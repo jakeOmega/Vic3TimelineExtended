@@ -245,11 +245,16 @@ class RowTest(unittest.TestCase):
 
 class TooltipTest(unittest.TestCase):
     def test_the_tooltip_says_it_is_an_estimate_and_what_narrows_it(self):
+        """Each row names the Program Estimate concept (SPC-10), whose
+        description holds the band's rules once: the estimate, what narrows it."""
+        desc = _loc("concept_sr_estimate_desc")
+        self.assertIn("intelligence network", desc)
+        self.assertIn("±25%", desc)
         for m in MILESTONES:
             with self.subTest(milestone=m):
                 tt = _loc(f"je_space_race_widget_rival_tt_{m}")
-                self.assertIn("estimate", tt.lower())
-                self.assertIn("intelligence network", tt)
+                self.assertIn("[concept_sr_estimate]", tt)
+                self.assertNotIn("intelligence network", tt)
                 for part in ("lo", "hi", "est"):
                     self.assertIn(f"ScriptValue('sr_disp_rival_{part}_{m}')", tt)
                 self.assertIn("ScriptValue('sr_disp_rival_band')", tt)

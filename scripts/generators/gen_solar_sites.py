@@ -1881,6 +1881,21 @@ def render_module_triggers() -> list[str]:
         for t in ("a", "b", *GENERIC_TYPES):
             out.append(f"\t\tAND = {{ scope:site = {site.index} scope:op = {MODULE_CODES[t]} sr_mod_can_queue_{t}_{site.key} = yes }}")
     out += ["\t}", "}",
+            "# sr_mod_can_queue_<type>_<key>'s conditions one by one, for the scripted GUI's",
+            "# is_valid, which gives each its own line (a tick or a cross); with",
+            "# sr_cf_scope_site_held and sr_mq_has_room they are the whole of it.",
+            "# The world's founding specialization is chosen.",
+            "sr_mod_scope_spec_chosen = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} has_global_variable = sr_site_spec_{s.key} }}" for s in SITES]
+    out += ["\t}", "}",
+            "# Its two specializations have a level left between them, counting queue and shipments.",
+            "sr_mod_scope_spec_room = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_spec_used_{s.key} < sr_mod_spec_budget }}" for s in SITES]
+    out += ["\t}", "}",
+            "# It has a slot left for a Habitat, Spaceport or Defences, counting queue and shipments.",
+            "sr_mod_scope_slot_room = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_slots_used_{s.key} < {s.slots} }}" for s in SITES]
+    out += ["\t}", "}",
             "# ... has a queue to clear.",
             "sr_mod_scope_has_queue = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} sr_mq_any_{s.key} = yes }}" for s in SITES]
@@ -2399,7 +2414,7 @@ def _autonomy_row(site: Site) -> list[str]:
     out += _override("aut_abandon_button",
                      f'enabled = "{_sgui_call("sr_colony_abandon_sgui", "IsValid", site)}"',
                      f'onclick = "{_sgui_call("sr_colony_abandon_sgui", "Execute", site)}"',
-                     f'tooltip = "{_sgui_call("sr_colony_abandon_sgui", "ExecuteTooltip", site)}"')
+                     f'tooltip = "{_reasoned("sr_colony_abandon_sgui", _site_scope(site))}"')
     return out + ["\t\t}"]
 
 
@@ -2415,7 +2430,7 @@ def _free_row(site: Site) -> list[str]:
     out += _override("free_supply_button",
                      f'enabled = "{_sgui_call("sr_free_supply_sgui", "IsValid", site)}"',
                      f'onclick = "{_sgui_call("sr_free_supply_sgui", "Execute", site)}"',
-                     f'tooltip = "{_sgui_call("sr_free_supply_sgui", "ExecuteTooltip", site)}"')
+                     f'tooltip = "{_reasoned("sr_free_supply_sgui", _site_scope(site))}"')
     out += _override("free_supply_visible", f'visible = "[{_eq(supplied, 0)}]"')
     out += _override("free_stop_visible", f'visible = "[{_eq(supplied, 1)}]"')
     return out + ["\t\t}"]
@@ -2632,9 +2647,20 @@ def _ge(name: str, value: int) -> str:
     return f"GreaterThanOrEqualTo_CFixedPoint( {_sv(name)}, '(CFixedPoint){value}' )"
 
 
+def _site_scope(site: Site) -> str:
+    return (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
+            f".AddScope( 'site', MakeScopeValue( '(CFixedPoint){site.index}' ) ).End")
+
+
 def _sgui_call(sgui: str, method: str, site: Site) -> str:
-    return (f"[GetScriptedGui('{sgui}').{method}( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
-            f".AddScope( 'site', MakeScopeValue( '(CFixedPoint){site.index}' ) ).End )]")
+    return f"[GetScriptedGui('{sgui}').{method}( {_site_scope(site)} )]"
+
+
+def _reasoned(sgui: str, scope: str) -> str:
+    """A button's tooltip: why it is greyed (the is_valid clauses, ticked and
+    crossed), a break, then what it does (gui_modding_guide.md gotcha #16)."""
+    return (f"[Concatenate( GetScriptedGui('{sgui}').IsValidTooltip( {scope} ), Concatenate( Localize( 'te_tt_break' ), "
+            f"GetScriptedGui('{sgui}').ExecuteTooltip( {scope} ) ) )]")
 
 
 def _override(name: str, *lines: str) -> list[str]:
@@ -2665,7 +2691,7 @@ def _site_row(site: Site) -> list[str]:
                      f'visible = "[{_ge(target, 1)}]"',
                      f'enabled = "{_sgui_call("sr_colony_target_sgui", "IsValid", site)}"',
                      f'onclick = "{_sgui_call("sr_colony_target_sgui", "Execute", site)}"',
-                     f'tooltip = "{_sgui_call("sr_colony_target_sgui", "ExecuteTooltip", site)}"')
+                     f'tooltip = "{_reasoned("sr_colony_target_sgui", _site_scope(site))}"')
     out += _override("site_target_set_visible", f'visible = "[{_eq(target, 1)}]"')
     out += _override("site_target_clear_visible", f'visible = "[{_eq(target, 2)}]"')
     return out + ["\t\t}"]
@@ -2683,7 +2709,7 @@ def _settler_row(site: Site) -> list[str]:
     out += _override("settler_priority_button",
                      f'enabled = "{_sgui_call("sr_colony_priority_sgui", "IsValid", site)}"',
                      f'onclick = "{_sgui_call("sr_colony_priority_sgui", "Execute", site)}"',
-                     f'tooltip = "{_sgui_call("sr_colony_priority_sgui", "ExecuteTooltip", site)}"')
+                     f'tooltip = "{_reasoned("sr_colony_priority_sgui", _site_scope(site))}"')
     for level in range(4):
         out += _override(f"prio_{level}_visible", f'visible = "[{_eq(prio, level)}]"')
     return out + ["\t\t}"]
@@ -2708,13 +2734,13 @@ def _module_row(site: Site) -> list[str]:
         out += _override(f"mod_{t}_button",
                          f"enabled = \"[GetScriptedGui('sr_colony_module_sgui').IsValid( {site_op} )]\"",
                          f"onclick = \"[GetScriptedGui('sr_colony_module_sgui').Execute( {site_op} )]\"",
-                         f"tooltip = \"[GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( {site_op} )]\"")
+                         f'tooltip = "{_reasoned("sr_colony_module_sgui", site_op)}"')
     clear = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( "
              f"'(CFixedPoint){site.index}' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End")
     out += _override("module_clear_button",
                      f"enabled = \"[GetScriptedGui('sr_colony_module_sgui').IsValid( {clear} )]\"",
                      f"onclick = \"[GetScriptedGui('sr_colony_module_sgui').Execute( {clear} )]\"",
-                     f"tooltip = \"[GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( {clear} )]\"")
+                     f'tooltip = "{_reasoned("sr_colony_module_sgui", clear)}"')
     return out + ["\t\t}"]
 
 
@@ -2740,11 +2766,11 @@ def _queue_row(n: int) -> list[str]:
                          f"\tondefault = \"[{up}.Execute( {op} )]\"",
                          f"\tonalt = \"[{up}.Execute( {_op_scope(n + QUEUE_TOP_OP)} )]\"",
                          "}",
-                         f"tooltip = \"[{up}.ExecuteTooltip( {op} )]\"")
+                         f'tooltip = "{_reasoned("sr_colony_module_queue_up_sgui", op)}"')
     out += _override("mq_remove_button",
                      f"enabled = \"[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( {op} )]\"",
                      f"onclick = \"[GetScriptedGui('sr_colony_module_queue_sgui').Execute( {op} )]\"",
-                     f"tooltip = \"[GetScriptedGui('sr_colony_module_queue_sgui').ExecuteTooltip( {op} )]\"")
+                     f'tooltip = "{_reasoned("sr_colony_module_queue_sgui", op)}"')
     return out + ["\t\t}"]
 
 

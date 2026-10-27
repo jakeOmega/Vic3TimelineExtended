@@ -1487,9 +1487,18 @@ def _override(name: str, *lines: str) -> list[str]:
     return [f'\t\t\tblockoverride "{name}" {{', *[f"\t\t\t\t{line}" for line in lines], "\t\t\t}"]
 
 
+def _reasoned(sgui: str, op: int) -> str:
+    """A button's tooltip: why it is greyed (the is_valid clauses, ticked and
+    crossed), a break, then what it does (gui_modding_guide.md gotcha #16)."""
+    scope = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
+             f".AddScope( 'op', MakeScopeValue( '(CFixedPoint){op}' ) ).End")
+    return (f"[Concatenate( GetScriptedGui('{sgui}').IsValidTooltip( {scope} ), Concatenate( Localize( 'te_tt_break' ), "
+            f"GetScriptedGui('{sgui}').ExecuteTooltip( {scope} ) ) )]")
+
+
 def _button(name: str, sgui: str, n: int) -> list[str]:
     return _override(name, f'enabled = "{_op(sgui, "IsValid", n)}"', f'onclick = "{_op(sgui, "Execute", n)}"',
-                     f'tooltip = "{_op(sgui, "ExecuteTooltip", n)}"')
+                     f'tooltip = "{_reasoned(sgui, n)}"')
 
 
 def _fleet_row(n: int) -> list[str]:
@@ -1508,7 +1517,9 @@ def _fleet_row(n: int) -> list[str]:
     out += _override("fl_marines", f'raw_text = "[{_sv(var(n, "marines_value"))}|0]"')
     out += _override("fl_orders_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}", 1)}]"')
     # The destination button's hover is the leg to the destination picked
-    # (sr_disp_fl_<n>_leg_months / _dv), not the scripted GUI's tooltip.
+    # (sr_disp_fl_<n>_leg_months / _dv), not the scripted GUI's tooltip; the
+    # key opens with the scripted GUI's IsValidTooltip, so a greyed button says
+    # why (a key that reads JournalEntry can't go through Localize, gotcha #16).
     out += _override("fl_pick_button", f'enabled = "{_op("sr_fleet_pick_sgui", "IsValid", n)}"',
                      f'onclick = "{_op("sr_fleet_pick_sgui", "Execute", n)}"',
                      f'tooltip = "je_space_race_widget_fl_{n}_leg_tt"')
@@ -1523,7 +1534,8 @@ def _fleet_row(n: int) -> list[str]:
     out += _button("fl_posture_button", "sr_fleet_posture_sgui", n)
     for p_code in POSTURES:
         out += _override(f"fl_posture_{p_code}_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_posture", p_code)}]"')
-    # The target button's hover is what we know of the target (sr_fl_<n>_target_intel).
+    # The target button's hover is what we know of the target (sr_fl_<n>_target_intel),
+    # after the scripted GUI's IsValidTooltip, as the destination button's.
     out += _override("fl_target_button", f'enabled = "{_op("sr_fleet_target_sgui", "IsValid", n)}"',
                      f'onclick = "{_op("sr_fleet_target_sgui", "Execute", n)}"',
                      f'tooltip = "je_space_race_widget_fl_{n}_target_tt"')

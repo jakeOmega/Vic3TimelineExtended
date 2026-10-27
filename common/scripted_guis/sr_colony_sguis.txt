@@ -25,11 +25,19 @@ sr_colony_target_sgui = {
 	}
 
 	# Our target can always be cleared; a new one needs the programme running.
+	# Each clause is its own line, so a greyed Target says which fails.
 	is_valid = {
-		OR = {
-			sr_cf_scope_site_is_target = yes
-			AND = {
+		trigger_if = {
+			limit = { sr_cf_scope_site_is_target = yes }
+			always = yes
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_cf_req_running_tt
 				sr_solar_colonization_running = yes
+			}
+			custom_tooltip = {
+				text = sr_cf_req_targetable_tt
 				sr_cf_scope_site_targetable = yes
 			}
 		}
@@ -67,7 +75,10 @@ sr_colony_priority_sgui = {
 	}
 
 	is_valid = {
-		sr_cf_scope_site_held = yes
+		custom_tooltip = {
+			text = sr_cf_req_held_tt
+			sr_cf_scope_site_held = yes
+		}
 	}
 
 	effect = {
@@ -147,10 +158,38 @@ sr_colony_module_sgui = {
 				sr_mod_scope_has_queue = yes
 			}
 		}
+		# sr_mod_scope_can_queue's conditions, one line each (the failing one
+		# gets the cross).
 		trigger_else = {
 			custom_tooltip = {
-				text = sr_mod_cannot_queue_tt
-				sr_mod_scope_can_queue = yes
+				text = sr_cf_req_held_tt
+				sr_cf_scope_site_held = yes
+			}
+			custom_tooltip = {
+				text = sr_mod_req_queue_room_tt
+				sr_mq_has_room = yes
+			}
+			trigger_if = {
+				limit = {
+					OR = {
+						scope:op = 1
+						scope:op = 2
+					}
+				}
+				custom_tooltip = {
+					text = sr_mod_req_spec_chosen_tt
+					sr_mod_scope_spec_chosen = yes
+				}
+				custom_tooltip = {
+					text = sr_mod_req_spec_room_tt
+					sr_mod_scope_spec_room = yes
+				}
+			}
+			trigger_else = {
+				custom_tooltip = {
+					text = sr_mod_req_slot_room_tt
+					sr_mod_scope_slot_room = yes
+				}
 			}
 		}
 	}
@@ -216,7 +255,10 @@ sr_colony_module_queue_sgui = {
 	}
 
 	is_valid = {
-		sr_mq_scope_place_filled = yes
+		custom_tooltip = {
+			text = sr_mq_req_filled_tt
+			sr_mq_scope_place_filled = yes
+		}
 	}
 
 	effect = {
@@ -244,7 +286,10 @@ sr_colony_module_queue_up_sgui = {
 	}
 
 	is_valid = {
-		sr_mq_scope_place_movable = yes
+		custom_tooltip = {
+			text = sr_mq_req_movable_tt
+			sr_mq_scope_place_movable = yes
+		}
 	}
 
 	effect = {
@@ -271,8 +316,14 @@ sr_colony_abandon_sgui = {
 	}
 
 	is_valid = {
-		sr_cf_scope_site_held = yes
-		NOT = { has_variable = sr_abandon_site }
+		custom_tooltip = {
+			text = sr_cf_req_held_tt
+			sr_cf_scope_site_held = yes
+		}
+		custom_tooltip = {
+			text = sr_abandon_req_none_pending_tt
+			NOT = { has_variable = sr_abandon_site }
+		}
 	}
 
 	effect = {
@@ -301,10 +352,17 @@ sr_free_supply_sgui = {
 
 	# A supply can always be stopped; starting one needs the means.
 	is_valid = {
-		OR = {
-			sr_free_scope_site_supplied = yes
-			AND = {
+		trigger_if = {
+			limit = { sr_free_scope_site_supplied = yes }
+			always = yes
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_free_req_free_tt
 				sr_free_scope_site_free = yes
+			}
+			custom_tooltip = {
+				text = sr_free_req_can_supply_tt
 				sr_free_can_supply = yes
 			}
 		}

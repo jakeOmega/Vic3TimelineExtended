@@ -482,6 +482,44 @@ class HowItWorksTest(unittest.TestCase):
             self.assertTrue(_loc(c) and _loc(f"{c}_desc"), c)
 
 
+class HoverMarkTest(unittest.TestCase):
+    """A value row's label is underlined when the row has a tooltip, and only
+    then (style guide rule 3; audit SPC-12): te_sr_value_row underlines by
+    default through its "label_format" block, and a row with no tooltip
+    overrides the block empty, so a new row with a hover is marked for free."""
+
+    def _rows(self):
+        gui = _read(GUI)
+        out = []
+        for m in re.finditer(r"\bte_sr_value_row = \{", gui):
+            body = gui[m.end():_close(gui, m.end() - 1)]
+            depth, top = 0, []
+            for line in body.split("\n"):
+                if depth == 0:
+                    top.append(line.strip())
+                depth += line.count("{") - line.count("}")
+            label = re.search(r'blockoverride "row_label" \{\s*text = "(\w+)"', body)
+            out.append((label.group(1) if label else body[:80], any(t.startswith("tooltip") for t in top), body))
+        return out
+
+    def test_the_type_underlines_by_default(self):
+        row = _type_body(_read(GUI), "te_sr_value_row")
+        self.assertRegex(row, r'block "label_format" \{\s*default_format = "#tooltippable"\s*\}\s*block "row_label"')
+
+    def test_a_row_without_a_tooltip_drops_the_underline(self):
+        rows = self._rows()
+        self.assertGreaterEqual(len(rows), 15)
+        for label, has_tooltip, body in rows:
+            with self.subTest(row=label):
+                overridden = 'blockoverride "label_format" {}' in body
+                self.assertEqual(overridden, not has_tooltip, label)
+
+    def test_labels_do_not_underline_themselves(self):
+        for label, _, _ in self._rows():
+            with self.subTest(row=label):
+                self.assertNotIn("#tooltippable", _loc(label))
+
+
 class ProgrammeRowTest(unittest.TestCase):
     def test_eight_icons_in_journal_order(self):
         row = _type_body(_read(GUI), "te_sr_ov_programme")
