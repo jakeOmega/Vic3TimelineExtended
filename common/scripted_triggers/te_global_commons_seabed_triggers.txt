@@ -21,6 +21,18 @@ te_seabed_is_claimant = {
 	any_scope_state = { is_coastal = yes }
 }
 
+# Country scope. One of the claimants a viewer's list of basin $B$ names
+# (te_seabed_rank_list): a share there this year, a capital to reach it by,
+# and not the viewer, whose own row the Seabed tab draws apart.
+# scope:te_seabed_rank_viewer is set.
+te_seabed_rank_listed = {
+	has_variable = te_seabed_shared
+	has_variable = te_seabed_ent_$B$
+	var:te_seabed_ent_$B$ > 0
+	exists = capital
+	NOT = { THIS = scope:te_seabed_rank_viewer }
+}
+
 # Country scope. Takes part in the yearly sharing: a claimant, or a holder of
 # licences without one (a conqueror without the technology), whose holdings
 # are frozen at what it holds.

@@ -48,8 +48,6 @@ class SeabedWordsTest(unittest.TestCase):
         for col in ("free", "pool", "weight", "next"):
             keys += [f"te_seabed_col_{col}", f"te_seabed_col_{col}_tt"]
         keys += ["te_seabed_basins_asof", "te_seabed_how_sub_claims", "te_seabed_how_claims"]
-        for b in BASINS:
-            keys += [f"te_seabed_rival_row_{b}", f"te_seabed_rivals_more_{b}"]
         # the claimant columns (audit SEA-3)
         keys += ["te_seabed_rival_us_name"] + [f"te_seabed_rival_col_{c}" for c in ("name", "mines", "claims", "weight")]
         keys += [f"te_seabed_rival_col_{c}_tt" for c in ("mines", "claims", "weight")]

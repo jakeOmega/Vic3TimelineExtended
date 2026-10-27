@@ -395,7 +395,7 @@ Top priorities: reasons on about 470 greyed buttons (SPC-1); the concept family 
 |---|---|---|---|---|
 | SPC-1 | Greyed buttons in every colony, fleet and Space Command row hide their reason | hidden info | medium | done |
 | SPC-2 | Defences and Spaceport tooltips still say fleets are not in the game (loc part done) | other, over-explaining | quick | done |
-| SPC-3 | No concepts for solar colonization; the same rules are explained inline, often twice | over-explaining, style | medium | done (no per-role concepts; the posture hover kept) |
+| SPC-3 | No concepts for solar colonization; the same rules are explained inline, often twice | over-explaining, style | medium | done (a concept per role added; the posture hover kept) |
 | SPC-4 | Explanatory paragraphs open seven live colony sections; How the Space Race Works covers none of colonization | over-explaining, style | medium | done |
 | SPC-5 | A colony's facts are spread over six sections; the colony name appears six times | spread-out/redundant | large | done |
 | SPC-6 | The colonization overview shows the programme, not what needs attention | spread-out/redundant | medium–large | done |
@@ -414,7 +414,7 @@ Top priorities: reasons on about 470 greyed buttons (SPC-1); the concept family 
 | SPC-19 | Our Colonies is 1,100 hand-copied lines the generator could own | other, list | medium | done |
 | SEA-1 | The overview's Policy and Regime hovers teach every option instead of ours | over-explaining, spread-out/redundant | medium | done |
 | SEA-2 | Seabed policies describe their effects in prose, not modifier lines | style | medium | done |
-| SEA-3 | The claimant rows are sentences under a table of columns | list, style | medium–large | done (columns; the later datamodel step not taken) |
+| SEA-3 | The claimant rows are sentences under a table of columns | list, style | medium–large | done (columns, then a claimant list per basin; `TE_SELF_CHECK seabed_claimant_list`) |
 | SEA-4 | Basin names read "in the Indian" / "in the Southern" (loc part done) | style | quick | done |
 | SEA-5 | The +1 licence caveat is repeated in five basin hovers | over-explaining | quick | done |
 | SEA-6 | The Pool column head restates the legend under the table | spread-out/redundant | quick | done |

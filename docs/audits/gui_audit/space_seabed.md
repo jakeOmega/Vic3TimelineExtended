@@ -68,7 +68,7 @@ against the generators.
 - **Confidence:** high
 
 ### SPC-3. No concepts for solar colonization; the same rules are explained inline, often twice
-- **Status:** done (2026-10-27): thirteen concepts (module, colony fleet, space fleet, ship role, Space Command, drive, launch window, colony autonomy, free colony, blockade, integrity, marines, program estimate), nested Defenses → space fleet → ship role → Space Command; the tooltips that re-taught them link them, and each build-mix button names its role (`sr_sc_mix_step_<role>_tt`). The optional per-role concepts were not added; `sr_fl_posture_tt` keeps its four postures, since the button steps through them and the hover is what the click will do.
+- **Status:** done (2026-10-27): thirteen concepts (module, colony fleet, space fleet, ship role, Space Command, drive, launch window, colony autonomy, free colony, blockade, integrity, marines, program estimate), nested Defenses → space fleet → ship role → Space Command; the tooltips that re-taught them link them, and each build-mix button names its role (`sr_sc_mix_step_<role>_tt`). One short concept per role followed at the owner's word (2026-10-27): Warship, Rapid Response Ship, Siege Ship, Assault Carrier and Tender, linked from the ship role concept, the build-mix buttons and the fleet's propellant and supply hovers. `sr_fl_posture_tt` keeps its four postures, since the button steps through them and the hover is what the click will do.
 - **Category:** over-explaining, style
 - **Where:** `common/game_concepts/extra_concepts.txt:72-78` (only `concept_space_race`, `_space_milestone`, `_solar_colonization`, `_sr_approach`, `_sr_funding`, `_sr_setback_risk`; plus `concept_orbital_debris`). Inline teaching:
   - `sr_sc_mix_step_tt` (`te_miscellaneous_l_english.yml:6134`) is every build-mix button's tooltip. Every one lists all five roles' fire, supply and special rules, and none says which role it steps.
@@ -274,7 +274,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SEA-3. The claimant rows are sentences under a table of columns
-- **Status:** done (2026-10-27): fixed columns under heads (flag, name, Mines, Claims, Weight, our button last), read through the stored capitals; a seat whose capital isn't stored yet keeps its scripted line. The proposal's later step, a datamodel in place of the six seats and "and N other claimants", was not taken; it is a follow-up on the SPC-9 pattern.
+- **Status:** done (2026-10-27): fixed columns under heads (flag, name, Mines, Claims, Weight, our button last). The later step followed at the owner's word: each basin's claimants are a datamodel of the player's `te_seabed_rk_list_<b>` (every other claimant's capital, largest share first, rebuilt at every sharing, on the SPC-9 pattern), in place of the six seats, `te_seabed_rival_row_sgui` and "and N other claimants"; `TE_SELF_CHECK seabed_claimant_list`.
 - **Category:** list, style
 - **Where:** `te_seabed_rival_row` / `te_seabed_rival_us` (`te_seabed_widgets.gui:379-434`), six fixed rows per basin ×5 (`:790-873` for the Pacific), text from `te_seabed_rival_row_sgui` (`te_seabed_rival_row_<basin>`, `te_miscellaneous_l_english.yml:8478`), and "and N other claimants" (`te_seabed_rivals_more_<basin>`).
 - **Now:** "France: 12 mines · 3 claims · 14% of the weight", wrapping on long names, under a basin header row whose columns are Free / Pool / Weight / +1 licence. "Us: …" sits in the same prose.
