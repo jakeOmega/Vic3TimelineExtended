@@ -117,6 +117,11 @@ class DirectHoverTests(_Fixture):
         r = audit(self.root)
         self.assertEqual((r.flags, r.vanilla_skipped), ([], 2))
 
+    def test_a_tooltip_repeating_its_label_is_not_judged(self):
+        self.gui('textbox = { text = "te_label" tooltip = "te_label" elide = right }\n')
+        r = audit(self.root)
+        self.assertEqual((r.flags, r.repeat_skipped), ([], 1))
+
     def test_tooltipwidget_with_mod_content(self):
         self.gui('widget = {\n'
                  '\ttooltipwidget = { textbox = { text = "te_tt" } }\n'

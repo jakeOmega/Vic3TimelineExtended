@@ -19,7 +19,7 @@ The rules run roughly from the most to the least important.
 ### 1. Dynamic content is visual and open; explanations are collapsed
 
 - Anything that changes from month to month gets a visual where one fits (a bar, a pie, an icon, a table) and is **open by default**. Examples are missions in the field, the resolution in session, the authority pillars and why authority is moving.
-- Anything that explains how the system works goes into **one collapsed "How X Works" section** at the bottom of the panel, with a subheading per topic. Don't sprinkle explanatory notes through the live sections.
+- Anything that explains how the system works goes into **one collapsed "How X Works" section** at the bottom of the panel, with a subheading per topic. Don't sprinkle explanatory notes through the live sections. `long_tooltip_audit.py` lists live text and tooltips over 500 rendered characters.
 - The overview at the top is always shown and cannot be collapsed.
 - *(play-test)* A **history chart** is open by default. A **list of past items** (an archive, a ledger, ended missions) starts collapsed. A **live list** (rivals, pressure, networks) is open.
 - *(play-test)* The journal entry's own **status text must not repeat the overview.** When the overview shows everything it said, it is empty while the entry is active. It keeps one line for the inactive entry, which draws no overview.
@@ -34,7 +34,7 @@ When an icon or a short label replaces a sentence, the sentence moves into that 
 
 - Lines read **"Label: value"**, as in "Represented: 82", "Tier: Established", "Passage Rule: Majority", "Weight: ×3.08" and "Target: Germany".
 - A game term in the label is a **concept** (`[concept_x]`), so hovering it explains the term. Add the concept when the term is new (`common/game_concepts/extra_concepts.txt` plus a name and a `_desc` key).
-- The reason behind a value goes in a tooltip: a breakdown of a number, the reason a list is empty ("Target: None" gives why on hover), or what a title means. Hoverable text is underlined (`#tooltippable`). In a row type whose tooltip comes from a `row_tooltip` block, put the label's `default_format = "#tooltippable"` in a `label_format` block, which a row without a tooltip overrides empty (`nd_row`, `nuclear_program_row`). The 2026-10-27 audit found whole panels with no underline at all (`docs/audits/gui_localization_audit.md`, finding 6).
+- The reason behind a value goes in a tooltip: a breakdown of a number, the reason a list is empty ("Target: None" gives why on hover), or what a title means. Hoverable text is underlined (`#tooltippable`). In a row type whose tooltip comes from a `row_tooltip` block, put the label's `default_format = "#tooltippable"` in a `label_format` block, which a row without a tooltip overrides empty (`nd_row`, `nuclear_program_row`). The 2026-10-27 audit found whole panels with no underline at all (`docs/audits/gui_localization_audit.md`, finding 6). `unmarked_hover_audit.py` lists every hover whose text isn't underlined.
 - Trim what the reader already knows. "Great-power commitment" became "Commitment", with the rest in its tooltip.
 - *(play-test)* **Nothing a player reads ends in "...".** A fixed-width cell elides text too long for it. In order of preference:
   1. drop words a heading already says ("Infrastructure" under a Directed Credit heading);
@@ -73,7 +73,7 @@ Example: the overview's first row and the agency icons in `gui/journal_entry_wid
 ### 6. Buttons carry their own reasons
 
 - A button sits **beside the item it acts on** or **centred** under it, never flush left under a wide block.
-- A button that can't be pressed is greyed, and its tooltip lists the failing condition (`IsValidTooltip`, concatenated with the effect preview, gotcha #16). The row's text does not repeat that reason.
+- A button that can't be pressed is greyed, and its tooltip lists the failing condition (`IsValidTooltip`, concatenated with the effect preview, gotcha #16). The row's text does not repeat that reason. `button_reason_audit.py` flags a button with no `IsValidTooltip`, and a condition that would print as raw script.
 - Something true of every row is said **once, above the rows**. For example, "another delegation holds the floor" greys all eighteen proposal buttons but is printed once.
 
 ### 7. Sections

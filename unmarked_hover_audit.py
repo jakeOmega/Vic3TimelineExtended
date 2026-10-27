@@ -42,6 +42,8 @@ Not flagged, to keep the audit to the mod's own hovers:
   rarely underlines;
 - a hover whose text is all vanilla's (a locked power bloc slot, whose
   tooltip the mod rewrote but whose look is vanilla's);
+- a tooltip that repeats its label, the full text of a label that may elide
+  (a good's name in a narrow column), since there is nothing more to find;
 - `gui/te_debug_*.gui`, the console-only panels.
 
 Where a flag is reported, and where its tag goes
@@ -129,6 +131,7 @@ class AuditResult:
     files_scanned: int = 0
     hovers_checked: int = 0
     vanilla_skipped: int = 0
+    repeat_skipped: int = 0
 
     @property
     def failing(self) -> int:
@@ -283,6 +286,7 @@ class _Walker:
         self.flags: dict[tuple[str, int], Flag] = {}
         self.hovers = 0
         self.vanilla = 0
+        self.repeats = 0
         self.prop_file: dict[int, str] = {}
         self.owner: dict[int, gui_tree.Node] = {}
 
@@ -378,6 +382,12 @@ class _Walker:
         self.hovers += 1
         if any(marked for _, marked in labels):
             return
+        texts = {_last(lv.props, "text") or _last(lv.props, "raw_text") for lv, _ in labels}
+        if source is not None and tooltip in texts:
+            # The hover repeats the label, the full name of a label that may
+            # elide (a good's name in a narrow column): nothing to find.
+            self.repeats += 1
+            return
         home = self.home_type(v, source)
         if home is not None:
             loc = (self.prop_file.get(id(home), "?"), home.line)
@@ -438,6 +448,7 @@ def audit(mod_path: str | Path | None = None) -> AuditResult:
             result.stale_tags.append(StaleTag(*loc))
     result.hovers_checked = walker.hovers
     result.vanilla_skipped = walker.vanilla
+    result.repeat_skipped = walker.repeats
     return result
 
 
@@ -540,6 +551,7 @@ def regenerate(mod_state=None) -> dict:
         "files_scanned": result.files_scanned,
         "hovers_checked": result.hovers_checked,
         "vanilla_skipped": result.vanilla_skipped,
+        "repeat_skipped": result.repeat_skipped,
         "path": out_path,
     }
 
