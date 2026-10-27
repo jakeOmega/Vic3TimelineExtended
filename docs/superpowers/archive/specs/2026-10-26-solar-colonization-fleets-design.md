@@ -5,10 +5,10 @@ Drafted 2026-10-26 from an interview with the owner. Slice 6 of the scope in
 § 5 and §§ 6.2–6.3), whose § Decisions and § 11 record the owner's earlier
 calls; the interview's answers are below and in the scope's § 11 (fifth
 round). This design assumes the records of slices 0 to 5
-(`2026-10-25-solar-colonization-holders-and-cession-design.md`,
-`2026-10-25-solar-colonization-population-and-transit-design.md`,
-`2026-10-25-solar-colonization-modules-and-bases-design.md`,
-`2026-10-26-solar-colonization-free-colonies-design.md`). The plan is
+(`docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md`,
+`docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md`,
+`docs/superpowers/specs/2026-10-25-solar-colonization-modules-and-bases-design.md`,
+`docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md`). The plan is
 `../plans/2026-10-26-solar-colonization-fleets.md`: four parts, each its own
 PR.
 
@@ -1085,3 +1085,83 @@ as one PR, its three tasks a commit each. Where the build departs from §§ 12 t
   lists are rebuilt monthly anyway.
 - **The console** gains option m, an interdiction by our first fleet that may
   make one.
+
+## 24. As built: part 6d (2026-10-27)
+
+6d (Earth orbit; Full Colonies the default) shipped as one PR, its tasks a commit
+each. Where the build departs from §§ 5.1, 14 and 15, or fills in what they leave
+open:
+
+- **Construction always goes to the reserve.** `sr_sc_month` puts the month's
+  strength into `sr_reserve_<role>` by the build mix; Auto (`sr_reserve_auto`,
+  absent or 1, on by default) sends the whole reserve into the home fleet the same
+  month while no hostile fleet is at Earth and the launch site is held. With all
+  nine slots away from Earth it waits on the ground, where 6a lost the month's
+  construction. The reserve counts in the upkeep (`sr_fleet_upkeep_units_value`),
+  so keeping hulls on the ground with Auto off saves nothing, and it keeps its
+  owner on the fleet powers list.
+- **Launch** takes the lowest empty slot, created at Earth, else our first fleet
+  at Earth (a refitting one included), and fills its propellant, supply and
+  marines, as a month docked at Earth would. Only an occupied launch site stops
+  it (`sr_reserve_may_launch` reads `sr_launch_site_lost`, not the blockade).
+- **The batteries** are `building_orbital_defense_battery` ("Ground-to-Orbit
+  Battery"), `bg_government`, with no `possible` (any state; an occupied one
+  counts for no one through the sums). Inputs and jobs are first guesses:
+  Kinetic Interceptors 25 Launch Capacity and 10 Electronic Components a level a
+  week, Ground Lasers 200 electricity and 15 Electronic Components, each 1,000
+  jobs a level. Their fire joins the owner's Earth side as fire without
+  strength, so they take no losses and hold no orbit: a blockade of Earth stands
+  while they wear it down. Their fire isn't raised by `sr_fleet_quality` (the
+  method's figure is what fires). Kinetic debris (0.02 low a point) is laid only
+  in a month with a hostile fleet to fire on (`sr_cb_kf`, the engaged strength
+  above 0).
+- **The AI's batteries**: `can_build_government` holds an AI to wars with a
+  country that has fleets, up to five levels (`sr_battery_ai_max_levels`, a first
+  guess); the group has no `ai_selection`, and `sr_fl_ai_batteries` switches the
+  method with `activate_production_method` (Ground Lasers at war and in peace from
+  Cluttered, with Directed Energy Weapons; Kinetic Interceptors otherwise), only
+  when a battery runs the other one.
+- **The sweep** runs in `te_debris_global_monthly` after the world's removal and
+  before the ceiling (`sr_battery_sweep_step`). The `battery_sweep` self-check is
+  armed on the first country at peace running Ground Lasers at half staff in a
+  state it controls, and judged a month later if one still qualifies (re-armed
+  otherwise), so a sweep that never reaches the pool reads BROKEN rather than
+  logging nothing.
+- **Earth's blockade** (`sr_earth_blockaded`) is read live from the location
+  records, not stored: a fleet of a country at war with us at Earth and none of
+  ours there. Posture doesn't enter (§ 15 says "standing off", but at Earth every
+  fleet engages every other and the panel shows no posture there). The
+  battlestation and the batteries don't lift it, nor an ally's fleet (§ 8's
+  rule). Read live, it blockades a colony holder with no fleets of its own, who
+  is never on the fleet powers list; a power leaving that list now clears its
+  `sr_fl_at_<loc>`, so no stale figure lifts a blockade.
+- **What it stops**: the departure paths read `sr_launches_barred`
+  (`sr_cf_launch_month`, the module shipments' departure in `sr_ms_step_slot`,
+  `sr_emig_month`, `sr_fl_<n>_may_depart_<loc>` from Earth, with its own line in
+  Go's tooltip). Module fabrication reads only the occupation half: in a blockade
+  modules are still made and wait at Earth. "None of its colonies has contact"
+  is built as no contact recorded while blockaded, from a fleet's arrival at any
+  location and from a module's landing.
+- **Notices.** `.106` comes once a blockade, naming the strongest blockader; there
+  is no notice when it lifts (the panel shows it). The launch site has a notice of
+  its own, `.108`, lost and back (the plan's "a player is told once"), from
+  `sr_earth_notice_step` in the country pulse for players under Full with a
+  Space Program or a fleet. A Space Program lost with its state is no return.
+- **Orbital superiority** counts fleets only, ours and the hostile ones at Earth
+  (`sr_fl_at_earth`, `sr_loc_ai_enemy_fleets_earth`, which now covers Earth); the
+  battlestation and batteries don't add to the margin. It stays in the country's
+  modifier list beside the anti-satellite strike's disruption (`KEEP_IN_LIST` in
+  `gen_nation_tab.py`). A country that stops being a fleet power has it removed
+  by the country pulse, since the refresh no longer runs for it.
+- **The AI's launch** also fires with no enemy at Earth (it covers an Auto the AI
+  never switches off), and comes first in its review, so the defence can send
+  what it put up.
+- **The panel**: Space Command's Reserve row (roles on hover), Launch and Auto:
+  on / off, and red notes while Earth is blockaded or the launch site lost;
+  Earth's Locations row reads Blockaded (status 6) or Blockading (7, an enemy
+  with no fleet at Earth while ours is there).
+- **The default**: `space_race_rule`'s default is `space_race_colonies_full`,
+  and its description, which still said fleets were planned, describes them.
+- **The console** gains options n (100 of each role into the reserve) and o (the
+  strongest country at war with us, by prestige, puts a fleet of 100 of each role
+  at Earth).

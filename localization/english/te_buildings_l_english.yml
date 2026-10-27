@@ -421,6 +421,8 @@
  building_orbital_battlestation_construction_site:0 "Orbital Battlestation Construction Site"
  building_orbital_battlestation_throughput_add:0 "$building_orbital_battlestation$ [concept_throughput]"
  building_orbital_battlestation_throughput_add_desc:0 "A bonus or penalty to both input and output of $building_orbital_battlestation$ buildings, and to the military bonuses they give"
+ building_orbital_defense_battery:0 "Ground-to-Orbit Battery"
+ building_orbital_defense_battery_desc:0 "Interceptor silos, and later lasers, aimed at the sky over our own territory. Each level fires on every enemy fleet in Earth orbit every month, by its production method, from states we control. Ground lasers also sweep small debris out of low orbit while we are at peace."
  building_orient_express_sirkeci_terminal:0 "Orient Express Sirkeci Terminal"
  building_oriental_dev_kunsan_granary:0 "Oriental Development Kunsan Granary"
  building_panama_company_culebra_cut:0 "Panama Company Culebra Cut"

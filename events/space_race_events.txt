@@ -5060,7 +5060,7 @@ space_race_events.99 = {
 }
 
 # ===== Solar System Colonization, slice 6: fleets, combat and occupation =====
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # § 17. Full Colonies only. Each names its world or location through a country
 # variable (a world's index, read by sr_sites_generated_custom_loc.txt, or a
 # location's code, read by sr_fleets_generated_custom_loc.txt); the after block
@@ -5319,5 +5319,94 @@ space_race_events.107 = {
 
 	after = {
 		sr_site_clear_event_var = { VAR = sr_garrison_lapsed_site }
+	}
+}
+
+# Our Earth blockaded (slice 6 fleets design § 15): a fleet at war with us at
+# Earth and none of ours there. sr_earth_notice_step sets sr_earth_blockade_by
+# (the strongest blockader) and sends it once a blockade.
+space_race_events.106 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/orbital_surveillance_earth.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = space_race_events.106.t
+	desc = space_race_events.106.d
+	flavor = space_race_events.106.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_earth_blockade_by }
+
+	immediate = {
+		if = {
+			limit = { has_variable = sr_earth_blockade_by }
+			var:sr_earth_blockade_by = { save_scope_as = sr_earth_blockade_power }
+		}
+	}
+
+	option = {
+		name = space_race_events.106.a
+		default_option = yes
+		custom_tooltip = sr_earth_blockade_notice_tt
+	}
+
+	after = {
+		if = { limit = { has_variable = sr_earth_blockade_by } remove_variable = sr_earth_blockade_by }
+	}
+}
+
+# Our launch site lost to an occupation, or back (slice 6 fleets design §§ 5.1,
+# 15): sr_launch_site_kind 1 lost, 2 back. Sent once each way by
+# sr_earth_notice_step.
+space_race_events.108 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/launch_pad_explosion.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = sr_launch_site_kind var:sr_launch_site_kind = 2 }
+				desc = space_race_events.108.t_back
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = space_race_events.108.t_lost
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = sr_launch_site_kind var:sr_launch_site_kind = 2 }
+				desc = space_race_events.108.d_back
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = space_race_events.108.d_lost
+			}
+		}
+	}
+	flavor = space_race_events.108.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_launch_site_kind }
+
+	option = {
+		name = space_race_events.108.a
+		default_option = yes
+		custom_tooltip = sr_launch_site_notice_tt
+	}
+
+	after = {
+		if = { limit = { has_variable = sr_launch_site_kind } remove_variable = sr_launch_site_kind }
 	}
 }

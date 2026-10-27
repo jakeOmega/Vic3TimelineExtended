@@ -137,6 +137,7 @@ sr_fl_1_may_depart_inner = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_inner
+	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_mars = {
 	has_variable = sr_fl_1_loc
@@ -144,6 +145,7 @@ sr_fl_1_may_depart_mars = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_mars
+	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_asteroids = {
 	has_variable = sr_fl_1_loc
@@ -151,6 +153,7 @@ sr_fl_1_may_depart_asteroids = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_asteroids
+	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_jupiter = {
 	has_variable = sr_fl_1_loc
@@ -158,6 +161,7 @@ sr_fl_1_may_depart_jupiter = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_jupiter
+	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_saturn = {
 	has_variable = sr_fl_1_loc
@@ -165,6 +169,7 @@ sr_fl_1_may_depart_saturn = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_saturn
+	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_uranus = {
 	has_variable = sr_fl_1_loc
@@ -172,6 +177,7 @@ sr_fl_1_may_depart_uranus = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_uranus
+	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_neptune = {
 	has_variable = sr_fl_1_loc
@@ -179,6 +185,7 @@ sr_fl_1_may_depart_neptune = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_neptune
+	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_kuiper = {
 	has_variable = sr_fl_1_loc
@@ -186,6 +193,13 @@ sr_fl_1_may_depart_kuiper = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_kuiper
+	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
+}
+# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
+sr_fl_1_earth_barred = {
+	has_variable = sr_fl_1_loc
+	var:sr_fl_1_loc = 1
+	sr_launches_barred = yes
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_1_can_go = {
@@ -715,6 +729,7 @@ sr_fl_2_may_depart_inner = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_inner
+	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_mars = {
 	has_variable = sr_fl_2_loc
@@ -722,6 +737,7 @@ sr_fl_2_may_depart_mars = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_mars
+	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_asteroids = {
 	has_variable = sr_fl_2_loc
@@ -729,6 +745,7 @@ sr_fl_2_may_depart_asteroids = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_asteroids
+	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_jupiter = {
 	has_variable = sr_fl_2_loc
@@ -736,6 +753,7 @@ sr_fl_2_may_depart_jupiter = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_jupiter
+	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_saturn = {
 	has_variable = sr_fl_2_loc
@@ -743,6 +761,7 @@ sr_fl_2_may_depart_saturn = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_saturn
+	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_uranus = {
 	has_variable = sr_fl_2_loc
@@ -750,6 +769,7 @@ sr_fl_2_may_depart_uranus = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_uranus
+	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_neptune = {
 	has_variable = sr_fl_2_loc
@@ -757,6 +777,7 @@ sr_fl_2_may_depart_neptune = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_neptune
+	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_kuiper = {
 	has_variable = sr_fl_2_loc
@@ -764,6 +785,13 @@ sr_fl_2_may_depart_kuiper = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_kuiper
+	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
+}
+# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
+sr_fl_2_earth_barred = {
+	has_variable = sr_fl_2_loc
+	var:sr_fl_2_loc = 1
+	sr_launches_barred = yes
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_2_can_go = {
@@ -1293,6 +1321,7 @@ sr_fl_3_may_depart_inner = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_inner
+	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_mars = {
 	has_variable = sr_fl_3_loc
@@ -1300,6 +1329,7 @@ sr_fl_3_may_depart_mars = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_mars
+	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_asteroids = {
 	has_variable = sr_fl_3_loc
@@ -1307,6 +1337,7 @@ sr_fl_3_may_depart_asteroids = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_asteroids
+	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_jupiter = {
 	has_variable = sr_fl_3_loc
@@ -1314,6 +1345,7 @@ sr_fl_3_may_depart_jupiter = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_jupiter
+	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_saturn = {
 	has_variable = sr_fl_3_loc
@@ -1321,6 +1353,7 @@ sr_fl_3_may_depart_saturn = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_saturn
+	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_uranus = {
 	has_variable = sr_fl_3_loc
@@ -1328,6 +1361,7 @@ sr_fl_3_may_depart_uranus = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_uranus
+	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_neptune = {
 	has_variable = sr_fl_3_loc
@@ -1335,6 +1369,7 @@ sr_fl_3_may_depart_neptune = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_neptune
+	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_kuiper = {
 	has_variable = sr_fl_3_loc
@@ -1342,6 +1377,13 @@ sr_fl_3_may_depart_kuiper = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_kuiper
+	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
+}
+# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
+sr_fl_3_earth_barred = {
+	has_variable = sr_fl_3_loc
+	var:sr_fl_3_loc = 1
+	sr_launches_barred = yes
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_3_can_go = {
@@ -1871,6 +1913,7 @@ sr_fl_4_may_depart_inner = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_inner
+	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_mars = {
 	has_variable = sr_fl_4_loc
@@ -1878,6 +1921,7 @@ sr_fl_4_may_depart_mars = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_mars
+	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_asteroids = {
 	has_variable = sr_fl_4_loc
@@ -1885,6 +1929,7 @@ sr_fl_4_may_depart_asteroids = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_asteroids
+	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_jupiter = {
 	has_variable = sr_fl_4_loc
@@ -1892,6 +1937,7 @@ sr_fl_4_may_depart_jupiter = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_jupiter
+	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_saturn = {
 	has_variable = sr_fl_4_loc
@@ -1899,6 +1945,7 @@ sr_fl_4_may_depart_saturn = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_saturn
+	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_uranus = {
 	has_variable = sr_fl_4_loc
@@ -1906,6 +1953,7 @@ sr_fl_4_may_depart_uranus = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_uranus
+	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_neptune = {
 	has_variable = sr_fl_4_loc
@@ -1913,6 +1961,7 @@ sr_fl_4_may_depart_neptune = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_neptune
+	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_kuiper = {
 	has_variable = sr_fl_4_loc
@@ -1920,6 +1969,13 @@ sr_fl_4_may_depart_kuiper = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_kuiper
+	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
+}
+# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
+sr_fl_4_earth_barred = {
+	has_variable = sr_fl_4_loc
+	var:sr_fl_4_loc = 1
+	sr_launches_barred = yes
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_4_can_go = {
@@ -2449,6 +2505,7 @@ sr_fl_5_may_depart_inner = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_inner
+	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_mars = {
 	has_variable = sr_fl_5_loc
@@ -2456,6 +2513,7 @@ sr_fl_5_may_depart_mars = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_mars
+	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_asteroids = {
 	has_variable = sr_fl_5_loc
@@ -2463,6 +2521,7 @@ sr_fl_5_may_depart_asteroids = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_asteroids
+	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_jupiter = {
 	has_variable = sr_fl_5_loc
@@ -2470,6 +2529,7 @@ sr_fl_5_may_depart_jupiter = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_jupiter
+	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_saturn = {
 	has_variable = sr_fl_5_loc
@@ -2477,6 +2537,7 @@ sr_fl_5_may_depart_saturn = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_saturn
+	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_uranus = {
 	has_variable = sr_fl_5_loc
@@ -2484,6 +2545,7 @@ sr_fl_5_may_depart_uranus = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_uranus
+	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_neptune = {
 	has_variable = sr_fl_5_loc
@@ -2491,6 +2553,7 @@ sr_fl_5_may_depart_neptune = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_neptune
+	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_kuiper = {
 	has_variable = sr_fl_5_loc
@@ -2498,6 +2561,13 @@ sr_fl_5_may_depart_kuiper = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_kuiper
+	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
+}
+# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
+sr_fl_5_earth_barred = {
+	has_variable = sr_fl_5_loc
+	var:sr_fl_5_loc = 1
+	sr_launches_barred = yes
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_5_can_go = {
@@ -3027,6 +3097,7 @@ sr_fl_6_may_depart_inner = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_inner
+	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_mars = {
 	has_variable = sr_fl_6_loc
@@ -3034,6 +3105,7 @@ sr_fl_6_may_depart_mars = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_mars
+	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_asteroids = {
 	has_variable = sr_fl_6_loc
@@ -3041,6 +3113,7 @@ sr_fl_6_may_depart_asteroids = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_asteroids
+	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_jupiter = {
 	has_variable = sr_fl_6_loc
@@ -3048,6 +3121,7 @@ sr_fl_6_may_depart_jupiter = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_jupiter
+	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_saturn = {
 	has_variable = sr_fl_6_loc
@@ -3055,6 +3129,7 @@ sr_fl_6_may_depart_saturn = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_saturn
+	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_uranus = {
 	has_variable = sr_fl_6_loc
@@ -3062,6 +3137,7 @@ sr_fl_6_may_depart_uranus = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_uranus
+	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_neptune = {
 	has_variable = sr_fl_6_loc
@@ -3069,6 +3145,7 @@ sr_fl_6_may_depart_neptune = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_neptune
+	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_kuiper = {
 	has_variable = sr_fl_6_loc
@@ -3076,6 +3153,13 @@ sr_fl_6_may_depart_kuiper = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_kuiper
+	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
+}
+# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
+sr_fl_6_earth_barred = {
+	has_variable = sr_fl_6_loc
+	var:sr_fl_6_loc = 1
+	sr_launches_barred = yes
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_6_can_go = {
@@ -3605,6 +3689,7 @@ sr_fl_7_may_depart_inner = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_inner
+	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_mars = {
 	has_variable = sr_fl_7_loc
@@ -3612,6 +3697,7 @@ sr_fl_7_may_depart_mars = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_mars
+	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_asteroids = {
 	has_variable = sr_fl_7_loc
@@ -3619,6 +3705,7 @@ sr_fl_7_may_depart_asteroids = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_asteroids
+	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_jupiter = {
 	has_variable = sr_fl_7_loc
@@ -3626,6 +3713,7 @@ sr_fl_7_may_depart_jupiter = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_jupiter
+	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_saturn = {
 	has_variable = sr_fl_7_loc
@@ -3633,6 +3721,7 @@ sr_fl_7_may_depart_saturn = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_saturn
+	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_uranus = {
 	has_variable = sr_fl_7_loc
@@ -3640,6 +3729,7 @@ sr_fl_7_may_depart_uranus = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_uranus
+	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_neptune = {
 	has_variable = sr_fl_7_loc
@@ -3647,6 +3737,7 @@ sr_fl_7_may_depart_neptune = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_neptune
+	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_kuiper = {
 	has_variable = sr_fl_7_loc
@@ -3654,6 +3745,13 @@ sr_fl_7_may_depart_kuiper = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_kuiper
+	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
+}
+# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
+sr_fl_7_earth_barred = {
+	has_variable = sr_fl_7_loc
+	var:sr_fl_7_loc = 1
+	sr_launches_barred = yes
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_7_can_go = {
@@ -4183,6 +4281,7 @@ sr_fl_8_may_depart_inner = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_inner
+	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_mars = {
 	has_variable = sr_fl_8_loc
@@ -4190,6 +4289,7 @@ sr_fl_8_may_depart_mars = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_mars
+	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_asteroids = {
 	has_variable = sr_fl_8_loc
@@ -4197,6 +4297,7 @@ sr_fl_8_may_depart_asteroids = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_asteroids
+	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_jupiter = {
 	has_variable = sr_fl_8_loc
@@ -4204,6 +4305,7 @@ sr_fl_8_may_depart_jupiter = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_jupiter
+	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_saturn = {
 	has_variable = sr_fl_8_loc
@@ -4211,6 +4313,7 @@ sr_fl_8_may_depart_saturn = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_saturn
+	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_uranus = {
 	has_variable = sr_fl_8_loc
@@ -4218,6 +4321,7 @@ sr_fl_8_may_depart_uranus = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_uranus
+	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_neptune = {
 	has_variable = sr_fl_8_loc
@@ -4225,6 +4329,7 @@ sr_fl_8_may_depart_neptune = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_neptune
+	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_kuiper = {
 	has_variable = sr_fl_8_loc
@@ -4232,6 +4337,13 @@ sr_fl_8_may_depart_kuiper = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_kuiper
+	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
+}
+# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
+sr_fl_8_earth_barred = {
+	has_variable = sr_fl_8_loc
+	var:sr_fl_8_loc = 1
+	sr_launches_barred = yes
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_8_can_go = {
@@ -4761,6 +4873,7 @@ sr_fl_9_may_depart_inner = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_inner
+	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_mars = {
 	has_variable = sr_fl_9_loc
@@ -4768,6 +4881,7 @@ sr_fl_9_may_depart_mars = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_mars
+	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_asteroids = {
 	has_variable = sr_fl_9_loc
@@ -4775,6 +4889,7 @@ sr_fl_9_may_depart_asteroids = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_asteroids
+	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_jupiter = {
 	has_variable = sr_fl_9_loc
@@ -4782,6 +4897,7 @@ sr_fl_9_may_depart_jupiter = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_jupiter
+	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_saturn = {
 	has_variable = sr_fl_9_loc
@@ -4789,6 +4905,7 @@ sr_fl_9_may_depart_saturn = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_saturn
+	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_uranus = {
 	has_variable = sr_fl_9_loc
@@ -4796,6 +4913,7 @@ sr_fl_9_may_depart_uranus = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_uranus
+	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_neptune = {
 	has_variable = sr_fl_9_loc
@@ -4803,6 +4921,7 @@ sr_fl_9_may_depart_neptune = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_neptune
+	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_kuiper = {
 	has_variable = sr_fl_9_loc
@@ -4810,6 +4929,13 @@ sr_fl_9_may_depart_kuiper = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_kuiper
+	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
+}
+# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
+sr_fl_9_earth_barred = {
+	has_variable = sr_fl_9_loc
+	var:sr_fl_9_loc = 1
+	sr_launches_barred = yes
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_9_can_go = {
@@ -5464,6 +5590,20 @@ sr_fl_any_at_or_bound = {
 		AND = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = $CODE$ }
 		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = $CODE$ }
 		AND = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = $CODE$ }
+	}
+}
+# ... at it.
+sr_fl_any_at = {
+	OR = {
+		AND = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = $CODE$ }
+		AND = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = $CODE$ }
+		AND = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = $CODE$ }
+		AND = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = $CODE$ }
+		AND = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = $CODE$ }
+		AND = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = $CODE$ }
+		AND = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = $CODE$ }
+		AND = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = $CODE$ }
+		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = $CODE$ }
 	}
 }
 # ... bound for it.

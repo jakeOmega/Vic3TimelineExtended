@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: the panel's figures
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # § 16. Read by the GUI only (gui/journal_entry_widgets/space_race_widget.gui,
 # the Space Command, Fleets and Colony Defences sections), as
 # space_race_display_values.txt's sr_disp_* are; no script reads them. The
@@ -57,4 +57,25 @@ sr_disp_battle_dealt = {
 sr_disp_battle_left = {
 	value = 0
 	if = { limit = { has_variable = sr_battle_left } value = var:sr_battle_left }
+}
+
+# 6d: the ground reserve's strength, and 1 while it launches itself (the
+# toggle on).
+sr_disp_reserve = {
+	value = sr_reserve_total
+}
+sr_disp_reserve_auto = {
+	value = 0
+	if = { limit = { sr_reserve_auto_on = yes } value = 1 }
+}
+
+# 6d: 1 while our Earth is blockaded; 1 while our launch site is occupied
+# (Space Command's notes).
+sr_disp_earth_blockaded = {
+	value = 0
+	if = { limit = { sr_earth_blockaded = yes } value = 1 }
+}
+sr_disp_launch_site_lost = {
+	value = 0
+	if = { limit = { sr_launch_site_lost = yes } value = 1 }
 }

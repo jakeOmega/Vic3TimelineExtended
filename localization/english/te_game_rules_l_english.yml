@@ -91,7 +91,7 @@
  setting_social_movements_enabled:0 "Social Movements Enabled"
  setting_social_movements_enabled_desc:0 "The social movement journal entries are active. As nations research the relevant technologies, they work through civil rights, human augmentation debates, digital rights and surveillance, the post-scarcity transition, and mental health awareness."
  setting_space_race_colonies_full:0 "[concept_space_race]: Full Colonies"
- setting_space_race_colonies_full_desc:0 "As Simple Colonies. Space fleets, blockades and sieges are planned for this setting; until they arrive it plays as Simple Colonies."
+ setting_space_race_colonies_full_desc:0 "As Simple Colonies, and wars reach space. Space Command builds warships that fly between the planets, fight, blockade colonies, and seize or destroy them; marines garrison colonies; an enemy fleet in Earth orbit stops your launches until you put up your reserve, and ground-to-orbit batteries fire on it. Holding Earth orbit supports your troops on the ground."
  setting_space_race_colonies_simple:0 "[concept_space_race]: Simple Colonies"
  setting_space_race_colonies_simple_desc:0 "As Races Only, and colonies are built up, held and lost. A colony fleet travels to the world you choose and claims it when it lands; colonies hold settlers from Earth and modules, and Extraplanetary Bases draw on their room. The Cede Colony treaty article sells or gives a colony, and a war can force one. A colony grows restless as it grows, can demand self-government and break away, can be abandoned, and lives on as a free colony that trades with whoever supplies it."
  setting_space_race_disabled:0 "[concept_space_race] Disabled"

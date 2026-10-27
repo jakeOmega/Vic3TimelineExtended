@@ -4503,7 +4503,7 @@ un_events.41 = {
 }
 
 # Event 42: The Convention on the Settlement of Outer Space (solar colonization
-# fleets, docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# fleets, docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # § 13; the ambition of the 1979 Moon Agreement). Raised by the docket after a
 # colony is seized or destroyed (item 17), and as Assembly business, under the
 # Space Race rule's Full Colonies. Offered to a member that holds a colony;

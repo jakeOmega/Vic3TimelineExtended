@@ -1,8 +1,8 @@
-"""Space fleets (solar colonization slice 6, parts 6a to 6c): the generator's
+"""Space fleets (solar colonization slice 6, parts 6a to 6d): the generator's
 output, the hand-written files' contract with it, and the rules a play test
 can't see in one evening.
 
-Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md.
+Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md.
 The legs are tested in test_launch_windows.py (FleetLegsTest), the panel's
 labels in test_space_race_labels.py and its figures in
 test_space_race_layout.py.
@@ -37,6 +37,14 @@ COVERT_ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
 DEBUG_EVENTS = ROOT / "events/te_debug_space_race_events.txt"
 CEDE_COLONY = ROOT / "common/treaty_articles/124_cede_colony.txt"
 SPACE_RACE_EVENTS = ROOT / "events/space_race_events.txt"
+EARTH_EFFECTS = ROOT / "common/scripted_effects/sr_earth_orbit_effects.txt"
+BATTERY = ROOT / "common/buildings/sr_orbital_defense_battery.txt"
+BATTERY_METHODS = ROOT / "common/production_methods/sr_orbital_defense_battery_pms.txt"
+MODIFIER_TYPES = ROOT / "common/modifier_type_definitions/sr_fleet_modifier_types.txt"
+DEBRIS_EFFECTS = ROOT / "common/scripted_effects/te_orbital_debris_effects.txt"
+COLONY_FLEET_EFFECTS = ROOT / "common/scripted_effects/sr_colony_fleet_effects.txt"
+MODULE_EFFECTS = ROOT / "common/scripted_effects/sr_colony_module_effects.txt"
+POPULATION_EFFECTS = ROOT / "common/scripted_effects/sr_colony_population_effects.txt"
 
 
 def _raw(path):
@@ -164,7 +172,7 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        self.assertEqual(len(names), 10)
+        self.assertEqual(len(names), 12)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -490,6 +498,289 @@ class AiOffenceTest(unittest.TestCase):
         for lc in gsf.LOCATIONS[1:]:
             with self.subTest(loc=lc.key):
                 self.assertIn(f"NOT = {{ AND = {{ sr_loc_ai_target_{lc.key} = yes sr_fl_ai_holds_{lc.key} = yes }} }}", home)
+
+
+class GroundReserveTest(unittest.TestCase):
+    """6d (design § 15): Space Command builds into a reserve on the ground, which
+    goes up together, by Launch at any time or by itself while no hostile fleet
+    is at Earth; a blockade can't stop a Launch, an occupied launch site can."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.fleet = _strip(_raw(FLEET_EFFECTS))
+        cls.earth = _strip(_raw(EARTH_EFFECTS))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+
+    def test_construction_joins_the_reserve(self):
+        month = _block(self.fleet, "sr_sc_month")
+        self.assertRegex(month, r"limit = \{ local_var:sr_sc_points > 0 \}\s*sr_reserve_build = yes")
+        self.assertTrue(month.rstrip().endswith("sr_reserve_auto_step = yes"))
+        self.assertNotIn("sr_fl_find_home", month)
+        build = _block(self.generated, "sr_reserve_build")
+        for role in gsf.ROLES:
+            with self.subTest(role=role.key):
+                self.assertIn(f"multiply = sr_sc_mix_share_{role.key}", build)
+                self.assertIn(f"change_variable = {{ name = sr_reserve_{role.key} add = local_var:sr_sc_share }}", build)
+        total = _block(self.values, "sr_reserve_total")
+        self.assertEqual(len(re.findall(r"add = sr_reserve_\w+_value", total)), len(gsf.ROLES))
+
+    def test_a_launch_takes_the_whole_reserve(self):
+        body = _block(self.generated, "sr_fl_reserve_in_at")
+        for role in gsf.ROLES:
+            with self.subTest(role=role.key):
+                self.assertIn(f"sr_fl_add_role = {{ N = $N$ ROLE = {role.key} AMOUNT = var:sr_reserve_{role.key} }}", body)
+                self.assertIn(f"remove_variable = sr_reserve_{role.key}", body)
+        self.assertIn("sr_fl_fill_at = { N = $N$ }", body)
+
+    def test_it_launches_itself_only_with_no_hostile_fleet_at_earth(self):
+        auto = _block(self.earth, "sr_reserve_auto_step")
+        for line in ("sr_reserve_auto_on = yes", "NOT = { sr_earth_hostile_present = yes }",
+                     "NOT = { sr_launch_site_lost = yes }", "sr_fl_find_home = yes",
+                     "sr_fl_by_local = { DO = reserve_in }"):
+            with self.subTest(line=line):
+                self.assertIn(line, auto)
+        self.assertIn("NOT = { has_variable = sr_reserve_auto }", _block(self.triggers, "sr_reserve_auto_on"))
+
+    def test_a_blockade_cannot_stop_a_launch(self):
+        may = _block(self.triggers, "sr_reserve_may_launch")
+        self.assertIn("NOT = { sr_launch_site_lost = yes }", may)
+        self.assertNotIn("blockade", may)
+        self.assertNotIn("sr_launches_barred", may)
+        sgui = _block(_strip(_raw(SGUIS)), "sr_reserve_launch_sgui")
+        self.assertIn("sr_reserve_may_launch = yes", sgui)
+        self.assertIn("sr_reserve_launch = yes", sgui)
+
+    def test_the_reserve_pays_upkeep_and_keeps_its_power_on_the_list(self):
+        self.assertIn("add = sr_reserve_total", _block(_strip(_raw(FLEET_VALUES)), "sr_fleet_upkeep_units_value"))
+        self.assertIn("sr_reserve_total > 0", _block(self.triggers, "sr_fleet_power"))
+
+    def test_the_ai_launches_when_it_matches_the_enemy_at_earth(self):
+        self.assertTrue(_block(self.fleet, "sr_fl_ai_review").strip().startswith("sr_fl_ai_reserve = yes"))
+        ai = _block(self.earth, "sr_fl_ai_reserve")
+        self.assertIn("sr_reserve_may_launch = yes", ai)
+        self.assertIn("sr_fl_ai_reserve_matches = yes", ai)
+        self.assertIn("sr_earth_reserve_and_ours >= sr_loc_ai_enemy_fleets_earth",
+                      _block(self.triggers, "sr_fl_ai_reserve_matches"))
+        self.assertIn("sr_loc_ai_enemy_fleets_earth = {", self.values)
+
+
+class BatteryTest(unittest.TestCase):
+    """6d (design § 15): ground-to-orbit batteries fire on hostile fleets at
+    Earth, and Ground Lasers sweep the low debris pool in peace; both figures
+    are state modifiers the script sums over the states the owner controls."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(FLEET_VALUES))
+        cls.methods = _strip(_raw(BATTERY_METHODS))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.earth = _strip(_raw(EARTH_EFFECTS))
+
+    def test_the_building(self):
+        building = _block(_strip(_raw(BATTERY)), "building_orbital_defense_battery")
+        self.assertIn("sr_colonies_full_enabled = yes", _block("x = {" + building.split("potential = {", 1)[1], "x"))
+        self.assertIn("space_militarization", _block("x = {" + building.split("unlocking_technologies = {", 1)[1], "x"))
+        self.assertIn("owner ?= { sr_battery_may_build_government = yes }", building)
+        self.assertIn("pmg_orbital_defense_battery", building)
+
+    def test_each_method_carries_its_figures_as_state_modifiers_only(self):
+        expected = {"pm_orbital_battery_kinetic": {"state_orbital_battery_fire_add": 1.0},
+                    "pm_orbital_battery_lasers": {"state_orbital_battery_fire_add": 2.0,
+                                                  "state_orbital_debris_sweep_add": 0.01}}
+        for pm, figures in expected.items():
+            body = _block(self.methods, pm)
+            state = _block("x = {" + body.split("state_modifiers = {", 1)[1], "x")
+            with self.subTest(pm=pm):
+                self.assertIn("workforce_scaled", state)
+                self.assertEqual({k: float(v) for k, v in re.findall(r"(state_orbital_\w+) = ([\d.]+)", state)}, figures)
+                building = _block("x = {" + body.split("building_modifiers = {", 1)[1], "x")
+                self.assertNotIn("orbital_battery", building)
+                self.assertNotIn("debris", building)
+        self.assertIn("directed_energy_weapons", _block(self.methods, "pm_orbital_battery_lasers"))
+        self.assertIn("goods_input_electricity_add", _block(self.methods, "pm_orbital_battery_lasers"))
+
+    def test_the_types_are_script_only_with_their_decimals(self):
+        types = _strip(_raw(MODIFIER_TYPES))
+        for name, decimals in (("state_orbital_battery_fire_add", 1), ("state_orbital_debris_sweep_add", 2)):
+            body = _block(types, name)
+            with self.subTest(type=name):
+                self.assertIn("script_only = yes", body)
+                self.assertIn(f"decimals = {decimals}", body)
+
+    def test_fire_and_sweep_count_only_states_held_by_their_owner(self):
+        for name, mod in (("sr_battery_fire", "state_orbital_battery_fire_add"),
+                          ("sr_battery_fire_kinetic", "state_orbital_battery_fire_add"),
+                          ("sr_battery_sweep", "state_orbital_debris_sweep_add")):
+            body = _block(self.values, name)
+            with self.subTest(value=name):
+                self.assertRegex(body, r"every_scope_state = \{\s*limit = \{\s*sr_state_held_by_owner = yes")
+                self.assertIn(f"add = modifier:{mod}", body)
+        self.assertRegex(_block(self.values, "sr_battery_sweep"), r"limit = \{ is_at_war = no \}")
+        # Nothing else reads the two types.
+        for path in (FLEET_EFFECTS, COMBAT_EFFECTS, EARTH_EFFECTS, FLEET_TRIGGERS, gsf.ROOT / gsf.VALUES_OUT):
+            with self.subTest(file=path.name):
+                self.assertNotIn("modifier:state_orbital", _strip(_raw(path)))
+
+    def test_batteries_fire_in_the_earth_battle_and_take_no_losses(self):
+        at = _block(self.combat, "sr_combat_at")
+        self.assertRegex(at, r"limit = \{ local_var:sr_cb_code = 1 \}\s*sr_cb_battlestation_gather = yes\s*"
+                             r"sr_cb_battery_gather = yes")
+        gather = _block(self.combat, "sr_cb_battery_gather")
+        self.assertIn("sr_cb_add = { VAR = sr_cb_f1 AMOUNT = local_var:sr_cb_bf }", gather)
+        self.assertNotIn("sr_cb_s1", gather)
+        self.assertIn("set_variable = { name = sr_cb_kf value = sr_battery_fire_kinetic }", gather)
+        self.assertIn("kf", gsf.CB_VARS)
+        self.assertIn("te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = 0 }", at)
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_battery_debris_low"), 0.02)
+
+    def test_the_sweep_takes_from_the_low_pool_alone_after_removal(self):
+        monthly = _block(_strip(_raw(DEBRIS_EFFECTS)), "te_debris_global_monthly")
+        self.assertLess(monthly.index("te_debris_removal_month"), monthly.index("sr_battery_sweep_step = yes"))
+        self.assertLess(monthly.index("sr_battery_sweep_step = yes"), monthly.index("te_debris_clamp_pools = yes"))
+        step = _block(self.earth, "sr_battery_sweep_step")
+        self.assertIn("name = orbital_debris_low", step)
+        self.assertNotRegex(step, r"name = orbital_debris_high\b")
+        self.assertIn("every_in_global_list = {\n\t\t\tvariable = sr_fleet_powers", step)
+        self.assertNotIn("every_country", step)
+        self.assertIn("sr_has_battery = yes", _block(_strip(_raw(FLEET_TRIGGERS)), "sr_fleet_power"))
+
+
+class EarthBlockadeTest(unittest.TestCase):
+    """6d (design §§ 5.1, 15): a fleet at war with us at Earth and none of ours
+    there, or an occupied launch site, stops every launch; Launch from the
+    reserve reads only the occupation half, and so does fabrication."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+
+    def test_the_tests_are_full_colonies_only(self):
+        for name in ("sr_earth_blockaded", "sr_launch_site_lost"):
+            with self.subTest(trigger=name):
+                self.assertIn("sr_colonies_full_enabled = yes", _block(self.triggers, name))
+        barred = _block(self.triggers, "sr_launches_barred")
+        self.assertIn("sr_earth_blockaded = yes", barred)
+        self.assertIn("sr_launch_site_lost = yes", barred)
+        blockaded = _block(self.triggers, "sr_earth_blockaded")
+        self.assertIn("NOT = { has_variable = sr_fl_at_earth }", blockaded)
+        self.assertIn("sr_earth_hostile_present = yes", blockaded)
+        lost = _block(self.triggers, "sr_launch_site_lost")
+        self.assertIn("is_building_type = building_space_program", lost)
+        self.assertIn("state = { sr_state_held_by_owner = yes }", lost)
+
+    def test_every_departure_reads_the_one_test(self):
+        launch = _block(_strip(_raw(COLONY_FLEET_EFFECTS)), "sr_cf_launch_month")
+        self.assertRegex(launch, r"^\s*if = \{\s*limit = \{ sr_launches_barred = yes \}\s*sr_launch_note_held = yes")
+        step = _block(_strip(_raw(MODULE_EFFECTS)), "sr_ms_step_slot")
+        self.assertRegex(step, r"limit = \{ NOT = \{ sr_launches_barred = yes \} \}\s*sr_ms_departure_by_index = yes")
+        self.assertEqual(step.count("sr_ms_departure_by_index"), 1)
+        emig = _block(_strip(_raw(POPULATION_EFFECTS)), "sr_emig_month")
+        self.assertIn("NOT = { sr_launches_barred = yes }", _block("x = {" + emig.split("limit = {", 1)[1], "x"))
+        for n in range(1, gsf.SLOTS + 1):
+            for lc in gsf.LOCATIONS[1:]:
+                with self.subTest(slot=n, loc=lc.key):
+                    self.assertIn(f"NOT = {{ AND = {{ var:sr_fl_{n}_loc = 1 sr_launches_barred = yes }} }}",
+                                  _block(self.gen_triggers, f"sr_fl_{n}_may_depart_{lc.key}"))
+
+    def test_fabrication_and_the_reserve_read_only_the_occupation(self):
+        month = _block(_strip(_raw(MODULE_EFFECTS)), "sr_mod_month")
+        self.assertEqual(month.count("NOT = { sr_launch_site_lost = yes }"), 2)
+        self.assertNotIn("sr_launches_barred", month)
+        for name in ("sr_reserve_may_launch",):
+            self.assertNotIn("sr_launches_barred", _block(self.triggers, name))
+
+    def test_no_contact_while_earth_is_blockaded(self):
+        arrival = _block(self.generated, "sr_fl_arrival_contact_at")
+        self.assertTrue(arrival.strip().startswith("if = {\n\t\tlimit = { NOT = { sr_earth_blockaded = yes } }"))
+        sites = _strip(_raw(gss.ROOT / gss.EFFECTS_OUT))
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertRegex(_block(sites, f"sr_mod_install_{site.key}"),
+                                 r"limit = \{ NOT = \{ sr_earth_blockaded = yes \} \}\s*"
+                                 rf"set_global_variable = \{{ name = sr_site_contact_{site.key} ")
+
+    def test_players_are_told(self):
+        on = _strip(_raw(ON_ACTIONS))
+        self.assertRegex(on, r"is_player = yes\s*sr_colonies_full_enabled = yes[^}]*\{[^}]*\}[^}]*\}\s*sr_earth_notice_step = yes")
+        step = _block(_strip(_raw(EARTH_EFFECTS)), "sr_earth_notice_step")
+        self.assertIn("trigger_event = { id = space_race_events.106 days = 1 }", step)
+        self.assertEqual(step.count("trigger_event = { id = space_race_events.108 days = 1 }"), 2)
+        events = _strip(_raw(SPACE_RACE_EVENTS))
+        for event, var in (("space_race_events.106", "sr_earth_blockade_by"), ("space_race_events.108", "sr_launch_site_kind")):
+            body = _block(events, event)
+            with self.subTest(event=event):
+                self.assertIn("event_image", body)
+                self.assertIn(f"trigger = {{ has_variable = {var} }}", body)
+                self.assertIn(f"remove_variable = {var}", body)
+
+
+class OrbitalSuperiorityTest(unittest.TestCase):
+    """6d (design § 15): at war, holding Earth orbit gives +10% offense and +5%
+    defense at the margin our fleets there hold, from one refresh site."""
+
+    def test_the_modifier(self):
+        body = _block(_strip(_raw(STATIC)), "sr_orbital_superiority")
+        self.assertIn("unit_offense_mult = 0.1", body)
+        self.assertIn("unit_defense_mult = 0.05", body)
+
+    def test_the_margin(self):
+        margin = _block(_strip(_raw(FLEET_VALUES)), "sr_orbital_superiority_margin")
+        for line in ("limit = { has_variable = sr_fl_at_earth }", "value = var:sr_fl_at_earth",
+                     "subtract = sr_loc_ai_enemy_fleets_earth", "min = sr_orbital_superiority_floor",
+                     "max = 1", "min = 0"):
+            with self.subTest(line=line):
+                self.assertIn(line, margin)
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_orbital_superiority_floor"), 10)
+
+    def test_one_refresh_site_removed_first_at_war_only(self):
+        texts = {path.name: _strip(_raw(path)) for path in (FLEET_EFFECTS, COMBAT_EFFECTS, EARTH_EFFECTS, ON_ACTIONS)}
+        adds = [name for name, text in texts.items() if "add_modifier = { name = sr_orbital_superiority" in text]
+        self.assertEqual(adds, [EARTH_EFFECTS.name])
+        refresh = _block(texts[EARTH_EFFECTS.name], "sr_orbital_superiority_refresh")
+        self.assertLess(refresh.index("remove_modifier = sr_orbital_superiority"), refresh.index("add_modifier"))
+        self.assertIn("is_at_war = yes", refresh)
+        self.assertIn("multiplier = sr_orbital_superiority_margin", refresh)
+        self.assertEqual(texts[FLEET_EFFECTS.name].count("sr_orbital_superiority_refresh = yes"), 1)
+        # A country off the fleet powers list loses it.
+        self.assertRegex(texts[ON_ACTIONS.name], r"sr_fl_country_month = yes\s*\}\s*else_if = \{\s*"
+                                                 r"limit = \{ has_modifier = sr_orbital_superiority \}\s*"
+                                                 r"remove_modifier = sr_orbital_superiority")
+
+
+class EarthOrbitAiAndConsoleTest(unittest.TestCase):
+    """6d (design § 14, § 18): the AI's batteries, and the console's options."""
+
+    def test_the_ai_builds_batteries_only_at_war_with_a_fleet_power(self):
+        triggers = _strip(_raw(FLEET_TRIGGERS))
+        may = _block(triggers, "sr_battery_may_build_government")
+        self.assertIn("is_ai = no", may)
+        self.assertIn("sr_battery_ai_wants = yes", may)
+        self.assertIn("sr_battery_queued_levels < sr_battery_ai_max_levels", may)
+        wants = _block(triggers, "sr_battery_ai_wants")
+        self.assertIn("is_at_war = yes", wants)
+        self.assertIn("has_war_with = prev", wants)
+        self.assertIn("sr_fl_has_any = yes", wants)
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_battery_ai_max_levels"), 5)
+
+    def test_the_ai_runs_lasers_at_war_or_from_cluttered(self):
+        self.assertIn("sr_fl_ai_batteries = yes", _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_ai_review"))
+        ai = _block(_strip(_raw(EARTH_EFFECTS)), "sr_fl_ai_batteries")
+        self.assertIn("has_technology_researched = directed_energy_weapons", ai)
+        self.assertRegex(ai, r"OR = \{\s*is_at_war = yes\s*te_debris_index >= te_debris_tier_cluttered\s*\}")
+        self.assertIn("production_method = pm_orbital_battery_lasers", ai)
+        self.assertIn("production_method = pm_orbital_battery_kinetic", ai)
+
+    def test_the_console_options(self):
+        event = _block(_strip(_raw(DEBUG_EVENTS)), "te_debug_space_race.6")
+        self.assertIn("sr_reserve_debug_fill = yes", event)
+        self.assertIn("sr_earth_debug_blockade = yes", event)
+        blockade = _block(_strip(_raw(EARTH_EFFECTS)), "sr_earth_debug_blockade")
+        self.assertIn("has_war_with = root", blockade)
+        self.assertIn("sr_fl_by_local = { DO = new_at_earth }", blockade)
 
 
 if __name__ == "__main__":

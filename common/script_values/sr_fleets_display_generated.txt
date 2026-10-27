@@ -671,10 +671,13 @@ sr_disp_loc_inbound_ours_kuiper = {
 
 # Per location, the viewer's status there (6b): 1 a battle this month or last,
 # 2 a colony of ours blockaded, 3 an enemy's blockaded by us; 6c: 4 a colony of
-# ours interdicted (blockaded by a country at peace with us), 5 we interdict.
+# ours interdicted (blockaded by a country at peace with us), 5 we interdict;
+# 6d, at Earth: 6 our Earth blockaded, 7 we blockade an enemy's.
 sr_disp_loc_status_earth = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_battle_earth global_var:sr_loc_battle_earth >= { value = te_history_month_index subtract = 1 } } value = 1 }
+	else_if = { limit = { sr_earth_blockaded = yes } value = 6 }
+	else_if = { limit = { has_variable = sr_fl_at_earth is_at_war = yes any_country = { has_war_with = prev sr_earth_blockaded = yes } } value = 7 }
 }
 sr_disp_loc_status_inner = {
 	value = 0
@@ -2382,3 +2385,10 @@ sr_disp_sc_mix_rapid = { value = sr_sc_mix_rapid_value }
 sr_disp_sc_mix_siege = { value = sr_sc_mix_siege_value }
 sr_disp_sc_mix_carrier = { value = sr_sc_mix_carrier_value }
 sr_disp_sc_mix_tender = { value = sr_sc_mix_tender_value }
+
+# The ground reserve by role (6d; Space Command's Reserve hover).
+sr_disp_reserve_war = { value = sr_reserve_war_value }
+sr_disp_reserve_rapid = { value = sr_reserve_rapid_value }
+sr_disp_reserve_siege = { value = sr_reserve_siege_value }
+sr_disp_reserve_carrier = { value = sr_reserve_carrier_value }
+sr_disp_reserve_tender = { value = sr_reserve_tender_value }

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: the panel's scripted GUIs
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # § 16. The buttons of the Fleets rows (gui/journal_entry_widgets/
 # sr_fleets_generated_rows.gui, one per slot, which pass the slot as scope:op)
 # and of Space Command's build mix (scope:op the role: 1 warships, 2 rapid
@@ -62,6 +62,11 @@ sr_fleet_go_sgui = {
 		custom_tooltip = {
 			text = sr_fl_refitting_tt
 			NOT = { sr_fl_op_check = { TEST = refitting } }
+		}
+		# 6d: nothing leaves a blockaded Earth or an occupied launch site.
+		custom_tooltip = {
+			text = sr_fl_earth_barred_tt
+			NOT = { sr_fl_op_check = { TEST = earth_barred } }
 		}
 		custom_tooltip = {
 			text = sr_fl_short_tt
@@ -331,6 +336,75 @@ sr_sc_mix_sgui = {
 			else_if = { limit = { scope:op = 3 } sr_sc_mix_step = { ROLE = siege } }
 			else_if = { limit = { scope:op = 4 } sr_sc_mix_step = { ROLE = carrier } }
 			else_if = { limit = { scope:op = 5 } sr_sc_mix_step = { ROLE = tender } }
+		}
+	}
+}
+
+# 6d: Launch: the whole ground reserve into orbit as one fleet at Earth, any
+# month, blockade or not (design § 15). Only an occupied launch site stops it.
+sr_reserve_launch_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_reserve_empty_tt
+			sr_reserve_total > 0
+		}
+		custom_tooltip = {
+			text = sr_launch_site_lost_tt
+			NOT = { sr_launch_site_lost = yes }
+		}
+		custom_tooltip = {
+			text = sr_reserve_no_slot_tt
+			sr_reserve_may_launch = yes
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_reserve_launch_tt
+		hidden_effect = {
+			sr_reserve_launch = yes
+		}
+	}
+}
+
+# 6d: the reserve's toggle: on (the default), it launches itself each month
+# while no hostile fleet is at Earth; off, it waits for Launch.
+sr_reserve_auto_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { sr_reserve_auto_on = yes }
+			custom_tooltip = sr_reserve_auto_off_tt
+		}
+		else = {
+			custom_tooltip = sr_reserve_auto_on_tt
+		}
+		hidden_effect = {
+			sr_reserve_toggle_auto = yes
 		}
 	}
 }

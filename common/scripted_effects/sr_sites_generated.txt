@@ -18170,7 +18170,12 @@ sr_mod_install_valles_marineris = {
 			set_global_variable = { name = sr_site_port_valles_marineris value = { value = sr_site_port_value_valles_marineris add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_valles_marineris value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_valles_marineris value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_valles_marineris }
@@ -18268,7 +18273,12 @@ sr_mod_install_olympus_mons = {
 			set_global_variable = { name = sr_site_port_olympus_mons value = { value = sr_site_port_value_olympus_mons add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_olympus_mons value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_olympus_mons value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_olympus_mons }
@@ -18366,7 +18376,12 @@ sr_mod_install_hellas_planitia = {
 			set_global_variable = { name = sr_site_port_hellas_planitia value = { value = sr_site_port_value_hellas_planitia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_hellas_planitia value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_hellas_planitia value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_hellas_planitia }
@@ -18464,7 +18479,12 @@ sr_mod_install_utopia_planitia = {
 			set_global_variable = { name = sr_site_port_utopia_planitia value = { value = sr_site_port_value_utopia_planitia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_utopia_planitia value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_utopia_planitia value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_utopia_planitia }
@@ -18562,7 +18582,12 @@ sr_mod_install_arcadia_planitia = {
 			set_global_variable = { name = sr_site_port_arcadia_planitia value = { value = sr_site_port_value_arcadia_planitia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_arcadia_planitia value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_arcadia_planitia value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_arcadia_planitia }
@@ -18660,7 +18685,12 @@ sr_mod_install_ceres = {
 			set_global_variable = { name = sr_site_port_ceres value = { value = sr_site_port_value_ceres add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_ceres value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_ceres value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_ceres }
@@ -18758,7 +18788,12 @@ sr_mod_install_vesta = {
 			set_global_variable = { name = sr_site_port_vesta value = { value = sr_site_port_value_vesta add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_vesta value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_vesta value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_vesta }
@@ -18856,7 +18891,12 @@ sr_mod_install_psyche = {
 			set_global_variable = { name = sr_site_port_psyche value = { value = sr_site_port_value_psyche add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_psyche value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_psyche value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_psyche }
@@ -18954,7 +18994,12 @@ sr_mod_install_pallas = {
 			set_global_variable = { name = sr_site_port_pallas value = { value = sr_site_port_value_pallas add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_pallas value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_pallas value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_pallas }
@@ -19052,7 +19097,12 @@ sr_mod_install_hygiea = {
 			set_global_variable = { name = sr_site_port_hygiea value = { value = sr_site_port_value_hygiea add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_hygiea value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_hygiea value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_hygiea }
@@ -19150,7 +19200,12 @@ sr_mod_install_io = {
 			set_global_variable = { name = sr_site_port_io value = { value = sr_site_port_value_io add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_io value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_io value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_io }
@@ -19248,7 +19303,12 @@ sr_mod_install_europa = {
 			set_global_variable = { name = sr_site_port_europa value = { value = sr_site_port_value_europa add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_europa value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_europa value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_europa }
@@ -19346,7 +19406,12 @@ sr_mod_install_ganymede = {
 			set_global_variable = { name = sr_site_port_ganymede value = { value = sr_site_port_value_ganymede add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_ganymede value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_ganymede value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_ganymede }
@@ -19444,7 +19509,12 @@ sr_mod_install_callisto = {
 			set_global_variable = { name = sr_site_port_callisto value = { value = sr_site_port_value_callisto add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_callisto value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_callisto value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_callisto }
@@ -19542,7 +19612,12 @@ sr_mod_install_himalia = {
 			set_global_variable = { name = sr_site_port_himalia value = { value = sr_site_port_value_himalia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_himalia value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_himalia value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_himalia }
@@ -19640,7 +19715,12 @@ sr_mod_install_amalthea = {
 			set_global_variable = { name = sr_site_port_amalthea value = { value = sr_site_port_value_amalthea add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_amalthea value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_amalthea value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_amalthea }
@@ -19738,7 +19818,12 @@ sr_mod_install_venus = {
 			set_global_variable = { name = sr_site_port_venus value = { value = sr_site_port_value_venus add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_venus value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_venus value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_venus }
@@ -19836,7 +19921,12 @@ sr_mod_install_mercury = {
 			set_global_variable = { name = sr_site_port_mercury value = { value = sr_site_port_value_mercury add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_mercury value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_mercury value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_mercury }
@@ -19934,7 +20024,12 @@ sr_mod_install_titan = {
 			set_global_variable = { name = sr_site_port_titan value = { value = sr_site_port_value_titan add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_titan value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_titan value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_titan }
@@ -20032,7 +20127,12 @@ sr_mod_install_enceladus = {
 			set_global_variable = { name = sr_site_port_enceladus value = { value = sr_site_port_value_enceladus add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_enceladus value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_enceladus value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_enceladus }
@@ -20130,7 +20230,12 @@ sr_mod_install_rhea = {
 			set_global_variable = { name = sr_site_port_rhea value = { value = sr_site_port_value_rhea add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_rhea value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_rhea value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_rhea }
@@ -20228,7 +20333,12 @@ sr_mod_install_mimas = {
 			set_global_variable = { name = sr_site_port_mimas value = { value = sr_site_port_value_mimas add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_mimas value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_mimas value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_mimas }
@@ -20326,7 +20436,12 @@ sr_mod_install_iapetus = {
 			set_global_variable = { name = sr_site_port_iapetus value = { value = sr_site_port_value_iapetus add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_iapetus value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_iapetus value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_iapetus }
@@ -20424,7 +20539,12 @@ sr_mod_install_titania = {
 			set_global_variable = { name = sr_site_port_titania value = { value = sr_site_port_value_titania add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_titania value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_titania value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_titania }
@@ -20522,7 +20642,12 @@ sr_mod_install_oberon = {
 			set_global_variable = { name = sr_site_port_oberon value = { value = sr_site_port_value_oberon add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_oberon value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_oberon value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_oberon }
@@ -20620,7 +20745,12 @@ sr_mod_install_miranda = {
 			set_global_variable = { name = sr_site_port_miranda value = { value = sr_site_port_value_miranda add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_miranda value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_miranda value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_miranda }
@@ -20718,7 +20848,12 @@ sr_mod_install_ariel = {
 			set_global_variable = { name = sr_site_port_ariel value = { value = sr_site_port_value_ariel add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_ariel value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_ariel value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_ariel }
@@ -20816,7 +20951,12 @@ sr_mod_install_triton = {
 			set_global_variable = { name = sr_site_port_triton value = { value = sr_site_port_value_triton add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_triton value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_triton value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_triton }
@@ -20914,7 +21054,12 @@ sr_mod_install_proteus = {
 			set_global_variable = { name = sr_site_port_proteus value = { value = sr_site_port_value_proteus add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_proteus value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_proteus value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_proteus }
@@ -21012,7 +21157,12 @@ sr_mod_install_pluto = {
 			set_global_variable = { name = sr_site_port_pluto value = { value = sr_site_port_value_pluto add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_pluto value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_pluto value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_pluto }
@@ -21110,7 +21260,12 @@ sr_mod_install_eris = {
 			set_global_variable = { name = sr_site_port_eris value = { value = sr_site_port_value_eris add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_eris value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_eris value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_eris }
@@ -21208,7 +21363,12 @@ sr_mod_install_makemake = {
 			set_global_variable = { name = sr_site_port_makemake value = { value = sr_site_port_value_makemake add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_makemake value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_makemake value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_makemake }
@@ -21306,7 +21466,12 @@ sr_mod_install_haumea = {
 			set_global_variable = { name = sr_site_port_haumea value = { value = sr_site_port_value_haumea add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_haumea value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_haumea value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_haumea }
@@ -21404,7 +21569,12 @@ sr_mod_install_sedna = {
 			set_global_variable = { name = sr_site_port_sedna value = { value = sr_site_port_value_sedna add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
-		set_global_variable = { name = sr_site_contact_sedna value = te_history_month_index }
+		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
+		# none of its colonies has contact).
+		if = {
+			limit = { NOT = { sr_earth_blockaded = yes } }
+			set_global_variable = { name = sr_site_contact_sedna value = te_history_month_index }
+		}
 		# Repairs come with it (slice 6 design § 7.3).
 		if = {
 			limit = { has_global_variable = sr_site_integrity_sedna }

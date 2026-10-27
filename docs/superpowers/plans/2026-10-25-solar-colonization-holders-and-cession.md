@@ -8,7 +8,7 @@
 
 **Tech stack:** Paradox script (`common/`, `events/`), Victoria 3 GUI, localization YAML, Python 3.11/3.12 `unittest`.
 
-**Spec:** `docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md`. Built 2026-10-25; where the build departs from the steps below, the design's § 17 (As built) says how and why. Scope: `docs/superpowers/specs/2026-10-25-solar-colonization-contest-scope.md`.
+**Spec:** `docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md`. Built 2026-10-25; where the build departs from the steps below, the design's § 17 (As built) says how and why. Scope: `docs/superpowers/archive/specs/2026-10-25-solar-colonization-contest-scope.md`.
 
 ## Global constraints
 

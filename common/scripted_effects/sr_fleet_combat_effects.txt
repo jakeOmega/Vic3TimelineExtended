@@ -1,8 +1,8 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: combat, blockade, seizure, destruction
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
-# (slice 6b, §§ 7-11, 14; 6c, §§ 12-14). Full Colonies only.
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
+# (slice 6b, §§ 7-11, 14; 6c, §§ 12-14; 6d, § 15). Full Colonies only.
 #
 # Each month, from the global step (sr_fl_global_month, after the fleets land
 # and before the worlds' step), at each of the nine locations
@@ -10,7 +10,8 @@
 #   0. every power's forces there by posture into country variables (sr_cb_*):
 #      strength and fire on fleets by posture (1 station, 2 stand off, 3 close
 #      in; 4 interdict, 6c, fights as standing off; at Earth every fleet counts
-#      as stationed, since everything there engages everything), and for each
+#      as stationed, since everything there engages everything, and the Orbital
+#      Battlestation and, 6d, the ground-to-orbit batteries join), and for each
 #      world its closing-in fleets target,
 #      their strength, fire on defences, marines and fire to destroy;
 #   1. each world's closing-in strength (global sr_cb_c_<key>);
@@ -25,7 +26,8 @@
 #      fleet's losses are exactly the fire allocated to it;
 #   4. the losses applied slot by slot (screens first, half destroyed, half
 #      damage: sr_fl_take_losses_at), the Orbital Battlestation's share at
-#      Earth, debris at Earth, war support's battle record, the notice;
+#      Earth, debris at Earth (6d: and the kinetic batteries'), war support's
+#      battle record, the notice;
 #   5. each world: integrity, seizure, destruction, blockade (sr_site_*_step);
 #   6. the records cleared.
 # Hostile means at war (has_war_with); a fleet closing in on a free colony is
@@ -62,6 +64,7 @@ sr_combat_at = {
 		if = {
 			limit = { local_var:sr_cb_code = 1 }
 			sr_cb_battlestation_gather = yes
+			sr_cb_battery_gather = yes
 		}
 	}
 	# 1. Each world's closing-in strength.
@@ -94,10 +97,19 @@ sr_combat_at = {
 	}
 	# 4. Applied; the records.
 	set_local_variable = { name = sr_cb_debris value = 0 }
+	set_local_variable = { name = sr_cb_kinetic value = 0 }
 	set_local_variable = { name = sr_cb_battle value = 0 }
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { has_variable = sr_cb_present }
+		# 6d: Kinetic Interceptors' fire, when there was a hostile fleet to fire on.
+		if = {
+			limit = {
+				has_variable = sr_cb_kf
+				var:sr_cb_e1 > 0
+			}
+			change_local_variable = { name = sr_cb_kinetic add = var:sr_cb_kf }
+		}
 		if = {
 			limit = { var:sr_cb_lost > 0 }
 			set_local_variable = { name = sr_cb_battle value = 1 }
@@ -127,6 +139,14 @@ sr_combat_at = {
 			value = { value = local_var:sr_cb_debris multiply = sr_battle_debris_high }
 		}
 		te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = local_var:sr_cb_debris_high }
+	}
+	if = {
+		limit = { local_var:sr_cb_kinetic > 0 }
+		set_local_variable = {
+			name = sr_cb_debris_low
+			value = { value = local_var:sr_cb_kinetic multiply = sr_battery_debris_low }
+		}
+		te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = 0 }
 	}
 	# 5. Each world.
 	sr_cb_worlds_after_$LOC$ = yes
@@ -518,6 +538,28 @@ sr_cb_battlestation_month = {
 			NOT = { sr_has_battlestation = yes }
 		}
 		remove_variable = sr_battlestation_strength
+	}
+}
+
+# ---- Ground-to-orbit batteries (design § 15, 6d) -----------------------------------------------
+# Country scope, at Earth: the batteries' fire joins their owner's side, from
+# the states it controls (sr_battery_fire; § 5.1). They are no fleet: no
+# strength, so no losses, and they don't hold orbit (a blockade of Earth
+# stands while they fire on it). The kinetic part leaves debris when there was
+# something to fire at (sr_cb_kf; the step's pass 4).
+sr_cb_battery_gather = {
+	if = {
+		limit = { sr_has_battery = yes }
+		set_local_variable = { name = sr_cb_bf value = sr_battery_fire }
+		if = {
+			limit = { local_var:sr_cb_bf > 0 }
+			sr_cb_add = { VAR = sr_cb_f1 AMOUNT = local_var:sr_cb_bf }
+			set_variable = { name = sr_cb_kf value = sr_battery_fire_kinetic }
+			if = {
+				limit = { NOT = { has_variable = sr_cb_present } }
+				set_variable = { name = sr_cb_present value = yes }
+			}
+		}
 	}
 }
 

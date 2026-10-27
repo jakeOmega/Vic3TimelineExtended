@@ -5,10 +5,10 @@ destroyed; colonies hold people taken from Earth; colonies can be built up with
 modules; space fleets and marines; anything else that fits. Revised the same day
 through three rounds of the owner's answers (§ Decisions). This is a scoping
 document, a menu with a build order, not yet a design. Slices 0 and 1 are built
-(`2026-10-25-solar-colonization-holders-and-cession-design.md`), slices 2 and
-3 (`2026-10-25-solar-colonization-population-and-transit-design.md`), slice
-4 (`2026-10-25-solar-colonization-modules-and-bases-design.md`), and slice 5
-(`2026-10-26-solar-colonization-free-colonies-design.md`). Slice 6, the
+(`docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md`), slices 2 and
+3 (`docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md`), slice
+4 (`docs/superpowers/specs/2026-10-25-solar-colonization-modules-and-bases-design.md`), and slice 5
+(`docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md`). Slice 6, the
 fleets phase, is designed in four parts, 6a to 6d
 (`2026-10-26-solar-colonization-fleets-design.md`, with its plan
 `../plans/2026-10-26-solar-colonization-fleets.md`), from the fifth round of
@@ -607,7 +607,7 @@ Fourth round (owner, 2026-10-25), now settled:
   colonies to garrison them.
 
 Nothing is open that blocks slices 0 and 1. Their design:
-`2026-10-25-solar-colonization-holders-and-cession-design.md`.
+`docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md`.
 
 Fifth round (owner, 2026-10-26, the fleets interview), now settled; the
 design is `2026-10-26-solar-colonization-fleets-design.md`:

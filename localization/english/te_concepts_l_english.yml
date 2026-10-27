@@ -2615,6 +2615,8 @@
  sr_orbital_military_pilot_desc:0 "Our first astronaut was a military test pilot, advancing military technology and influence."
  sr_orbital_scientist:0 "Scientist-Astronaut Pioneer"
  sr_orbital_scientist_desc:0 "Our first astronaut was a scientist, accelerating research breakthroughs from orbit."
+ sr_orbital_superiority:0 "Orbital Superiority"
+ sr_orbital_superiority_desc:0 "Our fleets hold Earth orbit in this war: reconnaissance, communications and fire from orbit support our troops. It grows with the margin by which our fleets at Earth outmatch the enemy's there, up to its full value."
  sr_powers_entry:0 "[THIS.GetCountry.GetName]: #v [THIS.GetCountry.MakeScope.ScriptValue('sr_disp_power_achieved')|0]#! of 8"
  sr_powers_intro:0 "Every other power in the space race, and how many of the eight entries with a goal it has achieved:"
  sr_probe:0 "Deep-Space Probe Completed"

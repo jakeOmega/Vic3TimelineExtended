@@ -1,7 +1,7 @@
 # Solar System Colonization, slices 2 and 3: colony population and colony fleets that travel — design
 
 Drafted 2026-10-25. Slices 2 and 3 of the scope in
-`2026-10-25-solar-colonization-contest-scope.md` (§ 10), whose § Decisions and
+`docs/superpowers/archive/specs/2026-10-25-solar-colonization-contest-scope.md` (§ 10), whose § Decisions and
 § 11 record the owner's calls; this design assumes them and the colony record
 of slices 0 and 1 (`2026-10-25-solar-colonization-holders-and-cession-design.md`).
 Slice 2 gives every colony a head count, an emigration programme with

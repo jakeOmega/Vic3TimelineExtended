@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: shared triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # (slice 6). Full Colonies only. The per-slot and per-location triggers are
 # generated (common/scripted_triggers/sr_fleets_generated.txt, from
 # scripts/generators/gen_space_fleets.py).
@@ -25,13 +25,16 @@ sr_has_space_command = {
 }
 
 # Country scope. A fleet power (design § 4): a fleet, or a Space Command to
-# build one, under Full Colonies. The monthly steps walk only these, through
-# the global list sr_fleet_powers.
+# build one (6d: or a reserve, or a battery), under Full Colonies. The monthly
+# steps walk only these, through the global list sr_fleet_powers.
 sr_fleet_power = {
 	sr_colonies_full_enabled = yes
 	OR = {
 		sr_fl_has_any = yes
 		sr_has_space_command = yes
+		# 6d: hulls in its ground reserve, or a ground-to-orbit battery.
+		sr_reserve_total > 0
+		sr_has_battery = yes
 	}
 }
 
@@ -188,5 +191,153 @@ sr_colony_convention_party = {
 	OR = {
 		has_modifier = un_colony_protection_modifier
 		has_variable = un_colony_protection_modifier_on
+	}
+}
+
+# ---- Earth orbit (6d; sr_earth_orbit_effects.txt) ---------------------------------------------
+# Country scope. The ground reserve launches itself each month (design § 15):
+# its toggle, on by default (sr_reserve_auto absent or 1).
+sr_reserve_auto_on = {
+	OR = {
+		NOT = { has_variable = sr_reserve_auto }
+		var:sr_reserve_auto > 0
+	}
+}
+
+# Country scope. A fleet of a country at war with it is at Earth (the location
+# records, sr_fl_at_earth, rebuilt on every arrival and departure).
+sr_earth_hostile_present = {
+	sr_loc_ai_enemy_fleets_earth > 0
+}
+
+# Country scope, under Full Colonies. Its launch site is lost (design § 5.1,
+# § 15): it has a Space Program, and none in a state it controls. Vanilla keeps
+# the building working under occupation, so this test is what stops every
+# launch and module fabrication; only retaking the state lifts it.
+sr_launch_site_lost = {
+	sr_colonies_full_enabled = yes
+	sr_has_space_program = yes
+	NOT = {
+		any_scope_building = {
+			is_building_type = building_space_program
+			state = { sr_state_held_by_owner = yes }
+		}
+	}
+}
+
+# Country scope, under Full Colonies. Its Earth is blockaded (design § 15, §
+# 8's rule at Earth): a fleet of a country at war with it is at Earth and none
+# of its own is. Every fleet at Earth engages every other (§ 7.1), so posture
+# doesn't enter; its batteries and its Orbital Battlestation fire on the
+# blockaders but are no fleet holding orbit. Read live from the location
+# records (sr_fl_at_earth, rebuilt on every arrival and departure), so a
+# country with no fleet of its own, a colony holder, is blockaded too.
+sr_earth_blockaded = {
+	sr_colonies_full_enabled = yes
+	NOT = { has_variable = sr_fl_at_earth }
+	sr_earth_hostile_present = yes
+}
+
+# Country scope. Nothing leaves Earth (design § 15): no colony fleet, module
+# shipment, settler or fleet departing Earth. Blockaded, or the launch site
+# occupied; Launch from the reserve reads only the second (sr_reserve_may_launch),
+# and module fabrication only the second too (sr_mod_month). Every departure
+# path reads this one test.
+sr_launches_barred = {
+	OR = {
+		sr_earth_blockaded = yes
+		sr_launch_site_lost = yes
+	}
+}
+
+# Country scope. Launch (the panel's, the AI's): hulls on the ground, the
+# launch site held (a blockade in orbit doesn't stop it: that is what the
+# reserve is for), and a slot to take them: an empty one, or a fleet of ours
+# at Earth.
+sr_reserve_may_launch = {
+	sr_reserve_total > 0
+	NOT = { sr_launch_site_lost = yes }
+	OR = {
+		sr_fl_has_free_slot = yes
+		sr_fl_any_at = { CODE = 1 }
+	}
+}
+
+# Country scope, the AI (design § 14): its reserve and its fleets at Earth
+# match the enemy's fleets there.
+sr_fl_ai_reserve_matches = {
+	sr_earth_reserve_and_ours >= sr_loc_ai_enemy_fleets_earth
+}
+
+# Country scope. A ground-to-orbit battery, anywhere (its levels count only in
+# the states it controls: sr_battery_fire, sr_battery_sweep).
+sr_has_battery = {
+	any_scope_building = {
+		is_building_type = building_orbital_defense_battery
+	}
+}
+
+# Country scope. The AI wants batteries (design § 14): at war with a country
+# that has fleets.
+sr_battery_ai_wants = {
+	is_at_war = yes
+	has_global_variable_list = sr_fleet_powers
+	any_in_global_list = {
+		variable = sr_fleet_powers
+		is_country_alive = yes
+		has_war_with = prev
+		sr_fl_has_any = yes
+	}
+}
+
+# Country scope, the battery's can_build_government: a player's government
+# always may; an AI's only while it wants them, up to sr_battery_ai_max_levels
+# counting those queued.
+sr_battery_may_build_government = {
+	OR = {
+		is_ai = no
+		custom_tooltip = {
+			text = sr_battery_ai_cap_tt
+			sr_battery_ai_wants = yes
+			sr_battery_queued_levels < sr_battery_ai_max_levels
+		}
+	}
+}
+
+# Country scope. The battery_sweep self-check's subject (design § 18): at
+# peace, a battery running Ground Lasers at half staff or more in a state it
+# controls.
+sr_battery_sweep_qualifies = {
+	is_at_war = no
+	any_scope_building = {
+		is_building_type = building_orbital_defense_battery
+		has_active_production_method = pm_orbital_battery_lasers
+		occupancy >= 0.5
+		state = { sr_state_held_by_owner = yes }
+	}
+}
+
+# Global scope, the battery_sweep self-check: the low pool fell by the whole
+# sweep, or to 0 where it held less, and the high pool kept its figure.
+sr_battery_sweep_took_all = {
+	OR = {
+		global_var:sr_battery_log_low_after <= 0
+		global_var:sr_battery_log_low_after <= {
+			value = global_var:sr_battery_log_low_before
+			subtract = global_var:sr_battery_sweep_month
+			add = 0.0001
+		}
+	}
+	global_var:sr_battery_log_high_after <= { value = global_var:sr_battery_log_high_before add = 0.0001 }
+	global_var:sr_battery_log_high_after >= { value = global_var:sr_battery_log_high_before subtract = 0.0001 }
+}
+
+# Global scope: some fleet power qualifies (sr_battery_sweep_qualifies).
+sr_battery_sweep_subject = {
+	has_global_variable_list = sr_fleet_powers
+	any_in_global_list = {
+		variable = sr_fleet_powers
+		is_country_alive = yes
+		sr_battery_sweep_qualifies = yes
 	}
 }
