@@ -887,7 +887,8 @@ class OrbitTest(unittest.TestCase):
 # Everything else is the Space Race's own art or a #571 journal icon.
 VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 # the colonization overview's Defense and Modules cells (audit
-                # SPC-6): the buildings that defend and that fabricate
+                # SPC-6): the buildings that defend and that fabricate; Space
+                # Command's also marks warships inbound in Locations (SPC-16)
                 "gfx/interface/icons/building_icons/building_space_command.dds",
                 "gfx/interface/icons/building_icons/building_space_program.dds",
                 # the rival rows' band marker, drawn as the UN's authority bar draws it
@@ -936,6 +937,15 @@ class SpaceRaceIconsTest(unittest.TestCase):
             with self.subTest(cell=cell):
                 mark = _enclosing(_type_body(self.gui, cell), "size = { 18 18 }", "icon = {")
                 self.assertIn(f'texture = "{SR_ICONS}first_mark.dds"', mark)
+
+    def test_colony_and_war_fleets_wear_different_icons(self):
+        """Audit SPC-16: Solar System's inbound colony fleets keep the
+        colonization rocket; Locations' inbound warships wear Space Command's."""
+        site = _type_body(self.gui, "te_sr_site_row")
+        loc = _type_body(self.gui, "te_sr_location_row")
+        self.assertIn('texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"', site)
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', loc),
+                         ["gfx/interface/icons/building_icons/building_space_command.dds"])
 
     def test_the_pies(self):
         pie = _type_body(self.gui, "te_sr_ov_pie")

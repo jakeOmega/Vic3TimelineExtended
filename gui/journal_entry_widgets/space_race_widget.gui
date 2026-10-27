@@ -3581,7 +3581,8 @@ types space_race_widget_types
 	### other power's flag (its capital stored on the viewer, sr_ls_cap_<loc>,
 	### gotcha #15) and every other power's strength there, exact (fleets in
 	### space are seen), the fleets on their way ("count·months", highlighted
-	### when the first is ours), and from 6b its status (a battle this month, our
+	### when the first is ours; marked with Space Command's icon, so warships
+	### don't wear the colony fleets' rocket: audit SPC-16), and from 6b its status (a battle this month, our
 	### colonies there blockaded, our blockade of an enemy's; from 6c, our
 	### colonies interdicted, our interdiction). 140 + 56 + 79 + 66 + 113 +
 	### 4 × 4 + 2 × 4 = 478, in the column. Instances in te_sr_location_rows
@@ -3675,7 +3676,7 @@ types space_race_widget_types
 				icon = {
 					size = { 16 16 }
 					parentanchor = vcenter
-					texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+					texture = "gfx/interface/icons/building_icons/building_space_command.dds"
 				}
 				textbox = {
 					parentanchor = vcenter

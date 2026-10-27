@@ -1173,7 +1173,7 @@
  je_space_race_widget_loc_col_where:0 "Location"
  je_space_race_widget_loc_earth_blockaded_tt:0 "#header Earth Blockaded#!\nA fleet at war with us is in Earth orbit and none of ours is: a [concept_sr_blockade] of Earth. Nothing of ours leaves Earth, and our colonies have no contact from home. Launch the reserve to put a fleet up; any fleet of ours at Earth breaks it."
  je_space_race_widget_loc_earth_blockading_tt:0 "#header Blockading Earth#!\nOur fleet holds Earth orbit against an enemy with no fleet there: nothing of theirs leaves Earth. Their ground-to-orbit batteries still fire on us."
- je_space_race_widget_loc_inbound_tt:0 "#header Fleets on Their Way#!\nThe first figure is how many [concept_sr_space_fleet]s are flying here, the second the months until the first lands. Highlighted when the first is ours."
+ je_space_race_widget_loc_inbound_tt:0 "#header Space Fleets on Their Way#!\nThe first figure is how many [concept_sr_space_fleet]s are flying here, the second the months until the first lands. Highlighted when the first is ours."
  je_space_race_widget_loc_interdicted_tt:0 "#header Interdicted#!\nA fleet of a country at peace with us stands off here and none of ours holds orbit: a [concept_sr_blockade] in peace. A fleet of ours stationed or standing off here turns it into a standoff, and we hold a casus belli against the interdictor."
  je_space_race_widget_loc_interdicting_tt:0 "#header Interdicting#!\nOur fleet interdicts the colonies here of a country at peace with us. While none of its fleets holds orbit here, they are blockaded."
  je_space_race_widget_loc_others_tt:0 "#header Other Powers' Fleets#!\nEvery other country's fleet strength at this location, and the strongest one's flag. Fleets in space are seen by all."

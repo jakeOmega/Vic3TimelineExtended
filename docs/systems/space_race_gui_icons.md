@@ -63,9 +63,9 @@ Three stacked `progresspie` layers in `te_sr_ov_pie` (the recipe in `gui_modding
 | Worlds claimed by anyone | rust red `#cf4a2a` | `pie_claimed.dds` |
 | Ours, on top | bright gold `#ecc043` | `pie_ours.dds` |
 
-## Our Colonies: the kind of world
+## Colonies: the kind of world
 
-One icon for each of nine kinds of world, not one for each of the 34 worlds or 68 specializations. It shows at 24 px, left of the specialization's name, in `te_sr_colony_row`, which takes the file from a `colony_icon` block override on each of the 68 rows. A row shows the icon of the kind its world belongs to, so a world's two specializations share one. `ColoniesTest` holds every row to its kind.
+One icon for each of nine kinds of world, not one for each of the 34 worlds. It shows at 24 px, left of the world's name, in `te_sr_colony_row`, which takes the file from a `colony_icon` block override on each of the 34 generated rows (`gen_solar_sites.py`, audit SPC-19). A row shows the icon of the kind its world belongs to. `ColoniesTest` holds every row to its kind.
 
 | Kind | Worlds | Shows | File |
 |---|---|---|---|
@@ -84,3 +84,5 @@ The kinds group worlds by the body they orbit. Each falls inside one stage (Mars
 ## Kept as they are
 
 The pie's frame (`gfx/interface/backgrounds/round_frame_dec.dds`) is vanilla's decoration, used as vanilla uses it. So are the Rivals rows' band marker (`gfx/interface/progressbar/progressbar_marker.dds`) and the transparent track under it (`generic_icons/transparent.dds`), drawn as the UN's authority bar draws them. The rows have no icons of their own.
+
+Two building icons stand in where a cell names what a building does (audit SPC-6, SPC-16): Space Command's (`building_icons/building_space_command.dds`) on the colonization overview's Defense cell and on Locations' inbound column, so warships on their way don't wear the colony fleets' rocket, which Solar System's inbound column keeps; and the Space Program's (`building_icons/building_space_program.dds`) on the Modules cell. A drawn icon for each (a warship, a module) would replace them; they are listed in `VANILLA_KEPT` in `test_space_race_layout.py`.
