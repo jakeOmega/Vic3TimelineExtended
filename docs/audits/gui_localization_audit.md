@@ -184,7 +184,7 @@ One pass, panel by panel, with the width tests each panel already has, is cheape
 - Space uses "Fleets" for colony fleets and warships alike (SPC-16).
 - The Strategic Reserve says "Withdrawing" and "Releasing" (SR-5).
 - Grand Monuments mixes construction site, undedicated and "Being Built" (GM-7).
-- Spelling is mixed mod-wide, British (programme, defence, licence) beside American (program, defense, stabilize). `docs/player_guide/STYLE.md` asks for American in the guide, as the base game uses. The loc needs one rule; see Decisions.
+- Spelling is mixed mod-wide, British (programme, defence, licence) beside American (program, defense, stabilize). `docs/player_guide/STYLE.md` asks for American in the guide, as the base game uses. The loc needs one rule; see Decisions. **Done:** American (Decision 10); `scripts/analysis/check_loc_spelling.py` swept the loc and the guide, and `--check` lists stragglers.
 
 ## Work list by system
 
