@@ -1016,7 +1016,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_mig_cell_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/state_status_icons/mass_migration_target.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_migration.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_mig"
@@ -1034,7 +1034,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_lx_e0_over_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_e0_tt_100', 'te_demog_ov_e0_tt' )]"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/healthcare_aid.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_life_expectancy.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_e0"
@@ -1126,7 +1126,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_tfr_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/decree/decree_natalism_initiative.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_fertility.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_fert"
@@ -1154,7 +1154,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_median_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/clock.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_median_age.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_median"
@@ -1185,7 +1185,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_work_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_working_age_tt', 'te_demog_ov_working_age_pending_tt' )]"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/institution_icons/institution_ministry_of_labor.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_working_age.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_working_age"
@@ -1200,7 +1200,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_gini_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/money.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_gini.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_gini"
@@ -4909,7 +4909,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_mig_cell_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/state_status_icons/mass_migration_target.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_migration.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_mig"
@@ -4927,7 +4927,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_lx_state_e0_over_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_e0_tt_100', 'te_demog_st_e0_tt' )]"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/healthcare_aid.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_life_expectancy.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_e0"
@@ -5019,7 +5019,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_tfr_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/decree/decree_natalism_initiative.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_fertility.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_fert"
@@ -5047,7 +5047,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_median_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/clock.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_median_age.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_median"
@@ -5078,7 +5078,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_state_work_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_working_age_tt', 'te_demog_ov_working_age_pending_tt' )]"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/institution_icons/institution_ministry_of_labor.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_working_age.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_working_age"
@@ -5093,7 +5093,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_gini_cell_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/money.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_gini.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_gini"
