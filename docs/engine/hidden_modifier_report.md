@@ -16,49 +16,18 @@ Suppress a deliberate case on the block's opening line:
 
 ## Unreviewed flags
 
-### `common/scripted_buttons/un_buttons.txt` (6)
-
-- line 87: `UN_FOUND_DESC` hides `un_founding_cost_modifier` (line 90)
-- line 642: `UN_PEACEKEEPING_DESC` hides `un_peacekeeping_contributor_modifier` (line 644)
-- line 903: `UN_HUMAN_RIGHTS_DESC` hides `un_human_rights_champion_modifier` (line 905)
-- line 994: `UN_ARMS_CONTROL_DESC` hides `un_arms_control_participant_modifier` (line 996)
-- line 1071: `UN_CHAMPION_ORDER_DESC` hides `un_champion_order_cost` (line 1073)
-- line 1138: `UN_UNDERMINE_ORDER_DESC` hides `un_undermine_order_cost` (line 1140)
-
-### `common/scripted_effects/nuclear_weapon_effects.txt` (2)
-
-- line 23: `INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC` hides `nuclear_weapon_program_funding` (line 38)
-- line 48: `DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC` hides `nuclear_weapon_program_funding` (line 63)
-
-### `common/scripted_effects/space_race_effects.txt` (2)
-
-- line 641: `SR_SAFE_APPROACH_EFFECT` hides `sr_safe_approach` (line 650)
-- line 658: `SR_AMBITIOUS_APPROACH_EFFECT` hides `sr_ambitious_approach` (line 667)
-
-### `common/scripted_effects/un_ladder_effects.txt` (1)
-
-- line 705: `UN_LEAVE_DESC` hides `un_withdrawal_penalty_modifier` (line 728)
-
-### `common/scripted_effects/un_propose_effects.txt` (1)
-
-- line 227: `UN_PROPOSE_CHARTER_REFORM_TT` hides `un_reform_champion_modifier` (line 232)
-
-### `common/scripted_effects/un_vote_cast_effects.txt` (1)
-
-- line 404: `UN_VOTE_VETO_TT` hides `un_veto_authority_drain_modifier` (line 411), `un_veto_isolation_modifier` (line 417)
-
-### `common/scripted_guis/gm_sguis.txt` (1)
-
-- line 467: `gm_name_start_tt` hides `gm_name_carrier_slot` (line 475)
+_None._
 
 ## Reviewed exemptions
 
-_None._
+- `common/scripted_effects/nuclear_weapon_effects.txt` — `INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC` hides `nuclear_weapon_program_funding` — **2026-10-27**: a refresh, removing and re-adding the funding modifier at the new total; its lines would print the whole cost at the multiplier from before the click, so the text gives the step the click changes
+- `common/scripted_effects/nuclear_weapon_effects.txt` — `DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC` hides `nuclear_weapon_program_funding` — **2026-10-27**: a refresh, removing and re-adding the funding modifier at the new total; its lines would print the whole cost at the multiplier from before the click, so the text gives the step the click changes
+- `common/scripted_guis/gm_sguis.txt` — `gm_name_start_tt` hides `gm_name_carrier_slot` — **2026-10-27**: gm_name_carrier_slot is plumbing, the company slot the naming box's carrier company takes for the year it is open; printing +1 company slot would tell the player of a gain they never get to use
 
 ## Coverage
 
-- total flags: 14
-- unreviewed: 14
-- exempted: 0
+- total flags: 3
+- unreviewed: 0
+- exempted: 3
 - stale tags: 0
 

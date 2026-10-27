@@ -787,8 +787,9 @@ carries its member modifier. Its effects are multiplied by the UN's enforcement,
 never below ×0.01, so a Moribund UN leaves conventions dormant rather than
 lapsed. Most also name winners and losers among the parties. Our Obligations
 lists each convention you are party to, with your terms under it; hover a
-convention for all its terms, or a term for its modifier. Hover an agency in the
-overview for its convention's terms, founded or not. Your terms start the day
+convention for all its terms, or a term for its modifier. An agency's hover in
+the overview says whether it is founded, with its convention's terms one hover
+further, on Its terms. Your terms start the day
 you ratify a convention or join, and are re-read when the tier changes and once
 a year.
 
@@ -838,7 +839,7 @@ INCB, the Antarctic Treaty Secretariat, the Office for Disarmament Affairs and
 the Committee on the Peaceful Uses of Outer Space. The seventeenth, the
 International Court of Justice, is founded the first time a
 country accepts a World Court ruling against it, and has no effects of its own.
-Hover an agency for its convention's terms. Once
+An agency's hover leads to its convention's terms (Its terms). Once
 the International Criminal Court convention is in force, the court indicts the
 ruler of a country that ratified it (from Established) or of any country (at
 Supranational) for a nuclear first or tactical strike or an exposed

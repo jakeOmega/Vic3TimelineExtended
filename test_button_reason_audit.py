@@ -317,6 +317,19 @@ class RepoTests(unittest.TestCase):
         self.assertIn("button_reason_audit", extract_rosters(
             os.path.join(root, "mod_state_server.py"))["POST_LOAD_AUDITS"])
 
+    def test_the_mod_has_no_failing_flag(self):
+        # CI runs it --strict (#1213): every flag is fixed or carries its
+        # check-tagged REVIEWED comment, and no tag is stale.
+        from path_constants import mod_path
+        result = audit(mod_path)
+        self.assertEqual([f for f in result.flags if not f.exemption], [])
+        self.assertEqual(result.stale_tags, [])
+
+    def test_ci_runs_it_strict(self):
+        root = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(root, ".github", "workflows", "ci.yml"), encoding="utf-8") as fh:
+            self.assertIn("python3 button_reason_audit.py --strict", fh.read())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -111,3 +111,13 @@ check: each is about what the panel draws.
 | **Delegation flags.** A month into a vote. | Each Delegations row starts with its member's flag. | No flags: the mirror (`un_deleg_mirror_flags`) did not run from `un_vote.7`, or `Var('un_deleg_cap_<N>').GetState.GetCountry` does not resolve here as it does for the Security Council's seats. |
 | **The archive.** Open Resolutions on the Record. | One row per resolution, newest first, its title and how it ended; the rest of its card on hover. Voting Details still lists the ballots, without the pledge caveat on each. | A blank hover: `un_chamber_history_card_row_sgui` did not receive `op` in a tooltip. |
 | **Type sizes.** Look at the panels at 1080p. | Rows, buttons and notes at 17, subheadings at 20, the overview at 16; nothing elided. | |
+
+## The GUI audit backlog: agency hovers, modifier lines, hidden guards (2026-10-27)
+
+The four #1213 audits went into CI with their backlog fixed. Three UN changes rest on the game.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Agency icons, one hover further.** Hover ITLOS and UNESCO in the overview, wait for the tooltip to lock, then hover **Its terms**. | The agency's name and Founded or Not yet founded, then an underlined Its terms whose hover is the convention's terms, every modifier listed. This replaces the first section's Agency icons row. | No nested hover inside the icon's tooltip: splice the terms back (`$je_un_terms_<key>$` in `je_un_ov_agency_<agency>_tt`) and tag the keys `long_tooltip`. |
+| **Veto and Charter Reform.** Hover Veto on a binding resolution, and Propose on Charter Reform. | Under the text, the engine's own lines: Veto Backlash and Diplomatic Isolation After Veto for the veto, UN Reform Champion for the proposal, each with its duration. | No lines: the vote's tooltip hides an `add_modifier` outside a `custom_tooltip` here; put it back with `[GetStaticModifier(...).GetDesc]` in the text. |
+| **No raw guards.** Hover Join, Found, Withhold and Pay Dues, Pledge Grain and a mission's Send a Contingent, pressable and greyed. | No line reads a variable name (`un_founded`, `un_fr_pledged`, `un_mission_registry`); a greyed one shows only worded requirements. | A raw line: a test outside `hidden_trigger`, which `button_reason_audit.py` should have caught. A greyed button with every line ticked: a hidden test failed; say it in a `custom_tooltip` instead. |
