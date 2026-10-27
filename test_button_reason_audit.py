@@ -236,6 +236,31 @@ class RawConditionTests(_Fixture):
         self.assertIn("`exists = var:te_target`", rows["te_button possible"][3])
         self.assertNotIn("te_clean_button possible", rows)
 
+    def test_a_scripted_button_only_the_ai_sees_is_not_read(self):
+        # `is_ai = yes` at the top of `visible` (an AND) hides the button from
+        # every player; nested in an OR it does not.
+        _write(self.root, "common/scripted_buttons/te_test_buttons.txt", BUTTONS + """\
+te_ai_button = {
+\tvisible = {
+\t\tis_ai = yes
+\t\thas_variable = te_flag
+\t}
+\tpossible = { has_variable = te_flag }
+}
+te_either_button = {
+\tvisible = {
+\t\tOR = { is_ai = yes has_variable = te_flag }
+\t}
+\tpossible = { has_variable = te_flag }
+}
+""")
+        r = audit(self.root)
+        owners = {f.owner for f in r.flags if f.check == "raw_condition"}
+        self.assertNotIn("te_ai_button possible", owners)
+        self.assertIn("te_either_button possible", owners)
+        self.assertIn("te_button possible", owners)
+        self.assertEqual(r.ai_only_skipped, 1)
+
 
 class SuppressionTests(_Fixture):
     def test_missing_reason_tag_on_the_enabled_line(self):
@@ -291,6 +316,19 @@ class RepoTests(unittest.TestCase):
         root = os.path.dirname(os.path.abspath(__file__))
         self.assertIn("button_reason_audit", extract_rosters(
             os.path.join(root, "mod_state_server.py"))["POST_LOAD_AUDITS"])
+
+    def test_the_mod_has_no_failing_flag(self):
+        # CI runs it --strict (#1213): every flag is fixed or carries its
+        # check-tagged REVIEWED comment, and no tag is stale.
+        from path_constants import mod_path
+        result = audit(mod_path)
+        self.assertEqual([f for f in result.flags if not f.exemption], [])
+        self.assertEqual(result.stale_tags, [])
+
+    def test_ci_runs_it_strict(self):
+        root = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(root, ".github", "workflows", "ci.yml"), encoding="utf-8") as fh:
+            self.assertIn("python3 button_reason_audit.py --strict", fh.read())
 
 
 if __name__ == "__main__":

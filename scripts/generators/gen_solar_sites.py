@@ -2484,7 +2484,9 @@ def _free_row(site: Site) -> list[str]:
     out += _override("free_visible", f'visible = "[{_eq(f"sr_disp_free_{k}", 1)}]"')
     out += _override("free_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
     out += _override("free_name", f'text = "sr_site_name_{k}"')
-    out += _override("free_people", f'raw_text = "[{_sv(f"sr_disp_site_pop_{k}")}|K]"')
+    # A figure under its own hover: the type underlines it, and #v here keeps
+    # its value color (unmarked_hover_audit; style rule 3).
+    out += _override("free_people", f'raw_text = "#v [{_sv(f"sr_disp_site_pop_{k}")}|K]#!"')
     out += _override("free_ties", f'raw_text = "[{_sv(f"sr_disp_free_ties_{k}")}|0]"')
     out += _override("free_supply_button",
                      f'enabled = "{_sgui_call("sr_free_supply_sgui", "IsValid", site)}"',
@@ -2760,7 +2762,7 @@ def _site_row(site: Site) -> list[str]:
     out += _override("site_occupied_visible", f'visible = "[{_eq(disp, 5)}]"')
     out += _override("site_ruined_visible", f'visible = "[{_eq(disp, 6)}]"')
     out += _override("site_inbound", f'visible = "[{_ge(inbound, 1)}]"', 'tooltip = "je_space_race_widget_ss_inbound_tt"')
-    out += _override("site_inbound_ours", f'visible = "[{_eq(ours, 1)}]"', f'raw_text = "{figure}"')
+    out += _override("site_inbound_ours", f'visible = "[{_eq(ours, 1)}]"', f'raw_text = "#v {figure}#!"')
     out += _override("site_inbound_rival", f'visible = "[{_eq(ours, 0)}]"', f'raw_text = "{figure}"')
     out += _override("site_target_button",
                      f'visible = "[{_ge(target, 1)}]"',
@@ -2799,7 +2801,9 @@ def _colony_row(site: Site) -> list[str]:
                      f'tooltip = "{_reasoned("sr_colony_priority_sgui", _site_scope(site))}"')
     for level in range(4):
         out += _override(f"prio_{level}_visible", f'visible = "[{_eq(prio, level)}]"')
-    out += _override("settler_people", f'raw_text = "[{_sv(f"sr_disp_site_pop_{k}")}|K] / [{_sv(f"sr_site_room_{k}")}|K]"')
+    # The figures under a hover of their own are underlined by the type; #v
+    # here keeps the value color the type's format used to give them.
+    out += _override("settler_people", f'raw_text = "#v [{_sv(f"sr_disp_site_pop_{k}")}|K] / [{_sv(f"sr_site_room_{k}")}|K]#!"')
     out += _override("settler_crews", f'raw_text = "[{_sv(f"sr_site_crews_{k}")}|0]"')
     # Modules
     out += _override("module_staffing", f'raw_text = "[{_sv(f"sr_disp_site_staffing_{k}")}|0]%"')
@@ -2823,7 +2827,7 @@ def _colony_row(site: Site) -> list[str]:
                      f"onclick = \"[GetScriptedGui('sr_colony_module_sgui').Execute( {clear} )]\"",
                      f'tooltip = "{_reasoned("sr_colony_module_sgui", clear)}"')
     # Autonomy
-    out += _override("aut_figure", f'raw_text = "[{_sv(f"sr_disp_site_aut_{k}")}|0]%"')
+    out += _override("aut_figure", f'raw_text = "#v [{_sv(f"sr_disp_site_aut_{k}")}|0]%#!"')
     out += _override("aut_drift_tooltip", f'tooltip = "je_space_race_widget_autonomy_drift_tt_{k}"')
     out += _override("aut_drift", f'raw_text = "[{_sv(f"sr_disp_site_aut_drift_{k}")}|+=2]"')
     for code, name in enumerate(("none", "charter", "garrison", "both")):
@@ -2833,9 +2837,9 @@ def _colony_row(site: Site) -> list[str]:
                      f'onclick = "{_sgui_call("sr_colony_abandon_sgui", "Execute", site)}"',
                      f'tooltip = "{_reasoned("sr_colony_abandon_sgui", _site_scope(site))}"')
     # Defenses (gen_space_fleets' sr_disp_def_* values)
-    out += _override("def_level", f'raw_text = "[{_sv(f"sr_site_def_value_{k}")}|0]"')
-    out += _override("def_integrity", f'raw_text = "[{_sv(f"sr_disp_def_integrity_{k}")}|0]%"')
-    out += _override("def_marines", f'raw_text = "[{_sv(f"sr_site_marines_value_{k}")}|0]"')
+    out += _override("def_level", f'raw_text = "#v [{_sv(f"sr_site_def_value_{k}")}|0]#!"')
+    out += _override("def_integrity", f'raw_text = "#v [{_sv(f"sr_disp_def_integrity_{k}")}|0]%#!"')
+    out += _override("def_marines", f'raw_text = "#v [{_sv(f"sr_site_marines_value_{k}")}|0]#!"')
     for code, name in ((0, "calm"), (1, "blockaded"), (2, "assault"), (3, "occupied"), (4, "interdicted")):
         out += _override(f"def_{name}_visible", f'visible = "[{_eq(dstatus, code)}]"')
     out += _override("def_occupier_context",

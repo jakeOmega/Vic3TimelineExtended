@@ -1396,6 +1396,7 @@ types space_race_widget_types
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
+						default_format = "#tooltippable"
 						tooltip = "je_space_race_widget_autonomy_charter_tt"
 						text = "je_space_race_widget_autonomy_status_charter"
 						block "aut_charter_visible" {}
@@ -1407,6 +1408,7 @@ types space_race_widget_types
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
+						default_format = "#tooltippable"
 						tooltip = "je_space_race_widget_autonomy_garrison_tt"
 						text = "je_space_race_widget_autonomy_status_garrison"
 						block "aut_garrison_visible" {}
@@ -1418,6 +1420,7 @@ types space_race_widget_types
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
+						default_format = "#tooltippable"
 						tooltip = "je_space_race_widget_autonomy_both_tt"
 						text = "je_space_race_widget_autonomy_status_both"
 						block "aut_both_visible" {}
@@ -1465,7 +1468,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#R"
+					default_format = "#tooltippable"
 					tooltip = "je_space_race_widget_loc_blockaded_tt"
 					text = "je_space_race_widget_def_status_blockaded"
 					block "def_blockaded_visible" {}
@@ -1477,7 +1480,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#R"
+					default_format = "#tooltippable"
 					tooltip = "je_space_race_widget_loc_interdicted_tt"
 					text = "je_space_race_widget_def_status_interdicted"
 					block "def_interdicted_visible" {}
@@ -1489,7 +1492,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#R"
+					default_format = "#tooltippable"
 					tooltip = "je_space_race_widget_def_assault_tt"
 					text = "je_space_race_widget_def_status_assault"
 					block "def_assault_visible" {}
@@ -1508,7 +1511,7 @@ types space_race_widget_types
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
-						default_format = "#R"
+						default_format = "#tooltippable"
 						tooltip = "je_space_race_widget_def_occupied_tt"
 						text = "je_space_race_widget_def_status_occupied"
 					}
@@ -1549,7 +1552,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#v"
+					default_format = "#tooltippable"
 					block "settler_people" {}
 				}
 			}
@@ -1566,6 +1569,7 @@ types space_race_widget_types
 					using = te_sr_fontsize_row
 					elide = right
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)0' )]"
+					default_format = "#tooltippable"
 					block "settler_crews" {}
 				}
 				textbox = {
@@ -1576,6 +1580,7 @@ types space_race_widget_types
 					using = te_sr_fontsize_row
 					elide = right
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
 					text = "je_space_race_widget_settlers_agi"
 				}
 			}
@@ -1606,6 +1611,7 @@ types space_race_widget_types
 						max_width = 14
 						align = center|nobaseline
 						using = te_sr_fontsize_row
+						default_format = "#tooltippable"
 						block "mod_a_level" {}
 					}
 				}
@@ -1645,6 +1651,7 @@ types space_race_widget_types
 						max_width = 14
 						align = center|nobaseline
 						using = te_sr_fontsize_row
+						default_format = "#tooltippable"
 						block "mod_b_level" {}
 					}
 				}
@@ -1684,6 +1691,7 @@ types space_race_widget_types
 						max_width = 14
 						align = center|nobaseline
 						using = te_sr_fontsize_row
+						default_format = "#tooltippable"
 						block "mod_hab_level" {}
 					}
 				}
@@ -1723,6 +1731,7 @@ types space_race_widget_types
 						max_width = 14
 						align = center|nobaseline
 						using = te_sr_fontsize_row
+						default_format = "#tooltippable"
 						block "mod_port_level" {}
 					}
 				}
@@ -1762,6 +1771,7 @@ types space_race_widget_types
 						max_width = 14
 						align = center|nobaseline
 						using = te_sr_fontsize_row
+						default_format = "#tooltippable"
 						block "mod_def_level" {}
 					}
 				}
@@ -1806,7 +1816,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#v"
+					default_format = "#tooltippable"
 					block "aut_figure" {}
 				}
 			}
@@ -1847,7 +1857,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#v"
+					default_format = "#tooltippable"
 					block "def_level" {}
 				}
 			}
@@ -1863,7 +1873,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#v"
+					default_format = "#tooltippable"
 					block "def_integrity" {}
 				}
 			}
@@ -1879,7 +1889,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#v"
+					default_format = "#tooltippable"
 					block "def_marines" {}
 				}
 			}
@@ -2558,6 +2568,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_ss_free_tt"
 				text = "je_space_race_widget_ss_free"
 				block "site_free_visible" {}
@@ -2570,7 +2581,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#R"
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_ss_occupied_tt"
 				text = "je_space_race_widget_ss_occupied"
 				block "site_occupied_visible" {}
@@ -2582,7 +2593,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#grey"
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_ss_ruined_tt"
 				text = "je_space_race_widget_ss_ruined"
 				block "site_ruined_visible" {}
@@ -2613,7 +2624,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#v"
+					default_format = "#tooltippable"
 					block "site_inbound_ours" {}
 				}
 				textbox = {
@@ -2623,6 +2634,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
+					default_format = "#tooltippable"
 					block "site_inbound_rival" {}
 				}
 			}
@@ -2997,7 +3009,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#v"
+				default_format = "#tooltippable"
 				block "free_people" {}
 			}
 		}
@@ -3013,6 +3025,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
+				default_format = "#tooltippable"
 				block "free_ties" {}
 			}
 		}
@@ -3255,7 +3268,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#v"
+					default_format = "#tooltippable"
 					block "fl_strength" {}
 				}
 			}
@@ -3271,6 +3284,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
+					default_format = "#tooltippable"
 					block "fl_drive" {}
 				}
 				flowcontainer = {
@@ -3290,6 +3304,7 @@ types space_race_widget_types
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
+						default_format = "#tooltippable"
 						text = "je_space_race_widget_fl_refit"
 					}
 					textbox = {
@@ -3315,6 +3330,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
+					default_format = "#tooltippable"
 					block "fl_dv" {}
 				}
 			}
@@ -3330,6 +3346,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
+					default_format = "#tooltippable"
 					block "fl_supply" {}
 				}
 			}
@@ -3345,6 +3362,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
+					default_format = "#tooltippable"
 					block "fl_marines" {}
 				}
 			}
@@ -3710,7 +3728,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#R"
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_battle_tt"
 				text = "je_space_race_widget_loc_status_battle"
 				block "loc_battle_visible" {}
@@ -3722,7 +3740,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#R"
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_blockaded_tt"
 				text = "je_space_race_widget_loc_status_blockaded"
 				block "loc_blockaded_visible" {}
@@ -3734,7 +3752,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#v"
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_blockading_tt"
 				text = "je_space_race_widget_loc_status_blockading"
 				block "loc_blockading_visible" {}
@@ -3746,7 +3764,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#R"
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_interdicted_tt"
 				text = "je_space_race_widget_loc_status_interdicted"
 				block "loc_interdicted_visible" {}
@@ -3758,7 +3776,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#v"
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_interdicting_tt"
 				text = "je_space_race_widget_loc_status_interdicting"
 				block "loc_interdicting_visible" {}
@@ -3771,7 +3789,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#R"
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_earth_blockaded_tt"
 				text = "je_space_race_widget_loc_status_earth_blockaded"
 				block "loc_earth_blockaded_visible" {}
@@ -3783,7 +3801,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#v"
+				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_earth_blockading_tt"
 				text = "je_space_race_widget_loc_status_earth_blockading"
 				block "loc_earth_blockading_visible" {}

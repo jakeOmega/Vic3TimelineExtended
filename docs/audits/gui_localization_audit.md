@@ -555,7 +555,7 @@ Each detail file names the test beside its finding. The ones most proposals touc
 
 ## Tooling that would keep this from coming back
 
-Four checks the audit ran by hand (#1213), now built as read-only audits in `POST_LOAD_AUDITS`. Each writes `docs/engine/<name>_report.md`, takes a check-tagged `# REVIEWED YYYY-MM-DD (<check>): rationale` suppression and fails `--strict` on an untagged flag or a stale tag. They are not in CI yet: the base still held the backlog below when they landed (2026-10-27, main 2d92e98), which the slices are fixing.
+Four checks the audit ran by hand (#1213), now built as read-only audits in `POST_LOAD_AUDITS`. Each writes `docs/engine/<name>_report.md`, takes a check-tagged `# REVIEWED YYYY-MM-DD (<check>): rationale` suppression and fails `--strict` on an untagged flag or a stale tag. The base still held the backlog below when they landed (2026-10-27, main 2d92e98); once the slices and the backlog pass had fixed or reviewed every flag, all four joined CI's `--strict` steps (2026-10-27).
 
 - **Long live tooltips** (`long_tooltip_audit.py`, check `long_tooltip`, tag trailing on the key's loc line): loc keys referenced from `.gui` files, outside How sections, over 500 rendered characters, the scan behind finding 7. 500 is above all but 9 of vanilla's 4,722 tooltip keys. On the base: 120 keys (289 over 300).
 - **Hidden modifier lines** (`hidden_modifier_audit.py`, check `hidden_modifier`, tag on the `custom_tooltip = {` line): a `custom_tooltip` whose block holds an `add_modifier` and whose text renders no `GetStaticModifier` for it. On the base: 14 of the 26 such blocks.

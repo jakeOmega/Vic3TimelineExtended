@@ -794,6 +794,7 @@ types te_tax_review_widget_types
 					# no date to print and no base to scale.
 					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_est_static', 'te_tax_est_stale' ) )]"
 					tooltip = "te_tax_est_header_tt"
+					default_format = "#tooltippable"
 				}
 				# The table's heads, the cells of te_tax_estimate_row. A line with no
 				# base prints a dash, and why on its hover.

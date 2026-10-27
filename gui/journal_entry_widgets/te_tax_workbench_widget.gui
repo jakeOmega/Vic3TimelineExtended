@@ -1463,6 +1463,7 @@ types te_tax_workbench_widget_types
 					blockoverride "row_value" {
 						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_sum_revenue_none', SelectLocalization( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_on'), '(CFixedPoint)0' ) ), 'te_tax_sum_revenue_range', SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_nobase_any'), '(CFixedPoint)0' ), 'te_tax_sum_revenue_partial', 'te_tax_sum_revenue_value' ) ) )]"
 						tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', 'te_tax_sum_revenue_lines_tt' )]"
+						default_format = "#tooltippable"
 					}
 				}
 				# Customs levels the draft changes (plan Task 15; the customs option only).

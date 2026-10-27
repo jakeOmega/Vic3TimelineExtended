@@ -1580,7 +1580,8 @@ def _fleet_row(n: int) -> list[str]:
     out += _override("fl_where", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_where_name')]\"")
     out += _override("fl_transit_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}", 2)}]"')
     out += _override("fl_transit", f'text = "je_space_race_widget_fl_{n}_transit"')
-    out += _override("fl_strength", f'raw_text = "[{_sv(var(n, "strength"))}|0]/[{_sv(var(n, "strength_full"))}|0]"',
+    # The type underlines the strength for its hover; #v keeps its value color.
+    out += _override("fl_strength", f'raw_text = "#v [{_sv(var(n, "strength"))}|0]/[{_sv(var(n, "strength_full"))}|0]#!"',
                      f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"')
     out += _override("fl_drive", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_drive_name')]\"")
     out += _override("fl_refit_visible", f'visible = "[{_ge(f"sr_disp_fl_{n}_refit_left", 1)}]"')

@@ -2952,6 +2952,7 @@ types banking_dashboard_widget_types
 								}
 								blockoverride "name" {
 									text = "banking_dash_mon_bs_country_name"
+									default_format = "#tooltippable"
 								}
 								blockoverride "value" {
 									text = "banking_dash_mon_union_member_value"

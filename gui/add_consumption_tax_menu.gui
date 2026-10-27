@@ -17,7 +17,7 @@
 					onclick = "[Execute( Goods.ToggleTaxation(GetPlayer) )]"
 					### MOD: Tax Code: greyed while the legislated tax code sets the taxed goods (te_tax_native_goods_controls_sgui).
 					# vanilla: enabled = "[IsValid( Goods.ToggleTaxation(GetPlayer) )]"
-					enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetPlayer) ) )]"
+					enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetPlayer) ) )]" # REVIEWED 2026-10-27 (missing_reason): never greyed by the code in practice: the Budget panel's + that opens this menu is greyed by the same gate, and its tooltip gives the Tax Code's reason (TAX-11)
 					### END MOD ###
 					tooltip = "[Goods.GetTaxDesc(GetPlayer)]"
 

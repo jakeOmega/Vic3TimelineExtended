@@ -209,7 +209,8 @@ types te_state_panel_widget_types
 	### title font, over a divider. Laid out like te_state_wide_row but with
 	### its own textboxes, so the instance's header_label / header_value land
 	### directly on a block of this type rather than being forwarded through a
-	### blockoverride of a nested derived type.
+	### blockoverride of a nested derived type. Both headers carry a hover, so
+	### the label is underlined.
 	type te_state_column_header = flowcontainer {
 		direction = vertical
 		spacing = 3
@@ -230,6 +231,7 @@ types te_state_panel_widget_types
 					max_width = 186
 					elide = right
 					align = nobaseline
+					default_format = "#tooltippable"
 					block "header_label" {}
 				}
 			}

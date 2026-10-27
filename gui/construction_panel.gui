@@ -1149,7 +1149,7 @@ types construction_panel
 							parentanchor = vcenter
 							datacontext = "[GetScriptedGui('te_construction_market_decrease_target_1')]"
 							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]" # REVIEWED 2026-10-27 (missing_reason): a minus stepper greyed only at zero, which the figure beside it shows, as vanilla's own construction stepper is
 							tooltip = "TE_CM_DECREASE_TT"
 							click_modifiers = {
 								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -1209,7 +1209,7 @@ types construction_panel
 							parentanchor = vcenter
 							datacontext = "[GetScriptedGui('te_construction_market_decrease_budget_1000')]"
 							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]" # REVIEWED 2026-10-27 (missing_reason): a minus stepper greyed only below one step of budget, which the figure beside it shows, as vanilla's own construction stepper is
 							tooltip = "TE_CM_BUDGET_DECREASE_TT"
 							click_modifiers = {
 								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"

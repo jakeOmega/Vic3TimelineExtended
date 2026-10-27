@@ -38,17 +38,21 @@ requirement reads as a requirement, never as a raw trigger name. Two checks:
     `hidden_trigger`, and a `trigger_if`'s `limit`. A scripted GUI's
     `IsValidTooltip` counts as rendered when a `.gui` or loc file names it
     (`GetScriptedGui('x').IsValidTooltip`), or when a `.gui` file that uses
-    `ScriptedGui.IsValidTooltip` gives x as a `datacontext`.
+    `ScriptedGui.IsValidTooltip` gives x as a `datacontext`. A scripted
+    button whose `visible` holds `is_ai = yes` at its top level is the AI's
+    alone (the UN's and the Nuclear program's buttons, since their panels'
+    scripted GUIs took over): no player sees its tooltip, so its `possible`
+    is not read (counted as `ai_only_skipped`).
 
 `gui/te_debug_*.gui` and `te_debug_*` script files are skipped, as
 console-only panels.
 
 Suppression is check-tagged. For `missing_reason`, on the `enabled =` line;
-for `raw_condition`, on the flagged test's line in the `is_valid` or
-`possible` block (for a scripted trigger, the line that calls it):
+for `raw_condition`, on the block's opening `is_valid = {` / `possible = {`
+line (one flag a block, listing its tests):
 
     enabled = "[…IsValid(…)]" # REVIEWED 2026-10-27 (missing_reason): rationale
-    var:x > 0 # REVIEWED 2026-10-27 (raw_condition): rationale
+    is_valid = { # REVIEWED 2026-10-27 (raw_condition): rationale
 
 A tag on a line with no flag of its check is stale and fails `--strict`.
 
@@ -130,6 +134,7 @@ class AuditResult:
     stale_tags: list[StaleTag] = field(default_factory=list)
     buttons_checked: int = 0
     blocks_checked: int = 0
+    ai_only_skipped: int = 0
 
     @property
     def failing(self) -> int:
@@ -280,6 +285,14 @@ def _never_greys(sgui: Stmt) -> bool:
         return True
     tests = [st for st in valid.children if st.key]
     return all(st.key == "always" and st.value == "yes" for st in tests)
+
+
+def _ai_only(button: Stmt) -> bool:
+    """A scripted button only the AI sees: `is_ai = yes` at the top level of
+    its `visible` (an AND), so no player ever reads its `possible`."""
+    visible = _block(button.children, "visible")
+    return visible is not None and any(
+        st.key == "is_ai" and st.op == "=" and st.value == "yes" for st in visible.children)
 
 
 def _rendered_sguis(root: Path, trees: dict[str, gui_tree.Node]) -> set[str]:
@@ -471,8 +484,12 @@ def audit(mod_path: str | Path | None = None) -> AuditResult:
         rel = path.relative_to(root).as_posix()
         for st in _depth0(path):
             possible = _block(st.children, "possible")
-            if possible is not None:
-                blocks.append((rel, st.key.split(":")[-1], possible))
+            if possible is None:
+                continue
+            if _ai_only(st):
+                result.ai_only_skipped += 1
+                continue
+            blocks.append((rel, st.key.split(":")[-1], possible))
     for rel, owner, block in blocks:
         if rel not in tags:
             tags[rel] = _tags_in((root / rel).read_text(encoding="utf-8-sig", errors="replace"))
@@ -515,11 +532,14 @@ def render_report(result: AuditResult) -> str:
         "a test in a rendered scripted GUI's `is_valid` or a scripted button's",
         "`possible`, outside any `custom_tooltip`, that prints as raw script (a",
         "variable or script value test, or a scripted trigger that reaches one).",
-        "Wrap it in `custom_tooltip = { text = <requirement> … }`.",
+        "Wrap it in `custom_tooltip = { text = <requirement> … }`, or in",
+        "`hidden_trigger` where `is_shown` already holds it. A scripted button",
+        "only the AI sees (`visible` holds `is_ai = yes`) is not read.",
         "",
         "Suppress a deliberate case on the flagged line:",
         "`# REVIEWED YYYY-MM-DD (missing_reason): why` on the `enabled` line, or",
-        "`# REVIEWED YYYY-MM-DD (raw_condition): why` on the test's line.",
+        "`# REVIEWED YYYY-MM-DD (raw_condition): why` on the block's opening",
+        "`is_valid = {` / `possible = {` line.",
         "",
     ]
     for check in CHECKS:
@@ -584,6 +604,7 @@ def regenerate(mod_state=None) -> dict:
         "stale_tags": len(result.stale_tags),
         "buttons_checked": result.buttons_checked,
         "blocks_checked": result.blocks_checked,
+        "ai_only_skipped": result.ai_only_skipped,
         "path": out_path,
     }
 

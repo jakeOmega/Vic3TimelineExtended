@@ -1740,6 +1740,7 @@ types nuclear_deterrence_widget_types
 					parentanchor = vcenter
 					elide = right
 					alwaystransparent = yes
+					default_format = "#tooltippable"
 					text = "nd_w_survivability_label"
 				}
 				widget = {

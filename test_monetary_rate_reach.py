@@ -297,7 +297,7 @@ class Simulator(unittest.TestCase):
 
 class Text(unittest.TestCase):
     def loc(self, key):
-        match = re.search(rf'^ {key}:0 "(.*)"$', LOC.read_text(encoding='utf-8-sig'), re.M)
+        match = re.search(rf'^ {key}:0 "(.*)"(?:\s*#[^"]*)?$', LOC.read_text(encoding='utf-8-sig'), re.M)
         self.assertIsNotNone(match, key)
         return match.group(1)
 

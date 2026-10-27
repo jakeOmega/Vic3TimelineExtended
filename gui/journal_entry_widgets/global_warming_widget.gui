@@ -661,6 +661,7 @@ types global_warming_widget_types
 							elide = right
 							align = left|nobaseline
 							text = "gw_ov_temp_label"
+							default_format = "#tooltippable"
 						}
 					}
 					widget = {

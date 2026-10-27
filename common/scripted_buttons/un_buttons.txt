@@ -60,8 +60,12 @@ un_found_button = {
 	}
 
 	possible = {
-		NOT = { has_global_variable = un_founded }
-		NOT = { un_conference_in_session = yes }
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			NOT = { has_global_variable = un_founded }
+			NOT = { un_conference_in_session = yes }
+		}
 		has_technology_researched = intergovernmental_organizations
 		country_rank >= rank_value:great_power
 		is_subject = no
@@ -135,9 +139,13 @@ un_join_button = {
 	}
 
 	possible = {
-		has_global_variable = un_founded
-		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-		NOT = { has_variable = un_member_modifier_on }
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			has_global_variable = un_founded
+			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			NOT = { has_variable = un_member_modifier_on }
+		}
 		custom_tooltip = {
 			text = un_membership_eligible_tt
 			un_membership_eligible = yes
@@ -286,9 +294,13 @@ un_withhold_dues_button = {
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		un_dues_self_assessed = yes
-		NOT = { un_dues_is_withholding = yes }
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_dues_self_assessed = yes
+			NOT = { un_dues_is_withholding = yes }
+		}
 		custom_tooltip = {
 			text = un_dues_assessed_tt
 			un_dues_assessed = yes
@@ -323,9 +335,13 @@ un_pay_dues_button = {
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		un_dues_self_assessed = yes
-		un_dues_is_withholding = yes
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_dues_self_assessed = yes
+			un_dues_is_withholding = yes
+		}
 	}
 
 	ai_chance = {
@@ -740,7 +756,8 @@ un_raise_development_button = {
 			text = un_representation_table_tt
 			NOT = { un_representation_suspended = yes }
 		}
-		un_dev_fund_size_stored < un_dev_fund_size_max
+		# is_shown's own test (above): never fails while the control shows.
+		hidden_trigger = { un_dev_fund_size_stored < un_dev_fund_size_max }
 	}
 
 	ai_chance = {
@@ -765,8 +782,12 @@ un_reduce_development_button = {
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
-		un_dev_fund_size_stored > 1
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+			un_dev_fund_size_stored > 1
+		}
 	}
 
 	ai_chance = {

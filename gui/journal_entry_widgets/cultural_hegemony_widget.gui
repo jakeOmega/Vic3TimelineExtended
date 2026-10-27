@@ -243,7 +243,8 @@ types cultural_hegemony_widget_types
 	### One line of the pull breakdown, as a UN pillar row: the component's name
 	### (a concept, so it hovers), its bar, and its contribution, in fixed
 	### columns (176 / 164 / 60). The working behind the number and the bar's
-	### range are on the row's hover. A total has no bar: its row leaves the
+	### range are on the row's hover, so the name is underlined (#tooltippable,
+	### style rule 3; every row has one). A total has no bar: its row leaves the
 	### column empty, so the values still line up.
 	type ch_bar_row = flowcontainer {
 		direction = horizontal
@@ -263,6 +264,7 @@ types cultural_hegemony_widget_types
 				elide = right
 				align = nobaseline
 				using = ch_fontsize_row
+				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
@@ -288,7 +290,8 @@ types cultural_hegemony_widget_types
 
 	### A line under a component that qualifies it, set in under its name and
 	### spanning the name and bar columns, its value in the value column. The
-	### art multiplier under Art Production.
+	### art multiplier under Art Production. Its hover is the working, so the
+	### figure is underlined (the label keeps its #lore look).
 	type ch_bar_subrow = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -322,6 +325,7 @@ types cultural_hegemony_widget_types
 				elide = right
 				align = nobaseline
 				using = ch_fontsize_row
+				default_format = "#tooltippable"
 				block "row_value" {}
 			}
 		}
@@ -488,7 +492,8 @@ types cultural_hegemony_widget_types
 	### (gotcha #15), gated on it, so a country that is gone says so instead.
 	### The "us" marker compares the row's rank with our own (ch_rank_self, the
 	### same pass's number), so no saved scope is needed. The components at the
-	### recount are the row's hover (ch_board_row_tt), which reads only the
+	### recount are the row's hover (ch_board_row_tt, so the share they add up
+	### to is underlined; the name has the country's own hover), which reads only the
 	### container and globals (gotcha #24); a model's name and laws are its
 	### swatch's.
 	type ch_board_row = flowcontainer {
@@ -566,6 +571,7 @@ types cultural_hegemony_widget_types
 				max_width = 60
 				elide = right
 				using = ch_fontsize_row
+				default_format = "#tooltippable"
 				text = "ch_board_row_share"
 			}
 		}
@@ -2001,6 +2007,7 @@ types cultural_hegemony_widget_types
 			textbox = {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display'), '(CFixedPoint)11' )]"
 				tooltip = "je_ch_widget_rank_tt"
+				default_format = "#tooltippable"
 				text = "je_ch_widget_board_us"
 				autoresize = yes
 				max_width = 474
@@ -2926,6 +2933,11 @@ types cultural_hegemony_widget_types
 			}
 			ch_note = {
 				text = "je_ch_how_models"
+			}
+			### Which model a country that fits several counts as: once here, not
+			### on every legend swatch's hover.
+			ch_note = {
+				text = "ch_model_order_tt"
 			}
 			ch_subheader = {
 				blockoverride "subheader_text" {

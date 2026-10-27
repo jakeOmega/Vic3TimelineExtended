@@ -616,6 +616,7 @@ types un_chamber_widget_types
 		# rows stay collapsed (the 2026-10-27 audit, UN-14).
 		un_chamber_text = {
 			parentanchor = hcenter
+			default_format = "#tooltippable"
 			text = "[GetScriptedGui('un_chamber_deleg_summary_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			tooltip = "[GetScriptedGui('un_chamber_deleg_firm_list_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
@@ -2606,6 +2607,7 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
+						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_0_figures"
 					}
 				}
@@ -2642,6 +2644,7 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
+						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_1_figures"
 					}
 				}
@@ -2678,6 +2681,7 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
+						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_2_figures"
 					}
 				}
@@ -2714,6 +2718,7 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
+						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_3_figures"
 					}
 				}
@@ -2750,6 +2755,7 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
+						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_4_figures"
 					}
 				}
@@ -2786,6 +2792,7 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
+						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_5_figures"
 					}
 				}
@@ -2822,6 +2829,7 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
+						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_6_figures"
 					}
 				}
@@ -2858,6 +2866,7 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
+						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_7_figures"
 					}
 				}

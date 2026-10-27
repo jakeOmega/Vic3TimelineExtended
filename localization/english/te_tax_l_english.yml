@@ -86,7 +86,7 @@
  te_tax_est_dividends_delta:0 "@money![Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') )|+=K]"
  te_tax_est_dividends_law:0 "@money![Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_law') )|K]"
  te_tax_est_goods:0 "Taxed goods: the effect depends on how much pops buy of these goods, so it is not estimated."
- te_tax_est_header:0 "Revenue Estimate"
+ te_tax_est_header:0 "#tooltippable Revenue Estimate#!"
  te_tax_est_header_tt:0 "Each line is a [concept_tax_static_estimate]. A tax that was not collected at the snapshot, or any tax before the first snapshot, has no receipts to scale: it shows no current base and no figure."
  te_tax_est_income_bill:0 "@money![Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_bill') )|K]"
  te_tax_est_income_delta:0 "@money![Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') )|+=K]"

@@ -282,6 +282,33 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 loc_script_value_audit.py --strict
 
+      # The four GUI and loc audits of #1213 (the 2026-10-27 GUI audit's
+      # findings 4 to 7). Each reads the .gui, script and loc files, with
+      # vanilla's loc and static modifiers from the committed vanilla_parsed/;
+      # each flag is fixed or carries a check-tagged REVIEWED comment.
+      # Live text and tooltips over 500 rendered characters outside a How
+      # section: the rules belong in How, or in a concept the tooltip links.
+      - name: Audit — live tooltips that run long
+        if: ${{ !cancelled() }}
+        run: python3 long_tooltip_audit.py --strict
+
+      # A custom_tooltip wrapping an add_modifier whose text renders no
+      # GetStaticModifier for it: the engine prints only the text.
+      - name: Audit — custom_tooltips that hide a modifier's lines
+        if: ${{ !cancelled() }}
+        run: python3 hidden_modifier_audit.py --strict
+
+      # A hover of the mod's whose text carries no #tooltippable underline.
+      - name: Audit — hovers with no underline
+        if: ${{ !cancelled() }}
+        run: python3 unmarked_hover_audit.py --strict
+
+      # A button greyed by a scripted GUI's IsValid whose tooltip prints no
+      # IsValidTooltip, and a condition such a tooltip prints as raw script.
+      - name: Audit — greyed buttons that don't say why
+        if: ${{ !cancelled() }}
+        run: python3 button_reason_audit.py --strict
+
       # Needs no game: the CLI builds a ModState from the committed
       # vanilla_parsed/ snapshot and its English loc. This is the check that
       # catches a mod-introduced entity (a modifier type, a PM, a building) with

@@ -69,7 +69,7 @@ def _loc():
     keys = {}
     for path in glob.glob(os.path.join(LOC_DIR, "*.yml")):
         for line in _read(path).splitlines():
-            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
             if m:
                 keys[m.group(1)] = m.group(2)
     return keys
