@@ -41,7 +41,7 @@ market can't have one. It is removed if the state stops being your market
 capital, for example when you lose it in a war or join another market. It
 employs 40,000 engineers, academics and clerks and consumes Launch Capacity, the
 good your Aerospace Industry makes. That weekly bill is what the program really
-costs; the Budget panel's Breakdown tab lists it under Programme Costs, in the
+costs; the Budget panel's Breakdown tab lists it under Program Costs, in the
 Space Race row.
 
 Its production method decides which milestones you can run. Each method includes
@@ -131,7 +131,7 @@ a note stands in their place. Two sections of its own follow, Space Powers and
 Orbit (see [The Space Race tab](#the-space-race-tab)), and How the Space Race
 Works comes once at the end.
 
-![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Programme row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies.](images/solar_system_colonization_tab.png)
+![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies.](images/solar_system_colonization_tab.png)
 
 The overview is always shown. Its first row is three icons, each with a label
 under it:
@@ -150,11 +150,11 @@ it comes from: each source that adds progress every month, each that multiplies
 it, and the pace that results, which is never below 0.5. Every running milestone
 gains the same pace.
 
-At the foot of the overview, the Programme row has an icon for each entry, in
+At the foot of the overview, the Program row has an icon for each entry, in
 order. An icon is lit once you have achieved that milestone, with a flag if you
 were first. It is half-lit while under way, and faint if you haven't begun it
 or another power finished it first. The Interstellar Probe and its wait for data
-share one icon with four pictures: the probe greyed (not begun), the probe with
+share one icon with four pictures: the probe grayed (not begun), the probe with
 a wrench (under way), radio dishes with a clock (launched, awaiting data) and
 the dishes with a check (data received). Hover any icon for its state.
 
@@ -162,9 +162,9 @@ Three sections follow the overview:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is greyed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), the Orbital Debris index on the journal entry (see [Orbital debris](#orbital-debris)), and the Mission Profile. |
+| Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is grayed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), the Orbital Debris index on the journal entry (see [Orbital debris](#orbital-debris)), and the Mission Profile. |
 | Rivals | Open | The other powers running the same milestone, each with an estimate of its progress. |
-| How the Space Race Works | Collapsed | The explanations: approach and pace, funding, setbacks, the first, rivals, the programme, space powers, and satellites and debris. |
+| How the Space Race Works | Collapsed | The explanations: approach and pace, funding, setbacks, the first, rivals, the program, space powers, and satellites and debris. |
 
 A rival's progress is an estimate. Every rival is listed, furthest along
 first, each with a band reaching 25% of the goal to either side of a marker,
@@ -180,7 +180,7 @@ of the first, and its bar is Next Colony, the progress toward your next colony.
 While a full bar waits for a launch window, Staged in Orbit gives the progress
 built so far in colony fleets ("1.4 fleets"); hover it for each destination's
 next window. Under the bar, the Worlds pie counts the 34 worlds: gold for your
-colonies, red for other powers' and grey for the worlds no one holds; hover it
+colonies, red for other powers' and gray for the worlds no one holds; hover it
 for the counts. Its Mission Control adds Next Windows, the destinations of the
 stage with a world left and the months to each window (see [Launch
 windows](#launch-windows)).
@@ -221,7 +221,7 @@ worlds and their effects without the views.
 
 Interstellar Probe: Awaiting Data has nothing to control, so it has no Mission
 Control or Rivals. Its overview is the Transit bar ("40 / 132 months") and the
-Programme row; hover the bar for the months to go and what the probe might
+Program row; hover the bar for the months to go and what the probe might
 find.
 
 A new milestone starts on the Standard approach at funding level 1. It moves at
@@ -237,7 +237,7 @@ milestones too. Both start open.
 Space Powers puts your own program first, then every other power that has
 started the race, furthest along first: the most milestones achieved, then the
 most colonies and the furthest milestone under way. Each row is the country's name, its program as the same
-eight icons as the Programme row (lit once achieved, with a flag for a first,
+eight icons as the Program row (lit once achieved, with a flag for a first,
 half-lit while under way, faint otherwise) and its furthest milestone under way
 with its progress, as in "Moon Landing: 35%–85%". Your own progress is exact.
 Another power's is an estimate, in the same band as the Rivals rows, which an
@@ -629,9 +629,9 @@ listed in the Colonies section's Modules view in Solar System Colonization:
 | Module | What a level does | Room for it |
 |---|---|---|
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
-| Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports and Defences: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
+| Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports and Defenses: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
 | Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a world that makes propellant. Under Simple Colonies, nothing | The colony's slots |
-| Defences | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | The colony's slots |
+| Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | The colony's slots |
 
 The founding event has to be answered before you can add a specialization
 level. Each row's buttons add one more level of a module to the end of your
@@ -675,7 +675,7 @@ values a colony more for each of them. AI programs in the top three with money
 to spare queue one module a year at each colony: a Habitat once its people fill
 three quarters of its room, otherwise the next specialization level its crews
 can run, its founding specialization first. They run the best fabrication method
-they have while anything is queued, and never build Spaceports or Defences.
+they have while anything is queued, and never build Spaceports or Defenses.
 
 ### Extraplanetary Base room
 
@@ -817,7 +817,7 @@ colonies and accept a colony that asks.
 Covert operations reach colonies too: Incite Colonial Autonomy raises the
 autonomy of every colony the target holds, Sabotage Colony kills a share of
 the people of its largest, and under Full Colonies Survey Colony Defenses
-shows your fleets the target's colony defences and sharpens their fire on them
+shows your fleets the target's colony defenses and sharpens their fire on them
 (see [The covert operations](11-influence.md#the-covert-operations)).
 
 **Colony life.** Three rare events come with growing colonies. The First Child
@@ -877,7 +877,7 @@ nothing. The month's strength is shared among five roles by the build mix,
 whose buttons step each role's weight from 0 to 3, and waits on the ground in
 the reserve until it is launched (see [Holding Earth orbit](#holding-earth-orbit)):
 
-| Role | Fire on fleets | Fire on colony defences | Months of supply | Also |
+| Role | Fire on fleets | Fire on colony defenses | Months of supply | Also |
 |---|---|---|---|---|
 | Warship | 1 | 1 | 18 | Takes losses first |
 | Rapid response | 0.5 | 0.5 | 12 | Takes losses first; a fleet of these alone flies one drive faster |
@@ -926,7 +926,7 @@ Earth):
 |---|---|---|
 | Station | Every enemy fleet there | Guard your colonies. A fleet arriving where you hold a colony stations |
 | Stand off | Enemy fleets that stand off or are stationed, out of the colonies' guns | Blockade an enemy's colonies |
-| Close in | The target world's Defences and the enemy fleets stationed there | Seize or destroy a colony |
+| Close in | The target world's Defenses and the enemy fleets stationed there | Seize or destroy a colony |
 | Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its world | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
 
 At Earth every fleet fights every enemy fleet, an Orbital Battlestation
@@ -949,7 +949,7 @@ specializations keep running. The Colonies section's Defenses view lists your
 colonies with their Defenses, integrity, marines and status.
 
 A fleet closing in on a world brings its integrity down, from 100 to 0, faster
-with siege ships and against fewer Defences; the world's Defences fire back.
+with siege ships and against fewer Defenses; the world's Defenses fire back.
 Integrity returns by 5 a month when the attack stops, 10 with a Spaceport. At
 0, with no enemy fleet stationed there, the fleet's next step depends on its
 Seize or Destroy button:
@@ -957,7 +957,7 @@ Seize or Destroy button:
 | Choice | Needs | What follows | Price |
 |---|---|---|---|
 | Seize | More marines than the world's garrison and militia (a battalion for every 20,000 people, at least one) | The world is occupied: it gives its holder nothing, counts as Colonies occupied in space in the war support breakdown, and goes back at the peace unless a Cede Colony article takes it. Its holder, or anyone at war with the occupier, frees it the same way, with more marines than the occupier's garrison | None |
-| Destroy | Three months closing in with more fire than its Defences | The colony and everyone in it are lost, and the world lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies and their resentment for ten years |
+| Destroy | Three months closing in with more fire than its Defenses | The colony and everyone in it are lost, and the world lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies and their resentment for ten years |
 
 A free colony can be attacked without a war: closing in costs 10 infamy at
 once, and seizing it makes it yours at autonomy 60. A party to the
@@ -965,7 +965,7 @@ once, and seizing it makes it yours at autonomy 60. A party to the
 pays twice the infamy and twice the UN record for destroying a colony or
 closing in on a free one. Seizing a colony at war costs a party no more than
 anyone else. Without Survey Colony
-Defences against its holder, the target's hover gives a world's Defences only
+Defenses against its holder, the target's hover gives a world's Defenses only
 roughly, and its integrity and marines not at all.
 
 ### Interdiction
@@ -1051,7 +1051,7 @@ its way, or when a fleet interdicts them there, bring fleets home short of
 supply or propellant, and land marines for the garrisons they order. At war,
 once a month, an AI sends one fleet from a dock to the nearest enemy location
 within a year's flight, when the fleet is at least half again as strong as the
-enemy's fleets and its colonies' Defences there and can fly home again or dock
+enemy's fleets and its colonies' Defenses there and can fly home again or dock
 there. It closes in on the enemy colony with the most people and modules,
 to seize it when its marines outnumber the garrison and militia, and otherwise
 stands off to blockade. It comes home once the enemy's fleets there outmatch

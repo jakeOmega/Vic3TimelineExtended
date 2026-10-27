@@ -389,7 +389,7 @@ electric or diesel trains to a stronger version on its own, which carries
 - Railways' Rolling Stock (passenger carriages up to Maglev Trains) and ports'
 Passenger Ships, which add more Transportation for a few more inputs.
 - Highways and Airports, and Urban Centers' public transit.
-- Railway, logistics and fulfilment company buildings.
+- Railway, logistics and fulfillment company buildings.
 
 Pops buy it to travel, and industry buys it to move its own goods:
 Construction Sectors from Iron-Frame Buildings onward, the rail-transport and
@@ -590,7 +590,7 @@ button back to your own. The tab ends with an Open Journal Entry button.
 ![The Strategic Reserve tab of the Market panel: the overview (Hub Operating, Flow Cap, Sales Income) above the Reserve Inventory, with the Ammunition row expanded to its figures, the Fill by Month chart and the start of its Policy Settings.](images/strategic_reserve_tab.png)
 
 The overview at the top is always shown, as four boxes. Hub has the hub's
-icon at full colour while the hub is fully staffed, marked Hub Operating, and
+icon at full color while the hub is fully staffed, marked Hub Operating, and
 dimmed and marked Understaffed below that; hover it for the staffing. Under the
 word is the Cap, how many units of each good the hub may move in a week (hover
 it for where that comes from). Blocked counts the goods that are full, or empty

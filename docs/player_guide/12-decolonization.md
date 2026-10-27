@@ -79,13 +79,13 @@ the value for the projection. Four boxes sit under it:
 | Band | Your [band](#colonial-stability-bands) as an icon and a name, and where the next one begins, such as "Stable at 65". Hover it for the band's modifier. |
 | Great Powers | Isolated or Consensus while one of [the two escalations](#great-power-stances-on-colonialism) applies, otherwise No escalation, and what the great powers do to your stability a month. Hover it for how many condemn and support you. |
 | Holdings | Your colonies and colonial subjects, what keeps the entry running. Hover it for what each one is. |
-| Programmes | How many of the three programs run, their icons lit while they do, and what they add a month. Hover it for each one's level. |
+| Programs | How many of the three programs run, their icons lit while they do, and what they add a month. Hover it for each one's level. |
 
 In the Solidified band, two more bars count toward winning: "Months at 100"
 against 60 and, for a great power, "Months Solidified" against 36, the
 requirement of the Imperial Federation Act and the Civilizing Mission Compact.
 Last comes a pie of great-power prestige, yours included: the condemning powers'
-share in red, the supporters' share in green, the rest in grey. Only the
+share in red, the supporters' share in green, the rest in gray. Only the
 condemning share counts toward the two escalations; hover each line of the
 legend for what its share does.
 
@@ -96,7 +96,7 @@ Every section starts open except the explanations:
 | Colonial Holdings | Open | Your wars of independence, your territories and your colonial subjects, with buttons beside each, then Planned Full Decolonization (see below). |
 | Why Stability Is Moving | Open | A bar for each term that moves the bar: red to the left of the center line for a drain, green to the right for a gain, each on its own scale. Then Base decline, Monthly limit and Projected change. Hover a row for what it holds and its bar's scale. |
 | International Pressure | Open | Every great power that condemns or supports you, with its prestige and what it does to your stability a month, then any escalation in force. |
-| Colonial Programmes | Open | The three programs, each with its level out of 3, what it adds a month, and a minus and a plus button to lower or raise it. Hover a row for its costs. |
+| Colonial Programs | Open | The three programs, each with its level out of 3, what it adds a month, and a minus and a plus button to lower or raise it. Hover a row for its costs. |
 | History | Open | Charts of Colonial Stability and the Monthly Stability Change. |
 | How the Colonial Empire Works | Collapsed | The explanations. |
 
@@ -160,7 +160,7 @@ current value.
 | Laws and events | Your Colonization, Minority Rights, Citizenship, Distribution of Power, State Power, Free Speech and Internal Security laws; Knowledge Economy and Globalization; event modifiers such as Positive Colonial Development (+1 a month) and Colonial Crisis (−1 a month) while they last. |
 | Interest Groups | Powerful Landowners +0.3 and Armed Forces +0.2; powerful Intelligentsia −0.4 and Trade Unions −0.3. |
 | Rank | +0.3 as a great power, −0.5 as anything else. |
-| Programmes | Whatever your running colonial programs are worth. |
+| Programs | Whatever your running colonial programs are worth. |
 | War and Turmoil | −0.5 while at war, a further −0.5 for each war of independence (−0.25 once its accords are signed), −1 during a revolution, and a penalty that grows with national turmoil. |
 | Imperial Overreach | A penalty once your colonial states outnumber your other states by more than 1.5 to 1. |
 | Great Power pressure | Condemnation and support from great powers (see below). |
@@ -222,7 +222,7 @@ what one more level would add and for its costs.
 |---|---|---|---|
 | Colonial Development Investment | none | about +0.5 | Colonial Development Spending, a weekly cost of 5% a year of your colonies' GDP for each level, counted as at least 1% of your own GDP. Each step up also costs a one-off half a year of one level's spending. Your lower and middle strata expect a higher standard of living. Industrialists and Petite Bourgeoisie disapprove when you start it. Unincorporated states attract more migrants. |
 | Military Garrison | more than 100 authority for each step up | about +1.0 | 100 authority a level for as long as it runs, and 5 infamy when you start it. Infamy decays 20% slower. Small losses of bureaucracy and prestige from army projection, higher borrowing costs, weaker Intelligentsia and Trade Unions. |
-| Cultural Assimilation Programme | none | about +0.7 | Each step up costs a one-off quarter of a year of one Investment level's spending. −15% bureaucracy and 100 authority while running. Assimilation and conversion speed up, but movements radicalize more, and colonial states lose some qualifications while it runs. |
+| Cultural Assimilation Program | none | about +0.7 | Each step up costs a one-off quarter of a year of one Investment level's spending. −15% bureaucracy and 100 authority while running. Assimilation and conversion speed up, but movements radicalize more, and colonial states lose some qualifications while it runs. |
 
 Investment's cost follows the size of what you develop, not of your whole
 economy. If your colonies produce a tenth of your GDP, each level costs about
@@ -344,7 +344,7 @@ when your own people are a tenth or more of the territory, its settlers.
 |---|---|
 | Let them go | The country forms now, as in Blood in the Colonies' release: Colonial War Weariness, the Armed Forces disapprove, the Intelligentsia approve, five months of +1 stability. |
 | Negotiate the handover | A Round Table release with the declared government as your partner, whatever its acceptance: +1 stability a month for 12 months and friendlier relations. It costs 100 authority, easing over a year. Under Neocolonialism it goes on your economic terms instead. |
-| Send the army | The rebels form as a country with the territory and the neighbouring states where its people are at home. The next day they open a diplomatic play against you, and about three weeks later you are at war. Until then you can still back down, which lets them go. You can fight three such wars at once; with three running the option is grayed. |
+| Send the army | The rebels form as a country with the territory and the neighboring states where its people are at home. The next day they open a diplomatic play against you, and about three weeks later you are at war. Until then you can still back down, which lets them go. You can fight three such wars at once; with three running the option is grayed. |
 
 ### Fighting a war of independence
 
@@ -428,7 +428,7 @@ than 24 months.
 |---|---|---|---|
 | Military Garrison | The Iron Fist Holds | The Empire Crumbles | Bloody Decolonization Legacy; they start under autocracy with outlawed dissent, and their relations with you fall by 50 |
 | Colonial Development Investment | The Commonwealth Path | Negotiated Withdrawal | Commonwealth Legacy; they start as parliamentary republics with protected speech, and relations rise by 30 |
-| Cultural Assimilation Programme | Quiet Assimilation | Negotiated Withdrawal | Cultural Assimilation Legacy; they start with Assimilatory Citizenship, and relations rise by 15 |
+| Cultural Assimilation Program | Quiet Assimilation | Negotiated Withdrawal | Cultural Assimilation Legacy; they start with Assimilatory Citizenship, and relations rise by 15 |
 | none | The Empire Endures | The Empire Crumbles | no legacy |
 
 The legacy applies to every country the system creates: those you release from
