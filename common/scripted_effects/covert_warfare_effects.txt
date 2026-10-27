@@ -175,6 +175,38 @@ covert_op_refresh_exposure_tier = {
 	}
 }
 
+# What a launch decision needs, in the diplomatic action's tooltip (COV-2):
+# our network in the target and the head start it gives, the upkeep the
+# operation adds, and the detection warning. Each action's accept_effect
+# calls it where the warning used to stand alone, so the summary, the
+# Agent Networks row and the Funding Levels table read the same numbers.
+# Display only. The network line prints from the network container itself
+# (THIS.Var on a covert_launch_net_tt line inside the lookup); a target with
+# no network of ours gets the plain line. The target's counterintelligence
+# stays hidden until launch, as before.
+# Scope: operator country; scope:target_country = the target
+covert_op_launch_summary = {
+	if = {
+		limit = {
+			has_variable_list = iw_nets
+			any_in_list = {
+				variable = iw_nets
+				var:iw_target ?= scope:target_country
+			}
+		}
+		every_in_list = {
+			variable = iw_nets
+			limit = { var:iw_target ?= scope:target_country }
+			custom_tooltip = covert_launch_net_tt
+		}
+	}
+	else = {
+		custom_tooltip = covert_launch_net_none_tt
+	}
+	custom_tooltip = covert_launch_upkeep_tt
+	custom_tooltip = covert_op_detection_warning_tt
+}
+
 # Destroy the $TYPE$ operation against $TARGET$, if there is one. The
 # no-duplicate gate on every covert action keeps (type, target) unique.
 # A watched operation's record on its target goes with it, so no row of the
@@ -1506,10 +1538,10 @@ covert_ops_age_all_durations = {
 }
 
 # THE one place the operation phase is turned into something a widget can read.
-# covert_op_is_established / covert_op_is_fully_operational stay the definition
-# of the thresholds; this only projects them onto two variables so the .gui
-# never has to compare iw_duration against a literal 6 or 12 (which would put
-# balance numbers outside script):
+# covert_op_is_established / covert_op_is_fully_operational stay the test of
+# the thresholds (covert_op_phase_2_month / _3_month); this only projects them
+# onto two variables so the .gui never has to compare iw_duration against a
+# literal 6 or 12 (which would put balance numbers outside script):
 #   iw_phase              1 preparatory, 2 establishing, 3 fully operational
 #   iw_phase_months_left  months until the next phase; 0 once fully operational
 # Called from covert_ops_age_all_durations (immediately after the +1, so the
@@ -1525,13 +1557,13 @@ covert_op_refresh_phase = {
 	else_if = {
 		limit = { covert_op_is_established = yes }
 		set_variable = { name = iw_phase value = 2 }
-		set_variable = { name = iw_phase_months_left value = { value = 12 subtract = covert_op_effective_duration } }
-		clamp_variable = { name = iw_phase_months_left min = 0 max = 12 }
+		set_variable = { name = iw_phase_months_left value = { value = covert_op_phase_3_month subtract = covert_op_effective_duration } }
+		clamp_variable = { name = iw_phase_months_left min = 0 max = covert_op_phase_3_month }
 	}
 	else = {
 		set_variable = { name = iw_phase value = 1 }
-		set_variable = { name = iw_phase_months_left value = { value = 6 subtract = covert_op_effective_duration } }
-		clamp_variable = { name = iw_phase_months_left min = 0 max = 6 }
+		set_variable = { name = iw_phase_months_left value = { value = covert_op_phase_2_month subtract = covert_op_effective_duration } }
+		clamp_variable = { name = iw_phase_months_left min = 0 max = covert_op_phase_2_month }
 	}
 }
 

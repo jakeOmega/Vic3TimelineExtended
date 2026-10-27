@@ -230,6 +230,7 @@ concept_agent_network = {}
 concept_covert_funding = {}
 concept_operation_slots = {}
 concept_funding_stealth = {}
+concept_operation_phase = {}
 
 # Institutions
 concept_ministry_system = {}

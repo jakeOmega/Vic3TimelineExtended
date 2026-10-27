@@ -140,6 +140,13 @@ covert_op_priority_detect_add = 2
 # Replaces the literal `multiplier = 2` the apply sites used to carry.
 covert_op_phase_full_mult = 2
 
+# The months an operation runs (with its network head start) before it is
+# Establishing and then Fully Operational. covert_op_is_established /
+# covert_op_is_fully_operational test them, covert_op_refresh_phase counts down
+# to them and the launch tooltips print them (COV-2), so this is the one copy.
+covert_op_phase_2_month = 6
+covert_op_phase_3_month = 12
+
 # Technology theft (2026-10): an espionage operation's monthly progress at base
 # strength, as a share of the stolen technology's era cost. add_technology_progress
 # takes no script value, so scripts/generators/gen_covert_tech_theft.py reads this
@@ -803,6 +810,20 @@ covert_ops_funding_ic_display = {
 covert_operation_cost_display = {
 	value = 0
 	owner = { add = covert_operation_cost_mult }
+	round = yes
+}
+
+# What one more operation at priority 1 adds to the weekly covert budget, for
+# the launch summary (COV-2, covert_op_launch_summary): one more unit in
+# covert_operation_cost_mult, at the funding level now.
+# Scope: country
+covert_launch_added_upkeep = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_funding_level }
+		add = var:iw_funding_level
+	}
+	multiply = covert_operations_cost_scale
 	round = yes
 }
 

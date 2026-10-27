@@ -20,7 +20,9 @@
 # duration; nothing in it runs. It lists every field, script_only ones
 # included. The <type>_extra_tt lines after it state what the engine cannot
 # list: modifiers on movements or states, and conditional parts.
-# covert_op_phase_warning_tt then says how phase and priority scale all of it.
+# covert_op_phase_warning_tt then says how phase scales all of it, and
+# covert_op_launch_summary (covert_warfare_effects.txt) what decides the
+# launch here: our network in the target, the upkeep it adds, the risk.
 # In game the scope:target_country block renders after the root-level lines
 # even though it is scripted before them, so no line here may say "above" or
 # "below". test_covert_launch_preview.py keeps the preview in step with the
@@ -105,9 +107,7 @@ covert_election_interference_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -303,9 +303,7 @@ covert_financial_subversion_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -481,9 +479,7 @@ covert_infrastructure_sabotage_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -647,9 +643,7 @@ covert_comms_disruption_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -828,9 +822,7 @@ covert_industrial_espionage_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -999,9 +991,7 @@ covert_military_espionage_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -1159,9 +1149,7 @@ covert_influence_campaign_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -1343,9 +1331,7 @@ covert_ideological_subversion_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -1534,9 +1520,7 @@ covert_destabilization_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -1726,9 +1710,7 @@ covert_regime_change_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -1917,9 +1899,7 @@ covert_nuclear_sabotage_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -2113,9 +2093,7 @@ covert_space_espionage_action = {
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -2276,9 +2254,7 @@ covert_cultivate_assets_action = {
 		custom_tooltip = {
 			text = covert_cultivate_assets_extra_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -2453,9 +2429,7 @@ covert_secure_material_action = {
 		custom_tooltip = {
 			text = covert_secure_material_extra_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -2635,6 +2609,11 @@ covert_counterintel_support_action = {
 		custom_tooltip = {
 			text = covert_counterintel_support_public_tt
 		}
+		# What it adds to our covert budget (COV-2); it has no network and no
+		# detection risk, so it takes only this line of the launch summary.
+		custom_tooltip = {
+			text = covert_launch_upkeep_tt
+		}
 		covert_op_start = { TYPE = counterintel_support DEFENSE_MOD = country_covert_defense_ideological_add CODE = 14 }
 	}
 
@@ -2785,9 +2764,7 @@ covert_incite_autonomy_action = {
 		custom_tooltip = {
 			text = covert_incite_autonomy_extra_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -2967,9 +2944,7 @@ covert_sabotage_colony_action = {
 		custom_tooltip = {
 			text = covert_sabotage_colony_extra_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
@@ -3162,9 +3137,7 @@ covert_survey_defences_action = {
 		custom_tooltip = {
 			text = covert_survey_defences_extra_tt
 		}
-		custom_tooltip = {
-			text = covert_op_detection_warning_tt
-		}
+		covert_op_launch_summary = yes
 		if = {
 			limit = { covert_is_friend = { TARGET = scope:target_country } }
 			custom_tooltip = {
