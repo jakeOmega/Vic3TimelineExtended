@@ -93,6 +93,9 @@ te_monetary_init_union_variables = {
 te_monetary_discover_union = {
 	set_variable = { name = te_mon_union_holdouts value = 0 }
 	set_variable = { name = te_mon_union_refusers value = 0 }
+	# The leader's members' sum, for the Backstops rows (GUI audit BNK-13); each
+	# member's own share is on it, for the Monetary Union member rows.
+	set_variable = { name = te_mon_bs_union_pts value = 0 }
 	if = {
 		limit = {
 			is_power_bloc_leader = yes
@@ -103,6 +106,8 @@ te_monetary_discover_union = {
 				limit = { NOT = { this = root } }
 				save_scope_as = te_mon_arr_party
 				root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_union_cost_to_root } }
+				root = { change_variable = { name = te_mon_bs_union_pts add = scope:te_mon_arr_party.te_mon_union_cost_to_root } }
+				set_variable = { name = te_mon_bs_cost_union value = te_mon_union_cost_to_root }
 				if = {
 					limit = { te_mon_union_is_holdout = yes }
 					root = { change_variable = { name = te_mon_union_holdouts add = 1 } }

@@ -945,7 +945,10 @@ worsens your credit standing for ten years, costs investment pool, relations and
 bloc cohesion, and bars you for ten years. A leader can Press for Convergence at
 50 influence per holdout, which waives the debt condition and puts The Question
 of the Common Currency to each holdout; one that refuses costs the bloc cohesion
-and gains Monetary Independence. Power blocs in general are covered in [Power
+and gains Monetary Independence. Under the Monetary Union row a leader sees each
+member: adopted, holding out, or holding out and set to refuse, with what backing
+it costs. The Backstops row lists each treaty partner the same way, received and
+extended. Power blocs in general are covered in [Power
 bloc principles and
 identities](09-diplomacy.md#power-bloc-principles-and-identities).
 

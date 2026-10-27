@@ -676,6 +676,20 @@ banking_mon_shows_union = {
 	effect = { }
 }
 
+# ...and its members, a row each, under it? For the bloc's leader only, the
+# one that pays for them and can press them (GUI audit BNK-13).
+banking_mon_shows_union_members = {
+	scope = country
+	is_shown = {
+		is_power_bloc_leader = yes
+		te_mon_bloc_union_tier_1_plus = yes
+		has_variable = te_mon_union_holdouts
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 banking_mon_union_adopt = {
 	scope = country
 	is_shown = {

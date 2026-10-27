@@ -575,7 +575,10 @@ te_monetary_discover_arrangements = {
 
 	# --- what ROOT pays for the lines and guarantees it extends -------------
 	# provider cost = recipient benefit x clamp( recipient gdp / provider gdp ).
+	# Each partner is also listed for the Backstops rows (GUI audit BNK-13):
+	# te_mon_record_backstop_partner below.
 	set_variable = { name = te_mon_arr_provider_pts value = 0 }
+	te_mon_clear_backstop_rows = yes
 	every_scope_treaty = {
 		every_scope_article = {
 			limit = {
@@ -585,6 +588,7 @@ te_monetary_discover_arrangements = {
 			}
 			target_country = { save_scope_as = te_mon_arr_party }
 			root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_arr_swap_cost_to_root } }
+			scope:te_mon_arr_party = { te_mon_record_backstop_partner = { KIND = swap COST = te_mon_arr_swap_cost_to_root } }
 		}
 		every_scope_article = {
 			limit = {
@@ -594,6 +598,7 @@ te_monetary_discover_arrangements = {
 			}
 			target_country = { save_scope_as = te_mon_arr_party }
 			root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_arr_lolr_cost_to_root } }
+			scope:te_mon_arr_party = { te_mon_record_backstop_partner = { KIND = lolr COST = te_mon_arr_lolr_cost_to_root } }
 		}
 		# [6c] A receiver carries a share of the relief its name buys the debtor,
 		# as a guarantor would — and it is the article's TARGET, not its source.
@@ -605,7 +610,32 @@ te_monetary_discover_arrangements = {
 			}
 			source_country = { save_scope_as = te_mon_arr_party }
 			root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_arr_receivership_cost_to_root } }
+			scope:te_mon_arr_party = { te_mon_record_backstop_partner = { KIND = receivership COST = te_mon_arr_receivership_cost_to_root } }
 		}
+	}
+	# ...and who backs ROOT: one swap line, one guarantor or receiver at most.
+	if = {
+		limit = {
+			te_mon_is_swap_recipient = yes
+			has_variable = te_mon_swap_provider
+			exists = var:te_mon_swap_provider
+		}
+		var:te_mon_swap_provider = { te_mon_record_backstop_backer = { KIND = swap } }
+	}
+	if = {
+		limit = {
+			te_mon_is_lolr_ward = yes
+			has_variable = te_mon_lolr_guarantor
+			exists = var:te_mon_lolr_guarantor
+		}
+		var:te_mon_lolr_guarantor = { te_mon_record_backstop_backer = { KIND = lolr } }
+	}
+	if = {
+		limit = {
+			te_mon_is_under_receivership = yes
+			exists = var:te_mon_receiver
+		}
+		var:te_mon_receiver = { te_mon_record_backstop_backer = { KIND = receiver } }
 	}
 	# [5b] A bloc leader's cooperation and backstop costs, and its holdout count.
 	te_monetary_discover_union = yes
@@ -646,6 +676,68 @@ te_monetary_discover_arrangements = {
 	}
 }
 
+
+# ----------------------------------------------------------------------------
+# The Backstops rows (GUI audit BNK-13, 2026-10-27)
+# ----------------------------------------------------------------------------
+# Display only: the dashboard's rows under Backstops name each partner, where
+# the row itself gives only the two sums. One list per kind, so a row knows
+# its kind, of each partner's CAPITAL: a GUI reaches a country through its
+# state (gui_modding_guide.md gotcha #15), as the Demographics and Grand
+# Monuments state lists do. What a partner we back costs us is written on the
+# partner (te_mon_bs_cost_<kind>), because a row cannot evaluate a value
+# relative to ROOT, and a country has one provider of each kind at most (one
+# swap line at a time, one guarantor, one receiver), so the variable is ours.
+# Rebuilt by every discovery, so a treaty that ends leaves no row. Nothing but
+# the panel reads any of it.
+#
+# Scope: country, ROOT = the country whose discovery this is.
+te_mon_clear_backstop_rows = {
+	if = {
+		limit = { has_variable_list = te_mon_bs_swap_to }
+		clear_variable_list = te_mon_bs_swap_to
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_lolr_to }
+		clear_variable_list = te_mon_bs_lolr_to
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_receivership_to }
+		clear_variable_list = te_mon_bs_receivership_to
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_swap_from }
+		clear_variable_list = te_mon_bs_swap_from
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_lolr_from }
+		clear_variable_list = te_mon_bs_lolr_from
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_receiver_from }
+		clear_variable_list = te_mon_bs_receiver_from
+	}
+}
+
+# Scope: the partner ROOT backs. $KIND$ swap, lolr or receivership (the list
+# te_mon_bs_<kind>_to), $COST$ what the partner costs ROOT (a value read in
+# the partner's scope, against ROOT).
+te_mon_record_backstop_partner = {
+	set_variable = { name = te_mon_bs_cost_$KIND$ value = $COST$ }
+	capital ?= {
+		save_temporary_scope_as = te_mon_bs_it
+		root = { add_to_variable_list = { name = te_mon_bs_$KIND$_to target = scope:te_mon_bs_it } }
+	}
+}
+
+# Scope: the country that backs ROOT. $KIND$ swap, lolr or receiver (the list
+# te_mon_bs_<kind>_from).
+te_mon_record_backstop_backer = {
+	capital ?= {
+		save_temporary_scope_as = te_mon_bs_it
+		root = { add_to_variable_list = { name = te_mon_bs_$KIND$_from target = scope:te_mon_bs_it } }
+	}
+}
 
 # ----------------------------------------------------------------------------
 # A change of (kind, anchor)
