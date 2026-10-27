@@ -510,19 +510,19 @@ Top priorities: State Collapse's status and goal line (JE-1; its reason is done 
 
 ## Decisions for the owner
 
-These findings change a recorded design or need a taste call, so they wait for the owner.
+The owner answered all eleven on 2026-10-27, and the follow-up wave (every slice's open findings, plus the four audits of #1213) implements them:
 
-1. **Global Warming repeal tooltips (GW-5).** Render the policy's own modifier under "Ends:", so the text can't drift from the script, at the cost of the lines keeping the colours of adopting? Or keep corrected prose? This PR applies the corrected prose, since three of the ten repeal texts contradicted their modifier.
-2. **Banking-style cell overviews** for the Tax Code, UN, Nuclear, space colonization and the Strategic Reserve (cross-cutting finding 1). Each replaces an overview from an earlier review round (UN round 1, Nuclear round 3).
-3. **UN Actions grid (UN-9):** make the journal-entry buttons AI-only and put scripted-GUI controls beside each figure. This supersedes spec §1's placement. Opening Programmes by default reverses a comment-recorded choice.
-4. **UN proposal list (UN-7):** hide in-force topics, and put ready topics first. Folding type and rule onto one line would reverse the owner's 2026-09-28 shortening.
-5. **Tax Code section order (TAX-14):** the sections that need watching first (bill, passed bills, promises), the editor last.
-6. **Grand Monuments "Awaiting a Decision" (GM-3)** above National Effects. This doesn't conflict with a recorded decision, but it is a structural change.
-7. **Covert operation names (COV-3):** one name per operation. The proposal is the diplomatic action's name, which is the one the player chose from.
-8. **Homeland tile (VAN-6c):** hide it where nothing can change, against the current "always visible" comment, which cites no owner decision.
-9. **Space Race tab order (SPC-8):** our milestones first, Space Powers after. Space Powers is new and has no placement decision recorded.
-10. **Spelling:** American, as the player guide and the base game use, or British, as much of the mod's loc does? The audit made no spelling sweep. This PR only aligned single words where one panel already used both.
-11. **The type-size pass** (cross-cutting finding 9): one release, or each panel when it is next reworked?
+1. **Global Warming repeal tooltips (GW-5):** render the modifier. Each repeal text is a plain "Ends:" header over the policy's own `GetStaticModifier(...).GetDesc`, accepting that the lines keep adopting's colours.
+2. **Banking-style cell overviews:** yes, for all five (Tax Code, UN, Nuclear, space colonization, Strategic Reserve), replacing the earlier rounds' overviews. The owner asked that they not read as a formula: no "What needs you: you need to X, Y and Z", just X, Y and Z.
+3. **UN Actions grid (UN-9):** the full version. Journal-entry buttons AI-only, scripted-GUI controls beside each figure, the Actions section gone, and Programmes open by default.
+4. **UN proposal list (UN-7):** hide topics in force, put ready topics first, and show the ready count. Type, passage rule and target stay a line each (the 2026-09-28 shortening stands).
+5. **Tax Code section order (TAX-14):** monitoring first (Bill Under Debate, Passed Bills, Promises), then Enacted Code, Draft Reform and Review.
+6. **Grand Monuments "Awaiting a Decision" (GM-3):** as proposed, with Awaiting Dedication beside it and the Monument Policy buttons at the top of National Effects.
+7. **Covert operation names (COV-3):** the diplomatic action's name, everywhere.
+8. **Homeland tile (VAN-6c):** hidden where nothing can change; still shown for the paused cases.
+9. **Space Race tab order (SPC-8):** our milestones first, then Space Powers, Orbit and How, with debris shown once. **Revised from the proposal: Rivals stays in each milestone's block.** The owner pointed out that it's actionable. It's each power's progress on this milestone, which says whether someone is close on our heels. Space Powers shows each power's furthest milestone, so the two agree only when a rival races the same one.
+10. **Spelling:** American, as the player guide and the base game use. The wave sweeps the existing loc and the player guide.
+11. **The type-size pass:** in this wave, every panel, Cultural Hegemony included (the wave reworks it, which ends its grandfathering).
 
 ## Tests that pin what would change
 
