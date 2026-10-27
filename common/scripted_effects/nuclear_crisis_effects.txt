@@ -1408,12 +1408,16 @@ nd_lobby_react = {
 # ----------------------------------------------------------------------------
 # THE WORLD LIST — every running crisis, for the panel's World Crises section
 # ----------------------------------------------------------------------------
-# Any scope. Writes global_var:nd_wc_1 … nd_wc_8, the issuers of the running
-# crises, most dangerous first, and global_var:nd_wc_count, how many crises
-# are running in all (the section says how many it could not list). The rows
-# only render these (nd_world_crisis_row_sgui), like the Nuclear Powers
-# leaderboard (update_nuclear_powers_ranking), so the panel never sorts the
-# world's countries every frame.
+# Any scope. Rebuilds nd_crises, a variable list on the panel's global store
+# (global_var:nd_lists_store, nd_lists_store_ensure): the capital of each
+# running crisis's issuer, most dangerous first. The section draws it as a
+# datamodel (NUC-14 of the 2026-10-27 GUI audit), one row per crisis, reading
+# the country through its capital (gui_modding_guide.md gotcha #15); each
+# issuer also carries its target's capital, nd_wc_target_cap, for the row's
+# second flag (gotcha #11). Both are rewritten here and read only for an
+# issuer on the list. global_var:nd_wc_count is how many crises are running
+# (the section's gate). The panel never sorts the world's countries every
+# frame.
 #
 # Callers: nd_crisis_open and nd_crisis_close, so a crisis appears and goes
 # at once; the end of each issuer's weekly tick, which moves the danger the
@@ -1425,14 +1429,13 @@ nd_lobby_react = {
 # their tooltips must not list the bookkeeping.
 nd_world_crises_refresh = {
 	hidden_effect = {
-		remove_global_variable = nd_wc_1
-		remove_global_variable = nd_wc_2
-		remove_global_variable = nd_wc_3
-		remove_global_variable = nd_wc_4
-		remove_global_variable = nd_wc_5
-		remove_global_variable = nd_wc_6
-		remove_global_variable = nd_wc_7
-		remove_global_variable = nd_wc_8
+		nd_lists_store_ensure = yes
+		global_var:nd_lists_store ?= {
+			if = {
+				limit = { has_variable_list = nd_crises }
+				clear_variable_list = nd_crises
+			}
+		}
 		set_global_variable = { name = nd_wc_count value = 0 }
 		ordered_country = {
 			limit = { nd_is_crisis_owner = yes }
@@ -1443,69 +1446,47 @@ nd_world_crises_refresh = {
 
 			change_global_variable = { name = nd_wc_count add = 1 }
 			if = {
-				limit = { global_var:nd_wc_count = 1 }
-				set_global_variable = { name = nd_wc_1 value = THIS }
-			}
-			else_if = {
-				limit = { global_var:nd_wc_count = 2 }
-				set_global_variable = { name = nd_wc_2 value = THIS }
-			}
-			else_if = {
-				limit = { global_var:nd_wc_count = 3 }
-				set_global_variable = { name = nd_wc_3 value = THIS }
-			}
-			else_if = {
-				limit = { global_var:nd_wc_count = 4 }
-				set_global_variable = { name = nd_wc_4 value = THIS }
-			}
-			else_if = {
-				limit = { global_var:nd_wc_count = 5 }
-				set_global_variable = { name = nd_wc_5 value = THIS }
-			}
-			else_if = {
-				limit = { global_var:nd_wc_count = 6 }
-				set_global_variable = { name = nd_wc_6 value = THIS }
-			}
-			else_if = {
-				limit = { global_var:nd_wc_count = 7 }
-				set_global_variable = { name = nd_wc_7 value = THIS }
-			}
-			else_if = {
-				limit = { global_var:nd_wc_count = 8 }
-				set_global_variable = { name = nd_wc_8 value = THIS }
-			}
-		}
-	}
-}
-
-# Any scope, display only: slot SLOT's row (nd_world_crisis_row_sgui). The line
-# prints in the issuer's scope; the target is read through a temporary scope
-# saved only on the branch that prints it (gui_modding_guide.md gotcha #25).
-nd_world_crisis_row_at = {
-	if = {
-		limit = { nd_world_crisis_slot_live = { SLOT = $SLOT$ } }
-		global_var:nd_wc_$SLOT$ = {
-			if = {
 				limit = { exists = var:nd_crisis_opponent }
-				var:nd_crisis_opponent = { save_temporary_scope_as = nd_wc_target }
-				custom_tooltip_no_bullet = nd_wc_row_text
+				var:nd_crisis_opponent = {
+					capital ?= { save_temporary_scope_as = nd_wc_target_cap_new }
+				}
 			}
-			else = {
-				custom_tooltip_no_bullet = nd_wc_row_alone
+			if = {
+				limit = { exists = scope:nd_wc_target_cap_new }
+				set_variable = { name = nd_wc_target_cap value = scope:nd_wc_target_cap_new }
+			}
+			capital ?= { save_temporary_scope_as = nd_wc_issuer_cap }
+			if = {
+				limit = { exists = scope:nd_wc_issuer_cap }
+				global_var:nd_lists_store ?= {
+					add_to_variable_list = { name = nd_crises target = scope:nd_wc_issuer_cap }
+				}
 			}
 		}
 	}
 }
 
-# Any scope, display only: slot SLOT's hover (nd_world_crisis_detail_sgui).
-nd_world_crisis_detail_at = {
+# Any scope: the parentless store that holds the panel's world lists
+# (nd_crises here, nd_powers in update_nuclear_powers_ranking). One container
+# for the whole world, reached through global_var:nd_lists_store, as the
+# Cultural Hegemony history keeps its samples (gotcha #37: the GUI reads
+# GetGlobalVariable('nd_lists_store').GetList(...) as a datamodel).
+nd_lists_store_ensure = {
 	if = {
-		limit = { nd_world_crisis_slot_live = { SLOT = $SLOT$ } }
-		global_var:nd_wc_$SLOT$ = { nd_world_crisis_detail_lines = yes }
+		limit = { NOT = { has_global_variable = nd_lists_store } }
+		create_container = {
+			tags = { nd_lists_store }
+			save_scope_as = nd_lists_store_new
+		}
+		if = {
+			limit = { exists = scope:nd_lists_store_new }
+			set_global_variable = { name = nd_lists_store value = scope:nd_lists_store_new }
+		}
 	}
 }
 
-# Issuer scope, display only. Every line reads the issuer's own record.
+# Issuer scope, display only: a World Crises row's hover
+# (nd_world_crisis_item_detail_sgui). Every line reads the issuer's own record.
 nd_world_crisis_detail_lines = {
 	custom_tooltip_no_bullet = nd_wc_detail_dispute
 	if = {

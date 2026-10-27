@@ -63,6 +63,8 @@ concept_nuclear_taboo = {}
 concept_nuclear_doctrine = {}
 concept_nuclear_readiness = {}
 concept_launch_authority = {}
+# How far a country's nuclear word holds (NUC-13, 2026-10-27).
+concept_nuclear_credibility = {}
 # The four ways an interest group can judge the posture (the class word under
 # each group's name in the At Home table).
 concept_posture_militarist = {}
