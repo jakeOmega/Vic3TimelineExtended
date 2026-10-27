@@ -474,3 +474,24 @@ sr_battery_queued_levels = {
 		}
 	}
 }
+
+# Orbital fire support (design § 15): the margin by which our fleets at Earth
+# outmatch the hostile fleets there, min(1, (ours - theirs) / max(theirs,
+# sr_orbital_superiority_floor)); 0 with no fleet of ours there. The
+# multiplier of sr_orbital_superiority, so a full margin gives +10% offense
+# and +5% defense.
+sr_orbital_superiority_floor = { value = 10 }
+sr_orbital_superiority_margin = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_at_earth }
+		value = var:sr_fl_at_earth
+		subtract = sr_loc_ai_enemy_fleets_earth
+		divide = {
+			value = sr_loc_ai_enemy_fleets_earth
+			min = sr_orbital_superiority_floor
+		}
+		max = 1
+		min = 0
+	}
+}

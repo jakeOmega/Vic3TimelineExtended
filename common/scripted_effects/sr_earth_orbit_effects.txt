@@ -238,3 +238,24 @@ sr_earth_notice_step = {
 		}
 	}
 }
+
+# ---- Orbital fire support (design § 15) ----------------------------------------------------------
+# Country scope, the fleets' monthly step (sr_fl_country_month): the one
+# refresh site of sr_orbital_superiority. Removed first (a same-name
+# add_modifier stacks); at war, put back at the margin our fleets at Earth
+# hold over the hostile ones there. A country that leaves the fleet powers
+# list has it removed by the country pulse (space_race_on_actions.txt), since
+# this step no longer runs for it.
+sr_orbital_superiority_refresh = {
+	if = {
+		limit = { has_modifier = sr_orbital_superiority }
+		remove_modifier = sr_orbital_superiority
+	}
+	if = {
+		limit = {
+			is_at_war = yes
+			sr_orbital_superiority_margin > 0
+		}
+		add_modifier = { name = sr_orbital_superiority multiplier = sr_orbital_superiority_margin }
+	}
+}

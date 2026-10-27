@@ -718,5 +718,38 @@ class EarthBlockadeTest(unittest.TestCase):
                 self.assertIn(f"remove_variable = {var}", body)
 
 
+class OrbitalSuperiorityTest(unittest.TestCase):
+    """6d (design § 15): at war, holding Earth orbit gives +10% offense and +5%
+    defense at the margin our fleets there hold, from one refresh site."""
+
+    def test_the_modifier(self):
+        body = _block(_strip(_raw(STATIC)), "sr_orbital_superiority")
+        self.assertIn("unit_offense_mult = 0.1", body)
+        self.assertIn("unit_defense_mult = 0.05", body)
+
+    def test_the_margin(self):
+        margin = _block(_strip(_raw(FLEET_VALUES)), "sr_orbital_superiority_margin")
+        for line in ("limit = { has_variable = sr_fl_at_earth }", "value = var:sr_fl_at_earth",
+                     "subtract = sr_loc_ai_enemy_fleets_earth", "min = sr_orbital_superiority_floor",
+                     "max = 1", "min = 0"):
+            with self.subTest(line=line):
+                self.assertIn(line, margin)
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_orbital_superiority_floor"), 10)
+
+    def test_one_refresh_site_removed_first_at_war_only(self):
+        texts = {path.name: _strip(_raw(path)) for path in (FLEET_EFFECTS, COMBAT_EFFECTS, EARTH_EFFECTS, ON_ACTIONS)}
+        adds = [name for name, text in texts.items() if "add_modifier = { name = sr_orbital_superiority" in text]
+        self.assertEqual(adds, [EARTH_EFFECTS.name])
+        refresh = _block(texts[EARTH_EFFECTS.name], "sr_orbital_superiority_refresh")
+        self.assertLess(refresh.index("remove_modifier = sr_orbital_superiority"), refresh.index("add_modifier"))
+        self.assertIn("is_at_war = yes", refresh)
+        self.assertIn("multiplier = sr_orbital_superiority_margin", refresh)
+        self.assertEqual(texts[FLEET_EFFECTS.name].count("sr_orbital_superiority_refresh = yes"), 1)
+        # A country off the fleet powers list loses it.
+        self.assertRegex(texts[ON_ACTIONS.name], r"sr_fl_country_month = yes\s*\}\s*else_if = \{\s*"
+                                                 r"limit = \{ has_modifier = sr_orbital_superiority \}\s*"
+                                                 r"remove_modifier = sr_orbital_superiority")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -413,14 +413,15 @@ sr_fl_global_month = {
 
 # ---- The country's month (space_race_on_actions.txt) ----------------------------------------------
 # Country scope, a fleet power under Full Colonies: Space Command's
-# construction, every slot's month, the upkeep, war support's records, the
-# AI's review, a player's Locations snapshot.
+# construction, every slot's month, the upkeep, war support's records, orbital
+# fire support (6d), the AI's review, a player's Locations snapshot.
 sr_fl_country_month = {
 	sr_fl_join_powers = yes
 	sr_sc_month = yes
 	sr_fl_each_slot = { DO = month }
 	sr_fl_upkeep_refresh = yes
 	sr_fl_ws_refresh = yes
+	sr_orbital_superiority_refresh = yes
 	if = {
 		limit = { is_ai = yes }
 		sr_fl_ai_review = yes
