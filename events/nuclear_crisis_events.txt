@@ -149,7 +149,10 @@ nuclear_crisis.1 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				trigger = { nd_effective_survivability >= 50 }
+				trigger = {
+					has_variable = nd_survivors_crisis
+					var:nd_survivors_crisis >= 3
+				}
 				add = 3
 			}
 			modifier = {
@@ -1026,6 +1029,22 @@ nuclear_crisis.20 = {
 		first_valid = {
 			triggered_desc = {
 				trigger = {
+					has_variable = nd_guarantee_basis
+					var:nd_guarantee_basis = 3
+					has_variable = nd_guarantee_context
+					var:nd_guarantee_context = 2
+				}
+				desc = nuclear_crisis.20.d_cobelligerent_struck
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_basis
+					var:nd_guarantee_basis = 3
+				}
+				desc = nuclear_crisis.20.d_cobelligerent
+			}
+			triggered_desc = {
+				trigger = {
 					has_variable = nd_guarantee_context
 					var:nd_guarantee_context = 2
 				}
@@ -1041,6 +1060,10 @@ nuclear_crisis.20 = {
 
 	duration = 3
 
+
+	immediate = {
+		nd_guarantor_store_survivors = yes
+	}
 	trigger = {
 		exists = scope:nd_guarantee_attacker
 		exists = scope:nd_guarantee_beneficiary
@@ -1119,8 +1142,8 @@ nuclear_crisis.20 = {
 			modifier = {
 				trigger = {
 					scope:nd_guarantee_attacker = { nd_believed_armed = yes }
-					has_variable = nd_survivability
-					nd_effective_survivability < 30
+					has_variable = nd_survivors_vs_attacker
+					var:nd_survivors_vs_attacker < 3
 				}
 				add = 3
 			}
@@ -1130,6 +1153,7 @@ nuclear_crisis.20 = {
 
 # ---- .21 The guarantor's answer -----------------------------------------------
 # To the beneficiary. nd_guarantee_answer: 1 stood by us, 0 walked away,
+# 3 an armed co-belligerent stood by us, 4 it would not (rework spec §8.3),
 # 2 declined to answer for a strike we made first (.24.c).
 nuclear_crisis.21 = {
 	type = country_event
@@ -1158,6 +1182,20 @@ nuclear_crisis.21 = {
 				desc = nuclear_crisis.21.t_abandoned
 			}
 			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 3
+				}
+				desc = nuclear_crisis.21.t_ally_stands
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 4
+				}
+				desc = nuclear_crisis.21.t_ally_alone
+			}
+			triggered_desc = {
 				trigger = { always = yes }
 				desc = nuclear_crisis.21.t
 			}
@@ -1178,6 +1216,20 @@ nuclear_crisis.21 = {
 					var:nd_guarantee_answer = 0
 				}
 				desc = nuclear_crisis.21.d_abandoned
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 3
+				}
+				desc = nuclear_crisis.21.d_ally_stands
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 4
+				}
+				desc = nuclear_crisis.21.d_ally_alone
 			}
 			triggered_desc = {
 				trigger = { always = yes }

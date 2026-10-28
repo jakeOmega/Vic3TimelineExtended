@@ -9,7 +9,7 @@
 > **2026-09-26:** §0.10 step 2 (custody transfer) and step 3's outbreak event are built, per `docs/superpowers/archive/specs/2026-09-26-nuclear-custody-design.md`: an arsenal ledger that outlives its owner, one settlement for every way an owner can end, "Who Holds the Button?", a winning revolution's new regime, the price of striking one's own civil war, and the first loose-warhead counts.
 > **2026-09-26 (later):** the rest of §0.10 is built, per `docs/superpowers/archive/specs/2026-09-26-nuclear-loose-warheads-design.md`: "Deny Them the Bomb" and the world's reaction to an armed civil war (step 3), the Budapest path (step 4), and loose warheads — plots from the terror pool, attribution, the reckoning, and recovery by inspection, a covert operation, a treaty article and a UN convention (step 5; buying warheads, its phase 2, is not built). Calls made without the owner are listed at the end of that spec.
 > **2026-09-26 (taboo):** a world **nuclear taboo** (§0.11), per `docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md`: one score that scales every nuclear cost, makes possession a burden, feeds the AI, and adds unilateral dismantling and reduction. Phase 2 (arms control, the UN's terms, the Assembly's verdict) is built; phase 3 (a Prohibition convention) followed as UN phase 7 (#651).
-> **2026-10-28 (rework designed, not built):** [`docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md`](../superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md) changes §0.2–§0.5: survivability against the enemy's arsenal, payoffs for Delegation and Launch on Warning, accident risk calibrated to the Cold War, counterforce and decapitation, range, and new disputes.
+> **2026-10-28 (rework phase 1 built, §0.12; phases 2–4 designed):** [`docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md`](../superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md) changes §0.2–§0.5: survivability against the enemy's arsenal, payoffs for Delegation and Launch on Warning, accident risk calibrated to the Cold War, counterforce and decapitation, range, and new disputes.
 > **2026-09-25:** posture and crises no longer have their own journal entry. `je_nuclear_deterrence` was merged into `je_nuclear_program`, shown as "Nuclear Weapons", to spend one journal slot instead of two; §0.1 and §0.7 say how the separation §2 and §10 asked for is kept.
 
 ## 0. Implementation as shipped
@@ -64,11 +64,11 @@ Doctrine changes need 24 months' tenure, and authority changes need 12. Readines
 
 **Recessed** (readiness 0, since 2026-09-25): warheads stored apart from their delivery systems (India's and Pakistan's posture after 1998). It sits below Routine on the same two-week steps. Nothing launches from it — no strike action, no retaliation option, no crisis strike, no incident launch (`nd_forces_assembled`, readiness 1 or more, gates every path and both dispatch fences). Custody costs half, the incident base is 0.5 ‰, the crisis danger part for our readiness reads −8, and a recessed issuer's threat carries a −10 pressure part (`nd_yp_recessed`). It carries no static modifier (`nd_readiness_mod_on` uses 0 for "none"). A stand-down or concession sets the target to Routine only from above, and the lock lets Routine through, so it holds readiness *at or below* Routine. Struck while recessed, a country can mate its warheads and wait (`nuclear_weapon_events.1` option g, `nd_assemble_for_retaliation`): the week they reach Routine, if its war or peacetime exchange with the attacker is still open and it is still armed, `nuclear_weapon_events.24` "Our Forces Are Ready" offers the answer. The AI goes recessed at peace with nothing to deter and nobody to protect (`nd_protects_anyone`: a subject under its umbrella or a treaty beneficiary) when cautious, under No First Use or in default, and mates its warheads the month a war or crisis starts or it gains someone to protect. A country whose readiness reaches Recessed while it protects anyone gets `nuclear_crisis.23` "Our Allies Are Alarmed", whose option applies the cost (`nd_allies_alarmed`): credibility −5, relations −10 with each country it protects, +5 liberty desire for each subject under its umbrella — every time it goes to Recessed; the Recessed button's tooltip says so first. While Recessed, it protects at half weight in a crisis (below).
 
-**Automatic Retaliation** (authority 4, since 2026-09-25; the Soviet Perimeter system): needs `radar`, `ICBMs` and `mainframe_computers`. A strategic first strike on us is answered in full — three warheads, fewer if fewer are left, sized from the stock before any flies — in `nuclear_weapon_events.1`'s only option ("The System Answered"). It fires only from `.1`, never when being answered (`.11`), and not twice against the same country within six months (`nd_auto_answers_strike`, `nd_auto_answered_months`), so two systems cannot empty each other's arsenals. Recessed and automatic, the warheads are mated first and `.24` answers by itself. In return, a threat against us is weighed as if our forces were survivable (`nd_yp_answer` −25), early warnings go to the government as under Central Authorization, and Silence from the Capital does not apply. It costs 3 upkeep units; restraint groups dislike it; and a weapons accident can set it off (§0.4).
+**Automatic Retaliation** (authority 4, since 2026-09-25; the Soviet Perimeter system): needs `radar`, `ICBMs` and `mainframe_computers`. A strategic first strike on us is answered in full — three warheads, fewer if fewer are left, sized from the stock before any flies — in `nuclear_weapon_events.1`'s only option ("The System Answered"). It fires only from `.1`, never when being answered (`.11`), and not twice against the same country within six months (`nd_auto_answers_strike`, `nd_auto_answered_months`), so two systems cannot empty each other's arsenals. Recessed and automatic, the warheads are mated first and `.24` answers by itself. In return, a strike on the capital can't cut the chain of command and the answer is certain; since rework phase 1 a threat against it is weighed by its survivors like anyone's (§0.12), not as if its forces were survivable. Early warnings go to the government as under Central Authorization, and Silence from the Capital does not apply. It costs 3 upkeep units; restraint groups dislike it; and a weapons accident can set it off (§0.4).
 
 Capabilities run 0–100 and are updated monthly in `nd_monthly_update`:
-- **Survivability** climbs toward a cap set by technology (`nd_survivability_cap`): 25 for bombers, +15 for `radar`, +20 for `ICBMs`, +25 for `advanced_submarine_technology` and +10 for `missile_defense_systems`, to a maximum of 95. Each hardening level closes 2 % of the remaining gap per month. With no hardening, survivability decays 1 % of the excess per month toward 30 % of the cap.
-  A crisis counts survivability at the country's readiness (`nd_effective_survivability`, since 2026-10-06): ×0.5 Recessed, ×0.8 Routine, ×0.9 Heightened, in full at High Alert (`nd_survivability_factor_*`), since bombers on strip alert, submarines surged to sea and dispersed launchers ride out a strike that catches them on the ground or in port. It is read wherever a threat is weighed against the target's ability to answer: `nd_yp_answer_value` (−25 at 50 or more), the crisis-opening preview, the AI's counter-threat weight (`nuclear_crisis.1.c`) and a guarantor's walk-away weight (`.20.c`, under 30). A calm posture therefore lowers the shared danger but makes the country easier to coerce. The AI's launch-authority choice reads the stored figure, so standing down never pushes it towards Launch on Warning or Automatic Retaliation. The readiness choices' tooltips show the figure at each level (`nd_effective_survivability_at_readiness_0`–`_3`).
+- **Survivability** climbs toward a cap set by technology (`nd_survivability_cap`): 25 for bombers, +15 for `radar`, +20 for `ICBMs`, +25 for `advanced_submarine_technology` and +10 for `missile_defense_systems`, to a maximum of 80 (95 until rework phase 1). Each hardening level closes 2 % of the remaining gap per month. With no hardening, survivability decays 1 % of the excess per month toward 30 % of the cap.
+  A crisis counts survivability at the country's readiness (`nd_effective_survivability`, since 2026-10-06): ×0.5 Recessed, ×0.8 Routine, ×0.9 Heightened, in full at High Alert (`nd_survivability_factor_*`), since bombers on strip alert, submarines surged to sea and dispersed launchers ride out a strike that catches them on the ground or in port. Since rework phase 1 it feeds survivors (§0.12), which every reader that drew a line at 50, 40 or 30 now reads instead. A calm posture therefore lowers the shared danger but makes the country easier to coerce. The AI's launch-authority choice reads survivors at Heightened with no launch credit, so neither standing down nor a fast authority's own credit pushes it towards Launch on Warning or Automatic Retaliation. The readiness choices' tooltips show the figure at each level (`nd_effective_survivability_at_readiness_0`–`_3`).
 - **Reliability** moves a quarter of the way each month toward `55 + 12×safeguards + 5 (satellite_communications) − 0.4×strain`, minus 10 each for a punished sceptic, a concealed incident, and an enemy comms-disruption operation, clamped to 5–98.
 - **Strain** rises 5 a month at high alert. At heightened readiness it rises 1.5, or falls 1 if it is above 40. At routine it falls 6.
 - **Credibility** starts at 50 and drifts 2 % of the gap back toward 50 each month. Crises, pledges and guarantees move it.
@@ -114,7 +114,7 @@ A crisis opens with `nd_nuclear_warning_action` (private: relations −5) or `nd
 | 2 | We are at war | −35 war support in that war |
 | 1 | We are enemies in a diplomatic play | `resolve_play_for` our side |
 | 3 | The target is in a play or war against a country we guarantee (`nuclear_guarantee`) | as for 1 or 2, for the beneficiary's side |
-| 4 | The target is proliferating and is our rival, or we are antagonistic, belligerent or domineering toward it | `nd_crisis_programme_freeze`: 10 years of `country_nuclear_program_pause_bool` |
+| 4 | The target is proliferating, is believed unarmed (since rework phase 1), and is our rival, or we are antagonistic, belligerent or domineering toward it | `nd_crisis_programme_freeze`: 10 years of `country_nuclear_program_pause_bool` |
 | 5 | The target is our rival, is armed, and is at heightened alert or higher | readiness to routine, locked for 24 months |
 
 One crisis opens without an action. When a peacetime launch is recalled (§0.4), the country it was aimed at gets `nuclear_incident.5`, and its option c, "warn them privately", opens a private crisis with itself as issuer. The option needs an arsenal, both sides free and no non-use pledge; it skips the dispute test and the 24-month cooldown, because the recalled launch is the grievance. With no weightier dispute it classifies as code 5. Nothing opens a crisis on a country's behalf.
@@ -173,7 +173,7 @@ Domestic rewards are one-off decaying IG modifiers plus native lobby appeasement
 
 A public bluff that ends in a climb-down or lapses costs the issuer 5 credibility more. The AI never makes a public bluff (`nd_ai_would_issue_ultimatum`). Of its private warnings, only the coercive kind — a hawkish doctrine or regime against a target that cannot answer — needs a backed threat or an aggressive ruler (`nd_ai_would_warn`); a warning in defence of a guaranteed country, of its survival or core, or against a rival's bomb can still be a bluff.
 
-**Figures.** `nd_crisis_refresh_figures` is the one writer of `nd_crisis_danger`, `nd_yield_pressure` and `nd_ft_reason`. Both totals are sums of named parts (`nd_cd_*`, `nd_yp_*` in `nuclear_deterrence_values.txt`), and every part is stored on both parties, so the panel's breakdowns print stored numbers that add up to the stored totals. The losing-war part reads the target through `nd_is_losing_war_to`: `is_losing_war_against` reads ROOT, and the old formula ran it in the target's scope with the issuer as ROOT. Since 2026-09-25 the pressure has an eleventh part, `nd_yp_recessed` (−10 while the issuer is Recessed); "can they answer in kind" (`nd_yp_answer`) scores a target under Automatic Retaliation as survivable; and the protector part (`nd_yp_protector`) counts a protector whose warheads are all in storage at half, −10 instead of −20 (`nd_has_ready_guarantor_against`).
+**Figures.** `nd_crisis_refresh_figures` is the one writer of `nd_crisis_danger`, `nd_yield_pressure` and `nd_ft_reason`. Both totals are sums of named parts (`nd_cd_*`, `nd_yp_*` in `nuclear_deterrence_values.txt`), and every part is stored on both parties, so the panel's breakdowns print stored numbers that add up to the stored totals. The losing-war part reads the target through `nd_is_losing_war_to`: `is_losing_war_against` reads ROOT, and the old formula ran it in the target's scope with the issuer as ROOT. Rework phase 1 added `nd_yp_issuer_exposure` and `nd_yp_stakes` to the pressure and `nd_cd_vulnerability` to the danger, and rewrote `nd_yp_answer` (§0.12). Since 2026-09-25 the pressure has had an eleventh part, `nd_yp_recessed` (−10 while the issuer is Recessed); "can they answer in kind" (`nd_yp_answer`) scored a target under Automatic Retaliation as survivable until rework phase 1, which reads survivors instead (§0.12); and the protector part (`nd_yp_protector`) counts a protector whose warheads are all in storage at half, −10 instead of −20 (`nd_has_ready_guarantor_against`).
 
 **The outcome notice applies the consequences.** `nd_crisis_close` writes a pending record on each party (`nd_crisis_pending_*`) and fires `nuclear_crisis.6`, whose option runs `nd_crisis_apply_outcome_side`: credibility, the decaying modifier, the interest-group and lobby reactions. So the option's tooltip shows them. The concession itself (war support, the play, the freeze, the stand-down) still happens at the moment of yielding. If another crisis closes before a notice is answered, `nd_crisis_flush_pending` applies the older record first, and the stale notice's option does nothing — unless the second crisis was with the same country, in which case the stale notice applies that newer record under its own text and the newer notice says it was already settled. Nothing is lost or applied twice either way. If the other party no longer exists when the notice is answered (annexed after conceding a war), the notice still applies its record; the lines about the other party (lobbies, interest-group reactions) are skipped.
 
@@ -192,8 +192,13 @@ readiness base (0.5, 1, 4, 10 per mille) divided by 52/12. The crisis part
 |---|---|---|---|
 | 0–24 | 0 | 0 | 0 |
 | 25–49 | 5 per mille | ×0.6 | ×0.25 |
-| 50–74 | 50 per mille | ×0.6 | ×0.25 |
-| 75–100 | 175 per mille | ×0.6 | ×0.25 |
+| 50–74 | 35 per mille (50 until rework phase 1) | ×0.6 | ×0.25 |
+| 75–100 | 85 per mille (175 until rework phase 1) | ×0.6 | ×0.25 |
+
+Since rework phase 1 the band is `nd_incident_band`, the higher of the crisis's
+and the war's (`nd_war_danger_band`: 2 at war with an enemy believed armed, 3
+when either side holds goals on the other's incorporated states, is losing, or
+has been struck).
 
 The crisis part is zero unless a misreading family (warning, exercise,
 isolated commander) is eligible (`nd_incident_misreading_eligible`): crisis
@@ -220,11 +225,12 @@ none for 60 months after one (`nd_mishap_cooldown_months`, set in `.40`'s
 `immediate`; the monthly roll and the warning fallback both skip `.40` while
 it runs).
 
-**Balance target, not a historical estimate:** two countries at High Alert,
+**Balance target (rework phase 1, §0.12):** the surcharge, the halt chance's
+floor and the family weights are now set so the rework spec's §2.3 launch bands
+hold (`test_nuclear_incident_risk.TestSpecBands`). Two countries at High Alert,
 danger ≥75, no strain, reliability 60, Existential doctrine, two weekly checks
-each: the implemented roll is 16% per country per week, giving
-`1 − 0.84^4 = 50.2%` for any meaningful incident. At danger 50–74 it is 4.7% per
-country per week, or 17.5% across the same four checks. The weekly cap is 35%.
+each: about 7.9% per country per week, 28% for any meaningful incident (50.2%
+before). The weekly cap is 35%.
 The [National Archives account of the Cuban crisis](https://www.archives.gov/publications/prologue/2012/fall/cuban-missiles.html)
 describes multiple dangerous events and the role of independent choices; one
 observed crisis cannot identify an exact accident probability.
@@ -234,7 +240,7 @@ observed crisis cannot identify an exact accident probability.
 | Weapons accident (`.30`) | 5; 35 after prolonged alert/high strain | Any armed country |
 | Unconfirmed warning (`.1`–`.5`) | 40; 60 at crisis stage ≥2 | Radar, readiness ≥2, plausible armed attacker |
 | Exercise misread (`.10`) | 25 | Crisis stage ≥2, readiness ≥2 |
-| Isolated commander (`.20`) | 5; 30 during war/acute crisis | Authority 2/3, assembled weapons, and war, acute crisis or heightened readiness facing a plausible attacker |
+| Isolated commander (`.20`) | 25; 30 during war/acute crisis (5 and 30 until rework phase 1) | Authority 2/3, assembled weapons, and war, acute crisis or heightened readiness facing a plausible attacker |
 
 The weapons accident is drawn only from the base part.
 
@@ -246,13 +252,17 @@ introduced this section had extended it to acute crises and the 2026-10-06
 review reverted that. Isolated commanders have residual peacetime exposure.
 Automatic Retaliation can misread a bomber/silo accident during war, acute
 crisis or High Alert against a plausible attacker. Containment remains
-`nd_hold_chance`: reliability +5 per safeguard −15 for punished skepticism −10
-under Launch on Warning, then a context term (the Petrov judgement: a warning
-weighed against the moment): +25 at peace with no crisis, +10 at peace in a
-Warning or Confrontation, nothing in an Acute crisis or a war; clamped
-20–97%. `nd_roll_launch_hold` feeds the warning chain, Silence from the
+`nd_hold_chance`: 53 plus half the reliability (the reliability itself until
+rework phase 1), +5 per safeguard −15 for punished skepticism −10 under Launch
+on Warning, then a context term (the Petrov judgement: a warning weighed
+against the moment): +25 at peace with no crisis, +10 at peace in a Warning or
+Confrontation, nothing in an Acute crisis or a war. Since rework phase 1 the
+suspect's posture (+20 Recessed, −5 High Alert, saved by each roll's caller as
+`scope:nd_hold_suspect`), open talks (+10) and our own vulnerability (up to −10)
+count too, and the ceiling depends on the moment: 97 at peace with no crisis, 92
+in a Warning or Confrontation, 85 in an Acute crisis or a war (floor 20). `nd_roll_launch_hold` feeds the warning chain, Silence from the
 Capital and `nd_system_reads_attack`, so the term covers all three. Government orders retain all ordinary
-deliberate-use gates. Permission for accidental use is not a doctrine exemption
+deliberate-use gates, except that since rework phase 1 the launch under attack passes the doctrine in a war or an Acute crisis with the suspect under every doctrine but No First Use. Permission for accidental use is not a doctrine exemption
 for ordinary strike actions.
 
 **Peacetime exchange:** `nd_launch_or_intercept` opens reciprocal country records
@@ -298,8 +308,9 @@ without answering about 53%.
 
 **The AI's readiness in an acute crisis** (`nd_ai_review_posture`) is High Alert
 only when its crisis opponent is at Heightened or higher, or its own forces
-are vulnerable short of High Alert (survivability counted at Heightened,
-`nd_effective_survivability_at_readiness_2`, under 50, without Automatic Retaliation;
+are vulnerable short of High Alert (since rework phase 1: fewer than three
+survivors against an armed crisis opponent at Heightened,
+`nd_survivors_main_r2`, without Automatic Retaliation;
 read at Heightened rather than the current level so reaching High Alert does not undo the reason for it);
 otherwise Heightened. A war with an armed enemy still means High Alert. A
 player who stays at Routine is not met with High Alert at the AI's next review.
@@ -320,11 +331,12 @@ its 12-month cooldown. Concealment exposure remains 3% monthly (`.60`).
 It evaluates the actual script-value arithmetic and incident-family weights,
 including integer rounding; tuning is not copied into the model. It reports
 crisis benchmarks, fixed-posture peace decades (including unheld launch orders)
-and worlds with 1, 2, 8 and 20 routine nuclear powers. It excludes incident-choice,
-war and diplomatic feedback. High Alert held permanently remains dangerous:
-with safeguards 3 and Launch on Warning, about 0.15 unheld orders over a decade;
-with safeguards 0, about 1.03 (0.44 and 1.31 before the peacetime hold-chance
-term). These are dispatched orders, not guaranteed hits
+and worlds with 1, 2, 8 and 20 routine nuclear powers. Since rework phase 1 it also models the AI government's launch order on a
+warning, an eight-week Acute crisis, a war-year and a peacetime pair-year
+(§0.12); it excludes other incident choices and diplomatic feedback. High Alert held permanently remains dangerous:
+with safeguards 3 and Launch on Warning, about 0.04 unheld orders over a decade;
+with safeguards 0, about 0.49 (0.15 and 1.03 before rework phase 1's calibration;
+0.44 and 1.31 before the peacetime hold-chance term). These are dispatched orders, not guaranteed hits
 or conventional wars. Routine/central/safeguards 3 yields about 0.05 meaningful
 incidents per country per decade, or 1.07 across twenty such countries.
 
@@ -390,6 +402,8 @@ The beneficiary hears the answer through `.21`. Programme freezes and disarmamen
 
 **A protégé that struck first (since 2026-09-25).** When the country a guarantor covers used nuclear weapons first and its victim answers — the answering country was itself licensed (`nd_was_struck_by` the protégé) — the guarantor gets `nuclear_crisis.24` "Our Protégé Struck First" instead of `.20` (`nd_guarantor_hears_of_strike`). It may still cover the protégé: stand by them (as Honour) or answer in kind (as Retaliate), each for +5 infamy. Or it may decline (`nd_guarantee_act_decline`, the default): no credibility lost, no `nd_guarantee_abandoned`, no word to its other protectees; the protégé takes −10 relations (a subject under its umbrella also +5 liberty desire) and hears it through `.21` ("Not Their War to Answer"). The guarantee stands. The AI usually declines, unless it is hostile to the answering country or close to the protégé.
 
+**Co-belligerent cover (rework phase 1, 2026-10-28; owner call 11).** An unarmed country fighting a war beside a country believed armed is covered by it against their common enemy, for that war only (`nd_cobelligerent_cover_against`, `nd_cobelligerent_of`): the protector term, `.20` once (a treaty or umbrella that reaches the same protector goes first; each loop sets `nd_guarantee_basis` 1 treaty, 2 umbrella, 3 co-belligerent), the retaliation licence (`nd_covered_country_struck_by`), the Rules of War exception (`nd_covered_country_struck`) and no nuclear shadow on its war support. Walking away costs −5 credibility and nothing else; `.21` tells the ally (answers 3 and 4). A co-belligerent opens no dispute-3 crisis: at war with the attacker, its crisis classifies as dispute 2 first. Plays don't count.
+
 **The nuclear umbrella (since 2026-09-25).** A **direct subject** of an overlord believed armed is covered as if that overlord had signed it a `nuclear_guarantee`, with no treaty (`nd_under_an_umbrella`) — except while the two are at war or on opposite sides of a play, as a treaty guarantee lapses in a war between its parties. Everything above applies: `nd_has_armed_guarantor_against`, `nd_is_guaranteed` and `nd_is_guaranteed_by` see it, and the three loops over guarantee articles (a crisis on the target, a strike on the victim, the abandonment ripple) have an umbrella branch beside the treaty one that skips an overlord a treaty already reaches, so `.20` fires once. The article itself refuses a guarantor's own subject. Abandoning a subject in `.20` also gives it +10 liberty desire; the umbrella stays. The overlord can withdraw the umbrella with **Withdraw Nuclear Umbrella** (`nd_withdraw_umbrella_action`, `common/diplomatic_actions/nuclear_umbrella_actions.txt`): +10 liberty desire and −20 relations at once, then a pact that grows the subject's liberty desire 0.1 a week while it stands (vanilla Raise Subject Payments' rate). **Restore Nuclear Umbrella** breaks it for free; only the overlord can (`target_can_break = no`, `is_two_sided_pact = no`), and the action is drawn only for an overlord believed armed or one with a withdrawal standing. The AI never withdraws. The posture panel shows "Nuclear umbrella: N subjects" while anyone is covered. Subjects of subjects are covered by their own direct overlord only; power-bloc members get nothing without a treaty.
 
 ### 0.6 Intelligence (phase 5, partial)
@@ -405,7 +419,7 @@ The beneficiary hears the answer through `.21`. Programme freezes and disarmamen
 - The Unconfirmed Warning is always a false alarm; the genuine-warning variant is not built. Nothing in its text says "false alarm" before the inquiry.
 - Exercises exist as an incident (`.10`) and as a crisis act, not as a standing action.
 - Posture and crises share the programme's journal entry (§2 and §10 kept them apart). The separations those sections care about are kept without a second entry: arsenal ownership is still separate from programme eligibility — the entry's `possible` admits anyone armed, while the programme half of its weekly pulse runs only under `nuclear_program_has_programme`, so a demoted power keeps its posture, upkeep and accidents and stops building — and production still does not share a bar with the crisis: the native bar is warhead progress, and the crisis has its own panel.
-- A strike through a crisis option (`.4.g`, `.7.a`, `.20.b`) now needs the Rules of War gate as well (`nd_war_law_permits_strategic_strike`). It used to check doctrine and pledges only, so a country under Limited War could strike through a crisis. The Monopoly Window's first use (`nuclear_incident.50.c`) had the same hole until 2026-09-26 and has the same gate; its ultimatum (`.50.b`) stays open under the law, as a crisis threat does. The government's order on an unconfirmed warning (`nuclear_incident.1.c`, "Give the launch order") passes the same gates as every deliberate launch since 2026-09-26 (owner ruling): doctrine, non-use pledge, Rules of War and assembled forces, shown greyed with the failing line when forbidden. The doctrine needs a war with the suspect, so outside a war that order can no longer be given; only launches nobody in government ordered (launch on warning, delegation, the cut-off commander) still skip the gates, as §8.1 and §8.3 intend.
+- A strike through a crisis option (`.4.g`, `.7.a`, `.20.b`) now needs the Rules of War gate as well (`nd_war_law_permits_strategic_strike`). It used to check doctrine and pledges only, so a country under Limited War could strike through a crisis. The Monopoly Window's first use (`nuclear_incident.50.c`) had the same hole until 2026-09-26 and has the same gate; its ultimatum (`.50.b`) stays open under the law, as a crisis threat does. The government's order on an unconfirmed warning (`nuclear_incident.1.c`, "Give the launch order") passes the same gates as every deliberate launch since 2026-09-26 (owner ruling): doctrine, non-use pledge, Rules of War and assembled forces, shown greyed with the failing line when forbidden. The doctrine needed a war with the suspect, so outside a war that order could not be given. Since rework phase 1 (owner, 2026-10-28) the launch under attack needs a war with the suspect or an Acute crisis against it, and passes the doctrine under every doctrine but No First Use (`nd_launch_under_attack_context`, `nd_launch_under_attack_doctrine`); pledges, the Rules of War and assembled forces still apply. Only launches nobody in government ordered (launch on warning, delegation, the cut-off commander) skip the gates, as §8.1 and §8.3 intend.
 - The AI's first use in `nuke.txt` used to test `scope:country` (the actor) and so probably never passed. It now tests `scope:target_country` and goes through `nd_ai_nuclear_use_justified`, so an AI warfighting monopolist **can** use weapons in an ordinary war, as §9 requires. Expect more AI nuclear use than before.
 - Civil war, secession and annexation were not handled explicitly until 2026-09-26; §0.10 says what is built. What the engine did on its own, read from saves of a revolution the rebels won (2026-09-25): the winner received the loser's arsenal and posture through the variable merge, but not `nuclear_power` or the entry (`scripting_best_practices.md` § "What a Civil War's Winner Inherits"). An arsenal annexed any other way vanished with its owner.
 
@@ -641,6 +655,17 @@ Re-run with python3 scripts/analysis/nuclear_taboo_sim.py after any retune; ever
 31. An AI that cut its arsenal in half through a band event keeps that ceiling through its six-monthly reviews in peacetime.
 32. The arms-control article's ceiling input tops out a quarter above the larger arsenal (at least 5). If it tops out at 5 whatever the arsenals, the engine binds neither pair of party scopes in `quantity_max_value` and the cap reads only one side.
 33. With the condemn topic on cooldown (a condemnation voted within five years), a nuclear strike taken up by the docket still offers the appellant "Table a condemnation", whose requirement reads "…or this is a nuclear use". A war-of-aggression appeal in the same window does not.
+
+### 0.12 Crisis rework, phase 1 (2026-10-28)
+
+Built from `docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md` phase 1 (plan: `docs/superpowers/plans/2026-10-28-nuclear-crisis-rework-phase1.md`). None of it has run in a game; `docs/testing/nuclear-playtest.md` items 28–33 and its Self-checks table are the checks.
+
+- **Survivors** (`nd_survivors_vs_saved` and its variants, `nuclear_deterrence_values.txt`): stockpile − min(exposed, K × the enemy's believed stockpile) × (1 − launch credit), exposed = stockpile × (1 − effective survivability ÷ 100), K = 1, +0.5 ICBMs, +0.5 Precision Guided Munitions. `nd_refresh_main_rival` (monthly, and before the AI's posture review) picks the main rival (the armed crisis opponent, else the plausible attacker believed to hold most warheads) and stores survivors against it four ways: at our readiness, at Heightened, at Heightened with no credit, and at the technology ceiling at Heightened with no credit. The panel's Forces section shows "First-strike survivors". `scripts/analysis/nuclear_survivors.py` mirrors the formula.
+- **Crisis readers:** `nd_yp_answer` is +20 unarmed, else −25 × min(1, survivors ÷ 3), with survivors counted at three quarters for a Central target whose issuer is believed to hold more than its `nd_redundancy`; `nd_yp_issuer_exposure` (armed target: 0 while the issuer keeps 3 survivors, to −15 at 0); `nd_cd_vulnerability` ((50 − effective survivability) ÷ 5 for the more vulnerable armed party, at most 10). The AI's counter-threat (`.1.c`, `nd_survivors_crisis`), walk-away (`.20.c`, `nd_survivors_vs_attacker`, stored by its `immediate`), the government's order (`nuclear_incident.1.c`, `nd_survivors_vs_suspect`) and High Alert (`nd_survivors_main_r2`, against an armed crisis opponent) read survivors an effect stored, not a trigger's temporary scope: whether a script value sees a scope a trigger saved as temporary is unverified (`TE_SELF_CHECK nd_trigger_temp_scope`), and only the opening preview's answer lines and the AI's stake gate rest on it.
+- **Launch authority:** credit 0.25 Delegation, 0.6 Launch on Warning, −0.05 per safeguards level; Automatic Retaliation lost its blanket −25. The AI's safeguards start at 1, +1 cautious, +1 restraint government (`nd_regime_is_restraint`), +1 Delegation or Launch on Warning, −1 militarist or Warfighting, −1 in deficit. Its authority goes fast only when vulnerable (`nd_ai_vulnerable_to_main_rival`) and hardening can't close the gap (`nd_ai_hardening_cannot_close`), and back to Central half the time once it isn't.
+- **Risk** (§0.4): the halt chance's floor, ceilings, suspect, hotline and vulnerability terms; war exposure; the surcharge and commander weights; the government's launch under attack and its AI weights. Calibrated offline: eight-week Acute crisis, both at High Alert, either side launches: Central 2.5% (safeguards 3) and 4.2% (0), Delegation 4.7% (3), Launch on Warning 8.5% (3) and 27.3% (0); a war-year with an armed enemy 8.7%, 19.3% when it threatens either side; a peacetime armed-rival pair-year at Heightened under Delegation 0.067%.
+- **Crisis subjects:** stakes (`nd_yp_stakes`, at most −40, the demands of `scope:nd_stakes_demander`, counted by goal type: the 2026-10-28 probe showed `is_target_of_wargoal` can't count states in a play); `nd_core_threatened_by` now also needs a state-taking goal, since in a war that trigger flags the capital under any country-level goal; the AI's stake gate (`nd_ai_stakes_block`, line 40); co-belligerent cover (§0.5); proliferation needs a target believed unarmed.
+- **Observer:** a `type=crisis_acute` record once per crisis; the report counts use per Acute crisis, near misses and launches nobody meant.
 
 ## 1. Intent and owner requirements
 

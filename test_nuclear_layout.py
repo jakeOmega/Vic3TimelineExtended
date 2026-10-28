@@ -1031,5 +1031,18 @@ class MilitaryTabTest(unittest.TestCase):
                         stack.pop()
 
 
+class TestSurvivorsRow(unittest.TestCase):
+    """Forces: survivors against the main rival, shown while there is one
+    (2026-10-28 rework spec §10)."""
+
+    def test_survivors_row_present(self):
+        text = _read(DETERRENCE)
+        i = text.index('text = "nd_w_survivors_label"')
+        row = text[text.rindex("nd_row = {", 0, i):i + 400]
+        self.assertIn("nd_has_main_rival_sgui", row)
+        self.assertIn('text = "nd_w_survivors_value"', row)
+        self.assertIn('tooltip = "nd_w_survivors_tt"', row)
+
+
 if __name__ == "__main__":
     unittest.main()

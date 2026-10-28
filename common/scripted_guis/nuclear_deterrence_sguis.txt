@@ -321,6 +321,19 @@ nd_crisis_action_sgui = {
 }
 
 # ---- Yes/no questions the .gui asks (scope-free is_shown) --------------------
+# Forces: survivors against the main rival, while we have one
+# (nd_refresh_main_rival).
+nd_has_main_rival_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_armed = yes
+		has_variable = nd_main_rival
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
 nd_armed_sgui = {
 	scope = country
 	is_shown = {
@@ -471,6 +484,7 @@ nd_crisis_pressure_breakdown_sgui = {
 	effect = {
 		nd_crisis_breakdown_line = { C = nd_yp_base KEY = nd_yp_base_line }
 		nd_crisis_breakdown_line = { C = nd_yp_answer KEY = nd_yp_answer_line }
+		nd_crisis_breakdown_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line }
 		nd_crisis_breakdown_line = { C = nd_yp_protector KEY = nd_yp_protector_line }
 		nd_crisis_breakdown_line = { C = nd_yp_credibility KEY = nd_yp_credibility_line }
 		nd_crisis_breakdown_line = { C = nd_yp_alert KEY = nd_yp_alert_line }
@@ -479,6 +493,7 @@ nd_crisis_pressure_breakdown_sgui = {
 		nd_crisis_breakdown_line = { C = nd_yp_exercise KEY = nd_yp_exercise_line }
 		nd_crisis_breakdown_line = { C = nd_yp_temperament KEY = nd_yp_temperament_line }
 		nd_crisis_breakdown_line = { C = nd_yp_war KEY = nd_yp_war_line }
+		nd_crisis_breakdown_line = { C = nd_yp_stakes KEY = nd_yp_stakes_line }
 		nd_crisis_breakdown_line = { C = nd_yp_follow_through KEY = nd_yp_follow_through_line }
 		nd_crisis_breakdown_line = { C = nd_yp_taboo KEY = nd_yp_taboo_line }
 		custom_tooltip_no_bullet = nd_yp_total_line
@@ -503,6 +518,7 @@ nd_crisis_danger_breakdown_sgui = {
 		nd_crisis_breakdown_line = { C = nd_cd_talks KEY = nd_cd_talks_line }
 		nd_crisis_breakdown_line = { C = nd_cd_backed KEY = nd_cd_backed_line }
 		nd_crisis_breakdown_line = { C = nd_cd_exercise KEY = nd_cd_exercise_line }
+		nd_crisis_breakdown_line = { C = nd_cd_vulnerability KEY = nd_cd_vulnerability_line }
 		if = {
 			limit = {
 				has_variable = nd_cd_dampened
@@ -534,6 +550,10 @@ nd_risk_breakdown_sgui = {
 		if = {
 			limit = { nd_in_crisis = yes }
 			custom_tooltip_no_bullet = nd_risk_factor_crisis
+		}
+		if = {
+			limit = { nd_war_danger_band > nd_own_danger_band }
+			custom_tooltip_no_bullet = nd_risk_factor_war
 		}
 	}
 }

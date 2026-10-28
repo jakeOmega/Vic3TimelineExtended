@@ -51,6 +51,23 @@ The panel was reworked from the 2026-10-27 GUI and localization audit (`docs/aud
 
 27. **17 / 20 / 16.** Rows, values, buttons and notes at 17 (EBGaramond), subheadings at 20, the overview at 16 (the tooltip face), all through `te_nuclear_fontsize_*` (`nuclear_deterrence_widget.gui`). Check that the larger rows fit their cells without "..." (Survivability's 94-wide value, the At Home tables, the steppers) and that the taboo history's subsection header reads at 17.
 
+## The crisis rework, phase 1 (2026-10-28)
+
+What `docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md` phase 1 changed (survivors, launch authority, the chance of a halt, war exposure, the launch under attack, stakes, co-belligerents). The numbers were tuned offline (`scripts/analysis/nuclear_incident_rates.py`, `test_nuclear_incident_risk.TestSpecBands`); the game has to show the mechanisms work.
+
+28. **First-strike survivors.** An armed country with a rival shows "First-strike survivors: N of M" in Forces; the hover names the rival and its three figures are numbers, not blanks. An armed country with no armed rival, war enemy, crisis opponent or hostile armed country shows no row. Fallback if the rival's name is blank: drop it from the hover header and body.
+29. **Pressure breakdown.** In a crisis between two armed powers, the pressure hover lists "Whether the threatened side could disarm the threatening side first" when the issuer is small, and a crisis over a play lists "What the threatening side demands"; the danger hover lists the vulnerable side's forces when survivability is under 50. The listed parts add up to the total.
+30. **Authority hovers.** Delegation and Launch on Warning list their launch credit (25%, 60%); those two and Automatic Retaliation list "Answer Not Discounted for the Capital"; Central Authorization lists neither. The safeguards hover lists −5% launch credit per level.
+31. **The launch under attack.** In an Acute crisis with an armed rival at peace, force a warning (`event te_debug_deterrence.2`, or wait): "Give the launch order" is available under every doctrine but No First Use, and greyed with the context line outside a war or an Acute crisis. Ordered at peace, it opens a peacetime exchange, as an unordered launch does.
+32. **Co-belligerent cover.** An unarmed country fighting beside an armed one is warned or struck by their common enemy: the armed ally gets "A Promise Called In" with the co-belligerent text, once; walking away costs 5 credibility and the ally gets "We Stand Alone".
+33. **The AI's posture.** Over an observer run, AI safeguards spread over 0–3 (not stuck at 2–3), and AI powers that can't make their force survivable move to Delegation, Launch on Warning or Automatic Retaliation, and back to Central once the threat passes. `nuclear_observer_report.py` reports Acute crises, use per Acute crisis, near misses and launches nobody meant; spec §2.1's targets are about 6–10% use per Acute crisis.
+34. **War exposure.** At war with an armed enemy, the incident exposure hover lists "Our war with an armed enemy adds misreadings of its own", and the exposure band rises.
+35. **An order at peace is a first use.** After the government's launch under attack in an Acute crisis at peace, the taboo falls and the UN records a first use, as for a wartime strike.
+
 ## Self-checks
 
-None: no part of the 2026-10-27 rework rests on an engine fact in script that a `debug_log` line could test. The accessors new to the panel are GUI facts, listed with their fallbacks above.
+| Line | What it tests | If BROKEN |
+|---|---|---|
+| `TE_SELF_CHECK OK\|BROKEN nd_trigger_temp_scope` (once a game, the first month an armed country has a main rival) | A script value sees a scope a trigger saved with `save_temporary_scope_as` (the GM precedent `gm_state_tr_holds_half` is also unread) | The scope is unseen, so the enemy's reach reads 0: the opening preview shows "Their arsenal would survive" for almost any target with three or more warheads, "could disarm ours first" only when we hold fewer than three, and the AI's stake gate never blocks a threat. Expect unset-scope errors in `error.log` for `scope:nd_sv_enemy`, `scope:nd_issuer` or `scope:nd_target` whenever the AI weighs a nuclear warning or the opening preview is on screen. Fallback: compute the preview's line from the target's stored `nd_survivors_main` when its main rival is the issuer, and drop the stake gate |
+
+The 2026-10-27 GUI rework rests on no engine fact in script; its accessors are GUI facts, listed with their fallbacks above.

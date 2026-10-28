@@ -293,10 +293,12 @@ class TestWarLawGate(unittest.TestCase):
 
     def test_the_government_launch_order_passes_every_deliberate_gate(self):
         """nuclear_incident.1.c is the government's own order (owner ruling
-        2026-09-26): the same gates as nuke_diplo_action, shown greyed."""
+        2026-09-26): the same gates as nuke_diplo_action, shown greyed, except
+        that a launch under attack passes the doctrine in a war or an Acute
+        crisis with the suspect unless it is No First Use (owner, 2026-10-28)."""
         body = option_body(strip_comments(read(INCIDENT_EVENTS)), "nuclear_incident.1.c")
-        for gate in ("has_war_with = scope:nd_warning_suspect",
-                     "nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }",
+        for gate in ("nd_launch_under_attack_context = { SUSPECT = scope:nd_warning_suspect }",
+                     "nd_launch_under_attack_doctrine = { SUSPECT = scope:nd_warning_suspect }",
                      "nd_pledge_permits_strike = { ENEMY = scope:nd_warning_suspect }",
                      "nd_war_law_permits_strategic_strike = yes",
                      "nd_forces_assembled = yes",
@@ -422,10 +424,10 @@ class TestFollowThrough(unittest.TestCase):
 
 DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness", "nd_cd_public",
                 "nd_cd_counter", "nd_cd_reliability", "nd_cd_weeks", "nd_cd_talks", "nd_cd_backed",
-                "nd_cd_exercise"]
-PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
+                "nd_cd_exercise", "nd_cd_vulnerability"]
+PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_issuer_exposure", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
                   "nd_yp_recessed", "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
-                  "nd_yp_follow_through", "nd_yp_taboo"]
+                  "nd_yp_stakes", "nd_yp_follow_through", "nd_yp_taboo"]
 
 
 class TestCrisisFigures(unittest.TestCase):
@@ -468,6 +470,284 @@ class TestCrisisFigures(unittest.TestCase):
             if path == CRISIS_EFFECTS:
                 text = text.replace(block(text, "nd_crisis_refresh_figures"), "")
             self.assertNotRegex(text, r"name = nd_(?:crisis_danger|yield_pressure) value", path.name)
+
+
+class TestSurvivorsInCrisis(unittest.TestCase):
+    """The answer in kind reads survivors, the issuer's own exposure weighs on
+    the threat, and a vulnerable force raises the danger (2026-10-28 rework
+    spec §3.3)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+        self.sguis = strip_comments(read(SGUIS))
+
+    def test_new_parts_are_stored_cleared_and_shown(self):
+        for part, sgui in (("nd_yp_issuer_exposure", "nd_crisis_pressure_breakdown_sgui"),
+                           ("nd_cd_vulnerability", "nd_crisis_danger_breakdown_sgui")):
+            self.assertRegex(self.values, rf"(?m)^{part}_value = \{{")
+            self.assertIn(f"C = {part} V = {part}_value", block(self.effects, "nd_crisis_refresh_figures"))
+            self.assertIn(f"remove_variable = {part}", block(self.effects, "nd_crisis_clear_figures"))
+            self.assertIn(f"C = {part} KEY = {part}_line", block(self.sguis, sgui))
+            self.assertIsNotNone(loc_value(f"{part}_line"), part)
+
+    def test_answer_has_no_line_at_50(self):
+        body = block(self.values, "nd_yp_answer_value")
+        self.assertNotIn(">= 50", body)
+        self.assertNotIn("nd_authority_automatic", body)
+        self.assertIn("nd_yp_answer_survivors_value", body)
+        self.assertIn("multiply = -25", body)
+
+    def test_answer_three_quarters_rule(self):
+        body = block(self.values, "nd_yp_answer_survivors_value")
+        self.assertIn("nd_survivors_vs_issuer", body)
+        self.assertIn("nd_authority_central = yes", body)
+        self.assertIn("nd_decapitation_margin_value > 0", body)
+        self.assertIn("multiply = 0.75", body)
+        margin = block(self.values, "nd_decapitation_margin_value")
+        self.assertIn("nd_believed_stockpile", margin)
+        self.assertIn("subtract = nd_redundancy", margin)
+
+    def test_issuer_exposure_falls_to_minus_15(self):
+        body = block(self.values, "nd_yp_issuer_exposure_value")
+        self.assertIn("nd_believed_armed = yes", body)
+        self.assertIn("nd_survivors_vs_target", body)
+        self.assertIn("max = 3", body)
+        self.assertIn("multiply = 5", body)
+
+    def test_vulnerability_reads_the_more_vulnerable_armed_party(self):
+        body = block(self.values, "nd_cd_vulnerability_value")
+        self.assertIn("nd_own_vulnerability_value", body)
+        self.assertIn("nd_believed_armed = yes", body)
+        own = block(self.values, "nd_own_vulnerability_value")
+        for needle in ("value = 50", "subtract = nd_effective_survivability", "divide = 5", "min = 0", "max = 10"):
+            self.assertIn(needle, own)
+
+    def test_refresh_stores_each_partys_survivors(self):
+        body = block(self.effects, "nd_crisis_refresh_figures")
+        self.assertEqual(body.count("name = nd_survivors_crisis"), 2)
+        self.assertIn("remove_variable = nd_survivors_crisis", block(self.effects, "nd_crisis_clear_figures"))
+
+    def test_ai_weights_read_survivors(self):
+        events = strip_comments(read(CRISIS_EVENTS))
+        for name in ("nuclear_crisis.1.c", "nuclear_crisis.20.c"):
+            self.assertNotIn("nd_effective_survivability", option_body(events, name))
+
+
+class TestCrisisSubjects(unittest.TestCase):
+    """Stakes weigh on the pressure, an armed co-belligerent covers an unarmed
+    one for the war, and an armed rival is not a proliferator (2026-10-28
+    rework spec §8.2–§8.4)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.effects = strip_comments(read(EFFECTS))
+
+    def test_proliferation_needs_unarmed_target(self):
+        body = block(self.triggers, "nd_dispute_proliferation_by")
+        self.assertRegex(body, r"\$TARGET\$ = \{[^}]*nd_believed_armed = no")
+
+    def test_cobelligerent_branch_in_guarantee_triggers(self):
+        for name, branch in (("nd_has_armed_guarantor_against", "nd_cobelligerent_cover_against"),
+                             ("nd_has_ready_guarantor_against", "nd_cobelligerent_cover_against"),
+                             ("nd_is_guaranteed_by", "nd_cobelligerent_of"),
+                             ("nd_covered_country_struck_by", "any_cobelligerent_in_war"),
+                             ("nd_covered_country_struck", "any_cobelligerent_in_war")):
+            self.assertIn(branch, block(self.triggers, name), name)
+        cover = block(self.triggers, "nd_cobelligerent_cover_against")
+        for needle in ("nd_believed_armed = no", "has_war_with = $AGAINST$", "any_cobelligerent_in_war",
+                       "nd_believed_armed = yes"):
+            self.assertIn(needle, cover)
+
+    def test_cobelligerent_branch_skips_treaty_and_umbrella(self):
+        for body in (block(self.crisis, "nd_crisis_notify_guarantors"), block(self.effects, "nd_record_nuclear_use")):
+            loop = body[body.index("every_cobelligerent_in_war"):]
+            limit = block(loop, "limit")
+            self.assertRegex(limit, r"NOT = \{[^}]*nd_is_guaranteed_by_treaty")
+            self.assertRegex(limit, r"NOT = \{[^}]*nd_under_umbrella_of")
+            self.assertIn("name = nd_guarantee_basis value = 3", loop)
+            self.assertIn("name = nd_guarantee_basis value = 1", body)
+            self.assertIn("name = nd_guarantee_basis value = 2", body)
+
+    def test_cobelligerent_abandon_costs_five(self):
+        body = block(self.crisis, "nd_guarantee_act_abandon")
+        branch = body[body.index("var:nd_guarantee_basis = 3"):body.index("else = {")]
+        branch += block(self.crisis, "nd_cobelligerent_abandon_effects")
+        self.assertIn("AMOUNT = -5", branch)
+        self.assertNotIn("nd_guarantee_abandoned", branch)
+        self.assertNotIn("every_scope_treaty", branch)
+        self.assertNotIn("add_liberty_desire", branch)
+
+    def test_stakes_part(self):
+        self.assertRegex(self.values, r"(?m)^nd_yp_stakes_value = \{")
+        self.assertIn("min = -40", block(self.values, "nd_yp_stakes_value"))
+        self.assertIn("C = nd_yp_stakes V = nd_yp_stakes_value", block(self.crisis, "nd_crisis_refresh_figures"))
+        self.assertIn("remove_variable = nd_yp_stakes", block(self.crisis, "nd_crisis_clear_figures"))
+        self.assertIn("C = nd_yp_stakes KEY = nd_yp_stakes_line",
+                      block(strip_comments(read(SGUIS)), "nd_crisis_pressure_breakdown_sgui"))
+        self.assertIsNotNone(loc_value("nd_yp_stakes_line"))
+
+    def test_unstaked_total_is_every_other_part(self):
+        body = block(self.values, "nd_yield_pressure_unstaked_value")
+        parts = re.findall(r"(?:value|add) = (nd_yp_\w+)_value\b", body)
+        self.assertEqual(parts, [p for p in PRESSURE_PARTS if p != "nd_yp_stakes"])
+
+    def test_ai_stake_gate(self):
+        self.assertIn("nd_ai_stakes_block = { TARGET = $TARGET$ }", block(self.triggers, "nd_ai_would_warn"))
+        gate = block(self.triggers, "nd_ai_stakes_block")
+        self.assertIn("nd_yield_pressure_unstaked_value >= nd_ai_concession_line", gate)
+        self.assertIn("nd_yield_pressure_value < nd_ai_concession_line", gate)
+        self.assertRegex(self.values, r"(?m)^nd_ai_concession_line = 40\b")
+
+
+class TestReviewFixesPhase1(unittest.TestCase):
+    """The mid-phase review's fixes (rework phase 1)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.cev = strip_comments(read(CRISIS_EVENTS))
+        self.iev = strip_comments(read(INCIDENT_EVENTS))
+
+    def test_an_unarmed_country_drops_its_main_rival(self):
+        update = block(self.effects, "nd_monthly_update")
+        unarmed = update[update.index("else = {"):]
+        self.assertIn("nd_refresh_main_rival = yes", unarmed[:unarmed.index("nd_tick_countdown")])
+        cleanup = block(self.effects, "nd_country_monthly_cleanup")
+        self.assertIn("nd_refresh_main_rival = yes", cleanup)
+
+    def test_ai_weights_read_survivors_stored_by_an_effect(self):
+        # A scope a trigger saves as temporary may not reach a script value
+        # (unverified), so the AI's weights read figures an effect stored.
+        self.assertNotRegex(self.triggers, r"(?m)^nd_vulnerable_to = \{")
+        self.assertIn("var:nd_survivors_crisis >= 3", option_body(self.cev, "nuclear_crisis.1.c"))
+        self.assertIn("var:nd_survivors_vs_attacker < 3", option_body(self.cev, "nuclear_crisis.20.c"))
+        self.assertIn("nd_guarantor_store_survivors = yes", block(self.cev, "nuclear_crisis.20"))
+        self.assertIn("name = nd_survivors_vs_attacker value = nd_survivors_vs_saved",
+                      block(self.crisis, "nd_guarantor_store_survivors"))
+        warning = block(self.effects, "nd_start_unconfirmed_warning")
+        self.assertIn("name = nd_survivors_vs_suspect value = nd_survivors_vs_saved", warning)
+        self.assertLess(warning.index("nd_survivors_vs_suspect"), warning.index("id = nuclear_incident.1 "))
+        body = block(self.iev, "nuclear_incident.1")
+        order = body[body.index("name = nuclear_incident.1.c"):]
+        self.assertIn("var:nd_survivors_vs_suspect < 3", block(order, "ai_chance"))
+
+    def test_trigger_temp_scope_self_check(self):
+        body = block(self.effects, "nd_refresh_main_rival")
+        check = body[:body.index("save_scope_as = nd_sv_enemy")]
+        self.assertIn("NOT = { exists = scope:nd_sv_enemy }", check)
+        self.assertIn("nd_counterforce_reach_visible = { ENEMY = scope:nd_mr_rival }", check)
+        self.assertIn("TE_SELF_CHECK OK nd_trigger_temp_scope", check)
+        self.assertIn("TE_SELF_CHECK BROKEN nd_trigger_temp_scope", check)
+        self.assertIn("save_temporary_scope_as = nd_sv_enemy", block(self.triggers, "nd_counterforce_reach_visible"))
+
+    def test_no_line_at_50_in_the_readiness_hover(self):
+        self.assertNotIn("From #v 50#!", loc_value("nd_w_readiness_head_survivability_tt"))
+
+    def test_the_governments_order_is_narrated_as_deliberate(self):
+        body = block(self.iev, "nuclear_incident.1")
+        order = body[body.index("name = nuclear_incident.1.c"):]
+        self.assertLess(order.index("save_scope_as = nd_deliberate_response"), order.index("nd_launch_or_intercept"))
+
+    def test_high_alert_only_over_an_armed_crisis_opponent(self):
+        review = block(self.effects, "nd_ai_review_posture")
+        i = review.index("var:nd_survivors_main_r2 < 3")
+        self.assertIn("var:nd_crisis_opponent ?= { nd_believed_armed = yes }", review[i - 300:i])
+
+    def test_vulnerability_reads_public_belief(self):
+        body = block(self.values, "nd_cd_vulnerability_value")
+        self.assertIn("nd_believed_armed = yes", body)
+        self.assertNotIn("nd_is_armed", body)
+
+    def test_old_saves_settle_to_the_new_ceiling(self):
+        step = block(self.values, "nd_survivability_step")
+        hardening = step[:step.index("else_if")]
+        self.assertNotIn("min = 0", hardening)
+
+
+class TestProbeFindings20261028(unittest.TestCase):
+    """What the 2026-10-28 engine probe changed (scripting_best_practices.md §
+    "War Goals, Plays, Adjacency and Claims"): is_target_of_wargoal finds
+    nothing in a play, and in a war it also flags the capital under a
+    country-level goal."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+
+    def test_stakes_count_goal_types_not_states(self):
+        territory = block(self.values, "nd_yp_stakes_territory_value")
+        self.assertNotIn("is_target_of_wargoal", territory)
+        self.assertNotIn("every_scope_state", territory)
+        for t in ("conquer_state", "return_state", "take_treaty_port", "liberate_country"):
+            self.assertIn(f"TYPE = {t} ", territory)
+        self.assertNotRegex(self.values, r"(?m)^nd_stakes_states_counted_value = ")
+        self.assertNotIn("nd_stakes_self_check", strip_comments(read(CRISIS_EFFECTS)))
+
+    def test_core_threat_needs_a_state_taking_goal(self):
+        body = block(self.triggers, "nd_core_threatened_by")
+        self.assertIn("is_target_of_wargoal = $ENEMY$", body)
+        for t in ("conquer_state", "return_state", "take_treaty_port"):
+            self.assertIn(f"war_side_has_war_goal_of_type_against = {{ type = {t} target = scope:nd_ct_self }}", body)
+
+
+class TestFinalReviewFixesPhase1(unittest.TestCase):
+    """The final review's fixes (rework phase 1)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_abandon_tests_the_cobelligerent_case_positively(self):
+        body = block(self.crisis, "nd_guarantee_act_abandon")
+        self.assertNotRegex(body, r"NOT = \{\s*has_variable = nd_guarantee_basis\s*var:nd_guarantee_basis = 3\s*\}")
+        self.assertRegex(body, r"if = \{\s*limit = \{\s*has_variable = nd_guarantee_basis\s*var:nd_guarantee_basis = 3\s*\}")
+        self.assertIn("nd_cobelligerent_abandon_effects = yes", body)
+
+    def test_an_ally_that_walks_away_stops_counting_as_a_protector(self):
+        body = block(self.crisis, "nd_cobelligerent_abandon_effects")
+        self.assertIn("name = nd_crisis_abandoned value = 1", body)
+        self.assertIn("var:nd_guarantee_context = 1", body)
+
+    def test_an_armed_ally_lifts_the_nuclear_shadow(self):
+        injections = strip_comments(read(ROOT / "common/script_values/zz_te_war_support_injections.txt"))
+        i = injections.index("WAR_SUPPORT_TE_NUCLEAR_SHADOW")
+        shadow = injections[injections.rindex("if = {", 0, injections.rindex("limit", 0, i)):i]
+        self.assertRegex(shadow, r"NOT = \{ this = ROOT \}\s*NOT = \{ has_war_with = ROOT \}\s*nd_believed_armed = yes")
+
+    def test_existence_goals_are_not_counted_twice_in_a_war(self):
+        body = block(self.values, "nd_yp_stakes_value")
+        self.assertIn("nd_enemy_threatens_existence = { ENEMY = scope:nd_issuer }", body)
+        self.assertIn("add = 15", body)
+
+    def test_stake_gate_runs_last_and_not_for_a_guarantee(self):
+        warn = block(self.triggers, "nd_ai_would_warn")
+        self.assertGreater(warn.index("nd_ai_stakes_block"), warn.index("A cautious ruler") if "A cautious ruler" in warn
+                           else warn.index("ruler_is_cautious = no"))
+        self.assertRegex(warn, r"OR = \{\s*nd_dispute_guarantee_against = \{ TARGET = \$TARGET\$ \}\s*NOT = \{ nd_ai_stakes_block")
+
+    def test_acute_record_also_at_close(self):
+        self.assertIn("nd_log_crisis_acute_once = yes", block(self.crisis, "nd_crisis_close"))
+
+    def test_more_goal_types_count(self):
+        body = block(self.values, "nd_yp_stakes_value") + block(self.values, "nd_yp_stakes_territory_value") + \
+            block(self.values, "nd_yp_stakes_minor_value")
+        for t in ("unification", "restore_union", "te_colonial_reconquest", "secession", "release_as_subject",
+                  "te_colonial_independence", "te_un_mandate_restore_state", "break_enforced_treaties"):
+            self.assertIn(f"TYPE = {t} ", body, t)
+
+    def test_main_rival_hover_figures_cleared(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival")
+        for name in ("nd_main_rival_reach", "nd_exposed_main"):
+            self.assertIn(f"remove_variable = {name}", body)
+
+    def test_survivors_shown_to_one_decimal(self):
+        self.assertIn("Var('nd_survivors_main').GetValue|1", loc_value("nd_w_survivors_value"))
 
 
 class TestOutcomeNotice(unittest.TestCase):
@@ -552,8 +832,9 @@ class TestNativeCloses(unittest.TestCase):
 PREVIEW_PINS = {
     # loc key: (script value holding the constant, operation, number)
     "nd_tt_open_f_unarmed": ("nd_yp_answer_value", "add", 20),
-    "nd_tt_open_f_survivable": ("nd_yp_answer_value", "subtract", 25),
-    "nd_tt_open_f_armed": ("nd_yp_answer_value", "subtract", 10),
+    # Armed, the answer is −25 × survivors ÷ 3 (rework spec §3.3): the preview
+    # names its ceiling; "armed but disarmable" carries no constant.
+    "nd_tt_open_f_survivable": ("nd_yp_answer_value", "multiply", -25),
     "nd_tt_open_f_protector": ("nd_yp_protector_value", "subtract", 20),
     "nd_tt_open_f_aggressive": ("nd_yp_temperament_value", "subtract", 15),
     "nd_tt_open_f_cautious": ("nd_yp_temperament_value", "add", 10),
@@ -643,28 +924,21 @@ class TestEffectiveSurvivability(unittest.TestCase):
                           block(self.values, "nd_effective_survivability"))
         self.assertNotIn("multiply", block(self.values, "nd_effective_survivability_at_readiness_3"))
 
-    def test_the_line_of_50_reads_the_effective_figure(self):
+    def test_answer_sites_read_survivors_not_a_line(self):
+        # The line of 50 is gone (rework spec §3.3): every site that weighs
+        # the target's answer reads survivors.
         sites = (block(self.values, "nd_yp_answer_value"),
-                 block(strip_comments(read(CRISIS_EFFECTS)), "nd_crisis_preview"),
-                 option_body(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.1.c"),
-                 option_body(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.20.c"))
+                 block(strip_comments(read(CRISIS_EFFECTS)), "nd_crisis_preview"))
         for body in sites:
-            self.assertIn("nd_effective_survivability", body)
+            self.assertNotIn("nd_effective_survivability >= 50", body)
             self.assertNotIn("var:nd_survivability", body)
 
-    def test_ai_authority_reads_the_stored_figure(self):
-        review = read(EFFECTS)
-        start = review.index("# ---- launch authority", review.index("nd_ai_review_posture = {"))
-        authority = strip_comments(review[start:review.index("# ---- investment", start)])
-        self.assertIn("var:nd_survivability < 50", authority)
-        self.assertNotIn("nd_effective_survivability", authority)
-
-    def test_ai_alert_reads_survivability_at_heightened(self):
+    def test_ai_alert_reads_survivors_at_heightened(self):
         # Not at the current readiness: reaching High Alert must not undo the
         # reason for it, or the review would swing between the two.
         review = strip_comments(block(read(EFFECTS), "nd_ai_review_posture"))
-        self.assertIn("nd_effective_survivability_at_readiness_2 < 50", review)
-        self.assertNotRegex(review, r"\bnd_effective_survivability\s*<")
+        self.assertIn("var:nd_survivors_main_r2 < 3", review)
+        self.assertNotRegex(review, r"\bnd_effective_survivability(?:_at_readiness_\d)?\s*<")
 
     def test_tooltips_show_the_figure(self):
         # The readiness table's Survivability column (NUC-5), one cell a level.
@@ -677,6 +951,85 @@ class TestEffectiveSurvivability(unittest.TestCase):
         for factor, words in READINESS_FACTOR_WORDS.items():
             self.assertEqual(self.factors[factor], {"half": 0.5, "four fifths": 0.8, "nine tenths": 0.9}[words])
             self.assertIn(words, survivability_tt)
+
+
+class TestSurvivorsAgainstRival(unittest.TestCase):
+    """Survivability tops out at 80; survivors are measured against the main
+    rival (2026-10-28 rework spec §3.1, §3.2)."""
+
+    def test_survivability_cap_is_80(self):
+        body = block(strip_comments(read(VALUES)), "nd_survivability_cap")
+        self.assertIn("max = 80", body)
+        self.assertNotIn("max = 95", body)
+
+    def test_main_rival_cleared_without_attacker(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival")
+        for name in ("nd_main_rival", "nd_survivors_main", "nd_survivors_main_r2", "nd_survivors_main_bare_r2",
+                     "nd_survivors_main_ceiling_bare_r2"):
+            self.assertIn(f"remove_variable = {name}", body)
+            self.assertIn(f"name = {name} value", body)
+
+    def test_main_rival_refreshed_monthly_and_before_the_ai_review(self):
+        effects = strip_comments(read(EFFECTS))
+        self.assertIn("nd_refresh_main_rival = yes", block(effects, "nd_monthly_update"))
+        review = block(effects, "nd_ai_review_posture")
+        self.assertLess(review.index("nd_refresh_main_rival = yes"), review.index("nd_set_readiness_target_3"))
+
+    def test_plausible_attacker_shared(self):
+        triggers = strip_comments(read(TRIGGERS))
+        self.assertIn("nd_plausible_attacker_of", block(triggers, "nd_has_plausible_attacker"))
+        self.assertIn("nd_plausible_attacker_of", block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival"))
+
+
+def ai_review_section(start_marker, end_marker):
+    review = read(EFFECTS)
+    start = review.index(start_marker, review.index("nd_ai_review_posture = {"))
+    return strip_comments(review[start:review.index(end_marker, start)])
+
+
+class TestAuthorityPayoffs(unittest.TestCase):
+    """Delegation and Launch on Warning pay; safeguards trim the payoff; the
+    AI's safeguards are no longer automatic and its authority reads survivors
+    (2026-10-28 rework spec §4.1, §4.2, §4.4)."""
+
+    def test_authority_reads_bare_heightened_survivors(self):
+        authority = ai_review_section("# ---- launch authority", "# ---- investment")
+        self.assertIn("nd_ai_vulnerable_to_main_rival = yes", authority)
+        self.assertIn("nd_ai_hardening_cannot_close = yes", authority)
+        self.assertNotIn("nd_effective_survivability", authority)
+        self.assertNotIn("var:nd_survivability", authority)
+        triggers = strip_comments(read(TRIGGERS))
+        self.assertIn("var:nd_survivors_main_bare_r2 < 3", block(triggers, "nd_ai_vulnerable_to_main_rival"))
+        self.assertIn("var:nd_survivors_main_ceiling_bare_r2 < 3", block(triggers, "nd_ai_hardening_cannot_close"))
+
+    def test_safeguards_not_automatic(self):
+        investment = ai_review_section("# ---- investment", "# ---- arsenal size")
+        for needle in ("ruler_is_cautious = yes", "nd_regime_is_restraint = yes", "nd_regime_is_militarist = yes",
+                       "nd_doctrine_warfighting = yes", "nd_in_budget_deficit = yes",
+                       "nd_authority_delegated_or_warning = yes",
+                       "clamp_variable = { name = nd_ai_want_safeguards min = 0 max = 3 }"):
+            self.assertIn(needle, investment)
+        self.assertNotIn("var:nd_readiness_target = 3", investment)
+
+    def test_back_to_central_without_threat(self):
+        authority = ai_review_section("# ---- launch authority", "# ---- investment")
+        branches = re.findall(r"else_if = \{\s*limit = \{(.*?)\}\s*(?:random = \{[^}]*)?nd_set_authority_1 = yes",
+                              authority, re.S)
+        self.assertTrue(any("ruler_is_cautious" not in b and "nd_ai_vulnerable_to_main_rival = no" in b
+                            for b in branches), branches)
+
+    def test_hardening_closes_a_closable_gap(self):
+        investment = ai_review_section("# ---- investment", "# ---- arsenal size")
+        self.assertIn("nd_ai_hardening_cannot_close = no", investment)
+        self.assertIn("clamp_variable = { name = nd_ai_want_hardening min = 0 max = 3 }", investment)
+
+    def test_authority_modifiers_show_payoff(self):
+        modifiers = strip_comments(read(MODIFIERS))
+        self.assertIn("country_nd_launch_credit_add = 0.25", block(modifiers, "nd_authority_terms_2"))
+        self.assertIn("country_nd_launch_credit_add = 0.6", block(modifiers, "nd_authority_terms_3"))
+        for level in (2, 3, 4):
+            self.assertIn("country_nd_decapitation_immune_bool = yes", block(modifiers, f"nd_authority_terms_{level}"))
+        self.assertIn("country_nd_launch_credit_add = -0.05", block(modifiers, "nd_safeguards_slow_launch"))
 
 
 ACT_LINES = {
@@ -1803,7 +2156,8 @@ class TestProtectorsAndProteges(unittest.TestCase):
         self.assertIn("id = nuclear_crisis.24", hears)
         self.assertIn("id = nuclear_crisis.20", hears)
         record = block(self.e, "nd_record_nuclear_use")
-        self.assertEqual(record.count("nd_guarantor_hears_of_strike = yes"), 2)
+        # Treaty, umbrella and co-belligerent (rework spec §8.3) branches.
+        self.assertEqual(record.count("nd_guarantor_hears_of_strike = yes"), 3)
         self.assertNotIn("id = nuclear_crisis.20", record)
         self.assertIn("nd_guarantee_act_honour = yes", option_body(self.cev, "nuclear_crisis.24.a"))
         self.assertIn("nd_guarantee_act_retaliate = yes", option_body(self.cev, "nuclear_crisis.24.b"))

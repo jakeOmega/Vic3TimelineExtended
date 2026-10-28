@@ -152,6 +152,14 @@ nd_authority_delegated_or_warning = {
 	}
 }
 
+# Central Authorization: authority 1, or none set yet.
+nd_authority_central = {
+	OR = {
+		NOT = { has_variable = nd_authority }
+		var:nd_authority = 1
+	}
+}
+
 nd_authority_launch_on_warning = {
 	has_variable = nd_authority
 	var:nd_authority = 3
@@ -264,6 +272,13 @@ nd_covered_country_struck_by = {
 				}
 			}
 		}
+		# An unarmed co-belligerent in the war with $ENEMY$ (rework spec §8.3).
+		any_cobelligerent_in_war = {
+			nd_believed_armed = no
+			has_war_with = $ENEMY$
+			has_variable = nuked_by_country
+			var:nuked_by_country ?= $ENEMY$
+		}
 	}
 }
 
@@ -296,6 +311,16 @@ nd_covered_country_struck = {
 				}
 			}
 		}
+		# An unarmed co-belligerent in one of our wars (rework spec §8.3).
+		any_cobelligerent_in_war = {
+			nd_believed_armed = no
+			any_scope_state = {
+				OR = {
+					has_modifier = nuclear_strike_aftermath
+					has_modifier = tactical_nuke_aftermath
+				}
+			}
+		}
 	}
 }
 
@@ -316,8 +341,21 @@ nd_enemy_threatens_existence = {
 	}
 }
 
-# One of our incorporated states is a war-goal target of $ENEMY$.
+# One of our incorporated states is a war-goal target of $ENEMY$, and its side
+# holds a goal that takes a state. Both: in a war is_target_of_wargoal also
+# flags our capital under any country-level goal, a humiliation say (probed
+# 2026-10-28, scripting_best_practices.md § "War Goals, Plays, Adjacency and
+# Claims"). In a play it finds nothing, so this is a war test.
 nd_core_threatened_by = {
+	save_temporary_scope_as = nd_ct_self
+	$ENEMY$ = {
+		OR = {
+			war_side_has_war_goal_of_type_against = { type = conquer_state target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = return_state target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = take_treaty_port target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = liberate_country target = scope:nd_ct_self }
+		}
+	}
 	any_scope_state = {
 		is_incorporated = yes
 		is_target_of_wargoal = $ENEMY$
@@ -695,6 +733,8 @@ nd_has_armed_guarantor_against = {
 			nd_under_an_umbrella = yes
 			overlord ?= { NOT = { this = $AGAINST$ } }
 		}
+		# An armed co-belligerent in the war against $AGAINST$.
+		nd_cobelligerent_cover_against = { AGAINST = $AGAINST$ }
 	}
 }
 
@@ -720,6 +760,14 @@ nd_has_ready_guarantor_against = {
 			overlord ?= {
 				nd_forces_assembled = yes
 				NOT = { this = $AGAINST$ }
+			}
+		}
+		AND = {
+			nd_cobelligerent_cover_against = { AGAINST = $AGAINST$ }
+			any_cobelligerent_in_war = {
+				nd_believed_armed = yes
+				nd_forces_assembled = yes
+				has_war_with = $AGAINST$
 			}
 		}
 	}
@@ -761,7 +809,30 @@ nd_is_guaranteed_by = {
 	OR = {
 		nd_is_guaranteed_by_treaty = { GUARANTOR = $GUARANTOR$ }
 		nd_under_umbrella_of = { OVERLORD = $GUARANTOR$ }
+		nd_cobelligerent_of = { GUARANTOR = $GUARANTOR$ }
 	}
+}
+
+# Co-belligerent cover (rework spec §8.3, owner 2026-10-28): an unarmed country
+# fighting a war against $AGAINST$ beside a country believed armed is covered
+# by it, for that war only. Nothing was promised: the cover lapses with the
+# war, and walking away costs little (nd_guarantee_act_abandon). Plays don't
+# count until they become wars. Beneficiary scope.
+nd_cobelligerent_cover_against = {
+	nd_believed_armed = no
+	has_war_with = $AGAINST$
+	any_cobelligerent_in_war = {
+		nd_believed_armed = yes
+		has_war_with = $AGAINST$
+		NOT = { this = $AGAINST$ }
+	}
+}
+
+# ...by $GUARANTOR$ in particular, in any war they fight side by side.
+nd_cobelligerent_of = {
+	nd_believed_armed = no
+	$GUARANTOR$ = { nd_believed_armed = yes }
+	any_cobelligerent_in_war = { this = $GUARANTOR$ }
 }
 
 # The treaty half: does $GUARANTOR$ hold a nuclear_guarantee article for this
@@ -826,6 +897,41 @@ nd_local_monopoly_over = {
 			}
 		}
 	}
+}
+
+# A restraint government (rework spec §4.4, the At Home restraint class): not a
+# militarist regime, and a powerful interest group in government whose class
+# or leader leans to restraint.
+nd_regime_is_restraint = {
+	nd_regime_is_militarist = no
+	any_interest_group = {
+		is_in_government = yes
+		is_powerful = yes
+		nd_ig_is_restraint = yes
+	}
+}
+
+# Spending more than we take in, counting fixed income and expenses only.
+nd_in_budget_deficit = {
+	OR = {
+		in_default = yes
+		net_fixed_income < 0
+	}
+}
+
+# AI posture review (rework spec §4.4): fewer than three survivors against the
+# main rival at Heightened with no launch credit (nd_refresh_main_rival).
+nd_ai_vulnerable_to_main_rival = {
+	nd_has_plausible_attacker = yes
+	has_variable = nd_survivors_main_bare_r2
+	var:nd_survivors_main_bare_r2 < 3
+}
+
+# ...and still fewer at the survivability our technology allows: hardening
+# would not close the gap.
+nd_ai_hardening_cannot_close = {
+	has_variable = nd_survivors_main_ceiling_bare_r2
+	var:nd_survivors_main_ceiling_bare_r2 < 3
 }
 
 # A militarist or expansionist regime, for AI judgement and the Monopoly Window.
@@ -1292,7 +1398,14 @@ nd_dispute_guarantee_against = {
 
 # Dispute 4: $TARGET$ is building a bomb and is our rival or antagonist.
 nd_dispute_proliferation_by = {
-	$TARGET$ = { nuclear_program_is_proliferating = yes }
+	# Not an armed rival's buildup, which is arms control's business (the
+	# nuclear_arms_limitation article): only a country the world believes
+	# unarmed, so one crisis cannot freeze a rival's arsenal for ten years.
+	# Public belief: an untested secret arsenal still counts (rework spec §8.4).
+	$TARGET$ = {
+		nuclear_program_is_proliferating = yes
+		nd_believed_armed = no
+	}
 	OR = {
 		has_diplomatic_pact = { who = $TARGET$ type = rivalry }
 		has_attitude = { who = $TARGET$ attitude = antagonistic }
@@ -1419,25 +1532,63 @@ nd_proliferation_guarantee_candidate = {
 # INCIDENT ELIGIBILITY (§8) — country scope
 # ----------------------------------------------------------------------------
 
+# The government's launch under attack (nuclear_incident.1.c, rework spec
+# §5.3): a warning of an attack by $SUSPECT$ comes in a war with it, or in an
+# Acute crisis against it...
+nd_launch_under_attack_context = {
+	OR = {
+		has_war_with = $SUSPECT$
+		AND = {
+			nd_crisis_stage_at_least = { STAGE = 3 }
+			var:nd_crisis_opponent ?= $SUSPECT$
+		}
+	}
+}
+
+# ...and the doctrine is not No First Use, unless $SUSPECT$ has already
+# struck us (retaliation is allowed under every doctrine).
+nd_launch_under_attack_doctrine = {
+	OR = {
+		nd_doctrine_nfu = no
+		nd_was_struck_by = { ENEMY = $SUSPECT$ }
+	}
+}
+
 # A plausible attacker exists, as far as our information goes: another country
 # we believe armed that is our crisis opponent, an enemy, a rival or hostile.
 # A monopolist never qualifies — it never gets a known-rival missile warning.
+# The self-check of nd_refresh_main_rival: does a script value see a scope this
+# trigger saves as temporary? $ENEMY$ is believed armed, so its reach is
+# positive when the scope is seen.
+nd_counterforce_reach_visible = {
+	$ENEMY$ = { save_temporary_scope_as = nd_sv_enemy }
+	nd_counterforce_reach_saved > 0
+}
+
 nd_has_plausible_attacker = {
 	save_temporary_scope_as = nd_pa_self
 	any_country = {
-		NOT = { this = scope:nd_pa_self }
-		nd_believed_armed = yes
-		save_temporary_scope_as = nd_pa_cand
-		OR = {
-			scope:nd_pa_self = {
-				nd_in_crisis = yes
-				var:nd_crisis_opponent ?= scope:nd_pa_cand
-			}
-			has_war_with = scope:nd_pa_self
-			has_diplomatic_pact = { who = scope:nd_pa_self type = rivalry }
-			has_attitude = { who = scope:nd_pa_self attitude = antagonistic }
-			has_attitude = { who = scope:nd_pa_self attitude = belligerent }
+		nd_plausible_attacker_of = { TARGET = scope:nd_pa_self }
+	}
+}
+
+# Candidate scope: could this country plausibly strike $TARGET$? Believed
+# armed, and its crisis opponent, its enemy in a war, its rival, or hostile to
+# it. nd_has_plausible_attacker and the main rival (nd_refresh_main_rival)
+# share the test.
+nd_plausible_attacker_of = {
+	NOT = { this = $TARGET$ }
+	nd_believed_armed = yes
+	save_temporary_scope_as = nd_pa_cand
+	OR = {
+		$TARGET$ = {
+			nd_in_crisis = yes
+			var:nd_crisis_opponent ?= scope:nd_pa_cand
 		}
+		has_war_with = $TARGET$
+		has_diplomatic_pact = { who = $TARGET$ type = rivalry }
+		has_attitude = { who = $TARGET$ attitude = antagonistic }
+		has_attitude = { who = $TARGET$ attitude = belligerent }
 	}
 }
 
@@ -1464,6 +1615,37 @@ nd_incident_eligible_commander = {
 
 # A family the crisis part of the week's exposure can draw (nd_fire_incident):
 # the misreadings, not a weapons accident.
+# War exposure band 3 (rework spec §5.1): a war with an enemy believed armed
+# that threatens either side — goals on the other's incorporated states, either
+# side losing, or a nuclear weapon landed on either side.
+nd_war_band_3_against_any = {
+	save_temporary_scope_as = nd_wb_self
+	any_enemy_in_war = {
+		nd_believed_armed = yes
+		save_temporary_scope_as = nd_wb_enemy
+		OR = {
+			nd_core_threatened_by = { ENEMY = scope:nd_wb_self }
+			scope:nd_wb_self = { nd_core_threatened_by = { ENEMY = scope:nd_wb_enemy } }
+			nd_is_losing_war_to = { ENEMY = scope:nd_wb_self }
+			scope:nd_wb_self = { nd_is_losing_war_to = { ENEMY = scope:nd_wb_enemy } }
+			any_scope_state = {
+				OR = {
+					has_modifier = nuclear_strike_aftermath
+					has_modifier = tactical_nuke_aftermath
+				}
+			}
+			scope:nd_wb_self = {
+				any_scope_state = {
+					OR = {
+						has_modifier = nuclear_strike_aftermath
+						has_modifier = tactical_nuke_aftermath
+					}
+				}
+			}
+		}
+	}
+}
+
 nd_incident_misreading_eligible = {
 	OR = {
 		nd_incident_eligible_warning = yes
@@ -1661,6 +1843,40 @@ nd_ai_would_warn = {
 		ruler_is_cautious = no
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
 		nd_enemy_threatens_existence = { ENEMY = $TARGET$ }
+	}
+	# Stakes (rework spec §8.2): not a threat whose demands alone would hold
+	# the pressure on them below the line where an AI concedes. Last, since it
+	# computes the pressure twice; not for a guarantee, whose demands are the
+	# protégé's.
+	OR = {
+		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		NOT = { nd_ai_stakes_block = { TARGET = $TARGET$ } }
+	}
+}
+
+# Issuer scope: would the stakes alone hold the pressure on $TARGET$ under the
+# AI's concession line (nuclear_crisis.1's yield weights start at 40)? The
+# pressure values read scope:nd_issuer and scope:nd_target, so they are saved
+# here as temporary scopes; nd_ai_would_warn's callers (the opening actions'
+# AI, a proliferation event's weight) run outside any crisis, where neither
+# exists. The demands are ours (nd_stakes_demander).
+nd_ai_stakes_block = {
+	save_temporary_scope_as = nd_issuer
+	save_temporary_scope_as = nd_stakes_demander
+	$TARGET$ = {
+		save_temporary_scope_as = nd_target
+		nd_yield_pressure_unstaked_value >= nd_ai_concession_line
+		nd_yield_pressure_value < nd_ai_concession_line
+	}
+}
+
+# Demander scope: does our side hold a goal of $TYPE$ against $TARGET$, in a
+# play or a war? (No trigger tells a primary demand from another, so every
+# goal counts: rework spec §8.2, owner call 10.)
+nd_side_holds_goal_against = {
+	OR = {
+		play_side_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }
 	}
 }
 

@@ -161,12 +161,24 @@ nd_crisis_preview = {
 	}
 	else_if = {
 		limit = {
-			$TARGET$ = { nd_effective_survivability >= 50 }
+			save_temporary_scope_as = nd_sv_enemy
+			$TARGET$ = { nd_survivors_vs_saved >= 3 }
 		}
 		custom_tooltip = nd_tt_open_f_survivable
 	}
 	else = {
 		custom_tooltip = nd_tt_open_f_armed
+	}
+	# Could they disarm us first? (rework spec §3.3, nd_yp_issuer_exposure)
+	if = {
+		limit = {
+			$TARGET$ = {
+				nd_believed_armed = yes
+				save_temporary_scope_as = nd_sv_enemy
+			}
+			nd_survivors_vs_saved < 3
+		}
+		custom_tooltip = nd_tt_open_f_exposed
 	}
 	if = {
 		limit = {
@@ -473,6 +485,7 @@ nd_crisis_notify_guarantors = {
 				source_country = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
+					set_variable = { name = nd_guarantee_basis value = 1 }
 					trigger_event = { id = nuclear_crisis.20 }
 				}
 			}
@@ -491,8 +504,28 @@ nd_crisis_notify_guarantors = {
 				scope:nd_umb_guarantor = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
+					set_variable = { name = nd_guarantee_basis value = 2 }
 					trigger_event = { id = nuclear_crisis.20 }
 				}
+			}
+		}
+		# An armed co-belligerent in the war against the issuer (rework spec
+		# §8.3), unless a treaty or the umbrella above has already asked it.
+		if = {
+			limit = { nd_cobelligerent_cover_against = { AGAINST = scope:nd_issuer } }
+			every_cobelligerent_in_war = {
+				limit = {
+					nd_believed_armed = yes
+					has_war_with = scope:nd_issuer
+					NOT = { this = scope:nd_issuer }
+					save_temporary_scope_as = nd_cb_guarantor
+					NOT = { scope:nd_target = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_cb_guarantor } } }
+					NOT = { scope:nd_target = { nd_under_umbrella_of = { OVERLORD = scope:nd_cb_guarantor } } }
+				}
+				save_scope_as = nd_guarantor
+				set_variable = { name = nd_guarantee_context value = 1 }
+				set_variable = { name = nd_guarantee_basis value = 3 }
+				trigger_event = { id = nuclear_crisis.20 }
 			}
 		}
 	}
@@ -507,6 +540,25 @@ nd_crisis_notify_guarantors = {
 # stored parts (nd_crisis_*_breakdown_sgui), so what it shows always sums to
 # what the AI weighs.
 nd_crisis_refresh_figures = {
+	# Each party's survivors against the other (rework spec §3.3), for the AI's
+	# crisis weights and the panel; the parts compute the same values live.
+	set_variable = { name = nd_survivors_crisis value = nd_survivors_vs_target }
+	scope:nd_target = {
+		set_variable = { name = nd_survivors_crisis value = nd_survivors_vs_issuer }
+	}
+	# Whose demands the target would concede to (nd_yp_stakes_value): ours,
+	# or in a guarantee dispute the country we cover.
+	if = {
+		limit = {
+			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = 3
+			exists = var:nd_crisis_beneficiary
+		}
+		var:nd_crisis_beneficiary = { save_scope_as = nd_stakes_demander }
+	}
+	else = {
+		save_scope_as = nd_stakes_demander
+	}
 	nd_crisis_classify_follow_through = { TARGET = scope:nd_target }
 	scope:nd_target = {
 		set_variable = { name = nd_ft_reason value = scope:nd_issuer.var:nd_ft_reason }
@@ -521,6 +573,7 @@ nd_crisis_refresh_figures = {
 	nd_crisis_store_cd = { C = nd_cd_talks V = nd_cd_talks_value }
 	nd_crisis_store_cd = { C = nd_cd_backed V = nd_cd_backed_value }
 	nd_crisis_store_cd = { C = nd_cd_exercise V = nd_cd_exercise_value }
+	nd_crisis_store_cd = { C = nd_cd_vulnerability V = nd_cd_vulnerability_value }
 	if = {
 		limit = { nd_crisis_danger_dampened = yes }
 		set_variable = { name = nd_cd_dampened value = 1 }
@@ -535,6 +588,7 @@ nd_crisis_refresh_figures = {
 	scope:nd_target = {
 		nd_crisis_store_yp = { C = nd_yp_base V = nd_yp_base_value }
 		nd_crisis_store_yp = { C = nd_yp_answer V = nd_yp_answer_value }
+		nd_crisis_store_yp = { C = nd_yp_issuer_exposure V = nd_yp_issuer_exposure_value }
 		nd_crisis_store_yp = { C = nd_yp_protector V = nd_yp_protector_value }
 		nd_crisis_store_yp = { C = nd_yp_credibility V = nd_yp_credibility_value }
 		nd_crisis_store_yp = { C = nd_yp_alert V = nd_yp_alert_value }
@@ -543,6 +597,7 @@ nd_crisis_refresh_figures = {
 		nd_crisis_store_yp = { C = nd_yp_exercise V = nd_yp_exercise_value }
 		nd_crisis_store_yp = { C = nd_yp_temperament V = nd_yp_temperament_value }
 		nd_crisis_store_yp = { C = nd_yp_war V = nd_yp_war_value }
+		nd_crisis_store_yp = { C = nd_yp_stakes V = nd_yp_stakes_value }
 		nd_crisis_store_yp = { C = nd_yp_follow_through V = nd_yp_follow_through_value }
 		nd_crisis_store_yp = { C = nd_yp_taboo V = nd_yp_taboo_value }
 		set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
@@ -616,12 +671,24 @@ nd_crisis_clear_figures = {
 		remove_variable = nd_cd_exercise
 	}
 	if = {
+		limit = { has_variable = nd_cd_vulnerability }
+		remove_variable = nd_cd_vulnerability
+	}
+	if = {
+		limit = { has_variable = nd_survivors_crisis }
+		remove_variable = nd_survivors_crisis
+	}
+	if = {
 		limit = { has_variable = nd_yp_base }
 		remove_variable = nd_yp_base
 	}
 	if = {
 		limit = { has_variable = nd_yp_answer }
 		remove_variable = nd_yp_answer
+	}
+	if = {
+		limit = { has_variable = nd_yp_issuer_exposure }
+		remove_variable = nd_yp_issuer_exposure
 	}
 	if = {
 		limit = { has_variable = nd_yp_protector }
@@ -654,6 +721,10 @@ nd_crisis_clear_figures = {
 	if = {
 		limit = { has_variable = nd_yp_war }
 		remove_variable = nd_yp_war
+	}
+	if = {
+		limit = { has_variable = nd_yp_stakes }
+		remove_variable = nd_yp_stakes
 	}
 	if = {
 		limit = { has_variable = nd_yp_follow_through }
@@ -728,6 +799,7 @@ nd_crisis_weekly_tick = {
 		limit = { nd_is_crisis_owner = yes }
 		nd_crisis_refresh_figures = yes
 		nd_log_crisis_sample = yes
+		nd_log_crisis_acute_once = yes
 		# ---- confrontation becomes acute ------------------------------------
 		if = {
 			limit = {
@@ -880,6 +952,10 @@ nd_crisis_clear_own_record = {
 
 nd_crisis_clear_vars = {
 	remove_variable = nd_crisis_id
+	if = {
+		limit = { has_variable = nd_crisis_acute_logged }
+		remove_variable = nd_crisis_acute_logged
+	}
 	remove_variable = nd_crisis_opponent
 	remove_variable = nd_crisis_role
 	if = {
@@ -979,6 +1055,9 @@ nd_crisis_target_watchdog = {
 # written a line earlier, which a preview would find missing.
 nd_crisis_close = {
 	save_scope_as = nd_crisis_closing
+	# A crisis that turns Acute and ends before its next weekly tick still
+	# counts as an Acute crisis for the observer report.
+	scope:nd_issuer ?= { nd_log_crisis_acute_once = yes }
 	if = {
 		limit = {
 			exists = scope:nd_crisis_closing
@@ -2244,9 +2323,34 @@ nd_guarantee_act_honour = {
 			nd_crisis_ai_review = yes
 			scope:nd_guarantee_beneficiary = {
 				set_variable = { name = nd_guarantee_answer value = 1 }
+				nd_guarantee_answer_from_cobelligerent = yes
 				trigger_event = { id = nuclear_crisis.21 }
 			}
 		}
+	}
+}
+
+# Guarantor scope, from nuclear_crisis.20's immediate: our survivors against the
+# attacker, for the walk-away weight (.20.c).
+nd_guarantor_store_survivors = {
+	if = {
+		limit = { exists = scope:nd_guarantee_attacker }
+		scope:nd_guarantee_attacker = { save_scope_as = nd_sv_enemy }
+		set_variable = { name = nd_survivors_vs_attacker value = nd_survivors_vs_saved }
+	}
+}
+
+# Beneficiary scope, ROOT the guarantor: an armed co-belligerent that stood by
+# us answers 3, not 1, so .21 doesn't call it a promise kept.
+nd_guarantee_answer_from_cobelligerent = {
+	if = {
+		limit = {
+			ROOT = {
+				has_variable = nd_guarantee_basis
+				var:nd_guarantee_basis = 3
+			}
+		}
+		set_variable = { name = nd_guarantee_answer value = 3 }
 	}
 }
 
@@ -2268,6 +2372,7 @@ nd_guarantee_act_retaliate = {
 	hidden_effect = {
 		scope:nd_guarantee_beneficiary ?= {
 			set_variable = { name = nd_guarantee_answer value = 1 }
+			nd_guarantee_answer_from_cobelligerent = yes
 			trigger_event = { id = nuclear_crisis.21 }
 		}
 	}
@@ -2399,74 +2504,122 @@ nd_allies_alarmed = {
 
 # Walk away (§6: abandoning a covered commitment shakes every beneficiary).
 nd_guarantee_act_abandon = {
-	custom_tooltip = nd_tt_guarantee_abandon
-	custom_tooltip = {
-		text = nd_tt_credibility_down_15
-		nd_change_credibility = { AMOUNT = -15 }
-	}
-	# Abandoning a subject under our umbrella feeds its wish to be free
-	# (umbrella/recessed/dead-hand spec §1.4). The umbrella stays. ROOT is the
-	# guarantor (nuclear_crisis.20), and the tooltip preview needs a scope
-	# that already exists.
+	# A co-belligerent (rework spec §8.3): nothing was promised, so walking
+	# away costs a little credibility and nothing else: no lasting mark and no
+	# word to anyone we do protect. The ally still hears it (.21), and the
+	# crisis stops counting us as its protector. Tested positively: a
+	# multi-child NOT is unproven (scripting_best_practices.md § "Write NOR or
+	# NAND, Never a Multi-Child NOT").
 	if = {
 		limit = {
-			exists = scope:nd_guarantee_beneficiary
-			scope:nd_guarantee_beneficiary = { nd_under_umbrella_of = { OVERLORD = ROOT } }
+			has_variable = nd_guarantee_basis
+			var:nd_guarantee_basis = 3
 		}
-		scope:nd_guarantee_beneficiary = { add_liberty_desire = 10 }
+		custom_tooltip = nd_tt_cobelligerent_abandon
+		custom_tooltip = {
+			text = nd_tt_credibility_down_5
+			nd_change_credibility = { AMOUNT = -5 }
+		}
+		nd_cobelligerent_abandon_effects = yes
 	}
-	add_modifier = {
-		name = nd_guarantee_abandoned
-		years = 5
-		is_decaying = yes
+	else = {
+		custom_tooltip = nd_tt_guarantee_abandon
+		custom_tooltip = {
+			text = nd_tt_credibility_down_15
+			nd_change_credibility = { AMOUNT = -15 }
+		}
+		# Abandoning a subject under our umbrella feeds its wish to be free
+		# (umbrella/recessed/dead-hand spec §1.4). The umbrella stays. ROOT is the
+		# guarantor (nuclear_crisis.20), and the tooltip preview needs a scope
+		# that already exists.
+		if = {
+			limit = {
+				exists = scope:nd_guarantee_beneficiary
+				scope:nd_guarantee_beneficiary = { nd_under_umbrella_of = { OVERLORD = ROOT } }
+			}
+			scope:nd_guarantee_beneficiary = { add_liberty_desire = 10 }
+		}
+		add_modifier = {
+			name = nd_guarantee_abandoned
+			years = 5
+			is_decaying = yes
+		}
+		hidden_effect = {
+			save_scope_as = nd_guarantor_self
+			if = {
+				limit = {
+					exists = scope:nd_guarantee_attacker
+					exists = scope:nd_guarantee_beneficiary
+				}
+				if = {
+					limit = {
+						var:nd_guarantee_context = 1
+						scope:nd_guarantee_attacker = {
+							nd_is_crisis_owner = yes
+							var:nd_crisis_opponent ?= scope:nd_guarantee_beneficiary
+						}
+					}
+					scope:nd_guarantee_attacker = {
+						set_variable = { name = nd_crisis_abandoned value = 1 }
+					}
+				}
+				scope:nd_guarantee_beneficiary = {
+					change_relations = { country = scope:nd_guarantor_self value = -30 }
+					set_variable = { name = nd_guarantee_answer value = 0 }
+					trigger_event = { id = nuclear_crisis.21 }
+				}
+				# Every other beneficiary of ours takes note.
+				every_scope_treaty = {
+					every_scope_article = {
+						limit = {
+							has_type = nuclear_guarantee
+							source_country = scope:nd_guarantor_self
+							NOT = { target_country = scope:nd_guarantee_beneficiary }
+						}
+						target_country = {
+							change_relations = { country = scope:nd_guarantor_self value = -10 }
+						}
+					}
+				}
+				# ...and every subject under our umbrella (the treaty loop's
+				# sibling; a subject with a treaty too is told once, above).
+				every_direct_subject = {
+					limit = {
+						nd_under_umbrella_of = { OVERLORD = scope:nd_guarantor_self }
+						NOT = { this = scope:nd_guarantee_beneficiary }
+						NOT = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_guarantor_self } }
+					}
+					change_relations = { country = scope:nd_guarantor_self value = -10 }
+				}
+			}
+		}
 	}
+}
+
+# Guarantor scope, ROOT the guarantor (nd_guarantee_act_abandon): walking away
+# from a co-belligerent. The crisis over our ally stops counting us as its
+# protector (nd_yp_protector_value), as for a treaty guarantee, and the ally
+# hears it.
+nd_cobelligerent_abandon_effects = {
 	hidden_effect = {
-		save_scope_as = nd_guarantor_self
 		if = {
 			limit = {
 				exists = scope:nd_guarantee_attacker
 				exists = scope:nd_guarantee_beneficiary
-			}
-			if = {
-				limit = {
-					var:nd_guarantee_context = 1
-					scope:nd_guarantee_attacker = {
-						nd_is_crisis_owner = yes
-						var:nd_crisis_opponent ?= scope:nd_guarantee_beneficiary
-					}
-				}
+				has_variable = nd_guarantee_context
+				var:nd_guarantee_context = 1
 				scope:nd_guarantee_attacker = {
-					set_variable = { name = nd_crisis_abandoned value = 1 }
+					nd_is_crisis_owner = yes
+					var:nd_crisis_opponent ?= scope:nd_guarantee_beneficiary
 				}
 			}
-			scope:nd_guarantee_beneficiary = {
-				change_relations = { country = scope:nd_guarantor_self value = -30 }
-				set_variable = { name = nd_guarantee_answer value = 0 }
-				trigger_event = { id = nuclear_crisis.21 }
+			scope:nd_guarantee_attacker = {
+				set_variable = { name = nd_crisis_abandoned value = 1 }
 			}
-			# Every other beneficiary of ours takes note.
-			every_scope_treaty = {
-				every_scope_article = {
-					limit = {
-						has_type = nuclear_guarantee
-						source_country = scope:nd_guarantor_self
-						NOT = { target_country = scope:nd_guarantee_beneficiary }
-					}
-					target_country = {
-						change_relations = { country = scope:nd_guarantor_self value = -10 }
-					}
-				}
-			}
-			# ...and every subject under our umbrella (the treaty loop's
-			# sibling; a subject with a treaty too is told once, above).
-			every_direct_subject = {
-				limit = {
-					nd_under_umbrella_of = { OVERLORD = scope:nd_guarantor_self }
-					NOT = { this = scope:nd_guarantee_beneficiary }
-					NOT = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_guarantor_self } }
-				}
-				change_relations = { country = scope:nd_guarantor_self value = -10 }
-			}
+		}
+		scope:nd_guarantee_beneficiary ?= {
+			set_variable = { name = nd_guarantee_answer value = 4 }
+			trigger_event = { id = nuclear_crisis.21 }
 		}
 	}
 }

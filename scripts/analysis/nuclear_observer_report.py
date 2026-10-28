@@ -32,6 +32,7 @@ def read_records(lines):
 def summarize(records):
     kinds, families, actions, outcomes = Counter(), Counter(), Counter(), Counter()
     countries, crises, exchanges = set(), set(), set()
+    acute, used = set(), set()
     exposure = defaultdict(lambda: {"country_weeks": 0, "expected_incidents": 0.0})
     unresolved = 0
     for r in records:
@@ -49,6 +50,10 @@ def summarize(records):
             actions[r.get("action", "unknown")] += 1
         elif kind == "crisis_end":
             outcomes[r.get("outcome", "unknown")] += 1
+            if r.get("outcome") == "7":
+                used.add(r.get("crisis", "0"))
+        elif kind == "crisis_acute":
+            acute.add(r.get("crisis", "0"))
         elif kind == "risk":
             try:
                 rate = float(r["incident_weekly_permille"])
@@ -73,6 +78,15 @@ def summarize(records):
         "incident_families": dict(sorted(families.items())),
         "actions": dict(sorted(actions.items())), "crisis_outcomes": dict(sorted(outcomes.items())),
         "exposure_by_danger_band": dict(sorted(exposure.items())), "unresolved_risk_records": unresolved,
+        # Rework spec §2.4: nuclear use per Acute crisis (crisis_acute and a
+        # crisis_end with outcome 7), near misses (a launch halted in the
+        # chain) and launches nobody meant (an incident's launch: a warning,
+        # a cut-off commander, Automatic Retaliation, or the government's order
+        # on a false warning).
+        "acute_crises": len(acute),
+        "uses_per_acute_crisis": len(acute & used) / len(acute) if acute else 0.0,
+        "near_misses": actions["launch_held"],
+        "unordered_or_mistaken_launches": sum(v for k, v in actions.items() if k.startswith("incident_launch_")),
     }
 
 
@@ -89,6 +103,8 @@ def main():
     print(f"{report['records']} records; {report['countries']} countries; "
           f"{report['observed_crisis_ids']} crisis IDs; {report['observed_exchange_ids']} exchange IDs")
     print(f"Meaningful incidents: {report['meaningful_incidents']}; routine mishaps: {report['routine_mishaps']}")
+    print(f"Acute crises: {report['acute_crises']}; nuclear use per Acute crisis {report['uses_per_acute_crisis']:.0%}; "
+          f"near misses {report['near_misses']}; launches nobody meant {report['unordered_or_mistaken_launches']}")
     for section in ("incident_families", "crisis_outcomes", "actions"):
         print(f"\n{section.replace('_', ' ').title()}:")
         for key, count in report[section].items():

@@ -135,12 +135,16 @@ nd_authority_terms_1 = {
 
 nd_authority_terms_2 = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_launch_credit_add = 0.25
+	country_nd_decapitation_immune_bool = yes
 	country_nd_unapproved_launch_bool = yes
 	country_nd_custody_loss_add = 0.03
 }
 
 nd_authority_terms_3 = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_launch_credit_add = 0.6
+	country_nd_decapitation_immune_bool = yes
 	country_nd_unapproved_launch_bool = yes
 	country_nd_halt_chance_add = -0.1
 	country_nd_custody_loss_add = 0.03
@@ -148,8 +152,16 @@ nd_authority_terms_3 = {
 
 nd_authority_terms_4 = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_decapitation_immune_bool = yes
 	country_nd_automatic_answer_bool = yes
-	country_nd_answer_assured_bool = yes
+}
+
+# What each safeguards level takes off a fast authority's launch credit
+# (nd_launch_credit, rework spec §4.2). Display only: the safeguards hover
+# prints it under Delegation or Launch on Warning.
+nd_safeguards_slow_launch = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_launch_credit_add = -0.05
 }
 
 # ---- Upkeep ---------------------------------------------------------------

@@ -1,6 +1,6 @@
 # Nuclear Crisis Rework: Survivability, Launch Authority, Accidental Risk and Crisis Subjects — Design
 
-> **Status: design, nothing built (2026-10-28).** Baseline `main` at c760baf. The owner's calls from the 2026-10-28 review are §1; everything else is a proposal, and every number is a first tuning value. Engine facts the design rests on but nobody has verified are §12, each with a fallback. Per the owner they are checked in game while building, not before it.
+> **Status: phase 1 built (2026-10-28, branch `feat/nuclear-rework-p1`; plan `docs/superpowers/plans/2026-10-28-nuclear-crisis-rework-phase1.md`); phases 2–4 designed, not built.** Owner answers to §14.1 (confirmed) and §14.2 (launch authority is public) are in §14. Baseline `main` at c760baf. The owner's calls from the 2026-10-28 review are §1; everything else is a proposal, and every number is a first tuning value. Engine facts the design rests on but nobody has verified are §12, each with a fallback. Per the owner they are checked in game while building, not before it.
 > Read first: [`docs/systems/nuclear_crisis_design.md`](../../systems/nuclear_crisis_design.md) §0, what shipped. This doc changes its §0.2–§0.5. When a phase ships, update §0 there, chapter 14 of the player guide and `docs/testing/nuclear-playtest.md`.
 
 ## 0. Why
@@ -306,18 +306,20 @@ At the deadline, or under Our Moves, either side can offer a matching concession
 
 ## 12. Engine probes, in game while building
 
-| Question | Used by | Fallback |
-|---|---|---|
-| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) |
-| `remove_war_goal` on a play's opening goal (the owner expects both to work) | §8.1 | skip the opening goal |
-| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip |
-| Does `resolve_play_for` enforce every goal or only primary demands? | §8.2 | stakes counts whichever it enforces |
-| What `has_strategic_adjacency`'s coastal adjacency covers | §7.2 | `is_adjacent_to_country` plus the region test |
-| `any_neighbouring_state` at strategic-region scope | §7.2 | own regions only |
-| `remove_claim` on another country's claim, from script | §8.5 | drop code 8 |
-| `remove_diplomatic_pact` on a covert operation's pact | §8.5 | end it through its maintain condition |
-| A list of states in the panel, for picking cities | §6.1 | keep `nuke_diplo_action` for one chosen city |
-| A salvo's option tooltip walks its effects without running away | §6 | fence it as `nd_launch_or_intercept` is fenced |
+Probed 2026-10-28 (one observer game; details in `docs/guides/scripting_best_practices.md` § "War Goals, Plays, Adjacency and Claims"). Rows 9 and 10 are for phase 3.
+
+| Question | Used by | Fallback | Result (2026-10-28) |
+|---|---|---|---|
+| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) | Removes the **opening** goal; the war goes on. Did not remove goals added by script `add_war_goal`. AI-added goals untested: probe in phase 2 |
+| `remove_war_goal` on a play's opening goal (the owner expects both to work) | §8.1 | skip the opening goal | Works, in a play and in a war |
+| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip | Untested: no added goal could be removed. Phase 2 |
+| Does `resolve_play_for` enforce every goal or only primary demands? | §8.2 | stakes counts whichever it enforces | Every goal. Stakes count every goal (as built) |
+| What `has_strategic_adjacency`'s coastal adjacency covers | §7.2 | `is_adjacent_to_country` plus the region test | Land and sea-coast neighbors; not distant coasts. `is_adjacent_to_country` covers sea-coast neighbors too |
+| `any_neighbouring_state` at strategic-region scope | §7.2 | own regions only | Works |
+| `remove_claim` on another country's claim, from script | §8.5 | drop code 8 | Works, history claims too |
+| `remove_diplomatic_pact` on a covert operation's pact | §8.5 | end it through its maintain condition | Works |
+| A list of states in the panel, for picking cities | §6.1 | keep `nuke_diplo_action` for one chosen city | Not probed (phase 3) |
+| A salvo's option tooltip walks its effects without running away | §6 | fence it as `nd_launch_or_intercept` is fenced | Not probed (phase 3) |
 
 ## 13. Phases
 
@@ -335,8 +337,8 @@ Each phase updates `nuclear_crisis_design.md` §0, chapter 14 and the play-test 
 
 ## 14. Open questions
 
-1. §5.3 reverses part of the 2026-09-26 ruling: the government may order a launch under attack outside a war, in an Acute crisis, under any doctrine but No First Use. Confirm.
-2. Is launch authority public, as doctrine is? §5.4's belief and §3.3's three-quarters rule assume it is.
+1. §5.3 reverses part of the 2026-09-26 ruling: the government may order a launch under attack outside a war, in an Acute crisis, under any doctrine but No First Use. **Confirmed by the owner, 2026-10-28.**
+2. Is launch authority public, as doctrine is? §5.4's belief and §3.3's three-quarters rule assume it is. **Public (owner, 2026-10-28).**
 3. A salvo's taboo knock and UN record: how much each further warhead adds.
 4. The AI's weights for Forces and Leadership missions, and how often it lies in a claim.
 5. K's values against the arsenal sizes the AI builds.

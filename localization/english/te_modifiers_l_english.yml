@@ -245,6 +245,8 @@
  country_nd_halt_chance_add_desc:0 "The chance that someone in the chain stops a launch the government never ordered."
  country_nd_incident_rate_mult:0 "Everyday Incident Rate"
  country_nd_incident_rate_mult_desc:0 "How often a false warning, a weapons accident or a commander cut off from the capital comes up, against Routine readiness. A crisis adds misreadings of its own."
+ country_nd_launch_credit_add:0 "Launch Credit"
+ country_nd_launch_credit_add_desc:0 "The share of the warheads a first strike would destroy that get away before it lands. A crisis counts them among the warheads that would survive to answer."
  country_nd_threat_pressure_add:0 "Pressure Our Threats Exert"
  country_nd_threat_pressure_add_desc:0 "Added to the pressure to concede on a country we threaten."
  country_nuclear_program_progress_mult:0 "[concept_nuclear_program] Progress"

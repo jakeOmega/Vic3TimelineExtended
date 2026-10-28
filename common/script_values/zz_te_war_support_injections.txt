@@ -133,6 +133,19 @@ INJECT:war_support_from_journal_entries = {
 		limit = {
 			NOT = { has_modifier = nuclear_power }
 			NOT = { nd_has_armed_guarantor_against = { AGAINST = ROOT } }
+			# An armed country fighting on our side in this war covers us too
+			# (co-belligerent cover, nuclear crisis rework spec §8.3). Tested
+			# here, on the war in scope: nd_has_armed_guarantor_against's own
+			# co-belligerent branch needs the enemy, and AGAINST is ROOT.
+			NOT = {
+				scope:war = {
+					any_war_participant = {
+						NOT = { this = ROOT }
+						NOT = { has_war_with = ROOT }
+						nd_believed_armed = yes
+					}
+				}
+			}
 			scope:war = {
 				any_war_participant = {
 					has_war_with = ROOT
