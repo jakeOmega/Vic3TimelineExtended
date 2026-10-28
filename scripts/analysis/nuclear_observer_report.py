@@ -33,6 +33,7 @@ def summarize(records):
     kinds, families, actions, outcomes = Counter(), Counter(), Counter(), Counter()
     countries, crises, exchanges = set(), set(), set()
     acute, used = set(), set()
+    claims, beliefs, truths = Counter(), Counter(), Counter()
     exposure = defaultdict(lambda: {"country_weeks": 0, "expected_incidents": 0.0})
     unresolved = 0
     for r in records:
@@ -54,6 +55,12 @@ def summarize(records):
                 used.add(r.get("crisis", "0"))
         elif kind == "crisis_acute":
             acute.add(r.get("crisis", "0"))
+        elif kind == "claim":
+            claims[r.get("truth", "unknown")] += 1
+        elif kind == "claim_belief":
+            beliefs[r.get("believed", "unknown")] += 1
+        elif kind == "claim_truth":
+            truths[r.get("truth", "unknown")] += 1
         elif kind == "risk":
             try:
                 rate = float(r["incident_weekly_permille"])
@@ -87,6 +94,12 @@ def summarize(records):
         "uses_per_acute_crisis": len(acute & used) / len(acute) if acute else 0.0,
         "near_misses": actions["launch_held"],
         "unordered_or_mistaken_launches": sum(v for k, v in actions.items() if k.startswith("incident_launch_")),
+        # Phase 2 (spec §5.4): claims that a strike was unauthorized, by truth;
+        # an AI victim's belief; lies found out when the truth came.
+        "claims": dict(sorted(claims.items())),
+        "claims_believed": beliefs["yes"],
+        "claims_doubted": beliefs["no"],
+        "lies_exposed": truths["false"],
     }
 
 
@@ -105,6 +118,8 @@ def main():
     print(f"Meaningful incidents: {report['meaningful_incidents']}; routine mishaps: {report['routine_mishaps']}")
     print(f"Acute crises: {report['acute_crises']}; nuclear use per Acute crisis {report['uses_per_acute_crisis']:.0%}; "
           f"near misses {report['near_misses']}; launches nobody meant {report['unordered_or_mistaken_launches']}")
+    print(f"Claims of an unauthorized strike: {report['claims']}; believed {report['claims_believed']}, "
+          f"doubted {report['claims_doubted']}; lies exposed {report['lies_exposed']}")
     for section in ("incident_families", "crisis_outcomes", "actions"):
         print(f"\n{section.replace('_', ' ').title()}:")
         for key, count in report[section].items():

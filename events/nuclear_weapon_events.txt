@@ -54,6 +54,14 @@ nuclear_weapon_events.1 = {
 				chance = nd_claim_belief_value
 				set_variable = { name = nd_claim_believed value = 1 }
 			}
+			nd_log_context = yes
+			if = {
+				limit = { var:nd_claim_believed = 1 }
+				debug_log = "TE_NUCLEAR: type=claim_belief; believed=yes; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			}
+			else = {
+				debug_log = "TE_NUCLEAR: type=claim_belief; believed=no; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			}
 		}
 	}
 
