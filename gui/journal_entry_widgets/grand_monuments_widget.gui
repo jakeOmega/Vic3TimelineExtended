@@ -211,6 +211,7 @@ types grand_monuments_widget_types
 			parentanchor = vcenter
 			align = right|nobaseline
 			using = gm_fontsize_row
+			elide = right
 			block "row_value" {}
 		}
 	}
@@ -1845,13 +1846,33 @@ types grand_monuments_widget_types
 		# shown only while there is one to drop (GM-8: greyed on most rows, it
 		# only took room). A contested or heritage monument keeps its name.
 		# Hidden while this monument is being named: the naming line below
-		# replaces it.
+		# replaces it. Two rows, two buttons or three, so neither changes
+		# width: one row that grew a button would stay centred at its first
+		# width and run past the panel (gui_modding_guide.md gotcha #43).
+		# 156 + 4 + 156 = 316.
 		flowcontainer = {
 			direction = horizontal
 			spacing = 4
-			ignoreinvisible = yes
 			parentanchor = hcenter
-			visible = "[And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) )]"
+			visible = "[And( And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0' ) )]"
+
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rename_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_rename_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_rename" }
+			}
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_name_start_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_name_start_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_name_start" }
+			}
+		}
+		# 156 + 4 + 156 + 4 + 156 = 476.
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = hcenter
+			visible = "[And( And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1' ) )]"
 
 			gm_choice_button = {
 				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rename_sgui')]" }
@@ -1864,7 +1885,6 @@ types grand_monuments_widget_types
 				blockoverride "choice_text" { text = "gm_button_name_start" }
 			}
 			gm_choice_button = {
-				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1' )]"
 				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_clear_name_sgui')]" }
 				blockoverride "choice_tooltip" { tooltip = "gm_button_clear_name_tooltip" }
 				blockoverride "choice_text" { text = "gm_button_clear_name" }
