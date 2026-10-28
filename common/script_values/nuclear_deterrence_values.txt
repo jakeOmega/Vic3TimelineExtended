@@ -350,7 +350,8 @@ nd_own_danger_band = {
 # own monthly roll and never dilute this pool. Peacetime bases below are monthly
 # equivalents divided by 52/12; the crisis surcharge is already weekly.
 # Benchmark: two high-alert powers, danger >=75, strain 0, reliability 60,
-# Existential doctrine: ~50% chance of an incident across two weekly pulses each.
+# Existential doctrine: ~28% chance of an incident across two weekly pulses each
+# (calibrated 2026-10-28 to the rework spec's §2.3 launch bands; ~50% before).
 #
 # Two parts, one roll. The base part draws from every family this country is
 # eligible for; the crisis part draws only from the misreadings a crisis
@@ -1313,6 +1314,9 @@ nd_yp_stakes_value = {
 					OR = {
 						nd_side_holds_goal_against = { TYPE = annex_country TARGET = scope:nd_target }
 						nd_side_holds_goal_against = { TYPE = te_reunify_country TARGET = scope:nd_target }
+						nd_side_holds_goal_against = { TYPE = unification TARGET = scope:nd_target }
+						nd_side_holds_goal_against = { TYPE = restore_union TARGET = scope:nd_target }
+						nd_side_holds_goal_against = { TYPE = te_colonial_reconquest TARGET = scope:nd_target }
 					}
 				}
 			}
@@ -1339,8 +1343,42 @@ nd_yp_stakes_value = {
 			add = nd_yp_stakes_minor_value
 		}
 	}
+	# In a war with the issuer the existence threat already weighs on us
+	# through nd_yp_war_value (−15); count only the rest here, so an
+	# annexation still totals −30.
+	if = {
+		limit = {
+			nd_yp_stakes_value_before_war_overlap < 0
+			nd_enemy_threatens_existence = { ENEMY = scope:nd_issuer }
+		}
+		add = 15
+	}
 	min = -40
 	round = yes
+}
+
+# Whether stakes found an existence-type goal (annexation, reunification,
+# a subjugation) before the war overlap: nd_yp_stakes_value's own first part.
+nd_yp_stakes_value_before_war_overlap = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:nd_stakes_demander
+			scope:nd_stakes_demander = {
+				OR = {
+					nd_side_holds_goal_against = { TYPE = annex_country TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = te_reunify_country TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_protectorate TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_dominion TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_tributary TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_personal_union TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_crown_land TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_chartered_company TARGET = scope:nd_target }
+				}
+			}
+		}
+		value = -1
+	}
 }
 
 # −10 for each type that takes a state or a subject from us (target scope).
@@ -1367,6 +1405,22 @@ nd_yp_stakes_territory_value = {
 		add = -10
 	}
 	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = secession TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = release_as_subject TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = te_colonial_independence TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = te_un_mandate_restore_state TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
 		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = transfer_subject TARGET = scope:nd_target } } }
 		add = -10
 	}
@@ -1382,6 +1436,14 @@ nd_yp_stakes_territory_value = {
 
 nd_yp_stakes_minor_value = {
 	value = 0
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = break_enforced_treaties TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = unification_leadership TARGET = scope:nd_target } } }
+		add = -4
+	}
 	if = {
 		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = enforce_treaty_article TARGET = scope:nd_target } } }
 		add = -4

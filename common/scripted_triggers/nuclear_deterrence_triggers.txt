@@ -1799,9 +1799,6 @@ nd_ai_nuclear_use_justified = {
 nd_ai_would_warn = {
 	nd_is_armed = yes
 	in_default = no
-	# Stakes (rework spec §8.2): not a threat whose demands alone would hold
-	# the pressure on them below the line where an AI concedes.
-	NOT = { nd_ai_stakes_block = { TARGET = $TARGET$ } }
 	OR = {
 		# Protecting a country we guarantee.
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
@@ -1846,6 +1843,14 @@ nd_ai_would_warn = {
 		ruler_is_cautious = no
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
 		nd_enemy_threatens_existence = { ENEMY = $TARGET$ }
+	}
+	# Stakes (rework spec §8.2): not a threat whose demands alone would hold
+	# the pressure on them below the line where an AI concedes. Last, since it
+	# computes the pressure twice; not for a guarantee, whose demands are the
+	# protégé's.
+	OR = {
+		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		NOT = { nd_ai_stakes_block = { TARGET = $TARGET$ } }
 	}
 }
 

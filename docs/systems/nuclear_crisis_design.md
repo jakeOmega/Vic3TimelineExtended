@@ -173,7 +173,7 @@ Domestic rewards are one-off decaying IG modifiers plus native lobby appeasement
 
 A public bluff that ends in a climb-down or lapses costs the issuer 5 credibility more. The AI never makes a public bluff (`nd_ai_would_issue_ultimatum`). Of its private warnings, only the coercive kind — a hawkish doctrine or regime against a target that cannot answer — needs a backed threat or an aggressive ruler (`nd_ai_would_warn`); a warning in defence of a guaranteed country, of its survival or core, or against a rival's bomb can still be a bluff.
 
-**Figures.** `nd_crisis_refresh_figures` is the one writer of `nd_crisis_danger`, `nd_yield_pressure` and `nd_ft_reason`. Both totals are sums of named parts (`nd_cd_*`, `nd_yp_*` in `nuclear_deterrence_values.txt`), and every part is stored on both parties, so the panel's breakdowns print stored numbers that add up to the stored totals. The losing-war part reads the target through `nd_is_losing_war_to`: `is_losing_war_against` reads ROOT, and the old formula ran it in the target's scope with the issuer as ROOT. Rework phase 1 added `nd_yp_issuer_exposure` and `nd_yp_stakes` to the pressure and `nd_cd_vulnerability` to the danger, and rewrote `nd_yp_answer` (§0.12). Since 2026-09-25 the pressure has had an eleventh part, `nd_yp_recessed` (−10 while the issuer is Recessed); "can they answer in kind" (`nd_yp_answer`) scores a target under Automatic Retaliation as survivable; and the protector part (`nd_yp_protector`) counts a protector whose warheads are all in storage at half, −10 instead of −20 (`nd_has_ready_guarantor_against`).
+**Figures.** `nd_crisis_refresh_figures` is the one writer of `nd_crisis_danger`, `nd_yield_pressure` and `nd_ft_reason`. Both totals are sums of named parts (`nd_cd_*`, `nd_yp_*` in `nuclear_deterrence_values.txt`), and every part is stored on both parties, so the panel's breakdowns print stored numbers that add up to the stored totals. The losing-war part reads the target through `nd_is_losing_war_to`: `is_losing_war_against` reads ROOT, and the old formula ran it in the target's scope with the issuer as ROOT. Rework phase 1 added `nd_yp_issuer_exposure` and `nd_yp_stakes` to the pressure and `nd_cd_vulnerability` to the danger, and rewrote `nd_yp_answer` (§0.12). Since 2026-09-25 the pressure has had an eleventh part, `nd_yp_recessed` (−10 while the issuer is Recessed); "can they answer in kind" (`nd_yp_answer`) scored a target under Automatic Retaliation as survivable until rework phase 1, which reads survivors instead (§0.12); and the protector part (`nd_yp_protector`) counts a protector whose warheads are all in storage at half, −10 instead of −20 (`nd_has_ready_guarantor_against`).
 
 **The outcome notice applies the consequences.** `nd_crisis_close` writes a pending record on each party (`nd_crisis_pending_*`) and fires `nuclear_crisis.6`, whose option runs `nd_crisis_apply_outcome_side`: credibility, the decaying modifier, the interest-group and lobby reactions. So the option's tooltip shows them. The concession itself (war support, the play, the freeze, the stand-down) still happens at the moment of yielding. If another crisis closes before a notice is answered, `nd_crisis_flush_pending` applies the older record first, and the stale notice's option does nothing — unless the second crisis was with the same country, in which case the stale notice applies that newer record under its own text and the newer notice says it was already settled. Nothing is lost or applied twice either way. If the other party no longer exists when the notice is answered (annexed after conceding a war), the notice still applies its record; the lines about the other party (lobbies, interest-group reactions) are skipped.
 
@@ -262,7 +262,7 @@ suspect's posture (+20 Recessed, −5 High Alert, saved by each roll's caller as
 count too, and the ceiling depends on the moment: 97 at peace with no crisis, 92
 in a Warning or Confrontation, 85 in an Acute crisis or a war (floor 20). `nd_roll_launch_hold` feeds the warning chain, Silence from the
 Capital and `nd_system_reads_attack`, so the term covers all three. Government orders retain all ordinary
-deliberate-use gates. Permission for accidental use is not a doctrine exemption
+deliberate-use gates, except that since rework phase 1 the launch under attack passes the doctrine in a war or an Acute crisis with the suspect under every doctrine but No First Use. Permission for accidental use is not a doctrine exemption
 for ordinary strike actions.
 
 **Peacetime exchange:** `nd_launch_or_intercept` opens reciprocal country records
@@ -308,8 +308,9 @@ without answering about 53%.
 
 **The AI's readiness in an acute crisis** (`nd_ai_review_posture`) is High Alert
 only when its crisis opponent is at Heightened or higher, or its own forces
-are vulnerable short of High Alert (survivability counted at Heightened,
-`nd_effective_survivability_at_readiness_2`, under 50, without Automatic Retaliation;
+are vulnerable short of High Alert (since rework phase 1: fewer than three
+survivors against an armed crisis opponent at Heightened,
+`nd_survivors_main_r2`, without Automatic Retaliation;
 read at Heightened rather than the current level so reaching High Alert does not undo the reason for it);
 otherwise Heightened. A war with an armed enemy still means High Alert. A
 player who stays at Routine is not met with High Alert at the AI's next review.
@@ -330,11 +331,12 @@ its 12-month cooldown. Concealment exposure remains 3% monthly (`.60`).
 It evaluates the actual script-value arithmetic and incident-family weights,
 including integer rounding; tuning is not copied into the model. It reports
 crisis benchmarks, fixed-posture peace decades (including unheld launch orders)
-and worlds with 1, 2, 8 and 20 routine nuclear powers. It excludes incident-choice,
-war and diplomatic feedback. High Alert held permanently remains dangerous:
-with safeguards 3 and Launch on Warning, about 0.15 unheld orders over a decade;
-with safeguards 0, about 1.03 (0.44 and 1.31 before the peacetime hold-chance
-term). These are dispatched orders, not guaranteed hits
+and worlds with 1, 2, 8 and 20 routine nuclear powers. Since rework phase 1 it also models the AI government's launch order on a
+warning, an eight-week Acute crisis, a war-year and a peacetime pair-year
+(§0.12); it excludes other incident choices and diplomatic feedback. High Alert held permanently remains dangerous:
+with safeguards 3 and Launch on Warning, about 0.04 unheld orders over a decade;
+with safeguards 0, about 0.49 (0.15 and 1.03 before rework phase 1's calibration;
+0.44 and 1.31 before the peacetime hold-chance term). These are dispatched orders, not guaranteed hits
 or conventional wars. Routine/central/safeguards 3 yields about 0.05 meaningful
 incidents per country per decade, or 1.07 across twenty such countries.
 

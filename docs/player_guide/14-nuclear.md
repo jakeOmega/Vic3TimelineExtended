@@ -176,7 +176,9 @@ figure that counts now.
 
 What decides how hard you are to coerce is how many warheads you would have
 left if your main rival spent its whole arsenal, as far as you know it, on
-yours: First-strike survivors, in the Forces section. Its hover shows how many
+yours: First-strike survivors, in the Forces section. Your main rival is your
+crisis opponent if it is armed, otherwise the armed rival, enemy or hostile
+country believed to hold the most warheads. Its hover shows how many
 of your warheads are within reach, what the rival could destroy, and the share
 your launch authority would get away first. Three survivors make a full
 answer, and a crisis weighs threats against you by them. Below 50, survivability
@@ -273,13 +275,15 @@ once a year.
 
 | Authority | Needs | Effect |
 |---|---|---|
-| Central Authorization | Nothing | Only the government orders a launch. A strike on the capital could cut the chain of command, so a crisis counts your survivors at three quarters against an issuer believed to hold enough warheads |
+| Central Authorization | Nothing | Only the government orders a launch. An issuer believed to hold more warheads than your command could absorb on the capital counts your survivors at three quarters |
 | Conditional Delegation | Radar | A quarter of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level. Cut-off commanders may fire, even at peace. In a war, a false warning can also end in a launch you never approved |
 | Launch on Warning | Radar, Intercontinental Ballistic Missiles | 60% of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level. A false warning can become a launch under standing orders |
-| Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you, from whatever survives. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
+| Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
 
-Delegation with full safeguards is about as risky as Central Authorization with
-none, and makes you harder to coerce. Hardening is the slow, costly, safe way
+For an AI government, which sometimes gives the launch order on a false
+warning, Delegation with full safeguards is about as risky as Central
+Authorization with none, and makes it harder to coerce. Under Central
+Authorization your own country launches only when you give the order. Hardening is the slow, costly, safe way
 to the same end: survivability's ceiling is 80, and the last stretch of
 security comes from a faster launch authority.
 
@@ -408,7 +412,7 @@ us when you are the target), each a word over the figure. Pressure reads Firm
 below 50, Wavering from 50, Yielding from 70 and Breaking from 85.
 
 - Danger (0–100) rises with the stage, time, publicity, readiness, poor command reliability, counter-threats, exercises and a vulnerable force on either side (up to +10 at survivability 0), and falls with open talks. It is lower when the target has no arsenal and no armed protector. High danger makes incidents likelier.
-- Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind (up to −25, for three warheads that would survive the issuer's whole arsenal) and an armed protector behind it lower it, as does a threat from an issuer the armed target could disarm first (up to −15). So do the demands at stake: an annexation −30, a subjugation −20, each goal that takes a state or a subject −10 and each lesser goal −4, at most −40; the AI won't make a demand so large that it alone keeps an AI target from conceding. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
+- Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind (up to −25, for three warheads that would survive the issuer's whole arsenal) and an armed protector behind it lower it, as does a threat from an issuer the armed target could disarm first (up to −15). So do the demands at stake: an annexation −30, a subjugation −20, each goal that takes a state or a subject −10 and each lesser goal −4, at most −40; the AI won't back with a nuclear threat a demand so large that it alone keeps an AI target from conceding. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
 
 From Confrontation on, the target is pressed every six weeks unless talks are
 open.
@@ -579,12 +583,15 @@ exposure reads Extreme in a dangerous crisis. Two High Alert countries at danger
 no strain and Existential Deterrence, have about a 28% chance of at least one
 meaningful incident over two weekly checks each.
 
-No posture is safe. Over an eight-week Acute crisis between two such powers,
-the chance that one of them launches when nobody attacked runs from about 2%
-(Central Authorization with full safeguards) through about 5% (Delegation with
-full safeguards, or Central with none) to about 27% (Launch on Warning with
-none). A year of war with an armed enemy carries about 9%, about 19% when the
-war threatens either side.
+No posture is safe. Over an eight-week Acute crisis between two AI powers at
+High Alert, the chance that one of them launches when nobody attacked runs
+from about 2% (Central Authorization with full safeguards) through about 5%
+(Delegation with full safeguards, or Central with none) to about 27% (Launch on
+Warning with none). A year of war between two AI powers under Central
+Authorization at High Alert carries about 9%, about 19% when the war threatens
+either side. Under Central Authorization those figures come from the AI
+governments' launch orders; a player's government launches only on its own
+order.
 
 Routine mishaps have their own monthly roll: 0.2% at Recessed, 0.5% at Routine,
 1% at Heightened and 2% at High Alert. After one, no other comes for five years.
@@ -1030,7 +1037,8 @@ It retaliates at any taboo.
 
 - It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more, and shrinks as the taboo rises: about a third larger at 0 than at 40, and half the size at 100. From a taboo of 70, an AI at peace that faces no plausible attacker is far slower to fund a program.
 - It reviews its posture every six months and when a crisis opens. Most AIs keep Existential Deterrence; cautious rulers and democracies lean to No First Use, and militarist regimes (fascist, or with a jingoist ruler or a powerful Armed Forces in government) to Compellence or Warfighting. Above a taboo of 50, No First Use gains favor; below 30, Compellence and Warfighting tempt any ruler who is not cautious; from 70 they, and Flexible First Use, lose favor.
-- It goes to High Alert in a war with an armed enemy, and in an Acute crisis when its opponent is at Heightened or higher or its own forces could not ride out a first strike short of High Alert; otherwise to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.
+- It sets its safeguards from one level: one more for a cautious ruler, a restraint-minded government and Delegation or Launch on Warning, one less for a militarist regime or Warfighting and in a budget deficit. It moves to Automatic Retaliation, Launch on Warning (if militarist) or Delegation only when fewer than three of its warheads would survive its main rival and hardening could not change that, and back to Central once that passes.
+- It goes to High Alert in a war with an armed enemy, and in an Acute crisis when its armed opponent is at Heightened or higher or fewer than three of its warheads would survive short of High Alert; otherwise to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.
 - It strikes first only when its doctrine allows and its survival is at stake, or when it is losing (Flexible), was defied (Compellence) or is at war (Warfighting) against an enemy with no arsenal and no armed protector. An aggressive ruler losing under Flexible First Use strikes whether or not the enemy can answer; a cautious one strikes first only for survival, unless the taboo is below 30. From a taboo of 70, any AI strikes first only when its enemy means to annex or subjugate it, whatever its doctrine. The lower the taboo, the more readily it takes a strike it is allowed, and that includes carrying out a crisis threat: under Warfighting below a taboo of 25 it does so about twice as readily. It is a fifth as likely to carry out a threat against an insurgency, a revolutionary or secessionist state. It keeps a warhead in reserve unless its survival is at stake, waits six months between first uses, and strikes its own rebels only with 40% of its land occupied under Outlawed Dissent or a Secret Police. None of this holds back retaliation.
 - It warns countries that threaten a protégé or its survival, and a great power warns a rival that is building a bomb. Coercive warnings need a hawkish doctrine or regime and a target that can't answer. It never makes a public bluff. The lower the taboo, the more often it threatens: about twice as often at 0 as at 35, and a third as often at 100, except in defense of a country it covers, its survival or its core territory. From a taboo of 70 it issues a public ultimatum only in defense of a country it covers, its survival or its core territory, and otherwise warns privately.
 - At each posture review it also weighs its arsenal. While its arsenal burdens it and it holds more than half again the stockpile it wants, it sets a ceiling at what it wants; it lifts that ceiling once it wants more, and in a war lifts any ceiling below what it wants. When the burden reaches 30% or the taboo 70, it may begin dismantling, a one-in-five chance each review, provided it is at peace, outside any nuclear crisis or civil war, faces no plausible attacker, has neither a militarist government nor an aggressive ruler, and is covered by a guarantee or umbrella or is not a great power. It halts a dismantling only when an armed enemy at war with it means to annex or subjugate it. A renouncer takes Resume the Nuclear Program only with the standing to run a program, below a taboo of 50, and when an armed country is at war with it or is a rival antagonistic toward it.

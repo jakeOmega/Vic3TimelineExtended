@@ -573,11 +573,12 @@ class TestCrisisSubjects(unittest.TestCase):
 
     def test_cobelligerent_abandon_costs_five(self):
         body = block(self.crisis, "nd_guarantee_act_abandon")
-        self.assertIn("var:nd_guarantee_basis = 3", body)
-        branch = body[body.rindex("else = {"):]
+        branch = body[body.index("var:nd_guarantee_basis = 3"):body.index("else = {")]
+        branch += block(self.crisis, "nd_cobelligerent_abandon_effects")
         self.assertIn("AMOUNT = -5", branch)
         self.assertNotIn("nd_guarantee_abandoned", branch)
         self.assertNotIn("every_scope_treaty", branch)
+        self.assertNotIn("add_liberty_desire", branch)
 
     def test_stakes_part(self):
         self.assertRegex(self.values, r"(?m)^nd_yp_stakes_value = \{")
@@ -692,6 +693,61 @@ class TestProbeFindings20261028(unittest.TestCase):
         self.assertIn("is_target_of_wargoal = $ENEMY$", body)
         for t in ("conquer_state", "return_state", "take_treaty_port"):
             self.assertIn(f"war_side_has_war_goal_of_type_against = {{ type = {t} target = scope:nd_ct_self }}", body)
+
+
+class TestFinalReviewFixesPhase1(unittest.TestCase):
+    """The final review's fixes (rework phase 1)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_abandon_tests_the_cobelligerent_case_positively(self):
+        body = block(self.crisis, "nd_guarantee_act_abandon")
+        self.assertNotRegex(body, r"NOT = \{\s*has_variable = nd_guarantee_basis\s*var:nd_guarantee_basis = 3\s*\}")
+        self.assertRegex(body, r"if = \{\s*limit = \{\s*has_variable = nd_guarantee_basis\s*var:nd_guarantee_basis = 3\s*\}")
+        self.assertIn("nd_cobelligerent_abandon_effects = yes", body)
+
+    def test_an_ally_that_walks_away_stops_counting_as_a_protector(self):
+        body = block(self.crisis, "nd_cobelligerent_abandon_effects")
+        self.assertIn("name = nd_crisis_abandoned value = 1", body)
+        self.assertIn("var:nd_guarantee_context = 1", body)
+
+    def test_an_armed_ally_lifts_the_nuclear_shadow(self):
+        injections = strip_comments(read(ROOT / "common/script_values/zz_te_war_support_injections.txt"))
+        i = injections.index("WAR_SUPPORT_TE_NUCLEAR_SHADOW")
+        shadow = injections[injections.rindex("if = {", 0, injections.rindex("limit", 0, i)):i]
+        self.assertRegex(shadow, r"NOT = \{ this = ROOT \}\s*NOT = \{ has_war_with = ROOT \}\s*nd_believed_armed = yes")
+
+    def test_existence_goals_are_not_counted_twice_in_a_war(self):
+        body = block(self.values, "nd_yp_stakes_value")
+        self.assertIn("nd_enemy_threatens_existence = { ENEMY = scope:nd_issuer }", body)
+        self.assertIn("add = 15", body)
+
+    def test_stake_gate_runs_last_and_not_for_a_guarantee(self):
+        warn = block(self.triggers, "nd_ai_would_warn")
+        self.assertGreater(warn.index("nd_ai_stakes_block"), warn.index("A cautious ruler") if "A cautious ruler" in warn
+                           else warn.index("ruler_is_cautious = no"))
+        self.assertRegex(warn, r"OR = \{\s*nd_dispute_guarantee_against = \{ TARGET = \$TARGET\$ \}\s*NOT = \{ nd_ai_stakes_block")
+
+    def test_acute_record_also_at_close(self):
+        self.assertIn("nd_log_crisis_acute_once = yes", block(self.crisis, "nd_crisis_close"))
+
+    def test_more_goal_types_count(self):
+        body = block(self.values, "nd_yp_stakes_value") + block(self.values, "nd_yp_stakes_territory_value") + \
+            block(self.values, "nd_yp_stakes_minor_value")
+        for t in ("unification", "restore_union", "te_colonial_reconquest", "secession", "release_as_subject",
+                  "te_colonial_independence", "te_un_mandate_restore_state", "break_enforced_treaties"):
+            self.assertIn(f"TYPE = {t} ", body, t)
+
+    def test_main_rival_hover_figures_cleared(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival")
+        for name in ("nd_main_rival_reach", "nd_exposed_main"):
+            self.assertIn(f"remove_variable = {name}", body)
+
+    def test_survivors_shown_to_one_decimal(self):
+        self.assertIn("Var('nd_survivors_main').GetValue|1", loc_value("nd_w_survivors_value"))
 
 
 class TestOutcomeNotice(unittest.TestCase):

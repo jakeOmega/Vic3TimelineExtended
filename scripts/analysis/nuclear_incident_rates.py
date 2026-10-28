@@ -129,9 +129,6 @@ class RiskModel:
             # No pledge and no Rules of War ban in these scenarios.
             "nd_pledge_permits_strike": lambda: True,
             "nd_war_law_permits_strategic_strike": lambda: True,
-            # The shipped doctrine gate in a war: Warfighting always; Flexible or
-            # Compellence once the war threatens us (the model's band 3).
-            "nd_doctrine_permits_strike": lambda: p.war and (p.doctrine == 5 or (p.doctrine >= 3 and p.war_band >= 3)),
             # The launch under attack (nuclear_incident.1.c): a war with the
             # suspect or an Acute crisis against it, and no No First Use.
             "nd_launch_under_attack_context": lambda: p.war or p.stage >= 3,

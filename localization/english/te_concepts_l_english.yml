@@ -1110,7 +1110,7 @@
  country_homelands_can_change_bool_desc:0 "Allows [concept_homeland] assignments to shift over time based on which cultures predominantly inhabit a state."
  country_longevity_care_banned_bool_desc:0 "No one is within reach of longevity care. Those in it leave as the ban takes hold, and their bodies keep the years it saved them. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  country_nd_automatic_answer_bool_desc:0 "Up to three warheads, without a decision from us. A weapons accident at home during a war, an Acute crisis or High Alert against a plausible attacker can be read as an attack."
- country_nd_decapitation_immune_bool_desc:0 "A strike on our capital cannot cut the chain of command: our forces can answer without an order from it."
+ country_nd_decapitation_immune_bool_desc:0 "Our forces can answer without an order from the capital, so a crisis does not discount our answer for a strike on it."
  country_nd_launch_blocked_bool_desc:0 "The warheads are stored apart from their delivery systems. Nothing can be launched until our forces are back at Routine."
  country_nd_order_required_bool_desc:0 "Only the government may order a launch."
  country_nd_unapproved_launch_bool_desc:0 "A false warning or a commander cut off from the capital can start a launch the government never approved. Only someone in the chain refusing stands in the way."

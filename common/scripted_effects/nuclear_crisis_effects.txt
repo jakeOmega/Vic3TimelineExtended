@@ -1055,6 +1055,9 @@ nd_crisis_target_watchdog = {
 # written a line earlier, which a preview would find missing.
 nd_crisis_close = {
 	save_scope_as = nd_crisis_closing
+	# A crisis that turns Acute and ends before its next weekly tick still
+	# counts as an Acute crisis for the observer report.
+	scope:nd_issuer ?= { nd_log_crisis_acute_once = yes }
 	if = {
 		limit = {
 			exists = scope:nd_crisis_closing
@@ -2501,13 +2504,25 @@ nd_allies_alarmed = {
 
 # Walk away (§6: abandoning a covered commitment shakes every beneficiary).
 nd_guarantee_act_abandon = {
+	# A co-belligerent (rework spec §8.3): nothing was promised, so walking
+	# away costs a little credibility and nothing else: no lasting mark and no
+	# word to anyone we do protect. The ally still hears it (.21), and the
+	# crisis stops counting us as its protector. Tested positively: a
+	# multi-child NOT is unproven (scripting_best_practices.md § "Write NOR or
+	# NAND, Never a Multi-Child NOT").
 	if = {
 		limit = {
-			NOT = {
-				has_variable = nd_guarantee_basis
-				var:nd_guarantee_basis = 3
-			}
+			has_variable = nd_guarantee_basis
+			var:nd_guarantee_basis = 3
 		}
+		custom_tooltip = nd_tt_cobelligerent_abandon
+		custom_tooltip = {
+			text = nd_tt_credibility_down_5
+			nd_change_credibility = { AMOUNT = -5 }
+		}
+		nd_cobelligerent_abandon_effects = yes
+	}
+	else = {
 		custom_tooltip = nd_tt_guarantee_abandon
 		custom_tooltip = {
 			text = nd_tt_credibility_down_15
@@ -2579,20 +2594,32 @@ nd_guarantee_act_abandon = {
 			}
 		}
 	}
-	# A co-belligerent (rework spec §8.3): nothing was promised, so walking
-	# away costs a little credibility and nothing else — no lasting mark and
-	# no word to anyone we do protect. The ally still hears it (.21).
-	else = {
-		custom_tooltip = nd_tt_cobelligerent_abandon
-		custom_tooltip = {
-			text = nd_tt_credibility_down_5
-			nd_change_credibility = { AMOUNT = -5 }
-		}
-		hidden_effect = {
-			scope:nd_guarantee_beneficiary ?= {
-				set_variable = { name = nd_guarantee_answer value = 4 }
-				trigger_event = { id = nuclear_crisis.21 }
+}
+
+# Guarantor scope, ROOT the guarantor (nd_guarantee_act_abandon): walking away
+# from a co-belligerent. The crisis over our ally stops counting us as its
+# protector (nd_yp_protector_value), as for a treaty guarantee, and the ally
+# hears it.
+nd_cobelligerent_abandon_effects = {
+	hidden_effect = {
+		if = {
+			limit = {
+				exists = scope:nd_guarantee_attacker
+				exists = scope:nd_guarantee_beneficiary
+				has_variable = nd_guarantee_context
+				var:nd_guarantee_context = 1
+				scope:nd_guarantee_attacker = {
+					nd_is_crisis_owner = yes
+					var:nd_crisis_opponent ?= scope:nd_guarantee_beneficiary
+				}
 			}
+			scope:nd_guarantee_attacker = {
+				set_variable = { name = nd_crisis_abandoned value = 1 }
+			}
+		}
+		scope:nd_guarantee_beneficiary ?= {
+			set_variable = { name = nd_guarantee_answer value = 4 }
+			trigger_event = { id = nuclear_crisis.21 }
 		}
 	}
 }
