@@ -11,7 +11,18 @@ nuclear_weapon_events.1 = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	title = nuclear_weapon_events.1.t
-	desc = nuclear_weapon_events.1.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { var:nd_claim_by ?= scope:attacking_country }
+				desc = nuclear_weapon_events.1.d_claim
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.1.d
+			}
+		}
+	}
 	flavor = nuclear_weapon_events.1.f
 
 	duration = 3
@@ -22,6 +33,28 @@ nuclear_weapon_events.1 = {
 
 	immediate = {
 		post_notification = industrial_nuke_succeeds_defender
+		# A claim that the launch was unauthorized (rework spec §5.4): an AI
+		# decides once per claim, not once per warhead, whether it believes it
+		# (nd_claim_belief_value).
+		if = {
+			limit = {
+				is_ai = yes
+				var:nd_claim_by ?= scope:attacking_country
+				has_variable = nd_claim_id
+				NOT = {
+					AND = {
+						has_variable = nd_claim_belief_rolled_for
+						var:nd_claim_belief_rolled_for = var:nd_claim_id
+					}
+				}
+			}
+			set_variable = { name = nd_claim_belief_rolled_for value = var:nd_claim_id }
+			set_variable = { name = nd_claim_believed value = 0 }
+			random = {
+				chance = nd_claim_belief_value
+				set_variable = { name = nd_claim_believed value = 1 }
+			}
+		}
 	}
 
 	# Absorb the blow. Not offered when an Automatic Retaliation system has the
@@ -216,6 +249,34 @@ nuclear_weapon_events.1 = {
 		}
 		scope:target_country = {
 			nd_record_nuclear_use = { VICTIM = scope:attacking_country }
+		}
+	}
+
+	# They say it was unauthorized (rework spec §5.4): accept it, hold back and
+	# demand reparations. Not when Automatic Retaliation has the answer in
+	# hand. The truth comes out later (nd_claim_schedule_truth). An AI takes it
+	# when it believed the claim.
+	option = {
+		name = nuclear_weapon_events.1.k
+		trigger = {
+			var:nd_claim_by ?= scope:attacking_country
+			NOT = { scope:target_country = { nd_auto_answers_strike = { ENEMY = scope:attacking_country } } }
+		}
+		custom_tooltip = nuclear_weapon_events.1.k.tt
+		set_variable = { name = nd_claim_accepted value = 1 }
+		hidden_effect = {
+			save_scope_as = nd_claim_victim
+			scope:attacking_country = { trigger_event = { id = nuclear_weapon_events.27 days = 3 } }
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					has_variable = nd_claim_believed
+					var:nd_claim_believed = 1
+				}
+				add = 100
+			}
 		}
 	}
 
@@ -2556,6 +2617,77 @@ nuclear_weapon_events.26 = {
 		default_option = yes
 		ai_chance = {
 			base = 1
+		}
+	}
+}
+
+# ---- .27 Reparations Demanded --------------------------------------------------
+# To a launcher whose claim that a strike was unauthorized the struck country
+# accepted (nuclear_weapon_events.1.k; rework spec §5.4): pay by the
+# loose-warhead formula (nd_loose_compensation_value) or refuse. ROOT is the
+# launcher; scope:nd_claim_victim the struck country.
+nuclear_weapon_events.27 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_weapon_events.27.t
+	desc = nuclear_weapon_events.27.d
+	flavor = nuclear_weapon_events.27.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nd_claim_victim
+	}
+
+	# Pay.
+	option = {
+		name = nuclear_weapon_events.27.a
+		default_option = yes
+		save_scope_as = nd_loose_payer
+		scope:nd_claim_victim = { save_scope_as = nd_loose_claimant }
+		set_variable = { name = nd_reparations_due value = nd_loose_compensation_value }
+		add_treasury = {
+			value = var:nd_reparations_due
+			multiply = -1
+		}
+		scope:nd_claim_victim = {
+			add_treasury = ROOT.var:nd_reparations_due
+			change_relations = { country = ROOT value = 20 }
+		}
+		remove_variable = nd_reparations_due
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = {
+					scope:nd_claim_victim = {
+						has_variable = nd_claim_true
+						var:nd_claim_true = 1
+					}
+				}
+				add = 4
+			}
+		}
+	}
+
+	# Refuse.
+	option = {
+		name = nuclear_weapon_events.27.b
+		scope:nd_claim_victim = {
+			change_relations = { country = ROOT value = -30 }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 3
+			}
 		}
 	}
 }

@@ -1565,6 +1565,46 @@ nd_ai_lies_value = {
 	round = yes
 }
 
+# The struck country's chance (percent) of believing a claim that the strike
+# was unauthorized (rework spec §5.4): 40, plus a quarter of its relations with
+# the launcher, 20 more when one warhead landed (a deliberate first strike is
+# usually larger), 20 less when the launcher is its Acute-crisis opponent, 30
+# less for each of the launcher's lies already found out; 5 to 90. Victim
+# scope, from nuclear_weapon_events.1 (scope:attacking_country saved).
+nd_claim_belief_value = {
+	value = 40
+	if = {
+		limit = { exists = scope:attacking_country }
+		add = {
+			value = scope:attacking_country.relations:root
+			divide = 4
+		}
+		if = {
+			limit = {
+				has_variable = nd_struck_count
+				var:nd_struck_count <= 1
+			}
+			add = 20
+		}
+		if = {
+			limit = {
+				var:nd_crisis_opponent ?= scope:attacking_country
+				nd_crisis_stage_at_least = { STAGE = 3 }
+			}
+			subtract = 20
+		}
+		if = {
+			limit = { scope:attacking_country = { has_variable = nd_false_claims } }
+			subtract = {
+				value = scope:attacking_country.var:nd_false_claims
+				multiply = 30
+			}
+		}
+	}
+	min = 5
+	max = 90
+}
+
 nd_yield_pressure_value = {
 	value = nd_yp_base_value
 	add = nd_yp_answer_value

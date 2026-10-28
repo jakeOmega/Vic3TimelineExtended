@@ -910,6 +910,50 @@ class TestStrikeClaims(unittest.TestCase):
         self.assertIn("has_variable = nd_disavow_strikes", block(strip_comments(read(SGUIS)), "nd_disavowing_sgui"))
 
 
+class TestVictimWeighsTheClaim(unittest.TestCase):
+    """The struck country weighs a claim that the strike was unauthorized
+    (2026-10-28 rework spec §5.4)."""
+
+    def setUp(self):
+        self.events = strip_comments(read(WEAPON_EVENTS))
+        self.values = strip_comments(read(VALUES))
+        self.ev1 = block(self.events, "nuclear_weapon_events.1")
+
+    def test_belief_rolled_once_per_claim(self):
+        imm = block(self.ev1, "immediate")
+        self.assertIn("var:nd_claim_belief_rolled_for = var:nd_claim_id", imm)
+        self.assertIn("chance = nd_claim_belief_value", imm)
+        self.assertIn("name = nd_claim_belief_rolled_for value = var:nd_claim_id", imm)
+
+    def test_belief_value_terms(self):
+        body = block(self.values, "nd_claim_belief_value")
+        for needle in ("value = 40", "divide = 4", "add = 20", "subtract = 20", "multiply = 30", "min = 5", "max = 90"):
+            self.assertIn(needle, body)
+
+    def test_accept_option_gated_on_a_claim(self):
+        accept = option_body(self.events, "nuclear_weapon_events.1.k")
+        trig = block(accept, "trigger")
+        self.assertIn("var:nd_claim_by ?= scope:attacking_country", trig)
+        self.assertIn("nd_auto_answers_strike", trig)
+        self.assertIn("id = nuclear_weapon_events.27", accept)
+        self.assertIn("name = nd_claim_accepted value = 1", accept)
+        self.assertIn("var:nd_claim_believed = 1", block(accept, "ai_chance"))
+
+    def test_reparations_event_pay_or_refuse(self):
+        ev = block(self.events, "nuclear_weapon_events.27")
+        pay = option_body(self.events, "nuclear_weapon_events.27.a")
+        self.assertIn("nd_loose_compensation_value", pay)
+        self.assertIn("add_treasury", pay)
+        refuse = option_body(self.events, "nuclear_weapon_events.27.b")
+        self.assertIn("value = -30", refuse)
+        self.assertIn("exists = scope:nd_claim_victim", ev)
+
+    def test_claim_shown_in_the_text(self):
+        desc = block(self.ev1, "desc")
+        self.assertIn("nuclear_weapon_events.1.d_claim", desc)
+        self.assertIsNotNone(loc_value("nuclear_weapon_events.1.d_claim"))
+
+
 class TestOutcomeNotice(unittest.TestCase):
     def setUp(self):
         self.effects = strip_comments(read(CRISIS_EFFECTS))
