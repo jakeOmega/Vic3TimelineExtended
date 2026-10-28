@@ -2360,6 +2360,16 @@ nd_guarantee_act_honour = {
 	}
 }
 
+# Guarantor scope, from nuclear_crisis.20's immediate: our survivors against the
+# attacker, for the walk-away weight (.20.c).
+nd_guarantor_store_survivors = {
+	if = {
+		limit = { exists = scope:nd_guarantee_attacker }
+		scope:nd_guarantee_attacker = { save_scope_as = nd_sv_enemy }
+		set_variable = { name = nd_survivors_vs_attacker value = nd_survivors_vs_saved }
+	}
+}
+
 # Beneficiary scope, ROOT the guarantor: an armed co-belligerent that stood by
 # us answers 3, not 1, so .21 doesn't call it a promise kept.
 nd_guarantee_answer_from_cobelligerent = {

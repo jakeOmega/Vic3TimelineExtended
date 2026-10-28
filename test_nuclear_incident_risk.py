@@ -339,7 +339,7 @@ class TestLaunchUnderAttack(unittest.TestCase):
     def test_ai_order_weights(self):
         body = block(self.events, "nuclear_incident.1")
         chance = block(body[body.index("name = nuclear_incident.1.c"):], "ai_chance")
-        for needle in ("nd_vulnerable_to = { ENEMY = scope:nd_warning_suspect }", "ruler_is_aggressive = yes",
+        for needle in ("var:nd_survivors_vs_suspect < 3", "ruler_is_aggressive = yes",
                        "var:nd_strain >= 50", "ruler_is_cautious = yes", "recon_satellites",
                        "satellite_communications", "nd_crisis_talks_open_either = yes"):
             self.assertIn(needle, chance)

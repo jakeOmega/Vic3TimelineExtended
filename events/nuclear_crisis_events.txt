@@ -149,7 +149,10 @@ nuclear_crisis.1 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				trigger = { NOT = { nd_vulnerable_to = { ENEMY = scope:nd_issuer } } }
+				trigger = {
+					has_variable = nd_survivors_crisis
+					var:nd_survivors_crisis >= 3
+				}
 				add = 3
 			}
 			modifier = {
@@ -1057,6 +1060,10 @@ nuclear_crisis.20 = {
 
 	duration = 3
 
+
+	immediate = {
+		nd_guarantor_store_survivors = yes
+	}
 	trigger = {
 		exists = scope:nd_guarantee_attacker
 		exists = scope:nd_guarantee_beneficiary
@@ -1135,7 +1142,8 @@ nuclear_crisis.20 = {
 			modifier = {
 				trigger = {
 					scope:nd_guarantee_attacker = { nd_believed_armed = yes }
-					nd_vulnerable_to = { ENEMY = scope:nd_guarantee_attacker }
+					has_variable = nd_survivors_vs_attacker
+					var:nd_survivors_vs_attacker < 3
 				}
 				add = 3
 			}

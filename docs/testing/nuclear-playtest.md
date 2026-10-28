@@ -68,4 +68,6 @@ What `docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md` phase 1
 |---|---|---|
 | `TE_SELF_CHECK OK\|BROKEN nd_stakes_states` (once a game, the first crisis over a play with a state-taking goal) | `is_target_of_wargoal` finds a play's (not only a war's) goal on a state, so stakes count −10 a state | Nothing to swap: stakes already fall back to −10 per state-taking goal type in a play. Drop the per-state count from plays if it never reads OK |
 
+| `TE_SELF_CHECK OK\|BROKEN nd_trigger_temp_scope` (once a game, the first month an armed country has a main rival) | A script value sees a scope a trigger saved with `save_temporary_scope_as` (the GM precedent `gm_state_tr_holds_half` is also unread) | The opening preview's "Their arsenal would survive" and "could disarm ours first" lines never show, and the AI's stake gate never blocks a threat. Fallback: compute the preview's line from the target's stored `nd_survivors_main` when its main rival is the issuer, and drop the stake gate |
+
 The 2026-10-27 GUI rework rests on no engine fact in script; its accessors are GUI facts, listed with their fallbacks above.

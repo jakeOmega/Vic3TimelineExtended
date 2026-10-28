@@ -99,6 +99,8 @@ class RiskModel:
     def number(self, value, posture):
         if isinstance(value, list):
             return self.arithmetic(value, posture)
+        if value == "var:nd_survivors_vs_suspect":
+            return posture.survivors      # stored by nd_start_unconfirmed_warning
         if value.startswith("var:nd_"):
             return getattr(posture, value[7:])
         if value == "nd_own_danger_band":
@@ -130,7 +132,6 @@ class RiskModel:
             # The shipped doctrine gate in a war: Warfighting always; Flexible or
             # Compellence once the war threatens us (the model's band 3).
             "nd_doctrine_permits_strike": lambda: p.war and (p.doctrine == 5 or (p.doctrine >= 3 and p.war_band >= 3)),
-            "nd_vulnerable_to": lambda: p.survivors < 3,
             # The launch under attack (nuclear_incident.1.c): a war with the
             # suspect or an Acute crisis against it, and no No First Use.
             "nd_launch_under_attack_context": lambda: p.war or p.stage >= 3,
@@ -166,7 +167,8 @@ class RiskModel:
                     answer = not all(parts)
             elif key == "has_variable":
                 name = value.removeprefix("nd_")
-                answer = getattr(p, name, False) if name in ("punished_skeptic", "concealed_incident") else hasattr(p, name)
+                answer = (getattr(p, name, False) if name in ("punished_skeptic", "concealed_incident")
+                          else name == "survivors_vs_suspect" or hasattr(p, name))
             elif key == "has_technology_researched":
                 answer = {"satellite_communications": p.satellite_communications, "ICBMs": p.icbms,
                           "recon_satellites": p.second_warning_source, "precision_guided_munitions": p.pgm,
