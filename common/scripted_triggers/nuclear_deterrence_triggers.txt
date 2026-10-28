@@ -272,6 +272,13 @@ nd_covered_country_struck_by = {
 				}
 			}
 		}
+		# An unarmed co-belligerent in the war with $ENEMY$ (rework spec §8.3).
+		any_cobelligerent_in_war = {
+			nd_believed_armed = no
+			has_war_with = $ENEMY$
+			has_variable = nuked_by_country
+			var:nuked_by_country ?= $ENEMY$
+		}
 	}
 }
 
@@ -301,6 +308,16 @@ nd_covered_country_struck = {
 							has_modifier = tactical_nuke_aftermath
 						}
 					}
+				}
+			}
+		}
+		# An unarmed co-belligerent in one of our wars (rework spec §8.3).
+		any_cobelligerent_in_war = {
+			nd_believed_armed = no
+			any_scope_state = {
+				OR = {
+					has_modifier = nuclear_strike_aftermath
+					has_modifier = tactical_nuke_aftermath
 				}
 			}
 		}
@@ -703,6 +720,8 @@ nd_has_armed_guarantor_against = {
 			nd_under_an_umbrella = yes
 			overlord ?= { NOT = { this = $AGAINST$ } }
 		}
+		# An armed co-belligerent in the war against $AGAINST$.
+		nd_cobelligerent_cover_against = { AGAINST = $AGAINST$ }
 	}
 }
 
@@ -728,6 +747,14 @@ nd_has_ready_guarantor_against = {
 			overlord ?= {
 				nd_forces_assembled = yes
 				NOT = { this = $AGAINST$ }
+			}
+		}
+		AND = {
+			nd_cobelligerent_cover_against = { AGAINST = $AGAINST$ }
+			any_cobelligerent_in_war = {
+				nd_believed_armed = yes
+				nd_forces_assembled = yes
+				has_war_with = $AGAINST$
 			}
 		}
 	}
@@ -769,7 +796,30 @@ nd_is_guaranteed_by = {
 	OR = {
 		nd_is_guaranteed_by_treaty = { GUARANTOR = $GUARANTOR$ }
 		nd_under_umbrella_of = { OVERLORD = $GUARANTOR$ }
+		nd_cobelligerent_of = { GUARANTOR = $GUARANTOR$ }
 	}
+}
+
+# Co-belligerent cover (rework spec §8.3, owner 2026-10-28): an unarmed country
+# fighting a war against $AGAINST$ beside a country believed armed is covered
+# by it, for that war only. Nothing was promised: the cover lapses with the
+# war, and walking away costs little (nd_guarantee_act_abandon). Plays don't
+# count until they become wars. Beneficiary scope.
+nd_cobelligerent_cover_against = {
+	nd_believed_armed = no
+	has_war_with = $AGAINST$
+	any_cobelligerent_in_war = {
+		nd_believed_armed = yes
+		has_war_with = $AGAINST$
+		NOT = { this = $AGAINST$ }
+	}
+}
+
+# ...by $GUARANTOR$ in particular, in any war they fight side by side.
+nd_cobelligerent_of = {
+	nd_believed_armed = no
+	$GUARANTOR$ = { nd_believed_armed = yes }
+	any_cobelligerent_in_war = { this = $GUARANTOR$ }
 }
 
 # The treaty half: does $GUARANTOR$ hold a nuclear_guarantee article for this
@@ -1335,7 +1385,14 @@ nd_dispute_guarantee_against = {
 
 # Dispute 4: $TARGET$ is building a bomb and is our rival or antagonist.
 nd_dispute_proliferation_by = {
-	$TARGET$ = { nuclear_program_is_proliferating = yes }
+	# Not an armed rival's buildup, which is arms control's business (the
+	# nuclear_arms_limitation article): only a country the world believes
+	# unarmed, so one crisis cannot freeze a rival's arsenal for ten years.
+	# Public belief: an untested secret arsenal still counts (rework spec §8.4).
+	$TARGET$ = {
+		nuclear_program_is_proliferating = yes
+		nd_believed_armed = no
+	}
 	OR = {
 		has_diplomatic_pact = { who = $TARGET$ type = rivalry }
 		has_attitude = { who = $TARGET$ attitude = antagonistic }
@@ -1734,6 +1791,9 @@ nd_ai_nuclear_use_justified = {
 nd_ai_would_warn = {
 	nd_is_armed = yes
 	in_default = no
+	# Stakes (rework spec §8.2): not a threat whose demands alone would hold
+	# the pressure on them below the line where an AI concedes.
+	NOT = { nd_ai_stakes_block = { TARGET = $TARGET$ } }
 	OR = {
 		# Protecting a country we guarantee.
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
@@ -1778,6 +1838,32 @@ nd_ai_would_warn = {
 		ruler_is_cautious = no
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
 		nd_enemy_threatens_existence = { ENEMY = $TARGET$ }
+	}
+}
+
+# Issuer scope: would the stakes alone hold the pressure on $TARGET$ under the
+# AI's concession line (nuclear_crisis.1's yield weights start at 40)? The
+# pressure values read scope:nd_issuer and scope:nd_target, so they are saved
+# here as temporary scopes; nd_ai_would_warn's callers (the opening actions'
+# AI, a proliferation event's weight) run outside any crisis, where neither
+# exists. The demands are ours (nd_stakes_demander).
+nd_ai_stakes_block = {
+	save_temporary_scope_as = nd_issuer
+	save_temporary_scope_as = nd_stakes_demander
+	$TARGET$ = {
+		save_temporary_scope_as = nd_target
+		nd_yield_pressure_unstaked_value >= nd_ai_concession_line
+		nd_yield_pressure_value < nd_ai_concession_line
+	}
+}
+
+# Demander scope: does our side hold a goal of $TYPE$ against $TARGET$, in a
+# play or a war? (No trigger tells a primary demand from another, so every
+# goal counts: rework spec §8.2, owner call 10.)
+nd_side_holds_goal_against = {
+	OR = {
+		play_side_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }
 	}
 }
 

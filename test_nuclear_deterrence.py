@@ -427,7 +427,7 @@ DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness
                 "nd_cd_exercise", "nd_cd_vulnerability"]
 PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_issuer_exposure", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
                   "nd_yp_recessed", "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
-                  "nd_yp_follow_through", "nd_yp_taboo"]
+                  "nd_yp_stakes", "nd_yp_follow_through", "nd_yp_taboo"]
 
 
 class TestCrisisFigures(unittest.TestCase):
@@ -535,6 +535,73 @@ class TestSurvivorsInCrisis(unittest.TestCase):
                       option_body(events, "nuclear_crisis.20.c"))
         for name in ("nuclear_crisis.1.c", "nuclear_crisis.20.c"):
             self.assertNotIn("nd_effective_survivability", option_body(events, name))
+
+
+class TestCrisisSubjects(unittest.TestCase):
+    """Stakes weigh on the pressure, an armed co-belligerent covers an unarmed
+    one for the war, and an armed rival is not a proliferator (2026-10-28
+    rework spec §8.2–§8.4)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.effects = strip_comments(read(EFFECTS))
+
+    def test_proliferation_needs_unarmed_target(self):
+        body = block(self.triggers, "nd_dispute_proliferation_by")
+        self.assertRegex(body, r"\$TARGET\$ = \{[^}]*nd_believed_armed = no")
+
+    def test_cobelligerent_branch_in_guarantee_triggers(self):
+        for name, branch in (("nd_has_armed_guarantor_against", "nd_cobelligerent_cover_against"),
+                             ("nd_has_ready_guarantor_against", "nd_cobelligerent_cover_against"),
+                             ("nd_is_guaranteed_by", "nd_cobelligerent_of"),
+                             ("nd_covered_country_struck_by", "any_cobelligerent_in_war"),
+                             ("nd_covered_country_struck", "any_cobelligerent_in_war")):
+            self.assertIn(branch, block(self.triggers, name), name)
+        cover = block(self.triggers, "nd_cobelligerent_cover_against")
+        for needle in ("nd_believed_armed = no", "has_war_with = $AGAINST$", "any_cobelligerent_in_war",
+                       "nd_believed_armed = yes"):
+            self.assertIn(needle, cover)
+
+    def test_cobelligerent_branch_skips_treaty_and_umbrella(self):
+        for body in (block(self.crisis, "nd_crisis_notify_guarantors"), block(self.effects, "nd_record_nuclear_use")):
+            loop = body[body.index("every_cobelligerent_in_war"):]
+            limit = block(loop, "limit")
+            self.assertRegex(limit, r"NOT = \{[^}]*nd_is_guaranteed_by_treaty")
+            self.assertRegex(limit, r"NOT = \{[^}]*nd_under_umbrella_of")
+            self.assertIn("name = nd_guarantee_basis value = 3", loop)
+            self.assertIn("name = nd_guarantee_basis value = 1", body)
+            self.assertIn("name = nd_guarantee_basis value = 2", body)
+
+    def test_cobelligerent_abandon_costs_five(self):
+        body = block(self.crisis, "nd_guarantee_act_abandon")
+        self.assertIn("var:nd_guarantee_basis = 3", body)
+        branch = body[body.rindex("else = {"):]
+        self.assertIn("AMOUNT = -5", branch)
+        self.assertNotIn("nd_guarantee_abandoned", branch)
+        self.assertNotIn("every_scope_treaty", branch)
+
+    def test_stakes_part(self):
+        self.assertRegex(self.values, r"(?m)^nd_yp_stakes_value = \{")
+        self.assertIn("min = -40", block(self.values, "nd_yp_stakes_value"))
+        self.assertIn("C = nd_yp_stakes V = nd_yp_stakes_value", block(self.crisis, "nd_crisis_refresh_figures"))
+        self.assertIn("remove_variable = nd_yp_stakes", block(self.crisis, "nd_crisis_clear_figures"))
+        self.assertIn("C = nd_yp_stakes KEY = nd_yp_stakes_line",
+                      block(strip_comments(read(SGUIS)), "nd_crisis_pressure_breakdown_sgui"))
+        self.assertIsNotNone(loc_value("nd_yp_stakes_line"))
+
+    def test_unstaked_total_is_every_other_part(self):
+        body = block(self.values, "nd_yield_pressure_unstaked_value")
+        parts = re.findall(r"(?:value|add) = (nd_yp_\w+)_value\b", body)
+        self.assertEqual(parts, [p for p in PRESSURE_PARTS if p != "nd_yp_stakes"])
+
+    def test_ai_stake_gate(self):
+        self.assertIn("nd_ai_stakes_block = { TARGET = $TARGET$ }", block(self.triggers, "nd_ai_would_warn"))
+        gate = block(self.triggers, "nd_ai_stakes_block")
+        self.assertIn("nd_yield_pressure_unstaked_value >= nd_ai_concession_line", gate)
+        self.assertIn("nd_yield_pressure_value < nd_ai_concession_line", gate)
+        self.assertRegex(self.values, r"(?m)^nd_ai_concession_line = 40\b")
 
 
 class TestOutcomeNotice(unittest.TestCase):
@@ -1943,7 +2010,8 @@ class TestProtectorsAndProteges(unittest.TestCase):
         self.assertIn("id = nuclear_crisis.24", hears)
         self.assertIn("id = nuclear_crisis.20", hears)
         record = block(self.e, "nd_record_nuclear_use")
-        self.assertEqual(record.count("nd_guarantor_hears_of_strike = yes"), 2)
+        # Treaty, umbrella and co-belligerent (rework spec §8.3) branches.
+        self.assertEqual(record.count("nd_guarantor_hears_of_strike = yes"), 3)
         self.assertNotIn("id = nuclear_crisis.20", record)
         self.assertIn("nd_guarantee_act_honour = yes", option_body(self.cev, "nuclear_crisis.24.a"))
         self.assertIn("nd_guarantee_act_retaliate = yes", option_body(self.cev, "nuclear_crisis.24.b"))

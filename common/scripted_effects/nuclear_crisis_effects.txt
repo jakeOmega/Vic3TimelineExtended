@@ -485,6 +485,7 @@ nd_crisis_notify_guarantors = {
 				source_country = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
+					set_variable = { name = nd_guarantee_basis value = 1 }
 					trigger_event = { id = nuclear_crisis.20 }
 				}
 			}
@@ -503,8 +504,28 @@ nd_crisis_notify_guarantors = {
 				scope:nd_umb_guarantor = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
+					set_variable = { name = nd_guarantee_basis value = 2 }
 					trigger_event = { id = nuclear_crisis.20 }
 				}
+			}
+		}
+		# An armed co-belligerent in the war against the issuer (rework spec
+		# §8.3), unless a treaty or the umbrella above has already asked it.
+		if = {
+			limit = { nd_cobelligerent_cover_against = { AGAINST = scope:nd_issuer } }
+			every_cobelligerent_in_war = {
+				limit = {
+					nd_believed_armed = yes
+					has_war_with = scope:nd_issuer
+					NOT = { this = scope:nd_issuer }
+					save_temporary_scope_as = nd_cb_guarantor
+					NOT = { scope:nd_target = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_cb_guarantor } } }
+					NOT = { scope:nd_target = { nd_under_umbrella_of = { OVERLORD = scope:nd_cb_guarantor } } }
+				}
+				save_scope_as = nd_guarantor
+				set_variable = { name = nd_guarantee_context value = 1 }
+				set_variable = { name = nd_guarantee_basis value = 3 }
+				trigger_event = { id = nuclear_crisis.20 }
 			}
 		}
 	}
@@ -525,6 +546,20 @@ nd_crisis_refresh_figures = {
 	scope:nd_target = {
 		set_variable = { name = nd_survivors_crisis value = nd_survivors_vs_issuer }
 	}
+	# Whose demands the target would concede to (nd_yp_stakes_value): ours,
+	# or in a guarantee dispute the country we cover.
+	if = {
+		limit = {
+			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = 3
+			exists = var:nd_crisis_beneficiary
+		}
+		var:nd_crisis_beneficiary = { save_scope_as = nd_stakes_demander }
+	}
+	else = {
+		save_scope_as = nd_stakes_demander
+	}
+	nd_stakes_self_check = yes
 	nd_crisis_classify_follow_through = { TARGET = scope:nd_target }
 	scope:nd_target = {
 		set_variable = { name = nd_ft_reason value = scope:nd_issuer.var:nd_ft_reason }
@@ -563,9 +598,42 @@ nd_crisis_refresh_figures = {
 		nd_crisis_store_yp = { C = nd_yp_exercise V = nd_yp_exercise_value }
 		nd_crisis_store_yp = { C = nd_yp_temperament V = nd_yp_temperament_value }
 		nd_crisis_store_yp = { C = nd_yp_war V = nd_yp_war_value }
+		nd_crisis_store_yp = { C = nd_yp_stakes V = nd_yp_stakes_value }
 		nd_crisis_store_yp = { C = nd_yp_follow_through V = nd_yp_follow_through_value }
 		nd_crisis_store_yp = { C = nd_yp_taboo V = nd_yp_taboo_value }
 		set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
+	}
+}
+
+# Once a game (TE_SELF_CHECK, CLAUDE.md § In-game checks): in a play — not a
+# war — whose demanding side holds a state-taking goal on the target, does
+# is_target_of_wargoal find the state? The engine documents it for wars only.
+# BROKEN means nd_yp_stakes_territory_value has been counting the fallback (−10
+# a type) in plays; fine as it is, but the per-state count never applies there.
+nd_stakes_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = nd_stakes_self_check_done }
+			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = 1
+			is_at_war = no
+			scope:nd_stakes_demander = {
+				OR = {
+					nd_side_holds_goal_against = { TYPE = conquer_state TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = return_state TARGET = scope:nd_target }
+				}
+			}
+		}
+		set_global_variable = nd_stakes_self_check_done
+		scope:nd_target = {
+			if = {
+				limit = { nd_stakes_states_counted_value > 0 }
+				debug_log = "TE_SELF_CHECK OK nd_stakes_states: is_target_of_wargoal finds a state-taking goal's state in a play"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN nd_stakes_states: a play's state-taking goal names no state is_target_of_wargoal finds; stakes count the per-type fallback"
+			}
+		}
 	}
 }
 
@@ -686,6 +754,10 @@ nd_crisis_clear_figures = {
 	if = {
 		limit = { has_variable = nd_yp_war }
 		remove_variable = nd_yp_war
+	}
+	if = {
+		limit = { has_variable = nd_yp_stakes }
+		remove_variable = nd_yp_stakes
 	}
 	if = {
 		limit = { has_variable = nd_yp_follow_through }
@@ -2276,9 +2348,24 @@ nd_guarantee_act_honour = {
 			nd_crisis_ai_review = yes
 			scope:nd_guarantee_beneficiary = {
 				set_variable = { name = nd_guarantee_answer value = 1 }
+				nd_guarantee_answer_from_cobelligerent = yes
 				trigger_event = { id = nuclear_crisis.21 }
 			}
 		}
+	}
+}
+
+# Beneficiary scope, ROOT the guarantor: an armed co-belligerent that stood by
+# us answers 3, not 1, so .21 doesn't call it a promise kept.
+nd_guarantee_answer_from_cobelligerent = {
+	if = {
+		limit = {
+			ROOT = {
+				has_variable = nd_guarantee_basis
+				var:nd_guarantee_basis = 3
+			}
+		}
+		set_variable = { name = nd_guarantee_answer value = 3 }
 	}
 }
 
@@ -2300,6 +2387,7 @@ nd_guarantee_act_retaliate = {
 	hidden_effect = {
 		scope:nd_guarantee_beneficiary ?= {
 			set_variable = { name = nd_guarantee_answer value = 1 }
+			nd_guarantee_answer_from_cobelligerent = yes
 			trigger_event = { id = nuclear_crisis.21 }
 		}
 	}
@@ -2431,73 +2519,97 @@ nd_allies_alarmed = {
 
 # Walk away (§6: abandoning a covered commitment shakes every beneficiary).
 nd_guarantee_act_abandon = {
-	custom_tooltip = nd_tt_guarantee_abandon
-	custom_tooltip = {
-		text = nd_tt_credibility_down_15
-		nd_change_credibility = { AMOUNT = -15 }
-	}
-	# Abandoning a subject under our umbrella feeds its wish to be free
-	# (umbrella/recessed/dead-hand spec §1.4). The umbrella stays. ROOT is the
-	# guarantor (nuclear_crisis.20), and the tooltip preview needs a scope
-	# that already exists.
 	if = {
 		limit = {
-			exists = scope:nd_guarantee_beneficiary
-			scope:nd_guarantee_beneficiary = { nd_under_umbrella_of = { OVERLORD = ROOT } }
+			NOT = {
+				has_variable = nd_guarantee_basis
+				var:nd_guarantee_basis = 3
+			}
 		}
-		scope:nd_guarantee_beneficiary = { add_liberty_desire = 10 }
-	}
-	add_modifier = {
-		name = nd_guarantee_abandoned
-		years = 5
-		is_decaying = yes
-	}
-	hidden_effect = {
-		save_scope_as = nd_guarantor_self
+		custom_tooltip = nd_tt_guarantee_abandon
+		custom_tooltip = {
+			text = nd_tt_credibility_down_15
+			nd_change_credibility = { AMOUNT = -15 }
+		}
+		# Abandoning a subject under our umbrella feeds its wish to be free
+		# (umbrella/recessed/dead-hand spec §1.4). The umbrella stays. ROOT is the
+		# guarantor (nuclear_crisis.20), and the tooltip preview needs a scope
+		# that already exists.
 		if = {
 			limit = {
-				exists = scope:nd_guarantee_attacker
 				exists = scope:nd_guarantee_beneficiary
+				scope:nd_guarantee_beneficiary = { nd_under_umbrella_of = { OVERLORD = ROOT } }
 			}
+			scope:nd_guarantee_beneficiary = { add_liberty_desire = 10 }
+		}
+		add_modifier = {
+			name = nd_guarantee_abandoned
+			years = 5
+			is_decaying = yes
+		}
+		hidden_effect = {
+			save_scope_as = nd_guarantor_self
 			if = {
 				limit = {
-					var:nd_guarantee_context = 1
-					scope:nd_guarantee_attacker = {
-						nd_is_crisis_owner = yes
-						var:nd_crisis_opponent ?= scope:nd_guarantee_beneficiary
-					}
+					exists = scope:nd_guarantee_attacker
+					exists = scope:nd_guarantee_beneficiary
 				}
-				scope:nd_guarantee_attacker = {
-					set_variable = { name = nd_crisis_abandoned value = 1 }
-				}
-			}
-			scope:nd_guarantee_beneficiary = {
-				change_relations = { country = scope:nd_guarantor_self value = -30 }
-				set_variable = { name = nd_guarantee_answer value = 0 }
-				trigger_event = { id = nuclear_crisis.21 }
-			}
-			# Every other beneficiary of ours takes note.
-			every_scope_treaty = {
-				every_scope_article = {
+				if = {
 					limit = {
-						has_type = nuclear_guarantee
-						source_country = scope:nd_guarantor_self
-						NOT = { target_country = scope:nd_guarantee_beneficiary }
+						var:nd_guarantee_context = 1
+						scope:nd_guarantee_attacker = {
+							nd_is_crisis_owner = yes
+							var:nd_crisis_opponent ?= scope:nd_guarantee_beneficiary
+						}
 					}
-					target_country = {
-						change_relations = { country = scope:nd_guarantor_self value = -10 }
+					scope:nd_guarantee_attacker = {
+						set_variable = { name = nd_crisis_abandoned value = 1 }
 					}
+				}
+				scope:nd_guarantee_beneficiary = {
+					change_relations = { country = scope:nd_guarantor_self value = -30 }
+					set_variable = { name = nd_guarantee_answer value = 0 }
+					trigger_event = { id = nuclear_crisis.21 }
+				}
+				# Every other beneficiary of ours takes note.
+				every_scope_treaty = {
+					every_scope_article = {
+						limit = {
+							has_type = nuclear_guarantee
+							source_country = scope:nd_guarantor_self
+							NOT = { target_country = scope:nd_guarantee_beneficiary }
+						}
+						target_country = {
+							change_relations = { country = scope:nd_guarantor_self value = -10 }
+						}
+					}
+				}
+				# ...and every subject under our umbrella (the treaty loop's
+				# sibling; a subject with a treaty too is told once, above).
+				every_direct_subject = {
+					limit = {
+						nd_under_umbrella_of = { OVERLORD = scope:nd_guarantor_self }
+						NOT = { this = scope:nd_guarantee_beneficiary }
+						NOT = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_guarantor_self } }
+					}
+					change_relations = { country = scope:nd_guarantor_self value = -10 }
 				}
 			}
-			# ...and every subject under our umbrella (the treaty loop's
-			# sibling; a subject with a treaty too is told once, above).
-			every_direct_subject = {
-				limit = {
-					nd_under_umbrella_of = { OVERLORD = scope:nd_guarantor_self }
-					NOT = { this = scope:nd_guarantee_beneficiary }
-					NOT = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_guarantor_self } }
-				}
-				change_relations = { country = scope:nd_guarantor_self value = -10 }
+		}
+	}
+	# A co-belligerent (rework spec §8.3): nothing was promised, so walking
+	# away costs a little credibility and nothing else — no lasting mark and
+	# no word to anyone we do protect. The ally still hears it (.21).
+	else = {
+		custom_tooltip = nd_tt_cobelligerent_abandon
+		custom_tooltip = {
+			text = nd_tt_credibility_down_5
+			nd_change_credibility = { AMOUNT = -5 }
+		}
+		hidden_effect = {
+			scope:nd_guarantee_beneficiary ?= {
+				set_variable = { name = nd_guarantee_answer value = 4 }
+				trigger_event = { id = nuclear_crisis.21 }
 			}
 		}
 	}

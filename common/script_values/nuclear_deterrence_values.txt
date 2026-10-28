@@ -27,6 +27,7 @@ nd_readiness_lock_months_value = 24     # a conceded or agreed stand-down
 nd_pledge_broken_months_value = 120     # a repudiation is remembered this long
 nd_monopoly_window_cooldown_months = 12
 nd_routine_mishap_cooldown_months_value = 60 # between routine mishaps (nuclear_incident.40)
+nd_ai_concession_line = 40              # pressure where nuclear_crisis.1's yield weights start (the AI's stake gate)
 nd_survivability_factor_recessed = 0.5   # share of survivability a crisis counts (nd_effective_survivability)
 nd_survivability_factor_routine = 0.8
 nd_survivability_factor_heightened = 0.9 # High Alert counts it all
@@ -1292,7 +1293,200 @@ nd_yp_taboo_value = {
 	round = yes
 }
 
+# What is at stake (rework spec §8.2): the demands of the side the target
+# would concede to (nd_stakes_demander: the issuer, or for a guarantee dispute
+# the country it covers) on the target. Annexation or reunification −30 and
+# nothing else counted; a subjugation type or regime change −20; −10 for each
+# of our states under one of their goals, or for each state-taking type while
+# no state is found (a play: is_target_of_wargoal is documented for wars), and
+# −10 for each type that takes a subject from us; −4 for each lesser type.
+# At most −40. No trigger tells a primary demand from another, so every goal
+# counts (owner call 10). Target scope; scope:nd_target and
+# scope:nd_stakes_demander saved.
+nd_yp_stakes_value = {
+	value = 0
+	if = {
+		limit = { exists = scope:nd_stakes_demander }
+		if = {
+			limit = {
+				scope:nd_stakes_demander = {
+					OR = {
+						nd_side_holds_goal_against = { TYPE = annex_country TARGET = scope:nd_target }
+						nd_side_holds_goal_against = { TYPE = te_reunify_country TARGET = scope:nd_target }
+					}
+				}
+			}
+			add = -30
+		}
+		else = {
+			if = {
+				limit = {
+					scope:nd_stakes_demander = {
+						OR = {
+							nd_side_holds_goal_against = { TYPE = make_protectorate TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_dominion TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_tributary TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_personal_union TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_crown_land TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_chartered_company TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = regime_change TARGET = scope:nd_target }
+						}
+					}
+				}
+				add = -20
+			}
+			add = nd_yp_stakes_territory_value
+			add = nd_yp_stakes_minor_value
+		}
+	}
+	min = -40
+	round = yes
+}
+
+# Our states under their goals, −10 each (target scope).
+nd_stakes_states_counted_value = {
+	value = 0
+	every_scope_state = {
+		limit = { is_target_of_wargoal = scope:nd_stakes_demander }
+		add = 1
+	}
+}
+
+nd_yp_stakes_territory_value = {
+	value = nd_stakes_states_counted_value
+	multiply = -10
+	if = {
+		limit = { nd_stakes_states_counted_value <= 0 }
+		if = {
+			limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = conquer_state TARGET = scope:nd_target } } }
+			add = -10
+		}
+		if = {
+			limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = return_state TARGET = scope:nd_target } } }
+			add = -10
+		}
+		if = {
+			limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = take_treaty_port TARGET = scope:nd_target } } }
+			add = -10
+		}
+		if = {
+			limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = liberate_country TARGET = scope:nd_target } } }
+			add = -10
+		}
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = transfer_subject TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = liberate_subject TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = independence TARGET = scope:nd_target } } }
+		add = -10
+	}
+}
+
+nd_yp_stakes_minor_value = {
+	value = 0
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = enforce_treaty_article TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = open_market TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = humiliation TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = contain_threat TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = foreign_investment_rights TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = force_nationalization TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = ban_slavery TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = colonization_rights TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = revoke_claim TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = revoke_all_claims TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = demand_strait_access TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = demand_toll_exemption TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = demand_no_tolls TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = demand_no_strait_closure TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = join_power_bloc TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = leave_power_bloc TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = increase_autonomy TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = reduce_autonomy TARGET = scope:nd_target } } }
+		add = -4
+	}
+}
+
 nd_yield_pressure_value = {
+	value = nd_yp_base_value
+	add = nd_yp_answer_value
+	add = nd_yp_issuer_exposure_value
+	add = nd_yp_protector_value
+	add = nd_yp_credibility_value
+	add = nd_yp_alert_value
+	add = nd_yp_recessed_value
+	add = nd_yp_danger_value
+	add = nd_yp_exercise_value
+	add = nd_yp_temperament_value
+	add = nd_yp_war_value
+	add = nd_yp_stakes_value
+	add = nd_yp_follow_through_value
+	add = nd_yp_taboo_value
+	min = 0
+	max = 100
+	round = yes
+}
+
+# The same without the stakes: the AI's stake gate (nd_ai_stakes_block) asks
+# whether the demands alone hold the pressure under its concession line.
+nd_yield_pressure_unstaked_value = {
 	value = nd_yp_base_value
 	add = nd_yp_answer_value
 	add = nd_yp_issuer_exposure_value
