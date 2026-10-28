@@ -71,6 +71,9 @@ class Posture:
     pgm: bool = False              # precision_guided_munitions
     mainframe: bool = True         # mainframe_computers
     enemy: "Posture | None" = None # scope:nd_sv_enemy, for the survivors values
+    salvo_forces_landed: float = 0 # a salvo's warheads landed on forces (the attacker's var:nd_salvo_forces_landed)
+    salvo_capital_landed: float = 0  # landed on the victim's capital (var:nd_salvo_capital_landed)
+    salvo_victim_r: float = 1      # the victim's redundancy when the salvo began (var:nd_salvo_victim_r)
 
 
 # The rework spec's §2.3 rows: both sides take the same posture.

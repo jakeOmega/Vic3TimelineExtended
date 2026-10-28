@@ -582,6 +582,13 @@ nd_strike_carries_claim = {
 	var:nd_strike_claim_id = var:nd_claim_id
 }
 
+# Our command can order a launch: not cut off by a strike on our capital
+# (rework spec §6.3, nd_salvo_decapitation; nd_decapitated lasts two to four
+# weeks). Only a Central Authorization country is ever cut off.
+nd_command_intact = {
+	NOT = { has_variable = nd_decapitated }
+}
+
 nd_threat_backed = {
 	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
 	nd_threat_law_permits = { TARGET = $TARGET$ }
