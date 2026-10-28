@@ -187,7 +187,9 @@ nd_survivability_cap = {
 		limit = { has_technology_researched = missile_defense_systems }
 		add = 10
 	}
-	max = 95
+	# The last stretch toward full security has to come from a fast launch
+	# authority (nd_launch_credit), not from technology (rework spec §3.1).
+	max = 80
 }
 
 # Without investment, survivability decays toward this floor.
@@ -677,6 +679,151 @@ nd_effective_survivability_at_readiness_2 = {
 
 nd_effective_survivability_at_readiness_3 = {
 	value = nd_survivability_or_zero
+}
+
+# ----------------------------------------------------------------------------
+# SECOND-STRIKE SURVIVORS (rework spec §3.2) — how many of our warheads would
+# be left after the other side spent its whole arsenal on them. Our own
+# stockpile is the true one; theirs is the world's estimate
+# (nd_believed_stockpile), so the figure leaks nothing. Country scope; the
+# enemy is saved as scope:nd_sv_enemy. Four variants: at our readiness with
+# our launch credit (crises, the panel); at Heightened with it (the AI's High
+# Alert); at Heightened with no credit (the AI's launch authority, so a fast
+# authority or standing down does not feed back into its own choice); and at
+# the technology ceiling, Heightened, no credit ("hardening won't close it").
+# ----------------------------------------------------------------------------
+
+# How many of the enemy's exposed warheads one landed counterforce warhead
+# destroys.
+nd_k_ratio = {
+	value = 1
+	if = {
+		limit = { has_technology_researched = ICBMs }
+		add = 0.5
+	}
+	if = {
+		limit = { has_technology_researched = precision_guided_munitions }
+		add = 0.5
+	}
+}
+
+# The share of the warheads a counterforce strike would destroy that get away
+# first (rework spec §4.1): Delegation 0.25, Launch on Warning 0.6, each 0.05
+# less per safeguards level, since a launch that can be halted is slower.
+# Central Authorization and Automatic Retaliation get none: the system answers
+# with whatever survives.
+nd_launch_credit = {
+	value = 0
+	if = {
+		limit = { nd_authority_launch_on_warning = yes }
+		value = 0.6
+	}
+	else_if = {
+		limit = { nd_authority_delegated_or_warning = yes }
+		value = 0.25
+	}
+	if = {
+		limit = {
+			nd_authority_delegated_or_warning = yes
+			has_variable = nd_safeguards
+		}
+		subtract = {
+			value = var:nd_safeguards
+			multiply = 0.05
+		}
+	}
+	min = 0
+}
+
+# How many warheads on the capital it takes to have any chance of
+# decapitating a country under Central Authorization (rework spec §6.3).
+nd_redundancy = {
+	value = nd_stockpile
+	divide = 10
+	add = 1
+	if = {
+		limit = { has_technology_researched = satellite_communications }
+		add = 2
+	}
+	if = {
+		limit = { has_technology_researched = mainframe_computers }
+		add = 1
+	}
+}
+
+# What the enemy's whole arsenal could destroy: its exchange ratio times the
+# warheads the world believes it holds.
+nd_counterforce_reach_saved = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_k_ratio
+		multiply = nd_believed_stockpile
+	}
+}
+
+# Our warheads a first strike could reach, at our readiness, at Heightened,
+# and at the technology ceiling at Heightened.
+nd_exposed_warheads = {
+	value = 100
+	subtract = nd_effective_survivability
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_r2 = {
+	value = 100
+	subtract = nd_effective_survivability_at_readiness_2
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_ceiling_r2 = {
+	value = nd_survivability_cap
+	multiply = nd_survivability_factor_heightened
+	multiply = -1
+	add = 100
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_survivors_vs_saved = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+	multiply = -1
+	add = nd_stockpile
+	min = 0
+}
+
+nd_survivors_r2_vs_saved = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_r2
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+	multiply = -1
+	add = nd_stockpile
+	min = 0
+}
+
+nd_survivors_bare_r2_vs_saved = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_r2
+	multiply = -1
+	add = nd_stockpile
+	min = 0
+}
+
+nd_survivors_ceiling_bare_r2_vs_saved = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_ceiling_r2
+	multiply = -1
+	add = nd_stockpile
+	min = 0
 }
 
 # ----------------------------------------------------------------------------

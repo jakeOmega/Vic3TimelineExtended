@@ -66,6 +66,11 @@ class Posture:
     ruler: str = "neutral"         # neutral | cautious | aggressive
     regime: str = "neutral"        # neutral | militarist | restraint
     second_warning_source: bool = True   # recon_satellites
+    stockpile: float = 10          # our true warheads (nd_stockpile)
+    believed_stockpile: float = 10 # the world's estimate of them (nd_believed_stockpile)
+    pgm: bool = False              # precision_guided_munitions
+    mainframe: bool = True         # mainframe_computers
+    enemy: "Posture | None" = None # scope:nd_sv_enemy, for the survivors values
 
 
 # The rework spec's §2.3 rows: both sides take the same posture.
@@ -100,6 +105,10 @@ class RiskModel:
             return min(3, posture.danger // 25)
         if value == "nd_war_danger_band":
             return posture.war_band if posture.war else 0
+        if value == "nd_stockpile":
+            return posture.stockpile
+        if value == "nd_believed_stockpile":
+            return posture.believed_stockpile
         if value in self.values:
             return self.number(self.values[value], posture)
         return float(value)
@@ -156,7 +165,8 @@ class RiskModel:
                 answer = getattr(p, name, False) if name in ("punished_skeptic", "concealed_incident") else hasattr(p, name)
             elif key == "has_technology_researched":
                 answer = {"satellite_communications": p.satellite_communications, "ICBMs": p.icbms,
-                          "recon_satellites": p.second_warning_source}.get(value, True)
+                          "recon_satellites": p.second_warning_source, "precision_guided_munitions": p.pgm,
+                          "mainframe_computers": p.mainframe}.get(value, True)
             elif key == "any_scope_diplomatic_pact":
                 answer = False  # no covert comms disruption in these scenarios
             elif key == "nd_has_plausible_attacker":
@@ -188,6 +198,9 @@ class RiskModel:
                 if (key == "if" or not branch_taken) and self.condition(limit, p, crisis):
                     result = self.arithmetic([x for x in value if x[0] != "limit"], p, result, crisis)
                     branch_taken = True
+                continue
+            if key == "scope:nd_sv_enemy":
+                result = self.arithmetic(value, p.enemy, result, crisis)
                 continue
             if key == "scope:nd_hold_suspect":
                 result = self.arithmetic(value, replace(p, readiness=p.suspect_readiness), result, crisis)

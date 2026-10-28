@@ -558,6 +558,7 @@ nd_monthly_update = {
 		clamp_variable = { name = nd_survivability min = 0 max = 100 }
 		change_variable = { name = nd_reliability add = nd_reliability_step }
 		clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		nd_refresh_main_rival = yes
 		# ---- AI posture: every sixth month -----------------------------------
 		if = {
 			limit = { is_ai = yes }
@@ -1146,6 +1147,72 @@ nd_ig_clear_band = {
 }
 
 # ----------------------------------------------------------------------------
+# THE MAIN RIVAL (rework spec §3.2) — country scope. The country whose arsenal
+# our second strike is measured against: our crisis opponent if it is believed
+# armed, else the plausible attacker the world believes holds the most
+# warheads. Stores our survivors against it in the four variants of
+# nd_survivors_vs_saved, for the panel and the AI's posture review. With no
+# arsenal or no rival every figure is removed, not left stale. Monthly, from
+# nd_monthly_update, and at the start of nd_ai_review_posture.
+# ----------------------------------------------------------------------------
+nd_refresh_main_rival = {
+	save_scope_as = nd_mr_self
+	if = {
+		limit = { exists = scope:nd_mr_rival }
+		clear_saved_scope = nd_mr_rival
+	}
+	if = {
+		limit = {
+			nd_is_armed = yes
+			nd_in_crisis = yes
+			var:nd_crisis_opponent ?= { nd_believed_armed = yes }
+		}
+		var:nd_crisis_opponent = { save_scope_as = nd_mr_rival }
+	}
+	else_if = {
+		limit = { nd_is_armed = yes }
+		ordered_country = {
+			limit = { nd_plausible_attacker_of = { TARGET = scope:nd_mr_self } }
+			order_by = nd_believed_stockpile
+			position = 0
+			check_range_bounds = no
+			save_scope_as = nd_mr_rival
+		}
+	}
+	if = {
+		limit = { exists = scope:nd_mr_rival }
+		set_variable = { name = nd_main_rival value = scope:nd_mr_rival }
+		scope:nd_mr_rival = { save_scope_as = nd_sv_enemy }
+		set_variable = { name = nd_survivors_main value = nd_survivors_vs_saved }
+		set_variable = { name = nd_survivors_main_r2 value = nd_survivors_r2_vs_saved }
+		set_variable = { name = nd_survivors_main_bare_r2 value = nd_survivors_bare_r2_vs_saved }
+		set_variable = { name = nd_survivors_main_ceiling_bare_r2 value = nd_survivors_ceiling_bare_r2_vs_saved }
+	}
+	else = {
+		if = {
+			limit = { has_variable = nd_main_rival }
+			remove_variable = nd_main_rival
+		}
+		if = {
+			limit = { has_variable = nd_survivors_main }
+			remove_variable = nd_survivors_main
+		}
+		if = {
+			limit = { has_variable = nd_survivors_main_r2 }
+			remove_variable = nd_survivors_main_r2
+		}
+		if = {
+			limit = { has_variable = nd_survivors_main_bare_r2 }
+			remove_variable = nd_survivors_main_bare_r2
+		}
+		if = {
+			limit = { has_variable = nd_survivors_main_ceiling_bare_r2 }
+			remove_variable = nd_survivors_main_ceiling_bare_r2
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
 # AI POSTURE REVIEW (§9) — every sixth month, and when a crisis opens
 # ----------------------------------------------------------------------------
 # Deterministic scoring with a weighted tie-break, not scripted buttons: one
@@ -1155,6 +1222,7 @@ nd_ig_clear_band = {
 nd_ai_review_posture = {
 	nd_init_posture = yes
 	save_scope_as = nd_ai_self
+	nd_refresh_main_rival = yes
 	# ---- doctrine -----------------------------------------------------------
 	# Not while the No-First-Strike Pledge is on our laws (#430): leaving No
 	# First Use would repudiate it — a cost the review's lottery should not pay

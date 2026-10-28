@@ -1425,19 +1425,27 @@ nd_proliferation_guarantee_candidate = {
 nd_has_plausible_attacker = {
 	save_temporary_scope_as = nd_pa_self
 	any_country = {
-		NOT = { this = scope:nd_pa_self }
-		nd_believed_armed = yes
-		save_temporary_scope_as = nd_pa_cand
-		OR = {
-			scope:nd_pa_self = {
-				nd_in_crisis = yes
-				var:nd_crisis_opponent ?= scope:nd_pa_cand
-			}
-			has_war_with = scope:nd_pa_self
-			has_diplomatic_pact = { who = scope:nd_pa_self type = rivalry }
-			has_attitude = { who = scope:nd_pa_self attitude = antagonistic }
-			has_attitude = { who = scope:nd_pa_self attitude = belligerent }
+		nd_plausible_attacker_of = { TARGET = scope:nd_pa_self }
+	}
+}
+
+# Candidate scope: could this country plausibly strike $TARGET$? Believed
+# armed, and its crisis opponent, its enemy in a war, its rival, or hostile to
+# it. nd_has_plausible_attacker and the main rival (nd_refresh_main_rival)
+# share the test.
+nd_plausible_attacker_of = {
+	NOT = { this = $TARGET$ }
+	nd_believed_armed = yes
+	save_temporary_scope_as = nd_pa_cand
+	OR = {
+		$TARGET$ = {
+			nd_in_crisis = yes
+			var:nd_crisis_opponent ?= scope:nd_pa_cand
 		}
+		has_war_with = $TARGET$
+		has_diplomatic_pact = { who = $TARGET$ type = rivalry }
+		has_attitude = { who = $TARGET$ attitude = antagonistic }
+		has_attitude = { who = $TARGET$ attitude = belligerent }
 	}
 }
 

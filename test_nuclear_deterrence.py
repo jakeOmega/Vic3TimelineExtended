@@ -679,6 +679,34 @@ class TestEffectiveSurvivability(unittest.TestCase):
             self.assertIn(words, survivability_tt)
 
 
+class TestSurvivorsAgainstRival(unittest.TestCase):
+    """Survivability tops out at 80; survivors are measured against the main
+    rival (2026-10-28 rework spec §3.1, §3.2)."""
+
+    def test_survivability_cap_is_80(self):
+        body = block(strip_comments(read(VALUES)), "nd_survivability_cap")
+        self.assertIn("max = 80", body)
+        self.assertNotIn("max = 95", body)
+
+    def test_main_rival_cleared_without_attacker(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival")
+        for name in ("nd_main_rival", "nd_survivors_main", "nd_survivors_main_r2", "nd_survivors_main_bare_r2",
+                     "nd_survivors_main_ceiling_bare_r2"):
+            self.assertIn(f"remove_variable = {name}", body)
+            self.assertIn(f"name = {name} value", body)
+
+    def test_main_rival_refreshed_monthly_and_before_the_ai_review(self):
+        effects = strip_comments(read(EFFECTS))
+        self.assertIn("nd_refresh_main_rival = yes", block(effects, "nd_monthly_update"))
+        review = block(effects, "nd_ai_review_posture")
+        self.assertLess(review.index("nd_refresh_main_rival = yes"), review.index("nd_set_readiness_target_3"))
+
+    def test_plausible_attacker_shared(self):
+        triggers = strip_comments(read(TRIGGERS))
+        self.assertIn("nd_plausible_attacker_of", block(triggers, "nd_has_plausible_attacker"))
+        self.assertIn("nd_plausible_attacker_of", block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival"))
+
+
 ACT_LINES = {
     "nd_crisis_act_yield": ["nd_crisis_yield_lines = yes", "custom_tooltip = nd_tt_then_yield"],
     "nd_crisis_yield_lines": ["nd_tt_yield_war", "nd_tt_yield_play", "nd_tt_yield_guarantee",
