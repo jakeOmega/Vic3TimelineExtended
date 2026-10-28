@@ -222,5 +222,41 @@ class TestObserverReport(unittest.TestCase):
         self.assertEqual(report["crisis_outcomes"], {"7": 1})
 
 
+class TestCrisisAndWarModel(unittest.TestCase):
+    """The rework spec's §2.3 Acute-crisis table, the war-year and the
+    peacetime pair-year (2026-10-28 rework spec §2, §11)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = RiskModel()
+
+    def test_acute_table_has_five_rows(self):
+        import contextlib
+        import io
+        import sys
+        from unittest import mock
+        from scripts.analysis import nuclear_incident_rates
+        out = io.StringIO()
+        with mock.patch.object(sys, "argv", ["nuclear_incident_rates.py"]), contextlib.redirect_stdout(out):
+            nuclear_incident_rates.main()
+        for row in ("Central, safeguards 3", "Central, safeguards 0", "Delegation, safeguards 3",
+                    "Launch on Warning, safeguards 3", "Launch on Warning, safeguards 0"):
+            self.assertIn(row, out.getvalue())
+
+    def test_acute_crisis_is_symmetric(self):
+        p = Posture(readiness=3, authority=3, safeguards=0, danger=80, stage=3)
+        side_week = self.model.launch_chance_week(p)
+        self.assertGreater(side_week, 0)
+        self.assertAlmostEqual(self.model.acute_crisis(p, p), 1 - (1 - side_week) ** 16)
+
+    def test_order_chance_zero_outside_war_or_acute(self):
+        self.assertEqual(self.model.order_chance(Posture(readiness=3, stage=2, danger=60)), 0.0)
+        self.assertEqual(self.model.order_chance(Posture(readiness=3, stage=0, war=False)), 0.0)
+
+    def test_unknown_trigger_raises(self):
+        with self.assertRaises(ValueError):
+            self.model.condition([("no_such_trigger", "=", "yes")], Posture())
+
+
 if __name__ == "__main__":
     unittest.main()
