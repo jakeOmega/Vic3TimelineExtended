@@ -367,17 +367,29 @@ class TestStep(unittest.TestCase):
                            body.index("has_variable = te_dg_f$S$"))
 
 
+_RAW_BLOCKS_CACHE = {}
+
+
 def _raw_blocks(paths):
-    """name -> body text of every top-level `name = { ... }` in the files, comments removed."""
+    """name -> body text of every top-level `name = { ... }` in the files, comments removed, a later file's name
+    over an earlier one's. Each file's parse is cached by (path, mtime, size): every _Engine reads ~2 MB of script and
+    the tests build hundreds, so re-parsing took ~450 s of this file's ~500 (2026-10-27). Each call returns a new dict,
+    which callers may change."""
     out = {}
     for path in paths:
-        text = re.sub(r"#[^\n]*", "", _text(path))
-        for m in re.finditer(r"^([\w.]+) = \{", text, re.M):
-            depth, i = 1, m.end()
-            while depth:
-                depth += {"{": 1, "}": -1}.get(text[i], 0)
-                i += 1
-            out[m.group(1)] = text[m.end():i - 1]
+        st = Path(path).stat()
+        key = (str(path), st.st_mtime_ns, st.st_size)
+        if key not in _RAW_BLOCKS_CACHE:
+            blocks = {}
+            text = re.sub(r"#[^\n]*", "", _text(path))
+            for m in re.finditer(r"^([\w.]+) = \{", text, re.M):
+                depth, i = 1, m.end()
+                while depth:
+                    depth += {"{": 1, "}": -1}.get(text[i], 0)
+                    i += 1
+                blocks[m.group(1)] = text[m.end():i - 1]
+            _RAW_BLOCKS_CACHE[key] = blocks
+        out.update(_RAW_BLOCKS_CACHE[key])
     return out
 
 
