@@ -295,7 +295,15 @@ banking_mon_control_sgui = {
 				text = banking_mon_tt_recap_cash
 				gold_reserves >= te_mon_bank_recap_amount
 			}
-			te_mon_bank_can_recapitalise = yes
+			# The vault is counted at the first month's end on gold.
+			custom_tooltip = {
+				text = banking_mon_tt_recap_counted
+				has_variable = te_bank_gold_seeded
+				var:te_bank_gold_seeded = 1
+			}
+			# The gate the AI's rule uses, kept in step with the lines above;
+			# hidden, since they say each of its parts (button_reason_audit).
+			hidden_trigger = { te_mon_bank_can_recapitalise = yes }
 		}
 		trigger_else = {
 			always = no
@@ -321,21 +329,23 @@ banking_mon_control_sgui = {
 		}
 		else_if = {
 			limit = { scope:op = 4 }
-			te_mon_effect_set_mandate = { MANDATE = 1 TT = banking_mon_mandate_set_tt }
+			te_mon_effect_set_mandate = { MANDATE = 1 TT = banking_mon_mandate_set_dual_tt }
 		}
 		else_if = {
 			limit = { scope:op = 5 }
-			te_mon_effect_set_mandate = { MANDATE = 2 TT = banking_mon_mandate_set_tt }
+			te_mon_effect_set_mandate = { MANDATE = 2 TT = banking_mon_mandate_set_growth_tt }
 		}
 		else_if = {
 			limit = { scope:op = 6 }
-			# Peg defence gets its own line: its rule points outside the country,
-			# at the world reference rate the dashboard now shows as a row.
+			# Each mandate's button says what its rule does (GUI audit BNK-2), then
+			# the shared price of a looser one (banking_mon_mandate_cost_tt). Peg
+			# defence's points outside the country, at the world rate, and sits
+			# off the looseness ladder, so it has no price line.
 			te_mon_effect_set_mandate = { MANDATE = 3 TT = banking_mon_mandate_peg_set_tt }
 		}
 		else_if = {
 			limit = { scope:op = 14 }
-			te_mon_effect_set_mandate = { MANDATE = 4 TT = banking_mon_mandate_set_tt }
+			te_mon_effect_set_mandate = { MANDATE = 4 TT = banking_mon_mandate_set_inflation_tt }
 		}
 		else_if = {
 			limit = { scope:op = 7 }
@@ -674,6 +684,20 @@ banking_mon_shows_union = {
 	effect = { }
 }
 
+# ...and its members, a row each, under it? For the bloc's leader only, the
+# one that pays for them and can press them (GUI audit BNK-13).
+banking_mon_shows_union_members = {
+	scope = country
+	is_shown = {
+		is_power_bloc_leader = yes
+		te_mon_bloc_union_tier_1_plus = yes
+		has_variable = te_mon_union_holdouts
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 banking_mon_union_adopt = {
 	scope = country
 	is_shown = {
@@ -693,7 +717,9 @@ banking_mon_union_leave = {
 	scope = country
 	is_shown = { te_mon_is_union_member = yes }
 	ai_is_valid = { always = no }
-	is_valid = { te_mon_is_union_member = yes }
+	# is_shown's own test, which holds while the button shows; hidden, as bare
+	# it would print as raw script (button_reason_audit).
+	is_valid = { hidden_trigger = { te_mon_is_union_member = yes } }
 	effect = {
 		custom_tooltip = te_mon_union_leave_effect_tt
 		hidden_effect = { te_mon_effect_union_exit = yes }
@@ -728,7 +754,9 @@ banking_mon_union_press_off = {
 	scope = country
 	is_shown = { te_mon_union_is_pressing = yes }
 	ai_is_valid = { always = no }
-	is_valid = { te_mon_union_is_pressing = yes }
+	# is_shown's own test, which holds while the button shows; hidden, as bare
+	# it would print as raw script (button_reason_audit).
+	is_valid = { hidden_trigger = { te_mon_union_is_pressing = yes } }
 	effect = {
 		custom_tooltip = te_mon_union_press_off_effect_tt
 		hidden_effect = {

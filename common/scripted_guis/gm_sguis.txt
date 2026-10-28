@@ -464,7 +464,7 @@ gm_name_start_sgui = {
 	}
 
 	effect = {
-		custom_tooltip = {
+		custom_tooltip = { # REVIEWED 2026-10-27 (hidden_modifier): gm_name_carrier_slot is plumbing, the company slot the naming box's carrier company takes for the year it is open; printing +1 company slot would tell the player of a gain they never get to use
 			text = gm_name_start_tt
 			scope:gm_state = { set_variable = gm_being_named }
 			# Before add_company: the company type's potential reads it.

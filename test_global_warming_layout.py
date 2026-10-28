@@ -283,7 +283,7 @@ class TierLadderTest(unittest.TestCase):
     def test_every_tier_has_an_icon(self):
         body = _type_body(_read(GUI), "te_gw_overview_panel")
         codes = {int(n) for n in re.findall(
-            r"ScriptValue\('gw_disp_tier_code'\), '\(CFixedPoint\)(\d+)' \)\]\"\s*blockoverride \"icon_texture\"", body)}
+            r"ScriptValue\('gw_disp_tier_code'\), '\(CFixedPoint\)(\d+)' \)\]\"\s*texture = \"", body)}
         self.assertEqual(codes, set(range(7)))
 
 
@@ -322,6 +322,30 @@ class RoundTwoTest(unittest.TestCase):
         self.assertIn("trigger = { always = yes }", blocks[1])
         self.assertEqual(_loc_value("je_global_warming_status_none"), "")
         self.assertNotIn("je_global_warming_status", _loc_keys())
+
+
+class PenaltyCellTest(unittest.TestCase):
+    """GW-8: the Warming Penalty cell prints two of the Climate Warming
+    modifier's lines at today's scale. Its per-degree values are the static
+    modifier's, which the entry applies at multiplier = the anomaly."""
+
+    def test_the_cell_figures_follow_the_modifier(self):
+        mods = _read(os.path.join(REPO, "common", "static_modifiers", "extra_modifiers.txt"))
+        gw = _top_level(mods, "global_warming")
+        sol = float(re.search(r"state_standard_of_living_add = (-?[\d.]+)", gw).group(1))
+        mort = float(re.search(r"state_mortality_mult = (-?[\d.]+)", gw).group(1))
+        values = _read(VALUES)
+        self.assertRegex(_top_level(values, "gw_disp_penalty_sol"),
+                         r"^\s*value = gw_warming_penalty_scale_display\s*multiply = (-?[\d.]+)\s*$")
+        got_sol = float(re.search(r"multiply = (-?[\d.]+)", _top_level(values, "gw_disp_penalty_sol")).group(1))
+        got_mort = float(re.search(r"multiply = (-?[\d.]+)", _top_level(values, "gw_disp_penalty_mortality_pct")).group(1))
+        self.assertEqual(got_sol, sol)
+        self.assertEqual(got_mort, mort * 100)
+        self.assertIn("multiplier = temperature_anomaly_display", _read(JE))
+        self.assertIn("gw_disp_penalty_sol", _loc_value("gw_ov_penalty_word"))
+        self.assertIn("gw_disp_penalty_mortality_pct", _loc_value("gw_ov_penalty_third"))
+        # The anomaly itself is the temperature row's; the cell no longer repeats it.
+        self.assertNotIn("gw_warming_penalty_scale_display", _loc_value("gw_ov_penalty_word"))
 
 
 class OverviewWidthTest(unittest.TestCase):
@@ -463,6 +487,16 @@ class ProjectionBarTest(unittest.TestCase):
 # round-2 screenshot showed all 25 characters of "1.61 -> 1.82 C (+0.02/yr)" in
 # its 198-unit cell). The default font is otherwise taken as medium. Plus 10%.
 UNITS = {"large": 10.0, "medium": 8.6, "small": 7.0, "digits": 7.1}
+# The panel's own sizes (GW-15: the gw_fontsize_* templates at the head of the
+# widget), scaled as Banking's test scales its: the serif face at 10 a
+# character in 20, the overview's tooltip face at 8.6 in 16.
+_SIZES = {m.group(1): int(m.group(2)) for m in re.finditer(
+    r"template gw_fontsize_(\w+) \{\s*fontsize = (\d+)", _read(GUI))}
+UNITS.update(row=10.0 / 20 * _SIZES["row"], heading=10.0 / 20 * _SIZES["heading"],
+             overview=8.6 / 16 * _SIZES["overview"])
+# Banking's overview cell (te_banking_ov_cell), which the overview reuses: its
+# words and third lines share the caption's column at Banking's overview size.
+DASH = os.path.join(REPO, "gui", "journal_entry_widgets", "banking_dashboard_widget.gui")
 MARGIN = 1.1
 
 
@@ -484,11 +518,15 @@ class WidthBudgetTest(unittest.TestCase):
         gui = _read(GUI)
         row = _type_body(gui, "gw_policy_row")
         cls.name_cell = int(re.search(r"max_width = (\d+)\s*elide = right\s*align = nobaseline\s*"
-                                      r"using = fontsize_large", row).group(1))
+                                      r"using = gw_fontsize_row", row).group(1))
         table = _type_body(gui, "gw_value_row")
         cls.label_cell, cls.value_cell = (int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", table))
         cls.pie_cell = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(gui, "te_gw_ov_pie")).group(1))
-        cls.icon_cell = int(re.search(r"max_width = (\d+)", _type_body(gui, "te_gw_ov_icon_label")).group(1))
+        dash = _read(DASH)
+        cls.ov_cell = int(re.search(r"max_width = (\d+)", _type_body(dash, "te_banking_ov_word")).group(1))
+        cls.ov_font = 8.6 / 16 * int(re.search(r"template banking_dash_fontsize_overview \{\s*fontsize = (\d+)",
+                                               dash).group(1))
+        UNITS["ov_cell"] = cls.ov_font
         ov = _type_body(gui, "te_gw_overview_panel")
         cls.temp_label_cell = int(re.search(r'max_width = (\d+)\s*elide = right\s*align = left\|nobaseline\s*'
                                             r'text = "gw_ov_temp_label"', ov).group(1))
@@ -505,15 +543,21 @@ class WidthBudgetTest(unittest.TestCase):
         cases = [
             # (loc key, font, cell width)
             ("gw_ov_temp_label", "medium", self.temp_label_cell),   # "Temperature", default font
-            ("gw_ov_treaty_label", "small", self.icon_cell),
-            ("gw_market_role_leader", "small", self.icon_cell),
-            ("gw_market_role_member", "small", self.icon_cell),
-            ("gw_emis_market_label_ours", "medium", self.label_cell),
-            ("gw_emis_market_label_theirs", "medium", self.label_cell),
-            ("gw_emis_capture_label", "medium", self.label_cell),
-            ("gw_emis_world_label", "medium", self.label_cell),
-            ("gw_emis_warming_label", "medium", self.label_cell),
-            ("gw_sect_world", "medium", 440 - 32),        # nested header, text after its arrow
+            # The overview's cells (te_banking_ov_cell): captions, words, third lines.
+            ("gw_ov_tier_caption", "ov_cell", self.ov_cell),
+            ("gw_ov_penalty_caption", "ov_cell", self.ov_cell),
+            ("gw_ov_treaty_caption", "ov_cell", self.ov_cell),
+            ("gw_ov_treaty_word", "ov_cell", self.ov_cell),
+            ("gw_ov_treaty_third", "ov_cell", self.ov_cell),
+            ("gw_ov_tier_next_none", "ov_cell", self.ov_cell),
+            ("gw_market_role_leader", "ov_cell", self.ov_cell),
+            ("gw_market_role_member", "ov_cell", self.ov_cell),
+            ("gw_emis_market_label_ours", "row", self.label_cell),
+            ("gw_emis_market_label_theirs", "row", self.label_cell),
+            ("gw_emis_capture_label", "row", self.label_cell),
+            ("gw_emis_world_label", "row", self.label_cell),
+            ("gw_emis_warming_label", "row", self.label_cell),
+            ("gw_sect_world", "heading", 440 - 32),       # nested header, text after its arrow
             ("gw_sect_policies", "large", 480),           # section headers, 520 with the arrow
             ("gw_sect_emitters", "large", 480),
             ("gw_sect_history", "large", 480),
@@ -522,8 +566,8 @@ class WidthBudgetTest(unittest.TestCase):
             ("gw_btn_repeal", "large", 104),
         ]
         for p in MARKET_WIDE + NATIONAL:
-            cases.append((f"GW_{p.upper()}_ROW", "large", self.name_cell))   # the policy row name
-            cases.append((f"GW_{p.upper()}_ROW", "medium", self.label_cell))  # Around the World's label
+            cases.append((f"GW_{p.upper()}_ROW", "row", self.name_cell))     # the policy row name
+            cases.append((f"GW_{p.upper()}_ROW", "row", self.label_cell))    # Around the World's label
         for key, font, cell in cases:
             self.assertFits(_visible_text(_loc_value(key)), font, cell, key)
 
@@ -532,20 +576,23 @@ class WidthBudgetTest(unittest.TestCase):
                  ("negligible", "slight", "moderate", "significant", "severe", "catastrophic", "apocalyptic")]
         self.assertEqual(max(tiers, key=len), "Catastrophic")
         cases = [
-            (max(tiers, key=len), "small", self.icon_cell, "tier word"),
-            ("Penalty ×9.99", "small", self.icon_cell, "penalty cell (anomaly below 10 C)"),
+            (max(tiers, key=len), "ov_cell", self.ov_cell, "tier word"),
+            ("Next at 4.0 °C", "ov_cell", self.ov_cell, "the next tier"),
+            ("Market", "ov_cell", self.ov_cell, "the role caption, vanilla's concept_market"),
+            ("SoL -9.9", "ov_cell", self.ov_cell, "penalty word (anomaly below 10 C)"),
+            ("Mortality +50%", "ov_cell", self.ov_cell, "penalty third line"),
             ("9.99 → 9.99 °C (-0.20/yr)", "digits", self.headline_cell, "temperature headline"),
             ([("9.99 °C ", "digits"), ("(no rate yet)", "medium")], None, self.headline_cell,
              "headline before January"),
-            ("Emissions Cut 100%", "medium", self.pie_cell, "cut pie label"),
-            ("Our Share 100%", "medium", self.pie_cell, "share pie label"),
-            ("Their Share 100%", "medium", self.pie_cell, "share pie label, another market"),
+            ("Emissions Cut 100%", "overview", self.pie_cell, "cut pie label"),
+            ("Our Share 100%", "overview", self.pie_cell, "share pie label"),
+            ("Their Share 100%", "overview", self.pie_cell, "share pie label, another market"),
             (_visible_text(_loc_value("gw_ov_share_theirs") + _loc_value("gw_ov_pie_share_pending").split(")]", 1)[1]),
-             "medium", self.pie_cell, "share pie label, pending"),
-            ("-999.9/yr", "medium", self.value_cell, "an emissions value"),
-            ("99999/yr", "medium", self.value_cell, "world emissions"),
-            ("+0.20 °C", "medium", self.value_cell, "warming last year"),
-            ("136 nations", "medium", self.value_cell, "an adoption count (every country)"),
+             "overview", self.pie_cell, "share pie label, pending"),
+            ("-999.9/yr", "row", self.value_cell, "an emissions value"),
+            ("99999/yr", "row", self.value_cell, "world emissions"),
+            ("+0.20 °C", "row", self.value_cell, "warming last year"),
+            ("136 nations", "row", self.value_cell, "an adoption count (every country)"),
         ]
         for text, font, cell, what in cases:
             self.assertFits(text, font, cell, what)
@@ -558,25 +605,25 @@ class WidthBudgetTest(unittest.TestCase):
         gui = _read(GUI)
         row = _type_body(gui, "gw_emitter_row")
         name = int(re.search(r'minimumsize = \{ (\d+) -1 \}\s*maximumsize = \{ \d+ -1 \}\s*autoresize = yes\s*'
-                             r'elide = right\s*align = left\|nobaseline\s*using = fontsize_medium\s*'
+                             r'elide = right\s*align = left\|nobaseline\s*using = gw_fontsize_row\s*'
                              r'default_format = "#tooltippable"\s*text = "gw_te_row_name"', row).group(1))
         cell = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
-                                                 r'using = fontsize_\w+\s*(?:default_format = "#v"\s*)?'
-                                                 r'(?:block "row_ours" \{\}\s*)?text = "(\w+)"', row)}
+                                                 r'using = gw_fontsize_row\s*(?:default_format = "#v"\s*)?'
+                                                 r'(?:visible = "[^"]*"\s*)?text = "(\w+)"', row)}
         head = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
-                                                 r'using = fontsize_small\s*default_format = "#tooltippable"\s*'
+                                                 r'using = gw_fontsize_row\s*default_format = "#tooltippable"\s*'
                                                  r'text = "(\w+)"', _type_body(gui, "gw_emitter_header"))}
         self.assertEqual(set(cell), {"gw_te_row_annual", "gw_te_row_share", "gw_te_row_cum", "gw_te_ours"})
         self.assertEqual(set(head), {"gw_te_head_annual", "gw_te_head_share", "gw_te_head_cum"})
         cases = [
-            ("United Socialist Council Republics of California", "medium", name, "the longest country name"),
-            ("-9999.9/yr", "medium", cell["gw_te_row_annual"], "a market's annual emissions"),
-            ("100%", "medium", cell["gw_te_row_share"], "a share"),
-            ("-9,999,999", "medium", cell["gw_te_row_cum"], "a cumulative total"),
-            (_visible_text(_loc_value("gw_te_ours")), "small", cell["gw_te_ours"], "our market's mark"),
+            ("United Socialist Council Republics of California", "row", name, "the longest country name"),
+            ("-9999.9/yr", "row", cell["gw_te_row_annual"], "a country's annual emissions"),
+            ("100%", "row", cell["gw_te_row_share"], "a share"),
+            ("-9,999,999", "row", cell["gw_te_row_cum"], "a cumulative total"),
+            (_visible_text(_loc_value("gw_te_ours")), "row", cell["gw_te_ours"], "our country's mark"),
         ]
         for key, width in head.items():
-            cases.append((_visible_text(_loc_value(key)), "small", width, key))
+            cases.append((_visible_text(_loc_value(key)), "row", width, key))
         for text, font, width, what in cases:
             self.assertFits(text, font, width, what)
 
@@ -610,6 +657,10 @@ OLD_PLACEHOLDERS = {
     "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds",
     "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds",
 }
+# GW-12: two policy rows' placeholders until their own art is painted
+# (docs/systems/global_warming_gui_icons.md has the subjects).
+POLICY_PLACEHOLDERS = {"fossil_fuel_tariffs": "gfx/interface/icons/trade_icons/max_tariffs.dds",
+                       "carbon_removal": "gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds"}
 # The two marks that stay vanilla by design.
 VANILLA_MARKS = {"gfx/interface/icons/generic_icons/green_checkmark.dds",
                  "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"}
@@ -630,24 +681,30 @@ class GwIconsTest(unittest.TestCase):
 
     def test_every_tier_code_has_its_own_file(self):
         found = dict(re.findall(r"ScriptValue\('gw_disp_tier_code'\), '\(CFixedPoint\)(\d)' \)\]\"\s*"
-                                r"blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"", self.overview))
+                                r"texture = \"([^\"]+)\"", self.overview))
         self.assertEqual(found, {str(c): f"{GW_ICONS}tier_{t}.dds" for c, t in enumerate(TIERS)})
 
     def test_roles_and_penalty(self):
-        leader = re.search(r"IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \)\]\"\s*"
-                           r"blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"", self.overview)
-        member = re.search(r"IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \) \)\]\"\s*"
-                           r"blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"", self.overview)
+        leader = re.search(r"gw_is_market_leader_sgui'\)\.IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \)\]\"\s*"
+                           r"texture = \"([^\"]+)\"", self.overview)
+        member = re.search(r"gw_is_market_leader_sgui'\)\.IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \) \)\]\"\s*"
+                           r"texture = \"([^\"]+)\"", self.overview)
         self.assertEqual(leader.group(1), f"{GW_ICONS}role_leader.dds")
         self.assertEqual(member.group(1), f"{GW_ICONS}role_member.dds")
-        self.assertRegex(self.overview, rf'tooltip = "gw_cond_penalty_tt"\s*blockoverride "icon_texture" \{{\s*'
+        self.assertRegex(self.overview, rf'tooltip = "gw_cond_penalty_tt"\s*size = \{{ 238 70 \}}\s*'
+                                        rf'blockoverride "caption" \{{\s*text = "gw_ov_penalty_caption"\s*\}}\s*'
+                                        rf'blockoverride "icons" \{{\s*icon = \{{\s*size = \{{ 100% 100% \}}\s*'
                                         rf'texture = "{re.escape(GW_ICONS)}penalty\.dds"')
 
     def test_every_policy_has_its_own_file(self):
+        """GW-12: no two rows share an icon. Two show placeholders until painted."""
+        seen = []
         for p in MARKET_WIDE + NATIONAL:
-            icon = {"carbon_removal": "renewable_investment", "fossil_fuel_tariffs": "fossil_fuel_divestment"}.get(p, p)
-            self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*"
-                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(GW_ICONS)}policy_{icon}\.dds"', p)
+            path = POLICY_PLACEHOLDERS.get(p, f"{GW_ICONS}policy_{p}.dds")
+            self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*(?:#[^\n]*\n\s*)?"
+                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(path)}"', p)
+            seen.append(path)
+        self.assertEqual(len(seen), len(set(seen)))
 
     def test_pies(self):
         for pie, key in (("pie_share", "gw_ov_pie_share"), ("pie_cut", "gw_ov_pie_cut")):
@@ -663,7 +720,7 @@ class GwIconsTest(unittest.TestCase):
     def test_no_placeholder_left(self):
         textures = set(re.findall(r'texture = "(gfx/[^"]+)"', self.gui))
         self.assertEqual(textures & OLD_PLACEHOLDERS, set())
-        icons = textures - NOT_ICONS - VANILLA_MARKS - set(TRANSITION_ICONS.values()) - {
+        icons = textures - NOT_ICONS - VANILLA_MARKS - set(TRANSITION_ICONS.values()) - set(POLICY_PLACEHOLDERS.values()) - {
             "gfx/interface/icons/un_icons/pie_rest.dds", "gfx/interface/icons/un_icons/pie_members.dds"}
         self.assertTrue(all(t.startswith(GW_ICONS) for t in icons), sorted(icons))
         self.assertEqual(len(icons), 7 + 2 + 1 + 8 + 2)   # tiers, roles, penalty, policies, pies
@@ -743,12 +800,12 @@ def _widget_with(text, line, start=None):
 
 def _market_cells(overview):
     """The bodies of the overview's four market-cell widgets (those carrying
-    block "gw_market_country"), with row 1's tier and penalty cells, which read
-    the player's own entry, taken out of the first."""
+    block "gw_market_country"). Since GW-15 the tier and penalty cells, which
+    read the player's own entry, sit in a row of their own, outside them."""
     cells = [_widget_with(overview, MARKET_BLOCK, start=m.start())
              for m in re.finditer(re.escape(MARKET_BLOCK), overview)]
     for world in ('tooltip = "gw_ov_tier_tt"', 'tooltip = "gw_cond_penalty_tt"'):
-        cells[0] = cells[0].replace(_widget_with(cells[0], world), "")
+        assert world not in cells[0], world
     return cells
 
 
@@ -939,8 +996,8 @@ class MarketTabTest(unittest.TestCase):
         self.assertEqual(ov.count(MARKET_BLOCK), 4)
         cells = [_block_from(ov, m.end()) for m in re.finditer(re.escape(MARKET_BLOCK), ov)]
         self.assertEqual([" ".join(c.split()) for c in cells], [MARKET_DEFAULT] * 4)
-        self.assertRegex(ov, r"### Row 1:[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
-        self.assertRegex(ov, r"### Row 4:[^\n]*\n[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
+        self.assertRegex(ov, r"### Row 2:[^\n]*\n[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
+        self.assertRegex(ov, r"### Row 5:[^\n]*\n[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
         for tip in ("gw_cond_emis_tt", "gw_emis_capture_tt"):
             self.assertRegex(ov, r"gw_value_row = \{\s*" + re.escape(MARKET_BLOCK) + r"\s*" + re.escape(MARKET_DEFAULT)
                              + rf'\s*\}}\s*tooltip = "{tip}"', tip)
@@ -1052,15 +1109,15 @@ class MarketTabTest(unittest.TestCase):
 
     def test_the_tooltip_has_three_branches(self):
         """Open: the tab's own tooltip. Conditions met but the entry not
-        running: te_market_tab_met_tt, since IsValidTooltip prints nothing for
+        running: te_system_tab_met_tt, since IsValidTooltip prints nothing for
         a passing test. Otherwise: the locked line and the checklist."""
         root = "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
         expected = (f"tooltip = \"[SelectLocalization( {GW_TAB_GATE}, 'te_market_tab_global_warming_tt', "
-                    f"SelectLocalization( {GW_TAB_UNLOCK}.IsValid( {root} ), 'te_market_tab_met_tt', "
+                    f"SelectLocalization( {GW_TAB_UNLOCK}.IsValid( {root} ), 'te_system_tab_met_tt', "
                     f"Concatenate( Localize( 'te_market_tab_global_warming_locked_tt' ), "
                     f"{GW_TAB_UNLOCK}.IsValidTooltip( {root} ) ) ) )]\"")
         self.assertEqual(self._gw_buttons()["fifth_button_tooltip"], expected)
-        met = _loc_value("te_market_tab_met_tt")
+        met = _loc_value("te_system_tab_met_tt")
         self.assertTrue(met.startswith("#b Not open yet#!"), met)
         self.assertIn("conditions are met", met)
 
@@ -1122,7 +1179,8 @@ class MarketTabTest(unittest.TestCase):
         take a state root, and no type reads the panel's ambient Market."""
         self.assertIn("te_gw_sec_emitters = {}", _type_body(_read(GUI), "te_gw_status_sections"))
         emitters = _type_body(_read(GUI), "te_gw_sec_emitters")
-        self.assertIn("datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_1').GetState]\"", emitters)
+        self.assertIn("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('gw_te_top')]\"", emitters)
+        self.assertIn("datacontext = \"[Scope.GetState]\"", emitters)
         self.assertIn("GetScriptedGui('gw_top_emitters_sgui').ExecuteTooltip( GuiScope.SetRoot( "
                       "JournalEntry.GetCountry.GetCapital.MakeScope ).End )", emitters)
         self.assertIn("GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )",

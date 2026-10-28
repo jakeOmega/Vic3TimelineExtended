@@ -102,6 +102,10 @@ class MissionSlotTableTest(unittest.TestCase):
             body = _block(sguis, sgui)
             cls.switches[(sgui, "is_valid")] = _branches(_sub_block(body, "is_valid"))
             cls.switches[(sgui, "effect")] = _branches(_sub_block(body, "effect"))
+        # Whether a row can ever take our contingent (the 2026-10-27 audit,
+        # UN-15): never executed, so it has no effect switch.
+        cls.switches[("un_chamber_mission_joinable_sgui", "is_valid")] = _branches(
+            _sub_block(_block(sguis, "un_chamber_mission_joinable_sgui"), "is_valid"))
         cls.rows = _widget_rows(_read(WIDGET), "un_chamber_mission_row")
         cls.assign = _block(_read(MISSION_EFFECTS), "un_mission_assign_slot")
 
@@ -110,9 +114,10 @@ class MissionSlotTableTest(unittest.TestCase):
 
     def test_each_row_passes_one_slot_everywhere(self):
         for ops in self.rows:
-            # row visible and text; Join visible, enabled, onclick and the
-            # tooltip's two calls; Withdraw visible, onclick and tooltip
-            self.assertEqual(len(ops), 10, ops)
+            # row visible and text; Join visible (joinable, not serving),
+            # enabled, onclick and the tooltip's two calls; Withdraw visible,
+            # onclick and tooltip
+            self.assertEqual(len(ops), 11, ops)
             self.assertEqual(len(set(ops)), 1, f"a mission row mixes slots {ops}")
 
     def test_every_switch_maps_op_to_the_same_slot(self):
@@ -123,6 +128,7 @@ class MissionSlotTableTest(unittest.TestCase):
             ("un_chamber_mission_join_sgui", "effect"): "un_mission_slot_volunteer",
             ("un_chamber_mission_withdraw_sgui", "is_valid"): "un_mission_slot_served",
             ("un_chamber_mission_withdraw_sgui", "effect"): "un_mission_slot_withdraw",
+            ("un_chamber_mission_joinable_sgui", "is_valid"): "un_mission_slot_joinable",
         }
         for key, call in expected.items():
             branches = self.switches[key]
@@ -131,6 +137,16 @@ class MissionSlotTableTest(unittest.TestCase):
                 for op, branch in branches.items():
                     found = re.findall(r"\b(\w+)\s*=\s*\{\s*SLOT\s*=\s*(\d+)\s*\}", branch)
                     self.assertEqual(found, [(call, str(op))], f"op {op}")
+
+    def test_each_row_reads_its_own_slots_figures(self):
+        widget = _read(WIDGET)
+        rows = [_braced(widget, m.end() - 1) for m in re.finditer(
+            r"^\t+un_chamber_mission_row\s*=\s*\{", widget, re.M)]
+        for row in rows:
+            op = _WIDGET_OP.findall(row)[0]
+            with self.subTest(slot=op):
+                self.assertEqual(set(re.findall(r"un_disp_msn_slot_(\d+)_", row)), {op})
+                self.assertEqual(set(re.findall(r"je_un_chamber_mission_slot_(\d+)_", row)), {op})
 
     def test_slots_are_assigned_lowest_first_and_all_of_them(self):
         pairs = re.findall(
@@ -190,6 +206,54 @@ class VotingDetailsRowTableTest(unittest.TestCase):
     def test_the_names_exist(self):
         self.assertIn("un_chamber_history_details_row", set(_TOP_LEVEL.findall(_read(DISPLAY))))
         self.assertIn("un_chamber_history_has_entry", set(_TOP_LEVEL.findall(_read(RESOLUTION_TRIGGERS))))
+
+
+class ArchiveRowTableTest(unittest.TestCase):
+    """The archive's brief rows (the 2026-10-27 audit, UN-16): one per
+    position, each passing its position to the row's IsValid, text and the
+    card on its hover."""
+
+    @classmethod
+    def setUpClass(cls):
+        sguis = _read(SGUIS)
+        brief = _block(sguis, "un_chamber_history_brief_row_sgui")
+        cls.valid = _branches(_sub_block(brief, "is_valid"))
+        cls.effect = _branches(_sub_block(brief, "effect"))
+        cls.card = _branches(_sub_block(_block(sguis, "un_chamber_history_card_row_sgui"), "effect"))
+        cls.rows = []
+        widget = _read(WIDGET)
+        for m in re.finditer(r"un_chamber_text\s*=\s*\{", widget):
+            block = _braced(widget, m.end() - 1)
+            if "un_chamber_history_brief_row_sgui').ExecuteTooltip" in block:
+                cls.rows.append([int(op) for op in _WIDGET_OP.findall(block)])
+
+    def test_the_widget_has_one_row_per_position(self):
+        self.assertEqual(sorted(ops[0] for ops in self.rows), list(range(HISTORY_ROWS)))
+        for ops in self.rows:
+            self.assertEqual(len(ops), 3, ops)
+            self.assertEqual(len(set(ops)), 1, ops)
+
+    def test_each_op_reads_its_own_position(self):
+        for name, branches in (("brief", self.effect), ("card", self.card)):
+            self.assertEqual(sorted(branches), list(range(HISTORY_ROWS)), name)
+            for op in range(HISTORY_ROWS):
+                with self.subTest(switch=name, op=op):
+                    self.assertEqual(
+                        re.findall(rf"un_chamber_history_{name}_row\s*=\s*\{{\s*POSITION\s*=\s*(\d+)\s+COUNT\s*=\s*(\d+)\s*\}}",
+                                   branches[op]),
+                        [(str(op), str(op + 1))],
+                    )
+        for op in range(HISTORY_ROWS):
+            with self.subTest(op=op):
+                self.assertEqual(
+                    re.findall(r"un_chamber_history_has_entry\s*=\s*\{\s*COUNT\s*=\s*(\d+)\s*\}", self.valid[op]),
+                    [str(op + 1)],
+                )
+
+    def test_the_names_exist(self):
+        display = set(_TOP_LEVEL.findall(_read(DISPLAY)))
+        for name in ("un_chamber_history_brief_row", "un_chamber_history_card_row", "un_chamber_history_entry"):
+            self.assertIn(name, display)
 
 
 class MissionContributorLinesTest(unittest.TestCase):

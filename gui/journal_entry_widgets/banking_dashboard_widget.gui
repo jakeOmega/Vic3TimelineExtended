@@ -122,6 +122,40 @@ types banking_dashboard_widget_types
 		using = banking_dash_fontsize_row
 	}
 
+	### A partner under a Monetary Policy row (GUI audit BNK-13): the
+	### Backstops row's partners and a bloc leader's members under Monetary
+	### Union. Indented 16 under its row, then the flag (vanilla's tiny_flag,
+	### the name on hover and the country on click), the name in the rest of
+	### the label column (16 + 28 + 4 + 124 + 4 = 176) and the figure in the
+	### value column's 280. A long name wraps rather than eliding. The instance
+	### sets the datacontext (a state, or a country) and fills the blocks.
+	type banking_dash_partner_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin_left = 16
+
+		widget = {
+			size = { 28 24 }
+			parentanchor = vcenter
+			block "flag" {}
+		}
+		textbox = {
+			parentanchor = vcenter
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 124 -1 }
+			maximumsize = { 124 -1 }
+			align = left|nobaseline
+			using = banking_dash_fontsize_row
+			block "name" {}
+		}
+		banking_dash_condition_value = {
+			multiline = yes
+			block "value" {}
+		}
+	}
+
 	### The left reading of a two-column pair row: label 176 + 4 + value 66 =
 	### 246. With banking_dash_pair_right (144 + 4 + 66 = 214) it fills the
 	### block's 460. Only for short readings (a percentage or a signed figure,
@@ -1202,6 +1236,12 @@ types banking_dashboard_widget_types
 	### a repealed law keeps a working Disable here.
 	### Shown once the cycle runs: a dormant entry has no tool to put in force
 	### (style guide rule 7, content for one state only).
+	### A tool whose button is an order ("Declare a Bank Holiday") is named
+	### here as what is in force (banking_dash_name_active_*, the modifier's own
+	### name: "Bank Holiday"), and the holiday says how long it has left (GUI
+	### audit BNK-11). Open-Market Operations is listed here and under the rate
+	### target on purpose: this is the whole list of what holds points, and
+	### that row is the action beside the rate it works on.
 	type te_banking_sec_active = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -1305,7 +1345,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_raise_margin_requirements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_raise_margin_requirements"
 				blockoverride "row_label" {
-					text = "CB_RAISE_MARGIN_REQ"
+					text = "banking_dash_name_active_cb_raise_margin_requirements"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_raise_margin_requirements"
@@ -1324,7 +1364,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_expand_deposit_guarantee').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_expand_deposit_guarantee"
 				blockoverride "row_label" {
-					text = "CB_EXPAND_DEPOSIT_GUARANTEE"
+					text = "banking_dash_name_active_cb_expand_deposit_guarantee"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_expand_deposit_guarantee"
@@ -1381,7 +1421,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_restrict_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_restrict_inflows"
 				blockoverride "row_label" {
-					text = "CB_RESTRICT_INFLOWS"
+					text = "banking_dash_name_active_cb_restrict_inflows"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_restrict_inflows"
@@ -1400,7 +1440,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_sterilize_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_sterilize_inflows"
 				blockoverride "row_label" {
-					text = "CB_STERILIZE_INFLOWS"
+					text = "banking_dash_name_active_cb_sterilize_inflows"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_sterilize_inflows"
@@ -1419,7 +1459,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_foreign_borrowing_limits').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_foreign_borrowing_limits"
 				blockoverride "row_label" {
-					text = "banking_dash_name_cb_foreign_borrowing_limits"
+					text = "banking_dash_name_active_cb_foreign_borrowing_limits"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_foreign_borrowing_limits"
@@ -1609,7 +1649,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_reserve_requirements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_reserve_requirements"
 				blockoverride "row_label" {
-					text = "CB_RESERVE_REQUIREMENTS"
+					text = "banking_dash_name_active_cb_reserve_requirements"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_reserve_requirements"
@@ -1628,7 +1668,7 @@ types banking_dashboard_widget_types
 				visible = "[GetScriptedGui('banking_dash_disable_cb_bank_holiday').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_bank_holiday"
 				blockoverride "row_label" {
-					text = "CB_BANK_HOLIDAY"
+					text = "banking_dash_name_active_cb_bank_holiday"
 				}
 				blockoverride "row_cost" {
 					text = "banking_dash_cost_cb_bank_holiday"
@@ -2679,6 +2719,198 @@ types banking_dashboard_widget_types
 						}
 					}
 
+					### The partners behind the two sums (GUI audit BNK-13): who backs us
+					### and whom we back, a row each, from the lists the arrangement
+					### discovery keeps (te_mon_record_backstop_* in
+					### te_monetary_arrangement_effects.txt): a partner's capital, since
+					### a GUI reaches a country through its state.
+					flowcontainer = {
+						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+
+						flowcontainer = {
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 2
+							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_swap_from')]"
+
+							item = {
+								banking_dash_partner_row = {
+									datacontext = "[Scope.GetState]"
+									blockoverride "flag" {
+										tiny_flag = {
+											parentanchor = center
+											datacontext = "[State.GetCountry]"
+										}
+									}
+									blockoverride "name" {
+										text = "banking_dash_mon_bs_state_name"
+									}
+									blockoverride "value" {
+										text = "banking_dash_mon_bs_swap_from"
+									}
+								}
+							}
+						}
+
+						flowcontainer = {
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 2
+							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_lolr_from')]"
+
+							item = {
+								banking_dash_partner_row = {
+									datacontext = "[Scope.GetState]"
+									blockoverride "flag" {
+										tiny_flag = {
+											parentanchor = center
+											datacontext = "[State.GetCountry]"
+										}
+									}
+									blockoverride "name" {
+										text = "banking_dash_mon_bs_state_name"
+									}
+									blockoverride "value" {
+										text = "banking_dash_mon_bs_lolr_from"
+									}
+								}
+							}
+						}
+
+						flowcontainer = {
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 2
+							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_receiver_from')]"
+
+							item = {
+								banking_dash_partner_row = {
+									datacontext = "[Scope.GetState]"
+									blockoverride "flag" {
+										tiny_flag = {
+											parentanchor = center
+											datacontext = "[State.GetCountry]"
+										}
+									}
+									blockoverride "name" {
+										text = "banking_dash_mon_bs_state_name"
+									}
+									blockoverride "value" {
+										text = "banking_dash_mon_bs_receiver_from"
+									}
+								}
+							}
+						}
+
+						### A member's share of its bloc's cooperation and backstop, from the
+						### leader.
+						banking_dash_partner_row = {
+							visible = "[And( JournalEntry.GetCountry.IsInPowerBloc, GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bs_union_received_display'), '(CFixedPoint)0' ) )]"
+							datacontext = "[JournalEntry.GetCountry.GetPowerBloc.GetLeader]"
+							blockoverride "flag" {
+								tiny_flag = {
+									parentanchor = center
+								}
+							}
+							blockoverride "name" {
+								text = "banking_dash_mon_bs_country_name"
+							}
+							blockoverride "value" {
+								text = "banking_dash_mon_bs_union_from"
+							}
+						}
+
+						flowcontainer = {
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 2
+							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_swap_to')]"
+
+							item = {
+								banking_dash_partner_row = {
+									datacontext = "[Scope.GetState]"
+									blockoverride "flag" {
+										tiny_flag = {
+											parentanchor = center
+											datacontext = "[State.GetCountry]"
+										}
+									}
+									blockoverride "name" {
+										text = "banking_dash_mon_bs_state_name"
+									}
+									blockoverride "value" {
+										text = "banking_dash_mon_bs_swap_to"
+									}
+								}
+							}
+						}
+
+						flowcontainer = {
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 2
+							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_lolr_to')]"
+
+							item = {
+								banking_dash_partner_row = {
+									datacontext = "[Scope.GetState]"
+									blockoverride "flag" {
+										tiny_flag = {
+											parentanchor = center
+											datacontext = "[State.GetCountry]"
+										}
+									}
+									blockoverride "name" {
+										text = "banking_dash_mon_bs_state_name"
+									}
+									blockoverride "value" {
+										text = "banking_dash_mon_bs_lolr_to"
+									}
+								}
+							}
+						}
+
+						flowcontainer = {
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 2
+							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_receivership_to')]"
+
+							item = {
+								banking_dash_partner_row = {
+									datacontext = "[Scope.GetState]"
+									blockoverride "flag" {
+										tiny_flag = {
+											parentanchor = center
+											datacontext = "[State.GetCountry]"
+										}
+									}
+									blockoverride "name" {
+										text = "banking_dash_mon_bs_state_name"
+									}
+									blockoverride "value" {
+										text = "banking_dash_mon_bs_receivership_to"
+									}
+								}
+							}
+						}
+
+						### A leader's whole bloc, one row: its members are listed under
+						### Monetary Union, each with its share.
+						banking_dash_partner_row = {
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bs_union_pts_display'), '(CFixedPoint)0' )]"
+							blockoverride "name" {
+								text = "banking_dash_mon_bs_bloc_name"
+							}
+							blockoverride "value" {
+								text = "banking_dash_mon_bs_union_to"
+							}
+						}
+					}
+
 					### [P5b] The bloc's common currency (§15A.3): one state row and the
 					### four actions, each its own scripted GUI.
 					banking_dash_condition_row = {
@@ -2691,6 +2923,40 @@ types banking_dashboard_widget_types
 							banking_dash_condition_value = {
 								multiline = yes
 								text = "banking_dash_mon_union_value"
+							}
+						}
+					}
+
+					### A leader's members, a row each (GUI audit BNK-13): whether each
+					### has adopted, holds out or would refuse if pressed, and what
+					### backing it costs us. The leader is left out, as vanilla's own
+					### member list leaves it out (power_bloc_panel.gui).
+					flowcontainer = {
+						### In a bloc first, as vanilla gates a GetPowerBloc datacontext
+						### (00_te_country_panel_information.gui's power bloc entry).
+						visible = "[And( JournalEntry.GetCountry.IsInPowerBloc, GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+						datacontext = "[JournalEntry.GetCountry.GetPowerBloc]"
+						datamodel = "[PowerBloc.GetMembers]"
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+
+						item = {
+							banking_dash_partner_row = {
+								visible = "[Not( PowerBloc.IsLeader( Country.Self ) )]"
+								tooltip = "banking_dash_mon_union_member_tt"
+								blockoverride "flag" {
+									tiny_flag = {
+										parentanchor = center
+									}
+								}
+								blockoverride "name" {
+									text = "banking_dash_mon_bs_country_name"
+									default_format = "#tooltippable"
+								}
+								blockoverride "value" {
+									text = "banking_dash_mon_union_member_value"
+								}
 							}
 						}
 					}
@@ -3198,6 +3464,24 @@ types banking_dashboard_widget_types
 			visible = "[GetScriptedGui('banking_dash_cycle_dormant').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			text = "banking_dash_dormant_tools_note"
 			tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 480 -1 }
+			maximumsize = { 480 -1 }
+			parentanchor = hcenter
+			align = center|nobaseline
+			using = banking_dash_fontsize_row
+			margin = { 6 4 }
+		}
+
+		### No points free (GUI audit BNK-12): each greyed Enable button says
+		### why in its own tooltip, and this says it once, above the rows, so
+		### the reason and what to do about it sit with the tools. Its hover is
+		### the overview's points-free breakdown.
+		textbox = {
+			visible = "[GetScriptedGui('banking_dash_no_points_free').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "banking_dash_no_points_note"
+			tooltip = "banking_dash_budget_free_tt"
 			autoresize = yes
 			multiline = yes
 			minimumsize = { 480 -1 }

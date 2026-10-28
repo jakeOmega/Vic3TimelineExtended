@@ -235,11 +235,13 @@ types diplomatic_panel
 				### MOD: UN tab (te_un) ###
 				# The United Nations journal entry, laid out for the tab in the order
 				# gui/journal_entry_widgets/un_layout_widget.gui sets for both hosts:
-				# the overview, the entry's status text as a Status section (open),
-				# the status sections, the entry's scripted buttons as an
-				# Actions section (founding, joining and leaving the UN and most
-				# requests exist only as buttons), the chart, the record and the
-				# explanations, then a link back. Spec:
+				# the overview, the entry's status text as a Status section (open;
+				# only a founding conference or a dissolution), the status sections,
+				# the chart, the record and the explanations, then a link back. The
+				# entry's scripted buttons are the AI's (`is_ai = yes`, the
+				# 2026-10-27 audit's UN-9), so the tab's old Actions section is
+				# gone: each control sits beside the figure it acts on, and
+				# founding sits under the overview's No UN cell. Spec:
 				# docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md. The gate sits
 				# on a parent of the GetPlayerJournalEntry datacontext, never on the
 				# widget carrying it (vanilla's shape: states_panel.gui, the Meiji
@@ -276,11 +278,13 @@ types diplomatic_panel
 							te_un_overview_panel = {}
 
 							# The entry's own status text (a founding conference or a
-							# dissolution, and the Assembly's statistics), open by default
-							# (the owner's call, 2026-09-28): nothing the journal says is lost
-							# from the tab. The whole section hides while the text is empty
-							# (un_status_text_sgui). te_je_status_desc has a visible of its
-							# own, so the section's gate is on a wrapper (gotcha #17).
+							# dissolution), open by default (the owner's call, 2026-09-28):
+							# nothing the journal says is lost from the tab. The whole
+							# section hides while the text is empty (un_status_text_sgui),
+							# which is whenever a UN stands: the Assembly's statistics moved
+							# into the overview (the 2026-10-27 audit, UN-20).
+							# te_je_status_desc has a visible of its own, so the section's
+							# gate is on a wrapper (gotcha #17).
 							flowcontainer = {
 								visible = "[GetScriptedGui('un_status_text_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 								parentanchor = hcenter
@@ -311,32 +315,6 @@ types diplomatic_panel
 							}
 
 							te_un_status_sections = {}
-
-							# The entry's own buttons (founding, joining, leaving and most
-							# requests exist only here), in a section of their own. A
-							# wrapper carries the section's gate: te_je_scripted_buttons
-							# has a visible of its own (gotcha #17).
-							un_chamber_section_header = {
-								blockoverride "left_text" {
-									text = "te_diplomacy_un_tab_actions_header"
-								}
-								blockoverride "onclick" {
-									onclick = "[GetVariableSystem.Toggle('te_un_tab_actions_closed')]"
-								}
-								blockoverride "onclick_showmore" {
-									visible = "[GetVariableSystem.Exists('te_un_tab_actions_closed')]"
-								}
-								blockoverride "onclick_showless" {
-									visible = "[Not(GetVariableSystem.Exists('te_un_tab_actions_closed'))]"
-								}
-							}
-							flowcontainer = {
-								visible = "[Not(GetVariableSystem.Exists('te_un_tab_actions_closed'))]"
-								parentanchor = hcenter
-								direction = vertical
-
-								te_je_scripted_buttons = {}
-							}
 
 							te_un_reference_sections = {}
 

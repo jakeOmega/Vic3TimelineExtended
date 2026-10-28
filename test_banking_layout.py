@@ -6,6 +6,7 @@ overview on top, the live sections open, the history and How Banking Works
 at the foot, and every collapse flag named for its default.
 """
 import json
+import operator
 import os
 import re
 import unittest
@@ -32,7 +33,16 @@ CATEGORIES = {
     "banking_dash_system_command": ["plan", "allocation", "admin", "pool"],
     "banking_dash_system_coop": ["surplus", "investment", "council", "membership"],
 }
-MONETARY_HOW = ["banking_dash_how_rate", "banking_dash_how_stance", "banking_dash_how_borrowing"]
+# The rules the Monetary Policy row tooltips used to teach are here since the
+# GUI audit (BNK-1, 2026-10-27): the mandates, gold, the exchange rate, the
+# international arrangements and prices.
+MONETARY_HOW = ["banking_dash_how_rate", "banking_dash_how_rate_none", "banking_dash_how_stance",
+                "banking_dash_how_mandates", "banking_dash_how_mandates_change", "banking_dash_how_mandates_floor",
+                "banking_dash_how_gold", "banking_dash_how_gold_flow", "banking_dash_how_peg",
+                "banking_dash_how_fx", "banking_dash_how_fx_effects", "banking_dash_how_fx_fixed",
+                "banking_dash_how_anchor", "banking_dash_how_treaty_peg", "banking_dash_how_backstops",
+                "banking_dash_how_union", "banking_dash_how_union_terms", "banking_dash_how_borrowing",
+                "banking_dash_how_prices", "banking_dash_how_expected", "banking_dash_how_printing"]
 GENERAL_HOW = ["banking_dash_how_cycle", "banking_dash_how_cycle_moves", "banking_dash_how_crashes",
                "banking_dash_how_budget"]
 
@@ -72,7 +82,7 @@ def _sgui(name):
 def _loc():
     keys = {}
     for line in _read(LOC).splitlines():
-        m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+        m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
         if m:
             keys[m.group(1)] = m.group(2)
     return keys
@@ -458,6 +468,59 @@ class BandCodeTest(unittest.TestCase):
                 self.assertEqual(got, [codes[k] for _, k in branches])
 
 
+class HistoryBandTest(unittest.TestCase):
+    """The cycle charts' bars name the month's band, as the overview names
+    today's (GUI audit BNK-4, 2026-10-27): each row's AddLocalizationIf chain
+    picks exactly one word for any reading, the word the overview would."""
+    OPS = {"GreaterThanOrEqualTo": operator.ge, "GreaterThan": operator.gt,
+           "LessThan": operator.lt, "LessThanOrEqualTo": operator.le,
+           ">=": operator.ge, ">": operator.gt, "<": operator.lt, "<=": operator.le}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc, cls.custom = _loc(), _read(CUSTOM_LOC)
+
+    def chosen(self, key, x):
+        out = []
+        for m in re.finditer(r"\[AddLocalizationIf\( (.*?), '(\w+)' \)\]", self.loc[key]):
+            conds = re.findall(r"(\w+)_CFixedPoint\( ScriptContainer\.GetVariableValue\('\w+'\), "
+                               r"'\(CFixedPoint\)(-?[\d.]+)' \)", m.group(1))
+            self.assertTrue(conds, m.group(0))
+            if all(self.OPS[op](x, float(v)) for op, v in conds):
+                out.append(m.group(2))
+        return out
+
+    def custom_word(self, name, x):
+        loc = _block_from(self.custom, re.search(rf"(?m)^{name} = \{{", self.custom).end() - 1)
+        for trigger, key in re.findall(r"text = \{\s*(?:trigger = \{(.*?)\}\s*)?localization_key = (\w+)\s*\}",
+                                       loc, re.S)[1:]:
+            m = re.fullmatch(r"\s*var:\w+ (>=|>|<=|<) (-?[\d.]+)\s*", trigger)
+            if not trigger or self.OPS[m.group(1)](x, float(m.group(2))):
+                return key
+
+    def test_each_reading_names_one_band(self):
+        triggers = _read(os.path.join(REPO, "common", "scripted_triggers", "market_triggers.txt"))
+        phases = {}
+        for name, body in re.findall(r"(?m)^banking_cycle_is_(\w+) = \{(.*)\}$", triggers):
+            conds = re.findall(r"var:finance_cycle_value (>=|<) (\d+)", body)
+            if conds and name in ("panic", "downturn", "stagnation", "stable", "expansion", "boom", "frenzy"):
+                phases[name] = conds
+        self.assertEqual(len(phases), 7)
+        for i in range(-20, 221):
+            x = i / 2
+            with self.subTest(value=x):
+                want = [k for k, conds in phases.items() if all(self.OPS[o](x, float(v)) for o, v in conds)]
+                self.assertEqual(self.chosen("te_hist_tt_bank_value_row", x),
+                                 ["banking_dash_phase_%s_value" % k for k in want])
+                self.assertEqual(self.chosen("te_hist_tt_bank_bubble_row", x),
+                                 [self.custom_word("banking_dash_bubble_band", x)])
+        for i in range(-40, 41):
+            x = i / 4
+            with self.subTest(momentum=x):
+                self.assertEqual(self.chosen("te_hist_tt_bank_momentum_row", x),
+                                 [self.custom_word("banking_dash_momentum_band", x)])
+
+
 class IconsDocTest(unittest.TestCase):
     """docs/systems/banking_gui_icons.md records each icon's file by its code."""
 
@@ -579,7 +642,7 @@ def _concept_loc():
         if not name.endswith(".yml"):
             continue
         for line in _read(os.path.join(loc_dir, name)).splitlines():
-            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
             if m:
                 keys[m.group(1)] = m.group(2)
     return keys
@@ -719,7 +782,7 @@ def _all_loc():
     for name in sorted(os.listdir(loc_dir)):
         if name.endswith(".yml"):
             for line in _read(os.path.join(loc_dir, name)).splitlines():
-                m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+                m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
                 if m:
                     keys[m.group(1)] = m.group(2)
     return keys

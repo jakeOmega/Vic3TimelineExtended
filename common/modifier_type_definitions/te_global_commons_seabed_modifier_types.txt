@@ -14,3 +14,37 @@ building_ocean_mine_throughput_add = {
 	percent = yes
 	decimals = 0
 }
+
+# The seabed policies' effects as modifier lines (audit SEA-2): display types
+# the three te_seabed_policy_<policy>_display static modifiers carry, so the
+# policy buttons and the overview's Policy box print engine lines through
+# GetStaticModifier(...).GetDesc. Nothing reads them: the weight stays
+# script's (te_seabed_policy_factor, te_seabed_navy_effective,
+# te_seabed_floor_keep, te_seabed_unilateral_relations), and
+# test_seabed_layout.py holds each display value to its script value.
+country_seabed_claim_weight_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+country_seabed_naval_weight_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+country_seabed_claim_floor_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+country_seabed_unilateral_relations_add = {
+	color = good
+	decimals = 0
+	script_only = yes
+}

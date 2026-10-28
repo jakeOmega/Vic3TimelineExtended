@@ -104,13 +104,14 @@ The Budget panel's Breakdown tab shows weekly income and expenses as pie charts
 and expandable lists. Groups start collapsed; click an arrow to see their
 components. Entries are ordered from largest to smallest amount at each level.
 The tab is available under every game-rule setting.
-Colors and percentages match across the pies and lists; hover an institution
-for its allocation. Investment Pool Transfer and the construction it funds are
+Colors and percentages match across the pies and lists. Hover a tax, tariff,
+welfare or interest amount for the Overview's graph of it, an institution for
+its share of the pool, and Administration for the pool itself. Investment Pool Transfer and the construction it funds are
 private spending, so they are excluded from the totals and Construction Goods.
 
 Taxes groups the individual tax receipts. Military expands into Army and Navy,
 which each expand into Wages plus Materials and Support. Materials and Support
-includes logistics centres and naval fortifications, whose operating costs
+includes logistics centers and naval fortifications, whose operating costs
 combine their own wages, goods and any slave upkeep. Barracks, conscription
 and naval administration stay in the native branch entries, while support
 buildings contribute their full upkeep. Navy also includes warship construction and
@@ -125,11 +126,13 @@ General Administration covers the remainder, including unused capacity. Other
 civil buildings, the military, construction and welfare have their own rows.
 
 Recurring costs from Banking, Covert Actions, Cultural Hegemony, the United
-Nations and other journal systems appear under Programme Costs, and so does the
+Nations and other journal systems appear under Program Costs, and so does the
 Space Program building's running cost, in the Space Race row. Expand it and
 hover over a system to see its
 current sources and amounts. One-time treasury payments and costs in resources
-such as innovation are outside this weekly money breakdown.
+such as innovation are outside this weekly money breakdown. The Banking row's
+hover also names what the Foreign Exchange Surrender Requirement buys for the
+central bank's gold each month, which stays outside the weekly budget.
 
 The charts show positive component amounts; negative adjustments stay in the
 list. Expanding a group preserves the chart total, including when costs and
@@ -165,14 +168,16 @@ interest group row is what your country gives each of them; their own panels add
 their local sources.
 
 Where These Come From, collapsed at the bottom, lists the permanent effects
-themselves under the section whose systems granted them. Hover one to see what
-it does at its current size.
+themselves under the section whose systems granted them, and its heading gives
+how many there are. Hover one to see what it does at its current size.
 
 The Modifiers list in the country panel's Information tab leaves these effects
-out. It keeps the timed ones, such as what an event has just done to you, and a
-few others: Nuclear Power, and what a foreign operation is doing to you. A
-system's weekly costs are in the Budget panel's Breakdown tab. Tooltips that
-break down a figure, such as legitimacy, still name every source.
+out, and a line under it gives how many it left out. On your own country an
+arrow beside that line opens the Nation tab. The list keeps the timed effects,
+such as what an event has just done to you, and a few others: Nuclear Power,
+and what a foreign operation is doing to you. A system's weekly costs are in the
+Budget panel's Breakdown tab. Tooltips that break down a figure, such as
+legitimacy, still name every source.
 
 ## How the guide is organized
 

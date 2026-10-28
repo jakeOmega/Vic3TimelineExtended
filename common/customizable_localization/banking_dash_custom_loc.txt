@@ -986,6 +986,42 @@ te_mon_union_state = {
 }
 
 
+# A bloc member's place in its leader's Monetary Union rows (GUI audit
+# BNK-13), evaluated on the member: the leader's view of te_mon_union_state.
+# "Would refuse" is te_monetary_discover_union's own test for its refusers
+# count, so the rows and the count agree.
+te_mon_union_member_status = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_bloc_union_tier_2_plus = no }
+		localization_key = banking_dash_mon_union_member_coop
+	}
+	text = {
+		trigger = { te_mon_is_union_adopter = yes }
+		localization_key = banking_dash_mon_union_member_adopted
+	}
+	text = {
+		trigger = { te_mon_is_union_member = yes }
+		localization_key = banking_dash_mon_union_member_dormant
+	}
+	text = {
+		trigger = {
+			te_mon_union_is_holdout = yes
+			te_mon_union_adopt_score <= 0
+		}
+		localization_key = banking_dash_mon_union_member_refuser
+	}
+	text = {
+		trigger = { te_mon_union_is_holdout = yes }
+		localization_key = banking_dash_mon_union_member_holdout
+	}
+	text = {
+		localization_key = banking_dash_mon_union_member_outside
+	}
+}
+
 # ----------------------------------------------------------------------------
 # §0.12 — the bank's virtual rate, under its own purchases
 # ----------------------------------------------------------------------------

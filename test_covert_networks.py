@@ -230,8 +230,13 @@ class ConsumerTests(unittest.TestCase):
         body = _text(TRIGGERS)
         est = _top_level_block(body, "covert_op_is_established = {")
         full = _top_level_block(body, "covert_op_is_fully_operational = {")
-        self.assertIn("covert_op_effective_duration >= 6", est)
-        self.assertIn("covert_op_effective_duration >= 12", full)
+        # The thresholds are named values (COV-2), so the launch tooltips
+        # print the same 6 and 12 the triggers test.
+        self.assertIn("covert_op_effective_duration >= covert_op_phase_2_month", est)
+        self.assertIn("covert_op_effective_duration >= covert_op_phase_3_month", full)
+        values = _text(ROOT / "common/script_values/covert_warfare_script_values.txt")
+        self.assertRegex(values, r"(?m)^covert_op_phase_2_month = 6$")
+        self.assertRegex(values, r"(?m)^covert_op_phase_3_month = 12$")
         self.assertNotIn("var:iw_duration", est + full)
 
     def test_refresh_phase_uses_effective_duration(self):
@@ -252,11 +257,14 @@ NET_LOC_KEYS = (
     "je_iw_net_header",
     "je_iw_net_header_tooltip",
     "je_iw_net_row_title",
-    "je_iw_net_row_strength",
+    "je_iw_net_row_country",
+    "je_iw_net_row_tt",
+    "je_iw_net_row_strength_value",
     "je_iw_net_row_trend_growing",
     "je_iw_net_row_trend_decaying",
     "je_iw_net_row_trend_holding",
-    "je_iw_net_row_benefit",
+    "je_iw_net_row_ops_value",
+    "je_iw_net_row_head_start",
     "je_iw_net_row_catch",
     "je_iw_net_row_catch_tt",
 )
@@ -350,9 +358,12 @@ class CounterintelligenceTests(unittest.TestCase):
         block = _top_level_block(_text(VALUES), "covert_operation_detection_chance = {")
         target = block.index("add = target_counterintelligence_penalty")
         catch = block.index("add = covert_net_catch_penalty")
-        efficiency = block.index("modifier:country_covert_operation_efficiency_mult")
+        # Efficiency is its own value since the row's breakdown prints it (COV-5).
+        efficiency = block.index("multiply = covert_detection_efficiency_factor")
         self.assertLess(target, catch)
         self.assertLess(catch, efficiency)
+        factor = _top_level_block(_text(VALUES), "covert_detection_efficiency_factor = {")
+        self.assertIn("subtract = modifier:country_covert_operation_efficiency_mult", factor)
 
     def test_catch_penalty_reads_guarded_staging(self):
         block = _top_level_block(_text(VALUES), "covert_net_catch_penalty = {")
@@ -381,10 +392,14 @@ class CounterintelligenceTests(unittest.TestCase):
         self.assertLess(block.index("iw_net_strength_staging value = 0"), zero)
 
     def test_network_row_shows_the_catch(self):
+        # Since the network table (COV-12) the catch is the country cell's
+        # hover, with what it means beneath.
         gui = _text(WIDGET)
-        self.assertIn('text = "je_iw_net_row_catch"', gui)
-        self.assertIn('tooltip = "je_iw_net_row_catch_tt"', gui)
+        self.assertIn('tooltip = "je_iw_net_row_tt"', gui)
         loc = _all_loc()
+        hover = re.search(r"(?m)^ je_iw_net_row_tt:0 .*$", loc).group(0)
+        self.assertIn("$je_iw_net_row_catch$", hover)
+        self.assertIn("$je_iw_net_row_catch_tt$", hover)
         line = re.search(r"(?m)^ je_iw_net_row_catch:0 .*$", loc).group(0)
         self.assertIn("covert_net_catch_display", line)
 

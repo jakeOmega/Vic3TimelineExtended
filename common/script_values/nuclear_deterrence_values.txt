@@ -392,6 +392,24 @@ nd_incident_rate_multiplier = {
 	multiply = nd_incident_doctrine_multiplier
 }
 
+# Display only: the strain and reliability factors of nd_incident_rate_multiplier,
+# one line each in the Incident Exposure hover (nd_risk_breakdown_sgui).
+nd_disp_incident_strain_factor = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_strain }
+		add = { value = var:nd_strain divide = 100 }
+	}
+}
+
+nd_disp_incident_reliability_factor = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_reliability }
+		value = { value = 100 subtract = var:nd_reliability divide = 100 add = 0.5 }
+	}
+}
+
 nd_incident_base_weekly_permille = {
 	value = nd_incident_base_monthly_permille
 	# 12 months to 52 weeks, as two whole numbers: the engine reads at most
@@ -1088,6 +1106,16 @@ nd_display_readiness_code = {
 	}
 }
 
+# The readiness ordered (it moves one step every two weeks toward it): the
+# readiness table tints its row, as the Order button greys on it.
+nd_display_readiness_target_code = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_readiness_target }
+		value = var:nd_readiness_target
+	}
+}
+
 nd_display_authority_code = {
 	value = 1
 	if = {
@@ -1174,6 +1202,31 @@ nd_display_crisis_weeks_left = {
 	}
 }
 
+# The crisis's age in weeks, whichever side we are on (the Stage cell's
+# "Week N of 52"; it lapses at nd_crisis_max_weeks).
+nd_display_crisis_week = {
+	value = 0
+	if = {
+		limit = {
+			nd_is_crisis_owner = yes
+			has_variable = nd_crisis_weeks
+		}
+		add = var:nd_crisis_weeks
+	}
+	else_if = {
+		limit = {
+			nd_is_crisis_target = yes
+			exists = var:nd_crisis_opponent
+		}
+		var:nd_crisis_opponent = {
+			if = {
+				limit = { has_variable = nd_crisis_weeks }
+				add = var:nd_crisis_weeks
+			}
+		}
+	}
+}
+
 # The target's yield pressure, stored on the target by the weekly tick.
 nd_display_yield_pressure = {
 	value = 0
@@ -1198,17 +1251,6 @@ nd_display_yield_pressure = {
 	}
 }
 
-# Any scope: the crises running past the eight the World Crises section lists
-# (global_var:nd_wc_count, written by nd_world_crises_refresh).
-nd_world_crises_unlisted = {
-	value = 0
-	if = {
-		limit = { has_global_variable = nd_wc_count }
-		add = global_var:nd_wc_count
-		subtract = 8
-	}
-	min = 0
-}
 
 # Weeks until the target is pressed again (nd_crisis_weekly_tick fires the
 # event on the tick at which the counter reaches the interval), from either

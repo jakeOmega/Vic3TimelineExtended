@@ -1,6 +1,6 @@
 # Global Warming GUI: Icons
 
-The Global Warming panels' overview and policy rows draw 17 icons of their own, plus a pie pair. They were placeholders during the style-guide pass, and PR #586 painted them. All of them live in `gfx/interface/icons/gw_icons/`. Two marks stay vanilla by design: the in-force check and Treaty-Bound.
+The Global Warming panels' overview and policy rows draw 17 icons of their own, plus a pie pair. They were placeholders during the style-guide pass, and PR #586 painted them. All of them live in `gfx/interface/icons/gw_icons/`. Two marks stay vanilla by design: the in-force check and Treaty-Bound. Two policy rows show placeholders until their own art is painted (GW-12, 2026-10-27): Fossil-Fuel Tariffs and Carbon Removal Support had shared another policy's icon, so at a glance they read as that policy.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/global_warming_widget.gui`, chosen by a display value or a scripted GUI:
 - the overview's cells and pies are in `te_gw_overview_panel`;
@@ -19,7 +19,7 @@ To change one, change its entry, re-render, review, then `write`. The pie fills 
 
 ## Overview: warming tier
 
-One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_code`, at 36 px with the tier's coloured word beneath. The list asked for a glass thermometer on a disc warming in colour. #586 drew both parts, so that only the column and the colour change between tiers.
+One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_code`, at 44 px in Banking's overview cell (`te_banking_ov_cell`, since GW-15), beside the caption, the tier's coloured word and where the next tier begins. The list asked for a glass thermometer on a disc warming in colour. #586 drew both parts, so that only the column and the colour change between tiers.
 
 | Code | Tier | Shows | File |
 |---|---|---|---|
@@ -33,7 +33,7 @@ One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_cod
 
 ## Overview: the other cells
 
-36 px, a word beneath each.
+44 px, in Banking's overview cells, beside the caption and the word.
 
 | Cell | Shown when | Shows | File |
 |---|---|---|---|
@@ -53,10 +53,11 @@ One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_cod
 | Emission Standards | a red-brick smokestack with a round gauge on its side, the needle in the green | `policy_emission_standards.dds` |
 | Climate Adaptation | a grey stone sea wall with a deep blue wave breaking against it | `policy_climate_adaptation.dds` |
 | Reforestation Subsidies | a young sapling planted in a mound of earth | `policy_reforestation.dds` |
-| Carbon Removal Support | shares Renewable Investment's clean-industry artwork | `policy_renewable_investment.dds` |
+| Carbon Removal Support | **placeholder:** the Carbon Capture and Storage technology's icon, `gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds`. To paint: a gray intake tower drawing a blue CO₂ stream down into the ground, proposed `policy_carbon_removal.dds` | `gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds` |
 | Public Transit | a green electric tram, front view, its pantograph on top | `policy_public_transit.dds` |
 | Fossil-Fuel Divestment | a black oil barrel, a gold coin flying up and away from it (the list's red arrow was left out) | `policy_fossil_fuel_divestment.dds` |
 | Green Building Codes | a small red-brick building front with a bright green leaf on its wall | `policy_green_building_codes.dds` |
+| Fossil-Fuel Tariffs | **placeholder:** vanilla's Maximum Tariffs trade icon, `gfx/interface/icons/trade_icons/max_tariffs.dds`. To paint: a customs barrier arm lowered across a coal wagon, proposed `policy_fossil_fuel_tariffs.dds` | `gfx/interface/icons/trade_icons/max_tariffs.dds` |
 
 Beside the name, a 20 px check shows while the policy is in force (play-test round 3; it replaced the "Active"/"Inactive" word) and nothing shows while it is not. It is vanilla's `gfx/interface/icons/generic_icons/green_checkmark.dds`, kept.
 
@@ -74,7 +75,7 @@ The same 20 px check as the policy rows shows while a programme runs.
 
 ## Top Emitters: the row marks
 
-No new art. Each row starts with the leader's flag, vanilla's `tiny_flag` widget (a widget, not a texture: its name on hover, the country on click). A 20 px treaty mark shows while an Enforce Emissions Reduction treaty binds the leader; it is the Treaty-Bound cell's vanilla icon above, `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds`. Our own market's row says "Our market" in words.
+No new art. Each row starts with the country's flag, vanilla's `tiny_flag` widget (a widget, not a texture: its name on hover, the country on click). A 20 px treaty mark shows while an Enforce Emissions Reduction treaty binds the country; it is the Treaty-Bound cell's vanilla icon above, `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds`. Our own country's row says "Our country" in words.
 
 ## Overview: the temperature bar
 

@@ -1,6 +1,6 @@
 # Demographics, Nation tab, Timeline Extended window chrome & system-tab gates — GUI & localization audit
 
-> Part of the 2026-10-27 GUI and localization audit; the index, the cross-cutting findings and the owner questions are in [`../gui_localization_audit.md`](../gui_localization_audit.md). Line numbers are as of the audit and drift as files change; search by key or type name. "Quick fixes" below means the loc-only edits this PR applied.
+> **Status (2026-10-27 wave):** every finding below is done or needs no change; each one's Status line says what changed. Part of the 2026-10-27 GUI and localization audit; the index, the cross-cutting findings and the owner questions are in [`../gui_localization_audit.md`](../gui_localization_audit.md). Line numbers are as of the audit and drift as files change; search by key or type name. "Quick fixes" below means the loc-only edits this PR applied.
 
 ## Top priorities
 - **DEM-1:** both fertility tooltips point at "the figures above" (mean age at childbirth, births to women of 50 and over), but no GUI shows them any more. Their keys sit in `te_unused_l_english.yml` and their gates are unreferenced. Put them back in the tooltip or delete the sentence. (hidden info, high)
@@ -14,7 +14,7 @@
 ## Findings
 
 ### WIN-1. The thirteen greyed-tab checklists read thirteen different ways
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). Every greyed tab's header is the tab's own name spliced from its key, the lead-in is "Not open yet. It opens once:" on all thirteen (the Space Race's and the Seabed's too; the Seabed's timing stays in its own met line), and the condition lines are second-person clauses with no stop: the Tax Code tab got its own line (`te_tax_tt_unlock_code`, "Your taxation law has been carried over into a tax code"), so the ~30 tax tooltips that print `te_tax_tt_code_in_force` keep their sentence; the nuclear line lost its parentheses; the mass-media and urban-center lines say who. The shape is written into `gui_style_guide.md` rule 9.
 - **Category:** style
 - **Where:** every `*_locked_tt` lead-in plus the condition lines the unlock triggers print through `IsValidTooltip` (gates in `common/scripted_guis/te_system_tab_sguis.txt`). Lead-ins: `te_window_tab_space_race_locked_tt`, `te_window_tab_grand_monuments_locked_tt`, `te_window_tab_colonial_empire_locked_tt`, `te_window_tab_seabed_locked_tt` (`te_miscellaneous_l_english.yml:8560-8573`), `te_society_tab_ch_locked_tt` (:8517), `te_market_tab_global_warming_locked_tt` / `te_market_tab_strategic_reserve_locked_tt` (:8045/:8049), `te_military_tab_covert_locked_tt` / `_nuclear_locked_tt` (:8056/:8059), `te_pops_tab_demog_locked_tt` (:8285), `te_budget_tab_banking_locked_tt` (:6605), `te_diplomacy_tab_un_locked_tt` (`te_diplomacy_l_english.yml:113`), `te_tax_tab_locked_tt` (`te_tax_l_english.yml:527`).
 - **Now:** the header, the lead-in and the condition lines each vary:
@@ -30,7 +30,7 @@
 - **Confidence:** high (each string quoted from the file).
 
 ### WIN-2. "These are the journal entry's own panels: a change made here shows there too" on every journal-backed tab's tooltip and the launcher's
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** **Done in #1202; no change needed since.** No tab tooltip carries the sentence, and every Open Journal Entry button says the journal shows the same panels.
 - **Category:** over-explaining
 - **Where:** `te_window_tab_colonial_empire_tt` (:8561), `te_window_tab_grand_monuments_tt` (:8564), `te_window_tab_space_race_tt` (:8574), `te_systems_window_launcher_tt` (:8550) in `te_miscellaneous_l_english.yml`; the same sentence ends `te_diplomacy_tab_un_tt`, `te_budget_tab_banking_tt`, `te_market_tab_global_warming_tt`, `te_market_tab_strategic_reserve_tt`, `te_military_tab_covert_tt`, `te_military_tab_nuclear_tt`, `te_society_tab_ch_tt`, `te_tax_tab_full_tt`, `te_tax_tab_light_tt`.
 - **Now:** every system tab's hover spends its second sentence on an implementation reassurance. On the Space Race tab it is "The milestones are the journal entries' own panels: a change made here shows there too."
@@ -39,7 +39,7 @@
 - **Confidence:** high
 
 ### WIN-3. The launcher's tooltip lists the tab strip in prose
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** **Done in #1202; no change needed since.**
 - **Category:** over-explaining
 - **Where:** `te_systems_window_launcher_tt` (`te_miscellaneous_l_english.yml:8550`), shown by `sidebar_tooltip_area_small` (`gui/te_systems_window.gui:1093`).
 - **Now:** "Nation: what your country carries for good, in one place. Then a tab each for the Space Race, Grand Monuments and the Colonial Empire, the journal entries' own panels (a change made here shows there too), and one for the Seabed." It's three clauses, and the strip says the same once the window is open.
@@ -48,6 +48,7 @@
 - **Confidence:** high
 
 ### WIN-4. The Grand Monuments tab is headed "Monuments"
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). The window's header reads `te_window_tab_grand_monuments`; the entry keeps its short "Monuments" in the journal, and the button's "Opens Monuments in the journal" names the entry, which is right.
 - **Category:** style (naming)
 - **Where:** `gui/te_systems_window.gui:778-784` (`default_header` `text = "je_grand_monuments"`), loc `je_grand_monuments:0 "Monuments"` (`te_journal_entries_l_english.yml:389`); also `te_window_tab_grand_monuments_locked_tt` (header `$je_grand_monuments$`) and `te_window_grand_monuments_open_journal_tt` ("Opens Monuments in the journal").
 - **Now:** the tab reads "Grand Monuments"; its own header, its greyed checklist header and its button tooltip read "Monuments". Every other window tab's header equals its tab name ("Colonial Empire" / `je_colonial_empire`).
@@ -56,6 +57,7 @@
 - **Confidence:** medium (the short JE name may be deliberate for the journal list; the tab header mismatch is not)
 
 ### WIN-5. Three identical "conditions met" keys
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). The window's three tabs and the Market panel's two use `te_system_tab_met_tt`; the two copies are deleted and the tests that named them updated. The Demographics tab's unreachable met branch is left, as the finding says.
 - **Category:** other (redundant loc)
 - **Where:** `te_system_tab_met_tt` (:8547), `te_window_tab_met_tt` (:8565), `te_market_tab_met_tt` (:8047), all "#b Not open yet#!\nIts conditions are met, but its journal entry is not running. It opens at the journal's next check, unless it has already run its course."
 - **Proposed:** the window and Market tabs point at `te_system_tab_met_tt` and the two copies go, so a later wording pass edits one string. Tests pin the names (`test_te_systems_window.py:301-306`, `test_global_warming_layout.py`), so update them in the same change. Also, the Demographics tab's tooltip carries the met branch although `pops_overview.gui:168` notes it can't be reached; harmless.
@@ -63,6 +65,7 @@
 - **Confidence:** high
 
 ### NAT-1. The country panel drops 249 modifiers with no word about where they went
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). `gen_nation_tab.py` writes a third MOD block under the list: "Lasting modifiers not listed: N" while the count is above 0, with a `button_icon_goto` (the tab, then the window) for `Country.IsLocalPlayer`; another country's line has no goto and its own hover, since vanilla's Modifiers tab is shown only for the player. The header keeps vanilla's test (the list or the line shows whenever the country has a modifier). The hover also names the Budget panel's Breakdown tab, since the money carriers are hidden there, not on the Nation tab.
 - **Category:** hidden info
 - **Where:** `gui/00_te_country_panel_information.gui:1004-1032` (the `### MOD: Nation tab` blocks, written by `scripts/generators/gen_nation_tab.py`), filter `te_nation_hidden_filter` (`gui/te_nation_generated.gui:8`, 249 names), count `gui_country_hidden_modifier_count`.
 - **Now:** the Information tab's MODIFIERS list skips every modifier the Nation tab shows, and the header goes too when nothing else is left. A player who remembers a space-race reward in that list ("First on the Moon", `sr_first_moon_landing`) finds it gone, and nothing on the panel says the Nation tab exists. The launcher is a small sidebar button. For a foreign country the same modifiers show nowhere but in breakdowns. The spec accepted that ("until a later version lets the tab show the viewed country", spec § 3), so this finding doesn't reverse it.
@@ -74,6 +77,7 @@
 - **Confidence:** high on the fact, medium on the wording
 
 ### NAT-2. The tab's own list of what the country holds sits collapsed, with no count
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). The header reads `te_nation_sources_header_count` ("Where These Come From: N", spliced); the tab's hover is reworded as proposed.
 - **Category:** hidden info
 - **Where:** `te_nation_sources_panel` (`gui/te_nation_tab.gui:622-735`), header `te_nation_sources_header` "Where These Come From" (`te_miscellaneous_l_english.yml:8231`); tab tooltip `te_window_tab_nation_tt` (:8567).
 - **Now:** the tab's hover promises "the permanent rewards, memberships and policies the country panel's modifier list leaves out", but the only place that names them (icon + name, the modifier's own tooltip) is a collapsed section at the foot. Two of them carry no field and so are in no type row's breakdown either: `cr_cooptation_expired` ("Cooptation Has Run Its Course") and `te_inflation_band_comfort` ("Inflation: Stable Prices"). The collapsed default is the owner's ruling (spec § 10, 2026-10-18: "Keep them, collapsed, in one panel at the bottom"), so this finding doesn't propose reopening it.
@@ -82,6 +86,7 @@
 - **Confidence:** medium
 
 ### NAT-3. The overview's tooltips define the term and point down, instead of giving the reading's cause
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). The five hovers take Banking's shape with the cause under the divider: the capacity's breakdown (plus the authority shortfall when it applies), the ceiling's sources (and a line before the score starts), where the target's terms are (the Demographics tab under its rule, else the terms named), the GDP part and the share that applies, and the spread. The caption "Global Tech" stays, as a short label with the full name now on hover (rule 3, option 2).
 - **Category:** spread-out / style
 - **Where:** `te_nation_ov_override_tt`, `te_nation_ov_wc_tt`, `te_nation_ov_construction_tt`, `te_nation_ov_tech_tt`, `te_nation_ov_jud_tt` (`te_miscellaneous_l_english.yml:8194-8213`), on `te_nation_ov_cell` (`gui/te_nation_tab.gui:240-325`).
 - **Now:** each cell's hover is a definition plus a pointer: "How freely the courts can rule without fear of the government, and the ceiling your court law sets. The Governance section below has the ceiling's sources and what the courts give now." Three of the five captions are already concept links (`[Concept('concept_judicial_independence','Judiciary')]`…), so the definition is there twice. Every cell then repeats its section's first row word for word ("Judiciary / Gaining / 45 → 70" over "Judicial Independence: 45 → 70"), so the overview adds no information that isn't already one screen down. Banking's cells, the exemplar, read `#header Name#!` + one line + `$TOOLTIP_DELIMITER$` + what is pushing the figure (`banking_dash_momentum_tt`, `banking_dash_budget_tt`).
@@ -96,6 +101,7 @@
 - **Confidence:** medium
 
 ### NAT-4. Each score is explained three times: concept, row tooltip, How
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). The Judicial Independence row lost its hover; How's Judiciary, Override and Wealth subsections point at their concepts and keep only what the concept lacks; the Global Tech row's hover keeps its figures and the overview's its reading. **No change** to the Algorithmic Mandate: its label has no concept, so the row's hover is the only live place its rule is written, and How's line is one sentence.
 - **Category:** over-explaining (duplication)
 - **Where:** `te_nation_jud_row_tt` (:8183) vs `concept_judicial_independence_desc` (`te_concepts_l_english.yml:836`) vs `te_nation_how_jud` (:8160); `te_nation_mandate_row_tt` (:8187) vs `algorithmic_mandate_desc` (`te_concepts_l_english.yml:233`) vs `te_nation_how_mandate` (:8162); `te_nation_how_override` (:8163) vs `concept_legislative_override_capacity_desc` + the three `te_nation_override_line_*_tt`; `te_nation_how_wc` (:8176) vs `concept_inheritance_concentration_desc`; `te_nation_tech_row_tt` (:8235) vs `te_nation_how_tech` (:8175) vs `te_nation_ov_tech_tt` (:8208).
 - **Now:** e.g. `te_nation_how_jud`'s second sentence, "In proportion to the score the courts add [concept_legitimacy], lower the [concept_banking_credit_standing] premium, make Capitalists invest more and calm movements that lose a law change", is the concept's second paragraph word for word. The row tooltip's "rises 4 a year … falls 10 a year" is the concept's first paragraph. That concept sits on the row's own label. "Once any great power has researched certain modern technologies" appears in all three of the Global Tech texts.
@@ -107,7 +113,7 @@
 - **Confidence:** medium
 
 ### NAT-5. "Private Construction: excess in force"
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** **Done in #1202; no change needed since.**
 - **Category:** style
 - **Where:** `te_nation_private_row` (`te_miscellaneous_l_english.yml:8224`), `gui/te_nation_tab.gui:540-550`.
 - **Now:** the value is a lowercase phrase that doesn't read as a value, and the list right under it names the modifier again ("Excess [concept_private_construction]", `too_much_private_construction`; or "Overinvestment").
@@ -116,6 +122,7 @@
 - **Confidence:** high
 
 ### DEM-1. The fertility tooltips promise figures the panel no longer shows
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). The line is back in both hovers, under the capital's (the state's) terms, on `te_demog_lx_mab_sgui` / `te_demog_lx_state_mab_sgui`; the five keys left `te_unused`.
 - **Category:** hidden info
 - **Where:** `te_demog_ov_tfr_tt` (Fertility cell, `gui/te_demographics_widgets.gui:1127`) and `te_demog_st_tfr_tt` (the state's), both in `te_miscellaneous_l_english.yml`; the orphaned keys `te_demog_ov_tfr_mab` / `te_demog_st_tfr_mab` / `te_demog_ov_tfr_b50` sit in `te_unused_l_english.yml:683-685`; their gates `te_demog_lx_mab_sgui`, `te_demog_lx_state_mab_sgui`, `te_demog_lx_b50_sgui` (`common/scripted_guis/te_demog_lx_sguis.txt:149-180`) are referenced by no GUI or loc.
 - **Now:** both tooltips say "…the figures above also show mean age at childbirth and births to women aged 50 and over". No figure above (or anywhere) shows them. `te_dg_mab` and `te_dg_lx_b50` are still computed every census, and their loc and gates still exist, but nothing reads them.
@@ -124,6 +131,7 @@
 - **Confidence:** high
 
 ### DEM-2. The fertility tooltip is the How section's Fertility text again, over the table that itemises it
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). Both hovers keep a title, one line (with "late marriage" and "birth spacing") and the figures; How's Fertility text gained family limitation's spread, births on top of the census and births following the body.
 - **Category:** over-explaining
 - **Where:** `te_demog_ov_tfr_tt` (1,816 characters) and `te_demog_st_tfr_tt` (1,606) vs `te_demog_how_fertility` (`te_miscellaneous_l_english.yml`); the term tables `te_demog_ov_tfr_capital` / `te_demog_st_tfr_terms` under them.
 - **Now:** the cell's hover opens with a nine-sentence model ("Wealth sets how many children couples would have with nothing holding them back. Women's legal standing moves that, and two customs lower it: late marriage, … birth spacing, …"). Its first five sentences are `te_demog_how_fertility` almost word for word. Under it, the capital's table lists each of the same terms with its multiplier ("Wealth alone 4.1 / Women's legal standing ×0.95 / Late marriage ×0.88 …"). So the reader gets the model twice before reaching the numbers.
@@ -134,6 +142,7 @@
 - **Confidence:** high
 
 ### DEM-3. How Demographics Works has no Work and Retirement or Longevity topic, so their rules live in the live tooltips
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). Both hosts' How gained Work and Retirement (three notes: the workforce, the pensions, and the fighting-age, youth-bulge and sex-balance rules spliced from their keys) and Longevity (three notes: care and the health laws, the augmentation laws and the gap's politics, backups and uploaded minds), after Causes of Death. Pension Age, Workforce, the Pension Bill, Fighting-Age Men, Youth, the Sex Balance's effects, Longevity Care, the Longevity Gap, Biological Age, Backed Up and Uploaded Minds now keep their title, a line and their figures.
 - **Category:** over-explaining / structure
 - **Where:** `te_demog_sec_how` (`gui/te_demographics_widgets.gui:4724-4845`): ten subsections (`te_demog_how_sub_census` … `_sources`), none for phases 2-3. The rules sit instead in `te_demog_wk_pension_age_tt` (its second paragraph, on linked pensions), `te_demog_wk_workforce_tt` ("in the game's units: the share of working age times…"), `te_demog_youth_rule`, `te_demog_sex_rule`, the `#lore` lines of `te_demog_ov_lx_care_tt` (which health law covers whom, the three augmentation laws), `te_demog_ov_lx_gap_tt` (the unions' reaction), `te_demog_ov_lx_bio_tt` (body vs calendar age) and `te_demog_ov_um_tt` ("Each Nexus level hosts a million minds…").
 - **Now:** a player hovering Pension Age gets 680 characters on how Linked to Average differs from Linked to Common. Hovering Youth gets the bulge formula ("how far the young pass 18% of the people, full at 24%, times how far unemployment goes toward 20%…"), and hovering Sex Balance its whole schedule. These are How-it-works texts (rule 1), and they're the only place the rules are written.
@@ -145,7 +154,7 @@
 - **Confidence:** high on the gap, medium on the split
 
 ### DEM-4. The Causes of Death pie's hover repeats the table beside it
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** **Done in #1202; no change needed since** (the estimation note is on the Deaths column head).
 - **Category:** redundant
 - **Where:** `te_demog_cd_pie_tt` / `te_demog_st_pie_tt` (pie at `gui/te_demographics_widgets.gui:1274`, state at :5439) vs the legend rows `te_demog_cause_row` beside the pie (deaths and share per cause) and the Deaths column head `te_demog_dc_head_deaths_tt`.
 - **Now:** hovering the pie lists the seven shares ("Infection and Hunger: 41% …"), which the table 8 px to its right shows with deaths as well. Its `#lore` note on estimation is the Deaths column head's tooltip again.
@@ -154,7 +163,7 @@
 - **Confidence:** high
 
 ### DEM-5. The pension buttons hand-write their interest-group reactions
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** **Done in #1202; no change needed since.** The `custom_tooltip` around each setting's effect is the setting change, not the modifier, and the hover now prints the modifier's own lines above it, so nothing is hidden. Play-test item 8 in `docs/testing/demographics-playtest.md` checks the lines render.
 - **Category:** style (prose vs engine modifier lines)
 - **Where:** `te_demog_pension_early_tt`, `_raised_tt`, `_linked_average_tt`, `_linked_common_tt` (`te_miscellaneous_l_english.yml:7291-7309`); the reactions are the static modifiers `te_demog_pension_pos_early` … `_linked_common` (`common/static_modifiers/te_demog_modifiers.txt:77-99`), applied by `te_demog_pension_ig_refresh`. The scripted GUIs' effects wrap the change in `custom_tooltip = { text = te_demog_pension_*_effect_tt … }`, so ExecuteTooltip never shows the modifier either.
 - **Now:** "Trade Unions #G +2#! approval, Industrialists #R -1#!." is typed into each tooltip, in a format the engine's lines don't use. The Family Policy measures in the same panel use `[GetStaticModifier('te_demog_ms_child_allowance').GetDesc]`.
@@ -163,6 +172,7 @@
 - **Confidence:** high
 
 ### DEM-6. "N of our states have a youth bulge … each state's subtab shows its own": a list, not a hunt
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`), the full version. `te_demog_country_lists` builds `te_dg_yb_states` (the Youth count's own test, strongest first) and `te_dg_mt_states` (the Metropolis line, largest share first), up to ten each, so the civil-war repair redraws them too; Work and Retirement and Where People Live draw them under their rows on a new `te_demog_state_link_row`, which opens the state as the States table's rows do. The Metropolises count stays live, so it can run ahead of the list by up to a year (play-test item 5).
 - **Category:** list
 - **Where:** `te_demog_ov_youth_tt` (the Youth row, `gui/te_demographics_widgets.gui:4995-5005`), `te_demog_mt_pl_tt` / `te_demog_mt_pl_value` (Metropolises "3 of 21", :2995), `te_demog_wc_top` / `te_demog_wc_bottom` (one state each).
 - **Now:** the Youth row gives a count ("#v 4#! of our states have a youth bulge") and sends the player to open states one by one ("Each state's Demographics subtab shows its own"). Metropolises does the same with four counts by label ("Each state's share … is on its Demographics subtab"). The States table, the exemplar this panel already has, solves exactly that.
@@ -174,7 +184,7 @@
 - **Confidence:** medium (the youth list is the clear win)
 
 ### DEM-7. When the census is taken is told three ways, one of them wrong
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** **Done in #1202; no change needed since** (checked: game start, then each country's and each state's yearly pulse).
 - **Category:** style / accuracy
 - **Where:** `te_demog_tab_first_census_tt` (the greyed tab's checklist line, `te_miscellaneous_l_english.yml:7696`), `te_demog_ov_census_tt`, `te_demog_pending`, `te_demog_st_pending`.
 - **Now:** the checklist says "It is taken at the turn of each year"; the overview says "at the start of the game and then once a year, each country on a day of its own" (the yearly pulse, `te_demog_effects.txt:1747`, and game start, :505); the state says "on a day of its own". The census overview line's tooltip also opens with the count method ("Each state counts its people by single year of age and by sex, scaled to the state's real population…"), which is `te_demog_how_census`'s text.
@@ -183,7 +193,7 @@
 - **Confidence:** high
 
 ### DEM-8. Small consistency points
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** **Done** (2026-10-27 wave, branch `wave/gui-demog`). The first two points were #1202's. The largest cities' rows are built on `te_demog_state_link_row` (a button with the States table's onclicks, highlight and menu, the figure now `|K`); Most and Least Concentrated have a goto in their trend slot, its datacontext under the rows' gate. The Gini's dash note shows only on the pending branch. The youth-bulge and more-men lines print radicals and turmoil red, and the state's lines name the modifier its Modifiers section lists.
 - **Category:** style / redundant
 - **Where / Now / Proposed:**
   - `te_demog_ov_wc_tt` is the hover of the "Score → Target" row **inside** the Wealth section (`gui/te_demographics_widgets.gui:2684`), yet ends "Wealth, below, shows what sets the target." The terms are the very next block. Quick fix: "The terms below set the target."

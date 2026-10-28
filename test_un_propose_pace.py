@@ -94,16 +94,20 @@ class PaceLadderTest(unittest.TestCase):
         for helper, (modifier, base_name) in LADDERS.items():
             base = _vanilla(base_name)
             body = _block(self.effects, helper)
+            # Each branch also mirrors its days in a variable the panel counts
+            # down (the 2026-10-27 audit, UN-8); the mirror holds the same days.
             branches = re.findall(
                 r"\b(if|else_if|else) = \{\s*"
                 r"(?:limit = \{ un_propose_pace_mult < ([\d.]+) \}\s*)?"
-                r"add_modifier = \{ name = (\w+) days = (\d+) is_decaying = yes \}\s*\}",
+                r"add_modifier = \{ name = (\w+) days = (\d+) is_decaying = yes \}\s*"
+                r"set_variable = \{ name = \w+_days value = (\d+) \}\s*\}",
                 body)
             self.assertEqual(len(branches), len(re.findall(r"\badd_modifier\b", body)), helper)
             self.assertEqual([b[0] for b in branches],
                              ["if"] + ["else_if"] * (len(self.reachable) - 2) + ["else"], helper)
             lower = 0.0
-            for kind, upper, name, days in branches:
+            for kind, upper, name, days, mirror in branches:
+                self.assertEqual(days, mirror, helper)
                 upper = float(upper) if upper else math.inf
                 inside = [m for m in self.reachable if lower <= m < upper]
                 with self.subTest(helper=helper, band=(lower, upper)):

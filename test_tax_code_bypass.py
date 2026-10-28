@@ -782,8 +782,9 @@ class CountsAsTest(unittest.TestCase):
 class VanillaJournalEntryTest(unittest.TestCase):
     """Each patched entry is vanilla's (vanilla_parsed, 1.14.5) except its
     `complete`, where the taxation OR becomes a trigger_if on the rule: with the
-    rule on, the original laws or the code counting as one of them; with it off
-    (trigger_else), vanilla's OR unchanged."""
+    rule on, only the code counting as one of the original laws (every country
+    then holds the code, so the laws themselves could never be met); with it
+    off (trigger_else), vanilla's OR unchanged."""
 
     @classmethod
     def setUpClass(cls):
@@ -831,7 +832,7 @@ class VanillaJournalEntryTest(unittest.TestCase):
                     mine["trigger_if"] = rest_ifs if len(rest_ifs) > 1 else rest_ifs[0]
                 # trigger_else binds to the trigger_if just before it: the rule's.
                 self.assertEqual(mine.pop("trigger_else"), {"OR": original})
-                expected = dict(original)
+                expected = {}
                 tips = [{"text": f"te_tax_tt_counts_as_{kind}", f"te_tax_code_counts_as_{kind}": "yes"}
                         for kind in kinds]
                 expected["custom_tooltip"] = tips if len(tips) > 1 else tips[0]

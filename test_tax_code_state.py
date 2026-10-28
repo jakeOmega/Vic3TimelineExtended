@@ -675,7 +675,19 @@ class DisplayValueTest(unittest.TestCase):
         want |= {"te_tax_view_pa_state", "te_tax_view_pb_state"}
         for position in range(1, 9):
             want |= {f"te_tax_view_hist_{position}_{suffix}"
-                     for suffix in ("kind", "inst", "month", "month_y", "month_mo")}
+                     for suffix in ("kind", "inst", "month", "month_y", "month_mo",
+                                    # The code version a row made (GUI audit TAX-21).
+                                    "version", "codever")}
+        # The GUI audit's overview cells (TAX-1): offers waiting, promises failing and the next
+        # deadline, the draft's changes to accept; the summary's "in part" (TAX-4); and each
+        # passed bill's goods and relief (TAX-12).
+        want |= {"te_tax_view_offers_open", "te_tax_view_obl_failing", "te_tax_view_obl_next_due",
+                 "te_tax_view_obl_next_due_y", "te_tax_view_obl_next_due_mo", "te_tax_view_dr_rebase_count",
+                 "te_tax_view_est_nobase_any"}
+        for slot in ("a", "b"):
+            want |= {f"te_tax_view_p{slot}_g_{good}" for good in catalog()}
+            want |= {f"te_tax_view_p{slot}_{suffix}" for suffix in (
+                "goods_taxed", "goods_exempt", "agrel_on", "agrel_pct", "regrel_on", "regrel_pct")}
         # The workbench, review and passage panels' views (Task 8): per instrument,
         # the draft's change against the law in its due month, its expiry and the
         # rate it reverts to, and a passed bill's change in each slot; per catalog

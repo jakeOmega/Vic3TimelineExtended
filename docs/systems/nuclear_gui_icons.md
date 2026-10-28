@@ -1,6 +1,6 @@
 # Nuclear Weapons GUI: Icons
 
-The overview at the top of the Nuclear Weapons journal entry (`je_nuclear_program`) draws 24 icons of its own: one per state of the programme and of the posture, plus the warheads and crisis cells. They were vanilla placeholders through the Nuclear panels' style pass and its play-tests, and PR #586 replaced them. All of them live in `gfx/interface/icons/nuclear_icons/`.
+The overview at the top of the Nuclear Weapons journal entry (`je_nuclear_program`) draws 24 icons of its own: one per state of the programme and of the posture, plus the warheads and crisis cells. They were vanilla placeholders through the Nuclear panels' style pass and its play-tests, and PR #586 replaced them. All of them live in `gfx/interface/icons/nuclear_icons/`. Since the 2026-10-27 audit (NUC-21) the overview is Banking's grid of cells (`te_banking_ov_cell`), each icon filling its cell's 44 px icon box; the Nuclear Powers table (NUC-14) draws the doctrine icons again, 28 px, at the end of each row. One cell, credibility's, still has a placeholder (below).
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/nuclear_overview_widget.gui`. There is one icon widget per state, picked by a display value's code (`EqualTo_CFixedPoint( …ScriptValue('<code value>'), '(CFixedPoint)N' )`). No script reads the paths. `NuclearIconsTest` in `test_nuclear_layout.py` holds each code to its file. It fails on any placeholder left in the overview and on any icon faded to tell it from another. Once the folder is in the tree, it also checks that every file is there.
 
@@ -11,7 +11,7 @@ The overview at the top of the Nuclear Weapons journal entry (`je_nuclear_progra
 - Readiness shares the olive-green missile on a drawn steel pad.
 - Launch authority shares the brass key.
 
-## Row 1: the programme
+## Row 2: the programme
 
 Code: `nuclear_program_display_state` (`common/script_values/extra_script_values.txt`), in the order of the status line's programme sentence (`nuclear_program_status_line`). The cell's hover is that sentence. Every state is drawn at full opacity: the art tells No Programme and Disarmed from their neighbours itself, so the 30% fade the placeholders needed is gone.
 
@@ -27,16 +27,22 @@ Code: `nuclear_program_display_state` (`common/script_values/extra_script_values
 | 7 | Renounced | a pale grey dove with an olive branch over the split warhead | `programme_renounced.dds` |
 | 8 | Disarmed (settlement or NPT) | the warhead, grey, under vanilla's red cross | `programme_disarmed.dds` |
 
-## Row 1: warheads and the crisis
+## Rows 1 and 2: the crisis and the warheads
 
 | Cell | Shown | Shows | File |
 |---|---|---|---|
 | Warheads | always | the warhead alone | `warheads.dds` |
 | Crisis | while in one | the warhead on a red disc, under vanilla's warning mark | `crisis.dds` |
 
-The credibility cell is a meter, not an icon.
+## Row 4: credibility (a placeholder)
 
-## Row 2: the posture (while armed)
+| Cell | Shown | Now | Final art (icon-pipeline subject) | Proposed file |
+|---|---|---|---|---|
+| Credibility | once there is a record | `gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds`, the guarantee article's icon | the steel warhead lying under a brass seal stamped with a handshake, the shared warhead emblem | `credibility.dds` |
+
+The cell was a meter until NUC-21 moved the overview to Banking's cells, which need an icon in every box. Swapping the art in is one `texture` line in `nuclear_overview_widget.gui` and one entry out of `PLACEHOLDERS` in `test_nuclear_layout.py`.
+
+## Rows 3 and 4: the posture (while armed)
 
 Codes: `nd_display_doctrine_code`, `nd_display_readiness_code` and `nd_display_authority_code` (`common/script_values/nuclear_deterrence_values.txt`). Each falls back as the name blocks in `nuclear_deterrence_custom_loc.txt` do. Each cell's hover is the posture row's own tooltip.
 
@@ -67,7 +73,7 @@ The list this page used to be asked for some things the renderer would not draw,
 - **Conditional Delegation** puts the key beside an officer's cap. The list's gloved hands are a risk at icon size.
 - Smaller changes: Unfunded's warhead has no cradle. Renounced's dove is pale grey, because white is lost in the cut-out. Existential's warhead rests on the wall, not behind it. On Warning's and Automatic's keys lie beside the dish and the cabinet, not under or in them.
 
-## Row 3: the nuclear taboo
+## Row 5: the nuclear taboo
 
 No icon of its own. The bar is the projection bar shared with Global Warming (play-test round 3). It has vanilla's `default_progressbar_horizontal` layers and no marker, and draws the change still to come in the bar's own fill at 40% opacity. The trend arrow is vanilla's `trend_up`, `trend_down` or `trend_nochange`, picked by `nd_disp_taboo_trend`. `NuclearIconsTest` allows these three as the only vanilla textures left in the overview.
 

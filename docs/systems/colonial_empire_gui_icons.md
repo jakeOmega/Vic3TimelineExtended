@@ -1,6 +1,6 @@
 # Colonial Empire GUI: Icons
 
-The Colonial Empire overview (`te_ce_overview_panel` in `gui/journal_entry_widgets/colonial_empire_widget.gui`) draws ten icons of its own and a three-disc pie with its legend. The territory list in Colonial Holdings (`te_ce_territory_row`) draws one more. They were vanilla placeholders, or other systems' textures, through the style pass's play-test rounds, and PR #586 replaced them. All of them live in `gfx/interface/icons/colonial_empire_icons/`.
+The Colonial Empire overview (`te_ce_overview_panel` in `gui/journal_entry_widgets/colonial_empire_widget.gui`) draws ten icons of its own, and the territory list's colony icon, in the 44 px icon boxes of four of Banking's cells (`te_banking_ov_cell`, since the 2026-10-27 GUI audit), and a three-disc pie with its legend. The territory list in Colonial Holdings (`te_ce_territory_row`) draws the colony icon too. They were vanilla placeholders, or other systems' textures, through the style pass's play-test rounds, and PR #586 replaced them. All of them live in `gfx/interface/icons/colonial_empire_icons/`.
 
 The colonial-subject list in Colonial Holdings (`te_ce_subject_head` / `te_ce_subject_row`, 2026-10-24) draws only vanilla's art for vanilla things, on purpose: each subject's flag (`tiny_flag`), its subject type's own icon (`[State.GetCountry.GetSubjectType.GetTexture]`) and, over the liberty-desire column, the liberty-desire concept's icon (`gfx/interface/icons/diplomatic_action_icons/liberty_desire.dds`). `ColonialIconsTest` keeps them in its list of vanilla textures.
 
@@ -12,7 +12,7 @@ The colonial-subject list in Colonial Holdings (`te_ce_subject_head` / `te_ce_su
 
 ## Overview: the stability band
 
-One globe of the Earth on a small stand. A drawn tie crosses it from the home coast to the overseas coast, and the tie's state is the band. Shown at 36 px, the band's name beneath. Picked by `colonial_empire_disp_tier`.
+One globe of the Earth on a small stand. A drawn tie crosses it from the home coast to the overseas coast, and the tie's state is the band. Shown in the Band cell's 44 px box, the band's name beside it. Picked by `colonial_empire_disp_tier`.
 
 | Code | Band | Shows | File |
 |---|---|---|---|
@@ -26,10 +26,11 @@ The list asked for the coasts joined by a gold band, then a line, then a taut, c
 
 ## Overview: great-power pressure
 
-One small orange flag on a bare grey rock, on a coloured disc. Shown beside the pie while an escalation applies, 36 px, its word beneath. Picked by `colonial_empire_disp_pressure_level`.
+One small orange flag on a bare grey rock, on a coloured disc. Shown in the Great Powers cell's 44 px box, the escalation's word beside it. Picked by `colonial_empire_disp_pressure_level`; with no escalation (code 0) the isolation flag shows at 25% opacity, as a programme not running does.
 
 | Code | State | Shows | File |
 |---|---|---|---|
+| 0 | No escalation | the isolation flag, dimmed | `gfx/interface/icons/colonial_empire_icons/alert_isolation.dds` |
 | 1 | Diplomatic isolation | the lone flag on its rock, on amber | `gfx/interface/icons/colonial_empire_icons/alert_isolation.dds` |
 | 2 | International consensus | the same flag, smaller, on red, eight white arrows closing in from all sides | `gfx/interface/icons/colonial_empire_icons/alert_consensus.dds` |
 
@@ -37,7 +38,7 @@ The list asked for the flag inside a ring of turned-away figures, and for a roun
 
 ## Overview: the programmes
 
-A row of three, 36 px, at full colour while the programme runs and 25% opacity while it does not. The fade is the design: one file per programme.
+Three in the Programmes cell's 44 px box, 22 px each, two over one, at full colour while the programme runs and 25% opacity while it does not. The fade is the design: one file per programme.
 
 | Programme | Shows | File |
 |---|---|---|

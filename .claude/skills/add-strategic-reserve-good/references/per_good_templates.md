@@ -351,6 +351,16 @@ st_res_<GOOD>_policy_budget_max = {
 
 The shared `st_res_policy_*` constants at the bottom of the file are **not** per-good — don't touch them when adding a good.
 
+### The panel's second pass (three more values and two list entries, 2026-10-27)
+
+At the very end of the file, in the group headed "The panel's second pass": the
+good's `st_res_<GOOD>_purchase_cost` (copy grain's) and one `add` line for it in
+`st_res_total_purchase_cost`; `st_res_<GOOD>_rate_after_up` and
+`st_res_<GOOD>_rate_after_down` (copy grain's pair); and one `if` branch in each
+of `st_res_disp_full_count` (status 5) and `st_res_disp_empty_count` (status 6).
+`test_strategic_reserve_layout.py` (`RateButtonTest`, `OverviewCellsTest`)
+fails if a good is missing from any of them.
+
 ---
 
 ## File 6: `common/scripted_triggers/st_res_triggers.txt` (unlock trigger)
@@ -548,6 +558,8 @@ st_res_adjust_<GOOD>_sgui = {
 
 A good also needs an `st_res_policy_<GOOD>_sgui`, in the lower half of the same file. It is long but entirely mechanical: **copy the `st_res_policy_grain_sgui` block and replace every `grain` with `<GOOD>`.** Nothing else changes — the op codes are identical for every good, and the file header carries the op-code table.
 
+Its `is_shown` ends with `st_res_policy_op_in_force = { GOOD = <GOOD> }` under `exists = scope:op`, which draws the policy and preset in force in the selected look; the copy carries it. Then add the good's two `if` blocks to `st_res_ov_held_sgui` at the end of the file (status 5, `st_res_ov_held_<GOOD>_full`; status 6, `_empty`).
+
 Do not hand-write it from the table; the `is_valid` chain has twenty-four branches and the relative-bound branches (ops 21, 22, 27, 28) reference that good's `_policy_*_limit` script values and the budget branches (ops 31, 51, 71 in `is_valid`; 30/31, 50/51, 70/71 in `effect`) its `_policy_budget_max`, which is exactly where a hand copy goes wrong.
 
 ---
@@ -641,7 +653,6 @@ One `te_st_res_good_row` instance, added inside the `te_st_res_sec_inventory` ty
 	te_st_res_good_row = {
 		datacontext = "[GetScriptedGui('st_res_adjust_<GOOD>_sgui')]"
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "st_res_row_<GOOD>_tooltip"
 
 		blockoverride "row_toggle" {
 			onclick = "[GetVariableSystem.Toggle('st_res_row_<GOOD>_open')]"
@@ -654,6 +665,7 @@ One `te_st_res_good_row` instance, added inside the `te_st_res_sec_inventory` ty
 			visible = "[Not(GetVariableSystem.Exists('st_res_row_<GOOD>_open'))]"
 		}
 		blockoverride "row_name" { text = "st_res_row_<GOOD>_name" }
+		blockoverride "row_stock_tooltip" { tooltip = "st_res_row_<GOOD>_stock_tt" }
 		blockoverride "row_status" { tooltip = "st_res_row_<GOOD>_status" }
 		blockoverride "row_status_idle" {
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_disp_status'), '(CFixedPoint)0' )]"
@@ -681,10 +693,14 @@ One `te_st_res_good_row` instance, added inside the `te_st_res_sec_inventory` ty
 		blockoverride "row_auto" {
 			visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_disp_policy'), '(CFixedPoint)0' )]"
 		}
+		blockoverride "row_auto_tooltip" { tooltip = "st_res_row_<GOOD>_auto_tooltip" }
+		blockoverride "row_rate_short" { text = "st_res_row_<GOOD>_rate_short" }
 		blockoverride "row_stored" { text = "st_res_row_<GOOD>_amount" }
 		blockoverride "row_rate" { text = "st_res_row_<GOOD>_flow" }
+		blockoverride "row_rate_tooltip" { tooltip = "st_res_row_<GOOD>_rate_tt" }
 		blockoverride "row_last" { text = "st_res_row_<GOOD>_last" }
 		blockoverride "row_decay" { text = "st_res_row_<GOOD>_decay" }
+		blockoverride "row_decay_tooltip" { tooltip = "st_res_row_<GOOD>_decay_tt" }
 		blockoverride "row_price" { text = "st_res_row_<GOOD>_price" }
 		blockoverride "row_policy" { text = "st_res_row_<GOOD>_policy" }
 		blockoverride "row_policy_reason" { text = "st_res_row_<GOOD>_policy_reason" }
@@ -734,6 +750,7 @@ One `te_st_res_good_row` instance, added inside the `te_st_res_sec_inventory` ty
 				blockoverride "policy_panel_context" {
 					datacontext = "[GetScriptedGui('st_res_policy_<GOOD>_sgui')]"
 				}
+				blockoverride "policy_value_policy" { text = "st_res_row_<GOOD>_policy" }
 				blockoverride "policy_value_buy_thr" {
 					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_buy_thr').GetValue|+0]"
 				}
@@ -768,11 +785,12 @@ What each part does:
 - `row_toggle` / `row_open` / `row_closed` share one GUI-only key, `st_res_row_<GOOD>_open`: clicking the good's name shows or hides its figures and Policy Settings, and swaps the chevron beside the name. The key is absent until the first click, so a new good's row starts collapsed like the others. `st_res_row_collapse_tooltip` is shared.
 - `row_status` is the status icon's hover (`st_res_row_<GOOD>_status`: the word and the reason); `row_status_idle` / `_storing` / `_withdrawing` / `_blocked` each show one icon on one value of `st_res_<GOOD>_disp_status`, so exactly one is drawn.
 - `row_fill` drives the fill bar; `row_target_marker` / `row_floor_marker` place the two markers and hide each at its end of the bar (the display values above put it there when the policy does not use that bound).
-- `row_auto` shows the lit policy icon over the always-drawn dimmed one.
+- `row_auto` shows the lit policy icon over the always-drawn dimmed one; `row_auto_tooltip` is its hover, the good's policy and what it is doing.
+- The row has no hover of its own (2026-10-27): `row_stock_tooltip` is the Stock bar's (stored, capacity, the markers), `row_rate_tooltip` and `row_decay_tooltip` the expanded Rate Setting and Decay lines' (the rate the hub actually trades; the decay's sources), and `row_rate_short` the rate between the - and + buttons.
 - `row_stored` … `row_policy_reason` are the expanded figures, one loc key each (file 14).
 - `row_history` is the good's fill-by-month chart (`te_history_chart`, shown inside the expanded row): its bars read `te_hist_v_st_res_<GOOD>`, which `te_history_record_strategic_reserve_samples` records (file 7g), and its bar tooltip is `st_res_hist_tt_<GOOD>` (file 14). The tooltip key may read only `ScriptContainer` (gotcha #24; `test_history_chart_tooltip_context.py`).
 - `row_settings_toggle` / `row_settings_open` / `row_settings_closed` share `st_res_policy_<GOOD>_open`, the Policy Settings subsection, collapsed until opened. `row_settings_toggle` is also the policy icon's click, so the icon opens the settings from the table line; `row_settings_shown` shows the subsection under an expanded row, or under a collapsed one while it is open.
-- `row_policy_panel` nests the shared `widget_je_st_res_policy_panel` with the good's `st_res_policy_<GOOD>_sgui` as its datacontext and its eight value cells. The value cells put their data function inline in `text` rather than behind a loc key, which is why adding a good needs no per-setting localization.
+- `row_policy_panel` nests the shared `widget_je_st_res_policy_panel` with the good's `st_res_policy_<GOOD>_sgui` as its datacontext, the policy in force on its "Policy:" line (`policy_value_policy`) and its eight value cells. The value cells put their data function inline in `text` rather than behind a loc key, which is why adding a good needs no per-setting localization.
 
 **`.gui` files need a UTF-8 BOM** — `bom_normalizer` adds one on the next reload, but keep it if you rewrite the file wholesale.
 
@@ -818,10 +836,19 @@ All row expressions use `JournalEntry.GetCountry…`, **not** `ROOT…` — the 
  st_res_row_<GOOD>_flow:0 "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0]/wk"
  st_res_row_<GOOD>_last:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1]/wk"
  st_res_row_<GOOD>_decay:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_annual_decay_rate')|%1]/yr ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1]/wk)"
- st_res_row_<GOOD>_tooltip:0 "#header @<GOOD>! <GOOD_DISPLAY> Reserve#!\n#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|1]%)\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0] / week\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|+1] / week\n#bold Net movement last week:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1] / week\n#bold Decay rate:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_<GOOD>_decay_add')] of the stockpile per year\n#bold Weekly decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1] / week\n#bold Hub flow cap:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / week per good\n#bold Hub staffing:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\n\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_reason_text')]\n\n#bold Reserve policy:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_text')]\n[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_reason_text')]\n#bold National market price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_rel')|%0] against base price (this is the market the hub's purchases and sales clear on)\n#bold Averaged price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_signal')|+0]% against base ([JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_price_memory').GetValue|0]-week average — the figure the policy acts on)\n#bold Response ramp:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_ramp').GetValue|0] points past each threshold (0 = full flow at the threshold)\n#bold Price signal at the last review:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_policy_price').GetValue|+0]%\n\n#italic Click the good's name to expand this row for stock, flow, decay and policy details; click it again to collapse it.#!"
+ st_res_row_<GOOD>_stock_tt:0 "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|0]%)\n$st_res_row_stock_markers_tt$"
+ st_res_row_<GOOD>_rate_tt:0 "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|+1]#! a week"
+ st_res_row_<GOOD>_decay_tt:0 "#bold Decay:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_<GOOD>_decay_add')] of the stockpile a year"
+ st_res_row_<GOOD>_auto_tooltip:0 "#bold [concept_st_res_policy]:#! $st_res_row_<GOOD>_policy$\n$st_res_row_<GOOD>_policy_reason$\n#italic Click to show or hide its settings.#!"
+ st_res_row_<GOOD>_rate_short:0 "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+K]"
+ st_res_row_<GOOD>_rate_up_tt:0 "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_<GOOD>_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_<GOOD>_rate_after_up')|+0]#! a week"
+ st_res_row_<GOOD>_rate_down_tt:0 "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_<GOOD>_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_<GOOD>_rate_after_down')|+0]#! a week"
+ st_res_row_<GOOD>_rate_stop_tt:0 "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_<GOOD>_rate').GetValue|+0]#! → #v 0#! a week"
+ st_res_ov_held_<GOOD>_full:0 "@<GOOD>! <GOOD_DISPLAY>: full"
+ st_res_ov_held_<GOOD>_empty:0 "@<GOOD>! <GOOD_DISPLAY>: empty, with a release set"
 ```
 
-`amount`, `flow`, `last` and `decay` are **value cells** of the expanded row: the labels beside them (Stored, Rate Setting, Last Week, Decay) are shared keys (`st_res_row_label_*`), so these carry only the figure. `st_res_row_<GOOD>_decay`'s `%N` is per good: enough decimals to show the good's finest decay step, and no more. Grain moves in 5 pp steps (`%0`), oil and Chemicals in 0.05–0.25 pp steps (`%2`), everything else in 0.1–0.7 pp steps (`%1`, as above). Too few decimals and a tech's cut rounds away on the row. The row tooltip's *Decay rate* line carries the exact figure with a hoverable per-source breakdown.
+`amount`, `flow`, `last` and `decay` are **value cells** of the expanded row: the labels beside them (Stored, Rate Setting, Last Week, Decay) are shared keys (`st_res_row_label_*`), so these carry only the figure. `st_res_row_<GOOD>_decay`'s `%N` is per good: enough decimals to show the good's finest decay step, and no more. Grain moves in 5 pp steps (`%0`), oil and Chemicals in 0.05–0.25 pp steps (`%2`), everything else in 0.1–0.7 pp steps (`%1`, as above). Too few decimals and a tech's cut rounds away on the row. The Decay line's hover (`st_res_row_<GOOD>_decay_tt`) carries the exact figure with a hoverable per-source breakdown. The rate buttons' three `_tt` keys are the bases' `custom_tooltip`s (`st_res_increase_rate_base` and its siblings), rendered through the shared button tooltips' `ExecuteTooltip`, so they read `THIS`, the country, not `JournalEntry`.
 
 `@<GOOD>!` is the goods texticon — confirm it exists with `grep -n "icon = <GOOD>$" "$VIC3/game/gui/goods_texticons.gui"` (a mod-only good needs an entry in `gui/zzz_extra_goods_texticons.gui` instead).
 

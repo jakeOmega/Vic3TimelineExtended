@@ -618,18 +618,19 @@ class StateCardViewTests(unittest.TestCase):
         row = self.type_body("gm_tr_row_short")
         self.assertNotIn("gm_tr_picture", row, "no pictures")
         self.assertIn('tooltip = "gm_tr_short_tt" text = "gm_tr_short_line"', row)
-        # 392 + 6 + 112 = the card's 510 inside its margins.
+        # 374 + 6 + 130 = the card's 510 inside its margins: the button at the
+        # row size (17) fits "Bring It Home" (GM-17).
         self.assertIn("spacing = 6", row)
-        self.assertIn("minimumsize = { 392 -1 } maximumsize = { 392 -1 }", row)
-        self.assertIn('blockoverride "tr_button_layout" { size = { 112 22 } parentanchor = vcenter }', row)
-        self.assertEqual(392 + 6 + 112, 530 - 2 * 10)
+        self.assertIn("minimumsize = { 374 -1 } maximumsize = { 374 -1 }", row)
+        self.assertIn('blockoverride "tr_button_layout" { size = { 130 26 } parentanchor = vcenter }', row)
+        self.assertEqual(374 + 6 + 130, 530 - 2 * 10)
         # The same scripted GUI, shown and run the same way, as the Full row's button.
         pick = r'blockoverride "tr_button" \{ (.*?) \} blockoverride "tr_button_text"'
         self.assertEqual(re.search(pick, row).group(1), re.search(pick, self.type_body("gm_tr_row_site")).group(1))
 
     def test_the_button_keeps_its_size_everywhere_else(self):
         btn = self.type_body("gm_tr_button", "button")
-        self.assertIn('block "tr_button_layout" { size = { 200 26 } parentanchor = hcenter margin_top = 2 }', btn)
+        self.assertIn('block "tr_button_layout" { size = { 200 28 } parentanchor = hcenter margin_top = 2 }', btn)
         self.assertIn('block "tr_button_text_width" { max_width = 190 }', btn)
         for row in ("gm_tr_row_held", "gm_tr_row_site"):
             self.assertNotIn("tr_button_layout", self.type_body(row), row)
@@ -639,8 +640,10 @@ class StateCardViewTests(unittest.TestCase):
         self.assertIn('tooltip = "gm_tr_row_site_value_tt" text = "gm_tr_row_site_value"', site)
         L = loc()
         self.assertEqual(L["gm_tr_row_site_value"], "[concept_grandeur]: #v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_grandeur')|0]#!")
-        for word in ("concept_grandeur", "aggregated", "Timeline Extended", "Journal Entry"):
+        for word in ("concept_grandeur", "aggregated", "Timeline Extended"):
             self.assertIn(word, L["gm_tr_row_site_value_tt"], word)
+        # Style rule 9: name the tab, not the journal entry (GM-16).
+        self.assertNotIn("Journal Entry", L["gm_tr_row_site_value_tt"])
         for word in ("concept_grandeur", "concept_prestige", "concept_cultural_pull", "Armed Forces"):
             self.assertIn(word, L["gm_state_tr_summary_tt"], word)
 
@@ -1254,14 +1257,26 @@ class OurMonumentsListTests(unittest.TestCase):
                       promote)
 
     def test_the_section_lists_primaries_then_secondaries(self):
-        sec = squash(strip_comments(raw_block_at(read(WIDGET), r"(?m)^\ttype te_gm_sec_monuments = flowcontainer \{")))
-        first = sec.find("GetList('gm_states')")
-        second = sec.find("GetList('gm_monuments_held')")
-        self.assertNotEqual(first, -1)
-        self.assertGreater(second, first)
+        """Our Monuments and Awaiting a Decision (GM-3, owner 2026-10-27) each
+        list the states' monuments, then the secondaries; a contested
+        secondary is Awaiting a Decision's, with its three choices."""
+        widget = read(WIDGET)
+        for sec_name in ("te_gm_sec_monuments", "te_gm_sec_decisions"):
+            sec = squash(strip_comments(raw_block_at(widget, rf"(?m)^\ttype {sec_name} = flowcontainer \{{")))
+            first = sec.find("GetList('gm_states')")
+            second = sec.find("GetList('gm_monuments_held')")
+            self.assertNotEqual(first, -1, sec_name)
+            self.assertGreater(second, first, sec_name)
+        rest = squash(strip_comments(raw_block_at(widget, r"(?m)^\ttype te_gm_sec_monuments = flowcontainer \{")))
         self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
-                      "blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
-                      "blockoverride \"mon_choices\" {", sec)
+                      "visible = \"[NotEqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
+                      "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } }",
+                      rest)
+        decide = squash(strip_comments(raw_block_at(widget, r"(?m)^\ttype te_gm_sec_decisions = flowcontainer \{")))
+        self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
+                      "visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
+                      "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
+                      "blockoverride \"mon_choices\" {", decide)
 
     def test_the_row_says_where_it_stands_only_where_asked(self):
         gui = strip_comments(read(TR_GUI))

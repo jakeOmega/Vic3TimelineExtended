@@ -44,6 +44,7 @@ against the generators.
 ## Findings
 
 ### SPC-1. Greyed buttons in every colony, fleet and Space Command row hide their reason
+- **Status:** done (2026-10-27): both generators' button helpers and the ten hand-written buttons compose `IsValidTooltip`, `te_tt_break` and `ExecuteTooltip`; the pick and target hovers open with the reason. The `is_valid` texts are requirements, the six colony scripted GUIs' bare triggers are wrapped, and `sr_mod_cannot_queue_tt` is three generated triggers, one line each.
 - **Category:** hidden info
 - **Where:** generator helpers `scripts/generators/gen_space_fleets.py:1490` (`_button`: `tooltip = _op(sgui, "ExecuteTooltip", n)`) and `gen_solar_sites.py:2402, 2418, 2668, 2686, 2711, 2717, 2743, 2747` (`_sgui_call(..., "ExecuteTooltip", site)`); counts in the output: `sr_sites_generated_rows.gui` 379 `enabled =` / 0 `IsValidTooltip`, `sr_fleets_generated_rows.gui` 81 / 0. Hand-written: `space_race_widget.gui:2985-3037` (Emigration −/+), `:4618-4649` (Launch, Auto on/off), `:4661-4710` (build mix ×5).
 - **Now:** a greyed Go shows only `sr_fl_go_tt` ("The fleet leaves for its destination…"). It never shows "The fleet is refitting" (`sr_fl_refitting_tt`), "Nothing leaves Earth: it is blockaded…" (`sr_fl_earth_barred_tt`) or "The leg can't leave this month…" (`sr_fl_short_tt`). Those clauses already sit in `sr_fleet_go_sgui`'s `is_valid` (`common/scripted_guis/sr_fleet_sguis.txt:59-72`). A greyed module "+" shows "Queue one more level…" without saying the queue is full or the slots are used. A greyed Emigration "−" hides "Emigration is already off." (`sr_emig_at_lowest_tt`). Mission Control's own buttons (`:901-971`) and the Seabed buttons (`te_seabed_widgets.gui:154, 174`) already use the right recipe.
@@ -58,7 +59,7 @@ against the generators.
 - **Confidence:** high
 
 ### SPC-2. Defences and Spaceport tooltips still say fleets are not in the game
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27): the loc part in #1202; the module tooltips now link `[concept_sr_space_fleet]`, `[concept_sr_module]` and `[concept_sr_integrity]` in place of re-teaching them.
 - **Category:** other (stale/wrong text), over-explaining
 - **Where:** loc `je_space_race_widget_mod_def_tt` (`te_journal_entries_l_english.yml:1092`), `je_space_race_widget_mod_port_tt` (`:1094`), shown on every Colony Modules "Def"/"Port" level cell (`sr_sites_generated_rows.gui`, e.g. the Venus row's `mod_def_level`) and on the column heads (`space_race_widget.gui:3751, 3759`); `sr_mod_queue_def_tt` / `sr_mod_queue_port_tt` (`te_miscellaneous_l_english.yml:6074, 6076`), the "+" buttons' effect.
 - **Now:** "Will be what an enemy fleet closing on the colony has to beat. Space fleets are not in the game yet, so Defences do nothing for now." Under Full Colonies, Defences fire (`je_space_race_widget_def_level_tt`: "Each fires 15 strength at factor 1.5…") and Spaceports dock fleets (`sr_fl_month_at`; integrity regains `sr_integrity_regain_port` = 10 against 5, `sr_fleet_values.txt:158-159`). The player guide already states it correctly (`docs/player_guide/16-space.md:610-611`).
@@ -67,6 +68,7 @@ against the generators.
 - **Confidence:** high
 
 ### SPC-3. No concepts for solar colonization; the same rules are explained inline, often twice
+- **Status:** done (2026-10-27): thirteen concepts (module, colony fleet, space fleet, ship role, Space Command, drive, launch window, colony autonomy, free colony, blockade, integrity, marines, program estimate), nested Defenses → space fleet → ship role → Space Command; the tooltips that re-taught them link them, and each build-mix button names its role (`sr_sc_mix_step_<role>_tt`). One short concept per role followed at the owner's word (2026-10-27): Warship, Rapid Response Ship, Siege Ship, Assault Carrier and Tender, linked from the ship role concept, the build-mix buttons and the fleet's propellant and supply hovers. `sr_fl_posture_tt` keeps its four postures, since the button steps through them and the hover is what the click will do.
 - **Category:** over-explaining, style
 - **Where:** `common/game_concepts/extra_concepts.txt:72-78` (only `concept_space_race`, `_space_milestone`, `_solar_colonization`, `_sr_approach`, `_sr_funding`, `_sr_setback_risk`; plus `concept_orbital_debris`). Inline teaching:
   - `sr_sc_mix_step_tt` (`te_miscellaneous_l_english.yml:6134`) is every build-mix button's tooltip. Every one lists all five roles' fire, supply and special rules, and none says which role it steps.
@@ -91,6 +93,7 @@ against the generators.
 - **Confidence:** high (the gap); medium (exact concept set)
 
 ### SPC-4. Explanatory paragraphs open seven live colony sections; How the Space Race Works covers none of colonization
+- **Status:** done (2026-10-27): How Solar Colonization Works (`te_sr_sec_how_colonies`, `sr_panel_how_colonies_open`, seven subsections) holds the rules; the live sections keep only state lines; `HowItWorksTest` covers the colony sections.
 - **Category:** over-explaining, style (rule 1, rule 7)
 - **Where:** `te_sr_note` at the head of Solar System (`space_race_widget.gui:2681`, `je_space_race_widget_solar_system_note` `:1305`), Settlers (`:2965`, `settlers_note` `:1299`, plus `settlers_crews_note`/`agi_note` `:3058-3065`), Colony Autonomy (`:3336`, `autonomy_note` `:820`), Colony Modules (`:3794`, `modules_note` `:1106`), Space Command (`:4563`, `sc_note` `:1270`), Fleets (`:4745`, `space_fleets_note` `:1308`) and Colony Defences (`:4979`, `defences_note` `:928`). The How section (`te_sr_sec_how`, `:5694`) has eight subsections: approach, funding, setbacks, first, rivals, programme, powers, orbit.
 - **Now:** a returning player with Full Colonies scrolls past seven paragraphs, for example "Pick a fleet's destination, then Go. A fleet travels at its drive's pace, spending propellant, and can't be stopped on the way…", before each section's rows. `test_space_race_layout.py:461` (`HowItWorksTest`) forbids `te_sr_note` only in `te_sr_sec_control`, `te_sr_sec_rivals` and the overviews. The colony sections arrived later and were never added to it.
@@ -99,6 +102,7 @@ against the generators.
 - **Confidence:** high
 
 ### SPC-5. A colony's facts are spread over six sections; the colony name appears six times
+- **Status:** done (2026-10-27): one Colonies section (`te_sr_sec_colonies`) with a view switch (`sr_colony_view`: People, Modules, Autonomy, Defenses), a two-line generated row per held world, the section figures above the rows for their view, and the specializations on the name's hover. Our Colonies, Settlers, Colony Modules, Colony Autonomy and Colony Defences are gone.
 - **Category:** spread-out/redundant
 - **Where:** `te_sr_solar_colonization_status` (`space_race_widget.gui:7129-7137`) stacks, for the same world:
   - Our Colonies (`:1329`, 68 hand-copied specialization rows, `:1375-2421`);
@@ -113,6 +117,7 @@ against the generators.
 - **Confidence:** medium (on the design; high that the spread is real)
 
 ### SPC-6. The colonization overview shows the programme, not what needs attention
+- **Status:** done (2026-10-27): four `te_banking_ov_cell` cells under the colonization overview (Colonies, Defense under Full, Modules, Next Window) that name what is due: the restless colony by name, what threatens which colony, an idle queue, the months to the window; their hovers list every case (`sr_colony_overview_sgui`).
 - **Category:** spread-out/redundant (summary → action)
 - **Where:** `te_sr_solar_colonization_overview` (`space_race_widget.gui:6943`): state, risk, stage, Next Colony bar, Staged in Orbit, worlds pie, programme row.
 - **Now:** everything a player acts on is several sections down or arrives only by event. Examples: a colony at autonomy ≥ 75 demanding self-government; one under assault, blockaded or occupied; Earth blockaded or the launch site lost (red notes inside Space Command, `:4567-4574`); a hostile fleet inbound (only `space_race_events.100`, `sr_disp_fl_alert_months`); the module queue empty while fabrication stocks points; the next launch window (Mission Control's Next Windows).
@@ -127,6 +132,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SPC-7. Target sits far from the destination it changes; world rows give no hover on what a world offers
+- **Status:** done (2026-10-27): Solar System sits under Colony Fleets, open, filtered to the worlds we can act on with a Show all toggle; Colony Fleets reads as value rows (Our target with Clear, Next fleet, Drive); each world's name hover gives its stage, specializations, transit by our drive and next window (which covers (d)).
 - **Category:** spread-out/redundant, hidden info
 - **Where:** Colony Fleets' destination lines (`space_race_widget.gui:2773-2784`, `je_space_race_widget_cf_destination_target/auto/auto_contested`, `te_journal_entries_l_english.yml:825-827`: "…Pick one with Target in the Solar System list"). Solar System is collapsed by default (`sr_panel_solar_system_open`, `:2668-2679`) and is the last of nine colony sections (`:7137`). `te_sr_site_row` (`:2444`): `site_name` (`:2464-2472`) has no tooltip. Next Windows is script-concatenated text in Mission Control (`gui/sr_launch_window_widgets.gui:38-55`, `sr_launch_windows_sgui`).
 - **Now:** to retarget, a player reads "Our next colony fleet goes to Ceres… Clear it there", scrolls past six sections, opens Solar System and finds the row. Hovering a world's name shows nothing: no stage, no specializations offered, no transit by our drive, no next window. Those come only after founding, or from Next Windows in a different section. The destination lines are live state, but they are drawn in the `#lore` note style (rule 7).
@@ -138,18 +144,20 @@ against the generators.
 - **Effort:** medium (reorder and filter; generator tooltips; small loc)
 - **Confidence:** high (the hidden hover and the distance); medium (the exact layout)
 
-### SPC-8. The Space Race tab buries our milestone under the other powers, and shows debris and rivals twice
+### SPC-8. The Space Race tab buries our milestone under the other powers, and shows debris twice
+- **Status:** done (2026-10-27, as the owner revised it): the tab opens with the running milestones, each keeping its overview, Mission Control and Rivals, then Space Powers, Orbit and How; debris shows once, in Orbit, through `block "sr_debris"` overridden empty in the tab's milestone instances.
 - **Category:** spread-out/redundant
 - **Where:** `gui/te_systems_window.gui:362-372` (Space Powers, then Orbit, then the milestone blocks). `te_sr_sec_powers` (`space_race_widget.gui:5472`, up to 9 rows of 50) and `te_sr_sec_rivals` (`:1127`) both appear in the tab. `te_sr_debris_row` sits in both `te_sr_sec_orbit` (`:5647`) and every milestone's Mission Control (`:998`).
-- **Now:** opening the tab, the player first sees up to nine power rows and five Orbit rows, then the overview and Mission Control of the milestone they are running: the summary they act on is a screen down. With two milestones running, the debris line appears three times. A rival appears both in Space Powers (its furthest milestone's band) and in Rivals (this milestone's band). The two often show the same figure, and `je_space_race_widget_how_powers` (`:1058`) says it is "the same band as the Rivals list".
-- **Proposed:**
-  - Order the tab as milestone blocks first (each with its overview, as in the journal), then Space Powers and Orbit, then How. Space Powers is new (#1147, 2026-10-25, "not yet seen in game") with no owner placement decision recorded.
-  - In the tab, drop the per-milestone Rivals (it stays in the journal), or keep only its "the first" information, which the overview already carries. Space Powers is the fuller list.
+- **Now:** opening the tab, the player first sees up to nine power rows and five Orbit rows, then the overview and Mission Control of the milestone they are running: the summary they act on is a screen down. With two milestones running, the debris line appears three times. A rival appears both in Space Powers and in Rivals, but not with the same figure: Space Powers gives its furthest milestone under way, Rivals its progress on this milestone (the owner, 2026-10-27).
+- **Proposed** (as the owner revised it, 2026-10-27):
+  - Order the tab as milestone blocks first, each with its overview, Mission Control and Rivals directly below, then Space Powers and Orbit, then How.
+  - Keep Rivals in the tab's milestone blocks: it is each power's progress on this milestone, which Space Powers doesn't show. (The audit's first proposal, dropping it from the tab, was wrong.)
   - Give `te_sr_sec_control` a `block "sr_debris"` around `te_sr_debris_row`, overridden empty by the tab's milestone instances, so the tab shows debris once, in Orbit.
 - **Effort:** medium (reorder, two blockoverrides, `test_te_systems_window.py` / `test_space_race_layout.py`)
 - **Confidence:** medium
 
 ### SPC-9. Rivals (5 slots) and Space Powers (8 slots) are fixed rows with "+N more" on hover; a list would show everyone
+- **Status:** done (2026-10-27): `sr_rivals_list_<m>` and `sr_powers_list`, built monthly with `ordered_country` (`min`/`max`, `check_range_bounds = no`), drawn as datamodels of capitals; "+N more" and both scripted GUIs are gone. `TE_SELF_CHECK sr_powers_list` and the accessor chain are on `docs/testing/space-race-playtest.md`.
 - **Category:** list
 - **Where:** `te_sr_sec_rivals` rows `:1155-1269` (`sr_rival_<m>_1..5`, per milestone ×8 in `te_sr_<m>_status`); `te_sr_sec_powers` rows `:5518-5605` (`sr_power_1..8`); "+N more" via `sr_rivals_sgui` / `sr_powers_sgui` ExecuteTooltip.
 - **Now:** these were fixed slots because `.gui` "has no verified way to list countries" (header comment, `:66-67`, gotcha #15). Since then a datamodel of **states** from a script list has been proven: Demographics' `GetList('te_dg_states_top')` with `datacontext = "[Scope.GetState]"`. `State.GetCountry` from a stored capital is the proven route these rows already use (`Var('sr_power_1').GetState`).
@@ -158,6 +166,7 @@ against the generators.
 - **Confidence:** medium (the accessor chain is new in this combination)
 
 ### SPC-10. The rival and power estimate hovers repeat a four-sentence explanation in nine keys
+- **Status:** done (2026-10-27): `concept_sr_estimate` holds the band rules; the rival and power hovers name it.
 - **Category:** over-explaining
 - **Where:** `je_space_race_widget_rival_tt_<m>` ×8 (`te_journal_entries_l_english.yml:1249-1256`), `je_space_race_widget_power_est_tt` (`:1151`), `je_space_race_widget_how_rivals` (`:1060`).
 - **Now:** "#bold An estimate, not a report.#! From what X has announced, its programme stands between 34% and 84% of the goal (the marker: 59%). The band is ±25% of the goal, and the true figure is always inside it; where in the band the marker sits is drawn again once a year. An intelligence network in the country narrows the band: ±10% at strength 50, ±5% at 75." The band is already drawn on the row and its range printed beside it.
@@ -166,6 +175,7 @@ against the generators.
 - **Confidence:** high
 
 ### SPC-11. The Space Race panel is off the house type ladder (rows 14, cells and the overview 12)
+- **Status:** done (2026-10-27): `te_sr_fontsize_row/heading/overview` (17/20/16) at the head of the file; every type uses them; widths re-budgeted (Safe and Ambitious take two lines in the overview), and `test_space_race_labels.py` measures every label against its cell at the template sizes.
 - **Category:** style (rule 3)
 - **Where:** `space_race_widget.gui` uses `fontsize_medium` (14) ×56 and `fontsize_small` (12) ×73: `te_sr_text` / `te_sr_value_row` / `te_sr_note` (`:128-220`, rows 14); `te_sr_ov_icon_label` (`:269`, overview words 12); `te_sr_action_button` (`:237`, 12); every fleet, location and module column and every row button (12). The generated rows follow the types.
 - **Now:** Seabed (`te_seabed_fontsize_*`, `te_seabed_widgets.gui:22-32`), Banking, Demographics and the Nation tab use rows 17, headings 20 and overview 16. The colony sections were written after the 2026-10-17 rule. Fleet and module figures a player decides on are at 12.
@@ -174,7 +184,7 @@ against the generators.
 - **Confidence:** high (the inconsistency); medium (that every table can fit at 17 without SPC-5)
 
 ### SPC-12. Labels and column heads with a hover are not marked hoverable
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27): the loc part in #1202; `te_sr_value_row` marks its label through a `label_format` block, emptied by rows without a hover (`HoverMarkTest`).
 - **Category:** hidden info (rule 3)
 - **Where:** `te_sr_value_row`'s label (`space_race_widget.gui:202-210`) has no `#tooltippable`. Rows carrying a `tooltip` include: Estimate (`:988`), Settlers a month, People off Earth (`:3041, 3050`), Free colony trade (`:3340`), the four Colony Modules rows (`:3798-3825`), the four Space Command rows (`:4576-4605`) and the four Orbit rows (`:5649-5676`). The column heads with a hover: Crew, I, II, Hab, Port, Def (`:3713-3760`), Strength, Drive, km/s, Supply, Marines (`:3891-3929`), Others, Inbound (`:4277-4291`).
 - **Now:** nothing tells the player that "Estimate", "Upkeep" or "km/s" open a breakdown. Siblings in the same panel do mark it inline ("#tooltippable Staged in Orbit#!", "#tooltippable Next Windows#!").
@@ -183,7 +193,7 @@ against the generators.
 - **Confidence:** high
 
 ### SPC-13. Stage names differ between the panel, the stage profile and the concept; the concept lists stages that don't exist
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done: the loc part in #1202 was the whole fix; the stage profiles now also link `[concept_sr_launch_window]` (SPC-3).
 - **Category:** style (naming), other (stale)
 - **Where:** `je_space_race_widget_colonies_stage_1..5` (`te_journal_entries_l_english.yml:843-847`: "Stage 1: Mars & Asteroids", "Stage 2: Jupiter System & Venus"…) against `je_space_race_solar_colonization_status_stage1..5` (`:789-793`, the overview Stage hover and Mission Profile: "Stage 1: Inner Solar System", "Stage 2: Gas Giant Frontier", "Stage 3: Mid-System Expansion", "Stage 4: Ice Giant Frontier"). `concept_solar_colonization_desc` (`te_concepts_l_english.yml:892`) gives five stages that match neither: "near-Earth asteroids and Lagrange points, Mars and lunar settlements, outer planet moons, dwarf planets and distant bodies, and multi-generation colonies". The real stages are in `gen_solar_sites.SITES` (`scripts/generators/gen_solar_sites.py:106-139`).
 - **Proposed:** the Quick fixes table gives the profile headings the panel's names and rewrites the concept from the table. `concept_space_race_desc` (`:896`) is also stale: it gives only "a Safe or Ambitious approach" (no Standard, no `[concept_sr_approach]`), skips the Deep-Space Probe, and doesn't mention setbacks. `concept_space_milestone_desc` (`:894`) says each milestone needs "sufficient space program funding to complete", but funding speeds the pace, which never drops below 0.5 a month (`je_space_race_widget_pace_tt`). Both are rewritten in the table.
@@ -191,7 +201,7 @@ against the generators.
 - **Confidence:** high
 
 ### SPC-14. Mission Profile restates the approach the overview shows; "Approach" means two things
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done: the loc part in #1202 was the whole fix.
 - **Category:** spread-out/redundant, style (naming)
 - **Where:** `je_space_race_<m>_status_{default,safe,ambitious}` ×21 (`te_journal_entries_l_english.yml:670-808`), read through `sr_<m>_profile` custom loc (`common/customizable_localization/space_race_custom_loc.txt`) into Mission Control's Mission Profile (`space_race_widget.gui:1020`); the moon-landing site profiles `je_space_race_moon_landing_status_{equatorial,far_side,shackleton,tranquility}` (`:737-741`).
 - **Now:** under Safe, the overview's state cell reads "Safe −120/wk", the Approach buttons grey Safe, and Mission Profile opens "#bold Approach:#! Safe\n#bold Status:#! …". The landing-site profiles use "#bold Approach:#!" for the landing plan ("Methodical survey and landing at a well-mapped equatorial site"), which collides with `[concept_sr_approach]` (Standard/Safe/Ambitious). The Mars strategies use "#bold Strategy:#!" for the same job.
@@ -200,6 +210,7 @@ against the generators.
 - **Confidence:** medium-high (it trims flavour the owner may like; nothing is lost)
 
 ### SPC-15. Every colony row's autonomy drift hover shows the generic table, not that colony's terms
+- **Status:** done (2026-10-27): `gen_solar_sites.py` writes `je_space_race_widget_autonomy_drift_tt_<key>`, each term a line through `AddLocalizationIf` only when it applies, from per-site values; the generic table moved to `concept_sr_colony_autonomy`.
 - **Category:** hidden info
 - **Where:** `te_sr_autonomy_row` drift cell (`space_race_widget.gui:3128-3142`), `tooltip = "je_space_race_widget_autonomy_drift_tt"` (`te_journal_entries_l_english.yml:816`), the same key on every row; the figure is per site (`sr_disp_site_aut_drift_<key>`).
 - **Now:** hovering "+0.35" on Ceres shows "• the pull of home: -0.25 • its people: +0.05 a 10,000 • its distance … • a charter: -0.4". That is every possible term with its rate, not which apply to Ceres or how much each adds now.
@@ -208,6 +219,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SPC-16. "Fleets" names two different things; the same icon marks colony and war fleets
+- **Status:** done (2026-10-27): "Space Fleets", "Fleet strength", the two fleet concepts on the words, and Space Command's icon on Locations' inbound column (a placeholder: a drawn warship icon would replace it).
 - **Category:** style (naming)
 - **Where:** section headers "Colony Fleets" (`je_space_race_widget_fleets_header`, `te_journal_entries_l_english.yml:1034`) and "Fleets" (`space_race_widget.gui:4729`, `je_space_race_widget_space_fleets_header` `:1307`), and the Space Command row "Fleets" (`sc_strength_label` `:1279`). The inbound cells of Solar System (colony fleets, `:2597`) and Locations (warships, `:4400`) both use `je_space_race_solar_colonization.dds`. `je_space_race_widget_loc_inbound_tt` (`:1080`) says only "fleets".
 - **Now:** "Staged in Orbit: 1.4 fleets", "Fleets in flight 2 of 6", "Fleets" and "Fleets 120/160" sit within a few sections of each other.
@@ -216,6 +228,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SPC-17. How the Space Race Works restates the concepts it links
+- **Status:** done (2026-10-27): How's approach and funding entries keep the cross-milestone rules and link the concepts; the programme legend lives on the programme header's hover, which How points to.
 - **Category:** over-explaining (duplication within How)
 - **Where:** `je_space_race_widget_how_approach` (`te_journal_entries_l_english.yml:1053`) against `concept_sr_approach_desc` (`te_concepts_l_english.yml:898`), near verbatim; `how_funding` (`:1055`) against `concept_sr_funding_desc` (`:900`); the lit/half-lit/faint legend in `ov_programme_tt` (`:1130`), `how_programme` (`:1059`) and `how_powers` (`:1058`).
 - **Proposed:** keep How as the long form but cut the repeated sentences from one side: let the concepts be the definitions and How the cross-milestone rules ("every running milestone moves at the same pace…"). Give the programme legend one home (the programme header's hover) and have How refer to it. Low priority; `test_space_race_layout.py:67-71` pins only that the How keys exist.
@@ -223,6 +236,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SPC-18. Orbit's strike hovers teach the action's rules inline
+- **Status:** done (2026-10-27): `concept_asat_strike` carries the rules; the strike and satellites hovers are the state plus the concept.
 - **Category:** over-explaining
 - **Where:** `te_orbit_strike_tt_ready` (`te_miscellaneous_l_english.yml:8261`: "A hostile diplomatic action against a country we are at war with, taken from the Diplomacy panel. It disrupts their orbital network, costs us infamy, relations and case strength at the UN…"), `te_orbit_satellites_tt_exposed` ("Any country at war with us that has Guided Missiles and a Space Program can strike them…"), both repeating `je_space_race_widget_how_orbit` (`te_journal_entries_l_english.yml:1057`).
 - **Proposed:** a `concept_asat_strike` ("Anti-Satellite Strike") carrying the rules. The hovers become the state plus the concept: "Ready: [concept_asat_strike] from the Diplomacy panel against:" then the target list; "Intact. Exposed to an [concept_asat_strike] by any enemy with Guided Missiles." The debris row (`te_debris_row`, already `[concept_orbital_debris]`) is a good model.
@@ -230,6 +244,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SPC-19. Our Colonies is 1,100 hand-copied lines the generator could own
+- **Status:** done (2026-10-27): the colony rows are generated (`te_sr_colony_rows`, one per world from `SITES`), with SPC-5.
 - **Category:** other (maintainability), list
 - **Where:** `te_sr_sec_colonies` (`space_race_widget.gui:1329-2423`): 68 `te_sr_colony_row` instances written by hand, each gated on `sr_disp_colony_<world>_<spec>`. Every other per-world list is generated from `gen_solar_sites.SITES`.
 - **Proposed:** if SPC-5 keeps the section, move its rows into `sr_sites_generated_rows.gui` (`te_sr_colony_rows`) from `SITES[*].specs`, as the other per-world rows are. The player sees no change; a new world or specialization can then no longer go missing from the panel.
@@ -237,6 +252,7 @@ against the generators.
 - **Confidence:** high (low player impact)
 
 ### SEA-1. The overview's Policy and Regime hovers teach every option instead of ours
+- **Status:** done (2026-10-27): the Policy and Regime boxes say what ours does now (`te_seabed_policy_ours`, `te_seabed_regime_ours`), the lock and its exceptions only when they apply; `concept_seabed_regime` holds the three regimes.
 - **Category:** over-explaining, spread-out/redundant
 - **Where:** `te_seabed_ov_policy_tt` (`te_miscellaneous_l_english.yml:8435`, overview cell `te_seabed_widgets.gui:583`), `te_seabed_ov_regime_tt` (`:8441`, cell `:607`); duplicated by `te_seabed_how_policy` (`:8376`), `te_seabed_how_regime` (`:8378`) and the three `te_seabed_policy_effect_<n>_tt` (`:8451-8453`).
 - **Now:** the Policy cell's hover explains all three policies' weight factors, when weight counts, the influence held, the five-year lock and its two exceptions (seven sentences). The three buttons under it and How say the same. The Regime hover defines Open, Regulated and Scramble in full, including the poorer-parties reservation and the royalty rate, whichever regime is in force.
@@ -249,6 +265,7 @@ against the generators.
 - **Confidence:** high
 
 ### SEA-2. Seabed policies describe their effects in prose, not modifier lines
+- **Status:** done (2026-10-27): four `script_only` modifier types and three display static modifiers (never added); the policy buttons print them with `GetStaticModifier(...).GetDesc`.
 - **Category:** style
 - **Where:** `te_seabed_policy_<1..3>_sgui` (`common/scripted_guis/te_global_commons_seabed_sguis.txt:12-58`), each wrapping `te_seabed_set_policy` in `custom_tooltip = { text = te_seabed_policy_effect_<n>_tt … }`; loc `:8451-8453` ("our claim weight ×0.5, and no influence held").
 - **Now:** the button hovers are sentences with inline figures. The influence cost is a real modifier (`te_seabed_policy_sponsor_cost` / `_unilateral_cost`, `country_influence_cost_add`, `common/static_modifiers/te_global_commons_seabed_modifiers.txt:38-46`), but it is applied with a multiplier and hidden behind the custom tooltip. Global Warming's policy rows (the house model) print a flavour line plus `[GetStaticModifier('…').GetDesc]`.
@@ -257,6 +274,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SEA-3. The claimant rows are sentences under a table of columns
+- **Status:** done (2026-10-27): fixed columns under heads (flag, name, Mines, Claims, Weight, our button last). The later step followed at the owner's word: each basin's claimants are a datamodel of the player's `te_seabed_rk_list_<b>` (every other claimant's capital, largest share first, rebuilt at every sharing, on the SPC-9 pattern), in place of the six seats, `te_seabed_rival_row_sgui` and "and N other claimants"; `TE_SELF_CHECK seabed_claimant_list`.
 - **Category:** list, style
 - **Where:** `te_seabed_rival_row` / `te_seabed_rival_us` (`te_seabed_widgets.gui:379-434`), six fixed rows per basin ×5 (`:790-873` for the Pacific), text from `te_seabed_rival_row_sgui` (`te_seabed_rival_row_<basin>`, `te_miscellaneous_l_english.yml:8478`), and "and N other claimants" (`te_seabed_rivals_more_<basin>`).
 - **Now:** "France: 12 mines · 3 claims · 14% of the weight", wrapping on long names, under a basin header row whose columns are Free / Pool / Weight / +1 licence. "Us: …" sits in the same prose.
@@ -265,7 +283,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SEA-4. Basin names read "in the Indian" / "in the Southern"
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done: the loc part in #1202, and the state panel's `TE_STATE_SEABED_WEIGHT_NONE` reads "the Southern Ocean" (2026-10-27).
 - **Category:** style
 - **Where:** `te_seabed_build_in_head_indian/_southern` (`te_miscellaneous_l_english.yml:8323, 8325`), `te_seabed_build_in_none_indian/_southern` (`:8333, 8335`), `te_seabed_next_tt_indian/_southern` (`:8408, 8410`), `te_seabed_weight_tt_indian/_southern` (`:8512, 8514`). Outside this slice, the state panel's `TE_STATE_SEABED_WEIGHT_NONE` (`:1060`, "in the Southern while…").
 - **Proposed:** "the Indian Ocean", "the Southern Ocean" in running text; the table keeps the one-word names. Quick fixes table.
@@ -273,6 +291,7 @@ against the generators.
 - **Confidence:** high
 
 ### SEA-5. The +1 licence caveat is repeated in five basin hovers
+- **Status:** done (2026-10-27): the caveat stays on the column head only.
 - **Category:** over-explaining
 - **Where:** `te_seabed_next_tt_<basin>` ×5 (`te_miscellaneous_l_english.yml:8406-8410`) all end "Enough, all else equal; often more than needed."; the column head's `te_seabed_col_next_tt` (`:8348`) says it at length ("The figure is enough, often more than needed: the sharing's rounding can hand the licence over sooner."), and `test_seabed_loc.py:55-57` pins "enough" there.
 - **Proposed:** keep the caveat on the column head only (rule 6: said once). Cut the per-basin sentence, or shorten it to "(enough; often more than needed)". Low priority; listed so the cut isn't made on the pinned head key.
@@ -280,6 +299,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SEA-6. The Pool column head restates the legend under the table
+- **Status:** done (2026-10-27): the Pool head's hover says what the legend lacks.
 - **Category:** spread-out/redundant
 - **Where:** `te_seabed_col_pool_tt` (`te_miscellaneous_l_english.yml:8350`) lists "our built mines, our queued mines (lighter), our unused claims, rivals' mines, and the rest (dark)…". The five legend chips under the table (`te_seabed_widgets.gui:1654-1739`) name the same layers, and every basin's bar hover (`te_seabed_pool_tt_<basin>`) gives the counts.
 - **Proposed:** shorten the head's hover to what the legend lacks: "The basin's whole pool; colours as in the legend below. Rivals' unused claims and the shares waiting for countries without $abyssal_plain_mining$ are divided again at every sharing, so a buildup could win them. Rivals' figures are as of the last sharing." Low priority.

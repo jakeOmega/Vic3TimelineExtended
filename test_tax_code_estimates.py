@@ -246,7 +246,7 @@ class EstimateValueTest(unittest.TestCase):
         want = {"te_tax_view_snap_month", "te_tax_view_snap_month_y", "te_tax_view_snap_month_mo",
                 "te_tax_view_snap_tax_income", "te_tax_view_snap_net_fixed", "te_tax_view_snap_net_total",
                 "te_tax_view_snap_gdp", "te_tax_view_snap_current", "te_tax_view_est_poll_shared",
-                "te_tax_view_est_regrel_state"}
+                "te_tax_view_est_regrel_state", "te_tax_view_est_nobase_any"}
         want |= {f"te_tax_view_snap_{key}" for key in KEYS}
         want |= {f"te_tax_view_est_cut_{key}" for key in KEYS}
         for channel, (_, keys) in CHANNELS.items():
@@ -382,7 +382,7 @@ class EstimatePanelTest(unittest.TestCase):
         cls.overview = type_body(gui(OVERVIEW), "te_tax_overview_panel")
 
     def test_labels(self):
-        self.assertIn("Static estimate at today's economy", self.loc["te_tax_est_static"])
+        self.assertIn("[concept_tax_static_estimate] at today's economy", self.loc["te_tax_est_static"])
         self.assertIn("Estimate out of date", self.loc["te_tax_est_stale"])
         self.assertIn("No current base — estimate unavailable", self.loc["te_tax_est_nobase"])
         self.assertIn("no current base — estimate unavailable", self.loc["te_tax_ig_offer_est_nobase"].lower())
@@ -403,36 +403,52 @@ class EstimatePanelTest(unittest.TestCase):
                       "SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), "
                       "'(CFixedPoint)1' ), 'te_tax_pol_est_note', 'te_tax_pol_est_note_stale' )", note.group(0))
         self.assertIn('tooltip = "te_tax_pol_est_tt"', note.group(0))
-        for key in ("te_tax_est_header_tt", "te_tax_pol_est_tt"):
+        # The assumptions are one concept, written once (GUI audit TAX-19); each
+        # hover links it and keeps only what is its own.
+        concept = self.loc["concept_tax_static_estimate_desc"]
+        self.assertIn("Receipts are counted where the law collects them; "
+                      "part of a tax may pass on through prices and wages.", concept)
+        self.assertIn("bringing in or removing rural assessment or head tax moves some of the other's payers", concept)
+        self.assertRegex(raw("common/game_concepts/extra_concepts.txt"), r"(?m)^concept_tax_static_estimate = \{")
+        for key in ("te_tax_est_header_tt", "te_tax_pol_est_tt", "te_tax_est_static", "te_tax_pol_est_note"):
             with self.subTest(key=key):
-                self.assertIn("Receipts are counted where the law collects them; "
-                              "part of a tax may pass on through prices and wages.", self.loc[key])
-        self.assertIn("bringing in or removing rural assessment or head tax moves some of the other's payers",
-                      self.loc["te_tax_est_header_tt"])
+                self.assertIn("[concept_tax_static_estimate]", self.loc[key])
+                self.assertNotIn("Receipts are counted", self.loc[key])
 
     def test_each_channel_row_has_a_no_base_branch_and_the_budget_getter(self):
+        """The estimate is a table (GUI audit TAX-4): one row per Budget line, its
+        cells existing law, the bill and the change, each its own key."""
         for channel, (getter, keys) in CHANNELS.items():
             with self.subTest(channel=channel):
                 self.assertIn(f"ScriptValue('te_tax_view_est_{channel}_on')", self.review)
                 self.assertRegex(self.review, rf"SelectLocalization\( EqualTo_CFixedPoint\( GetPlayer\.MakeScope\."
                                               rf"ScriptValue\('te_tax_view_est_{channel}_nobase'\), '\(CFixedPoint\)1' \), "
-                                              rf"'te_tax_est_nobase'")
+                                              rf"'te_tax_est_(?:nobase|dash)'")
                 forms = ("", "_range") if len(keys) > 1 else ("",)
-                for form in forms:
-                    text = self.loc[f"te_tax_est_{channel}{form}"]
-                    self.assertIn(f"Multiply_CFixedPoint( GetPlayer.{getter}, GetPlayer.MakeScope.ScriptValue(", text)
-                    for other in {g for g, _ in CHANNELS.values()} - {getter}:
-                        self.assertNotIn(other, text)
-                    # A two-tax line's single form prints the low bound, which equals
-                    # the high one while at most one of its taxes collects.
-                    if len(keys) == 1:
-                        parts = ("law", "bill", "delta")
-                    elif not form:
-                        parts = ("law_lo", "bill_lo", "delta_lo")
-                    else:
-                        parts = tuple(f"{p}_{e}" for p in ("law", "bill", "delta") for e in ("lo", "hi"))
-                    for part in parts:
-                        self.assertIn(f"ScriptValue('te_tax_view_est_{channel}_{part}')", text)
+                for part in ("law", "bill", "delta"):
+                    for form in forms:
+                        text = self.loc[f"te_tax_est_{channel}_{part}{form}"]
+                        self.assertIn(f"Multiply_CFixedPoint( GetPlayer.{getter}, GetPlayer.MakeScope.ScriptValue(", text)
+                        for other in {g for g, _ in CHANNELS.values()} - {getter}:
+                            self.assertNotIn(other, text)
+                        # A two-tax line's single form prints the low bound, which equals
+                        # the high one while at most one of its taxes collects.
+                        if len(keys) == 1:
+                            ends = ("",)
+                        elif not form:
+                            ends = ("_lo",)
+                        else:
+                            ends = ("_lo", "_hi")
+                        for end in ends:
+                            self.assertIn(f"ScriptValue('te_tax_view_est_{channel}_{part}{end}')", text)
+                        self.assertIn(f"'te_tax_est_{channel}_{part}{form}'", self.review)
+        # The draft summary's Revenue row sums the four changes (GUI audit TAX-4).
+        total = self.loc["te_tax_sum_revenue_value"]
+        for channel, (getter, keys) in CHANNELS.items():
+            delta = "delta_lo" if len(keys) > 1 else "delta"
+            self.assertIn(f"Multiply_CFixedPoint( GetPlayer.{getter}, GetPlayer.MakeScope.ScriptValue("
+                          f"'te_tax_view_est_{channel}_{delta}') )", total)
+        self.assertEqual(total.count("Add_CFixedPoint"), 3)
         # Poll prints a range when both of its taxes collect at the snapshot.
         self.assertIn("ScriptValue('te_tax_view_est_poll_shared')", self.review)
 
@@ -483,14 +499,17 @@ class EstimatePanelTest(unittest.TestCase):
         self.assertIn("agricultural wages", self.loc["te_tax_ig_offer_est_agrel"])
         self.assertIn("how much pops buy", self.loc["te_tax_ig_offer_est_untax"])
 
-    def test_the_overview_dates_the_snapshot_and_labels_the_aggregate(self):
-        self.assertIn("te_tax_view_snap_month", self.overview)
-        self.assertIn('"te_tax_ov_snapshot"', self.overview)
-        readers = [key for key, text in self.loc.items() if "te_tax_view_snap_tax_income" in text]
-        self.assertTrue(readers)
-        for key in readers:
-            with self.subTest(key=key):
-                self.assertIn("domestic tax aggregate (unclassified)", self.loc[key].lower())
+    def test_the_overview_dates_the_snapshot_on_the_code_cell(self):
+        """GUI audit TAX-18: no snapshot row; the Code cell's hover dates it, and the
+        engine's unclassified tax aggregate, which the estimates do not use, is shown
+        nowhere."""
+        self.assertNotIn("te_tax_ov_snapshot\"", self.overview)
+        self.assertIn('tooltip = "te_tax_ov_code_tt"', self.overview)
+        hover = self.loc["te_tax_ov_code_tt"]
+        self.assertIn("ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_ov_snapshot_none_tt', "
+                      "'te_tax_ov_snapshot_value_tt'", hover)
+        self.assertIn("te_tax_view_snap_month_y", self.loc["te_tax_ov_snapshot_value_tt"])
+        self.assertFalse([key for key, text in self.loc.items() if "te_tax_view_snap_tax_income" in text])
 
     def test_estimates_never_sweep_the_world_in_a_panel(self):
         # The Budget getters are the engine's own cached figures; a datamodel over

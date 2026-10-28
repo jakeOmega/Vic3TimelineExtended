@@ -1,0 +1,56 @@
+﻿# gm_policy_modifier_types.txt
+#
+# Grand Monuments: the four monument policies as the engine's coloured lines
+# (GM-2, the 2026-10-27 GUI audit). Script applies each policy itself
+# (gm_policy_set and gm_compute_totals: the policy's factor on the steps, the
+# venues' share, each monument's tourism), so these types are script_only:
+# they exist to be rendered, through the display-only static modifiers
+# gm_policy_*_display (common/static_modifiers/gm_modifiers.txt), on the
+# policy buttons and the overview's policy hover. No country carries them.
+
+# Open to the Public: tourism from each monument, x1.5.
+gm_monument_tourism_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# State Ceremonial: legitimacy and the Leader's authority also count this
+# share of every monument's grandeur.
+gm_monument_ceremonial_share_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Cultural Promotion: cultural pull from monuments, x1.5 (prestige with the
+# Cultural Hegemony rule off).
+gm_monument_cultural_pull_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+gm_monument_prestige_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Public Education: education access in every state for each step of the
+# grandeur counted.
+gm_monument_education_step_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}

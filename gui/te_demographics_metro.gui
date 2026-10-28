@@ -161,7 +161,8 @@ types te_demographics_metro
 	### One term of the metropolitan share's target as a bar either side of a centre line, on one shared scale of
 	### -35 .. +35 points (the capital's term fills its half; a larger figure runs past the end and the value carries
 	### it, rule 5), and its signed value. Neither direction is good or bad for the player in itself, so both halves take
-	### one neutral fill, as te_demog_term_row's do; the left half is the reverse hack. Blocks: "bar_label", "bar_left"
+	### one neutral fill, as te_demog_term_row's do; the left half is the reverse hack. Every row has a hover, so the
+	### label is underlined (#tooltippable). Blocks: "bar_label", "bar_left"
 	### (the value, clamped to 0 or below), "bar_right" (0 or above), "bar_value".
 	type te_demog_mt_bar_row = flowcontainer {
 		direction = horizontal
@@ -176,6 +177,7 @@ types te_demographics_metro
 			align = left|nobaseline
 			using = te_demog_fontsize_overview
 			elide = right
+			default_format = "#tooltippable"
 			block "bar_label" {}
 		}
 		widget = {

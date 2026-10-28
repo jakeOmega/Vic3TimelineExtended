@@ -114,7 +114,10 @@ def block(text, name):
 
 
 def gui_ops(gui_text, sgui):
-    """Op codes the .gui passes to `sgui` (rows set the datacontext)."""
+    """Op codes the .gui passes to `sgui` (rows set the datacontext). Only an
+    op scope counts (`AddScope( 'op', MakeScopeValue( '(CFixedPoint)N' ) )`),
+    so a row's other literals, such as the code that tints the option in
+    force, are never read as ops."""
     ops = set()
     for m in re.finditer(r"datacontext = \"\[GetScriptedGui\('(\w+)'\)\]\"", gui_text):
         if m.group(1) != sgui:
@@ -122,7 +125,7 @@ def gui_ops(gui_text, sgui):
         # The row's buttons follow its datacontext, up to the next row.
         nxt = re.search(r"datacontext = ", gui_text[m.end():])
         seg = gui_text[m.end(): m.end() + (nxt.start() if nxt else len(gui_text))]
-        ops |= {int(x) for x in re.findall(r"\(CFixedPoint\)(\d+)", seg)}
+        ops |= {int(x) for x in re.findall(r"AddScope\( 'op', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", seg)}
     return ops
 
 
@@ -664,9 +667,10 @@ class TestEffectiveSurvivability(unittest.TestCase):
         self.assertNotRegex(review, r"\bnd_effective_survivability\s*<")
 
     def test_tooltips_show_the_figure(self):
+        # The readiness table's Survivability column (NUC-5), one cell a level.
         for readiness in range(4):
             self.assertIn(f"ScriptValue('nd_effective_survivability_at_readiness_{readiness}')",
-                          loc_value(f"nd_w_readiness_choice_{readiness}_tt"))
+                          loc_value(f"nd_w_readiness_survivability_{readiness}"))
         survivability_tt = loc_value("nd_w_survivability_tt")
         self.assertIn("ScriptValue('nd_effective_survivability')", survivability_tt)
         self.assertIn("50", survivability_tt)
@@ -774,8 +778,12 @@ class TestCrisisPanel(unittest.TestCase):
     def test_new_custom_loc_blocks_have_fallbacks(self):
         for name in ("nd_crisis_pressure_label", "nd_crisis_concede_label", "nd_crisis_concession_short",
                      "nd_crisis_concession_long", "nd_crisis_ft_label", "nd_crisis_ft_word",
-                     "nd_crisis_ft_reason", "nd_crisis_stakes_short", "nd_crisis_stakes_long",
-                     "nd_crisis_concession_past", "nd_crisis_stage_next"):
+                     "nd_crisis_ft_reason", "nd_crisis_stakes_long",
+                     "nd_crisis_concession_past", "nd_crisis_stage_next",
+                     # the compact crisis (NUC-7): the headline's words, the readings, the outcomes
+                     "nd_crisis_role_phrase", "nd_crisis_dispute_phrase", "nd_crisis_public_phrase",
+                     "nd_crisis_deadline_who", "nd_crisis_pressure_band", "nd_crisis_backdown_label",
+                     "nd_crisis_cred_if_concede", "nd_crisis_cred_if_backdown", "nd_crisis_cred_if_standdown"):
             body = block(self.custom, name)
             self.assertRegex(body, r"text = \{\s*trigger = \{ always = yes \}\s*localization_key = \w+\s*\}\s*$", name)
 
@@ -794,44 +802,40 @@ class TestCrisisPanel(unittest.TestCase):
 
 
 class TestWorldCrises(unittest.TestCase):
-    """The World Crises section: the slots the refresh writes, the rows that
-    read them, and every place a crisis starts, ends or changes its danger."""
-
-    SLOTS = set(range(1, 9))
+    """The World Crises section (NUC-14): the list the refresh keeps, the
+    datamodel that draws it, and every place a crisis starts, ends or changes
+    its danger."""
 
     def setUp(self):
         self.sguis = strip_comments(read(SGUIS))
         self.gui = read(GUI)
         self.effects = strip_comments(read(CRISIS_EFFECTS))
 
-    def _drawn(self, sgui, call):
-        pat = rf"GetScriptedGui\('{sgui}'\)\.{call}\( [^\"]*?\(CFixedPoint\)(\d+)"
-        return {int(x) for x in re.findall(pat, self.gui)}
-
-    def test_rows_drawn_match_rows_handled(self):
-        rows = self._drawn("nd_world_crisis_row_sgui", "ExecuteTooltip")
-        self.assertEqual(rows, self.SLOTS | {9})
-        self.assertEqual(self._drawn("nd_world_crisis_row_sgui", "IsShown"), rows)
-        body = block(self.sguis, "nd_world_crisis_row_sgui")
-        self.assertEqual(sgui_ops(self.sguis, "nd_world_crisis_row_sgui", "is_shown"), rows)
-        self.assertEqual(sgui_ops(self.sguis, "nd_world_crisis_row_sgui", "effect"), rows)
-        for n in self.SLOTS:
-            self.assertIn(f"nd_world_crisis_row_at = {{ SLOT = {n} }}", body, n)
-
-    def test_hovers_drawn_match_hovers_handled(self):
-        hovers = self._drawn("nd_world_crisis_detail_sgui", "ExecuteTooltip")
-        self.assertEqual(hovers, self.SLOTS)
-        self.assertEqual(sgui_ops(self.sguis, "nd_world_crisis_detail_sgui", "effect"), hovers)
-
-    def test_the_refresh_writes_every_slot_the_rows_read(self):
+    def test_the_refresh_rebuilds_the_list_most_dangerous_first(self):
         body = block(self.effects, "nd_world_crises_refresh")
         self.assertTrue(body.strip().startswith("hidden_effect"), "the refresh must stay out of tooltips")
-        for n in self.SLOTS:
-            self.assertIn(f"remove_global_variable = nd_wc_{n}", body)
-            self.assertIn(f"set_global_variable = {{ name = nd_wc_{n} value = THIS }}", body)
+        self.assertIn("nd_lists_store_ensure = yes", body)
+        self.assertLess(body.index("clear_variable_list = nd_crises"), body.index("ordered_country"))
+        self.assertIn("order_by = nd_display_crisis_danger", body)
+        self.assertIn("add_to_variable_list = { name = nd_crises target = scope:nd_wc_issuer_cap }", body)
+        self.assertIn("set_variable = { name = nd_wc_target_cap value = scope:nd_wc_target_cap_new }", body)
+        self.assertIn("set_global_variable = { name = nd_wc_count value = 0 }", body)
+        store = block(self.effects, "nd_lists_store_ensure")
+        self.assertIn("set_global_variable = { name = nd_lists_store value = scope:nd_lists_store_new }", store)
+
+    def test_the_section_draws_the_list(self):
+        sec = self.gui[self.gui.index("type te_nuclear_sec_world_crises"):self.gui.index("type te_nuclear_sec_posture")]
+        self.assertIn('datamodel = "[GetGlobalVariable(\'nd_lists_store\').GetList(\'nd_crises\')]"', sec)
+        self.assertIn('datacontext = "[Scope.GetState]"', sec)
+        row = self.gui[self.gui.index("type nd_world_crisis_row = widget"):self.gui.index("type nd_world_crisis_head")]
+        self.assertEqual(row.count("tiny_flag = {"), 2)
+        self.assertIn('datacontext = "[State.GetOwner]"', row)
+        self.assertIn("State.GetOwner.MakeScope.Var('nd_wc_target_cap').GetState.GetOwner", row)
+        self.assertIn("GetScriptedGui('nd_world_crisis_item_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( State.GetOwner.MakeScope ).End )", row)
+
+    def test_the_gate_reads_the_count(self):
         gate = block(self.sguis, "nd_world_crises_sgui")
-        for n in self.SLOTS:
-            self.assertIn(f"nd_world_crisis_slot_live = {{ SLOT = {n} }}", gate)
+        self.assertIn("global_var:nd_wc_count > 0", gate)
 
     def test_every_change_refreshes_the_list(self):
         for name in ("nd_crisis_open", "nd_crisis_close", "nd_crisis_weekly_tick"):
@@ -840,11 +844,18 @@ class TestWorldCrises(unittest.TestCase):
         self.assertIn("nd_world_crises_refresh = yes", block(taboo, "nd_taboo_monthly_update"))
 
     def test_handlers_are_display_only_and_drawn(self):
-        for name in ("nd_world_crises_sgui", "nd_world_crisis_row_sgui", "nd_world_crisis_detail_sgui"):
+        for name in ("nd_world_crises_sgui", "nd_world_crisis_item_detail_sgui"):
             body = block(self.sguis, name)
             self.assertIn("is_valid = { always = no }", body, name)
             self.assertIn("ai_is_valid = { always = no }", body, name)
             self.assertIn(name, self.gui, f"{name} is never drawn")
+        self.assertIn("nd_world_crisis_detail_lines = yes", block(self.sguis, "nd_world_crisis_item_detail_sgui"))
+
+    def test_the_slots_are_gone(self):
+        for old in ("nd_world_crisis_row_sgui", "nd_world_crisis_detail_sgui", "nd_world_crisis_slot_live",
+                    "nd_world_crisis_row_at", "nd_world_crisis_detail_at", "global_var:nd_wc_1"):
+            for text in (self.sguis, self.effects, self.gui, strip_comments(read(TRIGGERS))):
+                self.assertNotIn(old, text, old)
 
     def test_printed_lines_have_loc(self):
         text = self.effects + self.sguis
@@ -1254,6 +1265,91 @@ class TestRecessed(unittest.TestCase):
         self.assertIn("localization_key = nd_readiness_0", block(custom, "nd_readiness_name"))
         self.assertIn("localization_key = nd_readiness_moving_0", block(custom, "nd_readiness_moving"))
         self.assertIn("nd_readiness_recessed = yes", block(self.values, "nd_incident_base_monthly_permille"))
+
+
+DISPLAY_TYPES = ROOT / "common/modifier_type_definitions/nuclear_deterrence_display_types.txt"
+
+
+class TestPostureTerms(unittest.TestCase):
+    """NUC-6 (2026-10-27): what readiness and launch authority do through script
+    prints as modifier lines, from display-only modifiers nothing adds, whose
+    figures are the ones the script uses."""
+
+    def setUp(self):
+        self.mods = strip_comments(read(MODIFIERS))
+        self.values = strip_comments(read(VALUES))
+        self.types = strip_comments(read(DISPLAY_TYPES))
+
+    def field(self, mod, name):
+        m = re.search(rf"\b{name} = (-?[\d.]+|yes)", block(self.mods, mod))
+        return None if m is None else (m.group(1) if m.group(1) == "yes" else float(m.group(1)))
+
+    def test_every_display_type_is_script_only_and_named(self):
+        names = re.findall(r"^(country_nd_\w+) = \{", self.types, re.M)
+        self.assertGreaterEqual(len(names), 10)
+        keys = loc_keys()
+        for name in names:
+            self.assertIn("script_only = yes", block(self.types, name), name)
+            self.assertIn(name, keys, name)
+            self.assertIn(name + "_desc", keys, name)
+
+    def test_nothing_adds_the_display_modifiers(self):
+        for path in SCRIPT_FILES + (ROOT / "common/journal_entries/je_nuclear_program.txt",):
+            text = strip_comments(read(path))
+            self.assertNotRegex(text, r"(add|remove)_modifier\s*=\s*\{?\s*(name\s*=\s*)?nd_(readiness|authority)_terms_",
+                                path.name)
+
+    def test_readiness_figures_match_the_script(self):
+        base = block(self.values, "nd_incident_base_monthly_permille")
+        rates = {0: float(re.search(r"nd_readiness_recessed = yes \} value = ([\d.]+)", base).group(1)), 1: 1.0,
+                 2: float(re.search(r"nd_readiness_heightened_or_higher = yes \} value = ([\d.]+)", base).group(1)),
+                 3: float(re.search(r"nd_readiness_high_alert = yes \} value = ([\d.]+)", base).group(1))}
+        self.assertRegex(base, r"^\s*value = 1\s*$" if False else r"value = 1\b")
+        strain = block(self.values, "nd_strain_step")
+        steps = {0: -6.0, 1: -6.0, 2: 1.5, 3: 5.0}
+        self.assertIn("value = -6", strain)
+        self.assertIn("value = 5", strain)
+        self.assertIn("value = 1.5", strain)
+        self.assertIn("multiply = 8", block(self.values, "nd_cd_issuer_readiness_value"))
+        for r in range(4):
+            mod = f"nd_readiness_terms_{r}"
+            rate = self.field(mod, "country_nd_incident_rate_mult") or 0.0
+            self.assertAlmostEqual(rate, rates[r] - 1, msg=mod)
+            self.assertEqual(self.field(mod, "country_nd_crew_strain_monthly_add"), steps[r], mod)
+            self.assertEqual(self.field(mod, "country_nd_crisis_danger_add") or 0.0, (r - 1) * 8.0, mod)
+        self.assertIn("multiply = 0.5", block(self.values, "nd_upkeep_units_custody_recessed"))
+        self.assertEqual(self.field("nd_readiness_terms_0", "country_nd_custody_cost_mult"), -0.5)
+        self.assertEqual(self.field("nd_readiness_terms_0", "country_nd_launch_blocked_bool"), "yes")
+        self.assertIn("add = -10", block(self.values, "nd_yp_recessed_value"))
+        self.assertIn("add = 10", block(self.values, "nd_yp_alert_value"))
+        self.assertEqual(self.field("nd_readiness_terms_0", "country_nd_threat_pressure_add"), -10.0)
+        self.assertEqual(self.field("nd_readiness_terms_3", "country_nd_threat_pressure_add"), 10.0)
+
+    def test_authority_figures_match_the_script(self):
+        hold = block(self.values, "nd_hold_chance")
+        self.assertRegex(hold, r"nd_authority_launch_on_warning = yes \}\s*subtract = 10")
+        self.assertEqual(self.field("nd_authority_terms_3", "country_nd_halt_chance_add"), -0.1)
+        custody = block(strip_comments(read(CUSTODY_VALUES)), "nd_custody_loss_rate")
+        self.assertRegex(custody, r"nd_authority_delegated_or_warning = yes \}\s*add = 0.03")
+        for a in (2, 3):
+            self.assertEqual(self.field(f"nd_authority_terms_{a}", "country_nd_custody_loss_add"), 0.03, a)
+            self.assertEqual(self.field(f"nd_authority_terms_{a}", "country_nd_unapproved_launch_bool"), "yes", a)
+        self.assertEqual(self.field("nd_authority_terms_1", "country_nd_order_required_bool"), "yes")
+        self.assertEqual(self.field("nd_authority_terms_4", "country_nd_automatic_answer_bool"), "yes")
+
+    def test_the_choices_print_the_lines(self):
+        for r in range(4):
+            self.assertIn(f"GetStaticModifier('nd_readiness_terms_{r}').GetDesc", loc_value(f"nd_w_readiness_choice_{r}_tt"))
+        for r in (2, 3):
+            self.assertIn(f"GetStaticModifier('nd_readiness_mod_{r}').GetDesc", loc_value(f"nd_w_readiness_choice_{r}_tt"))
+        for a in range(1, 5):
+            self.assertIn(f"GetStaticModifier('nd_authority_terms_{a}').GetDesc", loc_value(f"nd_w_authority_choice_{a}_tt"))
+        # NUC-6c: no option names the interest groups' reactions (At Home and the
+        # posture concepts list them all).
+        for key in ([f"nd_w_doctrine_choice_{d}_tt" for d in range(1, 6)] + [f"nd_w_readiness_choice_{r}_tt" for r in range(4)]
+                    + [f"nd_w_authority_choice_{a}_tt" for a in range(1, 5)]):
+            for word in ("groups approve", "groups disapprove", "popular with", "officers do not"):
+                self.assertNotIn(word, loc_value(key), key)
 
 
 class TestLaunchGate(unittest.TestCase):

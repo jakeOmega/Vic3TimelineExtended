@@ -612,9 +612,11 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # the `je_` rule. Generator-owned `te_tax_` families (plan Task 13): the
     # interest groups' view bands and the staple offers' lines; and the light
     # code's relief and reaction modifiers, its steps' reaction lines and its
-    # rows' per-law ranges.
+    # rows' per-law ranges; the history's promise lines, one per outcome and
+    # group (GUI audit TAX-21).
     if key.startswith(("amendment_te_tax_", "te_tax_ig_view_", "te_tax_offer_untax_", "te_tax_tt_offer_untax_",
-                       "te_tax_light_relief_", "te_tax_light_react_", "te_tax_lt_tt_react_", "te_tax_lt_range_")):
+                       "te_tax_light_relief_", "te_tax_light_react_", "te_tax_lt_tt_react_", "te_tax_lt_range_",
+                       "te_tax_hist_promise_")):
         return "TAX_GENERATED"
     if key.startswith(("te_tax_", "rule_te_tax_", "setting_te_tax_", "law_te_tax_code", "je_tax_code")):
         return "TAX"

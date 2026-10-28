@@ -2963,6 +2963,126 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 34 scope:op = 5 sr_mod_can_queue_port_sedna = yes }
 	}
 }
+# sr_mod_can_queue_<type>_<key>'s conditions one by one, for the scripted GUI's
+# is_valid, which gives each its own line (a tick or a cross); with
+# sr_cf_scope_site_held and sr_mq_has_room they are the whole of it.
+# The world's founding specialization is chosen.
+sr_mod_scope_spec_chosen = {
+	OR = {
+		AND = { scope:site = 1 has_global_variable = sr_site_spec_valles_marineris }
+		AND = { scope:site = 2 has_global_variable = sr_site_spec_olympus_mons }
+		AND = { scope:site = 3 has_global_variable = sr_site_spec_hellas_planitia }
+		AND = { scope:site = 4 has_global_variable = sr_site_spec_utopia_planitia }
+		AND = { scope:site = 5 has_global_variable = sr_site_spec_arcadia_planitia }
+		AND = { scope:site = 6 has_global_variable = sr_site_spec_ceres }
+		AND = { scope:site = 7 has_global_variable = sr_site_spec_vesta }
+		AND = { scope:site = 8 has_global_variable = sr_site_spec_psyche }
+		AND = { scope:site = 9 has_global_variable = sr_site_spec_pallas }
+		AND = { scope:site = 10 has_global_variable = sr_site_spec_hygiea }
+		AND = { scope:site = 11 has_global_variable = sr_site_spec_io }
+		AND = { scope:site = 12 has_global_variable = sr_site_spec_europa }
+		AND = { scope:site = 13 has_global_variable = sr_site_spec_ganymede }
+		AND = { scope:site = 14 has_global_variable = sr_site_spec_callisto }
+		AND = { scope:site = 15 has_global_variable = sr_site_spec_himalia }
+		AND = { scope:site = 16 has_global_variable = sr_site_spec_amalthea }
+		AND = { scope:site = 17 has_global_variable = sr_site_spec_venus }
+		AND = { scope:site = 18 has_global_variable = sr_site_spec_mercury }
+		AND = { scope:site = 19 has_global_variable = sr_site_spec_titan }
+		AND = { scope:site = 20 has_global_variable = sr_site_spec_enceladus }
+		AND = { scope:site = 21 has_global_variable = sr_site_spec_rhea }
+		AND = { scope:site = 22 has_global_variable = sr_site_spec_mimas }
+		AND = { scope:site = 23 has_global_variable = sr_site_spec_iapetus }
+		AND = { scope:site = 24 has_global_variable = sr_site_spec_titania }
+		AND = { scope:site = 25 has_global_variable = sr_site_spec_oberon }
+		AND = { scope:site = 26 has_global_variable = sr_site_spec_miranda }
+		AND = { scope:site = 27 has_global_variable = sr_site_spec_ariel }
+		AND = { scope:site = 28 has_global_variable = sr_site_spec_triton }
+		AND = { scope:site = 29 has_global_variable = sr_site_spec_proteus }
+		AND = { scope:site = 30 has_global_variable = sr_site_spec_pluto }
+		AND = { scope:site = 31 has_global_variable = sr_site_spec_eris }
+		AND = { scope:site = 32 has_global_variable = sr_site_spec_makemake }
+		AND = { scope:site = 33 has_global_variable = sr_site_spec_haumea }
+		AND = { scope:site = 34 has_global_variable = sr_site_spec_sedna }
+	}
+}
+# Its two specializations have a level left between them, counting queue and shipments.
+sr_mod_scope_spec_room = {
+	OR = {
+		AND = { scope:site = 1 sr_mod_spec_used_valles_marineris < sr_mod_spec_budget }
+		AND = { scope:site = 2 sr_mod_spec_used_olympus_mons < sr_mod_spec_budget }
+		AND = { scope:site = 3 sr_mod_spec_used_hellas_planitia < sr_mod_spec_budget }
+		AND = { scope:site = 4 sr_mod_spec_used_utopia_planitia < sr_mod_spec_budget }
+		AND = { scope:site = 5 sr_mod_spec_used_arcadia_planitia < sr_mod_spec_budget }
+		AND = { scope:site = 6 sr_mod_spec_used_ceres < sr_mod_spec_budget }
+		AND = { scope:site = 7 sr_mod_spec_used_vesta < sr_mod_spec_budget }
+		AND = { scope:site = 8 sr_mod_spec_used_psyche < sr_mod_spec_budget }
+		AND = { scope:site = 9 sr_mod_spec_used_pallas < sr_mod_spec_budget }
+		AND = { scope:site = 10 sr_mod_spec_used_hygiea < sr_mod_spec_budget }
+		AND = { scope:site = 11 sr_mod_spec_used_io < sr_mod_spec_budget }
+		AND = { scope:site = 12 sr_mod_spec_used_europa < sr_mod_spec_budget }
+		AND = { scope:site = 13 sr_mod_spec_used_ganymede < sr_mod_spec_budget }
+		AND = { scope:site = 14 sr_mod_spec_used_callisto < sr_mod_spec_budget }
+		AND = { scope:site = 15 sr_mod_spec_used_himalia < sr_mod_spec_budget }
+		AND = { scope:site = 16 sr_mod_spec_used_amalthea < sr_mod_spec_budget }
+		AND = { scope:site = 17 sr_mod_spec_used_venus < sr_mod_spec_budget }
+		AND = { scope:site = 18 sr_mod_spec_used_mercury < sr_mod_spec_budget }
+		AND = { scope:site = 19 sr_mod_spec_used_titan < sr_mod_spec_budget }
+		AND = { scope:site = 20 sr_mod_spec_used_enceladus < sr_mod_spec_budget }
+		AND = { scope:site = 21 sr_mod_spec_used_rhea < sr_mod_spec_budget }
+		AND = { scope:site = 22 sr_mod_spec_used_mimas < sr_mod_spec_budget }
+		AND = { scope:site = 23 sr_mod_spec_used_iapetus < sr_mod_spec_budget }
+		AND = { scope:site = 24 sr_mod_spec_used_titania < sr_mod_spec_budget }
+		AND = { scope:site = 25 sr_mod_spec_used_oberon < sr_mod_spec_budget }
+		AND = { scope:site = 26 sr_mod_spec_used_miranda < sr_mod_spec_budget }
+		AND = { scope:site = 27 sr_mod_spec_used_ariel < sr_mod_spec_budget }
+		AND = { scope:site = 28 sr_mod_spec_used_triton < sr_mod_spec_budget }
+		AND = { scope:site = 29 sr_mod_spec_used_proteus < sr_mod_spec_budget }
+		AND = { scope:site = 30 sr_mod_spec_used_pluto < sr_mod_spec_budget }
+		AND = { scope:site = 31 sr_mod_spec_used_eris < sr_mod_spec_budget }
+		AND = { scope:site = 32 sr_mod_spec_used_makemake < sr_mod_spec_budget }
+		AND = { scope:site = 33 sr_mod_spec_used_haumea < sr_mod_spec_budget }
+		AND = { scope:site = 34 sr_mod_spec_used_sedna < sr_mod_spec_budget }
+	}
+}
+# It has a slot left for a Habitat, Spaceport or Defences, counting queue and shipments.
+sr_mod_scope_slot_room = {
+	OR = {
+		AND = { scope:site = 1 sr_mod_slots_used_valles_marineris < 4 }
+		AND = { scope:site = 2 sr_mod_slots_used_olympus_mons < 3 }
+		AND = { scope:site = 3 sr_mod_slots_used_hellas_planitia < 4 }
+		AND = { scope:site = 4 sr_mod_slots_used_utopia_planitia < 4 }
+		AND = { scope:site = 5 sr_mod_slots_used_arcadia_planitia < 3 }
+		AND = { scope:site = 6 sr_mod_slots_used_ceres < 3 }
+		AND = { scope:site = 7 sr_mod_slots_used_vesta < 2 }
+		AND = { scope:site = 8 sr_mod_slots_used_psyche < 2 }
+		AND = { scope:site = 9 sr_mod_slots_used_pallas < 2 }
+		AND = { scope:site = 10 sr_mod_slots_used_hygiea < 2 }
+		AND = { scope:site = 11 sr_mod_slots_used_io < 2 }
+		AND = { scope:site = 12 sr_mod_slots_used_europa < 3 }
+		AND = { scope:site = 13 sr_mod_slots_used_ganymede < 3 }
+		AND = { scope:site = 14 sr_mod_slots_used_callisto < 3 }
+		AND = { scope:site = 15 sr_mod_slots_used_himalia < 1 }
+		AND = { scope:site = 16 sr_mod_slots_used_amalthea < 1 }
+		AND = { scope:site = 17 sr_mod_slots_used_venus < 2 }
+		AND = { scope:site = 18 sr_mod_slots_used_mercury < 3 }
+		AND = { scope:site = 19 sr_mod_slots_used_titan < 3 }
+		AND = { scope:site = 20 sr_mod_slots_used_enceladus < 2 }
+		AND = { scope:site = 21 sr_mod_slots_used_rhea < 2 }
+		AND = { scope:site = 22 sr_mod_slots_used_mimas < 1 }
+		AND = { scope:site = 23 sr_mod_slots_used_iapetus < 2 }
+		AND = { scope:site = 24 sr_mod_slots_used_titania < 2 }
+		AND = { scope:site = 25 sr_mod_slots_used_oberon < 2 }
+		AND = { scope:site = 26 sr_mod_slots_used_miranda < 1 }
+		AND = { scope:site = 27 sr_mod_slots_used_ariel < 2 }
+		AND = { scope:site = 28 sr_mod_slots_used_triton < 2 }
+		AND = { scope:site = 29 sr_mod_slots_used_proteus < 1 }
+		AND = { scope:site = 30 sr_mod_slots_used_pluto < 2 }
+		AND = { scope:site = 31 sr_mod_slots_used_eris < 1 }
+		AND = { scope:site = 32 sr_mod_slots_used_makemake < 1 }
+		AND = { scope:site = 33 sr_mod_slots_used_haumea < 1 }
+		AND = { scope:site = 34 sr_mod_slots_used_sedna < 1 }
+	}
+}
 # ... has a queue to clear.
 sr_mod_scope_has_queue = {
 	OR = {

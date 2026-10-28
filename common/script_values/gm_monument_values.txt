@@ -125,6 +125,46 @@ gm_mon_grandeur = {
 	add = gm_mon_age
 }
 
+# Container scope. What each of a contested secondary's three choices does
+# now (GM-4), for their tooltips: the figures gm_preview_choices stored at the
+# last refresh (gm_effects.txt), guarded; and Rededicate's halved grandeur.
+gm_mon_disp_prev_td_legit = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_td_legit }
+		value = var:gm_prev_td_legit
+	}
+}
+
+gm_mon_disp_prev_td_base = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_td_base }
+		value = var:gm_prev_td_base
+	}
+}
+
+gm_mon_disp_prev_td_sup = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_td_sup }
+		value = var:gm_prev_td_sup
+	}
+}
+
+gm_mon_disp_prev_rd_sup = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_rd_sup }
+		value = var:gm_prev_rd_sup
+	}
+}
+
+gm_mon_disp_prev_rd_grandeur = {
+	value = gm_mon_grandeur
+	divide = 2
+}
+
 # State scope. The grandeur standing here in secondary monuments, 0 with none.
 gm_state_secondary_grandeur = {
 	value = 0

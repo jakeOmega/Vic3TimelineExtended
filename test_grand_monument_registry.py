@@ -1807,8 +1807,13 @@ class WidgetTests(unittest.TestCase):
         for name, _ in self.ROOTS:
             self.assertIn(f'name = "{name}" visible = "[JournalEntry.IsActive]"', g, name)
         self.assertIn('datamodel = "[JournalEntry.GetCountry.MakeScope.GetList(\'gm_states\')]"', g)
+        # Our Monuments lists every finished monument but the contested, which
+        # Awaiting a Decision lists (GM-3, owner 2026-10-27).
+        self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" visible = "[And( EqualTo_CFixedPoint( '
+                      'State.MakeScope.ScriptValue(\'gm_state_disp_listed\'), \'(CFixedPoint)1\' ), NotEqualTo_CFixedPoint( '
+                      'State.MakeScope.ScriptValue(\'gm_status_code\'), \'(CFixedPoint)4\' ) )]" }', g)
         self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" visible = "[EqualTo_CFixedPoint( '
-                      'State.MakeScope.ScriptValue(\'gm_state_disp_listed\'), \'(CFixedPoint)1\' )]" }', g)
+                      'State.MakeScope.ScriptValue(\'gm_status_code\'), \'(CFixedPoint)4\' )]" }', g)
 
     def _shown_text(self):
         """The widget and the loc of every key it renders, followed through
@@ -6974,7 +6979,10 @@ class SitePanelTests(unittest.TestCase):
         self.assertEqual(squash(block(values, "gm_state_disp_listed")),
                          "value = 0 if = { limit = { has_building = building_grand_monument } value = 1 }")
         self.assertEqual(squash(block(values, "gm_disp_count_listed")), "value = gm_sum_monuments")
-        self.assertIn("gm_state_has_site = yes", squash(block(values, "gm_disp_count_undedicated")))
+        self.assertIn("gm_state_has_site = yes", squash(block(values, "gm_disp_count_sites")))
+        # The Monuments cell's breakdown counts a finished monument left
+        # undedicated (GM-7: one term per thing).
+        self.assertIn("gm_state_is_dedicated = no", squash(block(values, "gm_disp_count_undedicated")))
 
     def test_the_site_row(self):
         row = self.type_body(WIDGET, "gm_site_row")
@@ -6986,8 +6994,9 @@ class SitePanelTests(unittest.TestCase):
                                     .split("type te_gm_sec_monuments", 1)[0]))
         self.assertIn("gm_site_row = {} gm_dedicate_button = {}", sec)
         mon = squash(strip_comments(read(WIDGET).split("type te_gm_sec_monuments = flowcontainer {", 1)[1]))
-        self.assertIn("visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_listed'), "
-                      "'(CFixedPoint)1' )]\"", mon)
+        self.assertIn("visible = \"[And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_listed'), "
+                      "'(CFixedPoint)1' ), NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), "
+                      "'(CFixedPoint)4' ) )]\"", mon)
 
     def test_the_site_card(self):
         card = self.type_body(self.STATE_WIDGETS, "te_state_gm_site_card")
@@ -7004,9 +7013,12 @@ class SitePanelTests(unittest.TestCase):
         self.assertLess(panel.find("te_state_gm_card = {}"), panel.find("te_state_gm_site_card = {}"))
 
     def test_the_overview_counts_sites(self):
-        self.assertTrue(loc()["gm_je_ov_undedicated"].startswith("Being Built "))
+        # One term per thing (GM-7): the cell is the construction sites'.
+        L = loc()
+        self.assertEqual(L["gm_je_ov_sites_label"], "Sites")
+        self.assertIn("ScriptValue('gm_disp_count_sites_ready')", L["gm_je_ov_sites_ready"])
         self.assertIn("gm_je_ov_building_tt", read(WIDGET))
-        self.assertIn("gm_je_ov_building_tt", loc())
+        self.assertTrue(L["gm_je_ov_building_tt"].startswith("#b Construction Sites#!"))
 
     def test_a_site_opens_the_entry(self):
         site = "any_scope_state = { has_building = building_grand_monument_site }"
@@ -7185,22 +7197,27 @@ class MeaningCountsGrandeurTests(unittest.TestCase):
 
 class RateDisplayTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.2 (Plan B): the player sees what a level is
-    worth before building: on the site's card and row, in National Effects
+    worth before building: on the site's card, above Awaiting Dedication's
+    rows (GM-5, the 2026-10-27 GUI audit: once, where building is decided)
     and in the build menu; and grandeur, often fractional now, prints with a
     decimal (Review Focus 5)."""
 
     RATE = "ScriptValue('gm_world_rate_value')|3"
 
-    def test_the_four_places(self):
+    def test_the_places(self):
         L = loc()
         card = squash(strip_comments(read("gui/te_state_panel_widgets.gui")))
         self.assertIn('text = "gm_site_card_rate_lbl"', card)
         self.assertIn('text = "gm_site_card_rate"', card)
         self.assertIn(self.RATE, L["gm_site_card_rate"])
+        # Said once, as Awaiting Dedication's first line, where building is
+        # decided, not on every site's row nor in National Effects (GM-5).
         widget = squash(strip_comments(read(WIDGET)))
-        self.assertIn('text = "gm_site_row_rate"', widget)
-        self.assertIn(self.RATE, L["gm_site_row_rate"])
-        self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate"', widget)
+        awaiting = widget.split("type te_gm_sec_awaiting = flowcontainer {", 1)[1].split("type te_gm_sec_", 1)[0]
+        self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate"', awaiting)
+        self.assertEqual(widget.count('text = "gm_je_world_rate"'), 1)
+        self.assertNotIn("gm_site_row_rate", widget)
+        self.assertNotIn("gm_site_row_rate", L)
         self.assertIn(self.RATE, L["gm_je_world_rate"])
         self.assertIn("ScriptValue('gm_world_wealth_factor')|1", L["gm_je_world_rate_tt"])
         # How many times richer: the stored ratio, not the scaled rate.
@@ -7623,12 +7640,12 @@ class SitesFinalReviewTests(unittest.TestCase):
     def test_rate_prints_small(self):
         # Minor 5, re-graded: past 200 times 1836's wealth |2 reads 0.00.
         L = loc()
-        for key in ("gm_je_world_rate", "gm_site_card_rate", "gm_site_rate_tt", "gm_site_row_rate"):
+        for key in ("gm_je_world_rate", "gm_site_card_rate", "gm_site_rate_tt", "gm_je_com_levels_tt"):
             self.assertIn("ScriptValue('gm_world_rate_value')|3]", L[key], key)
             self.assertNotIn("ScriptValue('gm_world_rate_value')|2]", L[key], key)
         # What a level adds in 1836, spliced, not "N levels make one": the rate
         # passes one in 1836 (owner, 2026-10-19).
-        for key in ("gm_je_world_rate", "gm_site_rate_tt", "gm_site_row_rate", "gm_je_world_rate_tt"):
+        for key in ("gm_je_world_rate", "gm_site_rate_tt", "gm_je_world_rate_tt"):
             self.assertIn("ScriptValue('gm_level_grandeur_1836')|0]#! in 1836", L[key], key)
             self.assertNotIn("levels make one", L[key], key)
         # How It Works reads nothing (test_grand_monuments_layout), so it states the figure.

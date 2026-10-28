@@ -725,11 +725,13 @@ un_leave_organisation = {
 			limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
 			un_state_off = { MODIFIER = un_headquarters_modifier }
 		}
-		add_modifier = {
-			name = un_withdrawal_penalty_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
+	}
+	# The penalty for walking out, as the engine's own modifier line, outside
+	# the custom_tooltip above (the 2026-10-27 audit, UN-10).
+	add_modifier = {
+		name = un_withdrawal_penalty_modifier
+		days = normal_modifier_time
+		is_decaying = yes
 	}
 	# International standing: walking out costs the record, once. The score
 	# itself is FROZEN rather than reset — resigning must not let a
@@ -755,11 +757,9 @@ un_conference_open = {
 	ROOT = { save_scope_as = un_conference_convener }
 	set_global_variable = { name = un_founding_conference value = ROOT }
 	set_global_variable = { name = un_conference_months value = 0 }
-	add_modifier = {
-		name = un_founding_cost_modifier
-		days = normal_modifier_time
-		is_decaying = yes
-	}
+	# The cost, un_founding_cost_modifier, is the caller's (un_found_button),
+	# outside its custom_tooltip, so its modifier line shows (the 2026-10-27
+	# audit, UN-10).
 	ordered_country = {
 		limit = {
 			country_rank >= rank_value:great_power

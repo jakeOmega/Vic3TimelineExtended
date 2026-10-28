@@ -94,6 +94,9 @@ NOT_COPIED = {
     "te_mon_arr_provider_pts", "te_mon_arr_standing_pts",
     "te_mon_union_holdouts", "te_mon_union_refusers",
     "te_mon_union_seigniorage_pts", "te_mon_commodity_centre",
+    # The Backstops rows' display figures (GUI audit BNK-13): te_mon_bs_cost_<kind>
+    # (parsed as its prefix), the union's per-member share and its sum.
+    "te_mon_bs_cost_", "te_mon_bs_cost_union", "te_mon_bs_union_pts",
     # The independence law's act, re-read from the winner's own law (#799).
     "te_mon_mandate_statute",
     # Per-pulse copies of world figures, and the global passes' shares.

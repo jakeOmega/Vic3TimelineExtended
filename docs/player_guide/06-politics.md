@@ -446,7 +446,7 @@ once, five years after you attach the Birthright Endowment. Their answers move
 the score, a pop group or a modifier for up to ten years.
 
 With Mind Backups or Biological Immortality, Posthumous Title asks whether a
-person can outlive their estate. Recognising continuity of title freezes
+person can outlive their estate. Recognizing continuity of title freezes
 Wealth Concentration where it stands, at a cost of 10% innovation and 10%
 qualifications, and five years later the young who will never inherit
 organize. Declaring legal death lets estates pass and strengthens the

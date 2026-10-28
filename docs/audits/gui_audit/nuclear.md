@@ -16,6 +16,8 @@ The Military tab composes exactly the journal entry's types (`te_nuclear_overvie
 both hosts; nothing is reachable in only one of them. The JE status text is empty while active (`nuke_line_empty`),
 as rule 1 wants.
 
+All 21 findings are done in the 2026-10-27 GUI audit wave (each finding's Status line says how; play-test list `docs/testing/nuclear-playtest.md`).
+
 ## Top priorities
 
 - **Make the hovers findable and stop doubling them.** No row label, choice name or stepper label in the panel is
@@ -40,7 +42,7 @@ as rule 1 wants.
 ## Findings
 
 ### NUC-1. No hoverable text in the panel is marked hoverable
-- **Status:** fixed in this PR for the three row types (a `label_format` block, overridden empty by First Device). The choice rows' names and the stepper values remain.
+- **Status:** Done (the 2026-10-27 wave). `nd_choice_row` is a widget type whose name textbox carries a `name_format` block (`#tooltippable`, overridden empty for the crisis moves, which keep no name hover after NUC-2); the readiness table's level names and the four tooltipped stepper values are underlined too. The row labels were done in #1202.
 - **Category:** hidden info
 - **Where:** `gui/journal_entry_widgets/nuclear_deterrence_widget.gui:117-144` (`nd_row`: label textbox
   `alwaystransparent = yes`, no `default_format`), `:195-217` (`nd_home_term_row`), every `nd_choice_row` name
@@ -64,6 +66,7 @@ as rule 1 wants.
 - **Confidence:** high
 
 ### NUC-2. Every choice row has two hovers covering the same ground, and the name's hover holds unique content
+- **Status:** Done. The readiness names drop their upkeep and survivability lines (the readiness table shows both, NUC-5), Automatic Retaliation drops its Extra upkeep line (the button's preview has it), and the five crisis moves lose their name hovers: each move's one hover is its button's, the conditions and then what it does. The moves' flavour keys are deleted; the previews already said everything in them.
 - **Category:** spread-out/redundant, hidden info
 - **Where:** Posture choices `nuclear_deterrence_widget.gui:1048-1361`; crisis moves `:671-779`. Loc: `nd_w_doctrine_choice_N_tt`
   vs `nd_tt_doctrine_adopted_N` (`te_miscellaneous_l_english.yml:5371-5379` vs `:5155-5159`); `nd_w_readiness_choice_N_tt`
@@ -90,6 +93,7 @@ as rule 1 wants.
 - **Confidence:** high (the duplication); medium on which hover should keep the flavour line.
 
 ### NUC-3. The posture is shown twice, its tooltips restate the concepts, and its actions are far from it
+- **Status:** Done, option (a). Each axis is an `nd_axis_row`: its label a concept (not alwaystransparent, so the concept hovers), what is in force (underlined; its hover the posture's modifier lines in force and when it can next change), and a Change / Hide toggle that opens the axis's choices directly beneath it. Three flags, `nd_doctrine_open`, `nd_readiness_open`, `nd_authority_open`; the mixed subsection is gone. The overview's cells use the same hovers, now live rather than restating the concepts. `FlagTest` pins the three toggles.
 - **Category:** spread-out/redundant, over-explaining
 - **Where:** overview row 2 `nuclear_overview_widget.gui:257-393` and Posture rows `nuclear_deterrence_widget.gui:934-966`,
   both using `nd_w_doctrine_tt`, `nd_w_readiness_tt`, `nd_w_authority_tt` (`te_miscellaneous_l_english.yml:5383,
@@ -119,7 +123,7 @@ as rule 1 wants.
 - **Confidence:** high (duplication), medium (layout).
 
 ### NUC-4. "When can I change it?" is computed but never shown
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** Done. `nd_display_*_months_left` and `nd_display_readiness_lock_months` now print in a live line above each list (`nd_w_doctrine_legend` and its siblings, a `SelectLocalization` between "can be changed again in N months" and "can be changed now"), in each axis row's hover and in the overview's Doctrine and Launch Authority cells.
 - **Category:** hidden info
 - **Where:** `common/script_values/nuclear_deterrence_values.txt:1109-1134` (`nd_display_doctrine_months_left`,
   `nd_display_authority_months_left`, `nd_display_readiness_lock_months`) — referenced by no .gui, loc or script.
@@ -141,6 +145,7 @@ as rule 1 wants.
 - **Confidence:** high
 
 ### NUC-5. Readiness levels should be a comparison table, and the current option of each list is not marked
+- **Status:** Done. Readiness is a four-row table under a head (`nd_readiness_row`: level, weekly upkeep there, the survivability a crisis would count there, Order). Every list tints its option in force, as Covert's Funding Levels do; readiness tints the level ordered (`nd_display_readiness_target_code`, new), the one its Order button greys. The op-code caveat was the test's, not the panel's: `test_nuclear_deterrence.gui_ops` now counts only `AddScope( 'op', … )` literals, so a tint's code is not read as an op, and no display sguis were needed.
 - **Category:** list, hidden info
 - **Where:** readiness rows `nuclear_deterrence_widget.gui:1188-1271`; doctrine `:1048-1152`; authority `:1278-1361`.
   Figures per level already exist: `nd_upkeep_weekly_at_readiness_N` and `nd_effective_survivability_at_readiness_N`
@@ -160,6 +165,7 @@ as rule 1 wants.
 - **Confidence:** medium
 
 ### NUC-6. Prose where siblings render modifiers: Recessed, Routine and every launch authority; IG reactions told for some options only
+- **Status:** Done. Twelve `script_only` display types (`common/modifier_type_definitions/nuclear_deterrence_display_types.txt`) carried by eight static modifiers nothing adds (`nd_readiness_terms_0..3`, `nd_authority_terms_1..4`; `_terms_`, since `nd_readiness_mod_0` must not exist). Readiness prints custody cost, the everyday incident rate against Routine (x0.5 / x4 / x10, as exact relative factors: the Recessed tooltip already disclosed "half as likely", and a factor is not a probability), crew strain a month, danger in our crises and the pressure our threats exert; launch authority prints its rules as boolean lines, plus the halt chance and custody loss. The doctrine choices keep their own modifiers. No option names the interest groups' reactions any more (option c, dropping them). `TestPostureTerms` holds every figure to the script's.
 - **Category:** style, hidden info
 - **Where:** `nd_w_readiness_choice_0_tt`, `_1_tt` (`te_miscellaneous_l_english.yml:5404, 5406`) vs `_2_tt`, `_3_tt`
   (`:5408, 5410`, which embed `[GetStaticModifier('nd_readiness_mod_2'/'_3').GetDesc]`);
@@ -190,6 +196,7 @@ as rule 1 wants.
 - **Confidence:** medium-high
 
 ### NUC-7. The crisis is eleven stacked lines, with Our Moves below all of them
+- **Status:** Done. A headline printed in our own scope ("Against France · we made the threat · over a war, in public", `nd_crisis_opponent_sgui`); the six readings as a grid of `nd_crisis_cell`s two to a row (Banking's cell shape without the icon box, since six readings have no art: caption, word, figure; the breakdowns on hover); Our Moves directly under the grid; then an Outcomes table (they / we concede, back down, both stand down: what happens and the credibility change, from new `nd_crisis_cred_if_*` blocks that mirror the outcome effects). Pressure gets a word (Firm, Wavering, Yielding, Breaking at its event's 50 / 70 / 85); the stage cell counts the crisis's week.
 - **Category:** spread-out/redundant
 - **Where:** `te_nuclear_sec_crisis`, `nuclear_deterrence_widget.gui:523-781`.
 - **Now:** "Against France" (script line), then ten `nd_row`s: Our side · Over · Stage · Weeks to the deadline ·
@@ -208,7 +215,7 @@ as rule 1 wants.
 - **Confidence:** medium
 
 ### NUC-8. "Our stakes" is two bare numbers whose order flips with our side
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** Done. The stakes row is gone into the Outcomes table, whose Credibility column states each change on its own row, so the order cannot flip; the tooltip's header is "Credibility at Stake". The player guide's "your stakes" is rewritten.
 - **Category:** hidden info
 - **Where:** row `nuclear_deterrence_widget.gui:654-664`; `nd_stakes_short_target` / `_public` / `_private`
   (`te_miscellaneous_l_english.yml:4967-4969`) via `nd_crisis_stakes_short`.
@@ -223,6 +230,7 @@ as rule 1 wants.
 - **Confidence:** high
 
 ### NUC-9. Crisis tooltips enumerate the general case beside the specific one
+- **Status:** Done. The dispute's general case and "Stages are not a ladder to war" moved into How Nuclear Weapons Work → Crises; the headline's hover is the role and the public-ultimatum line; the Stage cell's hover is the next-stage line alone.
 - **Category:** over-explaining
 - **Where:** `nd_w_crisis_dispute_tt` (`te_miscellaneous_l_english.yml:5345`); `nd_w_crisis_stage_tt` (`:5365`);
   How-it-works crisis note `nd_w_crisis_actions_legend` (`:5332`).
@@ -243,7 +251,7 @@ as rule 1 wants.
 - **Confidence:** medium-high
 
 ### NUC-10. Crisis move naming: four verbs for one move
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** Done. Concede's label is "Give them what they demand" (the loc part did Back down).
 - **Category:** style
 - **Where:** `nd_w_crisis_act_back_down` "Let the threat go", `_btn` "Back down", `_tt` "Abandon the threat",
   `nd_last_outcome_backed_down` "The threat was abandoned", `nd_stakes_long_*` "If we back down"
@@ -256,7 +264,7 @@ as rule 1 wants.
 - **Confidence:** medium-high
 
 ### NUC-11. The taboo score, target and direction are shown twice, and the section colours the direction
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** Done. One row, "Nuclear taboo: 62 → 68 · Strong" with the breakdown on hover; the Heading toward row, its colourless words and `nd_taboo_heading` are deleted.
 - **Category:** spread-out/redundant, style
 - **Where:** overview row 3 (`nuclear_overview_widget.gui:415-504`, "Taboo [bar] 62 → 68 (+0.4/mo) ↑") and the
   section's first two rows (`nuclear_program_widget.gui:313-335`, "Nuclear taboo: 62 — Strong", "Heading toward: 68
@@ -272,7 +280,7 @@ as rule 1 wants.
 - **Confidence:** high
 
 ### NUC-12. Warheads appear three times, with the estimate explained three times
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** Done. The Forces section's Warheads held row moved into Arsenal Size, beside the ceiling: "12 (est. 10)" with " · treaty: N", " · UN ban: N" or " · dismantling" when they bind (`nd_taboo_arsenal_status` shortened; our own ceiling is the stepper's value); the old Arsenal status row folded into it. The estimate rule is said in the overview's hover and in How only; "Additional warheads add less and less…" moved to the ceiling's hover.
 - **Category:** spread-out/redundant, over-explaining
 - **Where:** overview cell + `je_nuclear_ov_warheads_tt` (`te_journal_entries_l_english.yml:606`); Forces row
   "Warheads held" + `nd_w_arsenal_tt` (`te_miscellaneous_l_english.yml:5297-5298`); How-it-works
@@ -290,6 +298,7 @@ as rule 1 wants.
 - **Confidence:** high
 
 ### NUC-13. Credibility shown twice; it is used everywhere but is not a concept
+- **Status:** Done. `concept_nuclear_credibility` ("Nuclear Credibility"), its desc the mechanics, with the pressure rule (every point above 50 adds half a point); 24 effect lines name it as `[Concept('concept_nuclear_credibility','credibility')]`. The Reputation row is dropped; the overview's Credibility cell gives a word (Doubted, Steady, Trusted) and the figure, its hover the figure, the word and what it adds to our threats.
 - **Category:** spread-out/redundant, over-explaining
 - **Where:** overview meter (`nuclear_overview_widget.gui:229-252`) and Reputation row (`nuclear_deterrence_widget.gui:1871-1881`),
   both `nd_w_credibility_tt` (`te_miscellaneous_l_english.yml:5315`); credibility in `nd_tt_credibility_*`,
@@ -305,6 +314,7 @@ as rule 1 wants.
 - **Confidence:** medium-high
 
 ### NUC-14. Leaderboard and World Crises are fixed slot rows of concatenated text
+- **Status:** Done. Both lists are datamodels over variable lists of capitals on a parentless global store (`global_var:nd_lists_store`, `nd_lists_store_ensure`), rebuilt where the slots were written (`update_nuclear_powers_ranking`, now monthly from the world's step; `nd_world_crises_refresh`). Rows read the country through `Scope.GetState` → `State.GetOwner`: vanilla's `tiny_flag`, the name and estimate and the doctrine icon for the powers; both flags, the stage and the danger for the crises (the target through `nd_wc_target_cap`, stored on the issuer), their details on hover from an `ExecuteTooltip` rooted at the issuer. Our rows are tinted. The slot sguis, the `nuke_rank_N` and `nd_wc_N` globals and their loc are deleted. `State.GetOwner` off a datamodel item is a play-test item (`docs/testing/nuclear-playtest.md`).
 - **Category:** list
 - **Where:** `te_nuclear_sec_powers` (`nuclear_program_widget.gui:605-711`, ten `nuclear_program_power_row`s,
   `nuclear_program_powers_sgui` op 1-10, loc `nuclear_program_power_row_1..10`, `te_miscellaneous_l_english.yml:5494-5503`);
@@ -326,6 +336,7 @@ as rule 1 wants.
 - **Confidence:** medium (value high; one engine step unproven)
 
 ### NUC-15. Burden of our arsenal: a modifier told as prose, with one effect left out
+- **Status:** Done, as proposed (the modifier's lines, UN Authority Target among them).
 - **Category:** style, hidden info
 - **Where:** `je_nuclear_program_widget_taboo_burden_tt` (`te_journal_entries_l_english.yml:634`); modifier
   `nd_taboo_possession_cost` (`common/static_modifiers/nuclear_taboo_modifiers.txt:28-33`, applied with
@@ -341,6 +352,7 @@ as rule 1 wants.
 - **Confidence:** high
 
 ### NUC-16. Bar tooltips explain the design, and the survivability hover is long
+- **Status:** Done, as proposed; the technology list stays only in the ceiling line's hover.
 - **Category:** over-explaining
 - **Where:** `je_nuclear_ov_taboo_bar_tt` (`te_journal_entries_l_english.yml:602`), `nd_w_survivability_bar_tt`
   (`te_miscellaneous_l_english.yml:5429`), `nd_w_survivability_tt` (`:5433`), `nd_w_survivability_cap_tt` (`:5430`).
@@ -359,6 +371,7 @@ as rule 1 wants.
 - **Confidence:** medium-high
 
 ### NUC-17. Incident exposure: mechanics in the hover, factors as prose
+- **Status:** Done. The hover is one line and `nd_risk_breakdown_sgui`'s factors (readiness against Routine, doctrine, crew strain, command reliability; in a crisis, its danger's word), multipliers rather than a probability; the peacetime-exchange rule moved to How Nuclear Weapons Work → Posture. The owner may still want to confirm that showing the factors fits `nuclear_crisis_design.md` §10.
 - **Category:** over-explaining, style
 - **Where:** `nd_w_risk_tt` (`te_miscellaneous_l_english.yml:5421`); `nd_w_hold_tt` (`:5390`); values
   `nd_incident_*` (`nuclear_deterrence_values.txt:356-443`).
@@ -373,6 +386,7 @@ as rule 1 wants.
 - **Confidence:** medium
 
 ### NUC-18. "Chance of a halt": shown when it cannot apply, and its hover omits a case where it does
+- **Status:** Done, as proposed: "not delegated" under Central Authorization, the figure under the other three, and Automatic Retaliation named in the hover.
 - **Category:** other (noise), hidden info
 - **Where:** row `nuclear_deterrence_widget.gui:1551-1561`; `nd_w_hold_value`, `nd_w_hold_tt`
   (`te_miscellaneous_l_english.yml:5390`, "Under conditional delegation or launch on warning ..."); the rolls
@@ -387,7 +401,7 @@ as rule 1 wants.
 - **Confidence:** high
 
 ### NUC-19. At Home rows repeat the same tenure sentence
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** No further change needed: the loc part (#1202) removed the sentence, and the doctrine and readiness rows already nest their concepts.
 - **Category:** over-explaining
 - **Where:** `nd_home_row_doctrine_tt`, `_readiness_tt`, `_authority_tt`, `_strain_tt` (`te_miscellaneous_l_english.yml:4881-4899`).
 - **Now:** each ends "Counted once the groups have had time to judge our doctrine." — up to four times per group
@@ -399,7 +413,7 @@ as rule 1 wants.
 - **Confidence:** high
 
 ### NUC-20. Smaller style points
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** Done. Title-case headers on every key listed; Delivery Capability and Home Defense align their headers and labels; "missile defense"; the rate tooltip's jargon was the loc part. Type: the panel's own templates (`te_nuclear_fontsize_row` 17, `_heading` 20, `_overview` 16, at the head of `nuclear_deterrence_widget.gui`) replace `fontsize_small` / `_medium` / `_large` everywhere; `LabelBudgetTest` reads them.
 - **Category:** style
 - **Where / Now / Proposed:**
   - Tooltip headers are half sentence case ("Launch authority", "Command reliability", "Crew strain", "Incident
@@ -422,6 +436,7 @@ as rule 1 wants.
 - **Confidence:** high
 
 ### NUC-21. The overview names states but not what needs attention
+- **Status:** Done (owner, 2026-10-27). Banking's `te_banking_ov_cell` as it is, two to a row: the crisis (stage, deadline weeks, red from two out), Program (state, next warhead), Warheads (count, the world's estimate), Doctrine and Launch Authority (short names, when each can change), Readiness (its name, where it is moving or the weekly upkeep), Credibility; the taboo bar keeps its row. Credibility's icon is a placeholder (art need in `docs/systems/nuclear_gui_icons.md`). `OverviewTest` pins the cells and the three figures the owner named.
 - **Category:** spread-out/redundant
 - **Where:** `te_nuclear_overview_panel` (`nuclear_overview_widget.gui:98-508`).
 - **Now:** row 1 "Producing · Warheads 12 · Confrontation · Credibility 55", row 2 the three posture names, row 3 the

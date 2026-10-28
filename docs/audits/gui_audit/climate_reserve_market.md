@@ -37,7 +37,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 ### Global Warming
 
 ### GW-1. Policy tooltips: the "Applies to your own country. Available at 0.5 °C…" boilerplate (and Carbon Removal Support)
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27 wave). The audit's loc fix was the substance; the wave checked every policy description now ends at its modifier and spelled the row "Subsidize Reforestation" to match Carbon Removal's flavor line.
 - **Category:** over-explaining / style
 - **Where:** loc `GW_CARBON_TAX_DESC` (`te_miscellaneous_l_english.yml:375`), `GW_RENEWABLE_INVESTMENT_DESC` (`:411`),
   `GW_EMISSION_STANDARDS_DESC` (`:379`), `GW_PUBLIC_TRANSIT_DESC` (`:390`), `GW_GREEN_BUILDING_CODES_DESC` (`:388`),
@@ -62,7 +62,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-2. Fossil-Fuel Tariffs' tooltip is a paragraph in front of its own modifier lines
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The audit's loc fix was the whole finding; checked in the 2026-10-27 wave.
 - **Category:** over-explaining / style
 - **Where:** loc `GW_FOSSIL_FUEL_TARIFFS_DESC` (`te_miscellaneous_l_english.yml:385`); row at
   `global_warming_widget.gui:902-921`.
@@ -82,7 +82,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-3. Policies move Environmental Movement radicalism: How now says so, the policy rows still don't
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27 wave). A `script_only` modifier type, `country_environmental_movement_radicalism_add`, sits on each policy's static modifier (−10%, Carbon Removal Support −5%), so every row's modifier list prints it; the movement's radicalism factor reads its sum as one line, "Climate policies in force", in place of eight `has_modifier` branches. The "could adopt but hasn't" +10% lines stay as they were.
 - **Category:** hidden info / style
 - **Where:** `common/political_movements/new_ideological_movements.txt:~255-345` (`additional_radicalism_factors` of
   `movement_environmental`); loc `gw_how_policies_2` (as changed in this PR), `GW_REMOVE_CARBON_REMOVAL_DESC`
@@ -105,7 +105,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high (the effect is real and unshown per policy); medium on the movement-scope `modifier:` read
 
 ### GW-4. Renewable Investment's money cost is invisible before adopting (hidden info)
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27 wave). `gw_renewable_investment_cost_apply` runs outside the policy's `custom_tooltip`, so the Adopt hover prints the running cost's modifier line (`test_country_climate_policies.py`).
 - **Category:** hidden info
 - **Where:** `gw_effect_renewable_investment` (`global_warming_effects.txt:25-31`) runs
   `gw_renewable_investment_cost_apply` *inside* the `custom_tooltip`, so the cost modifier
@@ -123,7 +123,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-5. Repeal tooltips are prose that has drifted from the modifiers; render the modifier instead
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27 wave). Every repeal text is "Ends:" and the same `[GetStaticModifier('<policy>_modifier').GetDesc]` the adopt shows (the owner accepted that the lines keep their adopt colors); Renewable Investment's also names its running cost.
 - **Category:** style / hidden info (wrong info)
 - **Where:** loc `GW_REMOVE_*_DESC` (`te_miscellaneous_l_english.yml:392-410`), shown by the Repeal button's
   ExecuteTooltip (`gw_effect_remove_*`, `global_warming_effects.txt:18-163`).
@@ -149,7 +149,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high that the prose is wrong; medium that the owner takes the colour trade-off
 
 ### GW-6. Stale "market" framing on another market's Climate tab
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The audit's loc fix was the whole finding; checked in the 2026-10-27 wave.
 - **Category:** hidden info (misleading) / style
 - **Where:** loc `te_market_gw_foreign_intro` (`te_miscellaneous_l_english.yml:8037`), `te_market_tab_global_warming_tt`
   (`:8046`), `gw_btn_not_ours_tt` (`:4356`); shown by `gui/market_panel.gui:1528-1531`, the tab strip `:184`, and every
@@ -166,7 +166,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-7. Stale market-era wording in emissions tooltips and How
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The audit's loc fix was the whole finding; checked in the 2026-10-27 wave.
 - **Category:** hidden info (misleading)
 - **Where:** loc `gw_cond_emis_tt_ours` / `_theirs` (`te_miscellaneous_l_english.yml:4358-4359`),
   `concept_greenhouse_gas_emissions_desc` (`te_concepts_l_english.yml:819`), `gw_how_policies_1` (`:4401`).
@@ -187,7 +187,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-8. The penalty tooltip says the same thing twice, and the overview shows the anomaly twice
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27 wave). The overview's Warming Penalty cell shows the modifier's standard-of-living and mortality lines at today's scale (`gw_disp_penalty_sol`, `gw_disp_penalty_mortality_pct`), its hover the whole modifier, so the anomaly is printed once, on the temperature line.
 - **Category:** over-explaining / redundant
 - **Where:** loc `gw_cond_penalty_tt` (`te_miscellaneous_l_english.yml:4364`), `gw_ov_penalty_label` (`:4414`); cell at
   `global_warming_widget.gui:559-568`.
@@ -202,7 +202,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high (quick part); medium (figure swap)
 
 ### GW-9. The same rules repeated across concept, How, overview and row tooltips
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The audit fixed the concepts' thresholds and the roster; the 2026-10-27 wave added `concept_emissions_reduction_treaty`, holding the treaty's rules once, and cut the five treaty texts to one line each nesting it.
 - **Category:** redundant / over-explaining
 - **Where:**
   - The treaty's rules in five places: `gw_pol_treaty` (`te_concepts_l_english.yml:1565`), `gw_ov_treaty_tt_ours` /
@@ -224,7 +224,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** medium-high
 
 ### GW-10. The journal entry's reason text is an always-open explanation at the foot of the panel
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The audit's loc fix was the whole finding; checked in the 2026-10-27 wave.
 - **Category:** over-explaining / redundant
 - **Where:** loc `je_global_warming_reason_climate` (`te_journal_entries_l_english.yml:378`), rendered by
   `gui/journal_entry.gui:749` below every widget.
@@ -237,6 +237,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-11. Top Emitters is five copy-pasted slots; a datamodel over a list would do it
+- **Status:** done (2026-10-27 wave). The monthly refresh builds `gw_te_top` (`ordered_country`, `max = 5`), one `gw_emitter_row` draws per item through a datamodel with `datacontext = "[Scope.GetState]"`, "Our country" is `State.GetCountry.IsLocalPlayer`, and "+N more" lists the next 25. The slot variables are dropped from older saves. `TE_SELF_CHECK gw_top_emitters_list` checks the list once a game (`docs/testing/global-warming-playtest.md`).
 - **Category:** list
 - **Where:** `global_warming_widget.gui:1471-1525` (five `gw_emitter_row` instances reading
   `Var('gw_emitter_1')`…`Var('gw_emitter_5')`, each with its own `gw_disp_emitters_own_slot = N` test for the "Our
@@ -258,6 +259,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-12. Two pairs of policy rows share an icon
+- **Status:** done with placeholder art (2026-10-27 wave). Tariffs and Carbon Removal Support have rows of their own in `global_warming_gui_icons.md` with the proposed subjects; until the art exists they show existing textures that differ from their neighbors (vanilla's maximum-tariffs trade icon, the Carbon Capture and Storage invention icon). The two `policy_*.dds` files remain an art need.
 - **Category:** style
 - **Where:** `global_warming_widget.gui:905` (Fossil-Fuel Tariffs uses `policy_fossil_fuel_divestment.dds`) and `:1038`
   (Carbon Removal Support uses `policy_renewable_investment.dds`); `docs/systems/global_warming_gui_icons.md:56` (and
@@ -272,7 +274,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-13. Cooling is printed blue, not green
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The audit's loc fix was the whole finding; checked in the 2026-10-27 wave.
 - **Category:** style (colour convention)
 - **Where:** loc `gw_trend_prefix_cooling` (`te_miscellaneous_l_english.yml:4471`, "#B -"), used by `gw_ov_temp_projected`
   and `gw_cond_trend_value` (the headline and "Warming Last Year").
@@ -283,6 +285,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** medium-high (blue may have been a "cold" metaphor; the guide says green)
 
 ### GW-14. Live tooltips teach accounting that belongs in How
+- **Status:** done (2026-10-27 wave). The synthetic-fuel booking moved to `gw_how_emissions_1`, the capture hovers and the Cumulative heading lost their accounting and save notes, and the row's lore nests the treaty concept; the tests moved with the text.
 - **Category:** over-explaining
 - **Where:** loc `gw_emis_capture_tt_ours` / `_theirs` (`te_miscellaneous_l_english.yml:4379-4380`), `gw_te_head_cum_tt`
   (`:4449`), `gw_te_row_tt` (`:4461`).
@@ -307,6 +310,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-15. Type sizes predate the 2026-10-17 ladder
+- **Status:** done (2026-10-27 wave). `gw_fontsize_row` (17), `gw_fontsize_heading` (20) and `gw_fontsize_overview` (16) set every text, and the width tests read the sizes from the templates.
 - **Category:** style
 - **Where:** `global_warming_widget.gui`: `gw_value_row` cells `fontsize_medium` (`:183,192`), `gw_note`
   `fontsize_medium` (`:149`), overview cell words `fontsize_small` (`:358`), Top Emitters values `fontsize_medium` and
@@ -321,6 +325,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** medium (the owner may accept the current sizes until a rework)
 
 ### GW-16. Minor
+- **Status:** done (2026-10-27 wave): the in-force conditions are `hidden_trigger`s, `gw_cond_role_tt_theirs` names the leader, the degree spacing matches. Adoption Around the World: no change, the owner's 2026-09-29 decision.
 - **Category:** style / tidiness
 - **Where / Now / Proposed:**
   - Every Adopt and Repeal tooltip opens with a condition that is always ticked, because the control is only drawn in
@@ -340,6 +345,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 ### Strategic Reserve
 
 ### SR-1. A collapsed row has rate buttons but no rate
+- **Status:** done (2026-10-27 wave). The rate setting sits between the decrease and increase buttons, then stop.
 - **Category:** spread-out / hidden info
 - **Where:** `gui/journal_entry_widgets/strategic_reserve_widget.gui:772-965` (the table line: name 170, Stock bar 150,
   status 30, policy 30, decrease / stop / increase 3 × 26; 486 of 496).
@@ -357,6 +363,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### SR-2. The row-wide hover repeats everything, and pops over the expanded figures
+- **Status:** done (2026-10-27 wave). The row hover is gone; each cell has its own (stock, status, policy, rate), and the expanded Rate Setting and Decay labels carry the active rate and the decay breakdown.
 - **Category:** redundant / over-explaining
 - **Where:** `tooltip = "st_res_row_<good>_tooltip"` on each `te_st_res_good_row` instance's *root*
   (`strategic_reserve_widget.gui:1253` and the seven siblings), i.e. over the table line *and* the expanded figures,
@@ -376,6 +383,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### SR-3. The policy icon doesn't say which policy
+- **Status:** done (2026-10-27 wave): the per-good hover the proposal names (`st_res_row_<good>_auto_tooltip`). The "better still" icon per policy needs four new textures; left as an art need.
 - **Category:** hidden info
 - **Where:** `strategic_reserve_widget.gui:914-934`, `tooltip = "st_res_row_auto_tooltip"` (`te_miscellaneous_l_english.yml:6420`).
 - **Now:** one generic hover for every good and state: "Lit while an automated policy sets this good's rate each week;
@@ -391,7 +399,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### SR-4. Preset tooltips are tables written as sentences
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The audit's loc fix was the whole finding; checked in the 2026-10-27 wave.
 - **Category:** list / style
 - **Where:** loc `st_res_preset_conservative_tooltip`, `_standard_`, `_aggressive_`, `_stockpile_tooltip`
   (`te_miscellaneous_l_english.yml:6369-6376`), `st_res_policy_panel_preset_header_tt` (`:6341`); the preset row at
@@ -408,7 +416,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### SR-5. One action, two words; one cap, four names
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27 wave): "Releasing" everywhere a player reads the status, and the flow cap's names nest the concept.
 - **Category:** style
 - **Where:** status word `st_res_mode_withdrawing` "#O Withdrawing#!" (`:6301`), `je_strategic_reserve_how_status`,
   `je_strategic_reserve_inv_col_status_tt`, `st_res_reason_cap_withdraw`, `concept_st_res_rate_setting_desc`
@@ -427,7 +435,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### SR-6. Concept descriptions read like design notes
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The audit's loc fix was the whole finding; checked in the 2026-10-27 wave.
 - **Category:** over-explaining / style
 - **Where:** loc `concept_st_res_rate_setting_desc` (`te_concepts_l_english.yml:906`), `concept_st_res_active_rate_desc`
   (`:902`).
@@ -442,7 +450,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### SR-7. Rate-button hovers: filler, and no before/after
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27 wave). Each rate button's hover opens with the setting before and after the click, through the base effects' `custom_tooltip` and `ExecuteTooltip`.
 - **Category:** over-explaining / hidden info
 - **Where:** loc `st_res_row_decrease_tooltip`, `st_res_row_increase_tooltip`, `st_res_row_stop_tooltip`
   (`te_miscellaneous_l_english.yml:6422,6443,6471`).
@@ -458,7 +466,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high (quick); medium (effect text)
 
 ### SR-8. The entry's reason text repeats How at the foot of the panel
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The audit's loc fix covered the reason text; the 2026-10-27 wave trimmed `je_strategic_reserve_desc` the same way and dropped its live "Max rate" figure, which the overview's Hub cell carries.
 - **Category:** over-explaining / redundant
 - **Where:** loc `je_strategic_reserve_reason` (`te_journal_entries_l_english.yml:1375`), rendered below every widget
   (`gui/journal_entry.gui:749`); `je_strategic_reserve_desc` (`:1337`) is a second paragraph of the same, with a live
@@ -472,6 +480,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high (reason), low (desc)
 
 ### SR-9. The overview has no "what needs attention" and only half the money
+- **Status:** done (2026-10-27 wave). Four of Banking's cells: Hub (with the flow cap), Blocked (goods full or empty with a release set, listed on hover), Purchases (an estimate at today's prices), Sales Income.
 - **Category:** spread-out
 - **Where:** `te_st_res_overview_panel` (`strategic_reserve_widget.gui:306-378`): Hub, Flow Cap, Sales Income.
 - **Now:** a returning player can't tell from the top whether any good is Blocked or full, or what the reserve is
@@ -486,6 +495,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** medium
 
 ### SR-10. Policy Settings are set in the smallest type, and the selected policy looks unavailable
+- **Status:** done (2026-10-27 wave). `st_res_fontsize_row` (17) and `st_res_fontsize_heading` (20), with width tests; the policy and preset in force are drawn in vanilla's selected-tab look (`is_shown` false for the op in force, fail-open when `scope:op` is absent; a play-test item).
 - **Category:** style
 - **Where:** `widget_je_st_res_policy_panel` / `widget_je_st_res_policy_stepper` / `widget_je_st_res_policy_choice`
   (`strategic_reserve_widget.gui:387-733`): every label, value and button `fontsize_small` (12); rows
@@ -502,6 +512,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** medium
 
 ### SR-11. Minor
+- **Status:** done (2026-10-27 wave): the no-hub status line keeps only the action, the Status heading's hover is cut to what the column shows (How keeps the explanation, not the reverse as proposed, since explanations belong in How), and "lane" is gone from the panel's text.
 - The no-hub status line (`je_strategic_reserve_status_no_hub`) and the overview's No Hub cell hover
   (`je_strategic_reserve_ov_hub_none_tt`) say the same thing while the active entry waits for a new hub (play-test rule:
   status text must not repeat the overview). Keeping the visible line is defensible (it is the one action); low.
@@ -513,6 +524,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 ### Market panel: Trade tab additions
 
 ### MKT-1. Top Trade Partners is five copy-pasted rows over fifteen rank variables
+- **Status:** done (2026-10-27 wave). `update_market_trade_partners` builds `te_tp_top_markets` (five, largest first), the table is one datamodel row reading each partner's figures live, and the fifteen rank variables and `tp_count` are dropped from older saves. A play-test item (`docs/testing/market-trade-partners-playtest.md`).
 - **Category:** list
 - **Where:** `gui/market_panel.gui:598-892` (Row 1 … Row 5, each reading `Var('tp_N_tc')`, `tp_N_total`,
   `tp_N_gdp_pct`); `common/scripted_effects/trade_partner_effects.txt:31-136` (`store_trade_partner_data`, a five-way
@@ -529,7 +541,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** medium-high (the GuiScope pattern is the charts'; the two values need a test in game)
 
 ### MKT-2. Three measures of trade on one tab, two of them unlabelled
-- **Status:** the Exports by Value hover now prices at market (fixed in this PR). The unit labels and the table/hover reconciliation remain.
+- **Status:** done. The audit fixed the price; the 2026-10-27 wave labelled the partner charts "units/wk" and opens the partner hover with the table's yearly figure. The play-test of 2026-10-28 found "units/wk" running past vanilla's `compact_chart` legend slot, so the unit moved to the headings' hovers ("The figure beside each flag is units a week").
 - **Category:** style / hidden info
 - **Where:** `market_panel.gui:476-596` (Export / Import Partners charts), `:598-892` (table), `:375-466` (Exports /
   Imports by Value), `gui/te_trade_partner_tooltips.gui:38-45`.
@@ -550,6 +562,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high (the inconsistency); medium (best wording)
 
 ### MKT-3. The additions' text is hard-coded English
+- **Status:** done (2026-10-27 wave). The additions' English is in loc keys (`te_market_*`, `te_market_tp_tt_*`), `test_market_trade_partners.py` keeps it there.
 - **Category:** style / other (localization)
 - **Where:** `raw_text` in `market_panel.gui:393,435,505,556,613,627,635,644` ("Exports by Value", "Imports by Value",
   "Export Partners", "Import Partners", "Top Trade Partners", "Market", "Trade / yr", "% of GDP"), the "units" in
@@ -564,6 +577,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### MKT-4. The table hides its best hover and uses an off-ladder size
+- **Status:** done (2026-10-27 wave). The trade figure carries the goods breakdown hover and is underlined; the table's text is `te_tp_fontsize_row` (17) with a width test.
 - **Category:** hidden info / style
 - **Where:** `market_panel.gui:681-692` (the Trade / yr cell carries the per-good breakdown,
   `RegularTooltip_TE_TradePartnerGoods`, with no underline); `:694-702` (every "% of GDP" cell repeats the column
@@ -577,6 +591,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** medium-high
 
 ### MKT-5. All Goods tariffs: the cooldown has no end date, and the label's hover is unmarked
+- **Status:** done (2026-10-27 wave). While a row waits, its hover says about how many days are left (`te_bulk_tariff_cd_days_left_<dir>`), and the label is `#tooltippable`.
 - **Category:** hidden info
 - **Where:** `gui/te_bulk_tariff_widgets.gui:56-80` (label textbox has a tooltip but no `#tooltippable`);
   `common/scripted_triggers/te_bulk_tariff_triggers.txt:22-38`; loc `te_bulk_tariff_req_ready_import` / `_export`

@@ -24,8 +24,8 @@ tooltip lists:
 | Violent Hostility or Ghettoization in force | −0.5 |
 | Incorporated states with pops below Provisional Acceptance | Up to +0.5 (at 40 states) |
 | Radicals at 10% of your population, and again at 20% | +0.15 each |
-| Encourage Grassroots Organizing | +0.2 |
-| Federal Civil Rights Protection | +0.3 |
+| Grassroots Organizing | +0.2 |
+| Federal Protection | +0.3 |
 | Gradualist Accommodation | +0.1 |
 | Cooptation / Token Reform (first 12 months) | +0.15 |
 | Suppression / Crackdown | −0.6 |
@@ -51,8 +51,8 @@ The bar's level sets a phase, applied as a modifier on the journal entry:
 
 | Policy | Support per month | While active |
 |---|---|---|
-| Encourage Grassroots Organizing | +0.2 | +5% enactment success chance, +10% radicals from political movements |
-| Federal Civil Rights Protection | +0.3 | +5 acceptance, −5% Bureaucracy, −5% Authority |
+| Grassroots Organizing | +0.2 | +5% enactment success chance, +10% radicals from political movements |
+| Federal Protection | +0.3 | +5 acceptance, −5% Bureaucracy, −5% Authority |
 | Gradualist Accommodation | +0.1 | −5% turmoil penalties, +2 acceptance |
 | Cooptation / Token Reform | +0.15 for 12 months | −10% turmoil penalties, +3 acceptance, +5% legitimacy penalty from ideological incoherence |
 | Suppression / Crackdown | −0.6 | +5% Authority, +10% turmoil penalties |

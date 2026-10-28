@@ -228,13 +228,14 @@ un_propose_reform_effect = {
 		text = "UN_PROPOSE_CHARTER_REFORM_TT"
 		un_propose_add_sponsor_mark = yes
 		un_propose_add_request_cooldown = yes
-		# The proposer champions reform (as un_events.6's own option does).
-		add_modifier = {
-			name = un_reform_champion_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
 		un_charter_reform_open = yes
+	}
+	# The proposer champions reform (as un_events.6's own option does). Outside
+	# the wrapper, so the button prints the modifier's own lines.
+	add_modifier = {
+		name = un_reform_champion_modifier
+		days = normal_modifier_time
+		is_decaying = yes
 	}
 	un_propose_sponsor_cost = yes
 }
@@ -448,46 +449,61 @@ un_propose_own_motion_marks = {
 # to the nearest day and at least un_propose_min_days. test_un_propose_pace.py
 # recomputes both from the tuning, so a retuned multiplier fails it until the
 # ladders follow.
+# Each branch also mirrors its duration in days (un_ga_resolution_days,
+# un_request_cooldown_days), which un_propose_wait_monthly counts down, so the
+# panel can say how long we still wait (the 2026-10-27 audit, UN-8: the
+# overview's Motions cell and the proposal list's intro). The modifiers stay
+# the gate; the mirror is display only, and goes when its modifier does.
 # Scope: the proposing country
 un_propose_add_sponsor_mark = {
 	if = {
 		limit = { un_propose_pace_mult < 0.39 }	# x0.35: a great power at Exemplary
 		add_modifier = { name = un_ga_resolution_modifier days = 639 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 639 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.46 }	# x0.425: a great power at Respected
 		add_modifier = { name = un_ga_resolution_modifier days = 776 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 776 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.56 }	# x0.5: a great power at Neutral
 		add_modifier = { name = un_ga_resolution_modifier days = 913 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 913 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.66 }	# x0.625: a great power at Poor
 		add_modifier = { name = un_ga_resolution_modifier days = 1141 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 1141 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.72 }	# x0.7: Exemplary
 		add_modifier = { name = un_ga_resolution_modifier days = 1278 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 1278 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.8 }	# x0.75: a great power at Disgraced
 		add_modifier = { name = un_ga_resolution_modifier days = 1369 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 1369 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.92 }	# x0.85: Respected
 		add_modifier = { name = un_ga_resolution_modifier days = 1551 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 1551 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 1.12 }	# x1: Neutral
 		add_modifier = { name = un_ga_resolution_modifier days = 1825 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 1825 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 1.37 }	# x1.25: Poor
 		add_modifier = { name = un_ga_resolution_modifier days = 2281 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 2281 }
 	}
 	else = {	# x1.5: Disgraced
 		add_modifier = { name = un_ga_resolution_modifier days = 2738 is_decaying = yes }
+		set_variable = { name = un_ga_resolution_days value = 2738 }
 	}
 }
 
@@ -496,41 +512,51 @@ un_propose_add_request_cooldown = {
 	if = {
 		limit = { un_propose_pace_mult < 0.39 }	# x0.35: a great power at Exemplary
 		add_modifier = { name = un_request_cooldown days = 1278 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 1278 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.46 }	# x0.425: a great power at Respected
 		add_modifier = { name = un_request_cooldown days = 1551 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 1551 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.56 }	# x0.5: a great power at Neutral
 		add_modifier = { name = un_request_cooldown days = 1825 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 1825 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.66 }	# x0.625: a great power at Poor
 		add_modifier = { name = un_request_cooldown days = 2281 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 2281 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.72 }	# x0.7: Exemplary
 		add_modifier = { name = un_request_cooldown days = 2555 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 2555 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.8 }	# x0.75: a great power at Disgraced
 		add_modifier = { name = un_request_cooldown days = 2738 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 2738 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 0.92 }	# x0.85: Respected
 		add_modifier = { name = un_request_cooldown days = 3103 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 3103 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 1.12 }	# x1: Neutral
 		add_modifier = { name = un_request_cooldown days = 3650 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 3650 }
 	}
 	else_if = {
 		limit = { un_propose_pace_mult < 1.37 }	# x1.25: Poor
 		add_modifier = { name = un_request_cooldown days = 4563 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 4563 }
 	}
 	else = {	# x1.5: Disgraced
 		add_modifier = { name = un_request_cooldown days = 5475 is_decaying = yes }
+		set_variable = { name = un_request_cooldown_days value = 5475 }
 	}
 }
 
@@ -901,4 +927,495 @@ un_propose_colony_protection_effect = {
 	custom_tooltip = un_vote_initiated_tt
 	un_propose_own_motion_costs = yes
 	un_propose_colony_protection_table = yes
+}
+
+# Once a month, from je_united_nations' pulse: count our two tabling marks'
+# mirrors down (un_propose_add_sponsor_mark, un_propose_add_request_cooldown),
+# and drop a mirror whose modifier has gone: it ran out, or a revolution's
+# winner inherited the variable without the modifier (§0.9).
+# Scope: country
+un_propose_wait_monthly = {
+	if = {
+		limit = { has_variable = un_ga_resolution_days }
+		if = {
+			limit = { has_modifier = un_ga_resolution_modifier }
+			change_variable = { name = un_ga_resolution_days subtract = 30.4375 }
+		}
+		else = {
+			remove_variable = un_ga_resolution_days
+		}
+	}
+	if = {
+		limit = { has_variable = un_request_cooldown_days }
+		if = {
+			limit = { has_modifier = un_request_cooldown }
+			change_variable = { name = un_request_cooldown_days subtract = 30.4375 }
+		}
+		else = {
+			remove_variable = un_request_cooldown_days
+		}
+	}
+}
+
+# Once a month, for a human member (je_united_nations' pulse): which of the
+# thirty-four topics have a case for us to table (un_propose_<key>_available,
+# the test each proposal row's "No Case" reads), as a flag per topic and a
+# count. The overview's Motions cell and the proposal list's header read the
+# count, and the cell's hover the flags, so neither sweeps the topics' triggers
+# every frame (the 2026-10-27 audit, UN-1 and UN-7). The list itself sorts
+# its rows live. Display only: nothing gates on these.
+# Scope: country
+un_propose_ready_snapshot = {
+	set_variable = { name = un_propose_ready_count value = 0 }
+	if = {
+		limit = { un_propose_condemn_available = yes }
+		set_variable = un_ready_condemn
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_condemn }
+		remove_variable = un_ready_condemn
+	}
+	if = {
+		limit = { un_propose_sanctions_available = yes }
+		set_variable = un_ready_sanctions
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_sanctions }
+		remove_variable = un_ready_sanctions
+	}
+	if = {
+		limit = { un_propose_expulsion_available = yes }
+		set_variable = un_ready_expulsion
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_expulsion }
+		remove_variable = un_ready_expulsion
+	}
+	if = {
+		limit = { un_propose_mandate_available = yes }
+		set_variable = un_ready_mandate
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_mandate }
+		remove_variable = un_ready_mandate
+	}
+	if = {
+		limit = { un_propose_peacekeepers_available = yes }
+		set_variable = un_ready_peacekeepers
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_peacekeepers }
+		remove_variable = un_ready_peacekeepers
+	}
+	if = {
+		limit = { un_propose_aid_available = yes }
+		set_variable = un_ready_aid
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_aid }
+		remove_variable = un_ready_aid
+	}
+	if = {
+		limit = { un_propose_reform_available = yes }
+		set_variable = un_ready_reform
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_reform }
+		remove_variable = un_ready_reform
+	}
+	if = {
+		limit = { un_propose_human_rights_available = yes }
+		set_variable = un_ready_human_rights
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_human_rights }
+		remove_variable = un_ready_human_rights
+	}
+	if = {
+		limit = { un_propose_icc_available = yes }
+		set_variable = un_ready_icc
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_icc }
+		remove_variable = un_ready_icc
+	}
+	if = {
+		limit = { un_propose_npt_available = yes }
+		set_variable = un_ready_npt
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_npt }
+		remove_variable = un_ready_npt
+	}
+	if = {
+		limit = { un_propose_climate_available = yes }
+		set_variable = un_ready_climate
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_climate }
+		remove_variable = un_ready_climate
+	}
+	if = {
+		limit = { un_propose_pandemic_available = yes }
+		set_variable = un_ready_pandemic
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_pandemic }
+		remove_variable = un_ready_pandemic
+	}
+	if = {
+		limit = { un_propose_refugee_available = yes }
+		set_variable = un_ready_refugee
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_refugee }
+		remove_variable = un_ready_refugee
+	}
+	if = {
+		limit = { un_propose_heritage_available = yes }
+		set_variable = un_ready_heritage
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_heritage }
+		remove_variable = un_ready_heritage
+	}
+	if = {
+		limit = { un_propose_decolonization_available = yes }
+		set_variable = un_ready_decolonization
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_decolonization }
+		remove_variable = un_ready_decolonization
+	}
+	if = {
+		limit = { un_propose_space_available = yes }
+		set_variable = un_ready_space
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_space }
+		remove_variable = un_ready_space
+	}
+	if = {
+		limit = { un_propose_law_of_sea_available = yes }
+		set_variable = un_ready_law_of_sea
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_law_of_sea }
+		remove_variable = un_ready_law_of_sea
+	}
+	if = {
+		limit = { un_propose_physical_protection_available = yes }
+		set_variable = un_ready_physical_protection
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_physical_protection }
+		remove_variable = un_ready_physical_protection
+	}
+	if = {
+		limit = { un_propose_cultural_diversity_available = yes }
+		set_variable = un_ready_cultural_diversity
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_cultural_diversity }
+		remove_variable = un_ready_cultural_diversity
+	}
+	if = {
+		limit = { un_propose_nuclear_ban_available = yes }
+		set_variable = un_ready_nuclear_ban
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_nuclear_ban }
+		remove_variable = un_ready_nuclear_ban
+	}
+	if = {
+		limit = { un_propose_court_referral_available = yes }
+		set_variable = un_ready_court_referral
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_court_referral }
+		remove_variable = un_ready_court_referral
+	}
+	if = {
+		limit = { un_propose_arms_embargo_available = yes }
+		set_variable = un_ready_arms_embargo
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_arms_embargo }
+		remove_variable = un_ready_arms_embargo
+	}
+	if = {
+		limit = { un_propose_credentials_available = yes }
+		set_variable = un_ready_credentials
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_credentials }
+		remove_variable = un_ready_credentials
+	}
+	if = {
+		limit = { un_propose_standing_force_available = yes }
+		set_variable = un_ready_standing_force
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_standing_force }
+		remove_variable = un_ready_standing_force
+	}
+	if = {
+		limit = { un_propose_observer_request_available = yes }
+		set_variable = un_ready_observer_request
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_observer_request }
+		remove_variable = un_ready_observer_request
+	}
+	if = {
+		limit = { un_propose_food_reserve_available = yes }
+		set_variable = un_ready_food_reserve
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_food_reserve }
+		remove_variable = un_ready_food_reserve
+	}
+	if = {
+		limit = { un_propose_ceasefire_available = yes }
+		set_variable = un_ready_ceasefire
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_ceasefire }
+		remove_variable = un_ready_ceasefire
+	}
+	if = {
+		limit = { un_propose_development_fund_available = yes }
+		set_variable = un_ready_development_fund
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_development_fund }
+		remove_variable = un_ready_development_fund
+	}
+	if = {
+		limit = { un_propose_referendum_available = yes }
+		set_variable = un_ready_referendum
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_referendum }
+		remove_variable = un_ready_referendum
+	}
+	if = {
+		limit = { un_propose_narcotics_available = yes }
+		set_variable = un_ready_narcotics
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_narcotics }
+		remove_variable = un_ready_narcotics
+	}
+	if = {
+		limit = { un_propose_lift_sanctions_available = yes }
+		set_variable = un_ready_lift_sanctions
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_lift_sanctions }
+		remove_variable = un_ready_lift_sanctions
+	}
+	if = {
+		limit = { un_propose_antarctic_available = yes }
+		set_variable = un_ready_antarctic
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_antarctic }
+		remove_variable = un_ready_antarctic
+	}
+	if = {
+		limit = { un_propose_asat_available = yes }
+		set_variable = un_ready_asat
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_asat }
+		remove_variable = un_ready_asat
+	}
+	if = {
+		limit = { un_propose_colony_protection_available = yes }
+		set_variable = un_ready_colony_protection
+		change_variable = { name = un_propose_ready_count add = 1 }
+	}
+	else_if = {
+		limit = { has_variable = un_ready_colony_protection }
+		remove_variable = un_ready_colony_protection
+	}
+}
+
+# A country that is no longer a human member drops the snapshot.
+# Scope: country
+un_propose_ready_clear = {
+	if = {
+		limit = { has_variable = un_propose_ready_count }
+		remove_variable = un_propose_ready_count
+	}
+	if = {
+		limit = { has_variable = un_ready_condemn }
+		remove_variable = un_ready_condemn
+	}
+	if = {
+		limit = { has_variable = un_ready_sanctions }
+		remove_variable = un_ready_sanctions
+	}
+	if = {
+		limit = { has_variable = un_ready_expulsion }
+		remove_variable = un_ready_expulsion
+	}
+	if = {
+		limit = { has_variable = un_ready_mandate }
+		remove_variable = un_ready_mandate
+	}
+	if = {
+		limit = { has_variable = un_ready_peacekeepers }
+		remove_variable = un_ready_peacekeepers
+	}
+	if = {
+		limit = { has_variable = un_ready_aid }
+		remove_variable = un_ready_aid
+	}
+	if = {
+		limit = { has_variable = un_ready_reform }
+		remove_variable = un_ready_reform
+	}
+	if = {
+		limit = { has_variable = un_ready_human_rights }
+		remove_variable = un_ready_human_rights
+	}
+	if = {
+		limit = { has_variable = un_ready_icc }
+		remove_variable = un_ready_icc
+	}
+	if = {
+		limit = { has_variable = un_ready_npt }
+		remove_variable = un_ready_npt
+	}
+	if = {
+		limit = { has_variable = un_ready_climate }
+		remove_variable = un_ready_climate
+	}
+	if = {
+		limit = { has_variable = un_ready_pandemic }
+		remove_variable = un_ready_pandemic
+	}
+	if = {
+		limit = { has_variable = un_ready_refugee }
+		remove_variable = un_ready_refugee
+	}
+	if = {
+		limit = { has_variable = un_ready_heritage }
+		remove_variable = un_ready_heritage
+	}
+	if = {
+		limit = { has_variable = un_ready_decolonization }
+		remove_variable = un_ready_decolonization
+	}
+	if = {
+		limit = { has_variable = un_ready_space }
+		remove_variable = un_ready_space
+	}
+	if = {
+		limit = { has_variable = un_ready_law_of_sea }
+		remove_variable = un_ready_law_of_sea
+	}
+	if = {
+		limit = { has_variable = un_ready_physical_protection }
+		remove_variable = un_ready_physical_protection
+	}
+	if = {
+		limit = { has_variable = un_ready_cultural_diversity }
+		remove_variable = un_ready_cultural_diversity
+	}
+	if = {
+		limit = { has_variable = un_ready_nuclear_ban }
+		remove_variable = un_ready_nuclear_ban
+	}
+	if = {
+		limit = { has_variable = un_ready_court_referral }
+		remove_variable = un_ready_court_referral
+	}
+	if = {
+		limit = { has_variable = un_ready_arms_embargo }
+		remove_variable = un_ready_arms_embargo
+	}
+	if = {
+		limit = { has_variable = un_ready_credentials }
+		remove_variable = un_ready_credentials
+	}
+	if = {
+		limit = { has_variable = un_ready_standing_force }
+		remove_variable = un_ready_standing_force
+	}
+	if = {
+		limit = { has_variable = un_ready_observer_request }
+		remove_variable = un_ready_observer_request
+	}
+	if = {
+		limit = { has_variable = un_ready_food_reserve }
+		remove_variable = un_ready_food_reserve
+	}
+	if = {
+		limit = { has_variable = un_ready_ceasefire }
+		remove_variable = un_ready_ceasefire
+	}
+	if = {
+		limit = { has_variable = un_ready_development_fund }
+		remove_variable = un_ready_development_fund
+	}
+	if = {
+		limit = { has_variable = un_ready_referendum }
+		remove_variable = un_ready_referendum
+	}
+	if = {
+		limit = { has_variable = un_ready_narcotics }
+		remove_variable = un_ready_narcotics
+	}
+	if = {
+		limit = { has_variable = un_ready_lift_sanctions }
+		remove_variable = un_ready_lift_sanctions
+	}
+	if = {
+		limit = { has_variable = un_ready_antarctic }
+		remove_variable = un_ready_antarctic
+	}
+	if = {
+		limit = { has_variable = un_ready_asat }
+		remove_variable = un_ready_asat
+	}
+	if = {
+		limit = { has_variable = un_ready_colony_protection }
+		remove_variable = un_ready_colony_protection
+	}
 }

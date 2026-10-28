@@ -27,5 +27,6 @@ types te_orbital_debris_types
 	type te_sr_debris_row = te_sr_text {
 		text = "te_debris_row"
 		tooltip = "te_debris_row_tt"
+		default_format = "#tooltippable"
 	}
 }

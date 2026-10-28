@@ -486,7 +486,7 @@ te_tax_obl_fulfil = {
 			}
 			te_tax_gen_obl_trust = { N = $N$ DELTA = 1 }
 		}
-		te_tax_history_push = { KIND = 11 SLOT = none }
+		te_tax_history_push_promise = { KIND = 11 N = $N$ }
 		debug_log = "TE_TAX obl_fulfilled a promise was kept for its whole term; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
 }
@@ -502,7 +502,7 @@ te_tax_obl_breach = {
 		set_variable = { name = te_tax_o$N$_on value = 0 }
 		te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_broken_modifier }
 		te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }
-		te_tax_history_push = { KIND = 12 SLOT = none }
+		te_tax_history_push_promise = { KIND = 12 N = $N$ }
 		debug_log = "TE_TAX obl_breached a promise missed its deadline or failed during its term; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
 }
@@ -524,7 +524,7 @@ te_tax_cmd_obl_renegotiate = {
 		set_variable = { name = te_tax_o$N$_on value = 0 }
 		te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_renegotiated_modifier }
 		te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }
-		te_tax_history_push = { KIND = 13 SLOT = none }
+		te_tax_history_push_promise = { KIND = 13 N = $N$ }
 		if = {
 			limit = { is_ai = no }
 			debug_log = "TE_TAX obl_renegotiated a promise was renegotiated and its slot freed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"

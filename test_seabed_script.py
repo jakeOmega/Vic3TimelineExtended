@@ -678,40 +678,54 @@ class PanelDataTest(unittest.TestCase):
             self.assertIn(f"te_seabed_rank_basin = {{ B = {b} }}", body)
         self.assertIn("name = te_seabed_last_sharing_month value = te_history_month_index", body)
 
-    def test_rank_flags_go_through_the_capital(self):
+    def test_every_player_gets_a_list_of_the_other_claimants(self):
+        """Audit SEA-3's later step (the owner, 2026-10-27): each player's
+        te_seabed_rk_list_<b>, every other claimant's capital, largest share
+        first, rebuilt at every sharing; the six global seats are gone, and an
+        older save's seats and counts are dropped."""
         rank = strip_comments(block(read(EFFECTS), "te_seabed_rank_basin"))
-        self.assertIn("order_by = te_seabed_ent_value_$B$", rank)
-        self.assertIn("remove_global_variable = te_seabed_rk_$B$_6", rank)
-        self.assertIn("name = te_seabed_rk_more_$B$", rank)
-        self.assertIn("is_player = yes", rank)
-        seat = strip_comments(block(read(EFFECTS), "te_seabed_rank_seat"))
-        self.assertIn("te_seabed_rkcap_$B$_$N$", seat)
-        self.assertIn("capital = { save_scope_as = te_seabed_rank_capital }", seat)
-        self.assertIn("name = te_seabed_rkcap_count_$B$", seat)
+        self.assertRegex(rank, r"is_player = yes\s+has_variable = te_seabed_shared\s+\}\s+"
+                               r"te_seabed_rank_list = \{ B = \$B\$ \}")
+        for n in range(1, 7):
+            self.assertIn(f"te_seabed_rank_clear = {{ B = $B$ N = {n} }}", rank)
+        self.assertIn("remove_global_variable = te_seabed_rk_more_$B$", rank)
+        self.assertIn("remove_variable = te_seabed_rank_$B$", rank)
+        lst = strip_comments(block(read(EFFECTS), "te_seabed_rank_list"))
+        self.assertTrue(lst.lstrip().startswith("save_scope_as = te_seabed_rank_viewer"))
+        self.assertLess(lst.index("clear_variable_list = te_seabed_rk_list_$B$"), lst.index("ordered_country"))
+        walk = lst[lst.index("ordered_country"):]
+        for line in ("limit = { te_seabed_rank_listed = { B = $B$ } }", "order_by = te_seabed_ent_value_$B$",
+                     "min = 0", "max = 40", "check_range_bounds = no",
+                     "capital = { save_scope_as = te_seabed_rank_capital }",
+                     "add_to_variable_list = { name = te_seabed_rk_list_$B$ target = scope:te_seabed_rank_capital }"):
+            self.assertIn(line, walk)
+        for n in range(1, 7):
+            self.assertIn(f"te_seabed_rank_seat_clear = {{ B = $B$ N = {n} }}", lst)
+        self.assertIn("remove_variable = te_seabed_rkcap_count_$B$", lst)
+        self.assertNotIn("te_seabed_rival_row_sgui", read(self.SGUIS))
+        self.assertNotIn("te_seabed_rk_more_disp_", read(VALUES))
+        self.assertNotIn("te_seabed_rkcap_count_disp_", read(VALUES))
 
-    def test_rival_row_follows_the_leaderboard_pattern(self):
-        body = block(read(self.SGUIS), "te_seabed_rival_row_sgui")
-        self.assertIn("saved_scopes = { op }", body)
-        self.assertIn("custom_tooltip_no_bullet", body)
-        self.assertIn("?=", body)
-        for i, b in enumerate(m.BASINS, 1):
-            for n in range(1, 7):
-                self.assertIn(f"scope:op = {10 * i + n} }}", body)
-                self.assertIn(f"global_var:te_seabed_rk_{b}_{n} ?= {{ custom_tooltip_no_bullet = te_seabed_rival_row_{b} }}", body)
+    def test_our_own_country_is_not_a_rival(self):
+        """Review I2: the viewer shows once, in its own row, so its list
+        leaves it out; a claimant needs a share there and a capital."""
+        listed = strip_comments(block(read(TRIGGERS), "te_seabed_rank_listed"))
+        for cond in ("has_variable = te_seabed_shared", "has_variable = te_seabed_ent_$B$",
+                     "var:te_seabed_ent_$B$ > 0", "exists = capital",
+                     "NOT = { THIS = scope:te_seabed_rank_viewer }"):
+            self.assertIn(cond, listed)
 
-    def test_our_own_slot_is_not_a_rival(self):
-        """Review I2: the viewer shows once, in its own row: its ranked slot is
-        hidden, and "and N others" leaves it out when it ranks below six."""
-        body = block(read(self.SGUIS), "te_seabed_rival_row_sgui")
-        for b in m.BASINS:
-            for n in range(1, 7):
-                self.assertIn(f"NOT = {{ global_var:te_seabed_rk_{b}_{n} = {{ this = root }} }}", body)
-        rank = strip_comments(block(read(EFFECTS), "te_seabed_rank_basin"))
-        self.assertIn("name = te_seabed_rank_$B$ value = global_var:te_seabed_rk_idx", rank)
-        for b in m.BASINS:
-            more = strip_comments(block(read(VALUES), f"te_seabed_rk_more_disp_{b}"))
-            self.assertIn(f"var:te_seabed_rank_{b} > 6", more)
-            self.assertIn("subtract = 1", more)
+    def test_the_list_self_check(self):
+        """TE_SELF_CHECK seabed_claimant_list: once a game, OK and BROKEN with
+        the counts, only when two or more claimants can tell a walk from a pick."""
+        check = block(read(EFFECTS), "te_seabed_rank_list_selfcheck")
+        self.assertIn("NOT = { has_global_variable = te_selfcheck_seabed_claimant_list_done }", check)
+        self.assertIn("set_global_variable = { name = te_selfcheck_seabed_claimant_list_done value = yes }", check)
+        self.assertIn("var:te_seabed_selfcheck_expected >= 2", check)
+        self.assertIn("limit = { te_seabed_rank_listed = { B = $B$ } }", check)
+        self.assertIn('debug_log = "TE_SELF_CHECK OK seabed_claimant_list', check)
+        self.assertIn('debug_log = "TE_SELF_CHECK BROKEN seabed_claimant_list', check)
+        self.assertIn("docs/testing/global-commons-playtest.md", check)
 
     def test_bar_values_exist(self):
         v = strip_comments(read(VALUES))
@@ -892,6 +906,60 @@ class BlockadeTest(unittest.TestCase):
         self.assertIn("te_seabed_blockaded", text)
         self.assertIn("BLOCKADE_THROUGHPUT_IMPACT_SCALING", text)
 
+
+
+class PolicyDisplayTest(unittest.TestCase):
+    """The seabed policies print engine modifier lines (audit SEA-2): three
+    display static modifiers, never added to a country, whose script_only lines
+    restate the script values that do the work. A change to a factor that left
+    its line behind would show the player a wrong figure."""
+
+    def test_each_line_restates_its_script_value(self):
+        values, mods = read(VALUES), read(MODIFIERS)
+
+        def fields(name):
+            return {k: float(v) for k, v in re.findall(r"^\t(country_seabed_\w+) = (-?[\d.]+)",
+                                                         block(mods, name), re.M)}
+        for policy in ("survey", "sponsor", "unilateral"):
+            with self.subTest(policy=policy):
+                factor = literal(values, f"te_seabed_policy_factor_{policy}")
+                got = fields(f"te_seabed_policy_{policy}_display")
+                self.assertAlmostEqual(got.get("country_seabed_claim_weight_mult", 0.0), factor - 1)
+        self.assertAlmostEqual(fields("te_seabed_policy_sponsor_display")["country_seabed_claim_floor_add"],
+                               literal(values, "te_seabed_floor_keep"))
+        unilateral = fields("te_seabed_policy_unilateral_display")
+        self.assertAlmostEqual(unilateral["country_seabed_naval_weight_mult"],
+                               literal(values, "te_seabed_assertive_navy_mult") - 1)
+        self.assertAlmostEqual(unilateral["country_seabed_unilateral_relations_add"],
+                               literal(values, "te_seabed_unilateral_relations"))
+
+    def test_display_types_are_script_only_and_unread(self):
+        types = read(TYPES)
+        for name in ("country_seabed_claim_weight_mult", "country_seabed_naval_weight_mult",
+                     "country_seabed_claim_floor_add", "country_seabed_unilateral_relations_add"):
+            with self.subTest(type=name):
+                self.assertIn("script_only = yes", block(types, name))
+                for sub in ("common", "events"):
+                    for root, _, files in os.walk(os.path.join(REPO, sub)):
+                        for f in files:
+                            if f.endswith(".txt") and "modifier_type_definitions" not in root \
+                                    and "static_modifiers" not in root:
+                                self.assertNotIn(f"modifier:{name}", read(os.path.relpath(os.path.join(root, f), REPO)))
+
+    def test_buttons_and_overview_print_the_lines(self):
+        loc = english_loc()
+        for n, policy in ((1, "survey"), (2, "sponsor"), (3, "unilateral")):
+            for key in (f"te_seabed_policy_effect_{n}_tt", f"te_seabed_ov_policy_ours_{n}"):
+                with self.subTest(key=key):
+                    line = re.search(rf'^ {key}:0 "(.*)"$', loc, re.M).group(1)
+                    self.assertIn(f"[GetStaticModifier('te_seabed_policy_{policy}_display').GetDesc]", line)
+        # the static modifiers are display only: nothing adds them
+        for sub in ("common", "events"):
+            for root, _, files in os.walk(os.path.join(REPO, sub)):
+                for f in files:
+                    if f.endswith(".txt"):
+                        self.assertNotRegex(read(os.path.relpath(os.path.join(root, f), REPO)),
+                                            r"name = te_seabed_policy_\w+_display")
 
 if __name__ == "__main__":
     unittest.main()

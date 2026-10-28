@@ -130,7 +130,7 @@ sr_disp_progress_frac_interstellar_results = {
 # ---- Whether another power has claimed "the first" --------------------------
 # 1 once sr_global_first_<m> is set. While our own entry runs we have not
 # finished the milestone, so a set flag is always someone else's. Solar
-# colonization has no first (space_race_effects.txt, sr_rivals_participants_base).
+# colonization has no first (space_race_effects.txt, sr_rivals_estimate_refresh).
 sr_disp_first_claimed_suborbital = {
 	value = 0
 	if = { limit = { has_global_variable = sr_global_first_suborbital } value = 1 }
@@ -255,9 +255,9 @@ sr_disp_worlds_ours_frac = {
 # space_race_colony_events.1-34 offer them): 1 while we hold it, else 0. The
 # record is <modifier>_held, which sr_grant_colony_modifier sets with the
 # modifier and sr_sync_colony_modifier_base keeps in step through a revolution.
-# The panel's "Our Colonies" rows each show on one of these; the per-stage
-# counts show the stage headings and their sum the "held" figure. A world holds
-# at most one of its two, so a stage's count is its worlds.
+# The Colonies table's name hovers name the ones we hold (je_space_race_widget_
+# colony_site_tt_<key>; audit SPC-5), and their sum is the "held" figure. A
+# world holds at most one of its two, so the sum is its worlds.
 
 # Stage 1: Mars & Asteroids
 
@@ -609,7 +609,7 @@ sr_disp_colony_sedna_interstellar = {
 	if = { limit = { has_variable = sr_colony_sedna_interstellar_held } value = 1 }
 }
 
-sr_disp_colonies_stage_1 = {
+sr_disp_colonies_held = {
 	value = 0
 	add = sr_disp_colony_valles_marineris_research
 	add = sr_disp_colony_valles_marineris_mining
@@ -631,10 +631,6 @@ sr_disp_colonies_stage_1 = {
 	add = sr_disp_colony_pallas_observatory
 	add = sr_disp_colony_hygiea_volatiles
 	add = sr_disp_colony_hygiea_automated
-}
-
-sr_disp_colonies_stage_2 = {
-	value = 0
 	add = sr_disp_colony_io_mining
 	add = sr_disp_colony_io_research
 	add = sr_disp_colony_europa_drilling
@@ -649,10 +645,6 @@ sr_disp_colonies_stage_2 = {
 	add = sr_disp_colony_amalthea_rings
 	add = sr_disp_colony_venus_atmospheric
 	add = sr_disp_colony_venus_extraction
-}
-
-sr_disp_colonies_stage_3 = {
-	value = 0
 	add = sr_disp_colony_mercury_solar
 	add = sr_disp_colony_mercury_ice
 	add = sr_disp_colony_titan_hydrocarbons
@@ -665,10 +657,6 @@ sr_disp_colonies_stage_3 = {
 	add = sr_disp_colony_mimas_gravity
 	add = sr_disp_colony_iapetus_ridge
 	add = sr_disp_colony_iapetus_organics
-}
-
-sr_disp_colonies_stage_4 = {
-	value = 0
 	add = sr_disp_colony_titania_mining
 	add = sr_disp_colony_titania_geophysics
 	add = sr_disp_colony_oberon_relay
@@ -681,10 +669,6 @@ sr_disp_colonies_stage_4 = {
 	add = sr_disp_colony_triton_gateway
 	add = sr_disp_colony_proteus_probe
 	add = sr_disp_colony_proteus_extraction
-}
-
-sr_disp_colonies_stage_5 = {
-	value = 0
 	add = sr_disp_colony_pluto_research
 	add = sr_disp_colony_pluto_harvesting
 	add = sr_disp_colony_eris_selfsufficiency
@@ -695,15 +679,6 @@ sr_disp_colonies_stage_5 = {
 	add = sr_disp_colony_haumea_rings
 	add = sr_disp_colony_sedna_outpost
 	add = sr_disp_colony_sedna_interstellar
-}
-
-sr_disp_colonies_held = {
-	value = 0
-	add = sr_disp_colonies_stage_1
-	add = sr_disp_colonies_stage_2
-	add = sr_disp_colonies_stage_3
-	add = sr_disp_colonies_stage_4
-	add = sr_disp_colonies_stage_5
 }
 
 # ---- What an approach costs, for the panel and the approach buttons ----------
@@ -794,9 +769,9 @@ sr_disp_rival_band = {
 	}
 }
 
-# Per milestone: the estimate (the marker), the band's ends, and the viewer's
-# count of rivals (sr_rival_total_<m>, written by sr_rivals_estimate_refresh)
-# with how many there are beyond the five rows.
+# Per milestone: the estimate (the marker) and the band's ends, for each rival
+# the Rivals list holds (sr_rivals_list_<m>, written by
+# sr_rivals_estimate_refresh).
 sr_disp_rival_est_suborbital = {
 	value = 0
 	scope:sr_rival = {
@@ -826,15 +801,6 @@ sr_disp_rival_hi_suborbital = {
 	add = sr_disp_rival_band
 	min = 0
 	max = 1
-}
-sr_disp_rival_total_suborbital = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_suborbital } value = var:sr_rival_total_suborbital }
-}
-sr_disp_rival_more_suborbital = {
-	value = sr_disp_rival_total_suborbital
-	subtract = 5
-	min = 0
 }
 sr_disp_rival_est_orbital = {
 	value = 0
@@ -866,15 +832,6 @@ sr_disp_rival_hi_orbital = {
 	min = 0
 	max = 1
 }
-sr_disp_rival_total_orbital = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_orbital } value = var:sr_rival_total_orbital }
-}
-sr_disp_rival_more_orbital = {
-	value = sr_disp_rival_total_orbital
-	subtract = 5
-	min = 0
-}
 sr_disp_rival_est_moon_landing = {
 	value = 0
 	scope:sr_rival = {
@@ -904,15 +861,6 @@ sr_disp_rival_hi_moon_landing = {
 	add = sr_disp_rival_band
 	min = 0
 	max = 1
-}
-sr_disp_rival_total_moon_landing = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_moon_landing } value = var:sr_rival_total_moon_landing }
-}
-sr_disp_rival_more_moon_landing = {
-	value = sr_disp_rival_total_moon_landing
-	subtract = 5
-	min = 0
 }
 sr_disp_rival_est_probe = {
 	value = 0
@@ -944,15 +892,6 @@ sr_disp_rival_hi_probe = {
 	min = 0
 	max = 1
 }
-sr_disp_rival_total_probe = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_probe } value = var:sr_rival_total_probe }
-}
-sr_disp_rival_more_probe = {
-	value = sr_disp_rival_total_probe
-	subtract = 5
-	min = 0
-}
 sr_disp_rival_est_moon_base = {
 	value = 0
 	scope:sr_rival = {
@@ -982,15 +921,6 @@ sr_disp_rival_hi_moon_base = {
 	add = sr_disp_rival_band
 	min = 0
 	max = 1
-}
-sr_disp_rival_total_moon_base = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_moon_base } value = var:sr_rival_total_moon_base }
-}
-sr_disp_rival_more_moon_base = {
-	value = sr_disp_rival_total_moon_base
-	subtract = 5
-	min = 0
 }
 sr_disp_rival_est_mars_landing = {
 	value = 0
@@ -1022,15 +952,6 @@ sr_disp_rival_hi_mars_landing = {
 	min = 0
 	max = 1
 }
-sr_disp_rival_total_mars_landing = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_mars_landing } value = var:sr_rival_total_mars_landing }
-}
-sr_disp_rival_more_mars_landing = {
-	value = sr_disp_rival_total_mars_landing
-	subtract = 5
-	min = 0
-}
 sr_disp_rival_est_interstellar_probe = {
 	value = 0
 	scope:sr_rival = {
@@ -1060,15 +981,6 @@ sr_disp_rival_hi_interstellar_probe = {
 	add = sr_disp_rival_band
 	min = 0
 	max = 1
-}
-sr_disp_rival_total_interstellar_probe = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_interstellar_probe } value = var:sr_rival_total_interstellar_probe }
-}
-sr_disp_rival_more_interstellar_probe = {
-	value = sr_disp_rival_total_interstellar_probe
-	subtract = 5
-	min = 0
 }
 sr_disp_rival_est_solar_colonization = {
 	value = 0
@@ -1100,29 +1012,15 @@ sr_disp_rival_hi_solar_colonization = {
 	min = 0
 	max = 1
 }
-sr_disp_rival_total_solar_colonization = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_solar_colonization } value = var:sr_rival_total_solar_colonization }
-}
-sr_disp_rival_more_solar_colonization = {
-	value = sr_disp_rival_total_solar_colonization
-	subtract = 5
-	min = 0
-}
 
 # ---- Space Powers: the standings on the Space Race tab -----------------------
 # Read by te_sr_sec_powers (the Timeline Extended window's Space Race tab).
 # The viewer's count of other powers (sr_power_total, written monthly by
 # sr_powers_refresh), -1 until the first refresh, so the panel can tell "not
-# listed yet" from "nobody else", and how many there are beyond the eight rows.
+# listed yet" from "nobody else". The rows are the list sr_powers_list.
 sr_disp_power_total = {
 	value = -1
 	if = { limit = { has_variable = sr_power_total } value = var:sr_power_total }
-}
-sr_disp_power_more = {
-	value = sr_disp_power_total
-	subtract = 8
-	min = 0
 }
 # A row's furthest milestone under way (0 none, 1-8 je_space_race.txt's
 # order), which picks the row's estimate. Scope: the row's power.
@@ -1139,7 +1037,8 @@ sr_disp_power_colonies = {
 }
 
 # ======= Colony fleets and population (slices 2-3 design §§ 3, 8, 10) =======
-# Colony Fleets and Settlers (te_sr_sec_colony_fleets, te_sr_sec_settlers); the
+# Colony Fleets and the Colonies table's People view (te_sr_sec_colony_fleets,
+# te_sr_sec_colonies); the
 # per-world and per-slot values are generated (sr_sites_display_generated.txt).
 # 1 under simple and full colonies, where colony fleets travel and colonies
 # hold people.
@@ -1182,7 +1081,7 @@ sr_disp_agi = {
 }
 
 # ======= Autonomy and free colonies (slice 5 design § 9) =======
-# Colony Autonomy (te_sr_sec_autonomy); the per-world values are generated
+# The Colonies table's Autonomy view (te_sr_sec_colonies); the per-world values are generated
 # (sr_sites_display_generated.txt). The free colonies we supply, and the
 # research speed and influence their trade gives us, in percent.
 sr_disp_free_supplied_count = {
@@ -1197,7 +1096,7 @@ sr_disp_free_trade_influence = {
 }
 
 # ======= Colony modules (colony modules design § 11) =======
-# Colony Modules (te_sr_sec_modules); the per-world values are generated
+# The Colonies table's Modules view (te_sr_sec_colonies); the per-world values are generated
 # (sr_sites_display_generated.txt). The month's fabrication points, and the
 # stock waiting for a module.
 sr_disp_fab_rate = {

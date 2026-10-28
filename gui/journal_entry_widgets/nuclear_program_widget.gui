@@ -13,9 +13,9 @@
 ### te_nuclear_sec_taboo       The nuclear taboo (open, from the world's first
 ###                            warhead), with its chart as a subsection, open.
 ### te_nuclear_sec_delivery    Delivery capability and home defence (open).
-### te_nuclear_sec_powers      The global nuclear-powers leaderboard that used
-###                            to be eleven triggered_desc lines on the entry
-###                            (open, from the world's first warhead).
+### te_nuclear_sec_powers      The global nuclear-powers leaderboard, a table
+###                            of the ten largest arsenals (open, from the
+###                            world's first warhead).
 ### The notes these sections used to carry (how a strike's odds combine, what
 ### the leaderboard's estimates are) are in "How Nuclear Weapons Work"
 ### (te_nuclear_sec_how, nuclear_layout_widget.gui).
@@ -37,13 +37,11 @@
 ### The op table is repeated in common/scripted_guis/nuclear_program_sguis.txt
 ### and in docs/systems/journal_entry_systems.md; keep all three in step.
 ###
-### nuclear_program_powers_sgui takes op = rank, 1 to 10, one ExecuteTooltip per
-### row. It is display-only (`is_valid` and `ai_is_valid` are both
-### `always = no`). The rows are separate widgets rather than one script-built
-### list because a scope's own tooltip lines print before the lines produced
-### inside nested scope changes (gui_modding_guide.md gotcha #18), and they carry
-### no flag icon because the engine prefixes a country-scope tooltip line with
-### that country's flag already (gotcha #19).
+### The Nuclear Powers leaderboard is a datamodel over nd_powers, a list of
+### the ten largest arsenals' capitals that update_nuclear_powers_ranking keeps
+### on the panel's global store (NUC-14 of the 2026-10-27 GUI audit): each row
+### reads its country through the capital (State.GetOwner, gui_modding_guide.md
+### gotcha #15), with vanilla's flag for the name and a click.
 ###
 ### NO CONTROL'S `visible` COMES FROM AN op-BRANCHING `IsShown`. Whether a saved
 ### scope passed through `IsShown( … AddScope('op', …) … )` reaches a handler's
@@ -52,10 +50,7 @@
 ### button grid hidden from humans, a stepper whose `visible` silently evaluated
 ### false would leave the player unable to act at all, so the two stepper buttons
 ### carry no `visible` — they are simply there while the entry is active, and
-### `is_valid` greys them and says why. The ten leaderboard rows do use `IsShown`,
-### but that handler is written fail-open (no `scope:op` means yes) and guards
-### emptiness inside its effect, so the worst case there is a blank line in a
-### section that is collapsed by default.
+### `is_valid` greys them and says why.
 ###
 ### THE ROOTS ARE GATED ON JournalEntry.IsActive (nuclear_layout_widget.gui).
 ### je_nuclear_program carries is_shown_when_inactive, so the panel is built for
@@ -100,7 +95,7 @@ types nuclear_program_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = te_nuclear_fontsize_row
 	}
 
 	### A label/value line. One tooltip for the whole row, so the number and the
@@ -117,7 +112,7 @@ types nuclear_program_widget_types
 		textbox = {
 			size = { 200 24 }
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
 			alwaystransparent = yes
@@ -132,7 +127,7 @@ types nuclear_program_widget_types
 		textbox = {
 			size = { 276 24 }
 			align = right|nobaseline
-			using = fontsize_medium
+			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
 			alwaystransparent = yes
@@ -157,7 +152,7 @@ types nuclear_program_widget_types
 			text = "je_nuclear_program_widget_funding_label"
 			size = { 170 24 }
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
 			alwaystransparent = yes
@@ -174,9 +169,10 @@ types nuclear_program_widget_types
 		textbox = {
 			text = "je_nuclear_program_widget_funding_value"
 			tooltip = "je_nuclear_program_widget_funding_tt"
+			default_format = "#tooltippable"
 			size = { 246 24 }
 			align = center|nobaseline
-			using = fontsize_medium
+			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -190,26 +186,113 @@ types nuclear_program_widget_types
 		}
 	}
 
-	### One leaderboard row, built in script. The instance supplies its op code
-	### twice: once to decide whether the slot is filled at all, once to render
-	### it.
-	type nuclear_program_power_row = flowcontainer {
+	### One row of Nuclear Powers (NUC-14): an item of nd_powers, so its
+	### datacontext is the country's capital and the country is State.GetOwner
+	### (gui_modding_guide.md gotcha #15). Vanilla's flag gives the name on
+	### hover and opens the country on a click; then the name, the arsenal as
+	### the world estimates it, and the public doctrine as the overview's icon
+	### (its name on hover). Our own row is tinted.
+	### 6 + 40 + 6 + 240 + 6 + 110 + 6 + 28 = 442.
+	type nuclear_program_power_row = widget {
+		size = { 480 30 }
+
+		icon = {
+			size = { 100% 100% }
+			texture = "gfx/interface/backgrounds/white.dds"
+			color = { 0.9 0.75 0.35 0.2 }
+			visible = "[ObjectsEqual( State.GetOwner, GetPlayer.Self )]"
+		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 6
+			position = { 6 0 }
+			parentanchor = vcenter
+
+			widget = {
+				size = { 40 28 }
+				parentanchor = vcenter
+
+				tiny_flag = {
+					parentanchor = center
+					datacontext = "[State.GetOwner]"
+				}
+			}
+			textbox = {
+				size = { 240 28 }
+				align = left|nobaseline
+				using = te_nuclear_fontsize_row
+				parentanchor = vcenter
+				elide = right
+				text = "[State.GetOwner.GetNameNoFormatting]"
+			}
+			textbox = {
+				size = { 110 28 }
+				align = right|nobaseline
+				using = te_nuclear_fontsize_row
+				parentanchor = vcenter
+				elide = right
+				text = "nuclear_program_power_estimate"
+			}
+			widget = {
+				size = { 28 28 }
+				parentanchor = vcenter
+				tooltip = "nuclear_program_power_doctrine_tt"
+
+				icon = {
+					size = { 28 28 }
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)1' )]"
+					texture = "gfx/interface/icons/nuclear_icons/doctrine_nfu.dds"
+				}
+				icon = {
+					size = { 28 28 }
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)2' )]"
+					texture = "gfx/interface/icons/nuclear_icons/doctrine_existential.dds"
+				}
+				icon = {
+					size = { 28 28 }
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)3' )]"
+					texture = "gfx/interface/icons/nuclear_icons/doctrine_flexible.dds"
+				}
+				icon = {
+					size = { 28 28 }
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)4' )]"
+					texture = "gfx/interface/icons/nuclear_icons/doctrine_compellence.dds"
+				}
+				icon = {
+					size = { 28 28 }
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)5' )]"
+					texture = "gfx/interface/icons/nuclear_icons/doctrine_warfighting.dds"
+				}
+			}
+		}
+	}
+
+	### The leaderboard's column heads, in its rows' cells.
+	type nuclear_program_powers_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
-		parentanchor = hcenter
+		spacing = 6
 		margin = { 6 1 }
-		datacontext = "[GetScriptedGui('nuclear_program_powers_sgui')]"
-
-		block "row_visible" {}
 
 		textbox = {
-			autoresize = yes
-			multiline = yes
-			minimumsize = { 468 -1 }
-			maximumsize = { 468 -1 }
+			size = { 286 24 }
 			align = left|nobaseline
-			using = fontsize_medium
-			block "row_text" {}
+			using = te_nuclear_fontsize_row
+			parentanchor = vcenter
+			elide = right
+			default_format = "#lore"
+			text = "je_nuclear_program_widget_powers_head_country"
+		}
+		textbox = {
+			size = { 110 24 }
+			align = right|nobaseline
+			using = te_nuclear_fontsize_row
+			parentanchor = vcenter
+			elide = right
+			default_format = "#tooltippable"
+			text = "je_nuclear_program_widget_powers_head_warheads"
+			tooltip = "je_nuclear_program_widget_powers_head_warheads_tt"
 		}
 	}
 
@@ -316,24 +399,14 @@ types nuclear_program_widget_types
 		nuclear_program_panel = {
 			visible = "[Not(GetVariableSystem.Exists('nd_taboo_panel_closed'))]"
 
+			### One row for the score, where it is heading and its band (NUC-11):
+			### the overview's bar draws the same movement, without colour.
 			nuclear_program_row = {
 				blockoverride "row_label" {
 					text = "je_nuclear_program_widget_taboo_score_label"
 				}
 				blockoverride "row_value" {
 					text = "je_nuclear_program_widget_taboo_score_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( Localize( 'je_nuclear_program_widget_taboo_score_tt' ), GetScriptedGui('nd_taboo_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-				}
-			}
-
-			nuclear_program_row = {
-				blockoverride "row_label" {
-					text = "je_nuclear_program_widget_taboo_heading_label"
-				}
-				blockoverride "row_value" {
-					text = "je_nuclear_program_widget_taboo_heading_value"
 				}
 				blockoverride "row_tooltip" {
 					tooltip = "[Concatenate( Localize( 'je_nuclear_program_widget_taboo_score_tt' ), GetScriptedGui('nd_taboo_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
@@ -602,18 +675,18 @@ types nuclear_program_widget_types
 	}
 
 	### The world's ten largest arsenals as the world estimates them (open: a
-	### live list, the owner's rule of 2026-09-29; it costs ten ExecuteTooltip
-	### calls a frame while the entry is on screen). Drawn from the world's
-	### first warhead, which is when the nuclear taboo is born: before it there is
-	### no arsenal to list and the section would open on nothing. The rows carry
-	### the op code twice: once to decide whether the slot is filled, once to
-	### render it (nuclear_program_power_row).
+	### live list, the owner's rule of 2026-09-29), as a table (NUC-14): a
+	### datamodel over nd_powers, the capitals update_nuclear_powers_ranking
+	### keeps on the panel's global store each month, largest first. Drawn from
+	### the world's first warhead, which is when the nuclear taboo is born,
+	### once the store exists (nd_powers_listed_sgui), so the datamodel never
+	### reads a store the first ranking has not made yet.
 	type te_nuclear_sec_powers = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[And( GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('nd_powers_listed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 
 		nuclear_program_section_header = {
 			blockoverride "left_text" {
@@ -633,84 +706,17 @@ types nuclear_program_widget_types
 		nuclear_program_panel = {
 			visible = "[Not(GetVariableSystem.Exists('nuclear_program_powers_closed'))]"
 
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				}
-			}
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				}
-			}
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				}
-			}
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				}
-			}
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				}
-			}
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				}
-			}
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				}
-			}
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				}
-			}
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				}
-			}
-			nuclear_program_power_row = {
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+			nuclear_program_powers_head = {}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				datamodel = "[GetGlobalVariable('nd_lists_store').GetList('nd_powers')]"
+
+				item = {
+					nuclear_program_power_row = {
+						datacontext = "[Scope.GetState]"
+					}
 				}
 			}
 		}

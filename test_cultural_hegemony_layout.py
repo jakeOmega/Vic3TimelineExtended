@@ -41,9 +41,12 @@ HOW_KEYS = ["je_ch_how_share", "je_ch_how_programmes", "je_ch_how_pull", "je_ch_
 CH_ICONS = "gfx/interface/icons/ch_icons/"
 CH_PIES = "gfx/interface/journal_entry_widgets/ch_model_pie/"
 TIER_ICONS = ["tier_negligible", "tier_minor", "tier_moderate", "tier_significant", "tier_major", "tier_hegemon"]
-# Textures the overview keeps from vanilla on purpose.
+# Textures the overview keeps from vanilla on purpose, and the Ministry of
+# Culture's own institution icon on the programs cell (CH-9): the programs
+# need the Ministry, so its icon is the cell's, not a placeholder.
 VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds", "gfx/interface/icons/generic_icons/trend_up.dds",
-                "gfx/interface/icons/generic_icons/trend_down.dds", "gfx/interface/icons/generic_icons/trend_nochange.dds"}
+                "gfx/interface/icons/generic_icons/trend_down.dds", "gfx/interface/icons/generic_icons/trend_nochange.dds",
+                "gfx/interface/icons/institution_icons/institution_ministry_of_culture.dds"}
 
 
 def _read(path):
@@ -196,9 +199,13 @@ class HowItWorksTest(unittest.TestCase):
                 with self.subTest(section=sec, key=key):
                     self.assertNotIn(f'"{key}"', body)
 
-    def test_the_boards_bracket_is_one_hover_away(self):
-        board = _type_body(self.gui, "te_ch_sec_board")
-        self.assertEqual(board.count("Localize( 'je_ch_board_row_hint_tt' )"), 10)
+    def test_the_boards_change_is_explained_once(self):
+        # The board's Change column says what it measures once, on its head
+        # (CH-2), where every row's hover used to append the same hint.
+        head = _type_body(self.gui, "ch_board_head")
+        self.assertIn('tooltip = "je_ch_board_head_change_tt"', head)
+        self.assertNotIn("je_ch_board_row_hint_tt", self.gui)
+        self.assertNotIn("je_ch_board_row_hint_tt", _loc())
 
 
 class StateGatedTest(unittest.TestCase):
@@ -470,6 +477,11 @@ class LeaderFlagsTest(unittest.TestCase):
     def test_the_slots_keep_their_width(self):
         # each gated 70x48 widget sits in an ungated 70x48 slot
         self.assertEqual(len(re.findall(r"widget = \{\s*size = \{ 70 48 \}\s*widget = \{\s*size = \{ 70 48 \}\s*visible", self.ov)), 3)
+        # and the block holding them is never hidden, or row 2 is centred
+        # without it and runs past the panel when it appears (gotcha #43)
+        block = self.ov[:self.ov.index('text = "je_ch_ov_leaders_label"')]
+        block = block[block.rindex("flowcontainer = {"):]
+        self.assertNotRegex(block, r"\bvisible = ")
 
     def test_seats_fill_in_order_from_guarded_ranks(self):
         seat = _block(self.effects, "ch_leaders_display_seat")
@@ -519,9 +531,12 @@ class ValueColourTest(unittest.TestCase):
 
     def test_breakdown_values(self):
         loc = _loc()
-        for part in ("art", "prestige", "tech", "monuments", "megaprojects", "modifiers", "mult"):
+        for part in ("art", "prestige", "tech", "monuments", "megaprojects", "modifiers"):
             with self.subTest(part=part):
                 self.assertTrue(loc[f"je_ch_widget_bd_{part}_value"].startswith("#G "))
+        # The Pull Multiplier is signed and sign-coloured, as the art
+        # multiplier beside it is (CH-3): "+25%", green.
+        self.assertIn("|+=0]%", loc["je_ch_widget_bd_mult_value"])
         # Standard of living can be either sign (a country below the world average loses pull), so its value
         # carries the signed, sign-coloured format rather than a fixed green.
         self.assertIn("|+=1]", loc["je_ch_widget_bd_sol_value"])
@@ -629,53 +644,71 @@ class ArtMultiplierTest(unittest.TestCase):
 
 
 # ---- Rule 1 (round 3): nothing a player reads ends in "..." ----------------------
-# Units per character, from the owner's screenshots (round3_rules.md): the large
-# row-name font about 10, the medium table font about 8.6. The small font is not
-# measured; 7.4 scales medium by the large/medium ratio. Plus 10% margin.
-UNITS = {"large": 10.0, "medium": 8.6, "small": 7.4}
+# Units per character, from the owner's screenshots (round3_rules.md and the
+# style guide): the serif face about 10 at 20, so 0.5 a point (8.5 at the 17
+# row size); the overview's tooltip face 8.6 at 16. Plus 10% margin. The
+# panel's sizes are its ch_fontsize_* templates (CH-15), read from the file,
+# so a change of type re-budgets every cell. "large" is vanilla's: the section
+# headers' and the action buttons' own fonts, which are not the panel's.
+_SIZES = {m.group(1): int(m.group(2)) for m in re.finditer(
+    r"template ch_fontsize_(\w+) \{\s*fontsize = (\d+)", _read(WIDGET))}
+UNITS = {"row": 10.0 / 20 * _SIZES["row"], "heading": 10.0 / 20 * _SIZES["heading"],
+         "overview": 8.6 / 16 * _SIZES["overview"], "large": 10.0}
 MARGIN = 1.1
 MODEL_KEYS = ["communist", "anarchist", "fascist", "corporatist", "socialist", "royalist_absolutist",
               "royalist_constitutional", "religious", "reactionary", "military_junta", "liberal", "other",
               "technocratic", "republican", "developmentalist_junta"]
 # (key, cell width, font, worst-case data values in order)
 STATIC_LABELS = (
-    [(f"je_ch_widget_bd_{p}_label", 176, "medium", ()) for p in
+    [(f"je_ch_widget_bd_{p}_label", 176, "row", ()) for p in
      ("art", "prestige", "sol", "tech", "monuments", "megaprojects", "modifiers", "infamy", "instability", "raw", "mult")]
-    + [("je_ch_widget_bd_art_mult_label", 332, "medium", ())]
-    + [(f"je_ch_widget_prog_{p}", 250, "large", ()) for p in ("outreach", "institutes", "media", "protectionism")]
-    + [("je_ch_widget_funding_label", 250, "large", ()),
-       ("ch_policy_status_active", 80, "medium", ()), ("ch_policy_status_idle", 80, "medium", ())]
+    + [("je_ch_widget_bd_art_mult_label", 332, "row", ())]
+    + [(f"je_ch_widget_prog_{p}", 250, "row", ()) for p in ("outreach", "institutes", "media", "protectionism")]
+    + [("je_ch_widget_funding_label", 250, "row", ()),
+       ("ch_policy_status_active", 80, "row", ()), ("ch_policy_status_idle", 80, "row", ())]
     + [(f"ch_policy_{p}_{s}", 112, "large", ()) for p in ("outreach", "institutes", "media", "protectionism") for s in ("on", "off")]
-    + [(f"je_ch_ov_tier_{n}", 108, "small", ()) for n in range(6)]
-    + [("je_ch_ov_rank_label", 108, "small", ()), ("je_ch_ov_benchmark_label", 108, "small", ()),
-       ("je_ch_ov_leaders_label", 222, "medium", ())]
+    + [(f"je_ch_ov_tier_{n}", 106, "overview", ()) for n in range(6)]
+    + [("je_ch_ov_rank_label", 106, "overview", ()), ("je_ch_ov_benchmark_label", 106, "overview", ()),
+       ("je_ch_ov_leaders_label", 222, "overview", ())]
     + [(k, 440, "large", ()) for k in ("je_ch_widget_programmes_header", "je_ch_widget_breakdown_header",
                                         "je_ch_widget_board_header", "je_ch_widget_models_header",
                                         "je_ch_widget_history_header", "je_ch_how_header")]
+    # The board's head (CH-2), in its columns.
+    + [("je_ch_board_head_rank", 26, "row", ()), ("je_ch_board_head_country", 208, "row", ()),
+       ("je_ch_board_head_share", 60, "row", ()), ("je_ch_board_head_change", 66, "row", ()),
+       ("je_ch_board_head_model", 50, "row", ())]
+    # The programs cell (CH-9): Banking's cell, its lines in a 154 column at 16.
+    + [("je_ch_ov_prog_label", 154, "overview", ()), ("je_ch_ov_prog_no_ministry", 154, "overview", ())]
 )
 # Dynamic text, at its longest: the political models' short names (the longest are
 # "Constitutional", "Military Junta" and "Technocratic"; the full names, up to
 # "Liberal / Progressive Democratic", are on hover), and numbers at their widest.
 DYNAMIC_LABELS = (
-    [(f"je_ch_ov_model_{m}", 116, "small", ()) for m in MODEL_KEYS]          # the overview's model cell
-    + [(f"je_ch_ov_model_{m}", 216, "medium", ()) for m in MODEL_KEYS]       # the models legend
-    + [("je_ch_ov_rank_value", 108, "large", ("999", "999")),
-       ("je_ch_ov_share_label", 156, "medium", ("100.0",)),                 # 180 cell less the 20 px arrow and 4 spacing
-       ("je_ch_widget_funding_value", 80, "medium", ("10", "10")),
-       ("je_ch_widget_board_us", 474, "medium", ("999", "999")),
-       ("je_ch_widget_bd_art_value", 60, "medium", ("150.0",)),
-       ("je_ch_widget_bd_prestige_value", 60, "medium", ("100.0",)),
-       ("je_ch_widget_bd_sol_value", 60, "medium", ("-5.0",)),
-       ("je_ch_widget_bd_tech_value", 60, "medium", ("40.0",)),
-       ("je_ch_widget_bd_monuments_value", 60, "medium", ("150",)),
-       ("je_ch_widget_bd_megaprojects_value", 60, "medium", ("21",)),
-       ("je_ch_widget_bd_modifiers_value", 60, "medium", ("30.0",)),
-       ("je_ch_widget_bd_infamy_value", 60, "medium", ("-20.0",)),
-       ("je_ch_widget_bd_instability_value", 60, "medium", ("-30.0",)),
-       ("je_ch_widget_bd_raw_value", 60, "medium", ("9999.9",)),
-       ("je_ch_widget_bd_mult_value", 60, "medium", ("999",)),
-       ("je_ch_widget_bd_art_mult_value", 60, "medium", ("+100",))]
-    + [(f"je_ch_widget_models_share_{m}", 60, "medium", ("100.0",)) for m in MODEL_KEYS]
+    [(f"je_ch_ov_model_{m}", 134, "overview", ()) for m in MODEL_KEYS]       # the overview's model cell
+    + [(f"je_ch_ov_model_{m}", 216, "row", ()) for m in MODEL_KEYS]          # the models legend
+    + [(f"je_ch_ov_model_{m}", 200, "row", ()) for m in MODEL_KEYS]          # the history legend (CH-12)
+    + [("je_ch_ov_rank_value", 106, "heading", ("999", "999")),
+       ("je_ch_ov_share_label", 156, "overview", ("100.0",)),               # 180 cell less the 20 px arrow and 4 spacing
+       ("je_ch_widget_funding_value", 80, "row", ("10", "10")),
+       ("je_ch_widget_board_us", 474, "row", ("999", "999")),
+       ("je_ch_widget_bd_art_value", 60, "row", ("150.0",)),
+       ("je_ch_widget_bd_prestige_value", 60, "row", ("100.0",)),
+       ("je_ch_widget_bd_sol_value", 60, "row", ("-5.0",)),
+       ("je_ch_widget_bd_tech_value", 60, "row", ("40.0",)),
+       ("je_ch_widget_bd_monuments_value", 60, "row", ("150",)),
+       ("je_ch_widget_bd_megaprojects_value", 60, "row", ("21",)),
+       ("je_ch_widget_bd_modifiers_value", 60, "row", ("30.0",)),
+       ("je_ch_widget_bd_infamy_value", 60, "row", ("-20.0",)),
+       ("je_ch_widget_bd_instability_value", 60, "row", ("-30.0",)),
+       ("je_ch_widget_bd_raw_value", 60, "row", ("9999.9",)),
+       ("je_ch_widget_bd_mult_value", 60, "row", ("+999",)),
+       ("je_ch_widget_bd_art_mult_value", 60, "row", ("+100",)),
+       # The board's rows: rank, share, and the change beside its 16 px arrow.
+       ("ch_board_row_rank", 26, "row", ("10",)), ("ch_board_row_share", 60, "row", ("100.0",)),
+       ("ch_board_row_change", 48, "row", ("+12.3",)),
+       # The programs cell's word and funding line.
+       ("je_ch_ov_prog_running", 154, "overview", ("4",)), ("je_ch_ov_prog_funding", 154, "overview", ("10", "10"))]
+    + [(f"je_ch_widget_models_share_{m}", 60, "row", ("100.0",)) for m in MODEL_KEYS]
 )
 
 
@@ -707,13 +740,235 @@ class LabelBudgetTest(unittest.TestCase):
                                  ("ch_bar_subrow", ["348 20", "60 20"]),
                                  ("ch_programme_row", ["250 26", "80 26"]),
                                  ("ch_model_legend_row", ["216 20", "60 20"]),
+                                 ("ch_board_row", ["14 24", "26 24", "28 24", "60 24", "66 24", "50 24"]),
+                                 ("te_ch_ov_icon_label", ["108 58"]),
                                  ("te_ch_ov_pie", ["180 108"])):
             body = _type_body(gui, type_name)
             for size in sizes:
                 with self.subTest(type=type_name, size=size):
                     self.assertIn(f"size = {{ {size} }}", body)
-        self.assertEqual(_read(WIDGET).count("size = { 118 58 }"), 15)   # the model cells
+        self.assertIn("minimumsize = { 208 -1 }", _type_body(gui, "ch_board_row"))
+        self.assertEqual(_read(WIDGET).count("size = { 136 58 }"), 15)   # the model cells
 
+    def test_the_overviews_first_row_fits_its_column(self):
+        # tier, rank and benchmark at 108, the model cell at 136, 4 between: 472 of 474.
+        ov = _type_body(_read(WIDGET), "te_ch_overview_panel")
+        row = ov[ov.index("### Row 1:"):ov.index("### The influence tier")]
+        self.assertIn("spacing = 4", row)
+        self.assertLessEqual(108 * 3 + 136 + 3 * 4, 474)
+
+
+class TypeSizeTest(unittest.TestCase):
+    """CH-15: the 17 / 20 / 16 ladder through the panel's own templates (the
+    owner lifted the panel's grandfathering for this rework, 2026-10-27)."""
+
+    def test_the_templates_and_their_sizes(self):
+        self.assertEqual(_SIZES, {"row": 17, "heading": 20, "overview": 16})
+        gui = _read(WIDGET)
+        self.assertRegex(gui, r"template ch_fontsize_overview \{\s*fontsize = 16\s*using = tooltip_font")
+        self.assertNotRegex(gui, r"using = fontsize_(small|medium|large|xl)\b")
+
+    def test_the_overview_reads_the_overview_size(self):
+        gui = _read(WIDGET)
+        for type_name in ("te_ch_ov_icon_label", "te_ch_ov_pie"):
+            with self.subTest(type=type_name):
+                self.assertIn("using = ch_fontsize_overview", _type_body(gui, type_name))
+        self.assertIn("using = ch_fontsize_heading", _type_body(gui, "ch_subheader"))
+        for type_name in ("ch_note", "ch_bar_row", "ch_programme_row", "ch_board_row", "ch_model_legend_row"):
+            with self.subTest(type=type_name):
+                self.assertIn("using = ch_fontsize_row", _type_body(gui, type_name))
+
+
+class BoardTest(unittest.TestCase):
+    """CH-2: the Top Cultural Powers board as a one-line table, a datamodel over
+    the board store's rows (the political-model history's shape)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(WIDGET)
+        cls.sec = _type_body(cls.gui, "te_ch_sec_board")
+        cls.row = _type_body(cls.gui, "ch_board_row")
+        cls.head = _type_body(cls.gui, "ch_board_head")
+        cls.effects = _read(EFFECTS)
+        cls.loc = _loc()
+
+    def test_rows_come_from_the_store_once_it_has_some(self):
+        self.assertIn("datamodel = \"[GetGlobalVariable('ch_board_store').GetList('ch_board')]\"", self.sec)
+        item = self.sec[self.sec.index("item = {"):]
+        self.assertIn("ch_board_row = {", item)
+        self.assertIn('datacontext = "[Scope.GetScriptContainer]"', item)
+        table = self.sec[self.sec.rindex("flowcontainer = {", 0, self.sec.index("ch_board_head = {}")):]
+        self.assertIn("ScriptValue('ch_board_has_rows'), '(CFixedPoint)1'", table[:300])
+        self.assertIn("ScriptValue('ch_board_has_rows'), '(CFixedPoint)0'", self.sec[:self.sec.index("ch_board_head = {}")])
+        self.assertLess(self.sec.index("ch_board_head = {}"), self.sec.index("datamodel ="))
+        # No row is an ExecuteTooltip string any more, and the old handlers went.
+        self.assertNotIn("ExecuteTooltip", self.sec + self.row)
+        sguis = _read(SGUIS)
+        for gone in ("ch_board_row_sgui", "ch_board_detail_sgui", "ch_board_is_us_sgui"):
+            self.assertNotRegex(sguis, rf"(?m)^{gone} = ")
+            self.assertNotIn(f"GetScriptedGui('{gone}')", self.gui)
+
+    def test_the_head_and_the_rows_share_their_columns(self):
+        widths = lambda body: [int(w) for w in re.findall(r"size = \{ (\d+) 24 \}", body)]
+        head = [w for w in widths(self.head)]
+        head_cells = re.findall(r'blockoverride "cell_size" \{\s*size = \{ (\d+) 24 \}', self.head)
+        self.assertEqual(head_cells, ["26", "208", "66", "50"])
+        # the row: marker, rank, flag (and its gated inner widget), share, change, model
+        self.assertEqual(widths(self.row), [14, 26, 28, 28, 60, 66, 50])
+        self.assertIn(14, head)
+        self.assertIn(28, head)
+
+    def test_the_flag_and_name_read_the_stored_capital(self):
+        flag = self.row[self.row.index("tiny_flag = {") - 200:self.row.index("tiny_flag = {") + 200]
+        self.assertIn("visible = \"[ScriptContainer.HasVariable('ch_board_capital')]\"", flag)
+        self.assertIn("datacontext = \"[ScriptContainer.MakeScope.Var('ch_board_capital').GetState.GetCountry]\"", flag)
+        self.assertIn("ScriptContainer.HasVariable('ch_board_capital')", self.loc["ch_board_row_name"])
+        self.assertIn("Var('ch_board_capital').GetState.GetCountry.GetName", self.loc["ch_board_row_name_known"])
+
+    def test_the_us_marker_compares_ranks_without_a_saved_scope(self):
+        self.assertIn("EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_rank'), "
+                      "JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display') )", self.row)
+
+    def test_every_model_has_its_swatch_and_hover(self):
+        for code, model in enumerate(MODEL_KEYS, 1):
+            with self.subTest(model=model):
+                self.assertRegex(self.row, rf"GetVariableValue\('ch_board_model'\), '\(CFixedPoint\){code}' \)\]\"\s*"
+                                           rf"texture = \"gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_{model}\.dds\"")
+                self.assertIn(f'tooltip = "ch_model_{model}_tt"', self.row)
+
+    def test_the_row_hover_reads_only_its_container(self):
+        # A datamodel item's tooltip has no JournalEntry (gotcha #24); follow
+        # splices and SelectLocalization keys.
+        seen, todo = set(), ["ch_board_row_tt"]
+        while todo:
+            key = todo.pop()
+            if key in seen:
+                continue
+            seen.add(key)
+            val = self.loc[key]
+            self.assertNotIn("JournalEntry", val, key)
+            todo += [k for k in re.findall(r"\$(\w+)\$", val) + re.findall(r"'(\w+)'", val) if k in self.loc]
+        self.assertIn("ch_board_tt_bonus", seen)
+
+    def test_the_rows_hold_every_component_the_hover_prints(self):
+        write = _block(self.effects, "ch_board_row_write")
+        read = set(re.findall(r"GetVariableValue\('(ch_board_\w+)'\)", "".join(
+            v for k, v in self.loc.items() if k.startswith(("ch_board_", "je_ch_board_"))) + self.row))
+        for var in read:
+            with self.subTest(var=var):
+                self.assertIn(f"name = {var} ", write)
+        for comp in ("art", "prs", "sol", "tech", "mon", "mega", "mods", "infamy", "instab", "bonus", "raw"):
+            self.assertIn(f"ch_board_{comp}", read)
+
+    def test_built_after_the_census_and_refreshed_for_players(self):
+        census = _block(self.effects, "ch_yearly_global_update")
+        self.assertLess(census.index("ch_finish_all_model_buckets = yes"), census.index("ch_board_rebuild = yes"))
+        self.assertLess(census.index("set_global_variable = { name = ch_ranked_total"), census.index("ch_board_rebuild = yes"))
+        monthly = _block(self.effects, "ch_monthly_country_update")
+        self.assertRegex(monthly, r"limit = \{ is_player = yes \}\s*ch_leaders_display_write = yes\s*ch_board_refresh_capitals = yes")
+        rebuild = _block(self.effects, "ch_board_rebuild")
+        self.assertEqual(re.findall(r"ch_board_row_write = \{ N = (\d+) \}", rebuild), [str(n) for n in range(1, 11)])
+        self.assertLess(rebuild.index("clear_variable_list = ch_board"), rebuild.index("ch_board_row_write"))
+
+    def test_the_change_is_the_countrys_own(self):
+        # The board printed a slot's change, so a new occupant was measured
+        # against whoever held the rank before.
+        census = _block(self.effects, "ch_yearly_global_update")
+        self.assertIn("set_variable = { name = ch_board_share_prev value = cultural_pull_display }", census)
+        self.assertLess(census.index("subtract = var:ch_board_share_prev"),
+                        census.index("set_variable = { name = ch_board_share_prev value = cultural_pull_display }"))
+        self.assertNotIn("_delta", re.sub(r"ch_board_delta\w*", "", census))
+
+    def test_how_describes_the_table(self):
+        how = self.loc["je_ch_how_board"]
+        self.assertNotIn("bracketed", how)
+        self.assertIn("swatch", how)
+
+
+class BreakdownOrderTest(unittest.TestCase):
+    """CH-3: the parts of a total, then the total. The Pull Multiplier scales the
+    components' sum, so it closes them, and the Raw Score stands under the rule."""
+
+    def test_the_multiplier_closes_the_components(self):
+        sec = _type_body(_read(WIDGET), "te_ch_sec_breakdown")
+        self.assertLess(sec.index("je_ch_widget_bd_instability_tt"), sec.index("je_ch_widget_bd_mult_tt"))
+        self.assertLess(sec.index("je_ch_widget_bd_mult_tt"), sec.index("divider_clean"))
+        self.assertLess(sec.index("divider_clean"), sec.index("je_ch_widget_bd_raw_tt"))
+        self.assertIn("components above", _loc()["je_ch_widget_bd_mult_tt"])
+
+
+class FundingCapTest(unittest.TestCase):
+    """CH-4: where the funding cap comes from, on the level's hover and in How."""
+
+    def test_the_level_says_where_its_cap_comes_from(self):
+        progs = _type_body(_read(WIDGET), "te_ch_sec_programmes")
+        cell = progs[progs.index('text = "je_ch_widget_funding_value"') - 300:progs.index('text = "je_ch_widget_funding_value"') + 120]
+        self.assertIn('tooltip = "je_ch_widget_funding_value_tt"', cell)
+        self.assertIn('default_format = "#tooltippable"', cell)
+        loc = _loc()
+        tip = loc["je_ch_widget_funding_value_tt"]
+        for part in ("institution_ministry_of_culture", "mass_media", "television",
+                     "GetValueWithBreakdownFor('country_cultural_program_max_funding_add')"):
+            self.assertIn(part, tip)
+        self.assertIn("institution_ministry_of_culture", loc["je_ch_how_programmes"])
+
+
+class TierFloorTest(unittest.TestCase):
+    """CH-5: the tier thresholds have one copy, which the tooltip and the
+    concept print; the tooltip names the next tier."""
+
+    def test_one_copy_of_the_floors(self):
+        values = _read(VALUES)
+        floors = {int(n): int(v) for n, v in re.findall(r"(?m)^ch_tier_(\d)_floor = (\d+)$", values)}
+        self.assertEqual(floors, {1: 2, 2: 5, 3: 10, 4: 15, 5: 25})
+        state = _block(_read(EFFECTS), "ch_set_display_state")
+        for n in range(1, 6):
+            self.assertIn(f"var:ch_total >= ch_tier_{n}_floor", state)
+        self.assertNotRegex(state, r"var:ch_total >= \d")
+
+    def test_the_tooltip_names_the_next_tier_and_the_concept_prints_the_ladder(self):
+        loc = _loc()
+        self.assertIn("je_ch_ov_tier_next", loc["je_ch_ov_tier_tt"])
+        self.assertIn("ch_disp_next_tier_floor", loc["je_ch_ov_tier_next"])
+        self.assertIn("GetCustom('ch_next_tier_name')", loc["je_ch_ov_tier_next"])
+        concept = loc["concept_ch_influence_tier_desc"]
+        for n in range(1, 6):
+            self.assertIn(f"ch_tier_{n}_floor", concept)
+        self.assertNotRegex(re.sub(r"\[[^\]]*\]", "", concept), r"\d")
+
+
+class SolRankFactorTest(unittest.TestCase):
+    """CH-1: the rank factor on the standard-of-living component is said."""
+
+    def test_the_factor_is_one_value_the_hover_prints(self):
+        values = _read(VALUES)
+        self.assertIn("multiply = ch_sol_rank_factor", _block(values, "cultural_pull_from_sol"))
+        factor = _block(values, "ch_sol_rank_factor")
+        for rank, value in (("great_power", "1"), ("major_power", "0.5"), ("minor_power", "0.25")):
+            self.assertIn(f"rank_value:{rank}", factor)
+            self.assertIn(f"value = {value}", factor)
+        self.assertIn("ScriptValue('ch_sol_rank_factor')", _loc()["je_ch_widget_bd_sol_tt"])
+
+
+class ProgramsCellTest(unittest.TestCase):
+    """CH-9: the overview's programs cell, Banking's te_banking_ov_cell."""
+
+    def test_the_cell(self):
+        ov = _type_body(_read(WIDGET), "te_ch_overview_panel")
+        cell = ov[ov.index("te_banking_ov_cell = {"):]
+        self.assertIn('tooltip = "je_ch_ov_prog_tt"', cell[:200])
+        for key in ("je_ch_ov_prog_label", "je_ch_ov_prog_running", "je_ch_ov_prog_no_ministry", "je_ch_ov_prog_funding"):
+            self.assertIn(f'text = "{key}"', cell)
+        self.assertEqual(cell.count("GetScriptedGui('ch_ministry_missing_sgui').IsShown"), 4)
+        self.assertIn("alpha = 0.4", cell)
+        loc = _loc()
+        self.assertIn("ScriptValue('ch_prog_count_display')", loc["je_ch_ov_prog_running"])
+        self.assertTrue(loc["je_ch_ov_prog_no_ministry"].startswith("#R "))
+        listing = loc["je_ch_ov_prog_tt_list"]
+        for p in ("outreach", "institutes", "media", "protectionism"):
+            self.assertIn(f"$je_ch_widget_prog_{p}_status$", listing)
+        # Below the leaders: the owner's board-first order and leader flags stand.
+        self.assertLess(ov.index("ch_leader_seat_3"), ov.index("te_banking_ov_cell = {"))
 
 if __name__ == "__main__":
     unittest.main()

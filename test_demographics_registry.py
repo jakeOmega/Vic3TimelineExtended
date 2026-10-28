@@ -54,6 +54,8 @@ WORKFORCE_LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_work
 # phase 3's urban pattern and Planned Capital (te_demog_up_country runs inside the country census)
 PLACE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_place_effects.txt"
 PLACE_VALUES = ROOT / "common" / "script_values" / "te_demog_place_values.txt"
+# the metropolitan share's, for te_demog_country_lists' Metropolises (2026-10-27 audit, DEM-6)
+METRO_VALUES = ROOT / "common" / "script_values" / "te_demog_metro_values.txt"
 PLACE_TRIGGERS = ROOT / "common" / "scripted_triggers" / "te_demog_place_triggers.txt"
 # phase 2 step 2: the workforce term, the pension setting and the bills
 WORK_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_work_effects.txt"
@@ -503,7 +505,7 @@ class _Engine:
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
                                    WORK_VALUES, CONSEQ_VALUES, LX_VALUES, LX_GEN_VALUES, SPREAD_VALUES, PLACE_VALUES,
-                                   UNEMP_VALUES, UM_VALUES, UM_GEN_VALUES])
+                                   UNEMP_VALUES, UM_VALUES, UM_GEN_VALUES, METRO_VALUES])
         self.values.update(_raw_blocks([RESETTLE_GEN_VALUES]))
         self.triggers = _raw_blocks([TRIGGERS, PLACE_TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
@@ -3897,7 +3899,7 @@ class TestNaturalFertilityScript(unittest.TestCase):
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_natural_shown")), 0.9)
         loc = _text(MISC_LOC)
         for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
-            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             self.assertIn("ScriptValue('te_demog_natural_shown')", line, key)
             self.assertNotIn("te_demog_tfr_natural", line, key)
 
@@ -3906,7 +3908,7 @@ class TestNaturalFertilityScript(unittest.TestCase):
         standing and the births added on top of the census (batch 1 review, I2), so they account for it."""
         loc = _text(MISC_LOC)
         for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
-            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             self.assertIn("ScriptValue('te_demog_natural_shown')", line, key)
             self.assertNotIn("Var('te_dg_natural')", line, key)
             self.assertIn("ScriptValue('te_demog_tfr_on_top')", line, key)
@@ -3931,14 +3933,14 @@ class TestNaturalFertilityScript(unittest.TestCase):
         and the means, with women's age at first marriage; the country tab adds the country's own means."""
         loc = _text(MISC_LOC)
         for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
-            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             for sv in ("te_demog_pr_term_lm", "te_demog_pr_term_bs", "te_demog_marriage_age"):
                 self.assertIn(f"ScriptValue('{sv}')", line, f"{key}: {sv}")
         capital = re.search(r"(?m)^ te_demog_ov_tfr_capital:0 \"(.*)\"$", loc).group(1)
         self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_marriage_age')", capital)
         self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_pr_share_bs')", capital)
         for key in ("te_demog_ov_tfr_tt", "te_demog_st_tfr_tt", "te_demog_how_fertility"):
-            text = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            text = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             self.assertNotIn("who marries", text, "women's legal standing no longer claims marriage (plan D2)")
             self.assertIn("late marriage", text)
             self.assertIn("birth spacing", text)
@@ -6988,7 +6990,7 @@ class TestCausesSection(unittest.TestCase):
     def setUpClass(cls):
         cls.gui = _text(WIDGETS)
         cls.section = _gui_type(cls.gui, "te_state_demog_causes")
-        cls.loc = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"$', _text(MISC_LOC)))
+        cls.loc = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"(?:\s*#[^"]*)?$', _text(MISC_LOC)))
 
     def test_it_sits_after_the_overview(self):
         # issue #1029: the subtab takes the country tab's order (te_demographics_layout.gui), the pyramid after Causes
@@ -7050,7 +7052,7 @@ class TestCausesSection(unittest.TestCase):
         for key, value in self.loc.items():
             if key.startswith("te_demog_st_"):
                 self.assertIsNone(typed.search(value), key)
-        concepts = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"$', _text(ROOT / "localization" / "english" /
+        concepts = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"(?:\s*#[^"]*)?$', _text(ROOT / "localization" / "english" /
                                                                       "te_concepts_l_english.yml")))
         self.assertIn("$institution_health_system$", concepts["concept_health_care_access_desc"])
         # the access hover's two lines sum to where access is heading, not the row (panel M2)
@@ -7919,6 +7921,23 @@ class TestConsequencesScript(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_fam_share"], fam / people, places=9)
         self.assertAlmostEqual(eng.vars["te_dg_fam_men"], fam / men, places=9)
         self.assertEqual(eng.vars["te_dg_yb_n"], 1)
+
+    def test_the_youth_and_metropolis_lists(self):
+        """2026-10-27 audit, DEM-6: the Youth row's states and the Metropolises, a list each built with the country's
+        census (te_demog_country_lists), strongest or largest share first: the states the Youth count counts, and
+        those at the Metropolis line or above. A refill, not an append."""
+        states = [TestCountry.state(*args) for args in TestCountry.INPUTS]
+        states[0]["te_dg_yb"] = 0.3
+        states[1]["te_dg_yb"] = 0.6
+        states[0]["te_dg_mt"] = 70.0
+        states[1]["te_dg_mt"] = 50.0          # Leading City: not a metropolis
+        states[2]["te_dg_mt"] = 85.0
+        eng = TestCountry().country(states)
+        for _ in range(2):
+            eng.call("te_demog_country_census")
+            self.assertEqual([s["te_dg_yb"] for s in eng.lists["te_dg_yb_states"]], [0.6, 0.3])
+            self.assertEqual(eng.vars["te_dg_yb_n"], len(eng.lists["te_dg_yb_states"]))
+            self.assertEqual([s["te_dg_mt"] for s in eng.lists["te_dg_mt_states"]], [85.0, 70.0])
 
     def test_the_self_checks_are_wired(self):
         """Owner, 2026-10-12: once a game each (a global flag), the conscription check reading before the add and

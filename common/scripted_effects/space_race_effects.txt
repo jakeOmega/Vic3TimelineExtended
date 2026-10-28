@@ -1002,63 +1002,40 @@ sr_fire_safe_setback_event = {
 	}
 }
 
-# --- Display-only: who else is racing for one milestone ----------------------
-# Rendered by sr_rivals_sgui through ExecuteTooltip, so nothing here ever runs.
-# Country scope (ROOT = the panel's owner). $MILESTONE$ is one of the eight
-# milestone tokens.
-#
-# The participation test is deliberately the same one the monthly pulse uses:
-# sr_ai_should_participate. A great power outside the top three can hold
-# sr_active_$MILESTONE$ and never tick a single month of progress, and listing it
-# as a competitor would be a lie.
-#
-# What this does NOT show is how far along a rival is. Programmes are announced;
-# their internal schedules are not, and reading another country's
-# sr_progress_$MILESTONE$ would hand the player omniscience the system has never
-# given. The claim on "the first" is public — it is a global variable — and the
-# panel's overview shows it (sr_disp_first_claimed_<m>). Solar colonization has
-# no first: no sr_first_solar_colonization reward, and no sr_global_first_ flag
-# is ever written for it (it does not go through
-# sr_complete_milestone_effect_base).
-sr_rivals_participants_base = {
-	if = {
-		limit = {
-			any_country = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
-		}
-		custom_tooltip_no_bullet = sr_rivals_intro
-		every_country = {
-			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
-			custom_tooltip = sr_rivals_entry
-		}
-	}
-	else = {
-		custom_tooltip_no_bullet = sr_rivals_none
-	}
-}
-
 # --- Display-only: rivals' estimated progress --------------------------------
-# The Rivals rows (space_race_widget.gui, te_sr_rival_row) show up to five
-# rivals, each as an estimate of its progress inside a band. The owner asked for
-# "a bar with some fuzz ... less if you have an intelligence network there".
+# The Rivals section (space_race_widget.gui, te_sr_sec_rivals) lists every
+# other power whose programme is running this milestone and moving, each as an
+# estimate of its progress inside a band. The owner asked for "a bar with some
+# fuzz ... less if you have an intelligence network there".
 #
+# - Who: sr_is_rival, the participation test the monthly pulse uses
+#   (sr_ai_should_participate). A great power outside the top three can hold
+#   sr_active_$MILESTONE$ and never tick a single month of progress, and
+#   listing it as a competitor would be a lie.
 # - The fuzz is one random offset per rival and milestone, sr_fuzz_<m> (−1 to
 #   +1 in nine steps), drawn again a year after it was drawn (sr_fuzz_until_<m>,
 #   a month index). Script values cannot roll dice, so it is a variable.
 # - The band around it is the viewer's: ±25% of the goal, ±10% or ±5% with a
 #   covert network of intelligence tier 1 or 2 in the rival
 #   (sr_disp_rival_band). The estimate is progress + offset × band, so the true
-#   figure is always inside the band drawn around it.
-# - The rows' order and names come from here, once a month, into the viewer's
-#   own variables: sr_rival_total_<m> (how many rivals), and
-#   sr_rival_<m>_<1..5>, each rival's capital (gotcha #11: the GUI reaches a
-#   country through a stored state). The numbers are read live, per frame,
-#   through script values with the rival passed in as scope:sr_rival.
+#   figure is always inside the band drawn around it. Programmes are announced;
+#   their schedules are not, so no row ever reads a rival's sr_progress_<m>
+#   straight.
+# - The rows come from here, once a month, into the viewer's own variable
+#   list sr_rivals_list_<m>: every rival's capital, by the open estimate
+#   (sr_rival_est_open_<m>), furthest first (audit SPC-9). The panel draws it as
+#   a datamodel of states and reaches each country through its capital
+#   (gotcha #11); the numbers are read live, per frame, through script values
+#   with the rival passed in as scope:sr_rival.
+# - Solar colonization lists its rivals the same way; it has no first to race
+#   for (no sr_first_solar_colonization reward, no sr_global_first_ flag: it
+#   does not go through sr_complete_milestone_effect_base).
 #
 # Players only: nobody else looks, and the draws happen here, on the rivals a
 # player can see, so no AI pulse carries any of it. Several players seeing one
 # rival share its offset, and a month index (not a countdown) dates it, so a
-# second player's pulse cannot age it twice. Everything is a variable, so a
-# revolution's winner keeps it; the snapshot is rebuilt every month anyway.
+# second player's pulse cannot age it twice. A revolution's winner inherits the
+# offsets (variables) but not the list, which the next month rebuilds.
 # Scope: country (a player); ROOT is the same country (the monthly pulse).
 sr_rivals_estimate_refresh = {
 	sr_rivals_estimate_refresh_base = { MILESTONE = suborbital         }
@@ -1072,6 +1049,7 @@ sr_rivals_estimate_refresh = {
 }
 
 sr_rivals_estimate_refresh_base = {
+	sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }
 	if = {
 		limit = { has_variable = sr_active_$MILESTONE$ }
 		save_scope_as = sr_rivals_viewer
@@ -1087,48 +1065,26 @@ sr_rivals_estimate_refresh_base = {
 				sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
 			}
 		}
-		# 2. How many rivals, then the first five by the open estimate.
-		set_variable = { name = sr_rival_total_$MILESTONE$ value = 0 } # REVIEWED 2026-09-29: a display snapshot rebuilt every month; nothing a revolution's winner could lose
-		every_country = {
-			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
-			scope:sr_rivals_viewer = { change_variable = { name = sr_rival_total_$MILESTONE$ add = 1 } }
-		}
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 1 POS = 0 }
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 2 POS = 1 }
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 3 POS = 2 }
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 4 POS = 3 }
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 5 POS = 4 }
-	}
-	else = {
-		sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }
-	}
-}
-
-# Slot $N$ (1-5) gets the rival at position $POS$ ($N$ - 1) of the open
-# estimate's order. An ordered_ position past the end of the list clamps to the
-# last element instead of skipping (un_overview_display_effects.txt), so the
-# count is checked first. Scope: the viewer (scope:sr_rivals_viewer is set).
-sr_rival_slot = {
-	if = {
-		limit = {
-			any_country = {
-				sr_is_rival = { MILESTONE = $MILESTONE$ }
-				count >= $N$
+		# 2. Every rival's capital, by the open estimate, furthest first. 40 is
+		# a cap no game reaches (players and the top three); min/max with
+		# check_range_bounds walks the whole list (scripting_best_practices.md,
+		# "remove_list_variable Does Not Preserve List Order").
+		if = {
+			limit = {
+				any_country = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+			}
+			ordered_country = {
+				limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+				order_by = sr_rival_est_open_$MILESTONE$
+				min = 0
+				max = 40
+				check_range_bounds = no
+				capital = { save_scope_as = sr_rival_capital }
+				scope:sr_rivals_viewer = {
+					add_to_variable_list = { name = sr_rivals_list_$MILESTONE$ target = scope:sr_rival_capital }
+				}
 			}
 		}
-		ordered_country = {
-			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
-			order_by = sr_rival_est_open_$MILESTONE$
-			position = $POS$
-			capital = { save_scope_as = sr_rival_capital }
-		}
-		scope:sr_rivals_viewer = {
-			set_variable = { name = sr_rival_$MILESTONE$_$N$ value = scope:sr_rival_capital } # REVIEWED 2026-09-29: a display snapshot rebuilt every month; nothing a revolution's winner could lose
-		}
-	}
-	else_if = {
-		limit = { has_variable = sr_rival_$MILESTONE$_$N$ }
-		remove_variable = sr_rival_$MILESTONE$_$N$
 	}
 }
 
@@ -1151,8 +1107,11 @@ sr_roll_rival_fuzz = {
 	change_variable = { name = sr_fuzz_until_$MILESTONE$ add = 12 }
 }
 
-# The viewer's snapshot for a milestone it no longer runs. Scope: the viewer.
+# The viewer's snapshot for a milestone: the list, and the five slots and the
+# count that held it before audit SPC-9 (2026-10-27), so an older save drops
+# them at its first refresh. Scope: the viewer.
 sr_clear_rival_slots = {
+	if = { limit = { has_variable_list = sr_rivals_list_$MILESTONE$ } clear_variable_list = sr_rivals_list_$MILESTONE$ }
 	if = { limit = { has_variable = sr_rival_total_$MILESTONE$ } remove_variable = sr_rival_total_$MILESTONE$ }
 	if = { limit = { has_variable = sr_rival_$MILESTONE$_1 } remove_variable = sr_rival_$MILESTONE$_1 }
 	if = { limit = { has_variable = sr_rival_$MILESTONE$_2 } remove_variable = sr_rival_$MILESTONE$_2 }
@@ -1164,24 +1123,27 @@ sr_clear_rival_slots = {
 # --- Display-only: the Space Powers standings --------------------------------
 # The Timeline Extended window's Space Race tab stays open once a country is in
 # the race (sr_in_space_race), and opens with Space Powers (te_sr_sec_powers,
-# space_race_widget.gui): our programme, then up to eight other powers, each as
-# its programme's icons and an estimate of its furthest milestone under way.
+# space_race_widget.gui): our programme, then every other power, each as its
+# programme's icons and an estimate of its furthest milestone under way.
 # Unlike the Rivals rows, which exist only inside a milestone we run, it shows
 # between milestones and powers on milestones we never ran.
 #
 # - Who: every other power in the race (sr_is_space_power), in the order of
 #   sr_power_rank_score (space_race_values.txt): what each has achieved and
 #   which milestone it is on, never its progress.
-# - Into the viewer's own variables, once a month: sr_power_total (how many),
-#   and sr_power_<1..8>, each power's capital (gotcha #11). The icons and the
-#   estimate are read live, per frame.
+# - Into the viewer's own variables, once a month: sr_power_total (how many;
+#   missing until the first refresh, so the panel can say "next month"), and
+#   the list sr_powers_list, each power's capital in that order (audit SPC-9;
+#   gotcha #11), which the panel draws as a datamodel of states. The icons and
+#   the estimate are read live, per frame.
 # - The estimate is the Rivals rows' (sr_disp_rival_*_<m> with the power passed
 #   in as scope:sr_rival), so each power's offset (sr_fuzz_<m>) is drawn here
 #   for every milestone it runs, when missing or a year old, as
 #   sr_rivals_estimate_refresh_base draws it: the same offset in both places.
 #
 # Players only, from the monthly pulse (space_race_on_actions.txt). Everything
-# is a variable, rebuilt every month.
+# is rebuilt every month; a revolution's winner inherits the count, not the
+# list, for that month.
 # Scope: country (a player in the race); ROOT is the same country.
 sr_powers_refresh = {
 	save_scope_as = sr_powers_viewer
@@ -1196,19 +1158,68 @@ sr_powers_refresh = {
 		sr_power_fuzz_base = { MILESTONE = interstellar_probe }
 		sr_power_fuzz_base = { MILESTONE = solar_colonization }
 	}
+	sr_powers_clear = yes
 	set_variable = { name = sr_power_total value = 0 } # REVIEWED 2026-10-25: a display snapshot rebuilt every month; nothing a revolution's winner could lose
 	every_country = {
 		limit = { sr_is_space_power = yes }
 		scope:sr_powers_viewer = { change_variable = { name = sr_power_total add = 1 } }
 	}
-	sr_power_slot = { N = 1 POS = 0 }
-	sr_power_slot = { N = 2 POS = 1 }
-	sr_power_slot = { N = 3 POS = 2 }
-	sr_power_slot = { N = 4 POS = 3 }
-	sr_power_slot = { N = 5 POS = 4 }
-	sr_power_slot = { N = 6 POS = 5 }
-	sr_power_slot = { N = 7 POS = 6 }
-	sr_power_slot = { N = 8 POS = 7 }
+	# Every power's capital, furthest along first. 40 is a cap no game
+	# reaches; min/max with check_range_bounds walks the whole list
+	# (sr_rivals_estimate_refresh_base).
+	if = {
+		limit = { var:sr_power_total >= 1 }
+		ordered_country = {
+			limit = { sr_is_space_power = yes }
+			order_by = sr_power_rank_score
+			min = 0
+			max = 40
+			check_range_bounds = no
+			capital = { save_scope_as = sr_power_capital }
+			scope:sr_powers_viewer = {
+				add_to_variable_list = { name = sr_powers_list target = scope:sr_power_capital }
+			}
+		}
+	}
+	sr_powers_list_selfcheck = yes
+}
+
+# TE_SELF_CHECK sr_powers_list (audit SPC-9, 2026-10-27), once a game: the
+# first time a player's standings hold 2 to 40 other powers, the list must hold
+# every one of them (sr_power_total, counted by every_country), which says the
+# ordered_country walk with min/max reached the whole field rather than one
+# power. Fewer than two can't tell a walk from a single pick, so it waits. That
+# the panel draws the list (a datamodel of capitals, State.GetCountry on each)
+# is the game's to show: docs/testing/space-race-playtest.md.
+# Scope: the viewer (scope:sr_powers_viewer is set).
+sr_powers_list_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = sr_selfcheck_powers_list_done }
+			var:sr_power_total >= 2
+			var:sr_power_total <= 40
+		}
+		set_global_variable = { name = sr_selfcheck_powers_list_done value = yes }
+		set_variable = { name = sr_selfcheck_powers_listed value = 0 }
+		if = {
+			limit = { has_variable_list = sr_powers_list }
+			every_in_list = {
+				variable = sr_powers_list
+				scope:sr_powers_viewer = { change_variable = { name = sr_selfcheck_powers_listed add = 1 } }
+			}
+		}
+		if = {
+			limit = {
+				var:sr_selfcheck_powers_listed >= var:sr_power_total
+				var:sr_power_total >= var:sr_selfcheck_powers_listed
+			}
+			debug_log = "TE_SELF_CHECK OK sr_powers_list country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] powers=[THIS.Var('sr_power_total').GetValue|0] listed=[THIS.Var('sr_selfcheck_powers_listed').GetValue|0] (the Space Powers list holds every other power in the race)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN sr_powers_list country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] powers=[THIS.Var('sr_power_total').GetValue|0] listed=[THIS.Var('sr_selfcheck_powers_listed').GetValue|0] (the Space Powers and Rivals lists miss powers: ordered_country with min/max did not walk the whole field; take the fallback in docs/testing/space-race-playtest.md)"
+		}
+		remove_variable = sr_selfcheck_powers_listed
+	}
 }
 
 # A power's offset for $MILESTONE$, while it runs it: drawn if it has none,
@@ -1227,37 +1238,12 @@ sr_power_fuzz_base = {
 	}
 }
 
-# Slot $N$ (1-8) gets the power at position $POS$ ($N$ - 1) of the standings.
-# An ordered_ position past the end of the list clamps to the last element, so
-# the count is checked first (sr_rival_slot). Scope: the viewer
-# (scope:sr_powers_viewer is set).
-sr_power_slot = {
-	if = {
-		limit = {
-			any_country = {
-				sr_is_space_power = yes
-				count >= $N$
-			}
-		}
-		ordered_country = {
-			limit = { sr_is_space_power = yes }
-			order_by = sr_power_rank_score
-			position = $POS$
-			capital = { save_scope_as = sr_power_capital }
-		}
-		scope:sr_powers_viewer = {
-			set_variable = { name = sr_power_$N$ value = scope:sr_power_capital } # REVIEWED 2026-10-25: a display snapshot rebuilt every month; nothing a revolution's winner could lose
-		}
-	}
-	else_if = {
-		limit = { has_variable = sr_power_$N$ }
-		remove_variable = sr_power_$N$
-	}
-}
-
-# The snapshot of a country that no longer views it (no longer played).
-# Scope: the country.
+# The snapshot: the list and the count, and the eight slots that held it
+# before audit SPC-9 (2026-10-27), so an older save drops them at its first
+# refresh. From the refresh, and for a country that no longer views it (no
+# longer played). Scope: the country.
 sr_powers_clear = {
+	if = { limit = { has_variable_list = sr_powers_list } clear_variable_list = sr_powers_list }
 	if = { limit = { has_variable = sr_power_total } remove_variable = sr_power_total }
 	if = { limit = { has_variable = sr_power_1 } remove_variable = sr_power_1 }
 	if = { limit = { has_variable = sr_power_2 } remove_variable = sr_power_2 }

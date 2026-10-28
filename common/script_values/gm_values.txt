@@ -1095,6 +1095,53 @@ gm_state_rededicate_cost = {
 	multiply = 500
 }
 
+# State scope. What each of a contested monument's three choices does now
+# (GM-4), for their tooltips: the figures gm_preview_choices stored at the
+# last refresh (gm_effects.txt), guarded; and Rededicate's halved records,
+# as gm_state_apply_rededicate keeps them.
+gm_state_disp_prev_td_legit = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_td_legit }
+		value = var:gm_prev_td_legit
+	}
+}
+
+gm_state_disp_prev_td_base = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_td_base }
+		value = var:gm_prev_td_base
+	}
+}
+
+gm_state_disp_prev_td_sup = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_td_sup }
+		value = var:gm_prev_td_sup
+	}
+}
+
+gm_state_disp_prev_rd_sup = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_rd_sup }
+		value = var:gm_prev_rd_sup
+	}
+}
+
+gm_state_disp_prev_rd_levels = {
+	value = gm_state_primary_levels
+	divide = 2
+	ceiling = yes
+}
+
+gm_state_disp_prev_rd_grandeur = {
+	value = gm_state_primary_grandeur
+	divide = 2
+}
+
 # Country scope. How many monuments the open notice (monument_events.16) names.
 gm_notice_count = {
 	value = 0
@@ -1464,6 +1511,269 @@ gm_display_ig_trade_unions = {
 	}
 }
 
+# The parts of each interest group's approval total, for its row's hover in
+# National Effects (GM-13): the grandeur of the monuments it approves of
+# (gm_ig_pos_*, trophies included), of those it objects to (gm_ig_neg_*), of
+# the contested ones it resents (gm_ig_res_*), all written by gm_compute_ig,
+# and what remains of past decisions (its fading ledger). Guarded: a save from
+# before the parts were kept has none until the next refresh.
+
+gm_disp_ig_pos_armed_forces = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_pos_armed_forces }
+		value = var:gm_ig_pos_armed_forces
+	}
+}
+
+gm_disp_ig_neg_armed_forces = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_neg_armed_forces }
+		value = var:gm_ig_neg_armed_forces
+	}
+}
+
+gm_disp_ig_res_armed_forces = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_res_armed_forces }
+		value = var:gm_ig_res_armed_forces
+	}
+}
+
+gm_disp_ig_ledger_armed_forces = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_ledger_armed_forces }
+		value = var:gm_ig_ledger_armed_forces
+	}
+}
+
+gm_disp_ig_pos_devout = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_pos_devout }
+		value = var:gm_ig_pos_devout
+	}
+}
+
+gm_disp_ig_neg_devout = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_neg_devout }
+		value = var:gm_ig_neg_devout
+	}
+}
+
+gm_disp_ig_res_devout = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_res_devout }
+		value = var:gm_ig_res_devout
+	}
+}
+
+gm_disp_ig_ledger_devout = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_ledger_devout }
+		value = var:gm_ig_ledger_devout
+	}
+}
+
+gm_disp_ig_pos_industrialists = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_pos_industrialists }
+		value = var:gm_ig_pos_industrialists
+	}
+}
+
+gm_disp_ig_neg_industrialists = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_neg_industrialists }
+		value = var:gm_ig_neg_industrialists
+	}
+}
+
+gm_disp_ig_res_industrialists = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_res_industrialists }
+		value = var:gm_ig_res_industrialists
+	}
+}
+
+gm_disp_ig_ledger_industrialists = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_ledger_industrialists }
+		value = var:gm_ig_ledger_industrialists
+	}
+}
+
+gm_disp_ig_pos_intelligentsia = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_pos_intelligentsia }
+		value = var:gm_ig_pos_intelligentsia
+	}
+}
+
+gm_disp_ig_neg_intelligentsia = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_neg_intelligentsia }
+		value = var:gm_ig_neg_intelligentsia
+	}
+}
+
+gm_disp_ig_res_intelligentsia = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_res_intelligentsia }
+		value = var:gm_ig_res_intelligentsia
+	}
+}
+
+gm_disp_ig_ledger_intelligentsia = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_ledger_intelligentsia }
+		value = var:gm_ig_ledger_intelligentsia
+	}
+}
+
+gm_disp_ig_pos_landowners = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_pos_landowners }
+		value = var:gm_ig_pos_landowners
+	}
+}
+
+gm_disp_ig_neg_landowners = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_neg_landowners }
+		value = var:gm_ig_neg_landowners
+	}
+}
+
+gm_disp_ig_res_landowners = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_res_landowners }
+		value = var:gm_ig_res_landowners
+	}
+}
+
+gm_disp_ig_ledger_landowners = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_ledger_landowners }
+		value = var:gm_ig_ledger_landowners
+	}
+}
+
+gm_disp_ig_pos_petty_bourgeoisie = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_pos_petty_bourgeoisie }
+		value = var:gm_ig_pos_petty_bourgeoisie
+	}
+}
+
+gm_disp_ig_neg_petty_bourgeoisie = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_neg_petty_bourgeoisie }
+		value = var:gm_ig_neg_petty_bourgeoisie
+	}
+}
+
+gm_disp_ig_res_petty_bourgeoisie = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_res_petty_bourgeoisie }
+		value = var:gm_ig_res_petty_bourgeoisie
+	}
+}
+
+gm_disp_ig_ledger_petty_bourgeoisie = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_ledger_petty_bourgeoisie }
+		value = var:gm_ig_ledger_petty_bourgeoisie
+	}
+}
+
+gm_disp_ig_pos_rural_folk = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_pos_rural_folk }
+		value = var:gm_ig_pos_rural_folk
+	}
+}
+
+gm_disp_ig_neg_rural_folk = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_neg_rural_folk }
+		value = var:gm_ig_neg_rural_folk
+	}
+}
+
+gm_disp_ig_res_rural_folk = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_res_rural_folk }
+		value = var:gm_ig_res_rural_folk
+	}
+}
+
+gm_disp_ig_ledger_rural_folk = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_ledger_rural_folk }
+		value = var:gm_ig_ledger_rural_folk
+	}
+}
+
+gm_disp_ig_pos_trade_unions = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_pos_trade_unions }
+		value = var:gm_ig_pos_trade_unions
+	}
+}
+
+gm_disp_ig_neg_trade_unions = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_neg_trade_unions }
+		value = var:gm_ig_neg_trade_unions
+	}
+}
+
+gm_disp_ig_res_trade_unions = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_res_trade_unions }
+		value = var:gm_ig_res_trade_unions
+	}
+}
+
+gm_disp_ig_ledger_trade_unions = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ig_ledger_trade_unions }
+		value = var:gm_ig_ledger_trade_unions
+	}
+}
+
 gm_display_teardown = {
 	value = 0
 	if = {
@@ -1488,9 +1798,10 @@ gm_display_vanity = {
 # save older than the system has none of these variables until the first
 # refresh).
 #
-# The overview's four cells: how many monuments hold each status. Live, with
-# gm_status_code's order of precedence (contested over heritage over the
-# rest), so the cells always agree with the rows' status icons.
+# The overview's cells (te_gm_overview_panel; owner, 2026-10-27): how many
+# monuments hold each status. Live, with gm_status_code's order of precedence
+# (contested over heritage over the rest), so the cells always agree with the
+# rows' status icons.
 gm_disp_count_upheld = {
 	value = 0
 	every_scope_state = {
@@ -1538,11 +1849,61 @@ gm_disp_count_heritage = {
 	}
 }
 
-# The overview's first cell (sites spec 2026-10-18): our construction sites.
-gm_disp_count_undedicated = {
+# The overview's Sites cell (sites spec 2026-10-18): our construction sites;
+# those a Dedicate button can finish now (a level built and none under
+# construction, gm_dedicate_sgui's own tests); those with levels still being
+# built; and the grandeur they come to so far.
+gm_disp_count_sites = {
 	value = 0
 	every_scope_state = {
 		limit = { gm_state_has_site = yes }
+		add = 1
+	}
+}
+
+gm_disp_count_sites_ready = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_awaits_dedication = yes
+			gm_state_site_level >= 1
+			gm_state_disp_site_building = 0
+		}
+		add = 1
+	}
+}
+
+gm_disp_count_sites_building = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_has_site = yes
+			gm_state_disp_site_building = 1
+		}
+		add = 1
+	}
+}
+
+gm_disp_sites_grandeur = {
+	value = 0
+	every_scope_state = {
+		limit = { gm_state_has_site = yes }
+		add = gm_state_disp_site_grandeur
+	}
+}
+
+# A finished monument left undedicated (gm_status_code 1: an older save's,
+# until its migration makes it a site; GM-7), for the Monuments cell's
+# breakdown, which counts every status.
+gm_disp_count_undedicated = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_dedicated = no
+			gm_state_is_heritage = no
+			gm_state_is_contested = no
+		}
 		add = 1
 	}
 }
@@ -1560,6 +1921,14 @@ gm_disp_count_awaiting = {
 
 gm_disp_count_listed = {
 	value = gm_sum_monuments
+}
+
+# The rows Our Monuments draws: every finished monument but the contested,
+# which Awaiting a Decision lists (GM-3). Its line says so when it is none.
+gm_disp_count_listed_rest = {
+	value = gm_sum_monuments
+	subtract = gm_disp_count_contested
+	min = 0
 }
 
 # State scope. 1 while a finished monument stands here: its row is in Our
@@ -1626,6 +1995,27 @@ gm_disp_count_contested = {
 			variable = gm_monuments_held
 			limit = { gm_mon_is_contested = yes }
 			add = 1
+		}
+	}
+}
+
+# The grandeur the contested monuments hold back while undecided, the
+# Contested cell's figure: a state's own monument and any beside another.
+gm_disp_contested_grandeur = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_contested = yes
+		}
+		add = gm_state_primary_grandeur
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_is_contested = yes }
+			add = gm_mon_grandeur
 		}
 	}
 }

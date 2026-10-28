@@ -3,7 +3,8 @@
 # ============================================================================
 # The month of the last sharing (the Ocean Basins table's "as of", seabed
 # claims spec § 3.3, vanilla's month names), the policy's short name (the
-# overview's Policy box) and the regime's name (its Regime box).
+# overview's Policy box) and the regime's name (its Regime box); and what our
+# policy and the regime in force do to us, the two boxes' hovers (audit SEA-1).
 # ============================================================================
 
 te_seabed_asof_month = {
@@ -99,5 +100,41 @@ te_seabed_regime_name = {
 	text = {
 		trigger = { always = yes }
 		localization_key = te_seabed_regime_name_1
+	}
+}
+
+te_seabed_policy_ours = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_seabed_policy_value = 3 }
+		localization_key = te_seabed_ov_policy_ours_3
+	}
+	text = {
+		trigger = { te_seabed_policy_value = 2 }
+		localization_key = te_seabed_ov_policy_ours_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_seabed_ov_policy_ours_1
+	}
+}
+
+te_seabed_regime_ours = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_seabed_regime_value = 3 }
+		localization_key = te_seabed_ov_regime_ours_3
+	}
+	text = {
+		trigger = { te_seabed_regime_value = 2 }
+		localization_key = te_seabed_ov_regime_ours_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_seabed_ov_regime_ours_1
 	}
 }

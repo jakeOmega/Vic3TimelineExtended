@@ -8,8 +8,8 @@
 #
 # Neither block owns a threshold or a classification. The tier reads `ch_tier`,
 # whose only derivation site is `ch_set_display_state`
-# (common/scripted_effects/cultural_hegemony_effects.txt), where 2/5/10/15/25
-# live. The exported model reads `global_var:ch_rank_1_ideology`, the rank-1
+# (common/scripted_effects/cultural_hegemony_effects.txt), from the
+# ch_tier_N_floor script values (2/5/10/15/25). The exported model reads `global_var:ch_rank_1_ideology`, the rank-1
 # country's `var:ch_model`, whose only derivation site is
 # `ch_set_political_model` in the same file — the 1..15 codes below are that
 # effect's (its header has the table; 13-15 are the newer models).
@@ -45,6 +45,38 @@ ch_tier_text = {
 	}
 	text = {
 		localization_key = ch_tier_negligible
+	}
+}
+
+# The next tier's name, for the tier tooltip's "Next" line (CH-5), in the
+# overview's own words (je_ch_ov_tier_N). The top tier has none; the line then
+# reads je_ch_ov_tier_next_top instead.
+ch_next_tier_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = ch_tier } }
+		localization_key = je_ch_ov_tier_1
+	}
+	text = {
+		trigger = { var:ch_tier >= 4 }
+		localization_key = je_ch_ov_tier_5
+	}
+	text = {
+		trigger = { var:ch_tier >= 3 }
+		localization_key = je_ch_ov_tier_4
+	}
+	text = {
+		trigger = { var:ch_tier >= 2 }
+		localization_key = je_ch_ov_tier_3
+	}
+	text = {
+		trigger = { var:ch_tier >= 1 }
+		localization_key = je_ch_ov_tier_2
+	}
+	text = {
+		localization_key = je_ch_ov_tier_1
 	}
 }
 
