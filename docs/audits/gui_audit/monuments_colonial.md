@@ -137,7 +137,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
   preview is meaningful)
 
 ### GM-5. The world-wealth level rate sits in National Effects and repeats on every site row
-- **Status:** done (2026-10-27, #1210): the world-wealth rate is the first line of Awaiting Dedication and stays on the state's site card; it left National Effects and every site row.
+- **Status:** done (2026-10-27, #1210): the world-wealth rate is the first line of Awaiting Dedication and stays on the state's site card; it left National Effects and every site row. Revised 2026-10-28: Awaiting Dedication shows only while a site stands, so the panel lost the rate before the first level was built; it is now the overview's last line, under the policy, and still said once.
 - **Category:** spread-out/redundant
 - **Where:** `gm_je_world_rate` as National Effects' first line (`grand_monuments_widget.gui:2147-2151`, loc `:3368`);
   `gm_site_row_rate` on every Awaiting Dedication row (`:1687-1689`, loc `:3943`); `gm_site_card_rate` on the state's

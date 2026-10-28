@@ -6,7 +6,8 @@
 ###     The overview, always shown: Banking's two-up cells (te_banking_ov_cell;
 ###     owner, 2026-10-27): our monuments, the contested ones, the construction
 ###     sites and Hard Times, each word red while something waits on us; under
-###     them the monument policy in force.
+###     them the monument policy in force and what a level built this year
+###     adds.
 ###   widget_je_gm_status     custom_widget_container_2
 ###     (The entry has no status description: its counts were the overview's.)
 ###     Opportunity (open), only while one is open (opportunities spec §2):
@@ -16,14 +17,14 @@
 ###     Awaiting a Decision (open; owner, 2026-10-27), only while a monument
 ###     is contested: its row with its three choices.
 ###     Awaiting Dedication (open; owner, 2026-10-18), only while one of our
-###     construction sites waits for its Dedicate button: what a level is
-###     worth, then each site's row with the button under it. The two "act
-###     now" sections come before the readout.
+###     construction sites waits for its Dedicate button: each site's row
+###     with the button under it. The two "act now" sections come before the
+###     readout.
 ###     Archaeological Expeditions (gui/gm_archaeology_widgets.gui).
 ###     National Effects (open): the monument policy's four buttons (v2 §5;
-###     the overview's last line names the policy in force), then a bar per
-###     stepped total, interest group approval, the fading ledgers and the
-###     opportunity boons in force (with their months left).
+###     the line under the overview's cells names the policy in force), then
+###     a bar per stepped total, interest group approval, the fading ledgers
+###     and the opportunity boons in force (with their months left).
 ###     Our Monuments (open): one row per other monument, from the country's
 ###     gm_states list (rebuilt by every gm_country_refresh).
 ###   widget_je_gm_reference  custom_widget_container_3
@@ -1685,8 +1686,8 @@ types grand_monuments_widget_types
 	### stands, the levels built and the grandeur they come to, and whether
 	### levels are still being built (Dedicate waits for them). Its Dedicate
 	### button follows it under Awaiting Dedication (96 + 8 + 364 = 468). What
-	### a level is worth is the same for every site, so the section says it
-	### once above the rows (GM-5).
+	### a level is worth is the same for every site, so the overview says it
+	### once (GM-5).
 	type gm_site_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -1935,7 +1936,9 @@ types grand_monuments_widget_types
 	### heritage under it); Contested (how many to decide, and the grandeur they
 	### hold back); Construction Sites (how many to dedicate or still building,
 	### and their grandeur); Hard Times (in force: pause building). Under them,
-	### the monument policy, its effects and when it can change on hover.
+	### the monument policy, its effects and when it can change on hover; then
+	### what a level built this year adds, why on hover (GM-5: said once, and
+	### shown before the first site, when building is decided).
 	type te_gm_overview_panel = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2104,6 +2107,22 @@ types grand_monuments_widget_types
 					default_format = "#tooltippable"
 					tooltip = "gm_je_ov_policy_tt"
 					text = "gm_je_ov_policy"
+				}
+
+				# What a level built this year adds (sites spec 2026-10-18 §3.2,
+				# Plan B), why on hover. Here, not under Awaiting Dedication, so
+				# it shows before there is a site to dedicate. One line in
+				# English; a longer translation wraps.
+				textbox = {
+					autoresize = yes
+					multiline = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					align = hcenter|nobaseline
+					using = gm_fontsize_overview
+					default_format = "#tooltippable"
+					tooltip = "gm_je_world_rate_tt"
+					text = "gm_je_world_rate"
 				}
 			}
 		}
@@ -3066,9 +3085,9 @@ types grand_monuments_widget_types
 
 	### Awaiting Dedication (open; owner, 2026-10-18): only while a construction
 	### site of ours waits for its Dedicate button (gm_disp_count_awaiting),
-	### beside Awaiting a Decision above the readout (owner, 2026-10-27): what
-	### a level finished this year is worth, said once for every site (GM-5),
-	### then each site's row (gm_site_row) and its button. Our Monuments lists
+	### beside Awaiting a Decision above the readout (owner, 2026-10-27): each
+	### site's row (gm_site_row) and its button. What a level finished this
+	### year is worth is the overview's last line (GM-5). Our Monuments lists
 	### the finished monuments (gm_state_disp_listed).
 	type te_gm_sec_awaiting = flowcontainer {
 		direction = vertical
@@ -3094,15 +3113,6 @@ types grand_monuments_widget_types
 
 		gm_panel = {
 			visible = "[Not(GetVariableSystem.Exists('gm_awaiting_closed'))]"
-			spacing = 4
-
-			# What a level built this year adds (sites spec 2026-10-18 §3.2,
-			# Plan B), why on hover: where building is decided.
-			gm_text = {
-				default_format = "#tooltippable"
-				tooltip = "gm_je_world_rate_tt"
-				text = "gm_je_world_rate"
-			}
 
 			flowcontainer = {
 				direction = vertical

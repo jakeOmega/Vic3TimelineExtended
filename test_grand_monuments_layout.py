@@ -335,13 +335,19 @@ class StateGatedTest(unittest.TestCase):
         self.assertTrue(effects.startswith(' gm_text = { visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry'
                                            '.MakeScope.ScriptValue(\'gm_disp_national_any\'), \'(CFixedPoint)0\' )]" '
                                            'text = "gm_je_national_none" }'), effects[:300])
-        # Awaiting Dedication opens on what a level is worth, said once for
-        # every site (GM-5).
+        # What a level is worth is said once, on the overview's last line
+        # (GM-5), so it shows before there is a site to dedicate; Awaiting
+        # Dedication opens on its rows.
+        flat = _strip_comments(gui)
+        self.assertEqual(flat.count('text = "gm_je_world_rate"'), 1)
+        ov = _squash(_strip_comments(_type_body(gui, "te_gm_overview_panel")))
+        last = ov.split('text = "gm_je_ov_policy" }', 1)[1]
+        self.assertTrue(last.startswith(' textbox = {'), last[:200])
+        self.assertIn('default_format = "#tooltippable" tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate" }',
+                      last)
         awaiting = _squash(_strip_comments(_type_body(gui, "te_gm_sec_awaiting")).split("gm_panel = {", 1)[1])
         self.assertTrue(awaiting.startswith('visible = "[Not(GetVariableSystem.Exists(\'gm_awaiting_closed\'))]" '
-                                            'spacing = 4 gm_text = { default_format = "#tooltippable" '
-                                            'tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate" }'), awaiting[:300])
-        self.assertNotIn("gm_je_world_rate", _type_body(gui, "te_gm_sec_national"))
+                                            'flowcontainer = {'), awaiting[:300])
         self.assertNotIn("gm_site_row_rate", _type_body(gui, "gm_site_row"))
         # Our Monuments: the empty-state line shows exactly when the list is empty.
         mon = _squash(_type_body(gui, "te_gm_sec_monuments"))
@@ -495,7 +501,7 @@ class ApprovalBreakdownTest(unittest.TestCase):
 
 
 class PolicyLayoutTest(unittest.TestCase):
-    """The monument policy (v2 §5): its name on the overview's last line,
+    """The monument policy (v2 §5): its name on the line under the overview's cells,
     the four buttons at the top of National Effects (GM-3, owner
     2026-10-27), two to a row."""
 
@@ -907,6 +913,24 @@ class LabelBudgetTest(unittest.TestCase):
         ov = _type_body(self.gui, "te_gm_overview_panel")
         self.assertIn("using = gm_fontsize_overview", ov.split('text = "gm_je_ov_policy"', 1)[0].rsplit("textbox", 1)[1])
 
+    def test_the_level_rate_line(self):
+        """What a level built now adds (GM-5), one line in English under the
+        policy at the overview's size; the rate is 5.000 at most. The box
+        wraps, for a longer translation."""
+        ov = _type_body(self.gui, "te_gm_overview_panel")
+        box = ov.split('text = "gm_je_world_rate"', 1)[0].rsplit("textbox", 1)[1]
+        self.assertIn("multiline = yes", box)
+        width = int(re.search(r"maximumsize = \{ (\d+) ", box).group(1))
+        font = re.search(r"using = (gm_fontsize_\w+)", box).group(1)
+        self.assertEqual(font, "gm_fontsize_overview")
+        # The 1836 figure prints whole (|0); the rate to three places.
+        value = self.loc["gm_je_world_rate"].replace(
+            "[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]", "5")
+        text = _rendered(value, self.loc, "5.000")
+        self.assertEqual(text, "A level built now adds 5.000 Grandeur (5 in 1836)")
+        need = len(text) * UNITS[font] * MARGIN
+        self.assertLessEqual(need, width, f"{text!r} needs {need:.0f} of {width} ({font})")
+
     def test_row_status_words(self):
         """The row's word is custom loc: the longest word it can pick."""
         (cell,) = _cells(_type_body(self.gui, "gm_row_status"))
@@ -1167,6 +1191,7 @@ class StateCardLabelBudgetTest(LabelBudgetTest):
     test_the_flagged_labels_are_short = test_overview_captions = test_row_status_words = None
     test_choice_buttons = test_policy_buttons = test_naming_buttons = test_hard_times_phrase = None
     test_the_policy_line = test_every_textbox_names_a_panel_size = test_trophy_and_dig_buttons = None
+    test_the_level_rate_line = None
 
 
 class PictureLayoutTests(unittest.TestCase):
