@@ -837,6 +837,41 @@ nd_local_monopoly_over = {
 }
 
 # A militarist or expansionist regime, for AI judgement and the Monopoly Window.
+# A restraint government (rework spec §4.4, the At Home restraint class): not a
+# militarist regime, and a powerful interest group in government whose class
+# or leader leans to restraint.
+nd_regime_is_restraint = {
+	nd_regime_is_militarist = no
+	any_interest_group = {
+		is_in_government = yes
+		is_powerful = yes
+		nd_ig_is_restraint = yes
+	}
+}
+
+# Spending more than we take in, counting fixed income and expenses only.
+nd_in_budget_deficit = {
+	OR = {
+		in_default = yes
+		net_fixed_income < 0
+	}
+}
+
+# AI posture review (rework spec §4.4): fewer than three survivors against the
+# main rival at Heightened with no launch credit (nd_refresh_main_rival).
+nd_ai_vulnerable_to_main_rival = {
+	nd_has_plausible_attacker = yes
+	has_variable = nd_survivors_main_bare_r2
+	var:nd_survivors_main_bare_r2 < 3
+}
+
+# ...and still fewer at the survivability our technology allows: hardening
+# would not close the gap.
+nd_ai_hardening_cannot_close = {
+	has_variable = nd_survivors_main_ceiling_bare_r2
+	var:nd_survivors_main_ceiling_bare_r2 < 3
+}
+
 nd_regime_is_militarist = {
 	OR = {
 		country_is_fascist = yes

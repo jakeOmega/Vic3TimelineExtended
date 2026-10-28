@@ -97,9 +97,20 @@ country_nd_automatic_answer_bool = {
 	script_only = yes
 }
 
-# Automatic Retaliation: a crisis counts us as able to answer, however
-# vulnerable our forces (nd_yp_answer_value).
-country_nd_answer_assured_bool = {
+# Delegation and Launch on Warning: the share of the warheads a counterforce
+# strike would destroy that get away first (nd_launch_credit). Survivors count
+# them, so a threat against us carries less weight.
+country_nd_launch_credit_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+# Delegation, Launch on Warning, Automatic Retaliation: a strike on our capital
+# cannot cut the chain of command (rework spec §6.3), and a crisis does not
+# discount our answer for it (nd_yp_answer_survivors_value).
+country_nd_decapitation_immune_bool = {
 	color = good
 	boolean = yes
 	script_only = yes

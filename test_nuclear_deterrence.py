@@ -718,19 +718,12 @@ class TestEffectiveSurvivability(unittest.TestCase):
             self.assertNotIn("nd_effective_survivability >= 50", body)
             self.assertNotIn("var:nd_survivability", body)
 
-    def test_ai_authority_reads_the_stored_figure(self):
-        review = read(EFFECTS)
-        start = review.index("# ---- launch authority", review.index("nd_ai_review_posture = {"))
-        authority = strip_comments(review[start:review.index("# ---- investment", start)])
-        self.assertIn("var:nd_survivability < 50", authority)
-        self.assertNotIn("nd_effective_survivability", authority)
-
-    def test_ai_alert_reads_survivability_at_heightened(self):
+    def test_ai_alert_reads_survivors_at_heightened(self):
         # Not at the current readiness: reaching High Alert must not undo the
         # reason for it, or the review would swing between the two.
         review = strip_comments(block(read(EFFECTS), "nd_ai_review_posture"))
-        self.assertIn("nd_effective_survivability_at_readiness_2 < 50", review)
-        self.assertNotRegex(review, r"\bnd_effective_survivability\s*<")
+        self.assertIn("var:nd_survivors_main_r2 < 3", review)
+        self.assertNotRegex(review, r"\bnd_effective_survivability(?:_at_readiness_\d)?\s*<")
 
     def test_tooltips_show_the_figure(self):
         # The readiness table's Survivability column (NUC-5), one cell a level.
@@ -771,6 +764,57 @@ class TestSurvivorsAgainstRival(unittest.TestCase):
         triggers = strip_comments(read(TRIGGERS))
         self.assertIn("nd_plausible_attacker_of", block(triggers, "nd_has_plausible_attacker"))
         self.assertIn("nd_plausible_attacker_of", block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival"))
+
+
+def ai_review_section(start_marker, end_marker):
+    review = read(EFFECTS)
+    start = review.index(start_marker, review.index("nd_ai_review_posture = {"))
+    return strip_comments(review[start:review.index(end_marker, start)])
+
+
+class TestAuthorityPayoffs(unittest.TestCase):
+    """Delegation and Launch on Warning pay; safeguards trim the payoff; the
+    AI's safeguards are no longer automatic and its authority reads survivors
+    (2026-10-28 rework spec §4.1, §4.2, §4.4)."""
+
+    def test_authority_reads_bare_heightened_survivors(self):
+        authority = ai_review_section("# ---- launch authority", "# ---- investment")
+        self.assertIn("nd_ai_vulnerable_to_main_rival = yes", authority)
+        self.assertIn("nd_ai_hardening_cannot_close = yes", authority)
+        self.assertNotIn("nd_effective_survivability", authority)
+        self.assertNotIn("var:nd_survivability", authority)
+        triggers = strip_comments(read(TRIGGERS))
+        self.assertIn("var:nd_survivors_main_bare_r2 < 3", block(triggers, "nd_ai_vulnerable_to_main_rival"))
+        self.assertIn("var:nd_survivors_main_ceiling_bare_r2 < 3", block(triggers, "nd_ai_hardening_cannot_close"))
+
+    def test_safeguards_not_automatic(self):
+        investment = ai_review_section("# ---- investment", "# ---- arsenal size")
+        for needle in ("ruler_is_cautious = yes", "nd_regime_is_restraint = yes", "nd_regime_is_militarist = yes",
+                       "nd_doctrine_warfighting = yes", "nd_in_budget_deficit = yes",
+                       "nd_authority_delegated_or_warning = yes",
+                       "clamp_variable = { name = nd_ai_want_safeguards min = 0 max = 3 }"):
+            self.assertIn(needle, investment)
+        self.assertNotIn("var:nd_readiness_target = 3", investment)
+
+    def test_back_to_central_without_threat(self):
+        authority = ai_review_section("# ---- launch authority", "# ---- investment")
+        branches = re.findall(r"else_if = \{\s*limit = \{(.*?)\}\s*(?:random = \{[^}]*)?nd_set_authority_1 = yes",
+                              authority, re.S)
+        self.assertTrue(any("ruler_is_cautious" not in b and "nd_ai_vulnerable_to_main_rival = no" in b
+                            for b in branches), branches)
+
+    def test_hardening_closes_a_closable_gap(self):
+        investment = ai_review_section("# ---- investment", "# ---- arsenal size")
+        self.assertIn("nd_ai_hardening_cannot_close = no", investment)
+        self.assertIn("clamp_variable = { name = nd_ai_want_hardening min = 0 max = 3 }", investment)
+
+    def test_authority_modifiers_show_payoff(self):
+        modifiers = strip_comments(read(MODIFIERS))
+        self.assertIn("country_nd_launch_credit_add = 0.25", block(modifiers, "nd_authority_terms_2"))
+        self.assertIn("country_nd_launch_credit_add = 0.6", block(modifiers, "nd_authority_terms_3"))
+        for level in (2, 3, 4):
+            self.assertIn("country_nd_decapitation_immune_bool = yes", block(modifiers, f"nd_authority_terms_{level}"))
+        self.assertIn("country_nd_launch_credit_add = -0.05", block(modifiers, "nd_safeguards_slow_launch"))
 
 
 ACT_LINES = {
