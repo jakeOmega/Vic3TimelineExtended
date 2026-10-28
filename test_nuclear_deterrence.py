@@ -867,6 +867,12 @@ class TestStrikeClaims(unittest.TestCase):
     def claim(self):
         return block(self.effects, "nd_record_claim")
 
+    def test_each_new_effect_defined_once(self):
+        # A patch re-run once defined nd_record_claim twice; the duplicate-key
+        # audit only warns on an identical repeat.
+        for name in ("nd_record_claim", "nd_claim_schedule_truth", "nd_claim_clear"):
+            self.assertLessEqual(len(re.findall(rf"(?m)^{name} = \{{", read(EFFECTS))), 1, name)
+
     def test_claim_recorded_before_the_victims_event(self):
         strike = block(strip_comments(read(EXTRA_EFFECTS)), "nuclear_first_strike")
         self.assertLess(strike.index("nd_record_claim = yes"), strike.index("id = nuclear_weapon_events.1 "))
@@ -952,6 +958,45 @@ class TestVictimWeighsTheClaim(unittest.TestCase):
         desc = block(self.ev1, "desc")
         self.assertIn("nuclear_weapon_events.1.d_claim", desc)
         self.assertIsNotNone(loc_value("nuclear_weapon_events.1.d_claim"))
+
+
+class TestClaimTruth(unittest.TestCase):
+    """The truth about a claim comes out 6 to 18 months later, sooner with a
+    covert network (2026-10-28 rework spec §5.4)."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(EFFECTS))
+        self.events = strip_comments(read(WEAPON_EVENTS))
+
+    def test_truth_scheduled_by_the_claim(self):
+        self.assertIn("nd_claim_schedule_truth = yes", block(self.effects, "nd_record_claim"))
+
+    def test_truth_delays_are_literal(self):
+        body = block(self.effects, "nd_claim_schedule_truth")
+        for days in (180, 270, 365, 455, 545, 90):
+            self.assertIn(f"days = {days}", body)
+        self.assertIn("sr_has_intel_tier = { TARGET = scope:attacking_country TIER = 1 }", body)
+        self.assertIn("id = nuclear_weapon_events.28", body)
+        self.assertIn("id = nuclear_weapon_events.29", body)
+        self.assertNotIn("$", body.replace("$EVENT$", ""))
+
+    def test_truth_revalidates_parties(self):
+        for eid in ("nuclear_weapon_events.28", "nuclear_weapon_events.29", "nuclear_weapon_events.30"):
+            trig = block(block(self.events, eid), "trigger")
+            self.assertIn("exists = scope:nd_truth_launcher", trig, eid)
+            self.assertIn("is_country_alive = yes", trig, eid)
+
+    def test_exposed_lie_costs(self):
+        body = option_body(self.events, "nuclear_weapon_events.30.a")
+        for needle in ("AMOUNT = -20", "change_infamy = nd_taboo_infamy_threat", "value = -50",
+                       "change_variable = { name = nd_false_claims add = 1 }"):
+            self.assertIn(needle, body)
+        self.assertIn("id = nuclear_weapon_events.30", block(self.events, "nuclear_weapon_events.29"))
+
+    def test_rejected_true_claim_offers_reconciliation(self):
+        body = option_body(self.events, "nuclear_weapon_events.28.b")
+        self.assertIn("nd_claim_accepted", block(body, "trigger"))
+        self.assertIn("value = 30", body)
 
 
 class TestOutcomeNotice(unittest.TestCase):
