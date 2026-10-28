@@ -310,9 +310,9 @@ Probed 2026-10-28 (one observer game; details in `docs/guides/scripting_best_pra
 
 | Question | Used by | Fallback | Result (2026-10-28) |
 |---|---|---|---|
-| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) | Removes the **opening** goal; the war goes on. Did not remove goals added by script `add_war_goal`. AI-added goals untested: probe in phase 2 |
+| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) | Removes the **opening** goal and the AI's own goals; the war goes on, and in a war the AI can't add them back. Did not remove goals added by script `add_war_goal` (second probe, 2026-10-28) |
 | `remove_war_goal` on a play's opening goal (the owner expects both to work) | §8.1 | skip the opening goal | Works, in a play and in a war |
-| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip | Untested: no added goal could be removed. Phase 2 |
+| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip | Still untested: no side held a goal its leader didn't. Fallback applies |
 | Does `resolve_play_for` enforce every goal or only primary demands? | §8.2 | stakes counts whichever it enforces | Every goal. Stakes count every goal (as built) |
 | What `has_strategic_adjacency`'s coastal adjacency covers | §7.2 | `is_adjacent_to_country` plus the region test | Land and sea-coast neighbors; not distant coasts. `is_adjacent_to_country` covers sea-coast neighbors too |
 | `any_neighbouring_state` at strategic-region scope | §7.2 | own regions only | Works |
