@@ -1,0 +1,15 @@
+﻿# ============================================================================
+# MATH HELPERS — the effect side of common/script_values/te_math_generated.txt
+#
+# A script value takes no arguments, so each generated function reads its input
+# from var:te_math_in on the current scope. These set it, store the result in a
+# variable of the caller's and remove the input again.
+# ============================================================================
+
+# var:$OUT$ on this scope = the square root of $IN$ (te_sqrt). $IN$ is one
+# token: a number, a script value's name or a var:.
+te_set_sqrt = {
+	set_variable = { name = te_math_in value = $IN$ }
+	set_variable = { name = $OUT$ value = te_sqrt }
+	remove_variable = te_math_in
+}

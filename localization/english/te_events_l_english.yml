@@ -1220,7 +1220,7 @@
  decolonization_events.73.t:0 "The Flag Comes Down"
  decolonization_events.74.a:0 "We condemn it, before the world."
  decolonization_events.74.b:0 "Send them arms."
- decolonization_events.74.b_tt:0 "#header Arms for the rebels#!\nWhile the war lasts, they fight harder and their resolve holds, and we pay them a sum from our [concept_treasury] each month."
+ decolonization_events.74.b_tt:0 "#header Arms for the rebels#!\nWhile the war lasts, they fight harder and their resolve holds, and we pay them a sum from our [concept_treasury] each month.\nWith ours, their Foreign Arms give #v [SCOPE.sCountry('decol_iw_gp_rebels').MakeScope.ScriptValue('decol_iw_disp_arms_next')|+%0]#! offense and defense, up from #v [SCOPE.sCountry('decol_iw_gp_rebels').MakeScope.ScriptValue('decol_iw_disp_arms_now')|+%0]#!. Each great power's arms add less than the last's, with no limit."
  decolonization_events.74.c:0 "Their fight is ours. We march."
  decolonization_events.74.c_guard_tt:0 "We are a [concept_great_power] at peace and the colonial power's rival with the larger army, not its ally, its bloc partner, its subject or its overlord, and not under a [concept_truce] with it"
  decolonization_events.74.d:0 "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] has sent its army against [SCOPE.sCountry('decol_iw_gp_rebels').GetName], the colony that declared its independence in [SCOPE.sState('decol_iw_note_state').GetName]. Our government has said for years that the age of empires is over, and the rebels' envoys are in our capital to ask what that means."

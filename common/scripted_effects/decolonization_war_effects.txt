@@ -273,15 +273,19 @@ decol_iw_refresh_fighters = {
 		limit = { has_modifier = decol_iw_foreign_arms_modifier }
 		remove_modifier = decol_iw_foreign_arms_modifier
 	}
+	# Foreign arms at the square root of the backers, uncapped
+	# (decol_iw_backers_next's comment), and the figure one more would bring.
+	te_set_sqrt = { IN = decol_iw_backers_next OUT = decol_iw_arms_mult_next }
 	if = {
 		limit = {
 			has_variable = decol_iw_backer_count
 			var:decol_iw_backer_count > 0
 		}
+		te_set_sqrt = { IN = var:decol_iw_backer_count OUT = decol_iw_arms_mult }
 		add_modifier = {
 			name = decol_iw_foreign_arms_modifier
 			months = 2
-			multiplier = decol_iw_backer_mult
+			multiplier = var:decol_iw_arms_mult
 		}
 	}
 }
@@ -672,6 +676,8 @@ decol_iw_clear_slot = {
 		remove_variable = decol_iw_settlers
 		remove_variable = decol_iw_conceded
 		remove_variable = decol_iw_backer_count
+		remove_variable = decol_iw_arms_mult
+		remove_variable = decol_iw_arms_mult_next
 	}
 	var:decol_iw_state_$N$ ?= {
 		remove_variable = decol_iw_row_months

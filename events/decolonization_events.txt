@@ -5150,8 +5150,10 @@ decolonization_events.74 = {
 				factor = 0
 			}
 		}
+		# The tooltip gives the arms with ours; the effect's own lines would show
+		# the rebels' modifiers removed and added again at today's figure.
 		custom_tooltip = decolonization_events.74.b_tt
-		decol_iw_begin_arming = yes
+		hidden_effect = { decol_iw_begin_arming = yes }
 		change_relations = {
 			country = scope:decol_iw_gp_metropole
 			value = -30

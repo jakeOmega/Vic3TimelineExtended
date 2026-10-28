@@ -82,9 +82,7 @@ decol_iw_red_war_support = 25
 decol_iw_talks_months = 6
 
 # ---- Foreign arms (phase 3) ----
-# The most backers whose arms count (decol_iw_foreign_arms_modifier's
-# multiplier), and what a backer moves to the rebels' treasury each month.
-decol_iw_max_backers = 3
+# What a backer moves to the rebels' treasury each month.
 decol_iw_arms_monthly = {
 	value = gdp
 	multiply = 0.0005
@@ -92,16 +90,43 @@ decol_iw_arms_monthly = {
 	max = 100000
 }
 
-# The rebels' foreign arms modifier's multiplier: one copy's worth per backer,
-# up to decol_iw_max_backers. SCOPE: country (the rebels).
-decol_iw_backer_mult = {
-	value = 0
+# The rebels' foreign arms modifier's multiplier is the square root of their
+# backers, with no cap (owner, 2026-10-28): 1 for one, 1.41 for two, 1.73 for
+# three, 2 for four, so each great power's arms add less than the last's but
+# never nothing. decol_iw_refresh_fighters stores it on the rebels
+# (var:decol_iw_arms_mult) through te_sqrt, with the figure one backer more
+# would bring (var:decol_iw_arms_mult_next) for .74.b's tooltip.
+# SCOPE: country (the rebels). Their backers and one more.
+decol_iw_backers_next = {
+	value = 1
 	if = {
 		limit = { has_variable = decol_iw_backer_count }
-		value = var:decol_iw_backer_count
+		add = var:decol_iw_backer_count
 	}
-	max = decol_iw_max_backers
-	min = 0
+}
+
+# One multiplier's offense and defense (decol_iw_foreign_arms_modifier's
+# unit_offense_mult and unit_defense_mult), for .74.b's tooltip.
+decol_iw_arms_unit = 0.10
+
+# .74.b's tooltip: the rebels' foreign arms now and with one backer more, as
+# shares (|%0). SCOPE: country (the rebels).
+decol_iw_disp_arms_now = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_arms_mult }
+		value = var:decol_iw_arms_mult
+		multiply = decol_iw_arms_unit
+	}
+}
+
+decol_iw_disp_arms_next = {
+	value = decol_iw_arms_unit
+	if = {
+		limit = { has_variable = decol_iw_arms_mult_next }
+		value = var:decol_iw_arms_mult_next
+		multiply = decol_iw_arms_unit
+	}
 }
 
 # ---- Displays (the Wars of Independence block) ----

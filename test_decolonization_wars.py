@@ -66,6 +66,8 @@ WAR_SUPPORT = _read("common", "script_values", "zz_te_war_support_injections.txt
 ON_ACTIONS = _read("common", "on_actions", "extra_on_actions.txt")
 CIVIL_WAR = _read("common", "on_actions", "te_civil_war_on_actions.txt")
 VALUES = _read("common", "script_values", "colonial_empire_values.txt")
+WAR_VALUES = _read("common", "script_values", "decolonization_war_values.txt")
+MODIFIERS = _read("common", "static_modifiers", "extra_modifiers.txt")
 BAR = _read("common", "scripted_progress_bars", "extra_progress_bars.txt")
 
 
@@ -312,6 +314,40 @@ class EventTests(unittest.TestCase):
         intervene = _def(EVENTS, "decolonization_events.74")
         intervene = intervene[intervene.index("name = decolonization_events.74.c"):]
         self.assertIn("decol_iw_can_intervene = yes", _block(intervene, "trigger"))
+
+    def test_foreign_arms_grow_as_the_square_root_of_the_backers(self):
+        """Uncapped (owner, 2026-10-28): the fourth backer's arms counted for nothing at a cap of three."""
+        refresh = _def(EFFECTS, "decol_iw_refresh_fighters")
+        self.assertIn("te_set_sqrt = { IN = var:decol_iw_backer_count OUT = decol_iw_arms_mult }", refresh)
+        self.assertIn("te_set_sqrt = { IN = decol_iw_backers_next OUT = decol_iw_arms_mult_next }", refresh)
+        add = refresh[refresh.index("name = decol_iw_foreign_arms_modifier"):]
+        self.assertIn("multiplier = var:decol_iw_arms_mult\n", add[:add.index("}")])
+        self.assertLess(refresh.index("OUT = decol_iw_arms_mult }"), refresh.index("multiplier = var:decol_iw_arms_mult"))
+        self.assertNotIn("decol_iw_max_backers", WAR_VALUES + EFFECTS)
+        self.assertNotIn("max", _def(WAR_VALUES, "decol_iw_backers_next"))
+        clear = _def(EFFECTS, "decol_iw_clear_slot")
+        for var in ("decol_iw_arms_mult", "decol_iw_arms_mult_next"):
+            with self.subTest(var=var):
+                self.assertIn(f"remove_variable = {var}\n", clear)
+
+    def test_the_arms_tooltip_shows_the_arms_with_ours(self):
+        """The effect's own lines showed the modifier removed and added back at today's figure."""
+        event = _def(EVENTS, "decolonization_events.74")
+        arms = event[event.index("name = decolonization_events.74.b"):event.index("name = decolonization_events.74.c")]
+        self.assertIn("hidden_effect = { decol_iw_begin_arming = yes }", arms)
+        self.assertNotRegex(re.sub(r"hidden_effect = \{[^{}]*\}", "", arms), r"decol_iw_begin_arming")
+        loc = _raw("localization", "english", "te_events_l_english.yml")
+        line = re.search(r"(?m)^ decolonization_events\.74\.b_tt:0 (.*)$", loc).group(1)
+        for value in ("decol_iw_disp_arms_next", "decol_iw_disp_arms_now"):
+            with self.subTest(value=value):
+                self.assertIn(f"SCOPE.sCountry('decol_iw_gp_rebels').MakeScope.ScriptValue('{value}')", line)
+
+    def test_the_tooltip_unit_is_the_modifiers(self):
+        unit = float(re.search(r"(?m)^decol_iw_arms_unit = ([0-9.]+)", WAR_VALUES).group(1))
+        modifier = _def(MODIFIERS, "decol_iw_foreign_arms_modifier")
+        for field in ("unit_offense_mult", "unit_defense_mult"):
+            with self.subTest(field=field):
+                self.assertEqual(float(re.search(field + r" = ([0-9.]+)", modifier).group(1)), unit)
 
     def test_the_collapse_is_a_wave(self):
         for event in ("decolonization_events.201", "decolonization_events.204"):
