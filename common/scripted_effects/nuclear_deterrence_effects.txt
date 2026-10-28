@@ -1661,6 +1661,7 @@ nd_start_unconfirmed_warning = {
 					}
 				}
 			}
+			scope:nd_warning_suspect = { save_scope_as = nd_hold_suspect }
 			nd_roll_launch_hold = yes
 			if = {
 				limit = { var:nd_launch_held = 1 }
@@ -2237,6 +2238,7 @@ nd_system_reads_attack = {
 		}
 		if = {
 			limit = { exists = scope:nd_system_suspect }
+			scope:nd_system_suspect = { save_scope_as = nd_hold_suspect }
 			nd_roll_launch_hold = yes
 			if = {
 				limit = { var:nd_launch_held = 1 }

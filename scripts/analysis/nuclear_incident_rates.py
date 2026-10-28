@@ -98,6 +98,8 @@ class RiskModel:
             return getattr(posture, value[7:])
         if value == "nd_own_danger_band":
             return min(3, posture.danger // 25)
+        if value == "nd_war_danger_band":
+            return posture.war_band if posture.war else 0
         if value in self.values:
             return self.number(self.values[value], posture)
         return float(value)
@@ -120,7 +122,7 @@ class RiskModel:
             # Compellence once the war threatens us (the model's band 3).
             "nd_doctrine_permits_strike": lambda: p.war and (p.doctrine == 5 or (p.doctrine >= 3 and p.war_band >= 3)),
             "nd_vulnerable_to": lambda: p.survivors < 3,
-            "nd_crisis_talks_open": lambda: p.talks,
+            "nd_crisis_talks_open_either": lambda: p.talks,
         }
         if key not in answers:
             return None
@@ -140,6 +142,9 @@ class RiskModel:
                 continue
             if key == "has_war_with":
                 answers.append(p.war)
+                continue
+            if key == "exists" and value == "scope:nd_hold_suspect":
+                answers.append(True)  # every benchmark has a suspected attacker
                 continue
             if key in ("OR", "AND", "NOT"):
                 parts = [self.condition([part], p, crisis) for part in value]
@@ -183,6 +188,9 @@ class RiskModel:
                 if (key == "if" or not branch_taken) and self.condition(limit, p, crisis):
                     result = self.arithmetic([x for x in value if x[0] != "limit"], p, result, crisis)
                     branch_taken = True
+                continue
+            if key == "scope:nd_hold_suspect":
+                result = self.arithmetic(value, replace(p, readiness=p.suspect_readiness), result, crisis)
                 continue
             if key in ("round", "floor"):
                 result = math.floor(result + 0.5) if key == "round" else math.floor(result)

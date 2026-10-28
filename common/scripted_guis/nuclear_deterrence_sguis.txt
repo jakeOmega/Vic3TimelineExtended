@@ -535,6 +535,10 @@ nd_risk_breakdown_sgui = {
 			limit = { nd_in_crisis = yes }
 			custom_tooltip_no_bullet = nd_risk_factor_crisis
 		}
+		if = {
+			limit = { nd_war_danger_band > nd_own_danger_band }
+			custom_tooltip_no_bullet = nd_risk_factor_war
+		}
 	}
 }
 

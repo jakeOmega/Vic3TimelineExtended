@@ -1464,6 +1464,37 @@ nd_incident_eligible_commander = {
 
 # A family the crisis part of the week's exposure can draw (nd_fire_incident):
 # the misreadings, not a weapons accident.
+# War exposure band 3 (rework spec §5.1): a war with an enemy believed armed
+# that threatens either side — goals on the other's incorporated states, either
+# side losing, or a nuclear weapon landed on either side.
+nd_war_band_3_against_any = {
+	save_temporary_scope_as = nd_wb_self
+	any_enemy_in_war = {
+		nd_believed_armed = yes
+		save_temporary_scope_as = nd_wb_enemy
+		OR = {
+			nd_core_threatened_by = { ENEMY = scope:nd_wb_self }
+			scope:nd_wb_self = { nd_core_threatened_by = { ENEMY = scope:nd_wb_enemy } }
+			nd_is_losing_war_to = { ENEMY = scope:nd_wb_self }
+			scope:nd_wb_self = { nd_is_losing_war_to = { ENEMY = scope:nd_wb_enemy } }
+			any_scope_state = {
+				OR = {
+					has_modifier = nuclear_strike_aftermath
+					has_modifier = tactical_nuke_aftermath
+				}
+			}
+			scope:nd_wb_self = {
+				any_scope_state = {
+					OR = {
+						has_modifier = nuclear_strike_aftermath
+						has_modifier = tactical_nuke_aftermath
+					}
+				}
+			}
+		}
+	}
+}
+
 nd_incident_misreading_eligible = {
 	OR = {
 		nd_incident_eligible_warning = yes

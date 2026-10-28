@@ -258,5 +258,64 @@ class TestCrisisAndWarModel(unittest.TestCase):
             self.model.condition([("no_such_trigger", "=", "yes")], Posture())
 
 
+class TestHoldAndExposure(unittest.TestCase):
+    """The chance of a halt has a ceiling by context and reads the suspect, the
+    hotline and our own vulnerability (rework spec §4.3); a war with an armed
+    enemy adds the crisis surcharge (§5.1)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = RiskModel()
+
+    def hold(self, **kw):
+        return self.model.number("nd_hold_chance", Posture(**kw))
+
+    def test_hold_ceiling_by_context(self):
+        high = dict(readiness=3, reliability=98, safeguards=3)
+        self.assertEqual(self.hold(**high), 97)
+        self.assertEqual(self.hold(stage=2, danger=50, **high), 92)
+        self.assertEqual(self.hold(stage=3, danger=80, **high), 85)
+        self.assertEqual(self.hold(war=True, **high), 85)
+
+    def test_hold_chance_suspect_terms(self):
+        low = dict(readiness=3, reliability=40, safeguards=0, stage=3, danger=80)
+        base = self.hold(suspect_readiness=1, **low)
+        self.assertEqual(base, 40)
+        self.assertEqual(self.hold(suspect_readiness=0, **low), base + 20)
+        self.assertEqual(self.hold(suspect_readiness=3, **low), base - 5)
+        self.assertEqual(self.hold(suspect_readiness=1, talks=True, **low), base + 10)
+        self.assertEqual(self.hold(suspect_readiness=1, survivability=0, **low), base - 10)
+        self.assertEqual(self.hold(suspect_readiness=1, survivability=25, **low), base - 5)
+
+    def test_hold_chance_suspect_optional(self):
+        values = strip_comments(read(ROOT / "common/script_values/nuclear_deterrence_values.txt"))
+        body = block(values, "nd_hold_chance")
+        self.assertIn("exists = scope:nd_hold_suspect", body)
+        self.assertEqual(body.count("scope:nd_hold_suspect = {"), 1)
+        effects = strip_comments(read(ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"))
+        events = strip_comments(read(ROOT / "events/nuclear_incident_events.txt"))
+        for text, name in ((effects, "nd_start_unconfirmed_warning"), (effects, "nd_system_reads_attack"),
+                           (events, "nuclear_incident.20")):
+            self.assertIn("save_scope_as = nd_hold_suspect", block(text, name), name)
+
+    def test_war_exposure_band(self):
+        crisis = self.model.number
+        band = {b: crisis("nd_incident_crisis_weekly_permille", Posture(readiness=3, danger=25 * b, stage=3 if b == 3 else 2))
+                for b in (1, 2, 3)}
+        at_war = Posture(readiness=3, war=True, war_band=2)
+        self.assertEqual(crisis("nd_incident_crisis_weekly_permille", at_war), band[2])
+        self.assertEqual(crisis("nd_incident_crisis_weekly_permille", Posture(readiness=3, war=True, war_band=3)), band[3])
+        both = Posture(readiness=3, war=True, war_band=2, danger=25, stage=2)
+        self.assertEqual(crisis("nd_incident_crisis_weekly_permille", both), band[2])
+        self.assertEqual(crisis("nd_incident_crisis_weekly_permille", Posture(readiness=3, war=True)), 0)
+
+    def test_war_band_triggers(self):
+        triggers = strip_comments(read(ROOT / "common/scripted_triggers/nuclear_deterrence_triggers.txt"))
+        body = block(triggers, "nd_war_band_3_against_any")
+        for needle in ("any_enemy_in_war", "nd_believed_armed = yes", "nd_core_threatened_by",
+                       "nd_is_losing_war_to", "nuclear_strike_aftermath", "tactical_nuke_aftermath"):
+            self.assertIn(needle, body)
+
+
 if __name__ == "__main__":
     unittest.main()

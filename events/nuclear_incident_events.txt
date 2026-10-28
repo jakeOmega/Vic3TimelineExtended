@@ -1115,6 +1115,7 @@ nuclear_incident.20 = {
 			}
 		}
 		# What happened.
+		scope:nd_ic_enemy ?= { save_scope_as = nd_hold_suspect }
 		nd_roll_launch_hold = yes
 		if = {
 			limit = {
