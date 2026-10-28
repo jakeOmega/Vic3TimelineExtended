@@ -12,6 +12,7 @@ import os
 import re
 import unittest
 
+import gui_tree
 from test_covert_op_registry import HOSTILE_TYPES, PLACEHOLDER_ICON
 from test_covert_op_registry import TYPES as OP_TYPES
 
@@ -317,6 +318,41 @@ class OverviewTest(unittest.TestCase):
             self.assertIn(f"ScriptValue('covert_disp_slots_shown'), '(CFixedPoint){n}' )", self.ov, n)
             self.assertEqual(self.ov.count(f"ScriptValue('covert_active_display'), '(CFixedPoint){n}' )"), 2, n)
         self.assertNotIn("(CFixedPoint)11' )", self.ov)
+
+    def test_the_rows_keep_their_width_whichever_cells_show(self):
+        # Both rows are centred, so each must be one width whatever shows
+        # (gui_modding_guide.md gotcha #43).
+        text = _read(GUI)
+        tree = gui_tree.parse(text)
+        cell = gui_tree.size(next(n for n in tree.walk() if n.kind == "type" and n.name == "covert_ov_icon_label"))
+        # Row 1: one standing, funding and Tradecraft cell each always shows
+        # (codes 0-4, zero or not, tiers 0-4); the catch, which comes and goes,
+        # sits in an ungated slot of a cell's size. Centred at 342, it ended near 527.
+        row = gui_tree.node_after(tree, text, "### Row 1: standing", "flowcontainer")
+        self.assertEqual(row.prop("parentanchor").value, "hcenter")
+        groups = {}
+        for child in gui_tree.widgets(row):
+            gate = child.prop("visible") and re.search(r"ScriptValue\('(\w+)'\), '\(CFixedPoint\)(\d+)'",
+                                                       child.prop("visible").value)
+            if child.kind == "covert_ov_icon_label" and gate:
+                groups.setdefault(gate.group(1), set()).add(child.prop("visible").value.startswith("[Not(") or int(gate.group(2)))
+            else:
+                self.assertEqual((child.kind, child.prop("visible")), ("widget", None))
+                self.assertEqual(gui_tree.size(child), cell)
+                (caught,) = gui_tree.widgets(child)
+                self.assertEqual(caught.prop("visible").value, f"[{CAUGHT}]")
+                groups["caught"] = {"slot"}
+        self.assertEqual(groups, {"covert_disp_standing_code": set(range(5)), "covert_funding_level_display": {0, True},
+                                  "covert_tradecraft_tier": set(range(5)), "caught": {"slot"}})
+        # Row 2's strip: up to ten 30 slots at 2 apart, held at the ten's width.
+        strip = next(n for n in gui_tree.node_after(tree, text, "### Row 2: operation slots", "flowcontainer").walk()
+                     if n.kind == "flowcontainer" and n.prop("direction") and n.prop("direction").value == "horizontal")
+        slots = gui_tree.widgets(strip)
+        self.assertEqual([s.kind for s in slots], ["covert_ov_slot"] * 10)
+        self.assertEqual(strip.prop("parentanchor").value, "hcenter")
+        slot = gui_tree.size(next(n for n in tree.walk() if n.kind == "type" and n.name == "covert_ov_slot"))[0]
+        spacing = int(strip.prop("spacing").value)
+        self.assertEqual(gui_tree.size(strip, "minimumsize"), (10 * slot + 9 * spacing, -1))
 
     def test_the_trend_arrow_covers_every_code(self):
         self.assertEqual(self._coded("covert_disp_tc_trend"),

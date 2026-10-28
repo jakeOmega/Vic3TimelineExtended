@@ -11,6 +11,8 @@ import os
 import re
 import unittest
 
+import gui_tree
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
 LAYOUT = os.path.join(W, "banking_layout_widget.gui")
@@ -443,6 +445,32 @@ class OverviewTest(unittest.TestCase):
         # bubble pressure and the budget, the stance and the price band
         self.assertEqual([len(w) for w in rows], [1, 2, 2, 2])
 
+
+
+class MandateGridTest(unittest.TestCase):
+    """The mandates' two-by-two grid: both rows are centred, so each keeps the
+    width of two buttons whichever show (gui_modding_guide.md gotcha #43)."""
+
+    def test_the_mandate_rows_keep_their_width(self):
+        tree = gui_tree.parse(_read(DASH))
+        rows = [n for n in tree.walk() if n.kind == "flowcontainer" and n.prop("visible")
+                and "banking_mon_mandate_by_choice" in n.prop("visible").value]
+        self.assertEqual(len(rows), 2)
+        for row, ops in zip(rows, (["14", "4"], ["5", "6"]), strict=True):
+            with self.subTest(ops=ops):
+                self.assertEqual(row.prop("parentanchor").value, "hcenter")
+                buttons = gui_tree.widgets(row)
+                self.assertEqual([re.search(r"\(CFixedPoint\)(\d+)", b.prop("onclick").value).group(1)
+                                  for b in buttons], ops)
+                widths = {gui_tree.size(b)[0] for b in buttons}
+                self.assertEqual(widths, {226})
+                full = 2 * 226 + int(row.prop("spacing").value)
+                gated = [b for b in buttons if b.prop("visible")]
+                if gated:
+                    # Peg Defence, on a gold standard only: 226 without it.
+                    self.assertEqual(gui_tree.size(row, "minimumsize"), (full, -1))
+                self.assertEqual(full, 456)
+        self.assertTrue([b for b in gui_tree.widgets(rows[1]) if b.prop("visible")], "Peg Defence is gated")
 
 class BandCodeTest(unittest.TestCase):
     """Each icon's display code repeats its band word's tests, in order, so the

@@ -949,6 +949,11 @@ types cultural_hegemony_widget_types
 
 				### Row 1: tier · world rank · exported model · benchmark, at
 				### 108 + 108 + 136 + 108 and 4 between: 472 of the 474 column.
+				### The tier always shows; the other three come later, so each
+				### sits in an ungated slot of its size and the row is 472 wide
+				### whichever show. Centred at 360 (no benchmark) and grown to 472,
+				### it ended near 529, past the column (gui_modding_guide.md
+				### gotcha #43). An empty slot is a gap, not a narrower row.
 				flowcontainer = {
 					direction = horizontal
 					parentanchor = hcenter
@@ -1020,28 +1025,32 @@ types cultural_hegemony_widget_types
 					### World rank, once the first recount has numbered us.
 					widget = {
 						size = { 108 58 }
-						visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display'), '(CFixedPoint)1' ) )]"
-						tooltip = "je_ch_widget_rank_tt"
 
-						textbox = {
-							parentanchor = top|hcenter
-							position = { 0 8 }
-							autoresize = yes
-							max_width = 108
-							elide = right
-							align = hcenter|nobaseline
-							using = ch_fontsize_heading
-							text = "je_ch_ov_rank_value"
-						}
-						textbox = {
-							parentanchor = bottom|hcenter
-							autoresize = yes
-							max_width = 108
-							elide = right
-							align = hcenter|nobaseline
-							using = ch_fontsize_overview
-							default_format = "#tooltippable"
-							text = "je_ch_ov_rank_label"
+						widget = {
+							size = { 108 58 }
+							visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display'), '(CFixedPoint)1' ) )]"
+							tooltip = "je_ch_widget_rank_tt"
+
+							textbox = {
+								parentanchor = top|hcenter
+								position = { 0 8 }
+								autoresize = yes
+								max_width = 108
+								elide = right
+								align = hcenter|nobaseline
+								using = ch_fontsize_heading
+								text = "je_ch_ov_rank_value"
+							}
+							textbox = {
+								parentanchor = bottom|hcenter
+								autoresize = yes
+								max_width = 108
+								elide = right
+								align = hcenter|nobaseline
+								using = ch_fontsize_overview
+								default_format = "#tooltippable"
+								text = "je_ch_ov_rank_label"
+							}
 						}
 					}
 
@@ -1050,277 +1059,285 @@ types cultural_hegemony_widget_types
 					### has run. Codes: ch_set_political_model's 1-15. The cell is
 					### 136 wide, for the longest short names ("Constitutional",
 					### "Military Junta") at 16; the full name is on hover.
-					flowcontainer = {
-						ignoreinvisible = yes
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)1' )]"
-						tooltip = "je_ch_ov_model_tt"
+					widget = {
+						size = { 136 58 }
 
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)1' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
+						flowcontainer = {
+							ignoreinvisible = yes
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)1' )]"
+							tooltip = "je_ch_ov_model_tt"
+
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)1' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_communist"
+								}
 							}
-							blockoverride "label_width" {
-								max_width = 134
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)2' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_anarchist"
+								}
 							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
-								framesize = { 128 128 }
-								frame = 2
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)3' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_fascist"
+								}
 							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_communist"
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)4' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_corporatist"
+								}
 							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)2' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)5' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_socialist"
+								}
 							}
-							blockoverride "label_width" {
-								max_width = 134
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)6' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_royalist_absolutist"
+								}
 							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds"
-								framesize = { 128 128 }
-								frame = 2
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)7' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_royalist_constitutional"
+								}
 							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_anarchist"
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)8' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_religious"
+								}
 							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)3' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)9' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_reactionary"
+								}
 							}
-							blockoverride "label_width" {
-								max_width = 134
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)10' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_military_junta"
+								}
 							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
-								framesize = { 128 128 }
-								frame = 2
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)11' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_liberal"
+								}
 							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_fascist"
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)12' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_other"
+								}
 							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)4' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)13' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_technocratic"
+								}
 							}
-							blockoverride "label_width" {
-								max_width = 134
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)14' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_republican"
+								}
 							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_corporatist"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)5' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_socialist"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)6' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_royalist_absolutist"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)7' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_royalist_constitutional"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)8' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_religious"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)9' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_reactionary"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)10' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_military_junta"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)11' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_liberal"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)12' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_other"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)13' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_technocratic"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)14' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_republican"
-							}
-						}
-						te_ch_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)15' )]"
-							blockoverride "cell_size" {
-								size = { 136 58 }
-							}
-							blockoverride "label_width" {
-								max_width = 134
-							}
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
-								framesize = { 128 128 }
-								frame = 2
-							}
-							blockoverride "label" {
-								text = "je_ch_ov_model_developmentalist_junta"
+							te_ch_ov_icon_label = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)15' )]"
+								blockoverride "cell_size" {
+									size = { 136 58 }
+								}
+								blockoverride "label_width" {
+									max_width = 134
+								}
+								blockoverride "icon_texture" {
+									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
+									framesize = { 128 128 }
+									frame = 2
+								}
+								blockoverride "label" {
+									text = "je_ch_ov_model_developmentalist_junta"
+								}
 							}
 						}
 					}
 
 					### Foreign Cultural Benchmark, only while we carry it.
-					te_ch_ov_icon_label = {
-						visible = "[GetScriptedGui('ch_benchmark_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "je_ch_ov_benchmark_tt"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/ch_icons/benchmark.dds"
-						}
-						blockoverride "label" {
-							text = "je_ch_ov_benchmark_label"
+					widget = {
+						size = { 108 58 }
+
+						te_ch_ov_icon_label = {
+							visible = "[GetScriptedGui('ch_benchmark_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "je_ch_ov_benchmark_tt"
+							blockoverride "icon_texture" {
+								texture = "gfx/interface/icons/ch_icons/benchmark.dds"
+							}
+							blockoverride "label" {
+								text = "je_ch_ov_benchmark_label"
+							}
 						}
 					}
 				}
