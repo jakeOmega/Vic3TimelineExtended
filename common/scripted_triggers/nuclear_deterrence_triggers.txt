@@ -547,6 +547,28 @@ nd_threat_existential_stake = {
 	}
 }
 
+# Dispute 6 (rework spec §8.5): $TARGET$ struck us, or a country we cover by
+# treaty or umbrella, outside a war in the last 24 months
+# (nd_peacetime_struck_by, set by nd_record_nuclear_use). The grievance is the
+# struck side's, and the concession its reparations.
+nd_dispute_peacetime_strike_by = {
+	save_temporary_scope_as = nd_dps_self
+	OR = {
+		var:nd_peacetime_struck_by ?= $TARGET$
+		any_direct_subject = {
+			nd_under_umbrella_of = { OVERLORD = scope:nd_dps_self }
+			var:nd_peacetime_struck_by ?= $TARGET$
+		}
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_guarantee
+				source_country = scope:nd_dps_self
+				target_country = { var:nd_peacetime_struck_by ?= $TARGET$ }
+			}
+		}
+	}
+}
+
 nd_threat_backed = {
 	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
 	nd_threat_law_permits = { TARGET = $TARGET$ }
@@ -1315,6 +1337,7 @@ nd_crisis_issuer_is_defensive = {
 	var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_def_opp }
 	OR = {
 		var:nd_crisis_dispute = 3
+		var:nd_crisis_dispute = 6
 		AND = {
 			var:nd_crisis_dispute = 1
 			scope:nd_def_opp = { is_diplomatic_play_initiator = yes }
@@ -1428,6 +1451,7 @@ nd_has_crisis_dispute_with = {
 		nd_dispute_play_with = { TARGET = $TARGET$ }
 		nd_dispute_war_with = { TARGET = $TARGET$ }
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		nd_dispute_proliferation_by = { TARGET = $TARGET$ }
 		nd_dispute_alert_by = { TARGET = $TARGET$ }
 	}
@@ -1802,6 +1826,8 @@ nd_ai_would_warn = {
 	OR = {
 		# Protecting a country we guarantee.
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		# A strike on us, or on a country we cover, outside a war (dispute 6).
+		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		# Our survival or our core is at stake in a play or war with them.
 		AND = {
 			OR = {
@@ -1842,6 +1868,7 @@ nd_ai_would_warn = {
 	OR = {
 		ruler_is_cautious = no
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		nd_enemy_threatens_existence = { ENEMY = $TARGET$ }
 	}
 	# Stakes (rework spec §8.2): not a threat whose demands alone would hold
@@ -1850,6 +1877,7 @@ nd_ai_would_warn = {
 	# protégé's.
 	OR = {
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		NOT = { nd_ai_stakes_block = { TARGET = $TARGET$ } }
 	}
 }

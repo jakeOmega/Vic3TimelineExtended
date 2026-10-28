@@ -729,7 +729,8 @@ class TestFinalReviewFixesPhase1(unittest.TestCase):
         warn = block(self.triggers, "nd_ai_would_warn")
         self.assertGreater(warn.index("nd_ai_stakes_block"), warn.index("A cautious ruler") if "A cautious ruler" in warn
                            else warn.index("ruler_is_cautious = no"))
-        self.assertRegex(warn, r"OR = \{\s*nd_dispute_guarantee_against = \{ TARGET = \$TARGET\$ \}\s*NOT = \{ nd_ai_stakes_block")
+        self.assertRegex(warn, r"OR = \{\s*nd_dispute_guarantee_against = \{ TARGET = \$TARGET\$ \}"
+                               r"(?:\s*nd_dispute_peacetime_strike_by = \{ TARGET = \$TARGET\$ \})?\s*NOT = \{ nd_ai_stakes_block")
 
     def test_acute_record_also_at_close(self):
         self.assertIn("nd_log_crisis_acute_once = yes", block(self.crisis, "nd_crisis_close"))
@@ -786,6 +787,72 @@ class TestSuezConcession(unittest.TestCase):
                       block(self.triggers, "nd_side_holds_any_goal_against"))
         self.assertNotIn("35", loc_value("nd_tt_yield_war"))
         self.assertIn("15", loc_value("nd_tt_yield_war"))
+
+
+class TestPeacetimeStrikeDispute(unittest.TestCase):
+    """Dispute code 6: the target struck us, or a country we cover, outside a
+    war in the last 24 months (2026-10-28 rework spec §8.5)."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.custom = strip_comments(read(CUSTOM_LOC))
+
+    def test_code_6_classified_between_guarantee_and_proliferation(self):
+        body = block(self.crisis, "nd_crisis_classify_dispute")
+        g = body.index("nd_dispute_guarantee_against")
+        six = body.index("nd_dispute_peacetime_strike_by")
+        p = body.index("nd_dispute_proliferation_by")
+        self.assertLess(g, six)
+        self.assertLess(six, p)
+        self.assertIn("name = nd_crisis_dispute value = 6", body)
+
+    def test_code_6_at_every_site(self):
+        for name in ("nd_crisis_preview", "nd_crisis_revalidate_dispute", "nd_crisis_act_yield", "nd_crisis_yield_lines"):
+            body = block(self.crisis, name)
+            self.assertTrue("= 6" in body or "D = 6" in body or "nd_dispute_peacetime_strike_by" in body, name)
+        for name in ("nd_has_crisis_dispute_with", "nd_crisis_issuer_is_defensive", "nd_ai_would_warn"):
+            body = block(self.triggers, name)
+            self.assertTrue("nd_dispute_peacetime_strike_by" in body or "var:nd_crisis_dispute = 6" in body, name)
+        for name in ("nd_crisis_dispute_phrase", "nd_crisis_dispute_word", "nd_crisis_demand_text",
+                     "nd_crisis_concession_past", "nd_crisis_concession_short", "nd_crisis_concession_long"):
+            self.assertRegex(block(self.custom, name), r"_6\b", name)
+        for key in ("nd_crisis_dispute_phrase_6", "nd_crisis_dispute_6", "nd_crisis_demand_6", "nd_concession_past_they_6",
+                    "nd_concession_past_we_6", "nd_concession_short_6", "nd_concession_long_6",
+                    "nd_tt_open_over_peacetime_strike", "nd_tt_yield_reparations"):
+            self.assertIsNotNone(loc_value(key), key)
+
+    def test_record_written_outside_war(self):
+        body = block(self.effects, "nd_record_nuclear_use")
+        i = body.index("name = nd_peacetime_struck_by")
+        self.assertIn("NOT = { has_war_with = $VICTIM$ }", body[max(0, i - 300):i])
+        self.assertIn("days = 730", body[i:i + 120])
+
+    def test_code_6_revalidates_on_the_record(self):
+        body = block(self.crisis, "nd_crisis_revalidate_dispute")
+        i = body.index("var:nd_crisis_dispute = 6")
+        self.assertIn("nd_dispute_peacetime_strike_by", body[i:i + 600])
+        self.assertIn("OUTCOME = 10", body[i:i + 900])
+
+    def test_honor_after_peacetime_strike_opens_a_crisis(self):
+        self.assertIn("nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }", block(self.triggers, "nd_has_crisis_dispute_with"))
+        trig = block(self.triggers, "nd_dispute_peacetime_strike_by")
+        for needle in ("var:nd_peacetime_struck_by ?= $TARGET$", "nd_under_umbrella_of", "has_type = nuclear_guarantee"):
+            self.assertIn(needle, trig)
+
+    def test_reparations_concession(self):
+        body = block(self.crisis, "nd_crisis_concede_reparations")
+        for needle in ("nd_loose_compensation_value", "add_treasury", "name = nd_loose_inspected value = 1 days = 7300",
+                       "name = nd_loose_inspections", "remove_variable = nd_peacetime_struck_by"):
+            self.assertIn(needle, body)
+        self.assertNotIn("nd_loose_answer", body)
+
+    def test_no_35_left_in_war_concession_texts(self):
+        for key in ("nd_concession_long_2", "nd_concession_long_3", "nd_concession_past_they_2", "nd_concession_past_they_3",
+                    "nd_concession_past_we_2", "nd_concession_past_we_3", "nd_concession_short_2", "nd_tt_open_over_guarantee",
+                    "nd_tt_open_over_war"):
+            self.assertNotIn("35", loc_value(key), key)
 
 
 class TestOutcomeNotice(unittest.TestCase):
@@ -1894,7 +1961,7 @@ class TestUmbrellaCoverage(unittest.TestCase):
                          "nd_allies_alarmed", "nd_is_guaranteed", "nd_is_guaranteed_by_treaty",
                          "nd_dispute_guarantee_against", "nd_crisis_classify_dispute", "nd_crisis_notify_guarantors",
                          "nd_record_nuclear_use", "nd_guarantee_act_abandon", "nd_covered_country_struck_by",
-                         "nd_covered_country_struck"}
+                         "nd_covered_country_struck", "nd_dispute_peacetime_strike_by"}
 
     def test_umbrella_triggers(self):
         t = strip_comments(read(TRIGGERS))

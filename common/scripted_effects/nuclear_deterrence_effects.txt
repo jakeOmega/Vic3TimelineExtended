@@ -2015,6 +2015,14 @@ nd_record_nuclear_use = {
 	nd_log_context = yes
 	debug_log = "TE_NUCLEAR: type=action; action=nuclear_use; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	hidden_effect = {
+		# A strike outside a war (rework spec §8.5, dispute 6): the struck
+		# country remembers its striker for two years.
+		if = {
+			limit = { NOT = { has_war_with = $VICTIM$ } }
+			$VICTIM$ = {
+				set_variable = { name = nd_peacetime_struck_by value = scope:nd_rec_attacker days = 730 }
+			}
+		}
 		# A pledge is breached unless the victim struck first; either way the
 		# pledge is gone.
 		if = {

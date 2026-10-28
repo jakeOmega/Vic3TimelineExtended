@@ -8,7 +8,7 @@
 # 1); the TARGET (role 2) holds a mirror: nd_crisis_id, nd_crisis_opponent,
 # nd_crisis_role. A country is in at most one crisis at a time.
 #   issuer only: nd_crisis_dispute (1 play, 2 war, 3 guarantee, 4 proliferation,
-#                5 alert), nd_crisis_beneficiary (dispute 3), nd_crisis_stage
+#                5 alert, 6 a peacetime strike), nd_crisis_beneficiary (disputes 3 and 6), nd_crisis_stage
 #                (1 warning, 2 confrontation, 3 acute), nd_crisis_public,
 #                nd_crisis_weeks, nd_crisis_deadline, nd_crisis_deadline_fired,
 #                nd_crisis_danger, nd_crisis_counter, nd_crisis_talks,
@@ -121,6 +121,10 @@ nd_crisis_preview = {
 	else_if = {
 		limit = { nd_dispute_guarantee_against = { TARGET = $TARGET$ } }
 		custom_tooltip = nd_tt_open_over_guarantee
+	}
+	else_if = {
+		limit = { nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_peacetime_strike
 	}
 	else_if = {
 		limit = { nd_dispute_proliferation_by = { TARGET = $TARGET$ } }
@@ -371,6 +375,39 @@ nd_crisis_classify_dispute = {
 		if = {
 			limit = { exists = scope:nd_crisis_ben }
 			set_variable = { name = nd_crisis_beneficiary value = scope:nd_crisis_ben }
+		}
+	}
+	# Dispute 6 (rework spec §8.5): the target struck us, or a country we
+	# cover, outside a war. When it was a protégé, the reparations go to it.
+	else_if = {
+		limit = { nd_dispute_peacetime_strike_by = { TARGET = scope:nd_target } }
+		set_variable = { name = nd_crisis_dispute value = 6 }
+		if = {
+			limit = { NOT = { var:nd_peacetime_struck_by ?= scope:nd_target } }
+			every_scope_treaty = {
+				every_scope_article = {
+					limit = {
+						has_type = nuclear_guarantee
+						source_country = scope:nd_issuer
+						target_country = { var:nd_peacetime_struck_by ?= scope:nd_target }
+					}
+					target_country = { save_scope_as = nd_crisis_ben }
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:nd_crisis_ben } }
+				random_direct_subject = {
+					limit = {
+						nd_under_umbrella_of = { OVERLORD = scope:nd_issuer }
+						var:nd_peacetime_struck_by ?= scope:nd_target
+					}
+					save_scope_as = nd_crisis_ben
+				}
+			}
+			if = {
+				limit = { exists = scope:nd_crisis_ben }
+				set_variable = { name = nd_crisis_beneficiary value = scope:nd_crisis_ben }
+			}
 		}
 	}
 	else_if = {
@@ -901,6 +938,24 @@ nd_crisis_revalidate_dispute = {
 					}
 				}
 			}
+			nd_crisis_close = { OUTCOME = 10 }
+		}
+	}
+	# ---- a peacetime strike: a war between them turns it into a war dispute;
+	# the grievance lapsing (the 24-month record gone, or the reparations paid)
+	# ends it with no winner.
+	else_if = {
+		limit = { var:nd_crisis_dispute = 6 }
+		if = {
+			limit = { has_war_with = scope:nd_target }
+			set_variable = { name = nd_crisis_dispute value = 2 }
+			if = {
+				limit = { has_variable = nd_crisis_beneficiary }
+				remove_variable = nd_crisis_beneficiary
+			}
+		}
+		else_if = {
+			limit = { NOT = { nd_dispute_peacetime_strike_by = { TARGET = scope:nd_target } } }
 			nd_crisis_close = { OUTCOME = 10 }
 		}
 	}
@@ -1672,6 +1727,13 @@ nd_crisis_act_yield = {
 						}
 					}
 				}
+				else_if = {
+					limit = {
+						var:nd_crisis_dispute = 6
+						exists = scope:nd_crisis_other_side
+					}
+					nd_crisis_concede_reparations = yes
+				}
 				else = {
 					scope:nd_target = {
 						if = {
@@ -1713,6 +1775,10 @@ nd_crisis_yield_lines = {
 	else_if = {
 		limit = { nd_crisis_dispute_is = { D = 5 } }
 		custom_tooltip = nd_tt_yield_alert
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 6 } }
+		custom_tooltip = nd_tt_yield_reparations
 	}
 }
 
@@ -1795,6 +1861,41 @@ nd_crisis_concede_war = {
 				target = scope:nd_target
 				value = -15
 			}
+		}
+	}
+}
+
+# Dispute 6's concession (rework spec §8.5): the target pays the struck country
+# (scope:nd_crisis_other_side, the issuer or its protégé) reparations by the
+# loose-warhead formula (nd_loose_compensation_value: a tenth of a year's
+# income, at most a tenth of the payee's GDP) and opens its custody to
+# inspection for twenty years, as nuclear_loose.6 does; the grievance is
+# settled, so the 24-month record goes.
+nd_crisis_concede_reparations = {
+	scope:nd_target = { save_scope_as = nd_loose_payer }
+	scope:nd_crisis_other_side = { save_scope_as = nd_loose_claimant }
+	scope:nd_target = {
+		set_variable = { name = nd_reparations_due value = nd_loose_compensation_value }
+		add_treasury = {
+			value = var:nd_reparations_due
+			multiply = -1
+		}
+		scope:nd_crisis_other_side = {
+			add_treasury = scope:nd_target.var:nd_reparations_due
+		}
+		remove_variable = nd_reparations_due
+		set_variable = { name = nd_loose_inspected value = 1 days = 7300 }
+		add_modifier = {
+			name = nd_loose_inspections
+			years = 10
+			is_decaying = yes
+		}
+		nd_ledger_refresh = yes
+	}
+	scope:nd_crisis_other_side = {
+		if = {
+			limit = { var:nd_peacetime_struck_by ?= scope:nd_target }
+			remove_variable = nd_peacetime_struck_by
 		}
 	}
 }
