@@ -306,18 +306,20 @@ At the deadline, or under Our Moves, either side can offer a matching concession
 
 ## 12. Engine probes, in game while building
 
-| Question | Used by | Fallback |
-|---|---|---|
-| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) |
-| `remove_war_goal` on a play's opening goal (the owner expects both to work) | §8.1 | skip the opening goal |
-| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip |
-| Does `resolve_play_for` enforce every goal or only primary demands? | §8.2 | stakes counts whichever it enforces |
-| What `has_strategic_adjacency`'s coastal adjacency covers | §7.2 | `is_adjacent_to_country` plus the region test |
-| `any_neighbouring_state` at strategic-region scope | §7.2 | own regions only |
-| `remove_claim` on another country's claim, from script | §8.5 | drop code 8 |
-| `remove_diplomatic_pact` on a covert operation's pact | §8.5 | end it through its maintain condition |
-| A list of states in the panel, for picking cities | §6.1 | keep `nuke_diplo_action` for one chosen city |
-| A salvo's option tooltip walks its effects without running away | §6 | fence it as `nd_launch_or_intercept` is fenced |
+Probed 2026-10-28 (one observer game; details in `docs/guides/scripting_best_practices.md` § "War Goals, Plays, Adjacency and Claims"). Rows 9 and 10 are for phase 3.
+
+| Question | Used by | Fallback | Result (2026-10-28) |
+|---|---|---|---|
+| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) | Removes the **opening** goal; the war goes on. Did not remove goals added by script `add_war_goal`. AI-added goals untested: probe in phase 2 |
+| `remove_war_goal` on a play's opening goal (the owner expects both to work) | §8.1 | skip the opening goal | Works, in a play and in a war |
+| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip | Untested: no added goal could be removed. Phase 2 |
+| Does `resolve_play_for` enforce every goal or only primary demands? | §8.2 | stakes counts whichever it enforces | Every goal. Stakes count every goal (as built) |
+| What `has_strategic_adjacency`'s coastal adjacency covers | §7.2 | `is_adjacent_to_country` plus the region test | Land and sea-coast neighbors; not distant coasts. `is_adjacent_to_country` covers sea-coast neighbors too |
+| `any_neighbouring_state` at strategic-region scope | §7.2 | own regions only | Works |
+| `remove_claim` on another country's claim, from script | §8.5 | drop code 8 | Works, history claims too |
+| `remove_diplomatic_pact` on a covert operation's pact | §8.5 | end it through its maintain condition | Works |
+| A list of states in the panel, for picking cities | §6.1 | keep `nuke_diplo_action` for one chosen city | Not probed (phase 3) |
+| A salvo's option tooltip walks its effects without running away | §6 | fence it as `nd_launch_or_intercept` is fenced | Not probed (phase 3) |
 
 ## 13. Phases
 

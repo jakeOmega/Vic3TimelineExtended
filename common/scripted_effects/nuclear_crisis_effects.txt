@@ -559,7 +559,6 @@ nd_crisis_refresh_figures = {
 	else = {
 		save_scope_as = nd_stakes_demander
 	}
-	nd_stakes_self_check = yes
 	nd_crisis_classify_follow_through = { TARGET = scope:nd_target }
 	scope:nd_target = {
 		set_variable = { name = nd_ft_reason value = scope:nd_issuer.var:nd_ft_reason }
@@ -602,38 +601,6 @@ nd_crisis_refresh_figures = {
 		nd_crisis_store_yp = { C = nd_yp_follow_through V = nd_yp_follow_through_value }
 		nd_crisis_store_yp = { C = nd_yp_taboo V = nd_yp_taboo_value }
 		set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
-	}
-}
-
-# Once a game (TE_SELF_CHECK, CLAUDE.md § In-game checks): in a play — not a
-# war — whose demanding side holds a state-taking goal on the target, does
-# is_target_of_wargoal find the state? The engine documents it for wars only.
-# BROKEN means nd_yp_stakes_territory_value has been counting the fallback (−10
-# a type) in plays; fine as it is, but the per-state count never applies there.
-nd_stakes_self_check = {
-	if = {
-		limit = {
-			NOT = { has_global_variable = nd_stakes_self_check_done }
-			has_variable = nd_crisis_dispute
-			var:nd_crisis_dispute = 1
-			is_at_war = no
-			scope:nd_stakes_demander = {
-				OR = {
-					nd_side_holds_goal_against = { TYPE = conquer_state TARGET = scope:nd_target }
-					nd_side_holds_goal_against = { TYPE = return_state TARGET = scope:nd_target }
-				}
-			}
-		}
-		set_global_variable = nd_stakes_self_check_done
-		scope:nd_target = {
-			if = {
-				limit = { nd_stakes_states_counted_value > 0 }
-				debug_log = "TE_SELF_CHECK OK nd_stakes_states: is_target_of_wargoal finds a state-taking goal's state in a play"
-			}
-			else = {
-				debug_log = "TE_SELF_CHECK BROKEN nd_stakes_states: a play's state-taking goal names no state is_target_of_wargoal finds; stakes count the per-type fallback"
-			}
-		}
 	}
 }
 

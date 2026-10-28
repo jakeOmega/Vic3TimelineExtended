@@ -1299,9 +1299,7 @@ nd_yp_taboo_value = {
 # would concede to (nd_stakes_demander: the issuer, or for a guarantee dispute
 # the country it covers) on the target. Annexation or reunification −30 and
 # nothing else counted; a subjugation type or regime change −20; −10 for each
-# of our states under one of their goals, or for each state-taking type while
-# no state is found (a play: is_target_of_wargoal is documented for wars), and
-# −10 for each type that takes a subject from us; −4 for each lesser type.
+# type that takes a state or a subject from us; −4 for each lesser type.
 # At most −40. No trigger tells a primary demand from another, so every goal
 # counts (owner call 10). Target scope; scope:nd_target and
 # scope:nd_stakes_demander saved.
@@ -1345,36 +1343,28 @@ nd_yp_stakes_value = {
 	round = yes
 }
 
-# Our states under their goals, −10 each (target scope).
-nd_stakes_states_counted_value = {
-	value = 0
-	every_scope_state = {
-		limit = { is_target_of_wargoal = scope:nd_stakes_demander }
-		add = 1
-	}
-}
-
+# −10 for each type that takes a state or a subject from us (target scope).
+# By type, not by state: is_target_of_wargoal finds nothing in a play, and in
+# a war it also flags our capital under any country-level goal (probed
+# 2026-10-28, scripting_best_practices.md § "War Goals, Plays, Adjacency and
+# Claims").
 nd_yp_stakes_territory_value = {
-	value = nd_stakes_states_counted_value
-	multiply = -10
+	value = 0
 	if = {
-		limit = { nd_stakes_states_counted_value <= 0 }
-		if = {
-			limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = conquer_state TARGET = scope:nd_target } } }
-			add = -10
-		}
-		if = {
-			limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = return_state TARGET = scope:nd_target } } }
-			add = -10
-		}
-		if = {
-			limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = take_treaty_port TARGET = scope:nd_target } } }
-			add = -10
-		}
-		if = {
-			limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = liberate_country TARGET = scope:nd_target } } }
-			add = -10
-		}
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = conquer_state TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = return_state TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = take_treaty_port TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = liberate_country TARGET = scope:nd_target } } }
+		add = -10
 	}
 	if = {
 		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = transfer_subject TARGET = scope:nd_target } } }

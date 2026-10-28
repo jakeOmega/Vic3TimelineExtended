@@ -668,6 +668,32 @@ class TestReviewFixesPhase1(unittest.TestCase):
         self.assertNotIn("min = 0", hardening)
 
 
+class TestProbeFindings20261028(unittest.TestCase):
+    """What the 2026-10-28 engine probe changed (scripting_best_practices.md §
+    "War Goals, Plays, Adjacency and Claims"): is_target_of_wargoal finds
+    nothing in a play, and in a war it also flags the capital under a
+    country-level goal."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+
+    def test_stakes_count_goal_types_not_states(self):
+        territory = block(self.values, "nd_yp_stakes_territory_value")
+        self.assertNotIn("is_target_of_wargoal", territory)
+        self.assertNotIn("every_scope_state", territory)
+        for t in ("conquer_state", "return_state", "take_treaty_port", "liberate_country"):
+            self.assertIn(f"TYPE = {t} ", territory)
+        self.assertNotRegex(self.values, r"(?m)^nd_stakes_states_counted_value = ")
+        self.assertNotIn("nd_stakes_self_check", strip_comments(read(CRISIS_EFFECTS)))
+
+    def test_core_threat_needs_a_state_taking_goal(self):
+        body = block(self.triggers, "nd_core_threatened_by")
+        self.assertIn("is_target_of_wargoal = $ENEMY$", body)
+        for t in ("conquer_state", "return_state", "take_treaty_port"):
+            self.assertIn(f"war_side_has_war_goal_of_type_against = {{ type = {t} target = scope:nd_ct_self }}", body)
+
+
 class TestOutcomeNotice(unittest.TestCase):
     def setUp(self):
         self.effects = strip_comments(read(CRISIS_EFFECTS))

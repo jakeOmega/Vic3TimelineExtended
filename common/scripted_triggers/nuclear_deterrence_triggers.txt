@@ -341,8 +341,21 @@ nd_enemy_threatens_existence = {
 	}
 }
 
-# One of our incorporated states is a war-goal target of $ENEMY$.
+# One of our incorporated states is a war-goal target of $ENEMY$, and its side
+# holds a goal that takes a state. Both: in a war is_target_of_wargoal also
+# flags our capital under any country-level goal, a humiliation say (probed
+# 2026-10-28, scripting_best_practices.md § "War Goals, Plays, Adjacency and
+# Claims"). In a play it finds nothing, so this is a war test.
 nd_core_threatened_by = {
+	save_temporary_scope_as = nd_ct_self
+	$ENEMY$ = {
+		OR = {
+			war_side_has_war_goal_of_type_against = { type = conquer_state target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = return_state target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = take_treaty_port target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = liberate_country target = scope:nd_ct_self }
+		}
+	}
 	any_scope_state = {
 		is_incorporated = yes
 		is_target_of_wargoal = $ENEMY$
