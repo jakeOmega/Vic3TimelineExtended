@@ -1820,23 +1820,42 @@ nd_crisis_concede_play = {
 	}
 }
 
-# The yielder's war support collapses in the war it shares with the other side:
-# the war then ends through the engine's own capitulation and peace.
-# The Suez model (rework spec §8.1, owner call 9): the target's side drops the
-# war goals it holds against the other side (the issuer, or the protégé it
-# shields), and its war support falls 15. remove_war_goal addresses a side and
-# a type, so a goal of the same type against another country in the war goes
-# too (the tooltip says so). It removes the AI's own goals and the opening goal
-# but not ones script added (probed 2026-10-28); a once-a-game self-check says
-# whether anything was left. A target that holds no goal against us is the
-# defender of our attack: only its war support falls.
+# The yielder's war support collapses in each war it fights against the other
+# side: the war then ends through the engine's own capitulation and peace.
+# Only wars the two fight on opposite sides: a country can be an ally of the
+# other side in one war and its enemy in another.
+# The Suez model (rework spec §8.1, owner call 9): when the target leads its
+# side, that side drops the war goals it holds against the other side (the
+# issuer, or the protégé it shields). A co-belligerent that yields loses only
+# war support, so threatening a coalition's weakest member does not strip its
+# leader's goals (phase 2 final review). remove_war_goal addresses a side and a
+# type, so a goal of the same type against another country in the war goes too
+# (the tooltip says so). It removes the AI's own goals and the opening goal but
+# not ones script added (probed 2026-10-28); a once-a-game self-check, a day
+# later (nuclear_crisis.25), says whether anything was left. A target that
+# holds no goal against us is the defender of our attack: only its war support
+# falls.
 nd_crisis_concede_war = {
 	scope:nd_target = {
 		every_scope_war = {
-			limit = { is_war_participant = scope:nd_crisis_other_side }
+			limit = {
+				is_war_participant = scope:nd_crisis_other_side
+				OR = {
+					AND = {
+						is_on_defending_side = scope:nd_target
+						NOT = { is_on_defending_side = scope:nd_crisis_other_side }
+					}
+					AND = {
+						is_on_defending_side = scope:nd_crisis_other_side
+						NOT = { is_on_defending_side = scope:nd_target }
+					}
+				}
+			}
 			if = {
-				limit = { scope:nd_target = { nd_side_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } } }
-				set_variable = nd_suez_had_goals
+				limit = {
+					is_warleader = scope:nd_target
+					scope:nd_target = { nd_side_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } }
+				}
 				if = {
 					limit = { is_on_defending_side = scope:nd_target }
 					nd_crisis_drop_goals = { WHO = target }
@@ -1847,15 +1866,11 @@ nd_crisis_concede_war = {
 				if = {
 					limit = { NOT = { has_global_variable = nd_suez_self_check_done } }
 					set_global_variable = nd_suez_self_check_done
-					if = {
-						limit = { scope:nd_target = { nd_side_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } } }
-						debug_log = "TE_SELF_CHECK BROKEN nd_suez_goals: the yielding side still holds a goal against the other side after remove_war_goal"
-					}
-					else = {
-						debug_log = "TE_SELF_CHECK OK nd_suez_goals: the yielding side holds no goal against the other side after remove_war_goal"
+					scope:nd_target = {
+						set_variable = { name = nd_suez_check_other value = scope:nd_crisis_other_side days = 10 }
+						trigger_event = { id = nuclear_crisis.25 days = 1 }
 					}
 				}
-				remove_variable = nd_suez_had_goals
 			}
 			add_war_war_support = {
 				target = scope:nd_target
@@ -1875,15 +1890,16 @@ nd_crisis_concede_reparations = {
 	scope:nd_target = { save_scope_as = nd_loose_payer }
 	scope:nd_crisis_other_side = { save_scope_as = nd_loose_claimant }
 	scope:nd_target = {
-		set_variable = { name = nd_reparations_due value = nd_loose_compensation_value }
+		# The sum read twice, not stored and read back: the yield's tooltip
+		# walks this and writes nothing. The payer's income does not move with
+		# its treasury, so both reads agree.
 		add_treasury = {
-			value = var:nd_reparations_due
+			value = nd_loose_compensation_value
 			multiply = -1
 		}
 		scope:nd_crisis_other_side = {
-			add_treasury = scope:nd_target.var:nd_reparations_due
+			add_treasury = nd_loose_compensation_value
 		}
-		remove_variable = nd_reparations_due
 		set_variable = { name = nd_loose_inspected value = 1 days = 7300 }
 		add_modifier = {
 			name = nd_loose_inspections

@@ -3699,7 +3699,7 @@
  nuclear_weapon_events.1.g:0 "Mate the warheads — we answer when they are ready"
  nuclear_weapon_events.1.h:0 "The system waits for its warheads, then answers."
  nuclear_weapon_events.1.k:0 "We accept that it was not ordered, and demand reparations"
- nuclear_weapon_events.1.k.tt:0 "We hold back our answer and demand that they pay for what they have done. In a year or two we will learn whether they told the truth"
+ nuclear_weapon_events.1.k.tt:0 "We hold back our answer and demand that they pay for what they have done. Within eighteen months we will learn whether they told the truth"
  nuclear_weapon_events.1.t:0 "A City Erased in [SCOPE.sState('target_state').GetName]"
  nuclear_weapon_events.10.a:0 "We have entered a new era of power and responsibility."
  nuclear_weapon_events.10.a_world_first:0 "We have split the atom. Nothing will ever be the same."

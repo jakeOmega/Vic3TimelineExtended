@@ -569,6 +569,19 @@ nd_dispute_peacetime_strike_by = {
 	}
 }
 
+# The struck country (victim scope): $ENEMY$'s strike on us carried the claim
+# we hold from it (rework spec §5.4). The claim record stands until its truth
+# comes out, months later; nd_strike_claim_id says, for 30 days after a
+# strike's first warhead, which claim that strike made (0 for none), so a later
+# strike that made none, or a strike's later warheads after the window, do not
+# read as the old claim (nd_record_claim).
+nd_strike_carries_claim = {
+	var:nd_claim_by ?= $ENEMY$
+	has_variable = nd_claim_id
+	has_variable = nd_strike_claim_id
+	var:nd_strike_claim_id = var:nd_claim_id
+}
+
 nd_threat_backed = {
 	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
 	nd_threat_law_permits = { TARGET = $TARGET$ }
@@ -1361,10 +1374,19 @@ nd_crisis_parties_free = {
 }
 
 # The 24-month cooldown after a crisis with the same country (anti-farming,
-# §7). Waived in war.
+# §7). Waived in war, and after a crisis that ended in $TARGET$'s nuclear
+# strike (outcome 7) while the strike's record stands: the strike is the
+# grievance (dispute 6), not a crisis chosen to farm, as nuclear_incident.5's
+# option c skips it for a recalled launch. Once a crisis over the strike has
+# closed, its outcome replaces 7 and the cooldown holds again.
 nd_crisis_cooldown_clear = {
 	OR = {
 		has_war_with = $TARGET$
+		AND = {
+			var:nd_crisis_last_outcome ?= 7
+			var:nd_crisis_last_opponent ?= $TARGET$
+			nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
+		}
 		NOT = { has_variable = nd_crisis_cooldown_target }
 		NOT = { var:nd_crisis_cooldown_target ?= $TARGET$ }
 		NOT = { has_variable = nd_crisis_cooldown_months }

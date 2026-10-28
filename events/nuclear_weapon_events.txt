@@ -14,7 +14,7 @@ nuclear_weapon_events.1 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { var:nd_claim_by ?= scope:attacking_country }
+				trigger = { nd_strike_carries_claim = { ENEMY = scope:attacking_country } }
 				desc = nuclear_weapon_events.1.d_claim
 			}
 			triggered_desc = {
@@ -39,8 +39,7 @@ nuclear_weapon_events.1 = {
 		if = {
 			limit = {
 				is_ai = yes
-				var:nd_claim_by ?= scope:attacking_country
-				has_variable = nd_claim_id
+				nd_strike_carries_claim = { ENEMY = scope:attacking_country }
 				NOT = {
 					AND = {
 						has_variable = nd_claim_belief_rolled_for
@@ -266,12 +265,23 @@ nuclear_weapon_events.1 = {
 	# when it believed the claim.
 	option = {
 		name = nuclear_weapon_events.1.k
+		# This strike's claim, once: a later warhead of the same strike does
+		# not send a second demand. Hidden where absorbing (a) is: an
+		# Automatic Retaliation system answers on its own.
 		trigger = {
-			var:nd_claim_by ?= scope:attacking_country
+			nd_strike_carries_claim = { ENEMY = scope:attacking_country }
+			NOT = { var:nd_claim_accepted ?= var:nd_claim_id }
 			NOT = { scope:target_country = { nd_auto_answers_strike = { ENEMY = scope:attacking_country } } }
+			NOT = {
+				scope:target_country = {
+					nd_authority_automatic = yes
+					nd_is_armed = yes
+					nd_forces_assembled = no
+				}
+			}
 		}
 		custom_tooltip = nuclear_weapon_events.1.k.tt
-		set_variable = { name = nd_claim_accepted value = 1 }
+		set_variable = { name = nd_claim_accepted value = var:nd_claim_id }
 		hidden_effect = {
 			save_scope_as = nd_claim_victim
 			scope:attacking_country = { trigger_event = { id = nuclear_weapon_events.27 days = 3 } }
@@ -280,6 +290,7 @@ nuclear_weapon_events.1 = {
 			base = 0
 			modifier = {
 				trigger = {
+					var:nd_claim_belief_rolled_for ?= var:nd_claim_id
 					has_variable = nd_claim_believed
 					var:nd_claim_believed = 1
 				}
@@ -2652,24 +2663,37 @@ nuclear_weapon_events.27 = {
 
 	trigger = {
 		exists = scope:nd_claim_victim
+		scope:nd_claim_victim = { is_country_alive = yes }
 	}
 
-	# Pay.
+	# The parties for the sum (nd_loose_compensation_value), saved in a real
+	# run so the Pay option's tooltip shows it.
+	immediate = {
+		save_scope_as = nd_loose_payer
+		scope:nd_claim_victim = { save_scope_as = nd_loose_claimant }
+	}
+
+	# Pay. The sum is read twice, not stored and read back (the tooltip walks
+	# the option and writes nothing); our income does not move with our
+	# treasury, so both reads agree. Paid, the strike is settled: the victim
+	# cannot also open a crisis over it (dispute 6).
 	option = {
 		name = nuclear_weapon_events.27.a
 		default_option = yes
-		save_scope_as = nd_loose_payer
-		scope:nd_claim_victim = { save_scope_as = nd_loose_claimant }
-		set_variable = { name = nd_reparations_due value = nd_loose_compensation_value }
 		add_treasury = {
-			value = var:nd_reparations_due
+			value = nd_loose_compensation_value
 			multiply = -1
 		}
 		scope:nd_claim_victim = {
-			add_treasury = ROOT.var:nd_reparations_due
+			add_treasury = nd_loose_compensation_value
 			change_relations = { country = ROOT value = 20 }
+			hidden_effect = {
+				if = {
+					limit = { var:nd_peacetime_struck_by ?= ROOT }
+					remove_variable = nd_peacetime_struck_by
+				}
+			}
 		}
-		remove_variable = nd_reparations_due
 		ai_chance = {
 			base = 4
 			modifier = {
@@ -2742,9 +2766,7 @@ nuclear_weapon_events.28 = {
 	option = {
 		name = nuclear_weapon_events.28.b
 		trigger = {
-			NOT = {
-				has_variable = nd_claim_accepted
-			}
+			NOT = { var:nd_claim_accepted ?= var:nd_claim_id }
 		}
 		change_relations = { country = scope:nd_truth_launcher value = 30 }
 		nd_claim_clear = yes
