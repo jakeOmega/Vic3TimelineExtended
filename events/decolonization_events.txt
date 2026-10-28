@@ -5111,6 +5111,10 @@ decolonization_events.74 = {
 		}
 	}
 
+	immediate = {
+		decol_iw_value_arms_offer = { RECIPIENT = scope:decol_iw_gp_rebels KIND = arms MODIFIER = decol_iw_foreign_arms_modifier }
+	}
+
 	# Condemn: its condemnation already counts on the bar and in the colonial
 	# power's war support.
 	option = {
@@ -5150,8 +5154,15 @@ decolonization_events.74 = {
 				factor = 0
 			}
 		}
+		# The tooltip gives the arms with ours (immediate's figures, for this war
+		# only); the effect's own lines would show the rebels' modifiers removed
+		# and added again at today's figure.
 		custom_tooltip = decolonization_events.74.b_tt
-		decol_iw_begin_arming = yes
+		if = {
+			limit = { var:decol_iw_offer_for ?= scope:decol_iw_gp_rebels }
+			custom_tooltip = decolonization_events.74.b_arms_tt
+		}
+		hidden_effect = { decol_iw_begin_arming = yes }
 		change_relations = {
 			country = scope:decol_iw_gp_metropole
 			value = -30
@@ -5434,28 +5445,34 @@ decolonization_events.79 = {
 
 	duration = 3
 
+	# A great power arms one colonial power at a time.
 	trigger = {
 		scope:decol_iw_gp_rebels ?= {
 			is_country_alive = yes
 			has_war_with = scope:decol_iw_gp_metropole
 		}
 		NOT = { has_war_with = scope:decol_iw_gp_metropole }
+		NOT = { has_variable = decol_iw_allied_arming }
 	}
 
+	immediate = {
+		decol_iw_value_arms_offer = { RECIPIENT = scope:decol_iw_gp_metropole KIND = allied_arms MODIFIER = decol_iw_allied_arms_modifier }
+	}
+
+	# Arm them: arms for two years, fading, beside any other great power's
+	# (decol_iw_refresh_allied_arms). The tooltip gives the arms with ours.
 	option = {
 		name = decolonization_events.79.a
 		default_option = yes
 		ai_chance = { base = 3 }
+		custom_tooltip = decolonization_events.79.a_tt
+		if = {
+			limit = { var:decol_iw_offer_for ?= scope:decol_iw_gp_metropole }
+			custom_tooltip = decolonization_events.79.a_arms_tt
+		}
+		hidden_effect = { decol_iw_begin_allied_arming = yes }
 		save_scope_as = decol_iw_side_taker
 		scope:decol_iw_gp_metropole = {
-			if = {
-				limit = { NOT = { has_modifier = decol_iw_allied_arms_modifier } }
-				add_modifier = {
-					name = decol_iw_allied_arms_modifier
-					days = 730
-					is_decaying = yes
-				}
-			}
 			post_notification = decol_iw_allied_arms_notice
 		}
 		change_relations = {

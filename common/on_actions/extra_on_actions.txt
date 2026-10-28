@@ -1988,6 +1988,11 @@ decolonization_events_on_action = {
 			limit = { has_variable = decol_iw_arming }
 			decol_iw_backer_monthly = yes
 		}
+		# A great power arming a colonial power: a month of its arms gone.
+		if = {
+			limit = { has_variable = decol_iw_allied_arming }
+			decol_iw_allied_backer_monthly = yes
+		}
 		if = {
 			limit = {
 				NOT = { is_country_type = decentralized }

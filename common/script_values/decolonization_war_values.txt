@@ -82,9 +82,7 @@ decol_iw_red_war_support = 25
 decol_iw_talks_months = 6
 
 # ---- Foreign arms (phase 3) ----
-# The most backers whose arms count (decol_iw_foreign_arms_modifier's
-# multiplier), and what a backer moves to the rebels' treasury each month.
-decol_iw_max_backers = 3
+# What a backer moves to the rebels' treasury each month.
 decol_iw_arms_monthly = {
 	value = gdp
 	multiply = 0.0005
@@ -92,17 +90,76 @@ decol_iw_arms_monthly = {
 	max = 100000
 }
 
-# The rebels' foreign arms modifier's multiplier: one copy's worth per backer,
-# up to decol_iw_max_backers. SCOPE: country (the rebels).
-decol_iw_backer_mult = {
+# Both sides' arms (owner, 2026-10-28): each great power's counts by its
+# economy against the colonial power's, from a quarter of a peer's to four
+# times, and the arms a side holds are the square root of its backers' weights
+# summed, with no cap. Equal backers give 1, 1.41, 1.73 and 2 times one's arms
+# for one to four, so each adds less than the last but never nothing. The
+# refreshes (decol_iw_refresh_fighters, decol_iw_refresh_allied_arms) store the
+# sum (var:decol_iw_<kind>_weight) and its root through te_sqrt
+# (var:decol_iw_<kind>_mult) on the side armed, the modifier's multiplier.
+decol_iw_backer_weight_min = 0.25
+decol_iw_backer_weight_max = 4
+
+# A backer's weight. SCOPE: the backer; scope:decol_iw_arms_metropole.
+decol_iw_backer_weight = {
+	value = gdp
+	divide = {
+		value = scope:decol_iw_arms_metropole.gdp
+		min = 1
+	}
+	min = decol_iw_backer_weight_min
+	max = decol_iw_backer_weight_max
+}
+
+# The rebels' backers' weights summed: every great power arming them (.74.b,
+# var:decol_iw_arming). SCOPE: the rebels; scope:decol_iw_arms_recipient (the
+# rebels), scope:decol_iw_arms_metropole.
+decol_iw_arms_weight_sum = {
+	value = 0
+	every_country = {
+		limit = { var:decol_iw_arming ?= scope:decol_iw_arms_recipient }
+		add = decol_iw_backer_weight
+	}
+}
+
+# A pro-colonial great power's arms (.79.a) last this many months, fading.
+decol_iw_allied_arms_months = 24
+
+# The share of its arms a pro-colonial backer still sends, from 1 as it
+# starts to 0 as its months run out. SCOPE: the backer.
+decol_iw_allied_arms_fade = {
 	value = 0
 	if = {
-		limit = { has_variable = decol_iw_backer_count }
-		value = var:decol_iw_backer_count
+		limit = { has_variable = decol_iw_allied_arms_left }
+		value = var:decol_iw_allied_arms_left
+		divide = decol_iw_allied_arms_months
 	}
-	max = decol_iw_max_backers
 	min = 0
+	max = 1
 }
+
+# The colonial power's backers' weights summed, each by its fade squared, so
+# that one backer's arms fade in a straight line, as the modifier's two
+# decaying years did before. SCOPE: the colonial power;
+# scope:decol_iw_arms_recipient and scope:decol_iw_arms_metropole (both it).
+decol_iw_allied_arms_weight_sum = {
+	value = 0
+	every_country = {
+		limit = { var:decol_iw_allied_arming ?= scope:decol_iw_arms_recipient }
+		add = {
+			value = decol_iw_backer_weight
+			multiply = decol_iw_allied_arms_fade
+			multiply = decol_iw_allied_arms_fade
+		}
+	}
+}
+
+# One multiplier's offense and defense (unit_offense_mult and unit_defense_mult
+# of decol_iw_foreign_arms_modifier and decol_iw_allied_arms_modifier), for
+# .74.b's and .79.a's tooltips.
+decol_iw_arms_unit = 0.10
+decol_iw_allied_arms_unit = 0.05
 
 # ---- Displays (the Wars of Independence block) ----
 # SCOPE: country (the empire). How many records are held, 0-3.

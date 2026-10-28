@@ -66,6 +66,8 @@ WAR_SUPPORT = _read("common", "script_values", "zz_te_war_support_injections.txt
 ON_ACTIONS = _read("common", "on_actions", "extra_on_actions.txt")
 CIVIL_WAR = _read("common", "on_actions", "te_civil_war_on_actions.txt")
 VALUES = _read("common", "script_values", "colonial_empire_values.txt")
+WAR_VALUES = _read("common", "script_values", "decolonization_war_values.txt")
+MODIFIERS = _read("common", "static_modifiers", "extra_modifiers.txt")
 BAR = _read("common", "scripted_progress_bars", "extra_progress_bars.txt")
 
 
@@ -243,7 +245,8 @@ class RecordTests(unittest.TestCase):
     def test_each_modifier_has_one_refresh_site(self):
         for modifier, site in (("decol_iw_home_front_modifier", "decol_iw_refresh_home_front"),
                                ("decol_iw_fighters_modifier", "decol_iw_refresh_fighters"),
-                               ("decol_iw_foreign_arms_modifier", "decol_iw_refresh_fighters")):
+                               ("decol_iw_foreign_arms_modifier", "decol_iw_refresh_fighters"),
+                               ("decol_iw_allied_arms_modifier", "decol_iw_refresh_allied_arms")):
             with self.subTest(modifier=modifier):
                 adds = re.findall(r"name = " + modifier + r"\b", EFFECTS + EVENTS)
                 self.assertEqual(len(adds), 1)
@@ -312,6 +315,87 @@ class EventTests(unittest.TestCase):
         intervene = _def(EVENTS, "decolonization_events.74")
         intervene = intervene[intervene.index("name = decolonization_events.74.c"):]
         self.assertIn("decol_iw_can_intervene = yes", _block(intervene, "trigger"))
+
+    def test_arms_grow_as_the_root_of_the_backers_weights(self):
+        """Uncapped (owner, 2026-10-28): the fourth backer's arms counted for nothing at a cap of three,
+        and a second pro-colonial backer's for nothing at all. Each counts by its economy against the
+        colonial power's, from 0.25 to 4."""
+        weight = _def(WAR_VALUES, "decol_iw_backer_weight")
+        self.assertIn("value = gdp", weight)
+        self.assertIn("value = scope:decol_iw_arms_metropole.gdp", weight)
+        self.assertIn("min = decol_iw_backer_weight_min", weight)
+        self.assertIn("max = decol_iw_backer_weight_max", weight)
+        self.assertRegex(WAR_VALUES, r"(?m)^decol_iw_backer_weight_min = 0\.25$")
+        self.assertRegex(WAR_VALUES, r"(?m)^decol_iw_backer_weight_max = 4$")
+        for kind, backer_var, site in (("arms", "decol_iw_arming", "decol_iw_refresh_fighters"),
+                                       ("allied_arms", "decol_iw_allied_arming", "decol_iw_refresh_allied_arms")):
+            with self.subTest(kind=kind):
+                total = _def(WAR_VALUES, f"decol_iw_{kind}_weight_sum")
+                self.assertIn(f"var:{backer_var} ?= scope:decol_iw_arms_recipient", total)
+                self.assertIn("decol_iw_backer_weight", total)
+                self.assertNotIn("max", total)
+                refresh = _def(EFFECTS, site)
+                sqrt = f"te_set_sqrt = {{ IN = var:decol_iw_{kind}_weight OUT = decol_iw_{kind}_mult }}"
+                self.assertIn(f"name = decol_iw_{kind}_weight value = decol_iw_{kind}_weight_sum", refresh)
+                self.assertIn(sqrt, refresh)
+                self.assertLess(refresh.index(sqrt), refresh.index(f"multiplier = var:decol_iw_{kind}_mult\n"))
+        self.assertNotIn("decol_iw_max_backers", WAR_VALUES + EFFECTS)
+        clear = _def(EFFECTS, "decol_iw_clear_slot")
+        for var in ("decol_iw_arms_weight", "decol_iw_arms_mult"):
+            with self.subTest(var=var):
+                self.assertIn(f"remove_variable = {var}\n", clear)
+
+    def test_allied_arms_fade_and_end(self):
+        """One backer's allied arms fade in a straight line over two years, as the decaying modifier did."""
+        total = _def(WAR_VALUES, "decol_iw_allied_arms_weight_sum")
+        self.assertEqual(total.count("multiply = decol_iw_allied_arms_fade"), 2)
+        self.assertRegex(WAR_VALUES, r"(?m)^decol_iw_allied_arms_months = 24$")
+        begin = _def(EFFECTS, "decol_iw_begin_allied_arming")
+        self.assertLess(begin.index("name = decol_iw_allied_arming value = scope:decol_iw_gp_metropole"),
+                        begin.index("decol_iw_refresh_allied_arms = yes"))
+        month = _def(EFFECTS, "decol_iw_allied_backer_monthly")
+        self.assertLess(month.index("add = -1"), month.index("remove_variable = decol_iw_allied_arming"))
+        self.assertLess(month.index("remove_variable = decol_iw_allied_arming"),
+                        month.index("decol_iw_refresh_allied_arms = yes"))
+        self.assertIn("decol_iw_allied_backer_monthly = yes", _def(ON_ACTIONS, "decolonization_events_on_action"))
+        self.assertIn("NOT = { has_variable = decol_iw_allied_arming }",
+                      _block(_def(EVENTS, "decolonization_events.79"), "trigger"))
+
+    def test_the_arms_tooltips_show_the_arms_with_ours(self):
+        """The effects' own lines showed the modifiers removed and added back at today's figure."""
+        loc = _raw("localization", "english", "te_events_l_english.yml")
+        for event, option, nxt, recipient, kind, modifier, begin in (
+                ("74", "b", "c", "decol_iw_gp_rebels", "arms", "decol_iw_foreign_arms_modifier",
+                 "decol_iw_begin_arming"),
+                ("79", "a", "b", "decol_iw_gp_metropole", "allied_arms", "decol_iw_allied_arms_modifier",
+                 "decol_iw_begin_allied_arming")):
+            with self.subTest(event=event):
+                body = _def(EVENTS, f"decolonization_events.{event}")
+                self.assertIn(f"decol_iw_value_arms_offer = {{ RECIPIENT = scope:{recipient} KIND = {kind} "
+                              f"MODIFIER = {modifier} }}", _block(body, "immediate"))
+                arms = body[body.index(f"name = decolonization_events.{event}.{option}"):
+                            body.index(f"name = decolonization_events.{event}.{nxt}")]
+                self.assertIn(f"hidden_effect = {{ {begin} = yes }}", arms)
+                self.assertNotRegex(re.sub(r"hidden_effect = \{[^{}]*\}", "", arms), begin + r"\b")
+                self.assertNotIn("add_modifier", arms)
+                guard = _block(arms, "if")
+                self.assertIn(f"var:decol_iw_offer_for ?= scope:{recipient}", guard)
+                self.assertIn(f"custom_tooltip = decolonization_events.{event}.{option}_arms_tt", guard)
+                line = re.search(rf"(?m)^ decolonization_events\.{event}\.{option}_arms_tt:0 (.*)$", loc).group(1)
+                for var in ("decol_iw_offer_with", "decol_iw_offer_now", "decol_iw_offer_weight"):
+                    self.assertIn(f"ROOT.GetCountry.MakeScope.Var('{var}')", line)
+        offer = _def(EFFECTS, "decol_iw_value_arms_offer")
+        self.assertIn("te_set_sqrt = { IN = var:decol_iw_offer_sum OUT = decol_iw_offer_with }", offer)
+        self.assertIn("multiply = decol_iw_$KIND$_unit", offer)
+
+    def test_the_tooltip_units_are_the_modifiers(self):
+        for kind, modifier in (("arms", "decol_iw_foreign_arms_modifier"),
+                               ("allied_arms", "decol_iw_allied_arms_modifier")):
+            unit = float(re.search(rf"(?m)^decol_iw_{kind}_unit = ([0-9.]+)", WAR_VALUES).group(1))
+            body = _def(MODIFIERS, modifier)
+            for field in ("unit_offense_mult", "unit_defense_mult"):
+                with self.subTest(modifier=modifier, field=field):
+                    self.assertEqual(float(re.search(field + r" = ([0-9.]+)", body).group(1)), unit)
 
     def test_the_collapse_is_a_wave(self):
         for event in ("decolonization_events.201", "decolonization_events.204"):

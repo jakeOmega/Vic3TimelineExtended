@@ -35,10 +35,15 @@
 #   decol_iw_backers_N   great powers arming them
 # On the rebels: decol_iw_metropole (us), decol_iw_settlers (our people were a
 # tenth or more of the territory), decol_iw_conceded (talks dropped our goal),
-# decol_iw_backer_count. On us: decol_iw_running / decol_iw_running_talks (wars
+# decol_iw_backer_count, decol_iw_arms_weight / decol_iw_arms_mult (their
+# foreign arms). On us: decol_iw_running / decol_iw_running_talks (wars
 # under way, for the bar), decol_iw_total_months (the home front),
 # decol_iw_condemner_share (the war-support line), decol_iw_next_declaration
-# (two years between declarations outside a collapse).
+# (two years between declarations outside a collapse),
+# decol_iw_allied_arms_weight / decol_iw_allied_arms_mult (our allied arms).
+# On a great power arming either side: decol_iw_arming (the rebels) or
+# decol_iw_allied_arming and decol_iw_allied_arms_left (us, and its months
+# left); decol_iw_offer_* (.74.b's and .79.a's tooltip figures).
 #
 # REVOLUTIONS: a revolution's winner inherits the variables but not the
 # modifiers (scripting_best_practices.md § What a Civil War's Winner Inherits).
@@ -273,15 +278,23 @@ decol_iw_refresh_fighters = {
 		limit = { has_modifier = decol_iw_foreign_arms_modifier }
 		remove_modifier = decol_iw_foreign_arms_modifier
 	}
-	if = {
-		limit = {
-			has_variable = decol_iw_backer_count
-			var:decol_iw_backer_count > 0
+	# Foreign arms at the square root of the backers' weights summed, uncapped
+	# (decol_iw_backer_weight_min's comment), counted afresh each month.
+	save_scope_as = decol_iw_arms_recipient
+	set_variable = { name = decol_iw_arms_weight value = 0 }
+	var:decol_iw_metropole ?= {
+		save_scope_as = decol_iw_arms_metropole
+		scope:decol_iw_arms_recipient = {
+			set_variable = { name = decol_iw_arms_weight value = decol_iw_arms_weight_sum }
 		}
+	}
+	if = {
+		limit = { var:decol_iw_arms_weight > 0 }
+		te_set_sqrt = { IN = var:decol_iw_arms_weight OUT = decol_iw_arms_mult }
 		add_modifier = {
 			name = decol_iw_foreign_arms_modifier
 			months = 2
-			multiplier = decol_iw_backer_mult
+			multiplier = var:decol_iw_arms_mult
 		}
 	}
 }
@@ -672,6 +685,8 @@ decol_iw_clear_slot = {
 		remove_variable = decol_iw_settlers
 		remove_variable = decol_iw_conceded
 		remove_variable = decol_iw_backer_count
+		remove_variable = decol_iw_arms_weight
+		remove_variable = decol_iw_arms_mult
 	}
 	var:decol_iw_state_$N$ ?= {
 		remove_variable = decol_iw_row_months
@@ -901,6 +916,96 @@ decol_iw_begin_arming = {
 		decol_iw_refresh_fighters = yes
 	}
 	scope:decol_iw_gp_metropole = { decol_iw_count_backers = yes }
+}
+
+# A great power that backs colonial rule arms the colonial power (.79.a): its
+# arms for decol_iw_allied_arms_months, fading. Scope: the great power;
+# scope:decol_iw_gp_metropole.
+decol_iw_begin_allied_arming = {
+	set_variable = { name = decol_iw_allied_arming value = scope:decol_iw_gp_metropole }
+	set_variable = { name = decol_iw_allied_arms_left value = decol_iw_allied_arms_months }
+	scope:decol_iw_gp_metropole = { decol_iw_refresh_allied_arms = yes }
+}
+
+# A pro-colonial backer's month: a month of its arms gone, and the colonial
+# power's arms counted again; at the end, or when the colonial power is gone,
+# the backer's mark goes. Scope: the backer, from the monthly on_action.
+decol_iw_allied_backer_monthly = {
+	change_variable = { name = decol_iw_allied_arms_left add = -1 }
+	var:decol_iw_allied_arming ?= { save_scope_as = decol_iw_allied_recipient }
+	if = {
+		limit = {
+			OR = {
+				var:decol_iw_allied_arms_left <= 0
+				NOT = { var:decol_iw_allied_arming ?= { is_country_alive = yes } }
+			}
+		}
+		remove_variable = decol_iw_allied_arming
+		remove_variable = decol_iw_allied_arms_left
+	}
+	scope:decol_iw_allied_recipient ?= {
+		if = {
+			limit = { is_country_alive = yes }
+			decol_iw_refresh_allied_arms = yes
+		}
+	}
+}
+
+# Allied arms on a colonial power: its pro-colonial backers' arms at the square
+# root of their weights summed, each fading (decol_iw_allied_arms_weight_sum).
+# Its one refresh site, from .79.a and each backer's month; two months long, so
+# it lapses on its own once no backer is left. Scope: the colonial power.
+decol_iw_refresh_allied_arms = {
+	if = {
+		limit = { has_modifier = decol_iw_allied_arms_modifier }
+		remove_modifier = decol_iw_allied_arms_modifier
+	}
+	save_scope_as = decol_iw_arms_recipient
+	save_scope_as = decol_iw_arms_metropole
+	set_variable = { name = decol_iw_allied_arms_weight value = decol_iw_allied_arms_weight_sum }
+	if = {
+		limit = { var:decol_iw_allied_arms_weight > 0 }
+		te_set_sqrt = { IN = var:decol_iw_allied_arms_weight OUT = decol_iw_allied_arms_mult }
+		add_modifier = {
+			name = decol_iw_allied_arms_modifier
+			months = 2
+			multiplier = var:decol_iw_allied_arms_mult
+		}
+	}
+}
+
+# .74.b's and .79.a's tooltip, as the event comes: the arms $RECIPIENT$ holds
+# now and would hold with ours, as shares of offense and defense, and the
+# weight ours count at. The day's figures: the arms are counted again when
+# chosen, and at each month. $KIND$ is arms (the rebels' foreign arms) or
+# allied_arms (the colonial power's), $MODIFIER$ its modifier. Scope: the great
+# power; scope:decol_iw_gp_metropole.
+decol_iw_value_arms_offer = {
+	set_variable = { name = decol_iw_offer_for value = $RECIPIENT$ }
+	scope:decol_iw_gp_metropole = { save_scope_as = decol_iw_arms_metropole }
+	set_variable = { name = decol_iw_offer_weight value = decol_iw_backer_weight }
+	set_variable = { name = decol_iw_offer_now value = 0 }
+	set_variable = { name = decol_iw_offer_sum value = var:decol_iw_offer_weight }
+	if = {
+		limit = {
+			$RECIPIENT$ = {
+				has_modifier = $MODIFIER$
+				has_variable = decol_iw_$KIND$_weight
+				has_variable = decol_iw_$KIND$_mult
+			}
+		}
+		change_variable = { name = decol_iw_offer_sum add = $RECIPIENT$.var:decol_iw_$KIND$_weight }
+		set_variable = {
+			name = decol_iw_offer_now
+			value = {
+				value = $RECIPIENT$.var:decol_iw_$KIND$_mult
+				multiply = decol_iw_$KIND$_unit
+			}
+		}
+	}
+	te_set_sqrt = { IN = var:decol_iw_offer_sum OUT = decol_iw_offer_with }
+	change_variable = { name = decol_iw_offer_with multiply = decol_iw_$KIND$_unit }
+	remove_variable = decol_iw_offer_sum
 }
 
 # The records' backer counts, for the rows. Scope: us.
