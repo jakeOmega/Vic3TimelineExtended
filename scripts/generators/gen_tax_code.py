@@ -4376,21 +4376,24 @@ def _gui_view(name, op, value):
     return (f"{op}( GetPlayer.MakeScope.ScriptValue('{name}'), '(CFixedPoint){value}' )")
 
 
-GOODS_ICONS_PER_ROW = 14     # te_tax_good_icon is 26 wide with 4 between: 14 x 30 = 420 of the 480 column
+GOODS_ICONS_PER_ROW = 14     # te_tax_good_icon is 26 wide with 4 between: 14 x 26 + 13 x 4 = 416 of the 480 column
+# Beside te_tax_goods_icons_label (80 + 4) in a passed bill's list, set in 4 from the column, a row
+# holds 13: 4 + 80 + 4 + 13 x 26 + 12 x 4 = 474. At 14 a full row was 504 and ran past the panel.
+LABELLED_GOODS_ICONS_PER_ROW = 13
 CUSTOMS_LEVEL_TEXTURES = {   # vanilla's own, the Market panel's and set_level_bar's (GUI audit TAX-26)
     -3: "max_subvention", -2: "high_subvention", -1: "low_subvention", 0: "no_tariffs_no_subvention",
     1: "low_tariffs", 2: "high_tariffs", 3: "max_tariffs"}
 
 
-def _goods_icon_rows(goods, visible, indent):
-    """Rows of te_tax_good_icon, at most GOODS_ICONS_PER_ROW to a row: one icon per good, shown
+def _goods_icon_rows(goods, visible, indent, per_row=GOODS_ICONS_PER_ROW):
+    """Rows of te_tax_good_icon, at most `per_row` to a row: one icon per good, shown
     while `visible(good)` holds (a GUI expression), with the good's name on hover. Hidden icons
     collapse, so each row shows only the goods that hold."""
     lines = []
-    for start in range(0, len(goods), GOODS_ICONS_PER_ROW):
+    for start in range(0, len(goods), per_row):
         lines += [f"{indent}flowcontainer = {{", f"{indent}\tdirection = horizontal", f"{indent}\tignoreinvisible = yes",
                   f"{indent}\tspacing = 4"]
-        for good in goods[start:start + GOODS_ICONS_PER_ROW]:
+        for good in goods[start:start + per_row]:
             lines.append(f"{indent}\tte_tax_good_icon = {{ visible = \"[{visible(good)}]\" "
                          f"texture = \"{good_texture(good)}\" tooltip = \"{good}\" }}")
         lines.append(f"{indent}}}")
@@ -4521,7 +4524,7 @@ def generated_rows():
             ]
             lines += _goods_icon_rows(
                 ordered, lambda good, value=value: _gui_view(f"te_tax_view_p{slot}_g_{good}", "EqualTo_CFixedPoint", value),
-                "\t\t\t\t")
+                "\t\t\t\t", per_row=LABELLED_GOODS_ICONS_PER_ROW)
             lines += ["\t\t\t}", "\t\t}"]
         lines.append("\t}")
     lines += _customs_rows()

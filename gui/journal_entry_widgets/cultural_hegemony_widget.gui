@@ -1372,13 +1372,15 @@ types cultural_hegemony_widget_types
 					### Council. Each flag's country comes from a capital the viewer
 					### holds (ch_leaders_display_write), and its slot's gate means a
 					### seat that is not set is never read. The slots keep their width
-					### whether filled or not, so the row does not change width.
+					### whether filled or not, so the row does not change width; the
+					### block itself is never hidden, since a row centred without it
+					### before the first recount ran past the panel once it appeared
+					### (gui_modding_guide.md gotcha #43).
 					flowcontainer = {
 						direction = vertical
 						parentanchor = vcenter
 						ignoreinvisible = yes
 						spacing = 4
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)1' )]"
 
 						textbox = {
 							parentanchor = hcenter

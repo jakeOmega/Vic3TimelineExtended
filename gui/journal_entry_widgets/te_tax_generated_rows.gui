@@ -1407,12 +1407,12 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_transportation'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/transportation.dds" tooltip = "transportation" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_clippers'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/clippers.dds" tooltip = "clippers" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_coal'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/coal.dds" tooltip = "coal" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_glass'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/glass.dds" tooltip = "glass" }
 				}
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_glass'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/glass.dds" tooltip = "glass" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_magnetic_drive_ships'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/magnetic_drive_ships.dds" tooltip = "magnetic_drive_ships" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_motor_ships'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/motor_ships.dds" tooltip = "motor_ships" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_oil'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/oil.dds" tooltip = "oil" }
@@ -1425,13 +1425,13 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_digital_assets'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/software.dds" tooltip = "digital_assets" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_fine_art'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/fine_art.dds" tooltip = "fine_art" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_fruit'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/fruit.dds" tooltip = "fruit" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_liquor'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/liquor.dds" tooltip = "liquor" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_luxury_clothes'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/luxury_clothes.dds" tooltip = "luxury_clothes" }
 				}
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_liquor'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/liquor.dds" tooltip = "liquor" }
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_luxury_clothes'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/luxury_clothes.dds" tooltip = "luxury_clothes" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_luxury_furniture'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/luxury_furniture.dds" tooltip = "luxury_furniture" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_meat'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/meat.dds" tooltip = "meat" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_opium'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/opium.dds" tooltip = "opium" }
@@ -1443,6 +1443,11 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_tobacco'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/tobacco.dds" tooltip = "tobacco" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_tourism'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/tourism.dds" tooltip = "tourism" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_wine'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/wine.dds" tooltip = "wine" }
+				}
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_aeroplanes'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/aeroplanes.dds" tooltip = "aeroplanes" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_small_arms'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/small_arms.dds" tooltip = "small_arms" }
 				}
@@ -1475,12 +1480,12 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_transportation'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/transportation.dds" tooltip = "transportation" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_clippers'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/clippers.dds" tooltip = "clippers" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_coal'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/coal.dds" tooltip = "coal" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_glass'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/glass.dds" tooltip = "glass" }
 				}
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_glass'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/glass.dds" tooltip = "glass" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_magnetic_drive_ships'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/magnetic_drive_ships.dds" tooltip = "magnetic_drive_ships" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_motor_ships'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/motor_ships.dds" tooltip = "motor_ships" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_oil'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/oil.dds" tooltip = "oil" }
@@ -1493,13 +1498,13 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_digital_assets'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/software.dds" tooltip = "digital_assets" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_fine_art'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/fine_art.dds" tooltip = "fine_art" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_fruit'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/fruit.dds" tooltip = "fruit" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_liquor'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/liquor.dds" tooltip = "liquor" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_luxury_clothes'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/luxury_clothes.dds" tooltip = "luxury_clothes" }
 				}
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_liquor'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/liquor.dds" tooltip = "liquor" }
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_luxury_clothes'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/luxury_clothes.dds" tooltip = "luxury_clothes" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_luxury_furniture'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/luxury_furniture.dds" tooltip = "luxury_furniture" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_meat'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/meat.dds" tooltip = "meat" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_opium'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/opium.dds" tooltip = "opium" }
@@ -1511,6 +1516,11 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_tobacco'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/tobacco.dds" tooltip = "tobacco" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_tourism'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/tourism.dds" tooltip = "tourism" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_wine'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/wine.dds" tooltip = "wine" }
+				}
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_aeroplanes'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/aeroplanes.dds" tooltip = "aeroplanes" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_g_small_arms'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/small_arms.dds" tooltip = "small_arms" }
 				}
@@ -1551,12 +1561,12 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_transportation'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/transportation.dds" tooltip = "transportation" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_clippers'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/clippers.dds" tooltip = "clippers" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_coal'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/coal.dds" tooltip = "coal" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_glass'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/glass.dds" tooltip = "glass" }
 				}
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_glass'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/glass.dds" tooltip = "glass" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_magnetic_drive_ships'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/magnetic_drive_ships.dds" tooltip = "magnetic_drive_ships" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_motor_ships'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/motor_ships.dds" tooltip = "motor_ships" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_oil'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/oil.dds" tooltip = "oil" }
@@ -1569,13 +1579,13 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_digital_assets'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/software.dds" tooltip = "digital_assets" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_fine_art'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/fine_art.dds" tooltip = "fine_art" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_fruit'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/fruit.dds" tooltip = "fruit" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_liquor'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/liquor.dds" tooltip = "liquor" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_luxury_clothes'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/luxury_clothes.dds" tooltip = "luxury_clothes" }
 				}
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_liquor'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/liquor.dds" tooltip = "liquor" }
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_luxury_clothes'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/luxury_clothes.dds" tooltip = "luxury_clothes" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_luxury_furniture'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/luxury_furniture.dds" tooltip = "luxury_furniture" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_meat'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/meat.dds" tooltip = "meat" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_opium'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/opium.dds" tooltip = "opium" }
@@ -1587,6 +1597,11 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_tobacco'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/tobacco.dds" tooltip = "tobacco" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_tourism'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/tourism.dds" tooltip = "tourism" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_wine'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/wine.dds" tooltip = "wine" }
+				}
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_aeroplanes'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/aeroplanes.dds" tooltip = "aeroplanes" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_small_arms'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/goods_icons/small_arms.dds" tooltip = "small_arms" }
 				}
@@ -1619,12 +1634,12 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_transportation'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/transportation.dds" tooltip = "transportation" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_clippers'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/clippers.dds" tooltip = "clippers" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_coal'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/coal.dds" tooltip = "coal" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_glass'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/glass.dds" tooltip = "glass" }
 				}
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_glass'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/glass.dds" tooltip = "glass" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_magnetic_drive_ships'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/magnetic_drive_ships.dds" tooltip = "magnetic_drive_ships" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_motor_ships'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/motor_ships.dds" tooltip = "motor_ships" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_oil'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/oil.dds" tooltip = "oil" }
@@ -1637,13 +1652,13 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_digital_assets'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/software.dds" tooltip = "digital_assets" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_fine_art'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/fine_art.dds" tooltip = "fine_art" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_fruit'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/fruit.dds" tooltip = "fruit" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_liquor'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/liquor.dds" tooltip = "liquor" }
-					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_luxury_clothes'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/luxury_clothes.dds" tooltip = "luxury_clothes" }
 				}
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_liquor'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/liquor.dds" tooltip = "liquor" }
+					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_luxury_clothes'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/luxury_clothes.dds" tooltip = "luxury_clothes" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_luxury_furniture'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/luxury_furniture.dds" tooltip = "luxury_furniture" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_meat'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/meat.dds" tooltip = "meat" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_opium'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/opium.dds" tooltip = "opium" }
@@ -1655,6 +1670,11 @@ types te_tax_generated_rows_types
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_tobacco'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/tobacco.dds" tooltip = "tobacco" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_tourism'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/tourism.dds" tooltip = "tourism" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_wine'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/wine.dds" tooltip = "wine" }
+				}
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_aeroplanes'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/aeroplanes.dds" tooltip = "aeroplanes" }
 					te_tax_good_icon = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_g_small_arms'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/goods_icons/small_arms.dds" tooltip = "small_arms" }
 				}

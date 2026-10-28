@@ -363,8 +363,16 @@ class FooterTest(unittest.TestCase):
                       "GetPlayer.MakeScope ).End ) ) )]\"", body)
         for name in ("te_tax_cmd_pass_sgui", "te_tax_cmd_force_through_sgui", "te_tax_cmd_withdraw_sgui"):
             self.assertIn(f"GetScriptedGui('{name}').Execute(", body)
-        force = brace_block(body, body.rindex("button = {", 0, body.index("te_tax_cmd_force_through_sgui")))
+        # Force Through shows only while the bill is short of support, in a row
+        # of its own, so neither row changes width (gui_modding_guide.md
+        # gotcha #43): Pass | Force Through | Withdraw, or Pass | Withdraw.
+        force = brace_block(body, body.rindex("flowcontainer = {", 0, body.index("te_tax_cmd_force_through_sgui")))
         self.assertIn("visible = \"[Not( GetScriptedGui('te_tax_show_pass_support_sgui').IsShown(", force)
+        self.assertEqual(force.count("button = {"), 3)
+        held = brace_block(body, body.rindex("flowcontainer = {", 0, body.index(
+            "visible = \"[GetScriptedGui('te_tax_show_pass_support_sgui').IsShown(")))
+        self.assertEqual(held.count("button = {"), 2)
+        self.assertNotIn("te_tax_cmd_force_through_sgui", held)
 
     def test_the_summary_type_needs_no_journal_entry(self):
         body = type_body(gui(WORKBENCH), "te_tax_draft_summary")
@@ -930,6 +938,27 @@ class WidthBudgetTest(unittest.TestCase):
                 for key in self.keys_in(label.group(1)):
                     with self.subTest(path=path, button=key):
                         self.fits(key, (int(size.group(1)) - 8, "row"))
+
+
+class GoodsIconRowTest(unittest.TestCase):
+    """A passed bill's goods icons sit beside an 80-wide label, set in 4 from
+    the column, so a full row of them fits the 480 column: 13 to a row (474).
+    At 14 a bill touching a whole row's goods ran 504 wide, past the panel."""
+
+    def test_a_full_row_fits_beside_its_label(self):
+        rows = gui(ROOT / GEN_ROWS)
+        label = type_body(gui(ROOT / "gui/journal_entry_widgets/te_tax_overview_widget.gui"), "te_tax_goods_icons_label")
+        self.assertIn("maximumsize = { 80 -1 }", label)
+        seen = 0
+        for slot in ("a", "b"):
+            body = type_body(rows, f"te_tax_pk_goods_icons_{slot}")
+            for row in re.finditer(r"flowcontainer = \{\s*direction = horizontal\s*ignoreinvisible = yes\s*spacing = 4\s*"
+                                   r"((?:te_tax_good_icon = \{[^\n]*\}\s*)+)\}", body):
+                icons = row.group(1).count("te_tax_good_icon = {")
+                seen += 1
+                with self.subTest(slot=slot, icons=icons):
+                    self.assertLessEqual(4 + 80 + 4 + icons * 26 + (icons - 1) * 4, 480)
+        self.assertGreaterEqual(seen, 8)
 
 
 class FlagTest(unittest.TestCase):

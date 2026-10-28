@@ -477,6 +477,11 @@ class LeaderFlagsTest(unittest.TestCase):
     def test_the_slots_keep_their_width(self):
         # each gated 70x48 widget sits in an ungated 70x48 slot
         self.assertEqual(len(re.findall(r"widget = \{\s*size = \{ 70 48 \}\s*widget = \{\s*size = \{ 70 48 \}\s*visible", self.ov)), 3)
+        # and the block holding them is never hidden, or row 2 is centred
+        # without it and runs past the panel when it appears (gotcha #43)
+        block = self.ov[:self.ov.index('text = "je_ch_ov_leaders_label"')]
+        block = block[block.rindex("flowcontainer = {"):]
+        self.assertNotRegex(block, r"\bvisible = ")
 
     def test_seats_fill_in_order_from_guarded_ranks(self):
         seat = _block(self.effects, "ch_leaders_display_seat")

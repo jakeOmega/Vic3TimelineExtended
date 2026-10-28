@@ -38,6 +38,7 @@ types TooltipTypes {
 				# Header: partner identity
 				textbox = {
 					autoresize = yes
+					multiline = yes
 					align = nobaseline
 					maximumsize = { 360 -1 }
 					raw_text = "#tooltip_header [Country.GetFlagTextIcon] [Country.GetNameNoFormatting]#!"
@@ -46,14 +47,17 @@ types TooltipTypes {
 				# The table's own figure first, yearly at base prices, then what the
 				# breakdown below is: the weekly flow at current market prices
 				# (MKT-2: the hover now reconciles with the row it opens from).
+				# These wrap at 360 rather than run past the tooltip's frame.
 				textbox = {
 					autoresize = yes
+					multiline = yes
 					align = nobaseline
 					maximumsize = { 360 -1 }
 					text = "te_market_tp_tt_year"
 				}
 				textbox = {
 					autoresize = yes
+					multiline = yes
 					align = nobaseline
 					maximumsize = { 360 -1 }
 					text = "te_market_tp_tt_per_week"
