@@ -541,7 +541,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** medium-high (the GuiScope pattern is the charts'; the two values need a test in game)
 
 ### MKT-2. Three measures of trade on one tab, two of them unlabelled
-- **Status:** done. The audit fixed the price; the 2026-10-27 wave labelled the partner charts "units/wk" and opens the partner hover with the table's yearly figure.
+- **Status:** done. The audit fixed the price; the 2026-10-27 wave labelled the partner charts "units/wk" and opens the partner hover with the table's yearly figure. The play-test of 2026-10-28 found "units/wk" running past vanilla's `compact_chart` legend slot, so the unit moved to the headings' hovers ("The figure beside each flag is units a week").
 - **Category:** style / hidden info
 - **Where:** `market_panel.gui:476-596` (Export / Import Partners charts), `:598-892` (table), `:375-466` (Exports /
   Imports by Value), `gui/te_trade_partner_tooltips.gui:38-45`.

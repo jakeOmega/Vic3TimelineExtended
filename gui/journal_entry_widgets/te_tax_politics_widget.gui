@@ -739,13 +739,17 @@ types te_tax_politics_widget_types
 						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_debate_days_left'), '(CFixedPoint)0' ), 'te_tax_pol_debate_done', 'te_tax_pol_debate_value' )]"
 					}
 				}
-				# Pass | Force Through (while short of support) | Withdraw, centred.
+				# Pass | Force Through | Withdraw while short of support, Pass |
+				# Withdraw once it holds, centred: two rows, so neither changes
+				# width (one row centred at two buttons ran past the panel when Force
+				# Through appeared, gui_modding_guide.md gotcha #43).
+				# 156 + 6 + 156 + 6 + 156 = 480.
 				flowcontainer = {
 					direction = horizontal
 					parentanchor = hcenter
-					ignoreinvisible = yes
 					spacing = 6
 					margin_top = 4
+					visible = "[Not( GetScriptedGui('te_tax_show_pass_support_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 
 					button = {
 						using = default_button
@@ -757,7 +761,6 @@ types te_tax_politics_widget_types
 						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_pass_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_pass_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 					}
 					button = {
-						visible = "[Not( GetScriptedGui('te_tax_show_pass_support_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 						using = default_button
 						using = te_tax_fontsize_row
 						size = { 156 32 }
@@ -765,6 +768,33 @@ types te_tax_politics_widget_types
 						enabled = "[GetScriptedGui('te_tax_cmd_force_through_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						onclick = "[GetScriptedGui('te_tax_cmd_force_through_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_force_through_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_force_through_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					}
+					button = {
+						using = default_button
+						using = te_tax_fontsize_row
+						size = { 156 32 }
+						text = "te_tax_pol_withdraw"
+						enabled = "[GetScriptedGui('te_tax_cmd_withdraw_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_withdraw_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_withdraw_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_withdraw_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					}
+				}
+				# 156 + 6 + 156 = 318.
+				flowcontainer = {
+					direction = horizontal
+					parentanchor = hcenter
+					spacing = 6
+					margin_top = 4
+					visible = "[GetScriptedGui('te_tax_show_pass_support_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+					button = {
+						using = default_button
+						using = te_tax_fontsize_row
+						size = { 156 32 }
+						text = "te_tax_pol_pass"
+						enabled = "[GetScriptedGui('te_tax_cmd_pass_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_pass_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_pass_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_pass_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 					}
 					button = {
 						using = default_button

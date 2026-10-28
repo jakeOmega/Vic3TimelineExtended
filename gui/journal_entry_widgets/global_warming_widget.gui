@@ -556,7 +556,10 @@ types global_warming_widget_types
 					direction = horizontal
 					spacing = 4
 					ignoreinvisible = yes
-					parentanchor = hcenter
+					# Not centred: the treaty cell comes and goes, and a row centred
+					# at one cell's width ran past the panel when the second
+					# appeared (gui_modding_guide.md gotcha #43). The cells sit in
+					# row 1's grid.
 					block "gw_market_country" {
 						datacontext = "[JournalEntry.GetCountry]"
 					}

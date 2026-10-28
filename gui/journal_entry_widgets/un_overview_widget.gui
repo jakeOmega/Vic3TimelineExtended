@@ -194,20 +194,28 @@ types un_overview_widget_types
 						}
 						# Found or convene, join, and leave: the journal entry's buttons, which
 						# are the AI's now, as controls under the cell they act on (UN-9).
-						un_act_control = {
-							blockoverride "act_context" {
-								datacontext = "[GetScriptedGui('un_act_found_sgui')]"
+						# Found and Join take turns in one fixed-size slot, hidden when
+						# neither shows, and nothing here is anchored: the controls are as
+						# wide as the cell (236 in 238), and a centred wrapper sized by its
+						# content drifts when a button appears (un_act_control).
+						un_act_slot = {
+							visible = "[Or( GetScriptedGui('un_act_found_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_act_join_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+							blockoverride "slot_anchor" {}
+							un_act_control = {
+								blockoverride "act_context" {
+									datacontext = "[GetScriptedGui('un_act_found_sgui')]"
+								}
+								blockoverride "act_label" {
+									text = "[SelectLocalization( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_convene_label', 'je_un_act_found_label' )]"
+								}
 							}
-							blockoverride "act_label" {
-								text = "[SelectLocalization( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_convene_label', 'je_un_act_found_label' )]"
-							}
-						}
-						un_act_control = {
-							blockoverride "act_context" {
-								datacontext = "[GetScriptedGui('un_act_join_sgui')]"
-							}
-							blockoverride "act_label" {
-								text = "je_un_act_join_label"
+							un_act_control = {
+								blockoverride "act_context" {
+									datacontext = "[GetScriptedGui('un_act_join_sgui')]"
+								}
+								blockoverride "act_label" {
+									text = "je_un_act_join_label"
+								}
 							}
 						}
 						# Leave is armed before it acts, as the veto is: a membership
@@ -217,13 +225,11 @@ types un_overview_widget_types
 							direction = vertical
 							spacing = 4
 							ignoreinvisible = yes
-							parentanchor = hcenter
 							datacontext = "[GetScriptedGui('un_act_leave_sgui')]"
 
 							button = {
 								using = default_button_action
 								size = { 236 30 }
-								parentanchor = hcenter
 								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetVariableSystem.Exists('un_leave_armed') ) )]"
 								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 								onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
@@ -242,7 +248,6 @@ types un_overview_widget_types
 							button = {
 								using = default_button_action
 								size = { 236 30 }
-								parentanchor = hcenter
 								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetVariableSystem.Exists('un_leave_armed') )]"
 								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -262,7 +267,6 @@ types un_overview_widget_types
 							button = {
 								using = default_button_action
 								size = { 236 30 }
-								parentanchor = hcenter
 								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetVariableSystem.Exists('un_leave_armed') )]"
 								onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
 								tooltip = "je_un_act_leave_cancel_tt"
@@ -829,11 +833,13 @@ types un_overview_widget_types
 				# the eligible countries and the great powers among them, with the
 				# suspended members on hover. It was the entry's status text, a
 				# section of its own on the tab, until the 2026-10-27 audit (UN-20).
+				# A fixed 480, its text centred in it: a box sized by its figures
+				# would be centred at its first width (gotcha #43).
 				textbox = {
 					autoresize = yes
-					parentanchor = hcenter
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
 					align = hcenter|nobaseline
-					max_width = 480
 					elide = right
 					using = un_fontsize_row
 					default_format = "#tooltippable"

@@ -272,17 +272,23 @@ types un_chamber_widget_types
 	### rest, so the visible never sits on the widget that sets the context.
 	### Shown while the button would be, greyed with its reasons
 	### (IsValidTooltip, gotcha #16), its effect under them. No saved scope.
-	type un_act_control = flowcontainer {
-		ignoreinvisible = yes
-		parentanchor = hcenter
+	###
+	### The wrapper is a fixed-size widget, the button's size, whether or not
+	### the button shows: a wrapper sized by its content was 0 wide while its
+	### button was hidden, and a centred one was centred at that width and
+	### drifted out of the panel when the button appeared (play-test,
+	### 2026-10-28; gui_style_guide.md rule 8). So controls that take turns
+	### (an on/off pair) overlap in one slot of their size, and a row of slots
+	### (un_act_row) is as wide whichever of them shows.
+	type un_act_control = widget {
+		block "act_size" {
+			size = { 236 30 }
+		}
 		block "act_context" {}
 
 		button = {
 			using = default_button_action
-			block "act_size" {
-				size = { 236 30 }
-			}
-			parentanchor = vcenter
+			size = { 100% 100% }
 			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -302,8 +308,11 @@ types un_chamber_widget_types
 		}
 	}
 
-	### A centred row of controls under a figure (two at most: the on/off pair
-	### shows one, the Development Fund's four sizes show two or three).
+	### A centred row of controls under a figure. Its children are fixed-size
+	### slots, each holding the controls that take turns in it (an on/off pair
+	### overlaps in one slot), so the row is the same width whichever control
+	### shows, and stays centred. The instance hides the whole row, with a
+	### `visible` that names the slots' scripted GUIs, when none of them shows.
 	type un_act_row = flowcontainer {
 		direction = horizontal
 		spacing = 4
@@ -311,6 +320,19 @@ types un_chamber_widget_types
 		parentanchor = hcenter
 		margin = { 0 4 }
 		block "act_row" {}
+	}
+
+	### One slot of an un_act_row, or of a table cell: the controls in it
+	### overlap, so it holds an on/off pair, or a control and nothing. Centred
+	### vertically in a row or a table cell; a slot in a vertical stack empties
+	### "slot_anchor".
+	type un_act_slot = widget {
+		block "slot_size" {
+			size = { 236 30 }
+		}
+		block "slot_anchor" {
+			parentanchor = vcenter
+		}
 	}
 
 	### One row of the proposal list: the topic's description, built in script
@@ -2995,32 +3017,37 @@ types un_chamber_widget_types
 							using = un_fontsize_row
 							text = "[SelectLocalization( GetScriptedGui('un_act_end_peacekeeping_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_prog_ours_yes', 'je_un_prog_ours_no' )]"
 						}
-						un_act_control = {
-							blockoverride "act_context" {
-								datacontext = "[GetScriptedGui('un_act_peacekeeping_mission_sgui')]"
-							}
-							blockoverride "act_size" {
+						un_act_slot = {
+							blockoverride "slot_size" {
 								size = { 106 28 }
 							}
-							blockoverride "act_label_width" {
-								max_width = 100
+							un_act_control = {
+								blockoverride "act_context" {
+									datacontext = "[GetScriptedGui('un_act_peacekeeping_mission_sgui')]"
+								}
+								blockoverride "act_size" {
+									size = { 106 28 }
+								}
+								blockoverride "act_label_width" {
+									max_width = 100
+								}
+								blockoverride "act_label" {
+									text = "je_un_act_prog_join_label"
+								}
 							}
-							blockoverride "act_label" {
-								text = "je_un_act_prog_join_label"
-							}
-						}
-						un_act_control = {
-							blockoverride "act_context" {
-								datacontext = "[GetScriptedGui('un_act_end_peacekeeping_sgui')]"
-							}
-							blockoverride "act_size" {
-								size = { 106 28 }
-							}
-							blockoverride "act_label_width" {
-								max_width = 100
-							}
-							blockoverride "act_label" {
-								text = "je_un_act_prog_leave_label"
+							un_act_control = {
+								blockoverride "act_context" {
+									datacontext = "[GetScriptedGui('un_act_end_peacekeeping_sgui')]"
+								}
+								blockoverride "act_size" {
+									size = { 106 28 }
+								}
+								blockoverride "act_label_width" {
+									max_width = 100
+								}
+								blockoverride "act_label" {
+									text = "je_un_act_prog_leave_label"
+								}
 							}
 						}
 					}
@@ -3057,32 +3084,37 @@ types un_chamber_widget_types
 							using = un_fontsize_row
 							text = "[SelectLocalization( GetScriptedGui('un_act_withdraw_human_rights_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_prog_ours_yes', 'je_un_prog_ours_no' )]"
 						}
-						un_act_control = {
-							blockoverride "act_context" {
-								datacontext = "[GetScriptedGui('un_act_human_rights_resolution_sgui')]"
-							}
-							blockoverride "act_size" {
+						un_act_slot = {
+							blockoverride "slot_size" {
 								size = { 106 28 }
 							}
-							blockoverride "act_label_width" {
-								max_width = 100
+							un_act_control = {
+								blockoverride "act_context" {
+									datacontext = "[GetScriptedGui('un_act_human_rights_resolution_sgui')]"
+								}
+								blockoverride "act_size" {
+									size = { 106 28 }
+								}
+								blockoverride "act_label_width" {
+									max_width = 100
+								}
+								blockoverride "act_label" {
+									text = "je_un_act_prog_join_label"
+								}
 							}
-							blockoverride "act_label" {
-								text = "je_un_act_prog_join_label"
-							}
-						}
-						un_act_control = {
-							blockoverride "act_context" {
-								datacontext = "[GetScriptedGui('un_act_withdraw_human_rights_sgui')]"
-							}
-							blockoverride "act_size" {
-								size = { 106 28 }
-							}
-							blockoverride "act_label_width" {
-								max_width = 100
-							}
-							blockoverride "act_label" {
-								text = "je_un_act_prog_leave_label"
+							un_act_control = {
+								blockoverride "act_context" {
+									datacontext = "[GetScriptedGui('un_act_withdraw_human_rights_sgui')]"
+								}
+								blockoverride "act_size" {
+									size = { 106 28 }
+								}
+								blockoverride "act_label_width" {
+									max_width = 100
+								}
+								blockoverride "act_label" {
+									text = "je_un_act_prog_leave_label"
+								}
 							}
 						}
 					}
@@ -3119,32 +3151,37 @@ types un_chamber_widget_types
 							using = un_fontsize_row
 							text = "[SelectLocalization( GetScriptedGui('un_act_withdraw_arms_control_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_prog_ours_yes', 'je_un_prog_ours_no' )]"
 						}
-						un_act_control = {
-							blockoverride "act_context" {
-								datacontext = "[GetScriptedGui('un_act_arms_control_sgui')]"
-							}
-							blockoverride "act_size" {
+						un_act_slot = {
+							blockoverride "slot_size" {
 								size = { 106 28 }
 							}
-							blockoverride "act_label_width" {
-								max_width = 100
+							un_act_control = {
+								blockoverride "act_context" {
+									datacontext = "[GetScriptedGui('un_act_arms_control_sgui')]"
+								}
+								blockoverride "act_size" {
+									size = { 106 28 }
+								}
+								blockoverride "act_label_width" {
+									max_width = 100
+								}
+								blockoverride "act_label" {
+									text = "je_un_act_prog_join_label"
+								}
 							}
-							blockoverride "act_label" {
-								text = "je_un_act_prog_join_label"
-							}
-						}
-						un_act_control = {
-							blockoverride "act_context" {
-								datacontext = "[GetScriptedGui('un_act_withdraw_arms_control_sgui')]"
-							}
-							blockoverride "act_size" {
-								size = { 106 28 }
-							}
-							blockoverride "act_label_width" {
-								max_width = 100
-							}
-							blockoverride "act_label" {
-								text = "je_un_act_prog_leave_label"
+							un_act_control = {
+								blockoverride "act_context" {
+									datacontext = "[GetScriptedGui('un_act_withdraw_arms_control_sgui')]"
+								}
+								blockoverride "act_size" {
+									size = { 106 28 }
+								}
+								blockoverride "act_label_width" {
+									max_width = 100
+								}
+								blockoverride "act_label" {
+									text = "je_un_act_prog_leave_label"
+								}
 							}
 						}
 					}
@@ -3182,18 +3219,23 @@ types un_chamber_widget_types
 					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_sanctions_target_count')|0]"
 				}
 				blockoverride "row_ours" {
-					un_act_control = {
-						blockoverride "act_context" {
-							datacontext = "[GetScriptedGui('un_act_lift_sanctions_sgui')]"
-						}
-						blockoverride "act_size" {
+					un_act_slot = {
+						blockoverride "slot_size" {
 							size = { 144 28 }
 						}
-						blockoverride "act_label_width" {
-							max_width = 138
-						}
-						blockoverride "act_label" {
-							text = "je_un_act_lift_sanctions_label"
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_lift_sanctions_sgui')]"
+							}
+							blockoverride "act_size" {
+								size = { 144 28 }
+							}
+							blockoverride "act_label_width" {
+								max_width = 138
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_lift_sanctions_label"
+							}
 						}
 					}
 				}
@@ -3248,23 +3290,27 @@ types un_chamber_widget_types
 				visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				text = "[GetScriptedGui('un_chamber_dues_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
-			# Withhold or pay, under the dues they act on (UN-9).
+			# Withhold or pay, under the dues they act on (UN-9), taking turns
+			# in one slot.
 			un_act_row = {
+				visible = "[Or( GetScriptedGui('un_act_withhold_dues_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_act_pay_dues_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 				blockoverride "act_row" {
-					un_act_control = {
-						blockoverride "act_context" {
-							datacontext = "[GetScriptedGui('un_act_withhold_dues_sgui')]"
+					un_act_slot = {
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_withhold_dues_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_withhold_dues_label"
+							}
 						}
-						blockoverride "act_label" {
-							text = "je_un_act_withhold_dues_label"
-						}
-					}
-					un_act_control = {
-						blockoverride "act_context" {
-							datacontext = "[GetScriptedGui('un_act_pay_dues_sgui')]"
-						}
-						blockoverride "act_label" {
-							text = "je_un_act_pay_dues_label"
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_pay_dues_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_pay_dues_label"
+							}
 						}
 					}
 				}
@@ -3337,21 +3383,24 @@ types un_chamber_widget_types
 				text = "[GetScriptedGui('un_chamber_food_reserve_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 			un_act_row = {
+				visible = "[Or( GetScriptedGui('un_act_food_reserve_pledge_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_act_food_reserve_withdraw_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 				blockoverride "act_row" {
-					un_act_control = {
-						blockoverride "act_context" {
-							datacontext = "[GetScriptedGui('un_act_food_reserve_pledge_sgui')]"
+					un_act_slot = {
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_food_reserve_pledge_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_food_pledge_label"
+							}
 						}
-						blockoverride "act_label" {
-							text = "je_un_act_food_pledge_label"
-						}
-					}
-					un_act_control = {
-						blockoverride "act_context" {
-							datacontext = "[GetScriptedGui('un_act_food_reserve_withdraw_sgui')]"
-						}
-						blockoverride "act_label" {
-							text = "je_un_act_food_withdraw_label"
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_food_reserve_withdraw_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_food_withdraw_label"
+							}
 						}
 					}
 				}
@@ -3429,7 +3478,13 @@ types un_chamber_widget_types
 			un_chamber_text = {
 				text = "[GetScriptedGui('un_chamber_dev_fund_position_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
+			# Fund while we don't contribute; once we do, Reduce, Raise and Defund
+			# in a row of their own (116 + 4 + 116 + 4 + 116 = 356). A control is
+			# a fixed-size slot, so Reduce at the smallest size and Raise at the
+			# largest leave their place empty rather than moving the others.
+			# Defund shows whenever we contribute.
 			un_act_row = {
+				visible = "[GetScriptedGui('un_act_fund_development_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				blockoverride "act_row" {
 					un_act_control = {
 						blockoverride "act_context" {
@@ -3439,6 +3494,11 @@ types un_chamber_widget_types
 							text = "je_un_act_fund_development_label"
 						}
 					}
+				}
+			}
+			un_act_row = {
+				visible = "[GetScriptedGui('un_act_defund_development_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				blockoverride "act_row" {
 					un_act_control = {
 						blockoverride "act_context" {
 							datacontext = "[GetScriptedGui('un_act_reduce_development_sgui')]"

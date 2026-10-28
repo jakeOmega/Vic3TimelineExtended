@@ -231,7 +231,8 @@ class StateGatedTest(unittest.TestCase):
                       f'tooltip = "gm_row_contest_tt" text = "gm_row_contest"', row)
         rows = re.findall(r'flowcontainer = \{ direction = horizontal spacing = 4 (?:ignoreinvisible = yes )?'
                           r'parentanchor = hcenter visible = "\[(.*?)\]" ((?:gm_choice_button = \{.*?\} \} )+)\}', row)
-        self.assertEqual(len(rows), 2, "Rename's row and the contested choices' row, each centred")
+        self.assertEqual(len(rows), 3, "Rename's two rows (without and with Clear Name) and the contested "
+                                       "choices' row, each centred")
         gates = dict(rows)
         self.assertEqual(gates[self.CONTESTED].count("gm_choice_button = {"), 3)
         self.assertNotIn("gm_rename_sgui", gates[self.CONTESTED])
@@ -242,10 +243,18 @@ class StateGatedTest(unittest.TestCase):
         row = _squash(_type_body(_gui(), "gm_monument_row"))
         upheld = ("And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), "
                   "EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) )")
-        self.assertIn(f'visible = "[{upheld}]" gm_choice_button = {{ blockoverride "choice_context" '
-                      f'{{ datacontext = "[GetScriptedGui(\'gm_rename_sgui\')]" }}', row)
-        for sgui in ("gm_name_start_sgui", "gm_clear_name_sgui"):
-            self.assertIn(f"GetScriptedGui('{sgui}')", row.split(upheld, 1)[1].split("gm_naming_line", 1)[0])
+        # Two rows, so neither changes width when Clear Name comes and goes
+        # (gui_modding_guide.md gotcha #43): Rename and Name It, and with a
+        # typed name Clear Name as well.
+        for typed in (0, 1):
+            gate = (f"And( {upheld}, EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), "
+                    f"'(CFixedPoint){typed}' ) )")
+            self.assertIn(f'visible = "[{gate}]" gm_choice_button = {{ blockoverride "choice_context" '
+                          f'{{ datacontext = "[GetScriptedGui(\'gm_rename_sgui\')]" }}', row)
+            buttons = row.split(f'visible = "[{gate}]"', 1)[1].split("flowcontainer = {", 1)[0]
+            self.assertIn("GetScriptedGui('gm_name_start_sgui')", buttons)
+            self.assertEqual("GetScriptedGui('gm_clear_name_sgui')" in buttons, typed == 1)
+            self.assertNotIn("visible", buttons)
         value = _squash(_block(_read(VALUES), "gm_state_can_rename"))
         self.assertEqual(value, "value = 0 if = { limit = { gm_state_status_fits = yes } value = 1 }")
         sgui = _squash(_block(_read(SGUIS), "gm_rename_sgui"))
@@ -388,7 +397,7 @@ class RowTooltipTest(unittest.TestCase):
         the player."""
         keys = re.findall(r'tooltip = "(\w+)"', _type_body(_gui(), "gm_monument_row"))
         loc = _loc()
-        checked = [k for k in keys if "ScriptedGui" in loc.get(k, "")]
+        checked = sorted({k for k in keys if "ScriptedGui" in loc.get(k, "")})
         self.assertEqual(len(checked), 6)
         for key in checked:
             self.assertNotIn("JournalEntry", loc[key], key)
@@ -908,7 +917,7 @@ class LabelBudgetTest(unittest.TestCase):
 
     def test_choice_buttons(self):
         (cell,) = _cells(_type_body(self.gui, "gm_choice_button"))
-        keys = re.findall(r'"choice_text" \{ text = "(\w+)" \}', _type_body(self.gui, "gm_monument_row"))
+        keys = sorted(set(re.findall(r'"choice_text" \{ text = "(\w+)" \}', _type_body(self.gui, "gm_monument_row"))))
         self.assertEqual(len(keys), 6, "Rename, Name It, Clear Name and the three contested choices")
         for key in keys:
             self._fits(key, cell)
