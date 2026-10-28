@@ -40,15 +40,16 @@ the reading in a word and one figure beneath it; hover a box for the detail.
 The Program sits directly above the entry's progress bar, which is progress
 toward your next warhead. The other sections follow below the bar. Every
 section starts open except How Nuclear Weapons Work, which holds the
-explanations, one heading per topic. The posture's choices open from a Change
-button beside each of its three rows.
+explanations, one heading per topic. Doctrine, readiness and launch authority
+each open their choices from a Change button beside their row, and Disavow our
+strikes is a switch of its own.
 
 | Section | Shown when | What it holds |
 |---|---|---|
 | The Program | You have a program | Program funding (a stepper), warhead production a month, the time to the next warhead, and the year of your first device and whether it was the world's first |
 | Nuclear Crisis | You are in a crisis | A line naming your opponent, your side and the dispute; boxes for the stage, the weeks to the deadline, danger, pressure, whether the threat can be carried out and when the target is pressed next; your buttons under Our Moves; then Outcomes, what each ending would bring and do to your credibility |
 | World Crises | Any crisis is running, anywhere | Every crisis, yours included and tinted, most dangerous first: the two countries' flags, the stage and the danger; hover a row for who threatened whom, the dispute, the deadline, any talks and whether it is public. Private warnings are listed too, since governments know of them even when the public doesn't |
-| Nuclear Posture | You hold warheads | Doctrine, readiness (with the level it is moving to) and launch authority, each with a Change button that opens its choices; your nuclear umbrella, warheads unaccounted for, upkeep and incident exposure |
+| Nuclear Posture | You hold warheads | Doctrine, readiness (with the level it is moving to) and launch authority, each with a Change button that opens its choices; whether you disavow your strikes; your nuclear umbrella, warheads unaccounted for, upkeep and incident exposure |
 | Forces | You hold warheads | Survivability, first-strike survivors against your main rival, command reliability, crew strain and the chance of a halt; safeguards and hardening under Investment; under Arsenal Size, warheads held beside the world's estimate, your arsenal ceiling and dismantling |
 | At Home | You hold warheads | A small table for each interest group with a view of your posture |
 | Reputation | You have a record | How your last crisis ended and your non-use pledges (your credibility is in the overview) |
@@ -375,7 +376,8 @@ Two diplomatic actions open one:
 Either action needs an arsenal of your own, both sides free of other crises, no
 non-use pledge between you, and one of the disputes below, taken in this order.
 After a crisis you can't threaten the same country again for 24 months, except
-in a war.
+in a war, or over their nuclear strike when that strike is what ended the
+crisis.
 
 The threat reaches its target 14 to 21 days after it is made. Its answer, the
 deadline and the crisis's year all wait for it, though danger is reckoned from
@@ -386,9 +388,10 @@ concede.
 
 | Dispute | What the target gives up if it concedes |
 |---|---|
-| A war between you | −35 war support in that war |
+| A war between you | It loses 15 war support in the war. If it leads its side, the side drops its war goals against you, and any others of the same kind it holds in that war |
 | A diplomatic play between you | It backs down, and the play should end in your favor |
 | A play or war between the target and a country you cover, when you are not a party to it | The same, on your protégé's behalf |
+| The target struck you, or a country you cover, with a nuclear weapon outside a war in the last 24 months, other than in answer to a strike of yours | It pays the struck country reparations, about a tenth of a year's income, and opens its arsenal to inspection for 20 years, taking Custody Inspections (−5 legitimacy, fading over ten years) |
 | A weapons program run by a country the world believes unarmed that is your rival, or that you are antagonistic, belligerent or domineering toward | Its program is frozen for 10 years |
 | An armed rival at Heightened readiness or higher | It stands down to Routine for 24 months |
 
@@ -481,6 +484,10 @@ Called In":
 | Retaliate (after a strike) | +10 credibility; you join the war and, if you are at war with the attacker a day later, strike back then, as retaliation, under any doctrine |
 | Abandon | −15 credibility, Abandoned a Nuclear Guarantee for five years, −30 relations with the protégé and −10 with everyone else you protect; a subject gains 10 liberty desire |
 
+After a nuclear strike outside a war on a country you cover, Honor opens a
+public crisis against the striker over it, if neither of you is in a crisis
+already.
+
 An armed country fighting a war beside an unarmed one covers it against their
 common enemy for that war, with no treaty: it hears the same call, and its
 answer counts as a protector's. Nothing was promised, so walking away costs it
@@ -540,6 +547,30 @@ and knocks the nuclear taboo down. The United
 Nations records it against you, and after a first strike or a tactical strike
 its court may indict your ruler (see
 [Grounds for UN censure](10-united-nations.md#grounds-for-un-censure)).
+
+### Claiming a strike was unauthorized
+
+When a strategic first strike lands, the launcher may tell the victim that the
+launch was unauthorized. After a launch nobody ordered (Launch on Warning acting
+on a false warning, a cut-off commander, Automatic Retaliation misreading an
+accident), it says so, truthfully. Your own deliberate first strikes carry the
+same claim while Disavow our strikes is on, in the Nuclear Posture section; the
+AI makes it falsely about one time in seven after a strike on a country believed
+armed (twice as
+often under an aggressive ruler, less under an honorable or direct one, more
+under a ruthless one or a grifter, half as often once the taboo is 50).
+
+The struck country's "A City Erased" shows the claim, with a choice to accept
+it: hold back the answer and demand reparations, which the launcher may pay or
+refuse. The choice comes once a strike, and not while Automatic Retaliation has
+the answer in hand. Paying settles the strike, so the victim can't also open a
+crisis over it. An AI believes a claim more readily when relations are good and only
+one warhead landed, less from an opponent in an Acute crisis, and much less
+from a country already caught lying. Six to eighteen months later (sooner with
+a covert network in the launcher) the truth comes out. A lie exposed costs the
+launcher 20 credibility, infamy and 50 relations with the victim, and makes its
+next claim far harder to believe. A true claim the victim refused to believe
+lets it make amends.
 
 ### Retaliation and Automatic Retaliation
 
@@ -1040,7 +1071,7 @@ It retaliates at any taboo.
 - It sets its safeguards from one level: one more for a cautious ruler, a restraint-minded government and Delegation or Launch on Warning, one less for a militarist regime or Warfighting and in a budget deficit. It moves to Automatic Retaliation, Launch on Warning (if militarist) or Delegation only when fewer than three of its warheads would survive its main rival and hardening could not change that, and back to Central once that passes.
 - It goes to High Alert in a war with an armed enemy, and in an Acute crisis when its armed opponent is at Heightened or higher or fewer than three of its warheads would survive short of High Alert; otherwise to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.
 - It strikes first only when its doctrine allows and its survival is at stake, or when it is losing (Flexible), was defied (Compellence) or is at war (Warfighting) against an enemy with no arsenal and no armed protector. An aggressive ruler losing under Flexible First Use strikes whether or not the enemy can answer; a cautious one strikes first only for survival, unless the taboo is below 30. From a taboo of 70, any AI strikes first only when its enemy means to annex or subjugate it, whatever its doctrine. The lower the taboo, the more readily it takes a strike it is allowed, and that includes carrying out a crisis threat: under Warfighting below a taboo of 25 it does so about twice as readily. It is a fifth as likely to carry out a threat against an insurgency, a revolutionary or secessionist state. It keeps a warhead in reserve unless its survival is at stake, waits six months between first uses, and strikes its own rebels only with 40% of its land occupied under Outlawed Dissent or a Secret Police. None of this holds back retaliation.
-- It warns countries that threaten a protégé or its survival, and a great power warns a rival that is building a bomb. Coercive warnings need a hawkish doctrine or regime and a target that can't answer. It never makes a public bluff. The lower the taboo, the more often it threatens: about twice as often at 0 as at 35, and a third as often at 100, except in defense of a country it covers, its survival or its core territory. From a taboo of 70 it issues a public ultimatum only in defense of a country it covers, its survival or its core territory, and otherwise warns privately.
+- It warns countries that threaten a protégé or its survival, and countries that struck it or a country it covers outside a war, and a great power warns a rival that is building a bomb. Coercive warnings need a hawkish doctrine or regime and a target that can't answer. It never makes a public bluff. The lower the taboo, the more often it threatens: about twice as often at 0 as at 35, and a third as often at 100, except in defense of a country it covers, its survival or its core territory, or over a nuclear strike. From a taboo of 70 it issues a public ultimatum only in defense of a country it covers, its survival or its core territory, and otherwise warns privately.
 - At each posture review it also weighs its arsenal. While its arsenal burdens it and it holds more than half again the stockpile it wants, it sets a ceiling at what it wants; it lifts that ceiling once it wants more, and in a war lifts any ceiling below what it wants. When the burden reaches 30% or the taboo 70, it may begin dismantling, a one-in-five chance each review, provided it is at peace, outside any nuclear crisis or civil war, faces no plausible attacker, has neither a militarist government nor an aggressive ruler, and is covered by a guarantee or umbrella or is not a great power. It halts a dismantling only when an armed enemy at war with it means to annex or subjugate it. A renouncer takes Resume the Nuclear Program only with the standing to run a program, below a taboo of 50, and when an armed country is at war with it or is a rival antagonistic toward it.
 - An armed AI proposes Nuclear Arms Limitation when the taboo is 50 or more or its arsenal burdens it, at a ceiling of three quarters of the larger arsenal.
 - It usually declines to answer for a protégé that struck first, never withdraws a nuclear umbrella, and demands disarmament or a program freeze from rivals and hostile countries. It makes either demand, in a treaty or as a war goal in a diplomatic play, only of a country with something to stop: a program, the rank of a major power or higher, or, for disarmament, an arsenal the world knows of. It presses hardest against a known arsenal or a program being funded. It accepts a Nuclear Disarmament demand more readily when the taboo is above 50 or its own arsenal burdens it.

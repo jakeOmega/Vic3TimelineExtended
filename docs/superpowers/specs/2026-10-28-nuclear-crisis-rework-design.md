@@ -1,6 +1,6 @@
 # Nuclear Crisis Rework: Survivability, Launch Authority, Accidental Risk and Crisis Subjects — Design
 
-> **Status: phase 1 built (2026-10-28, branch `feat/nuclear-rework-p1`; plan `docs/superpowers/plans/2026-10-28-nuclear-crisis-rework-phase1.md`); phases 2–4 designed, not built.** Owner answers to §14.1 (confirmed) and §14.2 (launch authority is public) are in §14. Baseline `main` at c760baf. The owner's calls from the 2026-10-28 review are §1; everything else is a proposal, and every number is a first tuning value. Engine facts the design rests on but nobody has verified are §12, each with a fallback. Per the owner they are checked in game while building, not before it.
+> **Status: phases 1 and 2 built (2026-10-28; plans `docs/superpowers/plans/2026-10-28-nuclear-crisis-rework-phase1.md`, `...-phase2.md`); phases 3–4 designed, not built.** §14.4's lie rate: 15%, ×2 aggressive, ×0.5 at a taboo of 50 or more, and ruler traits (owner, 2026-10-28); a human claims through a Disavow our strikes posture toggle. Owner answers to §14.1 (confirmed) and §14.2 (launch authority is public) are in §14. Baseline `main` at c760baf. The owner's calls from the 2026-10-28 review are §1; everything else is a proposal, and every number is a first tuning value. Engine facts the design rests on but nobody has verified are §12, each with a fallback. Per the owner they are checked in game while building, not before it.
 > Read first: [`docs/systems/nuclear_crisis_design.md`](../../systems/nuclear_crisis_design.md) §0, what shipped. This doc changes its §0.2–§0.5. When a phase ships, update §0 there, chapter 14 of the player guide and `docs/testing/nuclear-playtest.md`.
 
 ## 0. Why
@@ -310,9 +310,9 @@ Probed 2026-10-28 (one observer game; details in `docs/guides/scripting_best_pra
 
 | Question | Used by | Fallback | Result (2026-10-28) |
 |---|---|---|---|
-| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) | Removes the **opening** goal; the war goes on. Did not remove goals added by script `add_war_goal`. AI-added goals untested: probe in phase 2 |
+| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) | Removes the **opening** goal and the AI's own goals; the war goes on, and in a war the AI can't add them back. Did not remove goals added by script `add_war_goal` (second probe, 2026-10-28) |
 | `remove_war_goal` on a play's opening goal (the owner expects both to work) | §8.1 | skip the opening goal | Works, in a play and in a war |
-| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip | Untested: no added goal could be removed. Phase 2 |
+| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip | Still untested: no side held a goal its leader didn't. Fallback applies |
 | Does `resolve_play_for` enforce every goal or only primary demands? | §8.2 | stakes counts whichever it enforces | Every goal. Stakes count every goal (as built) |
 | What `has_strategic_adjacency`'s coastal adjacency covers | §7.2 | `is_adjacent_to_country` plus the region test | Land and sea-coast neighbors; not distant coasts. `is_adjacent_to_country` covers sea-coast neighbors too |
 | `any_neighbouring_state` at strategic-region scope | §7.2 | own regions only | Works |

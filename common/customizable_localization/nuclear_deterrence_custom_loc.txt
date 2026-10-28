@@ -322,6 +322,27 @@ nd_crisis_dispute_phrase = {
 					has_variable = nd_crisis_role
 					var:nd_crisis_role = 1
 					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 6
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 6
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_6
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
 					var:nd_crisis_dispute = 5
 				}
 				AND = {
@@ -810,6 +831,27 @@ nd_crisis_dispute_word = {
 					has_variable = nd_crisis_role
 					var:nd_crisis_role = 1
 					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 6
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 6
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_6
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
 					var:nd_crisis_dispute = 5
 				}
 				AND = {
@@ -1012,6 +1054,13 @@ nd_crisis_demand_text = {
 	text = {
 		trigger = {
 			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = 6
+		}
+		localization_key = nd_crisis_demand_6
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_dispute
 			var:nd_crisis_dispute = 5
 		}
 		localization_key = nd_crisis_demand_5
@@ -1068,6 +1117,15 @@ nd_crisis_concession_past = {
 		trigger = {
 			has_variable = nd_crisis_pending_role
 			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 6
+		}
+		localization_key = nd_concession_past_they_6
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
 		}
 		localization_key = nd_concession_past_they_5
 	}
@@ -1098,6 +1156,13 @@ nd_crisis_concession_past = {
 			var:nd_crisis_pending_dispute = 4
 		}
 		localization_key = nd_concession_past_we_4
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 6
+		}
+		localization_key = nd_concession_past_we_6
 	}
 	text = {
 		trigger = {
@@ -1306,6 +1371,10 @@ nd_crisis_concession_short = {
 		localization_key = nd_concession_short_4
 	}
 	text = {
+		trigger = { nd_crisis_dispute_is = { D = 6 } }
+		localization_key = nd_concession_short_6
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = nd_concession_short_5
 	}
@@ -1329,6 +1398,10 @@ nd_crisis_concession_long = {
 	text = {
 		trigger = { nd_crisis_dispute_is = { D = 4 } }
 		localization_key = nd_concession_long_4
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 6 } }
+		localization_key = nd_concession_long_6
 	}
 	text = {
 		trigger = { always = yes }

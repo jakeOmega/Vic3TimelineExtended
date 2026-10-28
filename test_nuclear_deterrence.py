@@ -729,7 +729,8 @@ class TestFinalReviewFixesPhase1(unittest.TestCase):
         warn = block(self.triggers, "nd_ai_would_warn")
         self.assertGreater(warn.index("nd_ai_stakes_block"), warn.index("A cautious ruler") if "A cautious ruler" in warn
                            else warn.index("ruler_is_cautious = no"))
-        self.assertRegex(warn, r"OR = \{\s*nd_dispute_guarantee_against = \{ TARGET = \$TARGET\$ \}\s*NOT = \{ nd_ai_stakes_block")
+        self.assertRegex(warn, r"OR = \{\s*nd_dispute_guarantee_against = \{ TARGET = \$TARGET\$ \}"
+                               r"(?:\s*nd_dispute_peacetime_strike_by = \{ TARGET = \$TARGET\$ \})?\s*NOT = \{ nd_ai_stakes_block")
 
     def test_acute_record_also_at_close(self):
         self.assertIn("nd_log_crisis_acute_once = yes", block(self.crisis, "nd_crisis_close"))
@@ -748,6 +749,412 @@ class TestFinalReviewFixesPhase1(unittest.TestCase):
 
     def test_survivors_shown_to_one_decimal(self):
         self.assertIn("Var('nd_survivors_main').GetValue|1", loc_value("nd_w_survivors_value"))
+
+
+class TestSuezConcession(unittest.TestCase):
+    """Yielding in a war drops the target's side's goals against the other
+    side and costs 15 war support (2026-10-28 rework spec §8.1)."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.triggers = strip_comments(read(TRIGGERS))
+
+    def test_concession_drops_goals_and_15_support(self):
+        body = block(self.crisis, "nd_crisis_concede_war")
+        self.assertIn("value = -15", body)
+        self.assertNotIn("value = -35", body)
+        self.assertIn("nd_crisis_drop_goals = { WHO = target }", body)
+        self.assertIn("nd_crisis_drop_goals = { WHO = initiator }", body)
+        drop = block(self.crisis, "nd_crisis_drop_goals")
+        for typ in ("conquer_state", "annex_country", "humiliation", "make_protectorate", "te_reunify_country"):
+            self.assertIn(f"remove_war_goal = {{ who = $WHO$ type = {typ} }}", drop, typ)
+        self.assertIn("diplomatic_play = {", drop)
+
+    def wars_loop(self):
+        return block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war")
+
+    def test_concession_without_goals_is_war_support_only(self):
+        # The war support line is a direct child of the war loop, not inside
+        # the goals branch, so a war in which we hold no goals still costs it.
+        loop = self.wars_loop()
+        support = loop.index("add_war_war_support")
+        self.assertEqual(loop[:support].count("{") - loop[:support].count("}"), 0)
+
+    def test_concession_side_from_defending_side(self):
+        goals = " ".join(block(self.wars_loop(), "if").split())
+        self.assertIn("if = { limit = { is_on_defending_side = scope:nd_target } nd_crisis_drop_goals = { WHO = target } }"
+                      " else = { nd_crisis_drop_goals = { WHO = initiator } }", goals)
+
+    def test_suez_self_check_line(self):
+        ev = block(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.25")
+        self.assertIn("TE_SELF_CHECK OK nd_suez_goals", ev)
+        self.assertIn("TE_SELF_CHECK BROKEN nd_suez_goals", ev)
+        self.assertIn("war_side_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }",
+                      block(self.triggers, "nd_side_holds_any_goal_against"))
+        self.assertNotIn("35", loc_value("nd_tt_yield_war"))
+        self.assertIn("15", loc_value("nd_tt_yield_war"))
+
+
+class TestPeacetimeStrikeDispute(unittest.TestCase):
+    """Dispute code 6: the target struck us, or a country we cover, outside a
+    war in the last 24 months (2026-10-28 rework spec §8.5)."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.custom = strip_comments(read(CUSTOM_LOC))
+
+    def test_code_6_classified_between_guarantee_and_proliferation(self):
+        body = block(self.crisis, "nd_crisis_classify_dispute")
+        g = body.index("nd_dispute_guarantee_against")
+        six = body.index("nd_dispute_peacetime_strike_by")
+        p = body.index("nd_dispute_proliferation_by")
+        self.assertLess(g, six)
+        self.assertLess(six, p)
+        self.assertIn("name = nd_crisis_dispute value = 6", body)
+
+    def test_code_6_at_every_site(self):
+        for name in ("nd_crisis_preview", "nd_crisis_revalidate_dispute", "nd_crisis_act_yield", "nd_crisis_yield_lines"):
+            body = block(self.crisis, name)
+            self.assertTrue("= 6" in body or "D = 6" in body or "nd_dispute_peacetime_strike_by" in body, name)
+        for name in ("nd_has_crisis_dispute_with", "nd_crisis_issuer_is_defensive", "nd_ai_would_warn"):
+            body = block(self.triggers, name)
+            self.assertTrue("nd_dispute_peacetime_strike_by" in body or "var:nd_crisis_dispute = 6" in body, name)
+        for name in ("nd_crisis_dispute_phrase", "nd_crisis_dispute_word", "nd_crisis_demand_text",
+                     "nd_crisis_concession_past", "nd_crisis_concession_short", "nd_crisis_concession_long"):
+            self.assertRegex(block(self.custom, name), r"_6\b", name)
+        for key in ("nd_crisis_dispute_phrase_6", "nd_crisis_dispute_6", "nd_crisis_demand_6", "nd_concession_past_they_6",
+                    "nd_concession_past_we_6", "nd_concession_short_6", "nd_concession_long_6",
+                    "nd_tt_open_over_peacetime_strike", "nd_tt_yield_reparations"):
+            self.assertIsNotNone(loc_value(key), key)
+
+    def test_record_written_outside_war(self):
+        body = block(self.effects, "nd_record_nuclear_use")
+        i = body.index("name = nd_peacetime_struck_by")
+        self.assertIn("NOT = { has_war_with = $VICTIM$ }", body[max(0, i - 300):i])
+        self.assertIn("days = 730", body[i:i + 120])
+
+    def test_code_6_revalidates_on_the_record(self):
+        body = block(self.crisis, "nd_crisis_revalidate_dispute")
+        i = body.index("var:nd_crisis_dispute = 6")
+        self.assertIn("nd_dispute_peacetime_strike_by", body[i:i + 600])
+        self.assertIn("OUTCOME = 10", body[i:i + 900])
+
+    def test_honor_after_peacetime_strike_opens_a_crisis(self):
+        self.assertIn("nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }", block(self.triggers, "nd_has_crisis_dispute_with"))
+        trig = block(self.triggers, "nd_dispute_peacetime_strike_by")
+        for needle in ("var:nd_peacetime_struck_by ?= $TARGET$", "nd_under_umbrella_of", "has_type = nuclear_guarantee"):
+            self.assertIn(needle, trig)
+
+    def test_reparations_concession(self):
+        body = block(self.crisis, "nd_crisis_concede_reparations")
+        for needle in ("nd_loose_compensation_value", "add_treasury", "name = nd_loose_inspected value = 1 days = 7300",
+                       "name = nd_loose_inspections", "remove_variable = nd_peacetime_struck_by"):
+            self.assertIn(needle, body)
+        self.assertNotIn("nd_loose_answer", body)
+
+    def test_no_35_left_in_war_concession_texts(self):
+        for key in ("nd_concession_long_2", "nd_concession_long_3", "nd_concession_past_they_2", "nd_concession_past_they_3",
+                    "nd_concession_past_we_2", "nd_concession_past_we_3", "nd_concession_short_2", "nd_tt_open_over_guarantee",
+                    "nd_tt_open_over_war"):
+            self.assertNotIn("35", loc_value(key), key)
+
+
+class TestStrikeClaims(unittest.TestCase):
+    """A launcher may claim a strike was unauthorized (2026-10-28 rework spec
+    §5.4): true after an unordered launch, false under Disavow our strikes or
+    an AI's lie."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(EFFECTS))
+        self.values = strip_comments(read(VALUES))
+
+    def claim(self):
+        return block(self.effects, "nd_record_claim")
+
+    def test_each_new_effect_defined_once(self):
+        # A patch re-run once defined nd_record_claim twice; the duplicate-key
+        # audit only warns on an identical repeat.
+        for name in ("nd_record_claim", "nd_claim_schedule_truth", "nd_claim_clear"):
+            self.assertLessEqual(len(re.findall(rf"(?m)^{name} = \{{", read(EFFECTS))), 1, name)
+
+    def test_claim_recorded_before_the_victims_event(self):
+        strike = block(strip_comments(read(EXTRA_EFFECTS)), "nuclear_first_strike")
+        self.assertLess(strike.index("nd_record_claim = yes"), strike.index("id = nuclear_weapon_events.1 "))
+
+    def test_no_claim_on_an_answer(self):
+        self.assertIn("NOT = { nd_was_struck_by = { ENEMY = scope:target_country } }", self.claim())
+
+    def test_unordered_launch_claims_true(self):
+        body = self.claim()
+        i = body.index("nd_strike_from_incident = yes")
+        self.assertIn("name = nd_claim_kind value = 1", body[i:i + 200])
+
+    def test_ai_lie_rate(self):
+        body = block(self.values, "nd_ai_lies_value")
+        for needle in ("value = 15", "ruler_is_aggressive = yes", "multiply = 2", "has_trait = ruthless",
+                       "has_trait = grifter", "multiply = 1.5", "has_trait = honorable", "multiply = 0.25",
+                       "has_trait = direct", "nd_taboo_value >= 50", "multiply = 0.5"):
+            self.assertIn(needle, body)
+        claim = self.claim()
+        self.assertIn("chance = nd_ai_lies_value", claim)
+        self.assertIn("has_variable = nd_disavow_strikes", claim)
+
+    def test_claim_record_once_per_strike(self):
+        body = self.claim()
+        self.assertIn("name = nd_struck_count", body)
+        self.assertIn("days = 30", body)
+        self.assertIn("change_global_variable = { name = nd_claim_counter add = 1 }", body)
+        for var in ("nd_claim_by", "nd_claim_true", "nd_claim_id"):
+            self.assertIn(f"name = {var} value", body)
+        # The decision runs only for a strike's first warhead.
+        self.assertLess(body.index("var:nd_last_striker ?= scope:attacking_country"), body.index("nd_ai_lies_value"))
+
+    def test_toggle_ops_in_step(self):
+        gui = read(GUI)
+        for op in (70, 71):
+            self.assertIn(f"'(CFixedPoint){op}'", gui)
+            self.assertIn(f"scope:op = {op}", strip_comments(read(SGUIS)))
+        self.assertIn("70/71", gui)
+        self.assertIn("70 / 71", read(SGUIS))
+        self.assertIn("70 / 71", read(JE_DOC))
+        self.assertIn("has_variable = nd_disavow_strikes", block(strip_comments(read(SGUIS)), "nd_disavowing_sgui"))
+
+
+class TestVictimWeighsTheClaim(unittest.TestCase):
+    """The struck country weighs a claim that the strike was unauthorized
+    (2026-10-28 rework spec §5.4)."""
+
+    def setUp(self):
+        self.events = strip_comments(read(WEAPON_EVENTS))
+        self.values = strip_comments(read(VALUES))
+        self.ev1 = block(self.events, "nuclear_weapon_events.1")
+
+    def test_belief_rolled_once_per_claim(self):
+        imm = block(self.ev1, "immediate")
+        self.assertIn("var:nd_claim_belief_rolled_for = var:nd_claim_id", imm)
+        self.assertIn("chance = nd_claim_belief_value", imm)
+        self.assertIn("name = nd_claim_belief_rolled_for value = var:nd_claim_id", imm)
+
+    def test_belief_value_terms(self):
+        body = block(self.values, "nd_claim_belief_value")
+        for needle in ("value = 40", "divide = 4", "add = 20", "subtract = 20", "multiply = 30", "min = 5", "max = 90"):
+            self.assertIn(needle, body)
+
+    def test_accept_option_gated_on_a_claim(self):
+        accept = option_body(self.events, "nuclear_weapon_events.1.k")
+        trig = block(accept, "trigger")
+        self.assertIn("nd_strike_carries_claim = { ENEMY = scope:attacking_country }", trig)
+        self.assertIn("nd_auto_answers_strike", trig)
+        self.assertIn("id = nuclear_weapon_events.27", accept)
+        self.assertIn("name = nd_claim_accepted value = var:nd_claim_id", accept)
+        self.assertIn("var:nd_claim_believed = 1", block(accept, "ai_chance"))
+
+    def test_reparations_event_pay_or_refuse(self):
+        ev = block(self.events, "nuclear_weapon_events.27")
+        pay = option_body(self.events, "nuclear_weapon_events.27.a")
+        self.assertIn("nd_loose_compensation_value", pay)
+        self.assertIn("add_treasury", pay)
+        refuse = option_body(self.events, "nuclear_weapon_events.27.b")
+        self.assertIn("value = -30", refuse)
+        self.assertIn("exists = scope:nd_claim_victim", ev)
+
+    def test_claim_shown_in_the_text(self):
+        desc = block(self.ev1, "desc")
+        self.assertIn("nuclear_weapon_events.1.d_claim", desc)
+        self.assertIsNotNone(loc_value("nuclear_weapon_events.1.d_claim"))
+
+
+class TestClaimTruth(unittest.TestCase):
+    """The truth about a claim comes out 6 to 18 months later, sooner with a
+    covert network (2026-10-28 rework spec §5.4)."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(EFFECTS))
+        self.events = strip_comments(read(WEAPON_EVENTS))
+
+    def test_truth_scheduled_by_the_claim(self):
+        self.assertIn("nd_claim_schedule_truth = yes", block(self.effects, "nd_record_claim"))
+
+    def test_truth_delays_are_literal(self):
+        body = block(self.effects, "nd_claim_schedule_truth")
+        for days in (180, 270, 365, 455, 545, 90):
+            self.assertIn(f"days = {days}", body)
+        self.assertIn("sr_has_intel_tier = { TARGET = scope:attacking_country TIER = 1 }", body)
+        self.assertIn("id = nuclear_weapon_events.28", body)
+        self.assertIn("id = nuclear_weapon_events.29", body)
+        self.assertNotIn("$", body.replace("$EVENT$", ""))
+
+    def test_truth_revalidates_parties(self):
+        for eid in ("nuclear_weapon_events.28", "nuclear_weapon_events.29", "nuclear_weapon_events.30"):
+            trig = block(block(self.events, eid), "trigger")
+            self.assertIn("exists = scope:nd_truth_launcher", trig, eid)
+            self.assertIn("is_country_alive = yes", trig, eid)
+
+    def test_exposed_lie_costs(self):
+        body = option_body(self.events, "nuclear_weapon_events.30.a")
+        for needle in ("AMOUNT = -20", "change_infamy = nd_taboo_infamy_threat", "value = -50",
+                       "change_variable = { name = nd_false_claims add = 1 }"):
+            self.assertIn(needle, body)
+        self.assertIn("id = nuclear_weapon_events.30", block(self.events, "nuclear_weapon_events.29"))
+
+    def test_rejected_true_claim_offers_reconciliation(self):
+        body = option_body(self.events, "nuclear_weapon_events.28.b")
+        self.assertIn("nd_claim_accepted", block(body, "trigger"))
+        self.assertIn("value = 30", body)
+
+
+def squash(text):
+    return " ".join(text.split())
+
+
+ACCEPTED_THIS_CLAIM = ("NOT = { AND = { has_variable = nd_claim_accepted"
+                       " var:nd_claim_accepted = var:nd_claim_id } }")
+
+
+class TestFinalReviewFixesPhase2(unittest.TestCase):
+    """The phase 2 final review's fixes (PR #1223)."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(EFFECTS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.events = strip_comments(read(WEAPON_EVENTS))
+        self.crisis_events = strip_comments(read(CRISIS_EVENTS))
+        self.ev1 = block(self.events, "nuclear_weapon_events.1")
+
+    # A claim belongs to the strike that made it, not to every later warhead
+    # or strike while its record stands.
+    def test_strike_claim_id_set_at_the_first_warhead(self):
+        body = block(self.effects, "nd_record_claim")
+        self.assertIn("name = nd_strike_claim_id value = 0 days = 30", body)
+        self.assertIn("name = nd_strike_claim_id value = global_var:nd_claim_counter days = 30", body)
+        trig = squash(block(self.triggers, "nd_strike_carries_claim"))
+        for needle in ("var:nd_claim_by ?= $ENEMY$", "var:nd_strike_claim_id = var:nd_claim_id"):
+            self.assertIn(needle, trig)
+
+    def test_victims_event_reads_the_strikes_claim(self):
+        call = "nd_strike_carries_claim = { ENEMY = scope:attacking_country }"
+        self.assertIn(call, block(self.ev1, "desc"))
+        self.assertIn(call, block(self.ev1, "immediate"))
+        accept = option_body(self.events, "nuclear_weapon_events.1.k")
+        # The guarded form: no vanilla or mod precedent for ?= with a var: on
+        # its right, so a variable is compared only once it is known set.
+        self.assertIn(ACCEPTED_THIS_CLAIM, squash(block(accept, "trigger")))
+        self.assertIn("has_variable = nd_claim_belief_rolled_for var:nd_claim_belief_rolled_for = var:nd_claim_id",
+                      squash(block(accept, "ai_chance")))
+        self.assertNotIn("?= var:", accept)
+        self.assertNotIn("var:nd_claim_by ?= scope:attacking_country", self.ev1)
+
+    def test_reconciliation_reads_this_claims_acceptance(self):
+        trig = squash(block(option_body(self.events, "nuclear_weapon_events.28.b"), "trigger"))
+        self.assertIn("NOT = { AND = { has_variable = nd_claim_id has_variable = nd_claim_accepted"
+                      " var:nd_claim_accepted = var:nd_claim_id } }", trig)
+
+    def test_accept_hidden_where_absorbing_is(self):
+        # Recessed under Automatic Retaliation the standing order answers (.h),
+        # so neither absorbing (.a) nor accepting the claim (.k) is offered.
+        recessed_ar = ("NOT = { scope:target_country = { nd_authority_automatic = yes nd_is_armed = yes"
+                       " nd_forces_assembled = no } }")
+        self.assertIn(recessed_ar, squash(block(option_body(self.events, "nuclear_weapon_events.1.a"), "trigger")))
+        self.assertIn(recessed_ar, squash(block(option_body(self.events, "nuclear_weapon_events.1.k"), "trigger")))
+
+    # A tooltip walk writes nothing, so a variable set and read back in one
+    # walked block logs every frame (scripting_best_practices.md).
+    def test_reparations_paid_without_a_read_back(self):
+        pay = option_body(self.events, "nuclear_weapon_events.27.a")
+        concede = block(self.crisis, "nd_crisis_concede_reparations")
+        for body in (pay, concede):
+            self.assertNotIn("nd_reparations_due", body)
+            self.assertEqual(body.count("nd_loose_compensation_value"), 2)
+        imm = block(block(self.events, "nuclear_weapon_events.27"), "immediate")
+        self.assertIn("save_scope_as = nd_loose_payer", imm)
+        self.assertIn("save_scope_as = nd_loose_claimant", imm)
+
+    def test_claim_decided_only_in_the_real_run(self):
+        self.assertRegex(block(self.effects, "nd_record_claim"),
+                         r"^\s*set_variable = nd_claim_click\s*if = \{\s*limit = \{ has_variable = nd_claim_click \}"
+                         r"\s*remove_variable = nd_claim_click")
+
+    # An answer to a first strike is no grievance against the one who struck.
+    def test_no_record_against_the_first_striker(self):
+        body = block(self.effects, "nd_record_nuclear_use")
+        i = body.index("name = nd_peacetime_struck_by")
+        self.assertIn("NOT = { nd_was_struck_by = { ENEMY = $VICTIM$ } }", body[max(0, i - 300):i])
+
+    def test_paying_the_demand_settles_the_grievance(self):
+        pay = option_body(self.events, "nuclear_weapon_events.27.a")
+        self.assertIn("if = { limit = { var:nd_peacetime_struck_by ?= ROOT } remove_variable = nd_peacetime_struck_by }",
+                      squash(pay))
+        trig = squash(block(block(self.events, "nuclear_weapon_events.27"), "trigger"))
+        self.assertIn("scope:nd_claim_victim = { is_country_alive = yes }", trig)
+
+    # The war concession: only wars the two fight against each other, and
+    # only a war leader's concession drops its side's goals.
+    def test_only_wars_fought_against_each_other(self):
+        lim = squash(block(block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war"), "limit"))
+        self.assertIn("AND = { is_on_defending_side = scope:nd_target"
+                      " NOT = { is_on_defending_side = scope:nd_crisis_other_side } }", lim)
+        self.assertIn("AND = { is_on_defending_side = scope:nd_crisis_other_side"
+                      " NOT = { is_on_defending_side = scope:nd_target } }", lim)
+
+    def test_only_the_war_leader_drops_its_sides_goals(self):
+        loop = block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war")
+        lim = squash(block(block(loop, "if"), "limit"))
+        self.assertIn("is_warleader = scope:nd_target", lim)
+        self.assertIn("nd_side_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side }", lim)
+        self.assertNotIn("nd_suez_had_goals", self.crisis)
+
+    def test_suez_self_check_a_day_later_naming_the_parties(self):
+        concede = block(self.crisis, "nd_crisis_concede_war")
+        self.assertNotIn("TE_SELF_CHECK", concede)
+        self.assertIn("id = nuclear_crisis.25 days = 1", concede)
+        self.assertIn("name = nd_suez_check_other value = scope:nd_crisis_other_side", concede)
+        ev = block(self.crisis_events, "nuclear_crisis.25")
+        self.assertIn("hidden = yes", ev)
+        broken = next(line for line in ev.splitlines() if "TE_SELF_CHECK BROKEN nd_suez_goals" in line)
+        self.assertIn("[THIS.GetCountry.GetNameNoFormatting]", broken)
+        self.assertIn("[SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting]", broken)
+        self.assertIn("remove_variable = nd_suez_check_other", ev)
+
+    # A crisis their strike ended (outcome 7) leaves a cooldown that must not
+    # outlast the grievance it ended over.
+    def test_cooldown_waived_after_a_crisis_their_strike_ended(self):
+        self.assertIn("AND = { var:nd_crisis_last_outcome ?= 7 var:nd_crisis_last_opponent ?= $TARGET$"
+                      " nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ } }",
+                      squash(block(self.triggers, "nd_crisis_cooldown_clear")))
+
+    # Texts.
+    def test_no_35_war_support_left_in_any_text(self):
+        for path in LOC_DIR.glob("*.yml"):
+            for line in read(path).splitlines():
+                m = re.match(r"\s+(nd_[A-Za-z0-9_.\-]+):\d*\s+\"(.*)\"\s*$", line)
+                if m and "war support" in m.group(2):
+                    self.assertNotRegex(m.group(2), r"\b35\b", m.group(1))
+
+    def test_dispute_lists_name_the_strike(self):
+        self.assertIn("nuclear strike", loc_value("nd_tt_has_dispute"))
+        legend = loc_value("nd_w_crisis_actions_legend")
+        self.assertIn("nuclear strike", legend)
+        self.assertIn("reparations", legend)
+
+    def test_reparations_texts_name_the_inspections_modifier(self):
+        for key in ("nd_tt_yield_reparations", "nd_concession_long_6", "nd_tt_open_over_peacetime_strike"):
+            self.assertIn("Custody Inspections", loc_value(key), key)
+
+    def test_war_concession_texts_say_only_a_leader_drops_goals(self):
+        for key in ("nd_tt_yield_war", "nd_tt_yield_guarantee", "nd_concession_long_2", "nd_concession_long_3",
+                    "nd_tt_open_over_war", "nd_tt_open_over_guarantee", "nd_concession_past_they_2",
+                    "nd_concession_past_they_3", "nd_concession_past_we_2", "nd_concession_past_we_3"):
+            self.assertRegex(loc_value(key), r"\b(leads?|led)\b", key)
+
+    def test_claim_texts_match_the_rules(self):
+        self.assertNotIn("a year or two", loc_value("nuclear_weapon_events.1.k.tt"))
+        self.assertNotIn("a year or two", loc_value("nd_w_disavow_tt"))
+        for key in ("nd_tt_disavow_on", "nd_w_disavow_tt"):
+            self.assertNotIn("each country we strike first", loc_value(key), key)
+            self.assertIn("city", loc_value(key), key)
 
 
 class TestOutcomeNotice(unittest.TestCase):
@@ -1856,7 +2263,7 @@ class TestUmbrellaCoverage(unittest.TestCase):
                          "nd_allies_alarmed", "nd_is_guaranteed", "nd_is_guaranteed_by_treaty",
                          "nd_dispute_guarantee_against", "nd_crisis_classify_dispute", "nd_crisis_notify_guarantors",
                          "nd_record_nuclear_use", "nd_guarantee_act_abandon", "nd_covered_country_struck_by",
-                         "nd_covered_country_struck"}
+                         "nd_covered_country_struck", "nd_dispute_peacetime_strike_by"}
 
     def test_umbrella_triggers(self):
         t = strip_comments(read(TRIGGERS))

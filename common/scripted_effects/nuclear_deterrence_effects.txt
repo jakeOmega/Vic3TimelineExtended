@@ -2007,6 +2007,186 @@ nd_tactical_strike_resolve = {
 	}
 }
 
+# The claim (rework spec §5.4). Launcher scope, from nuclear_first_strike's hit
+# branch, before the victim's nuclear_weapon_events.1 (scope:attacking_country,
+# scope:target_country saved). A first use only, never an answer. Decided once
+# per strike, at its first warhead: the victim keeps who struck it and how many
+# landed for 30 days (nd_last_striker, nd_struck_count), and later warheads of
+# the same strike only count. The claim is true after a launch nobody ordered;
+# false under Disavow our strikes (a human's choice, nd_disavow_strikes) or an
+# AI's lie (nd_ai_lies_value) after a strike on a country believed armed. The
+# victim keeps the claim (nd_claim_by, nd_claim_true, nd_claim_id) until its
+# truth comes out (nd_claim_schedule_truth), and for 30 days which claim, if
+# any, this strike made (nd_strike_claim_id: 0 for none), so a later strike
+# that made none does not read as the old one (nd_strike_carries_claim).
+# The action's confirmation box walks nuclear_first_strike's hit branch, and a
+# walk writes nothing, so the body runs only on the real launch (the
+# click-only marker, as nd_dispatch_strategic_strike).
+nd_record_claim = {
+	set_variable = nd_claim_click
+	if = {
+		limit = { has_variable = nd_claim_click }
+		remove_variable = nd_claim_click
+		if = {
+			limit = {
+				exists = scope:target_country
+				NOT = { nd_was_struck_by = { ENEMY = scope:target_country } }
+			}
+			if = {
+				limit = {
+					scope:target_country = {
+						has_variable = nd_struck_count
+						var:nd_last_striker ?= scope:attacking_country
+					}
+				}
+				scope:target_country = {
+					set_variable = {
+						name = nd_struck_count
+						value = {
+							value = var:nd_struck_count
+							add = 1
+						}
+						days = 30
+					}
+				}
+			}
+			else = {
+				scope:target_country = {
+					set_variable = { name = nd_last_striker value = scope:attacking_country }
+					set_variable = { name = nd_struck_count value = 1 days = 30 }
+					set_variable = { name = nd_strike_claim_id value = 0 days = 30 }
+				}
+				set_variable = { name = nd_claim_kind value = 0 }
+				if = {
+					limit = { nd_strike_from_incident = yes }
+					set_variable = { name = nd_claim_kind value = 1 }
+				}
+				else_if = {
+					limit = {
+						is_ai = no
+						has_variable = nd_disavow_strikes
+					}
+					set_variable = { name = nd_claim_kind value = 2 }
+				}
+				else_if = {
+					limit = {
+						is_ai = yes
+						scope:target_country = { nd_believed_armed = yes }
+					}
+					random = {
+						chance = nd_ai_lies_value
+						set_variable = { name = nd_claim_kind value = 2 }
+					}
+				}
+				if = {
+					limit = { var:nd_claim_kind > 0 }
+					change_global_variable = { name = nd_claim_counter add = 1 }
+					scope:target_country = {
+						set_variable = { name = nd_claim_by value = scope:attacking_country }
+						set_variable = { name = nd_claim_id value = global_var:nd_claim_counter }
+						set_variable = { name = nd_claim_true value = 0 }
+						set_variable = { name = nd_strike_claim_id value = global_var:nd_claim_counter days = 30 }
+					}
+					if = {
+						limit = { var:nd_claim_kind = 1 }
+						scope:target_country = {
+							set_variable = { name = nd_claim_true value = 1 }
+						}
+						nd_log_context = yes
+						debug_log = "TE_NUCLEAR: type=claim; truth=true; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+					}
+					else = {
+						nd_log_context = yes
+						debug_log = "TE_NUCLEAR: type=claim; truth=false; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+					}
+				}
+				if = {
+					limit = { var:nd_claim_kind > 0 }
+					nd_claim_schedule_truth = yes
+				}
+				remove_variable = nd_claim_kind
+			}
+		}
+	}
+}
+
+# The truth comes out (rework spec §5.4): six to eighteen months later, or three
+# to nine with a covert network of intel tier 1 or more in the launcher
+# (sr_has_intel_tier), the struck country learns whether the launch was
+# ordered: nuclear_weapon_events.28 (it was not) or .29 (it was, and the
+# launcher is told, .30). trigger_event takes one literal delay, so each delay
+# is a branch. Launcher scope, inside nd_record_claim (nd_claim_kind set).
+nd_claim_schedule_truth = {
+	save_scope_as = nd_truth_launcher
+	scope:target_country = {
+		save_scope_as = nd_truth_victim
+		if = {
+			limit = { scope:nd_truth_launcher = { var:nd_claim_kind = 1 } }
+			if = {
+				limit = { sr_has_intel_tier = { TARGET = scope:attacking_country TIER = 1 } }
+				random_list = {
+					1 = { trigger_event = { id = nuclear_weapon_events.28 days = 90 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.28 days = 180 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.28 days = 270 } }
+				}
+			}
+			else = {
+				random_list = {
+					1 = { trigger_event = { id = nuclear_weapon_events.28 days = 180 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.28 days = 270 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.28 days = 365 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.28 days = 455 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.28 days = 545 } }
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_has_intel_tier = { TARGET = scope:attacking_country TIER = 1 } }
+				random_list = {
+					1 = { trigger_event = { id = nuclear_weapon_events.29 days = 90 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.29 days = 180 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.29 days = 270 } }
+				}
+			}
+			else = {
+				random_list = {
+					1 = { trigger_event = { id = nuclear_weapon_events.29 days = 180 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.29 days = 270 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.29 days = 365 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.29 days = 455 } }
+					1 = { trigger_event = { id = nuclear_weapon_events.29 days = 545 } }
+				}
+			}
+		}
+	}
+}
+
+# The struck country's claim record goes once its truth is out (victim scope,
+# scope:nd_truth_launcher saved): only this launcher's.
+nd_claim_clear = {
+	if = {
+		limit = { var:nd_claim_by ?= scope:nd_truth_launcher }
+		remove_variable = nd_claim_by
+		if = {
+			limit = { has_variable = nd_claim_true }
+			remove_variable = nd_claim_true
+		}
+		if = {
+			limit = { has_variable = nd_claim_id }
+			remove_variable = nd_claim_id
+		}
+		if = {
+			limit = { has_variable = nd_claim_accepted }
+			remove_variable = nd_claim_accepted
+		}
+		if = {
+			limit = { has_variable = nd_claim_believed }
+			remove_variable = nd_claim_believed
+		}
+	}
+}
+
 # Record a nuclear use by this country against $VICTIM$, once per launch
 # (§11). Country scope = the attacker.
 nd_record_nuclear_use = {
@@ -2015,6 +2195,19 @@ nd_record_nuclear_use = {
 	nd_log_context = yes
 	debug_log = "TE_NUCLEAR: type=action; action=nuclear_use; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	hidden_effect = {
+		# A strike outside a war (rework spec §8.5, dispute 6): the struck
+		# country remembers its striker for two years. Not an answer to the
+		# victim's own first strike: the country that fired first has no
+		# grievance against the one that answered.
+		if = {
+			limit = {
+				NOT = { has_war_with = $VICTIM$ }
+				NOT = { nd_was_struck_by = { ENEMY = $VICTIM$ } }
+			}
+			$VICTIM$ = {
+				set_variable = { name = nd_peacetime_struck_by value = scope:nd_rec_attacker days = 730 }
+			}
+		}
 		# A pledge is breached unless the victim struck first; either way the
 		# pledge is gone.
 		if = {

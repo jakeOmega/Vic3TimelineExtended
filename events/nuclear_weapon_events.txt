@@ -11,7 +11,18 @@ nuclear_weapon_events.1 = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	title = nuclear_weapon_events.1.t
-	desc = nuclear_weapon_events.1.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_strike_carries_claim = { ENEMY = scope:attacking_country } }
+				desc = nuclear_weapon_events.1.d_claim
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.1.d
+			}
+		}
+	}
 	flavor = nuclear_weapon_events.1.f
 
 	duration = 3
@@ -22,6 +33,35 @@ nuclear_weapon_events.1 = {
 
 	immediate = {
 		post_notification = industrial_nuke_succeeds_defender
+		# A claim that the launch was unauthorized (rework spec §5.4): an AI
+		# decides once per claim, not once per warhead, whether it believes it
+		# (nd_claim_belief_value).
+		if = {
+			limit = {
+				is_ai = yes
+				nd_strike_carries_claim = { ENEMY = scope:attacking_country }
+				NOT = {
+					AND = {
+						has_variable = nd_claim_belief_rolled_for
+						var:nd_claim_belief_rolled_for = var:nd_claim_id
+					}
+				}
+			}
+			set_variable = { name = nd_claim_belief_rolled_for value = var:nd_claim_id }
+			set_variable = { name = nd_claim_believed value = 0 }
+			random = {
+				chance = nd_claim_belief_value
+				set_variable = { name = nd_claim_believed value = 1 }
+			}
+			nd_log_context = yes
+			if = {
+				limit = { var:nd_claim_believed = 1 }
+				debug_log = "TE_NUCLEAR: type=claim_belief; believed=yes; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			}
+			else = {
+				debug_log = "TE_NUCLEAR: type=claim_belief; believed=no; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			}
+		}
 	}
 
 	# Absorb the blow. Not offered when an Automatic Retaliation system has the
@@ -216,6 +256,52 @@ nuclear_weapon_events.1 = {
 		}
 		scope:target_country = {
 			nd_record_nuclear_use = { VICTIM = scope:attacking_country }
+		}
+	}
+
+	# They say it was unauthorized (rework spec §5.4): accept it, hold back and
+	# demand reparations. Not when Automatic Retaliation has the answer in
+	# hand. The truth comes out later (nd_claim_schedule_truth). An AI takes it
+	# when it believed the claim.
+	option = {
+		name = nuclear_weapon_events.1.k
+		# This strike's claim, once: a later warhead of the same strike does
+		# not send a second demand. Hidden where absorbing (a) is: an
+		# Automatic Retaliation system answers on its own.
+		trigger = {
+			nd_strike_carries_claim = { ENEMY = scope:attacking_country }
+			NOT = {
+				AND = {
+					has_variable = nd_claim_accepted
+					var:nd_claim_accepted = var:nd_claim_id
+				}
+			}
+			NOT = { scope:target_country = { nd_auto_answers_strike = { ENEMY = scope:attacking_country } } }
+			NOT = {
+				scope:target_country = {
+					nd_authority_automatic = yes
+					nd_is_armed = yes
+					nd_forces_assembled = no
+				}
+			}
+		}
+		custom_tooltip = nuclear_weapon_events.1.k.tt
+		set_variable = { name = nd_claim_accepted value = var:nd_claim_id }
+		hidden_effect = {
+			save_scope_as = nd_claim_victim
+			scope:attacking_country = { trigger_event = { id = nuclear_weapon_events.27 days = 3 } }
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					has_variable = nd_claim_belief_rolled_for
+					var:nd_claim_belief_rolled_for = var:nd_claim_id
+					has_variable = nd_claim_believed
+					var:nd_claim_believed = 1
+				}
+				add = 100
+			}
 		}
 	}
 
@@ -2556,6 +2642,234 @@ nuclear_weapon_events.26 = {
 		default_option = yes
 		ai_chance = {
 			base = 1
+		}
+	}
+}
+
+# ---- .27 Reparations Demanded --------------------------------------------------
+# To a launcher whose claim that a strike was unauthorized the struck country
+# accepted (nuclear_weapon_events.1.k; rework spec §5.4): pay by the
+# loose-warhead formula (nd_loose_compensation_value) or refuse. ROOT is the
+# launcher; scope:nd_claim_victim the struck country.
+nuclear_weapon_events.27 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_weapon_events.27.t
+	desc = nuclear_weapon_events.27.d
+	flavor = nuclear_weapon_events.27.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nd_claim_victim
+		scope:nd_claim_victim = { is_country_alive = yes }
+	}
+
+	# The parties for the sum (nd_loose_compensation_value), saved in a real
+	# run so the Pay option's tooltip shows it.
+	immediate = {
+		save_scope_as = nd_loose_payer
+		scope:nd_claim_victim = { save_scope_as = nd_loose_claimant }
+	}
+
+	# Pay. The sum is read twice, not stored and read back (the tooltip walks
+	# the option and writes nothing); our income does not move with our
+	# treasury, so both reads agree. Paid, the strike is settled: the victim
+	# cannot also open a crisis over it (dispute 6).
+	option = {
+		name = nuclear_weapon_events.27.a
+		default_option = yes
+		add_treasury = {
+			value = nd_loose_compensation_value
+			multiply = -1
+		}
+		scope:nd_claim_victim = {
+			add_treasury = nd_loose_compensation_value
+			change_relations = { country = ROOT value = 20 }
+			hidden_effect = {
+				if = {
+					limit = { var:nd_peacetime_struck_by ?= ROOT }
+					remove_variable = nd_peacetime_struck_by
+				}
+			}
+		}
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = {
+					scope:nd_claim_victim = {
+						has_variable = nd_claim_true
+						var:nd_claim_true = 1
+					}
+				}
+				add = 4
+			}
+		}
+	}
+
+	# Refuse.
+	option = {
+		name = nuclear_weapon_events.27.b
+		scope:nd_claim_victim = {
+			change_relations = { country = ROOT value = -30 }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 3
+			}
+		}
+	}
+}
+
+# ---- .28 It Was an Accident ------------------------------------------------------
+# The truth about a claim (rework spec §5.4): the launch was never ordered.
+# ROOT is the struck country; scope:nd_truth_launcher the launcher. Had we
+# rejected the claim, we may make it up with them.
+nuclear_weapon_events.28 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_weapon_events.28.t
+	desc = nuclear_weapon_events.28.d
+	flavor = nuclear_weapon_events.28.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nd_truth_launcher
+		exists = scope:nd_truth_victim
+		scope:nd_truth_launcher = { is_country_alive = yes }
+		scope:nd_truth_victim = { is_country_alive = yes }
+	}
+
+	immediate = {
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=claim_truth; truth=true; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+	}
+
+	option = {
+		name = nuclear_weapon_events.28.a
+		default_option = yes
+		nd_claim_clear = yes
+	}
+
+	# We did not believe them. Now we know.
+	option = {
+		name = nuclear_weapon_events.28.b
+		trigger = {
+			NOT = {
+				AND = {
+					has_variable = nd_claim_id
+					has_variable = nd_claim_accepted
+					var:nd_claim_accepted = var:nd_claim_id
+				}
+			}
+		}
+		change_relations = { country = scope:nd_truth_launcher value = 30 }
+		nd_claim_clear = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				factor = 0.5
+			}
+		}
+	}
+}
+
+# ---- .29 It Was No Accident ------------------------------------------------------
+# The launch was ordered after all. ROOT is the struck country; the launcher
+# hears it in .30, whose option carries the cost.
+nuclear_weapon_events.29 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_weapon_events.29.t
+	desc = nuclear_weapon_events.29.d
+	flavor = nuclear_weapon_events.29.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nd_truth_launcher
+		exists = scope:nd_truth_victim
+		scope:nd_truth_launcher = { is_country_alive = yes }
+		scope:nd_truth_victim = { is_country_alive = yes }
+	}
+
+	immediate = {
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=claim_truth; truth=false; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		scope:nd_truth_launcher = { trigger_event = { id = nuclear_weapon_events.30 } }
+	}
+
+	option = {
+		name = nuclear_weapon_events.29.a
+		default_option = yes
+		custom_tooltip = nuclear_weapon_events.29.a.tt
+		nd_claim_clear = yes
+	}
+}
+
+# ---- .30 Our Lie Is Exposed ------------------------------------------------------
+# To a launcher whose false claim the struck country has seen through (.29).
+# The option carries the cost, so its tooltip shows it.
+nuclear_weapon_events.30 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_weapon_events.30.t
+	desc = nuclear_weapon_events.30.d
+	flavor = nuclear_weapon_events.30.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nd_truth_launcher
+		exists = scope:nd_truth_victim
+		scope:nd_truth_launcher = { is_country_alive = yes }
+		scope:nd_truth_victim = { is_country_alive = yes }
+	}
+
+	option = {
+		name = nuclear_weapon_events.30.a
+		default_option = yes
+		custom_tooltip = {
+			text = nd_tt_credibility_down_20
+			nd_change_credibility = { AMOUNT = -20 }
+		}
+		change_infamy = nd_taboo_infamy_threat
+		change_relations = { country = scope:nd_truth_victim value = -50 }
+		custom_tooltip = {
+			text = nd_tt_false_claim_marked
+			change_variable = { name = nd_false_claims add = 1 }
 		}
 	}
 }

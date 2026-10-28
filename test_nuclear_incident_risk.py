@@ -256,6 +256,31 @@ class TestObserverRework(unittest.TestCase):
         self.assertIn("nd_crisis_acute_logged", crisis[crisis.index("nd_crisis_clear_vars = {"):])
 
 
+class TestObserverClaims(unittest.TestCase):
+    """Claims made, believed and found out (rework spec §11, phase 2)."""
+
+    def test_claim_counters(self):
+        lines = [
+            "TE_NUCLEAR: type=claim; truth=true; country=A; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=claim; truth=false; country=B; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=claim; truth=false; country=B; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=claim_belief; believed=yes; country=C; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=claim_belief; believed=no; country=D; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=claim_truth; truth=false; country=D; crisis=0; exchange=0\n",
+        ]
+        report = summarize(read_records(lines))
+        self.assertEqual(report["claims"], {"true": 1, "false": 2})
+        self.assertEqual(report["claims_believed"], 1)
+        self.assertEqual(report["claims_doubted"], 1)
+        self.assertEqual(report["lies_exposed"], 1)
+
+    def test_belief_logged_in_the_roll(self):
+        events = strip_comments(read(ROOT / "events/nuclear_weapon_events.txt"))
+        imm = block(block(events, "nuclear_weapon_events.1"), "immediate")
+        self.assertIn("type=claim_belief; believed=yes", imm)
+        self.assertIn("type=claim_belief; believed=no", imm)
+
+
 class TestCrisisAndWarModel(unittest.TestCase):
     """The rework spec's §2.3 Acute-crisis table, the war-year and the
     peacetime pair-year (2026-10-28 rework spec §2, §11)."""

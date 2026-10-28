@@ -1439,6 +1439,42 @@ nuclear_crisis.24 = {
 	}
 }
 
+# ---- .25 Hidden: the Suez self-check ---------------------------------------------
+# A day after the first war concession that dropped goals (nd_crisis_concede_war,
+# rework spec §8.1): does the yielding side still hold a goal against the other
+# side? Read a day later, as the probe read its removals (2026-10-28), not in
+# the block that removed them. If the war is already over, nothing is judged
+# and the next concession checks again, so an ended war cannot read as OK. A
+# goal script added stays (the probe), and a goal from another war between the
+# two counts too, so read a BROKEN line against the war it names
+# (docs/testing/nuclear-playtest.md).
+nuclear_crisis.25 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = nd_suez_check_other
+	}
+
+	immediate = {
+		var:nd_suez_check_other = { save_scope_as = nd_suez_check_other }
+		if = {
+			limit = { has_war_with = scope:nd_suez_check_other }
+			if = {
+				limit = { nd_side_holds_any_goal_against = { TARGET = scope:nd_suez_check_other } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_suez_goals: the side of [THIS.GetCountry.GetNameNoFormatting] still holds a goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_suez_goals: the side of [THIS.GetCountry.GetNameNoFormatting] holds no goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal"
+			}
+		}
+		else = {
+			remove_global_variable = nd_suez_self_check_done
+		}
+		remove_variable = nd_suez_check_other
+	}
+}
+
 # ---- .99 Hidden: an AI party reviews its posture --------------------------------
 # Fired by nd_crisis_ai_review so that the posture effects run with this
 # country as ROOT (nuclear_deterrence_effects.txt, "ROOT").
