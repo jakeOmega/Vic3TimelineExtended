@@ -38,6 +38,7 @@
 | E6 | A truth event follows only a claim. Delays: 180/270/365/455/545 days; with the victim's covert intel tier 1 on the launcher (`sr_has_intel_tier`), 90/180/270 | "Six to eighteen months, sooner with an established network" |
 | E7 | AI belief = 40 + relations ÷ 4 + 20 if one warhead landed − 20 if the launcher is our Acute-crisis opponent − 30 × the launcher's `nd_false_claims`, clamped 5–90; rolled once per claim in `.1`'s `immediate` into `nd_claim_believed` | `random = { chance = <script value> }` works (`nd_roll_launch_hold`) |
 | E8 | Accepting a claim: hold back (`.1.a`'s effects) and demand reparations; the launcher gets an event: pay (the formula) or refuse (relations −30). The answer-with-one-warhead path keeps its option (`.1.b`) | Spec's "holding back or answering with one warhead" |
+| E10 | The AI's lie rate also reads the ruler's traits (owner, 2026-10-28: "see if there is any deceitful type traits"; vanilla has none named so): ×1.5 Ruthless, ×1.5 Grifter, ×0.25 Honorable, ×0.5 Direct, multiplied with the aggressive and taboo factors | Thematic fit: Ruthless "whatever steps are necessary", Grifter pockets public funds, Honorable "a high personal standard", Direct "straightforward"; Tactful (careful with information) is spin, not lying |
 | E9 | The posture toggle is two new ops of `nd_posture_sgui` (70 on, 71 off) in the Posture section, a row like the steppers; it applies to deliberate first strikes ordered while on | Owner's choice |
 
 ---
@@ -64,7 +65,7 @@
 
 ### Task 3: The claim (§5.4)
 
-**Files:** `nd_dispatch_strategic_strike` / `nd_launch_or_intercept` (`nuclear_deterrence_effects.txt`), `nuke.txt`'s strategic strike (`nuclear_first_strike` direct call), new `nd_record_claim` effect, `nd_ai_lies_value` (values: 15, ×2 aggressive, ×0.5 taboo ≥ 50), the posture toggle (`nd_posture_sgui` ops 70/71, widget row, loc, `journal_entry_systems.md` op table), observer records `type=claim`.
+**Files:** `nd_dispatch_strategic_strike` / `nd_launch_or_intercept` (`nuclear_deterrence_effects.txt`), `nuke.txt`'s strategic strike (`nuclear_first_strike` direct call), new `nd_record_claim` effect, `nd_ai_lies_value` (values: 15, ×2 aggressive, ×0.5 taboo ≥ 50, and E10's traits), the posture toggle (`nd_posture_sgui` ops 70/71, widget row, loc, `journal_entry_systems.md` op table), observer records `type=claim`.
 
 **Interfaces:** Produces the E5 record on the victim; `nd_disavow_strikes` (country var) set by the toggle. A claim is made when: the launch is unordered (true); or a deliberate first strike by a human with `nd_disavow_strikes` (false); or by the AI on an armed target with one warhead, rolled `nd_ai_lies_value` (false). Answers never claim.
 
