@@ -750,6 +750,44 @@ class TestFinalReviewFixesPhase1(unittest.TestCase):
         self.assertIn("Var('nd_survivors_main').GetValue|1", loc_value("nd_w_survivors_value"))
 
 
+class TestSuezConcession(unittest.TestCase):
+    """Yielding in a war drops the target's side's goals against the other
+    side and costs 15 war support (2026-10-28 rework spec §8.1)."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.triggers = strip_comments(read(TRIGGERS))
+
+    def test_concession_drops_goals_and_15_support(self):
+        body = block(self.crisis, "nd_crisis_concede_war")
+        self.assertIn("value = -15", body)
+        self.assertNotIn("value = -35", body)
+        self.assertIn("nd_crisis_drop_goals = { WHO = target }", body)
+        self.assertIn("nd_crisis_drop_goals = { WHO = initiator }", body)
+        drop = block(self.crisis, "nd_crisis_drop_goals")
+        for typ in ("conquer_state", "annex_country", "humiliation", "make_protectorate", "te_reunify_country"):
+            self.assertIn(f"remove_war_goal = {{ who = $WHO$ type = {typ} }}", drop, typ)
+        self.assertIn("diplomatic_play = {", drop)
+
+    def test_concession_without_goals_is_war_support_only(self):
+        body = block(self.crisis, "nd_crisis_concede_war")
+        support = body.index("add_war_war_support")
+        self.assertNotIn("nd_side_holds_any_goal_against", body[max(0, support - 200):support])
+
+    def test_concession_side_from_defending_side(self):
+        body = block(self.crisis, "nd_crisis_concede_war")
+        self.assertIn("is_on_defending_side = scope:nd_target", body)
+
+    def test_suez_self_check_line(self):
+        body = block(self.crisis, "nd_crisis_concede_war")
+        self.assertIn("TE_SELF_CHECK OK nd_suez_goals", body)
+        self.assertIn("TE_SELF_CHECK BROKEN nd_suez_goals", body)
+        self.assertIn("war_side_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }",
+                      block(self.triggers, "nd_side_holds_any_goal_against"))
+        self.assertNotIn("35", loc_value("nd_tt_yield_war"))
+        self.assertIn("15", loc_value("nd_tt_yield_war"))
+
+
 class TestOutcomeNotice(unittest.TestCase):
     def setUp(self):
         self.effects = strip_comments(read(CRISIS_EFFECTS))

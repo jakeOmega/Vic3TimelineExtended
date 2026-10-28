@@ -1880,6 +1880,56 @@ nd_side_holds_goal_against = {
 	}
 }
 
+# Country scope: does our side in a war hold any goal against $TARGET$? The
+# war concession's test (nd_crisis_concede_war), before and after it drops them.
+nd_side_holds_any_goal_against = {
+	OR = {
+		war_side_has_war_goal_of_type_against = { type = annex_country target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = ban_slavery target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = colonization_rights target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = contain_threat target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = enforce_treaty_article target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = force_nationalization target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = foreign_investment_rights target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = increase_autonomy target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = independence target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = join_power_bloc target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = leave_power_bloc target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = liberate_country target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = liberate_subject target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_dominion target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_protectorate target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_tributary target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = open_market target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = reduce_autonomy target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = revoke_all_claims target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = revoke_claim target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = secession target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = take_treaty_port target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = transfer_subject target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = unification_leadership target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = restore_union target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = demand_strait_access target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = demand_toll_exemption target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = demand_no_tolls target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = demand_no_strait_closure target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_personal_union target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_chartered_company target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_crown_land target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = break_enforced_treaties target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = release_as_subject target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = te_colonial_independence target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = te_colonial_reconquest target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = te_un_mandate_restore_state target = $TARGET$ }
+	}
+}
+
 # The public form: an AI that means it and can afford the audience cost.
 nd_ai_would_issue_ultimatum = {
 	nd_ai_would_warn = { TARGET = $TARGET$ }
