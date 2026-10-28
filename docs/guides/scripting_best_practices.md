@@ -3710,6 +3710,8 @@ option = {
 
 The `?=` operator is exists-aware: `scope:foo ?= this` returns false if `scope:foo` doesn't exist, true if it exists and equals `this`. This lets the same option block work across event topics that don't all set the same saved scope.
 
+It guards its left side only. Vanilla also writes it with a number on the right (`scope:ig.var:promise_quest_type ?= 4`, `negotiation_values.txt`), but neither vanilla nor the mod writes a `var:` on the right (2026-10-28), so whether `var:a ?= var:b` compares two numbers is unverified. Compare two variables in the guarded form instead: `has_variable = a  var:a = var:b`, with the right-hand variable known set (`nuclear_weapon_events.1`'s belief roll and option k).
+
 **Vanilla example:** `iberia_events/carlist_war_events.txt` carlist_war.1 — uses the pattern with `c:SPA ?= this` and `c:SPC ?= this`. Hard to find by grep because almost no other vanilla event uses it; remember the file path.
 
 **Repo example:** `events/un_vote_events.txt` un_vote.1 options A and B — target-perspective labels keyed off `scope:un_vote_target ?= this`.
