@@ -1,6 +1,6 @@
 # Nuclear Crisis Rework: Survivability, Launch Authority, Accidental Risk and Crisis Subjects — Design
 
-> **Status: design, nothing built (2026-10-28).** Baseline `main` at c760baf. The owner's calls from the 2026-10-28 review are §1; everything else is a proposal, and every number is a first tuning value. Engine facts the design rests on but nobody has verified are §12, each with a fallback. Per the owner they are checked in game while building, not before it.
+> **Status: phase 1 built (2026-10-28, branch `feat/nuclear-rework-p1`; plan `docs/superpowers/plans/2026-10-28-nuclear-crisis-rework-phase1.md`); phases 2–4 designed, not built.** Owner answers to §14.1 (confirmed) and §14.2 (launch authority is public) are in §14. Baseline `main` at c760baf. The owner's calls from the 2026-10-28 review are §1; everything else is a proposal, and every number is a first tuning value. Engine facts the design rests on but nobody has verified are §12, each with a fallback. Per the owner they are checked in game while building, not before it.
 > Read first: [`docs/systems/nuclear_crisis_design.md`](../../systems/nuclear_crisis_design.md) §0, what shipped. This doc changes its §0.2–§0.5. When a phase ships, update §0 there, chapter 14 of the player guide and `docs/testing/nuclear-playtest.md`.
 
 ## 0. Why
@@ -335,8 +335,8 @@ Each phase updates `nuclear_crisis_design.md` §0, chapter 14 and the play-test 
 
 ## 14. Open questions
 
-1. §5.3 reverses part of the 2026-09-26 ruling: the government may order a launch under attack outside a war, in an Acute crisis, under any doctrine but No First Use. Confirm.
-2. Is launch authority public, as doctrine is? §5.4's belief and §3.3's three-quarters rule assume it is.
+1. §5.3 reverses part of the 2026-09-26 ruling: the government may order a launch under attack outside a war, in an Acute crisis, under any doctrine but No First Use. **Confirmed by the owner, 2026-10-28.**
+2. Is launch authority public, as doctrine is? §5.4's belief and §3.3's three-quarters rule assume it is. **Public (owner, 2026-10-28).**
 3. A salvo's taboo knock and UN record: how much each further warhead adds.
 4. The AI's weights for Forces and Leadership missions, and how often it lies in a claim.
 5. K's values against the arsenal sizes the AI builds.

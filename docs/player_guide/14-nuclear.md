@@ -49,7 +49,7 @@ button beside each of its three rows.
 | Nuclear Crisis | You are in a crisis | A line naming your opponent, your side and the dispute; boxes for the stage, the weeks to the deadline, danger, pressure, whether the threat can be carried out and when the target is pressed next; your buttons under Our Moves; then Outcomes, what each ending would bring and do to your credibility |
 | World Crises | Any crisis is running, anywhere | Every crisis, yours included and tinted, most dangerous first: the two countries' flags, the stage and the danger; hover a row for who threatened whom, the dispute, the deadline, any talks and whether it is public. Private warnings are listed too, since governments know of them even when the public doesn't |
 | Nuclear Posture | You hold warheads | Doctrine, readiness (with the level it is moving to) and launch authority, each with a Change button that opens its choices; your nuclear umbrella, warheads unaccounted for, upkeep and incident exposure |
-| Forces | You hold warheads | Survivability, command reliability, crew strain and the chance of a halt; safeguards and hardening under Investment; under Arsenal Size, warheads held beside the world's estimate, your arsenal ceiling and dismantling |
+| Forces | You hold warheads | Survivability, first-strike survivors against your main rival, command reliability, crew strain and the chance of a halt; safeguards and hardening under Investment; under Arsenal Size, warheads held beside the world's estimate, your arsenal ceiling and dismantling |
 | At Home | You hold warheads | A small table for each interest group with a view of your posture |
 | Reputation | You have a record | How your last crisis ended and your non-use pledges (your credibility is in the overview) |
 | The Nuclear Taboo | From the world's first warhead | The score, where it is heading and its band, what nuclear acts cost now, your arsenal's burden, and The Taboo Over Time, its history in two charts |
@@ -164,16 +164,23 @@ weekly total, and each readiness choice and investment row its own weekly cost.
 The Forces section tracks three numbers on a 0–100 scale, updated monthly, and
 two investment steppers from 0 to 3, Safeguards and Hardening.
 
-- Survivability is how much of your force would survive a first strike. It climbs toward a ceiling set by technology (25, plus 15 for Radar, 20 for Intercontinental Ballistic Missiles, 25 for Advanced Submarine Technology and 10 for Missile Defense Systems) only while you pay for hardening, and erodes when you stop. Its bar shows where it is heading: a green stretch while it climbs, a red one while it erodes, and a cream line at the ceiling.
+- Survivability is how much of your force would survive a first strike. It climbs toward a ceiling set by technology (25, plus 15 for Radar, 20 for Intercontinental Ballistic Missiles, 25 for Advanced Submarine Technology and 10 for Missile Defense Systems, at most 80) only while you pay for hardening, and erodes when you stop. Its bar shows where it is heading: a green stretch while it climbs, a red one while it erodes, and a cream line at the ceiling.
 - Command reliability is how well the chain of command holds. Each safeguards level raises it by about 12; strain, buried incidents and enemy sabotage lower it.
 - Crew strain rises 5 a month at High Alert, settles around 40 at Heightened, and falls 6 a month at Routine or Recessed.
 
 Safeguards also make an unapproved launch likelier to be halted and cut the
-warheads lost when your arsenal changes hands. Survivability decides how hard
-you are to coerce, at your present readiness: a crisis counts all of it at High
-Alert, nine tenths at Heightened, four fifths at Routine and half at Recessed.
-At 50 or more after that, threats against you carry much less weight. The
-Survivability tooltip shows the figure that counts now.
+warheads lost when your arsenal changes hands. A crisis counts survivability at
+your present readiness: all of it at High Alert, nine tenths at Heightened, four
+fifths at Routine and half at Recessed. The Survivability tooltip shows the
+figure that counts now.
+
+What decides how hard you are to coerce is how many warheads you would have
+left if your main rival spent its whole arsenal, as far as you know it, on
+yours: First-strike survivors, in the Forces section. Its hover shows how many
+of your warheads are within reach, what the rival could destroy, and the share
+your launch authority would get away first. Three survivors make a full
+answer, and a crisis weighs threats against you by them. Below 50, survivability
+also makes a crisis more dangerous and a launch less likely to be halted.
 
 ### Delivery capability and home defense
 
@@ -266,18 +273,28 @@ once a year.
 
 | Authority | Needs | Effect |
 |---|---|---|
-| Central Authorization | Nothing | Only the government orders a launch |
-| Conditional Delegation | Radar | Cut-off commanders may fire, even at peace. In a war, a false warning can also end in a launch you never approved |
-| Launch on Warning | Radar, Intercontinental Ballistic Missiles | A false warning can become a launch under standing orders |
-| Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you. Threats against you count as if your forces were survivable. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
+| Central Authorization | Nothing | Only the government orders a launch. A strike on the capital could cut the chain of command, so a crisis counts your survivors at three quarters against an issuer believed to hold enough warheads |
+| Conditional Delegation | Radar | A quarter of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level. Cut-off commanders may fire, even at peace. In a war, a false warning can also end in a launch you never approved |
+| Launch on Warning | Radar, Intercontinental Ballistic Missiles | 60% of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level. A false warning can become a launch under standing orders |
+| Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you, from whatever survives. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
+
+Delegation with full safeguards is about as risky as Central Authorization with
+none, and makes you harder to coerce. Hardening is the slow, costly, safe way
+to the same end: survivability's ceiling is 80, and the last stretch of
+security comes from a faster launch authority.
 
 The Forces section's Chance of a halt row is the chance that someone in the
 chain halts a launch begun under delegation or launch on warning, or an accident
 that Automatic Retaliation reads as an attack. Under Central Authorization it
-reads "not delegated". It rises by
-25 points at peace with no crisis and by 10 in a Warning or Confrontation,
-since a sudden attack makes little sense then; an Acute crisis or a war gives
-no such benefit of the doubt. Automatic
+reads "not delegated". It starts from 53 plus half your command reliability
+and rises by 25 points at peace with no crisis and by 10 in a Warning or
+Confrontation, since a sudden attack makes little sense then; an Acute crisis
+or a war gives no such benefit of the doubt. It also rises 20 when the
+suspected attacker's warheads are in storage and 10 while crisis talks are
+open, and falls 5 when the suspect is at High Alert and up to 10 when your own
+forces could not ride out a strike. Nothing makes it certain: it is at most 97%
+at peace, 92% in a Warning or Confrontation and 85% in an Acute crisis or a
+war. Automatic
 Retaliation never answers a retaliation, and answers a given attacker at most
 once in six months.
 
@@ -368,7 +385,7 @@ concede.
 | A war between you | −35 war support in that war |
 | A diplomatic play between you | It backs down, and the play should end in your favor |
 | A play or war between the target and a country you cover, when you are not a party to it | The same, on your protégé's behalf |
-| A weapons program run by your rival, or by a country you are antagonistic, belligerent or domineering toward | Its program is frozen for 10 years |
+| A weapons program run by a country the world believes unarmed that is your rival, or that you are antagonistic, belligerent or domineering toward | Its program is frozen for 10 years |
 | An armed rival at Heightened readiness or higher | It stands down to Routine for 24 months |
 
 Only conceding binds the target. Cutting its program's funding to zero, setting
@@ -390,8 +407,8 @@ broken down in their tooltips: Danger, and Pressure on the target (Pressure on
 us when you are the target), each a word over the figure. Pressure reads Firm
 below 50, Wavering from 50, Yielding from 70 and Breaking from 85.
 
-- Danger (0–100) rises with the stage, time, publicity, readiness, poor command reliability, counter-threats and exercises, and falls with open talks. It is lower when the target has no arsenal and no armed protector. High danger makes incidents likelier.
-- Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind (its survivability at its present readiness, or Automatic Retaliation) and an armed protector behind it lower it. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
+- Danger (0–100) rises with the stage, time, publicity, readiness, poor command reliability, counter-threats, exercises and a vulnerable force on either side (up to +10 at survivability 0), and falls with open talks. It is lower when the target has no arsenal and no armed protector. High danger makes incidents likelier.
+- Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind (up to −25, for three warheads that would survive the issuer's whole arsenal) and an armed protector behind it lower it, as does a threat from an issuer the armed target could disarm first (up to −15). So do the demands at stake: an annexation −30, a subjugation −20, each state −10 and each lesser goal −4, at most −40; the AI won't make a demand so large that it alone keeps an AI target from conceding. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
 
 From Confrontation on, the target is pressed every six weeks unless talks are
 open.
@@ -459,6 +476,11 @@ Called In":
 | Honor | +5 credibility. Under threat, you back the target. After a strike, you join its war, or open a public crisis against the attacker if there is no war to join |
 | Retaliate (after a strike) | +10 credibility; you join the war and, if you are at war with the attacker a day later, strike back then, as retaliation, under any doctrine |
 | Abandon | −15 credibility, Abandoned a Nuclear Guarantee for five years, −30 relations with the protégé and −10 with everyone else you protect; a subject gains 10 liberty desire |
+
+An armed country fighting a war beside an unarmed one covers it against their
+common enemy for that war, with no treaty: it hears the same call, and its
+answer counts as a protector's. Nothing was promised, so walking away costs it
+only 5 credibility.
 
 If your protégé used the bomb first and its victim answered, you get "Our
 Protégé Struck First" instead. Standing by it or answering in kind costs 5
@@ -544,16 +566,25 @@ Flexible First Use raises exposure by 15%, Compellence by 35% and Warfighting by
 60%. These are chances of an incident, not of nuclear use.
 
 Crisis danger adds a separate weekly exposure to that base. At High Alert it
-adds 0.5% at danger 25–49, 5% at 50–74 and 17.5% at 75–100, before the same
-modifiers. Heightened takes six tenths of that addition and Routine one
+adds 0.5% at danger 25–49, 3.5% at 50–74 and 8.5% at 75–100, before the same
+modifiers. A war with an enemy believed armed adds the same as danger 50–74, or
+as 75–100 when either side holds goals on the other's incorporated states, is
+losing, or has been struck; alongside a crisis the higher applies. Heightened takes six tenths of that addition and Routine one
 quarter. This crisis exposure only ever produces a misreading (a false warning,
 a mistaken exercise or a commander cut off), never a weapons accident, so it
 needs one of those to be possible: none is at Recessed, and at Routine only a
 cut-off commander under delegation or launch on warning is. Meaningful exposure
 is capped at 35% per country per week. The Nuclear Posture section's incident
 exposure reads Extreme in a dangerous crisis. Two High Alert countries at danger 75 or higher, with reliability 60,
-no strain and Existential Deterrence, have about a 50% chance of at least one
+no strain and Existential Deterrence, have about a 28% chance of at least one
 meaningful incident over two weekly checks each.
+
+No posture is safe. Over an eight-week Acute crisis between two such powers,
+the chance that one of them launches when nobody attacked runs from about 2%
+(Central Authorization with full safeguards) through about 5% (Delegation with
+full safeguards, or Central with none) to about 27% (Launch on Warning with
+none). A year of war with an armed enemy carries about 9%, about 19% when the
+war threatens either side.
 
 Routine mishaps have their own monthly roll: 0.2% at Recessed, 0.5% at Routine,
 1% at Heightened and 2% at High Alert. After one, no other comes for five years.
@@ -563,7 +594,7 @@ They do not replace a meaningful incident.
 |---|---|---|
 | A false warning ("Conflicting Indications") | Radar, Heightened or higher, and a plausible armed opponent | An early warning that no second source confirms. Launch on Warning, or delegation in a war with the suspected attacker, can execute it without another order; otherwise the government decides |
 | The Exercise They Mistook | A crisis at Confrontation or beyond, Heightened or higher | Your opponent reads your exercise as cover for an attack |
-| Silence from the Capital | Delegation or Launch on Warning, assembled weapons, and war, an Acute crisis or a heightened force facing a plausible attacker | A commander cut off from the capital; another officer refuses, or the unit fires. War or Acute crisis makes this family six times as likely in the incident draw |
+| Silence from the Capital | Delegation or Launch on Warning, assembled weapons, and war, an Acute crisis or a heightened force facing a plausible attacker | A commander cut off from the capital; another officer refuses, or the unit fires. Slightly likelier in the incident draw in a war or an Acute crisis |
 | A Weapons Accident | Any armed posture; six times more weight after six months at High Alert or strain of 60 or more | Crashes, silo explosions, lost weapons, a contaminated state or failed maintenance |
 | A Routine Mishap | Separate monthly roll | Base alarms, dropped training weapons and storms; cannot launch |
 
@@ -572,9 +603,11 @@ professional skepticism make launch sequences easier to halt. A buried incident
 has a 3% chance each month of coming out (Nuclear Cover-Up Exposed: −10 legitimacy,
 −10% authority, −5% prestige).
 
-When the government decides on a false warning, Give the launch order still
-requires an existing war and every test for a deliberate strike. Central
-Authorization cannot launch without this decision. Launch on Warning and
+When the government decides on a false warning, Give the launch order needs a
+war with the suspected attacker or an Acute crisis against it, and every test
+for a deliberate strike except the doctrine, which only No First Use blocks. If
+the warning was false, the launch is a first use. Central Authorization cannot
+launch without this decision. Launch on Warning and
 isolated delegated commanders can fire without it, including at peace.
 Automatic Retaliation can misread a bomber crash or silo explosion as an attack
 during war, an Acute crisis or High Alert against a plausible attacker.
