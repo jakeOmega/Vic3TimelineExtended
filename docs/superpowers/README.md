@@ -27,6 +27,12 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | [plans/2026-09-30-legislated-tax-code.md](plans/2026-09-30-legislated-tax-code.md): the package-level plan, packages 0–8 | Partial: packages 0–7 built | Package 8 (catalog expansion: political-reform, colonial, monetary and restraint promises, advanced instruments) and package 3's split of the carbon effects |
 | [plans/2026-10-02-legislated-tax-code-tasks.md](plans/2026-10-02-legislated-tax-code-tasks.md): Tasks 1–17 for packages 1–5 | Partial: Tasks 1–15 built (#680), Task 17 replaced by the 10-03 plan's Tasks 25–27 | Task 16, the carbon levy. Only its numbers exist (`docs/systems/carbon_levy_numbers.md`, "parked until #674", which has since landed). `carbon_tax_modifier` is unchanged |
 
+### Nuclear weapons
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [specs/2026-10-28-nuclear-crisis-rework-design.md](specs/2026-10-28-nuclear-crisis-rework-design.md): survivability measured against the enemy's arsenal, payoffs for Delegation and Launch on Warning, accident risk calibrated to the Cold War, accident claims, a strike planner with counterforce and decapitation, range, and new crisis disputes and concessions | Design only (2026-10-28): the owner's calls in its §1 | All four phases (§13); open question 1 reverses part of a 2026-09-26 ruling |
+
 ### Space Race
 
 | Doc | Status | What's left |
