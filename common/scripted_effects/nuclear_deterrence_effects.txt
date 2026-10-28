@@ -1661,12 +1661,16 @@ nd_fire_incident_family = {
 		}
 		0 = {
 			modifier = {
+				# A commander cut off at Heightened readiness facing a plausible
+				# attacker: the peacetime false alarms of rework spec §2.1
+				# (calibrated 2026-10-28; was 5 and 25, the same 30 in a war or
+				# an Acute crisis).
 				if = {
 					limit = { nd_incident_eligible_commander = yes }
-					add = 5
+					add = 25
 					if = {
 						limit = { OR = { is_at_war = yes nd_crisis_stage_at_least = { STAGE = 3 } } }
-						add = 25
+						add = 5
 					}
 				}
 			}

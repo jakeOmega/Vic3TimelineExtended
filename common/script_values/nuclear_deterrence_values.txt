@@ -387,10 +387,13 @@ nd_incident_band = {
 	}
 }
 
+# Calibrated 2026-10-28 to the rework spec's §2.3 Acute-crisis bands and its
+# §2.1 war-year rates (scripts/analysis/nuclear_incident_rates.py,
+# test_nuclear_incident_risk.TestSpecBands): band 3 was 175, band 2 50.
 nd_incident_crisis_weekly_permille = {
 	value = 0
-	if = { limit = { nd_incident_band >= 3 } value = 175 }
-	else_if = { limit = { nd_incident_band >= 2 } value = 50 }
+	if = { limit = { nd_incident_band >= 3 } value = 85 }
+	else_if = { limit = { nd_incident_band >= 2 } value = 35 }
 	else_if = { limit = { nd_incident_band >= 1 } value = 5 }
 	# A force below operational alert is harder to misread.
 	if = { limit = { nd_readiness_heightened_or_higher = no } multiply = 0.25 }
@@ -507,6 +510,13 @@ nd_hold_chance = {
 		limit = { has_variable = nd_reliability }
 		value = var:nd_reliability
 	}
+	# Half of it, on a floor of 53: someone in the chain doubts a warning
+	# however poorly the force is run, and safeguards already raise
+	# reliability. Calibrated 2026-10-28 so that Launch on Warning with no
+	# safeguards is reckless (a quarter over an Acute crisis), not suicidal
+	# (two thirds): rework spec §2.3.
+	multiply = 0.5
+	add = 53
 	if = {
 		limit = { has_variable = nd_safeguards }
 		add = {

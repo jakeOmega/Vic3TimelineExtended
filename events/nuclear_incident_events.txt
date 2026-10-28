@@ -181,7 +181,7 @@ nuclear_incident.1 = {
 		# command and an Acute crisis press for the order; caution, a second
 		# source of warning and open talks hold it back (rework spec §5.3).
 		ai_chance = {
-			base = 2
+			base = 5
 			modifier = {
 				trigger = { nd_vulnerable_to = { ENEMY = scope:nd_warning_suspect } }
 				add = 3
@@ -196,7 +196,7 @@ nuclear_incident.1 = {
 			}
 			modifier = {
 				trigger = { nd_crisis_stage_at_least = { STAGE = 3 } }
-				add = 2
+				add = 5
 			}
 			modifier = {
 				trigger = { ruler_is_cautious = yes }

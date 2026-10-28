@@ -16,11 +16,13 @@ class TestRiskBalance(unittest.TestCase):
     def setUpClass(cls):
         cls.model = RiskModel()
 
-    def test_two_week_acute_crisis_has_about_fifty_percent_incidence(self):
+    def test_two_week_acute_crisis_has_about_a_quarter_incidence(self):
+        # Was about half until the 2026-10-28 calibration to the rework
+        # spec's §2.3 launch bands (TestSpecBands), which set the surcharge.
         p = Posture(readiness=3, danger=75, stage=3)
         chance = 1 - (1 - self.model.probability(p)) ** 4
-        self.assertGreater(chance, .48)
-        self.assertLess(chance, .52)
+        self.assertGreater(chance, .20)
+        self.assertLess(chance, .35)
 
     def test_peace_is_nonzero_and_offensive_doctrine_increases_exposure(self):
         for readiness in range(4):
@@ -60,11 +62,13 @@ class TestRiskBalance(unittest.TestCase):
         self.assertLess(self.model.weights(acute)["weapons_accident"], .01)
 
     def test_hold_chance_reads_the_moment(self):
-        hold = {stage: self.model.number("nd_hold_chance", Posture(readiness=3, authority=3, stage=stage))
+        # Low reliability, so no ceiling clips the context terms.
+        hold = {stage: self.model.number("nd_hold_chance", Posture(readiness=3, authority=3, stage=stage, reliability=20))
                 for stage in (0, 2, 3)}
         self.assertEqual(hold[0] - hold[3], 25)
         self.assertEqual(hold[2] - hold[3], 10)
-        self.assertEqual(self.model.number("nd_hold_chance", Posture(readiness=3, authority=3, war=True)), hold[3])
+        self.assertEqual(self.model.number("nd_hold_chance", Posture(readiness=3, authority=3, war=True, reliability=20)),
+                         hold[3])
 
     def test_delegation_leaves_warnings_to_the_government_outside_war(self):
         p = Posture(readiness=3, danger=100, stage=3, authority=2)
@@ -311,6 +315,51 @@ class TestLaunchUnderAttack(unittest.TestCase):
             self.assertIn(needle, chance)
 
 
+class TestSpecBands(unittest.TestCase):
+    """The rework spec's calibration targets (§2.1, §2.3): no posture is safe,
+    and recklessness is not free."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = RiskModel()
+
+    def acute(self, authority, safeguards):
+        side = self.model.acute_posture(authority, safeguards)
+        return self.model.acute_crisis(side, side)
+
+    def assertBand(self, value, low, high):
+        self.assertGreaterEqual(value, low)
+        self.assertLessEqual(value, high)
+
+    def test_acute_bands(self):
+        self.assertBand(self.acute(1, 3), 0.02, 0.03)
+        self.assertBand(self.acute(1, 0), 0.04, 0.06)
+        self.assertBand(self.acute(2, 3), 0.03, 0.05)
+        self.assertBand(self.acute(3, 3), 0.08, 0.12)
+        self.assertBand(self.acute(3, 0), 0.20, 0.30)
+
+    def test_delegation_beats_central_none(self):
+        # Owner call 6: Delegation with safeguards is comparable in risk to
+        # Central with none, and pays better deterrence.
+        self.assertLessEqual(self.acute(2, 3), self.acute(1, 0) * 1.25)
+
+    def war_side(self):
+        return self.model.at_reliability_target(Posture(readiness=3, authority=1, safeguards=1))
+
+    def test_war_year_band2(self):
+        self.assertBand(self.model.war_year(self.war_side(), self.war_side(), 2), 0.08, 0.15)
+
+    def test_war_year_band3(self):
+        self.assertBand(self.model.war_year(self.war_side(), self.war_side(), 3), 0.15, 0.30)
+
+    def test_peace_pair_year(self):
+        side = self.model.at_reliability_target(Posture(readiness=2, authority=2, safeguards=2))
+        self.assertBand(self.model.peace_pair_year(side, side), 0.0005, 0.0015)
+
+    def test_near_misses_several_times_unheld(self):
+        self.assertGreaterEqual(self.model.near_miss_ratio(self.model.acute_posture(3, 3)), 3)
+
+
 class TestHoldAndExposure(unittest.TestCase):
     """The chance of a halt has a ceiling by context and reads the suspect, the
     hotline and our own vulnerability (rework spec §4.3); a war with an armed
@@ -331,9 +380,11 @@ class TestHoldAndExposure(unittest.TestCase):
         self.assertEqual(self.hold(war=True, **high), 85)
 
     def test_hold_chance_suspect_terms(self):
-        low = dict(readiness=3, reliability=40, safeguards=0, stage=3, danger=80)
+        low = dict(readiness=3, reliability=0, safeguards=0, stage=3, danger=80)
         base = self.hold(suspect_readiness=1, **low)
-        self.assertEqual(base, 40)
+        # Room above and below for every term: no clamp interferes.
+        self.assertLessEqual(base + 20, 85)
+        self.assertGreaterEqual(base - 10, 20)
         self.assertEqual(self.hold(suspect_readiness=0, **low), base + 20)
         self.assertEqual(self.hold(suspect_readiness=3, **low), base - 5)
         self.assertEqual(self.hold(suspect_readiness=1, talks=True, **low), base + 10)
