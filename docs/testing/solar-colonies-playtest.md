@@ -401,3 +401,9 @@ The colonization sections' share of the GUI and localization audit (`docs/audits
 7. **Greyed buttons (SPC-1, the generated rows).** Hover a greyed Target (the program not running, or a world it can't take), a module + with the queue full, the slots used or the specialization not chosen (each condition its own line), Abandon with a request pending, a fleet's Go while refitting: each shows the failing requirement with a cross, then what the button does. The fleet destination and target buttons keep their leg and intelligence hovers below the reason.
 8. **Space Fleets and Locations.** The section reads Space Fleets; Space Command's row reads Fleet strength; Locations' inbound column wears Space Command's icon, Solar System's the colonization rocket.
 9. **How Solar Colonization Works.** Collapsed at the foot of Solar System Colonization, seven subsections; the live sections open on their rows, with no paragraph of rules above them.
+
+## A world's specializations on hover (2026-10-28)
+
+The Solar System world hovers listed both specializations' effects in one run, so a player couldn't tell which belonged to which. Each now has its name in bold with its effects indented beneath it (`#indent_newline:3`, vanilla's form, new to the mod's own localization). No self-check: it is display and fails visibly.
+
+1. **Two labeled blocks.** Hover 4 Vesta in the Solar System list: "It offers two specializations:", then Vesta Mining Operations with Advanced Materials output and Extraplanetary Base throughput indented under it, then Vesta Science Outpost with research speed and space race progress under it. The transit line and the window line after them are back at the margin. If the effects are not indented, or the indent runs on into the transit line, write each block as a bold name, `\n`, then the `GetDesc` with no indent (the UN terms' form).

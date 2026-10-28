@@ -544,7 +544,9 @@ class ColoniesTest(unittest.TestCase):
             with self.subTest(world=k):
                 ss = self.loc[f"je_space_race_widget_ss_site_tt_{k}"]
                 for mod in gss.spec_modifiers(site):
-                    self.assertIn(f"[GetStaticModifier('{mod}').GetDesc]", ss)
+                    # each specialization's name heads its own effects, indented
+                    # beneath it, so the two lists can't run together
+                    self.assertIn(f"#bold ${mod}$#!#indent_newline:3 \\n[GetStaticModifier('{mod}').GetDesc]#!", ss)
                 self.assertIn(f"$je_space_race_widget_colonies_stage_{site.stage}$", ss)
                 self.assertIn(f"ScriptValue('sr_transit_months_{gss.transit_body(site)}')", ss)
                 self.assertEqual(f"'sr_ss_window_line_{site.body}'" in ss, site.body is not None)
