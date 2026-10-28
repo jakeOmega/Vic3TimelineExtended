@@ -386,9 +386,10 @@ concede.
 
 | Dispute | What the target gives up if it concedes |
 |---|---|
-| A war between you | −35 war support in that war |
+| A war between you | It drops its war goals against you, and any of the same kind its side holds in that war, and loses 15 war support |
 | A diplomatic play between you | It backs down, and the play should end in your favor |
 | A play or war between the target and a country you cover, when you are not a party to it | The same, on your protégé's behalf |
+| The target struck you, or a country you cover, with a nuclear weapon outside a war in the last 24 months | It pays the struck country reparations, about a tenth of a year's income, and opens its arsenal to inspection for 20 years |
 | A weapons program run by a country the world believes unarmed that is your rival, or that you are antagonistic, belligerent or domineering toward | Its program is frozen for 10 years |
 | An armed rival at Heightened readiness or higher | It stands down to Routine for 24 months |
 
@@ -481,6 +482,10 @@ Called In":
 | Retaliate (after a strike) | +10 credibility; you join the war and, if you are at war with the attacker a day later, strike back then, as retaliation, under any doctrine |
 | Abandon | −15 credibility, Abandoned a Nuclear Guarantee for five years, −30 relations with the protégé and −10 with everyone else you protect; a subject gains 10 liberty desire |
 
+After a nuclear strike outside a war on a country you cover, Honor opens a
+public crisis against the striker over it, if neither of you is in a crisis
+already.
+
 An armed country fighting a war beside an unarmed one covers it against their
 common enemy for that war, with no treaty: it hears the same call, and its
 answer counts as a protector's. Nothing was promised, so walking away costs it
@@ -540,6 +545,27 @@ and knocks the nuclear taboo down. The United
 Nations records it against you, and after a first strike or a tactical strike
 its court may indict your ruler (see
 [Grounds for UN censure](10-united-nations.md#grounds-for-un-censure)).
+
+### Claiming a strike was unauthorized
+
+When a strategic first strike lands, the launcher may tell the victim over the
+hotline that the launch was unauthorized. After a launch nobody ordered (a false
+warning, a cut-off commander, Automatic Retaliation misreading an accident), it
+says so, truthfully. Your own deliberate first strikes carry the same claim
+while Disavow our strikes is on, in the Nuclear Posture section; the AI makes
+it falsely about one time in seven after a strike on an armed country (twice as
+often under an aggressive ruler, less under an honorable or direct one, more
+under a ruthless one or a grifter, half as often once the taboo is 50).
+
+The struck country's "A City Erased" shows the claim, with a choice to accept
+it: hold back the answer and demand reparations, which the launcher may pay or
+refuse. An AI believes a claim more readily when relations are good and only
+one warhead landed, less from an opponent in an Acute crisis, and much less
+from a country already caught lying. Six to eighteen months later (sooner with
+a covert network in the launcher) the truth comes out. A lie exposed costs the
+launcher 20 credibility, infamy and 50 relations with the victim, and makes its
+next claim far harder to believe. A true claim the victim refused to believe
+lets it make amends.
 
 ### Retaliation and Automatic Retaliation
 

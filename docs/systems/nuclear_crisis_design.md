@@ -9,7 +9,7 @@
 > **2026-09-26:** §0.10 step 2 (custody transfer) and step 3's outbreak event are built, per `docs/superpowers/archive/specs/2026-09-26-nuclear-custody-design.md`: an arsenal ledger that outlives its owner, one settlement for every way an owner can end, "Who Holds the Button?", a winning revolution's new regime, the price of striking one's own civil war, and the first loose-warhead counts.
 > **2026-09-26 (later):** the rest of §0.10 is built, per `docs/superpowers/archive/specs/2026-09-26-nuclear-loose-warheads-design.md`: "Deny Them the Bomb" and the world's reaction to an armed civil war (step 3), the Budapest path (step 4), and loose warheads — plots from the terror pool, attribution, the reckoning, and recovery by inspection, a covert operation, a treaty article and a UN convention (step 5; buying warheads, its phase 2, is not built). Calls made without the owner are listed at the end of that spec.
 > **2026-09-26 (taboo):** a world **nuclear taboo** (§0.11), per `docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md`: one score that scales every nuclear cost, makes possession a burden, feeds the AI, and adds unilateral dismantling and reduction. Phase 2 (arms control, the UN's terms, the Assembly's verdict) is built; phase 3 (a Prohibition convention) followed as UN phase 7 (#651).
-> **2026-10-28 (rework phase 1 built, §0.12; phases 2–4 designed):** [`docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md`](../superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md) changes §0.2–§0.5: survivability against the enemy's arsenal, payoffs for Delegation and Launch on Warning, accident risk calibrated to the Cold War, counterforce and decapitation, range, and new disputes.
+> **2026-10-28 (rework phases 1 and 2 built, §0.12 and §0.13; phases 3–4 designed):** [`docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md`](../superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md) changes §0.2–§0.5: survivability against the enemy's arsenal, payoffs for Delegation and Launch on Warning, accident risk calibrated to the Cold War, counterforce and decapitation, range, and new disputes.
 > **2026-09-25:** posture and crises no longer have their own journal entry. `je_nuclear_deterrence` was merged into `je_nuclear_program`, shown as "Nuclear Weapons", to spend one journal slot instead of two; §0.1 and §0.7 say how the separation §2 and §10 asked for is kept.
 
 ## 0. Implementation as shipped
@@ -111,9 +111,10 @@ A crisis opens with `nd_nuclear_warning_action` (private: relations −5) or `nd
 
 | Code | Dispute | The target's concession if it yields |
 |---|---|---|
-| 2 | We are at war | −35 war support in that war |
+| 2 | We are at war | since rework phase 2: it drops its side's goals against us and loses 15 war support (−35 before) |
 | 1 | We are enemies in a diplomatic play | `resolve_play_for` our side |
 | 3 | The target is in a play or war against a country we guarantee (`nuclear_guarantee`) | as for 1 or 2, for the beneficiary's side |
+| 6 | Since rework phase 2: the target struck us, or a country we cover, outside a war in the last 24 months (`nd_peacetime_struck_by`) | reparations (`nd_loose_compensation_value`) and its custody opened to inspection for 20 years (`nd_crisis_concede_reparations`) |
 | 4 | The target is proliferating, is believed unarmed (since rework phase 1), and is our rival, or we are antagonistic, belligerent or domineering toward it | `nd_crisis_programme_freeze`: 10 years of `country_nuclear_program_pause_bool` |
 | 5 | The target is our rival, is armed, and is at heightened alert or higher | readiness to routine, locked for 24 months |
 
@@ -666,6 +667,17 @@ Built from `docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md` p
 - **Risk** (§0.4): the halt chance's floor, ceilings, suspect, hotline and vulnerability terms; war exposure; the surcharge and commander weights; the government's launch under attack and its AI weights. Calibrated offline: eight-week Acute crisis, both at High Alert, either side launches: Central 2.5% (safeguards 3) and 4.2% (0), Delegation 4.7% (3), Launch on Warning 8.5% (3) and 27.3% (0); a war-year with an armed enemy 8.7%, 19.3% when it threatens either side; a peacetime armed-rival pair-year at Heightened under Delegation 0.067%.
 - **Crisis subjects:** stakes (`nd_yp_stakes`, at most −40, the demands of `scope:nd_stakes_demander`, counted by goal type: the 2026-10-28 probe showed `is_target_of_wargoal` can't count states in a play); `nd_core_threatened_by` now also needs a state-taking goal, since in a war that trigger flags the capital under any country-level goal; the AI's stake gate (`nd_ai_stakes_block`, line 40); co-belligerent cover (§0.5); proliferation needs a target believed unarmed.
 - **Observer:** a `type=crisis_acute` record once per crisis; the report counts use per Acute crisis, near misses and launches nobody meant.
+
+### 0.13 Crisis rework, phase 2 (2026-10-28)
+
+Built from the rework spec's phase 2 (plan: `docs/superpowers/plans/2026-10-28-nuclear-crisis-rework-phase2.md`), after two engine probes (spec §12). Not run in a game; `docs/testing/nuclear-playtest.md` items 36–40.
+
+- **The Suez concession** (`nd_crisis_concede_war`, `nd_crisis_drop_goals`): yielding in a war drops every goal type the target's side holds against the other side (issuer or protégé), through the war's play on the target's side (`is_on_defending_side`), and costs 15 war support. `remove_war_goal` addresses a side and a type, so same-type goals against third countries go too. A once-a-game `TE_SELF_CHECK nd_suez_goals`.
+- **Dispute 6** (`nd_dispute_peacetime_strike_by`): the target struck us or a country we cover outside a war in the last 24 months; `nd_record_nuclear_use` sets `nd_peacetime_struck_by` (730 days) on the struck country. Classified after a guarantee; the concession pays reparations and opens custody to inspection, which settles the grievance; a war turns it into dispute 2. Honor after a peacetime strike on a protégé now opens its crisis (`nd_has_crisis_dispute_with`).
+- **Claims** (`nd_record_claim`, in `nuclear_first_strike` before `nuclear_weapon_events.1`): once per strike, first uses only; true after an unordered launch, false under **Disavow our strikes** (Posture, ops 70/71, `nd_disavow_strikes`; owner, 2026-10-28) or an AI lie (`nd_ai_lies_value`: 15, ×2 aggressive, ×1.5 Ruthless or Grifter, ×0.25 Honorable, ×0.5 Direct, ×0.5 from a taboo of 50). The victim keeps `nd_claim_by`, `_true`, `_id`, and the strike's count (`nd_last_striker`, `nd_struck_count`, 30 days).
+- **The victim's answer**: `.1` shows the claim; option k accepts it, holds back and demands reparations (`.27`, the launcher pays or refuses). An AI rolls belief once per claim (`nd_claim_belief_value`).
+- **The truth** (`nd_claim_schedule_truth`): `.28` (true; a reconciliation option if it was rejected) or `.29` (false; the launcher's `.30` pays −20 credibility, threat-scaled infamy, −50 relations and a `nd_false_claims` mark), 180–545 days later, 90–270 with intel tier 1 in the launcher.
+- **Observer**: `type=claim`, `claim_belief`, `claim_truth` records; the report counts them.
 
 ## 1. Intent and owner requirements
 

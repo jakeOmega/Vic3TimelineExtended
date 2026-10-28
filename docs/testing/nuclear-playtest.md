@@ -64,10 +64,19 @@ What `docs/superpowers/specs/2026-10-28-nuclear-crisis-rework-design.md` phase 1
 34. **War exposure.** At war with an armed enemy, the incident exposure hover lists "Our war with an armed enemy adds misreadings of its own", and the exposure band rises.
 35. **An order at peace is a first use.** After the government's launch under attack in an Acute crisis at peace, the taboo falls and the UN records a first use, as for a wartime strike.
 
+## The crisis rework, phase 2 (2026-10-28)
+
+36. **The Suez concession.** A target that yields in a war with an issuer it holds goals against loses those goals in the war's peace screen and 15 war support; a target holding none loses only the war support. Read `TE_SELF_CHECK nd_suez_goals`.
+37. **A peacetime strike as a dispute.** After a nuclear strike outside a war, the struck country (or its guarantor) can open a crisis over it; its pressure breakdown and the panel name "A nuclear strike"; conceding pays reparations (the treasury moves) and the striker's custody reads as inspected. Honor after a peacetime strike on a protégé opens the crisis.
+38. **Disavow our strikes.** The Posture section shows the toggle while armed; a deliberate first strike with it on shows the claim in the victim's "A City Erased" (a second save, or the observer log's `type=claim; truth=false`).
+39. **The victim's answer.** An AI victim of a single warhead from a friendly launcher accepts the claim more often than not (`type=claim_belief`); accepting sends the launcher "Reparations Demanded".
+40. **The truth.** Six to eighteen months after a claim, the victim gets "It Was an Accident" or "It Was No Accident"; a lie exposed sends the launcher "Our Lie Is Exposed" with its costs in the option.
+
 ## Self-checks
 
 | Line | What it tests | If BROKEN |
 |---|---|---|
+| `TE_SELF_CHECK OK\|BROKEN nd_suez_goals` (once a game, the first war concession with goals) | `remove_war_goal` removed every goal the yielding side held against the other side | The goals that stay are script-added ones (probed); the war support still falls. If it reads BROKEN for AI-held goals, fall back to war support only |
 | `TE_SELF_CHECK OK\|BROKEN nd_trigger_temp_scope` (once a game, the first month an armed country has a main rival) | A script value sees a scope a trigger saved with `save_temporary_scope_as` (the GM precedent `gm_state_tr_holds_half` is also unread) | The scope is unseen, so the enemy's reach reads 0: the opening preview shows "Their arsenal would survive" for almost any target with three or more warheads, "could disarm ours first" only when we hold fewer than three, and the AI's stake gate never blocks a threat. Expect unset-scope errors in `error.log` for `scope:nd_sv_enemy`, `scope:nd_issuer` or `scope:nd_target` whenever the AI weighs a nuclear warning or the opening preview is on screen. Fallback: compute the preview's line from the target's stored `nd_survivors_main` when its main rival is the issuer, and drop the stake gate |
 
 The 2026-10-27 GUI rework rests on no engine fact in script; its accessors are GUI facts, listed with their fallbacks above.
