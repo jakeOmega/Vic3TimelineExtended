@@ -2133,8 +2133,12 @@ types nuclear_deterrence_widget_types
 			}
 		}
 
+		### 512 whichever block shows: the pledges' nd_row (492) makes it 512,
+		### the last crisis's lines (480) alone 500, and a centred panel drawn
+		### at 500 drifts when the pledges appear (gotcha #43).
 		nd_panel = {
 			visible = "[Not(GetVariableSystem.Exists('nd_reputation_closed'))]"
+			minimumsize = { 512 -1 }
 
 			### Between crises: the last one and how it ended.
 			flowcontainer = {

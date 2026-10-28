@@ -18,6 +18,7 @@ import unittest
 REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 import gen_solar_sites as gss  # noqa: E402
+import gui_tree  # noqa: E402
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "space_race_sguis.txt")
@@ -320,9 +321,40 @@ class GatingTest(unittest.TestCase):
 
     def test_overview_risk_and_progress_follow_the_scripted_gui(self):
         body = _type_body(self.gui, "te_sr_overview_milestone")
-        # the state cells' container, the risk cell and the progress row
-        self.assertEqual(body.count(f'visible = "[{IS_SHOWN_OP0}]"'), 3)
-        self.assertEqual(body.count(f'visible = "[Not( {IS_SHOWN_OP0} )]"'), 1)  # Idle
+        # row 1 while running (the state cells and the risk cell) and the progress row
+        self.assertEqual(body.count(f'visible = "[{IS_SHOWN_OP0}]"'), 2)
+        self.assertEqual(body.count(f'visible = "[Not( {IS_SHOWN_OP0} )]"'), 1)  # row 1 while idle
+
+    def test_row_1_is_two_rows_of_fixed_contents(self):
+        # One row, 318 idle and 480 running, was centred at its first width and
+        # ran past the 480 column when a programme resumed with the panel open
+        # (gui_modding_guide.md gotcha #43). Now a running row and an idle row,
+        # each gated whole, each one width: every group in it shows one cell.
+        tree = gui_tree.parse(self.gui)
+        types = {n.name: n for n in tree.walk() if n.kind == "type"}
+        cell = gui_tree.size(types["te_sr_ov_icon_label"])[0]
+        panel = next(c for c in gui_tree.widgets(types["te_sr_overview_milestone"]) if c.kind == "te_sr_panel")
+        running, idle = gui_tree.widgets(panel)[:2]
+        gate = [(row.prop("visible") or gui_tree.Prop("visible", "", 0, True)).value for row in (running, idle)]
+        self.assertEqual(gate, [f"[{IS_SHOWN_OP0}]", f"[Not( {IS_SHOWN_OP0} )]"])
+        for row in (running, idle):
+            self.assertEqual((row.prop("direction").value, row.prop("parentanchor").value), ("horizontal", "hcenter"))
+            self.assertEqual([(c.kind, c.name) for c in row.children if c.kind == "block"], [("block", "sr_third_cells")])
+        state, risk = gui_tree.widgets(running)
+        for group, prefix in ((state, "sr_status_"), (risk, "sr_risk_")):
+            with self.subTest(group=prefix):
+                self.assertIsNone(group.prop("visible"))
+                cells = gui_tree.widgets(group)
+                self.assertTrue(cells)
+                for c in cells:
+                    self.assertEqual(c.kind, "te_sr_ov_icon_label")
+                    self.assertIsNone(c.prop("visible"))
+                    self.assertTrue(any(b.kind == "block" and b.name.startswith(prefix) for b in c.children))
+        ((idle_kind, idle_gate),) = [(c.kind, c.prop("visible")) for c in gui_tree.widgets(idle)]
+        self.assertEqual((idle_kind, idle_gate), ("te_sr_ov_icon_label", None))
+        spacing = int(running.prop("spacing").value)
+        self.assertEqual(3 * cell + 2 * spacing, 480)
+        self.assertEqual(2 * cell + spacing, 318)
 
     def test_state_cells_cover_every_code(self):
         for m in CONTROLLED:

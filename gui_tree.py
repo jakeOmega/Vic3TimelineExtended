@@ -212,6 +212,39 @@ def base_chain(kind: str, types: dict[str, Node], limit: int = 20) -> list[str]:
     return chain
 
 
+
+# Blocks that set a widget's own geometry or look rather than holding a child
+# widget. A layout test walks `widgets(node)` to see what a row lays out.
+_GEOMETRY_KINDS = frozenset({"size", "minimumsize", "maximumsize", "position", "margin", "framesize",
+                             "spriteborder", "color", "uv_scale", "state", "modify_texture",
+                             "block", "blockoverride"})
+
+
+def widgets(node: Node) -> list[Node]:
+    """The child widgets and type instances a node lays out, in order (its
+    `size = { }`, `margin = { }`, `blockoverride`s and the like left out)."""
+    return [c for c in node.children if c.kind not in _GEOMETRY_KINDS]
+
+
+def size(node: Node, key: str = "size") -> tuple[int, int] | None:
+    """A node's own `size = { W H }` (or `minimumsize`, …) as ints, or None.
+    A percentage or a block with other than two numbers is None too."""
+    for c in node.children:
+        if c.kind == key:
+            try:
+                w, h = (int(v) for v in c.values)
+            except ValueError:
+                return None
+            return w, h
+    return None
+
+
+def node_after(tree: Node, text: str, marker: str, kind: str) -> Node:
+    """The first `kind` node opened after the line of `text` holding `marker`,
+    for a test that finds a row by the comment above it."""
+    line = text[:text.index(marker)].count("\n") + 1
+    return next(n for n in tree.walk() if n.kind == kind and n.line > line)
+
 _HOW_TOKEN = re.compile(r"(?:^|_)(?:how|help)(?:_|$)", re.I)
 _HOW_TOGGLE = re.compile(r"GetVariableSystem\.Exists\(\s*'([^']*)'\s*\)")
 

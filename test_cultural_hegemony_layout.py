@@ -10,6 +10,8 @@ import os
 import re
 import unittest
 
+import gui_tree
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "cultural_hegemony_widget.gui")
 TAB = os.path.join(REPO, "gui", "culture_panel.gui")
@@ -748,7 +750,7 @@ class LabelBudgetTest(unittest.TestCase):
                 with self.subTest(type=type_name, size=size):
                     self.assertIn(f"size = {{ {size} }}", body)
         self.assertIn("minimumsize = { 208 -1 }", _type_body(gui, "ch_board_row"))
-        self.assertEqual(_read(WIDGET).count("size = { 136 58 }"), 15)   # the model cells
+        self.assertEqual(_read(WIDGET).count("size = { 136 58 }"), 16)   # the model cells and their slot
 
     def test_the_overviews_first_row_fits_its_column(self):
         # tier, rank and benchmark at 108, the model cell at 136, 4 between: 472 of 474.
@@ -756,6 +758,31 @@ class LabelBudgetTest(unittest.TestCase):
         row = ov[ov.index("### Row 1:"):ov.index("### The influence tier")]
         self.assertIn("spacing = 4", row)
         self.assertLessEqual(108 * 3 + 136 + 3 * 4, 474)
+
+    def test_the_overviews_first_row_keeps_its_width_whichever_cells_show(self):
+        # The row is centred, so it must be one width whatever shows (gotcha
+        # #43): the tier cell, one of whose six cells always shows, then the
+        # rank, model and benchmark cells, each gated inside an ungated slot of
+        # its own size. Centred at 360 without the benchmark, it ended near 529.
+        text = _read(WIDGET)
+        row = gui_tree.node_after(gui_tree.parse(text), text, "### Row 1:", "flowcontainer")
+        self.assertEqual(row.prop("parentanchor").value, "hcenter")
+        tier, *slots = gui_tree.widgets(row)
+        self.assertEqual(tier.kind, "flowcontainer")
+        self.assertIsNone(tier.prop("visible"))
+        self.assertEqual([c.kind for c in gui_tree.widgets(tier)], ["te_ch_ov_icon_label"] * 6)
+        widths = [108]
+        for slot, gate in zip(slots, ("ch_rank_self_display", "ch_disp_model_code", "ch_benchmark_sgui"), strict=True):
+            with self.subTest(gate=gate):
+                self.assertEqual(slot.kind, "widget")
+                self.assertIsNone(slot.prop("visible"))
+                (cell,) = gui_tree.widgets(slot)
+                self.assertIn(gate, cell.prop("visible").value)
+                if cell.kind == "widget":
+                    self.assertEqual(gui_tree.size(cell), gui_tree.size(slot))
+                widths.append(gui_tree.size(slot)[0])
+        self.assertEqual(widths, [108, 108, 136, 108])
+        self.assertEqual(sum(widths) + 4 * 3, 472)
 
 
 class TypeSizeTest(unittest.TestCase):

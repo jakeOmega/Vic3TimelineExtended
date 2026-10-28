@@ -705,27 +705,23 @@ types space_race_widget_types
 		te_sr_panel = {
 			spacing = 10
 
-			### Row 1
+			### Row 1, in two rows with fixed contents, each with its own visible:
+			### running, the state, the setback risk and the third cell (480);
+			### idle, Idle beside the third cell (318). One row that was 318 idle
+			### and 480 running was centred at the width it was first drawn, so a
+			### programme resumed with the panel open ran it to about 561, past the
+			### 480 column (gui_modding_guide.md gotcha #43). The third cell is a
+			### block in both rows, and one blockoverride fills both.
 			flowcontainer = {
 				direction = horizontal
 				spacing = 6
 				ignoreinvisible = yes
 				parentanchor = hcenter
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 
-				### The state: one cell of five shows.
-				te_sr_ov_icon_label = {
-					visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
-					tooltip = "je_space_race_widget_ov_idle_tt"
-					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/space_race_icons/state_idle.dds"
-					}
-					blockoverride "label" {
-						text = "je_space_race_widget_ov_idle"
-					}
-				}
+				### The state: one of four cells shows.
 				flowcontainer = {
 					ignoreinvisible = yes
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 
 					te_sr_ov_icon_label = {
 						block "sr_status_standard" {}
@@ -774,7 +770,6 @@ types space_race_widget_types
 				### Setback risk: lit while the monthly roll is made, faint at 0%.
 				flowcontainer = {
 					ignoreinvisible = yes
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 					tooltip = "je_space_race_widget_ov_risk_tt"
 
 					te_sr_ov_icon_label = {
@@ -797,6 +792,28 @@ types space_race_widget_types
 						blockoverride "label" {
 							block "sr_risk_label" {}
 						}
+					}
+				}
+
+				### The first (seven milestones) or the stage (colonization).
+				block "sr_third_cells" {}
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
+
+				### The state while the programme isn't running.
+				te_sr_ov_icon_label = {
+					tooltip = "je_space_race_widget_ov_idle_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/space_race_icons/state_idle.dds"
+					}
+					blockoverride "label" {
+						text = "je_space_race_widget_ov_idle"
 					}
 				}
 

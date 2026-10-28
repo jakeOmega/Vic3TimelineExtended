@@ -1619,6 +1619,10 @@ types covert_operations_widget_types
 
 			### Row 1: standing · funding · Tradecraft · a recent catch. The
 			### covert icons (PR #586), listed in docs/systems/covert_gui_icons.md.
+			### One of each of the first three always shows; the catch comes and
+			### goes, so it sits in an ungated slot and the row is 458 wide
+			### either way. Centred at 342 and grown to 458, it ended near 527,
+			### past the 480 column (gui_modding_guide.md gotcha #43).
 			flowcontainer = {
 				direction = horizontal
 				spacing = 6
@@ -1757,15 +1761,19 @@ types covert_operations_widget_types
 
 				# A foreign operation our counterintelligence caught in the last
 				# ten years: who and when, on hover (the Counterintelligence
-				# section's Last Caught line).
-				covert_ov_icon_label = {
-					visible = "[GetScriptedGui('covert_last_exposed_known_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "[GetScriptedGui('covert_last_exposed_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/covert_icons/spy_caught.dds"
-					}
-					blockoverride "label" {
-						text = "je_iw_ov_caught_label"
+				# section's Last Caught line). A gap in its slot otherwise.
+				widget = {
+					size = { 110 58 }
+
+					covert_ov_icon_label = {
+						visible = "[GetScriptedGui('covert_last_exposed_known_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('covert_last_exposed_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/covert_icons/spy_caught.dds"
+						}
+						blockoverride "label" {
+							text = "je_iw_ov_caught_label"
+						}
 					}
 				}
 			}
@@ -1786,11 +1794,15 @@ types covert_operations_widget_types
 					default_format = "#tooltippable"
 					text = "je_iw_slots_detail"
 				}
+				### Ten 30 slots at 2 apart, the cap (covert_ops_max_slot_cap): the
+				### strip keeps that width as slots come and go, so it stays
+				### centred, and the slots fill it from the left (gotcha #43).
 				flowcontainer = {
 					direction = horizontal
 					spacing = 2
 					ignoreinvisible = yes
 					parentanchor = hcenter
+					minimumsize = { 318 -1 }
 
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)1' )]"

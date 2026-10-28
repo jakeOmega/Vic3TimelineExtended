@@ -2403,7 +2403,9 @@ types banking_dashboard_widget_types
 					### The mandate already in force is greyed out by the handler's is_valid
 					### (that is the "you are here" marker), and so is every button for a
 					### year after a change. Not drawn under independence, where an act sets
-					### the mandate (the row above).
+					### the mandate (the row above). Both rows are 456 whichever buttons
+					### show, so they stay centred (gotcha #43): Peg Defence's absence
+					### leaves Growth under Inflation Targeting and a gap beside it.
 					flowcontainer = {
 						direction = horizontal
 						ignoreinvisible = yes
@@ -2436,6 +2438,7 @@ types banking_dashboard_widget_types
 						spacing = 4
 						parentanchor = hcenter
 						margin_bottom = 2
+						minimumsize = { 456 -1 }
 						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
 						visible = "[GetScriptedGui('banking_mon_mandate_by_choice').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 

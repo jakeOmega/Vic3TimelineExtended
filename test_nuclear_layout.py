@@ -5,6 +5,8 @@ import os
 import re
 import unittest
 
+import gui_tree
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
 LAYOUT = os.path.join(W, "nuclear_layout_widget.gui")
@@ -174,6 +176,47 @@ class GateTest(unittest.TestCase):
                         seen += 1
                 self.assertLessEqual(seen, 1, f"{os.path.basename(path)}:{i + 1}")
 
+
+
+def _types(*paths):
+    out = {}
+    for path in paths:
+        out.update({n.name: n for n in gui_tree.parse(_read(path)).walk() if n.kind == "type"})
+    return out
+
+
+def _row_width(node):
+    """A horizontal row of fixed-width children: margins, cells and spacing."""
+    cells = [gui_tree.size(c)[0] for c in gui_tree.widgets(node)]
+    spacing = int(node.prop("spacing").value) if node.prop("spacing") else 0
+    margin = gui_tree.size(node, "margin")
+    return 2 * (margin[0] if margin else 0) + sum(cells) + spacing * (len(cells) - 1)
+
+
+class WidthTest(unittest.TestCase):
+    """A centred panel sized by its content is centred at its first width
+    (gui_modding_guide.md gotcha #43), so each holds the width it grows to."""
+
+    def test_the_powers_head_is_as_wide_as_its_rows(self):
+        # With no rows yet (up to a month after the first warhead) the panel
+        # was centred at the head's 414 and ran past the section once rows came.
+        types = _types(PROGRAM)
+        head, row = types["nuclear_program_powers_head"], types["nuclear_program_power_row"]
+        self.assertEqual(_row_width(head), 414)
+        self.assertEqual(gui_tree.size(head, "minimumsize"), (gui_tree.size(row)[0], -1))
+
+    def test_the_reputation_panel_keeps_one_width(self):
+        # 512 with the pledges' nd_row, 500 with the last crisis's lines alone.
+        types = _types(DETERRENCE)
+        margin = gui_tree.size(types["nd_panel"], "margin")[0]
+        row = _row_width(types["nd_row"])
+        lines = max(gui_tree.size(types["nd_text"], "minimumsize")[0],
+                    2 * gui_tree.size(types["nd_script_line"], "margin")[0]
+                    + gui_tree.size(next(c for c in types["nd_script_line"].children if c.kind == "textbox"),
+                                    "minimumsize")[0])
+        self.assertEqual((row, lines), (492, 480))
+        (panel,) = [c for c in types["te_nuclear_sec_reputation"].children if c.kind == "nd_panel"]
+        self.assertEqual(gui_tree.size(panel, "minimumsize"), (2 * margin + row, -1))
 
 class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):

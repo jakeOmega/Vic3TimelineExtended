@@ -268,12 +268,16 @@ types nuclear_program_widget_types
 		}
 	}
 
-	### The leaderboard's column heads, in its rows' cells.
+	### The leaderboard's column heads, in its rows' cells (6 + 286 + 6 + 110
+	### + 6 = 414), held at the rows' 480: the panel is centred, and with no
+	### rows yet (up to a month after the first warhead) it was centred at the
+	### head's width and ran past the section once they came (gotcha #43).
 	type nuclear_program_powers_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 6
 		margin = { 6 1 }
+		minimumsize = { 480 -1 }
 
 		textbox = {
 			size = { 286 24 }
