@@ -1473,6 +1473,33 @@ nd_vulnerable_to = {
 	nd_survivors_vs_saved < 3
 }
 
+# The government's launch under attack (nuclear_incident.1.c, rework spec
+# §5.3): a warning of an attack by $SUSPECT$ comes in a war with it, or in an
+# Acute crisis against it...
+nd_launch_under_attack_context = {
+	OR = {
+		has_war_with = $SUSPECT$
+		AND = {
+			nd_crisis_stage_at_least = { STAGE = 3 }
+			var:nd_crisis_opponent ?= $SUSPECT$
+		}
+	}
+}
+
+# ...and the doctrine is not No First Use, unless $SUSPECT$ has already
+# struck us (retaliation is allowed under every doctrine).
+nd_launch_under_attack_doctrine = {
+	OR = {
+		nd_doctrine_nfu = no
+		nd_was_struck_by = { ENEMY = $SUSPECT$ }
+	}
+}
+
+nd_launch_under_attack_permitted = {
+	nd_launch_under_attack_context = { SUSPECT = $SUSPECT$ }
+	nd_launch_under_attack_doctrine = { SUSPECT = $SUSPECT$ }
+}
+
 nd_has_plausible_attacker = {
 	save_temporary_scope_as = nd_pa_self
 	any_country = {

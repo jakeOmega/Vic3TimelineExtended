@@ -131,6 +131,10 @@ class RiskModel:
             # Compellence once the war threatens us (the model's band 3).
             "nd_doctrine_permits_strike": lambda: p.war and (p.doctrine == 5 or (p.doctrine >= 3 and p.war_band >= 3)),
             "nd_vulnerable_to": lambda: p.survivors < 3,
+            # The launch under attack (nuclear_incident.1.c): a war with the
+            # suspect or an Acute crisis against it, and no No First Use.
+            "nd_launch_under_attack_context": lambda: p.war or p.stage >= 3,
+            "nd_launch_under_attack_doctrine": lambda: p.doctrine != 1,
             "nd_crisis_talks_open_either": lambda: p.talks,
         }
         if key not in answers:

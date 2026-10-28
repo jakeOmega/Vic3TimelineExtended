@@ -5430,6 +5430,8 @@
  nd_tt_investment_max:0 "Not already at the highest level"
  nd_tt_investment_min:0 "Not already at zero"
  nd_tt_launch_or_intercept:0 "#R A weapon is launched.#! It can strike even at peace. The victim may answer with nuclear weapons; after the exchange falls quiet, both governments decide whether to stand down. A refusal leads to conventional war"
+ nd_tt_launch_under_attack_context:0 "We are at war with them, or our crisis with them is Acute"
+ nd_tt_launch_under_attack_doctrine:0 "Our doctrine is not No First Use, or they have already struck us"
  nd_tt_loose_ask_suspects:0 "Each country on the list is asked, privately, to open its custody to our inspectors or refuse"
  nd_tt_loose_blame_rival:0 "[SCOPE.sCountry('nd_loose_rival').GetName] is accused in public, and told so"
  nd_tt_loose_first_search:0 "Their first search has a #v 50%#! chance to find one of the #v [ROOT.GetCountry.MakeScope.ScriptValue('nd_display_our_loose')|0]#! warheads from our arsenal that are unaccounted for"

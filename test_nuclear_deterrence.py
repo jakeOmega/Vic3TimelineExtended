@@ -293,10 +293,12 @@ class TestWarLawGate(unittest.TestCase):
 
     def test_the_government_launch_order_passes_every_deliberate_gate(self):
         """nuclear_incident.1.c is the government's own order (owner ruling
-        2026-09-26): the same gates as nuke_diplo_action, shown greyed."""
+        2026-09-26): the same gates as nuke_diplo_action, shown greyed, except
+        that a launch under attack passes the doctrine in a war or an Acute
+        crisis with the suspect unless it is No First Use (owner, 2026-10-28)."""
         body = option_body(strip_comments(read(INCIDENT_EVENTS)), "nuclear_incident.1.c")
-        for gate in ("has_war_with = scope:nd_warning_suspect",
-                     "nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }",
+        for gate in ("nd_launch_under_attack_context = { SUSPECT = scope:nd_warning_suspect }",
+                     "nd_launch_under_attack_doctrine = { SUSPECT = scope:nd_warning_suspect }",
                      "nd_pledge_permits_strike = { ENEMY = scope:nd_warning_suspect }",
                      "nd_war_law_permits_strategic_strike = yes",
                      "nd_forces_assembled = yes",

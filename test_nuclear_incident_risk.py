@@ -258,6 +258,59 @@ class TestCrisisAndWarModel(unittest.TestCase):
             self.model.condition([("no_such_trigger", "=", "yes")], Posture())
 
 
+class TestLaunchUnderAttack(unittest.TestCase):
+    """The government may order a launch under attack in a war or an Acute
+    crisis with the suspect, under every doctrine but No First Use (rework
+    spec §5.3; owner, 2026-10-28)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = RiskModel()
+        cls.events = strip_comments(read(ROOT / "events/nuclear_incident_events.txt"))
+
+    def test_order_needs_war_or_acute(self):
+        acute = Posture(readiness=3, stage=3, danger=80, doctrine=2)
+        self.assertGreater(self.model.order_chance(acute), 0)
+        self.assertGreater(self.model.order_chance(Posture(readiness=3, war=True, doctrine=2)), 0)
+        self.assertEqual(self.model.order_chance(Posture(readiness=3, stage=2, danger=60, doctrine=2)), 0)
+
+    def test_order_blocked_only_by_nfu(self):
+        self.assertEqual(self.model.order_chance(Posture(readiness=3, stage=3, danger=80, doctrine=1)), 0)
+        for doctrine in (2, 3, 4, 5):
+            self.assertGreater(self.model.order_chance(Posture(readiness=3, stage=3, danger=80, doctrine=doctrine)), 0)
+        body = block(self.events, "nuclear_incident.1")
+        order = body[body.index("name = nuclear_incident.1.c"):]
+        trigger = block(order, "trigger")
+        self.assertNotIn("nd_doctrine_permits_strike", trigger)
+        self.assertIn("nd_launch_under_attack_context = { SUSPECT = scope:nd_warning_suspect }", trigger)
+        self.assertIn("nd_launch_under_attack_doctrine = { SUSPECT = scope:nd_warning_suspect }", trigger)
+        for gate in ("nd_pledge_permits_strike", "nd_war_law_permits_strategic_strike", "nd_forces_assembled"):
+            self.assertIn(gate, trigger)
+
+    def test_order_outside_war_records_first_use(self):
+        # The order dispatches through nd_launch_or_intercept as a warning
+        # launch, which a peacetime exchange accepts; the recorder prices it
+        # as every use is priced. Its only incident-only branch is No First
+        # Use's breach follow-up, and No First Use cannot give this order.
+        body = block(self.events, "nuclear_incident.1")
+        order = body[body.index("name = nuclear_incident.1.c"):]
+        self.assertIn("nd_launch_or_intercept = { VICTIM = scope:nd_warning_suspect NARRATE = yes KIND = warning }", order)
+        effects = strip_comments(read(ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"))
+        recorder = block(effects, "nd_record_nuclear_use")
+        self.assertEqual(recorder.count("nd_incident_launch_warning"), 1)
+        nfu = recorder[recorder.index("nd_doctrine_nfu = yes"):]
+        self.assertLess(nfu.index("nd_incident_launch_warning"), nfu.index("set_variable = nd_nfu_unordered_breach"))
+        self.assertIn("set_variable = { name = nd_has_used value = 1 }", recorder)
+
+    def test_ai_order_weights(self):
+        body = block(self.events, "nuclear_incident.1")
+        chance = block(body[body.index("name = nuclear_incident.1.c"):], "ai_chance")
+        for needle in ("nd_vulnerable_to = { ENEMY = scope:nd_warning_suspect }", "ruler_is_aggressive = yes",
+                       "var:nd_strain >= 50", "ruler_is_cautious = yes", "recon_satellites",
+                       "satellite_communications", "nd_crisis_talks_open_either = yes"):
+            self.assertIn(needle, chance)
+
+
 class TestHoldAndExposure(unittest.TestCase):
     """The chance of a halt has a ceiling by context and reads the suspect, the
     hotline and our own vulnerability (rework spec §4.3); a war with an armed

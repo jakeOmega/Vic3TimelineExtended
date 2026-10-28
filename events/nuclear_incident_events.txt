@@ -78,10 +78,10 @@ nuclear_incident.1 = {
 		custom_tooltip = nuclear_incident.1.a.tt
 		trigger_event = { id = nuclear_incident.3 days = 3 }
 		ai_chance = {
-			base = 5
+			base = 50
 			modifier = {
 				trigger = { ruler_is_cautious = yes }
-				add = 3
+				add = 30
 			}
 		}
 	}
@@ -119,40 +119,46 @@ nuclear_incident.1 = {
 		}
 		trigger_event = { id = nuclear_incident.3 days = 5 }
 		ai_chance = {
-			base = 3
+			base = 30
 			modifier = {
 				trigger = { ruler_is_aggressive = yes }
-				add = 2
+				add = 20
 			}
 			modifier = {
 				trigger = { nd_in_crisis = yes }
-				add = 2
+				add = 20
 			}
 		}
 	}
 
-	# Execute the warning-response orders. The only way a warning under central
-	# authority ends in a launch: somebody has to give the order. It is the
-	# government's own order, so it passes the gates every deliberate launch
-	# passes (owner ruling 2026-09-26, PR #510): the doctrine, any non-use
-	# pledge, the Rules of War and assembled forces, with the shared triggers
-	# and failure lines nuke_diplo_action uses. Forbidden, it shows greyed with
-	# the reason. The doctrine needs a war with the suspect, so outside a war
-	# the order cannot be given: the bare has_war_with comes first, so a
-	# peacetime warning's greyed option names the missing war rather than
-	# blaming the doctrine (whose tooltip line hides its own war check). The
-	# unauthorised paths (launch on warning, delegation, the cut-off commander)
-	# still skip these gates. Not highlighted: it is often greyed now.
+	# Execute the warning-response orders: the launch under attack. The only
+	# way a warning reaching the government ends in a launch: somebody has to
+	# give the order. It is the government's own order, so it passes the
+	# gates every deliberate launch passes (owner ruling 2026-09-26, PR #510)
+	# but one: a warning that reads as an incoming attack is the case every
+	# doctrine but No First Use was written for, so in a war with the suspect
+	# or an Acute crisis against it the doctrine lets it through (owner,
+	# 2026-10-28, rework spec §5.3). Outside both it cannot be given. The
+	# pledge, the Rules of War and assembled forces still apply, with the
+	# shared triggers and failure lines nuke_diplo_action uses; forbidden, it
+	# shows greyed with the reason, the missing context first. If the warning
+	# was false the launch is a first use, priced as one (nd_record_nuclear_use
+	# prices every use alike). The unauthorised paths (launch on warning,
+	# delegation, the cut-off commander) still skip these gates. Not
+	# highlighted: it is often greyed.
 	option = {
 		name = nuclear_incident.1.c
 		nd_log_context = yes
 		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_incident.1.c; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		trigger = {
 			nd_is_armed = yes
-			has_war_with = scope:nd_warning_suspect
 			custom_tooltip = {
-				text = nd_tt_doctrine_permits_strike
-				custom_tooltip = { text = nd_tt_doctrine_permits_strike nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect } }
+				text = nd_tt_launch_under_attack_context
+				nd_launch_under_attack_context = { SUSPECT = scope:nd_warning_suspect }
+			}
+			custom_tooltip = {
+				text = nd_tt_launch_under_attack_doctrine
+				nd_launch_under_attack_doctrine = { SUSPECT = scope:nd_warning_suspect }
 			}
 			custom_tooltip = {
 				text = nd_tt_pledge_permits_strike
@@ -171,15 +177,43 @@ nuclear_incident.1 = {
 		set_variable = { name = nd_warning_launched value = 1 }
 		nd_launch_or_intercept = { VICTIM = scope:nd_warning_suspect NARRATE = yes KIND = warning }
 		trigger_event = { id = nuclear_incident.3 days = 10 }
+		# A government that believes it could lose its force, a hawk, a strained
+		# command and an Acute crisis press for the order; caution, a second
+		# source of warning and open talks hold it back (rework spec §5.3).
 		ai_chance = {
-			base = 0
+			base = 2
+			modifier = {
+				trigger = { nd_vulnerable_to = { ENEMY = scope:nd_warning_suspect } }
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { var:nd_strain >= 50 }
+				add = 2
+			}
+			modifier = {
+				trigger = { nd_crisis_stage_at_least = { STAGE = 3 } }
+				add = 2
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				factor = 0.5
+			}
 			modifier = {
 				trigger = {
-					nd_regime_is_militarist = yes
-					ruler_is_aggressive = yes
-					has_war_with = scope:nd_warning_suspect
+					OR = {
+						has_technology_researched = recon_satellites
+						has_technology_researched = satellite_communications
+					}
 				}
-				add = 1
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { nd_crisis_talks_open_either = yes }
+				factor = 0.5
 			}
 		}
 	}
