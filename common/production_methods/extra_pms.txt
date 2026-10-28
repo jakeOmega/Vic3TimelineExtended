@@ -21884,6 +21884,10 @@ REPLACE:pm_trade_center_principle_external_trade_2 = {
 ### focus PM applies the same `goods_output_<civilian-ship>_mult` to
 ### every civilian-hull good the shipyard might be producing, so the
 ### percentage lands on whichever era-good the active base PM emits.
+### The percentages sit in `unscaled`, as every vanilla building-scope
+### `_mult` does: under `workforce_scaled` they multiplied by the
+### shipyard's staffed levels, so Naval Priority cut a full level-10
+### yard's civilian output by 200% (-0.20 x 10), to below zero.
 ### The naval and wartime tiers stack `country_ship_construction_add`
 ### additively on the base PM's value (same modifier vanilla shipyards
 ### already use at +5/+10/+15/+20 per shipyard).
@@ -21915,7 +21919,7 @@ pm_focus_civilian_production = {
 	}
 
 	building_modifiers = {
-		workforce_scaled = {
+		unscaled = {
 			goods_output_clippers_mult = 0.25
 			goods_output_steamers_mult = 0.25
 			goods_output_motor_ships_mult = 0.25
@@ -21938,7 +21942,7 @@ pm_focus_naval_production = {
 	}
 
 	building_modifiers = {
-		workforce_scaled = {
+		unscaled = {
 			goods_output_clippers_mult = -0.20
 			goods_output_steamers_mult = -0.20
 			goods_output_motor_ships_mult = -0.20
@@ -21961,7 +21965,7 @@ pm_focus_wartime_mobilization = {
 	}
 
 	building_modifiers = {
-		workforce_scaled = {
+		unscaled = {
 			goods_output_clippers_mult = -0.40
 			goods_output_steamers_mult = -0.40
 			goods_output_motor_ships_mult = -0.40
