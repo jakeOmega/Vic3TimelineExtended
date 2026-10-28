@@ -2114,16 +2114,19 @@ decol_iw_fighters_modifier = {
 	building_training_rate_mult = 0.5
 }
 
-# One great power's arms, multiplied by the square root of the backers, with no
-# cap (decol_iw_refresh_fighters; decol_iw_arms_unit restates the values for
-# .74.b's tooltip). Vanilla's polish_rebel_funding_modifier is the shape.
+# One great power's arms, multiplied by the square root of the backers' weights
+# summed, with no cap (decol_iw_refresh_fighters; decol_iw_arms_unit restates
+# the values for .74.b's tooltip). Vanilla's polish_rebel_funding_modifier is
+# the shape.
 decol_iw_foreign_arms_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	unit_offense_mult = 0.10
 	unit_defense_mult = 0.10
 }
 
-# A pro-colonial great power's arms for the metropole (.79): the smaller package.
+# A pro-colonial great power's arms for the metropole (.79): the smaller package,
+# on the same curve, each backer's fading over two years
+# (decol_iw_refresh_allied_arms; decol_iw_allied_arms_unit restates the values).
 decol_iw_allied_arms_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	unit_offense_mult = 0.05
