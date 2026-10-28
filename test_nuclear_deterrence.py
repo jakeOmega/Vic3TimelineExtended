@@ -1009,6 +1009,10 @@ def squash(text):
     return " ".join(text.split())
 
 
+ACCEPTED_THIS_CLAIM = ("NOT = { AND = { has_variable = nd_claim_accepted"
+                       " var:nd_claim_accepted = var:nd_claim_id } }")
+
+
 class TestFinalReviewFixesPhase2(unittest.TestCase):
     """The phase 2 final review's fixes (PR #1223)."""
 
@@ -1035,13 +1039,18 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         self.assertIn(call, block(self.ev1, "desc"))
         self.assertIn(call, block(self.ev1, "immediate"))
         accept = option_body(self.events, "nuclear_weapon_events.1.k")
-        self.assertIn("NOT = { var:nd_claim_accepted ?= var:nd_claim_id }", block(accept, "trigger"))
-        self.assertIn("var:nd_claim_belief_rolled_for ?= var:nd_claim_id", block(accept, "ai_chance"))
+        # The guarded form: no vanilla or mod precedent for ?= with a var: on
+        # its right, so a variable is compared only once it is known set.
+        self.assertIn(ACCEPTED_THIS_CLAIM, squash(block(accept, "trigger")))
+        self.assertIn("has_variable = nd_claim_belief_rolled_for var:nd_claim_belief_rolled_for = var:nd_claim_id",
+                      squash(block(accept, "ai_chance")))
+        self.assertNotIn("?= var:", accept)
         self.assertNotIn("var:nd_claim_by ?= scope:attacking_country", self.ev1)
 
     def test_reconciliation_reads_this_claims_acceptance(self):
-        trig = block(option_body(self.events, "nuclear_weapon_events.28.b"), "trigger")
-        self.assertIn("NOT = { var:nd_claim_accepted ?= var:nd_claim_id }", trig)
+        trig = squash(block(option_body(self.events, "nuclear_weapon_events.28.b"), "trigger"))
+        self.assertIn("NOT = { AND = { has_variable = nd_claim_id has_variable = nd_claim_accepted"
+                      " var:nd_claim_accepted = var:nd_claim_id } }", trig)
 
     def test_accept_hidden_where_absorbing_is(self):
         # Recessed under Automatic Retaliation the standing order answers (.h),

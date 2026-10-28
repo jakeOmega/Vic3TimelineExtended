@@ -270,7 +270,12 @@ nuclear_weapon_events.1 = {
 		# Automatic Retaliation system answers on its own.
 		trigger = {
 			nd_strike_carries_claim = { ENEMY = scope:attacking_country }
-			NOT = { var:nd_claim_accepted ?= var:nd_claim_id }
+			NOT = {
+				AND = {
+					has_variable = nd_claim_accepted
+					var:nd_claim_accepted = var:nd_claim_id
+				}
+			}
 			NOT = { scope:target_country = { nd_auto_answers_strike = { ENEMY = scope:attacking_country } } }
 			NOT = {
 				scope:target_country = {
@@ -290,7 +295,8 @@ nuclear_weapon_events.1 = {
 			base = 0
 			modifier = {
 				trigger = {
-					var:nd_claim_belief_rolled_for ?= var:nd_claim_id
+					has_variable = nd_claim_belief_rolled_for
+					var:nd_claim_belief_rolled_for = var:nd_claim_id
 					has_variable = nd_claim_believed
 					var:nd_claim_believed = 1
 				}
@@ -2766,7 +2772,13 @@ nuclear_weapon_events.28 = {
 	option = {
 		name = nuclear_weapon_events.28.b
 		trigger = {
-			NOT = { var:nd_claim_accepted ?= var:nd_claim_id }
+			NOT = {
+				AND = {
+					has_variable = nd_claim_id
+					has_variable = nd_claim_accepted
+					var:nd_claim_accepted = var:nd_claim_id
+				}
+			}
 		}
 		change_relations = { country = scope:nd_truth_launcher value = 30 }
 		nd_claim_clear = yes
