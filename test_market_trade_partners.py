@@ -116,11 +116,15 @@ class LocTest(unittest.TestCase):
                 self.assertIn(key, loc, key)
 
     def test_the_partner_charts_say_their_unit(self):
-        """MKT-2: the partner charts count units, not money, so they say so."""
+        """MKT-2: the partner charts count units, not money, so they say so,
+        in the heading's hover. The legend row is the flag and the figure
+        only: vanilla's compact_chart slot has no room for a unit, and
+        "units/wk" ran past it (play-test, 2026-10-28)."""
         loc = _loc()
         for d, value in (("export", "gui_exports_to_target"), ("import", "gui_imports_from_target")):
             self.assertIn(value, loc[f"te_market_{d}_partner_units"])
-            self.assertTrue(loc[f"te_market_{d}_partner_units"].endswith("units/wk"))
+            self.assertTrue(loc[f"te_market_{d}_partner_units"].endswith(f"ScriptValue('{value}')|v0]"))
+            self.assertIn("units a week", loc[f"te_market_{d}_partners_tt"])
             self.assertIn("by value", loc[f"te_market_{d}_partners_tt"])
 
     def test_the_hover_opens_with_the_tables_figure(self):

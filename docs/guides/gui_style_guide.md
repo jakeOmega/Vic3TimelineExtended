@@ -89,6 +89,9 @@ Example: the overview's first row and the agency icons in `gui/journal_entry_wid
 - No tooltip ends in a blank line. Don't end a loc line with `\n`, because a script-built list already separates its lines.
 - No element may widen its row. Give each cell in a row of cells a fixed width, so a long label or a bar can't push its neighbours off-centre (the standing bar once pushed the pies out of line).
 - *(play-test)* **Give every root a fixed width** (`minimumsize = { 520 -1 }` for a journal-entry root, with its rows in a 480 column). A wrapper sized by its content is centred once, at its first width. Rows that appear later then drift off-centre and clip, as the Global Warming and Nuclear overviews did in round 1.
+- *(play-test, 2026-10-28)* **Never centre (or right-align) anything whose width changes: give controls that show and hide a fixed-size slot.** A control wrapper sized by its button is 0 wide while the button is hidden, so a centred one drifts when the button appears: the UN's Champion / Undermine and the programmes' Join ran out of the panel. Controls that take turns overlap in one slot of their size, and a row of slots is as wide whichever shows (`un_act_control`, `un_act_slot`; `gui_modding_guide.md` gotcha #43).
+- *(play-test, 2026-10-28)* **Text in a vanilla type's slot keeps vanilla's length.** A vanilla row (a `compact_chart` legend, a tab, a tooltip header) is laid out for the text vanilla puts there; a unit or a word added to it runs past the slot. Say it in the heading or its hover instead: the trade-partner legends' "units/wk" moved to the headings' hover.
+- *(play-test, 2026-10-28)* **One flag per country.** `GetName` draws a flag; beside a flag widget the name is `GetNameNoFlag` (`gui_modding_guide.md` gotcha #44).
 - Scripted text needs no leading spaces when each line is its own row. Keep indentation for a sub-item under a heading line, such as a convention's terms under its name.
 
 ### 9. Where a system's panel goes

@@ -704,40 +704,47 @@ types un_authority_widget_types
 			}
 			# Our own stance, centred under the groups it would put us in (the
 			# 2026-10-27 audit, UN-9: it was in the Actions grid). A great-power
-			# member sees Champion and Undermine, or the one that stops its
-			# stance; nobody else sees either.
+			# member sees Champion and Undermine, either of them replaced by its
+			# Stop while we hold that stance; nobody else sees either. Each pair
+			# takes turns in one slot, so the row is 236 + 4 + 236 = 476 wide
+			# whichever shows (un_act_row).
 			un_act_row = {
+				visible = "[Or( Or( GetScriptedGui('un_act_champion_order_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_act_stop_championing_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ), Or( GetScriptedGui('un_act_undermine_order_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_act_stop_undermining_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
 				blockoverride "act_row" {
-					un_act_control = {
-						blockoverride "act_context" {
-							datacontext = "[GetScriptedGui('un_act_champion_order_sgui')]"
+					un_act_slot = {
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_champion_order_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_champion_label"
+							}
 						}
-						blockoverride "act_label" {
-							text = "je_un_act_champion_label"
-						}
-					}
-					un_act_control = {
-						blockoverride "act_context" {
-							datacontext = "[GetScriptedGui('un_act_stop_championing_sgui')]"
-						}
-						blockoverride "act_label" {
-							text = "je_un_act_stop_championing_label"
-						}
-					}
-					un_act_control = {
-						blockoverride "act_context" {
-							datacontext = "[GetScriptedGui('un_act_undermine_order_sgui')]"
-						}
-						blockoverride "act_label" {
-							text = "je_un_act_undermine_label"
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_stop_championing_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_stop_championing_label"
+							}
 						}
 					}
-					un_act_control = {
-						blockoverride "act_context" {
-							datacontext = "[GetScriptedGui('un_act_stop_undermining_sgui')]"
+					un_act_slot = {
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_undermine_order_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_undermine_label"
+							}
 						}
-						blockoverride "act_label" {
-							text = "je_un_act_stop_undermining_label"
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_stop_undermining_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_stop_undermining_label"
+							}
 						}
 					}
 				}

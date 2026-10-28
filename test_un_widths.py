@@ -210,6 +210,83 @@ class WidthTest(unittest.TestCase):
                 self.fits(text.group(1), int(width.group(1)), font)
         self.assertGreaterEqual(seen, 15)
 
+    def test_controls_keep_their_size_whichever_shows(self):
+        """A control is a fixed-size widget, so a hidden one keeps its place
+        and a row of them never changes width. A wrapper sized by its content
+        was 0 wide while its button was hidden; a centred one was centred at
+        that width, and Champion / Undermine, the programmes' Join and the
+        rest drifted out of the panel when their buttons appeared (play-test,
+        2026-10-28)."""
+        control = _type(self.chamber, "un_act_control")
+        self.assertRegex(self.chamber, r"\ttype un_act_control = widget \{")
+        self.assertNotIn("parentanchor", control.split("button = {")[0])
+        self.assertRegex(control, r'block "act_size" \{\s*size = \{ 236 30 \}')
+        self.assertIn("size = { 100% 100% }", control)
+        self.assertRegex(self.chamber, r"\ttype un_act_slot = widget \{")
+
+        def size(body, block, default=(236, 30)):
+            m = re.search(rf'blockoverride "{block}" \{{\s*size = \{{ (\d+) (\d+) \}}', body)
+            return (int(m.group(1)), int(m.group(2))) if m else default
+
+        def children(body):
+            """The top-level `name = {` entries of a block body."""
+            out, depth = [], 0
+            for m in re.finditer(r"(\w+) = \{|\{|\}", body):
+                if m.group(0) == "}":
+                    depth -= 1
+                    continue
+                if depth == 0 and m.group(1):
+                    out.append((m.group(1), _block(body, m.end() - 1)))
+                depth += 1
+            return out
+
+        # Controls that take turns in a slot are the slot's size.
+        slots = _instances(self.all, "un_act_slot")
+        self.assertGreaterEqual(len(slots), 9)
+        for slot in slots:
+            kids = children(slot)
+            self.assertTrue(all(k in ("blockoverride", "un_act_control") for k, _ in kids), [k for k, _ in kids])
+            for kind, body in kids:
+                if kind == "un_act_control":
+                    self.assertEqual(size(body, "act_size"), size(slot, "slot_size"))
+
+        # A row is fixed-size slots and controls, at most the 480 column, and
+        # hides itself, naming only its own controls, when none shows.
+        rows = _instances(self.all, "un_act_row")
+        self.assertGreaterEqual(len(rows), 5)
+        for row in rows:
+            kids = children(_block(row, row.index('blockoverride "act_row" {') + len('blockoverride "act_row" ')))
+            with self.subTest(row=re.findall(r"GetScriptedGui\('(\w+)'\)\]", row)):
+                self.assertTrue(kids)
+                self.assertTrue(all(k in ("un_act_slot", "un_act_control") for k, _ in kids), [k for k, _ in kids])
+                widths = [size(b, "slot_size" if k == "un_act_slot" else "act_size")[0] for k, b in kids]
+                self.assertLessEqual(sum(widths) + 4 * (len(widths) - 1), 480)
+                visible = re.match(r'\s*visible = "([^"]*)"', row)
+                self.assertTrue(visible, "an un_act_row hides itself when none of its controls shows")
+                named = set(re.findall(r"GetScriptedGui\('(\w+)'\)\.IsShown", visible.group(1)))
+                own = set(re.findall(r"datacontext = \"\[GetScriptedGui\('(\w+)'\)\]\"", row))
+                self.assertTrue(named and named <= own, (named, own))
+
+        # Nothing that holds a control is centred at a width it can outgrow:
+        # the overview's Leave stack and its buttons carry no anchor.
+        leave = self.overview[self.overview.rindex("flowcontainer = {", 0, self.overview.index("GetScriptedGui('un_act_leave_sgui')")):]
+        leave = _block(leave, 0)
+        self.assertNotIn("hcenter", leave)
+
+    def test_the_ballot_is_a_fixed_width(self):
+        """The ballot's controls are hidden whenever no vote is open, so the
+        block holding them is a fixed 476 in a fixed 480, and the veto row's
+        two slots sit under For and Against (gotcha #43)."""
+        layout = _read(LAYOUT)
+        head = layout[:layout.index("datacontext = \"[GetScriptedGui('un_chamber_vote_sgui')]\"")]
+        vote = head.rindex("flowcontainer = {")
+        self.assertIn("minimumsize = { 476 -1 }", head[vote:])
+        gate = head.rindex("visible = \"[GetScriptedGui('un_session_open_sgui')")
+        self.assertIn("minimumsize = { 480 -1 }", head[head.rindex("flowcontainer = {", 0, gate):gate])
+        block = _block(layout, vote)
+        self.assertEqual(re.findall(r"\bwidget = \{\s*size = \{ (\d+) 30 \}", block), ["236", "236"])
+        self.assertIn("je_un_chamber_vote_veto_cancel_label", block)
+
     def test_the_delegation_words(self):
         for key, width in (("je_un_chamber_deleg_lobby_word", 56), ("je_un_chamber_deleg_pledge_word", 64)):
             with self.subTest(key=key):

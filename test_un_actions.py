@@ -158,7 +158,7 @@ class MirrorTest(unittest.TestCase):
 class ControlTypeTest(unittest.TestCase):
     def test_a_greyed_control_says_why(self):
         chamber = _read(WIDGETS[1])
-        body = chamber[chamber.index("type un_act_control = flowcontainer {"):]
+        body = chamber[chamber.index("type un_act_control = widget {"):]
         body = _body(body, 0)
         self.assertIn("ScriptedGui.IsValidTooltip(", body)
         self.assertIn("ScriptedGui.ExecuteTooltip(", body)

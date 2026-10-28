@@ -344,18 +344,24 @@ types un_layout_widget_types
 			# row with its terms on hover (UN-4). They followed the whole
 			# session card until then, and how we had voted showed only in the
 			# greyed buttons' tooltips.
+			#
+			# Every part is a fixed width, centred in a fixed 480: the vote
+			# controls are hidden whenever no vote is open, and a centred block
+			# sized by them would be centred at that empty width and spill out of
+			# the panel when they appeared (gotcha #43).
 			flowcontainer = {
 				direction = vertical
 				spacing = 4
 				ignoreinvisible = yes
 				parentanchor = hcenter
+				minimumsize = { 480 -1 }
 				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 				textbox = {
 					autoresize = yes
-					parentanchor = hcenter
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
 					align = hcenter|nobaseline
-					max_width = 480
 					using = un_fontsize_row
 					text = "je_un_our_vote_line"
 				}
@@ -372,11 +378,15 @@ types un_layout_widget_types
 				# is greyed out) concatenated with ExecuteTooltip (what the vote does),
 				# which is the un_vote.1 option's own consequence text, lobbying
 				# keep/break line included.
+				# For and Against show together (one is_shown); the veto row's two
+				# slots sit under them, Veto or Confirm under For and Cancel under
+				# Against: 236 + 4 + 236 = 476 whichever shows.
 				flowcontainer = {
 					direction = vertical
 					spacing = 4
 					ignoreinvisible = yes
 					parentanchor = hcenter
+					minimumsize = { 476 -1 }
 					datacontext = "[GetScriptedGui('un_chamber_vote_sgui')]"
 
 					flowcontainer = {
@@ -415,52 +425,61 @@ types un_layout_widget_types
 					# game, so the confirmation is built out of the expander mechanism
 					# this widget already relies on: GetVariableSystem state, which is
 					# client-side, never saved and never gameplay state.
+					# Veto, and once armed Confirm, take turns in the slot under For;
+					# Cancel has the slot under Against.
 					flowcontainer = {
 						direction = horizontal
 						spacing = 4
-						ignoreinvisible = yes
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 
-						un_chamber_action_button = {
-							blockoverride "action_label" {
-								text = "je_un_chamber_vote_veto_label"
+						widget = {
+							size = { 236 30 }
+
+							un_chamber_action_button = {
+								blockoverride "action_label" {
+									text = "je_un_chamber_vote_veto_label"
+								}
+								blockoverride "action_binding" {
+									visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Not(GetVariableSystem.Exists('un_chamber_veto_armed')) )]"
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+								}
 							}
-							blockoverride "action_binding" {
-								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Not(GetVariableSystem.Exists('un_chamber_veto_armed')) )]"
-								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-								onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
-								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+
+							un_chamber_action_button = {
+								blockoverride "action_label" {
+									text = "je_un_chamber_vote_veto_confirm_label"
+								}
+								blockoverride "action_binding" {
+									visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+								}
 							}
 						}
+						widget = {
+							size = { 236 30 }
 
-						un_chamber_action_button = {
-							blockoverride "action_label" {
-								text = "je_un_chamber_vote_veto_confirm_label"
-							}
-							blockoverride "action_binding" {
+							button = {
+								using = default_button_action
+								size = { 236 30 }
+								parentanchor = vcenter
 								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
-								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 								onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
-								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-							}
-						}
+								tooltip = "je_un_chamber_vote_veto_cancel_tt"
 
-						button = {
-							using = default_button_action
-							size = { 152 30 }
-							parentanchor = vcenter
-							visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
-							onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
-							tooltip = "je_un_chamber_vote_veto_cancel_tt"
-
-							textbox = {
-								parentanchor = center
-								align = center|nobaseline
-								autoresize = yes
-								max_width = 142
-								elide = right
-								using = un_fontsize_row
-								text = "je_un_chamber_vote_veto_cancel_label"
+								textbox = {
+									parentanchor = center
+									align = center|nobaseline
+									autoresize = yes
+									max_width = 226
+									elide = right
+									using = un_fontsize_row
+									text = "je_un_chamber_vote_veto_cancel_label"
+								}
 							}
 						}
 					}
