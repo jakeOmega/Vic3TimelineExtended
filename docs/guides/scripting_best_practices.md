@@ -2510,6 +2510,8 @@ The loader reads a loc file's language from its `_l_<language>.yml` suffix, and 
 | `[Nbsp]` | Non-breaking space |
 | `$EFFECT_LIST_BULLET$` | Bullet point marker |
 
+**Two modifier lists in one tooltip run together.** `GetStaticModifier('x').GetDesc` prints bare effect lines with no name, so two in a row read as one list (the Solar System worlds' hovers did, 2026-10-28). Head each with its own name and indent its effects: `#bold $x$#!#indent_newline:3 \n[GetStaticModifier('x').GetDesc]#!`, vanilla's form (`concept_subject_type_desc`). The block indents the lines that follow a newline inside it, so start it with `\n`; text after its `#!` is back at the margin.
+
 ### Tooltips
 | Code | Effect |
 |---|---|
