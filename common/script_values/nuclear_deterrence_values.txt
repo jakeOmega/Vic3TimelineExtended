@@ -1518,6 +1518,53 @@ nd_yp_stakes_minor_value = {
 	}
 }
 
+# The AI's chance (percent) of claiming a deliberate first strike was
+# unauthorized when it was not (rework spec §5.4; owner, 2026-10-28): 15, twice
+# under an aggressive ruler, half from a taboo of 50, and by the ruler's
+# character: half again for a Ruthless or Grifter ruler, a quarter for an
+# Honorable one, half for a Direct one. Launcher scope.
+nd_ai_lies_value = {
+	value = 15
+	if = {
+		limit = { ruler_is_aggressive = yes }
+		multiply = 2
+	}
+	if = {
+		limit = {
+			exists = ruler
+			ruler = { has_trait = ruthless }
+		}
+		multiply = 1.5
+	}
+	if = {
+		limit = {
+			exists = ruler
+			ruler = { has_trait = grifter }
+		}
+		multiply = 1.5
+	}
+	if = {
+		limit = {
+			exists = ruler
+			ruler = { has_trait = honorable }
+		}
+		multiply = 0.25
+	}
+	if = {
+		limit = {
+			exists = ruler
+			ruler = { has_trait = direct }
+		}
+		multiply = 0.5
+	}
+	if = {
+		limit = { nd_taboo_value >= 50 }
+		multiply = 0.5
+	}
+	max = 90
+	round = yes
+}
+
 nd_yield_pressure_value = {
 	value = nd_yp_base_value
 	add = nd_yp_answer_value

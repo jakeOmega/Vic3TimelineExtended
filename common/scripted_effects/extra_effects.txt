@@ -613,6 +613,9 @@ nuclear_first_strike = { # Scope is target state
 						}
 						nd_taboo_note_use = { KIND = strategic RETALIATION = no }
 					}
+					# Before the victim hears of it: whether the launcher says it
+					# was unauthorized (nuclear crisis rework spec §5.4).
+					hidden_effect = { nd_record_claim = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
 						owner = { trigger_event = { id = nuclear_weapon_events.1 popup = yes } }

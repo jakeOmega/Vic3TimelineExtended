@@ -54,6 +54,7 @@
 ###                           50/51 hardening -/+
 ###                           60/61 arsenal ceiling -/+  62 lift it
 ###                           63 dismantle the arsenal  64 halt it
+###                           70/71 disavow our strikes on / off
 ###   nd_crisis_action_sgui   1 go public  2 propose stand-down  3 exercise
 ###                           4 concede    5 let it go
 ### The AI does not use these (ai_is_valid = no): it sets its posture in
@@ -1627,6 +1628,42 @@ types nuclear_deterrence_widget_types
 						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
 						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End ) ) )]"
 					}
+				}
+			}
+
+			### Disavow our strikes (rework spec §5.4; owner, 2026-10-28): while on,
+			### each deliberate first strike we order is claimed as unauthorized.
+			### One row each way; visibility from the scope-free nd_disavowing_sgui.
+			nd_choice_row = {
+				visible = "[And( GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('nd_disavowing_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+				blockoverride "choice_name" {
+					text = "nd_w_disavow_off_label"
+					tooltip = "nd_w_disavow_tt"
+				}
+				blockoverride "button_text" {
+					text = "nd_w_btn_disavow"
+				}
+				blockoverride "button_binding" {
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End ) ) )]"
+				}
+			}
+			nd_choice_row = {
+				visible = "[GetScriptedGui('nd_disavowing_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+				blockoverride "choice_name" {
+					text = "nd_w_disavow_on_label"
+					tooltip = "nd_w_disavow_tt"
+				}
+				blockoverride "button_text" {
+					text = "nd_w_btn_own_strikes"
+				}
+				blockoverride "button_binding" {
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End ) ) )]"
 				}
 			}
 

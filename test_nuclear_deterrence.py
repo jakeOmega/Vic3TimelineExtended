@@ -855,6 +855,61 @@ class TestPeacetimeStrikeDispute(unittest.TestCase):
             self.assertNotIn("35", loc_value(key), key)
 
 
+class TestStrikeClaims(unittest.TestCase):
+    """A launcher may claim a strike was unauthorized (2026-10-28 rework spec
+    §5.4): true after an unordered launch, false under Disavow our strikes or
+    an AI's lie."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(EFFECTS))
+        self.values = strip_comments(read(VALUES))
+
+    def claim(self):
+        return block(self.effects, "nd_record_claim")
+
+    def test_claim_recorded_before_the_victims_event(self):
+        strike = block(strip_comments(read(EXTRA_EFFECTS)), "nuclear_first_strike")
+        self.assertLess(strike.index("nd_record_claim = yes"), strike.index("id = nuclear_weapon_events.1 "))
+
+    def test_no_claim_on_an_answer(self):
+        self.assertIn("NOT = { nd_was_struck_by = { ENEMY = scope:target_country } }", self.claim())
+
+    def test_unordered_launch_claims_true(self):
+        body = self.claim()
+        i = body.index("nd_strike_from_incident = yes")
+        self.assertIn("name = nd_claim_kind value = 1", body[i:i + 200])
+
+    def test_ai_lie_rate(self):
+        body = block(self.values, "nd_ai_lies_value")
+        for needle in ("value = 15", "ruler_is_aggressive = yes", "multiply = 2", "has_trait = ruthless",
+                       "has_trait = grifter", "multiply = 1.5", "has_trait = honorable", "multiply = 0.25",
+                       "has_trait = direct", "nd_taboo_value >= 50", "multiply = 0.5"):
+            self.assertIn(needle, body)
+        claim = self.claim()
+        self.assertIn("chance = nd_ai_lies_value", claim)
+        self.assertIn("has_variable = nd_disavow_strikes", claim)
+
+    def test_claim_record_once_per_strike(self):
+        body = self.claim()
+        self.assertIn("name = nd_struck_count", body)
+        self.assertIn("days = 30", body)
+        self.assertIn("change_global_variable = { name = nd_claim_counter add = 1 }", body)
+        for var in ("nd_claim_by", "nd_claim_true", "nd_claim_id"):
+            self.assertIn(f"name = {var} value", body)
+        # The decision runs only for a strike's first warhead.
+        self.assertLess(body.index("var:nd_last_striker ?= scope:attacking_country"), body.index("nd_ai_lies_value"))
+
+    def test_toggle_ops_in_step(self):
+        gui = read(GUI)
+        for op in (70, 71):
+            self.assertIn(f"'(CFixedPoint){op}'", gui)
+            self.assertIn(f"scope:op = {op}", strip_comments(read(SGUIS)))
+        self.assertIn("70/71", gui)
+        self.assertIn("70 / 71", read(SGUIS))
+        self.assertIn("70 / 71", read(JE_DOC))
+        self.assertIn("has_variable = nd_disavow_strikes", block(strip_comments(read(SGUIS)), "nd_disavowing_sgui"))
+
+
 class TestOutcomeNotice(unittest.TestCase):
     def setUp(self):
         self.effects = strip_comments(read(CRISIS_EFFECTS))

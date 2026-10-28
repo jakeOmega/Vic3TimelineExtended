@@ -1598,6 +1598,7 @@ Op table (repeated in the sgui header and the `.gui` header — keep all three i
 | | 62 | lift the arsenal ceiling |
 | | 63 | dismantle the arsenal |
 | | 64 | halt the dismantling |
+| | 70 / 71 | Disavow our strikes on / off (rework phase 2) |
 | `nd_crisis_action_sgui` | 1 | go public (issuer) |
 | | 2 | propose a mutual stand-down |
 | | 3 | a demonstration exercise (armed) |
