@@ -778,12 +778,12 @@ colonial_empire_je_cleanup_effect = {
 	# by the journal-entry widget. Surviving these past JE end would leave the
 	# journal-history tooltip quoting a stale tier and drift.
 	#
-	# The seven colonial_condemner_rank_N slot variables that used to be cleared
-	# here are gone: the pressuring-great-powers roster is now walked live in
-	# script by colonial_empire_pressure_sgui, so nothing sets the slots any
-	# more. Their remove_variable lines are deliberately NOT kept for old saves
-	# -- a remove_variable for a name nothing sets logs "used but never set", and
-	# an orphaned variable on a pre-upgrade save is inert.
+	# Slot variables nothing sets any more are deliberately NOT cleared for old
+	# saves -- a remove_variable for a name nothing sets logs "used but never
+	# set", and an orphaned variable on a pre-upgrade save is inert. That covers
+	# the seven colonial_condemner_rank_N slots (the great-power table is a
+	# container list since, below) and the eight colonial_empire_territory_N and
+	# colonial_empire_subject_N row slots (variable lists since 2026-10-27).
 	remove_variable = colonial_empire_tier
 	remove_variable = colonial_empire_next_boundary
 	remove_variable = colonial_empire_bar_bucket
@@ -799,22 +799,10 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_empire_subject_count
 	remove_variable = colonial_empire_eligible_count
 	remove_variable = colonial_empire_bloc_count
-	remove_variable = colonial_empire_territory_1
-	remove_variable = colonial_empire_territory_2
-	remove_variable = colonial_empire_territory_3
-	remove_variable = colonial_empire_territory_4
-	remove_variable = colonial_empire_territory_5
-	remove_variable = colonial_empire_territory_6
-	remove_variable = colonial_empire_territory_7
-	remove_variable = colonial_empire_territory_8
-	remove_variable = colonial_empire_subject_1
-	remove_variable = colonial_empire_subject_2
-	remove_variable = colonial_empire_subject_3
-	remove_variable = colonial_empire_subject_4
-	remove_variable = colonial_empire_subject_5
-	remove_variable = colonial_empire_subject_6
-	remove_variable = colonial_empire_subject_7
-	remove_variable = colonial_empire_subject_8
+	# The holdings lists and the great-power table's rows.
+	clear_variable_list = colonial_empire_blocs
+	clear_variable_list = colonial_empire_subject_capitals
+	colonial_empire_clear_gp_rows = yes
 	# And the release blocs the list marked on its states.
 	every_scope_state = {
 		limit = {
@@ -1166,7 +1154,7 @@ colonial_programme_garrison_up = {
 		limit = { colonial_garrison_level_value < 1 }
 		# Starting the garrison. The infamy lingers: the programme slows infamy
 		# decay, and a sustained Iron-Fist run draws great-power condemners.
-		change_infamy = 5
+		change_infamy = colonial_garrison_start_infamy
 	}
 	custom_tooltip = {
 		text = CE_GARRISON_UP_TT

@@ -13,7 +13,8 @@ panels](#the-un-panels)). The United Nations game rule turns the system off.
 ## Founding the United Nations
 
 A great power that has researched Intergovernmental Organizations and is not a
-subject can press Found the United Nations while no UN exists. Founding uses 500
+subject can press Found the United Nations, under the overview's Membership
+cell, while no UN exists. Founding uses 500
 influence, fading over five years, and needs that much available. The founder
 becomes the first member, a
 founding member, the headquarters host and the first permanent member of the
@@ -40,7 +41,7 @@ building is demolished.
 ### Joining and leaving the UN
 
 Any country that conducts its own foreign policy may press Join the United
-Nations: an independent country, or a dominion, protectorate or tributary.
+Nations, under the overview's Membership cell: an independent country, or a dominion, protectorate or tributary.
 Puppets, vassals, colonies, personal unions, crown lands, chartered companies
 and decentralized nations cannot. No technology is needed.
 
@@ -52,7 +53,8 @@ speed, +1% research speed, +3% prestige). Joining binds you, without a choice,
 to every convention already in force, and makes you pay [UN
 dues](#un-dues-and-article-19).
 
-Leave the United Nations ends your membership, seat, programs and conventions.
+Leave the UN, which asks you to confirm, ends your membership, seat, programs
+and conventions.
 It costs 5 [standing](#international-standing) and gives UN Withdrawal
 Consequences for five years (−25% relations improvement speed, −5% prestige),
 during which you cannot rejoin. Sanctions against you stay in force, and so do
@@ -123,7 +125,7 @@ Policy counts a country's UN Authority Target in full only while the country is
 a member and is not undermining the UN. A non-member, or a member undermining
 it, counts only when its total is negative: its harmful policies pull authority
 down, and its good ones can only offset them. Leaving the UN, or pressing
-Undermine International Order, stops a positive total from counting. Hover the
+Undermine the Order, stops a positive total from counting. Hover the
 Policy row to see your own figure, your weight and what you count for.
 
 ### What counts toward Policy
@@ -205,8 +207,8 @@ Dissolution ends every membership, seat, program, convention, agency, sanctions
 regime, mandate and mission, demolishes the headquarters and writes off unpaid
 dues. Every power bloc gains The UN Has Fallen (+20 cohesion, +20% leverage
 generation, fading over ten years). Twenty years later any great power with
-Intergovernmental Organizations can convene a founding conference with Found the
-United Nations, at the founder's influence cost. The great power with the most prestige, if it is not the
+Intergovernmental Organizations can convene a founding conference with Convene
+a Conference, in the same place, at the founder's influence cost. The great power with the most prestige, if it is not the
 convener, receives A Founding Conference and may join, stay out or oppose;
 opposing wrecks it and blocks another for ten years. Otherwise the UN is
 refounded after twelve months at authority 25, under the founding charter and
@@ -263,8 +265,8 @@ Each veto outside Moribund also adds 5 to your **veto record**, which fades by 5
 motion to expel is weighed on its own case, not the case that decides
 condemnations and sanctions: your veto record, −10 for Exemplary standing or −5
 for Respected (+5 for Poor, +10 for Disgraced), and −5 each for hosting the
-headquarters, running the development programme, and running the peacekeeping
-programme or serving in a mission (−10 at most). Every other member adds that
+headquarters, running the development program, and running the peacekeeping
+program or serving in a mission (−10 at most). Every other member adds that
 case to its lean, and the habit of consensus does not apply. The seat goes to
 the great power with the most prestige that holds none, which can be the
 proposer; members lean 5 against a proposer that would take it. Once you have
@@ -314,7 +316,7 @@ The other eight are:
 | International Sanctions | A major power, against a rival with a case of 50+ | Sanctioned: trade advantage, influence and prestige, × enforcement. The proposer enforces them until it presses Lift Sanctions or the Assembly lifts them; if the target voted for them, none apply and nobody enforces them. Sanctions whose enforcer leaves the UN or is gone lapse the next month. |
 | Lift the Sanctions Against Us | A member under sanctions, for itself | The sanctions end, with the embargoes the Assembly imposed, and the enforcer may table sanctions again. |
 | Authorized Military Mandate | See [UN military mandates](#un-military-mandates) | A mandate for the proposer. |
-| Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it, and cannot leave the Peacekeeping programme for ten years; nobody else is asked. |
+| Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it, and cannot leave the Peacekeeping program for ten years; nobody else is asked. |
 | Request Humanitarian Aid | A member with a state below 8 standard of living or devastated | An aid mission; major-power members that voted and take part pay for ten years. |
 | Charter Reform | A major power, once the charter is ripe | The next reform. |
 | Motion to Expel a Permanent Member | Any member, against a permanent member that vetoed within five years and is not its ally, overlord or subject | The seat is stripped. |
@@ -434,16 +436,20 @@ a member holding warheads that did not vote stays outside the nuclear ban.
 
 ### Tabling UN business
 
-You table the eight topics above, and the nine the reformed charter opens, from
-the Propose a Resolution rows or the UN tab's buttons, and any convention
-from those rows. The rows sit under
-the General Assembly while no resolution is in session. Each gives the topic,
-whether it is a Binding Resolution (which can be vetoed) or a Recommendatory
-one, its passage rule and its target. "Target: None" means no country gives
-grounds right now; hover it for why. Hover a topic's name for everything it
+You table the eight topics above, the nine the reformed charter opens and any
+convention from the Propose a Resolution rows, which sit under the General
+Assembly while no resolution is in session. Its heading says how many topics
+are ready, and its first line when your next motion may come. The topics with a
+case come first, under Ready to Table; the rest are under No Case Now,
+collapsed; a convention in force or an institution already founded is not
+listed, only counted. Each row gives the topic, whether it is a Binding
+Resolution (which can be vetoed) or a Recommendatory one, its passage rule and
+its target. "Target: None" means no country gives grounds right now; hover it
+for why. On a topic aimed at a country, Nearest names the candidate with the
+strongest case and the case strength it needs. Hover a topic's name for everything it
 would do, to its target, its proposer, the members and other systems, and for a
 convention the agency it founds and when the docket raises it. On the resolution
-in session, Its Terms after "If it carries" shows the same. A greyed Propose
+in session, Its Terms after "If it carries" shows the same. A grayed Propose
 button lists in its tooltip what stops you.
 
 Tabling on your own motion uses influence for two years, and you need that much
@@ -541,8 +547,9 @@ lean 3 points its way, up to 15, so it needs five months to reach its full
 effect. Campaigns on the same side stack to 20, and campaigns on opposite sides
 cancel out. A campaign ends when the member votes or the resolution closes, and
 you can stop it at any time, which frees the influence and loses what it had
-gained. While you lobby a member, its Delegations row shows Stop Lobbying in
-place of Lobby For and Lobby Against, and a campaign you are running never
+gained. Each Delegations row carries the member's flag and its band, marked
+(est.) for the Assembly's estimate or (true) for a member you lobby. While you
+lobby a member, its row shows Stop Lobbying in place of its two Lobby buttons, and a campaign you are running never
 starts over. Only AI members can be lobbied, never the resolution's target, and
 you need a vote yourself.
 
@@ -550,7 +557,7 @@ Lobby Top Members For and Lobby Top Members Against, above the Delegations rows,
 start campaigns in bulk. One press puts a campaign on each listed member the
 Assembly doesn't yet read as leaning your way, from the top of the list down,
 until your influence runs out. Members you already lobby are skipped. The
-tooltip says how many campaigns your influence covers. A button is greyed if you
+tooltip says how many campaigns your influence covers. A button is grayed if you
 have no vote, less than 100 influence, or no member on the list left to lobby.
 
 Seek a Vote Commitment: For and Seek a Vote Commitment: Against ask a member to
@@ -558,7 +565,7 @@ pledge its vote. If it accepts, you owe it an obligation and its lean moves 100
 points your way. A member pledges once per resolution, and the first pledge it
 accepts stands. You can ask each member once per resolution and collect two
 pledges per resolution, and you cannot ask the target or a member that has
-voted. From the Delegations rows an AI member answers at once; a human member
+voted. From the Delegations rows (Pledge For or Against) an AI member answers at once; a human member
 answers a request from the diplomacy panel. A kept pledge gives the member +1
 standing and +10 relations with you; a broken one costs it 4 standing and 20
 relations and cancels your obligation. A permanent member that pledged against
@@ -699,7 +706,7 @@ An overlord that voted for the referendum must hold it.
 ### The Standing UN Force
 
 A major-power member can propose the Standing UN Force once. While it stands it
-serves in every peacekeeping and Stabilisation mission as one more contributor,
+serves in every peacekeeping and Stabilization mission as one more contributor,
 and those missions no longer lapse unstaffed or fail when the last contingent
 goes home. It costs a tenth of the UN's budget. At Supranational, a war goal a
 member adds against a country hosting such a mission, in a play it started, is
@@ -744,7 +751,7 @@ the average, the line rises to that member's figure, so the Fund always pays at
 least one member.
 
 A reform strengthens a Fund that already stands; nobody votes on it again.
-The donations are the [Fund Development Programs](#development-programs-sizes)
+The donations are the [Development Programs](#development-programs-sizes)
 contributions, which open only once the Fund stands, to any member that holds its
 seat, pays its dues and draws no grant. A contributor's money pays the grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
@@ -759,8 +766,8 @@ to see how it was set.
 ### The World Food Reserve and hunger
 
 The World Food Reserve needs no charter reform. While it stands, a member with
-a Strategic Reserve Hub can press Pledge Grain to the World Food Reserve, and
-Withdraw Our Grain Pledge at any time. When a UN aid mission opens, the Reserve
+a Strategic Reserve Hub can press Pledge Grain, under the World Food Reserve
+line in Our Obligations, and Withdraw Our Pledge at any time. When a UN aid mission opens, the Reserve
 takes grain from the pledgers, other than the mission's host, holding at least 500: up to a quarter of each
 one's grain and no more than 2,500 units from any one, 5,000 in all. The
 mission's state gets up to +0.15 food security and −5% mortality for a year,
@@ -780,8 +787,9 @@ carries its member modifier. Its effects are multiplied by the UN's enforcement,
 never below ×0.01, so a Moribund UN leaves conventions dormant rather than
 lapsed. Most also name winners and losers among the parties. Our Obligations
 lists each convention you are party to, with your terms under it; hover a
-convention for all its terms, or a term for its modifier. Hover an agency in the
-overview for its convention's terms, founded or not. Your terms start the day
+convention for all its terms, or a term for its modifier. An agency's hover in
+the overview says whether it is founded, with its convention's terms one hover
+further, on Its terms. Your terms start the day
 you ratify a convention or join, and are re-read when the tier changes and once
 a year.
 
@@ -801,7 +809,7 @@ a year.
 | Single Convention on Narcotic Drugs (INCB) | Authority 20; a member with Antibiotic Mass Production; a major-power proposer with Pharmaceuticals | Pharmaceutical Industries throughput +5%, prestige +3% | Opium Plantation throughput −15%; no additional exporter penalty. |
 | Convention on Cultural Diversity | Charter Reform I; authority 40; UNESCO in force; a proposer with Mass Media that is not the cultural hegemon | Prestige; half the Foreign Cultural Benchmark (none at Supranational); minorities assimilate 20% more slowly and their homelands fade 30% more slowly | A cultural hegemon that is a party projects 10% less cultural pull. |
 | Treaty on the Prohibition of Nuclear Weapons (TPNW) | Charter Reform II; authority 40; the NPT in force; a proposer with Nuclear Weapons and no warheads; the Nuclear Weapons rule | Prestige | An armed party is held to its arsenal at ratification, a fifth fewer every five years, none after 25; an unarmed party may build none. An armed member that cast no ballot on it, or joins later, is not bound. |
-| Antarctic Treaty (ATS) | Authority 30; a country running an Antarctic research station; a proposer with Space Exploration; the Global Commons rule | Prestige +2%; +0.25 toward UN Authority's target, not scaled | Parties hold no new Southern seabed licences. A party with a research station gains +3% research speed. |
+| Antarctic Treaty (ATS) | Authority 30; a country running an Antarctic research station; a proposer with Space Exploration; the Global Commons rule | Prestige +2%; +0.25 toward UN Authority's target, not scaled | Parties hold no new Southern seabed licenses. A party with a research station gains +3% research speed. |
 | Moratorium on Destructive Anti-Satellite Tests (UNODA) | Authority 30; a destructive anti-satellite strike somewhere; a proposer with Space Exploration that has not struck in two years; the Space Race rule | Prestige +5% | A party's own strike costs twice the infamy and twice the case strength. A party running a debris-removal method counts toward the Delivery pillar each year. |
 | Convention on the Settlement of Outer Space (COPUOS) | Authority 30; a colony held somewhere; a proposer that holds a colony and has not seized or destroyed one in two years; the Space Race rule's Full Colonies | Prestige +2% | A party that destroys a colony, or closes in on a free one, pays twice the infamy and twice the case strength. It forbids nothing. |
 
@@ -831,7 +839,7 @@ INCB, the Antarctic Treaty Secretariat, the Office for Disarmament Affairs and
 the Committee on the Peaceful Uses of Outer Space. The seventeenth, the
 International Court of Justice, is founded the first time a
 country accepts a World Court ruling against it, and has no effects of its own.
-Hover an agency for its convention's terms. Once
+An agency's hover leads to its convention's terms (Its terms). Once
 the International Criminal Court convention is in force, the court indicts the
 ruler of a country that ratified it (from Established) or of any country (at
 Supranational) for a nuclear first or tactical strike or an exposed
@@ -851,11 +859,11 @@ Under the Global Commons rule, the Convention on the Law of the Sea has seabed
 terms that sleep until some country researches Abyssal Plain Mining. From then
 on the seabed has one regime for the whole world, and the Timeline Extended
 window's Seabed tab and Our Obligations show it. It is read once a year, when
-the basins' licences are shared out (see [Seabed
-licences](02-timeline.md#seabed-licences) for the basins, the claim weights and
+the basins' licenses are shared out (see [Seabed
+licenses](02-timeline.md#seabed-licenses) for the basins, the claim weights and
 the seabed policies).
 
-| Regime | When | How each basin's licences are shared |
+| Regime | When | How each basin's licenses are shared |
 |---|---|---|
 | Open | The convention is not in force, or the United Nations rule is off | By weight among all coastal countries. |
 | Regulated | The convention is in force | Half of each basin, the reserved half, by weight among the parties whose GDP per head is below the members' average (the World Development Fund's yardstick), with or without Abyssal Plain Mining: the share of a party without it waits for it. The other half by weight among all coastal countries. While no such party has any claim weight in a basin, its reserved half is shared with the open half. |
@@ -884,14 +892,14 @@ its weekly surplus covers ten times the upkeep: great and major powers, and
 smaller powers with a Southern coastline or a place in the Antarctic Treaty.
 
 A country's first station puts the Antarctic Treaty on the docket. Its parties
-hold no new Southern seabed licences; levels built before they ratified keep
+hold no new Southern seabed licenses; levels built before they ratified keep
 theirs. A party running a station gains +3% research speed (scaled by
 enforcement), and every party adds 0.25 to UN Authority's target, times its
 weight. A party can take the decision Denounce the Antarctic Treaty, for 10
 infamy, 5 standing and 10 case strength. It is then outside the treaty and
 free to claim the Southern seabed; rejoining the UN does not bring it back in,
 but a new treaty does. When two or more great powers outside the treaty hold
-Southern licences, the treaty lapses for everyone and the Southern basin opens
+Southern licenses, the treaty lapses for everyone and the Southern basin opens
 to all. The docket does not raise it again while that holds.
 
 ### The anti-satellite moratorium
@@ -927,8 +935,9 @@ move for one you need authority 40, no mandate in force and none proposed in the
 last five years, standing above Disgraced, and a target that is not a subject,
 has a case of 60 or more and holds a state in a region you claim. The button
 picks the case (a condemned or sanctioned target first, a rival before a
-stranger, a weaker country before a stronger), and both Mandates in Force and
-the Propose a Resolution row preview it.
+stranger, a weaker country before a stronger). Mandates in Force previews it
+under Our Case, with a Propose the Mandate button, and so does the Propose a
+Resolution row.
 
 A carried mandate lasts five years and makes the Authorized Restoration war goal
 available against that country, for that state, at no infamy, in one diplomatic
@@ -948,7 +957,7 @@ less war support to casualties and defeats.
 Missions put the UN's work in one state:
 
 Hover the name of a mission (on the state panel, in Missions in the Field or in
-a tooltip) for its Peacekeeping Mission, Aid Mission, Stabilisation Mission or
+a tooltip) for its Peacekeeping Mission, Aid Mission, Stabilization Mission or
 Electoral Observer Mission entry, which sets out how that kind opens, what it does, what its progress
 means and when it succeeds, fails or lapses.
 
@@ -956,18 +965,18 @@ means and when it succeeds, fails or lapses.
 |---|---|---|---|
 | Peacekeeping | A peacekeeping request carried in full | Turmoil effects −20%, devastation recovery +50% | The host has 24 months of peace. |
 | Aid | A carried aid request, or a full answer to a famine | Standard of living +1.5, food security +0.2, mortality −5% | After six months, no famine and, without the mission's help, a standard of living of 10 or 1 above where it started, whichever is higher. |
-| Stabilisation | A full answer to a state collapse | Turmoil effects −30%, standard of living +0.5 | About a year after the collapse ends, sooner if the mission served through it (it progresses slowly during the collapse). |
+| Stabilization | A full answer to a state collapse | Turmoil effects −30%, standard of living +0.5 | About a year after the collapse ends, sooner if the mission served through it (it progresses slowly during the collapse). |
 | Electoral observer | A carried request for [electoral observers](#electoral-observers) | Turmoil effects −10%, radicals from political movements −10%; the host also gains legitimacy and covert defense | An election campaign in the host ends while it is there. |
 
 Effects scale with the UN's enforcement, fall by up to half when members
 withhold dues, and rise with each contributor up to three; the [Standing UN
 Force](#the-standing-un-force) counts as one in every peacekeeping and
-Stabilisation mission, and an electoral mission's paid observers count as one.
+Stabilization mission, and an electoral mission's paid observers count as one.
 A mission fails if its host is attacked after it arrived, if every contributor
-leaves a peacekeeping or Stabilisation mission while the Standing UN Force does
-not serve in it, if the host expels a Stabilisation mission, or if an electoral
+leaves a peacekeeping or Stabilization mission while the Standing UN Force does
+not serve in it, if the host expels a Stabilization mission, or if an electoral
 mission's host stops holding elections. It lapses after six months if nobody
-has joined a peacekeeping or Stabilisation mission (never while the Standing UN
+has joined a peacekeeping or Stabilization mission (never while the Standing UN
 Force stands), after five years without an election for an electoral mission,
 or if its host or state is gone. A mission has no time
 limit: one that is not done goes on for as long as it keeps contributors, so a
@@ -978,13 +987,15 @@ contributor 3 standing and 15 relations with the host; failure takes
 delivery away. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.
 
-Any major-power member not under sanctions can press Send a Contingent on a
-mission's row in Missions in the Field, if it is not the host, not at war with it and has
-not left that mission before. Each mission joined this way costs a quarter of a
-percent of GDP a year, free for peacekeeping and Stabilisation if you run the
-peacekeeping program. Bring Our Contingent Home costs 2 standing and 10
-relations with the host, and a peacekeeping or Stabilisation mission left empty
-fails.
+Each row in Missions in the Field shows the mission's progress as a bar, with
+its month and strength beside it. Any major-power member not under sanctions
+can press Send a Contingent on a mission's row, if it is not the host, not at
+war with it and has not left that mission before; a country that can send none
+anywhere sees one line saying why, and electoral missions take no contingents.
+Each mission joined this way costs a quarter of a percent of GDP a year, free
+for peacekeeping and Stabilization if you run the peacekeeping program.
+Withdraw Contingent costs 2 standing and 10 relations with the host, and a
+peacekeeping or Stabilization mission left empty fails.
 
 ![The UN Mission tile on a state panel: an aid mission three months in, working at ×1.31 strength, with no progress yet.](images/UN_mission.png)
 
@@ -995,24 +1006,28 @@ toward the funding pillar while they run (two count in full); Development
 Programs counts by its money, whoever gives it. Every program earns standing
 after 24 months.
 
-| Button | Requires | Cost | Gives |
-|---|---|---|---|
-| Contribute to Peacekeeping | Major power | 0.5% of GDP a year, 100 influence, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
-| Fund Development Programs | The World Development Fund founded; you pay your dues and draw no grant | 0.0625% to 1% of GDP a year, by [size](#development-programs-sizes) | Faster infamy decay, prestige, lobbying with the Fund's recipients; the money pays the Fund's grants |
-| Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | 100 influence | Prestige, refugee ministry impact |
-| Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | 100 influence, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
+You join or leave a program with Join and Leave in its Ours column under
+Programs and Conventions, and fund Development Programs from the World
+Development Fund section.
 
-Great powers can also Champion International Order or Undermine International
-Order, each using 500 influence while it holds (as much as leading a power
+| Program | Requires | Cost | Gives |
+|---|---|---|---|
+| Peacekeeping | Major power | 0.5% of GDP a year, 100 influence, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
+| Development Programs | The World Development Fund founded; you pay your dues and draw no grant | 0.0625% to 1% of GDP a year, by [size](#development-programs-sizes) | Faster infamy decay, prestige, lobbying with the Fund's recipients; the money pays the Fund's grants |
+| Human rights champions | Universal Citizenship, Universal Suffrage or Protected Speech | 100 influence | Prestige, refugee ministry impact |
+| Arms control | War Crimes Forbidden, Humanitarian Regulations or Limited War | 100 influence, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
+
+Great powers can also Champion the Order or Undermine the Order, under the
+champions in Why UN Authority Is Moving, each using 500 influence while it holds (as much as leading a power
 bloc), which count +1 or −1 in the commitment pillar. Undermining also drains standing, and after 24 months it
 suspends your standing benefits until you stop. A program or stance that uses
 influence needs that much available to start.
 
 ### Development Programs sizes
 
-Fund Development Programs starts a Token contribution. Raise Development
-Contribution and Reduce Development Contribution move it one size at a time,
-and changing size doesn't restart the 24 months before it earns standing.
+Fund Development, at the top of the World Development Fund section, starts a
+Token contribution. Raise and Reduce move it one size at a time, and Withdraw
+ends it; changing size doesn't restart the 24 months before it earns standing.
 
 | Size | Cost (share of GDP a year) | Infamy decay | Prestige | Standing a month after 24 months | Lobbying with the Fund's recipients |
 |---|---|---|---|---|---|
@@ -1031,25 +1046,26 @@ The lobbying bonus is Grateful Aid Recipients on the UN journal entry: UN
 Lobbying Effectiveness with the members the Fund pays. It builds toward the
 figure for your size, about two thirds of the way in a year, and fades over a
 few years after you stop or cut back, so raising your contribution just before
-a vote buys little. Our Obligations shows your size, its weekly cost and the
-bonus.
+a vote buys little. The World Development Fund section shows your size, its
+weekly cost and the bonus first.
 
 ## UN dues and Article 19
 
 Every member that conducts its own foreign policy pays dues, the share of GDP
 set by the tier, as a weekly expense; that includes a member whose credentials
-the Assembly has rejected. Withhold our UN dues saves the money but costs 3 standing,
+the Assembly has rejected. Withhold Our Dues, under the dues in Our
+Obligations, saves the money but costs 3 standing,
 lowers the funding pillar and weakens every mission. Each month you withhold
 while dues are assessed is a month in arrears. After 24 months you lose your
 vote (Article 19): you cast no ballot, table nothing, cannot be given a
-permanent seat, and lose 5 more standing. Pay our UN dues settles everything
+permanent seat, and lose 5 more standing. Pay Our Dues settles everything
 owed at once and restores the vote. Arrears survive leaving and rejoining; only
 a dissolution writes them off.
 
 The dues paid are the UN's budget. While they stand, the Standing UN Force takes
 a tenth of it and the World Development Fund 5% after Charter Reform I or a
 quarter after Charter Reform II, and the emergency lending facility lends only
-from what is left. Our Obligations shows the split.
+from what is left. Our Obligations shows the split as a table.
 
 ## International standing
 
@@ -1081,38 +1097,43 @@ Court and the suspension of credentials need 20 standing to table.
 ## The UN panels
 
 The United Nations journal entry and the UN tab in the Diplomacy panel show the
-same panels, and a change made in one shows in the other. The tab is greyed
-until the journal entry is active; hover it for what is still missing. The tab
-adds the entry's status text and buttons as Status and Actions sections, and
-ends with an Open Journal Entry button.
+same panels, and a change made in one shows in the other. The tab is grayed
+until the journal entry is active; hover it for what is still missing. Every
+action is a button beside the figure it acts on, in the panels; the journal
+entry's own buttons are the AI's. The tab adds the entry's status text, while a
+founding conference sits or after the UN has dissolved, and ends with an Open
+Journal Entry button.
 
 ![The UN tab of the Diplomacy panel: the overview (membership, tier, standing, the authority bar, the countries, GDP and population pies, the Security Council, the agencies and the headquarters) and Status.](images/un_tab_overview.png)
 
-The overview at the top is always shown. Its first row is icons: your
-membership (a check for a member, a star for a permanent member, a pause mark
-while your representation is suspended), the UN's tier, a Crisis alert while
-the crisis runs, and your standing. Below them are the authority bar, with a
-tick at the target and the monthly change, and three pies: the members' share
-of the world's countries, GDP and population. Then come the Security Council's
-five flags (hover one for the country, click it to open the country), the
-sixteen agencies, lit once founded, and the headquarters. Hover any of them for
-the detail.
+The overview at the top is always shown. Its first rows are cells, two to a
+row: your membership (with Found, Join or Leave under it), the UN's tier and
+enforcement, the General Assembly (what is in session and how you voted, or
+that your vote is due), your motions (how many topics are ready, or how long
+until you may table again), your dues, your standing, the case against you and,
+while it runs, the crisis. Hover a cell for its detail. Below them are the
+authority bar, solid to the lower of authority and its target and pale to the
+higher (hover it for why the target is where it is), three pies of the members'
+share of the world's countries, GDP and population with the Assembly's
+membership under them, then the Security Council's five flags (hover one for
+the country, click it to open the country), the sixteen agencies, lit once
+founded, and the headquarters.
 
 The sections below are open by default when they change month to month, and
 collapsed when they are reference:
 
 | Section | Starts | Shows |
 |---|---|---|
-| General Assembly | Open | The resolution in session: its topic, a tally bar (green for, grey not yet voted, red against, with a mark at two thirds for the topics that need it), how many of its twelve months have run, the grounds, your lean and the vote buttons. Delegations and Recorded Ballot sit under it while a resolution is in session; Propose a Resolution takes their place when none is. |
-| Why UN Authority Is Moving | Open | A bar for each pillar, with its trend since last month (hover a pillar for how it is computed), then your weight, the tier and the authority cap, the champions and underminers, and the newest ledger entries (collapsed). |
-| Missions in the Field | Open | A row for each mission, with Send a Contingent or Bring Our Contingent Home; ended missions below, collapsed. |
-| Programmes and Conventions | Collapsed | How many countries take part in each program and convention, and how many are under sanctions. |
-| Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take. |
-| Our Obligations | Open | Your dues beside the whole budget and what the Standing UN Force and the World Development Fund take from it, your grant from the Fund, your pledge to the World Food Reserve, any ceasefire order against you or your enemy, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
-| World Development Fund | Open | While the Fund stands: the cutoff GDP per head (hover it for how it was set), the members' average, how many members qualify (at or below the cutoff, seated and paying their dues) and what the Fund pays out a week, then each member it pays this month and how much, or why nobody is paid. |
+| General Assembly | Open | The resolution in session: a tally bar (green for, gray not yet voted, red against, with a line at two thirds for the topics that need it) and how many of its twelve months have run, then your vote or the vote buttons and your lean (hover it for its terms), then the topic, the parties, what it does if it carries and the grounds. Delegations and Recorded Ballot sit under it while a resolution is in session; Propose a Resolution takes their place when none is. |
+| Why UN Authority Is Moving | Open | A bar for each pillar, with its trend since last month (hover a pillar for how it is computed), then your weight, the tier and the authority cap, the champions and underminers with Champion the Order or Undermine the Order, and the newest ledger entries (collapsed). |
+| Missions in the Field | Open | A row for each mission, with its progress bar and Send a Contingent or Withdraw Contingent; ended missions below, collapsed. |
+| Programs and Conventions | Open | How many countries take part in each program and convention, whether you do, with Join or Leave for a program, and how many are under sanctions. |
+| Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take, with Propose the Mandate. |
+| Our Obligations | Open | Your dues, with Withhold Our Dues or Pay Our Dues, beside the budget as a table (all members' dues and what the Standing UN Force, the World Development Fund and the lending facility take), your pledge to the World Food Reserve with Pledge Grain or Withdraw Our Pledge, any ceasefire order against you or your enemy, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
+| World Development Fund | Open | While the Fund stands: your position first (your grant, or your contribution with Fund Development, Raise, Reduce and Withdraw), then the cutoff GDP per head (hover it for how it was set), the members' average, how many members qualify (at or below the cutoff, seated and paying their dues) and what the Fund pays out a week, then each member it pays this month and how much, or why nobody is paid. |
 | Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
 | UN Authority History | Open | A chart of authority over time. |
-| Resolutions on the Record | Collapsed | Closed resolutions, with how each member voted. |
+| Resolutions on the Record | Collapsed | A row for each closed resolution, its title and how it ended, with the rest of its card on hover; Voting Details adds how each member voted. |
 | How the UN Works | Collapsed | The explanations: authority, standing, missions, delegations, dues and the record. |
 
 ## How the AI uses the UN

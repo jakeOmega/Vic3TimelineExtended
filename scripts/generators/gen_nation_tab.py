@@ -801,8 +801,40 @@ def generated_loc_file(types):
 
 
 _EMPTY = 'visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"'
+_HIDDEN = "Country.MakeScope.ScriptValue('gui_country_hidden_modifier_count')"
 _SHOWN = ("visible = \"[GreaterThan_int32(GetDataModelSize(Country.GetTimedModifiers), "
-          "FixedPointToInt(Country.MakeScope.ScriptValue('gui_country_hidden_modifier_count')))]\"")
+          f"FixedPointToInt({_HIDDEN}))]\"")
+# Under the list, while it leaves one of the country's modifiers out: how many,
+# and where they went (2026-10-27 audit, NAT-1). For the player's own country
+# the goto opens the window on the Nation tab (rule 9's goto, as the state
+# view's Grand Monument card does); another country's have no tab to go to.
+_WHERE = [
+    "flowcontainer = {",
+    f"\tvisible = \"[GreaterThan_CFixedPoint( {_HIDDEN}, '(CFixedPoint)0' )]\"",
+    "\tdirection = horizontal",
+    "\tparentanchor = hcenter",
+    "\tminimumsize = { @panel_width -1 }",
+    "\tmargin_top = 5",
+    "\tspacing = 10",
+    "\tignoreinvisible = yes",
+    "\tbutton_icon_goto = {",
+    "\t\tvisible = \"[Country.IsLocalPlayer]\"",
+    "\t\tsize = { 25 25 }",
+    "\t\ttooltip = \"te_nation_panel_goto_tt\"",
+    "\t\tonclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'nation')]\"",
+    "\t\tonclick = \"[GetVariableSystem.Set('com_open_window', 'te_systems_window')]\"",
+    "\t}",
+    "\ttextbox = {",
+    "\t\ttext = \"te_nation_panel_line\"",
+    "\t\ttooltip = \"[SelectLocalization( Country.IsLocalPlayer, 'te_nation_panel_line_tt', "
+    "'te_nation_panel_line_other_tt' )]\"",
+    "\t\tautoresize = yes",
+    "\t\talign = nobaseline",
+    "\t\tparentanchor = vcenter",
+    "\t\tdefault_format = \"#tooltippable\"",
+    "\t}",
+    "}",
+]
 
 
 def _mod_block(indent, why, vanilla, new):
@@ -813,10 +845,12 @@ def _mod_block(indent, why, vanilla, new):
 
 def generated_panel(vanilla_text=None):
     """Vanilla's country_panel_information_content with its modifier list
-    filtered: the header and the list shown while a modifier the Nation tab
-    doesn't show is left, the items the tab shows hidden
-    (te_nation_hidden_filter), and the list ignoring the hidden ones. Raises
-    if vanilla moved a line the filter hooks onto."""
+    filtered: the list shown while a modifier the Nation tab doesn't show is
+    left, the items the tab shows hidden (te_nation_hidden_filter), the list
+    ignoring the hidden ones, and under it a line counting them, with a goto
+    to the tab for the player's own country (_WHERE). The header keeps
+    vanilla's test, since the list or the line shows whenever the country has
+    a modifier. Raises if vanilla moved a line the filter hooks onto."""
     text = VANILLA_PANEL.read_text(encoding="utf-8-sig") if vanilla_text is None else vanilla_text
     lines = text.splitlines()
     head = [line for line in lines if re.match(r"@panel_width\w* = ", line)]
@@ -839,10 +873,16 @@ def generated_panel(vanilla_text=None):
     timed = next((i for i, line in enumerate(body) if line.strip() == "### TIMED MODIFIERS"), None)
     if timed is None:
         raise moved("its modifier list (no `### TIMED MODIFIERS`)")
-    out, empties, item = body[:timed], 0, None
+    out, empties, item, list_end, where = body[:timed], 0, None, None, False
     for line in body[timed:]:
         indent = line[:len(line) - len(line.lstrip())]
-        if item is not None:
+        if list_end is not None and line == list_end:
+            # the list's own flowcontainer closes: the line goes under it
+            out.append(line)
+            out += _mod_block(indent, "where the modifiers the list leaves out went (te_nation_panel_line)",
+                              [], _WHERE)
+            list_end, where = None, True
+        elif item is not None:
             # The filter goes on the item's root, so a hidden row leaves no
             # blank item: the line after `item = {` must open it.
             if line.strip() != "container = {" or indent != item + "\t":
@@ -853,10 +893,12 @@ def generated_panel(vanilla_text=None):
                               [], ["using = te_nation_hidden_filter"])
         elif line.strip() == _EMPTY:
             empties += 1
-            new = [_SHOWN] + (["ignoreinvisible = yes"] if empties == 2 else [])
-            why = ("the header shows while a modifier the Nation tab doesn't show is left" if empties == 1
-                   else "the list skips what the Nation tab shows")
-            out += _mod_block(indent, why, [line], new)
+            if empties == 1:
+                out.append(line)    # the header: vanilla's test (the docstring)
+            else:
+                out += _mod_block(indent, "the list skips what the Nation tab shows", [line],
+                                  [_SHOWN, "ignoreinvisible = yes"])
+                list_end = indent[:-1] + "}"
         elif line.strip() == "item = {":
             item = indent
             out.append(line)
@@ -864,6 +906,8 @@ def generated_panel(vanilla_text=None):
             out.append(line)
     if empties != 2 or item is not None or not any("te_nation_hidden_filter" in line for line in out):
         raise moved("its modifier list (its two IsDataModelEmpty lines or its item)")
+    if not where:
+        raise moved("its modifier list (the list's flowcontainer never closes)")
     parts = [
         f"### {HEADER}",
         f"### Vanilla's {PANEL_TYPE} (gui/country_panel.gui, the country panel's Information",

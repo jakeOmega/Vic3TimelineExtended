@@ -1325,7 +1325,10 @@ un_propose_colony_protection_in_force = {
 # Scope: the prospective proposer: a member that holds a colony, and not the
 # one whose seizure or destruction raised it.
 un_propose_colony_protection_qualifies = {
-	sr_has_space_colony = yes
+	custom_tooltip = {
+		text = un_propose_colony_protection_holder_tt
+		sr_has_space_colony = yes
+	}
 	custom_tooltip = {
 		text = un_propose_colony_protection_not_actor_tt
 		NOT = { has_variable = un_dkt_colony_actor }
@@ -1352,4 +1355,67 @@ un_propose_colony_protection_possible = {
 	un_propose_own_motion_possible = yes
 	un_docket_topic_open_colony_protection = yes
 	un_propose_colony_protection_qualifies = yes
+}
+
+# ---- The nearest candidate (the 2026-10-27 audit, UN-23) ---------------------------
+# Who could be named on each targeted topic but for its case: the topic's own
+# candidate test without its un_case_supports line. A topic's row, while no one
+# has the case, names the one of these with the strongest case and the
+# threshold it falls short of (un_chamber_propose_nearest_line), so a greyed
+# Propose says which part fails. test_un_propose_nearest.py holds each to its
+# topic's test: change both.
+# Scope: the candidate; ROOT the viewer (the prospective proposer)
+un_condemn_relation = {
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	is_at_war = yes
+	is_diplomatic_play_initiator = yes
+}
+
+un_sanctions_relation = {
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	NOT = { has_modifier = un_sanctions_target_modifier }
+}
+
+un_arms_embargo_relation = {
+	NOT = { this = ROOT }
+	NOT = { is_country_type = decentralized }
+	NOT = { un_arms_embargo_in_force = yes }
+	OR = {
+		has_diplomatic_pact = { who = ROOT type = rivalry }
+		AND = {
+			is_at_war = yes
+			any_country = {
+				has_war_with = PREV
+				un_member_represented = yes
+			}
+		}
+	}
+	un_justice_not_proposer_bloc = yes
+}
+
+un_credentials_relation = {
+	NOT = { this = ROOT }
+	OR = {
+		un_regime_human_rights_violator = yes
+		AND = {
+			has_variable = un_dos_defiance
+			var:un_dos_defiance >= un_credentials_defiance_min
+		}
+	}
+	un_justice_not_proposer_bloc = yes
+	un_member_represented = yes
+	OR = {
+		NOT = { is_un_permanent_member = yes }
+		un_charter_has_reform = { LEVEL = 2 }
+	}
+}
+
+# un_ceasefire_target_eligible names the proposer scope:un_order_proposer; the
+# row's viewer is ROOT.
+un_ceasefire_relation = {
+	is_at_war = yes
+	is_diplomatic_play_initiator = yes
+	NOT = { this = ROOT }
+	NOT = { has_variable = un_cf_order_months }
+	un_order_wages_war_on_member = yes
 }

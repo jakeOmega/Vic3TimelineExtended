@@ -332,9 +332,32 @@ class CountryPanelTest(unittest.TestCase):
         panel = _read(gen.PANEL_OUT)
         self.assertIn("using = te_nation_hidden_filter", panel)
         self.assertIn("ignoreinvisible = yes", panel)
+        # the list's test and the line under it
         self.assertEqual(panel.count("ScriptValue('gui_country_hidden_modifier_count')"), 2)
-        self.assertNotIn('visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"',
-                         "\n".join(line for line in panel.splitlines() if "# vanilla:" not in line))
+        # the header keeps vanilla's: the list or the line shows whenever the country has a modifier
+        live = "\n".join(line for line in panel.splitlines() if "# vanilla:" not in line)
+        self.assertEqual(live.count('visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"'), 1)
+        self.assertLess(live.index("IsDataModelEmpty"), live.index('datamodel = "[Country.GetTimedModifiers]"'))
+
+    def test_a_line_says_where_the_hidden_ones_went(self):
+        """2026-10-27 audit, NAT-1: under the list, while it leaves a modifier out, a line counts them; for the
+        player's own country a goto opens the window on the Nation tab (rule 9: the tab, then the window)."""
+        panel = _read(gen.PANEL_OUT)
+        at = panel.index("### MOD: Nation tab: where the modifiers the list leaves out went")
+        block = panel[at:panel.index(gen.MOD_CLOSE, at)]
+        self.assertGreater(at, panel.index('datamodel = "[Country.GetTimedModifiers]"'))
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue("
+                      "'gui_country_hidden_modifier_count'), '(CFixedPoint)0' )]\"", block)
+        goto = block[block.index("button_icon_goto = {"):]
+        self.assertIn('visible = "[Country.IsLocalPlayer]"', goto)
+        clicks = re.findall(r'onclick = "(.*)"', goto)
+        self.assertEqual(clicks, ["[GetVariableSystem.Set('te_systems_window_tab', 'nation')]",
+                                  "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"])
+        loc = _loc()
+        for key in re.findall(r"'?(te_nation_panel_\w+)'?", block):
+            with self.subTest(key=key):
+                self.assertIn(key, loc)
+        self.assertIn("ScriptValue('gui_country_hidden_modifier_count')", loc["te_nation_panel_line"])
 
     def test_it_defines_the_constants_it_uses(self):
         panel = _read(gen.PANEL_OUT)
@@ -610,6 +633,27 @@ class TabLayoutTest(unittest.TestCase):
             for name in names:
                 with self.subTest(key=key, name=name):
                     self.assertNotIn(name, value)
+
+
+class HoverMarkTest(unittest.TestCase):
+    """A row is underlined when it has a tooltip, and only then (style guide
+    rule 3): te_nation_row underlines through its "row_format" block, and a row
+    with no tooltip overrides the block empty, so a new row with a hover, the
+    generated type rows included, is marked for free."""
+
+    def test_rows_and_hovers_in_step(self):
+        row_type = re.search(r"\ttype te_nation_row = textbox \{\n(.*?)\n\t\}", _read(ROOT / "gui" / "te_nation_tab.gui"),
+                             re.S).group(1)
+        self.assertRegex(row_type, r'block "row_format" \{\s*default_format = "#tooltippable"\s*\}')
+        rows = 0
+        for name in ("te_nation_tab.gui", "te_nation_generated.gui"):
+            gui = _read(ROOT / "gui" / name)
+            for m in re.finditer(r"\n(\t+)te_nation_row = \{(.*?)\n\1\}", gui, re.S):
+                rows += 1
+                body = m.group(2)
+                with self.subTest(gui=name, row=re.search(r'text = "(\w+)"', body).group(1)):
+                    self.assertEqual('blockoverride "row_format" {}' in body, "tooltip" not in body)
+        self.assertGreater(rows, 100)
 
 
 class FixtureTest(unittest.TestCase):

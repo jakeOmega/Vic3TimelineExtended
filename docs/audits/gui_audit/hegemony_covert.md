@@ -26,7 +26,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 ## Findings — Cultural Hegemony
 
 ### CH-1. A negative Standard of Living contribution is hidden from "Where Our Pull Comes From"
-- **Status:** fixed in this PR (op 3 shows the row for either sign; the value is signed and sign-coloured). The rank-factor line in the row hover (medium) remains.
+- **Status:** done. The bug was fixed in #1202; the row's hover now ends "Counted at ×0.50 for our rank" from `ch_sol_rank_factor`, the factor `cultural_pull_from_sol` multiplies by (branch `wave/gui-hegemony`, 2026-10-27).
 - **Category:** hidden info (bug)
 - **Where:** `common/scripted_guis/cultural_hegemony_sguis.txt` `ch_show_sgui` op 3 (`has_variable = ch_sol` / `var:ch_sol > 0`); `gui/journal_entry_widgets/cultural_hegemony_widget.gui:1414-1432` (SoL `ch_bar_row`); loc `je_ch_widget_bd_sol_value` (`te_journal_entries_l_english.yml:103`)
 - **Now:** `var:ch_sol` is `cultural_pull_from_sol` (`cultural_hegemony_effects.txt:22`), which is clamped to `cultural_pull_sol_min` (−5) .. +20 and so goes negative for any country below the world-average SoL. The row is shown only when it is **> 0**, so a country that is *losing* pull to a low standard of living sees no line at all, while the Raw Score below still includes the loss: the visible lines then don't add up to the total. The row was built for negatives (the bar's comment "the one component that can be either sign", `ch_disp_bar_sol_neg`, and `test_cultural_hegemony_layout.py` budgets a "-5.0" value), and the value key is hard-coded green: `"#G [...cultural_pull_from_sol_display|1]#!"`, so a negative figure would also read green.
@@ -37,6 +37,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **Confidence:** high
 
 ### CH-2. The Top Cultural Powers board is ten copy-pasted two-line prose rows; make it a one-line table
+- **Status:** done, route 2 (branch `wave/gui-hegemony`, 2026-10-27). `ch_board_rebuild` writes ten parentless row containers on `global_var:ch_board_store` at every recount; the board is a datamodel over its `ch_board` list, with column heads (#, Country, Share, Change, Model) carrying their own hovers, a flag and name through each row's stored capital (as the covert rows read theirs), the country's own change since its recount before (the slot deltas measured a newcomer against the previous holder), and the model swatch with `ch_model_<m>_tt`. The three board handlers and twenty `ExecuteTooltip` keys are gone. The unverified datamodel read ships with `TE_SELF_CHECK OK|BROKEN ch_board_rows` and a play-test list, `docs/testing/cultural-hegemony-playtest.md`.
 - **Category:** list (+ spread-out: it pushes the programmes, the only actions, far down)
 - **Where:** `cultural_hegemony_widget.gui:1557-1746` (`te_ch_sec_board`, ten `ch_board_row` instances, ops 1-10); `ch_board_row_sgui` / `ch_board_detail_sgui` / `ch_board_is_us_sgui`; loc `ch_board_row_1..10` (`te_miscellaneous_l_english.yml:1952-1961`), `je_ch_board_row_hint_tt` (`te_journal_entries_l_english.yml:20`)
 - **Now:** each row is an `ExecuteTooltip` string: `#v 1.#! France — #v 23.4%#! (+1.2)\nModel: #v Liberal / Progressive Democratic#!`. Ten countries take twenty lines. What the bracketed figure is gets explained in every row's hover (`je_ch_board_row_hint_tt`, appended ten times) and in How (`je_ch_how_board`), but nowhere on screen: there is no column head. The board is the first live section (owner, 2026-09-29), so the Cultural Programmes section — the panel's only actions — starts ~25 lines below the overview.
@@ -49,6 +50,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **In line or differ:** brings it in line with rule 5 ("several related figures form a table") and rule 3 (Label/hover); the board-first order is kept.
 
 ### CH-3. The Pull Multiplier row sits *below* the Raw Score it is already part of
+- **Status:** done as proposed (branch `wave/gui-hegemony`, 2026-10-27).
 - **Category:** style / confusing structure
 - **Where:** `cultural_hegemony_widget.gui:1530-1550` (divider, Raw Score row, then Pull Multiplier row); loc `je_ch_widget_bd_mult_tt` (`te_journal_entries_l_english.yml:93`), `je_ch_widget_bd_mult_value` (:94)
 - **Now:** `cultural_pull_raw` (`cultural_hegemony_script_values.txt:511-528`) is the sum of the components **× (1 + multiplier)**, and How says so ("Their sum, raised by the Pull Multiplier, is our Raw Score"). The panel prints Raw Score first and the multiplier after it, whose tooltip says "Raises the sum of the lines above by this much" — the lines above now include the Raw Score itself. The value reads `#G 25%` with no sign, while the art-multiplier subrow beside it reads `+25%` (`|+=0`).
@@ -58,6 +60,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **In line or differ:** in line (rule 5, parts of a total, then the total).
 
 ### CH-4. Where the funding cap comes from is shown nowhere
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): `je_ch_widget_funding_value_tt` gives the maximum, the Ministry of Culture institution and the two technologies, then the modifier's breakdown; `je_ch_how_programmes` says the same.
 - **Category:** hidden info
 - **Where:** `cultural_hegemony_widget.gui:1184-1195` (the "3 / 5" value cell, no tooltip); loc `je_ch_widget_funding_value`, `CH_PROGRAM_FUNDING_NOT_MAX` (`te_miscellaneous_l_english.yml:237`), `je_ch_how_programmes` (`te_journal_entries_l_english.yml:25`)
 - **Now:** the cap is `modifier:country_cultural_program_max_funding_add`: +1 per investment level of the Ministry of Culture institution (`common/institutions/extra_institutions.txt:71`) and +1 from each of two era-6 technologies (`era_6.txt:345`, `:459`). A new Ministry shows "Programme Funding 0 / 0", the + greys with "Funding is not already at maximum (0).", and neither the row, the How text nor any concept says how to raise it. The modifier's own desc ("Increases the maximum funding level available for state-backed cultural programs in the Cultural Hegemony journal entry") is only seen on the institution.
@@ -67,7 +70,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **In line or differ:** in line (rule 3, the reason behind a value goes in its tooltip; rule 6).
 
 ### CH-5. Influence tier: three names per tier, a clash with vanilla's "Major Power", no thresholds anywhere
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. Names in #1202; the tier hover's last line names the next tier and its threshold (`ch_next_tier_name`, `ch_disp_next_tier_floor`), and the five `ch_tier_N_floor` values are the one copy of the thresholds that `ch_set_display_state`, the hover and the concept read (branch `wave/gui-hegemony`, 2026-10-27).
 - **Category:** style + hidden info
 - **Where:** overview cell `cultural_hegemony_widget.gui:626-684`; loc `je_ch_ov_tier_0..5` (`te_journal_entries_l_english.yml:58-63`), `je_ch_ov_tier_tt` (:64), `ch_tier_*` (`te_concepts_l_english.yml:571-576`), `concept_ch_influence_tier_desc` (`te_concepts_l_english.yml:743`)
 - **Now:** the same tier is "Major Power" (overview word), "#G Major Cultural Power#!" (tooltip line from `ch_tier_text`) and "Major" (concept's ladder); top tier "Hegemon" / "#G CULTURAL HEGEMON#!" (all caps) / "Cultural Hegemon". "Major Power" is also vanilla's name for a country rank, which the CH system itself reads (`cultural_pull_from_sol` scales by `rank_value:major_power`). The thresholds (2 / 5 / 10 / 15 / 25 % share, `ch_set_display_state`, `cultural_hegemony_effects.txt:112-139`) appear in no tooltip, concept or How text, so "how far to the next tier" — the one actionable question about a tier — has no answer. The concept also says the tier "sets the wording of the … journal entry", which is stale (the entry has no status text while active).
@@ -77,7 +80,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **In line or differ:** in line (rule 3: one name per term; nothing a returning player needs is hidden).
 
 ### CH-6. Three concept descriptions still describe a "parenthetical" the panel no longer has
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202.
 - **Category:** over-explaining (stale)
 - **Where:** `concept_ch_art_production_desc`, `concept_ch_prestige_desc`, `concept_ch_sol_desc` (`te_concepts_l_english.yml:739`, `:754`, `:756`)
 - **Now:** "The parenthetical shows (your production / world production)." etc. The old status text printed "(x / y)"; the breakdown now draws a bar and a value, and each row's hover prints "Our share …: X of Y" / "Our prestige: X of Y worldwide" / "Our standard of living: X against a world average of Y". The concepts also switch to "you/your" while every panel line says "we/our" (e.g. "early on you're limited by volume").
@@ -86,7 +89,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **Confidence:** high
 
 ### CH-7. The board's hover says "yearly recount"; everything else says about twice a year
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. Wording in #1202; each board row's hover now lists every component that is not zero, so they add up to its Raw Score (branch `wave/gui-hegemony`, 2026-10-27).
 - **Category:** style (contradiction)
 - **Where:** `ch_board_detail_1..10` (`te_miscellaneous_l_english.yml:1942-1951`), last line `#lore As of the last yearly recount.#!`
 - **Now:** the recount runs at the yearly pulse **and** whenever the 180-day lock (`ch_ldr_lock`, `cultural_hegemony_effects.txt:720`) has lapsed, and after every war (`ch_war_end_recalc_on_action`); How, the share tooltip and `concept_cultural_pull_share_desc` all say "about twice a year and after every war". The hover also lists only four of the nine components (art, prestige, SoL, tech) above the Raw Score, so the lines never add up to it.
@@ -95,7 +98,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **Confidence:** high
 
 ### CH-8. Live overview tooltips re-teach what the concept and How already say
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202.
 - **Category:** over-explaining
 - **Where:** `je_ch_ov_share_tt` (`te_journal_entries_l_english.yml:57`), `je_ch_ov_leaders_tt` (:37), `je_ch_widget_models_pie_tt` (:117)
 - **Now:** the share tooltip's title is `[concept_cultural_pull_share]`, then the next line restates that concept's definition ("Our raw Cultural Pull as a percentage of every country's raw pull added together"), and the closing `#lore` paragraph restates `je_ch_how_share` ("Other countries' pull is recounted about twice a year…, so the share can step…") and the concept's last sentence. The leaders tooltip ends "Hover a flag for the country, and click it to open the country." — how every vanilla flag behaves. The models pie tooltip ends with the exported-model push, which is the overview model cell's tooltip, `concept_ch_exported_model_desc` and `je_ch_how_models`.
@@ -104,6 +107,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **Confidence:** high (share, leaders), medium (pie)
 
 ### CH-9. The overview has no actionable reading; programme state lives two sections down
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): a programs cell under the share pie and the leader flags, Banking's `te_banking_ov_cell` reused: the Ministry of Culture icon (dimmed without the law), "n of 4 Running" or "No Ministry", and "Funding n / cap"; the hover lists each program Running or Idle and the cost, or the requirement. The leader flags stay.
 - **Category:** spread-out
 - **Where:** `te_ch_overview_panel` (`cultural_hegemony_widget.gui:595-1107`) vs `te_ch_sec_programmes` (:1117)
 - **Now:** the overview shows tier, rank, exported model, benchmark, share and the three leading flags — all readings, no actions. What the player can change (funding N/M, which of the four programmes run, whether an Enable is available) is only in the Programmes section, below the ten-row board. The three leader flags also repeat the board's first three rows directly underneath.
@@ -113,7 +117,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **In line or differ:** in line (rule 1/4: the overview answers "what needs attention"); the leaders block is an accepted design, so dropping it merely differs.
 
 ### CH-10. Programme-condition lines read as complaints next to a tick
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202.
 - **Category:** style
 - **Where:** `CH_MEDIA_BLOCKED_BY_PROTECTIONISM`, `CH_PROTECTIONISM_BLOCKED_BY_GLOBAL_MEDIA` (`te_miscellaneous_l_english.yml:235`, `:239`), used in `ch_possible_global_media_campaign` / `ch_possible_cultural_protectionism` (`cultural_hegemony_triggers.txt:94`, `:114`)
 - **Now:** the triggers file says the clauses are "phrased as CONDITIONS, not complaints, because IsValidTooltip renders each of them with a tick or a cross", but these two read "Cannot launch a Global Media Campaign while Cultural Protectionism is in effect." — so a satisfied gate shows a green tick beside "Cannot launch…". Siblings read "Requires Ministry of Culture." / "We have 150 Influence available".
@@ -122,7 +126,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **Confidence:** high
 
 ### CH-11. The funding tooltip is prose where its siblings are "Label: value"
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202.
 - **Category:** style
 - **Where:** `ch_policy_funding_step_tt` (`te_miscellaneous_l_english.yml:2021`), shown on the "Programme Funding" label and, through `custom_tooltip`, on both stepper buttons
 - **Now:** "Each funding step adds: [modifier lines] and costs, per step, @money! X/week. At its current level the programme costs @money! Y/week." — the modifier lines are engine-rendered (good), but the costs are a run-on sentence, and "the programme" is wrong (funding is not one of the four programmes). The Outreach row's tooltip already uses "Cost: … /week".
@@ -131,7 +135,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **Confidence:** high
 
 ### CH-12. Two colour keys for the same fifteen models, under different names
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): the history legend uses the short names with `ch_model_<m>_tt` on hover, in two columns (three don't fit at 17 points).
 - **Category:** style / redundant
 - **Where:** models legend `cultural_hegemony_widget.gui:1960-2145` (short names `je_ch_ov_model_*`, ≥0.5% only, with share) vs the history legend :2467-2542 (full names `ch_model_*`, all fifteen, two columns); loc `ch_model_hist_note` (`te_miscellaneous_l_english.yml:1993`)
 - **Now:** one swatch is "Mixed" in one section and "Mixed / Other" two sections down ("Theocratic" / "Theocratic / Religious", "Absolutist" / "Absolutist Monarchist", "Military Junta" / "Conservative Military Junta"). The chart's note also carries implementation notes a player can't act on: "Old saves begin collecting after the update. Up to 100 annual snapshots are retained."
@@ -141,6 +145,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **In line or differ:** in line (one name per thing, rule 3); the two-legend layout itself is accepted.
 
 ### CH-13. "Program" and "Programme" for the same things (spelling, mentioned once)
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): the owner chose American. The panel's text, its concepts and the debug modifier say program.
 - **Category:** style (low)
 - **Where:** modifier names `ch_cultural_program_funding` "Cultural Program Funding", `ch_cultural_program_funding_cost` "Cultural Program Cost", `ch_cultural_institutes_program` "Cultural Institutes Program" (`te_miscellaneous_l_english.yml:1964-1966`), `country_cultural_program_max_funding_add` "Cultural Program Maximum Funding Level" (`te_modifiers_l_english.yml:58`); vs the panel's "Programme Funding", "Cultural Programmes" and How's "programme". `ch_world_exposition_desc` has "centers".
 - **Proposed:** align the four modifier names on "Programme" (the panel's spelling; `docs/player_guide/` uses both, "Cultural Programmes" and "Cultural programs"); the modifier list on the journal entry then matches the panel. Low priority; not put in Quick fixes because it is a mod-wide spelling call.
@@ -148,6 +153,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **Confidence:** medium
 
 ### CH-14. Duplicate model explanation between How and the concept
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): `je_ch_how_models` keeps what the concept doesn't say.
 - **Category:** over-explaining (How-section duplication only)
 - **Where:** `je_ch_how_models` (`te_journal_entries_l_english.yml:24`) vs `concept_ch_exported_model_desc` (`te_concepts_l_english.yml:740`); `je_ch_widget_models_legend` (:115) vs `je_ch_widget_models_pie_tt` (:117)
 - **Now:** the How paragraph repeats the concept's two sentences word for word ("the political movements matching it grow more active and attract more pops. The push is nothing while the model's share of world culture is small, and grows with it"), and the How legend note repeats the pie tooltip's "Slices run clockwise from the top in the order listed".
@@ -156,6 +162,7 @@ bugs or stale text (CH-1, CH-3, CH-6, CH-7, the stale half of CH-5) and are wort
 - **Confidence:** medium
 
 ### CH-15. Type sizes predate the 17 / 20 / 16 ladder
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): `ch_fontsize_row` (17), `_heading` (20) and `_overview` (16) at the head of the file, every textbox on them, and `test_cultural_hegemony_layout` budgets the cells at those sizes. The owner lifted the grandfather clause for this wave.
 - **Category:** style
 - **Where:** every textbox in `cultural_hegemony_widget.gui`: rows, values and notes `fontsize_medium` (14, the tooltip face), the overview's words and the history legend `fontsize_small` (12), programme names and the funding label `fontsize_large` (20)
 - **Now:** rule 3 (Workshop feedback 2026-10-13, owner 2026-10-17): rows, values, buttons and notes 17, subheadings 20, overview 16, "nothing a player reads to decide something is smaller", in panel templates (`banking_dash_fontsize_row` / `_heading` / `_overview`, Demographics' `te_demog_fontsize_*`). The CH rows are 14 and the overview 12.
@@ -172,6 +179,7 @@ levels are a table (`covert_levels_row`). So the "should be a list" criterion is
 about what each row shows, the launch path, and tooltips.
 
 ### COV-1. A running operation never says what it is doing; the caught-operation hovers are prose, not modifiers
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): each row title's hover (`je_iw_op_row_<type>_tt`) is the operation's modifier lines at base strength on the target, plus the strength line; the caught-operation hovers (`iw_op_exposed_desc_<type>`) are one sentence and the same lines.
 - **Category:** hidden info + style (prose vs modifiers)
 - **Where:** `covert_operations_widget.gui:598-669` (`widget_je_covert_operation_text`, eighteen instances, **no tooltip**); `:1065-1149` (`widget_je_covert_known_op_name`, tooltip `iw_op_exposed_desc_<type>`, `te_concepts_l_english.yml:1709-1726`)
 - **Now:** after launch, nothing in the panel shows an operation's effect on its target: the row has its title, phase, detection risk and (espionage only) technology stolen. The effects appear once, at base strength, in the diplomatic action's launch preview. On the defending side, a watched operation's name hovers prose: "Jamming of military command and control. While it runs, its target's units fight with less offense and defense." — not the modifier lines the engine would print from the `covert_comms_disruption` static modifier the pulse applies.
@@ -180,6 +188,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** high (the gap); medium (that each `covert_<type>` modifier renders as cleanly as in the launch preview)
 
 ### COV-2. Deciding a launch needs four places; the launch tooltip has none of the target-specific numbers
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): each action's `accept_effect` tooltip ends with `covert_op_launch_summary` (our network there and its head start, or none; the upkeep the operation adds at priority 1, `covert_launch_added_upkeep`; the detection warning). The phase paragraph is one line naming `concept_operation_phase`, and the 6 / 12 months are named values (`covert_op_phase_2_month` / `_3_month`) that the triggers test and the loc prints.
 - **Category:** spread-out
 - **Where:** launch: `common/diplomatic_actions/covert_operations.txt` (e.g. `covert_election_interference_action` `accept_effect`, :96-118), loc `covert_op_phase_warning_tt`, `covert_op_detection_warning_tt` (`te_miscellaneous_l_english.yml:2347-2349`); panel: overview slots row, Operations' Detection Risk block, Agent Networks rows (`je_iw_net_row_benefit` "Head start for a new operation")
 - **Now:** operations are launched from the target's diplomatic actions. Its tooltip lists the requirements (ticks), the effects at base strength, a 100-word phase paragraph and a generic warning ("Each month your agents are active, there is a chance they are discovered…"). What decides *whether and where* to launch is elsewhere: free slots and funding (Covert overview), our network in that country and its head start (Agent Networks, the third section), the shared detection factors (Operations), the extra upkeep the operation adds (shown nowhere: the Funding Levels table prices the operations already running) and the target's counterintelligence (only after launch, on the row's hover). So the path is summary → Agent Networks → Diplomacy panel → country → action, holding numbers in one's head.
@@ -188,6 +197,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** medium (whether a tooltip-time `every_in_list` over our own list renders inside a diplomatic action's `accept_effect` needs one in-game check)
 
 ### COV-3. Each operation has up to three names
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): one name per operation, the action's minus "Covert: ", held by `iw_op_name_<type>` and spliced by the action names and the row titles (owner, 2026-10-27).
 - **Category:** style
 - **Where:** diplomatic actions `covert_<type>_action` (`te_miscellaneous_l_english.yml:2246-2387`); panel rows `je_iw_op_row_<type>` (`te_journal_entries_l_english.yml:509-540`); `iw_op_name_<type>` (`te_miscellaneous_l_english.yml:4584-4601`, used by the Known rows, events and custom loc); How / concepts
 - **Now:**
@@ -210,6 +220,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** high
 
 ### COV-4. Row titles are coloured red / yellow / green by an unstated rule that the exposure tiers contradict
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): plain titles, and an Exposure line from `iw_exposure_tier` (set by `covert_op_refresh_exposure_tier` from the tier triggers) with the tier's note on hover.
 - **Category:** style / hidden info
 - **Where:** `je_iw_op_row_<type>` (`te_journal_entries_l_english.yml:509-540`); exposure tiers in the action descriptions (`$iw_exposure_tier_<tier>_note$`, `te_miscellaneous_l_english.yml:4558-4564`)
 - **Now:** espionage and friendly operations are `#G`, meddling `#Y`, attacks `#R`. Nothing explains the colours, the house rule is "green is good for the player and red is bad", and they don't follow the exposure tier the player actually pays: Ideological Subversion is `#Y` but its exposure is *severe*; Comms Disruption and Infrastructure Sabotage are `#R` but their tier is *wartime* (costless once at war).
@@ -218,6 +229,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** medium
 
 ### COV-5. An operation's detection risk is a sentence, not the breakdown the shared block promises
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): `covert_op_refresh_detection` writes the risk's terms beside `iw_detect` (`iw_det_*`), and the row's hover is a Label: value table that adds up to it. Funding Stealth prints as points; the efficiency factor and the 50% ceiling are named values.
 - **Category:** list (table) / style
 - **Where:** `je_iw_op_row_detection_tt` (`te_journal_entries_l_english.yml:517`); the shared block `covert_operations_widget.gui:1816-1848` (`je_iw_detection_base` / `_funding` / `_efficiency`, :420-425)
 - **Now:** the shared block lists Base risk "10% a month", Funding Stealth "−8%" and Efficiency Factor "−25%". Each row then hovers "Our IC 45 against their 30, plus 5 defence… Funding, our network there, priority and our efficiency set the rest." — so the parts that differ per operation (network, priority) are never given a number. "−8%" is also percentage *points* (`concept_funding_stealth_desc`) while "−25%" is relative, and they print identically.
@@ -226,6 +238,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** high
 
 ### COV-6. The Tradecraft bar uses the eye-shaped marker the guide retired, and its "→" means something else
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): thin threshold lines with their own hovers (`covert_bar_line`) at each Tradecraft tier floor and each standing floor; headline "42 · next 60"; the marker texture is gone from the panel.
 - **Category:** style
 - **Where:** `covert_operations_widget.gui:1680-1755`; loc `je_iw_tradecraft_line` (`te_journal_entries_l_english.yml:570`); `test_covert_layout.py:69` (texture allow-list)
 - **Now:** the next tier's floor is drawn with `gfx/interface/progressbar/progressbar_marker.dds`, which rule 5 (play-test) dropped as ambiguous: "A fixed threshold on the bar is a thin vertical line with its own hover." The headline "42 → 60" uses the arrow the rule reserves for where a value is heading ("62 → 68 (+0.4/mo)"), but 60 is the next tier's floor. The Capacity bar above it has the standing floors (20/40/60/80% of the world's best) but draws none, so the standing icon and the bar don't connect.
@@ -234,7 +247,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** high
 
 ### COV-7. The Tradecraft hover is How-it-works, and drops one tier's unlocks
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. Unlocks in #1202; the split (branch `wave/gui-hegemony`, 2026-10-27): the bar's hover is this month's reading, and `je_iw_how_tradecraft` holds the rules once.
 - **Category:** over-explaining + inconsistency
 - **Where:** `je_iw_tradecraft_tooltip` (`te_journal_entries_l_english.yml:571`) vs `je_iw_how_tradecraft` (:477) and `concept_tradecraft_desc` (`te_concepts_l_english.yml:939`)
 - **Now:** the overview bar's hover is the rulebook: gains per operation, the cap on operations counted, losses per exposure category, decay, the tier modifiers, the unlock ladder. How and the concept say most of it again (and How ends "Hover Tradecraft in the overview for this month's figures"). Its Unlocks line lists nothing for Seasoned, where How and the concept give "Regime Change, Nuclear Programme Sabotage and Sabotage Colony", and leaves only Fledgling unbolded.
@@ -243,7 +256,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** high
 
 ### COV-8. The standing verdicts have no figure, no next threshold, and one shouts
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202.
 - **Category:** hidden info / style
 - **Where:** `je_iw_status_fortress` … `_vulnerable` (`te_journal_entries_l_english.yml:564-568`), the overview's first icon
 - **Now:** five prose verdicts. Fortress alone is all caps with the country's name ("#bold INTELLIGENCE FORTRESS.#! #G France's counterintelligence…"). None says what the standing is measured on or how far the next one is; the floors (20/40/60/80% of the world's best) are only in How, and our percentage only in the capacity bar's hover.
@@ -252,7 +265,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** high
 
 ### COV-9. Row-button tooltips: the root they read may not exist there, and guard checks show as ticks
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. (a) in #1202; (b) (branch `wave/gui-hegemony`, 2026-10-27): the guards print only when they fail, and the priority-3 Tradecraft gate only on the step that reaches 3.
 - **Category:** hidden info + over-explaining
 - **Where:** `je_iw_stand_down_tooltip`, `je_iw_priority_step_up_tooltip`, `je_iw_priority_step_down_tooltip` (`te_journal_entries_l_english.yml:556-563`); guards `iw_stand_down_target_known_tt`, `iw_stand_down_op_matches_tt`, `iw_priority_op_known_tt`, `iw_priority_op_ours_tt`, `iw_expose_known_exists_tt`, `iw_expose_known_ours_tt` (`te_miscellaneous_l_english.yml:4553-4616`) in `covert_possible_stand_down` / `covert_priority_op_is_ours` (`covert_warfare_triggers.txt:212-253`) and `covert_expose_known_sgui`
 - **Now:** (a) these three buttons sit inside a datamodel item, and their tooltips root on `JournalEntry.GetCountry.MakeScope`. The widget's own header (:69-72) and `docs/systems/journal_entry_systems.md` (Expose) say a tooltip there has no `JournalEntry` (gotcha #24), which is why the Expose button and the priority *label* hovers read `GetPlayer`. If so, the IsValid/Execute half of these tooltips silently fails, and a greyed Stand down or priority button doesn't say why (rule 6). (b) When they do render, every hover opens with ticked implementation guards — "The target of this operation can be identified", "This operation is one of ours and is still running", "The operation on this row can be identified", "We are watching this operation" — and `iw_priority_3_needs_tradecraft_tt` is ticked on every 1→2 step.
@@ -261,7 +274,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** medium (a: the context loss is the mod's documented belief, not observed for these keys); high (b)
 
 ### COV-10. Tooltips that repeat How, and one that points at a panel that no longer exists
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202.
 - **Category:** over-explaining / stale
 - **Where:** `je_iw_stand_down_tooltip` (:563), `je_iw_known_row_tt` (:486), `iw_increase_funding_effect_tt` (`te_miscellaneous_l_english.yml:4580`)
 - **Now:** Stand down restates `je_iw_how_ops` ("that is the price of being caught, not of calling off") and says "the slot is freed" right above the effect line that says it again. The Known row hover restates `je_iw_how_watching`'s growth rules and adds "hover its name" (the name is underlined). The funding-up hover says "Higher funding buys better tradecraft… The ladder in the command centre lists what every level gives": the ladder became the Funding Levels table in round 3 (`test_covert_layout.py` checks it is gone), it sits directly under the stepper, "command centre" is the journal entry, and funding does not raise [Tradecraft] at all.
@@ -270,7 +283,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** high
 
 ### COV-11. "Funding is zero" is said in three places; the running state line explains
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): the Funding section's state line shows only while funded with nothing running (`covert_funding_ready_sgui`).
 - **Category:** redundant / over-explaining
 - **Where:** overview funding cell (dormant icon + `je_iw_ov_funding_tt`), Operations card `je_iw_funding_dormant_banner` (`te_journal_entries_l_english.yml:455`), Funding section `je_iw_funding_state` → `iw_funding_state_*` (`te_miscellaneous_l_english.yml:4574-4577`)
 - **Now:** at zero the player reads "Unfunded" in the overview hover, the banner above the operations and the Funding section's first line. While running, the Funding section says "Operations are active. Each runs at its own phase strength and carries its own detection risk."
@@ -279,6 +292,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** medium
 
 ### COV-12. Operation rows lack the target's flag; network rows spend two lines saying "nothing yet"
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): the flag on each operation row, and the network rows as a one-line table, the further step the owner accepted on 2026-10-27 over the round-3 layout. A head (Country, Strength, Ops, Head Start, Report, each explained on hover), then per network its `tiny_flag`, its name (hover: the network and what it adds to catching their operations), strength as figure, bar and trend, our operations there, the head start, and the report as one word (None, Partial, Full) with the report on hover, at 17 points in shared columns that `test_covert_layout.NetworkTableTest` budgets. The two-line rows' keys (`je_iw_net_row_strength`, `_ops`, `_benefit`, `_intel_none`, `_strength_tt`) are gone.
 - **Category:** style / list compactness
 - **Where:** `widget_je_covert_operation_row` (`covert_operations_widget.gui:481-885`) vs `widget_je_covert_network_row` (:1211-1349) and `widget_je_covert_known_row` (:920-1202); loc `je_iw_net_row_intel_none`, `je_iw_net_row_intel_ops_locked` (`te_journal_entries_l_english.yml:494-496`)
 - **Now:** network and known-operation rows open with the vanilla `flag` widget (name on hover, click opens the country; rule 4); operation rows name the target only in text, so they can't take the player to the country whose diplomatic actions run them. A network row is six to eight lines; at low strength two of them are "Their service: nothing yet" and "Their operations against us: not yet known".
@@ -287,7 +301,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** high (flag), medium (folding)
 
 ### COV-13. Launch-tooltip wording out of step with the panel
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202.
 - **Category:** style
 - **Where:** `covert_op_detection_warning_tt`, `iw_has_available_slot_tt`, `iw_funding_not_zero_tt` (`te_miscellaneous_l_english.yml:2347`, `:4578`, `:4573`); `concept_target_defenses` "Target's Defenses" (`te_concepts_l_english.yml:910`) vs the panel's "defence"; `iw_op_exposed_desc_comms_disruption` "offense and defense"
 - **Now:** "@warning! Detection Risk: Each month your agents are active…" (plain text and second person, where the panel uses the concept and "we"); "Has an available Covert Operation slot" (the concept is Operation Slots); "Funding level must be at least 1 to launch operations" (a requirement, shown with a tick; also reused as a pact's maintenance condition). The detection hover renders `[Concept('concept_target_defenses', 'defence')]`, whose own title reads "Target's Defenses".
@@ -296,6 +310,7 @@ about what each row shows, the launch path, and tooltips.
 - **Confidence:** high
 
 ### COV-14. Type sizes predate the 17 / 20 / 16 ladder
+- **Status:** done (branch `wave/gui-hegemony`, 2026-10-27): `covert_fontsize_row` / `_heading` / `_overview` at the head of the file; `test_covert_layout`'s width budget reads the templates.
 - **Category:** style
 - **Where:** `covert_operations_widget.gui`: rows and values `fontsize_medium` (14), overview words, the priority label and value and the Stand down label `fontsize_small` (12)
 - **Now:** rule 3 asks 17 for rows, values, buttons and notes and 16 for the overview, in panel templates; "nothing a player reads to decide something is smaller". Stand down and the priority stepper, the row's only controls, are the smallest text in the panel.

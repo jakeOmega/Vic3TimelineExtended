@@ -136,11 +136,14 @@ gw_entry_unlocked = {
 # ---------------------------------------------------------------------------
 # Adopt / repeal eligibility. Bodies began as the scripted buttons' `possible`
 # blocks, with custom_tooltip phrasing added; the technology gates (header)
-# came later.
+# came later. Each opens with whether the policy is in force, in a
+# hidden_trigger: the widget draws Adopt only while a policy is out of force
+# and Repeal only while it is in force, so on a player's tooltip that line
+# was always ticked (GW-16, 2026-10-27). The scripted buttons that also read
+# these are the AI's.
 # ---------------------------------------------------------------------------
 gw_possible_carbon_tax = {
-	custom_tooltip = {
-		text = gw_cond_not_in_force
+	hidden_trigger = {
 		NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
 	}
 	custom_tooltip = {
@@ -150,8 +153,7 @@ gw_possible_carbon_tax = {
 }
 
 gw_possible_remove_carbon_tax = {
-	custom_tooltip = {
-		text = gw_cond_in_force
+	hidden_trigger = {
 		je:je_global_warming = { has_modifier = carbon_tax_modifier }
 	}
 	custom_tooltip = {
@@ -161,8 +163,7 @@ gw_possible_remove_carbon_tax = {
 }
 
 gw_possible_renewable_investment = {
-	custom_tooltip = {
-		text = gw_cond_not_in_force
+	hidden_trigger = {
 		NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
 	}
 	custom_tooltip = {
@@ -173,8 +174,7 @@ gw_possible_renewable_investment = {
 }
 
 gw_possible_remove_renewable_investment = {
-	custom_tooltip = {
-		text = gw_cond_in_force
+	hidden_trigger = {
 		je:je_global_warming = { has_modifier = renewable_investment_modifier }
 	}
 	custom_tooltip = {
@@ -184,8 +184,7 @@ gw_possible_remove_renewable_investment = {
 }
 
 gw_possible_climate_adaptation = {
-	custom_tooltip = {
-		text = gw_cond_not_in_force
+	hidden_trigger = {
 		NOT = { je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
 	}
 	produced_authority > 250
@@ -196,15 +195,13 @@ gw_possible_climate_adaptation = {
 }
 
 gw_possible_remove_climate_adaptation = {
-	custom_tooltip = {
-		text = gw_cond_in_force
+	hidden_trigger = {
 		je:je_global_warming = { has_modifier = climate_adaptation_modifier }
 	}
 }
 
 gw_possible_emission_standards = {
-	custom_tooltip = {
-		text = gw_cond_not_in_force
+	hidden_trigger = {
 		NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
 	}
 	custom_tooltip = {
@@ -216,8 +213,7 @@ gw_possible_emission_standards = {
 }
 
 gw_possible_remove_emission_standards = {
-	custom_tooltip = {
-		text = gw_cond_in_force
+	hidden_trigger = {
 		je:je_global_warming = { has_modifier = emission_standards_modifier }
 	}
 	custom_tooltip = {
@@ -227,8 +223,7 @@ gw_possible_remove_emission_standards = {
 }
 
 gw_possible_reforestation = {
-	custom_tooltip = {
-		text = gw_cond_not_in_force
+	hidden_trigger = {
 		NOT = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
 	}
 	custom_tooltip = {
@@ -239,8 +234,7 @@ gw_possible_reforestation = {
 }
 
 gw_possible_remove_reforestation = {
-	custom_tooltip = {
-		text = gw_cond_in_force
+	hidden_trigger = {
 		je:je_global_warming = { has_modifier = reforestation_subsidies_modifier }
 	}
 	custom_tooltip = {
@@ -250,8 +244,7 @@ gw_possible_remove_reforestation = {
 }
 
 gw_possible_public_transit = {
-	custom_tooltip = {
-		text = gw_cond_not_in_force
+	hidden_trigger = {
 		NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } }
 	}
 	custom_tooltip = {
@@ -263,8 +256,7 @@ gw_possible_public_transit = {
 }
 
 gw_possible_remove_public_transit = {
-	custom_tooltip = {
-		text = gw_cond_in_force
+	hidden_trigger = {
 		je:je_global_warming = { has_modifier = public_transit_modifier }
 	}
 	custom_tooltip = {
@@ -274,8 +266,7 @@ gw_possible_remove_public_transit = {
 }
 
 gw_possible_fossil_fuel_divestment = {
-	custom_tooltip = {
-		text = gw_cond_not_in_force
+	hidden_trigger = {
 		NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
 	}
 	custom_tooltip = {
@@ -286,8 +277,7 @@ gw_possible_fossil_fuel_divestment = {
 }
 
 gw_possible_remove_fossil_fuel_divestment = {
-	custom_tooltip = {
-		text = gw_cond_in_force
+	hidden_trigger = {
 		je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier }
 	}
 	custom_tooltip = {
@@ -297,8 +287,7 @@ gw_possible_remove_fossil_fuel_divestment = {
 }
 
 gw_possible_green_building_codes = {
-	custom_tooltip = {
-		text = gw_cond_not_in_force
+	hidden_trigger = {
 		NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
 	}
 	custom_tooltip = {
@@ -310,8 +299,7 @@ gw_possible_green_building_codes = {
 }
 
 gw_possible_remove_green_building_codes = {
-	custom_tooltip = {
-		text = gw_cond_in_force
+	hidden_trigger = {
 		je:je_global_warming = { has_modifier = green_building_codes_modifier }
 	}
 	custom_tooltip = {
@@ -349,8 +337,7 @@ gw_policy_carbon_removal_active = {
 }
 
 gw_possible_carbon_removal = {
-	custom_tooltip = {
-		text = gw_cond_not_in_force
+	hidden_trigger = {
 		NOT = { je:je_global_warming = { has_modifier = carbon_removal_modifier } }
 	}
 	custom_tooltip = {
@@ -362,8 +349,7 @@ gw_possible_carbon_removal = {
 }
 
 gw_possible_remove_carbon_removal = {
-	custom_tooltip = {
-		text = gw_cond_in_force
+	hidden_trigger = {
 		je:je_global_warming = { has_modifier = carbon_removal_modifier }
 	}
 	custom_tooltip = {
@@ -383,13 +369,13 @@ gw_policy_fossil_fuel_tariffs_active = {
 }
 
 gw_possible_fossil_fuel_tariffs = {
-	custom_tooltip = { text = gw_cond_not_in_force NOT = { gw_policy_fossil_fuel_tariffs_active = yes } }
+	hidden_trigger = { NOT = { gw_policy_fossil_fuel_tariffs_active = yes } }
 	custom_tooltip = { text = gw_cond_warming_mild temperature_anomaly_display >= 0.5 }
 	custom_tooltip = { text = gw_cond_leads_market te_tax_owns_market = yes }
 	produced_authority > 100
 }
 
 gw_possible_remove_fossil_fuel_tariffs = {
-	custom_tooltip = { text = gw_cond_in_force gw_policy_fossil_fuel_tariffs_active = yes }
+	hidden_trigger = { gw_policy_fossil_fuel_tariffs_active = yes }
 	custom_tooltip = { text = gw_cond_leads_market te_tax_owns_market = yes }
 }

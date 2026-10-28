@@ -56,7 +56,7 @@ buildings:
   - building_sr_site_pallas
   - building_sr_site_psyche
   - building_sr_site_vesta
-  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Our Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
+  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
 - image: gfx/interface/icons/space_race_icons/colony_dwarf.dds
   entities:
   - building_sr_site_eris
@@ -64,7 +64,7 @@ buildings:
   - building_sr_site_makemake
   - building_sr_site_pluto
   - building_sr_site_sedna
-  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Our Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
+  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
 - image: gfx/interface/icons/space_race_icons/colony_jovian.dds
   entities:
   - building_sr_site_amalthea
@@ -73,7 +73,7 @@ buildings:
   - building_sr_site_ganymede
   - building_sr_site_himalia
   - building_sr_site_io
-  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Our Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
+  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
 - image: gfx/interface/icons/space_race_icons/colony_mars.dds
   entities:
   - building_sr_site_arcadia_planitia
@@ -81,12 +81,12 @@ buildings:
   - building_sr_site_olympus_mons
   - building_sr_site_utopia_planitia
   - building_sr_site_valles_marineris
-  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Our Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
+  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
 - image: gfx/interface/icons/space_race_icons/colony_neptunian.dds
   entities:
   - building_sr_site_proteus
   - building_sr_site_triton
-  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Our Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
+  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
 - image: gfx/interface/icons/space_race_icons/colony_saturnian.dds
   entities:
   - building_sr_site_enceladus
@@ -94,14 +94,14 @@ buildings:
   - building_sr_site_mimas
   - building_sr_site_rhea
   - building_sr_site_titan
-  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Our Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
+  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
 - image: gfx/interface/icons/space_race_icons/colony_uranian.dds
   entities:
   - building_sr_site_ariel
   - building_sr_site_miranda
   - building_sr_site_oberon
   - building_sr_site_titania
-  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Our Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
+  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
 diplomatic_actions:
 - image: gfx/interface/icons/diplomatic_action_icons/change_culture.dds
   entities:

@@ -618,7 +618,7 @@ class ReviewFixesTest(unittest.TestCase):
         self.assertEqual(found, [])
 
     def test_the_pledge_count_names_no_side(self):
-        self.assertNotIn("in favour", self.loc["je_un_chamber_tally_committed"])
+        self.assertNotIn("in favor", self.loc["je_un_chamber_tally_committed"])
 
     def test_standing_help_no_longer_ties_pledges_to_the_sponsor(self):
         for key in ("je_un_standing_help_limits", "je_un_standing_help_losses", "je_un_standing_help_sources"):

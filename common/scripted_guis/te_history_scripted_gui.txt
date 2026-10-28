@@ -11,10 +11,14 @@
 # neither a player nor the AI can execute it. Opening the chart cannot change
 # simulation state.
 #
-# The policy branches quote the dashboard's own `banking_dash_tt_<button>`
-# keys, so the marker tooltip shows the policy's real name, description and
-# `[GetStaticModifier(...).GetDesc]` effect list — no number is retyped here,
-# and a rebalance of a policy updates its marker text automatically.
+# A policy branch prints the policy's NAME, one line under "adopted" or
+# "withdrawn" (GUI audit BNK-4, 2026-10-27). It used to quote the dashboard's
+# whole `banking_dash_tt_<button>` tooltip: today's Requires line and today's
+# live figures under a bar from years ago, three of them stacked in a busy
+# month, and five of those keys read `JournalEntry.GetCountry...`, which does
+# not resolve in this tooltip's context. What a policy does is on its row.
+# A verb-named button ("Declare a Bank Holiday") is named by its modifier
+# ("Bank Holiday"), as the Active Policies row names it.
 #
 # Adding a marker kind = one `te_history_record_marker = { MARK = x }` call
 # plus one branch below.
@@ -45,392 +49,392 @@ te_history_marker_tooltip = {
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_open_market_ops }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_open_market_ops
+					custom_tooltip = CB_OPEN_MARKET_OPS
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_open_market_ops }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_open_market_ops
+					custom_tooltip = CB_OPEN_MARKET_OPS
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_moral_suasion }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_moral_suasion
+					custom_tooltip = CB_MORAL_SUASION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_moral_suasion }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_moral_suasion
+					custom_tooltip = CB_MORAL_SUASION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_countercyclical_buffer }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_countercyclical_buffer
+					custom_tooltip = CB_COUNTERCYCLICAL_BUFFER
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_countercyclical_buffer }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_countercyclical_buffer
+					custom_tooltip = CB_COUNTERCYCLICAL_BUFFER
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_raise_margin_requirements }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_raise_margin_requirements
+					custom_tooltip = banking_raise_margin_requirements
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_raise_margin_requirements }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_raise_margin_requirements
+					custom_tooltip = banking_raise_margin_requirements
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_expand_deposit_guarantee }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_expand_deposit_guarantee
+					custom_tooltip = banking_expand_deposit_guarantee
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_expand_deposit_guarantee }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_expand_deposit_guarantee
+					custom_tooltip = banking_expand_deposit_guarantee
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_directed_credit_infrastructure }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_infrastructure
+					custom_tooltip = CB_DIRECTED_CREDIT_INFRA
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_directed_credit_infrastructure }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_infrastructure
+					custom_tooltip = CB_DIRECTED_CREDIT_INFRA
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_export_credit_facility }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_export_credit_facility
+					custom_tooltip = CB_EXPORT_CREDIT
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_export_credit_facility }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_export_credit_facility
+					custom_tooltip = CB_EXPORT_CREDIT
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_restrict_inflows }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_restrict_inflows
+					custom_tooltip = banking_restrict_inflows
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_restrict_inflows }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_restrict_inflows
+					custom_tooltip = banking_restrict_inflows
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_sterilize_inflows }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_sterilize_inflows
+					custom_tooltip = banking_sterilize_inflows
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_sterilize_inflows }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_sterilize_inflows
+					custom_tooltip = banking_sterilize_inflows
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_foreign_borrowing_limits }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_foreign_borrowing_limits
+					custom_tooltip = banking_foreign_borrowing_limits
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_foreign_borrowing_limits }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_foreign_borrowing_limits
+					custom_tooltip = banking_foreign_borrowing_limits
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_fx_surrender }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_fx_surrender
+					custom_tooltip = CB_FX_SURRENDER
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_fx_surrender }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_fx_surrender
+					custom_tooltip = CB_FX_SURRENDER
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_emergency_import_financing }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_emergency_import_financing
+					custom_tooltip = CB_EMERGENCY_IMPORT_FINANCING
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_emergency_import_financing }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_emergency_import_financing
+					custom_tooltip = CB_EMERGENCY_IMPORT_FINANCING
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_capital_controls_outflow }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_capital_controls_outflow
+					custom_tooltip = CB_CAPITAL_CONTROLS_OUT
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_capital_controls_outflow }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_capital_controls_outflow
+					custom_tooltip = CB_CAPITAL_CONTROLS_OUT
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_emergency_liquidity_program }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_emergency_liquidity_program
+					custom_tooltip = CB_EMERGENCY_LIQUIDITY
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_emergency_liquidity_program }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_emergency_liquidity_program
+					custom_tooltip = CB_EMERGENCY_LIQUIDITY
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_asset_relief_program }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_asset_relief_program
+					custom_tooltip = CB_ASSET_RELIEF
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_asset_relief_program }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_asset_relief_program
+					custom_tooltip = CB_ASSET_RELIEF
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_directed_credit_heavy_industry }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_heavy_industry
+					custom_tooltip = CB_DIRECTED_CREDIT_HEAVY
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_directed_credit_heavy_industry }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_heavy_industry
+					custom_tooltip = CB_DIRECTED_CREDIT_HEAVY
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_directed_credit_agriculture }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_agriculture
+					custom_tooltip = CB_DIRECTED_CREDIT_AGRI
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_directed_credit_agriculture }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_agriculture
+					custom_tooltip = CB_DIRECTED_CREDIT_AGRI
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_directed_credit_armaments }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_armaments
+					custom_tooltip = CB_DIRECTED_CREDIT_ARMS
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_directed_credit_armaments }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_armaments
+					custom_tooltip = CB_DIRECTED_CREDIT_ARMS
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_directed_credit_electrification }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_electrification
+					custom_tooltip = CB_DIRECTED_CREDIT_ELEC
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_directed_credit_electrification }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_directed_credit_electrification
+					custom_tooltip = CB_DIRECTED_CREDIT_ELEC
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_reserve_requirements }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_reserve_requirements
+					custom_tooltip = banking_reserve_requirements
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_reserve_requirements }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_reserve_requirements
+					custom_tooltip = banking_reserve_requirements
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_bank_holiday }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_bank_holiday
+					custom_tooltip = banking_bank_holiday
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_bank_holiday }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_bank_holiday
+					custom_tooltip = banking_bank_holiday
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_bail_in_regime }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_bail_in_regime
+					custom_tooltip = CB_BAIL_IN
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cb_bail_in_regime }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_bail_in_regime
+					custom_tooltip = CB_BAIL_IN
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_ce_plan_revision }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_ce_plan_revision
+					custom_tooltip = CE_PLAN_REVISION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_ce_plan_revision }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_ce_plan_revision
+					custom_tooltip = CE_PLAN_REVISION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_ce_target_reduction }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_ce_target_reduction
+					custom_tooltip = CE_TARGET_REDUCTION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_ce_target_reduction }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_ce_target_reduction
+					custom_tooltip = CE_TARGET_REDUCTION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_ce_consolidation_order }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_ce_consolidation_order
+					custom_tooltip = CE_CONSOLIDATION_ORDER
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_ce_consolidation_order }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_ce_consolidation_order
+					custom_tooltip = CE_CONSOLIDATION_ORDER
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_ce_emergency_allocation }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_ce_emergency_allocation
+					custom_tooltip = CE_EMERGENCY_ALLOCATION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_ce_emergency_allocation }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_ce_emergency_allocation
+					custom_tooltip = CE_EMERGENCY_ALLOCATION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_ce_strategic_stockpile }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_ce_strategic_stockpile
+					custom_tooltip = CE_STRATEGIC_STOCKPILE
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_ce_strategic_stockpile }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_ce_strategic_stockpile
+					custom_tooltip = CE_STRATEGIC_STOCKPILE
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_ce_distribution_upgrade }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_ce_distribution_upgrade
+					custom_tooltip = CE_DISTRIBUTION_UPGRADE
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_ce_distribution_upgrade }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_ce_distribution_upgrade
+					custom_tooltip = CE_DISTRIBUTION_UPGRADE
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_ce_admin_campaign }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_ce_admin_campaign
+					custom_tooltip = CE_ADMIN_CAMPAIGN
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_ce_admin_campaign }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_ce_admin_campaign
+					custom_tooltip = CE_ADMIN_CAMPAIGN
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_ce_coordination_protocol }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_ce_coordination_protocol
+					custom_tooltip = CE_COORDINATION_PROTOCOL
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_ce_coordination_protocol }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_ce_coordination_protocol
+					custom_tooltip = CE_COORDINATION_PROTOCOL
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_act_ce_invest_pool_inject }
 					custom_tooltip = te_hist_mk_action
-					custom_tooltip = banking_dash_tt_ce_invest_pool_inject
+					custom_tooltip = CE_INVEST_POOL_INJECT
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_act_ce_invest_pool_withdraw }
 					custom_tooltip = te_hist_mk_action
-					custom_tooltip = banking_dash_tt_ce_invest_pool_withdraw
+					custom_tooltip = CE_INVEST_POOL_WITHDRAW
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cw_dividend_restraint }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cw_dividend_restraint
+					custom_tooltip = CW_DIVIDEND_RESTRAINT
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cw_dividend_restraint }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cw_dividend_restraint
+					custom_tooltip = CW_DIVIDEND_RESTRAINT
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cw_mutual_aid_fund }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cw_mutual_aid_fund
+					custom_tooltip = CW_MUTUAL_AID_FUND
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cw_mutual_aid_fund }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cw_mutual_aid_fund
+					custom_tooltip = CW_MUTUAL_AID_FUND
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cw_capital_plan }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cw_capital_plan
+					custom_tooltip = CW_CAPITAL_PLAN
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cw_capital_plan }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cw_capital_plan
+					custom_tooltip = CW_CAPITAL_PLAN
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cw_credit_expansion }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cw_credit_expansion
+					custom_tooltip = CW_CREDIT_EXPANSION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cw_credit_expansion }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cw_credit_expansion
+					custom_tooltip = CW_CREDIT_EXPANSION
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cw_council_directive }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cw_council_directive
+					custom_tooltip = CW_COUNCIL_DIRECTIVE
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cw_council_directive }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cw_council_directive
+					custom_tooltip = CW_COUNCIL_DIRECTIVE
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cw_consumption_ceiling }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cw_consumption_ceiling
+					custom_tooltip = CW_CONSUMPTION_CEILING
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cw_consumption_ceiling }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cw_consumption_ceiling
+					custom_tooltip = CW_CONSUMPTION_CEILING
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cw_solidarity_campaign }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cw_solidarity_campaign
+					custom_tooltip = CW_SOLIDARITY_CAMPAIGN
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cw_solidarity_campaign }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cw_solidarity_campaign
+					custom_tooltip = CW_SOLIDARITY_CAMPAIGN
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_on_cw_worker_buyout }
 					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cw_worker_buyout
+					custom_tooltip = CW_WORKER_BUYOUT
 				}
 				if = {
 					limit = { has_variable = te_hist_mk_off_cw_worker_buyout }
 					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cw_worker_buyout
+					custom_tooltip = CW_WORKER_BUYOUT
 				}
 			}
 		}

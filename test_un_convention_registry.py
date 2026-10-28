@@ -630,8 +630,10 @@ class ChamberTests(unittest.TestCase):
                 self.assertIn(f"un_propose_{c.key}_possible = yes", body)
 
     def test_widget_has_one_row_per_convention(self):
+        # One in each of the list's two passes, "Ready to Table" and "No Case
+        # Now" (the 2026-10-27 audit, UN-7; test_un_chamber_propose_ops.py).
         ops = sorted(op for row_ops, _ in _widget_rows() for op in row_ops if _convention_op(op))
-        self.assertEqual(ops, sorted(c.op for c in CONVENTIONS))
+        self.assertEqual(ops, sorted(c.op for c in CONVENTIONS for _ in range(2)))
 
     def test_row_renderer_is_the_conventions_own(self):
         loc = _loc()
@@ -702,13 +704,17 @@ class RuleGateTests(unittest.TestCase):
 
     def test_the_widget_row_hides_under_the_rule(self):
         for c in CONVENTIONS:
-            body = next(b for ops, b in self.rows if c.op in ops)
+            bodies = [b for ops, b in self.rows if c.op in ops]
             # The Reform II gate is not a rule gate (test_un_charter_business.py
-            # pins which rows carry it).
-            gates = set(re.findall(r"GetScriptedGui\('(\w+)'\)", body)) - {
-                "un_chamber_propose_row_sgui", "un_chamber_reform_ii_in_view_sgui"}
+            # pins which rows carry it), nor are the member gate and the two
+            # passes' sorting (test_un_chamber_propose_ops.py).
+            gates = [set(re.findall(r"GetScriptedGui\('(\w+)'\)", body)) - {
+                "un_chamber_propose_row_sgui", "un_chamber_reform_ii_in_view_sgui",
+                "un_chamber_propose_ready_sgui", "un_chamber_propose_shelved_sgui"} for body in bodies]
             with self.subTest(key=c.key):
-                self.assertEqual(gates, {c.rule[1]} if c.rule else set())
+                self.assertEqual(len(bodies), 2)
+                for gate in gates:
+                    self.assertEqual(gate, {c.rule[1]} if c.rule else set())
                 if c.rule:
                     shown = _sub_block(_block(self.sguis, c.rule[1]), "is_shown")
                     self.assertEqual(self._rules(shown), {c.rule[0]})

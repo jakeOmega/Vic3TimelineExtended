@@ -160,6 +160,79 @@ un_overview_hq_sgui = {
 	}
 }
 
+# The overview's cells (the 2026-10-27 audit, UN-1): the Session cell's hover,
+# what is in session and who tabled it against whom; the Motions cell's, the
+# topics with a case for us (un_ov_ready_lines, un_chamber_display_effects.txt).
+un_ov_session_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = un_active_resolution
+				exists = global_var:un_active_resolution
+			}
+			global_var:un_active_resolution ?= {
+				un_chamber_topic_line = yes
+				un_chamber_parties_line = yes
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_no_active
+		}
+	}
+}
+
+un_ov_motions_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = { has_global_variable = un_vote_active }
+			custom_tooltip_no_bullet = je_un_ov_motions_held_tt
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_modifier = un_ga_resolution_modifier
+					has_modifier = un_request_cooldown
+				}
+			}
+			if = {
+				limit = { un_disp_propose_wait_months > 0 }
+				custom_tooltip_no_bullet = je_un_ov_motions_wait_tt
+			}
+			else = {
+				custom_tooltip_no_bullet = je_un_ov_motions_wait_unknown_tt
+			}
+		}
+		un_ov_ready_lines = yes
+	}
+}
+
+# Yes/no questions for the Membership cell's third line and the Found button's
+# label: a founding conference sits; a dissolved UN can be founded again.
+# Globals only (gotcha #22).
+un_ov_conference_sgui = {
+	scope = country
+	is_shown = {
+		un_conference_in_session = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+un_ov_refounding_sgui = {
+	scope = country
+	is_shown = {
+		un_founding_is_refounding = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Scope-free gate: a resolution is in session. The General Assembly shows its
 # tally, delegations and ballot, or, when this is false, the proposals.
 un_session_open_sgui = {
@@ -192,14 +265,17 @@ un_chamber_active_sgui = {
 				has_global_variable = un_active_resolution
 				exists = global_var:un_active_resolution
 			}
+			# The tally, the passage rule and the months are the session
+			# strip's, directly above (the 2026-10-27 audit, UN-3); the card
+			# keeps the pledges the tally leaves out. The archive's entries
+			# keep all three, having no strip.
 			global_var:un_active_resolution ?= {
 				un_chamber_topic_line = yes
 				un_chamber_parties_line = yes
 				un_chamber_mandate_terms_line = yes
-				un_chamber_tally_line = yes
+				un_chamber_tally_committed_line = yes
 				un_chamber_projection_line = yes
 				un_chamber_veto_line = yes
-				custom_tooltip_no_bullet = je_un_chamber_months
 				un_chamber_consequences_line = yes
 				un_chamber_grounds_line = yes
 			}
@@ -249,7 +325,9 @@ un_chamber_reasons_sgui = {
 }
 
 # Redesign phase 3: how the Assembly reads our own position on the
-# resolution in session. is_shown gates the textbox: only while our lean has
+# resolution in session, as one row, "Our Lean: +12", under the vote buttons;
+# its terms are the row's hover (un_chamber_position_terms_sgui; the
+# 2026-10-27 audit, UN-4). is_shown gates the row: only while our lean has
 # been written for the resolution in session. Never executed.
 un_chamber_position_sgui = {
 	scope = country
@@ -262,6 +340,14 @@ un_chamber_position_sgui = {
 		var:un_lean_res ?= global_var:un_active_resolution
 	}
 	ai_is_valid = { always = no }
+
+	effect = {
+		custom_tooltip_no_bullet = je_un_chamber_position_total
+	}
+}
+
+un_chamber_position_terms_sgui = {
+	scope = country
 
 	effect = {
 		un_chamber_position_block = yes
@@ -406,6 +492,105 @@ un_chamber_mission_slot_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 7 }
 			un_chamber_mission_slot_entry = { SLOT = 7 }
+		}
+	}
+}
+
+# The row's Send button at all (the 2026-10-27 audit, UN-15): never on an
+# electoral mission, which takes no contingents, nor on our own, which we
+# cannot serve. Read as IsValid, like the rows (gotcha #22). Never executed.
+un_chamber_mission_joinable_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_mission_slot_joinable = { SLOT = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_mission_slot_joinable = { SLOT = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_mission_slot_joinable = { SLOT = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_mission_slot_joinable = { SLOT = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_mission_slot_joinable = { SLOT = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_mission_slot_joinable = { SLOT = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_mission_slot_joinable = { SLOT = 6 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_mission_slot_joinable = { SLOT = 7 }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+}
+
+# Whether we may send a contingent anywhere: the country-wide part of the
+# Send button's test (un_mission_volunteer_eligible). While it fails, every
+# row's button hides and the refusal is said once above the rows
+# (un_chamber_mission_refusal_sgui). A root-only yes/no GUI.
+un_chamber_mission_volunteer_sgui = {
+	scope = country
+
+	is_shown = {
+		un_mission_volunteer_eligible = yes
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
+# The line above the rows when we can send no contingent to any mission: the
+# first reason, of the four un_mission_volunteer_eligible asks. Shown only
+# while a mission is in the field.
+un_chamber_mission_refusal_sgui = {
+	scope = country
+
+	is_shown = {
+		NOT = { un_mission_volunteer_eligible = yes }
+		has_global_variable_list = un_mission_registry
+		any_in_global_list = {
+			variable = un_mission_registry
+			has_tag = un_msn_active
+		}
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+		if = {
+			limit = { NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } } }
+			custom_tooltip_no_bullet = je_un_chamber_mission_refusal_member
+		}
+		else_if = {
+			limit = { un_representation_suspended = yes }
+			custom_tooltip_no_bullet = je_un_chamber_mission_refusal_suspended
+		}
+		else_if = {
+			limit = { country_rank < rank_value:major_power }
+			custom_tooltip_no_bullet = je_un_chamber_mission_refusal_rank
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_mission_refusal_sanctions
 		}
 	}
 }
@@ -631,17 +816,15 @@ un_chamber_reach_sgui = {
 }
 
 # Whether the entry's status text says anything (je_united_nations'
-# status_desc: a conference, a dissolution, or the Assembly's statistics), so
-# the Diplomacy tab's Status section shows only then. Reads globals only.
+# status_desc: a founding conference or a dissolution; the Assembly's
+# statistics are the overview's since the 2026-10-27 audit, UN-20), so the
+# Diplomacy tab's Status section shows only then. Reads globals only.
 un_status_text_sgui = {
 	scope = country
 	is_shown = {
 		OR = {
 			un_conference_in_session = yes
 			un_founding_is_refounding = yes
-			any_country = {
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-			}
 		}
 	}
 	ai_is_valid = { always = no }
@@ -657,14 +840,79 @@ un_chamber_obligations_outside_sgui = {
 	}
 }
 
-un_chamber_budget_sgui = {
+# The UN's budget under our dues is a table of value rows in the widget (the
+# 2026-10-27 audit, UN-13: it was one seven-figure sentence). These answer
+# which of its rows apply, reading globals only (gotcha #22): the Standing UN
+# Force's share and the World Development Fund's (the Fund takes a share only
+# once Charter Reform I has carried), and the lending facility, which is what
+# is left once either takes one.
+un_chamber_budget_force_sgui = {
 	scope = country
+	is_shown = {
+		has_global_variable = un_inst_standing_force
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
 
+un_chamber_budget_dev_fund_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = un_inst_development_fund
+		un_charter_has_reform = { LEVEL = 1 }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+un_chamber_budget_lending_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			has_global_variable = un_inst_standing_force
+			has_global_variable = un_inst_development_fund
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Our grain pledge to the World Food Reserve, under our dues, while the Reserve
+# stands (un_food_reserve_obligation_lines, un_economy_effects.txt); Pledge
+# Grain or Withdraw Our Pledge sits under it.
+un_chamber_food_reserve_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = un_inst_food_reserve
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
 	effect = {
-		custom_tooltip_no_bullet = je_un_chamber_dues_budget
-		# What the Standing UN Force and the World Development Fund take of it,
-		# and what is left to lend (redesign phase 7, un_economy_effects.txt).
-		un_economy_budget_lines = yes
+		un_food_reserve_obligation_lines = yes
+	}
+}
+
+# A Binding Ceasefire ordered against us, or protecting us from our enemy
+# (un_order_obligation_lines, un_order_effects.txt), under our dues, when one
+# applies.
+un_chamber_orders_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			has_variable = un_cf_order_months
+			any_country = {
+				has_variable = un_cf_order_months
+				var:un_cf_victim ?= ROOT
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		un_order_obligation_lines = yes
 	}
 }
 
@@ -682,6 +930,17 @@ un_chamber_dev_fund_sgui = {
 
 	effect = {
 		un_dev_fund_recipient_lines = yes
+	}
+}
+
+# Our own position in the Fund, the section's first row, with the four
+# Development Programs controls under it (un_economy_obligation_lines,
+# un_economy_effects.txt; UN-13).
+un_chamber_dev_fund_position_sgui = {
+	scope = country
+
+	effect = {
+		un_economy_obligation_lines = yes
 	}
 }
 
@@ -736,40 +995,397 @@ un_chamber_in_session_sgui = {
 	}
 }
 
-# Closed resolutions, newest first. Read straight out of the bounded
-# un_resolution_history global list, so pruning in un_resolution_archive is
-# invisible here: no index, count or cap is assumed. The `has_tag`
-# emptiness probe also covers a list variable that still exists after its
-# last entry was evicted.
-#
-# `max` here is a rendering ceiling, not the history cap: it is set far above
-# anything un_resolution_archive can leave behind (only one vote runs at a
-# time and a closed resolution holds its topic cooldown for 5-10 years, so a
-# handful of entries can outlive the 25-entry cap at most). It is stated
-# explicitly only because an ordered_ iterator's default span is ambiguous —
-# vanilla writes `max` out whenever the count matters (ep2_iwakura_events.txt:306).
-un_chamber_history_sgui = {
+# The archive, one short row per resolution, newest first (the 2026-10-27
+# audit, UN-16): its title and how it ended, and the rest of its card on the
+# row's hover (un_chamber_history_card_row_sgui). op = its place in the
+# archive, 0-29, as in un_chamber_history_details_row_sgui below, whose
+# is_valid says the same; the widget repeats the op table
+# (test_un_chamber_mission_slots.py). Each row is its own ExecuteTooltip, so a
+# country named on two resolutions is named on each (gotcha #27).
+un_chamber_history_brief_row_sgui = {
 	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_chamber_history_has_entry = { COUNT = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_chamber_history_has_entry = { COUNT = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_chamber_history_has_entry = { COUNT = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_chamber_history_has_entry = { COUNT = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_chamber_history_has_entry = { COUNT = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_chamber_history_has_entry = { COUNT = 6 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_chamber_history_has_entry = { COUNT = 7 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_chamber_history_has_entry = { COUNT = 8 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_chamber_history_has_entry = { COUNT = 9 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_chamber_history_has_entry = { COUNT = 10 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_chamber_history_has_entry = { COUNT = 11 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_chamber_history_has_entry = { COUNT = 12 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_chamber_history_has_entry = { COUNT = 13 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_chamber_history_has_entry = { COUNT = 14 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_chamber_history_has_entry = { COUNT = 15 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_chamber_history_has_entry = { COUNT = 16 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_chamber_history_has_entry = { COUNT = 17 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_chamber_history_has_entry = { COUNT = 18 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_chamber_history_has_entry = { COUNT = 19 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_chamber_history_has_entry = { COUNT = 20 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_chamber_history_has_entry = { COUNT = 21 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_chamber_history_has_entry = { COUNT = 22 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_chamber_history_has_entry = { COUNT = 23 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_chamber_history_has_entry = { COUNT = 24 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_chamber_history_has_entry = { COUNT = 25 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_chamber_history_has_entry = { COUNT = 26 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_chamber_history_has_entry = { COUNT = 27 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_chamber_history_has_entry = { COUNT = 28 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_chamber_history_has_entry = { COUNT = 29 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_chamber_history_has_entry = { COUNT = 30 }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
 
 	effect = {
 		if = {
-			limit = {
-				has_global_variable_list = un_resolution_history
-				any_in_global_list = {
-					variable = un_resolution_history
-					has_tag = un_resolution
-				}
-			}
-			ordered_in_global_list = {
-				variable = un_resolution_history
-				order_by = un_res_recency_order
-				max = 100
-				check_range_bounds = no
-				un_chamber_history_entry = yes
-			}
+			limit = { exists = scope:op scope:op = 0 }
+			un_chamber_history_brief_row = { POSITION = 0 COUNT = 1 }
 		}
-		else = {
-			custom_tooltip_no_bullet = je_un_chamber_no_history
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_chamber_history_brief_row = { POSITION = 1 COUNT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_chamber_history_brief_row = { POSITION = 2 COUNT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_chamber_history_brief_row = { POSITION = 3 COUNT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_chamber_history_brief_row = { POSITION = 4 COUNT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_chamber_history_brief_row = { POSITION = 5 COUNT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_chamber_history_brief_row = { POSITION = 6 COUNT = 7 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_chamber_history_brief_row = { POSITION = 7 COUNT = 8 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_chamber_history_brief_row = { POSITION = 8 COUNT = 9 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_chamber_history_brief_row = { POSITION = 9 COUNT = 10 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_chamber_history_brief_row = { POSITION = 10 COUNT = 11 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_chamber_history_brief_row = { POSITION = 11 COUNT = 12 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_chamber_history_brief_row = { POSITION = 12 COUNT = 13 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_chamber_history_brief_row = { POSITION = 13 COUNT = 14 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_chamber_history_brief_row = { POSITION = 14 COUNT = 15 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_chamber_history_brief_row = { POSITION = 15 COUNT = 16 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_chamber_history_brief_row = { POSITION = 16 COUNT = 17 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_chamber_history_brief_row = { POSITION = 17 COUNT = 18 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_chamber_history_brief_row = { POSITION = 18 COUNT = 19 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_chamber_history_brief_row = { POSITION = 19 COUNT = 20 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_chamber_history_brief_row = { POSITION = 20 COUNT = 21 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_chamber_history_brief_row = { POSITION = 21 COUNT = 22 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_chamber_history_brief_row = { POSITION = 22 COUNT = 23 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_chamber_history_brief_row = { POSITION = 23 COUNT = 24 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_chamber_history_brief_row = { POSITION = 24 COUNT = 25 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_chamber_history_brief_row = { POSITION = 25 COUNT = 26 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_chamber_history_brief_row = { POSITION = 26 COUNT = 27 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_chamber_history_brief_row = { POSITION = 27 COUNT = 28 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_chamber_history_brief_row = { POSITION = 28 COUNT = 29 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_chamber_history_brief_row = { POSITION = 29 COUNT = 30 }
+		}
+	}
+}
+
+# The card behind a brief row: everything the archive keeps of it but its
+# ballot. Read only as the row's tooltip.
+un_chamber_history_card_row_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_chamber_history_card_row = { POSITION = 0 COUNT = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_chamber_history_card_row = { POSITION = 1 COUNT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_chamber_history_card_row = { POSITION = 2 COUNT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_chamber_history_card_row = { POSITION = 3 COUNT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_chamber_history_card_row = { POSITION = 4 COUNT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_chamber_history_card_row = { POSITION = 5 COUNT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_chamber_history_card_row = { POSITION = 6 COUNT = 7 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_chamber_history_card_row = { POSITION = 7 COUNT = 8 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_chamber_history_card_row = { POSITION = 8 COUNT = 9 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_chamber_history_card_row = { POSITION = 9 COUNT = 10 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_chamber_history_card_row = { POSITION = 10 COUNT = 11 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_chamber_history_card_row = { POSITION = 11 COUNT = 12 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_chamber_history_card_row = { POSITION = 12 COUNT = 13 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_chamber_history_card_row = { POSITION = 13 COUNT = 14 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_chamber_history_card_row = { POSITION = 14 COUNT = 15 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_chamber_history_card_row = { POSITION = 15 COUNT = 16 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_chamber_history_card_row = { POSITION = 16 COUNT = 17 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_chamber_history_card_row = { POSITION = 17 COUNT = 18 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_chamber_history_card_row = { POSITION = 18 COUNT = 19 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_chamber_history_card_row = { POSITION = 19 COUNT = 20 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_chamber_history_card_row = { POSITION = 20 COUNT = 21 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_chamber_history_card_row = { POSITION = 21 COUNT = 22 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_chamber_history_card_row = { POSITION = 22 COUNT = 23 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_chamber_history_card_row = { POSITION = 23 COUNT = 24 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_chamber_history_card_row = { POSITION = 24 COUNT = 25 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_chamber_history_card_row = { POSITION = 25 COUNT = 26 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_chamber_history_card_row = { POSITION = 26 COUNT = 27 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_chamber_history_card_row = { POSITION = 27 COUNT = 28 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_chamber_history_card_row = { POSITION = 28 COUNT = 29 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_chamber_history_card_row = { POSITION = 29 COUNT = 30 }
 		}
 	}
 }
@@ -781,7 +1397,8 @@ un_chamber_history_sgui = {
 # the effect renders it. One row each, because in one block the tooltip
 # engine gathers every ballot line of a country under its first appearance
 # (gui_modding_guide.md gotcha #27). 30 rows cover the 25-entry cap and the
-# handful of entries that can outlive it (see un_chamber_history_sgui); the
+# handful of entries that can outlive it (only one vote runs at a time and a
+# closed resolution holds its topic cooldown for 5-10 years); the
 # widget's rows repeat the op table (test_un_chamber_mission_slots.py).
 # The widget keeps this behind its own collapsed-by-default toggle, since
 # ExecuteTooltip re-renders every frame the widget is visible.
@@ -1050,7 +1667,8 @@ un_chamber_history_details_row_sgui = {
 #
 # `max` is a rendering ceiling, not the register cap
 # (un_mandate_registry_cap = 12): stated explicitly only because an ordered_
-# iterator's default span is ambiguous, same as un_chamber_history_sgui.
+# iterator's default span is ambiguous (vanilla writes `max` out whenever the
+# count matters, ep2_iwakura_events.txt:306).
 un_chamber_mandates_sgui = {
 	scope = country
 
@@ -1510,8 +2128,22 @@ un_chamber_propose_sgui = {
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 24 }
+			# The case's three independent parts, a tick each (the 2026-10-27
+			# audit, UN-23), then the whole test, which they make up.
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_observer_request
+				un_mission_holds_elections = yes
+			}
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_observer_request_seated
+				NOT = { un_representation_suspended = yes }
+			}
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_observer_request_free
+				NOT = { un_mission_hosts = { TYPE = electoral } }
+				un_mission_can_join_host = { TYPE = electoral }
+			}
+			hidden_trigger = {
 				un_propose_observer_request_available = yes
 			}
 			un_propose_observer_request_possible = yes
@@ -1858,6 +2490,332 @@ un_chamber_propose_row_sgui = {
 	}
 }
 
+# The proposal list in two passes (the 2026-10-27 audit, UN-7): the topics
+# with a case for us, under "Ready to Table", open; the rest under "No Case
+# Now", collapsed; a topic in force (a convention ratified, an institution
+# founded) in neither, counted once above the list instead
+# (un_disp_topics_in_force). A row's visible reads IsValid, never IsShown,
+# because a saved scope is proven to reach is_valid (gotcha #22). "A case" is
+# the test the row's own "No Case" word reads, un_propose_<key>_available.
+# Same op table as un_chamber_propose_sgui. Never executed.
+un_chamber_propose_ready_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_propose_condemn_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_propose_sanctions_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_propose_expulsion_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_propose_mandate_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_propose_peacekeepers_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_propose_aid_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_propose_reform_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_propose_human_rights_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_propose_icc_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_propose_npt_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_propose_climate_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_propose_pandemic_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_propose_refugee_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_propose_heritage_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_propose_decolonization_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_propose_space_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_propose_law_of_sea_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_propose_physical_protection_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_propose_cultural_diversity_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_propose_nuclear_ban_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_propose_court_referral_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_propose_arms_embargo_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_propose_credentials_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_propose_standing_force_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_propose_observer_request_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_propose_food_reserve_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_propose_ceasefire_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_propose_development_fund_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_propose_referendum_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_propose_narcotics_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 30 }
+			un_propose_lift_sanctions_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 31 }
+			un_propose_antarctic_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 32 }
+			un_propose_asat_available = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 33 }
+			un_propose_colony_protection_available = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+}
+
+un_chamber_propose_shelved_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			NOT = { un_propose_condemn_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			NOT = { un_propose_sanctions_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			NOT = { un_propose_expulsion_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			NOT = { un_propose_mandate_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			NOT = { un_propose_peacekeepers_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			NOT = { un_propose_aid_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			NOT = { un_propose_reform_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			NOT = { un_propose_human_rights_available = yes }
+			NOT = { un_propose_human_rights_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			NOT = { un_propose_icc_available = yes }
+			NOT = { un_propose_icc_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			NOT = { un_propose_npt_available = yes }
+			NOT = { un_propose_npt_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			NOT = { un_propose_climate_available = yes }
+			NOT = { un_propose_climate_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			NOT = { un_propose_pandemic_available = yes }
+			NOT = { un_propose_pandemic_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			NOT = { un_propose_refugee_available = yes }
+			NOT = { un_propose_refugee_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			NOT = { un_propose_heritage_available = yes }
+			NOT = { un_propose_heritage_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			NOT = { un_propose_decolonization_available = yes }
+			NOT = { un_propose_decolonization_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			NOT = { un_propose_space_available = yes }
+			NOT = { un_propose_space_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			NOT = { un_propose_law_of_sea_available = yes }
+			NOT = { un_propose_law_of_sea_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			NOT = { un_propose_physical_protection_available = yes }
+			NOT = { un_propose_physical_protection_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			NOT = { un_propose_cultural_diversity_available = yes }
+			NOT = { un_propose_cultural_diversity_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			NOT = { un_propose_nuclear_ban_available = yes }
+			NOT = { un_propose_nuclear_ban_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			NOT = { un_propose_court_referral_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			NOT = { un_propose_arms_embargo_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			NOT = { un_propose_credentials_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			NOT = { un_propose_standing_force_available = yes }
+			NOT = { un_force_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			NOT = { un_propose_observer_request_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			NOT = { un_propose_food_reserve_available = yes }
+			NOT = { has_global_variable = un_inst_food_reserve }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			NOT = { un_propose_ceasefire_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			NOT = { un_propose_development_fund_available = yes }
+			NOT = { has_global_variable = un_inst_development_fund }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			NOT = { un_propose_referendum_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			NOT = { un_propose_narcotics_available = yes }
+			NOT = { un_propose_narcotics_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 30 }
+			NOT = { un_propose_lift_sanctions_available = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 31 }
+			NOT = { un_propose_antarctic_available = yes }
+			NOT = { un_propose_antarctic_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 32 }
+			NOT = { un_propose_asat_available = yes }
+			NOT = { un_propose_asat_in_force = yes }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 33 }
+			NOT = { un_propose_colony_protection_available = yes }
+			NOT = { un_propose_colony_protection_in_force = yes }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+}
+
 # The docket: how the Assembly takes up real situations, and what it took up
 # last. Members only, like the list under it.
 un_chamber_docket_sgui = {
@@ -1962,16 +2920,32 @@ un_chamber_reform_ii_in_view_sgui = {
 }
 
 # Non-members get one line where the proposal list would be, rather than an
-# empty section: the list is meaningless outside the organisation.
+# empty section: the list is meaningless outside the organisation. A member
+# reads first when it may table again (the 2026-10-27 audit, UN-8): a wait
+# greys every row's button, so it is said here, once, as a month count, and
+# how many topics are in force, since their rows are not listed (UN-7).
 un_chamber_propose_intro_sgui = {
 	scope = country
 
 	effect = {
 		if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-			custom_tooltip_no_bullet = je_un_chamber_propose_intro
+			if = {
+				limit = {
+					NOT = { has_modifier = un_ga_resolution_modifier }
+					NOT = { has_modifier = un_request_cooldown }
+				}
+				custom_tooltip_no_bullet = je_un_chamber_propose_next_ready
+			}
+			else_if = {
+				limit = { un_disp_propose_wait_months > 0 }
+				custom_tooltip_no_bullet = je_un_chamber_propose_next_wait
+			}
+			else = {
+				custom_tooltip_no_bullet = je_un_chamber_propose_next_unknown
+			}
 			# A held floor greys every row's button; it is said here, once,
-			# rather than on each of the thirty rows.
+			# rather than on each of the thirty-four rows.
 			if = {
 				limit = {
 					has_global_variable = un_vote_active
@@ -1988,6 +2962,11 @@ un_chamber_propose_intro_sgui = {
 				limit = { has_global_variable = un_recess_months }
 				custom_tooltip_no_bullet = je_un_chamber_propose_recess
 			}
+			if = {
+				limit = { un_disp_topics_in_force > 0 }
+				custom_tooltip_no_bullet = je_un_chamber_propose_in_force
+			}
+			custom_tooltip_no_bullet = je_un_chamber_propose_intro
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_propose_nonmember

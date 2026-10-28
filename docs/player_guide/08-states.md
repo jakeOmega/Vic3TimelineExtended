@@ -21,13 +21,14 @@ tooltip breaks the numbers down.
 
 | Tile | Shown | What it tells you |
 |---|---|---|
-| Homeland Dynamics | Always | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why nothing can change. |
+| Homeland Dynamics | Where a culture could gain or lose a homeland, even while changes are paused | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why progress is paused. |
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
 | Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
 | Wealth Concentration | While the state carries a modifier from its wealth concentration or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
-| Solar Collector | Once your country has one | Receiver slots available and generated (3 per staffed level). A megaproject; see [The extended timeline](02-timeline.md). |
-| Antimatter Facility | Once your country has one | Engine and warhead-plant slots available and generated (5 per staffed level). |
-| Seabed Licences | On a coastal state, once your country has had its first share of seabed licences | The state's ocean basin, the licences its Deep-Sea Mine levels hold and how many are long-haul, your unused claims in that basin and the claim weight the state adds there; see [Seabed licences](02-timeline.md#seabed-licences). |
+| Solar Collector | In a state with a Solar Collector or a Solar Receiver | Your country's receiver slots available and generated (3 per staffed level); a receiver's build tooltip also gives the free slots. A megaproject; see [The extended timeline](02-timeline.md). |
+| Antimatter Facility | In a state with the Facility, an engine or a warhead plant | Your country's engine and warhead-plant slots available and generated (5 per staffed level). |
+| Seabed Licenses | On a coastal state, once your country has had its first share of seabed licenses | The state's ocean basin, the licenses its Deep-Sea Mine levels hold and how many are long-haul, your unused claims in that basin and the claim weight the state adds there; see [Seabed licenses](02-timeline.md#seabed-licenses). |
+| Ocean Basin | On a coastal state without the Seabed Licenses tile (another country's, or one that never shared licenses), once you have researched Abyssal Plain Mining | The ocean basin the state faces, whose license pool its mines and ports would count in. |
 | UN Mission | While a UN mission works in the state | The mission's type, months, strength and progress; see [The United Nations](10-united-nations.md). |
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |
 | Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, its levels and age once finished, and what it gives the state: tourism output and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
@@ -321,7 +322,7 @@ census's health need rises above 1836's, and 5% more for each of six chronic-car
 technologies (Modern Pharmaceuticals, Telemedicine, Personalized Medicine, Genetic
 Engineering, Molecular Assemblers, Biological Immortality): about two fifths more
 for a rich country today. Outside Full none of this changes
-anything, and the buttons are greyed.
+anything, and the buttons are grayed.
 
 The census also counts each state's men of fighting age, 20 to 39, its young
 adults and its men per 100 women aged 20 to 59, and takes war dead from the men
@@ -376,14 +377,17 @@ them, and some break the figure down for your capital.
 | Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (over 10,000 past 10,000 years; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Wealth Concentration and its target). Hover a reading for more. |
 | Causes of Death | Last year's deaths per 1,000 people and a pie of those deaths by cause; see below. |
 | Population pyramid | Men per 100 women, then people by five-year age band (wider rows past 85 where many live past 100), with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
-| Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages; old age from (the age with fifteen years of life left; None when no age has); under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, the men of fighting age with the conscription they give, and young adults where they are many while work is short. |
+| Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages; old age from (the age with fifteen years of life left; None when no age has); under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, the men of fighting age with the conscription they give, and young adults where they are many while work is short, with up to ten of the states where they are, strongest first. |
 | Longevity | Once longevity care exists: Living to 100, the mean biological age beside the calendar one, the share of people within the care's reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | History | Eight charts by year, over 5, 20 or 100 years: births and deaths per 1,000 people, net migration, life expectancy, children per woman, median age, deaths by cause, the Gini coefficient and Wealth Concentration. A mark over a year shows war dead, a famine or a demographic event. |
-| Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
-| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises, and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
+| Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states; the arrow beside each opens it. |
+| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises with up to ten of them listed, and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
 | States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Wealth Concentration, and click it to open the state. Show All lists up to 40. |
-| How Demographics Works | A collapsed section that explains the method. |
+| How Demographics Works | A collapsed section that explains the method, topic by topic, from the census to work and retirement and longevity. |
+
+Every state the tab lists, in States, Where people live and Work and
+Retirement, opens on its Demographics subtab when you click it.
 
 The subtab shows one state's overview, causes of death, pyramid, work and
 retirement (without the buttons), longevity, wealth and modifiers, in the tab's
@@ -427,7 +431,7 @@ mid-twenties and many never marry. Under birth spacing, strongest in Japan and
 slight in China and Korea, couples space and stop births by custom. Modern
 contraception wears both away, and health care wears away birth spacing; women's
 paid work and farms that pass whole to one heir make late marriage more common.
-Both customs also spread slowly from neighbouring states.
+Both customs also spread slowly from neighboring states.
 The figure then falls with literacy, child survival and city life, and family policy moves it (see [Family policy measures](#family-policy-measures)). Under Full, the figure shown is what births came to that
 year, so decrees, famine and other effects on births count in it; its tooltip
 lists them as births added on top of the census. The means to plan a family
@@ -436,7 +440,7 @@ Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and
 State-Sponsored Family Planning adds more, whoever can read. Their tooltips show
 each line. Under Full, family limitation adds to them too: the share of couples
 who stop at the family size they want by older methods, which France starts with
-at 60%. It spreads from neighbouring countries that practise it, grows under
+at 60%. It spreads from neighboring countries that practice it, grows under
 Forced Heirship in farming countries and in nearly universally literate ones,
 less under a state religion, and never falls back, though modern contraception takes over its part
 of the means as it arrives. It shows as Family Limitation among a country's
@@ -579,7 +583,7 @@ in its treasury.
 
 ### Life extension
 
-From mRNA Therapeutics on, medicine slows ageing itself as well as treating
+From mRNA Therapeutics on, medicine slows aging itself as well as treating
 illness, and the census tracks each person's body apart from the calendar.
 People in longevity care age nine-tenths of a year each year with mRNA
 Therapeutics, seven-tenths once Personalized Medicine, Genetic Engineering and
@@ -599,7 +603,7 @@ lists its part among its modifiers.
 | Regulated Augmentation Market | The market's price falls half again as fast; with Private Health Insurance, two and a half times as fast. |
 | Human Purity | None. |
 
-The market reaches the rich first: from your first ageing technology, people
+The market reaches the rich first: from your first aging technology, people
 from wealth 80 can buy care, and the line falls about a level a year, faster with
 the technologies that spread medicine. Care rolls out as fast as new medicine
 spreads, and a ban winds it down the same way; people who lose care keep the
@@ -613,7 +617,7 @@ health system's share of the care costs your Ministry of Health more bureaucracy
 Women in care can have children they put off, and births nobody planned go on as
 long as their bodies allow, even past 50 by the calendar; State Youth Centers on
 Ectogenesis carry a share of planned births with no risk in childbirth. A society
-that stops ageing turns a slow decline into slow growth, about 1% a year at 1.6
+that stops aging turns a slow decline into slow growth, about 1% a year at 1.6
 children per woman: the brakes are the means to plan a family and the size of
 family people want. Old Age From rises with longer lives and reads None once no
 age has fifteen years left; Linked to Average Longevity follows it, Linked to
@@ -649,7 +653,7 @@ Family & Reproductive Policy law. It shows the law in force, a row for each
 measure that law allows, with its running cost, its term and a button, and,
 dimmed, the measures only another law allows; hover one for the laws that allow
 it. Under Display only the rows show what each measure would do and the buttons
-are greyed.
+are grayed.
 
 A measure takes effect as soon as you start it and costs its upkeep while it
 runs: a weekly share of GDP for the ones paid in money, recalculated each year,
@@ -665,7 +669,7 @@ doesn't allow a measure ends it at once, with a notice, and taking it up again
 under another law starts a new term. Under Communal Child-Rearing your form of
 government adds measures: a Council Republic or Anarchy also allows Sex
 Education, and a Single-Party State or Autocracy that has outlawed dissent also
-allows Honours for Large Families and Restricted Contraception. A change of
+allows Honors for Large Families and Restricted Contraception. A change of
 government ends what the new laws don't allow. Birth Limit's button moves from two
 children to one child, then ends the limit. The Crash Campaign ends itself after
 five years and can't return for ten.
@@ -674,7 +678,7 @@ five years and can't return for ten.
 |---|---|---|---|
 | Child Allowance | Pro-Natalist Policy, Communal Child-Rearing | Families want more children | 0.5% of GDP a year, more where children are many |
 | Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing | Offsets half of city life's pull toward smaller families | 0.25% of GDP a year, by the share of people in cities |
-| Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families want a few more children | 50 authority |
+| Honors for Large Families | Traditional Family Structure, Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families want a few more children | 50 authority |
 | Restricted Contraception | Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families have less means to plan their children; more mothers die; the feminist movement gains support | 200 authority |
 | Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year if every woman of working age worked, less as fewer do |
 | Free Contraception | State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Families have more means to plan their children | 0.1% of GDP a year |
@@ -691,7 +695,7 @@ researched, how many boys are born per 100 girls. Births follow over the year
 after. Under Full, Pro-Natalist Policy itself makes families want a few more
 children, and the law's own boost to births and Population Control Measures' cut
 no longer apply: the measures carry those laws' force. Pro-Natalist Policy with
-Child Allowance, Family Housing and Honours adds about 0.3 children per woman in
+Child Allowance, Family Housing and Honors adds about 0.3 children per woman in
 a rich country that has few, for 0.4–0.5% of GDP a year. Restricted
 Contraception, Birth Limit and the Crash Campaign move births further, at their
 political price. The Children per Woman tooltips list family policy beside the
@@ -711,7 +715,7 @@ when the need is pressing and its legitimacy is high.
 Under the Full setting, ten events mark the moments the census records: the
 Demographic Dividend (the working-age share a tenth above 1836's), the Baby Boom
 (after a long war with heavy losses), the Lost Generation (war dead past a
-twentieth of the men of fighting age), the Greying of the Nation (pensioners at a
+twentieth of the men of fighting age), the Graying of the Nation (pensioners at a
 fifth of the people), the Youth Bulge (a fifth of the people in their twenties
 while work is short), Missing Girls (110 boys born per 100 girls under Birth
 Limit), Bare Branches (110 men per 100 women), the Empty Villages (an old,

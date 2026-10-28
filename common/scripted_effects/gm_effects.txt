@@ -824,6 +824,8 @@ gm_country_refresh = {
 	gm_com_update_build_where = yes
 	gm_compute_totals = yes
 	gm_apply_national_modifiers = yes
+	# What each contested monument's three choices would do now (GM-4).
+	gm_preview_choices = yes
 	gm_notify_new_contests = yes
 }
 
@@ -997,6 +999,12 @@ gm_compute_totals = {
 # IG, across all monuments.
 gm_compute_ig = {
 	set_variable = { name = gm_ig_net_$IG$ value = var:gm_ig_ledger_$IG$ }
+	# The net's parts, for the approval row's hover (GM-13): the grandeur of the
+	# monuments it approves of (and trophies), of those it objects to, and of
+	# the contested ones it resents. Display only; the net is the sum.
+	set_variable = { name = gm_ig_pos_$IG$ value = gm_tr_ig_share_$IG$ }
+	set_variable = { name = gm_ig_neg_$IG$ value = 0 }
+	set_variable = { name = gm_ig_res_$IG$ value = 0 }
 	# Trophies held (gm_trophy_values.txt): the Armed Forces' only.
 	change_variable = { name = gm_ig_net_$IG$ add = gm_tr_ig_share_$IG$ }
 	every_scope_state = {
@@ -1009,6 +1017,7 @@ gm_compute_ig = {
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_grandeur }
 			}
+			owner = { change_variable = { name = gm_ig_pos_$IG$ add = prev.var:gm_grandeur } }
 		}
 		# A unique dedication's own group (signatures spec §2.3), beside the
 		# dedication's.
@@ -1020,6 +1029,7 @@ gm_compute_ig = {
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_grandeur }
 			}
+			owner = { change_variable = { name = gm_ig_pos_$IG$ add = prev.var:gm_grandeur } }
 		}
 		if = {
 			limit = {
@@ -1029,6 +1039,7 @@ gm_compute_ig = {
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_grandeur }
 			}
+			owner = { change_variable = { name = gm_ig_neg_$IG$ add = prev.var:gm_grandeur } }
 		}
 		if = {
 			limit = {
@@ -1039,6 +1050,7 @@ gm_compute_ig = {
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_grandeur }
 			}
+			owner = { change_variable = { name = gm_ig_res_$IG$ add = prev.var:gm_grandeur } }
 		}
 	}
 	# And each monument standing beside another (spec 2026-10-16 §4.2), by its
@@ -1057,6 +1069,7 @@ gm_compute_ig = {
 				scope:gm_ig_country = {
 					change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_tr_g }
 				}
+				scope:gm_ig_country = { change_variable = { name = gm_ig_pos_$IG$ add = prev.var:gm_tr_g } }
 			}
 			if = {
 				limit = {
@@ -1066,6 +1079,7 @@ gm_compute_ig = {
 				scope:gm_ig_country = {
 					change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_tr_g }
 				}
+				scope:gm_ig_country = { change_variable = { name = gm_ig_pos_$IG$ add = prev.var:gm_tr_g } }
 			}
 			if = {
 				limit = {
@@ -1075,6 +1089,7 @@ gm_compute_ig = {
 				scope:gm_ig_country = {
 					change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_tr_g }
 				}
+				scope:gm_ig_country = { change_variable = { name = gm_ig_neg_$IG$ add = prev.var:gm_tr_g } }
 			}
 			if = {
 				limit = {
@@ -1085,6 +1100,7 @@ gm_compute_ig = {
 				scope:gm_ig_country = {
 					change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_tr_g }
 				}
+				scope:gm_ig_country = { change_variable = { name = gm_ig_res_$IG$ add = prev.var:gm_tr_g } }
 			}
 		}
 	}
@@ -1691,6 +1707,178 @@ gm_state_choose_preserve = {
 	custom_tooltip = {
 		text = gm_preserve_tt
 		gm_state_preserve = yes
+	}
+}
+
+# ---- What each choice would do now (GM-4) ---------------------------------------
+# The three choices' tooltips print figures, not only prose: the legitimacy
+# Pull Down brings this month and the approval each choice moves, worked out
+# from the ledgers and the interest groups' nets the refresh has just
+# computed, on the same curves (gm_state_record_teardown, gm_compute_ig).
+# Pull Down puts the monument's grandeur on the teardown ledger and the
+# objecting group's ledger, takes it off its old supporters' and lifts the
+# standing resentment (so the objecting group's net rises by twice its
+# grandeur); Rededicate takes half of it off the old supporters'; Keep as
+# Heritage moves the resentment into a fading record, which changes nothing
+# this month, and its grandeur counts again for prestige and cultural pull.
+# Each figure is the first month's: the ledgers fade after.
+#
+# Stored on the contested monument (gm_prev_*), read through the guarded
+# gm_state_disp_prev_* / gm_mon_disp_prev_* values. Under a marker, as
+# gm_state_rededicate is: the refresh runs inside tooltips, which walk it
+# writing nothing, and a read of a variable set earlier in the same walk
+# logs an error a frame. Country scope, from gm_country_refresh.
+gm_preview_choices = {
+	set_variable = gm_preview_click
+	if = {
+		limit = { has_variable = gm_preview_click }
+		remove_variable = gm_preview_click
+		save_scope_as = gm_prev_country
+		every_scope_state = {
+			limit = {
+				has_building = building_grand_monument
+				gm_state_is_contested = yes
+			}
+			gm_state_preview_choices = yes
+		}
+		if = {
+			limit = { has_variable_list = gm_monuments_held }
+			every_in_list = {
+				variable = gm_monuments_held
+				limit = { gm_mon_is_contested = yes }
+				gm_mon_preview_choices = yes
+			}
+		}
+	}
+}
+
+# State scope, a contested primary; scope:gm_prev_country its owner.
+gm_state_preview_choices = {
+	set_variable = { name = gm_prev_g value = gm_state_primary_grandeur }
+	scope:gm_prev_country = {
+		set_variable = { name = gm_prev_who value = flag:none }
+		set_variable = { name = gm_prev_g value = prev.var:gm_prev_g }
+	}
+	if = {
+		limit = { has_variable = gm_base_ig }
+		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_base_ig } }
+	}
+	gm_preview_choices_on_country = yes
+	set_variable = { name = gm_prev_td_legit value = scope:gm_prev_country.var:gm_prev_td_legit }
+	set_variable = { name = gm_prev_td_base value = scope:gm_prev_country.var:gm_prev_td_base }
+	scope:gm_prev_country = { set_variable = { name = gm_prev_who value = flag:none } }
+	if = {
+		limit = { has_variable = gm_supporter_ig }
+		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_supporter_ig } }
+	}
+	gm_preview_supporters_on_country = yes
+	set_variable = { name = gm_prev_td_sup value = scope:gm_prev_country.var:gm_prev_td_sup }
+	set_variable = { name = gm_prev_rd_sup value = scope:gm_prev_country.var:gm_prev_rd_sup }
+}
+
+# Container scope, a contested monument beside another (gm_monuments_held).
+gm_mon_preview_choices = {
+	set_variable = { name = gm_prev_g value = gm_mon_grandeur }
+	scope:gm_prev_country = {
+		set_variable = { name = gm_prev_who value = flag:none }
+		set_variable = { name = gm_prev_g value = prev.var:gm_prev_g }
+	}
+	if = {
+		limit = { has_variable = gm_tr_base_ig }
+		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_tr_base_ig } }
+	}
+	gm_preview_choices_on_country = yes
+	set_variable = { name = gm_prev_td_legit value = scope:gm_prev_country.var:gm_prev_td_legit }
+	set_variable = { name = gm_prev_td_base value = scope:gm_prev_country.var:gm_prev_td_base }
+	scope:gm_prev_country = { set_variable = { name = gm_prev_who value = flag:none } }
+	if = {
+		limit = { has_variable = gm_tr_supporter_ig }
+		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_tr_supporter_ig } }
+	}
+	gm_preview_supporters_on_country = yes
+	set_variable = { name = gm_prev_td_sup value = scope:gm_prev_country.var:gm_prev_td_sup }
+	set_variable = { name = gm_prev_rd_sup value = scope:gm_prev_country.var:gm_prev_rd_sup }
+}
+
+# Country scope (scope:gm_prev_country): Pull Down's legitimacy, the change
+# in the teardown ledger's steps times gm_step_teardown, and the objecting
+# group's approval (gm_prev_who), its net up by twice the grandeur.
+gm_preview_choices_on_country = {
+	set_variable = { name = gm_prev_in value = var:gm_teardown_ledger }
+	gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_a }
+	set_variable = { name = gm_prev_in value = { value = var:gm_teardown_ledger add = var:gm_prev_g } }
+	gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_b }
+	set_variable = { name = gm_prev_td_legit value = { value = var:gm_prev_b subtract = var:gm_prev_a multiply = gm_step_teardown } }
+	gm_prev_ig_net = yes
+	set_variable = { name = gm_prev_td_base value = 0 }
+	if = {
+		limit = { has_variable = gm_prev_net }
+		set_variable = { name = gm_prev_in value = var:gm_prev_net }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_a }
+		set_variable = { name = gm_prev_in value = { value = var:gm_prev_net add = var:gm_prev_g add = var:gm_prev_g } }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_b }
+		set_variable = { name = gm_prev_td_base value = { value = var:gm_prev_b subtract = var:gm_prev_a multiply = gm_step_ig } }
+	}
+}
+
+# Country scope: the old supporters' approval (gm_prev_who), their net down by
+# the grandeur (Pull Down) or by half of it (Rededicate).
+gm_preview_supporters_on_country = {
+	gm_prev_ig_net = yes
+	set_variable = { name = gm_prev_td_sup value = 0 }
+	set_variable = { name = gm_prev_rd_sup value = 0 }
+	if = {
+		limit = { has_variable = gm_prev_net }
+		set_variable = { name = gm_prev_in value = var:gm_prev_net }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_a }
+		set_variable = { name = gm_prev_in value = { value = var:gm_prev_net subtract = var:gm_prev_g } }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_b }
+		set_variable = { name = gm_prev_td_sup value = { value = var:gm_prev_b subtract = var:gm_prev_a multiply = gm_step_ig } }
+		set_variable = { name = gm_prev_in value = { value = var:gm_prev_g multiply = -0.5 add = var:gm_prev_net } }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_b }
+		set_variable = { name = gm_prev_rd_sup value = { value = var:gm_prev_b subtract = var:gm_prev_a multiply = gm_step_ig } }
+	}
+}
+
+# Country scope: gm_prev_net, the net of the group gm_prev_who names, as
+# gm_compute_ig left it; unset when it names none.
+gm_prev_ig_net = {
+	if = {
+		limit = { has_variable = gm_prev_net }
+		remove_variable = gm_prev_net
+	}
+	gm_prev_ig_net_one = { IG = armed_forces }
+	gm_prev_ig_net_one = { IG = devout }
+	gm_prev_ig_net_one = { IG = industrialists }
+	gm_prev_ig_net_one = { IG = intelligentsia }
+	gm_prev_ig_net_one = { IG = landowners }
+	gm_prev_ig_net_one = { IG = petty_bourgeoisie }
+	gm_prev_ig_net_one = { IG = rural_folk }
+	gm_prev_ig_net_one = { IG = trade_unions }
+}
+
+gm_prev_ig_net_one = {
+	if = {
+		limit = {
+			has_variable = gm_prev_who
+			var:gm_prev_who = flag:$IG$
+			has_variable = gm_ig_net_$IG$
+		}
+		set_variable = { name = gm_prev_net value = var:gm_ig_net_$IG$ }
+	}
+}
+
+# Country scope: $OUT$ = the signed step count of var:$IN$ on the approval
+# curve (gm_compute_ig's: the curve on the absolute value, the sign put back).
+gm_prev_signed_steps = {
+	if = {
+		limit = { var:$IN$ >= 0 }
+		set_variable = { name = gm_curve_in value = var:$IN$ }
+		set_variable = { name = $OUT$ value = gm_curve_steps_f5 }
+	}
+	else = {
+		set_variable = { name = gm_curve_in value = { value = var:$IN$ multiply = -1 } }
+		set_variable = { name = $OUT$ value = { value = gm_curve_steps_f5 multiply = -1 } }
 	}
 }
 

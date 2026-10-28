@@ -27,10 +27,12 @@ types banking_layout_widget_types
 
 	### "How Banking Works": the explanations, collapsed by default, one heading
 	### per topic (style guide rule 1), for the player learning the system. The
-	### live sections carry none: each reading's meaning and what moves it are
-	### in its row's tooltip, each tool's in its own. The monetary topics are
-	### shown only while the monetary layer is on (not under
-	### banking_system_simplified), as the rows they explain are.
+	### live sections carry none: a row's tooltip gives its reading and what
+	### moves it, each tool's its own, and the rules behind them are here (GUI
+	### audit BNK-1, 2026-10-27: the Monetary Policy rows had taught them, at up
+	### to 3,800 characters). The monetary topics follow the section's own
+	### subheadings, and are shown only while the monetary layer is on (not
+	### under banking_system_simplified), as the rows they explain are.
 	type te_banking_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -116,7 +118,76 @@ types banking_layout_widget_types
 					text = "banking_dash_how_rate"
 				}
 				banking_dash_note = {
+					text = "banking_dash_how_rate_none"
+				}
+				banking_dash_note = {
 					text = "banking_dash_how_stance"
+				}
+
+				banking_dash_subheader = {
+					blockoverride "subheader_text" {
+						text = "banking_dash_how_sub_mandates"
+					}
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_mandates"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_mandates_change"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_mandates_floor"
+				}
+
+				banking_dash_subheader = {
+					blockoverride "subheader_text" {
+						text = "banking_dash_how_sub_gold"
+					}
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_gold"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_gold_flow"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_peg"
+				}
+
+				banking_dash_subheader = {
+					blockoverride "subheader_text" {
+						text = "banking_dash_how_sub_fx"
+					}
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_fx"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_fx_effects"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_fx_fixed"
+				}
+
+				banking_dash_subheader = {
+					blockoverride "subheader_text" {
+						text = "banking_dash_how_sub_arrangements"
+					}
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_anchor"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_treaty_peg"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_backstops"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_union"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_union_terms"
 				}
 
 				banking_dash_subheader = {
@@ -126,6 +197,21 @@ types banking_layout_widget_types
 				}
 				banking_dash_note = {
 					text = "banking_dash_how_borrowing"
+				}
+
+				banking_dash_subheader = {
+					blockoverride "subheader_text" {
+						text = "banking_dash_how_sub_prices"
+					}
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_prices"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_expected"
+				}
+				banking_dash_note = {
+					text = "banking_dash_how_printing"
 				}
 			}
 		}

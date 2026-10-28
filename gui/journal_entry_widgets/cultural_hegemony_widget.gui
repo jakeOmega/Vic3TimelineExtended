@@ -9,11 +9,12 @@
 ###                               model and the benchmark alert as icons with a
 ###                               word beneath; our cultural share as a framed pie
 ###                               with last month's trend, and the three leading
-###                               powers as vanilla flags
+###                               powers as vanilla flags; the programs as one of
+###                               Banking's cells (te_banking_ov_cell, CH-9)
 ###   te_ch_status_sections       open by default (flags *_closed):
-###     te_ch_sec_board           the top ten cultural powers (first: owner,
-###                               2026-09-29)
-###     te_ch_sec_programmes      funding stepper and the four programmes
+###     te_ch_sec_board           the top ten cultural powers as a table (first:
+###                               owner, 2026-09-29; a table: CH-2)
+###     te_ch_sec_programmes      funding stepper and the four programs
 ###     te_ch_sec_breakdown       where our pull comes from, a bar per component
 ###     te_ch_sec_models          political models of the world, pie and legend
 ###   te_ch_reference_sections
@@ -32,11 +33,13 @@
 ###                               so whether the player can act never depends on a
 ###                               saved scope reaching is_shown. The funding
 ###                               steppers are always drawn and grey out instead.
-###   - every other yes/no     -> ch_show_sgui / ch_board_row_sgui (op per
-###                               question), which FAIL OPEN, ch_board_is_us_sgui
-###                               (fail closed: no marker beats ten), and the
-###                               scope-free ch_ministry_missing_sgui /
-###                               ch_benchmark_sgui.
+###   - every other yes/no     -> ch_show_sgui (op per question), which FAILS
+###                               OPEN, and the scope-free
+###                               ch_ministry_missing_sgui / ch_benchmark_sgui.
+###   - the board's rows       -> a datamodel over ch_board_rebuild's row
+###                               containers (cultural_hegemony_effects.txt): the
+###                               row reads its ScriptContainer, the country
+###                               through the stored capital (gotcha #15)
 ###   - every action           -> ch_policy_sgui (op per control), which delegates
 ###                               to ch_possible_<button> / ch_effect_<button>,
 ###                               the same helpers the journal entry's scripted
@@ -73,18 +76,26 @@
 ###   (11, the "Rank N of M" line, is retired: the overview and the board's
 ###   own-rank line test ch_rank_self_display without a saved scope)
 ###   31-45 one "Political models" legend row each (op = 30 + ch_model code)
-###
-### ---- ch_board_is_us_sgui ----------------------------------------------------
-###   op = board rank 1 to 10; drives that row's "us" marker and nothing else.
-###
-### ---- ch_board_row_sgui / ch_board_detail_sgui ------------------------------
-###   op = board rank, 1 to 10. The row's TEXT comes from an ExecuteTooltip on the
-###   row sgui, because the board is a list of COUNTRIES and .gui cannot name one:
-###   Var().GetCountry.GetName is recorded as blank in this mod (gotcha #11) and
-###   Scope.GetCountry appears in no vanilla .gui (gotcha #15). The sgui enters the
-###   ranked country's scope in script and prints [THIS.GetCountry.GetName], which
-###   is vanilla's own shape for this case. Each row is its own widget, so the
-###   "headers print before nested lines" trap (gotcha #18) cannot apply.
+
+### The panel's type sizes (CH-15; gui_style_guide.md rule 3, the owner's
+### pass of 2026-10-17, its grandfathering lifted for this rework, 2026-10-27):
+### rows, values and notes at 17, subheadings at 20, the overview at 16 in the
+### tooltip face, the same ladder as Banking's banking_dash_fontsize_*
+### templates. The overview's world rank, a figure in an icon's place, stays at
+### the heading size. test_cultural_hegemony_layout.LabelBudgetTest reads the
+### sizes from here.
+template ch_fontsize_row {
+	fontsize = 17
+}
+
+template ch_fontsize_heading {
+	fontsize = 20
+}
+
+template ch_fontsize_overview {
+	fontsize = 16
+	using = tooltip_font
+}
 
 types cultural_hegemony_widget_types
 {
@@ -128,7 +139,7 @@ types cultural_hegemony_widget_types
 			multiline = yes
 			maximumsize = { 474 -1 }
 			align = left|nobaseline
-			using = fontsize_large
+			using = ch_fontsize_heading
 			default_format = "#title"
 			block "subheader_text" {}
 		}
@@ -147,7 +158,7 @@ types cultural_hegemony_widget_types
 		minimumsize = { 474 -1 }
 		maximumsize = { 474 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = ch_fontsize_row
 		default_format = "#lore"
 	}
 
@@ -232,7 +243,8 @@ types cultural_hegemony_widget_types
 	### One line of the pull breakdown, as a UN pillar row: the component's name
 	### (a concept, so it hovers), its bar, and its contribution, in fixed
 	### columns (176 / 164 / 60). The working behind the number and the bar's
-	### range are on the row's hover. A total has no bar: its row leaves the
+	### range are on the row's hover, so the name is underlined (#tooltippable,
+	### style rule 3; every row has one). A total has no bar: its row leaves the
 	### column empty, so the values still line up.
 	type ch_bar_row = flowcontainer {
 		direction = horizontal
@@ -251,7 +263,8 @@ types cultural_hegemony_widget_types
 				max_width = 176
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
+				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
@@ -269,7 +282,7 @@ types cultural_hegemony_widget_types
 				max_width = 60
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
 				block "row_value" {}
 			}
 		}
@@ -277,7 +290,8 @@ types cultural_hegemony_widget_types
 
 	### A line under a component that qualifies it, set in under its name and
 	### spanning the name and bar columns, its value in the value column. The
-	### art multiplier under Art Production.
+	### art multiplier under Art Production. Its hover is the working, so the
+	### figure is underlined (the label keeps its #lore look).
 	type ch_bar_subrow = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -296,7 +310,7 @@ types cultural_hegemony_widget_types
 				max_width = 332
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
 				default_format = "#lore"
 				block "row_label" {}
 			}
@@ -310,7 +324,8 @@ types cultural_hegemony_widget_types
 				max_width = 60
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
+				default_format = "#tooltippable"
 				block "row_value" {}
 			}
 		}
@@ -361,7 +376,7 @@ types cultural_hegemony_widget_types
 				max_width = 250
 				elide = right
 				align = nobaseline
-				using = fontsize_large
+				using = ch_fontsize_row
 				block "programme_label" {}
 			}
 		}
@@ -374,7 +389,7 @@ types cultural_hegemony_widget_types
 				max_width = 80
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
 				block "programme_status" {}
 			}
 		}
@@ -383,50 +398,365 @@ types cultural_hegemony_widget_types
 		ch_action_button = { block "programme_disable" {} }
 	}
 
-	### One leaderboard row: the line built in script, the rank's component
-	### snapshot on hover, and a marker when the row is us.
+	### The Top Cultural Powers board's columns (CH-2): the "us" marker, rank,
+	### flag, country, share, change and the political model's swatch, at
+	### 14 / 26 / 28 / 208 / 60 / 66 / 50 with 2 between, 464 of the 474
+	### column. The head and every row share them, so they line up.
+	### One head cell, its hover saying what the column is: a fixed-width cell
+	### holding one textbox, aligned as the column's values are.
+	type ch_board_head_cell = widget {
+		block "cell_size" {
+			size = { 60 24 }
+		}
+		textbox = {
+			autoresize = yes
+			block "cell_anchor" {
+				parentanchor = right|vcenter
+				align = right|nobaseline
+			}
+			using = ch_fontsize_row
+			block "cell_format" {
+				default_format = "#tooltippable"
+			}
+			block "cell_text" {}
+		}
+	}
+
+	### The head: column names, the ones that need saying with a hover.
+	type ch_board_head = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 2
+		margin = { 4 1 }
+
+		widget = {
+			size = { 14 24 }
+		}
+		ch_board_head_cell = {
+			blockoverride "cell_size" {
+				size = { 26 24 }
+			}
+			blockoverride "cell_text" {
+				text = "je_ch_board_head_rank"
+				tooltip = "je_ch_board_head_rank_tt"
+			}
+		}
+		widget = {
+			size = { 28 24 }
+		}
+		ch_board_head_cell = {
+			blockoverride "cell_size" {
+				size = { 208 24 }
+			}
+			blockoverride "cell_anchor" {
+				parentanchor = left|vcenter
+				align = left|nobaseline
+			}
+			blockoverride "cell_format" {}
+			blockoverride "cell_text" {
+				text = "je_ch_board_head_country"
+			}
+		}
+		ch_board_head_cell = {
+			blockoverride "cell_text" {
+				text = "je_ch_board_head_share"
+			}
+		}
+		ch_board_head_cell = {
+			blockoverride "cell_size" {
+				size = { 66 24 }
+			}
+			blockoverride "cell_text" {
+				text = "je_ch_board_head_change"
+				tooltip = "je_ch_board_head_change_tt"
+			}
+		}
+		ch_board_head_cell = {
+			blockoverride "cell_size" {
+				size = { 50 24 }
+			}
+			blockoverride "cell_anchor" {
+				parentanchor = center
+				align = center|nobaseline
+			}
+			blockoverride "cell_text" {
+				text = "je_ch_board_head_model"
+				tooltip = "je_ch_board_head_model_tt"
+			}
+		}
+	}
+
+	### One board row, over one of ch_board_rebuild's row containers (its
+	### datacontext is the row's ScriptContainer, the covert rows' shape). The
+	### flag and the name read the country through the stored capital
+	### (gotcha #15), gated on it, so a country that is gone says so instead.
+	### The "us" marker compares the row's rank with our own (ch_rank_self, the
+	### same pass's number), so no saved scope is needed. The components at the
+	### recount are the row's hover (ch_board_row_tt, so the share they add up
+	### to is underlined; the name has the country's own hover), which reads only the
+	### container and globals (gotcha #24); a model's name and laws are its
+	### swatch's.
 	type ch_board_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
-		parentanchor = hcenter
-		spacing = 4
-		margin = { 6 1 }
-
-		block "row_visible" {}
+		spacing = 2
+		margin = { 4 1 }
+		tooltip = "ch_board_row_tt"
 
 		background = {
 			using = entry_bg_fancy_dark
 			alpha = 0.3
 		}
 
-		### The "this is us" marker: a text pip rather than a second background,
-		### because no vanilla background template reads as a highlight over
-		### entry_bg_fancy_dark. Its column is always reserved, so every row's text
-		### starts at the same x. Whether it shows is ch_board_is_us_sgui's
-		### decision; the .gui never compares countries itself.
 		widget = {
-			size = { 16 20 }
+			size = { 14 24 }
 			parentanchor = vcenter
 
 			textbox = {
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_rank'), JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display') )]"
 				parentanchor = center
 				align = center|nobaseline
 				autoresize = yes
-				using = fontsize_medium
+				using = ch_fontsize_row
 				text = "je_ch_widget_board_us_marker"
-				block "row_us_marker" {}
 			}
 		}
+		widget = {
+			size = { 26 24 }
+			parentanchor = vcenter
 
+			textbox = {
+				parentanchor = right|vcenter
+				align = right|nobaseline
+				autoresize = yes
+				max_width = 26
+				elide = right
+				using = ch_fontsize_row
+				text = "ch_board_row_rank"
+			}
+		}
+		widget = {
+			size = { 28 24 }
+			parentanchor = vcenter
+
+			widget = {
+				size = { 28 24 }
+				visible = "[ScriptContainer.HasVariable('ch_board_capital')]"
+
+				tiny_flag = {
+					parentanchor = center
+					datacontext = "[ScriptContainer.MakeScope.Var('ch_board_capital').GetState.GetCountry]"
+				}
+			}
+		}
+		### A long name wraps rather than elides (style rule 3).
 		textbox = {
+			parentanchor = vcenter
 			autoresize = yes
 			multiline = yes
-			minimumsize = { 456 -1 }
-			maximumsize = { 456 -1 }
+			minimumsize = { 208 -1 }
+			maximumsize = { 208 -1 }
 			align = left|nobaseline
-			using = fontsize_medium
-			block "row_text" {}
-			block "row_tooltip" {}
+			using = ch_fontsize_row
+			text = "ch_board_row_name"
+		}
+		widget = {
+			size = { 60 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = right|vcenter
+				align = right|nobaseline
+				autoresize = yes
+				max_width = 60
+				elide = right
+				using = ch_fontsize_row
+				default_format = "#tooltippable"
+				text = "ch_board_row_share"
+			}
+		}
+		widget = {
+			size = { 66 24 }
+			parentanchor = vcenter
+
+			flowcontainer = {
+				parentanchor = right|vcenter
+				direction = horizontal
+				spacing = 2
+				ignoreinvisible = yes
+
+				icon = {
+					size = { 16 16 }
+					parentanchor = vcenter
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_trend'), '(CFixedPoint)1' )]"
+					texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+				}
+				icon = {
+					size = { 16 16 }
+					parentanchor = vcenter
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_trend'), '(CFixedPoint)-1' )]"
+					texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+				}
+				icon = {
+					size = { 16 16 }
+					parentanchor = vcenter
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_trend'), '(CFixedPoint)0' )]"
+					texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+				}
+				textbox = {
+					parentanchor = vcenter
+					align = right|nobaseline
+					autoresize = yes
+					max_width = 48
+					elide = right
+					using = ch_fontsize_row
+					text = "ch_board_row_change"
+				}
+			}
+		}
+		### The model's swatch: the models pie's own colour (frame 2 of its
+		### texture), its name and laws on hover (ch_model_<model>_tt), as the
+		### models legend pairs them. Codes: ch_set_political_model's 1-15;
+		### none before the country's first census.
+		widget = {
+			size = { 50 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)1' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_communist_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)2' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_anarchist_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)3' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_fascist_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)4' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_corporatist_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)5' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_socialist_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)6' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_royalist_absolutist_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)7' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_royalist_constitutional_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)8' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_religious_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)9' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_reactionary_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)10' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_military_junta_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)11' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_liberal_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)12' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_other_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)13' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_technocratic_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)14' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_republican_tt"
+			}
+			icon = {
+				size = { 14 14 }
+				parentanchor = center
+				visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_model'), '(CFixedPoint)15' )]"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
+				framesize = { 128 128 }
+				frame = 2
+				tooltip = "ch_model_developmentalist_junta_tt"
+			}
 		}
 	}
 
@@ -462,7 +792,7 @@ types cultural_hegemony_widget_types
 				max_width = 216
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
 				block "legend_label" {}
 			}
 		}
@@ -475,15 +805,17 @@ types cultural_hegemony_widget_types
 				max_width = 60
 				elide = right
 				align = nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
 				block "legend_value" {}
 			}
 		}
 	}
 
 	### One "Political Models over Time" legend row: the swatch and the model's
-	### full name. Half the chart's 456px: 14 + 6 + 200 = 220 per column, two
-	### columns and 12 between. A name too long for 200 wraps rather than elides.
+	### short name, the full name and its laws on hover, as the models legend
+	### above names them (CH-12: one name per model). Half the chart's 456px:
+	### 14 + 6 + 200 = 220 per column, two columns and 12 between. A name too
+	### long for 200 wraps rather than elides.
 	type ch_model_hist_legend_row = flowcontainer {
 		direction = horizontal
 		spacing = 6
@@ -499,7 +831,8 @@ types cultural_hegemony_widget_types
 			multiline = yes
 			minimumsize = { 200 -1 }
 			maximumsize = { 200 -1 }
-			using = fontsize_small
+			using = ch_fontsize_row
+			default_format = "#tooltippable"
 			block "hist_label" {}
 		}
 	}
@@ -509,7 +842,7 @@ types cultural_hegemony_widget_types
 	### panel wider.
 	type te_ch_ov_icon_label = widget {
 		block "cell_size" {
-			size = { 110 58 }
+			size = { 108 58 }
 		}
 
 		icon = {
@@ -521,11 +854,11 @@ types cultural_hegemony_widget_types
 			parentanchor = bottom|hcenter
 			autoresize = yes
 			block "label_width" {
-				max_width = 108
+				max_width = 106
 			}
 			elide = right
 			align = hcenter|nobaseline
-			using = fontsize_small
+			using = ch_fontsize_overview
 			default_format = "#tooltippable"
 			block "label" {}
 		}
@@ -577,7 +910,7 @@ types cultural_hegemony_widget_types
 				parentanchor = vcenter
 				autoresize = yes
 				align = hcenter|nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_overview
 				default_format = "#tooltippable"
 				block "label" {}
 			}
@@ -614,12 +947,13 @@ types cultural_hegemony_widget_types
 				spacing = 8
 				minimumsize = { 474 -1 }
 
-				### Row 1: tier · world rank · exported model · benchmark
+				### Row 1: tier · world rank · exported model · benchmark, at
+				### 108 + 108 + 136 + 108 and 4 between: 472 of the 474 column.
 				flowcontainer = {
 					direction = horizontal
 					parentanchor = hcenter
 					ignoreinvisible = yes
-					spacing = 6
+					spacing = 4
 
 					### The influence tier (ch_tier, 0-5), its full name and blurb on
 					### hover. One icon per tier (docs/systems/cultural_hegemony_gui_icons.md).
@@ -685,7 +1019,7 @@ types cultural_hegemony_widget_types
 
 					### World rank, once the first recount has numbered us.
 					widget = {
-						size = { 110 58 }
+						size = { 108 58 }
 						visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display'), '(CFixedPoint)1' ) )]"
 						tooltip = "je_ch_widget_rank_tt"
 
@@ -696,7 +1030,7 @@ types cultural_hegemony_widget_types
 							max_width = 108
 							elide = right
 							align = hcenter|nobaseline
-							using = fontsize_large
+							using = ch_fontsize_heading
 							text = "je_ch_ov_rank_value"
 						}
 						textbox = {
@@ -705,7 +1039,7 @@ types cultural_hegemony_widget_types
 							max_width = 108
 							elide = right
 							align = hcenter|nobaseline
-							using = fontsize_small
+							using = ch_fontsize_overview
 							default_format = "#tooltippable"
 							text = "je_ch_ov_rank_label"
 						}
@@ -714,8 +1048,8 @@ types cultural_hegemony_widget_types
 					### The world's leading cultural power's political model, as its
 					### slice colour in the models pie below, once the first census
 					### has run. Codes: ch_set_political_model's 1-15. The cell is
-					### 118 wide, for the longest short name ("Constitutional") in the
-					### small font; the full name is on hover.
+					### 136 wide, for the longest short names ("Constitutional",
+					### "Military Junta") at 16; the full name is on hover.
 					flowcontainer = {
 						ignoreinvisible = yes
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)1' )]"
@@ -724,10 +1058,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)1' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
@@ -741,10 +1075,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)2' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds"
@@ -758,10 +1092,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)3' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
@@ -775,10 +1109,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)4' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
@@ -792,10 +1126,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)5' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds"
@@ -809,10 +1143,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)6' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds"
@@ -826,10 +1160,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)7' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds"
@@ -843,10 +1177,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)8' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds"
@@ -860,10 +1194,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)9' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds"
@@ -877,10 +1211,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)10' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds"
@@ -894,10 +1228,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)11' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
@@ -911,10 +1245,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)12' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
@@ -928,10 +1262,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)13' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds"
@@ -945,10 +1279,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)14' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds"
@@ -962,10 +1296,10 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)15' )]"
 							blockoverride "cell_size" {
-								size = { 118 58 }
+								size = { 136 58 }
 							}
 							blockoverride "label_width" {
-								max_width = 116
+								max_width = 134
 							}
 							blockoverride "icon_texture" {
 								texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
@@ -992,7 +1326,7 @@ types cultural_hegemony_widget_types
 				}
 
 				### Row 2: our share of global cultural influence with last month's
-				### trend, and the three leading cultural powers.
+				### trend, and the three leading cultural powers (owner, 2026-09-29).
 				flowcontainer = {
 					direction = horizontal
 					parentanchor = hcenter
@@ -1050,7 +1384,7 @@ types cultural_hegemony_widget_types
 							parentanchor = hcenter
 							autoresize = yes
 							align = hcenter|nobaseline
-							using = fontsize_medium
+							using = ch_fontsize_overview
 							default_format = "#tooltippable"
 							text = "je_ch_ov_leaders_label"
 							tooltip = "je_ch_ov_leaders_tt"
@@ -1102,6 +1436,60 @@ types cultural_hegemony_widget_types
 						}
 					}
 				}
+
+				### Row 3: the cultural programs, the overview's one reading of
+				### what we can act on (CH-9): Banking's cell (te_banking_ov_cell,
+				### banking_dashboard_widget.gui) with the Ministry of Culture's
+				### icon, dimmed while it is missing (rule 4), how many of the four
+				### programs run, and the funding level against its cap. Without
+				### the Ministry nothing can run, so the word says so in red; the
+				### four programs and the funding cost are on hover. The
+				### Cultural Programs section below has the controls.
+				flowcontainer = {
+					direction = horizontal
+					parentanchor = hcenter
+					ignoreinvisible = yes
+
+					te_banking_ov_cell = {
+						tooltip = "je_ch_ov_prog_tt"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_ch_ov_prog_label"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[Not( GetScriptedGui('ch_ministry_missing_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+								texture = "gfx/interface/icons/institution_icons/institution_ministry_of_culture.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[GetScriptedGui('ch_ministry_missing_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								alpha = 0.4
+								texture = "gfx/interface/icons/institution_icons/institution_ministry_of_culture.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								visible = "[GetScriptedGui('ch_ministry_missing_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								text = "je_ch_ov_prog_no_ministry"
+							}
+							te_banking_ov_word = {
+								visible = "[Not( GetScriptedGui('ch_ministry_missing_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+								text = "je_ch_ov_prog_running"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								position = { 78 46 }
+								text = "je_ch_ov_prog_funding"
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -1146,7 +1534,7 @@ types cultural_hegemony_widget_types
 				multiline = yes
 				maximumsize = { 474 -1 }
 				align = hcenter|nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
 				text = "je_ch_prog_needs_ministry"
 				margin_bottom = 2
 			}
@@ -1174,7 +1562,7 @@ types cultural_hegemony_widget_types
 						max_width = 250
 						elide = right
 						align = nobaseline
-						using = fontsize_large
+						using = ch_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_ch_widget_funding_label"
 						tooltip = "ch_policy_funding_step_tt"
@@ -1189,8 +1577,10 @@ types cultural_hegemony_widget_types
 						max_width = 80
 						elide = right
 						align = nobaseline
-						using = fontsize_medium
+						using = ch_fontsize_row
+						default_format = "#tooltippable"
 						text = "je_ch_widget_funding_value"
+						tooltip = "je_ch_widget_funding_value_tt"
 					}
 				}
 
@@ -1527,7 +1917,19 @@ types cultural_hegemony_widget_types
 				blockoverride "row_value" { text = "je_ch_widget_bd_instability_value" }
 			}
 
-			### Totals, with no bar. The raw score always shows; the multiplier is op 10.
+			### The Pull Multiplier, op 10: it scales the sum of the components
+			### above, so it closes them (CH-3), and the Raw Score is that result.
+			### No bar.
+			ch_bar_row = {
+				tooltip = "je_ch_widget_bd_mult_tt"
+				blockoverride "row_visible" {
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				}
+				blockoverride "row_label" { text = "je_ch_widget_bd_mult_label" }
+				blockoverride "row_value" { text = "je_ch_widget_bd_mult_value" }
+			}
+
+			### The total under the rule, alone. It always shows.
 			divider_clean = {
 				blockoverride "size" {
 					size = { 474 2 }
@@ -1539,21 +1941,15 @@ types cultural_hegemony_widget_types
 				blockoverride "row_label" { text = "je_ch_widget_bd_raw_label" }
 				blockoverride "row_value" { text = "je_ch_widget_bd_raw_value" }
 			}
-			### Pull multiplier — op 10
-			ch_bar_row = {
-				tooltip = "je_ch_widget_bd_mult_tt"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-				}
-				blockoverride "row_label" { text = "je_ch_widget_bd_mult_label" }
-				blockoverride "row_value" { text = "je_ch_widget_bd_mult_value" }
-			}
 		}
 	}
 
-	### The top ten cultural powers. Ten rows, each one ExecuteTooltip; the
-	### bracketed figure's meaning is on each row's hover and in How Cultural
-	### Hegemony Works.
+	### The top ten cultural powers as a table (CH-2): a head, then one row per
+	### filled rank from the board store's list (ch_board_rebuild,
+	### cultural_hegemony_effects.txt), drawn by a datamodel as the political-
+	### model history draws its samples. The store does not exist before the
+	### first recount after this update, so the datamodel waits for
+	### ch_board_has_rows and a line says when the board fills.
 	type te_ch_sec_board = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1579,154 +1975,30 @@ types cultural_hegemony_widget_types
 		ch_panel = {
 			visible = "[Not(GetVariableSystem.Exists('ch_board_closed'))]"
 
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				}
+			ch_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_board_has_rows'), '(CFixedPoint)0' )]"
+				text = "je_ch_widget_board_pending"
 			}
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				}
-			}
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				}
-			}
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				}
-			}
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				}
-			}
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				}
-			}
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				}
-			}
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				}
-			}
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				}
-			}
-			ch_board_row = {
-				datacontext = "[GetScriptedGui('ch_board_row_sgui')]"
-				blockoverride "row_visible" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-				}
-				blockoverride "row_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( GetScriptedGui('ch_board_detail_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_ch_board_row_hint_tt' ) ) )]"
-				}
-				blockoverride "row_us_marker" {
-					visible = "[GetScriptedGui('ch_board_is_us_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+
+			flowcontainer = {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_board_has_rows'), '(CFixedPoint)1' )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 2
+
+				ch_board_head = {}
+
+				flowcontainer = {
+					direction = vertical
+					spacing = 2
+					datamodel = "[GetGlobalVariable('ch_board_store').GetList('ch_board')]"
+
+					item = {
+						ch_board_row = {
+							datacontext = "[Scope.GetScriptContainer]"
+						}
+					}
 				}
 			}
 
@@ -1735,11 +2007,12 @@ types cultural_hegemony_widget_types
 			textbox = {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display'), '(CFixedPoint)11' )]"
 				tooltip = "je_ch_widget_rank_tt"
+				default_format = "#tooltippable"
 				text = "je_ch_widget_board_us"
 				autoresize = yes
 				max_width = 474
 				align = left|nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
 				margin_top = 4
 			}
 		}
@@ -1793,7 +2066,7 @@ types cultural_hegemony_widget_types
 				minimumsize = { 474 -1 }
 				maximumsize = { 474 -1 }
 				align = left|nobaseline
-				using = fontsize_medium
+				using = ch_fontsize_row
 				default_format = "#lore"
 			}
 
@@ -2464,9 +2737,10 @@ types cultural_hegemony_widget_types
 				}
 				blockoverride "empty_text" { text = "ch_model_hist_empty" }
 			}
-			### Two columns of full legend names, read down then across in the
-			### chart's order (republican at the bottom of each bar first). All
-			### fifteen models stay visible even if their present-day share is zero.
+			### Two columns of the models' short names, read down then across in
+			### the chart's order (republican at the bottom of each bar first),
+			### each one's full name and laws on hover. All fifteen models stay
+			### visible even if their present-day share is zero.
 			flowcontainer = {
 				direction = horizontal
 				parentanchor = hcenter
@@ -2476,35 +2750,59 @@ types cultural_hegemony_widget_types
 					spacing = 1
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
-						blockoverride "hist_label" { text = "ch_model_republican" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_republican"
+							tooltip = "ch_model_republican_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
-						blockoverride "hist_label" { text = "ch_model_corporatist" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_corporatist"
+							tooltip = "ch_model_corporatist_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
-						blockoverride "hist_label" { text = "ch_model_anarchist" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_anarchist"
+							tooltip = "ch_model_anarchist_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
-						blockoverride "hist_label" { text = "ch_model_other" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_other"
+							tooltip = "ch_model_other_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
-						blockoverride "hist_label" { text = "ch_model_royalist_absolutist" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_royalist_absolutist"
+							tooltip = "ch_model_royalist_absolutist_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
-						blockoverride "hist_label" { text = "ch_model_technocratic" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_technocratic"
+							tooltip = "ch_model_technocratic_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
-						blockoverride "hist_label" { text = "ch_model_religious" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_religious"
+							tooltip = "ch_model_religious_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
-						blockoverride "hist_label" { text = "ch_model_socialist" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_socialist"
+							tooltip = "ch_model_socialist_tt"
+						}
 					}
 				}
 				flowcontainer = {
@@ -2512,31 +2810,52 @@ types cultural_hegemony_widget_types
 					spacing = 1
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
-						blockoverride "hist_label" { text = "ch_model_military_junta" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_military_junta"
+							tooltip = "ch_model_military_junta_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
-						blockoverride "hist_label" { text = "ch_model_royalist_constitutional" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_royalist_constitutional"
+							tooltip = "ch_model_royalist_constitutional_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
-						blockoverride "hist_label" { text = "ch_model_communist" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_communist"
+							tooltip = "ch_model_communist_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
-						blockoverride "hist_label" { text = "ch_model_liberal" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_liberal"
+							tooltip = "ch_model_liberal_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
-						blockoverride "hist_label" { text = "ch_model_reactionary" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_reactionary"
+							tooltip = "ch_model_reactionary_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
-						blockoverride "hist_label" { text = "ch_model_developmentalist_junta" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_developmentalist_junta"
+							tooltip = "ch_model_developmentalist_junta_tt"
+						}
 					}
 					ch_model_hist_legend_row = {
 						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
-						blockoverride "hist_label" { text = "ch_model_fascist" }
+						blockoverride "hist_label" {
+							text = "je_ch_ov_model_fascist"
+							tooltip = "ch_model_fascist_tt"
+						}
 					}
 				}
 			}
@@ -2614,6 +2933,11 @@ types cultural_hegemony_widget_types
 			}
 			ch_note = {
 				text = "je_ch_how_models"
+			}
+			### Which model a country that fits several counts as: once here, not
+			### on every legend swatch's hover.
+			ch_note = {
+				text = "ch_model_order_tt"
 			}
 			ch_subheader = {
 				blockoverride "subheader_text" {

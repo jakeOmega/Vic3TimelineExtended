@@ -12,9 +12,12 @@ import glob
 import os
 import re
 import subprocess
+import sys
 import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+import gen_solar_sites as gss  # noqa: E402
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "space_race_sguis.txt")
@@ -33,7 +36,7 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 
 RACING = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
           "interstellar_probe"]
-CONTROLLED = RACING + ["solar_colonization"]  # the eight with controls, in sr_rivals_sgui op order
+CONTROLLED = RACING + ["solar_colonization"]  # the eight with controls, in je_space_race.txt's order
 ALL = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
        "interstellar_probe", "interstellar_results", "solar_colonization"]  # journal order
 # The programme row: one icon per entry, except that the Interstellar Probe and
@@ -234,15 +237,15 @@ class RootTest(unittest.TestCase):
                     self.assertIn(f"datacontext = \"[GetScriptedGui('sr_milestone_{m}_sgui')]\"", root)
                     self.assertEqual(_milestones_named(root), {m})
 
-    def test_rivals_op_matches_the_scripted_gui(self):
-        sgui = _block(_read(SGUIS), "sr_rivals_sgui")
-        for op, m in enumerate(CONTROLLED):
+    def test_each_root_lists_its_own_rivals(self):
+        """Audit SPC-9: Rivals is a datamodel of the milestone's own list, so
+        the "+N more" scripted GUI went."""
+        self.assertNotIn("sr_rivals_sgui", _read(SGUIS))
+        for m in CONTROLLED:
             with self.subTest(milestone=m):
                 root = _root(self.gui, f"widget_je_space_race_{m}")
-                self.assertIn(f"MakeScopeValue( '(CFixedPoint){op}' )", root)
-                if op < len(CONTROLLED) - 1:
-                    self.assertRegex(sgui, rf"scope:op = {op} \}}\s*sr_rivals_participants_base = \{{ MILESTONE = {m} \}}")
-        self.assertRegex(sgui, r"else = \{\s*sr_rivals_participants_base = \{ MILESTONE = solar_colonization \}")
+                lists = set(re.findall(r"GetList\('sr_rivals_list_(\w+)'\)", root))
+                self.assertEqual(lists, {m})
 
     def test_the_first_line_left_the_rivals_list(self):
         """The overview's First cell carries it; the list names participants only."""
@@ -263,12 +266,14 @@ class FlagTest(unittest.TestCase):
 
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
-        # two live sections per milestone, solar colonization's Our Colonies,
-        # Colony Fleets, Settlers, Colony Modules, Colony Autonomy and Solar
-        # System, the shared reference, the Space Race tab's Space Powers and
-        # Orbit, and under Full Colonies Space Command, Fleets, Locations and
-        # Colony Defences (slice 6)
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 13)
+        # two live sections per milestone; solar colonization's Colony Fleets,
+        # Solar System and its "show all" toggle, Colonies (audit SPC-5: one
+        # table for what Our Colonies, Settlers, Colony Modules, Colony
+        # Autonomy and Colony Defences showed) and How Solar Colonization
+        # Works; the shared reference; the Space Race tab's Space Powers and
+        # Orbit; and under Full Colonies Space Command, Space Fleets and
+        # Locations (slice 6)
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 11)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -340,64 +345,67 @@ def _colony_sites():
 
 
 class ColoniesTest(unittest.TestCase):
-    """The Our Colonies section of the solar colonization panel: one row for each
-    of the 68 specializations, shown while the country holds it."""
+    """The Colonies table of the solar colonization panel (audit SPC-5, SPC-19):
+    one generated row per world, shown while ours, its views' cells reading its
+    own values, and the name's hover its held specializations' effects."""
 
     @classmethod
     def setUpClass(cls):
         cls.gui = _read(GUI)
+        cls.rows_file = _read(SITES_ROWS)
         cls.values = _read(DISPLAY)
         cls.sites = _colony_sites()
         cls.section = _type_body(cls.gui, "te_sr_sec_colonies")
         cls.mods = [m for _, ms in cls.sites for m in ms]
+        rows = cls.rows_file[cls.rows_file.index("type te_sr_colony_rows = flowcontainer {"):]
+        cls.rows = rows[:rows.index("\ttype ", 1)]
+        cls.loc = {}
+        for path in glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True):
+            cls.loc.update(re.findall(r'^ ([\w.]+):\d* "(.*)"\s*$', _read(path), re.M))
 
-    def _order(self, text):
-        return re.findall(r"text = \"(sr_colony_\w+)\"", text)
+    def _row_of(self, world):
+        for row in self.rows.split("te_sr_colony_row = {")[1:]:
+            if f'text = "sr_site_name_{world}"' in row:
+                return row
+        raise AssertionError(f"no colony row for {world}")
 
-    def test_every_specialization_has_a_row_in_the_order_the_events_offer_them(self):
+    def test_every_specialization_is_an_event_option_and_a_modifier(self):
         self.assertEqual(len(self.sites), 34)
         self.assertTrue(all(len(ms) == 2 for _, ms in self.sites))
-        self.assertEqual(self._order(self.section), self.mods)
         static = re.findall(r"(?m)^(sr_colony_\w+) = \{", _read(COLONY_MODIFIERS))
         self.assertEqual(sorted(self.mods), sorted(static), "a colony modifier no event grants, or the reverse")
 
+    def test_one_generated_row_per_world(self):
+        """The rows are the generator's (SPC-19): every world once, in the
+        panel's order, so a new world can't go missing."""
+        names = re.findall(r'text = "sr_site_name_(\w+)"', self.rows)
+        self.assertEqual(len(names), 34)
+        self.assertEqual(len(set(names)), 34)
+        self.assertIn("te_sr_colony_rows = {}", self.section)
+
     def test_a_row_reads_its_own_held_record(self):
-        """The row's value, its tooltip and its name are one modifier's, and the
-        value reads that modifier's <modifier>_held (sr_grant_colony_modifier)."""
-        rows = self.section.split("te_sr_colony_row = {")[1:]
-        self.assertEqual(len(rows), 68)
-        for row, mod in zip(rows, self.mods):
-            sx = mod[len("sr_colony_"):]
-            with self.subTest(modifier=mod):
-                self.assertIn(f"ScriptValue('sr_disp_colony_{sx}'), '(CFixedPoint)1' )", row)
-                self.assertIn(f'tooltip = "je_space_race_widget_colony_{sx}_tt"', row)
-                body = _strip_comments(_block(self.values, f"sr_disp_colony_{sx}"))
-                self.assertRegex(body, rf"limit = \{{ has_variable = {mod}_held \}} value = 1")
-                self.assertEqual(_loc(f"je_space_race_widget_colony_{sx}_tt"),
-                                 f"#header ${mod}$#!\\n[GetStaticModifier('{mod}').GetDesc]")
-
-    def test_stage_counts_and_headings_follow_the_events(self):
-        for stage, numbers in COLONY_STAGES.items():
-            mods = [m for n, ms in self.sites if n in numbers for m in ms]
-            with self.subTest(stage=stage):
-                body = _strip_comments(_block(self.values, f"sr_disp_colonies_stage_{stage}"))
-                self.assertEqual(re.findall(r"add = sr_disp_colony_(\w+)", body),
-                                 [m[len("sr_colony_"):] for m in mods])
-                self.assertIn(f"ScriptValue('sr_disp_colonies_stage_{stage}'), '(CFixedPoint)1' )", self.section)
-                self.assertEqual(_loc(f"je_space_race_widget_colonies_stage_{stage}").split(":")[0], f"Stage {stage}")
+        """The name's hover names the world's two specializations, each shown
+        while its sr_disp_colony_<spec> reads 1, which reads <modifier>_held."""
+        for _, mods in self.sites:
+            sxs = [m[len("sr_colony_"):] for m in mods]
+            world = None
+            for row in self.rows.split("te_sr_colony_row = {")[1:]:
+                tt = re.search(r'tooltip = "je_space_race_widget_colony_site_tt_(\w+)"', row).group(1)
+                hover = self.loc[f"je_space_race_widget_colony_site_tt_{tt}"]
+                if all(f"'je_space_race_widget_colony_{sx}_tt'" in hover for sx in sxs):
+                    world = tt
+            self.assertIsNotNone(world, f"no row's hover names {mods}")
+            hover = self.loc[f"je_space_race_widget_colony_site_tt_{world}"]
+            for mod, sx in zip(mods, sxs):
+                with self.subTest(modifier=mod):
+                    self.assertIn(f"ScriptValue('sr_disp_colony_{sx}'), '(CFixedPoint)1' ), 'je_space_race_widget_colony_{sx}_tt'", hover)
+                    body = _strip_comments(_block(self.values, f"sr_disp_colony_{sx}"))
+                    self.assertRegex(body, rf"limit = \{{ has_variable = {mod}_held \}} value = 1")
+                    self.assertEqual(self.loc[f"je_space_race_widget_colony_{sx}_tt"],
+                                     f"#header ${mod}$#!\\n[GetStaticModifier('{mod}').GetDesc]")
         held = _strip_comments(_block(self.values, "sr_disp_colonies_held"))
-        self.assertEqual(re.findall(r"add = (\w+)", held), [f"sr_disp_colonies_stage_{s}" for s in COLONY_STAGES])
-
-    def test_a_stage_heading_sits_above_its_own_rows(self):
-        headings = [m.start() for m in re.finditer(r"sr_disp_colonies_stage_\d", self.section)]
-        self.assertEqual(len(headings), 5)
-        for stage, numbers in COLONY_STAGES.items():
-            first = next(m for n, ms in self.sites if n in numbers for m in ms)
-            last = [m for n, ms in self.sites if n in numbers for m in ms][-1]
-            self.assertLess(self.section.index(f"sr_disp_colonies_stage_{stage}"),
-                            self.section.index(f'text = "{first}"'))
-            self.assertLess(self.section.index(f'text = "{last}"'),
-                            self.section.index(f"sr_disp_colonies_stage_{stage + 1}") if stage < 5 else len(self.section))
+        self.assertEqual(sorted(re.findall(r"add = sr_disp_colony_(\w+)", held)),
+                         sorted(m[len("sr_colony_"):] for m in self.mods))
 
     def test_the_section_is_solar_colonizations_alone(self):
         self.assertEqual(len(re.findall(r"te_sr_sec_colonies = \{\}", self.gui)), 1)
@@ -406,44 +414,83 @@ class ColoniesTest(unittest.TestCase):
             if m != "solar_colonization" and m != "interstellar_results":
                 self.assertNotIn("te_sr_sec_colonies", _type_body(self.gui, f"te_sr_{m}_status"), m)
 
-    def test_it_stacks_below_the_live_sections_and_shows_in_passive_mode(self):
+    def test_the_colonization_panel_order(self):
+        """Colony Fleets, then Solar System with its Target buttons (SPC-7),
+        then Colonies, Space Command, Space Fleets and How Solar Colonization
+        Works; the old per-aspect sections are gone (SPC-5)."""
         status = _type_body(self.gui, "te_sr_solar_colonization_status")
         self.assertIn("direction = vertical", status.split("\n\n")[0])
-        self.assertLess(status.index("te_sr_status_sections = {"), status.index("te_sr_sec_colonies = {}"))
+        self.assertEqual(re.findall(r"^\t\t(te_sr_sec_\w+) = \{\}", status, re.M),
+                         ["te_sr_sec_colony_fleets", "te_sr_sec_solar_system", "te_sr_sec_colonies",
+                          "te_sr_sec_space_command", "te_sr_sec_space_fleets", "te_sr_sec_how_colonies"])
+        self.assertLess(status.index("te_sr_status_sections = {"), status.index("te_sr_sec_colony_fleets = {}"))
+        for gone in ("te_sr_sec_settlers", "te_sr_sec_modules", "te_sr_sec_autonomy", "te_sr_sec_colony_defences",
+                     "te_sr_settler_row", "te_sr_module_row", "te_sr_autonomy_row", "te_sr_defence_row"):
+            self.assertNotIn(gone, self.gui + self.rows_file + _read(FLEETS_ROWS), gone)
         # not behind the controls' is_shown: a finished programme still lists its colonies
         self.assertNotIn("ScriptedGui.IsShown", self.section)
         self.assertIn('visible = "[JournalEntry.IsActive]"', self.section.split("\n\n")[0])
 
+    def test_the_view_switch(self):
+        """Four views (Defenses under Full Colonies only), picked by
+        GetVariableSystem's sr_colony_view; the switch's button for the view
+        shown is greyed. Each view's section items, heads and row cells are
+        gated on the same test."""
+        views = {"people": "GetVariableSystem.Clear('sr_colony_view')",
+                 "modules": "GetVariableSystem.Set('sr_colony_view', 'modules')",
+                 "autonomy": "GetVariableSystem.Set('sr_colony_view', 'autonomy')",
+                 "defences": "GetVariableSystem.Set('sr_colony_view', 'defences')"}
+        for view, onclick in views.items():
+            with self.subTest(view=view):
+                self.assertIn(f'onclick = "[{onclick}]"', self.section)
+                self.assertIn(f'text = "je_space_race_widget_cv_{view}"', self.section)
+        row = _type_body(self.gui, "te_sr_colony_row")
+        head = _type_body(self.gui, "te_sr_colony_head_row")
+        for view in ("modules", "autonomy", "defences"):
+            test = f"GetVariableSystem.HasValue('sr_colony_view', '{view}')"
+            # line 1's part and line 2's cells; the heads; the switch and the
+            # section's own items
+            self.assertGreaterEqual(row.count(test), 2, view)
+            self.assertGreaterEqual(head.count(test), 1, view)
+        # the People view is the default: no value, or one the rule doesn't offer
+        self.assertIn("Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules')", row)
+        self.assertIn("ScriptValue('sr_disp_colonies_full')", self.section)
+
+    def test_a_row_reads_its_own_world(self):
+        for site in gss.panel_order():
+            k = site.key
+            row = self._row_of(k)
+            with self.subTest(world=k):
+                self.assertIn(f"ScriptValue('sr_disp_site_{k}')", row)
+                self.assertIn(f"ScriptValue('sr_disp_def_{k}')", row)   # Defenses: ours, occupied too
+                self.assertIn(f"ScriptValue('sr_disp_site_pop_{k}')", row)
+                self.assertIn(f"ScriptValue('sr_disp_site_aut_{k}')", row)
+                self.assertIn(f"ScriptValue('sr_disp_def_integrity_{k}')", row)
+                self.assertIn(f'tooltip = "je_space_race_widget_autonomy_drift_tt_{k}"', row)
+                self.assertEqual(set(re.findall(r"AddScope\( 'site', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", row)),
+                                 {str(site.index)})
+                for slot, mod in zip(("a", "b"), gss.spec_modifiers(site)):
+                    self.assertIn(f'tooltip = "je_space_race_widget_colony_{mod[len("sr_colony_"):]}_tt"', row)
+
     def test_every_name_fits_its_row(self):
         row = _type_body(self.gui, "te_sr_colony_row")
-        self.assertIn("size = { 442 24 }", row)
-        self.assertIn("max_width = 442", row)
-        self.assertIn("spacing = 4", row)
-        self.assertIn("margin = { 4 1 }", row)  # 24 icon + 4 + 442 name + 2 x 4 = the 480 column
-        self.assertIn("using = fontsize_medium", row)
-        for mod in self.mods:
-            with self.subTest(modifier=mod):
-                need = len(_loc(mod)) * 8.6 * 1.1  # the labels test's medium-font budget
-                self.assertLessEqual(need, 442, _loc(mod))
+        self.assertIn("size = { 180 24 }", row)
+        self.assertIn("max_width = 180", row)
+        for site in gss.SITES:
+            with self.subTest(world=site.key):
+                need = len(self.loc[f"sr_site_name_{site.key}"]) * 8.5 * 1.1  # the row font's budget
+                self.assertLessEqual(need, 180, self.loc[f"sr_site_name_{site.key}"])
 
     def test_a_row_shows_the_icon_of_its_kind_of_world(self):
-        """Nine kinds of world, not 34 icons: a row's icon follows its world, and
-        the second specialization of a world shows the same one."""
+        """Nine kinds of world, not 34 icons: a row's icon follows its world."""
         kind_of = {w: k for k, ws in COLONY_KINDS.items() for w in ws}
         self.assertEqual((len(COLONY_KINDS), len(kind_of)), (9, 34))
-        rows = self.section.split("te_sr_colony_row = {")[1:]
-        seen = set()
-        for row, mod in zip(rows, self.mods):
-            sx = mod[len("sr_colony_"):]
-            worlds = [w for w in kind_of if sx.startswith(w + "_")]
-            with self.subTest(modifier=mod):
-                self.assertEqual(len(worlds), 1, f"{sx} names no world, or two")
-                seen.add(worlds[0])
-                self.assertRegex(row, rf'blockoverride "colony_icon" \{{\s*texture = '
-                                      rf'"{SR_ICONS}colony_{kind_of[worlds[0]]}\.dds"\s*\}}')
-        self.assertEqual(seen, set(kind_of), "a world in the table has no colony")
+        for site in gss.SITES:
+            with self.subTest(world=site.key):
+                self.assertRegex(self._row_of(site.key), rf'blockoverride "colony_icon" \{{\s*texture = '
+                                                         rf'"{SR_ICONS}colony_{site.kind}\.dds"\s*\}}')
 
-    def test_a_kind_of_world_sits_under_one_stage_heading(self):
+    def test_a_kind_of_world_sits_in_one_stage(self):
         kind_of = {w: k for k, ws in COLONY_KINDS.items() for w in ws}
         stage_of = {n: st for st, ns in COLONY_STAGES.items() for n in ns}
         stages = {}
@@ -457,6 +504,25 @@ class ColoniesTest(unittest.TestCase):
             with self.subTest(kind=kind):
                 self.assertEqual(len(found), 1, f"{kind} spans stages {sorted(found)}")
 
+    def test_each_world_has_its_hovers(self):
+        """The Solar System name's hover (SPC-7: stage, both specializations,
+        our transit and window) and the drift's own terms (SPC-15)."""
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(world=k):
+                ss = self.loc[f"je_space_race_widget_ss_site_tt_{k}"]
+                for mod in gss.spec_modifiers(site):
+                    self.assertIn(f"[GetStaticModifier('{mod}').GetDesc]", ss)
+                self.assertIn(f"$je_space_race_widget_colonies_stage_{site.stage}$", ss)
+                self.assertIn(f"ScriptValue('sr_transit_months_{gss.transit_body(site)}')", ss)
+                self.assertEqual(f"'sr_ss_window_line_{site.body}'" in ss, site.body is not None)
+                drift = self.loc[f"je_space_race_widget_autonomy_drift_tt_{k}"]
+                for term in (f"sr_disp_site_aut_drift_{k}", f"sr_disp_aut_people_{k}", f"sr_disp_aut_distance_{k}",
+                             f"sr_disp_aut_nocontact_{k}", "sr_disp_aut_war", "sr_disp_aut_destroyed",
+                             f"sr_disp_site_aut_status_{k}"):
+                    self.assertIn(f"ScriptValue('{term}')", drift)
+                self.assertIn("[concept_sr_colony_autonomy]", drift)
+
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_the_space_race_works(self):
@@ -464,8 +530,16 @@ class HowItWorksTest(unittest.TestCase):
         how = _type_body(gui, "te_sr_sec_how")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
+        # audit SPC-4: the colony sections' rules are in How Solar Colonization
+        # Works, collapsed, at the foot of the colonization panel
+        how_colonies = _type_body(gui, "te_sr_sec_how_colonies")
+        self.assertIn("Toggle('sr_panel_how_colonies_open')", how_colonies)
+        for topic in ("fleets", "windows", "settlers", "modules", "autonomy", "space_command", "defences"):
+            self.assertIn(f'"je_space_race_widget_howc_{topic}"', how_colonies, topic)
         for sec in ("te_sr_sec_control", "te_sr_sec_rivals", "te_sr_overview_milestone",
-                    "te_sr_overview_transit"):
+                    "te_sr_overview_transit", "te_sr_sec_colonies", "te_sr_sec_colony_fleets",
+                    "te_sr_sec_solar_system", "te_sr_sec_space_command", "te_sr_sec_space_fleets",
+                    "te_sr_colony_row", "te_sr_solar_colonization_overview"):
             body = _type_body(gui, sec)
             self.assertNotIn("te_sr_note", body, f"{sec} carries an explanation")
             for key in HOW_KEYS:
@@ -480,6 +554,44 @@ class HowItWorksTest(unittest.TestCase):
         for c in ("concept_sr_approach", "concept_sr_funding", "concept_sr_setback_risk"):
             self.assertRegex(concepts, rf"(?m)^{c} = \{{\}}", c)
             self.assertTrue(_loc(c) and _loc(f"{c}_desc"), c)
+
+
+class HoverMarkTest(unittest.TestCase):
+    """A value row's label is underlined when the row has a tooltip, and only
+    then (style guide rule 3; audit SPC-12): te_sr_value_row underlines by
+    default through its "label_format" block, and a row with no tooltip
+    overrides the block empty, so a new row with a hover is marked for free."""
+
+    def _rows(self):
+        gui = _read(GUI)
+        out = []
+        for m in re.finditer(r"\bte_sr_value_row = \{", gui):
+            body = gui[m.end():_close(gui, m.end() - 1)]
+            depth, top = 0, []
+            for line in body.split("\n"):
+                if depth == 0:
+                    top.append(line.strip())
+                depth += line.count("{") - line.count("}")
+            label = re.search(r'blockoverride "row_label" \{\s*text = "(\w+)"', body)
+            out.append((label.group(1) if label else body[:80], any(t.startswith("tooltip") for t in top), body))
+        return out
+
+    def test_the_type_underlines_by_default(self):
+        row = _type_body(_read(GUI), "te_sr_value_row")
+        self.assertRegex(row, r'block "label_format" \{\s*default_format = "#tooltippable"\s*\}\s*block "row_label"')
+
+    def test_a_row_without_a_tooltip_drops_the_underline(self):
+        rows = self._rows()
+        self.assertGreaterEqual(len(rows), 15)
+        for label, has_tooltip, body in rows:
+            with self.subTest(row=label):
+                overridden = 'blockoverride "label_format" {}' in body
+                self.assertEqual(overridden, not has_tooltip, label)
+
+    def test_labels_do_not_underline_themselves(self):
+        for label, _, _ in self._rows():
+            with self.subTest(row=label):
+                self.assertNotIn("#tooltippable", _loc(label))
 
 
 class ProgrammeRowTest(unittest.TestCase):
@@ -590,38 +702,43 @@ ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.t
 
 class SpacePowersTest(unittest.TestCase):
     """The Space Race tab's Space Powers (owner, 2026-10-25: see the AI rivals'
-    progress with or without a milestone running): our row, then eight slots
-    the monthly refresh fills, then "+N more"."""
+    progress with or without a milestone running): our row, then every other
+    power, a datamodel of the list the monthly refresh fills (audit SPC-9)."""
 
     @classmethod
     def setUpClass(cls):
         cls.gui = _read(GUI)
         cls.section = _type_body(cls.gui, "te_sr_sec_powers")
 
-    def test_our_row_then_eight_slots(self):
+    def test_our_row_then_the_list(self):
         rows = re.split(r"\bte_sr_power_row = \{", self.section)[1:]
-        self.assertEqual(len(rows), 9)
+        self.assertEqual(len(rows), 2)
         self.assertIn('datacontext = "[GetPlayer.GetCapital]"', rows[0])
         self.assertIn("te_sr_power_lead_own = {}", rows[0])
-        self.assertNotIn("row_visible", rows[0])
-        for n, row in enumerate(rows[1:], start=1):
-            with self.subTest(slot=n):
-                self.assertIn(f"datacontext = \"[GetPlayer.MakeScope.Var('sr_power_{n}').GetState]\"", row)
-                self.assertIn(f"ScriptValue('sr_disp_power_total'), '(CFixedPoint){n}' )", row)
-                self.assertIn("te_sr_power_lead_band = {}", row)
-        more = self.section[self.section.index("je_space_race_widget_powers_more") - 400:]
-        self.assertIn("'(CFixedPoint)9'", more)
-        self.assertIn("GetScriptedGui('sr_powers_sgui').ExecuteTooltip", more)
+        self.assertRegex(self.section, r'datamodel = "\[GetPlayer\.MakeScope\.GetList\(\'sr_powers_list\'\)\]"\s*'
+                                       r'item = \{\s*te_sr_power_row = \{\s*datacontext = "\[Scope\.GetState\]"')
+        self.assertIn("te_sr_power_lead_band = {}", rows[1])
+        self.assertNotIn("row_visible", _type_body(self.gui, "te_sr_power_row"))
+        self.assertNotIn("sr_powers_sgui", self.gui)
+        self.assertNotIn("powers_more", self.section)
+        # pending (the refresh has not run) and none still read the count
+        self.assertIn("ScriptValue('sr_disp_power_total'), '(CFixedPoint)0' )", self.section)
 
-    def test_the_refresh_fills_the_eight_slots(self):
+    def test_the_refresh_fills_the_list(self):
         effects = _read(EFFECTS)
         refresh = _block(effects, "sr_powers_refresh")
-        self.assertEqual(re.findall(r"sr_power_slot = \{ N = (\d) POS = (\d) \}", refresh),
-                         [(str(n), str(n - 1)) for n in range(1, 9)])
         for m in LEAD:
             self.assertIn(f"sr_power_fuzz_base = {{ MILESTONE = {m}", refresh)
-        self.assertIn("order_by = sr_power_rank_score", _block(effects, "sr_power_slot"))
+        self.assertLess(refresh.index("sr_powers_clear = yes"), refresh.index("ordered_country"))
+        walk = refresh[refresh.index("ordered_country"):]
+        for line in ("limit = { sr_is_space_power = yes }", "order_by = sr_power_rank_score", "min = 0",
+                     "max = 40", "check_range_bounds = no",
+                     "add_to_variable_list = { name = sr_powers_list target = scope:sr_power_capital }"):
+            self.assertIn(line, walk)
+        self.assertNotIn("sr_power_slot", effects)
+        self.assertIn("sr_powers_list_selfcheck = yes", refresh)
         clear = _block(effects, "sr_powers_clear")
+        self.assertIn("clear_variable_list = sr_powers_list", clear)
         for name in ["sr_power_total"] + [f"sr_power_{n}" for n in range(1, 9)]:
             self.assertIn(f"remove_variable = {name} }}", clear)
         # players in the race, monthly
@@ -631,6 +748,17 @@ class SpacePowersTest(unittest.TestCase):
         listed = _block(_read(TRIGGERS), "sr_is_space_power")
         for cond in ("NOT = { THIS = ROOT }", "sr_in_space_race = yes", "exists = capital"):
             self.assertIn(cond, listed)
+
+    def test_the_list_self_check(self):
+        """TE_SELF_CHECK sr_powers_list: once a game, OK and BROKEN, with the
+        count, and only when two or more powers can tell a walk from a pick."""
+        check = _block(_read(EFFECTS), "sr_powers_list_selfcheck")
+        self.assertIn("NOT = { has_global_variable = sr_selfcheck_powers_list_done }", check)
+        self.assertIn("set_global_variable = { name = sr_selfcheck_powers_list_done value = yes }", check)
+        self.assertIn("var:sr_power_total >= 2", check)
+        self.assertIn('debug_log = "TE_SELF_CHECK OK sr_powers_list', check)
+        self.assertIn('debug_log = "TE_SELF_CHECK BROKEN sr_powers_list', check)
+        self.assertIn("docs/testing/space-race-playtest.md", check)
 
     def test_each_estimate_column_shows_one_text_per_code(self):
         for column, prefix in (("te_sr_power_lead_band", "je_space_race_widget_power_lead_"),
@@ -704,6 +832,21 @@ class OrbitTest(unittest.TestCase):
                          [f"je_space_race_widget_orbit_{r}_label" for r in ("satellites", "strikes", "moratorium", "strike")])
         self.assertNotIn("JournalEntry", body)
 
+    def test_debris_shows_once_in_the_tab(self):
+        """SPC-8 (owner, 2026-10-27): Mission Control's debris row sits in a
+        block each milestone's status type passes up as "sr_debris", which the
+        Space Race tab overrides empty (test_te_systems_window.py), so the tab
+        shows debris once, in Orbit; the journal keeps it in Mission Control."""
+        gui = _read(GUI)
+        self.assertRegex(_type_body(gui, "te_sr_sec_control"),
+                         r'block "control_debris" \{\s*te_sr_debris_row = \{\}\s*\}')
+        self.assertRegex(_type_body(gui, "te_sr_status_sections"),
+                         r'blockoverride "control_debris" \{\s*block "status_debris" \{\s*te_sr_debris_row = \{\}\s*\}\s*\}')
+        for m in CONTROLLED:
+            with self.subTest(milestone=m):
+                self.assertRegex(_type_body(gui, f"te_sr_{m}_status"),
+                                 r'blockoverride "status_debris" \{\s*block "sr_debris" \{\s*te_sr_debris_row = \{\}\s*\}\s*\}')
+
     def test_the_debris_row_reads_the_player(self):
         """Mission Control's debris row is also the Orbit section's, outside
         any journal entry: every key it renders roots on GetPlayer."""
@@ -743,6 +886,11 @@ class OrbitTest(unittest.TestCase):
 # Textures the widget uses as they are: vanilla's, used as vanilla uses them.
 # Everything else is the Space Race's own art or a #571 journal icon.
 VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
+                # the colonization overview's Defense and Modules cells (audit
+                # SPC-6): the buildings that defend and that fabricate; Space
+                # Command's also marks warships inbound in Locations (SPC-16)
+                "gfx/interface/icons/building_icons/building_space_command.dds",
+                "gfx/interface/icons/building_icons/building_space_program.dds",
                 # the rival rows' band marker, drawn as the UN's authority bar draws it
                 "gfx/interface/icons/generic_icons/transparent.dds",
                 # the module queue's move-up button, the base game's ship construction queue's (#1159)
@@ -789,6 +937,15 @@ class SpaceRaceIconsTest(unittest.TestCase):
             with self.subTest(cell=cell):
                 mark = _enclosing(_type_body(self.gui, cell), "size = { 18 18 }", "icon = {")
                 self.assertIn(f'texture = "{SR_ICONS}first_mark.dds"', mark)
+
+    def test_colony_and_war_fleets_wear_different_icons(self):
+        """Audit SPC-16: Solar System's inbound colony fleets keep the
+        colonization rocket; Locations' inbound warships wear Space Command's."""
+        site = _type_body(self.gui, "te_sr_site_row")
+        loc = _type_body(self.gui, "te_sr_location_row")
+        self.assertIn('texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"', site)
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', loc),
+                         ["gfx/interface/icons/building_icons/building_space_command.dds"])
 
     def test_the_pies(self):
         pie = _type_body(self.gui, "te_sr_ov_pie")

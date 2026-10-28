@@ -38,27 +38,24 @@
 
 	status_desc = {
 		first_valid = {
+			# The law that completes the entry needs only its technology
+			# (law_post-scarcity's unlocking_technologies), so the step each
+			# status names is the technology, then the law (GUI audit JE-6).
 			triggered_desc = {
-				desc = je_post_scarcity_status_early
+				desc = je_post_scarcity_status_transition
 				trigger = {
-					NOT = {
-						has_law = law_type:law_universal_basic_income
-					}
+					has_technology_researched = post-scarcity_economy
 				}
 			}
 			triggered_desc = {
 				desc = je_post_scarcity_status_ubi
 				trigger = {
 					has_law = law_type:law_universal_basic_income
-					NOT = { has_technology_researched = post-scarcity_economy }
 				}
 			}
 			triggered_desc = {
-				desc = je_post_scarcity_status_transition
-				trigger = {
-					has_law = law_type:law_universal_basic_income
-					has_technology_researched = post-scarcity_economy
-				}
+				desc = je_post_scarcity_status_early
+				trigger = { always = yes }
 			}
 		}
 	}

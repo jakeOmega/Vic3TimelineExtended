@@ -845,7 +845,10 @@ class PanelTests(unittest.TestCase):
 
     def test_mounted_after_the_opportunity(self):
         status = squash(strip_comments(raw_block_at(read(WIDGET), r"(?m)^\ttype te_gm_status_sections = flowcontainer \{")))
-        self.assertIn("te_gm_sec_commission = {} te_gm_sec_archaeology = {} te_gm_sec_national = {}", status)
+        # After the two act-now sections that follow the opportunity (GM-3,
+        # owner 2026-10-27), before National Effects.
+        self.assertIn("te_gm_sec_commission = {} te_gm_sec_decisions = {} te_gm_sec_awaiting = {} "
+                      "te_gm_sec_archaeology = {} te_gm_sec_national = {}", status)
 
     def test_its_flag_says_its_default(self):
         text = strip_comments(self.gui)

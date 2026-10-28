@@ -180,9 +180,9 @@ heatwaves and wildfires, in both impact and duration;
 - 25% weaker pollinator surges and 10% weaker moderate rainfall, the two
 harvest conditions that help.
 
-At 2 °C every line doubles, and at 3 °C it triples. The Penalty figure at the
-top of the entry shows the current multiplier; hover it for the modifier's
-lines.
+At 2 °C every line doubles, and at 3 °C it triples. The Warming Penalty box at
+the top of the entry shows today's standard of living and mortality lines; hover
+it for every line and the multiplier.
 
 ## The climate dashboard
 
@@ -192,10 +192,11 @@ it has no status line: the overview carries the tier and the readings.
 
 ![The Climate tab of the Market panel at 1.90 °C, tier Significant: the overview (tier, Market Leader, Penalty ×1.90, the Temperature bar and its threshold line, the emissions table and the two pies) and the start of Mitigation Policies.](images/global_warming_tab.png)
 
-The overview's first row is icons with a word under each: the warming tier
-(hover it for what the tier means), Market Leader or Market Member (whether you
-set fossil-fuel tariffs), and Penalty with the Climate Warming modifier's
-current multiplier. A Treaty-Bound icon joins them while an Enforce Emissions
+The overview opens with boxes, two to a row: Warming, the tier and where the
+next one begins (hover it for what the tier means); Warming Penalty, today's
+standard of living and mortality lines of the Climate Warming modifier; and
+Market, Leader or Member, which says whether you set fossil-fuel tariffs. A
+Treaty box, Bound with repeals locked, joins them while an Enforce Emissions
 Reduction treaty binds you.
 
 Below them is the Temperature bar, from 0 to 4 °C, with a headline such as
@@ -222,7 +223,7 @@ other source together; hover it for how many of the ten policies you run. The cu
 | Section | Starts | Shows |
 |---|---|---|
 | Mitigation Policies | Open | Ten policies: market-wide Fossil-Fuel Tariffs first, then nine National policies. Each row has an icon, its name and effect tooltip, an active check, and Adopt or Repeal. Grayed controls explain the warming, authority, technology, treaty, market ownership and customs conditions. Adoption Around the World counts countries using each policy; the tariff row counts market leaders. |
-| Top Emitters | Open | The five countries emitting most, largest first, including market members. Each row shows its flag, annual emissions, share of world emissions and national cumulative total. A treaty icon marks a bound country; your row says "Our country". Hover for its industrial reduction and market context, or "+N more countries" for the full list. Figures update each January; rankings update monthly. |
+| Top Emitters | Open | The five countries emitting most, largest first, including market members. Each row shows its flag, annual emissions, share of world emissions and national cumulative total. A treaty icon marks a bound country; your row says "Our country". Hover for its industrial reduction and market context, or "+N more countries" for the next 25. Figures update each January; rankings update monthly. |
 | Fossil Transition | Open | Your Resource Transition law, what is left of your coal mines, oil rigs and power plants with a retirement control for each, and what could replace them. See [The fossil transition](#the-fossil-transition). Shown on your own market only. |
 | History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
 | How Global Warming Works | Collapsed | The explanations: warming, the warming penalty, emissions and the mitigation policies. |
@@ -231,8 +232,8 @@ Top Emitters tells you whom to bind: every country controls its own industrial
 policies, whether it leads its market or belongs to another country's. A country
 that captures as much carbon as it emits is not listed. Its cumulative total
 follows it through market joins, departures and leadership changes; negative
-years subtract from it. The tooltip says when cumulative counting begins. Each member can adopt or
-repeal its own policies independently.
+years subtract from it. Each member can adopt or repeal its own policies
+independently.
 
 ## Climate policies
 
@@ -350,7 +351,7 @@ Environment, and both restrictive laws need that ministry:
 |---|---|---|
 | Unrestricted Extraction | | The default. Nothing changes. |
 | Fossil Expansion Moratorium | Environmental Movement, Ministry of the Environment | No new Coal Mine, Oil Rig or Power Plant can be built or expanded in your states, by your government, your investors or foreign investors. Those already running carry on. |
-| Managed Fossil Phaseout | Carbon Capture and Storage, Ministry of the Environment funded to level 3 | The moratorium, retirement programmes, and at least 50% capture for eligible stationary sources. |
+| Managed Fossil Phaseout | Carbon Capture and Storage, Ministry of the Environment funded to level 3 | The moratorium, retirement programs, and at least 50% capture for eligible stationary sources. |
 
 Hydro, nuclear, fusion and renewable plants, Synthetic Fuel Works, Carbon
 Conversion Works and every other mine stay buildable. If you abolish the
@@ -365,11 +366,11 @@ at once, and its Fossil Transition section holds the controls. With the Global
 Warming rule off, the entry shows only that section; the laws work the same
 way.
 
-### Retirement programmes
+### Retirement programs
 
 Under Managed Fossil Phaseout, the Fossil Transition section has a row for each
 of Coal Mines, Oil Rigs and Power Plants, with the levels you have left and a
-Start button. A running programme closes the smallest building of its kind in
+Start button. A running program closes the smallest building of its kind in
 your states every 3 months, starting 3 months after you press Start:
 
 - the whole building goes, every level, whoever owns it: your government, a
@@ -381,8 +382,8 @@ loyalists that a change in standard of living would make, and +25%
 qualifications as the laid-off workers retrain.
 
 Hover a row for the next building to close, its state and its compensation, and
-for the cost of closing all that are left. Stop ends a programme; what it closed
-stays closed. Leaving Managed Fossil Phaseout stops every programme.
+for the cost of closing all that are left. Stop ends a program; what it closed
+stays closed. Leaving Managed Fossil Phaseout stops every program.
 
 ### Readiness and emissions
 
@@ -410,7 +411,7 @@ than it burns.
 The AI considers the moratorium on the same will as Fossil-Fuel Divestment
 ([How the AI adopts climate policy](#how-the-ai-adopts-climate-policy)), and
 only with a quarter of its power fleet clean; it moves to the phaseout with a
-stronger will and half its fleet clean. It starts a programme only while its
+stronger will and half its fleet clean. It starts a program only while its
 market has fuel to spare (or, for power plants, mostly clean generation) and it
 is not deep in debt, stops one when the fuel or electricity runs short, and
 returns to Unrestricted Extraction when its market is short of coal, oil or

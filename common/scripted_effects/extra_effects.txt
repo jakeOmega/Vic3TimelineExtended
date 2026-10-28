@@ -470,6 +470,8 @@ remove_banking_market_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = banking_foreign_borrowing_limits         MARK = off_cb_foreign_borrowing_limits }
 	banking_strip_tool = { MODIFIER = banking_fx_surrender                     MARK = off_cb_fx_surrender }
 	banking_strip_tool = { MODIFIER = banking_emergency_import_financing       MARK = off_cb_emergency_import_financing }
+	# ...and the two tools' weekly bills with them (banking_external_end_charges).
+	banking_external_end_charges = yes
 	banking_strip_tool = { MODIFIER = banking_capital_controls_out             MARK = off_cb_capital_controls_outflow }
 	banking_strip_tool = { MODIFIER = banking_export_credit_facility           MARK = off_cb_export_credit_facility }
 	banking_strip_tool = { MODIFIER = banking_asset_relief_program             MARK = off_cb_asset_relief_program }

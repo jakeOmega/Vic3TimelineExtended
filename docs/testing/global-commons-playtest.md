@@ -63,13 +63,14 @@ holding fee, Sponsor's protection, the policy lock and the panel
 | `TE_SELF_CHECK … seabed_lease_entry` | a day after a Lease Seabed Claims article comes into force (`te_seabed.1`); OK once a game, BROKEN each time it fails | the start event found the in-force article naming the lessee, read its lessor and quantity (`n`), and moved up to that many of the lessor's own claims (`moved`) | no such article a day after entry: the lessee's `every_scope_treaty` walk, the article's `target_country` test or `input_quantity` doesn't read as assumed (or the treaty ended within the day) | read the quantity in the hook instead (`scope:article_options.input_quantity`, unproven), or start the lease at the next sharing, whose walk reads the same article (`te_seabed_lease_shift_basin`) |
 | `TE_SELF_CHECK … seabed_pact_read` | a day after an overlord takes Administer Seabed Claims (`te_seabed.2`); OK once a game, BROKEN each time it fails | the subject sees the pact from its own side (`has_diplomatic_pact`), as every sharing reads it (`te_seabed_pact_stands`) | the pact isn't seen from the subject's side, or the overlord ended it within the day: then no sharing passes claims or counts the licences built on them as the subject's | read the pact from the overlord's side (iterate its `every_direct_subject` in `te_seabed_pass_subject_claims` and `te_seabed_lease_shift_held`) |
 | `TE_SELF_CHECK INFO/OK/BROKEN seabed_power_projection` | once a game, at the end of the first sharing with a claimant that has a navy (`navy_size` > 0) | `naval_power_projection` reads as a number in a script value (`te_seabed_navy_effective`, `te_seabed_npp_disp`) for at least one of them. Each `INFO` line gives a claimant's `npp`, `navy_size` and their `ratio` | every claimant with a navy reads 0: the read isn't a value (vanilla only ever compares it), so the claim weight's navy term is 0 for everyone | BROKEN: revert `te_seabed_navy_effective` to `navy_size` (no scale) and the hovers' "naval power projection" to "navy". OK: before a release, set `te_seabed_power_projection_scale` to the median `ratio` of the `INFO` lines, so a typical fleet's term stays near its flotilla count; a scale left too low lets navies swamp the coast and port terms |
+| `TE_SELF_CHECK OK/BROKEN seabed_claimant_list` | once a game, at the first sharing where a player's list for some basin should hold 2 to 40 other claimants (audit SEA-3, 2026-10-27) | the list (`te_seabed_rk_list_<basin>`) holds every other claimant with a share there (`listed` = `claimants`): `ordered_country` with `min = 0`, `max = 40`, `check_range_bounds = no` walked the whole field | `listed` differs: the walk stopped short or went past | go back to the six fixed seats, each filled at one `ordered_country` position with its count checked first, and their scripted lines (git history before SEA-3's later step) |
 
 The checks exclude the degenerate case: `seabed_cap` waits for a previous sharing (the ceilings) and
 logs OK only with records in the world; `seabed_licence_follows_state` watches only states the
 monthly recording saw holding licences (a global list kept apart from the states' own variables);
 `seabed_floor_fits` runs only after a sharing in which some floor protected a claim; `seabed_pact_read`
 gives no verdict for a country no longer a subject; `seabed_power_projection` reads only claimants with a
-navy, and says BROKEN only when all of them read 0.
+navy, and says BROKEN only when all of them read 0; `seabed_claimant_list` waits for two or more claimants.
 
 `seabed_power_projection` first fired on 2026-10-17 with `OK … claimants=5 reading=4`, but none of
 its `INFO` lines printed: they named the country with a bare `[THIS.GetNameNoFormatting]`, which
@@ -96,11 +97,23 @@ even in that save, and the scale comes from those lines.
    an Antarctic station's 5 in the Southern, and about the Weight row's own last line; under Unilateral Licensing or a scramble the naval share doubles. A
    relinquished basin, or the Southern for an Antarctic Treaty party, reads 0 with a red line saying
    why. A state just conquered has no basin until the next monthly update: Basin, Claims and Weight
-   are hidden until then. Tile hover: the country's licences in use, its share and long-haul ones,
-   each basin's held, unbuilt, weight and the world's licences in use against the pool, and the room.
+   are hidden until then. Tile hover (since the 2026-10-27 GUI audit, VAN-8): the country's licences
+   in use, its share and long-haul ones, and the room to build, then a pointer to the Seabed tab for
+   each basin's figures. The rows with a hover of their own are underlined.
    No "Failed to fetch variable" in `debug.log` while hovering, on a coastal state that never had a
    mine. **At 1080p no row ends in "…"**: "Southern" in the Basin row's 96 px value column, "Long-haul"
    in the 96 px label column.
+1a. **The Ocean Basin tile (VAN-8b, owner 2026-10-27).** With Abyssal Plain Mining researched, open a
+   coastal state of another country, and one of a country that never took part in a sharing: an
+   **Ocean Basin: Pacific** (or the state's basin) tile, its hover naming "the Pacific Ocean" as the
+   Seabed tab names it. Before the research, and on a landlocked state, no tile. A state of a
+   participant shows the full Seabed Licences tile instead, never both. A landlocked country with the
+   research and no coastal claimant anywhere still sees the basins the month it researches it
+   (`te_seabed_basins_set`, `te_seabed_global_monthly`). **Observer:** start an observer game (or
+   switch to observer) with a state panel open on a coastal state: no Ocean Basin tile, and no
+   `Scoped object of type 'country' is not valid` lines in `error.log` from `states_panel.gui`
+   (the tile tests `Not( GetMetaPlayer.IsObserver )` before its `GetPlayer` gate). In multiplayer,
+   a player without the research sees no tile even when another player has it.
 2. **The gate.** Build a Deep-Sea Mine in a coastal state: the building's requirements list
    "Seabed Licences to spare: N (unbuilt: …)" with a tick, and a second line saying whether the next
    level takes the state's own basin's licence or another's at -25%. Queue levels until the room is
@@ -307,6 +320,15 @@ even in that save, and the scale comes from those lines.
     A save from before the move loses the state's copy at the next monthly update. The
     multiplier is a state variable read through `root` (`resettlement_refresh_destination_readout`'s
     pattern): check the figure stays right between monthly updates, not only on the day of one.
+
+### The Seabed tab after the GUI audit (2026-10-27)
+
+The Seabed tab's share of the GUI and localization audit (`docs/audits/gui_audit/space_seabed.md`, SEA-1 to SEA-6). No self-check: each item fails visibly.
+
+1. **The policy buttons as modifier lines (`GetStaticModifier('te_seabed_policy_<policy>_display').GetDesc` inside a scripted GUI's effect tooltip; four `script_only` modifier types: new).** Hover each of the three policy buttons: a short line, then engine-rendered modifier lines (Scientific Survey: claim weight −25%; Sponsor Contractors: the claim floor, +75%; Unilateral Licensing: naval weight +100% and relations −10), then the influence it holds and the five-year lock. Each line has its name and a sign-colored figure, not a raw key. The figures must match the table in the player guide (`02-timeline.md`, Seabed licences).
+2. **The overview's Policy and Regime boxes.** Policy says what ours does to us now (its weight factor, the influence it holds) and when it can next change, with an exception (a newly binding Law of the Sea, a Scramble) only while one applies. Regime gives the regime in force in one line and links the new Seabed Regime concept, whose description holds all three regimes.
+3. **The claimant list (a datamodel of the player's `te_seabed_rk_list_<basin>`, each item a capital whose `State.GetCountry` reads the rival's own script values: new; audit SEA-3's later step, the owner, 2026-10-27).** Open a basin with three or more claimants: every other claimant has a row, largest share first, with no "and N other claimants" line: its flag (hover: the name; click: the country), its name elided at the column's edge, then Mines, Claims and Weight under the heads, matching what the rival's own Seabed tab shows (switch to it, or compare the basin's totals); our row follows, reading "Us" with our figures and Relinquish or Claim Again in the last cell. On a save from before the change, the lists fill at the next sharing (January, or the month after a new claimant appears or a civil war is won). If the figures read 0 for every rival, the values are being evaluated in our scope, not the rival's; if the rows are blank or repeat one country, the datamodel chain failed: in either case go back to the six fixed seats and their scripted lines (git history before audit SEA-3's later step).
+4. **Basin hovers.** The +1 licence column's per-basin hover no longer repeats "often more than needed" (the head's hover says it once); the Pool head's hover names what the legend lacks; the state panel's weight line reads "the Southern Ocean".
 
 ### Engine facts the build assumes, unverified
 

@@ -7,6 +7,8 @@ Slice: `je_tax_code` and the Budget panel's Tax Code tab (both hosts compose the
 and command tooltips they render, and `te_tax_l_english.yml` / `te_tax_generated_l_english.yml`.
 Read-only audit; every claim below was checked against the markup and loc at the line given.
 
+**Status:** every finding is done in the GUI audit wave of 2026-10-27 (branch `wave/gui-tax`); each finding's Status line says how, and where the build departs from the proposal.
+
 ## Top priorities
 
 - **The overview doesn't answer "what needs me now?"** It lists version, last change, snapshot date and
@@ -34,6 +36,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 ## Findings
 
 ### TAX-1. Overview lists metadata, not the actionable state of each process
+- **Status (wave, 2026-10-27):** Done. Banking's cells (`te_banking_ov_cell` as it is; the words and figures are `te_tax_ov_word`/`_fig`): Tax Code (version; next change, and on hover what it is, the last change and the snapshot), Draft Reform (None, Blocked, Too soon, Ready, Open), the bill (Month has come, Can pass, Short of support, Debating, Blocked; the share, or the offers waiting while short) and Passed Bills (Awaiting, Held) while either exists, Promises (failing, binding; the next due date) while one is made. The light code: Taxation Law and Tax Level. New generated views `te_tax_view_offers_open`, `_obl_failing`, `_obl_next_due`, `_dr_rebase_count`, and the custom loc `te_tax_ov_next_what`. Words name the state, without a "what needs you" lead-in.
 - **Category:** spread-out/redundant, hidden info, style
 - **Where:** `gui/journal_entry_widgets/te_tax_overview_widget.gui:211-354` (`te_tax_overview_panel`). Loc:
   `te_tax_ov_title` (`te_tax_l_english.yml:344`), `te_tax_ov_last_change*` (319-321), `te_tax_ov_next_change*`
@@ -75,6 +78,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high on the gap, medium on the exact cell set
 
 ### TAX-2. Pass / Revise / Withdraw / Force Through sit below every interest-group card
+- **Status (wave, 2026-10-27):** Done. The buttons sit under the Conditions table; `te_tax_bill_summary` is pinned in the Budget tab's `fixed_bottom` while a bill is under debate and no draft is open.
 - **Category:** spread-out/redundant
 - **Where:** `te_tax_politics_widget.gui:501-580` (Conditions for Passage), `:598` (IG card datamodel),
   `:605-657` (the button row, Force Through, Move to Next Month); Budget tab `gui/budget_panel.gui:1735-1762`
@@ -97,7 +101,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-3. "Changed Since Drafted" and its Accept buttons are only in the collapsed Review
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status (wave, 2026-10-27):** Done, the second option: Changed Since Drafted moved from the review to the top of the workbench, open while it applies, and the draft summary counts the changes to accept (red). The player guide's sentence now says where. No mark in the instrument rows: the block at the top carries the Accepts.
 - **Category:** hidden info
 - **Where:** `te_tax_review_widget.gui:231-380` (`te_tax_review_section`, collapsed by `te_tax_review_open`;
   rebase block at 262-380). Loc `te_tax_tt_draft_baseline` (`te_tax_l_english.yml:571`),
@@ -123,6 +127,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-4. Revenue: no figure in the summary, and the estimate is written as sentences
+- **Status (wave, 2026-10-27):** Done. The summary's Revenue row (an `Add_CFixedPoint` sum of the four lines' changes; a range while Poll is shared, "in part" when a changed line has no base, "Not estimated" before the first snapshot) and the review's estimate as a table (`te_tax_estimate_row`).
 - **Category:** spread-out/redundant, list (table as text)
 - **Where:** `te_tax_review_widget.gui:842-928` (Revenue Estimate, the last block of the collapsed
   Review). Loc `te_tax_est_income`/`_dividends`/`_poll`/`_poll_range`/`_consumption` (`te_tax_l_english.yml:65-75`).
@@ -145,6 +150,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
   precedents in this mod)
 
 ### TAX-5. The committed share is shown twice, one above the other
+- **Status (wave, 2026-10-27):** Done. The bar is the first condition row's middle cell, "38% / >50%" beside it; the separate bar row and `te_tax_pol_bar_label` are gone.
 - **Category:** spread-out/redundant
 - **Where:** `te_tax_politics_widget.gui:383-495` (bar row: `te_tax_pol_bar_label` "Committed", value
   `te_tax_pol_bar_value` "38% / 50%") and `:504-516` (first condition row: `te_tax_pol_support` "Committed
@@ -159,6 +165,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-6. Interest-group cards: full cards for marginal groups, zero rows, no icon
+- **Status (wave, 2026-10-27):** Done, (a) to (d): vanilla's `ig_button` before the name; reasons of 0 hidden; a committed or marginal group shows its line alone, and every group's score hover is the six-reason breakdown, so (d) folds the rows only for the groups no longer to be moved.
 - **Category:** spread-out/redundant, style
 - **Where:** `te_tax_politics_widget.gui:108-266` (`te_tax_ig_card`). Reason rows `:158-216`; stance `:136-145`
 - **Now:** every group with a stance draws a header and six reason rows, Marginal ones included ("too
@@ -182,7 +189,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high for (a)-(c), medium for (d)
 
 ### TAX-7. Live Bill section: teaching notes and a disclaimer repeated on every card
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status (wave, 2026-10-27):** Done. `te_tax_pol_groups_note` removed (its thresholds are on the stance hover); the estimate note stays.
 - **Category:** over-explaining
 - **Where:** `te_tax_politics_widget.gui:583-592` (`te_tax_pol_groups_note`, `te_tax_pol_est_note`); card
   revenue line `:240-252`. Loc `te_tax_pol_groups_note` (`te_tax_l_english.yml:414`), `te_tax_ig_offer_est_*`
@@ -200,7 +207,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-8. The offer's hover is a six-sentence paragraph that duplicates How it works
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status (wave, 2026-10-27):** Done in #1202 (loc); no GUI part was proposed.
 - **Category:** over-explaining
 - **Where:** `te_tax_politics_widget.gui:232-233` (offer line tooltip). Loc `te_tax_ig_offer_tt` (`te_tax_l_english.yml:175`)
   vs `te_tax_how_passage_offers` (130)
@@ -216,7 +223,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-9. Command tooltips restate the modifier lines the engine prints under them
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status (wave, 2026-10-27):** Done in #1202 (loc); in the wave the passed-bill line's hover (`te_tax_rv_passed_tt`) words the supersession rule for the bill under review only.
 - **Category:** over-explaining, style (prefer engine-rendered modifiers)
 - **Where:** `te_tax_tt_cmd_pass` (`te_tax_l_english.yml:559`; effect `te_tax_bill_effects.txt:561-573`,
   whose `te_tax_gen_oppose_approval` adds visible `ig_approval_effect` modifiers);
@@ -242,7 +249,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high (Pass, Force), high (Renegotiate)
 
 ### TAX-10. Click instructions repeated on every row's hover, under an intro that already says them
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status (wave, 2026-10-27):** Done in #1202 (loc): the intros carry the clicks, the Law head's hover the starting rate.
 - **Category:** over-explaining (rule 6: what is true of every row is said once, above the rows)
 - **Where:** workbench intro `te_tax_workbench_widget.gui:652` (`te_tax_wb_intro`, `te_tax_l_english.yml:685`)
   and the seven row hovers `te_tax_wb_row_{wage,div,land,head,cons,agrel,regrel}_tt` (710-716). Light:
@@ -259,6 +266,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-11. Greyed vanilla Budget controls don't say why
+- **Status (wave, 2026-10-27):** Done. A greyed control's tooltip starts with the code's line (`te_tax_tt_native_locked_level`/`_goods`/`_tariff`): the five tax levels, the "+" and the 14 tariff items in `budget_panel.gui`, the goods panel's toggle (`goods_panel.gui`, marked hunk) and the four right-click Tax/Untax items (`right_click_menu.gui`). The add-consumption-tax menu's items are unchanged: the greyed "+" never opens it. `test_tax_code_layout.TabStripTest` now counts the gates in `enabled` and in tooltips apart.
 - **Category:** hidden info
 - **Where:** `gui/budget_panel.gui:2225-2380` (tax-level buttons: `enabled` ANDs `te_tax_native_controls_sgui`;
   tooltip stays `[GetPlayer.GetTaxLevelDescVeryLow]` etc.), `:403-408` (consumption-tax "+": tooltip
@@ -278,6 +286,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-12. Held data never drawn: taxed goods, enacted relief states, a passed bill's relief
+- **Status (wave, 2026-10-27):** Done. (a) The enacted goods as icon rows by category (generated `te_tax_en_goods_icons`), and each passed bill's taxed and exempted goods (`te_tax_pk_goods_icons_<s>`, views `te_tax_view_p<s>_g_<good>`); (b) the enacted relief states under Regional Relief; (c) `te_tax_view_p<s>_<relief>_on`/`_pct`, relief lines and states in Passed Bills and in the review's relief timelines.
 - **Category:** hidden info, list
 - **Where:** Enacted Code `te_tax_overview_widget.gui:449-476`; Passed Bills `te_tax_politics_widget.gui:674-920`
   (slot rows cover wage, div, land, head, cons, goods, customs only); loc `te_tax_en_goods_value` (40),
@@ -308,6 +317,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-13. Goods Catalog is 39 ungrouped rows in key order, with no icons
+- **Status (wave, 2026-10-27):** Done. Grouped by the customs catalog's four categories, staples in `staple_order()`, each good's icon in its row; one Goods Catalog toggle kept.
 - **Category:** list, style
 - **Where:** generated `te_tax_generated_rows.gui:16-719` (`te_tax_wb_goods_rows`) from
   `scripts/generators/gen_tax_code.py` (`consumption_catalog()`); compare the customs editor's grouping,
@@ -323,6 +333,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-14. Section order puts the long editing workbench above the bill under debate
+- **Status (wave, 2026-10-27):** Done (owner, 2026-10-27): Bill Under Debate, Passed Bills, Promises, Enacted Code, Draft Reform, Review; `STATUS` updated.
 - **Category:** spread-out/redundant
 - **Where:** `te_tax_layout_widget.gui:41-57` (`te_tax_status_sections`); pinned by `test_tax_code_layout.py:67-68,362`
   (`STATUS` list)
@@ -336,6 +347,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** medium (reorders the pinned design order; owner sign-off)
 
 ### TAX-15. The whole UI is set a step below the house type ladder
+- **Status (wave, 2026-10-27):** Done. `te_tax_fontsize_row` (17), `_heading` (20), `_overview` (16) at the head of the overview file, every textbox and labelled button through them, the cells re-budgeted; `test_tax_code_layout.WidthBudgetTest` holds every fixed cell to its longest text. "Revise from Draft" became "Revise Bill", as the summary's button already read, to fit.
 - **Category:** style
 - **Where:** all `te_tax_*_widget.gui`: 60 × `fontsize_medium` (14, OpenSans) for rows, values, notes
   and live text; 8 × `fontsize_small` (12) for the column heads ("Law", "Draft", "Change", "Range", "Rate",
@@ -353,7 +365,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high on the deviation
 
 ### TAX-16. The same thing named differently across panel, tooltip and button
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status (wave, 2026-10-27):** Done. "Drop" in the held line (and the test), "takes effect" in every tooltip that said commence, "Trust" on the card and in the guide, "Dates" for the workbench's Commencement group, "agricultural relief" in the offers.
 - **Category:** style
 - **Where / Now:**
   - Button "Drop" (`te_tax_pk_release`, `te_tax_l_english.yml:391`), but the passed bill's line says
@@ -378,6 +390,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-17. Review: static mechanics lines in the live entries
+- **Status (wave, 2026-10-27):** Done. `te_tax_rv_unchanged` dropped; who benefits (and the goods' forgone tax) is on the provision's name; the agricultural and regional Forgoes lines stay. Tests updated.
 - **Category:** over-explaining
 - **Where:** `te_tax_review_widget.gui:257` (`te_tax_rv_unchanged`, "Present collections remain unchanged
   until commencement.", the first line of every review); `:638-655`, `:726-744`, `:823-841` ("Benefits" /
@@ -397,6 +410,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** medium
 
 ### TAX-18. The overview's Economy Snapshot row, and its developer-facing hover
+- **Status (wave, 2026-10-27):** Done. The row is gone; the Code cell's hover dates the snapshot with net fixed and total income and GDP, and the unclassified aggregate is shown nowhere. Test updated.
 - **Category:** over-explaining, other
 - **Where:** `te_tax_overview_widget.gui:270-280`; loc `te_tax_ov_snapshot_value_tt` (`te_tax_l_english.yml:343`)
 - **Now:** an always-shown overview row for the month the estimates were measured against. Its hover lists
@@ -412,6 +426,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-19. The estimate's assumptions are written out twice; make them one concept
+- **Status (wave, 2026-10-27):** Done. `concept_tax_static_estimate` holds the assumptions once; the header, the offers note and their hovers link it. Test moved to the concept.
 - **Category:** over-explaining
 - **Where:** `te_tax_est_header_tt` (`te_tax_l_english.yml:70`, three paragraphs) and `te_tax_pol_est_tt` (411)
   share a pinned sentence (`test_tax_code_estimates.py:406-411`)
@@ -425,6 +440,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** medium
 
 ### TAX-20. The Enacted Code doesn't show since when a rate holds
+- **Status (wave, 2026-10-27):** Done. "In force since" on each rate's hover.
 - **Category:** hidden info
 - **Where:** `te_tax_overview_widget.gui:142-177` (`te_tax_rate_row`: name, rate, expiry), `:383-447`; views
   `te_tax_view_en_<key>_since_y/_mo` (generated, unused by any GUI); player guide `05-tax-code.md:178-179`
@@ -436,6 +452,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-21. History rows say what kind of thing happened, not what changed
+- **Status (wave, 2026-10-27):** Done, the proposal's step: a row that changed the code shows the version it made, and a kept, broken or renegotiated promise names its group (`te_tax_history_push_promise` records it in `_inst`). Summaries of what each entry changed would need more fields per ring entry and are not built.
 - **Category:** hidden info
 - **Where:** `te_tax_overview_widget.gui:487-589` (eight hand-unrolled rows); `te_tax_hist_kind_*`
   (`te_tax_l_english.yml:87-117`); ring fields `te_tax_h<n>_kind/_inst/_slot/_version` (schema doc)
@@ -449,6 +466,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** medium
 
 ### TAX-22. A promise's "what" cell can elide
+- **Status (wave, 2026-10-27):** Done. The promise's what and state wrap; the group cell is 172.
 - **Category:** hidden info (elided text)
 - **Where:** `te_tax_politics_widget.gui:294-305` (`obl_what`, 308 wide, `elide = right`, fontsize_medium);
   loc `te_tax_obl_mode_maintain` + `te_tax_obl_what_wages_very_high`
@@ -461,6 +479,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** medium (width estimated, not measured)
 
 ### TAX-23. Light code: one sentence said three times; reaction text on every step button
+- **Status (wave, 2026-10-27):** Done. `te_tax_lt_tt_react_<key>` (generator) reads "Paid most by …"; How the Light Tax Code Works keeps the one fade wording.
 - **Category:** over-explaining, style
 - **Where:** `te_tax_lt_intro` (218), `te_tax_lt_ov_title_tt` (230), `je_tax_code_reason_light` (12),
   `te_tax_lt_how_rates` (212); generated `te_tax_lt_tt_react_<key>` (`te_tax_generated_l_english.yml:386-390`,
@@ -479,6 +498,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** high
 
 ### TAX-24. The interest-group view modifiers explain both codes in one description
+- **Status (wave, 2026-10-27):** Done, the one-sentence form: a modifier's description reads no data, so the `SelectLocalization` variant was not used.
 - **Category:** style
 - **Where:** `te_tax_ig_view_<ig>_{m1,m2,p1,p2}_desc` (`te_tax_generated_l_english.yml:323-330…`, generated)
 - **Now:** "Under the legislated tax code: this group's stance on the taxation law the enacted code comes
@@ -493,6 +513,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** medium
 
 ### TAX-25. Force Through is drawn, greyed, when the bill can pass on its own
+- **Status (wave, 2026-10-27):** Done. Force Through shows only while committed clout is short (also in the bill footer).
 - **Category:** other
 - **Where:** `te_tax_politics_widget.gui:637-649`
 - **Now:** a full-width Force Through button sits under Pass whenever a bill is open. With a majority
@@ -504,6 +525,7 @@ Read-only audit; every claim below was checked against the markup and loc at the
 - **Confidence:** medium (the owner may want the option always visible)
 
 ### TAX-26. Customs levels are words where vanilla uses tariff icons
+- **Status (wave, 2026-10-27):** Done. Vanilla's tariff icons per level (generator), the word on hover; the level cells shrank from 88 to 30.
 - **Category:** style (rule 4)
 - **Where:** generated `te_tax_cu_level_text` cells (`te_tax_generated_rows.gui:1179…`), loc `te_tax_cu_lv_*` (28-34)
 - **Now:** "Low tariff", "High subsidy" in 88-px text cells. The Market panel and the vanilla `set_level_bar`

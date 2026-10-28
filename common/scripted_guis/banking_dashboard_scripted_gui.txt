@@ -36,6 +36,22 @@ banking_dash_cycle_dormant = {
 	effect = { }
 }
 
+# No intervention points free while the cycle runs: every Enable button that
+# costs points is greyed, and Available Interventions says so once, above its
+# rows (style guide rule 6; GUI audit BNK-12). The same figure as the
+# overview's "free" line (banking_display_points_free), which goes negative
+# while the budget is overdrawn.
+banking_dash_no_points_free = {
+	scope = country
+	is_shown = {
+		te_banking_cycle_running = yes
+		banking_display_points_free <= 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Does the Monetary Policy section carry controls a dormant entry greys? The
 # dial block's (a dial, under the full system) or, under
 # banking_system_simplified, open-market operations' fallback row. Shows the

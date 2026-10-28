@@ -1,15 +1,19 @@
 ﻿# Scripted effects for computing Top Trade Partners data for GUI display.
-# Uses ordered_market to find the top 5 markets by mutual trade value.
-# Stores results as variables on each market's owner country (1 country = 1 market).
-# GUI reads via Market.GetOwner.MakeScope.Var('tp_X_...').
-#
-# Per-rank variables stored on market owner country:
-#   tp_X_tc      = partner's trade center state (for flag/name display)
-#   tp_X_total   = annual bilateral trade value (gui_tp_annual_trade: the weekly
-#                  mutual_trade_value_with_country x 52, at base prices)
-#   tp_X_gdp_pct = that yearly trade as a percentage of the owner's (yearly) GDP
-#                  (gui_tp_trade_pct_gdp)
-#   tp_count     = number of trade partners found (1-5)
+# Uses ordered_market to find the five markets each market trades most with,
+# by mutual trade value, and keeps them as a variable list on the market's
+# owner country (1 country = 1 market), largest first:
+#   te_tp_top_markets   = the partner markets (Top Trade Partners' rows,
+#                         a datamodel in gui/market_panel.gui; MKT-1,
+#                         2026-10-27)
+#   te_tp_import_markets, te_tp_export_markets
+#                       = the Import/Export Partners charts' markets
+# The rows read each partner's figures live, through the charts' GuiScope
+# form: gui_tp_annual_trade (the weekly mutual_trade_value_with_country x 52,
+# at base prices) and gui_tp_trade_pct_gdp (that yearly trade as a percentage
+# of the owner's yearly GDP), with the partner's owner passed as
+# scope:tp_partner_country. The fifteen per-rank variables the five copied
+# rows read (tp_<N>_tc, tp_<N>_total, tp_<N>_gdp_pct) and tp_count are gone;
+# older saves' copies are removed below.
 #
 # NOTE: Per-good per-partner trade data is not reachable from the SCRIPT layer
 # here: market_imports_reliance(target) in parenthesized form only passes the
@@ -22,38 +26,117 @@
 # per-good per-market-pair amounts. The Top Trade Partners rows use exactly that
 # for their goods-breakdown tooltip (see gui/te_trade_partner_tooltips.gui).
 
-# ============================================================================
-# HELPER: store data for one trade partner rank
-# Called from ordered_market body. THIS = partner market.
-# scope:tp_current_market = market being analyzed
-# scope:tp_market_owner = country that owns tp_current_market
-# Params: $RANK$ (1-5)
-# ============================================================================
-store_trade_partner_data = {
-	# THIS = partner market; save for reliance SV evaluation
-	save_scope_as = tp_partner_iter
-
-	# Store partner market's trade center state (for GUI country identity display)
-	trade_center = {
-		scope:tp_market_owner = {
-			set_variable = { name = tp_$RANK$_tc value = PREV }
-		}
+# Older saves' per-rank variables, from before the rows were a list. Scope: the
+# market owner.
+te_tp_drop_rank_variables = {
+	if = {
+		limit = { has_variable = tp_1_tc }
+		remove_variable = tp_1_tc
 	}
-
-	# Store annual bilateral trade value and its share of our owner's GDP
-	trade_center = {
-		owner = {
-			save_scope_as = tp_partner_country
-		}
+	if = {
+		limit = { has_variable = tp_1_total }
+		remove_variable = tp_1_total
 	}
-	scope:tp_market_owner = {
-		set_variable = { name = tp_$RANK$_total value = gui_tp_annual_trade }
-		set_variable = { name = tp_$RANK$_gdp_pct value = gui_tp_trade_pct_gdp }
+	if = {
+		limit = { has_variable = tp_1_gdp_pct }
+		remove_variable = tp_1_gdp_pct
+	}
+	if = {
+		limit = { has_variable = tp_1_imp_rel }
+		remove_variable = tp_1_imp_rel
+	}
+	if = {
+		limit = { has_variable = tp_1_exp_rel }
+		remove_variable = tp_1_exp_rel
+	}
+	if = {
+		limit = { has_variable = tp_2_tc }
+		remove_variable = tp_2_tc
+	}
+	if = {
+		limit = { has_variable = tp_2_total }
+		remove_variable = tp_2_total
+	}
+	if = {
+		limit = { has_variable = tp_2_gdp_pct }
+		remove_variable = tp_2_gdp_pct
+	}
+	if = {
+		limit = { has_variable = tp_2_imp_rel }
+		remove_variable = tp_2_imp_rel
+	}
+	if = {
+		limit = { has_variable = tp_2_exp_rel }
+		remove_variable = tp_2_exp_rel
+	}
+	if = {
+		limit = { has_variable = tp_3_tc }
+		remove_variable = tp_3_tc
+	}
+	if = {
+		limit = { has_variable = tp_3_total }
+		remove_variable = tp_3_total
+	}
+	if = {
+		limit = { has_variable = tp_3_gdp_pct }
+		remove_variable = tp_3_gdp_pct
+	}
+	if = {
+		limit = { has_variable = tp_3_imp_rel }
+		remove_variable = tp_3_imp_rel
+	}
+	if = {
+		limit = { has_variable = tp_3_exp_rel }
+		remove_variable = tp_3_exp_rel
+	}
+	if = {
+		limit = { has_variable = tp_4_tc }
+		remove_variable = tp_4_tc
+	}
+	if = {
+		limit = { has_variable = tp_4_total }
+		remove_variable = tp_4_total
+	}
+	if = {
+		limit = { has_variable = tp_4_gdp_pct }
+		remove_variable = tp_4_gdp_pct
+	}
+	if = {
+		limit = { has_variable = tp_4_imp_rel }
+		remove_variable = tp_4_imp_rel
+	}
+	if = {
+		limit = { has_variable = tp_4_exp_rel }
+		remove_variable = tp_4_exp_rel
+	}
+	if = {
+		limit = { has_variable = tp_5_tc }
+		remove_variable = tp_5_tc
+	}
+	if = {
+		limit = { has_variable = tp_5_total }
+		remove_variable = tp_5_total
+	}
+	if = {
+		limit = { has_variable = tp_5_gdp_pct }
+		remove_variable = tp_5_gdp_pct
+	}
+	if = {
+		limit = { has_variable = tp_5_imp_rel }
+		remove_variable = tp_5_imp_rel
+	}
+	if = {
+		limit = { has_variable = tp_5_exp_rel }
+		remove_variable = tp_5_exp_rel
+	}
+	if = {
+		limit = { has_variable = tp_count }
+		remove_variable = tp_count
 	}
 }
 
 # ============================================================================
-# PER-MARKET: update top 5 trade partners for a single market
+# PER-MARKET: update the trade partner lists for a single market
 # Called in market scope from every_market
 # ============================================================================
 update_market_trade_partners = {
@@ -64,77 +147,30 @@ update_market_trade_partners = {
 		}
 	}
 
-	# Clear previous data on market owner country
-	# (tp_X_imp_rel / tp_X_exp_rel are the Imp%/Exp% columns' old variables; removing
-	# them clears what saves made before the GDP column still carry.)
 	scope:tp_market_owner = {
-		remove_variable = tp_1_tc
-		remove_variable = tp_1_total
-		remove_variable = tp_1_gdp_pct
-		remove_variable = tp_1_imp_rel
-		remove_variable = tp_1_exp_rel
-		remove_variable = tp_2_tc
-		remove_variable = tp_2_total
-		remove_variable = tp_2_gdp_pct
-		remove_variable = tp_2_imp_rel
-		remove_variable = tp_2_exp_rel
-		remove_variable = tp_3_tc
-		remove_variable = tp_3_total
-		remove_variable = tp_3_gdp_pct
-		remove_variable = tp_3_imp_rel
-		remove_variable = tp_3_exp_rel
-		remove_variable = tp_4_tc
-		remove_variable = tp_4_total
-		remove_variable = tp_4_gdp_pct
-		remove_variable = tp_4_imp_rel
-		remove_variable = tp_4_exp_rel
-		remove_variable = tp_5_tc
-		remove_variable = tp_5_total
-		remove_variable = tp_5_gdp_pct
-		remove_variable = tp_5_imp_rel
-		remove_variable = tp_5_exp_rel
-		remove_variable = tp_count
-		set_variable = { name = tp_idx value = 0 }
+		te_tp_drop_rank_variables = yes
+		if = {
+			limit = { has_variable_list = te_tp_top_markets }
+			clear_variable_list = te_tp_top_markets
+		}
 	}
 
-	# Find top 5 markets by trade value with this market
+	# The five markets this market trades most with, largest first, appended
+	# in ordered_market's order so the stored order is the rank. A market it
+	# does not trade with at all is no partner, so it is left out.
 	ordered_market = {
 		limit = {
 			NOT = { this = scope:tp_current_market }
+			gui_trade_with_market_owner > 0
 		}
 		order_by = gui_trade_with_market_owner
 		max = 5
 		check_range_bounds = no
 
-		if = {
-			limit = { scope:tp_market_owner = { var:tp_idx < 1 } }
-			store_trade_partner_data = { RANK = 1 }
-		}
-		else_if = {
-			limit = { scope:tp_market_owner = { var:tp_idx < 2 } }
-			store_trade_partner_data = { RANK = 2 }
-		}
-		else_if = {
-			limit = { scope:tp_market_owner = { var:tp_idx < 3 } }
-			store_trade_partner_data = { RANK = 3 }
-		}
-		else_if = {
-			limit = { scope:tp_market_owner = { var:tp_idx < 4 } }
-			store_trade_partner_data = { RANK = 4 }
-		}
-		else_if = {
-			limit = { scope:tp_market_owner = { var:tp_idx < 5 } }
-			store_trade_partner_data = { RANK = 5 }
-		}
-
+		save_temporary_scope_as = tp_iter_mkt
 		scope:tp_market_owner = {
-			change_variable = { name = tp_idx add = 1 }
+			add_to_variable_list = { name = te_tp_top_markets target = scope:tp_iter_mkt }
 		}
-	}
-
-	scope:tp_market_owner = {
-		set_variable = { name = tp_count value = var:tp_idx }
-		remove_variable = tp_idx
 	}
 
 	# ------------------------------------------------------------------------

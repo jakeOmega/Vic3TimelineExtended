@@ -1083,6 +1083,25 @@ te_seabed_tile_shown = {
 	}
 }
 
+# State scope, the state view's Ocean Basin tile (GUI audit VAN-8b, owner
+# 2026-10-27): a coastal state whose owner has no Seabed Licences tile (it
+# never took part in a sharing, or is another country) shows its basin, once
+# the viewing player has researched abyssal_plain_mining
+# (te_seabed_basin_tile_sgui). The basin decides, say, which pool a port there
+# would weigh in.
+te_seabed_basin_tile_shown = {
+	value = 0
+	if = {
+		limit = {
+			te_global_commons_enabled = yes
+			is_coastal = yes
+			has_variable = te_seabed_basin
+			NOT = { owner = { has_variable = te_seabed_shared } }
+		}
+		value = 1
+	}
+}
+
 # State scope, the tile's Basin row: the state's basin, 0 when it has none yet
 # (a state scope newer than its owner's last monthly recording).
 te_seabed_state_basin_disp = {
@@ -2602,34 +2621,8 @@ te_seabed_policy_locked_disp = {
 	}
 }
 
-# Country scope (Pacific): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_pacific = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_pacific }
-		value = var:te_seabed_rkcap_count_pacific
-	}
-}
-
-te_seabed_rk_more_disp_pacific = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_pacific }
-		value = global_var:te_seabed_rk_more_pacific
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_pacific
-				var:te_seabed_rank_pacific > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Pacific): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_pacific = {
 	value = 0
 	if = {
@@ -2644,34 +2637,8 @@ te_seabed_us_shown_pacific = {
 	}
 }
 
-# Country scope (Atlantic): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_atlantic = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_atlantic }
-		value = var:te_seabed_rkcap_count_atlantic
-	}
-}
-
-te_seabed_rk_more_disp_atlantic = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_atlantic }
-		value = global_var:te_seabed_rk_more_atlantic
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_atlantic
-				var:te_seabed_rank_atlantic > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Atlantic): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_atlantic = {
 	value = 0
 	if = {
@@ -2686,34 +2653,8 @@ te_seabed_us_shown_atlantic = {
 	}
 }
 
-# Country scope (Indian): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_indian = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_indian }
-		value = var:te_seabed_rkcap_count_indian
-	}
-}
-
-te_seabed_rk_more_disp_indian = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_indian }
-		value = global_var:te_seabed_rk_more_indian
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_indian
-				var:te_seabed_rank_indian > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Indian): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_indian = {
 	value = 0
 	if = {
@@ -2728,34 +2669,8 @@ te_seabed_us_shown_indian = {
 	}
 }
 
-# Country scope (Arctic): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_arctic = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_arctic }
-		value = var:te_seabed_rkcap_count_arctic
-	}
-}
-
-te_seabed_rk_more_disp_arctic = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_arctic }
-		value = global_var:te_seabed_rk_more_arctic
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_arctic
-				var:te_seabed_rank_arctic > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Arctic): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_arctic = {
 	value = 0
 	if = {
@@ -2770,34 +2685,8 @@ te_seabed_us_shown_arctic = {
 	}
 }
 
-# Country scope (Southern): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_southern = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_southern }
-		value = var:te_seabed_rkcap_count_southern
-	}
-}
-
-te_seabed_rk_more_disp_southern = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_southern }
-		value = global_var:te_seabed_rk_more_southern
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_southern
-				var:te_seabed_rank_southern > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Southern): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_southern = {
 	value = 0
 	if = {

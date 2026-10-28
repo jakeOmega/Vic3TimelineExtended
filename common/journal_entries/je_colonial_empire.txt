@@ -417,11 +417,11 @@
 			# The pressuring-great-powers leaderboard used to be built here, into
 			# seven colonial_condemner_rank_N slot variables read by the
 			# status_desc. It is gone: the widget's International Pressure
-			# section walks the great powers live in script
-			# (colonial_empire_pressure_sgui), which removes ~50 lines of monthly
-			# work plus eight variables of save state, and sidesteps the
-			# `Var('x').GetCountry.GetName` chain that gui_modding_guide gotcha
-			# #11 records as rendering blank in this mod.
+			# section is a table of script containers built in
+			# colonial_empire_refresh_display (colonial_empire_refresh_gp_rows,
+			# players only), each reaching its country through a stored capital
+			# rather than the `Var('x').GetCountry.GetName` chain that
+			# gui_modding_guide gotcha #11 records as rendering blank in this mod.
 
 			# --- State-side assimilation disruption reapplication ---
 			# While Cultural Assimilation runs, every overseas colonial state,

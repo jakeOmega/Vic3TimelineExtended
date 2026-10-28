@@ -20,7 +20,7 @@ Codes 0–5 are `ch_tier`, which only `ch_set_display_state` writes. The icon is
 | 1 | Minor | a plain wooden lyre, a small laurel sprig at its foot | `tier_minor.dds` |
 | 2 | Moderate | a bronze lyre, a laurel branch along one side | `tier_moderate.dds` |
 | 3 | Significant | a bronze lyre in a full bronze laurel wreath | `tier_significant.dds` |
-| 4 | Major Power | a silver lyre in a full silver laurel wreath | `tier_major.dds` |
+| 4 | Major | a silver lyre in a full silver laurel wreath | `tier_major.dds` |
 | 5 | Hegemon | a gold lyre in a full gold laurel wreath, drawn gold rays behind it | `tier_hegemon.dds` |
 
 Two icons were finished by hand after the render:
@@ -52,3 +52,5 @@ Both textures use the pie format (`gui_modding_guide.md`, "Pie charts of script-
 - **The trend arrows** are vanilla's `trend_up` / `trend_down` / `trend_nochange`, as the UN's pillar rows use them.
 - **World rank** is a number, with no icon.
 - **The leading powers** are vanilla's `flag` widget, drawn from the capitals the viewer holds (`ch_leader_seat_1..3`), as the UN overview draws its Security Council.
+- **The programs cell** (CH-9, Banking's `te_banking_ov_cell`) shows the Ministry of Culture's own institution icon, `gfx/interface/icons/institution_icons/institution_ministry_of_culture.dds`, dimmed to 40% while the country lacks the law: every program needs the Ministry. It is the institution's icon, not a placeholder.
+- **The Top Cultural Powers board** (CH-2) draws each country with vanilla's `tiny_flag`, from the capital its row container holds (`ch_board_capital`), its change with the trend arrows above, and its political model as that model's slice texture (`ch_pie_<model>.dds`, frame 2) at 14 px, as the models legend does.

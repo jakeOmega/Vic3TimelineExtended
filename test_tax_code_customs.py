@@ -982,9 +982,12 @@ class GuiTest(unittest.TestCase):
                 for good in goods:
                     for d in DIRS:
                         for idx, suffix in LEVEL_KEYS.items():
+                            # Vanilla's tariff icon for the level, its word on hover (GUI audit TAX-26).
                             self.assertIn(f"visible = \"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue("
                                           f"'te_tax_view_cu_{d}_{good}'), '(CFixedPoint){idx}' )]\" "
-                                          f"text = \"te_tax_cu_lv_{suffix}\"", body)
+                                          f"texture = \"gfx/interface/icons/trade_icons/"
+                                          f"{gen.CUSTOMS_LEVEL_TEXTURES[idx]}.dds\" "
+                                          f"tooltip = \"te_tax_cu_lv_{suffix}\"", body)
 
     def test_the_review_lists_each_changed_level_and_a_blocked_good(self):
         self.assertIn("te_tax_rv_customs_rows = {}", self.review)

@@ -33,8 +33,8 @@ common/scripted_effects/sr_fleet_effects.txt and sr_fleet_combat_effects.txt):
 - ``common/script_values/sr_fleets_display_generated.txt``: the panel's.
 - ``common/customizable_localization/sr_fleets_generated_custom_loc.txt``: a
   slot's location, destination, target world and drive by name.
-- ``gui/journal_entry_widgets/sr_fleets_generated_rows.gui``: the Fleets,
-  Locations and Colony Defences rows.
+- ``gui/journal_entry_widgets/sr_fleets_generated_rows.gui``: the Fleets and
+  Locations rows (the colonies' Defenses are a view of gen_solar_sites' Colonies rows).
 
 Run ``python3 scripts/generators/gen_space_fleets.py [--dry-run | --check]``.
 A post-load regenerator (``mod_state_server.POST_LOAD_REGENERATORS``).
@@ -1263,7 +1263,7 @@ def render_effects() -> str:
              ""]
     for block in (render_dispatchers(), render_role_effects(), render_merge_detach(), render_location_effects(),
                   render_finders(), render_records(), render_ai_effects(), render_combat(), render_ai_defend(),
-                  render_ai_attack(), render_debug()):
+                  render_ai_attack(), render_debug(), render_overview_list()):
         parts += block + [""]
     return "\n".join(parts)
 
@@ -1271,6 +1271,51 @@ def render_effects() -> str:
 # ---------------------------------------------------------------------------
 # Display values, custom loc, the panel's rows
 # ---------------------------------------------------------------------------
+
+# The overview's Defense cell (audit SPC-6): what threatens our colonies, worst
+# first, as the colony record states it (sr_disp_def_status_<key> reads the same).
+def _def_conditions(k: str) -> dict[str, str]:
+    held = f"global_var:sr_site_holder_{k} ?= this"
+    return {
+        "occupied": f"{held} has_global_variable = sr_site_occupier_{k}",
+        "assault": (f"{held} NOT = {{ has_global_variable = sr_site_occupier_{k} }} "
+                    f"has_global_variable = sr_site_under_assault_{k} global_var:sr_site_under_assault_{k} >= "
+                    "{ value = te_history_month_index subtract = 1 }"),
+        "interdicted": (f"{held} NOT = {{ has_global_variable = sr_site_occupier_{k} }} "
+                        f"has_global_variable = sr_site_interdicted_{k}"),
+        "blockaded": (f"{held} NOT = {{ has_global_variable = sr_site_occupier_{k} }} "
+                      f"NOT = {{ has_global_variable = sr_site_interdicted_{k} }} has_global_variable = sr_site_blockaded_{k}"),
+    }
+
+
+DEF_ORDER = ("occupied", "assault", "blockaded", "interdicted")
+
+
+def render_overview_list() -> list[str]:
+    """Display only (sr_colony_overview_sgui, op 2): Earth's state, then each kind
+    of threat with the colonies under it, at the root's scope so the lines print
+    in order (gotcha #18); then a hostile fleet on its way."""
+    out = ["# ===== The colonization overview's Defense list (audit SPC-6; display only) =====",
+           "sr_ov_list_defense = {",
+           "\tif = { limit = { sr_earth_blockaded = yes } custom_tooltip = je_space_race_widget_ovc_def_line_earth }",
+           "\tif = { limit = { sr_launch_site_lost = yes } custom_tooltip = je_space_race_widget_ovc_def_line_site_lost }"]
+    for kind in DEF_ORDER:
+        out += ["\tif = {", "\t\tlimit = {", "\t\t\tOR = {"]
+        out += [f"\t\t\t\tAND = {{ {_def_conditions(site.key)[kind]} }}" for site in gss.panel_order()]
+        out += ["\t\t\t}", "\t\t}", f"\t\tcustom_tooltip_no_bullet = je_space_race_widget_ovc_def_head_{kind}"]
+        for site in gss.panel_order():
+            out.append(f"\t\tif = {{ limit = {{ {_def_conditions(site.key)[kind]} }} custom_tooltip = sr_site_name_{site.key} }}")
+        out.append("\t}")
+    threatened = [f"AND = {{ {_def_conditions(site.key)[kind]} }}" for kind in DEF_ORDER for site in gss.SITES]
+    out += ["\tif = {", "\t\tlimit = {", "\t\t\tNOT = {", "\t\t\t\tOR = {",
+            "\t\t\t\t\tsr_earth_blockaded = yes", "\t\t\t\t\tsr_launch_site_lost = yes",
+            *[f"\t\t\t\t\t{t}" for t in threatened],
+            "\t\t\t\t}", "\t\t\t}", "\t\t}",
+            "\t\tcustom_tooltip_no_bullet = je_space_race_widget_ovc_def_line_calm", "\t}",
+            "\tif = {", "\t\tlimit = { has_variable = sr_fl_alert_arrive var:sr_fl_alert_arrive >= te_history_month_index }",
+            "\t\tcustom_tooltip_no_bullet = je_space_race_widget_ovc_def_line_inbound", "\t}", "}"]
+    return out
+
 
 def render_display() -> str:
     out = [HEADER.rstrip("\n"),
@@ -1374,7 +1419,8 @@ def render_display() -> str:
                     "any_country = { has_war_with = prev sr_earth_blockaded = yes } } value = 7 }"]
         out.append("}")
     out += ["",
-            "# Colony Defences (6b), per world: 1 while ours (or ours occupied), its integrity",
+            "# Colony Defences (6b; the Colonies table's Defenses view), per world: 1 while ours",
+            "# (or ours occupied), its integrity",
             "# whole, its status (0 calm, 1 blockaded, 2 under assault, 3 occupied, 4",
             "# interdicted, 6c), and",
             "# 1 while its occupier's capital snapshot is there to show."]
@@ -1417,6 +1463,32 @@ def render_display() -> str:
             "", "# The ground reserve by role (6d; Space Command's Reserve hover).",
             *[f"sr_disp_reserve_{r.key} = {{ value = sr_reserve_{r.key}_value }}" for r in ROLES]]
     return "\n".join(out) + "\n"
+
+
+def _overview_custom_loc() -> list[str]:
+    """The overview's Defense cell: its word (the worst threat to us) and its
+    figure (the colony it threatens, or Earth's line, or the calm one)."""
+    out = ["# The colonization overview's Defense cell (audit SPC-6): the worst threat",
+           "# first, its word and the colony under it.",
+           "sr_ov_defense_word = {", "\ttype = country", "\trandom_valid = no", "",
+           "\ttext = {", "\t\ttrigger = { sr_earth_blockaded = yes }",
+           "\t\tlocalization_key = je_space_race_widget_ovc_def_word_earth", "\t}",
+           "\ttext = {", "\t\ttrigger = { sr_launch_site_lost = yes }",
+           "\t\tlocalization_key = je_space_race_widget_ovc_def_word_site_lost", "\t}"]
+    for kind in DEF_ORDER:
+        out += ["\ttext = {", "\t\ttrigger = {", "\t\t\tOR = {"]
+        out += [f"\t\t\t\tAND = {{ {_def_conditions(site.key)[kind]} }}" for site in gss.panel_order()]
+        out += ["\t\t\t}", "\t\t}", f"\t\tlocalization_key = je_space_race_widget_ovc_def_word_{kind}", "\t}"]
+    out += ["\ttext = {", "\t\tlocalization_key = je_space_race_widget_ovc_def_word_calm", "\t}", "}", "",
+            "sr_ov_defense_site = {", "\ttype = country", "\trandom_valid = no", "",
+            "\ttext = {", "\t\ttrigger = { OR = { sr_earth_blockaded = yes sr_launch_site_lost = yes } }",
+            "\t\tlocalization_key = je_space_race_widget_ovc_def_fig_earth", "\t}"]
+    for kind in DEF_ORDER:
+        for site in gss.panel_order():
+            out += ["\ttext = {", f"\t\ttrigger = {{ {_def_conditions(site.key)[kind]} }}",
+                    f"\t\tlocalization_key = {gss.overview_name_key(site)}", "\t}"]
+    out += ["\ttext = {", "\t\tlocalization_key = je_space_race_widget_ovc_def_fig_calm", "\t}", "}", ""]
+    return out
 
 
 def render_custom_loc() -> str:
@@ -1463,6 +1535,7 @@ def render_custom_loc() -> str:
             trigger = f"{var(n, 'drive_value')} >= {level}" if level else "always = yes"
             out += ["\ttext = {", f"\t\ttrigger = {{ {trigger} }}", f"\t\tlocalization_key = sr_fl_drive_{drive}", "\t}"]
         out += ["}", ""]
+    out += _overview_custom_loc()
     return "\n".join(out)
 
 
@@ -1487,9 +1560,18 @@ def _override(name: str, *lines: str) -> list[str]:
     return [f'\t\t\tblockoverride "{name}" {{', *[f"\t\t\t\t{line}" for line in lines], "\t\t\t}"]
 
 
+def _reasoned(sgui: str, op: int) -> str:
+    """A button's tooltip: why it is greyed (the is_valid clauses, ticked and
+    crossed), a break, then what it does (gui_modding_guide.md gotcha #16)."""
+    scope = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
+             f".AddScope( 'op', MakeScopeValue( '(CFixedPoint){op}' ) ).End")
+    return (f"[Concatenate( GetScriptedGui('{sgui}').IsValidTooltip( {scope} ), Concatenate( Localize( 'te_tt_break' ), "
+            f"GetScriptedGui('{sgui}').ExecuteTooltip( {scope} ) ) )]")
+
+
 def _button(name: str, sgui: str, n: int) -> list[str]:
     return _override(name, f'enabled = "{_op(sgui, "IsValid", n)}"', f'onclick = "{_op(sgui, "Execute", n)}"',
-                     f'tooltip = "{_op(sgui, "ExecuteTooltip", n)}"')
+                     f'tooltip = "{_reasoned(sgui, n)}"')
 
 
 def _fleet_row(n: int) -> list[str]:
@@ -1498,7 +1580,8 @@ def _fleet_row(n: int) -> list[str]:
     out += _override("fl_where", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_where_name')]\"")
     out += _override("fl_transit_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}", 2)}]"')
     out += _override("fl_transit", f'text = "je_space_race_widget_fl_{n}_transit"')
-    out += _override("fl_strength", f'raw_text = "[{_sv(var(n, "strength"))}|0]/[{_sv(var(n, "strength_full"))}|0]"',
+    # The type underlines the strength for its hover; #v keeps its value color.
+    out += _override("fl_strength", f'raw_text = "#v [{_sv(var(n, "strength"))}|0]/[{_sv(var(n, "strength_full"))}|0]#!"',
                      f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"')
     out += _override("fl_drive", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_drive_name')]\"")
     out += _override("fl_refit_visible", f'visible = "[{_ge(f"sr_disp_fl_{n}_refit_left", 1)}]"')
@@ -1508,7 +1591,9 @@ def _fleet_row(n: int) -> list[str]:
     out += _override("fl_marines", f'raw_text = "[{_sv(var(n, "marines_value"))}|0]"')
     out += _override("fl_orders_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}", 1)}]"')
     # The destination button's hover is the leg to the destination picked
-    # (sr_disp_fl_<n>_leg_months / _dv), not the scripted GUI's tooltip.
+    # (sr_disp_fl_<n>_leg_months / _dv), not the scripted GUI's tooltip; the
+    # key opens with the scripted GUI's IsValidTooltip, so a greyed button says
+    # why (a key that reads JournalEntry can't go through Localize, gotcha #16).
     out += _override("fl_pick_button", f'enabled = "{_op("sr_fleet_pick_sgui", "IsValid", n)}"',
                      f'onclick = "{_op("sr_fleet_pick_sgui", "Execute", n)}"',
                      f'tooltip = "je_space_race_widget_fl_{n}_leg_tt"')
@@ -1523,7 +1608,8 @@ def _fleet_row(n: int) -> list[str]:
     out += _button("fl_posture_button", "sr_fleet_posture_sgui", n)
     for p_code in POSTURES:
         out += _override(f"fl_posture_{p_code}_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_posture", p_code)}]"')
-    # The target button's hover is what we know of the target (sr_fl_<n>_target_intel).
+    # The target button's hover is what we know of the target (sr_fl_<n>_target_intel),
+    # after the scripted GUI's IsValidTooltip, as the destination button's.
     out += _override("fl_target_button", f'enabled = "{_op("sr_fleet_target_sgui", "IsValid", n)}"',
                      f'onclick = "{_op("sr_fleet_target_sgui", "Execute", n)}"',
                      f'tooltip = "je_space_race_widget_fl_{n}_target_tt"')
@@ -1531,27 +1617,6 @@ def _fleet_row(n: int) -> list[str]:
     out += _button("fl_destroy_button", "sr_fleet_destroy_sgui", n)
     out += _override("fl_destroy_off_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_destroy", 0)}]"')
     out += _override("fl_destroy_on_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_destroy", 1)}]"')
-    return out + ["\t\t}"]
-
-
-def _defence_row(site: gss.Site) -> list[str]:
-    k = site.key
-    status = f"sr_disp_def_status_{k}"
-    out = ["\t\tte_sr_defence_row = {"]
-    out += _override("def_visible", f'visible = "[{_eq(f"sr_disp_def_{k}", 1)}]"')
-    out += _override("def_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
-    out += _override("def_name", f'text = "sr_site_name_{k}"')
-    out += _override("def_level", f'raw_text = "[{_sv(f"sr_site_def_value_{k}")}|0]"')
-    out += _override("def_integrity", f'raw_text = "[{_sv(f"sr_disp_def_integrity_{k}")}|0]%"')
-    out += _override("def_marines", f'raw_text = "[{_sv(f"sr_site_marines_value_{k}")}|0]"')
-    out += _override("def_calm_visible", f'visible = "[{_eq(status, 0)}]"')
-    out += _override("def_blockaded_visible", f'visible = "[{_eq(status, 1)}]"')
-    out += _override("def_assault_visible", f'visible = "[{_eq(status, 2)}]"')
-    out += _override("def_occupied_visible", f'visible = "[{_eq(status, 3)}]"')
-    out += _override("def_interdicted_visible", f'visible = "[{_eq(status, 4)}]"')
-    out += _override("def_occupier_context",
-                     f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_{k}').GetState]\"",
-                     f'visible = "[{_eq(f"sr_disp_def_occupier_{k}", 1)}]"')
     return out + ["\t\t}"]
 
 
@@ -1582,10 +1647,10 @@ def render_gui() -> str:
            "### Solar System Colonization's Fleets and Locations rows, from",
            "### gen_space_fleets (slice 6 design § 16). The row types are in",
            "### space_race_widget.gui: te_sr_fleet_row (Fleets, one per slot) and",
-           "### te_sr_location_row (Locations, one per location) and te_sr_defence_row",
-           "### (Colony Defences, every world, shown while ours). Each value is a display",
+           "### te_sr_location_row (Locations, one per location). Each value is a display",
            "### value of sr_fleets_display_generated.txt; the scripted GUIs are in",
-           "### sr_fleet_sguis.txt and take the slot as scope:op.",
+           "### sr_fleet_sguis.txt and take the slot as scope:op. The colonies' Defenses",
+           "### (sr_disp_def_*) show in gen_solar_sites' Colonies rows (audit SPC-5).",
            "",
            "types sr_fleets_generated_rows_types",
            "{",
@@ -1602,13 +1667,6 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for lc in LOCATIONS:
         out += [""] + _location_row(lc)
-    out += ["\t}", "",
-            "\ttype te_sr_defence_rows = flowcontainer {",
-            "\t\tdirection = vertical",
-            "\t\tignoreinvisible = yes",
-            "\t\tspacing = 2"]
-    for site in gss.panel_order():
-        out += [""] + _defence_row(site)
     out += ["\t}", "}"]
     return "\n".join(out) + "\n"
 

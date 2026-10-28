@@ -1003,10 +1003,7 @@ types te_country_panel_information
 
 		### TIMED MODIFIERS
 		default_header = {
-			### MOD: Nation tab: the header shows while a modifier the Nation tab doesn't show is left
-			# vanilla: visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"
-			visible = "[GreaterThan_int32(GetDataModelSize(Country.GetTimedModifiers), FixedPointToInt(Country.MakeScope.ScriptValue('gui_country_hidden_modifier_count')))]"
-			### END MOD ###
+			visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"
 			blockoverride "text" {
 				text = "MODIFIERS"
 			}
@@ -1058,5 +1055,31 @@ types te_country_panel_information
 				}
 			}
 		}
+		### MOD: Nation tab: where the modifiers the list leaves out went (te_nation_panel_line)
+		flowcontainer = {
+			visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gui_country_hidden_modifier_count'), '(CFixedPoint)0' )]"
+			direction = horizontal
+			parentanchor = hcenter
+			minimumsize = { @panel_width -1 }
+			margin_top = 5
+			spacing = 10
+			ignoreinvisible = yes
+			button_icon_goto = {
+				visible = "[Country.IsLocalPlayer]"
+				size = { 25 25 }
+				tooltip = "te_nation_panel_goto_tt"
+				onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'nation')]"
+				onclick = "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"
+			}
+			textbox = {
+				text = "te_nation_panel_line"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'te_nation_panel_line_tt', 'te_nation_panel_line_other_tt' )]"
+				autoresize = yes
+				align = nobaseline
+				parentanchor = vcenter
+				default_format = "#tooltippable"
+			}
+		}
+		### END MOD ###
 	}
 }

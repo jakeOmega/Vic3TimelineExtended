@@ -72,6 +72,207 @@ un_disp_standing_frac = {
 	max = 1
 }
 
+# ---- The overview's cells: what needs us (the 2026-10-27 audit, UN-1, UN-2) ----
+# Each cell of the overview (un_overview_widget.gui) picks its icon and word by
+# one of these codes, so the panel decides nothing itself.
+
+# Our standing, for the Standing cell. -1 none (we have never been a member:
+# there is no score); 0 frozen (we have left: the score waits for our return,
+# un_standing_effects.txt never resets it); 1 not yet recorded (a member before
+# its first monthly pulse); then the tier: 2 Disgraced, 3 Poor, 4 Neutral,
+# 5 Respected, 6 Exemplary (un_standing_triggers.txt, in the same order).
+un_disp_standing_code = {
+	value = -1
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		value = 1
+		if = {
+			limit = { has_variable = un_standing }
+			value = 4
+			if = { limit = { un_standing_tier_disgraced = yes } value = 2 }
+			if = { limit = { un_standing_tier_poor = yes } value = 3 }
+			if = { limit = { un_standing_tier_respected = yes } value = 5 }
+			if = { limit = { un_standing_tier_exemplary = yes } value = 6 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = un_standing }
+		value = 0
+	}
+}
+
+# Our ballot on the resolution in session, for the Session cell and the row
+# under the tally (UN-2). -1 nothing in session; 0 not cast, so a vote is due;
+# 1 cast for; 2 cast against; 3 vetoed; 4 we tabled it, so our vote is the
+# motion; 5 no vote (not a member, our representation or credentials
+# suspended, Article 19, or the ballot closed). The same tests in the same
+# order as un_chamber_vote_sgui's is_valid, which refuses a second ballot by
+# naming the first; a veto books a no vote too, so it is asked first.
+un_disp_our_vote_code = {
+	value = -1
+	if = {
+		limit = {
+			has_global_variable = un_active_resolution
+			un_session_open = yes
+		}
+		value = 5
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			if = {
+				limit = { un_chamber_is_proposer = yes }
+				value = 4
+			}
+			else_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						un_lobby_in_list = { LIST = un_res_yes COUNTRY = ROOT }
+					}
+				}
+				value = 1
+			}
+			else_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						has_tag = un_res_vetoed
+						has_variable = un_res_vetoer
+						var:un_res_vetoer ?= ROOT
+					}
+				}
+				value = 3
+			}
+			else_if = {
+				limit = {
+					global_var:un_active_resolution ?= {
+						un_lobby_in_list = { LIST = un_res_no COUNTRY = ROOT }
+					}
+				}
+				value = 2
+			}
+			else_if = {
+				limit = { un_chamber_ballot_open = yes }
+				value = 0
+			}
+		}
+	}
+}
+
+# Our dues, for the Dues cell. 0 not a member (the cell hides); 1 our
+# overlord pays for our suspended seat; 2 none assessed (Moribund); 3 paid;
+# 4 withheld; 5 withheld long enough to lose our vote (Article 19). The same
+# tests in the same order as un_chamber_dues_lines, its hover.
+un_disp_dues_code = {
+	value = 0
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		value = 3
+		if = {
+			limit = { NOT = { un_dues_self_assessed = yes } }
+			value = 1
+		}
+		else_if = {
+			limit = { un_dues_vote_suspended = yes }
+			value = 5
+		}
+		else_if = {
+			limit = { un_dues_is_withholding = yes }
+			value = 4
+		}
+		else_if = {
+			limit = { NOT = { un_dues_assessed = yes } }
+			value = 2
+		}
+	}
+}
+
+# Our record, for the Our Record cell: the gravest resolution the case
+# against us supports today. 0 none; 1 a condemnation; 2 sanctions; 3 a
+# military mandate. The thresholds Our Record's "Would support" rows read.
+un_disp_record_code = {
+	value = 0
+	if = {
+		limit = { un_case_strength >= un_case_threshold_condemn }
+		value = 1
+	}
+	if = {
+		limit = { un_case_strength >= un_case_threshold_sanctions }
+		value = 2
+	}
+	if = {
+		limit = { un_case_strength >= un_case_threshold_mandate }
+		value = 3
+	}
+}
+
+# Our motions, for the Motions cell. 0 not a member (the cell hides); 1 a
+# resolution holds the floor; 2 we wait to table again (our own tabling marks,
+# un_ga_resolution_modifier and un_request_cooldown); 3 the floor is ours:
+# un_disp_propose_ready_count topics have a case. The count is the monthly
+# snapshot (un_propose_ready_snapshot), not a live sweep of the thirty-four
+# topics' triggers every frame the overview is open.
+un_disp_floor_code = {
+	value = 0
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		value = 3
+		if = {
+			limit = { has_global_variable = un_vote_active }
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_modifier = un_ga_resolution_modifier
+					has_modifier = un_request_cooldown
+				}
+			}
+			value = 2
+		}
+	}
+}
+
+un_disp_propose_ready_count = {
+	value = 0
+	if = {
+		limit = { has_variable = un_propose_ready_count }
+		value = var:un_propose_ready_count
+	}
+}
+
+# Months until we may table on our own motion again: the longer of our two
+# tabling marks' mirrors (un_propose_add_sponsor_mark,
+# un_propose_add_request_cooldown), rounded up. 0 with neither running, or with
+# a mark from a save made before the mirrors (the cell then says only that we
+# wait).
+un_disp_propose_wait_months = {
+	value = un_disp_propose_wait_sponsor_days
+	if = {
+		limit = { un_disp_propose_wait_cooldown_days > un_disp_propose_wait_sponsor_days }
+		value = un_disp_propose_wait_cooldown_days
+	}
+	divide = 30.4375
+	ceiling = yes
+}
+un_disp_propose_wait_sponsor_days = {
+	value = 0
+	if = {
+		limit = {
+			has_modifier = un_ga_resolution_modifier
+			has_variable = un_ga_resolution_days
+		}
+		value = var:un_ga_resolution_days
+	}
+}
+un_disp_propose_wait_cooldown_days = {
+	value = 0
+	if = {
+		limit = {
+			has_modifier = un_request_cooldown
+			has_variable = un_request_cooldown_days
+		}
+		value = var:un_request_cooldown_days
+	}
+}
+
 # ---- Authority ------------------------------------------------------------------
 
 un_disp_authority_frac = {
@@ -85,6 +286,23 @@ un_disp_target_frac = {
 	divide = 100
 	min = 0
 	max = 1
+}
+# The overview's authority bar (UN-17; gui_style_guide.md rule 5): the solid
+# fill runs to the lower of authority and its target, a pale segment to the
+# higher, so a rise shows past the fill and a fall as the tail about to go.
+un_disp_auth_bar_low_frac = {
+	value = un_disp_authority_frac
+	if = {
+		limit = { un_disp_target_frac < un_disp_authority_frac }
+		value = un_disp_target_frac
+	}
+}
+un_disp_auth_bar_high_frac = {
+	value = un_disp_authority_frac
+	if = {
+		limit = { un_disp_target_frac > un_disp_authority_frac }
+		value = un_disp_target_frac
+	}
 }
 
 # ---- Members' share of the world (the three pies) -----------------------------
@@ -121,6 +339,53 @@ un_disp_share_gdp_pct = {
 un_disp_share_pop_pct = {
 	value = un_disp_share_pop
 	multiply = 100
+}
+
+# ---- Who sits in the Assembly (the line under the pies; UN-20) ------------------
+# The monthly snapshot (un_authority_monthly_update).
+un_disp_stat_members = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_stat_members }
+		value = global_var:un_stat_members
+	}
+}
+un_disp_stat_eligible = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_stat_eligible }
+		value = global_var:un_stat_eligible
+	}
+}
+un_disp_stat_suspended = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_stat_suspended }
+		value = global_var:un_stat_suspended
+	}
+}
+un_disp_stat_gp_members = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_stat_gp_members }
+		value = global_var:un_stat_gp_members
+	}
+}
+un_disp_stat_gps = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_stat_gps }
+		value = global_var:un_stat_gps
+	}
+}
+
+# The UN's enforcement multiplier, for the Authority cell's third line.
+un_disp_enforcement = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_enforcement_now }
+		value = global_var:un_enforcement_now
+	}
 }
 
 # ---- Security Council -----------------------------------------------------------
@@ -642,4 +907,105 @@ un_disp_agency_unoda = {
 un_disp_agency_copuos = {
 	value = 0
 	if = { limit = { has_global_variable = un_agency_copuos } value = 1 }
+}
+
+# How many topics are in force, so the proposal list can say so once above
+# its rows rather than list them (the 2026-10-27 audit, UN-7): the conventions
+# ratified and the institutions founded. Cheap reads only (globals and the
+# agencies' flags).
+# Scope: any
+un_disp_topics_in_force = {
+	value = 0
+	if = {
+		limit = { un_propose_human_rights_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_icc_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_npt_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_climate_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_pandemic_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_refugee_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_heritage_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_decolonization_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_space_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_law_of_sea_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_physical_protection_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_cultural_diversity_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_nuclear_ban_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_force_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { has_global_variable = un_inst_food_reserve }
+		add = 1
+	}
+	if = {
+		limit = { has_global_variable = un_inst_development_fund }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_narcotics_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_antarctic_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_asat_in_force = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_propose_colony_protection_in_force = yes }
+		add = 1
+	}
+}
+
+# How many Delegations rows, from the top, have their member's capital
+# mirrored on us for the row's flag (un_deleg_mirror_flags). Row N's flag
+# shows when this is above N.
+# Scope: country (the viewer)
+un_disp_deleg_cap_count = {
+	value = 0
+	if = {
+		limit = { has_variable = un_deleg_cap_count }
+		value = var:un_deleg_cap_count
+	}
 }

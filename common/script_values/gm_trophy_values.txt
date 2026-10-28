@@ -119,6 +119,34 @@ gm_tr_infamy = {
 	}
 }
 
+# Container scope, for the tooltips of Carry It Off on a trophy on display
+# and on a monument beside another (GM-11): the infamy each costs, gm_tr_infamy
+# on the grandeur carried off. A trophy on display goes whole
+# (gm_tr_take_from_site); a monument beside another by its form's share
+# (gm_mon_tr_start, gm_mon_tr_age, the records gm_mon_tr_take moves).
+gm_tr_disp_take_infamy = {
+	value = gm_mon_grandeur
+	divide = 5
+	add = 2
+	max = 8
+	if = {
+		limit = { has_global_variable = un_agency_unesco }
+		multiply = 2
+	}
+}
+
+gm_mon_disp_take_infamy = {
+	value = gm_mon_tr_start
+	add = gm_mon_tr_age
+	divide = 5
+	add = 2
+	max = 8
+	if = {
+		limit = { has_global_variable = un_agency_unesco }
+		multiply = 2
+	}
+}
+
 # State scope: the infamy carrying this monument off would cost, for the
 # tooltips.
 gm_state_tr_infamy = {

@@ -241,7 +241,8 @@ class DossierTest(unittest.TestCase):
                       block(strip_comments(read(DOSSIER_TRIGGERS)), "un_dossier_has_records"))
         self.assertIn("ScriptValue('un_disp_dos_asat')", read(CHAMBER))
         self.assertIn("un_disp_dos_asat", loc_value("je_un_chamber_grounds_record"))
-        self.assertIn("anti-satellite", loc_value("je_un_chamber_exposure_help"))
+        # How the UN Works names the case strength concept, which lists what counts (2026-10-27 audit, UN-12).
+        self.assertIn("anti-satellite", loc_value("concept_un_case_desc"))
         strike = strip_comments(read(EFFECTS))
         self.assertIn("un_dossier_record = { RECORD = asat POINTS = te_asat_case_points }",
                       block(strike, "te_asat_strike_effect"))

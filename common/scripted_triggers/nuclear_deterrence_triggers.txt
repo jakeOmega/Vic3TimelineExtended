@@ -1082,15 +1082,6 @@ nd_is_crisis_target = {
 	var:nd_crisis_role = 2
 }
 
-# Any scope. Slot SLOT (1-8) of the world's crisis list holds an issuer whose
-# crisis is still running (nd_world_crises_refresh, nuclear_crisis_effects.txt).
-# The live check matters between refreshes: an annexed issuer leaves a
-# reference to a country that no longer exists.
-nd_world_crisis_slot_live = {
-	has_global_variable = nd_wc_$SLOT$
-	exists = global_var:nd_wc_$SLOT$
-	global_var:nd_wc_$SLOT$ ?= { nd_is_crisis_owner = yes }
-}
 
 # Both records still point at each other with the same id. Owner scope.
 nd_crisis_pair_intact = {

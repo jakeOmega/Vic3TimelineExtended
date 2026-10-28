@@ -294,7 +294,7 @@ types te_demographics_widgets
 	### "women_next" (each a `value`), "next_visible" (the outline's gate),
 	### "men_range" and "women_range" (min and max; the country's
 	### te_dg_pyr_max by default, so a state's pyramid overrides them),
-	### and "row_tooltip".
+	### and "row_tooltip". Every row sets a tooltip, so the ages are underlined.
 	type te_demog_pyramid_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -352,6 +352,7 @@ types te_demographics_widgets
 			parentanchor = vcenter
 			align = hcenter|nobaseline
 			using = te_demog_fontsize_row
+			default_format = "#tooltippable"
 			block "band_label" {}
 		}
 
@@ -646,32 +647,58 @@ types te_demographics_widgets
 		}
 	}
 
-	### One of the three largest cities (te_dg_cities; datacontext State): the
-	### state, which counts as one city, and its urban people. Fixed cells,
-	### 300 + 176 and a 4 px gap = 480.
-	type te_demog_city_row = flowcontainer {
-		direction = horizontal
-		ignoreinvisible = yes
-		spacing = 4
-		tooltip = "te_demog_city_row_tt"
+	### A state a list names (datacontext State; 2026-10-27 audit, DEM-6 and DEM-8): a button that opens the state on its
+	### Demographics subtab with te_demog_state_row's two onclicks, its map highlight and its right-click menu, the
+	### state's name on the left and one figure on the right. Fixed cells, 4 + 184 + 284 and a 4 px gap = 476 inside
+	### the 480 row: "100% aged 20–29, strength 100%", 30 characters, is the widest figure, and the name shrinks to 12
+	### before it would elide, as the States table's does. The instance sets "link_tooltip" and "link_value". The
+	### largest cities, the Youth row's states and the Metropolises use it.
+	type te_demog_state_link_row = button {
+		using = default_button
+		size = { 480 28 }
+		block "link_tooltip" {}
+		onclick = "[InformationPanelBar.OpenStatePanel( State.AccessSelf )]"
+		onclick = "[GetVariableSystem.Set('population_subtab', 'te_demog')]"
+		onrightclick = "[RightClickMenuManager.ShowForState(State.AccessSelf)]"
+		onmousehierarchyenter = "[AccessHighlightManager.HighlightState(State.Self)]"
+		onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
 
-		textbox = {
-			autoresize = yes
-			minimumsize = { 300 -1 }
-			maximumsize = { 300 -1 }
-			align = left|nobaseline
-			using = te_demog_fontsize_row
-			fontsize_min = 12
-			elide = right
-			text = "[State.GetNameNoFormatting]"
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			position = { 4 0 }
+			parentanchor = vcenter
+
+			textbox = {
+				autoresize = yes
+				minimumsize = { 184 -1 }
+				maximumsize = { 184 -1 }
+				align = left|nobaseline
+				using = te_demog_fontsize_row
+				fontsize_min = 12
+				elide = right
+				text = "[State.GetNameNoFormatting]"
+			}
+			textbox = {
+				autoresize = yes
+				minimumsize = { 284 -1 }
+				maximumsize = { 284 -1 }
+				align = right|nobaseline
+				using = te_demog_fontsize_row
+				elide = right
+				block "link_value" {}
+			}
 		}
-		textbox = {
-			autoresize = yes
-			minimumsize = { 176 -1 }
-			maximumsize = { 176 -1 }
-			align = right|nobaseline
-			using = te_demog_fontsize_row
-			elide = right
+	}
+
+	### One of the three largest cities (te_dg_cities; datacontext State): the state, which counts as one city, and its
+	### urban people.
+	type te_demog_city_row = te_demog_state_link_row {
+		blockoverride "link_tooltip" {
+			tooltip = "te_demog_city_row_tt"
+		}
+		blockoverride "link_value" {
 			text = "te_demog_city_row_value"
 		}
 	}
@@ -2633,8 +2660,9 @@ types te_demographics_widgets
 					ignoreinvisible = yes
 					spacing = 8
 
+					### The dash's note only while the dash shows (2026-10-27 audit, DEM-8), on the value's own gate.
 					te_demog_wealth_cell = {
-						tooltip = "te_demog_gini_tt"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_gini_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_gini_tt', 'te_demog_gini_pending_tt' )]"
 						blockoverride "cell_size" {
 							minimumsize = { 120 -1 }
 							maximumsize = { 120 -1 }
@@ -2896,6 +2924,18 @@ types te_demographics_widgets
 					blockoverride "row_value" {
 						text = "te_demog_wc_top_value"
 					}
+					### 2026-10-27 audit, DEM-8: a goto in the trend slot opens the state on its Demographics subtab, as the
+					### States table's rows do. The datacontext sits under the row's gate, never beside it.
+					blockoverride "row_trend" {
+						button_icon_goto = {
+							datacontext = "[GetPlayer.MakeScope.Var('te_dg_wc_top').GetState]"
+							size = { 22 22 }
+							parentanchor = center
+							tooltip = "te_demog_wc_open_tt"
+							onclick = "[InformationPanelBar.OpenStatePanel( State.AccessSelf )]"
+							onclick = "[GetVariableSystem.Set('population_subtab', 'te_demog')]"
+						}
+					}
 				}
 				te_demog_figure_row = {
 					visible = "[GetScriptedGui('te_demog_wc_bottom_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -2905,6 +2945,18 @@ types te_demographics_widgets
 					}
 					blockoverride "row_value" {
 						text = "te_demog_wc_bottom_value"
+					}
+					### 2026-10-27 audit, DEM-8: a goto in the trend slot opens the state on its Demographics subtab, as the
+					### States table's rows do. The datacontext sits under the row's gate, never beside it.
+					blockoverride "row_trend" {
+						button_icon_goto = {
+							datacontext = "[GetPlayer.MakeScope.Var('te_dg_wc_bottom').GetState]"
+							size = { 22 22 }
+							parentanchor = center
+							tooltip = "te_demog_wc_open_tt"
+							onclick = "[InformationPanelBar.OpenStatePanel( State.AccessSelf )]"
+							onclick = "[GetVariableSystem.Set('population_subtab', 'te_demog')]"
+						}
 					}
 				}
 			}
@@ -2995,6 +3047,27 @@ types te_demographics_widgets
 				}
 				blockoverride "row_value" {
 					text = "te_demog_mt_pl_value"
+				}
+			}
+			### 2026-10-27 audit, DEM-6: under it, those states, largest share first (te_dg_mt_states, at the country
+			### census; up to ten), a row each that opens the state on its subtab, where its Settlement row has the terms.
+			### The count above is live, so a state that crossed 60% since the census is counted before it is listed.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				datamodel = "[GetPlayer.MakeScope.GetList('te_dg_mt_states')]"
+
+				item = {
+					te_demog_state_link_row = {
+						datacontext = "[Scope.GetState]"
+						blockoverride "link_tooltip" {
+							tooltip = "te_demog_mt_list_tt"
+						}
+						blockoverride "link_value" {
+							text = "te_demog_mt_list_value"
+						}
+					}
 				}
 			}
 
@@ -4781,6 +4854,36 @@ types te_demographics_widgets
 			te_demog_note = {
 				text = "te_demog_how_causes"
 			}
+			### Work and Retirement and Longevity (2026-10-27 audit, DEM-3): the rules their live hovers taught, so each
+			### hover keeps its title, a line and its figures.
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_work"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_work"
+			}
+			te_demog_note = {
+				text = "te_demog_how_pensions"
+			}
+			te_demog_note = {
+				text = "te_demog_how_men"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_longevity"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_longevity"
+			}
+			te_demog_note = {
+				text = "te_demog_how_longevity_laws"
+			}
+			te_demog_note = {
+				text = "te_demog_how_minds"
+			}
 			te_demog_subheader = {
 				blockoverride "subheader_text" {
 					text = "te_demog_how_sub_family"
@@ -5001,6 +5104,29 @@ types te_demographics_widgets
 					}
 					blockoverride "row_value" {
 						text = "te_demog_ov_youth_value"
+					}
+				}
+				### 2026-10-27 audit, DEM-6: under it, the states with a youth bulge, strongest first (te_dg_yb_states, built
+				### beside the count at the country census; up to ten), a row each that opens the state, in place of
+				### "each state's subtab shows its own". Script values only, so a state that has since lost its count
+				### reads 0, not a missing variable.
+				flowcontainer = {
+					visible = "[GetScriptedGui('te_demog_youth_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[GetPlayer.MakeScope.GetList('te_dg_yb_states')]"
+
+					item = {
+						te_demog_state_link_row = {
+							datacontext = "[Scope.GetState]"
+							blockoverride "link_tooltip" {
+								tooltip = "te_demog_yb_list_tt"
+							}
+							blockoverride "link_value" {
+								text = "te_demog_yb_list_value"
+							}
+						}
 					}
 				}
 			}
@@ -7651,6 +7777,36 @@ types te_demographics_widgets
 			}
 			te_demog_note = {
 				text = "te_demog_how_causes"
+			}
+			### Work and Retirement and Longevity (2026-10-27 audit, DEM-3): the rules their live hovers taught, so each
+			### hover keeps its title, a line and its figures.
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_work"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_work"
+			}
+			te_demog_note = {
+				text = "te_demog_how_pensions"
+			}
+			te_demog_note = {
+				text = "te_demog_how_men"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_longevity"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_longevity"
+			}
+			te_demog_note = {
+				text = "te_demog_how_longevity_laws"
+			}
+			te_demog_note = {
+				text = "te_demog_how_minds"
 			}
 			te_demog_subheader = {
 				blockoverride "subheader_text" {

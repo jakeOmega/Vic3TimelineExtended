@@ -112,6 +112,12 @@ class StalePolicyTests(unittest.TestCase):
     def test_short_label_case_or_punctuation_is_minor(self):
         self.assertTrue(t.is_minor_change("Raise taxes.", "Raise Taxes"))
 
+    def test_american_spelling_is_minor(self):
+        """The 2026-10-27 sweep to American spelling keeps every translation, short labels included."""
+        self.assertTrue(t.is_minor_change("Seabed Licences", "Seabed Licenses"))
+        self.assertTrue(t.is_minor_change("[Concept('concept_x','Defence')] programme", "[Concept('concept_x','Defense')] program"))
+        self.assertFalse(t.is_minor_change("Seabed Licences", "Seabed Permits"))
+
     def test_rewrite_is_major(self):
         self.assertFalse(t.is_minor_change("Raises the price of grain.", "Lowers wages in every state."))
 

@@ -517,18 +517,32 @@ gw_te_members_sgui = {
 	}
 }
 
-# "+N more"'s hover: every emitting market, largest first, named by its leader
-# with its annual emissions. Root: the viewer's capital (any state would do).
+# "+N more"'s hover: the emitters below the five rows, largest first, each
+# with its annual emissions, up to 25 (GW-11: it no longer repeats the rows or
+# runs to every emitter). Below the rows is below the fifth country's figure
+# (gw_emitters_fifth_emis, gw_top_emitters_refresh). The intro is at the root,
+# which prints first (gotcha #18), so it says the cap there. Root: the
+# viewer's capital.
 gw_top_emitters_sgui = {
 	scope = state
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = {
-		custom_tooltip_no_bullet = gw_te_all_intro
+		if = {
+			limit = { owner = { var:gw_emitters_total > 30 } }
+			custom_tooltip_no_bullet = gw_te_all_intro_capped
+		}
+		else = {
+			custom_tooltip_no_bullet = gw_te_all_intro
+		}
 		ordered_country = {
-			limit = { gw_is_ranked_emitter = yes }
+			limit = {
+				gw_is_ranked_emitter = yes
+				ROOT.owner = { has_variable = gw_emitters_fifth_emis }
+				var:gw_disp_country_emis < ROOT.owner.var:gw_emitters_fifth_emis
+			}
 			order_by = gw_disp_own_emis
-			max = 200
+			max = 25
 			check_range_bounds = no
 			custom_tooltip = gw_te_all_entry
 		}

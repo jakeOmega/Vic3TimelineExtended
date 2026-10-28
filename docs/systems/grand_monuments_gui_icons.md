@@ -2,7 +2,7 @@
 
 The Monuments journal entry's overview and its monument rows draw five icons of their own: the four statuses and Hard Times. They were vanilla placeholders in the first round of the style pass, and PR #586 replaced them. All five live in `gfx/interface/icons/gm_icons/`.
 
-**Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/grand_monuments_widget.gui`. The status icons appear twice: once in the overview's cells (`te_gm_overview_panel`, one `gm_ov_cell` per status) and once in each monument row (`gm_monument_row`, one `gm_row_status` per `gm_status_code`). The state view's card (`te_state_gm_card` in `gui/te_state_panel_widgets.gui`) draws the row's four the same way, from its own literal lines. Hard Times appears once, on its own line under the cells, only while hard times hold. No script reads the paths. `IconsTest` in `test_grand_monuments_layout.py` holds each code to its file in its `ICONS` table. It fails if the widget uses a texture the table doesn't list, or any vanilla `generic_icons` placeholder. `StateCardTest` holds the card's four to the same table.
+**Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/grand_monuments_widget.gui`. The status icons appear twice: in the overview's Banking-style cells (`te_gm_overview_panel`, a `gm_ov_icon` in each `te_banking_ov_cell`: Upheld for Our Monuments, Contested, and Undedicated's bare stone for Sites; owner, 2026-10-27) and in each monument row (`gm_monument_row`, one `gm_row_status` per `gm_status_code`). The state view's card (`te_state_gm_card` in `gui/te_state_panel_widgets.gui`) draws the row's four the same way, from its own literal lines. Hard Times is the overview's fourth cell, lit while hard times hold. No script reads the paths. `IconsTest` in `test_grand_monuments_layout.py` holds each code to its file in its `ICONS` table. It fails if the widget uses a texture the table doesn't list, or any vanilla `generic_icons` placeholder. `StateCardTest` holds the card's four to the same table.
 
 **Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`). Their registry entries in `icon_prompts.py` are:
 
@@ -12,7 +12,7 @@ The Monuments journal entry's overview and its monument rows draw five icons of 
 
 Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
 
-**The set.** The four statuses are one stone stele with a blank panel on a plinth, and each status is a mark or a treatment of that same stone. They show at 36 px, in the overview at 25% opacity while a status's count is zero. Hard Times shows at 32 px.
+**The set.** The four statuses are one stone stele with a blank panel on a plinth, and each status is a mark or a treatment of that same stone. They show at 44 px in the overview's cells, at 25% opacity while a count is zero, and at 28 px on a row's picture.
 
 | Code | Status | Shows | File | Replaced |
 |---|---|---|---|---|

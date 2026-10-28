@@ -1,11 +1,32 @@
 ﻿# The Budget panel's always-available Breakdown tab. The generated chart
 # library owns category order, amounts and colours; this file owns layout.
+
+# The tab's type sizes (GUI audit BNK-20, 2026-10-27), the house ladder the
+# Banking tab beside it uses (gui_style_guide.md rule 3): rows, amounts and
+# notes at 17, the How section's subheadings at 20. Templates are global, so
+# the generated rows in te_budget_generated_charts.gui read nothing here but
+# the row type below. test_budget_breakdown.WidthBudgetTest reads both sizes.
+template te_budget_fontsize_row {
+	fontsize = 17
+}
+
+template te_budget_fontsize_heading {
+	fontsize = 20
+}
+
 types te_budget_breakdown {
+	### One row of a chart's list: an indent by depth, the expand arrow of a
+	### group, the swatch, the label, the weekly amount and the share. 500
+	### wide (5 + 18 + 5 + 12 + 5 + 291 + 5 + 94 + 5 + 60 = 500 at depth 0),
+	### so a label of about 30 characters fits on one line at 17; a longer one
+	### wraps. A row whose hover is on its amount (a vanilla graph template,
+	### gen_budget_breakdown.TOOLTIP_TEMPLATES) clears "label_format", since
+	### its label carries no tooltip of its own.
 	type te_budget_chart_row = flowcontainer {
 		direction = horizontal
 		spacing = 5
-		minimumsize = { 480 28 }
-		maximumsize = { 480 -1 }
+		minimumsize = { 500 28 }
+		maximumsize = { 500 -1 }
 		widget = { block "indent" { size = { 0 1 } } }
 		widget = { size = { 18 28 } parentanchor = vcenter block "toggle" {} }
 		icon = {
@@ -16,27 +37,67 @@ types te_budget_breakdown {
 			block "swatch" {}
 		}
 		textbox = {
-			block "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			block "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			autoresize = yes
 			multiline = yes
 			align = left|vcenter|nobaseline
-			using = fontsize_medium
+			using = te_budget_fontsize_row
+			block "label_format" {
+				default_format = "#tooltippable"
+			}
 			block "label" {}
 		}
 		textbox = {
 			size = { 94 28 }
 			parentanchor = vcenter
 			align = right|vcenter|nobaseline
-			using = fontsize_medium
+			using = te_budget_fontsize_row
 			block "amount" {}
 		}
 		textbox = {
 			size = { 60 28 }
 			parentanchor = vcenter
 			align = right|vcenter|nobaseline
-			using = fontsize_medium
+			using = te_budget_fontsize_row
 			block "share" {}
 		}
+	}
+
+	### A topic's heading in How the Breakdown Works, with a faint rule under
+	### it: Banking's banking_dash_subheader, at this tab's 480.
+	type te_budget_how_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 6
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = te_budget_fontsize_heading
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### A topic's note: Banking's banking_dash_note, at this tab's 480.
+	type te_budget_how_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_budget_fontsize_row
+		default_format = "#lore"
 	}
 
 	type te_budget_breakdown_panel = flowcontainer {
@@ -63,15 +124,57 @@ types te_budget_breakdown {
 				visible = "[GetVariableSystem.Exists('te_budget_chart_how_open')]"
 			}
 		}
-		textbox = {
+
+		### One subheading per topic (GUI audit BNK-20): the topics are the
+		### generator's HOW_TOPICS, in its order.
+		flowcontainer = {
 			visible = "[GetVariableSystem.Exists('te_budget_chart_how_open')]"
-			minimumsize = { 480 -1 }
-			maximumsize = { 480 -1 }
+			direction = vertical
 			parentanchor = hcenter
-			autoresize = yes
-			multiline = yes
-			using = fontsize_medium
-			text = "te_budget_chart_how_text"
+			ignoreinvisible = yes
+			spacing = 2
+
+			te_budget_how_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "te_budget_chart_how_sub_admin"
+				}
+			}
+			te_budget_how_note = {
+				text = "te_budget_chart_how_admin"
+			}
+			te_budget_how_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_budget_chart_how_sub_civil"
+				}
+			}
+			te_budget_how_note = {
+				text = "te_budget_chart_how_civil"
+			}
+			te_budget_how_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_budget_chart_how_sub_military"
+				}
+			}
+			te_budget_how_note = {
+				text = "te_budget_chart_how_military"
+			}
+			te_budget_how_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_budget_chart_how_sub_journal"
+				}
+			}
+			te_budget_how_note = {
+				text = "te_budget_chart_how_journal"
+			}
+			te_budget_how_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_budget_chart_how_sub_charts"
+				}
+			}
+			te_budget_how_note = {
+				text = "te_budget_chart_how_charts"
+			}
 		}
 	}
 }

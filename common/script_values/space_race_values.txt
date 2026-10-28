@@ -858,7 +858,8 @@ sr_power_lead_code = {
 }
 
 # How many of the eight entries with a goal a power has achieved: the rows'
-# lit icons as a figure, for the "+N more" list (sr_powers_sgui). Scope: country
+# lit icons as a figure, for a row's name hover (sr_disp_power_achieved).
+# Scope: country
 sr_power_achieved = {
 	value = 0
 	if = { limit = { has_variable = sr_completed_suborbital } add = 1 }
