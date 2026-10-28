@@ -177,3 +177,19 @@ nd_log_strike_eligibility = {
 		clear_variable_list = nd_sel_logged
 	}
 }
+
+# Issuer scope, from nd_crisis_weekly_tick: one record the first week a crisis
+# is Acute, whatever made it so, for the observer report's uses per Acute
+# crisis (rework spec §2.4). nd_crisis_clear_vars drops the marker.
+nd_log_crisis_acute_once = {
+	if = {
+		limit = {
+			has_variable = nd_crisis_stage
+			var:nd_crisis_stage >= 3
+			NOT = { has_variable = nd_crisis_acute_logged }
+		}
+		set_variable = nd_crisis_acute_logged
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=crisis_acute; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+	}
+}

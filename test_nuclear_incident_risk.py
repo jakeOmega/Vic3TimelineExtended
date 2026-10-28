@@ -226,6 +226,36 @@ class TestObserverReport(unittest.TestCase):
         self.assertEqual(report["crisis_outcomes"], {"7": 1})
 
 
+class TestObserverRework(unittest.TestCase):
+    """The observer report counts uses per Acute crisis, near misses and
+    launches nobody meant (rework spec §2.4)."""
+
+    def test_uses_per_acute_crisis_and_near_misses(self):
+        lines = [
+            "TE_NUCLEAR: type=crisis_acute; country=United States; crisis=12; exchange=0\n",
+            "TE_NUCLEAR: type=crisis_acute; country=Russia; crisis=13; exchange=0\n",
+            "TE_NUCLEAR: type=crisis_end; outcome=7; country=United States; crisis=12; exchange=0\n",
+            "TE_NUCLEAR: type=crisis_end; outcome=8; country=Russia; crisis=13; exchange=0\n",
+            "TE_NUCLEAR: type=action; action=launch_held; country=Russia; crisis=13; exchange=0\n",
+            "TE_NUCLEAR: type=action; action=launch_held; country=Russia; crisis=13; exchange=0\n",
+            "TE_NUCLEAR: type=action; action=incident_launch_warning; country=United States; crisis=12; exchange=0\n",
+        ]
+        report = summarize(read_records(lines))
+        self.assertEqual(report["acute_crises"], 2)
+        self.assertEqual(report["uses_per_acute_crisis"], 0.5)
+        self.assertEqual(report["near_misses"], 2)
+        self.assertEqual(report["unordered_or_mistaken_launches"], 1)
+
+    def test_acute_record_written_once_per_crisis(self):
+        effects = strip_comments(read(ROOT / "common/scripted_effects/nuclear_observer_effects.txt"))
+        body = block(effects, "nd_log_crisis_acute_once")
+        self.assertIn("type=crisis_acute", body)
+        self.assertNotIn("$", body)
+        crisis = strip_comments(read(ROOT / "common/scripted_effects/nuclear_crisis_effects.txt"))
+        self.assertIn("nd_log_crisis_acute_once = yes", block(crisis, "nd_crisis_weekly_tick"))
+        self.assertIn("nd_crisis_acute_logged", crisis[crisis.index("nd_crisis_clear_vars = {"):])
+
+
 class TestCrisisAndWarModel(unittest.TestCase):
     """The rework spec's §2.3 Acute-crisis table, the war-year and the
     peacetime pair-year (2026-10-28 rework spec §2, §11)."""

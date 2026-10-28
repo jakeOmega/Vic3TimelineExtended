@@ -832,6 +832,7 @@ nd_crisis_weekly_tick = {
 		limit = { nd_is_crisis_owner = yes }
 		nd_crisis_refresh_figures = yes
 		nd_log_crisis_sample = yes
+		nd_log_crisis_acute_once = yes
 		# ---- confrontation becomes acute ------------------------------------
 		if = {
 			limit = {
@@ -984,6 +985,10 @@ nd_crisis_clear_own_record = {
 
 nd_crisis_clear_vars = {
 	remove_variable = nd_crisis_id
+	if = {
+		limit = { has_variable = nd_crisis_acute_logged }
+		remove_variable = nd_crisis_acute_logged
+	}
 	remove_variable = nd_crisis_opponent
 	remove_variable = nd_crisis_role
 	if = {

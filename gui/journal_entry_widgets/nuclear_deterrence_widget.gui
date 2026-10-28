@@ -1833,6 +1833,21 @@ types nuclear_deterrence_widget_types
 					text = "nd_w_survivability_value"
 				}
 			}
+			### Survivors against the main rival (rework spec §3.2, §10): how many
+			### warheads would be left after its whole arsenal, as we know it, is
+			### spent on ours. Shown while we have one.
+			nd_row = {
+				visible = "[GetScriptedGui('nd_has_main_rival_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				blockoverride "row_label" {
+					text = "nd_w_survivors_label"
+				}
+				blockoverride "row_value" {
+					text = "nd_w_survivors_value"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "nd_w_survivors_tt"
+				}
+			}
 			nd_row = {
 				blockoverride "row_label" {
 					text = "nd_w_reliability_label"

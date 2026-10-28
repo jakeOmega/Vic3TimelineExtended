@@ -1187,6 +1187,10 @@ nd_refresh_main_rival = {
 		set_variable = { name = nd_survivors_main_r2 value = nd_survivors_r2_vs_saved }
 		set_variable = { name = nd_survivors_main_bare_r2 value = nd_survivors_bare_r2_vs_saved }
 		set_variable = { name = nd_survivors_main_ceiling_bare_r2 value = nd_survivors_ceiling_bare_r2_vs_saved }
+		# The panel's hover: what the rival could destroy, and how much of
+		# ours is within reach.
+		set_variable = { name = nd_main_rival_reach value = nd_counterforce_reach_saved }
+		set_variable = { name = nd_exposed_main value = nd_exposed_warheads }
 	}
 	else = {
 		if = {
@@ -1208,6 +1212,14 @@ nd_refresh_main_rival = {
 		if = {
 			limit = { has_variable = nd_survivors_main_ceiling_bare_r2 }
 			remove_variable = nd_survivors_main_ceiling_bare_r2
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_reach }
+			remove_variable = nd_main_rival_reach
+		}
+		if = {
+			limit = { has_variable = nd_exposed_main }
+			remove_variable = nd_exposed_main
 		}
 	}
 }
