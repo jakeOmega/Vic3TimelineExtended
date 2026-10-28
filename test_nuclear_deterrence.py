@@ -422,8 +422,8 @@ class TestFollowThrough(unittest.TestCase):
 
 DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness", "nd_cd_public",
                 "nd_cd_counter", "nd_cd_reliability", "nd_cd_weeks", "nd_cd_talks", "nd_cd_backed",
-                "nd_cd_exercise"]
-PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
+                "nd_cd_exercise", "nd_cd_vulnerability"]
+PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_issuer_exposure", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
                   "nd_yp_recessed", "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
                   "nd_yp_follow_through", "nd_yp_taboo"]
 
@@ -468,6 +468,71 @@ class TestCrisisFigures(unittest.TestCase):
             if path == CRISIS_EFFECTS:
                 text = text.replace(block(text, "nd_crisis_refresh_figures"), "")
             self.assertNotRegex(text, r"name = nd_(?:crisis_danger|yield_pressure) value", path.name)
+
+
+class TestSurvivorsInCrisis(unittest.TestCase):
+    """The answer in kind reads survivors, the issuer's own exposure weighs on
+    the threat, and a vulnerable force raises the danger (2026-10-28 rework
+    spec §3.3)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+        self.sguis = strip_comments(read(SGUIS))
+
+    def test_new_parts_are_stored_cleared_and_shown(self):
+        for part, sgui in (("nd_yp_issuer_exposure", "nd_crisis_pressure_breakdown_sgui"),
+                           ("nd_cd_vulnerability", "nd_crisis_danger_breakdown_sgui")):
+            self.assertRegex(self.values, rf"(?m)^{part}_value = \{{")
+            self.assertIn(f"C = {part} V = {part}_value", block(self.effects, "nd_crisis_refresh_figures"))
+            self.assertIn(f"remove_variable = {part}", block(self.effects, "nd_crisis_clear_figures"))
+            self.assertIn(f"C = {part} KEY = {part}_line", block(self.sguis, sgui))
+            self.assertIsNotNone(loc_value(f"{part}_line"), part)
+
+    def test_answer_has_no_line_at_50(self):
+        body = block(self.values, "nd_yp_answer_value")
+        self.assertNotIn(">= 50", body)
+        self.assertNotIn("nd_authority_automatic", body)
+        self.assertIn("nd_yp_answer_survivors_value", body)
+        self.assertIn("multiply = -25", body)
+
+    def test_answer_three_quarters_rule(self):
+        body = block(self.values, "nd_yp_answer_survivors_value")
+        self.assertIn("nd_survivors_vs_issuer", body)
+        self.assertIn("nd_authority_central = yes", body)
+        self.assertIn("nd_decapitation_margin_value > 0", body)
+        self.assertIn("multiply = 0.75", body)
+        margin = block(self.values, "nd_decapitation_margin_value")
+        self.assertIn("nd_believed_stockpile", margin)
+        self.assertIn("subtract = nd_redundancy", margin)
+
+    def test_issuer_exposure_falls_to_minus_15(self):
+        body = block(self.values, "nd_yp_issuer_exposure_value")
+        self.assertIn("nd_believed_armed = yes", body)
+        self.assertIn("nd_survivors_vs_target", body)
+        self.assertIn("max = 3", body)
+        self.assertIn("multiply = 5", body)
+
+    def test_vulnerability_reads_the_more_vulnerable_armed_party(self):
+        body = block(self.values, "nd_cd_vulnerability_value")
+        self.assertIn("nd_own_vulnerability_value", body)
+        self.assertIn("nd_is_armed = yes", body)
+        own = block(self.values, "nd_own_vulnerability_value")
+        for needle in ("value = 50", "subtract = nd_effective_survivability", "divide = 5", "min = 0", "max = 10"):
+            self.assertIn(needle, own)
+
+    def test_refresh_stores_each_partys_survivors(self):
+        body = block(self.effects, "nd_crisis_refresh_figures")
+        self.assertEqual(body.count("name = nd_survivors_crisis"), 2)
+        self.assertIn("remove_variable = nd_survivors_crisis", block(self.effects, "nd_crisis_clear_figures"))
+
+    def test_ai_weights_read_survivors(self):
+        events = strip_comments(read(CRISIS_EVENTS))
+        self.assertIn("nd_vulnerable_to = { ENEMY = scope:nd_issuer }", option_body(events, "nuclear_crisis.1.c"))
+        self.assertIn("nd_vulnerable_to = { ENEMY = scope:nd_guarantee_attacker }",
+                      option_body(events, "nuclear_crisis.20.c"))
+        for name in ("nuclear_crisis.1.c", "nuclear_crisis.20.c"):
+            self.assertNotIn("nd_effective_survivability", option_body(events, name))
 
 
 class TestOutcomeNotice(unittest.TestCase):
@@ -552,8 +617,9 @@ class TestNativeCloses(unittest.TestCase):
 PREVIEW_PINS = {
     # loc key: (script value holding the constant, operation, number)
     "nd_tt_open_f_unarmed": ("nd_yp_answer_value", "add", 20),
-    "nd_tt_open_f_survivable": ("nd_yp_answer_value", "subtract", 25),
-    "nd_tt_open_f_armed": ("nd_yp_answer_value", "subtract", 10),
+    # Armed, the answer is −25 × survivors ÷ 3 (rework spec §3.3): the preview
+    # names its ceiling; "armed but disarmable" carries no constant.
+    "nd_tt_open_f_survivable": ("nd_yp_answer_value", "multiply", -25),
     "nd_tt_open_f_protector": ("nd_yp_protector_value", "subtract", 20),
     "nd_tt_open_f_aggressive": ("nd_yp_temperament_value", "subtract", 15),
     "nd_tt_open_f_cautious": ("nd_yp_temperament_value", "add", 10),
@@ -643,13 +709,13 @@ class TestEffectiveSurvivability(unittest.TestCase):
                           block(self.values, "nd_effective_survivability"))
         self.assertNotIn("multiply", block(self.values, "nd_effective_survivability_at_readiness_3"))
 
-    def test_the_line_of_50_reads_the_effective_figure(self):
+    def test_answer_sites_read_survivors_not_a_line(self):
+        # The line of 50 is gone (rework spec §3.3): every site that weighs
+        # the target's answer reads survivors.
         sites = (block(self.values, "nd_yp_answer_value"),
-                 block(strip_comments(read(CRISIS_EFFECTS)), "nd_crisis_preview"),
-                 option_body(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.1.c"),
-                 option_body(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.20.c"))
+                 block(strip_comments(read(CRISIS_EFFECTS)), "nd_crisis_preview"))
         for body in sites:
-            self.assertIn("nd_effective_survivability", body)
+            self.assertNotIn("nd_effective_survivability >= 50", body)
             self.assertNotIn("var:nd_survivability", body)
 
     def test_ai_authority_reads_the_stored_figure(self):

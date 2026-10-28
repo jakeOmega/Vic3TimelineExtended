@@ -152,6 +152,14 @@ nd_authority_delegated_or_warning = {
 	}
 }
 
+# Central Authorization: authority 1, or none set yet.
+nd_authority_central = {
+	OR = {
+		NOT = { has_variable = nd_authority }
+		var:nd_authority = 1
+	}
+}
+
 nd_authority_launch_on_warning = {
 	has_variable = nd_authority
 	var:nd_authority = 3
@@ -1422,6 +1430,14 @@ nd_proliferation_guarantee_candidate = {
 # A plausible attacker exists, as far as our information goes: another country
 # we believe armed that is our crisis opponent, an enemy, a rival or hostile.
 # A monopolist never qualifies — it never gets a known-rival missile warning.
+# Would fewer than three of our warheads survive $ENEMY$'s whole arsenal spent
+# on them (rework spec §3.3: three is a full retaliation)? Our readiness and
+# launch credit; the AI's crisis weights read it.
+nd_vulnerable_to = {
+	$ENEMY$ = { save_temporary_scope_as = nd_sv_enemy }
+	nd_survivors_vs_saved < 3
+}
+
 nd_has_plausible_attacker = {
 	save_temporary_scope_as = nd_pa_self
 	any_country = {

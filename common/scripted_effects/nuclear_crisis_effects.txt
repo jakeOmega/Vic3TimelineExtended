@@ -161,12 +161,24 @@ nd_crisis_preview = {
 	}
 	else_if = {
 		limit = {
-			$TARGET$ = { nd_effective_survivability >= 50 }
+			save_temporary_scope_as = nd_sv_enemy
+			$TARGET$ = { nd_survivors_vs_saved >= 3 }
 		}
 		custom_tooltip = nd_tt_open_f_survivable
 	}
 	else = {
 		custom_tooltip = nd_tt_open_f_armed
+	}
+	# Could they disarm us first? (rework spec §3.3, nd_yp_issuer_exposure)
+	if = {
+		limit = {
+			$TARGET$ = {
+				nd_believed_armed = yes
+				save_temporary_scope_as = nd_sv_enemy
+			}
+			nd_survivors_vs_saved < 3
+		}
+		custom_tooltip = nd_tt_open_f_exposed
 	}
 	if = {
 		limit = {
@@ -507,6 +519,12 @@ nd_crisis_notify_guarantors = {
 # stored parts (nd_crisis_*_breakdown_sgui), so what it shows always sums to
 # what the AI weighs.
 nd_crisis_refresh_figures = {
+	# Each party's survivors against the other (rework spec §3.3), for the AI's
+	# crisis weights and the panel; the parts compute the same values live.
+	set_variable = { name = nd_survivors_crisis value = nd_survivors_vs_target }
+	scope:nd_target = {
+		set_variable = { name = nd_survivors_crisis value = nd_survivors_vs_issuer }
+	}
 	nd_crisis_classify_follow_through = { TARGET = scope:nd_target }
 	scope:nd_target = {
 		set_variable = { name = nd_ft_reason value = scope:nd_issuer.var:nd_ft_reason }
@@ -521,6 +539,7 @@ nd_crisis_refresh_figures = {
 	nd_crisis_store_cd = { C = nd_cd_talks V = nd_cd_talks_value }
 	nd_crisis_store_cd = { C = nd_cd_backed V = nd_cd_backed_value }
 	nd_crisis_store_cd = { C = nd_cd_exercise V = nd_cd_exercise_value }
+	nd_crisis_store_cd = { C = nd_cd_vulnerability V = nd_cd_vulnerability_value }
 	if = {
 		limit = { nd_crisis_danger_dampened = yes }
 		set_variable = { name = nd_cd_dampened value = 1 }
@@ -535,6 +554,7 @@ nd_crisis_refresh_figures = {
 	scope:nd_target = {
 		nd_crisis_store_yp = { C = nd_yp_base V = nd_yp_base_value }
 		nd_crisis_store_yp = { C = nd_yp_answer V = nd_yp_answer_value }
+		nd_crisis_store_yp = { C = nd_yp_issuer_exposure V = nd_yp_issuer_exposure_value }
 		nd_crisis_store_yp = { C = nd_yp_protector V = nd_yp_protector_value }
 		nd_crisis_store_yp = { C = nd_yp_credibility V = nd_yp_credibility_value }
 		nd_crisis_store_yp = { C = nd_yp_alert V = nd_yp_alert_value }
@@ -616,12 +636,24 @@ nd_crisis_clear_figures = {
 		remove_variable = nd_cd_exercise
 	}
 	if = {
+		limit = { has_variable = nd_cd_vulnerability }
+		remove_variable = nd_cd_vulnerability
+	}
+	if = {
+		limit = { has_variable = nd_survivors_crisis }
+		remove_variable = nd_survivors_crisis
+	}
+	if = {
 		limit = { has_variable = nd_yp_base }
 		remove_variable = nd_yp_base
 	}
 	if = {
 		limit = { has_variable = nd_yp_answer }
 		remove_variable = nd_yp_answer
+	}
+	if = {
+		limit = { has_variable = nd_yp_issuer_exposure }
+		remove_variable = nd_yp_issuer_exposure
 	}
 	if = {
 		limit = { has_variable = nd_yp_protector }

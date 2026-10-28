@@ -471,6 +471,7 @@ nd_crisis_pressure_breakdown_sgui = {
 	effect = {
 		nd_crisis_breakdown_line = { C = nd_yp_base KEY = nd_yp_base_line }
 		nd_crisis_breakdown_line = { C = nd_yp_answer KEY = nd_yp_answer_line }
+		nd_crisis_breakdown_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line }
 		nd_crisis_breakdown_line = { C = nd_yp_protector KEY = nd_yp_protector_line }
 		nd_crisis_breakdown_line = { C = nd_yp_credibility KEY = nd_yp_credibility_line }
 		nd_crisis_breakdown_line = { C = nd_yp_alert KEY = nd_yp_alert_line }
@@ -503,6 +504,7 @@ nd_crisis_danger_breakdown_sgui = {
 		nd_crisis_breakdown_line = { C = nd_cd_talks KEY = nd_cd_talks_line }
 		nd_crisis_breakdown_line = { C = nd_cd_backed KEY = nd_cd_backed_line }
 		nd_crisis_breakdown_line = { C = nd_cd_exercise KEY = nd_cd_exercise_line }
+		nd_crisis_breakdown_line = { C = nd_cd_vulnerability KEY = nd_cd_vulnerability_line }
 		if = {
 			limit = {
 				has_variable = nd_cd_dampened
