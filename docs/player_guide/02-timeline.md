@@ -631,8 +631,8 @@ grandeur, and in a world ten times as rich it adds a tenth as much: 5 times the
 world's GDP in 1836, divided by the world's GDP when the level is finished,
 updated each January, to the nearest 0.001 and never less than 0.001. So the
 same share of the world's wealth buys the same grandeur in any era. The rate
-shows above the rows of Awaiting Dedication, on a construction site's card and
-in the build menu before you build. The monuments standing in 1836, the trophies
+shows on the last line of the Grand Monuments overview, on a construction site's
+card and in the build menu before you build. The monuments standing in 1836, the trophies
 abroad in 1836 and the monuments dug up count at the 1836 rate, 5 grandeur a
 level, split as if each had been dedicated in the year it was built and had aged
 ever since (see [A finished monument and its age](#a-finished-monument-and-its-age)).
@@ -723,8 +723,9 @@ breakdown; Heritage and Contested are also terms you can hover.
 | Sites | The bare stone | How many construction sites you can dedicate now, in red, or how many are still building, and the grandeur they come to. |
 | Hard Times | A mallet and chisel by an empty bowl | Red while a finished level would cause [vanity backlash](#vanity-backlash), with the remedy: pause construction. |
 
-The last line names your [monument policy](#monument-policy); hover it for what
-the policy does and when it can next change.
+Under the boxes, a line names your [monument policy](#monument-policy); hover it
+for what the policy does and when it can next change. The last line says what a
+level built this year adds; hover it for how the rate is worked out.
 
 These sections follow:
 
@@ -732,7 +733,7 @@ These sections follow:
 |---|---|---|
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the levels still to build at today's rate, the months left, what completing it gives, Raise It and Let It Pass. |
 | Awaiting a Decision | Open | Only while a monument of yours is contested: its row, which names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A contested monument that stands beside a state's own has its row here too. |
-| Awaiting Dedication | Open | Only while one of your Grand Monuments is a construction site: what a level built this year adds, then a row for each site, with its levels built, the grandeur they come to and whether levels are still being built, and a Dedicate button under it. |
+| Awaiting Dedication | Open | Only while one of your Grand Monuments is a construction site: a row for each site, with its levels built, the grandeur they come to and whether levels are still being built, and a Dedicate button under it. |
 | Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
 | National Effects | Open | The four monument policy buttons first. Then a row for each national effect in force: Prestige and Prestige (%), Legitimacy, Cultural Pull, Education Access under Public Education, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total; hover a group for the monuments it approves of, those it objects to, the contested ones it resents and its fading record. Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. |
 | Our Monuments | Open | A row for each finished monument that is not contested: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename and Name It under it, and Clear Name once you have typed a name. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
@@ -1073,9 +1074,9 @@ keeps its name.
 ### Monument policy
 
 One policy covers all your monuments. You set it with the four buttons at the
-top of National Effects, and the overview's last line names the one in force.
-Each policy is the best at one thing, so the cost of choosing one is what the
-others would give. After a change the policy cannot change again for five
+top of National Effects, and a line under the overview's boxes names the one
+in force. Each policy is the best at one thing, so the cost of choosing one is
+what the others would give. After a change the policy cannot change again for five
 years, but your first choice starts no wait.
 
 | Policy | Gives | When it is worth it |

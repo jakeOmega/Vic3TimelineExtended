@@ -3520,7 +3520,7 @@
  gm_je_val_teardown:0 "#G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown')|1]#!"
  gm_je_val_vanity:0 "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity')|1]#!"
  gm_je_val_war_memorial:0 "#G [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_war_memorial')|%0]#!"
- gm_je_world_rate:0 "A Grand Monument level built this year adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_world_rate_value')|3]#! [concept_grandeur] (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! in 1836)"
+ gm_je_world_rate:0 "A level built now adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_world_rate_value')|3]#! [concept_grandeur] (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! in 1836)"
  gm_je_world_rate_tt:0 "#b What a level is worth#!\nA monument is impressive for what it cost its time: a level adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! in 1836, and the world is #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_world_wealth_factor')|1]#! times as rich now, so a level built this year adds that much less, to the nearest thousandth and at least 0.001. Each level counts at the rate of the January before it was finished; the monuments already standing keep theirs."
  gm_landmark_aachen_cathedral_desc:0 "The palace chapel Charlemagne built at Aachen, consecrated in 805, where he is buried and where the kings of Germany were crowned for six hundred years."
  gm_landmark_aachen_cathedral_evt:0 "$gm_skin_landmark_aachen_cathedral$"

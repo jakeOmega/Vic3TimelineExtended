@@ -7197,9 +7197,9 @@ class MeaningCountsGrandeurTests(unittest.TestCase):
 
 class RateDisplayTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.2 (Plan B): the player sees what a level is
-    worth before building: on the site's card, above Awaiting Dedication's
-    rows (GM-5, the 2026-10-27 GUI audit: once, where building is decided)
-    and in the build menu; and grandeur, often fractional now, prints with a
+    worth before building: on the site's card, on the overview's last line
+    (GM-5, the 2026-10-27 GUI audit: once; moved from Awaiting Dedication,
+    which shows only once there is a site, 2026-10-28) and in the build menu; and grandeur, often fractional now, prints with a
     decimal (Review Focus 5)."""
 
     RATE = "ScriptValue('gm_world_rate_value')|3"
@@ -7210,11 +7210,11 @@ class RateDisplayTests(unittest.TestCase):
         self.assertIn('text = "gm_site_card_rate_lbl"', card)
         self.assertIn('text = "gm_site_card_rate"', card)
         self.assertIn(self.RATE, L["gm_site_card_rate"])
-        # Said once, as Awaiting Dedication's first line, where building is
-        # decided, not on every site's row nor in National Effects (GM-5).
+        # Said once, on the overview's last line, which is always shown, not
+        # on every site's row nor in a section that needs a site (GM-5).
         widget = squash(strip_comments(read(WIDGET)))
-        awaiting = widget.split("type te_gm_sec_awaiting = flowcontainer {", 1)[1].split("type te_gm_sec_", 1)[0]
-        self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate"', awaiting)
+        overview = widget.split("type te_gm_overview_panel = flowcontainer {", 1)[1].split("type te_gm_sec_", 1)[0]
+        self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate"', overview)
         self.assertEqual(widget.count('text = "gm_je_world_rate"'), 1)
         self.assertNotIn("gm_site_row_rate", widget)
         self.assertNotIn("gm_site_row_rate", L)
