@@ -210,12 +210,22 @@ sr_solar_colonization_running = {
 	sr_solar_colonization_qualified = yes
 }
 
-# The two milestones Solar System Colonization needs to colonize (colony record
-# design § 8). A country given a colony without them, by treaty or as a dead
+# The milestone Solar System Colonization needs to colonize: the Moon Landing
+# (lunar colonization design § 4; before 2026-10-29 the Moon Base and the Mars
+# Landing). A country given a colony without it, by treaty or as a dead
 # holder's heir, holds the entry and keeps its colony's modifiers, and colonizes
 # nothing: its panel reads Idle and nothing is billed. Country scope.
 sr_solar_colonization_qualified = {
-	has_variable = sr_completed_moon_base
+	has_variable = sr_completed_moon_landing
+}
+
+# Worlds beyond the Moon (stage 1 and later) need the Mars Landing as well: a
+# hard gate, the "physical prerequisite" exception to the soft-caps default
+# (lunar colonization design §§ 1.5, 4). Every stage >= 1 world's
+# sr_cf_targetable_<key> and draw branch tests it (gen_solar_sites.py), so a
+# country given a world beyond the Moon by treaty keeps it and colonizes only
+# the Moon until its own Mars Landing. Country scope.
+sr_colonization_beyond_moon = {
 	has_variable = sr_completed_mars_landing
 }
 

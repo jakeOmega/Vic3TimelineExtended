@@ -377,6 +377,10 @@ def _draw_branch(site: Site, stage0: bool = False) -> list[str]:
     t = "\t\t\t"
     lines = [f"{t}10 = {{", f"{t}\ttrigger = {{",
              f"{t}\t\tNOT = {{ has_global_variable = sr_colony_{site.key} }}"]
+    if site.stage >= 1:
+        # Beyond the Moon needs the Mars Landing (lunar colonization design § 4),
+        # in whichever stage's block the world is listed.
+        lines.append(f"{t}\t\tsr_colonization_beyond_moon = yes")
     if site.body is None:
         lines.append(f"{t}\t\tsr_launch_ungated_departs = yes")
     else:
@@ -1323,10 +1327,12 @@ def render_fleet_triggers() -> list[str]:
     out += [f"\t\tglobal_var:sr_site_holder_{s.key} ?= this" for s in SITES if s.stage >= 1]
     out += ["\t}", "}", "",
             "# Per world, country scope:",
-            "#   sr_cf_targetable_<key>  THIS may send its next fleet there: unclaimed, and under",
-            "#                           races only of a stage reached (the draw's candidates), under",
-            "#                           simple and full of stage 0 to 2, or with Deep Space",
-            "#                           Exploration or a colony held beyond the Moon (design § 3)",
+            "#   sr_cf_targetable_<key>  THIS may send its next fleet there: unclaimed, beyond the",
+            "#                           Moon only after its Mars Landing (sr_colonization_beyond_moon;",
+            "#                           lunar colonization design § 4), and under races only of a",
+            "#                           stage reached (the draw's candidates), under simple and full",
+            "#                           of stage 0 to 2, or with Deep Space Exploration or a colony",
+            "#                           held beyond the Moon (design § 3)",
             "#   sr_cf_departs_<key>     a fleet can leave for it this month (its body's window, a",
             "#                           paid launch the approach accepts, or a torch; Mercury and",
             "#                           the Moon always)",
@@ -1339,8 +1345,10 @@ def render_fleet_triggers() -> list[str]:
         k, tb = site.key, transit_body(site)
         out += [f"sr_cf_targetable_{k} = {{",
                 f"\tNOT = {{ has_global_variable = sr_colony_{k} }}",
-                f"\tNOT = {{ has_global_variable = sr_site_ruined_{k} }}",
-                "\tOR = {",
+                f"\tNOT = {{ has_global_variable = sr_site_ruined_{k} }}"]
+        if site.stage >= 1:
+            out.append("\tsr_colonization_beyond_moon = yes")
+        out += ["\tOR = {",
                 f"\t\tAND = {{ NOT = {{ sr_colonies_contested_enabled = yes }} sr_current_colonization_stage >= {site.stage} }}"]
         if site.stage <= 2:
             out.append("\t\tsr_colonies_contested_enabled = yes")
@@ -1383,6 +1391,11 @@ def render_fleet_triggers() -> list[str]:
             "# The scripted GUIs' world (scope:site): targetable, our target, held by THIS.",
             "sr_cf_scope_site_targetable = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} sr_cf_targetable_{s.key} = yes }}" for s in SITES]
+    out += ["\t}", "}",
+            "# The scripted GUI's world (scope:site) is on the Moon: the Target button's",
+            "# Mars Landing line holds for it without one (sr_colony_target_sgui).",
+            "sr_cf_scope_site_is_lunar = {", "\tOR = {"]
+    out += [f"\t\tscope:site = {s.index}" for s in LUNAR]
     out += ["\t}", "}",
             "sr_cf_scope_site_is_target = {", "\thas_variable = sr_cf_target", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} var:sr_cf_target = {s.index} }}" for s in SITES]

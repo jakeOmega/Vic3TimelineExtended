@@ -36,6 +36,15 @@ sr_colony_target_sgui = {
 				text = sr_cf_req_running_tt
 				sr_solar_colonization_running = yes
 			}
+			# A world beyond the Moon needs our Mars Landing (lunar colonization
+			# design § 4): its own line, so the greyed button says why.
+			custom_tooltip = {
+				text = sr_cf_req_beyond_moon_tt
+				OR = {
+					sr_cf_scope_site_is_lunar = yes
+					sr_colonization_beyond_moon = yes
+				}
+			}
 			custom_tooltip = {
 				text = sr_cf_req_targetable_tt
 				sr_cf_scope_site_targetable = yes

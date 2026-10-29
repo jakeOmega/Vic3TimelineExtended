@@ -679,6 +679,7 @@
  state_devastation_monthly_add:0 "Monthly [concept_devastation]"
  state_harvest_condition_cold_snap_impact_mult:0 "Cold Snap Severity"
  supporting_environmental_policy:0 "Supporting environmental policy"
+ te_decision_tt_completed_moon_base:0 "We have completed the $je_space_race_moon_base$"
  te_demog_st_e0_n:0 "[State.MakeScope.Var('te_dg_e0').GetValue|1]"
  telecommunications:0 "Telecommunications"
  traditional_energy_interest:0 "Traditional energy dependence"

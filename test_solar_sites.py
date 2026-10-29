@@ -283,19 +283,56 @@ class RecordTest(unittest.TestCase):
 
 
 class EntryTest(unittest.TestCase):
-    def test_a_colony_holder_keeps_the_entry_and_colonizing_needs_the_milestones(self):
+    def test_a_colony_holder_keeps_the_entry_and_colonizing_needs_the_moon_landing(self):
+        """Colonization opens on the Moon Landing; the Mars Landing gates each world
+        beyond the Moon, not the entry (lunar colonization design § 4)."""
         je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
         entry = _block(je, "je_space_race_solar_colonization")
         for block in ("is_shown_when_inactive", "possible"):
             with self.subTest(block=block):
                 body = _block(entry, block)
                 self.assertIn("sr_has_space_colony = yes", body)
-                self.assertIn("has_variable = sr_completed_moon_base", body)
-                self.assertIn("has_variable = sr_completed_mars_landing", body)
+                self.assertIn("has_variable = sr_completed_moon_landing", body)
+                self.assertNotIn("sr_completed_moon_base", body)
+                self.assertNotIn("sr_completed_mars_landing", body)
+        self.assertIn("has_technology_researched = cislunar_infrastructure", _block(entry, "is_shown_when_inactive"))
         self.assertIn("sr_any_site_unclaimed = yes", _block(entry, "possible"))
         self.assertNotIn("sr_all_colonies_complete", _block(entry, "possible"))
-        running = _block(_raw("common", "scripted_triggers", "space_race_triggers.txt"), "sr_solar_colonization_running")
+        triggers = _strip(_raw("common", "scripted_triggers", "space_race_triggers.txt"))
+        running = _block(triggers, "sr_solar_colonization_running")
         self.assertIn("sr_solar_colonization_qualified = yes", running)
+        self.assertEqual(_block(triggers, "sr_solar_colonization_qualified").split(),
+                         ["has_variable", "=", "sr_completed_moon_landing"])
+        self.assertEqual(_block(triggers, "sr_colonization_beyond_moon").split(),
+                         ["has_variable", "=", "sr_completed_mars_landing"])
+
+    def test_beyond_the_moon_needs_the_mars_landing(self):
+        """Every way a world of stage 1 or later is chosen tests the Mars Landing (the
+        Target button, the automatic pick and a target's validity through
+        sr_cf_targetable_<key>; Races Only's draw per branch), and no lunar one does,
+        in whichever stage's block the draw lists it."""
+        triggers = _strip(_raw(str(gss.TRIGGERS_OUT)))
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                body = _block(triggers, f"sr_cf_targetable_{site.key}")
+                self.assertEqual("sr_colonization_beyond_moon = yes" in body, site.stage >= 1)
+        draw = _block(_strip(_raw(str(gss.EFFECTS_OUT))), "sr_establish_colony_effect")
+        branches = re.findall(r"10 = \{\s*trigger = \{(.*?)\}\s*set_global_variable = \{ name = sr_colony_(\w+) value = yes \}",
+                              draw, re.S)
+        self.assertEqual(len(branches), sum(1 + 5 - s.stage for s in gss.SITES))
+        stage_of = {s.key: s.stage for s in gss.SITES}
+        for trigger, key in branches:
+            with self.subTest(branch=key):
+                self.assertEqual("sr_colonization_beyond_moon = yes" in trigger, stage_of[key] >= 1)
+        # The greyed Target button says why: its own line, before the catch-all.
+        sgui = _block(_strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt")), "sr_colony_target_sgui")
+        valid = _block(sgui, "is_valid")
+        line = re.search(r"text = sr_cf_req_beyond_moon_tt\s*OR = \{\s*sr_cf_scope_site_is_lunar = yes\s*"
+                         r"sr_colonization_beyond_moon = yes\s*\}", valid)
+        self.assertIsNotNone(line)
+        self.assertLess(line.start(), valid.index("sr_cf_req_targetable_tt"))
+        lunar = _block(triggers, "sr_cf_scope_site_is_lunar")
+        self.assertEqual(re.findall(r"scope:site = (\d+)", lunar), [str(s.index) for s in gss.LUNAR])
 
 
 class RuleTest(unittest.TestCase):

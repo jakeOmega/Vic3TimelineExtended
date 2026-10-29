@@ -1237,9 +1237,11 @@ je_space_race_interstellar_results = {
 
 # ===========================================
 # 8. SOLAR SYSTEM COLONIZATION (Staged, Repeatable)
-# Prereq: Moon Base + Mars Landing + Solar Colonization PM (era 11)
+# Prereq: Moon Landing + Solar Colonization PM (Cislunar Infrastructure, era 10);
+# worlds beyond the Moon need the Mars Landing too (lunar colonization design § 4)
 # Stages 3-5 additionally require Deep Space Exploration PM (era 12)
-# 5 stages of colony establishment across the solar system
+# 6 stages of colony establishment across the solar system
+# Stage 0: The Moon
 # Stage 1: Mars & Asteroids
 # Stage 2: Jupiter System & Venus
 # Stage 3: Mercury & Saturn System
@@ -1290,10 +1292,11 @@ je_space_race_solar_colonization = {
 		sr_space_race_on = yes
 		OR = {
 			sr_has_space_colony = yes
+			# The Moon Landing and pm_solar_colonization's technology (lunar
+			# colonization design § 4): the Moon opens first, the worlds beyond
+			# it with the Mars Landing (sr_colonization_beyond_moon).
 			AND = {
-				has_variable = sr_completed_moon_base
-				has_variable = sr_completed_mars_landing
-				# pm_solar_colonization's technology (lunar colonization design § 4)
+				has_variable = sr_completed_moon_landing
 				has_technology_researched = cislunar_infrastructure
 			}
 		}
@@ -1307,10 +1310,10 @@ je_space_race_solar_colonization = {
 				text = sr_has_existing_colonies_tt
 				sr_has_space_colony = yes
 			}
-			# Can actively colonize (original prerequisites)
+			# Can actively colonize: the Moon Landing (lunar colonization design
+			# § 4); the Mars Landing gates each world beyond the Moon, not the entry.
 			AND = {
-				has_variable = sr_completed_moon_base
-				has_variable = sr_completed_mars_landing
+				has_variable = sr_completed_moon_landing
 				modifier:country_sr_solar_colonization_program_bool = yes
 				# Stages 3-5 (outer system) require Deep Space Exploration PM (space_colonization tech, era 12):
 				# past stage 2 under races only, once no inner world is free under
@@ -1435,7 +1438,7 @@ je_space_race_solar_colonization = {
 
 	on_fail = {
 		# Only a programme the country could run: a country that held only a
-		# colony it was given (no Moon Base or Mars Landing) has none to lose.
+		# colony it was given (no Moon Landing) has none to lose.
 		if = {
 			limit = { sr_solar_colonization_qualified = yes }
 			sr_report_program_loss = { MILESTONE = solar_colonization }

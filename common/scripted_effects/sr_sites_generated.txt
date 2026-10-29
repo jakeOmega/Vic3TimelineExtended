@@ -129,6 +129,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_valles_marineris }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_valles_marineris value = yes }
@@ -140,6 +141,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_olympus_mons }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_olympus_mons value = yes }
@@ -152,6 +154,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hellas_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_hellas_planitia value = yes }
@@ -164,6 +167,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_utopia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_utopia_planitia value = yes }
@@ -176,6 +180,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_arcadia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_arcadia_planitia value = yes }
@@ -188,6 +193,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ceres }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = ceres }
 				}
 				set_global_variable = { name = sr_colony_ceres value = yes }
@@ -200,6 +206,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_vesta }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = vesta }
 				}
 				set_global_variable = { name = sr_colony_vesta value = yes }
@@ -212,6 +219,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_psyche }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = psyche }
 				}
 				set_global_variable = { name = sr_colony_psyche value = yes }
@@ -224,6 +232,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_pallas }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = pallas }
 				}
 				set_global_variable = { name = sr_colony_pallas value = yes }
@@ -236,6 +245,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hygiea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = hygiea }
 				}
 				set_global_variable = { name = sr_colony_hygiea value = yes }
@@ -314,6 +324,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_io }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_io value = yes }
@@ -326,6 +337,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_europa }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_europa value = yes }
@@ -339,6 +351,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ganymede }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_ganymede value = yes }
@@ -351,6 +364,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_callisto }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_callisto value = yes }
@@ -363,6 +377,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_himalia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_himalia value = yes }
@@ -374,6 +389,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_amalthea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_amalthea value = yes }
@@ -385,6 +401,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_venus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = venus }
 				}
 				set_global_variable = { name = sr_colony_venus value = yes }
@@ -458,6 +475,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_valles_marineris }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_valles_marineris value = yes }
@@ -469,6 +487,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_olympus_mons }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_olympus_mons value = yes }
@@ -481,6 +500,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hellas_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_hellas_planitia value = yes }
@@ -493,6 +513,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_utopia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_utopia_planitia value = yes }
@@ -505,6 +526,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_arcadia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_arcadia_planitia value = yes }
@@ -517,6 +539,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ceres }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = ceres }
 				}
 				set_global_variable = { name = sr_colony_ceres value = yes }
@@ -529,6 +552,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_vesta }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = vesta }
 				}
 				set_global_variable = { name = sr_colony_vesta value = yes }
@@ -541,6 +565,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_psyche }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = psyche }
 				}
 				set_global_variable = { name = sr_colony_psyche value = yes }
@@ -553,6 +578,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_pallas }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = pallas }
 				}
 				set_global_variable = { name = sr_colony_pallas value = yes }
@@ -565,6 +591,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hygiea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = hygiea }
 				}
 				set_global_variable = { name = sr_colony_hygiea value = yes }
@@ -582,6 +609,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_mercury }
+					sr_colonization_beyond_moon = yes
 					sr_launch_ungated_departs = yes
 				}
 				set_global_variable = { name = sr_colony_mercury value = yes }
@@ -593,6 +621,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_titan }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_titan value = yes }
@@ -605,6 +634,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_enceladus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_enceladus value = yes }
@@ -617,6 +647,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_rhea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_rhea value = yes }
@@ -628,6 +659,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_mimas }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_mimas value = yes }
@@ -639,6 +671,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_iapetus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_iapetus value = yes }
@@ -711,6 +744,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_valles_marineris }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_valles_marineris value = yes }
@@ -722,6 +756,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_olympus_mons }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_olympus_mons value = yes }
@@ -734,6 +769,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hellas_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_hellas_planitia value = yes }
@@ -746,6 +782,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_utopia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_utopia_planitia value = yes }
@@ -758,6 +795,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_arcadia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_arcadia_planitia value = yes }
@@ -770,6 +808,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ceres }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = ceres }
 				}
 				set_global_variable = { name = sr_colony_ceres value = yes }
@@ -782,6 +821,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_vesta }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = vesta }
 				}
 				set_global_variable = { name = sr_colony_vesta value = yes }
@@ -794,6 +834,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_psyche }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = psyche }
 				}
 				set_global_variable = { name = sr_colony_psyche value = yes }
@@ -806,6 +847,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_pallas }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = pallas }
 				}
 				set_global_variable = { name = sr_colony_pallas value = yes }
@@ -818,6 +860,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hygiea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = hygiea }
 				}
 				set_global_variable = { name = sr_colony_hygiea value = yes }
@@ -829,6 +872,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_io }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_io value = yes }
@@ -841,6 +885,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_europa }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_europa value = yes }
@@ -854,6 +899,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ganymede }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_ganymede value = yes }
@@ -866,6 +912,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_callisto }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_callisto value = yes }
@@ -878,6 +925,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_himalia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_himalia value = yes }
@@ -889,6 +937,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_amalthea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_amalthea value = yes }
@@ -900,6 +949,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_venus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = venus }
 				}
 				set_global_variable = { name = sr_colony_venus value = yes }
@@ -918,6 +968,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_titania }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
 				}
 				set_global_variable = { name = sr_colony_titania value = yes }
@@ -930,6 +981,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_oberon }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
 				}
 				set_global_variable = { name = sr_colony_oberon value = yes }
@@ -941,6 +993,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_miranda }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
 				}
 				set_global_variable = { name = sr_colony_miranda value = yes }
@@ -952,6 +1005,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ariel }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
 				}
 				set_global_variable = { name = sr_colony_ariel value = yes }
@@ -963,6 +1017,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_triton }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = neptune }
 				}
 				set_global_variable = { name = sr_colony_triton value = yes }
@@ -975,6 +1030,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_proteus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = neptune }
 				}
 				set_global_variable = { name = sr_colony_proteus value = yes }
@@ -1047,6 +1103,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_valles_marineris }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_valles_marineris value = yes }
@@ -1058,6 +1115,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_olympus_mons }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_olympus_mons value = yes }
@@ -1070,6 +1128,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hellas_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_hellas_planitia value = yes }
@@ -1082,6 +1141,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_utopia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_utopia_planitia value = yes }
@@ -1094,6 +1154,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_arcadia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_arcadia_planitia value = yes }
@@ -1106,6 +1167,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ceres }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = ceres }
 				}
 				set_global_variable = { name = sr_colony_ceres value = yes }
@@ -1118,6 +1180,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_vesta }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = vesta }
 				}
 				set_global_variable = { name = sr_colony_vesta value = yes }
@@ -1130,6 +1193,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_psyche }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = psyche }
 				}
 				set_global_variable = { name = sr_colony_psyche value = yes }
@@ -1142,6 +1206,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_pallas }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = pallas }
 				}
 				set_global_variable = { name = sr_colony_pallas value = yes }
@@ -1154,6 +1219,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hygiea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = hygiea }
 				}
 				set_global_variable = { name = sr_colony_hygiea value = yes }
@@ -1165,6 +1231,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_io }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_io value = yes }
@@ -1177,6 +1244,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_europa }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_europa value = yes }
@@ -1190,6 +1258,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ganymede }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_ganymede value = yes }
@@ -1202,6 +1271,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_callisto }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_callisto value = yes }
@@ -1214,6 +1284,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_himalia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_himalia value = yes }
@@ -1225,6 +1296,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_amalthea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_amalthea value = yes }
@@ -1236,6 +1308,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_venus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = venus }
 				}
 				set_global_variable = { name = sr_colony_venus value = yes }
@@ -1248,6 +1321,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_mercury }
+					sr_colonization_beyond_moon = yes
 					sr_launch_ungated_departs = yes
 				}
 				set_global_variable = { name = sr_colony_mercury value = yes }
@@ -1259,6 +1333,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_titan }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_titan value = yes }
@@ -1271,6 +1346,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_enceladus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_enceladus value = yes }
@@ -1283,6 +1359,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_rhea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_rhea value = yes }
@@ -1294,6 +1371,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_mimas }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_mimas value = yes }
@@ -1305,6 +1383,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_iapetus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_iapetus value = yes }
@@ -1322,6 +1401,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_pluto }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
 				}
 				set_global_variable = { name = sr_colony_pluto value = yes }
@@ -1334,6 +1414,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_eris }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
 				}
 				set_global_variable = { name = sr_colony_eris value = yes }
@@ -1345,6 +1426,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_makemake }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
 				}
 				set_global_variable = { name = sr_colony_makemake value = yes }
@@ -1356,6 +1438,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_haumea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
 				}
 				set_global_variable = { name = sr_colony_haumea value = yes }
@@ -1367,6 +1450,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_sedna }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
 				}
 				set_global_variable = { name = sr_colony_sedna value = yes }
@@ -1439,6 +1523,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_valles_marineris }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_valles_marineris value = yes }
@@ -1450,6 +1535,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_olympus_mons }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_olympus_mons value = yes }
@@ -1462,6 +1548,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hellas_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_hellas_planitia value = yes }
@@ -1474,6 +1561,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_utopia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_utopia_planitia value = yes }
@@ -1486,6 +1574,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_arcadia_planitia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = mars }
 				}
 				set_global_variable = { name = sr_colony_arcadia_planitia value = yes }
@@ -1498,6 +1587,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ceres }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = ceres }
 				}
 				set_global_variable = { name = sr_colony_ceres value = yes }
@@ -1510,6 +1600,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_vesta }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = vesta }
 				}
 				set_global_variable = { name = sr_colony_vesta value = yes }
@@ -1522,6 +1613,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_psyche }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = psyche }
 				}
 				set_global_variable = { name = sr_colony_psyche value = yes }
@@ -1534,6 +1626,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_pallas }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = pallas }
 				}
 				set_global_variable = { name = sr_colony_pallas value = yes }
@@ -1546,6 +1639,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_hygiea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = hygiea }
 				}
 				set_global_variable = { name = sr_colony_hygiea value = yes }
@@ -1557,6 +1651,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_io }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_io value = yes }
@@ -1569,6 +1664,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_europa }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_europa value = yes }
@@ -1582,6 +1678,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ganymede }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_ganymede value = yes }
@@ -1594,6 +1691,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_callisto }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_callisto value = yes }
@@ -1606,6 +1704,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_himalia }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_himalia value = yes }
@@ -1617,6 +1716,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_amalthea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = jupiter }
 				}
 				set_global_variable = { name = sr_colony_amalthea value = yes }
@@ -1628,6 +1728,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_venus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = venus }
 				}
 				set_global_variable = { name = sr_colony_venus value = yes }
@@ -1640,6 +1741,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_mercury }
+					sr_colonization_beyond_moon = yes
 					sr_launch_ungated_departs = yes
 				}
 				set_global_variable = { name = sr_colony_mercury value = yes }
@@ -1651,6 +1753,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_titan }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_titan value = yes }
@@ -1663,6 +1766,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_enceladus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_enceladus value = yes }
@@ -1675,6 +1779,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_rhea }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_rhea value = yes }
@@ -1686,6 +1791,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_mimas }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_mimas value = yes }
@@ -1697,6 +1803,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_iapetus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
 				}
 				set_global_variable = { name = sr_colony_iapetus value = yes }
@@ -1708,6 +1815,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_titania }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
 				}
 				set_global_variable = { name = sr_colony_titania value = yes }
@@ -1720,6 +1828,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_oberon }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
 				}
 				set_global_variable = { name = sr_colony_oberon value = yes }
@@ -1731,6 +1840,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_miranda }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
 				}
 				set_global_variable = { name = sr_colony_miranda value = yes }
@@ -1742,6 +1852,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_ariel }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
 				}
 				set_global_variable = { name = sr_colony_ariel value = yes }
@@ -1753,6 +1864,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_triton }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = neptune }
 				}
 				set_global_variable = { name = sr_colony_triton value = yes }
@@ -1765,6 +1877,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = {
 					NOT = { has_global_variable = sr_colony_proteus }
+					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = neptune }
 				}
 				set_global_variable = { name = sr_colony_proteus value = yes }
