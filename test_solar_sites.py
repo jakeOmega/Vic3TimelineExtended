@@ -537,6 +537,11 @@ class FleetTest(unittest.TestCase):
             dispatch = _block(self.effects, f"sr_cf_dispatch_{k}")
             eligible = _block(self.triggers, f"sr_cf_eligible_{k}")
             with self.subTest(site=k):
+                # a second country this month can't found it: the first's claim is
+                # already set, and both ways in test the world unclaimed (review focus 5)
+                self.assertIn(f"sr_cf_targetable_{k} = yes", eligible)
+                self.assertIn(f"NOT = {{ has_global_variable = sr_colony_{k} }}",
+                              _block(self.triggers, f"sr_cf_targetable_{k}"))
                 if site in gss.LUNAR:
                     self.assertEqual(dispatch.split(), ["sr_cf_found_now_" + k, "=", "yes", "sr_cf_after_found",
                                                         "=", "{", "INDEX", "=", str(site.index), "}"])
@@ -559,6 +564,7 @@ class FleetTest(unittest.TestCase):
                 branch = re.search(rf"AND = \{{ var:sr_cf_target = {site.index} ([^\n]*) \}}\n", ready)
                 self.assertTrue(branch, site.key)
                 self.assertEqual("sr_cf_has_free_slot = yes" in branch.group(1), site not in gss.LUNAR)
+                self.assertIn(f"sr_cf_targetable_{site.key} = yes", branch.group(1))
 
     def test_the_landing_site_discounts_its_world(self):
         """The Moon Landing's site choice takes 25% off that lunar world's progress
