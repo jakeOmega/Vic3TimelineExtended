@@ -1326,14 +1326,48 @@ class TestSalvo(unittest.TestCase):
     def test_salvo_targets_self_check(self):
         self.assertIn("TE_SELF_CHECK OK nd_salvo_targets", self.effects)
         self.assertIn("TE_SELF_CHECK BROKEN nd_salvo_targets", self.effects)
-        check = block(self.effects, "nd_salvo_targets_self_check")
-        self.assertIn("var:nd_salvo_fired >= 2", check)
+        raw = block(self.effects, "nd_salvo_targets_self_check")
+        check = squash(raw)
+        # Final review: gated on the count ordered, not the warheads fired,
+        # so a loop that ran short reports BROKEN; any mission, so the AI's
+        # Forces and Leadership salvos reach it in an observer run.
+        gate = squash(block(raw, "limit"))
+        self.assertIn("var:nd_salvo_count >= 2", gate)
+        self.assertNotIn("nd_salvo_fired", gate)
+        self.assertNotIn("nd_salvo_mission", gate)
+        self.assertIn("var:nd_salvo_fired = var:nd_salvo_count", check)
+        # The spread is judged only for Cities on a victim of two states or more.
         self.assertIn("var:nd_salvo_mission = 1", check)
         self.assertIn("count >= 2", check)
-        self.assertIn("var:nd_salvo_fired = var:nd_salvo_count", check)
         self.assertIn("has_global_variable = nd_salvo_targets_self_check_done", check)
         self.assertLess(self.after.index("nd_salvo_targets_self_check = yes"), len(self.after))
         self.assertLess(self.order.index("nd_salvo_aftermath = yes"), self.order.index("nd_salvo_clear = yes"))
+
+    def test_fire_first_share_from_the_arsenal_before_destruction(self):
+        # Final review: the saved share is min(exposed, K x landed) x credit
+        # of the arsenal the salvo met, as the destroyed share is.
+        cf = squash(block(self.effects, "nd_salvo_counterforce"))
+        self.assertLess(cf.index("value = nd_counterforce_saved_raw"),
+                        cf.index("name = nuclear_weapon_stockpile subtract = var:nd_cf_whole"))
+
+    def test_only_an_armed_victim_is_disarmed_or_cut_off(self):
+        # Final review: nd_authority_central holds for a country that never
+        # set an authority, so the aftermath asks for an arsenal too.
+        after = squash(self.after)
+        self.assertIn("var:nd_salvo_forces_landed > 0 scope:nd_salvo_victim = { nd_is_armed = yes }", after)
+        self.assertIn("scope:nd_salvo_victim = { nd_authority_central = yes nd_is_armed = yes }", after)
+
+    def test_texts_name_a_state_a_warhead_hit(self):
+        # Final review: the events, notifications and UN subjects read
+        # scope:target_state, which the loop leaves on the last state aimed
+        # at; it is put back on one a warhead hit, the capital first.
+        hit = squash(block(self.effects, "nd_salvo_hit"))
+        self.assertIn("scope:target_state = { save_scope_as = nd_salvo_hit_state }", hit)
+        self.assertIn("is_capital = yes } } change_variable = { name = nd_salvo_capital_landed add = 1 }"
+                      " scope:target_state = { save_scope_as = nd_salvo_hit_capital }", hit)
+        restore = self.after.index("save_scope_as = target_state")
+        self.assertLess(self.after.index("scope:nd_salvo_hit_capital"), restore)
+        self.assertLess(restore, self.after.index("nd_salvo_record_use = yes"))
 
     def test_each_salvo_effect_defined_once(self):
         for name in ("nd_order_salvo", "nd_salvo_warhead", "nd_salvo_pick_target", "nd_salvo_hit", "nd_salvo_aftermath",
@@ -1363,7 +1397,7 @@ class TestDecapitationGates(unittest.TestCase):
             gate = block(body[body.index("remove_variable = nd_dispatch_click"):], "limit")
             self.assertIn("nd_command_intact = yes", gate, name)
         crisis = strip_comments(read(CRISIS_EVENTS))
-        for option in ("nuclear_crisis.4.g", "nuclear_crisis.7.a"):
+        for option in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b", "nuclear_crisis.24.b"):
             self.assertIn("nd_command_intact = yes", block(option_body(crisis, option), "trigger"), option)
         guarantor = block(crisis, "nuclear_crisis.22")
         self.assertIn("nd_command_intact = yes", guarantor)
@@ -1374,6 +1408,14 @@ class TestDecapitationGates(unittest.TestCase):
         weekly = self.effects[self.effects.index("limit = { has_variable = nd_pending_retaliation }"):]
         weekly = weekly[:weekly.index("nuclear_weapon_events.24")]
         self.assertIn("nd_command_intact = yes", weekly)
+
+    def test_cut_off_command_keeps_its_authority(self):
+        # Final review: a change of authority while cut off would leave the
+        # new authority's unordered launches narrated but refused by the
+        # dispatchers' gate.
+        self.assertIn("nd_command_intact = yes", block(self.triggers, "nd_can_set_authority"))
+        self.assertIn("limit = { var:nd_authority_months >= nd_authority_tenure_months nd_command_intact = yes }",
+                      squash(self.effects))
 
     def test_unordered_paths_untouched(self):
         # Only a Central Authorization country is ever cut off, and none of
@@ -1411,6 +1453,45 @@ class TestDecapitationGates(unittest.TestCase):
                           body, part)
             self.assertTrue(loc_value(key), key)
         self.assertIn("remove_variable = nd_restored_from_decapitation", block(event, "after"))
+
+    def test_salvo_claim_keeps_the_salvo_text(self):
+        # Final review: a claim on a salvo reads the salvo's text with the
+        # hotline sentence, not the single strike's.
+        desc = squash(block(block(self.weapon, "nuclear_weapon_events.1"), "desc"))
+        for key in ("nuclear_weapon_events.1.d_cut_off_claim", "nuclear_weapon_events.1.d_salvo_forces_claim",
+                    "nuclear_weapon_events.1.d_salvo_leadership_claim", "nuclear_weapon_events.1.d_salvo_cities_claim"):
+            self.assertLess(desc.index(f"desc = {key} }}"), desc.index("desc = nuclear_weapon_events.1.d_claim }"), key)
+            self.assertIn("$nuclear_weapon_events.1.claim_word$", loc_value(key), key)
+        self.assertLess(desc.index("desc = nuclear_weapon_events.1.d_salvo_cities }"),
+                        desc.index("desc = nuclear_weapon_events.1.d_claim }"))
+        self.assertIn("$nuclear_weapon_events.1.claim_word$", loc_value("nuclear_weapon_events.1.d_claim"))
+
+    def test_claim_accepted_while_cut_off_drops_the_answer(self):
+        # Final review: accepting the claim holds our answer back, so the
+        # answer a decapitation kept for Command Restored goes with it.
+        option = squash(option_body(block(self.weapon, "nuclear_weapon_events.1"), "nuclear_weapon_events.1.k"))
+        self.assertIn("var:nd_pending_retaliation = scope:attacking_country } remove_variable = nd_pending_retaliation", option)
+        self.assertNotIn("hold them back", loc_value("nuclear_weapon_events.1.cut_off.tt"))
+
+    def test_attacker_learns_the_leadership_result(self):
+        two = squash(block(block(self.weapon, "nuclear_weapon_events.2"), "desc"))
+        cut = two.index("desc = nuclear_weapon_events.2.d_salvo_cut_off }")
+        self.assertIn("has_variable = nd_decapitated", two[two.rindex("trigger", 0, cut):cut])
+        held = two.index("desc = nuclear_weapon_events.2.d_salvo_leadership }")
+        self.assertIn("var:nd_salvo_seen_mission ?= 3", two[two.rindex("trigger", 0, held):held])
+        self.assertLess(cut, held)
+        self.assertLess(held, two.index("desc = nuclear_weapon_events.2.d_salvo }"))
+        for key in ("nuclear_weapon_events.2.d_salvo_cut_off", "nuclear_weapon_events.2.d_salvo_leadership"):
+            self.assertTrue(loc_value(key), key)
+
+    def test_launch_order_shows_the_cost(self):
+        # Final review: the single strike's confirmation names what it costs;
+        # the salvo's does too, with the square root.
+        launch = squash(option_body(block(self.weapon, "nuclear_weapon_events.31"), "nuclear_weapon_events.31.a"))
+        self.assertIn("nd_was_struck_by = { ENEMY = scope:nd_salvo_victim } } custom_tooltip = nd_taboo_tt_strike_answer", launch)
+        self.assertIn("custom_tooltip = nd_taboo_tt_strike_first_use", launch)
+        self.assertLess(launch.index("nd_taboo_tt_strike_first_use"), launch.index("nd_order_salvo = yes"))
+        self.assertIn("square root", loc_value("nuclear_weapon_events.31.a.tt"))
 
     def test_salvo_text_and_stale_guard(self):
         one = block(self.weapon, "nuclear_weapon_events.1")

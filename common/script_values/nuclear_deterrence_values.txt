@@ -1071,7 +1071,12 @@ nd_ai_salvo_mission_value = {
 	if = {
 		limit = {
 			nd_ai_salvo_spare_value >= 1
-			scope:nd_sv_enemy = { nd_authority_central = yes }
+			# A country without warheads sets no authority, and so reads
+			# as Central: it has no command to cut off.
+			scope:nd_sv_enemy = {
+				nd_authority_central = yes
+				nd_believed_armed = yes
+			}
 			nd_ai_leadership_margin > 0
 		}
 		value = 3
@@ -1089,13 +1094,15 @@ nd_ai_forces_need = {
 	ceiling = yes
 }
 
-# Leadership: twice the enemy's redundancy, a chance of a third if all land.
+# Leadership: enough to land twice the enemy's redundancy on its capital, a
+# chance of a third, at the share of warheads the capital lets through.
 nd_ai_leadership_need = {
 	value = 0
 	scope:nd_sv_enemy = {
 		add = nd_redundancy_believed
 	}
 	multiply = 2
+	divide = nd_ai_capital_hit_share
 	ceiling = yes
 }
 

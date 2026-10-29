@@ -1509,8 +1509,13 @@ nd_ai_review_posture = {
 	# launches to standing orders, Launch on Warning for a militarist one,
 	# Delegation otherwise. Back to Central once the threat has passed; a
 	# cautious ruler always (rework spec §4.4).
+	# Not while cut off: a new authority's unordered launches would be
+	# narrated, then refused by the dispatchers' nd_command_intact.
 	if = {
-		limit = { var:nd_authority_months >= nd_authority_tenure_months }
+		limit = {
+			var:nd_authority_months >= nd_authority_tenure_months
+			nd_command_intact = yes
+		}
 		if = {
 			limit = {
 				ruler_is_cautious = no
@@ -2533,9 +2538,12 @@ nd_salvo_hit = {
 	nd_log_context = yes
 	debug_log = "TE_NUCLEAR: type=action; action=strategic_hit; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	change_variable = { name = nd_salvo_landed add = 1 }
+	# The aftermath names a state a warhead hit, the capital first.
+	scope:target_state = { save_scope_as = nd_salvo_hit_state }
 	if = {
 		limit = { scope:target_state = { is_capital = yes } }
 		change_variable = { name = nd_salvo_capital_landed add = 1 }
+		scope:target_state = { save_scope_as = nd_salvo_hit_capital }
 	}
 	if = {
 		limit = { var:nd_salvo_mission = 2 }
@@ -2561,14 +2569,33 @@ nd_salvo_aftermath = {
 		# Landed: nd_record_nuclear_use spurs the world's programmes.
 		set_variable = { name = nd_strike_landed value = 1 }
 		te_set_sqrt = { IN = var:nd_salvo_landed OUT = nd_salvo_sqrt }
+		# The loop leaves scope:target_state on the last state aimed at, which
+		# that warhead may have missed. The events, notifications and UN
+		# subjects below name one a warhead hit, the capital first.
 		if = {
-			limit = { var:nd_salvo_forces_landed > 0 }
+			limit = { exists = scope:nd_salvo_hit_capital }
+			scope:nd_salvo_hit_capital = { save_scope_as = target_state }
+		}
+		else_if = {
+			limit = { exists = scope:nd_salvo_hit_state }
+			scope:nd_salvo_hit_state = { save_scope_as = target_state }
+		}
+		# Counterforce and decapitation need an arsenal: nd_authority_central
+		# also holds for a country that never set an authority.
+		if = {
+			limit = {
+				var:nd_salvo_forces_landed > 0
+				scope:nd_salvo_victim = { nd_is_armed = yes }
+			}
 			nd_salvo_counterforce = yes
 		}
 		if = {
 			limit = {
 				var:nd_salvo_capital_landed > 0
-				scope:nd_salvo_victim = { nd_authority_central = yes }
+				scope:nd_salvo_victim = {
+					nd_authority_central = yes
+					nd_is_armed = yes
+				}
 			}
 			nd_salvo_decapitation = yes
 		}
@@ -2674,7 +2701,8 @@ nd_salvo_counterforce = {
 			limit = { var:nd_cf_whole > var:nuclear_weapon_stockpile }
 			set_variable = { name = nd_cf_whole value = var:nuclear_weapon_stockpile }
 		}
-		change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_cf_whole }
+		# The saved share is of the arsenal the salvo met, as the destroyed
+		# share is: read before the destroyed warheads leave the stockpile.
 		if = {
 			limit = { nd_authority_launch_on_warning = yes }
 			set_variable = {
@@ -2686,6 +2714,7 @@ nd_salvo_counterforce = {
 				}
 			}
 		}
+		change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_cf_whole }
 		nd_log_context = yes
 		debug_log = "TE_NUCLEAR: type=counterforce; destroyed=[THIS.Var('nd_cf_whole').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		# The arsenal ledger records what was destroyed
@@ -2788,23 +2817,17 @@ nd_salvo_decapitation = {
 	}
 }
 
-# Once a game (TE_SELF_CHECK), the first Cities salvo of two or more warheads
-# on a country with two or more states: the loop fired the count it was given
-# (while = { count = <script value> }), and the marks spread the warheads
-# over at least two states (a mark a later pick in the same effect can see).
-# Attacker scope, before nd_salvo_clear.
+# Once a game (TE_SELF_CHECK), the first salvo ordered with two or more
+# warheads, any mission: the loop fired the count it was given (while = {
+# count = <script value> }), gated on the count so a loop that ran short
+# reports BROKEN; and, for Cities on a country with two or more states, the
+# marks spread the warheads over at least two (a mark a later pick in the same
+# effect can see). Attacker scope, before nd_salvo_clear.
 nd_salvo_targets_self_check = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = nd_salvo_targets_self_check_done }
-			var:nd_salvo_mission = 1
-			var:nd_salvo_fired >= 2
-			scope:nd_salvo_victim = {
-				any_scope_state = {
-					count >= 2
-					always = yes
-				}
-			}
+			var:nd_salvo_count >= 2
 		}
 		set_global_variable = nd_salvo_targets_self_check_done
 		set_variable = { name = nd_salvo_marked value = 0 }
@@ -2817,12 +2840,25 @@ nd_salvo_targets_self_check = {
 		if = {
 			limit = {
 				var:nd_salvo_fired = var:nd_salvo_count
-				var:nd_salvo_marked >= 2
+				# The spread is judged for Cities on a victim of two states
+				# or more; Forces and Leadership may aim at one state.
+				OR = {
+					NOT = { var:nd_salvo_mission = 1 }
+					var:nd_salvo_marked >= 2
+					scope:nd_salvo_victim = {
+						NOT = {
+							any_scope_state = {
+								count >= 2
+								always = yes
+							}
+						}
+					}
+				}
 			}
-			debug_log = "TE_SELF_CHECK OK nd_salvo_targets fired=[THIS.Var('nd_salvo_fired').GetValue|0] of=[THIS.Var('nd_salvo_count').GetValue|0] states=[THIS.Var('nd_salvo_marked').GetValue|0] (a Cities salvo fired its count and spread its warheads)"
+			debug_log = "TE_SELF_CHECK OK nd_salvo_targets mission=[THIS.Var('nd_salvo_mission').GetValue|0] fired=[THIS.Var('nd_salvo_fired').GetValue|0] of=[THIS.Var('nd_salvo_count').GetValue|0] states=[THIS.Var('nd_salvo_marked').GetValue|0] (the salvo fired its count, and a Cities salvo spread its warheads)"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN nd_salvo_targets fired=[THIS.Var('nd_salvo_fired').GetValue|0] of=[THIS.Var('nd_salvo_count').GetValue|0] states=[THIS.Var('nd_salvo_marked').GetValue|0] (a Cities salvo fired fewer than its count, or every warhead fell on one state; see docs/testing/nuclear-playtest.md)"
+			debug_log = "TE_SELF_CHECK BROKEN nd_salvo_targets mission=[THIS.Var('nd_salvo_mission').GetValue|0] fired=[THIS.Var('nd_salvo_fired').GetValue|0] of=[THIS.Var('nd_salvo_count').GetValue|0] states=[THIS.Var('nd_salvo_marked').GetValue|0] (the salvo fired fewer than its count, or a Cities salvo put every warhead on one state; see docs/testing/nuclear-playtest.md)"
 		}
 		remove_variable = nd_salvo_marked
 	}

@@ -244,6 +244,10 @@ class TestAiSalvo(unittest.TestCase):
         self.assertEqual(self.mission(doctrine=2, stockpile=30, capital_hit_share=1, enemy=replace(small, authority=3)), 1)
         # No spare warhead: no salvo.
         self.assertEqual(self.mission(doctrine=5, stockpile=1, enemy=delegated), 1)
+        # A country without warheads has no launch authority to cut off
+        # (final review): never Leadership, whatever its nd_authority reads.
+        self.assertEqual(self.mission(doctrine=2, stockpile=9, capital_hit_share=0.9,
+                                      enemy=replace(small, believed_armed=False)), 1)
 
     def test_spare_keeps_a_reserve(self):
         spare = {s: self.model.number("nd_ai_salvo_spare_value", Posture(stockpile=s)) for s in (1, 2, 3, 9, 10, 30)}
@@ -262,6 +266,9 @@ class TestAiSalvo(unittest.TestCase):
         # Leadership: ceil(2R), here 2 x 1.3.
         small = Posture(authority=1, believed_stockpile=3, satellite_communications=False, mainframe=False)
         self.assertEqual(size("nd_ai_salvo_size_value", Posture(stockpile=9, capital_hit_share=0.9, enemy=small)), 3)
+        # Enough to land 2R on the capital (final review): 2.6 / 0.4 is 6.5,
+        # so 7, where ceil(2R) alone would land 1.2, under R.
+        self.assertEqual(size("nd_ai_salvo_size_value", Posture(stockpile=30, capital_hit_share=0.4, enemy=small)), 7)
 
     def test_accept_effect_routes_ai_missions(self):
         nuke = (ROOT / "common/diplomatic_actions/nuke.txt").read_text(encoding="utf-8-sig")

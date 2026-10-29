@@ -1109,6 +1109,7 @@ nuclear_crisis.20 = {
 			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
+			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes
@@ -1401,6 +1402,7 @@ nuclear_crisis.24 = {
 			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
+			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes

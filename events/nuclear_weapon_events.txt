@@ -28,9 +28,15 @@ nuclear_weapon_events.1 = {
 	}
 	desc = {
 		first_valid = {
+			# A salvo's text first, with the hotline sentence when it carries
+			# a claim; then the single strike's claim.
 			triggered_desc = {
-				trigger = { nd_strike_carries_claim = { ENEMY = scope:attacking_country } }
-				desc = nuclear_weapon_events.1.d_claim
+				trigger = {
+					var:nd_salvo_seen_by ?= scope:attacking_country
+					has_variable = nd_decapitated
+					nd_strike_carries_claim = { ENEMY = scope:attacking_country }
+				}
+				desc = nuclear_weapon_events.1.d_cut_off_claim
 			}
 			triggered_desc = {
 				trigger = {
@@ -43,8 +49,24 @@ nuclear_weapon_events.1 = {
 				trigger = {
 					var:nd_salvo_seen_by ?= scope:attacking_country
 					var:nd_salvo_seen_mission ?= 2
+					nd_strike_carries_claim = { ENEMY = scope:attacking_country }
+				}
+				desc = nuclear_weapon_events.1.d_salvo_forces_claim
+			}
+			triggered_desc = {
+				trigger = {
+					var:nd_salvo_seen_by ?= scope:attacking_country
+					var:nd_salvo_seen_mission ?= 2
 				}
 				desc = nuclear_weapon_events.1.d_salvo_forces
+			}
+			triggered_desc = {
+				trigger = {
+					var:nd_salvo_seen_by ?= scope:attacking_country
+					var:nd_salvo_seen_mission ?= 3
+					nd_strike_carries_claim = { ENEMY = scope:attacking_country }
+				}
+				desc = nuclear_weapon_events.1.d_salvo_leadership_claim
 			}
 			triggered_desc = {
 				trigger = {
@@ -54,8 +76,19 @@ nuclear_weapon_events.1 = {
 				desc = nuclear_weapon_events.1.d_salvo_leadership
 			}
 			triggered_desc = {
+				trigger = {
+					var:nd_salvo_seen_by ?= scope:attacking_country
+					nd_strike_carries_claim = { ENEMY = scope:attacking_country }
+				}
+				desc = nuclear_weapon_events.1.d_salvo_cities_claim
+			}
+			triggered_desc = {
 				trigger = { var:nd_salvo_seen_by ?= scope:attacking_country }
 				desc = nuclear_weapon_events.1.d_salvo_cities
+			}
+			triggered_desc = {
+				trigger = { nd_strike_carries_claim = { ENEMY = scope:attacking_country } }
+				desc = nuclear_weapon_events.1.d_claim
 			}
 			triggered_desc = {
 				trigger = { always = yes }
@@ -341,6 +374,15 @@ nuclear_weapon_events.1 = {
 		custom_tooltip = nuclear_weapon_events.1.k.tt
 		set_variable = { name = nd_claim_accepted value = var:nd_claim_id }
 		hidden_effect = {
+			# Holding our answer back includes the one a decapitation kept
+			# for Command Restored (nuclear_weapon_events.24).
+			if = {
+				limit = {
+					has_variable = nd_pending_retaliation
+					var:nd_pending_retaliation = scope:attacking_country
+				}
+				remove_variable = nd_pending_retaliation
+			}
 			save_scope_as = nd_claim_victim
 			scope:attacking_country = { trigger_event = { id = nuclear_weapon_events.27 days = 3 } }
 		}
@@ -531,6 +573,22 @@ nuclear_weapon_events.2 = {
 			triggered_desc = {
 				trigger = { nd_strike_from_incident_of = { KIND = commander } }
 				desc = nuclear_weapon_events.2.d_commander
+			}
+			# Whether the capital's warheads cut the command: launch
+			# authority is public (rework spec §14.2).
+			triggered_desc = {
+				trigger = {
+					scope:target_country ?= { var:nd_salvo_seen_by ?= ROOT }
+					scope:target_country = { has_variable = nd_decapitated }
+				}
+				desc = nuclear_weapon_events.2.d_salvo_cut_off
+			}
+			triggered_desc = {
+				trigger = {
+					scope:target_country ?= { var:nd_salvo_seen_by ?= ROOT }
+					scope:target_country = { var:nd_salvo_seen_mission ?= 3 }
+				}
+				desc = nuclear_weapon_events.2.d_salvo_leadership
 			}
 			triggered_desc = {
 				trigger = {
@@ -3052,6 +3110,15 @@ nuclear_weapon_events.31 = {
 			exists = scope:nd_salvo_victim
 		}
 		highlighted_option = yes
+		# What one warhead's use costs, as the strike action shows it; the
+		# tooltip below says how a salvo scales it.
+		if = {
+			limit = { nd_was_struck_by = { ENEMY = scope:nd_salvo_victim } }
+			custom_tooltip = nd_taboo_tt_strike_answer
+		}
+		else = {
+			custom_tooltip = nd_taboo_tt_strike_first_use
+		}
 		custom_tooltip = nuclear_weapon_events.31.a.tt
 		nd_order_salvo = yes
 		ai_chance = {

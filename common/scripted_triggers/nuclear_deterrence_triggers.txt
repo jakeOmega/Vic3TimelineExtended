@@ -2227,6 +2227,12 @@ nd_can_set_authority = {
 		has_variable = nd_authority_months
 		var:nd_authority_months >= nd_authority_tenure_months
 	}
+	# Not while cut off: the new authority's unordered launches would be
+	# refused by the dispatchers' nd_command_intact.
+	custom_tooltip = {
+		text = nd_tt_command_intact
+		nd_command_intact = yes
+	}
 }
 
 nd_can_step_investment_up = {
