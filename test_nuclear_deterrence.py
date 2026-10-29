@@ -238,7 +238,7 @@ class TestLocalization(unittest.TestCase):
         needed = set()
         for a in acts:
             needed |= {a, a + "_desc", a + "_action_notification_name", a + "_action_notification_desc"}
-        for article in ("nuclear_guarantee", "nuclear_security_assistance"):
+        for article in ("nuclear_guarantee", "nuclear_security_assistance", "nuclear_basing"):
             needed |= {article, article + "_desc", article + "_article_short_desc",
                        article + "_effects_desc"}
         self.assert_keys(needed, "actions and article")
@@ -258,6 +258,15 @@ class TestLocalization(unittest.TestCase):
         self.assert_keys({"je_nuclear_program", "je_nuclear_program_desc",
                           "je_nuclear_program_reason",
                           "je_nuclear_program_status_line"}, JE.name)
+
+
+# Every event option that orders a launch, gated on the command (phase 3) and
+# on reach (phase 4a, test_nuclear_reach.py): one list, so the gates can't
+# drift apart. The guarantor's hidden answer, nuclear_crisis.22, is the one
+# ordered launch that is not an option.
+ORDERED_LAUNCH_CRISIS_OPTIONS = ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b",
+                                 "nuclear_crisis.24.b")
+ORDERED_LAUNCH_INCIDENT_OPTIONS = ("nuclear_incident.1.c", "nuclear_incident.50.c")
 
 
 def option_body(text, option_name):
@@ -413,7 +422,7 @@ class TestFollowThrough(unittest.TestCase):
     def test_classification_writes_every_reason_once(self):
         body = block(self.effects, "nd_crisis_classify_follow_through")
         codes = re.findall(r"name = nd_ft_reason value = (\d)", body)
-        self.assertEqual(sorted(codes), [str(c) for c in range(1, 8)])
+        self.assertEqual(sorted(codes), [str(c) for c in range(1, 9)])
 
     def test_ai_never_bluffs_in_public(self):
         self.assertIn("nd_threat_backed = { TARGET = $TARGET$ }",
@@ -1181,7 +1190,8 @@ class TestSalvo(unittest.TestCase):
                        "nd_doctrine_permits_strike = { ENEMY = $ENEMY$ }", "nd_pledge_permits_strike = { ENEMY = $ENEMY$ }",
                        "nd_war_law_permits_strategic_strike = yes", "nd_command_intact = yes"):
             self.assertIn(needle, gates)
-        self.assertEqual(gates.count("custom_tooltip"), 7)
+        # The eighth: a Leadership salvo needs the capital in reach (phase 4a).
+        self.assertEqual(gates.count("custom_tooltip"), 8)
         cand = squash(block(self.triggers, "nd_planner_candidate"))
         for needle in ("has_war_with = $ENEMY$", "nd_in_peacetime_exchange_with = { ENEMY = $ENEMY$ }",
                        "any_scope_state = { always = yes }"):
@@ -1202,15 +1212,20 @@ class TestSalvo(unittest.TestCase):
 
     def test_targets_by_mission(self):
         pick = squash(block(self.effects, "nd_salvo_pick_target"))
-        for needle in ("capital = { save_scope_as = target_state }", "nd_state_has_military_target = yes",
+        for needle in ("capital = { nd_salvo_aim_here = yes }", "nd_state_has_military_target = yes",
                        "region ?= scope:nd_salvo_cap_region", "order_by = nuclear_strike_target_score", "position = 0",
-                       "NOT = { has_variable = nd_salvo_target }", "set_variable = nd_salvo_target"):
+                       "NOT = { has_variable = nd_salvo_target }"):
             self.assertIn(needle, pick)
         self.assertNotRegex(pick, r"position = [^0]")
+        aim = squash(block(self.effects, "nd_salvo_aim_here"))
+        self.assertIn("save_scope_as = target_state set_variable = nd_salvo_target", aim)
 
     def test_targets_fall_back_once_all_are_marked(self):
-        self.assertIn("else = { ordered_scope_state = { order_by = nuclear_strike_target_score position = 0"
-                      " save_scope_as = target_state } }", squash(block(self.effects, "nd_salvo_pick_target")))
+        # Last, once every state in reach is marked: the best state in reach
+        # (rework spec §7; test_nuclear_reach.py).
+        self.assertIn("ordered_scope_state = { limit = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker } }"
+                      " order_by = nuclear_strike_target_score position = 0 nd_salvo_aim_here = yes } }",
+                      squash(block(self.effects, "nd_salvo_pick_target")))
 
     def test_marks_cleared(self):
         clear = squash(block(self.effects, "nd_salvo_clear"))
@@ -1414,12 +1429,12 @@ class TestDecapitationGates(unittest.TestCase):
             gate = block(body[body.index("remove_variable = nd_dispatch_click"):], "limit")
             self.assertIn("nd_command_intact = yes", gate, name)
         crisis = strip_comments(read(CRISIS_EVENTS))
-        for option in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b", "nuclear_crisis.24.b"):
+        for option in ORDERED_LAUNCH_CRISIS_OPTIONS:
             self.assertIn("nd_command_intact = yes", block(option_body(crisis, option), "trigger"), option)
         guarantor = block(crisis, "nuclear_crisis.22")
         self.assertIn("nd_command_intact = yes", guarantor)
         incident = strip_comments(read(INCIDENT_EVENTS))
-        for option in ("nuclear_incident.1.c", "nuclear_incident.50.c"):
+        for option in ORDERED_LAUNCH_INCIDENT_OPTIONS:
             self.assertIn("nd_command_intact", block(option_body(incident, option), "trigger"), option)
         # The answer that waited is asked only once the command is restored.
         weekly = self.effects[self.effects.index("limit = { has_variable = nd_pending_retaliation }"):]
@@ -1732,6 +1747,7 @@ PREVIEW_PINS = {
     "nd_tt_open_bluff_flexible": ("nd_yp_follow_through_value", "subtract", 25),
     "nd_tt_open_bluff_law": ("nd_yp_follow_through_value", "subtract", 25),
     "nd_tt_open_bluff_nfu": ("nd_yp_follow_through_value", "subtract", 35),
+    "nd_tt_open_bluff_reach": ("nd_yp_follow_through_value", "subtract", 25),
 }
 
 

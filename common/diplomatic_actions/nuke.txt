@@ -44,13 +44,22 @@
 			text = nd_tt_command_intact
 			nd_command_intact = yes
 		}
+		# Our delivery reaches them (rework spec §7): the states we can
+		# strike are second_state_trigger's.
+		custom_tooltip = {
+			text = nd_tt_in_reach
+			nd_reaches_country = { TARGET = scope:target_country }
+		}
 	}
 
+	# will_select_as_second_state sees the state alone (vanilla's
+	# diplomatic_action.md), so reach is read here only.
 	second_state_trigger = {
 		exists = scope:country
 		owner = {
 			has_war_with = scope:country
 		}
+		nd_state_in_reach_of = { COUNTRY = scope:country }
 	}
 
 	accept_effect = {
@@ -256,13 +265,22 @@ tactical_nuke_diplo_action = {
 			text = nd_tt_command_intact
 			nd_command_intact = yes
 		}
+		# Our delivery reaches them (rework spec §7): the states we can
+		# strike are second_state_trigger's.
+		custom_tooltip = {
+			text = nd_tt_in_reach
+			nd_reaches_country = { TARGET = scope:target_country }
+		}
 	}
 
+	# will_select_as_second_state sees the state alone (vanilla's
+	# diplomatic_action.md), so reach is read here only.
 	second_state_trigger = {
 		exists = scope:country
 		owner = {
 			has_war_with = scope:country
 		}
+		nd_state_in_reach_of = { COUNTRY = scope:country }
 		nd_state_has_military_target = yes
 	}
 

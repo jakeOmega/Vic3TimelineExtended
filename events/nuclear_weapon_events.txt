@@ -243,6 +243,7 @@ nuclear_weapon_events.1 = {
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
@@ -323,18 +324,21 @@ nuclear_weapon_events.1 = {
 
 		scope:attacking_country = {
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
 
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 1
 				nuclear_response_strike = yes
 			}
 
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 2
 				nuclear_response_strike = yes
@@ -488,11 +492,13 @@ nuclear_weapon_events.1 = {
 			limit = { scope:target_country = { var:nuclear_weapon_stockpile >= 3 } }
 			scope:attacking_country = {
 				ordered_scope_state = {
+					limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
 				ordered_scope_state = {
+					limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 					order_by = nuclear_strike_target_score
 					position = 2
 					nuclear_response_strike = yes
@@ -503,6 +509,7 @@ nuclear_weapon_events.1 = {
 			limit = { scope:target_country = { var:nuclear_weapon_stockpile >= 2 } }
 			scope:attacking_country = {
 				ordered_scope_state = {
+					limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
@@ -511,6 +518,7 @@ nuclear_weapon_events.1 = {
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
@@ -1130,6 +1138,7 @@ nuclear_weapon_events.11 = {
 		}
 		scope:target_country = {
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:attacking_country } }
 				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_response_strike = yes
@@ -1202,18 +1211,21 @@ nuclear_weapon_events.11 = {
 		}
 		scope:target_country = {
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:attacking_country } }
 				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_response_strike = yes
 			}
 
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:attacking_country } }
 				order_by = nuclear_strike_target_score
 				position = 1
 				nuclear_response_response_strike = yes
 			}
 
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:attacking_country } }
 				order_by = nuclear_strike_target_score
 				position = 2
 				nuclear_response_response_strike = yes
@@ -2568,6 +2580,7 @@ nuclear_weapon_events.24 = {
 		highlighted_option = yes
 		scope:attacking_country = {
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
@@ -2594,16 +2607,19 @@ nuclear_weapon_events.24 = {
 		highlighted_option = yes
 		scope:attacking_country = {
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 1
 				nuclear_response_strike = yes
 			}
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 2
 				nuclear_response_strike = yes
@@ -2638,11 +2654,13 @@ nuclear_weapon_events.24 = {
 			limit = { var:nuclear_weapon_stockpile >= 3 }
 			scope:attacking_country = {
 				ordered_scope_state = {
+					limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
 				ordered_scope_state = {
+					limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 					order_by = nuclear_strike_target_score
 					position = 2
 					nuclear_response_strike = yes
@@ -2653,6 +2671,7 @@ nuclear_weapon_events.24 = {
 			limit = { var:nuclear_weapon_stockpile >= 2 }
 			scope:attacking_country = {
 				ordered_scope_state = {
+					limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
@@ -2661,6 +2680,7 @@ nuclear_weapon_events.24 = {
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
@@ -3146,5 +3166,16 @@ nuclear_weapon_events.31 = {
 		ai_chance = {
 			base = 1
 		}
+	}
+}
+
+# Hidden: a Nuclear Basing article started or ended a day ago, so the guest
+# rebuilds its reach (125_nuclear_basing.txt; the hooks can't read variables).
+nuclear_weapon_events.32 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		nd_reach_refresh = yes
 	}
 }

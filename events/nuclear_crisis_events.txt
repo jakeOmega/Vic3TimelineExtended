@@ -139,12 +139,15 @@ nuclear_crisis.1 = {
 		}
 	}
 
-	# Answer threat with threat. Armed targets only.
+	# Answer threat with threat. Armed targets whose weapons reach the issuer.
 	option = {
 		name = nuclear_crisis.1.c
 		nd_log_context = yes
 		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.1.c; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
-		trigger = { nd_is_armed = yes }
+		trigger = {
+			nd_is_armed = yes
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_issuer } }
+		}
 		nd_crisis_option = { ACT = counter_threat }
 		ai_chance = {
 			base = 1
@@ -259,6 +262,15 @@ nuclear_crisis.2 = {
 					var:nd_credibility >= 60
 				}
 				add = 2
+			}
+			# Last: the AI never makes a bluff public (reasons 5-8:
+			# doctrine, law, No First Use, reach).
+			modifier = {
+				trigger = {
+					has_variable = nd_ft_reason
+					var:nd_ft_reason >= 5
+				}
+				factor = 0
 			}
 		}
 	}
@@ -569,6 +581,7 @@ nuclear_crisis.4 = {
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_target } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_target } }
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -950,6 +963,7 @@ nuclear_crisis.7 = {
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_target } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_target } }
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -1110,6 +1124,7 @@ nuclear_crisis.20 = {
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_guarantee_attacker } }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes
@@ -1280,10 +1295,12 @@ nuclear_crisis.22 = {
 					nd_is_armed = yes
 					nd_forces_assembled = yes
 					nd_command_intact = yes
+					nd_reaches_country = { TARGET = scope:attacking_country }
 				}
 				save_scope_as = target_country
 				scope:attacking_country = {
 					ordered_scope_state = {
+						limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 						order_by = nuclear_strike_target_score
 						position = 0
 						nuclear_response_strike = yes
@@ -1403,6 +1420,7 @@ nuclear_crisis.24 = {
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_guarantee_attacker } }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes

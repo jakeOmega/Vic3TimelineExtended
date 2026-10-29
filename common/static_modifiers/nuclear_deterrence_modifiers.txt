@@ -306,6 +306,13 @@ nd_incident_scandal = {
 	country_authority_mult = -0.05
 }
 
+# A host said nothing when its guest's weapons contaminated one of its states
+# (nuclear_incident.31.c): smaller than the guest's own scandal.
+nd_host_accident_silence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legitimacy_base_add = -3
+}
+
 # A concealed incident came out: worse than admitting it.
 nd_incident_coverup_exposed = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds

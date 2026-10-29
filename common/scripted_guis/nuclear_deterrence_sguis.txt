@@ -200,6 +200,7 @@ nd_posture_sgui = {
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 76 }
 			nd_plan_can_set_mission = { M = 3 }
+			nd_plan_can_set_leadership = yes
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 77 }
@@ -421,6 +422,41 @@ nd_crisis_action_sgui = {
 # ---- Yes/no questions the .gui asks (scope-free is_shown) --------------------
 # Forces: survivors against the main rival, while we have one
 # (nd_refresh_main_rival).
+# The Forces section's Reach row (rework spec §7, §10): shown while armed
+# without ICBMs (nd_reach_limited); display only. Its hover lists the
+# countries in nd_reach through ExecuteTooltip (vanilla's
+# je_hispanoamerica_not_recognized_countries_sgui shape), each host of our
+# weapons marked on its own line: a heading over a script-built list prints
+# above all of it (gui_modding_guide.md gotcha #18).
+nd_reach_limited_sgui = {
+	scope = country
+	is_shown = { nd_reach_limited = yes }
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+nd_reach_list_sgui = {
+	scope = country
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		if = {
+			limit = { has_variable_list = nd_reach }
+			every_in_list = {
+				variable = nd_reach
+				if = {
+					limit = { nd_hosts_weapons_of = { GUEST = root } }
+					custom_tooltip = nd_w_reach_entry_host
+				}
+				else = {
+					custom_tooltip = nd_w_reach_entry
+				}
+			}
+		}
+	}
+}
+
 nd_has_main_rival_sgui = {
 	scope = country
 	is_shown = {

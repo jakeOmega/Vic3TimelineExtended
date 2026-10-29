@@ -1422,6 +1422,21 @@ nd_crisis_ft_label = {
 	}
 }
 
+# The Reach row's value (nd_w_reach_value): the countries our bombers reach,
+# and every coast once we have missile submarines.
+nd_reach_value = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = advanced_submarine_technology }
+		localization_key = nd_w_reach_value_subs
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_reach_value_bombers
+	}
+}
+
 nd_crisis_ft_word = {
 	type = country
 	random_valid = no
@@ -1500,6 +1515,13 @@ nd_crisis_ft_reason = {
 			var:nd_ft_reason = 7
 		}
 		localization_key = nd_ft_reason_7
+	}
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 8
+		}
+		localization_key = nd_ft_reason_8
 	}
 	text = {
 		trigger = { always = yes }

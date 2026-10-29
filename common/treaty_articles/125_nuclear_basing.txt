@@ -1,0 +1,247 @@
+﻿# ============================================================================
+# NUCLEAR BASING — our weapons stationed in another country (rework spec §7.3)
+# ============================================================================
+# Directed: SOURCE = the guest (the weapons' owner; it pays the upkeep),
+# TARGET = the host. Shaped like nuclear_guarantee (115): the leverage line
+# sits on the host's target_modifier, the party leaned on.
+#
+# What it does lives elsewhere, and reads the article as the source of truth:
+#   * the guest reaches every country it could strike from the host's states
+#     (nd_reach_refresh, nuclear_deterrence_effects.txt; rebuilt from this
+#     article's hooks and every week);
+#   * the host counts as protected by a ready guarantor at full weight, the
+#     weapons being forward (nd_has_armed_guarantor_against,
+#     nd_has_ready_guarantor_against), and a strike on it licenses the
+#     guest's answer (nd_covered_country_struck_by);
+#   * weapons in a country next to us cut our warning time against the guest
+#     (nd_based_near, the survivors values);
+#   * some of the guest's weapons accidents happen on the host's soil
+#     (nuclear_incident.30, .31). The host takes no custody risk: warheads
+#     have no location, and a war between the two ends the article.
+# A direct subject needs no article: our reach already runs from its states.
+# ============================================================================
+nuclear_basing = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_basing.dds"
+	kind = directed
+	maintenance_paid_by = source_country
+	cost = 100
+	relations_progress_per_day = 1
+	relations_improvement_max = 40
+
+	flags = { can_be_renegotiated giftable friendly }
+
+	usage_limit = once_per_side
+
+	# The host is the one leaned on (see header).
+	target_modifier = {
+		country_treaty_leverage_generation_add = 200
+	}
+
+	# ROOT is the source (the guest) in visible and possible.
+	visible = {
+		has_game_rule = nuclear_weapons_enabled
+		nd_believed_armed = yes
+	}
+
+	possible = {
+		nd_is_armed = yes
+		scope:other_country = {
+			NOT = { has_war_with = ROOT }
+		}
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+			scope:other_country.relations:root > relations_threshold:poor
+		}
+		custom_tooltip = {
+			text = nd_tt_basing_not_our_subject
+			NOT = { scope:other_country = { is_direct_subject_of = ROOT } }
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = nd_tt_guarantor_armed
+				scope:source_country = { nd_believed_armed = yes }
+			}
+		}
+	}
+	requirement_to_maintain = {
+		trigger = {
+			scope:source_country = {
+				NOT = { has_war_with = scope:target_country }
+			}
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = nuclear_basing
+							source_country = scope:source_country
+							target_country = scope:target_country
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = nd_tt_guarantor_armed
+			scope:source_country = { nd_is_armed = yes }
+		}
+	}
+
+	# These ongoing effects are implemented by the nuclear system, not modifiers.
+	# The hooks run in treaty-article scope, where variable reads fail
+	# (scripting_best_practices.md), so the guest rebuilds its reach a day
+	# later (nuclear_weapon_events.32); the weekly rebuild is the backstop.
+	on_entry_into_force = {
+		custom_tooltip_no_bullet = nuclear_basing_effects_desc
+		hidden_effect = {
+			scope:article_options = { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
+		}
+	}
+
+	# Whether article_options is bound when a treaty ends is unprobed, so both
+	# parties are named too, as the monetary articles do (110_currency_peg):
+	# the rebuild is harmless on the host, and the weekly one is the backstop.
+	on_break = {
+		scope:article_options ?= { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
+		scope:withdrawing_country ?= { trigger_event = { id = nuclear_weapon_events.32 days = 1 } }
+		scope:non_withdrawing_country ?= { trigger_event = { id = nuclear_weapon_events.32 days = 1 } }
+	}
+
+	on_withdrawal = {
+		scope:article_options ?= { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
+		scope:withdrawing_country ?= { trigger_event = { id = nuclear_weapon_events.32 days = 1 } }
+		scope:non_withdrawing_country ?= { trigger_event = { id = nuclear_weapon_events.32 days = 1 } }
+	}
+
+	ai = {
+		treaty_categories = { military_defense }
+		article_ai_usage = { offer request }
+		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0.02
+			if = {
+				limit = {
+					nd_is_armed = yes
+					country_rank >= rank_value:major_power
+				}
+				add = 0.05
+			}
+		}
+		inherent_accept_score = {
+			value = 0
+			if = {
+				# The guest weighs the deployment: worth it for a host next to
+				# one of its rivals (a cheap stand-in for "extends our reach").
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -40
+				}
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:target_country attitude = domineering }
+							has_attitude = { who = scope:target_country attitude = belligerent }
+							has_attitude = { who = scope:target_country attitude = antagonistic }
+						}
+					}
+					add = {
+						desc = "AI_HOSTILE_ATTITUDE"
+						value = -1000
+					}
+				}
+				if = {
+					limit = {
+						any_rival_country = {
+							save_temporary_scope_as = nd_basing_rival
+							scope:target_country = { has_strategic_adjacency = scope:nd_basing_rival }
+						}
+					}
+					add = {
+						desc = "nd_ai_rival_near_host"
+						value = 40
+					}
+				}
+				if = {
+					limit = { is_in_same_power_bloc = scope:target_country }
+					add = {
+						desc = "AI_SAME_POWER_BLOC"
+						value = 20
+					}
+				}
+				if = {
+					limit = { scope:target_country = { is_at_war = yes } }
+					add = {
+						desc = "nd_ai_beneficiary_at_war"
+						value = -40
+					}
+				}
+			}
+			else = {
+				# The host weighs the protection against the risk.
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = 0
+				}
+				if = {
+					limit = {
+						any_rival_country = { nd_believed_armed = yes }
+					}
+					add = {
+						desc = "nd_ai_armed_rival"
+						value = 30
+					}
+				}
+				if = {
+					limit = { nd_believed_armed = yes }
+					add = {
+						desc = "nd_ai_host_holds_warheads"
+						value = -30
+					}
+				}
+				if = {
+					limit = { nd_taboo_value >= nd_taboo_line_strong }
+					add = {
+						desc = "nd_ai_host_taboo"
+						value = -20
+					}
+				}
+				if = {
+					limit = { scope:source_country.relations:root >= relations_threshold:cordial }
+					add = {
+						desc = "AI_CORDIAL_RELATIONS"
+						value = 20
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_diplomatic_pact = { who = scope:source_country type = rivalry }
+							has_attitude = { who = scope:source_country attitude = wary }
+						}
+					}
+					add = {
+						desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
+						value = -40
+					}
+				}
+			}
+		}
+	}
+}

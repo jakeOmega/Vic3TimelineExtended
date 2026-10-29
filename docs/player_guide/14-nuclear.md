@@ -50,7 +50,7 @@ strikes is a switch of its own.
 | Nuclear Crisis | You are in a crisis | A line naming your opponent, your side and the dispute; boxes for the stage, the weeks to the deadline, danger, pressure, whether the threat can be carried out and when the target is pressed next; your buttons under Our Moves; then Outcomes, what each ending would bring and do to your credibility |
 | World Crises | Any crisis is running, anywhere | Every crisis, yours included and tinted, most dangerous first: the two countries' flags, the stage and the danger; hover a row for who threatened whom, the dispute, the deadline, any talks and whether it is public. Private warnings are listed too, since governments know of them even when the public doesn't |
 | Nuclear Posture | You hold warheads | Doctrine, readiness (with the level it is moving to) and launch authority, each with a Change button that opens its choices; whether you disavow your strikes; your nuclear umbrella, warheads unaccounted for, upkeep and incident exposure |
-| Forces | You hold warheads | Survivability, first-strike survivors against your main rival, command reliability, crew strain and the chance of a halt; safeguards and hardening under Investment; under Arsenal Size, warheads held beside the world's estimate, your arsenal ceiling and dismantling |
+| Forces | You hold warheads | Survivability, first-strike survivors against your main rival, your reach before Intercontinental Ballistic Missiles, command reliability, crew strain and the chance of a halt; safeguards and hardening under Investment; under Arsenal Size, warheads held beside the world's estimate, your arsenal ceiling and dismantling |
 | At Home | You hold warheads | A small table for each interest group with a view of your posture |
 | Reputation | You have a record | How your last crisis ended and your non-use pledges (your credibility is in the overview) |
 | The Nuclear Taboo | From the world's first warhead | The score, where it is heading and its band, what nuclear acts cost now, your arsenal's burden, and The Taboo Over Time, its history in two charts |
@@ -204,6 +204,30 @@ Technology defends every state. A Military Base defends its own state only, by
 Defense, and AI planners aim fewer strikes at defended states. Military bases in
 general are in [Military and war](13-military.md).
 
+### Range and Nuclear Basing
+
+Until you research Intercontinental Ballistic Missiles, your weapons go only as
+far as your bombers fly. That is every country next to you by land or sea, next
+to one of your direct subjects or next to a country that hosts your weapons, and
+every country with a state in a strategic region where you, a subject or a host
+holds one. Advanced Submarine Technology adds every coastal state. A war goal
+between you and a country puts it in reach, so range matters most in peacetime
+crises and against your enemies' distant allies. No strike, salvo or answer can
+hit a state out of reach, a Leadership salvo needs the capital in reach, and a
+threat against a country you can't reach is a bluff. The Forces section's Reach
+row counts the countries in reach and lists them on hover.
+
+A Nuclear Basing treaty article stations your weapons in another country. Your
+reach then extends from its states as from your own, and your arsenal covers it
+as a ready guarantor does in a crisis, with the right to answer a strike on it.
+An armed country next to the host loses 10 survivability against you. About one
+in three of your bomber crashes and silo explosions happens in the host, which
+then chooses to order your weapons out (ending the whole treaty that holds the
+article, and breaking it if it is still binding), to protest (−30 relations) or
+to say nothing (+10 relations, and −3 legitimacy fading over two and a half
+years). A country struck from a host next door may have no reach back to you,
+and then no answer at all.
+
 ## Nuclear posture
 
 Posture is three separate choices. Nuclear Posture shows the ones in force, one
@@ -337,7 +361,8 @@ your doctrine's tenure.
 
 Your direct subjects are under your **nuclear umbrella** while you hold Nuclear
 Power, unless you are at war with them or on opposite sides of a play. Anyone
-else needs a Nuclear Guarantee treaty article. To sign or renegotiate one you
+else needs a Nuclear Guarantee treaty article, or to host your weapons under
+[Nuclear Basing](#range-and-nuclear-basing). To sign or renegotiate one you
 need an alliance, a defensive pact or a Guarantee Independence of the country,
 already in force or in the same treaty, or a shared power bloc, and more
 warheads than the world believes it has (none, if it has never tested). A
@@ -452,7 +477,7 @@ we carry it out?" box ("Can they carry it out?" when you are the target): Backed
 (+10 pressure; your doctrine permits a strike now, or you hold Compellence or
 Warfighting), Uncertain (Flexible First Use, or Existential Deterrence with
 something at stake), or A bluff (−25, or −35 under No First Use; your doctrine
-or Rules of War law forbids a strike).
+or Rules of War law forbids a strike, or your weapons can't reach them).
 
 | Outcome | Issuer | Target |
 |---|---|---|
@@ -476,7 +501,8 @@ Broken Nuclear Pledge).
 ### Guarantors called in
 
 When a country you guarantee or cover is warned or struck, you get "A Promise
-Called In":
+Called In" (not as the guest of a Nuclear Basing article, which covers the host
+in its crises but is not called in):
 
 | Choice | Effect |
 |---|---|
@@ -508,7 +534,7 @@ Strike section of the journal entry.
 | | Nuclear Weapon Industrial Strike | Tactical Nuclear Strike |
 |---|---|---|
 | Needs | Nuclear Power and a warhead | The same, and the Tactical Nuclear Weapons technology |
-| Target | Any enemy state | A state with a Barracks, Naval Administration, Naval Fortification, Naval Logistics Center, Conscription Center or Military Base |
+| Target | Any enemy state in [reach](#range-and-nuclear-basing) | A state in reach with a Barracks, Naval Administration, Naval Fortification, Naval Logistics Center, Conscription Center or Military Base |
 | Rules of War that forbid it | Humanitarian Regulations, Limited War | Limited War |
 
 A strike ordered through these actions or a crisis event also needs your
@@ -553,8 +579,8 @@ its court may indict your ruler (see
 ### Salvos and the Strike section
 
 The Strike section appears below Nuclear Crisis while you hold warheads and are
-at war with a country, or in a [nuclear exchange before
-war](#a-nuclear-exchange-before-war) with it. Pick the target with the buttons
+at war with a country your weapons [reach](#range-and-nuclear-basing), or in a
+[nuclear exchange before war](#a-nuclear-exchange-before-war) with it. Pick the target with the buttons
 beside its name, then a mission and the number of warheads (up to the warheads
 you hold, at most 25), and press Order. A Launch Order event asks you to confirm:
 Give the order fires the salvo, and Stand the crews down, its default, fires
@@ -564,8 +590,8 @@ not cut off.
 | Mission | Aimed at | What each warhead that lands does |
 |---|---|---|
 | Cities | the states a single strike would choose, a different one each | what a strategic strike does |
-| Forces | states with a building a tactical strike can target (Barracks, Military Base and the rest), else the capital's region, else the capital | a quarter of a city strike's deaths and devastation, and destroys part of the enemy's arsenal |
-| Leadership | the capital | what a strategic strike does, and may cut off the enemy's command |
+| Forces | states with a building a tactical strike can target (Barracks, Military Base and the rest), else the capital's region, else the capital, else any state in reach | a quarter of a city strike's deaths and devastation, and destroys part of the enemy's arsenal |
+| Leadership | the capital, which must be in reach | what a strategic strike does, and may cut off the enemy's command |
 
 Each Forces warhead that lands destroys one of the enemy's warheads, or one and
 a half with Intercontinental Ballistic Missiles or Precision Guided Munitions,
@@ -684,7 +710,7 @@ They do not replace a meaningful incident.
 | A false warning ("Conflicting Indications") | Radar, Heightened or higher, and a plausible armed opponent | An early warning that no second source confirms. Launch on Warning, or delegation in a war with the suspected attacker, can execute it without another order; otherwise the government decides |
 | The Exercise They Mistook | A crisis at Confrontation or beyond, Heightened or higher | Your opponent reads your exercise as cover for an attack |
 | Silence from the Capital | Delegation or Launch on Warning, assembled weapons, and war, an Acute crisis or a heightened force facing a plausible attacker | A commander cut off from the capital; another officer refuses, or the unit fires. Slightly likelier in the incident draw in a war or an Acute crisis |
-| A Weapons Accident | Any armed posture; six times more weight after six months at High Alert or strain of 60 or more | Crashes, silo explosions, lost weapons, a contaminated state or failed maintenance |
+| A Weapons Accident | Any armed posture; six times more weight after six months at High Alert or strain of 60 or more | Crashes, silo explosions, lost weapons, a contaminated state or failed maintenance. With [Nuclear Basing](#range-and-nuclear-basing), a third of crashes and silo explosions happen in a host, and can't be classified |
 | A Routine Mishap | Separate monthly roll | Base alarms, dropped training weapons and storms; cannot launch |
 
 Most incidents cost money, readiness, reliability or reputation. Safeguards and
@@ -1093,7 +1119,7 @@ list](19-appendix-events.md#nuclear-taboo-event-list).
 
 ## Nuclear treaty articles
 
-Six treaty articles deal with nuclear weapons. Each costs its payer influence
+Seven treaty articles deal with nuclear weapons. Each costs its payer influence
 upkeep while the treaty is in force.
 
 | Article | Parties | Effect |
@@ -1101,6 +1127,7 @@ upkeep while the treaty is in force.
 | Nuclear Disarmament | The disarmed country concedes; the demander pays 200 | Stockpile and progress go to zero, Nuclear Power is lost, and no program runs while it lasts |
 | Nuclear Program Freeze | The frozen country concedes; the demander pays 100 | Funding held at zero; warheads and progress kept |
 | Nuclear Program Aid | A nuclear power helps a non-nuclear country and pays 500 | The recipient can run a program at any rank, at double the rate. Refused once the IAEA exists and United Nations authority is 60 or more |
+| Nuclear Basing | A nuclear power stations its weapons in a host and pays 100 | Its reach extends from the host's states, and it covers the host as a ready guarantor; not in your own subject. See [Range and Nuclear Basing](#range-and-nuclear-basing) |
 | Nuclear Guarantee | An armed guarantor pays 100 | Extended deterrence, as for the umbrella; not for your own subjects. The guarantor needs more warheads than the world believes the protected country has, and an alliance, a defensive pact, a Guarantee Independence or a shared power bloc with it |
 | Nuclear Security Assistance | An armed country pays 100 to help one holding or missing warheads | Secured custody and a monthly chance to recover missing warheads |
 | Nuclear Arms Limitation | Mutual, between two countries that each hold warheads or run a program; both pay 50 | Neither holds more warheads than the agreed ceiling; see [The Nuclear Arms Limitation treaty](#the-nuclear-arms-limitation-treaty) |

@@ -8,8 +8,9 @@ from dataclasses import replace
 from pathlib import Path
 
 from scripts.analysis.nuclear_incident_rates import Posture, RiskModel
-from scripts.analysis.nuclear_survivors import (counterforce_destroyed, counterforce_saved, decapitation_chance,
-                                                survivors)
+from scripts.analysis.nuclear_survivors import (WARNING_TIME_PENALTY, counterforce_destroyed, counterforce_saved,
+                                                decapitation_chance, exposed, survivors)
+from test_nuclear_deterrence import block, read, squash, strip_comments
 
 ROOT = Path(__file__).resolve().parent
 
@@ -76,6 +77,94 @@ class TestSurvivorsScript(unittest.TestCase):
         self.assertTrue(math.isclose(self.model.number("nd_survivors_ceiling_bare_r2_vs_saved", p),
                                      self.model.number("nd_survivors_vs_saved", ceiling)))
 
+
+class TestWarningTime(unittest.TestCase):
+    """Weapons based next door cut warning time (rework spec §7.4; plan 4a
+    R13): -10 to our effective survivability against the guest, for that pair
+    only, wherever survivors or counterforce are counted."""
+
+    VALUES = ROOT / "common/script_values/nuclear_deterrence_values.txt"
+    EFFECTS = ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"
+    # Each reader, the exposure variant it reads, and that variant's penalty.
+    READERS = {
+        "nd_survivors_vs_saved": "nd_exposed_warheads_vs_saved",
+        "nd_survivors_r2_vs_saved": "nd_exposed_warheads_r2_vs_saved",
+        "nd_survivors_bare_r2_vs_saved": "nd_exposed_warheads_r2_vs_saved",
+        "nd_survivors_ceiling_bare_r2_vs_saved": "nd_exposed_warheads_ceiling_r2_vs_saved",
+        "nd_survivors_vs_issuer": "nd_exposed_warheads_vs_issuer",
+        "nd_survivors_vs_target": "nd_exposed_warheads_vs_target",
+        "nd_counterforce_destroyed_raw": "nd_exposed_warheads_vs_saved",
+        "nd_counterforce_saved_raw": "nd_exposed_warheads_vs_saved",
+    }
+    PENALTIES = {"saved": "scope:nd_sv_enemy", "issuer": "scope:nd_issuer", "target": "scope:nd_target"}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = RiskModel()
+        cls.values = strip_comments(read(cls.VALUES))
+
+    def test_every_reader_reads_its_enemys_variant(self):
+        for reader, variant in self.READERS.items():
+            self.assertIn(f"max = {variant}", block(self.values, reader), reader)
+            penalty = "nd_warning_penalty_" + variant.rsplit("_vs_", 1)[1]
+            self.assertIn(f"subtract = {penalty}", block(self.values, variant), variant)
+
+    def test_penalty_names_its_scope(self):
+        for name, scope in self.PENALTIES.items():
+            body = squash(block(self.values, f"nd_warning_penalty_{name}"))
+            self.assertIn(f"is_target_in_variable_list = {{ name = nd_based_near target = {scope} }}", body, name)
+            self.assertIn("value = nd_warning_time_penalty", body, name)
+
+    def test_penalty_is_ten_for_a_listed_enemy_only(self):
+        self.assertEqual(WARNING_TIME_PENALTY, 10)
+        enemy = Posture()
+        self.assertEqual(self.model.number("nd_warning_penalty_saved", Posture(based_near=True, enemy=enemy)), 10)
+        self.assertEqual(self.model.number("nd_warning_penalty_saved", Posture(based_near=False, enemy=enemy)), 0)
+
+    def test_mirror_and_script_agree(self):
+        enemy = Posture(believed_stockpile=12, icbms=True, pgm=False)
+        for based_near in (False, True):
+            for p in (Posture(readiness=3, authority=1, survivability=40, stockpile=10, enemy=enemy),
+                      Posture(readiness=1, authority=3, safeguards=2, survivability=70, stockpile=6, enemy=enemy),
+                      # Below the penalty: no warning time at all, never less.
+                      Posture(readiness=3, authority=1, survivability=6, stockpile=8, enemy=enemy)):
+                p = replace(p, based_near=based_near)
+                factor = self.model.number("nd_effective_survivability", p) / p.survivability
+                credit = self.model.number("nd_launch_credit", p)
+                expected = survivors(p.stockpile, p.survivability, factor, credit,
+                                     self.model.number("nd_k_ratio", p.enemy), p.enemy.believed_stockpile,
+                                     based_near=based_near)
+                self.assertTrue(math.isclose(self.model.number("nd_survivors_vs_saved", p), expected), p)
+                bare = exposed(p.stockpile, p.survivability, factor, based_near=based_near)
+                self.assertTrue(math.isclose(self.model.number("nd_exposed_warheads_vs_saved", p), bare), p)
+                self.assertLessEqual(bare, p.stockpile)
+                attacker = Posture(salvo_forces_landed=3, icbms=True, pgm=True)
+                victim = replace(p, enemy=attacker)
+                self.assertTrue(math.isclose(self.model.number("nd_counterforce_destroyed_raw", victim),
+                                             counterforce_destroyed(3, 2, bare, credit), abs_tol=1e-9), p)
+
+    def test_next_door_costs_survivors(self):
+        enemy = Posture(believed_stockpile=40, icbms=True, pgm=True)
+        far = Posture(readiness=3, authority=1, survivability=50, stockpile=10, enemy=enemy)
+        near = replace(far, based_near=True)
+        self.assertTrue(math.isclose(self.model.number("nd_survivors_vs_saved", far), 5))
+        self.assertTrue(math.isclose(self.model.number("nd_survivors_vs_saved", near), 4))
+
+    def test_list_rebuilt_weekly_from_basing_next_door(self):
+        effects = strip_comments(read(self.EFFECTS))
+        weekly = block(effects, "nd_weekly_update")
+        self.assertIn("nd_based_near_refresh = yes", weekly)
+        body = squash(block(effects, "nd_based_near_refresh"))
+        for needle in ("if = { limit = { has_variable_list = nd_based_near } clear_variable_list = nd_based_near }",
+                       "has_type = nuclear_basing source_country = scope:nd_bn_guest",
+                       "is_adjacent_to_country = scope:nd_bn_self",
+                       "is_target_in_variable_list = { name = nd_based_near target = scope:nd_bn_guest }",
+                       "add_to_variable_list = { name = nd_based_near target = scope:nd_bn_guest }"):
+            self.assertIn(needle, body)
+        self.assertLess(body.index("clear_variable_list"), body.index("nd_is_armed = yes"))
+        self.assertLess(body.index("is_target_in_variable_list"), body.index("add_to_variable_list"))
+        # The panel's hover counts the main rival's exposure the same way.
+        self.assertIn("set_variable = { name = nd_exposed_main value = nd_exposed_warheads_vs_saved }", squash(effects))
 
 class TestCounterforceScript(unittest.TestCase):
     """A Forces salvo destroys min(exposed, K x landed) x (1 - credit) of the
@@ -248,6 +337,12 @@ class TestAiSalvo(unittest.TestCase):
         # (final review): never Leadership, whatever its nd_authority reads.
         self.assertEqual(self.mission(doctrine=2, stockpile=9, capital_hit_share=0.9,
                                       enemy=replace(small, believed_armed=False)), 1)
+        # Leadership needs the capital in reach (plan 4a R6): Forces under
+        # Warfighting, else the single strike.
+        self.assertEqual(self.mission(doctrine=5, stockpile=9, capital_hit_share=0.9, capital_in_reach=False,
+                                      enemy=small), 2)
+        self.assertEqual(self.mission(doctrine=2, stockpile=9, capital_hit_share=0.9, capital_in_reach=False,
+                                      enemy=small), 1)
 
     def test_spare_keeps_a_reserve(self):
         spare = {s: self.model.number("nd_ai_salvo_spare_value", Posture(stockpile=s)) for s in (1, 2, 3, 9, 10, 30)}
