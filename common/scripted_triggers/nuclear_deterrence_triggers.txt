@@ -638,6 +638,52 @@ nd_can_order_salvo = {
 	}
 }
 
+# The Strike section's buttons (nd_posture_sgui ops 72-79), each clause with
+# its own failure line. Country scope = us.
+nd_plan_can_step_enemy = {
+	custom_tooltip = {
+		text = nd_tt_plan_two_enemies
+		has_variable = nd_plan_count
+		var:nd_plan_count > 1
+	}
+}
+
+nd_plan_can_set_mission = {
+	custom_tooltip = {
+		text = nd_tt_already_current
+		NOT = { var:nd_salvo_mission ?= $M$ }
+	}
+}
+
+nd_plan_can_step_size_down = {
+	custom_tooltip = {
+		text = nd_tt_plan_size_at_least_one
+		nd_salvo_size_value > 1
+	}
+}
+
+nd_plan_can_step_size_up = {
+	custom_tooltip = {
+		text = nd_tt_plan_size_at_most
+		nd_salvo_size_value < nd_salvo_size_cap
+	}
+}
+
+# The order: the enemy the planner picked, through a temporary scope (the
+# gates compare it with ?=, which takes no var: on its right), and every gate
+# of an ordered salvo.
+nd_plan_can_order = {
+	custom_tooltip = {
+		text = nd_tt_plan_no_enemy
+		exists = var:nd_plan_enemy
+	}
+	trigger_if = {
+		limit = { exists = var:nd_plan_enemy }
+		var:nd_plan_enemy ?= { save_temporary_scope_as = nd_plan_victim }
+		nd_can_order_salvo = { ENEMY = scope:nd_plan_victim }
+	}
+}
+
 nd_threat_backed = {
 	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
 	nd_threat_law_permits = { TARGET = $TARGET$ }

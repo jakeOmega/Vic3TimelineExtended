@@ -2999,3 +2999,73 @@ nuclear_weapon_events.30 = {
 		}
 	}
 }
+
+# ---- .31 Launch Order -------------------------------------------------------
+# The Strike section's order (nd_plan_order, rework spec §6.1): a panel button
+# has no confirmation box, so the order is confirmed here. Launch re-checks
+# every gate of an ordered salvo (nd_can_order_salvo) and fires it
+# (nd_order_salvo); Stand down is the default, so a popup left to expire never
+# launches. scope:nd_salvo_victim is the planner's enemy; the mission and size
+# are our settings (var:nd_salvo_mission, nd_salvo_size_value).
+nuclear_weapon_events.31 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/missile_launch_crew.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = nuclear_weapon_events.31.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { var:nd_salvo_mission ?= 2 }
+				desc = nuclear_weapon_events.31.d_forces
+			}
+			triggered_desc = {
+				trigger = { var:nd_salvo_mission ?= 3 }
+				desc = nuclear_weapon_events.31.d_leadership
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.31.d_cities
+			}
+		}
+	}
+	flavor = nuclear_weapon_events.31.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nd_salvo_victim
+	}
+
+	# Launch.
+	option = {
+		name = nuclear_weapon_events.31.a
+		trigger = {
+			nd_can_order_salvo = { ENEMY = scope:nd_salvo_victim }
+		}
+		show_as_unavailable = {
+			exists = scope:nd_salvo_victim
+		}
+		highlighted_option = yes
+		custom_tooltip = nuclear_weapon_events.31.a.tt
+		nd_order_salvo = yes
+		ai_chance = {
+			base = 0
+		}
+	}
+
+	# Stand down.
+	option = {
+		name = nuclear_weapon_events.31.b
+		# REVIEWED 2026-10-28 (no_effect_option): not giving the order is the choice
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+}

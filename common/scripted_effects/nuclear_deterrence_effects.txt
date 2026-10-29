@@ -368,6 +368,14 @@ nd_remove_readiness_modifier = {
 # PULSES
 # ----------------------------------------------------------------------------
 nd_weekly_update = {
+	# ---- the Strike section's enemy (nd_plan_refresh): a human's panel only --
+	if = {
+		limit = {
+			is_ai = no
+			nd_is_armed = yes
+		}
+		nd_plan_refresh = yes
+	}
 	# ---- a newly armed country -----------------------------------------------
 	# The entry is usually already active when a programme finishes its first
 	# warhead, so its immediate cannot be what puts the country under a
@@ -2842,6 +2850,128 @@ nd_salvo_clear = {
 	if = {
 		limit = { has_variable = nd_salvo_world_rel }
 		remove_variable = nd_salvo_world_rel
+	}
+}
+
+# ---- The Strike section's planner (rework spec §6.1; ops 72-79) ------------
+# The panel cannot list countries or index a variable list, so the enemy is
+# found by a counted pass: nd_plan_enemy is the nd_plan_index-th country, in
+# every_country order, that we could aim a salvo at (nd_planner_candidate).
+# The first pass counts them (nd_plan_count) and wraps the index; the second
+# picks. With none, nd_plan_enemy goes and the section hides
+# (nd_plan_shown_sgui). Run weekly for a human (nd_weekly_update) and by every
+# planner op. The mission and size are set here too the first time, so the
+# panel's rows always read a setting. Country scope = us.
+nd_plan_refresh = {
+	save_scope_as = nd_plan_self
+	if = {
+		limit = { NOT = { has_variable = nd_salvo_mission } }
+		set_variable = { name = nd_salvo_mission value = 1 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_salvo_size } }
+		set_variable = { name = nd_salvo_size value = 1 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_plan_index } }
+		set_variable = { name = nd_plan_index value = 1 }
+	}
+	set_variable = { name = nd_plan_count value = 0 }
+	every_country = {
+		limit = {
+			save_temporary_scope_as = nd_plan_cand
+			scope:nd_plan_self = { nd_planner_candidate = { ENEMY = scope:nd_plan_cand } }
+		}
+		scope:nd_plan_self = { change_variable = { name = nd_plan_count add = 1 } }
+	}
+	if = {
+		limit = { var:nd_plan_index > var:nd_plan_count }
+		set_variable = { name = nd_plan_index value = 1 }
+	}
+	else_if = {
+		limit = { var:nd_plan_index < 1 }
+		set_variable = { name = nd_plan_index value = var:nd_plan_count }
+	}
+	if = {
+		limit = { has_variable = nd_plan_enemy }
+		remove_variable = nd_plan_enemy
+	}
+	if = {
+		limit = { var:nd_plan_count > 0 }
+		set_variable = { name = nd_plan_seen value = 0 }
+		every_country = {
+			limit = {
+				save_temporary_scope_as = nd_plan_cand
+				scope:nd_plan_self = { nd_planner_candidate = { ENEMY = scope:nd_plan_cand } }
+			}
+			save_scope_as = nd_plan_pick
+			scope:nd_plan_self = {
+				change_variable = { name = nd_plan_seen add = 1 }
+				if = {
+					limit = { var:nd_plan_seen = var:nd_plan_index }
+					set_variable = { name = nd_plan_enemy value = scope:nd_plan_pick }
+				}
+			}
+		}
+		remove_variable = nd_plan_seen
+	}
+}
+
+# Ops 72 / 73: the previous or next country we could strike (OP = subtract |
+# add). Each planner op runs behind a click-only marker: a tooltip walk writes
+# nothing, so the pass would read figures it never set, every frame.
+nd_plan_step_enemy = {
+	custom_tooltip = nd_tt_plan_step_enemy
+	set_variable = nd_plan_click
+	if = {
+		limit = { has_variable = nd_plan_click }
+		remove_variable = nd_plan_click
+		change_variable = { name = nd_plan_index $OP$ = 1 }
+		nd_plan_refresh = yes
+	}
+}
+
+# Ops 74-76: the mission, M = 1 Cities | 2 Forces | 3 Leadership.
+nd_plan_set_mission = {
+	custom_tooltip = nd_tt_plan_mission_$M$
+	set_variable = nd_plan_click
+	if = {
+		limit = { has_variable = nd_plan_click }
+		remove_variable = nd_plan_click
+		set_variable = { name = nd_salvo_mission value = $M$ }
+	}
+}
+
+# Ops 77 / 78: one warhead fewer or more (OP = subtract | add), kept within
+# the warheads we hold and the salvo's limit (nd_salvo_size_value): stored
+# clamped first, so a setting the stockpile outgrew steps from what an order
+# would fire.
+nd_plan_step_size = {
+	custom_tooltip = nd_tt_plan_size_$OP$
+	set_variable = nd_plan_click
+	if = {
+		limit = { has_variable = nd_plan_click }
+		remove_variable = nd_plan_click
+		set_variable = { name = nd_salvo_size value = nd_salvo_size_value }
+		change_variable = { name = nd_salvo_size $OP$ = 1 }
+		set_variable = { name = nd_salvo_size value = nd_salvo_size_value }
+	}
+}
+
+# Op 79: the order goes to the Launch Order (nuclear_weapon_events.31), where
+# it is confirmed or stood down; a panel button has no confirmation box, and
+# the event re-checks every gate at the moment of the launch.
+nd_plan_order = {
+	custom_tooltip = nd_tt_plan_order
+	set_variable = nd_plan_click
+	if = {
+		limit = { has_variable = nd_plan_click }
+		remove_variable = nd_plan_click
+		if = {
+			limit = { exists = var:nd_plan_enemy }
+			var:nd_plan_enemy = { save_scope_as = nd_salvo_victim }
+			trigger_event = { id = nuclear_weapon_events.31 popup = yes }
+		}
 	}
 }
 

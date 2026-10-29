@@ -18,7 +18,7 @@ JE = os.path.join(REPO, "common", "journal_entries", "je_nuclear_program.txt")
 ICON_DOC = os.path.join(REPO, "docs", "systems", "nuclear_gui_icons.md")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_world_crises", "te_nuclear_sec_posture",
+STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises", "te_nuclear_sec_posture",
           "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
           "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
 REFERENCE = ["te_nuclear_sec_how"]
@@ -128,6 +128,7 @@ class GateTest(unittest.TestCase):
     GATES = {
         "te_nuclear_sec_programme": [_sgui("nuclear_program_has_programme_sgui")],
         "te_nuclear_sec_crisis": [_sgui("nd_in_crisis_sgui")],
+        "te_nuclear_sec_strike": [_sgui("nd_plan_shown_sgui")],
         "te_nuclear_sec_world_crises": [_sgui("nd_world_crises_sgui")],
         "te_nuclear_sec_posture": [_sgui("nd_armed_sgui")],
         "te_nuclear_sec_forces": [_sgui("nd_armed_sgui")],
@@ -238,6 +239,7 @@ class FlagTest(unittest.TestCase):
     def test_live_sections_open_reference_collapsed(self):
         opened = {"te_nuclear_sec_programme": "nuclear_program_programme_closed",
                   "te_nuclear_sec_crisis": "nd_crisis_closed",
+                  "te_nuclear_sec_strike": "nd_strike_closed",
                   "te_nuclear_sec_world_crises": "nd_world_crises_closed",
                   "te_nuclear_sec_posture": "nd_posture_closed",
                   "te_nuclear_sec_forces": "nd_capabilities_closed",
@@ -329,7 +331,7 @@ class FlagTest(unittest.TestCase):
 # Explanations that live in "How Nuclear Weapons Work", and the live sections they left.
 HOW_KEYS = ["nd_w_home_legend", "nd_w_reputation_legend", "nd_w_crisis_actions_legend",
             "je_nuclear_program_widget_odds_note", "je_nuclear_program_widget_powers_legend",
-            "je_nuclear_how_programme", "je_nuclear_how_posture", "je_nuclear_how_taboo"]
+            "je_nuclear_how_programme", "je_nuclear_how_posture", "je_nuclear_how_taboo", "je_nuclear_how_strike"]
 
 
 class HowItWorksTest(unittest.TestCase):
@@ -796,8 +798,10 @@ class LabelBudgetTest(unittest.TestCase):
         both = _read(DETERRENCE) + _read(PROGRAM)
         labels = set(re.findall(r'text = "(\w+)"\n\t+size = \{ 170 24 \}', both))
         values = set(re.findall(r'text = "(\w+)"\n\t+tooltip = "\w+"\n\t+default_format = "#tooltippable"\n\t+size = \{ 246 24 \}', both))
-        self.assertEqual(len(labels), 4, labels)
-        self.assertEqual(len(values), 4, values)
+        # Safeguards, hardening, the arsenal ceiling and the programme's own,
+        # then the Strike section's target and warheads (rework phase 3).
+        self.assertEqual(len(labels), 6, labels)
+        self.assertEqual(len(values), 5, values)
         self._fits(labels, 170, ROW, "stepper label")
         self._fits(values, 246, ROW, "stepper value")
         det = _read(DETERRENCE)

@@ -970,6 +970,25 @@ nd_salvo_size_value = {
 	floor = yes
 }
 
+# The most a salvo can be: the warheads we hold, at most 25 (the Strike
+# section's stepper, nd_plan_can_step_size_up).
+nd_salvo_size_cap = {
+	value = nd_stockpile
+	max = 25
+	min = 1
+	floor = yes
+}
+
+# The Strike section's mission in force, 1 Cities (the default) | 2 Forces |
+# 3 Leadership: the panel tints its row.
+nd_display_plan_mission = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_salvo_mission }
+		value = var:nd_salvo_mission
+	}
+}
+
 # Attacker scope: the loop's count, fixed from nd_salvo_size_value before the
 # first warhead flies (each warhead lowers the stockpile that value caps by).
 nd_salvo_count_value = {

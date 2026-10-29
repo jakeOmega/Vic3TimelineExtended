@@ -1435,6 +1435,109 @@ class TestDecapitationGates(unittest.TestCase):
                             body.index("id = nuclear_weapon_events.1 "), name)
 
 
+
+def strike_section():
+    """The Strike section's GUI type body (a type opens `type x = flowcontainer {`)."""
+    text = read(GUI)
+    return block(text.replace("type te_nuclear_sec_strike = flowcontainer {", "te_nuclear_sec_strike = {"),
+                 "te_nuclear_sec_strike")
+
+
+class TestStrikeSection(unittest.TestCase):
+    """The Strike section and the Launch Order (rework spec §6.1, §10; plan
+    H1-H3, H15)."""
+
+    OPS = set(range(72, 80))
+    EFFECTS_BY_OP = ("nd_plan_step_enemy", "nd_plan_set_mission", "nd_plan_step_size", "nd_plan_order")
+
+    def setUp(self):
+        self.effects = strip_comments(read(EFFECTS))
+        self.sguis = strip_comments(read(SGUIS))
+
+    def test_ops_in_step(self):
+        self.assertLessEqual(self.OPS, gui_ops(read(GUI), "nd_posture_sgui"))
+        for part in ("is_valid", "effect"):
+            self.assertLessEqual(self.OPS, sgui_ops(self.sguis, "nd_posture_sgui", part), part)
+        doc = JE_DOC.read_text(encoding="utf-8")
+        for text in (read(GUI), read(SGUIS), doc):
+            for needle in ("72 / 73", "74..76", "77 / 78", "79"):
+                self.assertIn(needle, text.replace("74–76", "74..76"), needle)
+
+    def test_op_bodies_fenced(self):
+        for name in self.EFFECTS_BY_OP:
+            body = squash(block(self.effects, name))
+            self.assertIn("set_variable = nd_plan_click if = { limit = { has_variable = nd_plan_click }"
+                          " remove_variable = nd_plan_click", body, name)
+            self.assertIn("custom_tooltip", body[:body.index("set_variable = nd_plan_click")], name)
+
+    def test_refresh_picks_by_index_and_wraps(self):
+        refresh = squash(block(self.effects, "nd_plan_refresh"))
+        self.assertEqual(refresh.count("every_country = {"), 2)
+        self.assertEqual(refresh.count("nd_planner_candidate = { ENEMY = scope:nd_plan_cand }"), 2)
+        for needle in ("name = nd_plan_count", "var:nd_plan_index > var:nd_plan_count",
+                       "var:nd_plan_index < 1", "set_variable = { name = nd_plan_index value = 1 }",
+                       "set_variable = { name = nd_plan_index value = var:nd_plan_count }",
+                       "var:nd_plan_seen = var:nd_plan_index", "name = nd_plan_enemy value = scope:nd_plan_pick",
+                       "remove_variable = nd_plan_enemy"):
+            self.assertIn(needle, refresh, needle)
+        weekly = squash(block(self.effects, "nd_weekly_update"))
+        self.assertIn("is_ai = no nd_is_armed = yes } nd_plan_refresh = yes", weekly)
+        step = squash(block(self.effects, "nd_plan_step_enemy"))
+        self.assertIn("change_variable = { name = nd_plan_index $OP$ = 1 } nd_plan_refresh = yes", step)
+
+    def test_section_shown_cheaply(self):
+        shown = block(self.sguis, "nd_plan_shown_sgui")
+        self.assertIn("has_variable = nd_plan_enemy", block(shown, "is_shown"))
+        for loop in ("any_country", "every_country", "ordered_country"):
+            self.assertNotIn(loop, shown, loop)
+        section = strike_section()
+        self.assertIn("GetScriptedGui('nd_plan_shown_sgui').IsShown(", section)
+
+    def test_target_named_through_a_display_sgui(self):
+        name = block(self.sguis, "nd_plan_enemy_sgui")
+        self.assertIn("var:nd_plan_enemy = { save_temporary_scope_as = nd_plan_enemy_disp }", squash(name))
+        self.assertIn("SCOPE.sCountry('nd_plan_enemy_disp')", loc_value("nd_w_strike_target_name"))
+        self.assertNotIn("Var('nd_plan_enemy').GetCountry", read(GUI))
+        self.assertIn("GetScriptedGui('nd_plan_enemy_sgui').ExecuteTooltip(", strike_section())
+
+    def test_mission_and_size(self):
+        mission = squash(block(self.effects, "nd_plan_set_mission"))
+        self.assertIn("set_variable = { name = nd_salvo_mission value = $M$ }", mission)
+        size = squash(block(self.effects, "nd_plan_step_size"))
+        for needle in ("set_variable = { name = nd_salvo_size value = nd_salvo_size_value }",
+                       "change_variable = { name = nd_salvo_size $OP$ = 1 }",
+                       "set_variable = { name = nd_salvo_size value = nd_salvo_size_value }"):
+            self.assertIn(needle, size)
+        self.assertEqual(size.count("value = nd_salvo_size_value"), 2)
+        values = strip_comments(read(VALUES))
+        self.assertIn("value = var:nd_salvo_mission", block(values, "nd_display_plan_mission"))
+        section = strike_section()
+        for n in (1, 2, 3):
+            self.assertIn(f"ScriptValue('nd_display_plan_mission'), '(CFixedPoint){n}' )", section)
+
+    def test_confirmation_rechecks_the_order(self):
+        events = strip_comments(read(WEAPON_EVENTS))
+        event = block(events, "nuclear_weapon_events.31")
+        launch = option_body(event, "nuclear_weapon_events.31.a")
+        self.assertIn("nd_can_order_salvo = { ENEMY = scope:nd_salvo_victim }", block(launch, "trigger"))
+        self.assertIn("nd_order_salvo = yes", launch)
+        stand = option_body(event, "nuclear_weapon_events.31.b")
+        self.assertIn("default_option = yes", stand)
+        self.assertNotIn("default_option", launch)
+        order = squash(block(self.effects, "nd_plan_order"))
+        self.assertIn("var:nd_plan_enemy = { save_scope_as = nd_salvo_victim }", order)
+        self.assertIn("trigger_event = { id = nuclear_weapon_events.31 popup = yes }", order)
+        valid = squash(block(self.triggers_text(), "nd_plan_can_order"))
+        self.assertIn("var:nd_plan_enemy ?= { save_temporary_scope_as = nd_plan_victim }", valid)
+        self.assertIn("nd_can_order_salvo = { ENEMY = scope:nd_plan_victim }", valid)
+        for key in ("nuclear_weapon_events.31.t", "nuclear_weapon_events.31.a", "nuclear_weapon_events.31.b",
+                    "nuclear_weapon_events.31.a.tt", "nuclear_weapon_events.31.f"):
+            self.assertTrue(loc_value(key), key)
+
+    def triggers_text(self):
+        return strip_comments(read(TRIGGERS))
+
+
 class TestOutcomeNotice(unittest.TestCase):
     def setUp(self):
         self.effects = strip_comments(read(CRISIS_EFFECTS))
