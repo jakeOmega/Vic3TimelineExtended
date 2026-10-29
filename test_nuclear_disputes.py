@@ -72,6 +72,22 @@ CUSTOM_BLOCKS = {
 }
 
 
+# Each code with a concession of its own: its effect is nd_crisis_concede_<name>.
+CONCESSIONS = {6: "reparations", 7: "deployment", 8: "claims", 9: "covert_ops", 10: "orbital"}
+
+
+def yield_branch(body, code):
+    """The body of nd_crisis_act_yield's else_if for dispute `code`."""
+    m = re.search(r"else_if = \{\s*limit = \{\s*var:nd_crisis_dispute = " + str(code) + r"\b", body)
+    assert m, f"no yield branch for {code}"
+    depth, i = 1, body.index("{", m.start()) + 1
+    while depth:
+        depth += body[i] == "{"
+        depth -= body[i] == "}"
+        i += 1
+    return body[m.start():i]
+
+
 def dispute_var(code):
     return re.compile(r"var:nd_crisis_dispute = " + str(code) + r"\b")
 
@@ -199,12 +215,20 @@ class TestConcessionCheck(unittest.TestCase):
         body = block(self.crisis, "nd_crisis_act_yield")
         for code in SELF_CHECKED:
             trigger = next(d[1] for d in DISPUTES if d[0] == code)
-            i = dispute_var(code).search(body).end()
-            branch = body[i:i + 600]
-            call = branch.index(f"nd_crisis_concession_check_schedule = {{ CODE = {code} }}")
-            guard = branch.rfind("limit = { " + trigger + " = { TARGET = scope:nd_target } }", 0, call)
-            self.assertGreaterEqual(guard, 0, code)
-            self.assertLess(call, branch.index("nd_crisis_concede_"), code)
+            branch = yield_branch(body, code)
+            call = f"nd_crisis_concession_check_schedule = {{ CODE = {code} }}"
+            guarded = block(branch, "if")
+            self.assertIn("limit = { " + trigger + " = { TARGET = scope:nd_target } }", guarded, code)
+            self.assertIn(call, guarded, code)
+            # Only inside the if: a yield with nothing to remove isn't checked.
+            self.assertEqual(branch.count(call), 1, code)
+            self.assertLess(branch.index(call), branch.index("nd_crisis_concede_"), code)
+
+    def test_each_code_yields_its_own_concession(self):
+        body = block(self.crisis, "nd_crisis_act_yield")
+        for code, name in CONCESSIONS.items():
+            branch = yield_branch(body, code)
+            self.assertEqual(re.findall(r"nd_crisis_concede_(\w+) = yes", branch), [name], code)
 
 
 def squash(text):
@@ -248,7 +272,8 @@ class TestClaims(unittest.TestCase):
         i = body.index("nd_dispute_claims_by")
         rival = body.rfind("has_diplomatic_pact = { who = $TARGET$ type = rivalry }", 0, i)
         self.assertGreaterEqual(rival, 0)
-        self.assertEqual(body.count("nd_dispute_claims_by"), 1)
+        # Once as a licence; the orbital licence names it only to exclude it.
+        self.assertEqual(body.count("nd_dispute_claims_by") - body.count("NOT = { nd_dispute_claims_by = "), 1)
 
 
 class TestOrbital(unittest.TestCase):
@@ -263,8 +288,11 @@ class TestOrbital(unittest.TestCase):
         cls.triggers = strip_comments(read(TRIGGERS))
 
     def test_trigger_reads_the_site(self):
+        # A site on its Paused method is not a battlestation going up.
         body = squash(block(self.triggers, "nd_dispute_orbital_by"))
-        self.assertIn("$TARGET$ = { any_scope_state = { has_building = building_orbital_battlestation_construction_site } }", body)
+        self.assertIn("$TARGET$ = { any_scope_state = { any_scope_building = {"
+                      " is_building_type = building_orbital_battlestation_construction_site"
+                      " NOT = { has_active_production_method = pm_orbital_battlestation_construction_paused } } } }", body)
 
     def test_concession_removes_site_and_progress(self):
         body = squash(block(self.crisis, "nd_crisis_concede_orbital"))
@@ -286,7 +314,10 @@ class TestOrbital(unittest.TestCase):
 
     def test_ai_great_power_only(self):
         body = squash(block(self.triggers, "nd_ai_would_warn"))
-        self.assertIn("AND = { nd_dispute_orbital_by = { TARGET = $TARGET$ } country_rank >= rank_value:great_power }", body)
+        i = body.index("nd_dispute_orbital_by = { TARGET = $TARGET$ }")
+        licence = body[body.rfind("AND = {", 0, i):]
+        licence = licence[:licence.index("} # ") if "} # " in licence else len(licence)]
+        self.assertIn("country_rank >= rank_value:great_power", licence[:900])
         self.assertEqual(body.count("nd_dispute_orbital_by"), 1)
 
     def test_finished_levels_stay(self):
@@ -358,7 +389,8 @@ class TestCovert(unittest.TestCase):
         body = squash(block(self.triggers, "nd_ai_would_warn"))
         i = body.index("nd_dispute_covert_ops_by")
         self.assertGreaterEqual(body.rfind("has_diplomatic_pact = { who = $TARGET$ type = rivalry }", 0, i), 0)
-        self.assertEqual(body.count("nd_dispute_covert_ops_by"), 1)
+        # Once as a licence; the orbital licence names it only to exclude it.
+        self.assertEqual(body.count("nd_dispute_covert_ops_by") - body.count("NOT = { nd_dispute_covert_ops_by = "), 1)
 
     def test_revalidate_only_a_war(self):
         body = squash(block(self.crisis, "nd_crisis_revalidate_dispute"))
@@ -450,12 +482,132 @@ class TestDeployment(unittest.TestCase):
         body = squash(block(self.triggers, "nd_ai_would_warn"))
         i = body.index("nd_dispute_deployment_by")
         self.assertGreaterEqual(body.rfind("has_diplomatic_pact = { who = $TARGET$ type = rivalry }", 0, i), 0)
-        self.assertEqual(body.count("nd_dispute_deployment_by"), 1)
+        # Once as a licence; the orbital licence names it only to exclude it.
+        self.assertEqual(body.count("nd_dispute_deployment_by") - body.count("NOT = { nd_dispute_deployment_by = "), 1)
 
     def test_revalidate_only_a_war(self):
         body = squash(block(self.crisis, "nd_crisis_revalidate_dispute"))
         self.assertIn("else_if = { limit = { var:nd_crisis_dispute = 7 } if = { limit = { has_war_with = scope:nd_target }"
                       " set_variable = { name = nd_crisis_dispute value = 2 } } }", body)
+
+
+class TestAILicences(unittest.TestCase):
+    """The AI's warnings over codes 7–10 (rulings R8, revised in the final
+    review): licensed by the code the crisis would classify as, not the
+    dispute alone; never a bluff; code 10 only against a hostile country."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = strip_comments(read(TRIGGERS))
+        cls.warn = squash(block(cls.triggers, "nd_ai_would_warn"))
+
+    def licence(self, trigger):
+        i = self.warn.index(trigger + " = { TARGET = $TARGET$ }")
+        start = self.warn.rfind("AND = { ", 0, i)
+        # The licence's own AND block, brace-matched.
+        depth, j = 0, start
+        while True:
+            depth += self.warn[j] == "{"
+            depth -= self.warn[j] == "}"
+            j += 1
+            if depth == 0 and self.warn[j - 1] == "}":
+                return self.warn[start:j]
+
+    def test_weightier_codes_listed_in_order(self):
+        body = squash(block(self.triggers, "nd_dispute_weightier_than_7"))
+        before = [d[1] for d in DISPUTES[:[d[0] for d in DISPUTES].index(7)]]
+        self.assertEqual(re.findall(r"(nd_dispute_\w+) = \{ TARGET = \$TARGET\$ \}", body), before)
+
+    def test_not_when_a_weightier_code_holds(self):
+        for trigger in ("nd_dispute_deployment_by", "nd_dispute_orbital_by"):
+            self.assertIn("NOT = { nd_dispute_weightier_than_7 = { TARGET = $TARGET$ } }", self.licence(trigger), trigger)
+        orbital = self.licence("nd_dispute_orbital_by")
+        for trigger in ("nd_dispute_deployment_by", "nd_dispute_claims_by", "nd_dispute_covert_ops_by"):
+            self.assertIn("NOT = { " + trigger + " = { TARGET = $TARGET$ } }", orbital, trigger)
+
+    def test_never_a_bluff(self):
+        for trigger in ("nd_dispute_deployment_by", "nd_dispute_orbital_by"):
+            self.assertIn("OR = { nd_threat_backed = { TARGET = $TARGET$ } nd_threat_uncertain = { TARGET = $TARGET$ } }",
+                          self.licence(trigger), trigger)
+
+    def test_orbital_only_against_a_hostile_country(self):
+        orbital = self.licence("nd_dispute_orbital_by")
+        self.assertIn("OR = { has_diplomatic_pact = { who = $TARGET$ type = rivalry }"
+                      " has_attitude = { who = $TARGET$ attitude = antagonistic }"
+                      " has_attitude = { who = $TARGET$ attitude = belligerent }"
+                      " has_attitude = { who = $TARGET$ attitude = domineering } }", orbital)
+
+
+class TestFinalReviewFixes(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.crisis = strip_comments(read(CRISIS_EFFECTS))
+        cls.triggers = strip_comments(read(TRIGGERS))
+        cls.effects = strip_comments(read(DETERRENCE_EFFECTS))
+        cls.events = strip_comments(read(CRISIS_EVENTS))
+
+    def test_ai_keeps_an_ally_over_a_deployment(self):
+        body = squash(block(self.triggers, "nd_concession_costs_an_alliance"))
+        for needle in ("nd_crisis_dispute_is = { D = 7 }", "has_type = alliance", "has_type = defensive_pact",
+                       "OR = { has_type = nuclear_basing has_type = nuclear_guarantee }",
+                       "is_adjacent_to_country = scope:nd_issuer"):
+            self.assertIn(needle, body)
+        from test_nuclear_deterrence import option_body
+        for option in ("nuclear_crisis.1.a", "nuclear_crisis.5.a"):
+            chance = squash(block(option_body(self.events, option), "ai_chance"))
+            self.assertIn("modifier = { trigger = { nd_concession_costs_an_alliance = yes } factor = 0 }", chance, option)
+
+    def test_bars_lapse_in_a_war_with_the_issuer(self):
+        weekly = block(self.effects, "nd_weekly_update")
+        self.assertLess(weekly.index("nd_crisis_bars_void_in_war = yes"), weekly.index("nd_deploy_bar_enforce = yes"))
+        body = squash(block(self.effects, "nd_crisis_bars_void_in_war"))
+        for bar in ("nd_crisis_deploy_bar", "nd_crisis_covert_bar", "nd_crisis_orbital_freeze"):
+            self.assertIn("limit = { var:" + bar + " ?= { has_war_with = scope:nd_bv_self } } remove_variable = " + bar, body)
+
+    def test_a_player_hears_of_the_switch_off(self):
+        body = squash(block(self.effects, "nd_deploy_bar_enforce"))
+        self.assertIn("var:nd_crisis_deploy_bar ?= { save_scope_as = nd_dbe_issuer }", body)
+        self.assertIn("post_notification = nd_deploy_bar_enforced", body)
+        self.assertIn("is_ai = no", body)
+        messages = strip_comments(read(ROOT / "common/messages/extra_messages.txt"))
+        self.assertRegex(messages, r"(?m)^nd_deploy_bar_enforced = \{")
+        for suffix in ("_name", "_desc", "_tooltip"):
+            self.assertTrue(loc_value("notification_nd_deploy_bar_enforced" + suffix), suffix)
+
+    def test_covert_helper_acts_on_the_record(self):
+        helper = block(self.crisis, "nd_crisis_end_known_op")
+        limit = squash(block(helper, "limit"))
+        self.assertNotIn("has_diplomatic_pact", limit)
+        self.assertIn("iw_known_$TYPE$", limit)
+        h = squash(helper)
+        self.assertIn("if = { limit = { has_diplomatic_pact = { who = scope:nd_issuer type = $ACTION$ } }"
+                      " remove_diplomatic_pact = { country = scope:nd_issuer type = $ACTION$ } }", h)
+        self.assertIn("scope:nd_issuer = { covert_watch_forget = { ATTACKER = scope:nd_target TYPE = $TYPE$ } }", h)
+
+    def test_script_guarantees_read_the_bar(self):
+        cand = squash(block(self.triggers, "nd_proliferation_guarantee_candidate"))
+        self.assertIn("NOT = { var:nd_crisis_deploy_bar ?= { is_adjacent_to_country = scope:nd_pg_beneficiary } }", cand)
+        bp = squash(block(strip_comments(read(ROOT / "common/scripted_triggers/nuclear_custody_triggers.txt")),
+                          "nd_bp_guarantor_valid"))
+        self.assertIn("NOT = { var:nd_crisis_deploy_bar ?= { is_adjacent_to_country = $STATE$ } }", bp)
+
+    def test_demands_speak_of_the_issuer_in_the_third_person(self):
+        # Spliced into the target's events ("…has warned our government…").
+        for code in CODES:
+            self.assertNotRegex(loc_value(f"nd_crisis_demand_{code}"), r"\b(we|us|our)\b", code)
+
+    def test_eligibility_line_needs_no_rival_for_the_new_disputes(self):
+        text = loc_value("nd_tt_has_dispute")
+        for phrase in ("a rival's forces deployed", "a rival's claims", "a rival's covert operations"):
+            self.assertNotIn(phrase, text)
+
+    def test_legend_says_what_the_concessions_do(self):
+        legend = loc_value("nd_w_crisis_actions_legend")
+        self.assertNotIn("halts its battlestation", legend)
+        self.assertIn("battlestation site", legend)
+
+    def test_basing_bar_line_says_which_country(self):
+        self.assertIn("conceded to", loc_value("nd_tt_deploy_barred"))
 
 
 if __name__ == "__main__":

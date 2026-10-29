@@ -2765,7 +2765,7 @@ class TestUmbrellaCoverage(unittest.TestCase):
                          # Dispute 7 reads a guarantee over a neighbor and leaves
                          # umbrellas out on purpose: every armed overlord's
                          # subjects are under one by default (phase 4b, R2).
-                         "nd_dispute_deployment_by", "nd_crisis_concede_deployment"}
+                         "nd_dispute_deployment_by", "nd_crisis_concede_deployment", "nd_concession_costs_an_alliance"}
 
     def test_umbrella_triggers(self):
         t = strip_comments(read(TRIGGERS))

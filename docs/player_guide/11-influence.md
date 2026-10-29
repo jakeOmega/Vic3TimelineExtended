@@ -319,7 +319,9 @@ There are seventeen operations: sixteen run against another country, and one,
 Counterintelligence Support, helps a friend. Every operation against another
 country needs a free slot, room under the per-type limit, no operation of the
 same type already running against that target, funding of at least 1, a target
-that is not decentralized, no truce with it, and no Intelligence Sharing Pact
+that is not decentralized, no truce with it, no promise from a nuclear crisis
+to run none against it for ten years (see [Nuclear
+weapons](14-nuclear.md#opening-a-nuclear-crisis)), and no Intelligence Sharing Pact
 binding it (see [The Intelligence Sharing Pact's defense
 shield](09-diplomacy.md#the-intelligence-sharing-pacts-defense-shield)). Good
 relations don't stop any of them: you can run an operation against a friend, and

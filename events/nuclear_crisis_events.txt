@@ -109,6 +109,12 @@ nuclear_crisis.1 = {
 				trigger = { ruler_is_cautious = yes }
 				add = 2
 			}
+			# Not when conceding a deployment would end a treaty that holds an
+			# alliance or a defensive pact: a treaty is left whole.
+			modifier = {
+				trigger = { nd_concession_costs_an_alliance = yes }
+				factor = 0
+			}
 		}
 	}
 
@@ -718,6 +724,11 @@ nuclear_crisis.5 = {
 					var:nd_yield_pressure >= 85
 				}
 				add = 8
+			}
+			# As in nuclear_crisis.1.a: not at the cost of an alliance.
+			modifier = {
+				trigger = { nd_concession_costs_an_alliance = yes }
+				factor = 0
 			}
 		}
 	}

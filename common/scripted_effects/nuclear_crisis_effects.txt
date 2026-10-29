@@ -2158,12 +2158,14 @@ nd_crisis_concede_covert_ops = {
 }
 
 # Operator scope (scope:nd_target, the yielder), scope:nd_issuer the country
-# it runs $TYPE$ against: end that operation if the issuer has a record of it.
+# it runs $TYPE$ against: end that operation if the issuer has a record of it
+# — the record is what the dispute reads. A record whose pact already ended,
+# waiting for covert_op_sync's monthly reap, goes too, so the dispute is gone
+# the next day.
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key
 nd_crisis_end_known_op = {
 	if = {
 		limit = {
-			has_diplomatic_pact = { who = scope:nd_issuer type = $ACTION$ }
 			scope:nd_issuer = {
 				has_variable_list = iw_known_ops
 				any_in_list = {
@@ -2173,8 +2175,12 @@ nd_crisis_end_known_op = {
 				}
 			}
 		}
-		remove_diplomatic_pact = { country = scope:nd_issuer type = $ACTION$ }
+		if = {
+			limit = { has_diplomatic_pact = { who = scope:nd_issuer type = $ACTION$ } }
+			remove_diplomatic_pact = { country = scope:nd_issuer type = $ACTION$ }
+		}
 		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:nd_issuer }
+		scope:nd_issuer = { covert_watch_forget = { ATTACKER = scope:nd_target TYPE = $TYPE$ } }
 	}
 }
 
