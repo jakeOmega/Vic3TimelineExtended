@@ -25,6 +25,7 @@ DISPLAY = os.path.join(REPO, "common", "script_values", "space_race_display_valu
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "space_race_triggers.txt")
 BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "space_race_buttons.txt")
+ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "space_race_sguis.txt")
 MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "space_race_modifiers.txt")
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
@@ -121,6 +122,8 @@ class Script:
                 ok = ctx.get("solar_method", False) == (value == "yes")
             elif key == "NOT":
                 ok = not self.check(value, ctx)
+            elif key == "OR":
+                ok = any(self.check([item], ctx) for item in value)
             else:
                 ok = self.COMPARE[op](self.number(key, ctx), self.number(value, ctx))
             if not ok:
@@ -377,6 +380,36 @@ class CeilingTest(unittest.TestCase):
         self.assertGreaterEqual(writes, 10)  # each entry's creation, the debug seed, the two clicks
 
 
+class CapCacheTest(unittest.TestCase):
+    """The pace multiplier reads the cap, which technologies and Advanced
+    Research V move with no button press. sr_recalculate_cost records the cap
+    it computed with, and the monthly pulse recalculates when that is missing
+    or differs from the live cap, as it does for participation."""
+
+    def test_the_cap_is_recorded_with_the_costs(self):
+        recalc = _block(_read(EFFECTS), "sr_recalculate_cost")
+        self.assertIn("set_variable = { name = sr_cost_funding_cap value = sr_max_funding_level }", recalc)
+        self.assertLess(recalc.index("sr_apply_milestone_cost_modifiers_base"), recalc.index("sr_cost_funding_cap"))
+
+    def test_the_pulse_recalculates_when_the_cap_moves(self):
+        pulse = re.sub(r"\s+", " ", _block(_read(ON_ACTIONS), "space_race_on_action"))
+        self.assertIn("else_if = { limit = { NOT = { has_variable = sr_cost_funding_cap } } sr_recalculate_cost = yes }",
+                      pulse)
+        m = re.search(r"else_if = \{ limit = \{ (OR = \{ var:sr_cost_funding_cap < sr_max_funding_level "
+                      r"var:sr_cost_funding_cap > sr_max_funding_level \}) \} sr_recalculate_cost = yes \}", pulse)
+        self.assertIsNotNone(m, "no recalculation on a cap that moved")
+        # in the participants' chain, after the participation check and before
+        # the missing-modifier repair
+        self.assertGreater(m.start(), pulse.index("NOT = { has_variable = sr_cost_participation }"))
+        self.assertLess(m.start(), pulse.index("sr_cost_modifiers_missing = yes"))
+        stale = _parse(m.group(1))
+        for cached, cap, fires in ((7, 7, False), (7, 8, True), (7, 6, True), (22, 23, True)):
+            with self.subTest(cached=cached, cap=cap):
+                ctx = _ctx("probe", 9, cap)
+                ctx["vars"]["sr_cost_funding_cap"] = cached
+                self.assertEqual(SCRIPT.check(stale, ctx), fires)
+
+
 class PanelTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -408,7 +441,15 @@ class PanelTest(unittest.TestCase):
         outer = [v for k, _, v in _parse(body) if k == "if"]
         self.assertEqual(len(outer), 1)
         limit = next(v for k, _, v in outer[0] if k == "limit")
-        self.assertEqual(limit, [("sr_funding_$MILESTONE$_within_cap", ">=", "sr_max_funding_level")])
+        self.assertEqual(limit, [("sr_funding_$MILESTONE$_within_cap", ">=", "sr_max_funding_level"),
+                                 ("sr_funding_$MILESTONE$_past_cap", "<", "sr_funding_past_cap_steps")])
+        # Shown from the cap until the ladder is used up: never past the sixth
+        # step, where no share exists (the button is greyed there, or a falling
+        # cap left the level further past).
+        shown = _parse(re.sub(r"\$MILESTONE\$", "probe", "limit = { " + " ".join(f"{a} {o} {b}" for a, o, b in limit) + " }"))[0][2]
+        for level in range(16):
+            with self.subTest(level=level):
+                self.assertEqual(SCRIPT.check(shown, _ctx("probe", level, 7)), 7 <= level < 7 + STEPS)
         chain = [(k, v) for k, _, v in outer[0] if k in ("if", "else_if", "else")]
         picks = {}
         for past in range(STEPS):

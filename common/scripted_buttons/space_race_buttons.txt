@@ -14,8 +14,11 @@
 # `effect` all delegate to the shared helpers that the widget's scripted GUIs
 # also call (common/scripted_triggers/space_race_triggers.txt,
 # common/scripted_effects/space_race_effects.txt), so the AI's grid and the
-# player's panel cannot disagree. Change an approach or funding rule in the
-# helper; the `ai_chance` weights below are the only per-button content left.
+# player's panel agree. One difference is deliberate: the increase-funding
+# buttons ask sr_possible_fund_up_within_cap, the player's ceiling plus the
+# cap, because the AI stays within the cap (FUNDING PAST THE CAP below). Change
+# an approach or funding rule in the helper; the `ai_chance` weights below are
+# the only per-button content left.
 #
 # FUNDING PAST THE CAP. A player may fund a milestone up to six levels past the
 # cap (sr_possible_fund_up; lunar colonization design § 5.1). The AI stays

@@ -57,7 +57,8 @@ MARGIN = 1.1
 # The longest figures no script bounds: named here, as the round-3 rules ask.
 PACE_CEILING = 99.9       # sr_pace_rate_<m>, "+99.9/mo"; the real pace is a few a month
 SETBACKS_CEILING = 99     # sr_setbacks_<m>_value, a count of setbacks
-FUNDING_CEILING = 28      # sr_funding_<m> and sr_max_funding_level: 3, plus technology (22 with all of it), plus 6 past the cap
+FUNDING_CEILING = 99      # sr_funding_<m> and sr_max_funding_level: 3 plus every country_space_race_max_funding_add
+                          # source (technologies, Advanced Research V), plus 6 past the cap; two digits however they grow
 FUNDING_PAST_CAP = sum(1 / (j + 1) for j in range(1, 7))  # sr_funding_<m>_past_cap_effective: 1/2 + ... + 1/7, "+1.6"
 STAGE_CEILING = 5         # sr_current_colonization_stage, "Stage: 5 of 5"
 TRANSIT_MONTHS = 132      # sr_interstellar_transit_value, pinned by the waiting entry's goal
@@ -561,7 +562,7 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(_render(_loc("je_space_race_widget_ov_safe_orbital")), "Safe\\n−22.5 a week")
         self.assertEqual(_render(_loc("je_space_race_widget_progress_solar_colonization")), "650 / 650 (+99.9/mo)")
         self.assertEqual(_render(_loc("je_space_race_widget_eta_solar_colonization")), "1300 months")
-        self.assertEqual(_render(_loc("je_space_race_widget_funding_past_cap_suborbital")), "28 / 28 (+1.6)")
+        self.assertEqual(_render(_loc("je_space_race_widget_funding_past_cap_suborbital")), "99 / 99 (+1.6)")
         self.assertEqual(_render(_loc("je_space_race_widget_progress_interstellar_results")), "132 / 132 months")
         self.assertEqual(_render(_loc("je_space_race_widget_ov_shielded")), "Shielded: 6 mo")
         self.assertEqual(_render(_loc("je_space_race_widget_risk_mars_landing")), "Risk: 50%/mo")
