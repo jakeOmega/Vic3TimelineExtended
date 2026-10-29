@@ -5201,3 +5201,7 @@ One auto-running probe in an 1836 observer game (`te_probe_nr_*`, the nuclear cr
 - **`remove_claim = <country>`** (state-region scope) removes another country's claim, including one from history, at once.
 - **`remove_diplomatic_pact = { country = X type = <covert operation> }`** from the pact's first country ends it at once; another country's pact of the same type stays.
 
+
+## A Generated Table's Index Is Saved: Append New Rows, Never Insert
+
+When a generator numbers its rows by position (Solar System Colonization's `gen_solar_sites.SITES`: a world's index is its place plus one), that number ends up in saves: a country's `sr_cf_target`, every queued module's `sr_mq_<n>_site`, every fleet's `sr_fl_<n>_target` and the founding event's id all hold it. Inserting a row shifts every later index, so an old save's fleet lands on the wrong world and its queue builds on another colony, with no error. Add new rows at the end, even when they belong earlier in play (the Moon's six worlds are 35 to 40 but stage 0), and order the panel from a separate list (`gss.LOCATIONS`, `panel_order()`). `test_solar_sites.py` holds the first 34 keys to a golden list so a reorder fails the suite.
