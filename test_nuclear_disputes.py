@@ -29,6 +29,10 @@ CRISIS_EVENTS = ROOT / "events/nuclear_crisis_events.txt"
 BUILDINGS = ROOT / "common/buildings/extra_buildings.txt"
 COVERT_ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
 COVERT_TRIGGERS = ROOT / "common/scripted_triggers/covert_warfare_triggers.txt"
+DETERRENCE_EFFECTS = ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"
+BASING = ROOT / "common/treaty_articles/125_nuclear_basing.txt"
+GUARANTEE = ROOT / "common/treaty_articles/115_nuclear_guarantee.txt"
+MISSILE_DEFENSE = ("pm_missile_defense_battery", "pm_directed_energy_point_defense")
 
 # (code, the dispute's trigger, a word every prose list of disputes uses,
 #  the preview's "over" key, the yield line's key), in classification order
@@ -40,6 +44,7 @@ DISPUTES = [
     (3, "nd_dispute_guarantee_against", "guarantee", "nd_tt_open_over_guarantee", "nd_tt_yield_guarantee"),
     (6, "nd_dispute_peacetime_strike_by", "nuclear strike", "nd_tt_open_over_peacetime_strike", "nd_tt_yield_reparations"),
     (4, "nd_dispute_proliferation_by", "weapons program", "nd_tt_open_over_proliferation", "nd_tt_yield_freeze"),
+    (7, "nd_dispute_deployment_by", "deploy", "nd_tt_open_over_deployment", "nd_tt_yield_deployment"),
     (8, "nd_dispute_claims_by", "claims", "nd_tt_open_over_claims", "nd_tt_yield_claims"),
     (9, "nd_dispute_covert_ops_by", "covert operations", "nd_tt_open_over_covert_ops", "nd_tt_yield_covert_ops"),
     (10, "nd_dispute_orbital_by", "orbital", "nd_tt_open_over_orbital", "nd_tt_yield_orbital"),
@@ -363,6 +368,94 @@ class TestCovert(unittest.TestCase):
     def test_uncaught_operations_go_on(self):
         for key in ("nd_concession_long_9", "nd_tt_yield_covert_ops"):
             self.assertIn("caught", loc_value(key), key)
+
+
+class TestDeployment(unittest.TestCase):
+    """Dispute 7: the target's weapons based in a country next to us, its
+    nuclear guarantee over one, or its missile defense in a state next to
+    ours. Conceding leaves those treaties whole (no break penalties), switches
+    the missile defense off and bars all three for ten years."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.crisis = strip_comments(read(CRISIS_EFFECTS))
+        cls.triggers = strip_comments(read(TRIGGERS))
+        cls.effects = strip_comments(read(DETERRENCE_EFFECTS))
+
+    def test_three_clauses(self):
+        body = squash(block(self.triggers, "nd_dispute_deployment_by"))
+        self.assertIn("save_temporary_scope_as = nd_dd_self", body)
+        # Basing and guarantees read live, the same articles the concession
+        # leaves, so a day after it the self-check sees the result (the
+        # weekly nd_based_near list would still name the guest).
+        self.assertIn("$TARGET$ = { any_scope_treaty = { any_scope_article = { OR = { has_type = nuclear_basing has_type = nuclear_guarantee }"
+                      " source_country = $TARGET$ target_country = { NOT = { THIS = scope:nd_dd_self }"
+                      " is_adjacent_to_country = scope:nd_dd_self } } } }", body)
+        self.assertNotIn("nd_based_near", body)
+        self.assertIn("nd_state_has_missile_defense = yes any_neighbouring_state = { owner = scope:nd_dd_self }", body)
+        md = squash(block(self.triggers, "nd_state_has_missile_defense"))
+        for pm in MISSILE_DEFENSE:
+            self.assertIn("has_active_production_method = " + pm, md)
+        self.assertIn("is_building_type = building_military_base", md)
+
+    def test_no_umbrella_clause(self):
+        body = block(self.triggers, "nd_dispute_deployment_by")
+        self.assertNotIn("umbrella", body)
+        self.assertNotIn("has_strategic_adjacency", body)
+
+    def test_concession_withdraws_without_penalties(self):
+        body = squash(block(self.crisis, "nd_crisis_concede_deployment"))
+        self.assertIn("every_scope_treaty = { limit = { any_scope_article = { OR = { has_type = nuclear_basing has_type = nuclear_guarantee }"
+                      " source_country = scope:nd_target target_country = { NOT = { THIS = scope:nd_issuer }"
+                      " is_adjacent_to_country = scope:nd_issuer } } } withdraw = { country = scope:nd_target } }", body)
+        self.assertNotIn("apply_break_penalties", body)
+        for key in ("nd_concession_long_7", "nd_tt_yield_deployment"):
+            self.assertIn("treaty", loc_value(key), key)
+            self.assertIn("no penalt", loc_value(key), key)
+
+    def test_concession_switches_both_methods_off(self):
+        body = squash(block(self.crisis, "nd_crisis_concede_deployment"))
+        self.assertIn("every_scope_state = { limit = { nd_state_has_missile_defense = yes any_neighbouring_state = { owner = scope:nd_issuer } }"
+                      " nd_missile_defense_off = yes }", body)
+        off = squash(block(self.effects, "nd_missile_defense_off"))
+        self.assertIn("activate_production_method = { building_type = building_military_base production_method = pm_no_missile_defense }", off)
+
+    def test_bar_set_for_ten_years(self):
+        body = squash(block(self.crisis, "nd_crisis_concede_deployment"))
+        self.assertIn("set_variable = { name = nd_crisis_deploy_bar value = scope:nd_issuer days = 3650 }", body)
+
+    def test_articles_refuse_a_barred_guest(self):
+        bar = ("custom_tooltip = { text = nd_tt_deploy_barred scope:source_country = { NOT = { var:nd_crisis_deploy_bar ?= {"
+               " is_adjacent_to_country = scope:target_country } } } }")
+        for path, name in ((BASING, "nuclear_basing"), (GUARANTEE, "nuclear_guarantee")):
+            ratify = squash(block(block(strip_comments(read(path)), name), "can_ratify"))
+            self.assertIn(bar, ratify, name)
+        self.assertTrue(loc_value("nd_tt_deploy_barred"))
+
+    def test_deploy_bar_switches_batteries_off_weekly(self):
+        self.assertIn("nd_deploy_bar_enforce = yes", block(self.effects, "nd_weekly_update"))
+        body = squash(block(self.effects, "nd_deploy_bar_enforce"))
+        self.assertIn("has_variable = nd_crisis_deploy_bar", body)
+        self.assertIn("every_scope_state = { limit = { nd_state_has_missile_defense = yes any_neighbouring_state = { owner = scope:nd_dbe_issuer } }"
+                      " nd_missile_defense_off = yes }", body)
+
+    def test_reach_rebuilt_after_the_concession(self):
+        body = squash(block(self.crisis, "nd_crisis_concede_deployment"))
+        self.assertIn("trigger_event = { id = nuclear_weapon_events.32 days = 1 }", body)
+        # Our warning time comes back at once, not at the next weekly rebuild.
+        self.assertIn("scope:nd_issuer = { if = { limit = { has_variable_list = nd_based_near }"
+                      " remove_list_variable = { name = nd_based_near target = scope:nd_target } } }", body)
+
+    def test_ai_warns_only_against_a_rival(self):
+        body = squash(block(self.triggers, "nd_ai_would_warn"))
+        i = body.index("nd_dispute_deployment_by")
+        self.assertGreaterEqual(body.rfind("has_diplomatic_pact = { who = $TARGET$ type = rivalry }", 0, i), 0)
+        self.assertEqual(body.count("nd_dispute_deployment_by"), 1)
+
+    def test_revalidate_only_a_war(self):
+        body = squash(block(self.crisis, "nd_crisis_revalidate_dispute"))
+        self.assertIn("else_if = { limit = { var:nd_crisis_dispute = 7 } if = { limit = { has_war_with = scope:nd_target }"
+                      " set_variable = { name = nd_crisis_dispute value = 2 } } }", body)
 
 
 if __name__ == "__main__":

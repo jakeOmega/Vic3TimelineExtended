@@ -581,6 +581,53 @@ nd_dispute_peacetime_strike_by = {
 	}
 }
 
+# Dispute 7 (rework spec §8.5): $TARGET$ deploys next to us — its weapons
+# based in a country adjacent to us (Nuclear Basing, §7.3), its nuclear
+# guarantee over one, or its missile defense in a state next to ours. The
+# articles are read live: the same ones the concession leaves, so a day after
+# it the self-check sees the result. Adjacency is is_adjacent_to_country, not
+# strategic adjacency, which a war goal would stretch to anyone (rulings R4).
+# An overlord's umbrella over a subject is not a deployment: every armed
+# overlord's subjects are under it by default (R2).
+nd_dispute_deployment_by = {
+	save_temporary_scope_as = nd_dd_self
+	OR = {
+		$TARGET$ = {
+			any_scope_treaty = {
+				any_scope_article = {
+					OR = {
+						has_type = nuclear_basing
+						has_type = nuclear_guarantee
+					}
+					source_country = $TARGET$
+					target_country = {
+						NOT = { THIS = scope:nd_dd_self }
+						is_adjacent_to_country = scope:nd_dd_self
+					}
+				}
+			}
+		}
+		$TARGET$ = {
+			any_scope_state = {
+				nd_state_has_missile_defense = yes
+				any_neighbouring_state = { owner = scope:nd_dd_self }
+			}
+		}
+	}
+}
+
+# State scope: a military base here runs a Missile Defense method (the
+# battery, or directed-energy point defense in the same slot).
+nd_state_has_missile_defense = {
+	any_scope_building = {
+		is_building_type = building_military_base
+		OR = {
+			has_active_production_method = pm_missile_defense_battery
+			has_active_production_method = pm_directed_energy_point_defense
+		}
+	}
+}
+
 # Dispute 8 (rework spec §8.5): $TARGET$ claims one of our incorporated
 # states. A claim sits on the state region, so the claimer's has_claim is
 # tested against the region, not has_claim_by on our part of a split state
@@ -1634,6 +1681,7 @@ nd_crisis_issuer_is_defensive = {
 	OR = {
 		var:nd_crisis_dispute = 3
 		var:nd_crisis_dispute = 6
+		var:nd_crisis_dispute = 7
 		var:nd_crisis_dispute = 8
 		var:nd_crisis_dispute = 9
 		AND = {
@@ -1760,6 +1808,7 @@ nd_has_crisis_dispute_with = {
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
 		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		nd_dispute_proliferation_by = { TARGET = $TARGET$ }
+		nd_dispute_deployment_by = { TARGET = $TARGET$ }
 		nd_dispute_claims_by = { TARGET = $TARGET$ }
 		nd_dispute_covert_ops_by = { TARGET = $TARGET$ }
 		nd_dispute_orbital_by = { TARGET = $TARGET$ }
@@ -2174,12 +2223,13 @@ nd_ai_would_warn = {
 			country_rank >= rank_value:great_power
 			nd_doctrine_nfu = no
 		}
-		# Our land, or operations against us, from a rival (rework spec §8.5;
-		# rulings R8: claims and covert operations are common, so only a
-		# rival's).
+		# Forces next to us, our land, or operations against us, from a rival
+		# (rework spec §8.5; rulings R8: claims and covert operations are
+		# common, so only a rival's).
 		AND = {
 			has_diplomatic_pact = { who = $TARGET$ type = rivalry }
 			OR = {
+				nd_dispute_deployment_by = { TARGET = $TARGET$ }
 				nd_dispute_claims_by = { TARGET = $TARGET$ }
 				nd_dispute_covert_ops_by = { TARGET = $TARGET$ }
 			}

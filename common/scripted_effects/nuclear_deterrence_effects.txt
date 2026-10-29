@@ -371,6 +371,8 @@ nd_weekly_update = {
 	# ---- reach (rework spec §7): rebuilt before anything reads it ------------
 	nd_reach_refresh = yes
 	nd_based_near_refresh = yes
+	# ---- a deployment conceded in a crisis (dispute 7) stays conceded -------
+	nd_deploy_bar_enforce = yes
 	# ---- the Strike section's enemy (nd_plan_refresh): a human's panel only --
 	if = {
 		limit = {
@@ -2470,6 +2472,33 @@ nd_reach_refresh = {
 # coast: is_adjacent_to_country), rebuilt every week. Against a listed country
 # our effective survivability is 10 lower (nd_warning_penalty_*), whatever the
 # reach. Built from the armed countries' articles, the few that exist.
+# Country scope: while a deployment concession binds us (nd_crisis_deploy_bar,
+# nd_crisis_concede_deployment), missile defense switched back on in a state
+# next to that country goes off again within the week. A production method
+# has no script gate of its own, so the bar is kept here.
+nd_deploy_bar_enforce = {
+	if = {
+		limit = { has_variable = nd_crisis_deploy_bar }
+		var:nd_crisis_deploy_bar = { save_scope_as = nd_dbe_issuer }
+		every_scope_state = {
+			limit = {
+				nd_state_has_missile_defense = yes
+				any_neighbouring_state = { owner = scope:nd_dbe_issuer }
+			}
+			nd_missile_defense_off = yes
+		}
+	}
+}
+
+# State scope: switch the military base's Missile Defense group to its "none"
+# method (state-scoped activate_production_method, as nuclear_strike_pm_restore).
+nd_missile_defense_off = {
+	activate_production_method = {
+		building_type = building_military_base
+		production_method = pm_no_missile_defense
+	}
+}
+
 nd_based_near_refresh = {
 	save_scope_as = nd_bn_self
 	if = {

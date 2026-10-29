@@ -1513,6 +1513,16 @@ nuclear_crisis.26 = {
 	immediate = {
 		var:nd_cc_target = { save_scope_as = nd_cc_target }
 		if = {
+			limit = { var:nd_cc_code = 7 }
+			if = {
+				limit = { nd_dispute_deployment_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_7: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] still deploys next to [THIS.GetCountry.GetNameNoFormatting] a day after withdraw and activate_production_method"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_7: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] deploys nothing next to [THIS.GetCountry.GetNameNoFormatting] a day after withdraw and activate_production_method"
+			}
+		}
+		if = {
 			limit = { var:nd_cc_code = 8 }
 			if = {
 				limit = { nd_dispute_claims_by = { TARGET = scope:nd_cc_target } }

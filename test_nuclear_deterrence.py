@@ -2761,7 +2761,11 @@ class TestUmbrellaCoverage(unittest.TestCase):
                          "nd_allies_alarmed", "nd_is_guaranteed", "nd_is_guaranteed_by_treaty",
                          "nd_dispute_guarantee_against", "nd_crisis_classify_dispute", "nd_crisis_notify_guarantors",
                          "nd_record_nuclear_use", "nd_guarantee_act_abandon", "nd_covered_country_struck_by",
-                         "nd_covered_country_struck", "nd_dispute_peacetime_strike_by"}
+                         "nd_covered_country_struck", "nd_dispute_peacetime_strike_by",
+                         # Dispute 7 reads a guarantee over a neighbor and leaves
+                         # umbrellas out on purpose: every armed overlord's
+                         # subjects are under one by default (phase 4b, R2).
+                         "nd_dispute_deployment_by", "nd_crisis_concede_deployment"}
 
     def test_umbrella_triggers(self):
         t = strip_comments(read(TRIGGERS))
