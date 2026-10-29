@@ -436,5 +436,21 @@ class TestTradePanel(unittest.TestCase):
         self.assertIn("twenty-five display handlers", doc)
 
 
+class TestTradeDocs(unittest.TestCase):
+    def test_design_records_trades(self):
+        doc = (ROOT / "docs/systems/nuclear_crisis_design.md").read_text(encoding="utf-8")
+        self.assertIn("### 0.17", doc)
+        self.assertRegex(doc, r"\| 11 \|")
+
+    def test_guide_explains_a_trade(self):
+        guide = (ROOT / "docs/player_guide/14-nuclear.md").read_text(encoding="utf-8")
+        moves = guide.split("Moves during a crisis", 1)[1]
+        self.assertIn("trade", moves.lower())
+
+    def test_playtest_lists_the_self_check(self):
+        doc = (ROOT / "docs/testing/nuclear-playtest.md").read_text(encoding="utf-8")
+        self.assertIn("nd_trade_", doc)
+
+
 if __name__ == "__main__":
     unittest.main()
