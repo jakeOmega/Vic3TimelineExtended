@@ -161,10 +161,13 @@ class TestHostAccidents(unittest.TestCase):
                       " source_country = scope:nd_accident_guest target_country = ROOT } } withdraw = { country = ROOT } }",
                       out)
         self.assertIn("treaty", loc_value("nd_tt_basing_order_out"))
-        # Final review: a treaty still binding is broken, with its articles'
-        # penalties for breaking it.
-        self.assertIn("binding", loc_value("nd_tt_basing_order_out"))
-        self.assertIn("penalt", loc_value("nd_tt_basing_order_out"))
+        # Script withdraw applies no break penalties unless it passes
+        # apply_break_penalties = yes (engine docs, effects.log: "optional,
+        # default no"), so the tooltip must not promise them, even while the
+        # treaty binds.
+        self.assertNotIn("apply_break_penalties", out)
+        self.assertIn("binds", loc_value("nd_tt_basing_order_out"))
+        self.assertIn("no penalties", loc_value("nd_tt_basing_order_out"))
         protest = squash(option_body(self.host, "nuclear_incident.31.b"))
         self.assertIn("change_relations = { country = scope:nd_accident_guest value = -30 }", protest)
         quiet = squash(option_body(self.host, "nuclear_incident.31.c"))
