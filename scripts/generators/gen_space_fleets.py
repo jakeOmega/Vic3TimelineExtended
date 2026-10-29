@@ -1201,7 +1201,8 @@ def render_ai_attack() -> list[str]:
             "# Lunar colonization § 8.4: at war, the strongest of its fleets at Earth closes",
             "# in on the enemy's lunar world of most worth (sr_site_ai_worth_<key>) while it",
             "# holds Earth orbit against that enemy (sr_site_ai_lunar_target: the enemy's",
-            "# Earth is blockaded), to seize it when its marines exceed the world's garrison",
+            "# Earth is blockaded) and no enemy's fleet is at Earth (sr_earth_hostile_present),",
+            "# to seize it when its marines exceed the world's garrison",
             "# and militia; otherwise it, and every other fleet of ours at Earth, stays",
             "# stationed. Never to destroy. Before the offence's dispatch, which leaves a",
             "# fleet closing in at Earth where it is.",
@@ -1214,12 +1215,17 @@ def render_ai_attack() -> list[str]:
                 f"set_local_variable = {{ name = sr_fl_n value = {n} }} }}"]
     out += ["\tset_local_variable = { name = sr_ai_tgt value = 0 }",
             "\tset_local_variable = { name = sr_ai_need value = 0 }",
-            "\tset_local_variable = { name = sr_ai_best value = -1 }"]
+            "\tset_local_variable = { name = sr_ai_best value = -1 }",
+            "\t# Only with no fleet of any enemy at Earth: a stationed one bars the seizure",
+            "\t# (sr_cb_seizes), and closing in would take this fleet off its own colonies' guard.",
+            "\tif = {",
+            "\t\tlimit = { NOT = { sr_earth_hostile_present = yes } }"]
     for w in LUNAR:
-        out += [f"\tif = {{ limit = {{ sr_site_ai_lunar_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best }} "
+        out += [f"\t\tif = {{ limit = {{ sr_site_ai_lunar_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best }} "
                 f"set_local_variable = {{ name = sr_ai_best value = sr_site_ai_worth_{w.key} }} "
                 f"set_local_variable = {{ name = sr_ai_tgt value = {w.index} }} "
                 f"set_local_variable = {{ name = sr_ai_need value = sr_site_garrison_need_{w.key} }} }}"]
+    out += ["\t}"]
     for n in range(1, SLOTS + 1):
         out += ["\tif = {",
                 f"\t\tlimit = {{ {var(n, 'at_earth')} = yes }}",

@@ -9532,7 +9532,8 @@ sr_fl_ai_attack_all = {
 # Lunar colonization § 8.4: at war, the strongest of its fleets at Earth closes
 # in on the enemy's lunar world of most worth (sr_site_ai_worth_<key>) while it
 # holds Earth orbit against that enemy (sr_site_ai_lunar_target: the enemy's
-# Earth is blockaded), to seize it when its marines exceed the world's garrison
+# Earth is blockaded) and no enemy's fleet is at Earth (sr_earth_hostile_present),
+# to seize it when its marines exceed the world's garrison
 # and militia; otherwise it, and every other fleet of ours at Earth, stays
 # stationed. Never to destroy. Before the offence's dispatch, which leaves a
 # fleet closing in at Earth where it is.
@@ -9551,12 +9552,17 @@ sr_fl_ai_lunar_assault = {
 	set_local_variable = { name = sr_ai_tgt value = 0 }
 	set_local_variable = { name = sr_ai_need value = 0 }
 	set_local_variable = { name = sr_ai_best value = -1 }
-	if = { limit = { sr_site_ai_lunar_target = { KEY = shackleton } sr_site_ai_worth_shackleton > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_shackleton } set_local_variable = { name = sr_ai_tgt value = 35 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_shackleton } }
-	if = { limit = { sr_site_ai_lunar_target = { KEY = peary } sr_site_ai_worth_peary > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_peary } set_local_variable = { name = sr_ai_tgt value = 36 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_peary } }
-	if = { limit = { sr_site_ai_lunar_target = { KEY = tranquility } sr_site_ai_worth_tranquility > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_tranquility } set_local_variable = { name = sr_ai_tgt value = 37 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_tranquility } }
-	if = { limit = { sr_site_ai_lunar_target = { KEY = marius_hills } sr_site_ai_worth_marius_hills > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_marius_hills } set_local_variable = { name = sr_ai_tgt value = 38 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_marius_hills } }
-	if = { limit = { sr_site_ai_lunar_target = { KEY = daedalus } sr_site_ai_worth_daedalus > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_daedalus } set_local_variable = { name = sr_ai_tgt value = 39 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_daedalus } }
-	if = { limit = { sr_site_ai_lunar_target = { KEY = imbrium } sr_site_ai_worth_imbrium > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_imbrium } set_local_variable = { name = sr_ai_tgt value = 40 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_imbrium } }
+	# Only with no fleet of any enemy at Earth: a stationed one bars the seizure
+	# (sr_cb_seizes), and closing in would take this fleet off its own colonies' guard.
+	if = {
+		limit = { NOT = { sr_earth_hostile_present = yes } }
+		if = { limit = { sr_site_ai_lunar_target = { KEY = shackleton } sr_site_ai_worth_shackleton > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_shackleton } set_local_variable = { name = sr_ai_tgt value = 35 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_shackleton } }
+		if = { limit = { sr_site_ai_lunar_target = { KEY = peary } sr_site_ai_worth_peary > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_peary } set_local_variable = { name = sr_ai_tgt value = 36 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_peary } }
+		if = { limit = { sr_site_ai_lunar_target = { KEY = tranquility } sr_site_ai_worth_tranquility > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_tranquility } set_local_variable = { name = sr_ai_tgt value = 37 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_tranquility } }
+		if = { limit = { sr_site_ai_lunar_target = { KEY = marius_hills } sr_site_ai_worth_marius_hills > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_marius_hills } set_local_variable = { name = sr_ai_tgt value = 38 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_marius_hills } }
+		if = { limit = { sr_site_ai_lunar_target = { KEY = daedalus } sr_site_ai_worth_daedalus > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_daedalus } set_local_variable = { name = sr_ai_tgt value = 39 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_daedalus } }
+		if = { limit = { sr_site_ai_lunar_target = { KEY = imbrium } sr_site_ai_worth_imbrium > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_imbrium } set_local_variable = { name = sr_ai_tgt value = 40 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_imbrium } }
+	}
 	if = {
 		limit = { sr_fl_1_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_1_destroy } remove_variable = sr_fl_1_destroy }

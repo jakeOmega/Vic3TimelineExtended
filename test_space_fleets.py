@@ -974,6 +974,10 @@ class LunarAtEarthTest(unittest.TestCase):
                 self.assertIn(f"sr_site_ai_lunar_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best", lunar)
                 self.assertIn(f"set_local_variable = {{ name = sr_ai_need value = sr_site_garrison_need_{w.key} }}", lunar)
         self.assertEqual(len(re.findall(r"sr_site_ai_lunar_target = \{ KEY = (\w+) \}", lunar)), len(self.lunar))
+        # Only with no enemy fleet at Earth at all: any stationed one bars the seizure.
+        guarded = _block("x = {" + lunar.split("limit = { NOT = { sr_earth_hostile_present = yes } }", 1)[1], "x")
+        self.assertEqual(len(re.findall(r"sr_site_ai_lunar_target = \{ KEY = (\w+) \}", guarded)), len(self.lunar))
+        self.assertIn("sr_cb_hs_value <= 0", _block(self.triggers, "sr_cb_seizes"))
         self.assertNotIn("_destroy value", lunar)
         self.assertNotIn("posture value = 2", lunar)
         target = _block(self.triggers, "sr_site_ai_lunar_target")
