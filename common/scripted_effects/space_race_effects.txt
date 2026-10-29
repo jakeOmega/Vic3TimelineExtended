@@ -872,6 +872,35 @@ sr_apply_moon_base_reward          = { sr_apply_milestone_reward_base = { MILEST
 sr_apply_mars_landing_reward       = { sr_apply_milestone_reward_base = { MILESTONE = mars_landing       } }
 sr_apply_interstellar_probe_reward = { sr_apply_milestone_reward_base = { MILESTONE = interstellar_probe } }
 
+# --- The first lunar colony (lunar colonization design § 3.6) ------------------
+# The Moon Base milestone is retired (§ 7): the first lunar world a country
+# founds with its own fleet takes its place in the race. Called by each lunar
+# world's sr_site_found_<key> and lunar draw branch (gen_solar_sites.py), after
+# the world's sync, so a world received by treaty, inheritance, seizure, a
+# petition or the old-save migration (sr_lunar_migrate_take_<key>) never counts.
+# The record keeps the Moon Base's names, so every reader of
+# sr_completed_moon_base, sr_was_first_moon_base and sr_global_first_moon_base
+# (the Program row, Space Powers, the UN count, covert "ahead in space", the
+# Grand Monument) works unchanged. The bookkeeping is
+# sr_complete_milestone_effect_base's without its sr_recalculate_cost: this runs
+# inside the colonization pulse, where a second cost repost would stack the
+# cost modifier (add/remove are not visible within one effect). The reward is
+# paid by space_race_events.6's option, which plays the day after the founding
+# event. Country scope: the founder.
+sr_lunar_colony_founded = {
+	if = {
+		limit = { NOT = { has_variable = sr_completed_moon_base } }
+		set_variable = { name = sr_completed_moon_base value = yes }
+		if = {
+			limit = { NOT = { has_global_variable = sr_global_first_moon_base } }
+			set_global_variable = { name = sr_global_first_moon_base value = yes }
+			set_variable = { name = sr_was_first_moon_base value = yes }
+		}
+		sr_notify_milestone_achievement = { MILESTONE = moon_base }
+		trigger_event = { id = space_race_events.6 days = 1 }
+	}
+}
+
 # Solar System Colonization's founding draw (sr_establish_colony_effect) and stage
 # check (sr_check_colony_stage_effect) are generated from one table of the 34
 # worlds: common/scripted_effects/sr_sites_generated.txt, from

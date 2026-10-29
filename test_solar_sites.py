@@ -335,6 +335,64 @@ class EntryTest(unittest.TestCase):
         self.assertEqual(re.findall(r"scope:site = (\d+)", lunar), [str(s.index) for s in gss.LUNAR])
 
 
+class FirstLunarColonyTest(unittest.TestCase):
+    """The first lunar world a country founds with its own fleet takes the Moon
+    Base's place in the race (lunar colonization design § 3.6)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        cls.space = _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))
+
+    def test_founding_a_lunar_world_and_nothing_else_counts(self):
+        call = "sr_lunar_colony_founded = yes"
+        for site in gss.SITES:
+            k = site.key
+            found = _block(self.effects, f"sr_site_found_{k}")
+            with self.subTest(site=k):
+                self.assertEqual(found.count(call), 1 if site in gss.LUNAR else 0)
+                if site in gss.LUNAR:
+                    self.assertLess(found.index(f"sr_site_sync_{k} = yes"), found.index(call))
+                for other in ("transfer", "release", "sync", "monthly"):
+                    self.assertNotIn(call, _block(self.effects, f"sr_site_{other}_{k}"))
+        # Every lunar draw branch, the released ones under later stages too.
+        draw = _block(self.effects, "sr_establish_colony_effect")
+        branches = re.findall(r"set_global_variable = \{ name = sr_colony_(\w+) value = yes \}(.*?)trigger_event",
+                              draw, re.S)
+        self.assertEqual(len(branches), sum(1 + 5 - s.stage for s in gss.SITES))
+        lunar = {s.key for s in gss.LUNAR}
+        for key, body in branches:
+            with self.subTest(branch=key):
+                self.assertEqual(body.count(call), 1 if key in lunar else 0)
+                if key in lunar:
+                    self.assertLess(body.index(f"sr_site_sync_{key} = yes"), body.index(call))
+
+    def test_the_bookkeeping_is_the_moon_base_s_without_the_cost_repost(self):
+        body = _block(self.space, "sr_lunar_colony_founded")
+        self.assertIn("NOT = { has_variable = sr_completed_moon_base }", body)
+        for line in ("set_variable = { name = sr_completed_moon_base value = yes }",
+                     "set_global_variable = { name = sr_global_first_moon_base value = yes }",
+                     "set_variable = { name = sr_was_first_moon_base value = yes }",
+                     "sr_notify_milestone_achievement = { MILESTONE = moon_base }",
+                     "trigger_event = { id = space_race_events.6 days = 1 }"):
+            self.assertIn(line, body)
+        # sr_was_first_moon_base, which .6's text reads, is set before the event.
+        self.assertLess(body.index("sr_was_first_moon_base value = yes"), body.index("space_race_events.6"))
+        for repost in ("sr_recalculate_cost", "sr_complete_milestone_effect", "sr_apply_moon_base_reward"):
+            self.assertNotIn(repost, body)
+
+    def test_event_6_pays_the_reward_in_its_one_option(self):
+        events = _strip(_raw("events", "space_race_events.txt"))
+        event = _block(events, "space_race_events.6")
+        options = re.findall(r"\boption = \{", event)
+        self.assertEqual(len(options), 1)
+        option = _block(event, "option")
+        self.assertIn("default_option = yes", option)
+        self.assertIn("sr_apply_moon_base_reward = yes", option)
+        self.assertIn('lunar_base_dome.dds', event)
+        self.assertNotIn("sr_moon_base_scientific", event)
+
+
 class RuleTest(unittest.TestCase):
     def test_four_settings_and_the_old_name_kept(self):
         rules = _raw("common", "game_rules", "extra_game_rules.txt")

@@ -2684,7 +2684,7 @@
  sr_mission_failure_desc:0 "A space mission failure has set back progress and damaged public confidence in the program."
  sr_module_upkeep:0 "Colony Modules"
  sr_module_upkeep_desc:0 "Our colonies' modules past each colony's first are kept up from Earth. Each level raises the Space Program's throughput, and its Launch Capacity bill with it."
- sr_moon_base:0 "Lunar Base Established"
+ sr_moon_base:0 "Lunar Colony"
  sr_moon_base_desc:0 "A permanent human presence on the Moon strengthens our position in the [concept_space_race]."
  sr_moon_base_industrial_desc:0 "Our lunar base focuses on mining and materials processing, boosting industrial output."
  sr_moon_base_military_desc:0 "Our lunar base provides strategic military observation and force projection capabilities."

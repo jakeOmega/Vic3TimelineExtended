@@ -425,7 +425,11 @@ space_race_events.5 = {
 	}
 }
 
-# Event 6: Moon Base Established - options depend on purpose choice
+# Event 6: the first lunar colony (lunar colonization design § 3.6). The Moon
+# Base milestone is retired: the first lunar world a country founds with its own
+# fleet takes its place, and sr_lunar_colony_founded (space_race_effects.txt)
+# fires this the day after the world's founding event. The option pays the
+# first or later reward the Moon Base paid (sr_apply_moon_base_reward).
 space_race_events.6 = {
 	type = country_event
 	placement = root
@@ -436,7 +440,7 @@ space_race_events.6 = {
 
 	title = space_race_events.6.t
 	# The world-first text only for the country that really was first
-	# (sr_was_first_moon_base is set in on_complete before this event fires).
+	# (sr_lunar_colony_founded sets sr_was_first_moon_base before it fires this).
 	desc = {
 		first_valid = {
 			triggered_desc = {
@@ -450,65 +454,9 @@ space_race_events.6 = {
 
 	duration = 3
 
-	trigger = { }
-	immediate = { }
-
-	# Scientific research base
 	option = {
 		name = space_race_events.6.a
 		default_option = yes
-		trigger = { has_variable = sr_moon_base_scientific }
-		ai_chance = { base = 5 }
-		sr_apply_moon_base_reward = yes
-		add_modifier = {
-			name = sr_moon_base_scientific
-			days = long_modifier_time
-			is_decaying = yes
-		}
-		add_loyalists = { value = large_radicals pop_type = academics }
-	}
-
-	# Industrial mining base
-	option = {
-		name = space_race_events.6.b
-		trigger = { has_variable = sr_moon_base_industrial }
-		ai_chance = { base = 5 }
-		sr_apply_moon_base_reward = yes
-		add_modifier = {
-			name = sr_moon_base_industrial
-			days = long_modifier_time
-			is_decaying = yes
-		}
-		add_loyalists = { value = medium_radicals pop_type = academics }
-		add_loyalists = { value = medium_radicals }
-	}
-
-	# Military installation
-	option = {
-		name = space_race_events.6.c
-		trigger = { has_variable = sr_moon_base_military }
-		ai_chance = { base = 5 }
-		sr_apply_moon_base_reward = yes
-		add_modifier = {
-			name = sr_moon_base_military
-			days = long_modifier_time
-			is_decaying = yes
-		}
-		add_loyalists = { value = medium_radicals pop_type = officers }
-		add_loyalists = { value = medium_radicals pop_type = soldiers }
-		add_radicals = { value = small_radicals pop_type = laborers }
-	}
-
-	# Fallback - no purpose chosen
-	option = {
-		name = space_race_events.6.e
-		trigger = {
-			NOT = { has_variable = sr_moon_base_scientific }
-			NOT = { has_variable = sr_moon_base_industrial }
-			NOT = { has_variable = sr_moon_base_military }
-		}
-		default_option = yes
-		ai_chance = { base = 5 }
 		sr_apply_moon_base_reward = yes
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals }

@@ -6399,7 +6399,7 @@
  sr_facility_fire_damage:0 "Facility Fire Damage"
  sr_first_interstellar_probe:0 "First Interstellar Probe"
  sr_first_mars_landing:0 "First on Mars"
- sr_first_moon_base:0 "First Lunar Colony"
+ sr_first_moon_base:0 "First on the Moon"
  sr_first_moon_landing:0 "First on the Moon"
  sr_fl_alert_tt:0 "Our fleets and the colony's Defenses are listed in the Space Race panel."
  sr_fl_destroy_price_tt:0 "The fleet closes in to destroy its target. After #v 3#! months with no enemy fleet stationed there and more fire than its Defenses, the colony and its people are lost, and the world lies ruined for #v 25#! years. It costs #v [GetPlayer.MakeScope.ScriptValue('sr_destroy_infamy_cost')|0]#! [concept_infamy], #v [GetPlayer.MakeScope.ScriptValue('sr_destroy_dossier_cost')|0]#! on our UN record of hostile acts in space (twice as much for a party to the Convention on the Settlement of Outer Space), and our own colonies' loyalty."

@@ -389,6 +389,10 @@ def _draw_branch(site: Site, stage0: bool = False) -> list[str]:
               f"{t}\tset_global_variable = {{ name = sr_colony_{site.key} value = yes }}",
               f"{t}\tset_global_variable = {{ name = sr_site_holder_{site.key} value = root }}",
               f"{t}\tsr_site_sync_{site.key} = yes"]
+    if site in LUNAR:
+        # The first lunar colony takes the Moon Base's place (design § 3.6), in
+        # the stage-0 block and as a released world under a later stage alike.
+        lines.append(f"{t}\tsr_lunar_colony_founded = yes")
     if site.body is not None:
         lines.append(f"{t}\tsr_launch_window_gate_check = {{ BODY = {site.body} }}")
     if stage0:
@@ -1034,6 +1038,10 @@ def _found(site: Site) -> list[str]:
            f"\tset_global_variable = {{ name = sr_site_holder_{k} value = this }}",
            f"\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
            f"\tsr_site_sync_{k} = yes"]
+    if site in LUNAR:
+        # Founded by our own fleet: the first lunar colony takes the Moon Base's
+        # place in the race (design § 3.6; space_race_effects.txt).
+        out.append("\tsr_lunar_colony_founded = yes")
     out += [f"\tsr_seed_colony_discovery = {{ DISCOVERY = {d} }}" for d in site.discoveries]
     out += ["\tsr_cf_open_entry = yes",
             f"\ttrigger_event = {{ id = space_race_colony_events.{site.event} }}",
