@@ -24,11 +24,12 @@ sr_interstellar_probe_goal = {
 	value = 600
 }
 sr_solar_colonization_goal = {
-	# Base goal scales with stage - further out = harder: 400, 450, 500, 550,
-	# 650 (sr_colonization_goal_stage_<n>, gen_solar_sites.STAGE_GOALS). Under
-	# simple and full colonies, with a target, the target's own stage's goal
-	# (the stages are no locks there; slices 2-3 design § 9).
-	value = sr_colonization_goal_stage_1
+	# Base goal scales with stage - further out = harder: 300 for the Moon (stage
+	# 0), then 450, 525, 600, 700, 800 (sr_colonization_goal_stage_<n>,
+	# gen_solar_sites.STAGE_GOALS; lunar colonization design § 3.2). Under simple
+	# and full colonies, with a target, the target's own goal (the stages are no
+	# locks there; slices 2-3 design § 9), the landing site's discount included.
+	value = sr_colonization_goal_stage_0
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -64,6 +65,20 @@ sr_solar_colonization_goal = {
 		}
 		value = sr_colonization_goal_stage_2
 	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 1
+		}
+		value = sr_colonization_goal_stage_1
+	}
+}
+
+# The Moon Landing's site choice (space_race_events.txt, sr_moon_site_<site>):
+# the lunar world it names costs this share of its goal for that country
+# (lunar colonization design § 3.4; gen_solar_sites.LANDING_SITES).
+sr_landing_site_factor = {
+	value = 0.75
 }
 
 # Script value for interstellar transit progress display. Guarded: the journal
@@ -754,7 +769,8 @@ sr_progress_solar_colonization_percent = {
 	}
 }
 
-# GUI helper: current colonization stage (0 if not started)
+# GUI helper: current colonization stage (0 if not started, and at the Moon,
+# stage 0: the overview reads both as "the Moon")
 sr_current_colonization_stage = {
 	value = 0
 	if = {
@@ -763,49 +779,9 @@ sr_current_colonization_stage = {
 	}
 }
 
-# GUI helper: total colonies established globally
-sr_total_global_colonies = {
-	value = 0
-	# Stage 1
-	if = { limit = { has_global_variable = sr_colony_valles_marineris } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_olympus_mons } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_hellas_planitia } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_utopia_planitia } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_arcadia_planitia } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_ceres } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_vesta } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_psyche } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_pallas } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_hygiea } add = 1 }
-	# Stage 2
-	if = { limit = { has_global_variable = sr_colony_io } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_europa } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_ganymede } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_callisto } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_himalia } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_amalthea } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_venus } add = 1 }
-	# Stage 3
-	if = { limit = { has_global_variable = sr_colony_mercury } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_titan } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_enceladus } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_rhea } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_mimas } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_iapetus } add = 1 }
-	# Stage 4
-	if = { limit = { has_global_variable = sr_colony_titania } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_oberon } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_miranda } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_ariel } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_triton } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_proteus } add = 1 }
-	# Stage 5
-	if = { limit = { has_global_variable = sr_colony_pluto } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_eris } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_makemake } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_haumea } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_sedna } add = 1 }
-}
+# GUI helper: total colonies established globally (sr_total_global_colonies)
+# and the worlds there are (sr_sites_world_count): generated per world in
+# common/script_values/sr_sites_generated.txt (scripts/generators/gen_solar_sites.py).
 
 # The monthly rate the panel quotes, and the rate its estimate divides by: the
 # rate the pulse adds, whatever the approach. Kept per milestone so the panel's

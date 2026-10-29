@@ -65,10 +65,11 @@ Three stacked `progresspie` layers in `te_sr_ov_pie` (the recipe in `gui_modding
 
 ## Colonies: the kind of world
 
-One icon for each of nine kinds of world, not one for each of the 34 worlds. It shows at 24 px, left of the world's name, in `te_sr_colony_row`, which takes the file from a `colony_icon` block override on each of the 34 generated rows (`gen_solar_sites.py`, audit SPC-19). A row shows the icon of the kind its world belongs to. `ColoniesTest` holds every row to its kind.
+One icon for each of ten kinds of world, not one for each of the 40 worlds. It shows at 24 px, left of the world's name, in `te_sr_colony_row`, which takes the file from a `colony_icon` block override on each of the 40 generated rows (`gen_solar_sites.py`, audit SPC-19). A row shows the icon of the kind its world belongs to. `ColoniesTest` holds every row to its kind.
 
 | Kind | Worlds | Shows | File |
 |---|---|---|---|
+| The Moon | Shackleton, Peary, Tranquility, Marius Hills, Daedalus, Imbrium | for now a copy of Mercury's grey planet, until a lunar icon is drawn | `colony_moon.dds` |
 | Mars | Valles Marineris, Olympus Mons, Hellas, Utopia, Arcadia | a rust-red planet with canyon scars and a pale polar cap | `colony_mars.dds` |
 | Asteroid | Ceres, Vesta, Psyche, Pallas, Hygiea | a lumpy, cratered grey-brown rock | `colony_asteroid.dds` |
 | Jovian moon | Io, Europa, Ganymede, Callisto, Himalia, Amalthea | a cratered moon before a banded orange gas giant | `colony_jovian.dds` |
@@ -79,7 +80,7 @@ One icon for each of nine kinds of world, not one for each of the 34 worlds. It 
 | Neptunian moon | Triton, Proteus | a pink moon with a dark geyser streak across it | `colony_neptunian.dds` |
 | Dwarf planet | Pluto, Eris, Makemake, Haumea, Sedna | a tan-and-brown dwarf planet with a pale heart patch and a tiny moon | `colony_dwarf.dds` |
 
-The kinds group worlds by the body they orbit. Each falls inside one stage (Mars and the asteroids in stage 1, the Jovian moons and Venus in 2, Mercury and the Saturnian moons in 3, the Uranian and Neptunian moons in 4, the dwarf planets in 5), so no kind's icon sits under two stage headings. A world that is mostly white or pale loses its body in the cut-out, so Venus and the dwarf planet are drawn in colour. The modifiers' own icons (`icon =` on the 68 `sr_colony_*` static modifiers) are not these: they are the shared lightbulb and coins glyphs that say what kind of effect it is.
+The kinds group worlds by the body they orbit. Each falls inside one stage (the Moon in stage 0, Mars and the asteroids in stage 1, the Jovian moons and Venus in 2, Mercury and the Saturnian moons in 3, the Uranian and Neptunian moons in 4, the dwarf planets in 5), so no kind's icon sits under two stage headings. A world that is mostly white or pale loses its body in the cut-out, so Venus and the dwarf planet are drawn in colour. The modifiers' own icons (`icon =` on the 80 `sr_colony_*` static modifiers) are not these: they are the shared lightbulb and coins glyphs that say what kind of effect it is.
 
 ## Kept as they are
 

@@ -936,3 +936,66 @@ sr_colony_sedna_interstellar = {
 	country_tech_research_speed_mult = 0.05
 	country_space_race_progress_add = 0.6
 }
+
+# --- Stage 0: the Moon (lunar colonization design § 3.1) ---
+# Shackleton Crater's Propellant Depot carries the depots boolean
+# (sr_launch_has_depots); Imbrium's Mass Driver adds module fabrication.
+sr_colony_shackleton_depot = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_sr_propellant_depots_bool = yes
+	goods_output_launch_capacity_mult = 0.02
+}
+sr_colony_shackleton_outpost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_space_race_progress_add = 0.2
+	country_tech_research_speed_mult = 0.01
+}
+sr_colony_peary_solar = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_solar_collector_throughput_add = 0.1
+}
+sr_colony_peary_observatory = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.02
+	country_weekly_innovation_max_add = 25
+}
+sr_colony_tranquility_heritage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.06
+	country_prestige_mult = 0.01
+	building_tourism_industry_throughput_add = 0.05
+}
+sr_colony_tranquility_helium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_fusion_plant_throughput_add = 0.1
+	building_space_mine_throughput_add = 0.03
+}
+sr_colony_marius_lavatubes = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.04
+}
+sr_colony_marius_hardened = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_military_tech_research_speed_mult = 0.03
+	country_influence_mult = 0.03
+	country_military_goods_cost_mult = -0.02
+}
+sr_colony_daedalus_telescope = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.03
+	country_weekly_innovation_max_add = 25
+}
+sr_colony_daedalus_relay = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_space_race_progress_add = 0.3
+}
+sr_colony_imbrium_massdriver = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_sr_module_fabrication_add = 3
+	goods_output_launch_capacity_mult = 0.02
+}
+sr_colony_imbrium_kreep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_space_mine_throughput_add = 0.05
+	goods_output_advanced_materials_mult = 0.02
+}

@@ -383,7 +383,7 @@ types space_race_widget_types
 		}
 	}
 
-	### A share of the 34 worlds as a framed pie (te_un_ov_pie, with a third
+	### A share of the 40 worlds as a framed pie (te_un_ov_pie, with a third
 	### layer): the disc is the unclaimed rest, then every world claimed, then
 	### ours on top — largest first (gui_modding_guide.md, "Pie charts of
 	### script-held data"). The textures: docs/systems/space_race_gui_icons.md.
@@ -2693,7 +2693,7 @@ types space_race_widget_types
 	### § 9). Open by default, directly under Colony Fleets (audit SPC-7: Target
 	### beside the destination it sets), and filtered by default to the worlds
 	### that matter now: those our next colony fleet can go to, ours and any a
-	### fleet is bound for (sr_disp_ss_filtered_<location>), with "Show all 34"
+	### fleet is bound for (sr_disp_ss_filtered_<location>), with "Show all 40"
 	### beside the count. Rows in gen_solar_sites.panel_order(), written from the
 	### table and held to it by test_solar_sites.py. The flags are
 	### sr_panel_solar_system_closed and sr_panel_solar_system_all_open,
@@ -5884,6 +5884,8 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_ambitious_solar_colonization"
 			}
 			# No first to race for: the stage, whose tooltip is the stage's description.
+			# Stage 0 (and a race not yet begun) reads "the Moon"; SelectLocalization
+			# renders its key without the journal entry, so both read the player.
 			blockoverride "sr_third_cells" {
 				te_sr_ov_icon_label = {
 					tooltip = "je_space_race_widget_profile_solar_colonization"
@@ -5891,7 +5893,7 @@ types space_race_widget_types
 						texture = "gfx/interface/icons/space_race_icons/stage.dds"
 					}
 					blockoverride "label" {
-						text = "je_space_race_widget_ov_stage"
+						text = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), 'je_space_race_widget_ov_stage', 'je_space_race_widget_ov_stage_moon' )]"
 					}
 				}
 			}
@@ -5899,7 +5901,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_colony_label"
 			}
 			# Fleets staged in orbit while a full bar waits for a launch window
-			# (gui/sr_launch_window_widgets.gui), then the 34 worlds: every one
+			# (gui/sr_launch_window_widgets.gui), then the 40 worlds: every one
 			# claimed, ours on top; then what needs us.
 			blockoverride "sr_extra_rows" {
 				te_sr_ov_staged = {}

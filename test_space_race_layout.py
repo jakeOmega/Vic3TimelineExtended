@@ -51,9 +51,11 @@ ICONS_DOC = os.path.join(REPO, "docs", "systems", "space_race_gui_icons.md")
 COLONY_EVENTS = os.path.join(REPO, "events", "space_race_colony_events.txt")
 COLONY_MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "space_race_modifiers.txt")
 # The events that offer each stage's worlds (space_race_colony_events.<n>).
-COLONY_STAGES = {1: range(1, 11), 2: range(11, 18), 3: range(18, 24), 4: range(24, 30), 5: range(30, 35)}
+COLONY_STAGES = {0: range(35, 41), 1: range(1, 11), 2: range(11, 18), 3: range(18, 24), 4: range(24, 30),
+                 5: range(30, 35)}
 # The kind of world each colony is, and so which space_race_icons/colony_<kind>.dds its row shows.
 COLONY_KINDS = {
+    "moon": ["shackleton", "peary", "tranquility", "marius", "daedalus", "imbrium"],
     "mars": ["valles_marineris", "olympus_mons", "hellas", "utopia", "arcadia"],
     "asteroid": ["ceres", "vesta", "psyche", "pallas", "hygiea"],
     "jovian": ["io", "europa", "ganymede", "callisto", "himalia", "amalthea"],
@@ -402,7 +404,7 @@ class ColoniesTest(unittest.TestCase):
         raise AssertionError(f"no colony row for {world}")
 
     def test_every_specialization_is_an_event_option_and_a_modifier(self):
-        self.assertEqual(len(self.sites), 34)
+        self.assertEqual(len(self.sites), 40)
         self.assertTrue(all(len(ms) == 2 for _, ms in self.sites))
         static = re.findall(r"(?m)^(sr_colony_\w+) = \{", _read(COLONY_MODIFIERS))
         self.assertEqual(sorted(self.mods), sorted(static), "a colony modifier no event grants, or the reverse")
@@ -411,8 +413,8 @@ class ColoniesTest(unittest.TestCase):
         """The rows are the generator's (SPC-19): every world once, in the
         panel's order, so a new world can't go missing."""
         names = re.findall(r'text = "sr_site_name_(\w+)"', self.rows)
-        self.assertEqual(len(names), 34)
-        self.assertEqual(len(set(names)), 34)
+        self.assertEqual(len(names), 40)
+        self.assertEqual(len(set(names)), 40)
         self.assertIn("te_sr_colony_rows = {}", self.section)
 
     def test_a_row_reads_its_own_held_record(self):
@@ -514,9 +516,9 @@ class ColoniesTest(unittest.TestCase):
                 self.assertLessEqual(need, 180, self.loc[f"sr_site_name_{site.key}"])
 
     def test_a_row_shows_the_icon_of_its_kind_of_world(self):
-        """Nine kinds of world, not 34 icons: a row's icon follows its world."""
+        """Ten kinds of world, not 40 icons: a row's icon follows its world."""
         kind_of = {w: k for k, ws in COLONY_KINDS.items() for w in ws}
-        self.assertEqual((len(COLONY_KINDS), len(kind_of)), (9, 34))
+        self.assertEqual((len(COLONY_KINDS), len(kind_of)), (10, 40))
         for site in gss.SITES:
             with self.subTest(world=site.key):
                 self.assertRegex(self._row_of(site.key), rf'blockoverride "colony_icon" \{{\s*texture = '
@@ -548,7 +550,11 @@ class ColoniesTest(unittest.TestCase):
                     # beneath it, so the two lists can't run together
                     self.assertIn(f"#bold ${mod}$#!#indent_newline:3 \\n[GetStaticModifier('{mod}').GetDesc]#!", ss)
                 self.assertIn(f"$je_space_race_widget_colonies_stage_{site.stage}$", ss)
-                self.assertIn(f"ScriptValue('sr_transit_months_{gss.transit_body(site)}')", ss)
+                if site in gss.LUNAR:  # no transit to show: founded the month a fleet leaves
+                    self.assertIn("founds its colony the month it leaves", ss)
+                    self.assertNotIn("sr_transit_months_", ss)
+                else:
+                    self.assertIn(f"ScriptValue('sr_transit_months_{gss.transit_body(site)}')", ss)
                 self.assertEqual(f"'sr_ss_window_line_{site.body}'" in ss, site.body is not None)
                 drift = self.loc[f"je_space_race_widget_autonomy_drift_tt_{k}"]
                 for term in (f"sr_disp_site_aut_drift_{k}", f"sr_disp_aut_people_{k}", f"sr_disp_aut_distance_{k}",
@@ -962,7 +968,7 @@ class SpaceRaceIconsTest(unittest.TestCase):
                              ('block "sr_risk_unlit"', "risk"),
                              ('tooltip = "sr_rivals_first_open"', "first"),
                              ('tooltip = "sr_rivals_first_claimed"', "first"),
-                             ('text = "je_space_race_widget_ov_stage"', "stage")):
+                             ("'je_space_race_widget_ov_stage_moon'", "stage")):
             with self.subTest(cell=anchor):
                 self.assertEqual(self._cell_texture(anchor), [f"{SR_ICONS}{name}.dds"])
 

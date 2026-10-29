@@ -1047,7 +1047,10 @@ def render_combat() -> list[str]:
         out += ["\tif = {",
                 f"\t\tlimit = {{ has_variable = {var(n, 'loc')} has_variable = {var(n, 'target')} {var(n, 'posture_value')} = 4 }}"]
         out += _chain([(f"var:{var(n, 'loc')} = {CODE[w.location]} var:{var(n, 'target')} = {w.index}",
-                        [f"sr_icpt_note = {{ KEY = {w.key} LOC = {w.location} }}"]) for w in gss.SITES], 2)
+                        [f"sr_icpt_note = {{ KEY = {w.key} LOC = {w.location} }}"])
+                       # no interdiction at Earth (lunar colonization § 8.3): posture 4
+                       # can't exist there, and sr_icpt_earth is never built
+                       for w in gss.SITES if w.location != "earth"], 2)
         out += ["\t}"]
     out += ["}", ""]
     for lc in LOCATIONS:

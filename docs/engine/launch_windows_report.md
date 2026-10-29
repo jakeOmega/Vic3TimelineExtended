@@ -390,7 +390,7 @@ A full bar launches outside a window when goal × premium ÷ pace ≤ k × m (St
 
 ## Transit times
 
-The months a colony fleet takes (solar colonization slices 2-3 design § 2), rounded, at least 1. Chemical is the body's median Hohmann time, whatever the month. Fusion (Fusion Power): the shortest Lambert transfer within 30 km/s, from 0.05 to 2.6 times the Hohmann time. Fusion torch (Muon-Catalyzed Fusion Reactors): a brachistochrone at 0.01 g, its delta-v capped at 400 km/s. Antimatter (Antimatter Production and an Antimatter Containment Facility): a brachistochrone at 0.03 g, its delta-v capped at 2,000 km/s. By months from the optimum, a departure on day 15 averaged over the premium's cycles; a better drive is never slower than the one before it.
+The months a colony fleet takes (solar colonization slices 2-3 design § 2), rounded, at least 1, except the Moon's 0: a fleet founds its world the month it leaves (lunar colonization design § 3.3). Chemical is the body's median Hohmann time, whatever the month. Fusion (Fusion Power): the shortest Lambert transfer within 30 km/s, from 0.05 to 2.6 times the Hohmann time. Fusion torch (Muon-Catalyzed Fusion Reactors): a brachistochrone at 0.01 g, its delta-v capped at 400 km/s. Antimatter (Antimatter Production and an Antimatter Containment Facility): a brachistochrone at 0.03 g, its delta-v capped at 2,000 km/s. By months from the optimum, a departure on day 15 averaged over the premium's cycles; a better drive is never slower than the one before it.
 
 | Body | Chemical | Fusion, in a window | Fusion torch, in a window | Antimatter, in a window |
 |---|---|---|---|---|
@@ -407,6 +407,7 @@ The months a colony fleet takes (solar colonization slices 2-3 design § 2), rou
 | Neptune system | 369 | 57–63 | 9–10 | 3 |
 | Kuiper Belt | 611 | 133–303 | 12–13 | 4 |
 | Mercury (no window) | 4 | 3 | 1 | 1 |
+| The Moon (no window) | 0 | 0 | 0 | 0 |
 
 ### Mars: transit by month
 

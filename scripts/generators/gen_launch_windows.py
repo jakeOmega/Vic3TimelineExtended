@@ -27,12 +27,13 @@ them as month-index ranges against ``te_history_month_index``
 
 Transit times (solar colonization slices 2-3 design § 2,
 docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md):
-for every window body and Mercury, the months a colony fleet takes by each of
+for every window body, Mercury and the Moon, the months a colony fleet takes by each of
 four drives (``DRIVES``), as ``sr_transit_<drive>_<body>`` by the same signed
 months from the optimum as the premium. Chemical is the body's median Hohmann
 time; fusion the shortest Lambert transfer within its delta-v budget; the
 torch and antimatter drives a brachistochrone at their acceleration, capped by
-their delta-v. Mercury, never gated, has one figure per drive.
+their delta-v. Mercury, never gated, has one figure per drive; the Moon, never
+gated either, a constant 0 (lunar colonization design § 3.3).
 
 The rule (spec § 5.3): a departure date *d* is optimal when the target's true
 longitude at *d + T* equals Earth's at *d* + 180 degrees, where *T* is half the
@@ -187,7 +188,6 @@ BODIES = (
     Body("neptune", "Neptune system", 4, ("triton", "proteus")),
     Body("kuiper", "Kuiper Belt", 5, ("pluto", "eris", "makemake", "haumea", "sedna")),
 )
-UNGATED_SITES = {"mercury": 3}  # site -> stage
 
 # The debug lines' key to sr_window_body_code_<body>: a parameter can't be
 # printed inside a debug_log string (scripting_best_practices.md, "No $PARAM$
@@ -227,9 +227,18 @@ DRIVES = (
     Drive("antimatter", "Antimatter", "Antimatter Production and an Antimatter Containment Facility",
           accel_g=0.03, cap_kms=2000.0),
 )
-# Mercury has no launch window (UNGATED_SITES) but a transit time: one figure
-# per drive, its mean over evenly spread months of the span.
-TRANSIT_ONLY = (Body("mercury", "Mercury", 3, ("mercury",)),)
+# Bodies with no launch window (UNGATED_SITES) but a transit time: one figure
+# per drive. Mercury's is its mean over evenly spread months of the span. The
+# Moon's is a constant 0 on every drive (FIXED_TRANSIT): a crewed transfer
+# takes about three days, so a fleet founds its world the month it leaves
+# (lunar colonization design § 3.3). Its sites are gen_solar_sites' stage-0
+# rows (test_launch_windows.py holds the two equal). It has no premium.
+TRANSIT_ONLY = (
+    Body("mercury", "Mercury", 3, ("mercury",)),
+    Body("moon", "The Moon", 0, ("shackleton", "peary", "tranquility", "marius_hills", "daedalus", "imbrium")),
+)
+FIXED_TRANSIT = {"moon": 0}  # body -> months on every drive
+UNGATED_SITES = {site: b.stage for b in TRANSIT_ONLY for site in b.sites}  # site -> stage
 TRANSIT_DAY = 15  # a fleet's departure day in its month
 FUSION_TOF_RANGE = (0.05, 2.6)  # times the Hohmann time: fusion reaches far below chemical's grid
 FUSION_TOF_GRID = 48
@@ -547,13 +556,15 @@ def transit_months(key: str, departures: np.ndarray, groups: np.ndarray, hohmann
 
 @dataclass
 class TransitPlan:
-    """A body with a transit time and no window (Mercury): one figure per drive."""
+    """A body with a transit time and no window (Mercury, the Moon): one figure per drive."""
     body: Body
     hohmann_days: float
     transit: dict[str, int]
 
 
 def plan_transit_only(body: Body, first_month: int, last_month: int) -> TransitPlan:
+    if body.key in FIXED_TRANSIT:
+        return TransitPlan(body, 0.0, {d.key: FIXED_TRANSIT[body.key] for d in DRIVES})
     months = sorted({int(m) for m in np.linspace(first_month, last_month, MERCURY_SAMPLES).round()})
     departures = np.array([datetime_to_jd(datetime(*month_of(m), TRANSIT_DAY)) for m in months])
     earth, _ = state("earth", departures)
@@ -887,10 +898,14 @@ def render_transit(plan: BodyPlan) -> list[str]:
 
 def render_transit_only(plans: list[TransitPlan]) -> list[str]:
     out = ["# ===== Transit only: a body with no launch window =====",
-           f"# One figure per drive, the mean over {MERCURY_SAMPLES} months spread across the span."]
+           f"# One figure per drive, the mean over {MERCURY_SAMPLES} months spread across the span,",
+           "# or a constant (FIXED_TRANSIT)."]
     for plan in plans:
         key = plan.body.key
-        out.append(f"# {plan.body.name}: the median Hohmann time is {plan.hohmann_days:.0f} days")
+        if key in FIXED_TRANSIT:
+            out.append(f"# {plan.body.name}: {FIXED_TRANSIT[key]} months on every drive, a constant (founded the month a fleet leaves)")
+        else:
+            out.append(f"# {plan.body.name}: the median Hohmann time is {plan.hohmann_days:.0f} days")
         for drive in DRIVES:
             out.append(f"sr_transit_{drive.key}_{key} = {{ value = {plan.transit[drive.key]} }}")
     return out + [""]
@@ -954,8 +969,8 @@ def render_triggers(plans: list[BodyPlan]) -> str:
     out += ["", IN_PLAY_PREAMBLE]
     for plan in plans:
         out += _in_play(f"sr_window_body_in_play_{plan.body.key}", plan.body.stage, plan.body.sites)
-    for site, stage in UNGATED_SITES.items():
-        out += _in_play(f"sr_window_{site}_in_play", stage, (site,))
+    for body in TRANSIT_ONLY:
+        out += _in_play(f"sr_window_{body.key}_in_play", body.stage, body.sites)
     return "\n".join(out) + "\n"
 
 
@@ -974,7 +989,7 @@ def _in_play(name: str, stage: int, sites: tuple[str, ...]) -> list[str]:
 def _transit_reader(k: str, cached: bool) -> list[str]:
     """sr_transit_months_<k>: this country's drive's transit now. A window
     body's figures by offset come from the month's cache (the chemical one is
-    a constant); Mercury's are constants."""
+    a constant); Mercury's and the Moon's are constants."""
     lines = [f"sr_transit_months_{k} = {{", f"\tvalue = sr_transit_chemical_{k}"]
     for i, (level, drive) in enumerate(((3, "antimatter"), (2, "torch"), (1, "fusion"))):
         word = "if" if i == 0 else "else_if"
@@ -1047,21 +1062,21 @@ def render_readers(plans: list[BodyPlan], transit_plans: list[TransitPlan]) -> l
         out += [f"# {plan.body.name} (no window)"]
         out += _transit_reader(plan.body.key, cached=False)
     out += ["", "# The stage's soonest window among its unclaimed sites (m in the off-window",
-            "# rule, spec § 5.2a): 0 while one is open or Mercury is left; sr_launch_never",
-            "# when the stage has nothing left. Any scope.",
+            "# rule, spec § 5.2a): 0 while one is open or a world with no window (the Moon,",
+            "# Mercury) is left; sr_launch_never when the stage has nothing left. Any scope.",
             "sr_window_stage_wait = {", "\tvalue = sr_launch_never"]
     for plan in plans:
         k = plan.body.key
         out.append(f"\tif = {{ limit = {{ sr_window_body_in_play_{k} = yes }} max = sr_window_wait_months_{k} }}")
-    for site in UNGATED_SITES:
-        out.append(f"\tif = {{ limit = {{ sr_window_{site}_in_play = yes }} max = 0 }}")
+    for body in TRANSIT_ONLY:
+        out.append(f"\tif = {{ limit = {{ sr_window_{body.key}_in_play = yes }} max = 0 }}")
     out += ["}", "", "# The cheapest premium this country can launch at now, over the stage's",
             "# unclaimed sites; sr_launch_never when none can depart. Country scope.",
             "sr_launch_best_cost = {", "\tvalue = sr_launch_never"]
     for plan in plans:
         out.append(f"\tmax = sr_launch_cost_{plan.body.key}")
-    for site in UNGATED_SITES:
-        out.append(f"\tif = {{ limit = {{ sr_window_{site}_in_play = yes }} max = 0 }}")
+    for body in TRANSIT_ONLY:
+        out.append(f"\tif = {{ limit = {{ sr_window_{body.key}_in_play = yes }} max = 0 }}")
     out += ["}", ""]
     return out
 
@@ -1098,7 +1113,8 @@ IN_PLAY_PREAMBLE = """# sr_window_body_in_play_<body>: the body's stage has been
 # with no heir, colony record design § 6): those stages are full otherwise.
 # Under simple and full colonies the stages are no locks (slices 2-3 design
 # § 9): a body is in play while it has an unclaimed world.
-# Any scope. sr_window_mercury_in_play: the same for Mercury, never gated.
+# Any scope. sr_window_mercury_in_play and sr_window_moon_in_play: the same for
+# Mercury and the Moon's six worlds, never gated (TRANSIT_ONLY).
 """
 
 READERS_PREAMBLE = """# ===== Readers of the window cache (sr_launch_windows_refresh_cache) =====
@@ -1146,7 +1162,8 @@ TRIGGERS_PREAMBLE = """# Launch windows for Solar System Colonization (Global Co
 
 def render_transit_report(plans: list[BodyPlan], transit_plans: list[TransitPlan]) -> list[str]:
     lines = ["", "## Transit times", "",
-             "The months a colony fleet takes (solar colonization slices 2-3 design § 2), rounded, at least 1. "
+             "The months a colony fleet takes (solar colonization slices 2-3 design § 2), rounded, at least 1, "
+             "except the Moon's 0: a fleet founds its world the month it leaves (lunar colonization design § 3.3). "
              "Chemical is the body's median Hohmann time, whatever the month. "
              + " ".join(
                  f"{d.name} ({d.tech}): "

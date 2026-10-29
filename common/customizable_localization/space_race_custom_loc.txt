@@ -313,12 +313,21 @@ sr_solar_colonization_profile = {
 		localization_key = je_space_race_solar_colonization_status_complete
 	}
 
+	# The Moon is stage 0 (lunar colonization design § 3.2), and where a game
+	# that has not started colonizing begins.
 	text = {
 		trigger = {
 			OR = {
 				NOT = { has_global_variable = sr_colonization_stage }
-				global_var:sr_colonization_stage = 1
+				global_var:sr_colonization_stage = 0
 			}
+		}
+		localization_key = je_space_race_solar_colonization_status_stage0
+	}
+
+	text = {
+		trigger = {
+			global_var:sr_colonization_stage = 1
 		}
 		localization_key = je_space_race_solar_colonization_status_stage1
 	}

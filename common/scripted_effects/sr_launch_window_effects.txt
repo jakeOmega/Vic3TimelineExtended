@@ -85,6 +85,7 @@ sr_launch_windows_ensure_cache = {
 sr_launch_month = {
 	sr_launch_restore_banked_fleets = yes
 	sr_launch_windows_ensure_cache = yes
+	sr_depots_self_check = yes
 	# A target (the Solar System list's Target button; sr_colony_fleet_effects.txt)
 	# that a rival claimed first is dropped: the programme picks for itself again.
 	if = {
@@ -121,6 +122,12 @@ sr_launch_month = {
 		if = {
 			limit = { local_var:sr_launch_claimed_before < sr_total_global_colonies }
 			change_variable = { name = sr_progress_solar_colonization subtract = var:sr_goal_before_colony }
+		}
+		else = {
+			# A ready fleet the draw found nowhere for: no branch's departs
+			# trigger held. The lunar_stage0_draw self-check's evidence
+			# (sr_launch_note_held). Debug only.
+			sr_launch_note_held = yes
 		}
 		remove_variable = sr_goal_before_colony
 	}
@@ -253,6 +260,90 @@ sr_window_log_copy = {
 	set_global_variable = { name = sr_window_log_verdict_now value = sr_window_disp_verdict_$BODY$ }
 }
 
+# ---- Self-check: propellant_depots_bool (lunar colonization plan, review focus 3) ----
+# Country scope, from sr_launch_month. Shackleton Crater's Propellant Depot
+# carries country_sr_propellant_depots_bool on the solar colonization entry
+# (je:je_space_race_solar_colonization), and a blockade sets the shipping
+# specialization's multiplier to 0. Nothing yet shows that a journal entry's
+# boolean reaches the country's modifier:, or that a 0 multiplier turns it
+# off. This compares the modifier with the record (sr_depots_by_record) for
+# every country that holds the depot, held it, or reads the boolean.
+# OK once a game, once both answers have matched: a holder reading yes, and a
+# country that held the depot reading no after losing it (or its blockade).
+# BROKEN once a game on a mismatch two launch months running (a modifier sum
+# can lag a day). The fallback, named in docs/testing/solar-colonies-playtest.md,
+# is sr_depots_by_record in sr_launch_has_depots.
+sr_depots_self_check = {
+	if = {
+		limit = {
+			OR = {
+				sr_depots_by_record = yes
+				has_variable = sr_depots_had_record
+				modifier:country_sr_propellant_depots_bool = yes
+			}
+		}
+		if = {
+			limit = { sr_depots_by_record = yes }
+			set_variable = { name = sr_depots_had_record value = yes }
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						sr_depots_by_record = yes
+						modifier:country_sr_propellant_depots_bool = yes
+					}
+					AND = {
+						NOT = { sr_depots_by_record = yes }
+						NOT = { modifier:country_sr_propellant_depots_bool = yes }
+					}
+				}
+			}
+			if = {
+				limit = { has_variable = sr_depots_mismatch_months }
+				remove_variable = sr_depots_mismatch_months
+			}
+			if = {
+				limit = { sr_depots_by_record = yes }
+				set_global_variable = { name = sr_depots_seen_yes value = yes }
+			}
+			else = {
+				set_global_variable = { name = sr_depots_seen_no value = yes }
+			}
+			if = {
+				limit = {
+					has_global_variable = sr_depots_seen_yes
+					has_global_variable = sr_depots_seen_no
+					NOT = { has_global_variable = sr_depots_ok_logged }
+				}
+				set_global_variable = { name = sr_depots_ok_logged value = yes }
+				debug_log = "TE_SELF_CHECK OK propellant_depots_bool country=[THIS.GetCountry.GetNameNoFormatting] (the depots boolean read yes for a Shackleton holder and no for a country that lost it or its depots; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		else = {
+			if = {
+				limit = { NOT = { has_variable = sr_depots_mismatch_months } }
+				set_variable = { name = sr_depots_mismatch_months value = 0 }
+			}
+			change_variable = { name = sr_depots_mismatch_months add = 1 }
+			if = {
+				limit = {
+					var:sr_depots_mismatch_months >= 2
+					NOT = { has_global_variable = sr_depots_broken_logged }
+				}
+				set_global_variable = { name = sr_depots_broken_logged value = yes }
+				if = {
+					limit = { sr_depots_by_record = yes }
+					debug_log = "TE_SELF_CHECK BROKEN propellant_depots_bool record=yes boolean=no country=[THIS.GetCountry.GetNameNoFormatting] (Shackleton's Propellant Depot is held, unblockaded, but modifier:country_sr_propellant_depots_bool reads no: the entry's boolean does not reach the country; fall back to sr_depots_by_record, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN propellant_depots_bool record=no boolean=yes country=[THIS.GetCountry.GetNameNoFormatting] (the depots boolean reads yes with no Propellant Depot held and serving: a 0 multiplier leaves a boolean on; fall back to sr_depots_by_record, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+		}
+	}
+}
+
 # ---- Setbacks hit only the fleet being readied (spec § 5.2) ------------------------
 # A setback, or an in-progress event's loss, never takes more than one goal from
 # solar colonization, so fleets staged in orbit are safe: sr_lose_progress_months
@@ -282,8 +373,13 @@ sr_launch_window_line = {
 	}
 }
 
-# Every destination of the stage, in the panel's order.
+# Every destination of the stage, in the panel's order: the Moon first (no
+# window; founded the month a fleet leaves, lunar colonization design § 3.3).
 sr_launch_window_lines = {
+	if = {
+		limit = { sr_window_moon_in_play = yes }
+		custom_tooltip_no_bullet = sr_window_line_moon
+	}
 	sr_launch_window_line = { BODY = mars }
 	sr_launch_window_line = { BODY = ceres }
 	sr_launch_window_line = { BODY = vesta }

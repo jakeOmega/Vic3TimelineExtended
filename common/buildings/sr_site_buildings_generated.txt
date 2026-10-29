@@ -920,3 +920,165 @@ building_sr_site_sedna = {
 		always = no
 	}
 }
+
+building_sr_site_shackleton = {
+	building_group = bg_sr_colony_sites
+	icon = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	city_type = city
+	levels_per_mesh = -1
+	buildable = no
+	expandable = no
+	downsizeable = no
+	unique = yes
+	has_max_level = yes
+	production_method_groups = {
+		pmg_sr_site_marker
+	}
+	required_construction = construction_cost_low
+	ownership_type = no_ownership
+	potential = {
+		always = no
+	}
+	can_build_government = {
+		always = no
+	}
+	can_build_private = {
+		always = no
+	}
+}
+
+building_sr_site_peary = {
+	building_group = bg_sr_colony_sites
+	icon = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	city_type = city
+	levels_per_mesh = -1
+	buildable = no
+	expandable = no
+	downsizeable = no
+	unique = yes
+	has_max_level = yes
+	production_method_groups = {
+		pmg_sr_site_marker
+	}
+	required_construction = construction_cost_low
+	ownership_type = no_ownership
+	potential = {
+		always = no
+	}
+	can_build_government = {
+		always = no
+	}
+	can_build_private = {
+		always = no
+	}
+}
+
+building_sr_site_tranquility = {
+	building_group = bg_sr_colony_sites
+	icon = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	city_type = city
+	levels_per_mesh = -1
+	buildable = no
+	expandable = no
+	downsizeable = no
+	unique = yes
+	has_max_level = yes
+	production_method_groups = {
+		pmg_sr_site_marker
+	}
+	required_construction = construction_cost_low
+	ownership_type = no_ownership
+	potential = {
+		always = no
+	}
+	can_build_government = {
+		always = no
+	}
+	can_build_private = {
+		always = no
+	}
+}
+
+building_sr_site_marius_hills = {
+	building_group = bg_sr_colony_sites
+	icon = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	city_type = city
+	levels_per_mesh = -1
+	buildable = no
+	expandable = no
+	downsizeable = no
+	unique = yes
+	has_max_level = yes
+	production_method_groups = {
+		pmg_sr_site_marker
+	}
+	required_construction = construction_cost_low
+	ownership_type = no_ownership
+	potential = {
+		always = no
+	}
+	can_build_government = {
+		always = no
+	}
+	can_build_private = {
+		always = no
+	}
+}
+
+building_sr_site_daedalus = {
+	building_group = bg_sr_colony_sites
+	icon = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	city_type = city
+	levels_per_mesh = -1
+	buildable = no
+	expandable = no
+	downsizeable = no
+	unique = yes
+	has_max_level = yes
+	production_method_groups = {
+		pmg_sr_site_marker
+	}
+	required_construction = construction_cost_low
+	ownership_type = no_ownership
+	potential = {
+		always = no
+	}
+	can_build_government = {
+		always = no
+	}
+	can_build_private = {
+		always = no
+	}
+}
+
+building_sr_site_imbrium = {
+	building_group = bg_sr_colony_sites
+	icon = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	city_type = city
+	levels_per_mesh = -1
+	buildable = no
+	expandable = no
+	downsizeable = no
+	unique = yes
+	has_max_level = yes
+	production_method_groups = {
+		pmg_sr_site_marker
+	}
+	required_construction = construction_cost_low
+	ownership_type = no_ownership
+	potential = {
+		always = no
+	}
+	can_build_government = {
+		always = no
+	}
+	can_build_private = {
+		always = no
+	}
+}

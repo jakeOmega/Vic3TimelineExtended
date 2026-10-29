@@ -54,3 +54,12 @@ country_sr_module_fabrication_add = {
 	}
 	script_only = yes
 }
+
+# Propellant depots from the Moon (lunar colonization design § 3.5): Shackleton
+# Crater's Propellant Depot specialization carries it on the solar colonization
+# entry, and sr_launch_has_depots reads it beside Asteroid Mining (off-window
+# launches at the premium). Read by script only; the engine consumes nothing.
+country_sr_propellant_depots_bool = {
+	color = good
+	boolean = yes
+}
