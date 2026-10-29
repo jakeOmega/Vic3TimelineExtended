@@ -8,6 +8,19 @@
 # --- Slot 1 ---
 sr_fl_1_exists = { OR = { has_variable = sr_fl_1_loc has_variable = sr_fl_1_dest } }
 sr_fl_1_at_location = { has_variable = sr_fl_1_loc }
+sr_fl_1_at_earth = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 }
+# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
+sr_fl_1_target_lunar = {
+	has_variable = sr_fl_1_target
+	OR = {
+		var:sr_fl_1_target = 35
+		var:sr_fl_1_target = 36
+		var:sr_fl_1_target = 37
+		var:sr_fl_1_target = 38
+		var:sr_fl_1_target = 39
+		var:sr_fl_1_target = 40
+	}
+}
 sr_fl_1_picked = { has_variable = sr_fl_dest_pick_1 }
 sr_fl_1_destroying = { has_variable = sr_fl_1_destroy }
 sr_fl_1_closes_on_free = {
@@ -279,10 +292,12 @@ sr_fl_1_can_embark = {
 	}
 }
 # 6b: a world at its location it may close in on (at war with its holder or
-# occupier, or free); its target is one.
+# occupier, or free); its target is one. At Earth, a lunar world (lunar
+# colonization § 8.1).
 sr_fl_1_has_hostile_world = {
 	has_variable = sr_fl_1_loc
 	OR = {
+		AND = { var:sr_fl_1_loc = 1 OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } sr_site_hostile_target = { KEY = imbrium } } }
 		AND = { var:sr_fl_1_loc = 2 OR = { sr_site_hostile_target = { KEY = venus } sr_site_hostile_target = { KEY = mercury } } }
 		AND = { var:sr_fl_1_loc = 3 OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } sr_site_hostile_target = { KEY = arcadia_planitia } } }
 		AND = { var:sr_fl_1_loc = 4 OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } sr_site_hostile_target = { KEY = hygiea } } }
@@ -339,7 +354,8 @@ sr_fl_1_target_hostile = {
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
-# not our ally, holds it); its target is one; it interdicts.
+# not our ally, holds it); its target is one; it interdicts. Never at Earth
+# (lunar colonization § 8.3).
 sr_fl_1_has_interdict_world = {
 	has_variable = sr_fl_1_loc
 	OR = {
@@ -399,6 +415,8 @@ sr_fl_1_target_interdictable = {
 	}
 }
 sr_fl_1_interdicting = { sr_fl_1_posture_value = 4 }
+# At Earth, closing in on a lunar world (the AI's offence leaves it there).
+sr_fl_1_closing_at_earth = { sr_fl_1_at_earth = yes sr_fl_1_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
 # hostile worlds.
 sr_fl_1_can_target = {
@@ -624,6 +642,19 @@ sr_fl_1_ai_attacks_kuiper = {
 # --- Slot 2 ---
 sr_fl_2_exists = { OR = { has_variable = sr_fl_2_loc has_variable = sr_fl_2_dest } }
 sr_fl_2_at_location = { has_variable = sr_fl_2_loc }
+sr_fl_2_at_earth = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 }
+# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
+sr_fl_2_target_lunar = {
+	has_variable = sr_fl_2_target
+	OR = {
+		var:sr_fl_2_target = 35
+		var:sr_fl_2_target = 36
+		var:sr_fl_2_target = 37
+		var:sr_fl_2_target = 38
+		var:sr_fl_2_target = 39
+		var:sr_fl_2_target = 40
+	}
+}
 sr_fl_2_picked = { has_variable = sr_fl_dest_pick_2 }
 sr_fl_2_destroying = { has_variable = sr_fl_2_destroy }
 sr_fl_2_closes_on_free = {
@@ -895,10 +926,12 @@ sr_fl_2_can_embark = {
 	}
 }
 # 6b: a world at its location it may close in on (at war with its holder or
-# occupier, or free); its target is one.
+# occupier, or free); its target is one. At Earth, a lunar world (lunar
+# colonization § 8.1).
 sr_fl_2_has_hostile_world = {
 	has_variable = sr_fl_2_loc
 	OR = {
+		AND = { var:sr_fl_2_loc = 1 OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } sr_site_hostile_target = { KEY = imbrium } } }
 		AND = { var:sr_fl_2_loc = 2 OR = { sr_site_hostile_target = { KEY = venus } sr_site_hostile_target = { KEY = mercury } } }
 		AND = { var:sr_fl_2_loc = 3 OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } sr_site_hostile_target = { KEY = arcadia_planitia } } }
 		AND = { var:sr_fl_2_loc = 4 OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } sr_site_hostile_target = { KEY = hygiea } } }
@@ -955,7 +988,8 @@ sr_fl_2_target_hostile = {
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
-# not our ally, holds it); its target is one; it interdicts.
+# not our ally, holds it); its target is one; it interdicts. Never at Earth
+# (lunar colonization § 8.3).
 sr_fl_2_has_interdict_world = {
 	has_variable = sr_fl_2_loc
 	OR = {
@@ -1015,6 +1049,8 @@ sr_fl_2_target_interdictable = {
 	}
 }
 sr_fl_2_interdicting = { sr_fl_2_posture_value = 4 }
+# At Earth, closing in on a lunar world (the AI's offence leaves it there).
+sr_fl_2_closing_at_earth = { sr_fl_2_at_earth = yes sr_fl_2_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
 # hostile worlds.
 sr_fl_2_can_target = {
@@ -1240,6 +1276,19 @@ sr_fl_2_ai_attacks_kuiper = {
 # --- Slot 3 ---
 sr_fl_3_exists = { OR = { has_variable = sr_fl_3_loc has_variable = sr_fl_3_dest } }
 sr_fl_3_at_location = { has_variable = sr_fl_3_loc }
+sr_fl_3_at_earth = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 }
+# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
+sr_fl_3_target_lunar = {
+	has_variable = sr_fl_3_target
+	OR = {
+		var:sr_fl_3_target = 35
+		var:sr_fl_3_target = 36
+		var:sr_fl_3_target = 37
+		var:sr_fl_3_target = 38
+		var:sr_fl_3_target = 39
+		var:sr_fl_3_target = 40
+	}
+}
 sr_fl_3_picked = { has_variable = sr_fl_dest_pick_3 }
 sr_fl_3_destroying = { has_variable = sr_fl_3_destroy }
 sr_fl_3_closes_on_free = {
@@ -1511,10 +1560,12 @@ sr_fl_3_can_embark = {
 	}
 }
 # 6b: a world at its location it may close in on (at war with its holder or
-# occupier, or free); its target is one.
+# occupier, or free); its target is one. At Earth, a lunar world (lunar
+# colonization § 8.1).
 sr_fl_3_has_hostile_world = {
 	has_variable = sr_fl_3_loc
 	OR = {
+		AND = { var:sr_fl_3_loc = 1 OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } sr_site_hostile_target = { KEY = imbrium } } }
 		AND = { var:sr_fl_3_loc = 2 OR = { sr_site_hostile_target = { KEY = venus } sr_site_hostile_target = { KEY = mercury } } }
 		AND = { var:sr_fl_3_loc = 3 OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } sr_site_hostile_target = { KEY = arcadia_planitia } } }
 		AND = { var:sr_fl_3_loc = 4 OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } sr_site_hostile_target = { KEY = hygiea } } }
@@ -1571,7 +1622,8 @@ sr_fl_3_target_hostile = {
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
-# not our ally, holds it); its target is one; it interdicts.
+# not our ally, holds it); its target is one; it interdicts. Never at Earth
+# (lunar colonization § 8.3).
 sr_fl_3_has_interdict_world = {
 	has_variable = sr_fl_3_loc
 	OR = {
@@ -1631,6 +1683,8 @@ sr_fl_3_target_interdictable = {
 	}
 }
 sr_fl_3_interdicting = { sr_fl_3_posture_value = 4 }
+# At Earth, closing in on a lunar world (the AI's offence leaves it there).
+sr_fl_3_closing_at_earth = { sr_fl_3_at_earth = yes sr_fl_3_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
 # hostile worlds.
 sr_fl_3_can_target = {
@@ -1856,6 +1910,19 @@ sr_fl_3_ai_attacks_kuiper = {
 # --- Slot 4 ---
 sr_fl_4_exists = { OR = { has_variable = sr_fl_4_loc has_variable = sr_fl_4_dest } }
 sr_fl_4_at_location = { has_variable = sr_fl_4_loc }
+sr_fl_4_at_earth = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 }
+# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
+sr_fl_4_target_lunar = {
+	has_variable = sr_fl_4_target
+	OR = {
+		var:sr_fl_4_target = 35
+		var:sr_fl_4_target = 36
+		var:sr_fl_4_target = 37
+		var:sr_fl_4_target = 38
+		var:sr_fl_4_target = 39
+		var:sr_fl_4_target = 40
+	}
+}
 sr_fl_4_picked = { has_variable = sr_fl_dest_pick_4 }
 sr_fl_4_destroying = { has_variable = sr_fl_4_destroy }
 sr_fl_4_closes_on_free = {
@@ -2127,10 +2194,12 @@ sr_fl_4_can_embark = {
 	}
 }
 # 6b: a world at its location it may close in on (at war with its holder or
-# occupier, or free); its target is one.
+# occupier, or free); its target is one. At Earth, a lunar world (lunar
+# colonization § 8.1).
 sr_fl_4_has_hostile_world = {
 	has_variable = sr_fl_4_loc
 	OR = {
+		AND = { var:sr_fl_4_loc = 1 OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } sr_site_hostile_target = { KEY = imbrium } } }
 		AND = { var:sr_fl_4_loc = 2 OR = { sr_site_hostile_target = { KEY = venus } sr_site_hostile_target = { KEY = mercury } } }
 		AND = { var:sr_fl_4_loc = 3 OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } sr_site_hostile_target = { KEY = arcadia_planitia } } }
 		AND = { var:sr_fl_4_loc = 4 OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } sr_site_hostile_target = { KEY = hygiea } } }
@@ -2187,7 +2256,8 @@ sr_fl_4_target_hostile = {
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
-# not our ally, holds it); its target is one; it interdicts.
+# not our ally, holds it); its target is one; it interdicts. Never at Earth
+# (lunar colonization § 8.3).
 sr_fl_4_has_interdict_world = {
 	has_variable = sr_fl_4_loc
 	OR = {
@@ -2247,6 +2317,8 @@ sr_fl_4_target_interdictable = {
 	}
 }
 sr_fl_4_interdicting = { sr_fl_4_posture_value = 4 }
+# At Earth, closing in on a lunar world (the AI's offence leaves it there).
+sr_fl_4_closing_at_earth = { sr_fl_4_at_earth = yes sr_fl_4_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
 # hostile worlds.
 sr_fl_4_can_target = {
@@ -2472,6 +2544,19 @@ sr_fl_4_ai_attacks_kuiper = {
 # --- Slot 5 ---
 sr_fl_5_exists = { OR = { has_variable = sr_fl_5_loc has_variable = sr_fl_5_dest } }
 sr_fl_5_at_location = { has_variable = sr_fl_5_loc }
+sr_fl_5_at_earth = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 }
+# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
+sr_fl_5_target_lunar = {
+	has_variable = sr_fl_5_target
+	OR = {
+		var:sr_fl_5_target = 35
+		var:sr_fl_5_target = 36
+		var:sr_fl_5_target = 37
+		var:sr_fl_5_target = 38
+		var:sr_fl_5_target = 39
+		var:sr_fl_5_target = 40
+	}
+}
 sr_fl_5_picked = { has_variable = sr_fl_dest_pick_5 }
 sr_fl_5_destroying = { has_variable = sr_fl_5_destroy }
 sr_fl_5_closes_on_free = {
@@ -2743,10 +2828,12 @@ sr_fl_5_can_embark = {
 	}
 }
 # 6b: a world at its location it may close in on (at war with its holder or
-# occupier, or free); its target is one.
+# occupier, or free); its target is one. At Earth, a lunar world (lunar
+# colonization § 8.1).
 sr_fl_5_has_hostile_world = {
 	has_variable = sr_fl_5_loc
 	OR = {
+		AND = { var:sr_fl_5_loc = 1 OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } sr_site_hostile_target = { KEY = imbrium } } }
 		AND = { var:sr_fl_5_loc = 2 OR = { sr_site_hostile_target = { KEY = venus } sr_site_hostile_target = { KEY = mercury } } }
 		AND = { var:sr_fl_5_loc = 3 OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } sr_site_hostile_target = { KEY = arcadia_planitia } } }
 		AND = { var:sr_fl_5_loc = 4 OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } sr_site_hostile_target = { KEY = hygiea } } }
@@ -2803,7 +2890,8 @@ sr_fl_5_target_hostile = {
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
-# not our ally, holds it); its target is one; it interdicts.
+# not our ally, holds it); its target is one; it interdicts. Never at Earth
+# (lunar colonization § 8.3).
 sr_fl_5_has_interdict_world = {
 	has_variable = sr_fl_5_loc
 	OR = {
@@ -2863,6 +2951,8 @@ sr_fl_5_target_interdictable = {
 	}
 }
 sr_fl_5_interdicting = { sr_fl_5_posture_value = 4 }
+# At Earth, closing in on a lunar world (the AI's offence leaves it there).
+sr_fl_5_closing_at_earth = { sr_fl_5_at_earth = yes sr_fl_5_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
 # hostile worlds.
 sr_fl_5_can_target = {
@@ -3088,6 +3178,19 @@ sr_fl_5_ai_attacks_kuiper = {
 # --- Slot 6 ---
 sr_fl_6_exists = { OR = { has_variable = sr_fl_6_loc has_variable = sr_fl_6_dest } }
 sr_fl_6_at_location = { has_variable = sr_fl_6_loc }
+sr_fl_6_at_earth = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 }
+# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
+sr_fl_6_target_lunar = {
+	has_variable = sr_fl_6_target
+	OR = {
+		var:sr_fl_6_target = 35
+		var:sr_fl_6_target = 36
+		var:sr_fl_6_target = 37
+		var:sr_fl_6_target = 38
+		var:sr_fl_6_target = 39
+		var:sr_fl_6_target = 40
+	}
+}
 sr_fl_6_picked = { has_variable = sr_fl_dest_pick_6 }
 sr_fl_6_destroying = { has_variable = sr_fl_6_destroy }
 sr_fl_6_closes_on_free = {
@@ -3359,10 +3462,12 @@ sr_fl_6_can_embark = {
 	}
 }
 # 6b: a world at its location it may close in on (at war with its holder or
-# occupier, or free); its target is one.
+# occupier, or free); its target is one. At Earth, a lunar world (lunar
+# colonization § 8.1).
 sr_fl_6_has_hostile_world = {
 	has_variable = sr_fl_6_loc
 	OR = {
+		AND = { var:sr_fl_6_loc = 1 OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } sr_site_hostile_target = { KEY = imbrium } } }
 		AND = { var:sr_fl_6_loc = 2 OR = { sr_site_hostile_target = { KEY = venus } sr_site_hostile_target = { KEY = mercury } } }
 		AND = { var:sr_fl_6_loc = 3 OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } sr_site_hostile_target = { KEY = arcadia_planitia } } }
 		AND = { var:sr_fl_6_loc = 4 OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } sr_site_hostile_target = { KEY = hygiea } } }
@@ -3419,7 +3524,8 @@ sr_fl_6_target_hostile = {
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
-# not our ally, holds it); its target is one; it interdicts.
+# not our ally, holds it); its target is one; it interdicts. Never at Earth
+# (lunar colonization § 8.3).
 sr_fl_6_has_interdict_world = {
 	has_variable = sr_fl_6_loc
 	OR = {
@@ -3479,6 +3585,8 @@ sr_fl_6_target_interdictable = {
 	}
 }
 sr_fl_6_interdicting = { sr_fl_6_posture_value = 4 }
+# At Earth, closing in on a lunar world (the AI's offence leaves it there).
+sr_fl_6_closing_at_earth = { sr_fl_6_at_earth = yes sr_fl_6_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
 # hostile worlds.
 sr_fl_6_can_target = {
@@ -3704,6 +3812,19 @@ sr_fl_6_ai_attacks_kuiper = {
 # --- Slot 7 ---
 sr_fl_7_exists = { OR = { has_variable = sr_fl_7_loc has_variable = sr_fl_7_dest } }
 sr_fl_7_at_location = { has_variable = sr_fl_7_loc }
+sr_fl_7_at_earth = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 }
+# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
+sr_fl_7_target_lunar = {
+	has_variable = sr_fl_7_target
+	OR = {
+		var:sr_fl_7_target = 35
+		var:sr_fl_7_target = 36
+		var:sr_fl_7_target = 37
+		var:sr_fl_7_target = 38
+		var:sr_fl_7_target = 39
+		var:sr_fl_7_target = 40
+	}
+}
 sr_fl_7_picked = { has_variable = sr_fl_dest_pick_7 }
 sr_fl_7_destroying = { has_variable = sr_fl_7_destroy }
 sr_fl_7_closes_on_free = {
@@ -3975,10 +4096,12 @@ sr_fl_7_can_embark = {
 	}
 }
 # 6b: a world at its location it may close in on (at war with its holder or
-# occupier, or free); its target is one.
+# occupier, or free); its target is one. At Earth, a lunar world (lunar
+# colonization § 8.1).
 sr_fl_7_has_hostile_world = {
 	has_variable = sr_fl_7_loc
 	OR = {
+		AND = { var:sr_fl_7_loc = 1 OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } sr_site_hostile_target = { KEY = imbrium } } }
 		AND = { var:sr_fl_7_loc = 2 OR = { sr_site_hostile_target = { KEY = venus } sr_site_hostile_target = { KEY = mercury } } }
 		AND = { var:sr_fl_7_loc = 3 OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } sr_site_hostile_target = { KEY = arcadia_planitia } } }
 		AND = { var:sr_fl_7_loc = 4 OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } sr_site_hostile_target = { KEY = hygiea } } }
@@ -4035,7 +4158,8 @@ sr_fl_7_target_hostile = {
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
-# not our ally, holds it); its target is one; it interdicts.
+# not our ally, holds it); its target is one; it interdicts. Never at Earth
+# (lunar colonization § 8.3).
 sr_fl_7_has_interdict_world = {
 	has_variable = sr_fl_7_loc
 	OR = {
@@ -4095,6 +4219,8 @@ sr_fl_7_target_interdictable = {
 	}
 }
 sr_fl_7_interdicting = { sr_fl_7_posture_value = 4 }
+# At Earth, closing in on a lunar world (the AI's offence leaves it there).
+sr_fl_7_closing_at_earth = { sr_fl_7_at_earth = yes sr_fl_7_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
 # hostile worlds.
 sr_fl_7_can_target = {
@@ -4320,6 +4446,19 @@ sr_fl_7_ai_attacks_kuiper = {
 # --- Slot 8 ---
 sr_fl_8_exists = { OR = { has_variable = sr_fl_8_loc has_variable = sr_fl_8_dest } }
 sr_fl_8_at_location = { has_variable = sr_fl_8_loc }
+sr_fl_8_at_earth = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 }
+# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
+sr_fl_8_target_lunar = {
+	has_variable = sr_fl_8_target
+	OR = {
+		var:sr_fl_8_target = 35
+		var:sr_fl_8_target = 36
+		var:sr_fl_8_target = 37
+		var:sr_fl_8_target = 38
+		var:sr_fl_8_target = 39
+		var:sr_fl_8_target = 40
+	}
+}
 sr_fl_8_picked = { has_variable = sr_fl_dest_pick_8 }
 sr_fl_8_destroying = { has_variable = sr_fl_8_destroy }
 sr_fl_8_closes_on_free = {
@@ -4591,10 +4730,12 @@ sr_fl_8_can_embark = {
 	}
 }
 # 6b: a world at its location it may close in on (at war with its holder or
-# occupier, or free); its target is one.
+# occupier, or free); its target is one. At Earth, a lunar world (lunar
+# colonization § 8.1).
 sr_fl_8_has_hostile_world = {
 	has_variable = sr_fl_8_loc
 	OR = {
+		AND = { var:sr_fl_8_loc = 1 OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } sr_site_hostile_target = { KEY = imbrium } } }
 		AND = { var:sr_fl_8_loc = 2 OR = { sr_site_hostile_target = { KEY = venus } sr_site_hostile_target = { KEY = mercury } } }
 		AND = { var:sr_fl_8_loc = 3 OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } sr_site_hostile_target = { KEY = arcadia_planitia } } }
 		AND = { var:sr_fl_8_loc = 4 OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } sr_site_hostile_target = { KEY = hygiea } } }
@@ -4651,7 +4792,8 @@ sr_fl_8_target_hostile = {
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
-# not our ally, holds it); its target is one; it interdicts.
+# not our ally, holds it); its target is one; it interdicts. Never at Earth
+# (lunar colonization § 8.3).
 sr_fl_8_has_interdict_world = {
 	has_variable = sr_fl_8_loc
 	OR = {
@@ -4711,6 +4853,8 @@ sr_fl_8_target_interdictable = {
 	}
 }
 sr_fl_8_interdicting = { sr_fl_8_posture_value = 4 }
+# At Earth, closing in on a lunar world (the AI's offence leaves it there).
+sr_fl_8_closing_at_earth = { sr_fl_8_at_earth = yes sr_fl_8_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
 # hostile worlds.
 sr_fl_8_can_target = {
@@ -4936,6 +5080,19 @@ sr_fl_8_ai_attacks_kuiper = {
 # --- Slot 9 ---
 sr_fl_9_exists = { OR = { has_variable = sr_fl_9_loc has_variable = sr_fl_9_dest } }
 sr_fl_9_at_location = { has_variable = sr_fl_9_loc }
+sr_fl_9_at_earth = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 }
+# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
+sr_fl_9_target_lunar = {
+	has_variable = sr_fl_9_target
+	OR = {
+		var:sr_fl_9_target = 35
+		var:sr_fl_9_target = 36
+		var:sr_fl_9_target = 37
+		var:sr_fl_9_target = 38
+		var:sr_fl_9_target = 39
+		var:sr_fl_9_target = 40
+	}
+}
 sr_fl_9_picked = { has_variable = sr_fl_dest_pick_9 }
 sr_fl_9_destroying = { has_variable = sr_fl_9_destroy }
 sr_fl_9_closes_on_free = {
@@ -5207,10 +5364,12 @@ sr_fl_9_can_embark = {
 	}
 }
 # 6b: a world at its location it may close in on (at war with its holder or
-# occupier, or free); its target is one.
+# occupier, or free); its target is one. At Earth, a lunar world (lunar
+# colonization § 8.1).
 sr_fl_9_has_hostile_world = {
 	has_variable = sr_fl_9_loc
 	OR = {
+		AND = { var:sr_fl_9_loc = 1 OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } sr_site_hostile_target = { KEY = imbrium } } }
 		AND = { var:sr_fl_9_loc = 2 OR = { sr_site_hostile_target = { KEY = venus } sr_site_hostile_target = { KEY = mercury } } }
 		AND = { var:sr_fl_9_loc = 3 OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } sr_site_hostile_target = { KEY = arcadia_planitia } } }
 		AND = { var:sr_fl_9_loc = 4 OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } sr_site_hostile_target = { KEY = hygiea } } }
@@ -5267,7 +5426,8 @@ sr_fl_9_target_hostile = {
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
-# not our ally, holds it); its target is one; it interdicts.
+# not our ally, holds it); its target is one; it interdicts. Never at Earth
+# (lunar colonization § 8.3).
 sr_fl_9_has_interdict_world = {
 	has_variable = sr_fl_9_loc
 	OR = {
@@ -5327,6 +5487,8 @@ sr_fl_9_target_interdictable = {
 	}
 }
 sr_fl_9_interdicting = { sr_fl_9_posture_value = 4 }
+# At Earth, closing in on a lunar world (the AI's offence leaves it there).
+sr_fl_9_closing_at_earth = { sr_fl_9_at_earth = yes sr_fl_9_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
 # hostile worlds.
 sr_fl_9_can_target = {
@@ -5888,7 +6050,9 @@ sr_fl_op_check = {
 	}
 }
 
-# Earth has no colonies of ours (the alerts' uniform test).
+# The alerts' uniform test at Earth: no alert there, although the Moon's
+# colonies are at Earth (lunar colonization § 8), since a fleet bound for
+# Earth is nearly always one coming home.
 sr_loc_held_earth = { always = no }
 
 # ===== Per location, country scope =====

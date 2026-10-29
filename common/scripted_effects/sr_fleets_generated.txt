@@ -3131,7 +3131,8 @@ sr_fl_step_target_at = {
 }
 
 # The hostile step: the next hostile world at the slot's location after its
-# target (table order), else the first; none clears it.
+# target (table order), else the first; none clears it. At Earth, the lunar
+# worlds (lunar colonization § 8.1).
 sr_fl_step_hostile_target_at = {
 	set_local_variable = { name = sr_fl_tgt value = 0 }
 	if = { limit = { has_variable = sr_fl_$N$_target } set_local_variable = { name = sr_fl_tgt value = var:sr_fl_$N$_target } }
@@ -3139,6 +3140,21 @@ sr_fl_step_hostile_target_at = {
 	if = {
 		limit = { has_variable = sr_fl_$N$_loc }
 		if = {
+			limit = { var:sr_fl_$N$_loc = 1 }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 35 sr_site_hostile_target = { KEY = shackleton } } set_local_variable = { name = sr_fl_next value = 35 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 36 sr_site_hostile_target = { KEY = peary } } set_local_variable = { name = sr_fl_next value = 36 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 37 sr_site_hostile_target = { KEY = tranquility } } set_local_variable = { name = sr_fl_next value = 37 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 38 sr_site_hostile_target = { KEY = marius_hills } } set_local_variable = { name = sr_fl_next value = 38 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 39 sr_site_hostile_target = { KEY = daedalus } } set_local_variable = { name = sr_fl_next value = 39 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 40 sr_site_hostile_target = { KEY = imbrium } } set_local_variable = { name = sr_fl_next value = 40 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_hostile_target = { KEY = shackleton } } set_local_variable = { name = sr_fl_next value = 35 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_hostile_target = { KEY = peary } } set_local_variable = { name = sr_fl_next value = 36 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_hostile_target = { KEY = tranquility } } set_local_variable = { name = sr_fl_next value = 37 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_hostile_target = { KEY = marius_hills } } set_local_variable = { name = sr_fl_next value = 38 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_hostile_target = { KEY = daedalus } } set_local_variable = { name = sr_fl_next value = 39 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_hostile_target = { KEY = imbrium } } set_local_variable = { name = sr_fl_next value = 40 } }
+		}
+		else_if = {
 			limit = { var:sr_fl_$N$_loc = 2 }
 			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 17 sr_site_hostile_target = { KEY = venus } } set_local_variable = { name = sr_fl_next value = 17 } }
 			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 18 sr_site_hostile_target = { KEY = mercury } } set_local_variable = { name = sr_fl_next value = 18 } }
@@ -3244,6 +3260,7 @@ sr_fl_step_hostile_target_at = {
 
 # The interdiction's step (6c): the next world at the slot's location it may
 # interdict, else the first; none ends the interdiction (it stands off).
+# Never at Earth (lunar colonization § 8.3).
 sr_fl_step_icpt_target_at = {
 	set_local_variable = { name = sr_fl_tgt value = 0 }
 	if = { limit = { has_variable = sr_fl_$N$_target } set_local_variable = { name = sr_fl_tgt value = var:sr_fl_$N$_target } }
@@ -5049,17 +5066,17 @@ sr_cb_def_losses_earth = {
 }
 sr_cb_worlds_after_earth = {
 	sr_site_assault_step = { KEY = shackleton INDEX = 35 }
-	sr_site_blockade_step = { KEY = shackleton LOC = earth }
+	sr_site_lunar_blockade_step = { KEY = shackleton }
 	sr_site_assault_step = { KEY = peary INDEX = 36 }
-	sr_site_blockade_step = { KEY = peary LOC = earth }
+	sr_site_lunar_blockade_step = { KEY = peary }
 	sr_site_assault_step = { KEY = tranquility INDEX = 37 }
-	sr_site_blockade_step = { KEY = tranquility LOC = earth }
+	sr_site_lunar_blockade_step = { KEY = tranquility }
 	sr_site_assault_step = { KEY = marius_hills INDEX = 38 }
-	sr_site_blockade_step = { KEY = marius_hills LOC = earth }
+	sr_site_lunar_blockade_step = { KEY = marius_hills }
 	sr_site_assault_step = { KEY = daedalus INDEX = 39 }
-	sr_site_blockade_step = { KEY = daedalus LOC = earth }
+	sr_site_lunar_blockade_step = { KEY = daedalus }
 	sr_site_assault_step = { KEY = imbrium INDEX = 40 }
-	sr_site_blockade_step = { KEY = imbrium LOC = earth }
+	sr_site_lunar_blockade_step = { KEY = imbrium }
 }
 
 # --- Mercury and Venus ---
@@ -8755,47 +8772,47 @@ sr_fl_ai_attack_all = {
 		set_local_variable = { name = sr_fl_best value = 0 }
 		set_local_variable = { name = sr_fl_n value = 0 }
 		if = {
-			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_inner = yes sr_fl_1_strength > local_var:sr_fl_best }
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_inner = yes NOT = { sr_fl_1_closing_at_earth = yes } sr_fl_1_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
 			set_local_variable = { name = sr_fl_n value = 1 }
 		}
 		if = {
-			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_inner = yes sr_fl_2_strength > local_var:sr_fl_best }
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_inner = yes NOT = { sr_fl_2_closing_at_earth = yes } sr_fl_2_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
 			set_local_variable = { name = sr_fl_n value = 2 }
 		}
 		if = {
-			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_inner = yes sr_fl_3_strength > local_var:sr_fl_best }
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_inner = yes NOT = { sr_fl_3_closing_at_earth = yes } sr_fl_3_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
 			set_local_variable = { name = sr_fl_n value = 3 }
 		}
 		if = {
-			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_inner = yes sr_fl_4_strength > local_var:sr_fl_best }
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_inner = yes NOT = { sr_fl_4_closing_at_earth = yes } sr_fl_4_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
 			set_local_variable = { name = sr_fl_n value = 4 }
 		}
 		if = {
-			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_inner = yes sr_fl_5_strength > local_var:sr_fl_best }
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_inner = yes NOT = { sr_fl_5_closing_at_earth = yes } sr_fl_5_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
 			set_local_variable = { name = sr_fl_n value = 5 }
 		}
 		if = {
-			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_inner = yes sr_fl_6_strength > local_var:sr_fl_best }
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_inner = yes NOT = { sr_fl_6_closing_at_earth = yes } sr_fl_6_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
 			set_local_variable = { name = sr_fl_n value = 6 }
 		}
 		if = {
-			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_inner = yes sr_fl_7_strength > local_var:sr_fl_best }
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_inner = yes NOT = { sr_fl_7_closing_at_earth = yes } sr_fl_7_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
 			set_local_variable = { name = sr_fl_n value = 7 }
 		}
 		if = {
-			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_inner = yes sr_fl_8_strength > local_var:sr_fl_best }
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_inner = yes NOT = { sr_fl_8_closing_at_earth = yes } sr_fl_8_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
 			set_local_variable = { name = sr_fl_n value = 8 }
 		}
 		if = {
-			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_inner = yes sr_fl_9_strength > local_var:sr_fl_best }
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_inner = yes NOT = { sr_fl_9_closing_at_earth = yes } sr_fl_9_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
 			set_local_variable = { name = sr_fl_n value = 9 }
 		}
@@ -8850,47 +8867,47 @@ sr_fl_ai_attack_all = {
 		set_local_variable = { name = sr_fl_best value = 0 }
 		set_local_variable = { name = sr_fl_n value = 0 }
 		if = {
-			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_mars = yes sr_fl_1_strength > local_var:sr_fl_best }
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_mars = yes NOT = { sr_fl_1_closing_at_earth = yes } sr_fl_1_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
 			set_local_variable = { name = sr_fl_n value = 1 }
 		}
 		if = {
-			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_mars = yes sr_fl_2_strength > local_var:sr_fl_best }
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_mars = yes NOT = { sr_fl_2_closing_at_earth = yes } sr_fl_2_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
 			set_local_variable = { name = sr_fl_n value = 2 }
 		}
 		if = {
-			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_mars = yes sr_fl_3_strength > local_var:sr_fl_best }
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_mars = yes NOT = { sr_fl_3_closing_at_earth = yes } sr_fl_3_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
 			set_local_variable = { name = sr_fl_n value = 3 }
 		}
 		if = {
-			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_mars = yes sr_fl_4_strength > local_var:sr_fl_best }
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_mars = yes NOT = { sr_fl_4_closing_at_earth = yes } sr_fl_4_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
 			set_local_variable = { name = sr_fl_n value = 4 }
 		}
 		if = {
-			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_mars = yes sr_fl_5_strength > local_var:sr_fl_best }
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_mars = yes NOT = { sr_fl_5_closing_at_earth = yes } sr_fl_5_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
 			set_local_variable = { name = sr_fl_n value = 5 }
 		}
 		if = {
-			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_mars = yes sr_fl_6_strength > local_var:sr_fl_best }
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_mars = yes NOT = { sr_fl_6_closing_at_earth = yes } sr_fl_6_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
 			set_local_variable = { name = sr_fl_n value = 6 }
 		}
 		if = {
-			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_mars = yes sr_fl_7_strength > local_var:sr_fl_best }
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_mars = yes NOT = { sr_fl_7_closing_at_earth = yes } sr_fl_7_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
 			set_local_variable = { name = sr_fl_n value = 7 }
 		}
 		if = {
-			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_mars = yes sr_fl_8_strength > local_var:sr_fl_best }
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_mars = yes NOT = { sr_fl_8_closing_at_earth = yes } sr_fl_8_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
 			set_local_variable = { name = sr_fl_n value = 8 }
 		}
 		if = {
-			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_mars = yes sr_fl_9_strength > local_var:sr_fl_best }
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_mars = yes NOT = { sr_fl_9_closing_at_earth = yes } sr_fl_9_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
 			set_local_variable = { name = sr_fl_n value = 9 }
 		}
@@ -8945,47 +8962,47 @@ sr_fl_ai_attack_all = {
 		set_local_variable = { name = sr_fl_best value = 0 }
 		set_local_variable = { name = sr_fl_n value = 0 }
 		if = {
-			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_asteroids = yes sr_fl_1_strength > local_var:sr_fl_best }
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_asteroids = yes NOT = { sr_fl_1_closing_at_earth = yes } sr_fl_1_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
 			set_local_variable = { name = sr_fl_n value = 1 }
 		}
 		if = {
-			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_asteroids = yes sr_fl_2_strength > local_var:sr_fl_best }
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_asteroids = yes NOT = { sr_fl_2_closing_at_earth = yes } sr_fl_2_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
 			set_local_variable = { name = sr_fl_n value = 2 }
 		}
 		if = {
-			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_asteroids = yes sr_fl_3_strength > local_var:sr_fl_best }
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_asteroids = yes NOT = { sr_fl_3_closing_at_earth = yes } sr_fl_3_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
 			set_local_variable = { name = sr_fl_n value = 3 }
 		}
 		if = {
-			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_asteroids = yes sr_fl_4_strength > local_var:sr_fl_best }
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_asteroids = yes NOT = { sr_fl_4_closing_at_earth = yes } sr_fl_4_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
 			set_local_variable = { name = sr_fl_n value = 4 }
 		}
 		if = {
-			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_asteroids = yes sr_fl_5_strength > local_var:sr_fl_best }
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_asteroids = yes NOT = { sr_fl_5_closing_at_earth = yes } sr_fl_5_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
 			set_local_variable = { name = sr_fl_n value = 5 }
 		}
 		if = {
-			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_asteroids = yes sr_fl_6_strength > local_var:sr_fl_best }
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_asteroids = yes NOT = { sr_fl_6_closing_at_earth = yes } sr_fl_6_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
 			set_local_variable = { name = sr_fl_n value = 6 }
 		}
 		if = {
-			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_asteroids = yes sr_fl_7_strength > local_var:sr_fl_best }
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_asteroids = yes NOT = { sr_fl_7_closing_at_earth = yes } sr_fl_7_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
 			set_local_variable = { name = sr_fl_n value = 7 }
 		}
 		if = {
-			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_asteroids = yes sr_fl_8_strength > local_var:sr_fl_best }
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_asteroids = yes NOT = { sr_fl_8_closing_at_earth = yes } sr_fl_8_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
 			set_local_variable = { name = sr_fl_n value = 8 }
 		}
 		if = {
-			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_asteroids = yes sr_fl_9_strength > local_var:sr_fl_best }
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_asteroids = yes NOT = { sr_fl_9_closing_at_earth = yes } sr_fl_9_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
 			set_local_variable = { name = sr_fl_n value = 9 }
 		}
@@ -9040,47 +9057,47 @@ sr_fl_ai_attack_all = {
 		set_local_variable = { name = sr_fl_best value = 0 }
 		set_local_variable = { name = sr_fl_n value = 0 }
 		if = {
-			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_jupiter = yes sr_fl_1_strength > local_var:sr_fl_best }
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_jupiter = yes NOT = { sr_fl_1_closing_at_earth = yes } sr_fl_1_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
 			set_local_variable = { name = sr_fl_n value = 1 }
 		}
 		if = {
-			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_jupiter = yes sr_fl_2_strength > local_var:sr_fl_best }
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_jupiter = yes NOT = { sr_fl_2_closing_at_earth = yes } sr_fl_2_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
 			set_local_variable = { name = sr_fl_n value = 2 }
 		}
 		if = {
-			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_jupiter = yes sr_fl_3_strength > local_var:sr_fl_best }
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_jupiter = yes NOT = { sr_fl_3_closing_at_earth = yes } sr_fl_3_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
 			set_local_variable = { name = sr_fl_n value = 3 }
 		}
 		if = {
-			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_jupiter = yes sr_fl_4_strength > local_var:sr_fl_best }
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_jupiter = yes NOT = { sr_fl_4_closing_at_earth = yes } sr_fl_4_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
 			set_local_variable = { name = sr_fl_n value = 4 }
 		}
 		if = {
-			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_jupiter = yes sr_fl_5_strength > local_var:sr_fl_best }
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_jupiter = yes NOT = { sr_fl_5_closing_at_earth = yes } sr_fl_5_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
 			set_local_variable = { name = sr_fl_n value = 5 }
 		}
 		if = {
-			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_jupiter = yes sr_fl_6_strength > local_var:sr_fl_best }
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_jupiter = yes NOT = { sr_fl_6_closing_at_earth = yes } sr_fl_6_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
 			set_local_variable = { name = sr_fl_n value = 6 }
 		}
 		if = {
-			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_jupiter = yes sr_fl_7_strength > local_var:sr_fl_best }
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_jupiter = yes NOT = { sr_fl_7_closing_at_earth = yes } sr_fl_7_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
 			set_local_variable = { name = sr_fl_n value = 7 }
 		}
 		if = {
-			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_jupiter = yes sr_fl_8_strength > local_var:sr_fl_best }
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_jupiter = yes NOT = { sr_fl_8_closing_at_earth = yes } sr_fl_8_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
 			set_local_variable = { name = sr_fl_n value = 8 }
 		}
 		if = {
-			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_jupiter = yes sr_fl_9_strength > local_var:sr_fl_best }
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_jupiter = yes NOT = { sr_fl_9_closing_at_earth = yes } sr_fl_9_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
 			set_local_variable = { name = sr_fl_n value = 9 }
 		}
@@ -9135,47 +9152,47 @@ sr_fl_ai_attack_all = {
 		set_local_variable = { name = sr_fl_best value = 0 }
 		set_local_variable = { name = sr_fl_n value = 0 }
 		if = {
-			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_saturn = yes sr_fl_1_strength > local_var:sr_fl_best }
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_saturn = yes NOT = { sr_fl_1_closing_at_earth = yes } sr_fl_1_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
 			set_local_variable = { name = sr_fl_n value = 1 }
 		}
 		if = {
-			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_saturn = yes sr_fl_2_strength > local_var:sr_fl_best }
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_saturn = yes NOT = { sr_fl_2_closing_at_earth = yes } sr_fl_2_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
 			set_local_variable = { name = sr_fl_n value = 2 }
 		}
 		if = {
-			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_saturn = yes sr_fl_3_strength > local_var:sr_fl_best }
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_saturn = yes NOT = { sr_fl_3_closing_at_earth = yes } sr_fl_3_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
 			set_local_variable = { name = sr_fl_n value = 3 }
 		}
 		if = {
-			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_saturn = yes sr_fl_4_strength > local_var:sr_fl_best }
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_saturn = yes NOT = { sr_fl_4_closing_at_earth = yes } sr_fl_4_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
 			set_local_variable = { name = sr_fl_n value = 4 }
 		}
 		if = {
-			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_saturn = yes sr_fl_5_strength > local_var:sr_fl_best }
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_saturn = yes NOT = { sr_fl_5_closing_at_earth = yes } sr_fl_5_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
 			set_local_variable = { name = sr_fl_n value = 5 }
 		}
 		if = {
-			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_saturn = yes sr_fl_6_strength > local_var:sr_fl_best }
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_saturn = yes NOT = { sr_fl_6_closing_at_earth = yes } sr_fl_6_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
 			set_local_variable = { name = sr_fl_n value = 6 }
 		}
 		if = {
-			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_saturn = yes sr_fl_7_strength > local_var:sr_fl_best }
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_saturn = yes NOT = { sr_fl_7_closing_at_earth = yes } sr_fl_7_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
 			set_local_variable = { name = sr_fl_n value = 7 }
 		}
 		if = {
-			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_saturn = yes sr_fl_8_strength > local_var:sr_fl_best }
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_saturn = yes NOT = { sr_fl_8_closing_at_earth = yes } sr_fl_8_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
 			set_local_variable = { name = sr_fl_n value = 8 }
 		}
 		if = {
-			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_saturn = yes sr_fl_9_strength > local_var:sr_fl_best }
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_saturn = yes NOT = { sr_fl_9_closing_at_earth = yes } sr_fl_9_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
 			set_local_variable = { name = sr_fl_n value = 9 }
 		}
@@ -9230,47 +9247,47 @@ sr_fl_ai_attack_all = {
 		set_local_variable = { name = sr_fl_best value = 0 }
 		set_local_variable = { name = sr_fl_n value = 0 }
 		if = {
-			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_uranus = yes sr_fl_1_strength > local_var:sr_fl_best }
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_uranus = yes NOT = { sr_fl_1_closing_at_earth = yes } sr_fl_1_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
 			set_local_variable = { name = sr_fl_n value = 1 }
 		}
 		if = {
-			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_uranus = yes sr_fl_2_strength > local_var:sr_fl_best }
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_uranus = yes NOT = { sr_fl_2_closing_at_earth = yes } sr_fl_2_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
 			set_local_variable = { name = sr_fl_n value = 2 }
 		}
 		if = {
-			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_uranus = yes sr_fl_3_strength > local_var:sr_fl_best }
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_uranus = yes NOT = { sr_fl_3_closing_at_earth = yes } sr_fl_3_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
 			set_local_variable = { name = sr_fl_n value = 3 }
 		}
 		if = {
-			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_uranus = yes sr_fl_4_strength > local_var:sr_fl_best }
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_uranus = yes NOT = { sr_fl_4_closing_at_earth = yes } sr_fl_4_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
 			set_local_variable = { name = sr_fl_n value = 4 }
 		}
 		if = {
-			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_uranus = yes sr_fl_5_strength > local_var:sr_fl_best }
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_uranus = yes NOT = { sr_fl_5_closing_at_earth = yes } sr_fl_5_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
 			set_local_variable = { name = sr_fl_n value = 5 }
 		}
 		if = {
-			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_uranus = yes sr_fl_6_strength > local_var:sr_fl_best }
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_uranus = yes NOT = { sr_fl_6_closing_at_earth = yes } sr_fl_6_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
 			set_local_variable = { name = sr_fl_n value = 6 }
 		}
 		if = {
-			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_uranus = yes sr_fl_7_strength > local_var:sr_fl_best }
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_uranus = yes NOT = { sr_fl_7_closing_at_earth = yes } sr_fl_7_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
 			set_local_variable = { name = sr_fl_n value = 7 }
 		}
 		if = {
-			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_uranus = yes sr_fl_8_strength > local_var:sr_fl_best }
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_uranus = yes NOT = { sr_fl_8_closing_at_earth = yes } sr_fl_8_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
 			set_local_variable = { name = sr_fl_n value = 8 }
 		}
 		if = {
-			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_uranus = yes sr_fl_9_strength > local_var:sr_fl_best }
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_uranus = yes NOT = { sr_fl_9_closing_at_earth = yes } sr_fl_9_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
 			set_local_variable = { name = sr_fl_n value = 9 }
 		}
@@ -9325,47 +9342,47 @@ sr_fl_ai_attack_all = {
 		set_local_variable = { name = sr_fl_best value = 0 }
 		set_local_variable = { name = sr_fl_n value = 0 }
 		if = {
-			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_neptune = yes sr_fl_1_strength > local_var:sr_fl_best }
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_neptune = yes NOT = { sr_fl_1_closing_at_earth = yes } sr_fl_1_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
 			set_local_variable = { name = sr_fl_n value = 1 }
 		}
 		if = {
-			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_neptune = yes sr_fl_2_strength > local_var:sr_fl_best }
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_neptune = yes NOT = { sr_fl_2_closing_at_earth = yes } sr_fl_2_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
 			set_local_variable = { name = sr_fl_n value = 2 }
 		}
 		if = {
-			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_neptune = yes sr_fl_3_strength > local_var:sr_fl_best }
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_neptune = yes NOT = { sr_fl_3_closing_at_earth = yes } sr_fl_3_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
 			set_local_variable = { name = sr_fl_n value = 3 }
 		}
 		if = {
-			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_neptune = yes sr_fl_4_strength > local_var:sr_fl_best }
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_neptune = yes NOT = { sr_fl_4_closing_at_earth = yes } sr_fl_4_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
 			set_local_variable = { name = sr_fl_n value = 4 }
 		}
 		if = {
-			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_neptune = yes sr_fl_5_strength > local_var:sr_fl_best }
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_neptune = yes NOT = { sr_fl_5_closing_at_earth = yes } sr_fl_5_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
 			set_local_variable = { name = sr_fl_n value = 5 }
 		}
 		if = {
-			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_neptune = yes sr_fl_6_strength > local_var:sr_fl_best }
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_neptune = yes NOT = { sr_fl_6_closing_at_earth = yes } sr_fl_6_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
 			set_local_variable = { name = sr_fl_n value = 6 }
 		}
 		if = {
-			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_neptune = yes sr_fl_7_strength > local_var:sr_fl_best }
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_neptune = yes NOT = { sr_fl_7_closing_at_earth = yes } sr_fl_7_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
 			set_local_variable = { name = sr_fl_n value = 7 }
 		}
 		if = {
-			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_neptune = yes sr_fl_8_strength > local_var:sr_fl_best }
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_neptune = yes NOT = { sr_fl_8_closing_at_earth = yes } sr_fl_8_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
 			set_local_variable = { name = sr_fl_n value = 8 }
 		}
 		if = {
-			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_neptune = yes sr_fl_9_strength > local_var:sr_fl_best }
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_neptune = yes NOT = { sr_fl_9_closing_at_earth = yes } sr_fl_9_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
 			set_local_variable = { name = sr_fl_n value = 9 }
 		}
@@ -9420,47 +9437,47 @@ sr_fl_ai_attack_all = {
 		set_local_variable = { name = sr_fl_best value = 0 }
 		set_local_variable = { name = sr_fl_n value = 0 }
 		if = {
-			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_kuiper = yes sr_fl_1_strength > local_var:sr_fl_best }
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_kuiper = yes NOT = { sr_fl_1_closing_at_earth = yes } sr_fl_1_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
 			set_local_variable = { name = sr_fl_n value = 1 }
 		}
 		if = {
-			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_kuiper = yes sr_fl_2_strength > local_var:sr_fl_best }
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_kuiper = yes NOT = { sr_fl_2_closing_at_earth = yes } sr_fl_2_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
 			set_local_variable = { name = sr_fl_n value = 2 }
 		}
 		if = {
-			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_kuiper = yes sr_fl_3_strength > local_var:sr_fl_best }
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_kuiper = yes NOT = { sr_fl_3_closing_at_earth = yes } sr_fl_3_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
 			set_local_variable = { name = sr_fl_n value = 3 }
 		}
 		if = {
-			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_kuiper = yes sr_fl_4_strength > local_var:sr_fl_best }
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_kuiper = yes NOT = { sr_fl_4_closing_at_earth = yes } sr_fl_4_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
 			set_local_variable = { name = sr_fl_n value = 4 }
 		}
 		if = {
-			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_kuiper = yes sr_fl_5_strength > local_var:sr_fl_best }
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_kuiper = yes NOT = { sr_fl_5_closing_at_earth = yes } sr_fl_5_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
 			set_local_variable = { name = sr_fl_n value = 5 }
 		}
 		if = {
-			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_kuiper = yes sr_fl_6_strength > local_var:sr_fl_best }
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_kuiper = yes NOT = { sr_fl_6_closing_at_earth = yes } sr_fl_6_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
 			set_local_variable = { name = sr_fl_n value = 6 }
 		}
 		if = {
-			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_kuiper = yes sr_fl_7_strength > local_var:sr_fl_best }
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_kuiper = yes NOT = { sr_fl_7_closing_at_earth = yes } sr_fl_7_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
 			set_local_variable = { name = sr_fl_n value = 7 }
 		}
 		if = {
-			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_kuiper = yes sr_fl_8_strength > local_var:sr_fl_best }
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_kuiper = yes NOT = { sr_fl_8_closing_at_earth = yes } sr_fl_8_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
 			set_local_variable = { name = sr_fl_n value = 8 }
 		}
 		if = {
-			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_kuiper = yes sr_fl_9_strength > local_var:sr_fl_best }
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_kuiper = yes NOT = { sr_fl_9_closing_at_earth = yes } sr_fl_9_strength > local_var:sr_fl_best }
 			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
 			set_local_variable = { name = sr_fl_n value = 9 }
 		}
@@ -9508,6 +9525,153 @@ sr_fl_ai_attack_all = {
 			limit = { local_var:sr_fl_n = 9 }
 			sr_fl_dispatch = { N = 9 LOC = kuiper CODE = 9 }
 			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+	}
+}
+
+# Lunar colonization § 8.4: at war, the strongest of its fleets at Earth closes
+# in on the enemy's lunar world of most worth (sr_site_ai_worth_<key>) while it
+# holds Earth orbit against that enemy (sr_site_ai_lunar_target: the enemy's
+# Earth is blockaded), to seize it when its marines exceed the world's garrison
+# and militia; otherwise it, and every other fleet of ours at Earth, stays
+# stationed. Never to destroy. Before the offence's dispatch, which leaves a
+# fleet closing in at Earth where it is.
+sr_fl_ai_lunar_assault = {
+	set_local_variable = { name = sr_fl_best value = 0 }
+	set_local_variable = { name = sr_fl_n value = 0 }
+	if = { limit = { sr_fl_1_at_earth = yes sr_fl_1_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_1_strength } set_local_variable = { name = sr_fl_n value = 1 } }
+	if = { limit = { sr_fl_2_at_earth = yes sr_fl_2_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_2_strength } set_local_variable = { name = sr_fl_n value = 2 } }
+	if = { limit = { sr_fl_3_at_earth = yes sr_fl_3_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_3_strength } set_local_variable = { name = sr_fl_n value = 3 } }
+	if = { limit = { sr_fl_4_at_earth = yes sr_fl_4_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_4_strength } set_local_variable = { name = sr_fl_n value = 4 } }
+	if = { limit = { sr_fl_5_at_earth = yes sr_fl_5_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_5_strength } set_local_variable = { name = sr_fl_n value = 5 } }
+	if = { limit = { sr_fl_6_at_earth = yes sr_fl_6_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_6_strength } set_local_variable = { name = sr_fl_n value = 6 } }
+	if = { limit = { sr_fl_7_at_earth = yes sr_fl_7_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_7_strength } set_local_variable = { name = sr_fl_n value = 7 } }
+	if = { limit = { sr_fl_8_at_earth = yes sr_fl_8_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_8_strength } set_local_variable = { name = sr_fl_n value = 8 } }
+	if = { limit = { sr_fl_9_at_earth = yes sr_fl_9_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_9_strength } set_local_variable = { name = sr_fl_n value = 9 } }
+	set_local_variable = { name = sr_ai_tgt value = 0 }
+	set_local_variable = { name = sr_ai_need value = 0 }
+	set_local_variable = { name = sr_ai_best value = -1 }
+	if = { limit = { sr_site_ai_lunar_target = { KEY = shackleton } sr_site_ai_worth_shackleton > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_shackleton } set_local_variable = { name = sr_ai_tgt value = 35 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_shackleton } }
+	if = { limit = { sr_site_ai_lunar_target = { KEY = peary } sr_site_ai_worth_peary > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_peary } set_local_variable = { name = sr_ai_tgt value = 36 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_peary } }
+	if = { limit = { sr_site_ai_lunar_target = { KEY = tranquility } sr_site_ai_worth_tranquility > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_tranquility } set_local_variable = { name = sr_ai_tgt value = 37 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_tranquility } }
+	if = { limit = { sr_site_ai_lunar_target = { KEY = marius_hills } sr_site_ai_worth_marius_hills > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_marius_hills } set_local_variable = { name = sr_ai_tgt value = 38 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_marius_hills } }
+	if = { limit = { sr_site_ai_lunar_target = { KEY = daedalus } sr_site_ai_worth_daedalus > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_daedalus } set_local_variable = { name = sr_ai_tgt value = 39 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_daedalus } }
+	if = { limit = { sr_site_ai_lunar_target = { KEY = imbrium } sr_site_ai_worth_imbrium > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_imbrium } set_local_variable = { name = sr_ai_tgt value = 40 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_imbrium } }
+	if = {
+		limit = { sr_fl_1_at_earth = yes }
+		if = { limit = { has_variable = sr_fl_1_destroy } remove_variable = sr_fl_1_destroy }
+		if = {
+			limit = { local_var:sr_fl_n = 1 local_var:sr_ai_tgt > 0 sr_fl_1_marines_value > local_var:sr_ai_need }
+			set_variable = { name = sr_fl_1_posture value = 3 }
+			set_variable = { name = sr_fl_1_target value = local_var:sr_ai_tgt }
+		}
+		else = {
+			set_variable = { name = sr_fl_1_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_1_target } remove_variable = sr_fl_1_target }
+		}
+	}
+	if = {
+		limit = { sr_fl_2_at_earth = yes }
+		if = { limit = { has_variable = sr_fl_2_destroy } remove_variable = sr_fl_2_destroy }
+		if = {
+			limit = { local_var:sr_fl_n = 2 local_var:sr_ai_tgt > 0 sr_fl_2_marines_value > local_var:sr_ai_need }
+			set_variable = { name = sr_fl_2_posture value = 3 }
+			set_variable = { name = sr_fl_2_target value = local_var:sr_ai_tgt }
+		}
+		else = {
+			set_variable = { name = sr_fl_2_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_2_target } remove_variable = sr_fl_2_target }
+		}
+	}
+	if = {
+		limit = { sr_fl_3_at_earth = yes }
+		if = { limit = { has_variable = sr_fl_3_destroy } remove_variable = sr_fl_3_destroy }
+		if = {
+			limit = { local_var:sr_fl_n = 3 local_var:sr_ai_tgt > 0 sr_fl_3_marines_value > local_var:sr_ai_need }
+			set_variable = { name = sr_fl_3_posture value = 3 }
+			set_variable = { name = sr_fl_3_target value = local_var:sr_ai_tgt }
+		}
+		else = {
+			set_variable = { name = sr_fl_3_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_3_target } remove_variable = sr_fl_3_target }
+		}
+	}
+	if = {
+		limit = { sr_fl_4_at_earth = yes }
+		if = { limit = { has_variable = sr_fl_4_destroy } remove_variable = sr_fl_4_destroy }
+		if = {
+			limit = { local_var:sr_fl_n = 4 local_var:sr_ai_tgt > 0 sr_fl_4_marines_value > local_var:sr_ai_need }
+			set_variable = { name = sr_fl_4_posture value = 3 }
+			set_variable = { name = sr_fl_4_target value = local_var:sr_ai_tgt }
+		}
+		else = {
+			set_variable = { name = sr_fl_4_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_4_target } remove_variable = sr_fl_4_target }
+		}
+	}
+	if = {
+		limit = { sr_fl_5_at_earth = yes }
+		if = { limit = { has_variable = sr_fl_5_destroy } remove_variable = sr_fl_5_destroy }
+		if = {
+			limit = { local_var:sr_fl_n = 5 local_var:sr_ai_tgt > 0 sr_fl_5_marines_value > local_var:sr_ai_need }
+			set_variable = { name = sr_fl_5_posture value = 3 }
+			set_variable = { name = sr_fl_5_target value = local_var:sr_ai_tgt }
+		}
+		else = {
+			set_variable = { name = sr_fl_5_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_5_target } remove_variable = sr_fl_5_target }
+		}
+	}
+	if = {
+		limit = { sr_fl_6_at_earth = yes }
+		if = { limit = { has_variable = sr_fl_6_destroy } remove_variable = sr_fl_6_destroy }
+		if = {
+			limit = { local_var:sr_fl_n = 6 local_var:sr_ai_tgt > 0 sr_fl_6_marines_value > local_var:sr_ai_need }
+			set_variable = { name = sr_fl_6_posture value = 3 }
+			set_variable = { name = sr_fl_6_target value = local_var:sr_ai_tgt }
+		}
+		else = {
+			set_variable = { name = sr_fl_6_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_6_target } remove_variable = sr_fl_6_target }
+		}
+	}
+	if = {
+		limit = { sr_fl_7_at_earth = yes }
+		if = { limit = { has_variable = sr_fl_7_destroy } remove_variable = sr_fl_7_destroy }
+		if = {
+			limit = { local_var:sr_fl_n = 7 local_var:sr_ai_tgt > 0 sr_fl_7_marines_value > local_var:sr_ai_need }
+			set_variable = { name = sr_fl_7_posture value = 3 }
+			set_variable = { name = sr_fl_7_target value = local_var:sr_ai_tgt }
+		}
+		else = {
+			set_variable = { name = sr_fl_7_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_7_target } remove_variable = sr_fl_7_target }
+		}
+	}
+	if = {
+		limit = { sr_fl_8_at_earth = yes }
+		if = { limit = { has_variable = sr_fl_8_destroy } remove_variable = sr_fl_8_destroy }
+		if = {
+			limit = { local_var:sr_fl_n = 8 local_var:sr_ai_tgt > 0 sr_fl_8_marines_value > local_var:sr_ai_need }
+			set_variable = { name = sr_fl_8_posture value = 3 }
+			set_variable = { name = sr_fl_8_target value = local_var:sr_ai_tgt }
+		}
+		else = {
+			set_variable = { name = sr_fl_8_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_8_target } remove_variable = sr_fl_8_target }
+		}
+	}
+	if = {
+		limit = { sr_fl_9_at_earth = yes }
+		if = { limit = { has_variable = sr_fl_9_destroy } remove_variable = sr_fl_9_destroy }
+		if = {
+			limit = { local_var:sr_fl_n = 9 local_var:sr_ai_tgt > 0 sr_fl_9_marines_value > local_var:sr_ai_need }
+			set_variable = { name = sr_fl_9_posture value = 3 }
+			set_variable = { name = sr_fl_9_target value = local_var:sr_ai_tgt }
+		}
+		else = {
+			set_variable = { name = sr_fl_9_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_9_target } remove_variable = sr_fl_9_target }
 		}
 	}
 }

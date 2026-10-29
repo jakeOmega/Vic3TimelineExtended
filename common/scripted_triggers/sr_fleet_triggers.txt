@@ -93,6 +93,23 @@ sr_site_ai_attack_target = {
 	NOT = { has_global_variable = sr_site_free_$KEY$ }
 }
 
+# Country scope, the AI (lunar colonization § 8.4). A lunar world (KEY) its
+# strongest fleet at Earth may close in on: one its offence may attack, while
+# it holds Earth orbit against the enemy there, the world's holder or, for a
+# world of its own an enemy occupies, the occupier: that enemy's Earth is
+# blockaded (sr_earth_blockaded: none of its fleets at Earth, and a fleet of a
+# country at war with it there; ours is, since the fleet that closes in is).
+sr_site_ai_lunar_target = {
+	sr_site_ai_attack_target = { KEY = $KEY$ }
+	OR = {
+		AND = {
+			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+			global_var:sr_site_holder_$KEY$ ?= { sr_earth_blockaded = yes }
+		}
+		global_var:sr_site_occupier_$KEY$ ?= { sr_earth_blockaded = yes }
+	}
+}
+
 # Country scope, the interdictor (6c, design § 12). A world it may interdict
 # (KEY): a colony, not ruined, free or occupied, whose holder is another
 # country it is at peace with and not allied to (no alliance or defensive pact;
