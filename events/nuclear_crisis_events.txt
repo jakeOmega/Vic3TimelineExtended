@@ -1512,6 +1512,16 @@ nuclear_crisis.26 = {
 
 	immediate = {
 		var:nd_cc_target = { save_scope_as = nd_cc_target }
+		if = {
+			limit = { var:nd_cc_code = 8 }
+			if = {
+				limit = { nd_dispute_claims_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_8: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] still claims a state of [THIS.GetCountry.GetNameNoFormatting] a day after remove_claim"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_8: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] claims no state of [THIS.GetCountry.GetNameNoFormatting] a day after remove_claim"
+			}
+		}
 		remove_variable = nd_cc_target
 		remove_variable = nd_cc_code
 	}

@@ -130,6 +130,10 @@ nd_crisis_preview = {
 		limit = { nd_dispute_proliferation_by = { TARGET = $TARGET$ } }
 		custom_tooltip = nd_tt_open_over_proliferation
 	}
+	else_if = {
+		limit = { nd_dispute_claims_by = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_claims
+	}
 	else = {
 		custom_tooltip = nd_tt_open_over_alert
 	}
@@ -417,6 +421,10 @@ nd_crisis_classify_dispute = {
 	else_if = {
 		limit = { nd_dispute_proliferation_by = { TARGET = scope:nd_target } }
 		set_variable = { name = nd_crisis_dispute value = 4 }
+	}
+	else_if = {
+		limit = { nd_dispute_claims_by = { TARGET = scope:nd_target } }
+		set_variable = { name = nd_crisis_dispute value = 8 }
 	}
 	else = {
 		set_variable = { name = nd_crisis_dispute value = 5 }
@@ -996,6 +1004,20 @@ nd_crisis_revalidate_dispute = {
 			}
 		}
 		nd_crisis_close = { OUTCOME = 4 }
+	}
+	# ---- claims: a war between them turns it into a war dispute; no claim
+	# left (the UN court struck it, or the state left us) ends it with no
+	# winner. A claim can't be renewed at will, so it is gone for good.
+	else_if = {
+		limit = { var:nd_crisis_dispute = 8 }
+		if = {
+			limit = { has_war_with = scope:nd_target }
+			set_variable = { name = nd_crisis_dispute value = 2 }
+		}
+		else_if = {
+			limit = { NOT = { nd_dispute_claims_by = { TARGET = scope:nd_target } } }
+			nd_crisis_close = { OUTCOME = 10 }
+		}
 	}
 	# ---- a disarmed issuer has no threat left -----------------------------
 	if = {
@@ -1743,6 +1765,14 @@ nd_crisis_act_yield = {
 					}
 					nd_crisis_concede_reparations = yes
 				}
+				else_if = {
+					limit = { var:nd_crisis_dispute = 8 }
+					if = {
+						limit = { nd_dispute_claims_by = { TARGET = scope:nd_target } }
+						nd_crisis_concession_check_schedule = { CODE = 8 }
+					}
+					nd_crisis_concede_claims = yes
+				}
 				else = {
 					scope:nd_target = {
 						if = {
@@ -1807,6 +1837,10 @@ nd_crisis_yield_lines = {
 	else_if = {
 		limit = { nd_crisis_dispute_is = { D = 6 } }
 		custom_tooltip = nd_tt_yield_reparations
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 8 } }
+		custom_tooltip = nd_tt_yield_claims
 	}
 }
 
@@ -1941,6 +1975,20 @@ nd_crisis_concede_reparations = {
 			limit = { var:nd_peacetime_struck_by ?= scope:nd_target }
 			remove_variable = nd_peacetime_struck_by
 		}
+	}
+}
+
+# Issuer scope, scope:nd_target the yielder (dispute 8): it renounces every
+# claim it holds on our incorporated states. A claim is on the state region,
+# so a region we share with a third country loses the claim on all of it.
+# No bar follows: nothing lets a country claim a neighbor's land at will.
+nd_crisis_concede_claims = {
+	every_scope_state = {
+		limit = {
+			is_incorporated = yes
+			state_region = { scope:nd_target = { has_claim = PREV } }
+		}
+		state_region = { remove_claim = scope:nd_target }
 	}
 }
 

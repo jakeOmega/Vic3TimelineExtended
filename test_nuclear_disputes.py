@@ -37,6 +37,7 @@ DISPUTES = [
     (3, "nd_dispute_guarantee_against", "guarantee", "nd_tt_open_over_guarantee", "nd_tt_yield_guarantee"),
     (6, "nd_dispute_peacetime_strike_by", "nuclear strike", "nd_tt_open_over_peacetime_strike", "nd_tt_yield_reparations"),
     (4, "nd_dispute_proliferation_by", "weapons program", "nd_tt_open_over_proliferation", "nd_tt_yield_freeze"),
+    (8, "nd_dispute_claims_by", "claims", "nd_tt_open_over_claims", "nd_tt_yield_claims"),
     (5, "nd_dispute_alert_by", "alert", "nd_tt_open_over_alert", "nd_tt_yield_alert"),
 ]
 CODES = [d[0] for d in DISPUTES]
@@ -194,6 +195,50 @@ class TestConcessionCheck(unittest.TestCase):
             guard = branch.rfind("limit = { " + trigger + " = { TARGET = scope:nd_target } }", 0, call)
             self.assertGreaterEqual(guard, 0, code)
             self.assertLess(call, branch.index("nd_crisis_concede_"), code)
+
+
+def squash(text):
+    return re.sub(r"\s+", " ", text).strip()
+
+
+class TestClaims(unittest.TestCase):
+    """Dispute 8: the target claims one of our incorporated states. Conceding
+    renounces each such claim; claims can't be renewed at will, so there is
+    no bar, and the dispute ends when none is left (rulings R7)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.crisis = strip_comments(read(CRISIS_EFFECTS))
+        cls.triggers = strip_comments(read(TRIGGERS))
+
+    def test_trigger_reads_the_region(self):
+        body = squash(block(self.triggers, "nd_dispute_claims_by"))
+        self.assertIn("any_scope_state = { is_incorporated = yes state_region = { $TARGET$ = { has_claim = PREV } } }", body)
+        self.assertNotIn("has_claim_by", body)
+
+    def test_concession_removes_on_the_region(self):
+        body = squash(block(self.crisis, "nd_crisis_concede_claims"))
+        self.assertIn("every_scope_state = { limit = { is_incorporated = yes state_region = { scope:nd_target = { has_claim = PREV } } }"
+                      " state_region = { remove_claim = scope:nd_target } }", body)
+        self.assertNotIn("set_variable", body)
+
+    def test_claims_concession_names_the_whole_region(self):
+        for key in ("nd_concession_long_8", "nd_tt_yield_claims", "nd_tt_open_over_claims"):
+            self.assertIn("region", loc_value(key), key)
+
+    def test_revalidate_closes_when_no_claim_is_left(self):
+        body = block(self.crisis, "nd_crisis_revalidate_dispute")
+        i = dispute_var(8).search(body).start()
+        branch = squash(body[i:i + 700])
+        self.assertIn("has_war_with = scope:nd_target } set_variable = { name = nd_crisis_dispute value = 2 }", branch)
+        self.assertIn("NOT = { nd_dispute_claims_by = { TARGET = scope:nd_target } } } nd_crisis_close = { OUTCOME = 10 }", branch)
+
+    def test_ai_warns_only_against_a_rival(self):
+        body = squash(block(self.triggers, "nd_ai_would_warn"))
+        i = body.index("nd_dispute_claims_by")
+        rival = body.rfind("has_diplomatic_pact = { who = $TARGET$ type = rivalry }", 0, i)
+        self.assertGreaterEqual(rival, 0)
+        self.assertEqual(body.count("nd_dispute_claims_by"), 1)
 
 
 if __name__ == "__main__":

@@ -581,6 +581,17 @@ nd_dispute_peacetime_strike_by = {
 	}
 }
 
+# Dispute 8 (rework spec §8.5): $TARGET$ claims one of our incorporated
+# states. A claim sits on the state region, so the claimer's has_claim is
+# tested against the region, not has_claim_by on our part of a split state
+# (the decentralized-claims sweep's pattern, extra_on_actions.txt).
+nd_dispute_claims_by = {
+	any_scope_state = {
+		is_incorporated = yes
+		state_region = { $TARGET$ = { has_claim = PREV } }
+	}
+}
+
 # The struck country (victim scope): $ENEMY$'s strike on us carried the claim
 # we hold from it (rework spec §5.4). The claim record stands until its truth
 # comes out, months later; nd_strike_claim_id says, for 30 days after a
@@ -1599,6 +1610,7 @@ nd_crisis_issuer_is_defensive = {
 	OR = {
 		var:nd_crisis_dispute = 3
 		var:nd_crisis_dispute = 6
+		var:nd_crisis_dispute = 8
 		AND = {
 			var:nd_crisis_dispute = 1
 			scope:nd_def_opp = { is_diplomatic_play_initiator = yes }
@@ -1723,6 +1735,7 @@ nd_has_crisis_dispute_with = {
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
 		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		nd_dispute_proliferation_by = { TARGET = $TARGET$ }
+		nd_dispute_claims_by = { TARGET = $TARGET$ }
 		nd_dispute_alert_by = { TARGET = $TARGET$ }
 	}
 }
@@ -2133,6 +2146,14 @@ nd_ai_would_warn = {
 			nd_dispute_proliferation_by = { TARGET = $TARGET$ }
 			country_rank >= rank_value:great_power
 			nd_doctrine_nfu = no
+		}
+		# Our land, from a rival (rework spec §8.5; rulings R8: claims are
+		# common, so only a rival's).
+		AND = {
+			has_diplomatic_pact = { who = $TARGET$ type = rivalry }
+			OR = {
+				nd_dispute_claims_by = { TARGET = $TARGET$ }
+			}
 		}
 	}
 	# A cautious ruler warns only in defence.
