@@ -22,6 +22,11 @@ Colonization and Advanced Nanofabrication are both era 12 and neither requires t
 so a country with only the first runs its Deep-Sea Mines on the era-11 method beside a
 Mining Colony that earns more per level (though not per point of construction).
 
+The Extraplanetary Base opens in era 10 on Regolith Processing (lunar colonization
+design § 6, docs/superpowers/specs/2026-10-29-lunar-colonization-design.md), before
+any Deep-Sea Mine: an era with no Deep-Sea method has nothing to compare, and every
+ordering from era 11 on is unchanged.
+
 Run `python3 test_deep_sea_rebalance.py --table` to print the per-level figures.
 """
 import glob
@@ -305,6 +310,38 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
                 self.assertLess(margin(base, [tender]), margin(LAND_TECH_METAL_MINE))
 
 
+class RegolithProcessing(unittest.TestCase):
+    """Lunar colonization design § 6: the base opens in era 10 on a weak method of its
+    own, and the Asteroid Mine waits for Asteroid Mining."""
+
+    REGOLITH, ASTEROID = "pm_regolith_processing", "pm_space_mine"
+
+    def setUp(self):
+        self.d = _DATA
+        self.space = self.d.group_methods(self.d.base_group(SPACE))
+
+    def test_the_default_and_its_era(self):
+        self.assertEqual(self.space[0], self.REGOLITH)  # first in the group: the default
+        self.assertEqual(_list(self.d.pms[self.REGOLITH].get("unlocking_technologies")), [])
+        self.assertEqual([str(t) for t in _list(self.d.buildings[SPACE].get("unlocking_technologies"))],
+                         ["in_situ_resource_utilization"])
+        self.assertEqual(self.d.method_era(self.REGOLITH, SPACE), 10)
+        self.assertEqual([str(t) for t in _list(self.d.pms[self.ASTEROID].get("unlocking_technologies"))],
+                         ["asteroid_mining"])
+        self.assertEqual(self.d.method_era(self.ASTEROID, SPACE), 11)
+        self.assertLess(self.d.method_era(self.REGOLITH, SPACE),
+                        min(self.d.method_era(pm, DEEP_SEA) for pm in self.d.group_methods(self.d.base_group(DEEP_SEA))))
+
+    def test_half_the_asteroid_mine_s_inputs_and_a_thin_profit(self):
+        regolith, asteroid = self.d.goods(self.REGOLITH, "input"), self.d.goods(self.ASTEROID, "input")
+        self.assertEqual(regolith, {good: qty / 2 for good, qty in asteroid.items()})
+        profit = self.d.profit(self.REGOLITH)
+        self.assertGreater(profit, 0)
+        self.assertLess(4 * profit, self.d.profit(self.ASTEROID))  # under a quarter of its return a level
+        self.assertEqual(self.d.employment(self.REGOLITH), 800)
+        self.assertAlmostEqual(profit / self.d.employment(self.REGOLITH), 2.0)  # the wage it can pay
+
+
 class RuleOffKeepsTheOldMine(unittest.TestCase):
     """§ 2.9: with the Global Commons rule off the mine is uncapped, so it keeps the
     pre-rebalance methods; the rule's two settings switch the families."""
@@ -387,6 +424,8 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
         best_deep = max(max(self.d.deep_profits(pm).values()) for pm in deep)
         for pm in space:
             era = self.d.method_era(pm, SPACE)
+            if era < min(self.d.method_era(d, DEEP_SEA) for d in deep):
+                continue  # Regolith Processing (era 10): no Deep-Sea Mine yet
             with self.subTest(extraplanetary=pm, era=era):
                 if era >= 12:
                     # Space Colonization's methods: ahead of every Deep-Sea method with both.

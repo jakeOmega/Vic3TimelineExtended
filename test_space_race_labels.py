@@ -161,6 +161,12 @@ class _Script:
                                          values).group(1))
         self.cost_factor = {m: float(v) for m, v in
                             re.findall(r"(?m)^sr_cost_factor_(\w+)\s*=\s*\{\s*value = ([\d.]+)\s*\}", values)}
+        # A factor that is not a constant (solar colonization's: 5, then 8 after the Mars
+        # Landing) prints at most its base plus every addition.
+        for m in re.findall(r"(?m)^sr_cost_factor_(\w+)\s*=\s*\{\s*$", values):
+            body = _block(values, f"sr_cost_factor_{m}")
+            self.cost_factor[m] = (float(re.search(r"value = ([\d.]+)", body).group(1))
+                                   + sum(float(v) for v in re.findall(r"\badd = ([\d.]+)", body)))
         self.values = values
         cooldowns = []
         for sub in ("common", "events"):

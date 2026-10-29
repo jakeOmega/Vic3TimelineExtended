@@ -16061,8 +16061,51 @@ pm_ai_optimized_operations = {
 	required_input_goods = digital_access
 }
 
+# Regolith Processing (lunar colonization design § 6): the Extraplanetary Base's era-10
+# method, with the building and no technology of its own. Half the Asteroid Mine's
+# inputs for metals and glass from regolith; weak on purpose, a foothold that lunar
+# room makes worth a few levels. Its return on construction is a fifth of the Asteroid
+# Mine's; per worker it pays a little above the era-10 median.
+pm_regolith_processing = {
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 15           # Price:   80, Total cost:  1200.0 (8.00%)
+			goods_input_radios_add = 15                          # Price:   80, Total cost:  1200.0 (8.00%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (4.00%)
+			goods_input_launch_capacity_add = 60                 # Price:  200, Total cost: 12000.0 (80.00%)
+			# Output goods
+			goods_output_iron_add = 175                          # Price:   40, Total cost:  7000.0 (42.17%)
+			goods_output_tech_metals_add = 95                    # Price:   80, Total cost:  7600.0 (45.78%)
+			goods_output_glass_add = 50                          # Price:   40, Total cost:  2000.0 (12.05%)
+			# Total input cost: 15000.0
+			# Total output cost: 16600.0
+			# Profit: 1600.0
+			# Profit margin: 10.67%
+			# Zero profit price multiplier: 0.90
+			# Employment: 800
+			# Wage breakeven: 2.00
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+			building_employment_academics_add = 50
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
 pm_space_mine = {
 	texture = "gfx/interface/icons/production_method_icons/picks_and_shovels.dds"
+
+	unlocking_technologies = {
+		asteroid_mining
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -18031,22 +18074,24 @@ pm_mars_mission = {
 pm_solar_colonization = {
 	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p4.dds"
 
+	# Era 10 (lunar colonization design § 4): 10,000 a week, sized for Reusable
+	# Rockets; the 25,000 it had was sized for era 11's Ablative Rockets.
 	unlocking_technologies = {
-		directed_energy_weapons
+		cislunar_infrastructure
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 25000              # Price:  200, Total cost: 5000000.0 (100.00%)
+			goods_input_launch_capacity_add = 10000              # Price:  200, Total cost: 2000000.0 (100.00%)
 			# Output goods
-			# Total input cost: 5000000.0
+			# Total input cost: 2000000.0
 			# Total output cost: 0
-			# Profit: -5000000.0
+			# Profit: -2000000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -125.00
+			# Wage breakeven: -50.00
 		}
 
 		level_scaled = {

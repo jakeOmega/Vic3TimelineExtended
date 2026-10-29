@@ -660,7 +660,7 @@ te_decision_space_mission_mars = {
 te_decision_space_mission_solar = {
 	is_shown = {
 		sr_space_race_on = yes
-		has_technology_researched = directed_energy_weapons
+		has_technology_researched = cislunar_infrastructure
 		sr_has_space_program = yes
 		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { modifier:country_sr_solar_colonization_program_bool = yes }

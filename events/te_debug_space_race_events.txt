@@ -283,7 +283,7 @@ te_debug_space_race.4 = { # REVIEWED 2026-10-25: console-only test event (`event
 	# Our Extraplanetary Base room recomputed now.
 	option = {
 		name = te_debug_space_race.4.g
-		trigger = { has_technology_researched = asteroid_mining }
+		trigger = { has_technology_researched = in_situ_resource_utilization }
 		sr_ebase_refresh = yes
 		debug_log = "TE_SR_MODULES Extraplanetary Base room: [THIS.Var('sr_ebase_room').GetValue|0] levels, grade [THIS.Var('sr_ebase_grade').GetValue|2]% over [THIS.ScriptValue('sr_ebase_levels')|0] built"
 	}

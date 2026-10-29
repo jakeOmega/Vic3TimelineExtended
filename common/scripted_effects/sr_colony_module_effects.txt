@@ -260,9 +260,9 @@ sr_ms_count_slot = {
 # ---- Fabrication methods ---------------------------------------------------------------
 # Country scope. The best Module Fabrication method the country has, for the
 # AI's review (design § 10): Fusion Shipyards with Muon-Catalyzed Fusion
-# Reactors, else Lunar Foundries with Space Colonization, else Orbital Assembly
-# with Directed Energy Weapons; with none of them, nothing (a holder that was
-# given its colony may have none).
+# Reactors, else Orbital Foundries (pm_sr_fabrication_lunar_foundries) with
+# Space Colonization, else Orbital Assembly with Cislunar Infrastructure; with
+# none of them, nothing (a holder that was given its colony may have none).
 sr_mod_activate_best_fabrication = {
 	if = {
 		limit = { has_technology_researched = compact_fusion_reactors }
@@ -286,7 +286,7 @@ sr_mod_activate_best_fabrication = {
 	}
 	else_if = {
 		limit = {
-			has_technology_researched = directed_energy_weapons
+			has_technology_researched = cislunar_infrastructure
 			NOT = { sr_mod_fabrication_runs = { PM = pm_sr_fabrication_orbital_assembly } }
 		}
 		activate_production_method = {
@@ -346,11 +346,13 @@ sr_mod_ai_review = {
 
 # ---- Extraplanetary Bases from colonies (design § 9) ------------------------------------
 # Country scope, from the monthly country pulse, for every country with
-# Asteroid Mining: the one refresh site of the two room modifiers. Its built
-# levels fill its room best grade first (sr_ebase_fill); the average grade over
-# all of them, past the room at -50%, is one country modifier, so only the
-# levels past the room pay the penalty (owner, 2026-10-25). Both are removed
-# first; under races only neither is added.
+# In-Situ Resource Utilization (the building's technology): the one refresh
+# site of the two room modifiers. Its built levels fill its room best grade
+# first (sr_ebase_fill; the near-Earth asteroids' room needs Asteroid Mining,
+# lunar colonization design § 6); the average grade over all of them, past the
+# room at -50%, is one country modifier, so only the levels past the room pay
+# the penalty (owner, 2026-10-25). Both are removed first; under races only
+# neither is added.
 sr_ebase_refresh = {
 	if = {
 		limit = { has_modifier = sr_ebase_room_bonus }

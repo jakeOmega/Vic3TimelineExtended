@@ -1293,7 +1293,8 @@ je_space_race_solar_colonization = {
 			AND = {
 				has_variable = sr_completed_moon_base
 				has_variable = sr_completed_mars_landing
-				has_technology_researched = directed_energy_weapons
+				# pm_solar_colonization's technology (lunar colonization design § 4)
+				has_technology_researched = cislunar_infrastructure
 			}
 		}
 	}

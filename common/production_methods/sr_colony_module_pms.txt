@@ -13,9 +13,12 @@
 #
 #   method               gate                      Launch Capacity/wk  Adv. Materials/wk  points/mo
 #   None (default)       -                         0                   0                  0
-#   Orbital Assembly     directed_energy_weapons   1,500               10                 5
-#   Lunar Foundries      space_colonization        2,000               15                 12
+#   Orbital Assembly     cislunar_infrastructure   1,500               10                 5
+#   Orbital Foundries    space_colonization        2,000               15                 12
 #   Fusion Shipyards     compact_fusion_reactors   2,000               10                 25
+#
+# Orbital Foundries keeps its first name's key, pm_sr_fabrication_lunar_foundries
+# (renamed for Mare Imbrium's Mass Driver, lunar colonization design § 15.4).
 #
 # No method employs anyone: the programme's own mission method staffs the
 # building, and these ride on its workforce, as debris removal does
@@ -30,7 +33,7 @@ pm_sr_fabrication_orbital_assembly = {
 	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 
 	unlocking_technologies = {
-		directed_energy_weapons
+		cislunar_infrastructure
 	}
 
 	building_modifiers = {

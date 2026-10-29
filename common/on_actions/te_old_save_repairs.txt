@@ -15,6 +15,7 @@ on_monthly_pulse = {
 		te_repair_double_criminal_justice_law
 		te_repair_double_inheritance_law
 		te_repair_judiciary_seed
+		te_repair_lunar_technologies
 	}
 }
 
@@ -269,6 +270,48 @@ te_repair_judiciary_seed = {
 					te_jud_assign_court_by_rule = yes
 				}
 				set_global_variable = te_jud_courts_assigned
+			}
+		}
+	}
+}
+
+# OLD-SAVE REPAIR (#1232): remove after 2026-12-31 or at vanilla 1.15, whichever comes first.
+#
+# The lunar colonization design (docs/superpowers/specs/2026-10-29-lunar-colonization-design.md
+# §§ 5, 6) moved Solar System Colonization's method (pm_solar_colonization) and
+# Orbital Assembly from Directed Energy Weapons to the new Cislunar
+# Infrastructure, and the Extraplanetary Base to the new In-Situ Resource
+# Utilization, which Asteroid Mining now requires. A save from before it has
+# neither, so a colonizing program would lose its method's technology and a
+# base holder its building's. Once, in the first month after the load, every
+# country with Directed Energy Weapons and a Space Program is given Cislunar
+# Infrastructure, and every country with Asteroid Mining In-Situ Resource
+# Utilization. Once only: in a new game a country can hold Directed Energy
+# Weapons without Cislunar Infrastructure, and a new game sets the flag in its
+# first month with no one to repair. Whether the engine moves a Space Program
+# off a method whose technology it lacks before this month comes is unread
+# (docs/testing/solar-colonies-playtest.md).
+te_repair_lunar_technologies = {
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_lunar_techs_repaired } }
+			set_global_variable = te_lunar_techs_repaired
+			every_country = {
+				limit = {
+					has_technology_researched = directed_energy_weapons
+					NOT = { has_technology_researched = cislunar_infrastructure }
+					sr_has_space_program = yes
+				}
+				add_technology_researched = cislunar_infrastructure
+				debug_log = "TE_LUNAR_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given Cislunar Infrastructure"
+			}
+			every_country = {
+				limit = {
+					has_technology_researched = asteroid_mining
+					NOT = { has_technology_researched = in_situ_resource_utilization }
+				}
+				add_technology_researched = in_situ_resource_utilization
+				debug_log = "TE_LUNAR_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given In-Situ Resource Utilization"
 			}
 		}
 	}
