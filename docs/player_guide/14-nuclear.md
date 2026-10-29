@@ -470,7 +470,7 @@ Crisis section.
 | Refuse | Target | Confrontation. A refused public ultimatum counts as defiance, which lets a Compellence issuer strike you in a war |
 | Counter-threat | Armed target | Confrontation, danger +10, readiness to Heightened |
 | Propose a mutual stand-down | Either | Pressure pauses and danger falls 15 while the other side decides. If accepted, both stand down to Routine for 24 months and pledge non-use; the war or play goes on |
-| Offer a trade | Either, in a crisis over forces deployed next to a country, claims, covert operations or a battlestation, when each side holds the same against the other | Pressure pauses and danger falls 15 while the other side decides. If accepted, each side makes the concession the other demands of it (a base for a base, a claim for a claim), with the same ten-year bars, and the crisis ends with neither backing down |
+| Offer a trade | Either, in a crisis over forces deployed next to a country, claims, covert operations or a battlestation, when each side holds the same against the other and neither is under an earlier crisis's ten-year bar of that kind | Pressure pauses and danger falls 15 while the other side decides. If accepted, each side makes the concession the other demands of it (a base for a base, a claim for a claim), with the same ten-year bars, and the crisis ends with neither backing down |
 | Go public | Issuer | Infamy equal to a tenth of the nuclear taboo, −15 relations, a new 8-week deadline |
 | Exercise | Either armed side | Money and 5 strain (and +3 credibility for the issuer); for six weeks danger +10, and pressure +10 if the issuer holds it. It can be mistaken for an attack |
 | Back down | Issuer | The crisis ends in a climb-down |
@@ -505,8 +505,10 @@ The Outcomes table at the foot of the Nuclear Crisis section shows, for your
 crisis, what conceding, backing down and a mutual stand-down would bring, and a
 trade in a crisis that can have one, and what each would do to your
 credibility. An AI target takes a trade once pressure on it reaches 40, an AI
-issuer once the danger reaches 40, and neither takes one that gives more than it
-gets or ends one of its alliances. An AI offers one only at its own deadline.
+issuer once the danger reaches 40 and its threat is eight weeks old, and neither
+takes one that gives more than it gets or ends one of its alliances. An AI
+offers one only at its own deadline, and only when you would take it by the
+same rule.
 
 A public bluff that ends in a climb-down or runs out its year costs 5 more
 credibility. The modifiers last five years. A crisis also ends when its war or

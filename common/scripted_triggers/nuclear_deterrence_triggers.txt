@@ -2657,6 +2657,9 @@ nd_crisis_dispute_tradeable = {
 # the dispute $ISSUER$'s record is about still holds against $TARGET$, and
 # $TARGET$ holds the same code against $ISSUER$. Read when a trade is offered
 # and again when it is accepted, since an offer can go stale before its answer.
+# Neither side may hold that kind's ten-year bar from an earlier crisis (7, 9
+# and 10; claims have none): a bar holds one country, so the trade's own bar
+# would overwrite one held against a third country and free its holder.
 nd_crisis_trade_holds = {
 	exists = $ISSUER$
 	exists = $TARGET$
@@ -2668,6 +2671,8 @@ nd_crisis_trade_holds = {
 			}
 			$ISSUER$ = { nd_dispute_deployment_by = { TARGET = $TARGET$ } }
 			$TARGET$ = { nd_dispute_deployment_by = { TARGET = $ISSUER$ } }
+			NOT = { $ISSUER$ = { has_variable = nd_crisis_deploy_bar } }
+			NOT = { $TARGET$ = { has_variable = nd_crisis_deploy_bar } }
 		}
 		AND = {
 			$ISSUER$ = {
@@ -2684,6 +2689,8 @@ nd_crisis_trade_holds = {
 			}
 			$ISSUER$ = { nd_dispute_covert_ops_by = { TARGET = $TARGET$ } }
 			$TARGET$ = { nd_dispute_covert_ops_by = { TARGET = $ISSUER$ } }
+			NOT = { $ISSUER$ = { has_variable = nd_crisis_covert_bar } }
+			NOT = { $TARGET$ = { has_variable = nd_crisis_covert_bar } }
 		}
 		AND = {
 			$ISSUER$ = {
@@ -2692,6 +2699,8 @@ nd_crisis_trade_holds = {
 			}
 			$ISSUER$ = { nd_dispute_orbital_by = { TARGET = $TARGET$ } }
 			$TARGET$ = { nd_dispute_orbital_by = { TARGET = $ISSUER$ } }
+			NOT = { $ISSUER$ = { has_variable = nd_crisis_orbital_freeze } }
+			NOT = { $TARGET$ = { has_variable = nd_crisis_orbital_freeze } }
 		}
 	}
 }
@@ -2737,7 +2746,9 @@ nd_trade_costs_us_an_alliance = {
 # The AI's answer to a trade (nuclear_crisis.8; rework spec §8.6, ruling R4),
 # parties saved: a target accepts at the pressure where it would start to
 # yield (nd_ai_concession_line), an issuer once the crisis is dangerous
-# (nd_ai_trade_danger_line). Each accepts only if it gives no more than it
+# (nd_ai_trade_danger_line) and its threat has run to a first deadline
+# (nd_ai_trade_min_weeks): a public ultimatum opens near danger 40, so danger
+# alone let a target trade out in its first week. Each accepts only if it gives no more than it
 # gets (nd_trade_balance_value) and loses no ally by its own half.
 nd_ai_accepts_trade = {
 	exists = scope:nd_issuer
@@ -2755,6 +2766,7 @@ nd_ai_accepts_trade = {
 			THIS = scope:nd_issuer
 			has_variable = nd_crisis_danger
 			var:nd_crisis_danger >= nd_ai_trade_danger_line
+			var:nd_crisis_weeks >= nd_ai_trade_min_weeks
 			nd_trade_balance_value >= 0
 		}
 	}

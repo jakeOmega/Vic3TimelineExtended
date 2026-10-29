@@ -2340,7 +2340,9 @@ class TestReviewFixes(unittest.TestCase):
         self.assertLess(gate, body.index("change_relations"))
 
     def test_refuse_talks_promises_pressure_only_from_confrontation(self):
-        body = block(self.effects, "nd_crisis_act_refuse_talks")
+        # The refusal's lines live in the helper both refusals share (phase 4c).
+        self.assertIn("nd_crisis_talks_refused = yes", block(self.effects, "nd_crisis_act_refuse_talks"))
+        body = block(self.effects, "nd_crisis_talks_refused")
         self.assertIn("custom_tooltip = nd_tt_refuse_talks_resume", body)
         self.assertIn("custom_tooltip = nd_tt_refuse_talks_no_pressure_yet", body)
         self.assertIn("6", loc_value("nd_tt_refuse_talks_resume"))

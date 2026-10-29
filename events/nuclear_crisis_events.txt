@@ -581,6 +581,12 @@ nuclear_crisis.4 = {
 				trigger = { nd_trade_costs_us_an_alliance = yes }
 				factor = 0
 			}
+			# Never spend the deadline on an offer we can see refused: the
+			# other side judged by the AI's own rule.
+			modifier = {
+				trigger = { scope:nd_target = { NOT = { nd_ai_accepts_trade = yes } } }
+				factor = 0
+			}
 		}
 	}
 
@@ -1110,7 +1116,7 @@ nuclear_crisis.8 = {
 		nd_log_context = yes
 		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.8.b; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		default_option = yes
-		nd_crisis_option = { ACT = refuse_talks }
+		nd_crisis_option = { ACT = refuse_trade }
 		ai_chance = {
 			base = 1
 			modifier = {
@@ -1683,6 +1689,10 @@ nuclear_crisis.27 = {
 		nd_crisis_trade_check_log = { CODE = 10 WHAT = orbital }
 		remove_variable = nd_tc_other
 		remove_variable = nd_tc_code
+		if = {
+			limit = { has_variable = nd_tc_swap }
+			remove_variable = nd_tc_swap
+		}
 	}
 }
 

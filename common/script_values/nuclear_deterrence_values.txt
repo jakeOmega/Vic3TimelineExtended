@@ -29,6 +29,7 @@ nd_monopoly_window_cooldown_months = 12
 nd_routine_mishap_cooldown_months_value = 60 # between routine mishaps (nuclear_incident.40)
 nd_ai_concession_line = 40              # pressure where nuclear_crisis.1's yield weights start (the AI's stake gate)
 nd_ai_trade_danger_line = 40            # danger at which an AI issuer takes a fair trade (nuclear_crisis.8; ruling R4)
+nd_ai_trade_min_weeks = 8               # and not before its threat has run this long: a public ultimatum's first deadline
 nd_survivability_factor_recessed = 0.5   # share of survivability a crisis counts (nd_effective_survivability)
 nd_survivability_factor_routine = 0.8
 nd_survivability_factor_heightened = 0.9 # High Alert counts it all
