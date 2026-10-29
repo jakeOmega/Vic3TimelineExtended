@@ -388,7 +388,7 @@ class GateScriptTest(unittest.TestCase):
             with self.subTest(site=site):
                 self.assertIn(f"NOT = {{ has_global_variable = sr_colony_{site} }}", trigger)
                 if site in glw.UNGATED_SITES:
-                    self.assertIn("sr_launch_mercury_departs = yes", trigger)
+                    self.assertIn("sr_launch_ungated_departs = yes", trigger)
                     self.assertNotIn("sr_launch_window_gate_check", effect)
                 else:
                     body = self.site_body[site]
@@ -484,6 +484,59 @@ class NumberRangeTest(unittest.TestCase):
         self.assertLess(never * 2, 2_000_000)  # sr_launch_months_allowed
 
 
+class MoonTest(unittest.TestCase):
+    """The Moon (lunar colonization design § 3.3): no window, no transit, and
+    Shackleton's Propellant Depot standing in for Asteroid Mining's depots."""
+
+    def test_the_ungated_worlds_are_the_table_s_bodyless_worlds(self):
+        sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+        import gen_solar_sites as gss
+        self.assertEqual(glw.UNGATED_SITES, {s.key: s.stage for s in gss.SITES if s.body is None})
+        self.assertEqual([b.key for b in glw.TRANSIT_ONLY], ["mercury", "moon"])
+        moon = next(t for t in glw.plan_transit_all() if t.body.key == "moon")
+        self.assertEqual(set(moon.transit.values()), {0})
+        values = _strip(_raw("common", "script_values", "sr_launch_windows_generated.txt"))
+        for drive in glw.DRIVES:
+            self.assertIn(f"sr_transit_{drive.key}_moon = {{ value = 0 }}", values)
+        for name in ("sr_launch_best_cost", "sr_window_stage_wait"):
+            with self.subTest(value=name):
+                self.assertIn("if = { limit = { sr_window_moon_in_play = yes } max = 0 }", _block(values, name))
+        triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_windows_generated.txt"))
+        in_play = _block(triggers, "sr_window_moon_in_play")
+        self.assertEqual(re.findall(r"NOT = \{ has_global_variable = sr_colony_(\w+) \}", in_play),
+                         [s.key for s in gss.LUNAR])
+        # Mercury's old trigger is gone everywhere: the Moon departs by the same one.
+        for top in ("common", "events"):
+            for root, _, files in os.walk(os.path.join(REPO, top)):
+                for name in files:
+                    if name.endswith(".txt"):
+                        with self.subTest(file=name):
+                            self.assertNotIn("sr_launch_mercury_departs", _raw(root, name))
+        hand = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+        self.assertEqual(_block(hand, "sr_launch_ungated_departs").split(), ["sr_launch_best_cost", "<=", "0"])
+
+    def test_shackleton_s_depot_is_a_propellant_depot(self):
+        hand = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+        depots = _block(hand, "sr_launch_has_depots")
+        self.assertIn("has_technology_researched = asteroid_mining", depots)
+        self.assertIn("modifier:country_sr_propellant_depots_bool = yes", depots)
+        record = _block(hand, "sr_depots_by_record")
+        for line in ("global_var:sr_site_holder_shackleton ?= this", "sr_site_lvl_a_value_shackleton >= 1",
+                     "NOT = { has_global_variable = sr_site_blockaded_shackleton }",
+                     "NOT = { has_global_variable = sr_site_occupier_shackleton }"):
+            self.assertIn(line, record)
+        types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
+        self.assertIn("boolean = yes", _block(types, "country_sr_propellant_depots_bool"))
+        modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
+        self.assertIn("country_sr_propellant_depots_bool = yes", _block(modifiers, "sr_colony_shackleton_depot"))
+        # The self-check compares the boolean with the record each month (two strikes for BROKEN).
+        effects = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
+        self.assertIn("sr_depots_self_check = yes", _block(effects, "sr_launch_month"))
+        check = _block(effects, "sr_depots_self_check")
+        self.assertIn("sr_depots_by_record = yes", check)
+        self.assertIn("sr_depots_mismatch_months", check)
+
+
 class DebugLineTest(unittest.TestCase):
     """A $PARAM$ inside a debug_log string is mangled (scripting_best_practices.md, "No $PARAM$ inside the
     string"): the self-checks and the console copy figures into fixed-name globals and name the body by code."""
@@ -501,7 +554,7 @@ class DebugLineTest(unittest.TestCase):
         effects = _raw(*self.FILES[0])
         gate = _block(_strip(effects), "sr_launch_window_gate_check")
         self.assertEqual(gate.count("sr_window_log_copy = { BODY = $BODY$ }"), 3)
-        lines = re.findall(r'debug_log = "(TE_SELF_CHECK [^"]*)"', effects)
+        lines = re.findall(r'debug_log = "(TE_SELF_CHECK \w+ window_gate[^"]*)"', effects)
         self.assertEqual(len(lines), 3)
         for line in lines:
             self.assertIn(f"({glw.BODY_CODE_LEGEND})", line)

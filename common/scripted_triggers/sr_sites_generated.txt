@@ -39,6 +39,12 @@ sr_cede_site_input_valid = {
 		AND = { scope:input = bt:building_sr_site_makemake global_var:sr_site_holder_makemake ?= root }
 		AND = { scope:input = bt:building_sr_site_haumea global_var:sr_site_holder_haumea ?= root }
 		AND = { scope:input = bt:building_sr_site_sedna global_var:sr_site_holder_sedna ?= root }
+		AND = { scope:input = bt:building_sr_site_shackleton global_var:sr_site_holder_shackleton ?= root }
+		AND = { scope:input = bt:building_sr_site_peary global_var:sr_site_holder_peary ?= root }
+		AND = { scope:input = bt:building_sr_site_tranquility global_var:sr_site_holder_tranquility ?= root }
+		AND = { scope:input = bt:building_sr_site_marius_hills global_var:sr_site_holder_marius_hills ?= root }
+		AND = { scope:input = bt:building_sr_site_daedalus global_var:sr_site_holder_daedalus ?= root }
+		AND = { scope:input = bt:building_sr_site_imbrium global_var:sr_site_holder_imbrium ?= root }
 	}
 }
 
@@ -79,12 +85,19 @@ sr_any_site_unclaimed = {
 		NOT = { has_global_variable = sr_colony_makemake }
 		NOT = { has_global_variable = sr_colony_haumea }
 		NOT = { has_global_variable = sr_colony_sedna }
+		NOT = { has_global_variable = sr_colony_shackleton }
+		NOT = { has_global_variable = sr_colony_peary }
+		NOT = { has_global_variable = sr_colony_tranquility }
+		NOT = { has_global_variable = sr_colony_marius_hills }
+		NOT = { has_global_variable = sr_colony_daedalus }
+		NOT = { has_global_variable = sr_colony_imbrium }
 	}
 }
 
 # ===== Colony fleets (slices 2-3 design §§ 3-8) =====
-# An inner world (stages 1 and 2) is unclaimed: under simple and full the
-# outer-system rule reads it in place of the stage (sr_colonization_inner_open).
+# An inner world (the Moon and stages 1 and 2) is unclaimed: under simple and
+# full the outer-system rule reads it in place of the stage
+# (sr_colonization_inner_open).
 sr_sites_inner_unclaimed = {
 	OR = {
 		NOT = { has_global_variable = sr_colony_valles_marineris }
@@ -104,17 +117,79 @@ sr_sites_inner_unclaimed = {
 		NOT = { has_global_variable = sr_colony_himalia }
 		NOT = { has_global_variable = sr_colony_amalthea }
 		NOT = { has_global_variable = sr_colony_venus }
+		NOT = { has_global_variable = sr_colony_shackleton }
+		NOT = { has_global_variable = sr_colony_peary }
+		NOT = { has_global_variable = sr_colony_tranquility }
+		NOT = { has_global_variable = sr_colony_marius_hills }
+		NOT = { has_global_variable = sr_colony_daedalus }
+		NOT = { has_global_variable = sr_colony_imbrium }
+	}
+}
+
+# A lunar world (stage 0) is unclaimed. Any scope.
+sr_sites_lunar_open = {
+	OR = {
+		NOT = { has_global_variable = sr_colony_shackleton }
+		NOT = { has_global_variable = sr_colony_peary }
+		NOT = { has_global_variable = sr_colony_tranquility }
+		NOT = { has_global_variable = sr_colony_marius_hills }
+		NOT = { has_global_variable = sr_colony_daedalus }
+		NOT = { has_global_variable = sr_colony_imbrium }
+	}
+}
+
+# THIS holds a world beyond the Moon (stage 1 or later): Deep Space's colony
+# arm (sr_cf_targetable_<key>, stages 3 to 5; lunar colonization design § 4). A
+# lunar colony alone doesn't open the outer system. Country scope.
+sr_has_colony_beyond_moon = {
+	OR = {
+		global_var:sr_site_holder_valles_marineris ?= this
+		global_var:sr_site_holder_olympus_mons ?= this
+		global_var:sr_site_holder_hellas_planitia ?= this
+		global_var:sr_site_holder_utopia_planitia ?= this
+		global_var:sr_site_holder_arcadia_planitia ?= this
+		global_var:sr_site_holder_ceres ?= this
+		global_var:sr_site_holder_vesta ?= this
+		global_var:sr_site_holder_psyche ?= this
+		global_var:sr_site_holder_pallas ?= this
+		global_var:sr_site_holder_hygiea ?= this
+		global_var:sr_site_holder_io ?= this
+		global_var:sr_site_holder_europa ?= this
+		global_var:sr_site_holder_ganymede ?= this
+		global_var:sr_site_holder_callisto ?= this
+		global_var:sr_site_holder_himalia ?= this
+		global_var:sr_site_holder_amalthea ?= this
+		global_var:sr_site_holder_venus ?= this
+		global_var:sr_site_holder_mercury ?= this
+		global_var:sr_site_holder_titan ?= this
+		global_var:sr_site_holder_enceladus ?= this
+		global_var:sr_site_holder_rhea ?= this
+		global_var:sr_site_holder_mimas ?= this
+		global_var:sr_site_holder_iapetus ?= this
+		global_var:sr_site_holder_titania ?= this
+		global_var:sr_site_holder_oberon ?= this
+		global_var:sr_site_holder_miranda ?= this
+		global_var:sr_site_holder_ariel ?= this
+		global_var:sr_site_holder_triton ?= this
+		global_var:sr_site_holder_proteus ?= this
+		global_var:sr_site_holder_pluto ?= this
+		global_var:sr_site_holder_eris ?= this
+		global_var:sr_site_holder_makemake ?= this
+		global_var:sr_site_holder_haumea ?= this
+		global_var:sr_site_holder_sedna ?= this
 	}
 }
 
 # Per world, country scope:
 #   sr_cf_targetable_<key>  THIS may send its next fleet there: unclaimed, and under
 #                           races only of a stage reached (the draw's candidates), under
-#                           simple and full of stage 1 or 2, or with Deep Space
-#                           Exploration or a colony held (design § 3)
+#                           simple and full of stage 0 to 2, or with Deep Space
+#                           Exploration or a colony held beyond the Moon (design § 3)
 #   sr_cf_departs_<key>     a fleet can leave for it this month (its body's window, a
-#                           paid launch the approach accepts, or a torch; Mercury always)
-#   sr_cf_eligible_<key>    the automatic pick may take it: targetable, departs, its cost
+#                           paid launch the approach accepts, or a torch; Mercury and
+#                           the Moon always)
+#   sr_cf_eligible_<key>    the automatic pick may take it: targetable, a fleet slot free
+#                           (not for the Moon, founded at once), departs, its cost
 #                           covered, its transit within 180 months (design § 7);
 #                           the goal alone first, the cheap test before the window's
 #   sr_cf_beaten_<key>      a fleet already on its way lands no later than ours would
@@ -129,6 +204,7 @@ sr_cf_targetable_valles_marineris = {
 sr_cf_departs_valles_marineris = { sr_launch_target_cost_mars < sr_launch_never }
 sr_cf_eligible_valles_marineris = {
 	sr_cf_targetable_valles_marineris = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_valles_marineris
 	sr_cf_departs_valles_marineris = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_valles_marineris
@@ -149,6 +225,7 @@ sr_cf_targetable_olympus_mons = {
 sr_cf_departs_olympus_mons = { sr_launch_target_cost_mars < sr_launch_never }
 sr_cf_eligible_olympus_mons = {
 	sr_cf_targetable_olympus_mons = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_olympus_mons
 	sr_cf_departs_olympus_mons = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_olympus_mons
@@ -169,6 +246,7 @@ sr_cf_targetable_hellas_planitia = {
 sr_cf_departs_hellas_planitia = { sr_launch_target_cost_mars < sr_launch_never }
 sr_cf_eligible_hellas_planitia = {
 	sr_cf_targetable_hellas_planitia = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_hellas_planitia
 	sr_cf_departs_hellas_planitia = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_hellas_planitia
@@ -189,6 +267,7 @@ sr_cf_targetable_utopia_planitia = {
 sr_cf_departs_utopia_planitia = { sr_launch_target_cost_mars < sr_launch_never }
 sr_cf_eligible_utopia_planitia = {
 	sr_cf_targetable_utopia_planitia = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_utopia_planitia
 	sr_cf_departs_utopia_planitia = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_utopia_planitia
@@ -209,6 +288,7 @@ sr_cf_targetable_arcadia_planitia = {
 sr_cf_departs_arcadia_planitia = { sr_launch_target_cost_mars < sr_launch_never }
 sr_cf_eligible_arcadia_planitia = {
 	sr_cf_targetable_arcadia_planitia = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_arcadia_planitia
 	sr_cf_departs_arcadia_planitia = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_arcadia_planitia
@@ -229,6 +309,7 @@ sr_cf_targetable_ceres = {
 sr_cf_departs_ceres = { sr_launch_target_cost_ceres < sr_launch_never }
 sr_cf_eligible_ceres = {
 	sr_cf_targetable_ceres = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_ceres
 	sr_cf_departs_ceres = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_ceres
@@ -249,6 +330,7 @@ sr_cf_targetable_vesta = {
 sr_cf_departs_vesta = { sr_launch_target_cost_vesta < sr_launch_never }
 sr_cf_eligible_vesta = {
 	sr_cf_targetable_vesta = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_vesta
 	sr_cf_departs_vesta = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_vesta
@@ -269,6 +351,7 @@ sr_cf_targetable_psyche = {
 sr_cf_departs_psyche = { sr_launch_target_cost_psyche < sr_launch_never }
 sr_cf_eligible_psyche = {
 	sr_cf_targetable_psyche = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_psyche
 	sr_cf_departs_psyche = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_psyche
@@ -289,6 +372,7 @@ sr_cf_targetable_pallas = {
 sr_cf_departs_pallas = { sr_launch_target_cost_pallas < sr_launch_never }
 sr_cf_eligible_pallas = {
 	sr_cf_targetable_pallas = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_pallas
 	sr_cf_departs_pallas = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_pallas
@@ -309,6 +393,7 @@ sr_cf_targetable_hygiea = {
 sr_cf_departs_hygiea = { sr_launch_target_cost_hygiea < sr_launch_never }
 sr_cf_eligible_hygiea = {
 	sr_cf_targetable_hygiea = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_hygiea
 	sr_cf_departs_hygiea = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_hygiea
@@ -329,6 +414,7 @@ sr_cf_targetable_io = {
 sr_cf_departs_io = { sr_launch_target_cost_jupiter < sr_launch_never }
 sr_cf_eligible_io = {
 	sr_cf_targetable_io = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_io
 	sr_cf_departs_io = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_io
@@ -349,6 +435,7 @@ sr_cf_targetable_europa = {
 sr_cf_departs_europa = { sr_launch_target_cost_jupiter < sr_launch_never }
 sr_cf_eligible_europa = {
 	sr_cf_targetable_europa = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_europa
 	sr_cf_departs_europa = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_europa
@@ -369,6 +456,7 @@ sr_cf_targetable_ganymede = {
 sr_cf_departs_ganymede = { sr_launch_target_cost_jupiter < sr_launch_never }
 sr_cf_eligible_ganymede = {
 	sr_cf_targetable_ganymede = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_ganymede
 	sr_cf_departs_ganymede = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_ganymede
@@ -389,6 +477,7 @@ sr_cf_targetable_callisto = {
 sr_cf_departs_callisto = { sr_launch_target_cost_jupiter < sr_launch_never }
 sr_cf_eligible_callisto = {
 	sr_cf_targetable_callisto = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_callisto
 	sr_cf_departs_callisto = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_callisto
@@ -409,6 +498,7 @@ sr_cf_targetable_himalia = {
 sr_cf_departs_himalia = { sr_launch_target_cost_jupiter < sr_launch_never }
 sr_cf_eligible_himalia = {
 	sr_cf_targetable_himalia = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_himalia
 	sr_cf_departs_himalia = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_himalia
@@ -429,6 +519,7 @@ sr_cf_targetable_amalthea = {
 sr_cf_departs_amalthea = { sr_launch_target_cost_jupiter < sr_launch_never }
 sr_cf_eligible_amalthea = {
 	sr_cf_targetable_amalthea = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_amalthea
 	sr_cf_departs_amalthea = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_amalthea
@@ -449,6 +540,7 @@ sr_cf_targetable_venus = {
 sr_cf_departs_venus = { sr_launch_target_cost_venus < sr_launch_never }
 sr_cf_eligible_venus = {
 	sr_cf_targetable_venus = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_venus
 	sr_cf_departs_venus = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_venus
@@ -467,7 +559,7 @@ sr_cf_targetable_mercury = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -475,6 +567,7 @@ sr_cf_targetable_mercury = {
 sr_cf_departs_mercury = { always = yes }
 sr_cf_eligible_mercury = {
 	sr_cf_targetable_mercury = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_mercury
 	sr_cf_departs_mercury = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_mercury
@@ -493,7 +586,7 @@ sr_cf_targetable_titan = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -501,6 +594,7 @@ sr_cf_targetable_titan = {
 sr_cf_departs_titan = { sr_launch_target_cost_saturn < sr_launch_never }
 sr_cf_eligible_titan = {
 	sr_cf_targetable_titan = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_titan
 	sr_cf_departs_titan = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_titan
@@ -519,7 +613,7 @@ sr_cf_targetable_enceladus = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -527,6 +621,7 @@ sr_cf_targetable_enceladus = {
 sr_cf_departs_enceladus = { sr_launch_target_cost_saturn < sr_launch_never }
 sr_cf_eligible_enceladus = {
 	sr_cf_targetable_enceladus = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_enceladus
 	sr_cf_departs_enceladus = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_enceladus
@@ -545,7 +640,7 @@ sr_cf_targetable_rhea = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -553,6 +648,7 @@ sr_cf_targetable_rhea = {
 sr_cf_departs_rhea = { sr_launch_target_cost_saturn < sr_launch_never }
 sr_cf_eligible_rhea = {
 	sr_cf_targetable_rhea = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_rhea
 	sr_cf_departs_rhea = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_rhea
@@ -571,7 +667,7 @@ sr_cf_targetable_mimas = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -579,6 +675,7 @@ sr_cf_targetable_mimas = {
 sr_cf_departs_mimas = { sr_launch_target_cost_saturn < sr_launch_never }
 sr_cf_eligible_mimas = {
 	sr_cf_targetable_mimas = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_mimas
 	sr_cf_departs_mimas = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_mimas
@@ -597,7 +694,7 @@ sr_cf_targetable_iapetus = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -605,6 +702,7 @@ sr_cf_targetable_iapetus = {
 sr_cf_departs_iapetus = { sr_launch_target_cost_saturn < sr_launch_never }
 sr_cf_eligible_iapetus = {
 	sr_cf_targetable_iapetus = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_iapetus
 	sr_cf_departs_iapetus = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_iapetus
@@ -623,7 +721,7 @@ sr_cf_targetable_titania = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -631,6 +729,7 @@ sr_cf_targetable_titania = {
 sr_cf_departs_titania = { sr_launch_target_cost_uranus < sr_launch_never }
 sr_cf_eligible_titania = {
 	sr_cf_targetable_titania = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_titania
 	sr_cf_departs_titania = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_titania
@@ -649,7 +748,7 @@ sr_cf_targetable_oberon = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -657,6 +756,7 @@ sr_cf_targetable_oberon = {
 sr_cf_departs_oberon = { sr_launch_target_cost_uranus < sr_launch_never }
 sr_cf_eligible_oberon = {
 	sr_cf_targetable_oberon = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_oberon
 	sr_cf_departs_oberon = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_oberon
@@ -675,7 +775,7 @@ sr_cf_targetable_miranda = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -683,6 +783,7 @@ sr_cf_targetable_miranda = {
 sr_cf_departs_miranda = { sr_launch_target_cost_uranus < sr_launch_never }
 sr_cf_eligible_miranda = {
 	sr_cf_targetable_miranda = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_miranda
 	sr_cf_departs_miranda = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_miranda
@@ -701,7 +802,7 @@ sr_cf_targetable_ariel = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -709,6 +810,7 @@ sr_cf_targetable_ariel = {
 sr_cf_departs_ariel = { sr_launch_target_cost_uranus < sr_launch_never }
 sr_cf_eligible_ariel = {
 	sr_cf_targetable_ariel = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_ariel
 	sr_cf_departs_ariel = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_ariel
@@ -727,7 +829,7 @@ sr_cf_targetable_triton = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -735,6 +837,7 @@ sr_cf_targetable_triton = {
 sr_cf_departs_triton = { sr_launch_target_cost_neptune < sr_launch_never }
 sr_cf_eligible_triton = {
 	sr_cf_targetable_triton = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_triton
 	sr_cf_departs_triton = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_triton
@@ -753,7 +856,7 @@ sr_cf_targetable_proteus = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -761,6 +864,7 @@ sr_cf_targetable_proteus = {
 sr_cf_departs_proteus = { sr_launch_target_cost_neptune < sr_launch_never }
 sr_cf_eligible_proteus = {
 	sr_cf_targetable_proteus = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_proteus
 	sr_cf_departs_proteus = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_proteus
@@ -779,7 +883,7 @@ sr_cf_targetable_pluto = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -787,6 +891,7 @@ sr_cf_targetable_pluto = {
 sr_cf_departs_pluto = { sr_launch_target_cost_kuiper < sr_launch_never }
 sr_cf_eligible_pluto = {
 	sr_cf_targetable_pluto = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_pluto
 	sr_cf_departs_pluto = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_pluto
@@ -805,7 +910,7 @@ sr_cf_targetable_eris = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -813,6 +918,7 @@ sr_cf_targetable_eris = {
 sr_cf_departs_eris = { sr_launch_target_cost_kuiper < sr_launch_never }
 sr_cf_eligible_eris = {
 	sr_cf_targetable_eris = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_eris
 	sr_cf_departs_eris = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_eris
@@ -831,7 +937,7 @@ sr_cf_targetable_makemake = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -839,6 +945,7 @@ sr_cf_targetable_makemake = {
 sr_cf_departs_makemake = { sr_launch_target_cost_kuiper < sr_launch_never }
 sr_cf_eligible_makemake = {
 	sr_cf_targetable_makemake = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_makemake
 	sr_cf_departs_makemake = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_makemake
@@ -857,7 +964,7 @@ sr_cf_targetable_haumea = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -865,6 +972,7 @@ sr_cf_targetable_haumea = {
 sr_cf_departs_haumea = { sr_launch_target_cost_kuiper < sr_launch_never }
 sr_cf_eligible_haumea = {
 	sr_cf_targetable_haumea = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_haumea
 	sr_cf_departs_haumea = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_haumea
@@ -883,7 +991,7 @@ sr_cf_targetable_sedna = {
 			sr_colonies_contested_enabled = yes
 			OR = {
 				modifier:country_sr_deep_space_exploration_program_bool = yes
-				sr_has_space_colony = yes
+				sr_has_colony_beyond_moon = yes
 			}
 		}
 	}
@@ -891,6 +999,7 @@ sr_cf_targetable_sedna = {
 sr_cf_departs_sedna = { sr_launch_target_cost_kuiper < sr_launch_never }
 sr_cf_eligible_sedna = {
 	sr_cf_targetable_sedna = yes
+	sr_cf_has_free_slot = yes
 	sr_progress_solar_colonization_value >= sr_cf_goal_sedna
 	sr_cf_departs_sedna = yes
 	sr_progress_solar_colonization_value >= sr_cf_cost_sedna
@@ -899,6 +1008,126 @@ sr_cf_eligible_sedna = {
 sr_cf_beaten_sedna = {
 	has_global_variable = sr_site_inbound_first_sedna
 	sr_cf_arrival_sedna >= global_var:sr_site_inbound_first_sedna
+}
+sr_cf_targetable_shackleton = {
+	NOT = { has_global_variable = sr_colony_shackleton }
+	NOT = { has_global_variable = sr_site_ruined_shackleton }
+	OR = {
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 0 }
+		sr_colonies_contested_enabled = yes
+	}
+}
+sr_cf_departs_shackleton = { always = yes }
+sr_cf_eligible_shackleton = {
+	sr_cf_targetable_shackleton = yes
+	sr_progress_solar_colonization_value >= sr_cf_goal_shackleton
+	sr_cf_departs_shackleton = yes
+	sr_progress_solar_colonization_value >= sr_cf_cost_shackleton
+	sr_transit_months_moon <= sr_cf_horizon_months
+}
+sr_cf_beaten_shackleton = {
+	has_global_variable = sr_site_inbound_first_shackleton
+	sr_cf_arrival_shackleton >= global_var:sr_site_inbound_first_shackleton
+}
+sr_cf_targetable_peary = {
+	NOT = { has_global_variable = sr_colony_peary }
+	NOT = { has_global_variable = sr_site_ruined_peary }
+	OR = {
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 0 }
+		sr_colonies_contested_enabled = yes
+	}
+}
+sr_cf_departs_peary = { always = yes }
+sr_cf_eligible_peary = {
+	sr_cf_targetable_peary = yes
+	sr_progress_solar_colonization_value >= sr_cf_goal_peary
+	sr_cf_departs_peary = yes
+	sr_progress_solar_colonization_value >= sr_cf_cost_peary
+	sr_transit_months_moon <= sr_cf_horizon_months
+}
+sr_cf_beaten_peary = {
+	has_global_variable = sr_site_inbound_first_peary
+	sr_cf_arrival_peary >= global_var:sr_site_inbound_first_peary
+}
+sr_cf_targetable_tranquility = {
+	NOT = { has_global_variable = sr_colony_tranquility }
+	NOT = { has_global_variable = sr_site_ruined_tranquility }
+	OR = {
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 0 }
+		sr_colonies_contested_enabled = yes
+	}
+}
+sr_cf_departs_tranquility = { always = yes }
+sr_cf_eligible_tranquility = {
+	sr_cf_targetable_tranquility = yes
+	sr_progress_solar_colonization_value >= sr_cf_goal_tranquility
+	sr_cf_departs_tranquility = yes
+	sr_progress_solar_colonization_value >= sr_cf_cost_tranquility
+	sr_transit_months_moon <= sr_cf_horizon_months
+}
+sr_cf_beaten_tranquility = {
+	has_global_variable = sr_site_inbound_first_tranquility
+	sr_cf_arrival_tranquility >= global_var:sr_site_inbound_first_tranquility
+}
+sr_cf_targetable_marius_hills = {
+	NOT = { has_global_variable = sr_colony_marius_hills }
+	NOT = { has_global_variable = sr_site_ruined_marius_hills }
+	OR = {
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 0 }
+		sr_colonies_contested_enabled = yes
+	}
+}
+sr_cf_departs_marius_hills = { always = yes }
+sr_cf_eligible_marius_hills = {
+	sr_cf_targetable_marius_hills = yes
+	sr_progress_solar_colonization_value >= sr_cf_goal_marius_hills
+	sr_cf_departs_marius_hills = yes
+	sr_progress_solar_colonization_value >= sr_cf_cost_marius_hills
+	sr_transit_months_moon <= sr_cf_horizon_months
+}
+sr_cf_beaten_marius_hills = {
+	has_global_variable = sr_site_inbound_first_marius_hills
+	sr_cf_arrival_marius_hills >= global_var:sr_site_inbound_first_marius_hills
+}
+sr_cf_targetable_daedalus = {
+	NOT = { has_global_variable = sr_colony_daedalus }
+	NOT = { has_global_variable = sr_site_ruined_daedalus }
+	OR = {
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 0 }
+		sr_colonies_contested_enabled = yes
+	}
+}
+sr_cf_departs_daedalus = { always = yes }
+sr_cf_eligible_daedalus = {
+	sr_cf_targetable_daedalus = yes
+	sr_progress_solar_colonization_value >= sr_cf_goal_daedalus
+	sr_cf_departs_daedalus = yes
+	sr_progress_solar_colonization_value >= sr_cf_cost_daedalus
+	sr_transit_months_moon <= sr_cf_horizon_months
+}
+sr_cf_beaten_daedalus = {
+	has_global_variable = sr_site_inbound_first_daedalus
+	sr_cf_arrival_daedalus >= global_var:sr_site_inbound_first_daedalus
+}
+sr_cf_targetable_imbrium = {
+	NOT = { has_global_variable = sr_colony_imbrium }
+	NOT = { has_global_variable = sr_site_ruined_imbrium }
+	OR = {
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 0 }
+		sr_colonies_contested_enabled = yes
+	}
+}
+sr_cf_departs_imbrium = { always = yes }
+sr_cf_eligible_imbrium = {
+	sr_cf_targetable_imbrium = yes
+	sr_progress_solar_colonization_value >= sr_cf_goal_imbrium
+	sr_cf_departs_imbrium = yes
+	sr_progress_solar_colonization_value >= sr_cf_cost_imbrium
+	sr_transit_months_moon <= sr_cf_horizon_months
+}
+sr_cf_beaten_imbrium = {
+	has_global_variable = sr_site_inbound_first_imbrium
+	sr_cf_arrival_imbrium >= global_var:sr_site_inbound_first_imbrium
 }
 
 # The country's target (var:sr_cf_target, a world's index) is still targetable.
@@ -939,47 +1168,60 @@ sr_cf_target_valid = {
 		AND = { var:sr_cf_target = 32 sr_cf_targetable_makemake = yes }
 		AND = { var:sr_cf_target = 33 sr_cf_targetable_haumea = yes }
 		AND = { var:sr_cf_target = 34 sr_cf_targetable_sedna = yes }
+		AND = { var:sr_cf_target = 35 sr_cf_targetable_shackleton = yes }
+		AND = { var:sr_cf_target = 36 sr_cf_targetable_peary = yes }
+		AND = { var:sr_cf_target = 37 sr_cf_targetable_tranquility = yes }
+		AND = { var:sr_cf_target = 38 sr_cf_targetable_marius_hills = yes }
+		AND = { var:sr_cf_target = 39 sr_cf_targetable_daedalus = yes }
+		AND = { var:sr_cf_target = 40 sr_cf_targetable_imbrium = yes }
 	}
 }
 
-# The target can be launched for now: targetable, departs, its cost covered.
+# The target can be launched for now: targetable, a fleet slot free (not for the
+# Moon, founded at once; slots never fill under races only), departs, its cost covered.
 sr_cf_target_ready = {
 	has_variable = sr_cf_target
 	OR = {
-		AND = { var:sr_cf_target = 1 sr_cf_targetable_valles_marineris = yes sr_cf_departs_valles_marineris = yes sr_progress_solar_colonization_value >= sr_cf_cost_valles_marineris }
-		AND = { var:sr_cf_target = 2 sr_cf_targetable_olympus_mons = yes sr_cf_departs_olympus_mons = yes sr_progress_solar_colonization_value >= sr_cf_cost_olympus_mons }
-		AND = { var:sr_cf_target = 3 sr_cf_targetable_hellas_planitia = yes sr_cf_departs_hellas_planitia = yes sr_progress_solar_colonization_value >= sr_cf_cost_hellas_planitia }
-		AND = { var:sr_cf_target = 4 sr_cf_targetable_utopia_planitia = yes sr_cf_departs_utopia_planitia = yes sr_progress_solar_colonization_value >= sr_cf_cost_utopia_planitia }
-		AND = { var:sr_cf_target = 5 sr_cf_targetable_arcadia_planitia = yes sr_cf_departs_arcadia_planitia = yes sr_progress_solar_colonization_value >= sr_cf_cost_arcadia_planitia }
-		AND = { var:sr_cf_target = 6 sr_cf_targetable_ceres = yes sr_cf_departs_ceres = yes sr_progress_solar_colonization_value >= sr_cf_cost_ceres }
-		AND = { var:sr_cf_target = 7 sr_cf_targetable_vesta = yes sr_cf_departs_vesta = yes sr_progress_solar_colonization_value >= sr_cf_cost_vesta }
-		AND = { var:sr_cf_target = 8 sr_cf_targetable_psyche = yes sr_cf_departs_psyche = yes sr_progress_solar_colonization_value >= sr_cf_cost_psyche }
-		AND = { var:sr_cf_target = 9 sr_cf_targetable_pallas = yes sr_cf_departs_pallas = yes sr_progress_solar_colonization_value >= sr_cf_cost_pallas }
-		AND = { var:sr_cf_target = 10 sr_cf_targetable_hygiea = yes sr_cf_departs_hygiea = yes sr_progress_solar_colonization_value >= sr_cf_cost_hygiea }
-		AND = { var:sr_cf_target = 11 sr_cf_targetable_io = yes sr_cf_departs_io = yes sr_progress_solar_colonization_value >= sr_cf_cost_io }
-		AND = { var:sr_cf_target = 12 sr_cf_targetable_europa = yes sr_cf_departs_europa = yes sr_progress_solar_colonization_value >= sr_cf_cost_europa }
-		AND = { var:sr_cf_target = 13 sr_cf_targetable_ganymede = yes sr_cf_departs_ganymede = yes sr_progress_solar_colonization_value >= sr_cf_cost_ganymede }
-		AND = { var:sr_cf_target = 14 sr_cf_targetable_callisto = yes sr_cf_departs_callisto = yes sr_progress_solar_colonization_value >= sr_cf_cost_callisto }
-		AND = { var:sr_cf_target = 15 sr_cf_targetable_himalia = yes sr_cf_departs_himalia = yes sr_progress_solar_colonization_value >= sr_cf_cost_himalia }
-		AND = { var:sr_cf_target = 16 sr_cf_targetable_amalthea = yes sr_cf_departs_amalthea = yes sr_progress_solar_colonization_value >= sr_cf_cost_amalthea }
-		AND = { var:sr_cf_target = 17 sr_cf_targetable_venus = yes sr_cf_departs_venus = yes sr_progress_solar_colonization_value >= sr_cf_cost_venus }
-		AND = { var:sr_cf_target = 18 sr_cf_targetable_mercury = yes sr_cf_departs_mercury = yes sr_progress_solar_colonization_value >= sr_cf_cost_mercury }
-		AND = { var:sr_cf_target = 19 sr_cf_targetable_titan = yes sr_cf_departs_titan = yes sr_progress_solar_colonization_value >= sr_cf_cost_titan }
-		AND = { var:sr_cf_target = 20 sr_cf_targetable_enceladus = yes sr_cf_departs_enceladus = yes sr_progress_solar_colonization_value >= sr_cf_cost_enceladus }
-		AND = { var:sr_cf_target = 21 sr_cf_targetable_rhea = yes sr_cf_departs_rhea = yes sr_progress_solar_colonization_value >= sr_cf_cost_rhea }
-		AND = { var:sr_cf_target = 22 sr_cf_targetable_mimas = yes sr_cf_departs_mimas = yes sr_progress_solar_colonization_value >= sr_cf_cost_mimas }
-		AND = { var:sr_cf_target = 23 sr_cf_targetable_iapetus = yes sr_cf_departs_iapetus = yes sr_progress_solar_colonization_value >= sr_cf_cost_iapetus }
-		AND = { var:sr_cf_target = 24 sr_cf_targetable_titania = yes sr_cf_departs_titania = yes sr_progress_solar_colonization_value >= sr_cf_cost_titania }
-		AND = { var:sr_cf_target = 25 sr_cf_targetable_oberon = yes sr_cf_departs_oberon = yes sr_progress_solar_colonization_value >= sr_cf_cost_oberon }
-		AND = { var:sr_cf_target = 26 sr_cf_targetable_miranda = yes sr_cf_departs_miranda = yes sr_progress_solar_colonization_value >= sr_cf_cost_miranda }
-		AND = { var:sr_cf_target = 27 sr_cf_targetable_ariel = yes sr_cf_departs_ariel = yes sr_progress_solar_colonization_value >= sr_cf_cost_ariel }
-		AND = { var:sr_cf_target = 28 sr_cf_targetable_triton = yes sr_cf_departs_triton = yes sr_progress_solar_colonization_value >= sr_cf_cost_triton }
-		AND = { var:sr_cf_target = 29 sr_cf_targetable_proteus = yes sr_cf_departs_proteus = yes sr_progress_solar_colonization_value >= sr_cf_cost_proteus }
-		AND = { var:sr_cf_target = 30 sr_cf_targetable_pluto = yes sr_cf_departs_pluto = yes sr_progress_solar_colonization_value >= sr_cf_cost_pluto }
-		AND = { var:sr_cf_target = 31 sr_cf_targetable_eris = yes sr_cf_departs_eris = yes sr_progress_solar_colonization_value >= sr_cf_cost_eris }
-		AND = { var:sr_cf_target = 32 sr_cf_targetable_makemake = yes sr_cf_departs_makemake = yes sr_progress_solar_colonization_value >= sr_cf_cost_makemake }
-		AND = { var:sr_cf_target = 33 sr_cf_targetable_haumea = yes sr_cf_departs_haumea = yes sr_progress_solar_colonization_value >= sr_cf_cost_haumea }
-		AND = { var:sr_cf_target = 34 sr_cf_targetable_sedna = yes sr_cf_departs_sedna = yes sr_progress_solar_colonization_value >= sr_cf_cost_sedna }
+		AND = { var:sr_cf_target = 1 sr_cf_targetable_valles_marineris = yes sr_cf_has_free_slot = yes sr_cf_departs_valles_marineris = yes sr_progress_solar_colonization_value >= sr_cf_cost_valles_marineris }
+		AND = { var:sr_cf_target = 2 sr_cf_targetable_olympus_mons = yes sr_cf_has_free_slot = yes sr_cf_departs_olympus_mons = yes sr_progress_solar_colonization_value >= sr_cf_cost_olympus_mons }
+		AND = { var:sr_cf_target = 3 sr_cf_targetable_hellas_planitia = yes sr_cf_has_free_slot = yes sr_cf_departs_hellas_planitia = yes sr_progress_solar_colonization_value >= sr_cf_cost_hellas_planitia }
+		AND = { var:sr_cf_target = 4 sr_cf_targetable_utopia_planitia = yes sr_cf_has_free_slot = yes sr_cf_departs_utopia_planitia = yes sr_progress_solar_colonization_value >= sr_cf_cost_utopia_planitia }
+		AND = { var:sr_cf_target = 5 sr_cf_targetable_arcadia_planitia = yes sr_cf_has_free_slot = yes sr_cf_departs_arcadia_planitia = yes sr_progress_solar_colonization_value >= sr_cf_cost_arcadia_planitia }
+		AND = { var:sr_cf_target = 6 sr_cf_targetable_ceres = yes sr_cf_has_free_slot = yes sr_cf_departs_ceres = yes sr_progress_solar_colonization_value >= sr_cf_cost_ceres }
+		AND = { var:sr_cf_target = 7 sr_cf_targetable_vesta = yes sr_cf_has_free_slot = yes sr_cf_departs_vesta = yes sr_progress_solar_colonization_value >= sr_cf_cost_vesta }
+		AND = { var:sr_cf_target = 8 sr_cf_targetable_psyche = yes sr_cf_has_free_slot = yes sr_cf_departs_psyche = yes sr_progress_solar_colonization_value >= sr_cf_cost_psyche }
+		AND = { var:sr_cf_target = 9 sr_cf_targetable_pallas = yes sr_cf_has_free_slot = yes sr_cf_departs_pallas = yes sr_progress_solar_colonization_value >= sr_cf_cost_pallas }
+		AND = { var:sr_cf_target = 10 sr_cf_targetable_hygiea = yes sr_cf_has_free_slot = yes sr_cf_departs_hygiea = yes sr_progress_solar_colonization_value >= sr_cf_cost_hygiea }
+		AND = { var:sr_cf_target = 11 sr_cf_targetable_io = yes sr_cf_has_free_slot = yes sr_cf_departs_io = yes sr_progress_solar_colonization_value >= sr_cf_cost_io }
+		AND = { var:sr_cf_target = 12 sr_cf_targetable_europa = yes sr_cf_has_free_slot = yes sr_cf_departs_europa = yes sr_progress_solar_colonization_value >= sr_cf_cost_europa }
+		AND = { var:sr_cf_target = 13 sr_cf_targetable_ganymede = yes sr_cf_has_free_slot = yes sr_cf_departs_ganymede = yes sr_progress_solar_colonization_value >= sr_cf_cost_ganymede }
+		AND = { var:sr_cf_target = 14 sr_cf_targetable_callisto = yes sr_cf_has_free_slot = yes sr_cf_departs_callisto = yes sr_progress_solar_colonization_value >= sr_cf_cost_callisto }
+		AND = { var:sr_cf_target = 15 sr_cf_targetable_himalia = yes sr_cf_has_free_slot = yes sr_cf_departs_himalia = yes sr_progress_solar_colonization_value >= sr_cf_cost_himalia }
+		AND = { var:sr_cf_target = 16 sr_cf_targetable_amalthea = yes sr_cf_has_free_slot = yes sr_cf_departs_amalthea = yes sr_progress_solar_colonization_value >= sr_cf_cost_amalthea }
+		AND = { var:sr_cf_target = 17 sr_cf_targetable_venus = yes sr_cf_has_free_slot = yes sr_cf_departs_venus = yes sr_progress_solar_colonization_value >= sr_cf_cost_venus }
+		AND = { var:sr_cf_target = 18 sr_cf_targetable_mercury = yes sr_cf_has_free_slot = yes sr_cf_departs_mercury = yes sr_progress_solar_colonization_value >= sr_cf_cost_mercury }
+		AND = { var:sr_cf_target = 19 sr_cf_targetable_titan = yes sr_cf_has_free_slot = yes sr_cf_departs_titan = yes sr_progress_solar_colonization_value >= sr_cf_cost_titan }
+		AND = { var:sr_cf_target = 20 sr_cf_targetable_enceladus = yes sr_cf_has_free_slot = yes sr_cf_departs_enceladus = yes sr_progress_solar_colonization_value >= sr_cf_cost_enceladus }
+		AND = { var:sr_cf_target = 21 sr_cf_targetable_rhea = yes sr_cf_has_free_slot = yes sr_cf_departs_rhea = yes sr_progress_solar_colonization_value >= sr_cf_cost_rhea }
+		AND = { var:sr_cf_target = 22 sr_cf_targetable_mimas = yes sr_cf_has_free_slot = yes sr_cf_departs_mimas = yes sr_progress_solar_colonization_value >= sr_cf_cost_mimas }
+		AND = { var:sr_cf_target = 23 sr_cf_targetable_iapetus = yes sr_cf_has_free_slot = yes sr_cf_departs_iapetus = yes sr_progress_solar_colonization_value >= sr_cf_cost_iapetus }
+		AND = { var:sr_cf_target = 24 sr_cf_targetable_titania = yes sr_cf_has_free_slot = yes sr_cf_departs_titania = yes sr_progress_solar_colonization_value >= sr_cf_cost_titania }
+		AND = { var:sr_cf_target = 25 sr_cf_targetable_oberon = yes sr_cf_has_free_slot = yes sr_cf_departs_oberon = yes sr_progress_solar_colonization_value >= sr_cf_cost_oberon }
+		AND = { var:sr_cf_target = 26 sr_cf_targetable_miranda = yes sr_cf_has_free_slot = yes sr_cf_departs_miranda = yes sr_progress_solar_colonization_value >= sr_cf_cost_miranda }
+		AND = { var:sr_cf_target = 27 sr_cf_targetable_ariel = yes sr_cf_has_free_slot = yes sr_cf_departs_ariel = yes sr_progress_solar_colonization_value >= sr_cf_cost_ariel }
+		AND = { var:sr_cf_target = 28 sr_cf_targetable_triton = yes sr_cf_has_free_slot = yes sr_cf_departs_triton = yes sr_progress_solar_colonization_value >= sr_cf_cost_triton }
+		AND = { var:sr_cf_target = 29 sr_cf_targetable_proteus = yes sr_cf_has_free_slot = yes sr_cf_departs_proteus = yes sr_progress_solar_colonization_value >= sr_cf_cost_proteus }
+		AND = { var:sr_cf_target = 30 sr_cf_targetable_pluto = yes sr_cf_has_free_slot = yes sr_cf_departs_pluto = yes sr_progress_solar_colonization_value >= sr_cf_cost_pluto }
+		AND = { var:sr_cf_target = 31 sr_cf_targetable_eris = yes sr_cf_has_free_slot = yes sr_cf_departs_eris = yes sr_progress_solar_colonization_value >= sr_cf_cost_eris }
+		AND = { var:sr_cf_target = 32 sr_cf_targetable_makemake = yes sr_cf_has_free_slot = yes sr_cf_departs_makemake = yes sr_progress_solar_colonization_value >= sr_cf_cost_makemake }
+		AND = { var:sr_cf_target = 33 sr_cf_targetable_haumea = yes sr_cf_has_free_slot = yes sr_cf_departs_haumea = yes sr_progress_solar_colonization_value >= sr_cf_cost_haumea }
+		AND = { var:sr_cf_target = 34 sr_cf_targetable_sedna = yes sr_cf_has_free_slot = yes sr_cf_departs_sedna = yes sr_progress_solar_colonization_value >= sr_cf_cost_sedna }
+		AND = { var:sr_cf_target = 35 sr_cf_targetable_shackleton = yes sr_cf_departs_shackleton = yes sr_progress_solar_colonization_value >= sr_cf_cost_shackleton }
+		AND = { var:sr_cf_target = 36 sr_cf_targetable_peary = yes sr_cf_departs_peary = yes sr_progress_solar_colonization_value >= sr_cf_cost_peary }
+		AND = { var:sr_cf_target = 37 sr_cf_targetable_tranquility = yes sr_cf_departs_tranquility = yes sr_progress_solar_colonization_value >= sr_cf_cost_tranquility }
+		AND = { var:sr_cf_target = 38 sr_cf_targetable_marius_hills = yes sr_cf_departs_marius_hills = yes sr_progress_solar_colonization_value >= sr_cf_cost_marius_hills }
+		AND = { var:sr_cf_target = 39 sr_cf_targetable_daedalus = yes sr_cf_departs_daedalus = yes sr_progress_solar_colonization_value >= sr_cf_cost_daedalus }
+		AND = { var:sr_cf_target = 40 sr_cf_targetable_imbrium = yes sr_cf_departs_imbrium = yes sr_progress_solar_colonization_value >= sr_cf_cost_imbrium }
 	}
 }
 
@@ -1020,6 +1262,12 @@ sr_cf_scope_site_targetable = {
 		AND = { scope:site = 32 sr_cf_targetable_makemake = yes }
 		AND = { scope:site = 33 sr_cf_targetable_haumea = yes }
 		AND = { scope:site = 34 sr_cf_targetable_sedna = yes }
+		AND = { scope:site = 35 sr_cf_targetable_shackleton = yes }
+		AND = { scope:site = 36 sr_cf_targetable_peary = yes }
+		AND = { scope:site = 37 sr_cf_targetable_tranquility = yes }
+		AND = { scope:site = 38 sr_cf_targetable_marius_hills = yes }
+		AND = { scope:site = 39 sr_cf_targetable_daedalus = yes }
+		AND = { scope:site = 40 sr_cf_targetable_imbrium = yes }
 	}
 }
 sr_cf_scope_site_is_target = {
@@ -1059,6 +1307,12 @@ sr_cf_scope_site_is_target = {
 		AND = { scope:site = 32 var:sr_cf_target = 32 }
 		AND = { scope:site = 33 var:sr_cf_target = 33 }
 		AND = { scope:site = 34 var:sr_cf_target = 34 }
+		AND = { scope:site = 35 var:sr_cf_target = 35 }
+		AND = { scope:site = 36 var:sr_cf_target = 36 }
+		AND = { scope:site = 37 var:sr_cf_target = 37 }
+		AND = { scope:site = 38 var:sr_cf_target = 38 }
+		AND = { scope:site = 39 var:sr_cf_target = 39 }
+		AND = { scope:site = 40 var:sr_cf_target = 40 }
 	}
 }
 sr_cf_scope_site_held = {
@@ -1097,6 +1351,12 @@ sr_cf_scope_site_held = {
 		AND = { scope:site = 32 global_var:sr_site_holder_makemake ?= this }
 		AND = { scope:site = 33 global_var:sr_site_holder_haumea ?= this }
 		AND = { scope:site = 34 global_var:sr_site_holder_sedna ?= this }
+		AND = { scope:site = 35 global_var:sr_site_holder_shackleton ?= this }
+		AND = { scope:site = 36 global_var:sr_site_holder_peary ?= this }
+		AND = { scope:site = 37 global_var:sr_site_holder_tranquility ?= this }
+		AND = { scope:site = 38 global_var:sr_site_holder_marius_hills ?= this }
+		AND = { scope:site = 39 global_var:sr_site_holder_daedalus ?= this }
+		AND = { scope:site = 40 global_var:sr_site_holder_imbrium ?= this }
 	}
 }
 
@@ -2673,6 +2933,240 @@ sr_site_shipping_sedna = {
 		has_global_variable = sr_site_ship_def_sedna
 	}
 }
+sr_mq_any_shackleton = {
+	OR = {
+		has_variable = sr_mq_hab_shackleton
+		has_variable = sr_mq_a_shackleton
+		has_variable = sr_mq_b_shackleton
+		has_variable = sr_mq_def_shackleton
+	}
+}
+sr_mod_can_queue_a_shackleton = {
+	global_var:sr_site_holder_shackleton ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_shackleton
+	sr_mod_spec_used_shackleton < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_shackleton = {
+	global_var:sr_site_holder_shackleton ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_shackleton
+	sr_mod_spec_used_shackleton < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_shackleton = {
+	global_var:sr_site_holder_shackleton ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_shackleton < 2
+}
+sr_mod_can_queue_def_shackleton = {
+	global_var:sr_site_holder_shackleton ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_shackleton < 2
+}
+sr_mod_departs_shackleton = { always = yes }
+sr_site_shipping_shackleton = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_shackleton
+		has_global_variable = sr_site_ship_a_shackleton
+		has_global_variable = sr_site_ship_b_shackleton
+		has_global_variable = sr_site_ship_def_shackleton
+	}
+}
+sr_mq_any_peary = {
+	OR = {
+		has_variable = sr_mq_hab_peary
+		has_variable = sr_mq_a_peary
+		has_variable = sr_mq_b_peary
+		has_variable = sr_mq_def_peary
+	}
+}
+sr_mod_can_queue_a_peary = {
+	global_var:sr_site_holder_peary ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_peary
+	sr_mod_spec_used_peary < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_peary = {
+	global_var:sr_site_holder_peary ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_peary
+	sr_mod_spec_used_peary < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_peary = {
+	global_var:sr_site_holder_peary ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_peary < 1
+}
+sr_mod_can_queue_def_peary = {
+	global_var:sr_site_holder_peary ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_peary < 1
+}
+sr_mod_departs_peary = { always = yes }
+sr_site_shipping_peary = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_peary
+		has_global_variable = sr_site_ship_a_peary
+		has_global_variable = sr_site_ship_b_peary
+		has_global_variable = sr_site_ship_def_peary
+	}
+}
+sr_mq_any_tranquility = {
+	OR = {
+		has_variable = sr_mq_hab_tranquility
+		has_variable = sr_mq_a_tranquility
+		has_variable = sr_mq_b_tranquility
+		has_variable = sr_mq_def_tranquility
+	}
+}
+sr_mod_can_queue_a_tranquility = {
+	global_var:sr_site_holder_tranquility ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_tranquility
+	sr_mod_spec_used_tranquility < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_tranquility = {
+	global_var:sr_site_holder_tranquility ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_tranquility
+	sr_mod_spec_used_tranquility < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_tranquility = {
+	global_var:sr_site_holder_tranquility ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_tranquility < 2
+}
+sr_mod_can_queue_def_tranquility = {
+	global_var:sr_site_holder_tranquility ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_tranquility < 2
+}
+sr_mod_departs_tranquility = { always = yes }
+sr_site_shipping_tranquility = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_tranquility
+		has_global_variable = sr_site_ship_a_tranquility
+		has_global_variable = sr_site_ship_b_tranquility
+		has_global_variable = sr_site_ship_def_tranquility
+	}
+}
+sr_mq_any_marius_hills = {
+	OR = {
+		has_variable = sr_mq_hab_marius_hills
+		has_variable = sr_mq_a_marius_hills
+		has_variable = sr_mq_b_marius_hills
+		has_variable = sr_mq_def_marius_hills
+	}
+}
+sr_mod_can_queue_a_marius_hills = {
+	global_var:sr_site_holder_marius_hills ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_marius_hills
+	sr_mod_spec_used_marius_hills < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_marius_hills = {
+	global_var:sr_site_holder_marius_hills ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_marius_hills
+	sr_mod_spec_used_marius_hills < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_marius_hills = {
+	global_var:sr_site_holder_marius_hills ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_marius_hills < 3
+}
+sr_mod_can_queue_def_marius_hills = {
+	global_var:sr_site_holder_marius_hills ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_marius_hills < 3
+}
+sr_mod_departs_marius_hills = { always = yes }
+sr_site_shipping_marius_hills = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_marius_hills
+		has_global_variable = sr_site_ship_a_marius_hills
+		has_global_variable = sr_site_ship_b_marius_hills
+		has_global_variable = sr_site_ship_def_marius_hills
+	}
+}
+sr_mq_any_daedalus = {
+	OR = {
+		has_variable = sr_mq_hab_daedalus
+		has_variable = sr_mq_a_daedalus
+		has_variable = sr_mq_b_daedalus
+		has_variable = sr_mq_def_daedalus
+	}
+}
+sr_mod_can_queue_a_daedalus = {
+	global_var:sr_site_holder_daedalus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_daedalus
+	sr_mod_spec_used_daedalus < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_daedalus = {
+	global_var:sr_site_holder_daedalus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_daedalus
+	sr_mod_spec_used_daedalus < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_daedalus = {
+	global_var:sr_site_holder_daedalus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_daedalus < 1
+}
+sr_mod_can_queue_def_daedalus = {
+	global_var:sr_site_holder_daedalus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_daedalus < 1
+}
+sr_mod_departs_daedalus = { always = yes }
+sr_site_shipping_daedalus = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_daedalus
+		has_global_variable = sr_site_ship_a_daedalus
+		has_global_variable = sr_site_ship_b_daedalus
+		has_global_variable = sr_site_ship_def_daedalus
+	}
+}
+sr_mq_any_imbrium = {
+	OR = {
+		has_variable = sr_mq_hab_imbrium
+		has_variable = sr_mq_a_imbrium
+		has_variable = sr_mq_b_imbrium
+		has_variable = sr_mq_def_imbrium
+	}
+}
+sr_mod_can_queue_a_imbrium = {
+	global_var:sr_site_holder_imbrium ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_imbrium
+	sr_mod_spec_used_imbrium < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_imbrium = {
+	global_var:sr_site_holder_imbrium ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_imbrium
+	sr_mod_spec_used_imbrium < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_imbrium = {
+	global_var:sr_site_holder_imbrium ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_imbrium < 2
+}
+sr_mod_can_queue_def_imbrium = {
+	global_var:sr_site_holder_imbrium ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_imbrium < 2
+}
+sr_mod_departs_imbrium = { always = yes }
+sr_site_shipping_imbrium = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_imbrium
+		has_global_variable = sr_site_ship_a_imbrium
+		has_global_variable = sr_site_ship_b_imbrium
+		has_global_variable = sr_site_ship_def_imbrium
+	}
+}
 
 # THIS's module queue has a free place (of 20).
 sr_mq_has_room = { NOT = { has_variable = sr_mq_20_site } }
@@ -2785,6 +3279,12 @@ sr_mq_any = {
 		sr_mq_any_makemake = yes
 		sr_mq_any_haumea = yes
 		sr_mq_any_sedna = yes
+		sr_mq_any_shackleton = yes
+		sr_mq_any_peary = yes
+		sr_mq_any_tranquility = yes
+		sr_mq_any_marius_hills = yes
+		sr_mq_any_daedalus = yes
+		sr_mq_any_imbrium = yes
 	}
 }
 
@@ -2961,6 +3461,30 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 34 scope:op = 3 sr_mod_can_queue_hab_sedna = yes }
 		AND = { scope:site = 34 scope:op = 4 sr_mod_can_queue_def_sedna = yes }
 		AND = { scope:site = 34 scope:op = 5 sr_mod_can_queue_port_sedna = yes }
+		AND = { scope:site = 35 scope:op = 1 sr_mod_can_queue_a_shackleton = yes }
+		AND = { scope:site = 35 scope:op = 2 sr_mod_can_queue_b_shackleton = yes }
+		AND = { scope:site = 35 scope:op = 3 sr_mod_can_queue_hab_shackleton = yes }
+		AND = { scope:site = 35 scope:op = 4 sr_mod_can_queue_def_shackleton = yes }
+		AND = { scope:site = 36 scope:op = 1 sr_mod_can_queue_a_peary = yes }
+		AND = { scope:site = 36 scope:op = 2 sr_mod_can_queue_b_peary = yes }
+		AND = { scope:site = 36 scope:op = 3 sr_mod_can_queue_hab_peary = yes }
+		AND = { scope:site = 36 scope:op = 4 sr_mod_can_queue_def_peary = yes }
+		AND = { scope:site = 37 scope:op = 1 sr_mod_can_queue_a_tranquility = yes }
+		AND = { scope:site = 37 scope:op = 2 sr_mod_can_queue_b_tranquility = yes }
+		AND = { scope:site = 37 scope:op = 3 sr_mod_can_queue_hab_tranquility = yes }
+		AND = { scope:site = 37 scope:op = 4 sr_mod_can_queue_def_tranquility = yes }
+		AND = { scope:site = 38 scope:op = 1 sr_mod_can_queue_a_marius_hills = yes }
+		AND = { scope:site = 38 scope:op = 2 sr_mod_can_queue_b_marius_hills = yes }
+		AND = { scope:site = 38 scope:op = 3 sr_mod_can_queue_hab_marius_hills = yes }
+		AND = { scope:site = 38 scope:op = 4 sr_mod_can_queue_def_marius_hills = yes }
+		AND = { scope:site = 39 scope:op = 1 sr_mod_can_queue_a_daedalus = yes }
+		AND = { scope:site = 39 scope:op = 2 sr_mod_can_queue_b_daedalus = yes }
+		AND = { scope:site = 39 scope:op = 3 sr_mod_can_queue_hab_daedalus = yes }
+		AND = { scope:site = 39 scope:op = 4 sr_mod_can_queue_def_daedalus = yes }
+		AND = { scope:site = 40 scope:op = 1 sr_mod_can_queue_a_imbrium = yes }
+		AND = { scope:site = 40 scope:op = 2 sr_mod_can_queue_b_imbrium = yes }
+		AND = { scope:site = 40 scope:op = 3 sr_mod_can_queue_hab_imbrium = yes }
+		AND = { scope:site = 40 scope:op = 4 sr_mod_can_queue_def_imbrium = yes }
 	}
 }
 # sr_mod_can_queue_<type>_<key>'s conditions one by one, for the scripted GUI's
@@ -3003,6 +3527,12 @@ sr_mod_scope_spec_chosen = {
 		AND = { scope:site = 32 has_global_variable = sr_site_spec_makemake }
 		AND = { scope:site = 33 has_global_variable = sr_site_spec_haumea }
 		AND = { scope:site = 34 has_global_variable = sr_site_spec_sedna }
+		AND = { scope:site = 35 has_global_variable = sr_site_spec_shackleton }
+		AND = { scope:site = 36 has_global_variable = sr_site_spec_peary }
+		AND = { scope:site = 37 has_global_variable = sr_site_spec_tranquility }
+		AND = { scope:site = 38 has_global_variable = sr_site_spec_marius_hills }
+		AND = { scope:site = 39 has_global_variable = sr_site_spec_daedalus }
+		AND = { scope:site = 40 has_global_variable = sr_site_spec_imbrium }
 	}
 }
 # Its two specializations have a level left between them, counting queue and shipments.
@@ -3042,6 +3572,12 @@ sr_mod_scope_spec_room = {
 		AND = { scope:site = 32 sr_mod_spec_used_makemake < sr_mod_spec_budget }
 		AND = { scope:site = 33 sr_mod_spec_used_haumea < sr_mod_spec_budget }
 		AND = { scope:site = 34 sr_mod_spec_used_sedna < sr_mod_spec_budget }
+		AND = { scope:site = 35 sr_mod_spec_used_shackleton < sr_mod_spec_budget }
+		AND = { scope:site = 36 sr_mod_spec_used_peary < sr_mod_spec_budget }
+		AND = { scope:site = 37 sr_mod_spec_used_tranquility < sr_mod_spec_budget }
+		AND = { scope:site = 38 sr_mod_spec_used_marius_hills < sr_mod_spec_budget }
+		AND = { scope:site = 39 sr_mod_spec_used_daedalus < sr_mod_spec_budget }
+		AND = { scope:site = 40 sr_mod_spec_used_imbrium < sr_mod_spec_budget }
 	}
 }
 # It has a slot left for a Habitat, Spaceport or Defences, counting queue and shipments.
@@ -3081,6 +3617,12 @@ sr_mod_scope_slot_room = {
 		AND = { scope:site = 32 sr_mod_slots_used_makemake < 1 }
 		AND = { scope:site = 33 sr_mod_slots_used_haumea < 1 }
 		AND = { scope:site = 34 sr_mod_slots_used_sedna < 1 }
+		AND = { scope:site = 35 sr_mod_slots_used_shackleton < 2 }
+		AND = { scope:site = 36 sr_mod_slots_used_peary < 1 }
+		AND = { scope:site = 37 sr_mod_slots_used_tranquility < 2 }
+		AND = { scope:site = 38 sr_mod_slots_used_marius_hills < 3 }
+		AND = { scope:site = 39 sr_mod_slots_used_daedalus < 1 }
+		AND = { scope:site = 40 sr_mod_slots_used_imbrium < 2 }
 	}
 }
 # ... has a queue to clear.
@@ -3120,6 +3662,12 @@ sr_mod_scope_has_queue = {
 		AND = { scope:site = 32 sr_mq_any_makemake = yes }
 		AND = { scope:site = 33 sr_mq_any_haumea = yes }
 		AND = { scope:site = 34 sr_mq_any_sedna = yes }
+		AND = { scope:site = 35 sr_mq_any_shackleton = yes }
+		AND = { scope:site = 36 sr_mq_any_peary = yes }
+		AND = { scope:site = 37 sr_mq_any_tranquility = yes }
+		AND = { scope:site = 38 sr_mq_any_marius_hills = yes }
+		AND = { scope:site = 39 sr_mq_any_daedalus = yes }
+		AND = { scope:site = 40 sr_mq_any_imbrium = yes }
 	}
 }
 
@@ -3161,6 +3709,12 @@ sr_free_any = {
 		has_global_variable = sr_site_free_makemake
 		has_global_variable = sr_site_free_haumea
 		has_global_variable = sr_site_free_sedna
+		has_global_variable = sr_site_free_shackleton
+		has_global_variable = sr_site_free_peary
+		has_global_variable = sr_site_free_tranquility
+		has_global_variable = sr_site_free_marius_hills
+		has_global_variable = sr_site_free_daedalus
+		has_global_variable = sr_site_free_imbrium
 	}
 }
 
@@ -3201,6 +3755,12 @@ sr_life_has_colony = {
 		AND = { global_var:sr_site_holder_makemake ?= this sr_site_pop_value_makemake >= $MIN$ }
 		AND = { global_var:sr_site_holder_haumea ?= this sr_site_pop_value_haumea >= $MIN$ }
 		AND = { global_var:sr_site_holder_sedna ?= this sr_site_pop_value_sedna >= $MIN$ }
+		AND = { global_var:sr_site_holder_shackleton ?= this sr_site_pop_value_shackleton >= $MIN$ }
+		AND = { global_var:sr_site_holder_peary ?= this sr_site_pop_value_peary >= $MIN$ }
+		AND = { global_var:sr_site_holder_tranquility ?= this sr_site_pop_value_tranquility >= $MIN$ }
+		AND = { global_var:sr_site_holder_marius_hills ?= this sr_site_pop_value_marius_hills >= $MIN$ }
+		AND = { global_var:sr_site_holder_daedalus ?= this sr_site_pop_value_daedalus >= $MIN$ }
+		AND = { global_var:sr_site_holder_imbrium ?= this sr_site_pop_value_imbrium >= $MIN$ }
 	}
 }
 
@@ -3410,6 +3970,42 @@ sr_free_may_petition_sedna = {
 	sr_site_can_hold = yes
 	NOT = { has_variable = sr_petition_site }
 }
+sr_free_may_petition_shackleton = {
+	has_variable = sr_free_supply_shackleton
+	sr_free_ties_value_shackleton >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_peary = {
+	has_variable = sr_free_supply_peary
+	sr_free_ties_value_peary >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_tranquility = {
+	has_variable = sr_free_supply_tranquility
+	sr_free_ties_value_tranquility >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_marius_hills = {
+	has_variable = sr_free_supply_marius_hills
+	sr_free_ties_value_marius_hills >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_daedalus = {
+	has_variable = sr_free_supply_daedalus
+	sr_free_ties_value_daedalus >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_imbrium = {
+	has_variable = sr_free_supply_imbrium
+	sr_free_ties_value_imbrium >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
 
 # THIS's event world (VAR, a country variable holding its index) holds at least MIN
 # people (space_race_events.93).
@@ -3450,6 +4046,12 @@ sr_site_var_people = {
 		AND = { var:$VAR$ = 32 sr_site_pop_value_makemake >= $MIN$ }
 		AND = { var:$VAR$ = 33 sr_site_pop_value_haumea >= $MIN$ }
 		AND = { var:$VAR$ = 34 sr_site_pop_value_sedna >= $MIN$ }
+		AND = { var:$VAR$ = 35 sr_site_pop_value_shackleton >= $MIN$ }
+		AND = { var:$VAR$ = 36 sr_site_pop_value_peary >= $MIN$ }
+		AND = { var:$VAR$ = 37 sr_site_pop_value_tranquility >= $MIN$ }
+		AND = { var:$VAR$ = 38 sr_site_pop_value_marius_hills >= $MIN$ }
+		AND = { var:$VAR$ = 39 sr_site_pop_value_daedalus >= $MIN$ }
+		AND = { var:$VAR$ = 40 sr_site_pop_value_imbrium >= $MIN$ }
 	}
 }
 
@@ -3490,6 +4092,12 @@ sr_free_scope_site_free = {
 		AND = { scope:site = 32 has_global_variable = sr_site_free_makemake }
 		AND = { scope:site = 33 has_global_variable = sr_site_free_haumea }
 		AND = { scope:site = 34 has_global_variable = sr_site_free_sedna }
+		AND = { scope:site = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { scope:site = 36 has_global_variable = sr_site_free_peary }
+		AND = { scope:site = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { scope:site = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { scope:site = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { scope:site = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_free_scope_site_supplied = {
@@ -3528,5 +4136,11 @@ sr_free_scope_site_supplied = {
 		AND = { scope:site = 32 has_variable = sr_free_supply_makemake }
 		AND = { scope:site = 33 has_variable = sr_free_supply_haumea }
 		AND = { scope:site = 34 has_variable = sr_free_supply_sedna }
+		AND = { scope:site = 35 has_variable = sr_free_supply_shackleton }
+		AND = { scope:site = 36 has_variable = sr_free_supply_peary }
+		AND = { scope:site = 37 has_variable = sr_free_supply_tranquility }
+		AND = { scope:site = 38 has_variable = sr_free_supply_marius_hills }
+		AND = { scope:site = 39 has_variable = sr_free_supply_daedalus }
+		AND = { scope:site = 40 has_variable = sr_free_supply_imbrium }
 	}
 }

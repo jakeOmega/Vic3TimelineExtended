@@ -6449,12 +6449,18 @@ sr_transit_antimatter_kuiper = {
 }
 
 # ===== Transit only: a body with no launch window =====
-# One figure per drive, the mean over 240 months spread across the span.
+# One figure per drive, the mean over 240 months spread across the span,
+# or a constant (FIXED_TRANSIT).
 # Mercury: the median Hohmann time is 107 days
 sr_transit_chemical_mercury = { value = 4 }
 sr_transit_fusion_mercury = { value = 3 }
 sr_transit_torch_mercury = { value = 1 }
 sr_transit_antimatter_mercury = { value = 1 }
+# The Moon: 0 months on every drive, a constant (founded the month a fleet leaves)
+sr_transit_chemical_moon = { value = 0 }
+sr_transit_fusion_moon = { value = 0 }
+sr_transit_torch_moon = { value = 0 }
+sr_transit_antimatter_moon = { value = 0 }
 
 # ===== Readers of the window cache (sr_launch_windows_refresh_cache) =====
 # sr_window_body_code_<body>    the body's number in BODIES order, for debug
@@ -6968,10 +6974,17 @@ sr_transit_months_mercury = {
 	else_if = { limit = { sr_drive_level >= 2 } value = sr_transit_torch_mercury }
 	else_if = { limit = { sr_drive_level >= 1 } value = sr_transit_fusion_mercury }
 }
+# The Moon (no window)
+sr_transit_months_moon = {
+	value = sr_transit_chemical_moon
+	if = { limit = { sr_drive_level >= 3 } value = sr_transit_antimatter_moon }
+	else_if = { limit = { sr_drive_level >= 2 } value = sr_transit_torch_moon }
+	else_if = { limit = { sr_drive_level >= 1 } value = sr_transit_fusion_moon }
+}
 
 # The stage's soonest window among its unclaimed sites (m in the off-window
-# rule, spec § 5.2a): 0 while one is open or Mercury is left; sr_launch_never
-# when the stage has nothing left. Any scope.
+# rule, spec § 5.2a): 0 while one is open or a world with no window (the Moon,
+# Mercury) is left; sr_launch_never when the stage has nothing left. Any scope.
 sr_window_stage_wait = {
 	value = sr_launch_never
 	if = { limit = { sr_window_body_in_play_mars = yes } max = sr_window_wait_months_mars }
@@ -6987,6 +7000,7 @@ sr_window_stage_wait = {
 	if = { limit = { sr_window_body_in_play_neptune = yes } max = sr_window_wait_months_neptune }
 	if = { limit = { sr_window_body_in_play_kuiper = yes } max = sr_window_wait_months_kuiper }
 	if = { limit = { sr_window_mercury_in_play = yes } max = 0 }
+	if = { limit = { sr_window_moon_in_play = yes } max = 0 }
 }
 
 # The cheapest premium this country can launch at now, over the stage's
@@ -7006,4 +7020,5 @@ sr_launch_best_cost = {
 	max = sr_launch_cost_neptune
 	max = sr_launch_cost_kuiper
 	if = { limit = { sr_window_mercury_in_play = yes } max = 0 }
+	if = { limit = { sr_window_moon_in_play = yes } max = 0 }
 }

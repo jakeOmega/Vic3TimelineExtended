@@ -60,19 +60,19 @@ SETBACKS_CEILING = 99     # sr_setbacks_<m>_value, a count of setbacks
 FUNDING_CEILING = 10      # sr_funding_<m> and sr_max_funding_level: 3, plus technology
 STAGE_CEILING = 5         # sr_current_colonization_stage, "Stage: 5 of 5"
 TRANSIT_MONTHS = 132      # sr_interstellar_transit_value, pinned by the waiting entry's goal
-WORLDS = 34               # sr_total_global_colonies, the 34 worlds; sr_disp_colonies_held is a share of them
+WORLDS = 40               # sr_total_global_colonies, the 40 worlds; sr_disp_colonies_held is a share of them
 SECTION_HEADER_WIDTH = 400  # the text of the 520-wide section_header_button, less its arrow
 FLEET_SLOTS = 6           # sr_disp_cf_in_flight, "6 of 6": gen_solar_sites.FLEET_SLOTS
 SETTLERS_A_MONTH = 2000   # sr_disp_emig_per_month at High (sr_emig_level_batches 4 x sr_emig_batch_people 500)
-OFFWORLD_PEOPLE = 9_999_999  # sr_disp_offworld_pop: the rooms' sum is 810,000 before modules; seven digits
+OFFWORLD_PEOPLE = 9_999_999  # sr_disp_offworld_pop: the rooms' sum is 945,000 before modules; seven digits
 TRANSIT_CEILING = 999     # sr_disp_cf_slot_<n>_months: the longest transit is 611 (chemical, the Kuiper Belt)
 END_YEAR = 2136           # sr_disp_cf_slot_<n>_year: END_DATE's year
 FAB_RATE_CEILING = 99.9   # sr_disp_fab_rate: the best method gives 25 a month; technology could add more
 FAB_STOCK = 200           # sr_disp_fab_stock: sr_mod_fab_stock_cap
 SHIP_SLOTS = 8            # sr_disp_ms_waiting / _flying: gen_solar_sites.SHIP_SLOTS
-UPKEEP_CEILING = 999      # sr_disp_mod_upkeep_pct: a level past the first per module, 34 worlds x 7 at most
-EBASE_LEVELS = 9999       # sr_disp_ebase_levels / _room: 770 levels of room in all; four digits
-FREE_WORLDS = 34          # sr_disp_free_supplied_count: at most every world
+UPKEEP_CEILING = 999      # sr_disp_mod_upkeep_pct: a level past the first per module, 40 worlds x 7 at most
+EBASE_LEVELS = 9999       # sr_disp_ebase_levels / _room: 875 levels of room in all; four digits
+FREE_WORLDS = 40          # sr_disp_free_supplied_count: at most every world
 FREE_TRADE_RESEARCH = 5   # sr_disp_free_trade_research: sr_free_trade_max_units (5) x 1%
 SC_RATE_CEILING = 99.9    # sr_disp_sc_rate: 2 a level a month at most; ten levels for an AI, more for a player
 FLEET_STRENGTH = 99_999   # sr_disp_fl_strength / _full: every fleet's, unbounded by script; five digits
@@ -311,7 +311,7 @@ CELLS = {
     "state, risk, first and stage (te_sr_ov_icon_label)": (
         ("te_sr_ov_icon_label", 'block "label"'),
         r"je_space_race_widget_(ov_idle|standard_label|ov_safe_\w+|ov_ambitious_\w+|ov_shielded|risk_\w+"
-        r"|ov_first_open|ov_first_claimed|ov_stage)"),
+        r"|ov_first_open|ov_first_claimed|ov_stage(?:_moon)?)"),
     "approach buttons (te_sr_action_button)": (
         ("te_sr_action_button", 'block "action_label"'),
         r"je_space_race_widget_(standard_label|safe_label|ambitious_label)"),
@@ -558,8 +558,8 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(_render(_loc("je_space_race_widget_ov_ambitious_interstellar_probe")),
                          "Ambitious\\n−360 a week")
         self.assertEqual(_render(_loc("je_space_race_widget_ov_safe_orbital")), "Safe\\n−22.5 a week")
-        self.assertEqual(_render(_loc("je_space_race_widget_progress_solar_colonization")), "650 / 650 (+99.9/mo)")
-        self.assertEqual(_render(_loc("je_space_race_widget_eta_solar_colonization")), "1300 months")
+        self.assertEqual(_render(_loc("je_space_race_widget_progress_solar_colonization")), "800 / 800 (+99.9/mo)")
+        self.assertEqual(_render(_loc("je_space_race_widget_eta_solar_colonization")), "1600 months")
         self.assertEqual(_render(_loc("je_space_race_widget_progress_interstellar_results")), "132 / 132 months")
         self.assertEqual(_render(_loc("je_space_race_widget_ov_shielded")), "Shielded: 6 mo")
         self.assertEqual(_render(_loc("je_space_race_widget_risk_mars_landing")), "Risk: 50%/mo")
@@ -631,7 +631,7 @@ class FigureBudgetTest(unittest.TestCase):
         sec = _type_body(_read(GUI), "te_sr_sec_solar_system")
         box = _textbox_with(sec, "'je_space_race_widget_ss_filtered'")
         for key in ("je_space_race_widget_ss_filtered", "je_space_race_widget_ss_all"):
-            text = re.sub(r"\[[^\[\]]*\]", "34", _loc(key))
+            text = re.sub(r"\[[^\[\]]*\]", "40", _loc(key))
             text = re.sub(r"#[A-Za-z_;]+ ", "", text).replace("#!", "")
             self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
 

@@ -248,6 +248,48 @@ sr_site_notice_gained_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_site_notice_gained
+			var:sr_site_notice_gained = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_gained
+			var:sr_site_notice_gained = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_gained
+			var:sr_site_notice_gained = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_gained
+			var:sr_site_notice_gained = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_gained
+			var:sr_site_notice_gained = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_gained
+			var:sr_site_notice_gained = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -493,6 +535,48 @@ sr_site_notice_lost_name = {
 			var:sr_site_notice_lost = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_lost
+			var:sr_site_notice_lost = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_lost
+			var:sr_site_notice_lost = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_lost
+			var:sr_site_notice_lost = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_lost
+			var:sr_site_notice_lost = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_lost
+			var:sr_site_notice_lost = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_lost
+			var:sr_site_notice_lost = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -742,6 +826,48 @@ sr_site_notice_heir_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_site_notice_heir
+			var:sr_site_notice_heir = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_heir
+			var:sr_site_notice_heir = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_heir
+			var:sr_site_notice_heir = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_heir
+			var:sr_site_notice_heir = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_heir
+			var:sr_site_notice_heir = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_heir
+			var:sr_site_notice_heir = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -987,6 +1113,48 @@ sr_cf_target_name = {
 			var:sr_cf_target = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_target
+			var:sr_cf_target = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_target
+			var:sr_cf_target = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_target
+			var:sr_cf_target = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_target
+			var:sr_cf_target = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_target
+			var:sr_cf_target = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_target
+			var:sr_cf_target = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -1236,6 +1404,48 @@ sr_cf_slot_1_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_cf_1_site
+			var:sr_cf_1_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_1_site
+			var:sr_cf_1_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_1_site
+			var:sr_cf_1_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_1_site
+			var:sr_cf_1_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_1_site
+			var:sr_cf_1_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_1_site
+			var:sr_cf_1_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -1481,6 +1691,48 @@ sr_cf_slot_2_name = {
 			var:sr_cf_2_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_2_site
+			var:sr_cf_2_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_2_site
+			var:sr_cf_2_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_2_site
+			var:sr_cf_2_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_2_site
+			var:sr_cf_2_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_2_site
+			var:sr_cf_2_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_2_site
+			var:sr_cf_2_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -1730,6 +1982,48 @@ sr_cf_slot_3_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_cf_3_site
+			var:sr_cf_3_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_3_site
+			var:sr_cf_3_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_3_site
+			var:sr_cf_3_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_3_site
+			var:sr_cf_3_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_3_site
+			var:sr_cf_3_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_3_site
+			var:sr_cf_3_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -1975,6 +2269,48 @@ sr_cf_slot_4_name = {
 			var:sr_cf_4_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_4_site
+			var:sr_cf_4_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_4_site
+			var:sr_cf_4_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_4_site
+			var:sr_cf_4_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_4_site
+			var:sr_cf_4_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_4_site
+			var:sr_cf_4_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_4_site
+			var:sr_cf_4_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -2224,6 +2560,48 @@ sr_cf_slot_5_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_cf_5_site
+			var:sr_cf_5_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_5_site
+			var:sr_cf_5_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_5_site
+			var:sr_cf_5_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_5_site
+			var:sr_cf_5_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_5_site
+			var:sr_cf_5_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_5_site
+			var:sr_cf_5_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -2469,6 +2847,48 @@ sr_cf_slot_6_name = {
 			var:sr_cf_6_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_6_site
+			var:sr_cf_6_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_6_site
+			var:sr_cf_6_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_6_site
+			var:sr_cf_6_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_6_site
+			var:sr_cf_6_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_6_site
+			var:sr_cf_6_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_6_site
+			var:sr_cf_6_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -2718,6 +3138,48 @@ sr_cf_notice_target_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_cf_notice_target
+			var:sr_cf_notice_target = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_target
+			var:sr_cf_notice_target = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_target
+			var:sr_cf_notice_target = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_target
+			var:sr_cf_notice_target = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_target
+			var:sr_cf_notice_target = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_target
+			var:sr_cf_notice_target = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -2963,6 +3425,48 @@ sr_cf_notice_founded_name = {
 			var:sr_cf_notice_founded = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_founded
+			var:sr_cf_notice_founded = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_founded
+			var:sr_cf_notice_founded = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_founded
+			var:sr_cf_notice_founded = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_founded
+			var:sr_cf_notice_founded = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_founded
+			var:sr_cf_notice_founded = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_cf_notice_founded
+			var:sr_cf_notice_founded = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -3212,6 +3716,48 @@ sr_mq_1_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_1_site
+			var:sr_mq_1_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_1_site
+			var:sr_mq_1_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_1_site
+			var:sr_mq_1_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_1_site
+			var:sr_mq_1_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_1_site
+			var:sr_mq_1_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_1_site
+			var:sr_mq_1_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -3457,6 +4003,48 @@ sr_mq_2_world_name = {
 			var:sr_mq_2_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_2_site
+			var:sr_mq_2_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_2_site
+			var:sr_mq_2_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_2_site
+			var:sr_mq_2_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_2_site
+			var:sr_mq_2_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_2_site
+			var:sr_mq_2_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_2_site
+			var:sr_mq_2_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -3706,6 +4294,48 @@ sr_mq_3_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_3_site
+			var:sr_mq_3_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_3_site
+			var:sr_mq_3_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_3_site
+			var:sr_mq_3_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_3_site
+			var:sr_mq_3_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_3_site
+			var:sr_mq_3_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_3_site
+			var:sr_mq_3_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -3951,6 +4581,48 @@ sr_mq_4_world_name = {
 			var:sr_mq_4_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_4_site
+			var:sr_mq_4_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_4_site
+			var:sr_mq_4_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_4_site
+			var:sr_mq_4_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_4_site
+			var:sr_mq_4_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_4_site
+			var:sr_mq_4_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_4_site
+			var:sr_mq_4_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -4200,6 +4872,48 @@ sr_mq_5_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_5_site
+			var:sr_mq_5_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_5_site
+			var:sr_mq_5_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_5_site
+			var:sr_mq_5_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_5_site
+			var:sr_mq_5_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_5_site
+			var:sr_mq_5_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_5_site
+			var:sr_mq_5_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -4445,6 +5159,48 @@ sr_mq_6_world_name = {
 			var:sr_mq_6_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_6_site
+			var:sr_mq_6_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_6_site
+			var:sr_mq_6_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_6_site
+			var:sr_mq_6_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_6_site
+			var:sr_mq_6_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_6_site
+			var:sr_mq_6_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_6_site
+			var:sr_mq_6_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -4694,6 +5450,48 @@ sr_mq_7_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_7_site
+			var:sr_mq_7_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_7_site
+			var:sr_mq_7_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_7_site
+			var:sr_mq_7_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_7_site
+			var:sr_mq_7_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_7_site
+			var:sr_mq_7_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_7_site
+			var:sr_mq_7_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -4939,6 +5737,48 @@ sr_mq_8_world_name = {
 			var:sr_mq_8_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_8_site
+			var:sr_mq_8_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_8_site
+			var:sr_mq_8_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_8_site
+			var:sr_mq_8_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_8_site
+			var:sr_mq_8_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_8_site
+			var:sr_mq_8_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_8_site
+			var:sr_mq_8_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -5188,6 +6028,48 @@ sr_mq_9_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_9_site
+			var:sr_mq_9_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_9_site
+			var:sr_mq_9_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_9_site
+			var:sr_mq_9_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_9_site
+			var:sr_mq_9_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_9_site
+			var:sr_mq_9_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_9_site
+			var:sr_mq_9_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -5433,6 +6315,48 @@ sr_mq_10_world_name = {
 			var:sr_mq_10_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_10_site
+			var:sr_mq_10_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_10_site
+			var:sr_mq_10_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_10_site
+			var:sr_mq_10_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_10_site
+			var:sr_mq_10_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_10_site
+			var:sr_mq_10_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_10_site
+			var:sr_mq_10_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -5682,6 +6606,48 @@ sr_mq_11_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_11_site
+			var:sr_mq_11_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_11_site
+			var:sr_mq_11_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_11_site
+			var:sr_mq_11_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_11_site
+			var:sr_mq_11_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_11_site
+			var:sr_mq_11_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_11_site
+			var:sr_mq_11_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -5927,6 +6893,48 @@ sr_mq_12_world_name = {
 			var:sr_mq_12_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_12_site
+			var:sr_mq_12_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_12_site
+			var:sr_mq_12_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_12_site
+			var:sr_mq_12_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_12_site
+			var:sr_mq_12_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_12_site
+			var:sr_mq_12_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_12_site
+			var:sr_mq_12_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -6176,6 +7184,48 @@ sr_mq_13_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_13_site
+			var:sr_mq_13_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_13_site
+			var:sr_mq_13_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_13_site
+			var:sr_mq_13_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_13_site
+			var:sr_mq_13_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_13_site
+			var:sr_mq_13_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_13_site
+			var:sr_mq_13_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -6421,6 +7471,48 @@ sr_mq_14_world_name = {
 			var:sr_mq_14_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_14_site
+			var:sr_mq_14_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_14_site
+			var:sr_mq_14_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_14_site
+			var:sr_mq_14_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_14_site
+			var:sr_mq_14_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_14_site
+			var:sr_mq_14_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_14_site
+			var:sr_mq_14_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -6670,6 +7762,48 @@ sr_mq_15_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_15_site
+			var:sr_mq_15_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_15_site
+			var:sr_mq_15_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_15_site
+			var:sr_mq_15_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_15_site
+			var:sr_mq_15_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_15_site
+			var:sr_mq_15_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_15_site
+			var:sr_mq_15_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -6915,6 +8049,48 @@ sr_mq_16_world_name = {
 			var:sr_mq_16_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_16_site
+			var:sr_mq_16_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_16_site
+			var:sr_mq_16_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_16_site
+			var:sr_mq_16_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_16_site
+			var:sr_mq_16_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_16_site
+			var:sr_mq_16_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_16_site
+			var:sr_mq_16_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -7164,6 +8340,48 @@ sr_mq_17_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_17_site
+			var:sr_mq_17_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_17_site
+			var:sr_mq_17_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_17_site
+			var:sr_mq_17_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_17_site
+			var:sr_mq_17_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_17_site
+			var:sr_mq_17_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_17_site
+			var:sr_mq_17_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -7409,6 +8627,48 @@ sr_mq_18_world_name = {
 			var:sr_mq_18_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_18_site
+			var:sr_mq_18_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_18_site
+			var:sr_mq_18_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_18_site
+			var:sr_mq_18_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_18_site
+			var:sr_mq_18_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_18_site
+			var:sr_mq_18_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_18_site
+			var:sr_mq_18_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -7658,6 +8918,48 @@ sr_mq_19_world_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_19_site
+			var:sr_mq_19_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_19_site
+			var:sr_mq_19_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_19_site
+			var:sr_mq_19_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_19_site
+			var:sr_mq_19_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_19_site
+			var:sr_mq_19_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_19_site
+			var:sr_mq_19_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -7903,6 +9205,48 @@ sr_mq_20_world_name = {
 			var:sr_mq_20_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_20_site
+			var:sr_mq_20_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_20_site
+			var:sr_mq_20_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_20_site
+			var:sr_mq_20_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_20_site
+			var:sr_mq_20_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_20_site
+			var:sr_mq_20_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_20_site
+			var:sr_mq_20_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -8152,6 +9496,48 @@ sr_aut_site_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_aut_site
+			var:sr_aut_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_aut_site
+			var:sr_aut_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_aut_site
+			var:sr_aut_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_aut_site
+			var:sr_aut_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_aut_site
+			var:sr_aut_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_aut_site
+			var:sr_aut_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -8397,6 +9783,48 @@ sr_abandon_site_name = {
 			var:sr_abandon_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_abandon_site
+			var:sr_abandon_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_abandon_site
+			var:sr_abandon_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_abandon_site
+			var:sr_abandon_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_abandon_site
+			var:sr_abandon_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_abandon_site
+			var:sr_abandon_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_abandon_site
+			var:sr_abandon_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -8646,6 +10074,48 @@ sr_freed_site_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_freed_site
+			var:sr_freed_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_freed_site
+			var:sr_freed_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_freed_site
+			var:sr_freed_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_freed_site
+			var:sr_freed_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_freed_site
+			var:sr_freed_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_freed_site
+			var:sr_freed_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -8891,6 +10361,48 @@ sr_petition_site_name = {
 			var:sr_petition_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_petition_site
+			var:sr_petition_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_petition_site
+			var:sr_petition_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_petition_site
+			var:sr_petition_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_petition_site
+			var:sr_petition_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_petition_site
+			var:sr_petition_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_petition_site
+			var:sr_petition_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -9140,6 +10652,48 @@ sr_life_site_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_life_site
+			var:sr_life_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_life_site
+			var:sr_life_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_life_site
+			var:sr_life_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_life_site
+			var:sr_life_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_life_site
+			var:sr_life_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_life_site
+			var:sr_life_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -9385,6 +10939,48 @@ sr_occ_site_name = {
 			var:sr_occ_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_occ_site
+			var:sr_occ_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_occ_site
+			var:sr_occ_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_occ_site
+			var:sr_occ_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_occ_site
+			var:sr_occ_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_occ_site
+			var:sr_occ_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_occ_site
+			var:sr_occ_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -9634,6 +11230,48 @@ sr_destroyed_site_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_destroyed_site
+			var:sr_destroyed_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_destroyed_site
+			var:sr_destroyed_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_destroyed_site
+			var:sr_destroyed_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_destroyed_site
+			var:sr_destroyed_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_destroyed_site
+			var:sr_destroyed_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_destroyed_site
+			var:sr_destroyed_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -9879,6 +11517,48 @@ sr_seized_free_site_name = {
 			var:sr_seized_free_site = 34
 		}
 		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_seized_free_site
+			var:sr_seized_free_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_seized_free_site
+			var:sr_seized_free_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_seized_free_site
+			var:sr_seized_free_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_seized_free_site
+			var:sr_seized_free_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_seized_free_site
+			var:sr_seized_free_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_seized_free_site
+			var:sr_seized_free_site = 40
+		}
+		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -10128,6 +11808,48 @@ sr_garrison_lapsed_site_name = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
+		trigger = {
+			has_variable = sr_garrison_lapsed_site
+			var:sr_garrison_lapsed_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_garrison_lapsed_site
+			var:sr_garrison_lapsed_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_garrison_lapsed_site
+			var:sr_garrison_lapsed_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_garrison_lapsed_site
+			var:sr_garrison_lapsed_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_garrison_lapsed_site
+			var:sr_garrison_lapsed_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_garrison_lapsed_site
+			var:sr_garrison_lapsed_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -10138,6 +11860,30 @@ sr_ov_restless_site = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = { global_var:sr_site_holder_shackleton ?= this sr_site_autonomy_value_shackleton >= sr_aut_ask_level }
+		localization_key = sr_site_short_shackleton
+	}
+	text = {
+		trigger = { global_var:sr_site_holder_peary ?= this sr_site_autonomy_value_peary >= sr_aut_ask_level }
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = { global_var:sr_site_holder_tranquility ?= this sr_site_autonomy_value_tranquility >= sr_aut_ask_level }
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = { global_var:sr_site_holder_marius_hills ?= this sr_site_autonomy_value_marius_hills >= sr_aut_ask_level }
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = { global_var:sr_site_holder_daedalus ?= this sr_site_autonomy_value_daedalus >= sr_aut_ask_level }
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = { global_var:sr_site_holder_imbrium ?= this sr_site_autonomy_value_imbrium >= sr_aut_ask_level }
+		localization_key = sr_site_name_imbrium
+	}
 	text = {
 		trigger = { global_var:sr_site_holder_venus ?= this sr_site_autonomy_value_venus >= sr_aut_ask_level }
 		localization_key = sr_site_short_venus

@@ -5881,6 +5881,8 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_ambitious_solar_colonization"
 			}
 			# No first to race for: the stage, whose tooltip is the stage's description.
+			# Stage 0 (and a race not yet begun) reads "the Moon"; SelectLocalization
+			# renders its key without the journal entry, so both read the player.
 			blockoverride "sr_third_cells" {
 				te_sr_ov_icon_label = {
 					tooltip = "je_space_race_widget_profile_solar_colonization"
@@ -5888,7 +5890,7 @@ types space_race_widget_types
 						texture = "gfx/interface/icons/space_race_icons/stage.dds"
 					}
 					blockoverride "label" {
-						text = "je_space_race_widget_ov_stage"
+						text = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), 'je_space_race_widget_ov_stage', 'je_space_race_widget_ov_stage_moon' )]"
 					}
 				}
 			}
@@ -5896,7 +5898,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_colony_label"
 			}
 			# Fleets staged in orbit while a full bar waits for a launch window
-			# (gui/sr_launch_window_widgets.gui), then the 34 worlds: every one
+			# (gui/sr_launch_window_widgets.gui), then the 40 worlds: every one
 			# claimed, ours on top; then what needs us.
 			blockoverride "sr_extra_rows" {
 				te_sr_ov_staged = {}

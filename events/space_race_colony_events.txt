@@ -6,6 +6,9 @@
 # Stage 3: Mercury & Saturn System (.18-.23)
 # Stage 4: Uranus & Neptune Systems (.24-.29)
 # Stage 5: Kuiper Belt & Beyond (.30-.34)
+# Stage 0: The Moon (.35-.40; lunar colonization design § 3.1), numbered
+# after the rest because a world's event follows its place in
+# gen_solar_sites.SITES, which saves store
 #
 # Each option's specialisation goes on the solar colonization entry through
 # sr_grant_colony_modifier, which also records it (<modifier>_held) so a
@@ -1792,6 +1795,324 @@ space_race_colony_events.34 = {
 		# Interstellar medium research station at the edge of the heliosphere
 		sr_grant_colony_modifier = { MODIFIER = sr_colony_sedna_interstellar }
 		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:flavor_speaker }
+				scope:flavor_speaker = { kill_character = { hidden = yes } }
+			}
+		}
+	}
+}
+
+##############################################
+# STAGE 0: THE MOON
+##############################################
+
+# Colony 35: The Moon - Shackleton Crater
+space_race_colony_events.35 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/lunar_base_dome.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.35.t
+	desc = space_race_colony_events.35.d
+	flavor = space_race_colony_events.35.f
+
+	duration = 3
+	trigger = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+			on_created = { place_character_in_void = 6 }
+		}
+	}
+
+	option = {
+		name = space_race_colony_events.35.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Propellant depot cracking polar ice into fuel for every launch
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_shackleton_depot }
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_colony_events.35.b
+		ai_chance = { base = 5 }
+		# Polar outpost on the crater rim, in near-permanent sunlight
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_shackleton_outpost }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:flavor_speaker }
+				scope:flavor_speaker = { kill_character = { hidden = yes } }
+			}
+		}
+	}
+}
+
+# Colony 36: The Moon - Peary Crater
+space_race_colony_events.36 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/moon_site_selection.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.36.t
+	desc = space_race_colony_events.36.d
+	flavor = space_race_colony_events.36.f
+
+	duration = 3
+	trigger = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+			on_created = { place_character_in_void = 6 }
+		}
+	}
+
+	option = {
+		name = space_race_colony_events.36.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Solar arrays on the peaks of eternal light
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_peary_solar }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_colony_events.36.b
+		ai_chance = { base = 5 }
+		# Polar observatory in the cold, dark crater floor
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_peary_observatory }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:flavor_speaker }
+				scope:flavor_speaker = { kill_character = { hidden = yes } }
+			}
+		}
+	}
+}
+
+# Colony 37: The Moon - Tranquility Base
+space_race_colony_events.37 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/moon_landing_footprint.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.37.t
+	desc = space_race_colony_events.37.d
+	flavor = space_race_colony_events.37.f
+
+	duration = 3
+	trigger = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+			on_created = { place_character_in_void = 6 }
+		}
+	}
+
+	option = {
+		name = space_race_colony_events.37.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# The first landing site kept as a heritage site
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_tranquility_heritage }
+		add_loyalists = { value = medium_radicals pop_type = clergymen }
+		add_loyalists = { value = small_radicals pop_type = shopkeepers }
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_colony_events.37.b
+		ai_chance = { base = 5 }
+		# Helium-3 extraction from the mare regolith
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_tranquility_helium }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:flavor_speaker }
+				scope:flavor_speaker = { kill_character = { hidden = yes } }
+			}
+		}
+	}
+}
+
+# Colony 38: The Moon - Marius Hills
+space_race_colony_events.38 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_habitat_future.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.38.t
+	desc = space_race_colony_events.38.d
+	flavor = space_race_colony_events.38.f
+
+	duration = 3
+	trigger = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+			on_created = { place_character_in_void = 6 }
+		}
+	}
+
+	option = {
+		name = space_race_colony_events.38.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# A city sealed inside the lava tubes
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_marius_lavatubes }
+		add_loyalists = { value = medium_radicals }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+	}
+
+	option = {
+		name = space_race_colony_events.38.b
+		ai_chance = { base = 4 }
+		# A hardened installation deep under the basalt
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_marius_hardened }
+		add_loyalists = { value = medium_radicals pop_type = officers }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:flavor_speaker }
+				scope:flavor_speaker = { kill_character = { hidden = yes } }
+			}
+		}
+	}
+}
+
+# Colony 39: The Moon - Daedalus Crater
+space_race_colony_events.39 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/moon_site_selection.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.39.t
+	desc = space_race_colony_events.39.d
+	flavor = space_race_colony_events.39.f
+
+	duration = 3
+	trigger = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+			on_created = { place_character_in_void = 6 }
+		}
+	}
+
+	option = {
+		name = space_race_colony_events.39.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Radio telescope shielded from Earth's noise
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_daedalus_telescope }
+		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_colony_events.39.b
+		ai_chance = { base = 5 }
+		# Deep-space relay for the missions beyond
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_daedalus_relay }
+		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = small_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals }
+	}
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:flavor_speaker }
+				scope:flavor_speaker = { kill_character = { hidden = yes } }
+			}
+		}
+	}
+}
+
+# Colony 40: The Moon - Mare Imbrium
+space_race_colony_events.40 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/lunar_base_dome.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_colony_events.40.t
+	desc = space_race_colony_events.40.d
+	flavor = space_race_colony_events.40.f
+
+	duration = 3
+	trigger = { }
+	immediate = {
+		create_character = {
+			save_scope_as = flavor_speaker
+			on_created = { place_character_in_void = 6 }
+		}
+	}
+
+	option = {
+		name = space_race_colony_events.40.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		# Mass driver flinging parts and cargo into orbit
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_imbrium_massdriver }
+		add_loyalists = { value = medium_radicals pop_type = engineers }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
+		add_loyalists = { value = small_radicals }
+	}
+
+	option = {
+		name = space_race_colony_events.40.b
+		ai_chance = { base = 5 }
+		# Mining KREEP-rich regolith for rare earths
+		sr_grant_colony_modifier = { MODIFIER = sr_colony_imbrium_kreep }
+		add_loyalists = { value = small_radicals pop_type = machinists }
+		add_loyalists = { value = small_radicals pop_type = capitalists }
 		add_loyalists = { value = small_radicals }
 	}
 

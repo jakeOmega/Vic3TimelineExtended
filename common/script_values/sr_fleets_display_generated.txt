@@ -676,6 +676,10 @@ sr_disp_loc_inbound_ours_kuiper = {
 sr_disp_loc_status_earth = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_battle_earth global_var:sr_loc_battle_earth >= { value = te_history_month_index subtract = 1 } } value = 1 }
+	else_if = { limit = { OR = { AND = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_blockaded_shackleton NOT = { has_global_variable = sr_site_interdicted_shackleton } } AND = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_blockaded_peary NOT = { has_global_variable = sr_site_interdicted_peary } } AND = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_blockaded_tranquility NOT = { has_global_variable = sr_site_interdicted_tranquility } } AND = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_blockaded_marius_hills NOT = { has_global_variable = sr_site_interdicted_marius_hills } } AND = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_blockaded_daedalus NOT = { has_global_variable = sr_site_interdicted_daedalus } } AND = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_blockaded_imbrium NOT = { has_global_variable = sr_site_interdicted_imbrium } } } } value = 2 }
+	else_if = { limit = { OR = { AND = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_interdicted_shackleton } AND = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_interdicted_peary } AND = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_interdicted_tranquility } AND = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_interdicted_marius_hills } AND = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_interdicted_daedalus } AND = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_interdicted_imbrium } } } value = 4 }
+	else_if = { limit = { has_variable = sr_fl_at_earth OR = { AND = { has_global_variable = sr_site_blockaded_shackleton global_var:sr_site_holder_shackleton ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_peary global_var:sr_site_holder_peary ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_tranquility global_var:sr_site_holder_tranquility ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_marius_hills global_var:sr_site_holder_marius_hills ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_daedalus global_var:sr_site_holder_daedalus ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_imbrium global_var:sr_site_holder_imbrium ?= { has_war_with = prev } } } } value = 3 }
+	else_if = { limit = { has_variable_list = sr_icpt_earth any_in_list = { variable = sr_icpt_earth is_country_alive = yes } } value = 5 }
 	else_if = { limit = { sr_earth_blockaded = yes } value = 6 }
 	else_if = { limit = { has_variable = sr_fl_at_earth is_at_war = yes any_country = { has_war_with = prev sr_earth_blockaded = yes } } value = 7 }
 }
@@ -1293,6 +1297,102 @@ sr_disp_def_occupier_sedna = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_occupier_sedna has_variable = sr_ss_occ_sedna } value = 1 }
 }
+sr_disp_def_shackleton = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = 1 }
+}
+sr_disp_def_integrity_shackleton = { value = sr_site_integrity_value_shackleton floor = yes }
+sr_disp_def_status_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_shackleton } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_under_assault_shackleton global_var:sr_site_under_assault_shackleton >= { value = te_history_month_index subtract = 1 } } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_interdicted_shackleton } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_shackleton } value = 1 }
+}
+sr_disp_def_occupier_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_shackleton has_variable = sr_ss_occ_shackleton } value = 1 }
+}
+sr_disp_def_peary = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_peary ?= this } value = 1 }
+}
+sr_disp_def_integrity_peary = { value = sr_site_integrity_value_peary floor = yes }
+sr_disp_def_status_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_peary } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_under_assault_peary global_var:sr_site_under_assault_peary >= { value = te_history_month_index subtract = 1 } } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_interdicted_peary } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_peary } value = 1 }
+}
+sr_disp_def_occupier_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_peary has_variable = sr_ss_occ_peary } value = 1 }
+}
+sr_disp_def_tranquility = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = 1 }
+}
+sr_disp_def_integrity_tranquility = { value = sr_site_integrity_value_tranquility floor = yes }
+sr_disp_def_status_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_tranquility } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_under_assault_tranquility global_var:sr_site_under_assault_tranquility >= { value = te_history_month_index subtract = 1 } } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_interdicted_tranquility } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_tranquility } value = 1 }
+}
+sr_disp_def_occupier_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_tranquility has_variable = sr_ss_occ_tranquility } value = 1 }
+}
+sr_disp_def_marius_hills = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = 1 }
+}
+sr_disp_def_integrity_marius_hills = { value = sr_site_integrity_value_marius_hills floor = yes }
+sr_disp_def_status_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_marius_hills } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_under_assault_marius_hills global_var:sr_site_under_assault_marius_hills >= { value = te_history_month_index subtract = 1 } } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_interdicted_marius_hills } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_marius_hills } value = 1 }
+}
+sr_disp_def_occupier_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_marius_hills has_variable = sr_ss_occ_marius_hills } value = 1 }
+}
+sr_disp_def_daedalus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = 1 }
+}
+sr_disp_def_integrity_daedalus = { value = sr_site_integrity_value_daedalus floor = yes }
+sr_disp_def_status_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_daedalus } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_under_assault_daedalus global_var:sr_site_under_assault_daedalus >= { value = te_history_month_index subtract = 1 } } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_interdicted_daedalus } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_daedalus } value = 1 }
+}
+sr_disp_def_occupier_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_daedalus has_variable = sr_ss_occ_daedalus } value = 1 }
+}
+sr_disp_def_imbrium = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = 1 }
+}
+sr_disp_def_integrity_imbrium = { value = sr_site_integrity_value_imbrium floor = yes }
+sr_disp_def_status_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_imbrium } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_under_assault_imbrium global_var:sr_site_under_assault_imbrium >= { value = te_history_month_index subtract = 1 } } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_interdicted_imbrium } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_imbrium } value = 1 }
+}
+sr_disp_def_occupier_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_imbrium has_variable = sr_ss_occ_imbrium } value = 1 }
+}
 
 # Each slot's target world (the target button's hover): its Defences, a
 # range low-high (exact when surveyed or ours), integrity and marines.
@@ -1332,6 +1432,12 @@ sr_disp_fl_1_tgt_def = {
 	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 32 } value = sr_site_def_value_makemake }
 	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 33 } value = sr_site_def_value_haumea }
 	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 34 } value = sr_site_def_value_sedna }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 35 } value = sr_site_def_value_shackleton }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 36 } value = sr_site_def_value_peary }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 37 } value = sr_site_def_value_tranquility }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 38 } value = sr_site_def_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 39 } value = sr_site_def_value_daedalus }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 40 } value = sr_site_def_value_imbrium }
 }
 sr_disp_fl_1_tgt_integrity = {
 	value = 0
@@ -1369,6 +1475,12 @@ sr_disp_fl_1_tgt_integrity = {
 	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 32 } value = sr_disp_def_integrity_makemake }
 	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 33 } value = sr_disp_def_integrity_haumea }
 	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 34 } value = sr_disp_def_integrity_sedna }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 35 } value = sr_disp_def_integrity_shackleton }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 36 } value = sr_disp_def_integrity_peary }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 37 } value = sr_disp_def_integrity_tranquility }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 38 } value = sr_disp_def_integrity_marius_hills }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 39 } value = sr_disp_def_integrity_daedalus }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 40 } value = sr_disp_def_integrity_imbrium }
 }
 sr_disp_fl_1_tgt_marines = {
 	value = 0
@@ -1406,6 +1518,12 @@ sr_disp_fl_1_tgt_marines = {
 	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 32 } value = sr_site_marines_value_makemake }
 	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 33 } value = sr_site_marines_value_haumea }
 	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 34 } value = sr_site_marines_value_sedna }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 35 } value = sr_site_marines_value_shackleton }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 36 } value = sr_site_marines_value_peary }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 37 } value = sr_site_marines_value_tranquility }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 38 } value = sr_site_marines_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 39 } value = sr_site_marines_value_daedalus }
+	if = { limit = { has_variable = sr_fl_1_target var:sr_fl_1_target = 40 } value = sr_site_marines_value_imbrium }
 }
 sr_disp_fl_1_tgt_def_low = {
 	value = sr_disp_fl_1_tgt_def
@@ -1452,6 +1570,12 @@ sr_disp_fl_2_tgt_def = {
 	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 32 } value = sr_site_def_value_makemake }
 	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 33 } value = sr_site_def_value_haumea }
 	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 34 } value = sr_site_def_value_sedna }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 35 } value = sr_site_def_value_shackleton }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 36 } value = sr_site_def_value_peary }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 37 } value = sr_site_def_value_tranquility }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 38 } value = sr_site_def_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 39 } value = sr_site_def_value_daedalus }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 40 } value = sr_site_def_value_imbrium }
 }
 sr_disp_fl_2_tgt_integrity = {
 	value = 0
@@ -1489,6 +1613,12 @@ sr_disp_fl_2_tgt_integrity = {
 	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 32 } value = sr_disp_def_integrity_makemake }
 	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 33 } value = sr_disp_def_integrity_haumea }
 	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 34 } value = sr_disp_def_integrity_sedna }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 35 } value = sr_disp_def_integrity_shackleton }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 36 } value = sr_disp_def_integrity_peary }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 37 } value = sr_disp_def_integrity_tranquility }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 38 } value = sr_disp_def_integrity_marius_hills }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 39 } value = sr_disp_def_integrity_daedalus }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 40 } value = sr_disp_def_integrity_imbrium }
 }
 sr_disp_fl_2_tgt_marines = {
 	value = 0
@@ -1526,6 +1656,12 @@ sr_disp_fl_2_tgt_marines = {
 	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 32 } value = sr_site_marines_value_makemake }
 	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 33 } value = sr_site_marines_value_haumea }
 	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 34 } value = sr_site_marines_value_sedna }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 35 } value = sr_site_marines_value_shackleton }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 36 } value = sr_site_marines_value_peary }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 37 } value = sr_site_marines_value_tranquility }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 38 } value = sr_site_marines_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 39 } value = sr_site_marines_value_daedalus }
+	if = { limit = { has_variable = sr_fl_2_target var:sr_fl_2_target = 40 } value = sr_site_marines_value_imbrium }
 }
 sr_disp_fl_2_tgt_def_low = {
 	value = sr_disp_fl_2_tgt_def
@@ -1572,6 +1708,12 @@ sr_disp_fl_3_tgt_def = {
 	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 32 } value = sr_site_def_value_makemake }
 	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 33 } value = sr_site_def_value_haumea }
 	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 34 } value = sr_site_def_value_sedna }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 35 } value = sr_site_def_value_shackleton }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 36 } value = sr_site_def_value_peary }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 37 } value = sr_site_def_value_tranquility }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 38 } value = sr_site_def_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 39 } value = sr_site_def_value_daedalus }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 40 } value = sr_site_def_value_imbrium }
 }
 sr_disp_fl_3_tgt_integrity = {
 	value = 0
@@ -1609,6 +1751,12 @@ sr_disp_fl_3_tgt_integrity = {
 	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 32 } value = sr_disp_def_integrity_makemake }
 	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 33 } value = sr_disp_def_integrity_haumea }
 	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 34 } value = sr_disp_def_integrity_sedna }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 35 } value = sr_disp_def_integrity_shackleton }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 36 } value = sr_disp_def_integrity_peary }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 37 } value = sr_disp_def_integrity_tranquility }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 38 } value = sr_disp_def_integrity_marius_hills }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 39 } value = sr_disp_def_integrity_daedalus }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 40 } value = sr_disp_def_integrity_imbrium }
 }
 sr_disp_fl_3_tgt_marines = {
 	value = 0
@@ -1646,6 +1794,12 @@ sr_disp_fl_3_tgt_marines = {
 	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 32 } value = sr_site_marines_value_makemake }
 	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 33 } value = sr_site_marines_value_haumea }
 	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 34 } value = sr_site_marines_value_sedna }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 35 } value = sr_site_marines_value_shackleton }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 36 } value = sr_site_marines_value_peary }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 37 } value = sr_site_marines_value_tranquility }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 38 } value = sr_site_marines_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 39 } value = sr_site_marines_value_daedalus }
+	if = { limit = { has_variable = sr_fl_3_target var:sr_fl_3_target = 40 } value = sr_site_marines_value_imbrium }
 }
 sr_disp_fl_3_tgt_def_low = {
 	value = sr_disp_fl_3_tgt_def
@@ -1692,6 +1846,12 @@ sr_disp_fl_4_tgt_def = {
 	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 32 } value = sr_site_def_value_makemake }
 	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 33 } value = sr_site_def_value_haumea }
 	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 34 } value = sr_site_def_value_sedna }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 35 } value = sr_site_def_value_shackleton }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 36 } value = sr_site_def_value_peary }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 37 } value = sr_site_def_value_tranquility }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 38 } value = sr_site_def_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 39 } value = sr_site_def_value_daedalus }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 40 } value = sr_site_def_value_imbrium }
 }
 sr_disp_fl_4_tgt_integrity = {
 	value = 0
@@ -1729,6 +1889,12 @@ sr_disp_fl_4_tgt_integrity = {
 	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 32 } value = sr_disp_def_integrity_makemake }
 	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 33 } value = sr_disp_def_integrity_haumea }
 	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 34 } value = sr_disp_def_integrity_sedna }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 35 } value = sr_disp_def_integrity_shackleton }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 36 } value = sr_disp_def_integrity_peary }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 37 } value = sr_disp_def_integrity_tranquility }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 38 } value = sr_disp_def_integrity_marius_hills }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 39 } value = sr_disp_def_integrity_daedalus }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 40 } value = sr_disp_def_integrity_imbrium }
 }
 sr_disp_fl_4_tgt_marines = {
 	value = 0
@@ -1766,6 +1932,12 @@ sr_disp_fl_4_tgt_marines = {
 	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 32 } value = sr_site_marines_value_makemake }
 	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 33 } value = sr_site_marines_value_haumea }
 	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 34 } value = sr_site_marines_value_sedna }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 35 } value = sr_site_marines_value_shackleton }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 36 } value = sr_site_marines_value_peary }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 37 } value = sr_site_marines_value_tranquility }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 38 } value = sr_site_marines_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 39 } value = sr_site_marines_value_daedalus }
+	if = { limit = { has_variable = sr_fl_4_target var:sr_fl_4_target = 40 } value = sr_site_marines_value_imbrium }
 }
 sr_disp_fl_4_tgt_def_low = {
 	value = sr_disp_fl_4_tgt_def
@@ -1812,6 +1984,12 @@ sr_disp_fl_5_tgt_def = {
 	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 32 } value = sr_site_def_value_makemake }
 	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 33 } value = sr_site_def_value_haumea }
 	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 34 } value = sr_site_def_value_sedna }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 35 } value = sr_site_def_value_shackleton }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 36 } value = sr_site_def_value_peary }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 37 } value = sr_site_def_value_tranquility }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 38 } value = sr_site_def_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 39 } value = sr_site_def_value_daedalus }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 40 } value = sr_site_def_value_imbrium }
 }
 sr_disp_fl_5_tgt_integrity = {
 	value = 0
@@ -1849,6 +2027,12 @@ sr_disp_fl_5_tgt_integrity = {
 	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 32 } value = sr_disp_def_integrity_makemake }
 	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 33 } value = sr_disp_def_integrity_haumea }
 	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 34 } value = sr_disp_def_integrity_sedna }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 35 } value = sr_disp_def_integrity_shackleton }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 36 } value = sr_disp_def_integrity_peary }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 37 } value = sr_disp_def_integrity_tranquility }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 38 } value = sr_disp_def_integrity_marius_hills }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 39 } value = sr_disp_def_integrity_daedalus }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 40 } value = sr_disp_def_integrity_imbrium }
 }
 sr_disp_fl_5_tgt_marines = {
 	value = 0
@@ -1886,6 +2070,12 @@ sr_disp_fl_5_tgt_marines = {
 	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 32 } value = sr_site_marines_value_makemake }
 	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 33 } value = sr_site_marines_value_haumea }
 	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 34 } value = sr_site_marines_value_sedna }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 35 } value = sr_site_marines_value_shackleton }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 36 } value = sr_site_marines_value_peary }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 37 } value = sr_site_marines_value_tranquility }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 38 } value = sr_site_marines_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 39 } value = sr_site_marines_value_daedalus }
+	if = { limit = { has_variable = sr_fl_5_target var:sr_fl_5_target = 40 } value = sr_site_marines_value_imbrium }
 }
 sr_disp_fl_5_tgt_def_low = {
 	value = sr_disp_fl_5_tgt_def
@@ -1932,6 +2122,12 @@ sr_disp_fl_6_tgt_def = {
 	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 32 } value = sr_site_def_value_makemake }
 	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 33 } value = sr_site_def_value_haumea }
 	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 34 } value = sr_site_def_value_sedna }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 35 } value = sr_site_def_value_shackleton }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 36 } value = sr_site_def_value_peary }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 37 } value = sr_site_def_value_tranquility }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 38 } value = sr_site_def_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 39 } value = sr_site_def_value_daedalus }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 40 } value = sr_site_def_value_imbrium }
 }
 sr_disp_fl_6_tgt_integrity = {
 	value = 0
@@ -1969,6 +2165,12 @@ sr_disp_fl_6_tgt_integrity = {
 	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 32 } value = sr_disp_def_integrity_makemake }
 	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 33 } value = sr_disp_def_integrity_haumea }
 	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 34 } value = sr_disp_def_integrity_sedna }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 35 } value = sr_disp_def_integrity_shackleton }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 36 } value = sr_disp_def_integrity_peary }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 37 } value = sr_disp_def_integrity_tranquility }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 38 } value = sr_disp_def_integrity_marius_hills }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 39 } value = sr_disp_def_integrity_daedalus }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 40 } value = sr_disp_def_integrity_imbrium }
 }
 sr_disp_fl_6_tgt_marines = {
 	value = 0
@@ -2006,6 +2208,12 @@ sr_disp_fl_6_tgt_marines = {
 	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 32 } value = sr_site_marines_value_makemake }
 	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 33 } value = sr_site_marines_value_haumea }
 	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 34 } value = sr_site_marines_value_sedna }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 35 } value = sr_site_marines_value_shackleton }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 36 } value = sr_site_marines_value_peary }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 37 } value = sr_site_marines_value_tranquility }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 38 } value = sr_site_marines_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 39 } value = sr_site_marines_value_daedalus }
+	if = { limit = { has_variable = sr_fl_6_target var:sr_fl_6_target = 40 } value = sr_site_marines_value_imbrium }
 }
 sr_disp_fl_6_tgt_def_low = {
 	value = sr_disp_fl_6_tgt_def
@@ -2052,6 +2260,12 @@ sr_disp_fl_7_tgt_def = {
 	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 32 } value = sr_site_def_value_makemake }
 	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 33 } value = sr_site_def_value_haumea }
 	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 34 } value = sr_site_def_value_sedna }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 35 } value = sr_site_def_value_shackleton }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 36 } value = sr_site_def_value_peary }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 37 } value = sr_site_def_value_tranquility }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 38 } value = sr_site_def_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 39 } value = sr_site_def_value_daedalus }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 40 } value = sr_site_def_value_imbrium }
 }
 sr_disp_fl_7_tgt_integrity = {
 	value = 0
@@ -2089,6 +2303,12 @@ sr_disp_fl_7_tgt_integrity = {
 	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 32 } value = sr_disp_def_integrity_makemake }
 	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 33 } value = sr_disp_def_integrity_haumea }
 	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 34 } value = sr_disp_def_integrity_sedna }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 35 } value = sr_disp_def_integrity_shackleton }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 36 } value = sr_disp_def_integrity_peary }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 37 } value = sr_disp_def_integrity_tranquility }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 38 } value = sr_disp_def_integrity_marius_hills }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 39 } value = sr_disp_def_integrity_daedalus }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 40 } value = sr_disp_def_integrity_imbrium }
 }
 sr_disp_fl_7_tgt_marines = {
 	value = 0
@@ -2126,6 +2346,12 @@ sr_disp_fl_7_tgt_marines = {
 	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 32 } value = sr_site_marines_value_makemake }
 	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 33 } value = sr_site_marines_value_haumea }
 	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 34 } value = sr_site_marines_value_sedna }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 35 } value = sr_site_marines_value_shackleton }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 36 } value = sr_site_marines_value_peary }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 37 } value = sr_site_marines_value_tranquility }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 38 } value = sr_site_marines_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 39 } value = sr_site_marines_value_daedalus }
+	if = { limit = { has_variable = sr_fl_7_target var:sr_fl_7_target = 40 } value = sr_site_marines_value_imbrium }
 }
 sr_disp_fl_7_tgt_def_low = {
 	value = sr_disp_fl_7_tgt_def
@@ -2172,6 +2398,12 @@ sr_disp_fl_8_tgt_def = {
 	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 32 } value = sr_site_def_value_makemake }
 	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 33 } value = sr_site_def_value_haumea }
 	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 34 } value = sr_site_def_value_sedna }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 35 } value = sr_site_def_value_shackleton }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 36 } value = sr_site_def_value_peary }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 37 } value = sr_site_def_value_tranquility }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 38 } value = sr_site_def_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 39 } value = sr_site_def_value_daedalus }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 40 } value = sr_site_def_value_imbrium }
 }
 sr_disp_fl_8_tgt_integrity = {
 	value = 0
@@ -2209,6 +2441,12 @@ sr_disp_fl_8_tgt_integrity = {
 	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 32 } value = sr_disp_def_integrity_makemake }
 	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 33 } value = sr_disp_def_integrity_haumea }
 	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 34 } value = sr_disp_def_integrity_sedna }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 35 } value = sr_disp_def_integrity_shackleton }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 36 } value = sr_disp_def_integrity_peary }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 37 } value = sr_disp_def_integrity_tranquility }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 38 } value = sr_disp_def_integrity_marius_hills }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 39 } value = sr_disp_def_integrity_daedalus }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 40 } value = sr_disp_def_integrity_imbrium }
 }
 sr_disp_fl_8_tgt_marines = {
 	value = 0
@@ -2246,6 +2484,12 @@ sr_disp_fl_8_tgt_marines = {
 	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 32 } value = sr_site_marines_value_makemake }
 	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 33 } value = sr_site_marines_value_haumea }
 	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 34 } value = sr_site_marines_value_sedna }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 35 } value = sr_site_marines_value_shackleton }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 36 } value = sr_site_marines_value_peary }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 37 } value = sr_site_marines_value_tranquility }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 38 } value = sr_site_marines_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 39 } value = sr_site_marines_value_daedalus }
+	if = { limit = { has_variable = sr_fl_8_target var:sr_fl_8_target = 40 } value = sr_site_marines_value_imbrium }
 }
 sr_disp_fl_8_tgt_def_low = {
 	value = sr_disp_fl_8_tgt_def
@@ -2292,6 +2536,12 @@ sr_disp_fl_9_tgt_def = {
 	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 32 } value = sr_site_def_value_makemake }
 	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 33 } value = sr_site_def_value_haumea }
 	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 34 } value = sr_site_def_value_sedna }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 35 } value = sr_site_def_value_shackleton }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 36 } value = sr_site_def_value_peary }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 37 } value = sr_site_def_value_tranquility }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 38 } value = sr_site_def_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 39 } value = sr_site_def_value_daedalus }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 40 } value = sr_site_def_value_imbrium }
 }
 sr_disp_fl_9_tgt_integrity = {
 	value = 0
@@ -2329,6 +2579,12 @@ sr_disp_fl_9_tgt_integrity = {
 	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 32 } value = sr_disp_def_integrity_makemake }
 	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 33 } value = sr_disp_def_integrity_haumea }
 	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 34 } value = sr_disp_def_integrity_sedna }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 35 } value = sr_disp_def_integrity_shackleton }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 36 } value = sr_disp_def_integrity_peary }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 37 } value = sr_disp_def_integrity_tranquility }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 38 } value = sr_disp_def_integrity_marius_hills }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 39 } value = sr_disp_def_integrity_daedalus }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 40 } value = sr_disp_def_integrity_imbrium }
 }
 sr_disp_fl_9_tgt_marines = {
 	value = 0
@@ -2366,6 +2622,12 @@ sr_disp_fl_9_tgt_marines = {
 	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 32 } value = sr_site_marines_value_makemake }
 	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 33 } value = sr_site_marines_value_haumea }
 	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 34 } value = sr_site_marines_value_sedna }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 35 } value = sr_site_marines_value_shackleton }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 36 } value = sr_site_marines_value_peary }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 37 } value = sr_site_marines_value_tranquility }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 38 } value = sr_site_marines_value_marius_hills }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 39 } value = sr_site_marines_value_daedalus }
+	if = { limit = { has_variable = sr_fl_9_target var:sr_fl_9_target = 40 } value = sr_site_marines_value_imbrium }
 }
 sr_disp_fl_9_tgt_def_low = {
 	value = sr_disp_fl_9_tgt_def

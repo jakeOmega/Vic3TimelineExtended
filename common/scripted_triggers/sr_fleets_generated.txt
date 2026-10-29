@@ -47,6 +47,12 @@ sr_fl_1_closes_on_free = {
 		AND = { var:sr_fl_1_target = 32 has_global_variable = sr_site_free_makemake }
 		AND = { var:sr_fl_1_target = 33 has_global_variable = sr_site_free_haumea }
 		AND = { var:sr_fl_1_target = 34 has_global_variable = sr_site_free_sedna }
+		AND = { var:sr_fl_1_target = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { var:sr_fl_1_target = 36 has_global_variable = sr_site_free_peary }
+		AND = { var:sr_fl_1_target = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { var:sr_fl_1_target = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { var:sr_fl_1_target = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { var:sr_fl_1_target = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_fl_1_target_known = {
@@ -86,6 +92,12 @@ sr_fl_1_target_known = {
 		AND = { var:sr_fl_1_target = 32 OR = { sr_cov_surveys_makemake = yes global_var:sr_site_holder_makemake ?= this } }
 		AND = { var:sr_fl_1_target = 33 OR = { sr_cov_surveys_haumea = yes global_var:sr_site_holder_haumea ?= this } }
 		AND = { var:sr_fl_1_target = 34 OR = { sr_cov_surveys_sedna = yes global_var:sr_site_holder_sedna ?= this } }
+		AND = { var:sr_fl_1_target = 35 OR = { sr_cov_surveys_shackleton = yes global_var:sr_site_holder_shackleton ?= this } }
+		AND = { var:sr_fl_1_target = 36 OR = { sr_cov_surveys_peary = yes global_var:sr_site_holder_peary ?= this } }
+		AND = { var:sr_fl_1_target = 37 OR = { sr_cov_surveys_tranquility = yes global_var:sr_site_holder_tranquility ?= this } }
+		AND = { var:sr_fl_1_target = 38 OR = { sr_cov_surveys_marius_hills = yes global_var:sr_site_holder_marius_hills ?= this } }
+		AND = { var:sr_fl_1_target = 39 OR = { sr_cov_surveys_daedalus = yes global_var:sr_site_holder_daedalus ?= this } }
+		AND = { var:sr_fl_1_target = 40 OR = { sr_cov_surveys_imbrium = yes global_var:sr_site_holder_imbrium ?= this } }
 	}
 }
 sr_fl_1_all_rapid = {
@@ -318,6 +330,12 @@ sr_fl_1_target_hostile = {
 		AND = { var:sr_fl_1_target = 32 sr_site_hostile_target = { KEY = makemake } }
 		AND = { var:sr_fl_1_target = 33 sr_site_hostile_target = { KEY = haumea } }
 		AND = { var:sr_fl_1_target = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { var:sr_fl_1_target = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { var:sr_fl_1_target = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { var:sr_fl_1_target = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { var:sr_fl_1_target = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_1_target = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { var:sr_fl_1_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
@@ -372,6 +390,12 @@ sr_fl_1_target_interdictable = {
 		AND = { var:sr_fl_1_target = 32 sr_site_interdict_target = { KEY = makemake } }
 		AND = { var:sr_fl_1_target = 33 sr_site_interdict_target = { KEY = haumea } }
 		AND = { var:sr_fl_1_target = 34 sr_site_interdict_target = { KEY = sedna } }
+		AND = { var:sr_fl_1_target = 35 sr_site_interdict_target = { KEY = shackleton } }
+		AND = { var:sr_fl_1_target = 36 sr_site_interdict_target = { KEY = peary } }
+		AND = { var:sr_fl_1_target = 37 sr_site_interdict_target = { KEY = tranquility } }
+		AND = { var:sr_fl_1_target = 38 sr_site_interdict_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_1_target = 39 sr_site_interdict_target = { KEY = daedalus } }
+		AND = { var:sr_fl_1_target = 40 sr_site_interdict_target = { KEY = imbrium } }
 	}
 }
 sr_fl_1_interdicting = { sr_fl_1_posture_value = 4 }
@@ -639,6 +663,12 @@ sr_fl_2_closes_on_free = {
 		AND = { var:sr_fl_2_target = 32 has_global_variable = sr_site_free_makemake }
 		AND = { var:sr_fl_2_target = 33 has_global_variable = sr_site_free_haumea }
 		AND = { var:sr_fl_2_target = 34 has_global_variable = sr_site_free_sedna }
+		AND = { var:sr_fl_2_target = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { var:sr_fl_2_target = 36 has_global_variable = sr_site_free_peary }
+		AND = { var:sr_fl_2_target = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { var:sr_fl_2_target = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { var:sr_fl_2_target = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { var:sr_fl_2_target = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_fl_2_target_known = {
@@ -678,6 +708,12 @@ sr_fl_2_target_known = {
 		AND = { var:sr_fl_2_target = 32 OR = { sr_cov_surveys_makemake = yes global_var:sr_site_holder_makemake ?= this } }
 		AND = { var:sr_fl_2_target = 33 OR = { sr_cov_surveys_haumea = yes global_var:sr_site_holder_haumea ?= this } }
 		AND = { var:sr_fl_2_target = 34 OR = { sr_cov_surveys_sedna = yes global_var:sr_site_holder_sedna ?= this } }
+		AND = { var:sr_fl_2_target = 35 OR = { sr_cov_surveys_shackleton = yes global_var:sr_site_holder_shackleton ?= this } }
+		AND = { var:sr_fl_2_target = 36 OR = { sr_cov_surveys_peary = yes global_var:sr_site_holder_peary ?= this } }
+		AND = { var:sr_fl_2_target = 37 OR = { sr_cov_surveys_tranquility = yes global_var:sr_site_holder_tranquility ?= this } }
+		AND = { var:sr_fl_2_target = 38 OR = { sr_cov_surveys_marius_hills = yes global_var:sr_site_holder_marius_hills ?= this } }
+		AND = { var:sr_fl_2_target = 39 OR = { sr_cov_surveys_daedalus = yes global_var:sr_site_holder_daedalus ?= this } }
+		AND = { var:sr_fl_2_target = 40 OR = { sr_cov_surveys_imbrium = yes global_var:sr_site_holder_imbrium ?= this } }
 	}
 }
 sr_fl_2_all_rapid = {
@@ -910,6 +946,12 @@ sr_fl_2_target_hostile = {
 		AND = { var:sr_fl_2_target = 32 sr_site_hostile_target = { KEY = makemake } }
 		AND = { var:sr_fl_2_target = 33 sr_site_hostile_target = { KEY = haumea } }
 		AND = { var:sr_fl_2_target = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { var:sr_fl_2_target = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { var:sr_fl_2_target = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { var:sr_fl_2_target = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { var:sr_fl_2_target = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_2_target = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { var:sr_fl_2_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
@@ -964,6 +1006,12 @@ sr_fl_2_target_interdictable = {
 		AND = { var:sr_fl_2_target = 32 sr_site_interdict_target = { KEY = makemake } }
 		AND = { var:sr_fl_2_target = 33 sr_site_interdict_target = { KEY = haumea } }
 		AND = { var:sr_fl_2_target = 34 sr_site_interdict_target = { KEY = sedna } }
+		AND = { var:sr_fl_2_target = 35 sr_site_interdict_target = { KEY = shackleton } }
+		AND = { var:sr_fl_2_target = 36 sr_site_interdict_target = { KEY = peary } }
+		AND = { var:sr_fl_2_target = 37 sr_site_interdict_target = { KEY = tranquility } }
+		AND = { var:sr_fl_2_target = 38 sr_site_interdict_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_2_target = 39 sr_site_interdict_target = { KEY = daedalus } }
+		AND = { var:sr_fl_2_target = 40 sr_site_interdict_target = { KEY = imbrium } }
 	}
 }
 sr_fl_2_interdicting = { sr_fl_2_posture_value = 4 }
@@ -1231,6 +1279,12 @@ sr_fl_3_closes_on_free = {
 		AND = { var:sr_fl_3_target = 32 has_global_variable = sr_site_free_makemake }
 		AND = { var:sr_fl_3_target = 33 has_global_variable = sr_site_free_haumea }
 		AND = { var:sr_fl_3_target = 34 has_global_variable = sr_site_free_sedna }
+		AND = { var:sr_fl_3_target = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { var:sr_fl_3_target = 36 has_global_variable = sr_site_free_peary }
+		AND = { var:sr_fl_3_target = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { var:sr_fl_3_target = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { var:sr_fl_3_target = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { var:sr_fl_3_target = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_fl_3_target_known = {
@@ -1270,6 +1324,12 @@ sr_fl_3_target_known = {
 		AND = { var:sr_fl_3_target = 32 OR = { sr_cov_surveys_makemake = yes global_var:sr_site_holder_makemake ?= this } }
 		AND = { var:sr_fl_3_target = 33 OR = { sr_cov_surveys_haumea = yes global_var:sr_site_holder_haumea ?= this } }
 		AND = { var:sr_fl_3_target = 34 OR = { sr_cov_surveys_sedna = yes global_var:sr_site_holder_sedna ?= this } }
+		AND = { var:sr_fl_3_target = 35 OR = { sr_cov_surveys_shackleton = yes global_var:sr_site_holder_shackleton ?= this } }
+		AND = { var:sr_fl_3_target = 36 OR = { sr_cov_surveys_peary = yes global_var:sr_site_holder_peary ?= this } }
+		AND = { var:sr_fl_3_target = 37 OR = { sr_cov_surveys_tranquility = yes global_var:sr_site_holder_tranquility ?= this } }
+		AND = { var:sr_fl_3_target = 38 OR = { sr_cov_surveys_marius_hills = yes global_var:sr_site_holder_marius_hills ?= this } }
+		AND = { var:sr_fl_3_target = 39 OR = { sr_cov_surveys_daedalus = yes global_var:sr_site_holder_daedalus ?= this } }
+		AND = { var:sr_fl_3_target = 40 OR = { sr_cov_surveys_imbrium = yes global_var:sr_site_holder_imbrium ?= this } }
 	}
 }
 sr_fl_3_all_rapid = {
@@ -1502,6 +1562,12 @@ sr_fl_3_target_hostile = {
 		AND = { var:sr_fl_3_target = 32 sr_site_hostile_target = { KEY = makemake } }
 		AND = { var:sr_fl_3_target = 33 sr_site_hostile_target = { KEY = haumea } }
 		AND = { var:sr_fl_3_target = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { var:sr_fl_3_target = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { var:sr_fl_3_target = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { var:sr_fl_3_target = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { var:sr_fl_3_target = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_3_target = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { var:sr_fl_3_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
@@ -1556,6 +1622,12 @@ sr_fl_3_target_interdictable = {
 		AND = { var:sr_fl_3_target = 32 sr_site_interdict_target = { KEY = makemake } }
 		AND = { var:sr_fl_3_target = 33 sr_site_interdict_target = { KEY = haumea } }
 		AND = { var:sr_fl_3_target = 34 sr_site_interdict_target = { KEY = sedna } }
+		AND = { var:sr_fl_3_target = 35 sr_site_interdict_target = { KEY = shackleton } }
+		AND = { var:sr_fl_3_target = 36 sr_site_interdict_target = { KEY = peary } }
+		AND = { var:sr_fl_3_target = 37 sr_site_interdict_target = { KEY = tranquility } }
+		AND = { var:sr_fl_3_target = 38 sr_site_interdict_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_3_target = 39 sr_site_interdict_target = { KEY = daedalus } }
+		AND = { var:sr_fl_3_target = 40 sr_site_interdict_target = { KEY = imbrium } }
 	}
 }
 sr_fl_3_interdicting = { sr_fl_3_posture_value = 4 }
@@ -1823,6 +1895,12 @@ sr_fl_4_closes_on_free = {
 		AND = { var:sr_fl_4_target = 32 has_global_variable = sr_site_free_makemake }
 		AND = { var:sr_fl_4_target = 33 has_global_variable = sr_site_free_haumea }
 		AND = { var:sr_fl_4_target = 34 has_global_variable = sr_site_free_sedna }
+		AND = { var:sr_fl_4_target = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { var:sr_fl_4_target = 36 has_global_variable = sr_site_free_peary }
+		AND = { var:sr_fl_4_target = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { var:sr_fl_4_target = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { var:sr_fl_4_target = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { var:sr_fl_4_target = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_fl_4_target_known = {
@@ -1862,6 +1940,12 @@ sr_fl_4_target_known = {
 		AND = { var:sr_fl_4_target = 32 OR = { sr_cov_surveys_makemake = yes global_var:sr_site_holder_makemake ?= this } }
 		AND = { var:sr_fl_4_target = 33 OR = { sr_cov_surveys_haumea = yes global_var:sr_site_holder_haumea ?= this } }
 		AND = { var:sr_fl_4_target = 34 OR = { sr_cov_surveys_sedna = yes global_var:sr_site_holder_sedna ?= this } }
+		AND = { var:sr_fl_4_target = 35 OR = { sr_cov_surveys_shackleton = yes global_var:sr_site_holder_shackleton ?= this } }
+		AND = { var:sr_fl_4_target = 36 OR = { sr_cov_surveys_peary = yes global_var:sr_site_holder_peary ?= this } }
+		AND = { var:sr_fl_4_target = 37 OR = { sr_cov_surveys_tranquility = yes global_var:sr_site_holder_tranquility ?= this } }
+		AND = { var:sr_fl_4_target = 38 OR = { sr_cov_surveys_marius_hills = yes global_var:sr_site_holder_marius_hills ?= this } }
+		AND = { var:sr_fl_4_target = 39 OR = { sr_cov_surveys_daedalus = yes global_var:sr_site_holder_daedalus ?= this } }
+		AND = { var:sr_fl_4_target = 40 OR = { sr_cov_surveys_imbrium = yes global_var:sr_site_holder_imbrium ?= this } }
 	}
 }
 sr_fl_4_all_rapid = {
@@ -2094,6 +2178,12 @@ sr_fl_4_target_hostile = {
 		AND = { var:sr_fl_4_target = 32 sr_site_hostile_target = { KEY = makemake } }
 		AND = { var:sr_fl_4_target = 33 sr_site_hostile_target = { KEY = haumea } }
 		AND = { var:sr_fl_4_target = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { var:sr_fl_4_target = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { var:sr_fl_4_target = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { var:sr_fl_4_target = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { var:sr_fl_4_target = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_4_target = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { var:sr_fl_4_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
@@ -2148,6 +2238,12 @@ sr_fl_4_target_interdictable = {
 		AND = { var:sr_fl_4_target = 32 sr_site_interdict_target = { KEY = makemake } }
 		AND = { var:sr_fl_4_target = 33 sr_site_interdict_target = { KEY = haumea } }
 		AND = { var:sr_fl_4_target = 34 sr_site_interdict_target = { KEY = sedna } }
+		AND = { var:sr_fl_4_target = 35 sr_site_interdict_target = { KEY = shackleton } }
+		AND = { var:sr_fl_4_target = 36 sr_site_interdict_target = { KEY = peary } }
+		AND = { var:sr_fl_4_target = 37 sr_site_interdict_target = { KEY = tranquility } }
+		AND = { var:sr_fl_4_target = 38 sr_site_interdict_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_4_target = 39 sr_site_interdict_target = { KEY = daedalus } }
+		AND = { var:sr_fl_4_target = 40 sr_site_interdict_target = { KEY = imbrium } }
 	}
 }
 sr_fl_4_interdicting = { sr_fl_4_posture_value = 4 }
@@ -2415,6 +2511,12 @@ sr_fl_5_closes_on_free = {
 		AND = { var:sr_fl_5_target = 32 has_global_variable = sr_site_free_makemake }
 		AND = { var:sr_fl_5_target = 33 has_global_variable = sr_site_free_haumea }
 		AND = { var:sr_fl_5_target = 34 has_global_variable = sr_site_free_sedna }
+		AND = { var:sr_fl_5_target = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { var:sr_fl_5_target = 36 has_global_variable = sr_site_free_peary }
+		AND = { var:sr_fl_5_target = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { var:sr_fl_5_target = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { var:sr_fl_5_target = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { var:sr_fl_5_target = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_fl_5_target_known = {
@@ -2454,6 +2556,12 @@ sr_fl_5_target_known = {
 		AND = { var:sr_fl_5_target = 32 OR = { sr_cov_surveys_makemake = yes global_var:sr_site_holder_makemake ?= this } }
 		AND = { var:sr_fl_5_target = 33 OR = { sr_cov_surveys_haumea = yes global_var:sr_site_holder_haumea ?= this } }
 		AND = { var:sr_fl_5_target = 34 OR = { sr_cov_surveys_sedna = yes global_var:sr_site_holder_sedna ?= this } }
+		AND = { var:sr_fl_5_target = 35 OR = { sr_cov_surveys_shackleton = yes global_var:sr_site_holder_shackleton ?= this } }
+		AND = { var:sr_fl_5_target = 36 OR = { sr_cov_surveys_peary = yes global_var:sr_site_holder_peary ?= this } }
+		AND = { var:sr_fl_5_target = 37 OR = { sr_cov_surveys_tranquility = yes global_var:sr_site_holder_tranquility ?= this } }
+		AND = { var:sr_fl_5_target = 38 OR = { sr_cov_surveys_marius_hills = yes global_var:sr_site_holder_marius_hills ?= this } }
+		AND = { var:sr_fl_5_target = 39 OR = { sr_cov_surveys_daedalus = yes global_var:sr_site_holder_daedalus ?= this } }
+		AND = { var:sr_fl_5_target = 40 OR = { sr_cov_surveys_imbrium = yes global_var:sr_site_holder_imbrium ?= this } }
 	}
 }
 sr_fl_5_all_rapid = {
@@ -2686,6 +2794,12 @@ sr_fl_5_target_hostile = {
 		AND = { var:sr_fl_5_target = 32 sr_site_hostile_target = { KEY = makemake } }
 		AND = { var:sr_fl_5_target = 33 sr_site_hostile_target = { KEY = haumea } }
 		AND = { var:sr_fl_5_target = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { var:sr_fl_5_target = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { var:sr_fl_5_target = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { var:sr_fl_5_target = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { var:sr_fl_5_target = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_5_target = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { var:sr_fl_5_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
@@ -2740,6 +2854,12 @@ sr_fl_5_target_interdictable = {
 		AND = { var:sr_fl_5_target = 32 sr_site_interdict_target = { KEY = makemake } }
 		AND = { var:sr_fl_5_target = 33 sr_site_interdict_target = { KEY = haumea } }
 		AND = { var:sr_fl_5_target = 34 sr_site_interdict_target = { KEY = sedna } }
+		AND = { var:sr_fl_5_target = 35 sr_site_interdict_target = { KEY = shackleton } }
+		AND = { var:sr_fl_5_target = 36 sr_site_interdict_target = { KEY = peary } }
+		AND = { var:sr_fl_5_target = 37 sr_site_interdict_target = { KEY = tranquility } }
+		AND = { var:sr_fl_5_target = 38 sr_site_interdict_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_5_target = 39 sr_site_interdict_target = { KEY = daedalus } }
+		AND = { var:sr_fl_5_target = 40 sr_site_interdict_target = { KEY = imbrium } }
 	}
 }
 sr_fl_5_interdicting = { sr_fl_5_posture_value = 4 }
@@ -3007,6 +3127,12 @@ sr_fl_6_closes_on_free = {
 		AND = { var:sr_fl_6_target = 32 has_global_variable = sr_site_free_makemake }
 		AND = { var:sr_fl_6_target = 33 has_global_variable = sr_site_free_haumea }
 		AND = { var:sr_fl_6_target = 34 has_global_variable = sr_site_free_sedna }
+		AND = { var:sr_fl_6_target = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { var:sr_fl_6_target = 36 has_global_variable = sr_site_free_peary }
+		AND = { var:sr_fl_6_target = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { var:sr_fl_6_target = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { var:sr_fl_6_target = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { var:sr_fl_6_target = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_fl_6_target_known = {
@@ -3046,6 +3172,12 @@ sr_fl_6_target_known = {
 		AND = { var:sr_fl_6_target = 32 OR = { sr_cov_surveys_makemake = yes global_var:sr_site_holder_makemake ?= this } }
 		AND = { var:sr_fl_6_target = 33 OR = { sr_cov_surveys_haumea = yes global_var:sr_site_holder_haumea ?= this } }
 		AND = { var:sr_fl_6_target = 34 OR = { sr_cov_surveys_sedna = yes global_var:sr_site_holder_sedna ?= this } }
+		AND = { var:sr_fl_6_target = 35 OR = { sr_cov_surveys_shackleton = yes global_var:sr_site_holder_shackleton ?= this } }
+		AND = { var:sr_fl_6_target = 36 OR = { sr_cov_surveys_peary = yes global_var:sr_site_holder_peary ?= this } }
+		AND = { var:sr_fl_6_target = 37 OR = { sr_cov_surveys_tranquility = yes global_var:sr_site_holder_tranquility ?= this } }
+		AND = { var:sr_fl_6_target = 38 OR = { sr_cov_surveys_marius_hills = yes global_var:sr_site_holder_marius_hills ?= this } }
+		AND = { var:sr_fl_6_target = 39 OR = { sr_cov_surveys_daedalus = yes global_var:sr_site_holder_daedalus ?= this } }
+		AND = { var:sr_fl_6_target = 40 OR = { sr_cov_surveys_imbrium = yes global_var:sr_site_holder_imbrium ?= this } }
 	}
 }
 sr_fl_6_all_rapid = {
@@ -3278,6 +3410,12 @@ sr_fl_6_target_hostile = {
 		AND = { var:sr_fl_6_target = 32 sr_site_hostile_target = { KEY = makemake } }
 		AND = { var:sr_fl_6_target = 33 sr_site_hostile_target = { KEY = haumea } }
 		AND = { var:sr_fl_6_target = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { var:sr_fl_6_target = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { var:sr_fl_6_target = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { var:sr_fl_6_target = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { var:sr_fl_6_target = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_6_target = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { var:sr_fl_6_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
@@ -3332,6 +3470,12 @@ sr_fl_6_target_interdictable = {
 		AND = { var:sr_fl_6_target = 32 sr_site_interdict_target = { KEY = makemake } }
 		AND = { var:sr_fl_6_target = 33 sr_site_interdict_target = { KEY = haumea } }
 		AND = { var:sr_fl_6_target = 34 sr_site_interdict_target = { KEY = sedna } }
+		AND = { var:sr_fl_6_target = 35 sr_site_interdict_target = { KEY = shackleton } }
+		AND = { var:sr_fl_6_target = 36 sr_site_interdict_target = { KEY = peary } }
+		AND = { var:sr_fl_6_target = 37 sr_site_interdict_target = { KEY = tranquility } }
+		AND = { var:sr_fl_6_target = 38 sr_site_interdict_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_6_target = 39 sr_site_interdict_target = { KEY = daedalus } }
+		AND = { var:sr_fl_6_target = 40 sr_site_interdict_target = { KEY = imbrium } }
 	}
 }
 sr_fl_6_interdicting = { sr_fl_6_posture_value = 4 }
@@ -3599,6 +3743,12 @@ sr_fl_7_closes_on_free = {
 		AND = { var:sr_fl_7_target = 32 has_global_variable = sr_site_free_makemake }
 		AND = { var:sr_fl_7_target = 33 has_global_variable = sr_site_free_haumea }
 		AND = { var:sr_fl_7_target = 34 has_global_variable = sr_site_free_sedna }
+		AND = { var:sr_fl_7_target = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { var:sr_fl_7_target = 36 has_global_variable = sr_site_free_peary }
+		AND = { var:sr_fl_7_target = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { var:sr_fl_7_target = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { var:sr_fl_7_target = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { var:sr_fl_7_target = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_fl_7_target_known = {
@@ -3638,6 +3788,12 @@ sr_fl_7_target_known = {
 		AND = { var:sr_fl_7_target = 32 OR = { sr_cov_surveys_makemake = yes global_var:sr_site_holder_makemake ?= this } }
 		AND = { var:sr_fl_7_target = 33 OR = { sr_cov_surveys_haumea = yes global_var:sr_site_holder_haumea ?= this } }
 		AND = { var:sr_fl_7_target = 34 OR = { sr_cov_surveys_sedna = yes global_var:sr_site_holder_sedna ?= this } }
+		AND = { var:sr_fl_7_target = 35 OR = { sr_cov_surveys_shackleton = yes global_var:sr_site_holder_shackleton ?= this } }
+		AND = { var:sr_fl_7_target = 36 OR = { sr_cov_surveys_peary = yes global_var:sr_site_holder_peary ?= this } }
+		AND = { var:sr_fl_7_target = 37 OR = { sr_cov_surveys_tranquility = yes global_var:sr_site_holder_tranquility ?= this } }
+		AND = { var:sr_fl_7_target = 38 OR = { sr_cov_surveys_marius_hills = yes global_var:sr_site_holder_marius_hills ?= this } }
+		AND = { var:sr_fl_7_target = 39 OR = { sr_cov_surveys_daedalus = yes global_var:sr_site_holder_daedalus ?= this } }
+		AND = { var:sr_fl_7_target = 40 OR = { sr_cov_surveys_imbrium = yes global_var:sr_site_holder_imbrium ?= this } }
 	}
 }
 sr_fl_7_all_rapid = {
@@ -3870,6 +4026,12 @@ sr_fl_7_target_hostile = {
 		AND = { var:sr_fl_7_target = 32 sr_site_hostile_target = { KEY = makemake } }
 		AND = { var:sr_fl_7_target = 33 sr_site_hostile_target = { KEY = haumea } }
 		AND = { var:sr_fl_7_target = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { var:sr_fl_7_target = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { var:sr_fl_7_target = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { var:sr_fl_7_target = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { var:sr_fl_7_target = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_7_target = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { var:sr_fl_7_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
@@ -3924,6 +4086,12 @@ sr_fl_7_target_interdictable = {
 		AND = { var:sr_fl_7_target = 32 sr_site_interdict_target = { KEY = makemake } }
 		AND = { var:sr_fl_7_target = 33 sr_site_interdict_target = { KEY = haumea } }
 		AND = { var:sr_fl_7_target = 34 sr_site_interdict_target = { KEY = sedna } }
+		AND = { var:sr_fl_7_target = 35 sr_site_interdict_target = { KEY = shackleton } }
+		AND = { var:sr_fl_7_target = 36 sr_site_interdict_target = { KEY = peary } }
+		AND = { var:sr_fl_7_target = 37 sr_site_interdict_target = { KEY = tranquility } }
+		AND = { var:sr_fl_7_target = 38 sr_site_interdict_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_7_target = 39 sr_site_interdict_target = { KEY = daedalus } }
+		AND = { var:sr_fl_7_target = 40 sr_site_interdict_target = { KEY = imbrium } }
 	}
 }
 sr_fl_7_interdicting = { sr_fl_7_posture_value = 4 }
@@ -4191,6 +4359,12 @@ sr_fl_8_closes_on_free = {
 		AND = { var:sr_fl_8_target = 32 has_global_variable = sr_site_free_makemake }
 		AND = { var:sr_fl_8_target = 33 has_global_variable = sr_site_free_haumea }
 		AND = { var:sr_fl_8_target = 34 has_global_variable = sr_site_free_sedna }
+		AND = { var:sr_fl_8_target = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { var:sr_fl_8_target = 36 has_global_variable = sr_site_free_peary }
+		AND = { var:sr_fl_8_target = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { var:sr_fl_8_target = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { var:sr_fl_8_target = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { var:sr_fl_8_target = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_fl_8_target_known = {
@@ -4230,6 +4404,12 @@ sr_fl_8_target_known = {
 		AND = { var:sr_fl_8_target = 32 OR = { sr_cov_surveys_makemake = yes global_var:sr_site_holder_makemake ?= this } }
 		AND = { var:sr_fl_8_target = 33 OR = { sr_cov_surveys_haumea = yes global_var:sr_site_holder_haumea ?= this } }
 		AND = { var:sr_fl_8_target = 34 OR = { sr_cov_surveys_sedna = yes global_var:sr_site_holder_sedna ?= this } }
+		AND = { var:sr_fl_8_target = 35 OR = { sr_cov_surveys_shackleton = yes global_var:sr_site_holder_shackleton ?= this } }
+		AND = { var:sr_fl_8_target = 36 OR = { sr_cov_surveys_peary = yes global_var:sr_site_holder_peary ?= this } }
+		AND = { var:sr_fl_8_target = 37 OR = { sr_cov_surveys_tranquility = yes global_var:sr_site_holder_tranquility ?= this } }
+		AND = { var:sr_fl_8_target = 38 OR = { sr_cov_surveys_marius_hills = yes global_var:sr_site_holder_marius_hills ?= this } }
+		AND = { var:sr_fl_8_target = 39 OR = { sr_cov_surveys_daedalus = yes global_var:sr_site_holder_daedalus ?= this } }
+		AND = { var:sr_fl_8_target = 40 OR = { sr_cov_surveys_imbrium = yes global_var:sr_site_holder_imbrium ?= this } }
 	}
 }
 sr_fl_8_all_rapid = {
@@ -4462,6 +4642,12 @@ sr_fl_8_target_hostile = {
 		AND = { var:sr_fl_8_target = 32 sr_site_hostile_target = { KEY = makemake } }
 		AND = { var:sr_fl_8_target = 33 sr_site_hostile_target = { KEY = haumea } }
 		AND = { var:sr_fl_8_target = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { var:sr_fl_8_target = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { var:sr_fl_8_target = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { var:sr_fl_8_target = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { var:sr_fl_8_target = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_8_target = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { var:sr_fl_8_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
@@ -4516,6 +4702,12 @@ sr_fl_8_target_interdictable = {
 		AND = { var:sr_fl_8_target = 32 sr_site_interdict_target = { KEY = makemake } }
 		AND = { var:sr_fl_8_target = 33 sr_site_interdict_target = { KEY = haumea } }
 		AND = { var:sr_fl_8_target = 34 sr_site_interdict_target = { KEY = sedna } }
+		AND = { var:sr_fl_8_target = 35 sr_site_interdict_target = { KEY = shackleton } }
+		AND = { var:sr_fl_8_target = 36 sr_site_interdict_target = { KEY = peary } }
+		AND = { var:sr_fl_8_target = 37 sr_site_interdict_target = { KEY = tranquility } }
+		AND = { var:sr_fl_8_target = 38 sr_site_interdict_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_8_target = 39 sr_site_interdict_target = { KEY = daedalus } }
+		AND = { var:sr_fl_8_target = 40 sr_site_interdict_target = { KEY = imbrium } }
 	}
 }
 sr_fl_8_interdicting = { sr_fl_8_posture_value = 4 }
@@ -4783,6 +4975,12 @@ sr_fl_9_closes_on_free = {
 		AND = { var:sr_fl_9_target = 32 has_global_variable = sr_site_free_makemake }
 		AND = { var:sr_fl_9_target = 33 has_global_variable = sr_site_free_haumea }
 		AND = { var:sr_fl_9_target = 34 has_global_variable = sr_site_free_sedna }
+		AND = { var:sr_fl_9_target = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { var:sr_fl_9_target = 36 has_global_variable = sr_site_free_peary }
+		AND = { var:sr_fl_9_target = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { var:sr_fl_9_target = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { var:sr_fl_9_target = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { var:sr_fl_9_target = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 sr_fl_9_target_known = {
@@ -4822,6 +5020,12 @@ sr_fl_9_target_known = {
 		AND = { var:sr_fl_9_target = 32 OR = { sr_cov_surveys_makemake = yes global_var:sr_site_holder_makemake ?= this } }
 		AND = { var:sr_fl_9_target = 33 OR = { sr_cov_surveys_haumea = yes global_var:sr_site_holder_haumea ?= this } }
 		AND = { var:sr_fl_9_target = 34 OR = { sr_cov_surveys_sedna = yes global_var:sr_site_holder_sedna ?= this } }
+		AND = { var:sr_fl_9_target = 35 OR = { sr_cov_surveys_shackleton = yes global_var:sr_site_holder_shackleton ?= this } }
+		AND = { var:sr_fl_9_target = 36 OR = { sr_cov_surveys_peary = yes global_var:sr_site_holder_peary ?= this } }
+		AND = { var:sr_fl_9_target = 37 OR = { sr_cov_surveys_tranquility = yes global_var:sr_site_holder_tranquility ?= this } }
+		AND = { var:sr_fl_9_target = 38 OR = { sr_cov_surveys_marius_hills = yes global_var:sr_site_holder_marius_hills ?= this } }
+		AND = { var:sr_fl_9_target = 39 OR = { sr_cov_surveys_daedalus = yes global_var:sr_site_holder_daedalus ?= this } }
+		AND = { var:sr_fl_9_target = 40 OR = { sr_cov_surveys_imbrium = yes global_var:sr_site_holder_imbrium ?= this } }
 	}
 }
 sr_fl_9_all_rapid = {
@@ -5054,6 +5258,12 @@ sr_fl_9_target_hostile = {
 		AND = { var:sr_fl_9_target = 32 sr_site_hostile_target = { KEY = makemake } }
 		AND = { var:sr_fl_9_target = 33 sr_site_hostile_target = { KEY = haumea } }
 		AND = { var:sr_fl_9_target = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { var:sr_fl_9_target = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { var:sr_fl_9_target = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { var:sr_fl_9_target = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { var:sr_fl_9_target = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_9_target = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { var:sr_fl_9_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
 # 6c: a world at its location it may interdict (a country at peace with us,
@@ -5108,6 +5318,12 @@ sr_fl_9_target_interdictable = {
 		AND = { var:sr_fl_9_target = 32 sr_site_interdict_target = { KEY = makemake } }
 		AND = { var:sr_fl_9_target = 33 sr_site_interdict_target = { KEY = haumea } }
 		AND = { var:sr_fl_9_target = 34 sr_site_interdict_target = { KEY = sedna } }
+		AND = { var:sr_fl_9_target = 35 sr_site_interdict_target = { KEY = shackleton } }
+		AND = { var:sr_fl_9_target = 36 sr_site_interdict_target = { KEY = peary } }
+		AND = { var:sr_fl_9_target = 37 sr_site_interdict_target = { KEY = tranquility } }
+		AND = { var:sr_fl_9_target = 38 sr_site_interdict_target = { KEY = marius_hills } }
+		AND = { var:sr_fl_9_target = 39 sr_site_interdict_target = { KEY = daedalus } }
+		AND = { var:sr_fl_9_target = 40 sr_site_interdict_target = { KEY = imbrium } }
 	}
 }
 sr_fl_9_interdicting = { sr_fl_9_posture_value = 4 }
@@ -5539,6 +5755,42 @@ sr_cov_surveys_sedna = {
 	has_variable_list = sr_cov_survey_targets
 	has_global_variable = sr_site_holder_sedna
 	is_target_in_variable_list = { name = sr_cov_survey_targets target = global_var:sr_site_holder_sedna }
+}
+sr_cov_surveys_shackleton = {
+	has_variable = sr_cov_survey_live
+	has_variable_list = sr_cov_survey_targets
+	has_global_variable = sr_site_holder_shackleton
+	is_target_in_variable_list = { name = sr_cov_survey_targets target = global_var:sr_site_holder_shackleton }
+}
+sr_cov_surveys_peary = {
+	has_variable = sr_cov_survey_live
+	has_variable_list = sr_cov_survey_targets
+	has_global_variable = sr_site_holder_peary
+	is_target_in_variable_list = { name = sr_cov_survey_targets target = global_var:sr_site_holder_peary }
+}
+sr_cov_surveys_tranquility = {
+	has_variable = sr_cov_survey_live
+	has_variable_list = sr_cov_survey_targets
+	has_global_variable = sr_site_holder_tranquility
+	is_target_in_variable_list = { name = sr_cov_survey_targets target = global_var:sr_site_holder_tranquility }
+}
+sr_cov_surveys_marius_hills = {
+	has_variable = sr_cov_survey_live
+	has_variable_list = sr_cov_survey_targets
+	has_global_variable = sr_site_holder_marius_hills
+	is_target_in_variable_list = { name = sr_cov_survey_targets target = global_var:sr_site_holder_marius_hills }
+}
+sr_cov_surveys_daedalus = {
+	has_variable = sr_cov_survey_live
+	has_variable_list = sr_cov_survey_targets
+	has_global_variable = sr_site_holder_daedalus
+	is_target_in_variable_list = { name = sr_cov_survey_targets target = global_var:sr_site_holder_daedalus }
+}
+sr_cov_surveys_imbrium = {
+	has_variable = sr_cov_survey_live
+	has_variable_list = sr_cov_survey_targets
+	has_global_variable = sr_site_holder_imbrium
+	is_target_in_variable_list = { name = sr_cov_survey_targets target = global_var:sr_site_holder_imbrium }
 }
 
 # ===== Any slot =====

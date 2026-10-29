@@ -234,25 +234,25 @@ sr_disp_prog_solar_colonization = {
 	else_if = { limit = { has_variable = sr_active_solar_colonization } value = 1 }
 }
 
-# ---- Solar colonization: the worlds claimed, as shares of the 34 -------------
+# ---- Solar colonization: the worlds claimed, as shares of them all (40) ------
 # The pie stacks all claimed worlds under ours (gui_modding_guide.md, "Pie
 # charts of script-held data"): each layer a 0..1 fraction, largest first.
 sr_disp_worlds_claimed_frac = {
 	value = sr_total_global_colonies
-	divide = 34
+	divide = sr_sites_world_count
 	min = 0
 	max = 1
 }
 sr_disp_worlds_ours_frac = {
 	value = sr_colony_count_value
-	divide = 34
+	divide = sr_sites_world_count
 	min = 0
 	max = 1
 }
 
 # ---- Solar colonization: the colonies we hold ---------------------------------
-# One value per specialization (68, two for each of the 34 worlds, in the order
-# space_race_colony_events.1-34 offer them): 1 while we hold it, else 0. The
+# One value per specialization (80, two for each of the 40 worlds, in the order
+# space_race_colony_events.1-40 offer them): 1 while we hold it, else 0. The
 # record is <modifier>_held, which sr_grant_colony_modifier sets with the
 # modifier and sr_sync_colony_modifier_base keeps in step through a revolution.
 # The Colonies table's name hovers name the ones we hold (je_space_race_widget_
@@ -608,6 +608,54 @@ sr_disp_colony_sedna_interstellar = {
 	value = 0
 	if = { limit = { has_variable = sr_colony_sedna_interstellar_held } value = 1 }
 }
+sr_disp_colony_shackleton_depot = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_shackleton_depot_held } value = 1 }
+}
+sr_disp_colony_shackleton_outpost = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_shackleton_outpost_held } value = 1 }
+}
+sr_disp_colony_peary_solar = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_peary_solar_held } value = 1 }
+}
+sr_disp_colony_peary_observatory = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_peary_observatory_held } value = 1 }
+}
+sr_disp_colony_tranquility_heritage = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_tranquility_heritage_held } value = 1 }
+}
+sr_disp_colony_tranquility_helium = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_tranquility_helium_held } value = 1 }
+}
+sr_disp_colony_marius_lavatubes = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_marius_lavatubes_held } value = 1 }
+}
+sr_disp_colony_marius_hardened = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_marius_hardened_held } value = 1 }
+}
+sr_disp_colony_daedalus_telescope = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_daedalus_telescope_held } value = 1 }
+}
+sr_disp_colony_daedalus_relay = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_daedalus_relay_held } value = 1 }
+}
+sr_disp_colony_imbrium_massdriver = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_imbrium_massdriver_held } value = 1 }
+}
+sr_disp_colony_imbrium_kreep = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_imbrium_kreep_held } value = 1 }
+}
 
 sr_disp_colonies_held = {
 	value = 0
@@ -679,6 +727,18 @@ sr_disp_colonies_held = {
 	add = sr_disp_colony_haumea_rings
 	add = sr_disp_colony_sedna_outpost
 	add = sr_disp_colony_sedna_interstellar
+	add = sr_disp_colony_shackleton_depot
+	add = sr_disp_colony_shackleton_outpost
+	add = sr_disp_colony_peary_solar
+	add = sr_disp_colony_peary_observatory
+	add = sr_disp_colony_tranquility_heritage
+	add = sr_disp_colony_tranquility_helium
+	add = sr_disp_colony_marius_lavatubes
+	add = sr_disp_colony_marius_hardened
+	add = sr_disp_colony_daedalus_telescope
+	add = sr_disp_colony_daedalus_relay
+	add = sr_disp_colony_imbrium_massdriver
+	add = sr_disp_colony_imbrium_kreep
 }
 
 # ---- What an approach costs, for the panel and the approach buttons ----------

@@ -1365,9 +1365,10 @@ je_space_race_solar_colonization = {
 			if = { limit = { NOT = { has_variable = sr_funding_solar_colonization } } set_variable = { name = sr_funding_solar_colonization value = 1 } }
 		}
 		sr_sync_solar_colonization_entry = yes
+		# The Moon is stage 0 (lunar colonization design § 3.2).
 		if = {
 			limit = { NOT = { has_global_variable = sr_colonization_stage } }
-			set_global_variable = { name = sr_colonization_stage value = 1 }
+			set_global_variable = { name = sr_colonization_stage value = 0 }
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_colony_count } }

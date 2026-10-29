@@ -281,7 +281,7 @@ class RewardTests(unittest.TestCase):
         text = _read("events", "space_race_colony_events.txt")
         self.assertNotRegex(text, r"je:je_space_race_solar_colonization\s*=\s*\{\s*add_modifier")
         granted = re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", text)
-        self.assertEqual(len(granted), 68)
+        self.assertEqual(len(granted), 80)  # two for each of the 40 worlds
         # The backstop names every specialization at its multiplier, its level times
         # the colony's staffing (colony modules design § 7), from the site table.
         self.assertIn("sr_sites_sync_entry_specs = yes", _block(EFFECTS, "sr_sync_solar_colonization_entry"))

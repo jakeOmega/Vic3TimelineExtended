@@ -311,6 +311,60 @@ sr_disp_site_sedna = {
 	else_if = { limit = { has_global_variable = sr_site_free_sedna } value = 4 }
 	else_if = { limit = { has_global_variable = sr_site_ruined_sedna } value = 6 }
 }
+sr_disp_site_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_shackleton } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = 1 }
+	else_if = { limit = { has_global_variable = sr_site_holder_shackleton has_variable = sr_ss_cap_shackleton } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_holder_shackleton } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_free_shackleton } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_shackleton } value = 6 }
+}
+sr_disp_site_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_peary } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_peary ?= this } value = 1 }
+	else_if = { limit = { has_global_variable = sr_site_holder_peary has_variable = sr_ss_cap_peary } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_holder_peary } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_free_peary } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_peary } value = 6 }
+}
+sr_disp_site_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_tranquility } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = 1 }
+	else_if = { limit = { has_global_variable = sr_site_holder_tranquility has_variable = sr_ss_cap_tranquility } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_holder_tranquility } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_free_tranquility } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_tranquility } value = 6 }
+}
+sr_disp_site_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_marius_hills } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = 1 }
+	else_if = { limit = { has_global_variable = sr_site_holder_marius_hills has_variable = sr_ss_cap_marius_hills } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_holder_marius_hills } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_free_marius_hills } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_marius_hills } value = 6 }
+}
+sr_disp_site_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_daedalus } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = 1 }
+	else_if = { limit = { has_global_variable = sr_site_holder_daedalus has_variable = sr_ss_cap_daedalus } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_holder_daedalus } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_free_daedalus } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_daedalus } value = 6 }
+}
+sr_disp_site_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_imbrium } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = 1 }
+	else_if = { limit = { has_global_variable = sr_site_holder_imbrium has_variable = sr_ss_cap_imbrium } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_holder_imbrium } value = 3 }
+	else_if = { limit = { has_global_variable = sr_site_free_imbrium } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_imbrium } value = 6 }
+}
 
 # Colony fleets and population (slices 2-3 design §§ 3, 8, 10), per world:
 #   sr_disp_site_target_<key>         2 our target, 1 we may target it now, 0 neither
@@ -1202,6 +1256,181 @@ sr_disp_site_pop_sedna = {
 sr_disp_site_prio_sedna = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_sedna } value = var:sr_emig_prio_sedna }
+}
+sr_disp_site_target_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 35 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_shackleton = yes } value = 1 }
+}
+sr_disp_site_inbound_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_shackleton } value = global_var:sr_site_inbound_shackleton }
+}
+sr_disp_site_inbound_months_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_shackleton } value = global_var:sr_site_inbound_first_shackleton subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_shackleton = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_shackleton ?= this } value = 1 }
+}
+sr_disp_site_pop_shackleton = {
+	value = sr_site_pop_value_shackleton
+	floor = yes
+}
+sr_disp_site_prio_shackleton = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_shackleton } value = var:sr_emig_prio_shackleton }
+}
+sr_disp_site_target_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 36 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_peary = yes } value = 1 }
+}
+sr_disp_site_inbound_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_peary } value = global_var:sr_site_inbound_peary }
+}
+sr_disp_site_inbound_months_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_peary } value = global_var:sr_site_inbound_first_peary subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_peary = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_peary ?= this } value = 1 }
+}
+sr_disp_site_pop_peary = {
+	value = sr_site_pop_value_peary
+	floor = yes
+}
+sr_disp_site_prio_peary = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_peary } value = var:sr_emig_prio_peary }
+}
+sr_disp_site_target_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 37 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_tranquility = yes } value = 1 }
+}
+sr_disp_site_inbound_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_tranquility } value = global_var:sr_site_inbound_tranquility }
+}
+sr_disp_site_inbound_months_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_tranquility } value = global_var:sr_site_inbound_first_tranquility subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_tranquility = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_tranquility ?= this } value = 1 }
+}
+sr_disp_site_pop_tranquility = {
+	value = sr_site_pop_value_tranquility
+	floor = yes
+}
+sr_disp_site_prio_tranquility = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_tranquility } value = var:sr_emig_prio_tranquility }
+}
+sr_disp_site_target_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 38 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_marius_hills = yes } value = 1 }
+}
+sr_disp_site_inbound_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_marius_hills } value = global_var:sr_site_inbound_marius_hills }
+}
+sr_disp_site_inbound_months_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_marius_hills } value = global_var:sr_site_inbound_first_marius_hills subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_marius_hills = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_marius_hills ?= this } value = 1 }
+}
+sr_disp_site_pop_marius_hills = {
+	value = sr_site_pop_value_marius_hills
+	floor = yes
+}
+sr_disp_site_prio_marius_hills = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_marius_hills } value = var:sr_emig_prio_marius_hills }
+}
+sr_disp_site_target_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 39 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_daedalus = yes } value = 1 }
+}
+sr_disp_site_inbound_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_daedalus } value = global_var:sr_site_inbound_daedalus }
+}
+sr_disp_site_inbound_months_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_daedalus } value = global_var:sr_site_inbound_first_daedalus subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_daedalus = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_daedalus ?= this } value = 1 }
+}
+sr_disp_site_pop_daedalus = {
+	value = sr_site_pop_value_daedalus
+	floor = yes
+}
+sr_disp_site_prio_daedalus = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_daedalus } value = var:sr_emig_prio_daedalus }
+}
+sr_disp_site_target_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 40 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_imbrium = yes } value = 1 }
+}
+sr_disp_site_inbound_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_imbrium } value = global_var:sr_site_inbound_imbrium }
+}
+sr_disp_site_inbound_months_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_imbrium } value = global_var:sr_site_inbound_first_imbrium subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_imbrium = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_imbrium ?= this } value = 1 }
+}
+sr_disp_site_pop_imbrium = {
+	value = sr_site_pop_value_imbrium
+	floor = yes
+}
+sr_disp_site_prio_imbrium = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_imbrium } value = var:sr_emig_prio_imbrium }
+}
+
+# The lunar world our Moon Landing named (design § 3.4): 1 while its -25% is ours,
+# for its Solar System hover (sr_site_landing_discount_tt).
+sr_disp_site_landing_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_moon_site_shackleton } value = 1 }
+}
+sr_disp_site_landing_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_moon_site_tranquility } value = 1 }
+}
+sr_disp_site_landing_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_moon_site_equatorial } value = 1 }
+}
+sr_disp_site_landing_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_moon_site_far_side } value = 1 }
 }
 
 # Per fleet slot (Colony Fleets): 1 while it flies, the months until it lands,
@@ -2420,6 +2649,156 @@ sr_disp_site_staffing_sedna = {
 	multiply = 100
 	floor = yes
 }
+sr_disp_mod_pending_a_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_a_shackleton } add = var:sr_mq_a_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_a_shackleton } add = global_var:sr_site_ship_a_shackleton }
+}
+sr_disp_mod_pending_b_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_b_shackleton } add = var:sr_mq_b_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_b_shackleton } add = global_var:sr_site_ship_b_shackleton }
+}
+sr_disp_mod_pending_hab_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_hab_shackleton } add = var:sr_mq_hab_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_hab_shackleton } add = global_var:sr_site_ship_hab_shackleton }
+}
+sr_disp_mod_pending_def_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_def_shackleton } add = var:sr_mq_def_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_def_shackleton } add = global_var:sr_site_ship_def_shackleton }
+}
+sr_disp_site_staffing_shackleton = {
+	value = sr_site_staffing_shackleton
+	multiply = 100
+	floor = yes
+}
+sr_disp_mod_pending_a_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_a_peary } add = var:sr_mq_a_peary }
+	if = { limit = { has_global_variable = sr_site_ship_a_peary } add = global_var:sr_site_ship_a_peary }
+}
+sr_disp_mod_pending_b_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_b_peary } add = var:sr_mq_b_peary }
+	if = { limit = { has_global_variable = sr_site_ship_b_peary } add = global_var:sr_site_ship_b_peary }
+}
+sr_disp_mod_pending_hab_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_hab_peary } add = var:sr_mq_hab_peary }
+	if = { limit = { has_global_variable = sr_site_ship_hab_peary } add = global_var:sr_site_ship_hab_peary }
+}
+sr_disp_mod_pending_def_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_def_peary } add = var:sr_mq_def_peary }
+	if = { limit = { has_global_variable = sr_site_ship_def_peary } add = global_var:sr_site_ship_def_peary }
+}
+sr_disp_site_staffing_peary = {
+	value = sr_site_staffing_peary
+	multiply = 100
+	floor = yes
+}
+sr_disp_mod_pending_a_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_a_tranquility } add = var:sr_mq_a_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_a_tranquility } add = global_var:sr_site_ship_a_tranquility }
+}
+sr_disp_mod_pending_b_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_b_tranquility } add = var:sr_mq_b_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_b_tranquility } add = global_var:sr_site_ship_b_tranquility }
+}
+sr_disp_mod_pending_hab_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_hab_tranquility } add = var:sr_mq_hab_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_hab_tranquility } add = global_var:sr_site_ship_hab_tranquility }
+}
+sr_disp_mod_pending_def_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_def_tranquility } add = var:sr_mq_def_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_def_tranquility } add = global_var:sr_site_ship_def_tranquility }
+}
+sr_disp_site_staffing_tranquility = {
+	value = sr_site_staffing_tranquility
+	multiply = 100
+	floor = yes
+}
+sr_disp_mod_pending_a_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_a_marius_hills } add = var:sr_mq_a_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_a_marius_hills } add = global_var:sr_site_ship_a_marius_hills }
+}
+sr_disp_mod_pending_b_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_b_marius_hills } add = var:sr_mq_b_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_b_marius_hills } add = global_var:sr_site_ship_b_marius_hills }
+}
+sr_disp_mod_pending_hab_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_hab_marius_hills } add = var:sr_mq_hab_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_hab_marius_hills } add = global_var:sr_site_ship_hab_marius_hills }
+}
+sr_disp_mod_pending_def_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_def_marius_hills } add = var:sr_mq_def_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_def_marius_hills } add = global_var:sr_site_ship_def_marius_hills }
+}
+sr_disp_site_staffing_marius_hills = {
+	value = sr_site_staffing_marius_hills
+	multiply = 100
+	floor = yes
+}
+sr_disp_mod_pending_a_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_a_daedalus } add = var:sr_mq_a_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_a_daedalus } add = global_var:sr_site_ship_a_daedalus }
+}
+sr_disp_mod_pending_b_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_b_daedalus } add = var:sr_mq_b_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_b_daedalus } add = global_var:sr_site_ship_b_daedalus }
+}
+sr_disp_mod_pending_hab_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_hab_daedalus } add = var:sr_mq_hab_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_hab_daedalus } add = global_var:sr_site_ship_hab_daedalus }
+}
+sr_disp_mod_pending_def_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_def_daedalus } add = var:sr_mq_def_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_def_daedalus } add = global_var:sr_site_ship_def_daedalus }
+}
+sr_disp_site_staffing_daedalus = {
+	value = sr_site_staffing_daedalus
+	multiply = 100
+	floor = yes
+}
+sr_disp_mod_pending_a_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_a_imbrium } add = var:sr_mq_a_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_a_imbrium } add = global_var:sr_site_ship_a_imbrium }
+}
+sr_disp_mod_pending_b_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_b_imbrium } add = var:sr_mq_b_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_b_imbrium } add = global_var:sr_site_ship_b_imbrium }
+}
+sr_disp_mod_pending_hab_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_hab_imbrium } add = var:sr_mq_hab_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_hab_imbrium } add = global_var:sr_site_ship_hab_imbrium }
+}
+sr_disp_mod_pending_def_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_def_imbrium } add = var:sr_mq_def_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_def_imbrium } add = global_var:sr_site_ship_def_imbrium }
+}
+sr_disp_site_staffing_imbrium = {
+	value = sr_site_staffing_imbrium
+	multiply = 100
+	floor = yes
+}
 
 # Colony Autonomy (slice 5 design § 9), per world:
 #   sr_disp_site_aut_<key>        its autonomy, whole
@@ -3278,6 +3657,156 @@ sr_disp_free_supplied_sedna = {
 	value = 0
 	if = { limit = { has_variable = sr_free_supply_sedna } value = 1 }
 }
+sr_disp_site_aut_shackleton = {
+	value = sr_site_autonomy_value_shackleton
+	floor = yes
+}
+sr_disp_site_aut_drift_shackleton = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = sr_site_aut_drift_shackleton }
+}
+sr_disp_site_aut_status_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_charter_shackleton } add = 1 }
+	if = { limit = { has_global_variable = sr_site_garrison_shackleton } add = 2 }
+}
+sr_disp_free_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_free_shackleton } value = 1 }
+}
+sr_disp_free_ties_shackleton = {
+	value = sr_free_ties_value_shackleton
+	floor = yes
+}
+sr_disp_free_supplied_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_free_supply_shackleton } value = 1 }
+}
+sr_disp_site_aut_peary = {
+	value = sr_site_autonomy_value_peary
+	floor = yes
+}
+sr_disp_site_aut_drift_peary = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_peary ?= this } value = sr_site_aut_drift_peary }
+}
+sr_disp_site_aut_status_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_charter_peary } add = 1 }
+	if = { limit = { has_global_variable = sr_site_garrison_peary } add = 2 }
+}
+sr_disp_free_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_free_peary } value = 1 }
+}
+sr_disp_free_ties_peary = {
+	value = sr_free_ties_value_peary
+	floor = yes
+}
+sr_disp_free_supplied_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_free_supply_peary } value = 1 }
+}
+sr_disp_site_aut_tranquility = {
+	value = sr_site_autonomy_value_tranquility
+	floor = yes
+}
+sr_disp_site_aut_drift_tranquility = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = sr_site_aut_drift_tranquility }
+}
+sr_disp_site_aut_status_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_charter_tranquility } add = 1 }
+	if = { limit = { has_global_variable = sr_site_garrison_tranquility } add = 2 }
+}
+sr_disp_free_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_free_tranquility } value = 1 }
+}
+sr_disp_free_ties_tranquility = {
+	value = sr_free_ties_value_tranquility
+	floor = yes
+}
+sr_disp_free_supplied_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_free_supply_tranquility } value = 1 }
+}
+sr_disp_site_aut_marius_hills = {
+	value = sr_site_autonomy_value_marius_hills
+	floor = yes
+}
+sr_disp_site_aut_drift_marius_hills = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = sr_site_aut_drift_marius_hills }
+}
+sr_disp_site_aut_status_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_charter_marius_hills } add = 1 }
+	if = { limit = { has_global_variable = sr_site_garrison_marius_hills } add = 2 }
+}
+sr_disp_free_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_free_marius_hills } value = 1 }
+}
+sr_disp_free_ties_marius_hills = {
+	value = sr_free_ties_value_marius_hills
+	floor = yes
+}
+sr_disp_free_supplied_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_free_supply_marius_hills } value = 1 }
+}
+sr_disp_site_aut_daedalus = {
+	value = sr_site_autonomy_value_daedalus
+	floor = yes
+}
+sr_disp_site_aut_drift_daedalus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = sr_site_aut_drift_daedalus }
+}
+sr_disp_site_aut_status_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_charter_daedalus } add = 1 }
+	if = { limit = { has_global_variable = sr_site_garrison_daedalus } add = 2 }
+}
+sr_disp_free_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_free_daedalus } value = 1 }
+}
+sr_disp_free_ties_daedalus = {
+	value = sr_free_ties_value_daedalus
+	floor = yes
+}
+sr_disp_free_supplied_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_free_supply_daedalus } value = 1 }
+}
+sr_disp_site_aut_imbrium = {
+	value = sr_site_autonomy_value_imbrium
+	floor = yes
+}
+sr_disp_site_aut_drift_imbrium = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = sr_site_aut_drift_imbrium }
+}
+sr_disp_site_aut_status_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_charter_imbrium } add = 1 }
+	if = { limit = { has_global_variable = sr_site_garrison_imbrium } add = 2 }
+}
+sr_disp_free_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_free_imbrium } value = 1 }
+}
+sr_disp_free_ties_imbrium = {
+	value = sr_free_ties_value_imbrium
+	floor = yes
+}
+sr_disp_free_supplied_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_free_supply_imbrium } value = 1 }
+}
 
 # A colony's autonomy drift by term (audit SPC-15: its drift hover lists its own
 # terms): its people, its distance by our drive, a year without contact. The
@@ -3487,6 +4016,42 @@ sr_disp_aut_nocontact_sedna = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_sedna > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_people_shackleton = { value = sr_site_pop_value_shackleton divide = 10000 multiply = sr_aut_per_10k_people }
+sr_disp_aut_distance_shackleton = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+sr_disp_aut_nocontact_shackleton = {
+	value = 0
+	if = { limit = { sr_site_months_since_contact_shackleton > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_people_peary = { value = sr_site_pop_value_peary divide = 10000 multiply = sr_aut_per_10k_people }
+sr_disp_aut_distance_peary = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+sr_disp_aut_nocontact_peary = {
+	value = 0
+	if = { limit = { sr_site_months_since_contact_peary > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_people_tranquility = { value = sr_site_pop_value_tranquility divide = 10000 multiply = sr_aut_per_10k_people }
+sr_disp_aut_distance_tranquility = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+sr_disp_aut_nocontact_tranquility = {
+	value = 0
+	if = { limit = { sr_site_months_since_contact_tranquility > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_people_marius_hills = { value = sr_site_pop_value_marius_hills divide = 10000 multiply = sr_aut_per_10k_people }
+sr_disp_aut_distance_marius_hills = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+sr_disp_aut_nocontact_marius_hills = {
+	value = 0
+	if = { limit = { sr_site_months_since_contact_marius_hills > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_people_daedalus = { value = sr_site_pop_value_daedalus divide = 10000 multiply = sr_aut_per_10k_people }
+sr_disp_aut_distance_daedalus = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+sr_disp_aut_nocontact_daedalus = {
+	value = 0
+	if = { limit = { sr_site_months_since_contact_daedalus > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_people_imbrium = { value = sr_site_pop_value_imbrium divide = 10000 multiply = sr_aut_per_10k_people }
+sr_disp_aut_distance_imbrium = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+sr_disp_aut_nocontact_imbrium = {
+	value = 0
+	if = { limit = { sr_site_months_since_contact_imbrium > sr_aut_no_contact_months } value = 1 }
+}
 sr_disp_aut_war = {
 	value = 0
 	if = { limit = { is_at_war = yes } value = 1 }
@@ -3533,6 +4098,12 @@ sr_disp_free_count = {
 	if = { limit = { has_global_variable = sr_site_free_makemake } add = 1 }
 	if = { limit = { has_global_variable = sr_site_free_haumea } add = 1 }
 	if = { limit = { has_global_variable = sr_site_free_sedna } add = 1 }
+	if = { limit = { has_global_variable = sr_site_free_shackleton } add = 1 }
+	if = { limit = { has_global_variable = sr_site_free_peary } add = 1 }
+	if = { limit = { has_global_variable = sr_site_free_tranquility } add = 1 }
+	if = { limit = { has_global_variable = sr_site_free_marius_hills } add = 1 }
+	if = { limit = { has_global_variable = sr_site_free_daedalus } add = 1 }
+	if = { limit = { has_global_variable = sr_site_free_imbrium } add = 1 }
 }
 
 # The Solar System list's filter (audit SPC-7): 1 while the world is one our
@@ -3674,6 +4245,39 @@ sr_disp_ss_shown_sedna = {
 	value = 0
 	if = { limit = { OR = { sr_disp_site_target_sedna >= 1 sr_disp_site_sedna = 1 sr_disp_site_inbound_sedna >= 1 } } value = 1 }
 }
+sr_disp_ss_shown_shackleton = {
+	value = 0
+	if = { limit = { OR = { sr_disp_site_target_shackleton >= 1 sr_disp_site_shackleton = 1 sr_disp_site_inbound_shackleton >= 1 } } value = 1 }
+}
+sr_disp_ss_shown_peary = {
+	value = 0
+	if = { limit = { OR = { sr_disp_site_target_peary >= 1 sr_disp_site_peary = 1 sr_disp_site_inbound_peary >= 1 } } value = 1 }
+}
+sr_disp_ss_shown_tranquility = {
+	value = 0
+	if = { limit = { OR = { sr_disp_site_target_tranquility >= 1 sr_disp_site_tranquility = 1 sr_disp_site_inbound_tranquility >= 1 } } value = 1 }
+}
+sr_disp_ss_shown_marius_hills = {
+	value = 0
+	if = { limit = { OR = { sr_disp_site_target_marius_hills >= 1 sr_disp_site_marius_hills = 1 sr_disp_site_inbound_marius_hills >= 1 } } value = 1 }
+}
+sr_disp_ss_shown_daedalus = {
+	value = 0
+	if = { limit = { OR = { sr_disp_site_target_daedalus >= 1 sr_disp_site_daedalus = 1 sr_disp_site_inbound_daedalus >= 1 } } value = 1 }
+}
+sr_disp_ss_shown_imbrium = {
+	value = 0
+	if = { limit = { OR = { sr_disp_site_target_imbrium >= 1 sr_disp_site_imbrium = 1 sr_disp_site_inbound_imbrium >= 1 } } value = 1 }
+}
+sr_disp_ss_filtered_earth = {
+	value = 0
+	add = sr_disp_ss_shown_shackleton
+	add = sr_disp_ss_shown_peary
+	add = sr_disp_ss_shown_tranquility
+	add = sr_disp_ss_shown_marius_hills
+	add = sr_disp_ss_shown_daedalus
+	add = sr_disp_ss_shown_imbrium
+}
 sr_disp_ss_filtered_inner = {
 	value = 0
 	add = sr_disp_ss_shown_venus
@@ -3734,6 +4338,7 @@ sr_disp_ss_filtered_kuiper = {
 }
 sr_disp_ss_filtered = {
 	value = 0
+	add = sr_disp_ss_filtered_earth
 	add = sr_disp_ss_filtered_inner
 	add = sr_disp_ss_filtered_mars
 	add = sr_disp_ss_filtered_asteroids
@@ -3782,6 +4387,12 @@ sr_disp_aut_restless_count = {
 	if = { limit = { global_var:sr_site_holder_makemake ?= this sr_site_autonomy_value_makemake >= sr_aut_ask_level } add = 1 }
 	if = { limit = { global_var:sr_site_holder_haumea ?= this sr_site_autonomy_value_haumea >= sr_aut_ask_level } add = 1 }
 	if = { limit = { global_var:sr_site_holder_sedna ?= this sr_site_autonomy_value_sedna >= sr_aut_ask_level } add = 1 }
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this sr_site_autonomy_value_shackleton >= sr_aut_ask_level } add = 1 }
+	if = { limit = { global_var:sr_site_holder_peary ?= this sr_site_autonomy_value_peary >= sr_aut_ask_level } add = 1 }
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this sr_site_autonomy_value_tranquility >= sr_aut_ask_level } add = 1 }
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this sr_site_autonomy_value_marius_hills >= sr_aut_ask_level } add = 1 }
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this sr_site_autonomy_value_daedalus >= sr_aut_ask_level } add = 1 }
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this sr_site_autonomy_value_imbrium >= sr_aut_ask_level } add = 1 }
 }
 # ... less the one the cell names.
 sr_disp_aut_restless_more = { value = sr_disp_aut_restless_count subtract = 1 min = 0 }

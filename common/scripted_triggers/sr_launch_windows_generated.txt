@@ -40,7 +40,8 @@ sr_window_open_kuiper = { sr_window_months_to_next_kuiper <= 0 }
 # with no heir, colony record design § 6): those stages are full otherwise.
 # Under simple and full colonies the stages are no locks (slices 2-3 design
 # § 9): a body is in play while it has an unclaimed world.
-# Any scope. sr_window_mercury_in_play: the same for Mercury, never gated.
+# Any scope. sr_window_mercury_in_play and sr_window_moon_in_play: the same for
+# Mercury and the Moon's six worlds, never gated (TRANSIT_ONLY).
 
 sr_window_body_in_play_mars = {
 	OR = {
@@ -165,4 +166,18 @@ sr_window_mercury_in_play = {
 		sr_current_colonization_stage >= 3
 	}
 	NOT = { has_global_variable = sr_colony_mercury }
+}
+sr_window_moon_in_play = {
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 0
+	}
+	OR = {
+		NOT = { has_global_variable = sr_colony_shackleton }
+		NOT = { has_global_variable = sr_colony_peary }
+		NOT = { has_global_variable = sr_colony_tranquility }
+		NOT = { has_global_variable = sr_colony_marius_hills }
+		NOT = { has_global_variable = sr_colony_daedalus }
+		NOT = { has_global_variable = sr_colony_imbrium }
+	}
 }

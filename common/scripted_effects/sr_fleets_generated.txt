@@ -2597,6 +2597,30 @@ sr_fl_gather_target_at = {
 		limit = { var:sr_fl_$N$_target = 34 }
 		sr_cb_add_target = { N = $N$ KEY = sedna }
 	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 35 }
+		sr_cb_add_target = { N = $N$ KEY = shackleton }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 36 }
+		sr_cb_add_target = { N = $N$ KEY = peary }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 37 }
+		sr_cb_add_target = { N = $N$ KEY = tranquility }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 38 }
+		sr_cb_add_target = { N = $N$ KEY = marius_hills }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 39 }
+		sr_cb_add_target = { N = $N$ KEY = daedalus }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 40 }
+		sr_cb_add_target = { N = $N$ KEY = imbrium }
+	}
 }
 sr_fl_target_loss_at = {
 	if = {
@@ -2734,6 +2758,30 @@ sr_fl_target_loss_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_target = 34 }
 		sr_cb_add_target_loss = { N = $N$ KEY = sedna }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 35 }
+		sr_cb_add_target_loss = { N = $N$ KEY = shackleton }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 36 }
+		sr_cb_add_target_loss = { N = $N$ KEY = peary }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 37 }
+		sr_cb_add_target_loss = { N = $N$ KEY = tranquility }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 38 }
+		sr_cb_add_target_loss = { N = $N$ KEY = marius_hills }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 39 }
+		sr_cb_add_target_loss = { N = $N$ KEY = daedalus }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 40 }
+		sr_cb_add_target_loss = { N = $N$ KEY = imbrium }
 	}
 }
 sr_fl_check_target_at = {
@@ -2877,6 +2925,30 @@ sr_fl_check_target_at = {
 		limit = { var:sr_fl_$N$_target = 34 }
 		sr_cb_check_target = { N = $N$ KEY = sedna }
 	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 35 }
+		sr_cb_check_target = { N = $N$ KEY = shackleton }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 36 }
+		sr_cb_check_target = { N = $N$ KEY = peary }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 37 }
+		sr_cb_check_target = { N = $N$ KEY = tranquility }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 38 }
+		sr_cb_check_target = { N = $N$ KEY = marius_hills }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 39 }
+		sr_cb_check_target = { N = $N$ KEY = daedalus }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 40 }
+		sr_cb_check_target = { N = $N$ KEY = imbrium }
+	}
 }
 
 # Closing in on a free colony begins its price (sr_cb_charge_free).
@@ -3016,6 +3088,30 @@ sr_fl_charge_free_at = {
 	else_if = {
 		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 34 }
 		sr_cb_charge_free = { N = $N$ KEY = sedna INDEX = 34 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 35 }
+		sr_cb_charge_free = { N = $N$ KEY = shackleton INDEX = 35 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 36 }
+		sr_cb_charge_free = { N = $N$ KEY = peary INDEX = 36 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 37 }
+		sr_cb_charge_free = { N = $N$ KEY = tranquility INDEX = 37 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 38 }
+		sr_cb_charge_free = { N = $N$ KEY = marius_hills INDEX = 38 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 39 }
+		sr_cb_charge_free = { N = $N$ KEY = daedalus INDEX = 39 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 40 }
+		sr_cb_charge_free = { N = $N$ KEY = imbrium INDEX = 40 }
 	}
 }
 
@@ -3396,6 +3492,30 @@ sr_fl_charge_icpt_at = {
 		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 34 }
 		sr_cb_charge_interdict = { N = $N$ KEY = sedna }
 	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 35 }
+		sr_cb_charge_interdict = { N = $N$ KEY = shackleton }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 36 }
+		sr_cb_charge_interdict = { N = $N$ KEY = peary }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 37 }
+		sr_cb_charge_interdict = { N = $N$ KEY = tranquility }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 38 }
+		sr_cb_charge_interdict = { N = $N$ KEY = marius_hills }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 39 }
+		sr_cb_charge_interdict = { N = $N$ KEY = daedalus }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 40 }
+		sr_cb_charge_interdict = { N = $N$ KEY = imbrium }
+	}
 }
 sr_fl_check_icpt_at = {
 	if = {
@@ -3537,6 +3657,30 @@ sr_fl_check_icpt_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_target = 34 }
 		sr_cb_check_icpt = { N = $N$ KEY = sedna }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 35 }
+		sr_cb_check_icpt = { N = $N$ KEY = shackleton }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 36 }
+		sr_cb_check_icpt = { N = $N$ KEY = peary }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 37 }
+		sr_cb_check_icpt = { N = $N$ KEY = tranquility }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 38 }
+		sr_cb_check_icpt = { N = $N$ KEY = marius_hills }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 39 }
+		sr_cb_check_icpt = { N = $N$ KEY = daedalus }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 40 }
+		sr_cb_check_icpt = { N = $N$ KEY = imbrium }
 	}
 }
 
@@ -4828,16 +4972,94 @@ sr_cb_clear_earth = {
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
 	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
+	if = { limit = { has_variable = sr_cb_s3_shackleton } remove_variable = sr_cb_s3_shackleton }
+	if = { limit = { has_variable = sr_cb_fd3_shackleton } remove_variable = sr_cb_fd3_shackleton }
+	if = { limit = { has_variable = sr_cb_mar_shackleton } remove_variable = sr_cb_mar_shackleton }
+	if = { limit = { has_variable = sr_cb_dfd_shackleton } remove_variable = sr_cb_dfd_shackleton }
+	if = { limit = { has_variable = sr_cb_ld_shackleton } remove_variable = sr_cb_ld_shackleton }
+	if = { limit = { has_variable = sr_cb_s3_peary } remove_variable = sr_cb_s3_peary }
+	if = { limit = { has_variable = sr_cb_fd3_peary } remove_variable = sr_cb_fd3_peary }
+	if = { limit = { has_variable = sr_cb_mar_peary } remove_variable = sr_cb_mar_peary }
+	if = { limit = { has_variable = sr_cb_dfd_peary } remove_variable = sr_cb_dfd_peary }
+	if = { limit = { has_variable = sr_cb_ld_peary } remove_variable = sr_cb_ld_peary }
+	if = { limit = { has_variable = sr_cb_s3_tranquility } remove_variable = sr_cb_s3_tranquility }
+	if = { limit = { has_variable = sr_cb_fd3_tranquility } remove_variable = sr_cb_fd3_tranquility }
+	if = { limit = { has_variable = sr_cb_mar_tranquility } remove_variable = sr_cb_mar_tranquility }
+	if = { limit = { has_variable = sr_cb_dfd_tranquility } remove_variable = sr_cb_dfd_tranquility }
+	if = { limit = { has_variable = sr_cb_ld_tranquility } remove_variable = sr_cb_ld_tranquility }
+	if = { limit = { has_variable = sr_cb_s3_marius_hills } remove_variable = sr_cb_s3_marius_hills }
+	if = { limit = { has_variable = sr_cb_fd3_marius_hills } remove_variable = sr_cb_fd3_marius_hills }
+	if = { limit = { has_variable = sr_cb_mar_marius_hills } remove_variable = sr_cb_mar_marius_hills }
+	if = { limit = { has_variable = sr_cb_dfd_marius_hills } remove_variable = sr_cb_dfd_marius_hills }
+	if = { limit = { has_variable = sr_cb_ld_marius_hills } remove_variable = sr_cb_ld_marius_hills }
+	if = { limit = { has_variable = sr_cb_s3_daedalus } remove_variable = sr_cb_s3_daedalus }
+	if = { limit = { has_variable = sr_cb_fd3_daedalus } remove_variable = sr_cb_fd3_daedalus }
+	if = { limit = { has_variable = sr_cb_mar_daedalus } remove_variable = sr_cb_mar_daedalus }
+	if = { limit = { has_variable = sr_cb_dfd_daedalus } remove_variable = sr_cb_dfd_daedalus }
+	if = { limit = { has_variable = sr_cb_ld_daedalus } remove_variable = sr_cb_ld_daedalus }
+	if = { limit = { has_variable = sr_cb_s3_imbrium } remove_variable = sr_cb_s3_imbrium }
+	if = { limit = { has_variable = sr_cb_fd3_imbrium } remove_variable = sr_cb_fd3_imbrium }
+	if = { limit = { has_variable = sr_cb_mar_imbrium } remove_variable = sr_cb_mar_imbrium }
+	if = { limit = { has_variable = sr_cb_dfd_imbrium } remove_variable = sr_cb_dfd_imbrium }
+	if = { limit = { has_variable = sr_cb_ld_imbrium } remove_variable = sr_cb_ld_imbrium }
 }
 sr_cb_world_sums_earth = {
+	set_global_variable = { name = sr_cb_c_shackleton value = sr_cb_closing_shackleton }
+	set_global_variable = { name = sr_cb_c_peary value = sr_cb_closing_peary }
+	set_global_variable = { name = sr_cb_c_tranquility value = sr_cb_closing_tranquility }
+	set_global_variable = { name = sr_cb_c_marius_hills value = sr_cb_closing_marius_hills }
+	set_global_variable = { name = sr_cb_c_daedalus value = sr_cb_closing_daedalus }
+	set_global_variable = { name = sr_cb_c_imbrium value = sr_cb_closing_imbrium }
 }
 sr_cb_world_clear_earth = {
+	if = { limit = { has_global_variable = sr_cb_c_shackleton } remove_global_variable = sr_cb_c_shackleton }
+	if = { limit = { has_global_variable = sr_cb_c_peary } remove_global_variable = sr_cb_c_peary }
+	if = { limit = { has_global_variable = sr_cb_c_tranquility } remove_global_variable = sr_cb_c_tranquility }
+	if = { limit = { has_global_variable = sr_cb_c_marius_hills } remove_global_variable = sr_cb_c_marius_hills }
+	if = { limit = { has_global_variable = sr_cb_c_daedalus } remove_global_variable = sr_cb_c_daedalus }
+	if = { limit = { has_global_variable = sr_cb_c_imbrium } remove_global_variable = sr_cb_c_imbrium }
 }
 # The power's losses to each world's Defences, by its share of the strength
 # closing in on it.
 sr_cb_def_losses_earth = {
+	if = {
+		limit = { has_variable = sr_cb_s3_shackleton has_global_variable = sr_cb_c_shackleton global_var:sr_cb_c_shackleton > 0 }
+		set_variable = { name = sr_cb_ld_shackleton value = { value = sr_site_def_fire_shackleton multiply = sr_fleet_k multiply = var:sr_cb_s3_shackleton divide = global_var:sr_cb_c_shackleton } }
+	}
+	if = {
+		limit = { has_variable = sr_cb_s3_peary has_global_variable = sr_cb_c_peary global_var:sr_cb_c_peary > 0 }
+		set_variable = { name = sr_cb_ld_peary value = { value = sr_site_def_fire_peary multiply = sr_fleet_k multiply = var:sr_cb_s3_peary divide = global_var:sr_cb_c_peary } }
+	}
+	if = {
+		limit = { has_variable = sr_cb_s3_tranquility has_global_variable = sr_cb_c_tranquility global_var:sr_cb_c_tranquility > 0 }
+		set_variable = { name = sr_cb_ld_tranquility value = { value = sr_site_def_fire_tranquility multiply = sr_fleet_k multiply = var:sr_cb_s3_tranquility divide = global_var:sr_cb_c_tranquility } }
+	}
+	if = {
+		limit = { has_variable = sr_cb_s3_marius_hills has_global_variable = sr_cb_c_marius_hills global_var:sr_cb_c_marius_hills > 0 }
+		set_variable = { name = sr_cb_ld_marius_hills value = { value = sr_site_def_fire_marius_hills multiply = sr_fleet_k multiply = var:sr_cb_s3_marius_hills divide = global_var:sr_cb_c_marius_hills } }
+	}
+	if = {
+		limit = { has_variable = sr_cb_s3_daedalus has_global_variable = sr_cb_c_daedalus global_var:sr_cb_c_daedalus > 0 }
+		set_variable = { name = sr_cb_ld_daedalus value = { value = sr_site_def_fire_daedalus multiply = sr_fleet_k multiply = var:sr_cb_s3_daedalus divide = global_var:sr_cb_c_daedalus } }
+	}
+	if = {
+		limit = { has_variable = sr_cb_s3_imbrium has_global_variable = sr_cb_c_imbrium global_var:sr_cb_c_imbrium > 0 }
+		set_variable = { name = sr_cb_ld_imbrium value = { value = sr_site_def_fire_imbrium multiply = sr_fleet_k multiply = var:sr_cb_s3_imbrium divide = global_var:sr_cb_c_imbrium } }
+	}
 }
 sr_cb_worlds_after_earth = {
+	sr_site_assault_step = { KEY = shackleton INDEX = 35 }
+	sr_site_blockade_step = { KEY = shackleton LOC = earth }
+	sr_site_assault_step = { KEY = peary INDEX = 36 }
+	sr_site_blockade_step = { KEY = peary LOC = earth }
+	sr_site_assault_step = { KEY = tranquility INDEX = 37 }
+	sr_site_blockade_step = { KEY = tranquility LOC = earth }
+	sr_site_assault_step = { KEY = marius_hills INDEX = 38 }
+	sr_site_blockade_step = { KEY = marius_hills LOC = earth }
+	sr_site_assault_step = { KEY = daedalus INDEX = 39 }
+	sr_site_blockade_step = { KEY = daedalus LOC = earth }
+	sr_site_assault_step = { KEY = imbrium INDEX = 40 }
+	sr_site_blockade_step = { KEY = imbrium LOC = earth }
 }
 
 # --- Mercury and Venus ---
@@ -7468,6 +7690,342 @@ sr_fl_spend_marines_sedna = {
 		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
 	}
 }
+sr_fl_spend_marines_shackleton = {
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_1_target var:sr_fl_1_target = 35 sr_fl_1_posture_value = 3 NOT = { has_variable = sr_fl_1_destroy } sr_fl_1_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_1_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_1_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_2_target var:sr_fl_2_target = 35 sr_fl_2_posture_value = 3 NOT = { has_variable = sr_fl_2_destroy } sr_fl_2_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_2_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_2_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_3_target var:sr_fl_3_target = 35 sr_fl_3_posture_value = 3 NOT = { has_variable = sr_fl_3_destroy } sr_fl_3_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_3_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_3_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_4_target var:sr_fl_4_target = 35 sr_fl_4_posture_value = 3 NOT = { has_variable = sr_fl_4_destroy } sr_fl_4_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_4_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_4_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_5_target var:sr_fl_5_target = 35 sr_fl_5_posture_value = 3 NOT = { has_variable = sr_fl_5_destroy } sr_fl_5_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_5_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_5_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_6_target var:sr_fl_6_target = 35 sr_fl_6_posture_value = 3 NOT = { has_variable = sr_fl_6_destroy } sr_fl_6_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_6_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_6_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_7_target var:sr_fl_7_target = 35 sr_fl_7_posture_value = 3 NOT = { has_variable = sr_fl_7_destroy } sr_fl_7_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_7_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_7_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_8_target var:sr_fl_8_target = 35 sr_fl_8_posture_value = 3 NOT = { has_variable = sr_fl_8_destroy } sr_fl_8_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_8_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_8_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_9_target var:sr_fl_9_target = 35 sr_fl_9_posture_value = 3 NOT = { has_variable = sr_fl_9_destroy } sr_fl_9_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_9_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_9_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+}
+sr_fl_spend_marines_peary = {
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_1_target var:sr_fl_1_target = 36 sr_fl_1_posture_value = 3 NOT = { has_variable = sr_fl_1_destroy } sr_fl_1_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_1_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_1_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_2_target var:sr_fl_2_target = 36 sr_fl_2_posture_value = 3 NOT = { has_variable = sr_fl_2_destroy } sr_fl_2_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_2_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_2_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_3_target var:sr_fl_3_target = 36 sr_fl_3_posture_value = 3 NOT = { has_variable = sr_fl_3_destroy } sr_fl_3_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_3_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_3_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_4_target var:sr_fl_4_target = 36 sr_fl_4_posture_value = 3 NOT = { has_variable = sr_fl_4_destroy } sr_fl_4_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_4_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_4_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_5_target var:sr_fl_5_target = 36 sr_fl_5_posture_value = 3 NOT = { has_variable = sr_fl_5_destroy } sr_fl_5_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_5_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_5_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_6_target var:sr_fl_6_target = 36 sr_fl_6_posture_value = 3 NOT = { has_variable = sr_fl_6_destroy } sr_fl_6_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_6_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_6_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_7_target var:sr_fl_7_target = 36 sr_fl_7_posture_value = 3 NOT = { has_variable = sr_fl_7_destroy } sr_fl_7_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_7_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_7_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_8_target var:sr_fl_8_target = 36 sr_fl_8_posture_value = 3 NOT = { has_variable = sr_fl_8_destroy } sr_fl_8_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_8_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_8_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_9_target var:sr_fl_9_target = 36 sr_fl_9_posture_value = 3 NOT = { has_variable = sr_fl_9_destroy } sr_fl_9_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_9_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_9_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+}
+sr_fl_spend_marines_tranquility = {
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_1_target var:sr_fl_1_target = 37 sr_fl_1_posture_value = 3 NOT = { has_variable = sr_fl_1_destroy } sr_fl_1_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_1_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_1_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_2_target var:sr_fl_2_target = 37 sr_fl_2_posture_value = 3 NOT = { has_variable = sr_fl_2_destroy } sr_fl_2_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_2_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_2_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_3_target var:sr_fl_3_target = 37 sr_fl_3_posture_value = 3 NOT = { has_variable = sr_fl_3_destroy } sr_fl_3_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_3_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_3_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_4_target var:sr_fl_4_target = 37 sr_fl_4_posture_value = 3 NOT = { has_variable = sr_fl_4_destroy } sr_fl_4_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_4_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_4_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_5_target var:sr_fl_5_target = 37 sr_fl_5_posture_value = 3 NOT = { has_variable = sr_fl_5_destroy } sr_fl_5_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_5_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_5_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_6_target var:sr_fl_6_target = 37 sr_fl_6_posture_value = 3 NOT = { has_variable = sr_fl_6_destroy } sr_fl_6_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_6_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_6_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_7_target var:sr_fl_7_target = 37 sr_fl_7_posture_value = 3 NOT = { has_variable = sr_fl_7_destroy } sr_fl_7_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_7_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_7_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_8_target var:sr_fl_8_target = 37 sr_fl_8_posture_value = 3 NOT = { has_variable = sr_fl_8_destroy } sr_fl_8_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_8_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_8_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_9_target var:sr_fl_9_target = 37 sr_fl_9_posture_value = 3 NOT = { has_variable = sr_fl_9_destroy } sr_fl_9_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_9_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_9_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+}
+sr_fl_spend_marines_marius_hills = {
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_1_target var:sr_fl_1_target = 38 sr_fl_1_posture_value = 3 NOT = { has_variable = sr_fl_1_destroy } sr_fl_1_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_1_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_1_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_2_target var:sr_fl_2_target = 38 sr_fl_2_posture_value = 3 NOT = { has_variable = sr_fl_2_destroy } sr_fl_2_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_2_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_2_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_3_target var:sr_fl_3_target = 38 sr_fl_3_posture_value = 3 NOT = { has_variable = sr_fl_3_destroy } sr_fl_3_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_3_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_3_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_4_target var:sr_fl_4_target = 38 sr_fl_4_posture_value = 3 NOT = { has_variable = sr_fl_4_destroy } sr_fl_4_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_4_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_4_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_5_target var:sr_fl_5_target = 38 sr_fl_5_posture_value = 3 NOT = { has_variable = sr_fl_5_destroy } sr_fl_5_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_5_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_5_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_6_target var:sr_fl_6_target = 38 sr_fl_6_posture_value = 3 NOT = { has_variable = sr_fl_6_destroy } sr_fl_6_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_6_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_6_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_7_target var:sr_fl_7_target = 38 sr_fl_7_posture_value = 3 NOT = { has_variable = sr_fl_7_destroy } sr_fl_7_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_7_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_7_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_8_target var:sr_fl_8_target = 38 sr_fl_8_posture_value = 3 NOT = { has_variable = sr_fl_8_destroy } sr_fl_8_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_8_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_8_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_9_target var:sr_fl_9_target = 38 sr_fl_9_posture_value = 3 NOT = { has_variable = sr_fl_9_destroy } sr_fl_9_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_9_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_9_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+}
+sr_fl_spend_marines_daedalus = {
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_1_target var:sr_fl_1_target = 39 sr_fl_1_posture_value = 3 NOT = { has_variable = sr_fl_1_destroy } sr_fl_1_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_1_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_1_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_2_target var:sr_fl_2_target = 39 sr_fl_2_posture_value = 3 NOT = { has_variable = sr_fl_2_destroy } sr_fl_2_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_2_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_2_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_3_target var:sr_fl_3_target = 39 sr_fl_3_posture_value = 3 NOT = { has_variable = sr_fl_3_destroy } sr_fl_3_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_3_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_3_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_4_target var:sr_fl_4_target = 39 sr_fl_4_posture_value = 3 NOT = { has_variable = sr_fl_4_destroy } sr_fl_4_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_4_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_4_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_5_target var:sr_fl_5_target = 39 sr_fl_5_posture_value = 3 NOT = { has_variable = sr_fl_5_destroy } sr_fl_5_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_5_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_5_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_6_target var:sr_fl_6_target = 39 sr_fl_6_posture_value = 3 NOT = { has_variable = sr_fl_6_destroy } sr_fl_6_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_6_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_6_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_7_target var:sr_fl_7_target = 39 sr_fl_7_posture_value = 3 NOT = { has_variable = sr_fl_7_destroy } sr_fl_7_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_7_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_7_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_8_target var:sr_fl_8_target = 39 sr_fl_8_posture_value = 3 NOT = { has_variable = sr_fl_8_destroy } sr_fl_8_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_8_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_8_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_9_target var:sr_fl_9_target = 39 sr_fl_9_posture_value = 3 NOT = { has_variable = sr_fl_9_destroy } sr_fl_9_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_9_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_9_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+}
+sr_fl_spend_marines_imbrium = {
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_1_target var:sr_fl_1_target = 40 sr_fl_1_posture_value = 3 NOT = { has_variable = sr_fl_1_destroy } sr_fl_1_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_1_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_1_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_2_target var:sr_fl_2_target = 40 sr_fl_2_posture_value = 3 NOT = { has_variable = sr_fl_2_destroy } sr_fl_2_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_2_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_2_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_3_target var:sr_fl_3_target = 40 sr_fl_3_posture_value = 3 NOT = { has_variable = sr_fl_3_destroy } sr_fl_3_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_3_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_3_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_4_target var:sr_fl_4_target = 40 sr_fl_4_posture_value = 3 NOT = { has_variable = sr_fl_4_destroy } sr_fl_4_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_4_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_4_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_5_target var:sr_fl_5_target = 40 sr_fl_5_posture_value = 3 NOT = { has_variable = sr_fl_5_destroy } sr_fl_5_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_5_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_5_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_6_target var:sr_fl_6_target = 40 sr_fl_6_posture_value = 3 NOT = { has_variable = sr_fl_6_destroy } sr_fl_6_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_6_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_6_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_7_target var:sr_fl_7_target = 40 sr_fl_7_posture_value = 3 NOT = { has_variable = sr_fl_7_destroy } sr_fl_7_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_7_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_7_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_8_target var:sr_fl_8_target = 40 sr_fl_8_posture_value = 3 NOT = { has_variable = sr_fl_8_destroy } sr_fl_8_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_8_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_8_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+	if = {
+		limit = { local_var:sr_cb_pay > 0 has_variable = sr_fl_9_target var:sr_fl_9_target = 40 sr_fl_9_posture_value = 3 NOT = { has_variable = sr_fl_9_destroy } sr_fl_9_marines_value > 0 }
+		set_local_variable = { name = sr_cb_take value = { value = sr_fl_9_marines_value max = local_var:sr_cb_pay } }
+		change_variable = { name = sr_fl_9_marines subtract = local_var:sr_cb_take }
+		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
+	}
+}
 
 # ===== The AI's defence (6b; sr_fl_ai_defend) =====
 sr_fl_ai_defend_all = {
@@ -9165,6 +9723,12 @@ sr_ov_list_defense = {
 	if = {
 		limit = {
 			OR = {
+				AND = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_occupier_shackleton }
+				AND = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_occupier_peary }
+				AND = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_occupier_tranquility }
+				AND = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_occupier_marius_hills }
+				AND = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_occupier_daedalus }
+				AND = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_occupier_imbrium }
 				AND = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_occupier_venus }
 				AND = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_occupier_mercury }
 				AND = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_occupier_valles_marineris }
@@ -9202,6 +9766,12 @@ sr_ov_list_defense = {
 			}
 		}
 		custom_tooltip_no_bullet = je_space_race_widget_ovc_def_head_occupied
+		if = { limit = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_occupier_shackleton } custom_tooltip = sr_site_name_shackleton }
+		if = { limit = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_occupier_peary } custom_tooltip = sr_site_name_peary }
+		if = { limit = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_occupier_tranquility } custom_tooltip = sr_site_name_tranquility }
+		if = { limit = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_occupier_marius_hills } custom_tooltip = sr_site_name_marius_hills }
+		if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_occupier_daedalus } custom_tooltip = sr_site_name_daedalus }
+		if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_occupier_imbrium } custom_tooltip = sr_site_name_imbrium }
 		if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_occupier_venus } custom_tooltip = sr_site_name_venus }
 		if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_occupier_mercury } custom_tooltip = sr_site_name_mercury }
 		if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_occupier_valles_marineris } custom_tooltip = sr_site_name_valles_marineris }
@@ -9240,6 +9810,12 @@ sr_ov_list_defense = {
 	if = {
 		limit = {
 			OR = {
+				AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_under_assault_shackleton global_var:sr_site_under_assault_shackleton >= { value = te_history_month_index subtract = 1 } }
+				AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_under_assault_peary global_var:sr_site_under_assault_peary >= { value = te_history_month_index subtract = 1 } }
+				AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_under_assault_tranquility global_var:sr_site_under_assault_tranquility >= { value = te_history_month_index subtract = 1 } }
+				AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_under_assault_marius_hills global_var:sr_site_under_assault_marius_hills >= { value = te_history_month_index subtract = 1 } }
+				AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_under_assault_daedalus global_var:sr_site_under_assault_daedalus >= { value = te_history_month_index subtract = 1 } }
+				AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_under_assault_imbrium global_var:sr_site_under_assault_imbrium >= { value = te_history_month_index subtract = 1 } }
 				AND = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_under_assault_venus global_var:sr_site_under_assault_venus >= { value = te_history_month_index subtract = 1 } }
 				AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } has_global_variable = sr_site_under_assault_mercury global_var:sr_site_under_assault_mercury >= { value = te_history_month_index subtract = 1 } }
 				AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_under_assault_valles_marineris global_var:sr_site_under_assault_valles_marineris >= { value = te_history_month_index subtract = 1 } }
@@ -9277,6 +9853,12 @@ sr_ov_list_defense = {
 			}
 		}
 		custom_tooltip_no_bullet = je_space_race_widget_ovc_def_head_assault
+		if = { limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_under_assault_shackleton global_var:sr_site_under_assault_shackleton >= { value = te_history_month_index subtract = 1 } } custom_tooltip = sr_site_name_shackleton }
+		if = { limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_under_assault_peary global_var:sr_site_under_assault_peary >= { value = te_history_month_index subtract = 1 } } custom_tooltip = sr_site_name_peary }
+		if = { limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_under_assault_tranquility global_var:sr_site_under_assault_tranquility >= { value = te_history_month_index subtract = 1 } } custom_tooltip = sr_site_name_tranquility }
+		if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_under_assault_marius_hills global_var:sr_site_under_assault_marius_hills >= { value = te_history_month_index subtract = 1 } } custom_tooltip = sr_site_name_marius_hills }
+		if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_under_assault_daedalus global_var:sr_site_under_assault_daedalus >= { value = te_history_month_index subtract = 1 } } custom_tooltip = sr_site_name_daedalus }
+		if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_under_assault_imbrium global_var:sr_site_under_assault_imbrium >= { value = te_history_month_index subtract = 1 } } custom_tooltip = sr_site_name_imbrium }
 		if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_under_assault_venus global_var:sr_site_under_assault_venus >= { value = te_history_month_index subtract = 1 } } custom_tooltip = sr_site_name_venus }
 		if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } has_global_variable = sr_site_under_assault_mercury global_var:sr_site_under_assault_mercury >= { value = te_history_month_index subtract = 1 } } custom_tooltip = sr_site_name_mercury }
 		if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_under_assault_valles_marineris global_var:sr_site_under_assault_valles_marineris >= { value = te_history_month_index subtract = 1 } } custom_tooltip = sr_site_name_valles_marineris }
@@ -9315,6 +9897,12 @@ sr_ov_list_defense = {
 	if = {
 		limit = {
 			OR = {
+				AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } NOT = { has_global_variable = sr_site_interdicted_shackleton } has_global_variable = sr_site_blockaded_shackleton }
+				AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } NOT = { has_global_variable = sr_site_interdicted_peary } has_global_variable = sr_site_blockaded_peary }
+				AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } NOT = { has_global_variable = sr_site_interdicted_tranquility } has_global_variable = sr_site_blockaded_tranquility }
+				AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } NOT = { has_global_variable = sr_site_interdicted_marius_hills } has_global_variable = sr_site_blockaded_marius_hills }
+				AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } NOT = { has_global_variable = sr_site_interdicted_daedalus } has_global_variable = sr_site_blockaded_daedalus }
+				AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } NOT = { has_global_variable = sr_site_interdicted_imbrium } has_global_variable = sr_site_blockaded_imbrium }
 				AND = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } NOT = { has_global_variable = sr_site_interdicted_venus } has_global_variable = sr_site_blockaded_venus }
 				AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } NOT = { has_global_variable = sr_site_interdicted_mercury } has_global_variable = sr_site_blockaded_mercury }
 				AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } NOT = { has_global_variable = sr_site_interdicted_valles_marineris } has_global_variable = sr_site_blockaded_valles_marineris }
@@ -9352,6 +9940,12 @@ sr_ov_list_defense = {
 			}
 		}
 		custom_tooltip_no_bullet = je_space_race_widget_ovc_def_head_blockaded
+		if = { limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } NOT = { has_global_variable = sr_site_interdicted_shackleton } has_global_variable = sr_site_blockaded_shackleton } custom_tooltip = sr_site_name_shackleton }
+		if = { limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } NOT = { has_global_variable = sr_site_interdicted_peary } has_global_variable = sr_site_blockaded_peary } custom_tooltip = sr_site_name_peary }
+		if = { limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } NOT = { has_global_variable = sr_site_interdicted_tranquility } has_global_variable = sr_site_blockaded_tranquility } custom_tooltip = sr_site_name_tranquility }
+		if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } NOT = { has_global_variable = sr_site_interdicted_marius_hills } has_global_variable = sr_site_blockaded_marius_hills } custom_tooltip = sr_site_name_marius_hills }
+		if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } NOT = { has_global_variable = sr_site_interdicted_daedalus } has_global_variable = sr_site_blockaded_daedalus } custom_tooltip = sr_site_name_daedalus }
+		if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } NOT = { has_global_variable = sr_site_interdicted_imbrium } has_global_variable = sr_site_blockaded_imbrium } custom_tooltip = sr_site_name_imbrium }
 		if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } NOT = { has_global_variable = sr_site_interdicted_venus } has_global_variable = sr_site_blockaded_venus } custom_tooltip = sr_site_name_venus }
 		if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } NOT = { has_global_variable = sr_site_interdicted_mercury } has_global_variable = sr_site_blockaded_mercury } custom_tooltip = sr_site_name_mercury }
 		if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } NOT = { has_global_variable = sr_site_interdicted_valles_marineris } has_global_variable = sr_site_blockaded_valles_marineris } custom_tooltip = sr_site_name_valles_marineris }
@@ -9390,6 +9984,12 @@ sr_ov_list_defense = {
 	if = {
 		limit = {
 			OR = {
+				AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_interdicted_shackleton }
+				AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_interdicted_peary }
+				AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_interdicted_tranquility }
+				AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_interdicted_marius_hills }
+				AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_interdicted_daedalus }
+				AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_interdicted_imbrium }
 				AND = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_interdicted_venus }
 				AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } has_global_variable = sr_site_interdicted_mercury }
 				AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_interdicted_valles_marineris }
@@ -9427,6 +10027,12 @@ sr_ov_list_defense = {
 			}
 		}
 		custom_tooltip_no_bullet = je_space_race_widget_ovc_def_head_interdicted
+		if = { limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_interdicted_shackleton } custom_tooltip = sr_site_name_shackleton }
+		if = { limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_interdicted_peary } custom_tooltip = sr_site_name_peary }
+		if = { limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_interdicted_tranquility } custom_tooltip = sr_site_name_tranquility }
+		if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_interdicted_marius_hills } custom_tooltip = sr_site_name_marius_hills }
+		if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_interdicted_daedalus } custom_tooltip = sr_site_name_daedalus }
+		if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_interdicted_imbrium } custom_tooltip = sr_site_name_imbrium }
 		if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_interdicted_venus } custom_tooltip = sr_site_name_venus }
 		if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } has_global_variable = sr_site_interdicted_mercury } custom_tooltip = sr_site_name_mercury }
 		if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_interdicted_valles_marineris } custom_tooltip = sr_site_name_valles_marineris }
@@ -9502,6 +10108,12 @@ sr_ov_list_defense = {
 					AND = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_occupier_makemake }
 					AND = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_occupier_haumea }
 					AND = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_occupier_sedna }
+					AND = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_occupier_shackleton }
+					AND = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_occupier_peary }
+					AND = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_occupier_tranquility }
+					AND = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_occupier_marius_hills }
+					AND = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_occupier_daedalus }
+					AND = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_occupier_imbrium }
 					AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_under_assault_valles_marineris global_var:sr_site_under_assault_valles_marineris >= { value = te_history_month_index subtract = 1 } }
 					AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } has_global_variable = sr_site_under_assault_olympus_mons global_var:sr_site_under_assault_olympus_mons >= { value = te_history_month_index subtract = 1 } }
 					AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } has_global_variable = sr_site_under_assault_hellas_planitia global_var:sr_site_under_assault_hellas_planitia >= { value = te_history_month_index subtract = 1 } }
@@ -9536,6 +10148,12 @@ sr_ov_list_defense = {
 					AND = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } has_global_variable = sr_site_under_assault_makemake global_var:sr_site_under_assault_makemake >= { value = te_history_month_index subtract = 1 } }
 					AND = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } has_global_variable = sr_site_under_assault_haumea global_var:sr_site_under_assault_haumea >= { value = te_history_month_index subtract = 1 } }
 					AND = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } has_global_variable = sr_site_under_assault_sedna global_var:sr_site_under_assault_sedna >= { value = te_history_month_index subtract = 1 } }
+					AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_under_assault_shackleton global_var:sr_site_under_assault_shackleton >= { value = te_history_month_index subtract = 1 } }
+					AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_under_assault_peary global_var:sr_site_under_assault_peary >= { value = te_history_month_index subtract = 1 } }
+					AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_under_assault_tranquility global_var:sr_site_under_assault_tranquility >= { value = te_history_month_index subtract = 1 } }
+					AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_under_assault_marius_hills global_var:sr_site_under_assault_marius_hills >= { value = te_history_month_index subtract = 1 } }
+					AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_under_assault_daedalus global_var:sr_site_under_assault_daedalus >= { value = te_history_month_index subtract = 1 } }
+					AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_under_assault_imbrium global_var:sr_site_under_assault_imbrium >= { value = te_history_month_index subtract = 1 } }
 					AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } NOT = { has_global_variable = sr_site_interdicted_valles_marineris } has_global_variable = sr_site_blockaded_valles_marineris }
 					AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } NOT = { has_global_variable = sr_site_interdicted_olympus_mons } has_global_variable = sr_site_blockaded_olympus_mons }
 					AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } NOT = { has_global_variable = sr_site_interdicted_hellas_planitia } has_global_variable = sr_site_blockaded_hellas_planitia }
@@ -9570,6 +10188,12 @@ sr_ov_list_defense = {
 					AND = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } NOT = { has_global_variable = sr_site_interdicted_makemake } has_global_variable = sr_site_blockaded_makemake }
 					AND = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } NOT = { has_global_variable = sr_site_interdicted_haumea } has_global_variable = sr_site_blockaded_haumea }
 					AND = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } NOT = { has_global_variable = sr_site_interdicted_sedna } has_global_variable = sr_site_blockaded_sedna }
+					AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } NOT = { has_global_variable = sr_site_interdicted_shackleton } has_global_variable = sr_site_blockaded_shackleton }
+					AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } NOT = { has_global_variable = sr_site_interdicted_peary } has_global_variable = sr_site_blockaded_peary }
+					AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } NOT = { has_global_variable = sr_site_interdicted_tranquility } has_global_variable = sr_site_blockaded_tranquility }
+					AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } NOT = { has_global_variable = sr_site_interdicted_marius_hills } has_global_variable = sr_site_blockaded_marius_hills }
+					AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } NOT = { has_global_variable = sr_site_interdicted_daedalus } has_global_variable = sr_site_blockaded_daedalus }
+					AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } NOT = { has_global_variable = sr_site_interdicted_imbrium } has_global_variable = sr_site_blockaded_imbrium }
 					AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_interdicted_valles_marineris }
 					AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } has_global_variable = sr_site_interdicted_olympus_mons }
 					AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } has_global_variable = sr_site_interdicted_hellas_planitia }
@@ -9604,6 +10228,12 @@ sr_ov_list_defense = {
 					AND = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } has_global_variable = sr_site_interdicted_makemake }
 					AND = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } has_global_variable = sr_site_interdicted_haumea }
 					AND = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } has_global_variable = sr_site_interdicted_sedna }
+					AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_interdicted_shackleton }
+					AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_interdicted_peary }
+					AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_interdicted_tranquility }
+					AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_interdicted_marius_hills }
+					AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_interdicted_daedalus }
+					AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_interdicted_imbrium }
 				}
 			}
 		}

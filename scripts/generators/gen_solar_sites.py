@@ -1,11 +1,12 @@
-"""Solar System Colonization's 34 worlds, from one table.
+"""Solar System Colonization's 40 worlds, from one table.
 
 Every per-world block of the colony record is written from ``SITES`` below.
 Design: ``docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md``
 (slices 0-1), ``...-population-and-transit-design.md`` (slices 2-3),
 ``...-modules-and-bases-design.md`` (slice 4) and
 ``2026-10-26-solar-colonization-free-colonies-design.md`` (slice 5: autonomy,
-free colonies, abandonment, the covert hooks, colony life).
+free colonies, abandonment, the covert hooks, colony life). The Moon's six
+worlds, stage 0, are ``2026-10-29-lunar-colonization-design.md`` § 3.
 
 The global record is the truth: ``sr_site_holder_<key>`` (the holder, a
 country), ``sr_site_spec_<key>`` (1 or 2, the specialization chosen in the
@@ -37,7 +38,7 @@ Outputs:
   world's name from its index, for the notices.
 
 The table is the script's own: each world's stage, launch-window body
-(``gen_launch_windows.BODIES``; Mercury has none), founding event
+(``gen_launch_windows.BODIES``; Mercury and the Moon have none), founding event
 (``space_race_colony_events.N``), the two specializations its event offers in
 option order, and the discoveries its founding seeds. ``test_solar_sites.py``
 re-derives all of them from the events and the launch windows and fails when the
@@ -72,13 +73,13 @@ class Site:
     name: str  # the world as its founding event's title names it (comments only)
     stage: int
     location: str  # the panel's grouping, LOCATIONS
-    body: str | None  # launch-window body; None for Mercury (never gated)
+    body: str | None  # launch-window body; None for Mercury and the Moon (never gated)
     event: int  # space_race_colony_events.<event>
     specs: tuple[str, str]  # suffixes of the event's two specializations, in option order
     discoveries: tuple[str, ...]  # seeded at founding, in the draw's order
     kind: str  # gfx/interface/icons/space_race_icons/colony_<kind>.dds
     room: int  # people, in thousands, before modules (slices 2-3 design § 10.2)
-    slots: int  # generic module slots, shared by Habitat, Defences, Spaceport (slice 4 design § 1)
+    slots: int  # generic module slots, shared by Habitat, Defences, Spaceport (slice 4 design § 1; no Spaceport on the Moon)
     ebase_room: int  # Extraplanetary Base levels the world's room holds
     ebase_grade: int  # the throughput a base level in its room gets, in percent
 
@@ -144,6 +145,16 @@ SITES: tuple[Site, ...] = (
     _s("makemake", "Makemake", 5, "kuiper", "kuiper", 32, ("chemistry", "solarwind"), (), "dwarf", 10, 1, 10, -40),
     _s("haumea", "Haumea", 5, "kuiper", "kuiper", 33, ("dynamics", "rings"), (), "dwarf", 10, 1, 10, -40),
     _s("sedna", "Sedna", 5, "kuiper", "kuiper", 34, ("outpost", "interstellar"), (), "dwarf", 10, 1, 10, -45),
+    # Stage 0: the Moon (lunar colonization design § 3.1). Appended, not placed
+    # first: a world's index (its place here + 1) is stored in saves
+    # (sr_cf_target, sr_cf_<n>_site, sr_mq_<n>_site, sr_fl_<n>_target), so the
+    # earlier 34 keep theirs. The panel's order comes from LOCATIONS.
+    _s("shackleton", "Shackleton Crater", 0, "earth", None, 35, ("depot", "outpost"), (), "moon", 25, 2, 15, 0),
+    _s("peary", "Peary Crater", 0, "earth", None, 36, ("solar", "observatory"), (), "moon", 15, 1, 10, 0),
+    _s("tranquility", "Tranquility Base", 0, "earth", None, 37, ("heritage", "helium"), (), "moon", 20, 2, 20, 5),
+    _s("marius_hills", "Marius Hills", 0, "earth", None, 38, ("lavatubes", "hardened"), (), "moon", 40, 3, 25, 5),
+    _s("daedalus", "Daedalus Crater", 0, "earth", None, 39, ("telescope", "relay"), (), "moon", 10, 1, 10, 0),
+    _s("imbrium", "Mare Imbrium", 0, "earth", None, 40, ("massdriver", "kreep"), (), "moon", 25, 2, 25, 0),
 )
 
 # Propellant worlds (slice 6 design § 2): water or volatiles to crack, so a
@@ -168,11 +179,14 @@ SHIPPING: dict[str, tuple[bool, bool]] = {
     "iapetus": (False, True), "titania": (True, False), "oberon": (False, False), "miranda": (False, False),
     "ariel": (False, True), "triton": (True, False), "proteus": (False, True), "pluto": (False, True),
     "eris": (True, False), "makemake": (False, False), "haumea": (False, True), "sedna": (False, False),
+    "shackleton": (True, False), "peary": (True, False), "tranquility": (True, True),
+    "marius_hills": (False, False), "daedalus": (False, False), "imbrium": (True, True),
 }
 
-# The panel's locations, in its order (the owner's nine less Earth and the
-# Moon, where no world is colonized). Mercury and Venus share one.
-LOCATIONS: tuple[str, ...] = ("inner", "mars", "asteroids", "jupiter", "saturn", "uranus", "neptune", "kuiper")
+# The panel's locations, in its order: the owner's nine, Earth and the Moon
+# one (the fleets' location; its worlds are the Moon's, lunar colonization
+# design § 8). Mercury and Venus share one.
+LOCATIONS: tuple[str, ...] = ("earth", "inner", "mars", "asteroids", "jupiter", "saturn", "uranus", "neptune", "kuiper")
 
 # The specialization's modifier is sr_colony_<prefix>_<suffix>; the prefix is
 # the world's key except where the events shortened it.
@@ -180,13 +194,17 @@ SPEC_PREFIX = {
     "hellas_planitia": "hellas",
     "utopia_planitia": "utopia",
     "arcadia_planitia": "arcadia",
+    "marius_hills": "marius",
 }
 
 # A colony's goal at each stage (space_race_values.txt's sr_solar_colonization_goal
-# reads them as sr_colonization_goal_stage_<n>).
-STAGE_GOALS = {1: 400, 2: 450, 3: 500, 4: 550, 5: 650}
+# reads them as sr_colonization_goal_stage_<n>). Stage 0 is the Moon (lunar
+# colonization design § 3.2, the owner's 2026-10-29 goals).
+STAGE_GOALS = {0: 300, 1: 450, 2: 525, 3: 600, 4: 700, 5: 800}
+STAGES = tuple(sorted(STAGE_GOALS))
 
 STAGE_TITLES = {
+    0: "The Moon",
     1: "Mars & Asteroids",
     2: "Jupiter System & Venus",
     3: "Mercury & Saturn System",
@@ -194,7 +212,8 @@ STAGE_TITLES = {
     5: "Kuiper Belt & Beyond",
 }
 
-# Cede Colony's value of a world to the AI: 20 plus 5 a stage (design § 11.2).
+# Cede Colony's value of a world to the AI: 20 plus 5 a stage (design § 11.2;
+# a lunar world, stage 0, is worth 20).
 AI_VALUE_BASE = 20
 AI_VALUE_PER_STAGE = 5
 
@@ -242,6 +261,48 @@ NEAR_EARTH_ROOM = 10
 NEAR_EARTH_TECH = "asteroid_mining"
 OVERFLOW_GRADE = -50
 
+# The Moon's six worlds (lunar colonization design § 3): stage 0, at Earth's
+# location, never gated, founded the month their fleet leaves (§ 3.3).
+LUNAR: tuple[Site, ...] = tuple(s for s in SITES if s.stage == 0)
+
+# No Spaceport on a lunar world (design § 3.1): fleets dock at Earth, the same
+# location. Its slots hold Habitats and Defences. module_types() and its kin
+# drop the Spaceport for these, so no queue, shipment, building or panel cell
+# is emitted for one; sr_site_port_value_<key> stays, a constant 0, because the
+# integrity step (sr_fleet_combat_effects.txt) reads it for every world.
+NO_SPACEPORT = frozenset(s.key for s in SITES if s.location == "earth")
+
+# The Moon Landing's "Where the Eagle Shall Land" choice (space_race_events.txt,
+# the country variable sr_moon_site_<site>) gives -25% progress on the lunar
+# world it names, for that country (design § 3.4): sr_landing_site_factor in
+# sr_cf_goal_<key>, so the target's goal and the fleet's cost both show it.
+# Peary and Imbrium match no landing site.
+LANDING_SITES = {
+    "shackleton": "sr_moon_site_shackleton",
+    "tranquility": "sr_moon_site_tranquility",
+    "marius_hills": "sr_moon_site_equatorial",
+    "daedalus": "sr_moon_site_far_side",
+}
+
+
+def _types_at(site: Site, types: tuple[str, ...]) -> tuple[str, ...]:
+    return tuple(t for t in types if not (t == "port" and site.key in NO_SPACEPORT))
+
+
+def module_types(site: Site) -> tuple[str, ...]:
+    """MODULE_TYPES the world takes: all but a lunar world's Spaceport."""
+    return _types_at(site, MODULE_TYPES)
+
+
+def generic_types(site: Site) -> tuple[str, ...]:
+    """GENERIC_TYPES the world takes (its slots)."""
+    return _types_at(site, GENERIC_TYPES)
+
+
+def crewed_types(site: Site) -> tuple[str, ...]:
+    """CREWED_TYPES the world takes."""
+    return _types_at(site, CREWED_TYPES)
+
 
 def spec_modifiers(site: Site) -> tuple[str, str]:
     prefix = SPEC_PREFIX.get(site.key, site.key)
@@ -256,7 +317,7 @@ def discovery_modifiers(discovery: str) -> tuple[str, str]:
 def module_vars(site: Site) -> list[str]:
     """The world's module levels (slice 4 design § 2)."""
     k = site.key
-    return [f"sr_site_lvl_a_{k}", f"sr_site_lvl_b_{k}", *(f"sr_site_{t}_{k}" for t in GENERIC_TYPES)]
+    return [f"sr_site_lvl_a_{k}", f"sr_site_lvl_b_{k}", *(f"sr_site_{t}_{k}" for t in generic_types(site))]
 
 
 def level_value(t: str, site: Site) -> str:
@@ -275,7 +336,7 @@ def site_building(site: Site) -> str:
 # A world's name in the overview's 154-wide cells (audit SPC-6; 16-point
 # tooltip face): sr_site_name_<key>, or for a name too long for them its short
 # form, sr_site_short_<key> (test_space_race_labels.py measures every one).
-SHORT_NAMES = frozenset({"venus"})
+SHORT_NAMES = frozenset({"venus", "shackleton"})
 
 
 def overview_name_key(site: Site) -> str:
@@ -309,12 +370,15 @@ def choices() -> list[tuple[str, Site, str, int]]:
 # The founding draw and the stage check
 # ---------------------------------------------------------------------------
 
-def _draw_branch(site: Site) -> list[str]:
+def _draw_branch(site: Site, stage0: bool = False) -> list[str]:
+    """One world's branch of the draw. `stage0`: the stage-0 block's own lunar
+    worlds, which carry the lunar_stage0_draw self-check's OK (Races Only's
+    first stage founds; lunar colonization plan, review focus 4)."""
     t = "\t\t\t"
     lines = [f"{t}10 = {{", f"{t}\ttrigger = {{",
              f"{t}\t\tNOT = {{ has_global_variable = sr_colony_{site.key} }}"]
     if site.body is None:
-        lines.append(f"{t}\t\tsr_launch_mercury_departs = yes")
+        lines.append(f"{t}\t\tsr_launch_ungated_departs = yes")
     else:
         lines.append(f"{t}\t\tsr_launch_site_departs = {{ BODY = {site.body} }}")
     lines += [f"{t}\t}}",
@@ -323,6 +387,14 @@ def _draw_branch(site: Site) -> list[str]:
               f"{t}\tsr_site_sync_{site.key} = yes"]
     if site.body is not None:
         lines.append(f"{t}\tsr_launch_window_gate_check = {{ BODY = {site.body} }}")
+    if stage0:
+        lines += [f"{t}\tif = {{",
+                  f"{t}\t\tlimit = {{ NOT = {{ has_global_variable = sr_lunar_stage0_draw_ok_logged }} }}",
+                  f"{t}\t\tset_global_variable = {{ name = sr_lunar_stage0_draw_ok_logged value = yes }}",
+                  f'{t}\t\tdebug_log = "TE_SELF_CHECK OK lunar_stage0_draw world={site.key} '
+                  "country=[THIS.GetCountry.GetNameNoFormatting] (the Moon's stage drew and founded a world "
+                  'under Races Only; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"',
+                  f"{t}\t}}"]
     for discovery in site.discoveries:
         lines.append(f"{t}\tsr_seed_colony_discovery = {{ DISCOVERY = {discovery} }}")
     lines += [f"{t}\ttrigger_event = {{ id = space_race_colony_events.{site.event} }}", f"{t}}}"]
@@ -334,7 +406,7 @@ def render_draw() -> list[str]:
         "# Solar System Colonization - establish a colony at a random unclaimed location.",
         "# Only a site a fleet can leave for now is drawn, and only among the cheapest",
         "# (Global Commons § 5.2): each site's trigger asks sr_launch_site_departs for",
-        "# its window body (Mercury, never gated, sr_launch_mercury_departs). The body of",
+        "# its window body (Mercury and the Moon, never gated, sr_launch_ungated_departs). The body of",
         "# each site is the generator's BODIES table (scripts/generators/",
         "# gen_launch_windows.py; test_launch_windows.py holds the two equal). Called",
         "# from sr_launch_month only, which checks first that some site can depart.",
@@ -347,7 +419,7 @@ def render_draw() -> list[str]:
         "\t# Initialize stage if needed",
         "\tif = {",
         "\t\tlimit = { NOT = { has_global_variable = sr_colonization_stage } }",
-        "\t\tset_global_variable = { name = sr_colonization_stage value = 1 }",
+        "\t\tset_global_variable = { name = sr_colonization_stage value = 0 }",
         "\t}",
         "\t# Count the world's claimed sites before the draw. Once every site is",
         "\t# claimed (stage 5 full) the stage lists below have no valid entry and",
@@ -356,16 +428,16 @@ def render_draw() -> list[str]:
         "\tset_local_variable = { name = sr_colonies_claimed_before value = sr_total_global_colonies }",
         "",
     ]
-    for stage in range(1, 6):
+    for stage in STAGES:
         out.append(f"\t# ===== STAGE {stage}: {STAGE_TITLES[stage]} =====")
-        out.append("\tif = {" if stage == 1 else "\telse_if = {")
+        out.append("\tif = {" if stage == STAGES[0] else "\telse_if = {")
         out.append(f"\t\tlimit = {{ global_var:sr_colonization_stage = {stage} }}")
         out.append("\t\trandom_list = {")
         for site in stage_sites(stage):
-            out += _draw_branch(site)
-        if stage > 1:
+            out += _draw_branch(site, stage0=stage == 0)
+        if stage > STAGES[0]:
             out.append("\t\t\t# Released worlds of the stages before")
-            for earlier in range(1, stage):
+            for earlier in range(STAGES[0], stage):
                 for site in stage_sites(earlier):
                     out += _draw_branch(site)
         out += ["\t\t}", "\t}"]
@@ -376,10 +448,10 @@ def render_draw() -> list[str]:
 def render_stage_check() -> list[str]:
     out = ["# Check if current colonization stage is complete and advance",
            "sr_check_colony_stage_effect = {"]
-    for stage in range(1, 6):
+    for stage in STAGES:
         nxt = "All done" if stage == 5 else f"Stage {stage + 1}"
         out.append(f"\t# Stage {stage} complete → {nxt}")
-        out.append("\tif = {" if stage == 1 else "\telse_if = {")
+        out.append("\tif = {" if stage == STAGES[0] else "\telse_if = {")
         out += ["\t\tlimit = {", f"\t\t\tglobal_var:sr_colonization_stage = {stage}"]
         out += [f"\t\t\thas_global_variable = sr_colony_{s.key}" for s in stage_sites(stage)]
         out.append("\t\t}")
@@ -911,8 +983,11 @@ def render_debug() -> list[str]:
 # ---------------------------------------------------------------------------
 
 def transit_body(site: Site) -> str:
-    """The body a fleet's transit is read for: the window body, or Mercury."""
-    return site.body or "mercury"
+    """The body a fleet's transit is read for: the window body, the Moon for a
+    lunar world (gen_launch_windows' 0-month transit-only body), or Mercury."""
+    if site.body:
+        return site.body
+    return "moon" if site.key in NO_SPACEPORT else "mercury"
 
 
 def body_group(site: Site) -> list[Site]:
@@ -940,8 +1015,18 @@ def _by_index(name: str, test: str, body: str) -> list[str]:
 def _found(site: Site) -> list[str]:
     k = site.key
     out = [f"# THIS founds {site.name}: a colony fleet's arrival, or a target under races only.",
-           f"sr_site_found_{k} = {{",
-           f"\tset_global_variable = {{ name = sr_colony_{k} value = yes }}",
+           f"sr_site_found_{k} = {{"]
+    if site in LUNAR:
+        # Two countries, one lunar world, one month (lunar colonization plan,
+        # review focus 5): the second's target is no longer valid, so this
+        # must never find a holder. Engine-silent if it did.
+        out += ["\tif = {",
+                f"\t\tlimit = {{ has_global_variable = sr_site_holder_{k} }}",
+                f'\t\tdebug_log = "TE_SELF_CHECK BROKEN lunar_double_claim {k} country=[THIS.GetCountry.GetNameNoFormatting] '
+                '(a lunar world founded while it had a holder: two claims in one month; '
+                'docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"',
+                "\t}"]
+    out += [f"\tset_global_variable = {{ name = sr_colony_{k} value = yes }}",
            f"\tset_global_variable = {{ name = sr_site_holder_{k} value = this }}",
            f"\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
            f"\tsr_site_sync_{k} = yes"]
@@ -954,6 +1039,15 @@ def _found(site: Site) -> list[str]:
 
 def _dispatch(site: Site) -> list[str]:
     k = site.key
+    if site in LUNAR:
+        # No transit to the Moon (lunar colonization design § 3.3): founded in the
+        # launch month, through the races-only target's path; no slot, no inbound
+        # record. Then what a landing does after founding (charter, stage, rows).
+        return [f"# A fleet leaves for {site.name}: founded at once, its cost spent; no slot, no inbound record.",
+                f"sr_cf_dispatch_{k} = {{",
+                f"\tsr_cf_found_now_{k} = yes",
+                f"\tsr_cf_after_found = {{ INDEX = {site.index} }}",
+                "}"]
     out = [f"# A fleet leaves for {site.name}: its cost spent, a slot filled, the world's inbound record.",
            f"sr_cf_dispatch_{k} = {{",
            f"\tset_local_variable = {{ name = sr_cf_new_site value = {site.index} }}",
@@ -969,7 +1063,8 @@ def _dispatch(site: Site) -> list[str]:
 
 
 def _found_now(site: Site) -> list[str]:
-    """Races only, a target (D19): founded at once, at the stage's goal."""
+    """Races only, a target (D19): founded at once, at the stage's goal. Under
+    simple and full, a lunar world's fleet too (lunar colonization design § 3.3)."""
     k = site.key
     out = [f"sr_cf_found_now_{k} = {{",
            f"\tset_variable = {{ name = sr_goal_before_colony value = sr_cf_cost_{k} }}",
@@ -1070,8 +1165,8 @@ def render_fleet_effects() -> list[str]:
             "# the race is complete once none is left (design § 9). Worlds are claimed out",
             "# of order there, so the races-only step-by-one stage check would stall.",
             "sr_sites_recompute_stage = {"]
-    for stage in range(1, 6):
-        out += ["\tif = {" if stage == 1 else "\telse_if = {",
+    for stage in STAGES:
+        out += ["\tif = {" if stage == STAGES[0] else "\telse_if = {",
                 "\t\tlimit = {", "\t\t\tOR = {"]
         out += [f"\t\t\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in stage_sites(stage)]
         out += ["\t\t\t}", "\t\t}",
@@ -1208,20 +1303,35 @@ def render_triggers() -> str:
 
 def render_fleet_triggers() -> list[str]:
     out = ["# ===== Colony fleets (slices 2-3 design §§ 3-8) =====",
-           "# An inner world (stages 1 and 2) is unclaimed: under simple and full the",
-           "# outer-system rule reads it in place of the stage (sr_colonization_inner_open).",
+           "# An inner world (the Moon and stages 1 and 2) is unclaimed: under simple and",
+           "# full the outer-system rule reads it in place of the stage",
+           "# (sr_colonization_inner_open).",
            "sr_sites_inner_unclaimed = {",
            "\tOR = {"]
     out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in SITES if s.stage <= 2]
     out += ["\t}", "}", "",
+            "# A lunar world (stage 0) is unclaimed. Any scope.",
+            "sr_sites_lunar_open = {",
+            "\tOR = {"]
+    out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in LUNAR]
+    out += ["\t}", "}", "",
+            "# THIS holds a world beyond the Moon (stage 1 or later): Deep Space's colony",
+            "# arm (sr_cf_targetable_<key>, stages 3 to 5; lunar colonization design § 4). A",
+            "# lunar colony alone doesn't open the outer system. Country scope.",
+            "sr_has_colony_beyond_moon = {",
+            "\tOR = {"]
+    out += [f"\t\tglobal_var:sr_site_holder_{s.key} ?= this" for s in SITES if s.stage >= 1]
+    out += ["\t}", "}", "",
             "# Per world, country scope:",
             "#   sr_cf_targetable_<key>  THIS may send its next fleet there: unclaimed, and under",
             "#                           races only of a stage reached (the draw's candidates), under",
-            "#                           simple and full of stage 1 or 2, or with Deep Space",
-            "#                           Exploration or a colony held (design § 3)",
+            "#                           simple and full of stage 0 to 2, or with Deep Space",
+            "#                           Exploration or a colony held beyond the Moon (design § 3)",
             "#   sr_cf_departs_<key>     a fleet can leave for it this month (its body's window, a",
-            "#                           paid launch the approach accepts, or a torch; Mercury always)",
-            "#   sr_cf_eligible_<key>    the automatic pick may take it: targetable, departs, its cost",
+            "#                           paid launch the approach accepts, or a torch; Mercury and",
+            "#                           the Moon always)",
+            "#   sr_cf_eligible_<key>    the automatic pick may take it: targetable, a fleet slot free",
+            "#                           (not for the Moon, founded at once), departs, its cost",
             f"#                           covered, its transit within {HORIZON_MONTHS} months (design § 7);",
             "#                           the goal alone first, the cheap test before the window's",
             "#   sr_cf_beaten_<key>      a fleet already on its way lands no later than ours would"]
@@ -1239,7 +1349,7 @@ def render_fleet_triggers() -> list[str]:
                     "\t\t\tsr_colonies_contested_enabled = yes",
                     "\t\t\tOR = {",
                     "\t\t\t\tmodifier:country_sr_deep_space_exploration_program_bool = yes",
-                    "\t\t\t\tsr_has_space_colony = yes",
+                    "\t\t\t\tsr_has_colony_beyond_moon = yes",
                     "\t\t\t}",
                     "\t\t}"]
         out += ["\t}", "}"]
@@ -1249,6 +1359,7 @@ def render_fleet_triggers() -> list[str]:
             out.append(f"sr_cf_departs_{k} = {{ always = yes }}")
         out += [f"sr_cf_eligible_{k} = {{",
                 f"\tsr_cf_targetable_{k} = yes",
+                *([] if site in LUNAR else ["\tsr_cf_has_free_slot = yes"]),
                 f"\tsr_progress_solar_colonization_value >= sr_cf_goal_{k}",
                 f"\tsr_cf_departs_{k} = yes",
                 f"\tsr_progress_solar_colonization_value >= sr_cf_cost_{k}",
@@ -1262,10 +1373,12 @@ def render_fleet_triggers() -> list[str]:
             "sr_cf_target_valid = {", "\thas_variable = sr_cf_target", "\tOR = {"]
     out += [f"\t\tAND = {{ var:sr_cf_target = {s.index} sr_cf_targetable_{s.key} = yes }}" for s in SITES]
     out += ["\t}", "}", "",
-            "# The target can be launched for now: targetable, departs, its cost covered.",
+            "# The target can be launched for now: targetable, a fleet slot free (not for the",
+            "# Moon, founded at once; slots never fill under races only), departs, its cost covered.",
             "sr_cf_target_ready = {", "\thas_variable = sr_cf_target", "\tOR = {"]
-    out += [f"\t\tAND = {{ var:sr_cf_target = {s.index} sr_cf_targetable_{s.key} = yes sr_cf_departs_{s.key} = yes "
-            f"sr_progress_solar_colonization_value >= sr_cf_cost_{s.key} }}" for s in SITES]
+    out += [f"\t\tAND = {{ var:sr_cf_target = {s.index} sr_cf_targetable_{s.key} = yes "
+            + ("" if s in LUNAR else "sr_cf_has_free_slot = yes ")
+            + f"sr_cf_departs_{s.key} = yes sr_progress_solar_colonization_value >= sr_cf_cost_{s.key} }}" for s in SITES]
     out += ["\t}", "}", "",
             "# The scripted GUIs' world (scope:site): targetable, our target, held by THIS.",
             "sr_cf_scope_site_targetable = {", "\tOR = {"]
@@ -1289,6 +1402,15 @@ def render_values() -> str:
            "\tvalue = 0"]
     out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} add = 1 }}" for s in SITES]
     out += ["}", "",
+            "# The worlds claimed by anyone (never founded or released ones aside), any scope:",
+            "# the draw's and the launch month's spend read it before and after a claim, the",
+            "# panel shows it against sr_sites_world_count.",
+            "sr_total_global_colonies = {",
+            "\tvalue = 0"]
+    out += [f"\tif = {{ limit = {{ has_global_variable = sr_colony_{s.key} }} add = 1 }}" for s in SITES]
+    out += ["}",
+            f"sr_sites_world_count = {{ value = {len(SITES)} }}",
+            "",
             "# Cede Colony's AI: what the article's input world is worth, 20 plus 5 a",
             "# stage (design § 11.2), plus 5 a module level past the first (slice 4 design",
             "# § 7). scope:article in inherent_accept_score.",
@@ -1314,7 +1436,8 @@ def render_fleet_values() -> list[str]:
            "",
            "# Per world, country scope:",
            "#   sr_cf_goal_<key>     its colony's goal: its own stage's under simple and full, the",
-           "#                        current stage's under races only (a released world costs that)",
+           "#                        current stage's under races only (a released world costs that);",
+           "#                        -25% at the lunar world our Moon Landing named (LANDING_SITES)",
            "#   sr_cf_cost_<key>     what a fleet leaving now spends: goal x (1 + premium);",
            "#                        sr_launch_never's x goal when it can't leave",
            "#   sr_cf_arrival_<key>  the month a fleet leaving now lands, by THIS's drive",
@@ -1325,8 +1448,11 @@ def render_fleet_values() -> list[str]:
         k, tb = site.key, transit_body(site)
         out += [f"sr_cf_goal_{k} = {{",
                 f"\tvalue = sr_colonization_goal_stage_{site.stage}",
-                "\tif = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }",
-                "}"]
+                "\tif = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }"]
+        if k in LANDING_SITES:
+            # Our Moon Landing named this world (design § 3.4).
+            out.append(f"\tif = {{ limit = {{ has_variable = {LANDING_SITES[k]} }} multiply = sr_landing_site_factor }}")
+        out.append("}")
         if site.body:
             out += [f"sr_cf_cost_{k} = {{", f"\tvalue = sr_launch_target_cost_{site.body}", "\tadd = 1",
                     f"\tmultiply = sr_cf_goal_{k}", "}"]
@@ -1347,12 +1473,14 @@ def render_fleet_values() -> list[str]:
             "sr_cf_best_score = {", "\tvalue = sr_cf_no_score"]
     out += [f"\tif = {{ limit = {{ sr_cf_eligible_{s.key} = yes }} min = sr_cf_score_{s.key} }}" for s in SITES]
     out += ["}", "",
-            "# The target's goal (sr_solar_colonization_goal under simple and full).",
+            "# The target's goal (sr_solar_colonization_goal under simple and full, which",
+            "# alone reads it): its world's sr_cf_goal_<key>, the landing site's discount",
+            "# included. Under simple and full that never reads sr_solar_colonization_goal.",
             "sr_cf_target_goal = {", "\tvalue = sr_colonization_goal_stage_1"]
     for n, site in enumerate(SITES):
         word = "if" if n == 0 else "else_if"
         out.append(f"\t{word} = {{ limit = {{ has_variable = sr_cf_target var:sr_cf_target = {site.index} }} "
-                   f"value = sr_colonization_goal_stage_{site.stage} }}")
+                   f"value = sr_cf_goal_{site.key} }}")
     out.append("}")
     return out
 
@@ -1435,7 +1563,8 @@ def render_module_values() -> list[str]:
            "# Per world, any scope:",
            "#   sr_site_lvl_<a|b>_value_<key>  a specialization's level; the founding choice",
            "#                                  reads 1 until a module raises it, the other 0",
-           "#   sr_site_<hab|def|port>_value_<key>  a generic module's level",
+           "#   sr_site_<hab|def|port>_value_<key>  a generic module's level (a lunar world's",
+           "#                                  Spaceport a constant 0: it has none)",
            "#   sr_site_levels_<key>          the levels that need crews (Habitats house them)",
            "#   sr_site_extra_levels_<key>    every module level past the founding outpost's",
            "#   sr_site_staffing_<key>        1 with the crews, AGI or under races only; else",
@@ -1454,10 +1583,13 @@ def render_module_values() -> list[str]:
                     f"\telse_if = {{ limit = {{ has_global_variable = sr_site_spec_{k} global_var:sr_site_spec_{k} = {option} }} "
                     "value = 1 }",
                     "}"]
-        for t in GENERIC_TYPES:
+        for t in generic_types(site):
             out += _opt_var(f"sr_site_{t}_value_{k}", f"sr_site_{t}_{k}")
+        if k in NO_SPACEPORT:
+            # No Spaceport here; the integrity step reads the level anyway.
+            out.append(f"sr_site_port_value_{k} = {{ value = 0 }}")
         out += [f"sr_site_levels_{k} = {{",
-                *[f"\t{'value' if i == 0 else 'add'} = {level_value(t, site)}" for i, t in enumerate(CREWED_TYPES)],
+                *[f"\t{'value' if i == 0 else 'add'} = {level_value(t, site)}" for i, t in enumerate(crewed_types(site))],
                 "}",
                 f"sr_site_extra_levels_{k} = {{",
                 f"\tvalue = sr_site_levels_{k}",
@@ -1494,9 +1626,9 @@ def render_module_values() -> list[str]:
             out.append("}")
         out += [f"sr_site_spec_built_{k} = {{ value = sr_site_lvl_a_value_{k} add = sr_site_lvl_b_value_{k} }}",
                 f"sr_site_generic_built_{k} = {{",
-                *[f"\t{'value' if i == 0 else 'add'} = sr_site_{t}_value_{k}" for i, t in enumerate(GENERIC_TYPES)],
+                *[f"\t{'value' if i == 0 else 'add'} = sr_site_{t}_value_{k}" for i, t in enumerate(generic_types(site))],
                 "}"]
-        for name, types, built in (("spec_used", ("a", "b"), "spec_built"), ("slots_used", GENERIC_TYPES, "generic_built")):
+        for name, types, built in (("spec_used", ("a", "b"), "spec_built"), ("slots_used", generic_types(site), "generic_built")):
             out += [f"sr_mod_{name}_{k} = {{", f"\tvalue = sr_site_{built}_{k}"]
             for t in types:
                 out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{k} }} add = var:sr_mq_{t}_{k} }}",
@@ -1531,7 +1663,7 @@ def _module_install(site: Site) -> list[str]:
            f"\t\t\tNOT = {{ has_global_variable = sr_site_occupier_{k} }}",
            "\t\t}"]
     first = True
-    for t in ("a", "b", *GENERIC_TYPES):
+    for t in ("a", "b", *generic_types(site)):
         if t in ("a", "b"):
             cap, var = f"sr_site_spec_built_{k} < sr_mod_spec_budget", f"sr_site_lvl_{t}_{k}"
         else:
@@ -1676,7 +1808,7 @@ def render_module_queue() -> list[str]:
             "# The per-world counts, rebuilt from the queue.",
             "sr_mq_recount = {"]
     for site in SITES:
-        for t in MODULE_TYPES:
+        for t in module_types(site):
             var = f"sr_mq_{t}_{site.key}"
             out.append(f"\tif = {{ limit = {{ has_variable = {var} }} remove_variable = {var} }}")
     for n in range(1, q + 1):
@@ -1690,7 +1822,7 @@ def render_module_queue() -> list[str]:
     for n, site in enumerate(SITES):
         out += ["\tif = {" if n == 0 else "\telse_if = {",
                 f"\t\tlimit = {{ local_var:sr_mq_site_now = {site.index} }}"]
-        for m, t in enumerate(MODULE_TYPES):
+        for m, t in enumerate(module_types(site)):
             out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ local_var:sr_mq_type_now = {MODULE_CODES[t]} }} "
                        f"sr_mq_count_add = {{ VAR = sr_mq_{t}_{site.key} }} }}")
         out.append("\t}")
@@ -1706,7 +1838,7 @@ def render_module_queue() -> list[str]:
         k = site.key
         out += ["\tif = {" if n == 0 else "\telse_if = {",
                 f"\t\tlimit = {{ local_var:sr_mq_head_site = {site.index} global_var:sr_site_holder_{k} ?= this }}"]
-        for m, t in enumerate(MODULE_TYPES):
+        for m, t in enumerate(module_types(site)):
             out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ local_var:sr_mq_head_type = {MODULE_CODES[t]} }} "
                        f"sr_mod_fab_build = {{ KEY = {k} TYPE = {t} CODE = {MODULE_CODES[t]} INDEX = {site.index} }} }}")
         out.append("\t}")
@@ -1739,14 +1871,14 @@ def render_module_effects() -> list[str]:
             "# (sr_ms_global_after) and counted again from every country's slots.",
             "sr_ms_clear_counters = {"]
     for site in SITES:
-        for t in MODULE_TYPES:
+        for t in module_types(site):
             var = f"sr_site_ship_{t}_{site.key}"
             out.append(f"\tif = {{ limit = {{ has_global_variable = {var} }} remove_global_variable = {var} }}")
     out += ["}", "sr_ms_count_by_index = {"]
     for n, site in enumerate(SITES):
         out += ["\tif = {" if n == 0 else "\telse_if = {",
                 f"\t\tlimit = {{ local_var:sr_ms_site_now = {site.index} }}"]
-        for m, t in enumerate(MODULE_TYPES):
+        for m, t in enumerate(module_types(site)):
             out += [f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ local_var:sr_ms_type_now = {MODULE_CODES[t]} }} "
                     f"sr_ms_count_add = {{ VAR = sr_site_ship_{t}_{site.key} }} }}"]
         out.append("\t}")
@@ -1760,7 +1892,7 @@ def render_module_effects() -> list[str]:
             "sr_mod_queue_from_scope = {"]
     for n, site in enumerate(SITES):
         out += ["\tif = {" if n == 0 else "\telse_if = {", f"\t\tlimit = {{ scope:site = {site.index} }}"]
-        for m, t in enumerate(("a", "b", *GENERIC_TYPES)):
+        for m, t in enumerate(("a", "b", *generic_types(site))):
             out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ scope:op = {MODULE_CODES[t]} }} "
                        f"{_queue_call(site, t)} }}")
         out.append("\t}")
@@ -1808,7 +1940,7 @@ def render_module_effects() -> list[str]:
             "sr_mod_debug_log = {"]
     for site in SITES:
         k = site.key
-        levels = " ".join(f"{t}=[SCOPE.ScriptValue('{level_value(t, site)}')|0]" for t in ("a", "b", *GENERIC_TYPES))
+        levels = " ".join(f"{t}=[SCOPE.ScriptValue('{level_value(t, site)}')|0]" for t in ("a", "b", *generic_types(site)))
         queue = (f"specializations [THIS.MakeScope.ScriptValue('sr_mod_spec_used_{k}')|0] of {SPEC_BUDGET}, "
                  f"generic [THIS.MakeScope.ScriptValue('sr_mod_slots_used_{k}')|0] of {site.slots}")
         out += ["\tif = {",
@@ -1824,7 +1956,7 @@ def render_module_effects() -> list[str]:
         k = site.key
         out += ["\tif = {" if n == 0 else "\telse_if = {",
                 f"\t\tlimit = {{ global_var:sr_site_holder_{k} ?= this }}"]
-        for t in ("a", "b", *GENERIC_TYPES):
+        for t in ("a", "b", *generic_types(site)):
             out.append(f"\t\tif = {{ limit = {{ sr_mod_can_queue_{t}_{k} = yes }} {_queue_call(site, t)} }}")
         out.append("\t}")
     out += ["}", "",
@@ -1851,7 +1983,7 @@ def render_module_triggers() -> list[str]:
     for site in SITES:
         k = site.key
         out += [f"sr_mq_any_{k} = {{", "\tOR = {"]
-        out += [f"\t\thas_variable = sr_mq_{t}_{k}" for t in MODULE_TYPES]
+        out += [f"\t\thas_variable = sr_mq_{t}_{k}" for t in module_types(site)]
         out += ["\t}", "}"]
         for slot in ("a", "b"):
             out += [f"sr_mod_can_queue_{slot}_{k} = {{",
@@ -1860,7 +1992,7 @@ def render_module_triggers() -> list[str]:
                     f"\thas_global_variable = sr_site_spec_{k}",
                     f"\tsr_mod_spec_used_{k} < sr_mod_spec_budget",
                     "}"]
-        for t in GENERIC_TYPES:
+        for t in generic_types(site):
             out += [f"sr_mod_can_queue_{t}_{k} = {{",
                     f"\tglobal_var:sr_site_holder_{k} ?= this",
                     "\tsr_mq_has_room = yes",
@@ -1871,7 +2003,7 @@ def render_module_triggers() -> list[str]:
         else:
             out.append(f"sr_mod_departs_{k} = {{ always = yes }}")
         out += [f"sr_site_shipping_{k} = {{", "\tOR = {"]
-        out += [f"\t\thas_global_variable = sr_site_ship_{t}_{k}" for t in MODULE_TYPES]
+        out += [f"\t\thas_global_variable = sr_site_ship_{t}_{k}" for t in module_types(site)]
         out += ["\t}", "}"]
     out += ["", f"# THIS's module queue has a free place (of {QUEUE_SLOTS}).",
             f"sr_mq_has_room = {{ NOT = {{ has_variable = sr_mq_{QUEUE_SLOTS}_site }} }}",
@@ -1893,7 +2025,7 @@ def render_module_triggers() -> list[str]:
             "", "# The module scripted GUI's world and type (scope:site, scope:op) may be queued.",
             "sr_mod_scope_can_queue = {", "\tOR = {"]
     for site in SITES:
-        for t in ("a", "b", *GENERIC_TYPES):
+        for t in ("a", "b", *generic_types(site)):
             out.append(f"\t\tAND = {{ scope:site = {site.index} scope:op = {MODULE_CODES[t]} sr_mod_can_queue_{t}_{site.key} = yes }}")
     out += ["\t}", "}",
             "# sr_mod_can_queue_<type>_<key>'s conditions one by one, for the scripted GUI's",
@@ -2559,6 +2691,14 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ has_variable = sr_emig_prio_{k} }} value = var:sr_emig_prio_{k} }}",
                 "}"]
     out += ["",
+            "# The lunar world our Moon Landing named (design § 3.4): 1 while its -25% is ours,",
+            "# for its Solar System hover (sr_site_landing_discount_tt)."]
+    for k, var in LANDING_SITES.items():
+        out += [f"sr_disp_site_landing_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = {var} }} value = 1 }}",
+                "}"]
+    out += ["",
             "# Per fleet slot (Colony Fleets): 1 while it flies, the months until it lands,",
             "# the year it lands."]
     for n in range(1, FLEET_SLOTS + 1):
@@ -2593,7 +2733,7 @@ def render_display() -> str:
             "#   sr_disp_site_staffing_<key>       the colony's staffing, in percent"]
     for site in SITES:
         k = site.key
-        for t in ("a", "b", *GENERIC_TYPES):
+        for t in ("a", "b", *generic_types(site)):
             out += [f"sr_disp_mod_pending_{t}_{k} = {{",
                     "\tvalue = 0",
                     f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{k} }} add = var:sr_mq_{t}_{k} }}",
@@ -2814,7 +2954,7 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("module_staffing", f'raw_text = "[{_sv(f"sr_disp_site_staffing_{k}")}|0]%"')
     spec_tt = {slot: f"je_space_race_widget_colony_{m[len('sr_colony_'):]}_tt"
                for slot, m in zip(("a", "b"), spec_modifiers(site))}
-    for t in ("a", "b", *GENERIC_TYPES):
+    for t in ("a", "b", *generic_types(site)):
         pending = f"sr_disp_mod_pending_{t}_{k}"
         tooltip = spec_tt.get(t, f"je_space_race_widget_mod_{t}_tt")
         out += _override(f"mod_{t}_level", f'raw_text = "[{_sv(level_value(t, site))}|0]"', f'tooltip = "{tooltip}"')
@@ -2825,6 +2965,12 @@ def _colony_row(site: Site) -> list[str]:
                          f"enabled = \"[GetScriptedGui('sr_colony_module_sgui').IsValid( {site_op} )]\"",
                          f"onclick = \"[GetScriptedGui('sr_colony_module_sgui').Execute( {site_op} )]\"",
                          f'tooltip = "{_reasoned("sr_colony_module_sgui", site_op)}"')
+    if k in NO_SPACEPORT:
+        # No Spaceport on the Moon (lunar colonization design § 3.1): a dash where
+        # its level would be, the column kept, no queue button.
+        out += _override("mod_port_level", 'raw_text = "-"', 'tooltip = "je_space_race_widget_mod_port_none_tt"')
+        out += _override("mod_port_pending", "visible = no")
+        out += _override("mod_port_button", "visible = no")
     clear = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( "
              f"'(CFixedPoint){site.index}' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End")
     out += _override("module_clear_button",

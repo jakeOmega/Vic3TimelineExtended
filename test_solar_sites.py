@@ -103,9 +103,32 @@ class TableTest(unittest.TestCase):
         table = {m for d in seeded for m in gss.discovery_modifiers(d)}
         self.assertEqual(table, outcomes)
 
+    def test_a_world_s_index_is_its_place_and_new_worlds_append(self):
+        """A world's index (its event, its sr_site_spec_<key>, every queued module's
+        site and every fleet's target) is saved, so a new world goes at the end:
+        the first 34 keep their places and the Moon's six are 35-40 (lunar
+        colonization design § 3)."""
+        self.assertEqual([s.index for s in gss.SITES], list(range(1, len(gss.SITES) + 1)))
+        self.assertEqual([s.key for s in gss.SITES[:34]], [
+            "valles_marineris", "olympus_mons", "hellas_planitia", "utopia_planitia", "arcadia_planitia",
+            "ceres", "vesta", "psyche", "pallas", "hygiea", "io", "europa", "ganymede", "callisto",
+            "himalia", "amalthea", "venus", "mercury", "titan", "enceladus", "rhea", "mimas", "iapetus",
+            "titania", "oberon", "miranda", "ariel", "triton", "proteus", "pluto", "eris", "makemake",
+            "haumea", "sedna"])
+        lunar = gss.SITES[34:]
+        self.assertEqual([s.key for s in lunar], ["shackleton", "peary", "tranquility", "marius_hills",
+                                                  "daedalus", "imbrium"])
+        self.assertEqual(lunar, gss.LUNAR)
+        for site in lunar:
+            with self.subTest(site=site.key):
+                self.assertEqual(site.event, site.index)
+                self.assertEqual((site.stage, site.location, site.body, site.kind), (0, "earth", None, "moon"))
+                self.assertEqual(site.discoveries, ())
+        self.assertEqual(gss.NO_SPACEPORT, {s.key for s in lunar})
+
     def test_every_world_has_a_location_and_an_icon(self):
-        self.assertEqual(len(gss.SITES), 34)
-        self.assertEqual(len({s.key for s in gss.SITES}), 34)
+        self.assertEqual(len(gss.SITES), 40)
+        self.assertEqual(len({s.key for s in gss.SITES}), 40)
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(site.location, gss.LOCATIONS)
@@ -168,7 +191,7 @@ class RecordTest(unittest.TestCase):
         granted = set(re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}",
                                  _raw("events", "space_race_colony_events.txt")
                                  + _raw("events", "space_race_discovery_events.txt")))
-        self.assertEqual(len(granted), 108)
+        self.assertEqual(len(granted), 120)
         dispatched = set(re.findall(r"(?m)^sr_site_choose_(\w+) = \{", self.effects))
         self.assertEqual(granted, dispatched)
         grant = _block(_raw("common", "scripted_effects", "space_race_effects.txt"), "sr_grant_colony_modifier")
@@ -475,6 +498,8 @@ class FleetTest(unittest.TestCase):
 
     def test_a_dispatch_spends_its_cost_and_checks_the_window(self):
         for site in gss.SITES:
+            if site in gss.LUNAR:
+                continue  # founded the month it leaves (test_a_lunar_fleet_founds_the_month_it_leaves)
             body = _block(self.effects, f"sr_cf_dispatch_{site.key}")
             with self.subTest(site=site.key):
                 self.assertIn(f"set_local_variable = {{ name = sr_cf_new_site value = {site.index} }}", body)
@@ -492,6 +517,70 @@ class FleetTest(unittest.TestCase):
                 self.assertIn(f"sr_current_colonization_stage >= {site.stage}", body)
                 needs = "country_sr_deep_space_exploration_program_bool" in body
                 self.assertEqual(needs, site.stage >= 3)
+                # a lunar colony is no way past the Deep Space gate (lunar design § 4)
+                self.assertEqual("sr_has_colony_beyond_moon = yes" in body, site.stage >= 3)
+                self.assertNotIn("sr_has_space_colony", body)
+        beyond = _block(self.triggers, "sr_has_colony_beyond_moon")
+        self.assertEqual(set(re.findall(r"global_var:sr_site_holder_(\w+) \?= this", beyond)),
+                         {s.key for s in gss.SITES if s.stage >= 1})
+        lunar_open = _block(self.triggers, "sr_sites_lunar_open")
+        self.assertEqual(re.findall(r"NOT = \{ has_global_variable = sr_colony_(\w+) \}", lunar_open),
+                         [s.key for s in gss.LUNAR])
+
+    def test_a_lunar_fleet_founds_the_month_it_leaves(self):
+        """The Moon has no transit (design § 3.3): its dispatch founds the colony at
+        once, and the slot limit doesn't hold it up, since it never takes a slot."""
+        launch = _block(self.fleets, "sr_cf_launch_month")
+        self.assertNotIn("sr_cf_has_free_slot", launch)
+        for site in gss.SITES:
+            k = site.key
+            dispatch = _block(self.effects, f"sr_cf_dispatch_{k}")
+            eligible = _block(self.triggers, f"sr_cf_eligible_{k}")
+            with self.subTest(site=k):
+                if site in gss.LUNAR:
+                    self.assertEqual(dispatch.split(), ["sr_cf_found_now_" + k, "=", "yes", "sr_cf_after_found",
+                                                        "=", "{", "INDEX", "=", str(site.index), "}"])
+                    self.assertNotIn("sr_cf_has_free_slot", eligible)
+                    self.assertEqual(gss.transit_body(site), "moon")
+                    # the double claim it can't make: the self-check before the claim
+                    found = _block(_raw(str(gss.EFFECTS_OUT)), f"sr_site_found_{k}")
+                    guard = f"has_global_variable = sr_site_holder_{k}"
+                    self.assertIn(guard, found)
+                    self.assertIn(f"TE_SELF_CHECK BROKEN lunar_double_claim {k}", found)
+                    self.assertLess(found.index(guard),
+                                    found.index(f"set_global_variable = {{ name = sr_site_holder_{k} value = this }}"))
+                else:
+                    self.assertIn("sr_cf_store_new = yes", dispatch)
+                    self.assertIn("sr_cf_has_free_slot = yes", eligible)
+                    self.assertLess(eligible.index(f"sr_cf_targetable_{k} = yes"), eligible.index("sr_cf_has_free_slot"))
+        ready = _block(self.triggers, "sr_cf_target_ready")
+        for site in gss.SITES:
+            with self.subTest(target=site.key):
+                branch = re.search(rf"AND = \{{ var:sr_cf_target = {site.index} ([^\n]*) \}}\n", ready)
+                self.assertTrue(branch, site.key)
+                self.assertEqual("sr_cf_has_free_slot = yes" in branch.group(1), site not in gss.LUNAR)
+
+    def test_the_landing_site_discounts_its_world(self):
+        """The Moon Landing's site choice takes 25% off that lunar world's progress
+        for the country that made it (design § 3.4). The variables are the
+        landing event's own."""
+        events = _strip(_raw("events", "space_race_events.txt"))
+        chosen = set(re.findall(r"set_variable = \{ name = (sr_moon_site_\w+) value = yes \}", events))
+        self.assertEqual(set(gss.LANDING_SITES.values()), chosen)
+        self.assertLessEqual(set(gss.LANDING_SITES), {s.key for s in gss.LUNAR})
+        factor = _block(_strip(_raw("common", "script_values", "space_race_values.txt")), "sr_landing_site_factor")
+        self.assertEqual(factor.split(), ["value", "=", "0.75"])
+        for site in gss.SITES:
+            goal = _block(self.values, f"sr_cf_goal_{site.key}")
+            with self.subTest(site=site.key):
+                var = gss.LANDING_SITES.get(site.key)
+                self.assertEqual("multiply = sr_landing_site_factor" in goal, var is not None)
+                if var:
+                    self.assertIn(f"limit = {{ has_variable = {var} }} multiply = sr_landing_site_factor", goal)
+        # The chosen Target's bar reads the world's own goal, discount and all.
+        target = _block(self.values, "sr_cf_target_goal")
+        for site in gss.SITES:
+            self.assertIn(f"value = sr_cf_goal_{site.key}", target)
 
     def test_the_score_is_the_design_s(self):
         for site in gss.SITES:
@@ -508,7 +597,9 @@ class FleetTest(unittest.TestCase):
     def test_the_stage_recompute_lists_each_stage_s_worlds_and_completes(self):
         body = _block(self.effects, "sr_sites_recompute_stage")
         parts = re.split(r"set_global_variable = \{ name = sr_colonization_stage value = (\d) \}", body)
-        for i in range(1, 11, 2):
+        # each stage's branch, then the else that sets the last stage and completes the race
+        self.assertEqual([int(n) for n in parts[1::2]], [*gss.STAGES, gss.STAGES[-1]])
+        for i in range(1, 2 * len(gss.STAGES), 2):
             stage = int(parts[i])
             listed = set(re.findall(r"has_global_variable = sr_colony_(\w+)", parts[i - 1]))
             self.assertEqual(listed, {s.key for s in gss.stage_sites(stage)}, stage)
@@ -518,7 +609,8 @@ class FleetTest(unittest.TestCase):
         for stage, goal in gss.STAGE_GOALS.items():
             self.assertIn(f"sr_colonization_goal_stage_{stage} = {{ value = {goal} }}", self.values)
         goal = _block(_strip(_raw("common", "script_values", "space_race_values.txt")), "sr_solar_colonization_goal")
-        self.assertEqual(set(re.findall(r"sr_colonization_goal_stage_(\d)", goal)), {"1", "2", "3", "4", "5"})
+        self.assertEqual(set(re.findall(r"sr_colonization_goal_stage_(\d)", goal)), {str(n) for n in gss.STAGES})
+        self.assertEqual(gss.STAGE_GOALS, {0: 300, 1: 450, 2: 525, 3: 600, 4: 700, 5: 800})
         self.assertIn("value = sr_cf_target_goal", goal)
 
     def test_the_launch_month_branches_on_the_rule(self):
@@ -527,7 +619,9 @@ class FleetTest(unittest.TestCase):
         self.assertLess(month.index("sr_colonies_contested_enabled = yes"), month.index("sr_cf_launch_month = yes"))
         self.assertLess(month.index("sr_cf_found_target_now = yes"), month.index("sr_launch_fleet_ready = yes"))
         launch = _block(self.fleets, "sr_cf_launch_month")
-        self.assertIn("sr_cf_has_free_slot = yes", launch)
+        # the slot test is the worlds' own (sr_cf_eligible_<k>, sr_cf_target_ready): a
+        # lunar fleet takes none (test_a_lunar_fleet_founds_the_month_it_leaves)
+        self.assertIn("sr_cf_target_ready = yes", launch)
         self.assertIn("sr_cf_dispatch_target = yes", launch)
         self.assertIn("sr_cf_pick_auto = yes", launch)
 
@@ -568,6 +662,36 @@ class FleetTest(unittest.TestCase):
         self.assertIn("sr_cf_clear_notice = yes", notice)
 
 
+class MoonStageTest(unittest.TestCase):
+    """Stage 0, the Moon (lunar colonization design §§ 3-4)."""
+
+    def test_the_race_starts_at_the_moon(self):
+        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
+        self.assertIn("set_global_variable = { name = sr_colonization_stage value = 0 }", je)
+        self.assertNotIn("set_global_variable = { name = sr_colonization_stage value = 1 }", je)
+        self.assertEqual(gss.STAGES, (0, 1, 2, 3, 4, 5))
+        draw = _block(_strip(_raw(str(gss.EFFECTS_OUT))), "sr_establish_colony_effect")
+        self.assertIn("set_global_variable = { name = sr_colonization_stage value = 0 }", draw)
+        # the once-a-game OK in each lunar draw branch; BROKEN when Races Only holds at the Moon
+        for site in gss.LUNAR:
+            self.assertIn(f"TE_SELF_CHECK OK lunar_stage0_draw world={site.key} ", draw)
+        held = _block(_strip(_raw("common", "scripted_effects", "sr_colony_fleet_effects.txt")), "sr_launch_note_held")
+        self.assertIn("sr_sites_lunar_open = yes", held)
+        self.assertIn("NOT = { has_global_variable = sr_lunar_stage0_draw_broken_logged }", held)
+
+    def test_the_world_count_is_the_table_s(self):
+        values = _strip(_raw(str(gss.VALUES_OUT)))
+        total = _block(values, "sr_total_global_colonies")
+        self.assertEqual(re.findall(r"has_global_variable = sr_colony_(\w+) \} add = 1", total),
+                         [s.key for s in gss.SITES])
+        self.assertIn(f"sr_sites_world_count = {{ value = {len(gss.SITES)} }}", values)
+        hand = _strip(_raw("common", "script_values", "space_race_values.txt"))
+        self.assertNotRegex(hand, r"(?m)^sr_total_global_colonies = \{")
+        display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
+        self.assertNotIn("divide = 34", display)
+        self.assertEqual(display.count("divide = sr_sites_world_count"), 2)
+
+
 class PopulationTest(unittest.TestCase):
     """Colony population (slices 2-3 design § 10)."""
 
@@ -593,7 +717,7 @@ class PopulationTest(unittest.TestCase):
                     self.assertRegex(self.values, rf"(?m)^{kind}_{k} = \{{")
                 self.assertIn(f"add = sr_emig_weight_{k}", _block(self.values, "sr_emig_weight_total"))
                 self.assertIn(f"add = sr_site_pop_value_{k}", _block(self.values, "sr_offworld_pop_total"))
-        self.assertEqual(sum(s.room for s in gss.SITES), 810)
+        self.assertEqual(sum(s.room for s in gss.SITES), 945)
 
     def test_the_priority_weights_are_the_design_s(self):
         self.assertEqual(gss.PRIORITY_WEIGHTS, (0, 1, 2, 4))
@@ -703,7 +827,7 @@ class ModulesTest(unittest.TestCase):
                 self.assertIn(site.slots, range(1, 5))
                 self.assertIn(site.ebase_room, range(10, 61))
                 self.assertIn(site.ebase_grade, range(-45, 31))
-        self.assertEqual(sum(s.ebase_room for s in gss.SITES), 760)
+        self.assertEqual(sum(s.ebase_room for s in gss.SITES), 865)
         best = max(gss.SITES, key=lambda s: s.ebase_grade)
         self.assertEqual(best.key, "psyche")
         # The outer worlds are poorer than the inner, stage by stage on average.
@@ -726,7 +850,7 @@ class ModulesTest(unittest.TestCase):
             with self.subTest(site=k):
                 levels = _block(self.values, f"sr_site_levels_{k}")
                 self.assertEqual(re.findall(r"= (sr_site_\w+_value_\w+)", levels),
-                                 [gss.level_value(t, site) for t in gss.CREWED_TYPES])
+                                 [gss.level_value(t, site) for t in gss.crewed_types(site)])
                 self.assertNotIn("hab", levels)
                 staffing = _block(self.values, f"sr_site_staffing_{k}")
                 self.assertIn("sr_colonies_contested_enabled = yes", staffing)
@@ -798,9 +922,16 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"global_var:sr_site_holder_{k} ?= this", can)
                     self.assertIn(f"has_global_variable = sr_site_spec_{k}", can)
                     self.assertIn(f"sr_mod_spec_used_{k} < sr_mod_spec_budget", can)
-                for t in gss.GENERIC_TYPES:
+                for t in gss.generic_types(site):
                     self.assertIn(f"sr_mod_slots_used_{k} < {site.slots}", _block(self.triggers, f"sr_mod_can_queue_{t}_{k}"))
-                for name, types in (("spec_used", ("a", "b")), ("slots_used", gss.GENERIC_TYPES)):
+                # no Spaceport on a lunar world: no queue, shipment or level of one
+                no_port = site.key in gss.NO_SPACEPORT
+                self.assertEqual(f"sr_mod_can_queue_port_{k} =" in self.triggers, not no_port)
+                self.assertEqual(f"sr_mq_port_{k}" in self.effects, not no_port)
+                self.assertEqual(f"sr_site_ship_port_{k}" in self.effects + self.values, not no_port)
+                if no_port:
+                    self.assertIn(f"sr_site_port_value_{k} = {{ value = 0 }}", self.values)
+                for name, types in (("spec_used", ("a", "b")), ("slots_used", gss.generic_types(site))):
                     used = _block(self.values, f"sr_mod_{name}_{k}")
                     for t in types:
                         self.assertIn(f"add = var:sr_mq_{t}_{k}", used)
@@ -813,7 +944,7 @@ class ModulesTest(unittest.TestCase):
             body = _block(self.effects, f"sr_mod_install_{k}")
             with self.subTest(site=k):
                 self.assertIn(f"has_global_variable = sr_colony_{k}", body)
-                for t in ("a", "b", *gss.GENERIC_TYPES):
+                for t in ("a", "b", *gss.generic_types(site)):
                     cap = (f"sr_site_spec_built_{k} < sr_mod_spec_budget" if t in ("a", "b")
                            else f"sr_site_generic_built_{k} < {site.slots}")
                     self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]} {cap}", body)
@@ -833,7 +964,7 @@ class ModulesTest(unittest.TestCase):
             with self.subTest(site=site.key):
                 self.assertIn(f"local_var:sr_mq_head_site = {site.index} global_var:sr_site_holder_{site.key} ?= this",
                               head)
-                for t in gss.MODULE_TYPES:
+                for t in gss.module_types(site):
                     self.assertIn(f"local_var:sr_mq_head_type = {gss.MODULE_CODES[t]} }} sr_mod_fab_build = "
                                   f"{{ KEY = {site.key} TYPE = {t} CODE = {gss.MODULE_CODES[t]} INDEX = {site.index} }}",
                                   head)
@@ -859,7 +990,7 @@ class ModulesTest(unittest.TestCase):
     def test_the_counts_follow_the_queue(self):
         recount = _block(self.effects, "sr_mq_recount")
         for site in gss.SITES:
-            for t in gss.MODULE_TYPES:
+            for t in gss.module_types(site):
                 self.assertIn(f"remove_variable = sr_mq_{t}_{site.key}", recount)
         for n in range(1, gss.QUEUE_SLOTS + 1):
             self.assertIn(f"value = var:sr_mq_{n}_site", recount)
@@ -869,7 +1000,7 @@ class ModulesTest(unittest.TestCase):
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(f"sr_mq_drop_site = {{ INDEX = {site.index} }}", _block(self.effects, f"sr_site_unmirror_{site.key}"))
-                for t in ("a", "b", *gss.GENERIC_TYPES):
+                for t in ("a", "b", *gss.generic_types(site)):
                     self.assertIn("sr_mq_has_room = yes", _block(self.triggers, f"sr_mod_can_queue_{t}_{site.key}"))
         self.assertIn("sr_mq_recount = yes", _block(self.effects, "sr_mq_remove_from_scope"))
         rows = self.rows[self.rows.index("type te_sr_mq_rows = flowcontainer {"):]
@@ -984,7 +1115,7 @@ class ModulesTest(unittest.TestCase):
                       f"add = {gss.NEAR_EARTH_ROOM} }}", room)
         # Each world's room counts while it serves its holder (gss.site_serves:
         # held, not blockaded, not occupied; slice 6).
-        self.assertEqual(sum(int(n) for n in re.findall(r"sr_site_occupier_\w+ \} \} add = (\d+)", room)), 760)
+        self.assertEqual(sum(int(n) for n in re.findall(r"sr_site_occupier_\w+ \} \} add = (\d+)", room)), 865)
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(gss.site_serves(site), room)
@@ -1039,9 +1170,12 @@ class ModulesTest(unittest.TestCase):
         self.assertEqual(names, [s.key for s in gss.panel_order()])
         for site in gss.SITES:
             with self.subTest(site=site.key):
-                for t in ("a", "b", *gss.GENERIC_TYPES):
+                for t in ("a", "b", *gss.generic_types(site)):
                     self.assertIn(f"AddScope( 'site', MakeScopeValue( '(CFixedPoint){site.index}' ) )"
                                   f".AddScope( 'op', MakeScopeValue( '(CFixedPoint){gss.MODULE_CODES[t]}' ) )", rows)
+                port = (f"AddScope( 'site', MakeScopeValue( '(CFixedPoint){site.index}' ) )"
+                        f".AddScope( 'op', MakeScopeValue( '(CFixedPoint){gss.MODULE_CODES['port']}' ) )")
+                self.assertEqual(port in rows, site.key not in gss.NO_SPACEPORT)
 
     def test_the_cession_value_counts_the_modules(self):
         value = _block(self.values, "sr_cede_ai_input_value")

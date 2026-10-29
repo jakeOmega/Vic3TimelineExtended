@@ -410,8 +410,14 @@ class InterdictionTest(unittest.TestCase):
                               f"sr_fl_{n}_posture_value = 4 }}", body)
         for site in gss.SITES:
             with self.subTest(site=site.key):
+                note = f"sr_icpt_note = {{ KEY = {site.key} LOC = {site.location} }}"
+                if site.location == "earth":
+                    # no interdiction at Earth (lunar colonization § 8.3): posture 4 can't
+                    # exist there, and no sr_icpt_earth list is built
+                    self.assertNotIn(note, body)
+                    continue
                 self.assertIn(f"var:sr_fl_1_loc = {gsf.CODE[site.location]} var:sr_fl_1_target = {site.index} }}\n"
-                              f"\t\t\tsr_icpt_note = {{ KEY = {site.key} LOC = {site.location} }}", body)
+                              f"\t\t\t{note}", body)
         # Rebuilt with the location records, on each order and when one ends.
         self.assertIn("sr_icpt_rebuild = yes", _block(_strip(_raw(FLEET_EFFECTS)), "sr_loc_rebuild"))
         self.assertIn("sr_icpt_rebuild = yes", _block(self.combat, "sr_fl_end_icpt"))
@@ -513,8 +519,10 @@ class AiOffenceTest(unittest.TestCase):
         self.assertNotIn("sr_site_hostile_target", assault)
         for site in gss.SITES:
             with self.subTest(site=site.key):
-                self.assertIn(f"sr_site_ai_attack_target = {{ KEY = {site.key} }} sr_site_ai_worth_{site.key} > local_var:sr_ai_best",
-                              assault)
+                # Earth's location is no AI offence's (a fleet there is docked): the
+                # lunar worlds are blockaded by the generic rule only (lunar plan premise 33)
+                self.assertEqual(f"sr_site_ai_attack_target = {{ KEY = {site.key} }} sr_site_ai_worth_{site.key} > "
+                                 "local_var:sr_ai_best" in assault, site.location != "earth")
 
     def test_it_closes_in_to_seize_only_with_the_marines_for_it(self):
         assault = _block(self.generated, "sr_fl_ai_assault_at")
