@@ -418,11 +418,20 @@ concede.
 | A play or war between the target and a country you cover, when you are not a party to it | The same, on your protégé's behalf |
 | The target struck you, or a country you cover, with a nuclear weapon outside a war in the last 24 months, other than in answer to a strike of yours | It pays the struck country reparations, about a tenth of a year's income, and opens its arsenal to inspection for 20 years, taking Custody Inspections (−5 legitimacy, fading over ten years) |
 | A weapons program run by a country the world believes unarmed that is your rival, or that you are antagonistic, belligerent or domineering toward | Its program is frozen for 10 years |
+| The target's forces next to you: its Nuclear Basing article in, or nuclear guarantee over, a country bordering yours, or its missile defense in a state bordering yours | It leaves each such treaty (whole, so the treaty's other articles end too, with no penalty for breaking it), switches the missile defense off, and makes none of these next to you for 10 years |
+| The target claims one of your incorporated states | It renounces those claims. A claim covers a whole state region, so one on a region you share goes for all of it |
+| A covert operation of the target's against you that you have caught | It ends each one you have caught and runs no hostile operation against you for 10 years. Operations you haven't caught go on |
+| The target is building an Orbital Battlestation | It tears down the construction site, losing the progress, and starts no new one for 10 years. Levels already built stay |
 | An armed rival at Heightened readiness or higher | It stands down to Routine for 24 months |
 
 Only conceding binds the target. Cutting its program's funding to zero, setting
-its own arsenal ceiling or standing its forces down without conceding doesn't
-end the crisis, because it could undo each of them a week later.
+its own arsenal ceiling, standing its forces down, pulling a deployment back,
+ending an operation or tearing a battlestation site down without conceding
+doesn't end the crisis, because it could undo each of them a week later. A
+claim that disappears, struck down by the UN court or lost with the state, ends
+the crisis with no winner. The AI threatens over forces next to it, claims and
+caught operations only against a rival, and over a battlestation only as a
+great power.
 
 ### Crisis stages, danger and pressure
 
