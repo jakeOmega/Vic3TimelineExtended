@@ -550,7 +550,11 @@ class ColoniesTest(unittest.TestCase):
                     # beneath it, so the two lists can't run together
                     self.assertIn(f"#bold ${mod}$#!#indent_newline:3 \\n[GetStaticModifier('{mod}').GetDesc]#!", ss)
                 self.assertIn(f"$je_space_race_widget_colonies_stage_{site.stage}$", ss)
-                self.assertIn(f"ScriptValue('sr_transit_months_{gss.transit_body(site)}')", ss)
+                if site in gss.LUNAR:  # no transit to show: founded the month a fleet leaves
+                    self.assertIn("founds its colony the month it leaves", ss)
+                    self.assertNotIn("sr_transit_months_", ss)
+                else:
+                    self.assertIn(f"ScriptValue('sr_transit_months_{gss.transit_body(site)}')", ss)
                 self.assertEqual(f"'sr_ss_window_line_{site.body}'" in ss, site.body is not None)
                 drift = self.loc[f"je_space_race_widget_autonomy_drift_tt_{k}"]
                 for term in (f"sr_disp_site_aut_drift_{k}", f"sr_disp_aut_people_{k}", f"sr_disp_aut_distance_{k}",

@@ -154,6 +154,9 @@ sr_cf_horizon_months = { value = 180 }
 sr_cf_no_score = { value = -1000 }
 
 # Per world, country scope:
+#   sr_cf_base_goal_<key> its own stage's goal, -25% at the lunar world our Moon Landing
+#                        named (LANDING_SITES); sr_cf_target_goal reads it, so the chain
+#                        sr_solar_colonization_goal -> sr_cf_target_goal never loops back
 #   sr_cf_goal_<key>     its colony's goal: its own stage's under simple and full, the
 #                        current stage's under races only (a released world costs that);
 #                        -25% at the lunar world our Moon Landing named (LANDING_SITES)
@@ -162,9 +165,15 @@ sr_cf_no_score = { value = -1000 }
 #   sr_cf_arrival_<key>  the month a fleet leaving now lands, by THIS's drive
 #   sr_cf_score_<key>    the automatic pick: 100 - 10 x stage - transit / 2 - 40 x premium
 #                        - 10 a fleet inbound - 60 if one lands first
-sr_cf_goal_valles_marineris = {
+sr_cf_base_goal_valles_marineris = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_valles_marineris = {
+	value = sr_cf_base_goal_valles_marineris
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_valles_marineris = {
 	value = sr_launch_target_cost_mars
@@ -183,9 +192,15 @@ sr_cf_score_valles_marineris = {
 	if = { limit = { sr_cf_beaten_valles_marineris = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_olympus_mons = {
+sr_cf_base_goal_olympus_mons = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_olympus_mons = {
+	value = sr_cf_base_goal_olympus_mons
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_olympus_mons = {
 	value = sr_launch_target_cost_mars
@@ -204,9 +219,15 @@ sr_cf_score_olympus_mons = {
 	if = { limit = { sr_cf_beaten_olympus_mons = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_hellas_planitia = {
+sr_cf_base_goal_hellas_planitia = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_hellas_planitia = {
+	value = sr_cf_base_goal_hellas_planitia
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_hellas_planitia = {
 	value = sr_launch_target_cost_mars
@@ -225,9 +246,15 @@ sr_cf_score_hellas_planitia = {
 	if = { limit = { sr_cf_beaten_hellas_planitia = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_utopia_planitia = {
+sr_cf_base_goal_utopia_planitia = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_utopia_planitia = {
+	value = sr_cf_base_goal_utopia_planitia
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_utopia_planitia = {
 	value = sr_launch_target_cost_mars
@@ -246,9 +273,15 @@ sr_cf_score_utopia_planitia = {
 	if = { limit = { sr_cf_beaten_utopia_planitia = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_arcadia_planitia = {
+sr_cf_base_goal_arcadia_planitia = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_arcadia_planitia = {
+	value = sr_cf_base_goal_arcadia_planitia
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_arcadia_planitia = {
 	value = sr_launch_target_cost_mars
@@ -267,9 +300,15 @@ sr_cf_score_arcadia_planitia = {
 	if = { limit = { sr_cf_beaten_arcadia_planitia = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_ceres = {
+sr_cf_base_goal_ceres = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_ceres = {
+	value = sr_cf_base_goal_ceres
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_ceres = {
 	value = sr_launch_target_cost_ceres
@@ -288,9 +327,15 @@ sr_cf_score_ceres = {
 	if = { limit = { sr_cf_beaten_ceres = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_vesta = {
+sr_cf_base_goal_vesta = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_vesta = {
+	value = sr_cf_base_goal_vesta
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_vesta = {
 	value = sr_launch_target_cost_vesta
@@ -309,9 +354,15 @@ sr_cf_score_vesta = {
 	if = { limit = { sr_cf_beaten_vesta = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_psyche = {
+sr_cf_base_goal_psyche = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_psyche = {
+	value = sr_cf_base_goal_psyche
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_psyche = {
 	value = sr_launch_target_cost_psyche
@@ -330,9 +381,15 @@ sr_cf_score_psyche = {
 	if = { limit = { sr_cf_beaten_psyche = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_pallas = {
+sr_cf_base_goal_pallas = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_pallas = {
+	value = sr_cf_base_goal_pallas
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_pallas = {
 	value = sr_launch_target_cost_pallas
@@ -351,9 +408,15 @@ sr_cf_score_pallas = {
 	if = { limit = { sr_cf_beaten_pallas = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_hygiea = {
+sr_cf_base_goal_hygiea = {
 	value = sr_colonization_goal_stage_1
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_hygiea = {
+	value = sr_cf_base_goal_hygiea
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_hygiea = {
 	value = sr_launch_target_cost_hygiea
@@ -372,9 +435,15 @@ sr_cf_score_hygiea = {
 	if = { limit = { sr_cf_beaten_hygiea = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_io = {
+sr_cf_base_goal_io = {
 	value = sr_colonization_goal_stage_2
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_io = {
+	value = sr_cf_base_goal_io
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_io = {
 	value = sr_launch_target_cost_jupiter
@@ -393,9 +462,15 @@ sr_cf_score_io = {
 	if = { limit = { sr_cf_beaten_io = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_europa = {
+sr_cf_base_goal_europa = {
 	value = sr_colonization_goal_stage_2
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_europa = {
+	value = sr_cf_base_goal_europa
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_europa = {
 	value = sr_launch_target_cost_jupiter
@@ -414,9 +489,15 @@ sr_cf_score_europa = {
 	if = { limit = { sr_cf_beaten_europa = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_ganymede = {
+sr_cf_base_goal_ganymede = {
 	value = sr_colonization_goal_stage_2
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_ganymede = {
+	value = sr_cf_base_goal_ganymede
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_ganymede = {
 	value = sr_launch_target_cost_jupiter
@@ -435,9 +516,15 @@ sr_cf_score_ganymede = {
 	if = { limit = { sr_cf_beaten_ganymede = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_callisto = {
+sr_cf_base_goal_callisto = {
 	value = sr_colonization_goal_stage_2
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_callisto = {
+	value = sr_cf_base_goal_callisto
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_callisto = {
 	value = sr_launch_target_cost_jupiter
@@ -456,9 +543,15 @@ sr_cf_score_callisto = {
 	if = { limit = { sr_cf_beaten_callisto = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_himalia = {
+sr_cf_base_goal_himalia = {
 	value = sr_colonization_goal_stage_2
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_himalia = {
+	value = sr_cf_base_goal_himalia
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_himalia = {
 	value = sr_launch_target_cost_jupiter
@@ -477,9 +570,15 @@ sr_cf_score_himalia = {
 	if = { limit = { sr_cf_beaten_himalia = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_amalthea = {
+sr_cf_base_goal_amalthea = {
 	value = sr_colonization_goal_stage_2
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_amalthea = {
+	value = sr_cf_base_goal_amalthea
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_amalthea = {
 	value = sr_launch_target_cost_jupiter
@@ -498,9 +597,15 @@ sr_cf_score_amalthea = {
 	if = { limit = { sr_cf_beaten_amalthea = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_venus = {
+sr_cf_base_goal_venus = {
 	value = sr_colonization_goal_stage_2
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_venus = {
+	value = sr_cf_base_goal_venus
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_venus = {
 	value = sr_launch_target_cost_venus
@@ -519,9 +624,15 @@ sr_cf_score_venus = {
 	if = { limit = { sr_cf_beaten_venus = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_mercury = {
+sr_cf_base_goal_mercury = {
 	value = sr_colonization_goal_stage_3
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_mercury = {
+	value = sr_cf_base_goal_mercury
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_mercury = { value = sr_cf_goal_mercury }
 sr_cf_arrival_mercury = {
@@ -535,9 +646,15 @@ sr_cf_score_mercury = {
 	if = { limit = { sr_cf_beaten_mercury = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_titan = {
+sr_cf_base_goal_titan = {
 	value = sr_colonization_goal_stage_3
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_titan = {
+	value = sr_cf_base_goal_titan
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_titan = {
 	value = sr_launch_target_cost_saturn
@@ -556,9 +673,15 @@ sr_cf_score_titan = {
 	if = { limit = { sr_cf_beaten_titan = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_enceladus = {
+sr_cf_base_goal_enceladus = {
 	value = sr_colonization_goal_stage_3
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_enceladus = {
+	value = sr_cf_base_goal_enceladus
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_enceladus = {
 	value = sr_launch_target_cost_saturn
@@ -577,9 +700,15 @@ sr_cf_score_enceladus = {
 	if = { limit = { sr_cf_beaten_enceladus = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_rhea = {
+sr_cf_base_goal_rhea = {
 	value = sr_colonization_goal_stage_3
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_rhea = {
+	value = sr_cf_base_goal_rhea
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_rhea = {
 	value = sr_launch_target_cost_saturn
@@ -598,9 +727,15 @@ sr_cf_score_rhea = {
 	if = { limit = { sr_cf_beaten_rhea = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_mimas = {
+sr_cf_base_goal_mimas = {
 	value = sr_colonization_goal_stage_3
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_mimas = {
+	value = sr_cf_base_goal_mimas
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_mimas = {
 	value = sr_launch_target_cost_saturn
@@ -619,9 +754,15 @@ sr_cf_score_mimas = {
 	if = { limit = { sr_cf_beaten_mimas = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_iapetus = {
+sr_cf_base_goal_iapetus = {
 	value = sr_colonization_goal_stage_3
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_iapetus = {
+	value = sr_cf_base_goal_iapetus
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_iapetus = {
 	value = sr_launch_target_cost_saturn
@@ -640,9 +781,15 @@ sr_cf_score_iapetus = {
 	if = { limit = { sr_cf_beaten_iapetus = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_titania = {
+sr_cf_base_goal_titania = {
 	value = sr_colonization_goal_stage_4
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_titania = {
+	value = sr_cf_base_goal_titania
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_titania = {
 	value = sr_launch_target_cost_uranus
@@ -661,9 +808,15 @@ sr_cf_score_titania = {
 	if = { limit = { sr_cf_beaten_titania = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_oberon = {
+sr_cf_base_goal_oberon = {
 	value = sr_colonization_goal_stage_4
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_oberon = {
+	value = sr_cf_base_goal_oberon
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_oberon = {
 	value = sr_launch_target_cost_uranus
@@ -682,9 +835,15 @@ sr_cf_score_oberon = {
 	if = { limit = { sr_cf_beaten_oberon = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_miranda = {
+sr_cf_base_goal_miranda = {
 	value = sr_colonization_goal_stage_4
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_miranda = {
+	value = sr_cf_base_goal_miranda
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_miranda = {
 	value = sr_launch_target_cost_uranus
@@ -703,9 +862,15 @@ sr_cf_score_miranda = {
 	if = { limit = { sr_cf_beaten_miranda = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_ariel = {
+sr_cf_base_goal_ariel = {
 	value = sr_colonization_goal_stage_4
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_ariel = {
+	value = sr_cf_base_goal_ariel
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_ariel = {
 	value = sr_launch_target_cost_uranus
@@ -724,9 +889,15 @@ sr_cf_score_ariel = {
 	if = { limit = { sr_cf_beaten_ariel = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_triton = {
+sr_cf_base_goal_triton = {
 	value = sr_colonization_goal_stage_4
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_triton = {
+	value = sr_cf_base_goal_triton
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_triton = {
 	value = sr_launch_target_cost_neptune
@@ -745,9 +916,15 @@ sr_cf_score_triton = {
 	if = { limit = { sr_cf_beaten_triton = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_proteus = {
+sr_cf_base_goal_proteus = {
 	value = sr_colonization_goal_stage_4
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_proteus = {
+	value = sr_cf_base_goal_proteus
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_proteus = {
 	value = sr_launch_target_cost_neptune
@@ -766,9 +943,15 @@ sr_cf_score_proteus = {
 	if = { limit = { sr_cf_beaten_proteus = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_pluto = {
+sr_cf_base_goal_pluto = {
 	value = sr_colonization_goal_stage_5
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_pluto = {
+	value = sr_cf_base_goal_pluto
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_pluto = {
 	value = sr_launch_target_cost_kuiper
@@ -787,9 +970,15 @@ sr_cf_score_pluto = {
 	if = { limit = { sr_cf_beaten_pluto = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_eris = {
+sr_cf_base_goal_eris = {
 	value = sr_colonization_goal_stage_5
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_eris = {
+	value = sr_cf_base_goal_eris
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_eris = {
 	value = sr_launch_target_cost_kuiper
@@ -808,9 +997,15 @@ sr_cf_score_eris = {
 	if = { limit = { sr_cf_beaten_eris = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_makemake = {
+sr_cf_base_goal_makemake = {
 	value = sr_colonization_goal_stage_5
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_makemake = {
+	value = sr_cf_base_goal_makemake
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_makemake = {
 	value = sr_launch_target_cost_kuiper
@@ -829,9 +1024,15 @@ sr_cf_score_makemake = {
 	if = { limit = { sr_cf_beaten_makemake = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_haumea = {
+sr_cf_base_goal_haumea = {
 	value = sr_colonization_goal_stage_5
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_haumea = {
+	value = sr_cf_base_goal_haumea
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_haumea = {
 	value = sr_launch_target_cost_kuiper
@@ -850,9 +1051,15 @@ sr_cf_score_haumea = {
 	if = { limit = { sr_cf_beaten_haumea = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_sedna = {
+sr_cf_base_goal_sedna = {
 	value = sr_colonization_goal_stage_5
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_sedna = {
+	value = sr_cf_base_goal_sedna
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_sedna = {
 	value = sr_launch_target_cost_kuiper
@@ -871,10 +1078,17 @@ sr_cf_score_sedna = {
 	if = { limit = { sr_cf_beaten_sedna = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_shackleton = {
+sr_cf_base_goal_shackleton = {
 	value = sr_colonization_goal_stage_0
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
 	if = { limit = { has_variable = sr_moon_site_shackleton } multiply = sr_landing_site_factor }
+}
+sr_cf_goal_shackleton = {
+	value = sr_cf_base_goal_shackleton
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+		if = { limit = { has_variable = sr_moon_site_shackleton } multiply = sr_landing_site_factor }
+	}
 }
 sr_cf_cost_shackleton = { value = sr_cf_goal_shackleton }
 sr_cf_arrival_shackleton = {
@@ -888,9 +1102,15 @@ sr_cf_score_shackleton = {
 	if = { limit = { sr_cf_beaten_shackleton = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_peary = {
+sr_cf_base_goal_peary = {
 	value = sr_colonization_goal_stage_0
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_peary = {
+	value = sr_cf_base_goal_peary
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_peary = { value = sr_cf_goal_peary }
 sr_cf_arrival_peary = {
@@ -904,10 +1124,17 @@ sr_cf_score_peary = {
 	if = { limit = { sr_cf_beaten_peary = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_tranquility = {
+sr_cf_base_goal_tranquility = {
 	value = sr_colonization_goal_stage_0
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
 	if = { limit = { has_variable = sr_moon_site_tranquility } multiply = sr_landing_site_factor }
+}
+sr_cf_goal_tranquility = {
+	value = sr_cf_base_goal_tranquility
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+		if = { limit = { has_variable = sr_moon_site_tranquility } multiply = sr_landing_site_factor }
+	}
 }
 sr_cf_cost_tranquility = { value = sr_cf_goal_tranquility }
 sr_cf_arrival_tranquility = {
@@ -921,10 +1148,17 @@ sr_cf_score_tranquility = {
 	if = { limit = { sr_cf_beaten_tranquility = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_marius_hills = {
+sr_cf_base_goal_marius_hills = {
 	value = sr_colonization_goal_stage_0
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
 	if = { limit = { has_variable = sr_moon_site_equatorial } multiply = sr_landing_site_factor }
+}
+sr_cf_goal_marius_hills = {
+	value = sr_cf_base_goal_marius_hills
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+		if = { limit = { has_variable = sr_moon_site_equatorial } multiply = sr_landing_site_factor }
+	}
 }
 sr_cf_cost_marius_hills = { value = sr_cf_goal_marius_hills }
 sr_cf_arrival_marius_hills = {
@@ -938,10 +1172,17 @@ sr_cf_score_marius_hills = {
 	if = { limit = { sr_cf_beaten_marius_hills = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_daedalus = {
+sr_cf_base_goal_daedalus = {
 	value = sr_colonization_goal_stage_0
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
 	if = { limit = { has_variable = sr_moon_site_far_side } multiply = sr_landing_site_factor }
+}
+sr_cf_goal_daedalus = {
+	value = sr_cf_base_goal_daedalus
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+		if = { limit = { has_variable = sr_moon_site_far_side } multiply = sr_landing_site_factor }
+	}
 }
 sr_cf_cost_daedalus = { value = sr_cf_goal_daedalus }
 sr_cf_arrival_daedalus = {
@@ -955,9 +1196,15 @@ sr_cf_score_daedalus = {
 	if = { limit = { sr_cf_beaten_daedalus = yes } subtract = 60 }
 	min = -900
 }
-sr_cf_goal_imbrium = {
+sr_cf_base_goal_imbrium = {
 	value = sr_colonization_goal_stage_0
-	if = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }
+}
+sr_cf_goal_imbrium = {
+	value = sr_cf_base_goal_imbrium
+	if = {
+		limit = { NOT = { sr_colonies_contested_enabled = yes } }
+		value = sr_solar_colonization_goal
+	}
 }
 sr_cf_cost_imbrium = { value = sr_cf_goal_imbrium }
 sr_cf_arrival_imbrium = {
@@ -1018,50 +1265,51 @@ sr_cf_best_score = {
 }
 
 # The target's goal (sr_solar_colonization_goal under simple and full, which
-# alone reads it): its world's sr_cf_goal_<key>, the landing site's discount
-# included. Under simple and full that never reads sr_solar_colonization_goal.
+# alone reads it): its world's sr_cf_base_goal_<key>, the landing site's
+# discount included. Not sr_cf_goal_<key>, which reads sr_solar_colonization_goal
+# under races only: a static cycle, even though the two legs never both run.
 sr_cf_target_goal = {
-	value = sr_colonization_goal_stage_1
-	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 1 } value = sr_cf_goal_valles_marineris }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 2 } value = sr_cf_goal_olympus_mons }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 3 } value = sr_cf_goal_hellas_planitia }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 4 } value = sr_cf_goal_utopia_planitia }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 5 } value = sr_cf_goal_arcadia_planitia }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 6 } value = sr_cf_goal_ceres }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 7 } value = sr_cf_goal_vesta }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 8 } value = sr_cf_goal_psyche }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 9 } value = sr_cf_goal_pallas }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 10 } value = sr_cf_goal_hygiea }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 11 } value = sr_cf_goal_io }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 12 } value = sr_cf_goal_europa }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 13 } value = sr_cf_goal_ganymede }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 14 } value = sr_cf_goal_callisto }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 15 } value = sr_cf_goal_himalia }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 16 } value = sr_cf_goal_amalthea }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 17 } value = sr_cf_goal_venus }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 18 } value = sr_cf_goal_mercury }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 19 } value = sr_cf_goal_titan }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 20 } value = sr_cf_goal_enceladus }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 21 } value = sr_cf_goal_rhea }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 22 } value = sr_cf_goal_mimas }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 23 } value = sr_cf_goal_iapetus }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 24 } value = sr_cf_goal_titania }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 25 } value = sr_cf_goal_oberon }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 26 } value = sr_cf_goal_miranda }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 27 } value = sr_cf_goal_ariel }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 28 } value = sr_cf_goal_triton }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 29 } value = sr_cf_goal_proteus }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 30 } value = sr_cf_goal_pluto }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 31 } value = sr_cf_goal_eris }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 32 } value = sr_cf_goal_makemake }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 33 } value = sr_cf_goal_haumea }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 34 } value = sr_cf_goal_sedna }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 35 } value = sr_cf_goal_shackleton }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 36 } value = sr_cf_goal_peary }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 37 } value = sr_cf_goal_tranquility }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 38 } value = sr_cf_goal_marius_hills }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 39 } value = sr_cf_goal_daedalus }
-	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 40 } value = sr_cf_goal_imbrium }
+	value = sr_colonization_goal_stage_0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 1 } value = sr_cf_base_goal_valles_marineris }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 2 } value = sr_cf_base_goal_olympus_mons }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 3 } value = sr_cf_base_goal_hellas_planitia }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 4 } value = sr_cf_base_goal_utopia_planitia }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 5 } value = sr_cf_base_goal_arcadia_planitia }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 6 } value = sr_cf_base_goal_ceres }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 7 } value = sr_cf_base_goal_vesta }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 8 } value = sr_cf_base_goal_psyche }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 9 } value = sr_cf_base_goal_pallas }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 10 } value = sr_cf_base_goal_hygiea }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 11 } value = sr_cf_base_goal_io }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 12 } value = sr_cf_base_goal_europa }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 13 } value = sr_cf_base_goal_ganymede }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 14 } value = sr_cf_base_goal_callisto }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 15 } value = sr_cf_base_goal_himalia }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 16 } value = sr_cf_base_goal_amalthea }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 17 } value = sr_cf_base_goal_venus }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 18 } value = sr_cf_base_goal_mercury }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 19 } value = sr_cf_base_goal_titan }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 20 } value = sr_cf_base_goal_enceladus }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 21 } value = sr_cf_base_goal_rhea }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 22 } value = sr_cf_base_goal_mimas }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 23 } value = sr_cf_base_goal_iapetus }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 24 } value = sr_cf_base_goal_titania }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 25 } value = sr_cf_base_goal_oberon }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 26 } value = sr_cf_base_goal_miranda }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 27 } value = sr_cf_base_goal_ariel }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 28 } value = sr_cf_base_goal_triton }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 29 } value = sr_cf_base_goal_proteus }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 30 } value = sr_cf_base_goal_pluto }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 31 } value = sr_cf_base_goal_eris }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 32 } value = sr_cf_base_goal_makemake }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 33 } value = sr_cf_base_goal_haumea }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 34 } value = sr_cf_base_goal_sedna }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 35 } value = sr_cf_base_goal_shackleton }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 36 } value = sr_cf_base_goal_peary }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 37 } value = sr_cf_base_goal_tranquility }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 38 } value = sr_cf_base_goal_marius_hills }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 39 } value = sr_cf_base_goal_daedalus }
+	else_if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 40 } value = sr_cf_base_goal_imbrium }
 }
 
 # ===== Population (slices 2-3 design § 10) =====
