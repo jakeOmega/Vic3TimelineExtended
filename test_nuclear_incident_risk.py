@@ -158,8 +158,8 @@ class TestPeacetimeExchangeContracts(unittest.TestCase):
         effects = strip_comments(read(ROOT / "common/scripted_effects/extra_effects.txt"))
         response = block(effects, "nuclear_response_strike")
         self.assertIn("scope:target_country = { save_scope_as = nd_current_strike_launcher }", response)
-        damage = block(effects, "nuclear_industrial_strike")
-        self.assertIn("value = scope:nd_current_strike_launcher", damage)
+        self.assertIn("nuclear_strike_attribute = yes", block(effects, "nuclear_industrial_strike"))
+        self.assertIn("value = scope:nd_current_strike_launcher", block(effects, "nuclear_strike_attribute"))
 
 
 class TestObserverRecords(unittest.TestCase):
@@ -198,6 +198,15 @@ class TestObserverRecords(unittest.TestCase):
                                                      "exercise_misread", "isolated_commander"})
             elif kind == "crisis_end":
                 self.assertRegex(fields.get("outcome", ""), r"^\d+$")
+
+    def test_salvo_records_present(self):
+        # Phase 3 (rework spec §6): a salvo, what it destroyed, what fired
+        # first and each decapitation roll leave a record.
+        kinds = {next(read_records([record]))["type"] for _, record in self.records()}
+        self.assertLessEqual({"salvo", "counterforce", "fire_first", "decapitation"}, kinds)
+        results = {next(read_records([record])).get("result") for _, record in self.records()
+                   if "type=decapitation;" in record}
+        self.assertEqual(results, {"yes", "no"})
 
     def test_weekly_samples_need_the_observer_switch(self):
         effects = strip_comments(read(ROOT / "common/scripted_effects/nuclear_observer_effects.txt"))
@@ -254,6 +263,27 @@ class TestObserverRework(unittest.TestCase):
         crisis = strip_comments(read(ROOT / "common/scripted_effects/nuclear_crisis_effects.txt"))
         self.assertIn("nd_log_crisis_acute_once = yes", block(crisis, "nd_crisis_weekly_tick"))
         self.assertIn("nd_crisis_acute_logged", crisis[crisis.index("nd_crisis_clear_vars = {"):])
+
+
+class TestObserverSalvo(unittest.TestCase):
+    """Salvos, counterforce and decapitation (rework spec §11, phase 3)."""
+
+    def test_salvo_counters(self):
+        lines = [
+            "TE_NUCLEAR: type=salvo; mission=1; size=3; landed=2; country=A; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=salvo; mission=2; size=4; landed=4; country=A; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=counterforce; destroyed=3; country=B; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=counterforce; destroyed=2; country=B; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=fire_first; fired=2; country=B; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=decapitation; result=yes; country=C; crisis=0; exchange=0\n",
+            "TE_NUCLEAR: type=decapitation; result=no; country=C; crisis=0; exchange=0\n",
+        ]
+        report = summarize(read_records(lines))
+        self.assertEqual(report["salvos_by_mission"], {"cities": 1, "forces": 1})
+        self.assertEqual(report["salvo_warheads_landed"], 6)
+        self.assertEqual(report["counterforce_destroyed"], 5)
+        self.assertEqual(report["fired_before_impact"], 2)
+        self.assertEqual(report["decapitations"], {"yes": 1, "no": 1})
 
 
 class TestObserverClaims(unittest.TestCase):

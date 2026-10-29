@@ -507,6 +507,13 @@ nuclear_industrial_strike = {
 		days = short_modifier_time
 		is_decaying = yes
 	}
+	nuclear_strike_attribute = yes
+}
+
+# State scope, after a strike's damage: who struck the state and its owner,
+# and the owner's war support. Shared by the city strike and the counterforce
+# strike (nd_counterforce_strike_damage).
+nuclear_strike_attribute = {
 	# Who struck this state, for as long as the aftermath lasts: an answer
 	# must answer its striker or the striker's side (nd_was_struck_by, #526).
 	# A terror detonation (nuclear_loose_effects.txt) has neither scope and
@@ -541,6 +548,29 @@ nuclear_industrial_strike = {
 			}
 		}
 	}
+}
+
+# A Forces salvo's warhead on a missile field or base (rework spec §6.2): a
+# quarter of a city strike's deaths and devastation. The warheads it destroys
+# are counted once for the salvo (nd_salvo_counterforce). State scope.
+nd_counterforce_strike_damage = {
+	state_region = {
+		add_devastation = 25
+	}
+	set_variable = {
+		name = nuclear_strike_killed_population
+		value = nd_counterforce_strike_killed_population
+	}
+	te_demog_note_kills = { VALUE = var:nuclear_strike_killed_population }
+	kill_population_percent_in_state = {
+		percent = 0.025
+	}
+	add_modifier = {
+		name = nuclear_strike_aftermath
+		days = short_modifier_time
+		is_decaying = yes
+	}
+	nuclear_strike_attribute = yes
 }
 
 nuclear_first_strike = { # Scope is target state

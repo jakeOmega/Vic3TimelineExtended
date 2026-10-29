@@ -970,6 +970,21 @@ nd_salvo_size_value = {
 	floor = yes
 }
 
+# Attacker scope: the loop's count, fixed from nd_salvo_size_value before the
+# first warhead flies (each warhead lowers the stockpile that value caps by).
+nd_salvo_count_value = {
+	value = var:nd_salvo_count
+}
+
+# Victim scope: the chance, in percent, that the counterforce count rounds up
+# (var:nd_cf_raw, var:nd_cf_whole its whole part), so on average a salvo
+# destroys exactly nd_counterforce_destroyed_raw.
+nd_cf_round_up_chance = {
+	value = var:nd_cf_raw
+	subtract = var:nd_cf_whole
+	multiply = 100
+}
+
 # Attacker scope: how many warheads the strike landed — the salvo's count, or
 # 1 for a single strike (nd_record_claim's count and the AI's lie).
 nd_strike_landed_count_value = {

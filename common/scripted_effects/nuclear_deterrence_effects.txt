@@ -2012,9 +2012,11 @@ nd_tactical_strike_resolve = {
 # scope:target_country saved). A first use only, never an answer. Decided once
 # per strike, at its first warhead: the victim keeps who struck it and how many
 # landed for 30 days (nd_last_striker, nd_struck_count), and later warheads of
-# the same strike only count. The claim is true after a launch nobody ordered;
-# false under Disavow our strikes (a human's choice, nd_disavow_strikes) or an
-# AI's lie (nd_ai_lies_value) after a strike on a country believed armed. The
+# the same strike only count; a salvo's claim counts every warhead it landed
+# (nd_strike_landed_count_value). The claim is true after a launch nobody
+# ordered; false under Disavow our strikes (a human's choice,
+# nd_disavow_strikes) or an AI's lie (nd_ai_lies_value) after a single warhead
+# on a country believed armed. The
 # victim keeps the claim (nd_claim_by, nd_claim_true, nd_claim_id) until its
 # truth comes out (nd_claim_schedule_truth), and for 30 days which claim, if
 # any, this strike made (nd_strike_claim_id: 0 for none), so a later strike
@@ -2044,7 +2046,7 @@ nd_record_claim = {
 						name = nd_struck_count
 						value = {
 							value = var:nd_struck_count
-							add = 1
+							add = scope:attacking_country.nd_strike_landed_count_value
 						}
 						days = 30
 					}
@@ -2053,7 +2055,7 @@ nd_record_claim = {
 			else = {
 				scope:target_country = {
 					set_variable = { name = nd_last_striker value = scope:attacking_country }
-					set_variable = { name = nd_struck_count value = 1 days = 30 }
+					set_variable = { name = nd_struck_count value = scope:attacking_country.nd_strike_landed_count_value days = 30 }
 					set_variable = { name = nd_strike_claim_id value = 0 days = 30 }
 				}
 				set_variable = { name = nd_claim_kind value = 0 }
@@ -2072,6 +2074,8 @@ nd_record_claim = {
 					limit = {
 						is_ai = yes
 						scope:target_country = { nd_believed_armed = yes }
+						# Nobody believes a salvo was a rogue launch.
+						nd_strike_landed_count_value <= 1
 					}
 					random = {
 						chance = nd_ai_lies_value
@@ -2351,6 +2355,484 @@ nd_record_nuclear_use = {
 	if = {
 		limit = { nd_is_civil_war_counterpart = { ENEMY = $VICTIM$ } }
 		nd_custody_struck_own_people = yes
+	}
+}
+
+# ----------------------------------------------------------------------------
+# THE SALVO (rework spec §6) — the Strike section's order: several warheads by
+# mission, and the use's consequences once. Attacker scope, scope:nd_salvo_victim
+# saved; var:nd_salvo_mission (1 Cities, 2 Forces, 3 Leadership) and
+# var:nd_salvo_size are the panel's settings (the AI sets them first) and stay
+# after the salvo. Every other nd_salvo_* variable is a working figure,
+# removed by nd_salvo_clear, and so is every state's nd_salvo_target mark.
+# ----------------------------------------------------------------------------
+
+# The order. A tooltip walk writes nothing, so the body runs only on the real
+# click (the click-only marker, as nd_dispatch_strategic_strike). The victim's
+# redundancy is read before any warhead lands: the arsenal it counts is about
+# to shrink.
+nd_order_salvo = {
+	set_variable = nd_salvo_click
+	if = {
+		limit = { has_variable = nd_salvo_click }
+		remove_variable = nd_salvo_click
+		if = {
+			limit = {
+				exists = scope:nd_salvo_victim
+				nd_can_order_salvo = { ENEMY = scope:nd_salvo_victim }
+			}
+			save_scope_as = attacking_country
+			save_scope_as = nd_current_strike_launcher
+			save_scope_as = nd_salvo_attacker
+			scope:nd_salvo_victim = {
+				save_scope_as = target_country
+				save_scope_as = nd_strike_victim
+			}
+			if = {
+				limit = { exists = scope:nd_salvo_victim.capital.region }
+				scope:nd_salvo_victim.capital.region = { save_scope_as = nd_salvo_cap_region }
+			}
+			if = {
+				limit = { NOT = { has_variable = nd_salvo_mission } }
+				set_variable = { name = nd_salvo_mission value = 1 }
+			}
+			set_variable = { name = nd_salvo_count value = nd_salvo_size_value }
+			set_variable = { name = nd_salvo_fired value = 0 }
+			set_variable = { name = nd_salvo_landed value = 0 }
+			set_variable = { name = nd_salvo_forces_landed value = 0 }
+			set_variable = { name = nd_salvo_capital_landed value = 0 }
+			set_variable = { name = nd_salvo_destroyed value = 0 }
+			set_variable = { name = nd_salvo_victim_r value = scope:nd_salvo_victim.nd_redundancy }
+			while = {
+				count = nd_salvo_count_value
+				nd_salvo_warhead = yes
+			}
+			nd_salvo_aftermath = yes
+			nd_salvo_clear = yes
+		}
+	}
+}
+
+# One warhead: its target, then the dice the strike action rolls.
+nd_salvo_warhead = {
+	if = {
+		limit = { var:nuclear_weapon_stockpile > 0 }
+		change_variable = { name = nuclear_weapon_stockpile subtract = 1 }
+		change_variable = { name = nd_salvo_fired add = 1 }
+		scope:nd_salvo_victim = { nd_salvo_pick_target = yes }
+		random_list = {
+			0 = {
+				modifier = nuclear_strike_success_chance
+				nd_salvo_hit = yes
+			}
+			0 = {
+				modifier = nuclear_strike_fail_chance
+				nd_log_context = yes
+				debug_log = "TE_NUCLEAR: type=action; action=strategic_miss; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			}
+		}
+	}
+}
+
+# Victim scope: the next warhead's state, saved as scope:target_state (§6.1).
+# Leadership: the capital, every warhead. Forces: a state with a military
+# target, then the capital's region, then the capital. Cities: the states the
+# strike action would choose. An ordered_* position is a literal, so the
+# warheads spread by marks: each pick is the best state not yet aimed at,
+# and once every state is, the best of all.
+nd_salvo_pick_target = {
+	if = {
+		limit = { scope:nd_salvo_attacker = { var:nd_salvo_mission = 3 } }
+		capital = { save_scope_as = target_state }
+	}
+	else_if = {
+		limit = {
+			scope:nd_salvo_attacker = { var:nd_salvo_mission = 2 }
+			any_scope_state = {
+				nd_state_has_military_target = yes
+				NOT = { has_variable = nd_salvo_target }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				nd_state_has_military_target = yes
+				NOT = { has_variable = nd_salvo_target }
+			}
+			order_by = nuclear_strike_target_score
+			position = 0
+			save_scope_as = target_state
+		}
+	}
+	else_if = {
+		limit = {
+			scope:nd_salvo_attacker = { var:nd_salvo_mission = 2 }
+			exists = scope:nd_salvo_cap_region
+			any_scope_state = {
+				region ?= scope:nd_salvo_cap_region
+				NOT = { has_variable = nd_salvo_target }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				region ?= scope:nd_salvo_cap_region
+				NOT = { has_variable = nd_salvo_target }
+			}
+			order_by = nuclear_strike_target_score
+			position = 0
+			save_scope_as = target_state
+		}
+	}
+	else_if = {
+		limit = { scope:nd_salvo_attacker = { var:nd_salvo_mission = 2 } }
+		capital = { save_scope_as = target_state }
+	}
+	else_if = {
+		limit = {
+			any_scope_state = { NOT = { has_variable = nd_salvo_target } }
+		}
+		ordered_scope_state = {
+			limit = { NOT = { has_variable = nd_salvo_target } }
+			order_by = nuclear_strike_target_score
+			position = 0
+			save_scope_as = target_state
+		}
+	}
+	else = {
+		ordered_scope_state = {
+			order_by = nuclear_strike_target_score
+			position = 0
+			save_scope_as = target_state
+		}
+	}
+	scope:target_state ?= {
+		set_variable = nd_salvo_target
+	}
+}
+
+# A warhead landed: counted, then its damage. A Forces warhead hits the
+# missile fields and bases (nd_counterforce_strike_damage); the others hit the
+# state as the strike action does. Attacker scope.
+nd_salvo_hit = {
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=strategic_hit; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+	change_variable = { name = nd_salvo_landed add = 1 }
+	if = {
+		limit = { scope:target_state = { is_capital = yes } }
+		change_variable = { name = nd_salvo_capital_landed add = 1 }
+	}
+	if = {
+		limit = { var:nd_salvo_mission = 2 }
+		change_variable = { name = nd_salvo_forces_landed add = 1 }
+		scope:target_state = { nd_counterforce_strike_damage = yes }
+	}
+	else = {
+		scope:target_state = { nuclear_industrial_strike = yes }
+	}
+}
+
+# After the last warhead, once for the salvo, in order: what the warheads
+# destroyed (§6.2) and whether they cut the command (§6.3), both before the
+# victim hears; the claim; the record, scaled by the square root of the
+# warheads landed (owner, 2026-10-28); the victim's and the attacker's events;
+# the use (nd_record_nuclear_use). A Launch on Warning victim's warheads that
+# got away fire last: their hits on us would make our salvo read as an answer
+# to them (nd_was_struck_by), and their strike re-saves the scopes the events
+# read. Nothing landed: a failed strike, as the strike action's.
+nd_salvo_aftermath = {
+	if = {
+		limit = { var:nd_salvo_landed > 0 }
+		# Landed: nd_record_nuclear_use spurs the world's programmes.
+		set_variable = { name = nd_strike_landed value = 1 }
+		te_set_sqrt = { IN = var:nd_salvo_landed OUT = nd_salvo_sqrt }
+		if = {
+			limit = { var:nd_salvo_forces_landed > 0 }
+			nd_salvo_counterforce = yes
+		}
+		if = {
+			limit = {
+				var:nd_salvo_capital_landed > 0
+				scope:nd_salvo_victim = { nd_authority_central = yes }
+			}
+			nd_salvo_decapitation = yes
+		}
+		hidden_effect = { nd_record_claim = yes }
+		nd_salvo_record_use = yes
+		scope:nd_salvo_victim = {
+			set_variable = { name = nd_salvo_seen_by value = scope:nd_salvo_attacker days = 30 }
+			set_variable = { name = nd_salvo_seen_landed value = scope:nd_salvo_attacker.var:nd_salvo_landed days = 30 }
+			set_variable = { name = nd_salvo_seen_destroyed value = scope:nd_salvo_attacker.var:nd_salvo_destroyed days = 30 }
+			set_variable = { name = nd_salvo_seen_mission value = scope:nd_salvo_attacker.var:nd_salvo_mission days = 30 }
+			trigger_event = { id = nuclear_weapon_events.1 popup = yes }
+			change_relations = {
+				country = scope:nd_salvo_attacker
+				value = -50
+			}
+		}
+		trigger_event = { id = nuclear_weapon_events.2 popup = yes }
+		# First nuclear weapon used in combat — world-historical event
+		if = {
+			limit = { NOT = { has_global_variable = world_first_nuclear_weapon_used } }
+			set_global_variable = { name = world_first_nuclear_weapon_used value = yes }
+			trigger_event = { id = nuclear_weapon_events.17 }
+		}
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:nd_salvo_attacker }
+				NOT = { THIS = scope:nd_salvo_victim }
+			}
+			trigger_event = nuclear_weapon_events.15
+		}
+		nd_record_nuclear_use = { VICTIM = scope:nd_salvo_victim }
+		scope:nd_salvo_victim = { nd_salvo_fire_first = yes }
+	}
+	else = {
+		change_infamy = 5
+		scope:nd_salvo_victim = {
+			trigger_event = { id = nuclear_weapon_events.3 popup = yes }
+			change_relations = {
+				country = scope:nd_salvo_attacker
+				value = -10
+			}
+		}
+		trigger_event = { id = nuclear_weapon_events.4 popup = yes }
+		nd_record_nuclear_use = { VICTIM = scope:nd_salvo_victim }
+	}
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=salvo; mission=[THIS.Var('nd_salvo_mission').GetValue|0]; size=[THIS.Var('nd_salvo_count').GetValue|0]; landed=[THIS.Var('nd_salvo_landed').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+	nd_salvo_targets_self_check = yes
+}
+
+# The record of a salvo that landed: nuclear_first_strike's, each figure times
+# the square root of the warheads landed (nd_salvo_* values), once. An answer
+# to a strike on us or on a country we cover is retaliation. Attacker scope.
+# The world's relations are read from a variable: inside every_country a
+# script value on var:nd_salvo_sqrt would read each country's own.
+nd_salvo_record_use = {
+	if = {
+		limit = { nd_was_struck_by = { ENEMY = scope:nd_salvo_victim } }
+		un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = nd_salvo_un_order_answer REASON = 10 SUBJECT = scope:target_state }
+		un_dossier_record = { RECORD = nuclear POINTS = nd_salvo_dossier_answer }
+		nd_taboo_note_use_scaled = { KIND = strategic RETALIATION = yes SCALE = var:nd_salvo_sqrt }
+	}
+	else = {
+		un_authority_actor_shock_on = { AMOUNT = nd_salvo_un_shock REASON = 8 SUBJECT = scope:target_state }
+		un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = nd_salvo_un_order_first REASON = 8 SUBJECT = scope:target_state }
+		un_dossier_record = { RECORD = nuclear POINTS = nd_salvo_dossier_first }
+		un_docket_note_grievance = { KIND = nuclear VICTIM = scope:nd_salvo_victim }
+		un_regime_icc_note_crime = { CRIME = 1 }
+		change_infamy = nd_salvo_infamy
+		set_variable = { name = nd_salvo_world_rel value = nd_salvo_world_relations }
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:nd_salvo_attacker }
+				NOT = { THIS = scope:nd_salvo_victim }
+			}
+			change_relations = { country = scope:nd_salvo_attacker value = scope:nd_salvo_attacker.var:nd_salvo_world_rel }
+		}
+		nd_taboo_note_use_scaled = { KIND = strategic RETALIATION = no SCALE = var:nd_salvo_sqrt }
+	}
+}
+
+# Counterforce (§6.2): the Forces warheads landed destroy
+# nd_counterforce_destroyed_raw of the victim's arsenal, rounded up with the
+# chance of its fraction and never more than it holds. Under Launch on
+# Warning the share the launch credit saves gets away first: up to three fire
+# back before impact (nd_salvo_fire_first). Attacker scope.
+nd_salvo_counterforce = {
+	save_scope_as = nd_sv_enemy
+	scope:nd_salvo_victim = {
+		set_variable = { name = nd_cf_raw value = nd_counterforce_destroyed_raw }
+		set_variable = {
+			name = nd_cf_whole
+			value = {
+				value = var:nd_cf_raw
+				floor = yes
+			}
+		}
+		random = {
+			chance = nd_cf_round_up_chance
+			change_variable = { name = nd_cf_whole add = 1 }
+		}
+		if = {
+			limit = { var:nd_cf_whole > var:nuclear_weapon_stockpile }
+			set_variable = { name = nd_cf_whole value = var:nuclear_weapon_stockpile }
+		}
+		change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_cf_whole }
+		if = {
+			limit = { nd_authority_launch_on_warning = yes }
+			set_variable = {
+				name = nd_cf_fire_first
+				value = {
+					value = nd_counterforce_saved_raw
+					round = yes
+					max = 3
+				}
+			}
+		}
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=counterforce; destroyed=[THIS.Var('nd_cf_whole').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		# The arsenal ledger records what was destroyed
+		# (nuclear_custody_effects.txt).
+		hidden_effect = { nd_ledger_refresh = yes }
+		remove_variable = nd_cf_raw
+	}
+	set_variable = { name = nd_salvo_destroyed value = scope:nd_salvo_victim.var:nd_cf_whole }
+	scope:nd_salvo_victim = { remove_variable = nd_cf_whole }
+}
+
+# Victim scope, last in the aftermath: the warheads Launch on Warning got away
+# (var:nd_cf_fire_first) answer the attacker before its warheads land, as an
+# answer the retaliation gates allow (nd_retaliation_permitted), recorded as
+# our use. The first warhead goes last, as Automatic Retaliation's.
+nd_salvo_fire_first = {
+	if = {
+		limit = {
+			has_variable = nd_cf_fire_first
+			var:nd_cf_fire_first > 0
+			nd_is_armed = yes
+			nd_retaliation_permitted = { ENEMY = scope:nd_salvo_attacker }
+		}
+		set_variable = { name = nd_ff_before value = var:nuclear_weapon_stockpile }
+		if = {
+			limit = {
+				var:nd_cf_fire_first >= 3
+				var:nuclear_weapon_stockpile >= 3
+			}
+			scope:nd_salvo_attacker = {
+				ordered_scope_state = {
+					order_by = nuclear_strike_target_score
+					position = 2
+					nuclear_response_strike = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				var:nd_cf_fire_first >= 2
+				var:nuclear_weapon_stockpile >= 2
+			}
+			scope:nd_salvo_attacker = {
+				ordered_scope_state = {
+					order_by = nuclear_strike_target_score
+					position = 1
+					nuclear_response_strike = yes
+				}
+			}
+		}
+		scope:nd_salvo_attacker = {
+			ordered_scope_state = {
+				order_by = nuclear_strike_target_score
+				position = 0
+				nuclear_response_strike = yes
+			}
+		}
+		change_variable = { name = nd_ff_before subtract = var:nuclear_weapon_stockpile }
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=fire_first; fired=[THIS.Var('nd_ff_before').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		remove_variable = nd_ff_before
+		nd_record_nuclear_use = { VICTIM = scope:nd_salvo_attacker }
+	}
+	if = {
+		limit = { has_variable = nd_cf_fire_first }
+		remove_variable = nd_cf_fire_first
+	}
+}
+
+# Decapitation (§6.3): warheads on a Central Authorization country's capital
+# cut its command with nd_decapitation_chance_value, for two to four weeks.
+# While cut off it orders nothing (nd_command_intact); its answer waits
+# (nd_pending_retaliation) and is asked again when the command is restored
+# (nuclear_weapon_events.24, which nd_restored_from_decapitation words as
+# such). Attacker scope.
+nd_salvo_decapitation = {
+	save_scope_as = nd_sv_enemy
+	scope:nd_salvo_victim = {
+		set_variable = { name = nd_dc_result value = 0 }
+		random = {
+			chance = nd_decapitation_chance_value
+			set_variable = { name = nd_dc_result value = 1 }
+		}
+		nd_log_context = yes
+		if = {
+			limit = { var:nd_dc_result = 1 }
+			random_list = {
+				1 = { set_variable = { name = nd_decapitated days = 13 } }
+				1 = { set_variable = { name = nd_decapitated days = 20 } }
+				1 = { set_variable = { name = nd_decapitated days = 27 } }
+			}
+			set_variable = { name = nd_pending_retaliation value = scope:nd_salvo_attacker }
+			set_variable = { name = nd_restored_from_decapitation days = 60 }
+			debug_log = "TE_NUCLEAR: type=decapitation; result=yes; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		}
+		else = {
+			debug_log = "TE_NUCLEAR: type=decapitation; result=no; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		}
+		remove_variable = nd_dc_result
+	}
+}
+
+# Once a game (TE_SELF_CHECK), the first Cities salvo of two or more warheads
+# on a country with two or more states: the loop fired the count it was given
+# (while = { count = <script value> }), and the marks spread the warheads
+# over at least two states (a mark a later pick in the same effect can see).
+# Attacker scope, before nd_salvo_clear.
+nd_salvo_targets_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = nd_salvo_targets_self_check_done }
+			var:nd_salvo_mission = 1
+			var:nd_salvo_fired >= 2
+			scope:nd_salvo_victim = {
+				any_scope_state = {
+					count >= 2
+					always = yes
+				}
+			}
+		}
+		set_global_variable = nd_salvo_targets_self_check_done
+		set_variable = { name = nd_salvo_marked value = 0 }
+		scope:nd_salvo_victim = {
+			every_scope_state = {
+				limit = { has_variable = nd_salvo_target }
+				scope:nd_salvo_attacker = { change_variable = { name = nd_salvo_marked add = 1 } }
+			}
+		}
+		if = {
+			limit = {
+				var:nd_salvo_fired = var:nd_salvo_count
+				var:nd_salvo_marked >= 2
+			}
+			debug_log = "TE_SELF_CHECK OK nd_salvo_targets fired=[THIS.Var('nd_salvo_fired').GetValue|0] of=[THIS.Var('nd_salvo_count').GetValue|0] states=[THIS.Var('nd_salvo_marked').GetValue|0] (a Cities salvo fired its count and spread its warheads)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN nd_salvo_targets fired=[THIS.Var('nd_salvo_fired').GetValue|0] of=[THIS.Var('nd_salvo_count').GetValue|0] states=[THIS.Var('nd_salvo_marked').GetValue|0] (a Cities salvo fired fewer than its count, or every warhead fell on one state; see docs/testing/nuclear-playtest.md)"
+		}
+		remove_variable = nd_salvo_marked
+	}
+}
+
+# The salvo's working figures and marks go (not the panel's mission and size).
+nd_salvo_clear = {
+	scope:nd_salvo_victim = {
+		every_scope_state = {
+			limit = { has_variable = nd_salvo_target }
+			remove_variable = nd_salvo_target
+		}
+	}
+	remove_variable = nd_salvo_count
+	remove_variable = nd_salvo_fired
+	remove_variable = nd_salvo_landed
+	remove_variable = nd_salvo_forces_landed
+	remove_variable = nd_salvo_capital_landed
+	remove_variable = nd_salvo_destroyed
+	remove_variable = nd_salvo_victim_r
+	if = {
+		limit = { has_variable = nd_salvo_sqrt }
+		remove_variable = nd_salvo_sqrt
+	}
+	if = {
+		limit = { has_variable = nd_salvo_world_rel }
+		remove_variable = nd_salvo_world_rel
 	}
 }
 

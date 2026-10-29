@@ -183,7 +183,11 @@ class TestActs(unittest.TestCase):
         self.loose = strip_comments(read(LOOSE_EFFECTS))
 
     def test_note_use_scales_and_cuts_the_clock(self):
-        body = block(self.taboo, "nd_taboo_note_use")
+        # A single use is the scaled form at 1 (a salvo passes the square root
+        # of its warheads, rework spec §14.3).
+        self.assertIn("nd_taboo_note_use_scaled = { KIND = $KIND$ RETALIATION = $RETALIATION$ SCALE = 1 }",
+                      block(self.taboo, "nd_taboo_note_use"))
+        body = block(self.taboo, "nd_taboo_note_use_scaled")
         for needle in ("value = nd_taboo_shock_$KIND$", "value = nd_taboo_ledger_$KIND$",
                        "always = $RETALIATION$", "multiply = nd_taboo_clock_keep_retaliation",
                        "multiply = nd_taboo_clock_keep_first_use",
