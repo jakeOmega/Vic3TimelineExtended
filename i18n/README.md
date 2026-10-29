@@ -37,6 +37,8 @@ A translation stays attached to the English it was made from. When that English 
 - a small change keeps the old translation until the next run. For text of six words or more, that means the same numbers and at least 85% similarity; for shorter text (names, labels), only case, spacing or final punctuation may differ. A change of spelling only, British to American as `scripts/analysis/check_loc_spelling.py` makes it (Licence to License), is small at any length.
 - anything larger ships English until the key is translated again.
 
+Renaming a script value, scripted GUI or variable that a line reads (`ScriptValue('x')`, `GetVariable('x')`) changes its English too, and the word count leaves the markup out, so a short line such as a panel row counts as short text and ships English. Make the same swap in the memory's `en` and `de`/`es` fields of each record, after checking that its `en` still matches the current English, so the translation keeps shipping with the new binding. Otherwise a small change keeps the old translation, old binding included (lunar colonization PR 3a, Next Windows lines).
+
 The next `prepare` offers a stale key again, with the English its translation was made from and that translation as comments above the line (BRIEF.md § Updated lines), so the agent edits the translation rather than starting over. Developer test benches (`DEV_ONLY_FILES` in the script) are never offered.
 
 `python3 scripts/i18n/translate_loc.py status` counts translated, stale and missing keys. A deploy prints the same counts whenever it rewrites a file.
