@@ -299,6 +299,7 @@ te_repair_lunar_technologies = {
 			every_country = {
 				limit = {
 					has_technology_researched = directed_energy_weapons
+					has_technology_researched = reusable_rocketry # Cislunar Infrastructure's prerequisite
 					NOT = { has_technology_researched = cislunar_infrastructure }
 					sr_has_space_program = yes
 				}
