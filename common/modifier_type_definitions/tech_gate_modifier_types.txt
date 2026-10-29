@@ -41,9 +41,8 @@ country_sr_interstellar_mission_program_bool = {
 }
 
 # Nuclear Thermal Propulsion's smaller off-window launch premium (lunar
-# colonization design § 9), shown in the technology's tooltip. Display only:
-# the premium readers check the technology (sr_launch_has_ntp,
-# sr_launch_window_triggers.txt), not this.
+# colonization design § 9), carried by the technology. The premium readers
+# act on it (sr_launch_has_ntp, sr_launch_window_triggers.txt).
 country_sr_nuclear_thermal_launches_bool = {
 	color = good
 	boolean = yes

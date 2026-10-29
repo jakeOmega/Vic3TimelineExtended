@@ -526,8 +526,10 @@ class NuclearThermalTest(unittest.TestCase):
         cls.triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
 
     def test_the_technology_picks_the_curve(self):
+        # Act on the technology's marker, not the technology
+        # (scripting_best_practices.md, "Technology markers").
         self.assertEqual(_block(self.triggers, "sr_launch_has_ntp").split(),
-                         ["has_technology_researched", "=", "nuclear_thermal_propulsion"])
+                         ["modifier:country_sr_nuclear_thermal_launches_bool", "=", "yes"])
         era_11 = _strip(_raw("common", "technology", "technologies", "era_11.txt"))
         tech = _block(era_11, "nuclear_thermal_propulsion")
         self.assertIn("country_sr_nuclear_thermal_launches_bool = yes", tech)

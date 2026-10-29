@@ -50,9 +50,10 @@ sr_launch_has_depots = {
 # at about 9 km/s of exhaust velocity, not 3.7, so an off-window launch pays
 # the smaller premium curve (sr_launch_premium_ntp_<body>; read through
 # sr_window_premium_country_<body>). It makes off-window launches cheaper, not
-# possible: they still need propellant depots (sr_launch_has_depots).
+# possible: they still need propellant depots (sr_launch_has_depots). Reads
+# the technology's marker, so its tooltip line and the effect share one source.
 sr_launch_has_ntp = {
-	has_technology_researched = nuclear_thermal_propulsion
+	modifier:country_sr_nuclear_thermal_launches_bool = yes
 }
 
 # Launch windows bind this country: the space race rule is on and it has no

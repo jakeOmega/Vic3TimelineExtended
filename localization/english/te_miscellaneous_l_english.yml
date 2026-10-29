@@ -2363,7 +2363,7 @@
  country_sr_interstellar_mission_program_bool:0 "Interstellar Mission Program Active"
  country_sr_mars_mission_program_bool:0 "Mars Mission Program Active"
  country_sr_moon_mission_program_bool:0 "Moon Mission Program Active"
- country_sr_nuclear_thermal_launches_bool:0 "Smaller premium for #bold launches outside a window#!"
+ country_sr_nuclear_thermal_launches_bool:0 "Smaller Premium for Off-Window Launches"
  country_sr_solar_colonization_program_bool:0 "[concept_solar_colonization] Program Active"
  country_strategic_nuclear_strikes_forbidden_bool:0 "Strategic Nuclear Strikes Forbidden"
  country_tactical_nuclear_strikes_forbidden_bool:0 "Tactical Nuclear Strikes Forbidden"
