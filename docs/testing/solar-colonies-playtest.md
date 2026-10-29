@@ -407,3 +407,31 @@ The colonization sections' share of the GUI and localization audit (`docs/audits
 The Solar System world hovers listed both specializations' effects in one run, so a player couldn't tell which belonged to which. Each now has its name in bold with its effects indented beneath it (`#indent_newline:3`, vanilla's form, new to the mod's own localization). No self-check: it is display and fails visibly.
 
 1. **Two labeled blocks.** Hover 4 Vesta in the Solar System list: "It offers two specializations:", then Vesta Mining Operations with Advanced Materials output and Extraplanetary Base throughput indented under it, then Vesta Science Outpost with research speed and space race progress under it. The transit line and the window line after them are back at the margin. If the effects are not indented, or the indent runs on into the transit line, write each block as a bold name, `\n`, then the `GetDesc` with no indent (the UN terms' form).
+
+## Funding past the cap (lunar colonization design § 5.1, 2026-10-29)
+
+A milestone's funding may go six levels past the cap, each worth less pace than the one before (1/2 of a level, then
+1/3, down to 1/7); every level still costs in full and adds its full +25% Space Program throughput. The pace and the
+throughput are two modifiers on the entry now, `sr_funding_progress` and `sr_funding_throughput`. No self-check: the
+engine's modifier sum can't single out one source, and the panel shows the result. `event te_debug_space_race.1`
+reaches a milestone.
+
+1. **The stepper.** Fund a running milestone to the cap: the figure reads as before ("7 / 7"). Press + once more: it
+   reads "8 / 7 (+0.5)", then "9 / 7 (+0.8)", and at six past the cap "13 / 7 (+1.6)" with + greyed. Nothing ends in
+   "..." (the cell is 140 wide now) and the minus and plus buttons sit beside the figure.
+2. **The plus button's tooltip.** At the cap it ends with "Past the cap: +1/2 of a level of pace, at full cost"; one
+   level past, "+1/3"; at five past, "+1/7". Below the cap that line is absent. At six past, the button is greyed and
+   its first line reads "Funding is not yet six levels past the cap" with a cross.
+3. **The pace.** Hover the headline's "+N/mo": the Funding line reads "N levels within the cap, X effective levels past
+   it", summed over the running milestones. In the "Added each month" breakdown the Funding Progress Bonus of an entry
+   funded at 9 with a cap of 7 is +3.9 (7.83 × 0.5), not +4.5, and the added progress rises by 0.25 and then 0.17 for the first
+   two levels past the cap.
+4. **The throughput.** The Space Program's throughput breakdown shows Funding Throughput Bonus at the full +25% a level,
+   past the cap too (+225% at 9), and the Launch Capacity bill rises with it.
+5. **A falling cap.** Fund a milestone to the cap with Advanced Research tier V, then lose the principle (leave the bloc,
+   or change the principle): the level stays, the figure reads "N / N−1 (+0.5)", and the pace drops by half a level.
+6. **The AI.** In an observer run, no AI's stepper shows "(+…)": the AI stops at the cap. One left past it by a falling
+   cap funds down to the cap within a few weeks.
+7. **An old save.** Load a save from before the split with a running milestone: within a month its entry carries both
+   Funding Progress Bonus and Funding Throughput Bonus, and the Space Program's throughput is what it was before the
+   update.
