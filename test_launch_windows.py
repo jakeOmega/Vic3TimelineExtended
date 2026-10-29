@@ -11,6 +11,9 @@ solver, and writes them as script. These tests hold:
   bodies where the physics puts it there (the rest are listed, § 5.3's claim
   is about the method, and the physics wins);
 - § 5.2a's Mars break-even table as the rule gives it with these premiums;
+- Nuclear Thermal Propulsion's curve (lunar colonization design § 9): the same
+  extra delta-v at 9 km/s, read per country through one reader that every
+  launch price reads;
 - the generated files: current, and, read back by a small interpreter of the
   script they use, equal to the computed windows for every month to END_DATE;
 - the gate's script: every colony site maps to its body, its draw trigger
@@ -232,6 +235,42 @@ class PremiumCurveTest(unittest.TestCase):
             expected = round((math.exp(mars.extra_dv[off] / 3.7) - 1) * 100) / 100
             self.assertTrue(math.isclose(mars.premium[off], expected, rel_tol=1e-12))
 
+    def test_nuclear_thermal_premium_is_the_same_extra_delta_v_at_9_kms(self):
+        # Lunar colonization design § 9: (1 + p)^(3.7 / 9) - 1 of the chemical
+        # premium p. Computed from the extra delta-v itself, so rounded once.
+        self.assertEqual(glw.NTP_EXHAUST_VELOCITY_KMS, 9.0)
+        ratio = glw.EXHAUST_VELOCITY_KMS / glw.NTP_EXHAUST_VELOCITY_KMS
+        # Against the stored two-decimal p: half a hundredth for the NTP figure's
+        # rounding, plus p's half a hundredth carried through x^(3.7/9) (slope
+        # at most 3.7/9, since 1 + p >= 1).
+        stored_tolerance = 0.005 * (1 + ratio) + 1e-9
+        for p in plans()[0]:
+            self.assertEqual(sorted(p.premium_ntp), sorted(p.premium))
+            for off, chem in p.premium.items():
+                ntp = p.premium_ntp[off]
+                with self.subTest(body=p.body.key, offset=off):
+                    if -1 <= off <= 1:
+                        self.assertEqual(ntp, 0.0)
+                        continue
+                    exact = math.exp(p.extra_dv[off] / 9.0) - 1
+                    self.assertTrue(math.isclose(ntp, round(exact * 100) / 100, rel_tol=1e-12))
+                    unrounded_chem = math.exp(p.extra_dv[off] / 3.7) - 1
+                    self.assertTrue(math.isclose(exact, (1 + unrounded_chem) ** ratio - 1, rel_tol=1e-9))
+                    self.assertLessEqual(abs(ntp - ((1 + chem) ** ratio - 1)), stored_tolerance)
+                    self.assertGreater(ntp, 0.0)
+                    self.assertLess(ntp, chem)
+                    lo, hi = p.spread_ntp[off]
+                    self.assertLessEqual(lo, hi)
+
+    def test_the_guide_s_mars_figures(self):
+        # 16-space.md: about +40% the month after a window closes and +150% the
+        # month after that; about +15% and +45% with Nuclear Thermal Propulsion.
+        mars = plan("mars")
+        self.assertTrue(0.35 <= mars.premium[2] <= 0.45, mars.premium[2])
+        self.assertTrue(1.4 <= mars.premium[3] <= 1.6, mars.premium[3])
+        self.assertTrue(0.13 <= mars.premium_ntp[2] <= 0.17, mars.premium_ntp[2])
+        self.assertTrue(0.43 <= mars.premium_ntp[3] <= 0.48, mars.premium_ntp[3])
+
     def test_mars_cheapest_transfer_matches_the_spec(self):
         # § 5.2a: "The minimum for Mars comes out at 4.45 km/s".
         lo, hi = plan("mars").best_dv
@@ -335,6 +374,8 @@ class GeneratedFilesTest(unittest.TestCase):
                     self.assertEqual(offset, month - nearest, month)
                     premium = interp.value(f"sr_launch_premium_{key}", month)
                     self.assertAlmostEqual(premium, p.premium[month - nearest], places=6, msg=month)
+                    premium_ntp = interp.value(f"sr_launch_premium_ntp_{key}", month)
+                    self.assertAlmostEqual(premium_ntp, p.premium_ntp[month - nearest], places=6, msg=month)
 
     def test_generated_values_stay_inside_the_script_number_range(self):
         values = _raw("common", "script_values", "sr_launch_windows_generated.txt")
@@ -469,6 +510,107 @@ class GateScriptTest(unittest.TestCase):
             for kind in ("name", "line_open", "line_wait", "line_paid", "line_verdict"):
                 with self.subTest(body=b.key, kind=kind):
                     self.assertIn(f"sr_window_{kind}_{b.key}", keys)
+
+
+class NuclearThermalTest(unittest.TestCase):
+    """Nuclear Thermal Propulsion (lunar colonization design § 9): a second premium curve per window body,
+    cached beside the chemical one by the global pulse, and one country reader,
+    sr_window_premium_country_<body>, that picks it by the technology. Every launch price and the Next Windows
+    line read that reader; the global cache refresh reads only the any-scope curves."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values_raw = _raw("common", "script_values", "sr_launch_windows_generated.txt")
+        cls.values = _strip(cls.values_raw)
+        cls.windows = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
+        cls.triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+
+    def test_the_technology_picks_the_curve(self):
+        self.assertEqual(_block(self.triggers, "sr_launch_has_ntp").split(),
+                         ["has_technology_researched", "=", "nuclear_thermal_propulsion"])
+        era_11 = _strip(_raw("common", "technology", "technologies", "era_11.txt"))
+        tech = _block(era_11, "nuclear_thermal_propulsion")
+        self.assertIn("country_sr_nuclear_thermal_launches_bool = yes", tech)
+        # Cheaper, not possible: off-window launches still need depots.
+        for name in ("sr_launch_departs_paid", "sr_launch_target_departs_paid"):
+            self.assertIn("sr_launch_has_depots = yes", _block(self.triggers, name))
+            self.assertNotIn("sr_launch_has_ntp", _block(self.triggers, name))
+
+    def test_the_cache_holds_both_curves_and_reads_no_country(self):
+        cache = _block(self.windows, "sr_launch_window_cache_body")
+        self.assertIn("set_global_variable = { name = sr_window_cost_$BODY$ value = sr_launch_premium_$BODY$ }", cache)
+        self.assertIn("set_global_variable = { name = sr_window_cost_ntp_$BODY$ value = sr_launch_premium_ntp_$BODY$ }",
+                      cache)
+        refresh = _block(self.windows, "sr_launch_windows_refresh_cache")
+        for block in (cache, refresh):
+            self.assertNotIn("sr_window_premium_country_", block)
+            self.assertNotIn("sr_launch_has_ntp", block)
+
+    def test_each_body_s_readers(self):
+        for b in glw.BODIES:
+            k = b.key
+            with self.subTest(body=k):
+                cached = _block(self.values, f"sr_window_premium_now_ntp_{k}").split()
+                self.assertEqual(" ".join(cached), (
+                    f"value = 0 if = {{ limit = {{ has_global_variable = sr_window_cost_ntp_{k} }} "
+                    f"value = global_var:sr_window_cost_ntp_{k} }} else = {{ value = sr_launch_premium_ntp_{k} }}"))
+                pick = " ".join(_block(self.values, f"sr_window_premium_country_{k}").split())
+                self.assertEqual(pick, (f"value = sr_window_premium_now_{k} if = {{ limit = {{ sr_launch_has_ntp = yes }} "
+                                        f"value = sr_window_premium_now_ntp_{k} }}"))
+                for reader in (f"sr_launch_cost_{k}", f"sr_launch_target_cost_{k}", f"sr_launch_months_cost_{k}"):
+                    body = _block(self.values, reader)
+                    self.assertIn(f"sr_window_premium_country_{k}", body, reader)
+                    self.assertNotIn("sr_window_premium_now_", body, reader)
+
+    def test_the_country_reader_s_branches(self):
+        values = parse_file(self.values_raw)
+        for b in glw.BODIES:
+            k = b.key
+            values[f"sr_window_premium_now_{k}"] = [("value", "=", "0.43")]
+            values[f"sr_window_premium_now_ntp_{k}"] = [("value", "=", "0.16")]
+        for has_ntp, expected in ((True, 0.16), (False, 0.43)):
+            op = ">=" if has_ntp else "<"
+            interp = Interpreter(values, {"sr_launch_has_ntp": [("te_history_month_index", op, "0")]})
+            for b in glw.BODIES:
+                with self.subTest(body=b.key, has_ntp=has_ntp):
+                    self.assertAlmostEqual(interp.value(f"sr_window_premium_country_{b.key}", 24000), expected)
+
+    def test_only_the_country_reader_reads_the_chemical_cache(self):
+        # A new launch price must read sr_window_premium_country_<body>, or an NTP
+        # country pays the chemical curve there.
+        readers = []
+        for folder in ("common", "gui", "events", "localization"):
+            for dirpath, _, files in os.walk(os.path.join(REPO, folder)):
+                for name in files:
+                    if name.endswith((".txt", ".gui", ".yml")):
+                        text = _raw(os.path.relpath(os.path.join(dirpath, name), REPO))
+                        for m in re.finditer(r"sr_window_premium_now_(?!ntp_)(\w+)", _strip(text) if name.endswith(".txt") else text):
+                            readers.append((name, m.group(0)))
+        expected = [("sr_launch_windows_generated.txt", f"sr_window_premium_now_{b.key}") for b in glw.BODIES]
+        # Each body: its definition, and the country reader's read.
+        self.assertEqual(sorted(readers), sorted(expected * 2))
+
+    def test_the_next_windows_line_shows_the_country_s_premium(self):
+        loc = _raw("localization", "english", "te_miscellaneous_l_english.yml")
+        for b in glw.BODIES:
+            line = re.search(rf"(?m)^ sr_window_line_paid_{b.key}:0 \"(.*)\"$", loc).group(1)
+            with self.subTest(body=b.key):
+                self.assertIn(f"ScriptValue('sr_window_premium_country_{b.key}')", line)
+
+    def test_the_debug_copy_reads_this_country_s_curve(self):
+        copy = _block(self.windows, "sr_window_log_copy")
+        self.assertIn("name = sr_window_log_premium_cached_now value = sr_window_premium_country_$BODY$", copy)
+        self.assertIn("limit = { sr_launch_has_ntp = yes }", copy)
+        self.assertIn("name = sr_window_log_premium_date_now value = sr_launch_premium_ntp_$BODY$", copy)
+        self.assertIn("name = sr_window_log_premium_date_now value = sr_launch_premium_$BODY$", copy)
+
+    def test_bodies_with_no_window_get_no_curve(self):
+        # Mercury, and the Moon when it lands: transit only, never gated.
+        for b in glw.TRANSIT_ONLY:
+            with self.subTest(body=b.key):
+                for name in (f"sr_launch_premium_{b.key}", f"sr_launch_premium_ntp_{b.key}",
+                             f"sr_window_premium_now_ntp_{b.key}", f"sr_window_premium_country_{b.key}"):
+                    self.assertIsNone(re.search(r"(?m)^" + re.escape(name) + r"\s*=", self.values), name)
 
 
 class NumberRangeTest(unittest.TestCase):

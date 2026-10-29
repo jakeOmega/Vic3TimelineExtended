@@ -3,7 +3,8 @@
 # ============================================================================
 # Global Commons spec § 5. Chemical propulsion reaches each world only in its
 # launch window; propellant depots (Asteroid Mining) buy launches outside one
-# at the premium the extra propellant costs; fusion drives end the waiting.
+# at the premium the extra propellant costs, a smaller one with Nuclear Thermal
+# Propulsion (lunar colonization design § 9); fusion drives end the waiting.
 # While no fleet can leave, the programme keeps building: progress past the
 # goal is fleets staged in orbit, and they depart one a month while a window
 # is open. The windows are generated (scripts/generators/gen_launch_windows.py);
@@ -22,6 +23,9 @@
 #   sr_window_is_open_<body>  present while its window is open
 #   sr_window_wait_<body>     months to its next window (0 while open)
 #   sr_window_cost_<body>     this month's off-window premium (0 while open)
+#   sr_window_cost_ntp_<body> the same for nuclear thermal engines (a country
+#                             with Nuclear Thermal Propulsion pays it:
+#                             sr_window_premium_country_<body>)
 #   sr_window_cache_month     the te_history_month_index these were taken for
 # Filled from the global monthly pulse (sr_launch_windows_on_actions.txt) and,
 # when that has not yet run this month, by the first journal entry that needs
@@ -46,6 +50,7 @@ sr_launch_windows_refresh_cache = {
 sr_launch_window_cache_body = {
 	set_global_variable = { name = sr_window_wait_$BODY$ value = sr_window_months_to_next_$BODY$ }
 	set_global_variable = { name = sr_window_cost_$BODY$ value = sr_launch_premium_$BODY$ }
+	set_global_variable = { name = sr_window_cost_ntp_$BODY$ value = sr_launch_premium_ntp_$BODY$ }
 	# A colony fleet's transit leaving this month, by drive (slices 2-3 design
 	# § 2; chemical is a constant): read by sr_transit_months_<body>.
 	set_global_variable = { name = sr_window_transit_fusion_$BODY$ value = sr_transit_fusion_$BODY$ }
@@ -226,16 +231,23 @@ sr_launch_window_gate_check = {
 # character before it is lost and the closing $ stays; scripting_best_practices.md,
 # "No $PARAM$ inside the string"), so the lines read these through
 # GetGlobalVariable and name the body by its code (sr_window_body_code_<body>,
-# legend BODY_CODE_LEGEND in scripts/generators/gen_launch_windows.py). Any
-# scope; the country-dependent figures are this scope's. Debug only: nothing
-# else reads the sr_window_log_*_now globals.
+# legend BODY_CODE_LEGEND in scripts/generators/gen_launch_windows.py). Country
+# scope: the premiums are the ones this country's engines pay, nuclear thermal
+# with Nuclear Thermal Propulsion, cached and by date. Debug only: nothing else
+# reads the sr_window_log_*_now globals.
 sr_window_log_copy = {
 	set_global_variable = { name = sr_window_log_body_now value = sr_window_body_code_$BODY$ }
 	set_global_variable = { name = sr_window_log_wait_date_now value = sr_window_months_to_next_$BODY$ }
 	set_global_variable = { name = sr_window_log_wait_cached_now value = sr_window_wait_months_$BODY$ }
 	set_global_variable = { name = sr_window_log_offset_now value = sr_launch_offset_$BODY$ }
-	set_global_variable = { name = sr_window_log_premium_cached_now value = sr_window_premium_now_$BODY$ }
-	set_global_variable = { name = sr_window_log_premium_date_now value = sr_launch_premium_$BODY$ }
+	set_global_variable = { name = sr_window_log_premium_cached_now value = sr_window_premium_country_$BODY$ }
+	if = {
+		limit = { sr_launch_has_ntp = yes }
+		set_global_variable = { name = sr_window_log_premium_date_now value = sr_launch_premium_ntp_$BODY$ }
+	}
+	else = {
+		set_global_variable = { name = sr_window_log_premium_date_now value = sr_launch_premium_$BODY$ }
+	}
 	set_global_variable = { name = sr_window_log_cost_now value = sr_launch_cost_$BODY$ }
 	set_global_variable = { name = sr_window_log_months_cost_now value = sr_launch_months_cost_$BODY$ }
 	set_global_variable = { name = sr_window_log_verdict_now value = sr_window_disp_verdict_$BODY$ }

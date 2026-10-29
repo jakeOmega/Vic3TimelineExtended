@@ -10,10 +10,13 @@ them as month-index ranges against ``te_history_month_index``
   ``sr_window_open_<body>`` -- the body's window is open this month.
 * common/script_values/sr_launch_windows_generated.txt:
   ``sr_window_months_to_next_<body>`` (0 while open), ``sr_launch_offset_<body>``
-  (signed months from the nearest optimum) and ``sr_launch_premium_<body>``
-  (the off-window premium for that offset, as a fraction: 0.35 = +35%).
+  (signed months from the nearest optimum), ``sr_launch_premium_<body>``
+  (the off-window premium for that offset, as a fraction: 0.35 = +35%) and
+  ``sr_launch_premium_ntp_<body>`` (the same with Nuclear Thermal Propulsion),
+  with the readers of the month's cache.
 * docs/engine/launch_windows_report.md -- every window body's cycle, its
-  premium curve with the spread across cycles, the historical launches the
+  premium curves (chemical and nuclear thermal) with the spread across
+  cycles, the historical launches the
   method is checked against, the Mars windows of era 11, the transit
   times, and the fleets' legs.
 * common/script_values/sr_fleet_legs_generated.txt -- the legs between the
@@ -44,7 +47,12 @@ extra mass, ``exp(extra delta-v / 3.7 km/s) - 1``, at a methane-oxygen engine's
 exhaust velocity. A month's figure is its best departure day. The extra
 delta-v is taken against the cycle's best window month, averaged over a sample
 of cycles spread across the whole span, and stored up to +100,000%. Window
-months are free whatever the curve says.
+months are free whatever the curve says. A nuclear thermal engine (Nuclear
+Thermal Propulsion; lunar colonization design § 9,
+docs/superpowers/specs/2026-10-29-lunar-colonization-design.md) flies the same
+transfers at about 9 km/s, so its premium is ``exp(extra delta-v / 9 km/s) - 1``,
+which is ``(1 + p)^(3.7 / 9) - 1`` for the chemical premium p: a second curve,
+which a country with the technology pays (``sr_window_premium_country_<body>``).
 
 Sources:
 * Planets: E. M. Standish, "Keplerian Elements for Approximate Positions of the
@@ -98,6 +106,7 @@ J2000 = 2451545.0
 DEG = math.pi / 180.0
 
 EXHAUST_VELOCITY_KMS = 3.7  # methane-oxygen, spec § 5.2a
+NTP_EXHAUST_VELOCITY_KMS = 9.0  # nuclear thermal (Isp about 900 s), lunar colonization design § 9
 PREMIUM_CAP = 1000.0  # +100,000%: the script's number range, spec § 5.2a
 MU_EARTH = 398_600.4418  # km^3/s^2
 R_PARKING = 6_378.137 + 200.0  # km: 200 km circular parking orbit
@@ -591,6 +600,8 @@ class BodyPlan:
     extra_dv: dict[int, float] = field(default_factory=dict)  # mean extra km/s by offset
     premium: dict[int, float] = field(default_factory=dict)  # stored fraction by offset
     spread: dict[int, tuple[float, float]] = field(default_factory=dict)  # per-cycle premium range
+    premium_ntp: dict[int, float] = field(default_factory=dict)  # the same at NTP_EXHAUST_VELOCITY_KMS
+    spread_ntp: dict[int, tuple[float, float]] = field(default_factory=dict)
     best_dv: tuple[float, float] = (0.0, 0.0)  # cheapest window month: min, max over sampled cycles
     sampled: int = 0
     hohmann_days: float = 0.0  # median over its windows
@@ -603,8 +614,10 @@ def _round_premium(p: float) -> float:
     return min(PREMIUM_CAP, round(p * 100.0) / 100.0)
 
 
-def premium_from_extra(extra_kms: float) -> float:
-    return math.exp(max(0.0, extra_kms) / EXHAUST_VELOCITY_KMS) - 1.0
+def premium_from_extra(extra_kms: float, exhaust_kms: float = EXHAUST_VELOCITY_KMS) -> float:
+    """The rocket equation's extra propellant, as a fraction of the window's,
+    for `extra_kms` more delta-v at an exhaust velocity of `exhaust_kms`."""
+    return math.exp(max(0.0, extra_kms) / exhaust_kms) - 1.0
 
 
 def _sample_cycles(windows: list[Window], first: int, last: int) -> list[Window]:
@@ -657,12 +670,14 @@ def plan_body(body: Body, first_month: int, last_month: int) -> BodyPlan:
     for off in offsets:
         values = np.array(extras[off])
         plan.extra_dv[off] = float(np.mean(values))
-        if -1 <= off <= 1:
-            plan.premium[off] = 0.0
-        else:
-            plan.premium[off] = _round_premium(premium_from_extra(plan.extra_dv[off]))
-        per_cycle = [min(PREMIUM_CAP, premium_from_extra(v)) for v in values]
-        plan.spread[off] = (min(per_cycle), max(per_cycle))
+        for exhaust, premium, spread in ((EXHAUST_VELOCITY_KMS, plan.premium, plan.spread),
+                                         (NTP_EXHAUST_VELOCITY_KMS, plan.premium_ntp, plan.spread_ntp)):
+            if -1 <= off <= 1:
+                premium[off] = 0.0
+            else:
+                premium[off] = _round_premium(premium_from_extra(plan.extra_dv[off], exhaust))
+            per_cycle = [min(PREMIUM_CAP, premium_from_extra(v, exhaust)) for v in values]
+            spread[off] = (min(per_cycle), max(per_cycle))
     # Transit by drive, on the same offsets and cycles (one departure each, on
     # TRANSIT_DAY): what a fleet leaving that month takes.
     plan.hohmann_days = hohmann_days
@@ -912,15 +927,18 @@ def render_values(plans: list[BodyPlan], first: int, last: int, transit_plans: l
                 f"\tadd = sr_window_previous_gap_{key}", "}", ""]
         # The premium by offset, a binary search on sr_launch_offset_<body>.
         offsets = sorted(plan.premium)
-        out.append(f"# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of {plan.sampled} cycles:")
+        out.append(f"# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of {plan.sampled} cycles,")
+        out.append("# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):")
         for off in offsets:
             lo, hi = plan.spread[off]
-            note = "window, free" if -1 <= off <= 1 else f"cycles {lo * 100:.0f}% to {hi * 100:.0f}%"
-            out.append(f"#   {off:+3d}: {_num(plan.premium[off]):>7} ({note})")
-        out.append(f"sr_launch_premium_{key} = {{")
-        out.append("\tvalue = 0")
-        out += _premium_tree(key, plan.premium, offsets, 1)
-        out += ["}", ""]
+            note = "window, free" if -1 <= off <= 1 else f"chemical cycles {lo * 100:.0f}% to {hi * 100:.0f}%"
+            out.append(f"#   {off:+3d}: {_num(plan.premium[off]):>7}, NTP {_num(plan.premium_ntp[off]):>6} ({note})")
+        for name, table in ((f"sr_launch_premium_{key}", plan.premium), (f"sr_launch_premium_ntp_{key}", plan.premium_ntp)):
+            out.append(f"{name} = {{")
+            out.append("\tvalue = 0")
+            out += _premium_tree(key, table, offsets, 1)
+            out.append("}")
+        out.append("")
         out += render_transit(plan)
     out += render_transit_only(transit_plans)
     out += render_readers(plans, transit_plans)
@@ -980,7 +998,7 @@ def render_readers(plans: list[BodyPlan], transit_plans: list[TransitPlan]) -> l
             f"sr_launch_target_cost_{k} = {{",
             "\tvalue = sr_launch_never",
             f"\tif = {{ limit = {{ sr_launch_departs_free = {{ BODY = {k} }} }} value = 0 }}",
-            f"\telse_if = {{ limit = {{ sr_launch_target_departs_paid = {{ BODY = {k} }} }} value = sr_window_premium_now_{k} }}",
+            f"\telse_if = {{ limit = {{ sr_launch_target_departs_paid = {{ BODY = {k} }} }} value = sr_window_premium_country_{k} }}",
             "}",
             f"sr_launch_target_months_allowed_{k} = {{",
             f"\tvalue = sr_window_wait_months_{k}",
@@ -998,14 +1016,25 @@ def render_readers(plans: list[BodyPlan], transit_plans: list[TransitPlan]) -> l
             "\tvalue = 0",
             f"\tif = {{ limit = {{ has_global_variable = sr_window_cost_{k} }} value = global_var:sr_window_cost_{k} }}",
             "}",
+            # Until a refresh has cached it (a save from before this curve,
+            # loaded mid-month), the date's own figure, never a free launch.
+            f"sr_window_premium_now_ntp_{k} = {{",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_global_variable = sr_window_cost_ntp_{k} }} value = global_var:sr_window_cost_ntp_{k} }}",
+            f"\telse = {{ value = sr_launch_premium_ntp_{k} }}",
+            "}",
+            f"sr_window_premium_country_{k} = {{",
+            f"\tvalue = sr_window_premium_now_{k}",
+            f"\tif = {{ limit = {{ sr_launch_has_ntp = yes }} value = sr_window_premium_now_ntp_{k} }}",
+            "}",
             f"sr_launch_cost_{k} = {{",
             "\tvalue = sr_launch_never",
             f"\tif = {{ limit = {{ sr_launch_departs_free = {{ BODY = {k} }} }} value = 0 }}",
-            f"\telse_if = {{ limit = {{ sr_launch_departs_paid = {{ BODY = {k} }} }} value = sr_window_premium_now_{k} }}",
+            f"\telse_if = {{ limit = {{ sr_launch_departs_paid = {{ BODY = {k} }} }} value = sr_window_premium_country_{k} }}",
             "}",
             f"sr_launch_months_cost_{k} = {{",
             "\tvalue = sr_solar_colonization_goal",
-            f"\tmultiply = sr_window_premium_now_{k}",
+            f"\tmultiply = sr_window_premium_country_{k}",
             "\tdivide = sr_pace_rate_solar_colonization",
             "}",
             f"sr_window_disp_verdict_{k} = {{",
@@ -1056,6 +1085,9 @@ VALUES_PREAMBLE = """# Launch windows for Solar System Colonization (Global Comm
 #   sr_launch_offset_<body>          signed months from the nearest optimum
 #   sr_launch_premium_<body>         the off-window premium at that offset, a
 #                                    fraction (0.35 = +35%); 0 in the window
+#   sr_launch_premium_ntp_<body>     the same for a nuclear thermal engine: the
+#                                    extra delta-v at 9 km/s, not 3.7 (lunar
+#                                    colonization design § 9)
 # The optima's dates are in docs/engine/launch_windows_report.md.
 """
 
@@ -1074,6 +1106,13 @@ READERS_PREAMBLE = """# ===== Readers of the window cache (sr_launch_windows_ref
 #                               lines, which can't name a $BODY$ (BODY_CODE_LEGEND)
 # sr_window_wait_months_<body>  months to its next window, cached (0 if none yet)
 # sr_window_premium_now_<body>  this month's premium, cached (0 if none yet)
+# sr_window_premium_now_ntp_<body>  the same for nuclear thermal engines (the
+#                               date's own figure, sr_launch_premium_ntp_<body>,
+#                               if none yet)
+# sr_window_premium_country_<body>  country: the one its engines pay, nuclear
+#                               thermal with Nuclear Thermal Propulsion
+#                               (sr_launch_has_ntp), chemical otherwise. Every
+#                               reader below that prices a launch reads this.
 # sr_launch_cost_<body>         country: the premium it launches there at now, 0
 #                               in a window or with fusion drives, sr_launch_never
 #                               if it can't (sr_launch_departs_free / _paid,
@@ -1150,7 +1189,10 @@ def render_report(plans: list[BodyPlan], first: int, last: int, transit_plans: l
         f"window month, the extra delta-v averaged over {PREMIUM_CYCLES} cycles spread across the span; the "
         "spread is the range of the individual cycles' premiums. Delta-v: departure from a 200 km parking "
         f"orbit, capture into an orbit of eccentricity {CAPTURE_ECCENTRICITY} at a tenth of a radius up at a "
-        "planet, rendezvous at a small body.",
+        "planet, rendezvous at a small body. Nuclear thermal (NTP) premiums are the same extra delta-v at "
+        f"{NTP_EXHAUST_VELOCITY_KMS:g} km/s (Nuclear Thermal Propulsion, lunar colonization design § 9): "
+        f"`exp(extra delta-v / {NTP_EXHAUST_VELOCITY_KMS:g} km/s) - 1`, or `(1 + p)^(3.7 / 9) - 1` of the chemical "
+        "premium p. A country with the technology pays them; transit is unchanged.",
         "",
         "## Window bodies",
         "",
@@ -1170,12 +1212,15 @@ def render_report(plans: list[BodyPlan], first: int, last: int, transit_plans: l
         offsets = sorted(plan.premium)
         lines.append(f"### {plan.body.name}")
         lines.append("")
-        lines.append("| Months | Premium | Cycles range | Extra delta-v (km/s) |")
-        lines.append("|---|---|---|---|")
+        lines.append("| Months | Premium | Cycles range | NTP premium | NTP cycles range | Extra delta-v (km/s) |")
+        lines.append("|---|---|---|---|---|---|")
         for off in offsets:
-            lo, hi = plan.spread[off]
-            prem = "free" if -1 <= off <= 1 else f"+{plan.premium[off] * 100:,.0f}%"
-            lines.append(f"| {off:+d} | {prem} | +{lo * 100:,.0f}% to +{hi * 100:,.0f}% | {plan.extra_dv[off]:.3f} |")
+            cells = []
+            for premium, spread in ((plan.premium, plan.spread), (plan.premium_ntp, plan.spread_ntp)):
+                lo, hi = spread[off]
+                cells.append("free" if -1 <= off <= 1 else f"+{premium[off] * 100:,.0f}%")
+                cells.append(f"+{lo * 100:,.0f}% to +{hi * 100:,.0f}%")
+            lines.append(f"| {off:+d} | " + " | ".join(cells) + f" | {plan.extra_dv[off]:.3f} |")
         best = min((o for o in offsets if -1 <= o <= 1), key=lambda o: plan.extra_dv[o])
         lines.append("")
         lines.append(f"Minimum of the raw curve: month {best:+d}.")
@@ -1183,13 +1228,17 @@ def render_report(plans: list[BodyPlan], first: int, last: int, transit_plans: l
     mars = next(p for p in plans if p.body.key == "mars")
     lines += ["## The off-window rule on Mars", "",
               "A full bar launches outside a window when goal × premium ÷ pace ≤ k × m (Standard k = 1, "
-              "Ambitious 2; m = months to the next free window), in a 26-month cycle, goal 400:", "",
-              "| Pace | Standard launches | Ambitious launches |", "|---|---|---|"]
+              "Ambitious 2; m = months to the next free window), in a 26-month cycle, goal 400, on chemical "
+              "and on nuclear thermal (NTP) premiums:", "",
+              "| Pace | Standard launches | Ambitious launches | Standard, NTP | Ambitious, NTP |",
+              "|---|---|---|---|---|"]
     for pace in (5, 10, 20, 40):
-        std = launch_offsets(mars.premium, pace, "standard")
-        amb = launch_offsets(mars.premium, pace, "ambitious")
-        lines.append(f"| {pace} a month | {describe_launches(std)} ({len(std)} in 26) | "
-                     f"{describe_launches(amb)} ({len(amb)} in 26) |")
+        cells = []
+        for premium in (mars.premium, mars.premium_ntp):
+            for approach in ("standard", "ambitious"):
+                got = launch_offsets(premium, pace, approach)
+                cells.append(f"{describe_launches(got)} ({len(got)} in 26)")
+        lines.append(f"| {pace} a month | " + " | ".join(cells) + " |")
     lines += ["", "## Historical launches", "",
               "| Body | Mission | Launched | Computed optimum | Days from it | Window |", "|---|---|---|---|---|---|"]
     for plan in plans:

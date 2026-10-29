@@ -233,7 +233,7 @@
  nuclear_energy:0 "Nuclear Energy"
  nuclear_energy_desc:0 "By harnessing the power of nuclear reactions, we've found a new and powerful source of energy. It has fueled our industries and reduced our reliance on fossil fuels, but it comes with its own set of risks."
  nuclear_thermal_propulsion:0 "Nuclear Thermal Propulsion"
- nuclear_thermal_propulsion_desc:0 "A reactor heats hydrogen to twice the exhaust velocity of the best chemical rockets, so the same burn needs far less propellant. Our space agencies can plan bolder missions around it."
+ nuclear_thermal_propulsion_desc:0 "A reactor heats hydrogen to twice the exhaust velocity of the best chemical rockets, so the same burn needs far less propellant. A colony fleet that leaves outside its launch window pays a much smaller premium for it."
  nuclear_weapons:0 "Nuclear Weapons"
  nuclear_weapons_desc:0 "The atomic bomb has changed the world forever. These incredibly powerful weapons have fundamentally altered the nature of warfare and ushered in a new era of global politics."
  orbital_manufacturing:0 "Orbital Manufacturing"

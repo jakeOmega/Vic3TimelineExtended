@@ -5,13 +5,16 @@
 # (scripts/generators/gen_launch_windows.py: sr_window_open_<body>,
 # sr_window_body_in_play_<body>, the cache readers sr_window_wait_months_<body>
 # and sr_window_premium_now_<body>, and per body sr_launch_cost_<body>, which
-# calls the two triggers below). This file holds the rule; the generated files
-# hold the sky.
+# calls the two triggers below and prices a launch at the premium this
+# country's engines pay, sr_window_premium_country_<body>). This file holds the
+# rule; the generated files hold the sky.
 #
 # The three steps of propulsion, for one country:
 #   chemical          (no Asteroid Mining) a body's sites depart only in its window
 #   propellant depots (asteroid_mining)     outside a window too, at the premium,
-#                                           when the approach's test passes
+#                                           when the approach's test passes; with
+#                                           nuclear_thermal_propulsion at a smaller
+#                                           premium (sr_launch_has_ntp)
 #   fusion drives     (compact_fusion_reactors) any month, free: no windows
 # The Moon, Mercury and the probes are never gated. Players and the AI run the
 # same rule: the AI keeps funding and its approach decides off-window launches.
@@ -41,6 +44,15 @@ sr_launch_has_antimatter = {
 
 sr_launch_has_depots = {
 	has_technology_researched = asteroid_mining
+}
+
+# Nuclear thermal engines (lunar colonization design § 9): the same transfers
+# at about 9 km/s of exhaust velocity, not 3.7, so an off-window launch pays
+# the smaller premium curve (sr_launch_premium_ntp_<body>; read through
+# sr_window_premium_country_<body>). It makes off-window launches cheaper, not
+# possible: they still need propellant depots (sr_launch_has_depots).
+sr_launch_has_ntp = {
+	has_technology_researched = nuclear_thermal_propulsion
 }
 
 # Launch windows bind this country: the space race rule is on and it has no
