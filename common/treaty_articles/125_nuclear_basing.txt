@@ -104,8 +104,22 @@ nuclear_basing = {
 	}
 
 	# These ongoing effects are implemented by the nuclear system, not modifiers.
+	# The hooks run in treaty-article scope, where variable reads fail
+	# (scripting_best_practices.md), so the guest rebuilds its reach a day
+	# later (nuclear_weapon_events.32); the weekly rebuild is the backstop.
 	on_entry_into_force = {
 		custom_tooltip_no_bullet = nuclear_basing_effects_desc
+		hidden_effect = {
+			scope:article_options = { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
+		}
+	}
+
+	on_break = {
+		scope:article_options = { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
+	}
+
+	on_withdrawal = {
+		scope:article_options = { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
 	}
 
 	ai = {

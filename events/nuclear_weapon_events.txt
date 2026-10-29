@@ -3148,3 +3148,14 @@ nuclear_weapon_events.31 = {
 		}
 	}
 }
+
+# Hidden: a Nuclear Basing article started or ended a day ago, so the guest
+# rebuilds its reach (125_nuclear_basing.txt; the hooks can't read variables).
+nuclear_weapon_events.32 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		nd_reach_refresh = yes
+	}
+}
