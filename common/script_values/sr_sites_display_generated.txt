@@ -1414,23 +1414,65 @@ sr_disp_site_prio_imbrium = {
 	if = { limit = { has_variable = sr_emig_prio_imbrium } value = var:sr_emig_prio_imbrium }
 }
 
-# The lunar world our Moon Landing named (design § 3.4): 1 while its -25% is ours,
-# for its Solar System hover (sr_site_landing_discount_tt).
+# The lunar world our Moon Landing named (design § 3.4), for its Solar System
+# hover: 1 while its -25% is ours (sr_site_landing_discount_tt); 2 under races
+# only while it isn't our Target, which alone pays the discount there
+# (sr_site_landing_discount_target_tt).
 sr_disp_site_landing_shackleton = {
 	value = 0
-	if = { limit = { has_variable = sr_moon_site_shackleton } value = 1 }
+	if = {
+		limit = { has_variable = sr_moon_site_shackleton }
+		value = 1
+		if = {
+			limit = {
+				NOT = { sr_colonies_contested_enabled = yes }
+				NOT = { AND = { has_variable = sr_cf_target var:sr_cf_target = 35 } }
+			}
+			value = 2
+		}
+	}
 }
 sr_disp_site_landing_tranquility = {
 	value = 0
-	if = { limit = { has_variable = sr_moon_site_tranquility } value = 1 }
+	if = {
+		limit = { has_variable = sr_moon_site_tranquility }
+		value = 1
+		if = {
+			limit = {
+				NOT = { sr_colonies_contested_enabled = yes }
+				NOT = { AND = { has_variable = sr_cf_target var:sr_cf_target = 37 } }
+			}
+			value = 2
+		}
+	}
 }
 sr_disp_site_landing_marius_hills = {
 	value = 0
-	if = { limit = { has_variable = sr_moon_site_equatorial } value = 1 }
+	if = {
+		limit = { has_variable = sr_moon_site_equatorial }
+		value = 1
+		if = {
+			limit = {
+				NOT = { sr_colonies_contested_enabled = yes }
+				NOT = { AND = { has_variable = sr_cf_target var:sr_cf_target = 38 } }
+			}
+			value = 2
+		}
+	}
 }
 sr_disp_site_landing_daedalus = {
 	value = 0
-	if = { limit = { has_variable = sr_moon_site_far_side } value = 1 }
+	if = {
+		limit = { has_variable = sr_moon_site_far_side }
+		value = 1
+		if = {
+			limit = {
+				NOT = { sr_colonies_contested_enabled = yes }
+				NOT = { AND = { has_variable = sr_cf_target var:sr_cf_target = 39 } }
+			}
+			value = 2
+		}
+	}
 }
 
 # Per fleet slot (Colony Fleets): 1 while it flies, the months until it lands,

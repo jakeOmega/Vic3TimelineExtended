@@ -517,9 +517,12 @@ class FleetTest(unittest.TestCase):
                 self.assertIn(f"sr_current_colonization_stage >= {site.stage}", body)
                 needs = "country_sr_deep_space_exploration_program_bool" in body
                 self.assertEqual(needs, site.stage >= 3)
-                # a lunar colony is no way past the Deep Space gate (lunar design § 4)
+                # a lunar colony is no way past the Deep Space gate (lunar design § 4),
+                # under races only too: there `possible` keeps any colony holder running
                 self.assertEqual("sr_has_colony_beyond_moon = yes" in body, site.stage >= 3)
                 self.assertNotIn("sr_has_space_colony", body)
+                races = re.search(r"AND = \{ NOT = \{ sr_colonies_contested_enabled = yes \} ([^\n]*) \}\n", body)
+                self.assertEqual(gss.DEEP_SPACE_OPEN in races.group(1), site.stage >= 3)
         beyond = _block(self.triggers, "sr_has_colony_beyond_moon")
         self.assertEqual(set(re.findall(r"global_var:sr_site_holder_(\w+) \?= this", beyond)),
                          {s.key for s in gss.SITES if s.stage >= 1})
@@ -547,6 +550,12 @@ class FleetTest(unittest.TestCase):
                                                         "=", "{", "INDEX", "=", str(site.index), "}"])
                     self.assertNotIn("sr_cf_has_free_slot", eligible)
                     self.assertEqual(gss.transit_body(site), "moon")
+                    # the spend before the claim: progress pays the world's cost, then it is founded
+                    now = _block(self.effects, f"sr_cf_found_now_{k}")
+                    self.assertLess(now.index(f"set_variable = {{ name = sr_goal_before_colony value = sr_cf_cost_{k} }}"),
+                                    now.index("change_variable = { name = sr_progress_solar_colonization "
+                                              "subtract = var:sr_goal_before_colony }"))
+                    self.assertLess(now.index("subtract = var:sr_goal_before_colony"), now.index(f"sr_site_found_{k} = yes"))
                     # the double claim it can't make: the self-check before the claim
                     found = _block(_raw(str(gss.EFFECTS_OUT)), f"sr_site_found_{k}")
                     guard = f"has_global_variable = sr_site_holder_{k}"
@@ -577,16 +586,46 @@ class FleetTest(unittest.TestCase):
         factor = _block(_strip(_raw("common", "script_values", "space_race_values.txt")), "sr_landing_site_factor")
         self.assertEqual(factor.split(), ["value", "=", "0.75"])
         for site in gss.SITES:
+            base = _block(self.values, f"sr_cf_base_goal_{site.key}")
             goal = _block(self.values, f"sr_cf_goal_{site.key}")
             with self.subTest(site=site.key):
                 var = gss.LANDING_SITES.get(site.key)
-                self.assertEqual("multiply = sr_landing_site_factor" in goal, var is not None)
+                self.assertIn(f"value = sr_colonization_goal_stage_{site.stage}", base)
+                self.assertNotIn("sr_solar_colonization_goal", base)
+                self.assertEqual(goal.split()[:3], ["value", "=", f"sr_cf_base_goal_{site.key}"])
+                discount = f"limit = {{ has_variable = {var} }} multiply = sr_landing_site_factor"
+                # in the base (simple and full), and in the races only arm, which reads the stage's goal
+                self.assertEqual(base.count("multiply = sr_landing_site_factor"), int(var is not None))
+                self.assertEqual(goal.count("multiply = sr_landing_site_factor"), int(var is not None))
                 if var:
-                    self.assertIn(f"limit = {{ has_variable = {var} }} multiply = sr_landing_site_factor", goal)
-        # The chosen Target's bar reads the world's own goal, discount and all.
+                    self.assertIn(discount, base)
+                    self.assertIn(discount, goal)
+        # The chosen Target's bar reads the world's own goal, discount and all, through the
+        # base goal: sr_cf_goal_<key> reads sr_solar_colonization_goal, which reads this (a cycle).
         target = _block(self.values, "sr_cf_target_goal")
+        self.assertEqual(target.split()[:3], ["value", "=", "sr_colonization_goal_stage_0"])
+        self.assertNotRegex(target, r"\bsr_cf_goal_")
         for site in gss.SITES:
-            self.assertIn(f"value = sr_cf_goal_{site.key}", target)
+            self.assertIn(f"value = sr_cf_base_goal_{site.key} }}", target)
+        # Races only: the draw's spend has no discount (the stage's goal, sr_launch_fleet_cost).
+        fleet_cost = _block(_strip(_raw("common", "script_values", "sr_launch_window_values.txt")), "sr_launch_fleet_cost")
+        self.assertEqual(fleet_cost.split(), ["value", "=", "sr_launch_best_cost", "add", "=", "1",
+                                              "multiply", "=", "sr_solar_colonization_goal"])
+        self.assertNotIn("sr_landing_site_factor", _block(_strip(_raw("common", "script_values", "space_race_values.txt")),
+                                                           "sr_solar_colonization_goal"))
+        # The hover: 1 while the discount is ours, 2 under races only while the world isn't our Target.
+        display = _strip(_raw(str(gss.DISPLAY_OUT)))
+        loc = "".join(_raw("localization", "english", f)
+                      for f in sorted(os.listdir(os.path.join(REPO, "localization", "english"))) if f.endswith(".yml"))
+        for k, var in gss.LANDING_SITES.items():
+            index = next(s.index for s in gss.SITES if s.key == k)
+            with self.subTest(hover=k):
+                shown = _block(display, f"sr_disp_site_landing_{k}")
+                self.assertIn(f"limit = {{ has_variable = {var} }}", shown)
+                self.assertIn(f"NOT = {{ AND = {{ has_variable = sr_cf_target var:sr_cf_target = {index} }} }}", shown)
+                hover = re.search(rf'(?m)^ je_space_race_widget_ss_site_tt_{k}:\d* "(.*)"$', loc).group(1)
+                for n, key in ((1, "sr_site_landing_discount_tt"), (2, "sr_site_landing_discount_target_tt")):
+                    self.assertIn(f"ScriptValue('sr_disp_site_landing_{k}'), '(CFixedPoint){n}' ), '{key}'", hover)
 
     def test_the_score_is_the_design_s(self):
         for site in gss.SITES:
@@ -682,8 +721,43 @@ class MoonStageTest(unittest.TestCase):
         for site in gss.LUNAR:
             self.assertIn(f"TE_SELF_CHECK OK lunar_stage0_draw world={site.key} ", draw)
         held = _block(_strip(_raw("common", "scripted_effects", "sr_colony_fleet_effects.txt")), "sr_launch_note_held")
-        self.assertIn("sr_sites_lunar_open = yes", held)
-        self.assertIn("NOT = { has_global_variable = sr_lunar_stage0_draw_broken_logged }", held)
+        broken = held[held.index("NOT = { sr_colonies_contested_enabled = yes }"):held.index("TE_SELF_CHECK BROKEN")]
+        for line in ("NOT = { sr_colonies_contested_enabled = yes }", "NOT = { has_variable = sr_cf_target }",
+                     "has_global_variable = sr_colonization_stage", "global_var:sr_colonization_stage = 0",
+                     "sr_sites_lunar_open = yes", "var:sr_launch_held_months >= 3",
+                     "NOT = { has_global_variable = sr_lunar_stage0_draw_broken_logged }"):
+            self.assertIn(line, broken)
+        self.assertIn("set_global_variable = { name = sr_lunar_stage0_draw_broken_logged value = yes }", held)
+        # Races only steps from the Moon to stage 1 once all six are claimed.
+        check = _block(_strip(_raw(str(gss.EFFECTS_OUT))), "sr_check_colony_stage_effect")
+        first = _block(check, "if")
+        self.assertIn("global_var:sr_colonization_stage = 0", first)
+        self.assertEqual(re.findall(r"has_global_variable = sr_colony_(\w+)", first), [s.key for s in gss.LUNAR])
+        self.assertIn("set_global_variable = { name = sr_colonization_stage value = 1 }", first)
+
+    def test_the_fabrication_check_skips_the_mass_driver(self):
+        """The Mass Driver's points need no method, so a holder's OK would be a false pass."""
+        modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
+        self.assertIn("country_sr_module_fabrication_add", _block(modifiers, "sr_colony_imbrium_massdriver"))
+        check = _block(_strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt")),
+                       "sr_mod_fabrication_self_check")
+        self.assertIn("NOT = { has_variable = sr_colony_imbrium_massdriver_mult }", _block(check, "limit"))
+        # the only specialization that fabricates
+        fabricating = [m for s in gss.SITES for m in gss.spec_modifiers(s)
+                       if "country_sr_module_fabrication_add" in _block(modifiers, m)]
+        self.assertEqual(fabricating, ["sr_colony_imbrium_massdriver"])
+
+    def test_the_outer_draw_needs_deep_space_or_a_colony_beyond_the_moon(self):
+        """Under races only, `possible` keeps any colony holder running, so a lunar
+        colony alone would reach stages 3 to 5 without Deep Space (design § 4)."""
+        draw = _block(_strip(_raw(str(gss.EFFECTS_OUT))), "sr_establish_colony_effect")
+        branches = re.findall(r"trigger = \{(.*?)\}\s*set_global_variable = \{ name = sr_colony_(\w+) value = yes \}",
+                              draw, re.S)
+        stage = {s.key: s.stage for s in gss.SITES}
+        self.assertEqual({k for _, k in branches}, set(stage))
+        for trigger, k in branches:
+            with self.subTest(world=k):
+                self.assertEqual(gss.DEEP_SPACE_OPEN in trigger, stage[k] >= 3)
 
     def test_the_world_count_is_the_table_s(self):
         values = _strip(_raw(str(gss.VALUES_OUT)))
@@ -696,6 +770,16 @@ class MoonStageTest(unittest.TestCase):
         display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
         self.assertNotIn("divide = 34", display)
         self.assertEqual(display.count("divide = sr_sites_world_count"), 2)
+        # The panel's world counts read the table's, not a literal (review M1).
+        loc = "".join(_raw("localization", "english", f)
+                      for f in sorted(os.listdir(os.path.join(REPO, "localization", "english"))) if f.endswith(".yml"))
+        for key in ("je_space_race_widget_colonies_held_figure", "je_space_race_widget_ov_worlds",
+                    "je_space_race_widget_ov_worlds_tt", "je_space_race_widget_ovc_colonies_fig_calm",
+                    "je_space_race_widget_ss_all", "je_space_race_widget_ss_filtered"):
+            with self.subTest(key=key):
+                text = re.search(rf'(?m)^ {key}:\d* "(.*)"$', loc).group(1)
+                self.assertIn("ScriptValue('sr_sites_world_count')", text)
+                self.assertNotRegex(text, r"\b(34|40)\b")
 
 
 class PopulationTest(unittest.TestCase):

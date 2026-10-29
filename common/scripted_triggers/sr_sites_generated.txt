@@ -554,7 +554,7 @@ sr_cf_targetable_mercury = {
 	NOT = { has_global_variable = sr_colony_mercury }
 	NOT = { has_global_variable = sr_site_ruined_mercury }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -581,7 +581,7 @@ sr_cf_targetable_titan = {
 	NOT = { has_global_variable = sr_colony_titan }
 	NOT = { has_global_variable = sr_site_ruined_titan }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -608,7 +608,7 @@ sr_cf_targetable_enceladus = {
 	NOT = { has_global_variable = sr_colony_enceladus }
 	NOT = { has_global_variable = sr_site_ruined_enceladus }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -635,7 +635,7 @@ sr_cf_targetable_rhea = {
 	NOT = { has_global_variable = sr_colony_rhea }
 	NOT = { has_global_variable = sr_site_ruined_rhea }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -662,7 +662,7 @@ sr_cf_targetable_mimas = {
 	NOT = { has_global_variable = sr_colony_mimas }
 	NOT = { has_global_variable = sr_site_ruined_mimas }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -689,7 +689,7 @@ sr_cf_targetable_iapetus = {
 	NOT = { has_global_variable = sr_colony_iapetus }
 	NOT = { has_global_variable = sr_site_ruined_iapetus }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -716,7 +716,7 @@ sr_cf_targetable_titania = {
 	NOT = { has_global_variable = sr_colony_titania }
 	NOT = { has_global_variable = sr_site_ruined_titania }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -743,7 +743,7 @@ sr_cf_targetable_oberon = {
 	NOT = { has_global_variable = sr_colony_oberon }
 	NOT = { has_global_variable = sr_site_ruined_oberon }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -770,7 +770,7 @@ sr_cf_targetable_miranda = {
 	NOT = { has_global_variable = sr_colony_miranda }
 	NOT = { has_global_variable = sr_site_ruined_miranda }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -797,7 +797,7 @@ sr_cf_targetable_ariel = {
 	NOT = { has_global_variable = sr_colony_ariel }
 	NOT = { has_global_variable = sr_site_ruined_ariel }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -824,7 +824,7 @@ sr_cf_targetable_triton = {
 	NOT = { has_global_variable = sr_colony_triton }
 	NOT = { has_global_variable = sr_site_ruined_triton }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -851,7 +851,7 @@ sr_cf_targetable_proteus = {
 	NOT = { has_global_variable = sr_colony_proteus }
 	NOT = { has_global_variable = sr_site_ruined_proteus }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -878,7 +878,7 @@ sr_cf_targetable_pluto = {
 	NOT = { has_global_variable = sr_colony_pluto }
 	NOT = { has_global_variable = sr_site_ruined_pluto }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -905,7 +905,7 @@ sr_cf_targetable_eris = {
 	NOT = { has_global_variable = sr_colony_eris }
 	NOT = { has_global_variable = sr_site_ruined_eris }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -932,7 +932,7 @@ sr_cf_targetable_makemake = {
 	NOT = { has_global_variable = sr_colony_makemake }
 	NOT = { has_global_variable = sr_site_ruined_makemake }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -959,7 +959,7 @@ sr_cf_targetable_haumea = {
 	NOT = { has_global_variable = sr_colony_haumea }
 	NOT = { has_global_variable = sr_site_ruined_haumea }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {
@@ -986,7 +986,7 @@ sr_cf_targetable_sedna = {
 	NOT = { has_global_variable = sr_colony_sedna }
 	NOT = { has_global_variable = sr_site_ruined_sedna }
 	OR = {
-		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
+		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes } }
 		AND = {
 			sr_colonies_contested_enabled = yes
 			OR = {

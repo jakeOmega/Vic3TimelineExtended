@@ -465,11 +465,12 @@ the one before it has been claimed. Each stage needs more progress per colony.
 | 5 | The Kuiper Belt and beyond (Pluto-Charon, Eris, Makemake, Haumea, Sedna) | 5 | 800 |
 
 From stage 3, a country that doesn't yet hold a colony beyond the Moon needs the
-Deep Space Exploration or Interstellar Mission method to start the program; a
+Deep Space Exploration or Interstellar Mission method to colonize there; a
 country that already holds one carries on through every stage with Solar
 Colonization. Under Simple Colonies and Full Colonies the same rule applies world
 by world: a country holding no colony beyond the Moon needs one of those methods
-to send a fleet to Mercury, Saturn or beyond.
+to send a fleet to Mercury, Saturn or beyond. A colony on the Moon keeps the
+program open, but alone it reaches no further than stage 2.
 Each colony's event offers two specializations, and the one you choose becomes a
 small permanent modifier on the journal entry. Under Simple Colonies and Full
 Colonies you can raise it, and add the other, with modules (see [Colony
@@ -524,7 +525,7 @@ with Earth orbit (see [Battles in space](#battles-in-space)).
 
 ### Launch windows
 
-Every world but the Moon's and Mercury is reached on a transfer orbit that lines up only once
+Every world but Mercury and the Moon's six is reached on a transfer orbit that lines up only once
 in a while. A world's launch window is the month of its best departure and the
 month on either side. The windows are worked out from the planets' and
 asteroids' real orbits: Mars opens one every 26 months or so, each asteroid
@@ -700,7 +701,8 @@ group, Module Fabrication, which starts on No Module Fabrication:
 | Fusion Shipyards | Muon-Catalyzed Fusion Reactors | 2,000 and 10 | 25 |
 
 Each module costs 100 points, so a fully staffed Space Program builds one every
-20, 8 or 4 months, more often with higher funding. Fabrication builds the queue
+20, 8 or 4 months, more often with higher funding. Mare Imbrium's Mass Driver
+adds 3 points a month a level of its own, with or without a fabrication method. Fabrication builds the queue
 in order, first in first out: the module at the top is next. The arrow on each
 line from the second on moves that module up a place; Alt+Click moves it to the
 top. Up to 200 points wait in stock while nothing is queued.

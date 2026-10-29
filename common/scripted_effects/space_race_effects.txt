@@ -873,7 +873,7 @@ sr_apply_mars_landing_reward       = { sr_apply_milestone_reward_base = { MILEST
 sr_apply_interstellar_probe_reward = { sr_apply_milestone_reward_base = { MILESTONE = interstellar_probe } }
 
 # Solar System Colonization's founding draw (sr_establish_colony_effect) and stage
-# check (sr_check_colony_stage_effect) are generated from one table of the 34
+# check (sr_check_colony_stage_effect) are generated from one table of the 40
 # worlds: common/scripted_effects/sr_sites_generated.txt, from
 # scripts/generators/gen_solar_sites.py.
 
@@ -1517,7 +1517,7 @@ sr_sync_probe_data = {
 }
 
 # A colony's specialisation: one of 68 modifiers on the solar colonization
-# entry, granted by an option of space_race_colony_events.1-34. Recorded as
+# entry, granted by an option of space_race_colony_events.1-40. Recorded as
 # <modifier>_held in the same effect. Country scope.
 sr_grant_colony_modifier = {
 	je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }

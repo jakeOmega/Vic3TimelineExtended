@@ -383,7 +383,7 @@ types space_race_widget_types
 		}
 	}
 
-	### A share of the 34 worlds as a framed pie (te_un_ov_pie, with a third
+	### A share of the 40 worlds as a framed pie (te_un_ov_pie, with a third
 	### layer): the disc is the unclaimed rest, then every world claimed, then
 	### ours on top — largest first (gui_modding_guide.md, "Pie charts of
 	### script-held data"). The textures: docs/systems/space_race_gui_icons.md.
@@ -2693,7 +2693,7 @@ types space_race_widget_types
 	### § 9). Open by default, directly under Colony Fleets (audit SPC-7: Target
 	### beside the destination it sets), and filtered by default to the worlds
 	### that matter now: those our next colony fleet can go to, ours and any a
-	### fleet is bound for (sr_disp_ss_filtered_<location>), with "Show all 34"
+	### fleet is bound for (sr_disp_ss_filtered_<location>), with "Show all 40"
 	### beside the count. Rows in gen_solar_sites.panel_order(), written from the
 	### table and held to it by test_solar_sites.py. The flags are
 	### sr_panel_solar_system_closed and sr_panel_solar_system_all_open,
