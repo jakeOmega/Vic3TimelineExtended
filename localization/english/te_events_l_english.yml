@@ -3382,6 +3382,7 @@
  nuclear_crisis.4.e:0 "Let the deadline lapse. Nothing we win now is worth what follows."
  nuclear_crisis.4.f:0 "\"It is past midnight. The deadline was midnight.\"\n\n\"I am aware. I wrote it.\"\n\n\"Their embassy has sent nothing. Their state radio is playing light music. Their ambassador was seen at the opera, smiling.\"\n\n\"They are telling us they do not believe us.\"\n\n\"Or that they do, and have decided to find out. Either way, whatever we do in the next hour is what we will turn out to have meant all along.\""
  nuclear_crisis.4.g:0 "We told them what would happen. Now it happens."
+ nuclear_crisis.4.h:0 "Offer a trade: theirs for ours."
  nuclear_crisis.4.t:0 "The Deadline Passes"
  nuclear_crisis.5.a:0 "Enough. Give them what they want and end this."
  nuclear_crisis.5.b:0 "We said no once. We will say it as often as it takes."
@@ -3399,6 +3400,7 @@
  nuclear_crisis.6.d_native_win_target:0 "We have stepped back on our own terms, but the world sees only that the nuclear warning of [SCOPE.sCountry('nd_issuer').GetName] got what it wanted. The crisis is closed."
  nuclear_crisis.6.d_neutral:0 "The crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] has closed without a clear winner: the dispute behind it has ended, or moved beyond the reach of the threat."
  nuclear_crisis.6.d_standdown:0 "[SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] have stood their forces down and pledged never to use nuclear weapons against each other. The crisis between them is over; the dispute that caused it is not."
+ nuclear_crisis.6.d_trade:0 "[SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] have settled their crisis with a trade: each has given up the same kind of thing the other demanded of it. Neither side is seen to have backed down, and the world has watched a nuclear standoff end in a bargain."
  nuclear_crisis.6.d_use:0 "Nuclear weapons have been used in the crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName]. The crisis is over; what comes after it has only begun."
  nuclear_crisis.6.d_war_ended:0 "The war between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] has ended, and the nuclear crisis that hung over it has closed with it."
  nuclear_crisis.6.d_yielded_issuer:0 "[SCOPE.sCountry('nd_target').GetName] has given way and conceded what we demanded, and the crisis between us is closed. Abroad, our resolve has been noticed, and so has our method. [ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]"
@@ -3407,6 +3409,7 @@
  nuclear_crisis.6.t:0 "The Crisis Passes"
  nuclear_crisis.6.t_backed_down:0 "The Threat Withdrawn"
  nuclear_crisis.6.t_standdown:0 "Both Sides Stand Down"
+ nuclear_crisis.6.t_trade:0 "A Bargain Struck"
  nuclear_crisis.6.t_use:0 "The Threshold Crossed"
  nuclear_crisis.6.t_yielded:0 "The Demand Is Met"
  nuclear_crisis.7.a:0 "They were warned before the whole world. Carry out the threat."
@@ -3415,6 +3418,11 @@
  nuclear_crisis.7.d:0 "[SCOPE.sCountry('nd_target').GetName] has answered our public ultimatum with war. The diplomatic play we warned it over has become open fighting, and every government that read our ultimatum is now waiting to see whether we meant it. So is our own general staff."
  nuclear_crisis.7.f:0 "\"The ultimatum ran in every newspaper in the world. They mobilized the next morning.\"\n\n\"So the question is what we meant.\"\n\n\"No. The question is what we can live with having meant. Those are different questions, and they do not have the same answer.\"\n\n\"And the army?\"\n\n\"The army will fight whichever war you give it. It would like to know which one before breakfast.\""
  nuclear_crisis.7.t:0 "They Chose War"
+ nuclear_crisis.8.a:0 "Accept. Each side gives up the same, and neither is seen to yield."
+ nuclear_crisis.8.b:0 "Refuse. We will not bargain away what we hold."
+ nuclear_crisis.8.d:0 "[SCOPE.sCountry('nd_crisis_proposer').GetName] has offered to settle the nuclear crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] with a trade. Each side would give up the same kind of thing the other demands of it, so that neither could be said to have backed down. The terms are the same for both, and they are set out in the answer."
+ nuclear_crisis.8.f:0 "The two drafts were identical except for the order of the names. A junior delegate pointed this out, and was told that the order of the names was the whole of the negotiation."
+ nuclear_crisis.8.t:0 "A Trade Offered"
 
 #
 # NUCLEAR_CUSTODY

@@ -28,6 +28,8 @@ nd_pledge_broken_months_value = 120     # a repudiation is remembered this long
 nd_monopoly_window_cooldown_months = 12
 nd_routine_mishap_cooldown_months_value = 60 # between routine mishaps (nuclear_incident.40)
 nd_ai_concession_line = 40              # pressure where nuclear_crisis.1's yield weights start (the AI's stake gate)
+nd_ai_trade_danger_line = 40            # danger at which an AI issuer takes a fair trade (nuclear_crisis.8; ruling R4)
+nd_ai_trade_min_weeks = 8               # and not before its threat has run this long: a public ultimatum's first deadline
 nd_survivability_factor_recessed = 0.5   # share of survivability a crisis counts (nd_effective_survivability)
 nd_survivability_factor_routine = 0.8
 nd_survivability_factor_heightened = 0.9 # High Alert counts it all
@@ -2938,4 +2940,145 @@ nd_public_estimate_observed = {
 	}
 	round = yes
 	min = 1
+}
+
+# ---- Trades (rework spec §8.6, phase 4c) --------------------------------------
+# Parties saved (scope:nd_issuer, scope:nd_target), in a crisis over a dispute
+# that trades. What the target would give up less what the issuer would, on
+# §8.2's scale (ruling R6): a basing or guarantee treaty 10, like a state; a
+# missile-defense state 4, a lesser goal; a claimed incorporated state 10; a
+# caught covert operation 4; an active battlestation site 10. Within disputes
+# 8–10 only the counts matter. Each half counts what the dispute's trigger and
+# concession read (nd_dispute_*_by, nd_crisis_concede_*). The AI gives no more
+# than it gets: a target accepts at 0 or less, an issuer at 0 or more.
+nd_trade_balance_value = {
+	value = 0
+	if = {
+		limit = { scope:nd_issuer = { var:nd_crisis_dispute = 7 } }
+		scope:nd_target = {
+			every_scope_treaty = {
+				limit = {
+					any_scope_article = {
+						OR = {
+							has_type = nuclear_basing
+							has_type = nuclear_guarantee
+						}
+						source_country = scope:nd_target
+						target_country = {
+							NOT = { THIS = scope:nd_issuer }
+							is_adjacent_to_country = scope:nd_issuer
+						}
+					}
+				}
+				add = 10
+			}
+			every_scope_state = {
+				limit = {
+					nd_state_has_missile_defense = yes
+					any_neighbouring_state = { owner = scope:nd_issuer }
+				}
+				add = 4
+			}
+		}
+		scope:nd_issuer = {
+			every_scope_treaty = {
+				limit = {
+					any_scope_article = {
+						OR = {
+							has_type = nuclear_basing
+							has_type = nuclear_guarantee
+						}
+						source_country = scope:nd_issuer
+						target_country = {
+							NOT = { THIS = scope:nd_target }
+							is_adjacent_to_country = scope:nd_target
+						}
+					}
+				}
+				subtract = 10
+			}
+			every_scope_state = {
+				limit = {
+					nd_state_has_missile_defense = yes
+					any_neighbouring_state = { owner = scope:nd_target }
+				}
+				subtract = 4
+			}
+		}
+	}
+	else_if = {
+		limit = { scope:nd_issuer = { var:nd_crisis_dispute = 8 } }
+		scope:nd_issuer = {
+			every_scope_state = {
+				limit = {
+					is_incorporated = yes
+					state_region = { scope:nd_target = { has_claim = PREV } }
+				}
+				add = 10
+			}
+		}
+		scope:nd_target = {
+			every_scope_state = {
+				limit = {
+					is_incorporated = yes
+					state_region = { scope:nd_issuer = { has_claim = PREV } }
+				}
+				subtract = 10
+			}
+		}
+	}
+	else_if = {
+		limit = { scope:nd_issuer = { var:nd_crisis_dispute = 9 } }
+		scope:nd_issuer = {
+			if = {
+				limit = { has_variable_list = iw_known_ops }
+				every_in_list = {
+					variable = iw_known_ops
+					limit = {
+						var:iw_attacker ?= scope:nd_target
+						NOT = { has_tag = iw_known_counterintel_support }
+					}
+					add = 4
+				}
+			}
+		}
+		scope:nd_target = {
+			if = {
+				limit = { has_variable_list = iw_known_ops }
+				every_in_list = {
+					variable = iw_known_ops
+					limit = {
+						var:iw_attacker ?= scope:nd_issuer
+						NOT = { has_tag = iw_known_counterintel_support }
+					}
+					subtract = 4
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { scope:nd_issuer = { var:nd_crisis_dispute = 10 } }
+		scope:nd_target = {
+			every_scope_state = {
+				limit = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation_construction_site
+						NOT = { has_active_production_method = pm_orbital_battlestation_construction_paused }
+					}
+				}
+				add = 10
+			}
+		}
+		scope:nd_issuer = {
+			every_scope_state = {
+				limit = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation_construction_site
+						NOT = { has_active_production_method = pm_orbital_battlestation_construction_paused }
+					}
+				}
+				subtract = 10
+			}
+		}
+	}
 }

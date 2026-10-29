@@ -2596,18 +2596,199 @@ nd_can_propose_talks = {
 	}
 	custom_tooltip = {
 		text = nd_tt_talks_pending
-		OR = {
-			AND = {
-				nd_is_crisis_owner = yes
+		nd_crisis_no_proposal_pending = yes
+	}
+}
+
+# Either party: no proposal, to stand down or to trade, awaits an answer. Both
+# set the issuer's nd_crisis_talks (a trade offer is talks with terms).
+nd_crisis_no_proposal_pending = {
+	OR = {
+		AND = {
+			nd_is_crisis_owner = yes
+			var:nd_crisis_talks = 0
+		}
+		AND = {
+			nd_is_crisis_target = yes
+			var:nd_crisis_opponent ?= {
+				has_variable = nd_crisis_talks
 				var:nd_crisis_talks = 0
 			}
-			AND = {
-				nd_is_crisis_target = yes
-				var:nd_crisis_opponent ?= {
-					has_variable = nd_crisis_talks
-					var:nd_crisis_talks = 0
+		}
+	}
+}
+
+# ---- Trades (rework spec §8.6, phase 4c) ------------------------------------
+# Either side may offer the matching concession of its own for the one the
+# crisis is about: a base for a base, a claim for a claim. Only the same-code
+# mirrors trade (disputes 7–10; ruling R1): 5's stand-down for a stand-down
+# is outcome 3, 4's target is unarmed and its issuer armed, and 1–3 and 6
+# have no matching concession.
+nd_can_offer_trade = {
+	custom_tooltip = {
+		text = nd_tt_in_crisis
+		nd_in_crisis = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_talks_pending
+		nd_crisis_no_proposal_pending = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_trade_kind
+		nd_crisis_dispute_tradeable = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_trade_matching
+		nd_crisis_trade_holds_for_us = yes
+	}
+}
+
+# Either party: the crisis is over a dispute that can trade.
+nd_crisis_dispute_tradeable = {
+	OR = {
+		nd_crisis_dispute_is = { D = 7 }
+		nd_crisis_dispute_is = { D = 8 }
+		nd_crisis_dispute_is = { D = 9 }
+		nd_crisis_dispute_is = { D = 10 }
+	}
+}
+
+# A trade holds while each side holds the same grievance against the other:
+# the dispute $ISSUER$'s record is about still holds against $TARGET$, and
+# $TARGET$ holds the same code against $ISSUER$. Read when a trade is offered
+# and again when it is accepted, since an offer can go stale before its answer.
+# Neither side may hold that kind's ten-year bar from an earlier crisis (7, 9
+# and 10; claims have none): a bar holds one country, so the trade's own bar
+# would overwrite one held against a third country and free its holder.
+nd_crisis_trade_holds = {
+	exists = $ISSUER$
+	exists = $TARGET$
+	OR = {
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 7
+			}
+			$ISSUER$ = { nd_dispute_deployment_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_deployment_by = { TARGET = $ISSUER$ } }
+			NOT = { $ISSUER$ = { has_variable = nd_crisis_deploy_bar } }
+			NOT = { $TARGET$ = { has_variable = nd_crisis_deploy_bar } }
+		}
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 8
+			}
+			$ISSUER$ = { nd_dispute_claims_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_claims_by = { TARGET = $ISSUER$ } }
+		}
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 9
+			}
+			$ISSUER$ = { nd_dispute_covert_ops_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_covert_ops_by = { TARGET = $ISSUER$ } }
+			NOT = { $ISSUER$ = { has_variable = nd_crisis_covert_bar } }
+			NOT = { $TARGET$ = { has_variable = nd_crisis_covert_bar } }
+		}
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 10
+			}
+			$ISSUER$ = { nd_dispute_orbital_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_orbital_by = { TARGET = $ISSUER$ } }
+			NOT = { $ISSUER$ = { has_variable = nd_crisis_orbital_freeze } }
+			NOT = { $TARGET$ = { has_variable = nd_crisis_orbital_freeze } }
+		}
+	}
+}
+
+# Either party, parties saved, in a deployment crisis: our half of a trade
+# would leave a treaty that also holds an alliance or a defensive pact of ours
+# (a treaty is left whole). The target's half is nd_concession_costs_an_alliance;
+# the issuer's is the same read the other way. An AI keeps an ally.
+nd_trade_costs_us_an_alliance = {
+	nd_crisis_dispute_is = { D = 7 }
+	exists = scope:nd_issuer
+	exists = scope:nd_target
+	OR = {
+		AND = {
+			THIS = scope:nd_target
+			nd_concession_costs_an_alliance = yes
+		}
+		AND = {
+			THIS = scope:nd_issuer
+			any_scope_treaty = {
+				any_scope_article = {
+					OR = {
+						has_type = nuclear_basing
+						has_type = nuclear_guarantee
+					}
+					source_country = scope:nd_issuer
+					target_country = {
+						NOT = { THIS = scope:nd_target }
+						is_adjacent_to_country = scope:nd_target
+					}
+				}
+				any_scope_article = {
+					OR = {
+						has_type = alliance
+						has_type = defensive_pact
+					}
 				}
 			}
+		}
+	}
+}
+
+# The AI's answer to a trade (nuclear_crisis.8; rework spec §8.6, ruling R4),
+# parties saved: a target accepts at the pressure where it would start to
+# yield (nd_ai_concession_line), an issuer once the crisis is dangerous
+# (nd_ai_trade_danger_line) and its threat has run to a first deadline
+# (nd_ai_trade_min_weeks): a public ultimatum opens near danger 40, so danger
+# alone let a target trade out in its first week. Each accepts only if it gives no more than it
+# gets (nd_trade_balance_value) and loses no ally by its own half.
+nd_ai_accepts_trade = {
+	exists = scope:nd_issuer
+	exists = scope:nd_target
+	nd_crisis_trade_holds = { ISSUER = scope:nd_issuer TARGET = scope:nd_target }
+	NOT = { nd_trade_costs_us_an_alliance = yes }
+	OR = {
+		AND = {
+			THIS = scope:nd_target
+			has_variable = nd_yield_pressure
+			var:nd_yield_pressure >= nd_ai_concession_line
+			nd_trade_balance_value <= 0
+		}
+		AND = {
+			THIS = scope:nd_issuer
+			has_variable = nd_crisis_danger
+			var:nd_crisis_danger >= nd_ai_trade_danger_line
+			var:nd_crisis_weeks >= nd_ai_trade_min_weeks
+			nd_trade_balance_value >= 0
+		}
+	}
+}
+
+# Country scope, in a crisis: nd_crisis_trade_holds, the parties read from our
+# own record (the panel and the deadline event, where no party scopes need be
+# saved). A temporary scope saved inside a `?=` holds for the rest of the
+# trigger (zz_te_war_support_injections.txt, wars of independence).
+nd_crisis_trade_holds_for_us = {
+	OR = {
+		AND = {
+			nd_is_crisis_owner = yes
+			save_temporary_scope_as = nd_tr_issuer
+			var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_tr_target }
+			nd_crisis_trade_holds = { ISSUER = scope:nd_tr_issuer TARGET = scope:nd_tr_target }
+		}
+		AND = {
+			nd_is_crisis_target = yes
+			save_temporary_scope_as = nd_tr_target
+			var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_tr_issuer }
+			nd_crisis_trade_holds = { ISSUER = scope:nd_tr_issuer TARGET = scope:nd_tr_target }
 		}
 	}
 }

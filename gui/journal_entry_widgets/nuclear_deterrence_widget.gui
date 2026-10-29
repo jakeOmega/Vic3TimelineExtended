@@ -64,7 +64,7 @@
 ###                           77 / 78 Strike: warheads - / +
 ###                           79 Strike: order the salvo (Launch Order)
 ###   nd_crisis_action_sgui   1 go public  2 propose stand-down  3 exercise
-###                           4 concede    5 let it go
+###                           4 concede    5 let it go  6 offer a trade
 ### The AI does not use these (ai_is_valid = no): it sets its posture in
 ### nd_ai_review_posture and answers crises through the crisis events, which
 ### call the same effects. Every action row sets its handler as its own
@@ -1117,6 +1117,22 @@ types nuclear_deterrence_widget_types
 				}
 			}
 			nd_choice_row = {
+				visible = "[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
+				blockoverride "name_format" {}
+				blockoverride "choice_name" {
+					text = "nd_w_crisis_act_trade"
+				}
+				blockoverride "button_text" {
+					text = "nd_w_crisis_act_trade_btn"
+				}
+				blockoverride "button_binding" {
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+				}
+			}
+			nd_choice_row = {
 				visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
 				blockoverride "name_format" {}
@@ -1213,6 +1229,21 @@ types nuclear_deterrence_widget_types
 				}
 				blockoverride "outcome_credibility" {
 					text = "nd_w_crisis_cred_standdown"
+				}
+			}
+			nd_outcome_row = {
+				visible = "[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				blockoverride "row_tooltip" {
+					tooltip = "nd_w_crisis_trade_tt"
+				}
+				blockoverride "outcome_label" {
+					text = "nd_w_crisis_trade_label"
+				}
+				blockoverride "outcome_effect" {
+					text = "nd_w_crisis_trade_effect"
+				}
+				blockoverride "outcome_credibility" {
+					text = "nd_w_crisis_cred_trade"
 				}
 			}
 		}

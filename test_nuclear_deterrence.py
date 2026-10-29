@@ -2340,7 +2340,9 @@ class TestReviewFixes(unittest.TestCase):
         self.assertLess(gate, body.index("change_relations"))
 
     def test_refuse_talks_promises_pressure_only_from_confrontation(self):
-        body = block(self.effects, "nd_crisis_act_refuse_talks")
+        # The refusal's lines live in the helper both refusals share (phase 4c).
+        self.assertIn("nd_crisis_talks_refused = yes", block(self.effects, "nd_crisis_act_refuse_talks"))
+        body = block(self.effects, "nd_crisis_talks_refused")
         self.assertIn("custom_tooltip = nd_tt_refuse_talks_resume", body)
         self.assertIn("custom_tooltip = nd_tt_refuse_talks_no_pressure_yet", body)
         self.assertIn("6", loc_value("nd_tt_refuse_talks_resume"))
@@ -2765,7 +2767,9 @@ class TestUmbrellaCoverage(unittest.TestCase):
                          # Dispute 7 reads a guarantee over a neighbor and leaves
                          # umbrellas out on purpose: every armed overlord's
                          # subjects are under one by default (phase 4b, R2).
-                         "nd_dispute_deployment_by", "nd_crisis_concede_deployment", "nd_concession_costs_an_alliance"}
+                         "nd_dispute_deployment_by", "nd_crisis_concede_deployment", "nd_concession_costs_an_alliance",
+                         # A trade's issuer half, the same read the other way (phase 4c).
+                         "nd_trade_costs_us_an_alliance", "nd_trade_balance_value"}
 
     def test_umbrella_triggers(self):
         t = strip_comments(read(TRIGGERS))
