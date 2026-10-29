@@ -1773,7 +1773,7 @@ Multi-stage competitive space race system across nine journal entries — seven 
 - **Moon Landing Site:** Shackleton Crater (high risk, science) vs Equatorial Plain (low risk, modest).
 - **Progress Sources:** `country_space_race_progress_add` × (1 + `country_space_race_progress_mult`), at least 0.5 a month, for every running milestone whatever its approach. The adds come from the Space Programme production method, funding, the Space Elevator, the SpaceX / Lockheed Martin / Roscosmos companies, UN space partnership, two techs and choice-event rewards; the multipliers from the Ambitious approach, the UN outer-space regime, covert space espionage, antimatter engines and a power bloc principle. Full list: `mod_systems.md` § Space Race.
 - **Cross-System:** UN space partnership, the space companies and the space elevator add progress; the Nanofabrication Center lowers setback risk; the space mine and tourism only gate events (`.53`, `.51`).
-- **Colony Modifiers (JE-Scoped):** All 68 colony modifiers and `sr_solar_system_trade` are applied to `je:je_space_race_solar_colonization` (not country scope). The colonization JE stays alive indefinitely in passive mode once all 34 colonies are claimed, keeping colony modifiers active. Buttons are hidden when colonization is complete.
+- **Colony Modifiers (JE-Scoped):** All 68 colony modifiers and `sr_solar_system_trade` are applied to `je:je_space_race_solar_colonization` (not country scope). The colonization JE stays alive indefinitely in passive mode once all 40 colonies are claimed, keeping colony modifiers active. Buttons are hidden when colonization is complete.
 
 ### Milestones & Prerequisites
 | Milestone | Tech Required | Other Prerequisites |
@@ -1844,7 +1844,7 @@ Traced scenarios: fresh activation (Standard: the programme's pace, base risk, n
 ### Debug harness
 `event te_debug_space_race.1` (`events/te_debug_space_race_events.txt`, helpers in `common/scripted_effects/te_debug_space_race_effects.txt`) reaches every panel state: 90% / 100% progress, a forced setback with its cooldown, clearing the cooldown, seeding rival programmes, and claiming or releasing "the first". The rival flags are not backed by a journal entry, so the monthly cleanup wipes them — pause first.
 
-### Events (61 in `space_race_events.txt`, plus 30 probe results and 34 colony events)
+### Events (61 in `space_race_events.txt`, plus 30 probe results and 40 colony events)
 - `.1`-`.9` — Milestone completion events (1 per milestone + notification)
 - `.5` — Moon landing site choice (Shackleton vs Equatorial)
 - `.10` — Ambitious approach failure (3 options: investigate/switch to safe/double down)
@@ -1857,7 +1857,7 @@ Traced scenarios: fresh activation (Standard: the programme's pace, base risk, n
 - `.60` — Interstellar probe data received; its results are `.601`-`.630` in `events/probe_result_events.txt`
 - `.76` — Programme discontinued (a lost or lowered launch complex)
 - `.80`-`.83` — Choice events asked once per milestone (who flies first, probe target, the Moon base's purpose, the Mars strategy)
-- `events/space_race_colony_events.txt` — 34 colony establishment events
+- `events/space_race_colony_events.txt` — 40 colony establishment events
 
 ### Related Files
 - Effects: `common/scripted_effects/space_race_effects.txt`
