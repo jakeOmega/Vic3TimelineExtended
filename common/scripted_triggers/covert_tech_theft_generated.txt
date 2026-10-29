@@ -704,6 +704,11 @@ covert_tech_stealable_military = {
 			$TARGET$ ?= { has_technology_researched = chemical_warfare }
 		}
 		AND = {
+			NOT = { has_technology_researched = cislunar_infrastructure }
+			OR = { can_research = cislunar_infrastructure is_researching_technology = cislunar_infrastructure }
+			$TARGET$ ?= { has_technology_researched = cislunar_infrastructure }
+		}
+		AND = {
 			NOT = { has_technology_researched = combined_arms }
 			OR = { can_research = combined_arms is_researching_technology = combined_arms }
 			$TARGET$ ?= { has_technology_researched = combined_arms }
@@ -839,6 +844,11 @@ covert_tech_stealable_military = {
 			$TARGET$ ?= { has_technology_researched = hypersonic_weapons }
 		}
 		AND = {
+			NOT = { has_technology_researched = in_situ_resource_utilization }
+			OR = { can_research = in_situ_resource_utilization is_researching_technology = in_situ_resource_utilization }
+			$TARGET$ ?= { has_technology_researched = in_situ_resource_utilization }
+		}
+		AND = {
 			NOT = { has_technology_researched = inertial_navigation_systems }
 			OR = { can_research = inertial_navigation_systems is_researching_technology = inertial_navigation_systems }
 			$TARGET$ ?= { has_technology_researched = inertial_navigation_systems }
@@ -967,6 +977,11 @@ covert_tech_stealable_military = {
 			NOT = { has_technology_researched = nuclear_energy }
 			OR = { can_research = nuclear_energy is_researching_technology = nuclear_energy }
 			$TARGET$ ?= { has_technology_researched = nuclear_energy }
+		}
+		AND = {
+			NOT = { has_technology_researched = nuclear_thermal_propulsion }
+			OR = { can_research = nuclear_thermal_propulsion is_researching_technology = nuclear_thermal_propulsion }
+			$TARGET$ ?= { has_technology_researched = nuclear_thermal_propulsion }
 		}
 		AND = {
 			NOT = { has_technology_researched = nuclear_weapons }

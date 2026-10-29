@@ -235,8 +235,11 @@ MODULE_NAMES = {"a": "Specialization I", "b": "Specialization II", "hab": "Habit
 MODULE_AI_VALUE = 5  # Cede Colony's AI value of a module level past the first
 
 # Extraplanetary Bases from colonies (design § 9): every country's near-Earth
-# room, and the grade of a level past all of its room, in percent.
+# room, the technology it needs (the Extraplanetary Base itself comes earlier,
+# with In-Situ Resource Utilization: lunar colonization design § 6), and the
+# grade of a level past all of its room, in percent.
 NEAR_EARTH_ROOM = 10
+NEAR_EARTH_TECH = "asteroid_mining"
 OVERFLOW_GRADE = -50
 
 
@@ -1506,8 +1509,10 @@ def render_module_values() -> list[str]:
             for s in SITES]
     out += ["}", "",
             "# Country scope: THIS's Extraplanetary Base room, in levels (design § 9): the",
-            f"# near-Earth {NEAR_EARTH_ROOM} and every colony it holds.",
-            "sr_ebase_room_total = {", f"\tvalue = {NEAR_EARTH_ROOM}"]
+            f"# near-Earth {NEAR_EARTH_ROOM} with {NEAR_EARTH_TECH} (lunar colonization design § 6)",
+            "# and every colony it holds.",
+            "sr_ebase_room_total = {", "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_technology_researched = {NEAR_EARTH_TECH} }} add = {NEAR_EARTH_ROOM} }}"]
     out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = {s.ebase_room} }}" for s in SITES]
     out.append("}")
     return out
@@ -1782,7 +1787,7 @@ def render_module_effects() -> list[str]:
         room = NEAR_EARTH_ROOM if tier is None else tier.ebase_room
         grade = 0 if tier is None else tier.ebase_grade
         name = "near-Earth" if tier is None else tier.name
-        held = "" if tier is None else f" {site_serves(tier)}"
+        held = f" has_technology_researched = {NEAR_EARTH_TECH}" if tier is None else f" {site_serves(tier)}"
         out += [f"\t# {name}: {room} levels at {grade:+d}%",
                 "\tif = {",
                 f"\t\tlimit = {{ local_var:sr_eb_left > 0{held} }}",

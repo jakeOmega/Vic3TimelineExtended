@@ -5142,9 +5142,11 @@ sr_mod_upkeep_levels = {
 }
 
 # Country scope: THIS's Extraplanetary Base room, in levels (design § 9): the
-# near-Earth 10 and every colony it holds.
+# near-Earth 10 with asteroid_mining (lunar colonization design § 6)
+# and every colony it holds.
 sr_ebase_room_total = {
-	value = 10
+	value = 0
+	if = { limit = { has_technology_researched = asteroid_mining } add = 10 }
 	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = 40 }
 	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = 30 }
 	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = 40 }

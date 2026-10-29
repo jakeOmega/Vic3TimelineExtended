@@ -82,11 +82,12 @@ Systems and Network Centric Warfare are also in this era.
 Era 10 is the present day: Machine Learning, Generative AI, Additive
 Manufacturing, Electric Vehicles, Internet of Things, Reusable Rocketry,
 Hypersonic Weapons, Cyber Warfare, Universal Basic Income and Mental Health
-Awareness.
+Awareness. Cislunar Infrastructure opens the Space Program's Solar Colonization
+method, and In-Situ Resource Utilization the Extraplanetary Base.
 
 Era 11 is the near future. Modern Material Science unlocks the Advanced Material
 Fabricator, Abyssal Plain Mining the Deep-Sea Mine, Asteroid Mining the
-Extraplanetary Base, and Fusion Power the Fusion Plant. Genetic Engineering
+Extraplanetary Base's Asteroid Mine method, and Fusion Power the Fusion Plant. Genetic Engineering
 unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
 the Cultured Meat Plant and Cultured Produce Facility, and Synthetic Biology
 adds bioengineered production methods such as Designed Crops. Brain-Computer
@@ -269,11 +270,14 @@ existing mine costs about £260,000 a level in
 [retooling](03-economy.md#construction-maintenance-and-retooling), around 5
 years of that saving, so the switch pays back sooner while Motor Ships are
 expensive. The
-Extraplanetary Base (Asteroid Mining) costs 20,000 construction per level. It
-mines metals and minerals, and after Space Colonization it can switch to the
-Resort Colony production method, which produces art and tourism instead. With
+Extraplanetary Base (In-Situ Resource Utilization) costs 20,000 construction per
+level. It starts on Regolith Processing, which makes Structural Metals,
+Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
+level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
+and after Space Colonization the base can switch to the Resort Colony production
+method, which produces art and tourism instead. With
 the Space Race rule on Simple Colonies or Full Colonies its levels need room,
-from the near-Earth asteroids and your colonies, and work at −50% past it (see
+from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −50% past it (see
 [Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
 
 The Deep-Sea Mine costs 5,000 construction per level, a quarter of the

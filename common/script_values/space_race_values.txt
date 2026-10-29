@@ -597,7 +597,20 @@ sr_cost_factor_probe              = { value = 2   } # Era 7
 sr_cost_factor_moon_base          = { value = 5   } # Era 10
 sr_cost_factor_mars_landing       = { value = 6   } # Era 10
 sr_cost_factor_interstellar_probe = { value = 12  } # Era 12
-sr_cost_factor_solar_colonization = { value = 8   } # Era 11
+# Era 10 to 11 (lunar colonization design § 4): 5, the Moon Base's, until the
+# country's own Mars Landing, then 8. Read through owner, so it holds in the
+# entry's scope (the cost modifier's multiplier) and in the country's (the
+# panel). The Mars Landing's completion re-posts the cost
+# (sr_complete_milestone_effect runs sr_recalculate_cost).
+sr_cost_factor_solar_colonization = {
+	value = 5
+	owner = {
+		if = {
+			limit = { has_variable = sr_completed_mars_landing }
+			add = 3
+		}
+	}
+}
 
 # The weekly innovation one cost level stands for: the magnitude of
 # sr_space_program_cost's country_weekly_innovation_add, which the entries
@@ -608,7 +621,7 @@ sr_innovation_per_cost_level = {
 }
 
 # Per-JE innovation cost multipliers (scaling with tech era)
-# Suborbital=1x, Orbital=1.5x, Moon=2x, Probe=2x, Moon Base=5x, Mars=6x, Solar=8x, Interstellar=12x
+# Suborbital=1x, Orbital=1.5x, Moon=2x, Probe=2x, Moon Base=5x, Mars=6x, Solar=5x (8x after the Mars Landing), Interstellar=12x
 
 sr_suborbital_cost = {
 	value = 0
@@ -1164,7 +1177,7 @@ sr_power_rank_score = {
 sr_mission_units_earth_orbit = 500
 sr_mission_units_moon = 1500
 sr_mission_units_mars = 5000
-sr_mission_units_solar = 25000
+sr_mission_units_solar = 10000
 sr_mission_units_deep_space = 50000
 sr_mission_units_interstellar = 100000
 

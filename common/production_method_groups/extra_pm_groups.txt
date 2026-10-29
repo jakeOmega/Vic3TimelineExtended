@@ -1004,7 +1004,11 @@ REPLACE_OR_CREATE:pmg_automation_building_aerospace_industry = {
 }
 REPLACE_OR_CREATE:pmg_base_building_space_mine = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	# Regolith Processing first: the default, with the building's technology
+	# (In-Situ Resource Utilization, era 10); the Asteroid Mine needs Asteroid
+	# Mining (lunar colonization design § 6)
 	production_methods = {
+		pm_regolith_processing
 		pm_space_mine
 		pm_space_colony_mining
 		pm_space_colony_vacation

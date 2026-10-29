@@ -955,8 +955,10 @@ REPLACE_OR_CREATE:building_space_mine = {
 	city_type = city
 	levels_per_mesh = -1
 
+	# Era 10 with Regolith Processing; Asteroid Mining (era 11) brings the
+	# Asteroid Mine method (lunar colonization design § 6)
 	unlocking_technologies = {
-		asteroid_mining
+		in_situ_resource_utilization
 	}
 
 	production_method_groups = {
@@ -968,10 +970,10 @@ REPLACE_OR_CREATE:building_space_mine = {
 
 	required_construction = construction_cost_space_mine
 	# Simple and full colonies (colony modules design § 9): room for levels comes
-	# from the near-Earth asteroids and the colonies held, and a level past it
-	# works at -50%. No private investor builds past the room, and no AI
-	# government; a player's government can, at the penalty. Under races only
-	# both always pass (sr_ebase_has_room).
+	# from the near-Earth asteroids (with Asteroid Mining) and the colonies held,
+	# and a level past it works at -50%. No private investor builds past the
+	# room, and no AI government; a player's government can, at the penalty.
+	# Under races only both always pass (sr_ebase_has_room).
 	can_build_government = {
 		owner ?= { sr_ebase_may_build_government = yes }
 	}

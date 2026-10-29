@@ -968,13 +968,20 @@ class ModulesTest(unittest.TestCase):
         self.assertEqual(len(grades), len(gss.SITES) + 1)
         self.assertEqual(grades, sorted(grades, reverse=True))
         self.assertIn(f"value = local_var:sr_eb_left max = {gss.NEAR_EARTH_ROOM}", fill)
+        # The near-Earth room needs Asteroid Mining; the base itself comes a technology
+        # earlier (lunar colonization design § 6).
+        self.assertEqual(gss.NEAR_EARTH_TECH, "asteroid_mining")
+        self.assertIn(f"limit = {{ local_var:sr_eb_left > 0 has_technology_researched = {gss.NEAR_EARTH_TECH} }}",
+                      fill)
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(f"global_var:sr_site_holder_{site.key} ?= this", fill)
         self.assertTrue(fill.rstrip().endswith(
             f"multiply = {gss.OVERFLOW_GRADE} add = local_var:sr_eb_sum }} }}\n\t}}"))
         room = _block(self.values, "sr_ebase_room_total")
-        self.assertIn(f"value = {gss.NEAR_EARTH_ROOM}", room)
+        self.assertIn("value = 0", room)
+        self.assertIn(f"if = {{ limit = {{ has_technology_researched = {gss.NEAR_EARTH_TECH} }} "
+                      f"add = {gss.NEAR_EARTH_ROOM} }}", room)
         # Each world's room counts while it serves its holder (gss.site_serves:
         # held, not blockaded, not occupied; slice 6).
         self.assertEqual(sum(int(n) for n in re.findall(r"sr_site_occupier_\w+ \} \} add = (\d+)", room)), 760)

@@ -165,6 +165,52 @@ reusable_rocketry = {
 	}
 }
 
+cislunar_infrastructure = {
+	# Solar Colonization PM for the Space Program, Orbital Assembly PM for its Module
+	# Fabrication (lunar colonization design § 5, docs/superpowers/specs/2026-10-29-lunar-colonization-design.md)
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/cislunar_infrastructure.dds"
+	category = military
+
+	unlocking_technologies = {
+		reusable_rocketry
+	}
+
+	modifier = {
+		country_space_race_max_funding_add = 2
+	}
+
+	# As Directed Energy Weapons, which opened colonization before it
+	ai_weight = {
+		value = 3
+	}
+}
+
+in_situ_resource_utilization = {
+	# Extraplanetary Base (space mine) building with its Regolith Processing PM
+	# (lunar colonization design §§ 5, 6). Military, as every space technology
+	# here: Asteroid Mining (military) requires it, and a prerequisite must be
+	# in its technology's category (scripting_best_practices.md § Tech Tree
+	# Authoring), so the design's production category and its Additive
+	# Manufacturing prerequisite (production) are left out.
+	era = era_10
+	texture = "gfx/interface/icons/invention_icons/in_situ_resource_utilization.dds"
+	category = military
+
+	unlocking_technologies = {
+		reusable_rocketry
+	}
+
+	modifier = {
+		country_space_race_max_funding_add = 1
+	}
+
+	# Below Asteroid Mining's 5: its base method is weak (design § 6)
+	ai_weight = {
+		value = 3
+	}
+}
+
 hypersonic_weapons = {
 	# Railgun Tank and Hypersonic Missile Platform units
 	era = era_10

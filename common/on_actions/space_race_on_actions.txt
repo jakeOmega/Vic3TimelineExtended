@@ -13,9 +13,10 @@ space_race_on_action = {
 	effect = {
 		# Extraplanetary Base room (sr_colony_module_effects.txt; colony modules
 		# design § 9): its one refresh site, for every country that can build
-		# a base, colony or not.
+		# a base (In-Situ Resource Utilization, the building's technology),
+		# colony or not.
 		if = {
-			limit = { has_technology_researched = asteroid_mining }
+			limit = { has_technology_researched = in_situ_resource_utilization }
 			sr_ebase_refresh = yes
 		}
 		# Fleets (solar colonization slice 6, sr_fleet_effects.txt): a fleet

@@ -920,7 +920,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = clean_energy_technologies }
 			scope:iw_theft_target ?= { has_technology_researched = clean_energy_technologies }
 		}
-		covert_tech_grant_era_9 = { TECH = clean_energy_technologies IDX = 45 }
+		covert_tech_grant_era_9 = { TECH = clean_energy_technologies IDX = 46 }
 	}
 	else_if = {
 		limit = {
@@ -928,7 +928,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = cloud_computing }
 			scope:iw_theft_target ?= { has_technology_researched = cloud_computing }
 		}
-		covert_tech_grant_era_9 = { TECH = cloud_computing IDX = 46 }
+		covert_tech_grant_era_9 = { TECH = cloud_computing IDX = 47 }
 	}
 	else_if = {
 		limit = {
@@ -936,7 +936,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = combustion_engine }
 			scope:iw_theft_target ?= { has_technology_researched = combustion_engine }
 		}
-		covert_tech_grant_era_4 = { TECH = combustion_engine IDX = 48 }
+		covert_tech_grant_era_4 = { TECH = combustion_engine IDX = 49 }
 	}
 	else_if = {
 		limit = {
@@ -944,7 +944,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = compression_ignition }
 			scope:iw_theft_target ?= { has_technology_researched = compression_ignition }
 		}
-		covert_tech_grant_era_5 = { TECH = compression_ignition IDX = 50 }
+		covert_tech_grant_era_5 = { TECH = compression_ignition IDX = 51 }
 	}
 	else_if = {
 		limit = {
@@ -952,7 +952,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = computer_aided_design }
 			scope:iw_theft_target ?= { has_technology_researched = computer_aided_design }
 		}
-		covert_tech_grant_era_8 = { TECH = computer_aided_design IDX = 51 }
+		covert_tech_grant_era_8 = { TECH = computer_aided_design IDX = 52 }
 	}
 	else_if = {
 		limit = {
@@ -960,7 +960,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = computer_networks }
 			scope:iw_theft_target ?= { has_technology_researched = computer_networks }
 		}
-		covert_tech_grant_era_8 = { TECH = computer_networks IDX = 52 }
+		covert_tech_grant_era_8 = { TECH = computer_networks IDX = 53 }
 	}
 	else_if = {
 		limit = {
@@ -968,7 +968,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = conveyors }
 			scope:iw_theft_target ?= { has_technology_researched = conveyors }
 		}
-		covert_tech_grant_era_4 = { TECH = conveyors IDX = 55 }
+		covert_tech_grant_era_4 = { TECH = conveyors IDX = 56 }
 	}
 	else_if = {
 		limit = {
@@ -976,7 +976,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = cotton_gin }
 			scope:iw_theft_target ?= { has_technology_researched = cotton_gin }
 		}
-		covert_tech_grant_era_1 = { TECH = cotton_gin IDX = 56 }
+		covert_tech_grant_era_1 = { TECH = cotton_gin IDX = 57 }
 	}
 	else_if = {
 		limit = {
@@ -984,7 +984,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = crystal_glass }
 			scope:iw_theft_target ?= { has_technology_researched = crystal_glass }
 		}
-		covert_tech_grant_era_2 = { TECH = crystal_glass IDX = 58 }
+		covert_tech_grant_era_2 = { TECH = crystal_glass IDX = 59 }
 	}
 	else_if = {
 		limit = {
@@ -992,7 +992,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = digital_telecommunications }
 			scope:iw_theft_target ?= { has_technology_researched = digital_telecommunications }
 		}
-		covert_tech_grant_era_9 = { TECH = digital_telecommunications IDX = 62 }
+		covert_tech_grant_era_9 = { TECH = digital_telecommunications IDX = 63 }
 	}
 	else_if = {
 		limit = {
@@ -1000,7 +1000,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = distillation }
 			scope:iw_theft_target ?= { has_technology_researched = distillation }
 		}
-		covert_tech_grant_era_1 = { TECH = distillation IDX = 65 }
+		covert_tech_grant_era_1 = { TECH = distillation IDX = 66 }
 	}
 	else_if = {
 		limit = {
@@ -1008,7 +1008,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = dough_rollers }
 			scope:iw_theft_target ?= { has_technology_researched = dough_rollers }
 		}
-		covert_tech_grant_era_5 = { TECH = dough_rollers IDX = 66 }
+		covert_tech_grant_era_5 = { TECH = dough_rollers IDX = 67 }
 	}
 	else_if = {
 		limit = {
@@ -1016,7 +1016,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = dynamite }
 			scope:iw_theft_target ?= { has_technology_researched = dynamite }
 		}
-		covert_tech_grant_era_3 = { TECH = dynamite IDX = 69 }
+		covert_tech_grant_era_3 = { TECH = dynamite IDX = 70 }
 	}
 	else_if = {
 		limit = {
@@ -1024,7 +1024,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = e-commerce }
 			scope:iw_theft_target ?= { has_technology_researched = e-commerce }
 		}
-		covert_tech_grant_era_9 = { TECH = e-commerce IDX = 70 }
+		covert_tech_grant_era_9 = { TECH = e-commerce IDX = 71 }
 	}
 	else_if = {
 		limit = {
@@ -1032,7 +1032,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = early_nanotechnology }
 			scope:iw_theft_target ?= { has_technology_researched = early_nanotechnology }
 		}
-		covert_tech_grant_era_9 = { TECH = early_nanotechnology IDX = 71 }
+		covert_tech_grant_era_9 = { TECH = early_nanotechnology IDX = 72 }
 	}
 	else_if = {
 		limit = {
@@ -1040,7 +1040,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = electric_arc_process }
 			scope:iw_theft_target ?= { has_technology_researched = electric_arc_process }
 		}
-		covert_tech_grant_era_4 = { TECH = electric_arc_process IDX = 72 }
+		covert_tech_grant_era_4 = { TECH = electric_arc_process IDX = 73 }
 	}
 	else_if = {
 		limit = {
@@ -1048,7 +1048,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = electric_railway }
 			scope:iw_theft_target ?= { has_technology_researched = electric_railway }
 		}
-		covert_tech_grant_era_4 = { TECH = electric_railway IDX = 73 }
+		covert_tech_grant_era_4 = { TECH = electric_railway IDX = 74 }
 	}
 	else_if = {
 		limit = {
@@ -1056,7 +1056,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = electric_vehicles }
 			scope:iw_theft_target ?= { has_technology_researched = electric_vehicles }
 		}
-		covert_tech_grant_era_10 = { TECH = electric_vehicles IDX = 75 }
+		covert_tech_grant_era_10 = { TECH = electric_vehicles IDX = 76 }
 	}
 	else_if = {
 		limit = {
@@ -1064,7 +1064,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = electrical_capacitors }
 			scope:iw_theft_target ?= { has_technology_researched = electrical_capacitors }
 		}
-		covert_tech_grant_era_4 = { TECH = electrical_capacitors IDX = 76 }
+		covert_tech_grant_era_4 = { TECH = electrical_capacitors IDX = 77 }
 	}
 	else_if = {
 		limit = {
@@ -1072,7 +1072,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = electrical_generation }
 			scope:iw_theft_target ?= { has_technology_researched = electrical_generation }
 		}
-		covert_tech_grant_era_3 = { TECH = electrical_generation IDX = 77 }
+		covert_tech_grant_era_3 = { TECH = electrical_generation IDX = 78 }
 	}
 	else_if = {
 		limit = {
@@ -1080,7 +1080,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = enclosure }
 			scope:iw_theft_target ?= { has_technology_researched = enclosure }
 		}
-		covert_tech_grant_era_1 = { TECH = enclosure IDX = 79 }
+		covert_tech_grant_era_1 = { TECH = enclosure IDX = 80 }
 	}
 	else_if = {
 		limit = {
@@ -1088,7 +1088,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = fiber_optics }
 			scope:iw_theft_target ?= { has_technology_researched = fiber_optics }
 		}
-		covert_tech_grant_era_8 = { TECH = fiber_optics IDX = 81 }
+		covert_tech_grant_era_8 = { TECH = fiber_optics IDX = 82 }
 	}
 	else_if = {
 		limit = {
@@ -1096,7 +1096,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = flash_freezing }
 			scope:iw_theft_target ?= { has_technology_researched = flash_freezing }
 		}
-		covert_tech_grant_era_5 = { TECH = flash_freezing IDX = 84 }
+		covert_tech_grant_era_5 = { TECH = flash_freezing IDX = 85 }
 	}
 	else_if = {
 		limit = {
@@ -1104,7 +1104,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = fluorescent_lamps }
 			scope:iw_theft_target ?= { has_technology_researched = fluorescent_lamps }
 		}
-		covert_tech_grant_era_6 = { TECH = fluorescent_lamps IDX = 86 }
+		covert_tech_grant_era_6 = { TECH = fluorescent_lamps IDX = 87 }
 	}
 	else_if = {
 		limit = {
@@ -1112,7 +1112,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = fractional_distillation }
 			scope:iw_theft_target ?= { has_technology_researched = fractional_distillation }
 		}
-		covert_tech_grant_era_2 = { TECH = fractional_distillation IDX = 87 }
+		covert_tech_grant_era_2 = { TECH = fractional_distillation IDX = 88 }
 	}
 	else_if = {
 		limit = {
@@ -1120,7 +1120,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = gene_splicing }
 			scope:iw_theft_target ?= { has_technology_researched = gene_splicing }
 		}
-		covert_tech_grant_era_8 = { TECH = gene_splicing IDX = 91 }
+		covert_tech_grant_era_8 = { TECH = gene_splicing IDX = 92 }
 	}
 	else_if = {
 		limit = {
@@ -1128,7 +1128,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = generative_ai }
 			scope:iw_theft_target ?= { has_technology_researched = generative_ai }
 		}
-		covert_tech_grant_era_10 = { TECH = generative_ai IDX = 93 }
+		covert_tech_grant_era_10 = { TECH = generative_ai IDX = 94 }
 	}
 	else_if = {
 		limit = {
@@ -1136,7 +1136,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = genetic_engineering }
 			scope:iw_theft_target ?= { has_technology_researched = genetic_engineering }
 		}
-		covert_tech_grant_era_11 = { TECH = genetic_engineering IDX = 94 }
+		covert_tech_grant_era_11 = { TECH = genetic_engineering IDX = 95 }
 	}
 	else_if = {
 		limit = {
@@ -1144,7 +1144,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = green_revolution }
 			scope:iw_theft_target ?= { has_technology_researched = green_revolution }
 		}
-		covert_tech_grant_era_7 = { TECH = green_revolution IDX = 95 }
+		covert_tech_grant_era_7 = { TECH = green_revolution IDX = 96 }
 	}
 	else_if = {
 		limit = {
@@ -1152,7 +1152,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = hydraulic_fracturing }
 			scope:iw_theft_target ?= { has_technology_researched = hydraulic_fracturing }
 		}
-		covert_tech_grant_era_9 = { TECH = hydraulic_fracturing IDX = 100 }
+		covert_tech_grant_era_9 = { TECH = hydraulic_fracturing IDX = 101 }
 	}
 	else_if = {
 		limit = {
@@ -1160,7 +1160,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = improved_fertilizer }
 			scope:iw_theft_target ?= { has_technology_researched = improved_fertilizer }
 		}
-		covert_tech_grant_era_3 = { TECH = improved_fertilizer IDX = 102 }
+		covert_tech_grant_era_3 = { TECH = improved_fertilizer IDX = 103 }
 	}
 	else_if = {
 		limit = {
@@ -1168,7 +1168,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = integrated_circuits }
 			scope:iw_theft_target ?= { has_technology_researched = integrated_circuits }
 		}
-		covert_tech_grant_era_7 = { TECH = integrated_circuits IDX = 105 }
+		covert_tech_grant_era_7 = { TECH = integrated_circuits IDX = 107 }
 	}
 	else_if = {
 		limit = {
@@ -1176,7 +1176,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = intensive_agriculture }
 			scope:iw_theft_target ?= { has_technology_researched = intensive_agriculture }
 		}
-		covert_tech_grant_era_2 = { TECH = intensive_agriculture IDX = 106 }
+		covert_tech_grant_era_2 = { TECH = intensive_agriculture IDX = 108 }
 	}
 	else_if = {
 		limit = {
@@ -1184,7 +1184,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = internet_of_things }
 			scope:iw_theft_target ?= { has_technology_researched = internet_of_things }
 		}
-		covert_tech_grant_era_10 = { TECH = internet_of_things IDX = 107 }
+		covert_tech_grant_era_10 = { TECH = internet_of_things IDX = 109 }
 	}
 	else_if = {
 		limit = {
@@ -1192,7 +1192,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = isoprene }
 			scope:iw_theft_target ?= { has_technology_researched = isoprene }
 		}
-		covert_tech_grant_era_6 = { TECH = isoprene IDX = 109 }
+		covert_tech_grant_era_6 = { TECH = isoprene IDX = 111 }
 	}
 	else_if = {
 		limit = {
@@ -1200,7 +1200,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = laser_technology }
 			scope:iw_theft_target ?= { has_technology_researched = laser_technology }
 		}
-		covert_tech_grant_era_7 = { TECH = laser_technology IDX = 114 }
+		covert_tech_grant_era_7 = { TECH = laser_technology IDX = 116 }
 	}
 	else_if = {
 		limit = {
@@ -1208,7 +1208,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = lathe }
 			scope:iw_theft_target ?= { has_technology_researched = lathe }
 		}
-		covert_tech_grant_era_1 = { TECH = lathe IDX = 115 }
+		covert_tech_grant_era_1 = { TECH = lathe IDX = 117 }
 	}
 	else_if = {
 		limit = {
@@ -1216,7 +1216,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = machine_learning }
 			scope:iw_theft_target ?= { has_technology_researched = machine_learning }
 		}
-		covert_tech_grant_era_10 = { TECH = machine_learning IDX = 118 }
+		covert_tech_grant_era_10 = { TECH = machine_learning IDX = 120 }
 	}
 	else_if = {
 		limit = {
@@ -1224,7 +1224,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = mainframe_computers }
 			scope:iw_theft_target ?= { has_technology_researched = mainframe_computers }
 		}
-		covert_tech_grant_era_7 = { TECH = mainframe_computers IDX = 119 }
+		covert_tech_grant_era_7 = { TECH = mainframe_computers IDX = 121 }
 	}
 	else_if = {
 		limit = {
@@ -1232,7 +1232,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = manufacturies }
 			scope:iw_theft_target ?= { has_technology_researched = manufacturies }
 		}
-		covert_tech_grant_era_1 = { TECH = manufacturies IDX = 121 }
+		covert_tech_grant_era_1 = { TECH = manufacturies IDX = 123 }
 	}
 	else_if = {
 		limit = {
@@ -1240,7 +1240,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = mechanical_tools }
 			scope:iw_theft_target ?= { has_technology_researched = mechanical_tools }
 		}
-		covert_tech_grant_era_2 = { TECH = mechanical_tools IDX = 122 }
+		covert_tech_grant_era_2 = { TECH = mechanical_tools IDX = 124 }
 	}
 	else_if = {
 		limit = {
@@ -1248,7 +1248,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = mechanized_farming }
 			scope:iw_theft_target ?= { has_technology_researched = mechanized_farming }
 		}
-		covert_tech_grant_era_4 = { TECH = mechanized_farming IDX = 123 }
+		covert_tech_grant_era_4 = { TECH = mechanized_farming IDX = 125 }
 	}
 	else_if = {
 		limit = {
@@ -1256,7 +1256,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = mechanized_workshops }
 			scope:iw_theft_target ?= { has_technology_researched = mechanized_workshops }
 		}
-		covert_tech_grant_era_2 = { TECH = mechanized_workshops IDX = 124 }
+		covert_tech_grant_era_2 = { TECH = mechanized_workshops IDX = 126 }
 	}
 	else_if = {
 		limit = {
@@ -1264,7 +1264,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = microprocessor }
 			scope:iw_theft_target ?= { has_technology_researched = microprocessor }
 		}
-		covert_tech_grant_era_8 = { TECH = microprocessor IDX = 125 }
+		covert_tech_grant_era_8 = { TECH = microprocessor IDX = 127 }
 	}
 	else_if = {
 		limit = {
@@ -1272,7 +1272,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = modern_automotive_technology }
 			scope:iw_theft_target ?= { has_technology_researched = modern_automotive_technology }
 		}
-		covert_tech_grant_era_6 = { TECH = modern_automotive_technology IDX = 132 }
+		covert_tech_grant_era_6 = { TECH = modern_automotive_technology IDX = 134 }
 	}
 	else_if = {
 		limit = {
@@ -1280,7 +1280,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = modern_chemical_processes }
 			scope:iw_theft_target ?= { has_technology_researched = modern_chemical_processes }
 		}
-		covert_tech_grant_era_6 = { TECH = modern_chemical_processes IDX = 133 }
+		covert_tech_grant_era_6 = { TECH = modern_chemical_processes IDX = 135 }
 	}
 	else_if = {
 		limit = {
@@ -1288,7 +1288,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = modern_material_science }
 			scope:iw_theft_target ?= { has_technology_researched = modern_material_science }
 		}
-		covert_tech_grant_era_11 = { TECH = modern_material_science IDX = 134 }
+		covert_tech_grant_era_11 = { TECH = modern_material_science IDX = 136 }
 	}
 	else_if = {
 		limit = {
@@ -1296,7 +1296,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = modern_materials }
 			scope:iw_theft_target ?= { has_technology_researched = modern_materials }
 		}
-		covert_tech_grant_era_6 = { TECH = modern_materials IDX = 135 }
+		covert_tech_grant_era_6 = { TECH = modern_materials IDX = 137 }
 	}
 	else_if = {
 		limit = {
@@ -1304,7 +1304,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = modern_skyscrapers }
 			scope:iw_theft_target ?= { has_technology_researched = modern_skyscrapers }
 		}
-		covert_tech_grant_era_6 = { TECH = modern_skyscrapers IDX = 137 }
+		covert_tech_grant_era_6 = { TECH = modern_skyscrapers IDX = 139 }
 	}
 	else_if = {
 		limit = {
@@ -1312,7 +1312,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = modern_tools }
 			scope:iw_theft_target ?= { has_technology_researched = modern_tools }
 		}
-		covert_tech_grant_era_6 = { TECH = modern_tools IDX = 138 }
+		covert_tech_grant_era_6 = { TECH = modern_tools IDX = 140 }
 	}
 	else_if = {
 		limit = {
@@ -1320,7 +1320,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = molecular_assemblers }
 			scope:iw_theft_target ?= { has_technology_researched = molecular_assemblers }
 		}
-		covert_tech_grant_era_12 = { TECH = molecular_assemblers IDX = 139 }
+		covert_tech_grant_era_12 = { TECH = molecular_assemblers IDX = 141 }
 	}
 	else_if = {
 		limit = {
@@ -1328,7 +1328,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = nitrogen_fixation }
 			scope:iw_theft_target ?= { has_technology_researched = nitrogen_fixation }
 		}
-		covert_tech_grant_era_4 = { TECH = nitrogen_fixation IDX = 148 }
+		covert_tech_grant_era_4 = { TECH = nitrogen_fixation IDX = 150 }
 	}
 	else_if = {
 		limit = {
@@ -1336,7 +1336,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = nitroglycerin }
 			scope:iw_theft_target ?= { has_technology_researched = nitroglycerin }
 		}
-		covert_tech_grant_era_2 = { TECH = nitroglycerin IDX = 149 }
+		covert_tech_grant_era_2 = { TECH = nitroglycerin IDX = 151 }
 	}
 	else_if = {
 		limit = {
@@ -1344,7 +1344,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = oil_turbine }
 			scope:iw_theft_target ?= { has_technology_researched = oil_turbine }
 		}
-		covert_tech_grant_era_5 = { TECH = oil_turbine IDX = 152 }
+		covert_tech_grant_era_5 = { TECH = oil_turbine IDX = 155 }
 	}
 	else_if = {
 		limit = {
@@ -1352,7 +1352,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = open_hearth_process }
 			scope:iw_theft_target ?= { has_technology_researched = open_hearth_process }
 		}
-		covert_tech_grant_era_3 = { TECH = open_hearth_process IDX = 153 }
+		covert_tech_grant_era_3 = { TECH = open_hearth_process IDX = 156 }
 	}
 	else_if = {
 		limit = {
@@ -1360,7 +1360,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = orbital_manufacturing }
 			scope:iw_theft_target ?= { has_technology_researched = orbital_manufacturing }
 		}
-		covert_tech_grant_era_12 = { TECH = orbital_manufacturing IDX = 154 }
+		covert_tech_grant_era_12 = { TECH = orbital_manufacturing IDX = 157 }
 	}
 	else_if = {
 		limit = {
@@ -1368,7 +1368,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = pasteurization }
 			scope:iw_theft_target ?= { has_technology_researched = pasteurization }
 		}
-		covert_tech_grant_era_4 = { TECH = pasteurization IDX = 157 }
+		covert_tech_grant_era_4 = { TECH = pasteurization IDX = 160 }
 	}
 	else_if = {
 		limit = {
@@ -1376,7 +1376,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = personal_appliances }
 			scope:iw_theft_target ?= { has_technology_researched = personal_appliances }
 		}
-		covert_tech_grant_era_6 = { TECH = personal_appliances IDX = 159 }
+		covert_tech_grant_era_6 = { TECH = personal_appliances IDX = 162 }
 	}
 	else_if = {
 		limit = {
@@ -1384,7 +1384,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = personal_computers }
 			scope:iw_theft_target ?= { has_technology_researched = personal_computers }
 		}
-		covert_tech_grant_era_8 = { TECH = personal_computers IDX = 160 }
+		covert_tech_grant_era_8 = { TECH = personal_computers IDX = 163 }
 	}
 	else_if = {
 		limit = {
@@ -1392,7 +1392,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = photocopiers }
 			scope:iw_theft_target ?= { has_technology_researched = photocopiers }
 		}
-		covert_tech_grant_era_7 = { TECH = photocopiers IDX = 161 }
+		covert_tech_grant_era_7 = { TECH = photocopiers IDX = 164 }
 	}
 	else_if = {
 		limit = {
@@ -1400,7 +1400,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = plastic_mass_production }
 			scope:iw_theft_target ?= { has_technology_researched = plastic_mass_production }
 		}
-		covert_tech_grant_era_7 = { TECH = plastic_mass_production IDX = 162 }
+		covert_tech_grant_era_7 = { TECH = plastic_mass_production IDX = 165 }
 	}
 	else_if = {
 		limit = {
@@ -1408,7 +1408,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = plastics }
 			scope:iw_theft_target ?= { has_technology_researched = plastics }
 		}
-		covert_tech_grant_era_4 = { TECH = plastics IDX = 163 }
+		covert_tech_grant_era_4 = { TECH = plastics IDX = 166 }
 	}
 	else_if = {
 		limit = {
@@ -1416,7 +1416,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = pneumatic_tools }
 			scope:iw_theft_target ?= { has_technology_researched = pneumatic_tools }
 		}
-		covert_tech_grant_era_4 = { TECH = pneumatic_tools IDX = 164 }
+		covert_tech_grant_era_4 = { TECH = pneumatic_tools IDX = 167 }
 	}
 	else_if = {
 		limit = {
@@ -1424,7 +1424,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = prefabricated_construction }
 			scope:iw_theft_target ?= { has_technology_researched = prefabricated_construction }
 		}
-		covert_tech_grant_era_7 = { TECH = prefabricated_construction IDX = 169 }
+		covert_tech_grant_era_7 = { TECH = prefabricated_construction IDX = 172 }
 	}
 	else_if = {
 		limit = {
@@ -1432,7 +1432,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = programmable_matter }
 			scope:iw_theft_target ?= { has_technology_researched = programmable_matter }
 		}
-		covert_tech_grant_era_12 = { TECH = programmable_matter IDX = 170 }
+		covert_tech_grant_era_12 = { TECH = programmable_matter IDX = 173 }
 	}
 	else_if = {
 		limit = {
@@ -1440,7 +1440,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = prospecting }
 			scope:iw_theft_target ?= { has_technology_researched = prospecting }
 		}
-		covert_tech_grant_era_1 = { TECH = prospecting IDX = 171 }
+		covert_tech_grant_era_1 = { TECH = prospecting IDX = 174 }
 	}
 	else_if = {
 		limit = {
@@ -1448,7 +1448,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = pumpjacks }
 			scope:iw_theft_target ?= { has_technology_researched = pumpjacks }
 		}
-		covert_tech_grant_era_3 = { TECH = pumpjacks IDX = 172 }
+		covert_tech_grant_era_3 = { TECH = pumpjacks IDX = 175 }
 	}
 	else_if = {
 		limit = {
@@ -1456,7 +1456,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = quantum_computing }
 			scope:iw_theft_target ?= { has_technology_researched = quantum_computing }
 		}
-		covert_tech_grant_era_11 = { TECH = quantum_computing IDX = 174 }
+		covert_tech_grant_era_11 = { TECH = quantum_computing IDX = 177 }
 	}
 	else_if = {
 		limit = {
@@ -1464,7 +1464,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = quantum_materials }
 			scope:iw_theft_target ?= { has_technology_researched = quantum_materials }
 		}
-		covert_tech_grant_era_12 = { TECH = quantum_materials IDX = 175 }
+		covert_tech_grant_era_12 = { TECH = quantum_materials IDX = 178 }
 	}
 	else_if = {
 		limit = {
@@ -1472,7 +1472,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = radio }
 			scope:iw_theft_target ?= { has_technology_researched = radio }
 		}
-		covert_tech_grant_era_4 = { TECH = radio IDX = 177 }
+		covert_tech_grant_era_4 = { TECH = radio IDX = 180 }
 	}
 	else_if = {
 		limit = {
@@ -1480,7 +1480,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = railways }
 			scope:iw_theft_target ?= { has_technology_researched = railways }
 		}
-		covert_tech_grant_era_2 = { TECH = railways IDX = 178 }
+		covert_tech_grant_era_2 = { TECH = railways IDX = 181 }
 	}
 	else_if = {
 		limit = {
@@ -1488,7 +1488,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = reinforced_concrete }
 			scope:iw_theft_target ?= { has_technology_researched = reinforced_concrete }
 		}
-		covert_tech_grant_era_3 = { TECH = reinforced_concrete IDX = 181 }
+		covert_tech_grant_era_3 = { TECH = reinforced_concrete IDX = 184 }
 	}
 	else_if = {
 		limit = {
@@ -1496,7 +1496,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = robotics }
 			scope:iw_theft_target ?= { has_technology_researched = robotics }
 		}
-		covert_tech_grant_era_8 = { TECH = robotics IDX = 185 }
+		covert_tech_grant_era_8 = { TECH = robotics IDX = 188 }
 	}
 	else_if = {
 		limit = {
@@ -1504,7 +1504,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = rotary_valve_engine }
 			scope:iw_theft_target ?= { has_technology_researched = rotary_valve_engine }
 		}
-		covert_tech_grant_era_3 = { TECH = rotary_valve_engine IDX = 187 }
+		covert_tech_grant_era_3 = { TECH = rotary_valve_engine IDX = 190 }
 	}
 	else_if = {
 		limit = {
@@ -1512,7 +1512,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = rubber_mastication }
 			scope:iw_theft_target ?= { has_technology_researched = rubber_mastication }
 		}
-		covert_tech_grant_era_3 = { TECH = rubber_mastication IDX = 188 }
+		covert_tech_grant_era_3 = { TECH = rubber_mastication IDX = 191 }
 	}
 	else_if = {
 		limit = {
@@ -1520,7 +1520,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = shaft_mining }
 			scope:iw_theft_target ?= { has_technology_researched = shaft_mining }
 		}
-		covert_tech_grant_era_1 = { TECH = shaft_mining IDX = 194 }
+		covert_tech_grant_era_1 = { TECH = shaft_mining IDX = 197 }
 	}
 	else_if = {
 		limit = {
@@ -1528,7 +1528,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = shift_work }
 			scope:iw_theft_target ?= { has_technology_researched = shift_work }
 		}
-		covert_tech_grant_era_3 = { TECH = shift_work IDX = 196 }
+		covert_tech_grant_era_3 = { TECH = shift_work IDX = 199 }
 	}
 	else_if = {
 		limit = {
@@ -1536,7 +1536,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = smart_grids }
 			scope:iw_theft_target ?= { has_technology_researched = smart_grids }
 		}
-		covert_tech_grant_era_11 = { TECH = smart_grids IDX = 197 }
+		covert_tech_grant_era_11 = { TECH = smart_grids IDX = 200 }
 	}
 	else_if = {
 		limit = {
@@ -1544,7 +1544,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = stainless_steel_mass_production }
 			scope:iw_theft_target ?= { has_technology_researched = stainless_steel_mass_production }
 		}
-		covert_tech_grant_era_6 = { TECH = stainless_steel_mass_production IDX = 203 }
+		covert_tech_grant_era_6 = { TECH = stainless_steel_mass_production IDX = 206 }
 	}
 	else_if = {
 		limit = {
@@ -1552,7 +1552,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = steam_donkey }
 			scope:iw_theft_target ?= { has_technology_researched = steam_donkey }
 		}
-		covert_tech_grant_era_3 = { TECH = steam_donkey IDX = 206 }
+		covert_tech_grant_era_3 = { TECH = steam_donkey IDX = 209 }
 	}
 	else_if = {
 		limit = {
@@ -1560,7 +1560,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = steam_turbine }
 			scope:iw_theft_target ?= { has_technology_researched = steam_turbine }
 		}
-		covert_tech_grant_era_4 = { TECH = steam_turbine IDX = 207 }
+		covert_tech_grant_era_4 = { TECH = steam_turbine IDX = 210 }
 	}
 	else_if = {
 		limit = {
@@ -1568,7 +1568,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = steel_railway_cars }
 			scope:iw_theft_target ?= { has_technology_researched = steel_railway_cars }
 		}
-		covert_tech_grant_era_3 = { TECH = steel_railway_cars IDX = 208 }
+		covert_tech_grant_era_3 = { TECH = steel_railway_cars IDX = 211 }
 	}
 	else_if = {
 		limit = {
@@ -1576,7 +1576,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = steelworking }
 			scope:iw_theft_target ?= { has_technology_researched = steelworking }
 		}
-		covert_tech_grant_era_1 = { TECH = steelworking IDX = 209 }
+		covert_tech_grant_era_1 = { TECH = steelworking IDX = 212 }
 	}
 	else_if = {
 		limit = {
@@ -1584,7 +1584,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = supply_chain_management }
 			scope:iw_theft_target ?= { has_technology_researched = supply_chain_management }
 		}
-		covert_tech_grant_era_9 = { TECH = supply_chain_management IDX = 213 }
+		covert_tech_grant_era_9 = { TECH = supply_chain_management IDX = 216 }
 	}
 	else_if = {
 		limit = {
@@ -1592,7 +1592,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = synthetic_biology }
 			scope:iw_theft_target ?= { has_technology_researched = synthetic_biology }
 		}
-		covert_tech_grant_era_11 = { TECH = synthetic_biology IDX = 215 }
+		covert_tech_grant_era_11 = { TECH = synthetic_biology IDX = 218 }
 	}
 	else_if = {
 		limit = {
@@ -1600,7 +1600,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = telephone }
 			scope:iw_theft_target ?= { has_technology_researched = telephone }
 		}
-		covert_tech_grant_era_4 = { TECH = telephone IDX = 217 }
+		covert_tech_grant_era_4 = { TECH = telephone IDX = 220 }
 	}
 	else_if = {
 		limit = {
@@ -1608,7 +1608,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = television }
 			scope:iw_theft_target ?= { has_technology_researched = television }
 		}
-		covert_tech_grant_era_6 = { TECH = television IDX = 218 }
+		covert_tech_grant_era_6 = { TECH = television IDX = 221 }
 	}
 	else_if = {
 		limit = {
@@ -1616,7 +1616,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = threshing_machine }
 			scope:iw_theft_target ?= { has_technology_researched = threshing_machine }
 		}
-		covert_tech_grant_era_3 = { TECH = threshing_machine IDX = 219 }
+		covert_tech_grant_era_3 = { TECH = threshing_machine IDX = 222 }
 	}
 	else_if = {
 		limit = {
@@ -1624,7 +1624,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = transistors }
 			scope:iw_theft_target ?= { has_technology_researched = transistors }
 		}
-		covert_tech_grant_era_7 = { TECH = transistors IDX = 220 }
+		covert_tech_grant_era_7 = { TECH = transistors IDX = 223 }
 	}
 	else_if = {
 		limit = {
@@ -1632,7 +1632,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = vacuum_canning }
 			scope:iw_theft_target ?= { has_technology_researched = vacuum_canning }
 		}
-		covert_tech_grant_era_3 = { TECH = vacuum_canning IDX = 224 }
+		covert_tech_grant_era_3 = { TECH = vacuum_canning IDX = 227 }
 	}
 	else_if = {
 		limit = {
@@ -1640,7 +1640,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = vulcanization }
 			scope:iw_theft_target ?= { has_technology_researched = vulcanization }
 		}
-		covert_tech_grant_era_3 = { TECH = vulcanization IDX = 225 }
+		covert_tech_grant_era_3 = { TECH = vulcanization IDX = 228 }
 	}
 	else_if = {
 		limit = {
@@ -1648,7 +1648,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = watertube_boiler }
 			scope:iw_theft_target ?= { has_technology_researched = watertube_boiler }
 		}
-		covert_tech_grant_era_2 = { TECH = watertube_boiler IDX = 228 }
+		covert_tech_grant_era_2 = { TECH = watertube_boiler IDX = 231 }
 	}
 	else_if = {
 		limit = {
@@ -1656,7 +1656,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = wireless_internet }
 			scope:iw_theft_target ?= { has_technology_researched = wireless_internet }
 		}
-		covert_tech_grant_era_9 = { TECH = wireless_internet IDX = 229 }
+		covert_tech_grant_era_9 = { TECH = wireless_internet IDX = 232 }
 	}
 	else_if = {
 		limit = {
@@ -1664,7 +1664,7 @@ covert_tech_steal_production = {
 			NOT = { has_technology_researched = world_wide_web }
 			scope:iw_theft_target ?= { has_technology_researched = world_wide_web }
 		}
-		covert_tech_grant_era_9 = { TECH = world_wide_web IDX = 230 }
+		covert_tech_grant_era_9 = { TECH = world_wide_web IDX = 233 }
 	}
 	else_if = {
 		limit = { covert_tech_stealable_production = { TARGET = scope:iw_theft_target } }
@@ -1851,7 +1851,7 @@ covert_tech_steal_production = {
 					can_research = clean_energy_technologies
 					scope:iw_theft_target ?= { has_technology_researched = clean_energy_technologies }
 				}
-				covert_tech_grant_era_9 = { TECH = clean_energy_technologies IDX = 45 }
+				covert_tech_grant_era_9 = { TECH = clean_energy_technologies IDX = 46 }
 			}
 			1 = {
 				trigger = {
@@ -1859,7 +1859,7 @@ covert_tech_steal_production = {
 					can_research = cloud_computing
 					scope:iw_theft_target ?= { has_technology_researched = cloud_computing }
 				}
-				covert_tech_grant_era_9 = { TECH = cloud_computing IDX = 46 }
+				covert_tech_grant_era_9 = { TECH = cloud_computing IDX = 47 }
 			}
 			1 = {
 				trigger = {
@@ -1867,7 +1867,7 @@ covert_tech_steal_production = {
 					can_research = combustion_engine
 					scope:iw_theft_target ?= { has_technology_researched = combustion_engine }
 				}
-				covert_tech_grant_era_4 = { TECH = combustion_engine IDX = 48 }
+				covert_tech_grant_era_4 = { TECH = combustion_engine IDX = 49 }
 			}
 			1 = {
 				trigger = {
@@ -1875,7 +1875,7 @@ covert_tech_steal_production = {
 					can_research = compression_ignition
 					scope:iw_theft_target ?= { has_technology_researched = compression_ignition }
 				}
-				covert_tech_grant_era_5 = { TECH = compression_ignition IDX = 50 }
+				covert_tech_grant_era_5 = { TECH = compression_ignition IDX = 51 }
 			}
 			1 = {
 				trigger = {
@@ -1883,7 +1883,7 @@ covert_tech_steal_production = {
 					can_research = computer_aided_design
 					scope:iw_theft_target ?= { has_technology_researched = computer_aided_design }
 				}
-				covert_tech_grant_era_8 = { TECH = computer_aided_design IDX = 51 }
+				covert_tech_grant_era_8 = { TECH = computer_aided_design IDX = 52 }
 			}
 			1 = {
 				trigger = {
@@ -1891,7 +1891,7 @@ covert_tech_steal_production = {
 					can_research = computer_networks
 					scope:iw_theft_target ?= { has_technology_researched = computer_networks }
 				}
-				covert_tech_grant_era_8 = { TECH = computer_networks IDX = 52 }
+				covert_tech_grant_era_8 = { TECH = computer_networks IDX = 53 }
 			}
 			1 = {
 				trigger = {
@@ -1899,7 +1899,7 @@ covert_tech_steal_production = {
 					can_research = conveyors
 					scope:iw_theft_target ?= { has_technology_researched = conveyors }
 				}
-				covert_tech_grant_era_4 = { TECH = conveyors IDX = 55 }
+				covert_tech_grant_era_4 = { TECH = conveyors IDX = 56 }
 			}
 			1 = {
 				trigger = {
@@ -1907,7 +1907,7 @@ covert_tech_steal_production = {
 					can_research = cotton_gin
 					scope:iw_theft_target ?= { has_technology_researched = cotton_gin }
 				}
-				covert_tech_grant_era_1 = { TECH = cotton_gin IDX = 56 }
+				covert_tech_grant_era_1 = { TECH = cotton_gin IDX = 57 }
 			}
 			1 = {
 				trigger = {
@@ -1915,7 +1915,7 @@ covert_tech_steal_production = {
 					can_research = crystal_glass
 					scope:iw_theft_target ?= { has_technology_researched = crystal_glass }
 				}
-				covert_tech_grant_era_2 = { TECH = crystal_glass IDX = 58 }
+				covert_tech_grant_era_2 = { TECH = crystal_glass IDX = 59 }
 			}
 			1 = {
 				trigger = {
@@ -1923,7 +1923,7 @@ covert_tech_steal_production = {
 					can_research = digital_telecommunications
 					scope:iw_theft_target ?= { has_technology_researched = digital_telecommunications }
 				}
-				covert_tech_grant_era_9 = { TECH = digital_telecommunications IDX = 62 }
+				covert_tech_grant_era_9 = { TECH = digital_telecommunications IDX = 63 }
 			}
 			1 = {
 				trigger = {
@@ -1931,7 +1931,7 @@ covert_tech_steal_production = {
 					can_research = distillation
 					scope:iw_theft_target ?= { has_technology_researched = distillation }
 				}
-				covert_tech_grant_era_1 = { TECH = distillation IDX = 65 }
+				covert_tech_grant_era_1 = { TECH = distillation IDX = 66 }
 			}
 			1 = {
 				trigger = {
@@ -1939,7 +1939,7 @@ covert_tech_steal_production = {
 					can_research = dough_rollers
 					scope:iw_theft_target ?= { has_technology_researched = dough_rollers }
 				}
-				covert_tech_grant_era_5 = { TECH = dough_rollers IDX = 66 }
+				covert_tech_grant_era_5 = { TECH = dough_rollers IDX = 67 }
 			}
 			1 = {
 				trigger = {
@@ -1947,7 +1947,7 @@ covert_tech_steal_production = {
 					can_research = dynamite
 					scope:iw_theft_target ?= { has_technology_researched = dynamite }
 				}
-				covert_tech_grant_era_3 = { TECH = dynamite IDX = 69 }
+				covert_tech_grant_era_3 = { TECH = dynamite IDX = 70 }
 			}
 			1 = {
 				trigger = {
@@ -1955,7 +1955,7 @@ covert_tech_steal_production = {
 					can_research = e-commerce
 					scope:iw_theft_target ?= { has_technology_researched = e-commerce }
 				}
-				covert_tech_grant_era_9 = { TECH = e-commerce IDX = 70 }
+				covert_tech_grant_era_9 = { TECH = e-commerce IDX = 71 }
 			}
 			1 = {
 				trigger = {
@@ -1963,7 +1963,7 @@ covert_tech_steal_production = {
 					can_research = early_nanotechnology
 					scope:iw_theft_target ?= { has_technology_researched = early_nanotechnology }
 				}
-				covert_tech_grant_era_9 = { TECH = early_nanotechnology IDX = 71 }
+				covert_tech_grant_era_9 = { TECH = early_nanotechnology IDX = 72 }
 			}
 			1 = {
 				trigger = {
@@ -1971,7 +1971,7 @@ covert_tech_steal_production = {
 					can_research = electric_arc_process
 					scope:iw_theft_target ?= { has_technology_researched = electric_arc_process }
 				}
-				covert_tech_grant_era_4 = { TECH = electric_arc_process IDX = 72 }
+				covert_tech_grant_era_4 = { TECH = electric_arc_process IDX = 73 }
 			}
 			1 = {
 				trigger = {
@@ -1979,7 +1979,7 @@ covert_tech_steal_production = {
 					can_research = electric_railway
 					scope:iw_theft_target ?= { has_technology_researched = electric_railway }
 				}
-				covert_tech_grant_era_4 = { TECH = electric_railway IDX = 73 }
+				covert_tech_grant_era_4 = { TECH = electric_railway IDX = 74 }
 			}
 			1 = {
 				trigger = {
@@ -1987,7 +1987,7 @@ covert_tech_steal_production = {
 					can_research = electric_vehicles
 					scope:iw_theft_target ?= { has_technology_researched = electric_vehicles }
 				}
-				covert_tech_grant_era_10 = { TECH = electric_vehicles IDX = 75 }
+				covert_tech_grant_era_10 = { TECH = electric_vehicles IDX = 76 }
 			}
 			1 = {
 				trigger = {
@@ -1995,7 +1995,7 @@ covert_tech_steal_production = {
 					can_research = electrical_capacitors
 					scope:iw_theft_target ?= { has_technology_researched = electrical_capacitors }
 				}
-				covert_tech_grant_era_4 = { TECH = electrical_capacitors IDX = 76 }
+				covert_tech_grant_era_4 = { TECH = electrical_capacitors IDX = 77 }
 			}
 			1 = {
 				trigger = {
@@ -2003,7 +2003,7 @@ covert_tech_steal_production = {
 					can_research = electrical_generation
 					scope:iw_theft_target ?= { has_technology_researched = electrical_generation }
 				}
-				covert_tech_grant_era_3 = { TECH = electrical_generation IDX = 77 }
+				covert_tech_grant_era_3 = { TECH = electrical_generation IDX = 78 }
 			}
 			1 = {
 				trigger = {
@@ -2011,7 +2011,7 @@ covert_tech_steal_production = {
 					can_research = enclosure
 					scope:iw_theft_target ?= { has_technology_researched = enclosure }
 				}
-				covert_tech_grant_era_1 = { TECH = enclosure IDX = 79 }
+				covert_tech_grant_era_1 = { TECH = enclosure IDX = 80 }
 			}
 			1 = {
 				trigger = {
@@ -2019,7 +2019,7 @@ covert_tech_steal_production = {
 					can_research = fiber_optics
 					scope:iw_theft_target ?= { has_technology_researched = fiber_optics }
 				}
-				covert_tech_grant_era_8 = { TECH = fiber_optics IDX = 81 }
+				covert_tech_grant_era_8 = { TECH = fiber_optics IDX = 82 }
 			}
 			1 = {
 				trigger = {
@@ -2027,7 +2027,7 @@ covert_tech_steal_production = {
 					can_research = flash_freezing
 					scope:iw_theft_target ?= { has_technology_researched = flash_freezing }
 				}
-				covert_tech_grant_era_5 = { TECH = flash_freezing IDX = 84 }
+				covert_tech_grant_era_5 = { TECH = flash_freezing IDX = 85 }
 			}
 			1 = {
 				trigger = {
@@ -2035,7 +2035,7 @@ covert_tech_steal_production = {
 					can_research = fluorescent_lamps
 					scope:iw_theft_target ?= { has_technology_researched = fluorescent_lamps }
 				}
-				covert_tech_grant_era_6 = { TECH = fluorescent_lamps IDX = 86 }
+				covert_tech_grant_era_6 = { TECH = fluorescent_lamps IDX = 87 }
 			}
 			1 = {
 				trigger = {
@@ -2043,7 +2043,7 @@ covert_tech_steal_production = {
 					can_research = fractional_distillation
 					scope:iw_theft_target ?= { has_technology_researched = fractional_distillation }
 				}
-				covert_tech_grant_era_2 = { TECH = fractional_distillation IDX = 87 }
+				covert_tech_grant_era_2 = { TECH = fractional_distillation IDX = 88 }
 			}
 			1 = {
 				trigger = {
@@ -2051,7 +2051,7 @@ covert_tech_steal_production = {
 					can_research = gene_splicing
 					scope:iw_theft_target ?= { has_technology_researched = gene_splicing }
 				}
-				covert_tech_grant_era_8 = { TECH = gene_splicing IDX = 91 }
+				covert_tech_grant_era_8 = { TECH = gene_splicing IDX = 92 }
 			}
 			1 = {
 				trigger = {
@@ -2059,7 +2059,7 @@ covert_tech_steal_production = {
 					can_research = generative_ai
 					scope:iw_theft_target ?= { has_technology_researched = generative_ai }
 				}
-				covert_tech_grant_era_10 = { TECH = generative_ai IDX = 93 }
+				covert_tech_grant_era_10 = { TECH = generative_ai IDX = 94 }
 			}
 			1 = {
 				trigger = {
@@ -2067,7 +2067,7 @@ covert_tech_steal_production = {
 					can_research = genetic_engineering
 					scope:iw_theft_target ?= { has_technology_researched = genetic_engineering }
 				}
-				covert_tech_grant_era_11 = { TECH = genetic_engineering IDX = 94 }
+				covert_tech_grant_era_11 = { TECH = genetic_engineering IDX = 95 }
 			}
 			1 = {
 				trigger = {
@@ -2075,7 +2075,7 @@ covert_tech_steal_production = {
 					can_research = green_revolution
 					scope:iw_theft_target ?= { has_technology_researched = green_revolution }
 				}
-				covert_tech_grant_era_7 = { TECH = green_revolution IDX = 95 }
+				covert_tech_grant_era_7 = { TECH = green_revolution IDX = 96 }
 			}
 			1 = {
 				trigger = {
@@ -2083,7 +2083,7 @@ covert_tech_steal_production = {
 					can_research = hydraulic_fracturing
 					scope:iw_theft_target ?= { has_technology_researched = hydraulic_fracturing }
 				}
-				covert_tech_grant_era_9 = { TECH = hydraulic_fracturing IDX = 100 }
+				covert_tech_grant_era_9 = { TECH = hydraulic_fracturing IDX = 101 }
 			}
 			1 = {
 				trigger = {
@@ -2091,7 +2091,7 @@ covert_tech_steal_production = {
 					can_research = improved_fertilizer
 					scope:iw_theft_target ?= { has_technology_researched = improved_fertilizer }
 				}
-				covert_tech_grant_era_3 = { TECH = improved_fertilizer IDX = 102 }
+				covert_tech_grant_era_3 = { TECH = improved_fertilizer IDX = 103 }
 			}
 			1 = {
 				trigger = {
@@ -2099,7 +2099,7 @@ covert_tech_steal_production = {
 					can_research = integrated_circuits
 					scope:iw_theft_target ?= { has_technology_researched = integrated_circuits }
 				}
-				covert_tech_grant_era_7 = { TECH = integrated_circuits IDX = 105 }
+				covert_tech_grant_era_7 = { TECH = integrated_circuits IDX = 107 }
 			}
 			1 = {
 				trigger = {
@@ -2107,7 +2107,7 @@ covert_tech_steal_production = {
 					can_research = intensive_agriculture
 					scope:iw_theft_target ?= { has_technology_researched = intensive_agriculture }
 				}
-				covert_tech_grant_era_2 = { TECH = intensive_agriculture IDX = 106 }
+				covert_tech_grant_era_2 = { TECH = intensive_agriculture IDX = 108 }
 			}
 			1 = {
 				trigger = {
@@ -2115,7 +2115,7 @@ covert_tech_steal_production = {
 					can_research = internet_of_things
 					scope:iw_theft_target ?= { has_technology_researched = internet_of_things }
 				}
-				covert_tech_grant_era_10 = { TECH = internet_of_things IDX = 107 }
+				covert_tech_grant_era_10 = { TECH = internet_of_things IDX = 109 }
 			}
 			1 = {
 				trigger = {
@@ -2123,7 +2123,7 @@ covert_tech_steal_production = {
 					can_research = isoprene
 					scope:iw_theft_target ?= { has_technology_researched = isoprene }
 				}
-				covert_tech_grant_era_6 = { TECH = isoprene IDX = 109 }
+				covert_tech_grant_era_6 = { TECH = isoprene IDX = 111 }
 			}
 			1 = {
 				trigger = {
@@ -2131,7 +2131,7 @@ covert_tech_steal_production = {
 					can_research = laser_technology
 					scope:iw_theft_target ?= { has_technology_researched = laser_technology }
 				}
-				covert_tech_grant_era_7 = { TECH = laser_technology IDX = 114 }
+				covert_tech_grant_era_7 = { TECH = laser_technology IDX = 116 }
 			}
 			1 = {
 				trigger = {
@@ -2139,7 +2139,7 @@ covert_tech_steal_production = {
 					can_research = lathe
 					scope:iw_theft_target ?= { has_technology_researched = lathe }
 				}
-				covert_tech_grant_era_1 = { TECH = lathe IDX = 115 }
+				covert_tech_grant_era_1 = { TECH = lathe IDX = 117 }
 			}
 			1 = {
 				trigger = {
@@ -2147,7 +2147,7 @@ covert_tech_steal_production = {
 					can_research = machine_learning
 					scope:iw_theft_target ?= { has_technology_researched = machine_learning }
 				}
-				covert_tech_grant_era_10 = { TECH = machine_learning IDX = 118 }
+				covert_tech_grant_era_10 = { TECH = machine_learning IDX = 120 }
 			}
 			1 = {
 				trigger = {
@@ -2155,7 +2155,7 @@ covert_tech_steal_production = {
 					can_research = mainframe_computers
 					scope:iw_theft_target ?= { has_technology_researched = mainframe_computers }
 				}
-				covert_tech_grant_era_7 = { TECH = mainframe_computers IDX = 119 }
+				covert_tech_grant_era_7 = { TECH = mainframe_computers IDX = 121 }
 			}
 			1 = {
 				trigger = {
@@ -2163,7 +2163,7 @@ covert_tech_steal_production = {
 					can_research = manufacturies
 					scope:iw_theft_target ?= { has_technology_researched = manufacturies }
 				}
-				covert_tech_grant_era_1 = { TECH = manufacturies IDX = 121 }
+				covert_tech_grant_era_1 = { TECH = manufacturies IDX = 123 }
 			}
 			1 = {
 				trigger = {
@@ -2171,7 +2171,7 @@ covert_tech_steal_production = {
 					can_research = mechanical_tools
 					scope:iw_theft_target ?= { has_technology_researched = mechanical_tools }
 				}
-				covert_tech_grant_era_2 = { TECH = mechanical_tools IDX = 122 }
+				covert_tech_grant_era_2 = { TECH = mechanical_tools IDX = 124 }
 			}
 			1 = {
 				trigger = {
@@ -2179,7 +2179,7 @@ covert_tech_steal_production = {
 					can_research = mechanized_farming
 					scope:iw_theft_target ?= { has_technology_researched = mechanized_farming }
 				}
-				covert_tech_grant_era_4 = { TECH = mechanized_farming IDX = 123 }
+				covert_tech_grant_era_4 = { TECH = mechanized_farming IDX = 125 }
 			}
 			1 = {
 				trigger = {
@@ -2187,7 +2187,7 @@ covert_tech_steal_production = {
 					can_research = mechanized_workshops
 					scope:iw_theft_target ?= { has_technology_researched = mechanized_workshops }
 				}
-				covert_tech_grant_era_2 = { TECH = mechanized_workshops IDX = 124 }
+				covert_tech_grant_era_2 = { TECH = mechanized_workshops IDX = 126 }
 			}
 			1 = {
 				trigger = {
@@ -2195,7 +2195,7 @@ covert_tech_steal_production = {
 					can_research = microprocessor
 					scope:iw_theft_target ?= { has_technology_researched = microprocessor }
 				}
-				covert_tech_grant_era_8 = { TECH = microprocessor IDX = 125 }
+				covert_tech_grant_era_8 = { TECH = microprocessor IDX = 127 }
 			}
 			1 = {
 				trigger = {
@@ -2203,7 +2203,7 @@ covert_tech_steal_production = {
 					can_research = modern_automotive_technology
 					scope:iw_theft_target ?= { has_technology_researched = modern_automotive_technology }
 				}
-				covert_tech_grant_era_6 = { TECH = modern_automotive_technology IDX = 132 }
+				covert_tech_grant_era_6 = { TECH = modern_automotive_technology IDX = 134 }
 			}
 			1 = {
 				trigger = {
@@ -2211,7 +2211,7 @@ covert_tech_steal_production = {
 					can_research = modern_chemical_processes
 					scope:iw_theft_target ?= { has_technology_researched = modern_chemical_processes }
 				}
-				covert_tech_grant_era_6 = { TECH = modern_chemical_processes IDX = 133 }
+				covert_tech_grant_era_6 = { TECH = modern_chemical_processes IDX = 135 }
 			}
 			1 = {
 				trigger = {
@@ -2219,7 +2219,7 @@ covert_tech_steal_production = {
 					can_research = modern_material_science
 					scope:iw_theft_target ?= { has_technology_researched = modern_material_science }
 				}
-				covert_tech_grant_era_11 = { TECH = modern_material_science IDX = 134 }
+				covert_tech_grant_era_11 = { TECH = modern_material_science IDX = 136 }
 			}
 			1 = {
 				trigger = {
@@ -2227,7 +2227,7 @@ covert_tech_steal_production = {
 					can_research = modern_materials
 					scope:iw_theft_target ?= { has_technology_researched = modern_materials }
 				}
-				covert_tech_grant_era_6 = { TECH = modern_materials IDX = 135 }
+				covert_tech_grant_era_6 = { TECH = modern_materials IDX = 137 }
 			}
 			1 = {
 				trigger = {
@@ -2235,7 +2235,7 @@ covert_tech_steal_production = {
 					can_research = modern_skyscrapers
 					scope:iw_theft_target ?= { has_technology_researched = modern_skyscrapers }
 				}
-				covert_tech_grant_era_6 = { TECH = modern_skyscrapers IDX = 137 }
+				covert_tech_grant_era_6 = { TECH = modern_skyscrapers IDX = 139 }
 			}
 			1 = {
 				trigger = {
@@ -2243,7 +2243,7 @@ covert_tech_steal_production = {
 					can_research = modern_tools
 					scope:iw_theft_target ?= { has_technology_researched = modern_tools }
 				}
-				covert_tech_grant_era_6 = { TECH = modern_tools IDX = 138 }
+				covert_tech_grant_era_6 = { TECH = modern_tools IDX = 140 }
 			}
 			1 = {
 				trigger = {
@@ -2251,7 +2251,7 @@ covert_tech_steal_production = {
 					can_research = molecular_assemblers
 					scope:iw_theft_target ?= { has_technology_researched = molecular_assemblers }
 				}
-				covert_tech_grant_era_12 = { TECH = molecular_assemblers IDX = 139 }
+				covert_tech_grant_era_12 = { TECH = molecular_assemblers IDX = 141 }
 			}
 			1 = {
 				trigger = {
@@ -2259,7 +2259,7 @@ covert_tech_steal_production = {
 					can_research = nitrogen_fixation
 					scope:iw_theft_target ?= { has_technology_researched = nitrogen_fixation }
 				}
-				covert_tech_grant_era_4 = { TECH = nitrogen_fixation IDX = 148 }
+				covert_tech_grant_era_4 = { TECH = nitrogen_fixation IDX = 150 }
 			}
 			1 = {
 				trigger = {
@@ -2267,7 +2267,7 @@ covert_tech_steal_production = {
 					can_research = nitroglycerin
 					scope:iw_theft_target ?= { has_technology_researched = nitroglycerin }
 				}
-				covert_tech_grant_era_2 = { TECH = nitroglycerin IDX = 149 }
+				covert_tech_grant_era_2 = { TECH = nitroglycerin IDX = 151 }
 			}
 			1 = {
 				trigger = {
@@ -2275,7 +2275,7 @@ covert_tech_steal_production = {
 					can_research = oil_turbine
 					scope:iw_theft_target ?= { has_technology_researched = oil_turbine }
 				}
-				covert_tech_grant_era_5 = { TECH = oil_turbine IDX = 152 }
+				covert_tech_grant_era_5 = { TECH = oil_turbine IDX = 155 }
 			}
 			1 = {
 				trigger = {
@@ -2283,7 +2283,7 @@ covert_tech_steal_production = {
 					can_research = open_hearth_process
 					scope:iw_theft_target ?= { has_technology_researched = open_hearth_process }
 				}
-				covert_tech_grant_era_3 = { TECH = open_hearth_process IDX = 153 }
+				covert_tech_grant_era_3 = { TECH = open_hearth_process IDX = 156 }
 			}
 			1 = {
 				trigger = {
@@ -2291,7 +2291,7 @@ covert_tech_steal_production = {
 					can_research = orbital_manufacturing
 					scope:iw_theft_target ?= { has_technology_researched = orbital_manufacturing }
 				}
-				covert_tech_grant_era_12 = { TECH = orbital_manufacturing IDX = 154 }
+				covert_tech_grant_era_12 = { TECH = orbital_manufacturing IDX = 157 }
 			}
 			1 = {
 				trigger = {
@@ -2299,7 +2299,7 @@ covert_tech_steal_production = {
 					can_research = pasteurization
 					scope:iw_theft_target ?= { has_technology_researched = pasteurization }
 				}
-				covert_tech_grant_era_4 = { TECH = pasteurization IDX = 157 }
+				covert_tech_grant_era_4 = { TECH = pasteurization IDX = 160 }
 			}
 			1 = {
 				trigger = {
@@ -2307,7 +2307,7 @@ covert_tech_steal_production = {
 					can_research = personal_appliances
 					scope:iw_theft_target ?= { has_technology_researched = personal_appliances }
 				}
-				covert_tech_grant_era_6 = { TECH = personal_appliances IDX = 159 }
+				covert_tech_grant_era_6 = { TECH = personal_appliances IDX = 162 }
 			}
 			1 = {
 				trigger = {
@@ -2315,7 +2315,7 @@ covert_tech_steal_production = {
 					can_research = personal_computers
 					scope:iw_theft_target ?= { has_technology_researched = personal_computers }
 				}
-				covert_tech_grant_era_8 = { TECH = personal_computers IDX = 160 }
+				covert_tech_grant_era_8 = { TECH = personal_computers IDX = 163 }
 			}
 			1 = {
 				trigger = {
@@ -2323,7 +2323,7 @@ covert_tech_steal_production = {
 					can_research = photocopiers
 					scope:iw_theft_target ?= { has_technology_researched = photocopiers }
 				}
-				covert_tech_grant_era_7 = { TECH = photocopiers IDX = 161 }
+				covert_tech_grant_era_7 = { TECH = photocopiers IDX = 164 }
 			}
 			1 = {
 				trigger = {
@@ -2331,7 +2331,7 @@ covert_tech_steal_production = {
 					can_research = plastic_mass_production
 					scope:iw_theft_target ?= { has_technology_researched = plastic_mass_production }
 				}
-				covert_tech_grant_era_7 = { TECH = plastic_mass_production IDX = 162 }
+				covert_tech_grant_era_7 = { TECH = plastic_mass_production IDX = 165 }
 			}
 			1 = {
 				trigger = {
@@ -2339,7 +2339,7 @@ covert_tech_steal_production = {
 					can_research = plastics
 					scope:iw_theft_target ?= { has_technology_researched = plastics }
 				}
-				covert_tech_grant_era_4 = { TECH = plastics IDX = 163 }
+				covert_tech_grant_era_4 = { TECH = plastics IDX = 166 }
 			}
 			1 = {
 				trigger = {
@@ -2347,7 +2347,7 @@ covert_tech_steal_production = {
 					can_research = pneumatic_tools
 					scope:iw_theft_target ?= { has_technology_researched = pneumatic_tools }
 				}
-				covert_tech_grant_era_4 = { TECH = pneumatic_tools IDX = 164 }
+				covert_tech_grant_era_4 = { TECH = pneumatic_tools IDX = 167 }
 			}
 			1 = {
 				trigger = {
@@ -2355,7 +2355,7 @@ covert_tech_steal_production = {
 					can_research = prefabricated_construction
 					scope:iw_theft_target ?= { has_technology_researched = prefabricated_construction }
 				}
-				covert_tech_grant_era_7 = { TECH = prefabricated_construction IDX = 169 }
+				covert_tech_grant_era_7 = { TECH = prefabricated_construction IDX = 172 }
 			}
 			1 = {
 				trigger = {
@@ -2363,7 +2363,7 @@ covert_tech_steal_production = {
 					can_research = programmable_matter
 					scope:iw_theft_target ?= { has_technology_researched = programmable_matter }
 				}
-				covert_tech_grant_era_12 = { TECH = programmable_matter IDX = 170 }
+				covert_tech_grant_era_12 = { TECH = programmable_matter IDX = 173 }
 			}
 			1 = {
 				trigger = {
@@ -2371,7 +2371,7 @@ covert_tech_steal_production = {
 					can_research = prospecting
 					scope:iw_theft_target ?= { has_technology_researched = prospecting }
 				}
-				covert_tech_grant_era_1 = { TECH = prospecting IDX = 171 }
+				covert_tech_grant_era_1 = { TECH = prospecting IDX = 174 }
 			}
 			1 = {
 				trigger = {
@@ -2379,7 +2379,7 @@ covert_tech_steal_production = {
 					can_research = pumpjacks
 					scope:iw_theft_target ?= { has_technology_researched = pumpjacks }
 				}
-				covert_tech_grant_era_3 = { TECH = pumpjacks IDX = 172 }
+				covert_tech_grant_era_3 = { TECH = pumpjacks IDX = 175 }
 			}
 			1 = {
 				trigger = {
@@ -2387,7 +2387,7 @@ covert_tech_steal_production = {
 					can_research = quantum_computing
 					scope:iw_theft_target ?= { has_technology_researched = quantum_computing }
 				}
-				covert_tech_grant_era_11 = { TECH = quantum_computing IDX = 174 }
+				covert_tech_grant_era_11 = { TECH = quantum_computing IDX = 177 }
 			}
 			1 = {
 				trigger = {
@@ -2395,7 +2395,7 @@ covert_tech_steal_production = {
 					can_research = quantum_materials
 					scope:iw_theft_target ?= { has_technology_researched = quantum_materials }
 				}
-				covert_tech_grant_era_12 = { TECH = quantum_materials IDX = 175 }
+				covert_tech_grant_era_12 = { TECH = quantum_materials IDX = 178 }
 			}
 			1 = {
 				trigger = {
@@ -2403,7 +2403,7 @@ covert_tech_steal_production = {
 					can_research = radio
 					scope:iw_theft_target ?= { has_technology_researched = radio }
 				}
-				covert_tech_grant_era_4 = { TECH = radio IDX = 177 }
+				covert_tech_grant_era_4 = { TECH = radio IDX = 180 }
 			}
 			1 = {
 				trigger = {
@@ -2411,7 +2411,7 @@ covert_tech_steal_production = {
 					can_research = railways
 					scope:iw_theft_target ?= { has_technology_researched = railways }
 				}
-				covert_tech_grant_era_2 = { TECH = railways IDX = 178 }
+				covert_tech_grant_era_2 = { TECH = railways IDX = 181 }
 			}
 			1 = {
 				trigger = {
@@ -2419,7 +2419,7 @@ covert_tech_steal_production = {
 					can_research = reinforced_concrete
 					scope:iw_theft_target ?= { has_technology_researched = reinforced_concrete }
 				}
-				covert_tech_grant_era_3 = { TECH = reinforced_concrete IDX = 181 }
+				covert_tech_grant_era_3 = { TECH = reinforced_concrete IDX = 184 }
 			}
 			1 = {
 				trigger = {
@@ -2427,7 +2427,7 @@ covert_tech_steal_production = {
 					can_research = robotics
 					scope:iw_theft_target ?= { has_technology_researched = robotics }
 				}
-				covert_tech_grant_era_8 = { TECH = robotics IDX = 185 }
+				covert_tech_grant_era_8 = { TECH = robotics IDX = 188 }
 			}
 			1 = {
 				trigger = {
@@ -2435,7 +2435,7 @@ covert_tech_steal_production = {
 					can_research = rotary_valve_engine
 					scope:iw_theft_target ?= { has_technology_researched = rotary_valve_engine }
 				}
-				covert_tech_grant_era_3 = { TECH = rotary_valve_engine IDX = 187 }
+				covert_tech_grant_era_3 = { TECH = rotary_valve_engine IDX = 190 }
 			}
 			1 = {
 				trigger = {
@@ -2443,7 +2443,7 @@ covert_tech_steal_production = {
 					can_research = rubber_mastication
 					scope:iw_theft_target ?= { has_technology_researched = rubber_mastication }
 				}
-				covert_tech_grant_era_3 = { TECH = rubber_mastication IDX = 188 }
+				covert_tech_grant_era_3 = { TECH = rubber_mastication IDX = 191 }
 			}
 			1 = {
 				trigger = {
@@ -2451,7 +2451,7 @@ covert_tech_steal_production = {
 					can_research = shaft_mining
 					scope:iw_theft_target ?= { has_technology_researched = shaft_mining }
 				}
-				covert_tech_grant_era_1 = { TECH = shaft_mining IDX = 194 }
+				covert_tech_grant_era_1 = { TECH = shaft_mining IDX = 197 }
 			}
 			1 = {
 				trigger = {
@@ -2459,7 +2459,7 @@ covert_tech_steal_production = {
 					can_research = shift_work
 					scope:iw_theft_target ?= { has_technology_researched = shift_work }
 				}
-				covert_tech_grant_era_3 = { TECH = shift_work IDX = 196 }
+				covert_tech_grant_era_3 = { TECH = shift_work IDX = 199 }
 			}
 			1 = {
 				trigger = {
@@ -2467,7 +2467,7 @@ covert_tech_steal_production = {
 					can_research = smart_grids
 					scope:iw_theft_target ?= { has_technology_researched = smart_grids }
 				}
-				covert_tech_grant_era_11 = { TECH = smart_grids IDX = 197 }
+				covert_tech_grant_era_11 = { TECH = smart_grids IDX = 200 }
 			}
 			1 = {
 				trigger = {
@@ -2475,7 +2475,7 @@ covert_tech_steal_production = {
 					can_research = stainless_steel_mass_production
 					scope:iw_theft_target ?= { has_technology_researched = stainless_steel_mass_production }
 				}
-				covert_tech_grant_era_6 = { TECH = stainless_steel_mass_production IDX = 203 }
+				covert_tech_grant_era_6 = { TECH = stainless_steel_mass_production IDX = 206 }
 			}
 			1 = {
 				trigger = {
@@ -2483,7 +2483,7 @@ covert_tech_steal_production = {
 					can_research = steam_donkey
 					scope:iw_theft_target ?= { has_technology_researched = steam_donkey }
 				}
-				covert_tech_grant_era_3 = { TECH = steam_donkey IDX = 206 }
+				covert_tech_grant_era_3 = { TECH = steam_donkey IDX = 209 }
 			}
 			1 = {
 				trigger = {
@@ -2491,7 +2491,7 @@ covert_tech_steal_production = {
 					can_research = steam_turbine
 					scope:iw_theft_target ?= { has_technology_researched = steam_turbine }
 				}
-				covert_tech_grant_era_4 = { TECH = steam_turbine IDX = 207 }
+				covert_tech_grant_era_4 = { TECH = steam_turbine IDX = 210 }
 			}
 			1 = {
 				trigger = {
@@ -2499,7 +2499,7 @@ covert_tech_steal_production = {
 					can_research = steel_railway_cars
 					scope:iw_theft_target ?= { has_technology_researched = steel_railway_cars }
 				}
-				covert_tech_grant_era_3 = { TECH = steel_railway_cars IDX = 208 }
+				covert_tech_grant_era_3 = { TECH = steel_railway_cars IDX = 211 }
 			}
 			1 = {
 				trigger = {
@@ -2507,7 +2507,7 @@ covert_tech_steal_production = {
 					can_research = steelworking
 					scope:iw_theft_target ?= { has_technology_researched = steelworking }
 				}
-				covert_tech_grant_era_1 = { TECH = steelworking IDX = 209 }
+				covert_tech_grant_era_1 = { TECH = steelworking IDX = 212 }
 			}
 			1 = {
 				trigger = {
@@ -2515,7 +2515,7 @@ covert_tech_steal_production = {
 					can_research = supply_chain_management
 					scope:iw_theft_target ?= { has_technology_researched = supply_chain_management }
 				}
-				covert_tech_grant_era_9 = { TECH = supply_chain_management IDX = 213 }
+				covert_tech_grant_era_9 = { TECH = supply_chain_management IDX = 216 }
 			}
 			1 = {
 				trigger = {
@@ -2523,7 +2523,7 @@ covert_tech_steal_production = {
 					can_research = synthetic_biology
 					scope:iw_theft_target ?= { has_technology_researched = synthetic_biology }
 				}
-				covert_tech_grant_era_11 = { TECH = synthetic_biology IDX = 215 }
+				covert_tech_grant_era_11 = { TECH = synthetic_biology IDX = 218 }
 			}
 			1 = {
 				trigger = {
@@ -2531,7 +2531,7 @@ covert_tech_steal_production = {
 					can_research = telephone
 					scope:iw_theft_target ?= { has_technology_researched = telephone }
 				}
-				covert_tech_grant_era_4 = { TECH = telephone IDX = 217 }
+				covert_tech_grant_era_4 = { TECH = telephone IDX = 220 }
 			}
 			1 = {
 				trigger = {
@@ -2539,7 +2539,7 @@ covert_tech_steal_production = {
 					can_research = television
 					scope:iw_theft_target ?= { has_technology_researched = television }
 				}
-				covert_tech_grant_era_6 = { TECH = television IDX = 218 }
+				covert_tech_grant_era_6 = { TECH = television IDX = 221 }
 			}
 			1 = {
 				trigger = {
@@ -2547,7 +2547,7 @@ covert_tech_steal_production = {
 					can_research = threshing_machine
 					scope:iw_theft_target ?= { has_technology_researched = threshing_machine }
 				}
-				covert_tech_grant_era_3 = { TECH = threshing_machine IDX = 219 }
+				covert_tech_grant_era_3 = { TECH = threshing_machine IDX = 222 }
 			}
 			1 = {
 				trigger = {
@@ -2555,7 +2555,7 @@ covert_tech_steal_production = {
 					can_research = transistors
 					scope:iw_theft_target ?= { has_technology_researched = transistors }
 				}
-				covert_tech_grant_era_7 = { TECH = transistors IDX = 220 }
+				covert_tech_grant_era_7 = { TECH = transistors IDX = 223 }
 			}
 			1 = {
 				trigger = {
@@ -2563,7 +2563,7 @@ covert_tech_steal_production = {
 					can_research = vacuum_canning
 					scope:iw_theft_target ?= { has_technology_researched = vacuum_canning }
 				}
-				covert_tech_grant_era_3 = { TECH = vacuum_canning IDX = 224 }
+				covert_tech_grant_era_3 = { TECH = vacuum_canning IDX = 227 }
 			}
 			1 = {
 				trigger = {
@@ -2571,7 +2571,7 @@ covert_tech_steal_production = {
 					can_research = vulcanization
 					scope:iw_theft_target ?= { has_technology_researched = vulcanization }
 				}
-				covert_tech_grant_era_3 = { TECH = vulcanization IDX = 225 }
+				covert_tech_grant_era_3 = { TECH = vulcanization IDX = 228 }
 			}
 			1 = {
 				trigger = {
@@ -2579,7 +2579,7 @@ covert_tech_steal_production = {
 					can_research = watertube_boiler
 					scope:iw_theft_target ?= { has_technology_researched = watertube_boiler }
 				}
-				covert_tech_grant_era_2 = { TECH = watertube_boiler IDX = 228 }
+				covert_tech_grant_era_2 = { TECH = watertube_boiler IDX = 231 }
 			}
 			1 = {
 				trigger = {
@@ -2587,7 +2587,7 @@ covert_tech_steal_production = {
 					can_research = wireless_internet
 					scope:iw_theft_target ?= { has_technology_researched = wireless_internet }
 				}
-				covert_tech_grant_era_9 = { TECH = wireless_internet IDX = 229 }
+				covert_tech_grant_era_9 = { TECH = wireless_internet IDX = 232 }
 			}
 			1 = {
 				trigger = {
@@ -2595,7 +2595,7 @@ covert_tech_steal_production = {
 					can_research = world_wide_web
 					scope:iw_theft_target ?= { has_technology_researched = world_wide_web }
 				}
-				covert_tech_grant_era_9 = { TECH = world_wide_web IDX = 230 }
+				covert_tech_grant_era_9 = { TECH = world_wide_web IDX = 233 }
 			}
 		}
 	}
@@ -2780,11 +2780,19 @@ covert_tech_steal_military = {
 	}
 	else_if = {
 		limit = {
+			is_researching_technology = cislunar_infrastructure
+			NOT = { has_technology_researched = cislunar_infrastructure }
+			scope:iw_theft_target ?= { has_technology_researched = cislunar_infrastructure }
+		}
+		covert_tech_grant_era_10 = { TECH = cislunar_infrastructure IDX = 45 }
+	}
+	else_if = {
+		limit = {
 			is_researching_technology = combined_arms
 			NOT = { has_technology_researched = combined_arms }
 			scope:iw_theft_target ?= { has_technology_researched = combined_arms }
 		}
-		covert_tech_grant_era_6 = { TECH = combined_arms IDX = 47 }
+		covert_tech_grant_era_6 = { TECH = combined_arms IDX = 48 }
 	}
 	else_if = {
 		limit = {
@@ -2792,7 +2800,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = compact_fusion_reactors }
 			scope:iw_theft_target ?= { has_technology_researched = compact_fusion_reactors }
 		}
-		covert_tech_grant_era_12 = { TECH = compact_fusion_reactors IDX = 49 }
+		covert_tech_grant_era_12 = { TECH = compact_fusion_reactors IDX = 50 }
 	}
 	else_if = {
 		limit = {
@@ -2800,7 +2808,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = concrete_dockyards }
 			scope:iw_theft_target ?= { has_technology_researched = concrete_dockyards }
 		}
-		covert_tech_grant_era_4 = { TECH = concrete_dockyards IDX = 53 }
+		covert_tech_grant_era_4 = { TECH = concrete_dockyards IDX = 54 }
 	}
 	else_if = {
 		limit = {
@@ -2808,7 +2816,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = concrete_fortifications }
 			scope:iw_theft_target ?= { has_technology_researched = concrete_fortifications }
 		}
-		covert_tech_grant_era_5 = { TECH = concrete_fortifications IDX = 54 }
+		covert_tech_grant_era_5 = { TECH = concrete_fortifications IDX = 55 }
 	}
 	else_if = {
 		limit = {
@@ -2816,7 +2824,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = cryptography }
 			scope:iw_theft_target ?= { has_technology_researched = cryptography }
 		}
-		covert_tech_grant_era_6 = { TECH = cryptography IDX = 57 }
+		covert_tech_grant_era_6 = { TECH = cryptography IDX = 58 }
 	}
 	else_if = {
 		limit = {
@@ -2824,7 +2832,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = cyber_warfare }
 			scope:iw_theft_target ?= { has_technology_researched = cyber_warfare }
 		}
-		covert_tech_grant_era_10 = { TECH = cyber_warfare IDX = 59 }
+		covert_tech_grant_era_10 = { TECH = cyber_warfare IDX = 60 }
 	}
 	else_if = {
 		limit = {
@@ -2832,7 +2840,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = defense_in_depth }
 			scope:iw_theft_target ?= { has_technology_researched = defense_in_depth }
 		}
-		covert_tech_grant_era_4 = { TECH = defense_in_depth IDX = 60 }
+		covert_tech_grant_era_4 = { TECH = defense_in_depth IDX = 61 }
 	}
 	else_if = {
 		limit = {
@@ -2840,7 +2848,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = destroyer }
 			scope:iw_theft_target ?= { has_technology_researched = destroyer }
 		}
-		covert_tech_grant_era_5 = { TECH = destroyer IDX = 61 }
+		covert_tech_grant_era_5 = { TECH = destroyer IDX = 62 }
 	}
 	else_if = {
 		limit = {
@@ -2848,7 +2856,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = directed_energy_defenses }
 			scope:iw_theft_target ?= { has_technology_researched = directed_energy_defenses }
 		}
-		covert_tech_grant_era_10 = { TECH = directed_energy_defenses IDX = 63 }
+		covert_tech_grant_era_10 = { TECH = directed_energy_defenses IDX = 64 }
 	}
 	else_if = {
 		limit = {
@@ -2856,7 +2864,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = directed_energy_weapons }
 			scope:iw_theft_target ?= { has_technology_researched = directed_energy_weapons }
 		}
-		covert_tech_grant_era_11 = { TECH = directed_energy_weapons IDX = 64 }
+		covert_tech_grant_era_11 = { TECH = directed_energy_weapons IDX = 65 }
 	}
 	else_if = {
 		limit = {
@@ -2864,7 +2872,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = dreadnought_tech }
 			scope:iw_theft_target ?= { has_technology_researched = dreadnought_tech }
 		}
-		covert_tech_grant_era_4 = { TECH = dreadnought_tech IDX = 67 }
+		covert_tech_grant_era_4 = { TECH = dreadnought_tech IDX = 68 }
 	}
 	else_if = {
 		limit = {
@@ -2872,7 +2880,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = drydocks }
 			scope:iw_theft_target ?= { has_technology_researched = drydocks }
 		}
-		covert_tech_grant_era_1 = { TECH = drydocks IDX = 68 }
+		covert_tech_grant_era_1 = { TECH = drydocks IDX = 69 }
 	}
 	else_if = {
 		limit = {
@@ -2880,7 +2888,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = electric_telegraph }
 			scope:iw_theft_target ?= { has_technology_researched = electric_telegraph }
 		}
-		covert_tech_grant_era_3 = { TECH = electric_telegraph IDX = 74 }
+		covert_tech_grant_era_3 = { TECH = electric_telegraph IDX = 75 }
 	}
 	else_if = {
 		limit = {
@@ -2888,7 +2896,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = electronic_warfare }
 			scope:iw_theft_target ?= { has_technology_researched = electronic_warfare }
 		}
-		covert_tech_grant_era_10 = { TECH = electronic_warfare IDX = 78 }
+		covert_tech_grant_era_10 = { TECH = electronic_warfare IDX = 79 }
 	}
 	else_if = {
 		limit = {
@@ -2896,7 +2904,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = enlistment_offices }
 			scope:iw_theft_target ?= { has_technology_researched = enlistment_offices }
 		}
-		covert_tech_grant_era_3 = { TECH = enlistment_offices IDX = 80 }
+		covert_tech_grant_era_3 = { TECH = enlistment_offices IDX = 81 }
 	}
 	else_if = {
 		limit = {
@@ -2904,7 +2912,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = field_works }
 			scope:iw_theft_target ?= { has_technology_researched = field_works }
 		}
-		covert_tech_grant_era_2 = { TECH = field_works IDX = 82 }
+		covert_tech_grant_era_2 = { TECH = field_works IDX = 83 }
 	}
 	else_if = {
 		limit = {
@@ -2912,7 +2920,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = flamethrowers }
 			scope:iw_theft_target ?= { has_technology_researched = flamethrowers }
 		}
-		covert_tech_grant_era_5 = { TECH = flamethrowers IDX = 83 }
+		covert_tech_grant_era_5 = { TECH = flamethrowers IDX = 84 }
 	}
 	else_if = {
 		limit = {
@@ -2920,7 +2928,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = floating_harbor }
 			scope:iw_theft_target ?= { has_technology_researched = floating_harbor }
 		}
-		covert_tech_grant_era_3 = { TECH = floating_harbor IDX = 85 }
+		covert_tech_grant_era_3 = { TECH = floating_harbor IDX = 86 }
 	}
 	else_if = {
 		limit = {
@@ -2928,7 +2936,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = fusion_batteries }
 			scope:iw_theft_target ?= { has_technology_researched = fusion_batteries }
 		}
-		covert_tech_grant_era_12 = { TECH = fusion_batteries IDX = 88 }
+		covert_tech_grant_era_12 = { TECH = fusion_batteries IDX = 89 }
 	}
 	else_if = {
 		limit = {
@@ -2936,7 +2944,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = fusion_power }
 			scope:iw_theft_target ?= { has_technology_researched = fusion_power }
 		}
-		covert_tech_grant_era_11 = { TECH = fusion_power IDX = 89 }
+		covert_tech_grant_era_11 = { TECH = fusion_power IDX = 90 }
 	}
 	else_if = {
 		limit = {
@@ -2944,7 +2952,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = gantry_cranes }
 			scope:iw_theft_target ?= { has_technology_researched = gantry_cranes }
 		}
-		covert_tech_grant_era_3 = { TECH = gantry_cranes IDX = 90 }
+		covert_tech_grant_era_3 = { TECH = gantry_cranes IDX = 91 }
 	}
 	else_if = {
 		limit = {
@@ -2952,7 +2960,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = general_staff }
 			scope:iw_theft_target ?= { has_technology_researched = general_staff }
 		}
-		covert_tech_grant_era_2 = { TECH = general_staff IDX = 92 }
+		covert_tech_grant_era_2 = { TECH = general_staff IDX = 93 }
 	}
 	else_if = {
 		limit = {
@@ -2960,7 +2968,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = guided_missiles }
 			scope:iw_theft_target ?= { has_technology_researched = guided_missiles }
 		}
-		covert_tech_grant_era_7 = { TECH = guided_missiles IDX = 96 }
+		covert_tech_grant_era_7 = { TECH = guided_missiles IDX = 97 }
 	}
 	else_if = {
 		limit = {
@@ -2968,7 +2976,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = gunsmithing }
 			scope:iw_theft_target ?= { has_technology_researched = gunsmithing }
 		}
-		covert_tech_grant_era_1 = { TECH = gunsmithing IDX = 97 }
+		covert_tech_grant_era_1 = { TECH = gunsmithing IDX = 98 }
 	}
 	else_if = {
 		limit = {
@@ -2976,7 +2984,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = handcranked_machine_gun }
 			scope:iw_theft_target ?= { has_technology_researched = handcranked_machine_gun }
 		}
-		covert_tech_grant_era_3 = { TECH = handcranked_machine_gun IDX = 98 }
+		covert_tech_grant_era_3 = { TECH = handcranked_machine_gun IDX = 99 }
 	}
 	else_if = {
 		limit = {
@@ -2984,7 +2992,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = hydraulic_cranes }
 			scope:iw_theft_target ?= { has_technology_researched = hydraulic_cranes }
 		}
-		covert_tech_grant_era_2 = { TECH = hydraulic_cranes IDX = 99 }
+		covert_tech_grant_era_2 = { TECH = hydraulic_cranes IDX = 100 }
 	}
 	else_if = {
 		limit = {
@@ -2992,7 +3000,15 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = hypersonic_weapons }
 			scope:iw_theft_target ?= { has_technology_researched = hypersonic_weapons }
 		}
-		covert_tech_grant_era_10 = { TECH = hypersonic_weapons IDX = 101 }
+		covert_tech_grant_era_10 = { TECH = hypersonic_weapons IDX = 102 }
+	}
+	else_if = {
+		limit = {
+			is_researching_technology = in_situ_resource_utilization
+			NOT = { has_technology_researched = in_situ_resource_utilization }
+			scope:iw_theft_target ?= { has_technology_researched = in_situ_resource_utilization }
+		}
+		covert_tech_grant_era_10 = { TECH = in_situ_resource_utilization IDX = 104 }
 	}
 	else_if = {
 		limit = {
@@ -3000,7 +3016,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = inertial_navigation_systems }
 			scope:iw_theft_target ?= { has_technology_researched = inertial_navigation_systems }
 		}
-		covert_tech_grant_era_7 = { TECH = inertial_navigation_systems IDX = 103 }
+		covert_tech_grant_era_7 = { TECH = inertial_navigation_systems IDX = 105 }
 	}
 	else_if = {
 		limit = {
@@ -3008,7 +3024,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = infrared_night_vision }
 			scope:iw_theft_target ?= { has_technology_researched = infrared_night_vision }
 		}
-		covert_tech_grant_era_8 = { TECH = infrared_night_vision IDX = 104 }
+		covert_tech_grant_era_8 = { TECH = infrared_night_vision IDX = 106 }
 	}
 	else_if = {
 		limit = {
@@ -3016,7 +3032,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = ironclad_tech }
 			scope:iw_theft_target ?= { has_technology_researched = ironclad_tech }
 		}
-		covert_tech_grant_era_3 = { TECH = ironclad_tech IDX = 108 }
+		covert_tech_grant_era_3 = { TECH = ironclad_tech IDX = 110 }
 	}
 	else_if = {
 		limit = {
@@ -3024,7 +3040,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = jadc2 }
 			scope:iw_theft_target ?= { has_technology_researched = jadc2 }
 		}
-		covert_tech_grant_era_10 = { TECH = jadc2 IDX = 110 }
+		covert_tech_grant_era_10 = { TECH = jadc2 IDX = 112 }
 	}
 	else_if = {
 		limit = {
@@ -3032,7 +3048,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = jet_engine_technology }
 			scope:iw_theft_target ?= { has_technology_researched = jet_engine_technology }
 		}
-		covert_tech_grant_era_7 = { TECH = jet_engine_technology IDX = 111 }
+		covert_tech_grant_era_7 = { TECH = jet_engine_technology IDX = 113 }
 	}
 	else_if = {
 		limit = {
@@ -3040,7 +3056,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = jeune_ecole }
 			scope:iw_theft_target ?= { has_technology_researched = jeune_ecole }
 		}
-		covert_tech_grant_era_3 = { TECH = jeune_ecole IDX = 112 }
+		covert_tech_grant_era_3 = { TECH = jeune_ecole IDX = 114 }
 	}
 	else_if = {
 		limit = {
@@ -3048,7 +3064,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = landing_craft }
 			scope:iw_theft_target ?= { has_technology_researched = landing_craft }
 		}
-		covert_tech_grant_era_4 = { TECH = landing_craft IDX = 113 }
+		covert_tech_grant_era_4 = { TECH = landing_craft IDX = 115 }
 	}
 	else_if = {
 		limit = {
@@ -3056,7 +3072,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = line_infantry }
 			scope:iw_theft_target ?= { has_technology_researched = line_infantry }
 		}
-		covert_tech_grant_era_1 = { TECH = line_infantry IDX = 116 }
+		covert_tech_grant_era_1 = { TECH = line_infantry IDX = 118 }
 	}
 	else_if = {
 		limit = {
@@ -3064,7 +3080,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = logistics }
 			scope:iw_theft_target ?= { has_technology_researched = logistics }
 		}
-		covert_tech_grant_era_2 = { TECH = logistics IDX = 117 }
+		covert_tech_grant_era_2 = { TECH = logistics IDX = 119 }
 	}
 	else_if = {
 		limit = {
@@ -3072,7 +3088,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = mandatory_service }
 			scope:iw_theft_target ?= { has_technology_researched = mandatory_service }
 		}
-		covert_tech_grant_era_1 = { TECH = mandatory_service IDX = 120 }
+		covert_tech_grant_era_1 = { TECH = mandatory_service IDX = 122 }
 	}
 	else_if = {
 		limit = {
@@ -3080,7 +3096,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = military_aviation }
 			scope:iw_theft_target ?= { has_technology_researched = military_aviation }
 		}
-		covert_tech_grant_era_4 = { TECH = military_aviation IDX = 126 }
+		covert_tech_grant_era_4 = { TECH = military_aviation IDX = 128 }
 	}
 	else_if = {
 		limit = {
@@ -3088,7 +3104,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = military_drill }
 			scope:iw_theft_target ?= { has_technology_researched = military_drill }
 		}
-		covert_tech_grant_era_1 = { TECH = military_drill IDX = 127 }
+		covert_tech_grant_era_1 = { TECH = military_drill IDX = 129 }
 	}
 	else_if = {
 		limit = {
@@ -3096,7 +3112,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = military_grade_cybersecurity }
 			scope:iw_theft_target ?= { has_technology_researched = military_grade_cybersecurity }
 		}
-		covert_tech_grant_era_9 = { TECH = military_grade_cybersecurity IDX = 128 }
+		covert_tech_grant_era_9 = { TECH = military_grade_cybersecurity IDX = 130 }
 	}
 	else_if = {
 		limit = {
@@ -3104,7 +3120,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = military_statistics }
 			scope:iw_theft_target ?= { has_technology_researched = military_statistics }
 		}
-		covert_tech_grant_era_3 = { TECH = military_statistics IDX = 129 }
+		covert_tech_grant_era_3 = { TECH = military_statistics IDX = 131 }
 	}
 	else_if = {
 		limit = {
@@ -3112,7 +3128,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = missile_defense_systems }
 			scope:iw_theft_target ?= { has_technology_researched = missile_defense_systems }
 		}
-		covert_tech_grant_era_9 = { TECH = missile_defense_systems IDX = 130 }
+		covert_tech_grant_era_9 = { TECH = missile_defense_systems IDX = 132 }
 	}
 	else_if = {
 		limit = {
@@ -3120,7 +3136,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = mobile_armor }
 			scope:iw_theft_target ?= { has_technology_researched = mobile_armor }
 		}
-		covert_tech_grant_era_5 = { TECH = mobile_armor IDX = 131 }
+		covert_tech_grant_era_5 = { TECH = mobile_armor IDX = 133 }
 	}
 	else_if = {
 		limit = {
@@ -3128,7 +3144,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = modern_nursing }
 			scope:iw_theft_target ?= { has_technology_researched = modern_nursing }
 		}
-		covert_tech_grant_era_3 = { TECH = modern_nursing IDX = 136 }
+		covert_tech_grant_era_3 = { TECH = modern_nursing IDX = 138 }
 	}
 	else_if = {
 		limit = {
@@ -3136,7 +3152,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = monitor_tech }
 			scope:iw_theft_target ?= { has_technology_researched = monitor_tech }
 		}
-		covert_tech_grant_era_3 = { TECH = monitor_tech IDX = 140 }
+		covert_tech_grant_era_3 = { TECH = monitor_tech IDX = 142 }
 	}
 	else_if = {
 		limit = {
@@ -3144,7 +3160,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = motorized_artillery }
 			scope:iw_theft_target ?= { has_technology_researched = motorized_artillery }
 		}
-		covert_tech_grant_era_6 = { TECH = motorized_artillery IDX = 141 }
+		covert_tech_grant_era_6 = { TECH = motorized_artillery IDX = 143 }
 	}
 	else_if = {
 		limit = {
@@ -3152,7 +3168,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = napoleonic_warfare }
 			scope:iw_theft_target ?= { has_technology_researched = napoleonic_warfare }
 		}
-		covert_tech_grant_era_1 = { TECH = napoleonic_warfare IDX = 142 }
+		covert_tech_grant_era_1 = { TECH = napoleonic_warfare IDX = 144 }
 	}
 	else_if = {
 		limit = {
@@ -3160,7 +3176,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = naval_convoy_defense }
 			scope:iw_theft_target ?= { has_technology_researched = naval_convoy_defense }
 		}
-		covert_tech_grant_era_6 = { TECH = naval_convoy_defense IDX = 143 }
+		covert_tech_grant_era_6 = { TECH = naval_convoy_defense IDX = 145 }
 	}
 	else_if = {
 		limit = {
@@ -3168,7 +3184,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = naval_fire_control_systems }
 			scope:iw_theft_target ?= { has_technology_researched = naval_fire_control_systems }
 		}
-		covert_tech_grant_era_6 = { TECH = naval_fire_control_systems IDX = 144 }
+		covert_tech_grant_era_6 = { TECH = naval_fire_control_systems IDX = 146 }
 	}
 	else_if = {
 		limit = {
@@ -3176,7 +3192,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = navigation }
 			scope:iw_theft_target ?= { has_technology_researched = navigation }
 		}
-		covert_tech_grant_era_1 = { TECH = navigation IDX = 145 }
+		covert_tech_grant_era_1 = { TECH = navigation IDX = 147 }
 	}
 	else_if = {
 		limit = {
@@ -3184,7 +3200,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = nco_training }
 			scope:iw_theft_target ?= { has_technology_researched = nco_training }
 		}
-		covert_tech_grant_era_5 = { TECH = nco_training IDX = 146 }
+		covert_tech_grant_era_5 = { TECH = nco_training IDX = 148 }
 	}
 	else_if = {
 		limit = {
@@ -3192,7 +3208,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = network_centric_warfare }
 			scope:iw_theft_target ?= { has_technology_researched = network_centric_warfare }
 		}
-		covert_tech_grant_era_9 = { TECH = network_centric_warfare IDX = 147 }
+		covert_tech_grant_era_9 = { TECH = network_centric_warfare IDX = 149 }
 	}
 	else_if = {
 		limit = {
@@ -3200,7 +3216,15 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = nuclear_energy }
 			scope:iw_theft_target ?= { has_technology_researched = nuclear_energy }
 		}
-		covert_tech_grant_era_7 = { TECH = nuclear_energy IDX = 150 }
+		covert_tech_grant_era_7 = { TECH = nuclear_energy IDX = 152 }
+	}
+	else_if = {
+		limit = {
+			is_researching_technology = nuclear_thermal_propulsion
+			NOT = { has_technology_researched = nuclear_thermal_propulsion }
+			scope:iw_theft_target ?= { has_technology_researched = nuclear_thermal_propulsion }
+		}
+		covert_tech_grant_era_11 = { TECH = nuclear_thermal_propulsion IDX = 153 }
 	}
 	else_if = {
 		limit = {
@@ -3208,7 +3232,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = nuclear_weapons }
 			scope:iw_theft_target ?= { has_technology_researched = nuclear_weapons }
 		}
-		covert_tech_grant_era_6 = { TECH = nuclear_weapons IDX = 151 }
+		covert_tech_grant_era_6 = { TECH = nuclear_weapons IDX = 154 }
 	}
 	else_if = {
 		limit = {
@@ -3216,7 +3240,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = orbital_weapon_platforms }
 			scope:iw_theft_target ?= { has_technology_researched = orbital_weapon_platforms }
 		}
-		covert_tech_grant_era_12 = { TECH = orbital_weapon_platforms IDX = 155 }
+		covert_tech_grant_era_12 = { TECH = orbital_weapon_platforms IDX = 158 }
 	}
 	else_if = {
 		limit = {
@@ -3224,7 +3248,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = paddle_steamer }
 			scope:iw_theft_target ?= { has_technology_researched = paddle_steamer }
 		}
-		covert_tech_grant_era_1 = { TECH = paddle_steamer IDX = 156 }
+		covert_tech_grant_era_1 = { TECH = paddle_steamer IDX = 159 }
 	}
 	else_if = {
 		limit = {
@@ -3232,7 +3256,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = percussion_cap }
 			scope:iw_theft_target ?= { has_technology_researched = percussion_cap }
 		}
-		covert_tech_grant_era_2 = { TECH = percussion_cap IDX = 158 }
+		covert_tech_grant_era_2 = { TECH = percussion_cap IDX = 161 }
 	}
 	else_if = {
 		limit = {
@@ -3240,7 +3264,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = power_of_the_purse }
 			scope:iw_theft_target ?= { has_technology_researched = power_of_the_purse }
 		}
-		covert_tech_grant_era_2 = { TECH = power_of_the_purse IDX = 165 }
+		covert_tech_grant_era_2 = { TECH = power_of_the_purse IDX = 168 }
 	}
 	else_if = {
 		limit = {
@@ -3248,7 +3272,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = pre_dreadnought_tech }
 			scope:iw_theft_target ?= { has_technology_researched = pre_dreadnought_tech }
 		}
-		covert_tech_grant_era_4 = { TECH = pre_dreadnought_tech IDX = 166 }
+		covert_tech_grant_era_4 = { TECH = pre_dreadnought_tech IDX = 169 }
 	}
 	else_if = {
 		limit = {
@@ -3256,7 +3280,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = precision_guided_munitions }
 			scope:iw_theft_target ?= { has_technology_researched = precision_guided_munitions }
 		}
-		covert_tech_grant_era_8 = { TECH = precision_guided_munitions IDX = 167 }
+		covert_tech_grant_era_8 = { TECH = precision_guided_munitions IDX = 170 }
 	}
 	else_if = {
 		limit = {
@@ -3264,7 +3288,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = predictive_logistics }
 			scope:iw_theft_target ?= { has_technology_researched = predictive_logistics }
 		}
-		covert_tech_grant_era_8 = { TECH = predictive_logistics IDX = 168 }
+		covert_tech_grant_era_8 = { TECH = predictive_logistics IDX = 171 }
 	}
 	else_if = {
 		limit = {
@@ -3272,7 +3296,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = quantum_communications }
 			scope:iw_theft_target ?= { has_technology_researched = quantum_communications }
 		}
-		covert_tech_grant_era_11 = { TECH = quantum_communications IDX = 173 }
+		covert_tech_grant_era_11 = { TECH = quantum_communications IDX = 176 }
 	}
 	else_if = {
 		limit = {
@@ -3280,7 +3304,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = radar }
 			scope:iw_theft_target ?= { has_technology_researched = radar }
 		}
-		covert_tech_grant_era_6 = { TECH = radar IDX = 176 }
+		covert_tech_grant_era_6 = { TECH = radar IDX = 179 }
 	}
 	else_if = {
 		limit = {
@@ -3288,7 +3312,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = rapid_deployment_forces }
 			scope:iw_theft_target ?= { has_technology_researched = rapid_deployment_forces }
 		}
-		covert_tech_grant_era_9 = { TECH = rapid_deployment_forces IDX = 179 }
+		covert_tech_grant_era_9 = { TECH = rapid_deployment_forces IDX = 182 }
 	}
 	else_if = {
 		limit = {
@@ -3296,7 +3320,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = recon_satellites }
 			scope:iw_theft_target ?= { has_technology_researched = recon_satellites }
 		}
-		covert_tech_grant_era_7 = { TECH = recon_satellites IDX = 180 }
+		covert_tech_grant_era_7 = { TECH = recon_satellites IDX = 183 }
 	}
 	else_if = {
 		limit = {
@@ -3304,7 +3328,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = repeaters }
 			scope:iw_theft_target ?= { has_technology_researched = repeaters }
 		}
-		covert_tech_grant_era_3 = { TECH = repeaters IDX = 182 }
+		covert_tech_grant_era_3 = { TECH = repeaters IDX = 185 }
 	}
 	else_if = {
 		limit = {
@@ -3312,7 +3336,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = reusable_rocketry }
 			scope:iw_theft_target ?= { has_technology_researched = reusable_rocketry }
 		}
-		covert_tech_grant_era_10 = { TECH = reusable_rocketry IDX = 183 }
+		covert_tech_grant_era_10 = { TECH = reusable_rocketry IDX = 186 }
 	}
 	else_if = {
 		limit = {
@@ -3320,7 +3344,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = rifling }
 			scope:iw_theft_target ?= { has_technology_researched = rifling }
 		}
-		covert_tech_grant_era_2 = { TECH = rifling IDX = 184 }
+		covert_tech_grant_era_2 = { TECH = rifling IDX = 187 }
 	}
 	else_if = {
 		limit = {
@@ -3328,7 +3352,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = rocketry }
 			scope:iw_theft_target ?= { has_technology_researched = rocketry }
 		}
-		covert_tech_grant_era_6 = { TECH = rocketry IDX = 186 }
+		covert_tech_grant_era_6 = { TECH = rocketry IDX = 189 }
 	}
 	else_if = {
 		limit = {
@@ -3336,7 +3360,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = satellite_communications }
 			scope:iw_theft_target ?= { has_technology_researched = satellite_communications }
 		}
-		covert_tech_grant_era_7 = { TECH = satellite_communications IDX = 189 }
+		covert_tech_grant_era_7 = { TECH = satellite_communications IDX = 192 }
 	}
 	else_if = {
 		limit = {
@@ -3344,7 +3368,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = screw_frigate }
 			scope:iw_theft_target ?= { has_technology_researched = screw_frigate }
 		}
-		covert_tech_grant_era_2 = { TECH = screw_frigate IDX = 190 }
+		covert_tech_grant_era_2 = { TECH = screw_frigate IDX = 193 }
 	}
 	else_if = {
 		limit = {
@@ -3352,7 +3376,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = sea_lane_strategies }
 			scope:iw_theft_target ?= { has_technology_researched = sea_lane_strategies }
 		}
-		covert_tech_grant_era_4 = { TECH = sea_lane_strategies IDX = 191 }
+		covert_tech_grant_era_4 = { TECH = sea_lane_strategies IDX = 194 }
 	}
 	else_if = {
 		limit = {
@@ -3360,7 +3384,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = self_propelled_torpedoes }
 			scope:iw_theft_target ?= { has_technology_researched = self_propelled_torpedoes }
 		}
-		covert_tech_grant_era_3 = { TECH = self_propelled_torpedoes IDX = 192 }
+		covert_tech_grant_era_3 = { TECH = self_propelled_torpedoes IDX = 195 }
 	}
 	else_if = {
 		limit = {
@@ -3368,7 +3392,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = semiautomatic_rifle }
 			scope:iw_theft_target ?= { has_technology_researched = semiautomatic_rifle }
 		}
-		covert_tech_grant_era_6 = { TECH = semiautomatic_rifle IDX = 193 }
+		covert_tech_grant_era_6 = { TECH = semiautomatic_rifle IDX = 196 }
 	}
 	else_if = {
 		limit = {
@@ -3376,7 +3400,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = shell_gun }
 			scope:iw_theft_target ?= { has_technology_researched = shell_gun }
 		}
-		covert_tech_grant_era_2 = { TECH = shell_gun IDX = 195 }
+		covert_tech_grant_era_2 = { TECH = shell_gun IDX = 198 }
 	}
 	else_if = {
 		limit = {
@@ -3384,7 +3408,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = sonar }
 			scope:iw_theft_target ?= { has_technology_researched = sonar }
 		}
-		covert_tech_grant_era_6 = { TECH = sonar IDX = 198 }
+		covert_tech_grant_era_6 = { TECH = sonar IDX = 201 }
 	}
 	else_if = {
 		limit = {
@@ -3392,7 +3416,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = space_based_solar_power }
 			scope:iw_theft_target ?= { has_technology_researched = space_based_solar_power }
 		}
-		covert_tech_grant_era_12 = { TECH = space_based_solar_power IDX = 199 }
+		covert_tech_grant_era_12 = { TECH = space_based_solar_power IDX = 202 }
 	}
 	else_if = {
 		limit = {
@@ -3400,7 +3424,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = space_elevator }
 			scope:iw_theft_target ?= { has_technology_researched = space_elevator }
 		}
-		covert_tech_grant_era_12 = { TECH = space_elevator IDX = 200 }
+		covert_tech_grant_era_12 = { TECH = space_elevator IDX = 203 }
 	}
 	else_if = {
 		limit = {
@@ -3408,7 +3432,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = space_exploration }
 			scope:iw_theft_target ?= { has_technology_researched = space_exploration }
 		}
-		covert_tech_grant_era_7 = { TECH = space_exploration IDX = 201 }
+		covert_tech_grant_era_7 = { TECH = space_exploration IDX = 204 }
 	}
 	else_if = {
 		limit = {
@@ -3416,7 +3440,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = space_militarization }
 			scope:iw_theft_target ?= { has_technology_researched = space_militarization }
 		}
-		covert_tech_grant_era_11 = { TECH = space_militarization IDX = 202 }
+		covert_tech_grant_era_11 = { TECH = space_militarization IDX = 205 }
 	}
 	else_if = {
 		limit = {
@@ -3424,7 +3448,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = standing_army }
 			scope:iw_theft_target ?= { has_technology_researched = standing_army }
 		}
-		covert_tech_grant_era_1 = { TECH = standing_army IDX = 204 }
+		covert_tech_grant_era_1 = { TECH = standing_army IDX = 207 }
 	}
 	else_if = {
 		limit = {
@@ -3432,7 +3456,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = stealth_technology }
 			scope:iw_theft_target ?= { has_technology_researched = stealth_technology }
 		}
-		covert_tech_grant_era_8 = { TECH = stealth_technology IDX = 205 }
+		covert_tech_grant_era_8 = { TECH = stealth_technology IDX = 208 }
 	}
 	else_if = {
 		limit = {
@@ -3440,7 +3464,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = stormtroopers }
 			scope:iw_theft_target ?= { has_technology_researched = stormtroopers }
 		}
-		covert_tech_grant_era_5 = { TECH = stormtroopers IDX = 210 }
+		covert_tech_grant_era_5 = { TECH = stormtroopers IDX = 213 }
 	}
 	else_if = {
 		limit = {
@@ -3448,7 +3472,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = submarine }
 			scope:iw_theft_target ?= { has_technology_researched = submarine }
 		}
-		covert_tech_grant_era_4 = { TECH = submarine IDX = 211 }
+		covert_tech_grant_era_4 = { TECH = submarine IDX = 214 }
 	}
 	else_if = {
 		limit = {
@@ -3456,7 +3480,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = supersonic_aircraft }
 			scope:iw_theft_target ?= { has_technology_researched = supersonic_aircraft }
 		}
-		covert_tech_grant_era_8 = { TECH = supersonic_aircraft IDX = 212 }
+		covert_tech_grant_era_8 = { TECH = supersonic_aircraft IDX = 215 }
 	}
 	else_if = {
 		limit = {
@@ -3464,7 +3488,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = swarm_technology }
 			scope:iw_theft_target ?= { has_technology_researched = swarm_technology }
 		}
-		covert_tech_grant_era_11 = { TECH = swarm_technology IDX = 214 }
+		covert_tech_grant_era_11 = { TECH = swarm_technology IDX = 217 }
 	}
 	else_if = {
 		limit = {
@@ -3472,7 +3496,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = tactical_nuclear_weapons }
 			scope:iw_theft_target ?= { has_technology_researched = tactical_nuclear_weapons }
 		}
-		covert_tech_grant_era_7 = { TECH = tactical_nuclear_weapons IDX = 216 }
+		covert_tech_grant_era_7 = { TECH = tactical_nuclear_weapons IDX = 219 }
 	}
 	else_if = {
 		limit = {
@@ -3480,7 +3504,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = trench_works }
 			scope:iw_theft_target ?= { has_technology_researched = trench_works }
 		}
-		covert_tech_grant_era_4 = { TECH = trench_works IDX = 221 }
+		covert_tech_grant_era_4 = { TECH = trench_works IDX = 224 }
 	}
 	else_if = {
 		limit = {
@@ -3488,7 +3512,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = triage }
 			scope:iw_theft_target ?= { has_technology_researched = triage }
 		}
-		covert_tech_grant_era_2 = { TECH = triage IDX = 222 }
+		covert_tech_grant_era_2 = { TECH = triage IDX = 225 }
 	}
 	else_if = {
 		limit = {
@@ -3496,7 +3520,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = unmanned_aerial_vehicles }
 			scope:iw_theft_target ?= { has_technology_researched = unmanned_aerial_vehicles }
 		}
-		covert_tech_grant_era_9 = { TECH = unmanned_aerial_vehicles IDX = 223 }
+		covert_tech_grant_era_9 = { TECH = unmanned_aerial_vehicles IDX = 226 }
 	}
 	else_if = {
 		limit = {
@@ -3504,7 +3528,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = war_propaganda }
 			scope:iw_theft_target ?= { has_technology_researched = war_propaganda }
 		}
-		covert_tech_grant_era_4 = { TECH = war_propaganda IDX = 226 }
+		covert_tech_grant_era_4 = { TECH = war_propaganda IDX = 229 }
 	}
 	else_if = {
 		limit = {
@@ -3512,7 +3536,7 @@ covert_tech_steal_military = {
 			NOT = { has_technology_researched = wargaming }
 			scope:iw_theft_target ?= { has_technology_researched = wargaming }
 		}
-		covert_tech_grant_era_4 = { TECH = wargaming IDX = 227 }
+		covert_tech_grant_era_4 = { TECH = wargaming IDX = 230 }
 	}
 	else_if = {
 		limit = { covert_tech_stealable_military = { TARGET = scope:iw_theft_target } }
@@ -3695,11 +3719,19 @@ covert_tech_steal_military = {
 			}
 			1 = {
 				trigger = {
+					NOT = { has_technology_researched = cislunar_infrastructure }
+					can_research = cislunar_infrastructure
+					scope:iw_theft_target ?= { has_technology_researched = cislunar_infrastructure }
+				}
+				covert_tech_grant_era_10 = { TECH = cislunar_infrastructure IDX = 45 }
+			}
+			1 = {
+				trigger = {
 					NOT = { has_technology_researched = combined_arms }
 					can_research = combined_arms
 					scope:iw_theft_target ?= { has_technology_researched = combined_arms }
 				}
-				covert_tech_grant_era_6 = { TECH = combined_arms IDX = 47 }
+				covert_tech_grant_era_6 = { TECH = combined_arms IDX = 48 }
 			}
 			1 = {
 				trigger = {
@@ -3707,7 +3739,7 @@ covert_tech_steal_military = {
 					can_research = compact_fusion_reactors
 					scope:iw_theft_target ?= { has_technology_researched = compact_fusion_reactors }
 				}
-				covert_tech_grant_era_12 = { TECH = compact_fusion_reactors IDX = 49 }
+				covert_tech_grant_era_12 = { TECH = compact_fusion_reactors IDX = 50 }
 			}
 			1 = {
 				trigger = {
@@ -3715,7 +3747,7 @@ covert_tech_steal_military = {
 					can_research = concrete_dockyards
 					scope:iw_theft_target ?= { has_technology_researched = concrete_dockyards }
 				}
-				covert_tech_grant_era_4 = { TECH = concrete_dockyards IDX = 53 }
+				covert_tech_grant_era_4 = { TECH = concrete_dockyards IDX = 54 }
 			}
 			1 = {
 				trigger = {
@@ -3723,7 +3755,7 @@ covert_tech_steal_military = {
 					can_research = concrete_fortifications
 					scope:iw_theft_target ?= { has_technology_researched = concrete_fortifications }
 				}
-				covert_tech_grant_era_5 = { TECH = concrete_fortifications IDX = 54 }
+				covert_tech_grant_era_5 = { TECH = concrete_fortifications IDX = 55 }
 			}
 			1 = {
 				trigger = {
@@ -3731,7 +3763,7 @@ covert_tech_steal_military = {
 					can_research = cryptography
 					scope:iw_theft_target ?= { has_technology_researched = cryptography }
 				}
-				covert_tech_grant_era_6 = { TECH = cryptography IDX = 57 }
+				covert_tech_grant_era_6 = { TECH = cryptography IDX = 58 }
 			}
 			1 = {
 				trigger = {
@@ -3739,7 +3771,7 @@ covert_tech_steal_military = {
 					can_research = cyber_warfare
 					scope:iw_theft_target ?= { has_technology_researched = cyber_warfare }
 				}
-				covert_tech_grant_era_10 = { TECH = cyber_warfare IDX = 59 }
+				covert_tech_grant_era_10 = { TECH = cyber_warfare IDX = 60 }
 			}
 			1 = {
 				trigger = {
@@ -3747,7 +3779,7 @@ covert_tech_steal_military = {
 					can_research = defense_in_depth
 					scope:iw_theft_target ?= { has_technology_researched = defense_in_depth }
 				}
-				covert_tech_grant_era_4 = { TECH = defense_in_depth IDX = 60 }
+				covert_tech_grant_era_4 = { TECH = defense_in_depth IDX = 61 }
 			}
 			1 = {
 				trigger = {
@@ -3755,7 +3787,7 @@ covert_tech_steal_military = {
 					can_research = destroyer
 					scope:iw_theft_target ?= { has_technology_researched = destroyer }
 				}
-				covert_tech_grant_era_5 = { TECH = destroyer IDX = 61 }
+				covert_tech_grant_era_5 = { TECH = destroyer IDX = 62 }
 			}
 			1 = {
 				trigger = {
@@ -3763,7 +3795,7 @@ covert_tech_steal_military = {
 					can_research = directed_energy_defenses
 					scope:iw_theft_target ?= { has_technology_researched = directed_energy_defenses }
 				}
-				covert_tech_grant_era_10 = { TECH = directed_energy_defenses IDX = 63 }
+				covert_tech_grant_era_10 = { TECH = directed_energy_defenses IDX = 64 }
 			}
 			1 = {
 				trigger = {
@@ -3771,7 +3803,7 @@ covert_tech_steal_military = {
 					can_research = directed_energy_weapons
 					scope:iw_theft_target ?= { has_technology_researched = directed_energy_weapons }
 				}
-				covert_tech_grant_era_11 = { TECH = directed_energy_weapons IDX = 64 }
+				covert_tech_grant_era_11 = { TECH = directed_energy_weapons IDX = 65 }
 			}
 			1 = {
 				trigger = {
@@ -3779,7 +3811,7 @@ covert_tech_steal_military = {
 					can_research = dreadnought_tech
 					scope:iw_theft_target ?= { has_technology_researched = dreadnought_tech }
 				}
-				covert_tech_grant_era_4 = { TECH = dreadnought_tech IDX = 67 }
+				covert_tech_grant_era_4 = { TECH = dreadnought_tech IDX = 68 }
 			}
 			1 = {
 				trigger = {
@@ -3787,7 +3819,7 @@ covert_tech_steal_military = {
 					can_research = drydocks
 					scope:iw_theft_target ?= { has_technology_researched = drydocks }
 				}
-				covert_tech_grant_era_1 = { TECH = drydocks IDX = 68 }
+				covert_tech_grant_era_1 = { TECH = drydocks IDX = 69 }
 			}
 			1 = {
 				trigger = {
@@ -3795,7 +3827,7 @@ covert_tech_steal_military = {
 					can_research = electric_telegraph
 					scope:iw_theft_target ?= { has_technology_researched = electric_telegraph }
 				}
-				covert_tech_grant_era_3 = { TECH = electric_telegraph IDX = 74 }
+				covert_tech_grant_era_3 = { TECH = electric_telegraph IDX = 75 }
 			}
 			1 = {
 				trigger = {
@@ -3803,7 +3835,7 @@ covert_tech_steal_military = {
 					can_research = electronic_warfare
 					scope:iw_theft_target ?= { has_technology_researched = electronic_warfare }
 				}
-				covert_tech_grant_era_10 = { TECH = electronic_warfare IDX = 78 }
+				covert_tech_grant_era_10 = { TECH = electronic_warfare IDX = 79 }
 			}
 			1 = {
 				trigger = {
@@ -3811,7 +3843,7 @@ covert_tech_steal_military = {
 					can_research = enlistment_offices
 					scope:iw_theft_target ?= { has_technology_researched = enlistment_offices }
 				}
-				covert_tech_grant_era_3 = { TECH = enlistment_offices IDX = 80 }
+				covert_tech_grant_era_3 = { TECH = enlistment_offices IDX = 81 }
 			}
 			1 = {
 				trigger = {
@@ -3819,7 +3851,7 @@ covert_tech_steal_military = {
 					can_research = field_works
 					scope:iw_theft_target ?= { has_technology_researched = field_works }
 				}
-				covert_tech_grant_era_2 = { TECH = field_works IDX = 82 }
+				covert_tech_grant_era_2 = { TECH = field_works IDX = 83 }
 			}
 			1 = {
 				trigger = {
@@ -3827,7 +3859,7 @@ covert_tech_steal_military = {
 					can_research = flamethrowers
 					scope:iw_theft_target ?= { has_technology_researched = flamethrowers }
 				}
-				covert_tech_grant_era_5 = { TECH = flamethrowers IDX = 83 }
+				covert_tech_grant_era_5 = { TECH = flamethrowers IDX = 84 }
 			}
 			1 = {
 				trigger = {
@@ -3835,7 +3867,7 @@ covert_tech_steal_military = {
 					can_research = floating_harbor
 					scope:iw_theft_target ?= { has_technology_researched = floating_harbor }
 				}
-				covert_tech_grant_era_3 = { TECH = floating_harbor IDX = 85 }
+				covert_tech_grant_era_3 = { TECH = floating_harbor IDX = 86 }
 			}
 			1 = {
 				trigger = {
@@ -3843,7 +3875,7 @@ covert_tech_steal_military = {
 					can_research = fusion_batteries
 					scope:iw_theft_target ?= { has_technology_researched = fusion_batteries }
 				}
-				covert_tech_grant_era_12 = { TECH = fusion_batteries IDX = 88 }
+				covert_tech_grant_era_12 = { TECH = fusion_batteries IDX = 89 }
 			}
 			1 = {
 				trigger = {
@@ -3851,7 +3883,7 @@ covert_tech_steal_military = {
 					can_research = fusion_power
 					scope:iw_theft_target ?= { has_technology_researched = fusion_power }
 				}
-				covert_tech_grant_era_11 = { TECH = fusion_power IDX = 89 }
+				covert_tech_grant_era_11 = { TECH = fusion_power IDX = 90 }
 			}
 			1 = {
 				trigger = {
@@ -3859,7 +3891,7 @@ covert_tech_steal_military = {
 					can_research = gantry_cranes
 					scope:iw_theft_target ?= { has_technology_researched = gantry_cranes }
 				}
-				covert_tech_grant_era_3 = { TECH = gantry_cranes IDX = 90 }
+				covert_tech_grant_era_3 = { TECH = gantry_cranes IDX = 91 }
 			}
 			1 = {
 				trigger = {
@@ -3867,7 +3899,7 @@ covert_tech_steal_military = {
 					can_research = general_staff
 					scope:iw_theft_target ?= { has_technology_researched = general_staff }
 				}
-				covert_tech_grant_era_2 = { TECH = general_staff IDX = 92 }
+				covert_tech_grant_era_2 = { TECH = general_staff IDX = 93 }
 			}
 			1 = {
 				trigger = {
@@ -3875,7 +3907,7 @@ covert_tech_steal_military = {
 					can_research = guided_missiles
 					scope:iw_theft_target ?= { has_technology_researched = guided_missiles }
 				}
-				covert_tech_grant_era_7 = { TECH = guided_missiles IDX = 96 }
+				covert_tech_grant_era_7 = { TECH = guided_missiles IDX = 97 }
 			}
 			1 = {
 				trigger = {
@@ -3883,7 +3915,7 @@ covert_tech_steal_military = {
 					can_research = gunsmithing
 					scope:iw_theft_target ?= { has_technology_researched = gunsmithing }
 				}
-				covert_tech_grant_era_1 = { TECH = gunsmithing IDX = 97 }
+				covert_tech_grant_era_1 = { TECH = gunsmithing IDX = 98 }
 			}
 			1 = {
 				trigger = {
@@ -3891,7 +3923,7 @@ covert_tech_steal_military = {
 					can_research = handcranked_machine_gun
 					scope:iw_theft_target ?= { has_technology_researched = handcranked_machine_gun }
 				}
-				covert_tech_grant_era_3 = { TECH = handcranked_machine_gun IDX = 98 }
+				covert_tech_grant_era_3 = { TECH = handcranked_machine_gun IDX = 99 }
 			}
 			1 = {
 				trigger = {
@@ -3899,7 +3931,7 @@ covert_tech_steal_military = {
 					can_research = hydraulic_cranes
 					scope:iw_theft_target ?= { has_technology_researched = hydraulic_cranes }
 				}
-				covert_tech_grant_era_2 = { TECH = hydraulic_cranes IDX = 99 }
+				covert_tech_grant_era_2 = { TECH = hydraulic_cranes IDX = 100 }
 			}
 			1 = {
 				trigger = {
@@ -3907,7 +3939,15 @@ covert_tech_steal_military = {
 					can_research = hypersonic_weapons
 					scope:iw_theft_target ?= { has_technology_researched = hypersonic_weapons }
 				}
-				covert_tech_grant_era_10 = { TECH = hypersonic_weapons IDX = 101 }
+				covert_tech_grant_era_10 = { TECH = hypersonic_weapons IDX = 102 }
+			}
+			1 = {
+				trigger = {
+					NOT = { has_technology_researched = in_situ_resource_utilization }
+					can_research = in_situ_resource_utilization
+					scope:iw_theft_target ?= { has_technology_researched = in_situ_resource_utilization }
+				}
+				covert_tech_grant_era_10 = { TECH = in_situ_resource_utilization IDX = 104 }
 			}
 			1 = {
 				trigger = {
@@ -3915,7 +3955,7 @@ covert_tech_steal_military = {
 					can_research = inertial_navigation_systems
 					scope:iw_theft_target ?= { has_technology_researched = inertial_navigation_systems }
 				}
-				covert_tech_grant_era_7 = { TECH = inertial_navigation_systems IDX = 103 }
+				covert_tech_grant_era_7 = { TECH = inertial_navigation_systems IDX = 105 }
 			}
 			1 = {
 				trigger = {
@@ -3923,7 +3963,7 @@ covert_tech_steal_military = {
 					can_research = infrared_night_vision
 					scope:iw_theft_target ?= { has_technology_researched = infrared_night_vision }
 				}
-				covert_tech_grant_era_8 = { TECH = infrared_night_vision IDX = 104 }
+				covert_tech_grant_era_8 = { TECH = infrared_night_vision IDX = 106 }
 			}
 			1 = {
 				trigger = {
@@ -3931,7 +3971,7 @@ covert_tech_steal_military = {
 					can_research = ironclad_tech
 					scope:iw_theft_target ?= { has_technology_researched = ironclad_tech }
 				}
-				covert_tech_grant_era_3 = { TECH = ironclad_tech IDX = 108 }
+				covert_tech_grant_era_3 = { TECH = ironclad_tech IDX = 110 }
 			}
 			1 = {
 				trigger = {
@@ -3939,7 +3979,7 @@ covert_tech_steal_military = {
 					can_research = jadc2
 					scope:iw_theft_target ?= { has_technology_researched = jadc2 }
 				}
-				covert_tech_grant_era_10 = { TECH = jadc2 IDX = 110 }
+				covert_tech_grant_era_10 = { TECH = jadc2 IDX = 112 }
 			}
 			1 = {
 				trigger = {
@@ -3947,7 +3987,7 @@ covert_tech_steal_military = {
 					can_research = jet_engine_technology
 					scope:iw_theft_target ?= { has_technology_researched = jet_engine_technology }
 				}
-				covert_tech_grant_era_7 = { TECH = jet_engine_technology IDX = 111 }
+				covert_tech_grant_era_7 = { TECH = jet_engine_technology IDX = 113 }
 			}
 			1 = {
 				trigger = {
@@ -3955,7 +3995,7 @@ covert_tech_steal_military = {
 					can_research = jeune_ecole
 					scope:iw_theft_target ?= { has_technology_researched = jeune_ecole }
 				}
-				covert_tech_grant_era_3 = { TECH = jeune_ecole IDX = 112 }
+				covert_tech_grant_era_3 = { TECH = jeune_ecole IDX = 114 }
 			}
 			1 = {
 				trigger = {
@@ -3963,7 +4003,7 @@ covert_tech_steal_military = {
 					can_research = landing_craft
 					scope:iw_theft_target ?= { has_technology_researched = landing_craft }
 				}
-				covert_tech_grant_era_4 = { TECH = landing_craft IDX = 113 }
+				covert_tech_grant_era_4 = { TECH = landing_craft IDX = 115 }
 			}
 			1 = {
 				trigger = {
@@ -3971,7 +4011,7 @@ covert_tech_steal_military = {
 					can_research = line_infantry
 					scope:iw_theft_target ?= { has_technology_researched = line_infantry }
 				}
-				covert_tech_grant_era_1 = { TECH = line_infantry IDX = 116 }
+				covert_tech_grant_era_1 = { TECH = line_infantry IDX = 118 }
 			}
 			1 = {
 				trigger = {
@@ -3979,7 +4019,7 @@ covert_tech_steal_military = {
 					can_research = logistics
 					scope:iw_theft_target ?= { has_technology_researched = logistics }
 				}
-				covert_tech_grant_era_2 = { TECH = logistics IDX = 117 }
+				covert_tech_grant_era_2 = { TECH = logistics IDX = 119 }
 			}
 			1 = {
 				trigger = {
@@ -3987,7 +4027,7 @@ covert_tech_steal_military = {
 					can_research = mandatory_service
 					scope:iw_theft_target ?= { has_technology_researched = mandatory_service }
 				}
-				covert_tech_grant_era_1 = { TECH = mandatory_service IDX = 120 }
+				covert_tech_grant_era_1 = { TECH = mandatory_service IDX = 122 }
 			}
 			1 = {
 				trigger = {
@@ -3995,7 +4035,7 @@ covert_tech_steal_military = {
 					can_research = military_aviation
 					scope:iw_theft_target ?= { has_technology_researched = military_aviation }
 				}
-				covert_tech_grant_era_4 = { TECH = military_aviation IDX = 126 }
+				covert_tech_grant_era_4 = { TECH = military_aviation IDX = 128 }
 			}
 			1 = {
 				trigger = {
@@ -4003,7 +4043,7 @@ covert_tech_steal_military = {
 					can_research = military_drill
 					scope:iw_theft_target ?= { has_technology_researched = military_drill }
 				}
-				covert_tech_grant_era_1 = { TECH = military_drill IDX = 127 }
+				covert_tech_grant_era_1 = { TECH = military_drill IDX = 129 }
 			}
 			1 = {
 				trigger = {
@@ -4011,7 +4051,7 @@ covert_tech_steal_military = {
 					can_research = military_grade_cybersecurity
 					scope:iw_theft_target ?= { has_technology_researched = military_grade_cybersecurity }
 				}
-				covert_tech_grant_era_9 = { TECH = military_grade_cybersecurity IDX = 128 }
+				covert_tech_grant_era_9 = { TECH = military_grade_cybersecurity IDX = 130 }
 			}
 			1 = {
 				trigger = {
@@ -4019,7 +4059,7 @@ covert_tech_steal_military = {
 					can_research = military_statistics
 					scope:iw_theft_target ?= { has_technology_researched = military_statistics }
 				}
-				covert_tech_grant_era_3 = { TECH = military_statistics IDX = 129 }
+				covert_tech_grant_era_3 = { TECH = military_statistics IDX = 131 }
 			}
 			1 = {
 				trigger = {
@@ -4027,7 +4067,7 @@ covert_tech_steal_military = {
 					can_research = missile_defense_systems
 					scope:iw_theft_target ?= { has_technology_researched = missile_defense_systems }
 				}
-				covert_tech_grant_era_9 = { TECH = missile_defense_systems IDX = 130 }
+				covert_tech_grant_era_9 = { TECH = missile_defense_systems IDX = 132 }
 			}
 			1 = {
 				trigger = {
@@ -4035,7 +4075,7 @@ covert_tech_steal_military = {
 					can_research = mobile_armor
 					scope:iw_theft_target ?= { has_technology_researched = mobile_armor }
 				}
-				covert_tech_grant_era_5 = { TECH = mobile_armor IDX = 131 }
+				covert_tech_grant_era_5 = { TECH = mobile_armor IDX = 133 }
 			}
 			1 = {
 				trigger = {
@@ -4043,7 +4083,7 @@ covert_tech_steal_military = {
 					can_research = modern_nursing
 					scope:iw_theft_target ?= { has_technology_researched = modern_nursing }
 				}
-				covert_tech_grant_era_3 = { TECH = modern_nursing IDX = 136 }
+				covert_tech_grant_era_3 = { TECH = modern_nursing IDX = 138 }
 			}
 			1 = {
 				trigger = {
@@ -4051,7 +4091,7 @@ covert_tech_steal_military = {
 					can_research = monitor_tech
 					scope:iw_theft_target ?= { has_technology_researched = monitor_tech }
 				}
-				covert_tech_grant_era_3 = { TECH = monitor_tech IDX = 140 }
+				covert_tech_grant_era_3 = { TECH = monitor_tech IDX = 142 }
 			}
 			1 = {
 				trigger = {
@@ -4059,7 +4099,7 @@ covert_tech_steal_military = {
 					can_research = motorized_artillery
 					scope:iw_theft_target ?= { has_technology_researched = motorized_artillery }
 				}
-				covert_tech_grant_era_6 = { TECH = motorized_artillery IDX = 141 }
+				covert_tech_grant_era_6 = { TECH = motorized_artillery IDX = 143 }
 			}
 			1 = {
 				trigger = {
@@ -4067,7 +4107,7 @@ covert_tech_steal_military = {
 					can_research = napoleonic_warfare
 					scope:iw_theft_target ?= { has_technology_researched = napoleonic_warfare }
 				}
-				covert_tech_grant_era_1 = { TECH = napoleonic_warfare IDX = 142 }
+				covert_tech_grant_era_1 = { TECH = napoleonic_warfare IDX = 144 }
 			}
 			1 = {
 				trigger = {
@@ -4075,7 +4115,7 @@ covert_tech_steal_military = {
 					can_research = naval_convoy_defense
 					scope:iw_theft_target ?= { has_technology_researched = naval_convoy_defense }
 				}
-				covert_tech_grant_era_6 = { TECH = naval_convoy_defense IDX = 143 }
+				covert_tech_grant_era_6 = { TECH = naval_convoy_defense IDX = 145 }
 			}
 			1 = {
 				trigger = {
@@ -4083,7 +4123,7 @@ covert_tech_steal_military = {
 					can_research = naval_fire_control_systems
 					scope:iw_theft_target ?= { has_technology_researched = naval_fire_control_systems }
 				}
-				covert_tech_grant_era_6 = { TECH = naval_fire_control_systems IDX = 144 }
+				covert_tech_grant_era_6 = { TECH = naval_fire_control_systems IDX = 146 }
 			}
 			1 = {
 				trigger = {
@@ -4091,7 +4131,7 @@ covert_tech_steal_military = {
 					can_research = navigation
 					scope:iw_theft_target ?= { has_technology_researched = navigation }
 				}
-				covert_tech_grant_era_1 = { TECH = navigation IDX = 145 }
+				covert_tech_grant_era_1 = { TECH = navigation IDX = 147 }
 			}
 			1 = {
 				trigger = {
@@ -4099,7 +4139,7 @@ covert_tech_steal_military = {
 					can_research = nco_training
 					scope:iw_theft_target ?= { has_technology_researched = nco_training }
 				}
-				covert_tech_grant_era_5 = { TECH = nco_training IDX = 146 }
+				covert_tech_grant_era_5 = { TECH = nco_training IDX = 148 }
 			}
 			1 = {
 				trigger = {
@@ -4107,7 +4147,7 @@ covert_tech_steal_military = {
 					can_research = network_centric_warfare
 					scope:iw_theft_target ?= { has_technology_researched = network_centric_warfare }
 				}
-				covert_tech_grant_era_9 = { TECH = network_centric_warfare IDX = 147 }
+				covert_tech_grant_era_9 = { TECH = network_centric_warfare IDX = 149 }
 			}
 			1 = {
 				trigger = {
@@ -4115,7 +4155,15 @@ covert_tech_steal_military = {
 					can_research = nuclear_energy
 					scope:iw_theft_target ?= { has_technology_researched = nuclear_energy }
 				}
-				covert_tech_grant_era_7 = { TECH = nuclear_energy IDX = 150 }
+				covert_tech_grant_era_7 = { TECH = nuclear_energy IDX = 152 }
+			}
+			1 = {
+				trigger = {
+					NOT = { has_technology_researched = nuclear_thermal_propulsion }
+					can_research = nuclear_thermal_propulsion
+					scope:iw_theft_target ?= { has_technology_researched = nuclear_thermal_propulsion }
+				}
+				covert_tech_grant_era_11 = { TECH = nuclear_thermal_propulsion IDX = 153 }
 			}
 			1 = {
 				trigger = {
@@ -4123,7 +4171,7 @@ covert_tech_steal_military = {
 					can_research = nuclear_weapons
 					scope:iw_theft_target ?= { has_technology_researched = nuclear_weapons }
 				}
-				covert_tech_grant_era_6 = { TECH = nuclear_weapons IDX = 151 }
+				covert_tech_grant_era_6 = { TECH = nuclear_weapons IDX = 154 }
 			}
 			1 = {
 				trigger = {
@@ -4131,7 +4179,7 @@ covert_tech_steal_military = {
 					can_research = orbital_weapon_platforms
 					scope:iw_theft_target ?= { has_technology_researched = orbital_weapon_platforms }
 				}
-				covert_tech_grant_era_12 = { TECH = orbital_weapon_platforms IDX = 155 }
+				covert_tech_grant_era_12 = { TECH = orbital_weapon_platforms IDX = 158 }
 			}
 			1 = {
 				trigger = {
@@ -4139,7 +4187,7 @@ covert_tech_steal_military = {
 					can_research = paddle_steamer
 					scope:iw_theft_target ?= { has_technology_researched = paddle_steamer }
 				}
-				covert_tech_grant_era_1 = { TECH = paddle_steamer IDX = 156 }
+				covert_tech_grant_era_1 = { TECH = paddle_steamer IDX = 159 }
 			}
 			1 = {
 				trigger = {
@@ -4147,7 +4195,7 @@ covert_tech_steal_military = {
 					can_research = percussion_cap
 					scope:iw_theft_target ?= { has_technology_researched = percussion_cap }
 				}
-				covert_tech_grant_era_2 = { TECH = percussion_cap IDX = 158 }
+				covert_tech_grant_era_2 = { TECH = percussion_cap IDX = 161 }
 			}
 			1 = {
 				trigger = {
@@ -4155,7 +4203,7 @@ covert_tech_steal_military = {
 					can_research = power_of_the_purse
 					scope:iw_theft_target ?= { has_technology_researched = power_of_the_purse }
 				}
-				covert_tech_grant_era_2 = { TECH = power_of_the_purse IDX = 165 }
+				covert_tech_grant_era_2 = { TECH = power_of_the_purse IDX = 168 }
 			}
 			1 = {
 				trigger = {
@@ -4163,7 +4211,7 @@ covert_tech_steal_military = {
 					can_research = pre_dreadnought_tech
 					scope:iw_theft_target ?= { has_technology_researched = pre_dreadnought_tech }
 				}
-				covert_tech_grant_era_4 = { TECH = pre_dreadnought_tech IDX = 166 }
+				covert_tech_grant_era_4 = { TECH = pre_dreadnought_tech IDX = 169 }
 			}
 			1 = {
 				trigger = {
@@ -4171,7 +4219,7 @@ covert_tech_steal_military = {
 					can_research = precision_guided_munitions
 					scope:iw_theft_target ?= { has_technology_researched = precision_guided_munitions }
 				}
-				covert_tech_grant_era_8 = { TECH = precision_guided_munitions IDX = 167 }
+				covert_tech_grant_era_8 = { TECH = precision_guided_munitions IDX = 170 }
 			}
 			1 = {
 				trigger = {
@@ -4179,7 +4227,7 @@ covert_tech_steal_military = {
 					can_research = predictive_logistics
 					scope:iw_theft_target ?= { has_technology_researched = predictive_logistics }
 				}
-				covert_tech_grant_era_8 = { TECH = predictive_logistics IDX = 168 }
+				covert_tech_grant_era_8 = { TECH = predictive_logistics IDX = 171 }
 			}
 			1 = {
 				trigger = {
@@ -4187,7 +4235,7 @@ covert_tech_steal_military = {
 					can_research = quantum_communications
 					scope:iw_theft_target ?= { has_technology_researched = quantum_communications }
 				}
-				covert_tech_grant_era_11 = { TECH = quantum_communications IDX = 173 }
+				covert_tech_grant_era_11 = { TECH = quantum_communications IDX = 176 }
 			}
 			1 = {
 				trigger = {
@@ -4195,7 +4243,7 @@ covert_tech_steal_military = {
 					can_research = radar
 					scope:iw_theft_target ?= { has_technology_researched = radar }
 				}
-				covert_tech_grant_era_6 = { TECH = radar IDX = 176 }
+				covert_tech_grant_era_6 = { TECH = radar IDX = 179 }
 			}
 			1 = {
 				trigger = {
@@ -4203,7 +4251,7 @@ covert_tech_steal_military = {
 					can_research = rapid_deployment_forces
 					scope:iw_theft_target ?= { has_technology_researched = rapid_deployment_forces }
 				}
-				covert_tech_grant_era_9 = { TECH = rapid_deployment_forces IDX = 179 }
+				covert_tech_grant_era_9 = { TECH = rapid_deployment_forces IDX = 182 }
 			}
 			1 = {
 				trigger = {
@@ -4211,7 +4259,7 @@ covert_tech_steal_military = {
 					can_research = recon_satellites
 					scope:iw_theft_target ?= { has_technology_researched = recon_satellites }
 				}
-				covert_tech_grant_era_7 = { TECH = recon_satellites IDX = 180 }
+				covert_tech_grant_era_7 = { TECH = recon_satellites IDX = 183 }
 			}
 			1 = {
 				trigger = {
@@ -4219,7 +4267,7 @@ covert_tech_steal_military = {
 					can_research = repeaters
 					scope:iw_theft_target ?= { has_technology_researched = repeaters }
 				}
-				covert_tech_grant_era_3 = { TECH = repeaters IDX = 182 }
+				covert_tech_grant_era_3 = { TECH = repeaters IDX = 185 }
 			}
 			1 = {
 				trigger = {
@@ -4227,7 +4275,7 @@ covert_tech_steal_military = {
 					can_research = reusable_rocketry
 					scope:iw_theft_target ?= { has_technology_researched = reusable_rocketry }
 				}
-				covert_tech_grant_era_10 = { TECH = reusable_rocketry IDX = 183 }
+				covert_tech_grant_era_10 = { TECH = reusable_rocketry IDX = 186 }
 			}
 			1 = {
 				trigger = {
@@ -4235,7 +4283,7 @@ covert_tech_steal_military = {
 					can_research = rifling
 					scope:iw_theft_target ?= { has_technology_researched = rifling }
 				}
-				covert_tech_grant_era_2 = { TECH = rifling IDX = 184 }
+				covert_tech_grant_era_2 = { TECH = rifling IDX = 187 }
 			}
 			1 = {
 				trigger = {
@@ -4243,7 +4291,7 @@ covert_tech_steal_military = {
 					can_research = rocketry
 					scope:iw_theft_target ?= { has_technology_researched = rocketry }
 				}
-				covert_tech_grant_era_6 = { TECH = rocketry IDX = 186 }
+				covert_tech_grant_era_6 = { TECH = rocketry IDX = 189 }
 			}
 			1 = {
 				trigger = {
@@ -4251,7 +4299,7 @@ covert_tech_steal_military = {
 					can_research = satellite_communications
 					scope:iw_theft_target ?= { has_technology_researched = satellite_communications }
 				}
-				covert_tech_grant_era_7 = { TECH = satellite_communications IDX = 189 }
+				covert_tech_grant_era_7 = { TECH = satellite_communications IDX = 192 }
 			}
 			1 = {
 				trigger = {
@@ -4259,7 +4307,7 @@ covert_tech_steal_military = {
 					can_research = screw_frigate
 					scope:iw_theft_target ?= { has_technology_researched = screw_frigate }
 				}
-				covert_tech_grant_era_2 = { TECH = screw_frigate IDX = 190 }
+				covert_tech_grant_era_2 = { TECH = screw_frigate IDX = 193 }
 			}
 			1 = {
 				trigger = {
@@ -4267,7 +4315,7 @@ covert_tech_steal_military = {
 					can_research = sea_lane_strategies
 					scope:iw_theft_target ?= { has_technology_researched = sea_lane_strategies }
 				}
-				covert_tech_grant_era_4 = { TECH = sea_lane_strategies IDX = 191 }
+				covert_tech_grant_era_4 = { TECH = sea_lane_strategies IDX = 194 }
 			}
 			1 = {
 				trigger = {
@@ -4275,7 +4323,7 @@ covert_tech_steal_military = {
 					can_research = self_propelled_torpedoes
 					scope:iw_theft_target ?= { has_technology_researched = self_propelled_torpedoes }
 				}
-				covert_tech_grant_era_3 = { TECH = self_propelled_torpedoes IDX = 192 }
+				covert_tech_grant_era_3 = { TECH = self_propelled_torpedoes IDX = 195 }
 			}
 			1 = {
 				trigger = {
@@ -4283,7 +4331,7 @@ covert_tech_steal_military = {
 					can_research = semiautomatic_rifle
 					scope:iw_theft_target ?= { has_technology_researched = semiautomatic_rifle }
 				}
-				covert_tech_grant_era_6 = { TECH = semiautomatic_rifle IDX = 193 }
+				covert_tech_grant_era_6 = { TECH = semiautomatic_rifle IDX = 196 }
 			}
 			1 = {
 				trigger = {
@@ -4291,7 +4339,7 @@ covert_tech_steal_military = {
 					can_research = shell_gun
 					scope:iw_theft_target ?= { has_technology_researched = shell_gun }
 				}
-				covert_tech_grant_era_2 = { TECH = shell_gun IDX = 195 }
+				covert_tech_grant_era_2 = { TECH = shell_gun IDX = 198 }
 			}
 			1 = {
 				trigger = {
@@ -4299,7 +4347,7 @@ covert_tech_steal_military = {
 					can_research = sonar
 					scope:iw_theft_target ?= { has_technology_researched = sonar }
 				}
-				covert_tech_grant_era_6 = { TECH = sonar IDX = 198 }
+				covert_tech_grant_era_6 = { TECH = sonar IDX = 201 }
 			}
 			1 = {
 				trigger = {
@@ -4307,7 +4355,7 @@ covert_tech_steal_military = {
 					can_research = space_based_solar_power
 					scope:iw_theft_target ?= { has_technology_researched = space_based_solar_power }
 				}
-				covert_tech_grant_era_12 = { TECH = space_based_solar_power IDX = 199 }
+				covert_tech_grant_era_12 = { TECH = space_based_solar_power IDX = 202 }
 			}
 			1 = {
 				trigger = {
@@ -4315,7 +4363,7 @@ covert_tech_steal_military = {
 					can_research = space_elevator
 					scope:iw_theft_target ?= { has_technology_researched = space_elevator }
 				}
-				covert_tech_grant_era_12 = { TECH = space_elevator IDX = 200 }
+				covert_tech_grant_era_12 = { TECH = space_elevator IDX = 203 }
 			}
 			1 = {
 				trigger = {
@@ -4323,7 +4371,7 @@ covert_tech_steal_military = {
 					can_research = space_exploration
 					scope:iw_theft_target ?= { has_technology_researched = space_exploration }
 				}
-				covert_tech_grant_era_7 = { TECH = space_exploration IDX = 201 }
+				covert_tech_grant_era_7 = { TECH = space_exploration IDX = 204 }
 			}
 			1 = {
 				trigger = {
@@ -4331,7 +4379,7 @@ covert_tech_steal_military = {
 					can_research = space_militarization
 					scope:iw_theft_target ?= { has_technology_researched = space_militarization }
 				}
-				covert_tech_grant_era_11 = { TECH = space_militarization IDX = 202 }
+				covert_tech_grant_era_11 = { TECH = space_militarization IDX = 205 }
 			}
 			1 = {
 				trigger = {
@@ -4339,7 +4387,7 @@ covert_tech_steal_military = {
 					can_research = standing_army
 					scope:iw_theft_target ?= { has_technology_researched = standing_army }
 				}
-				covert_tech_grant_era_1 = { TECH = standing_army IDX = 204 }
+				covert_tech_grant_era_1 = { TECH = standing_army IDX = 207 }
 			}
 			1 = {
 				trigger = {
@@ -4347,7 +4395,7 @@ covert_tech_steal_military = {
 					can_research = stealth_technology
 					scope:iw_theft_target ?= { has_technology_researched = stealth_technology }
 				}
-				covert_tech_grant_era_8 = { TECH = stealth_technology IDX = 205 }
+				covert_tech_grant_era_8 = { TECH = stealth_technology IDX = 208 }
 			}
 			1 = {
 				trigger = {
@@ -4355,7 +4403,7 @@ covert_tech_steal_military = {
 					can_research = stormtroopers
 					scope:iw_theft_target ?= { has_technology_researched = stormtroopers }
 				}
-				covert_tech_grant_era_5 = { TECH = stormtroopers IDX = 210 }
+				covert_tech_grant_era_5 = { TECH = stormtroopers IDX = 213 }
 			}
 			1 = {
 				trigger = {
@@ -4363,7 +4411,7 @@ covert_tech_steal_military = {
 					can_research = submarine
 					scope:iw_theft_target ?= { has_technology_researched = submarine }
 				}
-				covert_tech_grant_era_4 = { TECH = submarine IDX = 211 }
+				covert_tech_grant_era_4 = { TECH = submarine IDX = 214 }
 			}
 			1 = {
 				trigger = {
@@ -4371,7 +4419,7 @@ covert_tech_steal_military = {
 					can_research = supersonic_aircraft
 					scope:iw_theft_target ?= { has_technology_researched = supersonic_aircraft }
 				}
-				covert_tech_grant_era_8 = { TECH = supersonic_aircraft IDX = 212 }
+				covert_tech_grant_era_8 = { TECH = supersonic_aircraft IDX = 215 }
 			}
 			1 = {
 				trigger = {
@@ -4379,7 +4427,7 @@ covert_tech_steal_military = {
 					can_research = swarm_technology
 					scope:iw_theft_target ?= { has_technology_researched = swarm_technology }
 				}
-				covert_tech_grant_era_11 = { TECH = swarm_technology IDX = 214 }
+				covert_tech_grant_era_11 = { TECH = swarm_technology IDX = 217 }
 			}
 			1 = {
 				trigger = {
@@ -4387,7 +4435,7 @@ covert_tech_steal_military = {
 					can_research = tactical_nuclear_weapons
 					scope:iw_theft_target ?= { has_technology_researched = tactical_nuclear_weapons }
 				}
-				covert_tech_grant_era_7 = { TECH = tactical_nuclear_weapons IDX = 216 }
+				covert_tech_grant_era_7 = { TECH = tactical_nuclear_weapons IDX = 219 }
 			}
 			1 = {
 				trigger = {
@@ -4395,7 +4443,7 @@ covert_tech_steal_military = {
 					can_research = trench_works
 					scope:iw_theft_target ?= { has_technology_researched = trench_works }
 				}
-				covert_tech_grant_era_4 = { TECH = trench_works IDX = 221 }
+				covert_tech_grant_era_4 = { TECH = trench_works IDX = 224 }
 			}
 			1 = {
 				trigger = {
@@ -4403,7 +4451,7 @@ covert_tech_steal_military = {
 					can_research = triage
 					scope:iw_theft_target ?= { has_technology_researched = triage }
 				}
-				covert_tech_grant_era_2 = { TECH = triage IDX = 222 }
+				covert_tech_grant_era_2 = { TECH = triage IDX = 225 }
 			}
 			1 = {
 				trigger = {
@@ -4411,7 +4459,7 @@ covert_tech_steal_military = {
 					can_research = unmanned_aerial_vehicles
 					scope:iw_theft_target ?= { has_technology_researched = unmanned_aerial_vehicles }
 				}
-				covert_tech_grant_era_9 = { TECH = unmanned_aerial_vehicles IDX = 223 }
+				covert_tech_grant_era_9 = { TECH = unmanned_aerial_vehicles IDX = 226 }
 			}
 			1 = {
 				trigger = {
@@ -4419,7 +4467,7 @@ covert_tech_steal_military = {
 					can_research = war_propaganda
 					scope:iw_theft_target ?= { has_technology_researched = war_propaganda }
 				}
-				covert_tech_grant_era_4 = { TECH = war_propaganda IDX = 226 }
+				covert_tech_grant_era_4 = { TECH = war_propaganda IDX = 229 }
 			}
 			1 = {
 				trigger = {
@@ -4427,7 +4475,7 @@ covert_tech_steal_military = {
 					can_research = wargaming
 					scope:iw_theft_target ?= { has_technology_researched = wargaming }
 				}
-				covert_tech_grant_era_4 = { TECH = wargaming IDX = 227 }
+				covert_tech_grant_era_4 = { TECH = wargaming IDX = 230 }
 			}
 		}
 	}

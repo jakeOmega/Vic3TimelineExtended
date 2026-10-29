@@ -254,8 +254,14 @@ New:
 | Technology | Era | Category | Requires | Gives |
 |---|---|---|---|---|
 | `cislunar_infrastructure` (Cislunar Infrastructure) | 10 | military | `reusable_rocketry` | `pm_solar_colonization`; `pm_sr_fabrication_orbital_assembly`; opens Solar System Colonization; **+2 funding cap** |
-| `in_situ_resource_utilization` (In-Situ Resource Utilization) | 10 | production | `reusable_rocketry`, `additive_manufacturing` | `building_space_mine` with Regolith Processing (§ 6); **+1 funding cap** |
+| `in_situ_resource_utilization` (In-Situ Resource Utilization) | 10 | military | `reusable_rocketry` | `building_space_mine` with Regolith Processing (§ 6); **+1 funding cap** |
 | `nuclear_thermal_propulsion` (Nuclear Thermal Propulsion) | 11 | military | `cislunar_infrastructure` | The smaller off-window premium (§ 9); **+1 funding cap** |
+
+In-Situ Resource Utilization was drafted as a production technology that also
+required Additive Manufacturing. It shipped as military, needing Reusable Rocketry
+only (PR1): Asteroid Mining, which requires it, is military, and a technology's
+prerequisites must share its category (`scripting_best_practices.md` § Same-category
+prereq rule).
 
 Changed:
 

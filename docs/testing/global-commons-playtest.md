@@ -488,7 +488,7 @@ audits) and this is what only the game can show. A fixed item is struck through 
 ### How to run
 
 - **Deploy** per CLAUDE.md, "Play-testing unmerged work". Space Race rule on.
-- **Reach Solar System Colonization**: a great or major power with the Moon Base and Mars Landing done, Directed Energy Weapons
+- **Reach Solar System Colonization**: a great or major power with the Moon Base and Mars Landing done, Cislunar Infrastructure
   and the Solar Colonization method on its Space Program. `event te_debug_space_race.1` option b finishes running milestones;
   research the rest from the console.
 - **Console.** `event te_debug_launch_windows.1`: a stages two and a half colony fleets (the bar at 2.5 × the goal); b writes
