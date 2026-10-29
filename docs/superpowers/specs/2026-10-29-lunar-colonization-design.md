@@ -34,6 +34,18 @@ separate plan: § 13 is the build order.
    days). A colony fleet bound for the Moon founds its world in the month it
    leaves (§ 3.3).
 
+Follow-up calls, the same day (PR #1232):
+
+10. **Judge the base on more than its margin.** Profit per point of
+    construction and profit per worker (the wage it can pay, and so the richest
+    economy that can run it) count too (§ 6).
+11. **The lunar tier should cost less than Mars, but more than the first
+    draft's 250** (about 40% below Mars's 400), and the later stages may rise
+    too (§ 3.2).
+12. **More funding levels from the new technologies, and a soft cap.** Funding
+    may go past the cap with diminishing returns: the first level above it
+    counts as half a level, the next a third, and so on (§ 5.1).
+
 ## 2. Intent
 
 After this design:
@@ -103,10 +115,25 @@ Notes:
 
 ### 3.2 Stage 0 and the goal
 
-The Moon is **stage 0** with goal **250** (`STAGE_GOALS[0]`, read as
-`sr_colonization_goal_stage_0`). The Moon Base took 300, Mars takes 400. Stage 0
-leaves stages 1 to 5, their goals, the Deep Space gate's "stage 3" and every
-save's stage variable unchanged. The overview's stage cell reads "Stage: the
+The Moon is **stage 0** (`STAGE_GOALS[0]`, read as
+`sr_colonization_goal_stage_0`). Stage 0 leaves stages 1 to 5, the Deep Space
+gate's "stage 3" and every save's stage variable unchanged.
+
+The goals rise (owner, call 11). Colonization now opens an era earlier, the new
+technologies add funding (§ 5), and the soft cap lets a program fund past it
+(§ 5.1), so the same goals would go faster than today's race:
+
+| Stage | Worlds | Goal today | Goal |
+|---|---|---|---|
+| 0 | The Moon | — | **300** (the Moon Base's; 2/3 of Mars) |
+| 1 | Mars and the asteroids | 400 | **450** |
+| 2 | Jupiter and Venus | 450 | **525** |
+| 3 | Mercury and Saturn | 500 | **600** |
+| 4 | Uranus and Neptune | 550 | **700** |
+| 5 | The Kuiper Belt | 650 | **800** |
+
+The steps widen with distance: the outer worlds are reached later, with more
+funding, at a faster pace. The overview's stage cell reads "Stage: the
 Moon" in place of "Stage: 0 of 5". The automatic pick's score
 (`SCORE_PER_STAGE` × stage) then favors the Moon, which the AI follows too.
 Cede Colony's AI value is `AI_VALUE_BASE` (20) for a lunar world.
@@ -140,7 +167,7 @@ is no longer a target for anyone else that month.
 
 The Moon Landing's "Where the Eagle Shall Land" choice (`sr_moon_site_*`) gives
 **−25% progress** on the lunar world it names (table in § 3.1), for that country
-only, so 187.5 against 250. Equatorial Plain maps to Marius Hills. Peary and
+only, so 225 against 300. Equatorial Plain maps to Marius Hills. Peary and
 Imbrium match no landing site. The discount enters the world's
 `sr_cf_cost_<key>` (generated) as a factor read from the country's landing
 choice. The world's hover and the Target row show the discounted cost. This is a
@@ -226,9 +253,9 @@ New:
 
 | Technology | Era | Category | Requires | Gives |
 |---|---|---|---|---|
-| `cislunar_infrastructure` (Cislunar Infrastructure) | 10 | military | `reusable_rocketry` | `pm_solar_colonization`; `pm_sr_fabrication_orbital_assembly`; opens Solar System Colonization; +1 funding cap |
-| `in_situ_resource_utilization` (In-Situ Resource Utilization) | 10 | production | `reusable_rocketry`, `additive_manufacturing` | `building_space_mine` with Regolith Processing (§ 6) |
-| `nuclear_thermal_propulsion` (Nuclear Thermal Propulsion) | 11 | military | `cislunar_infrastructure` | The smaller off-window premium (§ 9); +1 funding cap |
+| `cislunar_infrastructure` (Cislunar Infrastructure) | 10 | military | `reusable_rocketry` | `pm_solar_colonization`; `pm_sr_fabrication_orbital_assembly`; opens Solar System Colonization; **+2 funding cap** |
+| `in_situ_resource_utilization` (In-Situ Resource Utilization) | 10 | production | `reusable_rocketry`, `additive_manufacturing` | `building_space_mine` with Regolith Processing (§ 6); **+1 funding cap** |
+| `nuclear_thermal_propulsion` (Nuclear Thermal Propulsion) | 11 | military | `cislunar_infrastructure` | The smaller off-window premium (§ 9); **+1 funding cap** |
 
 Changed:
 
@@ -242,8 +269,75 @@ Changed:
   propellant depots.
 - **Reusable Rocketry** no longer gates the Moon Base. Its comment is updated.
 
-Funding cap: 11 technologies raise it from era 7 to era 11 today, and with the
-two new ones 13 do. The player guide's count changes.
+Funding cap: today it is 3, plus 1 from each of eleven technologies in eras 7
+to 11 and 2 from each of four in era 12, plus 1 from tier V of Advanced
+Research. With every space technology a country has 10 by the end of era 10,
+14 by the end of era 11 and 22 by the end of era 12. The three new ones add 4
+(owner, call 12), so 13 by the end of era 10, 18 by the end of era 11 and 26 by
+the end of era 12. The player guide's count changes.
+
+### 5.1 Funding past the cap
+
+The cap becomes soft (owner, call 12). A milestone's funding may go up to **6
+levels past the cap**. Each level past it counts for less pace than the one
+before: the first for 1/2, the second for 1/3, up to the sixth for 1/7. Every
+level still costs in full.
+
+| Levels past the cap | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| This level's pace | +0.25 | +0.17 | +0.13 | +0.10 | +0.08 | +0.07 |
+| Effective levels past the cap | 0.50 | 0.83 | 1.08 | 1.28 | 1.45 | 1.59 |
+
+The pace is +0.5 a month per effective level; the 0.5 is the weight of one
+level below the cap. The ceiling of 6 is for the script, whose ladder has to
+end somewhere. A seventh level would add 1/8 of a level for a full level's
+cost, which nobody would buy.
+
+**What is paid in full, and what is reduced:**
+
+- **Paid in full:** a level past the cap still costs 15 innovation a week ×
+  the cost factor, and still adds +25% Space Program throughput, which raises
+  the Launch Capacity bill.
+- **Reduced:** only the pace.
+
+Because throughput isn't reduced, a level past the cap also raises the
+program's other workforce-scaled output (module fabrication points, debris
+removal) by the full 25%. That is the same price-for-output trade as below the
+cap: a full level's Launch Capacity buys a full level's output. The cap only
+limits progress.
+
+**Script:**
+
+- `sr_funding_progress` splits in two: `sr_funding_progress`
+  (`country_space_race_progress_add = 0.5`) and a new `sr_funding_throughput`
+  (`building_space_program_throughput_add = 0.25`).
+- `sr_apply_milestone_cost_modifiers_base` gives the first
+  `multiplier = sr_funding_<m>_effective`, a new value: the level up to
+  `sr_max_funding_level`, plus a six-step ladder for the excess. It gives the
+  second `sr_funding_<m>_level`, as now.
+- `sr_possible_fund_up` tests `sr_max_funding_level` + 6.
+- A save's existing entries pick the split up through the monthly
+  `sr_cost_modifiers_missing` repair. Its test is extended to the new modifier.
+- A cap that falls below a milestone's level, for example when a power bloc
+  principle is lost, leaves the level standing. The excess simply counts past
+  the cap.
+
+**Panel:**
+
+- The Funding stepper reads "9 / 7 (+0.8)" past the cap: the level, the cap,
+  and the effective levels the excess adds.
+- The plus button's tooltip gives the next level's fraction ("+1/3 of a level
+  of pace, full cost").
+- The pace hover lists funding as below-cap levels and above-cap effective
+  levels.
+
+**The AI** stays within the cap in the first build. Observer runs then decide
+whether a great power in a contested race, with innovation to spare, should go
+one or two levels past it.
+
+Commercial Space Industry is unchanged: after the race, funding adds nothing.
+
+### 5.2 Icons
 
 Each new technology needs an invention icon. Placeholders that copy existing
 ones are enough for the first build: `reusable_rocketry.dds` for Cislunar
@@ -257,12 +351,36 @@ them later. `texture_reference_audit` checks the paths.
   `in_situ_resource_utilization`.
 - **New default method `pm_regolith_processing`** (Regolith Processing). It is
   the first in `pmg_base_building_space_mine` and has no unlocking technology of
-  its own. First guess: half the Asteroid Mine's inputs (15 electronic
-  components, 15 radios, 5 digital access, 60 Launch Capacity). It outputs 175
-  iron, 90 tech metals and 50 glass, with 1,000 staff (600 machinists, 300
-  engineers, 100 academics). That is about an 8% margin at base prices, against
-  the Asteroid Mine's 24%. It is weak on purpose: a foothold that the Moon's room
-  makes worth a few levels.
+  its own. First guess:
+  - Inputs, half the Asteroid Mine's: 15 electronic components, 15 radios, 5
+    digital access, 60 Launch Capacity. That is £15,000 a week at base prices.
+  - Outputs: 175 iron, 95 tech metals and 50 glass, £16,600.
+  - Staff: 800 (500 machinists, 250 engineers, 50 academics).
+
+  It is weak on purpose: a foothold that the Moon's room makes worth a few
+  levels. Margin is one of three measures (owner, call 10). Profit per
+  construction point says what a level repays on the 20,000 it costs. Profit
+  per worker is the wage it can pay, and so how rich an economy can still run
+  it.
+
+| Method (base prices, goods only) | Profit a level a week | Margin | Per worker (wage it can pay) | Per 1,000 construction |
+|---|---|---|---|---|
+| Regolith Processing (era 10) | £1,600 | 11% | 2.0 | £80 |
+| Asteroid Mine (era 11) | £7,250 | 24% | 7.25 | £363 |
+| Mining Colony (era 12) | £37,000 | 33% | 37.0 | £1,850 |
+| Deep-Sea Mine (era 11, before its support vessels; 5,000 construction) | £26,300 | 143% | 26.3 | £5,260 |
+
+  A first draft had 1,000 staff, and so 1.2 a worker. That sits in the bottom
+  quarter of the era-10 methods' cost comments (their quartiles are 1.4, 1.8 and
+  2.5, counting automation tiers), which is too little for the great powers
+  that build the base. At 800 staff it pays a little above the era-10
+  median, so a rich economy can staff it. Its return on construction stays a fifth of the
+  Asteroid Mine's, which is itself the weak investment of era 11 beside the
+  Deep-Sea Mine (Global Commons § 1.1). In the per-construction measure,
+  Regolith Processing is a toehold, not an investment. That is the intent: the
+  reasons to build it are lunar room, the Mining and Resort Colony methods
+  ahead, and the Commercial Space Industry once the race is over.
+  `pm_costs` rewrites its cost comment on reload.
 - **`pm_space_mine`** (the Asteroid Mine) gains
   `unlocking_technologies = { asteroid_mining }`. The Mining Colony and Resort
   Colony methods keep Space Colonization. The era-12 logistics groups are
@@ -392,7 +510,7 @@ Once, from the global step's migration (`sr_sites_global_monthly`, beside
    The world is founded quietly (no founding event, a notice). It does not
    count as a "founded" first lunar colony again.
 2. **An open `je_space_race_moon_base`:** its progress moves onto Solar System
-   Colonization's bar, up to one lunar goal (250), once that entry runs, and
+   Colonization's bar, up to one lunar goal (300), once that entry runs, and
    the entry is removed. Its funding and approach variables are cleared
    (`sr_cleanup_milestone_variables_effect`).
 3. **The colonization prerequisites** (§ 4) apply at once: a country that had
@@ -406,20 +524,30 @@ country or global variable, so the winner continues the nation.
 
 | Figure | Value | Where |
 |---|---|---|
-| Lunar goal | 250 | `STAGE_GOALS[0]` |
+| Stage goals | 300, 450, 525, 600, 700, 800 | `STAGE_GOALS` (§ 3.2) |
 | Landing-site discount | −25% | § 3.4 |
 | Colonization method's Launch Capacity | 10,000 a week | `pm_solar_colonization` |
 | Colonization cost factor | 5 before the Mars Landing, 8 after | `sr_cost_factor_solar_colonization` |
-| Funding cap | +1 Cislunar Infrastructure, +1 Nuclear Thermal Propulsion | § 5 |
-| Regolith Processing | about 8% margin | § 6 |
+| Funding cap | +2 Cislunar Infrastructure, +1 In-Situ Resource Utilization, +1 Nuclear Thermal Propulsion | § 5 |
+| Funding past the cap | up to 6 levels, worth 1/2, 1/3, … 1/7 | § 5.1 |
+| Regolith Processing | £1,600 a level, 2.0 a worker | § 6 |
 | Lunar people room, base room, grades | § 3.1 | `SITES` |
 | NTP exhaust velocity | 9 km/s | § 9 |
 
-A rough era-10 pace check: funding cap about 7 and Standard give about 4.7
-progress a month (×1.5 Ambitious). That is a lunar colony every 4 to 5 years
-(3 to 4 at the landing site), and a Mars colony every 7 years once landed. A
-strong power enters era 11 with two or three lunar worlds and perhaps one on
-Mars.
+A rough era-10 pace check. With every space technology through Cislunar
+Infrastructure and In-Situ Resource Utilization, the cap is 13. Pace is the
+program (+1), +0.5 a funded level on every running milestone, and +0.2 from
+Reusable Rocketry. At funding 8 on colonization alone, on Standard, that is
+5.2 a month: a lunar colony (300) every 58 months, 43 at the landing site.
+Funding 8 on the Mars Landing as well gives 9.2 a month: a lunar colony every
+33 months and Mars (450) every 49. Ambitious is ×1.5.
+
+The cap is rarely what binds. 8 levels on colonization alone cost 600
+innovation a week at cost factor 5, and they triple the Space Program's Launch
+Capacity bill (+200% throughput, to 30,000 a week). The innovation and Launch
+Capacity bills are the real limits, and the soft cap lets a rich program trade
+them for pace past the cap. Expect two or three lunar worlds and perhaps one on
+Mars for a strong power entering era 11.
 
 ## 12. Files touched
 
@@ -485,6 +613,9 @@ Three PRs, each green on its own:
    - the migration.
 3. **The Moon under fire, and NTP** (§§ 8, 9): Close in at Earth, the lunar
    blockade, the AI; the NTP premium curve.
+4. **Funding past the cap** (§ 5.1). Independent of the other three, so it can
+   land at any point; the funding levels the new technologies add ride with
+   PR 1.
 
 Each PR carries its player guide changes and the rebuilt PDF.
 
@@ -498,6 +629,13 @@ Each PR carries its player guide changes and the rebuilt PDF.
 - `test_space_fleets.py`: freshness. A new case: posture 3 survives gathering
   at Earth only for a lunar target.
 - `test_deep_sea_rebalance.py`: era 10 skipped, later orderings held.
+- Funding past the cap (new, or in `test_space_race_billing.py`):
+  - `sr_funding_<m>_effective` equals the level up to the cap, and the
+    harmonic sum past it, for each of the six steps;
+  - the throughput multiplier stays the raw level;
+  - the fund-up ceiling is the cap + 6;
+  - the approach-cost equality `test_space_race_approaches.py` holds is
+    unchanged.
 - Space race tests that count 34 worlds, 7 milestones or the Moon Base JE are
   updated: a sweep with `git grep -n "34\b\|moon_base" -- 'test_*.py'`.
 - `je_immediate_reset_audit`, `loc_coverage_audit`, `event_image_audit` and
@@ -518,3 +656,7 @@ Each PR carries its player guide changes and the rebuilt PDF.
 4. **Lunar Foundries** (Space Colonization's fabrication method) and Imbrium's
    Mass Driver overlap in theme. Rename Lunar Foundries ("Orbital Foundries"),
    or leave both?
+5. **The stage goals** (§ 3.2) are a first guess. Is 300 for the Moon (2/3 of
+   Mars) the right step, and is the rise for the later stages wanted?
+6. **The AI past the cap** (§ 5.1): it stays within the cap until observer runs
+   say otherwise.
