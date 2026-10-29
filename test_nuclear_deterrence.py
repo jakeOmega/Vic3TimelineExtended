@@ -50,6 +50,8 @@ LOOSE_VALUES = ROOT / "common/script_values/nuclear_loose_values.txt"
 LOOSE_EVENTS = ROOT / "events/nuclear_loose_events.txt"
 SOCIAL_TENSIONS_ON_ACTIONS = ROOT / "common/on_actions/social_tensions_on_actions.txt"
 EXTRA_EFFECTS = ROOT / "common/scripted_effects/extra_effects.txt"
+TABOO_EFFECTS = ROOT / "common/scripted_effects/nuclear_taboo_effects.txt"
+EXTRA_VALUES = ROOT / "common/script_values/extra_script_values.txt"
 EXTRA_BUILDINGS = ROOT / "common/buildings/extra_buildings.txt"
 EXTRA_PM_GROUPS = ROOT / "common/production_method_groups/extra_pm_groups.txt"
 NUKE_TRIGGERS = ROOT / "common/scripted_triggers/nuke_triggers.txt"
@@ -1157,6 +1159,483 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
             self.assertIn("city", loc_value(key), key)
 
 
+
+class TestSalvo(unittest.TestCase):
+    """A salvo by mission (2026-10-28 rework spec §6): one loop of warheads,
+    then the use's consequences once."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(EFFECTS))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.order = block(self.effects, "nd_order_salvo")
+        self.after = block(self.effects, "nd_salvo_aftermath")
+
+    def test_salvo_fenced_by_a_click_marker(self):
+        self.assertRegex(self.order, r"^\s*set_variable = nd_salvo_click\s*if = \{\s*limit = \{ has_variable = nd_salvo_click \}"
+                                     r"\s*remove_variable = nd_salvo_click")
+        self.assertIn("nd_can_order_salvo = { ENEMY = scope:nd_salvo_victim }", self.order)
+
+    def test_order_gates(self):
+        gates = block(self.triggers, "nd_can_order_salvo")
+        for needle in ("nd_is_armed = yes", "nd_forces_assembled = yes", "nd_planner_candidate = { ENEMY = $ENEMY$ }",
+                       "nd_doctrine_permits_strike = { ENEMY = $ENEMY$ }", "nd_pledge_permits_strike = { ENEMY = $ENEMY$ }",
+                       "nd_war_law_permits_strategic_strike = yes", "nd_command_intact = yes"):
+            self.assertIn(needle, gates)
+        self.assertEqual(gates.count("custom_tooltip"), 7)
+        cand = squash(block(self.triggers, "nd_planner_candidate"))
+        for needle in ("has_war_with = $ENEMY$", "nd_in_peacetime_exchange_with = { ENEMY = $ENEMY$ }",
+                       "any_scope_state = { always = yes }"):
+            self.assertIn(needle, cand)
+
+    def test_loop_counts_the_size_value(self):
+        # The count is fixed before the first warhead: each lowers the
+        # stockpile nd_salvo_size_value caps by.
+        self.assertIn("set_variable = { name = nd_salvo_count value = nd_salvo_size_value }", squash(self.order))
+        self.assertRegex(squash(self.order), r"while = \{ count = nd_salvo_count_value nd_salvo_warhead = yes \}")
+        self.assertIn("value = var:nd_salvo_count", block(strip_comments(read(VALUES)), "nd_salvo_count_value"))
+        warhead = block(self.effects, "nd_salvo_warhead")
+        self.assertIn("var:nuclear_weapon_stockpile > 0", warhead)
+        self.assertIn("modifier = nuclear_strike_success_chance", warhead)
+        self.assertIn("modifier = nuclear_strike_fail_chance", warhead)
+        self.assertIn("action=strategic_miss", warhead)
+        self.assertIn("action=strategic_hit", block(self.effects, "nd_salvo_hit"))
+
+    def test_targets_by_mission(self):
+        pick = squash(block(self.effects, "nd_salvo_pick_target"))
+        for needle in ("capital = { save_scope_as = target_state }", "nd_state_has_military_target = yes",
+                       "region ?= scope:nd_salvo_cap_region", "order_by = nuclear_strike_target_score", "position = 0",
+                       "NOT = { has_variable = nd_salvo_target }", "set_variable = nd_salvo_target"):
+            self.assertIn(needle, pick)
+        self.assertNotRegex(pick, r"position = [^0]")
+
+    def test_targets_fall_back_once_all_are_marked(self):
+        self.assertIn("else = { ordered_scope_state = { order_by = nuclear_strike_target_score position = 0"
+                      " save_scope_as = target_state } }", squash(block(self.effects, "nd_salvo_pick_target")))
+
+    def test_marks_cleared(self):
+        clear = squash(block(self.effects, "nd_salvo_clear"))
+        self.assertIn("every_scope_state = { limit = { has_variable = nd_salvo_target }"
+                      " remove_variable = nd_salvo_target }", clear)
+
+    def test_forces_damage_is_a_quarter_and_counted(self):
+        damage = block(strip_comments(read(EXTRA_EFFECTS)), "nd_counterforce_strike_damage")
+        for needle in ("percent = 0.025", "te_demog_note_kills", "value = nd_counterforce_strike_killed_population",
+                       "add_devastation = 25", "name = nuclear_strike_aftermath", "nuclear_strike_attribute = yes"):
+            self.assertIn(needle, damage)
+        self.assertIn("multiply = 0.025", block(strip_comments(read(EXTRA_VALUES)), "nd_counterforce_strike_killed_population"))
+        hit = block(self.effects, "nd_salvo_hit")
+        self.assertIn("nd_counterforce_strike_damage = yes", hit)
+        self.assertIn("nuclear_industrial_strike = yes", hit)
+        self.assertIn("is_capital = yes", hit)
+
+    def test_aftermath_order(self):
+        # Ruling (phase 3 Task 2): our record and events come before a Launch
+        # on Warning victim fires first, whose hits on us would make our salvo
+        # read as an answer (nd_was_struck_by) and whose strike re-saves the
+        # scopes the events read.
+        order = ["nd_salvo_counterforce = yes", "nd_salvo_decapitation = yes", "nd_record_claim = yes",
+                 "nd_salvo_record_use = yes", "id = nuclear_weapon_events.1 ", "id = nuclear_weapon_events.2 ",
+                 "nd_record_nuclear_use = { VICTIM = scope:nd_salvo_victim }", "nd_salvo_fire_first = yes"]
+        positions = [self.after.index(x) for x in order]
+        self.assertEqual(positions, sorted(positions))
+        positions = [self.order.index(x) for x in ("name = nd_salvo_victim_r", "while = {", "nd_salvo_aftermath = yes",
+                                                   "nd_salvo_clear = yes")]
+        self.assertEqual(positions, sorted(positions))
+        self.assertLess(self.after.index("te_set_sqrt = { IN = var:nd_salvo_landed OUT = nd_salvo_sqrt }"),
+                        self.after.index("nd_salvo_record_use = yes"))
+
+    def test_aftermath_only_when_a_warhead_landed(self):
+        landed = block(self.after, "if")
+        self.assertIn("limit = { var:nd_salvo_landed > 0 }", landed)
+        self.assertIn("nd_salvo_counterforce = yes", landed)
+        miss = self.after[self.after.index(landed) + len(landed):]
+        miss = block(miss, "else")
+        for needle in ("change_infamy = 5", "id = nuclear_weapon_events.3 ", "id = nuclear_weapon_events.4 ",
+                       "nd_record_nuclear_use = { VICTIM = scope:nd_salvo_victim }"):
+            self.assertIn(needle, miss)
+        for needle in ("nd_record_claim", "nd_salvo_record_use", "nd_salvo_counterforce", "nd_salvo_decapitation"):
+            self.assertNotIn(needle, miss)
+
+    def test_bookkeeping_scaled_once(self):
+        use = squash(block(self.effects, "nd_salvo_record_use"))
+        for needle in ("POINTS = nd_salvo_un_order_answer", "POINTS = nd_salvo_dossier_answer",
+                       "AMOUNT = nd_salvo_un_shock", "POINTS = nd_salvo_un_order_first", "POINTS = nd_salvo_dossier_first",
+                       "change_infamy = nd_salvo_infamy", "value = scope:nd_salvo_attacker.var:nd_salvo_world_rel",
+                       "nd_taboo_note_use_scaled = { KIND = strategic RETALIATION = yes SCALE = var:nd_salvo_sqrt }",
+                       "nd_taboo_note_use_scaled = { KIND = strategic RETALIATION = no SCALE = var:nd_salvo_sqrt }",
+                       "un_docket_note_grievance", "un_regime_icc_note_crime = { CRIME = 1 }"):
+            self.assertIn(needle, use)
+        self.assertIn("nd_taboo_note_use_scaled = { KIND = $KIND$ RETALIATION = $RETALIATION$ SCALE = 1 }",
+                      squash(block(strip_comments(read(TABOO_EFFECTS)), "nd_taboo_note_use")))
+        self.assertEqual(block(strip_comments(read(TABOO_EFFECTS)), "nd_taboo_note_use_scaled").count("multiply = $SCALE$"), 2)
+
+    def test_counterforce_rounds_stochastically_within_the_stockpile(self):
+        cf = squash(block(self.effects, "nd_salvo_counterforce"))
+        for needle in ("save_scope_as = nd_sv_enemy", "value = nd_counterforce_destroyed_raw", "floor = yes",
+                       "chance = nd_cf_round_up_chance", "name = nuclear_weapon_stockpile subtract = var:nd_cf_whole",
+                       "nd_authority_launch_on_warning = yes", "value = nd_counterforce_saved_raw", "max = 3",
+                       "type=counterforce", "set_variable = { name = nd_salvo_destroyed value = scope:nd_salvo_victim.var:nd_cf_whole }"):
+            self.assertIn(needle, cf)
+        self.assertRegex(cf, r"var:nd_cf_whole > var:nuclear_weapon_stockpile \} set_variable = \{ name = nd_cf_whole"
+                             r" value = var:nuclear_weapon_stockpile \}")
+
+    def test_low_fires_first_with_its_gate_and_record(self):
+        fire = squash(block(self.effects, "nd_salvo_fire_first"))
+        for needle in ("nd_retaliation_permitted = { ENEMY = scope:nd_salvo_attacker }", "nuclear_response_strike = yes",
+                       "position = 1", "position = 2", "nd_record_nuclear_use = { VICTIM = scope:nd_salvo_attacker }",
+                       "type=fire_first", "remove_variable = nd_cf_fire_first"):
+            self.assertIn(needle, fire)
+
+    def test_decapitation_only_central(self):
+        self.assertIn("nd_authority_central = yes", block(self.after, "if"))
+        dec = squash(block(self.effects, "nd_salvo_decapitation"))
+        for needle in ("chance = nd_decapitation_chance_value", "days = 13", "days = 20", "days = 27",
+                       "name = nd_pending_retaliation", "name = nd_restored_from_decapitation", "type=decapitation"):
+            self.assertIn(needle, dec)
+
+    def test_claim_reads_the_landed_count(self):
+        claim = block(self.effects, "nd_record_claim")
+        self.assertIn("value = scope:attacking_country.nd_strike_landed_count_value", claim)
+        lie = claim[claim.index("is_ai = yes"):claim.index("chance = nd_ai_lies_value")]
+        self.assertIn("nd_strike_landed_count_value <= 1", lie)
+
+    def test_salvo_working_variables_cleared(self):
+        clear = block(self.effects, "nd_salvo_clear")
+        for name in ("nd_salvo_landed", "nd_salvo_forces_landed", "nd_salvo_capital_landed", "nd_salvo_fired",
+                     "nd_salvo_victim_r", "nd_salvo_sqrt", "nd_salvo_world_rel", "nd_salvo_destroyed",
+                     "nd_salvo_count"):
+            self.assertIn(f"remove_variable = {name}", clear, name)
+        # The panel's settings stay for the next salvo.
+        for name in ("nd_salvo_mission", "nd_salvo_size"):
+            self.assertNotIn(f"remove_variable = {name}", clear, name)
+        # Every working variable the salvo sets on us is one nd_salvo_clear removes.
+        body = strip_comments(read(EFFECTS))
+        start = body.index("nd_order_salvo = {")
+        section = body[start:body.index("nd_salvo_clear = {")]
+        for name in set(re.findall(r"set_variable = \{ name = (nd_salvo_[a-z_]+)", section)):
+            if name.startswith("nd_salvo_seen_") or name in ("nd_salvo_mission", "nd_salvo_marked"):
+                continue
+            self.assertIn(f"remove_variable = {name}", clear, name)
+
+    def test_victim_summary_before_its_event(self):
+        summary = squash(self.after)
+        for name in ("nd_salvo_seen_by", "nd_salvo_seen_landed", "nd_salvo_seen_destroyed", "nd_salvo_seen_mission"):
+            self.assertRegex(summary, rf"set_variable = \{{ name = {name} value = [^}}]+ days = 30 \}}")
+            self.assertLess(self.after.index(name), self.after.index("id = nuclear_weapon_events.1 "))
+
+    def test_salvo_targets_self_check(self):
+        raw = block(self.effects, "nd_salvo_targets_self_check")
+        # Final review: two checks, each once a game. The count, gated on the
+        # count ordered (not the warheads fired, so a short loop reports
+        # BROKEN), for any mission, so the AI's salvos reach it; the spread,
+        # for Cities, with its own flag, so an earlier Forces or Leadership
+        # salvo doesn't use it up.
+        count = raw[:raw.index("nd_salvo_targets_self_check_done")]
+        spread = raw[raw.index("nd_salvo_targets_self_check_done"):]
+        for line in ("TE_SELF_CHECK OK nd_salvo_count", "TE_SELF_CHECK BROKEN nd_salvo_count"):
+            self.assertIn(line, count)
+        for line in ("TE_SELF_CHECK OK nd_salvo_targets", "TE_SELF_CHECK BROKEN nd_salvo_targets"):
+            self.assertIn(line, spread)
+        gate = squash(block(count, "limit"))
+        for needle in ("has_global_variable = nd_salvo_count_self_check_done", "var:nd_salvo_count >= 2"):
+            self.assertIn(needle, gate)
+        self.assertNotIn("nd_salvo_fired", gate)
+        self.assertNotIn("nd_salvo_mission", gate)
+        self.assertIn("var:nd_salvo_fired = var:nd_salvo_count", squash(count))
+        gate = squash(raw[raw.rindex("limit", 0, raw.index("nd_salvo_targets_self_check_done")):])
+        for needle in ("var:nd_salvo_mission = 1", "var:nd_salvo_fired >= 2", "count >= 2"):
+            self.assertIn(needle, gate[:gate.index("set_global_variable")])
+        self.assertIn("var:nd_salvo_marked >= 2", squash(spread))
+        self.assertLess(self.after.index("nd_salvo_targets_self_check = yes"), len(self.after))
+        self.assertLess(self.order.index("nd_salvo_aftermath = yes"), self.order.index("nd_salvo_clear = yes"))
+
+    def test_world_hears_of_a_salvo(self):
+        # Final review: every third country's .15 says a salvo, not a strike.
+        desc = squash(block(block(self.weapon_events(), "nuclear_weapon_events.15"), "desc"))
+        self.assertIn("scope:target_country ?= { var:nd_salvo_seen_by ?= scope:attacking_country }", desc)
+        self.assertLess(desc.index("desc = nuclear_weapon_events.15.d_salvo }"),
+                        desc.index("desc = nuclear_weapon_events.15.d }"))
+        self.assertTrue(loc_value("nuclear_weapon_events.15.d_salvo"))
+
+    def weapon_events(self):
+        return strip_comments(read(WEAPON_EVENTS))
+
+    def test_fire_first_share_from_the_arsenal_before_destruction(self):
+        # Final review: the saved share is min(exposed, K x landed) x credit
+        # of the arsenal the salvo met, as the destroyed share is.
+        cf = squash(block(self.effects, "nd_salvo_counterforce"))
+        self.assertLess(cf.index("value = nd_counterforce_saved_raw"),
+                        cf.index("name = nuclear_weapon_stockpile subtract = var:nd_cf_whole"))
+
+    def test_only_an_armed_victim_is_disarmed_or_cut_off(self):
+        # Final review: nd_authority_central holds for a country that never
+        # set an authority, so the aftermath asks for an arsenal too.
+        after = squash(self.after)
+        self.assertIn("var:nd_salvo_forces_landed > 0 scope:nd_salvo_victim = { nd_is_armed = yes }", after)
+        self.assertIn("scope:nd_salvo_victim = { nd_authority_central = yes nd_is_armed = yes }", after)
+
+    def test_texts_name_a_state_a_warhead_hit(self):
+        # Final review: the events, notifications and UN subjects read
+        # scope:target_state, which the loop leaves on the last state aimed
+        # at; it is put back on one a warhead hit, the capital first.
+        hit = squash(block(self.effects, "nd_salvo_hit"))
+        self.assertIn("scope:target_state = { save_scope_as = nd_salvo_hit_state }", hit)
+        self.assertIn("is_capital = yes } } change_variable = { name = nd_salvo_capital_landed add = 1 }"
+                      " scope:target_state = { save_scope_as = nd_salvo_hit_capital }", hit)
+        restore = self.after.index("save_scope_as = target_state")
+        self.assertLess(self.after.index("scope:nd_salvo_hit_capital"), restore)
+        self.assertLess(restore, self.after.index("nd_salvo_record_use = yes"))
+
+    def test_each_salvo_effect_defined_once(self):
+        for name in ("nd_order_salvo", "nd_salvo_warhead", "nd_salvo_pick_target", "nd_salvo_hit", "nd_salvo_aftermath",
+                     "nd_salvo_record_use", "nd_salvo_counterforce", "nd_salvo_fire_first", "nd_salvo_decapitation",
+                     "nd_salvo_clear", "nd_salvo_targets_self_check"):
+            self.assertEqual(len(re.findall(rf"(?m)^{name} = \{{", read(EFFECTS))), 1, name)
+
+
+
+class TestDecapitationGates(unittest.TestCase):
+    """A decapitated command orders nothing until it is restored (rework spec
+    §6.3, §6.4; plan H11-H13)."""
+
+    def setUp(self):
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.weapon = strip_comments(read(WEAPON_EVENTS))
+
+    def test_command_gates_every_ordered_launch(self):
+        self.assertIn("nd_command_intact = yes", block(self.triggers, "nd_retaliation_permitted"))
+        self.assertIn("nd_command_intact = yes", block(self.triggers, "nd_can_order_salvo"))
+        nuke = strip_comments(read(NUKE))
+        for action in ("nuke_diplo_action", "tactical_nuke_diplo_action"):
+            self.assertIn("nd_command_intact = yes", block(block(nuke, action), "possible"), action)
+        for name in ("nd_dispatch_strategic_strike", "nd_dispatch_tactical_strike"):
+            body = block(self.effects, name)
+            gate = block(body[body.index("remove_variable = nd_dispatch_click"):], "limit")
+            self.assertIn("nd_command_intact = yes", gate, name)
+        crisis = strip_comments(read(CRISIS_EVENTS))
+        for option in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b", "nuclear_crisis.24.b"):
+            self.assertIn("nd_command_intact = yes", block(option_body(crisis, option), "trigger"), option)
+        guarantor = block(crisis, "nuclear_crisis.22")
+        self.assertIn("nd_command_intact = yes", guarantor)
+        incident = strip_comments(read(INCIDENT_EVENTS))
+        for option in ("nuclear_incident.1.c", "nuclear_incident.50.c"):
+            self.assertIn("nd_command_intact", block(option_body(incident, option), "trigger"), option)
+        # The answer that waited is asked only once the command is restored.
+        weekly = self.effects[self.effects.index("limit = { has_variable = nd_pending_retaliation }"):]
+        weekly = weekly[:weekly.index("nuclear_weapon_events.24")]
+        self.assertIn("nd_command_intact = yes", weekly)
+
+    def test_cut_off_command_keeps_its_authority(self):
+        # Final review: a change of authority while cut off would leave the
+        # new authority's unordered launches narrated but refused by the
+        # dispatchers' gate.
+        self.assertIn("nd_command_intact = yes", block(self.triggers, "nd_can_set_authority"))
+        self.assertIn("limit = { var:nd_authority_months >= nd_authority_tenure_months nd_command_intact = yes }",
+                      squash(self.effects))
+
+    def test_unordered_paths_untouched(self):
+        # Only a Central Authorization country is ever cut off, and none of
+        # these launch under it: a cut-off command, Automatic Retaliation, a
+        # loose warhead and the incident dispatch itself.
+        self.assertNotIn("nd_command_intact", block(self.effects, "nd_launch_or_intercept"))
+        self.assertNotIn("nd_command_intact", strip_comments(read(LOOSE_EFFECTS)))
+        self.assertNotIn("nd_command_intact", strip_comments(read(LOOSE_EVENTS)))
+        self.assertNotIn("nd_command_intact", option_body(self.weapon, "nuclear_weapon_events.1.e"))
+        incident = strip_comments(read(INCIDENT_EVENTS))
+        commander = incident[incident.index("KIND = commander") - 3000:incident.index("KIND = commander")]
+        self.assertNotIn("nd_command_intact", commander)
+
+    def test_cut_off_option(self):
+        one = block(self.weapon, "nuclear_weapon_events.1")
+        option = option_body(one, "nuclear_weapon_events.1.cut_off")
+        self.assertIn("has_variable = nd_decapitated", block(option, "trigger"))
+        self.assertIn("default_option = yes", option)
+        raw = read(WEAPON_EVENTS)
+        raw_option = raw[raw.index("name = nuclear_weapon_events.1.cut_off"):]
+        self.assertRegex(raw_option[:600], r"# REVIEWED \d{4}-\d{2}-\d{2} \(no_effect_option\):")
+        # Absorbing and the Recessed mating are hidden while it is the default.
+        for name in ("nuclear_weapon_events.1.a", "nuclear_weapon_events.1.g"):
+            self.assertIn("NOT = { scope:target_country = { has_variable = nd_decapitated } }",
+                          squash(block(option_body(one, name), "trigger")), name)
+        for key in ("nuclear_weapon_events.1.cut_off", "nuclear_weapon_events.1.cut_off.tt"):
+            self.assertTrue(loc_value(key), key)
+        self.assertIn("custom_tooltip = nuclear_weapon_events.1.cut_off.tt", option)
+
+    def test_command_restored_reuses_24(self):
+        event = block(self.weapon, "nuclear_weapon_events.24")
+        for part, key in (("title", "nuclear_weapon_events.24.t_restored"), ("desc", "nuclear_weapon_events.24.d_restored")):
+            body = squash(block(event, part))
+            self.assertIn(f"triggered_desc = {{ trigger = {{ has_variable = nd_restored_from_decapitation }} desc = {key} }}",
+                          body, part)
+            self.assertTrue(loc_value(key), key)
+        self.assertIn("remove_variable = nd_restored_from_decapitation", block(event, "after"))
+
+    def test_salvo_claim_keeps_the_salvo_text(self):
+        # Final review: a claim on a salvo reads the salvo's text with the
+        # hotline sentence, not the single strike's.
+        desc = squash(block(block(self.weapon, "nuclear_weapon_events.1"), "desc"))
+        for key in ("nuclear_weapon_events.1.d_cut_off_claim", "nuclear_weapon_events.1.d_salvo_forces_claim",
+                    "nuclear_weapon_events.1.d_salvo_leadership_claim", "nuclear_weapon_events.1.d_salvo_cities_claim"):
+            self.assertLess(desc.index(f"desc = {key} }}"), desc.index("desc = nuclear_weapon_events.1.d_claim }"), key)
+            self.assertIn("$nuclear_weapon_events.1.claim_word$", loc_value(key), key)
+        self.assertLess(desc.index("desc = nuclear_weapon_events.1.d_salvo_cities }"),
+                        desc.index("desc = nuclear_weapon_events.1.d_claim }"))
+        self.assertIn("$nuclear_weapon_events.1.claim_word$", loc_value("nuclear_weapon_events.1.d_claim"))
+
+    def test_claim_accepted_while_cut_off_drops_the_answer(self):
+        # Final review: accepting the claim holds our answer back, so the
+        # answer a decapitation kept for Command Restored goes with it.
+        option = squash(option_body(block(self.weapon, "nuclear_weapon_events.1"), "nuclear_weapon_events.1.k"))
+        self.assertIn("var:nd_pending_retaliation = scope:attacking_country } remove_variable = nd_pending_retaliation", option)
+        self.assertNotIn("hold them back", loc_value("nuclear_weapon_events.1.cut_off.tt"))
+
+    def test_attacker_learns_the_leadership_result(self):
+        two = squash(block(block(self.weapon, "nuclear_weapon_events.2"), "desc"))
+        cut = two.index("desc = nuclear_weapon_events.2.d_salvo_cut_off }")
+        self.assertIn("has_variable = nd_decapitated", two[two.rindex("trigger", 0, cut):cut])
+        held = two.index("desc = nuclear_weapon_events.2.d_salvo_leadership }")
+        self.assertIn("var:nd_salvo_seen_mission ?= 3", two[two.rindex("trigger", 0, held):held])
+        self.assertLess(cut, held)
+        self.assertLess(held, two.index("desc = nuclear_weapon_events.2.d_salvo }"))
+        for key in ("nuclear_weapon_events.2.d_salvo_cut_off", "nuclear_weapon_events.2.d_salvo_leadership"):
+            self.assertTrue(loc_value(key), key)
+
+    def test_launch_order_shows_the_cost(self):
+        # Final review: the single strike's confirmation names what it costs;
+        # the salvo's does too, with the square root.
+        launch = squash(option_body(block(self.weapon, "nuclear_weapon_events.31"), "nuclear_weapon_events.31.a"))
+        self.assertIn("nd_was_struck_by = { ENEMY = scope:nd_salvo_victim } } custom_tooltip = nd_taboo_tt_strike_answer", launch)
+        self.assertIn("custom_tooltip = nd_taboo_tt_strike_first_use", launch)
+        self.assertLess(launch.index("nd_taboo_tt_strike_first_use"), launch.index("nd_order_salvo = yes"))
+        self.assertIn("square root", loc_value("nuclear_weapon_events.31.a.tt"))
+
+    def test_salvo_text_and_stale_guard(self):
+        one = block(self.weapon, "nuclear_weapon_events.1")
+        desc = squash(block(one, "desc"))
+        for key in ("nuclear_weapon_events.1.d_salvo_cities", "nuclear_weapon_events.1.d_salvo_forces",
+                    "nuclear_weapon_events.1.d_salvo_leadership", "nuclear_weapon_events.1.d_cut_off"):
+            self.assertIn(f"desc = {key} }}", desc, key)
+            self.assertTrue(loc_value(key), key)
+            self.assertLess(desc.index(key), desc.index("desc = nuclear_weapon_events.1.d }"))
+        self.assertIn("var:nd_salvo_seen_by ?= scope:attacking_country", desc)
+        self.assertIn("nd_salvo_seen_landed", loc_value("nuclear_weapon_events.1.d_salvo_cities"))
+        self.assertIn("nd_salvo_seen_destroyed", loc_value("nuclear_weapon_events.1.d_salvo_forces"))
+        title = squash(block(one, "title"))
+        self.assertIn("desc = nuclear_weapon_events.1.t_salvo }", title)
+        self.assertTrue(loc_value("nuclear_weapon_events.1.t_salvo"))
+        # A single strike after a salvo must not read as the salvo.
+        extra = strip_comments(read(EXTRA_EFFECTS))
+        for name in ("nuclear_first_strike", "nuclear_response_response_strike"):
+            body = block(extra, name)
+            self.assertIn("remove_variable = nd_salvo_seen_by", body, name)
+            self.assertLess(body.index("remove_variable = nd_salvo_seen_by"),
+                            body.index("id = nuclear_weapon_events.1 "), name)
+
+
+
+def strike_section():
+    """The Strike section's GUI type body (a type opens `type x = flowcontainer {`)."""
+    text = read(GUI)
+    return block(text.replace("type te_nuclear_sec_strike = flowcontainer {", "te_nuclear_sec_strike = {"),
+                 "te_nuclear_sec_strike")
+
+
+class TestStrikeSection(unittest.TestCase):
+    """The Strike section and the Launch Order (rework spec §6.1, §10; plan
+    H1-H3, H15)."""
+
+    OPS = set(range(72, 80))
+    EFFECTS_BY_OP = ("nd_plan_step_enemy", "nd_plan_set_mission", "nd_plan_step_size", "nd_plan_order")
+
+    def setUp(self):
+        self.effects = strip_comments(read(EFFECTS))
+        self.sguis = strip_comments(read(SGUIS))
+
+    def test_ops_in_step(self):
+        self.assertLessEqual(self.OPS, gui_ops(read(GUI), "nd_posture_sgui"))
+        for part in ("is_valid", "effect"):
+            self.assertLessEqual(self.OPS, sgui_ops(self.sguis, "nd_posture_sgui", part), part)
+        doc = JE_DOC.read_text(encoding="utf-8")
+        for text in (read(GUI), read(SGUIS), doc):
+            for needle in ("72 / 73", "74..76", "77 / 78", "79"):
+                self.assertIn(needle, text.replace("74–76", "74..76"), needle)
+
+    def test_op_bodies_fenced(self):
+        for name in self.EFFECTS_BY_OP:
+            body = squash(block(self.effects, name))
+            self.assertIn("set_variable = nd_plan_click if = { limit = { has_variable = nd_plan_click }"
+                          " remove_variable = nd_plan_click", body, name)
+            self.assertIn("custom_tooltip", body[:body.index("set_variable = nd_plan_click")], name)
+
+    def test_refresh_picks_by_index_and_wraps(self):
+        refresh = squash(block(self.effects, "nd_plan_refresh"))
+        self.assertEqual(refresh.count("every_country = {"), 2)
+        self.assertEqual(refresh.count("nd_planner_candidate = { ENEMY = scope:nd_plan_cand }"), 2)
+        for needle in ("name = nd_plan_count", "var:nd_plan_index > var:nd_plan_count",
+                       "var:nd_plan_index < 1", "set_variable = { name = nd_plan_index value = 1 }",
+                       "set_variable = { name = nd_plan_index value = var:nd_plan_count }",
+                       "var:nd_plan_seen = var:nd_plan_index", "name = nd_plan_enemy value = scope:nd_plan_pick",
+                       "remove_variable = nd_plan_enemy"):
+            self.assertIn(needle, refresh, needle)
+        weekly = squash(block(self.effects, "nd_weekly_update"))
+        self.assertIn("is_ai = no nd_is_armed = yes } nd_plan_refresh = yes", weekly)
+        step = squash(block(self.effects, "nd_plan_step_enemy"))
+        self.assertIn("change_variable = { name = nd_plan_index $OP$ = 1 } nd_plan_refresh = yes", step)
+
+    def test_section_shown_cheaply(self):
+        shown = block(self.sguis, "nd_plan_shown_sgui")
+        self.assertIn("has_variable = nd_plan_enemy", block(shown, "is_shown"))
+        for loop in ("any_country", "every_country", "ordered_country"):
+            self.assertNotIn(loop, shown, loop)
+        section = strike_section()
+        self.assertIn("GetScriptedGui('nd_plan_shown_sgui').IsShown(", section)
+
+    def test_target_named_through_a_display_sgui(self):
+        name = block(self.sguis, "nd_plan_enemy_sgui")
+        self.assertIn("var:nd_plan_enemy = { save_temporary_scope_as = nd_plan_enemy_disp }", squash(name))
+        self.assertIn("SCOPE.sCountry('nd_plan_enemy_disp')", loc_value("nd_w_strike_target_name"))
+        self.assertNotIn("Var('nd_plan_enemy').GetCountry", read(GUI))
+        self.assertIn("GetScriptedGui('nd_plan_enemy_sgui').ExecuteTooltip(", strike_section())
+
+    def test_mission_and_size(self):
+        mission = squash(block(self.effects, "nd_plan_set_mission"))
+        self.assertIn("set_variable = { name = nd_salvo_mission value = $M$ }", mission)
+        size = squash(block(self.effects, "nd_plan_step_size"))
+        for needle in ("set_variable = { name = nd_salvo_size value = nd_salvo_size_value }",
+                       "change_variable = { name = nd_salvo_size $OP$ = 1 }",
+                       "set_variable = { name = nd_salvo_size value = nd_salvo_size_value }"):
+            self.assertIn(needle, size)
+        self.assertEqual(size.count("value = nd_salvo_size_value"), 2)
+        values = strip_comments(read(VALUES))
+        self.assertIn("value = var:nd_salvo_mission", block(values, "nd_display_plan_mission"))
+        section = strike_section()
+        for n in (1, 2, 3):
+            self.assertIn(f"ScriptValue('nd_display_plan_mission'), '(CFixedPoint){n}' )", section)
+
+    def test_confirmation_rechecks_the_order(self):
+        events = strip_comments(read(WEAPON_EVENTS))
+        event = block(events, "nuclear_weapon_events.31")
+        launch = option_body(event, "nuclear_weapon_events.31.a")
+        self.assertIn("nd_can_order_salvo = { ENEMY = scope:nd_salvo_victim }", block(launch, "trigger"))
+        self.assertIn("nd_order_salvo = yes", launch)
+        stand = option_body(event, "nuclear_weapon_events.31.b")
+        self.assertIn("default_option = yes", stand)
+        self.assertNotIn("default_option", launch)
+        order = squash(block(self.effects, "nd_plan_order"))
+        self.assertIn("var:nd_plan_enemy = { save_scope_as = nd_salvo_victim }", order)
+        self.assertIn("trigger_event = { id = nuclear_weapon_events.31 popup = yes }", order)
+        valid = squash(block(self.triggers_text(), "nd_plan_can_order"))
+        self.assertIn("var:nd_plan_enemy ?= { save_temporary_scope_as = nd_plan_victim }", valid)
+        self.assertIn("nd_can_order_salvo = { ENEMY = scope:nd_plan_victim }", valid)
+        for key in ("nuclear_weapon_events.31.t", "nuclear_weapon_events.31.a", "nuclear_weapon_events.31.b",
+                    "nuclear_weapon_events.31.a.tt", "nuclear_weapon_events.31.f"):
+            self.assertTrue(loc_value(key), key)
+
+    def triggers_text(self):
+        return strip_comments(read(TRIGGERS))
+
+
 class TestOutcomeNotice(unittest.TestCase):
     def setUp(self):
         self.effects = strip_comments(read(CRISIS_EFFECTS))
@@ -2143,7 +2622,10 @@ class TestLaunchGate(unittest.TestCase):
         self.assertIn("nd_pending_retaliation", weekly)
         self.assertIn("id = nuclear_weapon_events.24", weekly)
         body = block(ev, "nuclear_weapon_events.24")
-        self.assertIn("has_war_with = scope:nd_ready_enemy", block(body, "trigger"))
+        # The event's own trigger, not a triggered text's (its title reads
+        # "Command Restored" after a decapitation).
+        event_trigger = block(body[re.search(r"(?m)^\ttrigger = \{", body).start():], "trigger")
+        self.assertIn("has_war_with = scope:nd_ready_enemy", event_trigger)
 
     def test_assembling_bypasses_the_lock_but_only_raises(self):
         body = block(strip_comments(read(EFFECTS)), "nd_assemble_for_retaliation")
@@ -2411,11 +2893,15 @@ class TestStruckByNamesTheStriker(unittest.TestCase):
             for path in sorted((ROOT / folder).rglob("*.txt")):
                 text = strip_comments(read(path))
                 sites += [(path, m.group(1)) for m in self.AFTERMATH.finditer(text)]
+        # The city strike and the counterforce strike (rework spec §6.2) share
+        # the strategic attribution.
         self.assertEqual(sorted(kind for _, kind in sites),
-                         ["nuclear_strike_aftermath", "tactical_nuke_aftermath"])
+                         ["nuclear_strike_aftermath", "nuclear_strike_aftermath", "tactical_nuke_aftermath"])
         self.assertTrue(all(path == EXTRA_EFFECTS for path, _ in sites))
-        strategic = block(self.extra, "nuclear_industrial_strike")
-        self.assertIn("name = nuclear_strike_aftermath", strategic)
+        for name in ("nuclear_industrial_strike", "nd_counterforce_strike_damage"):
+            self.assertIn("name = nuclear_strike_aftermath", block(self.extra, name))
+            self.assertIn("nuclear_strike_attribute = yes", block(self.extra, name))
+        strategic = block(self.extra, "nuclear_strike_attribute")
         self.assertIn("set_variable = { name = nd_struck_by value = scope:nd_current_strike_launcher "
                       "days = short_modifier_time }", strategic)
         self.assertIn("set_variable = { name = nd_struck_by value = scope:attacking_country "

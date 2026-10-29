@@ -71,6 +71,11 @@ class Posture:
     pgm: bool = False              # precision_guided_munitions
     mainframe: bool = True         # mainframe_computers
     enemy: "Posture | None" = None # scope:nd_sv_enemy, for the survivors values
+    salvo_forces_landed: float = 0 # a salvo's warheads landed on forces (the attacker's var:nd_salvo_forces_landed)
+    salvo_capital_landed: float = 0  # landed on the victim's capital (var:nd_salvo_capital_landed)
+    salvo_victim_r: float = 1      # the victim's redundancy when the salvo began (var:nd_salvo_victim_r)
+    believed_armed: bool = True    # the world believes it holds warheads (nd_believed_armed)
+    capital_hit_share: float = 0.9 # a warhead's chance on the enemy's capital (nd_ai_capital_hit_share)
 
 
 # The rework spec's §2.3 rows: both sides take the same posture.
@@ -111,6 +116,8 @@ class RiskModel:
             return posture.stockpile
         if value == "nd_believed_stockpile":
             return posture.believed_stockpile
+        if value == "nd_ai_capital_hit_share":
+            return posture.capital_hit_share   # reads modifiers at the enemy's capital
         if value in self.values:
             return self.number(self.values[value], posture)
         return float(value)
@@ -134,6 +141,7 @@ class RiskModel:
             "nd_launch_under_attack_context": lambda: p.war or p.stage >= 3,
             "nd_launch_under_attack_doctrine": lambda: p.doctrine != 1,
             "nd_crisis_talks_open_either": lambda: p.talks,
+            "nd_believed_armed": lambda: p.believed_armed,
         }
         if key not in answers:
             return None
@@ -153,6 +161,9 @@ class RiskModel:
                 continue
             if key == "has_war_with":
                 answers.append(p.war)
+                continue
+            if key == "scope:nd_sv_enemy":
+                answers.append(self.condition(value, p.enemy, crisis))
                 continue
             if key == "exists" and value == "scope:nd_hold_suspect":
                 answers.append(True)  # every benchmark has a suspected attacker
@@ -208,8 +219,9 @@ class RiskModel:
             if key == "scope:nd_hold_suspect":
                 result = self.arithmetic(value, replace(p, readiness=p.suspect_readiness), result, crisis)
                 continue
-            if key in ("round", "floor"):
-                result = math.floor(result + 0.5) if key == "round" else math.floor(result)
+            if key in ("round", "floor", "ceiling"):
+                result = {"round": math.floor(result + 0.5), "floor": math.floor(result),
+                          "ceiling": math.ceil(result)}[key]
                 continue
             operand = self.number(value, p)
             if key == "value":

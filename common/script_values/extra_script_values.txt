@@ -777,6 +777,13 @@ nuclear_industrial_strike_killed_population = {
 	round = yes
 }
 
+# A counterforce warhead (nd_counterforce_strike_damage): a quarter of a city's.
+nd_counterforce_strike_killed_population = {
+	value = state_population
+	multiply = 0.025
+	round = yes
+}
+
 nuclear_tactical_strike_civilian_killed_population = {
 	value = state_population
 	multiply = 0.005

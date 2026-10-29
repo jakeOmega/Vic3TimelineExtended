@@ -29,11 +29,22 @@ def read_records(lines):
             yield fields
 
 
+MISSIONS = {"1": "cities", "2": "forces", "3": "leadership"}
+
+
+def _count(value):
+    """A record's whole-number field; a template the engine left unfilled counts 0."""
+    value = (value or "").replace(",", "")
+    return int(value) if value.isdigit() else 0
+
+
 def summarize(records):
     kinds, families, actions, outcomes = Counter(), Counter(), Counter(), Counter()
     countries, crises, exchanges = set(), set(), set()
     acute, used = set(), set()
     claims, beliefs, truths = Counter(), Counter(), Counter()
+    salvos, decapitations = Counter(), Counter()
+    salvo_landed = destroyed = fired_first = 0
     exposure = defaultdict(lambda: {"country_weeks": 0, "expected_incidents": 0.0})
     unresolved = 0
     for r in records:
@@ -61,6 +72,15 @@ def summarize(records):
             beliefs[r.get("believed", "unknown")] += 1
         elif kind == "claim_truth":
             truths[r.get("truth", "unknown")] += 1
+        elif kind == "salvo":
+            salvos[MISSIONS.get(r.get("mission", ""), "unknown")] += 1
+            salvo_landed += _count(r.get("landed"))
+        elif kind == "counterforce":
+            destroyed += _count(r.get("destroyed"))
+        elif kind == "fire_first":
+            fired_first += _count(r.get("fired"))
+        elif kind == "decapitation":
+            decapitations[r.get("result", "unknown")] += 1
         elif kind == "risk":
             try:
                 rate = float(r["incident_weekly_permille"])
@@ -100,6 +120,14 @@ def summarize(records):
         "claims_believed": beliefs["yes"],
         "claims_doubted": beliefs["no"],
         "lies_exposed": truths["false"],
+        # Phase 3 (spec §6): salvos by mission and the warheads they landed;
+        # warheads counterforce destroyed and Launch on Warning fired first;
+        # decapitation rolls by result.
+        "salvos_by_mission": dict(sorted(salvos.items())),
+        "salvo_warheads_landed": salvo_landed,
+        "counterforce_destroyed": destroyed,
+        "fired_before_impact": fired_first,
+        "decapitations": dict(sorted(decapitations.items())),
     }
 
 

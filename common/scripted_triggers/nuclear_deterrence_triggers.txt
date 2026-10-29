@@ -582,6 +582,108 @@ nd_strike_carries_claim = {
 	var:nd_strike_claim_id = var:nd_claim_id
 }
 
+# Our command can order a launch: not cut off by a strike on our capital
+# (rework spec §6.3, nd_salvo_decapitation; nd_decapitated lasts two to four
+# weeks). Only a Central Authorization country is ever cut off.
+nd_command_intact = {
+	NOT = { has_variable = nd_decapitated }
+}
+
+# A country the Strike section can aim a salvo at (rework spec §6.1): another
+# living country with states, with which we are at war or in a peacetime
+# nuclear exchange (the strike actions' own reach). Country scope = us.
+nd_planner_candidate = {
+	exists = $ENEMY$
+	NOT = { THIS = $ENEMY$ }
+	OR = {
+		has_war_with = $ENEMY$
+		nd_in_peacetime_exchange_with = { ENEMY = $ENEMY$ }
+	}
+	$ENEMY$ = {
+		any_scope_state = { always = yes }
+	}
+}
+
+# Everything an ordered salvo needs (rework spec §6.1), each clause with its
+# own failure line: the strike action's gates and the command's. Country
+# scope = the attacker.
+nd_can_order_salvo = {
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_forces_assembled
+		nd_forces_assembled = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_salvo_candidate
+		nd_planner_candidate = { ENEMY = $ENEMY$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_doctrine_permits_strike
+		nd_doctrine_permits_strike = { ENEMY = $ENEMY$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_pledge_permits_strike
+		nd_pledge_permits_strike = { ENEMY = $ENEMY$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_war_law_permits_strike
+		nd_war_law_permits_strategic_strike = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_command_intact
+		nd_command_intact = yes
+	}
+}
+
+# The Strike section's buttons (nd_posture_sgui ops 72-79), each clause with
+# its own failure line. Country scope = us.
+nd_plan_can_step_enemy = {
+	custom_tooltip = {
+		text = nd_tt_plan_two_enemies
+		has_variable = nd_plan_count
+		var:nd_plan_count > 1
+	}
+}
+
+nd_plan_can_set_mission = {
+	custom_tooltip = {
+		text = nd_tt_already_current
+		NOT = { var:nd_salvo_mission ?= $M$ }
+	}
+}
+
+nd_plan_can_step_size_down = {
+	custom_tooltip = {
+		text = nd_tt_plan_size_at_least_one
+		nd_salvo_size_value > 1
+	}
+}
+
+nd_plan_can_step_size_up = {
+	custom_tooltip = {
+		text = nd_tt_plan_size_at_most
+		nd_salvo_size_value < nd_salvo_size_cap
+	}
+}
+
+# The order: the enemy the planner picked, through a temporary scope (the
+# gates compare it with ?=, which takes no var: on its right), and every gate
+# of an ordered salvo.
+nd_plan_can_order = {
+	custom_tooltip = {
+		text = nd_tt_plan_no_enemy
+		exists = var:nd_plan_enemy
+	}
+	trigger_if = {
+		limit = { exists = var:nd_plan_enemy }
+		var:nd_plan_enemy ?= { save_temporary_scope_as = nd_plan_victim }
+		nd_can_order_salvo = { ENEMY = scope:nd_plan_victim }
+	}
+}
+
 nd_threat_backed = {
 	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
 	nd_threat_law_permits = { TARGET = $TARGET$ }
@@ -691,6 +793,12 @@ nd_retaliation_permitted = {
 	custom_tooltip = {
 		text = nd_tt_forces_assembled
 		nd_forces_assembled = yes
+	}
+	# Cut off by a strike on our capital (rework spec §6.3): the answer waits
+	# for the command (nuclear_weapon_events.24).
+	custom_tooltip = {
+		text = nd_tt_command_intact
+		nd_command_intact = yes
 	}
 }
 
@@ -2118,6 +2226,12 @@ nd_can_set_authority = {
 		text = nd_tt_authority_tenure
 		has_variable = nd_authority_months
 		var:nd_authority_months >= nd_authority_tenure_months
+	}
+	# Not while cut off: the new authority's unordered launches would be
+	# refused by the dispatchers' nd_command_intact.
+	custom_tooltip = {
+		text = nd_tt_command_intact
+		nd_command_intact = yes
 	}
 }
 

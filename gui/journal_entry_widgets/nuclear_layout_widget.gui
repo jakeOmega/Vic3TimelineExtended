@@ -2,7 +2,7 @@
 ### entry's sections (je_nuclear_program, "Nuclear Weapons"). The entry attaches
 ### the named roots at the foot of this file; the sections are types in
 ### nuclear_program_widget.gui (programme, taboo, delivery and defence, powers)
-### and nuclear_deterrence_widget.gui (crisis, world crises, posture, forces,
+### and nuclear_deterrence_widget.gui (crisis, strike, world crises, posture, forces,
 ### at home, reputation); the overview is nuclear_overview_widget.gui. A future
 ### tab (style guide rule 9) would compose the same types.
 ###
@@ -18,7 +18,8 @@
 ###                next warhead
 ###   native bar   progress toward the next warhead
 ###   container_4  widget_je_nuclear_status     the live sections, open:
-###                Nuclear Crisis (only in one), World Crises (only while
+###                Nuclear Crisis (only in one), Strike (armed, with a
+###                country we could strike), World Crises (only while
 ###                there is one anywhere), Nuclear Posture, Forces and
 ###                At Home (only while armed), Reputation (once there is a
 ###                record), The Nuclear Taboo (from the first warhead), Delivery
@@ -42,6 +43,7 @@ types nuclear_layout_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_nuclear_sec_crisis = {}
+		te_nuclear_sec_strike = {}
 		te_nuclear_sec_world_crises = {}
 		te_nuclear_sec_posture = {}
 		te_nuclear_sec_forces = {}
@@ -96,6 +98,14 @@ types nuclear_layout_widget_types
 			}
 			nd_note = {
 				text = "nd_w_crisis_actions_legend"
+			}
+			nd_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_nuclear_how_sub_strike"
+				}
+			}
+			nd_note = {
+				text = "je_nuclear_how_strike"
 			}
 			nd_subheader = {
 				blockoverride "subheader_text" {

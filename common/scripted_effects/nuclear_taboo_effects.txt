@@ -193,10 +193,20 @@ nd_taboo_shock = {
 # Swap). A first use halves the tradition of non-use; an answer counts half
 # and cuts it by a quarter. Scope: any.
 nd_taboo_note_use = {
+	nd_taboo_note_use_scaled = { KIND = $KIND$ RETALIATION = $RETALIATION$ SCALE = 1 }
+}
+
+# The same with the shock and the ledger entry multiplied by SCALE: a salvo
+# passes the square root of the warheads it landed (var:nd_salvo_sqrt, owner
+# 2026-10-28), read in the caller's scope. The clock of quiet years falls once
+# whatever the scale: a salvo is one use.
+nd_taboo_note_use_scaled = {
 	if = {
 		limit = { has_global_variable = nd_taboo }
 		set_global_variable = { name = nd_tb_use_shock value = nd_taboo_shock_$KIND$ }
 		set_global_variable = { name = nd_tb_use_ledger value = nd_taboo_ledger_$KIND$ }
+		change_global_variable = { name = nd_tb_use_shock multiply = $SCALE$ }
+		change_global_variable = { name = nd_tb_use_ledger multiply = $SCALE$ }
 		if = {
 			limit = { always = $RETALIATION$ }
 			change_global_variable = { name = nd_tb_use_shock multiply = nd_taboo_retaliation_factor }

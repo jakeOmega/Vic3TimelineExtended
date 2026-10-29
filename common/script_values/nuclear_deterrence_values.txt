@@ -887,6 +887,279 @@ nd_survivors_ceiling_bare_r2_vs_saved = {
 }
 
 # ----------------------------------------------------------------------------
+# THE EXCHANGE (rework spec §6) — a salvo's counterforce and decapitation, in
+# the shape of the survivors values above. Victim scope, the attacker saved as
+# scope:nd_sv_enemy and holding the salvo's counts (nd_salvo_forces_landed,
+# nd_salvo_capital_landed, nd_salvo_victim_r: the victim's redundancy when the
+# salvo began). scripts/analysis/nuclear_survivors.py mirrors them.
+# ----------------------------------------------------------------------------
+
+# Warheads a Forces salvo destroys before rounding: min(exposed, K x landed)
+# x (1 - credit). Exposure never exceeds the stockpile, so neither does this.
+nd_counterforce_destroyed_raw = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_k_ratio
+		multiply = var:nd_salvo_forces_landed
+	}
+	max = nd_exposed_warheads
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+	max = nd_stockpile
+	min = 0
+}
+
+# Of the warheads the salvo would destroy, the share that gets away first:
+# under Launch on Warning they fire before impact (nd_salvo_counterforce).
+nd_counterforce_saved_raw = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_k_ratio
+		multiply = var:nd_salvo_forces_landed
+	}
+	max = nd_exposed_warheads
+	multiply = nd_launch_credit
+	min = 0
+}
+
+# Percent chance that the warheads landed on a Central Authorization
+# country's capital cut its command: max(0, (L - R)/(L + R)).
+nd_decapitation_chance_value = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = var:nd_salvo_capital_landed
+		subtract = var:nd_salvo_victim_r
+		divide = {
+			value = var:nd_salvo_capital_landed
+			add = var:nd_salvo_victim_r
+		}
+	}
+	multiply = 100
+	min = 0
+}
+
+# The redundancy the world sees: nd_redundancy on the public estimate, for the
+# AI's choice of a Leadership strike (launch authority is public, §14.2).
+nd_redundancy_believed = {
+	value = nd_believed_stockpile
+	divide = 10
+	add = 1
+	if = {
+		limit = { has_technology_researched = satellite_communications }
+		add = 2
+	}
+	if = {
+		limit = { has_technology_researched = mainframe_computers }
+		add = 1
+	}
+}
+
+# Attacker scope: the warheads a salvo fires, from var:nd_salvo_size, a whole
+# number from 1 to the stockpile, at most 25.
+nd_salvo_size_value = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_salvo_size }
+		value = var:nd_salvo_size
+	}
+	max = nd_stockpile
+	max = 25
+	min = 1
+	floor = yes
+}
+
+# The most a salvo can be: the warheads we hold, at most 25 (the Strike
+# section's stepper, nd_plan_can_step_size_up).
+nd_salvo_size_cap = {
+	value = nd_stockpile
+	max = 25
+	min = 1
+	floor = yes
+}
+
+# The Strike section's mission in force, 1 Cities (the default) | 2 Forces |
+# 3 Leadership: the panel tints its row.
+nd_display_plan_mission = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_salvo_mission }
+		value = var:nd_salvo_mission
+	}
+}
+
+# Attacker scope: the loop's count, fixed from nd_salvo_size_value before the
+# first warhead flies (each warhead lowers the stockpile that value caps by).
+nd_salvo_count_value = {
+	value = var:nd_salvo_count
+}
+
+# Victim scope: the chance, in percent, that the counterforce count rounds up
+# (var:nd_cf_raw, var:nd_cf_whole its whole part), so on average a salvo
+# destroys exactly nd_counterforce_destroyed_raw.
+nd_cf_round_up_chance = {
+	value = var:nd_cf_raw
+	subtract = var:nd_cf_whole
+	multiply = 100
+}
+
+# Attacker scope: how many warheads the strike landed — the salvo's count, or
+# 1 for a single strike (nd_record_claim's count and the AI's lie).
+nd_strike_landed_count_value = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_salvo_landed }
+		value = var:nd_salvo_landed
+	}
+}
+
+# ---- The AI's missions (rework spec §9, §14.4; owner, 2026-10-28) ---------
+# Attacker scope, its enemy saved as scope:nd_sv_enemy (nuke_diplo_action's
+# accept_effect). By rule: Leadership against Central Authorization when the
+# spare warheads, times the chance each lands on the capital, outnumber the
+# enemy's redundancy as the world sees it (launch authority is public,
+# §14.2); Forces under Flexible First Use or a doctrine above it against an
+# enemy believed armed; else Cities, the single strike it always made. Either
+# salvo needs a warhead to spare. Mirrored in test_nuclear_survivors.TestAiSalvo.
+
+# The warheads the AI can fire and still hold a third, at least one, back.
+nd_ai_salvo_spare_value = {
+	value = nd_stockpile
+	subtract = {
+		value = nd_stockpile
+		divide = 3
+		floor = yes
+		min = 1
+	}
+	min = 0
+}
+
+# The chance a warhead lands on the enemy's capital, 0.05 to 1:
+# nuclear_strike_success_chance's, read at the capital.
+nd_ai_capital_hit_share = {
+	value = modifier:country_nuclear_weapon_attack_success_add
+	scope:nd_sv_enemy = {
+		capital = {
+			subtract = modifier:state_nuclear_weapon_defense_chance_add
+		}
+	}
+	max = 1
+	min = 0.05
+}
+
+# The warheads we expect on the capital, less the enemy's redundancy: above
+# zero, a Leadership salvo has a chance to cut its command.
+nd_ai_leadership_margin = {
+	value = nd_ai_salvo_spare_value
+	multiply = nd_ai_capital_hit_share
+	scope:nd_sv_enemy = {
+		subtract = nd_redundancy_believed
+	}
+}
+
+nd_ai_salvo_mission_value = {
+	value = 1
+	if = {
+		limit = {
+			nd_ai_salvo_spare_value >= 1
+			nd_doctrine_at_least_flexible = yes
+			scope:nd_sv_enemy = { nd_believed_armed = yes }
+		}
+		value = 2
+	}
+	if = {
+		limit = {
+			nd_ai_salvo_spare_value >= 1
+			# A country without warheads sets no authority, and so reads
+			# as Central: it has no command to cut off.
+			scope:nd_sv_enemy = {
+				nd_authority_central = yes
+				nd_believed_armed = yes
+			}
+			nd_ai_leadership_margin > 0
+		}
+		value = 3
+	}
+}
+
+# Forces: enough to reach the arsenal the world believes the enemy holds,
+# K warheads destroyed for each landed (nd_counterforce_destroyed_raw).
+nd_ai_forces_need = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_believed_stockpile
+	}
+	divide = nd_k_ratio
+	ceiling = yes
+}
+
+# Leadership: enough to land twice the enemy's redundancy on its capital, a
+# chance of a third, at the share of warheads the capital lets through.
+nd_ai_leadership_need = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_redundancy_believed
+	}
+	multiply = 2
+	divide = nd_ai_capital_hit_share
+	ceiling = yes
+}
+
+nd_ai_salvo_size_value = {
+	value = nd_ai_salvo_spare_value
+	if = {
+		limit = { nd_ai_salvo_mission_value = 2 }
+		max = nd_ai_forces_need
+	}
+	else_if = {
+		limit = { nd_ai_salvo_mission_value = 3 }
+		max = nd_ai_leadership_need
+	}
+	min = 1
+}
+
+# A salvo's record (owner, 2026-10-28): a single strike's figure times the
+# square root of the warheads landed (var:nd_salvo_sqrt, te_set_sqrt), so four
+# warheads count twice as much as one and nine three times. Attacker scope.
+# The single strike's figures are nuclear_first_strike's.
+nd_salvo_un_order_first = {
+	value = -4
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_un_order_answer = {
+	value = -2
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_un_shock = {
+	value = -3
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_dossier_first = {
+	value = un_dos_points_first_strike
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_dossier_answer = {
+	value = un_dos_points_retaliation
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_infamy = {
+	value = nd_taboo_infamy_strategic
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_world_relations = {
+	value = nd_taboo_world_relations_strategic
+	multiply = var:nd_salvo_sqrt
+	round = yes
+}
+
+# ----------------------------------------------------------------------------
 # CRISIS FIGURES — danger and pressure, as named parts (2026-09-25 spec §1.2).
 # nd_crisis_refresh_figures stores every part on both parties, so the panel's
 # breakdowns print stored numbers that sum to the stored totals. Parts are

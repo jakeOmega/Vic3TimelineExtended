@@ -39,6 +39,11 @@
 			text = nd_tt_forces_assembled
 			nd_forces_assembled = yes
 		}
+		# Cut off by a strike on our capital (rework spec §6.3).
+		custom_tooltip = {
+			text = nd_tt_command_intact
+			nd_command_intact = yes
+		}
 	}
 
 	second_state_trigger = {
@@ -62,6 +67,30 @@
 			custom_tooltip = nd_taboo_tt_strike_first_use
 		}
 		if = {
+			limit = { exists = scope:target_country }
+			scope:target_country = { save_scope_as = nd_sv_enemy }
+		}
+		# The AI's mission by rule (rework spec §9, owner 2026-10-28): a salvo
+		# at the enemy's forces or its capital, through the Strike section's
+		# order (nd_order_salvo, which re-checks every gate). Hidden: the AI
+		# has no confirmation box, and a human's action is the one city it
+		# chose. The settings are the panel's, so they go again after.
+		if = {
+			limit = {
+				is_ai = yes
+				exists = scope:target_country
+				nd_ai_salvo_mission_value > 1
+			}
+			hidden_effect = {
+				set_variable = { name = nd_salvo_mission value = nd_ai_salvo_mission_value }
+				set_variable = { name = nd_salvo_size value = nd_ai_salvo_size_value }
+				scope:target_country = { save_scope_as = nd_salvo_victim }
+				nd_order_salvo = yes
+				remove_variable = nd_salvo_mission
+				remove_variable = nd_salvo_size
+			}
+		}
+		else_if = {
 			limit = { exists = scope:second_state }
 			scope:second_state = {
 				save_scope_as = target_state
@@ -221,6 +250,11 @@ tactical_nuke_diplo_action = {
 		custom_tooltip = {
 			text = nd_tt_forces_assembled
 			nd_forces_assembled = yes
+		}
+		# Cut off by a strike on our capital (rework spec §6.3).
+		custom_tooltip = {
+			text = nd_tt_command_intact
+			nd_command_intact = yes
 		}
 	}
 

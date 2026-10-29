@@ -276,9 +276,9 @@ once a year.
 
 | Authority | Needs | Effect |
 |---|---|---|
-| Central Authorization | Nothing | Only the government orders a launch. An issuer believed to hold more warheads than your command could absorb on the capital counts your survivors at three quarters |
+| Central Authorization | Nothing | Only the government orders a launch. A salvo on your capital can cut off your command for two to four weeks (see [Salvos and the Strike section](#salvos-and-the-strike-section)), and an issuer believed to hold more warheads than your command could absorb on the capital counts your survivors at three quarters |
 | Conditional Delegation | Radar | A quarter of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level. Cut-off commanders may fire, even at peace. In a war, a false warning can also end in a launch you never approved |
-| Launch on Warning | Radar, Intercontinental Ballistic Missiles | 60% of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level. A false warning can become a launch under standing orders |
+| Launch on Warning | Radar, Intercontinental Ballistic Missiles | 60% of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level, and up to three of them may answer a Forces salvo before it lands. A false warning can become a launch under standing orders |
 | Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
 
 For an AI government, which sometimes gives the launch order on a false
@@ -499,8 +499,9 @@ infamy; declining costs no credibility, only 10 relations with the protégé.
 
 ## Nuclear strikes
 
-Strikes are diplomatic actions against a country you are at war with, aimed at a
-state you pick.
+A single strike is a diplomatic action against a country you are at war with,
+aimed at a state you pick. A salvo of several warheads is ordered from the
+Strike section of the journal entry.
 
 ### Strategic and tactical strike actions
 
@@ -528,7 +529,8 @@ infrastructure, −3 standard of living, +25% mortality and −50% throughput. T
 victim loses 12.5 war support and 50 relations with you. A first use also costs
 you infamy equal to the [nuclear taboo](#what-the-nuclear-taboo-costs) and
 relations with every other country; an answer to a strike on you or on a country
-you cover costs neither. The action's confirmation names the figures. A strike
+you cover costs neither. The action's confirmation, and a salvo's Launch Order,
+name the figures. A strike
 that fails costs 5 infamy.
 
 A tactical strike that lands kills half the soldiers and officers in the state
@@ -548,6 +550,54 @@ Nations records it against you, and after a first strike or a tactical strike
 its court may indict your ruler (see
 [Grounds for UN censure](10-united-nations.md#grounds-for-un-censure)).
 
+### Salvos and the Strike section
+
+The Strike section appears below Nuclear Crisis while you hold warheads and are
+at war with a country, or in a [nuclear exchange before
+war](#a-nuclear-exchange-before-war) with it. Pick the target with the buttons
+beside its name, then a mission and the number of warheads (up to the warheads
+you hold, at most 25), and press Order. A Launch Order event asks you to confirm:
+Give the order fires the salvo, and Stand the crews down, its default, fires
+nothing. The order needs everything a single strike needs, and a command that is
+not cut off.
+
+| Mission | Aimed at | What each warhead that lands does |
+|---|---|---|
+| Cities | the states a single strike would choose, a different one each | what a strategic strike does |
+| Forces | states with a building a tactical strike can target (Barracks, Military Base and the rest), else the capital's region, else the capital | a quarter of a city strike's deaths and devastation, and destroys part of the enemy's arsenal |
+| Leadership | the capital | what a strategic strike does, and may cut off the enemy's command |
+
+Each Forces warhead that lands destroys one of the enemy's warheads, or one and
+a half with Intercontinental Ballistic Missiles or Precision Guided Munitions,
+and two with both. It can only reach the warheads the enemy's survivability
+leaves exposed. A share of those gets away first: a quarter under Conditional
+Delegation and 60% under Launch on Warning, each 5 points fewer per safeguards
+level. A fraction of a warhead is destroyed or not by chance. Under Launch on
+Warning up to three of the warheads that got away may answer at once, before
+your warheads land, if a launch is open to the enemy; the rest stay for its
+choice. A single warhead can't disarm a large arsenal, and a hardened one keeps
+most of its warheads whatever lands.
+
+Warheads that land on the capital of a nuclear power under Central
+Authorization can cut its chain of command. The more warheads it holds, and
+with Satellite Communications and Mainframe Computers, the more redundant its
+command: a power with 30 warheads and Satellite Communications needs 7 on its
+capital before there is any chance, and a state with 3 warheads faces 21% from
+two. A country cut off can't order a launch, or change its launch authority,
+for two to four weeks. The salvo's event, "A Nuclear Salvo from …", offers "Our
+command is cut off" in place of absorbing the blow or answering it, and so does
+any strike that lands before command returns. Once the command is restored, a
+"Command Restored" event asks how to answer, if the war or exchange is still on
+and the victim did not accept a claim that the salvo was unauthorized. The other
+launch authorities can't be cut off.
+
+However many warheads it fires, a salvo is one use of nuclear weapons, recorded
+once. Its record at the United Nations, its infamy, the world's loss of goodwill
+and its blow to the nuclear taboo are a single strike's times the square root of
+the warheads that land: four count twice as much as one, nine three times. A
+salvo that lands nothing costs what a failed strike costs. A claim that the
+salvo was unauthorized counts every warhead that landed.
+
 ### Claiming a strike was unauthorized
 
 When a strategic first strike lands, the launcher may tell the victim that the
@@ -555,13 +605,14 @@ launch was unauthorized. After a launch nobody ordered (Launch on Warning acting
 on a false warning, a cut-off commander, Automatic Retaliation misreading an
 accident), it says so, truthfully. Your own deliberate first strikes carry the
 same claim while Disavow our strikes is on, in the Nuclear Posture section; the
-AI makes it falsely about one time in seven after a strike on a country believed
-armed (twice as
+AI makes it falsely about one time in seven after a single warhead on a country
+believed armed, and after a salvo only when one warhead landed (twice as
 often under an aggressive ruler, less under an honorable or direct one, more
 under a ruthless one or a grifter, half as often once the taboo is 50).
 
-The struck country's "A City Erased" shows the claim, with a choice to accept
-it: hold back the answer and demand reparations, which the launcher may pay or
+The struck country's event ("A City Erased", or "A Nuclear Salvo from …")
+shows the claim, with a choice to accept it: hold back the answer and demand
+reparations, which the launcher may pay or
 refuse. The choice comes once a strike, and not while Automatic Retaliation has
 the answer in hand. Paying settles the strike, so the victim can't also open a
 crisis over it. An AI believes a claim more readily when relations are good and only
@@ -1071,6 +1122,7 @@ It retaliates at any taboo.
 - It sets its safeguards from one level: one more for a cautious ruler, a restraint-minded government and Delegation or Launch on Warning, one less for a militarist regime or Warfighting and in a budget deficit. It moves to Automatic Retaliation, Launch on Warning (if militarist) or Delegation only when fewer than three of its warheads would survive its main rival and hardening could not change that, and back to Central once that passes.
 - It goes to High Alert in a war with an armed enemy, and in an Acute crisis when its armed opponent is at Heightened or higher or fewer than three of its warheads would survive short of High Alert; otherwise to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.
 - It strikes first only when its doctrine allows and its survival is at stake, or when it is losing (Flexible), was defied (Compellence) or is at war (Warfighting) against an enemy with no arsenal and no armed protector. An aggressive ruler losing under Flexible First Use strikes whether or not the enemy can answer; a cautious one strikes first only for survival, unless the taboo is below 30. From a taboo of 70, any AI strikes first only when its enemy means to annex or subjugate it, whatever its doctrine. The lower the taboo, the more readily it takes a strike it is allowed, and that includes carrying out a crisis threat: under Warfighting below a taboo of 25 it does so about twice as readily. It is a fifth as likely to carry out a threat against an insurgency, a revolutionary or secessionist state. It keeps a warhead in reserve unless its survival is at stake, waits six months between first uses, and strikes its own rebels only with 40% of its land occupied under Outlawed Dissent or a Secret Police. None of this holds back retaliation.
+- When it strikes, it may fire a salvo instead of one warhead. It aims at the capital of an enemy under Central Authorization when its spare warheads, times the chance each lands there, outnumber the enemy's redundancy as the world sees it; at the forces of an enemy believed armed under Flexible First Use, Compellence or Warfighting; and otherwise at one city. It keeps a third of its warheads, at least one, in reserve. A Forces salvo is sized to destroy the arsenal the world believes the enemy holds; a Leadership salvo to land twice the enemy's redundancy on its capital.
 - It warns countries that threaten a protégé or its survival, and countries that struck it or a country it covers outside a war, and a great power warns a rival that is building a bomb. Coercive warnings need a hawkish doctrine or regime and a target that can't answer. It never makes a public bluff. The lower the taboo, the more often it threatens: about twice as often at 0 as at 35, and a third as often at 100, except in defense of a country it covers, its survival or its core territory, or over a nuclear strike. From a taboo of 70 it issues a public ultimatum only in defense of a country it covers, its survival or its core territory, and otherwise warns privately.
 - At each posture review it also weighs its arsenal. While its arsenal burdens it and it holds more than half again the stockpile it wants, it sets a ceiling at what it wants; it lifts that ceiling once it wants more, and in a war lifts any ceiling below what it wants. When the burden reaches 30% or the taboo 70, it may begin dismantling, a one-in-five chance each review, provided it is at peace, outside any nuclear crisis or civil war, faces no plausible attacker, has neither a militarist government nor an aggressive ruler, and is covered by a guarantee or umbrella or is not a great power. It halts a dismantling only when an armed enemy at war with it means to annex or subjugate it. A renouncer takes Resume the Nuclear Program only with the standing to run a program, below a taboo of 50, and when an armed country is at war with it or is a rival antagonistic toward it.
 - An armed AI proposes Nuclear Arms Limitation when the taboo is 50 or more or its arsenal burdens it, at a ceiling of three quarters of the larger arsenal.
