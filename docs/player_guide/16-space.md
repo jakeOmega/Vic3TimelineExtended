@@ -520,7 +520,8 @@ Mining (see [Launch windows](#launch-windows)).
 
 A lunar colony has no Spaceport: its fleets dock at Earth, the same location, so
 its slots hold only Habitats and Defenses. A colony on the Moon doesn't count
-toward the Deep Space rule above.
+toward the Deep Space rule above. Under Full Colonies the Moon is fought over
+with Earth orbit (see [Battles in space](#battles-in-space)).
 
 ### Launch windows
 
@@ -970,8 +971,7 @@ with the months until it arrives.
 ### Battles in space
 
 Each month, fleets of countries at war fight at every location where they meet.
-What a fleet fights depends on its posture, set by the posture button (away from
-Earth):
+What a fleet fights depends on its posture, set by the posture button:
 
 | Posture | Fights | Use it to |
 |---|---|---|
@@ -980,10 +980,17 @@ Earth):
 | Close in | The target world's Defenses and the enemy fleets stationed there | Seize or destroy a colony |
 | Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its world | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
 
-At Earth every fleet fights every enemy fleet, an Orbital Battlestation
-fights for its owner (25 strength a level, regaining 10% a month; none in a
-state its owner doesn't control), and so do its ground-to-orbit batteries (see
-[Holding Earth orbit](#holding-earth-orbit)). Losses follow the square law: each side loses
+At Earth every fleet is stationed and fights every enemy fleet, an Orbital
+Battlestation fights for its owner (25 strength a level, regaining 10% a month;
+none in a state its owner doesn't control), and so do its ground-to-orbit
+batteries (see [Holding Earth orbit](#holding-earth-orbit)). The one exception
+is a fleet closing in on a colony on the Moon: the posture button at Earth
+steps between Station and Close in while there is a lunar colony you can close
+in on (an enemy's, a free one, or yours under an enemy's occupation). A fleet
+closing in there takes fire from every enemy fleet, battlestation and battery at
+Earth, and no longer guards your own lunar colonies, which can't be seized or
+destroyed while a fleet of yours or your Orbital Battlestation is stationed at
+Earth. Losses follow the square law: each side loses
 in proportion to the other's fire, so concentration pays (100 strength against
 50 ends with about 87 left). Warships and rapid response take the losses before
 the other roles, and half of every loss is damage a dock repairs. A battle at
@@ -993,7 +1000,8 @@ fighting, and the war support breakdown shows Battles in space.
 ### Blockade, seizure and destruction
 
 A colony is blockaded when an enemy fleet stands off at its location and none
-of its holder's fleets holds orbit there. Settlers and modules stop reaching it,
+of its holder's fleets holds orbit there. A colony on the Moon is blockaded
+while its holder's Earth is (see [Holding Earth orbit](#holding-earth-orbit)). Settlers and modules stop reaching it,
 it gives its holder no Extraplanetary Base room, and a specialization that
 ships goods home (mining, industry, propellant) stops; research and observatory
 specializations keep running. The Colonies section's Defenses view lists your
@@ -1022,8 +1030,9 @@ roughly, and its integrity and marines not at all.
 ### Interdiction
 
 You can blockade a rival's colonies without going to war, as the United States
-quarantined Cuba in 1962. Send a fleet to a location where a country at peace
-with you, and not your ally (no alliance or defensive pact), holds a colony, and
+quarantined Cuba in 1962. Send a fleet to a location other than Earth where a
+country at peace with you, and not your ally (no alliance or defensive pact),
+holds a colony, and
 step its posture to Interdict; the target button picks which country's world.
 While none of that country's fleets is stationed or standing off there, its
 colonies at that location are blockaded as an enemy's would be, and its
@@ -1047,8 +1056,8 @@ Earth orbit is where every launch goes up, so it can be fought over. Your Earth
 is blockaded when a fleet of a country at war with you is at Earth and none of
 yours is. While it is, nothing of yours leaves Earth: no colony fleet (a full
 bar waits), no module shipment (modules are still made, and wait at Earth), no
-settlers and no fleet. None of your colonies has contact from home, so their
-autonomy counts the months. Your Locations row for Earth reads Blockaded,
+settlers and no fleet. Your colonies on the Moon are blockaded, and none of
+your colonies has contact from home, so their autonomy counts the months. Your Locations row for Earth reads Blockaded,
 Space Command shows a red note, and you are told which country holds your
 orbit. Your batteries and your Orbital Battlestation fire on the blockaders but
 don't lift the blockade: only a fleet of yours at Earth does.
@@ -1106,7 +1115,10 @@ enemy's fleets and its colonies' Defenses there and can fly home again or dock
 there. It closes in on the enemy colony with the most people and modules,
 to seize it when its marines outnumber the garrison and militia, and otherwise
 stands off to blockade. It comes home once the enemy's fleets there outmatch
-its own. An AI never destroys a colony, never attacks a free one and never
+its own. At Earth, while no enemy fleet is there, the AI picks the enemy lunar
+colony with the most people and modules, and its strongest fleet there whose
+marines outnumber that colony's garrison and militia closes in on it. Its other
+fleets at Earth stay stationed. An AI never destroys a colony, never attacks a free one and never
 interdicts. With an enemy fleet at Earth, it launches its reserve once the
 reserve and its fleets at Earth match the enemy's there. It builds batteries
 only while at war with a country that has fleets, up to five levels, and runs

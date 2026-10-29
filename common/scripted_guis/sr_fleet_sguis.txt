@@ -200,7 +200,8 @@ sr_fleet_embark_sgui = {
 # 6b: the posture steps Station, Stand off, Close in (close in needs a hostile
 # world there: at war with its holder, or free); 6c: then Interdict (a world
 # there of a country at peace with us, not our ally; its price is in the
-# tooltip when that is the next step).
+# tooltip when that is the next step). At Earth (lunar colonization § 8.1),
+# Station and Close in on a lunar world alone, with their own tooltip.
 sr_fleet_posture_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -222,7 +223,13 @@ sr_fleet_posture_sgui = {
 	}
 
 	effect = {
-		custom_tooltip = sr_fl_posture_tt
+		if = {
+			limit = { sr_fl_op_check = { TEST = at_earth } }
+			custom_tooltip = sr_fl_posture_earth_tt
+		}
+		else = {
+			custom_tooltip = sr_fl_posture_tt
+		}
 		if = {
 			limit = { sr_fl_op_check = { TEST = closes_on_free } }
 			custom_tooltip = sr_fl_free_price_tt

@@ -10,7 +10,8 @@
 #   0. every power's forces there by posture into country variables (sr_cb_*):
 #      strength and fire on fleets by posture (1 station, 2 stand off, 3 close
 #      in; 4 interdict, 6c, fights as standing off; at Earth every fleet counts
-#      as stationed, since everything there engages everything, and the Orbital
+#      as stationed, since everything there engages everything, except one
+#      closing in on a lunar world (lunar colonization § 8.1), and the Orbital
 #      Battlestation and, 6d, the ground-to-orbit batteries join), and for each
 #      world its closing-in fleets target,
 #      their strength, fire on defences, marines and fire to destroy;
@@ -28,7 +29,8 @@
 #      damage: sr_fl_take_losses_at), the Orbital Battlestation's share at
 #      Earth, debris at Earth (6d: and the kinetic batteries'), war support's
 #      battle record, the notice;
-#   5. each world: integrity, seizure, destruction, blockade (sr_site_*_step);
+#   5. each world: integrity, seizure, destruction, blockade (sr_site_*_step;
+#      a lunar world's blockade follows its holder's Earth's, § 8.2);
 #   6. the records cleared.
 # Hostile means at war (has_war_with); a fleet closing in on a free colony is
 # hostile to its Defences alone (§ 9.5). An interdiction (6c, § 12) fires no
@@ -162,9 +164,11 @@ sr_combat_at = {
 
 # ---- One slot's part ($N$; the power's scope) ---------------------------------------------------
 # 0. A slot at the location (local_var:sr_cb_code) adds its strength and fire
-# to its posture's (at Earth, stationed); closing in, to its target world's too.
-# A target no longer hostile (a peace made, the world taken) turns it to Stand
-# off first.
+# to its posture's; closing in, to its target world's too. At Earth every
+# fleet is stationed, except one closing in on a lunar world (lunar
+# colonization § 8.1): any other posture there is put back to Station. A target
+# no longer hostile (a peace made, the world taken) turns it to Stand off first
+# (at Earth, to Station).
 sr_fl_gather_at = {
 	if = {
 		limit = {
@@ -173,7 +177,22 @@ sr_fl_gather_at = {
 			sr_fl_$N$_strength > 0
 		}
 		set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
-		if = { limit = { local_var:sr_cb_code = 1 } set_local_variable = { name = sr_cb_p value = 1 } }
+		if = {
+			limit = {
+				local_var:sr_cb_code = 1
+				NOT = {
+					AND = {
+						local_var:sr_cb_p = 3
+						sr_fl_$N$_target_lunar = yes
+					}
+				}
+			}
+			set_local_variable = { name = sr_cb_p value = 1 }
+			if = {
+				limit = { NOT = { sr_fl_$N$_posture_value = 1 } }
+				set_variable = { name = sr_fl_$N$_posture value = 1 }
+			}
+		}
 		if = {
 			limit = { local_var:sr_cb_p = 3 }
 			sr_fl_check_target_at = { N = $N$ }
@@ -246,7 +265,7 @@ sr_cb_add = {
 
 # 4. The slot's losses: its posture's, by its share of that posture's strength,
 # and closing in, the target's Defences' too, by its share of ours closing in
-# on it.
+# on it. At Earth, stationed unless closing in on a lunar world, as gathered.
 sr_fl_apply_losses_at = {
 	if = {
 		limit = {
@@ -255,7 +274,18 @@ sr_fl_apply_losses_at = {
 			sr_fl_$N$_strength > 0
 		}
 		set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
-		if = { limit = { local_var:sr_cb_code = 1 } set_local_variable = { name = sr_cb_p value = 1 } }
+		if = {
+			limit = {
+				local_var:sr_cb_code = 1
+				NOT = {
+					AND = {
+						local_var:sr_cb_p = 3
+						sr_fl_$N$_target_lunar = yes
+					}
+				}
+			}
+			set_local_variable = { name = sr_cb_p value = 1 }
+		}
 		if = { limit = { local_var:sr_cb_p < 1 } set_local_variable = { name = sr_cb_p value = 1 } }
 		if = { limit = { local_var:sr_cb_p = 4 } set_local_variable = { name = sr_cb_p value = 2 } }
 		set_local_variable = { name = sr_fl_loss value = 0 }
@@ -296,11 +326,18 @@ sr_cb_add_target_loss = {
 	}
 }
 
-# A closing-in slot whose target world KEY is no longer a hostile one stands off.
+# A closing-in slot whose target world KEY is no longer a hostile one stands off
+# (at Earth, where nobody stands off, it stations: lunar colonization § 8.1).
 sr_cb_check_target = {
 	if = {
 		limit = { NOT = { sr_site_hostile_target = { KEY = $KEY$ } } }
-		set_variable = { name = sr_fl_$N$_posture value = 2 }
+		if = {
+			limit = { sr_fl_$N$_at_earth = yes }
+			set_variable = { name = sr_fl_$N$_posture value = 1 }
+		}
+		else = {
+			set_variable = { name = sr_fl_$N$_posture value = 2 }
+		}
 		remove_variable = sr_fl_$N$_target
 		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
 	}
@@ -962,9 +999,10 @@ sr_site_integrity_step = {
 # when a fleet at war with its holder stands off there, or (6c, § 12) a fleet
 # interdicting its holder does (sr_icpt_<loc>), and no fleet of its holder is
 # stationed or standing off there: an interdiction that meets the target's
-# fleet is a standoff. Not at Earth (6d). An occupied world, or a free one, is
-# never blockaded. sr_site_interdicted_<key> marks a blockade by interdiction
-# alone, no enemy standing off, for the panel.
+# fleet is a standoff. Not at Earth, where nobody stands off: the Moon's worlds
+# take sr_site_lunar_blockade_step instead. An occupied world, or a free one,
+# is never blockaded. sr_site_interdicted_<key> marks a blockade by
+# interdiction alone, no enemy standing off, for the panel.
 sr_site_blockade_step = {
 	if = {
 		limit = {
@@ -1026,6 +1064,39 @@ sr_site_blockade_step = {
 	}
 }
 
+# Global scope, from Earth's step (KEY, a lunar world; lunar colonization
+# § 8.2): blockaded while its holder's Earth is (sr_earth_blockaded: a fleet at
+# war with it at Earth and none of its own; its batteries and Orbital
+# Battlestation don't lift it). It replaces the generic step at Earth, whose
+# test (an enemy standing off) never holds there, since every fleet at Earth
+# is stationed or closing in. Never interdicted (§ 8.3). An occupied world, or
+# a free one, is never blockaded.
+sr_site_lunar_blockade_step = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+			global_var:sr_site_holder_$KEY$ ?= {
+				is_country_alive = yes
+				sr_earth_blockaded = yes
+			}
+		}
+		if = {
+			limit = { NOT = { has_global_variable = sr_site_blockaded_$KEY$ } }
+			set_global_variable = { name = sr_site_blockaded_$KEY$ value = yes }
+			sr_sites_refresh_players = yes
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = sr_site_blockaded_$KEY$ }
+		remove_global_variable = sr_site_blockaded_$KEY$
+		sr_sites_refresh_players = yes
+	}
+	if = {
+		limit = { has_global_variable = sr_site_interdicted_$KEY$ }
+		remove_global_variable = sr_site_interdicted_$KEY$
+	}
+}
+
 # ---- Orders (design §§ 7, 9, 12) ------------------------------------------------------------------
 # Country scope (sr_fleet_sguis.txt, $N$): the posture steps Station, Stand off,
 # Close in, Interdict. Closing in needs a target: the first hostile world at the
@@ -1034,10 +1105,36 @@ sr_site_blockade_step = {
 # and world. Interdicting (6c, § 12) needs a world of a country at peace with
 # us and not our ally (sr_fl_<n>_has_interdict_world), the first such when the
 # target is not one; it begins the interdiction's price (sr_cb_charge_interdict)
-# once per fleet and target. With neither, it goes back to Station.
+# once per fleet and target. With neither, it goes back to Station. At Earth
+# (lunar colonization § 8.1) it steps Station and Close in alone: Close in on a
+# lunar world, while one there is hostile; never Stand off or Interdict.
 sr_fl_step_posture_at = {
 	set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
 	if = {
+		limit = { sr_fl_$N$_at_earth = yes }
+		if = {
+			limit = {
+				NOT = { local_var:sr_cb_p = 3 }
+				sr_fl_$N$_has_hostile_world = yes
+			}
+			set_variable = { name = sr_fl_$N$_posture value = 3 }
+			if = {
+				limit = {
+					OR = {
+						NOT = { has_variable = sr_fl_$N$_target }
+						NOT = { sr_fl_$N$_target_hostile = yes }
+					}
+				}
+				sr_fl_step_hostile_target_at = { N = $N$ }
+			}
+			sr_fl_charge_free_at = { N = $N$ }
+		}
+		else = {
+			set_variable = { name = sr_fl_$N$_posture value = 1 }
+			if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+		}
+	}
+	else_if = {
 		limit = { local_var:sr_cb_p <= 1 }
 		set_variable = { name = sr_fl_$N$_posture value = 2 }
 	}
@@ -1185,10 +1282,15 @@ sr_fl_ai_defend = {
 # a colony, never closes in on a free one, and never interdicts: Interdict is
 # no AI posture. Every order passes the same sr_fl_<n>_may_depart_<loc> a
 # player's does, and the recall (sr_fl_ai_recall_at) brings home first a fleet
-# short of supply or of the propellant home.
+# short of supply or of the propellant home. First, at Earth (lunar
+# colonization § 8.4, sr_fl_ai_lunar_assault, generated): its strongest fleet
+# there closes in on the enemy's lunar world of most worth while the enemy's
+# Earth is blockaded, to seize it when its marines suffice; else it stays
+# stationed. The dispatch then leaves that fleet where it is.
 sr_fl_ai_attack = {
 	if = {
 		limit = { is_at_war = yes }
+		sr_fl_ai_lunar_assault = yes
 		sr_fl_ai_attack_all = yes
 		sr_fl_each_slot = { DO = ai_assault }
 	}

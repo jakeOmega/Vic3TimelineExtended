@@ -451,6 +451,19 @@ sr_fl_1_target_intel = {
 	}
 }
 
+sr_fl_1_target_price = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_fl_1_posture_value = 3 }
+		localization_key = sr_fl_target_free_price_tt
+	}
+	text = {
+		localization_key = te_tt_blank
+	}
+}
+
 sr_fl_1_drive_name = {
 	type = country
 	random_valid = no
@@ -782,6 +795,19 @@ sr_fl_2_target_intel = {
 	}
 	text = {
 		localization_key = je_space_race_widget_fl_2_intel_unknown
+	}
+}
+
+sr_fl_2_target_price = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_fl_2_posture_value = 3 }
+		localization_key = sr_fl_target_free_price_tt
+	}
+	text = {
+		localization_key = te_tt_blank
 	}
 }
 
@@ -1119,6 +1145,19 @@ sr_fl_3_target_intel = {
 	}
 }
 
+sr_fl_3_target_price = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_fl_3_posture_value = 3 }
+		localization_key = sr_fl_target_free_price_tt
+	}
+	text = {
+		localization_key = te_tt_blank
+	}
+}
+
 sr_fl_3_drive_name = {
 	type = country
 	random_valid = no
@@ -1450,6 +1489,19 @@ sr_fl_4_target_intel = {
 	}
 	text = {
 		localization_key = je_space_race_widget_fl_4_intel_unknown
+	}
+}
+
+sr_fl_4_target_price = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_fl_4_posture_value = 3 }
+		localization_key = sr_fl_target_free_price_tt
+	}
+	text = {
+		localization_key = te_tt_blank
 	}
 }
 
@@ -1787,6 +1839,19 @@ sr_fl_5_target_intel = {
 	}
 }
 
+sr_fl_5_target_price = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_fl_5_posture_value = 3 }
+		localization_key = sr_fl_target_free_price_tt
+	}
+	text = {
+		localization_key = te_tt_blank
+	}
+}
+
 sr_fl_5_drive_name = {
 	type = country
 	random_valid = no
@@ -2118,6 +2183,19 @@ sr_fl_6_target_intel = {
 	}
 	text = {
 		localization_key = je_space_race_widget_fl_6_intel_unknown
+	}
+}
+
+sr_fl_6_target_price = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_fl_6_posture_value = 3 }
+		localization_key = sr_fl_target_free_price_tt
+	}
+	text = {
+		localization_key = te_tt_blank
 	}
 }
 
@@ -2455,6 +2533,19 @@ sr_fl_7_target_intel = {
 	}
 }
 
+sr_fl_7_target_price = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_fl_7_posture_value = 3 }
+		localization_key = sr_fl_target_free_price_tt
+	}
+	text = {
+		localization_key = te_tt_blank
+	}
+}
+
 sr_fl_7_drive_name = {
 	type = country
 	random_valid = no
@@ -2789,6 +2880,19 @@ sr_fl_8_target_intel = {
 	}
 }
 
+sr_fl_8_target_price = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_fl_8_posture_value = 3 }
+		localization_key = sr_fl_target_free_price_tt
+	}
+	text = {
+		localization_key = te_tt_blank
+	}
+}
+
 sr_fl_8_drive_name = {
 	type = country
 	random_valid = no
@@ -3120,6 +3224,19 @@ sr_fl_9_target_intel = {
 	}
 	text = {
 		localization_key = je_space_race_widget_fl_9_intel_unknown
+	}
+}
+
+sr_fl_9_target_price = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_fl_9_posture_value = 3 }
+		localization_key = sr_fl_target_free_price_tt
+	}
+	text = {
+		localization_key = te_tt_blank
 	}
 }
 
