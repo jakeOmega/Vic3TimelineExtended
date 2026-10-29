@@ -1324,24 +1324,41 @@ class TestSalvo(unittest.TestCase):
             self.assertLess(self.after.index(name), self.after.index("id = nuclear_weapon_events.1 "))
 
     def test_salvo_targets_self_check(self):
-        self.assertIn("TE_SELF_CHECK OK nd_salvo_targets", self.effects)
-        self.assertIn("TE_SELF_CHECK BROKEN nd_salvo_targets", self.effects)
         raw = block(self.effects, "nd_salvo_targets_self_check")
-        check = squash(raw)
-        # Final review: gated on the count ordered, not the warheads fired,
-        # so a loop that ran short reports BROKEN; any mission, so the AI's
-        # Forces and Leadership salvos reach it in an observer run.
-        gate = squash(block(raw, "limit"))
-        self.assertIn("var:nd_salvo_count >= 2", gate)
+        # Final review: two checks, each once a game. The count, gated on the
+        # count ordered (not the warheads fired, so a short loop reports
+        # BROKEN), for any mission, so the AI's salvos reach it; the spread,
+        # for Cities, with its own flag, so an earlier Forces or Leadership
+        # salvo doesn't use it up.
+        count = raw[:raw.index("nd_salvo_targets_self_check_done")]
+        spread = raw[raw.index("nd_salvo_targets_self_check_done"):]
+        for line in ("TE_SELF_CHECK OK nd_salvo_count", "TE_SELF_CHECK BROKEN nd_salvo_count"):
+            self.assertIn(line, count)
+        for line in ("TE_SELF_CHECK OK nd_salvo_targets", "TE_SELF_CHECK BROKEN nd_salvo_targets"):
+            self.assertIn(line, spread)
+        gate = squash(block(count, "limit"))
+        for needle in ("has_global_variable = nd_salvo_count_self_check_done", "var:nd_salvo_count >= 2"):
+            self.assertIn(needle, gate)
         self.assertNotIn("nd_salvo_fired", gate)
         self.assertNotIn("nd_salvo_mission", gate)
-        self.assertIn("var:nd_salvo_fired = var:nd_salvo_count", check)
-        # The spread is judged only for Cities on a victim of two states or more.
-        self.assertIn("var:nd_salvo_mission = 1", check)
-        self.assertIn("count >= 2", check)
-        self.assertIn("has_global_variable = nd_salvo_targets_self_check_done", check)
+        self.assertIn("var:nd_salvo_fired = var:nd_salvo_count", squash(count))
+        gate = squash(raw[raw.rindex("limit", 0, raw.index("nd_salvo_targets_self_check_done")):])
+        for needle in ("var:nd_salvo_mission = 1", "var:nd_salvo_fired >= 2", "count >= 2"):
+            self.assertIn(needle, gate[:gate.index("set_global_variable")])
+        self.assertIn("var:nd_salvo_marked >= 2", squash(spread))
         self.assertLess(self.after.index("nd_salvo_targets_self_check = yes"), len(self.after))
         self.assertLess(self.order.index("nd_salvo_aftermath = yes"), self.order.index("nd_salvo_clear = yes"))
+
+    def test_world_hears_of_a_salvo(self):
+        # Final review: every third country's .15 says a salvo, not a strike.
+        desc = squash(block(block(self.weapon_events(), "nuclear_weapon_events.15"), "desc"))
+        self.assertIn("scope:target_country ?= { var:nd_salvo_seen_by ?= scope:attacking_country }", desc)
+        self.assertLess(desc.index("desc = nuclear_weapon_events.15.d_salvo }"),
+                        desc.index("desc = nuclear_weapon_events.15.d }"))
+        self.assertTrue(loc_value("nuclear_weapon_events.15.d_salvo"))
+
+    def weapon_events(self):
+        return strip_comments(read(WEAPON_EVENTS))
 
     def test_fire_first_share_from_the_arsenal_before_destruction(self):
         # Final review: the saved share is min(exposed, K x landed) x credit
