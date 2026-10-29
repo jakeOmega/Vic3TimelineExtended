@@ -42,6 +42,7 @@
 #   3  a demonstration exercise (armed)   -> nd_crisis_act_exercise
 #   4  concede (target)                   -> nd_crisis_act_yield
 #   5  let it go (issuer)                 -> nd_crisis_act_back_down
+#   6  offer a trade (either side)        -> nd_crisis_act_offer_trade
 #
 # Every `is_valid` delegates to a scripted trigger in
 # nuclear_deterrence_triggers.txt and every effect to the same scripted effect
@@ -386,6 +387,10 @@ nd_crisis_action_sgui = {
 			limit = { exists = scope:op  scope:op = 5 }
 			nd_can_back_down = yes
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 6 }
+			nd_can_offer_trade = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -415,6 +420,10 @@ nd_crisis_action_sgui = {
 		else_if = {
 			limit = { exists = scope:op  scope:op = 5 }
 			nd_crisis_act_back_down = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 6 }
+			nd_crisis_act_offer_trade = yes
 		}
 	}
 }
@@ -644,6 +653,18 @@ nd_crisis_private_sgui = {
 	is_shown = {
 		nd_is_crisis_owner = yes
 		nd_crisis_is_public = no
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# Crisis: the trade's move (op 6) and outcome row, in a crisis over a dispute
+# that can trade (rework spec §8.6). Whether this one can is op 6's is_valid.
+nd_crisis_tradeable_sgui = {
+	scope = country
+	is_shown = {
+		nd_crisis_dispute_tradeable = yes
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }

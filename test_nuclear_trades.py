@@ -14,6 +14,9 @@ from pathlib import Path
 from test_nuclear_deterrence import (
     CRISIS_EFFECTS,
     CUSTOM_LOC,
+    GUI,
+    JE_DOC,
+    SGUIS,
     TRIGGERS,
     VALUES,
     block,
@@ -383,6 +386,54 @@ class TestTradeAI(unittest.TestCase):
         self.assertIn("modifier = { trigger = { nd_trade_balance_value < 0 } factor = 0 }", chance)
         self.assertIn("modifier = { trigger = { nd_trade_costs_us_an_alliance = yes } factor = 0 }", chance)
         self.assertTrue(loc_value("nuclear_crisis.4.h"))
+
+
+def gui_instance(gui, type_name, block_name, key):
+    """The `type_name = { … }` instance whose `block_name` override shows key."""
+    for m in re.finditer(r"(?m)^\t+" + type_name + r" = \{", gui):
+        body = block(gui[m.start():], type_name)
+        if re.search(r'blockoverride "' + block_name + r'" \{\s*text = "' + key + '"', body):
+            return body
+    raise AssertionError(f"no {type_name} showing {key}")
+
+
+class TestTradePanel(unittest.TestCase):
+    SHOWN = "visible = \"[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\""
+
+    def setUp(self):
+        self.sguis = strip_comments(read(SGUIS))
+        self.gui = read(GUI)
+
+    def test_op_six(self):
+        body = block(self.sguis, "nd_crisis_action_sgui")
+        valid, effect = squash(block(body, "is_valid")), squash(block(body, "effect"))
+        self.assertIn("limit = { exists = scope:op scope:op = 6 } nd_can_offer_trade = yes", valid)
+        self.assertIn("limit = { exists = scope:op scope:op = 6 } nd_crisis_act_offer_trade = yes", effect)
+
+    def test_rows_shown_only_for_a_tradeable_dispute(self):
+        shown = block(self.sguis, "nd_crisis_tradeable_sgui")
+        self.assertEqual(squash(block(shown, "is_shown")), "nd_crisis_dispute_tradeable = yes")
+        self.assertIn("ai_is_valid = { always = no }", squash(shown))
+        move = gui_instance(self.gui, "nd_choice_row", "choice_name", "nd_w_crisis_act_trade")
+        outcome = gui_instance(self.gui, "nd_outcome_row", "outcome_label", "nd_w_crisis_trade_label")
+        for row in (move, outcome):
+            self.assertEqual(row.count("visible = "), 1)
+            self.assertIn(self.SHOWN, row)
+        self.assertIn("MakeScopeValue( '(CFixedPoint)6' )", move)
+        for key in ("nd_w_crisis_trade_effect", "nd_w_crisis_cred_trade", "nd_w_crisis_trade_tt"):
+            self.assertIn(key, outcome)
+        for key in ("nd_w_crisis_act_trade", "nd_w_crisis_act_trade_btn", "nd_w_crisis_trade_label",
+                    "nd_w_crisis_trade_effect", "nd_w_crisis_cred_trade", "nd_w_crisis_trade_tt"):
+            self.assertTrue(loc_value(key), key)
+
+    def test_legend_names_trades(self):
+        self.assertIn("trade", loc_value("nd_w_crisis_actions_legend"))
+
+    def test_je_doc_lists_the_handler(self):
+        doc = JE_DOC.read_bytes().decode("utf-8")
+        self.assertIn("`nd_crisis_tradeable_sgui`", doc)
+        self.assertRegex(doc, r"\| \| 6 \| offer a trade \(either side\) \|")
+        self.assertIn("twenty-five display handlers", doc)
 
 
 if __name__ == "__main__":
