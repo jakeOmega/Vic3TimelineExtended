@@ -223,7 +223,7 @@ as a ready guarantor does in a crisis, with the right to answer a strike on it.
 An armed country next to the host loses 10 survivability against you. About one
 in three of your bomber crashes and silo explosions happens in the host, which
 then chooses to order your weapons out (ending the whole treaty that holds the
-article, and breaking it if it is still binding), to protest (−30 relations) or
+article, with no penalty for breaking it even while it binds), to protest (−30 relations) or
 to say nothing (+10 relations, and −3 legitimacy fading over two and a half
 years). A country struck from a host next door may have no reach back to you,
 and then no answer at all.
