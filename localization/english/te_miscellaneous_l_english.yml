@@ -5698,7 +5698,7 @@
  nd_w_reach_entry:0 "[AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)]"
  nd_w_reach_entry_host:0 "[AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)]: #v our weapons are based here#!"
  nd_w_reach_label:0 "Reach"
- nd_w_reach_tt:0 "#tooltip_header Reach#!\n$TOOLTIP_DELIMITER$\nWithout #v $ICBMs$#! our weapons go only as far as our bombers fly: to every country next to us, to a direct subject of ours or a country that hosts our weapons, and to every country with a state in a strategic region where one of those holds a state. Missile submarines (#v $advanced_submarine_technology$#!) add every coastal state. A strike, an answer or a threat at anyone else is out of reach. The countries in reach by bomber, rebuilt every week:"
+ nd_w_reach_tt:0 "#tooltip_header Reach#!\n$TOOLTIP_DELIMITER$\nWithout #v $ICBMs$#! our weapons go only as far as our bombers fly: to every country next to us, to one of our direct subjects or to a country that hosts our weapons, and to every country with a state in a strategic region where we, a subject or a host holds a state. Missile submarines (#v $advanced_submarine_technology$#!) add every coastal state. A strike, an answer or a threat at anyone else is out of reach. The countries in reach by bomber, rebuilt every week:"
  nd_w_reach_value:0 "[JournalEntry.GetCountry.GetCustom('nd_reach_value')]"
  nd_w_reach_value_bombers:0 "#v [JournalEntry.GetCountry.MakeScope.Var('nd_reach_count').GetValue|0]#! countries"
  nd_w_reach_value_subs:0 "#v [JournalEntry.GetCountry.MakeScope.Var('nd_reach_count').GetValue|0]#! and coasts"

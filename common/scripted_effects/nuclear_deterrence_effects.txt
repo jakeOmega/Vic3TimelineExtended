@@ -2397,12 +2397,13 @@ nd_record_nuclear_use = {
 # week (nd_weekly_update) and a day after a Nuclear Basing article starts or
 # ends (nuclear_weapon_events.32): every country strategically adjacent to us,
 # a direct subject of ours or a host of our weapons (land and sea-coast
-# neighbors, and war-goal adjacency), and every owner of a state in a
-# strategic region where one of those holds a state. Delivery comes from the
-# arsenal, not the technology: any armed country has bombers. With ICBMs the
-# list is gone and nothing reads it; submarines' coasts are per state
-# (nd_state_in_reach_of). Built by effects alone: the region half is the
-# unprobed one (TE_SELF_CHECK nd_reach).
+# neighbors and war-goal adjacency; military access too, per the engine's
+# docs), and every owner of a state in a
+# strategic region where we, a subject or a host holds a state. Delivery
+# comes from the arsenal, not the technology: any armed country has bombers.
+# With ICBMs the list is gone and nothing reads it; submarines' coasts are
+# per state (nd_state_in_reach_of). Built by effects alone: the region half
+# is the unprobed one (TE_SELF_CHECK nd_reach).
 # ----------------------------------------------------------------------------
 nd_reach_refresh = {
 	save_scope_as = nd_reach_self

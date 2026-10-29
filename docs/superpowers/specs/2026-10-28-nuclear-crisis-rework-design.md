@@ -1,6 +1,6 @@
 # Nuclear Crisis Rework: Survivability, Launch Authority, Accidental Risk and Crisis Subjects — Design
 
-> **Status: phases 1–3 built (2026-10-28; plans `docs/superpowers/plans/2026-10-28-nuclear-crisis-rework-phase1.md`, `...-phase2.md`, `...-phase3.md`); phase 4 designed, not built.** Phase 3 answers: a salvo's taboo knock and UN record scale with √(warheads landed) (§14.3); the AI's missions are rule-based (§14.4); K stays 1, +0.5 ICBMs, +0.5 Precision Guided Munitions, checked in `nuclear_crisis_design.md` §0.14's calibration (§14.5). §14.4's lie rate: 15%, ×2 aggressive, ×0.5 at a taboo of 50 or more, and ruler traits (owner, 2026-10-28); a human claims through a Disavow our strikes posture toggle. Owner answers to §14.1 (confirmed) and §14.2 (launch authority is public) are in §14. Baseline `main` at c760baf. The owner's calls from the 2026-10-28 review are §1; everything else is a proposal, and every number is a first tuning value. Engine facts the design rests on but nobody has verified are §12, each with a fallback. Per the owner they are checked in game while building, not before it.
+> **Status: phases 1–3 built (2026-10-28; plans `docs/superpowers/plans/2026-10-28-nuclear-crisis-rework-phase1.md`, `...-phase2.md`, `...-phase3.md`); phase 4 split in two: 4a, range (§7, §14.6), built (`...-phase4a.md`; `nuclear_crisis_design.md` §0.15); 4b, the new disputes and trades (§8.5–§8.6), designed, not built.** §14.6 answer (owner, 2026-10-28): a Nuclear Basing host takes incident exposure and no custody risk. Phase 3 answers: a salvo's taboo knock and UN record scale with √(warheads landed) (§14.3); the AI's missions are rule-based (§14.4); K stays 1, +0.5 ICBMs, +0.5 Precision Guided Munitions, checked in `nuclear_crisis_design.md` §0.14's calibration (§14.5). §14.4's lie rate: 15%, ×2 aggressive, ×0.5 at a taboo of 50 or more, and ruler traits (owner, 2026-10-28); a human claims through a Disavow our strikes posture toggle. Owner answers to §14.1 (confirmed) and §14.2 (launch authority is public) are in §14. Baseline `main` at c760baf. The owner's calls from the 2026-10-28 review are §1; everything else is a proposal, and every number is a first tuning value. Engine facts the design rests on but nobody has verified are §12, each with a fallback. Per the owner they are checked in game while building, not before it.
 > Read first: [`docs/systems/nuclear_crisis_design.md`](../../systems/nuclear_crisis_design.md) §0, what shipped. This doc changes its §0.2–§0.5. When a phase ships, update §0 there, chapter 14 of the player guide and `docs/testing/nuclear-playtest.md`.
 
 ## 0. Why
@@ -210,8 +210,8 @@ Delegation, Launch on Warning and Automatic Retaliation are immune: that is part
 The engine has no distance trigger, but it has topology:
 
 - `has_strategic_adjacency` (direct, coastal, military-access or war-goal adjacency), which vanilla's alliance, defensive pact and rivalry AI use as `has_strategic_adjacency = scope:other_country`;
-- `is_adjacent_to_country` and `is_land_adjacent_to_state`;
-- `any_country_strategic_region`, already in the mod's `extra_effects.txt`;
+- `is_adjacent_to_country` and `is_land_adjacent_to_state` (the second is missing from the Modding-Digests 1.14-openbeta `triggers.log`, but vanilla's script values use it);
+- `any_country_strategic_region` (an engine trigger; the mod's `extra_effects.txt` uses only its effect form, `every_country_strategic_region`);
 - `any_neighbouring_state` at strategic-region scope;
 - `is_coastal`.
 
