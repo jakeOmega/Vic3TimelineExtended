@@ -2120,7 +2120,15 @@ nd_record_claim = {
 				}
 				if = {
 					limit = { var:nd_claim_kind > 0 }
-					change_global_variable = { name = nd_claim_counter add = 1 }
+					# Set before its first change: a variable only ever changed
+					# is "used but never set" to the load-time validator.
+					if = {
+						limit = { has_global_variable = nd_claim_counter }
+						change_global_variable = { name = nd_claim_counter add = 1 }
+					}
+					else = {
+						set_global_variable = { name = nd_claim_counter value = 1 }
+					}
 					scope:target_country = {
 						set_variable = { name = nd_claim_by value = scope:attacking_country }
 						set_variable = { name = nd_claim_id value = global_var:nd_claim_counter }

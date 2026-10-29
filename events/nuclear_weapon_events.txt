@@ -3085,7 +3085,13 @@ nuclear_weapon_events.30 = {
 		change_relations = { country = scope:nd_truth_victim value = -50 }
 		custom_tooltip = {
 			text = nd_tt_false_claim_marked
-			change_variable = { name = nd_false_claims add = 1 }
+			if = {
+				limit = { has_variable = nd_false_claims }
+				change_variable = { name = nd_false_claims add = 1 }
+			}
+			else = {
+				set_variable = { name = nd_false_claims value = 1 }
+			}
 		}
 	}
 }
