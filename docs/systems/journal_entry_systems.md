@@ -1773,7 +1773,7 @@ Multi-stage competitive space race system across nine journal entries — seven 
 - **Moon Landing Site:** Shackleton Crater (high risk, science) vs Equatorial Plain (low risk, modest).
 - **Progress Sources:** `country_space_race_progress_add` × (1 + `country_space_race_progress_mult`), at least 0.5 a month, for every running milestone whatever its approach. The adds come from the Space Programme production method, funding, the Space Elevator, the SpaceX / Lockheed Martin / Roscosmos companies, UN space partnership, two techs and choice-event rewards; the multipliers from the Ambitious approach, the UN outer-space regime, covert space espionage, antimatter engines and a power bloc principle. Full list: `mod_systems.md` § Space Race.
 - **Cross-System:** UN space partnership, the space companies and the space elevator add progress; the Nanofabrication Center lowers setback risk; the space mine and tourism only gate events (`.53`, `.51`).
-- **Colony Modifiers (JE-Scoped):** All 68 colony modifiers and `sr_solar_system_trade` are applied to `je:je_space_race_solar_colonization` (not country scope). The colonization JE stays alive indefinitely in passive mode once all 40 colonies are claimed, keeping colony modifiers active. Buttons are hidden when colonization is complete.
+- **Colony Modifiers (JE-Scoped):** All 80 colony modifiers and `sr_solar_system_trade` are applied to `je:je_space_race_solar_colonization` (not country scope). The colonization JE stays alive indefinitely in passive mode once all 40 colonies are claimed, keeping colony modifiers active. Buttons are hidden when colonization is complete.
 
 ### Milestones & Prerequisites
 | Milestone | Tech Required | Other Prerequisites |
