@@ -201,7 +201,10 @@ class CostModifierTests(unittest.TestCase):
     def test_the_check_matches_what_is_applied(self):
         applied = _definition(EFFECTS, "sr_apply_milestone_cost_modifiers_base")
         pairs = re.findall(r"name = (\w+)\s+multiplier = (\S+)", applied)
-        self.assertEqual(sorted(pairs), sorted([("sr_funding_progress", "sr_funding_$MILESTONE$_level"),
+        # The pace at the effective level, the throughput at the level itself
+        # (lunar colonization design § 5.1).
+        self.assertEqual(sorted(pairs), sorted([("sr_funding_progress", "sr_funding_$MILESTONE$_effective"),
+                                                ("sr_funding_throughput", "sr_funding_$MILESTONE$_level"),
                                                 ("sr_space_program_cost", "sr_$MILESTONE$_cost")]))
         check = _definition(TRIGGERS, "sr_cost_modifiers_missing_base")
         self.assertIn("sr_milestone_billed_$MILESTONE$ = yes", check)
@@ -210,7 +213,7 @@ class CostModifierTests(unittest.TestCase):
         # without the other, for instance when a funding click lands while
         # the entry cannot be found.
         self.assertTrue(entry.strip().startswith("OR = {"), entry)
-        self.assertEqual(entry.count("AND = {"), 2)
+        self.assertEqual(entry.count("AND = {"), len(pairs))
         for modifier, multiplier in pairs:
             with self.subTest(modifier=modifier):
                 # Missing only where the multiplier is not zero, so a zero

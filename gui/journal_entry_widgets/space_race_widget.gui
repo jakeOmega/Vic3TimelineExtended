@@ -978,8 +978,11 @@ types space_race_widget_types
 				}
 
 				### Funding — op 2 down, op 3 up, beside their label. The ceiling
-				### is sr_max_funding_level, read by the shared trigger the minus
-				### and plus buttons both ask.
+				### is sr_max_funding_level_soft, six levels past the cap, read by
+				### the shared trigger the plus button asks (lunar colonization
+				### design § 5.1). Past the cap the figure reads "9 / 7 (+0.8)":
+				### the level, the cap, and the effective levels the excess adds,
+				### so the cell is wide enough for "28 / 22 (+1.6)".
 				flowcontainer = {
 					direction = horizontal
 					spacing = 4
@@ -1005,7 +1008,7 @@ types space_race_widget_types
 
 					textbox = {
 						block "funding_value" {}
-						size = { 84 26 }
+						size = { 140 26 }
 						align = center|nobaseline
 						using = te_sr_fontsize_row
 						parentanchor = vcenter
@@ -4987,7 +4990,7 @@ types space_race_widget_types
 				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_suborbital_closed'))]"
 			}
 			blockoverride "sr_funding_value" {
-				text = "je_space_race_widget_funding_suborbital"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_suborbital_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_suborbital', 'je_space_race_widget_funding_suborbital' )]"
 			}
 			blockoverride "sr_setbacks_value" {
 				text = "je_space_race_widget_setbacks_suborbital"
@@ -5122,7 +5125,7 @@ types space_race_widget_types
 				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_orbital_closed'))]"
 			}
 			blockoverride "sr_funding_value" {
-				text = "je_space_race_widget_funding_orbital"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_orbital_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_orbital', 'je_space_race_widget_funding_orbital' )]"
 			}
 			blockoverride "sr_setbacks_value" {
 				text = "je_space_race_widget_setbacks_orbital"
@@ -5257,7 +5260,7 @@ types space_race_widget_types
 				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_moon_landing_closed'))]"
 			}
 			blockoverride "sr_funding_value" {
-				text = "je_space_race_widget_funding_moon_landing"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_moon_landing_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_moon_landing', 'je_space_race_widget_funding_moon_landing' )]"
 			}
 			blockoverride "sr_setbacks_value" {
 				text = "je_space_race_widget_setbacks_moon_landing"
@@ -5392,7 +5395,7 @@ types space_race_widget_types
 				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_probe_closed'))]"
 			}
 			blockoverride "sr_funding_value" {
-				text = "je_space_race_widget_funding_probe"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_probe_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_probe', 'je_space_race_widget_funding_probe' )]"
 			}
 			blockoverride "sr_setbacks_value" {
 				text = "je_space_race_widget_setbacks_probe"
@@ -5527,7 +5530,7 @@ types space_race_widget_types
 				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_moon_base_closed'))]"
 			}
 			blockoverride "sr_funding_value" {
-				text = "je_space_race_widget_funding_moon_base"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_moon_base_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_moon_base', 'je_space_race_widget_funding_moon_base' )]"
 			}
 			blockoverride "sr_setbacks_value" {
 				text = "je_space_race_widget_setbacks_moon_base"
@@ -5662,7 +5665,7 @@ types space_race_widget_types
 				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_mars_landing_closed'))]"
 			}
 			blockoverride "sr_funding_value" {
-				text = "je_space_race_widget_funding_mars_landing"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_mars_landing_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_mars_landing', 'je_space_race_widget_funding_mars_landing' )]"
 			}
 			blockoverride "sr_setbacks_value" {
 				text = "je_space_race_widget_setbacks_mars_landing"
@@ -5797,7 +5800,7 @@ types space_race_widget_types
 				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_interstellar_probe_closed'))]"
 			}
 			blockoverride "sr_funding_value" {
-				text = "je_space_race_widget_funding_interstellar_probe"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_interstellar_probe_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_interstellar_probe', 'je_space_race_widget_funding_interstellar_probe' )]"
 			}
 			blockoverride "sr_setbacks_value" {
 				text = "je_space_race_widget_setbacks_interstellar_probe"
@@ -6112,7 +6115,7 @@ types space_race_widget_types
 				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed'))]"
 			}
 			blockoverride "sr_funding_value" {
-				text = "je_space_race_widget_funding_solar_colonization"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_solar_colonization_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_solar_colonization', 'je_space_race_widget_funding_solar_colonization' )]"
 			}
 			blockoverride "sr_setbacks_value" {
 				text = "je_space_race_widget_setbacks_solar_colonization"

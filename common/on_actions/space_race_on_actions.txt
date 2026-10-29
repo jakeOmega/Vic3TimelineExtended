@@ -112,7 +112,9 @@ space_race_on_action = {
 				sr_recalculate_cost = yes
 			}
 			# A revolution's winner whose inherited entry lost its cost and
-			# funding modifiers (sr_cost_modifiers_missing): put them back.
+			# funding modifiers (sr_cost_modifiers_missing): put them back. The
+			# same test moves a save from before the funding split (2026-10-29)
+			# onto sr_funding_throughput.
 			else_if = {
 				limit = { sr_cost_modifiers_missing = yes }
 				sr_recalculate_cost = yes
