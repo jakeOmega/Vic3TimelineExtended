@@ -367,6 +367,8 @@ class TestLaunchUnderAttack(unittest.TestCase):
         self.assertEqual(self.model.order_chance(Posture(readiness=3, stage=3, danger=80, doctrine=1)), 0)
         for doctrine in (2, 3, 4, 5):
             self.assertGreater(self.model.order_chance(Posture(readiness=3, stage=3, danger=80, doctrine=doctrine)), 0)
+        # Nor at a suspect out of reach (rework spec §7).
+        self.assertEqual(self.model.order_chance(Posture(readiness=3, stage=3, danger=80, doctrine=5, in_reach=False)), 0)
         body = block(self.events, "nuclear_incident.1")
         order = body[body.index("name = nuclear_incident.1.c"):]
         trigger = block(order, "trigger")

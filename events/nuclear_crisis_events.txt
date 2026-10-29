@@ -569,6 +569,7 @@ nuclear_crisis.4 = {
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_target } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_target } }
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -950,6 +951,7 @@ nuclear_crisis.7 = {
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_target } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_target } }
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -1110,6 +1112,7 @@ nuclear_crisis.20 = {
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_guarantee_attacker } }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes
@@ -1280,10 +1283,12 @@ nuclear_crisis.22 = {
 					nd_is_armed = yes
 					nd_forces_assembled = yes
 					nd_command_intact = yes
+					nd_reaches_country = { TARGET = scope:attacking_country }
 				}
 				save_scope_as = target_country
 				scope:attacking_country = {
 					ordered_scope_state = {
+						limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 						order_by = nuclear_strike_target_score
 						position = 0
 						nuclear_response_strike = yes
@@ -1403,6 +1408,7 @@ nuclear_crisis.24 = {
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_guarantee_attacker } }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes

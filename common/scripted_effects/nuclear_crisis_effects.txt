@@ -143,6 +143,10 @@ nd_crisis_preview = {
 		custom_tooltip = nd_tt_open_bluff_law
 	}
 	else_if = {
+		limit = { NOT = { nd_reaches_country = { TARGET = $TARGET$ } } }
+		custom_tooltip = nd_tt_open_bluff_reach
+	}
+	else_if = {
 		limit = { nd_threat_backed = { TARGET = $TARGET$ } }
 		custom_tooltip = nd_tt_open_backed
 	}
@@ -428,6 +432,7 @@ nd_crisis_classify_dispute = {
 #   5 the doctrine does not allow it                bluff
 #   6 the Rules of War law forbids it               bluff
 #   7 No First Use                                  bluff
+#   8 our delivery doesn't reach them (§7)          bluff
 # Called by nd_crisis_refresh_figures on opening and every week, so a doctrine
 # change or a war turning against us counts the same week.
 nd_crisis_classify_follow_through = {
@@ -438,6 +443,10 @@ nd_crisis_classify_follow_through = {
 	else_if = {
 		limit = { NOT = { nd_threat_law_permits = { TARGET = $TARGET$ } } }
 		set_variable = { name = nd_ft_reason value = 6 }
+	}
+	else_if = {
+		limit = { NOT = { nd_reaches_country = { TARGET = $TARGET$ } } }
+		set_variable = { name = nd_ft_reason value = 8 }
 	}
 	else_if = {
 		limit = {

@@ -248,6 +248,12 @@ class TestAiSalvo(unittest.TestCase):
         # (final review): never Leadership, whatever its nd_authority reads.
         self.assertEqual(self.mission(doctrine=2, stockpile=9, capital_hit_share=0.9,
                                       enemy=replace(small, believed_armed=False)), 1)
+        # Leadership needs the capital in reach (plan 4a R6): Forces under
+        # Warfighting, else the single strike.
+        self.assertEqual(self.mission(doctrine=5, stockpile=9, capital_hit_share=0.9, capital_in_reach=False,
+                                      enemy=small), 2)
+        self.assertEqual(self.mission(doctrine=2, stockpile=9, capital_hit_share=0.9, capital_in_reach=False,
+                                      enemy=small), 1)
 
     def test_spare_keeps_a_reserve(self):
         spare = {s: self.model.number("nd_ai_salvo_spare_value", Posture(stockpile=s)) for s in (1, 2, 3, 9, 10, 30)}

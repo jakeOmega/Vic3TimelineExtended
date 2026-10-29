@@ -76,6 +76,8 @@ class Posture:
     salvo_victim_r: float = 1      # the victim's redundancy when the salvo began (var:nd_salvo_victim_r)
     believed_armed: bool = True    # the world believes it holds warheads (nd_believed_armed)
     capital_hit_share: float = 0.9 # a warhead's chance on the enemy's capital (nd_ai_capital_hit_share)
+    in_reach: bool = True          # our delivery reaches the enemy (nd_reaches_country, rework spec §7)
+    capital_in_reach: bool = True  # and its capital (nd_leadership_in_reach)
 
 
 # The rework spec's §2.3 rows: both sides take the same posture.
@@ -142,6 +144,9 @@ class RiskModel:
             "nd_launch_under_attack_doctrine": lambda: p.doctrine != 1,
             "nd_crisis_talks_open_either": lambda: p.talks,
             "nd_believed_armed": lambda: p.believed_armed,
+            # Reach (rework spec §7): the benchmarks are within it.
+            "nd_reaches_country": lambda: p.in_reach,
+            "nd_leadership_in_reach": lambda: p.capital_in_reach,
         }
         if key not in answers:
             return None

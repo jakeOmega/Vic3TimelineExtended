@@ -200,6 +200,7 @@ nd_posture_sgui = {
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 76 }
 			nd_plan_can_set_mission = { M = 3 }
+			nd_plan_can_set_leadership = yes
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 77 }

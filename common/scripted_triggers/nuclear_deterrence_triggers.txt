@@ -645,9 +645,20 @@ nd_reach_limited = {
 	NOT = { has_technology_researched = ICBMs }
 }
 
+# We reach $ENEMY$'s capital, a Leadership salvo's every target (plan 4a R6):
+# a submarine-only reach can miss an inland capital. Country scope = us.
+nd_leadership_in_reach = {
+	save_temporary_scope_as = nd_lir_self
+	$ENEMY$ = {
+		exists = capital
+		capital = { nd_state_in_reach_of = { COUNTRY = scope:nd_lir_self } }
+	}
+}
+
 # A country the Strike section can aim a salvo at (rework spec §6.1): another
 # living country with states, with which we are at war or in a peacetime
-# nuclear exchange (the strike actions' own reach). Country scope = us.
+# nuclear exchange (the strike actions' own reach), and that our delivery
+# reaches (§7). Country scope = us.
 nd_planner_candidate = {
 	exists = $ENEMY$
 	NOT = { THIS = $ENEMY$ }
@@ -658,6 +669,7 @@ nd_planner_candidate = {
 	$ENEMY$ = {
 		any_scope_state = { always = yes }
 	}
+	nd_reaches_country = { TARGET = $ENEMY$ }
 }
 
 # Everything an ordered salvo needs (rework spec §6.1), each clause with its
@@ -675,6 +687,13 @@ nd_can_order_salvo = {
 	custom_tooltip = {
 		text = nd_tt_salvo_candidate
 		nd_planner_candidate = { ENEMY = $ENEMY$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_capital_in_reach
+		OR = {
+			NOT = { var:nd_salvo_mission ?= 3 }
+			nd_leadership_in_reach = { ENEMY = $ENEMY$ }
+		}
 	}
 	custom_tooltip = {
 		text = nd_tt_doctrine_permits_strike
@@ -711,6 +730,20 @@ nd_plan_can_set_mission = {
 	}
 }
 
+# Op 76 also: Leadership needs the planned enemy's capital in reach (plan 4a
+# R6). With no enemy planned there is nothing to check, and the order is
+# greyed anyway.
+nd_plan_can_set_leadership = {
+	trigger_if = {
+		limit = { exists = var:nd_plan_enemy }
+		var:nd_plan_enemy ?= { save_temporary_scope_as = nd_plan_victim }
+		custom_tooltip = {
+			text = nd_tt_capital_in_reach
+			nd_leadership_in_reach = { ENEMY = scope:nd_plan_victim }
+		}
+	}
+}
+
 nd_plan_can_step_size_down = {
 	custom_tooltip = {
 		text = nd_tt_plan_size_at_least_one
@@ -743,6 +776,7 @@ nd_plan_can_order = {
 nd_threat_backed = {
 	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
 	nd_threat_law_permits = { TARGET = $TARGET$ }
+	nd_reaches_country = { TARGET = $TARGET$ }
 	OR = {
 		AND = {
 			has_war_with = $TARGET$
@@ -756,6 +790,7 @@ nd_threat_uncertain = {
 	NOT = { nd_threat_backed = { TARGET = $TARGET$ } }
 	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
 	nd_threat_law_permits = { TARGET = $TARGET$ }
+	nd_reaches_country = { TARGET = $TARGET$ }
 	NOT = { has_war_with = $TARGET$ }
 	OR = {
 		nd_doctrine_flexible = yes
@@ -855,6 +890,11 @@ nd_retaliation_permitted = {
 	custom_tooltip = {
 		text = nd_tt_command_intact
 		nd_command_intact = yes
+	}
+	# An answer flies as far as a first strike does (rework spec §7).
+	custom_tooltip = {
+		text = nd_tt_in_reach
+		nd_reaches_country = { TARGET = $ENEMY$ }
 	}
 }
 
@@ -1972,6 +2012,7 @@ nd_state_has_military_target = {
 # guarantor) and a six-month pause between first uses bound it.
 nd_ai_nuclear_use_justified = {
 	nd_is_armed = yes
+	nd_reaches_country = { TARGET = $ENEMY$ }
 	# Our own civil war: only when losing badly under laws that already
 	# silence dissent — retaliation included (owner ruling 2026-09-25;
 	# nuclear_custody_triggers.txt).

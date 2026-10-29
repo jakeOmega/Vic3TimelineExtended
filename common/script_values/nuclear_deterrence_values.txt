@@ -1078,6 +1078,8 @@ nd_ai_salvo_mission_value = {
 				nd_believed_armed = yes
 			}
 			nd_ai_leadership_margin > 0
+			# Every Leadership warhead aims at the capital (plan 4a R6).
+			nd_leadership_in_reach = { ENEMY = scope:nd_sv_enemy }
 		}
 		value = 3
 	}

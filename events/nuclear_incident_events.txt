@@ -176,6 +176,10 @@ nuclear_incident.1 = {
 				text = nd_tt_command_intact
 				nd_command_intact = yes
 			}
+			custom_tooltip = {
+				text = nd_tt_in_reach
+				nd_reaches_country = { TARGET = scope:nd_warning_suspect }
+			}
 		}
 		show_as_unavailable = { nd_is_armed = yes }
 		set_variable = { name = nd_warning_launched value = 1 }
@@ -1781,6 +1785,7 @@ nuclear_incident.50 = {
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_mw_enemy } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_mw_enemy } }
 		}
 		highlighted_option = yes
 		custom_tooltip = nd_tt_monopoly_first_use

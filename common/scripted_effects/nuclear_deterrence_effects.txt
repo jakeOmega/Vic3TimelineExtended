@@ -1910,14 +1910,16 @@ nd_dispatch_strategic_strike = {
 					has_war_with = scope:nd_strike_victim
 					nd_peacetime_incident_dispatch = yes
 				}
+				# Only a state our delivery reaches (rework spec §7).
 				scope:nd_strike_victim = {
-					any_scope_state = { always = yes }
+					any_scope_state = { nd_state_in_reach_of = { COUNTRY = scope:nd_dispatching } }
 				}
 			}
 			save_scope_as = attacking_country
 			scope:nd_strike_victim = {
 				save_scope_as = target_country
 				ordered_scope_state = {
+					limit = { nd_state_in_reach_of = { COUNTRY = scope:nd_dispatching } }
 					order_by = nuclear_strike_target_score
 					position = 0
 					nuclear_first_strike = yes
@@ -1951,14 +1953,20 @@ nd_dispatch_tactical_strike = {
 				}
 				has_technology_researched = tactical_nuclear_weapons
 				scope:nd_strike_victim = {
-					any_scope_state = { nd_state_has_military_target = yes }
+					any_scope_state = {
+						nd_state_has_military_target = yes
+						nd_state_in_reach_of = { COUNTRY = scope:nd_dispatching }
+					}
 				}
 			}
 			save_scope_as = attacking_country
 			scope:nd_strike_victim = {
 				save_scope_as = target_country
 				random_scope_state = {
-					limit = { nd_state_has_military_target = yes }
+					limit = {
+						nd_state_has_military_target = yes
+						nd_state_in_reach_of = { COUNTRY = scope:nd_dispatching }
+					}
 					save_scope_as = target_state
 				}
 			}
@@ -2555,33 +2563,45 @@ nd_order_salvo = {
 nd_salvo_warhead = {
 	if = {
 		limit = { var:nuclear_weapon_stockpile > 0 }
-		change_variable = { name = nuclear_weapon_stockpile subtract = 1 }
-		change_variable = { name = nd_salvo_fired add = 1 }
 		scope:nd_salvo_victim = { nd_salvo_pick_target = yes }
-		random_list = {
-			0 = {
-				modifier = nuclear_strike_success_chance
-				nd_salvo_hit = yes
-			}
-			0 = {
-				modifier = nuclear_strike_fail_chance
-				nd_log_context = yes
-				debug_log = "TE_NUCLEAR: type=action; action=strategic_miss; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		# Only a warhead aimed at a state in reach flies (rework spec §7).
+		# The gates leave one to aim at; the flag, not exists = scope:
+		# target_state, says so, since the last warhead's scope is still set.
+		if = {
+			limit = { has_variable = nd_salvo_aimed }
+			remove_variable = nd_salvo_aimed
+			change_variable = { name = nuclear_weapon_stockpile subtract = 1 }
+			change_variable = { name = nd_salvo_fired add = 1 }
+			random_list = {
+				0 = {
+					modifier = nuclear_strike_success_chance
+					nd_salvo_hit = yes
+				}
+				0 = {
+					modifier = nuclear_strike_fail_chance
+					nd_log_context = yes
+					debug_log = "TE_NUCLEAR: type=action; action=strategic_miss; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+				}
 			}
 		}
 	}
 }
 
-# Victim scope: the next warhead's state, saved as scope:target_state (§6.1).
-# Leadership: the capital, every warhead. Forces: a state with a military
-# target, then the capital's region, then the capital. Cities: the states the
-# strike action would choose. An ordered_* position is a literal, so the
-# warheads spread by marks: each pick is the best state not yet aimed at,
-# and once every state is, the best of all.
+# Victim scope: the next warhead's state, saved as scope:target_state (§6.1),
+# always one the attacker reaches (§7, nd_state_in_reach_of). Leadership: the
+# capital, every warhead. Forces: a state with a military target, then the
+# capital's region, then the capital. Cities, and Forces when none of those is
+# in reach: the states the strike action would choose. An ordered_* position
+# is a literal, so the warheads spread by marks: each pick is the best state
+# not yet aimed at, and once every state is, the best of all.
 nd_salvo_pick_target = {
 	if = {
-		limit = { scope:nd_salvo_attacker = { var:nd_salvo_mission = 3 } }
-		capital = { save_scope_as = target_state }
+		limit = {
+			scope:nd_salvo_attacker = { var:nd_salvo_mission = 3 }
+			exists = capital
+			capital = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker } }
+		}
+		capital = { nd_salvo_aim_here = yes }
 	}
 	else_if = {
 		limit = {
@@ -2589,16 +2609,18 @@ nd_salvo_pick_target = {
 			any_scope_state = {
 				nd_state_has_military_target = yes
 				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
 			}
 		}
 		ordered_scope_state = {
 			limit = {
 				nd_state_has_military_target = yes
 				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
 			}
 			order_by = nuclear_strike_target_score
 			position = 0
-			save_scope_as = target_state
+			nd_salvo_aim_here = yes
 		}
 	}
 	else_if = {
@@ -2608,43 +2630,64 @@ nd_salvo_pick_target = {
 			any_scope_state = {
 				region ?= scope:nd_salvo_cap_region
 				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
 			}
 		}
 		ordered_scope_state = {
 			limit = {
 				region ?= scope:nd_salvo_cap_region
 				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
 			}
 			order_by = nuclear_strike_target_score
 			position = 0
-			save_scope_as = target_state
+			nd_salvo_aim_here = yes
 		}
-	}
-	else_if = {
-		limit = { scope:nd_salvo_attacker = { var:nd_salvo_mission = 2 } }
-		capital = { save_scope_as = target_state }
 	}
 	else_if = {
 		limit = {
-			any_scope_state = { NOT = { has_variable = nd_salvo_target } }
+			scope:nd_salvo_attacker = { var:nd_salvo_mission = 2 }
+			exists = capital
+			capital = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker } }
+		}
+		capital = { nd_salvo_aim_here = yes }
+	}
+	else_if = {
+		limit = {
+			any_scope_state = {
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
 		}
 		ordered_scope_state = {
-			limit = { NOT = { has_variable = nd_salvo_target } }
+			limit = {
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
 			order_by = nuclear_strike_target_score
 			position = 0
-			save_scope_as = target_state
+			nd_salvo_aim_here = yes
 		}
 	}
-	else = {
+	else_if = {
+		limit = {
+			any_scope_state = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker } }
+		}
 		ordered_scope_state = {
+			limit = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker } }
 			order_by = nuclear_strike_target_score
 			position = 0
-			save_scope_as = target_state
+			nd_salvo_aim_here = yes
 		}
 	}
-	scope:target_state ?= {
-		set_variable = nd_salvo_target
-	}
+}
+
+# State scope: this is the next warhead's state. Marked for the spread, and
+# the attacker told a warhead was aimed (nd_salvo_warhead).
+nd_salvo_aim_here = {
+	save_scope_as = target_state
+	set_variable = nd_salvo_target
+	scope:nd_salvo_attacker = { set_variable = nd_salvo_aimed }
 }
 
 # A warhead landed: counted, then its damage. A Forces warhead hits the
@@ -2862,6 +2905,7 @@ nd_salvo_fire_first = {
 			}
 			scope:nd_salvo_attacker = {
 				ordered_scope_state = {
+					limit = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_victim } }
 					order_by = nuclear_strike_target_score
 					position = 2
 					nuclear_response_strike = yes
@@ -2875,6 +2919,7 @@ nd_salvo_fire_first = {
 			}
 			scope:nd_salvo_attacker = {
 				ordered_scope_state = {
+					limit = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_victim } }
 					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
@@ -2883,6 +2928,7 @@ nd_salvo_fire_first = {
 		}
 		scope:nd_salvo_attacker = {
 			ordered_scope_state = {
+				limit = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_victim } }
 				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
@@ -2989,6 +3035,10 @@ nd_salvo_targets_self_check = {
 
 # The salvo's working figures and marks go (not the panel's mission and size).
 nd_salvo_clear = {
+	if = {
+		limit = { has_variable = nd_salvo_aimed }
+		remove_variable = nd_salvo_aimed
+	}
 	scope:nd_salvo_victim = {
 		every_scope_state = {
 			limit = { has_variable = nd_salvo_target }
@@ -3140,7 +3190,10 @@ nd_plan_order = {
 
 # Incident launch dispatch. At peace, open a pair-scoped nuclear exchange;
 # damage and nuclear responses can precede conventional war. The aftermath
-# offers both sides a stand-down. Only invalid launch context is intercepted.
+# offers both sides a stand-down. Invalid launch context is intercepted, and
+# so is a launch at a country our delivery doesn't reach (plan 4a R7): it is
+# caught before it opens an exchange, counts as a launch or is narrated as
+# one, and goes the way of any order the weapons could not carry out.
 # NARRATE controls .4; commander and accident events narrate their own result.
 nd_launch_or_intercept = {
 	custom_tooltip = nd_tt_launch_or_intercept
@@ -3149,6 +3202,18 @@ nd_launch_or_intercept = {
 		save_scope_as = nd_incident_launch_$KIND$
 		$VICTIM$ = { save_scope_as = nd_strike_victim }
 		if = {
+			limit = {
+				nd_is_armed = yes
+				exists = scope:nd_strike_victim
+				NOT = { this = scope:nd_strike_victim }
+				NOT = { nd_reaches_country = { TARGET = scope:nd_strike_victim } }
+			}
+			set_variable = { name = nd_last_launch_kind value = 2 }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=out_of_reach; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			nd_intercepted_launch = { VICTIM = $VICTIM$ }
+		}
+		else_if = {
 			limit = {
 				nd_is_armed = yes
 				nd_forces_assembled = yes

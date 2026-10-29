@@ -1502,6 +1502,13 @@ nd_crisis_ft_reason = {
 		localization_key = nd_ft_reason_7
 	}
 	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 8
+		}
+		localization_key = nd_ft_reason_8
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = nd_ft_reason_unknown
 	}
