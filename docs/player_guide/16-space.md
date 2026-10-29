@@ -305,12 +305,12 @@ milestone is finished it also decides a reward that fades over ten years.
 
 ## Space race funding and cost
 
-Each milestone has its own funding level, from 0 up to your cap. The cap starts
+Each milestone has its own funding level, from 0 to six levels past your cap. The cap starts
 at 3 and rises with technology: eleven space-related technologies from era 7 to
 era 11 raise it by 1 each, and four in era 12 raise it by 2 each. Tier V of the
 Advanced Research power bloc principle, its highest, adds another level.
 
-Every funding level, on any milestone, adds 0.5 to your monthly pace, and so to
+Every funding level up to the cap, on any milestone, adds 0.5 to your monthly pace, and so to
 every running milestone. It also raises the Space Program's throughput
 by 25%, which makes the building consume more Launch Capacity. Funding and
 approach cost weekly innovation: 15 for each funding level, plus nothing for

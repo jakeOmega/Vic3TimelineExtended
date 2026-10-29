@@ -428,8 +428,14 @@ reaches a milestone.
    two levels past the cap.
 4. **The throughput.** The Space Program's throughput breakdown shows Funding Throughput Bonus at the full +25% a level,
    past the cap too (+225% at 9), and the Launch Capacity bill rises with it.
-5. **A falling cap.** Fund a milestone to the cap with Advanced Research tier V, then lose the principle (leave the bloc,
-   or change the principle): the level stays, the figure reads "N / N−1 (+0.5)", and the pace drops by half a level.
+5. **A cap that moves.** Fund a milestone to the cap with Advanced Research tier V, then lose the principle (leave the
+   bloc, or change the principle): the level stays and the figure reads "N / N−1 (+0.5)" at once. The pace follows at
+   the next monthly pulse, which sees the cap differ from the one the costs were computed with (`sr_cost_funding_cap`)
+   and recalculates: that entry's Funding Progress Bonus drops by 0.25 (the top level now counts as half a level). The
+   other way, research a cap technology while funded at 9 with a cap of 7: "9 / 7 (+0.8)" reads "9 / 8 (+0.5)" at
+   once, and within a month the bonus rises from +3.92 to +4.25. Until that pulse the pace hover's
+   Funding line (live values) and its "Added each month" breakdown (the modifier) can disagree by that much; after it
+   they agree. If they still disagree a month later, `sr_cost_funding_cap` isn't being compared or set.
 6. **The AI.** In an observer run, no AI's stepper shows "(+…)": the AI stops at the cap. One left past it by a falling
    cap funds down to the cap within a few weeks.
 7. **An old save.** Load a save from before the split with a running milestone: within a month its entry carries both
