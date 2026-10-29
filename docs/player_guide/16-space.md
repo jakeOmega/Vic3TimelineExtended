@@ -305,12 +305,12 @@ milestone is finished it also decides a reward that fades over ten years.
 
 ## Space race funding and cost
 
-Each milestone has its own funding level, from 0 up to your cap. The cap starts
+Each milestone has its own funding level, from 0 to six levels past your cap. The cap starts
 at 3 and rises with technology: eleven space-related technologies from era 7 to
 era 11 raise it by 1 each, and four in era 12 raise it by 2 each. Tier V of the
 Advanced Research power bloc principle, its highest, adds another level.
 
-Every funding level, on any milestone, adds 0.5 to your monthly pace, and so to
+Every funding level up to the cap, on any milestone, adds 0.5 to your monthly pace, and so to
 every running milestone. It also raises the Space Program's throughput
 by 25%, which makes the building consume more Launch Capacity. Funding and
 approach cost weekly innovation: 15 for each funding level, plus nothing for
@@ -319,13 +319,22 @@ from the table above. A Suborbital Flight at funding 1 on Safe costs 30
 innovation a week; an Interstellar Probe at funding 3 on Ambitious costs 900.
 The Space Program Cost modifier on each journal entry shows the current drain.
 
+You can fund a milestone up to six levels past the cap. Each level past it adds
+less pace than the one before: the first adds half a level's pace (+0.25 a
+month), the second a third of one, and so on to a seventh for the sixth, so all
+six together are worth 1.59 levels. Each still costs the full innovation and
+still raises the Space Program's throughput by the full 25%, and with it the
+Launch Capacity bill. Past the cap the Funding stepper reads "9 / 7 (+0.8)": the
+level, the cap, and the levels' worth of pace the excess adds. If the cap falls
+below a level you have set, the level stands and the excess counts past the cap.
+
 Your monthly pace is the sum of your progress sources, raised by your progress
 bonuses, and never less than 0.5.
 
 | Progress source | Monthly progress |
 |---|---|
 | Space Program: Earth Orbit, or any higher method, fully staffed | +0.5, or +1 |
-| Each funding level on each running milestone | +0.5 |
+| Each funding level on each running milestone, up to the cap | +0.5 |
 | Space Elevator megaproject, each fully staffed level | +1 |
 | SpaceX, Lockheed Martin or Roscosmos company, when prosperous | +0.3 each |
 | International Space Partnership, for members that ratify the UN's International Space Cooperation | +0.1 |
@@ -1214,8 +1223,8 @@ an entry but its bar doesn't move, and the Rivals list leaves it
 out. Such an AI winds its funding down to 0 and pays nothing for the approach
 it has chosen until it climbs back into the top three. AI great powers prefer
 the Ambitious approach, more so when another country is running the same
-milestone; AI major powers lean toward Safe. The AI raises funding while it has
-innovation to spare and cuts it when innovation runs short. Launch windows bind
+milestone; AI major powers lean toward Safe. The AI raises funding, never past
+the cap, while it has innovation to spare and cuts it when innovation runs short. Launch windows bind
 the AI as they bind you, and its approach decides its launches outside a window
 the same way. Under Simple Colonies and Full Colonies the AI sends its colony
 fleets where the program picks for you when you choose no world, and sets its

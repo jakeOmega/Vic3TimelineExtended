@@ -751,6 +751,35 @@ sr_disp_cost_ambitious_solar_colonization = {
 	multiply = 2
 }
 
+# ---- Funding, in the pace hover (je_space_race_widget_pace_tt) ---------------
+# Funding on the billed milestones (the entries that carry sr_funding_progress,
+# sr_apply_milestone_cost_modifiers_base), in levels within each one's cap and
+# effective levels past it (lunar colonization design § 5.1). Their sum, times
+# 0.5, is what funding adds to the pace. The per-milestone values guard their
+# variable reads (space_race_values.txt).
+sr_disp_funding_within_cap = {
+	value = 0
+	if = { limit = { sr_milestone_billed_suborbital = yes } add = sr_funding_suborbital_within_cap }
+	if = { limit = { sr_milestone_billed_orbital = yes } add = sr_funding_orbital_within_cap }
+	if = { limit = { sr_milestone_billed_moon_landing = yes } add = sr_funding_moon_landing_within_cap }
+	if = { limit = { sr_milestone_billed_probe = yes } add = sr_funding_probe_within_cap }
+	if = { limit = { sr_milestone_billed_moon_base = yes } add = sr_funding_moon_base_within_cap }
+	if = { limit = { sr_milestone_billed_mars_landing = yes } add = sr_funding_mars_landing_within_cap }
+	if = { limit = { sr_milestone_billed_interstellar_probe = yes } add = sr_funding_interstellar_probe_within_cap }
+	if = { limit = { sr_milestone_billed_solar_colonization = yes } add = sr_funding_solar_colonization_within_cap }
+}
+sr_disp_funding_past_cap = {
+	value = 0
+	if = { limit = { sr_milestone_billed_suborbital = yes } add = sr_funding_suborbital_past_cap_effective }
+	if = { limit = { sr_milestone_billed_orbital = yes } add = sr_funding_orbital_past_cap_effective }
+	if = { limit = { sr_milestone_billed_moon_landing = yes } add = sr_funding_moon_landing_past_cap_effective }
+	if = { limit = { sr_milestone_billed_probe = yes } add = sr_funding_probe_past_cap_effective }
+	if = { limit = { sr_milestone_billed_moon_base = yes } add = sr_funding_moon_base_past_cap_effective }
+	if = { limit = { sr_milestone_billed_mars_landing = yes } add = sr_funding_mars_landing_past_cap_effective }
+	if = { limit = { sr_milestone_billed_interstellar_probe = yes } add = sr_funding_interstellar_probe_past_cap_effective }
+	if = { limit = { sr_milestone_billed_solar_colonization = yes } add = sr_funding_solar_colonization_past_cap_effective }
+}
+
 # ---- Rivals: the estimate rows ----------------------------------------------
 # Read by the Rivals rows with the rival passed in: GuiScope.SetRoot(viewer)
 # .AddScope('sr_rival', <the rival>).ScriptValue(...), the shape

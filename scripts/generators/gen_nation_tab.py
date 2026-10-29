@@ -219,6 +219,7 @@ NOT_ON_COUNTRY = {
     "sr_fleet_upkeep_goods": "a Space Command building",
     "te_seabed_long_haul": "a Deep-Sea Mine building (Long-Haul Seabed Operations)",
     "sr_funding_progress": "the running milestone's entry", "sr_space_program_cost": "the running milestone's entry",
+    "sr_funding_throughput": "the running milestone's entry",
     "un_bloc_vacuum_modifier": "power blocs", "un_sovereignty_*": "interest groups",
     "un_standing_*": "je_united_nations", "un_member_*": "je_united_nations",
     "un_founding_member_modifier": "je_united_nations", "un_headquarters_modifier": "je_united_nations",

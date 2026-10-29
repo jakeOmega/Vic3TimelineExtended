@@ -57,7 +57,9 @@ MARGIN = 1.1
 # The longest figures no script bounds: named here, as the round-3 rules ask.
 PACE_CEILING = 99.9       # sr_pace_rate_<m>, "+99.9/mo"; the real pace is a few a month
 SETBACKS_CEILING = 99     # sr_setbacks_<m>_value, a count of setbacks
-FUNDING_CEILING = 10      # sr_funding_<m> and sr_max_funding_level: 3, plus technology
+FUNDING_CEILING = 99      # sr_funding_<m> and sr_max_funding_level: 3 plus every country_space_race_max_funding_add
+                          # source (technologies, Advanced Research V), plus 6 past the cap; two digits however they grow
+FUNDING_PAST_CAP = sum(1 / (j + 1) for j in range(1, 7))  # sr_funding_<m>_past_cap_effective: 1/2 + ... + 1/7, "+1.6"
 STAGE_CEILING = 5         # sr_current_colonization_stage, "Stage: 5 of 5"
 TRANSIT_MONTHS = 132      # sr_interstellar_transit_value, pinned by the waiting entry's goal
 WORLDS = 34               # sr_total_global_colonies, the 34 worlds; sr_disp_colonies_held is a share of them
@@ -226,6 +228,8 @@ def _longest_figure(name):
         return SCRIPT.risk_ceiling(m.group(1))
     if re.fullmatch(r"sr_setbacks_\w+_value", name):
         return SETBACKS_CEILING
+    if re.fullmatch(r"sr_funding_\w+_past_cap_effective", name):
+        return FUNDING_PAST_CAP
     if re.fullmatch(r"sr_funding_\w+|sr_max_funding_level", name):
         return FUNDING_CEILING
     if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+|sr_disp_progress_frac_\w+", name):
@@ -499,8 +503,12 @@ def _cell(gui, type_name, marker):
 
 def _shown_keys(gui):
     """Every loc key the GUI shows as a textbox's text, with the value-driven
-    keys the roots pass in (sr_label_safe, sr_risk_label, sr_progress_text …)."""
-    return sorted(set(re.findall(r'\btext = "(je_space_race_widget_\w+)"', gui)))
+    keys the roots pass in (sr_label_safe, sr_risk_label, sr_progress_text …),
+    and the funding figure's two keys, which a SelectLocalization picks between
+    at and past the cap (lunar colonization design § 5.1)."""
+    keys = set(re.findall(r'\btext = "(je_space_race_widget_\w+)"', gui))
+    keys |= set(re.findall(r"'(je_space_race_widget_funding_\w+)'", gui))
+    return sorted(keys)
 
 
 class LabelBudgetTest(unittest.TestCase):
@@ -554,6 +562,7 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(_render(_loc("je_space_race_widget_ov_safe_orbital")), "Safe\\n−22.5 a week")
         self.assertEqual(_render(_loc("je_space_race_widget_progress_solar_colonization")), "650 / 650 (+99.9/mo)")
         self.assertEqual(_render(_loc("je_space_race_widget_eta_solar_colonization")), "1300 months")
+        self.assertEqual(_render(_loc("je_space_race_widget_funding_past_cap_suborbital")), "99 / 99 (+1.6)")
         self.assertEqual(_render(_loc("je_space_race_widget_progress_interstellar_results")), "132 / 132 months")
         self.assertEqual(_render(_loc("je_space_race_widget_ov_shielded")), "Shielded: 6 mo")
         self.assertEqual(_render(_loc("je_space_race_widget_risk_mars_landing")), "Risk: 50%/mo")

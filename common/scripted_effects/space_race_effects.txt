@@ -76,6 +76,11 @@ sr_recalculate_cost = {
 	else = {
 		set_variable = { name = sr_cost_participation value = 0 } # REVIEWED 2026-09-26: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
 	}
+	# The funding cap the pace multipliers above were computed with
+	# (sr_funding_<m>_effective reads sr_max_funding_level; lunar colonization
+	# design § 5.1). Technologies and a power bloc principle move the cap with
+	# no button press, so space_race_on_action recalculates when this is stale.
+	set_variable = { name = sr_cost_funding_cap value = sr_max_funding_level } # REVIEWED 2026-10-29: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 	# Whether solar colonization was billed (sr_milestone_billed_solar_colonization).
 	# Its production method can be switched off with no button press, so
 	# space_race_on_action recalculates when this is stale.
@@ -557,20 +562,28 @@ sr_boost_active_milestone_base = {
 	}
 }
 
-# Strip the cost and funding-progress modifiers from one milestone's JE.
-# Country scope. Uses ?= so an inactive JE silently no-ops instead of erroring.
+# Strip the cost and the two funding modifiers (pace and throughput) from one
+# milestone's JE. Country scope. Uses ?= so an inactive JE silently no-ops
+# instead of erroring. sr_recalculate_cost runs it on every entry before
+# sr_apply_milestone_cost_modifiers_base, so each modifier is removed before it
+# is added again (a same-name add_modifier stacks).
 sr_clear_milestone_cost_modifiers_base = {
 	je:je_space_race_$MILESTONE$ ?= {
 		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
 		if = { limit = { has_modifier = sr_funding_progress   } remove_modifier = sr_funding_progress   }
+		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
 	}
 }
 
-# Re-apply the cost and funding-progress modifiers to one milestone's JE,
+# Re-apply the cost and the two funding modifiers to one milestone's JE,
 # gated on sr_milestone_billed_<X> (the active flag; for solar colonization,
-# its programme actually running). Multiplier names interpolate from
-# $MILESTONE$ (sr_<X>_cost and sr_funding_<X>_level — verified to exist for
-# all 8 tokens). Country scope. ?= because each milestone entry's immediate
+# its programme actually running). The pace (sr_funding_progress) takes the
+# effective level, which counts the levels past the cap for less; the
+# throughput (sr_funding_throughput) and the cost take the level itself, so a
+# level past the cap still costs in full and adds its full +25% (lunar
+# colonization design § 5.1). Multiplier names interpolate from $MILESTONE$
+# (sr_<X>_cost, sr_funding_<X>_effective and sr_funding_<X>_level — verified to
+# exist for all 8 tokens). Country scope. ?= because each milestone entry's immediate
 # sets sr_active_<X> and then runs sr_recalculate_cost, and when a
 # revolution's winner inherits the entry that immediate runs before je: can
 # find it ("Failed to scope to journal entry by tag", Spain's moon landing in
@@ -580,8 +593,9 @@ sr_apply_milestone_cost_modifiers_base = {
 	if = {
 		limit = { sr_milestone_billed_$MILESTONE$ = yes }
 		je:je_space_race_$MILESTONE$ ?= {
-			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost          }
-			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_level }
+			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost              }
+			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_effective }
+			add_modifier = { name = sr_funding_throughput multiplier = sr_funding_$MILESTONE$_level     }
 		}
 	}
 }
@@ -696,6 +710,42 @@ sr_effect_fund_up = {
 		text = "SR_INCREASE_FUNDING_EFFECT"
 		change_variable = { name = sr_funding_$MILESTONE$ add = 1 }
 		sr_recalculate_cost = yes
+	}
+	# The next level is past the cap: say what share of a level's pace it adds
+	# (lunar colonization design § 5.1). Tooltip lines only; each renders
+	# while its limit holds. The level is at or past the cap when the level up
+	# to the cap fills it (a guarded read, unlike var:); sr_funding_<m>_past_cap
+	# counts the levels already past, so the next is that plus one. Nothing is
+	# printed once the ladder is used up (six past: the button is greyed, or a
+	# falling cap left the level further past), since no further share exists.
+	if = {
+		limit = {
+			sr_funding_$MILESTONE$_within_cap >= sr_max_funding_level
+			sr_funding_$MILESTONE$_past_cap < sr_funding_past_cap_steps
+		}
+		if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 5 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_7
+		}
+		else_if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 4 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_6
+		}
+		else_if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 3 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_5
+		}
+		else_if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 2 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_4
+		}
+		else_if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 1 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_3
+		}
+		else = {
+			custom_tooltip = SR_FUND_UP_PAST_CAP_2
+		}
 	}
 }
 
@@ -1341,7 +1391,8 @@ sr_record_probe_result = {
 #   - sr_commercial_space_dividend (country): from the variables
 #     sr_space_race_concluded reads, by sr_refresh_space_dividend, which
 #     re-applies it every month anyway (end of this file).
-#   - sr_space_program_cost / sr_funding_progress (entry): from sr_funding_<m>
+#   - sr_space_program_cost / sr_funding_progress / sr_funding_throughput
+#     (entry): from sr_funding_<m>
 #     and the approach variables, by sr_recalculate_cost, which every
 #     `immediate` runs and the monthly pulse runs when an entry lacks one
 #     (sr_cost_modifiers_missing). The `immediate` alone was not enough: an
