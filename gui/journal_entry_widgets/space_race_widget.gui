@@ -6069,7 +6069,14 @@ types space_race_widget_types
 							blockoverride "third_line" {
 								te_banking_ov_word = {
 									position = { 78 46 }
+									visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' )]"
 									text = "je_space_race_widget_ovc_window_fig"
+								}
+								# Stage 0 is the Moon, which needs no window.
+								te_banking_ov_word = {
+									position = { 78 46 }
+									visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ) )]"
+									text = "je_space_race_widget_ovc_window_fig_moon"
 								}
 							}
 						}

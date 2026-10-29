@@ -563,6 +563,17 @@ class ColoniesTest(unittest.TestCase):
                     self.assertIn(f"ScriptValue('{term}')", drift)
                 self.assertIn("[concept_sr_colony_autonomy]", drift)
 
+    def test_next_window_reads_the_moon_at_stage_0(self):
+        """Lunar colonization 2b: at stage 0 the Next Window cell's third line
+        names the Moon, which needs no window, not 'stage 0 of 5'."""
+        cell = _enclosing(self.gui, 'tooltip = "je_space_race_widget_ovc_window_tt"', "te_banking_ov_cell = {")
+        third = cell[cell.index('blockoverride "third_line"'):]
+        stage = "GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' )"
+        self.assertEqual(re.findall(r'visible = "\[(.*)\]"\n\s*text = "(\w+)"', third),
+                         [(stage, "je_space_race_widget_ovc_window_fig"),
+                          (f"Not( {stage} )", "je_space_race_widget_ovc_window_fig_moon")])
+        self.assertEqual(self.loc["je_space_race_widget_ovc_window_fig_moon"], "the Moon")
+
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_the_space_race_works(self):

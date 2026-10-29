@@ -1454,6 +1454,7 @@
  je_space_race_widget_ovc_modules_word_queued:0 "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count')|0]#! queued"
  je_space_race_widget_ovc_window_cap:0 "Next Window"
  je_space_race_widget_ovc_window_fig:0 "stage [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage')|0] of 5"
+ je_space_race_widget_ovc_window_fig_moon:0 "the Moon"
  je_space_race_widget_ovc_window_tt:0 "#header Next Windows#!\nEach world's next [concept_sr_launch_window] for our chemical rockets:\n[GetScriptedGui('sr_launch_windows_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
  je_space_race_widget_ovc_window_word_any:0 "Any month"
  je_space_race_widget_ovc_window_word_in:0 "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_disp_next')|0]#! months"
