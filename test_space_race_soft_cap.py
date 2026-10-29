@@ -179,8 +179,8 @@ def _ctx(milestone, level, cap, billed=True):
     if billed:
         ctx["vars"][f"sr_active_{milestone}"] = 1
         if milestone == "solar_colonization":
-            ctx["vars"]["sr_completed_moon_base"] = 1
-            ctx["vars"]["sr_completed_mars_landing"] = 1
+            # sr_solar_colonization_qualified: the Moon Landing (lunar design § 4)
+            ctx["vars"]["sr_completed_moon_landing"] = 1
             ctx["solar_method"] = True
     return ctx
 

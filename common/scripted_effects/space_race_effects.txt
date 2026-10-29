@@ -902,7 +902,7 @@ sr_lunar_colony_founded = {
 }
 
 # Solar System Colonization's founding draw (sr_establish_colony_effect) and stage
-# check (sr_check_colony_stage_effect) are generated from one table of the 34
+# check (sr_check_colony_stage_effect) are generated from one table of the 40
 # worlds: common/scripted_effects/sr_sites_generated.txt, from
 # scripts/generators/gen_solar_sites.py.
 

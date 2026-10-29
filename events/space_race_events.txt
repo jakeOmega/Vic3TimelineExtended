@@ -1269,7 +1269,9 @@ space_race_events.35 = {
 	}
 }
 
-# Event 36: Moon Base - Helium-3 Discovery
+# Event 36: the Moon - Helium-3 Discovery
+# The Moon Base's arm is the first lunar colony's now: Solar System Colonization
+# before it founds one (sr_colonizing_moon_first; the Moon Base retired 2026-10-29).
 space_race_events.36 = {
 	type = country_event
 	placement = root
@@ -1286,8 +1288,8 @@ space_race_events.36 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_variable = sr_active_moon_base
-		var:sr_progress_moon_base >= 60
+		sr_colonizing_moon_first = yes
+		var:sr_progress_solar_colonization >= 60
 		NOT = { has_modifier = sr_mission_failure }
 	}
 
@@ -1301,7 +1303,7 @@ space_race_events.36 = {
 		ai_chance = { base = 5 }
 		# Begin extraction operations immediately
 		custom_tooltip = SR_PROGRESS_ADD_2_MONTHS_TT
-		sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 2 }
+		sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 2 }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
 
@@ -1310,7 +1312,7 @@ space_race_events.36 = {
 		ai_chance = { base = 3 }
 		# Study deposits first - ensure sustainable extraction
 		custom_tooltip = SR_PROGRESS_ADD_1_MONTHS_TT
-		sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 1 }
+		sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 1 }
 		add_loyalists = { value = medium_radicals }
 	}
 
@@ -1319,7 +1321,7 @@ space_race_events.36 = {
 		ai_chance = { base = 2 }
 		# License extraction rights to private industry
 		custom_tooltip = SR_PROGRESS_ADD_2_MONTHS_TT
-		sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 2 }
+		sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 2 }
 		add_loyalists = { value = small_radicals strata = upper }
 	}
 }
@@ -1375,6 +1377,8 @@ space_race_events.37 = {
 ##############################################
 
 # Event 40: Radiation Shielding Problem (orbital or moon)
+# The Moon Base's arm is the first lunar colony's now: Solar System Colonization
+# before it founds one (sr_colonizing_moon_first; the Moon Base retired 2026-10-29).
 # The Van Allen belts and solar particle events are a real engineering constraint
 space_race_events.40 = {
 	type = country_event
@@ -1395,7 +1399,7 @@ space_race_events.40 = {
 		OR = {
 			has_variable = sr_active_orbital
 			has_variable = sr_active_moon_landing
-			has_variable = sr_active_moon_base
+			sr_colonizing_moon_first = yes
 		}
 		OR = {
 			AND = {
@@ -1407,8 +1411,8 @@ space_race_events.40 = {
 				var:sr_progress_moon_landing >= 25
 			}
 			AND = {
-				has_variable = sr_active_moon_base
-				var:sr_progress_moon_base >= 25
+				sr_colonizing_moon_first = yes
+				var:sr_progress_solar_colonization >= 25
 			}
 		}
 		NOT = { has_modifier = sr_mission_failure }
@@ -1433,8 +1437,8 @@ space_race_events.40 = {
 			sr_gain_progress_months = { MILESTONE = moon_landing MONTHS = 1 }
 		}
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 1 }
+			limit = { sr_colonizing_moon_first = yes }
+			sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 1 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -1453,8 +1457,8 @@ space_race_events.40 = {
 			sr_gain_progress_months = { MILESTONE = moon_landing MONTHS = 2 }
 		}
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 2 }
+			limit = { sr_colonizing_moon_first = yes }
+			sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 2 }
 		}
 	}
 
@@ -1472,14 +1476,16 @@ space_race_events.40 = {
 			sr_gain_progress_months = { MILESTONE = moon_landing MONTHS = 3 }
 		}
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 3 }
+			limit = { sr_colonizing_moon_first = yes }
+			sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 3 }
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
 	}
 }
 
-# Event 41: Gravity Well Economics (moon base/mars)
+# Event 41: Gravity Well Economics (the Moon/Mars)
+# The Moon Base's arm is the first lunar colony's now: Solar System Colonization
+# before it founds one (sr_colonizing_moon_first; the Moon Base retired 2026-10-29).
 # Delta-v budgets and launch costs: real hard sf concerns
 space_race_events.41 = {
 	type = country_event
@@ -1498,13 +1504,13 @@ space_race_events.41 = {
 
 	trigger = {
 		OR = {
-			has_variable = sr_active_moon_base
+			sr_colonizing_moon_first = yes
 			has_variable = sr_active_mars_landing
 		}
 		OR = {
 			AND = {
-				has_variable = sr_active_moon_base
-				var:sr_progress_moon_base >= 40
+				sr_colonizing_moon_first = yes
+				var:sr_progress_solar_colonization >= 40
 			}
 			AND = {
 				has_variable = sr_active_mars_landing
@@ -1525,8 +1531,8 @@ space_race_events.41 = {
 		# Invest in electromagnetic launch catapult
 		custom_tooltip = SR_PROGRESS_ADD_2_MONTHS_TT
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 2 }
+			limit = { sr_colonizing_moon_first = yes }
+			sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 2 }
 		}
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
@@ -1562,8 +1568,8 @@ space_race_events.41 = {
 			}
 			custom_tooltip = SR_PROGRESS_ADD_3_MONTHS_TT
 			if = {
-				limit = { has_variable = sr_active_moon_base }
-				sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 3 }
+				limit = { sr_colonizing_moon_first = yes }
+				sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 3 }
 			}
 			if = {
 				limit = { has_variable = sr_active_mars_landing }
@@ -1576,8 +1582,8 @@ space_race_events.41 = {
 		else = {
 			custom_tooltip = SR_PROGRESS_ADD_1_MONTHS_TT
 			if = {
-				limit = { has_variable = sr_active_moon_base }
-				sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 1 }
+				limit = { sr_colonizing_moon_first = yes }
+				sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 1 }
 			}
 			if = {
 				limit = { has_variable = sr_active_mars_landing }
@@ -1595,8 +1601,8 @@ space_race_events.41 = {
 		# Conventional chemical rockets: reliable but expensive per kg
 		custom_tooltip = SR_PROGRESS_ADD_1_MONTHS_TT
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 1 }
+			limit = { sr_colonizing_moon_first = yes }
+			sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 1 }
 		}
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
@@ -1661,7 +1667,9 @@ space_race_events.42 = {
 	}
 }
 
-# Event 43: Closed-Loop Life Support Challenge (moon base/mars)
+# Event 43: Closed-Loop Life Support Challenge (the Moon/Mars)
+# The Moon Base's arm is the first lunar colony's now: Solar System Colonization
+# before it founds one (sr_colonizing_moon_first; the Moon Base retired 2026-10-29).
 # Bioregenerative ECLSS: growing air and water instead of importing it
 space_race_events.43 = {
 	type = country_event
@@ -1680,13 +1688,13 @@ space_race_events.43 = {
 
 	trigger = {
 		OR = {
-			has_variable = sr_active_moon_base
+			sr_colonizing_moon_first = yes
 			has_variable = sr_active_mars_landing
 		}
 		OR = {
 			AND = {
-				has_variable = sr_active_moon_base
-				var:sr_progress_moon_base >= 35
+				sr_colonizing_moon_first = yes
+				var:sr_progress_solar_colonization >= 35
 			}
 			AND = {
 				has_variable = sr_active_mars_landing
@@ -1707,8 +1715,8 @@ space_race_events.43 = {
 		# Full bioregenerative system - algae reactors and plant bays
 		custom_tooltip = SR_PROGRESS_ADD_2_MONTHS_TT
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 2 }
+			limit = { sr_colonizing_moon_first = yes }
+			sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 2 }
 		}
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
@@ -1723,8 +1731,8 @@ space_race_events.43 = {
 		# Hybrid chemical-biological - proven fallback for each subsystem
 		custom_tooltip = SR_PROGRESS_ADD_1_MONTHS_TT
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 1 }
+			limit = { sr_colonizing_moon_first = yes }
+			sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 1 }
 		}
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
@@ -1739,8 +1747,8 @@ space_race_events.43 = {
 		# Import everything from Earth - simpler but supply-chain dependent
 		custom_tooltip = SR_PROGRESS_ADD_1_MONTHS_TT
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 1 }
+			limit = { sr_colonizing_moon_first = yes }
+			sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 1 }
 		}
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
@@ -1775,10 +1783,6 @@ space_race_events.44 = {
 				var:sr_progress_moon_landing >= 15
 			}
 			AND = {
-				has_variable = sr_active_moon_base
-				var:sr_progress_moon_base >= 15
-			}
-			AND = {
 				has_variable = sr_active_mars_landing
 				var:sr_progress_mars_landing >= 15
 			}
@@ -1791,7 +1795,6 @@ space_race_events.44 = {
 		# More likely during later milestones (more exposure)
 		OR = {
 			has_variable = sr_active_moon_landing
-			has_variable = sr_active_moon_base
 			has_variable = sr_active_mars_landing
 			sr_solar_colonization_running = yes
 		}
@@ -1810,10 +1813,6 @@ space_race_events.44 = {
 		if = {
 			limit = { has_variable = sr_active_moon_landing }
 			sr_lose_progress_months = { MILESTONE = moon_landing MONTHS = 1 }
-		}
-		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_lose_progress_months = { MILESTONE = moon_base MONTHS = 1 }
 		}
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
@@ -1838,10 +1837,6 @@ space_race_events.44 = {
 					sr_gain_progress_months = { MILESTONE = moon_landing MONTHS = 1 }
 				}
 				if = {
-					limit = { has_variable = sr_active_moon_base }
-					sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 1 }
-				}
-				if = {
 					limit = { has_variable = sr_active_mars_landing }
 					sr_gain_progress_months = { MILESTONE = mars_landing MONTHS = 1 }
 				}
@@ -1859,10 +1854,6 @@ space_race_events.44 = {
 				if = {
 					limit = { has_variable = sr_active_moon_landing }
 					sr_lose_progress_months = { MILESTONE = moon_landing MONTHS = 3 }
-				}
-				if = {
-					limit = { has_variable = sr_active_moon_base }
-					sr_lose_progress_months = { MILESTONE = moon_base MONTHS = 3 }
 				}
 				if = {
 					limit = { has_variable = sr_active_mars_landing }
@@ -1937,6 +1928,8 @@ space_race_events.45 = {
 }
 
 # Event 46: In-Situ Resource Utilization Test (Moon/Mars)
+# The Moon Base's arm is the first lunar colony's now: Solar System Colonization
+# before it founds one (sr_colonizing_moon_first; the Moon Base retired 2026-10-29).
 # Manufacturing propellant and building materials from local regolith
 space_race_events.46 = {
 	type = country_event
@@ -1955,13 +1948,13 @@ space_race_events.46 = {
 
 	trigger = {
 		OR = {
-			has_variable = sr_active_moon_base
+			sr_colonizing_moon_first = yes
 			has_variable = sr_active_mars_landing
 		}
 		OR = {
 			AND = {
-				has_variable = sr_active_moon_base
-				var:sr_progress_moon_base >= 60
+				sr_colonizing_moon_first = yes
+				var:sr_progress_solar_colonization >= 60
 			}
 			AND = {
 				has_variable = sr_active_mars_landing
@@ -1982,8 +1975,8 @@ space_race_events.46 = {
 		# Extract oxygen and water from regolith: proven chemistry
 		custom_tooltip = SR_PROGRESS_ADD_2_MONTHS_TT
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 2 }
+			limit = { sr_colonizing_moon_first = yes }
+			sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 2 }
 		}
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
@@ -2000,8 +1993,8 @@ space_race_events.46 = {
 			70 = {
 				custom_tooltip = SR_PROGRESS_ADD_3_MONTHS_TT
 				if = {
-					limit = { has_variable = sr_active_moon_base }
-					sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 3 }
+					limit = { sr_colonizing_moon_first = yes }
+					sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 3 }
 				}
 				if = {
 					limit = { has_variable = sr_active_mars_landing }
@@ -2014,8 +2007,8 @@ space_race_events.46 = {
 			30 = {
 				custom_tooltip = SR_PROGRESS_ADD_1_MONTHS_TT
 				if = {
-					limit = { has_variable = sr_active_moon_base }
-					sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 1 }
+					limit = { sr_colonizing_moon_first = yes }
+					sr_gain_progress_months = { MILESTONE = solar_colonization MONTHS = 1 }
 				}
 				if = {
 					limit = { has_variable = sr_active_mars_landing }
@@ -2050,7 +2043,6 @@ space_race_events.47 = {
 		OR = {
 			has_variable = sr_active_orbital
 			has_variable = sr_active_probe
-			has_variable = sr_active_moon_base
 		}
 		OR = {
 			AND = {
@@ -2060,10 +2052,6 @@ space_race_events.47 = {
 			AND = {
 				has_variable = sr_active_probe
 				var:sr_progress_probe >= 20
-			}
-			AND = {
-				has_variable = sr_active_moon_base
-				var:sr_progress_moon_base >= 20
 			}
 		}
 		NOT = { has_modifier = sr_mission_failure }
@@ -2087,10 +2075,6 @@ space_race_events.47 = {
 			limit = { has_variable = sr_active_probe }
 			sr_lose_progress_months = { MILESTONE = probe MONTHS = 1 }
 		}
-		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_lose_progress_months = { MILESTONE = moon_base MONTHS = 1 }
-		}
 	}
 
 	option = {
@@ -2105,10 +2089,6 @@ space_race_events.47 = {
 		if = {
 			limit = { has_variable = sr_active_probe }
 			sr_lose_progress_months = { MILESTONE = probe MONTHS = 2 }
-		}
-		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_lose_progress_months = { MILESTONE = moon_base MONTHS = 2 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2241,10 +2221,6 @@ space_race_events.49 = {
 				var:sr_progress_probe >= 20
 			}
 			AND = {
-				has_variable = sr_active_moon_base
-				var:sr_progress_moon_base >= 20
-			}
-			AND = {
 				has_variable = sr_active_mars_landing
 				var:sr_progress_mars_landing >= 20
 			}
@@ -2323,10 +2299,6 @@ space_race_events.50 = {
 			AND = {
 				has_variable = sr_active_probe
 				var:sr_progress_probe >= 15
-			}
-			AND = {
-				has_variable = sr_active_moon_base
-				var:sr_progress_moon_base >= 15
 			}
 			AND = {
 				has_variable = sr_active_mars_landing
@@ -2735,15 +2707,10 @@ space_race_events.55 = {
 			is_building_type = building_space_elevator
 		}
 		OR = {
-			has_variable = sr_active_moon_base
 			has_variable = sr_active_mars_landing
 			sr_solar_colonization_running = yes
 		}
 		OR = {
-			AND = {
-				has_variable = sr_active_moon_base
-				var:sr_progress_moon_base >= 30
-			}
 			AND = {
 				has_variable = sr_active_mars_landing
 				var:sr_progress_mars_landing >= 30
@@ -2767,10 +2734,6 @@ space_race_events.55 = {
 		# Route all mission cargo through the elevator - massive cost reduction
 		custom_tooltip = SR_PROGRESS_ADD_2_MONTHS_TT
 		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 2 }
-		}
-		if = {
 			limit = { has_variable = sr_active_mars_landing }
 			sr_gain_progress_months = { MILESTONE = mars_landing MONTHS = 2 }
 		}
@@ -2786,10 +2749,6 @@ space_race_events.55 = {
 		ai_chance = { base = 3 }
 		# Use elevator for bulk cargo, rockets for time-critical payloads
 		custom_tooltip = SR_PROGRESS_ADD_1_MONTHS_TT
-		if = {
-			limit = { has_variable = sr_active_moon_base }
-			sr_gain_progress_months = { MILESTONE = moon_base MONTHS = 1 }
-		}
 		if = {
 			limit = { has_variable = sr_active_mars_landing }
 			sr_gain_progress_months = { MILESTONE = mars_landing MONTHS = 1 }
@@ -4313,8 +4272,12 @@ space_race_events.81 = {
 	}
 }
 
-# Event 82: Moon Base Purpose Choice
-# REVIEWED 2026-05-06: scientific's pure-positive choice modifier vs industrial/military pure-negative is by design — the costlier picks earn themed post-completion rewards (industrial: space-mine+launch capacity; military: mil_tech+influence+mil_goods_cost) that the audit can't see at choice time.
+# Event 82: Moon Base Purpose Choice, retired 2026-10-29 with the Moon Base
+# (lunar colonization design § 7). The entry's `immediate` can no longer run
+# (its `possible` is always false), but a save from before may hold a copy
+# queued from it; that copy plays its one option, which does nothing. The
+# sr_moon_base_<purpose> answers already recorded stand: the old-save migration
+# reads them to choose the country's lunar world (sr_lunar_migrate_country).
 space_race_events.82 = {
 	type = country_event
 	placement = root
@@ -4332,54 +4295,10 @@ space_race_events.82 = {
 	# Once per milestone. `immediate` asks only while unanswered; this re-check
 	# covers a second question queued before the first was answered.
 	trigger = { NOT = { sr_moon_base_choice_made = yes } }
-	immediate = { }
 
-	# Scientific research station
 	option = {
 		name = space_race_events.82.a
 		default_option = yes
-		ai_chance = {
-			base = 5
-			modifier = {
-				trigger = { has_variable = sr_safe_moon_base }
-				add = 3
-			}
-		}
-		set_variable = { name = sr_moon_base_scientific value = yes }
-		je:je_space_race_moon_base = { add_modifier = sr_choice_moon_base_scientific }
-		custom_tooltip = {
-			text = "SR_MOON_BASE_SCIENTIFIC_CHOSEN_TT"
-		}
-	}
-
-	# Industrial mining operation
-	option = {
-		name = space_race_events.82.b
-		ai_chance = {
-			base = 4
-		}
-		set_variable = { name = sr_moon_base_industrial value = yes }
-		je:je_space_race_moon_base = { add_modifier = sr_choice_moon_base_industrial }
-		custom_tooltip = {
-			text = "SR_MOON_BASE_INDUSTRIAL_CHOSEN_TT"
-		}
-	}
-
-	# Military installation
-	option = {
-		name = space_race_events.82.c
-		ai_chance = {
-			base = 2
-			modifier = {
-				trigger = { has_variable = sr_ambitious_moon_base }
-				add = 3
-			}
-		}
-		set_variable = { name = sr_moon_base_military value = yes }
-		je:je_space_race_moon_base = { add_modifier = sr_choice_moon_base_military }
-		custom_tooltip = {
-			text = "SR_MOON_BASE_MILITARY_CHOSEN_TT"
-		}
 	}
 }
 

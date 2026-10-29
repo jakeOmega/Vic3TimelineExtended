@@ -106,5 +106,51 @@ class RunningMilestoneTests(unittest.TestCase):
             self.assertIn("sr_has_running_milestone = yes", trigger, f"space_race_events.{n}")
 
 
+
+class MoonBaseRetiredTests(unittest.TestCase):
+    """The Moon Base milestone is retired (lunar colonization design § 7): the
+    first lunar colony takes its place. Its entry stays defined, its purpose
+    event keeps one option that does nothing, and the flavor events that ran
+    while it did narrate colonization before a first lunar colony instead."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.je = _block(_read(os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")),
+                        "je_space_race_moon_base")
+        cls.events = _read(os.path.join(REPO, "events", "space_race_events.txt"))
+
+    def test_the_entry_is_never_shown_possible_completed_or_failed(self):
+        for name in ("is_shown_when_inactive", "possible", "complete", "fail"):
+            with self.subTest(block=name):
+                self.assertEqual(_block(self.je, name).split(), ["always", "=", "no"])
+        # an old save's open copy can still drop out, and the cleanup follow it
+        self.assertIn("can_deactivate = yes", self.je)
+
+    def test_the_purpose_event_does_nothing(self):
+        event = _block(self.events, "space_race_events.82")
+        self.assertEqual(len(re.findall(r"\boption\s*=\s*\{", event)), 1)
+        option = _block(event, "option")
+        # A lone option is an acknowledgement: empty_effect_audit doesn't flag it.
+        self.assertEqual(sorted(re.findall(r"(\w+)\s*=", option)), ["default_option", "name"])
+
+    def test_no_event_waits_on_the_moon_base(self):
+        # .20's notice (MILESTONE = moon_base: the first lunar colony's) and .76's
+        # program loss read their own markers, not these.
+        for name in ("sr_active_moon_base", "sr_progress_moon_base"):
+            self.assertNotIn(name, self.events)
+        self.assertNotRegex(self.events, r"_progress_months\s*=\s*\{\s*MILESTONE\s*=\s*moon_base")
+
+    def test_the_flavor_events_narrate_the_moon_first(self):
+        moon_first = _block(_read(os.path.join(REPO, "common", "scripted_triggers",
+                                               "space_race_triggers.txt")), "sr_colonizing_moon_first")
+        self.assertEqual(moon_first.split(), ["sr_solar_colonization_running", "=", "yes",
+                                              "NOT", "=", "{", "has_variable", "=", "sr_completed_moon_base", "}",
+                                              "sr_sites_lunar_open", "=", "yes"])
+        for n in ("36", "40", "41", "43", "46"):
+            event = _block(self.events, f"space_race_events.{n}")
+            with self.subTest(event=n):
+                self.assertIn("sr_colonizing_moon_first = yes", _block(event, "trigger"))
+                self.assertIn("MILESTONE = solar_colonization", event)
+
 if __name__ == "__main__":
     unittest.main()

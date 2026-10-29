@@ -358,11 +358,24 @@ sr_space_race_concluded = {
 	NOT = { sr_has_running_milestone = yes }
 }
 
-# We have really claimed at least one colony (sr_establish_colony_effect counts
-# only real claims). The same test society_technology_events.18 uses.
+# We hold at least one colony: every world held, whether founded, given by
+# treaty, inherited, seized or migrated (sr_colony_count is sr_sites_held_count,
+# set by each world's sync). The same test society_technology_events.18 uses.
+# What counts as founding the first lunar colony is sr_lunar_colony_founded's
+# call sites, not this.
 sr_has_space_colony = {
 	has_variable = sr_colony_count
 	var:sr_colony_count > 0
+}
+
+# Solar System Colonization is running and has founded no lunar colony yet, with
+# a lunar world still free: the phase the retired Moon Base's flavor events
+# (space_race_events.36, .40, .41, .43, .46) narrate now (lunar colonization
+# design § 7). Country scope.
+sr_colonizing_moon_first = {
+	sr_solar_colonization_running = yes
+	NOT = { has_variable = sr_completed_moon_base }
+	sr_sites_lunar_open = yes
 }
 
 # The milestone's choice event has been answered: the answer is one of these

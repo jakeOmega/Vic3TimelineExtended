@@ -465,6 +465,7 @@ sr_prog_probe = {
 	}
 }
 
+# The Lunar Colony icon: no "under way" state (lunar colonization design § 3.6).
 sr_prog_moon_base = {
 	type = country
 	random_valid = no
@@ -476,10 +477,6 @@ sr_prog_moon_base = {
 	text = {
 		trigger = { has_variable = sr_completed_moon_base }
 		localization_key = sr_prog_state_done
-	}
-	text = {
-		trigger = { has_variable = sr_active_moon_base }
-		localization_key = sr_prog_state_running
 	}
 	text = {
 		trigger = { has_global_variable = sr_global_first_moon_base }
@@ -661,10 +658,6 @@ sr_power_prog_moon_base = {
 	text = {
 		trigger = { has_variable = sr_completed_moon_base }
 		localization_key = sr_prog_state_done
-	}
-	text = {
-		trigger = { has_variable = sr_active_moon_base }
-		localization_key = sr_prog_state_running
 	}
 	text = {
 		localization_key = sr_prog_state_open

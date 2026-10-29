@@ -1045,15 +1045,19 @@ class DisplayValuesTest(unittest.TestCase):
             self.assertIn("max = 4", body)
 
     def test_programme_codes_follow_the_tooltip_order(self):
-        """first (4) → done (3) → running (1) → taken (2), as sr_prog_<m> tests."""
+        """first (4) → done (3) → running (1) → taken (2), as sr_prog_<m> tests.
+        The Moon Base's icon is the first lunar colony's (lunar colonization
+        design § 3.6): no separate bar, so no "under way" state."""
         custom = _read(CUSTOM_LOC)
         for m in RACING:
             with self.subTest(milestone=m):
                 body = _block(self.values, f"sr_disp_prog_{m}")
                 tests = re.findall(r"(has_(?:global_)?variable = (\w+)) \} value = (\d)", body)
-                self.assertEqual([(v, int(c)) for _, v, c in tests],
-                                 [(f"sr_was_first_{m}", 4), (f"sr_completed_{m}", 3),
-                                  (f"sr_active_{m}", 1), (f"sr_global_first_{m}", 2)])
+                expected = [(f"sr_was_first_{m}", 4), (f"sr_completed_{m}", 3),
+                            (f"sr_active_{m}", 1), (f"sr_global_first_{m}", 2)]
+                if m == "moon_base":
+                    expected.remove(("sr_active_moon_base", 1))
+                self.assertEqual([(v, int(c)) for _, v, c in tests], expected)
                 loc = _block(custom, f"sr_prog_{m}")
                 order = re.findall(r"has_(?:global_)?variable = (\w+)", loc)
                 self.assertEqual(order, [v for _, v, _ in tests])

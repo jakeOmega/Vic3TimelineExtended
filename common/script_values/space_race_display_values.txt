@@ -194,11 +194,13 @@ sr_disp_prog_probe = {
 	else_if = { limit = { has_variable = sr_active_probe } value = 1 }
 	else_if = { limit = { has_global_variable = sr_global_first_probe } value = 2 }
 }
+# The Lunar Colony icon (lunar colonization design § 3.6): the Moon Base's
+# record, which the first lunar colony sets, and no "under way" state, since
+# there is no separate bar.
 sr_disp_prog_moon_base = {
 	value = 0
 	if = { limit = { has_variable = sr_was_first_moon_base } value = 4 }
 	else_if = { limit = { has_variable = sr_completed_moon_base } value = 3 }
-	else_if = { limit = { has_variable = sr_active_moon_base } value = 1 }
 	else_if = { limit = { has_global_variable = sr_global_first_moon_base } value = 2 }
 }
 sr_disp_prog_mars_landing = {
