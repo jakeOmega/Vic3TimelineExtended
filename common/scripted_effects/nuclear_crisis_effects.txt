@@ -1763,6 +1763,25 @@ nd_crisis_act_yield = {
 	}
 }
 
+# Issuer scope, scope:nd_target the yielder; $CODE$ = the dispute (7–10).
+# Once a game per code, a hidden check a day later (nuclear_crisis.26) says
+# whether the dispute still holds after its concession: TE_SELF_CHECK OK or
+# BROKEN nd_concession_$CODE$. The yield calls it only when the dispute held,
+# before the concession runs, so a yield with nothing to remove is never
+# counted as OK. The pattern of nd_suez_goals (nuclear_crisis.25).
+nd_crisis_concession_check_schedule = {
+	if = {
+		limit = {
+			exists = scope:nd_target
+			NOT = { has_global_variable = nd_cc_done_$CODE$ }
+		}
+		set_global_variable = nd_cc_done_$CODE$
+		set_variable = { name = nd_cc_target value = scope:nd_target days = 10 }
+		set_variable = { name = nd_cc_code value = $CODE$ days = 10 }
+		trigger_event = { id = nuclear_crisis.26 days = 1 }
+	}
+}
+
 # Target scope: the concession this crisis demands, in one line.
 nd_crisis_yield_lines = {
 	if = {

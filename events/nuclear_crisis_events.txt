@@ -1498,6 +1498,25 @@ nuclear_crisis.25 = {
 	}
 }
 
+# ---- .26 Hidden: a concession's self-check ------------------------------------
+# A day after a yield over a dispute 7–10 (nd_crisis_concession_check_schedule,
+# once a game per code): does the dispute still hold against the yielder? Each
+# code adds its branch; a code with none logs nothing.
+nuclear_crisis.26 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = nd_cc_target
+	}
+
+	immediate = {
+		var:nd_cc_target = { save_scope_as = nd_cc_target }
+		remove_variable = nd_cc_target
+		remove_variable = nd_cc_code
+	}
+}
+
 # ---- .99 Hidden: an AI party reviews its posture --------------------------------
 # Fired by nd_crisis_ai_review so that the posture effects run with this
 # country as ROOT (nuclear_deterrence_effects.txt, "ROOT").
