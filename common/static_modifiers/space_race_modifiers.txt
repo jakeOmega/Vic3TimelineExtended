@@ -12,10 +12,18 @@ sr_temporary_safety_review = {
 	country_space_race_progress_mult = -0.1
 	country_space_race_risk_mult = -0.25
 }
-# ======= Space Race - Funding Progress Modifier (applied per-JE, multiplier = funding level)
+# ======= Space Race - Funding Modifiers (applied per-JE by sr_apply_milestone_cost_modifiers_base)
+# The pace: multiplier = sr_funding_<m>_effective, the level up to the cap plus
+# the six-step ladder past it (1/2, 1/3, ... 1/7 of a level; lunar colonization
+# design § 5.1). The throughput: multiplier = sr_funding_<m>_level, every level
+# in full, past the cap too. Split 2026-10-29: one modifier carried both, so the
+# pace and the throughput could not be scaled apart.
 sr_funding_progress = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_space_race_progress_add = 0.5
+}
+sr_funding_throughput = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_program_throughput_add = 0.25
 }
 

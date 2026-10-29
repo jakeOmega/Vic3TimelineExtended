@@ -408,16 +408,50 @@ The Solar System world hovers listed both specializations' effects in one run, s
 
 1. **Two labeled blocks.** Hover 4 Vesta in the Solar System list: "It offers two specializations:", then Vesta Mining Operations with Advanced Materials output and Extraplanetary Base throughput indented under it, then Vesta Science Outpost with research speed and space race progress under it. The transit line and the window line after them are back at the margin. If the effects are not indented, or the indent runs on into the transit line, write each block as a bold name, `\n`, then the `GetDesc` with no indent (the UN terms' form).
 
+## Funding past the cap (lunar colonization design § 5.1, 2026-10-29)
+
+A milestone's funding may go six levels past the cap, each worth less pace than the one before (1/2 of a level, then
+1/3, down to 1/7); every level still costs in full and adds its full +25% Space Program throughput. The pace and the
+throughput are two modifiers on the entry now, `sr_funding_progress` and `sr_funding_throughput`. No self-check: the
+engine's modifier sum can't single out one source, and the panel shows the result. `event te_debug_space_race.1`
+reaches a milestone.
+
+1. **The stepper.** Fund a running milestone to the cap: the figure reads as before ("7 / 7"). Press + once more: it
+   reads "8 / 7 (+0.5)", then "9 / 7 (+0.8)", and at six past the cap "13 / 7 (+1.6)" with + greyed. Nothing ends in
+   "..." (the cell is 140 wide now) and the minus and plus buttons sit beside the figure.
+2. **The plus button's tooltip.** At the cap it ends with "Past the cap: +1/2 of a level of pace, at full cost"; one
+   level past, "+1/3"; at five past, "+1/7". Below the cap that line is absent. At six past, the button is greyed and
+   its first line reads "Funding is not yet six levels past the cap" with a cross.
+3. **The pace.** Hover the headline's "+N/mo": the Funding line reads "N levels within the cap, X effective levels past
+   it", summed over the running milestones. In the "Added each month" breakdown the Funding Progress Bonus of an entry
+   funded at 9 with a cap of 7 is +3.9 (7.83 × 0.5), not +4.5, and the added progress rises by 0.25 and then 0.17 for the first
+   two levels past the cap.
+4. **The throughput.** The Space Program's throughput breakdown shows Funding Throughput Bonus at the full +25% a level,
+   past the cap too (+225% at 9), and the Launch Capacity bill rises with it.
+5. **A cap that moves.** Fund a milestone to the cap with Advanced Research tier V, then lose the principle (leave the
+   bloc, or change the principle): the level stays and the figure reads "N / N−1 (+0.5)" at once. The pace follows at
+   the next monthly pulse, which sees the cap differ from the one the costs were computed with (`sr_cost_funding_cap`)
+   and recalculates: that entry's Funding Progress Bonus drops by 0.25 (the top level now counts as half a level). The
+   other way, research a cap technology while funded at 9 with a cap of 7: "9 / 7 (+0.8)" reads "9 / 8 (+0.5)" at
+   once, and within a month the bonus rises from +3.92 to +4.25. Until that pulse the pace hover's
+   Funding line (live values) and its "Added each month" breakdown (the modifier) can disagree by that much; after it
+   they agree. If they still disagree a month later, `sr_cost_funding_cap` isn't being compared or set.
+6. **The AI.** In an observer run, no AI's stepper shows "(+…)": the AI stops at the cap. One left past it by a falling
+   cap funds down to the cap within a few weeks.
+7. **An old save.** Load a save from before the split with a running milestone: within a month its entry carries both
+   Funding Progress Bonus and Funding Throughput Bonus, and the Space Program's throughput is what it was before the
+   update.
+
 ## Lunar colonization, build 1: technologies and the era-10 base (2026-10-29)
 
 The first build of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md` (§§ 5, 6): three technologies, the colonization method and Orbital Assembly on Cislunar Infrastructure, the Extraplanetary Base on In-Situ Resource Utilization with Regolith Processing. Colonization still needs the Moon Base and the Mars Landing until the second build. No self-check: the one engine question (item 6) shows in the game's own behaviour.
 
 1. **The tree.** Cislunar Infrastructure (era 10, military) follows Reusable Rocketry; In-Situ Resource Utilization (era 10, military) follows Reusable Rocketry; Nuclear Thermal Propulsion (era 11, military) follows Cislunar Infrastructure; Asteroid Mining now follows In-Situ Resource Utilization and Directed Energy Weapons. Each shows its space race funding cap line (+2, +1, +1) and a placeholder icon (Reusable Rocketry's, Asteroid Mining's, Fusion Power's).
 2. **The method.** With Cislunar Infrastructure, the Space Program's Solar Colonization method and Module Fabrication's Orbital Assembly unlock; Solar Colonization reads 10,000 Launch Capacity a week at full staff. Begin Solar Colonization shows with Cislunar Infrastructure and is still possible only after the Moon Base and the Mars Landing.
-3. **Switching early by hand.** Before the Moon Base and the Mars Landing, switch the method in the building panel: the bill rises from 5,000 to 10,000, the Moon Base and the Mars Landing keep running (the method carries the Mars Mission's), and Solar System Colonization does not start. This is the intended intermediate state (a method has no `possible`), not a bug.
+3. **Switching early by hand.** Before the Moon Base and the Mars Landing, switch the method in the building panel: the bill rises from 5,000 to 10,000, the Moon Base and the Mars Landing keep running (the method carries the Mars Mission's), and Solar System Colonization does not start. This is the intended intermediate state (a method has no `possible`), not a bug. Watch an AI too: the method group picks the most productive method, so an AI with Cislunar Infrastructure and no Moon Base may switch on its own and pay 10,000 a week for nothing. The second build ends this, since the method then opens colonization itself.
 4. **The cost factor.** Solar System Colonization's Space Program Cost reads ×8 for a country with the Mars Landing (15 innovation × 8 a funding level); a country holding a colony by treaty without the Mars Landing pays ×5, and its cost re-posts when its Mars Landing completes.
 5. **The era-10 base.** With In-Situ Resource Utilization, an Extraplanetary Base can be built and starts on Regolith Processing (15 Electronic Components, 15 Wireless Telecommunication Gear, 5 Digital Access and 60 Launch Capacity for 175 Structural Metals, 95 Tech-Critical Metals and 50 Glass and Plastics a level); the Asteroid Mine method waits for Asteroid Mining. Under Simple or Full Colonies, the Modules view reads room 0 until Asteroid Mining or a colony, and a level built then works at −50%; Asteroid Mining adds the near-Earth 10. AI governments and private investors don't build a base with no room.
-6. **An old save (`te_repair_lunar_technologies`).** Load a save from before this build in which a country runs Solar Colonization or Orbital Assembly on Directed Energy Weapons, and one holds Asteroid Mining. In the first month, `debug.log` has a `TE_LUNAR_TECH_REPAIR` line for each, and they hold Cislunar Infrastructure and In-Situ Resource Utilization. Before that month ends, watch the colonizing country's Space Program: if the engine moved it off Solar Colonization at the load (its technology unresearched for a moment), its colonization entry reports the program lost. Fallback for that: switch back by hand after the first month (the AI through Begin Solar Colonization); nothing in script runs before the first monthly pulse.
+6. **An old save (`te_repair_lunar_technologies`).** Load a save from before this build in which a country runs Solar Colonization or Orbital Assembly on Directed Energy Weapons, and one holds Asteroid Mining. In the first month, `debug.log` has a `TE_LUNAR_TECH_REPAIR` line for each, and they hold Cislunar Infrastructure and In-Situ Resource Utilization. Before that month ends, watch the colonizing country's Space Program: if the engine moved it off Solar Colonization at the load (its technology unresearched for a moment), its colonization entry fails (the program lost), and a colonizer with no colony yet loses its progress toward its first colony with the entry's `on_fail`. Fallback for that: switch back by hand after the first month (the AI through Begin Solar Colonization); nothing in script runs before the first monthly pulse.
 7. **Orbital Foundries.** Space Colonization's fabrication method reads Orbital Foundries in the method group, the Colony Modules section's fabrication tooltip and the method's own description.
 
 ## Lunar colonization, build 2a: six lunar worlds at stage 0 (2026-10-29)

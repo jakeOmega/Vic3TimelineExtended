@@ -166,9 +166,23 @@ sr_possible_standard = {
 	}
 }
 
+# The funding ceiling: the cap plus the ladder past it (sr_max_funding_level_soft;
+# lunar colonization design § 5.1). The player's plus button and, through
+# sr_possible_fund_up_within_cap, the AI's.
 sr_possible_fund_up = {
 	custom_tooltip = {
 		text = "SR_MAX_FUNDING_NOT_REACHED"
+		var:sr_funding_$MILESTONE$ < sr_max_funding_level_soft
+	}
+}
+
+# The AI's increase-funding buttons (space_race_buttons.txt): the same ceiling,
+# and the AI stays within the cap (owner, 2026-10-29, design § 15.6). Observer
+# runs decide later whether a great power in a contested race should go past it.
+sr_possible_fund_up_within_cap = {
+	sr_possible_fund_up = { MILESTONE = $MILESTONE$ }
+	custom_tooltip = {
+		text = "SR_FUNDING_BELOW_CAP"
 		var:sr_funding_$MILESTONE$ < sr_max_funding_level
 	}
 }
@@ -225,11 +239,13 @@ sr_milestone_billed_solar_colonization = { sr_solar_colonization_running = yes }
 # Whether a billed milestone's entry lacks a cost or funding modifier
 # sr_apply_milestone_cost_modifiers_base would give it: a revolution's winner,
 # whose inherited entry re-ran `immediate` before `je:` could find it (Spain's
-# moon landing, 2026-10-10 observer run), so neither modifier went on. The
-# monthly pulse (space_race_on_action) then runs sr_recalculate_cost. A modifier
-# whose multiplier is 0 (funding cut to 0) does not count as missing, so it
-# cannot set off a recalculation every month. The multipliers read the country
-# through `owner`, so they hold in the entry's scope. Country scope.
+# moon landing, 2026-10-10 observer run), so none of the three went on. It also
+# moves a save from before the funding split (2026-10-29) onto it: its entries
+# carry sr_funding_progress but not sr_funding_throughput. The monthly pulse
+# (space_race_on_action) then runs sr_recalculate_cost. A modifier whose
+# multiplier is 0 (funding cut to 0) does not count as missing, so it cannot
+# set off a recalculation every month. The multipliers read the country through
+# `owner`, so they hold in the entry's scope. Country scope.
 sr_cost_modifiers_missing_base = {
 	sr_milestone_billed_$MILESTONE$ = yes
 	je:je_space_race_$MILESTONE$ ?= {
@@ -239,8 +255,12 @@ sr_cost_modifiers_missing_base = {
 				NOT = { has_modifier = sr_space_program_cost }
 			}
 			AND = {
-				sr_funding_$MILESTONE$_level > 0
+				sr_funding_$MILESTONE$_effective > 0
 				NOT = { has_modifier = sr_funding_progress }
+			}
+			AND = {
+				sr_funding_$MILESTONE$_level > 0
+				NOT = { has_modifier = sr_funding_throughput }
 			}
 		}
 	}

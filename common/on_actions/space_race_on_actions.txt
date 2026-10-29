@@ -112,8 +112,27 @@ space_race_on_action = {
 				}
 				sr_recalculate_cost = yes
 			}
+			# The same for the funding cap, which the pace multipliers read
+			# (sr_funding_<m>_effective): technologies and Advanced Research V
+			# move it with no button press. Recorded since 2026-10-29, so an
+			# older save recalculates once.
+			else_if = {
+				limit = { NOT = { has_variable = sr_cost_funding_cap } }
+				sr_recalculate_cost = yes
+			}
+			else_if = {
+				limit = {
+					OR = {
+						var:sr_cost_funding_cap < sr_max_funding_level
+						var:sr_cost_funding_cap > sr_max_funding_level
+					}
+				}
+				sr_recalculate_cost = yes
+			}
 			# A revolution's winner whose inherited entry lost its cost and
-			# funding modifiers (sr_cost_modifiers_missing): put them back.
+			# funding modifiers (sr_cost_modifiers_missing): put them back. The
+			# same test moves a save from before the funding split (2026-10-29)
+			# onto sr_funding_throughput.
 			else_if = {
 				limit = { sr_cost_modifiers_missing = yes }
 				sr_recalculate_cost = yes
