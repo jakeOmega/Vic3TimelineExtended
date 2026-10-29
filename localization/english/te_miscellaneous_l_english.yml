@@ -6429,7 +6429,7 @@
  sr_fl_refitting_tt:0 "The fleet is not refitting"
  sr_fl_seize_tt:0 "The fleet goes back to seizing its target: at integrity #v 0#!, with more marines than its garrison and militia, the world is ours to occupy."
  sr_fl_short_tt:0 "The leg can leave this month, and the fleet has the propellant for it"
- sr_fl_target_free_price_tt:0 "\nWhile the fleet closes in, stepping its target to a free colony costs #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_infamy_cost')|0]#! [concept_infamy] and adds #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_dossier_cost')|0]#! to our hostile acts in space in the UN's record, at once."
+ sr_fl_target_free_price_tt:0 "\nWhile the fleet closes in, stepping its target to a free colony costs #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_infamy_cost')|0]#! [concept_infamy] and adds #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_dossier_cost')|0]#! to our hostile acts in space in the UN's record, at once (twice as much for a party to the Convention on the Settlement of Outer Space)."
  sr_fl_target_hostile_tt:0 "The fleet's target is held by a country at war with us, or is free"
  sr_fl_target_intel_none:0 "No world here can be closed in on: none is held by a country at war with us, or free."
  sr_fl_target_none:0 "No target"
