@@ -19,6 +19,9 @@
 #   sr_launch_offset_<body>          signed months from the nearest optimum
 #   sr_launch_premium_<body>         the off-window premium at that offset, a
 #                                    fraction (0.35 = +35%); 0 in the window
+#   sr_launch_premium_ntp_<body>     the same for a nuclear thermal engine: the
+#                                    extra delta-v at 9 km/s, not 3.7 (lunar
+#                                    colonization design § 9)
 # The optima's dates are in docs/engine/launch_windows_report.md.
 
 # ===== Mars (113 windows) =====
@@ -214,36 +217,37 @@ sr_launch_nearer_previous_mars = {
 	add = sr_window_previous_gap_mars
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#   -14:    3.35 (cycles 290% to 411%)
-#   -13:    4.76 (cycles 377% to 607%)
-#   -12:    8.61 (cycles 625% to 1167%)
-#   -11:    18.6 (cycles 1281% to 2711%)
-#   -10:   37.11 (cycles 2066% to 6244%)
-#    -9:   28.96 (cycles 1508% to 4703%)
-#    -8:   19.01 (cycles 1079% to 2718%)
-#    -7:   11.85 (cycles 758% to 1644%)
-#    -6:    6.74 (cycles 476% to 934%)
-#    -5:    3.61 (cycles 269% to 505%)
-#    -4:    1.79 (cycles 127% to 251%)
-#    -3:    0.81 (cycles 51% to 118%)
-#    -2:    0.24 (cycles 11% to 40%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.43 (cycles 20% to 83%)
-#    +3:     1.5 (cycles 98% to 202%)
-#    +4:    2.56 (cycles 216% to 303%)
-#    +5:    3.34 (cycles 281% to 403%)
-#    +6:    3.61 (cycles 271% to 449%)
-#    +7:    3.23 (cycles 236% to 402%)
-#    +8:    2.78 (cycles 211% to 337%)
-#    +9:    2.51 (cycles 208% to 291%)
-#   +10:    2.52 (cycles 225% to 283%)
-#   +11:     2.9 (cycles 256% to 333%)
-#   +12:    4.41 (cycles 344% to 579%)
-#   +13:    8.25 (cycles 606% to 1135%)
-#   +14:   17.33 (cycles 1207% to 2472%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#   -14:    3.35, NTP   0.83 (chemical cycles 290% to 411%)
+#   -13:    4.76, NTP   1.05 (chemical cycles 377% to 607%)
+#   -12:    8.61, NTP   1.54 (chemical cycles 625% to 1167%)
+#   -11:    18.6, NTP    2.4 (chemical cycles 1281% to 2711%)
+#   -10:   37.11, NTP   3.47 (chemical cycles 2066% to 6244%)
+#    -9:   28.96, NTP   3.05 (chemical cycles 1508% to 4703%)
+#    -8:   19.01, NTP   2.43 (chemical cycles 1079% to 2718%)
+#    -7:   11.85, NTP   1.86 (chemical cycles 758% to 1644%)
+#    -6:    6.74, NTP   1.32 (chemical cycles 476% to 934%)
+#    -5:    3.61, NTP   0.87 (chemical cycles 269% to 505%)
+#    -4:    1.79, NTP   0.52 (chemical cycles 127% to 251%)
+#    -3:    0.81, NTP   0.28 (chemical cycles 51% to 118%)
+#    -2:    0.24, NTP   0.09 (chemical cycles 11% to 40%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.43, NTP   0.16 (chemical cycles 20% to 83%)
+#    +3:     1.5, NTP   0.46 (chemical cycles 98% to 202%)
+#    +4:    2.56, NTP   0.69 (chemical cycles 216% to 303%)
+#    +5:    3.34, NTP   0.83 (chemical cycles 281% to 403%)
+#    +6:    3.61, NTP   0.87 (chemical cycles 271% to 449%)
+#    +7:    3.23, NTP   0.81 (chemical cycles 236% to 402%)
+#    +8:    2.78, NTP   0.73 (chemical cycles 211% to 337%)
+#    +9:    2.51, NTP   0.68 (chemical cycles 208% to 291%)
+#   +10:    2.52, NTP   0.68 (chemical cycles 225% to 283%)
+#   +11:     2.9, NTP   0.75 (chemical cycles 256% to 333%)
+#   +12:    4.41, NTP      1 (chemical cycles 344% to 579%)
+#   +13:    8.25, NTP    1.5 (chemical cycles 606% to 1135%)
+#   +14:   17.33, NTP   2.31 (chemical cycles 1207% to 2472%)
 sr_launch_premium_mars = {
 	value = 0
 	if = {
@@ -410,6 +414,172 @@ sr_launch_premium_mars = {
 					}
 					else = {
 						value = 17.33 # offset +14
+					}
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_mars = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_mars < 0 }
+		if = {
+			limit = { sr_launch_offset_mars < -7 }
+			if = {
+				limit = { sr_launch_offset_mars < -11 }
+				if = {
+					limit = { sr_launch_offset_mars < -13 }
+					value = 0.83 # offset -14
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_mars < -12 }
+						value = 1.05 # offset -13
+					}
+					else = {
+						value = 1.54 # offset -12
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_mars < -9 }
+					if = {
+						limit = { sr_launch_offset_mars < -10 }
+						value = 2.4 # offset -11
+					}
+					else = {
+						value = 3.47 # offset -10
+					}
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_mars < -8 }
+						value = 3.05 # offset -9
+					}
+					else = {
+						value = 2.43 # offset -8
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_mars < -4 }
+				if = {
+					limit = { sr_launch_offset_mars < -6 }
+					value = 1.86 # offset -7
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_mars < -5 }
+						value = 1.32 # offset -6
+					}
+					else = {
+						value = 0.87 # offset -5
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_mars < -2 }
+					if = {
+						limit = { sr_launch_offset_mars < -3 }
+						value = 0.52 # offset -4
+					}
+					else = {
+						value = 0.28 # offset -3
+					}
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_mars < -1 }
+						value = 0.09 # offset -2
+					}
+					else = {
+						value = 0 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_mars < 7 }
+			if = {
+				limit = { sr_launch_offset_mars < 3 }
+				if = {
+					limit = { sr_launch_offset_mars < 1 }
+					value = 0 # offset +0
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_mars < 2 }
+						value = 0 # offset +1
+					}
+					else = {
+						value = 0.16 # offset +2
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_mars < 5 }
+					if = {
+						limit = { sr_launch_offset_mars < 4 }
+						value = 0.46 # offset +3
+					}
+					else = {
+						value = 0.69 # offset +4
+					}
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_mars < 6 }
+						value = 0.83 # offset +5
+					}
+					else = {
+						value = 0.87 # offset +6
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_mars < 11 }
+				if = {
+					limit = { sr_launch_offset_mars < 9 }
+					if = {
+						limit = { sr_launch_offset_mars < 8 }
+						value = 0.81 # offset +7
+					}
+					else = {
+						value = 0.73 # offset +8
+					}
+				}
+				else = {
+					value = 0.68 # offsets +9 to +10
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_mars < 13 }
+					if = {
+						limit = { sr_launch_offset_mars < 12 }
+						value = 0.75 # offset +11
+					}
+					else = {
+						value = 1 # offset +12
+					}
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_mars < 14 }
+						value = 1.5 # offset +13
+					}
+					else = {
+						value = 2.31 # offset +14
 					}
 				}
 			}
@@ -844,26 +1014,27 @@ sr_launch_nearer_previous_ceres = {
 	add = sr_window_previous_gap_ceres
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#    -9:   13.05 (cycles 284% to 3609%)
-#    -8:    35.4 (cycles 426% to 13988%)
-#    -7:   87.16 (cycles 829% to 31977%)
-#    -6:  108.14 (cycles 2864% to 38394%)
-#    -5:   33.95 (cycles 852% to 13629%)
-#    -4:    9.34 (cycles 262% to 2996%)
-#    -3:    2.84 (cycles 79% to 796%)
-#    -2:    0.76 (cycles 9% to 214%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.46 (cycles 0% to 219%)
-#    +3:    1.91 (cycles 33% to 633%)
-#    +4:    3.28 (cycles 107% to 732%)
-#    +5:    4.22 (cycles 148% to 641%)
-#    +6:     9.1 (cycles 319% to 3483%)
-#    +7:   21.96 (cycles 746% to 11764%)
-#    +8:    62.6 (cycles 3137% to 16505%)
-#    +9:  104.13 (cycles 5550% to 28092%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#    -9:   13.05, NTP   1.96 (chemical cycles 284% to 3609%)
+#    -8:    35.4, NTP   3.38 (chemical cycles 426% to 13988%)
+#    -7:   87.16, NTP   5.31 (chemical cycles 829% to 31977%)
+#    -6:  108.14, NTP   5.88 (chemical cycles 2864% to 38394%)
+#    -5:   33.95, NTP   3.31 (chemical cycles 852% to 13629%)
+#    -4:    9.34, NTP   1.61 (chemical cycles 262% to 2996%)
+#    -3:    2.84, NTP   0.74 (chemical cycles 79% to 796%)
+#    -2:    0.76, NTP   0.26 (chemical cycles 9% to 214%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.46, NTP   0.17 (chemical cycles 0% to 219%)
+#    +3:    1.91, NTP   0.55 (chemical cycles 33% to 633%)
+#    +4:    3.28, NTP   0.82 (chemical cycles 107% to 732%)
+#    +5:    4.22, NTP   0.97 (chemical cycles 148% to 641%)
+#    +6:     9.1, NTP   1.59 (chemical cycles 319% to 3483%)
+#    +7:   21.96, NTP   2.63 (chemical cycles 746% to 11764%)
+#    +8:    62.6, NTP   4.51 (chemical cycles 3137% to 16505%)
+#    +9:  104.13, NTP   5.78 (chemical cycles 5550% to 28092%)
 sr_launch_premium_ceres = {
 	value = 0
 	if = {
@@ -964,6 +1135,112 @@ sr_launch_premium_ceres = {
 					}
 					else = {
 						value = 104.13 # offset +9
+					}
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_ceres = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_ceres < 0 }
+		if = {
+			limit = { sr_launch_offset_ceres < -5 }
+			if = {
+				limit = { sr_launch_offset_ceres < -7 }
+				if = {
+					limit = { sr_launch_offset_ceres < -8 }
+					value = 1.96 # offset -9
+				}
+				else = {
+					value = 3.38 # offset -8
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_ceres < -6 }
+					value = 5.31 # offset -7
+				}
+				else = {
+					value = 5.88 # offset -6
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_ceres < -3 }
+				if = {
+					limit = { sr_launch_offset_ceres < -4 }
+					value = 3.31 # offset -5
+				}
+				else = {
+					value = 1.61 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_ceres < -2 }
+					value = 0.74 # offset -3
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_ceres < -1 }
+						value = 0.26 # offset -2
+					}
+					else = {
+						value = 0 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_ceres < 5 }
+			if = {
+				limit = { sr_launch_offset_ceres < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_ceres < 3 }
+					value = 0.17 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_ceres < 4 }
+						value = 0.55 # offset +3
+					}
+					else = {
+						value = 0.82 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_ceres < 7 }
+				if = {
+					limit = { sr_launch_offset_ceres < 6 }
+					value = 0.97 # offset +5
+				}
+				else = {
+					value = 1.59 # offset +6
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_ceres < 8 }
+					value = 2.63 # offset +7
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_ceres < 9 }
+						value = 4.51 # offset +8
+					}
+					else = {
+						value = 5.78 # offset +9
 					}
 				}
 			}
@@ -1362,26 +1639,27 @@ sr_launch_nearer_previous_vesta = {
 	add = sr_window_previous_gap_vesta
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#    -9:   20.57 (cycles 598% to 16288%)
-#    -8:   61.21 (cycles 1094% to 22278%)
-#    -7:  151.22 (cycles 6877% to 33933%)
-#    -6:   97.25 (cycles 2615% to 31549%)
-#    -5:   25.43 (cycles 811% to 7218%)
-#    -4:    7.54 (cycles 273% to 2092%)
-#    -3:    2.34 (cycles 77% to 745%)
-#    -2:    0.52 (cycles 3% to 197%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.73 (cycles 9% to 234%)
-#    +3:    2.33 (cycles 93% to 498%)
-#    +4:    3.73 (cycles 193% to 699%)
-#    +5:    4.81 (cycles 181% to 944%)
-#    +6:    5.45 (cycles 163% to 1320%)
-#    +7:    6.73 (cycles 180% to 2078%)
-#    +8:   18.31 (cycles 303% to 16826%)
-#    +9:   65.93 (cycles 995% to 25972%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#    -9:   20.57, NTP   2.53 (chemical cycles 598% to 16288%)
+#    -8:   61.21, NTP   4.46 (chemical cycles 1094% to 22278%)
+#    -7:  151.22, NTP   6.89 (chemical cycles 6877% to 33933%)
+#    -6:   97.25, NTP   5.59 (chemical cycles 2615% to 31549%)
+#    -5:   25.43, NTP   2.84 (chemical cycles 811% to 7218%)
+#    -4:    7.54, NTP   1.41 (chemical cycles 273% to 2092%)
+#    -3:    2.34, NTP   0.64 (chemical cycles 77% to 745%)
+#    -2:    0.52, NTP   0.19 (chemical cycles 3% to 197%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.73, NTP   0.25 (chemical cycles 9% to 234%)
+#    +3:    2.33, NTP   0.64 (chemical cycles 93% to 498%)
+#    +4:    3.73, NTP   0.89 (chemical cycles 193% to 699%)
+#    +5:    4.81, NTP   1.06 (chemical cycles 181% to 944%)
+#    +6:    5.45, NTP   1.15 (chemical cycles 163% to 1320%)
+#    +7:    6.73, NTP   1.32 (chemical cycles 180% to 2078%)
+#    +8:   18.31, NTP   2.38 (chemical cycles 303% to 16826%)
+#    +9:   65.93, NTP   4.63 (chemical cycles 995% to 25972%)
 sr_launch_premium_vesta = {
 	value = 0
 	if = {
@@ -1482,6 +1760,112 @@ sr_launch_premium_vesta = {
 					}
 					else = {
 						value = 65.93 # offset +9
+					}
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_vesta = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_vesta < 0 }
+		if = {
+			limit = { sr_launch_offset_vesta < -5 }
+			if = {
+				limit = { sr_launch_offset_vesta < -7 }
+				if = {
+					limit = { sr_launch_offset_vesta < -8 }
+					value = 2.53 # offset -9
+				}
+				else = {
+					value = 4.46 # offset -8
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_vesta < -6 }
+					value = 6.89 # offset -7
+				}
+				else = {
+					value = 5.59 # offset -6
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_vesta < -3 }
+				if = {
+					limit = { sr_launch_offset_vesta < -4 }
+					value = 2.84 # offset -5
+				}
+				else = {
+					value = 1.41 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_vesta < -2 }
+					value = 0.64 # offset -3
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_vesta < -1 }
+						value = 0.19 # offset -2
+					}
+					else = {
+						value = 0 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_vesta < 5 }
+			if = {
+				limit = { sr_launch_offset_vesta < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_vesta < 3 }
+					value = 0.25 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_vesta < 4 }
+						value = 0.64 # offset +3
+					}
+					else = {
+						value = 0.89 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_vesta < 7 }
+				if = {
+					limit = { sr_launch_offset_vesta < 6 }
+					value = 1.06 # offset +5
+				}
+				else = {
+					value = 1.15 # offset +6
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_vesta < 8 }
+					value = 1.32 # offset +7
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_vesta < 9 }
+						value = 2.38 # offset +8
+					}
+					else = {
+						value = 4.63 # offset +9
 					}
 				}
 			}
@@ -1922,26 +2306,27 @@ sr_launch_nearer_previous_psyche = {
 	add = sr_window_previous_gap_psyche
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#    -9:    7.51 (cycles 301% to 1885%)
-#    -8:   13.33 (cycles 311% to 4203%)
-#    -7:   28.61 (cycles 383% to 14119%)
-#    -6:   64.59 (cycles 1905% to 26129%)
-#    -5:   51.68 (cycles 1987% to 10350%)
-#    -4:   15.29 (cycles 564% to 3272%)
-#    -3:    4.07 (cycles 159% to 788%)
-#    -2:    0.76 (cycles 29% to 156%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.89 (cycles 28% to 178%)
-#    +3:    2.36 (cycles 79% to 410%)
-#    +4:     3.9 (cycles 102% to 671%)
-#    +5:     5.5 (cycles 121% to 1081%)
-#    +6:    7.06 (cycles 151% to 2230%)
-#    +7:   11.75 (cycles 216% to 9889%)
-#    +8:   26.79 (cycles 489% to 24635%)
-#    +9:   59.87 (cycles 1953% to 36823%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#    -9:    7.51, NTP   1.41 (chemical cycles 301% to 1885%)
+#    -8:   13.33, NTP   1.99 (chemical cycles 311% to 4203%)
+#    -7:   28.61, NTP   3.03 (chemical cycles 383% to 14119%)
+#    -6:   64.59, NTP   4.58 (chemical cycles 1905% to 26129%)
+#    -5:   51.68, NTP    4.1 (chemical cycles 1987% to 10350%)
+#    -4:   15.29, NTP   2.15 (chemical cycles 564% to 3272%)
+#    -3:    4.07, NTP   0.95 (chemical cycles 159% to 788%)
+#    -2:    0.76, NTP   0.26 (chemical cycles 29% to 156%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.89, NTP    0.3 (chemical cycles 28% to 178%)
+#    +3:    2.36, NTP   0.65 (chemical cycles 79% to 410%)
+#    +4:     3.9, NTP   0.92 (chemical cycles 102% to 671%)
+#    +5:     5.5, NTP   1.16 (chemical cycles 121% to 1081%)
+#    +6:    7.06, NTP   1.36 (chemical cycles 151% to 2230%)
+#    +7:   11.75, NTP   1.85 (chemical cycles 216% to 9889%)
+#    +8:   26.79, NTP   2.92 (chemical cycles 489% to 24635%)
+#    +9:   59.87, NTP   4.41 (chemical cycles 1953% to 36823%)
 sr_launch_premium_psyche = {
 	value = 0
 	if = {
@@ -2042,6 +2427,112 @@ sr_launch_premium_psyche = {
 					}
 					else = {
 						value = 59.87 # offset +9
+					}
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_psyche = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_psyche < 0 }
+		if = {
+			limit = { sr_launch_offset_psyche < -5 }
+			if = {
+				limit = { sr_launch_offset_psyche < -7 }
+				if = {
+					limit = { sr_launch_offset_psyche < -8 }
+					value = 1.41 # offset -9
+				}
+				else = {
+					value = 1.99 # offset -8
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_psyche < -6 }
+					value = 3.03 # offset -7
+				}
+				else = {
+					value = 4.58 # offset -6
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_psyche < -3 }
+				if = {
+					limit = { sr_launch_offset_psyche < -4 }
+					value = 4.1 # offset -5
+				}
+				else = {
+					value = 2.15 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_psyche < -2 }
+					value = 0.95 # offset -3
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_psyche < -1 }
+						value = 0.26 # offset -2
+					}
+					else = {
+						value = 0 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_psyche < 5 }
+			if = {
+				limit = { sr_launch_offset_psyche < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_psyche < 3 }
+					value = 0.3 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_psyche < 4 }
+						value = 0.65 # offset +3
+					}
+					else = {
+						value = 0.92 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_psyche < 7 }
+				if = {
+					limit = { sr_launch_offset_psyche < 6 }
+					value = 1.16 # offset +5
+				}
+				else = {
+					value = 1.36 # offset +6
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_psyche < 8 }
+					value = 1.85 # offset +7
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_psyche < 9 }
+						value = 2.92 # offset +8
+					}
+					else = {
+						value = 4.41 # offset +9
 					}
 				}
 			}
@@ -2452,28 +2943,29 @@ sr_launch_nearer_previous_pallas = {
 	add = sr_window_previous_gap_pallas
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#   -10:    7.42 (cycles 42% to 18506%)
-#    -9:   19.51 (cycles 43% to 14170%)
-#    -8:   59.02 (cycles 158% to 59481%)
-#    -7:  151.01 (cycles 588% to 100000%)
-#    -6:  102.99 (cycles 942% to 100000%)
-#    -5:   38.69 (cycles 338% to 26391%)
-#    -4:   13.19 (cycles 93% to 7000%)
-#    -3:    5.38 (cycles 1% to 1996%)
-#    -2:    1.73 (cycles 0% to 683%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.55 (cycles 0% to 281%)
-#    +3:    2.34 (cycles 0% to 1799%)
-#    +4:    6.09 (cycles 0% to 4582%)
-#    +5:    7.96 (cycles 15% to 9777%)
-#    +6:   13.57 (cycles 6% to 33712%)
-#    +7:   31.44 (cycles 27% to 100000%)
-#    +8:   74.83 (cycles 112% to 59668%)
-#    +9:   55.44 (cycles 250% to 44117%)
-#   +10:   20.63 (cycles 237% to 12432%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#   -10:    7.42, NTP    1.4 (chemical cycles 42% to 18506%)
+#    -9:   19.51, NTP   2.46 (chemical cycles 43% to 14170%)
+#    -8:   59.02, NTP   4.38 (chemical cycles 158% to 59481%)
+#    -7:  151.01, NTP   6.89 (chemical cycles 588% to 100000%)
+#    -6:  102.99, NTP   5.75 (chemical cycles 942% to 100000%)
+#    -5:   38.69, NTP   3.54 (chemical cycles 338% to 26391%)
+#    -4:   13.19, NTP   1.98 (chemical cycles 93% to 7000%)
+#    -3:    5.38, NTP   1.14 (chemical cycles 1% to 1996%)
+#    -2:    1.73, NTP   0.51 (chemical cycles 0% to 683%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.55, NTP    0.2 (chemical cycles 0% to 281%)
+#    +3:    2.34, NTP   0.64 (chemical cycles 0% to 1799%)
+#    +4:    6.09, NTP   1.24 (chemical cycles 0% to 4582%)
+#    +5:    7.96, NTP   1.46 (chemical cycles 15% to 9777%)
+#    +6:   13.57, NTP   2.01 (chemical cycles 6% to 33712%)
+#    +7:   31.44, NTP   3.18 (chemical cycles 27% to 100000%)
+#    +8:   74.83, NTP   4.93 (chemical cycles 112% to 59668%)
+#    +9:   55.44, NTP   4.25 (chemical cycles 250% to 44117%)
+#   +10:   20.63, NTP   2.54 (chemical cycles 237% to 12432%)
 sr_launch_premium_pallas = {
 	value = 0
 	if = {
@@ -2586,6 +3078,124 @@ sr_launch_premium_pallas = {
 					}
 					else = {
 						value = 20.63 # offset +10
+					}
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_pallas = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_pallas < 0 }
+		if = {
+			limit = { sr_launch_offset_pallas < -5 }
+			if = {
+				limit = { sr_launch_offset_pallas < -8 }
+				if = {
+					limit = { sr_launch_offset_pallas < -9 }
+					value = 1.4 # offset -10
+				}
+				else = {
+					value = 2.46 # offset -9
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_pallas < -7 }
+					value = 4.38 # offset -8
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_pallas < -6 }
+						value = 6.89 # offset -7
+					}
+					else = {
+						value = 5.75 # offset -6
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_pallas < -3 }
+				if = {
+					limit = { sr_launch_offset_pallas < -4 }
+					value = 3.54 # offset -5
+				}
+				else = {
+					value = 1.98 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_pallas < -2 }
+					value = 1.14 # offset -3
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_pallas < -1 }
+						value = 0.51 # offset -2
+					}
+					else = {
+						value = 0 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_pallas < 5 }
+			if = {
+				limit = { sr_launch_offset_pallas < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_pallas < 3 }
+					value = 0.2 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_pallas < 4 }
+						value = 0.64 # offset +3
+					}
+					else = {
+						value = 1.24 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_pallas < 8 }
+				if = {
+					limit = { sr_launch_offset_pallas < 6 }
+					value = 1.46 # offset +5
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_pallas < 7 }
+						value = 2.01 # offset +6
+					}
+					else = {
+						value = 3.18 # offset +7
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_pallas < 9 }
+					value = 4.93 # offset +8
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_pallas < 10 }
+						value = 4.25 # offset +9
+					}
+					else = {
+						value = 2.54 # offset +10
 					}
 				}
 			}
@@ -3032,24 +3642,25 @@ sr_launch_nearer_previous_hygiea = {
 	add = sr_window_previous_gap_hygiea
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#    -8:   14.88 (cycles 469% to 5921%)
-#    -7:   43.95 (cycles 959% to 19027%)
-#    -6:  130.57 (cycles 3425% to 67199%)
-#    -5:   68.95 (cycles 2585% to 23481%)
-#    -4:    17.4 (cycles 653% to 4837%)
-#    -3:    4.44 (cycles 161% to 994%)
-#    -2:     0.8 (cycles 16% to 175%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.86 (cycles 27% to 192%)
-#    +3:    2.05 (cycles 74% to 436%)
-#    +4:    3.28 (cycles 158% to 740%)
-#    +5:    4.59 (cycles 190% to 1073%)
-#    +6:    8.73 (cycles 197% to 3693%)
-#    +7:   21.88 (cycles 280% to 8496%)
-#    +8:   68.32 (cycles 1133% to 24080%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#    -8:   14.88, NTP   2.12 (chemical cycles 469% to 5921%)
+#    -7:   43.95, NTP   3.78 (chemical cycles 959% to 19027%)
+#    -6:  130.57, NTP   6.43 (chemical cycles 3425% to 67199%)
+#    -5:   68.95, NTP   4.73 (chemical cycles 2585% to 23481%)
+#    -4:    17.4, NTP   2.31 (chemical cycles 653% to 4837%)
+#    -3:    4.44, NTP   1.01 (chemical cycles 161% to 994%)
+#    -2:     0.8, NTP   0.27 (chemical cycles 16% to 175%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.86, NTP   0.29 (chemical cycles 27% to 192%)
+#    +3:    2.05, NTP   0.58 (chemical cycles 74% to 436%)
+#    +4:    3.28, NTP   0.82 (chemical cycles 158% to 740%)
+#    +5:    4.59, NTP   1.03 (chemical cycles 190% to 1073%)
+#    +6:    8.73, NTP   1.55 (chemical cycles 197% to 3693%)
+#    +7:   21.88, NTP   2.62 (chemical cycles 280% to 8496%)
+#    +8:   68.32, NTP   4.71 (chemical cycles 1133% to 24080%)
 sr_launch_premium_hygiea = {
 	value = 0
 	if = {
@@ -3138,6 +3749,100 @@ sr_launch_premium_hygiea = {
 					}
 					else = {
 						value = 68.32 # offset +8
+					}
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_hygiea = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_hygiea < 0 }
+		if = {
+			limit = { sr_launch_offset_hygiea < -4 }
+			if = {
+				limit = { sr_launch_offset_hygiea < -6 }
+				if = {
+					limit = { sr_launch_offset_hygiea < -7 }
+					value = 2.12 # offset -8
+				}
+				else = {
+					value = 3.78 # offset -7
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_hygiea < -5 }
+					value = 6.43 # offset -6
+				}
+				else = {
+					value = 4.73 # offset -5
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_hygiea < -2 }
+				if = {
+					limit = { sr_launch_offset_hygiea < -3 }
+					value = 2.31 # offset -4
+				}
+				else = {
+					value = 1.01 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_hygiea < -1 }
+					value = 0.27 # offset -2
+				}
+				else = {
+					value = 0 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_hygiea < 4 }
+			if = {
+				limit = { sr_launch_offset_hygiea < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_hygiea < 3 }
+					value = 0.29 # offset +2
+				}
+				else = {
+					value = 0.58 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_hygiea < 6 }
+				if = {
+					limit = { sr_launch_offset_hygiea < 5 }
+					value = 0.82 # offset +4
+				}
+				else = {
+					value = 1.03 # offset +5
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_hygiea < 7 }
+					value = 1.55 # offset +6
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_hygiea < 8 }
+						value = 2.62 # offset +7
+					}
+					else = {
+						value = 4.71 # offset +8
 					}
 				}
 			}
@@ -3584,22 +4289,23 @@ sr_launch_nearer_previous_jupiter = {
 	add = sr_window_previous_gap_jupiter
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#    -7:    4.87 (cycles 229% to 1496%)
-#    -6:   20.24 (cycles 551% to 7284%)
-#    -5:   71.68 (cycles 2511% to 11927%)
-#    -4:   31.55 (cycles 1557% to 7434%)
-#    -3:    7.49 (cycles 364% to 1709%)
-#    -2:    1.25 (cycles 45% to 290%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.13 (cycles 2% to 28%)
-#    +3:    0.24 (cycles 9% to 40%)
-#    +4:    0.36 (cycles 20% to 66%)
-#    +5:     1.2 (cycles 43% to 273%)
-#    +6:    3.91 (cycles 97% to 1258%)
-#    +7:   17.27 (cycles 430% to 5642%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#    -7:    4.87, NTP   1.07 (chemical cycles 229% to 1496%)
+#    -6:   20.24, NTP   2.51 (chemical cycles 551% to 7284%)
+#    -5:   71.68, NTP   4.82 (chemical cycles 2511% to 11927%)
+#    -4:   31.55, NTP   3.19 (chemical cycles 1557% to 7434%)
+#    -3:    7.49, NTP   1.41 (chemical cycles 364% to 1709%)
+#    -2:    1.25, NTP   0.39 (chemical cycles 45% to 290%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.13, NTP   0.05 (chemical cycles 2% to 28%)
+#    +3:    0.24, NTP   0.09 (chemical cycles 9% to 40%)
+#    +4:    0.36, NTP   0.14 (chemical cycles 20% to 66%)
+#    +5:     1.2, NTP   0.38 (chemical cycles 43% to 273%)
+#    +6:    3.91, NTP   0.92 (chemical cycles 97% to 1258%)
+#    +7:   17.27, NTP    2.3 (chemical cycles 430% to 5642%)
 sr_launch_premium_jupiter = {
 	value = 0
 	if = {
@@ -3677,6 +4383,88 @@ sr_launch_premium_jupiter = {
 				}
 				else = {
 					value = 17.27 # offset +7
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_jupiter = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_jupiter < 0 }
+		if = {
+			limit = { sr_launch_offset_jupiter < -4 }
+			if = {
+				limit = { sr_launch_offset_jupiter < -6 }
+				value = 1.07 # offset -7
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_jupiter < -5 }
+					value = 2.51 # offset -6
+				}
+				else = {
+					value = 4.82 # offset -5
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_jupiter < -2 }
+				if = {
+					limit = { sr_launch_offset_jupiter < -3 }
+					value = 3.19 # offset -4
+				}
+				else = {
+					value = 1.41 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_jupiter < -1 }
+					value = 0.39 # offset -2
+				}
+				else = {
+					value = 0 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_jupiter < 4 }
+			if = {
+				limit = { sr_launch_offset_jupiter < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_jupiter < 3 }
+					value = 0.05 # offset +2
+				}
+				else = {
+					value = 0.09 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_jupiter < 6 }
+				if = {
+					limit = { sr_launch_offset_jupiter < 5 }
+					value = 0.14 # offset +4
+				}
+				else = {
+					value = 0.38 # offset +5
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_jupiter < 7 }
+					value = 0.92 # offset +6
+				}
+				else = {
+					value = 2.3 # offset +7
 				}
 			}
 		}
@@ -4047,28 +4835,29 @@ sr_launch_nearer_previous_venus = {
 	add = sr_window_previous_gap_venus
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#   -10:    1.45 (cycles 109% to 182%)
-#    -9:    1.24 (cycles 99% to 151%)
-#    -8:    1.02 (cycles 86% to 119%)
-#    -7:    0.81 (cycles 67% to 94%)
-#    -6:    0.63 (cycles 46% to 78%)
-#    -5:    0.46 (cycles 26% to 68%)
-#    -4:    0.31 (cycles 13% to 57%)
-#    -3:    0.18 (cycles 2% to 41%)
-#    -2:    0.08 (cycles 0% to 19%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.28 (cycles 5% to 73%)
-#    +3:    1.01 (cycles 62% to 157%)
-#    +4:    2.06 (cycles 126% to 299%)
-#    +5:    2.56 (cycles 228% to 285%)
-#    +6:    2.29 (cycles 198% to 261%)
-#    +7:    2.01 (cycles 168% to 247%)
-#    +8:    1.75 (cycles 139% to 230%)
-#    +9:     1.5 (cycles 114% to 202%)
-#   +10:    1.26 (cycles 92% to 169%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#   -10:    1.45, NTP   0.45 (chemical cycles 109% to 182%)
+#    -9:    1.24, NTP   0.39 (chemical cycles 99% to 151%)
+#    -8:    1.02, NTP   0.34 (chemical cycles 86% to 119%)
+#    -7:    0.81, NTP   0.28 (chemical cycles 67% to 94%)
+#    -6:    0.63, NTP   0.22 (chemical cycles 46% to 78%)
+#    -5:    0.46, NTP   0.17 (chemical cycles 26% to 68%)
+#    -4:    0.31, NTP   0.12 (chemical cycles 13% to 57%)
+#    -3:    0.18, NTP   0.07 (chemical cycles 2% to 41%)
+#    -2:    0.08, NTP   0.03 (chemical cycles 0% to 19%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.28, NTP   0.11 (chemical cycles 5% to 73%)
+#    +3:    1.01, NTP   0.33 (chemical cycles 62% to 157%)
+#    +4:    2.06, NTP   0.58 (chemical cycles 126% to 299%)
+#    +5:    2.56, NTP   0.68 (chemical cycles 228% to 285%)
+#    +6:    2.29, NTP   0.63 (chemical cycles 198% to 261%)
+#    +7:    2.01, NTP   0.57 (chemical cycles 168% to 247%)
+#    +8:    1.75, NTP   0.52 (chemical cycles 139% to 230%)
+#    +9:     1.5, NTP   0.46 (chemical cycles 114% to 202%)
+#   +10:    1.26, NTP    0.4 (chemical cycles 92% to 169%)
 sr_launch_premium_venus = {
 	value = 0
 	if = {
@@ -4181,6 +4970,124 @@ sr_launch_premium_venus = {
 					}
 					else = {
 						value = 1.26 # offset +10
+					}
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_venus = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_venus < 0 }
+		if = {
+			limit = { sr_launch_offset_venus < -5 }
+			if = {
+				limit = { sr_launch_offset_venus < -8 }
+				if = {
+					limit = { sr_launch_offset_venus < -9 }
+					value = 0.45 # offset -10
+				}
+				else = {
+					value = 0.39 # offset -9
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_venus < -7 }
+					value = 0.34 # offset -8
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_venus < -6 }
+						value = 0.28 # offset -7
+					}
+					else = {
+						value = 0.22 # offset -6
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_venus < -3 }
+				if = {
+					limit = { sr_launch_offset_venus < -4 }
+					value = 0.17 # offset -5
+				}
+				else = {
+					value = 0.12 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_venus < -2 }
+					value = 0.07 # offset -3
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_venus < -1 }
+						value = 0.03 # offset -2
+					}
+					else = {
+						value = 0 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_venus < 5 }
+			if = {
+				limit = { sr_launch_offset_venus < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_venus < 3 }
+					value = 0.11 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_venus < 4 }
+						value = 0.33 # offset +3
+					}
+					else = {
+						value = 0.58 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_venus < 8 }
+				if = {
+					limit = { sr_launch_offset_venus < 6 }
+					value = 0.68 # offset +5
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_venus < 7 }
+						value = 0.63 # offset +6
+					}
+					else = {
+						value = 0.57 # offset +7
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_venus < 9 }
+					value = 0.52 # offset +8
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_venus < 10 }
+						value = 0.46 # offset +9
+					}
+					else = {
+						value = 0.4 # offset +10
 					}
 				}
 			}
@@ -4624,22 +5531,23 @@ sr_launch_nearer_previous_saturn = {
 	add = sr_window_previous_gap_saturn
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#    -7:    3.21 (cycles 140% to 1193%)
-#    -6:   14.09 (cycles 404% to 6719%)
-#    -5:   74.27 (cycles 2108% to 23185%)
-#    -4:   74.24 (cycles 3240% to 16449%)
-#    -3:   13.68 (cycles 604% to 2884%)
-#    -2:    1.89 (cycles 81% to 390%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.14 (cycles 0% to 39%)
-#    +3:    0.21 (cycles 0% to 50%)
-#    +4:    0.55 (cycles 2% to 229%)
-#    +5:    1.87 (cycles 42% to 602%)
-#    +6:     7.1 (cycles 255% to 3299%)
-#    +7:   37.63 (cycles 998% to 17873%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#    -7:    3.21, NTP   0.81 (chemical cycles 140% to 1193%)
+#    -6:   14.09, NTP   2.05 (chemical cycles 404% to 6719%)
+#    -5:   74.27, NTP   4.91 (chemical cycles 2108% to 23185%)
+#    -4:   74.24, NTP   4.91 (chemical cycles 3240% to 16449%)
+#    -3:   13.68, NTP   2.02 (chemical cycles 604% to 2884%)
+#    -2:    1.89, NTP   0.55 (chemical cycles 81% to 390%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.14, NTP   0.05 (chemical cycles 0% to 39%)
+#    +3:    0.21, NTP   0.08 (chemical cycles 0% to 50%)
+#    +4:    0.55, NTP    0.2 (chemical cycles 2% to 229%)
+#    +5:    1.87, NTP   0.54 (chemical cycles 42% to 602%)
+#    +6:     7.1, NTP   1.36 (chemical cycles 255% to 3299%)
+#    +7:   37.63, NTP   3.49 (chemical cycles 998% to 17873%)
 sr_launch_premium_saturn = {
 	value = 0
 	if = {
@@ -4717,6 +5625,88 @@ sr_launch_premium_saturn = {
 				}
 				else = {
 					value = 37.63 # offset +7
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_saturn = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_saturn < 0 }
+		if = {
+			limit = { sr_launch_offset_saturn < -4 }
+			if = {
+				limit = { sr_launch_offset_saturn < -6 }
+				value = 0.81 # offset -7
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_saturn < -5 }
+					value = 2.05 # offset -6
+				}
+				else = {
+					value = 4.91 # offset -5
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_saturn < -2 }
+				if = {
+					limit = { sr_launch_offset_saturn < -3 }
+					value = 4.91 # offset -4
+				}
+				else = {
+					value = 2.02 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_saturn < -1 }
+					value = 0.55 # offset -2
+				}
+				else = {
+					value = 0 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_saturn < 4 }
+			if = {
+				limit = { sr_launch_offset_saturn < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_saturn < 3 }
+					value = 0.05 # offset +2
+				}
+				else = {
+					value = 0.08 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_saturn < 6 }
+				if = {
+					limit = { sr_launch_offset_saturn < 5 }
+					value = 0.2 # offset +4
+				}
+				else = {
+					value = 0.54 # offset +5
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_saturn < 7 }
+					value = 1.36 # offset +6
+				}
+				else = {
+					value = 3.49 # offset +7
 				}
 			}
 		}
@@ -5185,22 +6175,23 @@ sr_launch_nearer_previous_uranus = {
 	add = sr_window_previous_gap_uranus
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#    -7:    2.76 (cycles 54% to 1087%)
-#    -6:   16.75 (cycles 446% to 7076%)
-#    -5:   98.08 (cycles 2976% to 27805%)
-#    -4:   84.36 (cycles 3323% to 25841%)
-#    -3:   13.99 (cycles 551% to 3995%)
-#    -2:    1.64 (cycles 50% to 446%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.08 (cycles 2% to 17%)
-#    +3:    0.15 (cycles 5% to 23%)
-#    +4:    0.45 (cycles 8% to 121%)
-#    +5:    2.15 (cycles 42% to 829%)
-#    +6:   12.95 (cycles 327% to 5377%)
-#    +7:   79.96 (cycles 2208% to 29025%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#    -7:    2.76, NTP   0.72 (chemical cycles 54% to 1087%)
+#    -6:   16.75, NTP   2.26 (chemical cycles 446% to 7076%)
+#    -5:   98.08, NTP   5.62 (chemical cycles 2976% to 27805%)
+#    -4:   84.36, NTP   5.22 (chemical cycles 3323% to 25841%)
+#    -3:   13.99, NTP   2.04 (chemical cycles 551% to 3995%)
+#    -2:    1.64, NTP   0.49 (chemical cycles 50% to 446%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.08, NTP   0.03 (chemical cycles 2% to 17%)
+#    +3:    0.15, NTP   0.06 (chemical cycles 5% to 23%)
+#    +4:    0.45, NTP   0.16 (chemical cycles 8% to 121%)
+#    +5:    2.15, NTP    0.6 (chemical cycles 42% to 829%)
+#    +6:   12.95, NTP   1.95 (chemical cycles 327% to 5377%)
+#    +7:   79.96, NTP   5.09 (chemical cycles 2208% to 29025%)
 sr_launch_premium_uranus = {
 	value = 0
 	if = {
@@ -5278,6 +6269,88 @@ sr_launch_premium_uranus = {
 				}
 				else = {
 					value = 79.96 # offset +7
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_uranus = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_uranus < 0 }
+		if = {
+			limit = { sr_launch_offset_uranus < -4 }
+			if = {
+				limit = { sr_launch_offset_uranus < -6 }
+				value = 0.72 # offset -7
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_uranus < -5 }
+					value = 2.26 # offset -6
+				}
+				else = {
+					value = 5.62 # offset -5
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_uranus < -2 }
+				if = {
+					limit = { sr_launch_offset_uranus < -3 }
+					value = 5.22 # offset -4
+				}
+				else = {
+					value = 2.04 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_uranus < -1 }
+					value = 0.49 # offset -2
+				}
+				else = {
+					value = 0 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_uranus < 4 }
+			if = {
+				limit = { sr_launch_offset_uranus < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_uranus < 3 }
+					value = 0.03 # offset +2
+				}
+				else = {
+					value = 0.06 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_uranus < 6 }
+				if = {
+					limit = { sr_launch_offset_uranus < 5 }
+					value = 0.16 # offset +4
+				}
+				else = {
+					value = 0.6 # offset +5
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_uranus < 7 }
+					value = 1.95 # offset +6
+				}
+				else = {
+					value = 5.09 # offset +7
 				}
 			}
 		}
@@ -5709,22 +6782,23 @@ sr_launch_nearer_previous_neptune = {
 	add = sr_window_previous_gap_neptune
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#    -7:    1.99 (cycles 69% to 485%)
-#    -6:   12.69 (cycles 491% to 3331%)
-#    -5:   79.22 (cycles 3272% to 21957%)
-#    -4:   83.21 (cycles 2777% to 21086%)
-#    -3:   13.53 (cycles 456% to 3634%)
-#    -2:    1.56 (cycles 34% to 415%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.07 (cycles 0% to 30%)
-#    +3:    0.11 (cycles 0% to 33%)
-#    +4:    0.39 (cycles 0% to 96%)
-#    +5:    1.74 (cycles 59% to 413%)
-#    +6:   11.07 (cycles 419% to 2859%)
-#    +7:   69.69 (cycles 2807% to 18853%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#    -7:    1.99, NTP   0.57 (chemical cycles 69% to 485%)
+#    -6:   12.69, NTP   1.93 (chemical cycles 491% to 3331%)
+#    -5:   79.22, NTP   5.07 (chemical cycles 3272% to 21957%)
+#    -4:   83.21, NTP   5.19 (chemical cycles 2777% to 21086%)
+#    -3:   13.53, NTP      2 (chemical cycles 456% to 3634%)
+#    -2:    1.56, NTP   0.47 (chemical cycles 34% to 415%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.07, NTP   0.03 (chemical cycles 0% to 30%)
+#    +3:    0.11, NTP   0.04 (chemical cycles 0% to 33%)
+#    +4:    0.39, NTP   0.15 (chemical cycles 0% to 96%)
+#    +5:    1.74, NTP   0.51 (chemical cycles 59% to 413%)
+#    +6:   11.07, NTP   1.78 (chemical cycles 419% to 2859%)
+#    +7:   69.69, NTP   4.76 (chemical cycles 2807% to 18853%)
 sr_launch_premium_neptune = {
 	value = 0
 	if = {
@@ -5802,6 +6876,88 @@ sr_launch_premium_neptune = {
 				}
 				else = {
 					value = 69.69 # offset +7
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_neptune = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_neptune < 0 }
+		if = {
+			limit = { sr_launch_offset_neptune < -4 }
+			if = {
+				limit = { sr_launch_offset_neptune < -6 }
+				value = 0.57 # offset -7
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_neptune < -5 }
+					value = 1.93 # offset -6
+				}
+				else = {
+					value = 5.07 # offset -5
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_neptune < -2 }
+				if = {
+					limit = { sr_launch_offset_neptune < -3 }
+					value = 5.19 # offset -4
+				}
+				else = {
+					value = 2 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_neptune < -1 }
+					value = 0.47 # offset -2
+				}
+				else = {
+					value = 0 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_neptune < 4 }
+			if = {
+				limit = { sr_launch_offset_neptune < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_neptune < 3 }
+					value = 0.03 # offset +2
+				}
+				else = {
+					value = 0.04 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_neptune < 6 }
+				if = {
+					limit = { sr_launch_offset_neptune < 5 }
+					value = 0.15 # offset +4
+				}
+				else = {
+					value = 0.51 # offset +5
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_neptune < 7 }
+					value = 1.78 # offset +6
+				}
+				else = {
+					value = 4.76 # offset +7
 				}
 			}
 		}
@@ -6234,22 +7390,23 @@ sr_launch_nearer_previous_kuiper = {
 	add = sr_window_previous_gap_kuiper
 }
 
-# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles:
-#    -7:    5.67 (cycles 0% to 4203%)
-#    -6:   14.34 (cycles 3% to 17828%)
-#    -5:   37.84 (cycles 102% to 54166%)
-#    -4:   33.58 (cycles 202% to 25978%)
-#    -3:   14.22 (cycles 274% to 4321%)
-#    -2:    3.18 (cycles 38% to 875%)
-#    -1:       0 (window, free)
-#    +0:       0 (window, free)
-#    +1:       0 (window, free)
-#    +2:    0.43 (cycles 0% to 384%)
-#    +3:    1.37 (cycles 0% to 902%)
-#    +4:    2.16 (cycles 0% to 1290%)
-#    +5:    5.52 (cycles 0% to 4209%)
-#    +6:   13.73 (cycles 4% to 16306%)
-#    +7:    36.8 (cycles 103% to 58670%)
+# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of 16 cycles,
+# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):
+#    -7:    5.67, NTP   1.18 (chemical cycles 0% to 4203%)
+#    -6:   14.34, NTP   2.07 (chemical cycles 3% to 17828%)
+#    -5:   37.84, NTP    3.5 (chemical cycles 102% to 54166%)
+#    -4:   33.58, NTP   3.29 (chemical cycles 202% to 25978%)
+#    -3:   14.22, NTP   2.06 (chemical cycles 274% to 4321%)
+#    -2:    3.18, NTP    0.8 (chemical cycles 38% to 875%)
+#    -1:       0, NTP      0 (window, free)
+#    +0:       0, NTP      0 (window, free)
+#    +1:       0, NTP      0 (window, free)
+#    +2:    0.43, NTP   0.16 (chemical cycles 0% to 384%)
+#    +3:    1.37, NTP   0.43 (chemical cycles 0% to 902%)
+#    +4:    2.16, NTP    0.6 (chemical cycles 0% to 1290%)
+#    +5:    5.52, NTP   1.16 (chemical cycles 0% to 4209%)
+#    +6:   13.73, NTP   2.02 (chemical cycles 4% to 16306%)
+#    +7:    36.8, NTP   3.45 (chemical cycles 103% to 58670%)
 sr_launch_premium_kuiper = {
 	value = 0
 	if = {
@@ -6327,6 +7484,88 @@ sr_launch_premium_kuiper = {
 				}
 				else = {
 					value = 36.8 # offset +7
+				}
+			}
+		}
+	}
+}
+sr_launch_premium_ntp_kuiper = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_kuiper < 0 }
+		if = {
+			limit = { sr_launch_offset_kuiper < -4 }
+			if = {
+				limit = { sr_launch_offset_kuiper < -6 }
+				value = 1.18 # offset -7
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_kuiper < -5 }
+					value = 2.07 # offset -6
+				}
+				else = {
+					value = 3.5 # offset -5
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_kuiper < -2 }
+				if = {
+					limit = { sr_launch_offset_kuiper < -3 }
+					value = 3.29 # offset -4
+				}
+				else = {
+					value = 2.06 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_kuiper < -1 }
+					value = 0.8 # offset -2
+				}
+				else = {
+					value = 0 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_kuiper < 4 }
+			if = {
+				limit = { sr_launch_offset_kuiper < 2 }
+				value = 0 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_kuiper < 3 }
+					value = 0.16 # offset +2
+				}
+				else = {
+					value = 0.43 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_kuiper < 6 }
+				if = {
+					limit = { sr_launch_offset_kuiper < 5 }
+					value = 0.6 # offset +4
+				}
+				else = {
+					value = 1.16 # offset +5
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_kuiper < 7 }
+					value = 2.02 # offset +6
+				}
+				else = {
+					value = 3.45 # offset +7
 				}
 			}
 		}
@@ -6461,6 +7700,13 @@ sr_transit_antimatter_mercury = { value = 1 }
 #                               lines, which can't name a $BODY$ (BODY_CODE_LEGEND)
 # sr_window_wait_months_<body>  months to its next window, cached (0 if none yet)
 # sr_window_premium_now_<body>  this month's premium, cached (0 if none yet)
+# sr_window_premium_now_ntp_<body>  the same for nuclear thermal engines (the
+#                               date's own figure, sr_launch_premium_ntp_<body>,
+#                               if none yet)
+# sr_window_premium_country_<body>  country: the one its engines pay, nuclear
+#                               thermal with Nuclear Thermal Propulsion
+#                               (sr_launch_has_ntp), chemical otherwise. Every
+#                               reader below that prices a launch reads this.
 # sr_launch_cost_<body>         country: the premium it launches there at now, 0
 #                               in a window or with fusion drives, sr_launch_never
 #                               if it can't (sr_launch_departs_free / _paid,
@@ -6490,7 +7736,7 @@ sr_transit_months_mars = {
 sr_launch_target_cost_mars = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = mars } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = mars } } value = sr_window_premium_now_mars }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = mars } } value = sr_window_premium_country_mars }
 }
 sr_launch_target_months_allowed_mars = {
 	value = sr_window_wait_months_mars
@@ -6506,14 +7752,23 @@ sr_window_premium_now_mars = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_mars } value = global_var:sr_window_cost_mars }
 }
+sr_window_premium_now_ntp_mars = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_mars } value = global_var:sr_window_cost_ntp_mars }
+	else = { value = sr_launch_premium_ntp_mars }
+}
+sr_window_premium_country_mars = {
+	value = sr_window_premium_now_mars
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_mars }
+}
 sr_launch_cost_mars = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = mars } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = mars } } value = sr_window_premium_now_mars }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = mars } } value = sr_window_premium_country_mars }
 }
 sr_launch_months_cost_mars = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_mars
+	multiply = sr_window_premium_country_mars
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_mars = {
@@ -6530,7 +7785,7 @@ sr_transit_months_ceres = {
 sr_launch_target_cost_ceres = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = ceres } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = ceres } } value = sr_window_premium_now_ceres }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = ceres } } value = sr_window_premium_country_ceres }
 }
 sr_launch_target_months_allowed_ceres = {
 	value = sr_window_wait_months_ceres
@@ -6546,14 +7801,23 @@ sr_window_premium_now_ceres = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_ceres } value = global_var:sr_window_cost_ceres }
 }
+sr_window_premium_now_ntp_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_ceres } value = global_var:sr_window_cost_ntp_ceres }
+	else = { value = sr_launch_premium_ntp_ceres }
+}
+sr_window_premium_country_ceres = {
+	value = sr_window_premium_now_ceres
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_ceres }
+}
 sr_launch_cost_ceres = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = ceres } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = ceres } } value = sr_window_premium_now_ceres }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = ceres } } value = sr_window_premium_country_ceres }
 }
 sr_launch_months_cost_ceres = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_ceres
+	multiply = sr_window_premium_country_ceres
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_ceres = {
@@ -6570,7 +7834,7 @@ sr_transit_months_vesta = {
 sr_launch_target_cost_vesta = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = vesta } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = vesta } } value = sr_window_premium_now_vesta }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = vesta } } value = sr_window_premium_country_vesta }
 }
 sr_launch_target_months_allowed_vesta = {
 	value = sr_window_wait_months_vesta
@@ -6586,14 +7850,23 @@ sr_window_premium_now_vesta = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_vesta } value = global_var:sr_window_cost_vesta }
 }
+sr_window_premium_now_ntp_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_vesta } value = global_var:sr_window_cost_ntp_vesta }
+	else = { value = sr_launch_premium_ntp_vesta }
+}
+sr_window_premium_country_vesta = {
+	value = sr_window_premium_now_vesta
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_vesta }
+}
 sr_launch_cost_vesta = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = vesta } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = vesta } } value = sr_window_premium_now_vesta }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = vesta } } value = sr_window_premium_country_vesta }
 }
 sr_launch_months_cost_vesta = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_vesta
+	multiply = sr_window_premium_country_vesta
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_vesta = {
@@ -6610,7 +7883,7 @@ sr_transit_months_psyche = {
 sr_launch_target_cost_psyche = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = psyche } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = psyche } } value = sr_window_premium_now_psyche }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = psyche } } value = sr_window_premium_country_psyche }
 }
 sr_launch_target_months_allowed_psyche = {
 	value = sr_window_wait_months_psyche
@@ -6626,14 +7899,23 @@ sr_window_premium_now_psyche = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_psyche } value = global_var:sr_window_cost_psyche }
 }
+sr_window_premium_now_ntp_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_psyche } value = global_var:sr_window_cost_ntp_psyche }
+	else = { value = sr_launch_premium_ntp_psyche }
+}
+sr_window_premium_country_psyche = {
+	value = sr_window_premium_now_psyche
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_psyche }
+}
 sr_launch_cost_psyche = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = psyche } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = psyche } } value = sr_window_premium_now_psyche }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = psyche } } value = sr_window_premium_country_psyche }
 }
 sr_launch_months_cost_psyche = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_psyche
+	multiply = sr_window_premium_country_psyche
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_psyche = {
@@ -6650,7 +7932,7 @@ sr_transit_months_pallas = {
 sr_launch_target_cost_pallas = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = pallas } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = pallas } } value = sr_window_premium_now_pallas }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = pallas } } value = sr_window_premium_country_pallas }
 }
 sr_launch_target_months_allowed_pallas = {
 	value = sr_window_wait_months_pallas
@@ -6666,14 +7948,23 @@ sr_window_premium_now_pallas = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_pallas } value = global_var:sr_window_cost_pallas }
 }
+sr_window_premium_now_ntp_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_pallas } value = global_var:sr_window_cost_ntp_pallas }
+	else = { value = sr_launch_premium_ntp_pallas }
+}
+sr_window_premium_country_pallas = {
+	value = sr_window_premium_now_pallas
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_pallas }
+}
 sr_launch_cost_pallas = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = pallas } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = pallas } } value = sr_window_premium_now_pallas }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = pallas } } value = sr_window_premium_country_pallas }
 }
 sr_launch_months_cost_pallas = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_pallas
+	multiply = sr_window_premium_country_pallas
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_pallas = {
@@ -6690,7 +7981,7 @@ sr_transit_months_hygiea = {
 sr_launch_target_cost_hygiea = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = hygiea } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = hygiea } } value = sr_window_premium_now_hygiea }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = hygiea } } value = sr_window_premium_country_hygiea }
 }
 sr_launch_target_months_allowed_hygiea = {
 	value = sr_window_wait_months_hygiea
@@ -6706,14 +7997,23 @@ sr_window_premium_now_hygiea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_hygiea } value = global_var:sr_window_cost_hygiea }
 }
+sr_window_premium_now_ntp_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_hygiea } value = global_var:sr_window_cost_ntp_hygiea }
+	else = { value = sr_launch_premium_ntp_hygiea }
+}
+sr_window_premium_country_hygiea = {
+	value = sr_window_premium_now_hygiea
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_hygiea }
+}
 sr_launch_cost_hygiea = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = hygiea } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = hygiea } } value = sr_window_premium_now_hygiea }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = hygiea } } value = sr_window_premium_country_hygiea }
 }
 sr_launch_months_cost_hygiea = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_hygiea
+	multiply = sr_window_premium_country_hygiea
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_hygiea = {
@@ -6730,7 +8030,7 @@ sr_transit_months_jupiter = {
 sr_launch_target_cost_jupiter = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = jupiter } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = jupiter } } value = sr_window_premium_now_jupiter }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = jupiter } } value = sr_window_premium_country_jupiter }
 }
 sr_launch_target_months_allowed_jupiter = {
 	value = sr_window_wait_months_jupiter
@@ -6746,14 +8046,23 @@ sr_window_premium_now_jupiter = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_jupiter } value = global_var:sr_window_cost_jupiter }
 }
+sr_window_premium_now_ntp_jupiter = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_jupiter } value = global_var:sr_window_cost_ntp_jupiter }
+	else = { value = sr_launch_premium_ntp_jupiter }
+}
+sr_window_premium_country_jupiter = {
+	value = sr_window_premium_now_jupiter
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_jupiter }
+}
 sr_launch_cost_jupiter = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = jupiter } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = jupiter } } value = sr_window_premium_now_jupiter }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = jupiter } } value = sr_window_premium_country_jupiter }
 }
 sr_launch_months_cost_jupiter = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_jupiter
+	multiply = sr_window_premium_country_jupiter
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_jupiter = {
@@ -6770,7 +8079,7 @@ sr_transit_months_venus = {
 sr_launch_target_cost_venus = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = venus } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = venus } } value = sr_window_premium_now_venus }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = venus } } value = sr_window_premium_country_venus }
 }
 sr_launch_target_months_allowed_venus = {
 	value = sr_window_wait_months_venus
@@ -6786,14 +8095,23 @@ sr_window_premium_now_venus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_venus } value = global_var:sr_window_cost_venus }
 }
+sr_window_premium_now_ntp_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_venus } value = global_var:sr_window_cost_ntp_venus }
+	else = { value = sr_launch_premium_ntp_venus }
+}
+sr_window_premium_country_venus = {
+	value = sr_window_premium_now_venus
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_venus }
+}
 sr_launch_cost_venus = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = venus } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = venus } } value = sr_window_premium_now_venus }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = venus } } value = sr_window_premium_country_venus }
 }
 sr_launch_months_cost_venus = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_venus
+	multiply = sr_window_premium_country_venus
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_venus = {
@@ -6810,7 +8128,7 @@ sr_transit_months_saturn = {
 sr_launch_target_cost_saturn = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = saturn } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = saturn } } value = sr_window_premium_now_saturn }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = saturn } } value = sr_window_premium_country_saturn }
 }
 sr_launch_target_months_allowed_saturn = {
 	value = sr_window_wait_months_saturn
@@ -6826,14 +8144,23 @@ sr_window_premium_now_saturn = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_saturn } value = global_var:sr_window_cost_saturn }
 }
+sr_window_premium_now_ntp_saturn = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_saturn } value = global_var:sr_window_cost_ntp_saturn }
+	else = { value = sr_launch_premium_ntp_saturn }
+}
+sr_window_premium_country_saturn = {
+	value = sr_window_premium_now_saturn
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_saturn }
+}
 sr_launch_cost_saturn = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = saturn } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = saturn } } value = sr_window_premium_now_saturn }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = saturn } } value = sr_window_premium_country_saturn }
 }
 sr_launch_months_cost_saturn = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_saturn
+	multiply = sr_window_premium_country_saturn
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_saturn = {
@@ -6850,7 +8177,7 @@ sr_transit_months_uranus = {
 sr_launch_target_cost_uranus = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = uranus } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = uranus } } value = sr_window_premium_now_uranus }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = uranus } } value = sr_window_premium_country_uranus }
 }
 sr_launch_target_months_allowed_uranus = {
 	value = sr_window_wait_months_uranus
@@ -6866,14 +8193,23 @@ sr_window_premium_now_uranus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_uranus } value = global_var:sr_window_cost_uranus }
 }
+sr_window_premium_now_ntp_uranus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_uranus } value = global_var:sr_window_cost_ntp_uranus }
+	else = { value = sr_launch_premium_ntp_uranus }
+}
+sr_window_premium_country_uranus = {
+	value = sr_window_premium_now_uranus
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_uranus }
+}
 sr_launch_cost_uranus = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = uranus } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = uranus } } value = sr_window_premium_now_uranus }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = uranus } } value = sr_window_premium_country_uranus }
 }
 sr_launch_months_cost_uranus = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_uranus
+	multiply = sr_window_premium_country_uranus
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_uranus = {
@@ -6890,7 +8226,7 @@ sr_transit_months_neptune = {
 sr_launch_target_cost_neptune = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = neptune } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = neptune } } value = sr_window_premium_now_neptune }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = neptune } } value = sr_window_premium_country_neptune }
 }
 sr_launch_target_months_allowed_neptune = {
 	value = sr_window_wait_months_neptune
@@ -6906,14 +8242,23 @@ sr_window_premium_now_neptune = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_neptune } value = global_var:sr_window_cost_neptune }
 }
+sr_window_premium_now_ntp_neptune = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_neptune } value = global_var:sr_window_cost_ntp_neptune }
+	else = { value = sr_launch_premium_ntp_neptune }
+}
+sr_window_premium_country_neptune = {
+	value = sr_window_premium_now_neptune
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_neptune }
+}
 sr_launch_cost_neptune = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = neptune } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = neptune } } value = sr_window_premium_now_neptune }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = neptune } } value = sr_window_premium_country_neptune }
 }
 sr_launch_months_cost_neptune = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_neptune
+	multiply = sr_window_premium_country_neptune
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_neptune = {
@@ -6930,7 +8275,7 @@ sr_transit_months_kuiper = {
 sr_launch_target_cost_kuiper = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = kuiper } } value = 0 }
-	else_if = { limit = { sr_launch_target_departs_paid = { BODY = kuiper } } value = sr_window_premium_now_kuiper }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = kuiper } } value = sr_window_premium_country_kuiper }
 }
 sr_launch_target_months_allowed_kuiper = {
 	value = sr_window_wait_months_kuiper
@@ -6946,14 +8291,23 @@ sr_window_premium_now_kuiper = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cost_kuiper } value = global_var:sr_window_cost_kuiper }
 }
+sr_window_premium_now_ntp_kuiper = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cost_ntp_kuiper } value = global_var:sr_window_cost_ntp_kuiper }
+	else = { value = sr_launch_premium_ntp_kuiper }
+}
+sr_window_premium_country_kuiper = {
+	value = sr_window_premium_now_kuiper
+	if = { limit = { sr_launch_has_ntp = yes } value = sr_window_premium_now_ntp_kuiper }
+}
 sr_launch_cost_kuiper = {
 	value = sr_launch_never
 	if = { limit = { sr_launch_departs_free = { BODY = kuiper } } value = 0 }
-	else_if = { limit = { sr_launch_departs_paid = { BODY = kuiper } } value = sr_window_premium_now_kuiper }
+	else_if = { limit = { sr_launch_departs_paid = { BODY = kuiper } } value = sr_window_premium_country_kuiper }
 }
 sr_launch_months_cost_kuiper = {
 	value = sr_solar_colonization_goal
-	multiply = sr_window_premium_now_kuiper
+	multiply = sr_window_premium_country_kuiper
 	divide = sr_pace_rate_solar_colonization
 }
 sr_window_disp_verdict_kuiper = {

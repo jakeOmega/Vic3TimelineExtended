@@ -494,7 +494,14 @@ Implementation, all in `gen_launch_windows.py`:
 
 `sr_launch_cost_<body>`, `sr_launch_target_cost_<body>`,
 `sr_launch_months_cost_<body>` and the Next Windows display read the country
-reader. The report gains the NTP curve. Transit, drives, fleets, yards and
+reader. The report gains the NTP curve.
+
+As built (PR 3a): `sr_launch_premium_<body>` was already the chemical curve,
+which the global cache refresh reads in no country's scope, so the country
+reader is `sr_window_premium_country_<body>`; the cache holds the NTP curve as
+`sr_window_cost_ntp_<body>`. The tree is computed from the extra Δv at 9 km/s,
+rounded once, so it can differ from `(1 + p)^(3.7 / 9) − 1` on the stored,
+rounded p by under a hundredth. Transit, drives, fleets, yards and
 refits are untouched: NTP vehicles fly near-Hohmann transfers, so their transit
 is chemical's.
 

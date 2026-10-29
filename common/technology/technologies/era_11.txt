@@ -335,8 +335,11 @@ asteroid_mining = {
 }
 
 nuclear_thermal_propulsion = {
-	# Space race funding cap (lunar colonization design § 5); its off-window launch
-	# premium (design § 9) is a later build's
+	# Space race funding cap (lunar colonization design § 5), and the smaller
+	# off-window launch premium (design § 9): a country with it pays the nuclear
+	# thermal curve (sr_launch_premium_ntp_<body>, the same extra delta-v at
+	# 9 km/s) through sr_launch_has_ntp. Launching outside a window still needs
+	# propellant depots. The boolean below only shows that in the tooltip.
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/nuclear_thermal_propulsion.dds"
 	category = military
@@ -347,6 +350,7 @@ nuclear_thermal_propulsion = {
 
 	modifier = {
 		country_space_race_max_funding_add = 1
+		country_sr_nuclear_thermal_launches_bool = yes
 	}
 
 	ai_weight = {
