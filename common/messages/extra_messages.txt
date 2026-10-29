@@ -133,6 +133,15 @@ nd_crisis_ultimatum_issued = {
 	color = neutral
 }
 
+# A deployment concession switched our missile defense off again
+# (nd_deploy_bar_enforce).
+nd_deploy_bar_enforced = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
 nd_crisis_warning_reported = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"

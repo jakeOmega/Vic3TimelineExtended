@@ -418,11 +418,23 @@ concede.
 | A play or war between the target and a country you cover, when you are not a party to it | The same, on your protégé's behalf |
 | The target struck you, or a country you cover, with a nuclear weapon outside a war in the last 24 months, other than in answer to a strike of yours | It pays the struck country reparations, about a tenth of a year's income, and opens its arsenal to inspection for 20 years, taking Custody Inspections (−5 legitimacy, fading over ten years) |
 | A weapons program run by a country the world believes unarmed that is your rival, or that you are antagonistic, belligerent or domineering toward | Its program is frozen for 10 years |
+| The target's forces next to you: its Nuclear Basing article in, or nuclear guarantee over, a country next to yours by land or sea, or its missile defense in a state bordering yours | It leaves each such treaty (whole, so the treaty's other articles end too, with no penalty for breaking it), switches the missile defense off, and makes none of these next to you for 10 years |
+| The target claims one of your incorporated states | It renounces those claims. A claim covers a whole state region, so one on a region you share goes for all of it |
+| A covert operation of the target's against you that you have caught | It ends each one you have caught and runs no hostile operation against you for 10 years. Operations you haven't caught go on |
+| The target is building an Orbital Battlestation (a site not left paused) | It tears down the construction site, losing the progress, and starts no new one for 10 years. Levels already built stay |
 | An armed rival at Heightened readiness or higher | It stands down to Routine for 24 months |
 
 Only conceding binds the target. Cutting its program's funding to zero, setting
-its own arsenal ceiling or standing its forces down without conceding doesn't
-end the crisis, because it could undo each of them a week later.
+its own arsenal ceiling, standing its forces down, pulling a deployment back,
+ending an operation or tearing a battlestation site down without conceding
+doesn't end the crisis, because it could undo each of them a week later. A
+claim that disappears, struck down by the UN court or lost with the state, ends
+the crisis with no winner. The ten-year bars end if the two go to war. The AI
+threatens over forces next to it, claims and caught operations only against a
+rival, and over a battlestation only as a great power against a country it is
+hostile to; over any of the four only when nothing weightier divides you and its
+doctrine makes the threat more than a bluff. An AI won't concede forces next to
+you when that would end a treaty holding its alliance or defensive pact.
 
 ### Crisis stages, danger and pressure
 
@@ -483,7 +495,7 @@ or Rules of War law forbids a strike, or your weapons can't reach them).
 |---|---|---|
 | The target concedes | +10 credibility (+15 if public), Nuclear Brinkmanship Rewarded, hawks approve | −5 credibility, Yielded to Nuclear Coercion, hawks disapprove |
 | The issuer backs down | −5 credibility if private; −15, Nuclear Climb-Down and angry hawks if public | +10 credibility, Faced Down a Nuclear Threat |
-| Mutual stand-down | +5 credibility (−5 for trading away a public demand), Mutual Nuclear Restraint, restraint groups approve | +5 credibility, Mutual Nuclear Restraint, restraint groups approve |
+| Mutual stand-down | +5 credibility (−5 for trading away a public demand, unless the demand defended you or a country you cover: against a play the target started on you or a war on your core states, for a protégé, or over its nuclear strike, forces next to you, claims on your land or operations against you), Mutual Nuclear Restraint, restraint groups approve | +5 credibility, Mutual Nuclear Restraint, restraint groups approve |
 | A public crisis runs out its year unsettled | −10 credibility | Nothing |
 
 The Outcomes table at the foot of the Nuclear Crisis section shows, for your
@@ -493,7 +505,8 @@ what each would do to your credibility.
 A public bluff that ends in a climb-down or runs out its year costs 5 more
 credibility. The modifiers last five years. A crisis also ends when its war or
 play ends, when nuclear weapons are used between the two, when a treaty halts
-the program it is about, or when the country on alert no longer holds warheads.
+the program it is about, when the country on alert no longer holds warheads, or
+when no claim it is about is left.
 A non-use pledge from a stand-down blocks strikes on that partner until one side
 uses Repudiate Non-Use Pledge (−15 credibility, +5 infamy, −30 relations and a
 Broken Nuclear Pledge).

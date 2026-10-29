@@ -101,6 +101,17 @@ nuclear_basing = {
 			text = nd_tt_guarantor_armed
 			scope:source_country = { nd_is_armed = yes }
 		}
+		# A deployment conceded in a nuclear crisis (dispute 7,
+		# nd_crisis_concede_deployment): no new one next to that country for
+		# ten years.
+		custom_tooltip = {
+			text = nd_tt_deploy_barred
+			scope:source_country = {
+				NOT = {
+					var:nd_crisis_deploy_bar ?= { is_adjacent_to_country = scope:target_country }
+				}
+			}
+		}
 	}
 
 	# These ongoing effects are implemented by the nuclear system, not modifiers.

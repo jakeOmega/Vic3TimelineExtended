@@ -130,6 +130,22 @@ nd_crisis_preview = {
 		limit = { nd_dispute_proliferation_by = { TARGET = $TARGET$ } }
 		custom_tooltip = nd_tt_open_over_proliferation
 	}
+	else_if = {
+		limit = { nd_dispute_deployment_by = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_deployment
+	}
+	else_if = {
+		limit = { nd_dispute_claims_by = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_claims
+	}
+	else_if = {
+		limit = { nd_dispute_covert_ops_by = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_covert_ops
+	}
+	else_if = {
+		limit = { nd_dispute_orbital_by = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_orbital
+	}
 	else = {
 		custom_tooltip = nd_tt_open_over_alert
 	}
@@ -417,6 +433,22 @@ nd_crisis_classify_dispute = {
 	else_if = {
 		limit = { nd_dispute_proliferation_by = { TARGET = scope:nd_target } }
 		set_variable = { name = nd_crisis_dispute value = 4 }
+	}
+	else_if = {
+		limit = { nd_dispute_deployment_by = { TARGET = scope:nd_target } }
+		set_variable = { name = nd_crisis_dispute value = 7 }
+	}
+	else_if = {
+		limit = { nd_dispute_claims_by = { TARGET = scope:nd_target } }
+		set_variable = { name = nd_crisis_dispute value = 8 }
+	}
+	else_if = {
+		limit = { nd_dispute_covert_ops_by = { TARGET = scope:nd_target } }
+		set_variable = { name = nd_crisis_dispute value = 9 }
+	}
+	else_if = {
+		limit = { nd_dispute_orbital_by = { TARGET = scope:nd_target } }
+		set_variable = { name = nd_crisis_dispute value = 10 }
 	}
 	else = {
 		set_variable = { name = nd_crisis_dispute value = 5 }
@@ -996,6 +1028,52 @@ nd_crisis_revalidate_dispute = {
 			}
 		}
 		nd_crisis_close = { OUTCOME = 4 }
+	}
+	# ---- deployment: a war between them turns it into a war dispute. A
+	# deployment the target ends itself can be made again (a battery switched
+	# back on, a host re-signing), so it doesn't end the crisis: what we demand
+	# is the concession's bar.
+	else_if = {
+		limit = { var:nd_crisis_dispute = 7 }
+		if = {
+			limit = { has_war_with = scope:nd_target }
+			set_variable = { name = nd_crisis_dispute value = 2 }
+		}
+	}
+	# ---- claims: a war between them turns it into a war dispute; no claim
+	# left (the UN court struck it, or the state left us) ends it with no
+	# winner. A claim can't be renewed at will, so it is gone for good.
+	else_if = {
+		limit = { var:nd_crisis_dispute = 8 }
+		if = {
+			limit = { has_war_with = scope:nd_target }
+			set_variable = { name = nd_crisis_dispute value = 2 }
+		}
+		else_if = {
+			limit = { NOT = { nd_dispute_claims_by = { TARGET = scope:nd_target } } }
+			nd_crisis_close = { OUTCOME = 10 }
+		}
+	}
+	# ---- covert operations: a war between them turns it into a war dispute.
+	# An operation the target ends itself, or one burned, can be launched again
+	# at once, so neither ends the crisis: what we demand is the concession's
+	# bar.
+	else_if = {
+		limit = { var:nd_crisis_dispute = 9 }
+		if = {
+			limit = { has_war_with = scope:nd_target }
+			set_variable = { name = nd_crisis_dispute value = 2 }
+		}
+	}
+	# ---- an orbital battlestation: a war between them turns it into a war
+	# dispute. A site the target tears down itself can go up again at once, so
+	# it doesn't end the crisis: what we demand is the concession's freeze.
+	else_if = {
+		limit = { var:nd_crisis_dispute = 10 }
+		if = {
+			limit = { has_war_with = scope:nd_target }
+			set_variable = { name = nd_crisis_dispute value = 2 }
+		}
 	}
 	# ---- a disarmed issuer has no threat left -----------------------------
 	if = {
@@ -1743,6 +1821,38 @@ nd_crisis_act_yield = {
 					}
 					nd_crisis_concede_reparations = yes
 				}
+				else_if = {
+					limit = { var:nd_crisis_dispute = 7 }
+					if = {
+						limit = { nd_dispute_deployment_by = { TARGET = scope:nd_target } }
+						nd_crisis_concession_check_schedule = { CODE = 7 }
+					}
+					nd_crisis_concede_deployment = yes
+				}
+				else_if = {
+					limit = { var:nd_crisis_dispute = 8 }
+					if = {
+						limit = { nd_dispute_claims_by = { TARGET = scope:nd_target } }
+						nd_crisis_concession_check_schedule = { CODE = 8 }
+					}
+					nd_crisis_concede_claims = yes
+				}
+				else_if = {
+					limit = { var:nd_crisis_dispute = 9 }
+					if = {
+						limit = { nd_dispute_covert_ops_by = { TARGET = scope:nd_target } }
+						nd_crisis_concession_check_schedule = { CODE = 9 }
+					}
+					nd_crisis_concede_covert_ops = yes
+				}
+				else_if = {
+					limit = { var:nd_crisis_dispute = 10 }
+					if = {
+						limit = { nd_dispute_orbital_by = { TARGET = scope:nd_target } }
+						nd_crisis_concession_check_schedule = { CODE = 10 }
+					}
+					nd_crisis_concede_orbital = yes
+				}
 				else = {
 					scope:nd_target = {
 						if = {
@@ -1760,6 +1870,25 @@ nd_crisis_act_yield = {
 			}
 			nd_crisis_close = { OUTCOME = 1 }
 		}
+	}
+}
+
+# Issuer scope, scope:nd_target the yielder; $CODE$ = the dispute (7–10).
+# Once a game per code, a hidden check a day later (nuclear_crisis.26) says
+# whether the dispute still holds after its concession: TE_SELF_CHECK OK or
+# BROKEN nd_concession_$CODE$. The yield calls it only when the dispute held,
+# before the concession runs, so a yield with nothing to remove is never
+# counted as OK. The pattern of nd_suez_goals (nuclear_crisis.25).
+nd_crisis_concession_check_schedule = {
+	if = {
+		limit = {
+			exists = scope:nd_target
+			NOT = { has_global_variable = nd_cc_done_$CODE$ }
+		}
+		set_global_variable = nd_cc_done_$CODE$
+		set_variable = { name = nd_cc_target value = scope:nd_target days = 10 }
+		set_variable = { name = nd_cc_code value = $CODE$ days = 10 }
+		trigger_event = { id = nuclear_crisis.26 days = 1 }
 	}
 }
 
@@ -1788,6 +1917,22 @@ nd_crisis_yield_lines = {
 	else_if = {
 		limit = { nd_crisis_dispute_is = { D = 6 } }
 		custom_tooltip = nd_tt_yield_reparations
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 7 } }
+		custom_tooltip = nd_tt_yield_deployment
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 8 } }
+		custom_tooltip = nd_tt_yield_claims
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 9 } }
+		custom_tooltip = nd_tt_yield_covert_ops
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 10 } }
+		custom_tooltip = nd_tt_yield_orbital
 	}
 }
 
@@ -1922,6 +2067,136 @@ nd_crisis_concede_reparations = {
 			limit = { var:nd_peacetime_struck_by ?= scope:nd_target }
 			remove_variable = nd_peacetime_struck_by
 		}
+	}
+}
+
+# Issuer scope, scope:nd_target the yielder (dispute 7): it leaves every
+# treaty that holds its Nuclear Basing article in, or its nuclear guarantee
+# over, a country next to us — a treaty is left whole, and withdraw applies
+# no break penalties without apply_break_penalties (rulings R10) — switches
+# its missile defense off in the states next to ours, and makes none of these
+# again for ten years (nd_crisis_deploy_bar: the articles' can_ratify and the
+# weekly nd_deploy_bar_enforce read it). Our warning time against it comes
+# back at once rather than at the weekly rebuild, and its reach is rebuilt a
+# day later, as the article's own hooks do.
+nd_crisis_concede_deployment = {
+	scope:nd_target = {
+		every_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					OR = {
+						has_type = nuclear_basing
+						has_type = nuclear_guarantee
+					}
+					source_country = scope:nd_target
+					target_country = {
+						NOT = { THIS = scope:nd_issuer }
+						is_adjacent_to_country = scope:nd_issuer
+					}
+				}
+			}
+			withdraw = { country = scope:nd_target }
+		}
+		every_scope_state = {
+			limit = {
+				nd_state_has_missile_defense = yes
+				any_neighbouring_state = { owner = scope:nd_issuer }
+			}
+			nd_missile_defense_off = yes
+		}
+		set_variable = { name = nd_crisis_deploy_bar value = scope:nd_issuer days = 3650 }
+		trigger_event = { id = nuclear_weapon_events.32 days = 1 }
+	}
+	scope:nd_issuer = {
+		if = {
+			limit = { has_variable_list = nd_based_near }
+			remove_list_variable = { name = nd_based_near target = scope:nd_target }
+		}
+	}
+}
+
+# Issuer scope, scope:nd_target the yielder (dispute 8): it renounces every
+# claim it holds on our incorporated states. A claim is on the state region,
+# so a region we share with a third country loses the claim on all of it.
+# No bar follows: nothing lets a country claim a neighbor's land at will.
+nd_crisis_concede_claims = {
+	every_scope_state = {
+		limit = {
+			is_incorporated = yes
+			state_region = { scope:nd_target = { has_claim = PREV } }
+		}
+		state_region = { remove_claim = scope:nd_target }
+	}
+}
+
+# Issuer scope, scope:nd_target the yielder (dispute 9): it ends every
+# operation against us that we have caught, one type at a time — never by
+# walking iw_ops, the list covert_op_destroy changes — and runs no hostile
+# operation against us for ten years (nd_crisis_covert_bar, read by each
+# hostile action's possible). Operations we haven't caught go on.
+nd_crisis_concede_covert_ops = {
+	scope:nd_target = {
+		nd_crisis_end_known_op = { TYPE = election_interference ACTION = covert_election_interference_action }
+		nd_crisis_end_known_op = { TYPE = financial_subversion ACTION = covert_financial_subversion_action }
+		nd_crisis_end_known_op = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action }
+		nd_crisis_end_known_op = { TYPE = comms_disruption ACTION = covert_comms_disruption_action }
+		nd_crisis_end_known_op = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action }
+		nd_crisis_end_known_op = { TYPE = military_espionage ACTION = covert_military_espionage_action }
+		nd_crisis_end_known_op = { TYPE = influence_campaign ACTION = covert_influence_campaign_action }
+		nd_crisis_end_known_op = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action }
+		nd_crisis_end_known_op = { TYPE = destabilization ACTION = covert_destabilization_action }
+		nd_crisis_end_known_op = { TYPE = regime_change ACTION = covert_regime_change_action }
+		nd_crisis_end_known_op = { TYPE = nuclear_sabotage ACTION = covert_nuclear_sabotage_action }
+		nd_crisis_end_known_op = { TYPE = space_espionage ACTION = covert_space_espionage_action }
+		nd_crisis_end_known_op = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action }
+		nd_crisis_end_known_op = { TYPE = secure_material ACTION = covert_secure_material_action }
+		nd_crisis_end_known_op = { TYPE = incite_autonomy ACTION = covert_incite_autonomy_action }
+		nd_crisis_end_known_op = { TYPE = sabotage_colony ACTION = covert_sabotage_colony_action }
+		nd_crisis_end_known_op = { TYPE = survey_defences ACTION = covert_survey_defences_action }
+		set_variable = { name = nd_crisis_covert_bar value = scope:nd_issuer days = 3650 }
+	}
+}
+
+# Operator scope (scope:nd_target, the yielder), scope:nd_issuer the country
+# it runs $TYPE$ against: end that operation if the issuer has a record of it
+# — the record is what the dispute reads. A record whose pact already ended,
+# waiting for covert_op_sync's monthly reap, goes too, so the dispute is gone
+# the next day.
+# Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key
+nd_crisis_end_known_op = {
+	if = {
+		limit = {
+			scope:nd_issuer = {
+				has_variable_list = iw_known_ops
+				any_in_list = {
+					variable = iw_known_ops
+					has_tag = iw_known_$TYPE$
+					var:iw_attacker ?= scope:nd_target
+				}
+			}
+		}
+		if = {
+			limit = { has_diplomatic_pact = { who = scope:nd_issuer type = $ACTION$ } }
+			remove_diplomatic_pact = { country = scope:nd_issuer type = $ACTION$ }
+		}
+		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:nd_issuer }
+		scope:nd_issuer = { covert_watch_forget = { ATTACKER = scope:nd_target TYPE = $TYPE$ } }
+	}
+}
+
+# Issuer scope, scope:nd_target the yielder (dispute 10): it tears down every
+# Orbital Battlestation construction site with its progress (the order of
+# generic_wonder_construction_base's own completion, extra_effects.txt), and
+# builds no new site for ten years (nd_crisis_orbital_freeze, read by the
+# site's possible). Levels already finished stay.
+nd_crisis_concede_orbital = {
+	scope:nd_target = {
+		every_scope_state = {
+			limit = { has_building = building_orbital_battlestation_construction_site }
+			set_variable = { name = orbital_battlestation_progress_var value = 0 }
+			remove_building = building_orbital_battlestation_construction_site
+		}
+		set_variable = { name = nd_crisis_orbital_freeze value = scope:nd_issuer days = 3650 }
 	}
 }
 

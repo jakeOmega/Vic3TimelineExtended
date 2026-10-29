@@ -109,6 +109,12 @@ nuclear_crisis.1 = {
 				trigger = { ruler_is_cautious = yes }
 				add = 2
 			}
+			# Not when conceding a deployment would end a treaty that holds an
+			# alliance or a defensive pact: a treaty is left whole.
+			modifier = {
+				trigger = { nd_concession_costs_an_alliance = yes }
+				factor = 0
+			}
 		}
 	}
 
@@ -718,6 +724,11 @@ nuclear_crisis.5 = {
 					var:nd_yield_pressure >= 85
 				}
 				add = 8
+			}
+			# As in nuclear_crisis.1.a: not at the cost of an alliance.
+			modifier = {
+				trigger = { nd_concession_costs_an_alliance = yes }
+				factor = 0
 			}
 		}
 	}
@@ -1495,6 +1506,65 @@ nuclear_crisis.25 = {
 			remove_global_variable = nd_suez_self_check_done
 		}
 		remove_variable = nd_suez_check_other
+	}
+}
+
+# ---- .26 Hidden: a concession's self-check ------------------------------------
+# A day after a yield over a dispute 7–10 (nd_crisis_concession_check_schedule,
+# once a game per code): does the dispute still hold against the yielder? Each
+# code adds its branch; a code with none logs nothing.
+nuclear_crisis.26 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = nd_cc_target
+	}
+
+	immediate = {
+		var:nd_cc_target = { save_scope_as = nd_cc_target }
+		if = {
+			limit = { var:nd_cc_code = 7 }
+			if = {
+				limit = { nd_dispute_deployment_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_7: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] still deploys next to [THIS.GetCountry.GetNameNoFormatting] a day after withdraw and activate_production_method"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_7: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] deploys nothing next to [THIS.GetCountry.GetNameNoFormatting] a day after withdraw and activate_production_method"
+			}
+		}
+		if = {
+			limit = { var:nd_cc_code = 8 }
+			if = {
+				limit = { nd_dispute_claims_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_8: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] still claims a state of [THIS.GetCountry.GetNameNoFormatting] a day after remove_claim"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_8: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] claims no state of [THIS.GetCountry.GetNameNoFormatting] a day after remove_claim"
+			}
+		}
+		if = {
+			limit = { var:nd_cc_code = 9 }
+			if = {
+				limit = { nd_dispute_covert_ops_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_9: [THIS.GetCountry.GetNameNoFormatting] still has a record of an operation by [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] a day after remove_diplomatic_pact"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_9: [THIS.GetCountry.GetNameNoFormatting] has no record of an operation by [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] a day after remove_diplomatic_pact"
+			}
+		}
+		if = {
+			limit = { var:nd_cc_code = 10 }
+			if = {
+				limit = { nd_dispute_orbital_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_10: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] still has an Orbital Battlestation site a day after remove_building"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_10: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] has no Orbital Battlestation site a day after remove_building"
+			}
+		}
+		remove_variable = nd_cc_target
+		remove_variable = nd_cc_code
 	}
 }
 

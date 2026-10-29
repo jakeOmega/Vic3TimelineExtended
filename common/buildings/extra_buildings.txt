@@ -1953,6 +1953,12 @@ REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
 			NOT = { has_building = building_orbital_battlestation }
 			b:building_orbital_battlestation.level < 5
 		}
+		# A ten-year freeze conceded in a nuclear crisis (dispute 10,
+		# nd_crisis_concede_orbital).
+		custom_tooltip = {
+			text = nd_tt_orbital_frozen
+			owner = { NOT = { has_variable = nd_crisis_orbital_freeze } }
+		}
 	}
 
 	ownership_type = no_ownership

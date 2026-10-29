@@ -110,6 +110,17 @@ nuclear_guarantee = {
 			text = nd_tt_guarantor_armed
 			scope:source_country = { nd_is_armed = yes }
 		}
+		# A deployment conceded in a nuclear crisis (dispute 7,
+		# nd_crisis_concede_deployment): no new one next to that country for
+		# ten years.
+		custom_tooltip = {
+			text = nd_tt_deploy_barred
+			scope:source_country = {
+				NOT = {
+					var:nd_crisis_deploy_bar ?= { is_adjacent_to_country = scope:target_country }
+				}
+			}
+		}
 		# Two gates on a new guarantee (owner rulings 2026-10-05); a guarantee
 		# in force stays, since neither is in requirement_to_maintain, but a
 		# renegotiated treaty must pass them. The Budapest offer skips both:
