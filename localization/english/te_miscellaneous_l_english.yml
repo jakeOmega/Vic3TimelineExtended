@@ -6555,6 +6555,7 @@
  sr_sc_mix_step_war_tt:0 "[concept_sr_role_warship]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#! now. One more, or from #v 3#! back to #v 0#!.\n[concept_sr_space_command] shares each month's construction among the [concept_sr_ship_role]s by weight."
  sr_sea_of_tranquility:0 "Sea of Tranquility Landing"
  sr_seized_free_notice_tt:0 "The colony is now held, at autonomy #v 60#!, and its ties to every supplier are gone."
+ sr_site_landing_discount_target_tt:0 "#v -25%#! progress for us when we choose it as our Target: our Moon Landing came down here."
  sr_site_landing_discount_tt:0 "#v -25%#! progress for us: our Moon Landing came down here."
  sr_site_name_amalthea:0 "Amalthea"
  sr_site_name_arcadia_planitia:0 "Arcadia Planitia"

@@ -25,7 +25,7 @@ rewards after a revolution, using the same inherited country records as ordinary
 colony specializations. Pending discoveries and timers are country variables,
 so they follow the game's normal revolution inheritance. No flags are cleared
 by milestone cleanup. Colony surveys continue when the expansion program is
-idle and after all 34 sites have been claimed. Existing saves receive no
+idle and after every site has been claimed. Existing saves receive no
 retroactive rolls for colonies founded before this change.
 
 The two Europa candidates are independent: detecting vents neither guarantees

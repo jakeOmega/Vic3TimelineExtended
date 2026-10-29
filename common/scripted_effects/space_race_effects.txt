@@ -1546,7 +1546,7 @@ sr_sync_probe_data = {
 }
 
 # A colony's specialisation: one of 68 modifiers on the solar colonization
-# entry, granted by an option of space_race_colony_events.1-34. Recorded as
+# entry, granted by an option of space_race_colony_events.1-40. Recorded as
 # <modifier>_held in the same effect. Country scope.
 sr_grant_colony_modifier = {
 	je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }

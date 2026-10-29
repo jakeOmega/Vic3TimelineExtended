@@ -247,7 +247,7 @@ def _longest_figure(name):
     if re.fullmatch(r"sr_disp_cf_slot_\d_year", name):
         return END_YEAR
     fixed = {"sr_disp_cooldown_months": SCRIPT.cooldown, "sr_current_colonization_stage": STAGE_CEILING,
-             "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS,
+             "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS, "sr_sites_world_count": WORLDS,
              "sr_disp_colonies_held": WORLDS, "sr_disp_cf_in_flight": FLEET_SLOTS,
              "sr_disp_emig_per_month": SETTLERS_A_MONTH, "sr_disp_offworld_pop": OFFWORLD_PEOPLE,
              "sr_disp_fab_rate": FAB_RATE_CEILING, "sr_disp_fab_stock": FAB_STOCK,

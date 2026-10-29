@@ -383,6 +383,13 @@ def choices() -> list[tuple[str, Site, str, int]]:
 # The founding draw and the stage check
 # ---------------------------------------------------------------------------
 
+# Stages 3-5 need Deep Space Exploration or a colony beyond the Moon, under
+# every setting (design § 4): a lunar colony alone keeps the entry's
+# `possible` (its first branch), so the draw and the target test it per world.
+DEEP_SPACE_OPEN = ("OR = { modifier:country_sr_deep_space_exploration_program_bool = yes "
+                   "sr_has_colony_beyond_moon = yes }")
+
+
 def _draw_branch(site: Site, stage0: bool = False) -> list[str]:
     """One world's branch of the draw. `stage0`: the stage-0 block's own lunar
     worlds, which carry the lunar_stage0_draw self-check's OK (Races Only's
@@ -398,6 +405,8 @@ def _draw_branch(site: Site, stage0: bool = False) -> list[str]:
         lines.append(f"{t}\t\tsr_launch_ungated_departs = yes")
     else:
         lines.append(f"{t}\t\tsr_launch_site_departs = {{ BODY = {site.body} }}")
+    if site.stage >= 3:
+        lines.append(f"{t}\t\t{DEEP_SPACE_OPEN}")
     lines += [f"{t}\t}}",
               f"{t}\tset_global_variable = {{ name = sr_colony_{site.key} value = yes }}",
               f"{t}\tset_global_variable = {{ name = sr_site_holder_{site.key} value = root }}",
@@ -1061,7 +1070,7 @@ def transit_body(site: Site) -> str:
     lunar world (gen_launch_windows' 0-month transit-only body), or Mercury."""
     if site.body:
         return site.body
-    return "moon" if site.key in NO_SPACEPORT else "mercury"
+    return "moon" if site in LUNAR else "mercury"
 
 
 def body_group(site: Site) -> list[Site]:
@@ -1440,7 +1449,8 @@ def render_fleet_triggers() -> list[str]:
         if site.stage >= 1:
             out.append("\tsr_colonization_beyond_moon = yes")
         out += ["\tOR = {",
-                f"\t\tAND = {{ NOT = {{ sr_colonies_contested_enabled = yes }} sr_current_colonization_stage >= {site.stage} }}"]
+                f"\t\tAND = {{ NOT = {{ sr_colonies_contested_enabled = yes }} sr_current_colonization_stage >= {site.stage}"
+                f"{' ' + DEEP_SPACE_OPEN if site.stage >= 3 else ''} }}"]
         if site.stage <= 2:
             out.append("\t\tsr_colonies_contested_enabled = yes")
         else:
@@ -1539,6 +1549,9 @@ def render_fleet_values() -> list[str]:
            "sr_cf_no_score = { value = -1000 }",
            "",
            "# Per world, country scope:",
+           "#   sr_cf_base_goal_<key> its own stage's goal, -25% at the lunar world our Moon Landing",
+           "#                        named (LANDING_SITES); sr_cf_target_goal reads it, so the chain",
+           "#                        sr_solar_colonization_goal -> sr_cf_target_goal never loops back",
            "#   sr_cf_goal_<key>     its colony's goal: its own stage's under simple and full, the",
            "#                        current stage's under races only (a released world costs that);",
            "#                        -25% at the lunar world our Moon Landing named (LANDING_SITES)",
@@ -1550,13 +1563,18 @@ def render_fleet_values() -> list[str]:
            f"#                        - {SCORE_PER_INBOUND} a fleet inbound - {SCORE_BEATEN} if one lands first"]
     for site in SITES:
         k, tb = site.key, transit_body(site)
-        out += [f"sr_cf_goal_{k} = {{",
-                f"\tvalue = sr_colonization_goal_stage_{site.stage}",
-                "\tif = { limit = { NOT = { sr_colonies_contested_enabled = yes } } value = sr_solar_colonization_goal }"]
-        if k in LANDING_SITES:
-            # Our Moon Landing named this world (design § 3.4).
-            out.append(f"\tif = {{ limit = {{ has_variable = {LANDING_SITES[k]} }} multiply = sr_landing_site_factor }}")
-        out.append("}")
+        # Our Moon Landing named this world (design § 3.4).
+        landing = ([f"\tif = {{ limit = {{ has_variable = {LANDING_SITES[k]} }} multiply = sr_landing_site_factor }}"]
+                   if k in LANDING_SITES else [])
+        out += [f"sr_cf_base_goal_{k} = {{", f"\tvalue = sr_colonization_goal_stage_{site.stage}", *landing, "}",
+                f"sr_cf_goal_{k} = {{",
+                f"\tvalue = sr_cf_base_goal_{k}",
+                "\tif = {",
+                "\t\tlimit = { NOT = { sr_colonies_contested_enabled = yes } }",
+                "\t\tvalue = sr_solar_colonization_goal",
+                *["\t" + line for line in landing],
+                "\t}",
+                "}"]
         if site.body:
             out += [f"sr_cf_cost_{k} = {{", f"\tvalue = sr_launch_target_cost_{site.body}", "\tadd = 1",
                     f"\tmultiply = sr_cf_goal_{k}", "}"]
@@ -1578,13 +1596,14 @@ def render_fleet_values() -> list[str]:
     out += [f"\tif = {{ limit = {{ sr_cf_eligible_{s.key} = yes }} min = sr_cf_score_{s.key} }}" for s in SITES]
     out += ["}", "",
             "# The target's goal (sr_solar_colonization_goal under simple and full, which",
-            "# alone reads it): its world's sr_cf_goal_<key>, the landing site's discount",
-            "# included. Under simple and full that never reads sr_solar_colonization_goal.",
-            "sr_cf_target_goal = {", "\tvalue = sr_colonization_goal_stage_1"]
+            "# alone reads it): its world's sr_cf_base_goal_<key>, the landing site's",
+            "# discount included. Not sr_cf_goal_<key>, which reads sr_solar_colonization_goal",
+            "# under races only: a static cycle, even though the two legs never both run.",
+            "sr_cf_target_goal = {", "\tvalue = sr_colonization_goal_stage_0"]
     for n, site in enumerate(SITES):
         word = "if" if n == 0 else "else_if"
         out.append(f"\t{word} = {{ limit = {{ has_variable = sr_cf_target var:sr_cf_target = {site.index} }} "
-                   f"value = sr_cf_goal_{site.key} }}")
+                   f"value = sr_cf_base_goal_{site.key} }}")
     out.append("}")
     return out
 
@@ -2795,12 +2814,25 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ has_variable = sr_emig_prio_{k} }} value = var:sr_emig_prio_{k} }}",
                 "}"]
     out += ["",
-            "# The lunar world our Moon Landing named (design § 3.4): 1 while its -25% is ours,",
-            "# for its Solar System hover (sr_site_landing_discount_tt)."]
+            "# The lunar world our Moon Landing named (design § 3.4), for its Solar System",
+            "# hover: 1 while its -25% is ours (sr_site_landing_discount_tt); 2 under races",
+            "# only while it isn't our Target, which alone pays the discount there",
+            "# (sr_site_landing_discount_target_tt)."]
+    index = {s.key: s.index for s in SITES}
     for k, var in LANDING_SITES.items():
         out += [f"sr_disp_site_landing_{k} = {{",
                 "\tvalue = 0",
-                f"\tif = {{ limit = {{ has_variable = {var} }} value = 1 }}",
+                "\tif = {",
+                f"\t\tlimit = {{ has_variable = {var} }}",
+                "\t\tvalue = 1",
+                "\t\tif = {",
+                "\t\t\tlimit = {",
+                "\t\t\t\tNOT = { sr_colonies_contested_enabled = yes }",
+                f"\t\t\t\tNOT = {{ AND = {{ has_variable = sr_cf_target var:sr_cf_target = {index[k]} }} }}",
+                "\t\t\t}",
+                "\t\t\tvalue = 2",
+                "\t\t}",
+                "\t}",
                 "}"]
     out += ["",
             "# Per fleet slot (Colony Fleets): 1 while it flies, the months until it lands,",

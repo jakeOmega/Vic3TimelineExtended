@@ -629,6 +629,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_mercury }
 					sr_colonization_beyond_moon = yes
 					sr_launch_ungated_departs = yes
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_mercury value = yes }
 				set_global_variable = { name = sr_site_holder_mercury value = root }
@@ -641,6 +642,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_titan }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_titan value = yes }
 				set_global_variable = { name = sr_site_holder_titan value = root }
@@ -654,6 +656,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_enceladus }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_enceladus value = yes }
 				set_global_variable = { name = sr_site_holder_enceladus value = root }
@@ -667,6 +670,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_rhea }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_rhea value = yes }
 				set_global_variable = { name = sr_site_holder_rhea value = root }
@@ -679,6 +683,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_mimas }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_mimas value = yes }
 				set_global_variable = { name = sr_site_holder_mimas value = root }
@@ -691,6 +696,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_iapetus }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_iapetus value = yes }
 				set_global_variable = { name = sr_site_holder_iapetus value = root }
@@ -994,6 +1000,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_titania }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_titania value = yes }
 				set_global_variable = { name = sr_site_holder_titania value = root }
@@ -1007,6 +1014,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_oberon }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_oberon value = yes }
 				set_global_variable = { name = sr_site_holder_oberon value = root }
@@ -1019,6 +1027,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_miranda }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_miranda value = yes }
 				set_global_variable = { name = sr_site_holder_miranda value = root }
@@ -1031,6 +1040,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_ariel }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_ariel value = yes }
 				set_global_variable = { name = sr_site_holder_ariel value = root }
@@ -1043,6 +1053,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_triton }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = neptune }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_triton value = yes }
 				set_global_variable = { name = sr_site_holder_triton value = root }
@@ -1056,6 +1067,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_proteus }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = neptune }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_proteus value = yes }
 				set_global_variable = { name = sr_site_holder_proteus value = root }
@@ -1353,6 +1365,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_mercury }
 					sr_colonization_beyond_moon = yes
 					sr_launch_ungated_departs = yes
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_mercury value = yes }
 				set_global_variable = { name = sr_site_holder_mercury value = root }
@@ -1365,6 +1378,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_titan }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_titan value = yes }
 				set_global_variable = { name = sr_site_holder_titan value = root }
@@ -1378,6 +1392,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_enceladus }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_enceladus value = yes }
 				set_global_variable = { name = sr_site_holder_enceladus value = root }
@@ -1391,6 +1406,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_rhea }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_rhea value = yes }
 				set_global_variable = { name = sr_site_holder_rhea value = root }
@@ -1403,6 +1419,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_mimas }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_mimas value = yes }
 				set_global_variable = { name = sr_site_holder_mimas value = root }
@@ -1415,6 +1432,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_iapetus }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_iapetus value = yes }
 				set_global_variable = { name = sr_site_holder_iapetus value = root }
@@ -1433,6 +1451,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_pluto }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_pluto value = yes }
 				set_global_variable = { name = sr_site_holder_pluto value = root }
@@ -1446,6 +1465,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_eris }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_eris value = yes }
 				set_global_variable = { name = sr_site_holder_eris value = root }
@@ -1458,6 +1478,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_makemake }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_makemake value = yes }
 				set_global_variable = { name = sr_site_holder_makemake value = root }
@@ -1470,6 +1491,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_haumea }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_haumea value = yes }
 				set_global_variable = { name = sr_site_holder_haumea value = root }
@@ -1482,6 +1504,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_sedna }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = kuiper }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_sedna value = yes }
 				set_global_variable = { name = sr_site_holder_sedna value = root }
@@ -1779,6 +1802,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_mercury }
 					sr_colonization_beyond_moon = yes
 					sr_launch_ungated_departs = yes
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_mercury value = yes }
 				set_global_variable = { name = sr_site_holder_mercury value = root }
@@ -1791,6 +1815,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_titan }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_titan value = yes }
 				set_global_variable = { name = sr_site_holder_titan value = root }
@@ -1804,6 +1829,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_enceladus }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_enceladus value = yes }
 				set_global_variable = { name = sr_site_holder_enceladus value = root }
@@ -1817,6 +1843,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_rhea }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_rhea value = yes }
 				set_global_variable = { name = sr_site_holder_rhea value = root }
@@ -1829,6 +1856,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_mimas }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_mimas value = yes }
 				set_global_variable = { name = sr_site_holder_mimas value = root }
@@ -1841,6 +1869,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_iapetus }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = saturn }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_iapetus value = yes }
 				set_global_variable = { name = sr_site_holder_iapetus value = root }
@@ -1853,6 +1882,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_titania }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_titania value = yes }
 				set_global_variable = { name = sr_site_holder_titania value = root }
@@ -1866,6 +1896,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_oberon }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_oberon value = yes }
 				set_global_variable = { name = sr_site_holder_oberon value = root }
@@ -1878,6 +1909,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_miranda }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_miranda value = yes }
 				set_global_variable = { name = sr_site_holder_miranda value = root }
@@ -1890,6 +1922,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_ariel }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = uranus }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_ariel value = yes }
 				set_global_variable = { name = sr_site_holder_ariel value = root }
@@ -1902,6 +1935,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_triton }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = neptune }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_triton value = yes }
 				set_global_variable = { name = sr_site_holder_triton value = root }
@@ -1915,6 +1949,7 @@ sr_establish_colony_effect = {
 					NOT = { has_global_variable = sr_colony_proteus }
 					sr_colonization_beyond_moon = yes
 					sr_launch_site_departs = { BODY = neptune }
+					OR = { modifier:country_sr_deep_space_exploration_program_bool = yes sr_has_colony_beyond_moon = yes }
 				}
 				set_global_variable = { name = sr_colony_proteus value = yes }
 				set_global_variable = { name = sr_site_holder_proteus value = root }
