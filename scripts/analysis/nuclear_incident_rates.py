@@ -78,6 +78,7 @@ class Posture:
     capital_hit_share: float = 0.9 # a warhead's chance on the enemy's capital (nd_ai_capital_hit_share)
     in_reach: bool = True          # our delivery reaches the enemy (nd_reaches_country, rework spec §7)
     capital_in_reach: bool = True  # and its capital (nd_leadership_in_reach)
+    based_near: bool = False       # the enemy's weapons are based next door (nd_based_near, §7.4)
 
 
 # The rework spec's §2.3 rows: both sides take the same posture.
@@ -182,6 +183,11 @@ class RiskModel:
                 name = value.removeprefix("nd_")
                 answer = (getattr(p, name, False) if name in ("punished_skeptic", "concealed_incident")
                           else name == "survivors_vs_suspect" or hasattr(p, name))
+            elif key == "has_variable_list":
+                answer = value == "nd_based_near" and p.based_near
+            elif key == "is_target_in_variable_list":
+                # The posture's one enemy: listed or not.
+                answer = next(v for k, _, v in value if k == "name") == "nd_based_near" and p.based_near
             elif key == "has_technology_researched":
                 answer = {"satellite_communications": p.satellite_communications, "ICBMs": p.icbms,
                           "recon_satellites": p.second_warning_source, "precision_guided_munitions": p.pgm,

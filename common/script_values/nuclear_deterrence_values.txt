@@ -803,9 +803,106 @@ nd_exposed_warheads_ceiling_r2 = {
 	multiply = nd_stockpile
 }
 
+# Warning time (rework spec §7.4): weapons an enemy bases in a country next to
+# ours (nd_based_near, nd_based_near_refresh) take 10 from our effective
+# survivability against that enemy, never below zero, whatever the reach. One
+# penalty per enemy scope, and the exposure each survivors or counterforce
+# value reads against that scope; scripts/analysis/nuclear_survivors.py
+# mirrors them.
+nd_warning_time_penalty = 10
+
+nd_warning_penalty_saved = {
+	value = 0
+	if = {
+		limit = {
+			has_variable_list = nd_based_near
+			is_target_in_variable_list = { name = nd_based_near target = scope:nd_sv_enemy }
+		}
+		value = nd_warning_time_penalty
+	}
+}
+
+nd_warning_penalty_issuer = {
+	value = 0
+	if = {
+		limit = {
+			has_variable_list = nd_based_near
+			is_target_in_variable_list = { name = nd_based_near target = scope:nd_issuer }
+		}
+		value = nd_warning_time_penalty
+	}
+}
+
+nd_warning_penalty_target = {
+	value = 0
+	if = {
+		limit = {
+			has_variable_list = nd_based_near
+			is_target_in_variable_list = { name = nd_based_near target = scope:nd_target }
+		}
+		value = nd_warning_time_penalty
+	}
+}
+
+nd_exposed_warheads_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_r2_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability_at_readiness_2
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_ceiling_r2_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_survivability_cap
+		multiply = nd_survivability_factor_heightened
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_vs_issuer = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability
+		subtract = nd_warning_penalty_issuer
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_vs_target = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability
+		subtract = nd_warning_penalty_target
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
 nd_survivors_vs_saved = {
 	value = nd_counterforce_reach_saved
-	max = nd_exposed_warheads
+	max = nd_exposed_warheads_vs_saved
 	multiply = {
 		value = 1
 		subtract = nd_launch_credit
@@ -817,7 +914,7 @@ nd_survivors_vs_saved = {
 
 nd_survivors_r2_vs_saved = {
 	value = nd_counterforce_reach_saved
-	max = nd_exposed_warheads_r2
+	max = nd_exposed_warheads_r2_vs_saved
 	multiply = {
 		value = 1
 		subtract = nd_launch_credit
@@ -848,7 +945,7 @@ nd_counterforce_reach_target = {
 
 nd_survivors_vs_issuer = {
 	value = nd_counterforce_reach_issuer
-	max = nd_exposed_warheads
+	max = nd_exposed_warheads_vs_issuer
 	multiply = {
 		value = 1
 		subtract = nd_launch_credit
@@ -860,7 +957,7 @@ nd_survivors_vs_issuer = {
 
 nd_survivors_vs_target = {
 	value = nd_counterforce_reach_target
-	max = nd_exposed_warheads
+	max = nd_exposed_warheads_vs_target
 	multiply = {
 		value = 1
 		subtract = nd_launch_credit
@@ -872,7 +969,7 @@ nd_survivors_vs_target = {
 
 nd_survivors_bare_r2_vs_saved = {
 	value = nd_counterforce_reach_saved
-	max = nd_exposed_warheads_r2
+	max = nd_exposed_warheads_r2_vs_saved
 	multiply = -1
 	add = nd_stockpile
 	min = 0
@@ -880,7 +977,7 @@ nd_survivors_bare_r2_vs_saved = {
 
 nd_survivors_ceiling_bare_r2_vs_saved = {
 	value = nd_counterforce_reach_saved
-	max = nd_exposed_warheads_ceiling_r2
+	max = nd_exposed_warheads_ceiling_r2_vs_saved
 	multiply = -1
 	add = nd_stockpile
 	min = 0
@@ -902,7 +999,7 @@ nd_counterforce_destroyed_raw = {
 		add = nd_k_ratio
 		multiply = var:nd_salvo_forces_landed
 	}
-	max = nd_exposed_warheads
+	max = nd_exposed_warheads_vs_saved
 	multiply = {
 		value = 1
 		subtract = nd_launch_credit
@@ -919,7 +1016,7 @@ nd_counterforce_saved_raw = {
 		add = nd_k_ratio
 		multiply = var:nd_salvo_forces_landed
 	}
-	max = nd_exposed_warheads
+	max = nd_exposed_warheads_vs_saved
 	multiply = nd_launch_credit
 	min = 0
 }

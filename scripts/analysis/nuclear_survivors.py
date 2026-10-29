@@ -7,6 +7,9 @@ country X facing an enemy Y,
     reach     = K(Y) × believed stockpile(Y)
     survivors = stockpile(X) − min(exposed, reach) × (1 − launch credit(X))
 
+Weapons Y bases in a country next to X cut X's warning time (§7.4): against Y
+only, X's effective survivability is 10 lower, never below zero.
+
 In the exchange itself (§6.2, §6.3), a Forces salvo that lands L warheads on
 the victim's arsenal destroys min(exposed, K x L) x (1 - credit) of it, and the
 credit's share gets away first; L warheads on a Central Authorization victim's
@@ -18,10 +21,21 @@ and the counterforce calibration (owner, 2026-10-28: keep K, check it here).
 """
 
 
-def survivors(stockpile, survivability, readiness_factor, credit, enemy_k, enemy_believed):
+WARNING_TIME_PENALTY = 10
+
+
+def exposed(stockpile, survivability, readiness_factor, based_near=False):
+    """Our warheads a first strike could reach (nd_exposed_warheads_vs_saved)."""
+    effective = survivability * readiness_factor
+    if based_near:
+        effective = max(0.0, effective - WARNING_TIME_PENALTY)
+    return stockpile * (1 - effective / 100)
+
+
+def survivors(stockpile, survivability, readiness_factor, credit, enemy_k, enemy_believed, based_near=False):
     """Warheads left after the enemy spends its whole arsenal on ours."""
-    exposed = stockpile * (1 - survivability * readiness_factor / 100)
-    destroyed = min(exposed, enemy_k * enemy_believed) * (1 - credit)
+    destroyed = min(exposed(stockpile, survivability, readiness_factor, based_near),
+                    enemy_k * enemy_believed) * (1 - credit)
     return max(0.0, stockpile - destroyed)
 
 
