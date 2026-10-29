@@ -401,6 +401,10 @@ Both fail without a parse error and without a debug.log warning, so the system d
 
 **Practical rule.** Declare every mod-side boolean modifier in `common/modifier_type_definitions/` (`mod_entity_modifier_types.txt` or topical files like `tech_gate_modifier_types.txt`, `power_bloc_extra_modifier_types.txt`). When in doubt: `curl 'http://localhost:8950/raw/Modifier%20Types/<name>'` will return the definition or a `Not found` error.
 
+### A Modifier Type's Name Starts With Its Category
+
+The engine files a modifier type under a category it reads off the name's first word: `country_`, `state_`, `building_`, `unit_`, `character_`, `interest_group_`, `political_movement_`, `power_bloc_`, `military_formation_`, and so on. A name it can't file logs `Invalid category prefix for modifier <name>` (`modifier_types.cpp:626`) once per load, **in error.log only**, so the canonical debug.log triage never shows it. The five Grand Monuments policy types (#1215) were named `gm_monument_*` and logged it every launch until they became `country_gm_monument_*` (2026-10-29). Whether the engine still renders such a type was never checked; give a script-only type the category of what would carry it. `test_modifier_type_category_prefix.py` fails on a mod type whose first word no vanilla type uses.
+
 ### Modifier Coloring for "Good When Reduced" + Surfacing Greyed-Button Reasons
 
 Two short tips for making restrictions and signed-effect modifiers legible to the player:

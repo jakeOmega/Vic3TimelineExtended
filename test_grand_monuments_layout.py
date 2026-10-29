@@ -536,8 +536,10 @@ class PolicyLayoutTest(unittest.TestCase):
                 self.assertNotIn(gone, loc[key], key)
             body = _block(mods, f"gm_policy_{display}_display")
             self.assertIsNotNone(body, display)
-            for kind in re.findall(r"(gm_monument_\w+) =", body):
-                self.assertRegex(_block(types, kind), r"script_only = yes", kind)
+            kinds = re.findall(r"\b(country_gm_monument_\w+) =", body)
+            self.assertTrue(kinds, display)
+            for kind in kinds:
+                self.assertRegex(_block(types, kind) or "", r"script_only = yes", kind)
         self.assertIn("60", loc["gm_je_sub_policy_tt"])
         self.assertIn("next month", loc["gm_je_sub_policy_tt"])
 
