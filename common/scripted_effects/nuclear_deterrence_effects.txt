@@ -3390,8 +3390,38 @@ nd_nfu_breach_follow_up = {
 	}
 }
 
-# A weapons accident at home: local contamination in the state the event
-# picked (scope:nd_accident_state), and a public scandal.
+# Where a weapons accident happens (nuclear_incident.30): at home, a random
+# incorporated state of ours. Country scope = the country whose weapons.
+nd_accident_site_home = {
+	random_scope_state = {
+		limit = { is_incorporated = yes }
+		save_scope_as = nd_accident_state
+	}
+}
+
+# Abroad (rework spec §14.6, owner 2026-10-28): a random country hosting our
+# weapons under Nuclear Basing, and a random incorporated state of it. The
+# damage and the politics fall there (nuclear_incident.31); nd_accident_abroad
+# tells .30's texts and options, and nd_system_reads_attack, so. Called only
+# when such a host exists. Country scope = the guest, saved as
+# scope:nd_accident_guest.
+nd_accident_site_abroad = {
+	random_country = {
+		limit = {
+			nd_hosts_weapons_of = { GUEST = scope:nd_accident_guest }
+			any_scope_state = { is_incorporated = yes }
+		}
+		save_scope_as = nd_accident_host
+		random_scope_state = {
+			limit = { is_incorporated = yes }
+			save_scope_as = nd_accident_state
+		}
+	}
+	set_variable = nd_accident_abroad
+}
+
+# A weapons accident: local contamination in the state the event picked
+# (scope:nd_accident_state, ours or a host's), and a public scandal.
 nd_accident_local_damage = {
 	if = {
 		limit = { exists = scope:nd_accident_state }
@@ -3472,6 +3502,9 @@ nd_system_reads_attack = {
 				var:nd_accident_kind = 1
 				var:nd_accident_kind = 2
 			}
+			# Our own system reads our own soil: an accident in a host's
+			# country is the host's news, not a blast at home.
+			NOT = { has_variable = nd_accident_abroad }
 			OR = {
 				is_at_war = yes
 				nd_crisis_stage_at_least = { STAGE = 3 }

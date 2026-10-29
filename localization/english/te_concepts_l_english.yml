@@ -2058,6 +2058,7 @@
  nd_exercise_cost_desc:0 "The cost of exercises, scrambles and emergency repairs to our nuclear forces."
  nd_guarantee_abandoned:0 "Abandoned a Nuclear Guarantee"
  nd_guarantee_abandoned_desc:0 "We walked away from a country we had promised to protect."
+ nd_host_accident_silence_desc:0 "The government said nothing when a foreign power's nuclear weapons contaminated one of our states."
  nd_incident_coverup_exposed_desc:0 "A nuclear incident we tried to hide has come out."
  nd_incident_scandal:0 "Nuclear Incident Scandal"
  nd_incident_scandal_desc:0 "An accident or a false alarm with our nuclear forces has become public."
