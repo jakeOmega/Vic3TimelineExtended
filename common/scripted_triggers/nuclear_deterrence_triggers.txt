@@ -2696,6 +2696,70 @@ nd_crisis_trade_holds = {
 	}
 }
 
+# Either party, parties saved, in a deployment crisis: our half of a trade
+# would leave a treaty that also holds an alliance or a defensive pact of ours
+# (a treaty is left whole). The target's half is nd_concession_costs_an_alliance;
+# the issuer's is the same read the other way. An AI keeps an ally.
+nd_trade_costs_us_an_alliance = {
+	nd_crisis_dispute_is = { D = 7 }
+	exists = scope:nd_issuer
+	exists = scope:nd_target
+	OR = {
+		AND = {
+			THIS = scope:nd_target
+			nd_concession_costs_an_alliance = yes
+		}
+		AND = {
+			THIS = scope:nd_issuer
+			any_scope_treaty = {
+				any_scope_article = {
+					OR = {
+						has_type = nuclear_basing
+						has_type = nuclear_guarantee
+					}
+					source_country = scope:nd_issuer
+					target_country = {
+						NOT = { THIS = scope:nd_target }
+						is_adjacent_to_country = scope:nd_target
+					}
+				}
+				any_scope_article = {
+					OR = {
+						has_type = alliance
+						has_type = defensive_pact
+					}
+				}
+			}
+		}
+	}
+}
+
+# The AI's answer to a trade (nuclear_crisis.8; rework spec §8.6, ruling R4),
+# parties saved: a target accepts at the pressure where it would start to
+# yield (nd_ai_concession_line), an issuer once the crisis is dangerous
+# (nd_ai_trade_danger_line). Each accepts only if it gives no more than it
+# gets (nd_trade_balance_value) and loses no ally by its own half.
+nd_ai_accepts_trade = {
+	exists = scope:nd_issuer
+	exists = scope:nd_target
+	nd_crisis_trade_holds = { ISSUER = scope:nd_issuer TARGET = scope:nd_target }
+	NOT = { nd_trade_costs_us_an_alliance = yes }
+	OR = {
+		AND = {
+			THIS = scope:nd_target
+			has_variable = nd_yield_pressure
+			var:nd_yield_pressure >= nd_ai_concession_line
+			nd_trade_balance_value <= 0
+		}
+		AND = {
+			THIS = scope:nd_issuer
+			has_variable = nd_crisis_danger
+			var:nd_crisis_danger >= nd_ai_trade_danger_line
+			nd_trade_balance_value >= 0
+		}
+	}
+}
+
 # Country scope, in a crisis: nd_crisis_trade_holds, the parties read from our
 # own record (the panel and the deadline event, where no party scopes need be
 # saved). A temporary scope saved inside a `?=` holds for the rest of the

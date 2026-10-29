@@ -15,6 +15,7 @@ from test_nuclear_deterrence import (
     CRISIS_EFFECTS,
     CUSTOM_LOC,
     TRIGGERS,
+    VALUES,
     block,
     loc_value,
     option_body,
@@ -272,6 +273,116 @@ class TestTradeSelfCheck(unittest.TestCase):
         self.assertIn("scope:nd_tc_other = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_self } }", helper)
         self.assertIn('"TE_SELF_CHECK OK nd_trade_$CODE$', helper)
         self.assertEqual(helper.count('"TE_SELF_CHECK BROKEN nd_trade_$CODE$'), 2)
+
+
+def top_blocks(body):
+    """The `name = { … }` blocks directly inside body, as text."""
+    out, i = [], 0
+    while True:
+        m = re.compile(r"[\w:.]+ = \{").search(body, i)
+        if not m:
+            return out
+        depth, j = 1, m.end()
+        while depth:
+            depth += body[j] == "{"
+            depth -= body[j] == "}"
+            j += 1
+        out.append(body[m.start():j])
+        i = j
+
+
+def swap_sides(text):
+    text = text.replace("scope:nd_issuer", "@I").replace("scope:nd_target", "scope:nd_issuer").replace("@I", "scope:nd_target")
+    return text.replace("add = ", "@A").replace("subtract = ", "add = ").replace("@A", "subtract = ")
+
+
+def after_limit(branch):
+    """A branch's body after its limit block."""
+    lim = block(branch, "limit")
+    return branch[branch.index(lim) + len(lim) + 1:]
+
+
+def balance_branch(body, code):
+    for m in re.finditer(r"(?:else_if|if) = \{", body):
+        branch = block(body[m.start():], "else_if" if body[m.start()] == "e" else "if")
+        if re.fullmatch(r"\s*scope:nd_issuer = \{ var:nd_crisis_dispute = " + str(code) + r" \}\s*", block(branch, "limit")):
+            return branch
+    raise AssertionError(f"no balance branch for {code}")
+
+
+class TestTradeAI(unittest.TestCase):
+    # (weight of each item, the text that makes the target the giver in the add part)
+    WEIGHTS = {7: ({10, 4}, "source_country = scope:nd_target"),
+               8: ({10}, "scope:nd_target = { has_claim = PREV }"),
+               9: ({4}, "var:iw_attacker ?= scope:nd_target"),
+               10: ({10}, "scope:nd_target = { every_scope_state")}
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.events = strip_comments(read(CRISIS_EVENTS))
+        self.balance = block(self.values, "nd_trade_balance_value")
+
+    def test_balance_is_antisymmetric(self):
+        """What the target gives, less what the issuer gives: the issuer's part
+        is the target's with the parties and the sign swapped."""
+        for code in TRADES:
+            parts = top_blocks(after_limit(balance_branch(self.balance, code)))
+            self.assertEqual(len(parts), 2, code)
+            self.assertEqual(sorted(squash(b) for b in parts), sorted(squash(swap_sides(b)) for b in parts), code)
+
+    def test_balance_weights_and_direction(self):
+        for code, (weights, giver) in self.WEIGHTS.items():
+            branch = balance_branch(self.balance, code)
+            adds = {int(n) for n in re.findall(r"\badd = (\d+)", branch)}
+            subs = {int(n) for n in re.findall(r"\bsubtract = (\d+)", branch)}
+            self.assertEqual(adds, weights, code)
+            self.assertEqual(subs, weights, code)
+            parts = top_blocks(after_limit(branch))
+            add_part = squash(" ".join(b for b in parts if "add = " in b and "subtract = " not in b))
+            self.assertIn(giver, add_part, code)
+        self.assertIn("NOT = { has_active_production_method = pm_orbital_battlestation_construction_paused }",
+                      squash(balance_branch(self.balance, 10)))
+        self.assertRegex(read(VALUES), r"(?m)^nd_ai_trade_danger_line = 40\b")
+
+    def test_ai_accepts_on_the_spec_rule(self):
+        body = squash(block(self.triggers, "nd_ai_accepts_trade"))
+        self.assertIn("nd_crisis_trade_holds = { ISSUER = scope:nd_issuer TARGET = scope:nd_target }", body)
+        self.assertIn("NOT = { nd_trade_costs_us_an_alliance = yes }", body)
+        self.assertIn("AND = { THIS = scope:nd_target has_variable = nd_yield_pressure "
+                      "var:nd_yield_pressure >= nd_ai_concession_line nd_trade_balance_value <= 0 }", body)
+        self.assertIn("AND = { THIS = scope:nd_issuer has_variable = nd_crisis_danger "
+                      "var:nd_crisis_danger >= nd_ai_trade_danger_line nd_trade_balance_value >= 0 }", body)
+
+    def test_ai_keeps_an_ally_either_side(self):
+        body = block(self.triggers, "nd_trade_costs_us_an_alliance")
+        self.assertIn("nd_crisis_dispute_is = { D = 7 }", body)
+        ands = [block(body[m.start():], "AND") for m in re.finditer(r"\bAND = \{", body)]
+        target = [a for a in ands if re.match(r"\s*THIS = scope:nd_target\b", a)]
+        issuer = [a for a in ands if re.match(r"\s*THIS = scope:nd_issuer\b", a)]
+        self.assertEqual(len(target), 1)
+        self.assertEqual(len(issuer), 1)
+        self.assertIn("nd_concession_costs_an_alliance = yes", target[0])
+        s = squash(issuer[0])
+        self.assertIn("source_country = scope:nd_issuer target_country = { NOT = { THIS = scope:nd_target } "
+                      "is_adjacent_to_country = scope:nd_target }", s)
+        self.assertIn("has_type = alliance", s)
+        self.assertIn("has_type = defensive_pact", s)
+
+    def test_answer_weights(self):
+        accept = squash(block(option_body(self.events, "nuclear_crisis.8.a"), "ai_chance"))
+        refuse = squash(block(option_body(self.events, "nuclear_crisis.8.b"), "ai_chance"))
+        self.assertIn("modifier = { trigger = { NOT = { nd_ai_accepts_trade = yes } } factor = 0 }", accept)
+        self.assertIn("modifier = { trigger = { nd_ai_accepts_trade = yes } factor = 0 }", refuse)
+
+    def test_deadline_offer(self):
+        body = option_body(self.events, "nuclear_crisis.4.h")
+        self.assertIn("nd_can_offer_trade = yes", block(body, "trigger"))
+        self.assertIn("nd_crisis_option = { ACT = offer_trade }", body)
+        chance = squash(block(body, "ai_chance"))
+        self.assertIn("modifier = { trigger = { nd_trade_balance_value < 0 } factor = 0 }", chance)
+        self.assertIn("modifier = { trigger = { nd_trade_costs_us_an_alliance = yes } factor = 0 }", chance)
+        self.assertTrue(loc_value("nuclear_crisis.4.h"))
 
 
 if __name__ == "__main__":

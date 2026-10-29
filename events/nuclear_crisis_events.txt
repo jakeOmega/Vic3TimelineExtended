@@ -552,6 +552,38 @@ nuclear_crisis.4 = {
 		}
 	}
 
+	# Offer a trade (rework spec §8.6): the matching concession of our own. The
+	# AI offers only here, as the issuer (ruling R5), and never more than it gets.
+	option = {
+		name = nuclear_crisis.4.h
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.4.h; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		trigger = { nd_can_offer_trade = yes }
+		nd_crisis_option = { ACT = offer_trade }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_variable = nd_crisis_danger
+					var:nd_crisis_danger >= nd_ai_trade_danger_line
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { nd_trade_balance_value < 0 }
+				factor = 0
+			}
+			modifier = {
+				trigger = { nd_trade_costs_us_an_alliance = yes }
+				factor = 0
+			}
+		}
+	}
+
 	# Let it go.
 	option = {
 		name = nuclear_crisis.4.e
@@ -1066,6 +1098,10 @@ nuclear_crisis.8 = {
 		nd_crisis_option = { ACT = accept_trade }
 		ai_chance = {
 			base = 1
+			modifier = {
+				trigger = { NOT = { nd_ai_accepts_trade = yes } }
+				factor = 0
+			}
 		}
 	}
 
@@ -1077,6 +1113,10 @@ nuclear_crisis.8 = {
 		nd_crisis_option = { ACT = refuse_talks }
 		ai_chance = {
 			base = 1
+			modifier = {
+				trigger = { nd_ai_accepts_trade = yes }
+				factor = 0
+			}
 		}
 	}
 }
