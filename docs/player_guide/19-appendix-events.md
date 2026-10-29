@@ -306,7 +306,7 @@ handful that connect the space race to other systems:
 | Tickets to the Stars | You have reached orbit and own a Tourism Industry | Space Tourism Revenue (+5% tourism output, fading over ten years), a research bonus instead, or both for two and a half years |
 | A Station for All Nations | You are a UN member between Orbital Flight and the Moon Landing, and another member has reached orbit | A month of progress on every milestone under way, and a ten-year, fading bonus from either a joint station (research, prestige, influence, better relations with spacefaring members) or a national one (research, prestige) |
 | Off-World Industry Meets the Space Program | You are colonizing and own an Extraplanetary Base | Full integration: 2 months of colonization progress, plus research and prestige, fading over ten years. Staying commercial: 1 month, plus Extraplanetary Base throughput and advanced materials output, fading over ten years |
-| The Elevator Advantage | You own a Space Elevator and are building the Moon Base, landing on Mars or colonizing | 1 or 2 months of progress on those missions |
+| The Elevator Advantage | You own a Space Elevator and are landing on Mars or colonizing | 1 or 2 months of progress on those missions |
 | The Kessler Threshold | Orbital Flight is under way, or any milestone is once [orbital debris](16-space.md#orbital-debris) is Cluttered or worse | 1 or 3 months of progress, the larger with radical academics, or better relations with spacefaring powers |
 
 The Space Elevator and the Extraplanetary Base are covered in [The extended

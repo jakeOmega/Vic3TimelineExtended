@@ -2,8 +2,9 @@
 
 The space race is a sequence of journal entries in which great and major powers
 compete to reach space milestones, from a first suborbital flight to colonies in
-the Kuiper Belt. The first country to finish each of the seven single-goal
-milestones keeps a larger permanent reward than anyone who follows. The entries
+the Kuiper Belt. The first country to finish each of the six single-goal
+milestones, or to found a colony on the Moon, keeps a larger permanent reward
+than anyone who follows. The entries
 start to appear once you research Rocketry in era 6, but you need a Space
 Program building, unlocked by Guided Missiles in era 7, before any of them can
 make progress. The Space Race game rule controls the system; with it off, the
@@ -53,7 +54,7 @@ innovation, innovation cap and prestige.
 |---|---|---|---|
 | Earth Orbit | Guided Missiles (with the building) | Suborbital Flight, Orbital Flight | 500 |
 | Moon Mission | Space Exploration | adds Moon Landing and Deep-Space Probe | 1,500 |
-| Mars Mission | Knowledge Economy | adds Mars Landing and Moon Base | 5,000 |
+| Mars Mission | Knowledge Economy | adds Mars Landing | 5,000 |
 | Solar Colonization | Cislunar Infrastructure | adds Solar System Colonization, the Moon and stages 1 and 2 | 10,000 |
 | Deep Space Exploration | Space Colonization | lets a country with no colony beyond the Moon start colonizing at stages 3 to 5 | 50,000 |
 | Interstellar Mission | Muon-Catalyzed Fusion Reactors | adds the Interstellar Probe | 100,000 |
@@ -75,20 +76,21 @@ major power. It switches the Space Program to that method.
 |---|---|---|
 | Begin the Moon Mission | Earth Orbit | Orbital Flight |
 | Begin the Mars Mission | Moon Mission | Moon Landing and Deep-Space Probe |
-| Begin Solar Colonization | Mars Mission | Moon Base and Mars Landing |
-| Begin Deep Space Exploration | Mars Mission or Solar Colonization | Moon Base and Mars Landing |
+| Begin Solar Colonization | Moon Mission or Mars Mission | Moon Landing |
+| Begin Deep Space Exploration | Mars Mission or Solar Colonization | Mars Landing |
 | Begin the Interstellar Mission | Mars Mission or any later method | Deep-Space Probe and Mars Landing |
 
 Begin Solar Colonization appears only while there are worlds left that Solar
-Colonization can reach: those of the Moon and stages 1 and 2, or any stage once
-you hold a colony. Begin Deep Space Exploration appears only when you need it:
-every world of the Moon and stages 1 and 2 is claimed and you hold no colony.
+Colonization can reach: those of the Moon, and after your Mars Landing those of
+stages 1 and 2, or any stage once you hold a colony beyond the Moon. Begin Deep
+Space Exploration appears only when you need it: every world of the Moon and
+stages 1 and 2 is claimed and you hold no colony beyond the Moon.
 You can begin the Interstellar Mission without finishing colonization, and
 colonization goes on under it.
 
 ## Space race milestones
 
-There are nine space race journal entries: seven milestones with a single goal,
+There are eight space race journal entries: six milestones with a single goal,
 the repeatable Solar System Colonization, and a waiting entry that follows the
 interstellar probe. Each entry appears, inactive, once you have finished the
 milestone before it and researched its technology, and it starts when your Space
@@ -101,18 +103,18 @@ Program runs a method that supports it.
 | Moon Landing | Orbital Flight | Space Exploration (era 7) | 200 | 6% | ×2 |
 | Deep-Space Probe | Moon Landing | Space Exploration (era 7) | 150 | 6% | ×2 |
 | Mars Landing | Moon Landing | Knowledge Economy (era 9) | 450 | 9% | ×6 |
-| Moon Base | Moon Landing | Reusable Rocketry (era 10) | 300 | 8% | ×5 |
 | Interstellar Probe | Deep-Space Probe and Mars Landing | Muon-Catalyzed Fusion Reactors (era 12) | 600 | 9% | ×12 |
 | Interstellar Probe: Awaiting Data | Interstellar Probe | none | 132 months | none | none |
-| Solar System Colonization | Moon Base and Mars Landing | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
+| Solar System Colonization | Moon Landing (Mars Landing for the worlds beyond the Moon) | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
 
 The setback risk is the base chance each month; the cost factor scales the
 milestone's innovation cost (see [Space race funding and
 cost](#space-race-funding-and-cost)). The order is mostly a chain, but it
-branches after the Moon Landing: the Deep-Space Probe, Mars Landing and Moon
-Base can then run at the same time, as long as you have their technologies and
-the Mars Mission method. The Interstellar Probe and Solar System Colonization
-each need two of those three finished. The Deep-Space Probe and Mars Landing
+branches after the Moon Landing: the Deep-Space Probe, the Mars Landing and
+colonizing the Moon can then run at the same time, as long as you have their
+technologies and methods. The Interstellar Probe needs the Deep-Space Probe and
+the Mars Landing finished, and colonies beyond the Moon need the Mars Landing.
+The Deep-Space Probe and Mars Landing
 show up in the journal as soon as you reach orbit and have their technologies,
 but neither can start before the Moon Landing.
 
@@ -289,8 +291,8 @@ so check them after every change.
 
 ### Mission profile choices
 
-Thirty days after Orbital Flight, the Moon Landing, the Deep-Space Probe, the
-Moon Base or the Mars Landing starts, an event asks you to choose how to fly it.
+Thirty days after Orbital Flight, the Moon Landing, the Deep-Space Probe or
+the Mars Landing starts, an event asks you to choose how to fly it.
 While that milestone runs, your choice changes the setback risk, and sometimes
 the pace, of your whole program, in the same way as an approach. When the
 milestone is finished it also decides a reward that fades over ten years.
@@ -300,7 +302,6 @@ milestone is finished it also decides a reward that fades over ten years.
 | Who Flies First? | Orbital Flight | Civilian volunteer (riskier; prestige, cultural pull); military test pilot (lower risk, faster; military research, influence); scientist (a little riskier; research, innovation cap) |
 | Where the Eagle Shall Land | Moon Landing | Shackleton Crater (much riskier, faster; research, innovation cap); Equatorial Plain (lower risk; prestige, research); Sea of Tranquility (a little riskier; prestige, cultural pull); far side of the Moon (riskier, faster; research, innovation cap) |
 | Where Shall We Send the Probe? | Deep-Space Probe | Venus (riskier; research, space race progress); Mars (lower risk, faster; the most space race progress, prestige); the asteroid belt (much riskier; space race progress, innovation cap) |
-| The Purpose of the Base | Moon Base | Scientific outpost (lower risk, faster; research, innovation cap); industrial facility (riskier; Extraplanetary Base throughput, Launch Capacity output); military installation (much riskier; military research, influence, cheaper military goods) |
 | The Mars Strategy | Mars Landing | Direct landing (much riskier, much faster; prestige, cultural pull); orbital-first (slightly lower risk, faster; research, Space Program throughput); robotic precursors (lower risk; Extraplanetary Base throughput, innovation cap, and Mars Resource Extraction: research speed, space race progress and cultural pull) |
 
 ## Space race funding and cost
@@ -410,11 +411,14 @@ who finishes it later gets the smaller one.
 | Orbital Flight | +3% / +1.5% | +50 / +25 | none | none | +15% / +5% |
 | Moon Landing | +5% / +3% | +75 / +35 | +5% / +2% | none | +25% / +10% |
 | Deep-Space Probe | +4% / +2% | +50 / +25 | +3% / +1% | none | +15% / +5% |
-| Moon Base | +5% / +2.5% | +75 / +35 | +5% / +2% | +5% / +2% | +20% / +8% |
+| First lunar colony | +5% / +2.5% | +75 / +35 | +5% / +2% | +5% / +2% | +20% / +8% |
 | Mars Landing | +7% / +4% | +100 / +50 | +5% / +2% | none | +30% / +12% |
 | Interstellar Probe | +10% / +5% | +100 / +50 | +10% / +5% | +10% / +5% | +25% / +10% |
 
 The first figure is the first-to-finish reward, the second the later one.
+The first lunar colony is a milestone of its own: your first colony on the
+Moon plays Foothold on Another World and earns the reward, as the first in
+the race or a later one.
 Suborbital Flight's completion event also offers a choice: loyalists, or
 Suborbital Momentum, an extra copy of the later finisher's reward (+1%
 prestige, +10 innovation cap, +3% cultural pull) that fades over two and a half
@@ -492,7 +496,10 @@ speed, +10% influence and +15% cultural pull.
 
 ### The Moon
 
-The Moon is stage 0, settled before Mars. Its six worlds need no launch window
+The Moon is stage 0, settled before Mars. You can colonize it once your Moon
+Landing is complete, with Cislunar Infrastructure and the Solar Colonization
+method; the worlds beyond it wait for your Mars Landing, and a Target button on
+one says so until then. Its six worlds need no launch window
 and no transit: under every setting, a colony fleet bound for the Moon founds its
 colony the month it leaves, and it never takes one of the six places for fleets
 in flight.
@@ -780,8 +787,8 @@ can also occupy a colony in a war, which keeps its holder but gives it nothing
 until the peace (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)).
 
 A country that comes to hold a colony this way, or by treaty, gets Solar System
-Colonization for it even without a space program. Without the Moon Base and the
-Mars Landing it keeps the colony and its specialization but founds no more, and
+Colonization for it even without a space program. Without the Moon Landing it
+keeps the colony and its specialization but founds no more, and
 the entry reads Idle and costs nothing.
 
 ### Ceding a colony
@@ -1114,10 +1121,10 @@ Ground Lasers at war, and in peace once debris is Cluttered.
 
 ## After the space race
 
-The race is over for you once you have finished all seven single-goal
+The race is over for you once you have finished all six single-goal
 milestones, all 40 worlds have been claimed by anyone, and no program of yours is
 still running. A power that gets there after the last world is gone qualifies as
-soon as its own seven milestones are done. From then on, the progress your
+soon as its own six milestones are done. From then on, the progress your
 sources still give each month goes into your Extraplanetary Bases as
 Commercial Space Industry: each point of monthly progress adds +5%
 Extraplanetary Base throughput, up to +50% at 10 points. The first time it
