@@ -7,7 +7,10 @@
 # common/scripted_triggers/space_race_triggers.txt and every action delegates to
 # the shared bodies in common/scripted_effects/space_race_effects.txt — the very
 # helpers the journal entries' own scripted buttons call. Change an approach or
-# funding rule in the helper and both surfaces follow.
+# funding rule in the helper and both surfaces follow. One gate differs on
+# purpose: op 3 asks sr_possible_fund_up (up to six levels past the cap), while
+# the AI's increase-funding buttons ask sr_possible_fund_up_within_cap, since
+# the AI stays within the cap (lunar colonization design § 5.1, § 15.6).
 #
 # One scripted GUI per milestone, with the control passed in from the .gui as a
 # single saved scope. IMPLICIT CONTRACT with the widget — keep both sides in
