@@ -85,6 +85,11 @@ Colonization can reach: those of the Moon, and after your Mars Landing those of
 stages 1 and 2, or any stage once you hold a colony beyond the Moon. Begin Deep
 Space Exploration appears only when you need it: every world of the Moon and
 stages 1 and 2 is claimed and you hold no colony beyond the Moon.
+If Solar System Colonization has finished for you while a world on the Moon is
+free, the decision Resume Solar Colonization runs it again to settle the Moon.
+You keep Interplanetary Trade Networks. The program bills its funding and
+approach again, and Commercial Space Industry pauses until the Moon is full and
+the program stops by itself.
 You can begin the Interstellar Mission without finishing colonization, and
 colonization goes on under it.
 
