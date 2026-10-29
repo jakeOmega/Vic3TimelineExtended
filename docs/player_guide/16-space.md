@@ -547,19 +547,22 @@ unfinished bar always is, but whole fleets already staged stay in orbit and
 are back on the bar in the program's first month once it runs again. Once you
 hold a colony, the program never stops this way and keeps all its progress.
 
-Propulsion technology loosens the windows in three steps:
+Propulsion technology loosens the windows step by step:
 
 | Technology | Launches |
 |---|---|
 | Cislunar Infrastructure (opens colonization) | In a window only. |
 | Asteroid Mining, or Shackleton's Propellant Depot | In a window as before; outside one, at a premium of extra progress, when your approach judges it worth it. |
+| Nuclear Thermal Propulsion | Outside a window at a smaller premium, once Asteroid Mining or Shackleton's Propellant Depot lets you launch there at all. |
 | Muon-Catalyzed Fusion Reactors | Any month, with no premium. |
 | Antimatter Production, with an Antimatter Containment Facility built | Any month, with no premium. |
 
 The premium is the extra propellant an off-window transfer needs, so it climbs
 fast away from the window: on Mars, about +40% the month after a window closes
-and +150% the month after that. With Asteroid Mining, Next Windows shows
-today's figure for each closed destination. A fleet leaves outside a window, for the cheapest
+and +150% the month after that. A nuclear thermal engine burns far less
+propellant for the same extra speed, so with Nuclear Thermal Propulsion those
+figures are about +15% and +45%. With Asteroid Mining, Next Windows shows
+today's figure for each closed destination, at your own engines' premium. A fleet leaves outside a window, for the cheapest
 destination, when the months it saves (until the stage's next window) are worth
 the months its premium costs (the goal times the premium, at your monthly pace).
 Standard launches when it saves at least as many months as it costs, Ambitious
