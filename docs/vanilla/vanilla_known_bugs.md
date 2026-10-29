@@ -1078,6 +1078,15 @@ add_lobby_member effect [ Invalid target interest group ]
 
 `add_lobby_member` on a group already in the lobby or on a group the country lacks (`ig:ig_petty_bourgeoisie`), and `create_political_lobby` aimed at a country that has died, or creating a lobby the country already has (line 1808, once on 2026-10-17). One or two lines each, 2026-10-10. The last is followed in the same second by the `Attempted to create relations for invalid countries!` engine assert, which stays unregistered.
 
+### `common/decisions/goods_ban_decisions.txt:66` and `events/soi_events/00_lobbies_events_04.txt:1670` — a market whose owner is no longer valid
+- stack: vanilla only
+
+```
+Event target link 'owner' returned an invalid object
+```
+
+The Remove Opium Ban decision's is_shown checks `exists = market` and then reads `market.owner = root`, and lobby event 5's trigger reads `any_market = { NOT = { owner = root } … }`; both fail on a market whose owner is gone. 2026-10-29 (a game in 2010): 15 and 3 lines over 17 minutes, in the launch where the mod's monthly trade-partner refresh also met a market with no trade-center state (its `trade_center` link invalid, once a month; now skipped). The mod overrides neither file.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
