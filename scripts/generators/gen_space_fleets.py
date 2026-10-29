@@ -2,8 +2,10 @@
 
 Design: ``docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md``
 (slice 6: 6a the fleet record, Space Command and movement; 6b combat, blockade,
-seizure and destruction; 6c interdiction and the AI's offence). Full Colonies
-only.
+seizure and destruction; 6c interdiction and the AI's offence), and
+``docs/superpowers/specs/2026-10-29-lunar-colonization-design.md`` § 8 (the
+Moon's worlds at Earth: Close in there, their blockade, the AI's lunar
+offence; no interdiction at Earth). Full Colonies only.
 
 A country keeps up to ``SLOTS`` fleets, all country variables (a revolution's
 winner inherits them): ``sr_fl_<n>_loc`` (a location's code; absent while in
@@ -117,6 +119,17 @@ CB_WORLD_VARS = ("s3", "fd3", "mar", "dfd", "ld")
 
 def worlds_at(loc: str) -> list[gss.Site]:
     return [s for s in gss.SITES if s.location == loc]
+
+
+# Lunar colonization design § 8: the Moon's worlds sit at Earth, where every
+# fleet is stationed except one closing in on a lunar world (Close in at Earth).
+# Interdiction is never offered there (§ 8.3), and a lunar world is blockaded by
+# its holder's Earth blockade (§ 8.2), not by the generic step.
+LUNAR = tuple(worlds_at("earth"))
+# The locations where a fleet may close in: every location with worlds.
+CLOSE_IN_LOCATIONS = tuple(lc for lc in LOCATIONS if worlds_at(lc.key))
+# ... and where it may interdict: never at Earth.
+INTERDICT_LOCATIONS = tuple(lc for lc in LOCATIONS[1:] if worlds_at(lc.key))
 
 
 def var(n: int | str, name: str) -> str:
@@ -356,6 +369,14 @@ def render_slot_triggers(n: int) -> list[str]:
     out = [f"# --- Slot {n} ---",
            f"{var(n, 'exists')} = {{ OR = {{ has_variable = {loc} has_variable = {var(n, 'dest')} }} }}",
            f"{var(n, 'at_location')} = {{ has_variable = {loc} }}",
+           f"{var(n, 'at_earth')} = {{ has_variable = {loc} var:{loc} = {EARTH} }}",
+           "# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.",
+           f"{var(n, 'target_lunar')} = {{",
+           f"\thas_variable = {var(n, 'target')}",
+           "\tOR = {",
+           *[f"\t\tvar:{var(n, 'target')} = {w.index}" for w in LUNAR],
+           "\t}",
+           "}",
            f"{var(n, 'picked')} = {{ has_variable = sr_fl_dest_pick_{n} }}",
            f"{var(n, 'destroying')} = {{ has_variable = {var(n, 'destroy')} }}",
            f"{var(n, 'closes_on_free')} = {{",
@@ -448,11 +469,12 @@ def render_slot_triggers(n: int) -> list[str]:
     out += [f"\t\tAND = {{ var:{loc} = {lc.code} sr_loc_our_marines_{lc.key} = yes }}" for lc in LOCATIONS[1:]]
     out += ["\t}", "}",
             "# 6b: a world at its location it may close in on (at war with its holder or",
-            "# occupier, or free); its target is one.",
+            "# occupier, or free); its target is one. At Earth, a lunar world (lunar",
+            "# colonization § 8.1).",
             f"{var(n, 'has_hostile_world')} = {{",
             f"\thas_variable = {loc}",
             "\tOR = {"]
-    for lc in LOCATIONS[1:]:
+    for lc in CLOSE_IN_LOCATIONS:
         ws = worlds_at(lc.key)
         out.append(f"\t\tAND = {{ var:{loc} = {lc.code} OR = {{ "
                    + " ".join(f"sr_site_hostile_target = {{ KEY = {w.key} }}" for w in ws) + " } }")
@@ -463,13 +485,14 @@ def render_slot_triggers(n: int) -> list[str]:
             *[f"\t\tAND = {{ var:{var(n, 'target')} = {w.index} sr_site_hostile_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
             "\t}", "}",
             "# 6c: a world at its location it may interdict (a country at peace with us,",
-            "# not our ally, holds it); its target is one; it interdicts.",
+            "# not our ally, holds it); its target is one; it interdicts. Never at Earth",
+            "# (lunar colonization § 8.3).",
             f"{var(n, 'has_interdict_world')} = {{",
             f"\thas_variable = {loc}",
             "\tOR = {",
             *[f"\t\tAND = {{ var:{loc} = {lc.code} OR = {{ "
               + " ".join(f"sr_site_interdict_target = {{ KEY = {w.key} }}" for w in worlds_at(lc.key)) + " } }"
-              for lc in LOCATIONS[1:] if worlds_at(lc.key)],
+              for lc in INTERDICT_LOCATIONS],
             "\t}", "}",
             f"{var(n, 'target_interdictable')} = {{",
             f"\thas_variable = {var(n, 'target')}",
@@ -477,6 +500,8 @@ def render_slot_triggers(n: int) -> list[str]:
             *[f"\t\tAND = {{ var:{var(n, 'target')} = {w.index} sr_site_interdict_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
             "\t}", "}",
             f"{var(n, 'interdicting')} = {{ {var(n, 'posture_value')} = 4 }}",
+            "# At Earth, closing in on a lunar world (the AI's offence leaves it there).",
+            f"{var(n, 'closing_at_earth')} = {{ {var(n, 'at_earth')} = yes {var(n, 'posture_value')} = 3 }}",
             "# The target button: interdicting, the worlds it may interdict; else the",
             "# hostile worlds.",
             f"{var(n, 'can_target')} = {{",
@@ -569,7 +594,9 @@ def render_triggers() -> str:
             "sr_fl_op_check = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:op = {n} sr_fl_{n}_$TEST$ = yes }}" for n in range(1, SLOTS + 1)]
     out += ["\t}", "}", "",
-            "# Earth has no colonies of ours (the alerts' uniform test).",
+            "# The alerts' uniform test at Earth: no alert there, although the Moon's",
+            "# colonies are at Earth (lunar colonization § 8), since a fleet bound for",
+            "# Earth is nearly always one coming home.",
             "sr_loc_held_earth = { always = no }",
             "",
             "# ===== Per location, country scope =====",
@@ -957,13 +984,15 @@ def render_ai_effects() -> list[str]:
     out = ["# ===== The AI (design § 14) =====",
            "# A garrison due at a world of ours (design § 9.6): a fleet at Earth with",
            "# marines for it leaves for its location, if none of ours is there or on its",
-           "# way. One order a month.",
+           "# way; not one closing in on a lunar world (lunar colonization § 8.4). One",
+           "# order a month.",
            "sr_fl_ai_send_garrisons = {"]
     cases = []
     for lc in LOCATIONS[1:]:
         k = lc.key
         senders = _chain([(f"has_variable = {var(n, 'loc')} var:{var(n, 'loc')} = {EARTH} "
-                           f"{var(n, 'marines_value')} >= sr_garrison_marines_needed {var(n, f'may_depart_{k}')} = yes",
+                           f"{var(n, 'marines_value')} >= sr_garrison_marines_needed {var(n, f'may_depart_{k}')} = yes "
+                           f"NOT = {{ {var(n, 'closing_at_earth')} = yes }}",
                            [f"sr_fl_dispatch = {{ N = {n} LOC = {k} CODE = {lc.code} }}"]) for n in range(1, SLOTS + 1)], 0)
         cases.append((f"sr_loc_garrison_due_{k} = yes NOT = {{ sr_fl_any_at_or_bound = {{ CODE = {lc.code} }} }}", senders))
     out += _chain(cases)
@@ -1018,12 +1047,17 @@ def render_combat() -> list[str]:
             "}", ""]
     out += _step_target("sr_fl_step_hostile_target_at", "sr_site_hostile_target",
                         "The hostile step: the next hostile world at the slot's location after its",
-                        "target (table order), else the first; none clears it.",
-                        found=["\t\tsr_fl_charge_free_at = { N = $N$ }"],
+                        "target (table order), else the first; none clears it. At Earth, the lunar",
+                        "worlds (lunar colonization § 8.1). A free colony's price only while it closes",
+                        "in: a stationed fleet's target costs nothing.",
+                        locations=CLOSE_IN_LOCATIONS,
+                        found=["\t\tif = { limit = { sr_fl_$N$_posture_value = 3 } sr_fl_charge_free_at = { N = $N$ } }"],
                         none=["\t\tremove_variable = sr_fl_$N$_target"])
     out += _step_target("sr_fl_step_icpt_target_at", "sr_site_interdict_target",
                         "The interdiction's step (6c): the next world at the slot's location it may",
                         "interdict, else the first; none ends the interdiction (it stands off).",
+                        "Never at Earth (lunar colonization § 8.3).",
+                        locations=INTERDICT_LOCATIONS,
                         found=[],
                         none=["\t\tsr_fl_end_icpt = { N = $N$ }"],
                         none_guard="limit = { sr_fl_$N$_posture_value = 4 }")
@@ -1078,8 +1112,13 @@ def render_combat() -> list[str]:
                     "\t}"]
         out += ["}", f"sr_cb_worlds_after_{k} = {{"]
         for w in ws:
-            out += [f"\tsr_site_assault_step = {{ KEY = {w.key} INDEX = {w.index} }}",
-                    f"\tsr_site_blockade_step = {{ KEY = {w.key} LOC = {k} }}"]
+            out.append(f"\tsr_site_assault_step = {{ KEY = {w.key} INDEX = {w.index} }}")
+            if lc.code == EARTH:
+                # Lunar colonization § 8.2: blockaded while its holder's Earth is
+                # (the generic step's stand-off test never holds at Earth).
+                out.append(f"\tsr_site_lunar_blockade_step = {{ KEY = {w.key} }}")
+            else:
+                out.append(f"\tsr_site_blockade_step = {{ KEY = {w.key} LOC = {k} }}")
         out += ["}", ""]
     out += ["# The seizer's marines spent at the world (local_var:sr_cb_pay), from its slots",
             "# closing in on it to seize, in slot order."]
@@ -1097,17 +1136,19 @@ def render_combat() -> list[str]:
     return out
 
 
-def _step_target(name: str, trigger: str, *comment: str, found: list[str], none: list[str],
+def _step_target(name: str, trigger: str, *comment: str, locations: tuple[glw.Location, ...],
+                 found: list[str], none: list[str],
                  none_guard: str = "limit = { has_variable = sr_fl_$N$_target }") -> list[str]:
-    """A target button's step: the next world at the slot's location after its
-    target that passes ``trigger`` (table order), else the first such."""
+    """A target button's step: the next world at the slot's location (one of
+    ``locations``) after its target that passes ``trigger`` (table order), else
+    the first such."""
     out = [f"# {line}" for line in comment]
     out += [f"{name} = {{",
             "\tset_local_variable = { name = sr_fl_tgt value = 0 }",
             "\tif = { limit = { has_variable = sr_fl_$N$_target } set_local_variable = { name = sr_fl_tgt value = var:sr_fl_$N$_target } }",
             "\tset_local_variable = { name = sr_fl_next value = 0 }"]
     cases = []
-    for lc in LOCATIONS[1:]:
+    for lc in locations:
         ws = worlds_at(lc.key)
         body = []
         for w in ws:
@@ -1150,7 +1191,8 @@ def render_ai_attack() -> list[str]:
                 "\t\tset_local_variable = { name = sr_fl_n value = 0 }"]
         for n in range(1, SLOTS + 1):
             out += ["\t\tif = {",
-                    f"\t\t\tlimit = {{ {var(n, 'ai_free')} = yes {var(n, f'ai_attacks_{k}')} = yes {var(n, 'strength')} > local_var:sr_fl_best }}",
+                    f"\t\t\tlimit = {{ {var(n, 'ai_free')} = yes {var(n, f'ai_attacks_{k}')} = yes "
+                    f"NOT = {{ {var(n, 'closing_at_earth')} = yes }} {var(n, 'strength')} > local_var:sr_fl_best }}",
                     f"\t\t\tset_local_variable = {{ name = sr_fl_best value = {var(n, 'strength')} }}",
                     f"\t\t\tset_local_variable = {{ name = sr_fl_n value = {n} }}",
                     "\t\t}"]
@@ -1158,6 +1200,51 @@ def render_ai_attack() -> list[str]:
                                                      "set_local_variable = { name = sr_fl_ai_sent value = 1 }"])
                        for n in range(1, SLOTS + 1)], 2)
         out += ["\t}"]
+    out += ["}", "",
+            "# Lunar colonization § 8.4: at war, while no enemy's fleet is at Earth",
+            "# (sr_earth_hostile_present: a stationed one bars the seizure, sr_cb_seizes),",
+            "# first the enemy's lunar world of most worth (sr_site_ai_worth_<key>) that",
+            "# passes sr_site_ai_lunar_target, then the strongest of its fleets at Earth",
+            "# whose marines exceed that world's garrison and militia closes in on it to",
+            "# seize it; every other fleet of ours at Earth stays stationed (with none to",
+            "# close in, all of them). Never to destroy. Before the offence's dispatch,",
+            "# which leaves a fleet closing in at Earth where it is.",
+            "sr_fl_ai_lunar_assault = {",
+            "\tset_local_variable = { name = sr_ai_tgt value = 0 }",
+            "\tset_local_variable = { name = sr_ai_need value = 0 }",
+            "\tset_local_variable = { name = sr_ai_best value = -1 }",
+            "\tif = {",
+            "\t\tlimit = { NOT = { sr_earth_hostile_present = yes } }"]
+    for w in LUNAR:
+        out += [f"\t\tif = {{ limit = {{ sr_site_ai_lunar_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best }} "
+                f"set_local_variable = {{ name = sr_ai_best value = sr_site_ai_worth_{w.key} }} "
+                f"set_local_variable = {{ name = sr_ai_tgt value = {w.index} }} "
+                f"set_local_variable = {{ name = sr_ai_need value = sr_site_garrison_need_{w.key} }} }}"]
+    out += ["\t}",
+            "\tset_local_variable = { name = sr_fl_best value = 0 }",
+            "\tset_local_variable = { name = sr_fl_n value = 0 }",
+            "\tif = {",
+            "\t\tlimit = { local_var:sr_ai_tgt > 0 }"]
+    for n in range(1, SLOTS + 1):
+        out += [f"\t\tif = {{ limit = {{ {var(n, 'at_earth')} = yes {var(n, 'marines_value')} > local_var:sr_ai_need "
+                f"{var(n, 'strength')} > local_var:sr_fl_best }} "
+                f"set_local_variable = {{ name = sr_fl_best value = {var(n, 'strength')} }} "
+                f"set_local_variable = {{ name = sr_fl_n value = {n} }} }}"]
+    out += ["\t}"]
+    for n in range(1, SLOTS + 1):
+        out += ["\tif = {",
+                f"\t\tlimit = {{ {var(n, 'at_earth')} = yes }}",
+                f"\t\tif = {{ limit = {{ has_variable = {var(n, 'destroy')} }} remove_variable = {var(n, 'destroy')} }}",
+                "\t\tif = {",
+                f"\t\t\tlimit = {{ local_var:sr_fl_n = {n} }}",
+                f"\t\t\tset_variable = {{ name = {var(n, 'posture')} value = 3 }}",
+                f"\t\t\tset_variable = {{ name = {var(n, 'target')} value = local_var:sr_ai_tgt }}",
+                "\t\t}",
+                "\t\telse = {",
+                f"\t\t\tset_variable = {{ name = {var(n, 'posture')} value = 1 }}",
+                f"\t\t\tif = {{ limit = {{ has_variable = {var(n, 'target')} }} remove_variable = {var(n, 'target')} }}",
+                "\t\t}",
+                "\t}"]
     out += ["}", "",
             "# A slot at a location where we hold no threatened colony and there is a world",
             "# it may attack: it closes in on the one of most worth (sr_site_ai_worth_<key>)",
@@ -1355,6 +1442,9 @@ def render_display() -> str:
         out += [f"sr_disp_fl_{n}_combat = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'loc')} NOT = {{ var:{var(n, 'loc')} = {EARTH} }} }} value = 1 }}",
+                "\t# At Earth only while a lunar world there may be closed in on (lunar",
+                "\t# colonization § 8.1).",
+                f"\telse_if = {{ limit = {{ {var(n, 'at_earth')} = yes {var(n, 'has_hostile_world')} = yes }} value = 1 }}",
                 "}",
                 f"sr_disp_fl_{n}_posture = {{ value = {var(n, 'posture_value')} }}",
                 f"sr_disp_fl_{n}_destroy = {{",
@@ -1396,7 +1486,9 @@ def render_display() -> str:
     out += ["", "# Per location, the viewer's status there (6b): 1 a battle this month or last,",
             "# 2 a colony of ours blockaded, 3 an enemy's blockaded by us; 6c: 4 a colony of",
             "# ours interdicted (blockaded by a country at peace with us), 5 we interdict;",
-            "# 6d, at Earth: 6 our Earth blockaded, 7 we blockade an enemy's."]
+            "# 6d, at Earth: 6 our Earth blockaded, 7 we blockade an enemy's. At Earth only",
+            "# 1, 6 and 7: a lunar world is blockaded exactly while its holder's Earth is",
+            "# (lunar colonization § 8.2), and none is interdicted (§ 8.3)."]
     for lc in LOCATIONS:
         k = lc.key
         ws = worlds_at(k)
@@ -1410,7 +1502,7 @@ def render_display() -> str:
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_global_variable = sr_loc_battle_{k} global_var:sr_loc_battle_{k} >= "
                 "{ value = te_history_month_index subtract = 1 } } value = 1 }"]
-        if ws:
+        if ws and lc.code != EARTH:
             out += [f"\telse_if = {{ limit = {{ OR = {{ {ours} }} }} value = 2 }}",
                     f"\telse_if = {{ limit = {{ OR = {{ {ours_icpt} }} }} value = 4 }}",
                     f"\telse_if = {{ limit = {{ has_variable = sr_fl_at_{k} OR = {{ {theirs} }} }} value = 3 }}",
@@ -1533,6 +1625,12 @@ def render_custom_loc() -> str:
                 "\ttext = {", f"\t\ttrigger = {{ {var(n, 'target_known')} = yes }}",
                 f"\t\tlocalization_key = je_space_race_widget_fl_{n}_intel_known", "\t}",
                 "\ttext = {", f"\t\tlocalization_key = je_space_race_widget_fl_{n}_intel_unknown", "\t}", "}", "",
+                # The target button's price line: only while it closes in, when
+                # stepping to a free colony charges its price (sr_fl_step_hostile_target_at).
+                f"sr_fl_{n}_target_price = {{", "\ttype = country", "\trandom_valid = no", "",
+                "\ttext = {", f"\t\ttrigger = {{ {var(n, 'posture_value')} = 3 }}",
+                "\t\tlocalization_key = sr_fl_target_free_price_tt", "\t}",
+                "\ttext = {", "\t\tlocalization_key = te_tt_blank", "\t}", "}", "",
                 f"sr_fl_{n}_drive_name = {{", "\ttype = country", "\trandom_valid = no", ""]
         for level, drive in reversed(list(enumerate(DRIVES))):
             trigger = f"{var(n, 'drive_value')} >= {level}" if level else "always = yes"
@@ -1606,7 +1704,8 @@ def _fleet_row(n: int) -> list[str]:
     out += _button("fl_detach_button", "sr_fleet_detach_sgui", n)
     out += _button("fl_land_button", "sr_fleet_land_sgui", n)
     out += _button("fl_embark_button", "sr_fleet_embark_sgui", n)
-    # 6b: posture, target, seize or destroy; not at Earth, where everything engages.
+    # 6b: posture, target, seize or destroy; at Earth, where everything else is
+    # stationed, only while a lunar world may be closed in on (lunar colonization § 8.1).
     out += _override("fl_combat_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_combat", 1)}]"')
     out += _button("fl_posture_button", "sr_fleet_posture_sgui", n)
     for p_code in POSTURES:

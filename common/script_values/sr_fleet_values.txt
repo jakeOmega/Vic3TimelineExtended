@@ -477,7 +477,9 @@ sr_battery_queued_levels = {
 
 # Orbital fire support (design § 15): the margin by which our fleets at Earth
 # outmatch the hostile fleets there, min(1, (ours - theirs) / max(theirs,
-# sr_orbital_superiority_floor)); 0 with no fleet of ours there. The
+# sr_orbital_superiority_floor)); 0 with no fleet of ours there. Every fleet at
+# Earth counts, whatever its posture: sr_fl_at_<loc> is posture-blind, so one
+# closing in on a lunar world counts as at Earth (lunar colonization § 8.5). The
 # multiplier of sr_orbital_superiority, so a full margin gives +10% offense
 # and +5% defense.
 sr_orbital_superiority_floor = { value = 10 }

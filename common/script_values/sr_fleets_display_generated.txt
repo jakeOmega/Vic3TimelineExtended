@@ -49,6 +49,9 @@ sr_disp_fl_1_leg_dv = {
 sr_disp_fl_1_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_loc NOT = { var:sr_fl_1_loc = 1 } } value = 1 }
+	# At Earth only while a lunar world there may be closed in on (lunar
+	# colonization § 8.1).
+	else_if = { limit = { sr_fl_1_at_earth = yes sr_fl_1_has_hostile_world = yes } value = 1 }
 }
 sr_disp_fl_1_posture = { value = sr_fl_1_posture_value }
 sr_disp_fl_1_destroy = {
@@ -96,6 +99,9 @@ sr_disp_fl_2_leg_dv = {
 sr_disp_fl_2_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_loc NOT = { var:sr_fl_2_loc = 1 } } value = 1 }
+	# At Earth only while a lunar world there may be closed in on (lunar
+	# colonization § 8.1).
+	else_if = { limit = { sr_fl_2_at_earth = yes sr_fl_2_has_hostile_world = yes } value = 1 }
 }
 sr_disp_fl_2_posture = { value = sr_fl_2_posture_value }
 sr_disp_fl_2_destroy = {
@@ -143,6 +149,9 @@ sr_disp_fl_3_leg_dv = {
 sr_disp_fl_3_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_3_loc NOT = { var:sr_fl_3_loc = 1 } } value = 1 }
+	# At Earth only while a lunar world there may be closed in on (lunar
+	# colonization § 8.1).
+	else_if = { limit = { sr_fl_3_at_earth = yes sr_fl_3_has_hostile_world = yes } value = 1 }
 }
 sr_disp_fl_3_posture = { value = sr_fl_3_posture_value }
 sr_disp_fl_3_destroy = {
@@ -190,6 +199,9 @@ sr_disp_fl_4_leg_dv = {
 sr_disp_fl_4_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_loc NOT = { var:sr_fl_4_loc = 1 } } value = 1 }
+	# At Earth only while a lunar world there may be closed in on (lunar
+	# colonization § 8.1).
+	else_if = { limit = { sr_fl_4_at_earth = yes sr_fl_4_has_hostile_world = yes } value = 1 }
 }
 sr_disp_fl_4_posture = { value = sr_fl_4_posture_value }
 sr_disp_fl_4_destroy = {
@@ -237,6 +249,9 @@ sr_disp_fl_5_leg_dv = {
 sr_disp_fl_5_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_5_loc NOT = { var:sr_fl_5_loc = 1 } } value = 1 }
+	# At Earth only while a lunar world there may be closed in on (lunar
+	# colonization § 8.1).
+	else_if = { limit = { sr_fl_5_at_earth = yes sr_fl_5_has_hostile_world = yes } value = 1 }
 }
 sr_disp_fl_5_posture = { value = sr_fl_5_posture_value }
 sr_disp_fl_5_destroy = {
@@ -284,6 +299,9 @@ sr_disp_fl_6_leg_dv = {
 sr_disp_fl_6_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_loc NOT = { var:sr_fl_6_loc = 1 } } value = 1 }
+	# At Earth only while a lunar world there may be closed in on (lunar
+	# colonization § 8.1).
+	else_if = { limit = { sr_fl_6_at_earth = yes sr_fl_6_has_hostile_world = yes } value = 1 }
 }
 sr_disp_fl_6_posture = { value = sr_fl_6_posture_value }
 sr_disp_fl_6_destroy = {
@@ -331,6 +349,9 @@ sr_disp_fl_7_leg_dv = {
 sr_disp_fl_7_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_7_loc NOT = { var:sr_fl_7_loc = 1 } } value = 1 }
+	# At Earth only while a lunar world there may be closed in on (lunar
+	# colonization § 8.1).
+	else_if = { limit = { sr_fl_7_at_earth = yes sr_fl_7_has_hostile_world = yes } value = 1 }
 }
 sr_disp_fl_7_posture = { value = sr_fl_7_posture_value }
 sr_disp_fl_7_destroy = {
@@ -378,6 +399,9 @@ sr_disp_fl_8_leg_dv = {
 sr_disp_fl_8_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_loc NOT = { var:sr_fl_8_loc = 1 } } value = 1 }
+	# At Earth only while a lunar world there may be closed in on (lunar
+	# colonization § 8.1).
+	else_if = { limit = { sr_fl_8_at_earth = yes sr_fl_8_has_hostile_world = yes } value = 1 }
 }
 sr_disp_fl_8_posture = { value = sr_fl_8_posture_value }
 sr_disp_fl_8_destroy = {
@@ -425,6 +449,9 @@ sr_disp_fl_9_leg_dv = {
 sr_disp_fl_9_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_9_loc NOT = { var:sr_fl_9_loc = 1 } } value = 1 }
+	# At Earth only while a lunar world there may be closed in on (lunar
+	# colonization § 8.1).
+	else_if = { limit = { sr_fl_9_at_earth = yes sr_fl_9_has_hostile_world = yes } value = 1 }
 }
 sr_disp_fl_9_posture = { value = sr_fl_9_posture_value }
 sr_disp_fl_9_destroy = {
@@ -672,14 +699,12 @@ sr_disp_loc_inbound_ours_kuiper = {
 # Per location, the viewer's status there (6b): 1 a battle this month or last,
 # 2 a colony of ours blockaded, 3 an enemy's blockaded by us; 6c: 4 a colony of
 # ours interdicted (blockaded by a country at peace with us), 5 we interdict;
-# 6d, at Earth: 6 our Earth blockaded, 7 we blockade an enemy's.
+# 6d, at Earth: 6 our Earth blockaded, 7 we blockade an enemy's. At Earth only
+# 1, 6 and 7: a lunar world is blockaded exactly while its holder's Earth is
+# (lunar colonization § 8.2), and none is interdicted (§ 8.3).
 sr_disp_loc_status_earth = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_battle_earth global_var:sr_loc_battle_earth >= { value = te_history_month_index subtract = 1 } } value = 1 }
-	else_if = { limit = { OR = { AND = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_blockaded_shackleton NOT = { has_global_variable = sr_site_interdicted_shackleton } } AND = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_blockaded_peary NOT = { has_global_variable = sr_site_interdicted_peary } } AND = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_blockaded_tranquility NOT = { has_global_variable = sr_site_interdicted_tranquility } } AND = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_blockaded_marius_hills NOT = { has_global_variable = sr_site_interdicted_marius_hills } } AND = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_blockaded_daedalus NOT = { has_global_variable = sr_site_interdicted_daedalus } } AND = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_blockaded_imbrium NOT = { has_global_variable = sr_site_interdicted_imbrium } } } } value = 2 }
-	else_if = { limit = { OR = { AND = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_interdicted_shackleton } AND = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_interdicted_peary } AND = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_interdicted_tranquility } AND = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_interdicted_marius_hills } AND = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_interdicted_daedalus } AND = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_interdicted_imbrium } } } value = 4 }
-	else_if = { limit = { has_variable = sr_fl_at_earth OR = { AND = { has_global_variable = sr_site_blockaded_shackleton global_var:sr_site_holder_shackleton ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_peary global_var:sr_site_holder_peary ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_tranquility global_var:sr_site_holder_tranquility ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_marius_hills global_var:sr_site_holder_marius_hills ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_daedalus global_var:sr_site_holder_daedalus ?= { has_war_with = prev } } AND = { has_global_variable = sr_site_blockaded_imbrium global_var:sr_site_holder_imbrium ?= { has_war_with = prev } } } } value = 3 }
-	else_if = { limit = { has_variable_list = sr_icpt_earth any_in_list = { variable = sr_icpt_earth is_country_alive = yes } } value = 5 }
 	else_if = { limit = { sr_earth_blockaded = yes } value = 6 }
 	else_if = { limit = { has_variable = sr_fl_at_earth is_at_war = yes any_country = { has_war_with = prev sr_earth_blockaded = yes } } value = 7 }
 }

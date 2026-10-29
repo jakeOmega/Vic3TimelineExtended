@@ -3468,7 +3468,8 @@ types space_race_widget_types
 				}
 			}
 		}
-		### Posture and target (6b), at a location other than Earth.
+		### Posture and target (6b), at a location other than Earth; at Earth only
+		### while a lunar world there may be closed in on (lunar colonization § 8.1).
 		flowcontainer = {
 			direction = horizontal
 			ignoreinvisible = yes
