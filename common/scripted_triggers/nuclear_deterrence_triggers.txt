@@ -592,6 +592,16 @@ nd_dispute_claims_by = {
 	}
 }
 
+# Dispute 10 (rework spec §8.5): $TARGET$ is building an Orbital Battlestation.
+# A finished one gives every state its owner holds nuclear defense (the strike
+# odds, mod_systems.md), so it weakens our deterrent; the dispute is the
+# construction site, before a level is done.
+nd_dispute_orbital_by = {
+	$TARGET$ = {
+		any_scope_state = { has_building = building_orbital_battlestation_construction_site }
+	}
+}
+
 # The struck country (victim scope): $ENEMY$'s strike on us carried the claim
 # we hold from it (rework spec §5.4). The claim record stands until its truth
 # comes out, months later; nd_strike_claim_id says, for 30 days after a
@@ -1736,6 +1746,7 @@ nd_has_crisis_dispute_with = {
 		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		nd_dispute_proliferation_by = { TARGET = $TARGET$ }
 		nd_dispute_claims_by = { TARGET = $TARGET$ }
+		nd_dispute_orbital_by = { TARGET = $TARGET$ }
 		nd_dispute_alert_by = { TARGET = $TARGET$ }
 	}
 }
@@ -2154,6 +2165,12 @@ nd_ai_would_warn = {
 			OR = {
 				nd_dispute_claims_by = { TARGET = $TARGET$ }
 			}
+		}
+		# An orbital battlestation going up, for a great power (rework spec
+		# §9).
+		AND = {
+			nd_dispute_orbital_by = { TARGET = $TARGET$ }
+			country_rank >= rank_value:great_power
 		}
 	}
 	# A cautious ruler warns only in defence.

@@ -26,6 +26,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 CRISIS_EVENTS = ROOT / "events/nuclear_crisis_events.txt"
+BUILDINGS = ROOT / "common/buildings/extra_buildings.txt"
 
 # (code, the dispute's trigger, a word every prose list of disputes uses,
 #  the preview's "over" key, the yield line's key), in classification order
@@ -38,6 +39,7 @@ DISPUTES = [
     (6, "nd_dispute_peacetime_strike_by", "nuclear strike", "nd_tt_open_over_peacetime_strike", "nd_tt_yield_reparations"),
     (4, "nd_dispute_proliferation_by", "weapons program", "nd_tt_open_over_proliferation", "nd_tt_yield_freeze"),
     (8, "nd_dispute_claims_by", "claims", "nd_tt_open_over_claims", "nd_tt_yield_claims"),
+    (10, "nd_dispute_orbital_by", "orbital", "nd_tt_open_over_orbital", "nd_tt_yield_orbital"),
     (5, "nd_dispute_alert_by", "alert", "nd_tt_open_over_alert", "nd_tt_yield_alert"),
 ]
 CODES = [d[0] for d in DISPUTES]
@@ -239,6 +241,56 @@ class TestClaims(unittest.TestCase):
         rival = body.rfind("has_diplomatic_pact = { who = $TARGET$ type = rivalry }", 0, i)
         self.assertGreaterEqual(rival, 0)
         self.assertEqual(body.count("nd_dispute_claims_by"), 1)
+
+
+class TestOrbital(unittest.TestCase):
+    """Dispute 10: the target is building an Orbital Battlestation, which
+    gives every state its owner holds nuclear defense. Conceding tears the
+    construction site down with its progress and freezes new sites for ten
+    years; finished levels stay."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.crisis = strip_comments(read(CRISIS_EFFECTS))
+        cls.triggers = strip_comments(read(TRIGGERS))
+
+    def test_trigger_reads_the_site(self):
+        body = squash(block(self.triggers, "nd_dispute_orbital_by"))
+        self.assertIn("$TARGET$ = { any_scope_state = { has_building = building_orbital_battlestation_construction_site } }", body)
+
+    def test_concession_removes_site_and_progress(self):
+        body = squash(block(self.crisis, "nd_crisis_concede_orbital"))
+        self.assertIn("every_scope_state = { limit = { has_building = building_orbital_battlestation_construction_site }"
+                      " set_variable = { name = orbital_battlestation_progress_var value = 0 }"
+                      " remove_building = building_orbital_battlestation_construction_site }", body)
+        self.assertNotIn("building_orbital_battlestation }", body)
+
+    def test_freeze_is_ten_years_and_read_by_the_site(self):
+        body = squash(block(self.crisis, "nd_crisis_concede_orbital"))
+        self.assertIn("set_variable = { name = nd_crisis_orbital_freeze value = scope:nd_issuer days = 3650 }", body)
+        site = squash(block(block(strip_comments(read(BUILDINGS)),
+                                  "REPLACE_OR_CREATE:building_orbital_battlestation_construction_site"), "possible"))
+        self.assertIn("custom_tooltip = { text = nd_tt_orbital_frozen owner = { NOT = { has_variable = nd_crisis_orbital_freeze } } }", site)
+        self.assertTrue(loc_value("nd_tt_orbital_frozen"))
+
+    def test_not_defensive(self):
+        self.assertNotRegex(block(self.triggers, "nd_crisis_issuer_is_defensive"), dispute_var(10))
+
+    def test_ai_great_power_only(self):
+        body = squash(block(self.triggers, "nd_ai_would_warn"))
+        self.assertIn("AND = { nd_dispute_orbital_by = { TARGET = $TARGET$ } country_rank >= rank_value:great_power }", body)
+        self.assertEqual(body.count("nd_dispute_orbital_by"), 1)
+
+    def test_finished_levels_stay(self):
+        for key in ("nd_concession_long_10", "nd_tt_yield_orbital"):
+            self.assertIn("levels", loc_value(key).lower(), key)
+
+    def test_revalidate_only_a_war(self):
+        # A site torn down by the target itself can go up again at once, so
+        # it doesn't end the crisis (rulings R7).
+        body = squash(block(self.crisis, "nd_crisis_revalidate_dispute"))
+        self.assertIn("else_if = { limit = { var:nd_crisis_dispute = 10 } if = { limit = { has_war_with = scope:nd_target }"
+                      " set_variable = { name = nd_crisis_dispute value = 2 } } }", body)
 
 
 if __name__ == "__main__":

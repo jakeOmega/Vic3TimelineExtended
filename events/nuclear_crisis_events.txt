@@ -1522,6 +1522,16 @@ nuclear_crisis.26 = {
 				debug_log = "TE_SELF_CHECK OK nd_concession_8: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] claims no state of [THIS.GetCountry.GetNameNoFormatting] a day after remove_claim"
 			}
 		}
+		if = {
+			limit = { var:nd_cc_code = 10 }
+			if = {
+				limit = { nd_dispute_orbital_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_10: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] still has an Orbital Battlestation site a day after remove_building"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_10: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] has no Orbital Battlestation site a day after remove_building"
+			}
+		}
 		remove_variable = nd_cc_target
 		remove_variable = nd_cc_code
 	}
