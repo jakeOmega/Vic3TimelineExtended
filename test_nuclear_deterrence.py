@@ -1342,6 +1342,99 @@ class TestSalvo(unittest.TestCase):
             self.assertEqual(len(re.findall(rf"(?m)^{name} = \{{", read(EFFECTS))), 1, name)
 
 
+
+class TestDecapitationGates(unittest.TestCase):
+    """A decapitated command orders nothing until it is restored (rework spec
+    §6.3, §6.4; plan H11-H13)."""
+
+    def setUp(self):
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.weapon = strip_comments(read(WEAPON_EVENTS))
+
+    def test_command_gates_every_ordered_launch(self):
+        self.assertIn("nd_command_intact = yes", block(self.triggers, "nd_retaliation_permitted"))
+        self.assertIn("nd_command_intact = yes", block(self.triggers, "nd_can_order_salvo"))
+        nuke = strip_comments(read(NUKE))
+        for action in ("nuke_diplo_action", "tactical_nuke_diplo_action"):
+            self.assertIn("nd_command_intact = yes", block(block(nuke, action), "possible"), action)
+        for name in ("nd_dispatch_strategic_strike", "nd_dispatch_tactical_strike"):
+            body = block(self.effects, name)
+            gate = block(body[body.index("remove_variable = nd_dispatch_click"):], "limit")
+            self.assertIn("nd_command_intact = yes", gate, name)
+        crisis = strip_comments(read(CRISIS_EVENTS))
+        for option in ("nuclear_crisis.4.g", "nuclear_crisis.7.a"):
+            self.assertIn("nd_command_intact = yes", block(option_body(crisis, option), "trigger"), option)
+        guarantor = block(crisis, "nuclear_crisis.22")
+        self.assertIn("nd_command_intact = yes", guarantor)
+        incident = strip_comments(read(INCIDENT_EVENTS))
+        for option in ("nuclear_incident.1.c", "nuclear_incident.50.c"):
+            self.assertIn("nd_command_intact", block(option_body(incident, option), "trigger"), option)
+        # The answer that waited is asked only once the command is restored.
+        weekly = self.effects[self.effects.index("limit = { has_variable = nd_pending_retaliation }"):]
+        weekly = weekly[:weekly.index("nuclear_weapon_events.24")]
+        self.assertIn("nd_command_intact = yes", weekly)
+
+    def test_unordered_paths_untouched(self):
+        # Only a Central Authorization country is ever cut off, and none of
+        # these launch under it: a cut-off command, Automatic Retaliation, a
+        # loose warhead and the incident dispatch itself.
+        self.assertNotIn("nd_command_intact", block(self.effects, "nd_launch_or_intercept"))
+        self.assertNotIn("nd_command_intact", strip_comments(read(LOOSE_EFFECTS)))
+        self.assertNotIn("nd_command_intact", strip_comments(read(LOOSE_EVENTS)))
+        self.assertNotIn("nd_command_intact", option_body(self.weapon, "nuclear_weapon_events.1.e"))
+        incident = strip_comments(read(INCIDENT_EVENTS))
+        commander = incident[incident.index("KIND = commander") - 3000:incident.index("KIND = commander")]
+        self.assertNotIn("nd_command_intact", commander)
+
+    def test_cut_off_option(self):
+        one = block(self.weapon, "nuclear_weapon_events.1")
+        option = option_body(one, "nuclear_weapon_events.1.cut_off")
+        self.assertIn("has_variable = nd_decapitated", block(option, "trigger"))
+        self.assertIn("default_option = yes", option)
+        raw = read(WEAPON_EVENTS)
+        raw_option = raw[raw.index("name = nuclear_weapon_events.1.cut_off"):]
+        self.assertRegex(raw_option[:600], r"# REVIEWED \d{4}-\d{2}-\d{2} \(no_effect_option\):")
+        # Absorbing and the Recessed mating are hidden while it is the default.
+        for name in ("nuclear_weapon_events.1.a", "nuclear_weapon_events.1.g"):
+            self.assertIn("NOT = { scope:target_country = { has_variable = nd_decapitated } }",
+                          squash(block(option_body(one, name), "trigger")), name)
+        for key in ("nuclear_weapon_events.1.cut_off", "nuclear_weapon_events.1.cut_off.tt"):
+            self.assertTrue(loc_value(key), key)
+        self.assertIn("custom_tooltip = nuclear_weapon_events.1.cut_off.tt", option)
+
+    def test_command_restored_reuses_24(self):
+        event = block(self.weapon, "nuclear_weapon_events.24")
+        for part, key in (("title", "nuclear_weapon_events.24.t_restored"), ("desc", "nuclear_weapon_events.24.d_restored")):
+            body = squash(block(event, part))
+            self.assertIn(f"triggered_desc = {{ trigger = {{ has_variable = nd_restored_from_decapitation }} desc = {key} }}",
+                          body, part)
+            self.assertTrue(loc_value(key), key)
+        self.assertIn("remove_variable = nd_restored_from_decapitation", block(event, "after"))
+
+    def test_salvo_text_and_stale_guard(self):
+        one = block(self.weapon, "nuclear_weapon_events.1")
+        desc = squash(block(one, "desc"))
+        for key in ("nuclear_weapon_events.1.d_salvo_cities", "nuclear_weapon_events.1.d_salvo_forces",
+                    "nuclear_weapon_events.1.d_salvo_leadership", "nuclear_weapon_events.1.d_cut_off"):
+            self.assertIn(f"desc = {key} }}", desc, key)
+            self.assertTrue(loc_value(key), key)
+            self.assertLess(desc.index(key), desc.index("desc = nuclear_weapon_events.1.d }"))
+        self.assertIn("var:nd_salvo_seen_by ?= scope:attacking_country", desc)
+        self.assertIn("nd_salvo_seen_landed", loc_value("nuclear_weapon_events.1.d_salvo_cities"))
+        self.assertIn("nd_salvo_seen_destroyed", loc_value("nuclear_weapon_events.1.d_salvo_forces"))
+        title = squash(block(one, "title"))
+        self.assertIn("desc = nuclear_weapon_events.1.t_salvo }", title)
+        self.assertTrue(loc_value("nuclear_weapon_events.1.t_salvo"))
+        # A single strike after a salvo must not read as the salvo.
+        extra = strip_comments(read(EXTRA_EFFECTS))
+        for name in ("nuclear_first_strike", "nuclear_response_response_strike"):
+            body = block(extra, name)
+            self.assertIn("remove_variable = nd_salvo_seen_by", body, name)
+            self.assertLess(body.index("remove_variable = nd_salvo_seen_by"),
+                            body.index("id = nuclear_weapon_events.1 "), name)
+
+
 class TestOutcomeNotice(unittest.TestCase):
     def setUp(self):
         self.effects = strip_comments(read(CRISIS_EFFECTS))
@@ -2328,7 +2421,10 @@ class TestLaunchGate(unittest.TestCase):
         self.assertIn("nd_pending_retaliation", weekly)
         self.assertIn("id = nuclear_weapon_events.24", weekly)
         body = block(ev, "nuclear_weapon_events.24")
-        self.assertIn("has_war_with = scope:nd_ready_enemy", block(body, "trigger"))
+        # The event's own trigger, not a triggered text's (its title reads
+        # "Command Restored" after a decapitation).
+        event_trigger = block(body[re.search(r"(?m)^\ttrigger = \{", body).start():], "trigger")
+        self.assertIn("has_war_with = scope:nd_ready_enemy", event_trigger)
 
     def test_assembling_bypasses_the_lock_but_only_raises(self):
         body = block(strip_comments(read(EFFECTS)), "nd_assemble_for_retaliation")

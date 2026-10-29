@@ -519,6 +519,9 @@ nd_weekly_update = {
 				limit = {
 					nd_forces_assembled = yes
 					nd_is_armed = yes
+					# A command cut off by a strike on the capital asks
+					# again once restored (rework spec §6.3).
+					nd_command_intact = yes
 				}
 				trigger_event = { id = nuclear_weapon_events.24 popup = yes }
 				remove_variable = nd_pending_retaliation
@@ -1885,6 +1888,9 @@ nd_dispatch_strategic_strike = {
 				exists = scope:nd_strike_victim
 				nd_is_armed = yes
 				nd_forces_assembled = yes
+				# Only Central Authorization is ever cut off (rework spec
+				# §6.3), and every launch it makes is ordered.
+				nd_command_intact = yes
 				OR = {
 					has_war_with = scope:nd_strike_victim
 					nd_peacetime_incident_dispatch = yes
@@ -1921,6 +1927,9 @@ nd_dispatch_tactical_strike = {
 				exists = scope:nd_strike_victim
 				nd_is_armed = yes
 				nd_forces_assembled = yes
+				# Only Central Authorization is ever cut off (rework spec
+				# §6.3), and every launch it makes is ordered.
+				nd_command_intact = yes
 				OR = {
 					has_war_with = scope:nd_strike_victim
 					nd_peacetime_incident_dispatch = yes

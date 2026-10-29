@@ -648,7 +648,14 @@ nuclear_first_strike = { # Scope is target state
 					hidden_effect = { nd_record_claim = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
-						owner = { trigger_event = { id = nuclear_weapon_events.1 popup = yes } }
+						owner = {
+							# One warhead: not an old salvo's text (nd_salvo_aftermath).
+							if = {
+								limit = { has_variable = nd_salvo_seen_by }
+								remove_variable = nd_salvo_seen_by
+							}
+							trigger_event = { id = nuclear_weapon_events.1 popup = yes }
+						}
 					}
 					scope:target_country = {
 						change_relations = {
@@ -783,7 +790,14 @@ nuclear_response_response_strike = {  # Scope is target state
 					nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
-						owner = { trigger_event = { id = nuclear_weapon_events.1 popup = yes } }
+						owner = {
+							# One warhead: not an old salvo's text (nd_salvo_aftermath).
+							if = {
+								limit = { has_variable = nd_salvo_seen_by }
+								remove_variable = nd_salvo_seen_by
+							}
+							trigger_event = { id = nuclear_weapon_events.1 popup = yes }
+						}
 					}
 					trigger_event = { id = nuclear_weapon_events.2 popup = yes }
 					every_country = {

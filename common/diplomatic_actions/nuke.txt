@@ -39,6 +39,11 @@
 			text = nd_tt_forces_assembled
 			nd_forces_assembled = yes
 		}
+		# Cut off by a strike on our capital (rework spec §6.3).
+		custom_tooltip = {
+			text = nd_tt_command_intact
+			nd_command_intact = yes
+		}
 	}
 
 	second_state_trigger = {
@@ -221,6 +226,11 @@ tactical_nuke_diplo_action = {
 		custom_tooltip = {
 			text = nd_tt_forces_assembled
 			nd_forces_assembled = yes
+		}
+		# Cut off by a strike on our capital (rework spec §6.3).
+		custom_tooltip = {
+			text = nd_tt_command_intact
+			nd_command_intact = yes
 		}
 	}
 

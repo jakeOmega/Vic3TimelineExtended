@@ -748,6 +748,12 @@ nd_retaliation_permitted = {
 		text = nd_tt_forces_assembled
 		nd_forces_assembled = yes
 	}
+	# Cut off by a strike on our capital (rework spec §6.3): the answer waits
+	# for the command (nuclear_weapon_events.24).
+	custom_tooltip = {
+		text = nd_tt_command_intact
+		nd_command_intact = yes
+	}
 }
 
 # ----------------------------------------------------------------------------
