@@ -603,7 +603,9 @@ nd_command_intact = {
 
 # REACH (rework spec §7; nd_reach_refresh). State scope: can $COUNTRY$ strike
 # this state? ICBMs reach every state; bombers the countries in its nd_reach;
-# submarines (Advanced Submarine Technology) every coastal state.
+# submarines (Advanced Submarine Technology) every coastal state. Our own
+# strategic adjacency is also read live (final review): the list is weekly,
+# and a war begun mid-week brings its war-goal adjacency at once.
 nd_state_in_reach_of = {
 	OR = {
 		$COUNTRY$ = { has_technology_researched = ICBMs }
@@ -611,8 +613,13 @@ nd_state_in_reach_of = {
 			exists = owner
 			owner = { save_temporary_scope_as = nd_reach_owner }
 			$COUNTRY$ = {
-				has_variable_list = nd_reach
-				is_target_in_variable_list = { name = nd_reach target = scope:nd_reach_owner }
+				OR = {
+					has_strategic_adjacency = scope:nd_reach_owner
+					AND = {
+						has_variable_list = nd_reach
+						is_target_in_variable_list = { name = nd_reach target = scope:nd_reach_owner }
+					}
+				}
 			}
 		}
 		AND = {
@@ -628,6 +635,7 @@ nd_state_in_reach_of = {
 nd_reaches_country = {
 	OR = {
 		has_technology_researched = ICBMs
+		has_strategic_adjacency = $TARGET$
 		AND = {
 			has_variable_list = nd_reach
 			is_target_in_variable_list = { name = nd_reach target = $TARGET$ }

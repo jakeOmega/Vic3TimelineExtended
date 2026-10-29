@@ -114,12 +114,19 @@ nuclear_basing = {
 		}
 	}
 
+	# Whether article_options is bound when a treaty ends is unprobed, so both
+	# parties are named too, as the monetary articles do (110_currency_peg):
+	# the rebuild is harmless on the host, and the weekly one is the backstop.
 	on_break = {
-		scope:article_options = { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
+		scope:article_options ?= { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
+		scope:withdrawing_country ?= { trigger_event = { id = nuclear_weapon_events.32 days = 1 } }
+		scope:non_withdrawing_country ?= { trigger_event = { id = nuclear_weapon_events.32 days = 1 } }
 	}
 
 	on_withdrawal = {
-		scope:article_options = { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
+		scope:article_options ?= { source_country = { trigger_event = { id = nuclear_weapon_events.32 days = 1 } } }
+		scope:withdrawing_country ?= { trigger_event = { id = nuclear_weapon_events.32 days = 1 } }
+		scope:non_withdrawing_country ?= { trigger_event = { id = nuclear_weapon_events.32 days = 1 } }
 	}
 
 	ai = {

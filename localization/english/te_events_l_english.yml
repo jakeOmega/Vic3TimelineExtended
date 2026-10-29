@@ -3559,7 +3559,7 @@
  nuclear_incident.30.t:0 "A Weapons Accident"
  nuclear_incident.31.a:0 "Their weapons leave our soil."
  nuclear_incident.31.b:0 "Protest in the strongest terms, and keep the agreement."
- nuclear_incident.31.c:0 "Say nothing. The alliance matters more than one district."
+ nuclear_incident.31.c:0 "Say nothing. Their goodwill matters more than one district."
  nuclear_incident.31.d_bomber:0 "A [SCOPE.sCountry('nd_accident_guest').GetAdjective] bomber carrying nuclear weapons has broken up over [SCOPE.sState('nd_accident_state').GetName]. None of its weapons detonated, but the conventional explosives in one burst on impact and spread radioactive material across the fields. The weapons are [SCOPE.sCountry('nd_accident_guest').GetName]'s. The contamination, and the anger, are ours."
  nuclear_incident.31.d_silo:0 "A missile silo that [SCOPE.sCountry('nd_accident_guest').GetName] operates in [SCOPE.sState('nd_accident_state').GetName] under our basing agreement has exploded. The warhead was thrown clear and did not detonate, but the site is wrecked and the district around it contaminated. The weapons are [SCOPE.sCountry('nd_accident_guest').GetName]'s. The contamination, and the anger, are ours."
  nuclear_incident.31.f:0 "\"They told us these weapons were as safe as anything in their own country.\"\n\n\"They were. Ask their farmers.\""

@@ -1669,11 +1669,12 @@ nuclear_incident.31 = {
 		}
 	}
 
-	# Say nothing.
+	# Say nothing: the guest owes us, and our own people notice.
 	option = {
 		name = nuclear_incident.31.c
 		nd_log_context = yes
 		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_incident.31.c; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		change_relations = { country = scope:nd_accident_guest value = 10 }
 		add_modifier = {
 			name = nd_host_accident_silence
 			days = short_modifier_time

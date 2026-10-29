@@ -92,8 +92,17 @@ class TestReachList(unittest.TestCase):
         article = strip_comments(read(ARTICLE))
         for hook in ("on_entry_into_force", "on_break", "on_withdrawal"):
             body = squash(block(article, hook))
-            self.assertIn("scope:article_options = { source_country = { trigger_event = { id = nuclear_weapon_events.32"
-                          " days = 1 } } }", body, hook)
+            self.assertRegex(body, r"scope:article_options \??= \{ source_country = \{ trigger_event = \{ id = "
+                                   r"nuclear_weapon_events.32 days = 1 \} \} \}", hook)
+        # Final review: whether article_options is bound when a treaty ends is
+        # unknown, so the end hooks guard it and also name both parties, as
+        # the monetary articles do (the rebuild is harmless on a non-guest).
+        for hook in ("on_break", "on_withdrawal"):
+            body = squash(block(article, hook))
+            self.assertIn("scope:article_options ?= {", body, hook)
+            for party in ("withdrawing_country", "non_withdrawing_country"):
+                self.assertIn(f"scope:{party} ?= {{ trigger_event = {{ id = nuclear_weapon_events.32 days = 1 }} }}",
+                              body, hook)
         event = squash(block(strip_comments(read(WEAPON_EVENTS)), "nuclear_weapon_events.32"))
         self.assertIn("hidden = yes", event)
         self.assertIn("nd_reach_refresh = yes", event)
@@ -123,6 +132,14 @@ class TestReachTriggers(unittest.TestCase):
                        "has_technology_researched = advanced_submarine_technology",
                        "$TARGET$ = { any_scope_state = { is_coastal = yes } }"):
             self.assertIn(needle, body)
+
+    def test_live_adjacency_covers_a_new_war(self):
+        # Final review: the list is weekly, so a war begun mid-week would
+        # leave its war-goal adjacency out of reach for days, and the struck
+        # side unable to answer. Our own adjacency is read live.
+        self.assertIn("has_strategic_adjacency = $TARGET$", squash(block(self.triggers, "nd_reaches_country")))
+        self.assertIn("$COUNTRY$ = { OR = { has_strategic_adjacency = scope:nd_reach_owner",
+                      squash(block(self.triggers, "nd_state_in_reach_of")))
 
     def test_reach_limited(self):
         body = squash(block(self.triggers, "nd_reach_limited"))
@@ -169,6 +186,11 @@ class TestReachReaders(unittest.TestCase):
                                  option)
         guarantor = squash(block(self.crisis, "nuclear_crisis.22"))
         self.assertIn("nd_reaches_country = { TARGET = scope:attacking_country }", guarantor)
+
+    def test_counter_threat_reads_reach(self):
+        # Final review: "our weapons can reach their cities too".
+        trigger = squash(block(option_body(self.crisis, "nuclear_crisis.1.c"), "trigger"))
+        self.assertIn("text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_issuer }", trigger)
 
     def test_gates_read_reach(self):
         self.assertIn("nd_reaches_country = { TARGET = $ENEMY$ }", block(self.triggers, "nd_planner_candidate"))
@@ -249,6 +271,12 @@ class TestReasonEight(unittest.TestCase):
                               " custom_tooltip = nd_tt_open_bluff_reach")
         self.assertLess(law, reach)
         self.assertLess(reach, preview.index("custom_tooltip = nd_tt_open_backed"))
+
+    def test_ai_never_goes_public_with_a_bluff(self):
+        # Final review: a private warning the target rejected must not turn
+        # into a public bluff (reasons 5-8).
+        public = squash(block(option_body(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.2.a"), "ai_chance"))
+        self.assertIn("modifier = { trigger = { has_variable = nd_ft_reason var:nd_ft_reason >= 5 } factor = 0 }", public)
 
     def test_ai_never_bluffs_over_reach(self):
         triggers = strip_comments(read(TRIGGERS))
