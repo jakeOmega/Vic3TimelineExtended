@@ -4083,6 +4083,19 @@ Don't strand a source tech: before re-routing a PM/law away from its
 current tech, verify the source tech has other unlocks. Moving the only
 unlock off a tech leaves it pure-modifier with no content presence.
 
+Don't strand an old save either. Moving an unlock to a new technology, or
+giving a technology a new prerequisite, leaves a save's countries without the
+new one: the engine grants no prerequisite after the fact. A country that held
+Directed Energy Weapons when Solar Colonization's method moved to the new
+Cislunar Infrastructure, or Asteroid Mining when it came to require the new
+In-Situ Resource Utilization, loads without them, its method or building
+resting on a technology it lacks. Give it the new one once, in
+`common/on_actions/te_old_save_repairs.txt` (`te_repair_lunar_technologies`),
+behind a global flag a new game sets in its first month, since in a new game
+the old technology without the new one is legitimate. Whether the engine moves
+a building off such a method at the load, before that month's repair, is
+unread (`docs/testing/solar-colonies-playtest.md`).
+
 ### Polarity hints from `modifier_type_definitions/`
 
 For mod-only modifier names that vanilla declares but doesn't use,

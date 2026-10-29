@@ -54,7 +54,7 @@ innovation, innovation cap and prestige.
 | Earth Orbit | Guided Missiles (with the building) | Suborbital Flight, Orbital Flight | 500 |
 | Moon Mission | Space Exploration | adds Moon Landing and Deep-Space Probe | 1,500 |
 | Mars Mission | Knowledge Economy | adds Mars Landing and Moon Base | 5,000 |
-| Solar Colonization | Directed Energy Weapons | adds Solar System Colonization, stages 1 and 2 | 25,000 |
+| Solar Colonization | Cislunar Infrastructure | adds Solar System Colonization, stages 1 and 2 | 10,000 |
 | Deep Space Exploration | Space Colonization | lets a country with no colony start colonizing at stages 3 to 5 | 50,000 |
 | Interstellar Mission | Muon-Catalyzed Fusion Reactors | adds the Interstellar Probe | 100,000 |
 
@@ -104,7 +104,7 @@ Program runs a method that supports it.
 | Moon Base | Moon Landing | Reusable Rocketry (era 10) | 300 | 8% | ×5 |
 | Interstellar Probe | Deep-Space Probe and Mars Landing | Muon-Catalyzed Fusion Reactors (era 12) | 600 | 9% | ×12 |
 | Interstellar Probe: Awaiting Data | Interstellar Probe | none | 132 months | none | none |
-| Solar System Colonization | Moon Base and Mars Landing | Directed Energy Weapons (era 11) | 400 to 650 per colony | 10% | ×8 |
+| Solar System Colonization | Moon Base and Mars Landing | Cislunar Infrastructure (era 10) | 400 to 650 per colony | 10% | ×8 (×5 before your Mars Landing) |
 
 The setback risk is the base chance each month; the cost factor scales the
 milestone's innovation cost (see [Space race funding and
@@ -306,8 +306,10 @@ milestone is finished it also decides a reward that fades over ten years.
 ## Space race funding and cost
 
 Each milestone has its own funding level, from 0 up to your cap. The cap starts
-at 3 and rises with technology: eleven space-related technologies from era 7 to
-era 11 raise it by 1 each, and four in era 12 raise it by 2 each. Tier V of the
+at 3 and rises with technology: thirteen space-related technologies from era 7
+to era 11 raise it by 1 each, and Cislunar Infrastructure (era 10) and four
+technologies in era 12 raise it by 2 each. With all of them the cap is 13 by the
+end of era 10, 18 by the end of era 11 and 26 by the end of era 12. Tier V of the
 Advanced Research power bloc principle, its highest, adds another level.
 
 Every funding level, on any milestone, adds 0.5 to your monthly pace, and so to
@@ -507,7 +509,7 @@ Propulsion technology loosens the windows in three steps:
 
 | Technology | Launches |
 |---|---|
-| Directed Energy Weapons (opens colonization) | In a window only. |
+| Cislunar Infrastructure (opens colonization) | In a window only. |
 | Asteroid Mining | In a window as before; outside one, at a premium of extra progress, when your approach judges it worth it. |
 | Muon-Catalyzed Fusion Reactors | Any month, with no premium. |
 | Antimatter Production, with an Antimatter Containment Facility built | Any month, with no premium. |
@@ -646,8 +648,8 @@ group, Module Fabrication, which starts on No Module Fabrication:
 
 | Method | Technology | Launch Capacity and Advanced Materials a week | Points a month |
 |---|---|---|---|
-| Orbital Assembly | Directed Energy Weapons | 1,500 and 10 | 5 |
-| Lunar Foundries | Space Colonization | 2,000 and 15 | 12 |
+| Orbital Assembly | Cislunar Infrastructure | 1,500 and 10 | 5 |
+| Orbital Foundries | Space Colonization | 2,000 and 15 | 12 |
 | Fusion Shipyards | Muon-Catalyzed Fusion Reactors | 2,000 and 10 | 25 |
 
 Each module costs 100 points, so a fully staffed Space Program builds one every
@@ -679,9 +681,9 @@ they have while anything is queued, and never build Spaceports or Defenses.
 
 ### Extraplanetary Base room
 
-Under Simple Colonies and Full Colonies, Extraplanetary Bases need room. The
-near-Earth asteroids give every country room for 10 levels, and each colony you
-hold adds its own, from 10 levels on the small outer moons to 60 at 16 Psyche.
+Under Simple Colonies and Full Colonies, Extraplanetary Bases need room. With
+Asteroid Mining, the near-Earth asteroids give every country room for 10 levels,
+and each colony you hold adds its own, from 10 levels on the small outer moons to 60 at 16 Psyche.
 Each colony's room has a grade, which raises or lowers the output of the levels
 that work it:
 
@@ -698,7 +700,8 @@ that work it:
 | The Kuiper Belt | −35% to −45% |
 
 Your levels fill the best room first, and any past all of your room work at
-−50%. One country modifier, Extraplanetary Base Room, carries the average over
+−50%. Before Asteroid Mining, a country with no colony has no room at all. One
+country modifier, Extraplanetary Base Room, carries the average over
 all your levels, so only the levels past the room pay the penalty: with room for
 10 and 20 levels built, the base works at −25%. A new poor colony adds room
 without lowering what your levels already earn, and taking a rival's Psyche
@@ -1082,7 +1085,7 @@ recalculated every month, so a new Space Elevator level or a space company
 losing its prosperity shows in the next one.
 
 Commercial Space Industry does nothing until you build Extraplanetary Bases
-(Asteroid Mining). A Space Elevator of 10 levels reaches the cap on its own. The
+(In-Situ Resource Utilization). A Space Elevator of 10 levels reaches the cap on its own. The
 Space Program's method counts for at most one point, so once the race is over
 you can switch it to Earth Orbit, which uses 500 Launch Capacity instead of up to
 100,000, and give up only half a point. When you choose a colony's
