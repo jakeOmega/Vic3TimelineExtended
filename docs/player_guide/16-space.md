@@ -1113,9 +1113,10 @@ enemy's fleets and its colonies' Defenses there and can fly home again or dock
 there. It closes in on the enemy colony with the most people and modules,
 to seize it when its marines outnumber the garrison and militia, and otherwise
 stands off to blockade. It comes home once the enemy's fleets there outmatch
-its own. At Earth, while no enemy fleet is there, the AI's strongest fleet there
-closes in on the enemy lunar colony with the most people and modules when its
-marines outnumber the garrison and militia, and otherwise stays stationed. An AI never destroys a colony, never attacks a free one and never
+its own. At Earth, while no enemy fleet is there, the AI picks the enemy lunar
+colony with the most people and modules, and its strongest fleet there whose
+marines outnumber that colony's garrison and militia closes in on it. Its other
+fleets at Earth stay stationed. An AI never destroys a colony, never attacks a free one and never
 interdicts. With an enemy fleet at Earth, it launches its reserve once the
 reserve and its fleets at Earth match the enemy's there. It builds batteries
 only while at war with a country that has fleets, up to five levels, and runs

@@ -99,6 +99,10 @@ sr_site_ai_attack_target = {
 # world of its own an enemy occupies, the occupier: that enemy's Earth is
 # blockaded (sr_earth_blockaded: none of its fleets at Earth, and a fleet of a
 # country at war with it there; ours is, since the fleet that closes in is).
+# Its one caller, sr_fl_ai_lunar_assault, reads it only while no enemy fleet is
+# at Earth (NOT sr_earth_hostile_present), and that gate decides: with our
+# fleet there and none of the enemy's, the blockade clause always holds. It is
+# kept as the design's rule, for a caller without the gate.
 sr_site_ai_lunar_target = {
 	sr_site_ai_attack_target = { KEY = $KEY$ }
 	OR = {

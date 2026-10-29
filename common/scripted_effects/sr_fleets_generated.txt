@@ -2101,317 +2101,318 @@ sr_loc_refresh_snapshot = {
 # ===== The AI (design § 14) =====
 # A garrison due at a world of ours (design § 9.6): a fleet at Earth with
 # marines for it leaves for its location, if none of ours is there or on its
-# way. One order a month.
+# way; not one closing in on a lunar world (lunar colonization § 8.4). One
+# order a month.
 sr_fl_ai_send_garrisons = {
 	if = {
 		limit = { sr_loc_garrison_due_inner = yes NOT = { sr_fl_any_at_or_bound = { CODE = 2 } } }
 		if = {
-			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_inner = yes }
+			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_inner = yes NOT = { sr_fl_1_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 1 LOC = inner CODE = 2 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_inner = yes }
+			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_inner = yes NOT = { sr_fl_2_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 2 LOC = inner CODE = 2 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_inner = yes }
+			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_inner = yes NOT = { sr_fl_3_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 3 LOC = inner CODE = 2 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_inner = yes }
+			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_inner = yes NOT = { sr_fl_4_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 4 LOC = inner CODE = 2 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_inner = yes }
+			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_inner = yes NOT = { sr_fl_5_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 5 LOC = inner CODE = 2 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_inner = yes }
+			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_inner = yes NOT = { sr_fl_6_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 6 LOC = inner CODE = 2 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_inner = yes }
+			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_inner = yes NOT = { sr_fl_7_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 7 LOC = inner CODE = 2 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_inner = yes }
+			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_inner = yes NOT = { sr_fl_8_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 8 LOC = inner CODE = 2 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_inner = yes }
+			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_inner = yes NOT = { sr_fl_9_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 9 LOC = inner CODE = 2 }
 		}
 	}
 	else_if = {
 		limit = { sr_loc_garrison_due_mars = yes NOT = { sr_fl_any_at_or_bound = { CODE = 3 } } }
 		if = {
-			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_mars = yes }
+			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_mars = yes NOT = { sr_fl_1_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 1 LOC = mars CODE = 3 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_mars = yes }
+			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_mars = yes NOT = { sr_fl_2_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 2 LOC = mars CODE = 3 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_mars = yes }
+			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_mars = yes NOT = { sr_fl_3_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 3 LOC = mars CODE = 3 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_mars = yes }
+			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_mars = yes NOT = { sr_fl_4_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 4 LOC = mars CODE = 3 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_mars = yes }
+			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_mars = yes NOT = { sr_fl_5_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 5 LOC = mars CODE = 3 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_mars = yes }
+			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_mars = yes NOT = { sr_fl_6_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 6 LOC = mars CODE = 3 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_mars = yes }
+			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_mars = yes NOT = { sr_fl_7_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 7 LOC = mars CODE = 3 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_mars = yes }
+			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_mars = yes NOT = { sr_fl_8_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 8 LOC = mars CODE = 3 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_mars = yes }
+			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_mars = yes NOT = { sr_fl_9_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 9 LOC = mars CODE = 3 }
 		}
 	}
 	else_if = {
 		limit = { sr_loc_garrison_due_asteroids = yes NOT = { sr_fl_any_at_or_bound = { CODE = 4 } } }
 		if = {
-			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_asteroids = yes }
+			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_asteroids = yes NOT = { sr_fl_1_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 1 LOC = asteroids CODE = 4 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_asteroids = yes }
+			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_asteroids = yes NOT = { sr_fl_2_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 2 LOC = asteroids CODE = 4 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_asteroids = yes }
+			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_asteroids = yes NOT = { sr_fl_3_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 3 LOC = asteroids CODE = 4 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_asteroids = yes }
+			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_asteroids = yes NOT = { sr_fl_4_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 4 LOC = asteroids CODE = 4 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_asteroids = yes }
+			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_asteroids = yes NOT = { sr_fl_5_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 5 LOC = asteroids CODE = 4 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_asteroids = yes }
+			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_asteroids = yes NOT = { sr_fl_6_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 6 LOC = asteroids CODE = 4 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_asteroids = yes }
+			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_asteroids = yes NOT = { sr_fl_7_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 7 LOC = asteroids CODE = 4 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_asteroids = yes }
+			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_asteroids = yes NOT = { sr_fl_8_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 8 LOC = asteroids CODE = 4 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_asteroids = yes }
+			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_asteroids = yes NOT = { sr_fl_9_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 9 LOC = asteroids CODE = 4 }
 		}
 	}
 	else_if = {
 		limit = { sr_loc_garrison_due_jupiter = yes NOT = { sr_fl_any_at_or_bound = { CODE = 5 } } }
 		if = {
-			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_jupiter = yes }
+			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_jupiter = yes NOT = { sr_fl_1_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 1 LOC = jupiter CODE = 5 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_jupiter = yes }
+			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_jupiter = yes NOT = { sr_fl_2_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 2 LOC = jupiter CODE = 5 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_jupiter = yes }
+			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_jupiter = yes NOT = { sr_fl_3_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 3 LOC = jupiter CODE = 5 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_jupiter = yes }
+			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_jupiter = yes NOT = { sr_fl_4_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 4 LOC = jupiter CODE = 5 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_jupiter = yes }
+			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_jupiter = yes NOT = { sr_fl_5_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 5 LOC = jupiter CODE = 5 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_jupiter = yes }
+			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_jupiter = yes NOT = { sr_fl_6_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 6 LOC = jupiter CODE = 5 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_jupiter = yes }
+			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_jupiter = yes NOT = { sr_fl_7_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 7 LOC = jupiter CODE = 5 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_jupiter = yes }
+			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_jupiter = yes NOT = { sr_fl_8_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 8 LOC = jupiter CODE = 5 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_jupiter = yes }
+			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_jupiter = yes NOT = { sr_fl_9_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 9 LOC = jupiter CODE = 5 }
 		}
 	}
 	else_if = {
 		limit = { sr_loc_garrison_due_saturn = yes NOT = { sr_fl_any_at_or_bound = { CODE = 6 } } }
 		if = {
-			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_saturn = yes }
+			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_saturn = yes NOT = { sr_fl_1_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 1 LOC = saturn CODE = 6 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_saturn = yes }
+			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_saturn = yes NOT = { sr_fl_2_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 2 LOC = saturn CODE = 6 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_saturn = yes }
+			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_saturn = yes NOT = { sr_fl_3_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 3 LOC = saturn CODE = 6 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_saturn = yes }
+			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_saturn = yes NOT = { sr_fl_4_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 4 LOC = saturn CODE = 6 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_saturn = yes }
+			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_saturn = yes NOT = { sr_fl_5_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 5 LOC = saturn CODE = 6 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_saturn = yes }
+			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_saturn = yes NOT = { sr_fl_6_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 6 LOC = saturn CODE = 6 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_saturn = yes }
+			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_saturn = yes NOT = { sr_fl_7_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 7 LOC = saturn CODE = 6 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_saturn = yes }
+			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_saturn = yes NOT = { sr_fl_8_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 8 LOC = saturn CODE = 6 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_saturn = yes }
+			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_saturn = yes NOT = { sr_fl_9_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 9 LOC = saturn CODE = 6 }
 		}
 	}
 	else_if = {
 		limit = { sr_loc_garrison_due_uranus = yes NOT = { sr_fl_any_at_or_bound = { CODE = 7 } } }
 		if = {
-			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_uranus = yes }
+			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_uranus = yes NOT = { sr_fl_1_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 1 LOC = uranus CODE = 7 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_uranus = yes }
+			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_uranus = yes NOT = { sr_fl_2_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 2 LOC = uranus CODE = 7 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_uranus = yes }
+			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_uranus = yes NOT = { sr_fl_3_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 3 LOC = uranus CODE = 7 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_uranus = yes }
+			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_uranus = yes NOT = { sr_fl_4_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 4 LOC = uranus CODE = 7 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_uranus = yes }
+			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_uranus = yes NOT = { sr_fl_5_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 5 LOC = uranus CODE = 7 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_uranus = yes }
+			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_uranus = yes NOT = { sr_fl_6_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 6 LOC = uranus CODE = 7 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_uranus = yes }
+			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_uranus = yes NOT = { sr_fl_7_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 7 LOC = uranus CODE = 7 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_uranus = yes }
+			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_uranus = yes NOT = { sr_fl_8_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 8 LOC = uranus CODE = 7 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_uranus = yes }
+			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_uranus = yes NOT = { sr_fl_9_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 9 LOC = uranus CODE = 7 }
 		}
 	}
 	else_if = {
 		limit = { sr_loc_garrison_due_neptune = yes NOT = { sr_fl_any_at_or_bound = { CODE = 8 } } }
 		if = {
-			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_neptune = yes }
+			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_neptune = yes NOT = { sr_fl_1_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 1 LOC = neptune CODE = 8 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_neptune = yes }
+			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_neptune = yes NOT = { sr_fl_2_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 2 LOC = neptune CODE = 8 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_neptune = yes }
+			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_neptune = yes NOT = { sr_fl_3_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 3 LOC = neptune CODE = 8 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_neptune = yes }
+			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_neptune = yes NOT = { sr_fl_4_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 4 LOC = neptune CODE = 8 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_neptune = yes }
+			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_neptune = yes NOT = { sr_fl_5_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 5 LOC = neptune CODE = 8 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_neptune = yes }
+			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_neptune = yes NOT = { sr_fl_6_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 6 LOC = neptune CODE = 8 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_neptune = yes }
+			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_neptune = yes NOT = { sr_fl_7_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 7 LOC = neptune CODE = 8 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_neptune = yes }
+			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_neptune = yes NOT = { sr_fl_8_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 8 LOC = neptune CODE = 8 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_neptune = yes }
+			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_neptune = yes NOT = { sr_fl_9_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 9 LOC = neptune CODE = 8 }
 		}
 	}
 	else_if = {
 		limit = { sr_loc_garrison_due_kuiper = yes NOT = { sr_fl_any_at_or_bound = { CODE = 9 } } }
 		if = {
-			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_kuiper = yes }
+			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_kuiper = yes NOT = { sr_fl_1_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 1 LOC = kuiper CODE = 9 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_kuiper = yes }
+			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_may_depart_kuiper = yes NOT = { sr_fl_2_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 2 LOC = kuiper CODE = 9 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_kuiper = yes }
+			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_may_depart_kuiper = yes NOT = { sr_fl_3_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 3 LOC = kuiper CODE = 9 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_kuiper = yes }
+			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_may_depart_kuiper = yes NOT = { sr_fl_4_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 4 LOC = kuiper CODE = 9 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_kuiper = yes }
+			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_may_depart_kuiper = yes NOT = { sr_fl_5_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 5 LOC = kuiper CODE = 9 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_kuiper = yes }
+			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_may_depart_kuiper = yes NOT = { sr_fl_6_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 6 LOC = kuiper CODE = 9 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_kuiper = yes }
+			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_may_depart_kuiper = yes NOT = { sr_fl_7_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 7 LOC = kuiper CODE = 9 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_kuiper = yes }
+			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_may_depart_kuiper = yes NOT = { sr_fl_8_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 8 LOC = kuiper CODE = 9 }
 		}
 		else_if = {
-			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_kuiper = yes }
+			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_may_depart_kuiper = yes NOT = { sr_fl_9_closing_at_earth = yes } }
 			sr_fl_dispatch = { N = 9 LOC = kuiper CODE = 9 }
 		}
 	}
@@ -3132,7 +3133,8 @@ sr_fl_step_target_at = {
 
 # The hostile step: the next hostile world at the slot's location after its
 # target (table order), else the first; none clears it. At Earth, the lunar
-# worlds (lunar colonization § 8.1).
+# worlds (lunar colonization § 8.1). A free colony's price only while it closes
+# in: a stationed fleet's target costs nothing.
 sr_fl_step_hostile_target_at = {
 	set_local_variable = { name = sr_fl_tgt value = 0 }
 	if = { limit = { has_variable = sr_fl_$N$_target } set_local_variable = { name = sr_fl_tgt value = var:sr_fl_$N$_target } }
@@ -3250,7 +3252,7 @@ sr_fl_step_hostile_target_at = {
 	if = {
 		limit = { local_var:sr_fl_next > 0 }
 		set_variable = { name = sr_fl_$N$_target value = local_var:sr_fl_next }
-		sr_fl_charge_free_at = { N = $N$ }
+		if = { limit = { sr_fl_$N$_posture_value = 3 } sr_fl_charge_free_at = { N = $N$ } }
 	}
 	else_if = {
 		limit = { has_variable = sr_fl_$N$_target }
@@ -9529,31 +9531,18 @@ sr_fl_ai_attack_all = {
 	}
 }
 
-# Lunar colonization § 8.4: at war, the strongest of its fleets at Earth closes
-# in on the enemy's lunar world of most worth (sr_site_ai_worth_<key>) while it
-# holds Earth orbit against that enemy (sr_site_ai_lunar_target: the enemy's
-# Earth is blockaded) and no enemy's fleet is at Earth (sr_earth_hostile_present),
-# to seize it when its marines exceed the world's garrison
-# and militia; otherwise it, and every other fleet of ours at Earth, stays
-# stationed. Never to destroy. Before the offence's dispatch, which leaves a
-# fleet closing in at Earth where it is.
+# Lunar colonization § 8.4: at war, while no enemy's fleet is at Earth
+# (sr_earth_hostile_present: a stationed one bars the seizure, sr_cb_seizes),
+# first the enemy's lunar world of most worth (sr_site_ai_worth_<key>) that
+# passes sr_site_ai_lunar_target, then the strongest of its fleets at Earth
+# whose marines exceed that world's garrison and militia closes in on it to
+# seize it; every other fleet of ours at Earth stays stationed (with none to
+# close in, all of them). Never to destroy. Before the offence's dispatch,
+# which leaves a fleet closing in at Earth where it is.
 sr_fl_ai_lunar_assault = {
-	set_local_variable = { name = sr_fl_best value = 0 }
-	set_local_variable = { name = sr_fl_n value = 0 }
-	if = { limit = { sr_fl_1_at_earth = yes sr_fl_1_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_1_strength } set_local_variable = { name = sr_fl_n value = 1 } }
-	if = { limit = { sr_fl_2_at_earth = yes sr_fl_2_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_2_strength } set_local_variable = { name = sr_fl_n value = 2 } }
-	if = { limit = { sr_fl_3_at_earth = yes sr_fl_3_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_3_strength } set_local_variable = { name = sr_fl_n value = 3 } }
-	if = { limit = { sr_fl_4_at_earth = yes sr_fl_4_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_4_strength } set_local_variable = { name = sr_fl_n value = 4 } }
-	if = { limit = { sr_fl_5_at_earth = yes sr_fl_5_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_5_strength } set_local_variable = { name = sr_fl_n value = 5 } }
-	if = { limit = { sr_fl_6_at_earth = yes sr_fl_6_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_6_strength } set_local_variable = { name = sr_fl_n value = 6 } }
-	if = { limit = { sr_fl_7_at_earth = yes sr_fl_7_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_7_strength } set_local_variable = { name = sr_fl_n value = 7 } }
-	if = { limit = { sr_fl_8_at_earth = yes sr_fl_8_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_8_strength } set_local_variable = { name = sr_fl_n value = 8 } }
-	if = { limit = { sr_fl_9_at_earth = yes sr_fl_9_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_9_strength } set_local_variable = { name = sr_fl_n value = 9 } }
 	set_local_variable = { name = sr_ai_tgt value = 0 }
 	set_local_variable = { name = sr_ai_need value = 0 }
 	set_local_variable = { name = sr_ai_best value = -1 }
-	# Only with no fleet of any enemy at Earth: a stationed one bars the seizure
-	# (sr_cb_seizes), and closing in would take this fleet off its own colonies' guard.
 	if = {
 		limit = { NOT = { sr_earth_hostile_present = yes } }
 		if = { limit = { sr_site_ai_lunar_target = { KEY = shackleton } sr_site_ai_worth_shackleton > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_shackleton } set_local_variable = { name = sr_ai_tgt value = 35 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_shackleton } }
@@ -9563,11 +9552,25 @@ sr_fl_ai_lunar_assault = {
 		if = { limit = { sr_site_ai_lunar_target = { KEY = daedalus } sr_site_ai_worth_daedalus > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_daedalus } set_local_variable = { name = sr_ai_tgt value = 39 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_daedalus } }
 		if = { limit = { sr_site_ai_lunar_target = { KEY = imbrium } sr_site_ai_worth_imbrium > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_imbrium } set_local_variable = { name = sr_ai_tgt value = 40 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_imbrium } }
 	}
+	set_local_variable = { name = sr_fl_best value = 0 }
+	set_local_variable = { name = sr_fl_n value = 0 }
+	if = {
+		limit = { local_var:sr_ai_tgt > 0 }
+		if = { limit = { sr_fl_1_at_earth = yes sr_fl_1_marines_value > local_var:sr_ai_need sr_fl_1_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_1_strength } set_local_variable = { name = sr_fl_n value = 1 } }
+		if = { limit = { sr_fl_2_at_earth = yes sr_fl_2_marines_value > local_var:sr_ai_need sr_fl_2_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_2_strength } set_local_variable = { name = sr_fl_n value = 2 } }
+		if = { limit = { sr_fl_3_at_earth = yes sr_fl_3_marines_value > local_var:sr_ai_need sr_fl_3_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_3_strength } set_local_variable = { name = sr_fl_n value = 3 } }
+		if = { limit = { sr_fl_4_at_earth = yes sr_fl_4_marines_value > local_var:sr_ai_need sr_fl_4_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_4_strength } set_local_variable = { name = sr_fl_n value = 4 } }
+		if = { limit = { sr_fl_5_at_earth = yes sr_fl_5_marines_value > local_var:sr_ai_need sr_fl_5_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_5_strength } set_local_variable = { name = sr_fl_n value = 5 } }
+		if = { limit = { sr_fl_6_at_earth = yes sr_fl_6_marines_value > local_var:sr_ai_need sr_fl_6_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_6_strength } set_local_variable = { name = sr_fl_n value = 6 } }
+		if = { limit = { sr_fl_7_at_earth = yes sr_fl_7_marines_value > local_var:sr_ai_need sr_fl_7_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_7_strength } set_local_variable = { name = sr_fl_n value = 7 } }
+		if = { limit = { sr_fl_8_at_earth = yes sr_fl_8_marines_value > local_var:sr_ai_need sr_fl_8_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_8_strength } set_local_variable = { name = sr_fl_n value = 8 } }
+		if = { limit = { sr_fl_9_at_earth = yes sr_fl_9_marines_value > local_var:sr_ai_need sr_fl_9_strength > local_var:sr_fl_best } set_local_variable = { name = sr_fl_best value = sr_fl_9_strength } set_local_variable = { name = sr_fl_n value = 9 } }
+	}
 	if = {
 		limit = { sr_fl_1_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_1_destroy } remove_variable = sr_fl_1_destroy }
 		if = {
-			limit = { local_var:sr_fl_n = 1 local_var:sr_ai_tgt > 0 sr_fl_1_marines_value > local_var:sr_ai_need }
+			limit = { local_var:sr_fl_n = 1 }
 			set_variable = { name = sr_fl_1_posture value = 3 }
 			set_variable = { name = sr_fl_1_target value = local_var:sr_ai_tgt }
 		}
@@ -9580,7 +9583,7 @@ sr_fl_ai_lunar_assault = {
 		limit = { sr_fl_2_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_2_destroy } remove_variable = sr_fl_2_destroy }
 		if = {
-			limit = { local_var:sr_fl_n = 2 local_var:sr_ai_tgt > 0 sr_fl_2_marines_value > local_var:sr_ai_need }
+			limit = { local_var:sr_fl_n = 2 }
 			set_variable = { name = sr_fl_2_posture value = 3 }
 			set_variable = { name = sr_fl_2_target value = local_var:sr_ai_tgt }
 		}
@@ -9593,7 +9596,7 @@ sr_fl_ai_lunar_assault = {
 		limit = { sr_fl_3_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_3_destroy } remove_variable = sr_fl_3_destroy }
 		if = {
-			limit = { local_var:sr_fl_n = 3 local_var:sr_ai_tgt > 0 sr_fl_3_marines_value > local_var:sr_ai_need }
+			limit = { local_var:sr_fl_n = 3 }
 			set_variable = { name = sr_fl_3_posture value = 3 }
 			set_variable = { name = sr_fl_3_target value = local_var:sr_ai_tgt }
 		}
@@ -9606,7 +9609,7 @@ sr_fl_ai_lunar_assault = {
 		limit = { sr_fl_4_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_4_destroy } remove_variable = sr_fl_4_destroy }
 		if = {
-			limit = { local_var:sr_fl_n = 4 local_var:sr_ai_tgt > 0 sr_fl_4_marines_value > local_var:sr_ai_need }
+			limit = { local_var:sr_fl_n = 4 }
 			set_variable = { name = sr_fl_4_posture value = 3 }
 			set_variable = { name = sr_fl_4_target value = local_var:sr_ai_tgt }
 		}
@@ -9619,7 +9622,7 @@ sr_fl_ai_lunar_assault = {
 		limit = { sr_fl_5_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_5_destroy } remove_variable = sr_fl_5_destroy }
 		if = {
-			limit = { local_var:sr_fl_n = 5 local_var:sr_ai_tgt > 0 sr_fl_5_marines_value > local_var:sr_ai_need }
+			limit = { local_var:sr_fl_n = 5 }
 			set_variable = { name = sr_fl_5_posture value = 3 }
 			set_variable = { name = sr_fl_5_target value = local_var:sr_ai_tgt }
 		}
@@ -9632,7 +9635,7 @@ sr_fl_ai_lunar_assault = {
 		limit = { sr_fl_6_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_6_destroy } remove_variable = sr_fl_6_destroy }
 		if = {
-			limit = { local_var:sr_fl_n = 6 local_var:sr_ai_tgt > 0 sr_fl_6_marines_value > local_var:sr_ai_need }
+			limit = { local_var:sr_fl_n = 6 }
 			set_variable = { name = sr_fl_6_posture value = 3 }
 			set_variable = { name = sr_fl_6_target value = local_var:sr_ai_tgt }
 		}
@@ -9645,7 +9648,7 @@ sr_fl_ai_lunar_assault = {
 		limit = { sr_fl_7_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_7_destroy } remove_variable = sr_fl_7_destroy }
 		if = {
-			limit = { local_var:sr_fl_n = 7 local_var:sr_ai_tgt > 0 sr_fl_7_marines_value > local_var:sr_ai_need }
+			limit = { local_var:sr_fl_n = 7 }
 			set_variable = { name = sr_fl_7_posture value = 3 }
 			set_variable = { name = sr_fl_7_target value = local_var:sr_ai_tgt }
 		}
@@ -9658,7 +9661,7 @@ sr_fl_ai_lunar_assault = {
 		limit = { sr_fl_8_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_8_destroy } remove_variable = sr_fl_8_destroy }
 		if = {
-			limit = { local_var:sr_fl_n = 8 local_var:sr_ai_tgt > 0 sr_fl_8_marines_value > local_var:sr_ai_need }
+			limit = { local_var:sr_fl_n = 8 }
 			set_variable = { name = sr_fl_8_posture value = 3 }
 			set_variable = { name = sr_fl_8_target value = local_var:sr_ai_tgt }
 		}
@@ -9671,7 +9674,7 @@ sr_fl_ai_lunar_assault = {
 		limit = { sr_fl_9_at_earth = yes }
 		if = { limit = { has_variable = sr_fl_9_destroy } remove_variable = sr_fl_9_destroy }
 		if = {
-			limit = { local_var:sr_fl_n = 9 local_var:sr_ai_tgt > 0 sr_fl_9_marines_value > local_var:sr_ai_need }
+			limit = { local_var:sr_fl_n = 9 }
 			set_variable = { name = sr_fl_9_posture value = 3 }
 			set_variable = { name = sr_fl_9_target value = local_var:sr_ai_tgt }
 		}

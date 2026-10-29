@@ -956,41 +956,74 @@ class LunarAtEarthTest(unittest.TestCase):
         attack = _block(self.combat, "sr_fl_ai_attack")
         self.assertLess(attack.index("sr_fl_ai_lunar_assault = yes"), attack.index("sr_fl_ai_attack_all = yes"))
         lunar = _block(self.generated, "sr_fl_ai_lunar_assault")
-        # Its strongest fleet at Earth.
+        # First the target: the enemy's lunar world of most people and modules,
+        # never a free one, only with no enemy fleet at Earth at all (any
+        # stationed one bars the seizure).
+        gate = "limit = { NOT = { sr_earth_hostile_present = yes } }"
+        guarded = _block("x = {" + lunar.split(gate, 1)[1], "x")
+        for w in self.lunar:
+            with self.subTest(site=w.key):
+                self.assertIn(f"sr_site_ai_lunar_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best",
+                              guarded)
+                self.assertIn(f"set_local_variable = {{ name = sr_ai_need value = sr_site_garrison_need_{w.key} }}", guarded)
+        self.assertEqual(len(re.findall(r"sr_site_ai_lunar_target = \{ KEY = (\w+) \}", lunar)), len(self.lunar))
+        self.assertIn("sr_cb_hs_value <= 0", _block(self.triggers, "sr_cb_seizes"))
+        # Then the fleet: the strongest at Earth whose marines exceed that world's
+        # garrison and militia, picked only once a target is.
+        pick = _block("x = {" + lunar.split("limit = { local_var:sr_ai_tgt > 0 }", 1)[1], "x")
+        self.assertLess(lunar.index(gate), lunar.index("limit = { local_var:sr_ai_tgt > 0 }"))
         for n in range(1, gsf.SLOTS + 1):
             with self.subTest(slot=n):
-                self.assertIn(f"limit = {{ sr_fl_{n}_at_earth = yes sr_fl_{n}_strength > local_var:sr_fl_best }}", lunar)
-                self.assertRegex(lunar, rf"limit = \{{ local_var:sr_fl_n = {n} local_var:sr_ai_tgt > 0 "
-                                        rf"sr_fl_{n}_marines_value > local_var:sr_ai_need \}}\s*"
+                self.assertIn(f"limit = {{ sr_fl_{n}_at_earth = yes sr_fl_{n}_marines_value > local_var:sr_ai_need "
+                              f"sr_fl_{n}_strength > local_var:sr_fl_best }}", pick)
+                self.assertRegex(lunar, rf"limit = \{{ local_var:sr_fl_n = {n} \}}\s*"
                                         rf"set_variable = \{{ name = sr_fl_{n}_posture value = 3 \}}\s*"
                                         rf"set_variable = \{{ name = sr_fl_{n}_target value = local_var:sr_ai_tgt \}}")
                 self.assertIn(f"remove_variable = sr_fl_{n}_destroy", lunar)
-                # Every other fleet at Earth, and this one without the marines, stays stationed.
+                # Every other fleet at Earth (all, with no target or no fleet with
+                # the marines) stays stationed.
                 self.assertRegex(lunar, rf"else = \{{\s*set_variable = \{{ name = sr_fl_{n}_posture value = 1 \}}")
-        # The enemy's lunar world of most people and modules, never a free one,
-        # only while that enemy's Earth is blockaded.
-        for w in self.lunar:
-            with self.subTest(site=w.key):
-                self.assertIn(f"sr_site_ai_lunar_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best", lunar)
-                self.assertIn(f"set_local_variable = {{ name = sr_ai_need value = sr_site_garrison_need_{w.key} }}", lunar)
-        self.assertEqual(len(re.findall(r"sr_site_ai_lunar_target = \{ KEY = (\w+) \}", lunar)), len(self.lunar))
-        # Only with no enemy fleet at Earth at all: any stationed one bars the seizure.
-        guarded = _block("x = {" + lunar.split("limit = { NOT = { sr_earth_hostile_present = yes } }", 1)[1], "x")
-        self.assertEqual(len(re.findall(r"sr_site_ai_lunar_target = \{ KEY = (\w+) \}", guarded)), len(self.lunar))
-        self.assertIn("sr_cb_hs_value <= 0", _block(self.triggers, "sr_cb_seizes"))
         self.assertNotIn("_destroy value", lunar)
         self.assertNotIn("posture value = 2", lunar)
         target = _block(self.triggers, "sr_site_ai_lunar_target")
         self.assertIn("sr_site_ai_attack_target = { KEY = $KEY$ }", target)
         self.assertIn("global_var:sr_site_holder_$KEY$ ?= { sr_earth_blockaded = yes }", target)
         self.assertIn("global_var:sr_site_occupier_$KEY$ ?= { sr_earth_blockaded = yes }", target)
-        # The offence's dispatch leaves a fleet closing in at Earth where it is.
+        # The offence's dispatch and the garrisons leave a fleet closing in at Earth where it is.
         attack_all = _block(self.generated, "sr_fl_ai_attack_all")
+        garrisons = _block(self.generated, "sr_fl_ai_send_garrisons")
         for n in range(1, gsf.SLOTS + 1):
             with self.subTest(slot=n):
                 self.assertEqual(attack_all.count(f"NOT = {{ sr_fl_{n}_closing_at_earth = yes }}"), len(gsf.LOCATIONS) - 1)
+                self.assertEqual(garrisons.count(f"sr_fl_{n}_may_depart_"), len(gsf.LOCATIONS) - 1)
+                self.assertEqual(garrisons.count(f"NOT = {{ sr_fl_{n}_closing_at_earth = yes }}"), len(gsf.LOCATIONS) - 1)
                 self.assertEqual(_block(self.gen_triggers, f"sr_fl_{n}_closing_at_earth").strip(),
                                  f"sr_fl_{n}_at_earth = yes sr_fl_{n}_posture_value = 3")
+
+    def test_a_free_colony_s_price_only_while_closing_in(self):
+        """Review of #1237: the Target button of a stationed fleet (at Earth, a
+        free lunar colony makes it show at peace) charges nothing; closing in
+        charges once per target, and the hover's price line shows only then."""
+        step = _block(self.generated, "sr_fl_step_hostile_target_at")
+        found = _block("x = {" + step.split("limit = { local_var:sr_fl_next > 0 }", 1)[1], "x")
+        self.assertIn("if = { limit = { sr_fl_$N$_posture_value = 3 } sr_fl_charge_free_at = { N = $N$ } }", found)
+        self.assertEqual(step.count("sr_fl_charge_free_at"), 1)
+        # Entering Close in charges after the posture is set (the step's own
+        # charge then finds it charged: sr_fl_<n>_charged holds the world).
+        posture = _block(self.combat, "sr_fl_step_posture_at")
+        for branch in posture.split("set_variable = { name = sr_fl_$N$_posture value = 3 }")[1:]:
+            self.assertIn("sr_fl_charge_free_at = { N = $N$ }", branch[:branch.index("else")])
+        self.assertIn("NOT = { var:sr_fl_$N$_charged = $INDEX$ }", _block(self.combat, "sr_cb_charge_free"))
+        custom = _strip(_raw(gsf.ROOT / gsf.CUSTOM_LOC_OUT))
+        loc = _raw(ROOT / "localization/english/te_journal_entries_l_english.yml")
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                price = _block(custom, f"sr_fl_{n}_target_price")
+                self.assertRegex(price, rf"trigger = \{{ sr_fl_{n}_posture_value = 3 \}}\s*"
+                                        r"localization_key = sr_fl_target_free_price_tt")
+                self.assertIn("localization_key = te_tt_blank", price)
+                hover = re.search(rf"(?m)^ je_space_race_widget_fl_{n}_target_tt:0 \"(.*)\"$", loc).group(1)
+                self.assertTrue(hover.endswith(f"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_target_price')]"))
 
     def test_orbital_superiority_counts_a_fleet_closing_in_at_earth(self):
         """§ 8.5: the margin reads sr_fl_at_earth, which counts every slot at
