@@ -814,6 +814,10 @@ nuclear_crisis.6 = {
 				desc = nuclear_crisis.6.t_use
 			}
 			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 11 } }
+				desc = nuclear_crisis.6.t_trade
+			}
+			triggered_desc = {
 				trigger = { always = yes }
 				desc = nuclear_crisis.6.t
 			}
@@ -880,6 +884,10 @@ nuclear_crisis.6 = {
 			triggered_desc = {
 				trigger = { nd_crisis_last_outcome_is = { O = 8 } }
 				desc = nuclear_crisis.6.d_expired
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 11 } }
+				desc = nuclear_crisis.6.d_trade
 			}
 			triggered_desc = {
 				trigger = { always = yes }

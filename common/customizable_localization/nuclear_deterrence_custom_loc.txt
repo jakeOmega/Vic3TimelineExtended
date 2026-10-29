@@ -1534,6 +1534,13 @@ nd_crisis_last_outcome_word = {
 		localization_key = nd_last_outcome_expired
 	}
 	text = {
+		trigger = {
+			has_variable = nd_crisis_last_outcome
+			var:nd_crisis_last_outcome = 11
+		}
+		localization_key = nd_last_outcome_trade
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = nd_last_outcome_neutral
 	}

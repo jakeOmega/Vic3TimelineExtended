@@ -32,6 +32,7 @@
 #   3  reciprocal stand-down              8  expired
 #   4  the target backed down natively    9  invalid (a party vanished)
 #   5  the issuer's side backed down      10 the dispute ended, no clear winner
+#   11 a trade: each side gave the matching concession (disputes 7–10)
 #
 # TOOLTIP PASSES. The diplomatic actions' accept_effect and the panel's
 # ExecuteTooltip re-walk these effects every frame without running them, so
@@ -1480,6 +1481,16 @@ nd_crisis_apply_outcome_side = {
 		custom_tooltip = {
 			text = nd_tt_outcome_doves_approve
 			nd_reward_doves = yes
+		}
+	}
+	# ---- a trade (11) ----------------------------------------------------------
+	# Each side gave the concession the other demanded of the same kind, so
+	# neither climbed down (rework spec §8.6).
+	else_if = {
+		limit = { var:nd_crisis_pending_outcome = 11 }
+		custom_tooltip = {
+			text = nd_tt_credibility_up_5
+			nd_change_credibility = { AMOUNT = 5 }
 		}
 	}
 	# ---- an ultimatum left to lapse (8) ---------------------------------------

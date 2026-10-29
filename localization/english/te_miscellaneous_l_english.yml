@@ -5188,6 +5188,7 @@
  nd_last_outcome_neutral:0 "The dispute ended without a clear winner."
  nd_last_outcome_standdown:0 "Both sides stood down together."
  nd_last_outcome_stood_firm:0 "#G We faced the threat down.#!"
+ nd_last_outcome_trade:0 "Each side gave up the same."
  nd_last_outcome_use:0 "#R It ended in nuclear use.#!"
  nd_last_outcome_war_ended:0 "The war it was about has ended."
  nd_last_outcome_win:0 "#G Our objective was achieved.#!"
