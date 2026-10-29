@@ -266,6 +266,13 @@ sr_sites_global_monthly = {
 		set_global_variable = { name = sr_sites_initialized value = yes }
 		set_global_variable = { name = sr_sites_grace value = yes days = 45 }
 	}
+	# A save from before the Moon Base was retired (lunar colonization design
+	# § 10), once a game: in a new game it finds no one and only sets the flag.
+	if = {
+		limit = { NOT = { has_global_variable = sr_lunar_initialized } }
+		set_global_variable = { name = sr_lunar_initialized value = yes }
+		sr_lunar_migrate = yes
+	}
 	# Colony fleets land first (simple and full; sr_colony_fleet_effects.txt), so
 	# the world's step syncs the colonies they founded; then the inbound record
 	# and the stage follow the month's landings.
@@ -288,6 +295,144 @@ sr_sites_global_monthly = {
 		sr_cf_global_after = yes
 	}
 	sr_sites_refresh_players = yes
+}
+
+# ===== The retired Moon Base's old saves (lunar colonization design § 10) =====
+# Global scope, once a game (sr_sites_global_monthly, behind sr_lunar_initialized).
+# Every country that finished the old milestone (sr_completed_moon_base) keeps
+# its reward and record and is given one lunar world (sr_lunar_migrate_country,
+# generated): the world first, in order of completion where the save can tell
+# (the world first, sr_was_first_moon_base), then as every_country finds them.
+# An open Moon Base's progress is carried by the country pulse instead
+# (sr_lunar_carry_moon_base, sr_launch_window_effects.txt). The colonization
+# prerequisites (§ 4) apply at once: the Moon Landing, and the Mars Landing for
+# every world beyond the Moon.
+sr_lunar_migrate = {
+	set_global_variable = { name = sr_lunar_migrated_count value = 0 }
+	every_country = {
+		limit = { has_variable = sr_was_first_moon_base }
+		sr_lunar_migrate_country = yes
+	}
+	every_country = {
+		limit = {
+			has_variable = sr_completed_moon_base
+			NOT = { has_variable = sr_was_first_moon_base }
+		}
+		sr_lunar_migrate_country = yes
+	}
+	# A save whose race had ended before the Moon existed: reopened while a
+	# lunar world is left.
+	if = {
+		limit = {
+			has_global_variable = sr_all_colonies_complete
+			sr_sites_lunar_open = yes
+		}
+		sr_lunar_reopen_colonization = yes
+	}
+	# The stage follows the claims once, as after any claim: Races Only steps it
+	# when its worlds are all claimed, Simple and Full recompute it (the lowest
+	# stage with a free world, the Moon in an old save).
+	if = {
+		limit = { has_global_variable = sr_colonization_stage }
+		sr_sites_stage_after_claim = yes
+	}
+	sr_lunar_selfcheck_migration = yes
+}
+
+# Country scope, from sr_lunar_migrate_take_<key> (generated): count the world
+# for the self-check, and tell a player which world its Moon Base became
+# (space_race_events.109). INDEX is the world's place in gen_solar_sites.SITES.
+sr_lunar_note_migrated = {
+	change_global_variable = { name = sr_lunar_migrated_count add = 1 }
+	if = {
+		limit = { is_player = yes }
+		set_variable = { name = sr_lunar_notice_site value = $INDEX$ }
+		trigger_event = { id = space_race_events.109 days = 1 }
+	}
+}
+
+# Global scope, from sr_lunar_migrate. A save from before the six lunar worlds
+# existed (34 worlds; build 2a added the Moon) in which every world was
+# claimed carries sr_all_colonies_complete, which shuts colonization for good.
+# While a lunar world is left after the migration's claims the race isn't
+# over, so it reopens:
+# - the flag goes, and the stage follows (sr_lunar_migrate's stage step: under
+#   Simple and Full the Moon's 0; under Races Only the last stage stays, where
+#   the draw lists the Moon's worlds as released earlier ones and the stage
+#   check completes only once every world is claimed);
+# - a country whose programme had finished (sr_completed_solar_colonization)
+#   runs it again, as its entry's `immediate` would have: the finish and its
+#   Solar System Trade modifier, which rewards every world claimed, wait until
+#   the Moon is settled, when the entry's pulse completes it again. Its funding
+#   restarts at one level. Nothing else ever removes a completion
+#   (sr_space_race_participant's note), and the pulse sets this one again.
+# A player is told (space_race_events.109). Its Commercial Space Industry
+# dividend pauses meanwhile, since the race isn't over for it
+# (sr_space_race_concluded).
+sr_lunar_reopen_colonization = {
+	remove_global_variable = sr_all_colonies_complete
+	debug_log = "TE_SR_SITES lunar_reopen: every world had been claimed before the Moon existed; colonization reopened for the Moon date=[TimeKeeper.GetCurrentDate.GetString]"
+	every_country = {
+		limit = { has_variable = sr_completed_solar_colonization }
+		remove_variable = sr_completed_solar_colonization
+		if = {
+			limit = { has_journal_entry = je_space_race_solar_colonization }
+			je:je_space_race_solar_colonization = {
+				if = {
+					limit = { has_modifier = sr_solar_system_trade }
+					remove_modifier = sr_solar_system_trade
+				}
+			}
+			set_variable = { name = sr_active_solar_colonization value = yes }
+			if = {
+				limit = { NOT = { has_variable = sr_progress_solar_colonization } }
+				set_variable = { name = sr_progress_solar_colonization value = 0 }
+			}
+			if = {
+				limit = { NOT = { has_variable = sr_funding_solar_colonization } }
+				set_variable = { name = sr_funding_solar_colonization value = 1 }
+			}
+			sr_recalculate_cost = yes
+		}
+		if = {
+			limit = { is_player = yes }
+			set_variable = { name = sr_lunar_notice_reopened value = yes }
+			trigger_event = { id = space_race_events.109 days = 1 }
+		}
+	}
+}
+
+# Self-check lunar_migration (lunar colonization plan, review focus 1). Global
+# scope, at the end of sr_lunar_migrate, once a game. BROKEN when a country
+# that finished the old Moon Base ends without a lunar world while one is free
+# (the chain gave it none). OK when at least
+# one country was migrated, so a new game, where no one is, can't pass it.
+# The open Moon Base's carry logs its own lines (sr_lunar_carry_self_check).
+# te_debug_space_race.8 option a runs it again.
+sr_lunar_selfcheck_migration = {
+	if = {
+		limit = {
+			sr_lunar_world_free_any = yes
+			any_country = {
+				has_variable = sr_completed_moon_base
+				NOT = { sr_holds_lunar_world = yes }
+			}
+		}
+		random_country = {
+			limit = {
+				has_variable = sr_completed_moon_base
+				NOT = { sr_holds_lunar_world = yes }
+			}
+			debug_log = "TE_SELF_CHECK BROKEN lunar_migration country=[THIS.GetCountry.GetNameNoFormatting] migrated=[GetGlobalVariable('sr_lunar_migrated_count').GetValue|0] (a country that finished the old Moon Base holds no lunar world while one is free: sr_lunar_migrate_country gave it none; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_lunar_migrated_count
+			global_var:sr_lunar_migrated_count > 0
+		}
+		debug_log = "TE_SELF_CHECK OK lunar_migration migrated=[GetGlobalVariable('sr_lunar_migrated_count').GetValue|0] (each country that finished the old Moon Base holds a lunar world, or none was free; check each one's world and specialization against its purpose in the Solar System list) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
 }
 
 # Country scope, from the monthly country pulse. The site_receiver_entry

@@ -531,3 +531,62 @@ te_debug_space_race.7 = { # REVIEWED 2026-10-26: fired only by the console's pro
 		}
 	}
 }
+
+# The retired Moon Base's migration (lunar colonization design § 10;
+# sr_lunar_migrate, sr_site_effects.txt): its self-check again, or an old
+# save's state staged in a new game, so the migration and the carry can be
+# watched without one.
+te_debug_space_race.8 = { # REVIEWED 2026-10-29: console-only test event (`event te_debug_space_race.8`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/lunar_base_dome.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.8.t
+	desc = te_debug_space_race.8.d
+	flavor = te_debug_space_race.8.f
+
+	# The lunar_migration self-check now, whatever it logged before:
+	# TE_SELF_CHECK OK or BROKEN lunar_migration. Read after a real migration:
+	# later, a country that founded a lunar colony and ceded it reads BROKEN.
+	option = {
+		name = te_debug_space_race.8.a
+		default_option = yes
+		sr_lunar_selfcheck_migration = yes
+	}
+
+	# As if we had finished the old Moon Base as a scientific outpost: the
+	# migration runs again next month and gives us Daedalus Crater (or the next
+	# free lunar world). It skips any country already holding one.
+	option = {
+		name = te_debug_space_race.8.b
+		trigger = { NOT = { sr_holds_lunar_world = yes } }
+		set_variable = { name = sr_completed_moon_base value = yes }
+		if = {
+			limit = { NOT = { sr_moon_base_choice_made = yes } }
+			set_variable = { name = sr_moon_base_scientific value = yes }
+		}
+		if = {
+			limit = { has_global_variable = sr_lunar_initialized }
+			remove_global_variable = sr_lunar_initialized
+		}
+	}
+
+	# As if an old Moon Base were open with 120 progress: next month's pulse
+	# carries it onto Solar System Colonization (TE_SELF_CHECK OK lunar_migration
+	# carried=120), and the programme's next launch month adds it to the bar.
+	option = {
+		name = te_debug_space_race.8.c
+		trigger = { NOT = { has_variable = sr_completed_moon_base } }
+		set_variable = { name = sr_progress_moon_base value = 120 }
+		set_variable = { name = sr_funding_moon_base value = 1 }
+		if = {
+			limit = { has_global_variable = sr_lunar_carry_ok_logged }
+			remove_global_variable = sr_lunar_carry_ok_logged
+		}
+	}
+}

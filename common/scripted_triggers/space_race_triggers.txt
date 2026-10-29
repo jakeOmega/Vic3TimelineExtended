@@ -11,7 +11,9 @@ sr_has_space_program = {
 # no such country fails:
 # - suborbital, the first milestone, runs with sr_active_suborbital set;
 # - every other entry's `possible` needs a sr_completed_<m> that needs
-#   sr_completed_suborbital before it, and nothing removes sr_completed_<m>;
+#   sr_completed_suborbital before it, and nothing removes sr_completed_<m>
+#   (but an old save's finished colonization, run again once for the Moon:
+#   sr_lunar_reopen_colonization, which this gate doesn't read);
 # - the probe result and the colony records exist only at the end of that chain.
 # Both are variables, so a revolution's winner inherits them together with the
 # records the sync rebuilds from.

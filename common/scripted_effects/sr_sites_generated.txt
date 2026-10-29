@@ -2025,6 +2025,7 @@ sr_check_colony_stage_effect = {
 			has_global_variable = sr_colony_makemake
 			has_global_variable = sr_colony_haumea
 			has_global_variable = sr_colony_sedna
+			NOT = { sr_any_site_unclaimed = yes }
 		}
 		set_global_variable = { name = sr_all_colonies_complete value = yes }
 	}
@@ -13540,6 +13541,178 @@ sr_sites_migrate_country = {
 		limit = { has_variable = sr_discovery_pluto_antifreeze_pending NOT = { has_variable = sr_discovery_pluto_antifreeze_done } }
 		set_global_variable = { name = sr_site_disc_pluto_antifreeze_pending value = yes }
 	}
+}
+
+# ===== The retired Moon Base's old saves (lunar colonization design § 10) =====
+# THIS finished the old Moon Base (sr_completed_moon_base). Unless it already
+# holds a lunar world (a game from between builds 2a and 2b), it is given one,
+# first match: the world its purpose names, on that specialization; with no
+# purpose, Tranquility Base; else the first free in table order; else none.
+# Quietly: no founding event, and not a first lunar colony again.
+sr_lunar_migrate_country = {
+	if = {
+		limit = { NOT = { sr_holds_lunar_world = yes } }
+		if = {
+			limit = {
+				has_variable = sr_moon_base_scientific
+				sr_lunar_world_free_daedalus = yes
+			}
+			sr_lunar_migrate_take_daedalus = { SPEC = 1 }
+		}
+		else_if = {
+			limit = {
+				has_variable = sr_moon_base_industrial
+				sr_lunar_world_free_imbrium = yes
+			}
+			sr_lunar_migrate_take_imbrium = { SPEC = 1 }
+		}
+		else_if = {
+			limit = {
+				has_variable = sr_moon_base_military
+				sr_lunar_world_free_marius_hills = yes
+			}
+			sr_lunar_migrate_take_marius_hills = { SPEC = 2 }
+		}
+		else_if = {
+			limit = {
+				NOT = { sr_moon_base_choice_made = yes }
+				sr_lunar_world_free_tranquility = yes
+			}
+			sr_lunar_migrate_take_tranquility = { SPEC = 1 }
+		}
+		else_if = {
+			limit = {
+				sr_lunar_world_free_shackleton = yes
+			}
+			sr_lunar_migrate_take_shackleton = { SPEC = 1 }
+		}
+		else_if = {
+			limit = {
+				sr_lunar_world_free_peary = yes
+			}
+			sr_lunar_migrate_take_peary = { SPEC = 1 }
+		}
+		else_if = {
+			limit = {
+				sr_lunar_world_free_tranquility = yes
+			}
+			sr_lunar_migrate_take_tranquility = { SPEC = 1 }
+		}
+		else_if = {
+			limit = {
+				sr_lunar_world_free_marius_hills = yes
+			}
+			sr_lunar_migrate_take_marius_hills = { SPEC = 1 }
+		}
+		else_if = {
+			limit = {
+				sr_lunar_world_free_daedalus = yes
+			}
+			sr_lunar_migrate_take_daedalus = { SPEC = 1 }
+		}
+		else_if = {
+			limit = {
+				sr_lunar_world_free_imbrium = yes
+			}
+			sr_lunar_migrate_take_imbrium = { SPEC = 1 }
+		}
+	}
+}
+
+# THIS is given Shackleton Crater, specialization $SPEC$: the record, then the
+# received world's path (the entry opens), the migration's count, a player's notice.
+sr_lunar_migrate_take_shackleton = {
+	set_global_variable = { name = sr_colony_shackleton value = yes }
+	set_global_variable = { name = sr_site_holder_shackleton value = this }
+	set_global_variable = { name = sr_site_spec_shackleton value = $SPEC$ }
+	set_global_variable = { name = sr_site_contact_shackleton value = te_history_month_index }
+	if = {
+		limit = { NOT = { has_global_variable = sr_colonization_stage } }
+		set_global_variable = { name = sr_colonization_stage value = 0 }
+	}
+	sr_site_sync_shackleton = yes
+	sr_site_gained_quiet = { INDEX = 35 }
+	sr_lunar_note_migrated = { INDEX = 35 }
+}
+
+# THIS is given Peary Crater, specialization $SPEC$: the record, then the
+# received world's path (the entry opens), the migration's count, a player's notice.
+sr_lunar_migrate_take_peary = {
+	set_global_variable = { name = sr_colony_peary value = yes }
+	set_global_variable = { name = sr_site_holder_peary value = this }
+	set_global_variable = { name = sr_site_spec_peary value = $SPEC$ }
+	set_global_variable = { name = sr_site_contact_peary value = te_history_month_index }
+	if = {
+		limit = { NOT = { has_global_variable = sr_colonization_stage } }
+		set_global_variable = { name = sr_colonization_stage value = 0 }
+	}
+	sr_site_sync_peary = yes
+	sr_site_gained_quiet = { INDEX = 36 }
+	sr_lunar_note_migrated = { INDEX = 36 }
+}
+
+# THIS is given Tranquility Base, specialization $SPEC$: the record, then the
+# received world's path (the entry opens), the migration's count, a player's notice.
+sr_lunar_migrate_take_tranquility = {
+	set_global_variable = { name = sr_colony_tranquility value = yes }
+	set_global_variable = { name = sr_site_holder_tranquility value = this }
+	set_global_variable = { name = sr_site_spec_tranquility value = $SPEC$ }
+	set_global_variable = { name = sr_site_contact_tranquility value = te_history_month_index }
+	if = {
+		limit = { NOT = { has_global_variable = sr_colonization_stage } }
+		set_global_variable = { name = sr_colonization_stage value = 0 }
+	}
+	sr_site_sync_tranquility = yes
+	sr_site_gained_quiet = { INDEX = 37 }
+	sr_lunar_note_migrated = { INDEX = 37 }
+}
+
+# THIS is given Marius Hills, specialization $SPEC$: the record, then the
+# received world's path (the entry opens), the migration's count, a player's notice.
+sr_lunar_migrate_take_marius_hills = {
+	set_global_variable = { name = sr_colony_marius_hills value = yes }
+	set_global_variable = { name = sr_site_holder_marius_hills value = this }
+	set_global_variable = { name = sr_site_spec_marius_hills value = $SPEC$ }
+	set_global_variable = { name = sr_site_contact_marius_hills value = te_history_month_index }
+	if = {
+		limit = { NOT = { has_global_variable = sr_colonization_stage } }
+		set_global_variable = { name = sr_colonization_stage value = 0 }
+	}
+	sr_site_sync_marius_hills = yes
+	sr_site_gained_quiet = { INDEX = 38 }
+	sr_lunar_note_migrated = { INDEX = 38 }
+}
+
+# THIS is given Daedalus Crater, specialization $SPEC$: the record, then the
+# received world's path (the entry opens), the migration's count, a player's notice.
+sr_lunar_migrate_take_daedalus = {
+	set_global_variable = { name = sr_colony_daedalus value = yes }
+	set_global_variable = { name = sr_site_holder_daedalus value = this }
+	set_global_variable = { name = sr_site_spec_daedalus value = $SPEC$ }
+	set_global_variable = { name = sr_site_contact_daedalus value = te_history_month_index }
+	if = {
+		limit = { NOT = { has_global_variable = sr_colonization_stage } }
+		set_global_variable = { name = sr_colonization_stage value = 0 }
+	}
+	sr_site_sync_daedalus = yes
+	sr_site_gained_quiet = { INDEX = 39 }
+	sr_lunar_note_migrated = { INDEX = 39 }
+}
+
+# THIS is given Mare Imbrium, specialization $SPEC$: the record, then the
+# received world's path (the entry opens), the migration's count, a player's notice.
+sr_lunar_migrate_take_imbrium = {
+	set_global_variable = { name = sr_colony_imbrium value = yes }
+	set_global_variable = { name = sr_site_holder_imbrium value = this }
+	set_global_variable = { name = sr_site_spec_imbrium value = $SPEC$ }
+	set_global_variable = { name = sr_site_contact_imbrium value = te_history_month_index }
+	if = {
+		limit = { NOT = { has_global_variable = sr_colonization_stage } }
+		set_global_variable = { name = sr_colonization_stage value = 0 }
+	}
+	sr_site_sync_imbrium = yes
+	sr_site_gained_quiet = { INDEX = 40 }
+	sr_lunar_note_migrated = { INDEX = 40 }
 }
 
 # ===== A revolution's winner (sr_repair_after_civil_war) =====

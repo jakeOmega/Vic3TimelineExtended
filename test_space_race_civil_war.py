@@ -177,6 +177,15 @@ class ImmediateTests(unittest.TestCase):
         self.assertIn("has_variable = sr_completed_suborbital",
                       _block(_block(JE, "je_space_race_orbital"), "possible"))
         self.assertNotRegex(EFFECTS + JE, r"remove_variable\s*=\s*sr_completed_")
+        # The one exception: an old save whose race ended before the Moon existed
+        # runs its finished programme again (sr_lunar_reopen_colonization; lunar
+        # colonization design § 10), once, and its pulse completes it again. The
+        # gate reads Suborbital Flight only, so no one leaves it.
+        sites = _read("common", "scripted_effects", "sr_site_effects.txt")
+        reopen = _block(sites, "sr_lunar_reopen_colonization")
+        self.assertEqual(re.findall(r"remove_variable\s*=\s*(sr_completed_\w+)", reopen),
+                         ["sr_completed_solar_colonization"])
+        self.assertNotRegex(sites.replace(reopen, ""), r"remove_variable\s*=\s*sr_completed_")
 
     def test_rebels_start_no_programme(self):
         entry = _block(JE, "je_space_race_suborbital")

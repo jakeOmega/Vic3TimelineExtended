@@ -138,6 +138,55 @@ sr_sites_lunar_open = {
 	}
 }
 
+# THIS holds a lunar world (the old-save migration, sr_lunar_migrate_country).
+# Country scope.
+sr_holds_lunar_world = {
+	OR = {
+		global_var:sr_site_holder_shackleton ?= this
+		global_var:sr_site_holder_peary ?= this
+		global_var:sr_site_holder_tranquility ?= this
+		global_var:sr_site_holder_marius_hills ?= this
+		global_var:sr_site_holder_daedalus ?= this
+		global_var:sr_site_holder_imbrium ?= this
+	}
+}
+
+# A lunar world the migration can give: unclaimed and not a ruin. Any scope.
+sr_lunar_world_free_any = {
+	OR = {
+		sr_lunar_world_free_shackleton = yes
+		sr_lunar_world_free_peary = yes
+		sr_lunar_world_free_tranquility = yes
+		sr_lunar_world_free_marius_hills = yes
+		sr_lunar_world_free_daedalus = yes
+		sr_lunar_world_free_imbrium = yes
+	}
+}
+sr_lunar_world_free_shackleton = {
+	NOT = { has_global_variable = sr_colony_shackleton }
+	NOT = { has_global_variable = sr_site_ruined_shackleton }
+}
+sr_lunar_world_free_peary = {
+	NOT = { has_global_variable = sr_colony_peary }
+	NOT = { has_global_variable = sr_site_ruined_peary }
+}
+sr_lunar_world_free_tranquility = {
+	NOT = { has_global_variable = sr_colony_tranquility }
+	NOT = { has_global_variable = sr_site_ruined_tranquility }
+}
+sr_lunar_world_free_marius_hills = {
+	NOT = { has_global_variable = sr_colony_marius_hills }
+	NOT = { has_global_variable = sr_site_ruined_marius_hills }
+}
+sr_lunar_world_free_daedalus = {
+	NOT = { has_global_variable = sr_colony_daedalus }
+	NOT = { has_global_variable = sr_site_ruined_daedalus }
+}
+sr_lunar_world_free_imbrium = {
+	NOT = { has_global_variable = sr_colony_imbrium }
+	NOT = { has_global_variable = sr_site_ruined_imbrium }
+}
+
 # THIS holds a world beyond the Moon (stage 1 or later): Deep Space's colony
 # arm (sr_cf_targetable_<key>, stages 3 to 5; lunar colonization design § 4). A
 # lunar colony alone doesn't open the outer system. Country scope.

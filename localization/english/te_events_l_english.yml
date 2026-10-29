@@ -4866,6 +4866,12 @@
  space_race_events.108.f:0 "\"You can blockade a sky. A launch pad you have to occupy.\"\n\n— Staff college lecture"
  space_race_events.108.t_back:0 "Our Launch Site Is Ours Again"
  space_race_events.108.t_lost:0 "Our Launch Site Is Occupied"
+ space_race_events.109.a:0 "The Moon is ours to settle."
+ space_race_events.109.d:0 "Our $je_space_race_moon_base$ program has been folded into $je_space_race_solar_colonization$. The base we finished on the Moon is now our colony at #b [ROOT.GetCountry.GetCustom('sr_lunar_notice_name')]#!, one of the Moon's six worlds, with the specialization its purpose chose. It counts as our first colony on the Moon, and its reward stays as it was."
+ space_race_events.109.d_both:0 "Our $je_space_race_moon_base$ program has been folded into $je_space_race_solar_colonization$. The base we finished on the Moon is now our colony at #b [ROOT.GetCountry.GetCustom('sr_lunar_notice_name')]#!, one of the Moon's six worlds, with the specialization its purpose chose, and its reward stays as it was.\n\nSome of the Moon's worlds are still unclaimed, so our colonization program, finished once every world beyond the Moon was claimed, is running again, its funding back at one level. Its Solar System Trade bonus returns when the Moon is settled too."
+ space_race_events.109.d_reopened:0 "The Moon's six worlds are open to colonization, and some are still unclaimed. Our $je_space_race_solar_colonization$ program, finished once every world beyond the Moon was claimed, is running again, its funding back at one level. Its Solar System Trade bonus returns when the Moon is settled too."
+ space_race_events.109.f:0 "\"We built it as a base. Now its people call it home, and they want to know who their neighbors will be.\"\n\n— Office of Extraplanetary Affairs"
+ space_race_events.109.t:0 "The Moon Base Becomes a Colony"
  space_race_events.11.a:0 "A setback, but not a disaster."
  space_race_events.11.b:0 "Redirect resources while we regroup."
  space_race_events.11.d:0 "A technical anomaly has forced a mission delay. While no lives were lost, the issue demands careful investigation before the program can resume. Engineers believe the root cause is well understood, but weeks of lost time cannot be recovered."
@@ -5965,6 +5971,12 @@
  te_debug_space_race.6.n:0 "6d: add 100 strength of each role to our ground reserve"
  te_debug_space_race.6.o:0 "6d: our strongest enemy puts a fleet of 100 of each role at Earth (a blockade if none of ours is there)"
  te_debug_space_race.6.t:0 "Fleets Console"
+ te_debug_space_race.8.a:0 "Run the migration's self-check again"
+ te_debug_space_race.8.b:0 "Pretend we finished the old Moon Base, and migrate next month"
+ te_debug_space_race.8.c:0 "Pretend an old Moon Base is open with 120 progress"
+ te_debug_space_race.8.d:0 "The retired Moon Base's old-save migration. Each option logs or stages one case; read debug.log for TE_SELF_CHECK lunar_migration."
+ te_debug_space_race.8.f:0 "Console only."
+ te_debug_space_race.8.t:0 "Lunar Migration Console"
 
 #
 # TE_DEBUG_UN

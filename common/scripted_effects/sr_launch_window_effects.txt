@@ -167,7 +167,8 @@ sr_launch_bank_staged_fleets = {
 
 # From sr_launch_month, the running programme's pulse: the banked fleets back
 # into progress, at the current stage's goal (a stage that moved on while the
-# programme was stopped takes them as it would staged progress).
+# programme was stopped takes them as it would staged progress), and an old
+# Moon Base's carried progress as it is (sr_launch_banked_progress, below).
 sr_launch_restore_banked_fleets = {
 	if = {
 		limit = { has_variable = sr_launch_banked_fleets }
@@ -182,6 +183,83 @@ sr_launch_restore_banked_fleets = {
 			change_variable = { name = sr_progress_solar_colonization add = local_var:sr_launch_restored }
 		}
 		remove_variable = sr_launch_banked_fleets
+	}
+	if = {
+		limit = { has_variable = sr_launch_banked_progress }
+		if = {
+			limit = { NOT = { has_global_variable = sr_all_colonies_complete } }
+			if = {
+				limit = { NOT = { has_variable = sr_progress_solar_colonization } }
+				set_variable = { name = sr_progress_solar_colonization value = 0 }
+			}
+			change_variable = { name = sr_progress_solar_colonization add = var:sr_launch_banked_progress }
+		}
+		remove_variable = sr_launch_banked_progress
+	}
+}
+
+# ---- An old save's open Moon Base (lunar colonization design § 10) -------------
+# Country scope, from the monthly country pulse (space_race_on_actions.txt), on
+# the line before sr_cleanup_inactive_space_race_milestones. The retired
+# Moon Base's entry is never possible, so an old save's open copy deactivates,
+# and that cleanup then deletes its progress: this runs first. The progress
+# moves onto Solar System Colonization's bar, up to one lunar goal
+# (sr_lunar_carry_value), banked as sr_launch_banked_progress until the
+# programme's next launch month restores it (sr_launch_restore_banked_fleets),
+# so it never becomes an activation's baseline (je_space_race.txt's header).
+# The milestone's other variables go too, as sr_cleanup_milestone_variables_effect
+# clears them, but without its cost repost: the cleanup on the next line reposts
+# once, for the flag set here (two reposts in one effect stack the cost
+# modifier). Consuming the progress keeps a copy the engine left active from
+# carrying twice; the self-check says if it did.
+sr_lunar_carry_moon_base = {
+	if = {
+		limit = {
+			has_variable = sr_progress_moon_base
+			NOT = { has_variable = sr_completed_moon_base }
+		}
+		sr_lunar_carry_self_check = yes
+		set_variable = { name = sr_launch_banked_progress value = sr_lunar_carry_value }
+		remove_variable = sr_progress_moon_base
+		if = { limit = { has_variable = sr_active_moon_base } remove_variable = sr_active_moon_base }
+		if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
+		if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
+		if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
+		set_variable = { name = sr_space_race_cleanup_changed value = yes }
+	}
+}
+
+# Self-check lunar_migration, the carry's half (lunar colonization plan, review
+# focus 2). Country scope, before the carry. OK once a game, on the first carry
+# of progress above 0: the progress and what the bank will hold. BROKEN once a
+# game when a country carries again a month or more after its first carry
+# with the retired entry still active: a `possible` that is always false
+# didn't deactivate it (can_deactivate), so it went on moving its bar (the
+# fallback: give the retired entry no on_monthly_pulse and no `immediate`). A
+# second carry once the entry is inactive is one month's lag (its last pulse
+# came after the first carry) and is banked like the first, up to the cap.
+sr_lunar_carry_self_check = {
+	if = {
+		limit = {
+			has_variable = sr_lunar_carried
+			has_journal_entry = je_space_race_moon_base
+			NOT = { has_global_variable = sr_lunar_carry_broken_logged }
+		}
+		set_global_variable = { name = sr_lunar_carry_broken_logged value = yes }
+		debug_log = "TE_SELF_CHECK BROKEN lunar_migration carried again: progress=[THIS.Var('sr_progress_moon_base').GetValue|1] country=[THIS.GetCountry.GetNameNoFormatting] (the retired Moon Base entry is still active a month after its progress was carried, and moved its bar again; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = sr_lunar_carried }
+			var:sr_progress_moon_base > 0
+			NOT = { has_global_variable = sr_lunar_carry_ok_logged }
+		}
+		set_global_variable = { name = sr_lunar_carry_ok_logged value = yes }
+		debug_log = "TE_SELF_CHECK OK lunar_migration carried=[THIS.Var('sr_progress_moon_base').GetValue|1] banked=[THIS.ScriptValue('sr_lunar_carry_value')|1] country=[THIS.GetCountry.GetNameNoFormatting] (an open Moon Base's progress moved onto Solar System Colonization, at most 300; its bar should show it in the programme's next launch month) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_lunar_carried } }
+		set_variable = { name = sr_lunar_carried value = yes }
 	}
 }
 
