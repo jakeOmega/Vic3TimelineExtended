@@ -238,7 +238,7 @@ class TestLocalization(unittest.TestCase):
         needed = set()
         for a in acts:
             needed |= {a, a + "_desc", a + "_action_notification_name", a + "_action_notification_desc"}
-        for article in ("nuclear_guarantee", "nuclear_security_assistance"):
+        for article in ("nuclear_guarantee", "nuclear_security_assistance", "nuclear_basing"):
             needed |= {article, article + "_desc", article + "_article_short_desc",
                        article + "_effects_desc"}
         self.assert_keys(needed, "actions and article")
