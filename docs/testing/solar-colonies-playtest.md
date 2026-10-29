@@ -478,7 +478,7 @@ The second build of `docs/superpowers/specs/2026-10-29-lunar-colonization-design
 
 ## Lunar colonization, build 2b: the Moon Base retired (2026-10-29)
 
-Build 2b of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md` (§§ 4, 7): Solar System Colonization opens on the Moon Landing with Cislunar Infrastructure, and each world beyond the Moon needs the Mars Landing; a country's first lunar colony takes the Moon Base's place in the race; the Moon Base milestone is retired, and an old save's Moon Base becomes a lunar colony. Lunar blockades are PR3b's (item 7 above). The console is `event te_debug_space_race.8`: option a runs the migration's check again, b pretends we finished a scientific Moon Base and holds no lunar world (the migration runs again next month), c pretends an old Moon Base is open with 120 progress (next month's pulse carries it).
+Build 2b of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md` (§§ 4, 7): Solar System Colonization opens on the Moon Landing with Cislunar Infrastructure, and each world beyond the Moon needs the Mars Landing; a country's first lunar colony takes the Moon Base's place in the race; the Moon Base milestone is retired, and an old save's Moon Base becomes a lunar colony. Lunar blockades are build 3b's (its section below). The console is `event te_debug_space_race.8`: option a runs the migration's check again, b pretends we finished a scientific Moon Base and holds no lunar world (the migration runs again next month), c pretends an old Moon Base is open with 120 progress (next month's pulse carries it).
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
