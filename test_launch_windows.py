@@ -1009,7 +1009,9 @@ class StagedBankTest(unittest.TestCase):
     def test_banking_keeps_whole_fleets_and_adds_up(self):
         bank = _block(self.windows, "sr_launch_bank_staged_fleets")
         self.assertIn("sr_launch_staged_whole_fleets >= 1", bank)
-        self.assertIn("NOT = { has_global_variable = sr_all_colonies_complete }", bank)
+        # while a world is left: an old save keeps sr_all_colonies_complete with
+        # the Moon free, so the flag is history (lunar colonization 2b)
+        self.assertIn("sr_any_site_unclaimed = yes", bank)
         self.assertIn("change_variable = { name = sr_launch_banked_fleets add = sr_launch_staged_whole_fleets }", bank)
         self.assertNotIn("set_variable = { name = sr_launch_banked_fleets value = sr_", bank)
         values = _strip(_raw("common", "script_values", "sr_launch_window_values.txt"))

@@ -11,9 +11,7 @@ sr_has_space_program = {
 # no such country fails:
 # - suborbital, the first milestone, runs with sr_active_suborbital set;
 # - every other entry's `possible` needs a sr_completed_<m> that needs
-#   sr_completed_suborbital before it, and nothing removes sr_completed_<m>
-#   (but an old save's finished colonization, run again once for the Moon:
-#   sr_lunar_reopen_colonization, which this gate doesn't read);
+#   sr_completed_suborbital before it, and nothing removes sr_completed_<m>;
 # - the probe result and the colony records exist only at the end of that chain.
 # Both are variables, so a revolution's winner inherits them together with the
 # records the sync rebuilds from.
@@ -205,10 +203,16 @@ sr_possible_fund_down = {
 # as the colonization pulse's own gate — outside it the entry is open but frozen
 # (passive mode, holding the colony modifiers), so an event must not narrate or
 # move its progress. Also the gate of the entry's four controls.
+# A finished programme runs again only when the country resumed it for the
+# Moon (sr_colonization_resumed, te_decision_resume_solar_colonization), which
+# keeps its completion record: lunar colonization 2b, owner 2026-10-29.
 sr_solar_colonization_running = {
 	has_variable = sr_active_solar_colonization
 	modifier:country_sr_solar_colonization_program_bool = yes
-	NOT = { has_variable = sr_completed_solar_colonization }
+	OR = {
+		NOT = { has_variable = sr_completed_solar_colonization }
+		has_variable = sr_colonization_resumed
+	}
 	sr_solar_colonization_qualified = yes
 }
 
@@ -348,7 +352,11 @@ sr_has_running_milestone = {
 # as idle. The Moon Base is no longer one of them (retired 2026-10-29): its
 # record is a first lunar colony now, which a power may never found once the
 # six lunar worlds are taken (lunar colonization design § 7). All variables,
-# so a revolution's winner inherits the state.
+# so a revolution's winner inherits the state. sr_all_colonies_complete is
+# history: an old save whose worlds were all claimed before the Moon existed
+# keeps it with the Moon free, so a country that had concluded keeps the
+# dividend until it chooses to resume colonization for the Moon (owner,
+# 2026-10-29; sr_colonization_resumed makes it running again).
 sr_space_race_concluded = {
 	has_variable = sr_completed_suborbital
 	has_variable = sr_completed_orbital

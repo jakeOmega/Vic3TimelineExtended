@@ -2060,7 +2060,6 @@ sr_check_colony_stage_effect = {
 			has_global_variable = sr_colony_makemake
 			has_global_variable = sr_colony_haumea
 			has_global_variable = sr_colony_sedna
-			NOT = { sr_any_site_unclaimed = yes }
 		}
 		set_global_variable = { name = sr_all_colonies_complete value = yes }
 	}

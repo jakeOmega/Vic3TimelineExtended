@@ -395,8 +395,9 @@ class FirstLunarColonyTest(unittest.TestCase):
 
 class LunarMigrationTest(unittest.TestCase):
     """Old saves: a finished Moon Base becomes a lunar colony, an open one's
-    progress moves onto Solar System Colonization, and a race that ended before
-    the Moon existed reopens for it (lunar colonization design § 10)."""
+    progress moves onto Solar System Colonization, and in a race that ended
+    before the Moon existed the finished programmes keep everything and may
+    resume for the Moon (lunar colonization design § 10; owner, 2026-10-29)."""
 
     @classmethod
     def setUpClass(cls):
@@ -468,7 +469,7 @@ class LunarMigrationTest(unittest.TestCase):
         rest = migrate.index("NOT = { has_variable = sr_was_first_moon_base }")
         self.assertLess(first, rest)
         self.assertEqual(migrate.count("sr_lunar_migrate_country = yes"), 2)
-        order = [migrate.index(x) for x in ("sr_lunar_migrate_country = yes", "sr_lunar_reopen_colonization = yes",
+        order = [migrate.index(x) for x in ("sr_lunar_migrate_country = yes", "sr_lunar_note_moon_open = yes",
                                             "sr_sites_stage_after_claim = yes", "sr_lunar_selfcheck_migration = yes")]
         self.assertEqual(order, sorted(order))
         self.assertIn("has_global_variable = sr_colonization_stage", migrate)
@@ -507,36 +508,85 @@ class LunarMigrationTest(unittest.TestCase):
         part = restore[restore.index("has_variable = sr_launch_banked_progress"):]
         self.assertIn("change_variable = { name = sr_progress_solar_colonization add = var:sr_launch_banked_progress }",
                       part)
-        self.assertIn("NOT = { has_global_variable = sr_all_colonies_complete }", part)
+        # spent while a world is left, the Moon of an old all-claimed save too
+        self.assertIn("limit = { sr_any_site_unclaimed = yes }", part)
         self.assertIn("remove_variable = sr_launch_banked_progress", part)
 
-    def test_a_race_ended_before_the_moon_reopens(self):
+    def test_a_race_ended_before_the_moon_keeps_everything(self):
+        """Owner, 2026-10-29: nothing is removed. The flag stays as history, the
+        finished programmes keep their record, Interplanetary Trade Networks and
+        the dividend, and a player among them is told the Moon is open to it."""
+        self.assertNotIn("sr_lunar_reopen_colonization", self.shared)
+        self.assertNotIn("remove_global_variable = sr_all_colonies_complete", self.shared)
         migrate = _block(self.shared, "sr_lunar_migrate")
         self.assertRegex(migrate, r"limit = \{\s*has_global_variable = sr_all_colonies_complete\s*"
-                                  r"sr_sites_lunar_open = yes\s*\}\s*sr_lunar_reopen_colonization = yes")
-        reopen = _block(self.shared, "sr_lunar_reopen_colonization")
-        for line in ("remove_global_variable = sr_all_colonies_complete",
-                     "remove_variable = sr_completed_solar_colonization",
-                     "remove_modifier = sr_solar_system_trade",
+                                  r"sr_sites_lunar_open = yes\s*\}\s*every_country = \{\s*limit = \{\s*"
+                                  r"is_player = yes\s*has_variable = sr_completed_solar_colonization\s*\}\s*"
+                                  r"sr_lunar_note_moon_open = yes")
+        note = _block(self.shared, "sr_lunar_note_moon_open")
+        self.assertIn("set_variable = { name = sr_lunar_notice_reopened value = yes }", note)
+        self.assertIn("id = space_race_events.109", note)
+        # the stage check sets the flag as it does on main: no extra unclaimed test
+        check = _block(self.effects, "sr_check_colony_stage_effect")
+        self.assertNotIn("sr_any_site_unclaimed", check)
+        concluded = _block(_strip(_raw("common", "scripted_triggers", "space_race_triggers.txt")),
+                           "sr_space_race_concluded")
+        self.assertIn("has_global_variable = sr_all_colonies_complete", concluded)
+        self.assertIn("sr_has_running_milestone = yes", concluded)
+
+    def test_a_finished_programme_resumes_for_the_moon_only_by_choice(self):
+        triggers = _strip(_raw("common", "scripted_triggers", "space_race_triggers.txt"))
+        running = _block(triggers, "sr_solar_colonization_running")
+        self.assertRegex(running, r"OR = \{\s*NOT = \{ has_variable = sr_completed_solar_colonization \}\s*"
+                                  r"has_variable = sr_colonization_resumed\s*\}")
+        # the dividend's pause, billing and the controls all read `running`
+        self.assertIn("sr_solar_colonization_running = yes", _block(triggers, "sr_has_running_milestone"))
+        self.assertIn("sr_solar_colonization_running = yes", _block(triggers, "sr_milestone_billed_solar_colonization"))
+        resume = _block(self.shared, "sr_resume_solar_colonization")
+        for line in ("set_variable = { name = sr_colonization_resumed value = yes }",
                      "set_variable = { name = sr_active_solar_colonization value = yes }",
                      "set_variable = { name = sr_funding_solar_colonization value = 1 }",
-                     "set_variable = { name = sr_progress_solar_colonization value = 0 }",
-                     "sr_recalculate_cost = yes",
-                     "id = space_race_events.109"):
-            self.assertIn(line, reopen)
-        # Races Only's last stage completes only once every world is claimed, so
-        # a lunar world drawn there doesn't close the race on the rest.
-        check = _block(self.effects, "sr_check_colony_stage_effect")
-        last = check[check.index("global_var:sr_colonization_stage = 5"):]
-        self.assertLess(last.index("NOT = { sr_any_site_unclaimed = yes }"),
-                        last.index("name = sr_all_colonies_complete value = yes"))
+                     "sr_recalculate_cost = yes"):
+            self.assertIn(line, resume)
+        self.assertNotRegex(resume, r"remove_(variable|modifier)")
+        decisions = _strip(_raw("common", "decisions", "extra_decisions.txt"))
+        decision = _block(decisions, "te_decision_resume_solar_colonization")
+        shown = _block(decision, "is_shown")
+        for line in ("has_variable = sr_completed_solar_colonization",
+                     "NOT = { has_variable = sr_active_solar_colonization }",
+                     "modifier:country_sr_solar_colonization_program_bool = yes",
+                     "has_journal_entry = je_space_race_solar_colonization",
+                     "sr_sites_lunar_open = yes"):
+            self.assertIn(line, shown)
+        self.assertIn("sr_resume_solar_colonization = yes", _block(decision, "when_taken"))
+        # it stops again once the Moon is full, keeping one Interplanetary Trade Networks
+        entry = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
+        pulse = _block(_block(entry, "je_space_race_solar_colonization"), "on_monthly_pulse")
+        done = pulse[pulse.index("has_global_variable = sr_all_colonies_complete"):]
+        done = done[:done.index("sr_complete_milestone_effect = yes")]
+        self.assertIn("NOT = { sr_sites_lunar_open = yes }", done)
+        self.assertRegex(done, r"if = \{\s*limit = \{ je:je_space_race_solar_colonization \?= \{ NOT = \{ "
+                               r"has_modifier = sr_solar_system_trade \} \} \}\s*"
+                               r"je:je_space_race_solar_colonization = \{ add_modifier = \{ name = sr_solar_system_trade \} \}")
+        self.assertIn("remove_variable = sr_colonization_resumed", done)
+        # no launch-side reader treats the flag as "nothing left to claim"
+        for path in (("common", "script_values", "sr_launch_window_values.txt"),
+                     ("common", "scripted_effects", "sr_launch_window_effects.txt"),
+                     ("common", "scripted_effects", "sr_colony_fleet_effects.txt")):
+            with self.subTest(file=path[-1]):
+                self.assertNotIn("sr_all_colonies_complete", _strip(_raw(*path)))
+        self.assertIn("sr_any_site_unclaimed = yes",
+                      _block(_block(decisions, "te_decision_space_mission_solar"), "is_shown"))
 
     def test_the_notice_and_the_console(self):
         events = _strip(_raw("events", "space_race_events.txt"))
         notice = _block(events, "space_race_events.109")
         self.assertIn("lunar_base_dome.dds", notice)
+        # a notice with no migrated world is titled for the Moon, not the base
+        self.assertIn("desc = space_race_events.109.t_moon_open", _block(notice, "title"))
+        trigger = _block(notice[notice.index("duration = "):], "trigger")
         for var in ("sr_lunar_notice_site", "sr_lunar_notice_reopened"):
-            self.assertIn(f"has_variable = {var}", _block(notice, "trigger"))
+            self.assertIn(f"has_variable = {var}", trigger)
             self.assertIn(f"remove_variable = {var}", _block(notice, "after"))
         names = _raw(str(gss.CUSTOM_LOC_OUT))
         self.assertIn("var:sr_lunar_notice_site = 35", _block(names, "sr_lunar_notice_name"))

@@ -101,7 +101,7 @@ sr_launch_staged_shown = {
 	if = {
 		limit = {
 			sr_solar_colonization_running = yes
-			NOT = { has_global_variable = sr_all_colonies_complete }
+			sr_any_site_unclaimed = yes
 			sr_progress_solar_colonization_value >= sr_solar_colonization_goal
 		}
 		value = 1

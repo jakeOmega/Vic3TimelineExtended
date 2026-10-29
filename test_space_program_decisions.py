@@ -257,9 +257,9 @@ class LocalizationTest(unittest.TestCase):
         text = strip_comments(read(DECISIONS))
         keys = loc_keys()
         names = re.findall(r"^(te_decision_\w+)\s*=\s*\{", text, re.M)
-        # Establish a Strategic Reserve, the six space decisions and
-        # Restructure the Public Debt (#800).
-        self.assertEqual(len(names), 8)
+        # Establish a Strategic Reserve, the six space decisions, Resume Solar
+        # Colonization (lunar colonization 2b) and Restructure the Public Debt (#800).
+        self.assertEqual(len(names), 9)
         for name in names:
             for key in (name, f"{name}_desc"):
                 with self.subTest(key=key):

@@ -320,14 +320,21 @@ sr_lunar_migrate = {
 		}
 		sr_lunar_migrate_country = yes
 	}
-	# A save whose race had ended before the Moon existed: reopened while a
-	# lunar world is left.
+	# A save whose race had ended before the Moon existed: a player whose
+	# programme had finished is told the Moon is open to it if it resumes
+	# (sr_lunar_note_moon_open).
 	if = {
 		limit = {
 			has_global_variable = sr_all_colonies_complete
 			sr_sites_lunar_open = yes
 		}
-		sr_lunar_reopen_colonization = yes
+		every_country = {
+			limit = {
+				is_player = yes
+				has_variable = sr_completed_solar_colonization
+			}
+			sr_lunar_note_moon_open = yes
+		}
 	}
 	# The stage follows the claims once, as after any claim: Races Only steps it
 	# when its worlds are all claimed, Simple and Full recompute it (the lowest
@@ -351,55 +358,40 @@ sr_lunar_note_migrated = {
 	}
 }
 
-# Global scope, from sr_lunar_migrate. A save from before the six lunar worlds
-# existed (34 worlds; build 2a added the Moon) in which every world was
-# claimed carries sr_all_colonies_complete, which shuts colonization for good.
-# While a lunar world is left after the migration's claims the race isn't
-# over, so it reopens:
-# - the flag goes, and the stage follows (sr_lunar_migrate's stage step: under
-#   Simple and Full the Moon's 0; under Races Only the last stage stays, where
-#   the draw lists the Moon's worlds as released earlier ones and the stage
-#   check completes only once every world is claimed);
-# - a country whose programme had finished (sr_completed_solar_colonization)
-#   runs it again, as its entry's `immediate` would have: the finish and its
-#   Solar System Trade modifier, which rewards every world claimed, wait until
-#   the Moon is settled, when the entry's pulse completes it again. Its funding
-#   restarts at one level. Nothing else ever removes a completion
-#   (sr_space_race_participant's note), and the pulse sets this one again.
-# A player is told (space_race_events.109). Its Commercial Space Industry
-# dividend pauses meanwhile, since the race isn't over for it
-# (sr_space_race_concluded).
-sr_lunar_reopen_colonization = {
-	remove_global_variable = sr_all_colonies_complete
-	debug_log = "TE_SR_SITES lunar_reopen: every world had been claimed before the Moon existed; colonization reopened for the Moon date=[TimeKeeper.GetCurrentDate.GetString]"
-	every_country = {
-		limit = { has_variable = sr_completed_solar_colonization }
-		remove_variable = sr_completed_solar_colonization
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = {
-				if = {
-					limit = { has_modifier = sr_solar_system_trade }
-					remove_modifier = sr_solar_system_trade
-				}
-			}
-			set_variable = { name = sr_active_solar_colonization value = yes }
-			if = {
-				limit = { NOT = { has_variable = sr_progress_solar_colonization } }
-				set_variable = { name = sr_progress_solar_colonization value = 0 }
-			}
-			if = {
-				limit = { NOT = { has_variable = sr_funding_solar_colonization } }
-				set_variable = { name = sr_funding_solar_colonization value = 1 }
-			}
-			sr_recalculate_cost = yes
-		}
-		if = {
-			limit = { is_player = yes }
-			set_variable = { name = sr_lunar_notice_reopened value = yes }
-			trigger_event = { id = space_race_events.109 days = 1 }
-		}
+# Country scope (a player), from sr_lunar_migrate. A save from before the six
+# lunar worlds existed (34 worlds; build 2a added the Moon) in which every world
+# was claimed carries sr_all_colonies_complete, and its colony holders finished
+# colonization. They keep it all (owner, 2026-10-29): the record
+# (sr_completed_solar_colonization), Interplanetary Trade Networks, and the
+# Commercial Space Industry dividend, since the flag stays as history and
+# sr_space_race_concluded keeps holding. The Moon is open to them only if they
+# choose to resume colonization (te_decision_resume_solar_colonization), which
+# pauses the dividend while it runs; this notice says so (.109).
+sr_lunar_note_moon_open = {
+	set_variable = { name = sr_lunar_notice_reopened value = yes }
+	trigger_event = { id = space_race_events.109 days = 1 }
+}
+
+# Country scope, from te_decision_resume_solar_colonization: a finished
+# programme runs again to settle the Moon's free worlds. It keeps its
+# completion record and Interplanetary Trade Networks: the marker
+# sr_colonization_resumed makes it running (sr_solar_colonization_running), so
+# it is billed, its four controls and Target work, and its dividend pauses
+# (sr_has_running_milestone). The entry's pulse stops it again once no lunar
+# world is free, removing the marker and adding no second modifier. The bar
+# starts from what is kept, at one funding level if none is left.
+sr_resume_solar_colonization = {
+	set_variable = { name = sr_colonization_resumed value = yes }
+	set_variable = { name = sr_active_solar_colonization value = yes }
+	if = {
+		limit = { NOT = { has_variable = sr_progress_solar_colonization } }
+		set_variable = { name = sr_progress_solar_colonization value = 0 }
 	}
+	if = {
+		limit = { NOT = { has_variable = sr_funding_solar_colonization } }
+		set_variable = { name = sr_funding_solar_colonization value = 1 }
+	}
+	sr_recalculate_cost = yes
 }
 
 # Self-check lunar_migration (lunar colonization plan, review focus 1). Global

@@ -484,12 +484,6 @@ def render_stage_check() -> list[str]:
         out.append("\tif = {" if stage == STAGES[0] else "\telse_if = {")
         out += ["\t\tlimit = {", f"\t\t\tglobal_var:sr_colonization_stage = {stage}"]
         out += [f"\t\t\thas_global_variable = sr_colony_{s.key}" for s in stage_sites(stage)]
-        if stage == STAGES[-1]:
-            # Every world, not only the last stage's: a released world of an
-            # earlier stage, or the Moon reopened in a save whose race had ended
-            # before it existed (sr_lunar_reopen_colonization), is drawn at the
-            # last stage and keeps the race open until it is claimed.
-            out.append("\t\t\tNOT = { sr_any_site_unclaimed = yes }")
         out.append("\t\t}")
         if stage == 5:
             out.append("\t\tset_global_variable = { name = sr_all_colonies_complete value = yes }")

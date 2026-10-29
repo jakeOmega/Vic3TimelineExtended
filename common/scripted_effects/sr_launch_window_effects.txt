@@ -155,7 +155,7 @@ sr_launch_bank_staged_fleets = {
 		limit = {
 			has_variable = sr_progress_solar_colonization
 			sr_launch_staged_whole_fleets >= 1
-			NOT = { has_global_variable = sr_all_colonies_complete }
+			sr_any_site_unclaimed = yes
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_launch_banked_fleets } }
@@ -173,7 +173,7 @@ sr_launch_restore_banked_fleets = {
 	if = {
 		limit = { has_variable = sr_launch_banked_fleets }
 		if = {
-			limit = { NOT = { has_global_variable = sr_all_colonies_complete } }
+			limit = { sr_any_site_unclaimed = yes }
 			if = {
 				limit = { NOT = { has_variable = sr_progress_solar_colonization } }
 				set_variable = { name = sr_progress_solar_colonization value = 0 }
@@ -187,7 +187,7 @@ sr_launch_restore_banked_fleets = {
 	if = {
 		limit = { has_variable = sr_launch_banked_progress }
 		if = {
-			limit = { NOT = { has_global_variable = sr_all_colonies_complete } }
+			limit = { sr_any_site_unclaimed = yes }
 			if = {
 				limit = { NOT = { has_variable = sr_progress_solar_colonization } }
 				set_variable = { name = sr_progress_solar_colonization value = 0 }

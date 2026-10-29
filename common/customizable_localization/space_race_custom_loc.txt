@@ -306,9 +306,11 @@ sr_solar_colonization_profile = {
 	type = country
 	random_valid = no
 
+	# Not while resumed for the Moon (lunar colonization 2b): the stage reads.
 	text = {
 		trigger = {
 			has_variable = sr_completed_solar_colonization
+			NOT = { has_variable = sr_colonization_resumed }
 		}
 		localization_key = je_space_race_solar_colonization_status_complete
 	}

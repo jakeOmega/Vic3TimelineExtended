@@ -1499,14 +1499,26 @@ je_space_race_solar_colonization = {
 			# `can_deactivate = yes` drops the entry back to inactive;
 			# sr_cleanup_inactive_space_race_milestones then clears its
 			# variables. It is not paid, and not pinned open.
+			# Not while a lunar world is free (lunar colonization 2b, owner
+			# 2026-10-29): an old save whose other worlds were all claimed before
+			# the Moon existed keeps the flag, and a programme still running
+			# there, or one resumed for the Moon (sr_colonization_resumed), goes
+			# on until the Moon is full. A resumed one already holds its record
+			# and Interplanetary Trade Networks, so the modifier is added only
+			# when missing, and the marker goes.
 			if = {
 				limit = {
 					has_variable = sr_active_solar_colonization
 					has_global_variable = sr_all_colonies_complete
 					sr_has_space_colony = yes
+					NOT = { sr_sites_lunar_open = yes }
 				}
 				set_variable = { name = sr_completed_solar_colonization value = yes }
-				je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
+				if = {
+					limit = { je:je_space_race_solar_colonization ?= { NOT = { has_modifier = sr_solar_system_trade } } }
+					je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
+				}
+				if = { limit = { has_variable = sr_colonization_resumed } remove_variable = sr_colonization_resumed }
 				remove_variable = sr_active_solar_colonization
 				if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
 				if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
