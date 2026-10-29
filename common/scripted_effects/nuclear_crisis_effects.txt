@@ -135,6 +135,10 @@ nd_crisis_preview = {
 		custom_tooltip = nd_tt_open_over_claims
 	}
 	else_if = {
+		limit = { nd_dispute_covert_ops_by = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_covert_ops
+	}
+	else_if = {
 		limit = { nd_dispute_orbital_by = { TARGET = $TARGET$ } }
 		custom_tooltip = nd_tt_open_over_orbital
 	}
@@ -429,6 +433,10 @@ nd_crisis_classify_dispute = {
 	else_if = {
 		limit = { nd_dispute_claims_by = { TARGET = scope:nd_target } }
 		set_variable = { name = nd_crisis_dispute value = 8 }
+	}
+	else_if = {
+		limit = { nd_dispute_covert_ops_by = { TARGET = scope:nd_target } }
+		set_variable = { name = nd_crisis_dispute value = 9 }
 	}
 	else_if = {
 		limit = { nd_dispute_orbital_by = { TARGET = scope:nd_target } }
@@ -1025,6 +1033,17 @@ nd_crisis_revalidate_dispute = {
 		else_if = {
 			limit = { NOT = { nd_dispute_claims_by = { TARGET = scope:nd_target } } }
 			nd_crisis_close = { OUTCOME = 10 }
+		}
+	}
+	# ---- covert operations: a war between them turns it into a war dispute.
+	# An operation the target ends itself, or one burned, can be launched again
+	# at once, so neither ends the crisis: what we demand is the concession's
+	# bar.
+	else_if = {
+		limit = { var:nd_crisis_dispute = 9 }
+		if = {
+			limit = { has_war_with = scope:nd_target }
+			set_variable = { name = nd_crisis_dispute value = 2 }
 		}
 	}
 	# ---- an orbital battlestation: a war between them turns it into a war
@@ -1792,6 +1811,14 @@ nd_crisis_act_yield = {
 					nd_crisis_concede_claims = yes
 				}
 				else_if = {
+					limit = { var:nd_crisis_dispute = 9 }
+					if = {
+						limit = { nd_dispute_covert_ops_by = { TARGET = scope:nd_target } }
+						nd_crisis_concession_check_schedule = { CODE = 9 }
+					}
+					nd_crisis_concede_covert_ops = yes
+				}
+				else_if = {
 					limit = { var:nd_crisis_dispute = 10 }
 					if = {
 						limit = { nd_dispute_orbital_by = { TARGET = scope:nd_target } }
@@ -1867,6 +1894,10 @@ nd_crisis_yield_lines = {
 	else_if = {
 		limit = { nd_crisis_dispute_is = { D = 8 } }
 		custom_tooltip = nd_tt_yield_claims
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 9 } }
+		custom_tooltip = nd_tt_yield_covert_ops
 	}
 	else_if = {
 		limit = { nd_crisis_dispute_is = { D = 10 } }
@@ -2019,6 +2050,55 @@ nd_crisis_concede_claims = {
 			state_region = { scope:nd_target = { has_claim = PREV } }
 		}
 		state_region = { remove_claim = scope:nd_target }
+	}
+}
+
+# Issuer scope, scope:nd_target the yielder (dispute 9): it ends every
+# operation against us that we have caught, one type at a time — never by
+# walking iw_ops, the list covert_op_destroy changes — and runs no hostile
+# operation against us for ten years (nd_crisis_covert_bar, read by each
+# hostile action's possible). Operations we haven't caught go on.
+nd_crisis_concede_covert_ops = {
+	scope:nd_target = {
+		nd_crisis_end_known_op = { TYPE = election_interference ACTION = covert_election_interference_action }
+		nd_crisis_end_known_op = { TYPE = financial_subversion ACTION = covert_financial_subversion_action }
+		nd_crisis_end_known_op = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action }
+		nd_crisis_end_known_op = { TYPE = comms_disruption ACTION = covert_comms_disruption_action }
+		nd_crisis_end_known_op = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action }
+		nd_crisis_end_known_op = { TYPE = military_espionage ACTION = covert_military_espionage_action }
+		nd_crisis_end_known_op = { TYPE = influence_campaign ACTION = covert_influence_campaign_action }
+		nd_crisis_end_known_op = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action }
+		nd_crisis_end_known_op = { TYPE = destabilization ACTION = covert_destabilization_action }
+		nd_crisis_end_known_op = { TYPE = regime_change ACTION = covert_regime_change_action }
+		nd_crisis_end_known_op = { TYPE = nuclear_sabotage ACTION = covert_nuclear_sabotage_action }
+		nd_crisis_end_known_op = { TYPE = space_espionage ACTION = covert_space_espionage_action }
+		nd_crisis_end_known_op = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action }
+		nd_crisis_end_known_op = { TYPE = secure_material ACTION = covert_secure_material_action }
+		nd_crisis_end_known_op = { TYPE = incite_autonomy ACTION = covert_incite_autonomy_action }
+		nd_crisis_end_known_op = { TYPE = sabotage_colony ACTION = covert_sabotage_colony_action }
+		nd_crisis_end_known_op = { TYPE = survey_defences ACTION = covert_survey_defences_action }
+		set_variable = { name = nd_crisis_covert_bar value = scope:nd_issuer days = 3650 }
+	}
+}
+
+# Operator scope (scope:nd_target, the yielder), scope:nd_issuer the country
+# it runs $TYPE$ against: end that operation if the issuer has a record of it.
+# Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key
+nd_crisis_end_known_op = {
+	if = {
+		limit = {
+			has_diplomatic_pact = { who = scope:nd_issuer type = $ACTION$ }
+			scope:nd_issuer = {
+				has_variable_list = iw_known_ops
+				any_in_list = {
+					variable = iw_known_ops
+					has_tag = iw_known_$TYPE$
+					var:iw_attacker ?= scope:nd_target
+				}
+			}
+		}
+		remove_diplomatic_pact = { country = scope:nd_issuer type = $ACTION$ }
+		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:nd_issuer }
 	}
 }
 

@@ -592,6 +592,20 @@ nd_dispute_claims_by = {
 	}
 }
 
+# Dispute 9 (rework spec §8.5): $TARGET$ runs a covert operation against us
+# that we have caught: our record of it (covert_watch_record_create), which
+# goes with the operation (covert_op_destroy, covert_op_sync's reap), so a
+# record means running and caught. Counterintelligence Support is help, not
+# an operation against us.
+nd_dispute_covert_ops_by = {
+	has_variable_list = iw_known_ops
+	any_in_list = {
+		variable = iw_known_ops
+		var:iw_attacker ?= $TARGET$
+		NOT = { has_tag = iw_known_counterintel_support }
+	}
+}
+
 # Dispute 10 (rework spec §8.5): $TARGET$ is building an Orbital Battlestation.
 # A finished one gives every state its owner holds nuclear defense (the strike
 # odds, mod_systems.md), so it weakens our deterrent; the dispute is the
@@ -1621,6 +1635,7 @@ nd_crisis_issuer_is_defensive = {
 		var:nd_crisis_dispute = 3
 		var:nd_crisis_dispute = 6
 		var:nd_crisis_dispute = 8
+		var:nd_crisis_dispute = 9
 		AND = {
 			var:nd_crisis_dispute = 1
 			scope:nd_def_opp = { is_diplomatic_play_initiator = yes }
@@ -1746,6 +1761,7 @@ nd_has_crisis_dispute_with = {
 		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		nd_dispute_proliferation_by = { TARGET = $TARGET$ }
 		nd_dispute_claims_by = { TARGET = $TARGET$ }
+		nd_dispute_covert_ops_by = { TARGET = $TARGET$ }
 		nd_dispute_orbital_by = { TARGET = $TARGET$ }
 		nd_dispute_alert_by = { TARGET = $TARGET$ }
 	}
@@ -2158,12 +2174,14 @@ nd_ai_would_warn = {
 			country_rank >= rank_value:great_power
 			nd_doctrine_nfu = no
 		}
-		# Our land, from a rival (rework spec §8.5; rulings R8: claims are
-		# common, so only a rival's).
+		# Our land, or operations against us, from a rival (rework spec §8.5;
+		# rulings R8: claims and covert operations are common, so only a
+		# rival's).
 		AND = {
 			has_diplomatic_pact = { who = $TARGET$ type = rivalry }
 			OR = {
 				nd_dispute_claims_by = { TARGET = $TARGET$ }
+				nd_dispute_covert_ops_by = { TARGET = $TARGET$ }
 			}
 		}
 		# An orbital battlestation going up, for a great power (rework spec

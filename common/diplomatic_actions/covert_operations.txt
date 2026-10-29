@@ -162,6 +162,12 @@ covert_election_interference_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
+		}
 
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
@@ -347,6 +353,12 @@ covert_financial_subversion_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
+		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
@@ -519,6 +531,12 @@ covert_infrastructure_sabotage_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
+		}
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
 			NOT = {
@@ -686,6 +704,12 @@ covert_comms_disruption_action = {
 		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
+		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
 		}
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
@@ -862,6 +886,12 @@ covert_industrial_espionage_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
+		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
@@ -1031,6 +1061,12 @@ covert_military_espionage_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
+		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
@@ -1193,6 +1229,12 @@ covert_influence_campaign_action = {
 		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
+		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
 		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
@@ -1374,6 +1416,12 @@ covert_ideological_subversion_action = {
 		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
+		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
 		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
@@ -1563,6 +1611,12 @@ covert_destabilization_action = {
 		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
+		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
 		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
@@ -1754,6 +1808,12 @@ covert_regime_change_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
+		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
@@ -1938,6 +1998,12 @@ covert_nuclear_sabotage_action = {
 		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
+		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
 		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
@@ -2133,6 +2199,12 @@ covert_space_espionage_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
+		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
@@ -2293,6 +2365,12 @@ covert_cultivate_assets_action = {
 		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
+		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
 		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
@@ -2469,6 +2547,12 @@ covert_secure_material_action = {
 		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
+		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
 		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
@@ -2805,6 +2889,12 @@ covert_incite_autonomy_action = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
 		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
+		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
 			text = iw_no_intel_sharing_tt
@@ -2984,6 +3074,12 @@ covert_sabotage_colony_action = {
 		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
+		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
 		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {
@@ -3177,6 +3273,12 @@ covert_survey_defences_action = {
 		custom_tooltip = {
 			text = iw_no_truce_tt
 			NOT = { has_truce_with = scope:target_country }
+		}
+		# A covert-operations concession in a nuclear crisis (dispute 9,
+		# nd_crisis_concede_covert_ops).
+		custom_tooltip = {
+			text = nd_tt_covert_conceded
+			NOT = { var:nd_crisis_covert_bar ?= scope:target_country }
 		}
 		# Allowed during war: no has_war guard
 		custom_tooltip = {

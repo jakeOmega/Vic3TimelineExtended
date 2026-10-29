@@ -27,6 +27,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 CRISIS_EVENTS = ROOT / "events/nuclear_crisis_events.txt"
 BUILDINGS = ROOT / "common/buildings/extra_buildings.txt"
+COVERT_ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
+COVERT_TRIGGERS = ROOT / "common/scripted_triggers/covert_warfare_triggers.txt"
 
 # (code, the dispute's trigger, a word every prose list of disputes uses,
 #  the preview's "over" key, the yield line's key), in classification order
@@ -39,6 +41,7 @@ DISPUTES = [
     (6, "nd_dispute_peacetime_strike_by", "nuclear strike", "nd_tt_open_over_peacetime_strike", "nd_tt_yield_reparations"),
     (4, "nd_dispute_proliferation_by", "weapons program", "nd_tt_open_over_proliferation", "nd_tt_yield_freeze"),
     (8, "nd_dispute_claims_by", "claims", "nd_tt_open_over_claims", "nd_tt_yield_claims"),
+    (9, "nd_dispute_covert_ops_by", "covert operations", "nd_tt_open_over_covert_ops", "nd_tt_yield_covert_ops"),
     (10, "nd_dispute_orbital_by", "orbital", "nd_tt_open_over_orbital", "nd_tt_yield_orbital"),
     (5, "nd_dispute_alert_by", "alert", "nd_tt_open_over_alert", "nd_tt_yield_alert"),
 ]
@@ -291,6 +294,75 @@ class TestOrbital(unittest.TestCase):
         body = squash(block(self.crisis, "nd_crisis_revalidate_dispute"))
         self.assertIn("else_if = { limit = { var:nd_crisis_dispute = 10 } if = { limit = { has_war_with = scope:nd_target }"
                       " set_variable = { name = nd_crisis_dispute value = 2 } } }", body)
+
+
+def hostile_covert_types():
+    """(short name, action) of every hostile covert operation, from the pact
+    list the covert system's own triggers use."""
+    pacts = block(strip_comments(read(COVERT_TRIGGERS)), "is_covert_operation_pact")
+    actions = re.findall(r"is_diplomatic_action_type = (covert_(\w+)_action)", pacts)
+    return [(short, action) for action, short in actions if short != "counterintel_support"]
+
+
+class TestCovert(unittest.TestCase):
+    """Dispute 9: the target runs an operation against us that we have caught.
+    Conceding ends each caught one and bars new hostile ones for ten years."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.crisis = strip_comments(read(CRISIS_EFFECTS))
+        cls.triggers = strip_comments(read(TRIGGERS))
+        cls.actions = strip_comments(read(COVERT_ACTIONS))
+        cls.types = hostile_covert_types()
+
+    def test_seventeen_hostile_types(self):
+        self.assertEqual(len(self.types), 17)
+
+    def test_dispute_reads_the_issuers_records(self):
+        body = squash(block(self.triggers, "nd_dispute_covert_ops_by"))
+        self.assertIn("has_variable_list = iw_known_ops any_in_list = { variable = iw_known_ops var:iw_attacker ?= $TARGET$"
+                      " NOT = { has_tag = iw_known_counterintel_support } }", body)
+
+    def test_covert_concession_goes_type_by_type(self):
+        body = squash(block(self.crisis, "nd_crisis_concede_covert_ops"))
+        calls = re.findall(r"nd_crisis_end_known_op = \{ TYPE = (\w+) ACTION = (\w+) \}", body)
+        self.assertEqual(sorted(calls), sorted(self.types))
+        helper = squash(block(self.crisis, "nd_crisis_end_known_op"))
+        for text in (body, helper):
+            self.assertNotIn("every_in_list", text)
+        for needle in ("has_diplomatic_pact = { who = scope:nd_issuer type = $ACTION$ }",
+                       "any_in_list = { variable = iw_known_ops has_tag = iw_known_$TYPE$ var:iw_attacker ?= scope:nd_target }",
+                       "remove_diplomatic_pact = { country = scope:nd_issuer type = $ACTION$ }",
+                       "covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:nd_issuer }"):
+            self.assertIn(needle, helper)
+
+    def test_bar_set_for_ten_years(self):
+        body = squash(block(self.crisis, "nd_crisis_concede_covert_ops"))
+        self.assertIn("set_variable = { name = nd_crisis_covert_bar value = scope:nd_issuer days = 3650 }", body)
+
+    def test_bar_on_every_hostile_action(self):
+        bar = "custom_tooltip = { text = nd_tt_covert_conceded NOT = { var:nd_crisis_covert_bar ?= scope:target_country } }"
+        for _short, action in self.types:
+            self.assertIn(bar, squash(block(block(self.actions, action), "possible")), action)
+        self.assertTrue(loc_value("nd_tt_covert_conceded"))
+
+    def test_no_bar_on_counterintel_support(self):
+        self.assertNotIn("nd_crisis_covert_bar", block(self.actions, "covert_counterintel_support_action"))
+
+    def test_ai_warns_only_against_a_rival(self):
+        body = squash(block(self.triggers, "nd_ai_would_warn"))
+        i = body.index("nd_dispute_covert_ops_by")
+        self.assertGreaterEqual(body.rfind("has_diplomatic_pact = { who = $TARGET$ type = rivalry }", 0, i), 0)
+        self.assertEqual(body.count("nd_dispute_covert_ops_by"), 1)
+
+    def test_revalidate_only_a_war(self):
+        body = squash(block(self.crisis, "nd_crisis_revalidate_dispute"))
+        self.assertIn("else_if = { limit = { var:nd_crisis_dispute = 9 } if = { limit = { has_war_with = scope:nd_target }"
+                      " set_variable = { name = nd_crisis_dispute value = 2 } } }", body)
+
+    def test_uncaught_operations_go_on(self):
+        for key in ("nd_concession_long_9", "nd_tt_yield_covert_ops"):
+            self.assertIn("caught", loc_value(key), key)
 
 
 if __name__ == "__main__":

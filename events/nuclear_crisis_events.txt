@@ -1523,6 +1523,16 @@ nuclear_crisis.26 = {
 			}
 		}
 		if = {
+			limit = { var:nd_cc_code = 9 }
+			if = {
+				limit = { nd_dispute_covert_ops_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_9: [THIS.GetCountry.GetNameNoFormatting] still has a record of an operation by [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] a day after remove_diplomatic_pact"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_9: [THIS.GetCountry.GetNameNoFormatting] has no record of an operation by [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] a day after remove_diplomatic_pact"
+			}
+		}
+		if = {
 			limit = { var:nd_cc_code = 10 }
 			if = {
 				limit = { nd_dispute_orbital_by = { TARGET = scope:nd_cc_target } }
