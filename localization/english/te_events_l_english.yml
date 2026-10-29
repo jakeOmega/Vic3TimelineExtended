@@ -3417,6 +3417,11 @@
  nuclear_crisis.7.d:0 "[SCOPE.sCountry('nd_target').GetName] has answered our public ultimatum with war. The diplomatic play we warned it over has become open fighting, and every government that read our ultimatum is now waiting to see whether we meant it. So is our own general staff."
  nuclear_crisis.7.f:0 "\"The ultimatum ran in every newspaper in the world. They mobilized the next morning.\"\n\n\"So the question is what we meant.\"\n\n\"No. The question is what we can live with having meant. Those are different questions, and they do not have the same answer.\"\n\n\"And the army?\"\n\n\"The army will fight whichever war you give it. It would like to know which one before breakfast.\""
  nuclear_crisis.7.t:0 "They Chose War"
+ nuclear_crisis.8.a:0 "Accept. Each side gives up the same, and neither is seen to yield."
+ nuclear_crisis.8.b:0 "Refuse. We will not bargain away what we hold."
+ nuclear_crisis.8.d:0 "[SCOPE.sCountry('nd_crisis_proposer').GetName] has offered to settle the nuclear crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] with a trade. Each side would give up the same kind of thing the other demands of it, so that neither could be said to have backed down. The terms are the same for both, and they are set out in the answer."
+ nuclear_crisis.8.f:0 "The two drafts were identical except for the order of the names. A junior delegate pointed this out, and was told that the order of the names was the whole of the negotiation."
+ nuclear_crisis.8.t:0 "A Trade Offered"
 
 #
 # NUCLEAR_CUSTODY

@@ -1035,6 +1035,52 @@ nuclear_crisis.7 = {
 	}
 }
 
+# ---- .8 A trade offered ---------------------------------------------------------
+# To the other party, when one side offers the matching concession of its own
+# (nd_crisis_act_offer_trade; rework spec §8.6). The default refuses: giving
+# something up takes a click (ruling R3).
+nuclear_crisis.8 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_crisis.8.t
+	desc = nuclear_crisis.8.d
+	flavor = nuclear_crisis.8.f
+
+	duration = 3
+
+	trigger = {
+		nd_crisis_event_matches = yes
+	}
+
+	option = {
+		name = nuclear_crisis.8.a
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.8.a; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		nd_crisis_option = { ACT = accept_trade }
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = {
+		name = nuclear_crisis.8.b
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.8.b; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		default_option = yes
+		nd_crisis_option = { ACT = refuse_talks }
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
 # ---- .20 A guarantee is tested ------------------------------------------------
 # To an armed guarantor, when its beneficiary is put under a nuclear warning
 # (nd_guarantee_context 1) or struck (2). Expects scope:nd_guarantee_attacker
@@ -1573,6 +1619,30 @@ nuclear_crisis.26 = {
 		}
 		remove_variable = nd_cc_target
 		remove_variable = nd_cc_code
+	}
+}
+
+# ---- .27 Hidden: did both halves of a trade take? -----------------------------
+# A day after the first trade over each dispute code
+# (nd_crisis_trade_check_schedule): TE_SELF_CHECK OK or BROKEN nd_trade_<code>,
+# the BROKEN line naming the half that survived. The pattern of .26.
+nuclear_crisis.27 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = nd_tc_other
+	}
+
+	immediate = {
+		save_scope_as = nd_tc_self
+		var:nd_tc_other = { save_scope_as = nd_tc_other }
+		nd_crisis_trade_check_log = { CODE = 7 WHAT = deployment }
+		nd_crisis_trade_check_log = { CODE = 8 WHAT = claims }
+		nd_crisis_trade_check_log = { CODE = 9 WHAT = covert_ops }
+		nd_crisis_trade_check_log = { CODE = 10 WHAT = orbital }
+		remove_variable = nd_tc_other
+		remove_variable = nd_tc_code
 	}
 }
 

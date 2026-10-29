@@ -610,5 +610,17 @@ class TestFinalReviewFixes(unittest.TestCase):
         self.assertIn("conceded to", loc_value("nd_tt_deploy_barred"))
 
 
+
+class TestTradeDecision(unittest.TestCase):
+    """Phase 4c: every dispute either trades (a same-code mirror, its own
+    branch at every trade site) or is listed as not trading."""
+
+    def test_every_dispute_decides_on_trades(self):
+        from test_nuclear_trades import NO_TRADE, TRADES
+
+        self.assertFalse(set(TRADES) & NO_TRADE)
+        self.assertEqual(set(TRADES) | NO_TRADE, set(CODES))
+
+
 if __name__ == "__main__":
     unittest.main()

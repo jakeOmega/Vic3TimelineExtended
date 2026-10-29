@@ -2626,6 +2626,183 @@ nd_crisis_act_refuse_talks = {
 	}
 }
 
+# ---- Trades (rework spec §8.6, phase 4c) ------------------------------------
+# Either party, under Our Moves or at the issuer's deadline: offer the
+# matching concession of our own for the one the crisis is about (disputes
+# 7–10, nd_can_offer_trade). An offer is a proposal of talks with terms: it
+# pauses the pressure and eases the danger as talks do, and refusing it is
+# refusing talks (nd_crisis_act_refuse_talks; ruling R2).
+nd_crisis_act_offer_trade = {
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_offer_trade; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+	custom_tooltip = nd_tt_act_trade
+	nd_crisis_trade_lines = yes
+	custom_tooltip = nd_tt_trade_cred
+	custom_tooltip = nd_tt_talks_meanwhile
+	hidden_effect = {
+		nd_crisis_save_parties = yes
+		if = {
+			limit = {
+				exists = scope:nd_issuer
+				exists = scope:nd_target
+			}
+			scope:nd_issuer = { set_variable = { name = nd_crisis_talks value = 1 } }
+			if = {
+				limit = { this = scope:nd_issuer }
+				save_scope_as = nd_crisis_proposer
+				nd_crisis_send_event = { WHO = scope:nd_target EVENT = nuclear_crisis.8 }
+			}
+			else = {
+				save_scope_as = nd_crisis_proposer
+				nd_crisis_send_event = { WHO = scope:nd_issuer EVENT = nuclear_crisis.8 }
+			}
+		}
+	}
+}
+
+# Either party, answering .8. The trade runs only while it still holds, each
+# side still having what it offered: an offer can go stale before its answer
+# (the other side left its basing treaty meanwhile). A stale offer lapses as a
+# refusal would, and the crisis goes on; a trade never runs one-sided.
+nd_crisis_act_accept_trade = {
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_accept_trade; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+	if = {
+		limit = { nd_crisis_trade_holds = { ISSUER = scope:nd_issuer TARGET = scope:nd_target } }
+		custom_tooltip = nd_tt_act_accept_trade
+		nd_crisis_trade_lines = yes
+		custom_tooltip = nd_tt_trade_cred
+	}
+	else = {
+		custom_tooltip = nd_tt_trade_lapsed
+	}
+	hidden_effect = {
+		nd_crisis_save_parties = yes
+		if = {
+			limit = {
+				exists = scope:nd_issuer
+				exists = scope:nd_target
+				scope:nd_issuer = { nd_is_crisis_owner = yes }
+				nd_crisis_trade_holds = { ISSUER = scope:nd_issuer TARGET = scope:nd_target }
+			}
+			scope:nd_issuer = {
+				if = {
+					limit = { var:nd_crisis_dispute = 7 }
+					nd_crisis_trade_halves = { CODE = 7 WHAT = deployment }
+				}
+				else_if = {
+					limit = { var:nd_crisis_dispute = 8 }
+					nd_crisis_trade_halves = { CODE = 8 WHAT = claims }
+				}
+				else_if = {
+					limit = { var:nd_crisis_dispute = 9 }
+					nd_crisis_trade_halves = { CODE = 9 WHAT = covert_ops }
+				}
+				else_if = {
+					limit = { var:nd_crisis_dispute = 10 }
+					nd_crisis_trade_halves = { CODE = 10 WHAT = orbital }
+				}
+			}
+			nd_crisis_close = { OUTCOME = 11 }
+		}
+		else_if = {
+			limit = {
+				exists = scope:nd_issuer
+				scope:nd_issuer = { nd_is_crisis_owner = yes }
+			}
+			scope:nd_issuer = {
+				set_variable = { name = nd_crisis_talks value = 0 }
+				set_variable = { name = nd_crisis_pressure_weeks value = 0 }
+			}
+		}
+	}
+}
+
+# Either party: what each side gives up in a trade over this crisis's
+# dispute, one line (the mutual form of nd_crisis_yield_lines).
+nd_crisis_trade_lines = {
+	if = {
+		limit = { nd_crisis_dispute_is = { D = 7 } }
+		custom_tooltip = nd_tt_trade_deployment
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 8 } }
+		custom_tooltip = nd_tt_trade_claims
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 9 } }
+		custom_tooltip = nd_tt_trade_covert_ops
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 10 } }
+		custom_tooltip = nd_tt_trade_orbital
+	}
+}
+
+# Issuer scope, parties saved, inside nd_crisis_act_accept_trade's guard (both
+# halves hold). Both halves of a trade over dispute $CODE$, whose trigger and
+# concession are nd_dispute_$WHAT$_by and nd_crisis_concede_$WHAT$: the
+# target's concession, then the issuer's with the parties swapped for it, and
+# swapped back before anything else reads them. Each concession bars its giver
+# for ten years, so both sides are barred (ruling R7).
+nd_crisis_trade_halves = {
+	nd_crisis_trade_check_schedule = { CODE = $CODE$ }
+	scope:nd_issuer = { nd_crisis_concede_$WHAT$ = yes }
+	nd_crisis_swap_parties = yes
+	scope:nd_issuer = { nd_crisis_concede_$WHAT$ = yes }
+	nd_crisis_swap_parties = yes
+}
+
+# Parties saved: swaps scope:nd_issuer and scope:nd_target, for a trade's
+# matching half (the concessions read the giver as scope:nd_target and the
+# one it gives to as scope:nd_issuer). A later save_scope_as replaces an
+# earlier one, as every loop that saves each item relies on. Called in pairs,
+# and nothing between a pair may close the crisis or print a line.
+nd_crisis_swap_parties = {
+	scope:nd_issuer = { save_scope_as = nd_crisis_swap }
+	scope:nd_target = { save_scope_as = nd_issuer }
+	scope:nd_crisis_swap = { save_scope_as = nd_target }
+}
+
+# Issuer scope, scope:nd_target the other party; $CODE$ the dispute (7–10).
+# Once a game per code, a hidden check a day later (nuclear_crisis.27) says
+# whether either side still holds the grievance after the trade: TE_SELF_CHECK
+# OK or BROKEN nd_trade_$CODE$, the BROKEN line naming the half that survived
+# (the matching half points at nd_crisis_swap_parties). Both halves held when
+# it is called, so OK can't be a pass with nothing removed.
+nd_crisis_trade_check_schedule = {
+	if = {
+		limit = {
+			exists = scope:nd_target
+			NOT = { has_global_variable = nd_tc_done_$CODE$ }
+		}
+		set_global_variable = nd_tc_done_$CODE$
+		set_variable = { name = nd_tc_other value = scope:nd_target days = 10 }
+		set_variable = { name = nd_tc_code value = $CODE$ days = 10 }
+		trigger_event = { id = nuclear_crisis.27 days = 1 }
+	}
+}
+
+# nuclear_crisis.27's immediate, in the traded crisis's issuer: one code's
+# line. The demanded half is the other side's concession to us; the matching
+# half is ours to it, the one run with the parties swapped.
+nd_crisis_trade_check_log = {
+	if = {
+		limit = { var:nd_tc_code = $CODE$ }
+		if = {
+			limit = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_other } }
+			debug_log = "TE_SELF_CHECK BROKEN nd_trade_$CODE$: the demanded half; [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] still holds a dispute $CODE$ grievance against [THIS.GetCountry.GetNameNoFormatting] a day after their trade"
+		}
+		else_if = {
+			limit = { scope:nd_tc_other = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_self } } }
+			debug_log = "TE_SELF_CHECK BROKEN nd_trade_$CODE$: the matching half (the swapped call); [THIS.GetCountry.GetNameNoFormatting] still holds a dispute $CODE$ grievance against [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] a day after their trade"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK OK nd_trade_$CODE$: neither [THIS.GetCountry.GetNameNoFormatting] nor [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] holds a dispute $CODE$ grievance against the other a day after their trade"
+		}
+	}
+}
+
 # Issuer scope, at the deadline: hold firm — the crisis turns acute and the
 # deadline moves out once more.
 nd_crisis_act_hold = {

@@ -2596,18 +2596,123 @@ nd_can_propose_talks = {
 	}
 	custom_tooltip = {
 		text = nd_tt_talks_pending
-		OR = {
-			AND = {
-				nd_is_crisis_owner = yes
+		nd_crisis_no_proposal_pending = yes
+	}
+}
+
+# Either party: no proposal, to stand down or to trade, awaits an answer. Both
+# set the issuer's nd_crisis_talks (a trade offer is talks with terms).
+nd_crisis_no_proposal_pending = {
+	OR = {
+		AND = {
+			nd_is_crisis_owner = yes
+			var:nd_crisis_talks = 0
+		}
+		AND = {
+			nd_is_crisis_target = yes
+			var:nd_crisis_opponent ?= {
+				has_variable = nd_crisis_talks
 				var:nd_crisis_talks = 0
 			}
-			AND = {
-				nd_is_crisis_target = yes
-				var:nd_crisis_opponent ?= {
-					has_variable = nd_crisis_talks
-					var:nd_crisis_talks = 0
-				}
+		}
+	}
+}
+
+# ---- Trades (rework spec §8.6, phase 4c) ------------------------------------
+# Either side may offer the matching concession of its own for the one the
+# crisis is about: a base for a base, a claim for a claim. Only the same-code
+# mirrors trade (disputes 7–10; ruling R1): 5's stand-down for a stand-down
+# is outcome 3, 4's target is unarmed and its issuer armed, and 1–3 and 6
+# have no matching concession.
+nd_can_offer_trade = {
+	custom_tooltip = {
+		text = nd_tt_in_crisis
+		nd_in_crisis = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_talks_pending
+		nd_crisis_no_proposal_pending = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_trade_kind
+		nd_crisis_dispute_tradeable = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_trade_matching
+		nd_crisis_trade_holds_for_us = yes
+	}
+}
+
+# Either party: the crisis is over a dispute that can trade.
+nd_crisis_dispute_tradeable = {
+	OR = {
+		nd_crisis_dispute_is = { D = 7 }
+		nd_crisis_dispute_is = { D = 8 }
+		nd_crisis_dispute_is = { D = 9 }
+		nd_crisis_dispute_is = { D = 10 }
+	}
+}
+
+# A trade holds while each side holds the same grievance against the other:
+# the dispute $ISSUER$'s record is about still holds against $TARGET$, and
+# $TARGET$ holds the same code against $ISSUER$. Read when a trade is offered
+# and again when it is accepted, since an offer can go stale before its answer.
+nd_crisis_trade_holds = {
+	exists = $ISSUER$
+	exists = $TARGET$
+	OR = {
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 7
 			}
+			$ISSUER$ = { nd_dispute_deployment_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_deployment_by = { TARGET = $ISSUER$ } }
+		}
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 8
+			}
+			$ISSUER$ = { nd_dispute_claims_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_claims_by = { TARGET = $ISSUER$ } }
+		}
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 9
+			}
+			$ISSUER$ = { nd_dispute_covert_ops_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_covert_ops_by = { TARGET = $ISSUER$ } }
+		}
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 10
+			}
+			$ISSUER$ = { nd_dispute_orbital_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_orbital_by = { TARGET = $ISSUER$ } }
+		}
+	}
+}
+
+# Country scope, in a crisis: nd_crisis_trade_holds, the parties read from our
+# own record (the panel and the deadline event, where no party scopes need be
+# saved). A temporary scope saved inside a `?=` holds for the rest of the
+# trigger (zz_te_war_support_injections.txt, wars of independence).
+nd_crisis_trade_holds_for_us = {
+	OR = {
+		AND = {
+			nd_is_crisis_owner = yes
+			save_temporary_scope_as = nd_tr_issuer
+			var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_tr_target }
+			nd_crisis_trade_holds = { ISSUER = scope:nd_tr_issuer TARGET = scope:nd_tr_target }
+		}
+		AND = {
+			nd_is_crisis_target = yes
+			save_temporary_scope_as = nd_tr_target
+			var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_tr_issuer }
+			nd_crisis_trade_holds = { ISSUER = scope:nd_tr_issuer TARGET = scope:nd_tr_target }
 		}
 	}
 }
