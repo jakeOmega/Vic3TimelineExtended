@@ -6,7 +6,6 @@ counts as protected by a ready guarantor, weapons next to a country cut its
 warning time, and some of the guest's weapons accidents happen on the host's
 soil."""
 
-import re
 import unittest
 
 from test_nuclear_deterrence import (ROOT, block, loc_value, read, squash,
