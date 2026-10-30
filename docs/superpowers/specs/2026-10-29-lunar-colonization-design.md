@@ -499,7 +499,9 @@ reader. The report gains the NTP curve.
 As built (PR 3a): `sr_launch_premium_<body>` was already the chemical curve,
 which the global cache refresh reads in no country's scope, so the country
 reader is `sr_window_premium_country_<body>`; the cache holds the NTP curve as
-`sr_window_cost_ntp_<body>`. The tree is computed from the extra Δv at 9 km/s,
+`sr_window_cost_ntp_<body>`. The country reader acts on the technology's
+marker, `country_sr_nuclear_thermal_launches_bool` (`sr_launch_has_ntp`), not on
+the technology itself, so the tooltip line and the effect share one source. The tree is computed from the extra Δv at 9 km/s,
 rounded once, so it can differ from `(1 + p)^(3.7 / 9) − 1` on the stored,
 rounded p by under a hundredth. Transit, drives, fleets, yards and
 refits are untouched: NTP vehicles fly near-Hohmann transfers, so their transit
@@ -673,3 +675,59 @@ Each PR carries its player guide changes and the rebuilt PDF.
    Mars) the right step, and is the rise for the later stages wanted?
 6. **The AI past the cap** (§ 5.1): it stays within the cap until observer runs
    say otherwise.
+
+## 16. As built (2026-10-29)
+
+Built in #1233 (funding past the cap), #1234 (technologies and the base), #1235
+(NTP), #1236 (the six lunar worlds), #1237 (the Moon at Earth) and #1238 (the
+Moon Base retired, the gates, the migration); #1239 changed the wording.
+
+**Owner's answers to § 15:** the names and the flat 10,000 bill stay;
+no interdiction at Earth; Lunar Foundries is renamed Orbital Foundries (text
+only); the stage goals stand as drafted; the AI stays within the cap.
+
+**Later owner calls:**
+
+- **Old saves where every colony was already claimed** keep their rewards. No
+  completion, Interplanetary Trade Networks or Commercial Space Industry is
+  removed, and the Moon opens to them. A country takes it only by choice:
+  Resume Solar System Colonization, or Begin Solar Colonization, sets
+  `sr_colonization_resumed`, and the entry needs it in such a save.
+- **Player-facing text calls a colony site a "site"**, not a "world" (#1239).
+  Next Windows, which lists one line per body, says "destination".
+
+**Rulings made in the build:**
+
+- In-Situ Resource Utilization is military and needs only Reusable Rocketry
+  (§ 5's note).
+- PR2 was split into 2a (the worlds) and 2b (the retirement), and PR3 into 3a
+  (NTP) and 3b (the Moon at Earth).
+- The Races Only landing discount applies to a chosen Target, not to the
+  random draw.
+- The six worlds are appended to `SITES` as indices 35 to 40, because indices
+  are stored in saves.
+- The hand-written world count of 34 became a generated value.
+- Under every setting, stages 3 to 5 need Deep Space Exploration or a colony
+  beyond the Moon. A lunar colony alone doesn't open them.
+- The generic blockade step can never fire at Earth, so a lunar world's
+  blockade is § 8.2's Earth rule, in place of the generic step.
+- The AI closes in on a lunar world only while no enemy fleet is at Earth (a
+  stationed enemy bars the seizure). It picks the target first, then the
+  strongest fleet whose marines are enough.
+- The Target button charges the free-colony price only while the fleet closes
+  in.
+- After the race, Begin Solar Colonization is hidden from a finished program
+  unless a lunar world is free.
+
+**Left for the owner:**
+
+- **Lunar garrisons:** Land and Embark aren't offered at Earth, so a lunar
+  colony's garrison is its militia.
+- **Attackers closing in at Earth** are docked: they repair and refill supply
+  and marines every month.
+- **A migrated holder** in an all-claimed save is marked finished the next
+  month and gets Interplanetary Trade Networks.
+- **The Races Only best cost** ignores the stage 3 to 5 Deep Space gate.
+- **The AI past the cap** waits for observer runs.
+- **German and Spanish:** settle a word for "site" before the next
+  translation pass.
