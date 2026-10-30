@@ -848,6 +848,7 @@ class LunarAtEarthTest(unittest.TestCase):
         cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
         cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
         cls.display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
+        cls.sites = _strip(_raw(gss.ROOT / gss.EFFECTS_OUT))
         cls.lunar = [w for w in gss.SITES if w.location == "earth"]
 
     def test_the_moon_is_at_earth(self):
@@ -930,8 +931,28 @@ class LunarAtEarthTest(unittest.TestCase):
         self.assertNotIn("sr_icpt_earth", rebuild)
         lunar_step = _block(self.combat, "sr_site_lunar_blockade_step")
         self.assertNotIn("sr_icpt_interdicts_at", lunar_step)
-        self.assertNotIn("set_global_variable = { name = sr_site_interdicted_", lunar_step)
+        self.assertNotIn("sr_site_interdicted_", lunar_step)
         self.assertNotIn("sr_icpt", _block(self.display, "sr_disp_loc_status_earth"))
+
+    def test_nothing_reads_a_lunar_world_s_interdiction(self):
+        """#1243: nothing sets sr_site_interdicted_<lunar key>, so any read of one is logged
+        at load as never set. The Defense lists, the colony's status and its release skip it;
+        every other world keeps it."""
+        lunar = re.compile(r"sr_site_interdicted_(%s)\b" % "|".join(w.key for w in self.lunar))
+        for path in sorted(p for d in ("common", "events", "gui") for p in (ROOT / d).rglob("*")
+                           if p.suffix in (".txt", ".gui")):
+            with self.subTest(path=str(path.relative_to(ROOT))):
+                self.assertIsNone(lunar.search(_strip(_raw(path))))
+        for w in self.lunar:
+            with self.subTest(site=w.key):
+                self.assertNotIn("value = 4", _block(self.display, f"sr_disp_def_status_{w.key}"))
+        others = [w for w in gss.SITES if w not in self.lunar]
+        self.assertTrue(others)
+        for w in others:
+            with self.subTest(site=w.key):
+                self.assertIn(f"has_global_variable = sr_site_interdicted_{w.key} }} value = 4",
+                              _block(self.display, f"sr_disp_def_status_{w.key}"))
+                self.assertIn(f"sr_site_interdicted_{w.key}", _block(self.sites, f"sr_site_release_{w.key}"))
 
     def test_a_lunar_world_is_blockaded_while_its_holder_s_earth_is(self):
         after = _block(self.generated, "sr_cb_worlds_after_earth")

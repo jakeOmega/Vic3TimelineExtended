@@ -1069,8 +1069,11 @@ sr_site_blockade_step = {
 # war with it at Earth and none of its own; its batteries and Orbital
 # Battlestation don't lift it). It replaces the generic step at Earth, whose
 # test (an enemy standing off) never holds there, since every fleet at Earth
-# is stationed or closing in. Never interdicted (§ 8.3). An occupied world, or
-# a free one, is never blockaded.
+# is stationed or closing in. Never interdicted (§ 8.3), so nothing reads or
+# clears sr_site_interdicted_<key> for a lunar world: a read of a variable
+# nothing sets is logged at load (#1243), and none was ever set, since build
+# 2a's generic step at Earth never held either. An occupied world, or a free
+# one, is never blockaded.
 sr_site_lunar_blockade_step = {
 	if = {
 		limit = {
@@ -1090,10 +1093,6 @@ sr_site_lunar_blockade_step = {
 		limit = { has_global_variable = sr_site_blockaded_$KEY$ }
 		remove_global_variable = sr_site_blockaded_$KEY$
 		sr_sites_refresh_players = yes
-	}
-	if = {
-		limit = { has_global_variable = sr_site_interdicted_$KEY$ }
-		remove_global_variable = sr_site_interdicted_$KEY$
 	}
 }
 
