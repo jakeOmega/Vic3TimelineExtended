@@ -420,15 +420,14 @@ state to a power grid so that states can share it.
 A grid starts as your stations in one market area. Once a month it moves
 Electricity from states where it is cheap to states where it is dear, until it
 sells at one price in the states that send it and at that price over their
-transmission efficiency (below) in the states that receive it. A sending state
-sells its spare power to the grid as Grid Power, and a receiving state buys
-Grid Power and turns it back into Electricity. A grid with more power than it
+transmission efficiency (below) in the states that receive it. A sending
+state's station buys its spare power and sends it, and a receiving state's
+station delivers it. A grid with more power than it
 uses brings the price down in every state on it, the senders' too, so plants
 that make more than the grid needs earn less. A grid short of power raises
 the price in every state on it together, the same way. A grid takes out what
-it puts in, so power never crosses to a grid it isn't joined to. Grid Power
-can't be traded between markets, and its price is fixed at its base of 30.
-After a change, such as a new power plant or a new station, the grid takes a
+it puts in, so power never crosses to a grid it isn't joined to. After a
+change, such as a new power plant or a new station, the grid takes a
 few months to settle.
 
 Some of the power a short state receives is lost on the way. Grid
@@ -460,10 +459,19 @@ keeps its staff. A station moves its staff's share of what it is asked, so the
 monthly balancing asks a thinly staffed one for more, enough to move its full
 share down to a fifth staffed; while it is still hiring it moves a little more
 than its share. With no workers at all it moves nothing, and starts again as
-soon as it hires one. Stations are
-private infrastructure that is always subsidized: a station buys and sells
-both goods at market prices, and your government pays whatever its wages cost
-beyond what it earns.
+soon as it hires one.
+
+Stations settle in Grid Power, a good whose price is fixed at 30,
+Electricity's base, and which can't be traded between markets. A sending
+station is paid in Grid Power what the Electricity it buys costs at the
+grid's price, and a receiving station pays in it what the Electricity it
+delivers sells for, so a station covers what its goods cost. The exception
+is a grid so short of power that a receiving state's price would pass its
+ceiling, about twice base: the receiving station then pays more for its power
+than it sells for. Stations are private infrastructure that is always
+subsidized: your government pays whatever a station's wages and upkeep cost
+beyond what it earns. That is about their whole cost, give or take a little
+while a grid is settling and prices are off the grid's.
 
 Two things join grids that don't touch:
 
@@ -489,10 +497,9 @@ up to a month after both are laid. The two can be in one market or in two.
 
 A grid that joins two markets sends power across the border from the market
 with more to spare to the one with less. Because Grid Power's price is fixed,
-it is paid for at 30 a unit on both sides: the sending market's stations are
-paid for all the Grid Power they sell, and the receiving market's pay for all
-they buy. Exporting your surplus earns your stations what selling it at home
-would, and importing costs what buying at home would. One station in the
+the power is paid for at the grid's price on both sides: the sending market's
+stations are paid for all the Grid Power they sell, and the receiving market's
+pay for all they buy. One station in the
 receiving market, at the border, takes the import in: it buys the import and
 sells it into its market at the same price, which costs it nothing and keeps
 the market from running short of Grid Power.

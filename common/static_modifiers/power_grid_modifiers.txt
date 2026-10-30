@@ -13,7 +13,9 @@
 # goods_output_electricity_mult +0.2) add to the line's multiplier, and the
 # Electricity modifiers are applied net of them
 # (te_grid_read_other_electricity_effect). Grid Power is the mod's own good,
-# and nothing else touches its lines.
+# and nothing else touches its lines. A Grid Power line's Q is the flow times
+# the grid's sending price (te_grid_power_rate), an Electricity line's the
+# flow.
 # ============================================================================
 
 # Upload: Grid Power out.

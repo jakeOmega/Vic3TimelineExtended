@@ -1,4 +1,4 @@
-"""Power grids: the Grid Transfer Station, Grid Power and the balancing.
+﻿"""Power grids: the Grid Transfer Station, Grid Power and the balancing.
 
 Static checks on the pieces the engine gives no warning for when they are
 wrong: the station's method keeps its 1-unit lines of both goods (the flow
@@ -371,7 +371,7 @@ class BalancingTest(unittest.TestCase):
 
     @classmethod
     def flows_at(cls, states, q):
-        """Each state's flow at the sending price q, in Grid Power, as
+        """Each state's flow at the sending price q, in Electricity sent, as
         te_grid_surplus_value reads it: a sender's LP / x(q) - LC, a
         receiver's shortfall at q / eff over eff."""
         send = cls.ratio_at(q)
@@ -586,6 +586,153 @@ class BalancingTest(unittest.TestCase):
         prices = self.prices_after(states, flows)
         for p in prices[:2]:
             self.assertAlmostEqual(p, prices[2], delta=0.005)
+
+
+class BreakEvenTest(unittest.TestCase):
+    """Grid Power is how a grid settles: each station's Grid Power line is its
+    flow times the grid's sending price (te_grid_power_rate), so a station
+    covers its goods at the prices the balancing aims for, whoever owns it,
+    and the grid's Grid Power still balances (2026-10-30)."""
+
+    def setUp(self):
+        self.effects = _code(_read(EFFECTS))
+        self.values = _code(_read(VALUES))
+
+    @staticmethod
+    def accounts(states, q, flows):
+        """Each station's goods revenue and cost, in units of the base price,
+        at the engine's prices once the flows are moved
+        (BalancingTest.prices_after): a sender buys its flow of Electricity at
+        its state's price and is paid flow x q of Grid Power at 1; a receiver
+        pays flow x q of Grid Power and sells flow x eff of Electricity at its
+        state's price."""
+        prices = BalancingTest().prices_after(states, flows)
+        out = []
+        for (_, _, eff), t, p in zip(states, flows, prices):
+            if t > 0:
+                out.append((t * q, t * p))
+            elif t < 0:
+                out.append((-t * eff * p, -t * q))
+            else:
+                out.append((0.0, 0.0))
+        return out
+
+    def test_every_station_breaks_even_at_the_balancings_prices(self):
+        # The 2013 Byzantium grid in miniature, a short grid above base, and
+        # two efficiencies.
+        for states in ([(87.5e6, 0.16e6, 0.98), (0.10e6, 0.85e6, 0.98), (0.015e6, 1.38e6, 0.98),
+                        (0.05e6, 9.0e6, 0.98), (0.2e6, 6.0e6, 0.98)],
+                       [(10000, 1000, 0.9), (0, 8000, 0.9), (500, 6000, 0.9)],
+                       [(4000, 1000, 0.75), (1500, 1000, 0.75), (200, 2000, 0.75), (0, 500, 0.9)]):
+            q, targets = BalancingTest.solve(states)
+            flows = BalancingTest.balanced(targets)
+            for revenue, cost in self.accounts(states, q, flows):
+                self.assertAlmostEqual(revenue, cost, delta=0.01 * max(1.0, cost), msg=states)
+            # Grid Power out (senders' flow x q) equals Grid Power in (receivers').
+            sold = sum(t * q for t in flows if t > 0)
+            bought = -sum(t * q for t in flows if t < 0)
+            self.assertAlmostEqual(sold, bought, delta=1e-6 * max(1.0, sold))
+
+    def test_a_receiver_at_the_price_ceiling_pays_the_gap(self):
+        # A grid so short that q passes the ceiling times a receiver's
+        # efficiency: its price stops at the ceiling, so it pays more than its
+        # power sells for, by D x (q - ceiling x eff), at most a quarter of
+        # what it pays at 0.75. On one Grid Power a unit the senders lost
+        # more, (q - 1) x U.
+        ceiling = 1 + BalancingTest.RANGE
+        states = [(3000, 4000, 0.75), (0, 8000, 0.75), (100, 10000, 0.75)]
+        q, targets = BalancingTest.solve(states)
+        flows = BalancingTest.balanced(targets)
+        self.assertGreater(q, ceiling * 0.75)
+        accounts = self.accounts(states, q, flows)
+        for (_, _, eff), t, (revenue, cost) in zip(states, flows, accounts):
+            if t < 0:
+                self.assertAlmostEqual(cost - revenue, -t * (q - ceiling * eff), delta=0.01 * cost)
+                self.assertLessEqual(cost - revenue, 0.25 * cost + 1e-9)
+        loss_now = sum(cost - revenue for revenue, cost in accounts if cost > revenue)
+        senders_before = sum(t * (q - 1) for t in flows if t > 0)
+        self.assertGreater(senders_before, loss_now)
+
+    def test_a_fixed_unit_grid_power_leaves_the_receivers_in_the_red(self):
+        # Before: one Grid Power a unit of flow. At a sending price under base
+        # the senders' stations profit and the receivers' lose as much.
+        states = [(87.5e6, 0.16e6, 0.98), (0.10e6, 0.85e6, 0.98), (0.05e6, 9.0e6, 0.98)]
+        q, targets = BalancingTest.solve(states)
+        flows = BalancingTest.balanced(targets)
+        self.assertLess(q, 0.75)
+        prices = BalancingTest().prices_after(states, flows)
+        receivers_loss = sum(-t - (-t * 0.98) * p for t, p in zip(flows, prices) if t < 0)
+        self.assertGreater(receivers_loss, 0.3 * -sum(t for t in flows if t < 0))
+
+    def test_electricitys_base_is_grid_powers_cost(self):
+        # The rate is the sending price over Electricity's base, in Grid Power
+        # at its cost: the two must be the same.
+        import json
+        vanilla = json.load(open(os.path.join(REPO, "vanilla_parsed", "common", "goods.json"),
+                                 encoding="utf-8"))
+        electricity = vanilla["electricity"][1]
+        self.assertEqual(electricity["cost"][1], "30")
+        self.assertRegex(_code(_top_level(_read(GOODS), "grid_power")), r"\bcost = 30\b")
+        self.assertNotRegex(_code(_read(GOODS)), r"(?m)^(REPLACE:|INJECT:)?electricity = \{")
+
+    def test_the_grid_power_lines_carry_the_rate_and_the_electricity_lines_do_not(self):
+        for name in ("te_grid_upload_power_mult_value", "te_grid_download_mult_value"):
+            self.assertIn("multiply = te_grid_power_rate_value", _top_level(self.values, name), name)
+        for name in ("te_grid_upload_mult_value", "te_grid_download_supply_mult_value"):
+            self.assertNotIn("te_grid_power_rate", _top_level(self.values, name), name)
+
+    def test_the_readbacks_divide_by_the_rate_the_lines_were_set_at(self):
+        for name in ("te_grid_uploaded", "te_grid_downloaded"):
+            self.assertIn("divide = te_grid_power_rate_value", _top_level(self.values, name), name)
+        rate = _top_level(self.values, "te_grid_power_rate_value")
+        self.assertRegex(rate, r"^\s*value = 1\b")
+        self.assertIn("value = var:te_grid_power_rate", rate)
+        # Set at the grid's price before the multipliers are taken, kept while
+        # idle (nothing moves) and cleared with the station.
+        flow = _top_level(self.effects, "te_grid_set_station_flow_effect")
+        self.assertIn("set_variable = { name = te_grid_power_rate value = global_var:te_grid_price }", flow)
+        self.assertLess(flow.index("name = te_grid_power_rate"), flow.index("name = te_grid_upload_power_mult"))
+        self.assertIn("remove_variable = te_grid_power_rate", _top_level(self.effects, "te_grid_clear_state_effect"))
+        # The factor reads last month's rate: the rate is set after it.
+        balance = _top_level(self.effects, "te_grid_balance_region_effect")
+        self.assertLess(balance.index("name = te_grid_factor "), balance.index("te_grid_set_station_flow_effect = yes"))
+
+    def test_the_tiles_grid_power_figures_carry_the_rate(self):
+        for name in ("te_grid_market_flow_disp", "te_grid_import_disp"):
+            self.assertIn("multiply = te_grid_power_rate_value", _top_level(self.values, name), name)
+
+    def test_the_rate_self_check_tells_a_scaled_line_from_an_unscaled_one(self):
+        check = _top_level(self.effects, "te_grid_power_rate_selfcheck_effect")
+        self.assertIn("TE_SELF_CHECK OK grid_power_rate", check)
+        self.assertIn("TE_SELF_CHECK BROKEN grid_power_rate", check)
+        self.assertIn("has_variable = te_grid_power_rate", check)
+        self.assertIn("te_grid_station_staffed_throughout = yes", check)
+        self.assertIn("occupancy >= 0.9", check)
+        thr_lo = float(re.search(r"modifier:building_throughput_add >= (-?[\d.]+)", check).group(1))
+        thr_hi = float(re.search(r"modifier:building_throughput_add <= ([\d.]+)", check).group(1))
+        low = float(re.search(r"OR = \{\s*var:te_grid_power_rate <= ([\d.]+)", check).group(1))
+        high_lo, high_hi = (float(x) for x in re.search(
+            r"AND = \{\s*var:te_grid_power_rate >= ([\d.]+)\s*var:te_grid_power_rate <= ([\d.]+)", check).groups())
+        ok_lo = float(re.search(r"te_grid_chk_rate_moved_value >= ([\d.]+)", check).group(1))
+        ok_hi = float(re.search(r"te_grid_chk_rate_moved_value <= ([\d.]+)", check).group(1))
+        # Below the ceiling, where a sending state nears the shortage threshold.
+        self.assertLess(high_hi, 1.95)
+        # A correct line reads staffing x throughput, at a station whose
+        # throughput is near none; one set without the rate reads that over the
+        # rate, one with it twice that times the rate. All three apart at any
+        # rate chosen, whether or not throughput reaches the lines.
+        for read in (0.9 * (1 + thr_lo), 0.9, 1.0, 1.0 * (1 + thr_hi)):
+            self.assertTrue(ok_lo <= read <= ok_hi, read)
+            for rate in (low, 0.1, high_lo, high_hi):
+                self.assertFalse(ok_lo <= read / rate <= ok_hi, (read, rate))
+                self.assertFalse(ok_lo <= read * rate <= ok_hi, (read, rate))
+        balance = _top_level(self.effects, "te_grid_balance_region_effect")
+        self.assertLess(balance.index("te_grid_power_rate_selfcheck_effect = yes"), balance.index("name = te_grid_factor "))
+        self.assertTrue(re.search(r"(?m)^te_grid_chk_rate_moved_value = \{", _read(VALUES)))
+        # The state's own Grid Power price, which settlement assumes is base.
+        self.assertIn("TE_SELF_CHECK OK grid_power_state_price", check)
+        self.assertIn("global_var:te_grid_chk_state_gp_gap <= 0.02", check)
+        self.assertIn("sg:grid_power", _top_level(self.values, "te_grid_chk_state_gp_gap_value"))
 
 
 class EfficiencyTest(unittest.TestCase):
