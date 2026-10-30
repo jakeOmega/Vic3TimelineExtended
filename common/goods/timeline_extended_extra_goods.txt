@@ -162,10 +162,13 @@ magnetic_drive_ships = {
 	traded_quantity = 3
 }
 
-# High-voltage power that Grid Transfer Stations move between the states of one
-# grid (power_grid_effects.txt). A market good, bought and sold at its fixed
-# base price as gold is: the monthly balancing keeps each grid's uploads equal
-# to its downloads, but a grid that spans markets under a Grid Interconnection
+# What Grid Transfer Stations settle in for the power they move between the
+# states of one grid (power_grid_effects.txt): since 2026-10-31 a station's
+# Grid Power line is its flow times the grid's sending price over Electricity's
+# base, so its cost must stay Electricity's 30 (test_power_grid.py). A market
+# good, bought and sold at its fixed base price as gold is: the monthly
+# balancing keeps each grid's uploads equal to its downloads, but a grid that
+# spans markets under a Grid Interconnection
 # Agreement sells more in the sending market than it buys there, and the
 # reverse in the receiving one. At a fixed price the senders are paid for all
 # they sell and the receivers pay for all they buy, so the power is paid for
