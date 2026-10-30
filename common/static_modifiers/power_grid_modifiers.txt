@@ -4,7 +4,8 @@
 # Building scope, on a Grid Transfer Station, re-applied every month by
 # te_grid_apply_station_modifiers_effect. Each scales one of
 # pm_grid_transfer_base's four 1-unit lines: applied with multiplier Q - 1 the
-# line moves Q a week (before staffing and throughput, which
+# line moves Q a week (before throughput, which the order is divided by,
+# te_grid_station_throughput_value, and staffing, which
 # te_grid_station_factor_value measures and corrects for); applied with
 # multiplier -1 it is off.
 #
