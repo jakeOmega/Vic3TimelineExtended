@@ -81,7 +81,7 @@ FLEET_STRENGTH = 99_999   # sr_disp_fl_strength / _full: every fleet's, unbounde
 FLEET_UPKEEP_PCT = 9999   # sr_disp_sc_upkeep_pct: full strength / 10 (sr_fleet_upkeep_points)
 MIX_WEIGHT = 3            # sr_disp_sc_mix_<role>: sr_sc_mix_max
 QUEUE_PLACES = 20         # sr_disp_mq_count: gen_solar_sites.QUEUE_SLOTS
-WINDOW_MONTHS = 999       # sr_window_disp_next: capped at 999 (the cell reads "No world left" there)
+WINDOW_MONTHS = 999       # sr_window_disp_next: capped at 999 (the cell reads "No site left" there)
 
 
 def _read(path):

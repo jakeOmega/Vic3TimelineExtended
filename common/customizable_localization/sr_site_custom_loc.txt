@@ -1,4 +1,4 @@
-﻿# The notices' "and other worlds besides" (space_race_events.90 / .91): the
+﻿# The notices' "and other sites besides" (space_race_events.90 / .91): the
 # first world each way is named (sr_sites_generated_custom_loc.txt), any more
 # are only noted. Each branch has_variable-guarded.
 
