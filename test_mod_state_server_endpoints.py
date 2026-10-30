@@ -2267,5 +2267,98 @@ class VariableUsageEndpointTests(unittest.TestCase):
                 self.assertEqual(self.get(path)[0], status)
 
 
+class LocAccessorsEndpointTests(unittest.TestCase):
+    """GET /loc-accessors through do_GET (#1246), on test_loc_accessor_usage's
+    fixture."""
+
+    def setUp(self):
+        import test_loc_accessor_usage as tlau
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        tlau._write(tmp.name, "game/gui/panel.gui", 'text = "[PoliticalLobby.GetName]"\n')
+        self.loc = dict(tlau.LOC)
+        for target, name, value in (
+            (mss, "_VANILLA_LOC_CACHE", self.loc),
+            (mss, "_loc_accessor_cache", None),
+            (mss, "ms", None),
+            (mss, "base_game_path", tmp.name),
+        ):
+            patch = mock.patch.object(target, name, value)
+            patch.start()
+            self.addCleanup(patch.stop)
+        patch = mock.patch.object(mss.loc_accessor_usage, "load_catalog",
+                                  return_value=tlau.CATALOG)
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def get(self, path):
+        handler = _CapturingHandler(path)
+        handler.do_GET()
+        return handler.last
+
+    def test_type_lookup(self):
+        status, body = self.get("/loc-accessors/PoliticalLobby")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["type"], "political_lobby")
+        self.assertEqual(body["scope_accessor"], "SCOPE.sPoliticalLobby")
+        self.assertTrue(body["gui_scanned"])
+        names = {a["name"]: a for a in body["accessors"]}
+        self.assertEqual(names["GetName"]["contexts"], {"events": 2, "gui": 1, "ui": 1})
+        self.assertEqual(names["GetMembersDesc"]["contexts"], {"notification": 1})
+        self.assertEqual(self.get("/loc-accessors/political_lobby")[1]["type"], "political_lobby")
+
+    def test_context_min_uses_and_examples(self):
+        status, body = self.get("/loc-accessors/PoliticalLobby?context=notification")
+        self.assertEqual(status, 200)
+        self.assertEqual([a["name"] for a in body["accessors"]], ["GetMembersDesc"])
+        body = self.get("/loc-accessors/PoliticalLobby?min_uses=4")[1]
+        self.assertEqual([a["name"] for a in body["accessors"]], ["GetName"])
+        body = self.get("/loc-accessors/PoliticalLobby?examples=0")[1]
+        self.assertTrue(all(a["examples"] == [] for a in body["accessors"]))
+        body = self.get("/loc-accessors/PoliticalLobby?examples=1")[1]
+        self.assertTrue(all(len(a["examples"]) <= 1 for a in body["accessors"]))
+
+    def test_listing(self):
+        status, body = self.get("/loc-accessors")
+        self.assertEqual(status, 200)
+        self.assertIn("PoliticalLobby", [t["name"] for t in body["types"]])
+        self.assertIn("gui", body["contexts"])
+
+    def test_index_is_kept_until_vanilla_loc_is_replaced(self):
+        self.get("/loc-accessors/PoliticalLobby")
+        first = mss._loc_accessor_cache[1]
+        self.get("/loc-accessors/Country")
+        self.assertIs(mss._loc_accessor_cache[1], first)
+        # A mod-only reload bumps the call-index generation and keeps the loc.
+        with mock.patch.object(mss, "_call_index_generation", mss._call_index_generation + 1):
+            self.get("/loc-accessors/Country")
+        self.assertIs(mss._loc_accessor_cache[1], first)
+        # A full load replaces the vanilla loc object.
+        with mock.patch.object(mss, "_VANILLA_LOC_CACHE", dict(self.loc)):
+            self.get("/loc-accessors/Country")
+            self.assertIsNot(mss._loc_accessor_cache[1], first)
+
+    def test_unknown_type_is_404_with_suggestions(self):
+        status, body = self.get("/loc-accessors/PoliticalLobbi")
+        self.assertEqual(status, 404)
+        self.assertIn("PoliticalLobby", body["did_you_mean"])
+
+    def test_errors(self):
+        for path, status in (
+            ("/loc-accessors/PoliticalLobby/extra", 404),
+            ("/loc-accessors/PoliticalLobby?context=nonsense", 400),
+            ("/loc-accessors/PoliticalLobby?examples=x", 400),
+            ("/loc-accessors/PoliticalLobby?min_uses=x", 400),
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(self.get(path)[0], status)
+
+    def test_not_ready_before_the_first_load(self):
+        with mock.patch.object(mss, "_VANILLA_LOC_CACHE", None):
+            status, body = self.get("/loc-accessors/PoliticalLobby")
+        self.assertEqual(status, 503)
+        self.assertIn("Localization", body["error"])
+
+
 if __name__ == "__main__":
     unittest.main()
