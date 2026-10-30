@@ -714,7 +714,8 @@ class BreakEvenTest(unittest.TestCase):
         self.assertNotIn("modifier:building_throughput_add", check)
         self.assertIn("divide = te_grid_station_throughput_value",
                       _top_level(self.values, "te_grid_chk_rate_moved_value"))
-        # What the read could still miss: a strike's group line, or a month's warming.
+        # Slack for a month's warming drift and a read a little off; a strike's
+        # group line the read misses (-0.2) would fail the check, as before.
         thr_lo, thr_hi = -0.05, 0.1
         low = float(re.search(r"OR = \{\s*var:te_grid_power_rate <= ([\d.]+)", check).group(1))
         high_lo, high_hi = (float(x) for x in re.search(
@@ -1240,6 +1241,10 @@ class ThroughputTest(unittest.TestCase):
         self.assertIn("TE_SELF_CHECK BROKEN grid_throughput", check)
         self.assertIn("te_grid_station_staffed_throughout = yes", check)
         self.assertIn("var:te_grid_command >= 100", check)
+        # Full at the last measure too, so a station still hiring isn't judged
+        # on last week's thinner staff (and a save from before waits a month).
+        factor_gate = float(re.search(r"var:te_grid_factor >= ([\d.]+)", check).group(1))
+        self.assertGreaterEqual(factor_gate, 0.98)
         gate_lo = float(re.search(r"var:te_grid_throughput <= (-[\d.]+)", check).group(1))
         gate_hi = float(re.search(r"var:te_grid_throughput >= ([\d.]+)", check).group(1))
         occupancy = float(re.search(r"occupancy >= ([\d.]+)", check).group(1))
