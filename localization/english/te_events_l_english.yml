@@ -5271,7 +5271,7 @@
  space_race_events.76.t:0 "Program Discontinued"
  space_race_events.76.t_lost:0 "The Silent Gantry"
  space_race_events.77.a:0 "Put the rockets to work."
- space_race_events.77.d:0 "Every milestone is behind us, and every colony site from Mars to Sedna now flies someone's flag. The race is over. What it built is still here: the launch crews, the spaceports, the colony outposts and the contractors who served them. The agencies that once competed for firsts are now bidding for freight contracts, and ore from the asteroid belt has never been cheaper to bring down. [ROOT.GetCountry.GetAdjective] industry means to have it."
+ space_race_events.77.d:0 "Every milestone is behind us, and every colony site from the Moon to Sedna now flies someone's flag. The race is over. What it built is still here: the launch crews, the spaceports, the colony outposts and the contractors who served them. The agencies that once competed for firsts are now bidding for freight contracts, and ore from the asteroid belt has never been cheaper to bring down. [ROOT.GetCountry.GetAdjective] industry means to have it."
  space_race_events.77.f:0 "\"For fifty years we flew to be first. Now we fly because there is nickel up there, and platinum, and someone has to haul it down. Nobody will put that on a stamp. It will pay for the next fifty years.\"\n\n— Director of Commercial Launch Operations"
  space_race_events.77.t:0 "The Commercial Space Age"
  space_race_events.8.a:0 "Fusion torch drive: proven and reliable."
