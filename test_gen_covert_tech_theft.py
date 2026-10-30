@@ -144,6 +144,66 @@ class RenderTest(unittest.TestCase):
             self.assertEqual((ROOT / relative).read_text(encoding="utf-8-sig"), text, str(relative))
 
 
+class CanResearchSelfcheckTest(unittest.TestCase):
+    """TEMPORARY, with TE_SELF_CHECK covert_can_research_current/_stranded."""
+
+    HOOK = "common/on_actions/te_covert_tech_selfcheck_on_actions.txt"
+    HELPERS = "common/scripted_effects/te_covert_tech_selfcheck_effects.txt"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.catalog = gen.tech_catalog(gen.load_state(ROOT))
+        cls.tally = gen.render_selfcheck(cls.catalog)
+
+    def test_tally_sorts_every_technology_by_its_prerequisites(self):
+        for tech in self.catalog:
+            start = self.tally.index(f"\t\tlimit = {{ is_researching_technology = {tech.key} }}\n")
+            end = self.tally.find("\n\t}\n", start)
+            branch = [line.strip() for line in self.tally[start:end].splitlines()]
+            held = f"covert_tech_selfcheck_held = {{ TECH = {tech.key} }}"
+            if not tech.prereqs:
+                self.assertEqual(branch[1:], [held], tech.key)
+                continue
+            self.assertEqual(
+                branch[1:],
+                [
+                    "if = {",
+                    "limit = {",
+                    *(f"has_technology_researched = {prereq}" for prereq in tech.prereqs),
+                    "}",
+                    held,
+                    "}",
+                    "else = {",
+                    f"covert_tech_selfcheck_stranded = {{ TECH = {tech.key} }}",
+                    "}",
+                ],
+                tech.key,
+            )
+
+    def test_helpers_ask_can_research(self):
+        for name, counter in (("held", "te_cov_cr_held"), ("stranded", "te_cov_cr_stranded")):
+            block = " ".join(_block(self.HELPERS, f"covert_tech_selfcheck_{name}").split())
+            self.assertIn(f"change_global_variable = {{ name = {counter} add = 1 }}", block)
+            self.assertIn(
+                f"limit = {{ can_research = $TECH$ }} change_global_variable = {{ name = {counter}_can add = 1 }}", block
+            )
+
+    def test_hook_runs_once_with_a_sample(self):
+        block = " ".join(_block(self.HOOK, "te_covert_tech_can_research_selfcheck").split())
+        self.assertIn("limit = { NOT = { has_global_variable = te_cov_cr_checked } }", block)
+        self.assertIn("every_country = { covert_tech_selfcheck_research_tally = yes }", block)
+        # Marked done only once some country holds its prerequisites, so OK
+        # can't pass on an empty sample; the stranded line needs its own.
+        self.assertIn(
+            "limit = { global_var:te_cov_cr_held > 0 } set_global_variable = { name = te_cov_cr_checked value = yes }",
+            block,
+        )
+        self.assertLess(block.index("global_var:te_cov_cr_stranded > 0"), block.index("covert_can_research_stranded"))
+        for verdict in ("OK", "BROKEN"):
+            for name in ("covert_can_research_current", "covert_can_research_stranded"):
+                self.assertEqual(block.count(f"TE_SELF_CHECK {verdict} {name} "), 1, (verdict, name))
+
+
 def _block(path: str, name: str) -> str:
     """The text of top-level block `name` in a Paradox file, comments stripped."""
     import re

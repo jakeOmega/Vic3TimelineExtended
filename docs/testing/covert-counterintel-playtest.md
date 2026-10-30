@@ -22,6 +22,10 @@ the things only the game can show. Strike a fixed item through with the commit t
 | `TE_SELF_CHECK BROKEN covert_catch_decision` | `.3` never ran for a pending catch; the operation was released for the next roll. | As above. |
 | `TE_SELF_CHECK OK covert_watch_expose` | An exposure of a watched operation reached the attacker's `covert_warfare.1`, defender to attacker. | — |
 | `TE_SELF_CHECK BROKEN covert_watch_expose` | An ordered exposure was sent but `.1` never ran. | `covert_watch_expose_record` flags the operation (`iw_expose_requested`), and the attacker's own monthly pass finds it and calls `covert_exposure_fire`. |
+| `TE_SELF_CHECK OK covert_can_research_current` | `can_research` held for every country's current production or military research whose prerequisites it holds (`held=` countries, `can_research=` of them). Logged on the first monthly pulse with a sample. | — |
+| `TE_SELF_CHECK BROKEN covert_can_research_current` | `can_research` failed for some current research with its prerequisites held. | Keep the prerequisite lines in covert tech theft (as built); delete the check. |
+| `TE_SELF_CHECK OK covert_can_research_stranded` | `can_research` failed for every current research missing a prerequisite. Logged only in a save with such a country (the Byzantium 2013 autosaves: LIB, UNA); a fresh game logs nothing. With `current` also OK: generate `can_research` in place of the prerequisite lines and delete the check (`te_covert_tech_selfcheck_on_actions.txt` says how). | — |
+| `TE_SELF_CHECK BROKEN covert_can_research_stranded` | `can_research` held for current research missing a prerequisite, so it doesn't check prerequisites. | Keep the prerequisite lines; delete the check. |
 | `TE_SELF_CHECK BROKEN covert_exposure_lock` | A `.1`'s copies (`iw_burned_type_code` and siblings) outlived five monthly passes, longer than the event can stay open, so its `after` never ran; the watchdog has released the lock. Expected only after a revolution won while that `.1` was open. | Without a revolution behind it, `.1` closed without running `after`: remove the copies and the lock in each option as well. |
 
 ## Watching a caught operation
@@ -104,8 +108,9 @@ self-check: nothing here rests on an engine fact script can test. Run any harnes
 
 ## Technology theft and stranded research (#1244, 2026-10-30)
 
-Espionage's current-research theft now also checks the technology's prerequisites. No self-check: the fix is a guard,
-and the log line it removes is the test.
+Espionage's current-research theft now also checks the technology's prerequisites, by name. The log line the fix
+removes is its test. The `covert_can_research_*` self-checks above say whether one `can_research` line could replace
+those prerequisite lines. Load the Byzantium save before #1252's repair runs, or its two stranded countries are gone.
 
 | Check | Expect | If it fails |
 |---|---|---|

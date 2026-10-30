@@ -313,6 +313,44 @@ def render_stealable(category: str, techs: list[Tech]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_selfcheck(techs: list[Tech]) -> str:
+    """TEMPORARY: the tally behind TE_SELF_CHECK covert_can_research_current
+    and _stranded (common/on_actions/te_covert_tech_selfcheck_on_actions.txt).
+
+    Sorts the country's current research into prerequisites held or missing
+    and asks can_research of it there. If can_research holds in the first case
+    and fails in the second, the prerequisite lines above can become
+    can_research; remove this with the check."""
+    lines = [
+        "# TEMPORARY self-check tally (see render_selfcheck in the generator).",
+        "# Scope: country.",
+        "covert_tech_selfcheck_research_tally = {",
+    ]
+    for position, tech in enumerate(techs):
+        held = f"covert_tech_selfcheck_held = {{ TECH = {tech.key} }}"
+        lines += [
+            f"\t{'if' if position == 0 else 'else_if'} = {{",
+            f"\t\tlimit = {{ is_researching_technology = {tech.key} }}",
+        ]
+        if tech.prereqs:
+            lines += [
+                "\t\tif = {",
+                "\t\t\tlimit = {",
+                *(f"\t\t\t\thas_technology_researched = {prereq}" for prereq in tech.prereqs),
+                "\t\t\t}",
+                f"\t\t\t{held}",
+                "\t\t}",
+                "\t\telse = {",
+                f"\t\t\tcovert_tech_selfcheck_stranded = {{ TECH = {tech.key} }}",
+                "\t\t}",
+            ]
+        else:
+            lines.append(f"\t\t{held}")
+        lines.append("\t}")
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
 def render_custom_loc(techs: list[Tech]) -> str:
     lines = ["covert_stolen_tech_name = {", "\ttype = container", "\trandom_valid = no"]
     for tech in techs:
@@ -334,6 +372,7 @@ def plan_outputs(mod_state, root: Path = ROOT) -> dict[Path, str]:
     effects = [HEADER + EFFECTS_PREAMBLE]
     effects += [render_grant(era, amounts(era_costs[era], constants)) for era in sorted({t.era for t in catalog})]
     effects += [render_steal(category, by_category[category]) for category in CATEGORIES]
+    effects.append(render_selfcheck(catalog))
     triggers = [HEADER + TRIGGERS_PREAMBLE]
     triggers += [render_stealable(category, by_category[category]) for category in CATEGORIES]
     return {

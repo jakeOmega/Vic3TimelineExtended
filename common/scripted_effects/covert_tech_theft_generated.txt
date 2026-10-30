@@ -4795,3 +4795,2858 @@ covert_tech_steal_military = {
 		}
 	}
 }
+
+# TEMPORARY self-check tally (see render_selfcheck in the generator).
+# Scope: country.
+covert_tech_selfcheck_research_tally = {
+	if = {
+		limit = { is_researching_technology = ICBMs }
+		if = {
+			limit = {
+				has_technology_researched = guided_missiles
+				has_technology_researched = nuclear_weapons
+			}
+			covert_tech_selfcheck_held = { TECH = ICBMs }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = ICBMs }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = abyssal_plain_mining }
+		if = {
+			limit = {
+				has_technology_researched = additive_manufacturing
+				has_technology_researched = advanced_structural_engineering
+			}
+			covert_tech_selfcheck_held = { TECH = abyssal_plain_mining }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = abyssal_plain_mining }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = additive_manufacturing }
+		if = {
+			limit = {
+				has_technology_researched = robotics
+				has_technology_researched = supply_chain_management
+			}
+			covert_tech_selfcheck_held = { TECH = additive_manufacturing }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = additive_manufacturing }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = admiralty }
+		if = {
+			limit = {
+				has_technology_researched = navigation
+			}
+			covert_tech_selfcheck_held = { TECH = admiralty }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = admiralty }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = advanced_assembly_lines }
+		if = {
+			limit = {
+				has_technology_researched = transistors
+			}
+			covert_tech_selfcheck_held = { TECH = advanced_assembly_lines }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = advanced_assembly_lines }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = advanced_body_armor }
+		if = {
+			limit = {
+				has_technology_researched = advanced_materials_armor
+			}
+			covert_tech_selfcheck_held = { TECH = advanced_body_armor }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = advanced_body_armor }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = advanced_materials_armor }
+		if = {
+			limit = {
+				has_technology_researched = precision_guided_munitions
+			}
+			covert_tech_selfcheck_held = { TECH = advanced_materials_armor }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = advanced_materials_armor }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = advanced_military_aircraft }
+		if = {
+			limit = {
+				has_technology_researched = bombing_aircraft
+				has_technology_researched = radar
+			}
+			covert_tech_selfcheck_held = { TECH = advanced_military_aircraft }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = advanced_military_aircraft }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = advanced_nanofabrication }
+		if = {
+			limit = {
+				has_technology_researched = synthetic_biology
+				has_technology_researched = additive_manufacturing
+			}
+			covert_tech_selfcheck_held = { TECH = advanced_nanofabrication }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = advanced_nanofabrication }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = advanced_structural_engineering }
+		if = {
+			limit = {
+				has_technology_researched = robotics
+			}
+			covert_tech_selfcheck_held = { TECH = advanced_structural_engineering }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = advanced_structural_engineering }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = advanced_submarine_technology }
+		if = {
+			limit = {
+				has_technology_researched = sonar
+				has_technology_researched = nuclear_energy
+			}
+			covert_tech_selfcheck_held = { TECH = advanced_submarine_technology }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = advanced_submarine_technology }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = aluminum_mass_production }
+		if = {
+			limit = {
+				has_technology_researched = arc_welding
+			}
+			covert_tech_selfcheck_held = { TECH = aluminum_mass_production }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = aluminum_mass_production }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = aniline }
+		if = {
+			limit = {
+				has_technology_researched = rubber_mastication
+			}
+			covert_tech_selfcheck_held = { TECH = aniline }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = aniline }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = anti_sub_warfare }
+		if = {
+			limit = {
+				has_technology_researched = advanced_submarine_technology
+			}
+			covert_tech_selfcheck_held = { TECH = anti_sub_warfare }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = anti_sub_warfare }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = antimatter_production }
+		if = {
+			limit = {
+				has_technology_researched = fusion_power
+				has_technology_researched = quantum_communications
+			}
+			covert_tech_selfcheck_held = { TECH = antimatter_production }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = antimatter_production }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = arc_welding }
+		if = {
+			limit = {
+				has_technology_researched = electric_arc_process
+				has_technology_researched = pneumatic_tools
+			}
+			covert_tech_selfcheck_held = { TECH = arc_welding }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = arc_welding }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = army_reserves }
+		if = {
+			limit = {
+				has_technology_researched = line_infantry
+			}
+			covert_tech_selfcheck_held = { TECH = army_reserves }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = army_reserves }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = art_silk }
+		if = {
+			limit = {
+				has_technology_researched = aniline
+			}
+			covert_tech_selfcheck_held = { TECH = art_silk }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = art_silk }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = artificial_intelligence }
+		if = {
+			limit = {
+				has_technology_researched = generative_ai
+				has_technology_researched = programmable_matter
+				has_technology_researched = autonomous_vehicles
+			}
+			covert_tech_selfcheck_held = { TECH = artificial_intelligence }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = artificial_intelligence }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = artillery }
+		if = {
+			limit = {
+				has_technology_researched = gunsmithing
+			}
+			covert_tech_selfcheck_held = { TECH = artillery }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = artillery }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = asteroid_mining }
+		if = {
+			limit = {
+				has_technology_researched = in_situ_resource_utilization
+				has_technology_researched = directed_energy_weapons
+			}
+			covert_tech_selfcheck_held = { TECH = asteroid_mining }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = asteroid_mining }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = atmospheric_engine }
+		if = {
+			limit = {
+				has_technology_researched = shaft_mining
+			}
+			covert_tech_selfcheck_held = { TECH = atmospheric_engine }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = atmospheric_engine }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = augmented_reality_warfare }
+		if = {
+			limit = {
+				has_technology_researched = network_centric_warfare
+			}
+			covert_tech_selfcheck_held = { TECH = augmented_reality_warfare }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = augmented_reality_warfare }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = automated_surveillance }
+		if = {
+			limit = {
+				has_technology_researched = military_grade_cybersecurity
+			}
+			covert_tech_selfcheck_held = { TECH = automated_surveillance }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = automated_surveillance }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = automatic_bottle_blowers }
+		if = {
+			limit = {
+				has_technology_researched = vulcanization
+			}
+			covert_tech_selfcheck_held = { TECH = automatic_bottle_blowers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = automatic_bottle_blowers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = automatic_machine_guns }
+		if = {
+			limit = {
+				has_technology_researched = handcranked_machine_gun
+				has_technology_researched = bolt_action_rifles
+			}
+			covert_tech_selfcheck_held = { TECH = automatic_machine_guns }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = automatic_machine_guns }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = autonomous_vehicles }
+		if = {
+			limit = {
+				has_technology_researched = machine_learning
+				has_technology_researched = electric_vehicles
+			}
+			covert_tech_selfcheck_held = { TECH = autonomous_vehicles }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = autonomous_vehicles }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = baking_powder }
+		if = {
+			limit = {
+				has_technology_researched = fractional_distillation
+			}
+			covert_tech_selfcheck_held = { TECH = baking_powder }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = baking_powder }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = barcodes_and_scanners }
+		if = {
+			limit = {
+				has_technology_researched = laser_technology
+				has_technology_researched = photocopiers
+			}
+			covert_tech_selfcheck_held = { TECH = barcodes_and_scanners }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = barcodes_and_scanners }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = battlefleet_tactics }
+		if = {
+			limit = {
+				has_technology_researched = battleship_tech
+				has_technology_researched = sea_lane_strategies
+			}
+			covert_tech_selfcheck_held = { TECH = battlefleet_tactics }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = battlefleet_tactics }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = battleship_tech }
+		if = {
+			limit = {
+				has_technology_researched = dreadnought_tech
+			}
+			covert_tech_selfcheck_held = { TECH = battleship_tech }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = battleship_tech }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = bergius_process }
+		if = {
+			limit = {
+				has_technology_researched = aniline
+				has_technology_researched = combustion_engine
+			}
+			covert_tech_selfcheck_held = { TECH = bergius_process }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = bergius_process }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = bessemer_process }
+		if = {
+			limit = {
+				has_technology_researched = steelworking
+			}
+			covert_tech_selfcheck_held = { TECH = bessemer_process }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = bessemer_process }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = bioenhanced_soldiers }
+		if = {
+			limit = {
+				has_technology_researched = swarm_technology
+			}
+			covert_tech_selfcheck_held = { TECH = bioenhanced_soldiers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = bioenhanced_soldiers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = biotechnology }
+		if = {
+			limit = {
+				has_technology_researched = gene_splicing
+				has_technology_researched = computer_networks
+			}
+			covert_tech_selfcheck_held = { TECH = biotechnology }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = biotechnology }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = bolt_action_rifles }
+		if = {
+			limit = {
+				has_technology_researched = repeaters
+			}
+			covert_tech_selfcheck_held = { TECH = bolt_action_rifles }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = bolt_action_rifles }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = bombing_aircraft }
+		if = {
+			limit = {
+				has_technology_researched = military_aviation
+			}
+			covert_tech_selfcheck_held = { TECH = bombing_aircraft }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = bombing_aircraft }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = breech_loading_artillery }
+		if = {
+			limit = {
+				has_technology_researched = rifling
+				has_technology_researched = shell_gun
+			}
+			covert_tech_selfcheck_held = { TECH = breech_loading_artillery }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = breech_loading_artillery }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = canneries }
+		if = {
+			limit = {
+				has_technology_researched = lathe
+			}
+			covert_tech_selfcheck_held = { TECH = canneries }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = canneries }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = carbon_capture_and_storage }
+		if = {
+			limit = {
+				has_technology_researched = clean_energy_technologies
+			}
+			covert_tech_selfcheck_held = { TECH = carbon_capture_and_storage }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = carbon_capture_and_storage }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = carrier_tech }
+		if = {
+			limit = {
+				has_technology_researched = dreadnought_tech
+			}
+			covert_tech_selfcheck_held = { TECH = carrier_tech }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = carrier_tech }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = cellular_networks }
+		if = {
+			limit = {
+				has_technology_researched = barcodes_and_scanners
+			}
+			covert_tech_selfcheck_held = { TECH = cellular_networks }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = cellular_networks }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = chemical_bleaching }
+		if = {
+			limit = {
+				has_technology_researched = crystal_glass
+			}
+			covert_tech_selfcheck_held = { TECH = chemical_bleaching }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = chemical_bleaching }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = chemical_warfare }
+		if = {
+			limit = {
+				has_technology_researched = automatic_machine_guns
+			}
+			covert_tech_selfcheck_held = { TECH = chemical_warfare }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = chemical_warfare }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = cislunar_infrastructure }
+		if = {
+			limit = {
+				has_technology_researched = reusable_rocketry
+			}
+			covert_tech_selfcheck_held = { TECH = cislunar_infrastructure }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = cislunar_infrastructure }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = clean_energy_technologies }
+		if = {
+			limit = {
+				has_technology_researched = personal_computers
+			}
+			covert_tech_selfcheck_held = { TECH = clean_energy_technologies }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = clean_energy_technologies }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = cloud_computing }
+		if = {
+			limit = {
+				has_technology_researched = wireless_internet
+			}
+			covert_tech_selfcheck_held = { TECH = cloud_computing }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = cloud_computing }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = combined_arms }
+		if = {
+			limit = {
+				has_technology_researched = mobile_armor
+			}
+			covert_tech_selfcheck_held = { TECH = combined_arms }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = combined_arms }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = combustion_engine }
+		if = {
+			limit = {
+				has_technology_researched = rotary_valve_engine
+			}
+			covert_tech_selfcheck_held = { TECH = combustion_engine }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = combustion_engine }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = compact_fusion_reactors }
+		if = {
+			limit = {
+				has_technology_researched = fusion_power
+				has_technology_researched = directed_energy_weapons
+			}
+			covert_tech_selfcheck_held = { TECH = compact_fusion_reactors }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = compact_fusion_reactors }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = compression_ignition }
+		if = {
+			limit = {
+				has_technology_researched = combustion_engine
+			}
+			covert_tech_selfcheck_held = { TECH = compression_ignition }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = compression_ignition }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = computer_aided_design }
+		if = {
+			limit = {
+				has_technology_researched = mainframe_computers
+				has_technology_researched = computer_networks
+			}
+			covert_tech_selfcheck_held = { TECH = computer_aided_design }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = computer_aided_design }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = computer_networks }
+		if = {
+			limit = {
+				has_technology_researched = mainframe_computers
+				has_technology_researched = cellular_networks
+			}
+			covert_tech_selfcheck_held = { TECH = computer_networks }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = computer_networks }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = concrete_dockyards }
+		if = {
+			limit = {
+				has_technology_researched = floating_harbor
+			}
+			covert_tech_selfcheck_held = { TECH = concrete_dockyards }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = concrete_dockyards }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = concrete_fortifications }
+		if = {
+			limit = {
+				has_technology_researched = defense_in_depth
+			}
+			covert_tech_selfcheck_held = { TECH = concrete_fortifications }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = concrete_fortifications }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = conveyors }
+		if = {
+			limit = {
+				has_technology_researched = vulcanization
+				has_technology_researched = shift_work
+				has_technology_researched = electrical_generation
+			}
+			covert_tech_selfcheck_held = { TECH = conveyors }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = conveyors }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = cotton_gin }
+		if = {
+			limit = {
+				has_technology_researched = manufacturies
+			}
+			covert_tech_selfcheck_held = { TECH = cotton_gin }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = cotton_gin }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = cryptography }
+		if = {
+			limit = {
+				has_technology_researched = radar
+			}
+			covert_tech_selfcheck_held = { TECH = cryptography }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = cryptography }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = crystal_glass }
+		if = {
+			limit = {
+				has_technology_researched = lathe
+			}
+			covert_tech_selfcheck_held = { TECH = crystal_glass }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = crystal_glass }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = cyber_warfare }
+		if = {
+			limit = {
+				has_technology_researched = network_centric_warfare
+				has_technology_researched = automated_surveillance
+			}
+			covert_tech_selfcheck_held = { TECH = cyber_warfare }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = cyber_warfare }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = defense_in_depth }
+		if = {
+			limit = {
+				has_technology_researched = trench_works
+				has_technology_researched = handcranked_machine_gun
+			}
+			covert_tech_selfcheck_held = { TECH = defense_in_depth }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = defense_in_depth }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = destroyer }
+		if = {
+			limit = {
+				has_technology_researched = monitor_tech
+			}
+			covert_tech_selfcheck_held = { TECH = destroyer }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = destroyer }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = digital_telecommunications }
+		if = {
+			limit = {
+				has_technology_researched = fiber_optics
+				has_technology_researched = cellular_networks
+			}
+			covert_tech_selfcheck_held = { TECH = digital_telecommunications }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = digital_telecommunications }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = directed_energy_defenses }
+		if = {
+			limit = {
+				has_technology_researched = stealth_technology
+				has_technology_researched = missile_defense_systems
+			}
+			covert_tech_selfcheck_held = { TECH = directed_energy_defenses }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = directed_energy_defenses }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = directed_energy_weapons }
+		if = {
+			limit = {
+				has_technology_researched = directed_energy_defenses
+			}
+			covert_tech_selfcheck_held = { TECH = directed_energy_weapons }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = directed_energy_weapons }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = distillation }
+		if = {
+			limit = {
+				has_technology_researched = manufacturies
+			}
+			covert_tech_selfcheck_held = { TECH = distillation }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = distillation }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = dough_rollers }
+		if = {
+			limit = {
+				has_technology_researched = conveyors
+			}
+			covert_tech_selfcheck_held = { TECH = dough_rollers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = dough_rollers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = dreadnought_tech }
+		if = {
+			limit = {
+				has_technology_researched = pre_dreadnought_tech
+				has_technology_researched = sea_lane_strategies
+				has_technology_researched = concrete_dockyards
+				has_technology_researched = military_aviation
+			}
+			covert_tech_selfcheck_held = { TECH = dreadnought_tech }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = dreadnought_tech }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = drydocks }
+		if = {
+			limit = {
+				has_technology_researched = navigation
+			}
+			covert_tech_selfcheck_held = { TECH = drydocks }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = drydocks }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = dynamite }
+		if = {
+			limit = {
+				has_technology_researched = nitroglycerin
+			}
+			covert_tech_selfcheck_held = { TECH = dynamite }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = dynamite }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = e-commerce }
+		if = {
+			limit = {
+				has_technology_researched = world_wide_web
+				has_technology_researched = supply_chain_management
+			}
+			covert_tech_selfcheck_held = { TECH = e-commerce }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = e-commerce }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = early_nanotechnology }
+		if = {
+			limit = {
+				has_technology_researched = computer_networks
+				has_technology_researched = computer_aided_design
+			}
+			covert_tech_selfcheck_held = { TECH = early_nanotechnology }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = early_nanotechnology }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = electric_arc_process }
+		if = {
+			limit = {
+				has_technology_researched = open_hearth_process
+			}
+			covert_tech_selfcheck_held = { TECH = electric_arc_process }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = electric_arc_process }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = electric_railway }
+		if = {
+			limit = {
+				has_technology_researched = electrical_capacitors
+				has_technology_researched = steel_railway_cars
+			}
+			covert_tech_selfcheck_held = { TECH = electric_railway }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = electric_railway }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = electric_telegraph }
+		if = {
+			limit = {
+				has_technology_researched = logistics
+			}
+			covert_tech_selfcheck_held = { TECH = electric_telegraph }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = electric_telegraph }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = electric_vehicles }
+		if = {
+			limit = {
+				has_technology_researched = clean_energy_technologies
+			}
+			covert_tech_selfcheck_held = { TECH = electric_vehicles }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = electric_vehicles }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = electrical_capacitors }
+		if = {
+			limit = {
+				has_technology_researched = electrical_generation
+			}
+			covert_tech_selfcheck_held = { TECH = electrical_capacitors }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = electrical_capacitors }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = electrical_generation }
+		if = {
+			limit = {
+				has_technology_researched = rotary_valve_engine
+			}
+			covert_tech_selfcheck_held = { TECH = electrical_generation }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = electrical_generation }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = electronic_warfare }
+		if = {
+			limit = {
+				has_technology_researched = network_centric_warfare
+			}
+			covert_tech_selfcheck_held = { TECH = electronic_warfare }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = electronic_warfare }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = enclosure }
+		covert_tech_selfcheck_held = { TECH = enclosure }
+	}
+	else_if = {
+		limit = { is_researching_technology = enlistment_offices }
+		if = {
+			limit = {
+				has_technology_researched = logistics
+			}
+			covert_tech_selfcheck_held = { TECH = enlistment_offices }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = enlistment_offices }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = fiber_optics }
+		if = {
+			limit = {
+				has_technology_researched = computer_aided_design
+				has_technology_researched = plastic_mass_production
+			}
+			covert_tech_selfcheck_held = { TECH = fiber_optics }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = fiber_optics }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = field_works }
+		if = {
+			limit = {
+				has_technology_researched = napoleonic_warfare
+			}
+			covert_tech_selfcheck_held = { TECH = field_works }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = field_works }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = flamethrowers }
+		if = {
+			limit = {
+				has_technology_researched = trench_works
+				has_technology_researched = automatic_machine_guns
+			}
+			covert_tech_selfcheck_held = { TECH = flamethrowers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = flamethrowers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = flash_freezing }
+		if = {
+			limit = {
+				has_technology_researched = pasteurization
+			}
+			covert_tech_selfcheck_held = { TECH = flash_freezing }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = flash_freezing }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = floating_harbor }
+		if = {
+			limit = {
+				has_technology_researched = gantry_cranes
+			}
+			covert_tech_selfcheck_held = { TECH = floating_harbor }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = floating_harbor }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = fluorescent_lamps }
+		if = {
+			limit = {
+				has_technology_researched = radio
+			}
+			covert_tech_selfcheck_held = { TECH = fluorescent_lamps }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = fluorescent_lamps }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = fractional_distillation }
+		if = {
+			limit = {
+				has_technology_researched = distillation
+			}
+			covert_tech_selfcheck_held = { TECH = fractional_distillation }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = fractional_distillation }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = fusion_batteries }
+		if = {
+			limit = {
+				has_technology_researched = compact_fusion_reactors
+			}
+			covert_tech_selfcheck_held = { TECH = fusion_batteries }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = fusion_batteries }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = fusion_power }
+		if = {
+			limit = {
+				has_technology_researched = directed_energy_defenses
+			}
+			covert_tech_selfcheck_held = { TECH = fusion_power }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = fusion_power }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = gantry_cranes }
+		if = {
+			limit = {
+				has_technology_researched = hydraulic_cranes
+				has_technology_researched = screw_frigate
+			}
+			covert_tech_selfcheck_held = { TECH = gantry_cranes }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = gantry_cranes }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = gene_splicing }
+		if = {
+			limit = {
+				has_technology_researched = green_revolution
+			}
+			covert_tech_selfcheck_held = { TECH = gene_splicing }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = gene_splicing }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = general_staff }
+		if = {
+			limit = {
+				has_technology_researched = army_reserves
+			}
+			covert_tech_selfcheck_held = { TECH = general_staff }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = general_staff }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = generative_ai }
+		if = {
+			limit = {
+				has_technology_researched = machine_learning
+			}
+			covert_tech_selfcheck_held = { TECH = generative_ai }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = generative_ai }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = genetic_engineering }
+		if = {
+			limit = {
+				has_technology_researched = biotechnology
+			}
+			covert_tech_selfcheck_held = { TECH = genetic_engineering }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = genetic_engineering }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = green_revolution }
+		if = {
+			limit = {
+				has_technology_researched = modern_chemical_processes
+			}
+			covert_tech_selfcheck_held = { TECH = green_revolution }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = green_revolution }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = guided_missiles }
+		if = {
+			limit = {
+				has_technology_researched = inertial_navigation_systems
+			}
+			covert_tech_selfcheck_held = { TECH = guided_missiles }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = guided_missiles }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = gunsmithing }
+		if = {
+			limit = {
+				has_technology_researched = standing_army
+			}
+			covert_tech_selfcheck_held = { TECH = gunsmithing }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = gunsmithing }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = handcranked_machine_gun }
+		if = {
+			limit = {
+				has_technology_researched = repeaters
+				has_technology_researched = breech_loading_artillery
+			}
+			covert_tech_selfcheck_held = { TECH = handcranked_machine_gun }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = handcranked_machine_gun }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = hydraulic_cranes }
+		if = {
+			limit = {
+				has_technology_researched = drydocks
+			}
+			covert_tech_selfcheck_held = { TECH = hydraulic_cranes }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = hydraulic_cranes }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = hydraulic_fracturing }
+		if = {
+			limit = {
+				has_technology_researched = computer_aided_design
+				has_technology_researched = personal_computers
+			}
+			covert_tech_selfcheck_held = { TECH = hydraulic_fracturing }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = hydraulic_fracturing }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = hypersonic_weapons }
+		if = {
+			limit = {
+				has_technology_researched = precision_guided_munitions
+				has_technology_researched = supersonic_aircraft
+			}
+			covert_tech_selfcheck_held = { TECH = hypersonic_weapons }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = hypersonic_weapons }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = improved_fertilizer }
+		if = {
+			limit = {
+				has_technology_researched = intensive_agriculture
+			}
+			covert_tech_selfcheck_held = { TECH = improved_fertilizer }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = improved_fertilizer }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = in_situ_resource_utilization }
+		if = {
+			limit = {
+				has_technology_researched = reusable_rocketry
+			}
+			covert_tech_selfcheck_held = { TECH = in_situ_resource_utilization }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = in_situ_resource_utilization }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = inertial_navigation_systems }
+		if = {
+			limit = {
+				has_technology_researched = rocketry
+				has_technology_researched = radar
+			}
+			covert_tech_selfcheck_held = { TECH = inertial_navigation_systems }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = inertial_navigation_systems }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = infrared_night_vision }
+		if = {
+			limit = {
+				has_technology_researched = nuclear_energy
+			}
+			covert_tech_selfcheck_held = { TECH = infrared_night_vision }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = infrared_night_vision }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = integrated_circuits }
+		if = {
+			limit = {
+				has_technology_researched = transistors
+			}
+			covert_tech_selfcheck_held = { TECH = integrated_circuits }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = integrated_circuits }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = intensive_agriculture }
+		if = {
+			limit = {
+				has_technology_researched = enclosure
+			}
+			covert_tech_selfcheck_held = { TECH = intensive_agriculture }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = intensive_agriculture }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = internet_of_things }
+		if = {
+			limit = {
+				has_technology_researched = wireless_internet
+				has_technology_researched = cloud_computing
+			}
+			covert_tech_selfcheck_held = { TECH = internet_of_things }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = internet_of_things }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = ironclad_tech }
+		if = {
+			limit = {
+				has_technology_researched = screw_frigate
+			}
+			covert_tech_selfcheck_held = { TECH = ironclad_tech }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = ironclad_tech }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = isoprene }
+		if = {
+			limit = {
+				has_technology_researched = plastics
+			}
+			covert_tech_selfcheck_held = { TECH = isoprene }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = isoprene }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = jadc2 }
+		if = {
+			limit = {
+				has_technology_researched = network_centric_warfare
+				has_technology_researched = electronic_warfare
+			}
+			covert_tech_selfcheck_held = { TECH = jadc2 }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = jadc2 }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = jet_engine_technology }
+		if = {
+			limit = {
+				has_technology_researched = advanced_military_aircraft
+			}
+			covert_tech_selfcheck_held = { TECH = jet_engine_technology }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = jet_engine_technology }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = jeune_ecole }
+		if = {
+			limit = {
+				has_technology_researched = self_propelled_torpedoes
+			}
+			covert_tech_selfcheck_held = { TECH = jeune_ecole }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = jeune_ecole }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = landing_craft }
+		if = {
+			limit = {
+				has_technology_researched = jeune_ecole
+				has_technology_researched = monitor_tech
+			}
+			covert_tech_selfcheck_held = { TECH = landing_craft }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = landing_craft }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = laser_technology }
+		if = {
+			limit = {
+				has_technology_researched = modern_chemical_processes
+			}
+			covert_tech_selfcheck_held = { TECH = laser_technology }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = laser_technology }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = lathe }
+		if = {
+			limit = {
+				has_technology_researched = cotton_gin
+			}
+			covert_tech_selfcheck_held = { TECH = lathe }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = lathe }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = line_infantry }
+		if = {
+			limit = {
+				has_technology_researched = mandatory_service
+				has_technology_researched = military_drill
+			}
+			covert_tech_selfcheck_held = { TECH = line_infantry }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = line_infantry }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = logistics }
+		if = {
+			limit = {
+				has_technology_researched = napoleonic_warfare
+				has_technology_researched = army_reserves
+			}
+			covert_tech_selfcheck_held = { TECH = logistics }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = logistics }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = machine_learning }
+		if = {
+			limit = {
+				has_technology_researched = cloud_computing
+				has_technology_researched = e-commerce
+			}
+			covert_tech_selfcheck_held = { TECH = machine_learning }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = machine_learning }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = mainframe_computers }
+		if = {
+			limit = {
+				has_technology_researched = transistors
+			}
+			covert_tech_selfcheck_held = { TECH = mainframe_computers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = mainframe_computers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = mandatory_service }
+		if = {
+			limit = {
+				has_technology_researched = standing_army
+			}
+			covert_tech_selfcheck_held = { TECH = mandatory_service }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = mandatory_service }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = manufacturies }
+		covert_tech_selfcheck_held = { TECH = manufacturies }
+	}
+	else_if = {
+		limit = { is_researching_technology = mechanical_tools }
+		if = {
+			limit = {
+				has_technology_researched = lathe
+				has_technology_researched = steelworking
+			}
+			covert_tech_selfcheck_held = { TECH = mechanical_tools }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = mechanical_tools }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = mechanized_farming }
+		if = {
+			limit = {
+				has_technology_researched = threshing_machine
+			}
+			covert_tech_selfcheck_held = { TECH = mechanized_farming }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = mechanized_farming }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = mechanized_workshops }
+		if = {
+			limit = {
+				has_technology_researched = canneries
+				has_technology_researched = mechanical_tools
+			}
+			covert_tech_selfcheck_held = { TECH = mechanized_workshops }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = mechanized_workshops }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = microprocessor }
+		if = {
+			limit = {
+				has_technology_researched = integrated_circuits
+				has_technology_researched = plastic_mass_production
+			}
+			covert_tech_selfcheck_held = { TECH = microprocessor }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = microprocessor }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = military_aviation }
+		if = {
+			limit = {
+				has_technology_researched = handcranked_machine_gun
+			}
+			covert_tech_selfcheck_held = { TECH = military_aviation }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = military_aviation }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = military_drill }
+		if = {
+			limit = {
+				has_technology_researched = standing_army
+			}
+			covert_tech_selfcheck_held = { TECH = military_drill }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = military_drill }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = military_grade_cybersecurity }
+		if = {
+			limit = {
+				has_technology_researched = cryptography
+			}
+			covert_tech_selfcheck_held = { TECH = military_grade_cybersecurity }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = military_grade_cybersecurity }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = military_statistics }
+		if = {
+			limit = {
+				has_technology_researched = electric_telegraph
+				has_technology_researched = general_staff
+			}
+			covert_tech_selfcheck_held = { TECH = military_statistics }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = military_statistics }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = missile_defense_systems }
+		if = {
+			limit = {
+				has_technology_researched = guided_missiles
+			}
+			covert_tech_selfcheck_held = { TECH = missile_defense_systems }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = missile_defense_systems }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = mobile_armor }
+		if = {
+			limit = {
+				has_technology_researched = concrete_fortifications
+				has_technology_researched = nco_training
+			}
+			covert_tech_selfcheck_held = { TECH = mobile_armor }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = mobile_armor }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = modern_automotive_technology }
+		if = {
+			limit = {
+				has_technology_researched = compression_ignition
+			}
+			covert_tech_selfcheck_held = { TECH = modern_automotive_technology }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = modern_automotive_technology }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = modern_chemical_processes }
+		if = {
+			limit = {
+				has_technology_researched = nitrogen_fixation
+				has_technology_researched = isoprene
+			}
+			covert_tech_selfcheck_held = { TECH = modern_chemical_processes }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = modern_chemical_processes }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = modern_material_science }
+		if = {
+			limit = {
+				has_technology_researched = early_nanotechnology
+				has_technology_researched = biotechnology
+				has_technology_researched = additive_manufacturing
+			}
+			covert_tech_selfcheck_held = { TECH = modern_material_science }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = modern_material_science }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = modern_materials }
+		if = {
+			limit = {
+				has_technology_researched = arc_welding
+			}
+			covert_tech_selfcheck_held = { TECH = modern_materials }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = modern_materials }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = modern_nursing }
+		if = {
+			limit = {
+				has_technology_researched = triage
+			}
+			covert_tech_selfcheck_held = { TECH = modern_nursing }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = modern_nursing }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = modern_skyscrapers }
+		if = {
+			limit = {
+				has_technology_researched = modern_materials
+			}
+			covert_tech_selfcheck_held = { TECH = modern_skyscrapers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = modern_skyscrapers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = modern_tools }
+		if = {
+			limit = {
+				has_technology_researched = modern_materials
+			}
+			covert_tech_selfcheck_held = { TECH = modern_tools }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = modern_tools }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = molecular_assemblers }
+		if = {
+			limit = {
+				has_technology_researched = advanced_nanofabrication
+			}
+			covert_tech_selfcheck_held = { TECH = molecular_assemblers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = molecular_assemblers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = monitor_tech }
+		if = {
+			limit = {
+				has_technology_researched = ironclad_tech
+				has_technology_researched = breech_loading_artillery
+			}
+			covert_tech_selfcheck_held = { TECH = monitor_tech }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = monitor_tech }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = motorized_artillery }
+		if = {
+			limit = {
+				has_technology_researched = mobile_armor
+			}
+			covert_tech_selfcheck_held = { TECH = motorized_artillery }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = motorized_artillery }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = napoleonic_warfare }
+		if = {
+			limit = {
+				has_technology_researched = line_infantry
+				has_technology_researched = artillery
+			}
+			covert_tech_selfcheck_held = { TECH = napoleonic_warfare }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = napoleonic_warfare }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = naval_convoy_defense }
+		if = {
+			limit = {
+				has_technology_researched = sonar
+			}
+			covert_tech_selfcheck_held = { TECH = naval_convoy_defense }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = naval_convoy_defense }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = naval_fire_control_systems }
+		if = {
+			limit = {
+				has_technology_researched = battlefleet_tactics
+			}
+			covert_tech_selfcheck_held = { TECH = naval_fire_control_systems }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = naval_fire_control_systems }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = navigation }
+		covert_tech_selfcheck_held = { TECH = navigation }
+	}
+	else_if = {
+		limit = { is_researching_technology = nco_training }
+		if = {
+			limit = {
+				has_technology_researched = wargaming
+				has_technology_researched = trench_works
+			}
+			covert_tech_selfcheck_held = { TECH = nco_training }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = nco_training }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = network_centric_warfare }
+		if = {
+			limit = {
+				has_technology_researched = military_grade_cybersecurity
+				has_technology_researched = satellite_communications
+			}
+			covert_tech_selfcheck_held = { TECH = network_centric_warfare }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = network_centric_warfare }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = nitrogen_fixation }
+		if = {
+			limit = {
+				has_technology_researched = improved_fertilizer
+			}
+			covert_tech_selfcheck_held = { TECH = nitrogen_fixation }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = nitrogen_fixation }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = nitroglycerin }
+		if = {
+			limit = {
+				has_technology_researched = intensive_agriculture
+				has_technology_researched = prospecting
+			}
+			covert_tech_selfcheck_held = { TECH = nitroglycerin }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = nitroglycerin }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = nuclear_energy }
+		if = {
+			limit = {
+				has_technology_researched = nuclear_weapons
+			}
+			covert_tech_selfcheck_held = { TECH = nuclear_energy }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = nuclear_energy }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = nuclear_thermal_propulsion }
+		if = {
+			limit = {
+				has_technology_researched = cislunar_infrastructure
+			}
+			covert_tech_selfcheck_held = { TECH = nuclear_thermal_propulsion }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = nuclear_thermal_propulsion }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = nuclear_weapons }
+		if = {
+			limit = {
+				has_technology_researched = rocketry
+			}
+			covert_tech_selfcheck_held = { TECH = nuclear_weapons }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = nuclear_weapons }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = oil_turbine }
+		if = {
+			limit = {
+				has_technology_researched = steam_turbine
+			}
+			covert_tech_selfcheck_held = { TECH = oil_turbine }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = oil_turbine }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = open_hearth_process }
+		if = {
+			limit = {
+				has_technology_researched = bessemer_process
+			}
+			covert_tech_selfcheck_held = { TECH = open_hearth_process }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = open_hearth_process }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = orbital_manufacturing }
+		if = {
+			limit = {
+				has_technology_researched = smart_grids
+				has_technology_researched = additive_manufacturing
+			}
+			covert_tech_selfcheck_held = { TECH = orbital_manufacturing }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = orbital_manufacturing }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = orbital_weapon_platforms }
+		if = {
+			limit = {
+				has_technology_researched = space_militarization
+				has_technology_researched = asteroid_mining
+			}
+			covert_tech_selfcheck_held = { TECH = orbital_weapon_platforms }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = orbital_weapon_platforms }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = paddle_steamer }
+		if = {
+			limit = {
+				has_technology_researched = admiralty
+			}
+			covert_tech_selfcheck_held = { TECH = paddle_steamer }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = paddle_steamer }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = pasteurization }
+		if = {
+			limit = {
+				has_technology_researched = vacuum_canning
+				has_technology_researched = electrical_capacitors
+			}
+			covert_tech_selfcheck_held = { TECH = pasteurization }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = pasteurization }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = percussion_cap }
+		if = {
+			limit = {
+				has_technology_researched = gunsmithing
+			}
+			covert_tech_selfcheck_held = { TECH = percussion_cap }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = percussion_cap }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = personal_appliances }
+		if = {
+			limit = {
+				has_technology_researched = flash_freezing
+				has_technology_researched = radio
+			}
+			covert_tech_selfcheck_held = { TECH = personal_appliances }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = personal_appliances }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = personal_computers }
+		if = {
+			limit = {
+				has_technology_researched = microprocessor
+			}
+			covert_tech_selfcheck_held = { TECH = personal_computers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = personal_computers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = photocopiers }
+		if = {
+			limit = {
+				has_technology_researched = transistors
+			}
+			covert_tech_selfcheck_held = { TECH = photocopiers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = photocopiers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = plastic_mass_production }
+		if = {
+			limit = {
+				has_technology_researched = bergius_process
+			}
+			covert_tech_selfcheck_held = { TECH = plastic_mass_production }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = plastic_mass_production }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = plastics }
+		if = {
+			limit = {
+				has_technology_researched = reinforced_concrete
+			}
+			covert_tech_selfcheck_held = { TECH = plastics }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = plastics }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = pneumatic_tools }
+		if = {
+			limit = {
+				has_technology_researched = rotary_valve_engine
+				has_technology_researched = reinforced_concrete
+			}
+			covert_tech_selfcheck_held = { TECH = pneumatic_tools }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = pneumatic_tools }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = power_of_the_purse }
+		if = {
+			limit = {
+				has_technology_researched = admiralty
+			}
+			covert_tech_selfcheck_held = { TECH = power_of_the_purse }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = power_of_the_purse }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = pre_dreadnought_tech }
+		if = {
+			limit = {
+				has_technology_researched = ironclad_tech
+			}
+			covert_tech_selfcheck_held = { TECH = pre_dreadnought_tech }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = pre_dreadnought_tech }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = precision_guided_munitions }
+		if = {
+			limit = {
+				has_technology_researched = guided_missiles
+			}
+			covert_tech_selfcheck_held = { TECH = precision_guided_munitions }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = precision_guided_munitions }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = predictive_logistics }
+		if = {
+			limit = {
+				has_technology_researched = satellite_communications
+				has_technology_researched = guided_missiles
+			}
+			covert_tech_selfcheck_held = { TECH = predictive_logistics }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = predictive_logistics }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = prefabricated_construction }
+		if = {
+			limit = {
+				has_technology_researched = modern_skyscrapers
+			}
+			covert_tech_selfcheck_held = { TECH = prefabricated_construction }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = prefabricated_construction }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = programmable_matter }
+		if = {
+			limit = {
+				has_technology_researched = molecular_assemblers
+				has_technology_researched = quantum_materials
+			}
+			covert_tech_selfcheck_held = { TECH = programmable_matter }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = programmable_matter }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = prospecting }
+		if = {
+			limit = {
+				has_technology_researched = shaft_mining
+			}
+			covert_tech_selfcheck_held = { TECH = prospecting }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = prospecting }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = pumpjacks }
+		if = {
+			limit = {
+				has_technology_researched = steam_donkey
+				has_technology_researched = dynamite
+			}
+			covert_tech_selfcheck_held = { TECH = pumpjacks }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = pumpjacks }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = quantum_communications }
+		if = {
+			limit = {
+				has_technology_researched = network_centric_warfare
+				has_technology_researched = military_grade_cybersecurity
+			}
+			covert_tech_selfcheck_held = { TECH = quantum_communications }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = quantum_communications }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = quantum_computing }
+		if = {
+			limit = {
+				has_technology_researched = machine_learning
+				has_technology_researched = early_nanotechnology
+			}
+			covert_tech_selfcheck_held = { TECH = quantum_computing }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = quantum_computing }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = quantum_materials }
+		if = {
+			limit = {
+				has_technology_researched = quantum_computing
+			}
+			covert_tech_selfcheck_held = { TECH = quantum_materials }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = quantum_materials }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = radar }
+		if = {
+			limit = {
+				has_technology_researched = military_aviation
+			}
+			covert_tech_selfcheck_held = { TECH = radar }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = radar }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = radio }
+		if = {
+			limit = {
+				has_technology_researched = telephone
+			}
+			covert_tech_selfcheck_held = { TECH = radio }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = radio }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = railways }
+		if = {
+			limit = {
+				has_technology_researched = mechanical_tools
+				has_technology_researched = atmospheric_engine
+			}
+			covert_tech_selfcheck_held = { TECH = railways }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = railways }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = rapid_deployment_forces }
+		if = {
+			limit = {
+				has_technology_researched = satellite_communications
+			}
+			covert_tech_selfcheck_held = { TECH = rapid_deployment_forces }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = rapid_deployment_forces }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = recon_satellites }
+		if = {
+			limit = {
+				has_technology_researched = space_exploration
+			}
+			covert_tech_selfcheck_held = { TECH = recon_satellites }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = recon_satellites }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = reinforced_concrete }
+		if = {
+			limit = {
+				has_technology_researched = bessemer_process
+			}
+			covert_tech_selfcheck_held = { TECH = reinforced_concrete }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = reinforced_concrete }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = repeaters }
+		if = {
+			limit = {
+				has_technology_researched = rifling
+			}
+			covert_tech_selfcheck_held = { TECH = repeaters }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = repeaters }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = reusable_rocketry }
+		if = {
+			limit = {
+				has_technology_researched = satellite_communications
+			}
+			covert_tech_selfcheck_held = { TECH = reusable_rocketry }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = reusable_rocketry }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = rifling }
+		if = {
+			limit = {
+				has_technology_researched = percussion_cap
+			}
+			covert_tech_selfcheck_held = { TECH = rifling }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = rifling }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = robotics }
+		if = {
+			limit = {
+				has_technology_researched = computer_networks
+				has_technology_researched = advanced_assembly_lines
+			}
+			covert_tech_selfcheck_held = { TECH = robotics }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = robotics }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = rocketry }
+		if = {
+			limit = {
+				has_technology_researched = bombing_aircraft
+			}
+			covert_tech_selfcheck_held = { TECH = rocketry }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = rocketry }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = rotary_valve_engine }
+		if = {
+			limit = {
+				has_technology_researched = watertube_boiler
+			}
+			covert_tech_selfcheck_held = { TECH = rotary_valve_engine }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = rotary_valve_engine }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = rubber_mastication }
+		if = {
+			limit = {
+				has_technology_researched = fractional_distillation
+				has_technology_researched = chemical_bleaching
+			}
+			covert_tech_selfcheck_held = { TECH = rubber_mastication }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = rubber_mastication }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = satellite_communications }
+		if = {
+			limit = {
+				has_technology_researched = space_exploration
+				has_technology_researched = cryptography
+			}
+			covert_tech_selfcheck_held = { TECH = satellite_communications }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = satellite_communications }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = screw_frigate }
+		if = {
+			limit = {
+				has_technology_researched = paddle_steamer
+			}
+			covert_tech_selfcheck_held = { TECH = screw_frigate }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = screw_frigate }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = sea_lane_strategies }
+		if = {
+			limit = {
+				has_technology_researched = jeune_ecole
+			}
+			covert_tech_selfcheck_held = { TECH = sea_lane_strategies }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = sea_lane_strategies }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = self_propelled_torpedoes }
+		if = {
+			limit = {
+				has_technology_researched = power_of_the_purse
+			}
+			covert_tech_selfcheck_held = { TECH = self_propelled_torpedoes }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = self_propelled_torpedoes }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = semiautomatic_rifle }
+		if = {
+			limit = {
+				has_technology_researched = bolt_action_rifles
+			}
+			covert_tech_selfcheck_held = { TECH = semiautomatic_rifle }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = semiautomatic_rifle }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = shaft_mining }
+		if = {
+			limit = {
+				has_technology_researched = enclosure
+				has_technology_researched = manufacturies
+			}
+			covert_tech_selfcheck_held = { TECH = shaft_mining }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = shaft_mining }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = shell_gun }
+		if = {
+			limit = {
+				has_technology_researched = artillery
+			}
+			covert_tech_selfcheck_held = { TECH = shell_gun }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = shell_gun }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = shift_work }
+		if = {
+			limit = {
+				has_technology_researched = mechanized_workshops
+			}
+			covert_tech_selfcheck_held = { TECH = shift_work }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = shift_work }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = smart_grids }
+		if = {
+			limit = {
+				has_technology_researched = clean_energy_technologies
+				has_technology_researched = internet_of_things
+			}
+			covert_tech_selfcheck_held = { TECH = smart_grids }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = smart_grids }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = sonar }
+		if = {
+			limit = {
+				has_technology_researched = battlefleet_tactics
+			}
+			covert_tech_selfcheck_held = { TECH = sonar }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = sonar }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = space_based_solar_power }
+		if = {
+			limit = {
+				has_technology_researched = quantum_communications
+			}
+			covert_tech_selfcheck_held = { TECH = space_based_solar_power }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = space_based_solar_power }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = space_elevator }
+		if = {
+			limit = {
+				has_technology_researched = asteroid_mining
+				has_technology_researched = compact_fusion_reactors
+			}
+			covert_tech_selfcheck_held = { TECH = space_elevator }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = space_elevator }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = space_exploration }
+		if = {
+			limit = {
+				has_technology_researched = ICBMs
+			}
+			covert_tech_selfcheck_held = { TECH = space_exploration }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = space_exploration }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = space_militarization }
+		if = {
+			limit = {
+				has_technology_researched = reusable_rocketry
+			}
+			covert_tech_selfcheck_held = { TECH = space_militarization }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = space_militarization }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = stainless_steel_mass_production }
+		if = {
+			limit = {
+				has_technology_researched = aluminum_mass_production
+			}
+			covert_tech_selfcheck_held = { TECH = stainless_steel_mass_production }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = stainless_steel_mass_production }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = standing_army }
+		covert_tech_selfcheck_held = { TECH = standing_army }
+	}
+	else_if = {
+		limit = { is_researching_technology = stealth_technology }
+		if = {
+			limit = {
+				has_technology_researched = supersonic_aircraft
+				has_technology_researched = advanced_submarine_technology
+			}
+			covert_tech_selfcheck_held = { TECH = stealth_technology }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = stealth_technology }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = steam_donkey }
+		if = {
+			limit = {
+				has_technology_researched = intensive_agriculture
+			}
+			covert_tech_selfcheck_held = { TECH = steam_donkey }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = steam_donkey }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = steam_turbine }
+		if = {
+			limit = {
+				has_technology_researched = electrical_generation
+			}
+			covert_tech_selfcheck_held = { TECH = steam_turbine }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = steam_turbine }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = steel_railway_cars }
+		if = {
+			limit = {
+				has_technology_researched = railways
+			}
+			covert_tech_selfcheck_held = { TECH = steel_railway_cars }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = steel_railway_cars }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = steelworking }
+		if = {
+			limit = {
+				has_technology_researched = shaft_mining
+			}
+			covert_tech_selfcheck_held = { TECH = steelworking }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = steelworking }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = stormtroopers }
+		if = {
+			limit = {
+				has_technology_researched = wargaming
+				has_technology_researched = trench_works
+			}
+			covert_tech_selfcheck_held = { TECH = stormtroopers }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = stormtroopers }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = submarine }
+		if = {
+			limit = {
+				has_technology_researched = self_propelled_torpedoes
+			}
+			covert_tech_selfcheck_held = { TECH = submarine }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = submarine }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = supersonic_aircraft }
+		if = {
+			limit = {
+				has_technology_researched = inertial_navigation_systems
+				has_technology_researched = jet_engine_technology
+			}
+			covert_tech_selfcheck_held = { TECH = supersonic_aircraft }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = supersonic_aircraft }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = supply_chain_management }
+		if = {
+			limit = {
+				has_technology_researched = computer_networks
+				has_technology_researched = advanced_assembly_lines
+			}
+			covert_tech_selfcheck_held = { TECH = supply_chain_management }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = supply_chain_management }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = swarm_technology }
+		if = {
+			limit = {
+				has_technology_researched = rapid_deployment_forces
+				has_technology_researched = unmanned_aerial_vehicles
+			}
+			covert_tech_selfcheck_held = { TECH = swarm_technology }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = swarm_technology }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = synthetic_biology }
+		if = {
+			limit = {
+				has_technology_researched = genetic_engineering
+				has_technology_researched = modern_material_science
+			}
+			covert_tech_selfcheck_held = { TECH = synthetic_biology }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = synthetic_biology }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = tactical_nuclear_weapons }
+		if = {
+			limit = {
+				has_technology_researched = ICBMs
+			}
+			covert_tech_selfcheck_held = { TECH = tactical_nuclear_weapons }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = tactical_nuclear_weapons }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = telephone }
+		if = {
+			limit = {
+				has_technology_researched = shift_work
+				has_technology_researched = electrical_generation
+			}
+			covert_tech_selfcheck_held = { TECH = telephone }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = telephone }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = television }
+		if = {
+			limit = {
+				has_technology_researched = personal_appliances
+			}
+			covert_tech_selfcheck_held = { TECH = television }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = television }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = threshing_machine }
+		if = {
+			limit = {
+				has_technology_researched = steam_donkey
+			}
+			covert_tech_selfcheck_held = { TECH = threshing_machine }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = threshing_machine }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = transistors }
+		if = {
+			limit = {
+				has_technology_researched = modern_tools
+			}
+			covert_tech_selfcheck_held = { TECH = transistors }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = transistors }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = trench_works }
+		if = {
+			limit = {
+				has_technology_researched = general_staff
+				has_technology_researched = electric_telegraph
+			}
+			covert_tech_selfcheck_held = { TECH = trench_works }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = trench_works }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = triage }
+		if = {
+			limit = {
+				has_technology_researched = logistics
+			}
+			covert_tech_selfcheck_held = { TECH = triage }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = triage }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = unmanned_aerial_vehicles }
+		if = {
+			limit = {
+				has_technology_researched = supersonic_aircraft
+			}
+			covert_tech_selfcheck_held = { TECH = unmanned_aerial_vehicles }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = unmanned_aerial_vehicles }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = vacuum_canning }
+		if = {
+			limit = {
+				has_technology_researched = mechanized_workshops
+			}
+			covert_tech_selfcheck_held = { TECH = vacuum_canning }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = vacuum_canning }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = vulcanization }
+		if = {
+			limit = {
+				has_technology_researched = rubber_mastication
+			}
+			covert_tech_selfcheck_held = { TECH = vulcanization }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = vulcanization }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = war_propaganda }
+		if = {
+			limit = {
+				has_technology_researched = enlistment_offices
+			}
+			covert_tech_selfcheck_held = { TECH = war_propaganda }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = war_propaganda }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = wargaming }
+		if = {
+			limit = {
+				has_technology_researched = military_statistics
+			}
+			covert_tech_selfcheck_held = { TECH = wargaming }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = wargaming }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = watertube_boiler }
+		if = {
+			limit = {
+				has_technology_researched = atmospheric_engine
+			}
+			covert_tech_selfcheck_held = { TECH = watertube_boiler }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = watertube_boiler }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = wireless_internet }
+		if = {
+			limit = {
+				has_technology_researched = world_wide_web
+				has_technology_researched = personal_computers
+			}
+			covert_tech_selfcheck_held = { TECH = wireless_internet }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = wireless_internet }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = world_wide_web }
+		if = {
+			limit = {
+				has_technology_researched = fiber_optics
+				has_technology_researched = computer_networks
+			}
+			covert_tech_selfcheck_held = { TECH = world_wide_web }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = world_wide_web }
+		}
+	}
+}
