@@ -534,27 +534,34 @@ te_decision_found_space_program = {
 # The mission -> milestone map (je_space_race.txt `possible` blocks):
 #   pm_earth_orbit              Suborbital Flight, Orbital Flight
 #   pm_moon_mission             Moon Landing, Deep-Space Probe
-#   pm_mars_mission             Moon Base, Mars Landing
-#   pm_solar_colonization       Solar System Colonization, stages 1-2 (and
-#                               every stage once a colony is held)
+#   pm_mars_mission             Mars Landing (the Moon Base, retired
+#                               2026-10-29, ran here too)
+#   pm_solar_colonization       Solar System Colonization: the Moon and stages
+#                               1-2 (and every stage once a colony beyond the
+#                               Moon is held); beyond the Moon after the Mars
+#                               Landing (lunar colonization design § 4)
 #   pm_deep_space_exploration   Solar System Colonization, stages 3-5, for a
-#                               country holding no colony
+#                               country holding no colony beyond the Moon
 #   pm_interstellar_mission     Interstellar Probe
 #
 # A mission is offered once its technology is researched, while the programme
-# runs the mission below it (Mars or above for the last three), and becomes
-# possible for a great or major power (every milestone needs the rank) once
-# the milestones the missions below it serve are complete:
+# runs the mission below it (Mars or above for Deep Space and Interstellar; the
+# Moon or Mars for Solar Colonization), and becomes possible for a great or
+# major power (every milestone needs the rank) once the milestones the
+# missions below it serve are complete:
 # Moon after Orbital Flight; Mars after the Moon Landing and the Deep-Space
-# Probe; Solar Colonization and Deep Space after the Moon Base and the Mars
-# Landing. The Interstellar Mission waits only for the Interstellar Probe's own
+# Probe; Solar Colonization after the Moon Landing (lunar colonization design
+# § 4: the Moon opens in era 10, the worlds beyond it with the Mars Landing);
+# Deep Space after the Mars Landing. The Interstellar Mission waits only for the Interstellar Probe's own
 # prerequisites (Deep-Space Probe, Mars Landing), from Mars, Solar
 # Colonization or Deep Space: colonization never "completes" for one country
 # while worlds are left, and the Interstellar Mission carries its bools.
 # Deep Space Exploration is offered only to a country it would help: inner
 # worlds all claimed (sr_colonization_inner_open false: stage 3 or later, or
-# under simple and full no stage 1 or 2 world free) and no colony held, since
-# a colony holder keeps colonizing on Solar Colonization.
+# under simple and full no world of the Moon or stages 1 and 2 free) and no
+# colony held beyond the Moon, since such a holder keeps colonizing on Solar
+# Colonization (sr_has_colony_beyond_moon: a lunar colony alone doesn't open
+# the outer system).
 #
 # ai_chance: the same gates as founding, against the increase in the weekly
 # bill (sr_mission_bill_increase_<mission>, space_race_values.txt).
@@ -662,14 +669,37 @@ te_decision_space_mission_solar = {
 		sr_space_race_on = yes
 		has_technology_researched = cislunar_infrastructure
 		sr_has_space_program = yes
-		modifier:country_sr_mars_mission_program_bool = yes
-		NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
-		NOT = { has_global_variable = sr_all_colonies_complete }
-		# Past stage 2 a country without a colony needs Deep Space Exploration
-		# (under simple and full, once no inner world is free).
+		# From the Moon Mission or the Mars Mission (lunar colonization design § 4).
 		OR = {
-			sr_has_space_colony = yes
-			sr_colonization_inner_open = yes
+			modifier:country_sr_moon_mission_program_bool = yes
+			modifier:country_sr_mars_mission_program_bool = yes
+		}
+		NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
+		# A world left (sr_all_colonies_complete is history: an old save keeps
+		# it with the Moon free, lunar colonization 2b).
+		sr_any_site_unclaimed = yes
+		# A finished programme starts again only for the Moon, by choice
+		# (sr_resume_solar_colonization below). A world beyond it released
+		# after the race stays out of its reach (main's end-of-race rule), so
+		# the method would be bought for nothing (review R4).
+		OR = {
+			NOT = { has_variable = sr_completed_solar_colonization }
+			sr_sites_lunar_open = yes
+		}
+		# A world left that the method reaches: a lunar world, or, after our
+		# Mars Landing, a world of stages 1 and 2 (past stage 2 a country with
+		# no colony beyond the Moon needs Deep Space Exploration; under simple
+		# and full, once no inner world is free), or any world once we hold a
+		# colony beyond the Moon.
+		OR = {
+			sr_sites_lunar_open = yes
+			AND = {
+				sr_colonization_beyond_moon = yes
+				OR = {
+					sr_has_colony_beyond_moon = yes
+					sr_colonization_inner_open = yes
+				}
+			}
 		}
 	}
 
@@ -682,12 +712,8 @@ te_decision_space_mission_solar = {
 			is_great_or_major_power = yes
 		}
 		custom_tooltip = {
-			text = te_decision_tt_completed_moon_base
-			has_variable = sr_completed_moon_base
-		}
-		custom_tooltip = {
-			text = te_decision_tt_completed_mars_landing
-			has_variable = sr_completed_mars_landing
+			text = te_decision_tt_completed_moon_landing
+			has_variable = sr_completed_moon_landing
 		}
 	}
 
@@ -697,6 +723,15 @@ te_decision_space_mission_solar = {
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_solar_colonization
+			}
+			# With the race over and a lunar world free, taking this is the
+			# choice to colonize the Moon (sr_colonization_by_choice), and it
+			# starts the programme as Resume does: with the entry already open
+			# (a finished holder on the Moon or Mars Mission), nothing else
+			# would set its active flag (review R1).
+			if = {
+				limit = { sr_race_over_moon_free = yes }
+				sr_resume_solar_colonization = yes
 			}
 		}
 	}
@@ -714,6 +749,62 @@ te_decision_space_mission_solar = {
 	}
 }
 
+# Resume Solar System Colonization (lunar colonization 2b, owner 2026-10-29).
+# With the race over and a lunar world free (sr_race_over_moon_free), as in a
+# save whose worlds were all claimed before the Moon existed, colonizing the
+# Moon is a choice (sr_colonization_by_choice): finished programmes keep their
+# record, Interplanetary Trade Networks and the Commercial Space Industry
+# dividend, and no programme starts from the method alone. This is that
+# choice, for any country with the colonization method that hasn't made it:
+# sr_resume_solar_colonization (sr_site_effects.txt) sets the marker and starts
+# the programme, which pauses the dividend while it runs (the "no programme
+# running" rule), and the entry's pulse stops a holder's once no lunar world is
+# free. A decision, not the production method: every power that finished the
+# race runs the Interstellar Mission, which carries the colonization bool, so
+# the method alone would restart them all.
+te_decision_resume_solar_colonization = {
+	is_shown = {
+		sr_space_race_on = yes
+		modifier:country_sr_solar_colonization_program_bool = yes
+		sr_race_over_moon_free = yes
+		NOT = { has_variable = sr_colonization_resumed }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_moon_landing
+			has_variable = sr_completed_moon_landing
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = {
+			text = te_decision_tt_resume_solar_colonization
+			sr_resume_solar_colonization = yes
+		}
+	}
+
+	# The mission decisions' gates (review R2). The method is already paid
+	# for (its bool is held), so the bill it adds is the programme's funding
+	# and approach, in innovation: the income test asks only that the budget
+	# isn't already in deficit on fixed expenses.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				sr_ai_should_participate = yes
+				in_default = no
+				net_fixed_income > 0
+			}
+			add = 100
+		}
+	}
+}
+
 te_decision_space_mission_deep_space = {
 	is_shown = {
 		sr_space_race_on = yes
@@ -722,11 +813,15 @@ te_decision_space_mission_deep_space = {
 		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { modifier:country_sr_deep_space_exploration_program_bool = yes }
 		NOT = { has_global_variable = sr_all_colonies_complete }
-		# Only where Solar Colonization no longer reaches: the inner worlds are
-		# all claimed and we hold no colony (solar colonization's `possible`).
+		sr_any_site_unclaimed = yes
+		# Only where Solar Colonization no longer reaches: the inner worlds
+		# beyond the Moon are all claimed (a free lunar world needs no Deep
+		# Space, so it doesn't hide this) and we hold no colony beyond the Moon
+		# (a lunar colony alone doesn't open the outer system:
+		# sr_cf_targetable_<key>).
 		has_global_variable = sr_colonization_stage
-		NOT = { sr_colonization_inner_open = yes }
-		sr_has_space_colony = no
+		NOT = { sr_colonization_inner_beyond_moon_open = yes }
+		sr_has_colony_beyond_moon = no
 	}
 
 	possible = {
@@ -736,10 +831,6 @@ te_decision_space_mission_deep_space = {
 		custom_tooltip = {
 			text = sr_unlock_rank_tt
 			is_great_or_major_power = yes
-		}
-		custom_tooltip = {
-			text = te_decision_tt_completed_moon_base
-			has_variable = sr_completed_moon_base
 		}
 		custom_tooltip = {
 			text = te_decision_tt_completed_mars_landing

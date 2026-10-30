@@ -5884,7 +5884,9 @@ types space_race_widget_types
 			blockoverride "sr_label_ambitious" {
 				text = "je_space_race_widget_ov_ambitious_solar_colonization"
 			}
-			# No first to race for: the stage, whose tooltip is the stage's description.
+			# The stage, whose tooltip is the stage's description (the first lunar
+			# colony's race for the first is on the reward hover and the Program
+			# row's Lunar Colony icon).
 			# Stage 0 (and a race not yet begun) reads "the Moon"; SelectLocalization
 			# renders its key without the journal entry, so both read the player.
 			blockoverride "sr_third_cells" {
@@ -6070,7 +6072,20 @@ types space_race_widget_types
 							blockoverride "third_line" {
 								te_banking_ov_word = {
 									position = { 78 46 }
+									visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' ) ) )]"
 									text = "je_space_race_widget_ovc_window_fig"
+								}
+								# The Moon full and no Mars Landing: why the bar holds.
+								te_banking_ov_word = {
+									position = { 78 46 }
+									visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' ) )]"
+									text = "je_space_race_widget_ovc_window_fig_mars"
+								}
+								# Stage 0 is the Moon, which needs no window.
+								te_banking_ov_word = {
+									position = { 78 46 }
+									visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ) )]"
+									text = "je_space_race_widget_ovc_window_fig_moon"
 								}
 							}
 						}

@@ -306,9 +306,11 @@ sr_solar_colonization_profile = {
 	type = country
 	random_valid = no
 
+	# Not while resumed for the Moon (lunar colonization 2b): the stage reads.
 	text = {
 		trigger = {
 			has_variable = sr_completed_solar_colonization
+			NOT = { has_variable = sr_colonization_resumed }
 		}
 		localization_key = je_space_race_solar_colonization_status_complete
 	}
@@ -465,6 +467,7 @@ sr_prog_probe = {
 	}
 }
 
+# The Lunar Colony icon: no "under way" state (lunar colonization design § 3.6).
 sr_prog_moon_base = {
 	type = country
 	random_valid = no
@@ -476,10 +479,6 @@ sr_prog_moon_base = {
 	text = {
 		trigger = { has_variable = sr_completed_moon_base }
 		localization_key = sr_prog_state_done
-	}
-	text = {
-		trigger = { has_variable = sr_active_moon_base }
-		localization_key = sr_prog_state_running
 	}
 	text = {
 		trigger = { has_global_variable = sr_global_first_moon_base }
@@ -661,10 +660,6 @@ sr_power_prog_moon_base = {
 	text = {
 		trigger = { has_variable = sr_completed_moon_base }
 		localization_key = sr_prog_state_done
-	}
-	text = {
-		trigger = { has_variable = sr_active_moon_base }
-		localization_key = sr_prog_state_running
 	}
 	text = {
 		localization_key = sr_prog_state_open

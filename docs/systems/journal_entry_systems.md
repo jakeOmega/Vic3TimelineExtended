@@ -1762,10 +1762,10 @@ Completes when `ww_fully_resolved` is set (36 months post-war). Fails if dropped
 **Group:** `je_group_foreign_affairs`
 
 ### Purpose
-Multi-stage competitive space race system across nine journal entries — seven milestones with a bar, the repeatable Solar System Colonization entry, and a passive entry that waits out the interstellar probe's transit. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
+Multi-stage competitive space race system across nine journal entries — seven milestones with a bar (one of them, the Moon Base, retired 2026-10-29), the repeatable Solar System Colonization entry, and a passive entry that waits out the interstellar probe's transit. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
 
 ### Key Mechanics
-- **9 Entries:** Suborbital Flight → Orbital Flight → Moon Landing → Deep-Space Probe / Moon Base / Mars Landing (parallel; all three need the Moon Landing) → Interstellar Probe (→ Awaiting Data, passive) / Solar System Colonization (repeatable)
+- **9 Entries:** Suborbital Flight → Orbital Flight → Moon Landing → Deep-Space Probe / Mars Landing / Solar System Colonization on the Moon (parallel; all three need the Moon Landing) → Interstellar Probe (→ Awaiting Data, passive) / Solar System Colonization beyond the Moon (repeatable; each world needs the Mars Landing). The Moon Base is retired: the first lunar colony takes its place
 - **"The First" Bonus:** Global flags track first achiever per milestone. First nation gets ~2× permanent rewards.
 - **Approach Choice:** Standard, Safe or Ambitious, per entry. Every milestone starts on Standard (neither `sr_safe_<m>` nor `sr_ambitious_<m>`): no modifier, no approach cost, the programme's pace and the base risk. Base setback risk is 5–10% a month depending on the milestone (`sr_base_risk_<m>`); Safe halves it and Ambitious leaves it alone, through `country_space_race_risk_mult`. The roll and the panel's risk figure read the same `sr_risk_pct_<m>`. Standard replaced a no-approach state that drifted at 0.5 a month with no roll (2026-09-29).
 - **Funding Levels:** 0 to `sr_max_funding_level` (base 3) affecting progress speed and innovation drain. A milestone is billed, and its funding adds to the pace, only while `sr_milestone_billed_<m>` holds: for the seven single-goal milestones, while they run; for solar colonization, while `sr_solar_colonization_running` (its entry stays open with the production method off, and billing it then was a bug, fixed 2026-09-29). `sr_cost_solar_running` records the state `sr_recalculate_cost` last billed, and `space_race_on_action` recalculates when it is stale, as for `sr_cost_participation`.
@@ -1782,11 +1782,11 @@ Multi-stage competitive space race system across nine journal entries — seven 
 | Orbital Flight | guided_missiles | Suborbital complete |
 | Moon Landing | space_exploration | Orbital complete |
 | Outer Solar System Probe | space_exploration | Orbital + Moon Landing complete (shown once Orbital is done) |
-| Moon Base | reusable_rocketry | Moon Landing complete |
+| Moon Base | — | Retired 2026-10-29: never shown or possible; the first lunar colony takes its place (`sr_lunar_colony_founded`) and an old save's Moon Base becomes a lunar colony (mod_systems.md → Space Race → *The Moon Base retired*) |
 | Mars Landing | knowledge_economy | Orbital + Moon Landing complete (shown once Orbital is done) |
 | Interstellar Probe | compact_fusion_reactors | Deep-Space Probe + Mars Landing complete |
 | Interstellar Probe: Awaiting Data | — | Interstellar Probe launched (passive, 132 months) |
-| Solar System Colonization | cislunar_infrastructure | Moon Base + Mars Landing complete; or any colony held (given by treaty or inherited), which opens it without colonizing (`sr_solar_colonization_qualified`) |
+| Solar System Colonization | cislunar_infrastructure | Moon Landing complete, and the Mars Landing for each world beyond the Moon; or any colony held (given by treaty or inherited), which opens it without colonizing (`sr_solar_colonization_qualified`) |
 
 Each entry additionally requires the matching `country_sr_*_program_bool` from the space programme's production method; losing it fires the entry's `fail`. A country gets the programme, and moves it up the missions, through the Found a Space Program and Begin the <mission> decisions (`te_decision_found_space_program`, `te_decision_space_mission_*` in `common/decisions/extra_decisions.txt`); a player can also build it and switch its production method by hand. See `mod_systems.md` § Space Race → The Space Program: founding and missions.
 
@@ -1844,7 +1844,7 @@ Traced scenarios: fresh activation (Standard: the programme's pace, base risk, n
 ### Debug harness
 `event te_debug_space_race.1` (`events/te_debug_space_race_events.txt`, helpers in `common/scripted_effects/te_debug_space_race_effects.txt`) reaches every panel state: 90% / 100% progress, a forced setback with its cooldown, clearing the cooldown, seeding rival programmes, and claiming or releasing "the first". The rival flags are not backed by a journal entry, so the monthly cleanup wipes them — pause first.
 
-### Events (61 in `space_race_events.txt`, plus 30 probe results and 40 colony events)
+### Events (82 in `space_race_events.txt`, plus 30 probe results and 40 colony events)
 - `.1`-`.9` — Milestone completion events (1 per milestone + notification)
 - `.5` — Moon landing site choice (Shackleton vs Equatorial)
 - `.10` — Ambitious approach failure (3 options: investigate/switch to safe/double down)
@@ -1856,7 +1856,8 @@ Traced scenarios: fresh activation (Standard: the programme's pace, base risk, n
 - `.12`-`.19`, `.21`-`.25`, `.70`-`.73`, `.75` — Themed setbacks and incidents (pad fires, lost probes, scandals, supply failures, …); `.74` — An Unexpected Breakthrough; `.26` — When Politics Reaches Orbit
 - `.60` — Interstellar probe data received; its results are `.601`-`.630` in `events/probe_result_events.txt`
 - `.76` — Programme discontinued (a lost or lowered launch complex)
-- `.80`-`.83` — Choice events asked once per milestone (who flies first, probe target, the Moon base's purpose, the Mars strategy)
+- `.80`-`.83` — Choice events asked once per milestone (who flies first, probe target, the Moon base's purpose, the Mars strategy); `.82` is retired to one option for an old save's open copy
+- `.109` — An old save's Moon Base became a lunar colony, or its Moon is open by choice: with every other world claimed, the decision Resume Solar System Colonization (or Begin Solar Colonization) runs a program for the Moon; a finished one keeps its rewards, and Commercial Space Industry pauses while it runs (players; one notice for both)
 - `events/space_race_colony_events.txt` — 40 colony establishment events
 
 ### Related Files

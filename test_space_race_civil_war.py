@@ -19,6 +19,10 @@ MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base",
 ENTRIES = MILESTONES + ("solar_colonization",)
 CHOICE_EVENTS = {"80": "orbital", "5": "moon_landing", "81": "probe",
                  "82": "moon_base", "83": "mars_landing"}
+# Retired with the Moon Base (2026-10-29, lunar colonization design § 7): the
+# entry is never possible, and .82 keeps one option that does nothing, for an
+# old save's queued copy. Its recorded answers stand (the migration reads them).
+RETIRED = ("moon_base",)
 
 
 def _path(*parts):
@@ -165,10 +169,19 @@ class ImmediateTests(unittest.TestCase):
         for entry in ENTRIES[1:]:
             with self.subTest(entry=entry):
                 possible = _block(_block(JE, f"je_space_race_{entry}"), "possible")
+                if entry in RETIRED:
+                    # never possible, so it admits no one the gate could miss
+                    self.assertEqual(possible.split(), ["always", "=", "no"])
+                    continue
                 self.assertRegex(possible, r"(?<!NOT = \{ )has_variable = sr_completed_\w+")
         self.assertIn("has_variable = sr_completed_suborbital",
                       _block(_block(JE, "je_space_race_orbital"), "possible"))
         self.assertNotRegex(EFFECTS + JE, r"remove_variable\s*=\s*sr_completed_")
+        # Nor the old-save migration (owner, 2026-10-29: a race that ended before
+        # the Moon existed keeps every completion; a finished programme resumes
+        # for the Moon by choice, sr_colonization_resumed).
+        self.assertNotRegex(_read("common", "scripted_effects", "sr_site_effects.txt"),
+                            r"remove_variable\s*=\s*sr_completed_")
 
     def test_rebels_start_no_programme(self):
         entry = _block(JE, "je_space_race_suborbital")
@@ -260,6 +273,11 @@ class RewardTests(unittest.TestCase):
     def test_choice_modifiers_are_rebuilt_from_the_choice(self):
         for ev, entry in CHOICE_EVENTS.items():
             event = _block(EVENTS, f"space_race_events.{ev}")
+            if entry in RETIRED:
+                # one option, setting and adding nothing
+                self.assertEqual(len(re.findall(r"\boption\s*=\s*\{", event)), 1, ev)
+                self.assertNotRegex(event, r"set_variable|add_modifier|je:", ev)
+                continue
             pairs = re.findall(
                 r"set_variable\s*=\s*\{\s*name\s*=\s*(\w+)\s+value\s*=\s*yes\s*\}\s*"
                 r"je:je_space_race_" + entry + r"\s*=\s*\{\s*add_modifier\s*=\s*(\w+)\s*\}", event)

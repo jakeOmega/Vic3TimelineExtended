@@ -563,6 +563,23 @@ class ColoniesTest(unittest.TestCase):
                     self.assertIn(f"ScriptValue('{term}')", drift)
                 self.assertIn("[concept_sr_colony_autonomy]", drift)
 
+    def test_next_window_reads_the_moon_at_stage_0(self):
+        """Lunar colonization 2b: at stage 0 the Next Window cell's third line
+        names the Moon, which needs no window, not 'stage 0 of 5'."""
+        cell = _enclosing(self.gui, 'tooltip = "je_space_race_widget_ovc_window_tt"', "te_banking_ov_cell = {")
+        third = cell[cell.index('blockoverride "third_line"'):]
+        stage = "GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' )"
+        waits = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' )"
+        # and, the Moon full without our Mars Landing, why the bar holds (design § 4)
+        self.assertEqual(re.findall(r'visible = "\[(.*)\]"\n\s*text = "(\w+)"', third),
+                         [(f"And( {stage}, Not( {waits} ) )", "je_space_race_widget_ovc_window_fig"),
+                          (f"And( {stage}, {waits} )", "je_space_race_widget_ovc_window_fig_mars"),
+                          (f"Not( {stage} )", "je_space_race_widget_ovc_window_fig_moon")])
+        self.assertEqual(self.loc["je_space_race_widget_ovc_window_fig_moon"], "the Moon")
+        waits_value = _block(_read(DISPLAY), "sr_disp_held_beyond_moon")
+        self.assertIn("NOT = { sr_colonization_beyond_moon = yes }", waits_value)
+        self.assertIn("NOT = { sr_sites_lunar_open = yes }", waits_value)
+
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_the_space_race_works(self):
@@ -1049,15 +1066,19 @@ class DisplayValuesTest(unittest.TestCase):
             self.assertIn("max = 4", body)
 
     def test_programme_codes_follow_the_tooltip_order(self):
-        """first (4) → done (3) → running (1) → taken (2), as sr_prog_<m> tests."""
+        """first (4) → done (3) → running (1) → taken (2), as sr_prog_<m> tests.
+        The Moon Base's icon is the first lunar colony's (lunar colonization
+        design § 3.6): no separate bar, so no "under way" state."""
         custom = _read(CUSTOM_LOC)
         for m in RACING:
             with self.subTest(milestone=m):
                 body = _block(self.values, f"sr_disp_prog_{m}")
                 tests = re.findall(r"(has_(?:global_)?variable = (\w+)) \} value = (\d)", body)
-                self.assertEqual([(v, int(c)) for _, v, c in tests],
-                                 [(f"sr_was_first_{m}", 4), (f"sr_completed_{m}", 3),
-                                  (f"sr_active_{m}", 1), (f"sr_global_first_{m}", 2)])
+                expected = [(f"sr_was_first_{m}", 4), (f"sr_completed_{m}", 3),
+                            (f"sr_active_{m}", 1), (f"sr_global_first_{m}", 2)]
+                if m == "moon_base":
+                    expected.remove(("sr_active_moon_base", 1))
+                self.assertEqual([(v, int(c)) for _, v, c in tests], expected)
                 loc = _block(custom, f"sr_prog_{m}")
                 order = re.findall(r"has_(?:global_)?variable = (\w+)", loc)
                 self.assertEqual(order, [v for _, v, _ in tests])

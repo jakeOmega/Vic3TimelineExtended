@@ -78,7 +78,7 @@ sr_launch_note_held = {
 		limit = {
 			has_variable = sr_progress_solar_colonization
 			var:sr_progress_solar_colonization >= sr_solar_colonization_goal
-			NOT = { has_global_variable = sr_all_colonies_complete }
+			sr_any_site_unclaimed = yes
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_launch_held_months } }

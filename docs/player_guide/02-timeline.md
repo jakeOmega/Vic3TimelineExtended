@@ -83,7 +83,8 @@ Era 10 is the present day: Machine Learning, Generative AI, Additive
 Manufacturing, Electric Vehicles, Internet of Things, Reusable Rocketry,
 Hypersonic Weapons, Cyber Warfare, Universal Basic Income and Mental Health
 Awareness. Cislunar Infrastructure opens the Space Program's Solar Colonization
-method, and In-Situ Resource Utilization the Extraplanetary Base.
+method, and with it colonies on the Moon after a Moon Landing, and In-Situ
+Resource Utilization the Extraplanetary Base.
 
 Era 11 is the near future. Modern Material Science unlocks the Advanced Material
 Fabricator, Abyssal Plain Mining the Deep-Sea Mine, Asteroid Mining the

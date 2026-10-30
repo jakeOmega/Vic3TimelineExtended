@@ -285,6 +285,19 @@ LANDING_SITES = {
 }
 
 
+# The old-save migration (lunar colonization design § 10): a country that
+# finished the retired Moon Base is given the lunar world its purpose names
+# (§ 3.1), on that specialization (1 or 2, the founding event's option);
+# with no purpose recorded, Tranquility Base's Heritage Site; if that world is
+# taken, the first free one in table order on its first specialization.
+LUNAR_MIGRATION = (
+    ("sr_moon_base_scientific", "daedalus", 1),
+    ("sr_moon_base_industrial", "imbrium", 1),
+    ("sr_moon_base_military", "marius_hills", 2),
+)
+LUNAR_MIGRATION_NO_PURPOSE = ("tranquility", 1)
+
+
 def _types_at(site: Site, types: tuple[str, ...]) -> tuple[str, ...]:
     return tuple(t for t in types if not (t == "port" and site.key in NO_SPACEPORT))
 
@@ -384,6 +397,10 @@ def _draw_branch(site: Site, stage0: bool = False) -> list[str]:
     t = "\t\t\t"
     lines = [f"{t}10 = {{", f"{t}\ttrigger = {{",
              f"{t}\t\tNOT = {{ has_global_variable = sr_colony_{site.key} }}"]
+    if site.stage >= 1:
+        # Beyond the Moon needs the Mars Landing (lunar colonization design § 4),
+        # in whichever stage's block the world is listed.
+        lines.append(f"{t}\t\tsr_colonization_beyond_moon = yes")
     if site.body is None:
         lines.append(f"{t}\t\tsr_launch_ungated_departs = yes")
     else:
@@ -394,6 +411,10 @@ def _draw_branch(site: Site, stage0: bool = False) -> list[str]:
               f"{t}\tset_global_variable = {{ name = sr_colony_{site.key} value = yes }}",
               f"{t}\tset_global_variable = {{ name = sr_site_holder_{site.key} value = root }}",
               f"{t}\tsr_site_sync_{site.key} = yes"]
+    if site in LUNAR:
+        # The first lunar colony takes the Moon Base's place (design § 3.6), in
+        # the stage-0 block and as a released world under a later stage alike.
+        lines.append(f"{t}\tsr_lunar_colony_founded = yes")
     if site.body is not None:
         lines.append(f"{t}\tsr_launch_window_gate_check = {{ BODY = {site.body} }}")
     if stage0:
@@ -819,6 +840,53 @@ def render_migration() -> list[str]:
     return out
 
 
+def render_lunar_migration() -> list[str]:
+    """The Moon Base's old saves (lunar colonization design § 10;
+    sr_lunar_migrate in sr_site_effects.txt, once a game)."""
+    by_key = {s.key: s for s in LUNAR}
+    out = ["# ===== The retired Moon Base's old saves (lunar colonization design § 10) =====",
+           "# THIS finished the old Moon Base (sr_completed_moon_base). Unless it already",
+           "# holds a lunar world (a game from between builds 2a and 2b), it is given one,",
+           "# first match: the world its purpose names, on that specialization; with no",
+           "# purpose, Tranquility Base; else the first free in table order; else none.",
+           "# Quietly: no founding event, and not a first lunar colony again.",
+           "sr_lunar_migrate_country = {",
+           "\tif = {",
+           "\t\tlimit = { NOT = { sr_holds_lunar_world = yes } }"]
+    branches = [(f"has_variable = {var}", key, spec) for var, key, spec in LUNAR_MIGRATION]
+    key, spec = LUNAR_MIGRATION_NO_PURPOSE
+    branches.append(("NOT = { sr_moon_base_choice_made = yes }", key, spec))
+    branches += [(None, s.key, 1) for s in LUNAR]
+    for n, (test, key, spec) in enumerate(branches):
+        site = by_key[key]
+        out.append("\t\tif = {" if n == 0 else "\t\telse_if = {")
+        out.append("\t\t\tlimit = {")
+        if test:
+            out.append(f"\t\t\t\t{test}")
+        out.append(f"\t\t\t\tsr_lunar_world_free_{site.key} = yes")
+        out += ["\t\t\t}", f"\t\t\tsr_lunar_migrate_take_{site.key} = {{ SPEC = {spec} }}", "\t\t}"]
+    out += ["\t}", "}"]
+    for site in LUNAR:
+        k = site.key
+        out += ["",
+                f"# THIS is given {site.name}, specialization $SPEC$: the record, then the",
+                "# received world's path (the entry opens), the migration's count, a player's notice.",
+                f"sr_lunar_migrate_take_{k} = {{",
+                f"\tset_global_variable = {{ name = sr_colony_{k} value = yes }}",
+                f"\tset_global_variable = {{ name = sr_site_holder_{k} value = this }}",
+                f"\tset_global_variable = {{ name = sr_site_spec_{k} value = $SPEC$ }}",
+                f"\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
+                "\tif = {",
+                "\t\tlimit = { NOT = { has_global_variable = sr_colonization_stage } }",
+                "\t\tset_global_variable = { name = sr_colonization_stage value = 0 }",
+                "\t}",
+                f"\tsr_site_sync_{k} = yes",
+                f"\tsr_site_gained_quiet = {{ INDEX = {site.index} }}",
+                f"\tsr_lunar_note_migrated = {{ INDEX = {site.index} }}",
+                "}"]
+    return out
+
+
 def render_repoint() -> list[str]:
     out = ["# ===== A revolution's winner (sr_repair_after_civil_war) =====",
            "# ROOT the winner. When the rebels won, every world the old government held",
@@ -1039,6 +1107,10 @@ def _found(site: Site) -> list[str]:
            f"\tset_global_variable = {{ name = sr_site_holder_{k} value = this }}",
            f"\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
            f"\tsr_site_sync_{k} = yes"]
+    if site in LUNAR:
+        # Founded by our own fleet: the first lunar colony takes the Moon Base's
+        # place in the race (design § 3.6; space_race_effects.txt).
+        out.append("\tsr_lunar_colony_founded = yes")
     out += [f"\tsr_seed_colony_discovery = {{ DISCOVERY = {d} }}" for d in site.discoveries]
     out += ["\tsr_cf_open_entry = yes",
             f"\ttrigger_event = {{ id = space_race_colony_events.{site.event} }}",
@@ -1280,7 +1352,7 @@ def render_effects() -> str:
         parts += ["", f"# --- {site.name} ({site.key}), stage {site.stage} ---"]
         parts += _sync(site) + _mirror_on(site) + _unmirror(site) + _release(site) + _transfer(site) + _monthly(site)
     parts += ["", *render_dispatcher(), "", *render_monthly_list(), "", *render_migration(), "",
-              *render_repoint(), "", *render_snapshot(), "", *render_cede_apply(), "", *render_debug(),
+              *render_lunar_migration(), "", *render_repoint(), "", *render_snapshot(), "", *render_cede_apply(), "", *render_debug(),
               "", *render_fleet_effects(), "", *render_population_effects(), "", *render_module_effects(),
               "", *render_autonomy_effects(), "", *render_overview_effects()]
     return "\n".join(parts) + "\n"
@@ -1319,11 +1391,36 @@ def render_fleet_triggers() -> list[str]:
            "\tOR = {"]
     out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in SITES if s.stage <= 2]
     out += ["\t}", "}", "",
-            "# A lunar world (stage 0) is unclaimed. Any scope.",
+            "# A world of stages 1 and 2 is unclaimed: the inner worlds beyond the Moon,",
+            "# where Begin Deep Space Exploration reads the inner rule without the Moon",
+            "# (sr_colonization_inner_beyond_moon_open; lunar colonization 2b, review M4).",
+            "sr_sites_inner_beyond_moon_unclaimed = {",
+            "\tOR = {"]
+    out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in SITES if 1 <= s.stage <= 2]
+    out += ["\t}", "}", "",
+            "# A lunar world (stage 0) is free to colonize: unclaimed and not a ruin, as",
+            "# sr_cf_targetable_<key> reads it (review M4). Any scope.",
             "sr_sites_lunar_open = {",
             "\tOR = {"]
-    out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in LUNAR]
+    out += [f"\t\tsr_lunar_world_free_{s.key} = yes" for s in LUNAR]
     out += ["\t}", "}", "",
+            "# THIS holds a lunar world (the old-save migration, sr_lunar_migrate_country).",
+            "# Country scope.",
+            "sr_holds_lunar_world = {",
+            "\tOR = {"]
+    out += [f"\t\tglobal_var:sr_site_holder_{s.key} ?= this" for s in LUNAR]
+    out += ["\t}", "}", "",
+            "# A lunar world the migration can give: unclaimed and not a ruin. Any scope.",
+            "sr_lunar_world_free_any = {",
+            "\tOR = {"]
+    out += [f"\t\tsr_lunar_world_free_{s.key} = yes" for s in LUNAR]
+    out += ["\t}", "}"]
+    for s_ in LUNAR:
+        out += [f"sr_lunar_world_free_{s_.key} = {{",
+                f"\tNOT = {{ has_global_variable = sr_colony_{s_.key} }}",
+                f"\tNOT = {{ has_global_variable = sr_site_ruined_{s_.key} }}",
+                "}"]
+    out += ["",
             "# THIS holds a world beyond the Moon (stage 1 or later): Deep Space's colony",
             "# arm (sr_cf_targetable_<key>, stages 3 to 5; lunar colonization design § 4). A",
             "# lunar colony alone doesn't open the outer system. Country scope.",
@@ -1332,10 +1429,12 @@ def render_fleet_triggers() -> list[str]:
     out += [f"\t\tglobal_var:sr_site_holder_{s.key} ?= this" for s in SITES if s.stage >= 1]
     out += ["\t}", "}", "",
             "# Per world, country scope:",
-            "#   sr_cf_targetable_<key>  THIS may send its next fleet there: unclaimed, and under",
-            "#                           races only of a stage reached (the draw's candidates), under",
-            "#                           simple and full of stage 0 to 2, or with Deep Space",
-            "#                           Exploration or a colony held beyond the Moon (design § 3)",
+            "#   sr_cf_targetable_<key>  THIS may send its next fleet there: unclaimed, beyond the",
+            "#                           Moon only after its Mars Landing (sr_colonization_beyond_moon;",
+            "#                           lunar colonization design § 4), and under races only of a",
+            "#                           stage reached (the draw's candidates), under simple and full",
+            "#                           of stage 0 to 2, or with Deep Space Exploration or a colony",
+            "#                           held beyond the Moon (design § 3)",
             "#   sr_cf_departs_<key>     a fleet can leave for it this month (its body's window, a",
             "#                           paid launch the approach accepts, or a torch; Mercury and",
             "#                           the Moon always)",
@@ -1348,8 +1447,10 @@ def render_fleet_triggers() -> list[str]:
         k, tb = site.key, transit_body(site)
         out += [f"sr_cf_targetable_{k} = {{",
                 f"\tNOT = {{ has_global_variable = sr_colony_{k} }}",
-                f"\tNOT = {{ has_global_variable = sr_site_ruined_{k} }}",
-                "\tOR = {",
+                f"\tNOT = {{ has_global_variable = sr_site_ruined_{k} }}"]
+        if site.stage >= 1:
+            out.append("\tsr_colonization_beyond_moon = yes")
+        out += ["\tOR = {",
                 f"\t\tAND = {{ NOT = {{ sr_colonies_contested_enabled = yes }} sr_current_colonization_stage >= {site.stage}"
                 f"{' ' + DEEP_SPACE_OPEN if site.stage >= 3 else ''} }}"]
         if site.stage <= 2:
@@ -1393,6 +1494,11 @@ def render_fleet_triggers() -> list[str]:
             "# The scripted GUIs' world (scope:site): targetable, our target, held by THIS.",
             "sr_cf_scope_site_targetable = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} sr_cf_targetable_{s.key} = yes }}" for s in SITES]
+    out += ["\t}", "}",
+            "# The scripted GUI's world (scope:site) is on the Moon: the Target button's",
+            "# Mars Landing line holds for it without one (sr_colony_target_sgui).",
+            "sr_cf_scope_site_is_lunar = {", "\tOR = {"]
+    out += [f"\t\tscope:site = {s.index}" for s in LUNAR]
     out += ["\t}", "}",
             "sr_cf_scope_site_is_target = {", "\thas_variable = sr_cf_target", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} var:sr_cf_target = {s.index} }}" for s in SITES]
@@ -2822,8 +2928,8 @@ def render_custom_loc() -> str:
     out = [HEADER.rstrip("\n"),
            "# A world's name from its index (gen_solar_sites.SITES order), for the",
            "# notices (space_race_events.90 / .91 / .92), the Colony Fleets section, the",
-           "# module queue, slice 5's events (.93 to .99) and slice 6's (.102 to .107);",
-           "# then each queue place's module.",
+           "# module queue, slice 5's events (.93 to .99) and slice 6's (.102 to .107), and",
+           "# the retired Moon Base's notice (.109); then each queue place's module.",
            "# Each branch has_variable-guarded.",
            ""]
     names = [("sr_site_notice_gained_name", "sr_site_notice_gained"),
@@ -2847,7 +2953,9 @@ def render_custom_loc() -> str:
              ("sr_occ_site_name", "sr_occ_site"),
              ("sr_destroyed_site_name", "sr_destroyed_site"),
              ("sr_seized_free_site_name", "sr_seized_free_site"),
-             ("sr_garrison_lapsed_site_name", "sr_garrison_lapsed_site")]
+             ("sr_garrison_lapsed_site_name", "sr_garrison_lapsed_site"),
+             # The retired Moon Base's notice (space_race_events.109): the world it became.
+             ("sr_lunar_notice_name", "sr_lunar_notice_site")]
     for name, var in names:
         out += [f"{name} = {{", "\ttype = country", "\trandom_valid = no", ""]
         for site in SITES:

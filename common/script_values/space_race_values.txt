@@ -747,11 +747,15 @@ sr_progress_solar_colonization_value = {
 # Normalized 0-100 percentage for progress bar display
 # goal_add_value is locked at JE activation, so dynamic goals break the bar
 # This SV computes (progress / current_dynamic_goal) * 100
-# Returns 100 when colonization is fully complete
+# Returns 100 when colonization is fully complete (not while resumed for the
+# Moon: its bar runs again, lunar colonization 2b)
 sr_progress_solar_colonization_percent = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_completed_solar_colonization }
+		limit = {
+			has_variable = sr_completed_solar_colonization
+			NOT = { has_variable = sr_colonization_resumed }
+		}
 		add = 100
 	}
 	else = {

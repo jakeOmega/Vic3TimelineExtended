@@ -61,6 +61,20 @@ sr_launch_staged_whole_fleets = {
 	floor = yes
 }
 
+# An old save's open Moon Base carried onto Solar System Colonization (lunar
+# colonization design § 10; sr_lunar_carry_moon_base): its progress plus what
+# is already banked, up to one lunar goal. Country scope, with
+# sr_progress_moon_base set.
+sr_lunar_carry_value = {
+	value = var:sr_progress_moon_base
+	if = {
+		limit = { has_variable = sr_launch_banked_progress }
+		add = var:sr_launch_banked_progress
+	}
+	max = sr_colonization_goal_stage_0
+	min = 0
+}
+
 # What the month's fleet costs: goal x (1 + the cheapest premium). Read only
 # while sr_launch_best_cost is below sr_launch_never (sr_launch_fleet_ready).
 sr_launch_fleet_cost = {
@@ -87,7 +101,7 @@ sr_launch_staged_shown = {
 	if = {
 		limit = {
 			sr_solar_colonization_running = yes
-			NOT = { has_global_variable = sr_all_colonies_complete }
+			sr_any_site_unclaimed = yes
 			sr_progress_solar_colonization_value >= sr_solar_colonization_goal
 		}
 		value = 1
