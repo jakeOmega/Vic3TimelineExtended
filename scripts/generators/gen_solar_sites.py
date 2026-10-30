@@ -2196,11 +2196,13 @@ def slice5_vars(site: Site) -> list[str]:
 
 
 def slice6_vars(site: Site) -> list[str]:
-    """The world's slice 6 globals (fleets design §§ 7-9, 12), cleared by a release."""
+    """The world's slice 6 globals (fleets design §§ 7-9, 12), cleared by a release.
+    Not a lunar world's interdiction, which nothing sets (lunar colonization
+    § 8.3): a read of it is logged as never set at load (#1243)."""
     k = site.key
     return [f"sr_site_marines_{k}", f"sr_site_garrison_due_{k}", f"sr_site_integrity_{k}", f"sr_site_occupier_{k}",
             f"sr_site_blockaded_{k}", f"sr_site_bombard_{k}", f"sr_site_under_assault_{k}",
-            f"sr_site_interdicted_{k}"]
+            *([] if site in LUNAR else [f"sr_site_interdicted_{k}"])]
 
 
 def site_serves(site: Site) -> str:

@@ -3373,12 +3373,12 @@ sr_ov_defense_word = {
 	text = {
 		trigger = {
 			OR = {
-				AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } NOT = { has_global_variable = sr_site_interdicted_shackleton } has_global_variable = sr_site_blockaded_shackleton }
-				AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } NOT = { has_global_variable = sr_site_interdicted_peary } has_global_variable = sr_site_blockaded_peary }
-				AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } NOT = { has_global_variable = sr_site_interdicted_tranquility } has_global_variable = sr_site_blockaded_tranquility }
-				AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } NOT = { has_global_variable = sr_site_interdicted_marius_hills } has_global_variable = sr_site_blockaded_marius_hills }
-				AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } NOT = { has_global_variable = sr_site_interdicted_daedalus } has_global_variable = sr_site_blockaded_daedalus }
-				AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } NOT = { has_global_variable = sr_site_interdicted_imbrium } has_global_variable = sr_site_blockaded_imbrium }
+				AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_blockaded_shackleton }
+				AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_blockaded_peary }
+				AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_blockaded_tranquility }
+				AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_blockaded_marius_hills }
+				AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_blockaded_daedalus }
+				AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_blockaded_imbrium }
 				AND = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } NOT = { has_global_variable = sr_site_interdicted_venus } has_global_variable = sr_site_blockaded_venus }
 				AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } NOT = { has_global_variable = sr_site_interdicted_mercury } has_global_variable = sr_site_blockaded_mercury }
 				AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } NOT = { has_global_variable = sr_site_interdicted_valles_marineris } has_global_variable = sr_site_blockaded_valles_marineris }
@@ -3420,12 +3420,6 @@ sr_ov_defense_word = {
 	text = {
 		trigger = {
 			OR = {
-				AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_interdicted_shackleton }
-				AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_interdicted_peary }
-				AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_interdicted_tranquility }
-				AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_interdicted_marius_hills }
-				AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_interdicted_daedalus }
-				AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_interdicted_imbrium }
 				AND = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_interdicted_venus }
 				AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } has_global_variable = sr_site_interdicted_mercury }
 				AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_interdicted_valles_marineris }
@@ -3798,27 +3792,27 @@ sr_ov_defense_site = {
 		localization_key = sr_site_name_sedna
 	}
 	text = {
-		trigger = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } NOT = { has_global_variable = sr_site_interdicted_shackleton } has_global_variable = sr_site_blockaded_shackleton }
+		trigger = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_blockaded_shackleton }
 		localization_key = sr_site_short_shackleton
 	}
 	text = {
-		trigger = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } NOT = { has_global_variable = sr_site_interdicted_peary } has_global_variable = sr_site_blockaded_peary }
+		trigger = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_blockaded_peary }
 		localization_key = sr_site_name_peary
 	}
 	text = {
-		trigger = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } NOT = { has_global_variable = sr_site_interdicted_tranquility } has_global_variable = sr_site_blockaded_tranquility }
+		trigger = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_blockaded_tranquility }
 		localization_key = sr_site_name_tranquility
 	}
 	text = {
-		trigger = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } NOT = { has_global_variable = sr_site_interdicted_marius_hills } has_global_variable = sr_site_blockaded_marius_hills }
+		trigger = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_blockaded_marius_hills }
 		localization_key = sr_site_name_marius_hills
 	}
 	text = {
-		trigger = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } NOT = { has_global_variable = sr_site_interdicted_daedalus } has_global_variable = sr_site_blockaded_daedalus }
+		trigger = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_blockaded_daedalus }
 		localization_key = sr_site_name_daedalus
 	}
 	text = {
-		trigger = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } NOT = { has_global_variable = sr_site_interdicted_imbrium } has_global_variable = sr_site_blockaded_imbrium }
+		trigger = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_blockaded_imbrium }
 		localization_key = sr_site_name_imbrium
 	}
 	text = {
@@ -3956,30 +3950,6 @@ sr_ov_defense_site = {
 	text = {
 		trigger = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } NOT = { has_global_variable = sr_site_interdicted_sedna } has_global_variable = sr_site_blockaded_sedna }
 		localization_key = sr_site_name_sedna
-	}
-	text = {
-		trigger = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_interdicted_shackleton }
-		localization_key = sr_site_short_shackleton
-	}
-	text = {
-		trigger = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_interdicted_peary }
-		localization_key = sr_site_name_peary
-	}
-	text = {
-		trigger = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_interdicted_tranquility }
-		localization_key = sr_site_name_tranquility
-	}
-	text = {
-		trigger = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_interdicted_marius_hills }
-		localization_key = sr_site_name_marius_hills
-	}
-	text = {
-		trigger = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_interdicted_daedalus }
-		localization_key = sr_site_name_daedalus
-	}
-	text = {
-		trigger = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_interdicted_imbrium }
-		localization_key = sr_site_name_imbrium
 	}
 	text = {
 		trigger = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_interdicted_venus }

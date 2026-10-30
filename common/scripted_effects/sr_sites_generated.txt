@@ -10798,7 +10798,6 @@ sr_site_release_shackleton = {
 	if = { limit = { has_global_variable = sr_site_blockaded_shackleton } remove_global_variable = sr_site_blockaded_shackleton }
 	if = { limit = { has_global_variable = sr_site_bombard_shackleton } remove_global_variable = sr_site_bombard_shackleton }
 	if = { limit = { has_global_variable = sr_site_under_assault_shackleton } remove_global_variable = sr_site_under_assault_shackleton }
-	if = { limit = { has_global_variable = sr_site_interdicted_shackleton } remove_global_variable = sr_site_interdicted_shackleton }
 	debug_log = "TE_SR_SITES released shackleton"
 }
 # Moves Shackleton Crater to scope:sr_site_to_shackleton; scope:sr_site_from_shackleton, when saved,
@@ -11039,7 +11038,6 @@ sr_site_release_peary = {
 	if = { limit = { has_global_variable = sr_site_blockaded_peary } remove_global_variable = sr_site_blockaded_peary }
 	if = { limit = { has_global_variable = sr_site_bombard_peary } remove_global_variable = sr_site_bombard_peary }
 	if = { limit = { has_global_variable = sr_site_under_assault_peary } remove_global_variable = sr_site_under_assault_peary }
-	if = { limit = { has_global_variable = sr_site_interdicted_peary } remove_global_variable = sr_site_interdicted_peary }
 	debug_log = "TE_SR_SITES released peary"
 }
 # Moves Peary Crater to scope:sr_site_to_peary; scope:sr_site_from_peary, when saved,
@@ -11280,7 +11278,6 @@ sr_site_release_tranquility = {
 	if = { limit = { has_global_variable = sr_site_blockaded_tranquility } remove_global_variable = sr_site_blockaded_tranquility }
 	if = { limit = { has_global_variable = sr_site_bombard_tranquility } remove_global_variable = sr_site_bombard_tranquility }
 	if = { limit = { has_global_variable = sr_site_under_assault_tranquility } remove_global_variable = sr_site_under_assault_tranquility }
-	if = { limit = { has_global_variable = sr_site_interdicted_tranquility } remove_global_variable = sr_site_interdicted_tranquility }
 	debug_log = "TE_SR_SITES released tranquility"
 }
 # Moves Tranquility Base to scope:sr_site_to_tranquility; scope:sr_site_from_tranquility, when saved,
@@ -11521,7 +11518,6 @@ sr_site_release_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_blockaded_marius_hills } remove_global_variable = sr_site_blockaded_marius_hills }
 	if = { limit = { has_global_variable = sr_site_bombard_marius_hills } remove_global_variable = sr_site_bombard_marius_hills }
 	if = { limit = { has_global_variable = sr_site_under_assault_marius_hills } remove_global_variable = sr_site_under_assault_marius_hills }
-	if = { limit = { has_global_variable = sr_site_interdicted_marius_hills } remove_global_variable = sr_site_interdicted_marius_hills }
 	debug_log = "TE_SR_SITES released marius_hills"
 }
 # Moves Marius Hills to scope:sr_site_to_marius_hills; scope:sr_site_from_marius_hills, when saved,
@@ -11762,7 +11758,6 @@ sr_site_release_daedalus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_daedalus } remove_global_variable = sr_site_blockaded_daedalus }
 	if = { limit = { has_global_variable = sr_site_bombard_daedalus } remove_global_variable = sr_site_bombard_daedalus }
 	if = { limit = { has_global_variable = sr_site_under_assault_daedalus } remove_global_variable = sr_site_under_assault_daedalus }
-	if = { limit = { has_global_variable = sr_site_interdicted_daedalus } remove_global_variable = sr_site_interdicted_daedalus }
 	debug_log = "TE_SR_SITES released daedalus"
 }
 # Moves Daedalus Crater to scope:sr_site_to_daedalus; scope:sr_site_from_daedalus, when saved,
@@ -12003,7 +11998,6 @@ sr_site_release_imbrium = {
 	if = { limit = { has_global_variable = sr_site_blockaded_imbrium } remove_global_variable = sr_site_blockaded_imbrium }
 	if = { limit = { has_global_variable = sr_site_bombard_imbrium } remove_global_variable = sr_site_bombard_imbrium }
 	if = { limit = { has_global_variable = sr_site_under_assault_imbrium } remove_global_variable = sr_site_under_assault_imbrium }
-	if = { limit = { has_global_variable = sr_site_interdicted_imbrium } remove_global_variable = sr_site_interdicted_imbrium }
 	debug_log = "TE_SR_SITES released imbrium"
 }
 # Moves Mare Imbrium to scope:sr_site_to_imbrium; scope:sr_site_from_imbrium, when saved,
@@ -35385,7 +35379,6 @@ sr_site_set_free_shackleton = {
 	if = { limit = { has_global_variable = sr_site_blockaded_shackleton } remove_global_variable = sr_site_blockaded_shackleton }
 	if = { limit = { has_global_variable = sr_site_bombard_shackleton } remove_global_variable = sr_site_bombard_shackleton }
 	if = { limit = { has_global_variable = sr_site_under_assault_shackleton } remove_global_variable = sr_site_under_assault_shackleton }
-	if = { limit = { has_global_variable = sr_site_interdicted_shackleton } remove_global_variable = sr_site_interdicted_shackleton }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES shackleton is a free colony"
 }
@@ -35498,7 +35491,6 @@ sr_site_set_free_peary = {
 	if = { limit = { has_global_variable = sr_site_blockaded_peary } remove_global_variable = sr_site_blockaded_peary }
 	if = { limit = { has_global_variable = sr_site_bombard_peary } remove_global_variable = sr_site_bombard_peary }
 	if = { limit = { has_global_variable = sr_site_under_assault_peary } remove_global_variable = sr_site_under_assault_peary }
-	if = { limit = { has_global_variable = sr_site_interdicted_peary } remove_global_variable = sr_site_interdicted_peary }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES peary is a free colony"
 }
@@ -35611,7 +35603,6 @@ sr_site_set_free_tranquility = {
 	if = { limit = { has_global_variable = sr_site_blockaded_tranquility } remove_global_variable = sr_site_blockaded_tranquility }
 	if = { limit = { has_global_variable = sr_site_bombard_tranquility } remove_global_variable = sr_site_bombard_tranquility }
 	if = { limit = { has_global_variable = sr_site_under_assault_tranquility } remove_global_variable = sr_site_under_assault_tranquility }
-	if = { limit = { has_global_variable = sr_site_interdicted_tranquility } remove_global_variable = sr_site_interdicted_tranquility }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES tranquility is a free colony"
 }
@@ -35724,7 +35715,6 @@ sr_site_set_free_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_blockaded_marius_hills } remove_global_variable = sr_site_blockaded_marius_hills }
 	if = { limit = { has_global_variable = sr_site_bombard_marius_hills } remove_global_variable = sr_site_bombard_marius_hills }
 	if = { limit = { has_global_variable = sr_site_under_assault_marius_hills } remove_global_variable = sr_site_under_assault_marius_hills }
-	if = { limit = { has_global_variable = sr_site_interdicted_marius_hills } remove_global_variable = sr_site_interdicted_marius_hills }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES marius_hills is a free colony"
 }
@@ -35837,7 +35827,6 @@ sr_site_set_free_daedalus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_daedalus } remove_global_variable = sr_site_blockaded_daedalus }
 	if = { limit = { has_global_variable = sr_site_bombard_daedalus } remove_global_variable = sr_site_bombard_daedalus }
 	if = { limit = { has_global_variable = sr_site_under_assault_daedalus } remove_global_variable = sr_site_under_assault_daedalus }
-	if = { limit = { has_global_variable = sr_site_interdicted_daedalus } remove_global_variable = sr_site_interdicted_daedalus }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES daedalus is a free colony"
 }
@@ -35950,7 +35939,6 @@ sr_site_set_free_imbrium = {
 	if = { limit = { has_global_variable = sr_site_blockaded_imbrium } remove_global_variable = sr_site_blockaded_imbrium }
 	if = { limit = { has_global_variable = sr_site_bombard_imbrium } remove_global_variable = sr_site_bombard_imbrium }
 	if = { limit = { has_global_variable = sr_site_under_assault_imbrium } remove_global_variable = sr_site_under_assault_imbrium }
-	if = { limit = { has_global_variable = sr_site_interdicted_imbrium } remove_global_variable = sr_site_interdicted_imbrium }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES imbrium is a free colony"
 }

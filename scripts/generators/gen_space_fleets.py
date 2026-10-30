@@ -1364,9 +1364,13 @@ def render_effects() -> str:
 
 # The overview's Defense cell (audit SPC-6): what threatens our colonies, worst
 # first, as the colony record states it (sr_disp_def_status_<key> reads the same).
-def _def_conditions(k: str) -> dict[str, str]:
+# A lunar world is never interdicted (lunar colonization § 8.3), so it has no
+# such kind: nothing sets its interdiction, and a read of it is logged as never
+# set at load (#1243).
+def _def_conditions(site: gss.Site) -> dict[str, str]:
+    k = site.key
     held = f"global_var:sr_site_holder_{k} ?= this"
-    return {
+    conditions = {
         "occupied": f"{held} has_global_variable = sr_site_occupier_{k}",
         "assault": (f"{held} NOT = {{ has_global_variable = sr_site_occupier_{k} }} "
                     f"has_global_variable = sr_site_under_assault_{k} global_var:sr_site_under_assault_{k} >= "
@@ -1376,9 +1380,19 @@ def _def_conditions(k: str) -> dict[str, str]:
         "blockaded": (f"{held} NOT = {{ has_global_variable = sr_site_occupier_{k} }} "
                       f"NOT = {{ has_global_variable = sr_site_interdicted_{k} }} has_global_variable = sr_site_blockaded_{k}"),
     }
+    if site in LUNAR:
+        del conditions["interdicted"]
+        conditions["blockaded"] = (f"{held} NOT = {{ has_global_variable = sr_site_occupier_{k} }} "
+                                   f"has_global_variable = sr_site_blockaded_{k}")
+    return conditions
 
 
 DEF_ORDER = ("occupied", "assault", "blockaded", "interdicted")
+
+
+def _def_sites(kind: str, sites) -> list[tuple[gss.Site, str]]:
+    """The sites (in the given order) that can be in this kind of threat, each with its condition."""
+    return [(s, c[kind]) for s in sites if kind in (c := _def_conditions(s))]
 
 
 def render_overview_list() -> list[str]:
@@ -1391,12 +1405,12 @@ def render_overview_list() -> list[str]:
            "\tif = { limit = { sr_launch_site_lost = yes } custom_tooltip = je_space_race_widget_ovc_def_line_site_lost }"]
     for kind in DEF_ORDER:
         out += ["\tif = {", "\t\tlimit = {", "\t\t\tOR = {"]
-        out += [f"\t\t\t\tAND = {{ {_def_conditions(site.key)[kind]} }}" for site in gss.panel_order()]
+        out += [f"\t\t\t\tAND = {{ {cond} }}" for _, cond in _def_sites(kind, gss.panel_order())]
         out += ["\t\t\t}", "\t\t}", f"\t\tcustom_tooltip_no_bullet = je_space_race_widget_ovc_def_head_{kind}"]
-        for site in gss.panel_order():
-            out.append(f"\t\tif = {{ limit = {{ {_def_conditions(site.key)[kind]} }} custom_tooltip = sr_site_name_{site.key} }}")
+        for site, cond in _def_sites(kind, gss.panel_order()):
+            out.append(f"\t\tif = {{ limit = {{ {cond} }} custom_tooltip = sr_site_name_{site.key} }}")
         out.append("\t}")
-    threatened = [f"AND = {{ {_def_conditions(site.key)[kind]} }}" for kind in DEF_ORDER for site in gss.SITES]
+    threatened = [f"AND = {{ {cond} }}" for kind in DEF_ORDER for _, cond in _def_sites(kind, gss.SITES)]
     out += ["\tif = {", "\t\tlimit = {", "\t\t\tNOT = {", "\t\t\t\tOR = {",
             "\t\t\t\t\tsr_earth_blockaded = yes", "\t\t\t\t\tsr_launch_site_lost = yes",
             *[f"\t\t\t\t\t{t}" for t in threatened],
@@ -1517,7 +1531,7 @@ def render_display() -> str:
             "# Colony Defences (6b; the Colonies table's Defenses view), per world: 1 while ours",
             "# (or ours occupied), its integrity",
             "# whole, its status (0 calm, 1 blockaded, 2 under assault, 3 occupied, 4",
-            "# interdicted, 6c), and",
+            "# interdicted, 6c, never a lunar world: lunar colonization § 8.3), and",
             "# 1 while its occupier's capital snapshot is there to show."]
     for site in gss.SITES:
         k = site.key
@@ -1531,7 +1545,8 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_occupier_{k} }} value = 3 }}",
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_under_assault_{k} global_var:sr_site_under_assault_{k} >= "
                 "{ value = te_history_month_index subtract = 1 } } value = 2 }",
-                f"\telse_if = {{ limit = {{ has_global_variable = sr_site_interdicted_{k} }} value = 4 }}",
+                *([] if site in LUNAR else
+                  [f"\telse_if = {{ limit = {{ has_global_variable = sr_site_interdicted_{k} }} value = 4 }}"]),
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_blockaded_{k} }} value = 1 }}",
                 "}",
                 f"sr_disp_def_occupier_{k} = {{",
@@ -1572,15 +1587,15 @@ def _overview_custom_loc() -> list[str]:
            "\t\tlocalization_key = je_space_race_widget_ovc_def_word_site_lost", "\t}"]
     for kind in DEF_ORDER:
         out += ["\ttext = {", "\t\ttrigger = {", "\t\t\tOR = {"]
-        out += [f"\t\t\t\tAND = {{ {_def_conditions(site.key)[kind]} }}" for site in gss.panel_order()]
+        out += [f"\t\t\t\tAND = {{ {cond} }}" for _, cond in _def_sites(kind, gss.panel_order())]
         out += ["\t\t\t}", "\t\t}", f"\t\tlocalization_key = je_space_race_widget_ovc_def_word_{kind}", "\t}"]
     out += ["\ttext = {", "\t\tlocalization_key = je_space_race_widget_ovc_def_word_calm", "\t}", "}", "",
             "sr_ov_defense_site = {", "\ttype = country", "\trandom_valid = no", "",
             "\ttext = {", "\t\ttrigger = { OR = { sr_earth_blockaded = yes sr_launch_site_lost = yes } }",
             "\t\tlocalization_key = je_space_race_widget_ovc_def_fig_earth", "\t}"]
     for kind in DEF_ORDER:
-        for site in gss.panel_order():
-            out += ["\ttext = {", f"\t\ttrigger = {{ {_def_conditions(site.key)[kind]} }}",
+        for site, cond in _def_sites(kind, gss.panel_order()):
+            out += ["\ttext = {", f"\t\ttrigger = {{ {cond} }}",
                     f"\t\tlocalization_key = {gss.overview_name_key(site)}", "\t}"]
     out += ["\ttext = {", "\t\tlocalization_key = je_space_race_widget_ovc_def_fig_calm", "\t}", "}", ""]
     return out

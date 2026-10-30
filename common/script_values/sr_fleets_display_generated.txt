@@ -776,7 +776,7 @@ sr_disp_loc_status_kuiper = {
 # Colony Defences (6b; the Colonies table's Defenses view), per world: 1 while ours
 # (or ours occupied), its integrity
 # whole, its status (0 calm, 1 blockaded, 2 under assault, 3 occupied, 4
-# interdicted, 6c), and
+# interdicted, 6c, never a lunar world: lunar colonization § 8.3), and
 # 1 while its occupier's capital snapshot is there to show.
 sr_disp_def_valles_marineris = {
 	value = 0
@@ -1331,7 +1331,6 @@ sr_disp_def_status_shackleton = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_occupier_shackleton } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_under_assault_shackleton global_var:sr_site_under_assault_shackleton >= { value = te_history_month_index subtract = 1 } } value = 2 }
-	else_if = { limit = { has_global_variable = sr_site_interdicted_shackleton } value = 4 }
 	else_if = { limit = { has_global_variable = sr_site_blockaded_shackleton } value = 1 }
 }
 sr_disp_def_occupier_shackleton = {
@@ -1347,7 +1346,6 @@ sr_disp_def_status_peary = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_occupier_peary } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_under_assault_peary global_var:sr_site_under_assault_peary >= { value = te_history_month_index subtract = 1 } } value = 2 }
-	else_if = { limit = { has_global_variable = sr_site_interdicted_peary } value = 4 }
 	else_if = { limit = { has_global_variable = sr_site_blockaded_peary } value = 1 }
 }
 sr_disp_def_occupier_peary = {
@@ -1363,7 +1361,6 @@ sr_disp_def_status_tranquility = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_occupier_tranquility } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_under_assault_tranquility global_var:sr_site_under_assault_tranquility >= { value = te_history_month_index subtract = 1 } } value = 2 }
-	else_if = { limit = { has_global_variable = sr_site_interdicted_tranquility } value = 4 }
 	else_if = { limit = { has_global_variable = sr_site_blockaded_tranquility } value = 1 }
 }
 sr_disp_def_occupier_tranquility = {
@@ -1379,7 +1376,6 @@ sr_disp_def_status_marius_hills = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_occupier_marius_hills } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_under_assault_marius_hills global_var:sr_site_under_assault_marius_hills >= { value = te_history_month_index subtract = 1 } } value = 2 }
-	else_if = { limit = { has_global_variable = sr_site_interdicted_marius_hills } value = 4 }
 	else_if = { limit = { has_global_variable = sr_site_blockaded_marius_hills } value = 1 }
 }
 sr_disp_def_occupier_marius_hills = {
@@ -1395,7 +1391,6 @@ sr_disp_def_status_daedalus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_occupier_daedalus } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_under_assault_daedalus global_var:sr_site_under_assault_daedalus >= { value = te_history_month_index subtract = 1 } } value = 2 }
-	else_if = { limit = { has_global_variable = sr_site_interdicted_daedalus } value = 4 }
 	else_if = { limit = { has_global_variable = sr_site_blockaded_daedalus } value = 1 }
 }
 sr_disp_def_occupier_daedalus = {
@@ -1411,7 +1406,6 @@ sr_disp_def_status_imbrium = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_occupier_imbrium } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_under_assault_imbrium global_var:sr_site_under_assault_imbrium >= { value = te_history_month_index subtract = 1 } } value = 2 }
-	else_if = { limit = { has_global_variable = sr_site_interdicted_imbrium } value = 4 }
 	else_if = { limit = { has_global_variable = sr_site_blockaded_imbrium } value = 1 }
 }
 sr_disp_def_occupier_imbrium = {
