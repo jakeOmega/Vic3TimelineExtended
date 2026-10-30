@@ -292,10 +292,6 @@ class LocalizationTest(unittest.TestCase):
         self.assertEqual(units["sr_mission_units_moon"], 3 * units["sr_mission_units_earth_orbit"])
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 def _tree(text):
     """`key op value` triples, nested for blocks, from a comment-free body."""
     tokens = iter(re.findall(r"\{|\}|[<>=!]=|[<>=]|[^\s{}<>=!]+", text))
@@ -449,3 +445,7 @@ class DecisionOpensTheEntryTest(unittest.TestCase):
         self.assertIn("sr_resume_solar_colonization = yes",
                       block(self.decisions["te_decision_resume_solar_colonization"], "when_taken"))
         self.check("te_decision_resume_solar_colonization", self.resumed)
+
+
+if __name__ == "__main__":
+    unittest.main()
