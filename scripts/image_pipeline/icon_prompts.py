@@ -2187,6 +2187,15 @@ ICONS: dict[str, dict[str, dict]] = {
                          "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
         # Lunar colonization (2026-10-29): a copy of Mercury's until now. Mid-grey with dark seas and evenly
         # lit, so it neither loses its body in the cut-out nor repeats Mercury's half-lit grey-brown.
+        # Audit SPC-6 / SPC-16 stand-ins: Space Command's building icon on the Defense cell and on Locations'
+        # inbound warships (16 px), the Space Program's on the Modules cell. A light grey warship reroll
+        # (batch 7) read as a shuttle; the dark one keeps the armed silhouette.
+        "warship": {"subject": "a sleek dark grey armed warship spacecraft seen from the side, a long angular hull with "
+                               "two thick gun turrets on top and three round blue engine nozzles at the back",
+                    "seed": 1, "now": f"{_BI}/building_space_command.dds"},
+        "module": {"subject": "a squat silver-grey cylindrical spacecraft habitat module wrapped in gold foil bands, a "
+                              "round docking ring at one end and two short dark blue solar panels",
+                   "seed": 1, "now": f"{_BI}/building_space_program.dds"},
         "colony_moon": {"subject": "a round mid-grey Moon, evenly lit, with large dark grey seas across its face and a "
                                    "few bright rayed craters",
                         "seed": 1, "now": f"{_GI}/space_race_icons/colony_mercury.dds"},

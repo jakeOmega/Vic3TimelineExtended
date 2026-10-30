@@ -259,7 +259,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high
 
 ### GW-12. Two pairs of policy rows share an icon
-- **Status:** done with placeholder art (2026-10-27 wave). Tariffs and Carbon Removal Support have rows of their own in `global_warming_gui_icons.md` with the proposed subjects; until the art exists they show existing textures that differ from their neighbors (vanilla's maximum-tariffs trade icon, the Carbon Capture and Storage invention icon). The two `policy_*.dds` files remain an art need.
+- **Status:** done with placeholder art (2026-10-27 wave). Tariffs and Carbon Removal Support have rows of their own in `global_warming_gui_icons.md` with the proposed subjects; until the art exists they show existing textures that differ from their neighbors (vanilla's maximum-tariffs trade icon, the Carbon Capture and Storage invention icon). Icon batch 7 (2026-10-30, #1249) painted the two `policy_*.dds` files, so no placeholder is left.
 - **Category:** style
 - **Where:** `global_warming_widget.gui:905` (Fossil-Fuel Tariffs uses `policy_fossil_fuel_divestment.dds`) and `:1038`
   (Carbon Removal Support uses `policy_renewable_investment.dds`); `docs/systems/global_warming_gui_icons.md:56` (and

@@ -943,11 +943,6 @@ class OrbitTest(unittest.TestCase):
 # Textures the widget uses as they are: vanilla's, used as vanilla uses them.
 # Everything else is the Space Race's own art or a #571 journal icon.
 VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
-                # the colonization overview's Defense and Modules cells (audit
-                # SPC-6): the buildings that defend and that fabricate; Space
-                # Command's also marks warships inbound in Locations (SPC-16)
-                "gfx/interface/icons/building_icons/building_space_command.dds",
-                "gfx/interface/icons/building_icons/building_space_program.dds",
                 # the rival rows' band marker, drawn as the UN's authority bar draws it
                 "gfx/interface/icons/generic_icons/transparent.dds",
                 # the module queue's move-up button, the base game's ship construction queue's (#1159)
@@ -997,12 +992,11 @@ class SpaceRaceIconsTest(unittest.TestCase):
 
     def test_colony_and_war_fleets_wear_different_icons(self):
         """Audit SPC-16: Solar System's inbound colony fleets keep the
-        colonization rocket; Locations' inbound warships wear Space Command's."""
+        colonization rocket; Locations' inbound warships wear the warship."""
         site = _type_body(self.gui, "te_sr_site_row")
         loc = _type_body(self.gui, "te_sr_location_row")
         self.assertIn('texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"', site)
-        self.assertEqual(re.findall(r'texture = "([^"]+)"', loc),
-                         ["gfx/interface/icons/building_icons/building_space_command.dds"])
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', loc), [f"{SR_ICONS}warship.dds"])
 
     def test_the_pies(self):
         pie = _type_body(self.gui, "te_sr_ov_pie")
