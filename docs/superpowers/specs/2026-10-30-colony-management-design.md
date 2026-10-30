@@ -198,19 +198,43 @@ the checks only the game can show: a JE-scope `unit_` modifier reaching the army
 ## 11. As built (2026-10-30)
 
 Built in #1257, the build order's five steps on one branch. A follow-up (#1258)
-finished two things:
+finished two of its sections and took the owner's review of the built panel
+(2026-10-30):
 
 - **§ 4.1's colors.** The drift hover's conditional lines (`sr_aut_line_*`:
   charter, garrison, war, no contact, a destroyed colony) had kept `|+=2`, so a
   garrison's +0.2 read green. They now read `|=-2` like the rest, and
   `test_space_race_layout.py` holds every figure in the hover to it.
 - **§ 5's technologies as markers** (`scripting_best_practices.md` § Technology
-  markers). #1257 read `has_technology_researched`, so neither technology's
-  tooltip mentioned the slot. Advanced Nanofabrication and Molecular Assemblers
-  now carry +1 `country_sr_colony_slots_add` each (script-only, "Colony Module
-  Slots"), `sr_site_slots_<key>` adds the holder's, and the Slots hover reads its
-  breakdown. Anything else that grants it later, a law or a policy, counts the
-  same way.
+  markers). #1257 read `has_technology_researched`, so no technology's tooltip
+  mentioned the slot. The technologies carry +1 `country_sr_colony_slots_add`
+  each (script-only, "Colony Module Slots"), `sr_site_slots_<key>` adds the
+  holder's, and the Slots hover reads its breakdown. The owner added three to
+  the design's two: Nuclear Thermal Propulsion, Orbital Manufacturing,
+  Advanced Nanofabrication, Space Colonization and Molecular Assemblers, so a
+  world has up to 9 slots. Anything else that grants it later, a law or a
+  policy, counts the same way.
+- **The drives as markers** (the owner): Fusion Power, Muon-Catalyzed Fusion
+  Reactors and Antimatter Production carry `country_sr_drive_<fusion|torch|antimatter>_bool`
+  (script-only booleans), which `sr_drive_level`, `sr_launch_has_fusion` and
+  `sr_launch_has_antimatter` read, so each technology's tooltip names its drive.
+  Two self-checks, `drive_marker` and `slot_marker`, read the markers in game.
+- **Underlines** (the owner: far too many across the Space Race GUI). Style rule
+  3 had every hover's text underlined, enforced by `unmarked_hover_audit`;
+  vanilla underlines 1 to 4% of its own text hovers. The rule now follows
+  vanilla, the audit is retired, and the Space Race GUI lost its underlines.
+- **§ 8, revisited.** A colony's name reads as a button (vanilla's
+  `clean_button` and go-to arrow). A colony's page is a body of its own, not
+  the list row with every view stacked: sections with their controls beside
+  the headings, readings in icon tiles two to a row (`te_sr_page_tile`), and
+  the modules one to a line with their full names (`te_sr_page_mod_row`). Its
+  icons are kept art or placeholders listed in `space_race_gui_icons.md`.
+- **A site before it is settled.** Solar System shows under each site's name
+  its slots as ours and its Extraplanetary Base room and grade.
+- **The race to the Moon.** Solar System Colonization's reward hover gave the
+  first lunar colony's prize with no word of why only the Moon has one. It now
+  names the race to the Moon, the old Moon Base milestone's prize and the one
+  race among the sites, and the six lunar sites' hovers point to it.
 
 **Where the build fills in what the sections leave open:**
 
@@ -249,11 +273,10 @@ finished two things:
   generated `te_sr_window_row` each, with the premium shown up to +999%.
   `sr_window_reach_<body>` is 1 within the horizon, 2 beyond it (counted under
   the table) and 0 with nothing to target.
-- **A colony's page** puts each view under a `te_sr_colony_detail_heading` and
-  its column heads (`te_sr_colony_heads_<view>`); the Modules part has no
-  heads, since its cells label themselves.
+- **A colony's page**, as #1257 built it, put each view under a heading and
+  its column heads; #1258 replaced that with the page above.
 
-**Left for the owner:**
+**The owner's calls** (2026-10-30: fine for now):
 
 - **The numbers are a first guess:** settling at 1% a month, a colony's own
   builds (a point a month a 10,000 people at full autonomy, at most 5), the
@@ -273,6 +296,7 @@ finished two things:
   waits for the head's whole price, so the fourth module past a colony's slots
   (500 points) holds everything behind it for up to 100 months at Orbital
   Assembly's 5 points a month, or 20 at Fusion Shipyards' 25.
-- **Not seen in game:** the play-test list's § Colony management (nine checks,
-  no self-check), including whether the Training Ground's `unit_` modifier on
-  the entry reaches the army, and the fallback if it doesn't.
+- **Not seen in game:** the play-test list's § Colony management (twelve
+  checks and the `drive_marker` and `slot_marker` self-checks), including
+  whether the Training Ground's `unit_` modifier on the entry reaches the army,
+  and the fallback if it doesn't.

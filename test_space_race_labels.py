@@ -658,9 +658,9 @@ class FigureBudgetTest(unittest.TestCase):
         # a module level and what is on its way, autonomy and drift, Defenses
         "settler_people": "999.9K / 999.9K", "settler_crews": "99", "module_staffing": "100%",
         "aut_figure": "100%", "aut_drift": "+0.99", "def_level": "99", "def_integrity": "100%", "def_marines": "99",
-        # slots used of slots (4 + 2 technologies + 4 past), base room (60 + 10 levels x 10),
+        # slots used of slots (4 + 5 technologies + 4 past), base room (60 + 10 levels x 10),
         # what the colony builds of its own (colony management design §§ 4.3, 5)
-        "module_slots": "10/6", "module_slots_past": "10/6", "module_bases": "160", "aut_build": "100% (+5.0)",
+        "module_slots": "13/9", "module_slots_past": "13/9", "module_bases": "160", "aut_build": "100% (+5.0)",
     }
     # a module cell (te_sr_mod_cell): a level (10 past a world's slots at most) and what is on its way
     CELL = {"cell_level": "8", "cell_pending": "+8"}

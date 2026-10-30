@@ -293,8 +293,9 @@ MODULE_NAMES = {"a": "Specialization I", "b": "Specialization II", "hab": "Habit
 MODULE_AI_VALUE = 8  # Cede Colony's AI value of a module level past the first
 
 # Slots (colony management design § 5): the table's slots plus the holder's
-# SLOTS_MODIFIER, a script-only type that Advanced Nanofabrication and
-# Molecular Assemblers carry (+1 each), so their tooltips show it, and up to
+# SLOTS_MODIFIER, a script-only type that five technologies carry (+1 each:
+# Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication,
+# Space Colonization, Molecular Assemblers), so their tooltips show it, and up to
 # SLOTS_PAST_MAX modules past them, the n-th past costing sr_module_points x
 # (1 + n).
 SLOTS_MODIFIER = "country_sr_colony_slots_add"
@@ -1842,6 +1843,14 @@ def render_module_values() -> list[str]:
                 f"subtract = sr_site_slots_{k} add = 2 multiply = sr_module_points }}",
                 "}"]
     out += render_facility_values()
+    out += ["", "# Country scope, the slot_marker self-check's reading (colony management design",
+            "# § 11): what the holder's Colony Module Slots add at the first colony THIS holds,",
+            "# read through that world's own slots (the holder's scope), or -1 with none.",
+            "sr_site_slots_tech_seen = {", "\tvalue = -1"]
+    for n, s in enumerate(SITES):
+        out.append(f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} "
+                   f"value = sr_site_slots_{s.key} subtract = {s.slots} }}")
+    out.append("}")
     out += ["", "# Country scope: the module levels past the first at the colonies THIS holds, the",
             "# upkeep's multiplier (design § 8).",
             "sr_mod_upkeep_levels = {", "\tvalue = 0"]

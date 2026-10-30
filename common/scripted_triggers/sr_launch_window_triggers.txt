@@ -26,18 +26,19 @@
 # ============================================================================
 
 # Fusion drives that leave any month: the torch (Muon-Catalyzed Fusion
-# Reactors) or the antimatter drive.
+# Reactors' marker) or the antimatter drive.
 sr_launch_has_fusion = {
 	OR = {
-		has_technology_researched = compact_fusion_reactors
+		modifier:country_sr_drive_torch_bool = yes
 		sr_launch_has_antimatter = yes
 	}
 }
 
-# The antimatter drive: the technology and an Antimatter Containment Facility
-# to fill its tanks (scope § 5.3). The fastest of the four (sr_drive_level 3).
+# The antimatter drive: Antimatter Production's marker and an Antimatter
+# Containment Facility to fill its tanks (scope § 5.3). The fastest of the four
+# (sr_drive_level 3).
 sr_launch_has_antimatter = {
-	has_technology_researched = antimatter_production
+	modifier:country_sr_drive_antimatter_bool = yes
 	any_scope_building = {
 		is_building_type = building_antimatter_facility
 	}

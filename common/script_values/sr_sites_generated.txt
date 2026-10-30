@@ -12020,6 +12020,53 @@ sr_mq_head_cost = {
 	}
 }
 
+# Country scope, the slot_marker self-check's reading (colony management design
+# § 11): what the holder's Colony Module Slots add at the first colony THIS holds,
+# read through that world's own slots (the holder's scope), or -1 with none.
+sr_site_slots_tech_seen = {
+	value = -1
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = sr_site_slots_valles_marineris subtract = 4 }
+	else_if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = sr_site_slots_olympus_mons subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = sr_site_slots_hellas_planitia subtract = 4 }
+	else_if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = sr_site_slots_utopia_planitia subtract = 4 }
+	else_if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = sr_site_slots_arcadia_planitia subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_ceres ?= this } value = sr_site_slots_ceres subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_vesta ?= this } value = sr_site_slots_vesta subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_psyche ?= this } value = sr_site_slots_psyche subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_pallas ?= this } value = sr_site_slots_pallas subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = sr_site_slots_hygiea subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_io ?= this } value = sr_site_slots_io subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_europa ?= this } value = sr_site_slots_europa subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = sr_site_slots_ganymede subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_callisto ?= this } value = sr_site_slots_callisto subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_himalia ?= this } value = sr_site_slots_himalia subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = sr_site_slots_amalthea subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_venus ?= this } value = sr_site_slots_venus subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_mercury ?= this } value = sr_site_slots_mercury subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_titan ?= this } value = sr_site_slots_titan subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = sr_site_slots_enceladus subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_rhea ?= this } value = sr_site_slots_rhea subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_mimas ?= this } value = sr_site_slots_mimas subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = sr_site_slots_iapetus subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_titania ?= this } value = sr_site_slots_titania subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_oberon ?= this } value = sr_site_slots_oberon subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_miranda ?= this } value = sr_site_slots_miranda subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_ariel ?= this } value = sr_site_slots_ariel subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_triton ?= this } value = sr_site_slots_triton subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_proteus ?= this } value = sr_site_slots_proteus subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_pluto ?= this } value = sr_site_slots_pluto subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_eris ?= this } value = sr_site_slots_eris subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_makemake ?= this } value = sr_site_slots_makemake subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_haumea ?= this } value = sr_site_slots_haumea subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_sedna ?= this } value = sr_site_slots_sedna subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = sr_site_slots_shackleton subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_peary ?= this } value = sr_site_slots_peary subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = sr_site_slots_tranquility subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = sr_site_slots_marius_hills subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = sr_site_slots_daedalus subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = sr_site_slots_imbrium subtract = 2 }
+}
+
 # Country scope: the module levels past the first at the colonies THIS holds, the
 # upkeep's multiplier (design § 8).
 sr_mod_upkeep_levels = {

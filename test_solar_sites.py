@@ -1281,23 +1281,29 @@ class ModulesTest(unittest.TestCase):
 
     def test_the_slot_technologies_carry_the_slots_the_worlds_read(self):
         """Colony management design § 5, as a technology marker
-        (scripting_best_practices.md § Technology markers): the two technologies
-        carry +1 Colony Module Slots each, so their tooltips say so, and each
-        world's slots read the holder's modifier, not the technologies."""
+        (scripting_best_practices.md § Technology markers): five technologies
+        carry +1 Colony Module Slots each (the owner added three on
+        2026-10-30), so their tooltips say so, and each world's slots read the
+        holder's modifier, not the technologies."""
         name = gss.SLOTS_MODIFIER
         types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
         self.assertIn("script_only = yes", _block(types, name))
-        techs = _strip(_raw("common", "technology", "technologies", "era_12.txt"))
-        for tech in ("advanced_nanofabrication", "molecular_assemblers"):
-            with self.subTest(tech=tech):
-                self.assertIn(f"{name} = 1", _block(techs, tech))
-        carriers = []
+        carriers = {"era_11.txt": ("nuclear_thermal_propulsion",),
+                    "era_12.txt": ("orbital_manufacturing", "advanced_nanofabrication", "space_colonization",
+                                   "molecular_assemblers")}
+        for era, techs in carriers.items():
+            text = _strip(_raw("common", "technology", "technologies", era))
+            for tech in techs:
+                with self.subTest(tech=tech):
+                    self.assertIn(f"{name} = 1", _block(text, tech))
+            self.assertEqual(len(re.findall(rf"\b{name} = 1\b", text)), len(techs), era)
+        found = []
         for root, _, files in os.walk(os.path.join(REPO, "common")):
             for f in files:
                 path = os.path.join(root, f)
                 if f.endswith(".txt") and re.search(rf"\b{name} = -?[\d.]", _strip(open(path, encoding="utf-8-sig").read())):
-                    carriers.append(os.path.relpath(path, REPO))
-        self.assertEqual(carriers, [os.path.join("common", "technology", "technologies", "era_12.txt")])
+                    found.append(os.path.relpath(path, REPO))
+        self.assertEqual(sorted(found), sorted(os.path.join("common", "technology", "technologies", e) for e in carriers))
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):

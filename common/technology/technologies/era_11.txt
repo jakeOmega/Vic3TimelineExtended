@@ -352,6 +352,8 @@ nuclear_thermal_propulsion = {
 	modifier = {
 		country_space_race_max_funding_add = 1
 		country_sr_nuclear_thermal_launches_bool = yes
+		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
+		country_sr_colony_slots_add = 1
 	}
 
 	ai_weight = {
@@ -378,6 +380,8 @@ fusion_power = {
 		country_space_race_max_funding_add = 1
 		ship_max_distance_to_port_mult = 0.30
 		ship_movement_speed_mult = 0.05
+		# a colony fleet's drive (slices 2-3 design § 1; sr_drive_level)
+		country_sr_drive_fusion_bool = yes
 	}
 
 	ai_weight = {

@@ -218,8 +218,11 @@ Colonies (open) has a box for every site you hold, with Colonies Held (out of
 40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a
 dwarf planet). Hovering its name shows the colony's permanent effects, and
-clicking it opens the colony's page: all four views of that colony at once, with
-Back to return to the list. The buttons above the rows switch what each box
+clicking it, or the arrow beside it, opens the colony's page. The page sets out
+People, Modules, Autonomy and (under Full Colonies) Defenses one under another,
+each with its control beside its heading (the settler priority, Clear, Abandon),
+its figures in tiles and every module on a line of its own with its full name.
+Back returns to the list. The buttons above the rows switch what each box
 shows:
 
 | View | Shows | Above the rows |
@@ -725,11 +728,14 @@ colonies:
 A blockade stops the Mining Complex, Orbital Yard, resort and foundry; an
 occupied colony's facilities give nothing.
 
-A colony has 1 to 4 slots by its size, and one more each with Advanced
-Nanofabrication and Molecular Assemblers. Past them it still takes up to four
-more modules, each costing 100 fabrication points more than the last: 200, then
-300, 400 and 500. The Modules view's Slots figure turns red past them, and its
-hover gives the next module's price.
+A colony has 1 to 4 slots by its size, and one more each with Nuclear Thermal
+Propulsion, Orbital Manufacturing, Advanced Nanofabrication, Space Colonization
+and Molecular Assemblers, whose tooltips list Colony Module Slots. Past them it
+still takes up to four more modules, each costing 100 fabrication points more
+than the last: 200, then 300, 400 and 500. The Modules view's Slots figure turns
+red past them, and its hover gives the next module's price. Solar System shows
+each site's slots and Extraplanetary Base room under its name, so you can weigh
+a site before you settle it.
 
 The founding event has to be answered before you can add a specialization
 level. Each row's buttons add one more level of a module to the end of your
