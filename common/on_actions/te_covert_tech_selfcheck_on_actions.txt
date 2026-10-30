@@ -1,0 +1,76 @@
+﻿# TEMPORARY self-check (#1251, 2026-10-30): does can_research hold for the
+# technology a country is researching?
+#
+# Covert tech theft's current-research branch names each prerequisite
+# (has_technology_researched), because a save made before a prerequisite was
+# added can be researching a technology without it, and the engine then
+# refuses add_technology_progress (#1244). A single can_research line per
+# technology could replace those lines, in the steal's ladder and in the
+# stealable gates (common/scripted_triggers/covert_tech_theft_generated.txt).
+# That needs can_research to be
+#   1. true for a current research whose prerequisites are held, and
+#   2. false for one with a prerequisite missing.
+# The first monthly pulse of a game, or of a save loaded after this landed,
+# tallies every country's current production or military research.
+#
+# covert_can_research_current, once at least one country holds its current
+# research's prerequisites (until then it tries again each month):
+#   OK      can_research held for every one of them: 1 holds.
+#   BROKEN  it failed for some or all (can_research would then mean "could
+#           start researching"): keep the prerequisite lines.
+# covert_can_research_stranded, only when some country researches a technology
+# without one of its prerequisites. LIB and UNA do in the owner's 2013
+# Byzantium autosaves; a fresh game has no such country and logs nothing.
+#   OK      can_research failed for every one of them: 2 holds.
+#   BROKEN  it held for some: can_research doesn't check prerequisites, so it
+#           can't stand in for them.
+#
+# Both OK: generate can_research in place of the prerequisite lines, drop
+# Tech.prereqs from the generator, and delete this check (this file,
+# te_covert_tech_selfcheck_effects.txt and the generator's render_selfcheck).
+# Play-test rows: docs/testing/covert-counterintel-playtest.md.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_covert_tech_can_research_selfcheck
+	}
+}
+
+te_covert_tech_can_research_selfcheck = {
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_cov_cr_checked } }
+			set_global_variable = { name = te_cov_cr_held value = 0 }
+			set_global_variable = { name = te_cov_cr_held_can value = 0 }
+			set_global_variable = { name = te_cov_cr_stranded value = 0 }
+			set_global_variable = { name = te_cov_cr_stranded_can value = 0 }
+			every_country = {
+				covert_tech_selfcheck_research_tally = yes
+			}
+			if = {
+				limit = { global_var:te_cov_cr_held > 0 }
+				set_global_variable = { name = te_cov_cr_checked value = yes }
+				if = {
+					limit = { global_var:te_cov_cr_held_can >= global_var:te_cov_cr_held }
+					debug_log = "TE_SELF_CHECK OK covert_can_research_current held=[GetGlobalVariable('te_cov_cr_held').GetValue|0] can_research=[GetGlobalVariable('te_cov_cr_held_can').GetValue|0] (can_research holds for every country's current production or military research whose prerequisites it holds) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN covert_can_research_current held=[GetGlobalVariable('te_cov_cr_held').GetValue|0] can_research=[GetGlobalVariable('te_cov_cr_held_can').GetValue|0] (can_research fails for current research whose prerequisites are held: keep covert tech theft's prerequisite lines) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				if = {
+					limit = { global_var:te_cov_cr_stranded > 0 }
+					if = {
+						limit = { global_var:te_cov_cr_stranded_can = 0 }
+						debug_log = "TE_SELF_CHECK OK covert_can_research_stranded stranded=[GetGlobalVariable('te_cov_cr_stranded').GetValue|0] can_research=[GetGlobalVariable('te_cov_cr_stranded_can').GetValue|0] (can_research fails for every current research missing a prerequisite, as the engine refuses its progress) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN covert_can_research_stranded stranded=[GetGlobalVariable('te_cov_cr_stranded').GetValue|0] can_research=[GetGlobalVariable('te_cov_cr_stranded_can').GetValue|0] (can_research holds for current research missing a prerequisite, whose progress the engine refuses: it can't stand in for the prerequisite lines) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+				}
+			}
+			remove_global_variable = te_cov_cr_held
+			remove_global_variable = te_cov_cr_held_can
+			remove_global_variable = te_cov_cr_stranded
+			remove_global_variable = te_cov_cr_stranded_can
+		}
+	}
+}

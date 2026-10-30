@@ -45,6 +45,7 @@ class Tech:
     category: str
     era: int
     index: int
+    prereqs: tuple[str, ...] = ()  # unlocking_technologies, all required
 
 
 @dataclass(frozen=True)
@@ -98,8 +99,13 @@ def tech_catalog(mod_state) -> list[Tech]:
         if category not in CATEGORIES or unwrap(body.get("can_research")) == "no":
             continue
         era = int(str(unwrap(body["era"])).removeprefix("era_"))
-        rows.append((key, category, era))
-    return [Tech(key, category, era, index) for index, (key, category, era) in enumerate(rows, start=1)]
+        unlocking = unwrap(body.get("unlocking_technologies")) or []
+        prereqs = tuple(unwrap(p) for p in (unlocking if isinstance(unlocking, list) else [unlocking]))
+        rows.append((key, category, era, prereqs))
+    return [
+        Tech(key, category, era, index, prereqs)
+        for index, (key, category, era, prereqs) in enumerate(rows, start=1)
+    ]
 
 
 def read_constants(mod_state) -> Constants:
@@ -147,7 +153,8 @@ EFFECTS_PREAMBLE = (
 TRIGGERS_PREAMBLE = (
     "# Scope: country (the would-be operator). True when $TARGET$ has researched a\n"
     "# technology of the category that we have not and could research now, or are\n"
-    "# researching: exactly when covert_tech_steal_<category> would take something.\n"
+    "# researching with its prerequisites held: exactly when\n"
+    "# covert_tech_steal_<category> would take something.\n"
     "# Espionage's launch (possible, will_propose) and keep (requirement_to_maintain)\n"
     "# gates.\n"
 )
@@ -210,20 +217,44 @@ def render_grant(era: int, values: list[int]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _candidate(tech: Tech, target: str, depth: int, *, or_current: bool = False) -> list[str]:
-    """One technology's theft condition. `or_current` also accepts it while
-    we research it: the steal's current-research branch reads no
-    can_research, so a gate must not either, or it could end an operation
-    that is still stealing."""
+def _current_research(tech: Tech, depth: int) -> list[str]:
+    """We research the technology and hold its prerequisites.
+
+    Researching doesn't imply the prerequisites: a save made before one was
+    added keeps researching the technology without it, and
+    add_technology_progress then refuses the progress (#1244: LIB and UNA on
+    asteroid_mining after #1234 made in_situ_resource_utilization its
+    prerequisite). The prerequisites are checked by name, as vanilla's events
+    do, rather than with can_research, which may not hold for the technology
+    being researched."""
     tab = "\t" * depth
-    researchable = (
-        f"OR = {{ can_research = {tech.key} is_researching_technology = {tech.key} }}"
-        if or_current
-        else f"can_research = {tech.key}"
-    )
+    return [
+        f"{tab}is_researching_technology = {tech.key}",
+        *(f"{tab}has_technology_researched = {prereq}" for prereq in tech.prereqs),
+    ]
+
+
+def _candidate(tech: Tech, target: str, depth: int, *, or_current: bool = False) -> list[str]:
+    """One technology's theft condition. `or_current` also accepts it on the
+    steal's current-research terms, which read no can_research, so a gate
+    must not either, or it could end an operation that is still stealing."""
+    tab = "\t" * depth
+    if not or_current:
+        researchable = [f"{tab}can_research = {tech.key}"]
+    elif not tech.prereqs:
+        researchable = [f"{tab}OR = {{ can_research = {tech.key} is_researching_technology = {tech.key} }}"]
+    else:
+        researchable = [
+            f"{tab}OR = {{",
+            f"{tab}\tcan_research = {tech.key}",
+            f"{tab}\tAND = {{",
+            *_current_research(tech, depth + 2),
+            f"{tab}\t}}",
+            f"{tab}}}",
+        ]
     return [
         f"{tab}NOT = {{ has_technology_researched = {tech.key} }}",
-        f"{tab}{researchable}",
+        *researchable,
         f"{tab}{target} ?= {{ has_technology_researched = {tech.key} }}",
     ]
 
@@ -235,19 +266,22 @@ def _grant_call(tech: Tech) -> str:
 def render_steal(category: str, techs: list[Tech]) -> str:
     """Current research first, then a random candidate, else nothing.
 
-    The current-research branch also asks that the technology isn't researched
-    yet, as vanilla guards add_technology_progress. Without it the grant logged
-    "You need to acquire the technology before adding progress", twice in one
-    second from two operations' phase branches (2026-10-17): most likely the
-    first completed the technology while is_researching_technology still held
-    for the second."""
+    The engine refuses add_technology_progress for a technology the country
+    hasn't the prerequisites for, logging "You need to acquire the technology
+    before adding progress". The current-research branch therefore asks that
+    the technology isn't researched yet, as vanilla guards it (2026-10-17, when
+    the line came twice in one second from two operations' phase branches),
+    and that we hold its prerequisites (#1244, every month from two countries
+    whose research predated a new prerequisite; see _current_research)."""
     lines = [f"covert_tech_steal_{category} = {{"]
     for position, tech in enumerate(techs):
+        current, *prereqs = _current_research(tech, 3)
         lines += [
             f"\t{'if' if position == 0 else 'else_if'} = {{",
             "\t\tlimit = {",
-            f"\t\t\tis_researching_technology = {tech.key}",
+            current,
             f"\t\t\tNOT = {{ has_technology_researched = {tech.key} }}",
+            *prereqs,
             f"\t\t\tscope:iw_theft_target ?= {{ has_technology_researched = {tech.key} }}",
             "\t\t}",
             f"\t\t{_grant_call(tech)}",
@@ -279,6 +313,44 @@ def render_stealable(category: str, techs: list[Tech]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_selfcheck(techs: list[Tech]) -> str:
+    """TEMPORARY: the tally behind TE_SELF_CHECK covert_can_research_current
+    and _stranded (common/on_actions/te_covert_tech_selfcheck_on_actions.txt).
+
+    Sorts the country's current research into prerequisites held or missing
+    and asks can_research of it there. If can_research holds in the first case
+    and fails in the second, the prerequisite lines above can become
+    can_research; remove this with the check."""
+    lines = [
+        "# TEMPORARY self-check tally (see render_selfcheck in the generator).",
+        "# Scope: country.",
+        "covert_tech_selfcheck_research_tally = {",
+    ]
+    for position, tech in enumerate(techs):
+        held = f"covert_tech_selfcheck_held = {{ TECH = {tech.key} }}"
+        lines += [
+            f"\t{'if' if position == 0 else 'else_if'} = {{",
+            f"\t\tlimit = {{ is_researching_technology = {tech.key} }}",
+        ]
+        if tech.prereqs:
+            lines += [
+                "\t\tif = {",
+                "\t\t\tlimit = {",
+                *(f"\t\t\t\thas_technology_researched = {prereq}" for prereq in tech.prereqs),
+                "\t\t\t}",
+                f"\t\t\t{held}",
+                "\t\t}",
+                "\t\telse = {",
+                f"\t\t\tcovert_tech_selfcheck_stranded = {{ TECH = {tech.key} }}",
+                "\t\t}",
+            ]
+        else:
+            lines.append(f"\t\t{held}")
+        lines.append("\t}")
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
 def render_custom_loc(techs: list[Tech]) -> str:
     lines = ["covert_stolen_tech_name = {", "\ttype = container", "\trandom_valid = no"]
     for tech in techs:
@@ -300,6 +372,7 @@ def plan_outputs(mod_state, root: Path = ROOT) -> dict[Path, str]:
     effects = [HEADER + EFFECTS_PREAMBLE]
     effects += [render_grant(era, amounts(era_costs[era], constants)) for era in sorted({t.era for t in catalog})]
     effects += [render_steal(category, by_category[category]) for category in CATEGORIES]
+    effects.append(render_selfcheck(catalog))
     triggers = [HEADER + TRIGGERS_PREAMBLE]
     triggers += [render_stealable(category, by_category[category]) for category in CATEGORIES]
     return {
