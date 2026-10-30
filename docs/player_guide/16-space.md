@@ -85,16 +85,16 @@ Colonization can reach: those of the Moon, and after your Mars Landing those of
 stages 1 and 2, or of any stage once you also hold a colony beyond the Moon.
 Every world beyond the Moon needs your Mars Landing. Begin Deep Space
 Exploration appears only when you need it: every world of stages 1 and 2 is
-claimed and you hold no colony beyond the Moon.
+claimed and you hold no colony beyond the Moon. You can begin the Interstellar
+Mission without finishing colonization, and colonization goes on under it.
 
 Once all 40 worlds have been claimed, a world on the Moon that comes free again
-is settled only by choice. No program starts on its own then. The decision Resume Solar Colonization (or Begin Solar
-Colonization) runs your program for the Moon until it is full. A finished
-program keeps Interplanetary Trade Networks. While it runs, the program bills
-its funding and approach, and Commercial Space Industry pauses, as it does
-whenever one of your programs runs.
-You can begin the Interstellar Mission without finishing colonization, and
-colonization goes on under it.
+is settled only by choice, and no program starts on its own. The decision Resume
+Solar System Colonization (or Begin Solar Colonization) runs your program for
+the Moon until it is full. A finished program keeps Interplanetary Trade
+Networks, and it doesn't start again for a world beyond the Moon. While it runs,
+the program bills its funding and approach, and Commercial Space Industry
+pauses, as it does whenever one of your programs runs.
 
 ## Space race milestones
 

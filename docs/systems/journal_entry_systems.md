@@ -1857,7 +1857,7 @@ Traced scenarios: fresh activation (Standard: the programme's pace, base risk, n
 - `.60` — Interstellar probe data received; its results are `.601`-`.630` in `events/probe_result_events.txt`
 - `.76` — Programme discontinued (a lost or lowered launch complex)
 - `.80`-`.83` — Choice events asked once per milestone (who flies first, probe target, the Moon base's purpose, the Mars strategy); `.82` is retired to one option for an old save's open copy
-- `.109` — An old save's Moon Base became a lunar colony, or its Moon is open by choice: with every other world claimed, the decision Resume Solar Colonization (or Begin Solar Colonization) runs a program for the Moon; a finished one keeps its rewards, and Commercial Space Industry pauses while it runs (players; one notice for both)
+- `.109` — An old save's Moon Base became a lunar colony, or its Moon is open by choice: with every other world claimed, the decision Resume Solar System Colonization (or Begin Solar Colonization) runs a program for the Moon; a finished one keeps its rewards, and Commercial Space Industry pauses while it runs (players; one notice for both)
 - `events/space_race_colony_events.txt` — 40 colony establishment events
 
 ### Related Files
