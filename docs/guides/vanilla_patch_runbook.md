@@ -2,6 +2,8 @@
 
 End-to-end workflow for updating Vic3TimelineExtended for a new vanilla Victoria 3 patch (e.g. 1.12.4 → 1.13). Follow in order — earlier steps unlock later ones.
 
+**1.15 (due 2026-11-05):** `docs/audits/vanilla_1_15_prep.md` lists what is specific to it: the release-day checks, the full state-region copies `resources.py` must regenerate first, the key collisions with new vanilla content, the journal entry outcome conversion, the removed progress bar presets and the copied journal entry panel. Read it alongside this runbook.
+
 ## 0. Prerequisites
 
 - Local clone of vanilla at `~/src/vic3` (full git history; the prior version is in git history). Set `vanilla_source_repo_path` in `paths.local.json` to it (`setup.py` accepts any existing directory there, so double-check it isn't pointing at a digest folder). **On a fresh machine without the clone, get it before starting** — the engine-surface diff works from digests alone (§ 3), but GUI merges (§ 5), `REPLACE:` re-bases and the `/validate/*?old_ref=` endpoints all need the exact prior-version files, and Steam's rollback branch is usually the *latest* prior hotfix, not the version the mod was last migrated on.
@@ -158,6 +160,8 @@ python3 effect_trigger_validity_audit.py bootstrap-context  # docs/engine/effect
 python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors; 1.14.3 a further 5 — point releases count)
 python3 scripts/generators/gen_pb_principle_slots.py # power bloc principle slot limit INJECTs + the remove dispatch (stops on a vanilla principle that gains its own `possible`)
 python3 scripts/generators/gen_capital_bloc_names.py # capital-city power bloc names, one per state (after resources.py, which rewrites map_data/state_regions)
+python3 scripts/generators/gen_planned_capital.py    # common/scripted_effects/te_demog_capital_generated.txt, one branch per state (after resources.py)
+python3 scripts/analysis/demographics_adjacency.py --check  # the demographics harness's state adjacency; --refresh when it says stale
 ```
 
 **Run `fold_vanilla_loc_accessors.py --dry-run` first, and look each new accessor up in vanilla loc before folding.** The generator folds every flagged accessor as `"value"`, which is right for a terminal atom and wrong for a *type-changing* one — and folding the latter still makes the flag go away, by making the audit stop checking the rest of the chain. That is a silent loss of engine-surface knowledge, not a fix. 1.14.3's `State.GetStateInfamyPerspective` is the worked example: it returns a **country** (`"[State.GetStateInfamyPerspective.GetNameNoFormatting] already owns [State.GetName]"`), so it goes into `_BUILTIN_ACCESSORS_BY_TYPE` by hand *before* the fold. The tell is a flagged chain with another step after the flagged accessor.
@@ -168,7 +172,7 @@ Re-bootstrap the asset catalog too, then run `python3 texture_reference_audit.py
 
 Rebuild `vanilla_parsed/` first. Until you do, the server notices that the game version and files no longer match the snapshot, parses the game files instead on every start (slower), and says so in `/status` `vanilla_source` and the reload `warnings`. Cloud sessions without a game install keep serving the old vanilla until the rebuilt snapshot is committed. See `docs/guides/python_tools.md` § "Vanilla data source".
 
-If the vanilla map changed (states removed/renamed/split), edit `deposits_config.json` to point old keys at successors **before** running `resources.py`. See `docs/auto_generated_files.md` for the full ownership table.
+If the vanilla map changed (states removed/renamed/split), edit `deposits_config.json` and `state_trait_config.json` to point old keys at successors **before** running `resources.py`, which skips a key that matches no state without a word. `resources.py` also never deletes a file, so a state-region file vanilla renamed or dropped leaves a stale copy in `map_data/state_regions/`. Three hand-written lists name states and need the same edit: `common/geographic_regions/te_formable_regions.txt`, `base_tourism_appeal_value` in `common/script_values/tourism.txt` (a state it misses gets the default 20), and `scripts/analysis/demographics_params.py` (then rerun `scripts/generators/gen_demographics.py`). See `docs/auto_generated_files.md` for the full ownership table.
 
 `gen_formable_regions.py` reads vanilla `common/strategic_regions/*.txt` and re-expands the four EU/Africa/N.America/Earth formable regions to explicit state lists — re-run if vanilla rebalances strategic regions or renames states. The script also fails loudly if a configured strategic region disappears, which is the signal to update its inline config.
 
