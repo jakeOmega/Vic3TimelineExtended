@@ -147,18 +147,51 @@ def enclosing_block(text, pos):
     raise ValueError("unbalanced block")
 
 
+def strip_comments(text):
+    """`text` with each `#` comment blanked, keeping `#` inside quotes (`#b`)."""
+    out = []
+    for line in text.split("\n"):
+        quoted = False
+        for i, ch in enumerate(line):
+            if ch == '"':
+                quoted = not quoted
+            elif ch == "#" and not quoted:
+                line = line[:i]
+                break
+        out.append(line)
+    return "\n".join(out)
+
+
+def top_level(block_text):
+    """`block_text` without its nested blocks: the widget's own properties."""
+    out, depth = [], 0
+    for ch in block_text:
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        elif depth == 0:
+            out.append(ch)
+    return "".join(out)
+
+
 def unguarded_valid_building_types(text):
     """Line numbers of GetValidBuildingTypes reads whose widget has no company.
 
     The engine lists a company's building types there: with no company the
     data is no list, and the game crashes (`This data is likely not a
     container`, then an access violation). Vanilla reads it only in the
-    monopoly picker, on a widget whose datacontext is the company and whose
-    `visible` requires it."""
+    monopoly picker, on a widget whose own datacontext is the company and
+    whose own `visible` requires it, so that is the one form accepted: a
+    guard on a parent widget is flagged too."""
+    text = strip_comments(text)
     lines = []
     for match in re.finditer(re.escape(VALID_BUILDING_TYPES), text):
-        widget = enclosing_block(text, match.start())
-        if 'datacontext = "[ArticleDraft.GetCompany]"' not in widget or "Company.IsValid" not in widget:
+        own = top_level(enclosing_block(text, match.start())[1:])
+        guarded = 'datacontext = "[ArticleDraft.GetCompany]"' in own and any(
+            "Company.IsValid" in strip_negations(m.group(1)) for m in VISIBLE_RE.finditer(own)
+        )
+        if not guarded:
             lines.append(text.count("\n", 0, match.start()) + 1)
     return lines
 
@@ -202,6 +235,14 @@ class TreatyArticleInputWidgetTests(unittest.TestCase):
             '\tvisible = "[Company.IsValid]"\n\tdatamodel = "[ArticleDraft.GetValidBuildingTypes]"\n}'
         )
         self.assertEqual(unguarded_valid_building_types(guarded), [])
+        negated = guarded.replace("[Company.IsValid]", "[Not(Company.IsValid)]")
+        self.assertEqual(unguarded_valid_building_types(negated), [4])
+        nested = (
+            'dynamicgridbox = {\n\tdatamodel = "[ArticleDraft.GetValidBuildingTypes]"\n'
+            '\twidget = {\n\t\tdatacontext = "[ArticleDraft.GetCompany]"\n\t\tvisible = "[Company.IsValid]"\n\t}\n}'
+        )
+        self.assertEqual(unguarded_valid_building_types(nested), [2])
+        self.assertEqual(unguarded_valid_building_types("# reads ArticleDraft.GetValidBuildingTypes\n"), [])
 
     def test_building_type_without_company_has_its_own_picker(self):
         # With no company the engine has no list to offer, so such an article
