@@ -132,7 +132,7 @@ group judges your code as the taxation law it comes closest to:
 
 A group's approval then counts as it would for that law, and its approval
 breakdown says so: Endorses the Tax Code, Strongly Opposes the Tax Code and so
-on. The judgement is renewed on the 1st of every month. The same mapping decides
+on. The judgment is renewed on the 1st of every month. The same mapping decides
 three base-game journal entries that ask for a taxation law: Great Reforms:
 Bureaucratic Reform, Imperialism of Promise and Our Fortunate Regeneration
 complete when your code counts as the law they ask for.
@@ -171,12 +171,20 @@ Open Budget button.
 
 <!-- screenshot: the Budget panel's Tax Code tab, overview and Enacted Code open -->
 
-The overview gives your code's version and its Last Change and Next Change,
-the bill under debate and the open Draft Reform, your Promises, and the date of
-the Economy Snapshot the estimates use. Below it:
+The overview's boxes say what needs you. Tax Code gives your code's version
+and its next change. Draft Reform reads Blocked while a change waits to be
+accepted, Too soon while a bill introduced now couldn't pass in time, and Ready
+once it can be introduced. The bill's box reads Can pass, Short of support or
+Month has come, with the committed clout or the offers waiting. Passed Bills
+reads Held for a bill held back, and Promises counts the ones failing. Hover a
+box for the checklist or the dates behind it.
 
-- Enacted Code lists every rate in force, when it came into force and, for a
-  temporary rate, when it expires and what replaces it.
+Below it, the sections you watch come first: the Bill Under Debate, the Passed
+Bills and your Promises, each shown only while it has something in it. Then:
+
+- Enacted Code lists every rate in force, with when it came into force on the
+  rate's hover and, for a temporary rate, when it expires and what replaces it.
+  The taxed goods show as icons, and regional relief lists its states.
 - History lists the last eight changes: bills passed and taking effect, rates
   expiring, promises kept or broken, held bills.
 - How Tax Legislation Works, collapsed by default, repeats the rules of this
@@ -191,12 +199,13 @@ the draft starts from that bill.
 ### The draft reform workbench
 
 The Draft Reform section groups the provisions under Income, Land and Head,
-Consumption, Relief and Commencement, with a Goods Catalog for the taxed goods.
+Consumption, Relief and Dates, with a Goods Catalog for the taxed goods, sorted
+into staples, industrial goods, luxuries and military goods.
 Each row shows three columns:
 
 | Column | Shows |
 |---|---|
-| Law | the rate existing law will have in the draft's commencement month: today's rate, unless a temporary rate expires or a passed bill takes effect before then |
+| Law | the rate existing law will have in the month the draft takes effect: today's rate, unless a temporary rate expires or a passed bill takes effect before then |
 | Draft | the rate the draft sets |
 | Change | the difference |
 
@@ -206,8 +215,10 @@ existing law has it. In the Goods Catalog, Tax and Exempt change a good and
 Undo takes it out of the draft. Discard closes the draft.
 
 If a passed bill, or a change made outside legislation, alters a tax after you
-changed it in the draft, the draft's row is marked Changed Since Drafted. Accept
-the new baseline before you introduce the draft; your own value stays.
+changed it in the draft, Changed Since Drafted appears at the top of Draft
+Reform with an Accept button for each such change, and the draft summary counts
+them. Accept the new baseline before you introduce the draft; your own value
+stays.
 
 ### Commencement and temporary tax rates
 
@@ -241,7 +252,8 @@ Review opens the comparison of your draft with existing law. Each changed tax
 shows Existing Law and With This Bill, with the expiry and what returns after
 it, and a revenue estimate (see [Revenue estimates](#revenue-estimates)). The
 review also lists the passed bills waiting to take effect and any customs
-changes.
+changes. The draft summary's Revenue line gives the whole draft's change in
+weekly taxes.
 
 Bill Class says whether the bill is minor or major. A minor bill moves at most
 two taxes by at most two steps each, and touches no goods, relief or customs.
@@ -262,14 +274,18 @@ available once all of them hold:
 | Committed Clout | committed groups hold more than 50% of the clout of all groups that aren't marginal |
 | Legitimacy | at least 25 |
 | Debate | 30 days since the last revision, 15 for a minor bill |
-| Takes Effect | the commencement month is still ahead |
+| Takes Effect | the month the bill takes effect is still ahead |
 | Waiting Bills | fewer than two passed bills waiting to take effect |
 | Outside Changes | nothing outside legislation has changed a tax the bill changes since you introduced it |
 
 <!-- screenshot: the Bill Under Debate section with the committed-clout bar and interest group cards -->
 
+Pass, Revise Bill and Withdraw sit right under the conditions. On the Budget
+panel's Tax Code tab, while no draft is open, the bill's committed clout, its
+debate and its buttons stay pinned at the bottom of the tab.
+
 When a bill passes, each group that opposed it and did not commit disapproves
-of the government: −3 approval, fading over 180 days. If the commencement month
+of the government: −3 approval, fading over 180 days. If the bill's month
 arrives while the bill is still in debate, Move to Next Month moves it a month
 later without losing its commitments.
 
@@ -284,14 +300,17 @@ Each interest group gets a card with a score from −100 to +100, made of:
 | State of the Budget | with a deficit on the 1st of the month, a bill that raises revenue scores better; with a surplus, one that cuts taxes does |
 | In Government | +10 for a group in government |
 | Promises | promises made to the group under this bill |
-| Kept Promises | the group's record of your earlier promises |
+| Trust | the group's record of your earlier promises |
 
 A group scoring 20 or more is Committed: it commits to the bill's current
 revision and stays committed whatever happens to its score. A group at −40 or
 below draws a Red Line. Between the two a group is Persuadable if its score is
 0 or more and Opposed below that. A Marginal group counts for nothing until it
 grows, but it can still hold a commitment that counts once it does. The cards
-are refreshed on the 1st of every month and whenever the bill changes.
+are refreshed on the 1st of every month and whenever the bill changes. A card
+lists the reasons only for a group you still have to win over, and only those
+that aren't 0; a Committed or Marginal group shows its line alone, with every
+reason on the score's hover.
 
 ### Offers from interest groups
 
@@ -322,12 +341,13 @@ promised what is already pending or in force.
 ### Revising, withdrawing and forcing a tax bill
 
 To change a bill under debate, open Draft a Revision, edit it, and click Revise
-Bill or Revise from Draft. A revision releases every commitment, withdraws every
+Bill. A revision releases every commitment, withdraws every
 offer and restarts the debate. Promises you accepted under the bill stay on the
 new revision; a revision from the draft drops them. Withdraw closes the bill and
 leaves the code as it was. Introducing and withdrawing a bill costs nothing.
 
-Force Through passes a bill that is short of a majority. It needs Legislative
+Force Through passes a bill that is short of a majority, and its button shows
+only while the bill is. It needs Legislative
 Override Capacity of at least 2, committed groups holding at least 35% of the
 clout, enough authority to pay for it, and every other condition for passage.
 It costs authority and 5
@@ -368,7 +388,7 @@ the bureaucracy count as they stood on the 1st.
 | Renegotiated Tax Promise | −2 | −1 |
 
 Each reaction fades over 180 days. Renegotiate ends a promise that is in force
-before it breaks. Trust shows on the group's card as Kept Promises, 10 points per
+before it breaks. Trust shows on the group's card, 10 points per
 step, and fades a step back toward neutral after 24 months without a kept,
 broken or renegotiated promise. Breaking a promise never repeals a tax bill.
 
@@ -408,6 +428,10 @@ Economy Snapshot taken on the 1st of the month. It is a static estimate: pops,
 wages, prices and purchases as they are now. Poll Taxes shows a range when both
 the rural assessment and the head tax collect, because today's receipts don't
 say how they divide.
+
+The review gives it as a table, each line's weekly receipts under existing law
+and with the bill and the change, and the draft summary's Revenue line adds the
+changes up.
 
 A tax you don't collect now has no current base, and its line says so. Taxed
 goods, agricultural relief and customs get no figure. Regional relief shows its

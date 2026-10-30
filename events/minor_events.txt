@@ -90,6 +90,14 @@ minor_events_timelineextended.2 = {
 			text = te_jud_spend_small_tt
 			te_jud_spend = { AMOUNT = 5 }
 		}
+		# A reviewing court hears the law once it passes (judiciary spec § 14.1).
+		if = {
+			limit = { te_jud_court_can_strike_laws = yes }
+			custom_tooltip = {
+				text = te_jud_review_small_tt
+				te_jud_open_challenge = { TIER = 1 }
+			}
+		}
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -133,6 +141,14 @@ minor_events_timelineextended.2 = {
 			text = te_jud_spend_medium_tt
 			te_jud_spend = { AMOUNT = 10 }
 		}
+		# A reviewing court hears the law once it passes (judiciary spec § 14.1).
+		if = {
+			limit = { te_jud_court_can_strike_laws = yes }
+			custom_tooltip = {
+				text = te_jud_review_medium_tt
+				te_jud_open_challenge = { TIER = 2 }
+			}
+		}
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -175,6 +191,14 @@ minor_events_timelineextended.2 = {
 		custom_tooltip = {
 			text = te_jud_spend_large_tt
 			te_jud_spend = { AMOUNT = 20 }
+		}
+		# A reviewing court hears the law once it passes (judiciary spec § 14.1).
+		if = {
+			limit = { te_jud_court_can_strike_laws = yes }
+			custom_tooltip = {
+				text = te_jud_review_large_tt
+				te_jud_open_challenge = { TIER = 3 }
+			}
 		}
 		add_enactment_phase = 1
 		add_radicals = {

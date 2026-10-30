@@ -1,0 +1,190 @@
+﻿namespace = te_fptp_events
+
+# First Past the Post (amendment_first_past_the_post).
+# Design: docs/superpowers/specs/2026-10-25-first-past-the-post-design.md.
+#   .1  fired by te_fptp_from_law_scope when a voting law the amendment allows
+#       arrives in a country that held it: keep it on the new law, or not
+#   .2  pooled in on_law_checkpoint_debate: while such a law is enacted, a group
+#       in one of the two largest parties asks for it
+
+# ======================================================================
+#  1 – Counting the Votes  (First Past the Post – the voting law changed)
+#  A law's amendments leave with it, so a new voting law arrives without
+#  first past the post. Keeping it re-attaches it; declining adopts
+#  proportional representation and lets the country's te_fptp_var go.
+# ======================================================================
+te_fptp_events.1 = {
+	type = country_event
+	placement = root
+
+	title = te_fptp_events.1.t
+	desc = te_fptp_events.1.d
+	flavor = te_fptp_events.1.f
+
+	category = enactment
+
+	event_image = { video = "unspecific_politicians_arguing" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		has_variable = te_fptp_var
+		te_fptp_on_allowed_voting_law = yes
+		NOT = { te_fptp_in_force = yes }
+	}
+
+	immediate = {
+		active_law:lawgroup_distribution_of_power ?= {
+			save_scope_as = te_fptp_voting_law
+		}
+		te_fptp_save_sponsor = yes
+		te_fptp_save_outsider = yes
+	}
+
+	cancellation_trigger = {
+		OR = {
+			te_fptp_in_force = yes
+			NOT = { te_fptp_on_allowed_voting_law = yes }
+		}
+	}
+
+	option = { # Keep first past the post
+		name = te_fptp_events.1.a
+		default_option = yes
+		scope:te_fptp_voting_law = {
+			add_amendment = {
+				type = amendment_first_past_the_post
+				sponsor = scope:te_fptp_sponsor_ig
+			}
+		}
+		custom_tooltip = te_fptp_two_party_tt
+		scope:te_fptp_outsider_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { scope:te_fptp_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Proportional representation
+		name = te_fptp_events.1.b
+		custom_tooltip = {
+			text = te_fptp_events.1.b.tt
+			remove_variable = te_fptp_var
+		}
+		scope:te_fptp_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		scope:te_fptp_outsider_ig ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:te_fptp_outsider_ig ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  2 – The Winner Takes All  (First Past the Post – Amendment)
+#  The enactment way in: while a voting law the amendment allows is
+#  enacted in a country whose two largest parties hold most of the clout
+#  (as would_sponsor and the petition ask) and no first past the post, the
+#  strongest group in one of them asks for it. Pooled in
+#  on_law_checkpoint_debate beside the other amendment events.
+# ======================================================================
+te_fptp_events.2 = {
+	type = country_event
+	placement = root
+
+	title = te_fptp_events.2.t
+	desc = te_fptp_events.2.d
+	flavor = te_fptp_events.2.f
+
+	category = enactment
+
+	event_image = { video = "unspecific_politicians_arguing" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		te_fptp_enacting_allowed_voting_law = yes
+		NOT = { has_variable = te_fptp_var }
+		has_variable = te_fptp_two_majors
+		te_fptp_major_clout >= 0.6
+		any_interest_group = { has_variable = te_fptp_major_member }
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_first_past_the_post
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		te_fptp_save_sponsor = yes
+		te_fptp_save_outsider = yes
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Adopt first past the post
+		name = te_fptp_events.2.a
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_first_past_the_post
+				sponsor = scope:te_fptp_sponsor_ig
+				cooldown = 120
+			}
+		}
+		custom_tooltip = te_fptp_two_party_tt
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		scope:te_fptp_outsider_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { scope:te_fptp_sponsor_ig = { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Keep the count proportional
+		name = te_fptp_events.2.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:te_fptp_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+		}
+	}
+}

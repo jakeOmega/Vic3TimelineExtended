@@ -777,6 +777,13 @@ nuclear_industrial_strike_killed_population = {
 	round = yes
 }
 
+# A counterforce warhead (nd_counterforce_strike_damage): a quarter of a city's.
+nd_counterforce_strike_killed_population = {
+	value = state_population
+	multiply = 0.025
+	round = yes
+}
+
 nuclear_tactical_strike_civilian_killed_population = {
 	value = state_population
 	multiply = 0.005
@@ -2930,10 +2937,53 @@ population_transfer_pop_ratio_score = {
 	max = 50
 }
 
+# State Collapse's status line (je_state_collapse, country scope): the weeks
+# left before the bar fills and the state collapses.
+state_collapse_weeks_left = {
+	value = 52
+	if = {
+		limit = { has_variable = state_collapse_progress }
+		subtract = var:state_collapse_progress
+	}
+	min = 0
+}
+
 #==================================================
 # GUI Display Script Values — Mega Project Resource Tracking
 #==================================================
 # All evaluated in COUNTRY scope. Used by state panel GUI via State.GetOwner.MakeScope.ScriptValue().
+#
+# The two tiles' gates below are STATE scope: the state view shows a tile only
+# in a state that holds a building of its chain, so the country-wide slot
+# figures (which walk every state's buildings) are read there and not in every
+# state of the country (GUI audit VAN-7, 2026-10-27). A receiver or engine can
+# go in any state; its build tooltip gives the free slots
+# (building_solar_receiver_slots_tt, building_antimatter_sub_slots_tt).
+te_state_solar_tile_shown = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_building = building_solar_collector
+				has_building = building_solar_receiver
+			}
+		}
+		value = 1
+	}
+}
+te_state_antimatter_tile_shown = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_building = building_antimatter_facility
+				has_building = building_antimatter_engine
+				has_building = building_antimatter_warhead_plant
+			}
+		}
+		value = 1
+	}
+}
 
 # Solar Collectors: total capacity generated (before consumer deductions)
 solar_total_generated_points = {
@@ -3270,13 +3320,16 @@ sv_prestige_event_medium = { value = prestige  multiply = 0.05  }
 sv_prestige_event_large  = { value = prestige  multiply = 0.15  }
 sv_prestige_event_huge   = { value = prestige  multiply = 0.30  }
 
-# Treasury (instant): use gold_reserves as the base. Vanilla precedent for
-# this script-value source — it tracks the country's literal money stock.
-sv_treasury_event_tiny   = { value = gold_reserves  multiply = 0.005 }
-sv_treasury_event_small  = { value = gold_reserves  multiply = 0.02  }
-sv_treasury_event_medium = { value = gold_reserves  multiply = 0.05  }
-sv_treasury_event_large  = { value = gold_reserves  multiply = 0.15  }
-sv_treasury_event_huge   = { value = gold_reserves  multiply = 0.30  }
+# Treasury (instant): a share of the yearly gross income, the convention every
+# other one-off payment in the mod follows (gm_event_cost, te_demog_wave_cost_*).
+# Positive: a cost is add_treasury = { value = sv_treasury_event_<tier> multiply = -1 }.
+# Not gold_reserves: a country living on loans has no reserves, so a share of
+# them charged it nothing (The Budget Debate's full budget was free in debt).
+sv_treasury_event_tiny   = { value = yearly_gross_income  multiply = 0.005 }
+sv_treasury_event_small  = { value = yearly_gross_income  multiply = 0.02  }
+sv_treasury_event_medium = { value = yearly_gross_income  multiply = 0.05  }
+sv_treasury_event_large  = { value = yearly_gross_income  multiply = 0.15  }
+sv_treasury_event_huge   = { value = yearly_gross_income  multiply = 0.30  }
 
 # Money-flow (weekly): pair with a static modifier carrying
 # country_expenses_add = 1, country_tax_income_add = 1, or

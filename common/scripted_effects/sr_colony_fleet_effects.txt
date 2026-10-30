@@ -1,0 +1,365 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — colony fleets: targets, travel, arrival
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md
+# (slice 3 of the scope, §§ 3-9).
+#
+# Under every setting but off a programme can choose its next world (the
+# Solar System list's Target button: var:sr_cf_target, a world's index in
+# gen_solar_sites.SITES). Under races only the target is founded at once, as
+# the draw founds. Under simple and full a colony fleet travels: it leaves
+# with the transit time its drive buys (sr_transit_months_<body>,
+# gen_launch_windows.py) and founds its world when it lands, from the global
+# monthly step. A world taken first sends it to another of the same body; with
+# none it is lost.
+#
+# Per country, six fleet slots (country variables, inherited by a
+# revolution's winner): sr_cf_<n>_site (a world's index), sr_cf_<n>_depart and
+# sr_cf_<n>_arrive (te_history_month_index), and sr_cf_in_flight, how many fly.
+# Per world, the inbound record (global): sr_site_inbound_<key> (fleets on
+# their way), sr_site_inbound_first_<key> (the earliest landing month) and
+# sr_site_inbound_by_<key> (its country). The per-world blocks are generated
+# (sr_sites_generated.txt, scripts/generators/gen_solar_sites.py); this file
+# holds what they call and what is not per world.
+# ============================================================================
+
+# ---- The month's launch under simple and full (sr_launch_month) -------------
+# Country scope, the entry's pulse, after the cache. At most one fleet a month.
+# A fleet beyond the Moon needs a free slot: with all six in flight it waits
+# (each world's sr_cf_eligible_<key> and its branch of sr_cf_target_ready test
+# sr_cf_has_free_slot). A lunar fleet takes none: it founds its world in the
+# month it leaves (lunar colonization design § 3.3). A target is launched for
+# when it can depart and staged progress covers its cost; without one the
+# automatic pick takes the eligible world with the best score (design § 7).
+# Whatever cannot leave stays staged, as under races only. Under Full Colonies
+# nothing leaves while Earth is blockaded or the launch site is occupied
+# (slice 6 fleets design § 15, sr_launches_barred), for the Moon too.
+sr_cf_launch_month = {
+	if = {
+		limit = { sr_launches_barred = yes }
+		sr_launch_note_held = yes
+	}
+	else_if = {
+		limit = { has_variable = sr_cf_target }
+		if = {
+			limit = { sr_cf_target_ready = yes }
+			sr_cf_dispatch_target = yes
+		}
+		else = {
+			sr_launch_note_held = yes
+		}
+	}
+	else = {
+		set_local_variable = { name = sr_cf_best value = sr_cf_best_score }
+		if = {
+			limit = { local_var:sr_cf_best > sr_cf_no_score }
+			sr_cf_pick_auto = yes
+		}
+		else = {
+			sr_launch_note_held = yes
+		}
+	}
+}
+
+# A full bar held this month (by closed windows, an unaffordable target or full
+# slots): the window_gate self-check's evidence that the gate held a fleet
+# (sr_launch_window_effects.txt). Debug only.
+#
+# Self-check lunar_stage0_draw (lunar colonization plan, review focus 4): under
+# Races Only with no target, nothing should hold a full bar at the Moon's stage
+# while a lunar world is free: the Moon has no window, so its draw founds the
+# month the bar fills. Held three months there, the Moon is missing from the
+# best-cost reader or its draw branches' departs trigger is false, and Mars
+# stays locked for everyone. BROKEN once a game; the OK is the stage-0 draw's
+# own (sr_establish_colony_effect, generated). Not run under Simple and Full,
+# where a full bar may wait for a window with lunar worlds free.
+sr_launch_note_held = {
+	if = {
+		limit = {
+			has_variable = sr_progress_solar_colonization
+			var:sr_progress_solar_colonization >= sr_solar_colonization_goal
+			sr_any_site_unclaimed = yes
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_launch_held_months } }
+			set_variable = { name = sr_launch_held_months value = 0 }
+		}
+		change_variable = { name = sr_launch_held_months add = 1 }
+		if = {
+			limit = {
+				NOT = { sr_colonies_contested_enabled = yes }
+				NOT = { has_variable = sr_cf_target }
+				has_global_variable = sr_colonization_stage
+				global_var:sr_colonization_stage = 0
+				sr_sites_lunar_open = yes
+				var:sr_launch_held_months >= 3
+				NOT = { has_global_variable = sr_lunar_stage0_draw_broken_logged }
+			}
+			set_global_variable = { name = sr_lunar_stage0_draw_broken_logged value = yes }
+			debug_log = "TE_SELF_CHECK BROKEN lunar_stage0_draw held=[THIS.Var('sr_launch_held_months').GetValue|0] best_cost=[THIS.ScriptValue('sr_launch_best_cost')|2] country=[THIS.GetCountry.GetNameNoFormatting] (Races Only held a full bar at the Moon's stage with a lunar world free: the Moon is not in sr_launch_best_cost, or sr_launch_ungated_departs is false; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}
+
+# ---- Slots ------------------------------------------------------------------------
+# Country scope, from sr_cf_dispatch_<key> with local_var:sr_cf_new_site and
+# local_var:sr_cf_new_arrive set: the fleet takes the first free slot (the
+# launch month checked there is one), and joins its world's inbound record.
+sr_cf_store_new = {
+	if = {
+		limit = { NOT = { has_variable = sr_cf_1_site } }
+		sr_cf_fill_slot = { N = 1 }
+	}
+	else_if = {
+		limit = { NOT = { has_variable = sr_cf_2_site } }
+		sr_cf_fill_slot = { N = 2 }
+	}
+	else_if = {
+		limit = { NOT = { has_variable = sr_cf_3_site } }
+		sr_cf_fill_slot = { N = 3 }
+	}
+	else_if = {
+		limit = { NOT = { has_variable = sr_cf_4_site } }
+		sr_cf_fill_slot = { N = 4 }
+	}
+	else_if = {
+		limit = { NOT = { has_variable = sr_cf_5_site } }
+		sr_cf_fill_slot = { N = 5 }
+	}
+	else_if = {
+		limit = { NOT = { has_variable = sr_cf_6_site } }
+		sr_cf_fill_slot = { N = 6 }
+	}
+	sr_cf_note_inbound_by_index = yes
+}
+
+sr_cf_fill_slot = {
+	set_variable = { name = sr_cf_$N$_site value = local_var:sr_cf_new_site }
+	set_variable = { name = sr_cf_$N$_depart value = te_history_month_index }
+	set_variable = { name = sr_cf_$N$_arrive value = local_var:sr_cf_new_arrive }
+	if = {
+		limit = { NOT = { has_variable = sr_cf_in_flight } }
+		set_variable = { name = sr_cf_in_flight value = 0 }
+	}
+	change_variable = { name = sr_cf_in_flight add = 1 }
+}
+
+sr_cf_clear_slot = {
+	if = { limit = { has_variable = sr_cf_$N$_site } remove_variable = sr_cf_$N$_site }
+	if = { limit = { has_variable = sr_cf_$N$_depart } remove_variable = sr_cf_$N$_depart }
+	if = { limit = { has_variable = sr_cf_$N$_arrive } remove_variable = sr_cf_$N$_arrive }
+	if = {
+		limit = { has_variable = sr_cf_in_flight }
+		change_variable = { name = sr_cf_in_flight subtract = 1 }
+		if = {
+			limit = { var:sr_cf_in_flight <= 0 }
+			remove_variable = sr_cf_in_flight
+		}
+	}
+}
+
+# ---- Arrival (the global monthly step) ---------------------------------------------
+# Global scope (no ROOT), simple and full: every fleet whose month has come
+# lands, before the per-world step; then every world's inbound record is
+# rebuilt from the slots, and the stage recomputed (design § 9).
+sr_cf_global_arrivals = {
+	every_country = {
+		limit = { has_variable = sr_cf_in_flight }
+		sr_cf_arrive_slot = { N = 1 }
+		sr_cf_arrive_slot = { N = 2 }
+		sr_cf_arrive_slot = { N = 3 }
+		sr_cf_arrive_slot = { N = 4 }
+		sr_cf_arrive_slot = { N = 5 }
+		sr_cf_arrive_slot = { N = 6 }
+	}
+}
+
+sr_cf_global_after = {
+	sr_cf_rebuild_inbound = yes
+	sr_sites_recompute_stage = yes
+}
+
+# Country scope. The slot is cleared before its world's landing runs, so the
+# landing's own inbound record, rebuilt after, no longer counts it.
+sr_cf_arrive_slot = {
+	if = {
+		limit = {
+			has_variable = sr_cf_$N$_site
+			has_variable = sr_cf_$N$_arrive
+			var:sr_cf_$N$_arrive <= te_history_month_index
+		}
+		set_local_variable = { name = sr_cf_site_now value = var:sr_cf_$N$_site }
+		set_local_variable = {
+			name = sr_cf_late
+			value = {
+				value = te_history_month_index
+				subtract = var:sr_cf_$N$_arrive
+			}
+		}
+		set_local_variable = { name = sr_cf_flown value = 0 }
+		if = {
+			limit = { has_variable = sr_cf_$N$_depart }
+			set_local_variable = {
+				name = sr_cf_flown
+				value = {
+					value = te_history_month_index
+					subtract = var:sr_cf_$N$_depart
+				}
+			}
+		}
+		sr_cf_clear_slot = { N = $N$ }
+		sr_cf_arrival_self_check = yes
+		sr_cf_arrive_by_index = yes
+	}
+}
+
+# Country scope: the world THIS founded on landing (sr_cf_arrive_<key>, after
+# sr_site_found_<key>). The first-colony charter, as the draw's trailer has
+# it; the stage; every player's Solar System rows.
+sr_cf_after_found = {
+	if = {
+		limit = {
+			has_variable = sr_colony_count
+			var:sr_colony_count = 1
+			NOT = { has_variable = ste_event_18_fired }
+		}
+		set_variable = { name = sr_colony_charter_pending value = yes days = 14 }
+		trigger_event = { id = society_technology_events.18 days = 7 }
+	}
+	set_variable = { name = sr_cf_last_founded value = $INDEX$ }
+	sr_sites_recompute_stage = yes
+	sr_sites_refresh_players = yes
+}
+
+# Country scope. A colony founded by a fleet's landing or a races-only target
+# needs the entry that holds its modifiers: opened, after the sync has counted
+# the colony (so `possible` holds), before the founding event offers its
+# specialization (sr_grant_colony_modifier writes through je:).
+sr_cf_open_entry = {
+	if = {
+		limit = {
+			NOT = { has_journal_entry = je_space_race_solar_colonization }
+			sr_space_race_on = yes
+		}
+		add_journal_entry = { type = je_space_race_solar_colonization }
+	}
+}
+
+# ---- The landing's notice (players; space_race_events.92) --------------------------
+sr_cf_note_diverted = {
+	if = {
+		limit = { is_player = yes }
+		set_variable = { name = sr_cf_notice_target value = $TARGET$ }
+		set_variable = { name = sr_cf_notice_founded value = $FOUNDED$ }
+		trigger_event = { id = space_race_events.92 days = 1 }
+	}
+}
+
+sr_cf_note_lost = {
+	if = {
+		limit = { is_player = yes }
+		set_variable = { name = sr_cf_notice_target value = $TARGET$ }
+		if = { limit = { has_variable = sr_cf_notice_founded } remove_variable = sr_cf_notice_founded }
+		trigger_event = { id = space_race_events.92 days = 1 }
+	}
+}
+
+sr_cf_clear_notice = {
+	if = { limit = { has_variable = sr_cf_notice_target } remove_variable = sr_cf_notice_target }
+	if = { limit = { has_variable = sr_cf_notice_founded } remove_variable = sr_cf_notice_founded }
+}
+
+# ---- The inbound record --------------------------------------------------------------
+# Global scope: cleared, then rebuilt from every country's slots, so a fleet
+# that landed or a country that died drops out within a month.
+sr_cf_rebuild_inbound = {
+	sr_sites_clear_inbound = yes
+	every_country = {
+		limit = { has_variable = sr_cf_in_flight }
+		sr_cf_note_slot = { N = 1 }
+		sr_cf_note_slot = { N = 2 }
+		sr_cf_note_slot = { N = 3 }
+		sr_cf_note_slot = { N = 4 }
+		sr_cf_note_slot = { N = 5 }
+		sr_cf_note_slot = { N = 6 }
+	}
+}
+
+sr_cf_note_slot = {
+	if = {
+		limit = {
+			has_variable = sr_cf_$N$_site
+			has_variable = sr_cf_$N$_arrive
+		}
+		set_local_variable = { name = sr_cf_new_site value = var:sr_cf_$N$_site }
+		set_local_variable = { name = sr_cf_new_arrive value = var:sr_cf_$N$_arrive }
+		sr_cf_note_inbound_by_index = yes
+	}
+}
+
+# ---- Self-check: colony_fleet_arrival (design § 12) ---------------------------------
+# Country scope, from sr_cf_arrive_slot with local_var:sr_cf_late (months
+# past its arrival month) and local_var:sr_cf_flown (months since it left).
+# OK once a game, on the first fleet that lands in its month: the months it
+# flew, against the transit the table gave it at departure. BROKEN once a
+# game if a fleet lands two or more months late (the step missed it). The
+# figures go through globals: a debug line reads no local variable.
+sr_cf_arrival_self_check = {
+	set_global_variable = { name = sr_cf_log_site_now value = local_var:sr_cf_site_now }
+	set_global_variable = { name = sr_cf_log_flown_now value = local_var:sr_cf_flown }
+	set_global_variable = { name = sr_cf_log_late_now value = local_var:sr_cf_late }
+	if = {
+		limit = {
+			local_var:sr_cf_late >= 2
+			NOT = { has_global_variable = sr_cf_arrival_broken_logged }
+		}
+		set_global_variable = { name = sr_cf_arrival_broken_logged value = yes }
+		debug_log = "TE_SELF_CHECK BROKEN colony_fleet_arrival world=[GetGlobalVariable('sr_cf_log_site_now').GetValue|0] late=[GetGlobalVariable('sr_cf_log_late_now').GetValue|0] flown=[GetGlobalVariable('sr_cf_log_flown_now').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (a colony fleet landed months after its arrival month: the global step missed it; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	else_if = {
+		limit = {
+			local_var:sr_cf_late < 1
+			NOT = { has_global_variable = sr_cf_arrival_ok_logged }
+		}
+		set_global_variable = { name = sr_cf_arrival_ok_logged value = yes }
+		debug_log = "TE_SELF_CHECK OK colony_fleet_arrival world=[GetGlobalVariable('sr_cf_log_site_now').GetValue|0] flown=[GetGlobalVariable('sr_cf_log_flown_now').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (a colony fleet landed in its arrival month; flown should be the transit its drive bought: docs/engine/launch_windows_report.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
+# ---- The stage after a claim ------------------------------------------------------
+# Any scope. Races only steps the stage when its worlds are all claimed (the
+# draw's own check); simple and full recompute it (design § 9). The console's
+# claim (sr_sites_debug_claim_first_free) uses it.
+sr_sites_stage_after_claim = {
+	if = {
+		limit = { sr_colonies_contested_enabled = yes }
+		sr_sites_recompute_stage = yes
+	}
+	else = {
+		sr_check_colony_stage_effect = yes
+	}
+}
+
+# ---- Console (te_debug_space_race.3) ---------------------------------------------------
+# Every fleet of every country lands now: each slot's arrival month set to this
+# month, then the global step's landings and rebuild.
+sr_cf_debug_land_all_now = {
+	every_country = {
+		limit = { has_variable = sr_cf_in_flight }
+		sr_cf_debug_land_slot = { N = 1 }
+		sr_cf_debug_land_slot = { N = 2 }
+		sr_cf_debug_land_slot = { N = 3 }
+		sr_cf_debug_land_slot = { N = 4 }
+		sr_cf_debug_land_slot = { N = 5 }
+		sr_cf_debug_land_slot = { N = 6 }
+	}
+	sr_cf_global_arrivals = yes
+	sr_cf_global_after = yes
+}
+
+sr_cf_debug_land_slot = {
+	if = {
+		limit = { has_variable = sr_cf_$N$_arrive }
+		set_variable = { name = sr_cf_$N$_arrive value = te_history_month_index }
+	}
+}

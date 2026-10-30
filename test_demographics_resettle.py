@@ -119,16 +119,17 @@ class TestProfiles(unittest.TestCase):
                 self.assertAlmostEqual(sh.get((c, "f"), 0.0), 0.6 * fam[c] / 2 + 0.4 * lab[c] * lf)
         # the labour share follows the destination's jobs as the residual's labour kind does (before its balance ramp)
         for fjob, fws in ((0.0, 0.1), (0.4, 0.25), (0.9, 0.48)):
-            rights = fws / P.FULL_FEMALE_WORK_SHARE
-            want = M.clamp(P.LABOUR_FEMALE_SHARE_MIN + fjob * rights
+            women = fws / P.WOMEN_WORKER_PARITY
+            want = M.clamp(P.LABOUR_FEMALE_SHARE_MIN + fjob * women
                            * (P.LABOUR_FEMALE_SHARE_MAX - P.LABOUR_FEMALE_SHARE_MIN),
                            P.LABOUR_FEMALE_SHARE_MIN, P.LABOUR_FEMALE_SHARE_MAX)
             self.assertAlmostEqual(RS.labour_female_share(fjob, fws), want)
-        # and the script's value reads the same (te_demog_rs_labour_f, at the destination)
+        # and the script's value reads the same (te_demog_rs_labour_f, at the destination: its count of women among
+        # its workers, 2026-10-25)
         eng = _engine_for(dataclasses.replace(INP, female_job_share=0.4), YEAR, POP)
-        eng.vars["te_dg_fjob_share"] = 0.4
+        eng.vars.update(te_dg_fjob_share=0.4, te_dg_fws_wk=0.3)
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_rs_labour_f")),
-                               RS.labour_female_share(0.4, M.female_work_share(INP)))
+                               RS.labour_female_share(0.4, 0.3))
         del eng.vars["te_dg_fjob_share"]
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_rs_labour_f")), P.LABOUR_FEMALE_SHARE_MIN)
 
@@ -223,9 +224,12 @@ class TestStepWithKnownMoves(unittest.TestCase):
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = ring.f[k] * ring.scale, ring.m[k] * ring.scale
         balance = M.structure(ring)["men_per_100_women"]
         eng.vars.update(te_dg_pf=ring.pool_f, te_dg_pm=ring.pool_m, te_dg_pa=ring.pool_age, te_dg_scale=1.0,
-                        te_dg_year=YEAR, te_dg_people=ring.total, te_dg_raw=ring.total, te_dg_sex_balance=balance,
+                        te_dg_year=YEAR, te_dg_ring=float(P.RING_YEARS), te_dg_people=ring.total, te_dg_raw=ring.total, te_dg_sex_balance=balance,
                         te_dg_faw=ring.faw, te_dg_fam=ring.fam, te_dg_pop_last=ring.total, te_dg_eb=eb, te_dg_ed=ed,
                         te_dg_fjob_share=fjob)
+        # the last count of women among the workers, which the step reads (te_demog_women_worker_share, 2026-10-25)
+        if ring.fws_work is not None:
+            eng.vars["te_dg_fws_wk"] = ring.fws_work
         for c in range(len(P.MIGRANT_CLASSES)):
             eng.vars[f"te_dg_cf{c}"], eng.vars[f"te_dg_cm{c}"] = ring.class_f[c], ring.class_m[c]
         for b, (bf, bm) in enumerate(zip(*M.band_sums(ring))):
@@ -315,7 +319,7 @@ class TestStepWithKnownMoves(unittest.TestCase):
 
     def test_development_program_and_managed_retreat(self):
         c = RS.Counters()
-        RS.book(c, "development_program", 7000.0, "in", RS.labour_female_share(0.3, M.female_work_share(INP)))
+        RS.book(c, "development_program", 7000.0, "in", RS.labour_female_share(0.3, M.women_worker_share(INP)))
         RS.book(c, "managed_retreat", 2000.0, "in")
         eng, model, *_ = self.run_both(c, rest=-900.0)
         self.check(eng, model)

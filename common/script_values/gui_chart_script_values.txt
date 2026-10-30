@@ -33,7 +33,8 @@ gui_trade_with_market_owner = {
 # and the engine describes the related piracy value as an "average weekly base
 # value", so x52 gives the per-year figure the Top Trade Partners table shows.
 # Evaluated in our market owner's country scope. scope:tp_partner_country = the
-# partner market's owner (saved in store_trade_partner_data).
+# partner market's owner, which the Top Trade Partners rows pass with
+# GuiScope...AddScope('tp_partner_country', ...) (gui/market_panel.gui; MKT-1).
 gui_tp_annual_trade = {
 	value = "mutual_trade_value_with_country(scope:tp_partner_country)"
 	multiply = 52
@@ -53,16 +54,6 @@ gui_tp_trade_pct_gdp = {
 		min = 1
 	}
 	multiply = 100
-}
-
-# Count of trade partners found (for GUI visibility checks)
-# Evaluated in country scope: Market.GetOwner.MakeScope.ScriptValue('gui_tp_count')
-gui_tp_count = {
-	value = 0
-	if = {
-		limit = { has_variable = tp_count }
-		add = var:tp_count
-	}
 }
 
 # ============================================================================
@@ -138,6 +129,10 @@ gui_state_hidden_modifier_count = {
 	}
 	if = {
 		limit = { has_modifier = migration_crowding }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_mt_crowding }
 		add = 1
 	}
 	if = {

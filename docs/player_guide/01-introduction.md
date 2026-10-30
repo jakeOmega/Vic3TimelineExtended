@@ -84,14 +84,14 @@ turn a default system off.
 | Global Warming | Enabled | Greenhouse emissions, rising temperatures, climate events and climate policies. | [Climate and pollution](15-climate.md) |
 | United Nations | Enabled | Founding and joining the UN, its votes, resolutions and agencies. | [The United Nations](10-united-nations.md) |
 | Nuclear Weapons | Enabled | Nuclear programs, arsenals, doctrine, crises, strikes and the nuclear taboo. | [Nuclear weapons](14-nuclear.md) |
-| Space Race | Enabled | The space race milestones and their events. | [The space race](16-space.md) |
+| Space Race | Full Colonies | *Races Only*: the space race milestones and their events, with colonies founded the month their fleet leaves and staying with their holder. *Simple Colonies*: as Races Only, and colony fleets travel for months or years and claim their site on arrival, colonies hold settlers sent from Earth and are built up with modules, Extraplanetary Bases work the room the near-Earth asteroids and colonies give, a colony can change hands by the Cede Colony treaty article, sold, given or demanded in a war, and colonies grow restless, can be abandoned or break away, and live on as free colonies. *Full Colonies*: as Simple Colonies, and Space Command builds warships that move between the planets, fight, blockade colonies and seize or destroy them; an enemy fleet in Earth orbit stops your launches until you put up your reserve, and ground-to-orbit batteries fire on it. *Disabled*: no space race. | [The space race](16-space.md) |
 | Decolonization | Enabled | Colonial stability, the decolonization journal entry and its events. | [Colonial empires and decolonization](12-decolonization.md) |
 | Cultural Hegemony | Enabled | The competition for global cultural influence. | [Cultural hegemony and covert warfare](11-influence.md) |
 | Covert Warfare | Enabled | Intelligence agencies and covert operations against other countries. | [Cultural hegemony and covert warfare](11-influence.md) |
 | Social Movements | Enabled | The five social-movement journal entries (civil rights, human augmentation, digital rights, mental health and post-scarcity) and their events. Feminism, LGBTQ+, religious, anti-war, transhumanist and environmental events fire either way. | [Social movements](07-social-movements.md) |
 | Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](08-states.md) |
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
-| Demographics (Experimental) | Disabled | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Wealth Concentration keeps working. The census is experimental: released versions of the mod leave this rule out, and development builds have it off by default. | [States and population](08-states.md#demographics) |
+| Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Wealth Concentration keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](13-military.md) |
 | Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](06-politics.md) |
 | Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](06-politics.md) |
@@ -104,13 +104,14 @@ The Budget panel's Breakdown tab shows weekly income and expenses as pie charts
 and expandable lists. Groups start collapsed; click an arrow to see their
 components. Entries are ordered from largest to smallest amount at each level.
 The tab is available under every game-rule setting.
-Colors and percentages match across the pies and lists; hover an institution
-for its allocation. Investment Pool Transfer and the construction it funds are
+Colors and percentages match across the pies and lists. Hover a tax, tariff,
+welfare or interest amount for the Overview's graph of it, an institution for
+its share of the pool, and Administration for the pool itself. Investment Pool Transfer and the construction it funds are
 private spending, so they are excluded from the totals and Construction Goods.
 
 Taxes groups the individual tax receipts. Military expands into Army and Navy,
 which each expand into Wages plus Materials and Support. Materials and Support
-includes logistics centres and naval fortifications, whose operating costs
+includes logistics centers and naval fortifications, whose operating costs
 combine their own wages, goods and any slave upkeep. Barracks, conscription
 and naval administration stay in the native branch entries, while support
 buildings contribute their full upkeep. Navy also includes warship construction and
@@ -125,11 +126,13 @@ General Administration covers the remainder, including unused capacity. Other
 civil buildings, the military, construction and welfare have their own rows.
 
 Recurring costs from Banking, Covert Actions, Cultural Hegemony, the United
-Nations and other journal systems appear under Programme Costs, and so does the
+Nations and other journal systems appear under Program Costs, and so does the
 Space Program building's running cost, in the Space Race row. Expand it and
 hover over a system to see its
 current sources and amounts. One-time treasury payments and costs in resources
-such as innovation are outside this weekly money breakdown.
+such as innovation are outside this weekly money breakdown. The Banking row's
+hover also names what the Foreign Exchange Surrender Requirement buys for the
+central bank's gold each month, which stays outside the weekly budget.
 
 The charts show positive component amounts; negative adjustments stay in the
 list. Expanding a group preserves the chart total, including when costs and
@@ -165,14 +168,16 @@ interest group row is what your country gives each of them; their own panels add
 their local sources.
 
 Where These Come From, collapsed at the bottom, lists the permanent effects
-themselves under the section whose systems granted them. Hover one to see what
-it does at its current size.
+themselves under the section whose systems granted them, and its heading gives
+how many there are. Hover one to see what it does at its current size.
 
 The Modifiers list in the country panel's Information tab leaves these effects
-out. It keeps the timed ones, such as what an event has just done to you, and a
-few others: Nuclear Power, and what a foreign operation is doing to you. A
-system's weekly costs are in the Budget panel's Breakdown tab. Tooltips that
-break down a figure, such as legitimacy, still name every source.
+out, and a line under it gives how many it left out. On your own country an
+arrow beside that line opens the Nation tab. The list keeps the timed effects,
+such as what an event has just done to you, and a few others: Nuclear Power,
+and what a foreign operation is doing to you. A system's weekly costs are in the
+Budget panel's Breakdown tab. Tooltips that break down a figure, such as
+legitimacy, still name every source.
 
 ## How the guide is organized
 

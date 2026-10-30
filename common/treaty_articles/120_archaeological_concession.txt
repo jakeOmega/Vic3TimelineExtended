@@ -36,8 +36,13 @@ archaeological_concession = {
 		state
 	}
 
+	# Shown only where there is a site to dig (owner, 2026-10-23): the
+	# prospective host has a site on its ground open to the other country, as
+	# possible asks (below).
 	visible = {
 		gm_system_enabled = yes
+		exists = scope:other_country
+		gm_arch_country_offers_site = { WHO = scope:other_country }
 	}
 
 	# ROOT is the prospective source (the host), scope:other_country the

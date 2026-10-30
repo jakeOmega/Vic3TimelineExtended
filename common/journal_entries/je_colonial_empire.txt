@@ -9,12 +9,13 @@
 	}
 
 	possible = {
-		# Direct overseas-state holders OR holders of qualifying colonial
-		# subjects (Colonial Administration Colonies, Chartered Companies, and
-		# overseas Protectorates of a different heritage group from the
-		# metropole). The subject branch catches modern-era colonial relations
-		# where the metropole owns no overseas states directly -- e.g. UK over
-		# India, Netherlands over the DEIC, France over Tunisia/Morocco.
+		# Holders of a colony (is_overseas_colonial_state: separated, distinct,
+		# subordinated) OR of a qualifying colonial subject (Colonial
+		# Administration Colonies, Chartered Companies, and separated
+		# Protectorates sharing no heritage trait with the metropole). The
+		# subject branch catches modern-era colonial relations where the
+		# metropole owns no colonies directly -- e.g. UK over India, Netherlands
+		# over the DEIC, France over Tunisia/Morocco.
 		OR = {
 			any_scope_state = {
 				is_overseas_colonial_state = yes
@@ -227,6 +228,11 @@
 
 			custom_tooltip = {
 				text = je_colonial_empire_voluntary_fail_tt
+				# The colony test reads the monthly separation cache
+				# (colonial_geography_effects.txt). A save from before the
+				# cache holds none until our first pass, and would read "no
+				# colonies" here and end the entry.
+				has_variable = ce_separation_cached
 				NOT = {
 					OR = {
 						any_scope_state = { is_overseas_colonial_state = yes }
@@ -251,9 +257,10 @@
 			}
 			# .206 reads and then clears var:decol_chosen_releases itself.
 			trigger_event = { id = decolonization_events.206 }   # Voluntary Decolonization
-			# .206 forms no country. .204 and .201 below do, in their option,
-			# where apply_decolonization_path reads these counters for each
-			# successor's legacy; they clear them after forming.
+			# .206 forms no country. .204 and .201 below start the collapse's
+			# wave of declarations (decol_wave_start), whose successors'
+			# legacy (apply_decolonization_path) reads these counters; the
+			# wave clears them after its last answer (decol_wave_end).
 			colonial_empire_clear_path_months = yes
 		}
 		else_if = {
@@ -284,9 +291,8 @@
 		# colonial subject takes a strong LD spike + relations hit. Subjects
 		# don't auto-secede but become much harder to hold; the player has to
 		# negotiate releases or weather the LD-driven independence pressure.
-		# Direct-state release (where applicable) already happens via the
-		# event-204/201 flavor branches and the existing form_decolonized
-		# pathway.
+		# Direct-state release (where applicable) happens through the wave of
+		# declarations .204 / .201 start (decol_wave_start, .77 -> .70).
 		every_subject_or_below = {
 			limit = { is_qualifying_colonial_subject = yes }
 			add_modifier = {
@@ -301,7 +307,7 @@
 		# applied just above is intentionally preserved (failure consequence)
 		# -- the cleanup helper removes the bar-band LD modifiers but not the
 		# failure aftershock. It leaves the programme-month counters, which
-		# .201 / .204 still need (colonial_empire_clear_path_months).
+		# the wave .201 / .204 start still needs (decol_wave_end clears them).
 		colonial_empire_je_cleanup_effect = yes
 	}
 
@@ -411,11 +417,11 @@
 			# The pressuring-great-powers leaderboard used to be built here, into
 			# seven colonial_condemner_rank_N slot variables read by the
 			# status_desc. It is gone: the widget's International Pressure
-			# section walks the great powers live in script
-			# (colonial_empire_pressure_sgui), which removes ~50 lines of monthly
-			# work plus eight variables of save state, and sidesteps the
-			# `Var('x').GetCountry.GetName` chain that gui_modding_guide gotcha
-			# #11 records as rendering blank in this mod.
+			# section is a table of script containers built in
+			# colonial_empire_refresh_display (colonial_empire_refresh_gp_rows,
+			# players only), each reaching its country through a stored capital
+			# rather than the `Var('x').GetCountry.GetName` chain that
+			# gui_modding_guide gotcha #11 records as rendering blank in this mod.
 
 			# --- State-side assimilation disruption reapplication ---
 			# While Cultural Assimilation runs, every overseas colonial state,

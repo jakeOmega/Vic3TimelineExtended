@@ -16,7 +16,7 @@
  decree_greenest_grass_campaign:0 "Greenest Grass Campaign"
  decree_greenest_grass_campaign_desc:0 "A highly effective campaign to encourage migration to a region."
  decree_medical_outreach:0 "Medical Outreach"
- decree_medical_outreach_behind_tt:0 "This state's medicine is still behind what our technology and laws allow"
+ decree_medical_outreach_behind_tt:0 "This state's medicine is still behind what our technology and laws allow, and the next yearly count won't close the gap on its own"
  decree_medical_outreach_desc:0 "Doctors and nurses go out to train this state's practitioners and staff its clinics, so the newest treatments and the reach of our health system arrive here years sooner."
  decree_migration_invalid_tooltip:0 "In a [concept_power_bloc] allowing forced migration."
  decree_natalism_initiative:0 "Natalism Initiative"

@@ -50,6 +50,8 @@ Vanilla videos (`gfx/event_pictures/*.bk2`), usable as `event_image = { video = 
 
 `africa_animism`, `africa_city_center`, `africa_construction_colony`, `africa_desert_expedition`, `africa_diplomats_negotiating`, `africa_leader_arguing`, `africa_prosperous_farm`, `africa_public_protest`, `africa_soldiers_breaking_protest`, `asia_buddhism`, `asia_confucianism_shinto`, `asia_dead_cattle_poor_harvest`, `asia_factory_accident`, `asia_farmers_market`, `asia_hinduism_sikhism`, `asia_politician_parliament_motion`, `asia_poor_people_moving`, `asia_sepoy_mutiny`, `asia_union_leader`, `asia_westerners_arriving`, `europenorthamerica_american_civil_war`, `europenorthamerica_antarctica`, `europenorthamerica_art_gallery`, `europenorthamerica_before_the_battle`, `europenorthamerica_capitalists_meeting`, `europenorthamerica_gold_prospectors`, `europenorthamerica_judaism`, `europenorthamerica_london_center`, `europenorthamerica_native_american`, `europenorthamerica_opium_smoker`, `europenorthamerica_political_extremism`, `europenorthamerica_rich_and_poor`, `europenorthamerica_russian_serfs`, `europenorthamerica_springtime_of_nations`, `europenorthamerica_sufferage`, `middleeast_battlefield_trenches`, `middleeast_courtroom_upheaval`, `middleeast_engineer_blueprint`, `middleeast_islam`, `middleeast_jungle_expedition`, `middleeast_middleclass_cafe`, `middleeast_oil_derricks`, `middleeast_police_breaking_door`, `middleeast_upperclass_party`, `southamerica_aristocrats`, `southamerica_child_labor`, `southamerica_christianity`, `southamerica_election`, `southamerica_factory_opening`, `southamerica_public_figure_assassination`, `southamerica_slave_chains`, `southamerica_slaves_night`, `southamerica_war_civilians`, `unspecific_airPlane`, `unspecific_airship`, `unspecific_armored_train`, `unspecific_automobile`, `unspecific_devastation`, `unspecific_factory_closed`, `unspecific_fire`, `unspecific_gears_pistons`, `unspecific_iceberg`, `unspecific_military_parade`, `unspecific_naval_battle`, `unspecific_politicians_arguing`, `unspecific_ruler_speaking_to_people`, `unspecific_sick_in_hospital`, `unspecific_signed_contract`, `unspecific_steam_ship`, `unspecific_temperance_movement`, `unspecific_trains`, `unspecific_vandalized_storefront`, `unspecific_whaling`, `unspecific_world_fair`
 
+The name is a media alias from vanilla's `gfx/media_aliases/media_aliases.txt`, not a file name: `ip3_village_school` plays `ip3_villageschool.bk2`, and falls back to another alias for a player without the DLC. `texture_reference_audit` fails CI on a `video` that names no alias and on a `texture` path that names no file.
+
 `event_image` accepts **multiple blocks, each with its own `trigger`** — the first match wins, and an untriggered block at the end is the fallback. Vanilla uses this for religion-gated art (see the seven-way ladder in `ig_petitions.txt`, mirrored by `monument_events.4`); it is the only clean way to picture something whose look depends on game state.
 
 **Every visible event needs one.** The default event window has no fallback art, and the engine emits no warning — an event with no `event_image` renders a magenta missing-texture blob. The only supported alternative is a `gui_window` layout with no image panel plus `left_icon` / `right_icon` portraits (vanilla's `event_window_1char_tabloid`). `event_image_audit` enforces this; see `docs/engine/event_image_report.md`.
@@ -103,6 +105,7 @@ Only the game shows which one a recipient got, so a new popup belongs on the sys
 - Create a separate file per namespace: `localization/english/<namespace>_l_english.yml`
 - Must have `l_english:` header line, UTF-8 BOM encoding, one leading space before each key.
 - Required keys per event: `.t` (title), `.d` (description), `.f` (flavor text), `.a`/`.b`/`.c` (option button text).
+- **An event's fourth option is `.e`, not `.d`.** `.d`, `.f` and `.t` are the description, flavor and title, so a fourth option named `<event>.d` shares the description's key: the button reads the description, and the second definition of the key is silently dropped. Letter options a, b, c, e, g… (`decolonization_events.13.e`, `.74.e`, `.75.e`). The bare `.d` or `.f` that ends a `first_valid` desc or flavor counts too: `arch_events.2`'s options were `.d` and `.f`. `test_event_option_keys.py` checks every event.
 - Conditional descriptions use `_variant` suffix (e.g. `.d_modern`, `.d_tv`, `.d_cyber`).
 - Required keys per modifier: `modifier_name:0 "Display Name"`, `modifier_name_desc:0 "Tooltip description."`
 
@@ -295,6 +298,17 @@ Both modes accept `?prefix=<namespace>` / `?file=events/foo.txt` filters.
 
 After editing modifier or event files, `POST /reload` to refresh the server's view before re-running.
 
+### How Often a Recurring Event Fires
+
+Before an event that fires by chance ships, count how often a player sees it in one game. A monthly chance of p% is about 12p% a year; multiply by the years it can fire (a late-game system runs 50 to 80 years), and for a yearly pool by `chance_to_happen` times the event's share of the weights. A flavour event with two or three options that a player sees more than four or five times a game reads as noise and breaks immersion (owner, 2026-10-26).
+
+- **A "first" moment fires once**: once per nation (a country flag), not once per colony, state or building. The tenth "first child born" is no longer a first.
+- **Give a family of events one shared cooldown**: a country variable with `days`, set when any of them fires and tested in every roll's `limit`, so a strike doesn't land the month after a disaster.
+- **Keep one open at a time** where the events share a variable that names their subject.
+- **`random`'s `chance` takes whole percents here.** Neither the mod nor vanilla uses a fractional chance, so get below 1% by nesting (`chance = 1`, then `chance = 50` inside it) rather than writing `chance = 0.5`.
+
+The solar colony life events were drafted at 2% and 1% a month with no cooldown and a first child at every colony: about twenty in a 60-year late game. Once per nation for the first child, a ten-year shared cooldown and 1% / 0.5% a month bring it to about four (`sr_life_month`, `common/scripted_effects/sr_colony_autonomy_effects.txt`).
+
 ### Toggle vs Cooldown Design Preference
 - **For policy choices reflecting long-term strategic orientations, prefer toggles over one-shot actions with cooldowns.**
 - **Toggle pattern:** Two button pairs — "Enable X" (visible when NOT active) and "Disable X" (visible when active). The "Enable" button adds a permanent modifier. The "Disable" button removes it. Ongoing effects are processed in the relevant pulse.
@@ -312,7 +326,7 @@ After editing modifier or event files, `POST /reload` to refresh the server's vi
 - **Modifiers in `common/static_modifiers/extra_modifiers.txt`** — every new modifier needs an `icon`, gameplay fields, and two loc keys.
 - **Differentiate options mechanically**, not just by magnitude. Each option should apply a different modifier with distinct effects.
 - **Duration tiers** (days, from vanilla `common/script_values/event_values.txt`): `very_short_modifier_time` (365, 1 year), `short_modifier_time` (913, 2.5 years), `normal_modifier_time` (1825, 5 years), `long_modifier_time` (3650, 10 years), `very_long_modifier_time` (7300, 20 years). Pass them as `days =`, never `months =`. Use `is_decaying = yes` for most event modifiers.
-- **Icon convention:** `modifier_coins_negative.dds` for economic costs, `modifier_lightbulb_positive.dds` for research/innovation, `modifier_flag_positive/negative.dds` for political/prestige, `modifier_gear_positive/negative.dds` for production/throughput, `modifier_military_negative.dds` for military costs.
+- **Icon convention:** `modifier_coins_negative.dds` for economic costs, `modifier_lightbulb_positive.dds` for research/innovation, `modifier_flag_positive/negative.dds` for political/prestige, `modifier_gear_positive/negative.dds` for production/throughput, `modifier_rifle_positive/negative.dds` for military. Vanilla has nine pairs in `gfx/interface/icons/timed_modifier_icons/` (coins, documents, fire, fist, flag, gear, lightbulb, rifle, statue); a name outside them logs `VFSOpen Error` once per render and shows no icon (`modifier_military_negative.dds`, 2026-10-25). Write the full path, `gfx/interface/icons/timed_modifier_icons/<name>.dds`: a bare file name doesn't resolve. `texture_reference_audit` fails CI on either.
 
 ### Localization Scope References
 - **In event loc strings**, use typed scope syntax: `[SCOPE.sCountry('scope_name').GetName]` — not `[scope:scope_name.GetName]`.

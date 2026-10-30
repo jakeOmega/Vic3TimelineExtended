@@ -133,6 +133,15 @@ nd_crisis_ultimatum_issued = {
 	color = neutral
 }
 
+# A deployment concession switched our missile defense off again
+# (nd_deploy_bar_enforce).
+nd_deploy_bar_enforced = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
 nd_crisis_warning_reported = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
@@ -283,6 +292,77 @@ gp_support_declined_notice = {
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
 	notification_type = feed
 	color = neutral
+}
+
+# Wars of independence (decolonization_war_effects.txt, events .70-.80)
+decol_iw_war_begins_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_iw_war_begins_rebels_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+decol_iw_war_ends_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_iw_war_won_rebels_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+decol_iw_war_unstarted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_iw_talks_opened_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+decol_iw_accords_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_iw_rebels_armed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+decol_iw_intervention_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+decol_iw_allied_arms_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
 }
 
 # International Relations bilateral notifications

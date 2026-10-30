@@ -435,6 +435,15 @@ class WidthTest(unittest.TestCase):
         self.check_type("te_demog_figure_row", ("row_label",), bodies, 20)
         self.check_type("te_demog_term_row", ("row_label", "row_value"), bodies, 5)
 
+    def test_the_state_link_rows(self):
+        """Each list's figure fits the link row's 284 at 17, beside the 184 name (2026-10-27 audit, DEM-6)."""
+        row = [self.cell(b) for _, b in _textboxes(_type_body(self.widgets, "te_demog_state_link_row"))]
+        self.assertEqual(row, [(184, "row"), (284, "row")])
+        self.assertEqual(4 + 184 + 4 + 284, 476)
+        self.check_type("te_demog_state_link_row", ("link_value",), [self.widgets], 2)
+        city = re.search(r'blockoverride "link_value" \{\s*text = "(\w+)"', _type_body(self.widgets, "te_demog_city_row"))
+        self.fits(self.shown(city.group(1)), row[1], "te_demog_city_row")
+
     def test_the_states_table(self):
         head = [b for _, b in _textboxes(_type_body(self.widgets, "te_demog_state_head"))]
         row = [b for _, b in _textboxes(_type_body(self.widgets, "te_demog_state_row"))]
@@ -495,11 +504,13 @@ class WidthTest(unittest.TestCase):
                 self.fits(self.shown(key), (width, "heading"), key)
 
 
-def _doc_tables():
-    """Each table row of the icon doc, as its cells."""
-    rows = []
+def _doc_tables(heading):
+    """Each table row of the icon doc under `heading` (its nearest heading of any level), as its cells."""
+    rows, under = [], None
     for line in _read(ICONS_DOC).splitlines():
-        if line.startswith("| ") and not line.startswith("|---") and "`" in line:
+        if line.startswith("#"):
+            under = line.lstrip("#").strip()
+        elif under == heading and line.startswith("| ") and not line.startswith("|---") and "`" in line:
             rows.append([c.strip() for c in line.strip("|").split("|")])
     return rows
 
@@ -510,9 +521,9 @@ class IconsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.widgets = _read(WIDGETS)
-        rows = _doc_tables()
-        cls.cells = [(r[0], r[1].strip("`"), r[3].strip("`")) for r in rows if len(r) == 4]
-        cls.pips = [(r[0], r[1].strip("`"), r[2], r[4].strip("`")) for r in rows if len(r) == 5]
+        cls.cells = [(r[0], r[1].strip("`"), r[3].strip("`")) for r in _doc_tables("Overview cells")]
+        cls.causes = [(int(r[0]), r[3].strip("`")) for r in _doc_tables("The leading cause's icons")]
+        cls.pips = [(r[0], r[1].strip("`"), r[2], r[4].strip("`")) for r in _doc_tables("History pips")]
 
     def cell_icons(self, overview):
         body = _type_body(self.widgets, overview)
@@ -525,6 +536,27 @@ class IconsTest(unittest.TestCase):
         for overview in ("te_demog_overview", "te_state_demog_overview"):
             with self.subTest(overview=overview):
                 self.assertEqual(self.cell_icons(overview), listed)
+
+    def test_the_lead_cells_draw_each_causes_icon(self):
+        """The Leading Cause cell's headstone shows until deaths by cause are counted, then its cause's icon, by code;
+        War also takes the old code 6, as the reading's text does."""
+        self.assertEqual([code for code, _ in self.causes], PIE_CODES + [8])
+        headstone = PIE_DIR + "ov_leading_cause.dds"
+        for overview, ready in (("te_demog_overview", "te_demog_dc_ready_sgui"),
+                                ("te_state_demog_overview", "te_demog_state_dc_sgui")):
+            with self.subTest(overview=overview):
+                cells = [c for c in _instances(_type_body(self.widgets, overview), "te_demog_ov_cell")
+                         if headstone in (_override(c, "icon") or "")]
+                self.assertEqual(len(cells), 1)
+                icon, layers = _override(cells[0], "icon"), _override(cells[0], "icon_layers")
+                self.assertIn(f"Not( GetScriptedGui('{ready}')", icon)
+                self.assertIn(f"visible = \"[GetScriptedGui('{ready}')", layers)
+                drawn = []
+                for layer in _instances(layers, "icon"):
+                    codes = sorted(int(c) for c in re.findall(r"'\(CFixedPoint\)(\d+)'", layer))
+                    drawn.append((codes, re.search(r'texture = "([^"]+)"', layer).group(1)))
+                self.assertEqual(drawn, [([code], tex) for code, tex in self.causes[:-1]]
+                                 + [([6, 8], self.causes[-1][1])])
 
     def test_the_cells_name_their_captions(self):
         captions = [self.shown_caption(c) for c in _instances(_type_body(self.widgets, "te_demog_overview"),
@@ -654,6 +686,24 @@ class HistoryTest(unittest.TestCase):
             self.assertEqual(_override(chart, "marker_pips").strip(), "te_demog_hist_pips = {}")
         self.assertEqual(len(_instances(self.history, "te_demog_hist_pip_legend")), 1, "one key under the charts")
 
+    def test_the_pips_have_a_lane_above_the_bars(self):
+        """Each frame is 132 tall with its plots (and the zero axis) in a 96 px box at its foot, as te_history_chart's
+        96 px frame holds them; the pips sit in the 36 px over them, never on a bar (owner, 2026-10-22)."""
+        lane = re.compile(r"^### [^\n]*\n\s*widget = \{\s*size = \{ 100% 96 \}\s*parentanchor = bottom")
+        for chart in self.charts:
+            self.assertIn("size = { 456 132 }", _override(chart, "plot_size"))
+            self.assertRegex(_override(chart, "plot_layouts").strip(), lane)
+            if _override(chart, "zero_axis") is not None:
+                self.assertRegex(_override(chart, "zero_axis").strip(), lane)
+        pips = re.findall(r"position = \{ 0 (-?\d+) \}\s*alwaystransparent = yes\s*size = \{ (\d+) \d+ \}",
+                          _type_body(self.widgets, "te_demog_hist_pips"))
+        self.assertEqual(len(pips), 3)
+        column_top = 36 + 6     # the lane, then the 96 px box's margin above its 84 px bars
+        for y, size in pips:
+            top = column_top + int(y)
+            self.assertGreaterEqual(top, 0, "inside the frame")
+            self.assertLessEqual(top + int(size), column_top - 2, "clear of the bars")
+
     def test_every_sample_variable_read_is_recorded(self):
         recorded = set(re.findall(r"name = (te_dg_h_\w+)", _read(HISTORY)))
         recorded |= set(re.findall(r"TO = (te_dg_h_\w+)", _read(HISTORY)))
@@ -718,6 +768,38 @@ class StatesTest(unittest.TestCase):
     def test_the_civil_war_repair_redraws_the_lists(self):
         self.assertIn("te_demog_country_lists = yes", _read(os.path.join(
             REPO, "common", "scripted_effects", "te_inheritance_effects.txt")))
+
+    def test_every_state_a_list_names_opens_it(self):
+        """2026-10-27 audit, DEM-6 and DEM-8: the largest cities, the Youth row's states and the Metropolises are rows
+        that open the state on its Demographics subtab, with the States table's onclicks, highlight and menu."""
+        row = _type_body(self.widgets, "te_demog_state_row")
+        link = _type_body(self.widgets, "te_demog_state_link_row")
+        for line in re.findall(r"(?m)^\t\t(on\w+ = \".*\")$", row):
+            self.assertIn(line, link)
+        self.assertRegex(self.widgets, r"type te_demog_city_row = te_demog_state_link_row \{")
+        for section, name in (("te_demog_sec_work", "te_dg_yb_states"), ("te_demog_sec_places", "te_dg_mt_states")):
+            with self.subTest(section=section):
+                body = _type_body(self.widgets, section)
+                at = body.index(f"datamodel = \"[GetPlayer.MakeScope.GetList('{name}')]\"")
+                item = _block_from(body, body.index("item = {", at))
+                self.assertIn("te_demog_state_link_row = {", item)
+                self.assertIn('datacontext = "[Scope.GetState]"', item)
+
+    def test_the_youth_and_metropolis_lists_are_built_with_the_census(self):
+        effects = _read(EFFECTS)
+        lists = _block_from(effects, effects.index("te_demog_country_lists = {"))
+        for name, order, test in (("te_dg_yb_states", "te_demog_youth_bulge_shown", "te_demog_youth_bulge_shown > 0"),
+                                  ("te_dg_mt_states", "te_demog_mt_share", "var:te_dg_mt >= te_demog_k_mt_metropolis")):
+            with self.subTest(list=name):
+                at = lists.index(f"clear_variable_list = {name}")
+                block = _block_from(lists, lists.index("ordered_scope_state = {", at))
+                self.assertIn(test, block)
+                self.assertRegex(block, rf"order_by = {order}\s*max = 10\b")
+                self.assertIn(f"add_to_variable_list = {{ name = {name} target = scope:te_dg_it }}", block)
+        # the Youth row's count and its list read the same test
+        conseq = _read(os.path.join(REPO, "common", "scripted_effects", "te_demog_consequence_effects.txt"))
+        country = _block_from(conseq, conseq.index("te_demog_consequences_country = {"))
+        self.assertIn("te_demog_youth_bulge_shown > 0", country)
 
 
 class StateWealthTermsTest(unittest.TestCase):

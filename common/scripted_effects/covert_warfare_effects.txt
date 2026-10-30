@@ -13,6 +13,10 @@
 #           iw_detect          monthly detection % (JE display)
 #           iw_tgt_ic          target's intelligence capacity (JE display)
 #           iw_tgt_td          target's type-specific covert defense (JE display)
+#           iw_det_ci, iw_det_their_net, iw_det_net, iw_det_prio, iw_det_fund,
+#           iw_det_eff         the terms of iw_detect, for the row's breakdown
+#                              (JE display; covert_op_refresh_detection)
+#           iw_exposure_tier   1-4, the exposure tier its row names (JE display)
 #           iw_priority        1-3; multiplies effect, upkeep share and detection
 #                              (covert_warfare_script_values.txt, slice 3 section)
 #           iw_net_head_start  whole months of head start from the target's
@@ -110,6 +114,7 @@ covert_op_create = {
 			set_variable = { name = iw_target value = $TARGET$ }
 			set_variable = { name = iw_duration value = 0 }
 			set_variable = { name = iw_type_code value = $CODE$ }
+			covert_op_refresh_exposure_tier = yes
 			set_variable = { name = iw_priority value = 1 }
 			# Head start from the target's network, fixed now (slice 4). Set
 			# before the phase is derived, which reads it.
@@ -142,6 +147,64 @@ covert_op_create = {
 		add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
 		covert_refresh_priority_cost = yes
 	}
+}
+
+# The exposure tier an operation's row names (COV-4): what the world calls it
+# if it is caught. Read from the tier table (covert_code_tier_*, the one
+# place the tiers live) through the type code, so the widget never lists
+# types by tier. 1 routine espionage, 2 interference, 3 an attack on the
+# government, 4 wartime sabotage. Written at creation and by every monthly
+# sync, so a container from an older save has it after its first month; the
+# row's lines wait for it (HasVariable).
+# Scope: operation container (iw_type_code set)
+covert_op_refresh_exposure_tier = {
+	if = {
+		limit = { covert_code_tier_war = { VAR = iw_type_code } }
+		set_variable = { name = iw_exposure_tier value = 4 }
+	}
+	else_if = {
+		limit = { covert_code_tier_severe = { VAR = iw_type_code } }
+		set_variable = { name = iw_exposure_tier value = 3 }
+	}
+	else_if = {
+		limit = { covert_code_tier_moderate = { VAR = iw_type_code } }
+		set_variable = { name = iw_exposure_tier value = 2 }
+	}
+	else = {
+		set_variable = { name = iw_exposure_tier value = 1 }
+	}
+}
+
+# What a launch decision needs, in the diplomatic action's tooltip (COV-2):
+# our network in the target and the head start it gives, the upkeep the
+# operation adds, and the detection warning. Each action's accept_effect
+# calls it where the warning used to stand alone, so the summary, the
+# Agent Networks row and the Funding Levels table read the same numbers.
+# Display only. The network line prints from the network container itself
+# (THIS.Var on a covert_launch_net_tt line inside the lookup); a target with
+# no network of ours gets the plain line. The target's counterintelligence
+# stays hidden until launch, as before.
+# Scope: operator country; scope:target_country = the target
+covert_op_launch_summary = {
+	if = {
+		limit = {
+			has_variable_list = iw_nets
+			any_in_list = {
+				variable = iw_nets
+				var:iw_target ?= scope:target_country
+			}
+		}
+		every_in_list = {
+			variable = iw_nets
+			limit = { var:iw_target ?= scope:target_country }
+			custom_tooltip = covert_launch_net_tt
+		}
+	}
+	else = {
+		custom_tooltip = covert_launch_net_none_tt
+	}
+	custom_tooltip = covert_launch_upkeep_tt
+	custom_tooltip = covert_op_detection_warning_tt
 }
 
 # Destroy the $TYPE$ operation against $TARGET$, if there is one. The
@@ -245,16 +308,37 @@ covert_op_refresh_detection = {
 				}
 			}
 			set_variable = { name = iw_detect_staging value = covert_operation_detection_chance }
+			# The terms of that chance, for the row's breakdown (COV-5), from the
+			# same values covert_operation_detection_chance adds, so the table
+			# adds up to iw_detect. Display only: the roll reads iw_detect.
+			set_variable = { name = iw_det_ci_staging value = target_counterintelligence_penalty }
+			set_variable = { name = iw_det_their_net_staging value = covert_net_catch_penalty }
+			set_variable = { name = iw_det_net_staging value = covert_net_detect_reduction }
+			set_variable = { name = iw_det_prio_staging value = covert_op_priority_detect_penalty }
+			set_variable = { name = iw_det_fund_staging value = covert_ops_funding_detection_reduction_display }
+			set_variable = { name = iw_det_eff_staging value = covert_detection_efficiency_factor }
 		}
 	}
 	set_variable = { name = iw_detect value = scope:iw_operator.var:iw_detect_staging }
 	set_variable = { name = iw_tgt_ic value = scope:iw_operator.var:target_max_ic }
 	set_variable = { name = iw_tgt_td value = scope:iw_operator.var:target_type_defense }
+	set_variable = { name = iw_det_ci value = scope:iw_operator.var:iw_det_ci_staging }
+	set_variable = { name = iw_det_their_net value = scope:iw_operator.var:iw_det_their_net_staging }
+	set_variable = { name = iw_det_net value = scope:iw_operator.var:iw_det_net_staging }
+	set_variable = { name = iw_det_prio value = scope:iw_operator.var:iw_det_prio_staging }
+	set_variable = { name = iw_det_fund value = scope:iw_operator.var:iw_det_fund_staging }
+	set_variable = { name = iw_det_eff value = scope:iw_operator.var:iw_det_eff_staging }
 	scope:iw_operator = {
 		remove_variable = iw_detect_staging
 		remove_variable = iw_priority_staging
 		remove_variable = iw_net_strength_staging
 		remove_variable = iw_tgt_net_strength_staging
+		remove_variable = iw_det_ci_staging
+		remove_variable = iw_det_their_net_staging
+		remove_variable = iw_det_net_staging
+		remove_variable = iw_det_prio_staging
+		remove_variable = iw_det_fund_staging
+		remove_variable = iw_det_eff_staging
 	}
 }
 
@@ -392,22 +476,24 @@ covert_backlash_home = {
 }
 
 # The full share: appeasement -3 / -5 / -8 and legitimacy -3 / -5 / -8 (mild /
-# moderate / severe), the latter fading over short_modifier_time. With no
-# lobby at home that favours the target the appeasement line is replaced by a
-# note saying so, rather than a lobby that is not there; legitimacy still falls.
-# The lobby's interest groups lose approval through the lobby itself, so no
-# separate approval hit. appeasement_covert_spying_exposed is always usable, so
-# the lobby types need not list it (te_covert_appeasement.txt).
-# Scope: operator country; scope:detected_by_country is the target
+# moderate / severe), the latter fading over short_modifier_time. The lobby is
+# the one covert_warfare.1's immediate pinned as scope:iw_home_lobby, changed
+# through its own scope so the option's tooltip names it (vanilla's lobby
+# events do the same); a lobby formed after the event opened is missed. With
+# no lobby at home that favours the target, or one that has disbanded since,
+# the appeasement line is replaced by a note saying so, rather than a lobby
+# that is not there; legitimacy still falls. The lobby's interest groups lose
+# approval through the lobby itself, so no separate approval hit.
+# appeasement_covert_spying_exposed is always usable, so the lobby types need
+# not list it (te_covert_appeasement.txt).
+# Scope: operator country; scope:detected_by_country is the target,
+# scope:iw_home_lobby the lobby at home that favours it
 covert_backlash_home_full = {
 	if = {
-		limit = {
-			any_political_lobby = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
-		}
+		limit = { exists = scope:iw_home_lobby }
 		if = {
 			limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -3 factor = appeasement_covert_spying_exposed }
 			}
 		}
@@ -418,14 +504,12 @@ covert_backlash_home_full = {
 					covert_code_tier_war = { VAR = iw_burned_type_code }
 				}
 			}
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -8 factor = appeasement_covert_spying_exposed }
 			}
 		}
 		else = {
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -5 factor = appeasement_covert_spying_exposed }
 			}
 		}
@@ -453,16 +537,14 @@ covert_backlash_home_full = {
 
 # The half share, for Deny: appeasement and legitimacy -2 / -3 / -4. Same shape
 # as covert_backlash_home_full; only the literals differ.
-# Scope: operator country; scope:detected_by_country is the target
+# Scope: operator country; scope:detected_by_country is the target,
+# scope:iw_home_lobby the lobby at home that favours it
 covert_backlash_home_half = {
 	if = {
-		limit = {
-			any_political_lobby = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
-		}
+		limit = { exists = scope:iw_home_lobby }
 		if = {
 			limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -2 factor = appeasement_covert_spying_exposed }
 			}
 		}
@@ -473,14 +555,12 @@ covert_backlash_home_half = {
 					covert_code_tier_war = { VAR = iw_burned_type_code }
 				}
 			}
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -4 factor = appeasement_covert_spying_exposed }
 			}
 		}
 		else = {
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -3 factor = appeasement_covert_spying_exposed }
 			}
 		}
@@ -1394,6 +1474,7 @@ covert_op_sync = {
 			limit = { has_tag = iw_op_$TYPE$ }
 			remove_variable = iw_seen
 			set_variable = { name = iw_type_code value = $CODE$ }
+			covert_op_refresh_exposure_tier = yes
 			# Old-save backfill: detection reads the priority, so it must
 			# exist before covert_op_refresh_detection runs.
 			if = {
@@ -1431,6 +1512,9 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 12 }
 	covert_op_sync = { TYPE = secure_material ACTION = covert_secure_material_action DEFENSE_MOD = country_covert_defense_military_add CODE = 13 }
 	covert_op_sync = { TYPE = counterintel_support ACTION = covert_counterintel_support_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 14 }
+	covert_op_sync = { TYPE = incite_autonomy ACTION = covert_incite_autonomy_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 15 }
+	covert_op_sync = { TYPE = sabotage_colony ACTION = covert_sabotage_colony_action DEFENSE_MOD = country_covert_defense_military_add CODE = 16 }
+	covert_op_sync = { TYPE = survey_defences ACTION = covert_survey_defences_action DEFENSE_MOD = country_covert_defense_military_add CODE = 17 }
 	# The sync reaps lapsed containers without going through covert_op_destroy.
 	covert_refresh_priority_cost = yes
 }
@@ -1450,10 +1534,10 @@ covert_ops_age_all_durations = {
 }
 
 # THE one place the operation phase is turned into something a widget can read.
-# covert_op_is_established / covert_op_is_fully_operational stay the definition
-# of the thresholds; this only projects them onto two variables so the .gui
-# never has to compare iw_duration against a literal 6 or 12 (which would put
-# balance numbers outside script):
+# covert_op_is_established / covert_op_is_fully_operational stay the test of
+# the thresholds (covert_op_phase_2_month / _3_month); this only projects them
+# onto two variables so the .gui never has to compare iw_duration against a
+# literal 6 or 12 (which would put balance numbers outside script):
 #   iw_phase              1 preparatory, 2 establishing, 3 fully operational
 #   iw_phase_months_left  months until the next phase; 0 once fully operational
 # Called from covert_ops_age_all_durations (immediately after the +1, so the
@@ -1469,13 +1553,13 @@ covert_op_refresh_phase = {
 	else_if = {
 		limit = { covert_op_is_established = yes }
 		set_variable = { name = iw_phase value = 2 }
-		set_variable = { name = iw_phase_months_left value = { value = 12 subtract = covert_op_effective_duration } }
-		clamp_variable = { name = iw_phase_months_left min = 0 max = 12 }
+		set_variable = { name = iw_phase_months_left value = { value = covert_op_phase_3_month subtract = covert_op_effective_duration } }
+		clamp_variable = { name = iw_phase_months_left min = 0 max = covert_op_phase_3_month }
 	}
 	else = {
 		set_variable = { name = iw_phase value = 1 }
-		set_variable = { name = iw_phase_months_left value = { value = 6 subtract = covert_op_effective_duration } }
-		clamp_variable = { name = iw_phase_months_left min = 0 max = 6 }
+		set_variable = { name = iw_phase_months_left value = { value = covert_op_phase_2_month subtract = covert_op_effective_duration } }
+		clamp_variable = { name = iw_phase_months_left min = 0 max = covert_op_phase_2_month }
 	}
 }
 
@@ -1766,6 +1850,70 @@ covert_ops_apply_all_phase_effects = {
 					nd_loose_recover_from_line = { HOW = 2 }
 				}
 				nd_loose_tell_recovery = { WHO = ROOT HOW = 2 }
+			}
+		}
+
+		# ---- Incite Colonial Autonomy (solar colonization slice 5): no
+		#      modifier. Once established, every colony the target holds gains
+		#      autonomy each month, sr_cov_incite_autonomy_base x the
+		#      operation's phase x priority (sr_cov_incite_autonomy,
+		#      sr_sites_generated.txt; it reads local_var:sr_cov_mult). Several
+		#      operators' campaigns add up. ----
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_incite_autonomy
+				covert_op_is_established = yes
+			}
+			set_local_variable = { name = sr_cov_mult value = covert_op_effect_mult }
+			var:iw_target ?= {
+				if = {
+					limit = { is_country_alive = yes }
+					sr_cov_incite_autonomy = yes
+				}
+			}
+		}
+
+		# ---- Colony Sabotage (solar colonization slice 5): no modifier.
+		#      Once established, the target's most populous colony loses
+		#      sr_cov_sabotage_share of its people each month and gains
+		#      sr_cov_sabotage_autonomy autonomy, both x phase x priority
+		#      (sr_cov_sabotage_colony, sr_sites_generated.txt; reads
+		#      local_var:sr_cov_mult). ----
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_sabotage_colony
+				covert_op_is_established = yes
+			}
+			set_local_variable = { name = sr_cov_mult value = covert_op_effect_mult }
+			var:iw_target ?= {
+				if = {
+					limit = { is_country_alive = yes }
+					sr_cov_sabotage_colony = yes
+				}
+			}
+		}
+
+		# ---- Survey Colony Defences (solar colonization slice 6): no
+		#      modifier. The operator's survey record is rebuilt each month:
+		#      cleared (sr_cov_survey_reset), then each established survey adds
+		#      its target and multiplier (sr_cov_survey_defences, reading
+		#      local_var:sr_cov_mult), so our fleets fire harder on the target's
+		#      colony defences and our panel shows their figures. ----
+		sr_cov_survey_reset = yes
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_survey_defences
+				covert_op_is_established = yes
+			}
+			set_local_variable = { name = sr_cov_mult value = covert_op_effect_mult }
+			var:iw_target ?= {
+				if = {
+					limit = { is_country_alive = yes }
+					sr_cov_survey_defences = yes
+				}
 			}
 		}
 
@@ -2083,6 +2231,18 @@ covert_watch_start = {
 		else_if = {
 			limit = { scope:iw_caught_op = { has_tag = iw_op_secure_material } }
 			covert_watch_record_create = { TYPE = secure_material }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_incite_autonomy } }
+			covert_watch_record_create = { TYPE = incite_autonomy }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_sabotage_colony } }
+			covert_watch_record_create = { TYPE = sabotage_colony }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_survey_defences } }
+			covert_watch_record_create = { TYPE = survey_defences }
 		}
 	}
 }
@@ -2824,8 +2984,11 @@ covert_ai_manage_priorities = {
 # The bloc audience is guarded on the TARGET actually having a bloc: two
 # countries that are both in none can otherwise read as being in the same one,
 # which would hit every unaligned country on the map.
+# The notice names both countries: the operator as scope:covert_exposure_operator,
+# the target as scope:detected_by_country.
 # Scope: country (the operator); scope:detected_by_country = the target
 covert_exposure_third_party_blowback = {
+	save_scope_as = covert_exposure_operator
 	custom_tooltip = {
 		text = covert_exposure_third_party_tt
 		every_country = {

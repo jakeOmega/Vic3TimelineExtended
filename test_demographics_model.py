@@ -21,13 +21,18 @@ import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
 
 CARRIERS = DM.load_carriers()
+# the moved working-adult lines, as the harness reads them: the census reads the women's-work family as women's
+# participation, and since 2026-10-25 women's share of the workers splits work deaths
+LINES = DM.workforce_line_carriers()
 
 
 def scenario(**kw):
     """Inputs whose modifier totals come from the game files' carriers for its techs, laws and
-    institutions (an incorporated state)."""
+    institutions (an incorporated state), the moved working-adult lines among them."""
     inp = M.Inputs(**kw)
-    inp.mods = DM.totals(CARRIERS, inp.techs, inp.laws, inp.institutions)
+    inp.mods = {**DM.totals(CARRIERS, inp.techs, inp.laws, inp.institutions),
+                **DM.totals(LINES, inp.techs, inp.laws, inp.institutions,
+                            types=tuple(P.WORKFORCE_LINE_TYPES.values()))}
     return inp
 
 MODERN = frozenset({
@@ -228,11 +233,14 @@ class TestMortality(unittest.TestCase):
     def test_women_outlive_men_by_a_calibration_gap(self):
         # §3's anchor is about 2 years at e0 35 and 5-7 at e0 75; the starting parameters give
         # about 5 at both. Meeting the anchor is calibration's job (the plan's 'After this
-        # plan'); this pins the starting gap so a parameter change that moves it is seen.
+        # plan'); this pins the starting gap so a parameter change that moves it is seen. 6.0 at most until 2026-10-25,
+        # when women's share of the workers took the place of the women's-rights laws' share in the work-death split:
+        # West 1990's women went from 47% of its workers to 37%, its gap from 4.9 years to 6.0 (Britain 1836's 5.0 to
+        # 5.2), inside the anchor's 5-7.
         for inp in (BRITAIN_1836, WEST_1990):
             qf, qm, _ = M.group_rates(inp)
             gap = M.life_table(qf)["e0"] - M.life_table(qm)["e0"]
-            self.assertTrue(3.0 <= gap <= 6.0, gap)
+            self.assertTrue(3.0 <= gap <= 6.5, gap)
 
     def test_no_deaths_lives_at_the_floor_rate_past_150(self):
         # the open last interval (2026-10-20): with no deaths the survivors at 150 live on at the floor rate, one per
@@ -420,21 +428,25 @@ class TestRing(unittest.TestCase):
         self.assertLess(abs(after["men_per_100_women"] - before["men_per_100_women"]), 0.5)
 
     def test_a_birth_cohort_does_not_spread(self):
-        """Extra men born in 1800 stay in one slot for 120 years, then fold into the pool."""
-        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
-        twin = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        """Extra men born in 1800 stay in one slot for 120 years, and fold into the pool at the ring's last age (300 since
+        issue #1075), when the slot takes that year's births."""
+        # one women's share of the workers for both: the extra men would move each ring's own count, and through it
+        # every cohort's work deaths (women_worker_share), which is the census's, not the ring's
+        inp = dataclasses.replace(AGRARIAN_1836, work_female_share=M.women_worker_share(AGRARIAN_1836))
+        ring = M.seed(inp, 1836, 1_000_000)
+        twin = M.seed(inp, 1836, 1_000_000)
         marked = 1800 % P.RING_YEARS
         ring.m[marked] += 777.0
         for year in range(1837, 1921):
-            M.step(ring, AGRARIAN_1836, year)
-            M.step(twin, AGRARIAN_1836, year)
+            M.step(ring, inp, year)
+            M.step(twin, inp, year)
         diffs = [a - b for a, b in zip(ring.m, twin.m)]
         self.assertEqual(ring.age_of_slot(marked), 120)
         self.assertGreater(diffs[marked], 0.0)
         self.assertLess(sum(abs(d) for i, d in enumerate(diffs) if i != marked), 1e-6)
-        for year in range(1921, 1951):
-            M.step(ring, AGRARIAN_1836, year)
-            M.step(twin, AGRARIAN_1836, year)
+        for year in range(1921, 1800 + P.RING_YEARS + 1):
+            M.step(ring, inp, year)
+            M.step(twin, inp, year)
         self.assertEqual(ring.age_of_slot(marked), 0)
         self.assertGreater(ring.pool_m, twin.pool_m)
 
@@ -761,16 +773,20 @@ class TestMigrantProfile(unittest.TestCase):
                 self.assertEqual(len(spec["weights"]), len(P.MIGRANT_CLASSES))
                 self.assertAlmostEqual(sum(spec["weights"]), 1.0)
 
-    def test_women_at_work_is_the_base_plus_the_laws_line(self):
-        """Modifier-types stage 3 (2026-10-19): the share was a law table; each women's-rights law now carries the old
-        table's figure less the 0.1 base, so every law reads what it did."""
-        old_table = {"law_no_womens_rights": 0.1, "law_women_in_the_fields": 0.25, "law_women_own_property": 0.3,
-                     "law_women_in_the_workplace": 0.45, "law_womens_suffrage": 0.47, "law_protected_class": 0.48}
-        for law, share in old_table.items():
-            self.assertAlmostEqual(M.female_work_share(scenario(laws=frozenset({law}))), share, msg=law)
-        self.assertEqual(M.female_work_share(M.Inputs()), P.FEMALE_WORK_SHARE_DEFAULT, "no law: the base")
-        self.assertEqual(M.female_work_share(M.Inputs(mods={P.FEMALE_WORK_SHARE_TYPE: 2.0})), 1.0, "at most 1")
-        self.assertEqual(M.female_work_share(M.Inputs(mods={P.FEMALE_WORK_SHARE_TYPE: -0.5})), 0.0, "at least 0")
+    def test_women_at_work_is_the_census_count_or_the_rates(self):
+        """2026-10-25: women's share of the workers is the census's own count at the last count, else what the sexes'
+        rates give equal numbers of women and men (it replaced the women's-rights laws' own share)."""
+        self.assertEqual(M.women_worker_share(M.Inputs(work_female_share=0.37)), 0.37, "the count, where there is one")
+        none = M.Inputs()
+        self.assertAlmostEqual(M.women_worker_share(none), P.WOMEN_BASE / (P.WOMEN_BASE + P.MEN_RATE))
+        # the women's-work family at full: women work at the men's rate, half the workers
+        full = M.Inputs(mods={P.WOMENS_WORK_TYPE: P.WOMENS_WORK_FULL})
+        self.assertAlmostEqual(M.women_worker_share(full), 0.5)
+        half = M.Inputs(mods={P.WOMENS_WORK_TYPE: P.WOMENS_WORK_FULL / 2})
+        rf = P.WOMEN_BASE + (P.MEN_RATE - P.WOMEN_BASE) / 2
+        self.assertAlmostEqual(M.women_worker_share(half), rf / (rf + P.MEN_RATE))
+        self.assertEqual(M.women_worker_share(M.Inputs(mods={P.MALE_PARTICIPATION_TYPE: -1.0,
+                                                             P.PARTICIPATION_TYPE: -1.0})), 0.0, "nobody at work")
 
     def _family(self, inp):
         """The family kind's weight, read back from the profile's under-15s (only families and refugees bring them)."""
@@ -783,10 +799,29 @@ class TestMigrantProfile(unittest.TestCase):
         base = dict(laws=frozenset({"law_no_womens_rights"}))
         steam = frozenset({"paddle_steamer", "railways", "combustion_engine"})
         air = steam | {"commercial_aviation", "jet_engine_technology"}
-        rights = P.FAMILY_RIGHTS_WEIGHT * P.FEMALE_WORK_SHARE_DEFAULT / P.FULL_FEMALE_WORK_SHARE
-        self.assertAlmostEqual(self._family(scenario(**base)), P.FAMILY_BASE + rights)
-        self.assertAlmostEqual(self._family(scenario(techs=steam, **base)), P.FAMILY_BASE + 0.35 + rights)
-        self.assertAlmostEqual(self._family(scenario(techs=air, **base)), P.FAMILY_BASE + 0.45 + rights)
+        self.assertAlmostEqual(self._family(scenario(**base)), P.FAMILY_BASE)
+        self.assertAlmostEqual(self._family(scenario(techs=steam, **base)), P.FAMILY_BASE + 0.35)
+        self.assertAlmostEqual(self._family(scenario(techs=air, **base)), P.FAMILY_BASE + 0.45)
+
+    def test_womens_rights_leave_the_families_alone(self):
+        """2026-10-25: the women's-rights term went (women who can move on their own account don't make families move
+        more); the 0.0417 it gave No Women's Rights stayed in FAMILY_BASE, so a state under that law is unchanged."""
+        self.assertAlmostEqual(P.FAMILY_BASE, 0.2 + 0.2 * 0.1 / 0.48, places=4)
+        weights = {law: self._family(scenario(laws=frozenset({law})))
+                   for law in ("law_no_womens_rights", "law_womens_suffrage", "law_protected_class")}
+        self.assertEqual(len(set(round(w, 12) for w in weights.values())), 1, weights)
+
+    def test_the_labour_kinds_women_follow_the_jobs_and_women_at_work(self):
+        """The labour kind's women's share: the minimum plus the women's job share x women's share of the workers over
+        parity x the range (2026-10-25: the women's-rights laws' share over 0.48 before)."""
+        lo, hi = P.LABOUR_FEMALE_SHARE_MIN, P.LABOUR_FEMALE_SHARE_MAX
+        for jobs, women in ((0.0, 0.4), (0.3, 0.1), (0.3, 0.4), (0.8, 0.5), (1.0, 0.7)):
+            inp = M.Inputs(female_job_share=jobs, work_female_share=women)
+            prof = M.migrant_profile(inp)
+            labour = 1 - (P.FAMILY_BASE)            # no refugees, no transport, no chain migration
+            share = prof[(2, "f")] - P.FAMILY_BASE * P.MIGRANT_PROFILE["family"]["weights"][2] * 0.5
+            want = min(max(lo + jobs * women / P.WOMEN_WORKER_PARITY * (hi - lo), lo), hi)
+            self.assertAlmostEqual(share, labour * P.MIGRANT_PROFILE["labour"]["weights"][2] * want, msg=(jobs, women))
 
 
 class TestMigrantBooking(unittest.TestCase):
@@ -975,8 +1010,9 @@ class TestCausesOfDeath(unittest.TestCase):
         self.assertLess(M.medicine_drift(far, inp)["access"], target["access"])
 
     def test_constant_inputs_keep_the_calibration(self):
-        # medicine at its targets from the seed on: run_constant (the anchors' equilibria) is what it was
-        inp = M.Inputs(sol=14, literacy=0.4, mods=dict(self.MODS))
+        # medicine at its targets from the seed on: run_constant (the anchors' equilibria) is what it was. One women's share
+        # of the workers throughout: each step otherwise reads the last count, which follows the ring (2026-10-25)
+        inp = M.Inputs(sol=14, literacy=0.4, mods=dict(self.MODS), work_female_share=0.2)
         _ring, last = M.run_constant(inp, years=60)
         qf, qm, _mmr = M.group_rates(inp)
         self.assertAlmostEqual(last["e0"], (M.life_table(qf)["e0"] + M.life_table(qm)["e0"]) / 2, places=9)
@@ -1065,8 +1101,11 @@ class TestPractices(unittest.TestCase):
         # Marriage line, 0.15, from the game files)
         inp = scenario(literacy=0.4, laws=frozenset({"law_no_womens_rights", "law_primogeniture"}), agrarian_share=0.5,
                        female_job_share=0.2)
-        work = P.LM_WOMENS_WORK * 0.2 * 0.1 / P.FULL_FEMALE_WORK_SHARE
+        work = P.LM_WOMENS_WORK * 0.2 * M.women_worker_share(inp) / P.WOMEN_WORKER_PARITY
         self.assertAlmostEqual(M.practice_target("lm", inp, 0.0), 0.15 * 0.5 + work)
+        # with a count of women among the workers, that count (2026-10-25)
+        counted = dataclasses.replace(inp, work_female_share=0.3)
+        self.assertAlmostEqual(M.practice_target("lm", counted, 0.0), 0.15 * 0.5 + P.LM_WOMENS_WORK * 0.2 * 0.3 / 0.5)
         self.assertEqual(M.practice_target("lm", inp, 1.0), 1.0, "clamped at 1")
         # era 3's pair at literacy 0.75: the means beyond traditional methods are 0.35 x 0.825 = 0.289 (and no
         # impartible inheritance: mods holds no Late Marriage line)
@@ -1114,7 +1153,7 @@ class TestPractices(unittest.TestCase):
         self.assertAlmostEqual(M.practice_seed("bs", M.Inputs(mods={P.ACCESS_TYPE: 0.25}), 1.0, []),
                                1 - P.PRACTICE_EROSION_ACCESS["bs"] * 0.5)
         drivers = M.Inputs(female_job_share=1.0, laws=frozenset({"law_protected_class"}), agrarian_share=1.0,
-                           mods={P.LM_FARMS_TYPE: 0.15, P.FEMALE_WORK_SHARE_TYPE: 0.38})
+                           work_female_share=0.5, mods={P.LM_FARMS_TYPE: 0.15})
         self.assertEqual(M.practice_seed("lm", drivers, 0.0, []), 0.0,
                          "the drivers stay out of the seed: Japan's Late Marriage starts at 0 (call 3)")
 
@@ -1312,11 +1351,13 @@ class TestPhase2Step2(unittest.TestCase):
         self.assertAlmostEqual(M.health_term(1.0, frozenset(P.HEALTH_TECHS) | {"railways"}),
                                P.HEALTH_TECH_STEP * len(P.HEALTH_TECHS))
 
-    def test_work_deaths_split_by_the_census_under_full(self):
+    def test_work_deaths_split_by_the_census(self):
+        """The census's own count of women among its workers splits work deaths, under every setting it runs
+        (2026-10-25; before, the women's-rights laws' share split them outside Full); the rates before a count."""
         inp = scenario(laws=frozenset({"law_protected_class"}))
-        self.assertAlmostEqual(M.work_death_share(inp), P.FULL_FEMALE_WORK_SHARE, msg="the laws' share outside Full")
+        self.assertAlmostEqual(M.work_split(inp, 1.0)[0], 2 * M.women_worker_share(inp))
         full = dataclasses.replace(inp, work_female_share=0.3)
-        self.assertEqual(M.work_death_share(full), 0.3)
+        self.assertEqual(M.women_worker_share(full), 0.3)
         f, m = M.work_split(full, 2.0)
         self.assertAlmostEqual(f, 2.0 * 2 * 0.3)
         self.assertAlmostEqual(m, 2.0 * 2 * 0.7)
@@ -1421,8 +1462,12 @@ class TestConsequences(unittest.TestCase):
         self.assertAlmostEqual(M.sex_women_add(82.0), 0.8 * P.SEX_WOMEN_RATE)
         self.assertEqual(M.sex_births(60.0), P.SEX_BIRTHS_FLOOR)
         self.assertEqual((M.sex_fewer_men(80.0), M.sex_women_add(75.0)), (1.0, P.SEX_WOMEN_RATE))
-        self.assertEqual((M.sex_more_men(150.0), M.sex_more_men(170.0)), (1.0, 1.0))
-        self.assertAlmostEqual(M.sex_more_men(130.0), 0.5)
+        # More Men full at 130 since the 2026-10-22 effects design; the modifiers' strengths keep rising past full at
+        # half the slope, at most 2, while these ramps stay 0-1
+        self.assertEqual((M.sex_more_men(130.0), M.sex_more_men(170.0)), (1.0, 1.0))
+        self.assertAlmostEqual(M.sex_more_men(120.0), 0.5)
+        self.assertEqual((M.sex_more_men_strength(150.0), M.sex_more_men_strength(170.0)), (1.5, 2.0))
+        self.assertEqual((M.sex_fewer_men_strength(70.0), M.sex_fewer_men_strength(40.0)), (1.5, 2.0))
 
     @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
     def test_the_fertility_term_scales_planned_and_unplanned_alike(self):

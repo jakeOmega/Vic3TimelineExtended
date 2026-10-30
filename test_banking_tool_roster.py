@@ -159,6 +159,24 @@ class RosterTests(unittest.TestCase):
                 self.assertIn("has_variable = te_hist_mk_on_%s }" % tool, body)
                 self.assertIn("has_variable = te_hist_mk_off_%s }" % tool, body)
 
+    def test_each_marker_names_its_tool(self):
+        """GUI audit BNK-4 (2026-10-27): a marker prints the tool's name, one
+        line under "adopted" or "withdrawn", not its whole dashboard tooltip,
+        whose Requires line and live figures are today's and whose
+        JournalEntry reads do not resolve in the chart's tooltip."""
+        body = _text(HISTORY_SGUIS)
+        self.assertNotIn("custom_tooltip = banking_dash_tt_", body)
+        keys = _loc_keys()
+        for tool in _tools():
+            for kind, header in (("on", "te_hist_mk_enabled"), ("off", "te_hist_mk_disabled")):
+                with self.subTest(tool=tool, kind=kind):
+                    at = body.index("has_variable = te_hist_mk_%s_%s }" % (kind, tool))
+                    branch = _braced(body, body.rindex("if = {", 0, at))
+                    lines = re.findall(r"custom_tooltip = (\w+)", branch)
+                    self.assertEqual(len(lines), 2, branch)
+                    self.assertEqual(lines[0], header)
+                    self.assertIn(lines[1], keys)
+
     def test_each_tool_has_a_static_modifier_with_a_point_cost(self):
         body = _text(MODIFIERS)
         for tool in _tools():

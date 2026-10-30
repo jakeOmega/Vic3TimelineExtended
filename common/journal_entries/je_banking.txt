@@ -237,24 +237,13 @@
 		}
 	}
 
-	# Progress bar: shows remaining points as % of initial allowance at activation.
+	# No progress line either (GUI audit BNK-7, 2026-10-27). It read "Free
+	# Intervention Points: X/Y", the overview's Budget cell again, out of a
+	# total that left out the banking union's point, and it showed while the
+	# entry was dormant, when the overview hides the budget on purpose. Its one
+	# unique part, the breakdown of the free points by grant and tool, is now
+	# in the Budget cell's "free" hover (banking_dash_budget_free_tt).
 	progressbar      = no
-	progress_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = banking_cycle_progress_desc_command
-				trigger = { has_law = law_type:law_command_economy }
-			}
-			triggered_desc = {
-				desc = banking_cycle_progress_desc_coop
-				trigger = { has_law = law_type:law_cooperative_ownership }
-			}
-			triggered_desc = {
-				desc = banking_cycle_progress_desc
-				trigger = { always = yes }
-			}
-		}
-	}
 
 	# No status text: the overview shows everything it said (the owner's rule:
 	# status text that repeats the overview is removed). The phase, momentum and

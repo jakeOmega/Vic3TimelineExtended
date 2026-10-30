@@ -417,7 +417,7 @@ gm_clear_state = {
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
-# Tourism Industry throughput for every monument; the dedication's own local
+# Tourism output for every monument; the dedication's own local
 # effect for every dedicated one (fits, heritage or contested, §2.3). Both on
 # the 1/n curve (gm_curve_steps_lin_f5) over the grandeur standing here.
 gm_state_monthly = {
@@ -442,20 +442,20 @@ gm_state_monthly = {
 		gm_state_record_dedication = yes
 		gm_monument_migration_self_check = yes
 		gm_monument_merge_level_self_check = yes
-		# Tourism counts everything standing here; the monument policy (v2 §5)
-		# scales it and each local effect.
+		# Tourism counts everything standing here; Open to the Public scales
+		# it (policy spec 2026-10-23 § 4.1), To History's share at half (§ 4.5).
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
 		set_variable = {
 			name = gm_local_tourism_steps
 			value = {
 				value = gm_curve_steps_lin_f5
-				multiply = gm_policy_factor_tourism
+				multiply = gm_policy_factor_tourism_here
 			}
 		}
 		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }
-		# Upkeep on the building itself (sites spec 2026-10-18 §3.4): the levels
-		# its monuments record, at pm_maintenance's 0.1 a level, through one
-		# modifier whose multiplier reads ROOT, this state, by name
+		# Upkeep on the building itself (sites spec 2026-10-18 §3.4): none since
+		# policy spec 2026-10-23 § 5, one modifier at -1 that cancels the
+		# maintenance input, its multiplier read from ROOT, this state, by name
 		# (scripting_best_practices.md). Its variable is overwritten, never
 		# removed.
 		set_variable = { name = gm_upkeep_mult value = gm_state_upkeep_mult }
@@ -478,9 +478,11 @@ gm_state_monthly = {
 		gm_state_local_steps_one = { KEY = athletic CAP = gm_local_cap_athletic }
 		# And each unique dedication's (signatures spec §2.2), counted the same
 		# way, beside its parent's.
-		gm_state_sig_local_steps_one = { SIG = antiquity }
-		gm_state_sig_local_steps_one = { SIG = archive }
-		gm_state_sig_local_steps_one = { SIG = first_emperor }
+		# Open's x1.5 covers the two signatures whose local effect is tourism
+		# (policy spec 2026-10-23 § 4.1); the archive's is not.
+		gm_state_sig_local_steps_one = { SIG = antiquity FACTOR = gm_policy_factor_tourism }
+		gm_state_sig_local_steps_one = { SIG = archive FACTOR = 1 }
+		gm_state_sig_local_steps_one = { SIG = first_emperor FACTOR = gm_policy_factor_tourism }
 		# Trophies (gm_trophy_effects.txt): the owner stamped, an occupier's
 		# offer or roll. Last: a taking removes the building.
 		gm_state_tr_monthly = yes
@@ -563,7 +565,6 @@ gm_state_local_steps_one = {
 		name = gm_local_steps_$KEY$
 		value = {
 			value = gm_curve_steps_lin_f5
-			multiply = gm_policy_factor_local
 			max = $CAP$
 		}
 	}
@@ -704,6 +705,7 @@ gm_decay_ledgers = {
 # a scripted GUI effect or a country event option. Never call it where ROOT is
 # a state, building, law or character: the multipliers resolve against ROOT.
 gm_country_refresh = {
+	gm_policy_migrate = yes
 	gm_init_ledgers = yes
 	if = {
 		limit = {
@@ -720,10 +722,13 @@ gm_country_refresh = {
 	# is_shown_when_inactive auto-activates it for new saves, but a new
 	# auto-activating JE does not reach a save started before it existed
 	# (same doc, following paragraph). Add it explicitly here so saves that
-	# predate this entry, and any save where it lapsed, pick it back up.
+	# predate this entry, and any save where it lapsed, pick it back up. Not for
+	# a decentralized country (has_events = no), which can hold a landmark (Great
+	# Zimbabwe, under the Rozvi) but takes no journal entry: the add logs an error.
 	if = {
 		limit = {
 			gm_system_enabled = yes
+			NOT = { is_country_type = decentralized }
 			NOT = { has_journal_entry = je_grand_monuments }
 			OR = {
 				any_scope_state = { has_building = building_grand_monument }
@@ -819,6 +824,8 @@ gm_country_refresh = {
 	gm_com_update_build_where = yes
 	gm_compute_totals = yes
 	gm_apply_national_modifiers = yes
+	# What each contested monument's three choices would do now (GM-4).
+	gm_preview_choices = yes
 	gm_notify_new_contests = yes
 }
 
@@ -836,6 +843,7 @@ gm_country_monthly = {
 	gm_com_check_progress = yes
 	gm_com_monthly = yes
 	gm_country_refresh = yes
+	gm_policy_education_self_check = yes
 	every_scope_state = {
 		limit = { gm_state_is_contested = yes }
 		change_variable = { name = gm_contested add = 1 }
@@ -925,6 +933,11 @@ gm_set_steps_lin_open = {
 
 gm_compute_totals = {
 	set_variable = { name = gm_g_standing value = gm_sum_standing }
+	# To History's part of it, which every policy counts at half (policy spec
+	# 2026-10-23 § 4.5): read by the venues, Public Education's input and
+	# Cultural Promotion's factors below.
+	set_variable = { name = gm_g_historic value = gm_sum_historic }
+	set_variable = { name = gm_g_education value = gm_sum_education }
 	set_variable = { name = gm_g_regime value = gm_sum_regime }
 	set_variable = { name = gm_g_leader value = gm_sum_leader }
 	set_variable = { name = gm_g_religious value = gm_sum_religious }
@@ -932,10 +945,27 @@ gm_compute_totals = {
 	set_variable = { name = gm_g_artistic value = gm_sum_artistic }
 	set_variable = { name = gm_g_scientific value = gm_sum_scientific }
 	set_variable = { name = gm_g_industrial value = gm_sum_industrial }
+	# State Ceremonial's share of every venue (policy spec 2026-10-23 § 4.2),
+	# added to regime and Leader grandeur before their curves.
+	set_variable = { name = gm_g_venues value = gm_sum_venues }
+	set_variable = { name = gm_g_ceremonial value = gm_policy_ceremonial_grandeur }
+	set_variable = { name = gm_g_regime_in value = { value = var:gm_g_regime add = var:gm_g_ceremonial } }
+	set_variable = { name = gm_g_leader_in value = { value = var:gm_g_leader add = var:gm_g_ceremonial } }
 	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing WIDTH = gm_w_standing F = 5 }
 	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture WIDTH = gm_w_culture F = 10 }
-	gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
-	gm_set_steps = { IN = gm_g_leader OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
+	# Public Education (policy spec 2026-10-23 § 4.4): education access from
+	# standing grandeur, To History's at half (§ 4.5), on the curve cultural
+	# pull uses; 0 under any other policy, so its row and modifier go when the
+	# policy changes.
+	if = {
+		limit = { gm_policy_is = { P = education STANDARD = no } }
+		gm_set_steps_lin_open = { IN = gm_g_education OUT = gm_s_education NEXT = gm_n_education WIDTH = gm_w_education F = 10 }
+	}
+	else = {
+		set_variable = { name = gm_s_education value = 0 }
+	}
+	gm_set_steps = { IN = gm_g_regime_in OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
+	gm_set_steps = { IN = gm_g_leader_in OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
 	gm_set_steps = { IN = gm_g_religious OUT = gm_s_religious NEXT = gm_n_religious F = 5 }
 	gm_set_steps = { IN = gm_g_war_memorial OUT = gm_s_war_memorial NEXT = gm_n_war_memorial F = 5 }
 	gm_set_steps = { IN = gm_g_artistic OUT = gm_s_artistic NEXT = gm_n_artistic F = 5 }
@@ -943,12 +973,11 @@ gm_compute_totals = {
 	gm_set_steps = { IN = gm_g_industrial OUT = gm_s_industrial NEXT = gm_n_industrial F = 5 }
 	gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }
 	# The monument policy (v2 §5), on the steps so the effect moves by the
-	# factor: Mothballed halves prestige and cultural pull, State Ceremonial
-	# adds half to legitimacy and the Leader's authority.
-	gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_standing }
-	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_standing }
-	gm_policy_scale_steps = { S = regime FACTOR = gm_policy_factor_regime }
-	gm_policy_scale_steps = { S = leader FACTOR = gm_policy_factor_regime }
+	# factor: Cultural Promotion adds half to cultural pull, or to prestige with
+	# the Cultural Hegemony rule off (policy spec 2026-10-23 § 4.3), To
+	# History's share of it at half (§ 4.5).
+	gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_prestige_standing }
+	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_culture_standing }
 	# The unique dedications' sums (signatures spec §2.1), steps and policy.
 	gm_sig_compute_sums = yes
 	gm_compute_ig = { IG = armed_forces }
@@ -970,6 +999,12 @@ gm_compute_totals = {
 # IG, across all monuments.
 gm_compute_ig = {
 	set_variable = { name = gm_ig_net_$IG$ value = var:gm_ig_ledger_$IG$ }
+	# The net's parts, for the approval row's hover (GM-13): the grandeur of the
+	# monuments it approves of (and trophies), of those it objects to, and of
+	# the contested ones it resents. Display only; the net is the sum.
+	set_variable = { name = gm_ig_pos_$IG$ value = gm_tr_ig_share_$IG$ }
+	set_variable = { name = gm_ig_neg_$IG$ value = 0 }
+	set_variable = { name = gm_ig_res_$IG$ value = 0 }
 	# Trophies held (gm_trophy_values.txt): the Armed Forces' only.
 	change_variable = { name = gm_ig_net_$IG$ add = gm_tr_ig_share_$IG$ }
 	every_scope_state = {
@@ -982,6 +1017,7 @@ gm_compute_ig = {
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_grandeur }
 			}
+			owner = { change_variable = { name = gm_ig_pos_$IG$ add = prev.var:gm_grandeur } }
 		}
 		# A unique dedication's own group (signatures spec §2.3), beside the
 		# dedication's.
@@ -993,6 +1029,7 @@ gm_compute_ig = {
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_grandeur }
 			}
+			owner = { change_variable = { name = gm_ig_pos_$IG$ add = prev.var:gm_grandeur } }
 		}
 		if = {
 			limit = {
@@ -1002,6 +1039,7 @@ gm_compute_ig = {
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_grandeur }
 			}
+			owner = { change_variable = { name = gm_ig_neg_$IG$ add = prev.var:gm_grandeur } }
 		}
 		if = {
 			limit = {
@@ -1012,6 +1050,7 @@ gm_compute_ig = {
 			owner = {
 				change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_grandeur }
 			}
+			owner = { change_variable = { name = gm_ig_res_$IG$ add = prev.var:gm_grandeur } }
 		}
 	}
 	# And each monument standing beside another (spec 2026-10-16 §4.2), by its
@@ -1030,6 +1069,7 @@ gm_compute_ig = {
 				scope:gm_ig_country = {
 					change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_tr_g }
 				}
+				scope:gm_ig_country = { change_variable = { name = gm_ig_pos_$IG$ add = prev.var:gm_tr_g } }
 			}
 			if = {
 				limit = {
@@ -1039,6 +1079,7 @@ gm_compute_ig = {
 				scope:gm_ig_country = {
 					change_variable = { name = gm_ig_net_$IG$ add = prev.var:gm_tr_g }
 				}
+				scope:gm_ig_country = { change_variable = { name = gm_ig_pos_$IG$ add = prev.var:gm_tr_g } }
 			}
 			if = {
 				limit = {
@@ -1048,6 +1089,7 @@ gm_compute_ig = {
 				scope:gm_ig_country = {
 					change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_tr_g }
 				}
+				scope:gm_ig_country = { change_variable = { name = gm_ig_neg_$IG$ add = prev.var:gm_tr_g } }
 			}
 			if = {
 				limit = {
@@ -1058,6 +1100,7 @@ gm_compute_ig = {
 				scope:gm_ig_country = {
 					change_variable = { name = gm_ig_net_$IG$ subtract = prev.var:gm_tr_g }
 				}
+				scope:gm_ig_country = { change_variable = { name = gm_ig_res_$IG$ add = prev.var:gm_tr_g } }
 			}
 		}
 	}
@@ -1090,6 +1133,8 @@ gm_apply_national_modifiers = {
 	je:je_grand_monuments ?= {
 		gm_remove_national_modifiers = yes
 		gm_add_national = { NAME = gm_national_prestige VAR = gm_s_standing }
+		gm_add_national = { NAME = gm_national_prestige_pct VAR = gm_s_standing }
+		gm_add_national = { NAME = gm_national_education VAR = gm_s_education }
 		gm_add_national = { NAME = gm_national_legitimacy VAR = gm_s_regime }
 		gm_add_national = { NAME = gm_national_leader VAR = gm_s_leader }
 		gm_add_national = { NAME = gm_national_religious VAR = gm_s_religious }
@@ -1133,6 +1178,8 @@ gm_apply_national_modifiers = {
 # Journal-entry scope.
 gm_remove_national_modifiers = {
 	remove_modifier = gm_national_prestige
+	remove_modifier = gm_national_prestige_pct
+	remove_modifier = gm_national_education
 	remove_modifier = gm_national_legitimacy
 	remove_modifier = gm_national_leader
 	remove_modifier = gm_national_religious
@@ -1197,7 +1244,8 @@ gm_add_national_signed = {
 # longer fits becomes contested; a contested or heritage one whose message
 # fits again is restored (a Bourbon restoration gets its statues back). Not
 # while this country is a side in a civil war: the winner is judged after it
-# (plan decision 2). A civil war's winner first adopts the loser's monuments.
+# (plan decision 2), with the loser's monuments already its own
+# (gm_repair_after_civil_war).
 gm_check_contests = {
 	if = {
 		limit = {
@@ -1220,12 +1268,6 @@ gm_check_contests = {
 				# meanwhile. Moving this check ahead of that loop would skip new
 				# monuments for a month.
 				has_variable = gm_seen
-			}
-			if = {
-				limit = {
-					owner = { has_variable = gm_cw_adopting }
-				}
-				gm_state_adopt_for_winner = yes
 			}
 			# A shrine this country did not raise always becomes heritage, whatever
 			# the route it arrived by: outright conquest, a secession that drops
@@ -1363,12 +1405,6 @@ gm_state_changed_hands = {
 	}
 	if = {
 		limit = {
-			owner = { has_variable = gm_cw_adopting }
-		}
-		gm_state_adopt_for_winner = yes
-	}
-	if = {
-		limit = {
 			gm_state_is_dedicated = yes
 			gm_state_is_bound = yes
 			owner = {
@@ -1403,45 +1439,81 @@ gm_state_changed_hands = {
 # ---- Civil wars: the winner continues the nation (#460-#465) -------------------
 # Country scope, ROOT = the winner (te_civil_war_on_won, between
 # te_civil_war_resolve_sides and te_civil_war_clear). The monuments the loser
-# raised become the winner's, now and, for 30 days, in states still changing
-# hands (gm_state_changed_hands and gm_check_contests call
-# gm_state_adopt_for_winner). The fit test then contests them only if the
-# winner's laws differ.
+# raised become the winner's: their raiser (gm_raised_by, gm_tr_raised_by) is
+# rewritten now, while scope:te_cw_loser still resolves. The loser is deleted
+# within about two weeks of the win (civil_war_inheritance_audit.md), and a
+# record naming it then names nothing, so nothing after today may need to
+# recognise it (issue #1136).
+# - A dead loser was the nation: every monument it raised is the winner's,
+#   wherever it stands. The primaries in every state, and the containers in
+#   their global lists: monuments beside another, trophies, and shadows (an
+#   orphan's records are never written again from its state). A third
+#   country's conquered copy is then the winner's to take back.
+# - A loser still alive (a secession that won, should on_civil_war_won fire for
+#   one) goes on as itself and keeps its monuments, except those in the states
+#   the winner now holds.
+# The fit test then contests them only if the winner's laws differ.
 gm_repair_after_civil_war = {
 	if = {
 		limit = { exists = scope:te_cw_loser }
-		set_variable = { name = gm_cw_loser value = scope:te_cw_loser days = 30 }
-		set_variable = { name = gm_cw_adopting value = yes days = 30 }
-		every_scope_state = {
-			limit = { has_building = building_grand_monument }
-			gm_state_adopt_for_winner = yes
-		}
-		# The monuments beside another (spec 2026-10-16 §4.3), from the global
-		# list: the winner inherits no lists until the pass writes them.
 		if = {
-			limit = { has_global_variable_list = gm_monuments }
-			every_in_global_list = {
-				variable = gm_monuments
-				limit = {
-					var:gm_tr_origin ?= { owner = root }
+			limit = {
+				scope:te_cw_loser = { is_country_alive = no }
+			}
+			every_state = {
+				limit = { var:gm_raised_by ?= scope:te_cw_loser }
+				set_variable = { name = gm_raised_by value = root }
+			}
+			gm_cw_repoint_list = { LIST = gm_monuments }
+			gm_cw_repoint_list = { LIST = gm_trophies }
+			gm_cw_repoint_list = { LIST = gm_shadows }
+			# A shadow's last owner too (gm_sh_owner): an orphan settles in the
+			# part of its region its last owner holds, and once the winner's and
+			# the loser's parts of a monument's state merge, the dead loser holds
+			# none. Haiti's Sans Souci Palace was lost that way (2026-10-25).
+			if = {
+				limit = { has_global_variable_list = gm_shadows }
+				every_in_global_list = {
+					variable = gm_shadows
+					limit = { var:gm_sh_owner ?= scope:te_cw_loser }
+					set_variable = { name = gm_sh_owner value = root }
 				}
-				gm_mon_adopt_for_winner = yes
+			}
+		}
+		else = {
+			every_scope_state = {
+				limit = { var:gm_raised_by ?= scope:te_cw_loser }
+				set_variable = { name = gm_raised_by value = root }
+			}
+			# The monuments beside another (spec 2026-10-16 §4.3), from the global
+			# list: the winner inherits no lists until the pass writes them.
+			if = {
+				limit = { has_global_variable_list = gm_monuments }
+				every_in_global_list = {
+					variable = gm_monuments
+					limit = {
+						var:gm_tr_origin ?= { owner = root }
+						var:gm_tr_raised_by ?= scope:te_cw_loser
+					}
+					set_variable = { name = gm_tr_raised_by value = root }
+				}
 			}
 		}
 		gm_monument_pass = yes
 	}
 }
 
-# State scope, owner = a civil war's winner.
-gm_state_adopt_for_winner = {
+# Country scope, ROOT = a civil war's winner, from gm_repair_after_civil_war:
+# each container in the global list $LIST$ that its dead loser raised, the
+# winner's.
+gm_cw_repoint_list = {
 	if = {
-		limit = {
-			has_variable = gm_raised_by
-			owner = { has_variable = gm_cw_loser }
-			owner.var:gm_cw_loser ?= { save_temporary_scope_as = gm_tmp_loser }
-			var:gm_raised_by = scope:gm_tmp_loser
+		limit = { has_global_variable_list = $LIST$ }
+		every_in_global_list = {
+			variable = $LIST$
+			limit = { var:gm_tr_raised_by ?= scope:te_cw_loser }
+			set_variable = { name = gm_tr_raised_by value = root }
 		}
-		set_variable = { name = gm_raised_by value = owner }
 	}
 }
 
@@ -1635,6 +1707,178 @@ gm_state_choose_preserve = {
 	custom_tooltip = {
 		text = gm_preserve_tt
 		gm_state_preserve = yes
+	}
+}
+
+# ---- What each choice would do now (GM-4) ---------------------------------------
+# The three choices' tooltips print figures, not only prose: the legitimacy
+# Pull Down brings this month and the approval each choice moves, worked out
+# from the ledgers and the interest groups' nets the refresh has just
+# computed, on the same curves (gm_state_record_teardown, gm_compute_ig).
+# Pull Down puts the monument's grandeur on the teardown ledger and the
+# objecting group's ledger, takes it off its old supporters' and lifts the
+# standing resentment (so the objecting group's net rises by twice its
+# grandeur); Rededicate takes half of it off the old supporters'; Keep as
+# Heritage moves the resentment into a fading record, which changes nothing
+# this month, and its grandeur counts again for prestige and cultural pull.
+# Each figure is the first month's: the ledgers fade after.
+#
+# Stored on the contested monument (gm_prev_*), read through the guarded
+# gm_state_disp_prev_* / gm_mon_disp_prev_* values. Under a marker, as
+# gm_state_rededicate is: the refresh runs inside tooltips, which walk it
+# writing nothing, and a read of a variable set earlier in the same walk
+# logs an error a frame. Country scope, from gm_country_refresh.
+gm_preview_choices = {
+	set_variable = gm_preview_click
+	if = {
+		limit = { has_variable = gm_preview_click }
+		remove_variable = gm_preview_click
+		save_scope_as = gm_prev_country
+		every_scope_state = {
+			limit = {
+				has_building = building_grand_monument
+				gm_state_is_contested = yes
+			}
+			gm_state_preview_choices = yes
+		}
+		if = {
+			limit = { has_variable_list = gm_monuments_held }
+			every_in_list = {
+				variable = gm_monuments_held
+				limit = { gm_mon_is_contested = yes }
+				gm_mon_preview_choices = yes
+			}
+		}
+	}
+}
+
+# State scope, a contested primary; scope:gm_prev_country its owner.
+gm_state_preview_choices = {
+	set_variable = { name = gm_prev_g value = gm_state_primary_grandeur }
+	scope:gm_prev_country = {
+		set_variable = { name = gm_prev_who value = flag:none }
+		set_variable = { name = gm_prev_g value = prev.var:gm_prev_g }
+	}
+	if = {
+		limit = { has_variable = gm_base_ig }
+		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_base_ig } }
+	}
+	gm_preview_choices_on_country = yes
+	set_variable = { name = gm_prev_td_legit value = scope:gm_prev_country.var:gm_prev_td_legit }
+	set_variable = { name = gm_prev_td_base value = scope:gm_prev_country.var:gm_prev_td_base }
+	scope:gm_prev_country = { set_variable = { name = gm_prev_who value = flag:none } }
+	if = {
+		limit = { has_variable = gm_supporter_ig }
+		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_supporter_ig } }
+	}
+	gm_preview_supporters_on_country = yes
+	set_variable = { name = gm_prev_td_sup value = scope:gm_prev_country.var:gm_prev_td_sup }
+	set_variable = { name = gm_prev_rd_sup value = scope:gm_prev_country.var:gm_prev_rd_sup }
+}
+
+# Container scope, a contested monument beside another (gm_monuments_held).
+gm_mon_preview_choices = {
+	set_variable = { name = gm_prev_g value = gm_mon_grandeur }
+	scope:gm_prev_country = {
+		set_variable = { name = gm_prev_who value = flag:none }
+		set_variable = { name = gm_prev_g value = prev.var:gm_prev_g }
+	}
+	if = {
+		limit = { has_variable = gm_tr_base_ig }
+		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_tr_base_ig } }
+	}
+	gm_preview_choices_on_country = yes
+	set_variable = { name = gm_prev_td_legit value = scope:gm_prev_country.var:gm_prev_td_legit }
+	set_variable = { name = gm_prev_td_base value = scope:gm_prev_country.var:gm_prev_td_base }
+	scope:gm_prev_country = { set_variable = { name = gm_prev_who value = flag:none } }
+	if = {
+		limit = { has_variable = gm_tr_supporter_ig }
+		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_tr_supporter_ig } }
+	}
+	gm_preview_supporters_on_country = yes
+	set_variable = { name = gm_prev_td_sup value = scope:gm_prev_country.var:gm_prev_td_sup }
+	set_variable = { name = gm_prev_rd_sup value = scope:gm_prev_country.var:gm_prev_rd_sup }
+}
+
+# Country scope (scope:gm_prev_country): Pull Down's legitimacy, the change
+# in the teardown ledger's steps times gm_step_teardown, and the objecting
+# group's approval (gm_prev_who), its net up by twice the grandeur.
+gm_preview_choices_on_country = {
+	set_variable = { name = gm_prev_in value = var:gm_teardown_ledger }
+	gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_a }
+	set_variable = { name = gm_prev_in value = { value = var:gm_teardown_ledger add = var:gm_prev_g } }
+	gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_b }
+	set_variable = { name = gm_prev_td_legit value = { value = var:gm_prev_b subtract = var:gm_prev_a multiply = gm_step_teardown } }
+	gm_prev_ig_net = yes
+	set_variable = { name = gm_prev_td_base value = 0 }
+	if = {
+		limit = { has_variable = gm_prev_net }
+		set_variable = { name = gm_prev_in value = var:gm_prev_net }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_a }
+		set_variable = { name = gm_prev_in value = { value = var:gm_prev_net add = var:gm_prev_g add = var:gm_prev_g } }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_b }
+		set_variable = { name = gm_prev_td_base value = { value = var:gm_prev_b subtract = var:gm_prev_a multiply = gm_step_ig } }
+	}
+}
+
+# Country scope: the old supporters' approval (gm_prev_who), their net down by
+# the grandeur (Pull Down) or by half of it (Rededicate).
+gm_preview_supporters_on_country = {
+	gm_prev_ig_net = yes
+	set_variable = { name = gm_prev_td_sup value = 0 }
+	set_variable = { name = gm_prev_rd_sup value = 0 }
+	if = {
+		limit = { has_variable = gm_prev_net }
+		set_variable = { name = gm_prev_in value = var:gm_prev_net }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_a }
+		set_variable = { name = gm_prev_in value = { value = var:gm_prev_net subtract = var:gm_prev_g } }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_b }
+		set_variable = { name = gm_prev_td_sup value = { value = var:gm_prev_b subtract = var:gm_prev_a multiply = gm_step_ig } }
+		set_variable = { name = gm_prev_in value = { value = var:gm_prev_g multiply = -0.5 add = var:gm_prev_net } }
+		gm_prev_signed_steps = { IN = gm_prev_in OUT = gm_prev_b }
+		set_variable = { name = gm_prev_rd_sup value = { value = var:gm_prev_b subtract = var:gm_prev_a multiply = gm_step_ig } }
+	}
+}
+
+# Country scope: gm_prev_net, the net of the group gm_prev_who names, as
+# gm_compute_ig left it; unset when it names none.
+gm_prev_ig_net = {
+	if = {
+		limit = { has_variable = gm_prev_net }
+		remove_variable = gm_prev_net
+	}
+	gm_prev_ig_net_one = { IG = armed_forces }
+	gm_prev_ig_net_one = { IG = devout }
+	gm_prev_ig_net_one = { IG = industrialists }
+	gm_prev_ig_net_one = { IG = intelligentsia }
+	gm_prev_ig_net_one = { IG = landowners }
+	gm_prev_ig_net_one = { IG = petty_bourgeoisie }
+	gm_prev_ig_net_one = { IG = rural_folk }
+	gm_prev_ig_net_one = { IG = trade_unions }
+}
+
+gm_prev_ig_net_one = {
+	if = {
+		limit = {
+			has_variable = gm_prev_who
+			var:gm_prev_who = flag:$IG$
+			has_variable = gm_ig_net_$IG$
+		}
+		set_variable = { name = gm_prev_net value = var:gm_ig_net_$IG$ }
+	}
+}
+
+# Country scope: $OUT$ = the signed step count of var:$IN$ on the approval
+# curve (gm_compute_ig's: the curve on the absolute value, the sign put back).
+gm_prev_signed_steps = {
+	if = {
+		limit = { var:$IN$ >= 0 }
+		set_variable = { name = gm_curve_in value = var:$IN$ }
+		set_variable = { name = $OUT$ value = gm_curve_steps_f5 }
+	}
+	else = {
+		set_variable = { name = gm_curve_in value = { value = var:$IN$ multiply = -1 } }
+		set_variable = { name = $OUT$ value = { value = gm_curve_steps_f5 multiply = -1 } }
 	}
 }
 
@@ -1974,6 +2218,7 @@ gm_state_record_dedication = {
 	gm_state_record_dedication_one = { KEY = scientific }
 	gm_state_record_dedication_one = { KEY = industrial }
 	gm_state_record_dedication_one = { KEY = athletic }
+	gm_state_record_dedication_one = { KEY = historic }
 }
 
 gm_state_record_dedication_one = {
@@ -2344,7 +2589,9 @@ gm_state_choose_building_skin = {
 # the radicals come once a month however many levels finished. $AMOUNT$ is
 # read on the owner: a state's variable is passed as prev.var:, and nothing is
 # called between the owner block's opening and the read, so prev is the state.
+# The notice names the state (scope:gm_vanity_state).
 gm_state_vanity_backlash_for = {
+	save_scope_as = gm_vanity_state
 	add_radicals_in_state = { value = 0.005 }
 	owner = { gm_init_ledgers = yes }
 	owner = {

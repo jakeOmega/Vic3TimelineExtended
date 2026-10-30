@@ -57,10 +57,10 @@ METHODS = {
 
 
 def number(text, name):
-    """A script value written `name = { value = N }`."""
-    m = re.search(rf"^{re.escape(name)} = \{{ value = (-?[\d.]+) \}}", text, re.M)
+    """A script value written `name = { value = N }`, or `name = N` (the durations)."""
+    m = re.search(rf"^{re.escape(name)} = (?:\{{ value = (-?[\d.]+) \}}|(-?[\d.]+)$)", text, re.M)
     assert m, f"{name} is not a one-line value"
-    return float(m.group(1))
+    return float(m.group(1) or m.group(2))
 
 
 def field(body, name):
@@ -241,7 +241,8 @@ class DossierTest(unittest.TestCase):
                       block(strip_comments(read(DOSSIER_TRIGGERS)), "un_dossier_has_records"))
         self.assertIn("ScriptValue('un_disp_dos_asat')", read(CHAMBER))
         self.assertIn("un_disp_dos_asat", loc_value("je_un_chamber_grounds_record"))
-        self.assertIn("anti-satellite", loc_value("je_un_chamber_exposure_help"))
+        # How the UN Works names the case strength concept, which lists what counts (2026-10-27 audit, UN-12).
+        self.assertIn("anti-satellite", loc_value("concept_un_case_desc"))
         strike = strip_comments(read(EFFECTS))
         self.assertIn("un_dossier_record = { RECORD = asat POINTS = te_asat_case_points }",
                       block(strike, "te_asat_strike_effect"))
@@ -255,7 +256,7 @@ class StrikeTest(unittest.TestCase):
     def test_requirements(self):
         body = block(self.action, "te_asat_strike_action")
         potential = block(body, "potential")
-        self.assertIn("has_game_rule = space_race_enabled", potential)
+        self.assertIn("sr_space_race_on = yes", potential)
         self.assertIn("has_technology_researched = guided_missiles", potential)
         possible = block(body, "possible")
         for test in ("has_war_with = scope:target_country", "sr_has_space_program = yes",
@@ -277,6 +278,19 @@ class StrikeTest(unittest.TestCase):
     def test_the_lens_has_an_icon(self):
         self.assertTrue(LENS.exists() or tracked(LENS), "missing lens_toolbar_icons/te_asat_strike_action.dds")
 
+    def test_the_rebuild_puts_back_the_months_left_as_literals(self):
+        """add_modifier's days reads a computed script value as 0, so the rebuild branches on
+        the months left (scripting_best_practices.md, "Modifier & Cooldown Duration Units")."""
+        body = block(strip_comments(read(EFFECTS)), "te_asat_rebuild_disruption")
+        self.assertNotIn("te_asat_disruption_days_left", body)
+        rungs = [(int(m), int(d)) for m, d in re.findall(
+            r"te_asat_disruption_months_left <= (\d+) \}\s*add_modifier = \{ name = te_orbital_network_disrupted "
+            r"days = (\d+) multiplier = te_asat_disruption_factor_held \}", body)]
+        longest = round(number(strip_comments(read(VALUES)), "te_asat_disruption_days") / 30)
+        self.assertEqual(rungs, [(k, 30 * k) for k in range(1, longest)])
+        self.assertRegex(body, r"else = \{\s*add_modifier = \{ name = te_orbital_network_disrupted "
+                               rf"days = {30 * longest} multiplier = te_asat_disruption_factor_held \}}")
+
     def test_debris_and_relations(self):
         values = strip_comments(read(VALUES))
         self.assertEqual(number(values, "te_asat_debris_low"), 6)
@@ -291,7 +305,7 @@ class WiringTest(unittest.TestCase):
         self.assertIn("te_debris_global_monthly_on_action", block(text, "on_monthly_pulse"))
         self.assertIn("te_debris_country_monthly_on_action", block(text, "on_monthly_pulse_country"))
         for name in ("te_debris_global_monthly_on_action", "te_debris_country_monthly_on_action"):
-            self.assertIn("space_race_enabled", block(text, name))
+            self.assertIn("sr_space_race_on = yes", block(text, name))
 
     def test_one_refresh_site_each(self):
         """te_orbital_debris and te_debris_cleaner_prestige are added in one place."""

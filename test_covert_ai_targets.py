@@ -38,7 +38,9 @@ GATED = {
     "comms_disruption",
 }
 # The payoff is our research or space progress, the threat removed, or a
-# friend protected (counterintelligence support: aimed at weaker friends).
+# friend protected (counterintelligence support: aimed at weaker friends). The
+# colony operations' payoff is the target's colonies, not its size, and the
+# defences survey's our own fleets' fight.
 EXEMPT = {
     "counterintel_support",
     "industrial_espionage",
@@ -46,6 +48,9 @@ EXEMPT = {
     "space_espionage",
     "nuclear_sabotage",
     "secure_material",
+    "incite_autonomy",
+    "sabotage_colony",
+    "survey_defences",
 }
 WARTIME = {"infrastructure_sabotage", "comms_disruption"}
 
@@ -58,6 +63,10 @@ NET_DONE = (
     + " STRENGTH = covert_cultivate_ai_net_done } }"
 )
 NEVER = "will_break = { always = no }"
+# No stake in space left: no colony of our own and no milestone running.
+NO_SPACE_STAKE = re.compile(
+    r"NOR = \{\s*sr_has_space_colony = yes\s*sr_has_running_milestone = yes\s*\}"
+)
 
 # Called off once settled, when what the operation is for has gone.
 BREAK_WHEN = {
@@ -69,6 +78,9 @@ BREAK_WHEN = {
     "nuclear_sabotage": [HOSTILITY_GONE],
     "cultivate_assets": [HOSTILITY_GONE],
     "space_espionage": ["sr_has_running_milestone = no"],
+    "incite_autonomy": [NO_SPACE_STAKE, "influence < 0"],
+    "sabotage_colony": [HOSTILITY_GONE, NO_SPACE_STAKE, "influence < 0"],
+    "survey_defences": ["sr_fleet_power = no", HOSTILITY_GONE, "influence < 0"],
 }
 # Never by choice: requirement_to_maintain ends them when their purpose goes.
 NEVER_BREAK = {
@@ -172,7 +184,10 @@ class WillBreakTests(unittest.TestCase):
                 will = _will_break(op_type)
                 self.assertIn(SETTLED % op_type, will)
                 for reason in reasons:
-                    self.assertIn(reason, will)
+                    if isinstance(reason, str):
+                        self.assertIn(reason, will)
+                    else:
+                        self.assertRegex(will, reason)
 
     def test_never_break_types(self):
         for op_type in sorted(NEVER_BREAK):

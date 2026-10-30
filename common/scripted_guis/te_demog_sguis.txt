@@ -628,3 +628,21 @@ te_demog_state_mig_rate_sgui = {
 	is_valid = { always = no }
 	effect = { }
 }
+
+# The pyramid's rows past 85 (issue #1075): where the people past 100 are 1% of the people or more, the census splits 85
+# and over into its rows (te_dg_pyr_top and te_dg_px<f|m><0-6>, written together by te_demog_old_rows_show), and the
+# pyramid draws them in 85+'s place. A census from before them has none until its next count, and shows 85+.
+te_demog_pyr_split_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_pxf0 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+te_demog_state_pyr_split_sgui = {
+	scope = state
+	is_shown = { has_variable = te_dg_pxf0 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

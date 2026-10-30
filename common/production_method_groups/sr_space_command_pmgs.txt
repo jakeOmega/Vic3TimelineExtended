@@ -1,0 +1,18 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — Space Command's yards (fleets design § 5)
+# ============================================================================
+# The one group of building_space_command (sr_space_command.txt). Its methods
+# (sr_space_command_pms.txt) only cost goods and give a state modifier, so
+# most_productive, as the Space Program's groups have.
+# ============================================================================
+
+pmg_space_command_yards = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = {
+		pm_sr_space_command_orbital_shipyards
+		pm_sr_space_command_fusion_yards
+		pm_sr_space_command_torch_yards
+		pm_sr_space_command_antimatter_yards
+	}
+}

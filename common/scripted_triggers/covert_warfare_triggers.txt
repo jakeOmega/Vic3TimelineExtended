@@ -49,6 +49,9 @@ is_covert_operation_pact = {
 		is_diplomatic_action_type = covert_cultivate_assets_action
 		is_diplomatic_action_type = covert_secure_material_action
 		is_diplomatic_action_type = covert_counterintel_support_action
+		is_diplomatic_action_type = covert_incite_autonomy_action
+		is_diplomatic_action_type = covert_sabotage_colony_action
+		is_diplomatic_action_type = covert_survey_defences_action
 	}
 }
 
@@ -126,17 +129,19 @@ covert_ops_type_below_cap = {
 	}
 }
 
-# Operation phase checks. Phase 2 (establishing) starts at month 6, phase 3
-# (fully operational) at month 12, measured on covert_op_effective_duration:
+# Operation phase checks. Phase 2 (establishing) starts at month
+# covert_op_phase_2_month (6), phase 3 (fully operational) at
+# covert_op_phase_3_month (12), measured on covert_op_effective_duration:
 # months run plus the head start the target's network gave the operation at
-# creation (slice 4). These two are the ONLY place the thresholds live.
+# creation (slice 4). The two script values are the ONLY place the
+# thresholds live; these triggers are the only test of them.
 # Scope: covert operation container
 covert_op_is_established = {
-	covert_op_effective_duration >= 6
+	covert_op_effective_duration >= covert_op_phase_2_month
 }
 
 covert_op_is_fully_operational = {
-	covert_op_effective_duration >= 12
+	covert_op_effective_duration >= covert_op_phase_3_month
 }
 
 # True when the operation's priority is at least $N$. A container without
@@ -206,18 +211,35 @@ covert_possible_decrease_funding = {
 # does nothing. It can never end an operation other than the one the row names.
 # Parameters: $TYPE$ = short name (e.g. election_interference)
 # Scope: operator country; scope:iw_tgt = the row's target country
+#
+# The two checks are guards, not conditions a player can meet, so each prints
+# only when it fails (COV-9b): a held guard would sit on every row's hover as
+# a tick. trigger_if = { limit = { NOT = { <guard> } } ... always = no } is
+# the same test, phrased so IsValidTooltip shows nothing while it holds.
 covert_possible_stand_down = {
-	custom_tooltip = {
-		text = iw_stand_down_target_known_tt
-		exists = scope:iw_tgt
+	trigger_if = {
+		limit = { NOT = { exists = scope:iw_tgt } }
+		custom_tooltip = {
+			text = iw_stand_down_target_known_tt
+			always = no
+		}
 	}
-	custom_tooltip = {
-		text = iw_stand_down_op_matches_tt
-		has_variable_list = iw_ops
-		any_in_list = {
-			variable = iw_ops
-			has_tag = iw_op_$TYPE$
-			var:iw_target ?= scope:iw_tgt
+	trigger_if = {
+		limit = {
+			NOT = {
+				AND = {
+					has_variable_list = iw_ops
+					any_in_list = {
+						variable = iw_ops
+						has_tag = iw_op_$TYPE$
+						var:iw_target ?= scope:iw_tgt
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_stand_down_op_matches_tt
+			always = no
 		}
 	}
 }
@@ -235,17 +257,30 @@ covert_possible_stand_down = {
 # unset, or is anything but one of OUR running operations, the stepper greys
 # out and does nothing.
 # Scope: operator country; scope:iw_op = the operation container
+# Both are guards, printed only when they fail (see covert_possible_stand_down).
 covert_priority_op_is_ours = {
-	custom_tooltip = {
-		text = iw_priority_op_known_tt
-		exists = scope:iw_op
+	trigger_if = {
+		limit = { NOT = { exists = scope:iw_op } }
+		custom_tooltip = {
+			text = iw_priority_op_known_tt
+			always = no
+		}
 	}
-	custom_tooltip = {
-		text = iw_priority_op_ours_tt
-		exists = scope:iw_op
-		has_variable_list = iw_ops
-		is_target_in_variable_list = { name = iw_ops target = scope:iw_op }
-		scope:iw_op ?= { has_tag = iw_op }
+	trigger_if = {
+		limit = {
+			NOT = {
+				AND = {
+					exists = scope:iw_op
+					has_variable_list = iw_ops
+					is_target_in_variable_list = { name = iw_ops target = scope:iw_op }
+					scope:iw_op ?= { has_tag = iw_op }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_priority_op_ours_tt
+			always = no
+		}
 	}
 }
 
@@ -276,11 +311,13 @@ covert_possible_priority_up = {
 	# Tradecraft gate (slice 5): the step TO priority 3 needs an Established
 	# agency. Only the step up is gated — an operation already at 3 stays
 	# there when the score falls, and stepping down is never blocked. The AI
-	# steps through this same trigger (covert_ai_manage_priorities).
-	custom_tooltip = {
-		text = iw_priority_3_needs_tradecraft_tt
-		OR = {
-			scope:iw_op ?= { NOT = { covert_op_priority_at_least = { N = 2 } } }
+	# steps through this same trigger (covert_ai_manage_priorities). Inside a
+	# trigger_if on the step that reaches 3 (COV-9b), so the line is not ticked
+	# on every 1 -> 2 step; an operation below priority 2 steps freely.
+	trigger_if = {
+		limit = { scope:iw_op ?= { covert_op_priority_at_least = { N = 2 } } }
+		custom_tooltip = {
+			text = iw_priority_3_needs_tradecraft_tt
 			covert_tradecraft_unlocks_priority_3 = yes
 		}
 	}
@@ -336,6 +373,10 @@ covert_code_tier_moderate = {
 		var:$VAR$ = 0
 		var:$VAR$ = 1
 		var:$VAR$ = 6
+		# Inciting colonial autonomy: a colony's own politics.
+		var:$VAR$ = 15
+		# Surveying colony defences: reading a rival's guns, not firing on them.
+		var:$VAR$ = 17
 	}
 }
 
@@ -347,6 +388,8 @@ covert_code_tier_severe = {
 		var:$VAR$ = 8
 		var:$VAR$ = 9
 		var:$VAR$ = 10
+		# Colony sabotage: people killed in the target's colony.
+		var:$VAR$ = 16
 	}
 }
 
@@ -381,7 +424,12 @@ covert_exposure_is_costless = {
 # type a pro-country lobby swaps to once its country becomes a subject). THE
 # one place that says which lobbies the backlash reaches: the attacker's home
 # appeasement hit (covert_backlash_home) and the defender's discredited
-# interest groups (covert_backlash_public) both ask it.
+# interest groups (covert_backlash_public) both ask it, and so do the
+# exposure events that pin the lobby to name it (covert_warfare.1-.3).
+# At most one lobby matches: a country has one lobby of a type per target,
+# and lobby_pro_country requires not being the target's subject while
+# lobby_pro_overlord requires being it, so the events pin it with
+# random_political_lobby.
 # Parameters: $TARGET$ = the country the lobby favours (a scope: reference)
 # Scope: political_lobby
 covert_backlash_pro_lobby_of = {

@@ -12,10 +12,18 @@ sr_temporary_safety_review = {
 	country_space_race_progress_mult = -0.1
 	country_space_race_risk_mult = -0.25
 }
-# ======= Space Race - Funding Progress Modifier (applied per-JE, multiplier = funding level)
+# ======= Space Race - Funding Modifiers (applied per-JE by sr_apply_milestone_cost_modifiers_base)
+# The pace: multiplier = sr_funding_<m>_effective, the level up to the cap plus
+# the six-step ladder past it (1/2, 1/3, ... 1/7 of a level; lunar colonization
+# design § 5.1). The throughput: multiplier = sr_funding_<m>_level, every level
+# in full, past the cap too. Split 2026-10-29: one modifier carried both, so the
+# pace and the throughput could not be scaled apart.
 sr_funding_progress = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_space_race_progress_add = 0.5
+}
+sr_funding_throughput = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_program_throughput_add = 0.25
 }
 
@@ -226,6 +234,127 @@ sr_solar_system_trade = {
 	country_tech_research_speed_mult = 0.05
 	country_influence_mult = 0.10
 	country_cultural_pull_mult = 0.15
+}
+
+# ======= Solar System Colonization - colony population (simple and full colonies)
+# Both on the entry, at a multiplier, re-applied monthly by
+# sr_emig_refresh_modifiers (sr_colony_population_effects.txt; slices 2-3
+# design § 10). The programme's upkeep, per level of emigration: the Space
+# Program's Launch Capacity bill, as funding raises it.
+sr_emigration_programme = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.05
+}
+
+# The nation's people off Earth, per 100,000 (at most ten times).
+sr_offworld_population = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.01
+	country_cultural_pull_mult = 0.02
+}
+
+# ======= Solar System Colonization - colony modules (simple and full colonies)
+# On the entry, at multiplier = the module levels past the first at the
+# colonies held (sr_mod_upkeep_units), re-applied monthly with the two above by
+# sr_emig_refresh_modifiers (colony modules design § 8): each level's upkeep is
+# the Space Program's Launch Capacity bill, as emigration's is.
+sr_module_upkeep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.01
+}
+
+# ======= Solar System Colonization - autonomy and free colonies (slice 5;
+# docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md)
+# On the entry, each at a multiplier and re-applied monthly with the three
+# above by sr_emig_refresh_modifiers: supplying free colonies is the Space
+# Program's Launch Capacity bill (a unit a colony supplied); their trade a unit
+# a 20,000 of a colony's people, shared among its suppliers, at most five
+# (sr_free_trade_units); a garrison's upkeep a unit a garrisoned colony.
+sr_free_colony_supply = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.03
+}
+
+sr_free_colony_trade = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_tech_research_speed_mult = 0.01
+	country_influence_mult = 0.02
+}
+
+sr_colonial_garrisons = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.02
+}
+
+# Colony life (slice 5 design § 7): timed, on the country, from the events'
+# options (space_race_events.95 to .97).
+sr_birth_citizen = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.05
+}
+
+sr_birth_native = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.10
+}
+
+sr_strike_settlement = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.05
+}
+
+sr_dome_breach_repairs = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.10
+}
+
+# Extraplanetary Base room (colony modules design § 9): unit country modifiers,
+# one at a time, at multiplier = the average grade of the country's base levels
+# in percent, past its room at -50%. The one refresh site is sr_ebase_refresh
+# (sr_colony_module_effects.txt), monthly from the country pulse.
+# ======= Solar System Colonization - fleets (slice 6;
+# docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md § 5)
+# The fleets' upkeep: on each Space Command building, never the country (the
+# input multipliers are building-masked and would raise every building's use),
+# at sr_fleet_upkeep_units (full fleet strength in service / 10), its one
+# refresh site sr_fl_upkeep_refresh. +1% of the building's input goods a unit,
+# so a bigger fleet costs more and builds no faster. sr_fleet_upkeep_goods, the
+# three good-specific multipliers the mod registers, is the live one;
+# sr_fleet_upkeep, the generic building_goods_input_mult (one line for every
+# input, following the methods), waits on the upkeep_inputs probe
+# (te_debug_space_race.6): the owner recalls trouble with it, and nothing in
+# the repo says what. test_space_fleets.py keeps the goods list in step with
+# the methods' inputs.
+sr_fleet_upkeep_goods = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	goods_input_launch_capacity_mult = 0.01
+	goods_input_advanced_materials_mult = 0.01
+	goods_input_electricity_mult = 0.01
+}
+sr_fleet_upkeep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_goods_input_mult = 0.01
+}
+
+# Orbital fire support (fleets design § 15, 6d): at war, a country whose
+# fleets at Earth outmatch the hostile fleets there (or face none while it has
+# some), on the country at multiplier = the margin, min(1, (ours - theirs) /
+# max(theirs, 10)); its one refresh site sr_orbital_superiority_refresh
+# (sr_earth_orbit_effects.txt), from the fleets' monthly step. It stands beside
+# the anti-satellite strike's te_orbital_network_disrupted (-10%).
+sr_orbital_superiority = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_offense_mult = 0.1
+	unit_defense_mult = 0.05
+}
+
+sr_ebase_room_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_space_mine_throughput_add = 0.01
+}
+sr_ebase_room_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_space_mine_throughput_add = -0.01
 }
 
 # ======= Space Race - After the race: Commercial Space Industry
@@ -806,4 +935,67 @@ sr_colony_sedna_interstellar = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.05
 	country_space_race_progress_add = 0.6
+}
+
+# --- Stage 0: the Moon (lunar colonization design § 3.1) ---
+# Shackleton Crater's Propellant Depot carries the depots boolean
+# (sr_launch_has_depots); Imbrium's Mass Driver adds module fabrication.
+sr_colony_shackleton_depot = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_sr_propellant_depots_bool = yes
+	goods_output_launch_capacity_mult = 0.02
+}
+sr_colony_shackleton_outpost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_space_race_progress_add = 0.2
+	country_tech_research_speed_mult = 0.01
+}
+sr_colony_peary_solar = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_solar_collector_throughput_add = 0.1
+}
+sr_colony_peary_observatory = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.02
+	country_weekly_innovation_max_add = 25
+}
+sr_colony_tranquility_heritage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.06
+	country_prestige_mult = 0.01
+	building_tourism_industry_throughput_add = 0.05
+}
+sr_colony_tranquility_helium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_fusion_plant_throughput_add = 0.1
+	building_space_mine_throughput_add = 0.03
+}
+sr_colony_marius_lavatubes = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_pull_mult = 0.04
+}
+sr_colony_marius_hardened = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_military_tech_research_speed_mult = 0.03
+	country_influence_mult = 0.03
+	country_military_goods_cost_mult = -0.02
+}
+sr_colony_daedalus_telescope = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.03
+	country_weekly_innovation_max_add = 25
+}
+sr_colony_daedalus_relay = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_space_race_progress_add = 0.3
+}
+sr_colony_imbrium_massdriver = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_sr_module_fabrication_add = 3
+	goods_output_launch_capacity_mult = 0.02
+}
+sr_colony_imbrium_kreep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_space_mine_throughput_add = 0.05
+	goods_output_advanced_materials_mult = 0.02
 }

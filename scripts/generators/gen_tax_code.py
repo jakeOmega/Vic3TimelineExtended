@@ -219,6 +219,13 @@ CUSTOM_LOC_PATH = "common/customizable_localization/te_tax_generated_custom_loc.
 KIND_MIGRATED, KIND_REPAIRED = 5, 7
 # History kinds the policy obligations write (plan Task 12; te_tax_obligation_effects.txt).
 KIND_OBL_FULFILLED, KIND_OBL_BREACHED, KIND_OBL_RENEGOTIATED, KIND_OBL_RELEASED = 11, 12, 13, 14
+# A kept, broken or renegotiated promise records its group in the entry's _inst
+# (te_tax_history_push_promise, te_tax_obligation_effects.txt), and its history line names
+# the group: te_tax_hist_promise_<outcome>_<ig> (GUI audit TAX-21).
+# A month index beyond any game date: te_tax_view_obl_next_due's starting point, lowered by each deadline.
+NO_DEADLINE = 999999
+PROMISE_OUTCOME_KINDS = {KIND_OBL_FULFILLED: ("kept", "was kept"), KIND_OBL_BREACHED: ("broken", "was broken"),
+                         KIND_OBL_RENEGOTIATED: ("renegotiated", "was renegotiated")}
 # History kinds of the customs schedule (plan Task 15): levels the re-asserts could not restore
 # (a treaty or the tariff cooldown) adopted into the code, one entry a month carrying the count in
 # its _inst; the market lost (the records frozen); a market gained (its native levels migrated into
@@ -689,6 +696,27 @@ def consumption_catalog():
     return tuple(sorted(pop_need_goods()))
 
 
+def catalog_by_category():
+    """{category: (good, ...)}: the consumption catalog in CUSTOMS_CATEGORIES order, as the
+    workbench's goods catalog and the enacted goods' icons group it (GUI audit TAX-12, TAX-13).
+    Staples come most-taxed first (staple_order()), the interest groups' heaviest weight; the
+    other categories by key. Raises ValueError for a good of another category."""
+    definitions = goods_definitions()
+    groups = {category: [] for category in CUSTOMS_CATEGORIES}
+    for good in consumption_catalog():
+        category = definitions[good].get("category")
+        if category not in groups:
+            raise ValueError(f"catalog good {good}: category {category!r} is not one of {CUSTOMS_CATEGORIES}")
+        groups[category].append(good)
+    groups["staple"] = staple_order()
+    return {category: tuple(goods) for category, goods in groups.items()}
+
+
+def good_texture(good):
+    """The good's own icon, from its goods definition (vanilla's or the mod's)."""
+    return goods_definitions()[good]["texture"].strip('"')
+
+
 def goods_weight(good):
     """The support model's weight for catalog good `good` (GOODS_CATEGORY_WEIGHT), from its
     goods-file category. Raises ValueError for a category the table lacks."""
@@ -882,7 +910,54 @@ def _panel_views():
                                condition=_is_open(token))
         lines += _month_views(f"te_tax_view_p{slot}_due", f"te_tax_p{slot}_due", _is_open(token))
     return (lines + _last_change_views() + _history_views() + _workbench_views() + _ig_values()
-            + _obligation_views() + _estimate_views())
+            + _obligation_views() + _estimate_views() + _overview_views())
+
+
+def _overview_views():
+    """The overview cells' readings (GUI audit TAX-1): what needs the player in each process.
+    Offers waiting on the bill's current revision from groups not committed to it; promises
+    failing in their term and the next deadline among those still being delivered; and how
+    many parts of the open draft wait on an Accept (te_tax_view_dr_*_rebase)."""
+    lines = [
+        "",
+        "# The overview (GUI audit TAX-1). te_tax_view_offers_open: groups with an offer on the bill's",
+        "# current revision that have not committed to it (te_tax_disp_ig_offer's test, per group type).",
+    ]
+    lines += ["te_tax_view_offers_open = {", "\tvalue = 0"]
+    for ig in IGS:
+        off, com = f"te_tax_off_{ig}", f"te_tax_com_{ig}"
+        lines.append(
+            f"\tif = {{ limit = {{ has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev "
+            f"has_variable = {off}_kind has_variable = {off}_rev var:{off}_rev = var:te_tax_bl_rev var:{off}_kind > 0 "
+            f"NAND = {{ has_variable = {com} has_variable = {com}_rev var:{com} = 1 var:{com}_rev = var:te_tax_bl_rev }} }} "
+            "add = 1 }")
+    lines.append("}")
+    lines += ["", "# Promises in their term with a failing check (te_tax_obl_st_failing_<n>), and the earliest",
+              "# deadline among those still being delivered (-1 if none), with its year and month.",
+              "te_tax_view_obl_failing = {", "\tvalue = 0"]
+    for n in OBLIGATION_SLOTS:
+        lines.append(f"\tif = {{ limit = {{ {_is_open(f'te_tax_o{n}_on')} has_variable = te_tax_o{n}_state "
+                     f"var:te_tax_o{n}_state = {OBL_MAINTAINING} has_variable = te_tax_o{n}_fails "
+                     f"var:te_tax_o{n}_fails > 0 }} add = 1 }}")
+    lines.append("}")
+    # The earliest deadline: while any slot is being delivered, a large sentinel lowered
+    # (`max =`, an upper bound) by each such slot's deadline; -1 while none is.
+    delivering = {n: (f"{_is_open(f'te_tax_o{n}_on')} has_variable = te_tax_o{n}_state "
+                      f"var:te_tax_o{n}_state = {OBL_DELIVERING} has_variable = te_tax_o{n}_deadline")
+                  for n in OBLIGATION_SLOTS}
+    lines += ["te_tax_view_obl_next_due = {", "\tvalue = -1", "\tif = {",
+              "\t\tlimit = { has_variable = te_tax_schema OR = { "
+              + " ".join(f"AND = {{ {cond} }}" for cond in delivering.values()) + " } }",
+              f"\t\tvalue = {NO_DEADLINE}"]
+    lines += [f"\t\tif = {{ limit = {{ {cond} }} max = var:te_tax_o{n}_deadline }}" for n, cond in delivering.items()]
+    lines += ["\t}", "}"]
+    lines += _split_month("te_tax_view_obl_next_due", "te_tax_view_obl_next_due", "has_variable = te_tax_schema")
+    lines += ["", "# How many parts of the open draft a passed bill or an outside change moved since the draft",
+              "# changed them: each waits on its Accept before the draft can be introduced."]
+    parts = [f"te_tax_view_dr_{instrument.key}_rebase" for instrument in INSTRUMENTS]
+    parts += ["te_tax_view_dr_goods_rebase", "te_tax_view_dr_relief_rebase", "te_tax_view_dr_customs_rebase"]
+    lines += _view("te_tax_view_dr_rebase_count", 0, DRAFT_OPEN, [f"add = {part}" for part in parts])
+    return lines
 
 
 def _obligation_views():
@@ -998,6 +1073,11 @@ def _estimate_views():
                     f"else = {{ value = {first} " + " ".join(f"add = {other}" for other in rest) + " }",
                 ])
         lines += _view(f"{prefix}_shared", 0, all_collect, ["value = 1"])
+    lines += ["", "# 1 while a Budget line the draft changes has no base (the draft summary's revenue figure",
+              "# is then partial; GUI audit TAX-4)."]
+    lines += _view("te_tax_view_est_nobase_any", 0, DRAFT_OPEN,
+                   [f"if = {{ limit = {{ te_tax_view_est_{channel}_on = 1 te_tax_view_est_{channel}_nobase = 1 }} value = 1 }}"
+                    for channel, _, _ in CHANNELS])
     lines += [
         "",
         "# An offer to cut a tax (te_tax_off_<ig>_kind 1) lowers the bill's index by one step: as a",
@@ -1090,6 +1170,22 @@ def _workbench_views():
         lines += _view(f"te_tax_view_p{slot}_goods_changed", 0, on,
                        [f"if = {{ limit = {{ has_variable = {p}_g_{good} var:{p}_g_{good} >= 0 }} add = 1 }}"
                         for good in goods])
+        # Which goods it taxes (1) or exempts (2; stored as 0), 0 for a good it leaves alone, and
+        # how many of each (GUI audit TAX-12: the passed bill's goods as icons).
+        for good in goods:
+            lines += _view(f"te_tax_view_p{slot}_g_{good}", 0, f"{on} has_variable = {p}_g_{good} var:{p}_g_{good} >= 0",
+                           ["value = 2", f"if = {{ limit = {{ var:{p}_g_{good} = 1 }} value = 1 }}"])
+        for name, value in (("taxed", 1), ("exempt", 0)):
+            lines += _view(f"te_tax_view_p{slot}_goods_{name}", 0, on,
+                           [f"if = {{ limit = {{ has_variable = {p}_g_{good} var:{p}_g_{good} = {value} }} add = 1 }}"
+                            for good in goods])
+        # The relief it sets (GUI audit TAX-12): whether it changes each relief, and the band it
+        # sets as a percentage (te_tax_relief_pct_step a band).
+        for key in RELIEF_KEYS:
+            touched = f"{on} has_variable = {p}_{key} var:{p}_{key} >= 0"
+            lines += _view(f"te_tax_view_p{slot}_{key}_on", 0, touched, ["value = 1"])
+            lines += _view(f"te_tax_view_p{slot}_{key}_pct", 0, touched,
+                           [f"value = var:{p}_{key}", "multiply = te_tax_relief_pct_step"])
         marker = customs_marker(f"p{slot}")
         lines += _view(f"te_tax_view_p{slot}_customs_changed", 0, f"{on} has_variable = {marker}",
                        [f"if = {{ limit = {{ has_variable = {field} {_customs_touched(field)} }} add = 1 }}"
@@ -1258,9 +1354,13 @@ def _history_views():
     from 1 back to HISTORY_SIZE."""
     lines = ["", "# The history ring newest first: position <i> reads entry te_tax_h<n>_* with",
              "# n = te_tax_h_head - i + 1, wrapping past 1 to 8. kind 0 and month -1 while the",
-             "# position is empty. _inst is the instrument a sunset changed (INSTRUMENTS order)."]
+             "# position is empty. _inst is the instrument a sunset changed (INSTRUMENTS order), the",
+             "# group a kept, broken or renegotiated promise was made to (te_tax_ig_id_<ig>), or a",
+             "# count. _version is the code's version when the entry was written; _codever is that",
+             "# version for an entry that changed the code (CODE_CHANGE_KINDS), else 0, the row's",
+             "# \"v8\" (GUI audit TAX-21)."]
     for i in range(1, HISTORY_SIZE + 1):
-        for field, default in (("kind", 0), ("inst", 0), ("month", -1)):
+        for field, default in (("kind", 0), ("inst", 0), ("month", -1), ("version", 0)):
             lines += [f"te_tax_view_hist_{i}_{field} = {{", f"\tvalue = {default}"]
             for head in range(1, HISTORY_SIZE + 1):
                 variable = f"te_tax_h{(head - i) % HISTORY_SIZE + 1}_{field}"
@@ -1270,6 +1370,10 @@ def _history_views():
             lines.append("}")
         month = f"te_tax_view_hist_{i}_month"
         lines += _split_month(month, month, "has_variable = te_tax_h_head")
+        kinds = " ".join(f"te_tax_view_hist_{i}_kind = {kind}" for kind in CODE_CHANGE_KINDS)
+        lines += [f"te_tax_view_hist_{i}_codever = {{", "\tvalue = 0",
+                  f"\tif = {{ limit = {{ has_variable = te_tax_h_head OR = {{ {kinds} }} te_tax_view_hist_{i}_version > 0 }} "
+                  f"value = te_tax_view_hist_{i}_version }}", "}"]
     return lines
 
 
@@ -1297,13 +1401,33 @@ def custom_localization():
                 # _inst 1: the bill changed nothing else and was withdrawn.
                 entries.append((f"{kind} = {value} {inst} = 1", f"{HISTORY_KIND_KEYS[value]}_withdrawn"))
                 entries.append((f"{kind} = {value}", HISTORY_KIND_KEYS[value]))
+            elif value in PROMISE_OUTCOME_KINDS:
+                # The group the promise was made to, in _inst (te_tax_history_push_promise); an
+                # entry written before it was recorded (0) keeps the line without a name.
+                outcome = PROMISE_OUTCOME_KINDS[value][0]
+                entries += [(f"{kind} = {value} {inst} = {idx}", f"te_tax_hist_promise_{outcome}_{ig}")
+                            for idx, ig in enumerate(IGS, start=1)]
+                entries.append((f"{kind} = {value}", HISTORY_KIND_KEYS[value]))
             else:
                 entries.append((f"{kind} = {value}", HISTORY_KIND_KEYS[value]))
         lines += ["", f"te_tax_hist_event_{i} = {{", "\ttype = country", "\trandom_valid = no"]
         for trigger, key in entries:
             lines += ["\ttext = {", f"\t\ttrigger = {{ {trigger} }}", f"\t\tlocalization_key = {key}", "\t}"]
         lines += ["\ttext = {", f"\t\tlocalization_key = {HISTORY_KIND_FALLBACK}", "\t}", "}"]
-    return _txt("\n".join(lines + _obligation_custom_loc() + _offer_custom_loc()) + "\n")
+    return _txt("\n".join(lines + _next_change_custom_loc() + _obligation_custom_loc()
+                           + _offer_custom_loc()) + "\n")
+
+
+def _next_change_custom_loc():
+    """What happens at the code's next change (GUI audit TAX-1, the overview's Code cell): a
+    passed bill taking effect, or which tax's temporary rate expires, read as
+    GetPlayer.GetCustom('te_tax_ov_next_what'). The triggers read only guarded views."""
+    entries = [(f"te_tax_view_p{slot}_state = {STATE_AWAITING} te_tax_view_p{slot}_due >= 0 "
+                f"te_tax_view_p{slot}_due = te_tax_view_next_month", "te_tax_ov_next_what_bill") for slot in SLOTS]
+    entries += [(f"te_tax_view_en_{i.key}_exp >= 0 te_tax_view_en_{i.key}_exp = te_tax_view_next_month",
+                 f"te_tax_ov_next_what_sunset_{i.key}") for i in INSTRUMENTS]
+    return ["", "# What the code's next change is (GUI audit TAX-1; te_tax_overview_panel's Code cell)."] + _custom_loc(
+        "te_tax_ov_next_what", entries, "te_tax_ov_next_what_none")
 
 
 def _offer_custom_loc():
@@ -4252,55 +4376,88 @@ def _gui_view(name, op, value):
     return (f"{op}( GetPlayer.MakeScope.ScriptValue('{name}'), '(CFixedPoint){value}' )")
 
 
+GOODS_ICONS_PER_ROW = 14     # te_tax_good_icon is 26 wide with 4 between: 14 x 26 + 13 x 4 = 416 of the 480 column
+# Beside te_tax_goods_icons_label (80 + 4) in a passed bill's list, set in 4 from the column, a row
+# holds 13: 4 + 80 + 4 + 13 x 26 + 12 x 4 = 474. At 14 a full row was 504 and ran past the panel.
+LABELLED_GOODS_ICONS_PER_ROW = 13
+CUSTOMS_LEVEL_TEXTURES = {   # vanilla's own, the Market panel's and set_level_bar's (GUI audit TAX-26)
+    -3: "max_subvention", -2: "high_subvention", -1: "low_subvention", 0: "no_tariffs_no_subvention",
+    1: "low_tariffs", 2: "high_tariffs", 3: "max_tariffs"}
+
+
+def _goods_icon_rows(goods, visible, indent, per_row=GOODS_ICONS_PER_ROW):
+    """Rows of te_tax_good_icon, at most `per_row` to a row: one icon per good, shown
+    while `visible(good)` holds (a GUI expression), with the good's name on hover. Hidden icons
+    collapse, so each row shows only the goods that hold."""
+    lines = []
+    for start in range(0, len(goods), per_row):
+        lines += [f"{indent}flowcontainer = {{", f"{indent}\tdirection = horizontal", f"{indent}\tignoreinvisible = yes",
+                  f"{indent}\tspacing = 4"]
+        for good in goods[start:start + per_row]:
+            lines.append(f"{indent}\tte_tax_good_icon = {{ visible = \"[{visible(good)}]\" "
+                         f"texture = \"{good_texture(good)}\" tooltip = \"{good}\" }}")
+        lines.append(f"{indent}}}")
+    return lines
+
+
 @output(ROWS_PATH)
 def generated_rows():
     lines = [
         HEADER,
         "### The legislated tax code's per-good rows (plan Task 8): the workbench's goods catalog and",
-        "### the review's goods lines, one per consumption-catalog good, in catalog order. The row",
-        "### types, te_tax_good_row and te_tax_review_good_line, are in te_tax_workbench_widget.gui",
+        "### the review's goods lines, one per consumption-catalog good. The catalog groups the goods",
+        "### by category (catalog_by_category(): staples, most-taxed first, then industrial goods,",
+        "### luxuries and military goods; GUI audit TAX-13), each with its icon. The row types,",
+        "### te_tax_good_row and te_tax_review_good_line, are in te_tax_workbench_widget.gui",
         "### and te_tax_review_widget.gui; the goods' names are their own loc keys. Every value is a",
         "### guarded view of the player's draft (te_tax_view_dr_g_<good>*), shown as a 0/1 code. Each",
         "### good's name carries itself as a hover, in case a font draws it wider than its cell.",
+        "### The enacted code's taxed goods and each passed bill's, as icons (GUI audit TAX-12;",
+        "### te_tax_good_icon, te_tax_overview_widget.gui).",
         "### Then the customs schedule's rows (plan Task 15): the workbench's per category and the",
         "### review's, one per customs-catalog good (te_tax_customs_row, te_tax_review_customs_line,",
-        "### te_tax_cu_level_text; te_tax_view_cu_*).",
+        "### te_tax_cu_level_icon, vanilla's tariff icons; GUI audit TAX-26; te_tax_view_cu_*).",
         "",
         "types te_tax_generated_rows_types",
         "{",
-        "\t### The goods catalog: the good, taxed or not under existing law in the draft's month,",
-        "\t### taxed or not in the draft, and its toggle (te_tax_good_<good>_sgui).",
+        "\t### The goods catalog by category: the good's icon and name, taxed or not under existing law",
+        "\t### in the draft's month, taxed or not in the draft, and its toggle (te_tax_good_<good>_sgui).",
         "\ttype te_tax_wb_goods_rows = flowcontainer {",
         "\t\tdirection = vertical",
         "\t\tignoreinvisible = yes",
         "\t\tspacing = 1",
     ]
-    for good in consumption_catalog():
-        law = _gui_view(f"te_tax_view_dr_g_{good}_base", "EqualTo_CFixedPoint", 1)
-        draft = _gui_view(f"te_tax_view_dr_g_{good}", "EqualTo_CFixedPoint", 1)
-        touched = _gui_view(f"te_tax_view_dr_g_{good}_on", "NotEqualTo_CFixedPoint", 0)
-        lines += [
-            "",
-            "\t\tte_tax_good_row = {",
-            f"\t\t\tdatacontext = \"[GetScriptedGui('te_tax_good_{good}_sgui')]\"",
-            "\t\t\tblockoverride \"good_name\" {",
-            f"\t\t\t\ttext = \"{good}\"",
-            f"\t\t\t\ttooltip = \"{good}\"",
-            "\t\t\t}",
-            "\t\t\tblockoverride \"good_law\" {",
-            f"\t\t\t\ttext = \"[SelectLocalization( {law}, 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' )]\"",
-            "\t\t\t}",
-            "\t\t\tblockoverride \"good_draft\" {",
-            f"\t\t\t\ttext = \"[SelectLocalization( {touched}, SelectLocalization( {draft}, "
-            "'te_tax_wb_good_taxed_changed', 'te_tax_wb_good_untaxed_changed' ), "
-            f"SelectLocalization( {draft}, 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' ) )]\"",
-            "\t\t\t}",
-            "\t\t\tblockoverride \"good_button_text\" {",
-            f"\t\t\t\ttext = \"[SelectLocalization( {touched}, 'te_tax_wb_good_undo', "
-            f"SelectLocalization( {law}, 'te_tax_wb_good_untax', 'te_tax_wb_good_tax' ) )]\"",
-            "\t\t\t}",
-            "\t\t}",
-        ]
+    for category, goods in catalog_by_category().items():
+        lines += ["", f"\t\tte_tax_wb_goods_heading = {{ text = \"te_tax_wb_cu_cat_{category}\" }}"]
+        for good in goods:
+            law = _gui_view(f"te_tax_view_dr_g_{good}_base", "EqualTo_CFixedPoint", 1)
+            draft = _gui_view(f"te_tax_view_dr_g_{good}", "EqualTo_CFixedPoint", 1)
+            touched = _gui_view(f"te_tax_view_dr_g_{good}_on", "NotEqualTo_CFixedPoint", 0)
+            lines += [
+                "",
+                "\t\tte_tax_good_row = {",
+                f"\t\t\tdatacontext = \"[GetScriptedGui('te_tax_good_{good}_sgui')]\"",
+                "\t\t\tblockoverride \"good_icon\" {",
+                f"\t\t\t\ttexture = \"{good_texture(good)}\"",
+                "\t\t\t}",
+                "\t\t\tblockoverride \"good_name\" {",
+                f"\t\t\t\ttext = \"{good}\"",
+                f"\t\t\t\ttooltip = \"{good}\"",
+                "\t\t\t}",
+                "\t\t\tblockoverride \"good_law\" {",
+                f"\t\t\t\ttext = \"[SelectLocalization( {law}, 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' )]\"",
+                "\t\t\t}",
+                "\t\t\tblockoverride \"good_draft\" {",
+                f"\t\t\t\ttext = \"[SelectLocalization( {touched}, SelectLocalization( {draft}, "
+                "'te_tax_wb_good_taxed_changed', 'te_tax_wb_good_untaxed_changed' ), "
+                f"SelectLocalization( {draft}, 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' ) )]\"",
+                "\t\t\t}",
+                "\t\t\tblockoverride \"good_button_text\" {",
+                f"\t\t\t\ttext = \"[SelectLocalization( {touched}, 'te_tax_wb_good_undo', "
+                f"SelectLocalization( {law}, 'te_tax_wb_good_untax', 'te_tax_wb_good_tax' ) )]\"",
+                "\t\t\t}",
+                "\t\t}",
+            ]
     lines += [
         "\t}",
         "",
@@ -4327,23 +4484,69 @@ def generated_rows():
             "\t\t}",
         ]
     lines.append("\t}")
+    ordered = [good for goods in catalog_by_category().values() for good in goods]
+    lines += [
+        "",
+        "\t### The enacted code's taxed goods as icons, by category (te_tax_view_en_g_<good>), under the",
+        "\t### Enacted Code's Taxed Goods row.",
+        "\ttype te_tax_en_goods_icons = flowcontainer {",
+        "\t\tdirection = vertical",
+        "\t\tignoreinvisible = yes",
+        "\t\tspacing = 2",
+        "\t\tmargin_left = 4",
+    ]
+    lines += _goods_icon_rows(ordered, lambda good: _gui_view(f"te_tax_view_en_g_{good}", "EqualTo_CFixedPoint", 1),
+                              "\t\t")
+    lines.append("\t}")
+    for slot in SLOTS:
+        lines += [
+            "",
+            f"\t### The goods passed bill {slot} taxes and exempts, as icons (te_tax_view_p{slot}_g_<good>:",
+            "\t### 1 taxed, 2 exempted, 0 left alone), each set under its label.",
+            f"\ttype te_tax_pk_goods_icons_{slot} = flowcontainer {{",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 2",
+        ]
+        for name, value in (("taxed", 1), ("exempt", 2)):
+            count = _gui_view(f"te_tax_view_p{slot}_goods_{name}", "NotEqualTo_CFixedPoint", 0)
+            lines += [
+                "\t\tflowcontainer = {",
+                f"\t\t\tvisible = \"[{count}]\"",
+                "\t\t\tdirection = horizontal",
+                "\t\t\tignoreinvisible = yes",
+                "\t\t\tspacing = 4",
+                f"\t\t\tte_tax_goods_icons_label = {{ text = \"te_tax_pk_goods_{name}\" }}",
+                "\t\t\tflowcontainer = {",
+                "\t\t\t\tdirection = vertical",
+                "\t\t\t\tignoreinvisible = yes",
+                "\t\t\t\tspacing = 2",
+            ]
+            lines += _goods_icon_rows(
+                ordered, lambda good, value=value: _gui_view(f"te_tax_view_p{slot}_g_{good}", "EqualTo_CFixedPoint", value),
+                "\t\t\t\t", per_row=LABELLED_GOODS_ICONS_PER_ROW)
+            lines += ["\t\t\t}", "\t\t}"]
+        lines.append("\t}")
     lines += _customs_rows()
     lines.append("}")
     return _txt("\n".join(lines) + "\n")
 
 
-def _level_texts(view, indent):
-    """One te_tax_cu_level_text per level, each shown while the view `view` holds that level."""
-    return [f"{indent}te_tax_cu_level_text = {{ visible = \"[{_gui_view(view, 'EqualTo_CFixedPoint', idx)}]\" "
-            f"text = \"te_tax_cu_lv_{CUSTOMS_LEVEL_SUFFIX[idx]}\" }}" for idx, _ in CUSTOMS_LEVELS]
+def _level_icons(view, indent):
+    """One te_tax_cu_level_icon per level, each shown while the view `view` holds that level, its
+    word on hover (GUI audit TAX-26: vanilla's tariff icons, as the Market panel draws them)."""
+    return [f"{indent}te_tax_cu_level_icon = {{ visible = \"[{_gui_view(view, 'EqualTo_CFixedPoint', idx)}]\" "
+            f"texture = \"gfx/interface/icons/trade_icons/{CUSTOMS_LEVEL_TEXTURES[idx]}.dds\" "
+            f"tooltip = \"te_tax_cu_lv_{CUSTOMS_LEVEL_SUFFIX[idx]}\" }}" for idx, _ in CUSTOMS_LEVELS]
 
 
 def _customs_rows():
     """The customs schedule's generated rows (plan Task 15): the workbench's Customs rows, one type per
     goods category (te_tax_wb_customs_rows_<category>) with a te_tax_customs_row per good, and the
     review's lines (te_tax_rv_customs_rows), one per good and direction the draft changes and one
-    per good a treaty or the tariff cooldown blocked. A level prints as one of seven loc keys, each
-    a te_tax_cu_level_text shown while the guarded view holds its level."""
+    per good a treaty or the tariff cooldown blocked. A level is one of seven of vanilla's tariff
+    icons, each a te_tax_cu_level_icon shown while the guarded view holds its level, its word on
+    hover (GUI audit TAX-26)."""
     lines = []
     for category, goods in customs_by_category().items():
         lines += [
@@ -4361,7 +4564,7 @@ def _customs_rows():
                       f"\t\t\t\ttooltip = \"{good}\"", "\t\t\t}"]
             for d, _ in CUSTOMS_DIRS:
                 view = f"te_tax_view_cu_{d}_{good}"
-                lines += [f"\t\t\tblockoverride \"{d}_level\" {{"] + _level_texts(view, "\t\t\t\t") + ["\t\t\t}",
+                lines += [f"\t\t\tblockoverride \"{d}_level\" {{"] + _level_icons(view, "\t\t\t\t") + ["\t\t\t}",
                           f"\t\t\tblockoverride \"{d}_changed\" {{",
                           f"\t\t\t\tvisible = \"[{_gui_view(f'{view}_on', 'NotEqualTo_CFixedPoint', 0)}]\"", "\t\t\t}"]
             lines.append("\t\t}")
@@ -4383,8 +4586,8 @@ def _customs_rows():
                       "\t\t\tblockoverride \"good_name\" {", f"\t\t\t\ttext = \"{good}\"",
                       f"\t\t\t\ttooltip = \"{good}\"", "\t\t\t}",
                       "\t\t\tblockoverride \"direction\" {", f"\t\t\t\ttext = \"te_tax_rv_cu_{d}\"", "\t\t\t}",
-                      "\t\t\tblockoverride \"law_level\" {"] + _level_texts(f"{view}_base", "\t\t\t\t") + [
-                      "\t\t\t}", "\t\t\tblockoverride \"bill_level\" {"] + _level_texts(view, "\t\t\t\t") + [
+                      "\t\t\tblockoverride \"law_level\" {"] + _level_icons(f"{view}_base", "\t\t\t\t") + [
+                      "\t\t\t}", "\t\t\tblockoverride \"bill_level\" {"] + _level_icons(view, "\t\t\t\t") + [
                       "\t\t\t}", "\t\t}"]
             blocked = _gui_view(f"{view}_blocked", "NotEqualTo_CFixedPoint", 0)
             touched = _gui_view(f"{view}_on", "NotEqualTo_CFixedPoint", 0)
@@ -4438,13 +4641,17 @@ def localization():
         for band, value in VIEW_BANDS:
             key = f"te_tax_ig_view_{ig}_{band}"
             entries[key] = f'0 "{VIEW_NAMES[value]}"'
-            entries[f"{key}_desc"] = ('0 "Under the legislated tax code: this group\'s stance on the taxation '
-                                      'law the enacted code comes closest to, counted as it would be for that law. '
-                                      'Under the light tax code: how far below the tax level the taxes its members '
-                                      'pay are set."')
+            # One sentence that holds under either code (GUI audit TAX-24): a player only ever
+            # has one of them, and a modifier's description reads no data.
+            entries[f"{key}_desc"] = ('0 "How this group judges the tax code: the taxation law it comes closest '
+                                      'to, or how far below the tax level the taxes its members pay are set."')
     for good in staple_order():
         entries[f"te_tax_offer_untax_{good}"] = f'0 "Leave ${good}$ untaxed."'
         entries[f"te_tax_tt_offer_untax_{good}"] = f'0 "The bill and the draft no longer tax ${good}$."'
+    # The history's promise lines, naming the group (GUI audit TAX-21).
+    for outcome, verb in PROMISE_OUTCOME_KINDS.values():
+        for ig in IGS:
+            entries[f"te_tax_hist_promise_{outcome}_{ig}"] = f'0 "A promise to the $ig_{ig}$ {verb}."'
     entries.update(light_localization())
     return _render_loc_file([(section_label(LOC_CATEGORY), entries)])
 
@@ -5090,6 +5297,10 @@ def light_custom_localization():
                        "te_tax_lt_not_levied")
     lines += entry("te_tax_lt_law", [(f"te_tax_view_light_law = {n}", law) for n, law in light_laws()],
                    "te_tax_lt_law_other")
+    # The overview cell's word (GUI audit TAX-1): the law's name without "Taxation", which the
+    # cell's caption says (te_tax_lt_law_short_<law>, te_tax_l_english.yml).
+    lines += entry("te_tax_lt_law_short", [(f"te_tax_view_light_law = {n}", f"te_tax_lt_law_short_{law}")
+                                           for n, law in light_laws()], "te_tax_lt_law_other")
     ladders = light_ladders()
     for instrument in INSTRUMENTS:
         lines += entry(f"te_tax_lt_range_{instrument.key}",
@@ -5119,12 +5330,13 @@ def light_localization():
         entries[key] = f'0 "$te_tax_inst_{instrument.key}$ Relief"'
         entries[f"{key}_desc"] = (f'0 "The light tax code sets the $te_tax_inst_{instrument.key}$ below the rate the '
                                   'taxation law sets at the current tax level."')
+        # The step buttons' reaction line: who pays the tax, the part of the reaction a player
+        # weighs; how groups react and how fast it fades is How the Light Tax Code Works' (GUI
+        # audit TAX-23).
         payers = light_payers(instrument)
         names = ", ".join(f"${'ig_' + ig}$" for ig in payers)
-        who = f"Paid most by {names}. " if payers else ""
         entries[f"te_tax_lt_tt_react_{instrument.key}"] = (
-            f'0 "{who}Each interest group reacts by how much of this tax its members pay and by its views on '
-            'taxation; a reaction that pleases a group counts half. Reactions fade over about six months."')
+            f'0 "Paid most by {names}."' if payers else '0 "Interest groups react by how much of it their members pay."')
     ladders = light_ladders()
     for instrument in INSTRUMENTS:
         for n, law in light_laws():

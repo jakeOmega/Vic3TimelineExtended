@@ -98,20 +98,12 @@ gm_mon_start = {
 }
 
 # Container scope. What a month adds to a secondary's age grandeur: 2% of its
-# starting grandeur a year, half under its owner's Mothballed, until a
-# century's worth is reached (gm_state_age_step).
+# starting grandeur a year, until a century's worth is reached
+# (gm_state_age_step). No monument policy changes it (policy spec 2026-10-23).
 gm_mon_age_step = {
 	value = gm_mon_start
 	multiply = 2
 	divide = 1200
-	if = {
-		limit = {
-			var:gm_tr_origin ?= {
-				owner = { gm_policy_is = { P = mothballed STANDARD = no } }
-			}
-		}
-		multiply = 0.5
-	}
 	max = gm_mon_age_room
 }
 
@@ -131,6 +123,46 @@ gm_mon_age_room = {
 gm_mon_grandeur = {
 	value = gm_mon_start
 	add = gm_mon_age
+}
+
+# Container scope. What each of a contested secondary's three choices does
+# now (GM-4), for their tooltips: the figures gm_preview_choices stored at the
+# last refresh (gm_effects.txt), guarded; and Rededicate's halved grandeur.
+gm_mon_disp_prev_td_legit = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_td_legit }
+		value = var:gm_prev_td_legit
+	}
+}
+
+gm_mon_disp_prev_td_base = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_td_base }
+		value = var:gm_prev_td_base
+	}
+}
+
+gm_mon_disp_prev_td_sup = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_td_sup }
+		value = var:gm_prev_td_sup
+	}
+}
+
+gm_mon_disp_prev_rd_sup = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_prev_rd_sup }
+		value = var:gm_prev_rd_sup
+	}
+}
+
+gm_mon_disp_prev_rd_grandeur = {
+	value = gm_mon_grandeur
+	divide = 2
 }
 
 # State scope. The grandeur standing here in secondary monuments, 0 with none.

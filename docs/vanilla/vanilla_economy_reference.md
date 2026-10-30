@@ -696,7 +696,9 @@ States can grant Charters to companies to expand reach:
 | Colonization | Speed bonus to colonizing a target state. Sustained colonization can convert the state into a "Chartered Company" semi-independent country |
 | Monopoly | Permanent variant gated on the company producing prestige goods |
 
-**Companies can have only one industry-expansion Charter active at a time** in current vanilla — granting a new industry charter retires the previous one. (Trade / Investment / Colonization / Monopoly are independent of the industry-expansion slot.) Most charters carry multi-year cooldowns between grants.
+**Companies can have only one industry-expansion Charter active at a time** in current vanilla. The engine refuses a second ("This company already has other Industry Rights", `COMPANY_ALREADY_HAS_INDUSTRY_CHARTER`), so the first must be revoked before another is granted. The check is per category, not per charter type: a mod's second charter type with `type = industry` is refused too (owner tested it). (Trade / Investment / Colonization / Monopoly are independent of the industry-expansion slot.) Most charters carry multi-year cooldowns between grants.
+
+Script can't work around it. No effect grants or revokes an industry, investment, trade or colonization charter, and no trigger reads one; monopolies are the exception (`add_company_monopoly`, `company_has_monopoly`). No effect edits a company type's `building_types` or `extension_building_types` either. The `NEconomy` define `DYNAMIC_INDUSTRY_CHARTER` ("use dynamic industry charter instead of scripted ones") is documented only by that comment; what it computes is untested.
 
 Where to look: `common/company_types/`, `common/company_charter_types/`, `/raw/CompanyType`.
 

@@ -30,6 +30,8 @@ SOURCES = {
             "banking_event_interbank_guarantee", "banking_event_microfinance_cost",
             "banking_event_student_debt_relief_cost", "banking_event_bailout_cost",
             "planning_treasury_pool_balance", "te_mon_gold_carry_expense",
+            # Two external tools' bills, weekly since 2026-10-27 (BNK-14).
+            "banking_external_sterilization_charge", "banking_external_import_charge",
         )),
         "covert": ("Covert Actions", ("covert_operation_funding_cost",)),
         "culture": ("Cultural Hegemony", ("ch_cultural_program_funding_cost", "ch_world_exposition_cost")),
@@ -44,7 +46,7 @@ SOURCES = {
             "te_seabed_holding_fee_modifier",
         )),
         "nuclear": ("Nuclear Program", ("nd_upkeep_cost", "nd_exercise_cost")),
-        "nuclear_taboo": ("Nuclear Civil Defence", ("nd_taboo_civil_defence",)),
+        "nuclear_taboo": ("Nuclear Civil Defense", ("nd_taboo_civil_defence",)),
         # The Antarctic research station needs Space Exploration; its upkeep
         # is listed with the space programmes rather than in a category of
         # its own (a new category needs a pie colour model and regenerates
@@ -66,6 +68,17 @@ SOURCES = {
         "tax_code": ("Spectrum Auctions", ("te_tax_spectrum_auction_proceeds",)),
         "pension_reform": ("Pension Reform", ("te_demog_wave_pension_cut_income", "te_demog_wave_contributions_income")),
     },
+}
+
+
+# Treasury payments a source's system makes outside the weekly budget, which
+# its row names under the weekly amount (GUI audit BNK-14): a script value of
+# the country's, and the line's text. FX Surrender buys gold for the bank once
+# a month with add_treasury, the same sum the vault receives that day; the other
+# two external tools' bills are weekly expenses (SOURCES above).
+OUTSIDE_THE_BUDGET = {
+    ("expense", "banking"): ("banking_external_surrender_purchase_display",
+                             "Bought for the bank's gold reserve this month, outside the weekly budget"),
 }
 
 
@@ -144,21 +157,121 @@ LOCALIZATION = {
     "additional_expense": "Other Additional Expenses",
     "no_income": "No positive income this week.",
     "no_expense": "No positive expenses this week.",
-    "pie_tt": "Each color matches a row below. Collapsed groups form one slice; expanded groups use their visible children. Pies show shares of positive component amounts; signed adjustments remain in the list. Weekly headers include those adjustments and exclude Investment Pool Transfer.",
-    "row_tt": "Weekly amount and share of positive amounts. Other Civil Buildings excludes the administration costs allocated to institutions and General Administration, and the Space Program, which is under Programme Costs. Other Income and Other Expenses reconcile the listed amounts to the public budget totals after excluding Investment Pool Transfer, including temporary flows and uncategorized items.",
+    # GUI audit BNK-19 (2026-10-27): each hover says what its own row is; the
+    # accounting rules are said once, in How the Breakdown Works.
+    "pie_tt": "Each color matches a row below. Expand a group to split its slice.",
     "how": "How the Breakdown Works",
-    "how_text": "#b Administration Allocation#!\\nGovernment Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep. Universities, ports and other civil buildings stay under Other Civil Buildings, except the Space Program: its weekly operating deficit, its wages and Launch Capacity, appears under Programme Costs as part of Space Race.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs. Targets still being implemented do not count. General Administration receives the remainder, including unused capacity and non-institution bureaucracy use. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance. Allocation is capped at the government's civil wage, goods and slave-upkeep total, so a wage change cannot allocate more than that total. The Space Program's cost is capped at what that total holds after administration.\\n\\n#b Charts and Amounts#!\\nIncome and expense totals exclude Investment Pool Transfer. Construction Goods also excludes that transfer, which funds private construction. Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance. Shipping covers supply ships and port connections.\\n\\n#b Journal Systems#!\\nBanking, Covert Actions, Cultural Hegemony, the United Nations and other systems have separate rows. Hover over a row to see its currently applied sources. Their amounts are removed from Additional Expenses or Income once; only the unattributed remainder stays there. One-time treasury payments and non-monetary resource costs are outside the weekly budget.\\n\\nGroups start collapsed. Click the arrow to expand Taxes, Administration, Military, Shipping, Programme Costs or diplomatic flows. Army and Navy each expand to Wages plus Materials and Support. Rows are ordered from largest to smallest amount within each group. Collapsed groups have one pie slice; expanded groups give their visible parts separate slices. Military wages are derived from each branch’s forecast total minus its goods. Materials and Support includes branch goods plus the full operating deficits of logistics centres and naval fortifications. Their own wages and upkeep are separate from barracks, conscription and naval administration costs covered by the branch forecast. Support upkeep combines wages, goods and slave upkeep. Navy also includes warship construction and maintenance. Other Military Costs reconciles remaining upkeep and forecast differences. Category colors stay fixed across the charts and the list. With many institutions the palette repeats; use the names and percentages to identify each category. Signed negative adjustments appear in the list with a zero chart share. Charts are empty when there are no positive amounts.",
 }
+
+# How the Breakdown Works, as subheaded notes (GUI audit BNK-20): each pair is
+# a subheading's key and its note's. gui/te_budget_breakdown.gui draws them in
+# this order (test_budget_breakdown.HowItWorksTest).
+HOW_TOPICS = (
+    ("how_sub_admin", "Administration",
+     "how_admin", "Government Administration produces bureaucracy and tax capacity rather than goods for sale. Its "
+     "weekly operating deficit is the cost of its wages and input goods, including any slave upkeep.\\n\\nThe share "
+     "allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. "
+     "Each institution receives that pool in proportion to its current level, including institutions with reduced "
+     "bureaucracy costs; targets still being implemented do not count. General Administration receives the "
+     "remainder, including unused capacity and bureaucracy used outside institutions. With no production or no "
+     "institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration "
+     "buildings report their latest weekly balance, so the allocation is capped at the government's civil wage, goods "
+     "and slave-upkeep total."),
+    ("how_sub_civil", "Other Civil Buildings",
+     "how_civil", "Universities, ports and other civil buildings stay under Other Civil Buildings, except the Space "
+     "Program: its weekly operating deficit, its wages and Launch Capacity, appears under Program Costs as part of "
+     "Space Race, capped at what the civil total holds after administration. Construction Goods leaves out the "
+     "Investment Pool Transfer, which funds private construction."),
+    ("how_sub_military", "Military",
+     "how_military", "Military includes army and navy wages, goods, slave upkeep, warship construction and warship "
+     "maintenance; Shipping covers supply ships and port connections. Each branch's wages are its forecast total less "
+     "its goods. Materials and Support is its goods plus the whole operating deficit of logistics centers and naval "
+     "fortifications, their wages, goods and slave upkeep together. Barracks, conscription and naval administration "
+     "are already in the branch forecast and are not added again. Navy also includes warship construction and "
+     "maintenance. Weekly operating balances can differ from wage forecasts, and Other Military Costs reconciles the "
+     "difference."),
+    ("how_sub_journal", "Journal Systems",
+     "how_journal", "Banking, Covert Actions, Cultural Hegemony, the United Nations and other systems have rows of "
+     "their own, each listing the sources applied now, with their multipliers and any decay. Their amounts are taken "
+     "out of Additional Expenses or Income once, and only the unattributed remainder stays there. One-time treasury "
+     "payments and costs in other resources are outside the weekly budget."),
+    ("how_sub_charts", "Totals and Shares",
+     "how_charts", "Income and expense totals leave out the Investment Pool Transfer. A share counts positive "
+     "amounts only: a refund stays in the list with its sign and a zero share, so expanding a group never changes "
+     "the whole, and a group whose costs and refunds cancel can still be expanded. Other Income and Other Expenses "
+     "reconcile the listed rows to the budget's totals, including temporary flows and uncategorized items."),
+)
+for sub_key, sub_text, note_key, note_text in HOW_TOPICS:
+    LOCALIZATION[sub_key] = sub_text
+    LOCALIZATION[note_key] = note_text
 
 LOCALIZATION.update({
     "taxes": "Taxes", "administration_group": "Administration", "army": "Army", "navy": "Navy",
     "wages": "Wages", "materials": "Materials and Support", "military_adjustment": "Other Military Costs",
-    "programmes": "Programme Costs", "diplomacy_income": "Diplomatic Income", "diplomacy_expense": "Diplomatic Payments",
+    "programmes": "Program Costs", "diplomacy_income": "Diplomatic Income", "diplomacy_expense": "Diplomatic Payments",
     "supply_construction": "Supply Ship Construction", "supply_maintenance": "Supply Ship Maintenance", "port_connections": "Port Connections",
-    "expand_tt": "Expand or collapse this breakdown. The pie groups collapsed categories and separates expanded categories into their visible parts.",
-    "materials_tt": "Materials and Support includes branch goods plus full logistics-centre and naval-fortification upkeep, combining their wages, goods and any slave upkeep. Barracks, conscription and naval administration stay in the native branch amounts and are not added again. Navy also includes warship construction and maintenance. Weekly operating balances can differ from wage forecasts; Other Military Costs reconciles the difference.",
-    "group_tt": "This total includes the indented rows below it. Expand to see its components as separate pie slices. Shares count positive component amounts; refunds remain signed, so expansion never changes the denominator. A zero net group can still contain costs and refunds.",
+    "expand_tt": "Show or hide the rows inside.",
+    "materials_tt": "Branch goods, plus the upkeep of logistics centers and naval fortifications. Navy also includes warship construction and maintenance.",
+    "group_tt": "Includes the indented rows below it.",
 })
+
+# GUI audit BNK-17: a row says what it is. A row with the same figure as an
+# Overview row takes that row's own hover, vanilla's graph of the figure over
+# time, on its amount, where the Overview puts it (budget_panel.gui's
+# tax_exp_frame text_2). Every other leaf gets a line of its own.
+TOOLTIP_TEMPLATES = {
+    "income": {
+        "income_tax": "tax_income_tooltip_with_graph", "poll_tax": "tax_poll_tooltip_with_graph",
+        "consumption_tax": "consumption_tax_tooltip_with_graph", "dividends_tax": "dividends_tax_tooltip_with_graph",
+        "tariffs": "tariffs_tooltip_with_graph", "minting": "minting_tooltip_with_graph",
+        "government_dividends": "government_share_dividends_tooltip_with_graph",
+        "pacts": "diplomatic_pacts_income_tooltip_with_graph", "treaties": "treaty_income_tooltip_with_graph",
+    },
+    "expense": {
+        "welfare": "welfare_payments_expense_tooltip_with_graph", "subsidies": "subsidies_expense_tooltip_with_graph",
+        "subventions": "subventions_expense_tooltip_with_graph",
+        "government_losses": "government_share_losses_tooltip_with_graph",
+        "pacts": "diplomatic_pacts_expense_tooltip_with_graph", "treaties": "treaty_expense_tooltip_with_graph",
+        "interest": "interest_expense_tooltip_with_graph",
+    },
+}
+ROW_TOOLTIPS = {
+    "civil": "Wages and goods of universities, ports and other civil buildings. Government Administration is split among your institutions under Administration, and the Space Program is under Program Costs.",
+    "construction": "Goods for the government's construction. The Investment Pool Transfer, which funds private construction, is left out.",
+    "additional_income": "Additional income no row above claims.",
+    "additional_expense": "Additional expenses no row above claims.",
+    "other_income": "What the rows above leave of the budget's weekly income: temporary flows and uncategorized items.",
+    "other_expense": "What the rows above leave of the budget's weekly expenses: temporary flows and uncategorized items.",
+    "administration": "Government Administration's cost that no institution takes: unused capacity and bureaucracy used outside institutions.",
+    "wages_army": "The army's wages: its forecast total less its goods.",
+    "wages_navy": "The navy's wages: its forecast total less its goods.",
+    "military_adjustment": "The difference between the military total and its army and navy parts, from weekly balances that differ from wage forecasts.",
+    "supply_construction": "Building supply ships.",
+    "supply_maintenance": "Keeping supply ships at sea.",
+    "port_connections": "The upkeep of port connections.",
+}
+for key, text in ROW_TOOLTIPS.items():
+    LOCALIZATION[key + "_tt"] = text
+
+
+def row_tooltip(side, key):
+    """The row's own tooltip key, or None where the amount carries a vanilla
+    template (TOOLTIP_TEMPLATES)."""
+    if key in TOOLTIP_TEMPLATES[side]:
+        return None
+    if key.startswith("institution_"):
+        return f"te_budget_chart_{key}_tt"
+    if key in ("army_materials", "navy_materials"):
+        return "te_budget_chart_materials_tt"
+    if key in ("army_wages", "navy_wages"):
+        return f"te_budget_chart_wages_{key.split('_')[0]}_tt"
+    if key in SOURCES[side]:
+        return f"te_budget_chart_source_{side}_{key}_tt"
+    if key in ("additional", "other"):
+        return f"te_budget_chart_{key}_{side}_tt"
+    if key == "administration_group":
+        return "te_budget_chart_administration_group_tt"
+    return f"te_budget_chart_{key}_tt"
 
 
 def institutions():
@@ -360,6 +473,12 @@ def generated_values():
     return "\n".join(out)
 
 
+# The label column at depth 0 (gui/te_budget_breakdown.gui's te_budget_chart_row,
+# 291 since the 17-point type of GUI audit BNK-20); each level of indent takes
+# 14 from it.
+LABEL_WIDTH = 291
+
+
 def pie_texture(i):
     return f"gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_{MODELS[i % len(MODELS)][0]}.dds"
 
@@ -374,23 +493,21 @@ def chart(side):
         key, label = node.key, node.label
         val, share = expression(side, f"{side}_{key}"), expression(side, f"{side}_{key}_share")
         rank, active = expression(side, f"{side}_{key}_cached_rank"), expression(side, f"{side}_{key}_cached_active")
-        tooltip = f"te_budget_chart_{key}_tt" if key.startswith("institution_") else "te_budget_chart_row_tt"
-        if key in ("army_materials", "navy_materials"):
-            tooltip = "te_budget_chart_materials_tt"
-        if key in SOURCES[side]:
-            tooltip = f"te_budget_chart_source_{side}_{key}_tt"
-        if node.children:
-            tooltip = "te_budget_chart_group_tt"
+        tooltip = "te_budget_chart_group_tt" if node.children and key != "administration_group" else row_tooltip(side, key)
+        template = TOOLTIP_TEMPLATES[side].get(key) if not node.children else None
         depth = len(ancestors)
         swatch_alpha = (f' alpha = "[Select_float(GetVariableSystem.Exists(\'{flag(side, key)}\'), \'(float)0\', \'(float)1\')]"'
                         if node.children else "")
         out += [f"\ttype te_budget_{side}_row_{key} = flowcontainer {{", "\t\tdirection = vertical", "\t\tignoreinvisible = yes",
                 f'\t\tvisible = "[And(GreaterThan_CFixedPoint({active}, \'(CFixedPoint)0\'), EqualTo_CFixedPoint({rank}, TopScope.ScriptValue(\'te_budget_row_slot\')))]"',
-                "\t\tte_budget_chart_row = {", f'\t\t\ttooltip = "{tooltip}"',
+                "\t\tte_budget_chart_row = {", *([f'\t\t\ttooltip = "{tooltip}"'] if tooltip else []),
                 f"\t\t\tblockoverride \"indent\" {{ size = {{ {depth * 14} 1 }} }}",
-                f"\t\t\tblockoverride \"label_width\" {{ minimumsize = {{ {271 - depth * 14} 28 }} maximumsize = {{ {271 - depth * 14} -1 }} }}",
+                f"\t\t\tblockoverride \"label_width\" {{ minimumsize = {{ {LABEL_WIDTH - depth * 14} 28 }} maximumsize = {{ {LABEL_WIDTH - depth * 14} -1 }} }}",
                 f'\t\t\tblockoverride "swatch" {{ texture = "{pie_texture(i)}"{swatch_alpha} }}', f'\t\t\tblockoverride "label" {{ text = "{label}" }}',
-                f'\t\t\tblockoverride "amount" {{ raw_text = "@money![{val}|D]" }}', f'\t\t\tblockoverride "share" {{ raw_text = "[{share}|%1]" }}']
+                f'\t\t\tblockoverride "amount" {{ raw_text = "@money![{val}|D]"{f" using = {template}" if template else ""} }}', f'\t\t\tblockoverride "share" {{ raw_text = "[{share}|%1]" }}']
+        if not tooltip:
+            # The hover is the amount's, so the label is plain text.
+            out += ['\t\t\tblockoverride "label_format" {}']
         if node.children:
             f = flag(side, key)
             out += ["\t\t\tblockoverride \"toggle\" {", "\t\t\t\tbutton = {", "\t\t\t\t\tsize = { 18 24 }", "\t\t\t\t\tparentanchor = vcenter",
@@ -483,8 +600,9 @@ def main():
         for key, (label, _) in SOURCES[side].items():
             loc[f"te_budget_chart_source_{side}_{key}"] = label
             # A source modifier's tooltip prints this line beside the native one;
-            # name it as a label so the repeated amount doesn't read as a second charge.
-            loc[source_type(side, key)] = f"Counted in the Budget Breakdown under {label}"
+            # name it as a label so the repeated amount doesn't read as a second
+            # charge, and keep it short (GUI audit BNK-21).
+            loc[source_type(side, key)] = f"Breakdown: {label}"
             loc[source_type(side, key) + "_desc"] = (
                 f"Not a second {'payment' if side == 'income' else 'charge'}: the ${NATIVE[side]}$ line already includes this amount. "
                 f"It is repeated so the Budget panel's Breakdown tab can list it under {label}."
@@ -494,24 +612,36 @@ def main():
                 name, building_label = CARVE_OUTS[key]
                 building = (f"\\n{building_label}: @money![TopScope.ScriptValue('te_budget_{name}_cost')|D]"
                             f"\\nThe {building_label}'s wages and input goods, moved here from Other Civil Buildings.")
+            outside = ""
+            if (side, key) in OUTSIDE_THE_BUDGET:
+                value, text = OUTSIDE_THE_BUDGET[(side, key)]
+                outside = f"\\n{text}: @money![GetPlayer.MakeScope.ScriptValue('{value}')|D]"
+            # GUI audit BNK-19: the row's figures and its sources, without the
+            # rules How the Breakdown Works states once.
             loc[f"te_budget_chart_source_{side}_{key}_tt"] = (
                 f"#b {label}#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_{side}_{key}')|D]"
-                f"{building}"
-                f"\\n\\n[GetPlayer.GetModifier.GetDescFor('{source_type(side, key)}')]"
-                "\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. "
-                "One-time treasury payments and non-monetary costs are excluded from the weekly budget."
+                f"{building}{outside}"
+                f"\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('{source_type(side, key)}')]"
             )
+    # GUI audit BNK-18: an institution's row gives its own share; the pool's
+    # figures are said once, on the Administration group's row, and the
+    # formula in How the Breakdown Works.
     for key in institutions():
         loc[f"te_budget_chart_{key}_tt"] = (
-            f"#b ${key}$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_{key}')|0]"
-            "\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]"
-            "\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]"
-            "\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]"
-            "\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]"
-            "\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]"
-            f"\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_{key}')|D]"
-            "\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels."
+            f"#b ${key}$#!\\nLevel [TopScope.ScriptValue('te_budget_level_{key}')|0] of "
+            "[TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: "
+            f"@money![TopScope.ScriptValue('te_budget_expense_{key}')|D] of the "
+            "@money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool."
         )
+    loc["te_budget_chart_administration_group_tt"] = (
+        "#b $te_budget_chart_administration_group$#!\\nGovernment Administration's weekly cost, split between your "
+        "institutions and General Administration."
+        "\\n$TOOLTIP_DELIMITER$"
+        "\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]"
+        "\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]"
+        "\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]"
+        "\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]"
+    )
     (ROOT / "localization/english/te_budget_l_english.yml").write_bytes(
         _render_loc_file([(section_label("BUDGET"), {key: f'0 "{value}"' for key, value in loc.items()})])
     )

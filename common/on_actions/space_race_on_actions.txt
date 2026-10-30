@@ -1,8 +1,8 @@
 ﻿# Space Race On-Actions
 
 # Once a month per country (not per journal entry): the inactive-milestone
-# cleanup, the revolution backstop, the post-race dividend and the global
-# failure-cooldown tick.
+# cleanup, the revolution backstop, the post-race dividend, a player's Space
+# Powers standings and the global failure-cooldown tick.
 on_monthly_pulse_country = {
 	on_actions = {
 		space_race_on_action
@@ -11,8 +11,51 @@ on_monthly_pulse_country = {
 
 space_race_on_action = {
 	effect = {
+		# Extraplanetary Base room (sr_colony_module_effects.txt; colony modules
+		# design § 9): its one refresh site, for every country that can build
+		# a base (In-Situ Resource Utilization, the building's technology),
+		# colony or not.
+		if = {
+			limit = { has_technology_researched = in_situ_resource_utilization }
+			sr_ebase_refresh = yes
+		}
+		# Fleets (solar colonization slice 6, sr_fleet_effects.txt): a fleet
+		# power's month under Full Colonies, Space Command's construction first.
+		if = {
+			limit = { sr_fleet_power = yes }
+			sr_fl_country_month = yes
+		}
+		# Its orbital fire support (6d) is refreshed in that month; a country no
+		# longer a fleet power loses it here.
+		else_if = {
+			limit = { has_modifier = sr_orbital_superiority }
+			remove_modifier = sr_orbital_superiority
+		}
+		# Earth orbit (slice 6d, sr_earth_orbit_effects.txt): a player told when
+		# its Earth is blockaded, or its launch site lost and back.
+		if = {
+			limit = {
+				is_player = yes
+				sr_colonies_full_enabled = yes
+				OR = {
+					sr_has_space_program = yes
+					sr_fleet_power = yes
+					has_variable = sr_launch_site_noted
+				}
+			}
+			sr_earth_notice_step = yes
+		}
+		# An old save's open Moon Base (lunar colonization design § 10): its
+		# progress moves onto Solar System Colonization before the cleanup on
+		# the next line deletes it (sr_launch_window_effects.txt).
+		sr_lunar_carry_moon_base = yes
 		sr_cleanup_inactive_space_race_milestones = yes
+		# A choice to colonize the Moon lasts while a lunar world is free
+		# (sr_site_effects.txt).
+		sr_colonization_resumed_expire = yes
 		sr_monthly_colony_discoveries = yes
+		# The site_receiver_entry self-check (sr_site_effects.txt).
+		sr_site_receiver_check_step = yes
 		# What a revolution's winner keeps (space_race_effects.txt): the
 		# backstop that puts the entries' modifiers back, and the probe result's
 		# record, which also migrates a save from before the record existed.
@@ -76,12 +119,45 @@ space_race_on_action = {
 				}
 				sr_recalculate_cost = yes
 			}
+			# The same for the funding cap, which the pace multipliers read
+			# (sr_funding_<m>_effective): technologies and Advanced Research V
+			# move it with no button press. Recorded since 2026-10-29, so an
+			# older save recalculates once.
+			else_if = {
+				limit = { NOT = { has_variable = sr_cost_funding_cap } }
+				sr_recalculate_cost = yes
+			}
+			else_if = {
+				limit = {
+					OR = {
+						var:sr_cost_funding_cap < sr_max_funding_level
+						var:sr_cost_funding_cap > sr_max_funding_level
+					}
+				}
+				sr_recalculate_cost = yes
+			}
 			# A revolution's winner whose inherited entry lost its cost and
-			# funding modifiers (sr_cost_modifiers_missing): put them back.
+			# funding modifiers (sr_cost_modifiers_missing): put them back. The
+			# same test moves a save from before the funding split (2026-10-29)
+			# onto sr_funding_throughput.
 			else_if = {
 				limit = { sr_cost_modifiers_missing = yes }
 				sr_recalculate_cost = yes
 			}
+		}
+		# The Space Powers standings on the Space Race tab
+		# (space_race_effects.txt): players in the race, a month at a time.
+		if = {
+			limit = {
+				is_player = yes
+				sr_space_race_on = yes
+				sr_in_space_race = yes
+			}
+			sr_powers_refresh = yes
+		}
+		else_if = {
+			limit = { has_variable = sr_power_total }
+			sr_powers_clear = yes
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_failure_cooldown } }

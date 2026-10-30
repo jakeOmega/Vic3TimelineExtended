@@ -1996,6 +1996,166 @@ class MovementEndpointTests(unittest.TestCase):
                          ["lawgroup_privacy"])
 
 
+class ExternalModOverlapEndpointTests(unittest.TestCase):
+    """GET /external-mod-overlap through do_GET (#1170), on
+    test_external_mod_overlap's two fake mods."""
+
+    def setUp(self):
+        import external_mod_overlap as emo
+        import test_external_mod_overlap as temo
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.ours, self.theirs = temo.build_fake_mods(tmp.name)
+        self.missing = os.path.join(tmp.name, "missing")
+        self.empty = os.path.join(tmp.name, "empty")
+        os.makedirs(self.empty)
+        vanilla = emo.VanillaIndex(keys=temo.FAKE_VANILLA)
+        for patch in (mock.patch.object(mss, "mod_path", self.ours),
+                      mock.patch.object(mss, "_overlap_vanilla_index", return_value=vanilla)):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def get(self, path):
+        handler = _CapturingHandler(path)
+        handler.do_GET()
+        return handler.last
+
+    def test_report(self):
+        status, body = self.get(f"/external-mod-overlap?path={quote(self.theirs)}")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["mod_name"], "Fake Pop Mod")
+        verdicts = {c["key"]: c["verdict"] for c in body["key_collisions"]}
+        # law_a: our plain REPLACE outlasts their TRY_REPLACE (#1185, probe round 5).
+        self.assertEqual(verdicts, {"law_a": "theirs_wiped", "great_power": "both_merge",
+                                    "state_turmoil": "both_merge",
+                                    "decree_x": "depends_on_playset"})
+        self.assertNotIn("trace", body["key_collisions"][0])
+        self.assertEqual([p["path"] for p in body["path_collisions"]][0],
+                         "common/decrees/modified.txt")
+        status, body = self.get(f"/external-mod-overlap?path={quote(self.theirs)}&trace=true")
+        self.assertEqual(status, 200)
+        self.assertIn("trace", body["key_collisions"][0])
+
+    def test_errors(self):
+        for path, status in (
+            ("/external-mod-overlap", 400),
+            (f"/external-mod-overlap?path={quote(self.missing)}", 400),
+            (f"/external-mod-overlap?path={quote(self.empty)}", 400),
+            (f"/external-mod-overlap?path={quote(self.ours)}", 400),
+            (f"/external-mod-overlap?path={quote(self.theirs)}&trace=maybe", 400),
+            (f"/external-mod-overlap/extra?path={quote(self.theirs)}", 404),
+        ):
+            with self.subTest(path=path):
+                status_got, body = self.get(path)
+                self.assertEqual(status_got, status)
+                self.assertIn("error", body)
+
+    def test_a_full_reload_drops_the_vanilla_index(self):
+        mss._overlap_vanilla_cache["x"] = object()
+        self.addCleanup(mss._overlap_vanilla_cache.clear)
+        with mock.patch.object(mss, "_choose_vanilla_source",
+                               side_effect=RuntimeError("stop after the cache step")):
+            with self.assertRaises(RuntimeError):
+                mss._load_mod_state()
+        self.assertEqual(mss._overlap_vanilla_cache, {})
+
+
+class ExternalModStateEndpointTests(unittest.TestCase):
+    """GET /external-mod-overlap/state through do_GET (#1184), on
+    test_external_mod_overlap's layered-state fixture."""
+
+    def setUp(self):
+        import external_mod_overlap as emo
+        import test_external_mod_overlap as temo
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        game, self.ours, self.theirs = temo.build_fake_layer_mods(tmp.name)
+        fake_ms = temo.fake_layer_mod_state(game, self.ours)
+        vanilla = emo.VanillaIndex(game_common=game, snapshot_dir=None)
+        for patch in (mock.patch.object(mss, "mod_path", self.ours),
+                      mock.patch.object(mss, "ms", fake_ms),
+                      mock.patch.object(mss, "_overlap_vanilla_index", return_value=vanilla),
+                      mock.patch.dict(mss._overlap_state_cache, clear=True)):
+            patch.start()
+            self.addCleanup(patch.stop)
+        self.q = f"path={quote(self.theirs)}"
+
+    def get(self, path):
+        handler = _CapturingHandler(path)
+        handler.do_GET()
+        return handler.last
+
+    def test_summary_type_and_key(self):
+        status, body = self.get(f"/external-mod-overlap/state?{self.q}")
+        self.assertEqual(status, 200)
+        self.assertFalse(body["cached"])
+        self.assertIn("Laws", [t["entity_type"] for t in body["entity_types"]])
+        status, body = self.get(f"/external-mod-overlap/state/laws?{self.q}")
+        self.assertEqual(status, 200)
+        self.assertTrue(body["cached"])
+        self.assertEqual(body["entity_type"], "Laws")
+        self.assertIn({"key": "te_law", "status": "changed"}, body["keys"])
+        status, body = self.get(f"/external-mod-overlap/state/Laws/te_law?{self.q}")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["value"][1]["modifier"][1]["b_add"], ["=", "2"])
+        status, body = self.get(f"/external-mod-overlap/state/Laws/te_law?{self.q}&refresh=true")
+        self.assertFalse(body["cached"])
+
+    def test_errors(self):
+        for path, status in (
+            ("/external-mod-overlap/state", 400),
+            (f"/external-mod-overlap/state?path={quote(self.ours)}", 400),
+            (f"/external-mod-overlap/state?{self.q}&refresh=maybe", 400),
+            (f"/external-mod-overlap/state/NoSuchType?{self.q}", 404),
+            (f"/external-mod-overlap/state/Laws/law_missing?{self.q}", 404),
+            (f"/external-mod-overlap/state/Laws/te_law/extra?{self.q}", 404),
+        ):
+            with self.subTest(path=path):
+                status_got, body = self.get(path)
+                self.assertEqual(status_got, status)
+                self.assertIn("error", body)
+
+    def test_a_reload_drops_the_layered_states(self):
+        mss._overlap_state_cache["x"] = object()
+        # No cached vanilla loc: mod_only falls back to a full load, which
+        # stops at the patched raise before any file is read or written.
+        with mock.patch.object(mss, "_VANILLA_LOC_CACHE", None), \
+                mock.patch.object(mss, "_choose_vanilla_source",
+                                  side_effect=RuntimeError("stop after the cache step")):
+            with self.assertRaises(RuntimeError):
+                mss._load_mod_state(mod_only=True)
+        self.assertEqual(mss._overlap_state_cache, {})
+
+    def test_the_post_load_reparse_drops_the_layered_states(self):
+        mss._overlap_state_cache["x"] = object()
+        stub = mock.Mock()
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(mss, "_VANILLA_LOC_CACHE", None), \
+                mock.patch.object(mss, "mod_path", tmp):
+            self.assertIsNone(mss._reparse_mod_after_writes(stub))
+        stub.reload_mod.assert_called_once()
+        self.assertEqual(mss._overlap_state_cache, {})
+
+
+class OverlapVanillaIndexTests(unittest.TestCase):
+    """_overlap_vanilla_index follows the vanilla the server parsed (#1184)."""
+
+    def test_a_stale_snapshot_keeps_the_vanilla_index_on_it(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "game", "common"))
+            with mock.patch.object(mss, "base_game_path", tmp), \
+                    mock.patch.dict(mss._overlap_vanilla_cache, clear=True):
+                for source, uses_game in (
+                    ({"kind": "vanilla_parsed", "freshness": {"fresh": False}}, False),
+                    ({"kind": "vanilla_parsed", "freshness": {"fresh": True}}, True),
+                    ({"kind": "game_files"}, True),
+                ):
+                    with self.subTest(source=source), \
+                            mock.patch.object(mss, "_vanilla_source", source):
+                        index = mss._overlap_vanilla_index()
+                        self.assertEqual(index.game_common is not None, uses_game)
+
+
 class PmEmploymentEndpointTests(unittest.TestCase):
     """GET /pm-employment through do_GET (#990), on test_pm_employment_audit's
     fixture."""
@@ -2105,6 +2265,99 @@ class VariableUsageEndpointTests(unittest.TestCase):
         ):
             with self.subTest(path=path):
                 self.assertEqual(self.get(path)[0], status)
+
+
+class LocAccessorsEndpointTests(unittest.TestCase):
+    """GET /loc-accessors through do_GET (#1246), on test_loc_accessor_usage's
+    fixture."""
+
+    def setUp(self):
+        import test_loc_accessor_usage as tlau
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        tlau._write(tmp.name, "game/gui/panel.gui", 'text = "[PoliticalLobby.GetName]"\n')
+        self.loc = dict(tlau.LOC)
+        for target, name, value in (
+            (mss, "_VANILLA_LOC_CACHE", self.loc),
+            (mss, "_loc_accessor_cache", None),
+            (mss, "ms", None),
+            (mss, "base_game_path", tmp.name),
+        ):
+            patch = mock.patch.object(target, name, value)
+            patch.start()
+            self.addCleanup(patch.stop)
+        patch = mock.patch.object(mss.loc_accessor_usage, "load_catalog",
+                                  return_value=tlau.CATALOG)
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def get(self, path):
+        handler = _CapturingHandler(path)
+        handler.do_GET()
+        return handler.last
+
+    def test_type_lookup(self):
+        status, body = self.get("/loc-accessors/PoliticalLobby")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["type"], "political_lobby")
+        self.assertEqual(body["scope_accessor"], "SCOPE.sPoliticalLobby")
+        self.assertTrue(body["gui_scanned"])
+        names = {a["name"]: a for a in body["accessors"]}
+        self.assertEqual(names["GetName"]["contexts"], {"events": 2, "gui": 1, "ui": 1})
+        self.assertEqual(names["GetMembersDesc"]["contexts"], {"notification": 1})
+        self.assertEqual(self.get("/loc-accessors/political_lobby")[1]["type"], "political_lobby")
+
+    def test_context_min_uses_and_examples(self):
+        status, body = self.get("/loc-accessors/PoliticalLobby?context=notification")
+        self.assertEqual(status, 200)
+        self.assertEqual([a["name"] for a in body["accessors"]], ["GetMembersDesc"])
+        body = self.get("/loc-accessors/PoliticalLobby?min_uses=4")[1]
+        self.assertEqual([a["name"] for a in body["accessors"]], ["GetName"])
+        body = self.get("/loc-accessors/PoliticalLobby?examples=0")[1]
+        self.assertTrue(all(a["examples"] == [] for a in body["accessors"]))
+        body = self.get("/loc-accessors/PoliticalLobby?examples=1")[1]
+        self.assertTrue(all(len(a["examples"]) <= 1 for a in body["accessors"]))
+
+    def test_listing(self):
+        status, body = self.get("/loc-accessors")
+        self.assertEqual(status, 200)
+        self.assertIn("PoliticalLobby", [t["name"] for t in body["types"]])
+        self.assertIn("gui", body["contexts"])
+
+    def test_index_is_kept_until_vanilla_loc_is_replaced(self):
+        self.get("/loc-accessors/PoliticalLobby")
+        first = mss._loc_accessor_cache[1]
+        self.get("/loc-accessors/Country")
+        self.assertIs(mss._loc_accessor_cache[1], first)
+        # A mod-only reload bumps the call-index generation and keeps the loc.
+        with mock.patch.object(mss, "_call_index_generation", mss._call_index_generation + 1):
+            self.get("/loc-accessors/Country")
+        self.assertIs(mss._loc_accessor_cache[1], first)
+        # A full load replaces the vanilla loc object.
+        with mock.patch.object(mss, "_VANILLA_LOC_CACHE", dict(self.loc)):
+            self.get("/loc-accessors/Country")
+            self.assertIsNot(mss._loc_accessor_cache[1], first)
+
+    def test_unknown_type_is_404_with_suggestions(self):
+        status, body = self.get("/loc-accessors/PoliticalLobbi")
+        self.assertEqual(status, 404)
+        self.assertIn("PoliticalLobby", body["did_you_mean"])
+
+    def test_errors(self):
+        for path, status in (
+            ("/loc-accessors/PoliticalLobby/extra", 404),
+            ("/loc-accessors/PoliticalLobby?context=nonsense", 400),
+            ("/loc-accessors/PoliticalLobby?examples=x", 400),
+            ("/loc-accessors/PoliticalLobby?min_uses=x", 400),
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(self.get(path)[0], status)
+
+    def test_not_ready_before_the_first_load(self):
+        with mock.patch.object(mss, "_VANILLA_LOC_CACHE", None):
+            status, body = self.get("/loc-accessors/PoliticalLobby")
+        self.assertEqual(status, 503)
+        self.assertIn("Localization", body["error"])
 
 
 if __name__ == "__main__":

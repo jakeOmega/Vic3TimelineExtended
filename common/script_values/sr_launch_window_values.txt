@@ -34,6 +34,18 @@ sr_launch_approach_weight = {
 	}
 }
 
+# A colony fleet's drive (slices 2-3 design § 1), the best of four: 0 chemical,
+# 1 fusion (Fusion Power), 2 the fusion torch (Muon-Catalyzed Fusion Reactors),
+# 3 antimatter (Antimatter Production and an Antimatter Containment Facility).
+# It sets the transit (sr_transit_months_<body>); the torch and antimatter also
+# leave any month (sr_launch_has_fusion). Country scope.
+sr_drive_level = {
+	value = 0
+	if = { limit = { sr_launch_has_antimatter = yes } value = 3 }
+	else_if = { limit = { has_technology_researched = compact_fusion_reactors } value = 2 }
+	else_if = { limit = { has_technology_researched = fusion_power } value = 1 }
+}
+
 # k x m: the most months of progress an off-window launch may cost every later
 # colony, where m is the months it brings this one forward (the stage's next
 # free window among its unclaimed sites, sr_window_stage_wait).
@@ -47,6 +59,20 @@ sr_launch_staged_whole_fleets = {
 	value = sr_progress_solar_colonization_value
 	divide = sr_solar_colonization_goal
 	floor = yes
+}
+
+# An old save's open Moon Base carried onto Solar System Colonization (lunar
+# colonization design § 10; sr_lunar_carry_moon_base): its progress plus what
+# is already banked, up to one lunar goal. Country scope, with
+# sr_progress_moon_base set.
+sr_lunar_carry_value = {
+	value = var:sr_progress_moon_base
+	if = {
+		limit = { has_variable = sr_launch_banked_progress }
+		add = var:sr_launch_banked_progress
+	}
+	max = sr_colonization_goal_stage_0
+	min = 0
 }
 
 # What the month's fleet costs: goal x (1 + the cheapest premium). Read only
@@ -75,7 +101,7 @@ sr_launch_staged_shown = {
 	if = {
 		limit = {
 			sr_solar_colonization_running = yes
-			NOT = { has_global_variable = sr_all_colonies_complete }
+			sr_any_site_unclaimed = yes
 			sr_progress_solar_colonization_value >= sr_solar_colonization_goal
 		}
 		value = 1
@@ -89,6 +115,18 @@ sr_window_disp_cache_month = {
 		limit = { has_global_variable = sr_window_cache_month }
 		value = global_var:sr_window_cache_month
 	}
+}
+
+# The colonization overview's Next Window cell (audit SPC-6): the months to the
+# stage's next free window (999 while no world of the stage is left), and 1
+# while windows apply at all (before Muon-Catalyzed Fusion Reactors).
+sr_window_disp_next = {
+	value = sr_window_stage_wait
+	max = 999
+}
+sr_window_disp_apply = {
+	value = 0
+	if = { limit = { sr_launch_windows_apply = yes } value = 1 }
 }
 
 # The months an off-window launch would bring this colony forward (m).

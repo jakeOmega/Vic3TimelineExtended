@@ -143,7 +143,13 @@ CONVENTIONS = (
                ("global_commons_enabled", "un_chamber_global_commons_rule_sgui"), False),
     Convention("asat", "un_agency_unoda", "un_asat_moratorium_modifier", "country",
                32, 41, 1411, "un_asat_refusal_modifier",
-               (), ("space_race_enabled", "un_chamber_space_race_rule_sgui"), False),
+               (), ("sr_space_race_on", "un_chamber_space_race_rule_sgui"), False),
+    # Solar colonization's fleets (docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
+    # § 13): raised by a colony's seizure or destruction (docket item 17), and
+    # Assembly business too, under the Space Race rule's Full Colonies.
+    Convention("colony_protection", "un_agency_copuos", "un_colony_protection_modifier", "country",
+               33, 42, 1421, "un_colony_protection_refusal_modifier",
+               (), ("sr_colonies_full_enabled", "un_chamber_colonies_full_rule_sgui"), True),
 )
 
 KEYS = tuple(c.key for c in CONVENTIONS)
@@ -624,8 +630,10 @@ class ChamberTests(unittest.TestCase):
                 self.assertIn(f"un_propose_{c.key}_possible = yes", body)
 
     def test_widget_has_one_row_per_convention(self):
+        # One in each of the list's two passes, "Ready to Table" and "No Case
+        # Now" (the 2026-10-27 audit, UN-7; test_un_chamber_propose_ops.py).
         ops = sorted(op for row_ops, _ in _widget_rows() for op in row_ops if _convention_op(op))
-        self.assertEqual(ops, sorted(c.op for c in CONVENTIONS))
+        self.assertEqual(ops, sorted(c.op for c in CONVENTIONS for _ in range(2)))
 
     def test_row_renderer_is_the_conventions_own(self):
         loc = _loc()
@@ -676,7 +684,12 @@ class RuleGateTests(unittest.TestCase):
         cls.rows = _widget_rows()
 
     def _rules(self, body):
-        return set(re.findall(r"has_game_rule\s*=\s*(\w+)", body))
+        # A rule read through its scripted gate counts as the rule: the Space
+        # Race rule has four settings, read only through sr_space_race_on and,
+        # for its Full Colonies setting, sr_colonies_full_enabled
+        # (common/scripted_triggers/sr_site_triggers.txt).
+        rules = set(re.findall(r"has_game_rule\s*=\s*(\w+)", body))
+        return rules | set(re.findall(r"\b(sr_space_race_on|sr_colonies_full_enabled)\s*=\s*yes", body))
 
     def test_the_gate_is_at_every_entrance(self):
         for c in CONVENTIONS:
@@ -691,13 +704,17 @@ class RuleGateTests(unittest.TestCase):
 
     def test_the_widget_row_hides_under_the_rule(self):
         for c in CONVENTIONS:
-            body = next(b for ops, b in self.rows if c.op in ops)
+            bodies = [b for ops, b in self.rows if c.op in ops]
             # The Reform II gate is not a rule gate (test_un_charter_business.py
-            # pins which rows carry it).
-            gates = set(re.findall(r"GetScriptedGui\('(\w+)'\)", body)) - {
-                "un_chamber_propose_row_sgui", "un_chamber_reform_ii_in_view_sgui"}
+            # pins which rows carry it), nor are the member gate and the two
+            # passes' sorting (test_un_chamber_propose_ops.py).
+            gates = [set(re.findall(r"GetScriptedGui\('(\w+)'\)", body)) - {
+                "un_chamber_propose_row_sgui", "un_chamber_reform_ii_in_view_sgui",
+                "un_chamber_propose_ready_sgui", "un_chamber_propose_shelved_sgui"} for body in bodies]
             with self.subTest(key=c.key):
-                self.assertEqual(gates, {c.rule[1]} if c.rule else set())
+                self.assertEqual(len(bodies), 2)
+                for gate in gates:
+                    self.assertEqual(gate, {c.rule[1]} if c.rule else set())
                 if c.rule:
                     shown = _sub_block(_block(self.sguis, c.rule[1]), "is_shown")
                     self.assertEqual(self._rules(shown), {c.rule[0]})
@@ -1000,7 +1017,7 @@ class LocTests(unittest.TestCase):
 # ---- Counts in comments and docs ------------------------------------------------------
 
 NUMBER_WORDS = ("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-                "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen")
+                "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen")
 
 
 class CountTests(unittest.TestCase):

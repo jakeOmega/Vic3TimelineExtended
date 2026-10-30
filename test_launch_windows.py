@@ -11,6 +11,9 @@ solver, and writes them as script. These tests hold:
   bodies where the physics puts it there (the rest are listed, § 5.3's claim
   is about the method, and the physics wins);
 - § 5.2a's Mars break-even table as the rule gives it with these premiums;
+- Nuclear Thermal Propulsion's curve (lunar colonization design § 9): the same
+  extra delta-v at 9 km/s, read per country through one reader that every
+  launch price reads;
 - the generated files: current, and, read back by a small interpreter of the
   script they use, equal to the computed windows for every month to END_DATE;
 - the gate's script: every colony site maps to its body, its draw trigger
@@ -138,6 +141,10 @@ class Interpreter:
                 acc = math.floor(acc + 1e-9)
             elif key == "round":
                 acc = round(acc)
+            elif key == "modulo":
+                # C++'s % keeps the dividend's sign; the generated phases keep it positive.
+                assert acc >= 0, "a negative dividend"
+                acc = acc % self.number(value, month)
             else:
                 raise AssertionError(f"unsupported script value step {key}")
         return acc
@@ -228,6 +235,42 @@ class PremiumCurveTest(unittest.TestCase):
             expected = round((math.exp(mars.extra_dv[off] / 3.7) - 1) * 100) / 100
             self.assertTrue(math.isclose(mars.premium[off], expected, rel_tol=1e-12))
 
+    def test_nuclear_thermal_premium_is_the_same_extra_delta_v_at_9_kms(self):
+        # Lunar colonization design § 9: (1 + p)^(3.7 / 9) - 1 of the chemical
+        # premium p. Computed from the extra delta-v itself, so rounded once.
+        self.assertEqual(glw.NTP_EXHAUST_VELOCITY_KMS, 9.0)
+        ratio = glw.EXHAUST_VELOCITY_KMS / glw.NTP_EXHAUST_VELOCITY_KMS
+        # Against the stored two-decimal p: half a hundredth for the NTP figure's
+        # rounding, plus p's half a hundredth carried through x^(3.7/9) (slope
+        # at most 3.7/9, since 1 + p >= 1).
+        stored_tolerance = 0.005 * (1 + ratio) + 1e-9
+        for p in plans()[0]:
+            self.assertEqual(sorted(p.premium_ntp), sorted(p.premium))
+            for off, chem in p.premium.items():
+                ntp = p.premium_ntp[off]
+                with self.subTest(body=p.body.key, offset=off):
+                    if -1 <= off <= 1:
+                        self.assertEqual(ntp, 0.0)
+                        continue
+                    exact = math.exp(p.extra_dv[off] / 9.0) - 1
+                    self.assertTrue(math.isclose(ntp, round(exact * 100) / 100, rel_tol=1e-12))
+                    unrounded_chem = math.exp(p.extra_dv[off] / 3.7) - 1
+                    self.assertTrue(math.isclose(exact, (1 + unrounded_chem) ** ratio - 1, rel_tol=1e-9))
+                    self.assertLessEqual(abs(ntp - ((1 + chem) ** ratio - 1)), stored_tolerance)
+                    self.assertGreater(ntp, 0.0)
+                    self.assertLess(ntp, chem)
+                    lo, hi = p.spread_ntp[off]
+                    self.assertLessEqual(lo, hi)
+
+    def test_the_guide_s_mars_figures(self):
+        # 16-space.md: about +40% the month after a window closes and +150% the
+        # month after that; about +15% and +45% with Nuclear Thermal Propulsion.
+        mars = plan("mars")
+        self.assertTrue(0.35 <= mars.premium[2] <= 0.45, mars.premium[2])
+        self.assertTrue(1.4 <= mars.premium[3] <= 1.6, mars.premium[3])
+        self.assertTrue(0.13 <= mars.premium_ntp[2] <= 0.17, mars.premium_ntp[2])
+        self.assertTrue(0.43 <= mars.premium_ntp[3] <= 0.48, mars.premium_ntp[3])
+
     def test_mars_cheapest_transfer_matches_the_spec(self):
         # § 5.2a: "The minimum for Mars comes out at 4.45 km/s".
         lo, hi = plan("mars").best_dv
@@ -300,7 +343,7 @@ class GeneratedFilesTest(unittest.TestCase):
                          f"stale: {result['changed_files']}; run python3 scripts/generators/gen_launch_windows.py")
 
     def test_one_bom_and_the_auto_generated_header(self):
-        for rel in (glw.TRIGGERS_OUT, glw.VALUES_OUT):
+        for rel in (glw.TRIGGERS_OUT, glw.VALUES_OUT, glw.LEGS_OUT):
             data = (glw.ROOT / rel).read_bytes()
             with self.subTest(file=str(rel)):
                 self.assertTrue(data.startswith(b"\xef\xbb\xbf# AUTO-GENERATED"))
@@ -331,6 +374,8 @@ class GeneratedFilesTest(unittest.TestCase):
                     self.assertEqual(offset, month - nearest, month)
                     premium = interp.value(f"sr_launch_premium_{key}", month)
                     self.assertAlmostEqual(premium, p.premium[month - nearest], places=6, msg=month)
+                    premium_ntp = interp.value(f"sr_launch_premium_ntp_{key}", month)
+                    self.assertAlmostEqual(premium_ntp, p.premium_ntp[month - nearest], places=6, msg=month)
 
     def test_generated_values_stay_inside_the_script_number_range(self):
         values = _raw("common", "script_values", "sr_launch_windows_generated.txt")
@@ -366,7 +411,9 @@ class GateScriptTest(unittest.TestCase):
     def setUpClass(cls):
         cls.effects = _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))
         cls.windows = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
-        cls.colony = _block(cls.effects, "sr_establish_colony_effect")
+        # The draw is generated from the site table (gen_solar_sites.py).
+        cls.colony = _block(_strip(_raw("common", "scripted_effects", "sr_sites_generated.txt")),
+                            "sr_establish_colony_effect")
         cls.site_body = {site: b.key for b in glw.BODIES for site in b.sites}
 
     def test_every_colony_site_is_drawn_through_its_window_body(self):
@@ -374,12 +421,15 @@ class GateScriptTest(unittest.TestCase):
                               r"trigger_event", self.colony, re.S)
         sites = {site for _, site, _ in branches}
         self.assertEqual(sites, set(self.site_body) | set(glw.UNGATED_SITES))
-        self.assertEqual(len(branches), 34)
+        # Each stage also draws the released worlds of the stages before it
+        # (colony record design § 6): a world is listed once per stage from its own.
+        stage_of = {site: b.stage for b in glw.BODIES for site in b.sites} | dict(glw.UNGATED_SITES)
+        self.assertEqual(len(branches), sum(6 - stage_of[site] for site in sites))
         for trigger, site, effect in branches:
             with self.subTest(site=site):
                 self.assertIn(f"NOT = {{ has_global_variable = sr_colony_{site} }}", trigger)
                 if site in glw.UNGATED_SITES:
-                    self.assertIn("sr_launch_mercury_departs = yes", trigger)
+                    self.assertIn("sr_launch_ungated_departs = yes", trigger)
                     self.assertNotIn("sr_launch_window_gate_check", effect)
                 else:
                     body = self.site_body[site]
@@ -387,13 +437,14 @@ class GateScriptTest(unittest.TestCase):
                     self.assertEqual(re.findall(r"sr_launch_window_gate_check = \{ BODY = (\w+) \}", effect), [body])
 
     def test_each_stage_holds_its_bodies_sites(self):
-        draws = self.colony[:self.colony.index("change_variable = { name = sr_colony_count")]
+        draws = self.colony[:self.colony.index("local_var:sr_colonies_claimed_before < sr_total_global_colonies")]
         stages = re.split(r"global_var:sr_colonization_stage = (\d)", draws)
         for i in range(1, len(stages), 2):
             stage, body = int(stages[i]), stages[i + 1]
             drawn = set(re.findall(r"name = sr_colony_(\w+) value = yes", body))
-            expected = {s for b in glw.BODIES if b.stage == stage for s in b.sites}
-            expected |= {s for s, st in glw.UNGATED_SITES.items() if st == stage}
+            # Its own worlds, and the released worlds of the stages before it.
+            expected = {s for b in glw.BODIES if b.stage <= stage for s in b.sites}
+            expected |= {s for s, st in glw.UNGATED_SITES.items() if st <= stage}
             with self.subTest(stage=stage):
                 self.assertEqual(drawn, expected)
 
@@ -416,28 +467,27 @@ class GateScriptTest(unittest.TestCase):
         self.assertLess(month.index("value = sr_launch_fleet_cost"), month.index("sr_establish_colony_effect = yes"))
         self.assertIn("local_var:sr_launch_claimed_before < sr_total_global_colonies", month)
 
-    def test_setback_cap_applies_to_solar_colonization_only(self):
-        for name, mult in (("sr_apply_ambitious_failure_progress_loss", "0.75"),
-                           ("sr_apply_safe_setback_progress_loss", "0.85")):
-            body = _block(self.effects, name)
-            with self.subTest(helper=name):
-                self.assertIn(f"sr_apply_solar_colonization_progress_loss = {{ MULT = {mult} }}", body)
-                self.assertEqual(len(re.findall(rf"sr_apply_progress_loss_base = \{{ MILESTONE = \w+\s+MULT = {mult} \}}",
-                                                body)), 7)
-        self.assertNotIn("MILESTONE = solar_colonization MULT", self.effects)
+    def test_setbacks_reach_solar_colonization_through_the_capped_loss(self):
+        body = _block(self.effects, "sr_setback_lose_months")
+        self.assertIn("sr_setback_lose_months_base = { MILESTONE = solar_colonization MONTHS = $MONTHS$ }", body)
+        base = _block(self.effects, "sr_setback_lose_months_base")
+        self.assertIn("sr_lose_progress_months = { MILESTONE = $MILESTONE$ MONTHS = $MONTHS$ }", base)
+        self.assertNotIn("sr_apply_solar_colonization_progress_loss", self.windows)
 
-    def test_setback_cap_takes_a_share_of_one_goal_at_most(self):
-        # The helper's arithmetic, step by step, against loss = share x min(P, G).
-        body = _block(self.windows, "sr_apply_solar_colonization_progress_loss")
-        self.assertIn("var:sr_progress_solar_colonization > sr_solar_colonization_goal", body)
-        steps = re.findall(r"(subtract|add|multiply) = (\S+) \}", body)
-        self.assertEqual(steps, [("multiply", "$MULT$"), ("subtract", "sr_solar_colonization_goal"),
-                                 ("add", "local_var:sr_setback_readied"), ("multiply", "$MULT$")])
-        for progress in (100.0, 400.0, 1000.0):
-            for mult in (0.75, 0.85):
-                goal = 400.0
-                after = progress - goal + goal * mult if progress > goal else progress * mult
-                self.assertAlmostEqual(progress - after, (1 - mult) * min(progress, goal))
+    def test_a_loss_takes_one_goal_at_most(self):
+        # loss = min(months x pace, goal, progress): staged fleets past one goal
+        # are never touched, and progress never goes below zero.
+        body = _block(self.effects, "sr_lose_progress_months")
+        steps = re.findall(r"(value|multiply|max) = (\S+)", body)
+        self.assertEqual(steps, [("value", "sr_event_pace_value"), ("multiply", "$MONTHS$"),
+                                 ("max", "sr_$MILESTONE$_goal"), ("max", "var:sr_progress_$MILESTONE$")])
+        goal = 400.0
+        for progress in (10.0, 400.0, 1000.0):
+            for loss_wanted in (30.0, 500.0):
+                loss = min(loss_wanted, goal, progress)
+                after = progress - loss
+                self.assertGreaterEqual(after, 0)
+                self.assertGreaterEqual(after, progress - goal)
 
     def test_global_variable_reads_are_guarded(self):
         values = _strip(_raw("common", "script_values", "sr_launch_window_values.txt"))
@@ -462,6 +512,109 @@ class GateScriptTest(unittest.TestCase):
                     self.assertIn(f"sr_window_{kind}_{b.key}", keys)
 
 
+class NuclearThermalTest(unittest.TestCase):
+    """Nuclear Thermal Propulsion (lunar colonization design § 9): a second premium curve per window body,
+    cached beside the chemical one by the global pulse, and one country reader,
+    sr_window_premium_country_<body>, that picks it by the technology. Every launch price and the Next Windows
+    line read that reader; the global cache refresh reads only the any-scope curves."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values_raw = _raw("common", "script_values", "sr_launch_windows_generated.txt")
+        cls.values = _strip(cls.values_raw)
+        cls.windows = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
+        cls.triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+
+    def test_the_technology_picks_the_curve(self):
+        # Act on the technology's marker, not the technology
+        # (scripting_best_practices.md, "Technology markers").
+        self.assertEqual(_block(self.triggers, "sr_launch_has_ntp").split(),
+                         ["modifier:country_sr_nuclear_thermal_launches_bool", "=", "yes"])
+        era_11 = _strip(_raw("common", "technology", "technologies", "era_11.txt"))
+        tech = _block(era_11, "nuclear_thermal_propulsion")
+        self.assertIn("country_sr_nuclear_thermal_launches_bool = yes", tech)
+        # Cheaper, not possible: off-window launches still need depots.
+        for name in ("sr_launch_departs_paid", "sr_launch_target_departs_paid"):
+            self.assertIn("sr_launch_has_depots = yes", _block(self.triggers, name))
+            self.assertNotIn("sr_launch_has_ntp", _block(self.triggers, name))
+
+    def test_the_cache_holds_both_curves_and_reads_no_country(self):
+        cache = _block(self.windows, "sr_launch_window_cache_body")
+        self.assertIn("set_global_variable = { name = sr_window_cost_$BODY$ value = sr_launch_premium_$BODY$ }", cache)
+        self.assertIn("set_global_variable = { name = sr_window_cost_ntp_$BODY$ value = sr_launch_premium_ntp_$BODY$ }",
+                      cache)
+        refresh = _block(self.windows, "sr_launch_windows_refresh_cache")
+        for block in (cache, refresh):
+            self.assertNotIn("sr_window_premium_country_", block)
+            self.assertNotIn("sr_launch_has_ntp", block)
+
+    def test_each_body_s_readers(self):
+        for b in glw.BODIES:
+            k = b.key
+            with self.subTest(body=k):
+                cached = _block(self.values, f"sr_window_premium_now_ntp_{k}").split()
+                self.assertEqual(" ".join(cached), (
+                    f"value = 0 if = {{ limit = {{ has_global_variable = sr_window_cost_ntp_{k} }} "
+                    f"value = global_var:sr_window_cost_ntp_{k} }} else = {{ value = sr_launch_premium_ntp_{k} }}"))
+                pick = " ".join(_block(self.values, f"sr_window_premium_country_{k}").split())
+                self.assertEqual(pick, (f"value = sr_window_premium_now_{k} if = {{ limit = {{ sr_launch_has_ntp = yes }} "
+                                        f"value = sr_window_premium_now_ntp_{k} }}"))
+                for reader in (f"sr_launch_cost_{k}", f"sr_launch_target_cost_{k}", f"sr_launch_months_cost_{k}"):
+                    body = _block(self.values, reader)
+                    self.assertIn(f"sr_window_premium_country_{k}", body, reader)
+                    self.assertNotIn("sr_window_premium_now_", body, reader)
+
+    def test_the_country_reader_s_branches(self):
+        values = parse_file(self.values_raw)
+        for b in glw.BODIES:
+            k = b.key
+            values[f"sr_window_premium_now_{k}"] = [("value", "=", "0.43")]
+            values[f"sr_window_premium_now_ntp_{k}"] = [("value", "=", "0.16")]
+        for has_ntp, expected in ((True, 0.16), (False, 0.43)):
+            op = ">=" if has_ntp else "<"
+            interp = Interpreter(values, {"sr_launch_has_ntp": [("te_history_month_index", op, "0")]})
+            for b in glw.BODIES:
+                with self.subTest(body=b.key, has_ntp=has_ntp):
+                    self.assertAlmostEqual(interp.value(f"sr_window_premium_country_{b.key}", 24000), expected)
+
+    def test_only_the_country_reader_reads_the_chemical_cache(self):
+        # A new launch price must read sr_window_premium_country_<body>, or an NTP
+        # country pays the chemical curve there.
+        readers = []
+        for folder in ("common", "gui", "events", "localization"):
+            for dirpath, _, files in os.walk(os.path.join(REPO, folder)):
+                for name in files:
+                    if name.endswith((".txt", ".gui", ".yml")):
+                        text = _raw(os.path.relpath(os.path.join(dirpath, name), REPO))
+                        for m in re.finditer(r"sr_window_premium_now_(?!ntp_)(\w+)", _strip(text) if name.endswith(".txt") else text):
+                            readers.append((name, m.group(0)))
+        expected = [("sr_launch_windows_generated.txt", f"sr_window_premium_now_{b.key}") for b in glw.BODIES]
+        # Each body: its definition, and the country reader's read.
+        self.assertEqual(sorted(readers), sorted(expected * 2))
+
+    def test_the_next_windows_line_shows_the_country_s_premium(self):
+        loc = _raw("localization", "english", "te_miscellaneous_l_english.yml")
+        for b in glw.BODIES:
+            line = re.search(rf"(?m)^ sr_window_line_paid_{b.key}:0 \"(.*)\"$", loc).group(1)
+            with self.subTest(body=b.key):
+                self.assertIn(f"ScriptValue('sr_window_premium_country_{b.key}')", line)
+
+    def test_the_debug_copy_reads_this_country_s_curve(self):
+        copy = _block(self.windows, "sr_window_log_copy")
+        self.assertIn("name = sr_window_log_premium_cached_now value = sr_window_premium_country_$BODY$", copy)
+        self.assertIn("limit = { sr_launch_has_ntp = yes }", copy)
+        self.assertIn("name = sr_window_log_premium_date_now value = sr_launch_premium_ntp_$BODY$", copy)
+        self.assertIn("name = sr_window_log_premium_date_now value = sr_launch_premium_$BODY$", copy)
+
+    def test_bodies_with_no_window_get_no_curve(self):
+        # Mercury, and the Moon when it lands: transit only, never gated.
+        for b in glw.TRANSIT_ONLY:
+            with self.subTest(body=b.key):
+                for name in (f"sr_launch_premium_{b.key}", f"sr_launch_premium_ntp_{b.key}",
+                             f"sr_window_premium_now_ntp_{b.key}", f"sr_window_premium_country_{b.key}"):
+                    self.assertIsNone(re.search(r"(?m)^" + re.escape(name) + r"\s*=", self.values), name)
+
+
 class NumberRangeTest(unittest.TestCase):
     """The script's numbers are fixed-point, about +-2.1 million."""
 
@@ -473,6 +626,59 @@ class NumberRangeTest(unittest.TestCase):
         self.assertLess((1 + never) * highest_goal, 2_000_000)  # sr_launch_fleet_cost
         self.assertLess(highest_goal * glw.PREMIUM_CAP / 0.5, 2_000_000)  # sr_launch_months_cost_<body>, pace floor
         self.assertLess(never * 2, 2_000_000)  # sr_launch_months_allowed
+
+
+class MoonTest(unittest.TestCase):
+    """The Moon (lunar colonization design § 3.3): no window, no transit, and
+    Shackleton's Propellant Depot standing in for Asteroid Mining's depots."""
+
+    def test_the_ungated_worlds_are_the_table_s_bodyless_worlds(self):
+        sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+        import gen_solar_sites as gss
+        self.assertEqual(glw.UNGATED_SITES, {s.key: s.stage for s in gss.SITES if s.body is None})
+        self.assertEqual([b.key for b in glw.TRANSIT_ONLY], ["mercury", "moon"])
+        moon = next(t for t in glw.plan_transit_all() if t.body.key == "moon")
+        self.assertEqual(set(moon.transit.values()), {0})
+        values = _strip(_raw("common", "script_values", "sr_launch_windows_generated.txt"))
+        for drive in glw.DRIVES:
+            self.assertIn(f"sr_transit_{drive.key}_moon = {{ value = 0 }}", values)
+        for name in ("sr_launch_best_cost", "sr_window_stage_wait"):
+            with self.subTest(value=name):
+                self.assertIn("if = { limit = { sr_window_moon_in_play = yes } max = 0 }", _block(values, name))
+        triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_windows_generated.txt"))
+        in_play = _block(triggers, "sr_window_moon_in_play")
+        self.assertEqual(re.findall(r"NOT = \{ has_global_variable = sr_colony_(\w+) \}", in_play),
+                         [s.key for s in gss.LUNAR])
+        # Mercury's old trigger is gone everywhere: the Moon departs by the same one.
+        for top in ("common", "events"):
+            for root, _, files in os.walk(os.path.join(REPO, top)):
+                for name in files:
+                    if name.endswith(".txt"):
+                        with self.subTest(file=name):
+                            self.assertNotIn("sr_launch_mercury_departs", _raw(root, name))
+        hand = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+        self.assertEqual(_block(hand, "sr_launch_ungated_departs").split(), ["sr_launch_best_cost", "<=", "0"])
+
+    def test_shackleton_s_depot_is_a_propellant_depot(self):
+        hand = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+        depots = _block(hand, "sr_launch_has_depots")
+        self.assertIn("has_technology_researched = asteroid_mining", depots)
+        self.assertIn("modifier:country_sr_propellant_depots_bool = yes", depots)
+        record = _block(hand, "sr_depots_by_record")
+        for line in ("global_var:sr_site_holder_shackleton ?= this", "sr_site_lvl_a_value_shackleton >= 1",
+                     "NOT = { has_global_variable = sr_site_blockaded_shackleton }",
+                     "NOT = { has_global_variable = sr_site_occupier_shackleton }"):
+            self.assertIn(line, record)
+        types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
+        self.assertIn("boolean = yes", _block(types, "country_sr_propellant_depots_bool"))
+        modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
+        self.assertIn("country_sr_propellant_depots_bool = yes", _block(modifiers, "sr_colony_shackleton_depot"))
+        # The self-check compares the boolean with the record each month (two strikes for BROKEN).
+        effects = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
+        self.assertIn("sr_depots_self_check = yes", _block(effects, "sr_launch_month"))
+        check = _block(effects, "sr_depots_self_check")
+        self.assertIn("sr_depots_by_record = yes", check)
+        self.assertIn("sr_depots_mismatch_months", check)
 
 
 class DebugLineTest(unittest.TestCase):
@@ -492,7 +698,7 @@ class DebugLineTest(unittest.TestCase):
         effects = _raw(*self.FILES[0])
         gate = _block(_strip(effects), "sr_launch_window_gate_check")
         self.assertEqual(gate.count("sr_window_log_copy = { BODY = $BODY$ }"), 3)
-        lines = re.findall(r'debug_log = "(TE_SELF_CHECK [^"]*)"', effects)
+        lines = re.findall(r'debug_log = "(TE_SELF_CHECK \w+ window_gate[^"]*)"', effects)
         self.assertEqual(len(lines), 3)
         for line in lines:
             self.assertIn(f"({glw.BODY_CODE_LEGEND})", line)
@@ -514,6 +720,264 @@ class DebugLineTest(unittest.TestCase):
             for name in re.findall(r"GetGlobalVariable\('(sr_window_log_\w+_now)'\)", _raw(*parts)):
                 with self.subTest(file=parts[-1], name=name):
                     self.assertIn(name, copied)
+
+
+class TransitTest(unittest.TestCase):
+    """Transit times by drive (solar colonization slices 2-3 design § 2): the chemical era's Hohmann times,
+    fusion faster with windows still mattering, the torch months to the outer planets; and the script
+    reads every table back for every month."""
+
+    # The scope's minimum-energy times (§ 5.3), in months: "about 4 months to Mercury, 5 to Venus, 8 to 9
+    # to Mars, 15 to Ceres, 2.7 years to Jupiter, 6 to Saturn, 16 to Uranus, 31 to Neptune and 45 to Pluto".
+    # Pluto is past its mean distance for most of the span, so its median transfer runs longer.
+    CHEMICAL = {"mercury": (3, 5), "venus": (4, 6), "mars": (8, 10), "ceres": (14, 17), "jupiter": (30, 36),
+                "saturn": (68, 78), "uranus": (180, 200), "neptune": (355, 380), "kuiper": (480, 660)}
+
+    def test_chemical_is_the_scope_s_hohmann_times(self):
+        chemical = {p.body.key: p.transit["chemical"][0] for p in plans()[0]}
+        chemical.update({t.body.key: t.transit["chemical"] for t in glw.plan_transit_all()})
+        for key, (lo, hi) in self.CHEMICAL.items():
+            with self.subTest(body=key):
+                self.assertGreaterEqual(chemical[key], lo)
+                self.assertLessEqual(chemical[key], hi)
+        for p in plans()[0]:
+            self.assertEqual(set(p.transit["chemical"].values()), {glw.months_of(p.hohmann_days)}, p.body.key)
+
+    def test_a_better_drive_is_never_slower_and_each_is_at_least_a_month(self):
+        keys = [d.key for d in glw.DRIVES]
+        for p in plans()[0]:
+            for off in p.transit["chemical"]:
+                months = [p.transit[k][off] for k in keys]
+                with self.subTest(body=p.body.key, offset=off):
+                    self.assertEqual(months, sorted(months, reverse=True))
+                    self.assertGreaterEqual(min(months), 1)
+        for t in glw.plan_transit_all():
+            months = [t.transit[k] for k in keys]
+            self.assertEqual(months, sorted(months, reverse=True))
+
+    def test_fusion_is_well_under_hohmann_in_a_window_and_the_torch_takes_months(self):
+        for p in plans()[0]:
+            with self.subTest(body=p.body.key):
+                window = [p.transit["fusion"][o] for o in (-1, 0, 1)]
+                self.assertLess(max(window), p.transit["chemical"][0])
+                if p.body.key in ("jupiter", "saturn", "uranus", "neptune", "kuiper"):
+                    self.assertLess(max(window), p.transit["chemical"][0] * 0.6)
+                self.assertLessEqual(max(p.transit["torch"].values()), 14)
+                self.assertLessEqual(max(p.transit["antimatter"].values()), 5)
+        # Windows still matter for fusion to the far worlds: off-window is slower.
+        for key in ("saturn", "uranus", "neptune"):
+            p = plan(key)
+            far = max(p.transit["fusion"][o] for o in p.transit["fusion"] if abs(o) >= 4)
+            self.assertGreater(far, 2 * p.transit["fusion"][0], key)
+
+    def test_the_script_reads_back_every_transit_table_every_month(self):
+        interp = interpreter()
+        _, first, last = plans()
+        for p in plans()[0]:
+            key = p.body.key
+            optima = [w.optimum_month for w in p.windows]
+            with self.subTest(body=key):
+                self.assertEqual(interp.value(f"sr_transit_chemical_{key}", first), p.transit["chemical"][0])
+                for month in range(first, last + 1, 7):
+                    nxt = next(o for o in optima if o + 1 >= month)
+                    prev = max((o for o in optima if o < nxt), default=None)
+                    nearest = prev if prev is not None and month - prev <= nxt - month else nxt
+                    for drive in glw.DRIVES[1:]:
+                        self.assertEqual(interp.value(f"sr_transit_{drive.key}_{key}", month),
+                                         p.transit[drive.key][month - nearest], (drive.key, month))
+        for t in glw.plan_transit_all():
+            for drive in glw.DRIVES:
+                self.assertEqual(interp.value(f"sr_transit_{drive.key}_{t.body.key}", first), t.transit[drive.key])
+
+    def test_the_cache_holds_each_drive_and_the_reader_picks_by_drive_level(self):
+        windows = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
+        cache = _block(windows, "sr_launch_window_cache_body")
+        for drive in glw.DRIVES[1:]:
+            self.assertIn(f"set_global_variable = {{ name = sr_window_transit_{drive.key}_$BODY$ "
+                          f"value = sr_transit_{drive.key}_$BODY$ }}", cache)
+        values = _strip(_raw("common", "script_values", "sr_launch_windows_generated.txt"))
+        for b in list(glw.BODIES) + list(glw.TRANSIT_ONLY):
+            reader = _block(values, f"sr_transit_months_{b.key}")
+            with self.subTest(body=b.key):
+                self.assertIn(f"value = sr_transit_chemical_{b.key}", reader)
+                self.assertEqual(re.findall(r"sr_drive_level >= (\d)", reader), ["3", "2", "1"])
+        level = _block(_strip(_raw("common", "script_values", "sr_launch_window_values.txt")), "sr_drive_level")
+        for tech in ("compact_fusion_reactors", "fusion_power"):
+            self.assertIn(f"has_technology_researched = {tech}", level)
+        self.assertIn("sr_launch_has_antimatter = yes", level)
+        triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+        self.assertIn("sr_launch_has_antimatter = yes", _block(triggers, "sr_launch_has_fusion"))
+        self.assertIn("building_antimatter_facility", _block(triggers, "sr_launch_has_antimatter"))
+
+    def test_a_targeted_departure_weighs_its_own_body_s_wait(self):
+        triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+        paid = _block(triggers, "sr_launch_target_departs_paid")
+        self.assertIn("sr_launch_months_cost_$BODY$ <= sr_launch_target_months_allowed_$BODY$", paid)
+        values = _strip(_raw("common", "script_values", "sr_launch_windows_generated.txt"))
+        for b in glw.BODIES:
+            allowed = _block(values, f"sr_launch_target_months_allowed_{b.key}")
+            self.assertIn(f"value = sr_window_wait_months_{b.key}", allowed)
+            cost = _block(values, f"sr_launch_target_cost_{b.key}")
+            self.assertIn(f"sr_launch_target_departs_paid = {{ BODY = {b.key} }}", cost)
+
+
+_LEGS = None
+
+
+def legs():
+    global _LEGS
+    if _LEGS is None:
+        _LEGS = glw.plan_legs()
+    return _LEGS
+
+
+def legs_interpreter():
+    values = parse_file(_raw("common", "script_values", "sr_launch_windows_generated.txt"))
+    values.update(parse_file(_raw("common", "script_values", "sr_fleet_legs_generated.txt")))
+    triggers = parse_file(_raw("common", "scripted_triggers", "sr_launch_windows_generated.txt"))
+    return Interpreter(values, triggers)
+
+
+class FleetLegsTest(unittest.TestCase):
+    """The fleets' legs between the nine locations (solar colonization slice 6 design § 1.2): every
+    ordered pair and drive has its readers; a better drive is never slower; Earth's outbound months are
+    the colony fleets' transit; the script's mean-cycle phase is the generator's for every month."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _strip(_raw("common", "script_values", "sr_fleet_legs_generated.txt"))
+        cls.names = set(re.findall(r"(?m)^(sr_leg_\w+) = \{", cls.text))
+
+    def test_nine_locations_and_every_ordered_pair_by_kind(self):
+        self.assertEqual([loc.key for loc in glw.LOCATIONS],
+                         ["earth", "inner", "mars", "asteroids", "jupiter", "saturn", "uranus", "neptune", "kuiper"])
+        self.assertEqual([loc.code for loc in glw.LOCATIONS], list(range(1, 10)))
+        self.assertEqual({loc.key: loc.body for loc in glw.LOCATIONS}["inner"], "venus")
+        self.assertEqual({loc.key: loc.body for loc in glw.LOCATIONS}["asteroids"], "ceres")
+        kinds = [k for _, _, k in glw.LEGS]
+        self.assertEqual(len(glw.LEGS), 72)
+        self.assertEqual(kinds.count("exact"), 8)
+        self.assertEqual(kinds.count("cycle"), 8 + 12)  # every return, and the inner four's 12 ordered pairs
+        self.assertEqual(kinds.count("fixed"), 44)
+
+    def test_every_ordered_pair_and_drive_has_both_readers(self):
+        for a, b, _ in glw.LEGS:
+            for drive in glw.DRIVES:
+                for name in ("months", "dv", "months_rapid", "dv_rapid"):
+                    stem, rapid = (name.split("_") + [""])[:2]
+                    reader = f"sr_leg_{stem}_{'rapid_' if rapid else ''}{drive.key}_{a}_{b}"
+                    with self.subTest(reader=reader):
+                        self.assertIn(reader, self.names)
+
+    def test_a_better_drive_is_never_slower(self):
+        keys = [d.key for d in glw.DRIVES]
+        for p in legs():
+            for off in p.months["chemical"]:
+                months = [p.months[k][off] for k in keys]
+                with self.subTest(leg=(p.a, p.b), offset=off):
+                    self.assertEqual(months, sorted(months, reverse=True))
+                    self.assertGreaterEqual(min(months), 1)
+
+    def test_earth_s_outbound_months_are_the_colony_fleets_transit(self):
+        bodies = {p.body.key: p for p in plans()[0]}
+        for p in legs():
+            if p.kind != "exact":
+                continue
+            body = glw.LOCATION[p.b].body
+            for drive in glw.DRIVES:
+                with self.subTest(leg=p.b, drive=drive.key):
+                    self.assertEqual(p.months[drive.key], bodies[body].transit[drive.key])
+                    self.assertEqual(_block(self.text, f"sr_leg_months_{drive.key}_earth_{p.b}").strip(),
+                                     f"value = sr_transit_{drive.key}_{body}")
+                    if len({glw._dv_text(drive, v) for v in p.dv[drive.key].values()}) > 1:
+                        self.assertIn(f"sr_launch_offset_{body}",
+                                      _block(self.text, f"sr_leg_dv_{drive.key}_earth_{p.b}"))
+
+    def test_the_phase_is_integer_arithmetic_on_a_positive_dividend(self):
+        game_start = glw.month_index(1836, 1)
+        _, _, last = plans()
+        for p in legs():
+            if p.kind != "cycle":
+                continue
+            with self.subTest(leg=(p.a, p.b)):
+                self.assertGreaterEqual(100 * (game_start - glw.LEG_BASE_MONTH) + p.epoch, 0)
+                self.assertLess(100 * (last - glw.LEG_BASE_MONTH) + p.epoch, 2_000_000)
+                self.assertTrue(0 <= p.epoch < p.cycle)
+                for phase in range(p.cycle):
+                    folded = glw.fold_phase(phase, p.cycle)
+                    self.assertTrue(-p.cycle / 2 <= folded < p.cycle / 2)
+
+    def test_the_script_reads_back_every_leg_every_month(self):
+        interp = legs_interpreter()
+        _, first, last = plans()
+        bodies = {p.body.key: p for p in plans()[0]}
+        for p in legs():
+            with self.subTest(leg=(p.a, p.b)):
+                if p.kind == "fixed":
+                    for drive in glw.DRIVES:
+                        self.assertEqual(interp.value(f"sr_leg_months_{drive.key}_{p.a}_{p.b}", first),
+                                         p.months[drive.key][0])
+                    continue
+                for month in range(first, last + 1, 1 if p.kind == "cycle" else 5):
+                    if p.kind == "cycle":
+                        phase = interp.value(f"sr_leg_phase_{p.a}_{p.b}", month)
+                        self.assertEqual(phase, glw.leg_phase(month, p.epoch, p.cycle), month)
+                        off = glw.leg_offset(month, p.epoch, p.cycle)
+                    else:
+                        off = interp.value(f"sr_launch_offset_{glw.LOCATION[p.b].body}", month)
+                    for drive in glw.DRIVES:
+                        months = interp.value(f"sr_leg_months_{drive.key}_{p.a}_{p.b}", month)
+                        dv = interp.value(f"sr_leg_dv_{drive.key}_{p.a}_{p.b}", month)
+                        self.assertEqual(months, p.months[drive.key][off], (drive.key, month))
+                        self.assertAlmostEqual(dv, float(glw._dv_text(drive, p.dv[drive.key][off])), places=6,
+                                               msg=(drive.key, month))
+                    rapid = interp.value(f"sr_leg_months_rapid_antimatter_{p.a}_{p.b}", month)
+                    self.assertEqual(rapid, max(1, math.ceil(0.75 * p.months["antimatter"][off])), month)
+        self.assertTrue(bodies)
+
+    def test_rapid_response_flies_one_drive_ahead(self):
+        for a, b, _ in glw.LEGS:
+            for i, drive in enumerate(glw.DRIVES[:-1]):
+                ahead = glw.DRIVES[i + 1].key
+                with self.subTest(leg=(a, b), drive=drive.key):
+                    self.assertEqual(_block(self.text, f"sr_leg_months_rapid_{drive.key}_{a}_{b}").strip(),
+                                     f"value = sr_leg_months_{ahead}_{a}_{b}")
+                    self.assertEqual(_block(self.text, f"sr_leg_dv_rapid_{drive.key}_{a}_{b}").strip(),
+                                     f"value = sr_leg_dv_{ahead}_{a}_{b}")
+
+    def test_the_fixed_legs_medians_lie_in_their_sampled_range(self):
+        for p in legs():
+            if p.kind != "fixed":
+                continue
+            for drive in glw.DRIVES:
+                m_lo, m_hi, dv_lo, dv_hi = p.sampled_range[drive.key]
+                with self.subTest(leg=(p.a, p.b), drive=drive.key):
+                    self.assertLessEqual(p.months[drive.key][0], m_hi)
+                    self.assertGreaterEqual(p.dv[drive.key][0], dv_lo - 1e-9)
+                    self.assertLessEqual(p.dv[drive.key][0], dv_hi + 1e-9)
+                    if drive.key == "chemical":
+                        self.assertGreaterEqual(p.months[drive.key][0], m_lo)
+
+    def test_a_planet_s_capture_orbit_by_hand(self):
+        # Mars: GM 42,828.37 km^3/s^2, periapsis a tenth of its 3,389.5 km radius up, e = 0.9. At an
+        # excess speed of 2.65 km/s the hyperbola's periapsis speed is sqrt(2.65^2 + 2 GM / rp) = 5.4773
+        # and the capture orbit's sqrt(GM (1 + e) / rp) = 4.6722: 0.805 km/s either way.
+        self.assertAlmostEqual(float(glw.system_dv("mars", 2.65)), 0.805, places=3)
+        self.assertEqual(float(glw.system_dv("ceres", 2.65)), 2.65)  # a rendezvous
+        self.assertAlmostEqual(float(glw.parking_dv(2.94)), 3.6, places=1)  # Earth to Mars, the textbook 3.6
+
+    def test_the_chemical_drive_s_reach(self):
+        """Design § 2: 12 km/s is a round trip to Mars or Venus, one way to Jupiter."""
+        by = {(p.a, p.b): p for p in legs()}
+        trip = lambda a, b: by[(a, b)].dv["chemical"][0]  # noqa: E731
+        self.assertLess(trip("earth", "mars") + trip("mars", "earth"), 12)
+        self.assertLess(trip("earth", "inner") + trip("inner", "earth"), 12)
+        self.assertLess(trip("earth", "jupiter"), 12)
+        self.assertGreater(trip("earth", "jupiter") + trip("jupiter", "earth"), 12)
+
+    def test_the_file_stays_a_sane_size(self):
+        lines = _raw("common", "script_values", "sr_fleet_legs_generated.txt").count("\n")
+        self.assertLess(lines, 15_000)
 
 
 class StagedBankTest(unittest.TestCase):
@@ -545,7 +1009,9 @@ class StagedBankTest(unittest.TestCase):
     def test_banking_keeps_whole_fleets_and_adds_up(self):
         bank = _block(self.windows, "sr_launch_bank_staged_fleets")
         self.assertIn("sr_launch_staged_whole_fleets >= 1", bank)
-        self.assertIn("NOT = { has_global_variable = sr_all_colonies_complete }", bank)
+        # while a world is left: an old save keeps sr_all_colonies_complete with
+        # the Moon free, so the flag is history (lunar colonization 2b)
+        self.assertIn("sr_any_site_unclaimed = yes", bank)
         self.assertIn("change_variable = { name = sr_launch_banked_fleets add = sr_launch_staged_whole_fleets }", bank)
         self.assertNotIn("set_variable = { name = sr_launch_banked_fleets value = sr_", bank)
         values = _strip(_raw("common", "script_values", "sr_launch_window_values.txt"))

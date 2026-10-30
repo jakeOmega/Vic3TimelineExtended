@@ -1,0 +1,188 @@
+﻿# ============================================================================
+# WARS OF INDEPENDENCE — the tests
+#
+# Records, settle and endings: common/scripted_effects/decolonization_war_effects.txt.
+# Design: docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.
+# ============================================================================
+
+# Slot $N$ (1-3) of our war records is free. Scope: country (us).
+decol_iw_slot_free = {
+	NOT = { has_variable = decol_iw_rebels_$N$ }
+}
+
+# A slot is free for one more war. Scope: country (us).
+decol_iw_has_free_slot = {
+	OR = {
+		decol_iw_slot_free = { N = 1 }
+		decol_iw_slot_free = { N = 2 }
+		decol_iw_slot_free = { N = 3 }
+	}
+}
+
+# We hold a war record. Scope: country (us).
+decol_iw_any_record = {
+	OR = {
+		has_variable = decol_iw_rebels_1
+		has_variable = decol_iw_rebels_2
+		has_variable = decol_iw_rebels_3
+	}
+}
+
+# A territory that may declare independence from the event pool or Blood in
+# the Colonies: a colony with severely unaccepted people (a pop below
+# acceptance_status_2, the test .9 and .13 use), that has not declared, or been
+# reconquered, in the last ten years (decol_declared). Scope: state.
+decol_iw_can_declare = {
+	colonial_state_low_acceptance_colony = yes
+	NOT = { has_variable = decol_declared }
+}
+
+# A territory the collapse wave (decolonization_events.77) may take: what a
+# release could offer (is_decolonization_eligible_state), as the collapse took
+# before the wave. Scope: state.
+decol_wave_candidate = {
+	is_decolonization_eligible_state = yes
+}
+
+# Our distribution of power lets people vote: the regime crisis (.75) and the
+# AI's weights split on it. Scope: country.
+decol_iw_has_voting_law = {
+	OR = {
+		collective_governance_is_popular = yes
+		has_law = law_type:law_direct_democracy
+	}
+}
+
+# The stability bar is below 40 (Under Pressure or Crumbling): colonies
+# declare independence (the pool's .70, .13's Fight). `?=` because the entry
+# may have ended. Scope: country.
+decol_iw_bar_below_40 = {
+	je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" < 40 }
+}
+
+# The bar is in the Crumbling band, or the empire has collapsed and its
+# colonies are leaving in a wave: the AI's lean to concede. Scope: country.
+decol_iw_bar_crumbling = {
+	OR = {
+		je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" < 20 }
+		has_variable = decol_wave_left
+	}
+}
+
+# The war of record $N$ is under way. Scope: country (us).
+decol_iw_slot_at_war = {
+	has_variable = decol_iw_rebels_$N$
+	save_temporary_scope_as = decol_iw_at_war_metropole
+	var:decol_iw_rebels_$N$ ?= {
+		is_country_alive = yes
+		has_war_with = scope:decol_iw_at_war_metropole
+	}
+}
+
+# The play of record $N$ is running, not yet a war: the rebels'
+# dp_te_independence_war, or a first-build dp_te_colonial_war against them
+# (common/diplomatic_plays/te_colonial_war_play.txt). Scope: country (us).
+decol_iw_slot_has_play = {
+	has_variable = decol_iw_rebels_$N$
+	var:decol_iw_rebels_$N$ ?= {
+		save_temporary_scope_as = decol_iw_play_rebels
+		any_diplomatic_play = {
+			OR = {
+				AND = {
+					is_diplomatic_play_type = dp_te_independence_war
+					initiator ?= { this = scope:decol_iw_play_rebels }
+				}
+				AND = {
+					is_diplomatic_play_type = dp_te_colonial_war
+					target ?= { this = scope:decol_iw_play_rebels }
+				}
+			}
+		}
+	}
+}
+
+# The war of record $N$ has broken the home front: it has run
+# decol_iw_crisis_war_months, and our war support in it has been at the red
+# line for decol_iw_crisis_red_months running (the regime crisis, .75).
+# Scope: country (us).
+decol_iw_slot_in_crisis = {
+	has_variable = decol_iw_rebels_$N$
+	has_variable = decol_iw_months_$N$
+	var:decol_iw_months_$N$ >= decol_iw_crisis_war_months
+	has_variable = decol_iw_red_$N$
+	var:decol_iw_red_$N$ >= decol_iw_crisis_red_months
+}
+
+# The war of record $N$, a territory's rebels' (kind 1: talks drop our
+# goal), is under way and has no talks open: the panel's Open Talks.
+# Scope: country (us).
+decol_iw_slot_can_open_talks = {
+	decol_iw_slot_at_war = { N = $N$ }
+	var:decol_iw_kind_$N$ = 1
+	NOT = { has_variable = decol_iw_talks_$N$ }
+}
+
+# We are at war with a great power, in any war: the AI does not fight a
+# colony then. Scope: country (us).
+decol_iw_at_war_with_great_power = {
+	is_at_war = yes
+	any_enemy_in_war = {
+		country_rank >= rank_value:great_power
+	}
+}
+
+# ---- The world takes sides (phase 3) ----
+# A great power that may intervene for the rebels (.74's Intervene). The
+# owner's rule (2026-10-24): rarely, and never where it should not: not for
+# rebels fighting its ally, its bloc partner, its overlord or its subject, nor
+# one it has a truce with or is already at war beside, and not while it is at
+# war itself. scope:decol_iw_gp_metropole is us, scope:decol_iw_gp_rebels the
+# rebels. Scope: country (the great power).
+decol_iw_can_intervene = {
+	country_rank >= rank_value:great_power
+	is_subject = no
+	is_at_war = no
+	NOT = { this = scope:decol_iw_gp_metropole }
+	NOT = { this = scope:decol_iw_gp_rebels }
+	NOT = { has_war_with = scope:decol_iw_gp_rebels }
+	NOT = { is_in_war_together = scope:decol_iw_gp_metropole }
+	NOT = { has_truce_with = scope:decol_iw_gp_metropole }
+	NOT = { is_in_same_power_bloc = scope:decol_iw_gp_metropole }
+	NOT = { has_treaty_alliance_with = { TARGET = scope:decol_iw_gp_metropole } }
+	NOT = { has_treaty_defensive_pact_with = { TARGET = scope:decol_iw_gp_metropole } }
+	NOT = { is_subject_of = scope:decol_iw_gp_metropole }
+	save_temporary_scope_as = decol_iw_gp_self
+	NOT = { scope:decol_iw_gp_metropole = { is_subject_of = scope:decol_iw_gp_self } }
+	has_diplomatic_pact = { who = scope:decol_iw_gp_metropole type = rivalry }
+	army_power_projection > {
+		value = scope:decol_iw_gp_metropole.army_power_projection
+	}
+	scope:decol_iw_gp_rebels = {
+		is_country_alive = yes
+		has_war_with = scope:decol_iw_gp_metropole
+		NOT = { has_variable = decol_iw_conceded }
+	}
+}
+
+# The war whose rebels hold scope:ce_state as their capital can open talks
+# (the panel's Open Talks, colonial_empire_open_talks_sgui). Scope: country (us).
+decol_iw_state_can_open_talks = {
+	custom_tooltip = {
+		text = CE_WAR_TALKS_NOT_OPEN
+		OR = {
+			AND = {
+				var:decol_iw_state_1 ?= scope:ce_state
+				decol_iw_slot_can_open_talks = { N = 1 }
+			}
+			AND = {
+				var:decol_iw_state_2 ?= scope:ce_state
+				decol_iw_slot_can_open_talks = { N = 2 }
+			}
+			AND = {
+				var:decol_iw_state_3 ?= scope:ce_state
+				decol_iw_slot_can_open_talks = { N = 3 }
+			}
+		}
+	}
+	colonial_empire_no_offer_pending = yes
+}

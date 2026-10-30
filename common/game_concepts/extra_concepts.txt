@@ -52,6 +52,8 @@ concept_global_warming_system = {}
 concept_greenhouse_gas_emissions = {}
 concept_temperature_anomaly = {}
 concept_climate_policy = {}
+# The treaty article's rules, said once for every climate tooltip that names it (GW-9).
+concept_emissions_reduction_treaty = {}
 # Resource Transition (#660): the laws and the retirement programmes.
 concept_fossil_transition = {}
 concept_nuclear_program = {}
@@ -63,6 +65,8 @@ concept_nuclear_taboo = {}
 concept_nuclear_doctrine = {}
 concept_nuclear_readiness = {}
 concept_launch_authority = {}
+# How far a country's nuclear word holds (NUC-13, 2026-10-27).
+concept_nuclear_credibility = {}
 # The four ways an interest group can judge the posture (the class word under
 # each group's name in the At Home table).
 concept_posture_militarist = {}
@@ -76,11 +80,42 @@ concept_solar_colonization = {}
 concept_sr_approach = {}
 concept_sr_funding = {}
 concept_sr_setback_risk = {}
+concept_sr_estimate = {}
+# Solar colonization's terms (the colony sections of space_race_widget.gui),
+# nested so a tooltip names one and its hover leads on: a colony's Defenses
+# link the space fleet, which links the ship role, which links each role and
+# Space Command.
+concept_sr_colony_fleet = {}
+concept_sr_space_fleet = {}
+concept_sr_ship_role = {}
+# One per role (the owner, 2026-10-27), in the build mix's order; the ship role
+# concept and the build-mix buttons link them.
+concept_sr_role_warship = {}
+concept_sr_role_rapid = {}
+concept_sr_role_siege = {}
+concept_sr_role_carrier = {}
+concept_sr_role_tender = {}
+concept_sr_space_command = {
+	texture = "gfx/interface/icons/building_icons/building_space_command.dds"
+}
+concept_sr_drive = {}
+concept_sr_launch_window = {}
+concept_sr_module = {}
+concept_sr_colony_autonomy = {}
+concept_sr_free_colony = {}
+concept_sr_blockade = {}
+concept_sr_integrity = {}
+concept_sr_marines = {}
 concept_decolonization_system = {}
 concept_colonial_stability = {}
 # Colonial Empire panel terms (gui/journal_entry_widgets/colonial_empire_widget.gui)
 concept_colonial_band = {}
 concept_colonial_overreach = {}
+# What a colonial territory, an overseas colony and a colonial subject are,
+# defined once (the 2026-10-27 GUI audit, CE-4: written out five times before).
+concept_colonial_territory = {}
+concept_overseas_colony = {}
+concept_colonial_subject = {}
 concept_united_nations_system = {}
 concept_un_general_assembly = {}
 concept_un_represented = {}
@@ -110,6 +145,14 @@ concept_un_mission_peacekeeping = {}
 concept_un_mission_aid = {}
 concept_un_mission_stabilisation = {}
 concept_un_suspended_representation = {}
+# The UN's own terms (the 2026-10-27 GUI audit, UN-5 and UN-12): what a
+# resolution brings every proposer and member, a member's standing, the case
+# against a country, a member's lean on the vote, and the docket.
+concept_un_resolution = {}
+concept_un_standing = {}
+concept_un_case = {}
+concept_un_lean = {}
+concept_un_docket = {}
 concept_heir_education_system = {}
 concept_sol_expectations = {}
 concept_world_war_system = {}
@@ -128,6 +171,9 @@ concept_civil_rights_movement = {}
 # Economy & Scaling
 concept_construction_cost_scaling = {}
 concept_te_construction_market = {
+	texture = "gfx/interface/icons/goods_icons/construction_good.dds"
+}
+concept_te_construction_queue_cap = {
 	texture = "gfx/interface/icons/goods_icons/construction_good.dds"
 }
 concept_migration_crowding = {
@@ -176,8 +222,16 @@ concept_antimatter_facility = {
 concept_seabed_licence = {
 	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
 }
+# Grid Transfer Stations sharing Electricity (power_grid_effects.txt).
+concept_power_grid = {
+	texture = "gfx/interface/icons/building_icons/building_grid_transfer_station.dds"
+}
 # An unused share of a basin (seabed claims spec § 1).
 concept_seabed_claim = {
+	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
+}
+# How the seabed pools are divided: Open, Regulated or Scramble (te_seabed_widgets.gui's Regime cell).
+concept_seabed_regime = {
 	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
 }
 
@@ -226,6 +280,7 @@ concept_agent_network = {}
 concept_covert_funding = {}
 concept_operation_slots = {}
 concept_funding_stealth = {}
+concept_operation_phase = {}
 
 # Institutions
 concept_ministry_system = {}
@@ -260,11 +315,12 @@ concept_contested_monument = {}
 concept_heritage_monument = {}
 
 # Legislated Tax Code (the Budget panel's Tax Code tab and je_tax_code; plan
-# Task 7): the code itself, a bill to change it and the day a passed bill
-# takes effect.
+# Task 7): the code itself, a bill to change it, the day a passed bill
+# takes effect, and the revenue estimates' assumptions (GUI audit TAX-19).
 concept_tax_code = {}
 concept_tax_bill = {}
 concept_tax_commencement = {}
+concept_tax_static_estimate = {}
 
 # Subjugate (force_become_subject): the score its possible clause gates on
 # (script value te_subjugation_strength). The action's tooltip breaks it down.

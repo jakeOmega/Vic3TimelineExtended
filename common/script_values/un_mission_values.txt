@@ -466,6 +466,372 @@ un_disp_msn_strength = {
 	}
 }
 
+# The same three, for the mission in display slot N (0-7), for the chamber's
+# rows (the 2026-10-27 audit, UN-15): a GUI script value takes no argument, so
+# each slot has its own. 0 while the slot is empty. _frac is the progress
+# bar's 0-1.
+# Scope: any
+un_disp_msn_slot_0_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 0 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_0_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 0 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_0_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 0 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_1_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 1 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_1_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 1 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_1_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 1 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_2_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 2 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_2_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 2 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_2_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 2 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_3_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 3 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_3_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 3 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_3_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 3 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_4_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 4 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_4_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 4 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_4_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 4 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_5_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 5 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_5_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 5 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_5_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 5 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_6_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 6 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_6_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 6 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_6_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 6 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_7_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 7 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_7_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 7 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_7_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 7 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+
 # Order key for the register display and eviction: newest first / oldest first.
 # Scope: mission container
 un_mission_recency_order = {

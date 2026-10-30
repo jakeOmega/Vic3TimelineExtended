@@ -27,6 +27,9 @@ nd_readiness_lock_months_value = 24     # a conceded or agreed stand-down
 nd_pledge_broken_months_value = 120     # a repudiation is remembered this long
 nd_monopoly_window_cooldown_months = 12
 nd_routine_mishap_cooldown_months_value = 60 # between routine mishaps (nuclear_incident.40)
+nd_ai_concession_line = 40              # pressure where nuclear_crisis.1's yield weights start (the AI's stake gate)
+nd_ai_trade_danger_line = 40            # danger at which an AI issuer takes a fair trade (nuclear_crisis.8; ruling R4)
+nd_ai_trade_min_weeks = 8               # and not before its threat has run this long: a public ultimatum's first deadline
 nd_survivability_factor_recessed = 0.5   # share of survivability a crisis counts (nd_effective_survivability)
 nd_survivability_factor_routine = 0.8
 nd_survivability_factor_heightened = 0.9 # High Alert counts it all
@@ -187,7 +190,9 @@ nd_survivability_cap = {
 		limit = { has_technology_researched = missile_defense_systems }
 		add = 10
 	}
-	max = 95
+	# The last stretch toward full security has to come from a fast launch
+	# authority (nd_launch_credit), not from technology (rework spec §3.1).
+	max = 80
 }
 
 # Without investment, survivability decays toward this floor.
@@ -206,13 +211,14 @@ nd_survivability_step = {
 			has_variable = nd_hardening
 			var:nd_hardening >= 1
 		}
+		# No floor: above the ceiling (a save from before it fell from 95 to
+		# 80, rework spec §3.1) the step is negative and settles to it.
 		add = nd_survivability_cap
 		subtract = var:nd_survivability
 		multiply = {
 			value = var:nd_hardening
 			multiply = 0.02
 		}
-		min = 0
 	}
 	else_if = {
 		limit = {
@@ -346,7 +352,8 @@ nd_own_danger_band = {
 # own monthly roll and never dilute this pool. Peacetime bases below are monthly
 # equivalents divided by 52/12; the crisis surcharge is already weekly.
 # Benchmark: two high-alert powers, danger >=75, strain 0, reliability 60,
-# Existential doctrine: ~50% chance of an incident across two weekly pulses each.
+# Existential doctrine: ~28% chance of an incident across two weekly pulses each
+# (calibrated 2026-10-28 to the rework spec's §2.3 launch bands; ~50% before).
 #
 # Two parts, one roll. The base part draws from every family this country is
 # eligible for; the crisis part draws only from the misreadings a crisis
@@ -360,11 +367,39 @@ nd_incident_base_monthly_permille = {
 	else_if = { limit = { nd_readiness_heightened_or_higher = yes } value = 4 }
 }
 
+# A war with an enemy believed armed (rework spec §5.1): band 2, or band 3 when
+# the war threatens either side (goals on incorporated states, a side losing,
+# a nuclear weapon landed). Alongside a crisis the higher band applies.
+nd_war_danger_band = {
+	value = 0
+	if = {
+		limit = { nd_war_band_3_against_any = yes }
+		value = 3
+	}
+	else_if = {
+		limit = {
+			any_enemy_in_war = { nd_believed_armed = yes }
+		}
+		value = 2
+	}
+}
+
+nd_incident_band = {
+	value = nd_own_danger_band
+	if = {
+		limit = { nd_war_danger_band > nd_own_danger_band }
+		value = nd_war_danger_band
+	}
+}
+
+# Calibrated 2026-10-28 to the rework spec's §2.3 Acute-crisis bands and its
+# §2.1 war-year rates (scripts/analysis/nuclear_incident_rates.py,
+# test_nuclear_incident_risk.TestSpecBands): band 3 was 175, band 2 50.
 nd_incident_crisis_weekly_permille = {
 	value = 0
-	if = { limit = { nd_own_danger_band >= 3 } value = 175 }
-	else_if = { limit = { nd_own_danger_band >= 2 } value = 50 }
-	else_if = { limit = { nd_own_danger_band >= 1 } value = 5 }
+	if = { limit = { nd_incident_band >= 3 } value = 85 }
+	else_if = { limit = { nd_incident_band >= 2 } value = 35 }
+	else_if = { limit = { nd_incident_band >= 1 } value = 5 }
 	# A force below operational alert is harder to misread.
 	if = { limit = { nd_readiness_heightened_or_higher = no } multiply = 0.25 }
 	else_if = { limit = { nd_readiness_high_alert = no } multiply = 0.6 }
@@ -390,6 +425,24 @@ nd_incident_rate_multiplier = {
 		multiply = { value = 100 subtract = var:nd_reliability divide = 100 add = 0.5 }
 	}
 	multiply = nd_incident_doctrine_multiplier
+}
+
+# Display only: the strain and reliability factors of nd_incident_rate_multiplier,
+# one line each in the Incident Exposure hover (nd_risk_breakdown_sgui).
+nd_disp_incident_strain_factor = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_strain }
+		add = { value = var:nd_strain divide = 100 }
+	}
+}
+
+nd_disp_incident_reliability_factor = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_reliability }
+		value = { value = 100 subtract = var:nd_reliability divide = 100 add = 0.5 }
+	}
 }
 
 nd_incident_base_weekly_permille = {
@@ -462,6 +515,13 @@ nd_hold_chance = {
 		limit = { has_variable = nd_reliability }
 		value = var:nd_reliability
 	}
+	# Half of it, on a floor of 53: someone in the chain doubts a warning
+	# however poorly the force is run, and safeguards already raise
+	# reliability. Calibrated 2026-10-28 so that Launch on Warning with no
+	# safeguards is reckless (a quarter over an Acute crisis), not suicidal
+	# (two thirds): rework spec §2.3.
+	multiply = 0.5
+	add = 53
 	if = {
 		limit = { has_variable = nd_safeguards }
 		add = {
@@ -495,8 +555,66 @@ nd_hold_chance = {
 		}
 		add = 10
 	}
+	# The suspect's posture (rework spec §4.3): forces in storage cannot be
+	# launching, so a warning about them is easy to doubt; forces at High
+	# Alert make it easy to believe. The caller saves the suspect as
+	# scope:nd_hold_suspect; the panel's figure has none.
+	if = {
+		limit = { exists = scope:nd_hold_suspect }
+		scope:nd_hold_suspect = {
+			if = {
+				limit = { nd_readiness_recessed = yes }
+				add = 20
+			}
+			else_if = {
+				limit = { nd_readiness_high_alert = yes }
+				add = -5
+			}
+		}
+	}
+	# A hotline: the crisis's talks are open, so someone can be asked.
+	if = {
+		limit = { nd_crisis_talks_open_either = yes }
+		add = 10
+	}
+	# Our own vulnerability: commanders who fear losing the force are quicker
+	# to use it. The shape of the crisis danger's vulnerability part.
+	subtract = nd_own_vulnerability_value
 	min = 20
-	max = 97
+	# No investment takes the risk away (owner, 2026-10-28).
+	max = nd_hold_ceiling
+}
+
+# The highest chance of a halt in this moment: 97 at peace with no crisis, 92
+# in a Warning or a Confrontation, 85 in an Acute crisis or a war.
+nd_hold_ceiling = {
+	value = 85
+	if = {
+		limit = {
+			is_at_war = no
+			nd_in_crisis = no
+		}
+		value = 97
+	}
+	else_if = {
+		limit = {
+			is_at_war = no
+			NOT = { nd_crisis_stage_at_least = { STAGE = 3 } }
+		}
+		value = 92
+	}
+}
+
+# How exposed our forces are, as a pressure on the people holding them:
+# (50 − effective survivability) ÷ 5, between 0 and 10. The chance of a halt
+# subtracts it, and the crisis danger counts the more vulnerable side's
+# (nd_cd_vulnerability_value).
+nd_own_vulnerability_value = {
+	value = 50
+	subtract = nd_effective_survivability
+	divide = 5
+	min = 0
+	max = 10
 }
 
 # ----------------------------------------------------------------------------
@@ -539,11 +657,12 @@ nd_survivability_or_zero = {
 # The survivability a crisis counts: the stored figure scaled by readiness.
 # Bombers on strip alert, submarines surged to sea and launchers dispersed
 # ride out a first strike that would catch them on the ground or in port, and
-# warheads in storage are the easiest target of all. Read wherever a threat is
-# weighed against our ability to answer it (nd_yp_answer_value and the readers
-# that share its line of 50). The AI's choice of launch authority reads the
-# stored figure instead (nd_ai_review_posture): standing down must not push it
-# towards Launch on Warning.
+# warheads in storage are the easiest target of all. It sets how many warheads
+# are exposed (nd_exposed_warheads), so survivors and every reader of them;
+# below 50 it also raises the crisis danger and lowers the chance of a halt
+# (nd_own_vulnerability_value). The AI's choice of launch authority reads
+# survivors at Heightened with no credit instead (nd_ai_review_posture):
+# standing down must not push it towards Launch on Warning.
 nd_effective_survivability = {
 	value = nd_survivability_or_zero
 	if = {
@@ -579,6 +698,566 @@ nd_effective_survivability_at_readiness_2 = {
 
 nd_effective_survivability_at_readiness_3 = {
 	value = nd_survivability_or_zero
+}
+
+# ----------------------------------------------------------------------------
+# SECOND-STRIKE SURVIVORS (rework spec §3.2) — how many of our warheads would
+# be left after the other side spent its whole arsenal on them. Our own
+# stockpile is the true one; theirs is the world's estimate
+# (nd_believed_stockpile), so the figure leaks nothing. Country scope; the
+# enemy is saved as scope:nd_sv_enemy. Four variants: at our readiness with
+# our launch credit (crises, the panel); at Heightened with it (the AI's High
+# Alert); at Heightened with no credit (the AI's launch authority, so a fast
+# authority or standing down does not feed back into its own choice); and at
+# the technology ceiling, Heightened, no credit ("hardening won't close it").
+# ----------------------------------------------------------------------------
+
+# How many of the enemy's exposed warheads one landed counterforce warhead
+# destroys.
+nd_k_ratio = {
+	value = 1
+	if = {
+		limit = { has_technology_researched = ICBMs }
+		add = 0.5
+	}
+	if = {
+		limit = { has_technology_researched = precision_guided_munitions }
+		add = 0.5
+	}
+}
+
+# The share of the warheads a counterforce strike would destroy that get away
+# first (rework spec §4.1): Delegation 0.25, Launch on Warning 0.6, each 0.05
+# less per safeguards level, since a launch that can be halted is slower.
+# Central Authorization and Automatic Retaliation get none: the system answers
+# with whatever survives.
+nd_launch_credit = {
+	value = 0
+	if = {
+		limit = { nd_authority_launch_on_warning = yes }
+		value = 0.6
+	}
+	else_if = {
+		limit = { nd_authority_delegated_or_warning = yes }
+		value = 0.25
+	}
+	if = {
+		limit = {
+			nd_authority_delegated_or_warning = yes
+			has_variable = nd_safeguards
+		}
+		subtract = {
+			value = var:nd_safeguards
+			multiply = 0.05
+		}
+	}
+	min = 0
+}
+
+# How many warheads on the capital it takes to have any chance of
+# decapitating a country under Central Authorization (rework spec §6.3).
+nd_redundancy = {
+	value = nd_stockpile
+	divide = 10
+	add = 1
+	if = {
+		limit = { has_technology_researched = satellite_communications }
+		add = 2
+	}
+	if = {
+		limit = { has_technology_researched = mainframe_computers }
+		add = 1
+	}
+}
+
+# What the enemy's whole arsenal could destroy: its exchange ratio times the
+# warheads the world believes it holds.
+nd_counterforce_reach_saved = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_k_ratio
+		multiply = nd_believed_stockpile
+	}
+}
+
+# Our warheads a first strike could reach, at our readiness, at Heightened,
+# and at the technology ceiling at Heightened.
+nd_exposed_warheads = {
+	value = 100
+	subtract = nd_effective_survivability
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_r2 = {
+	value = 100
+	subtract = nd_effective_survivability_at_readiness_2
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_ceiling_r2 = {
+	value = nd_survivability_cap
+	multiply = nd_survivability_factor_heightened
+	multiply = -1
+	add = 100
+	divide = 100
+	multiply = nd_stockpile
+}
+
+# Warning time (rework spec §7.4): weapons an enemy bases in a country next to
+# ours (nd_based_near, nd_based_near_refresh) take 10 from our effective
+# survivability against that enemy, never below zero, whatever the reach. One
+# penalty per enemy scope, and the exposure each survivors or counterforce
+# value reads against that scope; scripts/analysis/nuclear_survivors.py
+# mirrors them.
+nd_warning_time_penalty = 10
+
+nd_warning_penalty_saved = {
+	value = 0
+	if = {
+		limit = {
+			has_variable_list = nd_based_near
+			is_target_in_variable_list = { name = nd_based_near target = scope:nd_sv_enemy }
+		}
+		value = nd_warning_time_penalty
+	}
+}
+
+nd_warning_penalty_issuer = {
+	value = 0
+	if = {
+		limit = {
+			has_variable_list = nd_based_near
+			is_target_in_variable_list = { name = nd_based_near target = scope:nd_issuer }
+		}
+		value = nd_warning_time_penalty
+	}
+}
+
+nd_warning_penalty_target = {
+	value = 0
+	if = {
+		limit = {
+			has_variable_list = nd_based_near
+			is_target_in_variable_list = { name = nd_based_near target = scope:nd_target }
+		}
+		value = nd_warning_time_penalty
+	}
+}
+
+nd_exposed_warheads_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_r2_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability_at_readiness_2
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_ceiling_r2_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_survivability_cap
+		multiply = nd_survivability_factor_heightened
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_vs_issuer = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability
+		subtract = nd_warning_penalty_issuer
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_vs_target = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability
+		subtract = nd_warning_penalty_target
+		min = 0
+	}
+	divide = 100
+	multiply = nd_stockpile
+}
+
+nd_survivors_vs_saved = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+	multiply = -1
+	add = nd_stockpile
+	min = 0
+}
+
+nd_survivors_r2_vs_saved = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_r2_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+	multiply = -1
+	add = nd_stockpile
+	min = 0
+}
+
+# The same against a crisis's other party, read through the crisis's own saved
+# scopes (scope:nd_issuer, scope:nd_target), so a pressure or danger part, the
+# opening preview and the AI's prediction compute it without saving anything.
+nd_counterforce_reach_issuer = {
+	value = 0
+	scope:nd_issuer = {
+		add = nd_k_ratio
+		multiply = nd_believed_stockpile
+	}
+}
+
+nd_counterforce_reach_target = {
+	value = 0
+	scope:nd_target = {
+		add = nd_k_ratio
+		multiply = nd_believed_stockpile
+	}
+}
+
+nd_survivors_vs_issuer = {
+	value = nd_counterforce_reach_issuer
+	max = nd_exposed_warheads_vs_issuer
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+	multiply = -1
+	add = nd_stockpile
+	min = 0
+}
+
+nd_survivors_vs_target = {
+	value = nd_counterforce_reach_target
+	max = nd_exposed_warheads_vs_target
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+	multiply = -1
+	add = nd_stockpile
+	min = 0
+}
+
+nd_survivors_bare_r2_vs_saved = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_r2_vs_saved
+	multiply = -1
+	add = nd_stockpile
+	min = 0
+}
+
+nd_survivors_ceiling_bare_r2_vs_saved = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_ceiling_r2_vs_saved
+	multiply = -1
+	add = nd_stockpile
+	min = 0
+}
+
+# ----------------------------------------------------------------------------
+# THE EXCHANGE (rework spec §6) — a salvo's counterforce and decapitation, in
+# the shape of the survivors values above. Victim scope, the attacker saved as
+# scope:nd_sv_enemy and holding the salvo's counts (nd_salvo_forces_landed,
+# nd_salvo_capital_landed, nd_salvo_victim_r: the victim's redundancy when the
+# salvo began). scripts/analysis/nuclear_survivors.py mirrors them.
+# ----------------------------------------------------------------------------
+
+# Warheads a Forces salvo destroys before rounding: min(exposed, K x landed)
+# x (1 - credit). Exposure never exceeds the stockpile, so neither does this.
+nd_counterforce_destroyed_raw = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_k_ratio
+		multiply = var:nd_salvo_forces_landed
+	}
+	max = nd_exposed_warheads_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+	max = nd_stockpile
+	min = 0
+}
+
+# Of the warheads the salvo would destroy, the share that gets away first:
+# under Launch on Warning they fire before impact (nd_salvo_counterforce).
+nd_counterforce_saved_raw = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_k_ratio
+		multiply = var:nd_salvo_forces_landed
+	}
+	max = nd_exposed_warheads_vs_saved
+	multiply = nd_launch_credit
+	min = 0
+}
+
+# Percent chance that the warheads landed on a Central Authorization
+# country's capital cut its command: max(0, (L - R)/(L + R)).
+nd_decapitation_chance_value = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = var:nd_salvo_capital_landed
+		subtract = var:nd_salvo_victim_r
+		divide = {
+			value = var:nd_salvo_capital_landed
+			add = var:nd_salvo_victim_r
+		}
+	}
+	multiply = 100
+	min = 0
+}
+
+# The redundancy the world sees: nd_redundancy on the public estimate, for the
+# AI's choice of a Leadership strike (launch authority is public, §14.2).
+nd_redundancy_believed = {
+	value = nd_believed_stockpile
+	divide = 10
+	add = 1
+	if = {
+		limit = { has_technology_researched = satellite_communications }
+		add = 2
+	}
+	if = {
+		limit = { has_technology_researched = mainframe_computers }
+		add = 1
+	}
+}
+
+# Attacker scope: the warheads a salvo fires, from var:nd_salvo_size, a whole
+# number from 1 to the stockpile, at most 25.
+nd_salvo_size_value = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_salvo_size }
+		value = var:nd_salvo_size
+	}
+	max = nd_stockpile
+	max = 25
+	min = 1
+	floor = yes
+}
+
+# The most a salvo can be: the warheads we hold, at most 25 (the Strike
+# section's stepper, nd_plan_can_step_size_up).
+nd_salvo_size_cap = {
+	value = nd_stockpile
+	max = 25
+	min = 1
+	floor = yes
+}
+
+# The Strike section's mission in force, 1 Cities (the default) | 2 Forces |
+# 3 Leadership: the panel tints its row.
+nd_display_plan_mission = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_salvo_mission }
+		value = var:nd_salvo_mission
+	}
+}
+
+# Attacker scope: the loop's count, fixed from nd_salvo_size_value before the
+# first warhead flies (each warhead lowers the stockpile that value caps by).
+nd_salvo_count_value = {
+	value = var:nd_salvo_count
+}
+
+# Victim scope: the chance, in percent, that the counterforce count rounds up
+# (var:nd_cf_raw, var:nd_cf_whole its whole part), so on average a salvo
+# destroys exactly nd_counterforce_destroyed_raw.
+nd_cf_round_up_chance = {
+	value = var:nd_cf_raw
+	subtract = var:nd_cf_whole
+	multiply = 100
+}
+
+# Attacker scope: how many warheads the strike landed — the salvo's count, or
+# 1 for a single strike (nd_record_claim's count and the AI's lie).
+nd_strike_landed_count_value = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_salvo_landed }
+		value = var:nd_salvo_landed
+	}
+}
+
+# ---- The AI's missions (rework spec §9, §14.4; owner, 2026-10-28) ---------
+# Attacker scope, its enemy saved as scope:nd_sv_enemy (nuke_diplo_action's
+# accept_effect). By rule: Leadership against Central Authorization when the
+# spare warheads, times the chance each lands on the capital, outnumber the
+# enemy's redundancy as the world sees it (launch authority is public,
+# §14.2); Forces under Flexible First Use or a doctrine above it against an
+# enemy believed armed; else Cities, the single strike it always made. Either
+# salvo needs a warhead to spare. Mirrored in test_nuclear_survivors.TestAiSalvo.
+
+# The warheads the AI can fire and still hold a third, at least one, back.
+nd_ai_salvo_spare_value = {
+	value = nd_stockpile
+	subtract = {
+		value = nd_stockpile
+		divide = 3
+		floor = yes
+		min = 1
+	}
+	min = 0
+}
+
+# The chance a warhead lands on the enemy's capital, 0.05 to 1:
+# nuclear_strike_success_chance's, read at the capital.
+nd_ai_capital_hit_share = {
+	value = modifier:country_nuclear_weapon_attack_success_add
+	scope:nd_sv_enemy = {
+		capital = {
+			subtract = modifier:state_nuclear_weapon_defense_chance_add
+		}
+	}
+	max = 1
+	min = 0.05
+}
+
+# The warheads we expect on the capital, less the enemy's redundancy: above
+# zero, a Leadership salvo has a chance to cut its command.
+nd_ai_leadership_margin = {
+	value = nd_ai_salvo_spare_value
+	multiply = nd_ai_capital_hit_share
+	scope:nd_sv_enemy = {
+		subtract = nd_redundancy_believed
+	}
+}
+
+nd_ai_salvo_mission_value = {
+	value = 1
+	if = {
+		limit = {
+			nd_ai_salvo_spare_value >= 1
+			nd_doctrine_at_least_flexible = yes
+			scope:nd_sv_enemy = { nd_believed_armed = yes }
+		}
+		value = 2
+	}
+	if = {
+		limit = {
+			nd_ai_salvo_spare_value >= 1
+			# A country without warheads sets no authority, and so reads
+			# as Central: it has no command to cut off.
+			scope:nd_sv_enemy = {
+				nd_authority_central = yes
+				nd_believed_armed = yes
+			}
+			nd_ai_leadership_margin > 0
+			# Every Leadership warhead aims at the capital (plan 4a R6).
+			nd_leadership_in_reach = { ENEMY = scope:nd_sv_enemy }
+		}
+		value = 3
+	}
+}
+
+# Forces: enough to reach the arsenal the world believes the enemy holds,
+# K warheads destroyed for each landed (nd_counterforce_destroyed_raw).
+nd_ai_forces_need = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_believed_stockpile
+	}
+	divide = nd_k_ratio
+	ceiling = yes
+}
+
+# Leadership: enough to land twice the enemy's redundancy on its capital, a
+# chance of a third, at the share of warheads the capital lets through.
+nd_ai_leadership_need = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_redundancy_believed
+	}
+	multiply = 2
+	divide = nd_ai_capital_hit_share
+	ceiling = yes
+}
+
+nd_ai_salvo_size_value = {
+	value = nd_ai_salvo_spare_value
+	if = {
+		limit = { nd_ai_salvo_mission_value = 2 }
+		max = nd_ai_forces_need
+	}
+	else_if = {
+		limit = { nd_ai_salvo_mission_value = 3 }
+		max = nd_ai_leadership_need
+	}
+	min = 1
+}
+
+# A salvo's record (owner, 2026-10-28): a single strike's figure times the
+# square root of the warheads landed (var:nd_salvo_sqrt, te_set_sqrt), so four
+# warheads count twice as much as one and nine three times. Attacker scope.
+# The single strike's figures are nuclear_first_strike's.
+nd_salvo_un_order_first = {
+	value = -4
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_un_order_answer = {
+	value = -2
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_un_shock = {
+	value = -3
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_dossier_first = {
+	value = un_dos_points_first_strike
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_dossier_answer = {
+	value = un_dos_points_retaliation
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_infamy = {
+	value = nd_taboo_infamy_strategic
+	multiply = var:nd_salvo_sqrt
+}
+
+nd_salvo_world_relations = {
+	value = nd_taboo_world_relations_strategic
+	multiply = var:nd_salvo_sqrt
+	round = yes
 }
 
 # ----------------------------------------------------------------------------
@@ -695,6 +1374,30 @@ nd_cd_exercise_value = {
 	}
 }
 
+# A force that could not ride out a strike is a reason to strike first, and a
+# reason to fear it (rework spec §3.3): the more vulnerable armed party's
+# (50 − effective survivability) ÷ 5, so +10 at 0 and nothing from 50. Small
+# and absolute, not relative to the enemy: a secondary effect (owner,
+# 2026-10-28). Issuer scope, scope:nd_target saved.
+nd_cd_vulnerability_value = {
+	value = nd_own_vulnerability_value
+	if = {
+		limit = {
+			scope:nd_target = { nd_believed_armed = yes }
+			nd_cd_target_vulnerability_value > nd_own_vulnerability_value
+		}
+		value = nd_cd_target_vulnerability_value
+	}
+	round = yes
+}
+
+nd_cd_target_vulnerability_value = {
+	value = 0
+	scope:nd_target = {
+		add = nd_own_vulnerability_value
+	}
+}
+
 nd_crisis_danger_value = {
 	value = nd_cd_stage_value
 	add = nd_cd_issuer_readiness_value
@@ -706,6 +1409,7 @@ nd_crisis_danger_value = {
 	add = nd_cd_talks_value
 	add = nd_cd_backed_value
 	add = nd_cd_exercise_value
+	add = nd_cd_vulnerability_value
 	# With no arsenal on the other side there is no reciprocal alert to
 	# misread; the danger is our own hand, not an exchange.
 	if = {
@@ -723,29 +1427,65 @@ nd_yp_base_value = {
 	value = 30
 }
 
-# Can we answer in kind?
+# Can we answer in kind? (rework spec §3.3) Unarmed, +20. Armed, by the
+# warheads that would survive the issuer's whole arsenal spent on ours: three
+# make a full retaliation (nuclear_weapon_events.1), so −25 × survivors ÷ 3,
+# at most −25. Continuous: no line at 50, and no blanket term for Automatic
+# Retaliation, which answers with whatever survives.
 nd_yp_answer_value = {
 	value = 0
 	if = {
 		limit = { nd_believed_armed = no }
 		add = 20
 	}
-	# Forces that would survive at our current readiness answer
-	# (nd_effective_survivability) — and so does an Automatic Retaliation
-	# system, however vulnerable the forces behind it (umbrella/recessed/
-	# dead-hand spec §3.2).
-	else_if = {
-		limit = {
-			OR = {
-				nd_authority_automatic = yes
-				nd_effective_survivability >= 50
-			}
-		}
-		subtract = 25
-	}
 	else = {
-		subtract = 10
+		add = nd_yp_answer_survivors_value
+		divide = 3
+		max = 1
+		multiply = -25
 	}
+	round = yes
+}
+
+# Target scope: our survivors against the issuer as the answer counts them. A
+# target under Central Authorization that the issuer could decapitate (it
+# believes the issuer holds more warheads than our command's redundancy,
+# rework spec §6.3) counts them at three quarters.
+nd_yp_answer_survivors_value = {
+	value = nd_survivors_vs_issuer
+	if = {
+		limit = {
+			nd_authority_central = yes
+			nd_decapitation_margin_value > 0
+		}
+		multiply = 0.75
+	}
+}
+
+# Target scope: the issuer's believed stockpile beyond our redundancy.
+nd_decapitation_margin_value = {
+	value = 0
+	scope:nd_issuer = {
+		add = nd_believed_stockpile
+	}
+	subtract = nd_redundancy
+}
+
+# Can the issuer afford it? (rework spec §3.3) Against an armed target only: 0
+# while the issuer's own survivors against us are 3 or more, falling linearly
+# to −15 at none. A threat from a force we could disarm first is a weaker one.
+nd_yp_issuer_exposure_value = {
+	value = 0
+	if = {
+		limit = { nd_believed_armed = yes }
+		scope:nd_issuer = {
+			add = nd_survivors_vs_target
+		}
+		max = 3
+		subtract = 3
+		multiply = 5
+	}
+	round = yes
 }
 
 # A protector: an armed guarantor that has not walked away, more so once it
@@ -930,9 +1670,341 @@ nd_yp_taboo_value = {
 	round = yes
 }
 
+# What is at stake (rework spec §8.2): the demands of the side the target
+# would concede to (nd_stakes_demander: the issuer, or for a guarantee dispute
+# the country it covers) on the target. Annexation or reunification −30 and
+# nothing else counted; a subjugation type or regime change −20; −10 for each
+# type that takes a state or a subject from us; −4 for each lesser type.
+# At most −40. No trigger tells a primary demand from another, so every goal
+# counts (owner call 10). Target scope; scope:nd_target and
+# scope:nd_stakes_demander saved.
+nd_yp_stakes_value = {
+	value = 0
+	if = {
+		limit = { exists = scope:nd_stakes_demander }
+		if = {
+			limit = {
+				scope:nd_stakes_demander = {
+					OR = {
+						nd_side_holds_goal_against = { TYPE = annex_country TARGET = scope:nd_target }
+						nd_side_holds_goal_against = { TYPE = te_reunify_country TARGET = scope:nd_target }
+						nd_side_holds_goal_against = { TYPE = unification TARGET = scope:nd_target }
+						nd_side_holds_goal_against = { TYPE = restore_union TARGET = scope:nd_target }
+						nd_side_holds_goal_against = { TYPE = te_colonial_reconquest TARGET = scope:nd_target }
+					}
+				}
+			}
+			add = -30
+		}
+		else = {
+			if = {
+				limit = {
+					scope:nd_stakes_demander = {
+						OR = {
+							nd_side_holds_goal_against = { TYPE = make_protectorate TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_dominion TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_tributary TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_personal_union TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_crown_land TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = make_chartered_company TARGET = scope:nd_target }
+							nd_side_holds_goal_against = { TYPE = regime_change TARGET = scope:nd_target }
+						}
+					}
+				}
+				add = -20
+			}
+			add = nd_yp_stakes_territory_value
+			add = nd_yp_stakes_minor_value
+		}
+	}
+	# In a war with the issuer the existence threat already weighs on us
+	# through nd_yp_war_value (−15); count only the rest here, so an
+	# annexation still totals −30.
+	if = {
+		limit = {
+			nd_yp_stakes_value_before_war_overlap < 0
+			nd_enemy_threatens_existence = { ENEMY = scope:nd_issuer }
+		}
+		add = 15
+	}
+	min = -40
+	round = yes
+}
+
+# Whether stakes found an existence-type goal (annexation, reunification,
+# a subjugation) before the war overlap: nd_yp_stakes_value's own first part.
+nd_yp_stakes_value_before_war_overlap = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:nd_stakes_demander
+			scope:nd_stakes_demander = {
+				OR = {
+					nd_side_holds_goal_against = { TYPE = annex_country TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = te_reunify_country TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_protectorate TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_dominion TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_tributary TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_personal_union TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_crown_land TARGET = scope:nd_target }
+					nd_side_holds_goal_against = { TYPE = make_chartered_company TARGET = scope:nd_target }
+				}
+			}
+		}
+		value = -1
+	}
+}
+
+# −10 for each type that takes a state or a subject from us (target scope).
+# By type, not by state: is_target_of_wargoal finds nothing in a play, and in
+# a war it also flags our capital under any country-level goal (probed
+# 2026-10-28, scripting_best_practices.md § "War Goals, Plays, Adjacency and
+# Claims").
+nd_yp_stakes_territory_value = {
+	value = 0
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = conquer_state TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = return_state TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = take_treaty_port TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = liberate_country TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = secession TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = release_as_subject TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = te_colonial_independence TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = te_un_mandate_restore_state TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = transfer_subject TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = liberate_subject TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = independence TARGET = scope:nd_target } } }
+		add = -10
+	}
+}
+
+nd_yp_stakes_minor_value = {
+	value = 0
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = break_enforced_treaties TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = unification_leadership TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = enforce_treaty_article TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = open_market TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = humiliation TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = contain_threat TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = foreign_investment_rights TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = force_nationalization TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = ban_slavery TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = colonization_rights TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = revoke_claim TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = revoke_all_claims TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = demand_strait_access TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = demand_toll_exemption TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = demand_no_tolls TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = demand_no_strait_closure TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = join_power_bloc TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = leave_power_bloc TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = increase_autonomy TARGET = scope:nd_target } } }
+		add = -4
+	}
+	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = reduce_autonomy TARGET = scope:nd_target } } }
+		add = -4
+	}
+}
+
+# The AI's chance (percent) of claiming a deliberate first strike was
+# unauthorized when it was not (rework spec §5.4; owner, 2026-10-28): 15, twice
+# under an aggressive ruler, half from a taboo of 50, and by the ruler's
+# character: half again for a Ruthless or Grifter ruler, a quarter for an
+# Honorable one, half for a Direct one. Launcher scope.
+nd_ai_lies_value = {
+	value = 15
+	if = {
+		limit = { ruler_is_aggressive = yes }
+		multiply = 2
+	}
+	if = {
+		limit = {
+			exists = ruler
+			ruler = { has_trait = ruthless }
+		}
+		multiply = 1.5
+	}
+	if = {
+		limit = {
+			exists = ruler
+			ruler = { has_trait = grifter }
+		}
+		multiply = 1.5
+	}
+	if = {
+		limit = {
+			exists = ruler
+			ruler = { has_trait = honorable }
+		}
+		multiply = 0.25
+	}
+	if = {
+		limit = {
+			exists = ruler
+			ruler = { has_trait = direct }
+		}
+		multiply = 0.5
+	}
+	if = {
+		limit = { nd_taboo_value >= 50 }
+		multiply = 0.5
+	}
+	max = 90
+	round = yes
+}
+
+# The struck country's chance (percent) of believing a claim that the strike
+# was unauthorized (rework spec §5.4): 40, plus a quarter of its relations with
+# the launcher, 20 more when one warhead landed (a deliberate first strike is
+# usually larger), 20 less when the launcher is its Acute-crisis opponent, 30
+# less for each of the launcher's lies already found out; 5 to 90. Victim
+# scope, from nuclear_weapon_events.1 (scope:attacking_country saved).
+nd_claim_belief_value = {
+	value = 40
+	if = {
+		limit = { exists = scope:attacking_country }
+		add = {
+			value = scope:attacking_country.relations:root
+			divide = 4
+		}
+		if = {
+			limit = {
+				has_variable = nd_struck_count
+				var:nd_struck_count <= 1
+			}
+			add = 20
+		}
+		if = {
+			limit = {
+				var:nd_crisis_opponent ?= scope:attacking_country
+				nd_crisis_stage_at_least = { STAGE = 3 }
+			}
+			subtract = 20
+		}
+		if = {
+			limit = { scope:attacking_country = { has_variable = nd_false_claims } }
+			subtract = {
+				value = scope:attacking_country.var:nd_false_claims
+				multiply = 30
+			}
+		}
+	}
+	min = 5
+	max = 90
+}
+
 nd_yield_pressure_value = {
 	value = nd_yp_base_value
 	add = nd_yp_answer_value
+	add = nd_yp_issuer_exposure_value
+	add = nd_yp_protector_value
+	add = nd_yp_credibility_value
+	add = nd_yp_alert_value
+	add = nd_yp_recessed_value
+	add = nd_yp_danger_value
+	add = nd_yp_exercise_value
+	add = nd_yp_temperament_value
+	add = nd_yp_war_value
+	add = nd_yp_stakes_value
+	add = nd_yp_follow_through_value
+	add = nd_yp_taboo_value
+	min = 0
+	max = 100
+	round = yes
+}
+
+# The same without the stakes: the AI's stake gate (nd_ai_stakes_block) asks
+# whether the demands alone hold the pressure under its concession line.
+nd_yield_pressure_unstaked_value = {
+	value = nd_yp_base_value
+	add = nd_yp_answer_value
+	add = nd_yp_issuer_exposure_value
 	add = nd_yp_protector_value
 	add = nd_yp_credibility_value
 	add = nd_yp_alert_value
@@ -1088,6 +2160,16 @@ nd_display_readiness_code = {
 	}
 }
 
+# The readiness ordered (it moves one step every two weeks toward it): the
+# readiness table tints its row, as the Order button greys on it.
+nd_display_readiness_target_code = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_readiness_target }
+		value = var:nd_readiness_target
+	}
+}
+
 nd_display_authority_code = {
 	value = 1
 	if = {
@@ -1174,6 +2256,31 @@ nd_display_crisis_weeks_left = {
 	}
 }
 
+# The crisis's age in weeks, whichever side we are on (the Stage cell's
+# "Week N of 52"; it lapses at nd_crisis_max_weeks).
+nd_display_crisis_week = {
+	value = 0
+	if = {
+		limit = {
+			nd_is_crisis_owner = yes
+			has_variable = nd_crisis_weeks
+		}
+		add = var:nd_crisis_weeks
+	}
+	else_if = {
+		limit = {
+			nd_is_crisis_target = yes
+			exists = var:nd_crisis_opponent
+		}
+		var:nd_crisis_opponent = {
+			if = {
+				limit = { has_variable = nd_crisis_weeks }
+				add = var:nd_crisis_weeks
+			}
+		}
+	}
+}
+
 # The target's yield pressure, stored on the target by the weekly tick.
 nd_display_yield_pressure = {
 	value = 0
@@ -1198,17 +2305,6 @@ nd_display_yield_pressure = {
 	}
 }
 
-# Any scope: the crises running past the eight the World Crises section lists
-# (global_var:nd_wc_count, written by nd_world_crises_refresh).
-nd_world_crises_unlisted = {
-	value = 0
-	if = {
-		limit = { has_global_variable = nd_wc_count }
-		add = global_var:nd_wc_count
-		subtract = 8
-	}
-	min = 0
-}
 
 # Weeks until the target is pressed again (nd_crisis_weekly_tick fires the
 # event on the tick at which the counter reaches the interval), from either
@@ -1844,4 +2940,145 @@ nd_public_estimate_observed = {
 	}
 	round = yes
 	min = 1
+}
+
+# ---- Trades (rework spec §8.6, phase 4c) --------------------------------------
+# Parties saved (scope:nd_issuer, scope:nd_target), in a crisis over a dispute
+# that trades. What the target would give up less what the issuer would, on
+# §8.2's scale (ruling R6): a basing or guarantee treaty 10, like a state; a
+# missile-defense state 4, a lesser goal; a claimed incorporated state 10; a
+# caught covert operation 4; an active battlestation site 10. Within disputes
+# 8–10 only the counts matter. Each half counts what the dispute's trigger and
+# concession read (nd_dispute_*_by, nd_crisis_concede_*). The AI gives no more
+# than it gets: a target accepts at 0 or less, an issuer at 0 or more.
+nd_trade_balance_value = {
+	value = 0
+	if = {
+		limit = { scope:nd_issuer = { var:nd_crisis_dispute = 7 } }
+		scope:nd_target = {
+			every_scope_treaty = {
+				limit = {
+					any_scope_article = {
+						OR = {
+							has_type = nuclear_basing
+							has_type = nuclear_guarantee
+						}
+						source_country = scope:nd_target
+						target_country = {
+							NOT = { THIS = scope:nd_issuer }
+							is_adjacent_to_country = scope:nd_issuer
+						}
+					}
+				}
+				add = 10
+			}
+			every_scope_state = {
+				limit = {
+					nd_state_has_missile_defense = yes
+					any_neighbouring_state = { owner = scope:nd_issuer }
+				}
+				add = 4
+			}
+		}
+		scope:nd_issuer = {
+			every_scope_treaty = {
+				limit = {
+					any_scope_article = {
+						OR = {
+							has_type = nuclear_basing
+							has_type = nuclear_guarantee
+						}
+						source_country = scope:nd_issuer
+						target_country = {
+							NOT = { THIS = scope:nd_target }
+							is_adjacent_to_country = scope:nd_target
+						}
+					}
+				}
+				subtract = 10
+			}
+			every_scope_state = {
+				limit = {
+					nd_state_has_missile_defense = yes
+					any_neighbouring_state = { owner = scope:nd_target }
+				}
+				subtract = 4
+			}
+		}
+	}
+	else_if = {
+		limit = { scope:nd_issuer = { var:nd_crisis_dispute = 8 } }
+		scope:nd_issuer = {
+			every_scope_state = {
+				limit = {
+					is_incorporated = yes
+					state_region = { scope:nd_target = { has_claim = PREV } }
+				}
+				add = 10
+			}
+		}
+		scope:nd_target = {
+			every_scope_state = {
+				limit = {
+					is_incorporated = yes
+					state_region = { scope:nd_issuer = { has_claim = PREV } }
+				}
+				subtract = 10
+			}
+		}
+	}
+	else_if = {
+		limit = { scope:nd_issuer = { var:nd_crisis_dispute = 9 } }
+		scope:nd_issuer = {
+			if = {
+				limit = { has_variable_list = iw_known_ops }
+				every_in_list = {
+					variable = iw_known_ops
+					limit = {
+						var:iw_attacker ?= scope:nd_target
+						NOT = { has_tag = iw_known_counterintel_support }
+					}
+					add = 4
+				}
+			}
+		}
+		scope:nd_target = {
+			if = {
+				limit = { has_variable_list = iw_known_ops }
+				every_in_list = {
+					variable = iw_known_ops
+					limit = {
+						var:iw_attacker ?= scope:nd_issuer
+						NOT = { has_tag = iw_known_counterintel_support }
+					}
+					subtract = 4
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { scope:nd_issuer = { var:nd_crisis_dispute = 10 } }
+		scope:nd_target = {
+			every_scope_state = {
+				limit = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation_construction_site
+						NOT = { has_active_production_method = pm_orbital_battlestation_construction_paused }
+					}
+				}
+				add = 10
+			}
+		}
+		scope:nd_issuer = {
+			every_scope_state = {
+				limit = {
+					any_scope_building = {
+						is_building_type = building_orbital_battlestation_construction_site
+						NOT = { has_active_production_method = pm_orbital_battlestation_construction_paused }
+					}
+				}
+				subtract = 10
+			}
+		}
+	}
 }

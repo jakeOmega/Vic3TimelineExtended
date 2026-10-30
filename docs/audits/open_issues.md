@@ -172,9 +172,9 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 
 ### L10. Mod loc-only variables flagged unused
 **Files:**
-- `common/scripted_effects/cultural_hegemony_effects.txt` — `ch_rank_*_{sol,art,prs,tech,raw}` globals
+- `common/scripted_effects/cultural_hegemony_effects.txt` — the Top Cultural Powers rows' `ch_board_*` variables (`ch_board_row_write`, since 2026-10-27; the `ch_rank_*_{sol,art,prs,tech,raw}` globals before)
 - `common/scripted_effects/nuclear_weapon_effects.txt` — `nuke_rank_*_stockpile` globals
-- `localization/english/te_concepts_l_english.yml` — `[GetGlobalVariable('…').GetValue]` reads
+- `localization/english/te_concepts_l_english.yml` — `[GetGlobalVariable('…').GetValue]` reads; `te_miscellaneous_l_english.yml` and the board in `cultural_hegemony_widget.gui` — `ScriptContainer.GetVariableValue('ch_board_…')` reads
 
 **Problem:** Mod uses `set_global_variable` to expose per-rank breakdown values (cultural-hegemony component scores, nuclear stockpiles) to tooltip text via `GetGlobalVariable('ch_rank_N_sol')` etc. in concept tooltips. The engine explicitly tracks variable reads but notes "use in localization doesn't count due to technical limitations," emitting `Variable 'X' is set but is never used` (source `jomini_effect.cpp:1135`) once per variable at load. Filtered from log triage via `docs/audits/mod_known_noise.md`.
 
@@ -223,16 +223,9 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 **Problem:** Vanilla 1.13.9 added a load-time validation that logs `Country <TAG> is not permitted to retain law <Name>` for every country holding a law whose `unlocking_technologies` it lacks. Two mod cases, both warning-only:
 
 1. **Init-order noise (158 countries × 3 laws, plus 146 countries for Penal Labor Camps):** the mod's lawgroups list laws in progressiveness/menu order, so the tech-gated late-era law sits first in `lawgroup_privacy_rights` / `lawgroup_rules_of_war` / `lawgroup_right_to_information`, and since #520 in `lawgroup_criminal_justice` (Penal Labor Camps, replaced by `law_punishment_focused_criminal_justice`). At country init the engine auto-assigns the **first law in the group** to every unseeded country and the new validation logs it — then `extra_history.txt` GLOBAL (`every_country`, "executed last among all history") activates the intended tech-free baselines (`law_minimal_privacy_protection`, `law_traditional_rules_of_war`, `law_informal_government_secrecy`). Final game state is correct; the warnings describe a transient. Keeping file order is deliberate (menu ordering).
-2. **Deliberate historical seeds (~36 pairs):** GBR on Gold Standard since 1821, Prussian Kriegsministerium 1808, Statute of Anne 1710, north-German Civic Monolingualism, colonial-slavery seeds, … — history flavor trumps tech gates. Countries keep the law (they can never lose a tech requirement they never had).
+2. **Deliberate historical seeds (~36 pairs):** GBR on Gold Standard since 1821, Prussian Kriegsministerium 1808, Statute of Anne 1710, north-German Civic Monolingualism, colonial-slavery seeds, the USA's Constitutional Review (Marbury v. Madison, 1803; Judiciary, registered 2026-10-25), … — history flavor trumps tech gates. Countries keep the law (they can never lose a tech requirement they never had).
 
 **Fix:** By design; keep. If a *new* law name appears in these warnings that matches neither class, investigate instead of assuming noise.
-
-### L17. Strategic-reserve silo missing-texture warning (unresolved)
-**Files:** `common/buildings/strategic_reserve.txt:61`
-
-**Problem:** `Database type building_strategic_reserve_silo has missing texture` (guitexturehandler.h:155) once per launch. The building's `icon` points at a vanilla dds that exists; the missing texture is some other UI slot (map/entity/background) not yet identified. Cosmetic — panels render with fallback art.
-
-**Fix:** Unresolved; next investigation step is comparing against a warning-free mod building's full gfx surface (icon + any `city_gfx`/entity/asset references) to find the queried-but-missing slot.
 
 ### L23. Console-only debug test events logged as orphaned (by design)
 **Files:** `events/te_debug_*_events.txt` (seven today: ch, colonial_empire, covert, gw, nuclear, space_race, un)
@@ -242,11 +235,11 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 **Fix:** None needed while the consoles exist. A new `te_debug_*` console needs no registry change. Delete this entry if the consoles are ever removed.
 
 ### L24. Old-save migration cleanup reads variables nothing sets
-**Files:** `common/scripted_effects/space_race_effects.txt` (`sr_clear_legacy_milestone_notice`), `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_domestic_stance`), `common/scripted_effects/un_ladder_effects.txt` (the dissolution sweep), `common/scripted_effects/trade_partner_effects.txt` (the Imp%/Exp% columns' old `tp_<n>_imp_rel` / `tp_<n>_exp_rel`, registered 2026-10-05), `common/scripted_effects/te_demog_generated_effects.txt` (`te_demog_gini_band_store`, generated by `scripts/generators/gen_demographics.py`: the six pre-#854 strata sums `te_dg_<n|y>_<lo|mi|up>`, registered 2026-10-10), `common/scripted_effects/gm_commission_effects.txt` (`gm_com_clear` and the first-sight sweep: four opportunity variables #915 retired, registered 2026-10-16), `common/scripted_effects/te_demog_effects.txt` (the 18-40 sums `te_dg_m1840` / `te_dg_f1840` from before #942, registered 2026-10-16)
+**Files:** `common/scripted_effects/space_race_effects.txt` (`sr_clear_legacy_milestone_notice`), `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_domestic_stance`), `common/scripted_effects/un_ladder_effects.txt` (the dissolution sweep), `common/scripted_effects/trade_partner_effects.txt` (`te_tp_drop_rank_variables`: the Imp%/Exp% columns' old `tp_<n>_imp_rel` / `tp_<n>_exp_rel`, registered 2026-10-05, and the per-rank `tp_<n>_tc` / `_total` / `_gdp_pct` and `tp_count` from before the rows were a list, registered 2026-10-27), `common/scripted_effects/global_warming_effects.txt` (`gw_top_emitters_drop_slots`: Top Emitters' slot variables `gw_emitter_<n>`, `gw_emitters_shown` and `gw_emitters_own_slot` from before its rows were a list, registered 2026-10-27), `common/scripted_effects/te_demog_generated_effects.txt` (`te_demog_gini_band_store`, generated by `scripts/generators/gen_demographics.py`: the six pre-#854 strata sums `te_dg_<n|y>_<lo|mi|up>`, registered 2026-10-10), `common/scripted_effects/gm_commission_effects.txt` (`gm_com_clear` and the first-sight sweep: four opportunity variables #915 retired, registered 2026-10-16), `common/scripted_effects/te_demog_effects.txt` (the 18-40 sums `te_dg_m1840` / `te_dg_f1840` from before #942, registered 2026-10-16; the deaths-on-top slice `te_dg_dc_ontop` from before #1099, registered 2026-10-24), `common/scripted_effects/gm_trophy_effects.txt` (the queued returns `gm_tr_return_queued` / `gm_tr_return_relations` from before #1058, registered 2026-10-24), `common/scripted_effects/gm_policy_effects.txt` and `common/scripted_triggers/gm_policy_triggers.txt` (the retired Mothballed and Standard policies' `flag:mothballed` / `flag:standard` from before #1121, registered 2026-10-24), `common/scripted_effects/space_race_effects.txt` again (`sr_clear_rival_slots` and `sr_powers_clear`: the Rivals and Space Powers slots from before #1215, registered 2026-10-29) and `common/scripted_effects/te_global_commons_seabed_effects.txt` (`te_seabed_rank_clear`, `te_seabed_rank_list` and `te_seabed_rank_seat_clear`: the seabed claimants' seats and ranks from before #1215, registered 2026-10-29), `common/scripted_effects/sr_sites_generated.txt` (`sr_lunar_migrate_country`, generated by `scripts/generators/gen_solar_sites.py`: the retired Moon Base's purpose choices `sr_moon_base_industrial` / `sr_moon_base_military`, also read by the retired entry's panel in `common/customizable_localization/space_race_custom_loc.txt`, `sr_moon_base_choice_made` in `common/scripted_triggers/space_race_triggers.txt` and `sr_sync_moon_base_entry` in `space_race_effects.txt`, registered 2026-10-30)
 
-**Problem (2026-09-26):** Three systems strip variables an older save may still hold: the space race's single-variable milestone notice (nine `sr_notify_*`) and its retired `sr_active_milestone` (#483, 2026-09-26), the nuclear doctrine's country-level class scores (four `nd_stance_*`, before 2026-09-25) and the UN's founding window (`un_founding_window_active`). Nothing sets them any more, so the parse-time validator logs `Variable 'X' is used but is never set` (`jomini_effect.cpp:1139`) once per launch for each of them. The trading-partners refresh does the same for the ten old `tp_<n>_imp_rel` / `tp_<n>_exp_rel` (registered 2026-10-05), the demographics Gini store for its six old strata sums (#854, registered 2026-10-10), the Grand Monument opportunity for the four variables #915 retired, and the demographics census for the 18-40 sums #942 replaced (both registered 2026-10-16). Harmless: each read is a `has_variable` guard in front of a `remove_variable` (the census also reads the old sums once, behind the same guard, for the war dead's window). Filtered from log triage via `docs/audits/mod_known_noise.md`, which names all thirty-seven, so a new never-set variable still shows up.
+**Problem (2026-09-26):** Three systems strip variables an older save may still hold: the space race's single-variable milestone notice (nine `sr_notify_*`) and its retired `sr_active_milestone` (#483, 2026-09-26), the nuclear doctrine's country-level class scores (four `nd_stance_*`, before 2026-09-25) and the UN's founding window (`un_founding_window_active`). Nothing sets them any more, so the parse-time validator logs `Variable 'X' is used but is never set` (`jomini_effect.cpp:1139`) once per launch for each of them. The trading-partners refresh does the same for the ten old `tp_<n>_imp_rel` / `tp_<n>_exp_rel` (registered 2026-10-05) and the sixteen per-rank variables the Top Trade Partners list replaced (registered 2026-10-27), as does Top Emitters' refresh for the seven slot variables its list replaced (registered 2026-10-27), the demographics Gini store for its six old strata sums (#854, registered 2026-10-10), the Grand Monument opportunity for the four variables #915 retired, and the demographics census for the 18-40 sums #942 replaced (both registered 2026-10-16). Three more joined on 2026-10-24: the trophy pass for the two queued-return variables #1058 stopped setting, the census for the deaths-on-top slice #1099 folded into the causes, and the monument policy for the two policy flags #1121 retired (the validator words those `Flag 'X' is used but is never set`). On 2026-10-29, 131 more from #1215's list rewrites (audits SPC-9 and SEA-3, 2026-10-27): the Space Race's 40 Rivals slots, 8 Rivals counts and 8 Space Powers slots, and the seabed ranking's 30 global seats, 5 overflow markers, 5 country ranks, 30 player seats and 5 seat counts. On 2026-10-30 (#1243), two from the Moon Base #1238 retired: the purpose choices `sr_moon_base_industrial` and `sr_moon_base_military`, which the old-save migration reads to give a country that finished the Moon Base the lunar site its purpose names, as do the retired entry's panel, purpose trigger and modifier sync for a copy that lingers in an old save (the third purpose, `sr_moon_base_scientific`, is set by the debug console, so it isn't logged). Harmless: each read is a `has_variable` guard in front of a `remove_variable` (the census also reads the old sums once, behind the same guard, for the war dead's window; the policy reads the two old flags as the default before `gm_policy_migrate` removes them; the Moon Base purposes are read as `has_variable` tests that pick a site or a status line). Filtered from log triage via `docs/audits/mod_known_noise.md`, which names all 196 variables and both flags, so a new never-set name still shows up.
 
-**Fix:** Delete the migration blocks, and this entry, once saves from before 2026-09-26 are no longer in play (a release or two after that date); the Gini store's block (in the generator) once saves from before #854 (2026-10-10) are, and the Grand Monument and census blocks once saves from before #915 and #942 (2026-10-12) are.
+**Fix:** Delete the migration blocks, and this entry, once saves from before 2026-09-26 are no longer in play (a release or two after that date); the Gini store's block (in the generator) once saves from before #854 (2026-10-10) are, and the Grand Monument and census blocks once saves from before #915 and #942 (2026-10-12) are; the trophy returns once saves from before #1058 (2026-10-19) are, and the deaths-on-top slice and the policy flags once saves from before #1099 and #1121 (2026-10-22, 2026-10-23) are; the Space Race and seabed slots once saves from before #1215 (2026-10-27) are; the Moon Base purposes, with the migration and the retired entry, once saves from before #1238 (2026-10-29) are.
 
 ---
 
@@ -260,17 +253,16 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 ---
 
 ### L26. Grand Monuments v2 load-time notices
-**Files:** `events/monument_events.txt` (`monument_events.11`), `common/buildings/gm_name_carrier.txt`, `common/scripted_effects/gm_commission_effects.txt:115`
+**Files:** `events/monument_events.txt` (`monument_events.11`), `common/scripted_effects/gm_commission_effects.txt:115`
 
-**Problem (2026-10-07):** Grand Monuments v2 (#759) logs three lines once per launch, and the picture work (#909) added a fourth.
+**Problem (2026-10-07):** Grand Monuments v2 (#759) logs two lines once per launch, and the picture work (#909) added a third. (A fourth, `Database type building_gm_name_carrier_anchor has missing texture`, went on 2026-10-25, when the placeholder building was given a `background`: the slot `guitexturehandler.h:155` reports missing is the building panel's background, `scripting_best_practices.md`.)
 - `No default option in event monument_events.11.` (`event.cpp:358`). By design: the skin choice leaves out `default_option` so that an expired event takes its first valid option, the most specific skin (the note above its Hebrew option).
-- `Database type building_gm_name_carrier_anchor has missing texture` (`guitexturehandler.h:155`). The placeholder building is never built and its `icon` exists, so this is the same unidentified UI slot as L17.
 - `Flag 'leader' is used but is never set` (`jomini_effect.cpp:1139`). `gm_com_dedication` is set as `flag:$DEDICATION$`, which the parse-time validator cannot see.
 - `Flag 'memorial' is used but is never set` (`jomini_effect.cpp:1139`, 2026-10-12). #909 retired the Memorial form, so nothing sets `flag:memorial` any more, but a monument or commission from an older save can still hold it. The form's `gm_form_name` and `gm_com_form_phrase` branches stay on purpose to name it (`RETIRED_FORMS` in `test_grand_monument_registry.py`).
 
-Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures name these four.
+Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures name these three.
 
-**Fix:** None needed for the first, third and fourth. Close the second with L17 once that slot is found.
+**Fix:** None needed.
 
 ---
 
@@ -282,6 +274,24 @@ Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures 
 Filtered from log triage via `docs/audits/mod_known_noise.md`.
 
 **Fix:** only a whole-article override of vanilla's `ship_transfer` that skips every mutual article (`kind`, or the four by name), which the mod avoids for vanilla content (INJECT over REPLACE). Owner's call; nothing to do while the result stays correct.
+
+### L28. Zero construction speed with a queued project (unattributed)
+**Files:** none named; the engine's `country.cpp:9608` (`:9594`, worded "queues", in the 2026-10-11 logs)
+
+**Problem (2026-10-25):** `Failed to approximate weeks left in construction queue: The total construction speed is zero. Returning max int...` logs 20 to 40 times a minute through a long game, a third of `error.log` on 2026-10-24 (3,208 lines in three and a half hours), with no country and no script frame. The 2026-10-11 observer runs logged it too. Some country holds a construction queue and has no construction at all. Two candidates, neither checked: a country with no states (vanilla's base construction, `country_gdp_construction`, scales with GDP, which is 0 there), or a construction-market country whose sites produce nothing (§ Construction as a Market Good, `docs/systems/mod_systems.md`).
+
+Filtered from log triage via `docs/audits/mod_known_noise.md`.
+
+**Fix:** find the country first: on an autosave from such a session, list the countries with queued construction and their states and construction (`scripts/analysis/save_country_probe.py`). If they are stateless countries, it is vanilla's estimate and moves to `docs/vanilla/vanilla_known_bugs.md`; if they are construction-market countries, it is ours.
+
+### L29. A decree's country_trigger checked with no country
+**Files:** `common/decrees/extra_decrees.txt` (any decree with a `country_trigger`; `decree_medical_outreach` so far)
+
+**Problem (2026-10-25):** now and then the engine evaluates a decree's `country_trigger` with the null country, and the trigger fails at its opening line: `untyped trigger [ Scoped object of type 'country' is not valid (Country  (4294967295)) ]`. Vanilla's decrees fail the same way in the same second. Once on 2026-10-25 (Medical Outreach, line 287); the archived observer runs logged it about as often as vanilla's decrees (as line 281, before the decree's comments grew).
+
+Filtered from log triage via `docs/audits/mod_known_noise.md`.
+
+**Fix:** none in script: the root is invalid before the trigger's first line runs. Tracked so a rise in the count shows.
 
 ---
 

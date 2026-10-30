@@ -68,7 +68,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
 
     def test_every_type_has_a_carrier(self):
         carried = {c.type for c in self.carriers}
-        for name in P.DEMOG_TYPES:
+        # capacity's only carrier is Pollution Impact's static modifier, which no reader walks
+        # (TestWorkforceLinesMoved.BLOCKS pins it), since State Eugenics lost its line (owner, 2026-10-24)
+        for name in set(P.DEMOG_TYPES) - {P.CAPACITY_TYPE}:
             self.assertIn(name, carried, name)
 
     def test_each_type_sits_where_its_design_puts_it(self):
@@ -85,9 +87,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    "state_chronic_mortality_mult": {"law"},
                    P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"},
                    P.NATURAL_FERTILITY_TYPE: {"law"}, P.DIFFUSION_TYPE: {"technology"},
-                   # call 3's participation inputs (phase 2 step 1): the criminal-justice laws and State Eugenics'
-                   # flat lines, the Ministries of Labour per level; Community Service and Mandatory Minimums are
-                   # amendments (read since 2026-10-17, when load_carriers took amendments in)
+                   # call 3's participation inputs (phase 2 step 1): the criminal-justice laws' flat lines, the
+                   # Ministries of Labour per level; Community Service and Mandatory Minimums are amendments (read
+                   # since 2026-10-17, when load_carriers took amendments in). No law carries capacity today.
                    P.MALE_PARTICIPATION_TYPE: {"law", "amendment"}, P.PARTICIPATION_TYPE: {"law_institution"},
                    P.CAPACITY_TYPE: {"law"},
                    # calibration step 3: Malaria Prevention's control
@@ -102,8 +104,8 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    # weight on Family Limitation, impartible inheritance's Late Marriage (Undivided Farm Succession is
                    # an amendment)
                    P.CHILD_WORK_TYPE: {"law"}, P.FL_LITERACY_TYPE: {"law"}, P.LM_FARMS_TYPE: {"law", "amendment"},
-                   # stage 3 (2026-10-19): the migrant profile's women's-rights laws and transport technologies
-                   P.FEMALE_WORK_SHARE_TYPE: {"law"}, P.FAMILY_MIGRATION_TYPE: {"technology"}}
+                   # stage 3 (2026-10-19): the migrant profile's transport technologies
+                   P.FAMILY_MIGRATION_TYPE: {"technology"}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
 
@@ -154,25 +156,20 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
             P.FL_LITERACY_TYPE: {"law_state_religion": -0.5, "law_millet_system": -0.5, "law_people_of_the_book": -0.5,
                                  "law_total_separation": 0.5, "law_state_atheism": 0.5}})
 
-    def test_the_migrant_profiles_inputs_sit_on_the_laws_and_the_transport_techs(self):
-        """Stage 3 (2026-10-19): a law table and a technology ladder until then. The women's-rights laws carry the old
-        table less the 0.1 base (No Women's Rights none), the transport technologies their old figures plus the
-        aviation techs §2.5 names (owner, 2026-10-19). Protected Class's line sets the share at women's rights'
-        fullest, which the profile divides by."""
+    def test_the_migrant_profiles_input_sits_on_the_transport_techs(self):
+        """Stage 3 (2026-10-19): a technology ladder until then. The transport technologies carry their old figures plus
+        the aviation techs §2.5 names (owner, 2026-10-19). The women's-rights laws' share of women at work went on
+        2026-10-25: the census's own count of women among its workers took its place, so no law carries a profile
+        line."""
         carried = {}
         for c in self.carriers:
             if c.type in P.MIGRANT_PROFILE_TYPES:
                 carried.setdefault(c.type, {})[c.key] = c.value
         self.assertEqual(carried, {
-            P.FEMALE_WORK_SHARE_TYPE: {"law_women_in_the_fields": 0.15, "law_women_own_property": 0.2,
-                                       "law_women_in_the_workplace": 0.35, "law_womens_suffrage": 0.37,
-                                       "law_protected_class": 0.38},
             P.FAMILY_MIGRATION_TYPE: {"paddle_steamer": 0.1, "railways": 0.1, "combustion_engine": 0.15,
                                       "commercial_aviation": 0.05, "jet_engine_technology": 0.05}})
-        full = P.FEMALE_WORK_SHARE_DEFAULT + max(carried[P.FEMALE_WORK_SHARE_TYPE].values())
-        self.assertAlmostEqual(P.FULL_FEMALE_WORK_SHARE, full)
-        self.assertAlmostEqual(P.FULL_FEMALE_WORK_SHARE, P.FEMALE_WORK_SHARE_DEFAULT
-                               + carried[P.FEMALE_WORK_SHARE_TYPE]["law_protected_class"])
+        self.assertNotIn("state_female_work_share_add", {c.type for c in DM.load_carriers(
+            types=P.DEMOG_TYPES + ("state_female_work_share_add",))})
 
     def test_late_marriages_two_carriers_never_meet(self):
         """Primogeniture's and Undivided Farm Succession's lines add as modifiers do, where the script's OR counted them
@@ -521,6 +518,163 @@ class TestWorkforceReaders(unittest.TestCase):
         self.assertEqual(by_key["law_pro_capital_ministry_of_labor"].kind, "law_institution")
         self.assertEqual(by_key["law_womens_suffrage"].kind, "law")
         self.assertEqual(by_key["contraceptive_pill"].kind, "technology")
+
+
+def _rule_loc():
+    """Every English loc value by key, and te_demog_custom_loc.txt's text."""
+    loc = {}
+    for path in (ROOT / "localization/english").glob("*.yml"):
+        for m in re.finditer(r'(?m)^ ([\w.\-]+):\d* "(.*)"\s*$', path.read_text(encoding="utf-8-sig")):
+            loc[m.group(1)] = m.group(2)
+    return loc, (ROOT / "common/customizable_localization/te_demog_custom_loc.txt").read_text(encoding="utf-8-sig")
+
+
+class TestCensusOffNames(unittest.TestCase):
+    """With the census off, every census-only type's name and description say so (te_demog_custom_loc.txt)."""
+
+    NAME = "[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+    DESC = "[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+
+    @classmethod
+    def setUpClass(cls):
+        types = (ROOT / "common/modifier_type_definitions/demographics_modifier_types.txt").read_text(encoding="utf-8-sig")
+        cls.types = re.findall(r"(?m)^(\w+)\s*=\s*\{", types)
+        cls.loc, cls.custom = _rule_loc()
+
+    def test_every_census_type_ends_in_the_tag(self):
+        self.assertGreater(len(self.types), 40)
+        for name in self.types:
+            self.assertTrue(self.loc.get(name, "").endswith(self.NAME), name)
+            self.assertTrue(self.loc.get(name + "_desc", "").endswith(self.DESC), name + "_desc")
+
+    def test_no_other_modifier_carries_the_tag(self):
+        """An engine line or a Wealth Concentration term works with the census off, so its name has no tag."""
+        tagged = {k for k, v in self.loc.items() if self.NAME in v or self.DESC in v}
+        self.assertEqual(tagged, set(self.types) | {t + "_desc" for t in self.types})
+
+    def test_the_tag_shows_only_while_the_census_doesnt_run(self):
+        for entry, key in (("te_demog_census_off_name", "te_demog_census_off_tag"),
+                           ("te_demog_census_off_desc", "te_demog_census_off_note")):
+            block = re.search(rf"(?ms)^{entry} = \{{(.*?)^\}}", self.custom)
+            self.assertIsNotNone(block, entry)
+            texts = re.findall(r"trigger = \{ (.*?) \}\s*localization_key = (\w+)", block.group(1))
+            self.assertEqual(texts, [("te_demog_cohorts_run = yes", "te_demog_census_off_none"),
+                                     ("always = yes", key)], entry)
+            self.assertTrue(self.loc[key], key)
+        self.assertEqual(self.loc["te_demog_census_off_none"], "")
+
+
+class TestWorkforceLineNames(unittest.TestCase):
+    """Under Full, the two moved Workforce Ratio families' names say what the census does with them instead: the
+    replaced family's in a tag after Workforce Ratio, the women's-work family's by reading women's work first (owner,
+    2026-10-25)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc, cls.custom = _rule_loc()
+
+    def _texts(self, entry):
+        block = re.search(rf"(?ms)^{entry} = \{{(.*?)^\}}", self.custom)
+        self.assertIsNotNone(block, entry)
+        return re.findall(r"trigger = \{ (.*?) \}\s*localization_key = (\w+)", block.group(1))
+
+    def test_these_are_the_two_families(self):
+        moved = (ROOT / "common/modifier_type_definitions/demographics_workforce_line_types.txt").read_text(
+            encoding="utf-8-sig")
+        self.assertEqual(set(re.findall(r"(?m)^(\w+)\s*=\s*\{", moved)),
+                         {"state_demog_replaced_ratio_add", "state_demog_womens_work_ratio_add"})
+
+    def test_the_replaced_family_ends_in_its_tag_only_under_full(self):
+        self.assertEqual(self.loc["state_demog_replaced_ratio_add"],
+                         "$state_working_adult_ratio_add$"
+                         "[SelectLocalization(GetPlayer.IsValid,'te_demog_wf_replaced_name_ingame','te_demog_census_off_none')]")
+        self.assertEqual(self._texts("te_demog_wf_replaced_name"),
+                         [("te_demog_effects_run = yes", "te_demog_wf_replaced_tag"),
+                          ("always = yes", "te_demog_census_off_none")])
+        # the rendered name is pasted into a quoted tooltip argument (loc_render_audit): no straight apostrophe
+        tag = self.loc["te_demog_wf_replaced_tag"]
+        self.assertTrue(tag and "'" not in tag)
+
+    def test_the_womens_work_family_reads_womens_work_first_under_full(self):
+        self.assertEqual(self.loc["state_demog_womens_work_ratio_add"],
+                         "[SelectLocalization(GetPlayer.IsValid,'te_demog_wf_womens_name_ingame','te_demog_wf_plain')]")
+        self.assertEqual(self.loc["state_demog_womens_work_ratio_add_desc"],
+                         "[SelectLocalization(GetPlayer.IsValid,'te_demog_wf_womens_desc_ingame','te_demog_wf_womens_desc_plain')]")
+        self.assertEqual(self._texts("te_demog_wf_womens_name"),
+                         [("te_demog_effects_run = yes", "te_demog_wf_womens_full"),
+                          ("always = yes", "te_demog_wf_plain")])
+        self.assertEqual(self._texts("te_demog_wf_womens_desc"),
+                         [("te_demog_effects_run = yes", "te_demog_wf_womens_desc_full"),
+                          ("always = yes", "te_demog_wf_womens_desc_plain")])
+        full = self.loc["te_demog_wf_womens_full"]
+        # "Women's Work" alone since Women's Work Outside the Home went (owner, 2026-10-25)
+        self.assertEqual(full, "Women’s Work")
+        self.assertNotIn("'", full)  # pasted into a quoted tooltip argument, as above
+        self.assertEqual(self.loc["te_demog_wf_plain"], "$state_working_adult_ratio_add$")
+        self.assertTrue(self.loc["te_demog_wf_womens_desc_plain"].startswith("$state_working_adult_ratio_add_desc$"))
+        self.assertFalse(self.loc["te_demog_wf_womens_desc_full"].startswith("$state_working_adult_ratio_add"))
+
+
+class TestBirthDeathLineNames(unittest.TestCase):
+    """Under Full, the moved birth and death lines' names end in "(Demographics)" (owner, 2026-10-25)."""
+
+    CALL = "[SelectLocalization(GetPlayer.IsValid,'te_demog_line_name_ingame','te_demog_census_off_none')]"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc, cls.custom = _rule_loc()
+        cls.types = re.findall(r"(?m)^(\w+)\s*=\s*\{", (
+            ROOT / "common/modifier_type_definitions/demographics_engine_line_types.txt").read_text(encoding="utf-8-sig"))
+
+    def test_every_line_type_keeps_its_vanilla_name_and_ends_in_the_tag(self):
+        self.assertGreaterEqual(len(self.types), 9)
+        for name in self.types:
+            self.assertRegex(self.loc[name], rf"^\$state_\w+_mult\${re.escape(self.CALL)}$", name)
+        tagged = {k for k, v in self.loc.items() if self.CALL in v}
+        self.assertEqual(tagged, set(self.types))
+
+    def test_the_tag_shows_only_under_full(self):
+        block = re.search(r"(?ms)^te_demog_line_name = \{(.*?)^\}", self.custom)
+        self.assertIsNotNone(block)
+        texts = re.findall(r"trigger = \{ (.*?) \}\s*localization_key = (\w+)", block.group(1))
+        self.assertEqual(texts, [("te_demog_effects_run = yes", "te_demog_line_tag"),
+                                 ("always = yes", "te_demog_census_off_none")])
+        self.assertEqual(self.loc["te_demog_line_tag"], " #grey (Demographics)#!")
+
+
+class TestModifierNamesRenderWithNoPlayer(unittest.TestCase):
+    """A modifier type's name and description also render where no player exists: a loading-screen concept tip
+    lists a static modifier's lines (vanilla's Pollution Impact shows state_region_pollution_health's), and so does an
+    observer's session. `GetPlayer.GetCustom` there logs `Object of type 'country' is not valid for '<entry>'` once per
+    frame (about 2,000 lines in 3 seconds on 2026-10-27), so each such name reaches its custom loc through vanilla's
+    loading-tip guard, `SelectLocalization(GetPlayer.IsValid, '<x>_ingame', '<plain>')`, and only the `_ingame` key
+    calls GetCustom."""
+
+    GUARD = re.compile(r"\[SelectLocalization\(GetPlayer\.IsValid,'(\w+)_ingame','(\w+)'\)\]")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc, _ = _rule_loc()
+        cls.types = set()
+        for path in (ROOT / "common/modifier_type_definitions").glob("*.txt"):
+            cls.types |= set(re.findall(r"(?m)^(\w+)\s*=\s*\{", path.read_text(encoding="utf-8-sig")))
+
+    def test_no_modifier_type_calls_getcustom_on_the_player_unguarded(self):
+        self.assertGreater(len(self.types), 100)
+        bare = [k for t in self.types for k in (t, t + "_desc") if "GetPlayer.GetCustom(" in self.loc.get(k, "")]
+        self.assertEqual(bare, [])
+
+    def test_each_guard_names_its_custom_entry_and_a_plain_fallback(self):
+        guarded = {}
+        for key, value in self.loc.items():
+            for entry, plain in self.GUARD.findall(value):
+                guarded[entry] = plain
+                self.assertIn(plain, self.loc, key)
+        self.assertEqual(set(guarded), {"te_demog_census_off_name", "te_demog_census_off_desc", "te_demog_line_name",
+                                        "te_demog_wf_replaced_name", "te_demog_wf_womens_name",
+                                        "te_demog_wf_womens_desc"})
+        for entry in guarded:
+            self.assertEqual(self.loc[entry + "_ingame"], f"[GetPlayer.GetCustom('{entry}')]", entry)
 
 
 if __name__ == "__main__":

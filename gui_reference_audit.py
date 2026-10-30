@@ -15,10 +15,20 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from paradox_file_parser import directive_prefixes
+
 BOM = b"\xef\xbb\xbf"
 IDENT = r"[A-Za-z_][\w.\-]*"
 LEX = re.compile(r'"(?:\\.|[^"\\])*"|#[^\n]*', re.S)
 OPEN = re.compile(rf"({IDENT})\s*=\s*\{{")
+# Of the six merge directives, only the *_OR_CREATE forms create the entry they
+# name. INJECT:, REPLACE: and their TRY_ forms edit an entry that has to be
+# defined elsewhere (#1180). A depth-0 key is `name =` or `DIRECTIVE: name =`
+# (space after the colon allowed). The lookbehind keeps out a scripted
+# constant (`@foo = 3`).
+_CREATING = frozenset(p[:-1] for p in directive_prefixes if p.endswith("_OR_CREATE:"))
+_DIRECTIVES = "|".join(re.escape(p[:-1]) for p in directive_prefixes)
+_DEPTH0_KEY = re.compile(rf"[{{}}]|(?<![@\w:])(?:({_DIRECTIVES}):\s*)?({IDENT})\s*=")
 CALLS = {
     "scripted_guis": "GetScriptedGui",
     "script_values": "ScriptValue",
@@ -76,6 +86,45 @@ def masks(text: str) -> tuple[str, str]:
 
 def read(path: Path) -> str:
     return path.read_text(encoding="utf-8-sig")
+
+
+def depth0_names(text: str) -> tuple[set[str], set[str]]:
+    """(defined, merge targets) among a database file's depth-0 keys.
+
+    Defined: a scalar `foo = 1` (a script value can be one), a block, or a
+    name behind `INJECT_OR_CREATE:` or `REPLACE_OR_CREATE:`. Merge targets:
+    a name behind `INJECT:`, `REPLACE:`, `TRY_INJECT:` or `TRY_REPLACE:`,
+    which edits an entry that must exist elsewhere, in the mod or vanilla, so
+    only that entry resolves a read. A scripted constant (`@foo = 3`) is
+    neither.
+    """
+    defined: set[str] = set()
+    targets: set[str] = set()
+    depth = 0
+    for token in _DEPTH0_KEY.finditer(masks(text)[1]):
+        if token[0] == "{":
+            depth += 1
+        elif token[0] == "}":
+            depth -= 1
+        elif depth == 0:
+            directive, name = token[1], token[2]
+            (defined if directive is None or directive in _CREATING else targets).add(name)
+    return defined, targets
+
+
+def defined_names(text: str) -> set[str]:
+    """Names a database file (`common/script_values/` and the like) defines:
+    the first half of `depth0_names`. `loc_script_value_audit` and
+    `scripts/analysis/check_gui_lint.py` use this too, so they can't disagree
+    on what a definition is.
+
+    Whether a merge target's own definition can be found depends on what was
+    read: the mod always, vanilla's script values and static modifiers from
+    the committed `vanilla_parsed/` snapshot, and vanilla's scripted GUIs and
+    custom localization only from game files. `gui_reference_audit` warns
+    rather than errs on a merge target it can't confirm for that reason.
+    """
+    return depth0_names(text)[0]
 
 
 def blocks(syntax: str):
@@ -138,6 +187,10 @@ class Index:
         self.complete = {kind: False for kind in self.keys}
         self.complete["custom_loc"] = True  # mod-only custom localization contract
         self.vanilla_read = set()
+        # Kinds whose vanilla definitions were read, from game files or the
+        # snapshot, and names the mod only merges into (INJECT:, REPLACE:...).
+        self.vanilla_covered = set()
+        self.merge_targets = {kind: set() for kind in DIRS}
         self.saved = {}
         self.shown = []
         self.gui_files = {}
@@ -149,19 +202,15 @@ class Index:
                 if base == self.vanilla and folder.is_dir():
                     self.complete[kind] = True
                     self.vanilla_read.add(kind)
+                    self.vanilla_covered.add(kind)
                 for path in sorted(folder.rglob("*.txt")):
                     text = read(path)
-                    code, syntax = masks(text)
-                    # Scalars count too: foo = 1 is a script-value definition.
-                    depth = 0
-                    for token in re.finditer(rf"[{{}}]|(?:INJECT:|REPLACE:)?({IDENT})\s*=", syntax):
-                        if token[0] == "{":
-                            depth += 1
-                        elif token[0] == "}":
-                            depth -= 1
-                        elif depth == 0:
-                            self.keys[kind].add(token[1])
+                    defined, targets = depth0_names(text)
+                    self.keys[kind] |= defined
+                    if base == root:
+                        self.merge_targets[kind] |= targets
                     if kind == "scripted_guis":
+                        code, syntax = masks(text)
                         for name, opening, start, end in blocks(syntax):
                             saved, shown = set(), ""
                             for child, _, a, b in blocks(syntax[start:end]):
@@ -193,6 +242,7 @@ class Index:
                 data = json.loads(path.read_text(encoding="utf-8"))
                 self.keys[kind].update(data)
                 self.complete[kind] = True
+                self.vanilla_covered.add(kind)
 
 
 def scripted_call_scopes(expr: str):
@@ -240,8 +290,14 @@ def audit(mod_path: str | Path | None = None, vanilla_path: str | Path | None = 
             complete = index.complete[kind] or (kind == "scripted_guis" and name not in VANILLA_SCRIPTED_GUIS)
             if kind == "custom_loc" and name in VANILLA_CUSTOM_LOC and kind not in index.vanilla_read:
                 complete = False
-            severity = "error" if complete else "warn"
-            flag(file, line, kind, name, severity, "unresolved" if severity == "error" else "unresolved; vanilla category unavailable")
+            # The mod only INJECTs/REPLACEs it, and vanilla's definitions of
+            # this kind weren't read: presumably vanilla's, unconfirmable here.
+            presumed = name in index.merge_targets.get(kind, ()) and kind not in index.vanilla_covered
+            severity = "error" if complete and not presumed else "warn"
+            detail = ("unresolved" if severity == "error"
+                      else "only an INJECT/REPLACE names it; presumed vanilla, can't confirm offline" if presumed
+                      else "unresolved; vanilla category unavailable")
+            flag(file, line, kind, name, severity, detail)
 
     for path in sorted((root / "gui").rglob("*.gui")):
         file = str(path.relative_to(root))

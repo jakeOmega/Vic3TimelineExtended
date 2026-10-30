@@ -112,7 +112,9 @@ point, and a surplus lowers it (the Government Fiscal Policy Effect).
 Policies, laws, events and, under the full Banking System, your policy stance
 push the readings directly. Fiat Money and Digital Currency add 0.2 bubble
 pressure a month, and Digital Currency and Decentralized Cryptocurrency make the
-cycle more volatile.
+cycle more volatile. Wealth Concentration moves it too: Great Family Fortunes
+adds up to 0.5 bubble pressure a month and Dispersed Wealth takes up to 0.53
+off (see [Who inherits](06-politics.md#who-inherits)).
 
 ## Banking crashes and contagion
 
@@ -260,7 +262,7 @@ and each heading opens or closes its section:
 | Monetary Policy | Open | Under the full Banking System, the rate, gold, the exchange rate, what borrowing costs and prices (see [Monetary policy under the full Banking System](#monetary-policy-under-the-full-banking-system)). Under Simplified, only the Open-Market Operations row, in a market economy. |
 | Available Interventions | Open | Your economic system's other tools, in categories you can close one by one, each tool with its point cost and an Enable button. |
 | History | Open | The charts in [Banking history charts](#banking-history-charts). |
-| How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate, the stance and what borrowing costs. |
+| How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate and the stance, the mandates, gold and the peg, the exchange rate, international arrangements, what borrowing costs and prices. |
 
 Each tool's name is underlined: hover it for what the tool does, its full name
 and what it requires. A grayed button means you cannot use the tool now, and
@@ -274,16 +276,15 @@ tables in this chapter use the full names.
 The intervention budget is the pool of points your active policies hold. Your
 financial regulation law gives 1 to 7 points, National Bank Established 1 more,
 and a power bloc's banking union 1 more. The overview's Budget box shows how
-many are in use and how many are free, and the journal entry repeats the free
-points as Free Intervention Points: a
-command economy calls it the Free Planning Budget and a cooperative the Free
-Council Mandate Points.
+many are in use and how many are free. Hover the free figure to see what each
+grant adds and what each active tool holds.
 
 Switching a tool on has its own price: the lending tools charge the treasury
 0.2% to 2.5% of GDP, most regulatory tools create radicals, and Capital Controls
 (Outflows) costs infamy and great-power relations. Sterilize Capital Inflows and
-Emergency Import Financing charge cash on activation and each month; their
-tooltips show the current monthly cost.
+Emergency Import Financing add a weekly government expense while they run, a
+quarter of their monthly rate, so a year costs 13 months' worth. It shows in the
+Budget panel under Banking, and their tooltips show the current weekly cost.
 
 ### Market economy banking tools
 
@@ -441,10 +442,10 @@ Established. The tooltips show their current costs and restrictions.
 | Intervention | What you gain | What you pay or give up |
 |---|---|---|
 | Restrict Speculative Inflows | Halves incoming speculative gold and the upward exchange-rate pressure from a positive real-rate gap. Gold can still leave at its usual speed. | Slower reserve accumulation, −3% bureaucracy and slightly slower credit growth. Bubble pressure also falls. |
-| Sterilize Capital Inflows | Removes 75% of the inflation pressure from incoming gold. | 0.01% of annual GDP in cash on activation and each month, with slightly slower credit growth and less bubble pressure. Foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
+| Sterilize Capital Inflows | Removes 75% of the inflation pressure from incoming gold. | 0.01% of annual GDP a month, charged weekly as a government expense, with slightly slower credit growth and less bubble pressure. Foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
 | Limit Foreign-Currency Borrowing | Gradually reduces the risk premium caused by a weak currency, reaching half that component after about 24 months. | Adds 0.25 percentage points of risk premium while active and slows credit growth. Protection takes time to build; it also takes about 24 months to disappear after you lift the limits. |
 | Foreign Exchange Surrender Requirement | Buys gold for the central bank with treasury cash, without adding Borrowed Gold that foreign lenders can withdraw. | −10% export advantage and −3% bureaucracy, plus the cash spent on reserves. Purchases stop at the vault's capacity and cannot exceed available cash. |
-| Emergency Import Financing | +15% import advantage while a financial crisis lasts. | Cash on activation and each month: initially 0.05% of annual GDP, rising to 0.10% after 12 funded months. Holds 3 intervention points. |
+| Emergency Import Financing | +15% import advantage while a financial crisis lasts. | A weekly government expense of a quarter of the monthly rate: initially 0.05% of annual GDP a month, rising to 0.10% after 12 funded months. Holds 3 intervention points. |
 
 Surrender purchases depend on your market's exports. The monthly cap is 0.05%
 of annual GDP when export reliance is above 30%, half that amount above 10%,
@@ -459,7 +460,9 @@ ships through a blockade. The tool ends when the crisis passes or you cannot
 fund it. Each inactive month removes one month of its accumulated surcharge;
 switching it off and back on does not reset the cost.
 
-Sterilize Capital Inflows ends if you cannot fund it. Both it and Foreign
+Sterilize Capital Inflows ends if the treasury cannot cover a month of it. The
+surrender requirement's purchases stay monthly: the treasury pays the same day,
+and the same sum, as the vault receives. Both it and Foreign
 Exchange Surrender Requirement end when you lose the conditions for convertible
 gold flows, including a suspension of convertibility. Other tools are lifted
 when their law or monetary requirements no longer hold. Restrict Speculative
@@ -491,17 +494,18 @@ Emergency Liquidity Program still refunds 1% of GDP when that closes it.
 | Cooperative Ownership | Surplus & Reserves | Dividend Restraint Resolution (2), Mutual Aid Fund Deployment (4) |
 | Cooperative Ownership | Investment & Credit | Collective Capital Investment Plan (4), Cooperative Credit Union Expansion (3) |
 | Cooperative Ownership | Council Direction | Federation Council Advisory Directive (1), Consumption Ceiling Resolution (2) |
-| Cooperative Ownership | Membership Mobilisation | Worker Solidarity Campaign (1), Worker Buyout Facilitation (3) |
+| Cooperative Ownership | Membership Mobilization | Worker Solidarity Campaign (1), Worker Buyout Facilitation (3) |
 
 ### Banking history charts
 
 The History section starts open in both the journal entry and the Banking tab.
-It charts the last 1 Year, 5 Years or 20 Years month by month: Cycle Value,
-Cycle Momentum, Bubble Pressure, Policy Rate and Rate Paid on Debt, plus
+It charts the last 1 Year, 5 Years or 20 Years month by month: Banking Cycle
+Value, Banking Momentum, Bubble Pressure, Policy Rate and Rate Paid on Debt, plus
 Inflation and the Exchange Rate Index under the full Banking System. Markers
 flag policy changes, including tools a change of economic system switches off,
-and crashes, including imported ones. History is kept for the player and for
-major powers and above.
+and crashes, including imported ones. Hover a bar for that month's phase or
+band and the policies switched on or off. History is kept for the player and
+for major powers and above.
 
 ## Financial regulation laws
 
@@ -551,7 +555,8 @@ The Monetary Policy section's rows are grouped under The Rate, Gold and the Peg 
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
 Costs and Prices. Hover a row's label for what the term means and the row for
-the detail behind its figure. Your Policy Stance and price band are in the
+its reading and what moves it; How Banking Works has the rules behind each
+group. Each mandate button says what its rule does. Your Policy Stance and price band are in the
 overview, with the policy rate and the past year's inflation under them.
 
 ![The Monetary Policy block of the banking dashboard: the rates and the Rate Target stepper, the exchange rate, what borrowing costs, prices, and the central bank's stance, delegation and mandate.](images/banking_rate.png)
@@ -569,7 +574,7 @@ anchor's.
 
 ### Rate target, delegation and mandates
 
-You choose a Rate Target, the stepper labelled Target beside your Policy Rate,
+You choose a Rate Target, the stepper labeled Target beside your Policy Rate,
 and each month the policy rate moves a sixth of the distance toward it, never
 less than a third of a point; Digital Currency doubles both. The distance it
 counts is at most how far inflation is from its target, so with inflation on
@@ -589,7 +594,7 @@ free of charge.
 | Inflation Targeting | Raises the rate more than a point for each point of inflation above target, and leaves the financial cycle to prices, so booms run further and slumps go deeper before it acts. Lenders believe it most, which holds expected inflation nearer the target |
 | Dual Mandate | Reacts to inflation as hard, and also leans fully against where the cycle is heading. Every bank starts on it |
 | Growth | A quarter point looser at target, half as responsive to the cycle, and blind to inflation below 4% |
-| Peg Defence | Holds the world rate, up to a point above while gold is short, and ignores the domestic cycle; convertible gold standard only |
+| Peg Defense | Holds the world rate, up to a point above while gold is short, and ignores the domestic cycle; convertible gold standard only |
 
 A mandate-run bank cuts at least a point a month (two under Digital Currency)
 once the cycle falls into Stagnation or worse.
@@ -658,7 +663,7 @@ The purchases cost no intervention points and no money, and you don't switch
 them on. While there are any, an Asset Purchases row below Price Pressure shows
 how much they add, together with Open-Market Operations, and its tooltip gives
 the rate the bank would set without the floor. They need Fiat Money or Digital
-Currency. A dial you set by hand gets none of them, because you have Monetise
+Currency. A dial you set by hand gets none of them, because you have Monetize
 Deficit instead; while your rate is on its floor and prices are falling, the
 Delegation tooltip reminds you that a delegated bank would buy. AI countries
 are always delegated, so they get the purchases too.
@@ -666,7 +671,7 @@ are always delegated, so they get the purchases too.
 Under Central Bank Independence you can't print for the treasury, so a long
 deflation leaves you the bank's purchases, Open-Market Operations and a budget
 deficit above 1% of GDP, which adds a little pressure of its own. Recovery from
-a deep deflation can still take years. Leaving independence for Monetise Deficit is
+a deep deflation can still take years. Leaving independence for Monetize Deficit is
 possible but costly: you lose its credit-standing bonus and some of the
 intervention budget.
 
@@ -691,7 +696,7 @@ fade after a return to Neutral.
 ### What your government pays to borrow
 
 Rate You Pay shows the yearly interest on your debt. It adds up the market yield
-(the higher of your policy rate and the World Reference Rate plus expected
+(the higher of your policy rate and the Reference Rate plus expected
 inflation), your credit standing and your risk premium, less the inflation that
 actually happened, and never falls below 0.5%.
 
@@ -703,7 +708,7 @@ cycle phase, crisis tools, banking events, bankruptcy, a debt load past a
 quarter of your credit limit (up to +4 points at the limit), expectations that
 have strayed from target, money printing and a weak currency.
 
-The World Reference Rate is 3% for every country, 2.5% once any great power has
+The Reference Rate is 3% for every country, 2.5% once any great power has
 Macroeconomics and 2% once one has Globalization. The World Rate is the real
 interest rate of the great powers that set their own; gold flows and exchange
 rates are measured against it.
@@ -766,7 +771,7 @@ Command and dollarized economies never get it.
 
 ### Monetizing the deficit
 
-Monetise Deficit, from 0 to 3, has your national bank print money for the
+Monetize Deficit, from 0 to 3, has your national bank print money for the
 treasury. Each level mints about 1% of a year's GDP, adds about 2.5 points of
 inflation pressure and half a point of risk premium. It needs Fiat Money or
 Digital Currency and a bank that takes instructions, so Central Bank
@@ -783,7 +788,7 @@ Your Monetary Policy law sets the dial's range.
 | Currency law | Unlocked by | Rate range | Notes |
 |---|---|---|---|
 | Commodity Money | default | World rate −1 to +3, with a national bank | Prices that outrun the world's are pulled back down; fixed at par |
-| Gold Standard | Central Banking | 0% to 15% | A point off credit standing; gold reserve; Peg Defence; fixed at par |
+| Gold Standard | Central Banking | 0% to 15% | A point off credit standing; gold reserve; Peg Defense; fixed at par |
 | Fiat Money | Keynesian Economics, with National Bank Established | 0% to 60% | Open-Market Operations and money printing; floats |
 | Digital Currency | Universal Digital Identity, with National Bank Established | −3% to 60% | As Fiat, and the rate moves twice as fast; floats |
 | Decentralized Cryptocurrency | Cybersecurity | no dial | Borrows at the world rate plus a spread; floats |
@@ -797,7 +802,7 @@ treasury. Each point your rate sits above the World Rate draws in gold worth
 Borrowed Gold. It costs your budget nothing, but it leaves first, at double
 speed, once your rate is no longer above the world's. What the high rate costs
 you is a tighter Policy Stance and dearer borrowing for your government.
-Recapitalise the Bank moves a tenth of the reserve's limit from treasury to
+Recapitalize the Bank moves a tenth of the reserve's limit from treasury to
 vault, in cash, for good.
 
 Peg Confidence (0 to 100) reacts to your rate while the vault is under a tenth
@@ -826,7 +831,7 @@ An overvalued currency drains it at any time and stops the recovery. So does a
 deep slump: a Downturn or Panic while your Policy Stance reads Tight or Very
 Tight costs 3 a month however full the vault is, because the peg is holding your
 rate up while the economy sinks. From full confidence that reaches 20 in a little
-over two years. Peg Defence holds the World Rate whatever the cycle does, so a
+over two years. Peg Defense holds the World Rate whatever the cycle does, so a
 bank left on it rides a long slump down to the run unless you cut the rate and
 pay for it in gold. At 20, The Run on the Vault fires:
 
@@ -843,7 +848,7 @@ the event restores convertibility by itself:
 | Option | Effect |
 |---|---|
 | Restore convertibility | Back on gold at the old parity; Peg Confidence starts at 50 |
-| Keep the paper | Fiat Money becomes law at once, ending any currency law you were enacting; the lost credit-standing bonus stops counting against you. Needs Keynesian Economics and National Bank Established, and a currency of your own; greyed out otherwise |
+| Keep the paper | Fiat Money becomes law at once, ending any currency law you were enacting; the lost credit-standing bonus stops counting against you. Needs Keynesian Economics and National Bank Established, and a currency of your own; grayed out otherwise |
 
 ### The exchange-rate index and capital controls
 
@@ -879,7 +884,7 @@ inherits](06-politics.md#who-inherits)) falls 5 when the crisis fires.
 | Option | Effect |
 |---|---|
 | Currency reform: "Call in every note. We begin again." | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; Wealth Concentration falls 5 more; middle and upper strata radicalize; Currency Reform adds 5 points of risk premium for ten years |
-| Dollarize: "Let them keep the foreign money. They already have." | A Dollarised Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
+| Dollarize: "Let them keep the foreign money. They already have." | A Dollarized Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
 | Wait: "It will pass. Everything passes." | Nothing; if inflation is still 50% or more in two years, the crisis fires again and takes another 5 |
 
 ### Monetary treaty articles
@@ -943,7 +948,10 @@ worsens your credit standing for ten years, costs investment pool, relations and
 bloc cohesion, and bars you for ten years. A leader can Press for Convergence at
 50 influence per holdout, which waives the debt condition and puts The Question
 of the Common Currency to each holdout; one that refuses costs the bloc cohesion
-and gains Monetary Independence. Power blocs in general are covered in [Power
+and gains Monetary Independence. Under the Monetary Union row a leader sees each
+member: adopted, holding out, or holding out and set to refuse, with what backing
+it costs. The Backstops row lists each treaty partner the same way, received and
+extended. Power blocs in general are covered in [Power
 bloc principles and
 identities](09-diplomacy.md#power-bloc-principles-and-identities).
 
@@ -957,7 +965,7 @@ board.
 
 ### How the AI runs monetary policy
 
-AI countries always delegate. They run Peg Defence on a convertible gold
+AI countries always delegate. They run Peg Defense on a convertible gold
 standard, Growth at war or with debt at half their credit limit, and Price
 Stability otherwise. Once Fiat Money is open to them they stop favoring gold and
 lean toward fiat, more so in later eras, in deflation and while convertibility
@@ -977,7 +985,7 @@ mandates, inflation,
 exchange rate, gold reserve, monetary treaty articles, Monetary Union principles
 or currency boards.
 
-You still borrow at a rate of your own: the World Reference Rate, a point more
+You still borrow at a rate of your own: the Reference Rate, a point more
 without a national bank, plus credit standing and risk premium, so a Panic still
 raises your interest. Open-Market Operations needs only Keynesian Economics,
 four points and a law that allows it, and The Gold Window Closes, a
@@ -1041,13 +1049,13 @@ throughput by 5% and blocks another appeal while it lasts.
 
 A loan on conditions reaches the recipient as The Rescue's Terms. Refusing, the
 default, costs nothing. Signing pays a third of the sum at once and puts you
-under two years of Rescue Programme (−1 point of risk premium, −5 legitimacy)
+under two years of Rescue Program (−1 point of risk premium, −5 legitimacy)
 and Restored Banking Confidence; Trade Unions disapprove and Industrialists
 approve. The other two thirds come at yearly reviews, each only if your budget
 took loans in no more than 6 of the 12 months before it. Miss a review and the
-programme is suspended: no more payments, −20 relations with the rescuer and +2
+program is suspended: no more payments, −20 relations with the rescuer and +2
 points of risk premium fading over five years. Both sides get a notice at each
-review. While a programme still owes you money, no one else is asked to rescue
+review. While a program still owes you money, no one else is asked to rescue
 you.
 
 ### The Great Depression
@@ -1093,7 +1101,7 @@ Sovereign Debt Scare, drawn only while your debt is past a quarter of your
 credit limit, can end in a partial default, the quarter haircut of
 [Restructuring the public debt](#restructuring-the-public-debt) at the same
 price. Its central bank option, where your bank may monetize the deficit under
-the full Banking System, has the bank buy government bonds: Monetise Deficit
+the full Banking System, has the bank buy government bonds: Monetize Deficit
 rises one level for 12 months, with that level's inflation and risk premium,
 then steps back. A few tie into the banking tools: The Bank Holiday appears only when you could
 declare one, and its first option does.

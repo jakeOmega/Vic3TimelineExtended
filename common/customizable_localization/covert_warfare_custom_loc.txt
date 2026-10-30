@@ -171,6 +171,18 @@ covert_last_exposed_type_name = {
 		localization_key = iw_op_name_counterintel_support
 	}
 	text = {
+		trigger = { var:iw_last_exposed_type = 15 }
+		localization_key = iw_op_name_incite_autonomy
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 16 }
+		localization_key = iw_op_name_sabotage_colony
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 17 }
+		localization_key = iw_op_name_survey_defences
+	}
+	text = {
 		localization_key = iw_op_name_unknown
 	}
 }
@@ -242,6 +254,18 @@ covert_last_exposed_type_desc = {
 	text = {
 		trigger = { var:iw_last_exposed_type = 14 }
 		localization_key = iw_op_exposed_desc_counterintel_support
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 15 }
+		localization_key = iw_op_exposed_desc_incite_autonomy
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 16 }
+		localization_key = iw_op_exposed_desc_sabotage_colony
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 17 }
+		localization_key = iw_op_exposed_desc_survey_defences
 	}
 	text = {
 		localization_key = iw_op_exposed_desc_unknown
@@ -316,6 +340,18 @@ covert_burned_type_name = {
 		localization_key = iw_op_name_counterintel_support
 	}
 	text = {
+		trigger = { var:iw_burned_type_code = 15 }
+		localization_key = iw_op_name_incite_autonomy
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 16 }
+		localization_key = iw_op_name_sabotage_colony
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 17 }
+		localization_key = iw_op_name_survey_defences
+	}
+	text = {
 		localization_key = iw_op_name_unknown
 	}
 }
@@ -387,6 +423,18 @@ covert_caught_type_name = {
 	text = {
 		trigger = { var:iw_caught_type_code = 14 }
 		localization_key = iw_op_name_counterintel_support
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 15 }
+		localization_key = iw_op_name_incite_autonomy
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 16 }
+		localization_key = iw_op_name_sabotage_colony
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 17 }
+		localization_key = iw_op_name_survey_defences
 	}
 	text = {
 		localization_key = iw_op_name_unknown

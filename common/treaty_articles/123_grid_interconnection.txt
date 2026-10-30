@@ -1,0 +1,199 @@
+﻿# =================================================================
+# TREATY ARTICLE: grid_interconnection_agreement
+# Mutual agreement joining the two countries' power grids where they
+# border. Historical: the Nordel and UCPTE power pools, cross-border
+# interconnectors between neighbours in one market.
+#
+# The article has no modifier. The monthly grid balancing
+# (common/scripted_effects/power_grid_effects.txt) reads it: each station
+# owner's partners are listed at the start of a run
+# (te_grid_refresh_partners_effect), and a station joins a partner's
+# bordering station into one grid (te_grid_land_link), or one across the sea
+# when both have an undersea cable and either's range reaches the other
+# (te_grid_sea_link, te_grid_cable_in_range). The two
+# may be in different markets: Grid Power has a fixed price, so the power
+# that crosses is paid for at it, the sending market's stations paid for all
+# they sell and the receiving market's paying for all they buy
+# (te_grid_cross_market_effect).
+# =================================================================
+grid_interconnection_agreement = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/grid_interconnection_agreement.dds"
+	kind = mutual
+	cost = 50
+
+	relations_progress_per_day = 0.25
+	relations_improvement_max = 20
+
+	flags = {
+		can_be_renegotiated
+		friendly
+	}
+
+	usage_limit = once_per_treaty
+
+	mutual_exclusions = {
+		grid_interconnection_agreement
+	}
+
+	unlocked_by_technologies = {
+		intergovernmental_organizations
+	}
+
+	visible = {
+		always = yes
+	}
+
+	possible = {
+		NOT = { has_war_with = scope:other_country }
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+		has_technology_researched = electrical_capacitors
+		scope:other_country = { has_technology_researched = electrical_capacitors }
+		# A land border, a Sea Node between them, or undersea cables that
+		# reach each other: an agreement across the sea joins stations with
+		# cables (te_grid_sea_link). A trigger can't walk the sea farther than
+		# one Sea Node, so cables that reach farther are read from the list the
+		# monthly balancing keeps (te_grid_cable_reach,
+		# te_grid_add_cable_reach_effect), up to a month late.
+		custom_tooltip = {
+			text = te_grid_interconnection_border_tt
+			OR = {
+				any_scope_state = {
+					OR = {
+						any_neighbouring_state = { owner = scope:other_country }
+						any_sea_node_adjacent_state = { owner = scope:other_country }
+					}
+				}
+				is_target_in_variable_list = { name = te_grid_cable_reach target = scope:other_country }
+			}
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:first_country = {
+					any_scope_treaty = {
+						binds = scope:second_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = grid_interconnection_agreement
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0.03
+			# A country with a grid of its own looks for neighbours to join.
+			if = {
+				limit = {
+					any_scope_state = { has_building = building_grid_transfer_station }
+				}
+				add = 0.07
+			}
+		}
+
+		inherent_accept_score = {
+			value = -10
+
+			# Mutual articles bind first/second, not other_country, here.
+			if = {
+				limit = { root = scope:first_country }
+				scope:second_country = { save_temporary_scope_as = te_treaty_partner }
+			}
+			else = {
+				scope:first_country = { save_temporary_scope_as = te_treaty_partner }
+			}
+
+			# Hostile nations don't share a grid
+			if = {
+				limit = {
+					OR = {
+						has_attitude = { who = scope:te_treaty_partner attitude = antagonistic }
+						has_attitude = { who = scope:te_treaty_partner attitude = domineering }
+						has_attitude = { who = scope:te_treaty_partner attitude = belligerent }
+					}
+				}
+				add = {
+					desc = "AI_HOSTILE_ATTITUDE"
+					value = -1000
+				}
+			}
+			# The agreement joins grids where both have a station across the
+			# border, or across a sea for interconnectors, or cables that reach
+			# each other farther out (te_grid_cable_reach).
+			if = {
+				limit = {
+					OR = {
+						any_scope_state = {
+							has_building = building_grid_transfer_station
+							OR = {
+								any_neighbouring_state = {
+									owner = scope:te_treaty_partner
+									has_building = building_grid_transfer_station
+								}
+								any_sea_node_adjacent_state = {
+									owner = scope:te_treaty_partner
+									has_building = building_grid_transfer_station
+								}
+							}
+						}
+						is_target_in_variable_list = { name = te_grid_cable_reach target = scope:te_treaty_partner }
+					}
+				}
+				add = {
+					desc = "AI_GRID_STATIONS_MEET"
+					value = 30
+				}
+			}
+			# Cooperative attitude
+			if = {
+				limit = {
+					has_attitude = { who = scope:te_treaty_partner attitude = cooperative }
+				}
+				add = {
+					desc = "AI_COOPERATIVE_ATTITUDE"
+					value = 10
+				}
+			}
+			# Genial attitude
+			if = {
+				limit = {
+					has_attitude = { who = scope:te_treaty_partner attitude = genial }
+				}
+				add = {
+					desc = "AI_FRIENDLY_ATTITUDE"
+					value = 15
+				}
+			}
+			# Same power bloc
+			if = {
+				limit = {
+					is_in_same_power_bloc = scope:te_treaty_partner
+				}
+				add = {
+					desc = "AI_SAME_POWER_BLOC"
+					value = 10
+				}
+			}
+		}
+	}
+}

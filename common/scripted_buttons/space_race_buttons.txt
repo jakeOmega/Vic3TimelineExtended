@@ -14,8 +14,18 @@
 # `effect` all delegate to the shared helpers that the widget's scripted GUIs
 # also call (common/scripted_triggers/space_race_triggers.txt,
 # common/scripted_effects/space_race_effects.txt), so the AI's grid and the
-# player's panel cannot disagree. Change an approach or funding rule in the
-# helper; the `ai_chance` weights below are the only per-button content left.
+# player's panel agree. One difference is deliberate: the increase-funding
+# buttons ask sr_possible_fund_up_within_cap, the player's ceiling plus the
+# cap, because the AI stays within the cap (FUNDING PAST THE CAP below). Change
+# an approach or funding rule in the helper; the `ai_chance` weights below are
+# the only per-button content left.
+#
+# FUNDING PAST THE CAP. A player may fund a milestone up to six levels past the
+# cap (sr_possible_fund_up; lunar colonization design § 5.1). The AI stays
+# within it (owner, 2026-10-29, design § 15.6): its increase-funding buttons
+# ask sr_possible_fund_up_within_cap, and when the cap falls below a level
+# (a power bloc principle lost) its decrease-funding button gets +100 until the
+# level is back within the cap.
 #
 # NON-PARTICIPANTS. An AI outside the top three by global ranking
 # (sr_ai_should_participate fails) makes no progress at all in the monthly
@@ -118,7 +128,7 @@ sr_btn_fund_up_suborbital = {
 		}
 	}
 
-	possible = { sr_possible_fund_up = { MILESTONE = suborbital } }
+	possible = { sr_possible_fund_up_within_cap = { MILESTONE = suborbital } }
 
 	effect = { sr_effect_fund_up = { MILESTONE = suborbital } }
 }
@@ -137,6 +147,12 @@ sr_btn_fund_down_suborbital = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Past the cap (a cap that fell below the level): back within it.
+		# See FUNDING PAST THE CAP in the header.
+		if = {
+			limit = { sr_funding_suborbital_past_cap > 0 }
+			add = 100
 		}
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
@@ -242,7 +258,7 @@ sr_btn_fund_up_orbital = {
 		}
 	}
 
-	possible = { sr_possible_fund_up = { MILESTONE = orbital } }
+	possible = { sr_possible_fund_up_within_cap = { MILESTONE = orbital } }
 
 	effect = { sr_effect_fund_up = { MILESTONE = orbital } }
 }
@@ -261,6 +277,12 @@ sr_btn_fund_down_orbital = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Past the cap (a cap that fell below the level): back within it.
+		# See FUNDING PAST THE CAP in the header.
+		if = {
+			limit = { sr_funding_orbital_past_cap > 0 }
+			add = 100
 		}
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
@@ -366,7 +388,7 @@ sr_btn_fund_up_moon_landing = {
 		}
 	}
 
-	possible = { sr_possible_fund_up = { MILESTONE = moon_landing } }
+	possible = { sr_possible_fund_up_within_cap = { MILESTONE = moon_landing } }
 
 	effect = { sr_effect_fund_up = { MILESTONE = moon_landing } }
 }
@@ -385,6 +407,12 @@ sr_btn_fund_down_moon_landing = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Past the cap (a cap that fell below the level): back within it.
+		# See FUNDING PAST THE CAP in the header.
+		if = {
+			limit = { sr_funding_moon_landing_past_cap > 0 }
+			add = 100
 		}
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
@@ -490,7 +518,7 @@ sr_btn_fund_up_probe = {
 		}
 	}
 
-	possible = { sr_possible_fund_up = { MILESTONE = probe } }
+	possible = { sr_possible_fund_up_within_cap = { MILESTONE = probe } }
 
 	effect = { sr_effect_fund_up = { MILESTONE = probe } }
 }
@@ -509,6 +537,12 @@ sr_btn_fund_down_probe = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Past the cap (a cap that fell below the level): back within it.
+		# See FUNDING PAST THE CAP in the header.
+		if = {
+			limit = { sr_funding_probe_past_cap > 0 }
+			add = 100
 		}
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
@@ -614,7 +648,7 @@ sr_btn_fund_up_moon_base = {
 		}
 	}
 
-	possible = { sr_possible_fund_up = { MILESTONE = moon_base } }
+	possible = { sr_possible_fund_up_within_cap = { MILESTONE = moon_base } }
 
 	effect = { sr_effect_fund_up = { MILESTONE = moon_base } }
 }
@@ -633,6 +667,12 @@ sr_btn_fund_down_moon_base = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Past the cap (a cap that fell below the level): back within it.
+		# See FUNDING PAST THE CAP in the header.
+		if = {
+			limit = { sr_funding_moon_base_past_cap > 0 }
+			add = 100
 		}
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
@@ -738,7 +778,7 @@ sr_btn_fund_up_mars_landing = {
 		}
 	}
 
-	possible = { sr_possible_fund_up = { MILESTONE = mars_landing } }
+	possible = { sr_possible_fund_up_within_cap = { MILESTONE = mars_landing } }
 
 	effect = { sr_effect_fund_up = { MILESTONE = mars_landing } }
 }
@@ -757,6 +797,12 @@ sr_btn_fund_down_mars_landing = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Past the cap (a cap that fell below the level): back within it.
+		# See FUNDING PAST THE CAP in the header.
+		if = {
+			limit = { sr_funding_mars_landing_past_cap > 0 }
+			add = 100
 		}
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
@@ -862,7 +908,7 @@ sr_btn_fund_up_interstellar_probe = {
 		}
 	}
 
-	possible = { sr_possible_fund_up = { MILESTONE = interstellar_probe } }
+	possible = { sr_possible_fund_up_within_cap = { MILESTONE = interstellar_probe } }
 
 	effect = { sr_effect_fund_up = { MILESTONE = interstellar_probe } }
 }
@@ -881,6 +927,12 @@ sr_btn_fund_down_interstellar_probe = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Past the cap (a cap that fell below the level): back within it.
+		# See FUNDING PAST THE CAP in the header.
+		if = {
+			limit = { sr_funding_interstellar_probe_past_cap > 0 }
+			add = 100
 		}
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
@@ -986,7 +1038,7 @@ sr_btn_fund_up_solar_colonization = {
 		}
 	}
 
-	possible = { sr_possible_fund_up = { MILESTONE = solar_colonization } }
+	possible = { sr_possible_fund_up_within_cap = { MILESTONE = solar_colonization } }
 
 	effect = { sr_effect_fund_up = { MILESTONE = solar_colonization } }
 }
@@ -1005,6 +1057,12 @@ sr_btn_fund_down_solar_colonization = {
 		if = {
 			limit = { country_innovation < 25 }
 			add = 30
+		}
+		# Past the cap (a cap that fell below the level): back within it.
+		# See FUNDING PAST THE CAP in the header.
+		if = {
+			limit = { sr_funding_solar_colonization_past_cap > 0 }
+			add = 100
 		}
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {

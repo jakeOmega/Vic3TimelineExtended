@@ -1247,7 +1247,7 @@ types state_panel_types
 
 				item = {
 					icon = {
-						visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_artistic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_athletic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_civic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_crown')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_industrial')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_leader')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_naturalist')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_religious')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_republic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_revolution')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_scientific')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_antiquity')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_archive')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_first_emperor')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_tourism')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_war_memorial')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_concentrated_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_dispersed_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_forced_heirship_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_land_hunger')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_primogeniture_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_undivided_farm_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_fewer_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_inequality')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_more_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_youth_bulge')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_lx_gap_labor')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_dispersed')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_metropolis')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_primate_city')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_provincial_neglect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput')))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))]"
+						visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_artistic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_athletic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_civic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_crown')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_industrial')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_leader')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_naturalist')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_religious')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_republic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_revolution')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_scientific')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_antiquity')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_archive')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_first_emperor')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_tourism')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_war_memorial')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_concentrated_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_dispersed_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_forced_heirship_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_land_hunger')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_primogeniture_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_undivided_farm_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_fewer_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_inequality')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_more_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_youth_bulge')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_lx_gap_labor')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_dispersed')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_metropolis')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_primate_city')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_provincial_neglect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput'))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))]"
 						size = { 30 30 }
 						tooltip = "[TimedModifier.GetTooltip]"
 						using = tooltip_se
@@ -2154,8 +2154,14 @@ types state_panel_types
 			### extra_widget, so their numbers right-align in one column instead of
 			### riding along \n-stacked loc lines.
 
-			### HOMELAND DYNAMICS — always visible, including before unlock.
+			### HOMELAND DYNAMICS — shown only where a homeland can change
+			### (te_homeland_relevant, homeland_values.txt): a culture here could
+			### gain or lose one, or a culture's project is under way. That
+			### includes the paused cases (changes not enabled, region divided),
+			### which the player can act on. Where nothing can change the tile is
+			### hidden (owner decision, 2026-10-27; GUI audit VAN-6c).
 			state_panel_status_item_small = {
+				visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_relevant'), '(CFixedPoint)0')]"
 				tooltip = "TE_STATE_HOMELAND_TT"
 				blockoverride "texture" {
 					texture = "gfx/interface/icons/state_status_icons/state_homelands.dds"
@@ -2310,9 +2316,13 @@ types state_panel_types
 				}
 			}
 
-			### SOLAR COLLECTOR POINTS
+			### SOLAR COLLECTOR POINTS: the country's Solar Receiver slots, shown
+			### only in a state that holds a Solar Collector or a Receiver
+			### (te_state_solar_tile_shown, extra_script_values.txt). The slots are
+			### one pool for the whole country, so the tile stays out of states with
+			### nothing to do with them (GUI audit VAN-7).
 			state_panel_status_item_small = {
-				visible = "[GreaterThan_CFixedPoint(State.GetOwner.MakeScope.ScriptValue('solar_total_generated_points'), '(CFixedPoint)0')]"
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_state_solar_tile_shown'), '(CFixedPoint)0')]"
 				tooltip = "TE_STATE_SOLAR_TT"
 
 				blockoverride "texture" {
@@ -2349,9 +2359,11 @@ types state_panel_types
 				}
 			}
 
-			### ANTIMATTER FACILITY POINTS
+			### ANTIMATTER FACILITY POINTS: the country's Antimatter Facility slots,
+			### shown only in a state that holds the Facility, an Antimatter Engine or
+			### a Warhead Plant (te_state_antimatter_tile_shown), as the solar tile.
 			state_panel_status_item_small = {
-				visible = "[GreaterThan_CFixedPoint(State.GetOwner.MakeScope.ScriptValue('antimatter_total_generated_points'), '(CFixedPoint)0')]"
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_state_antimatter_tile_shown'), '(CFixedPoint)0')]"
 				tooltip = "TE_STATE_ANTIMATTER_TT"
 
 				blockoverride "texture" {
@@ -2395,7 +2407,8 @@ types state_panel_types
 			### basin's, our unused claims in its basin (what a new level here
 			### would take at full throughput) and what it adds to our claim
 			### weight there; each row's hover has the detail. The tile's hover
-			### has the country's licences, each basin's figures and the world's.
+			### has the country's licences and sends the player to the Seabed tab
+			### for each basin's figures (GUI audit VAN-8).
 			state_panel_status_item_small = {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0')]"
 				tooltip = "TE_STATE_SEABED_TT"
@@ -2417,6 +2430,9 @@ types state_panel_types
 						### recording, so one gained since has none: the three rows
 						### that read the basin wait for it.
 						te_state_tile_word_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_visible" {
 								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)0')]"
 							}
@@ -2432,6 +2448,9 @@ types state_panel_types
 						}
 
 						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_tooltip" {
 								tooltip = "TE_STATE_SEABED_ROW_LICENCES_TT"
 							}
@@ -2444,6 +2463,9 @@ types state_panel_types
 						}
 
 						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_visible" {
 								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_distant_records'), '(CFixedPoint)0')]"
 							}
@@ -2459,6 +2481,9 @@ types state_panel_types
 						}
 
 						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_visible" {
 								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)0')]"
 							}
@@ -2474,6 +2499,9 @@ types state_panel_types
 						}
 
 						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_visible" {
 								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)0')]"
 							}
@@ -2485,6 +2513,200 @@ types state_panel_types
 							}
 							blockoverride "row_value" {
 								raw_text = "#v [State.MakeScope.ScriptValue('te_seabed_state_weight_disp')|1]#!"
+							}
+						}
+					}
+				}
+			}
+
+			### OCEAN BASIN (GUI audit VAN-8b, owner 2026-10-27): a coastal state
+			### without the Seabed Licences tile above (its owner never took part
+			### in a sharing, or it is another country's) shows its basin once
+			### the viewing player has researched Abyssal Plain Mining, so the
+			### player can see which pool a port there would weigh in. The cheap
+			### state test first; Not( GetMetaPlayer.IsObserver ) before the
+			### GetPlayer-rooted gate, since an observer has no player.
+			state_panel_status_item_small = {
+				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_basin_tile_shown'), '(CFixedPoint)0'), And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('te_seabed_basin_tile_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				tooltip = "TE_STATE_SEABED_BASIN_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_SEABED_BASIN_STATUS"
+				}
+			}
+
+			### POWER GRID (power grids phase 2): on a state with a Grid
+			### Transfer Station. Its mode (sending, receiving, idle, offline),
+			### the Electricity it moves a week, its grid's size, its undersea
+			### cable's links and the owner's transmission efficiency; the
+			### tile's hover explains them and gives the grid's supply against
+			### its demand.
+			state_panel_status_item_small = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_tile_shown'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_GRID_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/building_grid_transfer_station.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_GRID_STATUS"
+				}
+
+				blockoverride "extra_widget" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+
+						te_state_tile_word_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_MODE_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_MODE"
+							}
+							blockoverride "row_value" {
+								text = "TE_STATE_GRID_ROW_MODE_VALUE"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_electricity_moved_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_MOVED_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_MOVED"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|K]#!"
+							}
+						}
+
+						### The grid's hub, its largest producer, read from the
+						### state reference the balancing stores (te_grid_hub).
+						te_state_tile_word_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_HUB_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_HUB"
+							}
+							blockoverride "row_value" {
+								text = "TE_STATE_GRID_ROW_HUB_VALUE"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_region_size_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_SIZE_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_SIZE"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#!"
+							}
+						}
+
+						### On a station with an undersea cable: how many
+						### stations of other groups the cable joins to this
+						### grid (te_grid_cable_links). The hover names them.
+						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_interconnector_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_CABLES_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_CABLES"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_cable_count_disp')|0]#!"
+							}
+						}
+
+						### On a grid that spans markets: what this state's market
+						### sends (Exports) or receives (Imports) across the
+						### border, net, a week (te_grid_market_net).
+						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_market_dir_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_MARKET_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_MARKET"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_market_flow_disp')|K]#!"
+							}
+						}
+
+						### The receiving market's station that passes the
+						### import through (te_grid_import).
+						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_import_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_PASS_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_PASS"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_import_disp')|K]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_EFFICIENCY_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_EFFICIENCY"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!"
 							}
 						}
 					}
@@ -3444,7 +3666,7 @@ types state_panel_types
 		}
 	}
 
-	type state_panel_status_item_small = container {
+	type state_panel_status_item_small = container { # REVIEWED 2026-10-27 (unmarked_hover): vanilla's state tile, whose whole tile is the hover; the mod's tiles keep the look of vanilla's beside them (GDP, Capital, Infrastructure), which vanilla never underlines, and a row inside a tile with a hover of its own is underlined (te_state_stat_row)
 		flowcontainer = {
 			spacing = 10
 			margin = { 10 10 }
@@ -3839,7 +4061,7 @@ types state_panel_types
 
 					item = {
 						widget = {
-							visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_artistic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_athletic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_civic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_crown')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_industrial')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_leader')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_naturalist')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_religious')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_republic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_revolution')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_scientific')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_antiquity')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_archive')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_first_emperor')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_tourism')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_war_memorial')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_concentrated_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_dispersed_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_forced_heirship_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_land_hunger')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_primogeniture_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_undivided_farm_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_fewer_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_inequality')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_more_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_youth_bulge')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_lx_gap_labor')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_dispersed')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_metropolis')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_primate_city')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_provincial_neglect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput')))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))]"
+							visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_artistic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_athletic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_civic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_crown')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_industrial')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_leader')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_naturalist')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_religious')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_republic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_revolution')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_scientific')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_antiquity')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_archive')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_first_emperor')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_tourism')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_war_memorial')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_concentrated_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_dispersed_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_forced_heirship_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_land_hunger')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_primogeniture_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_undivided_farm_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_fewer_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_inequality')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_more_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_youth_bulge')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_lx_gap_labor')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_dispersed')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_metropolis')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_primate_city')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_provincial_neglect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput'))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))]"
 							size = { 30 30 }
 							icon = {
 								tooltip = "[TimedModifier.GetTooltip]"

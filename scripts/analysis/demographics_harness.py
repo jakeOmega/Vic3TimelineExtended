@@ -31,7 +31,9 @@ Usage:
     demographics_harness.py uploads [--years N]         # uploaded minds: the Nexus's calibration, one and three
                                                         # full Nexuses at era 11, the transition and era 12
 
-SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
+SAVE is a plain-text save (debug mode). wc, effects and gini's census line also read an ordinary binary save
+(save_country_probe.py's decoder: script variables and laws, no pops); every other SAVE command refuses a binary
+one with exit 1.
 The model is demographics_model.py with demographics_params.py; the generator writes the
 script from the same two files, so a parameter tuned here reaches the game by
 `python3 scripts/generators/gen_demographics.py`.
@@ -52,6 +54,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import demographics_effects as DE  # noqa: E402
 import demographics_model as M  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
@@ -157,7 +160,27 @@ def grouped_by(pops, key):
 def cmd_gini(args):
     """The panel's Gini per country (§4.1: 1 - X (1 - the wealth bands' Gini)), then the bands' own figure,
     each pop as its own group and the three strata the census used before 2026-10-10 (all computed).
-    --shift N makes every pop N wealth levels richer: a late game no save has yet."""
+    --shift N makes every pop N wealth levels richer: a late game no save has yet. A binary save has no pops, so it
+    prints the census's line alone."""
+    # The census's own Gini per state (te_dg_gini, Full only): how many states the Inequality effect's steep
+    # part reaches (the 2026-10-22 effects design). Read first, so a save neither reader opens prints nothing.
+    _countries, census = S.read_save_variables(args.save, (), ("te_dg_gini", "te_dg_walk_pop"))
+    if S.is_plain_text(args.save):
+        out = gini_by_pops(args)
+    else:
+        out = 0
+        print("a binary save has no pops: the census's own Ginis only (the pop-by-pop figures need a plain-text save)")
+    ginis = [(st["vars"]["te_dg_gini"], st["vars"].get("te_dg_walk_pop", 0.0))
+             for st in census.values() if "te_dg_gini" in st["vars"]]
+    if ginis:
+        above = [p for g, p in ginis if g > DE.GINI_STEEP]
+        share = sum(above) / (sum(p for _, p in ginis) or 1.0)
+        print(f"census Ginis above 0.70: {len(above)} of {len(ginis)} states ({share:.0%} of people)")
+    return out
+
+
+def gini_by_pops(args):
+    """cmd_gini's pop-by-pop part, for a plain-text save: 1 when a country named has no pops."""
     sections = S.read_sections(args.save)
     costs = buy_package_costs()
     inputs = S.country_inputs(sections)
@@ -313,7 +336,7 @@ def parse_replay(lines):
                         cur[kind][sex][first + i] = float(v or 0)
                 if "pool_f" in fields:
                     cur[kind]["pool"] = (float(fields["pool_f"] or 0), float(fields["pool_m"] or 0),
-                                         float(fields["pool_age"] or 150))
+                                         float(fields["pool_age"] or P.RING_YEARS))
             except (KeyError, ValueError) as e:
                 cur["errors"].append(f"unreadable {kind} line (from={fields.get('from', '?')}): {type(e).__name__} {e}")
     return blocks
@@ -383,7 +406,7 @@ def replay_block(b):
     for k in range(P.RING_YEARS):
         ring.f[k] = b["before"]["f"].get(k, 0.0) * pop_last / 1000.0
         ring.m[k] = b["before"]["m"].get(k, 0.0) * pop_last / 1000.0
-    pf, pm, page = b["before"].get("pool", (0.0, 0.0, 150.0))
+    pf, pm, page = b["before"].get("pool", (0.0, 0.0, float(P.RING_YEARS)))
     ring.pool_f, ring.pool_m, ring.pool_age = pf * pop_last / 1000.0, pm * pop_last / 1000.0, page
     M._refresh_denominators(ring)
     ring.total = ring.people()
@@ -474,7 +497,8 @@ def wc_rows(countries, states):
 def cmd_wc(args):
     """Each country's national figure, the target's terms and modifier multipliers, and its states'
     range, read from the save's script variables (spec 4.2). A balance pass's in-game check."""
-    rows = wc_rows(*S.read_variables(args.save, WC_COUNTRY_VARS, WC_STATE_VARS))
+    countries, states = S.read_save_variables(args.save, WC_COUNTRY_VARS, WC_STATE_VARS)
+    rows = wc_rows(countries, states)
     if args.tag:
         rows = [r for r in rows if r[0] in args.tag]
     terms = ("law", "land", "own", "ineq", "tax", "econ", "rg")
@@ -495,6 +519,171 @@ def cmd_wc(args):
         median = sorted(w for _, w in xs)[len(xs) // 2]
         print(f"{law.replace('law_', ''):32s} countries {len(xs):3d}  above 50 {sum(w > 50 for _, w in xs):3d}  "
               f"median {median:5.1f}  weighted by people {mean:5.1f}")
+    pairs = [(st["vars"]["te_dg_wc"], st["vars"].get("te_dg_walk_pop", 0.0))
+             for st in states.values() if "te_dg_wc" in st["vars"]]
+    print("\nstate scores (states / M people):")
+    print("  " + "  ".join(f"{lo}-{lo + 10}: {n}/{ppl / 1e6:.1f}" for lo, n, ppl in score_deciles(pairs)))
+    for name in ("wc_high", "wc_low"):
+        print_strength_table(name, strength_table(*DE.CONDITIONS[name], pairs))
+    return 0
+
+
+# ---- effects: Phase 0's readouts (docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md) ----
+# Each condition's strength in a save under the curve before the design and the new one, and the new sizes'
+# radicals, turmoil and primate Urban Center stacks. It reads only the census's stored figures, so a save made
+# before the build reads the same.
+
+EFFECT_COUNTRY_VARS = ("te_inh_concentration", "te_dg_primacy", "te_dg_up_states", "te_dg_primate_state")
+EFFECT_STATE_VARS = ("te_dg_wc", "te_dg_walk_pop", "te_dg_gini", "te_dg_mt", "te_dg_sex_balance", "te_dg_agr_share",
+                     "te_dg_unemp")
+EFFECT_RAW_VARS = ("te_dg_primate_state",)
+COUNTRY_CONDITIONS = ("wc_high (national)", "wc_low (national)", "primacy")
+UP_MIN_STATES = 3  # te_demog_k_up_min_states: a country with fewer census states has no urban pattern
+STRENGTH_BINS = (("0", None, 0.01), ("0-0.5", 0.01, 0.5), ("0.5-1", 0.5, 1.0), ("1-1.5", 1.0, 1.5),
+                 ("1.5-2", 1.5, 2.0), (">2", 2.0, None))
+
+
+def strength_bins(pairs):
+    """[(label, states, people)] for (strength, people) pairs: "0" is 0.01 or less (no modifier applies: each refresh
+    adds its modifier only above 0.01), then each bin takes its upper edge."""
+    def inside(x, lo, hi):
+        return x <= hi if lo is None else x > lo and (hi is None or x <= hi)
+
+    out = []
+    for label, lo, hi in STRENGTH_BINS:
+        ps = [p for x, p in pairs if inside(x, lo, hi)]
+        out.append((label, len(ps), sum(ps)))
+    return out
+
+
+def score_deciles(pairs):
+    """[(low, states, people)] for (score, people) pairs on 0-100; 100 sits in 90-100."""
+    out = []
+    for lo in range(0, 100, 10):
+        inside = [p for x, p in pairs if lo <= x < lo + 10 or (lo == 90 and x >= 100)]
+        out.append((lo, len(inside), sum(inside)))
+    return out
+
+
+def strength_table(old, new, pairs):
+    """[(bin, old states, old people, new states, new people)] for (figure, people) pairs."""
+    before = strength_bins([(old(x), p) for x, p in pairs])
+    after = strength_bins([(new(x), p) for x, p in pairs])
+    return [(b[0], b[1], b[2], a[1], a[2]) for b, a in zip(before, after)]
+
+
+def print_strength_table(label, table):
+    unit = "countries" if label in COUNTRY_CONDITIONS else "states"
+    print(f"{label}: strength   old {unit} / M people   new {unit} / M people")
+    for b, on, op, nn, np_ in table:
+        print(f"  {b:>6s}   {on:6d} / {op / 1e6:7.1f}       {nn:6d} / {np_ / 1e6:7.1f}")
+
+
+def _size(modifier, field):
+    return DE.SIZES[modifier].get(field, 0.0)
+
+
+def effects_rows(countries, states, census, idle):
+    """{"conditions": {label: strength_table rows}, "radicals"/"turmoil": [(state id, tag, total)] worst first,
+    "uc": [(tag, primate state id, total)]} at the new sizes. census: census_figures' {state id: figures};
+    idle: S.state_unemployment's {state id: (workforce, without work)}. A figure a state lacks leaves it out of
+    that condition only."""
+    tag = {cid: c["tag"] or cid for cid, c in countries.items()}
+    people = {sid: st["vars"].get("te_dg_walk_pop", census.get(sid, {}).get("people", 0.0))
+              for sid, st in states.items()}
+    owned = collections.defaultdict(float)
+    for sid, st in states.items():
+        owned[st["owner"]] += people[sid]
+
+    def primacy_of(cid):
+        v = countries.get(cid, {}).get("vars", {})
+        if v.get("te_dg_up_states", 0) < UP_MIN_STATES:
+            return None
+        return v.get("te_dg_primacy")
+
+    def youth_of(sid):
+        f = census.get(sid)
+        total, none = idle.get(sid, (0.0, 0.0))
+        return (f["youth"], none / total if total else 0.0) if f else (None, None)
+
+    def sex_of(sid):
+        return states[sid]["vars"].get("te_dg_sex_balance", census.get(sid, {}).get("sex_balance"))
+
+    figures = {
+        "wc_high (national)": ("wc_high", [(c["vars"]["te_inh_concentration"], owned[cid])
+                                           for cid, c in countries.items() if "te_inh_concentration" in c["vars"]]),
+        "wc_low (national)": ("wc_low", [(c["vars"]["te_inh_concentration"], owned[cid])
+                                         for cid, c in countries.items() if "te_inh_concentration" in c["vars"]]),
+        "primacy": ("primacy", [(primacy_of(cid), owned[cid]) for cid in countries if primacy_of(cid) is not None]),
+    }
+    for label, name, var in (("wc_high (state)", "wc_high", "te_dg_wc"), ("wc_low (state)", "wc_low", "te_dg_wc"),
+                             ("metro_up", "metro_up", "te_dg_mt"), ("metro_down", "metro_down", "te_dg_mt"),
+                             ("inequality", "inequality", "te_dg_gini")):
+        figures[label] = (name, [(st["vars"][var], people[sid]) for sid, st in states.items() if var in st["vars"]])
+    for name in ("fewer_men", "more_men"):
+        figures[name] = (name, [(sex_of(sid), people[sid]) for sid in states if sex_of(sid) is not None])
+    conditions = {label: strength_table(*DE.CONDITIONS[name], pairs) for label, (name, pairs) in figures.items()}
+    youth_pairs = [(youth_of(sid), people[sid]) for sid in states if youth_of(sid)[0] is not None]
+    conditions["youth"] = strength_table(lambda f: DE.youth_old(*f), lambda f: DE.youth(*f), youth_pairs)
+
+    primate = {}
+    for cid, c in countries.items():
+        ref = c["vars"].get("te_dg_primate_state")
+        if ref is not None and primacy_of(cid) is not None:
+            primate[cid] = str(ref)
+    radicals, turmoil = [], []
+    rad, tur = "state_radicals_from_political_movements_mult", "state_turmoil_effects_mult"
+    for sid, st in states.items():
+        v, owner = st["vars"], st["owner"]
+        wc, gini, mt, sex = v.get("te_dg_wc"), v.get("te_dg_gini"), v.get("te_dg_mt"), sex_of(sid)
+        y = DE.youth(*youth_of(sid))
+        r = (_size("inh_land_hunger", rad) * DE.wc_high(wc) * v.get("te_dg_agr_share", 0.0)
+             + _size("inh_dispersed_property", rad) * DE.wc_low(wc)
+             + _size("te_demog_census_inequality", rad) * DE.inequality(gini)
+             + _size("te_demog_census_youth_bulge", rad) * y
+             + _size("te_demog_census_more_men", rad) * DE.more_men(sex))
+        t = (_size("te_demog_mt_metropolis", tur) * DE.metro_up(mt)
+             + _size("te_demog_census_youth_bulge", tur) * y
+             + _size("te_demog_census_more_men", tur) * DE.more_men(sex))
+        if owner in primate and primate[owner] != sid:
+            t += _size("te_demog_provincial_neglect", tur) * DE.primacy(primacy_of(owner))
+        radicals.append((sid, tag.get(owner, owner), r))
+        turmoil.append((sid, tag.get(owner, owner), t))
+    uc = "building_urban_center_throughput_add"
+    stacks = [(tag.get(cid, cid), sid, _size("te_demog_primate_city", uc) * DE.primacy(primacy_of(cid))
+               + _size("te_demog_mt_metropolis", uc) * DE.metro_up(states.get(sid, {}).get("vars", {}).get("te_dg_mt")))
+              for cid, sid in primate.items()]
+    return {"conditions": conditions,
+            "radicals": sorted(radicals, key=lambda r: -r[2]), "turmoil": sorted(turmoil, key=lambda r: -r[2]),
+            "uc": sorted(stacks, key=lambda r: -r[2])}
+
+
+def cmd_effects(args):
+    """Phase 0 of the 2026-10-22 effects design: each condition's states and people at each strength, the curve
+    before the design against the new one, then the new sizes' worst radicals and turmoil stacks and each primate
+    country's Urban Center stack. Reads a save's census figures (te_dg_*), plain text or binary; the youth bulge needs
+    the census bands (a Display only or Full save) and unemployment: the census's own (te_dg_unemp), else a plain-text
+    save's pops."""
+    countries, states = S.read_save_variables(args.save, EFFECT_COUNTRY_VARS, EFFECT_STATE_VARS,
+                                              raw=EFFECT_RAW_VARS)
+    census = census_figures(args.save)
+    idle = {sid: (1.0, st["vars"]["te_dg_unemp"]) for sid, st in states.items() if "te_dg_unemp" in st["vars"]}
+    missing = len(set(census) - set(idle))
+    if missing and S.is_plain_text(args.save):
+        idle = {**S.state_unemployment(S.read_sections(args.save, wanted=("pops",))), **idle}
+    elif missing:
+        print(f"note: {missing} census states have no stored unemployment (te_dg_unemp), and a binary save has no "
+              "pops, so their youth bulge reads 0\n")
+    rows = effects_rows(countries, states, census, idle)
+    for label, table in rows["conditions"].items():
+        print_strength_table(label, table)
+    for key, title in (("radicals", "radicals stack"), ("turmoil", "turmoil stack")):
+        print(f"\n{title} at the new sizes, worst {args.top}:")
+        for sid, owner, total in rows[key][:args.top]:
+            print(f"  state {sid:>6s} {owner:5s} {total:+.1%}")
+    print("\nprimate Urban Center stack (Primate City + Metropolis):")
+    for owner, sid, total in rows["uc"][:args.top]:
+        print(f"  {owner:5s} state {sid:>6s} {total:+.1%}")
     return 0
 
 
@@ -797,8 +986,7 @@ def participation_rows(carriers=None, lines=None):
     rows = []
     for law, inst in (("law_restorative_justice", None), ("law_rehabilitation_focused_criminal_justice", None),
                       ("law_pro_labor_ministry_of_labor", "institution_ministry_of_labor"),
-                      ("law_pro_capital_ministry_of_labor", "institution_ministry_of_labor"),
-                      ("law_state_eugenics_program", None)):
+                      ("law_pro_capital_ministry_of_labor", "institution_ministry_of_labor")):
         kw = dict(WORKFORCE_TODAY, laws=WORKFORCE_TODAY["laws"] | {law})
         if inst:
             kw["institutions"] = {**WORKFORCE_TODAY["institutions"], inst: 5}
@@ -1025,7 +1213,7 @@ def census_figures(path):
     lo, hi = P.POOL_FROM // P.BAND_WIDTH, (P.POOL_TO + 1) // P.BAND_WIDTH
     assert P.POOL_FROM % P.BAND_WIDTH == 0 and (P.POOL_TO + 1) % P.BAND_WIDTH == 0
     ylo, yhi = P.YOUTH_AGES[0] // P.BAND_WIDTH, (P.YOUTH_AGES[1] + 1) // P.BAND_WIDTH
-    _countries, states = S.read_variables(path, (), CENSUS_BAND_VARS)
+    _countries, states = S.read_save_variables(path, (), CENSUS_BAND_VARS)
     out = {}
     for sid, st in states.items():
         v = st["vars"]
@@ -2514,6 +2702,11 @@ def main(argv=None):
     p.add_argument("--tag", action="append", default=[])
     p.add_argument("--top", type=int, default=30)
     p.set_defaults(fn=cmd_wc)
+    p = sub.add_parser("effects", help="the 2026-10-22 effects design's Phase 0: each condition's strength in a "
+                                       "save, old curve against new, and the new sizes' stacks")
+    p.add_argument("save")
+    p.add_argument("--top", type=int, default=10)
+    p.set_defaults(fn=cmd_effects)
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
     sub.add_parser("lag").set_defaults(fn=cmd_lag)
     p = sub.add_parser("consequences", help="phase 2 step 4: conscription, the youth bulge and sex balance against "

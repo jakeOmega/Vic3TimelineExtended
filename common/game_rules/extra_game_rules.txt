@@ -137,8 +137,26 @@ decolonization_rule = {
 	}
 }
 
+# Four settings (colony record design § 10): full and simple colonies, races
+# only and off. Races only is today's system and keeps the name
+# space_race_enabled, so a save from before the change keeps it. Each setting
+# has one flag, named after it; script reads the rule through the gates in
+# common/scripted_triggers/sr_site_triggers.txt (sr_space_race_on,
+# sr_colonies_contested_enabled, sr_colonies_full_enabled), never through a
+# bare has_game_rule = space_race_enabled, which is races only alone. Full
+# colonies is the default from slice 6d (fleets design § 15, owner: "Full
+# Colonies becomes the default when 6d ships"), after simple colonies from
+# slice 5; a save records its setting by name, so one from before keeps its own.
 space_race_rule = {
-	default = space_race_enabled
+	default = space_race_colonies_full
+
+	space_race_colonies_full = {
+		flag = space_race_colonies_full
+	}
+
+	space_race_colonies_simple = {
+		flag = space_race_colonies_simple
+	}
 
 	space_race_enabled = {
 		flag = space_race_enabled
@@ -317,6 +335,9 @@ free_market_construction_rule = {
 		flag = disable_pm_maintenance_intensive
 		flag = disable_pm_maintenance_traditional
 		flag = disable_pm_maintenance_mechanized_mine
+		flag = disable_pm_maintenance_graded_light
+		flag = disable_pm_maintenance_graded_standard
+		flag = disable_pm_maintenance_graded_heavy
 		flag = force_pm_no_maintenance
 
 		# Company and Engineering & Logistics methods keep the construction
@@ -344,6 +365,9 @@ free_market_construction_rule = {
 		flag = disable_pm_maintenance_intensive
 		flag = disable_pm_maintenance_traditional
 		flag = disable_pm_maintenance_mechanized_mine
+		flag = disable_pm_maintenance_graded_light
+		flag = disable_pm_maintenance_graded_standard
+		flag = disable_pm_maintenance_graded_heavy
 		flag = force_pm_no_maintenance
 
 		flag = disable_pm_disney_world
@@ -400,12 +424,12 @@ grand_monuments_rule = {
 # Full runs the cohort model and, from phase 2, applies its effects; Display only
 # runs the cohorts and the panel but applies only the equilibrium's births and
 # deaths; Disabled runs neither. In phase 1 nothing is applied, so Full and Display
-# only behave the same. Off by default while the census is experimental (owner,
-# 2026-10-10). Every check is written positively (te_demog_cohorts_run,
+# only behave the same. Full by default (owner, 2026-10-25; off by default from
+# 2026-10-10 while the census was experimental). Every check is written positively (te_demog_cohorts_run,
 # te_demog_effects_run name the settings that run), so a save from before the rule
 # existed, which stores no value for it, reads as Disabled.
 demographics_rule = {
-	default = demographics_disabled
+	default = demographics_full
 
 	demographics_full = {
 		flag = demographics_full

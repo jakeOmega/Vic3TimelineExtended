@@ -20,93 +20,117 @@
 
 types te_tax_light_widget_types
 {
-	### The overview's light rows: the law, the tax level and what sets it.
+	### The overview's light cells (GUI audit TAX-1): the taxation law, and the tax
+	### level with the tax that sets it, as the legislated code's cells.
 	type te_tax_light_overview_rows = flowcontainer {
-		direction = vertical
+		direction = horizontal
 		ignoreinvisible = yes
-		spacing = 2
+		spacing = 4
 
-		te_tax_value_row = {
-			blockoverride "row_label" {
+		# The taxation law in force, which sets each tax's range.
+		te_banking_ov_cell = {
+			size = { 238 70 }
+			tooltip = "te_tax_lt_ov_law_tt"
+			blockoverride "caption_width" {
+				max_width = 154
+			}
+			blockoverride "caption" {
 				text = "te_tax_lt_ov_law"
-				tooltip = "te_tax_lt_ov_law_tt"
 			}
-			blockoverride "row_value" {
-				text = "[GetPlayer.GetCustom('te_tax_lt_law')]"
+			blockoverride "icons" {
+				icon = {
+					size = { 100% 100% }
+					texture = "gfx/interface/icons/tax_icons/ov_law.dds"
+				}
+			}
+			blockoverride "word" {
+				te_tax_ov_word = {
+					text = "te_tax_lt_ov_law_word"
+				}
 			}
 		}
-		te_tax_value_row = {
-			blockoverride "row_label" {
+
+		# The tax level, and the tax whose step sets it.
+		te_banking_ov_cell = {
+			size = { 238 70 }
+			tooltip = "te_tax_lt_ov_level_tt"
+			blockoverride "caption_width" {
+				max_width = 154
+			}
+			blockoverride "caption" {
 				text = "te_tax_lt_ov_level"
-				tooltip = "te_tax_lt_ov_level_tt"
 			}
-			blockoverride "row_value" {
-				text = "te_tax_lt_ov_level_value"
+			blockoverride "icons" {
+				icon = {
+					size = { 100% 100% }
+					texture = "gfx/interface/icons/tax_icons/ov_level.dds"
+				}
 			}
-		}
-		te_tax_value_row = {
-			blockoverride "row_label" {
-				text = "te_tax_lt_ov_setter"
-				tooltip = "te_tax_lt_ov_setter_tt"
+			blockoverride "word" {
+				te_tax_ov_word = {
+					text = "te_tax_lt_ov_level_value"
+				}
 			}
-			blockoverride "row_value" {
-				text = "[GetPlayer.GetCustom('te_tax_lt_setter')]"
+			blockoverride "third_line" {
+				te_tax_ov_fig = {
+					text = "te_tax_lt_ov_setter_fig"
+				}
 			}
 		}
 	}
 
 	### The rows' column heads, in te_tax_instrument_row's cells.
-	### 4 + 146 + 4 + 70 + 4 + 18 + 4 + 70 + 4 + 26 + 4 + 26 + 4 + 80 + 4 = 468.
+	### 2 + 180 + 4 + 62 + 4 + 10 + 4 + 62 + 4 + 48 + 4 + 90 + 2 = 476.
 	type te_tax_light_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 4
-		margin = { 4 1 }
+		margin = { 2 1 }
 
 		widget = {
-			size = { 146 20 }
+			size = { 180 22 }
 		}
 		widget = {
-			size = { 70 20 }
+			size = { 62 22 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 70
+				max_width = 62
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = te_tax_fontsize_row
 				default_format = "#tooltippable"
 				text = "te_tax_lt_col_range"
 				tooltip = "te_tax_lt_col_range_tt"
 			}
 		}
 		widget = {
-			size = { 18 20 }
+			size = { 10 22 }
 		}
 		widget = {
-			size = { 70 20 }
+			size = { 62 22 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 70
+				max_width = 62
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = te_tax_fontsize_row
 				text = "te_tax_lt_col_rate"
 			}
 		}
 		widget = {
-			size = { 56 20 }
+			size = { 48 22 }
 		}
 		widget = {
-			size = { 80 20 }
+			size = { 90 22 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 80
+				max_width = 90
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = te_tax_fontsize_row
 				default_format = "#tooltippable"
 				text = "te_tax_lt_col_step"
 				tooltip = "te_tax_lt_col_step_tt"

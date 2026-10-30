@@ -144,10 +144,16 @@ class TheCensusStoresTheConversion(unittest.TestCase):
             values.update(_top_blocks(_read(path)))
         self.assertIn("value = var:te_dg_unemp", _squash(values["te_demog_unemployment"]))
         self.assertEqual(_squash(values["te_demog_unemployment_census"]), "value = te_demog_unemployment")
-        for name in ("te_demog_youth_bulge_now", "te_demog_wave_unemployment", "te_demog_country_unemployment"):
+        for name in ("te_demog_wave_unemployment", "te_demog_country_unemployment"):
             with self.subTest(name=name):
                 self.assertIn("value = te_demog_unemployment", _squash(values[name]))
                 self.assertNotIn("te_state_unemployment_share", values[name])
+        # the youth bulge reads it through its unemployment factor (the 2026-10-22 effects design), the panel's own
+        self.assertIn("multiply = te_demog_youth_unemployment_part", _squash(values["te_demog_youth_bulge_now"]))
+        self.assertEqual(_squash(values["te_demog_youth_unemployment_reach"]).split(" divide")[0],
+                         "value = te_demog_unemployment_census")
+        for name in ("te_demog_youth_bulge_now", "te_demog_youth_unemployment_part", "te_demog_youth_unemployment_reach"):
+            self.assertNotIn("te_state_unemployment_share", values[name])
 
 
 class TheConversion(unittest.TestCase):

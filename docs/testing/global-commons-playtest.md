@@ -34,6 +34,15 @@ what only the game can show.
 5. Saves from before the change: existing Deep-Sea Mines keep their levels and change outputs on load, and lay off
    the half of their staff the new method no longer employs. Existing Extraplanetary Bases start on Chemical
    Launch and Chemical Tugs, the groups' defaults. Watch for a base left with no method in a new group.
+6. Deep-Sea Mine support vessels: a mine on any extraction method shows a Support Vessels group on Motor Ship
+   Tenders, buying 40 Motor Ships a level a week at full staff and base throughput and no ships through its
+   extraction method. Research Modern Material Science: Magnetic Drive Tenders appear, and switching buys 20 Magnetic
+   Drive Ships instead and adds the Production Method Retooling modifier. A save from before the group starts its
+   mines on Motor Ship Tenders, the default; watch for a mine left with no method in it.
+7. AI: in an observer run past 2100, AI Deep-Sea Mines move to Magnetic Drive Tenders within a few years of Modern
+   Material Science and don't switch back. Mines that never move mean `most_productive` with `ai_value` 1000 / 3000
+   doesn't rank cost-only methods as `pmg_emissions_control` assumes (record it there too); mines flipping back and
+   forth mean the stickiness doesn't hold them.
 
 ## Seabed licences (§ 2)
 
@@ -54,13 +63,14 @@ holding fee, Sponsor's protection, the policy lock and the panel
 | `TE_SELF_CHECK … seabed_lease_entry` | a day after a Lease Seabed Claims article comes into force (`te_seabed.1`); OK once a game, BROKEN each time it fails | the start event found the in-force article naming the lessee, read its lessor and quantity (`n`), and moved up to that many of the lessor's own claims (`moved`) | no such article a day after entry: the lessee's `every_scope_treaty` walk, the article's `target_country` test or `input_quantity` doesn't read as assumed (or the treaty ended within the day) | read the quantity in the hook instead (`scope:article_options.input_quantity`, unproven), or start the lease at the next sharing, whose walk reads the same article (`te_seabed_lease_shift_basin`) |
 | `TE_SELF_CHECK … seabed_pact_read` | a day after an overlord takes Administer Seabed Claims (`te_seabed.2`); OK once a game, BROKEN each time it fails | the subject sees the pact from its own side (`has_diplomatic_pact`), as every sharing reads it (`te_seabed_pact_stands`) | the pact isn't seen from the subject's side, or the overlord ended it within the day: then no sharing passes claims or counts the licences built on them as the subject's | read the pact from the overlord's side (iterate its `every_direct_subject` in `te_seabed_pass_subject_claims` and `te_seabed_lease_shift_held`) |
 | `TE_SELF_CHECK INFO/OK/BROKEN seabed_power_projection` | once a game, at the end of the first sharing with a claimant that has a navy (`navy_size` > 0) | `naval_power_projection` reads as a number in a script value (`te_seabed_navy_effective`, `te_seabed_npp_disp`) for at least one of them. Each `INFO` line gives a claimant's `npp`, `navy_size` and their `ratio` | every claimant with a navy reads 0: the read isn't a value (vanilla only ever compares it), so the claim weight's navy term is 0 for everyone | BROKEN: revert `te_seabed_navy_effective` to `navy_size` (no scale) and the hovers' "naval power projection" to "navy". OK: before a release, set `te_seabed_power_projection_scale` to the median `ratio` of the `INFO` lines, so a typical fleet's term stays near its flotilla count; a scale left too low lets navies swamp the coast and port terms |
+| `TE_SELF_CHECK OK/BROKEN seabed_claimant_list` | once a game, at the first sharing where a player's list for some basin should hold 2 to 40 other claimants (audit SEA-3, 2026-10-27) | the list (`te_seabed_rk_list_<basin>`) holds every other claimant with a share there (`listed` = `claimants`): `ordered_country` with `min = 0`, `max = 40`, `check_range_bounds = no` walked the whole field | `listed` differs: the walk stopped short or went past | go back to the six fixed seats, each filled at one `ordered_country` position with its count checked first, and their scripted lines (git history before SEA-3's later step) |
 
 The checks exclude the degenerate case: `seabed_cap` waits for a previous sharing (the ceilings) and
 logs OK only with records in the world; `seabed_licence_follows_state` watches only states the
 monthly recording saw holding licences (a global list kept apart from the states' own variables);
 `seabed_floor_fits` runs only after a sharing in which some floor protected a claim; `seabed_pact_read`
 gives no verdict for a country no longer a subject; `seabed_power_projection` reads only claimants with a
-navy, and says BROKEN only when all of them read 0.
+navy, and says BROKEN only when all of them read 0; `seabed_claimant_list` waits for two or more claimants.
 
 `seabed_power_projection` first fired on 2026-10-17 with `OK … claimants=5 reading=4`, but none of
 its `INFO` lines printed: they named the country with a bare `[THIS.GetNameNoFormatting]`, which
@@ -78,7 +88,7 @@ even in that save, and the scale comes from those lines.
    of them is another basin's, Claims (our unused claims in its basin, the Seabed tab's Free figure
    for that basin) and Weight. Each row's hover: the levels built and queued with local and distant
    licences, and a "wait for a licence" line only when a level has none; the long-haul penalty
-   (matching Long-Haul Seabed Operations on the state); the weight's coast (2, or 1 unincorporated),
+   (matching Long-Haul Seabed Operations on the state's Deep-Sea Mine); the weight's coast (2, or 1 unincorporated),
    port levels, naval share and policy factor, with our weight in the basin at the last sharing.
    Check the basin's name renders in the Basin, Claims and Weight hovers (they splice it in), and
    that the "wait for a licence" line renders its number (it reads the state inside a key named by
@@ -87,11 +97,23 @@ even in that save, and the scale comes from those lines.
    an Antarctic station's 5 in the Southern, and about the Weight row's own last line; under Unilateral Licensing or a scramble the naval share doubles. A
    relinquished basin, or the Southern for an Antarctic Treaty party, reads 0 with a red line saying
    why. A state just conquered has no basin until the next monthly update: Basin, Claims and Weight
-   are hidden until then. Tile hover: the country's licences in use, its share and long-haul ones,
-   each basin's held, unbuilt, weight and the world's licences in use against the pool, and the room.
+   are hidden until then. Tile hover (since the 2026-10-27 GUI audit, VAN-8): the country's licences
+   in use, its share and long-haul ones, and the room to build, then a pointer to the Seabed tab for
+   each basin's figures. The rows with a hover of their own are underlined.
    No "Failed to fetch variable" in `debug.log` while hovering, on a coastal state that never had a
    mine. **At 1080p no row ends in "…"**: "Southern" in the Basin row's 96 px value column, "Long-haul"
    in the 96 px label column.
+1a. **The Ocean Basin tile (VAN-8b, owner 2026-10-27).** With Abyssal Plain Mining researched, open a
+   coastal state of another country, and one of a country that never took part in a sharing: an
+   **Ocean Basin: Pacific** (or the state's basin) tile, its hover naming "the Pacific Ocean" as the
+   Seabed tab names it. Before the research, and on a landlocked state, no tile. A state of a
+   participant shows the full Seabed Licences tile instead, never both. A landlocked country with the
+   research and no coastal claimant anywhere still sees the basins the month it researches it
+   (`te_seabed_basins_set`, `te_seabed_global_monthly`). **Observer:** start an observer game (or
+   switch to observer) with a state panel open on a coastal state: no Ocean Basin tile, and no
+   `Scoped object of type 'country' is not valid` lines in `error.log` from `states_panel.gui`
+   (the tile tests `Not( GetMetaPlayer.IsObserver )` before its `GetPlayer` gate). In multiplayer,
+   a player without the research sees no tile even when another player has it.
 2. **The gate.** Build a Deep-Sea Mine in a coastal state: the building's requirements list
    "Seabed Licences to spare: N (unbuilt: …)" with a tick, and a second line saying whether the next
    level takes the state's own basin's licence or another's at -25%. Queue levels until the room is
@@ -278,6 +300,35 @@ even in that save, and the scale comes from those lines.
     first share at one sharing, check each notice names its own country (the scope is saved again
     for each). (c) A basin's licences all held: "The <Basin> Ocean Is Fully Licensed" to each
     player with a share there or coast on it (one with coast and no mines there too), once; destroy or downsize a level and refill it for the second.
+30. **Countries without the technology wait for their share** (owner, 2026-10-27; model:
+    `WaitingShareTest`). The month after the first country researches Abyssal Plain Mining, open its
+    Seabed tab: its share in each basin is what its weight wins against every coastal country's,
+    not the whole pool, and each basin's pool hover lists "Waiting for countries without Abyssal
+    Plain Mining" beside rivals' claims; the figures, with our mines and claims, add up to the pool.
+    The Weight % reads our weight against everyone's, those waiting included. A coastal country
+    without the technology gets no Seabed tab, no State Panel tile and no new-claimant notice; when
+    it researches the technology, the next month's sharing turns its waiting share into claims (its
+    tab opens, and a notice names it to the players already in the basin). Under the Regulated
+    regime, with the poorer parties still without the technology, the first claimant's share stays
+    within the open half. Check the yearly sharing's month doesn't hitch: it now weighs and
+    water-fills every coastal country, not only the claimants. Scientific Survey and the waiting
+    countries weigh at ×0.75 (the owner, 2026-10-27: ×0.25 gave Sponsor Contractors a 4× edge).
+31. **Long-Haul Seabed Operations on the building** (owner, 2026-10-27). A Deep-Sea Mine with
+    distant licences: the modifier is on the building, in its throughput breakdown, at -25% times
+    the state's share of distant licences (the tile's Long-haul row gives the figure), and no
+    longer on the state; the building's throughput falls by that much against a mine with none.
+    A save from before the move loses the state's copy at the next monthly update. The
+    multiplier is a state variable read through `root` (`resettlement_refresh_destination_readout`'s
+    pattern): check the figure stays right between monthly updates, not only on the day of one.
+
+### The Seabed tab after the GUI audit (2026-10-27)
+
+The Seabed tab's share of the GUI and localization audit (`docs/audits/gui_audit/space_seabed.md`, SEA-1 to SEA-6). No self-check: each item fails visibly.
+
+1. **The policy buttons as modifier lines (`GetStaticModifier('te_seabed_policy_<policy>_display').GetDesc` inside a scripted GUI's effect tooltip; four `script_only` modifier types: new).** Hover each of the three policy buttons: a short line, then engine-rendered modifier lines (Scientific Survey: claim weight −25%; Sponsor Contractors: the claim floor, +75%; Unilateral Licensing: naval weight +100% and relations −10), then the influence it holds and the five-year lock. Each line has its name and a sign-colored figure, not a raw key. The figures must match the table in the player guide (`02-timeline.md`, Seabed licences).
+2. **The overview's Policy and Regime boxes.** Policy says what ours does to us now (its weight factor, the influence it holds) and when it can next change, with an exception (a newly binding Law of the Sea, a Scramble) only while one applies. Regime gives the regime in force in one line and links the new Seabed Regime concept, whose description holds all three regimes.
+3. **The claimant list (a datamodel of the player's `te_seabed_rk_list_<basin>`, each item a capital whose `State.GetCountry` reads the rival's own script values: new; audit SEA-3's later step, the owner, 2026-10-27).** Open a basin with three or more claimants: every other claimant has a row, largest share first, with no "and N other claimants" line: its flag (hover: the name; click: the country), its name elided at the column's edge, then Mines, Claims and Weight under the heads, matching what the rival's own Seabed tab shows (switch to it, or compare the basin's totals); our row follows, reading "Us" with our figures and Relinquish or Claim Again in the last cell. On a save from before the change, the lists fill at the next sharing (January, or the month after a new claimant appears or a civil war is won). If the figures read 0 for every rival, the values are being evaluated in our scope, not the rival's; if the rows are blank or repeat one country, the datamodel chain failed: in either case go back to the six fixed seats and their scripted lines (git history before audit SEA-3's later step).
+4. **Basin hovers.** The +1 licence column's per-basin hover no longer repeats "often more than needed" (the head's hover says it once); the Pool head's hover names what the legend lacks; the state panel's weight line reads "the Southern Ocean".
 
 ### Engine facts the build assumes, unverified
 
@@ -437,7 +488,7 @@ audits) and this is what only the game can show. A fixed item is struck through 
 ### How to run
 
 - **Deploy** per CLAUDE.md, "Play-testing unmerged work". Space Race rule on.
-- **Reach Solar System Colonization**: a great or major power with the Moon Base and Mars Landing done, Directed Energy Weapons
+- **Reach Solar System Colonization**: a great or major power with the Moon Base and Mars Landing done, Cislunar Infrastructure
   and the Solar Colonization method on its Space Program. `event te_debug_space_race.1` option b finishes running milestones;
   research the rest from the console.
 - **Console.** `event te_debug_launch_windows.1`: a stages two and a half colony fleets (the bar at 2.5 × the goal); b writes
@@ -455,7 +506,7 @@ Logged once a game each. Nothing logged means the premise never came up (no chem
 | Line | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN window_gate` | the first colony founded by a country with neither Asteroid Mining nor Muon-Catalyzed Fusion Reactors after a closed window has held its full bar at least once (OK), or any such colony founded while its body's window is closed (BROKEN) | closed windows held the bar and the fleet left in its window: the global cache (`sr_window_is_open_<body>`) agreed with the date's own answer (`sr_window_open_<body>`, the generated chain) and the draw read it | a colony was founded outside its window: the cache was stale or wrong (`cache_month` against `month`, `cached_wait` against `months_to_next`), or a site's draw trigger didn't hold | if `cache_month` lags `month`, the global pulse reads last month's index: make `sr_launch_window_cache_current` the only path (refresh from the entry's pulse every month) or compare against `te_history_month_index` directly in `sr_launch_departs_free`; if the cache is current, read the site's `trigger` in `sr_establish_colony_effect` |
-| `TE_SELF_CHECK OK window_gate_paid` | the first off-window launch by a country with Asteroid Mining | `premium_cached` = `premium_date`, and `spent` = `goal` × (1 + premium) | the two premiums differ (stale cache) or `spent` is another figure | as above for the cache; for `spent`, `sr_launch_fleet_cost` is read before the colony effect in `sr_launch_month` |
+| `TE_SELF_CHECK OK window_gate_paid` | the first off-window launch by a country with Asteroid Mining | `premium_cached` = `premium_date`, and `spent` = `goal` × (1 + premium); both are the nuclear thermal curve's for a country with Nuclear Thermal Propulsion (lunar colonization design § 9) | the two premiums differ (stale cache) or `spent` is another figure | as above for the cache; for `spent`, `sr_launch_fleet_cost` is read before the colony effect in `sr_launch_month` |
 
 ### Checklist
 
@@ -469,8 +520,8 @@ Logged once a game each. Nothing logged means the premise never came up (no chem
    opens, one colony is founded that month and the bar drops by one goal; the next month another, while the window stays open
    and a goal is left; what is left waits. Founded worlds belong to the open body only.
 3. **A setback while fleets are staged.** With 2.5 fleets staged, fire a setback (`event te_debug_space_race.1` option j while
-   solar colonization is the most advanced running milestone, or wait for the roll): the bar loses 25% (Ambitious) or 15%
-   (Safe, Standard) of one goal, plus any flat amount, not of the whole bar. The option's tooltip says so.
+   solar colonization is the most advanced running milestone, or wait for the roll): the bar loses the option's months of
+   progress at the recorded pace, as its tooltip says, and never more than one goal, so the staged fleets survive.
 4. **An off-window launch after Asteroid Mining.** Research Asteroid Mining, Standard approach, every stage-1 window closed and
    staged progress above one goal. Next Windows gives each closed destination today's premium and the verdict, months saved (to
    the stage's next window, option b's `stage_wait`) against months cost (goal × premium ÷ pace). A colony is founded off-window
@@ -549,6 +600,9 @@ decision Begin Orbital Debris Removal and wait a month.
    Hazardous, option g: the event Ribbon Strike, its picture, both option tooltips stating the
    −50% for 6 or 2 months, the repair option showing its treasury cost. After either option
    the elevator building shows Ribbon Strike, and option g again does nothing until it ends.
+   Each option's effects give Ribbon Strike for 182 or 61 days, not 0, and it ends about six or
+   two months on (both were `{ value = N }` script values, which `add_modifier` reads as 0 days,
+   until 2026-10-23).
 4. **A Kessler cascade cleared by Fusion Sweepers** (play-test list of the spec). Console to
    Kessler Cascade (90), research Muon-Catalyzed Fusion Reactors, own a Space Elevator of ten
    levels, take Begin Orbital Debris Removal: the Space Program switches to Fusion Sweepers,
@@ -558,15 +612,17 @@ decision Begin Orbital Debris Removal and wait a month.
 5. **The ceiling.** Console to Kessler Cascade, then strike several times (or option c again):
    the index stops at 100, and the high pool keeps its share (the low pool gives way).
 6. **The anti-satellite strike.** At war with a country that has a Space Program: the action
-   Anti-Satellite Strike appears in its diplomatic actions (and in the lens bar, with the
-   placeholder icon), greyed with each failing requirement's line until all hold. The
+   Anti-Satellite Strike appears in its diplomatic actions (and in the lens bar, with its
+   missile-and-satellite icon), greyed with each failing requirement's line until all hold. The
    confirmation box lists the network penalty (and its six-month and half-strength cases),
    the infamy, the case strength, the relations and the debris. After the strike: the target
    holds Orbital Network Disrupted for a year (half strength with a Battlestation, six months
    on the Mars Mission or higher), we gain 5 infamy, Our Record on the UN tab shows
    Anti-satellite strikes 15 (with a UN), every other country in orbit likes us 30 less, the
    index rises by 12, both notifications read correctly (ours and the third party's), and the
-   action is greyed against that target for 12 months for every country.
+   action is greyed against that target for 12 months for every country. Hover the target's
+   Orbital Network Disrupted: it expires a year on (six months on the Mars Mission), not at once
+   and not never (its duration was a `{ value = N }` script value until 2026-10-23).
 7. **The AI and the strike.** In an observer run with a late war between space powers: an AI
    strikes only an enemy with more in orbit than itself, rarely, and almost never once the
    index is 50 or more unless it is losing. An AI should never strike a country with no
@@ -585,14 +641,18 @@ decision Begin Orbital Debris Removal and wait a month.
     unavailable (the rule's `disable_pm_*` flags; the mod's first use of them).
 11. **A revolution.** A country holding Orbital Debris and Orbital Cleanup loses a civil war
     to its rebels: the winner has both back after its next monthly pulse, and a struck
-    country's 12-month cooldown carries over.
+    country's 12-month cooldown carries over. A country still under Orbital Network Disrupted
+    that loses one has it back the next month, at the strike's strength, expiring within a month
+    of when the strike's would have (`te_asat_rebuild_disruption`'s ladder of 30-day literals;
+    it passed a computed duration, read as 0 days, until 2026-10-23).
 
-### Placeholder art
+### Art
 
-| Where | Now | Final art (icon-pipeline subject) | Proposed path |
-|---|---|---|---|
-| `te_asat_strike_action`'s `texture` | `diplomatic_action_icons/covert_space_espionage_action.dds` | an interceptor missile streaking up toward a small satellite that is breaking into fragments | `gfx/interface/icons/diplomatic_action_icons/te_asat_strike_action.dds` |
-| the lens bar | `lens_toolbar_icons/te_asat_strike_action.dds`, a byte copy of the same placeholder | the same picture (the pipeline's lens copy) | unchanged |
-| `pm_debris_active_removal` | `cat_star_purple_p1.dds` | a small servicer spacecraft grappling a dead satellite with a robotic arm | `gfx/interface/icons/production_method_icons/debris_active_removal.dds` |
-| `pm_debris_laser_broom` | `cat_star_purple_p2.dds` | a ground observatory dome firing a thin green laser beam up at a tiny tumbling fragment | `gfx/interface/icons/production_method_icons/debris_laser_broom.dds` |
-| `pm_debris_fusion_sweepers` | `cat_rocket_purple_p5.dds` | a fusion-drive tug with a wide mesh net gathering debris in orbit | `gfx/interface/icons/production_method_icons/debris_fusion_sweepers.dds` |
+Painted in icon batch 6 (2026-10-27); until then each borrowed another icon or a `cat_*` glyph.
+
+| Where | Shows | File |
+|---|---|---|
+| `te_asat_strike_action`'s `texture`, and the lens bar's copy | an interceptor missile striking a gold-foil satellite in a burst of fire | `gfx/interface/icons/diplomatic_action_icons/te_asat_strike_action.dds`, `lens_toolbar_icons/te_asat_strike_action.dds` |
+| `pm_debris_active_removal` | a spacecraft gripping a dead satellite with a jointed arm | `gfx/interface/icons/production_method_icons/pm_debris_active_removal.dds` |
+| `pm_debris_laser_broom` | an observatory dome, its tube aimed at a small fragment | `gfx/interface/icons/production_method_icons/pm_debris_laser_broom.dds` |
+| `pm_debris_fusion_sweepers` | a rocket towing a net of rocks | `gfx/interface/icons/production_method_icons/pm_debris_fusion_sweepers.dds` |

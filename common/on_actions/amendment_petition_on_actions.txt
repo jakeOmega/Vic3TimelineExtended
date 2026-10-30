@@ -48,6 +48,14 @@ on_yearly_pulse_country = {
 		te_amendment_petition_perpetual_trusts
 		te_amendment_petition_birthright_endowment
 		te_amendment_petition_undivided_farm_succession
+		te_amendment_petition_habeas_corpus_suspension
+		te_amendment_petition_judicial_elections
+		te_amendment_petition_mixed_commercial_courts
+		te_amendment_petition_jury_trials
+		te_amendment_petition_military_tribunals
+		te_amendment_petition_peoples_tribunals
+		te_amendment_petition_human_in_the_loop
+		te_amendment_petition_first_past_the_post
 	}
 }
 
@@ -221,5 +229,73 @@ te_amendment_petition_undivided_farm_succession = {
 	random_events = {
 		975 = 0
 		25 = amendment_petition_events.20
+	}
+}
+
+# The Writ Suspended: a war, which seldom lasts. 25%.
+te_amendment_petition_habeas_corpus_suspension = {
+	random_events = {
+		750 = 0
+		250 = amendment_petition_events.21
+	}
+}
+
+# Let the People Choose Their Judges: a populist or Jacksonian leader of a
+# strong group comes and goes. 5%.
+te_amendment_petition_judicial_elections = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.22
+	}
+}
+
+# Courts for the Merchants: strong merchants are a lasting state. 2.5%.
+te_amendment_petition_mixed_commercial_courts = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.23
+	}
+}
+
+# Twelve Good Citizens: strong liberals are a lasting state. 2.5%.
+te_amendment_petition_jury_trials = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.24
+	}
+}
+
+# Courts-Martial for Rebels: unrest. 10%.
+te_amendment_petition_military_tribunals = {
+	random_events = {
+		900 = 0
+		100 = amendment_petition_events.25
+	}
+}
+
+# Justice of the Party: a single-party state led by a vanguard or fascist
+# group is a lasting state. 5%, since the regime itself is rare.
+te_amendment_petition_peoples_tribunals = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.26
+	}
+}
+
+# A Human Signature: a scandal over a machine's ruling comes with low
+# legitimacy or a strong rights lobby. 5%.
+te_amendment_petition_human_in_the_loop = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.27
+	}
+}
+
+# The Winner Takes All: two parties holding most of the clout is a lasting
+# state. 2.5%.
+te_amendment_petition_first_past_the_post = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.28
 	}
 }

@@ -27,3 +27,9 @@ numpy
 # loose here so a dev machine can track releases; CI installs one pinned version
 # (see that step's comment) so a ruff release can't redden an unrelated commit.
 ruff>=0.5,<1
+# pytest + pytest-xdist: run the unittest suite in parallel,
+# `python3 -m pytest -n auto test_*.py`, as CI's "Unit tests" step does (CI pins
+# both, as it pins ruff). `python3 -m unittest discover -s . -p 'test_*.py'`
+# still runs the same tests one at a time.
+pytest>=9,<10
+pytest-xdist>=3.6,<4

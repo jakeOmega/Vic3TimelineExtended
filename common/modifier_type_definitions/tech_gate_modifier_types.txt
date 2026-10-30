@@ -40,6 +40,14 @@ country_sr_interstellar_mission_program_bool = {
 	boolean = yes
 }
 
+# Nuclear Thermal Propulsion's smaller off-window launch premium (lunar
+# colonization design § 9), carried by the technology. The premium readers
+# act on it (sr_launch_has_ntp, sr_launch_window_triggers.txt).
+country_sr_nuclear_thermal_launches_bool = {
+	color = good
+	boolean = yes
+}
+
 # Power bloc principle technology requirements
 country_icbm_pb_principles_bool = {
 	color = good

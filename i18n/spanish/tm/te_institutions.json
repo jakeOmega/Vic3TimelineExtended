@@ -1,0 +1,170 @@
+{
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_foreign_affairs": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]",
+  "es": "Nivel de inversión de [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_international_aid": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_international_aid').GetName]",
+  "es": "Nivel de inversión de [GetInstitutionType('institution_ministry_of_international_aid').GetName]"
+ },
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_refugee_affairs": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]",
+  "es": "Nivel de inversión de [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]"
+ },
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_the_environment": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_the_environment').GetName]",
+  "es": "Nivel de inversión de [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_foreign_affairs": {
+  "en": "No [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]",
+  "es": "Sin [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_international_aid": {
+  "en": "No [GetInstitutionType('institution_ministry_of_international_aid').GetName]",
+  "es": "Sin [GetInstitutionType('institution_ministry_of_international_aid').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_refugee_affairs": {
+  "en": "No [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]",
+  "es": "Sin [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_the_environment": {
+  "en": "No [GetInstitutionType('institution_ministry_of_the_environment').GetName]",
+  "es": "Sin [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "institution_migration_controls": {
+  "en": "Migration Controls",
+  "es": "Controles de migración"
+ },
+ "institution_migration_controls_desc": {
+  "en": "The border and immigration authorities deciding who may settle in the nation.",
+  "es": "Las autoridades fronterizas y de inmigración que deciden quién puede asentarse en la nación."
+ },
+ "institution_ministry_of_commerce": {
+  "en": "Ministry of Commerce",
+  "es": "Ministerio de Comercio"
+ },
+ "institution_ministry_of_commerce_desc": {
+  "en": "The ministry promoting the nation's trade and commercial interests at home and abroad.",
+  "es": "El ministerio que promueve el comercio y los intereses comerciales de la nación dentro y fuera del país."
+ },
+ "institution_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection",
+  "es": "Ministerio de Protección del Consumidor"
+ },
+ "institution_ministry_of_consumer_protection_desc": {
+  "en": "Safeguarding the public from unsafe goods and unscrupulous sellers.",
+  "es": "Protege al público de los productos peligrosos y de los vendedores sin escrúpulos."
+ },
+ "institution_ministry_of_culture": {
+  "en": "Ministry of Culture",
+  "es": "Ministerio de Cultura"
+ },
+ "institution_ministry_of_culture_desc": {
+  "en": "Fostering the national culture and spreading it at home and abroad.",
+  "es": "Fomenta la cultura nacional y la difunde dentro y fuera del país."
+ },
+ "institution_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs",
+  "es": "Ministerio de Asuntos Exteriores"
+ },
+ "institution_ministry_of_foreign_affairs_desc": {
+  "en": "The diplomatic corps representing the nation's interests abroad.",
+  "es": "El cuerpo diplomático que representa los intereses de la nación en el exterior."
+ },
+ "institution_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security",
+  "es": "Ministerio de Inteligencia y Seguridad"
+ },
+ "institution_ministry_of_intelligence_and_security_desc": {
+  "en": "The nation's intelligence services, gathering secrets and running covert operations.",
+  "es": "Los servicios de inteligencia de la nación, que recopilan secretos y llevan a cabo operaciones encubiertas."
+ },
+ "institution_ministry_of_international_aid": {
+  "en": "Ministry of International Aid",
+  "es": "Ministerio de Ayuda Internacional"
+ },
+ "institution_ministry_of_international_aid_desc": {
+  "en": "Channeling the nation's aid and development funds to other countries.",
+  "es": "Canaliza los fondos de ayuda y desarrollo de la nación hacia otros países."
+ },
+ "institution_ministry_of_labor": {
+  "en": "Ministry of Labor",
+  "es": "Ministerio de Trabajo"
+ },
+ "institution_ministry_of_labor_desc": {
+  "en": "The ministry mediating between workers and employers.",
+  "es": "El ministerio que media entre trabajadores y empleadores."
+ },
+ "institution_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda",
+  "es": "Ministerio de Propaganda"
+ },
+ "institution_ministry_of_propaganda_desc": {
+  "en": "Shaping public opinion in favor of the state and its policies.",
+  "es": "Moldea la opinión pública a favor del Estado y sus políticas."
+ },
+ "institution_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs",
+  "es": "Ministerio de Asuntos de Refugiados"
+ },
+ "institution_ministry_of_refugee_affairs_desc": {
+  "en": "Receiving and settling those who flee to the nation for safety.",
+  "es": "Acoge y asienta a quienes huyen a la nación en busca de seguridad."
+ },
+ "institution_ministry_of_religion": {
+  "en": "Ministry of Religion",
+  "es": "Ministerio de Religión"
+ },
+ "institution_ministry_of_religion_desc": {
+  "en": "Overseeing the nation's religious life and upholding the state faith.",
+  "es": "Supervisa la vida religiosa de la nación y defiende la fe del Estado."
+ },
+ "institution_ministry_of_science": {
+  "en": "Ministry of Science",
+  "es": "Ministerio de Ciencia"
+ },
+ "institution_ministry_of_science_desc": {
+  "en": "Funding and coordinating the nation's scientific research.",
+  "es": "Financia y coordina la investigación científica de la nación."
+ },
+ "institution_ministry_of_the_environment": {
+  "en": "Ministry of the Environment",
+  "es": "Ministerio de Medio Ambiente"
+ },
+ "institution_ministry_of_the_environment_desc": {
+  "en": "Protecting the nation's land, air and water from the costs of industry.",
+  "es": "Protege la tierra, el aire y el agua de la nación de los costes de la industria."
+ },
+ "institution_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control",
+  "es": "Ministerio de Control del Pensamiento"
+ },
+ "institution_ministry_of_thought_control_desc": {
+  "en": "Tasked with ensuring that no citizen thinks otherwise than the state.",
+  "es": "Encargado de asegurar que ningún ciudadano piense de forma distinta al Estado."
+ },
+ "institution_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning",
+  "es": "Ministerio de Planificación Urbana"
+ },
+ "institution_ministry_of_urban_planning_desc": {
+  "en": "Directing the growth and rebuilding of the nation's cities.",
+  "es": "Dirige el crecimiento y la reconstrucción de las ciudades de la nación."
+ },
+ "institution_ministry_of_war": {
+  "en": "Ministry of War",
+  "es": "Ministerio de la Guerra"
+ },
+ "institution_ministry_of_war_desc": {
+  "en": "The ministry commanding the nation's armed forces and overseeing their supply.",
+  "es": "El ministerio que manda las fuerzas armadas de la nación y supervisa su abastecimiento."
+ },
+ "institution_national_bank": {
+  "en": "National Bank",
+  "es": "Banco Nacional"
+ },
+ "institution_national_bank_desc": {
+  "en": "The central bank issuing the nation's currency and managing its reserves.",
+  "es": "El banco central que emite la moneda de la nación y gestiona sus reservas."
+ }
+}

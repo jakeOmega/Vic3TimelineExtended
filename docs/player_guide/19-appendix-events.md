@@ -37,7 +37,7 @@ Authority where it fires.
 ## Demographic event list
 
 These are the events behind [Demographic events](08-states.md#demographic-events)
-in States and population, under the Demographics (Experimental) rule's Full
+in States and population, under the Demographics rule's Full
 setting. Each fires when the census crosses its threshold, at most once in 25
 years (the Last Generation? once a game). Money costs are a share of your yearly
 gross income; modifiers last ten years unless the table says otherwise.
@@ -47,7 +47,7 @@ gross income; modifiers last ten years unless the table says otherwise.
 | The Demographic Dividend | 62% of your people are aged 15 to 64, a tenth more than in 1836 | Schools: more education access, a costlier Ministry of Education. Industry: construction and manufacturing throughput. Savings: cheaper loans and more tax capacity |
 | The Baby Boom | A war lasting two years or more ends, after its dead passed a hundredth of your men of fighting age | Births +15% fading over ten years, with standard of living +1 for the lower strata for five years at 5%. Or births +20% and fewer women at work. Or births +10% and more women at work |
 | The Lost Generation | Your war dead pass a twentieth of your men of fighting age | Of three harms (legitimacy and radicals; lower throughput; poorer widows and fewer births), memorials at 2% spare the first, women in the factories spare the second at the Devout's and Landowners' cost, and widows' pensions at 5% spare the third |
-| The Greying of the Nation | Pensioners reach a fifth of your people; with no pension law, 14% of your people are past the age where old age begins | With Old Age Pension: raise the pension age to 70 (greyed while your pension setting's five-year term runs), cut benefits (income of a fifth of the pension bill, poorer lower strata, Trade Unions angry), raise contributions (income of a seventh, Industrialists and Trade Unions displeased), open the borders (more immigrants, a nativist movement grows), or keep the pension. Without it: open the borders, almshouses (fewer deaths, a costlier Ministry of Health), or leave the old to their families (fewer women at work) |
+| The Graying of the Nation | Pensioners reach a fifth of your people; with no pension law, 14% of your people are past the age where old age begins | With Old Age Pension: raise the pension age to 70 (grayed while your pension setting's five-year term runs), cut benefits (income of a fifth of the pension bill, poorer lower strata, Trade Unions angry), raise contributions (income of a seventh, Industrialists and Trade Unions displeased), open the borders (more immigrants, a nativist movement grows), or keep the pension. Without it: open the borders, almshouses (fewer deaths, a costlier Ministry of Health), or leave the old to their families (fewer women at work) |
 | The Youth Bulge | More than a fifth of your people are aged 20 to 29 and a tenth of your workforce has no work | For five years: public works at 5% (fewer radicals, more construction), national service (more conscripts, fewer radicals), emigration (more people leave, less prestige), or nothing (more radicals and turmoil) |
 | Missing Girls | 110 or more boys are born per 100 girls (Birth Limit after Microprocessor) | Ban sex selection (5 fewer boys per 100 girls for twenty years, 25 authority for five), pay for daughters (3 fewer for twenty years, 5%), relax Birth Limit (one child back to two, or end it once its term has run), or call it a private matter (the feminist movement grows) |
 | Bare Branches | 110 or more men per 100 women aged 20 to 59 | Pay women's passage (more immigrants, 2%), call the bachelors up (more conscripts, fewer radicals), more police (less turmoil, 25 authority for five years), or nothing (more radicals) |
@@ -151,14 +151,16 @@ trade privilege in the new country, whose upkeep you pay.
 | The World is Watching (not the cultural hegemony milestone of the same name) | An anti-colonial great power presses you over a colonial subject (needs Intergovernmental Organizations). |
 | The Price of Empire | A colonial subject at 75 liberty desire rises in armed revolt (needs Civil Rights Movement). |
 | Trouble in (the colony's name) | A colony has a severely unaccepted population. |
-| Blood in the Colonies | Armed resistance in a colony, once two or more colonies are badly unaccepted. |
+| Blood in the Colonies | Armed resistance in a colony, once two or more colonies are badly unaccepted. Below 40 stability its suppression is a war of independence. |
+| Declaration in (the territory) | Below 40 stability, a colony with severely unaccepted people declares independence; also each declaration of a collapse. See [Wars of independence](12-decolonization.md#wars-of-independence). |
+| The Captains' Revolt, The Republic in Danger | A war of independence has run four years with your war support in it at 25 or below for a year. |
 | Judged by New Standards | An anti-colonial great power condemns you in international forums. |
 | Powerful Friends | A pro-colonial great power offers its backing. |
 | These Dark Satanic Mills of Empire, The Intelligentsia Petition | An Anti-Colonialist leads the Intelligentsia. |
 | The Treasury Says No | Your debt is high while you hold colonies. |
-| Conscription Crisis | You are at war against a rebelling colonial subject or culturally distinct secessionists, or at war while Colonial Crackdown runs. |
+| Conscription Crisis | You are fighting a war of independence (against a colony's rebels, a rebelling colonial subject or a colony's secessionists), or are at war while Colonial Crackdown runs. |
 | The Universities Speak | The entry has run for ten years and a powerful Intelligentsia is out of government. |
-| The Veterans' Protest | Your garrison has run for more than three years. |
+| The Veterans' Protest | Your garrison has run for more than three years, or you lost a war of independence. |
 
 ### Former colony event list
 
@@ -300,12 +302,12 @@ handful that connect the space race to other systems:
 
 | Event | When it can fire | What it offers |
 |---|---|---|
-| The Private Sector Steps Up | You have the SpaceX company and a milestone under way | 3 to 15 points of progress on every milestone under way, more the more you hand to the company |
+| The Private Sector Steps Up | You have the SpaceX company and a milestone under way | 1 to 3 months of progress on every milestone under way, more the more you hand to the company |
 | Tickets to the Stars | You have reached orbit and own a Tourism Industry | Space Tourism Revenue (+5% tourism output, fading over ten years), a research bonus instead, or both for two and a half years |
-| A Station for All Nations | You are a UN member between Orbital Flight and the Moon Landing, and another member has reached orbit | 5 points of progress, and a ten-year, fading bonus from either a joint station (research, prestige, influence, better relations with spacefaring members) or a national one (research, prestige) |
-| Off-World Industry Meets the Space Program | You are colonizing and own an Extraplanetary Base | Full integration: 15 points of colonization progress, plus research and prestige, fading over ten years. Staying commercial: 5 points, plus Extraplanetary Base throughput and advanced materials output, fading over ten years |
-| The Elevator Advantage | You own a Space Elevator and are building the Moon Base, landing on Mars or colonizing | 8 or 12 points of progress on those missions |
-| The Kessler Threshold | Orbital Flight is under way, or any milestone is once [orbital debris](16-space.md#orbital-debris) is Cluttered or worse | 3 or 8 points of progress, the larger with radical academics, or better relations with spacefaring powers |
+| A Station for All Nations | You are a UN member between Orbital Flight and the Moon Landing, and another member has reached orbit | A month of progress on every milestone under way, and a ten-year, fading bonus from either a joint station (research, prestige, influence, better relations with spacefaring members) or a national one (research, prestige) |
+| Off-World Industry Meets the Space Program | You are colonizing and own an Extraplanetary Base | Full integration: 2 months of colonization progress, plus research and prestige, fading over ten years. Staying commercial: 1 month, plus Extraplanetary Base throughput and advanced materials output, fading over ten years |
+| The Elevator Advantage | You own a Space Elevator and are landing on Mars or colonizing | 1 or 2 months of progress on those missions |
+| The Kessler Threshold | Orbital Flight is under way, or any milestone is once [orbital debris](16-space.md#orbital-debris) is Cluttered or worse | 1 or 3 months of progress, the larger with radical academics, or better relations with spacefaring powers |
 
 The Space Elevator and the Extraplanetary Base are covered in [The extended
 timeline](02-timeline.md), tourism in [States and population](08-states.md), and

@@ -1,63 +1,86 @@
 ﻿# ======================================================================
 #  INHERITANCE — modifiers
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 #  Applied by common/scripted_effects/te_inheritance_effects.txt and
 #  events/inheritance_events.txt. Docs: docs/systems/mod_systems.md
 #  § Inheritance.
 # ======================================================================
 
 # ----------------------------------------------------------------------
-#  Wealth Concentration (demographics spec §4.2). Unit values, applied
-#  with a multiplier of 0-1 read from a variable.
+#  Wealth Concentration (demographics spec §4.2). Sizes at full strength
+#  (a score of 80 or 20; docs/superpowers/specs/2026-10-22-demographic-
+#  effects-impact-design.md): the multiplier, read from a variable, keeps
+#  rising past it, to 5/3 at 100 and 4/3 at 0 (te_inheritance_values.txt).
+#  Concentration grows faster but crashes more often; dispersal grows
+#  slower but steadier. Pinned by demographics_effects.SIZES.
 #  Country pair: the national figure, refreshed by te_demog_wc_national
 #  (te_inh_apply_concentration_modifiers), multipliers
-#  te_inh_great_fortunes_mult and te_inh_dispersed_mult. Political capture
-#  is national: a few great fortunes buy influence beyond their own state.
+#  te_inh_great_fortunes_mult and te_inh_dispersed_mult: the strata's clout
+#  (a few great fortunes buy influence beyond their own state) and the
+#  financial cycle, which is national.
 #  State three: the state's own score (te_dg_wc), refreshed on the state's
 #  yearly pulse (te_inh_refresh_wc_state_effects), multipliers
 #  te_inh_wc_high_mult, te_inh_wc_low_mult and te_inh_land_hunger_mult.
-#  Saving, mobility, radicals and the rural exodus happen where the
-#  property is.
+#  Saving, wealth's local clout, mobility, schooling and the rural exodus
+#  happen where the property is.
 # ----------------------------------------------------------------------
 
-# National score above 50: multiplier (score - 50) / 50.
+# National score above 50. A few great fortunes buy influence, and their
+# extra saving is lent on and bids up assets: sharp rises in top incomes
+# came before 1929 and 2008 (Kumhof, Rancière and Winant 2015). Bubble
+# pressure is read by the banking cycle once it runs (+0.3 a month at full
+# strength; banking_cycle_simulation.md §27).
 inh_great_fortunes = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_aristocrats_pol_str_mult = 0.2
 	country_capitalists_pol_str_mult = 0.2
+	country_bubble_pressure_monthly_add = 0.3
 }
 
-# National score below 50: multiplier (50 - score) / 50.
+# National score below 50. Few great houses remain to buy influence, and
+# many owners deciding apart don't all pile into one bond issue (Barings and
+# Argentina, 1890). -0.4 a month at full strength, more than the other side's
+# +0.3: bubble pressure stops at 0, so a push down moves crashes about half as
+# far as the same push up (banking_cycle_simulation.md §27).
 inh_dispersed_wealth = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_aristocrats_pol_str_mult = -0.2
+	country_capitalists_pol_str_mult = -0.2
+	country_bubble_pressure_monthly_add = -0.4
 }
 
-# State score above 50: multiplier (score - 50) / 50. The great houses
-# save and invest; the rest find the ladder short and resent it.
+# State score above 50. The great houses save and invest, and their wealth
+# buys clout; the rest find the ladder short, and landowners hold back
+# public schooling (Galor, Moav and Vollrath 2009).
 inh_concentrated_property = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	state_aristocrats_investment_pool_efficiency_mult = 0.1
-	state_capitalists_investment_pool_efficiency_mult = 0.1
-	state_radicals_from_political_movements_mult = 0.1
-	state_pop_qualifications_mult = -0.1
-	state_education_access_add = -0.05
+	state_aristocrats_investment_pool_efficiency_mult = 0.2
+	state_capitalists_investment_pool_efficiency_mult = 0.2
+	state_political_strength_from_wealth_mult = 0.2
+	state_pop_qualifications_mult = -0.2
+	state_education_access_add = -0.1
 }
 
-# State score below 50: multiplier (50 - score) / 50. Many small owners
-# do the saving.
+# State score below 50. Small owners save too, so no investment line; the
+# same wealth buys less influence, the ladder and the schools open, and a
+# wide propertied middle resists revolutionary movements.
 inh_dispersed_property = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	state_farmers_investment_pool_efficiency_mult = 0.1
-	state_shopkeepers_investment_pool_efficiency_mult = 0.1
+	state_political_strength_from_wealth_mult = -0.1
+	state_pop_qualifications_mult = 0.1
+	state_education_access_add = 0.1
+	state_radicals_from_political_movements_mult = -0.1
 }
 
-# State score above 50 in farming country: multiplier (score - 50) / 50
-# times the agrarian share. Great estates leave the young no land of their
-# own, and they leave (southern Italy's emigrants).
+# State score above 50 in farming country, times the agrarian share. Great
+# estates leave the young no land of their own: they leave (southern
+# Italy's emigrants) or rise (Andalusia, Russia 1905, Mexico 1910), and the
+# Land Reform movement shows where the base game creates it.
 inh_land_hunger = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_migration_quota_mult = 0.2
+	state_migration_quota_mult = 0.3
+	state_pop_support_movement_land_reform_mult = 0.25
+	state_radicals_from_political_movements_mult = 0.1
 }
 
 # ----------------------------------------------------------------------
@@ -148,6 +171,49 @@ inh_dynasty_founded = {
 inh_probate_litigation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_bureaucracy_investment_cost_factor_mult = 0.05
+}
+
+# The Hidden Estates. An audit of every official's estate takes the
+# government's attention (authority, fading over five years); looking away
+# lets the officials keep what they hid, and they save again for children
+# who will have it, while the public sees the privilege.
+inh_estates_audited = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_cost_add = 100
+}
+inh_estates_overlooked = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_bureaucrats_pol_str_mult = 0.1
+	state_bureaucrats_investment_pool_efficiency_mult = 0.1
+	country_legitimacy_base_add = -3
+}
+
+# The Empty Holding. Land the next repartition may take is not improved;
+# land the children will keep is.
+inh_commune_repartition = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.03
+}
+inh_holding_continuity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	building_group_bg_agriculture_throughput_add = 0.05
+}
+
+# The First Cohort: what the first stakes were spent on.
+inh_cohort_schooled = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_education_access_add = 0.03
+	state_pop_qualifications_mult = 0.1
+	country_bureaucracy_investment_cost_factor_mult = 0.03
+}
+inh_cohort_enterprise = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_shopkeepers_investment_pool_efficiency_mult = 0.1
+	state_farmers_investment_pool_efficiency_mult = 0.1
+}
+inh_cohort_spent = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_lower_strata_standard_of_living_add = 1
 }
 
 # ----------------------------------------------------------------------

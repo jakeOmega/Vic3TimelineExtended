@@ -8,7 +8,7 @@
 
 **Tech Stack:** Victoria 3 Paradox script (`common/`, `events/`), localization YAML, Python 3.11/3.12 `unittest`.
 
-**Spec:** `docs/superpowers/specs/2026-10-17-judiciary-design.md` (§§ 1–9, 11). Phases 2–4 (§ 10) get their own plans after the phase 1 play-test.
+**Spec:** `docs/superpowers/archive/specs/2026-10-17-judiciary-design.md` (§§ 1–9, 11). Phases 2–4 (§ 10) were to get their own plans after the phase 1 play-test; at the owner's request they were built on 2026-10-25 from the spec alone, as its § 14 records.
 
 ## Global Constraints
 
@@ -61,7 +61,7 @@
 - [ ] **Step 1: Write the failing tests** (`test_judiciary.py`)
 
 ```python
-"""Judiciary law group (docs/superpowers/specs/2026-10-17-judiciary-design.md).
+"""Judiciary law group (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md).
 
 What the engine would never report:
 
@@ -395,7 +395,7 @@ country_override_with_algorithmic_governance_add = {
 - [ ] **Step 4: Add the group** at the end of the power-structure entries in `common/law_groups/extra_law_groups.txt`, after `lawgroup_state_power`:
 
 ```
-# Judiciary (docs/superpowers/specs/2026-10-17-judiciary-design.md): who checks
+# Judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md): who checks
 # the government, and how far the courts are trusted to. Courts were imposed
 # with regimes (West Germany 1951, Japan 1947), so regime change carries them.
 lawgroup_judiciary = {
@@ -410,7 +410,7 @@ lawgroup_judiciary = {
 ```
 # ======================================================================
 #  JUDICIARY — laws
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 #  The laws carry what the courts can do. Judicial Independence
 #  (te_judiciary_effects.txt) carries how far they are trusted, up to the
 #  ceiling each law's tooltip shows. Every rule a player plans around is a
@@ -815,7 +815,7 @@ class ScoreDefinitionsTest(unittest.TestCase):
 ```
 # ======================================================================
 #  JUDICIARY — script values (country scope)
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md § 3
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md § 3
 # ======================================================================
 
 # The ceiling Judicial Independence moves toward (spec § 3.1): the court
@@ -888,7 +888,7 @@ te_jud_display = {
 ```
 # ======================================================================
 #  JUDICIARY — scripted triggers (country scope)
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 # ======================================================================
 
 # A regime whose executive answers to nobody: its courts challenge nothing
@@ -928,7 +928,7 @@ te_jud_is_islamic_state = {
 ```
 # ======================================================================
 #  JUDICIARY — static modifiers
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 # ======================================================================
 
 # Judicial Independence at 100 (spec § 3.2). te_jud_refresh, its only
@@ -1114,7 +1114,7 @@ class ScoreScriptTest(unittest.TestCase):
 ```
 # ======================================================================
 #  JUDICIARY — scripted effects (country scope)
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 #  The score lives in var:te_judicial_independence (0-100) and nowhere else,
 #  so a revolution's winner inherits it and te_jud_refresh rebuilds the
 #  modifiers.
@@ -1314,7 +1314,7 @@ te_jud_assign_court_by_rule = {
 ```
 # ======================================================================
 #  JUDICIARY — on actions
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 #  Effects: common/scripted_effects/te_judiciary_effects.txt.
 # ======================================================================
 
@@ -1374,7 +1374,7 @@ te_jud_yearly = {
 ```
 # OLD-SAVE REPAIR (#<PR>): remove after <YYYY-MM-DD> or at vanilla 1.15, whichever comes first.
 #
-# The Judiciary group (docs/superpowers/specs/2026-10-17-judiciary-design.md
+# The Judiciary group (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 # § 6) is new, so a save from before it gives every country Executive
 # Tribunals, the first law in te_judiciary_laws.txt, and no score. First
 # month: the starting court by rule. Second month: te_jud_world_seeded, which
@@ -1926,7 +1926,7 @@ class StancesTest(unittest.TestCase):
 - [ ] **Step 3: The lists** in `ideology_modifications.py`, before `modifications = {`:
 
 ```python
-# --- lawgroup_judiciary (docs/superpowers/specs/2026-10-17-judiciary-design.md § 7) ---
+# --- lawgroup_judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md § 7) ---
 # Every list names all six laws, in file order (the ideology_lawgroup audit;
 # test_judiciary.py). Applied to the vanilla ideologies in JUDICIARY_STANCES by
 # the loop after `modifications`; the mod's own ideologies carry the same
@@ -2050,7 +2050,7 @@ Laws ship on placeholder icons (Task 1: Autocracy, State Religion, Appointed Bur
 - [ ] **Step 1: Add the six entries** beside the other law entries in `icon_prompts.ICONS`, `seed: None` (unreviewed), one object per law, siblings differing in silhouette:
 
 ```python
-        # Judiciary (docs/superpowers/specs/2026-10-17-judiciary-design.md)
+        # Judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md)
         "law_executive_tribunals": {"subject": "a royal crown resting on top of a closed leather-bound law book", "seed": None},
         "law_religious_courts": {"subject": "a thick holy book lying open on a carved wooden lectern, a string of prayer beads draped across its pages", "seed": None},
         "law_statutory_courts": {"subject": "a stack of three thick bound law codes with a judge's curled white wig resting on top", "seed": None},

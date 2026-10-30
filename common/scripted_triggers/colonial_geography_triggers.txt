@@ -1,0 +1,199 @@
+﻿# ============================================================================
+# COLONIAL GEOGRAPHY — the separation test's sea crossings and fill links
+#
+# A colony is "geographically separate" from the country that rules it (UN
+# General Assembly Resolution 1541 (XV), Principle IV), which the UN read as
+# separated by sea. In the game: a state of ours not joined to our capital over
+# land through states we own (is_separated_from_capital,
+# colonial_empire_triggers.txt). No trigger answers that, so a monthly ring
+# fill works it out and caches it on our states (ce_refresh_separation,
+# common/scripted_effects/colonial_geography_effects.txt); these triggers are
+# the fill's tests.
+#
+# STRAITS. Vanilla's map joins 26 pairs of states by a sea crossing
+# (adjacencies.csv, read into scripts/analysis/demographics_state_adjacency.json
+# under "strait"). A crossing joins two states only when both are homelands of
+# our primary cultures: Constantinople reaches Anatolia, Tokyo Kyushu and
+# Hokkaido, Copenhagen Jutland, Rome Sicily; Spanish Morocco, Ireland, Ryukyu
+# and Sakhalin are separated. Whether the engine's any_neighbouring_state
+# crosses a strait is unverified (the demographics self-check
+# neighbouring_state_reads logs strait=0|1), so the fill does both halves and
+# gives the same answer either way: it refuses a crossing the iterator may
+# return unless both ends are our homelands, and adds a crossing between two
+# homelands itself. test_colonial_geography.py pins the two lists below to the
+# JSON's pairs.
+#
+# SCOPE: state.
+# ============================================================================
+
+# One end of a sea crossing. The fill tags our states that are
+# (ce_strait_end) once a month, so the costly pair test below runs only where
+# both states of a link are ends.
+ce_is_strait_endpoint = {
+	OR = {
+		state_region = s:STATE_ALAND
+		state_region = s:STATE_AL_RIF
+		state_region = s:STATE_ATTICA
+		state_region = s:STATE_CALABRIA
+		state_region = s:STATE_CELEBES
+		state_region = s:STATE_CEYLON
+		state_region = s:STATE_CHUGOKU
+		state_region = s:STATE_CORSICA
+		state_region = s:STATE_CRIMEA
+		state_region = s:STATE_EASTERN_THRACE
+		state_region = s:STATE_EAST_JAVA
+		state_region = s:STATE_HOKKAIDO
+		state_region = s:STATE_HUDAVENDIGAR
+		state_region = s:STATE_JUTLAND
+		state_region = s:STATE_KUBAN
+		state_region = s:STATE_KYUSHU
+		state_region = s:STATE_LOWLANDS
+		state_region = s:STATE_LUZON
+		state_region = s:STATE_MADRAS
+		state_region = s:STATE_MINDANAO
+		state_region = s:STATE_MOLUCCAS
+		state_region = s:STATE_NORTH_BORNEO
+		state_region = s:STATE_NORTH_ISLAND
+		state_region = s:STATE_RYUKYU_ISLANDS
+		state_region = s:STATE_SAKHALIN
+		state_region = s:STATE_SARDINIA
+		state_region = s:STATE_SCANIA
+		state_region = s:STATE_SCHLESWIG_HOLSTEIN
+		state_region = s:STATE_SHIKOKU
+		state_region = s:STATE_SICILY
+		state_region = s:STATE_SOUTH_ISLAND
+		state_region = s:STATE_SOUTH_SUMATRA
+		state_region = s:STATE_SUNDA_ISLANDS
+		state_region = s:STATE_TASMANIA
+		state_region = s:STATE_TOHOKU
+		state_region = s:STATE_ULSTER
+		state_region = s:STATE_UPPER_ANDALUSIA
+		state_region = s:STATE_UUSIMAA
+		state_region = s:STATE_VICTORIA
+		state_region = s:STATE_VISAYAS
+		state_region = s:STATE_WEST_AEGEAN_ISLANDS
+		state_region = s:STATE_WEST_INDIES
+		state_region = s:STATE_WEST_JAVA
+		state_region = s:STATE_ZEALAND
+		state_region = s:STATE_ZULIA
+	}
+}
+
+# This state and scope:ce_strait_other are the two ends of one crossing.
+ce_strait_pair_with_other = {
+	OR = {
+		AND = { state_region = s:STATE_ALAND scope:ce_strait_other = { state_region = s:STATE_UUSIMAA } }
+		AND = { state_region = s:STATE_UUSIMAA scope:ce_strait_other = { state_region = s:STATE_ALAND } }
+		AND = { state_region = s:STATE_AL_RIF scope:ce_strait_other = { state_region = s:STATE_UPPER_ANDALUSIA } }
+		AND = { state_region = s:STATE_UPPER_ANDALUSIA scope:ce_strait_other = { state_region = s:STATE_AL_RIF } }
+		AND = { state_region = s:STATE_ATTICA scope:ce_strait_other = { state_region = s:STATE_WEST_AEGEAN_ISLANDS } }
+		AND = { state_region = s:STATE_WEST_AEGEAN_ISLANDS scope:ce_strait_other = { state_region = s:STATE_ATTICA } }
+		AND = { state_region = s:STATE_CALABRIA scope:ce_strait_other = { state_region = s:STATE_SICILY } }
+		AND = { state_region = s:STATE_SICILY scope:ce_strait_other = { state_region = s:STATE_CALABRIA } }
+		AND = { state_region = s:STATE_CELEBES scope:ce_strait_other = { state_region = s:STATE_MOLUCCAS } }
+		AND = { state_region = s:STATE_MOLUCCAS scope:ce_strait_other = { state_region = s:STATE_CELEBES } }
+		AND = { state_region = s:STATE_CEYLON scope:ce_strait_other = { state_region = s:STATE_MADRAS } }
+		AND = { state_region = s:STATE_MADRAS scope:ce_strait_other = { state_region = s:STATE_CEYLON } }
+		AND = { state_region = s:STATE_CHUGOKU scope:ce_strait_other = { state_region = s:STATE_KYUSHU } }
+		AND = { state_region = s:STATE_KYUSHU scope:ce_strait_other = { state_region = s:STATE_CHUGOKU } }
+		AND = { state_region = s:STATE_CHUGOKU scope:ce_strait_other = { state_region = s:STATE_SHIKOKU } }
+		AND = { state_region = s:STATE_SHIKOKU scope:ce_strait_other = { state_region = s:STATE_CHUGOKU } }
+		AND = { state_region = s:STATE_CORSICA scope:ce_strait_other = { state_region = s:STATE_SARDINIA } }
+		AND = { state_region = s:STATE_SARDINIA scope:ce_strait_other = { state_region = s:STATE_CORSICA } }
+		AND = { state_region = s:STATE_CRIMEA scope:ce_strait_other = { state_region = s:STATE_KUBAN } }
+		AND = { state_region = s:STATE_KUBAN scope:ce_strait_other = { state_region = s:STATE_CRIMEA } }
+		AND = { state_region = s:STATE_EASTERN_THRACE scope:ce_strait_other = { state_region = s:STATE_HUDAVENDIGAR } }
+		AND = { state_region = s:STATE_HUDAVENDIGAR scope:ce_strait_other = { state_region = s:STATE_EASTERN_THRACE } }
+		AND = { state_region = s:STATE_EAST_JAVA scope:ce_strait_other = { state_region = s:STATE_SUNDA_ISLANDS } }
+		AND = { state_region = s:STATE_SUNDA_ISLANDS scope:ce_strait_other = { state_region = s:STATE_EAST_JAVA } }
+		AND = { state_region = s:STATE_HOKKAIDO scope:ce_strait_other = { state_region = s:STATE_SAKHALIN } }
+		AND = { state_region = s:STATE_SAKHALIN scope:ce_strait_other = { state_region = s:STATE_HOKKAIDO } }
+		AND = { state_region = s:STATE_HOKKAIDO scope:ce_strait_other = { state_region = s:STATE_TOHOKU } }
+		AND = { state_region = s:STATE_TOHOKU scope:ce_strait_other = { state_region = s:STATE_HOKKAIDO } }
+		AND = { state_region = s:STATE_JUTLAND scope:ce_strait_other = { state_region = s:STATE_ZEALAND } }
+		AND = { state_region = s:STATE_ZEALAND scope:ce_strait_other = { state_region = s:STATE_JUTLAND } }
+		AND = { state_region = s:STATE_KYUSHU scope:ce_strait_other = { state_region = s:STATE_RYUKYU_ISLANDS } }
+		AND = { state_region = s:STATE_RYUKYU_ISLANDS scope:ce_strait_other = { state_region = s:STATE_KYUSHU } }
+		AND = { state_region = s:STATE_LOWLANDS scope:ce_strait_other = { state_region = s:STATE_ULSTER } }
+		AND = { state_region = s:STATE_ULSTER scope:ce_strait_other = { state_region = s:STATE_LOWLANDS } }
+		AND = { state_region = s:STATE_LUZON scope:ce_strait_other = { state_region = s:STATE_NORTH_BORNEO } }
+		AND = { state_region = s:STATE_NORTH_BORNEO scope:ce_strait_other = { state_region = s:STATE_LUZON } }
+		AND = { state_region = s:STATE_LUZON scope:ce_strait_other = { state_region = s:STATE_VISAYAS } }
+		AND = { state_region = s:STATE_VISAYAS scope:ce_strait_other = { state_region = s:STATE_LUZON } }
+		AND = { state_region = s:STATE_MINDANAO scope:ce_strait_other = { state_region = s:STATE_VISAYAS } }
+		AND = { state_region = s:STATE_VISAYAS scope:ce_strait_other = { state_region = s:STATE_MINDANAO } }
+		AND = { state_region = s:STATE_NORTH_ISLAND scope:ce_strait_other = { state_region = s:STATE_SOUTH_ISLAND } }
+		AND = { state_region = s:STATE_SOUTH_ISLAND scope:ce_strait_other = { state_region = s:STATE_NORTH_ISLAND } }
+		AND = { state_region = s:STATE_SCANIA scope:ce_strait_other = { state_region = s:STATE_ZEALAND } }
+		AND = { state_region = s:STATE_ZEALAND scope:ce_strait_other = { state_region = s:STATE_SCANIA } }
+		AND = { state_region = s:STATE_SCHLESWIG_HOLSTEIN scope:ce_strait_other = { state_region = s:STATE_ZEALAND } }
+		AND = { state_region = s:STATE_ZEALAND scope:ce_strait_other = { state_region = s:STATE_SCHLESWIG_HOLSTEIN } }
+		AND = { state_region = s:STATE_SOUTH_SUMATRA scope:ce_strait_other = { state_region = s:STATE_WEST_JAVA } }
+		AND = { state_region = s:STATE_WEST_JAVA scope:ce_strait_other = { state_region = s:STATE_SOUTH_SUMATRA } }
+		AND = { state_region = s:STATE_TASMANIA scope:ce_strait_other = { state_region = s:STATE_VICTORIA } }
+		AND = { state_region = s:STATE_VICTORIA scope:ce_strait_other = { state_region = s:STATE_TASMANIA } }
+		AND = { state_region = s:STATE_WEST_INDIES scope:ce_strait_other = { state_region = s:STATE_ZULIA } }
+		AND = { state_region = s:STATE_ZULIA scope:ce_strait_other = { state_region = s:STATE_WEST_INDIES } }
+	}
+}
+
+# The fill's link from a marked neighbour (this) into scope:ce_strait_other, an
+# unmarked state of ours: a land border, or a crossing between two of our
+# homelands. scope:ce_fill_country is the country filling.
+ce_fill_land_link = {
+	OR = {
+		NOT = { has_variable = ce_strait_end }
+		scope:ce_strait_other = { NOT = { has_variable = ce_strait_end } }
+		NOT = { ce_strait_pair_with_other = yes }
+		AND = {
+			is_homeland_of_country_cultures = scope:ce_fill_country
+			scope:ce_strait_other = { is_homeland_of_country_cultures = scope:ce_fill_country }
+		}
+	}
+}
+
+# A crossing from one of our marked homelands into this unmarked homeland of
+# ours (scope:ce_strait_other is this state, saved by the caller). The fill's
+# own half of the strait rule, for an iterator that does not cross straits.
+ce_fill_homeland_strait = {
+	has_variable = ce_strait_end
+	is_homeland_of_country_cultures = scope:ce_fill_country
+	scope:ce_fill_country = {
+		any_scope_state = {
+			has_variable = ce_strait_end
+			var:ce_linked ?= scope:ce_fill_country
+			is_homeland_of_country_cultures = scope:ce_fill_country
+			ce_strait_pair_with_other = yes
+		}
+	}
+}
+
+# A protectorate of ours borders our capital's land: one of its states
+# (scope:ce_strait_other, saved by the caller) has a land neighbour of ours that
+# the fill joined to the capital. A crossing never counts here: no protectorate
+# state is a homeland of ours. Scope: state (the protectorate's).
+ce_protectorate_state_borders_linked = {
+	any_neighbouring_state = {
+		owner = scope:ce_fill_country
+		var:ce_linked ?= scope:ce_fill_country
+		NOT = { ce_strait_pair_with_other = yes }
+	}
+}
+
+# Whether a country's states need the monthly separation pass
+# (ce_separation_step, colonial_geography_effects.txt): it holds a
+# non-homeland state large enough to be a colony, or a protectorate.
+# Scope: country.
+ce_needs_separation = {
+	NOT = { is_country_type = decentralized }
+	exists = capital
+	OR = {
+		any_scope_state = {
+			state_population >= colonial_territory_min_population
+			NOT = { is_homeland_of_country_cultures = owner }
+		}
+		any_subject_or_below = {
+			is_subject_type = subject_type_protectorate
+		}
+	}
+}

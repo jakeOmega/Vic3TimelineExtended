@@ -511,7 +511,7 @@ law_strong_privacy_rights = {
 #  it can (State as Universal Heir 50, Possession by Use 60), else on Forced
 #  Heirship (25), or Customary (10) without Egalitarianism. Freedom of
 #  Testation (5) sits below Customary: Le Play's cause, a conservative one.
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 # =================================================================
 
 # Primogeniture & Entail: the eldest takes the estate, and entail stops him
@@ -3193,11 +3193,15 @@ law_state_eugenics_program = {
 	# from the 1900s to the 1970s.
 	unlocking_technologies = { behaviorism }
 
+	# An authority law that pays for its authority, as vanilla's do. The programmes
+	# never made a population fitter; they sterilised, registered and excluded. The
+	# "fitter people" lines belong to State Youth Centers' Eugenics Programs method,
+	# where the player pays for them (owner, 2026-10-24).
 	modifier = {
 		country_authority_add = 150
-		state_demog_replaced_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_work_capacity_mult = 0.1	# the census's participation input (phase 2 step 1; the design §1.7): the law's claim to a fitter people, as fitness for work late in life
-		state_demog_ontop_birth_rate_mult = 0.1
+		state_demog_ontop_birth_rate_mult = -0.05	# sterilisation of the "unfit"
+		country_acceptance_no_shared_heritage_trait_add = -10	# the boards' targets were minorities (Ethnostate's own line)
+		state_bureaucracy_population_base_cost_factor_mult = 0.05	# registries, screening boards, hereditary health courts
 	}
 }
 
@@ -4265,7 +4269,6 @@ law_protected_class = {
 		state_demog_womens_work_ratio_add = 0.2	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_demog_absorbed_birth_rate_mult = -0.1
 		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
-		state_female_work_share_add = 0.38	# the census's women at work: 0.1 + it (modifier-types stage 3)
 		state_dependent_political_participation_add = 0.5
 	}
 }

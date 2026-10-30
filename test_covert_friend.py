@@ -45,6 +45,11 @@ FORMERLY_GATED = ("election_interference", "financial_subversion", "infrastructu
 # their war-or-play requirement ends them.
 WARTIME = ("infrastructure_sabotage", "comms_disruption")
 BREAKABLE = tuple(t for t in FORMERLY_GATED if t not in WARTIME)
+# Operations added since, whose AI was written to stay off friends from the
+# start (solar colonization slices 5 and 6). Unlike the four above, the AI does
+# not call them off when the target turns friend: their break reasons are their
+# own.
+AI_SPARES_FRIENDS = ("incite_autonomy", "sabotage_colony", "survey_defences")
 
 FRIEND_WARNING = "covert_friend_target_warning_tt"
 RELATIONS_TOOLTIPS = ("iw_no_good_relations_tt", "iw_no_cordial_relations_tt")
@@ -200,7 +205,7 @@ class RelationsBlockRemoved(unittest.TestCase):
             self.assertIn("text = iw_no_intel_sharing_tt", blocks(action(typ), "possible")[0], typ)
 
     def test_formerly_gated_ai_avoids_friends(self):
-        for typ in FORMERLY_GATED:
+        for typ in FORMERLY_GATED + AI_SPARES_FRIENDS:
             wp = blocks(action(typ), "will_propose")[0]
             self.assertRegex(wp, r"NOT = \{\s*covert_is_friend = \{ TARGET = scope:target_country \}")
 
@@ -209,7 +214,7 @@ class RelationsBlockRemoved(unittest.TestCase):
         # friends with the rest and pays the backlash when caught.
         # Counterintelligence Support is for friends only, so its AI asks.
         for typ in HOSTILE_TYPES:
-            if typ not in FORMERLY_GATED:
+            if typ not in FORMERLY_GATED + AI_SPARES_FRIENDS:
                 with self.subTest(typ):
                     self.assertNotIn("covert_is_friend", "\n".join(blocks(action(typ), "ai")))
 

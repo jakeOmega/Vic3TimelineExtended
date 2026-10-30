@@ -21,10 +21,10 @@
 # site's region (te_demog_pc_set_capital, generated). Whether set_capital also brings the base game's Moved Capital
 # Recently penalty is unverified: the planned_capital_moved self-check logs it (docs/testing/demographics-playtest.md).
 #
-# ai_chance: te_demog_pc_ai_wants, the same conditions for every country (no is_ai): a Primate pattern at half strength
-# or more in a country of eight census states or more whose largest city is under Migration Crowding, out of default,
-# with the money in the treasury and authority to spare. The weight is the siblings' 100 (the Strategic Reserve and the
-# space missions): ai_chance weighs a decision against the others possible, so the rule alone decides.
+# ai_chance: te_demog_pc_ai_wants, the same conditions for every country (no is_ai): a Primate pattern at 0.7 strength
+# or more (42.5% primacy) in a country of eight census states or more whose largest city is under Migration Crowding,
+# out of default, with the money in the treasury and authority to spare. The weight is the siblings' 100 (the Strategic
+# Reserve and the space missions): ai_chance weighs a decision against the others possible, so the rule alone decides.
 # ============================================================================
 te_decision_plan_new_capital = {
 	is_shown = {

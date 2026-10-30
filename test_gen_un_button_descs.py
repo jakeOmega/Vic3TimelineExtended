@@ -1,35 +1,38 @@
-"""Unit tests for gen_un_button_descs' modifier phrase rendering."""
+"""Unit tests for gen_un_button_descs: what it states, and what it leaves to
+the engine's own modifier lines (the 2026-10-27 audit, UN-10)."""
 import unittest
 
-from gen_un_button_descs import _render_modifier_phrase, _walk_for_effects
+from gen_un_button_descs import _walk_for_effects, render_effects_text
 
 
-class RenderModifierPhraseTests(unittest.TestCase):
-    def test_name_is_a_plain_substitution(self):
-        # `Concept()` takes a game concept key and no modifier is one; the old
-        # `[Concept('<name>','$<name>$')]` also broke on names that are links.
-        phrase = _render_modifier_phrase(
-            "un_peacekeeping_contributor_modifier",
-            {"un_peacekeeping_contributor_modifier": [("country_prestige_mult", 0.05)]},
-        )
-        self.assertEqual(
-            phrase, "$un_peacekeeping_contributor_modifier$ (+5% $country_prestige_mult$)")
-        self.assertNotIn("Concept(", phrase)
+def _found(**kw):
+    found = {"added_modifiers": [], "removed_modifiers": [],
+             "authority_delta": 0.0, "ledger_entries": []}
+    found.update(kw)
+    return found
 
-    def test_modifier_without_effects(self):
-        self.assertEqual(_render_modifier_phrase("un_x_modifier", {}), "$un_x_modifier$")
+
+class RenderTests(unittest.TestCase):
+    def test_modifiers_are_left_to_the_engine(self):
+        # The buttons no longer hide their add_modifier lines in a
+        # custom_tooltip, so the engine prints them coloured; prose here would
+        # print them twice.
+        text = render_effects_text(_found(added_modifiers=["un_peacekeeping_contributor_modifier"],
+                                          removed_modifiers=["un_x_modifier"]))
+        self.assertEqual(text, "")
+
+    def test_a_ledger_booking_is_stated(self):
+        text = render_effects_text(_found(ledger_entries=[("credibility", -1.0)]))
+        self.assertIn("#R UN credibility −1#!", text)
+        self.assertIn("[concept_un_authority]", text)
 
 
 class LedgerEntryTests(unittest.TestCase):
-    def _found(self):
-        return {"added_modifiers": [], "removed_modifiers": [],
-                "authority_delta": 0.0, "ledger_entries": []}
-
     def test_both_forms_of_the_actor_entry_are_read(self):
         # un_buttons.txt's Lift Sanctions books through the _on form, which
         # names the sanctioned country in the UN's log; its button text must
         # still carry the credibility debit.
-        found = self._found()
+        found = _found()
         _walk_for_effects({
             "un_ledger_actor_entry": {"PILLAR": "credibility", "POINTS": "-1", "REASON": "7"},
             "custom_tooltip": {
@@ -39,6 +42,12 @@ class LedgerEntryTests(unittest.TestCase):
             },
         }, found)
         self.assertEqual(found["ledger_entries"], [("credibility", -1.0), ("credibility", -1.0)])
+
+    def test_a_booking_inside_a_hidden_effect_is_read(self):
+        found = _found()
+        _walk_for_effects({"hidden_effect": {"un_ledger_actor_entry_on": {
+            "PILLAR": "credibility", "POINTS": "-1", "REASON": "7", "SUBJECT": "scope:x"}}}, found)
+        self.assertEqual(found["ledger_entries"], [("credibility", -1.0)])
 
 
 if __name__ == "__main__":

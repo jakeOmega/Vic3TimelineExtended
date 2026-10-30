@@ -461,13 +461,23 @@ def pm_figures(ms, numbers: ModNumbers, pm: str) -> PMFigures:
 class Ladder:
     """A sector's representative building: its maintenance rate (construction
     goods a level a week), the base-method ladder, and the automation ladder.
-    `automation[0]` is the group's first method, the "none" tier."""
+    `automation[0]` is the group's first method, the "none" tier.
+
+    `maintenance_by_base` holds the rate for base methods that unlock a dearer
+    maintenance method (`pmg_maintenance_graded`: railways step up with their
+    trains); a base method not in it pays `maintenance` (`maintenance_at`)."""
 
     sector: str
     building: str
     maintenance: float
     base: tuple[PMFigures, ...]
     automation: tuple[PMFigures, ...]
+    maintenance_by_base: tuple[tuple[str, float], ...] = ()
+
+
+def maintenance_at(lad: Ladder, base_pm: str) -> float:
+    """The ladder's maintenance rate while its building runs `base_pm`."""
+    return dict(lad.maintenance_by_base).get(base_pm, lad.maintenance)
 
 
 def _group_pms(ms, group: str) -> list[str]:
@@ -492,6 +502,29 @@ def _maintenance(ms, building: str) -> float:
     return 0.0
 
 
+def _maintenance_by_base(ms, building: str) -> tuple[tuple[str, float], ...]:
+    """(base method, rate) for every method that a paid maintenance method of the
+    building lists in `unlocking_production_methods`, at the dearest such rate: the
+    graded group steps up through `replacement_if_valid` to the dearest method that
+    fits. Mines' mechanized methods unlock the same rate `_maintenance` returns."""
+    groups = _names(_need(_entry(ms, "Buildings", building), "production_method_groups", "Buildings " + building))
+    rates: dict[str, float] = {}
+    for group in groups:
+        if not group.startswith("pmg_maintenance"):
+            continue
+        for pm in _group_pms(ms, group):
+            if pm in NO_MAINTENANCE_PMS:
+                continue
+            entry = _entry(ms, "PMs", pm)
+            rate = 0.0
+            for level_block in _scopes(entry).get("level_scaled", []):
+                if "goods_input_construction_add" in level_block:
+                    rate += _number(level_block["goods_input_construction_add"], pm + " maintenance")
+            for base_pm in _names(entry.get("unlocking_production_methods")):
+                rates[base_pm] = max(rates.get(base_pm, 0.0), rate)
+    return tuple(sorted(rates.items()))
+
+
 def ladder(ms, numbers: ModNumbers, sector: str) -> Ladder:
     if sector not in SECTOR_BUILDINGS:
         raise KeyError("SECTOR_BUILDINGS: " + sector)
@@ -504,7 +537,7 @@ def ladder(ms, numbers: ModNumbers, sector: str) -> Ladder:
         if auto_group
         else ()
     )
-    return Ladder(sector, building, _maintenance(ms, building), base, auto)
+    return Ladder(sector, building, _maintenance(ms, building), base, auto, _maintenance_by_base(ms, building))
 
 
 def base_at(lad: Ladder, era: float) -> PMFigures:

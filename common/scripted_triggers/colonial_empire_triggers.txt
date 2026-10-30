@@ -233,7 +233,10 @@ is_in_or_adjacent_colonial_macroregion_australia_oceania = {
 }
 
 # Checks if a state lies outside both the capital's macro-region and all directly
-# neighboring macro-regions.
+# neighboring macro-regions. No longer the colony test (that is
+# is_separated_from_capital, below, since 2026-10-24): the Continental Union
+# HQ (common/buildings/wonders.txt) reads `is_overseas_from_capital = no` to
+# mean "on the capital's continent", which the macro-regions answer well.
 # Scope: state
 is_overseas_from_capital = {
 	custom_tooltip = {
@@ -325,13 +328,24 @@ colonial_collapse_unattached = {
 	NOT = { any_scope_treaty = { always = yes } }
 }
 
-# A state that structurally qualifies as an overseas colony.
-# Does NOT include acceptance/integration checks - those are context-dependent.
-# Two qualifying signals (either suffices, given non-primary population
-# present): low acceptance for an indigenous culture, OR significantly lower
-# average SoL than the metropole. The SoL fallback captures empires that
-# have culturally co-opted but economically underdeveloped peripheries
-# (Portugal under assimilatory citizenship, etc.).
+# A state that is a colony: UN General Assembly Resolution 1541 (XV)'s test,
+# Principle IV's prima facie case (geographically separate and distinct) and
+# Principle V's subordination. All of:
+#   1. not a homeland of our primary cultures;
+#   2. at least colonial_territory_min_population people;
+#   3. separated: not joined to our capital over land through states we own
+#      (is_separated_from_capital, the monthly cache; a strait joins only two
+#      of our homelands), third because it is one variable read and spares
+#      every contiguous state the pop walks below;
+#   4. distinct: a people sharing no heritage trait with ours is more than a
+#      tenth of it (colonial_state_distinct_people);
+#   5. subordinated, by any one of: unincorporated, the distinct people poorly
+#      accepted (the indigenous signal), or poor beside the metropole (the
+#      disparity signal);
+#   6. not settled land (last: it walks the pops).
+# Does NOT include acceptance/integration checks beyond those signals; those
+# are context-dependent. Design: docs/superpowers/archive/specs/
+# 2026-10-24-colonial-criteria-and-independence-wars-design.md § 1.
 # Scope: state
 is_overseas_colonial_state = {
 	custom_tooltip = {
@@ -340,29 +354,78 @@ is_overseas_colonial_state = {
 		NOT = { is_homeland_of_country_cultures = owner }
 		# Meaningful population - filters tiny outposts (Falklands, Wallis & Futuna, etc.)
 		state_population >= colonial_territory_min_population
+		is_separated_from_capital = yes
+		colonial_state_distinct_people = yes
 		OR = {
+			colonial_state_unincorporated_signal = yes
 			colonial_state_indigenous_signal = yes
 			colonial_state_disparity_signal = yes
 		}
-		# Outside the capital's macro-region and all neighboring macro-regions
-		is_overseas_from_capital = yes
+		# Not settled land (last: it walks the pops)
+		colonial_state_settler_majority = no
 	}
 }
 
-# The two signals of is_overseas_colonial_state, one trigger each so the
-# Colonial Empire panel's list of territories (colonial_territory_disp_* in
-# colonial_empire_values.txt) reads exactly the test the entry uses.
+# Separated from our capital: the monthly fill (ce_refresh_separation,
+# common/scripted_effects/colonial_geography_effects.txt) did not reach it
+# over land through our own states. The cache names the owner it was worked
+# out for, so a state taken since then reads as not separated until its new
+# owner's pass. Scope: state.
+is_separated_from_capital = {
+	custom_tooltip = {
+		text = IS_SEPARATED_FROM_CAPITAL_TT
+		owner = { save_temporary_scope_as = ce_sep_owner }
+		var:ce_separated ?= scope:ce_sep_owner
+	}
+}
+
+# Distinct from us: a culture sharing no heritage trait with any of our
+# primary cultures (our own cultures share theirs, so none of them counts) is
+# more than colonial_state_indigenous_min_share of the state's people.
+# Heritage traits are narrow (Irish and Australian share heritage_british,
+# Icelandic heritage_nordic with Danish, Ryukyuan heritage_japanese), so
+# shared-heritage lands and multi-island countries' own islands are not
+# colonies; Korean, Maghrebi, Berber and Maltese are each distinct from their
+# rulers. Scope: state.
+colonial_state_distinct_people = {
+	owner = { save_temporary_scope_as = ce_distinct_owner }
+	any_scope_culture = {
+		NOT = { shares_heritage_trait_with_any_primary_culture = scope:ce_distinct_owner }
+		prev = {
+			culture_percent_state = { target = prev value > colonial_state_indigenous_min_share }
+		}
+	}
+}
+
+# Our own people are most of the territory: the owner's primary cultures are
+# more than colonial_settler_majority_share of its people. Such a territory is
+# settled land, not a colony (owner ruling, 2026-10-24: a British Guatemala of
+# 75% English offered for release, and released as its 8% Irish). It is no
+# colony, no decolonization decision offers it, and a collapse (.201, .204)
+# does not take it. Walks the state's pops, so callers put it after their
+# cheap tests.
+# Scope: state.
+colonial_state_settler_majority = {
+	colonial_territory_primary_share_value > colonial_settler_majority_share
+}
+
+# The three subordination signals of is_overseas_colonial_state, one trigger
+# each so the Colonial Empire panel's list of territories
+# (colonial_territory_disp_* in colonial_empire_values.txt) reads exactly the
+# test the entry uses.
 # Scope: state.
 #
-# Indigenous-population signal: a non-primary culture that is more than a
-# tenth of the state and has low acceptance. Acceptance runs 0-100;
+# Indigenous-population signal: a people sharing no heritage with ours (the
+# distinct culture, colonial_state_distinct_people) that is more than a tenth
+# of the state and has low acceptance. Acceptance runs 0-100;
 # acceptance_status_4 is vanilla's 60 (the old `value < 0.6` read it as 0-1
 # and so matched almost no one). The share is a 0-1 fraction
 # (culture_percent_state, as in vanilla 06_language_policy.txt); 4f222c8b had
 # it, and 9b61d999 dropped it.
 colonial_state_indigenous_signal = {
+	owner = { save_temporary_scope_as = ce_distinct_owner }
 	any_scope_culture = {
-		NOT = { is_primary_culture_of = owner }
+		NOT = { shares_heritage_trait_with_any_primary_culture = scope:ce_distinct_owner }
 		prev = {
 			state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_4 }
 			culture_percent_state = { target = prev value > colonial_state_indigenous_min_share }
@@ -380,6 +443,42 @@ colonial_state_disparity_signal = {
 	average_sol < colonial_state_sol_qualifying_floor
 }
 
+# Unincorporated signal: the state is not incorporated, so its people have
+# severely reduced political strength, the game's nearest thing to having no
+# representation (vanilla_states_reference.md § 2). Portugal's "overseas
+# provinces" and France's Algerian départements were part of the nation on
+# paper and colonies anyway (Res. 1542), so incorporation does not clear a
+# state; its absence is evidence.
+colonial_state_unincorporated_signal = {
+	is_incorporated = no
+}
+
+# The two acceptance terms of the bar, per state (colonial_low_acceptance_count
+# and colonial_high_acceptance_count count them; the Colonial Holdings list's
+# per-territory weight reads them one at a time). Scope: state.
+#
+# A colony with any severely unaccepted people (below acceptance_status_2,
+# vanilla's 20): it drains the bar.
+colonial_state_low_acceptance_colony = {
+	is_overseas_colonial_state = yes
+	any_scope_pop = {
+		pop_acceptance < acceptance_status_2
+	}
+}
+
+# A separated territory where everyone is well accepted (no one below
+# acceptance_status_4, vanilla's 60): it steadies the bar, colony or not.
+colonial_state_high_acceptance = {
+	NOT = { is_homeland_of_country_cultures = owner }
+	state_population >= colonial_territory_min_population
+	is_separated_from_capital = yes
+	NOT = {
+		any_scope_pop = {
+			pop_acceptance < acceptance_status_4
+		}
+	}
+}
+
 # Is colonial stability at least $N$? Country scope; `?=` because the entry
 # may have ended. For colonial_empire_live_bar (colonial_empire_values.txt),
 # which reads the bar as a whole number for the overview's projection.
@@ -389,90 +488,26 @@ colonial_stability_bar_at_least = {
 
 # Looser counterpart of is_overseas_colonial_state, used by the three
 # decolonization BUTTONS (Release Colonial Territory, Round Table Conference,
-# Planned Decolonization) to decide which states are offered for release. The
-# strict trigger above filters out well-integrated overseas territories (high
-# acceptance + SoL parity), but for the player's decolonization choices the
-# more intuitive definition is just "any overseas non-homeland holding of
-# meaningful size." The strict trigger continues to gate the JE itself, the
-# colonial-policy modifiers, and similar mechanics where "colonial-flavored"
-# matters; this looser trigger only controls release eligibility.
+# Planned Decolonization), the Colonial Holdings list and the collapse
+# (.201 / .204) to decide which states are offered for release: the colony
+# test without its subordination signals (Resolution 1541's prima facie case,
+# separated and distinct), with the homeland, size and settler rules kept.
+# The strict trigger above filters out well-integrated territories (high
+# acceptance, SoL parity, incorporated), but a player may still release one.
+# The strict trigger continues to gate the JE itself, the colonial-policy
+# modifiers, and similar mechanics where "colonial-flavored" matters; this
+# looser trigger only controls release eligibility. Every state that passes
+# the strict trigger passes this one. A directly held settler land of shared
+# heritage (Australia, New Zealand) is not offered: it leaves by vanilla's
+# release or as a dominion.
 is_decolonization_eligible_state = {
 	custom_tooltip = {
 		text = IS_DECOLONIZATION_ELIGIBLE_STATE_TT
 		NOT = { is_homeland_of_country_cultures = owner }
 		state_population >= colonial_territory_min_population
-		is_overseas_from_capital = yes
-	}
-}
-
-# Sibling of is_overseas_from_capital that checks against the OVERLORD's
-# capital instead of the owner's. Used when iterating subjects of a metropole;
-# the subject's own capital is in the colonial region by construction, so the
-# owner-perspective check would never fire.
-# Scope: state (subject's state); requires owner to have an overlord.
-is_overseas_from_overlord_capital = {
-	custom_tooltip = {
-		text = IS_OVERSEAS_FROM_OVERLORD_CAPITAL_TT
-		owner = { exists = overlord }
-		owner = { exists = overlord.capital }
-		OR = {
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_north_america = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_north_america = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_south_america = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_south_america = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_western_europe = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_western_europe = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_eastern_europe = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_eastern_europe = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_siberia_central_asia = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_siberia_central_asia = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_middle_east = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_middle_east = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_north_africa = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_north_africa = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_western_africa = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_western_africa = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_eastern_africa = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_eastern_africa = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_southern_africa = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_southern_africa = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_india = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_india = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_southeast_asia_indonesia = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_southeast_asia_indonesia = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_east_asia = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_east_asia = yes }
-			}
-			AND = {
-				owner = { overlord = { capital = { is_in_colonial_macroregion_australia_oceania = yes } } }
-				NOT = { is_in_or_adjacent_colonial_macroregion_australia_oceania = yes }
-			}
-		}
+		is_separated_from_capital = yes
+		colonial_state_distinct_people = yes
+		colonial_state_settler_majority = no
 	}
 }
 
@@ -481,14 +516,17 @@ is_overseas_from_overlord_capital = {
 # Used by country_has_qualifying_colonial_subject (metropole gate) and by
 # every_subject_or_below { limit = ... } blocks scoping into subjects.
 #
-# The Protectorate branch additionally requires:
-#   - at least one of the subject's states is overseas from the overlord's
-#     capital (so European-on-European protectorates do not qualify), AND
-#   - none of the subject's primary cultures shares a heritage trait group
-#     with any of the overlord's primary cultures (i.e. different heritage
-#     group entirely -- e.g. UK -> Egypt qualifies, France -> Tunisia
-#     qualifies, but a hypothetical Germany -> Austria protectorate would
-#     not).
+# Colonies and Chartered Companies always qualify. A Protectorate qualifies
+# when it is separated and distinct, the colony test's prima facie case:
+#   - none of its states borders a state of the overlord's joined to the
+#     overlord's capital over land (ce_subject_separated, cached by the
+#     overlord's monthly separation pass; a strait does not count), AND
+#   - none of its primary cultures shares a heritage trait with any of the
+#     overlord's primary cultures (the trait test colonial_state_distinct_people
+#     uses, for one rule).
+# So UK -> Egypt and France -> Tunisia / Morocco qualify (across the
+# Mediterranean, Arab and Berber), but a hypothetical Germany -> Austria
+# protectorate would not.
 is_qualifying_colonial_subject = {
 	exists = overlord
 	OR = {
@@ -496,13 +534,11 @@ is_qualifying_colonial_subject = {
 		is_subject_type =subject_type_chartered_company
 		AND = {
 			is_subject_type =subject_type_protectorate
-			any_scope_state = {
-				is_overseas_from_overlord_capital = yes
-			}
 			overlord = { save_temporary_scope_as = ce_overlord_ref }
+			var:ce_subject_separated ?= scope:ce_overlord_ref
 			NOT = {
 				any_primary_culture = {
-					shares_heritage_trait_group_with_any_primary_culture = scope:ce_overlord_ref
+					shares_heritage_trait_with_any_primary_culture = scope:ce_overlord_ref
 				}
 			}
 		}
@@ -554,9 +590,11 @@ ce_entry_unlocked = {
 #     a colony fighting for independence (the independence war goal is valid
 #     only while the holder's overlord is the target, so the colony is still
 #     our subject until that war ends);
-#   - an enemy is a secessionist country of a people that shares no heritage
-#     with ours: the same "culturally distinct" test is_qualifying_colonial_subject
-#     applies to protectorates.
+#   - an enemy is fighting us in a war of independence we have on record
+#     (var:decol_iw_metropole, decolonization_war_effects.txt): a territory's
+#     rebels after .70's Fight, or the secession of a colony, whose capital was
+#     separated from ours and whose people share no heritage trait with ours
+#     (decol_iw_on_secession_start), the colony test's own tests.
 # Used by decolonization_events.51 (the conscription crisis of a colonial war).
 decol_fighting_colonial_war = {
 	is_at_war = yes
@@ -569,14 +607,7 @@ decol_fighting_colonial_war = {
 					is_subject_of = scope:decol_cw_metropole
 					is_qualifying_colonial_subject = yes
 				}
-				AND = {
-					is_secessionist = yes
-					NOT = {
-						any_primary_culture = {
-							shares_heritage_trait_group_with_any_primary_culture = scope:decol_cw_metropole
-						}
-					}
-				}
+				var:decol_iw_metropole ?= scope:decol_cw_metropole
 			}
 		}
 	}
@@ -796,6 +827,7 @@ colonial_empire_possible_release_territory = {
 }
 
 colonial_empire_possible_planned_decolonization = {
+	colonial_empire_no_offer_pending = yes
 	custom_tooltip = {
 		text = CE_NEEDS_COLONIAL_STATES
 		any_scope_state = {
@@ -809,12 +841,141 @@ colonial_empire_possible_round_table = {
 		text = CE_ROUND_TABLE_REQUIRES_ACCEPTABLE_COLONY
 		any_scope_state = {
 			is_decolonization_eligible_state = yes
-			NOT = {
-				any_scope_pop = {
-					pop_acceptance < acceptance_status_2
+			colonial_state_round_table_ready = yes
+		}
+	}
+	authority > colonial_round_table_authority
+}
+
+# Scope: state. The Round Table's test on a territory: none of its people is
+# severely unaccepted (acceptance below acceptance_status_2, vanilla's 20), so
+# there is a partner to negotiate with rather than a tinderbox. Read by the
+# empire-wide gate above, its count (colonial_round_table_state_count), its
+# pick (colonial_empire_effect_round_table) and the one-territory Round Table
+# (colonial_empire_possible_round_table_state, decolonization_events.402.b).
+colonial_state_round_table_ready = {
+	NOT = {
+		any_scope_pop = {
+			pop_acceptance < acceptance_status_2
+		}
+	}
+}
+
+# ============================================================================
+# COLONIAL EMPIRE — PER-TARGET GATES (the Colonial Holdings section)
+#
+# The Colonial Holdings section of the panel (colonial_empire_widget.gui,
+# te_ce_sec_holdings) lists our territories and our colonial subjects, each
+# with its own buttons beside it. Each button opens a confirmation event for
+# that one territory or subject (decolonization_events.402 / .403 / .404); the
+# button's scripted GUI (colonial_empire_sguis.txt) passes the territory, or
+# the subject's capital, as a saved scope, and its is_valid is the gate below.
+# The confirmation events' options read the same gates, so a choice cannot be
+# offered in the event that the button would have refused.
+#
+# SCOPE: country (the empire, ROOT). $STATE$ is the territory; $CAPITAL$ the
+# subject's capital, a state (gotcha #11 of gui_modding_guide.md: the panel
+# reaches a country through a stored state), whose owner is the subject.
+# A custom_tooltip line is what the greyed button's hover prints, so each is
+# phrased as a condition.
+# ============================================================================
+
+# One decision at a time. Each per-target button, and Planned Full
+# Decolonization, opens a confirmation that previews its target in shared
+# variables (the release region's markers and count), so a second one opened
+# before the first is answered would overwrite the first one's preview.
+# decol_offer_pending is set when a confirmation opens and cleared by each of
+# its options; it lapses on its own after a week in case an event is lost.
+colonial_empire_no_offer_pending = {
+	custom_tooltip = {
+		text = CE_NO_DECISION_PENDING
+		NOT = { has_variable = decol_offer_pending }
+	}
+}
+
+# Release one territory: it is ours and the decolonization decisions could
+# offer it (is_decolonization_eligible_state, the test the list itself uses).
+colonial_empire_possible_release_state = {
+	colonial_empire_no_offer_pending = yes
+	custom_tooltip = {
+		text = CE_STATE_IS_ELIGIBLE
+		$STATE$ = {
+			owner = root
+			is_decolonization_eligible_state = yes
+		}
+	}
+}
+
+# Negotiate one territory's independence at a Round Table Conference: the
+# empire-wide Round Table's tests (colonial_empire_possible_round_table) for
+# this territory alone. The confirmation event's Round Table option.
+colonial_empire_possible_round_table_state = {
+	colonial_empire_possible_release_state = { STATE = $STATE$ }
+	custom_tooltip = {
+		text = CE_STATE_NO_SEVERELY_UNACCEPTED
+		$STATE$ = { colonial_state_round_table_ready = yes }
+	}
+	authority > colonial_round_table_authority
+}
+
+# Both subject actions: the capital's owner is our own direct subject, still
+# a colonial subject by the entry's test, and not our enemy in a diplomatic
+# play (vanilla's autonomy actions refuse an enemy too).
+colonial_empire_subject_action_base = {
+	colonial_empire_no_offer_pending = yes
+	custom_tooltip = {
+		text = CE_SUBJECT_IS_OURS
+		$CAPITAL$ = {
+			owner = {
+				is_direct_subject_of = root
+				is_qualifying_colonial_subject = yes
+			}
+		}
+	}
+	custom_tooltip = {
+		text = CE_SUBJECT_NOT_OPPOSING
+		$CAPITAL$ = {
+			owner = {
+				NOT = { is_diplomatic_play_enemy_of = root }
+			}
+		}
+	}
+}
+
+# Grant a colonial subject its independence.
+colonial_empire_possible_free_subject = {
+	colonial_empire_subject_action_base = { CAPITAL = $CAPITAL$ }
+}
+
+# Raise a colony to a dominion: vanilla's own step up in autonomy
+# (subject_type_colony's higher_autonomy_subject_type_alternatives is the
+# dominion, which only a colonial country may be), so only a colony qualifies.
+# A chartered company or a protectorate has no looser kind of subject to
+# become; its only way out is independence. Vanilla's autonomy cooldown
+# applies, as for da_increase_autonomy_of_subject: the effect leaves the same
+# catalyst, so this and vanilla's action cannot be chained.
+colonial_empire_possible_dominion_subject = {
+	colonial_empire_subject_action_base = { CAPITAL = $CAPITAL$ }
+	custom_tooltip = {
+		text = CE_SUBJECT_CAN_BECOME_DOMINION
+		$CAPITAL$ = {
+			owner = {
+				is_subject_type = subject_type_colony
+				can_increase_autonomy = yes
+			}
+		}
+	}
+	custom_tooltip = {
+		text = CE_SUBJECT_AUTONOMY_NOT_ON_COOLDOWN
+		$CAPITAL$ = {
+			owner = {
+				NOT = {
+					any_diplomatic_catalyst = {
+						is_diplomatic_catalyst_type = catalyst_autonomy_change_imposed
+						target = root
+					}
 				}
 			}
 		}
 	}
-	authority > 200
 }

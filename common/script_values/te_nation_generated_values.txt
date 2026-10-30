@@ -29,6 +29,14 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = banking_external_import_charge }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = banking_external_sterilization_charge }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = ch_cultural_program_funding_cost }
 		add = 1
 	}
@@ -234,6 +242,14 @@ gui_country_hidden_modifier_count = {
 	}
 	if = {
 		limit = { has_modifier = sr_commercial_space_dividend }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_bonus }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_penalty }
 		add = 1
 	}
 	if = {
@@ -577,10 +593,6 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = te_seabed_long_haul }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = te_seabed_policy_sponsor_cost }
 		add = 1
 	}
@@ -842,6 +854,10 @@ gui_country_hidden_modifier_count = {
 	}
 	if = {
 		limit = { has_modifier = un_asat_moratorium_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
 		add = 1
 	}
 	if = {
@@ -1585,6 +1601,14 @@ te_nation_list_science_and_space_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = sr_ebase_room_bonus }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_penalty }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = sr_first_interstellar_probe }
 		add = 1
 	}
@@ -1677,10 +1701,6 @@ te_nation_list_science_and_space_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = te_seabed_long_haul }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = te_seabed_policy_sponsor_cost }
 		add = 1
 	}
@@ -1747,6 +1767,10 @@ te_nation_list_international_count = {
 	}
 	if = {
 		limit = { has_modifier = un_asat_moratorium_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
 		add = 1
 	}
 	if = {
@@ -5033,6 +5057,14 @@ te_nation_types_science_and_space_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = sr_ebase_room_bonus }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_penalty }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = sr_first_interstellar_probe }
 		add = 1
 	}
@@ -5114,10 +5146,6 @@ te_nation_types_science_and_space_count = {
 	}
 	if = {
 		limit = { has_modifier = te_orbital_debris }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_seabed_long_haul }
 		add = 1
 	}
 	if = {
@@ -5410,11 +5438,15 @@ te_nation_group_space_and_seabed_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = te_orbital_debris }
+		limit = { has_modifier = sr_ebase_room_bonus }
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = te_seabed_long_haul }
+		limit = { has_modifier = sr_ebase_room_penalty }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_orbital_debris }
 		add = 1
 	}
 	if = {
@@ -5461,6 +5493,14 @@ te_nation_type_building_space_mine_throughput_add_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = sr_ebase_room_bonus }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_penalty }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_orbital_debris }
 		add = 1
 	}
@@ -5489,15 +5529,6 @@ te_nation_type_building_orbital_battlestation_throughput_add_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = te_orbital_debris }
-		add = 1
-	}
-}
-
-# Used by: the building_ocean_mine_throughput_add row
-te_nation_type_building_ocean_mine_throughput_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = te_seabed_long_haul }
 		add = 1
 	}
 }
@@ -5667,6 +5698,10 @@ te_nation_types_international_count = {
 	}
 	if = {
 		limit = { has_modifier = un_asat_moratorium_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
 		add = 1
 	}
 	if = {
@@ -5927,6 +5962,10 @@ te_nation_group_standing_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = un_cultural_diversity_modifier }
 		add = 1
 	}
@@ -6106,6 +6145,10 @@ te_nation_type_country_prestige_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = un_asat_moratorium_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
 		add = 1
 	}
 	if = {

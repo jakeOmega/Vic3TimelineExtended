@@ -276,7 +276,8 @@ class DraftReliefTest(unittest.TestCase):
         sgui = squash(block(read(SGUIS), "te_tax_cmd_draft_rebase_sgui"))
         self.assertIn("limit = { exists = scope:op scope:op = 7 } te_tax_can_draft_rebase = { KEY = relief }", sgui)
         self.assertIn("limit = { exists = scope:op scope:op = 7 } te_tax_cmd_draft_rebase = { KEY = relief }", sgui)
-        self.assertIn("te_tax_view_dr_relief_rebase", gui(REVIEW))
+        # Changed Since Drafted sits at the top of the workbench (GUI audit TAX-3).
+        self.assertIn("te_tax_view_dr_relief_rebase", gui(WORKBENCH))
 
 
 class RecordListTest(unittest.TestCase):
@@ -593,14 +594,19 @@ class LabelTest(unittest.TestCase):
                 self.assertNotIn("dividend", self.loc[key].lower())
 
     def test_the_review_names_beneficiaries_and_foregone_revenue(self):
+        """The forgone revenue, which carries the figures, is a line; who benefits,
+        the same text every time, is on the provision's name (GUI audit TAX-17)."""
         review = gui(REVIEW)
         for key in ("te_tax_rv_relief_benefit", "te_tax_rv_relief_forgoes", "te_tax_rv_agrel_benefit",
                     "te_tax_rv_agrel_forgoes", "te_tax_rv_regrel_benefit", "te_tax_rv_regrel_forgoes"):
             with self.subTest(key=key):
                 self.assertIn(key, self.loc)
-        for key in ("te_tax_rv_agrel_benefit", "te_tax_rv_agrel_forgoes", "te_tax_rv_regrel_benefit",
-                    "te_tax_rv_regrel_forgoes"):
-            self.assertIn(key, review)
+        for key in ("te_tax_rv_agrel_forgoes", "te_tax_rv_regrel_forgoes"):
+            self.assertIn(f'text = "{key}"', review)
+        for relief in ("agrel", "regrel"):
+            with self.subTest(relief=relief):
+                self.assertIn(f'tooltip = "te_tax_rv_{relief}_tt"', review)
+                self.assertIn(f"$te_tax_rv_{relief}_benefit$", self.loc[f"te_tax_rv_{relief}_tt"])
         self.assertIn("GetList('te_tax_dr_relief_states')", review)
 
 

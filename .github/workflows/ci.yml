@@ -29,7 +29,7 @@ jobs:
   checks:
     name: Checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
-    # The whole job takes 11-20 minutes (October 2026; 3.12 is the slower one);
+    # The whole job takes 8-10 minutes (October 2026; 3.11 is the slower one);
     # 30 caps a hung step instead of burning the default 6-hour allowance.
     timeout-minutes: 30
     strategy:
@@ -70,17 +70,27 @@ jobs:
           # `ruff>=0.5,<1` is right for a developer machine, but a new ruff
           # release can add rules (or change an existing one's behaviour) and
           # redden CI on a commit that changed nothing. Bump this deliberately,
-          # after running `ruff check .` locally on the new version.
-          python3 -m pip install "ruff==0.15.8"
+          # after running `ruff check .` locally on the new version. pytest and
+          # pytest-xdist (the unit-test runner) are pinned for the same reason.
+          python3 -m pip install "ruff==0.15.8" "pytest==9.1.1" "pytest-xdist==3.8.0"
           ruff --version
 
       - name: Byte-compile every Python file
         if: ${{ !cancelled() }}
         run: python3 -m compileall -q .
 
+      # The tests are unittest classes; pytest runs them unchanged, one worker
+      # per CPU (-n auto). --dist loadfile runs each file whole, in order, on one
+      # worker, as unittest does: under loadscope a file's classes are split into
+      # batches, and pytest runs tearDownModule after each, so
+      # test_econ_save_series lost its temporary directory midway. This step
+      # takes 6-7 minutes; run one test at a time, it took 16-24 (October 2026).
+      # --durations=25 lists the slowest tests, so a new slow one shows in the
+      # log. `python3 -m unittest discover -s . -p 'test_*.py'` still runs the
+      # same tests serially.
       - name: Unit tests
         if: ${{ !cancelled() }}
-        run: python3 -m unittest discover -s . -p 'test_*.py'
+        run: python3 -m pytest -n auto --dist loadfile -p no:cacheprovider --durations=25 -q test_*.py
 
       # Bare `ruff check .` on purpose — the rule set lives in ruff.toml
       # (`[lint] select = ["F"]`), so this is byte-for-byte the command the
@@ -120,6 +130,12 @@ jobs:
       - name: Localization file sanity (BOM, header, duplicate keys)
         if: ${{ !cancelled() }}
         run: python3 scripts/analysis/check_localization_files.py
+
+      # Loc and player-guide text are American English (owner, 2026-10-27).
+      # Fix: run the script without --check and commit what it rewrote.
+      - name: Localization and player guide spelling (American)
+        if: ${{ !cancelled() }}
+        run: python3 scripts/analysis/check_loc_spelling.py --check
 
       # organize_loc.py rewrites localization/english/ on every full /reload.
       # A key filed where it would not put it (a hand-placed key, a new prefix
@@ -239,6 +255,15 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 ideology_lawgroup_audit.py --strict
 
+      # Effect and trigger names the engine doesn't know, and known ones in the
+      # wrong kind of block: an effect where triggers are read (save_scope_as in
+      # a scripted trigger) or the reverse. The engine logs either at load and
+      # drops the line (#1142). Reads only the committed catalogs under
+      # docs/engine/.
+      - name: Audit — effect and trigger names, and the context they're used in
+        if: ${{ !cancelled() }}
+        run: python3 effect_trigger_validity_audit.py --strict
+
       # Mod callees only here: vanilla scripted effects and triggers come from
       # the game files, which CI doesn't have. A reload on a machine with the
       # game checks calls to vanilla's too.
@@ -246,9 +271,59 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 script_argument_audit.py --strict
 
+      # add_modifier reads a duration given as a script value written as a
+      # block, or computed, as 0 days ("for 0 days" in the tooltip).
+      - name: Audit — add_modifier durations a script value would zero
+        if: ${{ !cancelled() }}
+        run: python3 modifier_duration_audit.py --strict
+
+      # Vanilla's file list comes from the committed catalog
+      # docs/engine/vanilla_asset_paths.txt (no game here), the mod's from
+      # `git ls-files gfx/`, which lists every texture this sparse checkout
+      # leaves off the disk. The engine logs a missing texture only on first
+      # render. It also flags an entity that declares no art field its type
+      # needs (a building's `background`), with vanilla's from vanilla_parsed/.
+      - name: Audit — asset paths in script that name no file
+        if: ${{ !cancelled() }}
+        run: python3 texture_reference_audit.py --strict
+
       - name: Audit — loc keys named in script that no loc file defines
         if: ${{ !cancelled() }}
         run: python3 script_loc_reference_audit.py --strict
+
+      # ScriptValue('x') in a loc value or a script string (common/, events/)
+      # naming no script value renders 0. The .gui half is
+      # gui_reference_audit's, above.
+      - name: Audit — loc and script-string ScriptValue reads that name no script value
+        if: ${{ !cancelled() }}
+        run: python3 loc_script_value_audit.py --strict
+
+      # The four GUI and loc audits of #1213 (the 2026-10-27 GUI audit's
+      # findings 4 to 7). Each reads the .gui, script and loc files, with
+      # vanilla's loc and static modifiers from the committed vanilla_parsed/;
+      # each flag is fixed or carries a check-tagged REVIEWED comment.
+      # Live text and tooltips over 500 rendered characters outside a How
+      # section: the rules belong in How, or in a concept the tooltip links.
+      - name: Audit — live tooltips that run long
+        if: ${{ !cancelled() }}
+        run: python3 long_tooltip_audit.py --strict
+
+      # A custom_tooltip wrapping an add_modifier whose text renders no
+      # GetStaticModifier for it: the engine prints only the text.
+      - name: Audit — custom_tooltips that hide a modifier's lines
+        if: ${{ !cancelled() }}
+        run: python3 hidden_modifier_audit.py --strict
+
+      # A hover of the mod's whose text carries no #tooltippable underline.
+      - name: Audit — hovers with no underline
+        if: ${{ !cancelled() }}
+        run: python3 unmarked_hover_audit.py --strict
+
+      # A button greyed by a scripted GUI's IsValid whose tooltip prints no
+      # IsValidTooltip, and a condition such a tooltip prints as raw script.
+      - name: Audit — greyed buttons that don't say why
+        if: ${{ !cancelled() }}
+        run: python3 button_reason_audit.py --strict
 
       # Needs no game: the CLI builds a ModState from the committed
       # vanilla_parsed/ snapshot and its English loc. This is the check that

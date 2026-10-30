@@ -134,7 +134,10 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
    - Ones that stand for women's or children's work stay.
 4. **Slow clocks with visible momentum.** Each number moves over a generation, and the panel shows where it is heading.
    The fun is in seeing a window open twenty years ahead (§9, §10).
-5. **Effects are deviations from a stated reference, and capped.** The reference structure is the 1836 equilibrium.
+5. **Effects are deviations from a stated reference, and capped.** (Revised 2026-10-22 for the effect sizes: a strong
+   condition is worth about one vanilla law on its main effect, and the reference point is a size, not a ceiling; see
+   `2026-10-22-demographic-effects-impact-design.md`. The census's own model terms keep this rule.) The reference
+   structure is the 1836 equilibrium.
    Every state starts at the equilibrium of its own 1836 inputs, so nothing jumps on day one. A save from before the
    system starts each state at its equilibrium (the #822 pattern).
 6. **Every number has a real meaning and an anchor value.** The sources are UN World Population Prospects (WPP) for
@@ -251,6 +254,10 @@ how old their body is, not the year they were born.
   pyramid's top.
 - **So the ring runs to about 150 from 1836** (owner, provisional). The extra slots sit empty, and are skipped, until
   someone lives that long. The benchmark (§14 Q9) found them cheap: an empty slot costs one variable check.
+- **Since issue #1075 (2026-10-27) it runs to 299**, the pool from 300: in the owner's 2057 game 98 million people sat
+  in the 150-and-over pool with no ages. A census taken on the 150-year ring is re-filed at its next step, and the
+  pyramid splits 85 and over into rows where people live past 100 (`docs/systems/mod_systems.md`, § The ring's 300
+  years and the pyramid past 85).
 
 ## 2. The age model
 
@@ -465,6 +472,11 @@ profile mixes three kinds of migrant:
 | **Families** | parents with children; few over 60 | about half | cheaper transport (`paddle_steamer`, `railways`, `combustion_engine` and the mod's aviation techs); women's rights at the origin, since women can move on their own account; the time a migration has been running (chain migration: the men send for their families) |
 | **Refugees** | everyone | about half | war, devastation, turmoil and Violent Hostility at the origin |
 
+*Changed 2026-10-25 (owner):* women's rights no longer raise the families' weight (women who can move on their own
+account move as labour migrants, not as families), and the labour migrants' women's share reads the census's own count
+of women among the destination's workers in place of the women's-rights laws' share (`docs/systems/mod_systems.md`
+§ The census, Flows).
+
 **Labour migrants' women's share follows the destination's jobs.**
 - Mines, logging, plantations, construction, railways and the army draw men.
 - Textiles, light industry and services draw women, as far as the destination's women's-rights laws let women work
@@ -630,7 +642,8 @@ state. The stock is the #822 score.
   - relative deprivation: lower-strata radicals rise with the Gini above about 0.45 (a threshold on the first build's
     scale: set it afresh on the wealth-band figure when this is built). **Built 2026-10-19, under Full only** (owner):
     radicals rise with the state's shown Gini above 0.45, by 10% at 0.65 and on at that slope with no cap (owner,
-    2026-10-20; the first build stopped at 10%), +27.5% at a Gini of 1 (§7's Inequality row);
+    2026-10-20; the first build stopped at 10%), +27.5% at a Gini of 1 (§7's Inequality row); since 2026-10-22 twice
+    as steep above 0.70, with socialist and labor support (+42.5% at 1; `2026-10-22-demographic-effects-impact-design.md`);
   - an input to crime for the policing laws. **Dropped** (owner, 2026-10-19): the engine has no crime quantity.
 
 ### 4.2 Wealth Concentration (per state, the #822 score)
@@ -859,6 +872,9 @@ Market Towns (< 20).
 | Capital, ports, area, industry, infrastructure, crowding, urban planning | settlement pattern | §5.2 |
 
 ## 7. What it feeds
+
+> **Sizes revised 2026-10-22** (`2026-10-22-demographic-effects-impact-design.md`): the effects below are now worth
+> about one vanilla law at their reference, and keep rising past it; that spec's tables are the current sizes.
 
 All effects are refreshed once a year by the dynamic-modifier pattern, each from one site. State effects run from the
 state pulse and country effects from the country pulse. Sizes are starting proposals.

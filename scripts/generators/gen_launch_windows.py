@@ -10,11 +10,30 @@ them as month-index ranges against ``te_history_month_index``
   ``sr_window_open_<body>`` -- the body's window is open this month.
 * common/script_values/sr_launch_windows_generated.txt:
   ``sr_window_months_to_next_<body>`` (0 while open), ``sr_launch_offset_<body>``
-  (signed months from the nearest optimum) and ``sr_launch_premium_<body>``
-  (the off-window premium for that offset, as a fraction: 0.35 = +35%).
+  (signed months from the nearest optimum), ``sr_launch_premium_<body>``
+  (the off-window premium for that offset, as a fraction: 0.35 = +35%) and
+  ``sr_launch_premium_ntp_<body>`` (the same with Nuclear Thermal Propulsion),
+  with the readers of the month's cache.
 * docs/engine/launch_windows_report.md -- every window body's cycle, its
-  premium curve with the spread across cycles, the historical launches the
-  method is checked against, and the Mars windows of era 11.
+  premium curves (chemical and nuclear thermal) with the spread across
+  cycles, the historical launches the
+  method is checked against, the Mars windows of era 11, the transit
+  times, and the fleets' legs.
+* common/script_values/sr_fleet_legs_generated.txt -- the legs between the
+  nine fleet locations (solar colonization slice 6 design § 1.2,
+  docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md): for
+  every ordered pair and drive, ``sr_leg_months_<drive>_<a>_<b>`` and
+  ``sr_leg_dv_<drive>_<a>_<b>`` (km/s), and the rapid response readers.
+
+Transit times (solar colonization slices 2-3 design § 2,
+docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md):
+for every window body, Mercury and the Moon, the months a colony fleet takes by each of
+four drives (``DRIVES``), as ``sr_transit_<drive>_<body>`` by the same signed
+months from the optimum as the premium. Chemical is the body's median Hohmann
+time; fusion the shortest Lambert transfer within its delta-v budget; the
+torch and antimatter drives a brachistochrone at their acceleration, capped by
+their delta-v. Mercury, never gated, has one figure per drive; the Moon, never
+gated either, a constant 0 (lunar colonization design § 3.3).
 
 The rule (spec § 5.3): a departure date *d* is optimal when the target's true
 longitude at *d + T* equals Earth's at *d* + 180 degrees, where *T* is half the
@@ -29,7 +48,12 @@ extra mass, ``exp(extra delta-v / 3.7 km/s) - 1``, at a methane-oxygen engine's
 exhaust velocity. A month's figure is its best departure day. The extra
 delta-v is taken against the cycle's best window month, averaged over a sample
 of cycles spread across the whole span, and stored up to +100,000%. Window
-months are free whatever the curve says.
+months are free whatever the curve says. A nuclear thermal engine (Nuclear
+Thermal Propulsion; lunar colonization design § 9,
+docs/superpowers/specs/2026-10-29-lunar-colonization-design.md) flies the same
+transfers at about 9 km/s, so its premium is ``exp(extra delta-v / 9 km/s) - 1``,
+which is ``(1 + p)^(3.7 / 9) - 1`` for the chemical premium p: a second curve,
+which a country with the technology pays (``sr_window_premium_country_<body>``).
 
 Sources:
 * Planets: E. M. Standish, "Keplerian Elements for Approximate Positions of the
@@ -64,6 +88,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 TRIGGERS_OUT = Path("common/scripted_triggers/sr_launch_windows_generated.txt")
 VALUES_OUT = Path("common/script_values/sr_launch_windows_generated.txt")
+LEGS_OUT = Path("common/script_values/sr_fleet_legs_generated.txt")
 REPORT_OUT = Path("docs/engine/launch_windows_report.md")
 DEFINES = Path("common/defines/extra_defines.txt")
 
@@ -82,6 +107,7 @@ J2000 = 2451545.0
 DEG = math.pi / 180.0
 
 EXHAUST_VELOCITY_KMS = 3.7  # methane-oxygen, spec § 5.2a
+NTP_EXHAUST_VELOCITY_KMS = 9.0  # nuclear thermal (Isp about 900 s), lunar colonization design § 9
 PREMIUM_CAP = 1000.0  # +100,000%: the script's number range, spec § 5.2a
 MU_EARTH = 398_600.4418  # km^3/s^2
 R_PARKING = 6_378.137 + 200.0  # km: 200 km circular parking orbit
@@ -90,6 +116,8 @@ CAPTURE_ECCENTRICITY = 0.9  # a loose capture orbit at the target
 # Standish Table 1 (1800-2050): a [AU], e, I, L, long. peri, long. node [deg],
 # then the same six rates per Julian century.
 STANDISH = {
+    "mercury": ((0.38709927, 0.20563593, 7.00497902, 252.25032350, 77.45779628, 48.33076593),
+                (0.00000037, 0.00001906, -0.00594749, 149472.67411175, 0.16047689, -0.12534081)),
     "earth": ((1.00000261, 0.01671123, -0.00001531, 100.46457166, 102.93768193, 0.0),
               (0.00000562, -0.00004392, -0.01294668, 35999.37244981, 0.32327364, 0.0)),
     "venus": ((0.72333566, 0.00677672, 3.39467605, 181.97909950, 131.60246718, 76.67984255),
@@ -120,6 +148,7 @@ SBDB = {
 # Capture at the target: GM [km^3/s^2] and periapsis radius [km] of the loose
 # capture orbit (a tenth of the radius up; at small bodies a rendezvous, GM 0).
 CAPTURE = {
+    "mercury": (22_031.86, 2_439.7 * 1.1),
     "venus": (324_858.592, 6_051.8 * 1.1),
     "mars": (42_828.37, 3_389.5 * 1.1),
     "jupiter": (126_686_534.0, 71_492.0 * 1.1),
@@ -159,7 +188,6 @@ BODIES = (
     Body("neptune", "Neptune system", 4, ("triton", "proteus")),
     Body("kuiper", "Kuiper Belt", 5, ("pluto", "eris", "makemake", "haumea", "sedna")),
 )
-UNGATED_SITES = {"mercury": 3}  # site -> stage
 
 # The debug lines' key to sr_window_body_code_<body>: a parameter can't be
 # printed inside a debug_log string (scripting_best_practices.md, "No $PARAM$
@@ -175,6 +203,50 @@ TOF_GRID = 24
 TOF_RANGE = (0.25, 2.6)  # times the body's Hohmann time
 TOF_REFINE_STEPS = 10
 LAMBERT_ITERATIONS = 32
+
+
+# The four drives of a colony fleet (slices 2-3 design § 1, § 2), slowest
+# first. `budget_kms`: fusion's delta-v budget (departure plus capture, as the
+# premium's), spent on the shortest Lambert transfer it covers. `accel_g` and
+# `cap_kms`: a torch's constant acceleration and its delta-v cap, a
+# brachistochrone that coasts at half the cap when the cap binds.
+@dataclass(frozen=True)
+class Drive:
+    key: str  # script token: sr_transit_<key>_<body>
+    name: str
+    tech: str  # what gives it (report only; sr_drive_level in the script)
+    budget_kms: float | None = None
+    accel_g: float | None = None
+    cap_kms: float | None = None
+
+
+DRIVES = (
+    Drive("chemical", "Chemical", "the Space Program"),
+    Drive("fusion", "Fusion", "Fusion Power", budget_kms=30.0),
+    Drive("torch", "Fusion torch", "Muon-Catalyzed Fusion Reactors", accel_g=0.01, cap_kms=400.0),
+    Drive("antimatter", "Antimatter", "Antimatter Production and an Antimatter Containment Facility",
+          accel_g=0.03, cap_kms=2000.0),
+)
+# Bodies with no launch window (UNGATED_SITES) but a transit time: one figure
+# per drive. Mercury's is its mean over evenly spread months of the span. The
+# Moon's is a constant 0 on every drive (FIXED_TRANSIT): a crewed transfer
+# takes about three days, so a fleet founds its world the month it leaves
+# (lunar colonization design § 3.3). Its sites are gen_solar_sites' stage-0
+# rows (test_launch_windows.py holds the two equal). It has no premium.
+TRANSIT_ONLY = (
+    Body("mercury", "Mercury", 3, ("mercury",)),
+    Body("moon", "The Moon", 0, ("shackleton", "peary", "tranquility", "marius_hills", "daedalus", "imbrium")),
+)
+FIXED_TRANSIT = {"moon": 0}  # body -> months on every drive
+UNGATED_SITES = {site: b.stage for b in TRANSIT_ONLY for site in b.sites}  # site -> stage
+TRANSIT_DAY = 15  # a fleet's departure day in its month
+FUSION_TOF_RANGE = (0.05, 2.6)  # times the Hohmann time: fusion reaches far below chemical's grid
+FUSION_TOF_GRID = 48
+FUSION_REFINE_STEPS = 8
+BRACHISTOCHRONE_ITERATIONS = 6
+MERCURY_SAMPLES = 240
+G0 = 9.80665  # m/s^2
+MONTH_DAYS = 30.4375
 
 
 # ---------------------------------------------------------------------------
@@ -403,6 +475,110 @@ def min_delta_v(key: str, departures: np.ndarray, hohmann_days: float) -> np.nda
 
 
 # ---------------------------------------------------------------------------
+# Transit times (slices 2-3 design § 2)
+# ---------------------------------------------------------------------------
+def months_of(days: float) -> int:
+    """Whole months, rounded half up, at least one: a fleet lands at a monthly step."""
+    return max(1, int(math.floor(days / MONTH_DAYS + 0.5)))
+
+
+def fusion_tof(key: str, departures: np.ndarray, hohmann_days: float, budget_kms: float) -> np.ndarray:
+    """The shortest time of flight [days] whose delta-v is within the budget,
+    per departure JD: the first grid time that is, refined by bisection
+    against the one before it. The Hohmann time where none is."""
+    nd = departures.size
+    earth_r, earth_v = state("earth", departures)
+    grid = np.geomspace(FUSION_TOF_RANGE[0], FUSION_TOF_RANGE[1], FUSION_TOF_GRID) * hohmann_days
+
+    def cost(dep_index: np.ndarray, tof: np.ndarray) -> np.ndarray:
+        r2, v_t = state(key, departures[dep_index] + tof)
+        v1, v2 = lambert(earth_r[dep_index], r2, tof)
+        dep = np.linalg.norm(v1 - earth_v[dep_index], axis=-1) * AU_PER_DAY_KMS
+        arr = np.linalg.norm(v2 - v_t, axis=-1) * AU_PER_DAY_KMS
+        return _delta_v(key, dep, arr)
+
+    table = cost(np.repeat(np.arange(nd), FUSION_TOF_GRID), np.tile(grid, nd)).reshape(nd, FUSION_TOF_GRID)
+    within = table <= budget_kms
+    found = within.any(axis=1)
+    first = np.argmax(within, axis=1)
+    hi, lo = grid[first], grid[np.maximum(first - 1, 0)]
+    refine = found & (first > 0)
+    idx = np.arange(nd)
+    for _ in range(FUSION_REFINE_STEPS):
+        mid = 0.5 * (lo + hi)
+        ok = cost(idx, mid) <= budget_kms
+        hi = np.where(refine & ok, mid, hi)
+        lo = np.where(refine & ~ok, mid, lo)
+    return np.where(found, hi, hohmann_days)
+
+
+def brachistochrone_days(key: str, departures: np.ndarray, accel_g: float, cap_kms: float) -> np.ndarray:
+    """Days to the body at constant acceleration, turning at the midpoint, over
+    the distance from Earth at departure to the body at arrival (iterated);
+    with the delta-v cap binding, accelerate to half the cap, coast, brake."""
+    accel = accel_g * G0
+    v_max = cap_kms * 1000.0 / 2.0
+    earth, _ = state("earth", departures)
+    days = np.full(departures.shape, 30.0)
+    for _ in range(BRACHISTOCHRONE_ITERATIONS):
+        target, _ = state(key, departures + days)
+        metres = np.linalg.norm(target - earth, axis=-1) * AU_KM * 1000.0
+        full = 2.0 * np.sqrt(metres / accel)
+        t_accel = v_max / accel
+        capped = 2.0 * t_accel + (metres - accel * t_accel ** 2) / v_max
+        days = np.where(accel * full / 2.0 > v_max, capped, full) / DAY_S
+    return days
+
+
+def drive_days(drive: Drive, key: str, departures: np.ndarray, hohmann_days: float) -> np.ndarray:
+    if drive.budget_kms is not None:
+        return fusion_tof(key, departures, hohmann_days, drive.budget_kms)
+    if drive.accel_g is not None:
+        return brachistochrone_days(key, departures, drive.accel_g, drive.cap_kms)
+    return np.full(departures.shape, hohmann_days)
+
+
+def transit_months(key: str, departures: np.ndarray, groups: np.ndarray, hohmann_days: float) -> dict[str, dict[int, int]]:
+    """{drive: {group: months}}: each group's mean over its departures, a
+    better drive never slower than the one before it, chemical the Hohmann time."""
+    out: dict[str, dict[int, int]] = {}
+    previous = None
+    for drive in DRIVES:
+        days = drive_days(drive, key, departures, hohmann_days)
+        table = {}
+        for g in sorted(set(groups.tolist())):
+            months = months_of(float(np.mean(days[groups == g])))
+            table[g] = months if previous is None else min(months, previous[g])
+        out[drive.key] = table
+        previous = table
+    return out
+
+
+@dataclass
+class TransitPlan:
+    """A body with a transit time and no window (Mercury, the Moon): one figure per drive."""
+    body: Body
+    hohmann_days: float
+    transit: dict[str, int]
+
+
+def plan_transit_only(body: Body, first_month: int, last_month: int) -> TransitPlan:
+    if body.key in FIXED_TRANSIT:
+        return TransitPlan(body, 0.0, {d.key: FIXED_TRANSIT[body.key] for d in DRIVES})
+    months = sorted({int(m) for m in np.linspace(first_month, last_month, MERCURY_SAMPLES).round()})
+    departures = np.array([datetime_to_jd(datetime(*month_of(m), TRANSIT_DAY)) for m in months])
+    earth, _ = state("earth", departures)
+    r_earth = np.linalg.norm(earth, axis=-1)
+    tof = hohmann_time(r_earth, _semi_major(body.key))
+    for _ in range(4):
+        target, _ = state(body.key, departures + tof)
+        tof = hohmann_time(r_earth, np.linalg.norm(target, axis=-1))
+    hohmann_days = float(np.median(tof))
+    table = transit_months(body.key, departures, np.zeros(departures.size, dtype=int), hohmann_days)
+    return TransitPlan(body, hohmann_days, {drive: by_group[0] for drive, by_group in table.items()})
+
+
+# ---------------------------------------------------------------------------
 # Windows and premiums
 # ---------------------------------------------------------------------------
 @dataclass
@@ -435,16 +611,24 @@ class BodyPlan:
     extra_dv: dict[int, float] = field(default_factory=dict)  # mean extra km/s by offset
     premium: dict[int, float] = field(default_factory=dict)  # stored fraction by offset
     spread: dict[int, tuple[float, float]] = field(default_factory=dict)  # per-cycle premium range
+    premium_ntp: dict[int, float] = field(default_factory=dict)  # the same at NTP_EXHAUST_VELOCITY_KMS
+    spread_ntp: dict[int, tuple[float, float]] = field(default_factory=dict)
     best_dv: tuple[float, float] = (0.0, 0.0)  # cheapest window month: min, max over sampled cycles
     sampled: int = 0
+    hohmann_days: float = 0.0  # median over its windows
+    transit: dict[str, dict[int, int]] = field(default_factory=dict)  # drive -> offset -> months
+    chem_dv: dict[int, float] = field(default_factory=dict)  # a month's cheapest delta-v by offset, mean over cycles
+    cycles: list[Window] = field(default_factory=list)  # the sampled cycles
 
 
 def _round_premium(p: float) -> float:
     return min(PREMIUM_CAP, round(p * 100.0) / 100.0)
 
 
-def premium_from_extra(extra_kms: float) -> float:
-    return math.exp(max(0.0, extra_kms) / EXHAUST_VELOCITY_KMS) - 1.0
+def premium_from_extra(extra_kms: float, exhaust_kms: float = EXHAUST_VELOCITY_KMS) -> float:
+    """The rocket equation's extra propellant, as a fraction of the window's,
+    for `extra_kms` more delta-v at an exhaust velocity of `exhaust_kms`."""
+    return math.exp(max(0.0, extra_kms) / exhaust_kms) - 1.0
 
 
 def _sample_cycles(windows: list[Window], first: int, last: int) -> list[Window]:
@@ -492,22 +676,37 @@ def plan_body(body: Body, first_month: int, last_month: int) -> BodyPlan:
         for off in offsets:
             extras[off].append(months[off] - ref)
     plan.best_dv = (min(refs), max(refs))
+    plan.chem_dv = {off: float(np.mean([months[off] for months in by_cycle.values()])) for off in offsets}
+    plan.cycles = cycles
     for off in offsets:
         values = np.array(extras[off])
         plan.extra_dv[off] = float(np.mean(values))
-        if -1 <= off <= 1:
-            plan.premium[off] = 0.0
-        else:
-            plan.premium[off] = _round_premium(premium_from_extra(plan.extra_dv[off]))
-        per_cycle = [min(PREMIUM_CAP, premium_from_extra(v)) for v in values]
-        plan.spread[off] = (min(per_cycle), max(per_cycle))
+        for exhaust, premium, spread in ((EXHAUST_VELOCITY_KMS, plan.premium, plan.spread),
+                                         (NTP_EXHAUST_VELOCITY_KMS, plan.premium_ntp, plan.spread_ntp)):
+            if -1 <= off <= 1:
+                premium[off] = 0.0
+            else:
+                premium[off] = _round_premium(premium_from_extra(plan.extra_dv[off], exhaust))
+            per_cycle = [min(PREMIUM_CAP, premium_from_extra(v, exhaust)) for v in values]
+            spread[off] = (min(per_cycle), max(per_cycle))
+    # Transit by drive, on the same offsets and cycles (one departure each, on
+    # TRANSIT_DAY): what a fleet leaving that month takes.
+    plan.hohmann_days = hohmann_days
+    transit_deps, transit_groups = [], []
+    for w in cycles:
+        for off in offsets:
+            transit_deps.append(datetime_to_jd(datetime(*month_of(w.optimum_month + off), TRANSIT_DAY)))
+            transit_groups.append(off)
+    plan.transit = transit_months(body.key, np.array(transit_deps), np.array(transit_groups), hohmann_days)
     return plan
 
 
 # The computation depends only on the constants above and END_DATE, so a
-# long-running server computes it once (about two seconds) and every later
+# long-running server computes it once (about two seconds; the fleets' legs
+# about fifteen more, _LEG_CACHE) and every later
 # reload reuses it.
 _PLAN_CACHE: dict[tuple[int, int], list[BodyPlan]] = {}
+_TRANSIT_CACHE: dict[tuple[int, int], list[TransitPlan]] = {}
 
 
 def plan_all(root: Path = ROOT) -> tuple[list[BodyPlan], int, int]:
@@ -516,6 +715,13 @@ def plan_all(root: Path = ROOT) -> tuple[list[BodyPlan], int, int]:
     if (first, last) not in _PLAN_CACHE:
         _PLAN_CACHE[first, last] = [plan_body(b, first, last) for b in BODIES]
     return _PLAN_CACHE[first, last], first, last
+
+
+def plan_transit_all(root: Path = ROOT) -> list[TransitPlan]:
+    _, first, last = plan_all(root)
+    if (first, last) not in _TRANSIT_CACHE:
+        _TRANSIT_CACHE[first, last] = [plan_transit_only(b, first, last) for b in TRANSIT_ONLY]
+    return _TRANSIT_CACHE[first, last]
 
 
 # ---------------------------------------------------------------------------
@@ -653,23 +859,59 @@ def _guarded_blocks(entries: list[tuple[int, int, str]], first: int, last: int) 
     return lines
 
 
-def _premium_tree(key: str, premium: dict[int, float], offsets: list[int], depth: int) -> list[str]:
+def _offset_tree(key: str, table: dict[int, float], offsets: list[int], depth: int) -> list[str]:
+    """A binary search on sr_launch_offset_<key> returning table[offset]."""
     tab = "\t" * depth
     if len(offsets) == 1:
-        return [f"{tab}value = {_num(premium[offsets[0]])} # offset {offsets[0]:+d}"]
-    if all(premium[o] == premium[offsets[0]] for o in offsets):
-        return [f"{tab}value = {_num(premium[offsets[0]])} # offsets {offsets[0]:+d} to {offsets[-1]:+d}"]
+        return [f"{tab}value = {_num(table[offsets[0]])} # offset {offsets[0]:+d}"]
+    if all(table[o] == table[offsets[0]] for o in offsets):
+        return [f"{tab}value = {_num(table[offsets[0]])} # offsets {offsets[0]:+d} to {offsets[-1]:+d}"]
     mid = len(offsets) // 2
     left, right = offsets[:mid], offsets[mid:]
     lines = [f"{tab}if = {{", f"{tab}\tlimit = {{ sr_launch_offset_{key} < {right[0]} }}"]
-    lines += _premium_tree(key, premium, left, depth + 1)
+    lines += _offset_tree(key, table, left, depth + 1)
     lines += [f"{tab}}}", f"{tab}else = {{"]
-    lines += _premium_tree(key, premium, right, depth + 1)
+    lines += _offset_tree(key, table, right, depth + 1)
     lines += [f"{tab}}}"]
     return lines
 
 
-def render_values(plans: list[BodyPlan], first: int, last: int) -> str:
+_premium_tree = _offset_tree
+
+
+def render_transit(plan: BodyPlan) -> list[str]:
+    key = plan.body.key
+    offsets = sorted(plan.transit["chemical"])
+    out = [f"# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time "
+           f"({plan.hohmann_days:.0f} days) whatever the month; the others by months from the optimum,",
+           f"# a departure on day {TRANSIT_DAY} averaged over the same {plan.sampled} cycles:"]
+    for off in offsets:
+        row = ", ".join(f"{d.key} {plan.transit[d.key][off]}" for d in DRIVES[1:])
+        out.append(f"#   {off:+3d}: {row}")
+    out.append(f"sr_transit_chemical_{key} = {{ value = {plan.transit['chemical'][offsets[0]]} }}")
+    for drive in DRIVES[1:]:
+        out += [f"sr_transit_{drive.key}_{key} = {{", "\tvalue = 0"]
+        out += _offset_tree(key, plan.transit[drive.key], offsets, 1)
+        out.append("}")
+    return out + [""]
+
+
+def render_transit_only(plans: list[TransitPlan]) -> list[str]:
+    out = ["# ===== Transit only: a body with no launch window =====",
+           f"# One figure per drive, the mean over {MERCURY_SAMPLES} months spread across the span,",
+           "# or a constant (FIXED_TRANSIT)."]
+    for plan in plans:
+        key = plan.body.key
+        if key in FIXED_TRANSIT:
+            out.append(f"# {plan.body.name}: {FIXED_TRANSIT[key]} months on every drive, a constant (founded the month a fleet leaves)")
+        else:
+            out.append(f"# {plan.body.name}: the median Hohmann time is {plan.hohmann_days:.0f} days")
+        for drive in DRIVES:
+            out.append(f"sr_transit_{drive.key}_{key} = {{ value = {plan.transit[drive.key]} }}")
+    return out + [""]
+
+
+def render_values(plans: list[BodyPlan], first: int, last: int, transit_plans: list[TransitPlan]) -> str:
     out = [HEADER, VALUES_PREAMBLE]
     for plan in plans:
         key, ws = plan.body.key, plan.windows
@@ -700,16 +942,21 @@ def render_values(plans: list[BodyPlan], first: int, last: int) -> str:
                 f"\tadd = sr_window_previous_gap_{key}", "}", ""]
         # The premium by offset, a binary search on sr_launch_offset_<body>.
         offsets = sorted(plan.premium)
-        out.append(f"# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of {plan.sampled} cycles:")
+        out.append(f"# Premium by months from the optimum (fraction; 0.35 = +35%), from the mean extra delta-v of {plan.sampled} cycles,")
+        out.append("# chemical then nuclear thermal (sr_launch_premium_ntp_<body>, the same delta-v at 9 km/s):")
         for off in offsets:
             lo, hi = plan.spread[off]
-            note = "window, free" if -1 <= off <= 1 else f"cycles {lo * 100:.0f}% to {hi * 100:.0f}%"
-            out.append(f"#   {off:+3d}: {_num(plan.premium[off]):>7} ({note})")
-        out.append(f"sr_launch_premium_{key} = {{")
-        out.append("\tvalue = 0")
-        out += _premium_tree(key, plan.premium, offsets, 1)
-        out += ["}", ""]
-    out += render_readers(plans)
+            note = "window, free" if -1 <= off <= 1 else f"chemical cycles {lo * 100:.0f}% to {hi * 100:.0f}%"
+            out.append(f"#   {off:+3d}: {_num(plan.premium[off]):>7}, NTP {_num(plan.premium_ntp[off]):>6} ({note})")
+        for name, table in ((f"sr_launch_premium_{key}", plan.premium), (f"sr_launch_premium_ntp_{key}", plan.premium_ntp)):
+            out.append(f"{name} = {{")
+            out.append("\tvalue = 0")
+            out += _premium_tree(key, table, offsets, 1)
+            out.append("}")
+        out.append("")
+        out += render_transit(plan)
+    out += render_transit_only(transit_plans)
+    out += render_readers(plans, transit_plans)
     return "\n".join(out)
 
 
@@ -722,13 +969,14 @@ def render_triggers(plans: list[BodyPlan]) -> str:
     out += ["", IN_PLAY_PREAMBLE]
     for plan in plans:
         out += _in_play(f"sr_window_body_in_play_{plan.body.key}", plan.body.stage, plan.body.sites)
-    for site, stage in UNGATED_SITES.items():
-        out += _in_play(f"sr_window_{site}_in_play", stage, (site,))
+    for body in TRANSIT_ONLY:
+        out += _in_play(f"sr_window_{body.key}_in_play", body.stage, body.sites)
     return "\n".join(out) + "\n"
 
 
 def _in_play(name: str, stage: int, sites: tuple[str, ...]) -> list[str]:
-    lines = [f"{name} = {{", f"\tsr_current_colonization_stage = {stage}"]
+    lines = [f"{name} = {{", "\tOR = {", "\t\tsr_colonies_contested_enabled = yes",
+             f"\t\tsr_current_colonization_stage >= {stage}", "\t}"]
     if len(sites) == 1:
         lines.append(f"\tNOT = {{ has_global_variable = sr_colony_{sites[0]} }}")
     else:
@@ -738,12 +986,40 @@ def _in_play(name: str, stage: int, sites: tuple[str, ...]) -> list[str]:
     return lines + ["}"]
 
 
-def render_readers(plans: list[BodyPlan]) -> list[str]:
+def _transit_reader(k: str, cached: bool) -> list[str]:
+    """sr_transit_months_<k>: this country's drive's transit now. A window
+    body's figures by offset come from the month's cache (the chemical one is
+    a constant); Mercury's and the Moon's are constants."""
+    lines = [f"sr_transit_months_{k} = {{", f"\tvalue = sr_transit_chemical_{k}"]
+    for i, (level, drive) in enumerate(((3, "antimatter"), (2, "torch"), (1, "fusion"))):
+        word = "if" if i == 0 else "else_if"
+        if cached:
+            var = f"sr_window_transit_{drive}_{k}"
+            lines.append(f"\t{word} = {{ limit = {{ sr_drive_level >= {level} has_global_variable = {var} }} "
+                         f"value = global_var:{var} }}")
+        else:
+            lines.append(f"\t{word} = {{ limit = {{ sr_drive_level >= {level} }} value = sr_transit_{drive}_{k} }}")
+    return lines + ["}"]
+
+
+def render_readers(plans: list[BodyPlan], transit_plans: list[TransitPlan]) -> list[str]:
     """Per-body readers of the window cache and the stage's minima: the body
     list's boilerplate, so a window body is added in one place (BODIES)."""
     out = [READERS_PREAMBLE]
     for code, plan in enumerate(plans, start=1):
         k = plan.body.key
+        out += _transit_reader(k, cached=True)
+        out += [
+            f"sr_launch_target_cost_{k} = {{",
+            "\tvalue = sr_launch_never",
+            f"\tif = {{ limit = {{ sr_launch_departs_free = {{ BODY = {k} }} }} value = 0 }}",
+            f"\telse_if = {{ limit = {{ sr_launch_target_departs_paid = {{ BODY = {k} }} }} value = sr_window_premium_country_{k} }}",
+            "}",
+            f"sr_launch_target_months_allowed_{k} = {{",
+            f"\tvalue = sr_window_wait_months_{k}",
+            "\tmultiply = sr_launch_approach_weight",
+            "}",
+        ]
         out += [
             f"# {plan.body.name}",
             f"sr_window_body_code_{k} = {{ value = {code} }}",
@@ -755,14 +1031,25 @@ def render_readers(plans: list[BodyPlan]) -> list[str]:
             "\tvalue = 0",
             f"\tif = {{ limit = {{ has_global_variable = sr_window_cost_{k} }} value = global_var:sr_window_cost_{k} }}",
             "}",
+            # Until a refresh has cached it (a save from before this curve,
+            # loaded mid-month), the date's own figure, never a free launch.
+            f"sr_window_premium_now_ntp_{k} = {{",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_global_variable = sr_window_cost_ntp_{k} }} value = global_var:sr_window_cost_ntp_{k} }}",
+            f"\telse = {{ value = sr_launch_premium_ntp_{k} }}",
+            "}",
+            f"sr_window_premium_country_{k} = {{",
+            f"\tvalue = sr_window_premium_now_{k}",
+            f"\tif = {{ limit = {{ sr_launch_has_ntp = yes }} value = sr_window_premium_now_ntp_{k} }}",
+            "}",
             f"sr_launch_cost_{k} = {{",
             "\tvalue = sr_launch_never",
             f"\tif = {{ limit = {{ sr_launch_departs_free = {{ BODY = {k} }} }} value = 0 }}",
-            f"\telse_if = {{ limit = {{ sr_launch_departs_paid = {{ BODY = {k} }} }} value = sr_window_premium_now_{k} }}",
+            f"\telse_if = {{ limit = {{ sr_launch_departs_paid = {{ BODY = {k} }} }} value = sr_window_premium_country_{k} }}",
             "}",
             f"sr_launch_months_cost_{k} = {{",
             "\tvalue = sr_solar_colonization_goal",
-            f"\tmultiply = sr_window_premium_now_{k}",
+            f"\tmultiply = sr_window_premium_country_{k}",
             "\tdivide = sr_pace_rate_solar_colonization",
             "}",
             f"sr_window_disp_verdict_{k} = {{",
@@ -771,22 +1058,25 @@ def render_readers(plans: list[BodyPlan]) -> list[str]:
             f"\telse_if = {{ limit = {{ sr_launch_departs_paid = {{ BODY = {k} }} }} value = 1 }}",
             "}",
         ]
+    for plan in transit_plans:
+        out += [f"# {plan.body.name} (no window)"]
+        out += _transit_reader(plan.body.key, cached=False)
     out += ["", "# The stage's soonest window among its unclaimed sites (m in the off-window",
-            "# rule, spec § 5.2a): 0 while one is open or Mercury is left; sr_launch_never",
-            "# when the stage has nothing left. Any scope.",
+            "# rule, spec § 5.2a): 0 while one is open or a world with no window (the Moon,",
+            "# Mercury) is left; sr_launch_never when the stage has nothing left. Any scope.",
             "sr_window_stage_wait = {", "\tvalue = sr_launch_never"]
     for plan in plans:
         k = plan.body.key
         out.append(f"\tif = {{ limit = {{ sr_window_body_in_play_{k} = yes }} max = sr_window_wait_months_{k} }}")
-    for site in UNGATED_SITES:
-        out.append(f"\tif = {{ limit = {{ sr_window_{site}_in_play = yes }} max = 0 }}")
+    for body in TRANSIT_ONLY:
+        out.append(f"\tif = {{ limit = {{ sr_window_{body.key}_in_play = yes }} max = 0 }}")
     out += ["}", "", "# The cheapest premium this country can launch at now, over the stage's",
             "# unclaimed sites; sr_launch_never when none can depart. Country scope.",
             "sr_launch_best_cost = {", "\tvalue = sr_launch_never"]
     for plan in plans:
         out.append(f"\tmax = sr_launch_cost_{plan.body.key}")
-    for site in UNGATED_SITES:
-        out.append(f"\tif = {{ limit = {{ sr_window_{site}_in_play = yes }} max = 0 }}")
+    for body in TRANSIT_ONLY:
+        out.append(f"\tif = {{ limit = {{ sr_window_{body.key}_in_play = yes }} max = 0 }}")
     out += ["}", ""]
     return out
 
@@ -810,13 +1100,21 @@ VALUES_PREAMBLE = """# Launch windows for Solar System Colonization (Global Comm
 #   sr_launch_offset_<body>          signed months from the nearest optimum
 #   sr_launch_premium_<body>         the off-window premium at that offset, a
 #                                    fraction (0.35 = +35%); 0 in the window
+#   sr_launch_premium_ntp_<body>     the same for a nuclear thermal engine: the
+#                                    extra delta-v at 9 km/s, not 3.7 (lunar
+#                                    colonization design § 9)
 # The optima's dates are in docs/engine/launch_windows_report.md.
 """
 
-IN_PLAY_PREAMBLE = """# sr_window_body_in_play_<body>: the body is in the current colonization stage
-# and has a site nobody has claimed (the sites are the generator's BODIES
-# table; space_race_effects.txt's sr_establish_colony_effect draws them).
-# Any scope. sr_window_mercury_in_play: the same for Mercury, never gated.
+IN_PLAY_PREAMBLE = """# sr_window_body_in_play_<body>: the body's stage has been reached and it has a
+# site nobody has claimed (the sites are the generator's BODIES table;
+# sr_sites_generated.txt's sr_establish_colony_effect draws them). An earlier
+# stage's body is in play only while a world of it is released (a dead holder
+# with no heir, colony record design § 6): those stages are full otherwise.
+# Under simple and full colonies the stages are no locks (slices 2-3 design
+# § 9): a body is in play while it has an unclaimed world.
+# Any scope. sr_window_mercury_in_play and sr_window_moon_in_play: the same for
+# Mercury and the Moon's six worlds, never gated (TRANSIT_ONLY).
 """
 
 READERS_PREAMBLE = """# ===== Readers of the window cache (sr_launch_windows_refresh_cache) =====
@@ -824,6 +1122,13 @@ READERS_PREAMBLE = """# ===== Readers of the window cache (sr_launch_windows_ref
 #                               lines, which can't name a $BODY$ (BODY_CODE_LEGEND)
 # sr_window_wait_months_<body>  months to its next window, cached (0 if none yet)
 # sr_window_premium_now_<body>  this month's premium, cached (0 if none yet)
+# sr_window_premium_now_ntp_<body>  the same for nuclear thermal engines (the
+#                               date's own figure, sr_launch_premium_ntp_<body>,
+#                               if none yet)
+# sr_window_premium_country_<body>  country: the one its engines pay, nuclear
+#                               thermal with Nuclear Thermal Propulsion
+#                               (sr_launch_has_ntp), chemical otherwise. Every
+#                               reader below that prices a launch reads this.
 # sr_launch_cost_<body>         country: the premium it launches there at now, 0
 #                               in a window or with fusion drives, sr_launch_never
 #                               if it can't (sr_launch_departs_free / _paid,
@@ -833,6 +1138,16 @@ READERS_PREAMBLE = """# ===== Readers of the window cache (sr_launch_windows_ref
 # sr_window_disp_verdict_<body> country, the panel's verdict on launching there
 #                               now outside its window: 1 the approach would,
 #                               0 it waits, 2 Safe (never off-window)
+# sr_transit_months_<body>      country: the months a colony fleet leaving now
+#                               takes, by its drive (sr_drive_level), from the
+#                               month's cache sr_window_transit_<drive>_<body>
+#                               (chemical, a constant, needs none)
+# sr_launch_target_cost_<body>  country: the premium a fleet bound for a chosen
+#                               world of the body leaves at now (0 in a window or
+#                               with a torch), sr_launch_never if it can't
+#                               (sr_launch_target_departs_paid: the approach's test
+#                               against the body's own wait, not the stage's,
+#                               sr_launch_target_months_allowed_<body> = k x it)
 """
 
 TRIGGERS_PREAMBLE = """# Launch windows for Solar System Colonization (Global Commons spec § 5.3).
@@ -845,7 +1160,42 @@ TRIGGERS_PREAMBLE = """# Launch windows for Solar System Colonization (Global Co
 """
 
 
-def render_report(plans: list[BodyPlan], first: int, last: int) -> str:
+def render_transit_report(plans: list[BodyPlan], transit_plans: list[TransitPlan]) -> list[str]:
+    lines = ["", "## Transit times", "",
+             "The months a colony fleet takes (solar colonization slices 2-3 design § 2), rounded, at least 1, "
+             "except the Moon's 0: a fleet founds its world the month it leaves (lunar colonization design § 3.3). "
+             "Chemical is the body's median Hohmann time, whatever the month. "
+             + " ".join(
+                 f"{d.name} ({d.tech}): "
+                 + (f"the shortest Lambert transfer within {d.budget_kms:.0f} km/s, from {FUSION_TOF_RANGE[0]} to "
+                    f"{FUSION_TOF_RANGE[1]} times the Hohmann time." if d.budget_kms is not None else
+                    f"a brachistochrone at {d.accel_g} g, its delta-v capped at {d.cap_kms:,.0f} km/s.")
+                 for d in DRIVES[1:])
+             + f" By months from the optimum, a departure on day {TRANSIT_DAY} averaged over the premium's "
+               "cycles; a better drive is never slower than the one before it.", "",
+             "| Body | Chemical | " + " | ".join(f"{d.name}, in a window" for d in DRIVES[1:]) + " |",
+             "|---|---|" + "---|" * (len(DRIVES) - 1)]
+    for plan in plans:
+        window = [-1, 0, 1]
+        cells = []
+        for d in DRIVES[1:]:
+            values = [plan.transit[d.key][o] for o in window]
+            cells.append(f"{min(values)}–{max(values)}" if min(values) != max(values) else f"{values[0]}")
+        lines.append(f"| {plan.body.name} | {plan.transit['chemical'][0]} | " + " | ".join(cells) + " |")
+    for plan in transit_plans:
+        lines.append(f"| {plan.body.name} (no window) | {plan.transit['chemical']} | "
+                     + " | ".join(str(plan.transit[d.key]) for d in DRIVES[1:]) + " |")
+    for plan in plans:
+        offsets = sorted(plan.transit["chemical"])
+        lines += ["", f"### {plan.body.name}: transit by month", "",
+                  "| Months | " + " | ".join(d.name for d in DRIVES[1:]) + " |",
+                  "|---|" + "---|" * (len(DRIVES) - 1)]
+        for off in offsets:
+            lines.append(f"| {off:+d} | " + " | ".join(str(plan.transit[d.key][off]) for d in DRIVES[1:]) + " |")
+    return lines
+
+
+def render_report(plans: list[BodyPlan], first: int, last: int, transit_plans: list[TransitPlan]) -> str:
     lines = [
         "<!-- AUTO-GENERATED by scripts/generators/gen_launch_windows.py - do not edit manually. -->",
         "# Launch windows report",
@@ -856,7 +1206,10 @@ def render_report(plans: list[BodyPlan], first: int, last: int) -> str:
         f"window month, the extra delta-v averaged over {PREMIUM_CYCLES} cycles spread across the span; the "
         "spread is the range of the individual cycles' premiums. Delta-v: departure from a 200 km parking "
         f"orbit, capture into an orbit of eccentricity {CAPTURE_ECCENTRICITY} at a tenth of a radius up at a "
-        "planet, rendezvous at a small body.",
+        "planet, rendezvous at a small body. Nuclear thermal (NTP) premiums are the same extra delta-v at "
+        f"{NTP_EXHAUST_VELOCITY_KMS:g} km/s (Nuclear Thermal Propulsion, lunar colonization design § 9): "
+        f"`exp(extra delta-v / {NTP_EXHAUST_VELOCITY_KMS:g} km/s) - 1`, or `(1 + p)^(3.7 / 9) - 1` of the chemical "
+        "premium p. A country with the technology pays them; transit is unchanged.",
         "",
         "## Window bodies",
         "",
@@ -876,12 +1229,15 @@ def render_report(plans: list[BodyPlan], first: int, last: int) -> str:
         offsets = sorted(plan.premium)
         lines.append(f"### {plan.body.name}")
         lines.append("")
-        lines.append("| Months | Premium | Cycles range | Extra delta-v (km/s) |")
-        lines.append("|---|---|---|---|")
+        lines.append("| Months | Premium | Cycles range | NTP premium | NTP cycles range | Extra delta-v (km/s) |")
+        lines.append("|---|---|---|---|---|---|")
         for off in offsets:
-            lo, hi = plan.spread[off]
-            prem = "free" if -1 <= off <= 1 else f"+{plan.premium[off] * 100:,.0f}%"
-            lines.append(f"| {off:+d} | {prem} | +{lo * 100:,.0f}% to +{hi * 100:,.0f}% | {plan.extra_dv[off]:.3f} |")
+            cells = []
+            for premium, spread in ((plan.premium, plan.spread), (plan.premium_ntp, plan.spread_ntp)):
+                lo, hi = spread[off]
+                cells.append("free" if -1 <= off <= 1 else f"+{premium[off] * 100:,.0f}%")
+                cells.append(f"+{lo * 100:,.0f}% to +{hi * 100:,.0f}%")
+            lines.append(f"| {off:+d} | " + " | ".join(cells) + f" | {plan.extra_dv[off]:.3f} |")
         best = min((o for o in offsets if -1 <= o <= 1), key=lambda o: plan.extra_dv[o])
         lines.append("")
         lines.append(f"Minimum of the raw curve: month {best:+d}.")
@@ -889,13 +1245,17 @@ def render_report(plans: list[BodyPlan], first: int, last: int) -> str:
     mars = next(p for p in plans if p.body.key == "mars")
     lines += ["## The off-window rule on Mars", "",
               "A full bar launches outside a window when goal × premium ÷ pace ≤ k × m (Standard k = 1, "
-              "Ambitious 2; m = months to the next free window), in a 26-month cycle, goal 400:", "",
-              "| Pace | Standard launches | Ambitious launches |", "|---|---|---|"]
+              "Ambitious 2; m = months to the next free window), in a 26-month cycle, goal 400, on chemical "
+              "and on nuclear thermal (NTP) premiums:", "",
+              "| Pace | Standard launches | Ambitious launches | Standard, NTP | Ambitious, NTP |",
+              "|---|---|---|---|---|"]
     for pace in (5, 10, 20, 40):
-        std = launch_offsets(mars.premium, pace, "standard")
-        amb = launch_offsets(mars.premium, pace, "ambitious")
-        lines.append(f"| {pace} a month | {describe_launches(std)} ({len(std)} in 26) | "
-                     f"{describe_launches(amb)} ({len(amb)} in 26) |")
+        cells = []
+        for premium in (mars.premium, mars.premium_ntp):
+            for approach in ("standard", "ambitious"):
+                got = launch_offsets(premium, pace, approach)
+                cells.append(f"{describe_launches(got)} ({len(got)} in 26)")
+        lines.append(f"| {pace} a month | " + " | ".join(cells) + " |")
     lines += ["", "## Historical launches", "",
               "| Body | Mission | Launched | Computed optimum | Days from it | Window |", "|---|---|---|---|---|---|"]
     for plan in plans:
@@ -907,15 +1267,626 @@ def render_report(plans: list[BodyPlan], first: int, last: int) -> str:
         if month_index(2030, 1) <= w.optimum_month <= month_index(2060, 12):
             lines.append(f"| {month_label(w.start)}–{month_label(w.end)} | {jd_to_datetime(w.optimum_jd).date()} | "
                          f"{month_label(w.arrival_month)} |")
+    lines += render_transit_report(plans, transit_plans)
     return "\n".join(lines) + "\n"
+
+
+# ---------------------------------------------------------------------------
+# Fleet legs (solar colonization slice 6 design §§ 1-2)
+# ---------------------------------------------------------------------------
+# The nine locations a fleet can be at, in the panel's order, each measured to
+# one body: Mercury is reached on Venus's legs, the four smaller asteroids on
+# Ceres's (design § 1.1; gen_space_fleets.FLEET_LOCATIONS reads this table).
+@dataclass(frozen=True)
+class Location:
+    key: str  # script token: sr_leg_months_<drive>_<a>_<b>, sr_fl_<n>_loc's code
+    code: int
+    name: str
+    body: str  # the body its legs are measured to
+
+
+LOCATIONS = (
+    Location("earth", 1, "Earth and the Moon", "earth"),
+    Location("inner", 2, "Mercury and Venus", "venus"),
+    Location("mars", 3, "Mars", "mars"),
+    Location("asteroids", 4, "the Asteroid Belt", "ceres"),
+    Location("jupiter", 5, "the Jupiter system", "jupiter"),
+    Location("saturn", 6, "the Saturn system", "saturn"),
+    Location("uranus", 7, "the Uranus system", "uranus"),
+    Location("neptune", 8, "the Neptune system", "neptune"),
+    Location("kuiper", 9, "the Kuiper Belt", "kuiper"),
+)
+LOCATION = {loc.key: loc for loc in LOCATIONS}
+# The inner four, among which every leg has a mean-cycle window (design § 1.2:
+# "include it only where it matters most").
+CYCLE_LOCATIONS = ("inner", "mars", "asteroids", "jupiter")
+# The script's phase counts months from here, so the dividend stays positive
+# from the game's start (1836) and its hundredths stay inside the script's
+# number range (about two million) to END_DATE: (2136 - 1800) x 1200 = 403,200.
+LEG_BASE_MONTH = month_index(1800, 1)
+LEG_DV_CAP = 9999.0  # km/s: past every capacity, inside the number range
+LEG_SAMPLES = 16  # departures averaged per signed month of a mean-cycle leg, spread across the span
+FIXED_SAMPLES = 120  # departures a fixed leg's medians are taken over
+R_EARTH = 6_378.137
+
+
+def leg_kind(a: str, b: str) -> str:
+    """exact: Earth's outbound legs, on the bodies' own windows; cycle: returns
+    to Earth and legs among the inner four, on the pair's mean synodic cycle;
+    fixed: the rest, one median figure each."""
+    if a == "earth":
+        return "exact"
+    if b == "earth" or (a in CYCLE_LOCATIONS and b in CYCLE_LOCATIONS):
+        return "cycle"
+    return "fixed"
+
+
+LEGS = tuple((a.key, b.key, leg_kind(a.key, b.key)) for a in LOCATIONS for b in LOCATIONS if a.key != b.key)
+
+
+def system_dv(key: str, v_inf):
+    """Delta-v [km/s] between a hyperbolic excess speed and the loose capture
+    orbit of the body's system (eccentricity CAPTURE_ECCENTRICITY at a tenth of
+    a radius up): a fleet arrives in it, and leaves from it (design § 1.2). A
+    small body is a rendezvous: the excess speed itself."""
+    if key == "earth":
+        mu, rp = MU_EARTH, R_EARTH * 1.1
+    elif key in CAPTURE:
+        mu, rp = CAPTURE[key]
+    else:
+        return v_inf
+    return np.sqrt(np.asarray(v_inf) ** 2 + 2 * mu / rp) - math.sqrt(mu * (1 + CAPTURE_ECCENTRICITY) / rp)
+
+
+def parking_dv(v_inf):
+    """Departure [km/s] from Earth's 200 km parking orbit (the premium's model)."""
+    return np.sqrt(np.asarray(v_inf) ** 2 + 2 * MU_EARTH / R_PARKING) - math.sqrt(MU_EARTH / R_PARKING)
+
+
+def _pair_cost(a: str, b: str, departures: np.ndarray, parking: bool):
+    """cost(dep_index, tof) -> delta-v [km/s] of a Lambert transfer from body a
+    at a departure to body b on arrival."""
+    a_r, a_v = state(a, departures)
+
+    def cost(dep_index: np.ndarray, tof: np.ndarray) -> np.ndarray:
+        r2, v_t = state(b, departures[dep_index] + tof)
+        v1, v2 = lambert(a_r[dep_index], r2, tof)
+        dep = np.linalg.norm(v1 - a_v[dep_index], axis=-1) * AU_PER_DAY_KMS
+        arr = np.linalg.norm(v2 - v_t, axis=-1) * AU_PER_DAY_KMS
+        return (parking_dv(dep) if parking else system_dv(a, dep)) + system_dv(b, arr)
+
+    return cost
+
+
+def pair_hohmann_days(a: str, b: str, departures: np.ndarray) -> np.ndarray:
+    pos, _ = state(a, departures)
+    r_a = np.linalg.norm(pos, axis=-1)
+    tof = hohmann_time(r_a, _semi_major(b))
+    for _ in range(4):
+        target, _ = state(b, departures + tof)
+        tof = hohmann_time(r_a, np.linalg.norm(target, axis=-1))
+    return tof
+
+
+def leg_min_dv(a: str, b: str, departures: np.ndarray, hohmann_days: float, parking: bool) -> np.ndarray:
+    """The least delta-v [km/s] over every transfer time, per departure (the
+    premium's search, from any body)."""
+    nd = departures.size
+    cost = _pair_cost(a, b, departures, parking)
+    grid = np.geomspace(TOF_RANGE[0], TOF_RANGE[1], TOF_GRID) * hohmann_days
+    table = cost(np.repeat(np.arange(nd), TOF_GRID), np.tile(grid, nd)).reshape(nd, TOF_GRID)
+    best = np.argmin(table, axis=1)
+    lo = grid[np.maximum(best - 1, 0)]
+    hi = grid[np.minimum(best + 1, TOF_GRID - 1)]
+    idx = np.arange(nd)
+    golden = (math.sqrt(5) - 1) / 2
+    x1 = hi - golden * (hi - lo)
+    x2 = lo + golden * (hi - lo)
+    f1, f2 = cost(idx, x1), cost(idx, x2)
+    for _ in range(TOF_REFINE_STEPS):
+        left = f1 < f2
+        hi = np.where(left, x2, hi)
+        lo = np.where(left, lo, x1)
+        new_x = np.where(left, hi - golden * (hi - lo), lo + golden * (hi - lo))
+        new_f = cost(idx, new_x)
+        x2, f2, x1, f1 = (np.where(left, x1, new_x), np.where(left, f1, new_f),
+                          np.where(left, new_x, x2), np.where(left, new_f, f2))
+    return np.minimum(np.minimum(f1, f2), table.min(axis=1))
+
+
+def leg_fusion(a: str, b: str, departures: np.ndarray, hohmann_days: float, budget_kms: float,
+               parking: bool) -> tuple[np.ndarray, np.ndarray]:
+    """(days, delta-v) of the shortest transfer within the budget, per
+    departure, as fusion_tof finds it; where none is, the least delta-v over
+    the grid, at its time."""
+    nd = departures.size
+    cost = _pair_cost(a, b, departures, parking)
+    grid = np.geomspace(FUSION_TOF_RANGE[0], FUSION_TOF_RANGE[1], FUSION_TOF_GRID) * hohmann_days
+    table = cost(np.repeat(np.arange(nd), FUSION_TOF_GRID), np.tile(grid, nd)).reshape(nd, FUSION_TOF_GRID)
+    within = table <= budget_kms
+    found = within.any(axis=1)
+    first = np.argmax(within, axis=1)
+    hi, lo = grid[first], grid[np.maximum(first - 1, 0)]
+    refine = found & (first > 0)
+    idx = np.arange(nd)
+    for _ in range(FUSION_REFINE_STEPS):
+        mid = 0.5 * (lo + hi)
+        ok = cost(idx, mid) <= budget_kms
+        hi = np.where(refine & ok, mid, hi)
+        lo = np.where(refine & ~ok, mid, lo)
+    cheapest = np.argmin(table, axis=1)
+    days = np.where(found, hi, grid[cheapest])
+    return days, cost(idx, days)
+
+
+def leg_brachistochrone(a: str, b: str, departures: np.ndarray, accel_g: float,
+                        cap_kms: float) -> tuple[np.ndarray, np.ndarray]:
+    """(days, delta-v) at constant acceleration from body a at departure to
+    body b on arrival (brachistochrone_days, from any body): the delta-v is
+    acceleration x time, at most the cap."""
+    accel = accel_g * G0
+    v_max = cap_kms * 1000.0 / 2.0
+    origin, _ = state(a, departures)
+    days = np.full(departures.shape, 30.0)
+    for _ in range(BRACHISTOCHRONE_ITERATIONS):
+        target, _ = state(b, departures + days)
+        metres = np.linalg.norm(target - origin, axis=-1) * AU_KM * 1000.0
+        full = 2.0 * np.sqrt(metres / accel)
+        t_accel = v_max / accel
+        capped = 2.0 * t_accel + (metres - accel * t_accel ** 2) / v_max
+        days = np.where(accel * full / 2.0 > v_max, capped, full) / DAY_S
+    return days, brachistochrone_dv(days, accel_g, cap_kms)
+
+
+def brachistochrone_dv(days, accel_g: float, cap_kms: float):
+    """A torch's delta-v [km/s] over a flight of `days`: acceleration x time,
+    at most its cap (turning at the midpoint, or coasting at half the cap)."""
+    return np.minimum(accel_g * G0 * np.asarray(days) * DAY_S / 1000.0, cap_kms)
+
+
+def _pair_phase(a: str, b: str, d: np.ndarray) -> np.ndarray:
+    """b's longitude at arrival less a's at departure less 180 degrees, wrapped
+    to +-pi, on the Hohmann time (_phase, from any body)."""
+    origin, _ = state(a, d)
+    tof = pair_hohmann_days(a, b, d)
+    target, _ = state(b, d + tof)
+    diff = np.arctan2(target[:, 1], target[:, 0]) - np.arctan2(origin[:, 1], origin[:, 0]) - np.pi
+    return np.remainder(diff + np.pi, 2 * np.pi) - np.pi
+
+
+def pair_optima(a: str, b: str, jd_start: float, jd_end: float) -> list[float]:
+    """Departure JDs of every Hohmann optimum from a to b in the range."""
+    d = np.arange(math.floor(jd_start), math.ceil(jd_end) + 1, 4.0)
+    f = _pair_phase(a, b, d)
+    i = np.nonzero((np.sign(f[:-1]) != np.sign(f[1:])) & (np.abs(f[:-1]) < 1.5) & (np.abs(f[1:]) < 1.5))[0]
+    lo, hi, f_lo = d[i], d[i + 1], f[i]
+    for _ in range(16):
+        mid = 0.5 * (lo + hi)
+        f_mid = _pair_phase(a, b, mid)
+        same = np.sign(f_mid) == np.sign(f_lo)
+        lo, f_lo = np.where(same, mid, lo), np.where(same, f_mid, f_lo)
+        hi = np.where(same, hi, mid)
+    return [float(r) for r in 0.5 * (lo + hi)]
+
+
+def mean_motion(key: str) -> float:
+    """Radians a day: the mean longitude's rate (Standish), or the mean
+    anomaly's (SBDB)."""
+    if key in STANDISH:
+        return STANDISH[key][1][3] * DEG / 36525.0
+    return GAUSS_K / SBDB[key][1] ** 1.5
+
+
+def synodic_months(a: str, b: str) -> float:
+    """The pair's mean synodic period in months: the cycle a leg's window
+    repeats on."""
+    return 2 * math.pi / abs(mean_motion(a) - mean_motion(b)) / MONTH_DAYS
+
+
+def month_position(jd: float) -> float:
+    """The JD as a month index with a fraction, a departure on TRANSIT_DAY at
+    the whole month: the month a script departure in it stands for."""
+    dt = jd_to_datetime(jd)
+    first = datetime(dt.year, dt.month, 1)
+    nxt = datetime(dt.year + (dt.month == 12), dt.month % 12 + 1, 1)
+    days = (nxt - first).days
+    return month_index(dt.year, dt.month) + ((dt - first).total_seconds() / DAY_S - (TRANSIT_DAY - 1)) / days
+
+
+def leg_phase(month: int, epoch: int, cycle: int) -> int:
+    """The script's sr_leg_phase_<a>_<b>: hundredths of a month into the mean
+    cycle, (100 x (month - LEG_BASE_MONTH) + epoch) mod cycle, on a positive
+    dividend (C++'s % keeps the dividend's sign)."""
+    dividend = 100 * (month - LEG_BASE_MONTH) + epoch
+    assert dividend >= 0
+    return dividend % cycle
+
+
+def fold_phase(phase: int, cycle: int) -> int:
+    """Signed hundredths from the mean cycle's optimum, in [-cycle/2, cycle/2)."""
+    return phase - cycle if 2 * phase >= cycle else phase
+
+
+def leg_offset(month: int, epoch: int, cycle: int) -> int:
+    """Signed whole months from the mean cycle's optimum: the curves' key."""
+    return math.floor(fold_phase(leg_phase(month, epoch, cycle), cycle) / 100 + 0.5)
+
+
+@dataclass
+class LegPlan:
+    a: str
+    b: str
+    kind: str
+    hohmann_days: float = 0.0
+    # cycle legs
+    cycle: int = 0  # hundredths of a month
+    epoch: int = 0
+    optima: int = 0  # optima fitted
+    worst_miss: float = 0.0  # months between the mean cycle and a true optimum, at most
+    # drive -> offset -> figure (cycle and exact legs); drive -> figure (fixed legs)
+    months: dict = field(default_factory=dict)
+    dv: dict = field(default_factory=dict)
+    sampled_range: dict = field(default_factory=dict)  # fixed legs: drive -> (months lo, hi, dv lo, hi)
+
+
+def _drive_figures(a: str, b: str, departures: np.ndarray, chem_days: np.ndarray, hohmann_days: float,
+                   parking: bool) -> dict[str, tuple[np.ndarray, np.ndarray]]:
+    """drive -> (days, delta-v) per departure. Chemical: its days are given
+    (the Hohmann time), its delta-v the least over every transfer time, the
+    best of FAR_DAYS in the departure's month."""
+    out = {}
+    for drive in DRIVES:
+        if drive.budget_kms is not None:
+            out[drive.key] = leg_fusion(a, b, departures, hohmann_days, drive.budget_kms, parking)
+        elif drive.accel_g is not None:
+            out[drive.key] = leg_brachistochrone(a, b, departures, drive.accel_g, drive.cap_kms)
+        else:
+            out[drive.key] = (chem_days, None)
+    return out
+
+
+def _chemical_month_dv(a: str, b: str, months: list[int], hohmann_days: float, parking: bool) -> np.ndarray:
+    """The cheapest delta-v of each month's departures on FAR_DAYS."""
+    deps = np.array([datetime_to_jd(datetime(*month_of(m), day)) for m in months for day in FAR_DAYS])
+    dv = leg_min_dv(a, b, deps, hohmann_days, parking).reshape(len(months), len(FAR_DAYS))
+    return dv.min(axis=1)
+
+
+def _never_slower(months: dict[str, dict]) -> None:
+    """A better drive is never slower than the one before it, and every leg takes a month."""
+    previous = None
+    for drive in DRIVES:
+        table = months[drive.key]
+        for k in table:
+            table[k] = max(1, table[k] if previous is None else min(table[k], previous[k]))
+        previous = table
+
+
+def plan_cycle_leg(a: str, b: str, first: int, last: int) -> LegPlan:
+    ba, bb = LOCATION[a].body, LOCATION[b].body
+    jd0 = datetime_to_jd(datetime(month_of(first)[0] - 10, 1, 1))
+    jd1 = datetime_to_jd(datetime(month_of(last)[0] + 10, 1, 1))
+    optima = pair_optima(ba, bb, jd0, jd1)
+    pos = np.array([month_position(jd) for jd in optima])
+    cycle = int(round(100 * synodic_months(ba, bb)))
+    angles = 2 * np.pi * np.remainder(-100 * (pos - LEG_BASE_MONTH), cycle) / cycle
+    epoch = int(round(cycle * math.atan2(np.mean(np.sin(angles)), np.mean(np.cos(angles))) / (2 * np.pi))) % cycle
+    misses = [abs(fold_phase(int(round(100 * (p - LEG_BASE_MONTH) + epoch)) % cycle, cycle)) / 100
+              for p in pos if first <= p <= last]
+    plan = LegPlan(a, b, "cycle", cycle=cycle, epoch=epoch, optima=len(misses), worst_miss=max(misses))
+    plan.hohmann_days = float(np.median(pair_hohmann_days(ba, bb, np.array(optima))))
+    # Every month of the span by its offset in the mean cycle; LEG_SAMPLES of
+    # each, spread across the span.
+    by_offset: dict[int, list[int]] = {}
+    for m in range(first, last + 1):
+        by_offset.setdefault(leg_offset(m, epoch, cycle), []).append(m)
+    offsets = sorted(by_offset)
+    chosen = {}
+    for off in offsets:
+        ms = by_offset[off]
+        step = max(1, len(ms) // LEG_SAMPLES)
+        chosen[off] = ms[::step][:LEG_SAMPLES]
+    flat = [m for off in offsets for m in chosen[off]]
+    groups = np.array([off for off in offsets for _ in chosen[off]])
+    deps = np.array([datetime_to_jd(datetime(*month_of(m), TRANSIT_DAY)) for m in flat])
+    chem_dv = _chemical_month_dv(ba, bb, flat, plan.hohmann_days, parking=False)
+    figures = _drive_figures(ba, bb, deps, np.full(deps.shape, plan.hohmann_days), plan.hohmann_days, False)
+    for drive in DRIVES:
+        days, dv = figures[drive.key]
+        if dv is None:
+            dv = chem_dv
+        plan.months[drive.key] = {off: months_of(float(np.mean(days[groups == off]))) for off in offsets}
+        plan.dv[drive.key] = {off: min(LEG_DV_CAP, float(np.mean(dv[groups == off]))) for off in offsets}
+    # A sliver of the phase no whole month reaches (the month steps it 100
+    # hundredths, so some residues of the cycle never come up) still needs a
+    # branch: it reads its nearer neighbour's figures.
+    for off in cycle_bounds(cycle):
+        if off not in offsets:
+            near = min(offsets, key=lambda o: (abs(o - off), abs(o)))
+            for drive in DRIVES:
+                plan.months[drive.key][off] = plan.months[drive.key][near]
+                plan.dv[drive.key][off] = plan.dv[drive.key][near]
+    _never_slower(plan.months)
+    return plan
+
+
+def plan_fixed_leg(a: str, b: str, first: int, last: int) -> LegPlan:
+    ba, bb = LOCATION[a].body, LOCATION[b].body
+    months = sorted({int(m) for m in np.linspace(first, last, FIXED_SAMPLES).round()})
+    deps = np.array([datetime_to_jd(datetime(*month_of(m), TRANSIT_DAY)) for m in months])
+    plan = LegPlan(a, b, "fixed")
+    plan.hohmann_days = float(np.median(pair_hohmann_days(ba, bb, deps)))
+    chem_dv = _chemical_month_dv(ba, bb, months, plan.hohmann_days, parking=False)
+    figures = _drive_figures(ba, bb, deps, np.full(deps.shape, plan.hohmann_days), plan.hohmann_days, False)
+    for drive in DRIVES:
+        days, dv = figures[drive.key]
+        if dv is None:
+            dv = chem_dv
+        month_samples = [months_of(float(d)) for d in days]
+        plan.months[drive.key] = {0: months_of(float(np.median(days)))}
+        plan.dv[drive.key] = {0: min(LEG_DV_CAP, float(np.median(dv)))}
+        plan.sampled_range[drive.key] = (min(month_samples), max(month_samples), float(np.min(dv)), float(np.max(dv)))
+    _never_slower(plan.months)
+    return plan
+
+
+def plan_exact_leg(b: str, body_plans: list[BodyPlan]) -> LegPlan:
+    """Earth to a location: the body's own windows. Months are its transit
+    table; delta-v new, by the same offsets: chemical a month's cheapest
+    transfer (the premium's), fusion the transfer its transit takes, the
+    torches acceleration x time, from the 200 km parking orbit."""
+    body = LOCATION[b].body
+    bp = next(p for p in body_plans if p.body.key == body)
+    plan = LegPlan("earth", b, "exact", hohmann_days=bp.hohmann_days)
+    offsets = sorted(bp.transit["chemical"])
+    deps, groups = [], []
+    for w in bp.cycles:
+        for off in offsets:
+            deps.append(datetime_to_jd(datetime(*month_of(w.optimum_month + off), TRANSIT_DAY)))
+            groups.append(off)
+    deps, groups = np.array(deps), np.array(groups)
+    for drive in DRIVES:
+        plan.months[drive.key] = dict(bp.transit[drive.key])
+        if drive.budget_kms is not None:
+            _, dv = leg_fusion("earth", body, deps, bp.hohmann_days, drive.budget_kms, parking=True)
+        elif drive.accel_g is not None:
+            _, dv = leg_brachistochrone("earth", body, deps, drive.accel_g, drive.cap_kms)
+        else:
+            plan.dv[drive.key] = {off: bp.chem_dv[off] for off in offsets}
+            continue
+        plan.dv[drive.key] = {off: min(LEG_DV_CAP, float(np.mean(dv[groups == off]))) for off in offsets}
+    return plan
+
+
+_LEG_CACHE: dict[tuple[int, int], list[LegPlan]] = {}
+
+
+def plan_legs(root: Path = ROOT) -> list[LegPlan]:
+    body_plans, first, last = plan_all(root)
+    if (first, last) not in _LEG_CACHE:
+        out = []
+        for a, b, kind in LEGS:
+            if kind == "exact":
+                out.append(plan_exact_leg(b, body_plans))
+            elif kind == "cycle":
+                out.append(plan_cycle_leg(a, b, first, last))
+            else:
+                out.append(plan_fixed_leg(a, b, first, last))
+        _LEG_CACHE[first, last] = out
+    return _LEG_CACHE[first, last]
+
+
+def _dv_text(drive: Drive, x: float) -> str:
+    """Delta-v as the script stores it: tenths of a km/s for chemical and
+    fusion, whole km/s for the torches."""
+    return _num(round(x, 1)) if drive.accel_g is None else str(int(round(x)))
+
+
+def _segments(table: dict[int, str], bounds: dict[int, tuple[int, int]]) -> list[tuple[int, int, str, str]]:
+    """(lo, hi, value, comment) runs over the reader's variable, equal
+    neighbours merged: bounds[offset] is the half-open range of the variable
+    that offset covers."""
+    runs: list[list] = []
+    for off in sorted(bounds, key=lambda o: bounds[o][0]):
+        lo, hi = bounds[off]
+        if runs and runs[-1][2] == table[off] and runs[-1][1] == lo:
+            runs[-1][1] = hi
+            runs[-1][4].append(off)
+        else:
+            runs.append([lo, hi, table[off], None, [off]])
+    out = []
+    for lo, hi, value, _, offs in runs:
+        label = f"offset {offs[0]:+d}" if len(offs) == 1 else f"offsets {offs[0]:+d} to {offs[-1]:+d}"
+        out.append((lo, hi, value, label))
+    return out
+
+
+def _range_tree(var: str, segs: list[tuple[int, int, str, str]], depth: int) -> list[str]:
+    """A binary search on `var` over contiguous half-open runs."""
+    tab = "\t" * depth
+    if len(segs) == 1:
+        return [f"{tab}value = {segs[0][2]} # {segs[0][3]}"]
+    mid = len(segs) // 2
+    lines = [f"{tab}if = {{", f"{tab}\tlimit = {{ {var} < {segs[mid][0]} }}"]
+    lines += _range_tree(var, segs[:mid], depth + 1)
+    lines += [f"{tab}}}", f"{tab}else = {{"]
+    lines += _range_tree(var, segs[mid:], depth + 1)
+    lines += [f"{tab}}}"]
+    return lines
+
+
+def cycle_bounds(cycle: int) -> dict[int, list[tuple[int, int]]]:
+    """offset -> the half-open ranges of sr_leg_phase_<a>_<b> (hundredths) it
+    covers: the curves' keys as leg_offset gives them, read back from the
+    phase directly so the script needs no rounding of a negative number."""
+    out: dict[int, list[tuple[int, int]]] = {}
+    phase = 0
+    while phase < cycle:
+        off = math.floor(fold_phase(phase, cycle) / 100 + 0.5)
+        start = phase
+        while phase < cycle and math.floor(fold_phase(phase, cycle) / 100 + 0.5) == off:
+            phase += 1
+        out.setdefault(off, []).append((start, phase))
+    return out
+
+
+def _offsets_label(offs: list[int]) -> str:
+    if len(offs) == 1:
+        return f"offset {offs[0]:+d}"
+    return f"offsets {offs[0]:+d} to {offs[-1]:+d}" if len(offs) > 2 else f"offsets {offs[0]:+d}, {offs[1]:+d}"
+
+
+def _cycle_tree(var: str, table: dict[int, str], cycle: int) -> list[str]:
+    bounds = cycle_bounds(cycle)
+    pieces = sorted(((lo, hi, off) for off, rs in bounds.items() for lo, hi in rs))
+    runs: list[list] = []
+    for lo, hi, off in pieces:
+        if runs and runs[-1][2] == table[off]:
+            runs[-1][1] = hi
+            if off not in runs[-1][3]:
+                runs[-1][3].append(off)
+        else:
+            runs.append([lo, hi, table[off], [off]])
+    segs = [(lo, hi, value, _offsets_label(offs)) for lo, hi, value, offs in runs]
+    if len(segs) == 1:
+        return [f"\tvalue = {segs[0][2]} # every month"]
+    return _range_tree(var, segs, 1)
+
+
+def render_legs(plans: list[LegPlan]) -> str:
+    out = [HEADER, LEGS_PREAMBLE]
+    for plan in plans:
+        a, b = plan.a, plan.b
+        la, lb = LOCATION[a], LOCATION[b]
+        out.append(f"# ===== {la.name} to {lb.name} ({plan.kind}) =====")
+        if plan.kind == "exact":
+            body = lb.body
+            out.append(f"# The {body} window body's legs: months its colony fleets' transit, delta-v by "
+                       f"sr_launch_offset_{body}.")
+            for drive in DRIVES:
+                out.append(f"sr_leg_months_{drive.key}_{a}_{b} = {{ value = sr_transit_{drive.key}_{body} }}")
+                table = {o: _dv_text(drive, v) for o, v in plan.dv[drive.key].items()}
+                bounds = {o: (o, o + 1) for o in table}
+                segs = _segments(table, bounds)
+                out.append(f"sr_leg_dv_{drive.key}_{a}_{b} = {{")
+                if len(segs) == 1:
+                    out.append(f"\tvalue = {segs[0][2]}")
+                else:
+                    out += ["\tvalue = 0"] + _range_tree(f"sr_launch_offset_{body}", segs, 1)
+                out.append("}")
+        elif plan.kind == "cycle":
+            var = f"sr_leg_phase_{a}_{b}"
+            out += [f"# Mean cycle {plan.cycle / 100:.2f} months, epoch {plan.epoch}: within {plan.worst_miss:.2f} "
+                    f"months of every one of {plan.optima} optima.",
+                    f"{var} = {{",
+                    "\tvalue = te_history_month_index",
+                    f"\tsubtract = {LEG_BASE_MONTH}",
+                    "\tmultiply = 100",
+                    f"\tadd = {plan.epoch}",
+                    f"\tmodulo = {plan.cycle}",
+                    "}"]
+            for drive in DRIVES:
+                for name, table in (("months", {o: str(v) for o, v in plan.months[drive.key].items()}),
+                                    ("dv", {o: _dv_text(drive, v) for o, v in plan.dv[drive.key].items()})):
+                    tree = _cycle_tree(var, table, plan.cycle)
+                    head = [f"sr_leg_{name}_{drive.key}_{a}_{b} = {{"]
+                    out += head + ([] if len(tree) == 1 else ["\tvalue = 0"]) + tree + ["}"]
+        else:
+            for drive in DRIVES:
+                out.append(f"sr_leg_months_{drive.key}_{a}_{b} = {{ value = {plan.months[drive.key][0]} }}")
+                out.append(f"sr_leg_dv_{drive.key}_{a}_{b} = {{ value = {_dv_text(drive, plan.dv[drive.key][0])} }}")
+        # Rapid response (design § 1.2): one drive ahead; antimatter's own at
+        # three quarters of its months, rounded up, at least one.
+        for i, drive in enumerate(DRIVES):
+            if i + 1 < len(DRIVES):
+                ahead = DRIVES[i + 1].key
+                out.append(f"sr_leg_months_rapid_{drive.key}_{a}_{b} = {{ value = sr_leg_months_{ahead}_{a}_{b} }}")
+                out.append(f"sr_leg_dv_rapid_{drive.key}_{a}_{b} = {{ value = sr_leg_dv_{ahead}_{a}_{b} }}")
+            else:
+                out += [f"sr_leg_months_rapid_{drive.key}_{a}_{b} = {{",
+                        f"\tvalue = sr_leg_months_{drive.key}_{a}_{b}",
+                        "\tmultiply = 0.75",
+                        "\tadd = 0.75",
+                        "\tfloor = yes",
+                        "\tmin = 1",
+                        "}",
+                        f"sr_leg_dv_rapid_{drive.key}_{a}_{b} = {{ value = sr_leg_dv_{drive.key}_{a}_{b} }}"]
+        out.append("")
+    return "\n".join(out)
+
+
+LEGS_PREAMBLE = """# The legs between the nine fleet locations (solar colonization slice 6 design
+# §§ 1.2-2, docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md),
+# for every ordered pair and drive (chemical, fusion, torch, antimatter):
+#   sr_leg_months_<drive>_<a>_<b>   the months the leg takes, leaving this month
+#   sr_leg_dv_<drive>_<a>_<b>       its delta-v, km/s (tenths for chemical and
+#                                   fusion, whole for the torches)
+#   sr_leg_*_rapid_<drive>_<a>_<b>  a fleet of rapid response hulls alone: one
+#                                   drive ahead; antimatter's at 3/4 its months
+# Three kinds of leg:
+#   exact  Earth to a location: the body's own windows (sr_launch_offset_<body>),
+#          its colony fleets' transit as months
+#   cycle  back to Earth, and among Mercury and Venus, Mars, the Belt and Jupiter:
+#          the pair's mean synodic cycle, sr_leg_phase_<a>_<b> (hundredths of a
+#          month into it, from 1800 so the dividend is positive; a curve reads it
+#          directly, so no negative number is rounded)
+#   fixed  the rest: one median figure each
+# Departure from a planet's system starts in the loose capture orbit (e = 0.9) a
+# fleet arrives in; from Earth, in its 200 km parking orbit. Read when a fleet
+# departs and when the panel draws its row: no cache. Any scope.
+"""
+
+
+def render_legs_report(plans: list[LegPlan]) -> list[str]:
+    lines = ["", "## Fleets' legs", "",
+             "The legs between the nine fleet locations (solar colonization slice 6 design § 1.2), in "
+             "`common/script_values/sr_fleet_legs_generated.txt`. Each location is measured to one body: "
+             + ", ".join(f"{loc.name} to {loc.body.capitalize()}" for loc in LOCATIONS[1:]) + ". "
+             "Departure from a planet's system starts in its loose capture orbit (eccentricity "
+             f"{CAPTURE_ECCENTRICITY}), from Earth in the 200 km parking orbit; arrival is that capture orbit, "
+             "a rendezvous at a small body. Chemical's delta-v is the cheapest transfer of the departure's "
+             "month; fusion's the shortest transfer within its budget; a torch's acceleration × time, at most its cap. "
+             "Months are rounded, at least 1; a better drive is never slower.", "",
+             "| Leg | Kind | Cycle (months) | Mean cycle's worst miss (months) | "
+             + " | ".join(f"{d.name}, months · km/s" for d in DRIVES) + " |",
+             "|---|---|---|---|" + "---|" * len(DRIVES)]
+    for plan in plans:
+        la, lb = LOCATION[plan.a], LOCATION[plan.b]
+        cells = []
+        for d in DRIVES:
+            m, v = plan.months[d.key], plan.dv[d.key]
+            key = 0 if 0 in m else sorted(m)[len(m) // 2]
+            cells.append(f"{m[key]} · {_dv_text(d, v[key])}")
+        cyc = f"{plan.cycle / 100:.2f}" if plan.kind == "cycle" else "—"
+        miss = f"{plan.worst_miss:.2f}" if plan.kind == "cycle" else "—"
+        lines.append(f"| {la.name} → {lb.name} | {plan.kind} | {cyc} | {miss} | " + " | ".join(cells) + " |")
+    lines += ["", "The figures above are at the optimum (offset 0) for exact and cycle legs, the median for fixed ones.", ""]
+    for plan in plans:
+        if plan.kind != "cycle":
+            continue
+        la, lb = LOCATION[plan.a], LOCATION[plan.b]
+        lines += [f"### {la.name} → {lb.name}: by months from the mean cycle's optimum", "",
+                  f"Mean cycle {plan.cycle / 100:.2f} months, epoch {plan.epoch} hundredths from 1800.01; "
+                  f"the fitted cycle is within {plan.worst_miss:.2f} months of each of the span's {plan.optima} "
+                  "true optima.", "",
+                  "| Months | " + " | ".join(f"{d.name} (months · km/s)" for d in DRIVES) + " |",
+                  "|---|" + "---|" * len(DRIVES)]
+        for off in sorted(plan.months["chemical"]):
+            lines.append(f"| {off:+d} | " + " | ".join(
+                f"{plan.months[d.key][off]} · {_dv_text(d, plan.dv[d.key][off])}" for d in DRIVES) + " |")
+        lines.append("")
+    return lines
 
 
 def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
     plans, first, last = plan_all(root)
+    transit_plans = plan_transit_all(root)
+    legs = plan_legs(root)
     return {
         TRIGGERS_OUT: render_triggers(plans),
-        VALUES_OUT: render_values(plans, first, last),
-        REPORT_OUT: render_report(plans, first, last),
+        VALUES_OUT: render_values(plans, first, last, transit_plans),
+        LEGS_OUT: render_legs(legs),
+        REPORT_OUT: render_report(plans, first, last, transit_plans) + "\n".join(render_legs_report(legs)) + "\n",
     }
 
 
@@ -948,6 +1919,9 @@ def main() -> int:
         print(f"{verb}: {path}")
     if not result["changed"]:
         print("launch windows: current")
+    if args.dry_run:
+        legs = render_legs(plan_legs())
+        print(f"{LEGS_OUT}: {legs.count(chr(10))} lines (keep it under about 15,000)")
     return int(args.check and result["changed"])
 
 

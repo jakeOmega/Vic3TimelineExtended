@@ -220,3 +220,50 @@ cycle drop, no radicals. Every engine fact it rests on is used elsewhere in the 
     the scope again in `banking_contagion_decide` before it sends the popup, as the spread does.
 34. **The Great Depression still counts the survivors.** A country that held back a scare reads the survivor text in
     `minor_events_timelineextended.8` (`banking_crisis_wave_scared`) like one that was shown it.
+
+## GUI audit wave (2026-10-27, #1203)
+
+The Banking slice of the GUI and localization audit (`docs/audits/gui_audit/banking_budget.md`). Nothing here was
+seen in game. No self-check line: every new script piece reuses a pattern the mod already runs (a capital in a variable
+list, a weekly counter, display-only static modifiers), and what is new is GUI rendering, which no script can log.
+
+35. **Greyed external tools say why.** With a tool unaffordable or out of season (Emergency Import Financing outside a
+    crisis, Sterilize Capital Inflows off gold), its Enable tooltip lists phrased conditions with ticks ("A financial
+    crisis is under way: …", "Your treasury can pay this month's cost") and no raw names
+    (`te_mon_in_financial_crisis`, `banking_external_export_share > 0`), and no always-ticked availability line.
+    *Fallback if a bare trigger still prints:* the engine renders a `hidden_trigger` too; wrap it in a
+    `custom_tooltip` with a key instead.
+36. **Monthly work prints as modifier lines.** The tooltips of Open-Market Operations, Capital Controls (Outflows)
+    and the five External & Currency tools show "Each month:" over coloured lines ("Pull of the Rate Gap −75%",
+    "Treasury Cost, of Annual GDP +0.01%"); Monetise Deficit's buttons show "Each step, while it runs:" and the mandate
+    buttons "for each step looser:" the same way. *Fallback if `GetStaticModifier(...).GetDesc` renders empty in an
+    ExecuteTooltip:* print the figures through a `custom_tooltip` key that reads the same display modifier from loc.
+37. **The Monetary Policy rows are short, and How Banking Works has the rules.** Hover each row: a reading and its
+    breakdown, no paragraph that repeats the label's concept. How Banking Works lists The Mandates, Gold and the Peg,
+    The Exchange Rate, International Arrangements and Prices under the monetary topics. Check the mandate buttons'
+    own tooltips (each its rule, then the price of a looser one) and the Target row's drift line.
+38. **History bars.** A month with a policy change reads "Policy adopted this month:" then the policy's name, one line
+    each; no live figures, no Requires line. A Cycle Value bar reads "Banking Cycle Value: Expansion" (the phase
+    word in its colour), Banking Momentum and Bubble Pressure their bands. *Fallback if the band word is missing:*
+    `AddLocalizationIf` with a nested `And` over `ScriptContainer.GetVariableValue` did not resolve; record a band
+    code at sampling (`te_hist_v_bank_*_code`) and switch on it with `SelectLocalization`.
+39. **Active Policies names.** A running Bank Holiday reads "Bank Holiday: N days left", falling by about 7 a week
+    from 90; other tools read as what is in force ("Raised Reserve Requirements"). "No intervention points free"
+    shows above Available Interventions at 0 points, with the breakdown on hover.
+40. **Backstops and Monetary Union rows.** With a swap line or guarantee received or extended, each partner shows
+    under Backstops with its flag, name and points. A bloc leader with the Monetary Union principle sees each member
+    under Monetary Union: flag, name, a status word and its cost. *Unproven GUI facts:* `Scope.GetState` then
+    `State.GetCountry` from a datamodel item (the Grand Monuments and covert rows each prove one step), and
+    `JournalEntry.GetCountry.GetPowerBloc` as a datacontext over `PowerBloc.GetMembers`. *Fallback if a name or flag
+    is blank:* print the rows from a scripted GUI's `ExecuteTooltip` in fixed slots, as the Cultural Hegemony board
+    does (`gui_modding_guide.md` gotcha #15).
+41. **The two bills are weekly expenses (owner, 2026-10-27).** With Sterilize Capital Inflows or Emergency Import
+    Financing on, Government Expenses rise by a quarter of the month's cost (the tool's "Weekly cost" line), the
+    Breakdown lists it under Banking with the bill modifier in its sources, and the treasury takes no monthly lump.
+    Disable the tool, or change economic system: the expense goes the same week. A month the treasury cannot cover
+    still lifts the tool. FX Surrender's purchase still lands monthly, and the Banking row's hover names it.
+42. **Breakdown.** Rows, amounts and the How notes read at the panel's 17 (subheadings at 20); "Ministry of
+    Intelligence and Security" wraps rather than eliding. Hover Income Taxes' amount: the Overview's graph tooltip.
+    *Fallback if it renders nothing on a row's amount:* put the `using` on the row, or give the row a tooltip key.
+    An institution's hover gives its level and share of the pool; Administration's gives the pool. A banking event
+    charge's modifier tooltip reads "Breakdown: Banking" under Government Expenses.

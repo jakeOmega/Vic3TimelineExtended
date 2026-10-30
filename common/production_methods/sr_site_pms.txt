@@ -1,0 +1,5 @@
+﻿# The production method of Solar System Colonization's site building types,
+# which are never built (pmg_sr_site_marker). It does nothing.
+pm_sr_site_marker = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+}

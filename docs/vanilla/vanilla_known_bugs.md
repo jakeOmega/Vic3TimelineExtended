@@ -236,7 +236,7 @@ Maybe a define macro is missing
 Vanilla defines that reference macros which aren't always set. Cosmetic warning during startup. Confirmed examples include `CIVIL_WAR_UPRISING_STATE_EXCESSIVE_ARMY_FRACTION`, `BUILDING_MAX_PROFIT_TO_PAUSE_HIRES`, `HIGH_POP_THRESHOLD`, `ROLE_RULER`, `MIN_COMBAT_UNITS_FOR_MULTIPLE_COMMANDERS_*`, `RETIRE_COMMANDER_INTERACTION_KEY`, `COMMANDER_DESIRED_RANK_DISPARITY_*`, and (new in 1.13.9, `00_graphics.txt`) `FLAGSHIP_DECORATION_LOCATOR` — vanilla emits one entry per macro per startup. (Signature narrowed to `common/defines/00_` so a *mod* define warning from extra_defines.txt still surfaces in triage — an earlier revision wrongly listed the mod's own `WORLD_MARKET_MONOPOLY_MIN_SHARE` here; that define was dead config and has been removed from extra_defines.txt.)
 
 ### `common/laws/00_distribution_of_power.txt:1` — `set_only_legal_party_from_ig` + `remove_ruling_interest_group` on invalid IG
-- reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `set_only_legal_party_from_ig` and `remove_ruling_interest_group` errors)
+- reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `set_only_legal_party_from_ig` and `remove_ruling_interest_group` errors). The mod's law-consistency cascade (`te_fix_inconsistent_laws`, from `on_law_activated`) can activate `law_single_party_state`, so these errors can carry its frames, but they are still vanilla's unguarded `on_activate` (2026-10-27: one of three activations that session came through the cascade)
 
 ```
 Error: set_only_legal_party_from_ig effect [ Invalid target interestgroup ]
@@ -244,7 +244,7 @@ Error: remove_ruling_interest_group effect [ InterestGroup is insurrectionary ]
 Country in scope has no parties
 ```
 
-Vanilla `law_single_party_state` (and adjacent governance laws) call `set_only_legal_party_from_ig` and `remove_ruling_interest_group` in `on_activate` blocks without guarding against insurrectionary or absent IGs. Same family as `00_victoria_ip4_scripted_effects.txt:449`. Vanilla bug. The resignation event (`events/resignation.txt:414`) reaches the same `remove_ruling_interest_group` error through vanilla's scripted effect when the ruling group has joined a revolution (2026-10-06, twice).
+Vanilla `law_single_party_state` (and adjacent governance laws) call `set_only_legal_party_from_ig` and `remove_ruling_interest_group` in `on_activate` blocks without guarding against insurrectionary or absent IGs. Same family as `00_victoria_ip4_scripted_effects.txt:449`. Vanilla bug. The resignation event (`events/resignation.txt:414`) reaches the same `remove_ruling_interest_group` error through vanilla's scripted effect when the ruling group has joined a revolution (2026-10-06, twice). The mod reaches the `set_only_legal_party_from_ig` line too, without calling this file's helpers: a country formed by a planned decolonization (form_decolonized_country, from option a of decolonization_events.400) activates the law it is given, whose `on_activate` names a group the new country lacks (2026-10-24, one line, `:1311`). So the `reviewed` note above holds for helper calls only; a mod-framed line of this signature is still the vanilla law's missing guard.
 
 ### `gui/block_windows.gui:650` — malformed item desc
 
@@ -324,6 +324,27 @@ add_modifier effect [ Wrong scope for effect: none
 ```
 
 Vanilla political-movement event references `event_target:relevant_state` where it's not bound in the immediate scope; cascade emits "unset scope" + `add_loyalists_in_state` / `add_modifier` "Wrong scope for effect: none". Single root cause, three log lines — recognize as one vanilla bug, not three.
+
+### `events/agitators_events/exiles_events_02.txt:677` — an exile event reads interest-group leaders with no guard
+- stack: vanilla only
+
+```
+Could not get leader of interest group
+Event target link 'leader' returned an unset scope
+```
+
+Vanilla's exile event reads `leader` on every interest group of the country without checking it has one. On 2026-10-25 (1915) it fired for India, whose groups' leaders had been deleted (the Indian-revolution entry, `00_code_on_actions.txt:5440`): five unset `leader` lines and one `Could not get leader` line a group. The mod doesn't override the file.
+
+### `events/neighbor_events.txt:627, 628` — `neighbor_neighbor_state` unset
+- stack: vanilla only
+
+```
+Undefined event target 'neighbor_neighbor_state'
+Event target link 'scope' returned an unset scope
+add_radicals_in_state effect [ Wrong scope for effect: none, expected state ]
+```
+
+Vanilla's neighbour event reads a saved state it didn't save in that branch, and the radicals effect after it runs on no state. Once on 2026-10-25. The mod doesn't override the file.
 
 ### `events/agitators_events/coup_events.txt:983`/`:984` — `Undefined event target 'legacy_of_democracy_state'` cascading into wrong-scope effects
 
@@ -482,6 +503,26 @@ Event target link 'home_country' returned an invalid object
 ```
 
 Vanilla revolution event reads `home_country` on a scope where it isn't always set (typically when the referenced character has no recorded home_country). Engine logs the failure and skips the dependent effect. No mod-side fix.
+
+### `events/agitators_events/revolution_events_01.txt:1700, 1705, 1724, 1729` — Siege of the Arsenal options read a revolution the immediate didn't save
+- stack: vanilla only
+
+```
+Event target link 'scope' returned an invalid object
+add_civil_war_progress effect [ Scoped object is not valid. Type: Civil war
+```
+
+`revolution_pulse1_events.15` saves `ongoing_revolution` in its `immediate` from `random_civil_war = { civil_war_save_scopes = yes }`, and its trigger also accepts a secession (`any_secession_ongoing`). Both options then move that civil war's progress with no check that the scope holds one. On 2026-10-25 it held the null civil war (`Civil war (4294967295)`, logged when the option was taken). While the event sat open it logged 290 lines in three seconds, one per read per frame, with no mod frame. The mod neither overrides nor fires the event, and doesn't override `civil_war_save_scopes`. No mod-side fix.
+
+### `events/technology_events.txt:220` — radio event's opium option reads a ruler the immediate didn't find
+- stack: vanilla only
+
+```
+Undefined event target 'radio_ruler'
+Event target link 'scope' returned an unset scope
+```
+
+`technology_events.20` saves `radio_ruler` from `random_scope_character = { limit = { is_ruler_of_own_country = yes } }`, but its trigger doesn't require a ruler, so a country without one gets the event with the scope unset. The opium option's `trigger` then reads it, one pair of lines per evaluation (2026-10-25, once). No mod-side fix.
 
 ### common/scripted_effects/00_government_type_change_effects.txt:19, 20 (called from `common/government_types/05_council_republics.txt`) — `get_ruler_for` unset cascading into `set_character_as_ruler` wrong-scope
 
@@ -726,14 +767,14 @@ Event target link 'owner' returned an invalid object
 
 The infamy value calls `is_scripted_unification_conquest = { TARGET = scope:infamy_target_state.owner }`, and the trigger reads `$TARGET$` with no existence check, so it fails when that state's owner is invalid. Once in a session, 2026-10-05. Not anchored on the trigger file: the mod calls `has_treaty_alliance_with` from it nineteen times, and this signature would match any of those calls passing an invalid owner (#730). The mod's reunification war goal (te_reunify_country.txt) also adds `country_infamy_value`, so the helper-anchor check keeps flagging this entry until a triage names the vanilla caller at the bottom of the stack.
 
-### `common/journal_entries/00_acw_entries.txt:311`, `common/journal_entries/00_hawaii.txt:21`, `common/journal_entries/00_indian_removal.txt:7`, `common/journal_entries/00_zanzibar.txt:7` — `is_shown_in_lobby` reads a tag that may be gone
+### `common/journal_entries/00_acw_entries.txt:311`, `common/journal_entries/00_hawaii.txt:21`, `common/journal_entries/00_indian_removal.txt:7`, `common/journal_entries/00_sick_man.txt:7`, `common/journal_entries/00_zanzibar.txt:7` — `is_shown_in_lobby` reads a tag that may be gone
 
 ```
 Event target link 'c' returned an unset scope
 Invalid left side during comparison 'c'
 ```
 
-Each entry's `is_shown_in_lobby = { c:USA = THIS }` (Hawaii's `c:HAW`, Zanzibar's `c:OMA`) uses a plain link, not `?=`. Loading a save in which the tag no longer exists logs both lines for each entry, four times per load (2026-10-05, a save in 2015). The mod overrides none of these entries.
+Each entry's `is_shown_in_lobby = { c:USA = THIS }` (Hawaii's `c:HAW`, Zanzibar's `c:OMA`, the Sick Man's `c:TUR`) uses a plain link, not `?=`. Loading a save in which the tag no longer exists logs both lines for each entry, four times per load (2026-10-05, a save in 2015). The mod overrides none of these entries. 2026-10-25: the Sick Man's too, in a 1988 save without the Ottomans.
 
 ### `common/political_movements/00_ideological_movements.txt:4947` — Div/0 in a movement's `state_weight`
 
@@ -777,6 +818,7 @@ Undefined event target 'agitator_scope_2'
 Undefined event target 'agitator_party_scope'
 Undefined event target 'govnas'
 Undefined event target 'ongoing_revolution_movement'
+Undefined event target 'ongoing_revolution'
 Undefined event target 'da_boss'
 Undefined event target 'agitator_scope'
 Undefined event target 'opposing_ig'
@@ -788,7 +830,7 @@ Event target link 'interest_group' returned an invalid object
 Trying to change relations between the same country
 ```
 
-`scope:agitator_scope_2`, `scope:agitator_party_scope` and `scope:govnas` are used in options and `if` limits without an `exists` check, and the follow-on `add_momentum`, `random_member` and `leader` effects then run in no scope. 2026-10-04: 27 lines over eighteen minutes. The same happens to `scope:ongoing_revolution_movement` in option c of `revolution_pulse_events.13` (`events/agitators_events/revolution_events_02.txt:2097`), whose `add_modifier` then runs in no scope. 2026-10-05: `scope:da_boss` in option b of the scandal event at `agitator_law_events_2.txt:1325`, saved in `immediate` by a `random_interest_group` that can match no group, one line. 2026-10-10: `scope:agitator_scope` in the cancellation triggers and options at agitators_election_events :1911, :1932, :2052 and :2083 (the agitator is gone), `scope:opposing_ig` and `scope:supporting_ig` at agitator_law_events_2 :169 and :367, `this.interest_group.leader` at agitators_election_events :1194 and :1200 for a character whose group no longer exists, and option a of `agitators_election_events.19` (:2923) changing relations with `scope:scary_communist_country` when that is the country itself (a French Commune). One or two lines each.
+`scope:agitator_scope_2`, `scope:agitator_party_scope` and `scope:govnas` are used in options and `if` limits without an `exists` check, and the follow-on `add_momentum`, `random_member` and `leader` effects then run in no scope. 2026-10-04: 27 lines over eighteen minutes. The same happens to `scope:ongoing_revolution_movement` in option c of `revolution_pulse_events.13` (`events/agitators_events/revolution_events_02.txt:2097`), whose `add_modifier` then runs in no scope. 2026-10-24: an option of the same file at line 2006 reads `scope:ongoing_revolution` and `scope:ongoing_revolution_movement` with no guard, so `add_civil_war_progress` and `add_modifier` run in no scope (two sets of four lines). 2026-10-05: `scope:da_boss` in option b of the scandal event at `agitator_law_events_2.txt:1325`, saved in `immediate` by a `random_interest_group` that can match no group, one line. 2026-10-10: `scope:agitator_scope` in the cancellation triggers and options at agitators_election_events :1911, :1932, :2052 and :2083 (the agitator is gone), `scope:opposing_ig` and `scope:supporting_ig` at agitator_law_events_2 :169 and :367, `this.interest_group.leader` at agitators_election_events :1194 and :1200 for a character whose group no longer exists, and option a of `agitators_election_events.19` (:2923) changing relations with `scope:scary_communist_country` when that is the country itself (a French Commune). One or two lines each.
 
 ### `common/political_lobbies/00_political_lobbies.txt:26` — a lobby's upkeep check names a target country that has since died
 
@@ -820,6 +862,32 @@ Error setting properties for '' (widget)
 
 Vanilla's `### UNASSIGNED HEADER` block (vanilla line 16141) gives a `widget` `margin_top` and `margin_left`, which a plain widget does not take. The mod's override keeps vanilla's block as it is (mod lines 16428–16430). One set per opening of the unassigned-generals or admirals menu; cosmetic.
 
+### `gui/building_details_panel.gui:4723` — a building its workforce owns, with no pops, reads the first pop of an empty list
+- source: `pdx_gui_data_model.h:421`
+
+```
+FetchData failed for 'PopListItem.GetPopType.GetTexture'
+Could not get datacontext of type PopListItem from model
+```
+
+The ownership icon's `#local workforce` branch (vanilla line 4725) takes `datacontext_from_model` index 0 of the owned building's pop list, which is empty when the building has no workers. The mod's override keeps vanilla's block as it is (mod line 4723). The second line names no file, so the entry also anchors on its source. 2026-10-24: 12 and 4 lines while a building panel was open; cosmetic.
+
+### `gui/politics_panel_types.gui:2080` — the trend chart's single line drawn from a one-point trend
+
+```
+Line must have atleast 2 points
+```
+
+Vanilla's generic trend chart (`v3_plotline`, the `singleitem` block's `plotline`) draws its line from whatever trend it is given, and a trend with one recorded point (a new country's or interest group's) is too short for the line renderer. The mod doesn't override the file. 2026-10-24: four lines at once while the politics panel was open; cosmetic.
+
+### `common/character_roles/01_appointment_roles.txt:22` — an interest-group leader's career ends after the group is gone
+
+```
+remove_as_interest_group_leader effect [ Character has no valid Interest Group ]
+```
+
+`character_role_ig_leader`'s `on_career_end` ends with `remove_as_interest_group_leader = yes` and no check that the character still has a group, so a leader whose group was dissolved first logs this as the role is taken away. The stack has no other frame. 2026-10-24: one line; harmless.
+
 ### `common/journal_entries/06_iberia.txt:47`, `common/journal_entries/01_natural_borders_of_france.txt:88` and `events/technology_events.txt:28` — a country with no states read through its capital
 - reviewed: helper anchor, signature cannot match a mod call (the mod reads only the numeric interest_tier_effect_* constants from 00_diplomacy_values, which read no capital, region or market; its override of leverage_threshold_to_invite lives in the mod's own script values)
 
@@ -833,7 +901,7 @@ Undefined event target 'capital_scope'
 
 A country that loses its last state while it is still at war stays in the game until the war ends, with no capital (`scripting_best_practices.md` § Guard Scope References in Triggers). Vanilla reads `capital` unguarded in the Iberian entry's `should_show_when_not_involved` (`top_overlord ?= { capital = { ... } }`), in the natural-borders entry's `is_shown_when_inactive` (`any_subject_or_below = { capital = { ... } }`), in `technology_events.txt`'s car-regulation trigger (`capital.market`) and in `liberty_desire_weekly_change` (`common/script_values/00_diplomacy_values.txt:846`, `root.second_country.capital`). 2026-10-10 (a 300-year 4x observer run): 160, 11, 2 and 23 lines. The same window carries the stateless country's `Could not get leader of interest group` lines. Two vanilla events read the capital the same way: `events/movement_events.txt:1657` (`capital`, then `add_loyalists_in_state` on `NULL_STATE`) and `events/agitators_events/agitators_law_events.txt:1497` (`capital = { save_scope_as = capital_scope }`, so `scope:capital_scope` at line 1523 is undefined), one or two lines each in the 2026-10-10 and 2026-10-11 runs. The vanilla AI strategies read capitals the same way; the next entry covers them, for stacks with no mod frame only.
 
-### `common/ai_strategies/00_default_strategy.txt` and `common/ai_strategies/01_admin_strategies.txt:51` — the AI reads a stateless country's capital
+### `common/ai_strategies/00_default_strategy.txt`, `common/ai_strategies/01_admin_strategies.txt:51` and `common/ai_strategies/02_diplomatic_strategies.txt:724, 778` — the AI reads a stateless country's capital
 - stack: vanilla only
 
 ```
@@ -843,7 +911,7 @@ Event target link 'market_capital' returned an invalid object
 Event target link 'market' returned an invalid object
 ```
 
-The same stateless country as the entry above, read by the AI: the default strategy through a vanilla scripted trigger (Script location common/scripted_triggers/00_scripted_triggers.txt:1065, called from the default strategy; its line 8873 reads `market_capital`), and the admin strategy at line 51 (`capital`, then `region`). Across the 2026-10-10 and 2026-10-11 observer runs it tags 25 lines, none with a mod frame. A mod effect that sets off an AI evaluation reaches the same frames with the same message: a UN ballot's diplomatic catalyst did, 46 lines on 2026-10-10 (stack `un_on_actions.txt:88 <- … <- 00_default_strategy.txt:6513`), and so do a few through common/ai_strategies/02_diplomatic_strategies.txt. `- stack: vanilla only` keeps those visible (#863). Not mod-fixable: vanilla's strategies would need an `exists` guard on every capital read.
+The same stateless country as the entry above, read by the AI: the default strategy through a vanilla scripted trigger (Script location common/scripted_triggers/00_scripted_triggers.txt:1065, called from the default strategy; its line 8873 reads `market_capital`), and the admin strategy at line 51 (`capital`, then `region`). Across the 2026-10-10 and 2026-10-11 observer runs it tags 25 lines, none with a mod frame. A mod effect that sets off an AI evaluation reaches the same frames with the same message: a UN ballot's diplomatic catalyst did, 46 lines on 2026-10-10 (stack `un_on_actions.txt:88 <- … <- 00_default_strategy.txt:6513`), and so do a few through the diplomatic strategies. `- stack: vanilla only` keeps those visible (#863). The diplomatic strategies' British secret-goal scores for Southern Africa (`dominate` and `conquer`, commented "Cleaning up Boers and Zulu") read `capital.region` for every subject and for the target (lines 724 and 778); on 2026-10-24 they logged a `capital` and a `region` line each, twice in one session, with no mod frame. Not mod-fixable: vanilla's strategies would need an `exists` guard on every capital read.
 
 ### `common/journal_entries/01_silkworm_diseases.txt:75, 141` and `events/agitators_events/silkworm_diseases.txt:242` — the pébrine entry compares markets of countries that have none
 
@@ -1010,6 +1078,15 @@ add_lobby_member effect [ Invalid target interest group ]
 
 `add_lobby_member` on a group already in the lobby or on a group the country lacks (`ig:ig_petty_bourgeoisie`), and `create_political_lobby` aimed at a country that has died, or creating a lobby the country already has (line 1808, once on 2026-10-17). One or two lines each, 2026-10-10. The last is followed in the same second by the `Attempted to create relations for invalid countries!` engine assert, which stays unregistered.
 
+### `common/decisions/goods_ban_decisions.txt:66` and `events/soi_events/00_lobbies_events_04.txt:1670` — a market whose owner is no longer valid
+- stack: vanilla only
+
+```
+Event target link 'owner' returned an invalid object
+```
+
+The Remove Opium Ban decision's is_shown checks `exists = market` and then reads `market.owner = root`, and lobby event 5's trigger reads `any_market = { NOT = { owner = root } … }`; both fail on a market whose owner is gone. 2026-10-29 (a game in 2010): 15 and 3 lines over 17 minutes, in the launch where the mod's monthly trade-partner refresh also met a market with no trade-center state (its `trade_center` link invalid, once a month; now skipped). The mod overrides neither file.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
@@ -1047,10 +1124,13 @@ These entries are filtered via the `- source: \`<cpp_file:line>\`` registry mech
 - source: `pdx_persistent_reader.cpp:268`
 
 ```
-Failed to read key reference
+in file: "save games/
+in file: "" near line
 ```
 
 Loading a save (e.g. `save games/autosave_exit.v3`) whose serialized data references keys that don't resolve in the current entity state — observed for `headlines_all_minor_events` and `superpower`. Save-migration noise from older-version or cross-mod-state saves; the engine falls back gracefully. Not a current-content bug. (`headlines_*` is the vanilla headlines system; `superpower` is a stale serialized reference.)
+
+The signature names the file a save load reports (a save, or none), not the message. The same source and message report a script file's literal-key field given something it can't read at load, and those are real. Until 2026-10-27 the signature was `Failed to read key reference`, which tagged `create_pop`'s `culture = scope:sr_evac_culture` in sr_colony_autonomy_effects.txt as save noise (#1194 found it through its PostValidate line instead).
 
 ### `character_templates_utils.cpp:1814` — vanilla character missing last-name loc
 - source: `character_templates_utils.cpp:1814`
@@ -1424,9 +1504,10 @@ Engine-internal assertion fired during pop-strata setup when an empty hierarchy 
 
 ```
 Mobilize Army Commmand given an invalid army
+Raise Conscripts Command given an invalid formation
 ```
 
-Engine assertion (note the typo `Commmand` is in vanilla's source string — match it verbatim) fired when the AI sends a Mobilize Army command targeting an army that has since been disbanded or merged. Cosmetic.
+Engine assertion (note the typo `Commmand` is in vanilla's source string — match it verbatim) fired when the AI sends a Mobilize Army command targeting an army that has since been disbanded or merged. Cosmetic. Its sibling for conscripts (spelled `Command`) logged in the same second on 2026-10-25, with no script frame (once before in the archived runs).
 
 ### `pdx_online_telemetry.cpp:25` — engine telemetry dump on graphics-settings init
 - source: `pdx_online_telemetry.cpp:25`
@@ -1866,6 +1947,15 @@ SecondBest.Lookup().IsValid()
 ```
 
 An engine assertion with no script frame, once in a 27-minute session (2026-10-05). The same second error.log logged the registered `<unknown>:0` null-country line (`Country  (4294967295)`), so the engine was ranking against a country that no longer existed. Not actionable from script.
+
+### `pdx_assert.cpp:641` — `Country.IsValid()`
+- source: `pdx_assert.cpp:641`
+
+```
+Assertion failed: Country.IsValid()
+```
+
+An engine assertion with no script frame, about once a session: eight seconds after loading a save on 2026-10-25, with nothing in error.log that second. Six occurrences in the archived runs, each in a second whose other lines are vanilla only (the default AI strategy's `Invalid right side during comparison 's'` for a stateless country, a Barracks downsize assert, a revolution's `get_ruler_for` with no ruler), never a mod frame. Not actionable from script. The `LeftCountry` / `RightCountry` asserts are a separate entry; this signature doesn't match them.
 
 ### `pdx_assert.cpp:641` — game-state access assert at the first ticks of a session
 - source: `pdx_assert.cpp:641`

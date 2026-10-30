@@ -3,16 +3,20 @@
 ###
 ### Three roots at the foot of this file, all mounted from je_colonial_empire:
 ###   widget_je_colonial_empire_overview   custom_widget_container_1
-###       the overview (te_ce_overview_panel), always shown: the band, the
-###       programmes running, the stability bar with where it is heading and
-###       a line where the next band begins, the completion clocks in the top
-###       band, and the condemning and supporting great powers' shares of
-###       prestige.
+###       the overview (te_ce_overview_panel), always shown: the stability bar
+###       with where it is heading and a line where the next band begins, then
+###       four cells in Banking's pattern (te_banking_ov_cell, owner
+###       2026-10-27): the band and where the next one begins, the great
+###       powers' pressure and any escalation in force, what holds the entry
+###       (colonies and colonial subjects), and the programmes running; the
+###       completion clocks in the top band, and the condemning and supporting
+###       great powers' shares of prestige.
 ###   widget_je_colonial_empire_status     custom_widget_container_2
-###       te_ce_status_sections, open: why stability is moving (pillar bars,
-###       and the eligible territories as a collapsed list), international
-###       pressure, the three colonial programmes, the three decolonization
-###       decisions.
+###       te_ce_status_sections, open: Colonial Holdings (the territories and
+###       the colonial subjects, each with its own buttons, and Planned Full
+###       Decolonization), why stability is moving (pillar bars),
+###       international pressure (a row per great power that condemns or backs
+###       us), the three colonial programmes.
 ###   widget_je_colonial_empire_reference  custom_widget_container_3
 ###       te_ce_reference_sections: the two history charts, then "How the
 ###       Colonial Empire Works", the one collapsed section of explanations.
@@ -27,24 +31,34 @@
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_colonial_empire_layout.py).
 ###
+### TYPE SIZES (rule 3; the owner's pass of 2026-10-17 on Banking, brought here
+### 2026-10-27): rows, values, buttons, column heads and notes in
+### colonial_empire_fontsize_row (17), subheadings in
+### colonial_empire_fontsize_heading (20), the overview in
+### colonial_empire_fontsize_overview (16, the tooltip face). The templates
+### follow this header. test_colonial_empire_layout's WidthBudgetTest reads each
+### cell's font and width from the markup and holds the longest text a cell can
+### show to it, so a cell is sized from its longest label first.
+###
 ### The vanilla button grid is AI-only (`is_ai = yes` on the three decision
 ### buttons) and the programmes have no buttons (the AI steps them in the
 ### entry's monthly pulse), so every action a human could take has a control
-### here. Each control calls the SAME shared trigger/effect the AI uses, through
-### common/scripted_guis/colonial_empire_sguis.txt.
+### here. Each control calls a shared trigger/effect through
+### common/scripted_guis/colonial_empire_sguis.txt: the programme steps and
+### Planned Full Decolonization the same ones the AI uses; the per-target
+### buttons of Colonial Holdings (Release beside a territory, Release and
+### Dominion beside a colonial subject) their own, which their confirmation
+### events (decolonization_events.402-.404) read too.
 ###
 ### OP TABLE — colonial_empire_policy_sgui
 ###   0  raise Development Investment      1  lower Development Investment
 ###   2  raise Military Garrison           3  lower Military Garrison
 ###   4  raise Cultural Assimilation       5  lower Cultural Assimilation
 ###
-### OP TABLE — colonial_empire_decision_sgui
-###   0  Release a Colonial Territory   1  Planned Full Decolonization
-###   2  Round Table Conference
-###
-### Both tables are repeated in the sgui file and in
+### The table is repeated in the sgui file and in
 ### docs/systems/journal_entry_systems.md § Colonial Stability Widget. Keep all
-### three in step.
+### three in step. The per-target buttons pass their target instead of an op
+### code: a territory as ce_state, a subject as its capital, ce_capital.
 ###
 ### An op code decides what a control DOES, never whether it is DRAWN. Each
 ### programme's minus and plus are always drawn and grey out through IsValid.
@@ -61,10 +75,16 @@
 ### colonial_stability_drift_* script values — the same leaves the bar itself
 ### consumes — six read live and three read from the snapshot variables
 ### colonial_empire_refresh_display writes; each pillar bar's range is a
-### colonial_pillar_* script value. The eligible territories are the states
-### colonial_empire_refresh_display stores (colonial_empire_territory_1..8),
-### each read through colonial_territory_disp_* values that call the entry's
-### own triggers. The band and the next band's edge
+### colonial_pillar_* script value. The lists are datamodels over what
+### colonial_empire_refresh_display stores each month (CE-1 and CE-2 of the
+### 2026-10-27 GUI audit; eight fixed slots and script-built text before):
+### the release blocs' seed states (colonial_empire_blocs), each read through
+### colonial_bloc_disp_* values summed from colonial_territory_disp_* values
+### that call the entry's own triggers; the colonial subjects' capitals
+### (colonial_empire_subject_capitals), each read through vanilla's subject
+### getters and colonial_subject_disp_* values; and a script container per
+### great power with a stance (colonial_empire_gp_rows), each read through
+### colonial_gp_row_disp_* values. The band and the next band's edge
 ### come from the live band ladder (colonial_empire_live_tier /
 ### colonial_empire_live_next_boundary in colonial_empire_values.txt), never
 ### from the snapshot, which is stale on a newly activated entry; the overview
@@ -76,6 +96,11 @@
 ### cached monthly). If you need a new number here, derive it there or in
 ### colonial_empire_display_effects.txt and read it.
 ###
+### A tooltip inside a datamodel item sees the item's datacontext and nothing
+### above it (gui_modding_guide gotcha #24), so every hover in a list row is
+### rooted at GetPlayer, never at JournalEntry; the rows' enabled and onclick
+### still see JournalEntry.
+###
 ### je_colonial_empire carries `is_shown_when_inactive`, so every root is gated
 ### on [JournalEntry.IsActive] (gotcha #14: an unguarded display sgui in that
 ### state produces a "Failed to fetch variable" per frame for every country that
@@ -85,15 +110,28 @@
 ###
 ### Section open/closed state and the chart range live in GetVariableSystem —
 ### client-side UI state, never saved, never gameplay state. There is no armed
-### action state anywhere: the three decolonization decisions confirm through
-### decolonization_events.400 / .401, which is real game state and offers a
-### Reconsider option.
+### action state anywhere: every decolonization button confirms through an
+### event (.401 for Planned Full Decolonization, .402-.404 for one territory
+### or subject), which is real game state and offers a Reconsider option.
 ###
 ### Art: the band, alert and programme icons, the pie's three discs and the
 ### territory list's colony icon are the system's own, in
 ### gfx/interface/icons/colonial_empire_icons/ (PR #586). Each is listed, with
 ### what it shows, in docs/systems/colonial_empire_gui_icons.md. The trend
 ### arrows, the pie's round frame and the bar's line are vanilla's.
+
+template colonial_empire_fontsize_row {
+	fontsize = 17
+}
+
+template colonial_empire_fontsize_heading {
+	fontsize = 20
+}
+
+template colonial_empire_fontsize_overview {
+	fontsize = 16
+	using = tooltip_font
+}
 
 types colonial_empire_widget_types
 {
@@ -103,7 +141,7 @@ types colonial_empire_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_large
+		using = colonial_empire_fontsize_row
 	}
 
 	type colonial_empire_panel = flowcontainer {
@@ -143,7 +181,7 @@ types colonial_empire_widget_types
 			multiline = yes
 			maximumsize = { 480 -1 }
 			align = left|nobaseline
-			using = fontsize_large
+			using = colonial_empire_fontsize_heading
 			default_format = "#title"
 			block "subheader_text" {}
 		}
@@ -162,53 +200,19 @@ types colonial_empire_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = colonial_empire_fontsize_row
 		default_format = "#lore"
 	}
 
-	### A line of the eligible-territories list (its caption, and the lines
-	### for none and for not yet assessed): the medium font, the rows' width.
+	### A line of a Colonial Holdings or International Pressure list (the lines
+	### for none and for not yet assessed): the row size, the rows' width.
 	type colonial_empire_list_text = textbox {
 		autoresize = yes
 		multiline = yes
 		minimumsize = { 476 -1 }
 		maximumsize = { 476 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
-	}
-
-	### A table row: a label on the left and its value on the right
-	### (un_chamber_value_row's shape). Every row carries a tooltip with the
-	### reason behind its value, so the label is marked hoverable. 250 + 210:
-	### the value column holds the longest state name, "South Atlantic
-	### Islands" (22 characters, about 208 units in the medium font), for the
-	### Decolonization section's "Largest" row (play-test round 3's width
-	### budget; it was 320 + 140).
-	type colonial_empire_value_row = flowcontainer {
-		direction = horizontal
-		ignoreinvisible = yes
-		margin = { 4 1 }
-
-		textbox = {
-			autoresize = yes
-			minimumsize = { 250 -1 }
-			maximumsize = { 250 -1 }
-			align = left|nobaseline
-			using = fontsize_medium
-			default_format = "#tooltippable"
-			elide = right
-			block "row_label" {}
-		}
-		textbox = {
-			autoresize = yes
-			minimumsize = { 210 -1 }
-			maximumsize = { 210 -1 }
-			align = right|nobaseline
-			using = fontsize_medium
-			default_format = "#v"
-			elide = right
-			block "row_value" {}
-		}
+		using = colonial_empire_fontsize_row
 	}
 
 	### One term of the bar's formula as a pillar, the UN's "why authority is
@@ -222,7 +226,7 @@ types colonial_empire_widget_types
 	### monthly limit, the projected change) leaves the bar's cell empty, so
 	### every value sits in one column. Fixed cells, 190 + 190 + 72, two 8 px
 	### gaps and the margins = 476: the longest label, "Great Power pressure",
-	### is 20 characters, about 189 units in the medium font.
+	### is 20 characters, about 187 units at the row size.
 	type colonial_empire_pillar_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -235,7 +239,7 @@ types colonial_empire_widget_types
 			maximumsize = { 190 -1 }
 			parentanchor = vcenter
 			align = left|nobaseline
-			using = fontsize_medium
+			using = colonial_empire_fontsize_row
 			default_format = "#tooltippable"
 			elide = right
 			block "row_label" {}
@@ -251,133 +255,365 @@ types colonial_empire_widget_types
 			maximumsize = { 72 -1 }
 			parentanchor = vcenter
 			align = right|nobaseline
-			using = fontsize_medium
+			using = colonial_empire_fontsize_row
 			default_format = "#v"
 			elide = right
 			block "row_value" {}
 		}
 	}
 
-	### An expandable list nested inside a section's panel, set in from the
-	### panel's edge by the flowcontainer that holds it (un_chamber_subsection_header's
-	### shape, copied rather than instanced so this file does not depend on the
-	### UN's).
-	type colonial_empire_subsection_header = section_header_button {
-		blockoverride "layout" {
-			size = { 440 30 }
-		}
-		blockoverride "fontsize" {
-			using = fontsize_medium
-		}
-		blockoverride "arrow_size" {
-			size = { 20 20 }
-		}
-		blockoverride "left_textbox_margin_left" {
-			margin_left = 32
-		}
-	}
-
-	### The eligible-territories list: its column heads, then one row per
-	### stored territory. Fixed cells, 24 + 210 + 58 + 56 + 40 + 68 and five
+	### The territory list (Colonial Holdings): its column heads, then one row
+	### per release bloc. Fixed cells, 24 + 206 + 48 + 40 + 66 + 72 and five
 	### 4 px gaps = 476, so a long name cannot widen the row: the longest state
-	### name, "South Atlantic Islands", is 22 characters, about 208 units in
-	### the medium font. The heads are in the small font ("Primary", 7
-	### characters, about 54 units).
+	### name, "South Atlantic Islands", is 22 characters, about 206 units at the
+	### row size. The heads are at the row size too. The last column is the
+	### row's Release button and has no head. People moved to the name's hover
+	### (2026-10-24) to make room for it: every listed territory passes the
+	### population test, so the figure decides nothing.
 	type te_ce_territory_head = flowcontainer {
 		direction = horizontal
 		spacing = 4
 		ignoreinvisible = yes
 
 		widget = {
-			size = { 24 20 }
+			size = { 24 24 }
 		}
 		widget = {
-			size = { 210 20 }
+			size = { 206 24 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 210
+				max_width = 206
 				elide = right
 				align = left|nobaseline
-				using = fontsize_small
+				using = colonial_empire_fontsize_row
 				default_format = "#tooltippable"
 				text = "je_colonial_empire_territory_head_name"
 				tooltip = "je_colonial_empire_territory_head_name_tt"
 			}
 		}
 		widget = {
-			size = { 58 20 }
+			size = { 48 24 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 58
+				max_width = 48
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
-				default_format = "#tooltippable"
-				text = "je_colonial_empire_territory_head_pop"
-				tooltip = "je_colonial_empire_territory_head_pop_tt"
-			}
-		}
-		widget = {
-			size = { 56 20 }
-			textbox = {
-				parentanchor = right|vcenter
-				autoresize = yes
-				max_width = 56
-				elide = right
-				align = right|nobaseline
-				using = fontsize_small
+				using = colonial_empire_fontsize_row
 				default_format = "#tooltippable"
 				text = "je_colonial_empire_territory_head_primary"
 				tooltip = "je_colonial_empire_territory_head_primary_tt"
 			}
 		}
 		widget = {
-			size = { 40 20 }
+			size = { 40 24 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
 				max_width = 40
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = colonial_empire_fontsize_row
 				default_format = "#tooltippable"
 				text = "je_colonial_empire_territory_head_sol"
 				tooltip = "je_colonial_empire_territory_head_sol_tt"
 			}
 		}
 		widget = {
-			size = { 68 20 }
+			size = { 66 24 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 68
+				max_width = 66
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = colonial_empire_fontsize_row
 				default_format = "#tooltippable"
 				text = "je_colonial_empire_territory_head_gdp"
 				tooltip = "je_colonial_empire_territory_head_gdp_tt"
 			}
 		}
+		widget = {
+			size = { 72 24 }
+		}
 	}
 
-	### One territory: whether it counts as a colony (the colony icon lit, or
-	### dimmed), its name, people, primary-culture share, standard of living
-	### and GDP, in te_ce_territory_head's cells. The share is red while the
-	### indigenous-population test holds, the standard of living red while the
-	### living-standards test holds: the figure that makes it a colony. Each
+	### One release bloc: a territory and the states a release would take with
+	### it (colonial_empire_mark_release_blocs), shown at its seed, the
+	### largest. Whether any of its states counts as a colony (the colony icon
+	### lit, or dimmed), its name with "+N" for the states that go with it (on
+	### hover the people it forms with, its states, its weight on stability:
+	### colonial_empire_bloc_sgui), primary-culture share, standard of living
+	### and GDP across its states, in te_ce_territory_head's cells, then its
+	### Release button. The share is red while a state of the bloc holds the
+	### indigenous-population test, the standard of living red while one holds
+	### the living-standards test: the figure that makes it a colony. Each
 	### cell's hover gives the figure's threshold.
 	###
-	### The instance gates the row on the count of stored rows ("row_visible")
-	### and sets the stored state as its datacontext ("row_context"), on the
-	### inner container so the variable is read only while the row is shown
-	### (Space Race's rival rows). Every cell reads the state through
+	### An item of the datamodel over colonial_empire_blocs, whose datacontext
+	### is the seed (Scope.GetState: the Demographics and Grand Monuments
+	### lists' shape). Every cell reads the seed through
 	### State.MakeScope.ScriptValue (grand monuments' rows), the
-	### colonial_territory_disp_* values that call the entry's own triggers.
+	### colonial_bloc_disp_* values the monthly assessment summed from each
+	### state's colonial_territory_disp_*, which call the entry's own triggers.
+	### Its hovers are rooted at GetPlayer (gotcha #24).
+	###
+	### Release opens decolonization_events.402 for the seed (its release takes
+	### the whole bloc: colonial_empire_release_state_sgui, the seed passed as
+	### ce_state: gm_tr_take_button's shape). Always drawn; greyed with the
+	### reason when it cannot be pressed, and its hover says whether a Round
+	### Table is open.
 	type te_ce_territory_row = widget {
-		size = { 476 24 }
+		size = { 476 28 }
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = vcenter
+			ignoreinvisible = yes
+
+			widget = {
+				size = { 24 24 }
+				parentanchor = vcenter
+
+				icon = {
+					size = { 22 22 }
+					parentanchor = center
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_colony'), '(CFixedPoint)1' )]"
+					texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
+					tooltip = "je_colonial_empire_territory_colony_tt"
+				}
+				icon = {
+					size = { 22 22 }
+					parentanchor = center
+					alpha = 0.25
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_colony'), '(CFixedPoint)0' )]"
+					texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
+					tooltip = "je_colonial_empire_territory_not_colony_tt"
+				}
+			}
+			widget = {
+				size = { 206 26 }
+				parentanchor = vcenter
+				datacontext = "[GetScriptedGui('colonial_empire_bloc_sgui')]"
+				tooltip = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 206
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					default_format = "#tooltippable"
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_extra'), '(CFixedPoint)0' )]"
+					text = "[State.GetName]"
+				}
+				# A bloc: the name, cut short if it must be, and "+N" always
+				# shown (172 + 4 + 30 = 206).
+				flowcontainer = {
+					parentanchor = left|vcenter
+					direction = horizontal
+					spacing = 4
+					visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_extra'), '(CFixedPoint)0' )]"
+
+					textbox = {
+						autoresize = yes
+						max_width = 172
+						elide = right
+						align = left|nobaseline
+						using = colonial_empire_fontsize_row
+						default_format = "#tooltippable"
+						text = "[State.GetName]"
+					}
+					textbox = {
+						autoresize = yes
+						max_width = 30
+						elide = right
+						align = left|nobaseline
+						using = colonial_empire_fontsize_row
+						text = "je_colonial_empire_territory_name_extra"
+					}
+				}
+			}
+			widget = {
+				size = { 48 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 48
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_indigenous'), '(CFixedPoint)1' )]"
+					text = "je_colonial_empire_territory_primary_bad"
+					tooltip = "je_colonial_empire_territory_primary_bad_tt"
+					default_format = "#tooltippable"
+				}
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 48
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_indigenous'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_territory_primary"
+					tooltip = "je_colonial_empire_territory_primary_tt"
+					default_format = "#tooltippable"
+				}
+			}
+			widget = {
+				size = { 40 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 40
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_disparity'), '(CFixedPoint)1' )]"
+					text = "je_colonial_empire_territory_sol_bad"
+					tooltip = "je_colonial_empire_territory_sol_bad_tt"
+					default_format = "#tooltippable"
+				}
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 40
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_disparity'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_territory_sol"
+					tooltip = "je_colonial_empire_territory_sol_tt"
+					default_format = "#tooltippable"
+				}
+			}
+			widget = {
+				size = { 66 26 }
+				parentanchor = vcenter
+				tooltip = "je_colonial_empire_territory_gdp_tt"
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 66
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					default_format = "#tooltippable"
+					text = "je_colonial_empire_territory_gdp"
+				}
+			}
+			widget = {
+				size = { 72 26 }
+				parentanchor = vcenter
+
+				button = {
+					using = default_button_action
+					size = { 72 26 }
+					parentanchor = center
+					datacontext = "[GetScriptedGui('colonial_empire_release_state_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ) ) )]"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 68
+						elide = right
+						using = colonial_empire_fontsize_row
+						text = "je_colonial_empire_btn_release"
+					}
+				}
+			}
+		}
+	}
+
+	### The wars of independence (Colonial Holdings): its column heads, then
+	### one row per war we are fighting (decol_iw_rebels_1..3 in
+	### decolonization_war_effects.txt: a territory's rebels after Fight, a
+	### colonial subject's independence war, a colony's secession). Fixed
+	### cells, 28 + 172 + 58 + 66 + 136 and four 4 px gaps = 476. The flag
+	### has no head; the last column is the row's Open Talks button.
+	type te_ce_war_head = flowcontainer {
+		direction = horizontal
+		spacing = 4
+		ignoreinvisible = yes
+
+		widget = {
+			size = { 28 24 }
+		}
+		widget = {
+			size = { 172 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 172
+				elide = right
+				align = left|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_war_head_name"
+				tooltip = "je_colonial_empire_war_head_name_tt"
+			}
+		}
+		widget = {
+			size = { 58 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 58
+				elide = right
+				align = right|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_war_head_months"
+				tooltip = "je_colonial_empire_war_head_months_tt"
+			}
+		}
+		widget = {
+			size = { 66 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 66
+				elide = right
+				align = right|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_war_head_backers"
+				tooltip = "je_colonial_empire_war_head_backers_tt"
+			}
+		}
+		widget = {
+			size = { 136 24 }
+		}
+	}
+
+	### One war: the flag and name of the country fighting us (vanilla's
+	### tiny_flag, the country on click), months at war (red while our war
+	### support in it is at the red line), the great powers arming them, and
+	### Open Talks (decolonization_events.80 through
+	### colonial_empire_open_talks_sgui, the row's capital passed as ce_state).
+	### The button is always drawn; its text says where talks stand, and it
+	### greys with the reason while talks run or the war has not begun. The
+	### instance gates the row on its record and sets the rebels' stored capital
+	### as its datacontext (gotcha #11), on the inner container, so the variable
+	### is read only while the row is shown (Space Race's rival rows). Every
+	### figure is one the monthly settle writes on that capital (decol_iw_disp_*
+	### in decolonization_war_values.txt). Three records at most, so three fixed
+	### rows, not a datamodel.
+	type te_ce_war_row = widget {
+		size = { 476 28 }
 		block "row_visible" {}
 
 		flowcontainer = {
@@ -388,43 +624,34 @@ types colonial_empire_widget_types
 			block "row_context" {}
 
 			widget = {
-				size = { 24 24 }
+				size = { 28 26 }
 				parentanchor = vcenter
 
-				icon = {
-					size = { 22 22 }
+				tiny_flag = {
 					parentanchor = center
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_colony'), '(CFixedPoint)1' )]"
-					texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
-					tooltip = "je_colonial_empire_territory_colony_tt"
-				}
-				icon = {
-					size = { 22 22 }
-					parentanchor = center
-					alpha = 0.25
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_colony'), '(CFixedPoint)0' )]"
-					texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
-					tooltip = "je_colonial_empire_territory_not_colony_tt"
+					datacontext = "[State.GetCountry]"
 				}
 			}
 			widget = {
-				size = { 210 24 }
+				size = { 172 26 }
 				parentanchor = vcenter
+				tooltip = "je_colonial_empire_war_name_tt"
 
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
-					max_width = 210
+					max_width = 172
+					fontsize_min = 12
 					elide = right
 					align = left|nobaseline
-					using = fontsize_medium
-					text = "[State.GetName]"
+					using = colonial_empire_fontsize_row
+					default_format = "#tooltippable"
+					text = "je_colonial_empire_war_name"
 				}
 			}
 			widget = {
-				size = { 58 24 }
+				size = { 58 26 }
 				parentanchor = vcenter
-				tooltip = "je_colonial_empire_territory_pop_tt"
 
 				textbox = {
 					parentanchor = right|vcenter
@@ -432,88 +659,541 @@ types colonial_empire_widget_types
 					max_width = 58
 					elide = right
 					align = right|nobaseline
-					using = fontsize_medium
-					text = "je_colonial_empire_territory_pop"
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_red'), '(CFixedPoint)1' )]"
+					text = "je_colonial_empire_war_months_bad"
+					tooltip = "je_colonial_empire_war_months_bad_tt"
+					default_format = "#tooltippable"
+				}
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 58
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_red'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_war_months"
+					tooltip = "je_colonial_empire_war_months_tt"
+					default_format = "#tooltippable"
 				}
 			}
 			widget = {
-				size = { 56 24 }
+				size = { 66 26 }
 				parentanchor = vcenter
+				tooltip = "je_colonial_empire_war_backers_tt"
 
 				textbox = {
 					parentanchor = right|vcenter
 					autoresize = yes
-					max_width = 56
+					max_width = 66
 					elide = right
 					align = right|nobaseline
-					using = fontsize_medium
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_indigenous'), '(CFixedPoint)1' )]"
-					text = "je_colonial_empire_territory_primary_bad"
-					tooltip = "je_colonial_empire_territory_primary_bad_tt"
-				}
-				textbox = {
-					parentanchor = right|vcenter
-					autoresize = yes
-					max_width = 56
-					elide = right
-					align = right|nobaseline
-					using = fontsize_medium
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_indigenous'), '(CFixedPoint)0' )]"
-					text = "je_colonial_empire_territory_primary"
-					tooltip = "je_colonial_empire_territory_primary_tt"
+					using = colonial_empire_fontsize_row
+					default_format = "#tooltippable"
+					text = "je_colonial_empire_war_backers"
 				}
 			}
 			widget = {
-				size = { 40 24 }
+				size = { 136 26 }
 				parentanchor = vcenter
 
-				textbox = {
-					parentanchor = right|vcenter
-					autoresize = yes
-					max_width = 40
-					elide = right
-					align = right|nobaseline
-					using = fontsize_medium
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_disparity'), '(CFixedPoint)1' )]"
-					text = "je_colonial_empire_territory_sol_bad"
-					tooltip = "je_colonial_empire_territory_sol_bad_tt"
-				}
-				textbox = {
-					parentanchor = right|vcenter
-					autoresize = yes
-					max_width = 40
-					elide = right
-					align = right|nobaseline
-					using = fontsize_medium
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_disparity'), '(CFixedPoint)0' )]"
-					text = "je_colonial_empire_territory_sol"
-					tooltip = "je_colonial_empire_territory_sol_tt"
-				}
-			}
-			widget = {
-				size = { 68 24 }
-				parentanchor = vcenter
-				tooltip = "je_colonial_empire_territory_gdp_tt"
+				button = {
+					using = default_button_action
+					size = { 136 26 }
+					parentanchor = center
+					datacontext = "[GetScriptedGui('colonial_empire_open_talks_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ) ) )]"
 
-				textbox = {
-					parentanchor = right|vcenter
-					autoresize = yes
-					max_width = 68
-					elide = right
-					align = right|nobaseline
-					using = fontsize_medium
-					text = "je_colonial_empire_territory_gdp"
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 132
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_talks'), '(CFixedPoint)0' )]"
+						text = "je_colonial_empire_btn_open_talks"
+					}
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 132
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_talks'), '(CFixedPoint)1' )]"
+						text = "je_colonial_empire_btn_in_talks"
+					}
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 132
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_talks'), '(CFixedPoint)2' )]"
+						text = "je_colonial_empire_btn_accords"
+					}
 				}
 			}
 		}
 	}
 
-	### One programme: its name and costs on the left, its level, and a minus
-	### and a plus that step it down and up (op codes: the table in this file's
-	### header). Both controls are always drawn; a step that cannot be taken
-	### greys out with the reason in its tooltip (IsValidTooltip, then what the
-	### step does). Both address colonial_empire_policy_sgui, so the
-	### datacontext lives on the type and each row passes its two op codes.
+	### The colonial subject list (Colonial Holdings): its column heads, then
+	### one row per subject. Fixed cells, 28 + 134 + 38 + 34 + 66 + 72 + 80
+	### and six 4 px gaps = 476, the territory rows' width. The flag is
+	### vanilla's tiny_flag (the country's name on hover, the country on
+	### click); the kind is vanilla's own subject-type icon, its name and why
+	### it counts on hover. Liberty desire's head is vanilla's concept icon.
+	### The last two columns are the row's buttons and have no head.
+	type te_ce_subject_head = flowcontainer {
+		direction = horizontal
+		spacing = 4
+		ignoreinvisible = yes
+
+		widget = {
+			size = { 28 24 }
+		}
+		widget = {
+			size = { 134 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 134
+				elide = right
+				align = left|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_subject_head_name"
+				tooltip = "je_colonial_empire_subject_head_name_tt"
+			}
+		}
+		widget = {
+			size = { 38 24 }
+			textbox = {
+				parentanchor = center
+				autoresize = yes
+				max_width = 38
+				elide = right
+				align = center|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_subject_head_kind"
+				tooltip = "je_colonial_empire_subject_head_kind_tt"
+			}
+		}
+		widget = {
+			size = { 34 24 }
+			icon = {
+				size = { 20 20 }
+				parentanchor = right|vcenter
+				texture = "gfx/interface/icons/diplomatic_action_icons/liberty_desire.dds"
+				tooltip = "je_colonial_empire_subject_head_ld_tt"
+			}
+		}
+		widget = {
+			size = { 66 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 66
+				elide = right
+				align = right|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_subject_head_gdp"
+				tooltip = "je_colonial_empire_subject_head_gdp_tt"
+			}
+		}
+		widget = {
+			size = { 156 24 }
+		}
+	}
+
+	### One colonial subject: its flag, name, kind, liberty desire and GDP,
+	### then Release (decolonization_events.403, independence) and Dominion
+	### (.404, dominion status, for a colony only). An item of the datamodel
+	### over colonial_empire_subject_capitals, whose datacontext is the
+	### subject's capital (Scope.GetState); the cells reach the subject as
+	### State.GetCountry (gotcha #11), and the buttons pass the capital
+	### (ce_capital), whose owner script acts on. Both buttons are always drawn
+	### and greyed with the reason when they cannot be pressed; their hovers,
+	### and every other in the row, are rooted at GetPlayer (gotcha #24).
+	###
+	### TE_SELF_CHECK ce_subject_row: State.GetCountry from a datamodel item is
+	### unproven (gotcha #15 proves it only from a stored variable). The first
+	### row drawn in a session reports through one of the two 1x1 widgets
+	### below, outside the row's flow so they take no room: ce_check 1 when
+	### the row read its subject's name, 0 when it read none
+	### (colonial_empire_selfcheck_subject_sgui logs once a game). The client
+	### flag stops the other rows asking. Fallback: the play-test list
+	### (docs/testing/colonial-holdings-playtest.md).
+	type te_ce_subject_row = widget {
+		size = { 476 28 }
+
+		widget = {
+			size = { 1 1 }
+			visible = "[And( Not( GetVariableSystem.Exists('colonial_empire_selfcheck_subject') ), Not( EqualTo_string( State.GetCountry.GetNameNoFormatting, '' ) ) )]"
+			state = {
+				name = _show
+				on_start = "[GetScriptedGui('colonial_empire_selfcheck_subject_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).AddScope( 'ce_check', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				on_start = "[GetVariableSystem.Set( 'colonial_empire_selfcheck_subject', '1' )]"
+			}
+		}
+		widget = {
+			size = { 1 1 }
+			visible = "[And( Not( GetVariableSystem.Exists('colonial_empire_selfcheck_subject') ), EqualTo_string( State.GetCountry.GetNameNoFormatting, '' ) )]"
+			state = {
+				name = _show
+				on_start = "[GetScriptedGui('colonial_empire_selfcheck_subject_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).AddScope( 'ce_check', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				on_start = "[GetVariableSystem.Set( 'colonial_empire_selfcheck_subject', '1' )]"
+			}
+		}
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = vcenter
+			ignoreinvisible = yes
+
+			widget = {
+				size = { 28 26 }
+				parentanchor = vcenter
+
+				tiny_flag = {
+					parentanchor = center
+					datacontext = "[State.GetCountry]"
+				}
+			}
+			widget = {
+				size = { 134 26 }
+				parentanchor = vcenter
+				tooltip = "je_colonial_empire_subject_name_tt"
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 134
+					fontsize_min = 12
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					default_format = "#tooltippable"
+					text = "je_colonial_empire_subject_name"
+				}
+			}
+			widget = {
+				size = { 38 26 }
+				parentanchor = vcenter
+
+				icon = {
+					size = { 22 22 }
+					parentanchor = center
+					texture = "[State.GetCountry.GetSubjectType.GetTexture]"
+					tooltip = "je_colonial_empire_subject_kind_tt"
+				}
+			}
+			widget = {
+				size = { 34 26 }
+				parentanchor = vcenter
+				tooltip = "je_colonial_empire_subject_ld_tt"
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 34
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					default_format = "#tooltippable"
+					text = "je_colonial_empire_subject_ld"
+				}
+			}
+			widget = {
+				size = { 66 26 }
+				parentanchor = vcenter
+				tooltip = "je_colonial_empire_subject_gdp_tt"
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 66
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					default_format = "#tooltippable"
+					text = "je_colonial_empire_subject_gdp"
+				}
+			}
+			widget = {
+				size = { 72 26 }
+				parentanchor = vcenter
+
+				button = {
+					using = default_button_action
+					size = { 72 26 }
+					parentanchor = center
+					datacontext = "[GetScriptedGui('colonial_empire_free_subject_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End ) ) )]"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 68
+						elide = right
+						using = colonial_empire_fontsize_row
+						text = "je_colonial_empire_btn_release"
+					}
+				}
+			}
+			widget = {
+				size = { 80 26 }
+				parentanchor = vcenter
+
+				button = {
+					using = default_button_action
+					size = { 80 26 }
+					parentanchor = center
+					datacontext = "[GetScriptedGui('colonial_empire_dominion_subject_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End ) ) )]"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 76
+						elide = right
+						using = colonial_empire_fontsize_row
+						text = "je_colonial_empire_btn_dominion"
+					}
+				}
+			}
+		}
+	}
+
+	### International Pressure's table (CE-2 of the 2026-10-27 GUI audit: a
+	### script-built roster before): its column heads, then one row per great
+	### power that condemns or backs us. Fixed cells, 28 + 180 + 100 + 76 + 76
+	### and four 4 px gaps = 476. The flag has no head.
+	type te_ce_gp_head = flowcontainer {
+		direction = horizontal
+		spacing = 4
+		ignoreinvisible = yes
+
+		widget = {
+			size = { 28 24 }
+		}
+		widget = {
+			size = { 180 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				elide = right
+				align = left|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_gp_head_name"
+				tooltip = "je_colonial_empire_gp_head_name_tt"
+			}
+		}
+		widget = {
+			size = { 100 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 100
+				elide = right
+				align = left|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_gp_head_stance"
+				tooltip = "je_colonial_empire_gp_head_stance_tt"
+			}
+		}
+		widget = {
+			size = { 76 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 76
+				elide = right
+				align = right|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_gp_head_prestige"
+				tooltip = "je_colonial_empire_gp_head_prestige_tt"
+			}
+		}
+		widget = {
+			size = { 76 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 76
+				elide = right
+				align = right|nobaseline
+				using = colonial_empire_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_gp_head_effect"
+				tooltip = "je_colonial_empire_gp_head_effect_tt"
+			}
+		}
+	}
+
+	### One great power: its flag (vanilla's tiny_flag, the country on click)
+	### and name, its stance, its prestige at the monthly assessment and what
+	### it adds to or takes from stability a month, the one term of the bar it
+	### makes. An item of the datamodel over colonial_empire_gp_rows, whose
+	### datacontext is the row's script container
+	### (colonial_empire_refresh_gp_rows). The country is reached through its
+	### stored capital, ScriptContainer.MakeScope.Var('ce_gp_capital')
+	### .GetState.GetCountry, the covert rows' proven chain (gotcha #15); the
+	### figures through the guarded colonial_gp_row_disp_* values. The hover
+	### reads nothing but the container and the player (gotcha #24).
+	type te_ce_gp_row = widget {
+		size = { 476 28 }
+		tooltip = "je_colonial_empire_gp_row_tt"
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = vcenter
+			ignoreinvisible = yes
+
+			widget = {
+				size = { 28 26 }
+				parentanchor = vcenter
+
+				tiny_flag = {
+					parentanchor = center
+					visible = "[ScriptContainer.HasVariable('ce_gp_capital')]"
+					datacontext = "[ScriptContainer.MakeScope.Var('ce_gp_capital').GetState.GetCountry]"
+				}
+			}
+			widget = {
+				size = { 180 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 180
+					fontsize_min = 12
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					default_format = "#tooltippable"
+					visible = "[ScriptContainer.HasVariable('ce_gp_capital')]"
+					text = "je_colonial_empire_gp_name"
+				}
+			}
+			widget = {
+				size = { 100 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 100
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[LessThan_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_stance'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_gp_condemning"
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 100
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[GreaterThan_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_stance'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_gp_supporting"
+				}
+			}
+			widget = {
+				size = { 76 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 76
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					text = "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_prestige')|0]"
+				}
+			}
+			widget = {
+				size = { 76 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 76
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					text = "je_colonial_empire_gp_effect"
+				}
+			}
+		}
+	}
+
+	### A great-power escalation in force, under the table: its name, its
+	### hover the overview's, and its loss a month in the table's last column
+	### (396 = the four cells before it and their gaps).
+	type te_ce_escalation_row = flowcontainer {
+		direction = horizontal
+		spacing = 4
+		ignoreinvisible = yes
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 396 -1 }
+			maximumsize = { 396 -1 }
+			parentanchor = vcenter
+			elide = right
+			align = left|nobaseline
+			using = colonial_empire_fontsize_row
+			default_format = "#tooltippable"
+			block "escalation_label" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 76 -1 }
+			maximumsize = { 76 -1 }
+			parentanchor = vcenter
+			elide = right
+			align = right|nobaseline
+			using = colonial_empire_fontsize_row
+			block "escalation_value" {}
+		}
+	}
+
+	### One programme: its name, its level, what it adds to stability a month
+	### now, and a minus and a plus that step it down and up (op codes: the
+	### table in this file's header), all at the row size. Its costs, and what
+	### each level adds, are on the row's hover (CE-6 of the 2026-10-27 GUI
+	### audit: a small four-figure cost line under the name before). Both
+	### controls are always drawn; a step that cannot be taken greys out with
+	### the reason in its tooltip (IsValidTooltip, then what the step does).
+	### Both address colonial_empire_policy_sgui, so the datacontext lives on
+	### the type and each row passes its two op codes. Fixed cells,
+	### 4 + 230 + 6 + 50 + 6 + 90 + 6 + 76 + 4 = 472: the longest name,
+	### "Development Investment", is 22 characters, about 206 units.
 	type colonial_empire_policy_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -522,31 +1202,16 @@ types colonial_empire_widget_types
 		parentanchor = hcenter
 		datacontext = "[GetScriptedGui('colonial_empire_policy_sgui')]"
 
-		flowcontainer = {
-			direction = vertical
-			ignoreinvisible = yes
+		textbox = {
+			autoresize = yes
+			minimumsize = { 230 -1 }
+			maximumsize = { 230 -1 }
 			parentanchor = vcenter
-			minimumsize = { 360 -1 }
-			maximumsize = { 360 -1 }
-
-			textbox = {
-				autoresize = yes
-				multiline = yes
-				minimumsize = { 360 -1 }
-				maximumsize = { 360 -1 }
-				align = left|nobaseline
-				using = fontsize_medium
-				block "row_label" {}
-			}
-			textbox = {
-				autoresize = yes
-				multiline = yes
-				minimumsize = { 360 -1 }
-				maximumsize = { 360 -1 }
-				align = left|nobaseline
-				using = fontsize_small
-				block "row_cost" {}
-			}
+			align = left|nobaseline
+			elide = right
+			using = colonial_empire_fontsize_row
+			default_format = "#tooltippable"
+			block "row_label" {}
 		}
 
 		widget = {
@@ -559,8 +1224,23 @@ types colonial_empire_widget_types
 				max_width = 50
 				elide = right
 				align = center|nobaseline
-				using = fontsize_medium
+				using = colonial_empire_fontsize_row
 				block "row_level" {}
+			}
+		}
+
+		widget = {
+			size = { 90 26 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 90
+				elide = right
+				align = right|nobaseline
+				using = colonial_empire_fontsize_row
+				block "row_term" {}
 			}
 		}
 
@@ -589,15 +1269,15 @@ types colonial_empire_widget_types
 
 	### One decolonization decision: its name on the left, what it does on
 	### hover, and the control that opens its confirmation event beside it
-	### (style rule 6; it used to sit under a paragraph, flush left). Every row
-	### shares one scripted GUI and differs only by op code, so the datacontext
-	### lives here.
+	### (style rule 6; it used to sit under a paragraph, flush left). One row
+	### since 2026-10-24, Planned Full Decolonization: releasing one territory
+	### or one subject is a button on its own row in the lists above it.
 	type colonial_empire_decision_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 10
 		margin = { 4 4 }
-		datacontext = "[GetScriptedGui('colonial_empire_decision_sgui')]"
+		datacontext = "[GetScriptedGui('colonial_empire_planned_sgui')]"
 
 		textbox = {
 			autoresize = yes
@@ -606,7 +1286,7 @@ types colonial_empire_widget_types
 			maximumsize = { 300 -1 }
 			parentanchor = vcenter
 			align = left|nobaseline
-			using = fontsize_medium
+			using = colonial_empire_fontsize_row
 			default_format = "#tooltippable"
 			block "row_text" {}
 		}
@@ -622,7 +1302,7 @@ types colonial_empire_widget_types
 				autoresize = yes
 				max_width = 140
 				elide = right
-				using = fontsize_small
+				using = colonial_empire_fontsize_row
 				text = "je_colonial_empire_btn_open_choice"
 			}
 
@@ -634,43 +1314,32 @@ types colonial_empire_widget_types
 	### OVERVIEW. Always shown, not collapsible (style rule 1).
 	### ======================================================================
 
-	### A cell of the overview: an icon, its word small beneath. Fixed width,
-	### so a long word cannot push the row wider (te_un_ov_icon_label's shape).
-	type te_ce_ov_icon_label = widget {
-		size = { 110 58 }
-
-		icon = {
-			size = { 36 36 }
-			parentanchor = top|hcenter
-			block "icon_texture" {}
-		}
-		textbox = {
-			parentanchor = bottom|hcenter
-			autoresize = yes
-			max_width = 108
-			elide = right
-			align = hcenter|nobaseline
-			using = fontsize_small
-			default_format = "#tooltippable"
-			block "label" {}
-		}
+	### A cell's word or third line (te_banking_ov_word's shape, the cell's 154
+	### column at the overview's size). The instance sets the position for the
+	### third line (y 46), the text and any hover of its own.
+	type te_ce_ov_line = textbox {
+		position = { 78 24 }
+		autoresize = yes
+		max_width = 154
+		elide = right
+		align = left|nobaseline
+		using = colonial_empire_fontsize_overview
 	}
 
-	### One programme: full colour while it runs, dimmed while it does not. The
-	### instance sets the texture on both icons, and the visible gate and
-	### tooltip on each (te_un_ov_agency's shape).
+	### One programme, in the Programmes cell's icon box: full colour while it
+	### runs, dimmed while it does not. Three share the 44 box, two over one,
+	### so the instance sets the position; and the texture on both icons, and
+	### the visible gate and tooltip on each (te_un_ov_agency's shape).
 	type te_ce_ov_programme = widget {
-		size = { 40 40 }
+		size = { 22 22 }
 
 		icon = {
-			size = { 36 36 }
-			parentanchor = center
+			size = { 100% 100% }
 			block "lit" {}
 			block "programme_texture" {}
 		}
 		icon = {
-			size = { 36 36 }
-			parentanchor = center
+			size = { 100% 100% }
 			alpha = 0.25
 			block "unlit" {}
 			block "programme_texture" {}
@@ -729,7 +1398,8 @@ types colonial_empire_widget_types
 	}
 
 	### One line of the pie's legend: its slice's texture as a swatch (frame 2
-	### is the coloured disc, as in ch_model_legend_row) and the share.
+	### is the coloured disc, as in ch_model_legend_row) and the share, with
+	### what that share does on hover (CE-7: a note under the legend before).
 	type te_ce_ov_legend_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -748,15 +1418,21 @@ types colonial_empire_widget_types
 			elide = right
 			parentanchor = vcenter
 			align = nobaseline
-			using = fontsize_medium
+			using = colonial_empire_fontsize_overview
+			default_format = "#tooltippable"
 			block "legend_text" {}
 		}
 	}
 
-	### What a returning player checks: which band, which programmes are
-	### running, where the bar is and which way it is moving, how close the
-	### empire is to winning once it is Solidified, and how much of the great
-	### powers' weight condemns or backs us.
+	### What a returning player checks: where the bar is and which way it is
+	### moving; then four cells in Banking's pattern (te_banking_ov_cell, the
+	### owner's call of 2026-10-27, CE's overview in the GUI audit): the band
+	### and where the next one begins, the great powers' pressure and any
+	### escalation in force, what holds the entry, and the programmes running.
+	### Each cell's word is the status, red or orange where something is due,
+	### its third line the one figure, its hover the breakdown. Then how close
+	### the empire is to winning once it is Solidified, and how much of the
+	### great powers' weight condemns or backs us.
 	type te_ce_overview_panel = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -765,10 +1441,9 @@ types colonial_empire_widget_types
 
 		colonial_empire_panel = {
 			### Pinned to the 480 column. A frame whose width comes from its content
-			### is centred by the width it had at first layout, and the pressure
-			### alert and the completion clocks appear later, behind their gates
-			### (Nuclear and Global Warming drew off-centre until pinned, play-test
-			### 2026-09-29).
+			### is centred by the width it had at first layout, and the completion
+			### clocks appear later, behind their gate (Nuclear and Global Warming
+			### drew off-centre until pinned, play-test 2026-09-29).
 			flowcontainer = {
 				direction = vertical
 				spacing = 10
@@ -783,130 +1458,7 @@ types colonial_empire_widget_types
 					text = "je_colonial_empire_conditions_pending"
 				}
 
-				### Row 1: the band · the programmes running
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					ignoreinvisible = yes
-					parentanchor = hcenter
-
-					### The band. Its tooltip is the entry's status line and the
-					### modifier the band puts on the entry (the panel's old "While in
-					### this band" line).
-					flowcontainer = {
-						ignoreinvisible = yes
-						visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "je_colonial_empire_ov_band_tt"
-
-						te_ce_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/colonial_empire_icons/band_solidified.dds"
-							}
-							blockoverride "label" {
-								text = "je_colonial_empire_band_solidified"
-							}
-						}
-						te_ce_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)4' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/colonial_empire_icons/band_stable.dds"
-							}
-							blockoverride "label" {
-								text = "je_colonial_empire_band_stable"
-							}
-						}
-						te_ce_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)3' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/colonial_empire_icons/band_strained.dds"
-							}
-							blockoverride "label" {
-								text = "je_colonial_empire_band_strained"
-							}
-						}
-						te_ce_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)2' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/colonial_empire_icons/band_crumbling.dds"
-							}
-							blockoverride "label" {
-								text = "je_colonial_empire_band_crumbling"
-							}
-						}
-						te_ce_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)1' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/colonial_empire_icons/band_collapsing.dds"
-							}
-							blockoverride "label" {
-								text = "je_colonial_empire_band_collapsing"
-							}
-						}
-					}
-
-					### The three programmes, lit while they run. Which half of each
-					### pair is drawn comes from the same scope-free handlers that pick
-					### the Enable or the Disable control below.
-					widget = {
-						size = { 150 58 }
-
-						flowcontainer = {
-							direction = horizontal
-							spacing = 4
-							parentanchor = top|hcenter
-
-							te_ce_ov_programme = {
-								blockoverride "programme_texture" {
-									texture = "gfx/interface/icons/colonial_empire_icons/programme_invest.dds"
-								}
-								blockoverride "lit" {
-									visible = "[GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-									tooltip = "je_colonial_empire_ov_invest_on_tt"
-								}
-								blockoverride "unlit" {
-									visible = "[Not(GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-									tooltip = "je_colonial_empire_ov_invest_off_tt"
-								}
-							}
-							te_ce_ov_programme = {
-								blockoverride "programme_texture" {
-									texture = "gfx/interface/icons/colonial_empire_icons/programme_garrison.dds"
-								}
-								blockoverride "lit" {
-									visible = "[GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-									tooltip = "je_colonial_empire_ov_garrison_on_tt"
-								}
-								blockoverride "unlit" {
-									visible = "[Not(GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-									tooltip = "je_colonial_empire_ov_garrison_off_tt"
-								}
-							}
-							te_ce_ov_programme = {
-								blockoverride "programme_texture" {
-									texture = "gfx/interface/icons/colonial_empire_icons/programme_assimilation.dds"
-								}
-								blockoverride "lit" {
-									visible = "[GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-									tooltip = "je_colonial_empire_ov_assimilation_on_tt"
-								}
-								blockoverride "unlit" {
-									visible = "[Not(GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
-									tooltip = "je_colonial_empire_ov_assimilation_off_tt"
-								}
-							}
-						}
-						textbox = {
-							parentanchor = bottom|hcenter
-							autoresize = yes
-							align = hcenter|nobaseline
-							using = fontsize_small
-							text = "je_colonial_empire_ov_programmes_label"
-						}
-					}
-				}
-
-				### Row 2: the stability bar, where it is heading, a line where the
+				### Row 1: the stability bar, where it is heading, a line where the
 				### next band begins, the value and this month's projected change, and
 				### its direction. Reached the way vanilla's journal panel reaches it,
 				### through the entry's own datamodel (one scripted bar, so one item).
@@ -917,7 +1469,8 @@ types colonial_empire_widget_types
 				### his own journal). Everything else in the row is a widget property or
 				### text, which does see JournalEntry. Four fixed cells, 90 + 180 + 145
 				### + 24 and three 8 px gaps = 463: "100% (-1.67/mo)" is 15 characters,
-				### about 142 units (it elided in 120, play-test round 3).
+				### about 142 units at the overview's size (it elided in 120,
+				### play-test round 3).
 				###
 				### THE BAR (play-test round 3, 2026-09-30; the Global Warming bar's
 				### construction, e4db4ce9). Five layers in one fixed 180 x 18 cell,
@@ -964,6 +1517,7 @@ types colonial_empire_widget_types
 								parentanchor = vcenter
 								align = left|nobaseline
 								elide = right
+								using = colonial_empire_fontsize_overview
 								text = "je_colonial_empire_ov_stability_label"
 							}
 							widget = {
@@ -1053,6 +1607,7 @@ types colonial_empire_widget_types
 								autoresize = yes
 								parentanchor = vcenter
 								align = left|nobaseline
+								using = colonial_empire_fontsize_overview
 								default_format = "#tooltippable"
 								elide = right
 								text = "je_colonial_empire_ov_stability_value"
@@ -1082,14 +1637,249 @@ types colonial_empire_widget_types
 					}
 				}
 
-				### Row 3: where the next band begins, under the line that marks it.
-				textbox = {
-					visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					autoresize = yes
+				### Rows 2 and 3: the four cells, two to a row (238 + 4 + 238 = 480).
+				flowcontainer = {
+					direction = vertical
+					spacing = 4
+					ignoreinvisible = yes
 					parentanchor = hcenter
-					align = hcenter|nobaseline
-					using = fontsize_medium
-					text = "je_colonial_empire_ov_next"
+					visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						ignoreinvisible = yes
+
+						### The band: its icon and name, coloured as the band is
+						### (red in the two lowest), and where the next one begins
+						### under it, in bands 1-4; that line's hover is the bar's line's.
+						### The cell's hover is the entry's status line and the modifier
+						### the band puts on the entry.
+						te_banking_ov_cell = {
+							tooltip = "je_colonial_empire_ov_band_tt"
+							blockoverride "caption" {
+								text = "je_colonial_empire_ov_band_label"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/band_solidified.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)4' )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/band_stable.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)3' )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/band_strained.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)2' )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/band_crumbling.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)1' )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/band_collapsing.dds"
+								}
+							}
+							blockoverride "word" {
+								te_ce_ov_line = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
+									text = "je_colonial_empire_band_solidified"
+								}
+								te_ce_ov_line = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)4' )]"
+									text = "je_colonial_empire_band_stable"
+								}
+								te_ce_ov_line = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)3' )]"
+									text = "je_colonial_empire_band_strained"
+								}
+								te_ce_ov_line = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)2' )]"
+									text = "je_colonial_empire_band_crumbling"
+								}
+								te_ce_ov_line = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)1' )]"
+									text = "je_colonial_empire_band_collapsing"
+								}
+							}
+							blockoverride "third_line" {
+								te_ce_ov_line = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_next_tick'), '(CFixedPoint)1' )]"
+									position = { 78 46 }
+									default_format = "#tooltippable"
+									tooltip = "je_colonial_empire_ov_tick_tt"
+									text = "je_colonial_empire_ov_next"
+								}
+							}
+						}
+
+						### The great powers: the escalation in force (diplomatic
+						### isolation, orange; international consensus, red), each with
+						### its own hover, and what they do to stability a month. The
+						### cell's hover counts them; International Pressure lists them.
+						te_banking_ov_cell = {
+							tooltip = "je_colonial_empire_ov_gp_tt"
+							blockoverride "caption" {
+								text = "je_colonial_empire_ov_gp_label"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									alpha = 0.25
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)0' )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/alert_isolation.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/alert_isolation.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/alert_consensus.dds"
+								}
+							}
+							blockoverride "word" {
+								te_ce_ov_line = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)0' )]"
+									text = "je_colonial_empire_ov_gp_calm"
+								}
+								te_ce_ov_line = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
+									default_format = "#tooltippable"
+									tooltip = "je_colonial_empire_ov_isolation_tt"
+									text = "je_colonial_empire_ov_isolation"
+								}
+								te_ce_ov_line = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
+									default_format = "#tooltippable"
+									tooltip = "je_colonial_empire_ov_consensus_tt"
+									text = "je_colonial_empire_ov_consensus"
+								}
+							}
+							blockoverride "third_line" {
+								te_ce_ov_line = {
+									position = { 78 46 }
+									text = "je_colonial_empire_ov_gp_net"
+								}
+							}
+						}
+					}
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						ignoreinvisible = yes
+
+						### What holds the entry, the answer to "why is this running for
+						### us?": the colonies and the colonial subjects, from the monthly
+						### snapshot, the colony icon lit while there is a colony. Each is
+						### listed, with its buttons, in Colonial Holdings.
+						te_banking_ov_cell = {
+							tooltip = "je_colonial_empire_ov_held_tt"
+							blockoverride "caption" {
+								text = "je_colonial_empire_ov_held_label"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies'), '(CFixedPoint)0' )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									alpha = 0.25
+									visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies'), '(CFixedPoint)0' ) )]"
+									texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
+								}
+							}
+							blockoverride "word" {
+								te_ce_ov_line = {
+									text = "je_colonial_empire_ov_held_colonies"
+								}
+							}
+							blockoverride "third_line" {
+								te_ce_ov_line = {
+									position = { 78 46 }
+									text = "je_colonial_empire_ov_held_subjects"
+								}
+							}
+						}
+
+						### The three programmes, lit while they run, from the same
+						### scope-free handlers that decide nothing else; how many run,
+						### and what they add to stability a month. The cell's hover
+						### gives each one's level.
+						te_banking_ov_cell = {
+							tooltip = "je_colonial_empire_ov_programmes_tt"
+							blockoverride "caption" {
+								text = "je_colonial_empire_ov_programmes_label"
+							}
+							blockoverride "icons" {
+								te_ce_ov_programme = {
+									position = { 0 0 }
+									blockoverride "programme_texture" {
+										texture = "gfx/interface/icons/colonial_empire_icons/programme_invest.dds"
+									}
+									blockoverride "lit" {
+										visible = "[GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+										tooltip = "je_colonial_empire_ov_invest_on_tt"
+									}
+									blockoverride "unlit" {
+										visible = "[Not(GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+										tooltip = "je_colonial_empire_ov_invest_off_tt"
+									}
+								}
+								te_ce_ov_programme = {
+									position = { 22 0 }
+									blockoverride "programme_texture" {
+										texture = "gfx/interface/icons/colonial_empire_icons/programme_garrison.dds"
+									}
+									blockoverride "lit" {
+										visible = "[GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+										tooltip = "je_colonial_empire_ov_garrison_on_tt"
+									}
+									blockoverride "unlit" {
+										visible = "[Not(GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+										tooltip = "je_colonial_empire_ov_garrison_off_tt"
+									}
+								}
+								te_ce_ov_programme = {
+									position = { 11 22 }
+									blockoverride "programme_texture" {
+										texture = "gfx/interface/icons/colonial_empire_icons/programme_assimilation.dds"
+									}
+									blockoverride "lit" {
+										visible = "[GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+										tooltip = "je_colonial_empire_ov_assimilation_on_tt"
+									}
+									blockoverride "unlit" {
+										visible = "[Not(GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+										tooltip = "je_colonial_empire_ov_assimilation_off_tt"
+									}
+								}
+							}
+							blockoverride "word" {
+								te_ce_ov_line = {
+									text = "je_colonial_empire_ov_programmes_running"
+								}
+							}
+							blockoverride "third_line" {
+								te_ce_ov_line = {
+									position = { 78 46 }
+									text = "je_colonial_empire_ov_programmes_net"
+								}
+							}
+						}
+					}
 				}
 
 				### Row 4, in the top band only: the completion clocks, each a bar whose
@@ -1114,7 +1904,7 @@ types colonial_empire_widget_types
 							autoresize = yes
 							parentanchor = hcenter
 							align = hcenter|nobaseline
-							using = fontsize_medium
+							using = colonial_empire_fontsize_overview
 							default_format = "#tooltippable"
 							text = "je_colonial_empire_ov_hold"
 						}
@@ -1139,7 +1929,7 @@ types colonial_empire_widget_types
 							autoresize = yes
 							parentanchor = hcenter
 							align = hcenter|nobaseline
-							using = fontsize_medium
+							using = colonial_empire_fontsize_overview
 							default_format = "#tooltippable"
 							text = "je_colonial_empire_ov_act"
 						}
@@ -1155,88 +1945,54 @@ types colonial_empire_widget_types
 					}
 				}
 
-				### Row 5: the great powers. The pie is great-power prestige (ours
-				### included): the condemners' share, the number the two escalations fire
-				### on, and the supporters' share in its own colour, which no escalation
-				### reads. The legend says so. The group's tooltip is International
-				### Pressure's roster. Beside it, the escalation in force, if any.
+				### Row 5: the great powers' prestige. The pie is great-power prestige
+				### (ours included): the condemners' share, the number the two
+				### escalations fire on, and the supporters' share in its own colour,
+				### which no escalation reads. Each legend line says what its share
+				### does on hover; the Great Powers cell above carries the escalation
+				### in force.
 				flowcontainer = {
 					direction = horizontal
-					spacing = 6
+					spacing = 8
 					ignoreinvisible = yes
 					parentanchor = hcenter
 					visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
+					te_ce_ov_pie = {
+						parentanchor = vcenter
+						tooltip = "je_colonial_empire_ov_pie_tt"
+						blockoverride "pie_value_cum" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_cum') )]"
+						}
+						blockoverride "pie_value" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_condemner_share') )]"
+						}
+					}
 					flowcontainer = {
-						direction = horizontal
-						spacing = 8
+						direction = vertical
+						spacing = 2
 						ignoreinvisible = yes
-						tooltip = "[GetScriptedGui('colonial_empire_pressure_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-
-						te_ce_ov_pie = {
-							parentanchor = vcenter
-							blockoverride "pie_value_cum" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_cum') )]"
-							}
-							blockoverride "pie_value" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_condemner_share') )]"
-							}
-						}
-						flowcontainer = {
-							direction = vertical
-							spacing = 2
-							ignoreinvisible = yes
-							parentanchor = vcenter
-							minimumsize = { 200 -1 }
-							maximumsize = { 200 -1 }
-
-							te_ce_ov_legend_row = {
-								blockoverride "legend_swatch" {
-									texture = "gfx/interface/icons/colonial_empire_icons/pie_condemners.dds"
-								}
-								blockoverride "legend_text" {
-									text = "je_colonial_empire_ov_legend_condemn"
-								}
-							}
-							te_ce_ov_legend_row = {
-								blockoverride "legend_swatch" {
-									texture = "gfx/interface/icons/colonial_empire_icons/pie_supporters.dds"
-								}
-								blockoverride "legend_text" {
-									text = "je_colonial_empire_ov_legend_support"
-								}
-							}
-							textbox = {
-								autoresize = yes
-								multiline = yes
-								minimumsize = { 200 -1 }
-								maximumsize = { 200 -1 }
-								align = left|nobaseline
-								using = fontsize_small
-								text = "je_colonial_empire_ov_legend_note"
-							}
-						}
-					}
-					te_ce_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
 						parentanchor = vcenter
-						tooltip = "je_colonial_empire_ov_isolation_tt"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/colonial_empire_icons/alert_isolation.dds"
+						minimumsize = { 200 -1 }
+						maximumsize = { 200 -1 }
+
+						te_ce_ov_legend_row = {
+							tooltip = "je_colonial_empire_ov_legend_condemn_tt"
+							blockoverride "legend_swatch" {
+								texture = "gfx/interface/icons/colonial_empire_icons/pie_condemners.dds"
+							}
+							blockoverride "legend_text" {
+								text = "je_colonial_empire_ov_legend_condemn"
+							}
 						}
-						blockoverride "label" {
-							text = "je_colonial_empire_ov_isolation"
-						}
-					}
-					te_ce_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
-						parentanchor = vcenter
-						tooltip = "je_colonial_empire_ov_consensus_tt"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/colonial_empire_icons/alert_consensus.dds"
-						}
-						blockoverride "label" {
-							text = "je_colonial_empire_ov_consensus"
+						te_ce_ov_legend_row = {
+							tooltip = "je_colonial_empire_ov_legend_support_tt"
+							blockoverride "legend_swatch" {
+								texture = "gfx/interface/icons/colonial_empire_icons/pie_supporters.dds"
+							}
+							blockoverride "legend_text" {
+								text = "je_colonial_empire_ov_legend_support"
+							}
 						}
 					}
 				}
@@ -1251,8 +2007,10 @@ types colonial_empire_widget_types
 
 	### Why stability is moving: the terms of the bar's formula as pillar bars
 	### (colonial_empire_pillar_row, the UN's "why authority is moving" rows;
-	### play-test round 3), then the monthly limit and the total, then the
-	### eligible territories as a list. Open by default (the CLOSED flag). Each
+	### play-test round 3), then the monthly limit and the total. The eligible
+	### territories that used to follow are the Colonial Holdings section's
+	### list (te_ce_sec_holdings) since 2026-10-24. Open by default (the CLOSED
+	### flag). Each
 	### row's tooltip says what the term holds; the explanations are in "How
 	### the Colonial Empire Works".
 	type te_ce_sec_stability = flowcontainer {
@@ -1494,154 +2252,17 @@ types colonial_empire_widget_types
 					}
 				}
 			}
-
-			# The eligible territories: a list, so collapsed until opened (the OPEN
-			# flag), in the chamber's nested-header shape. The rows come from
-			# colonial_empire_refresh_display's monthly snapshot, the first eight
-			# eligible territories by GDP, largest first (players only; the rival
-			# estimates' pattern in Space Race), each gated on the count of stored
-			# rows; "+N more" names the rest on hover. The snapshot is written in
-			# the same pass as the display_ready flag, so the gate below covers it.
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 2
-				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-
-				flowcontainer = {
-					direction = vertical
-					ignoreinvisible = yes
-					margin_left = 20
-					margin_top = 6
-
-					colonial_empire_subsection_header = {
-						blockoverride "left_text" {
-							text = "je_colonial_empire_territories_header"
-						}
-						blockoverride "onclick" {
-							onclick = "[GetVariableSystem.Toggle('colonial_empire_territories_open')]"
-						}
-						blockoverride "onclick_showmore" {
-							visible = "[Not(GetVariableSystem.Exists('colonial_empire_territories_open'))]"
-						}
-						blockoverride "onclick_showless" {
-							visible = "[GetVariableSystem.Exists('colonial_empire_territories_open')]"
-						}
-					}
-				}
-				# Open: the list itself. Every state of ours that
-				# is_decolonization_eligible_state, the test the entry's count and its
-				# three decisions use: overseas, not a homeland of our cultures, at least
-				# colonial_territory_min_population people. Largest GDP first.
-				flowcontainer = {
-					direction = vertical
-					ignoreinvisible = yes
-					spacing = 2
-					visible = "[GetVariableSystem.Exists('colonial_empire_territories_open')]"
-
-					colonial_empire_list_text = {
-						text = "je_colonial_empire_territories_caption"
-					}
-					te_ce_territory_head = {}
-					te_ce_territory_row = {
-						blockoverride "row_visible" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territory_rows'), '(CFixedPoint)1' )]"
-						}
-						blockoverride "row_context" {
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_territory_1').GetState]"
-						}
-					}
-					te_ce_territory_row = {
-						blockoverride "row_visible" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territory_rows'), '(CFixedPoint)2' )]"
-						}
-						blockoverride "row_context" {
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_territory_2').GetState]"
-						}
-					}
-					te_ce_territory_row = {
-						blockoverride "row_visible" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territory_rows'), '(CFixedPoint)3' )]"
-						}
-						blockoverride "row_context" {
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_territory_3').GetState]"
-						}
-					}
-					te_ce_territory_row = {
-						blockoverride "row_visible" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territory_rows'), '(CFixedPoint)4' )]"
-						}
-						blockoverride "row_context" {
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_territory_4').GetState]"
-						}
-					}
-					te_ce_territory_row = {
-						blockoverride "row_visible" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territory_rows'), '(CFixedPoint)5' )]"
-						}
-						blockoverride "row_context" {
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_territory_5').GetState]"
-						}
-					}
-					te_ce_territory_row = {
-						blockoverride "row_visible" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territory_rows'), '(CFixedPoint)6' )]"
-						}
-						blockoverride "row_context" {
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_territory_6').GetState]"
-						}
-					}
-					te_ce_territory_row = {
-						blockoverride "row_visible" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territory_rows'), '(CFixedPoint)7' )]"
-						}
-						blockoverride "row_context" {
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_territory_7').GetState]"
-						}
-					}
-					te_ce_territory_row = {
-						blockoverride "row_visible" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territory_rows'), '(CFixedPoint)8' )]"
-						}
-						blockoverride "row_context" {
-							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_territory_8').GetState]"
-						}
-					}
-					# None eligible (a country with only colonial subjects, say).
-					colonial_empire_list_text = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible'), '(CFixedPoint)0' )]"
-						text = "je_colonial_empire_territories_none"
-					}
-					# Eligible territories but no stored rows yet: a save upgraded mid-entry,
-					# until the next monthly assessment.
-					colonial_empire_list_text = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_pending'), '(CFixedPoint)1' )]"
-						text = "je_colonial_empire_conditions_pending"
-					}
-					# The rest, named on hover (colonial_empire_territories_sgui, built only
-					# while hovered).
-					textbox = {
-						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_more'), '(CFixedPoint)0' )]"
-						autoresize = yes
-						max_width = 476
-						elide = right
-						align = left|nobaseline
-						using = fontsize_medium
-						default_format = "#tooltippable"
-						text = "je_colonial_empire_territories_more"
-						tooltip = "[GetScriptedGui('colonial_empire_territories_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-					}
-				}
-			}
 		}
 	}
 
-	### International pressure: which great powers condemn or back us. Open by
-	### default, a live list (the owner's rule, play-test round 2: live lists
-	### stay open unless they are seen to cost; this one's roster walks
-	### every_country twice per frame in colonial_empire_pressure_sgui, and no
-	### slowdown was seen with such sections open). The overview's pie shows
-	### the two shares and carries the same roster on hover.
+	### International pressure: a row per great power that condemns or backs
+	### us, condemners first, each by its prestige, with what it does to
+	### stability a month (CE-2 of the 2026-10-27 GUI audit: a script-built
+	### roster in the row font before, which repeated the overview pie's two
+	### shares and gave no power's weight). Then the escalation in force, if
+	### any: the one great-power loss no single power makes. The rows are the
+	### monthly assessment's (colonial_empire_refresh_gp_rows), so the panel
+	### walks no country. Open by default, a live list.
 	type te_ce_sec_pressure = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1666,14 +2287,67 @@ types colonial_empire_widget_types
 		colonial_empire_panel = {
 			visible = "[Not(GetVariableSystem.Exists('colonial_empire_pressure_closed'))]"
 
+			# Shown for a save upgraded mid-entry, until the first pulse.
 			colonial_empire_text = {
-				text = "[GetScriptedGui('colonial_empire_pressure_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+				text = "je_colonial_empire_conditions_pending"
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				te_ce_gp_head = {
+					visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_gp_rows') ) )]"
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_gp_rows')]"
+
+					item = {
+						te_ce_gp_row = {
+							datacontext = "[Scope.GetScriptContainer]"
+						}
+					}
+				}
+				colonial_empire_list_text = {
+					visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_gp_rows') )]"
+					text = "je_colonial_empire_pressure_none"
+				}
+
+				# The escalations in force (colonial_empire_disp_pressure_level: 1
+				# diplomatic isolation, 2 both, as they stack).
+				te_ce_escalation_row = {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
+					tooltip = "je_colonial_empire_ov_isolation_tt"
+					blockoverride "escalation_label" {
+						text = "je_colonial_empire_pressure_isolation"
+					}
+					blockoverride "escalation_value" {
+						text = "je_colonial_empire_pressure_isolation_value"
+					}
+				}
+				te_ce_escalation_row = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
+					tooltip = "je_colonial_empire_ov_consensus_tt"
+					blockoverride "escalation_label" {
+						text = "je_colonial_empire_pressure_consensus"
+					}
+					blockoverride "escalation_value" {
+						text = "je_colonial_empire_pressure_consensus_value"
+					}
+				}
 			}
 		}
 	}
 
-	### The three colonial programmes, each with its level and the minus and
-	### plus that step it. Open by default.
+	### The three colonial programmes, each with its level, what it adds to
+	### stability a month, and the minus and plus that step it; its costs on
+	### hover. Open by default.
 	type te_ce_sec_programmes = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1702,10 +2376,10 @@ types colonial_empire_widget_types
 			colonial_empire_policy_row = {
 				tooltip = "je_colonial_empire_tt_invest"
 				blockoverride "row_label" {
-					text = "je_colonial_empire_row_invest"
+					text = "je_colonial_empire_row_invest_short"
 				}
-				blockoverride "row_cost" {
-					text = "je_colonial_empire_cost_invest"
+				blockoverride "row_term" {
+					text = "je_colonial_empire_term_invest"
 				}
 				blockoverride "row_level" {
 					text = "je_colonial_empire_level_invest"
@@ -1726,10 +2400,10 @@ types colonial_empire_widget_types
 			colonial_empire_policy_row = {
 				tooltip = "je_colonial_empire_tt_garrison"
 				blockoverride "row_label" {
-					text = "je_colonial_empire_row_garrison"
+					text = "je_colonial_empire_row_garrison_short"
 				}
-				blockoverride "row_cost" {
-					text = "je_colonial_empire_cost_garrison"
+				blockoverride "row_term" {
+					text = "je_colonial_empire_term_garrison"
 				}
 				blockoverride "row_level" {
 					text = "je_colonial_empire_level_garrison"
@@ -1750,10 +2424,10 @@ types colonial_empire_widget_types
 			colonial_empire_policy_row = {
 				tooltip = "je_colonial_empire_tt_assimilation"
 				blockoverride "row_label" {
-					text = "je_colonial_empire_row_assimilation"
+					text = "je_colonial_empire_row_assimilation_short"
 				}
-				blockoverride "row_cost" {
-					text = "je_colonial_empire_cost_assimilation"
+				blockoverride "row_term" {
+					text = "je_colonial_empire_term_assimilation"
 				}
 				blockoverride "row_level" {
 					text = "je_colonial_empire_level_assimilation"
@@ -1772,10 +2446,26 @@ types colonial_empire_widget_types
 		}
 	}
 
-	### The three decolonization decisions. Open by default. The candidate
-	### counts sit once above the rows, since an empty count greys all three
-	### (style rule 6); each decision's description is on its name's hover.
-	type te_ce_sec_decisions = flowcontainer {
+	### What holds the entry, and what can be done with each part of it: the
+	### territories (the colonies and every other territory the decisions can
+	### take) and the colonial subjects, each with its own buttons beside it,
+	### then Planned Full Decolonization for the whole empire. The owner's
+	### request (2026-10-24): show why the entry runs, and put an action that
+	### targets a territory or a subject beside that target rather than behind
+	### a button that asks which. First of the live sections, under the
+	### overview's Holdings cell, which counts them; open by default (the CLOSED
+	### flag), as a live list is (rule 1).
+	###
+	### Each list is a datamodel over the monthly snapshot
+	### colonial_empire_refresh_display takes, every release bloc and every
+	### colonial subject by GDP, players only (CE-1 of the 2026-10-27 GUI
+	### audit: the first eight in fixed rows and the rest named in a "+N more"
+	### hover before, with no button). The columns explain themselves on their
+	### heads' hovers, so no caption repeats them (CE-3). A button opens a
+	### confirmation for its one target (decolonization_events.402-.404), whose
+	### default is Reconsider; one confirmation can be open at a time, and the
+	### others grey out until it is answered.
+	type te_ce_sec_holdings = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -1783,103 +2473,168 @@ types colonial_empire_widget_types
 
 		colonial_empire_section_header = {
 			blockoverride "left_text" {
-				text = "je_colonial_empire_decisions_header"
+				text = "je_colonial_empire_holdings_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('colonial_empire_decisions_closed')]"
+				onclick = "[GetVariableSystem.Toggle('colonial_empire_holdings_closed')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('colonial_empire_decisions_closed')]"
+				visible = "[GetVariableSystem.Exists('colonial_empire_holdings_closed')]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[Not(GetVariableSystem.Exists('colonial_empire_decisions_closed'))]"
+				visible = "[Not(GetVariableSystem.Exists('colonial_empire_holdings_closed'))]"
 			}
 		}
 
 		colonial_empire_panel = {
-			visible = "[Not(GetVariableSystem.Exists('colonial_empire_decisions_closed'))]"
+			visible = "[Not(GetVariableSystem.Exists('colonial_empire_holdings_closed'))]"
 
-			# How many territories are on the table, and which one the confirmation
-			# event will offer first. The three-candidate flood-fill itself stays in
-			# the button action, on click.
+			# Shown for a save upgraded mid-entry, until the first pulse.
+			colonial_empire_text = {
+				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+				text = "je_colonial_empire_conditions_pending"
+			}
+
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
+				spacing = 2
 				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
-				colonial_empire_value_row = {
-					tooltip = "je_colonial_empire_candidates_eligible_tt"
-					blockoverride "row_label" {
-						text = "je_colonial_empire_candidates_eligible"
+				# --- Wars of independence ------------------------------------
+				# A row per war we are fighting, while there is one: the
+				# records decol_iw_rebels_1..3 (decolonization_war_effects.txt),
+				# each row on its rebels' capital (decol_iw_state_N).
+				colonial_empire_subheader = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars'), '(CFixedPoint)0' )]"
+					blockoverride "subheader_margin" {
+						margin_top = 0
 					}
-					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_eligible_count').GetValue|0]"
-					}
-				}
-				colonial_empire_value_row = {
-					tooltip = "je_colonial_empire_candidates_round_table_tt"
-					blockoverride "row_label" {
-						text = "je_colonial_empire_candidates_round_table"
-					}
-					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_round_table_count').GetValue|0]"
+					blockoverride "subheader_text" {
+						text = "je_colonial_empire_holdings_wars"
+						tooltip = "je_colonial_empire_holdings_wars_tt"
 					}
 				}
-				# Its own gate: refresh_display removes the variable when nothing
-				# qualifies, so this row must not rely on the display_ready gate
-				# above alone.
-				colonial_empire_value_row = {
-					visible = "[GetScriptedGui('colonial_empire_has_candidates').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "je_colonial_empire_candidates_largest_tt"
-					blockoverride "row_label" {
-						text = "je_colonial_empire_candidates_largest"
+				te_ce_war_head = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars'), '(CFixedPoint)0' )]"
+				}
+				te_ce_war_row = {
+					blockoverride "row_visible" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_slot_1'), '(CFixedPoint)1' )]"
 					}
-					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.Var('colonial_empire_largest_eligible_state').GetState.GetName]"
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('decol_iw_state_1').GetState]"
 					}
 				}
-			}
+				te_ce_war_row = {
+					blockoverride "row_visible" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_slot_2'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('decol_iw_state_2').GetState]"
+					}
+				}
+				te_ce_war_row = {
+					blockoverride "row_visible" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_slot_3'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('decol_iw_state_3').GetState]"
+					}
+				}
 
-			# Release a Colonial Territory — op 0
-			colonial_empire_decision_row = {
-				blockoverride "row_text" {
-					text = "je_colonial_empire_decision_release"
-					tooltip = "je_colonial_empire_decision_release_tt"
+				# --- Territories -------------------------------------------
+				# Every state of ours that is_decolonization_eligible_state (a
+				# colonial territory, the concept), the test Planned Full
+				# Decolonization and the Release buttons use. One row per
+				# release bloc, the states one release takes together
+				# (colonial_empire_mark_release_blocs). The colony icon is lit for
+				# a bloc with a state that also meets is_overseas_colonial_state,
+				# the test that keeps the entry running.
+				colonial_empire_subheader = {
+					blockoverride "subheader_margin" {
+						margin_top = 0
+					}
+					blockoverride "subheader_text" {
+						text = "je_colonial_empire_holdings_territories"
+						tooltip = "je_colonial_empire_holdings_territories_tt"
+					}
 				}
-				blockoverride "row_action" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+				te_ce_territory_head = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible'), '(CFixedPoint)0' )]"
 				}
-			}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_blocs')]"
 
-			# Round Table Conference — op 2 (listed second: it is the negotiated
-			# middle path between a unilateral grant and liquidating the empire)
-			colonial_empire_decision_row = {
-				blockoverride "row_text" {
-					text = "je_colonial_empire_decision_round_table"
-					tooltip = "je_colonial_empire_decision_round_table_tt"
+					item = {
+						te_ce_territory_row = {
+							datacontext = "[Scope.GetState]"
+						}
+					}
 				}
-				blockoverride "row_action" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+				# None eligible (a country held by its colonial subjects alone, say).
+				colonial_empire_list_text = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_territories_none"
 				}
-			}
+				# Eligible territories but no stored rows yet: a save upgraded
+				# mid-entry, until the next monthly assessment.
+				colonial_empire_list_text = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_pending'), '(CFixedPoint)1' )]"
+					text = "je_colonial_empire_conditions_pending"
+				}
 
-			# Planned Full Decolonization — op 1
-			colonial_empire_decision_row = {
-				blockoverride "row_text" {
-					text = "je_colonial_empire_decision_planned"
-					tooltip = "je_colonial_empire_decision_planned_tt"
+				# --- Colonial subjects ---------------------------------------
+				# Every subject, at any depth, that is_qualifying_colonial_subject
+				# (a colonial subject, the concept): a colony, a chartered company,
+				# or an overseas protectorate whose people share no heritage with
+				# ours. Release and Dominion act on our direct subjects; a
+				# subject's own subject greys them, with the reason on hover.
+				colonial_empire_subheader = {
+					blockoverride "subheader_text" {
+						text = "je_colonial_empire_holdings_subjects"
+						tooltip = "je_colonial_empire_holdings_subjects_tt"
+					}
 				}
-				blockoverride "row_action" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				te_ce_subject_head = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects'), '(CFixedPoint)0' )]"
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_subject_capitals')]"
+
+					item = {
+						te_ce_subject_row = {
+							datacontext = "[Scope.GetState]"
+						}
+					}
+				}
+				colonial_empire_list_text = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_subjects_none"
+				}
+
+				# --- The whole empire ----------------------------------------
+				colonial_empire_subheader = {
+					blockoverride "subheader_text" {
+						text = "je_colonial_empire_holdings_whole"
+					}
+				}
+				colonial_empire_decision_row = {
+					blockoverride "row_text" {
+						text = "je_colonial_empire_decision_planned"
+						tooltip = "je_colonial_empire_decision_planned_tt"
+					}
+					blockoverride "row_action" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+					}
 				}
 			}
 		}
@@ -2156,10 +2911,10 @@ types colonial_empire_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
+		te_ce_sec_holdings = {}
 		te_ce_sec_stability = {}
 		te_ce_sec_pressure = {}
 		te_ce_sec_programmes = {}
-		te_ce_sec_decisions = {}
 	}
 
 	### The charts, then how it all works.

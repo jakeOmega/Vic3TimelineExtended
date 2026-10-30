@@ -28,8 +28,9 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
               "interstellar_probe", "solar_colonization")
 # The cost factors sr_<m>_cost multiplied by before they became named values.
+# Solar colonization's is no longer a constant (CostTest below).
 FACTORS = {"suborbital": "1", "orbital": "1.5", "moon_landing": "2", "probe": "2", "moon_base": "5",
-           "mars_landing": "6", "interstellar_probe": "12", "solar_colonization": "8"}
+           "mars_landing": "6", "interstellar_probe": "12"}
 
 
 def _read(path, comments=False):
@@ -132,6 +133,23 @@ class CostTest(unittest.TestCase):
             with self.subTest(milestone=m):
                 self.assertEqual(_block(values, f"sr_cost_factor_{m}").split(), ["value", "=", factor])
                 self.assertIn(f"multiply = sr_cost_factor_{m}", _block(values, f"sr_{m}_cost"))
+
+    def test_colonization_costs_the_moon_base_s_factor_until_the_mars_landing(self):
+        """Lunar colonization design § 4: 5 until the country's own Mars Landing, then 8,
+        read through owner so it holds in the journal entry's scope (the cost modifier's
+        multiplier) as in the country's."""
+        values = _read(VALUES)
+        body = _block(values, "sr_cost_factor_solar_colonization").split()
+        self.assertEqual(body, ["value", "=", "5", "owner", "=", "{", "if", "=", "{", "limit", "=", "{",
+                                "has_variable", "=", "sr_completed_mars_landing", "}", "add", "=", "3", "}", "}"])
+        self.assertEqual(_block(values, "sr_cost_factor_moon_base").split(), ["value", "=", "5"])
+        self.assertIn("multiply = sr_cost_factor_solar_colonization", _block(values, "sr_solar_colonization_cost"))
+        # The Mars Landing's completion re-posts the cost with the new factor.
+        effects = _read(EFFECTS)
+        complete = _block(effects, "sr_complete_milestone_effect_base")
+        self.assertLess(complete.index("set_variable = { name = sr_completed_$MILESTONE$ value = yes }"),
+                        complete.index("sr_complete_milestone_effect = yes"))
+        self.assertIn("sr_recalculate_cost = yes", _block(effects, "sr_complete_milestone_effect"))
 
     def test_one_cost_level_is_the_modifier_s_innovation(self):
         modifier = _block(_read(MODIFIERS), "sr_space_program_cost")

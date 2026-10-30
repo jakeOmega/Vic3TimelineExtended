@@ -30,8 +30,11 @@ ROOTS = {"widget_je_strategic_reserve_overview": ("custom_widget_container_1", "
 # The keys the panel used before the pass; a survivor means a half-renamed flag.
 OLD_FLAGS = ["st_res_row_expanded_", "st_res_policy_open_"]
 HOW_TOPICS = ["hub", "rates", "status", "decay", "policies", "presets", "income", "history"]
-# Per-good loc keys a row reads; the skill's file 14 lists the same set.
-ROW_LOC = ["name", "status", "tooltip", "amount", "flow", "last", "decay", "price", "policy", "policy_reason"]
+# Per-good loc keys a row reads; the skill's file 14 lists the same set. Since
+# SR-1-3 and SR-7 (2026-10-27) the row has no hover of its own: each cell has one.
+ROW_LOC = ["name", "status", "amount", "flow", "last", "decay", "price", "policy", "policy_reason",
+           "stock_tt", "rate_tt", "decay_tt", "auto_tooltip", "rate_short",
+           "rate_up_tt", "rate_down_tt", "rate_stop_tt"]
 DISPLAY_VALUES = ["disp_policy", "disp_target", "disp_floor", "disp_status"]
 
 
@@ -390,12 +393,147 @@ class PolicyOpTest(unittest.TestCase):
         self.assertEqual(labels, ["manual", "buy_cheap", "release_high", "stabilize", "stockpile"])
         presets = re.findall(r'text = "st_res_preset_(\w+)"', panel)
         self.assertEqual(presets, ["conservative", "standard", "aggressive", "stockpile"])
-        # Five 110px buttons cannot share the 450px row: three, then two, then the
-        # four presets (4 x 110 + 3 x 3 = 449).
+        # At 17 (SR-10) five 146px policies cannot share the 450px row: three, then
+        # two; the presets 222px, two to a row (2 x 222 + 3 = 447). The panel's
+        # first horizontal row is its "Policy:" line.
         rows = [_body(panel[m.start():], r"flowcontainer = \{")
                 for m in re.finditer(r"flowcontainer = \{\s*direction = horizontal", panel)]
-        self.assertEqual([len(re.findall(r"widget_je_st_res_policy_choice = \{", r)) for r in rows], [3, 2, 4])
-        self.assertIn("size = { 110 26 }", _type_body(_read(WIDGET), "widget_je_st_res_policy_choice"))
+        self.assertEqual([len(re.findall(r"widget_je_st_res_policy_choice = \{", r)) for r in rows], [0, 3, 2, 2, 2])
+        self.assertIn("size = { 146 26 }", _type_body(_read(WIDGET), "widget_je_st_res_policy_choice"))
+        self.assertEqual(panel.count("size = { 222 26 }"), 4)
+
+    def test_the_choice_in_force_is_drawn_selected(self):
+        """SR-10: each choice shows its button while the good's policy scripted GUI
+        is shown for its op, and vanilla's selected-tab look while it isn't; the
+        scripted GUI's is_shown is false for the op in force, read only with the
+        op present."""
+        widget = _read(WIDGET)
+        choice = _type_body(widget, "widget_je_st_res_policy_choice")
+        self.assertRegex(choice, r'button = \{\s*using = default_button_action\s*size = \{ 100% 100% \}\s*'
+                                 r'block "choice_shown" \{\}')
+        self.assertRegex(choice, r'icon = \{\s*using = selected_tabs\s*size = \{ 100% 100% \}\s*'
+                                 r'block "choice_selected" \{\}')
+        panel = _type_body(widget, "widget_je_st_res_policy_panel")
+        for n in (0, 1, 2, 3, 4, 10, 11, 12, 13):
+            scope = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', "
+                     f"MakeScopeValue( '(CFixedPoint){n}' ) ).End")
+            self.assertIn(f'visible = "[ScriptedGui.IsShown( {scope} )]"', panel, n)
+            self.assertIn(f'visible = "[Not( ScriptedGui.IsShown( {scope} ) )]"', panel, n)
+        sguis = _strip_comments(_read(SGUIS))
+        for g in _goods():
+            shown = _body(_body(sguis, rf"(?m)^st_res_policy_{g}_sgui = \{{"), r"is_shown = \{")
+            self.assertRegex(shown, rf"trigger_if = \{{\s*limit = \{{ exists = scope:op \}}\s*"
+                                    rf"NOT = \{{ st_res_policy_op_in_force = \{{ GOOD = {g} \}} \}}", g)
+        trig = _body(_strip_comments(_read(TRIGGERS)), r"(?m)^st_res_policy_op_in_force = \{")
+        pairs = re.findall(r"AND = \{ scope:op = (\d+) var:st_res_\$GOOD\$_(policy|preset) \?= (\d) \}", trig)
+        self.assertEqual(pairs, [(str(n), "policy", str(n)) for n in range(5)]
+                         + [(str(10 + i), "preset", str(i + 1)) for i in range(4)])
+        # The panel names the policy in force.
+        self.assertIn('block "policy_value_policy" {}', panel)
+        for row in _instances(_type_body(widget, "te_st_res_sec_inventory"), "te_st_res_good_row"):
+            g = re.search(r"st_res_adjust_(\w+)_sgui", row).group(1)
+            self.assertIn(f'blockoverride "policy_value_policy" {{ text = "st_res_row_{g}_policy" }}', row, g)
+
+
+EFFECTS = os.path.join(REPO, "common", "scripted_effects", "st_res_effects.txt")
+
+
+class RateButtonTest(unittest.TestCase):
+    """SR-1, SR-2, SR-7: the rate sits between - and +, each button says what
+    the rate becomes, and the row has no hover of its own."""
+
+    def test_each_base_says_the_rate_before_and_after_and_hides_the_rest(self):
+        effects = _strip_comments(_read(EFFECTS))
+        for base, key in (("st_res_increase_rate_base", "up"), ("st_res_decrease_rate_base", "down"),
+                          ("st_res_stop_rate_base", "stop")):
+            body = _body(effects, rf"(?m)^{base} = \{{")
+            self.assertRegex(body, rf"^\s*custom_tooltip = st_res_row_\$GOOD\$_rate_{key}_tt\s*hidden_effect = \{{", base)
+            hidden = _body(body, r"hidden_effect = \{")
+            for step in ("st_res_init_effect = yes", "st_res_switch_to_manual_base = { GOOD = $GOOD$ }",
+                         "st_res_refresh_hub_flow_effect = yes", "st_res_clamp_stockpiles_effect = yes"):
+                self.assertIn(step, hidden, base)
+        loc = _loc()
+        for g in _goods():
+            for key in ("up", "down"):
+                self.assertIn(f"THIS.ScriptValue('st_res_{g}_rate_after_{key}')", loc[f"st_res_row_{g}_rate_{key}_tt"])
+            self.assertIn(f"THIS.Var('st_res_{g}_rate')", loc[f"st_res_row_{g}_rate_stop_tt"])
+
+    def test_the_after_values_clamp_as_the_click_does(self):
+        values = _strip_comments(_read(SVALS))
+        for g in _goods():
+            for key, op in (("up", "add"), ("down", "subtract")):
+                body = _body(values, rf"(?m)^st_res_{g}_rate_after_{key} = \{{")
+                self.assertIn(f"has_variable = st_res_{g}_rate", body)
+                self.assertRegex(body, rf"{op} = st_res_adjust_step_value\s*max = st_res_weekly_base_rate_cap\s*"
+                                       rf"max = st_res_{g}_max_storable\s*min = st_res_neg_weekly_base_rate_cap\s*"
+                                       rf"min = st_res_{g}_max_withdrawable", g)
+
+    def test_the_buttons_append_the_effect_preview(self):
+        loc = _loc()
+        for key, d in (("decrease", 0), ("stop", 1), ("increase", 2)):
+            v = loc[f"st_res_row_{key}_tooltip"]
+            scope = f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint){d}' ) ).End"
+            self.assertIn(f"[ScriptedGui.ExecuteTooltip( {scope} )]", v, key)
+            self.assertIn(f"[ScriptedGui.IsValidTooltip( {scope} )]", v, key)
+
+    def test_the_row_has_no_hover_of_its_own(self):
+        widget = _read(WIDGET)
+        for row in _instances(_type_body(widget, "te_st_res_sec_inventory"), "te_st_res_good_row"):
+            g = re.search(r"st_res_adjust_(\w+)_sgui", row).group(1)
+            self.assertNotRegex(row, r"(?m)^\t\t\t\ttooltip = ", g)
+            self.assertNotIn(f"st_res_row_{g}_tooltip", row, g)
+            for block, key in (("row_stock_tooltip", "stock_tt"), ("row_auto_tooltip", "auto_tooltip"),
+                               ("row_rate_tooltip", "rate_tt"), ("row_decay_tooltip", "decay_tt")):
+                self.assertIn(f'blockoverride "{block}" {{ tooltip = "st_res_row_{g}_{key}" }}', row, (g, block))
+            self.assertIn(f'blockoverride "row_rate_short" {{ text = "st_res_row_{g}_rate_short" }}', row, g)
+        self.assertNotIn("st_res_row_auto_tooltip", widget)
+        loc = _loc()
+        for g in _goods():
+            self.assertNotIn(f"st_res_row_{g}_tooltip", loc, g)
+            self.assertIn(f"$st_res_row_{g}_policy$", loc[f"st_res_row_{g}_auto_tooltip"], g)
+            self.assertIn(f"country_st_res_{g}_decay_add", loc[f"st_res_row_{g}_decay_tt"], g)
+            self.assertIn(f"st_res_{g}_actual_rate", loc[f"st_res_row_{g}_rate_tt"], g)
+
+
+class OverviewCellsTest(unittest.TestCase):
+    """SR-9: Banking's cells, two to a row: the hub with the flow cap, the goods
+    blocked full or empty, and the week's purchases beside its sales."""
+
+    def test_four_banking_cells_in_two_rows(self):
+        ov = _type_body(_read(WIDGET), "te_st_res_overview_panel")
+        self.assertEqual(ov.count("te_banking_ov_cell = {"), 4)
+        self.assertEqual(ov.count("size = { 238 70 }"), 4)
+        order = [ov.index(k) for k in ('"je_strategic_reserve_ov_hub_caption"', '"je_strategic_reserve_ov_held_caption"',
+                                       '"je_strategic_reserve_ov_spend_label"', '"je_strategic_reserve_ov_income_label"')]
+        self.assertEqual(order, sorted(order))
+        self.assertNotIn("st_res_ov_cell", _read(WIDGET))
+
+    def test_the_counts_read_the_status_codes(self):
+        values = _strip_comments(_read(SVALS))
+        for name, code in (("st_res_disp_full_count", 5), ("st_res_disp_empty_count", 6)):
+            body = _body(values, rf"(?m)^{name} = \{{")
+            for g in _goods():
+                self.assertRegex(body, rf"has_variable = st_res_{g}_last_status\s*var:st_res_{g}_last_status = {code}", (name, g))
+        held = _body(values, r"(?m)^st_res_disp_held_count = \{")
+        self.assertIn("value = st_res_disp_full_count", held)
+        self.assertIn("add = st_res_disp_empty_count", held)
+        sgui = _body(_strip_comments(_read(SGUIS)), r"(?m)^st_res_ov_held_sgui = \{")
+        self.assertIn("is_valid = { always = no }", sgui)
+        loc = _loc()
+        for g in _goods():
+            for code, key in ((5, "full"), (6, "empty")):
+                self.assertRegex(sgui, rf"var:st_res_{g}_last_status \?= {code} \}}\s*custom_tooltip = st_res_ov_held_{g}_{key}")
+                self.assertIn(f"st_res_ov_held_{g}_{key}", loc)
+
+    def test_purchases_sum_every_good_bought_at_its_price(self):
+        values = _strip_comments(_read(SVALS))
+        total = _body(values, r"(?m)^st_res_total_purchase_cost = \{")
+        self.assertEqual(re.findall(r"add = st_res_(\w+)_purchase_cost", total), _goods())
+        for g in _goods():
+            body = _body(values, rf"(?m)^st_res_{g}_purchase_cost = \{{")
+            self.assertRegex(body, rf"limit = \{{ st_res_{g}_actual_rate_base_applied > 0 \}}\s*"
+                                   rf"add = st_res_{g}_actual_rate_base_applied\s*multiply = st_res_{g}_unit_price")
+        self.assertIn("st_res_total_purchase_cost", _loc()["je_strategic_reserve_ov_spend_value"])
 
 
 class HistoryTest(unittest.TestCase):
@@ -451,6 +589,16 @@ class PolicyIconTest(unittest.TestCase):
 # from those by the font sizes, and is an estimate.
 # ---------------------------------------------------------------------------
 UPC = {"large": 10.0, "medium": 8.6, "small": 7.3}
+# The panel's own sizes (SR-10: the st_res_fontsize_* templates at the head of
+# the widget), scaled as Banking's test scales its, and the overview's cells,
+# Banking's te_banking_ov_cell at Banking's overview size.
+_SIZES = {m.group(1): int(m.group(2)) for m in re.finditer(
+    r"template st_res_fontsize_(\w+) \{\s*fontsize = (\d+)", _read(WIDGET))}
+DASH = os.path.join(REPO, "gui", "journal_entry_widgets", "banking_dashboard_widget.gui")
+UPC.update(row=10.0 / 20 * _SIZES["row"], heading=10.0 / 20 * _SIZES["heading"],
+           overview=8.6 / 16 * int(re.search(r"template banking_dash_fontsize_overview \{\s*fontsize = (\d+)",
+                                             _read(DASH)).group(1)))
+OV_CELL = int(re.search(r"max_width = (\d+)", _type_body(_read(DASH), "te_banking_ov_word")).group(1))
 MARGIN = 1.1
 TEXT_ICON = "XX"  # a @texticon! draws about two characters wide
 
@@ -473,48 +621,59 @@ def _display(value, loc, stand_ins=()):
 
 # (loc key, cell width, font, stand-ins for its [data] in order)
 STATIC_CELLS = (
-    [(f"st_res_row_{g}_name", 150, "medium", ()) for g in
+    [(f"st_res_row_{g}_name", 150, "row", ()) for g in
      ("grain", "ammunition", "oil", "small_arms", "artillery", "aeroplanes", "tanks", "fertilizer")]
-    + [("je_strategic_reserve_inv_col_good", 150, "small", ()),
-       ("je_strategic_reserve_inv_col_stock", 150, "small", ()),
-       ("je_strategic_reserve_inv_col_status", 64, "small", ()),
-       ("je_strategic_reserve_inv_col_rate", 86, "small", ()),
-       ("je_strategic_reserve_inv_step", 240, "medium", ("10,000",)),
-       ("st_res_panel_cycle_step", 92, "small", ()),
-       ("st_res_panel_reset_rates", 102, "small", ()),
-       ("je_strategic_reserve_ov_hub_staffed", 128, "small", ()),
-       ("je_strategic_reserve_ov_hub_understaffed", 128, "small", ()),
-       ("je_strategic_reserve_ov_cap_label", 128, "small", ()),
-       ("je_strategic_reserve_ov_income_label", 128, "small", ()),
-       ("je_strategic_reserve_ov_cap_value", 128, "large", ("99,999",)),
-       ("je_strategic_reserve_ov_income_value", 128, "large", ("999.9K",)),
-       ("st_res_row_settings_header", 390, "medium", ()),
+    + [("je_strategic_reserve_inv_col_good", 150, "row", ()),
+       ("je_strategic_reserve_inv_col_stock", 92, "row", ()),
+       ("je_strategic_reserve_inv_col_status", 64, "row", ()),
+       ("je_strategic_reserve_inv_col_rate", 148, "row", ()),
+       ("je_strategic_reserve_inv_step", 220, "row", ("10,000",)),
+       ("st_res_panel_cycle_step", 96, "row", ()),
+       ("st_res_panel_reset_rates", 104, "row", ()),
+       # The overview's cells (te_banking_ov_cell): captions, words, figures.
+       ("je_strategic_reserve_ov_hub_caption", OV_CELL, "overview", ()),
+       ("je_strategic_reserve_ov_hub_staffed", OV_CELL, "overview", ()),
+       ("je_strategic_reserve_ov_hub_understaffed", OV_CELL, "overview", ()),
+       ("je_strategic_reserve_ov_hub_none", OV_CELL, "overview", ()),
+       ("je_strategic_reserve_ov_cap_value", OV_CELL, "overview", ("99,999",)),
+       ("je_strategic_reserve_ov_held_caption", OV_CELL, "overview", ()),
+       ("je_strategic_reserve_ov_held_word_empty", OV_CELL, "overview", ("8",)),
+       ("je_strategic_reserve_ov_held_word_full", OV_CELL, "overview", ("8",)),
+       ("je_strategic_reserve_ov_held_word_none", OV_CELL, "overview", ()),
+       ("je_strategic_reserve_ov_held_third", OV_CELL, "overview", ("8",)),
+       ("je_strategic_reserve_ov_spend_label", OV_CELL, "overview", ()),
+       ("je_strategic_reserve_ov_spend_value", OV_CELL, "overview", ("999.9K",)),
+       ("je_strategic_reserve_ov_income_label", OV_CELL, "overview", ()),
+       ("je_strategic_reserve_ov_income_value", OV_CELL, "overview", ("999.9K",)),
+       ("st_res_row_settings_header", 398, "heading", ()),
        ("je_strategic_reserve_inv_header", 480, "large", ()),
        ("je_strategic_reserve_how_header", 480, "large", ()),
        ("st_res_hist_title", 484, "large", ())]
-    + [(f"st_res_row_label_{k}", 170, "medium", ()) for k in
+    + [(f"st_res_row_label_{k}", 170, "row", ()) for k in
        ("stored", "rate", "last", "decay", "price", "policy")]
-    + [(f"st_res_policy_short_{k}", 102, "small", ()) for k in
+    + [(f"st_res_policy_short_{k}", 138, "row", ()) for k in
        ("manual", "buy_cheap", "release_high", "stabilize", "stockpile")]
-    + [(f"st_res_preset_{k}", 102, "small", ()) for k in ("conservative", "standard", "aggressive", "stockpile")]
-    + [("st_res_panel_all_stabilize", 114, "small", ()),
-       ("st_res_panel_military_stockpile", 154, "small", ()),
-       ("st_res_panel_all_manual", 114, "small", ())]
-    + [(f"st_res_policy_label_{k}", 300, "small", ()) for k in
+    + [(f"st_res_preset_{k}", 214, "row", ()) for k in ("conservative", "standard", "aggressive", "stockpile")]
+    + [("st_res_panel_all_stabilize", 132, "row", ()),
+       ("st_res_panel_military_stockpile", 178, "row", ()),
+       ("st_res_panel_all_manual", 104, "row", ())]
+    + [(f"st_res_policy_label_{k}", 290, "row", ()) for k in
        ("buy_thr", "sell_thr", "max_flow", "floor_pct", "ceil_pct", "budget", "price_memory", "ramp")]
-    + [(f"st_res_policy_panel_{k}_header", 450, "small", ()) for k in ("policy", "preset", "settings")]
+    + [(f"st_res_policy_panel_{k}_header", 450, "row", ()) for k in ("preset", "settings")]
 )
 
 # Value cells whose text is data: the longest reading each can show.
 DYNAMIC_CELLS = [
-    ("st_res_row_ammunition_amount", 270, "medium", ("999,999", "999,999", "100")),
-    ("st_res_row_ammunition_flow", 270, "medium", ("-10,000",)),
-    ("st_res_row_ammunition_last", 270, "medium", ("-10,000.0",)),
-    ("st_res_row_oil_decay", 270, "medium", ("25.00%", "9,999.9")),
-    ("st_res_row_ammunition_price", 270, "medium", ("-100%", "+100")),
+    ("st_res_row_ammunition_amount", 270, "row", ("999,999", "999,999", "100")),
+    ("st_res_row_ammunition_flow", 270, "row", ("-10,000",)),
+    ("st_res_row_ammunition_last", 270, "row", ("-10,000.0",)),
+    ("st_res_row_oil_decay", 270, "row", ("25.00%", "9,999.9")),
+    ("st_res_row_ammunition_price", 270, "row", ("-100%", "+100")),
+    # SR-1: the rate between the - and + buttons, at most the flow cap.
+    ("st_res_row_small_arms_rate_short", 58, "row", ("-99.9K",)),
 ]
-# The longest names the policy value cell (270, medium) and the stepper value
-# cells (90, small) can show.
+# The longest names the policy value cell (270) and the panel's "Policy:" line
+# (450 less the header) can show, and the stepper value cells (100).
 LONGEST_POLICY_NAME_KEYS = ("st_res_policy_manual", "st_res_policy_buy_cheap",
                             "st_res_policy_release_high", "st_res_policy_stabilize",
                             "st_res_policy_stockpile")
@@ -541,19 +700,37 @@ class WidthBudgetTest(unittest.TestCase):
             with self.subTest(key=key):
                 self._check(key, width, font, stand_ins)
         longest = max((self.loc[k] for k in LONGEST_POLICY_NAME_KEYS), key=len)
-        self.assertLessEqual(len(longest) * UPC["medium"] * MARGIN, 270, longest)
-        self.assertLessEqual(len(LONGEST_STEPPER_VALUE) * UPC["small"] * MARGIN, 90)
+        self.assertLessEqual(len(longest) * UPC["row"] * MARGIN, 270, longest)
+        self.assertLessEqual(len(longest) * UPC["row"] * MARGIN, 360, longest)   # the panel's Policy: line
+        self.assertLessEqual(len(LONGEST_STEPPER_VALUE) * UPC["row"] * MARGIN, 100)
 
     def test_the_cells_are_the_widths_the_budget_assumes(self):
         widget = _read(WIDGET)
         row = _type_body(widget, "te_st_res_good_row")
         self.assertIn("size = { 150 28 }", row)            # the name's text
+        self.assertIn("size = { 92 28 }", row)             # the Stock bar's cell (SR-1)
+        self.assertIn("size = { 58 28 }", row)             # the rate between - and +
         stepper = _type_body(widget, "widget_je_st_res_policy_stepper")
-        self.assertIn("size = { 300 24 }", stepper)        # the label
-        self.assertIn("size = { 90 24 }", stepper)         # the value
-        self.assertIn("max_width = 102", _type_body(widget, "widget_je_st_res_policy_choice"))
+        self.assertIn("size = { 290 24 }", stepper)        # the label
+        self.assertIn("size = { 100 24 }", stepper)        # the value
+        choice = _type_body(widget, "widget_je_st_res_policy_choice")
+        self.assertIn("max_width = 138", choice)
+        self.assertIn("size = { 146 26 }", choice)
+        self.assertIn("max_width = 214", _type_body(widget, "widget_je_st_res_policy_panel"))   # the presets
         self.assertIn("minimumsize = { 170 -1 }", _type_body(widget, "st_res_value_row"))
         self.assertIn("minimumsize = { 270 -1 }", _type_body(widget, "st_res_value_row"))
+
+    def test_every_textbox_names_a_panel_size(self):
+        """SR-10: the panel's text goes through its templates (or Banking's cell's)."""
+        widget = _read(WIDGET)
+        self.assertEqual(re.findall(r"using = (fontsize_\w+)", widget), [])
+        self.assertEqual(_SIZES, {"row": 17, "heading": 20})
+        # The table line still fills 486 of the inventory's 496.
+        row = _type_body(widget, "te_st_res_good_row")
+        line = _body(row, r"flowcontainer = \{\s*direction = horizontal")
+        widths = [int(w) for w in re.findall(r"^\t{3}(?:button|widget|button_icon_\w+) = \{\s*size = \{ (\d+) \d+ \}", line, re.M)]
+        self.assertEqual(widths, [170, 92, 30, 30, 26, 58, 26, 26])
+        self.assertEqual(sum(widths) + 4 * (len(widths) - 1), 486)
 
 
 class StatusIconTest(unittest.TestCase):
@@ -758,15 +935,15 @@ class MarketTabTest(unittest.TestCase):
 
     def test_the_tooltip_has_three_branches(self):
         """Open: the tab's own tooltip. Conditions met but the entry not
-        running: te_market_tab_met_tt, since IsValidTooltip prints nothing for
+        running: te_system_tab_met_tt, since IsValidTooltip prints nothing for
         a passing test. Otherwise: the locked line and the checklist."""
         root = "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
         expected = (f"tooltip = \"[SelectLocalization( {SR_TAB_GATE}, 'te_market_tab_strategic_reserve_tt', "
-                    f"SelectLocalization( {SR_TAB_UNLOCK}.IsValid( {root} ), 'te_market_tab_met_tt', "
+                    f"SelectLocalization( {SR_TAB_UNLOCK}.IsValid( {root} ), 'te_system_tab_met_tt', "
                     f"Concatenate( Localize( 'te_market_tab_strategic_reserve_locked_tt' ), "
                     f"{SR_TAB_UNLOCK}.IsValidTooltip( {root} ) ) ) )]\"")
         self.assertEqual(self._sr_buttons()["sixth_button_tooltip"], expected)
-        met = _loc()["te_market_tab_met_tt"]
+        met = _loc()["te_system_tab_met_tt"]
         self.assertTrue(met.startswith("#b Not open yet#!"), met)
         self.assertIn("conditions are met", met)
 

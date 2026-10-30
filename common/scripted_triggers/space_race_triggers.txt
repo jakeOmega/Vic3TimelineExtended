@@ -22,6 +22,47 @@ sr_space_race_participant = {
 	}
 }
 
+# The country holds one of the nine space race entries active.
+# has_journal_entry counts active entries only. Scope: country
+sr_holds_space_race_entry = {
+	OR = {
+		has_journal_entry = je_space_race_suborbital
+		has_journal_entry = je_space_race_orbital
+		has_journal_entry = je_space_race_moon_landing
+		has_journal_entry = je_space_race_probe
+		has_journal_entry = je_space_race_moon_base
+		has_journal_entry = je_space_race_mars_landing
+		has_journal_entry = je_space_race_interstellar_probe
+		has_journal_entry = je_space_race_interstellar_results
+		has_journal_entry = je_space_race_solar_colonization
+	}
+}
+
+# The country is in the space race for good: it has run a milestone
+# (sr_space_race_participant, variables a revolution's winner inherits), or it
+# holds an entry (a colony given by treaty opens Solar System Colonization's
+# without one). From then on the Timeline Extended window's Space Race tab
+# stays open, with or without a milestone running
+# (te_window_space_race_tab_sgui), and the Space Powers standings list it
+# (sr_is_space_power) and refresh for it (sr_powers_refresh). Scope: country
+sr_in_space_race = {
+	OR = {
+		sr_space_race_participant = yes
+		sr_holds_space_race_entry = yes
+	}
+}
+
+# Another country the Space Powers standings list: in the race, with a capital
+# for its row to read (gotcha #11), and not ROOT, the viewer. Every one, not
+# only the top three by ranking as the Rivals rows (sr_is_rival): a power
+# outside them makes no progress, but what it achieved stands.
+# Scope: the country tested; ROOT the viewer.
+sr_is_space_power = {
+	NOT = { THIS = ROOT }
+	sr_in_space_race = yes
+	exists = capital
+}
+
 # AI participation gate: only the top ~3 countries by prestige should pursue space race
 # Players can always participate regardless
 sr_ai_should_participate = {
@@ -37,7 +78,7 @@ sr_ai_should_participate = {
 #   $PREREQ$  — prior milestone token (e.g. suborbital, orbital, moon_landing)
 #   $TECH$    — technology required (e.g. guided_missiles, space_exploration)
 sr_milestone_followup_is_shown = {
-	has_game_rule = space_race_enabled
+	sr_space_race_on = yes
 	has_variable = sr_completed_$PREREQ$
 	has_technology_researched = $TECH$
 }
@@ -125,9 +166,23 @@ sr_possible_standard = {
 	}
 }
 
+# The funding ceiling: the cap plus the ladder past it (sr_max_funding_level_soft;
+# lunar colonization design § 5.1). The player's plus button and, through
+# sr_possible_fund_up_within_cap, the AI's.
 sr_possible_fund_up = {
 	custom_tooltip = {
 		text = "SR_MAX_FUNDING_NOT_REACHED"
+		var:sr_funding_$MILESTONE$ < sr_max_funding_level_soft
+	}
+}
+
+# The AI's increase-funding buttons (space_race_buttons.txt): the same ceiling,
+# and the AI stays within the cap (owner, 2026-10-29, design § 15.6). Observer
+# runs decide later whether a great power in a contested race should go past it.
+sr_possible_fund_up_within_cap = {
+	sr_possible_fund_up = { MILESTONE = $MILESTONE$ }
+	custom_tooltip = {
+		text = "SR_FUNDING_BELOW_CAP"
 		var:sr_funding_$MILESTONE$ < sr_max_funding_level
 	}
 }
@@ -148,10 +203,65 @@ sr_possible_fund_down = {
 # as the colonization pulse's own gate — outside it the entry is open but frozen
 # (passive mode, holding the colony modifiers), so an event must not narrate or
 # move its progress. Also the gate of the entry's four controls.
+# A finished programme runs again only when the country resumed it for the
+# Moon (sr_colonization_resumed, te_decision_resume_solar_colonization), which
+# keeps its completion record: lunar colonization 2b, owner 2026-10-29. And
+# with the race over and a lunar world free, nothing runs without that choice
+# (sr_colonization_by_choice).
 sr_solar_colonization_running = {
 	has_variable = sr_active_solar_colonization
 	modifier:country_sr_solar_colonization_program_bool = yes
-	NOT = { has_variable = sr_completed_solar_colonization }
+	OR = {
+		NOT = { has_variable = sr_completed_solar_colonization }
+		has_variable = sr_colonization_resumed
+	}
+	sr_solar_colonization_qualified = yes
+	sr_colonization_by_choice = yes
+}
+
+# The race is over (every world was once claimed: sr_all_colonies_complete,
+# kept as history) and a lunar world is free, as in a save whose worlds were
+# all claimed before the Moon existed. Settling the Moon is then a choice
+# (sr_colonization_by_choice). Read by that trigger, the entry's `possible`
+# (to show its line only here), Begin Solar Colonization, Resume Solar System
+# Colonization and the old-save notice. Any scope.
+sr_race_over_moon_free = {
+	has_global_variable = sr_all_colonies_complete
+	sr_sites_lunar_open = yes
+}
+
+# Colonizing the Moon after the race is over is a choice (owner, 2026-10-29).
+# While sr_race_over_moon_free holds, a programme colonizes only once the
+# country chose it: Resume Solar System Colonization or Begin Solar
+# Colonization set sr_colonization_resumed. Otherwise a method carrying the
+# colonization bool, which every power that finished the race runs, would
+# start it on its own and pause its Commercial Space Industry. Read by the
+# entry's `possible` and sr_solar_colonization_running (its pulse, billing,
+# controls and the dividend's pause). Country scope.
+sr_colonization_by_choice = {
+	OR = {
+		NOT = { sr_race_over_moon_free = yes }
+		has_variable = sr_colonization_resumed
+	}
+}
+
+# The milestone Solar System Colonization needs to colonize: the Moon Landing
+# (lunar colonization design § 4; before 2026-10-29 the Moon Base and the Mars
+# Landing). A country given a colony without it, by treaty or as a dead
+# holder's heir, holds the entry and keeps its colony's modifiers, and colonizes
+# nothing: its panel reads Idle and nothing is billed. Country scope.
+sr_solar_colonization_qualified = {
+	has_variable = sr_completed_moon_landing
+}
+
+# Worlds beyond the Moon (stage 1 and later) need the Mars Landing as well: a
+# hard gate, the "physical prerequisite" exception to the soft-caps default
+# (lunar colonization design §§ 1.5, 4). Every stage >= 1 world's
+# sr_cf_targetable_<key> and draw branch tests it (gen_solar_sites.py), so a
+# country given a world beyond the Moon by treaty keeps it and colonizes only
+# the Moon until its own Mars Landing. Country scope.
+sr_colonization_beyond_moon = {
+	has_variable = sr_completed_mars_landing
 }
 
 # Whether a milestone's funding and approach are billed, and its funding adds
@@ -174,11 +284,13 @@ sr_milestone_billed_solar_colonization = { sr_solar_colonization_running = yes }
 # Whether a billed milestone's entry lacks a cost or funding modifier
 # sr_apply_milestone_cost_modifiers_base would give it: a revolution's winner,
 # whose inherited entry re-ran `immediate` before `je:` could find it (Spain's
-# moon landing, 2026-10-10 observer run), so neither modifier went on. The
-# monthly pulse (space_race_on_action) then runs sr_recalculate_cost. A modifier
-# whose multiplier is 0 (funding cut to 0) does not count as missing, so it
-# cannot set off a recalculation every month. The multipliers read the country
-# through `owner`, so they hold in the entry's scope. Country scope.
+# moon landing, 2026-10-10 observer run), so none of the three went on. It also
+# moves a save from before the funding split (2026-10-29) onto it: its entries
+# carry sr_funding_progress but not sr_funding_throughput. The monthly pulse
+# (space_race_on_action) then runs sr_recalculate_cost. A modifier whose
+# multiplier is 0 (funding cut to 0) does not count as missing, so it cannot
+# set off a recalculation every month. The multipliers read the country through
+# `owner`, so they hold in the entry's scope. Country scope.
 sr_cost_modifiers_missing_base = {
 	sr_milestone_billed_$MILESTONE$ = yes
 	je:je_space_race_$MILESTONE$ ?= {
@@ -188,8 +300,12 @@ sr_cost_modifiers_missing_base = {
 				NOT = { has_modifier = sr_space_program_cost }
 			}
 			AND = {
-				sr_funding_$MILESTONE$_level > 0
+				sr_funding_$MILESTONE$_effective > 0
 				NOT = { has_modifier = sr_funding_progress }
+			}
+			AND = {
+				sr_funding_$MILESTONE$_level > 0
+				NOT = { has_modifier = sr_funding_throughput }
 			}
 		}
 	}
@@ -262,24 +378,43 @@ sr_has_running_milestone = {
 # Industry dividend instead (sr_refresh_space_dividend). A country that reaches
 # the end after the last world is gone qualifies as soon as its own milestones
 # are done; it never opens Solar System Colonization, but its sources are just
-# as idle. All variables, so a revolution's winner inherits the state.
+# as idle. The Moon Base is no longer one of them (retired 2026-10-29): its
+# record is a first lunar colony now, which a power may never found once the
+# six lunar worlds are taken (lunar colonization design § 7). All variables,
+# so a revolution's winner inherits the state. sr_all_colonies_complete is
+# history: an old save whose worlds were all claimed before the Moon existed
+# keeps it with the Moon free, so a country that had concluded keeps the
+# dividend until it chooses to resume colonization for the Moon (owner,
+# 2026-10-29; sr_colonization_resumed makes it running again).
 sr_space_race_concluded = {
 	has_variable = sr_completed_suborbital
 	has_variable = sr_completed_orbital
 	has_variable = sr_completed_moon_landing
 	has_variable = sr_completed_probe
-	has_variable = sr_completed_moon_base
 	has_variable = sr_completed_mars_landing
 	has_variable = sr_completed_interstellar_probe
 	has_global_variable = sr_all_colonies_complete
 	NOT = { sr_has_running_milestone = yes }
 }
 
-# We have really claimed at least one colony (sr_establish_colony_effect counts
-# only real claims). The same test society_technology_events.18 uses.
+# We hold at least one colony: every world held, whether founded, given by
+# treaty, inherited, seized or migrated (sr_colony_count is sr_sites_held_count,
+# set by each world's sync). The same test society_technology_events.18 uses.
+# What counts as founding the first lunar colony is sr_lunar_colony_founded's
+# call sites, not this.
 sr_has_space_colony = {
 	has_variable = sr_colony_count
 	var:sr_colony_count > 0
+}
+
+# Solar System Colonization is running and has founded no lunar colony yet, with
+# a lunar world still free: the phase the retired Moon Base's flavor events
+# (space_race_events.36, .40, .41, .43, .46) narrate now (lunar colonization
+# design § 7). Country scope.
+sr_colonizing_moon_first = {
+	sr_solar_colonization_running = yes
+	NOT = { has_variable = sr_completed_moon_base }
+	sr_sites_lunar_open = yes
 }
 
 # The milestone's choice event has been answered: the answer is one of these

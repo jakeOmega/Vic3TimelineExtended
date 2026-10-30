@@ -25,7 +25,7 @@ te_demog_state_yearly_on_action = {
 		te_demog_up_state_refresh = yes
 		# a planned capital's development ends once the state is no longer the capital
 		te_demog_pc_state_check = yes
-		# the metropolitan share's two modifiers (Full only; te_demog_metro_effects.txt): their one refresh site,
+		# the metropolitan share's three modifiers (Full only; te_demog_metro_effects.txt): their one refresh site,
 		# with ROOT the state
 		te_demog_mt_state_refresh = yes
 	}

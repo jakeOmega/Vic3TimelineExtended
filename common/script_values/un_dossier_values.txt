@@ -17,6 +17,9 @@
 #                       Assembly under the Non-Proliferation Treaty (#448)
 #   un_dos_asat         destructive anti-satellite strikes (Global Commons
 #                       § 6.3, te_asat_strike_effect)
+#   un_dos_space        hostile acts in space: a colony destroyed, a free
+#                       colony assaulted (solar colonization fleets design
+#                       §§ 9.3-9.4), weighted per act
 #
 # Their sum, with the infamy term, is the CASE STRENGTH (0-100). A punitive
 # topic can be tabled against a country only when its case reaches the topic's
@@ -74,6 +77,9 @@ un_dos_points_npt_breach = { value = 30 }
 # § 6.3): debris every user of orbit shares. Twice as much from a party to the
 # Moratorium (te_asat_case_points, te_orbital_debris_values.txt).
 un_dos_points_asat = { value = 15 }
+# Hostile acts in space (solar colonization fleets design §§ 9.3-9.4): the acts
+# write their own weights (sr_destroy_dossier, sr_free_assault_dossier in
+# sr_fleet_values.txt); this is the ground's mark for the tests and the panel.
 
 # The grounds each punitive topic needs.
 un_case_threshold_condemn = { value = 30 }
@@ -100,6 +106,36 @@ un_lean_veto_line_moribund = { value = -10 }
 # this size or more.
 un_lean_reason_size = { value = 10 }
 un_lean_reason_size_negative = { value = -10 }
+
+# ---- Tuning: the motion to expel a permanent member ------------------------------
+# (owner, 2026-10-24). A motion to expel is weighed on its own case, not the
+# dossier's: the target's VETO RECORD, less its standing and its service to the
+# UN (un_expulsion_case). It replaces the habit of consensus there, which
+# carried a motion against any recent vetoer by default (a neutral Assembly
+# voted 80% yes, against two thirds needed).
+#
+# Every veto a permanent member casts outside Moribund adds this to its veto
+# record (un_veto_record_add)...
+un_veto_record_points = { value = 5 }
+# ...which fades by 5% a year: 0.95^(1/12) a month.
+un_veto_record_decay_factor = { value = 0.99574 }
+# A record below this is dropped (one veto reaches it after about 45 years).
+un_veto_record_floor = { value = 0.5 }
+# The target's standing.
+un_expulsion_case_exemplary = { value = -10 }
+un_expulsion_case_respected = { value = -5 }
+un_expulsion_case_poor = { value = 5 }
+un_expulsion_case_disgraced = { value = 10 }
+# Its service: hosting the headquarters; running the development programme;
+# running the peacekeeping programme or serving in a mission. Each counts this
+# much, and all of them together no more than the cap.
+un_expulsion_case_service_each = { value = -5 }
+un_expulsion_case_service_cap = { value = -10 }
+# The proposer would take the seat (un_expulsion_next_in_line): the members
+# hold the seat grab against it a little.
+un_lean_expulsion_seat_grab = { value = -5 }
+# The AI tables a motion only against a case above this (un_expulsion_ai_case_floor).
+un_expulsion_ai_case_floor_base = { value = 10 }
 
 # ---- The dossier: reads ---------------------------------------------------------
 
@@ -138,6 +174,10 @@ un_case_strength = {
 	if = {
 		limit = { has_variable = un_dos_asat }
 		add = var:un_dos_asat
+	}
+	if = {
+		limit = { has_variable = un_dos_space }
+		add = var:un_dos_space
 	}
 	# The Supranational standing case against an outsider, or a member
 	# building a bomb outside the Non-Proliferation Treaty (redesign phase 5,
@@ -207,6 +247,103 @@ un_disp_dos_asat = {
 		add = var:un_dos_asat
 	}
 }
+un_disp_dos_space = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dos_space }
+		add = var:un_dos_space
+	}
+}
+
+# ---- The case for expulsion (owner, 2026-10-24) -------------------------------------
+# What every member but the target adds to its lean on a motion to expel this
+# country from its permanent seat (un_lean_grounds): its veto record, less its
+# standing and its service. Not part of un_case_strength: the punitive topics
+# keep their own case.
+# Scope: country (the target)
+un_expulsion_case = {
+	value = un_disp_veto_record
+	add = un_expulsion_case_standing_term
+	add = un_expulsion_case_service_term
+}
+
+# The case an AI needs before it tables a motion to expel: the base, and the
+# seat grab's cost on top when the seat would come to it.
+# Scope: country (the prospective proposer)
+un_expulsion_ai_case_floor = {
+	value = un_expulsion_ai_case_floor_base
+	if = {
+		limit = { un_expulsion_next_in_line = yes }
+		subtract = un_lean_expulsion_seat_grab
+	}
+}
+
+# 1 while this country holds a permanent seat and has a veto record: Our
+# Record's Our Permanent Seat block.
+# Scope: country
+un_disp_expulsion_exposed = {
+	value = 0
+	if = {
+		limit = {
+			is_un_permanent_member = yes
+			has_variable = un_veto_record
+		}
+		value = 1
+	}
+}
+
+# Scope: country
+un_disp_veto_record = {
+	value = 0
+	if = {
+		limit = { has_variable = un_veto_record }
+		add = var:un_veto_record
+	}
+}
+
+# Scope: country
+un_expulsion_case_standing_term = {
+	value = 0
+	if = {
+		limit = { un_standing_tier_exemplary = yes }
+		add = un_expulsion_case_exemplary
+	}
+	else_if = {
+		limit = { un_standing_tier_respected = yes }
+		add = un_expulsion_case_respected
+	}
+	else_if = {
+		limit = { un_standing_tier_poor = yes }
+		add = un_expulsion_case_poor
+	}
+	else_if = {
+		limit = { un_standing_tier_disgraced = yes }
+		add = un_expulsion_case_disgraced
+	}
+}
+
+# Scope: country
+un_expulsion_case_service_term = {
+	value = 0
+	if = {
+		limit = { un_hq_is_host = yes }
+		add = un_expulsion_case_service_each
+	}
+	if = {
+		limit = { un_standing_program_active_development = yes }
+		add = un_expulsion_case_service_each
+	}
+	if = {
+		limit = {
+			OR = {
+				un_standing_program_active_peacekeeping = yes
+				has_modifier = un_mission_service_cost
+			}
+		}
+		add = un_expulsion_case_service_each
+	}
+	min = un_expulsion_case_service_cap
+}
 
 # The threshold this resolution's topic needs, 0 for a non-punitive topic.
 # Scope: resolution container
@@ -247,14 +384,29 @@ un_res_case_threshold = {
 
 un_lean_consensus = {
 	value = un_lean_consensus_value
+	# No member presumes in favour of stripping a permanent seat: the motion
+	# stands on its case (un_lean_grounds).
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
+		value = 0
+	}
 }
 
 # THE GROUNDS. For a punitive topic, how far the target's case clears the
-# topic's threshold, halved, between -20 and +30. The target itself does not
+# topic's threshold, halved, between -20 and +30. For a motion to expel, the
+# case for expulsion, whole (un_expulsion_case). The target itself does not
 # weigh its own case here (un_lean_self does that).
 un_lean_grounds = {
 	value = 0
 	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_topic_expulsion }
+			exists = scope:un_vote_target
+			NOT = { scope:un_vote_target ?= this }
+		}
+		scope:un_vote_target = { add = un_expulsion_case }
+	}
+	else_if = {
 		limit = {
 			scope:un_resolution ?= { un_resolution_is_punitive = yes }
 			exists = scope:un_vote_target
@@ -316,6 +468,14 @@ un_lean_proposer = {
 			divide = 10
 			min = -10
 			max = 10
+		}
+		# A motion to expel whose proposer would take the seat.
+		if = {
+			limit = {
+				scope:un_resolution ?= { has_tag = un_topic_expulsion }
+				scope:un_vote_proposer ?= { un_expulsion_next_in_line = yes }
+			}
+			add = un_lean_expulsion_seat_grab
 		}
 	}
 }
@@ -729,6 +889,18 @@ un_lean_interests = {
 		}
 		if = { limit = { has_variable = un_dkt_asat_struck } add = -40 }
 		if = { limit = { has_law = law_type:law_total_war } add = -15 }
+	}
+	else_if = {
+		# The Convention on the Settlement of Outer Space (solar colonization
+		# fleets design § 13): a power with colonies to lose wants it, a seizure
+		# or destruction on the docket makes everyone want it more, and a power
+		# whose fleets have just taken or destroyed one, or that keeps a large
+		# fleet, would rather keep its hands free.
+		limit = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
+		if = { limit = { sr_has_space_colony = yes } add = 15 }
+		if = { limit = { has_global_variable = un_dkt_colony_pending } add = 10 }
+		if = { limit = { has_variable = un_dkt_colony_actor } add = -40 }
+		if = { limit = { sr_fl_strength_total >= 200 } add = -10 }
 	}
 	else_if = {
 		# Physical protection of nuclear material (nuclear_crisis_design.md

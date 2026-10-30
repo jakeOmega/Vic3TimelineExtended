@@ -182,7 +182,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_group_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" alpha = "[Select_float(GetVariableSystem.Exists('te_budget_income_taxes_open'), '(float)0', '(float)1')]" }
 			blockoverride "label" { text = "te_budget_chart_taxes" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_taxes')|D]" }
@@ -204,13 +204,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_income_tax_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_income_tax_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
 			blockoverride "label" { text = "BUDGET_INCOME_TAXES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_income_tax')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_income_tax')|D]" using = tax_income_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_income_tax_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_poll_tax = flowcontainer {
@@ -218,13 +218,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_poll_tax_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_poll_tax_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
 			blockoverride "label" { text = "BUDGET_POLL_TAXES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_poll_tax')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_poll_tax')|D]" using = tax_poll_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_poll_tax_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_consumption_tax = flowcontainer {
@@ -232,13 +232,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_consumption_tax_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_consumption_tax_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
 			blockoverride "label" { text = "BUDGET_CONSUMPTION_TAXES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_consumption_tax')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_consumption_tax')|D]" using = consumption_tax_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_consumption_tax_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_dividends_tax = flowcontainer {
@@ -246,13 +246,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_dividends_tax_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_dividends_tax_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
 			blockoverride "label" { text = "BUDGET_DIVIDENDS_TAXES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_dividends_tax')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_dividends_tax')|D]" using = dividends_tax_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_dividends_tax_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_tariffs = flowcontainer {
@@ -260,13 +260,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_tariffs_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_tariffs_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
 			blockoverride "label" { text = "BUDGET_TARIFFS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_tariffs')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_tariffs')|D]" using = tariffs_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_tariffs_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_war_tax = flowcontainer {
@@ -276,7 +276,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_income_war_tax_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_income_war_tax" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_war_tax')|D]" }
@@ -290,7 +290,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_group_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" alpha = "[Select_float(GetVariableSystem.Exists('te_budget_income_diplomacy_open'), '(float)0', '(float)1')]" }
 			blockoverride "label" { text = "te_budget_chart_diplomacy_income" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_diplomacy')|D]" }
@@ -312,13 +312,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_pacts_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_pacts_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
 			blockoverride "label" { text = "BUDGET_DIPLOMATIC_PACTS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_pacts')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_pacts')|D]" using = diplomatic_pacts_income_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_pacts_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_treaties = flowcontainer {
@@ -326,13 +326,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_treaties_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_treaties_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
 			blockoverride "label" { text = "BUDGET_TREATIES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_treaties')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_treaties')|D]" using = treaty_income_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_treaties_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_minting = flowcontainer {
@@ -340,13 +340,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_minting_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_minting_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
 			blockoverride "label" { text = "BUDGET_MINTING" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_minting')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_minting')|D]" using = minting_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_minting_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_government_dividends = flowcontainer {
@@ -354,13 +354,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_government_dividends_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_government_dividends_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
 			blockoverride "label" { text = "DIVIDENDS_FROM_GOVERNMENT_SHARES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_government_dividends')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_government_dividends')|D]" using = government_share_dividends_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_government_dividends_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_un = flowcontainer {
@@ -370,7 +370,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_income_un_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_income_un" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_un')|D]" }
@@ -384,7 +384,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_income_reserve_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_income_reserve" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_reserve')|D]" }
@@ -398,7 +398,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_income_tax_code_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_income_tax_code" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_tax_code')|D]" }
@@ -412,7 +412,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_income_pension_reform_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_income_pension_reform" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_pension_reform')|D]" }
@@ -424,9 +424,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_additional_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_additional_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_additional_income_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
 			blockoverride "label" { text = "te_budget_chart_additional_income" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_additional')|D]" }
@@ -438,9 +438,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_income_other_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_other_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_other_income_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
 			blockoverride "label" { text = "te_budget_chart_other_income" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_other')|D]" }
@@ -1173,9 +1173,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_administration_group_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_administration_group_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_group_tt"
+			tooltip = "te_budget_chart_administration_group_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" alpha = "[Select_float(GetVariableSystem.Exists('te_budget_expense_administration_group_open'), '(float)0', '(float)1')]" }
 			blockoverride "label" { text = "te_budget_chart_administration_group" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_administration_group')|D]" }
@@ -1199,7 +1199,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_colonial_affairs_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
 			blockoverride "label" { text = "institution_colonial_affairs" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs')|D]" }
@@ -1213,7 +1213,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_health_system_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
 			blockoverride "label" { text = "institution_health_system" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_health_system')|D]" }
@@ -1227,7 +1227,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_home_affairs_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
 			blockoverride "label" { text = "institution_home_affairs" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_home_affairs')|D]" }
@@ -1241,7 +1241,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_migration_controls_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
 			blockoverride "label" { text = "institution_migration_controls" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_migration_controls')|D]" }
@@ -1255,7 +1255,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_commerce_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
 			blockoverride "label" { text = "institution_ministry_of_commerce" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce')|D]" }
@@ -1269,7 +1269,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_consumer_protection_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
 			blockoverride "label" { text = "institution_ministry_of_consumer_protection" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection')|D]" }
@@ -1283,7 +1283,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_culture_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
 			blockoverride "label" { text = "institution_ministry_of_culture" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture')|D]" }
@@ -1297,7 +1297,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_foreign_affairs_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
 			blockoverride "label" { text = "institution_ministry_of_foreign_affairs" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs')|D]" }
@@ -1311,7 +1311,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_intelligence_and_security_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
 			blockoverride "label" { text = "institution_ministry_of_intelligence_and_security" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security')|D]" }
@@ -1325,7 +1325,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_international_aid_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
 			blockoverride "label" { text = "institution_ministry_of_international_aid" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid')|D]" }
@@ -1339,7 +1339,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_labor_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
 			blockoverride "label" { text = "institution_ministry_of_labor" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor')|D]" }
@@ -1353,7 +1353,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_propaganda_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
 			blockoverride "label" { text = "institution_ministry_of_propaganda" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda')|D]" }
@@ -1367,7 +1367,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_refugee_affairs_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
 			blockoverride "label" { text = "institution_ministry_of_refugee_affairs" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs')|D]" }
@@ -1381,7 +1381,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_religion_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
 			blockoverride "label" { text = "institution_ministry_of_religion" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion')|D]" }
@@ -1395,7 +1395,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_science_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
 			blockoverride "label" { text = "institution_ministry_of_science" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science')|D]" }
@@ -1409,7 +1409,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_the_environment_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
 			blockoverride "label" { text = "institution_ministry_of_the_environment" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment')|D]" }
@@ -1423,7 +1423,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_thought_control_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
 			blockoverride "label" { text = "institution_ministry_of_thought_control" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control')|D]" }
@@ -1437,7 +1437,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_urban_planning_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
 			blockoverride "label" { text = "institution_ministry_of_urban_planning" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning')|D]" }
@@ -1451,7 +1451,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_ministry_of_war_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
 			blockoverride "label" { text = "institution_ministry_of_war" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war')|D]" }
@@ -1465,7 +1465,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_national_bank_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
 			blockoverride "label" { text = "institution_national_bank" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_national_bank')|D]" }
@@ -1479,7 +1479,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_police_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
 			blockoverride "label" { text = "institution_police" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_police')|D]" }
@@ -1493,7 +1493,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_schools_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
 			blockoverride "label" { text = "institution_schools" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_schools')|D]" }
@@ -1507,7 +1507,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_social_security_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
 			blockoverride "label" { text = "institution_social_security" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_social_security')|D]" }
@@ -1521,7 +1521,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_institution_workplace_safety_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
 			blockoverride "label" { text = "institution_workplace_safety" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_workplace_safety')|D]" }
@@ -1533,9 +1533,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_administration_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_administration_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_administration_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
 			blockoverride "label" { text = "te_budget_chart_administration" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_administration')|D]" }
@@ -1549,7 +1549,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_group_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" alpha = "[Select_float(GetVariableSystem.Exists('te_budget_expense_military_open'), '(float)0', '(float)1')]" }
 			blockoverride "label" { text = "te_budget_chart_military" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_military')|D]" }
@@ -1573,7 +1573,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_group_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" alpha = "[Select_float(GetVariableSystem.Exists('te_budget_expense_army_open'), '(float)0', '(float)1')]" }
 			blockoverride "label" { text = "te_budget_chart_army" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_army')|D]" }
@@ -1595,9 +1595,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_army_wages_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_army_wages_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_wages_army_tt"
 			blockoverride "indent" { size = { 28 1 } }
-			blockoverride "label_width" { minimumsize = { 243 28 } maximumsize = { 243 -1 } }
+			blockoverride "label_width" { minimumsize = { 263 28 } maximumsize = { 263 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
 			blockoverride "label" { text = "te_budget_chart_wages" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_army_wages')|D]" }
@@ -1611,7 +1611,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_materials_tt"
 			blockoverride "indent" { size = { 28 1 } }
-			blockoverride "label_width" { minimumsize = { 243 28 } maximumsize = { 243 -1 } }
+			blockoverride "label_width" { minimumsize = { 263 28 } maximumsize = { 263 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
 			blockoverride "label" { text = "te_budget_chart_materials" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_army_materials')|D]" }
@@ -1625,7 +1625,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_group_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" alpha = "[Select_float(GetVariableSystem.Exists('te_budget_expense_navy_open'), '(float)0', '(float)1')]" }
 			blockoverride "label" { text = "te_budget_chart_navy" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_navy')|D]" }
@@ -1647,9 +1647,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_navy_wages_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_navy_wages_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_wages_navy_tt"
 			blockoverride "indent" { size = { 28 1 } }
-			blockoverride "label_width" { minimumsize = { 243 28 } maximumsize = { 243 -1 } }
+			blockoverride "label_width" { minimumsize = { 263 28 } maximumsize = { 263 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
 			blockoverride "label" { text = "te_budget_chart_wages" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_navy_wages')|D]" }
@@ -1663,7 +1663,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_materials_tt"
 			blockoverride "indent" { size = { 28 1 } }
-			blockoverride "label_width" { minimumsize = { 243 28 } maximumsize = { 243 -1 } }
+			blockoverride "label_width" { minimumsize = { 263 28 } maximumsize = { 263 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
 			blockoverride "label" { text = "te_budget_chart_materials" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_navy_materials')|D]" }
@@ -1675,9 +1675,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_military_adjustment_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_military_adjustment_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_military_adjustment_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
 			blockoverride "label" { text = "te_budget_chart_military_adjustment" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_military_adjustment')|D]" }
@@ -1691,7 +1691,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_group_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" alpha = "[Select_float(GetVariableSystem.Exists('te_budget_expense_shipping_open'), '(float)0', '(float)1')]" }
 			blockoverride "label" { text = "te_budget_chart_shipping" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_shipping')|D]" }
@@ -1713,9 +1713,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_supply_construction_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_supply_construction_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_supply_construction_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
 			blockoverride "label" { text = "te_budget_chart_supply_construction" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_supply_construction')|D]" }
@@ -1727,9 +1727,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_supply_maintenance_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_supply_maintenance_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_supply_maintenance_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
 			blockoverride "label" { text = "te_budget_chart_supply_maintenance" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_supply_maintenance')|D]" }
@@ -1741,9 +1741,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_port_connections_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_port_connections_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_port_connections_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
 			blockoverride "label" { text = "te_budget_chart_port_connections" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_port_connections')|D]" }
@@ -1757,7 +1757,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_group_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" alpha = "[Select_float(GetVariableSystem.Exists('te_budget_expense_programmes_open'), '(float)0', '(float)1')]" }
 			blockoverride "label" { text = "te_budget_chart_programmes" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_programmes')|D]" }
@@ -1781,7 +1781,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_banking_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_banking" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_banking')|D]" }
@@ -1795,7 +1795,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_covert_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_covert" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_covert')|D]" }
@@ -1809,7 +1809,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_culture_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_culture" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_culture')|D]" }
@@ -1823,7 +1823,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_colonial_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_colonial" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_colonial')|D]" }
@@ -1837,7 +1837,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_un_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_un" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_un')|D]" }
@@ -1851,7 +1851,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_nuclear_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_nuclear" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]" }
@@ -1865,7 +1865,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_nuclear_taboo_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_nuclear_taboo" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_nuclear_taboo')|D]" }
@@ -1879,7 +1879,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_space_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_space" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_space')|D]" }
@@ -1893,7 +1893,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_drugs_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_drugs" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_drugs')|D]" }
@@ -1907,7 +1907,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_family_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_family" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_family')|D]" }
@@ -1921,7 +1921,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_pensions_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_pensions" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_pensions')|D]" }
@@ -1935,7 +1935,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_archaeology_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_archaeology" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]" }
@@ -1949,7 +1949,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_source_expense_climate_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
 			blockoverride "label" { text = "te_budget_chart_source_expense_climate" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_climate')|D]" }
@@ -1963,7 +1963,7 @@ types te_budget_generated_charts {
 		te_budget_chart_row = {
 			tooltip = "te_budget_chart_group_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" alpha = "[Select_float(GetVariableSystem.Exists('te_budget_expense_diplomacy_open'), '(float)0', '(float)1')]" }
 			blockoverride "label" { text = "te_budget_chart_diplomacy_expense" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_diplomacy')|D]" }
@@ -1985,13 +1985,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_pacts_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_pacts_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
 			blockoverride "label" { text = "BUDGET_DIPLOMATIC_PACTS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_pacts')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_pacts')|D]" using = diplomatic_pacts_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_pacts_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_treaties = flowcontainer {
@@ -1999,13 +1999,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_treaties_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_treaties_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 14 1 } }
-			blockoverride "label_width" { minimumsize = { 257 28 } maximumsize = { 257 -1 } }
+			blockoverride "label_width" { minimumsize = { 277 28 } maximumsize = { 277 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
 			blockoverride "label" { text = "BUDGET_TREATIES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_treaties')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_treaties')|D]" using = treaty_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_treaties_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_civil = flowcontainer {
@@ -2013,9 +2013,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_civil_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_civil_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_civil_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
 			blockoverride "label" { text = "te_budget_chart_civil" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_civil')|D]" }
@@ -2027,9 +2027,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_construction_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_construction_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_construction_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
 			blockoverride "label" { text = "BUDGET_CONSTRUCTION_GOODS" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_construction')|D]" }
@@ -2041,13 +2041,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_welfare_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_welfare_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
 			blockoverride "label" { text = "BUDGET_WELFARE_PAYMENTS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_welfare')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_welfare')|D]" using = welfare_payments_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_welfare_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_subsidies = flowcontainer {
@@ -2055,13 +2055,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subsidies_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subsidies_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
 			blockoverride "label" { text = "BUDGET_SUBSIDIES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subsidies')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subsidies')|D]" using = subsidies_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_subsidies_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_subventions = flowcontainer {
@@ -2069,13 +2069,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subventions_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subventions_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
 			blockoverride "label" { text = "BUDGET_SUBVENTIONS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subventions')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subventions')|D]" using = subventions_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_subventions_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_government_losses = flowcontainer {
@@ -2083,13 +2083,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_government_losses_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_government_losses_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
 			blockoverride "label" { text = "LOSSES_FROM_GOVERNMENT_SHARES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_government_losses')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_government_losses')|D]" using = government_share_losses_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_government_losses_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_interest = flowcontainer {
@@ -2097,13 +2097,13 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_interest_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_interest_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
 			blockoverride "label" { text = "BUDGET_INTEREST" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_interest')|D]" }
+			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_interest')|D]" using = interest_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_interest_share')|%1]" }
+			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_additional = flowcontainer {
@@ -2111,9 +2111,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_additional_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_additional_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_additional_expense_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
 			blockoverride "label" { text = "te_budget_chart_additional_expense" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_additional')|D]" }
@@ -2125,9 +2125,9 @@ types te_budget_generated_charts {
 		ignoreinvisible = yes
 		visible = "[And(GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_expense_other_cached_active'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_other_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
 		te_budget_chart_row = {
-			tooltip = "te_budget_chart_row_tt"
+			tooltip = "te_budget_chart_other_expense_tt"
 			blockoverride "indent" { size = { 0 1 } }
-			blockoverride "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			blockoverride "label_width" { minimumsize = { 291 28 } maximumsize = { 291 -1 } }
 			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
 			blockoverride "label" { text = "te_budget_chart_other_expense" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_other')|D]" }

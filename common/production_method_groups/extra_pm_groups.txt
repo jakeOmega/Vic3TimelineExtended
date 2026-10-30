@@ -165,6 +165,7 @@ INJECT:pmg_base_building_shipyard = {
 	}
 }
 REPLACE:pmg_aeroplanes = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_aeroplane_production
 		pm_aeroplane_production_2
@@ -188,6 +189,7 @@ INJECT:pmg_telephones_category = {
 	}
 }
 REPLACE:pmg_radios_category = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
 	production_methods = {
 		pm_radios
 		pm_vhf_and_uhf_transmission
@@ -1002,7 +1004,11 @@ REPLACE_OR_CREATE:pmg_automation_building_aerospace_industry = {
 }
 REPLACE_OR_CREATE:pmg_base_building_space_mine = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	# Regolith Processing first: the default, with the building's technology
+	# (In-Situ Resource Utilization, era 10); the Asteroid Mine needs Asteroid
+	# Mining (lunar colonization design § 6)
 	production_methods = {
+		pm_regolith_processing
 		pm_space_mine
 		pm_space_colony_mining
 		pm_space_colony_vacation
@@ -1018,6 +1024,23 @@ REPLACE_OR_CREATE:pmg_base_building_ocean_mine = {
 		pm_ocean_mine_uncapped
 		pm_advanced_ocean_mine_uncapped
 		pm_automated_ocean_mine_uncapped
+	}
+}
+# The Deep-Sea Mine's ships, for every method in the group above; the methods and the
+# design notes are with the mine's in extra_pms.txt. Both only cost ships, so under the
+# default most_profitable the AI would switch between them whenever Motor and Magnetic
+# Drive Ship prices cross, each switch a five-year retool, as the pure-cost
+# emissions-control tiers did (mod_systems.md § Construction as a Market Good, "AI
+# production-method switching"). Under most_productive they should score alike, so the
+# stickiness holds the current one (not yet observed for cost-only methods), and the
+# methods' ai_value (1000 / 3000) is meant to move the AI up to Magnetic Drive Tenders,
+# not back: pmg_emissions_control's pattern.
+pmg_support_vessels_building_ocean_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = {
+		pm_motor_ship_tenders_building_ocean_mine
+		pm_magnetic_drive_tenders_building_ocean_mine
 	}
 }
 REPLACE_OR_CREATE:pmg_base_building_space_elevator_construction_site = {
@@ -1460,8 +1483,8 @@ REPLACE_OR_CREATE:pmg_maintenance = {
 
 # Maintenance at other rates (pm_maintenance_* in extra_pms.txt). Same shape as
 # pmg_maintenance: one rate, and pm_no_maintenance under the game rule. The GUI hides
-# all four groups by key (production_methods.gui and the building panels), so a new
-# tier group must be added to those checks too. Which building takes which tier:
+# every maintenance group by key (production_methods.gui and the building panels), so
+# a new tier group must be added to those checks too. Which building takes which tier:
 # docs/systems/mod_systems.md, "Maintenance tiers".
 REPLACE_OR_CREATE:pmg_maintenance_light = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
@@ -1506,6 +1529,23 @@ REPLACE_OR_CREATE:pmg_maintenance_mine = {
 	production_methods = {
 		pm_maintenance_traditional
 		pm_maintenance_mechanized_mine
+		pm_no_maintenance
+	}
+}
+
+# Power plants, railways and ports: maintenance follows the base method, because a level
+# of these buildings is several times larger on its late methods than on its early ones.
+# See pm_maintenance_graded_light in extra_pms.txt. Light first: it is the default and
+# the fallback.
+REPLACE_OR_CREATE:pmg_maintenance_graded = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	is_hidden_when_unavailable = yes
+
+	production_methods = {
+		pm_maintenance_graded_light
+		pm_maintenance_graded_standard
+		pm_maintenance_graded_heavy
 		pm_no_maintenance
 	}
 }
@@ -1641,6 +1681,7 @@ REPLACE_OR_CREATE:pmg_base_building_mind_upload_nexus = {
 #==================================================
 
 pmg_base_building_antimatter_facility_construction_site = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_antimatter_facility_construction_paused
 		pm_antimatter_facility_construction_slow
@@ -1650,18 +1691,21 @@ pmg_base_building_antimatter_facility_construction_site = {
 }
 
 pmg_base_building_antimatter_facility = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_antimatter_facility
 	}
 }
 
 pmg_base_building_antimatter_engine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_antimatter_engine
 	}
 }
 
 pmg_base_building_antimatter_warhead_plant = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_antimatter_warhead_plant
 	}

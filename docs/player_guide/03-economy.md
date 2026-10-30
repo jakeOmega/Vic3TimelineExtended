@@ -7,7 +7,7 @@ and most industry uses a little of it as upkeep. It runs from the first day of
 the game under the Free Market Construction game rule, which also offers four
 alternative settings. The rest of the chapter covers what construction costs in rich
 countries, how living-standard expectations adapt, what wealthy pops buy, the
-transport goods, setting tariffs for all goods at once, the Strategic
+transport goods, power grids, setting tariffs for all goods at once, the Strategic
 Reserve journal entry, wartime demand for ammunition and the mod's new mineral
 deposits.
 
@@ -75,16 +75,28 @@ building:
 
 | Rate per level | Buildings |
 |---|---|
-| 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries, the modern mines (bauxite, chromium, copper, graphite, lithium and the like) and the coal, iron, lead, sulfur and gold mines once they run a mechanized pump |
-| 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries |
-| 0.15 | Railways, Highways, Airports, Ports, Network Infrastructure, Power Plants, Hydro Plants, Renewable Energy Plants, Oil Rigs |
+| 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries, the tech metals mines (lithium, nickel and cobalt, rare earths, platinum group metals), every other mine once it runs a mechanized pump; Railways, Ports and Power Plants on their early methods |
+| 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries; Railways, Ports and Power Plants on their middle methods |
+| 0.15 | Highways, Airports, Network Infrastructure, Hydro Plants, Renewable Energy Plants, Grid Transfer Stations, HVDC Undersea Interconnectors, Oil Rigs; Railways and Ports on their latest methods |
 | 0.2 | Nuclear Plants, Fusion Plants, Deep-Sea Mines, Extraplanetary Bases |
 
-Farms, plantations and urban centers pay none. The coal, iron, lead, sulfur and
-gold mines pay none while they run picks and shovels or the atmospheric engine
-pump, and start paying when their equipment changes to a condensing engine pump
-or anything later; going back to the old equipment stops the upkeep. A few
-company buildings also use construction in their production. This upkeep competes with your queues for the same supply, so a
+Railways, Ports and Power Plants pay by the method they run, because a level on
+an early method carries a fraction of the traffic or power of a level on a late
+one:
+
+| Rate per level | Railway | Port | Power Plant |
+|---|---|---|---|
+| 0.05 | Early and steam trains | Anchorage, basic and industrial ports | Early and coal-fired plants |
+| 0.1 | Electric and diesel trains, Centralized Traffic Control | Modern port | Oil-fired and both modern plants |
+| 0.15 | Containerized cargo and later | Container ports and later | No method |
+
+The rate follows the method by itself, up or down. Farms, plantations and urban
+centers pay none. The other mines (coal, iron, lead, sulfur and gold, and the
+bauxite, copper, graphite and similar mines that use the same equipment) pay
+none while they run picks and shovels or the atmospheric engine pump, and start
+paying when their equipment changes to a condensing engine pump or anything
+later; going back to the old equipment stops the upkeep. A few company buildings
+also use construction in their production. This upkeep competes with your queues for the same supply, so a
 growing economy needs a growing construction sector, and a country built around
 railways and power pays more than one built around trade.
 
@@ -113,16 +125,16 @@ National Queue tab.
 
 ![The Construction Market section under Fixed Budget. The government spends £40.0M a week and buys 3,042 points, still closing on the 3,075 the budget buys at today's price; private investors take 84% of construction and the market is short.](images/construction_market.png)
 
-| Line | What it shows |
+| Row | What it shows |
 |---|---|
 | Fixed Quantity / Fixed Budget | Whether you set the government purchase as a number of points or as weekly spending. The lit button is the mode in force; click the other to switch. |
 | Purchase control | The government purchase you have set. Fixed Quantity: click for ±1, Shift+Click ±10, Ctrl+Click ±100, Alt+Click ±1,000; right-click on the plus adds 10,000. Fixed Budget: click for ±£1,000, Shift+Click ±£10,000, Ctrl+Click ±£100,000, Alt+Click ±£1,000,000; right-click on the plus adds £10,000,000. In both, right-click on the minus sets 0. |
-| Government buys | Points bought this week and the approximate treasury cost. "Capped at what the queue can use" appears when your setting is higher than the queue can take. |
-| Your budget buys | Fixed Budget only: how many points a week your budget buys at today's price, which is where the government purchase is heading. |
-| Still moving toward it | Fixed Budget only, and only while the purchase has not yet reached what your budget buys: the share of the remaining gap that closes this week. Its tooltip explains why the purchase moves in steps. |
-| Private investors buy | Points investors bought this week and the share of construction going to private projects. |
+| Government buys | Points bought this week and the approximate treasury cost. A red "Capped" appears when your setting is higher than the queue can take (the Queue Cap). |
+| Budget buys | Fixed Budget only: how many points a week your budget buys at today's price, which is where the government purchase is heading. |
+| Still closing | Fixed Budget only, and only while the purchase has not yet reached what your budget buys: the share of the remaining gap that closes this week. Its tooltip explains why the purchase moves in steps. |
+| Private buys | Points investors bought this week and the share of construction going to private projects. |
 | Price | What one construction point costs now: the market price, raised by Construction Cost Scaling in rich countries with few idle workers. |
-| Your market | Construction on sale (including imports) against construction wanted (every buyer, including maintenance and exports). A red "shortage" marks demand above supply: the price rises, but you still get all the construction you buy. |
+| On sale / wanted | Construction on sale (including imports) against construction wanted (every buyer, including maintenance and exports). A red "Shortage" marks demand above supply: the price rises, but you still get all the construction you buy. |
 
 ### Fixed quantity or fixed budget
 
@@ -377,7 +389,7 @@ electric or diesel trains to a stronger version on its own, which carries
 - Railways' Rolling Stock (passenger carriages up to Maglev Trains) and ports'
 Passenger Ships, which add more Transportation for a few more inputs.
 - Highways and Airports, and Urban Centers' public transit.
-- Railway, logistics and fulfilment company buildings.
+- Railway, logistics and fulfillment company buildings.
 
 Pops buy it to travel, and industry buys it to move its own goods:
 Construction Sectors from Iron-Frame Buildings onward, the rail-transport and
@@ -399,6 +411,117 @@ construction: a state with a large Construction Sector needs railways beside
 it, and its Transportation price shows when it is short. An agrarian economy
 barely touches the good.
 
+## Power grids
+
+Electricity is only available in the state that produces it, as in the base
+game. A Grid Transfer Station, unlocked by Electrical Capacitors, joins its
+state to a power grid so that states can share it.
+
+A grid starts as your stations in one market area. Once a month it moves
+Electricity from states where it is cheap to states where it is dear, until it
+sells at one price in the states that send it and at that price over their
+transmission efficiency (below) in the states that receive it. A sending
+state's station buys its spare power and sends it, and a receiving state's
+station delivers it. A grid with more power than it
+uses brings the price down in every state on it, the senders' too, so plants
+that make more than the grid needs earn less. A grid short of power raises
+the price in every state on it together, the same way. A grid takes out what
+it puts in, so power never crosses to a grid it isn't joined to. After a
+change, such as a new power plant or a new station, the grid takes a
+few months to settle.
+
+Some of the power a short state receives is lost on the way. Grid
+Transmission Efficiency is the share that arrives. The last three
+technologies also set how far an undersea cable reaches (below):
+
+| Technology | Era | Efficiency | Cable range |
+|---|---|---|---|
+| Electrical Capacitors | 4 | 75% | — |
+| Rural Electrification | 6 | 85% | — |
+| Transistors | 7 | 90% | — |
+| Microprocessor | 8 | 92% | — |
+| Clean Energy Technologies | 9 | 95% | 1 Sea Node |
+| Smart Grids | 11 | 98% | 2 Sea Nodes |
+| Quantum Materials | 12 | 100% | 3 Sea Nodes |
+
+A receiving state pays the senders' price over its efficiency, so at 75% its
+Electricity costs a third more than theirs. A state whose price lies between
+the two neither sends nor receives, since losses would eat what the grid could
+move. An early grid evens prices out less than a late one.
+
+You can build one station per state. Your first station in a market area can
+go in any of your states there, and every later one must border a state of
+yours that has a station, built or queued, so a grid grows outward from where
+it starts. A station costs 100 construction, the same as a level of Barracks,
+and joins its grid as soon as it is built. Engineers and clerks seek station
+jobs out and stay in them, so a station fills in two or three months and
+keeps its staff. A station moves its staff's share of what it is asked, so the
+monthly balancing asks a thinly staffed one for more, enough to move its full
+share down to a fifth staffed; while it is still hiring it moves a little more
+than its share. With no workers at all it moves nothing, and starts again as
+soon as it hires one.
+
+Stations settle in Grid Power, a good whose price is fixed at 30,
+Electricity's base, and which can't be traded between markets. A sending
+station is paid in Grid Power what the Electricity it buys costs at the
+grid's price, and a receiving station pays in it what the Electricity it
+delivers sells for, so a station covers what its goods cost. The exception
+is a grid so short of power that a receiving state's price would pass its
+ceiling, about twice base: the receiving station then pays more for its power
+than it sells for. Stations are private infrastructure that is always
+subsidized: your government pays whatever a station's wages and upkeep cost
+beyond what it earns. That is about their whole cost, give or take a little
+while a grid is settling and prices are off the grid's.
+
+Two things join grids that don't touch:
+
+- With Clean Energy Technologies, you can build an HVDC Undersea
+Interconnector in a coastal state that has a station, built or queued: one
+per state, for 400 construction. Your government pays its engineers and
+Electronic Components. It lays an undersea cable with an
+Undersea Cable Range of 1 Sea Node. Smart Grids and Quantum Materials add 1
+each, but only to interconnectors: a station without one has no cable. Two
+cables join their grids when either one's range reaches the other: at 1,
+states on the same Sea Node. Each point of range more crosses one more Sea
+Node, landing on a coast that touches both on the way. The cable joins your
+own grids across the sea, such as a mainland and a colony in your market, or
+a partner's under a Grid Interconnection Agreement. It needs a cable at both
+ends, and it joins nothing once its state's station is gone.
+The AI builds one at a coastal station when a grid of its own, or a
+partner's, is within its cable's reach, one at a time.
+- The Grid Interconnection Agreement treaty article (from Intergovernmental
+Organizations) joins both countries' stations where they border, and their
+cables across the sea. It can be signed between two countries that share a
+border or a Sea Node, or whose cables already reach each other, which shows
+up to a month after both are laid. The two can be in one market or in two.
+
+A grid that joins two markets sends power across the border from the market
+with more to spare to the one with less. Because Grid Power's price is fixed,
+the power is paid for at the grid's price on both sides: the sending market's
+stations are paid for all the Grid Power they sell, and the receiving market's
+pay for all they buy. One station in the
+receiving market, at the border, takes the import in: it buys the import and
+sells it into its market at the same price, which costs it nothing and keeps
+the market from running short of Grid Power.
+
+The state panel shows a Power Grid tile on a state with a station: whether its
+station is sending or receiving, the grid's hub (its largest producer, which
+names the grid), the Electricity the station moves a week (its hover gives the
+price Electricity sells at in the state at that flow), how many states
+its grid has and your transmission efficiency. A state with a cable also
+shows Sea cables, how many stations from other grids its cable joins to this
+one; the hover names them and gives the cable's range. On a grid that joins two
+markets it also shows the Exports or Imports of the state's market across the
+border, and Pass-through on the station that takes the import in. Its hover
+has the grid's supply against its demand.
+
+A station is worth building where power plants make more than the state uses,
+and where Electricity is dear. A state with no power uses none, because its
+buildings can't run the methods that need it; a station lets it receive power
+once a building there switches to one. The AI builds stations in every market
+area where it makes Electricity: it starts in a state with power plants and
+queues a station in one more bordering state each month, larger states first.
+
 ## Tariffs for all goods at once
 
 On your own market, the Trade tab of the Market panel opens with two All Goods
@@ -412,7 +535,8 @@ Only the market owner can use the rows, and only at levels your Trade Policy
 allows: under Free Trade the tariff levels are grayed out. After you use a row,
 you have a week to change that direction again to correct it; then the row
 waits 3 months, as each good's own buttons do after a change. Hover a level to
-see what it will do and what is stopping it. Under *Tax Code and Customs
+see what it will do and what is stopping it; while the row waits, it says about
+how many days are left. Under *Tax Code and Customs
 Enabled* the rows are grayed out with the other tariff buttons.
 
 ## The Strategic Reserve
@@ -479,11 +603,14 @@ button back to your own. The tab ends with an Open Journal Entry button.
 
 ![The Strategic Reserve tab of the Market panel: the overview (Hub Operating, Flow Cap, Sales Income) above the Reserve Inventory, with the Ammunition row expanded to its figures, the Fill by Month chart and the start of its Policy Settings.](images/strategic_reserve_tab.png)
 
-The overview at the top is always shown. The hub's icon is at full colour
-while the hub is fully staffed, marked Hub Operating, and dimmed and marked
-Understaffed below that; hover it for the staffing. Beside it are the Flow Cap,
-how many units of each good the hub may move in a week (hover it for where
-that comes from), and Sales Income, what this week's releases earn.
+The overview at the top is always shown, as four boxes. Hub has the hub's
+icon at full color while the hub is fully staffed, marked Hub Operating, and
+dimmed and marked Understaffed below that; hover it for the staffing. Under the
+word is the Cap, how many units of each good the hub may move in a week (hover
+it for where that comes from). Blocked counts the goods that are full, or empty
+while a release is set; it turns red while one is empty, and its hover names
+them. Purchases is what this week's buying costs at today's prices, and Sales
+Income what this week's releases earn.
 
 The Reserve Inventory starts open. Its first line shows the Adjustment Step,
 with the Cycle Step and Reset Rates buttons beside it. The second line holds
@@ -495,17 +622,19 @@ Below them is a row for each good you have unlocked:
 |---|---|
 | Good | The good's name. Click it to expand the row. |
 | Stock | How full the good's reserve is. A marker shows the target stockpile when a buying policy stops short of full, and the protected stockpile when a selling policy keeps a floor. |
-| Status | A crate icon: a yellow bar for Idle, a green arrow going in for Storing, an orange arrow coming out for Withdrawing, a striped barrier for Blocked. Hover it for the word and the reason. |
-| Policy icon | A brass governor, lit while a reserve policy sets the good's rate and dimmed while you set it by hand. Click it to open the good's Policy Settings. |
-| Rate | The decrease, stop and increase buttons. |
+| Status | A crate icon: a yellow bar for Idle, a green arrow going in for Storing, an orange arrow coming out for Releasing, a striped barrier for Blocked. Hover it for the word and the reason. |
+| Policy icon | A brass governor, lit while a reserve policy sets the good's rate and dimmed while you set it by hand. Hover it for the policy and what it is doing; click it to open the good's Policy Settings. |
+| Rate | The decrease button, the good's rate, then the increase and stop buttons. Hover a button for the rate it would leave. |
 
 Blocked means the stockpile is full, or empty while a release is set, or the
-hub is understaffed. Hover anywhere else on a row for its full breakdown:
-stock, rates, decay by source, the hub's flow cap and staffing, and the policy.
+hub is understaffed. Hover the Stock bar for what is stored and what its marker
+means.
 
 An expanded row lists Stored, Rate Setting, Last Week (what actually moved),
 Decay, Market Price (against the good's base price, with the average the policy
 acts on) and Reserve Policy, then a line on what the policy is doing and why.
+Hover Rate Setting for what the hub actually trades this week, the rate plus the
+decay it replaces, and Decay for where the decay rate comes from.
 Under them, Fill by Month charts how full the reserve was each month, with 1
 Year, 5 Years and 20 Years ranges. Each bar is a share of capacity, so building
 Silos lowers the bars of an unchanged stock. Policy Settings comes last,
@@ -535,7 +664,8 @@ treasury, and adds demand that raises the price. Releasing sells onto your
 market, adds supply that lowers the price, and pays the treasury; the overview
 shows this as Sales Income.
 
-The budget panel shows the two sides separately. Sales appear under Additional
+The overview's Purchases and Sales Income boxes show the week's two sides
+together. The budget panel shows them separately. Sales appear under Additional
 Income, as the Strategic Reserve journal entry's income; purchases appear with the
 hub's inputs under Goods for Government Buildings. They are not netted, so a
 reserve that buys small arms while selling grain can show +1,000 a week of income
@@ -588,7 +718,8 @@ switch that runs at full flow once the price crosses the threshold.
 
 A preset keeps its flow and budget in step with your country, recalculating them
 every week from your capacity and GDP, until you change either by hand. The
-preset in force is grayed out, and changing any setting by hand ends it. The
+policy and the preset in force are shown selected, and changing any setting by
+hand ends the preset. The
 budget is set for each good and caps each week's spending; what goes unspent
 doesn't carry over. A new reserve starts every good on Manual with the Standard
 settings loaded, so switching a good to a policy works at once. The row's own
@@ -637,12 +768,12 @@ hold.
 ### Pledging grain to the World Food Reserve
 
 Once the United Nations has founded the World Food Reserve, a member with a
-Strategic Reserve Hub can press Pledge Grain to the World Food Reserve on the
-UN tab of the Diplomacy panel. When a UN aid mission opens in another country,
+Strategic Reserve Hub can press Pledge Grain, under the World Food Reserve
+line in Our Obligations on the UN tab of the Diplomacy panel. When a UN aid mission opens in another country,
 the Reserve takes up to a quarter of your grain, at most 2,500 units, if you
 hold at least 500. The
 grain leaves your reserve through its own bookkeeping, and you gain standing for
-each draw. Withdraw Our Grain Pledge stops it at any time (see [The World Food
+each draw. Withdraw Our Pledge stops it at any time (see [The World Food
 Reserve and hunger](10-united-nations.md#the-world-food-reserve-and-hunger)).
 
 ### How the AI uses the reserve

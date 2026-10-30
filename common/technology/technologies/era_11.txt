@@ -76,6 +76,9 @@ smart_grids = {
 	modifier = {
 		state_bureaucracy_population_base_cost_factor_mult = 2
 		country_voting_power_mult = 0.2
+		country_grid_transmission_efficiency_add = 0.03
+		# Undersea supergrids: an interconnector's cable crosses one more Sea Node
+		building_grid_undersea_cable_range_add = 1
 	}
 
 	unlocking_technologies = {
@@ -172,8 +175,12 @@ synthetic_biology = {
 }
 
 directed_energy_weapons = {
-	# Ablative Rockets PM for Launch Facilities, Solar Exploration PM for Space Program,
-	# Pulsed Laser Escort unit, Inertial Fusion Reactors PM for Fusion Plants
+	# Ablative Rockets PM for Launch Facilities, Laser Excavation PMs for mines,
+	# Electromagnetic Projectors PM for Artillery Foundries, Inertial Fusion Reactors PM
+	# for Fusion Plants, Pulsed Laser Escort unit, Laser Broom PM for the Space
+	# Program's debris removal, Ground Lasers PM for Ground-to-Orbit Batteries.
+	# Solar System Colonization and Orbital Assembly moved to Cislunar
+	# Infrastructure (era 10; lunar colonization design § 5).
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/directed_energy_weapons.dds"
 	category = military
@@ -306,13 +313,15 @@ augmented_reality_warfare = {
 }
 
 asteroid_mining = {
-	# Extraplanetary Base (space mine) building
+	# Asteroid Mine PM for the Extraplanetary Base (the building itself is In-Situ
+	# Resource Utilization's), the near-Earth asteroids' 10 levels of base room,
+	# propellant depots (off-window launches; lunar colonization design §§ 5, 6)
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/asteroid_mining.dds"
 	category = military
 
 	unlocking_technologies = {
-		reusable_rocketry
+		in_situ_resource_utilization
 		directed_energy_weapons
 	}
 
@@ -322,6 +331,31 @@ asteroid_mining = {
 
 	ai_weight = {
 		value = 5
+	}
+}
+
+nuclear_thermal_propulsion = {
+	# Space race funding cap (lunar colonization design § 5), and the smaller
+	# off-window launch premium (design § 9): a country with it pays the nuclear
+	# thermal curve (sr_launch_premium_ntp_<body>, the same extra delta-v at
+	# 9 km/s) through sr_launch_has_ntp. Launching outside a window still needs
+	# propellant depots. The boolean below is that marker: it shows the effect in
+	# the tooltip and is what sr_launch_has_ntp reads.
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/nuclear_thermal_propulsion.dds"
+	category = military
+
+	unlocking_technologies = {
+		cislunar_infrastructure
+	}
+
+	modifier = {
+		country_space_race_max_funding_add = 1
+		country_sr_nuclear_thermal_launches_bool = yes
+	}
+
+	ai_weight = {
+		value = 1
 	}
 }
 

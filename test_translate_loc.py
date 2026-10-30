@@ -71,6 +71,12 @@ class MarkupCheckRejectsTests(unittest.TestCase):
         errors = _errors("[X.GetValue|+=]", "[X.GetValue]")
         self.assertTrue(any("[...] calls" in e for e in errors), errors)
 
+    def test_alt_name_only_in_a_language_that_declines(self):
+        en = "Protect [TARGET_COUNTRY.GetName]"
+        errors = t.check_translation(en, "Protege a [TARGET_COUNTRY.GetAltName('DAT')]", "spanish")[0]
+        self.assertTrue(any("GetAltName" in e for e in errors), errors)
+        self.assertEqual(t.check_translation(en, "Protege a [TARGET_COUNTRY.GetName]", "spanish")[0], [])
+
     def test_lost_reference_icon_code_and_line_break(self):
         errors = _errors("#b $VAL$#! @money!\\nMore", "fett Geld mehr")
         names = " ".join(errors)
@@ -105,6 +111,12 @@ class StalePolicyTests(unittest.TestCase):
 
     def test_short_label_case_or_punctuation_is_minor(self):
         self.assertTrue(t.is_minor_change("Raise taxes.", "Raise Taxes"))
+
+    def test_american_spelling_is_minor(self):
+        """The 2026-10-27 sweep to American spelling keeps every translation, short labels included."""
+        self.assertTrue(t.is_minor_change("Seabed Licences", "Seabed Licenses"))
+        self.assertTrue(t.is_minor_change("[Concept('concept_x','Defence')] programme", "[Concept('concept_x','Defense')] program"))
+        self.assertFalse(t.is_minor_change("Seabed Licences", "Seabed Permits"))
 
     def test_rewrite_is_major(self):
         self.assertFalse(t.is_minor_change("Raises the price of grain.", "Lowers wages in every state."))
@@ -144,6 +156,12 @@ class NumberFormatTests(unittest.TestCase):
     def test_percent_space_closed_as_vanilla_german_writes(self):
         self.assertEqual(t.localize_numbers("up to 5% more", "bis zu 5 % mehr", "german"), "bis zu 5% mehr")
 
+    def test_spanish_thousands_take_a_no_break_space(self):
+        en = "Costs 2.5 times as much, up to 1,000 units, or 12,000 at 5%."
+        es = "Cuesta 2.5 veces más, hasta 1,000 unidades, o 12 000 al 5 %."
+        self.assertEqual(t.localize_numbers(en, es, "spanish"),
+                         "Cuesta 2,5 veces más, hasta 1\u00a0000 unidades, o 12\u00a0000 al 5%.")
+
     def test_english_formats_kept_for_other_languages(self):
         self.assertEqual(t.localize_numbers("2.5", "2.5", "japanese"), "2.5")
 
@@ -162,6 +180,13 @@ class QuoteFormatTests(unittest.TestCase):
         odd = '\\"Eins.\\" Zwei.\\"'
         self.assertEqual(t.localize_quotes(odd, "german"), odd)
         self.assertEqual(t.localize_quotes("„Ja“", "french"), "„Ja“")
+
+    def test_spanish_angle_quotes_outside_curly_inside(self):
+        self.assertEqual(t.localize_quotes('\\"Empezar con “sí”.\\"', "spanish"), "«Empezar con “sí”.»")
+        self.assertEqual(t.localize_quotes("La acción “Resolver la crisis”", "spanish"), "La acción «Resolver la crisis»")
+
+    def test_spanish_apostrophe_is_not_a_quote(self):
+        self.assertEqual(t.localize_quotes('O’Higgins dijo \\"no\\"', "spanish"), "O’Higgins dijo «no»")
 
 
 class TermCheckTests(unittest.TestCase):
@@ -183,6 +208,10 @@ class QuoteRepairTests(unittest.TestCase):
 
     def test_both_marks_plain(self):
         self.assertEqual(t.repair_bare_quotes(' k:0 "Er sagte "Hallo" laut"'), "Er sagte „Hallo“ laut")
+
+    def test_spanish_marks(self):
+        self.assertEqual(t.repair_bare_quotes(' k:0 "Dijo "Hola" en voz alta"', "spanish"), "Dijo «Hola» en voz alta")
+        self.assertEqual(t.repair_bare_quotes(' k:0 "«Se oye." \\n— Comandante"', "spanish"), "«Se oye.» \\n— Comandante")
 
 
 class ChunkingTests(unittest.TestCase):
@@ -263,7 +292,7 @@ class RoundTripTests(unittest.TestCase):
         with open(os.path.join(self.dirs[1], "manifest.json"), "w", encoding="utf-8") as fh:
             json.dump({"names-001": {"keys": {e.key: e.en for e in self.entries},
                                      "country_names": ["AFU"], "words": 5}}, fh)
-        forms = "\n".join(f' AFU_{f}:0 "die Afrikanische Union"' for f in t.COUNTRY_FORMS)
+        forms = "\n".join(f' AFU_{f}:0 "die Afrikanische Union"' for f in t.COUNTRY_FORMS["german"])
         with open(os.path.join(self.dirs[1], "out", "names-001.01.txt"), "w", encoding="utf-8") as fh:
             fh.write(' AFU:0 "Afrikanische Union"\n law_x:0 "Erhöht die Legitimität"\n'
                      ' law_y:0 "Er sagte "Hallo""\n' + forms + "\n")
@@ -305,6 +334,29 @@ class RoundTripTests(unittest.TestCase):
             text = fh.read()
         self.assertIn("=== COUNTRY NAME FORMS ===", text)
         self.assertIn("# PREVIOUS TRANSLATION: Alt", text)
+
+
+class SpanishNamesTests(unittest.TestCase):
+    """A language vanilla doesn't decline gets no country-forms section, and
+    its merge expects none."""
+
+    def test_names_chunk_and_merge_without_country_forms(self):
+        entries = [
+            t.Entry("te_formable_countries_l_english.yml", "AFU", "African Union"),
+            t.Entry("te_laws_l_english.yml", "law_x", "Free Port"),
+        ]
+        with tempfile.TemporaryDirectory() as root:
+            dirs = (os.path.join(root, "i18n", "spanish"), os.path.join(root, "build", "i18n", "spanish"))
+            with mock.patch.object(t, "language_dirs", lambda language: dirs), \
+                    mock.patch.object(t, "load_english", lambda english_dir=None: entries):
+                t.main(["--language", "spanish", "prepare", "--set", "names", "--no-vanilla"])
+                with open(os.path.join(dirs[1], "chunks", "names-001.txt"), encoding="utf-8") as fh:
+                    self.assertNotIn("COUNTRY NAME FORMS", fh.read())
+                os.makedirs(os.path.join(dirs[1], "out"))
+                with open(os.path.join(dirs[1], "out", "names-001.01.txt"), "w", encoding="utf-8") as fh:
+                    fh.write(' AFU:0 "Unión Africana"\n law_x:0 "Puerto franco"\n')
+                self.assertEqual(t.main(["--language", "spanish", "merge"]), 0)
+                self.assertEqual(t.load_tm("spanish")["AFU"], {"en": "African Union", "es": "Unión Africana"})
 
 
 if __name__ == "__main__":

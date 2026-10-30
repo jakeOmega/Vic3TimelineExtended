@@ -3,6 +3,12 @@
 	country_bubble_pressure_monthly_add = -1
 	state_building_state_youth_centers_max_level_add = 1
 	state_building_strategic_reserve_hub_max_level_add = 1
+	state_building_grid_transfer_station_max_level_add = 1
+	country_building_grid_transfer_station_require_subsidies_bool = yes
+	state_building_grid_hvdc_interconnector_max_level_add = 1
+	# Power grids: the share of downloaded Grid Power a station turns back into
+	# Electricity. Six technologies raise it to 1 (power_grid_values.txt).
+	country_grid_transmission_efficiency_add = 0.75
 	state_building_un_headquarters_max_level_add = 1
 
 	# Homeland creation/removal base thresholds (state-level; modified by laws, techs, decrees, buildings)
@@ -1078,8 +1084,9 @@ banking_capital_controls_out = {
 	# capital a reward. It is gone; the price of controls is
 	# te_capital_controls_fatigue, which grows with peacetime months held. What
 	# controls BUY is te_mon_controls_damp (0.25 on the carry term, the gold gap
-	# and the overvaluation drain), which no modifier line can state — the
-	# button's description does. Organised labour backed controls in the
+	# and the overvaluation drain), which the monetary pulse applies, not this
+	# modifier: the display-only banking_monthly_capital_controls prints it
+	# (GUI audit BNK-6). Organised labour backed controls in the
 	# Bretton Woods decades, hence the flat +1.
 	interest_group_ig_trade_unions_approval_add = 1
 	country_bureaucracy_mult = -0.05
@@ -1384,6 +1391,7 @@ carbon_tax_modifier = {
 	building_group_bg_manufacturing_tax_mult = 0.1
 	building_group_bg_oil_extraction_tax_mult = 1
 	country_greenhouse_gas_emissions_mult = -0.20         # 20% direct emissions reduction
+	country_environmental_movement_radicalism_add = -0.10	# read by movement_environmental (GW-3)
 }
 
 renewable_investment_modifier = {
@@ -1393,6 +1401,7 @@ renewable_investment_modifier = {
 	building_power_plant_throughput_add = -0.10                               # transition away from conventional power
 	building_group_bg_clean_power_construction_efficiency_add = 0.25          # hydro, nuclear, fusion and renewable plants only (bg_clean_power); the coal and oil plant is not sped up
 	country_greenhouse_gas_emissions_mult = -0.15                             # 15% direct emissions reduction
+	country_environmental_movement_radicalism_add = -0.10	# read by movement_environmental (GW-3)
 }
 
 # Renewable Investment's running cost, in place of the forced plant subsidies it
@@ -1414,6 +1423,7 @@ climate_adaptation_modifier = {
 	state_death_cause_chr_mult = -0.025
 	state_standard_of_living_add = 0.5
 	country_authority_cost_add = 250
+	country_environmental_movement_radicalism_add = -0.10	# read by movement_environmental (GW-3)
 }
 
 emission_standards_modifier = {
@@ -1422,6 +1432,7 @@ emission_standards_modifier = {
 	state_pollution_generation_mult = -0.25         # reduces pollution
 	country_greenhouse_gas_emissions_mult = -0.10   # 10% direct emissions reduction
 	country_authority_cost_add = 200
+	country_environmental_movement_radicalism_add = -0.10	# read by movement_environmental (GW-3)
 }
 
 # Indirect-effect policies (available to all countries)
@@ -1430,6 +1441,7 @@ carbon_removal_modifier = {
 	country_building_synthetics_plant_coal_require_subsidies_bool = yes
 	building_synthetics_plant_coal_throughput_add = 0.05
 	country_authority_cost_add = 100
+	country_environmental_movement_radicalism_add = -0.05	# read by movement_environmental (GW-3)
 }
 
 reforestation_subsidies_modifier = {
@@ -1440,6 +1452,7 @@ reforestation_subsidies_modifier = {
 	state_harvest_condition_flood_impact_mult = -0.25
 	state_harvest_condition_flood_duration_mult = -0.25
 	country_authority_cost_add = 100
+	country_environmental_movement_radicalism_add = -0.10	# read by movement_environmental (GW-3)
 }
 
 public_transit_modifier = {
@@ -1449,6 +1462,7 @@ public_transit_modifier = {
 	building_group_bg_infrastructure_construction_efficiency_add = 0.1
 	state_infrastructure_from_automobiles_consumption_add = -0.25
 	country_authority_cost_add = 150
+	country_environmental_movement_radicalism_add = -0.10	# read by movement_environmental (GW-3)
 }
 
 fossil_fuel_divestment_modifier = {
@@ -1458,6 +1472,7 @@ fossil_fuel_divestment_modifier = {
 	goods_input_coal_mult = -0.05
 	goods_input_oil_mult = -0.05
 	country_authority_cost_add = 200
+	country_environmental_movement_radicalism_add = -0.10	# read by movement_environmental (GW-3)
 }
 
 green_building_codes_modifier = {
@@ -2084,6 +2099,88 @@ colonial_war_exhaustion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_mult = -0.10
 	country_prestige_from_army_power_projection_mult = -0.10
+}
+
+# ---- Wars of independence (decolonization_war_effects.txt, events .70-.80) ----
+# The rebels fight like guerrillas while they fight us: re-applied each month by
+# the settle, two months long (vanilla's caucasus_war_defender_circassia and
+# modifier_kenesary_revolt carry the same set).
+decol_iw_fighters_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds
+	unit_morale_loss_mult = -0.5
+	battle_defense_owned_province_mult = 0.5
+	unit_provinces_lost_mult = -0.65
+	state_conscription_rate_mult = 1.0
+	building_training_rate_mult = 0.5
+}
+
+# One great power's arms, multiplied by the square root of the backers' weights
+# summed, with no cap (decol_iw_refresh_fighters; decol_iw_arms_unit restates
+# the values for .74.b's tooltip). Vanilla's polish_rebel_funding_modifier is
+# the shape.
+decol_iw_foreign_arms_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_offense_mult = 0.10
+	unit_defense_mult = 0.10
+}
+
+# A pro-colonial great power's arms for the metropole (.79): the smaller package,
+# on the same curve, each backer's fading over two years
+# (decol_iw_refresh_allied_arms; decol_iw_allied_arms_unit restates the values).
+decol_iw_allied_arms_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_offense_mult = 0.05
+	unit_defense_mult = 0.05
+}
+
+# The home front: one year of war's worth, multiplied by the years of every war
+# we are fighting summed, up to five (decol_iw_home_front_mult).
+decol_iw_home_front_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -2
+}
+
+# The negotiated release at a declaration (.70.b): authority, easing over a year.
+decol_iw_negotiation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_cost_add = 100
+}
+
+# The Flag Comes Down (.73), decaying over five years.
+decol_iw_lost_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.15
+	country_legitimacy_base_add = -10
+}
+
+# The Accords (.76): as a loss, but lighter; under the general's mandate (.75.c)
+# without the cost to legitimacy.
+decol_iw_accords_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.15
+	country_legitimacy_base_add = -5
+}
+
+decol_iw_accords_mandate_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.15
+}
+
+# The regime crisis (.75): the officers crushed; the general's mandate; holding
+# the line.
+decol_iw_officers_crushed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	country_legitimacy_base_add = -20
+}
+
+decol_iw_general_mandate_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds
+	country_authority_add = 100
+}
+
+decol_iw_hold_the_line_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -15
 }
 
 cultural_reclamation_modifier = {
@@ -8468,6 +8565,82 @@ te_mon_lolr_reneged = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_prestige_mult = -0.1
 	country_credit_standing_add = 0.005
+}
+
+# ----------------------------------------------------------------------------
+# Display-only modifiers (GUI audit BNK-6, 2026-10-27)
+# ----------------------------------------------------------------------------
+# NEVER APPLIED. Each prints, through [GetStaticModifier('x').GetDesc], what
+# the monetary pulse or a control does that no applied modifier carries, so it
+# reads as coloured modifier lines rather than prose. The banking_monthly_*
+# six are spliced under a tool's own modifier by its banking_nonmod_*_tt line
+# ("Each month:"), which keeps their gates (the full Banking System, a war's
+# end); the last two by the Monetise Deficit and mandate buttons. Their types
+# are display fields (banking_cycle_modifier_types.txt, "Display fields"):
+# no script reads them. The figures the script uses are its script values,
+# which test_banking_external_tools.DisplayModifierTest holds these to.
+banking_monthly_open_market_ops = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_te_mon_asset_purchase_pressure_add = 0.01
+}
+
+banking_monthly_capital_controls = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_te_mon_rate_gap_pull_mult = -0.75
+}
+
+banking_monthly_restrict_inflows = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_te_mon_inflow_pull_mult = -0.5
+}
+
+banking_monthly_sterilize_inflows = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_te_mon_inflow_price_pressure_mult = -0.75
+}
+
+banking_monthly_foreign_borrowing_limits = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_te_mon_fx_debt_protection_add = 0.02084
+}
+
+banking_monthly_fx_surrender = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_te_mon_reserve_purchase_gdp_add = 0.0005
+}
+
+# One step of Monetise Deficit, while it runs (te_mon_monetisation_gdp_share,
+# te_mon_monetisation_pressure, te_mon_monetisation_premium).
+te_mon_monetisation_step = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_te_mon_minting_gdp_add = 0.01
+	country_te_mon_printing_pressure_add = 0.025
+	country_risk_premium_add = 0.005
+}
+
+# A step looser on the mandate (te_mon_mandate_loosen_expectation, and
+# te_mon_mandate_loosened's premium, which is the one applied).
+te_mon_mandate_loosen_step = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_te_mon_expected_inflation_add = 0.005
+	country_risk_premium_add = 0.005
+}
+
+# The weekly bills of Sterilize Capital Inflows and Emergency Import Financing
+# (owner, 2026-10-27, GUI audit BNK-14): a month's cost ÷ 4 a week, as the
+# multiplier, refreshed monthly by banking_external_charge_* (its header has
+# the rules), on the entry beside the tool. The mirror field puts them under
+# Banking in the Budget Breakdown (gen_budget_breakdown.py's SOURCES).
+banking_external_sterilization_charge = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
+}
+
+banking_external_import_charge = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_restrict_inflows = {

@@ -1,0 +1,67 @@
+﻿# ============================================================================
+# WAR OF INDEPENDENCE — INDEPENDENCE (the rebels' goal)
+#
+# The goal of dp_te_independence_war (common/diplomatic_plays/te_colonial_war_play.txt):
+# the play the rebels open against the metropole they declared against, the
+# day after they form (decol_iw_open_war). They are a country already, so the
+# goal asks for nothing the engine has to do: kind = custom has no predefined
+# effect (war_goal_types.md), and the record's settle reads the war's end.
+#
+#   1. Objective: holding all their own states (control_all_own_states), so
+#      the rebels' war support rises while they hold their land and ours falls.
+#   2. No mirrored_wargoal block, so it never self-enforces: only our
+#      capitulation or a peace enforces it, as for te_colonial_reconquest.
+#   3. Zero infamy; valid only against the metropole the rebels name
+#      (decol_iw_metropole).
+#   4. A significant demand, so an AI metropole does not concede it at the
+#      table for nothing: if we back down from the play, the rebels are free.
+# ============================================================================
+
+te_colonial_independence = {
+	icon = "gfx/interface/icons/war_goals/independence.dds"
+
+	kind = custom
+
+	settings = {
+		require_target_be_part_of_war
+
+		# Validation
+		validate_conflicts_war_goals_all
+	}
+
+	execution_priority = 100
+
+	contestion_type = control_all_own_states
+
+	target_type = country
+
+	possible = {
+		# scopes: root = holder (the rebels), creator_country, diplomatic_play, target_country
+		var:decol_iw_metropole ?= scope:target_country
+	}
+
+	valid = {
+		var:decol_iw_metropole ?= scope:target_country
+	}
+
+	maneuvers = {
+		value = 0
+	}
+
+	infamy = {
+		value = 0
+	}
+
+	on_enforced = {
+		# scopes here: root = holder, creator_country, target_country. The
+		# rebels are free once the war is over, which the monthly settle reads
+		# (decol_iw_settle_slot), so this only leaves a trace.
+		root = {
+			debug_log = "TE_DECOL_IW: independence enforced holder=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+
+	ai = {
+		is_significant_demand = yes
+	}
+}

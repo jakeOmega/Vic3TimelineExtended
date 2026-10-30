@@ -174,9 +174,11 @@ class RenewableInvestmentCostTest(unittest.TestCase):
 
     def test_cost_goes_on_and_off_with_the_policy(self):
         effects = load(EFFECTS)
-        adopt = effects["gw_effect_renewable_investment"]["custom_tooltip"]
+        adopt = effects["gw_effect_renewable_investment"]
         repeal = effects["gw_effect_remove_renewable_investment"]["custom_tooltip"]
+        # Outside the adopt custom_tooltip, so the tooltip prints the cost (GW-4).
         self.assertEqual(adopt["gw_renewable_investment_cost_apply"], "yes")
+        self.assertNotIn("gw_renewable_investment_cost_apply", adopt["custom_tooltip"])
         self.assertEqual(repeal["remove_modifier"], self.COST)
         # The removal comes first: after the add it would strip the fresh cost.
         self.assertEqual(effects["gw_renewable_investment_cost_apply"], {

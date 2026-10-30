@@ -111,9 +111,28 @@ Constitutional Review and Judicial Supremacy cost override capacity and lower
 the enactment success of the constitutional law groups by 10% and 15%, and
 Judicial Supremacy that of the rights laws too; each law's tooltip lists what
 it does. Cutting the courts to a ceiling 20 or more below the score raises your
-risk premium and costs legitimacy for five years. Religious Courts need an
-established religion. The [Nation tab](01-introduction.md#the-nation-tab) shows
-the score heading for its ceiling, and what the courts give you now.
+risk premium and costs legitimacy for five years, and from a gap of 40 lawyers
+take to the streets. Religious Courts need an established religion. The [Nation
+tab](01-introduction.md#the-nation-tab) shows the score heading for its ceiling,
+and what the courts give you now.
+
+Under Constitutional Review and Judicial Supremacy a law you force through goes
+to the courts once it passes (see [Forceful Legislation](#forceful-legislation)),
+and they rule six months later. They strike it down if Judicial Independence is
+at least 90 when you only expedited it, 60 when you pushed it forward
+decisively, or 30 when you forced it through, and otherwise uphold it. Against a ruling you can comply, which puts the
+old law back and earns legitimacy and 5 points of the score; defy the court,
+which costs 20 points and raises your risk premium for five years; or pack it,
+which costs 15 points and authority, and leaves a court that challenges nothing
+for ten years. A year after packing you may turn the courts into Statutory
+Courts.
+
+Seven amendments change what the courts do (see [Amendments to the mod's
+laws](#amendments-to-the-mods-laws)), and landmark cases come once each when the
+country's situation calls for them: a ruling on slavery while abolitionists
+organize, a foreign power demanding an execution, a labor law struck down under
+Judicial Supremacy, an election voided, a new regime asking its courts to call
+it lawful, and two paths out of Religious Courts toward Statutory Courts.
 
 ### The rules of war
 
@@ -166,7 +185,7 @@ or subjugate it, and back to another law once it is at peace.
 |---|---|---|
 | Antitrust & Market Structure | Guilds and Chartered Monopolies, Freedom of Contract, Antitrust Enforcement, Regulated Utilities, Dirigiste Policy, Command/Cooperative Economy | Companies and monopolies. |
 | Intellectual Property | No IP Protection, Creative Commons, Traditional IP Protection, Strict IP Protection, Open Source Innovation, State Intellectual Property | Innovation and technology spread against capitalist investment. |
-| Genetic Rights | Traditional Heredity, Ban on Genetic Modification, Corporate Genetic Licensing, Open-Source Genetics, State Eugenics Program | Biotechnology output and companies ([Companies added by the mod](02-timeline.md#companies-added-by-the-mod)), birth rate and authority. |
+| Genetic Rights | Traditional Heredity, Ban on Genetic Modification, Corporate Genetic Licensing, Open-Source Genetics, State Eugenics Program | Biotechnology output and companies ([Companies added by the mod](02-timeline.md#companies-added-by-the-mod)), birth rate, authority and minority acceptance. |
 | Monetary Policy | Commodity Money, Gold Standard, Fiat Money, Digital Currency, Decentralized Cryptocurrency | Currency regime. |
 | Financial Regulation | Unregulated Banking, Free & Mutual Banking, Universal Banking (Light Prudence), Prudential / Narrow Banking, Directed Credit & Development Banks, State-Owned Banking, Central Bank Independence | How banks are supervised. |
 | Resource Transition | Unrestricted Extraction, Fossil Expansion Moratorium, Managed Fossil Phaseout | Whether coal mines, oil rigs and power plants may be built, and retiring them ([The fossil transition](15-climate.md#the-fossil-transition)). |
@@ -316,7 +335,9 @@ pays most where many pops are Second-Rate Citizens or face Open Prejudice.
 
 The Inheritance group decides who inherits an estate. Interest groups judge
 the inheritance law in force for as long as it stands, so a group that dislikes
-yours loses approval the whole time.
+yours loses approval the whole time. Every reform movement (liberal, radical,
+socialist and land reform) opposes Primogeniture & Entail and grows more radical
+while it stands, and the traditionalist movements defend it.
 
 | Law | Available | Wealth Concentration target | Also |
 |---|---|---|---|
@@ -369,27 +390,31 @@ it lasts. A new law therefore takes
 about a generation to show: a country that abolishes entail still has great
 houses twenty years later.
 
-Your country's figure sets the political weight of great fortunes. Above 50,
-Great Family Fortunes strengthens the Aristocrats and Capitalists; below 50,
-Dispersed Wealth weakens the Aristocrats. Each state's own score does the rest
-in that state:
+Your country's figure sets the political weight of great fortunes and how
+fast speculation builds. Above 50, Great Family Fortunes strengthens the
+Aristocrats and Capitalists and adds bubble pressure to the banking cycle, by
+20% and 0.3 a month at 80; below 50, Dispersed Wealth weakens both and takes
+bubble pressure off, by 20% and 0.4 a month at 20. Concentrated wealth grows faster but crashes more often; dispersed
+wealth grows slower but steadier. Each state's own score does the rest in that
+state:
 
-| A state's score | Modifier | Effect at 100 or 0 |
+| A state's score | Modifier | Effect at 80 (or 20) |
 |---|---|---|
-| Above 50 | Concentrated Property | Aristocrats and Capitalists invest 10% more; radicals +10%; qualifications −10%; education access −5% |
-| Above 50, in farming states | Land Hunger | Migration +20%, scaled by the state's share of Peasants and Farmers |
-| Below 50 | Dispersed Property | Farmers and Shopkeepers invest 10% more |
+| Above 50 | Concentrated Property | Aristocrats and Capitalists invest 20% more; political strength from wealth +20%; qualifications −20%; education access −10% |
+| Above 50, in farming states | Land Hunger | Migration +30%, Land Reform movement support +25%, radicals +10%, scaled by the state's share of Peasants and Farmers |
+| Below 50 | Dispersed Property | Political strength from wealth −10%; qualifications +10%; education access +10%; radicals −10% |
 
-Every effect grows with the distance from 50, so a state at 75 gets half of
-it. A state's modifiers update with its yearly count, so a war loss or an event
+Every effect reaches its full size at 80 or 20, so a state at 65 gets half of
+it, and keeps growing beyond: the concentrated side to two thirds more at 100,
+the dispersed side to a third more at 0. A state's modifiers update with its yearly count, so a war loss or an event
 that moves the scores reaches them within a year. A capital full of Financial
 Districts can carry Concentrated Property while your country as a whole sits
 below 50. The Inheritance group's description shows the score and where it is
 heading, and the Wealth section of the [Demographics tab](08-states.md#demographics)
 shows what sets the target. A state's Wealth Concentration tile, on the state
 panel, shows its own score and the modifiers it carries from it and from the
-inheritance law. With the census off (the default, and the only
-choice in released versions) the tab is gone, but Wealth Concentration and all
+inheritance law. With the census off (the rule's Disabled setting)
+the tab is gone, but Wealth Concentration and all
 its effects still run and the group's description still shows the score.
 
 The farming effects follow the share of Peasants and Farmers in each state.
@@ -414,12 +439,14 @@ Endowment or the farm rule over.
 Once you have held a law for 20 years, its generation event can come, at
 most once every 25 years: The Cadet Sons under Primogeniture & Entail, The Last
 Division under Forced Heirship (one answer attaches Undivided Farm Succession)
-and The Founder's Will under Freedom of Testation. The Great Estates for Sale
-comes after 15 years of an estate duty. Their answers move the score, a pop
-group or a modifier for up to ten years.
+The Founder's Will under Freedom of Testation, The Hidden Estates under State
+as Universal Heir and The Empty Holding under Possession by Use. The Great
+Estates for Sale comes after 15 years of an estate duty, and The First Cohort
+once, five years after you attach the Birthright Endowment. Their answers move
+the score, a pop group or a modifier for up to ten years.
 
 With Mind Backups or Biological Immortality, Posthumous Title asks whether a
-person can outlive their estate. Recognising continuity of title freezes
+person can outlive their estate. Recognizing continuity of title freezes
 Wealth Concentration where it stands, at a cost of 10% innovation and 10%
 qualifications, and five years later the young who will never inherit
 organize. Declaring legal death lets estates pass and strengthens the
@@ -476,7 +503,9 @@ stronger option also needs authority income above its own cost.
 | Force the law through, consequences be damned | 4 | 750 | +50 amenability, +25% success, three quarters fewer stalls, two more setbacks, 35% faster, jumps one enactment phase | Opposition −5 approval, −10 legitimacy, more radicals, some upper-strata radicals at once, capacity −3 |
 
 Each option also lowers Judicial Independence by 5, 10 or 20. That loss
-doesn't fade: the score climbs back at its usual 4 a year.
+doesn't fade: the score climbs back at its usual 4 a year. Under Constitutional
+Review or Judicial Supremacy the law then goes to the courts, which may strike
+it down (see [Laws on state power and information](#laws-on-state-power-and-information)).
 
 The authority cost fades out over five years too. More capacity makes it
 cheaper: a few percent off from 2 (about 9% at 4), then 20% at 5 and half at 8.
@@ -529,9 +558,9 @@ Interest groups sponsor amendments to the mod's laws as they do for base-game
 laws, and every one of them also comes with an event or another way into the
 game: most are offered by enactment events as the price of passage, and most can
 also be asked for later, on a law already in force (see [Amendment
-petitions](#amendment-petitions)). Three
+petitions](#amendment-petitions)). Four
 amendments attach to base-game laws: the Spoils System, Corporate Security
-Powers and Civilian Oversight. Under the Legislated Tax Code rule's legislated
+Powers, Civilian Oversight and First Past the Post. Under the Legislated Tax Code rule's legislated
 settings the tax rates are amendments to the Legislated Tax Code law, and only tax
 bills change them (see [Taxation (experimental)](05-tax-code.md)).
 
@@ -556,10 +585,18 @@ bills change them (see [Taxation (experimental)](05-tax-code.md)).
 | Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
 | Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Legislative Override Capacity −0.5; radicalism rises 10% slower for Second-Rate Citizen and Open Prejudice pops; −5% turmoil penalties; the sponsoring group gains 10% political strength. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
+| First Past the Post | Landed, Wealth or Census Voting, Universal Suffrage, Anarchy | Interest groups join the two largest parties far more readily than any other (see [Two-party politics](#two-party-politics)); 25% less legitimacy lost to disagreement inside the government; −5 legitimacy. Members of the two largest parties sponsor it once those parties hold most of the clout, and on the same condition The Winner Takes All event offers it while a voting law is enacted |
 | Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
 | Perpetual Dynastic Trusts | Freedom of Testation | Wealth Concentration target +30; Capitalists invest 10% more. From Globalization. Judged as Laissez-Faire; the Industrialists sponsor it, and The Trust That Never Ends event offers it |
 | Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −20, since its duty pays the stakes; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more; institutions cost 5% more bureaucracy. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
 | Undivided Farm Succession | Forced Heirship, Customary Inheritance | Wealth Concentration target +10; ends Forced Heirship's farming effects, and in farming states the siblings who don't inherit leave the land. Judged as Peasant Proprietorship; the Rural Folk sponsor it, and the One Heir to the Farm event offers it |
+| Suspension of Habeas Corpus | Statutory Courts, Constitutional Review | Suppression 25% cheaper; Judicial Independence ceiling −20%; −5 legitimacy. Only at war, and it lapses when the war ends. Judged as Secret Police; the Armed Forces ask for it |
+| Judicial Elections | Statutory Courts, Constitutional Review | +5 legitimacy; Judicial Independence ceiling −20. Under an elected government. Judged as Universal Suffrage; offered while either law is enacted |
+| Mixed Commercial Courts | Religious Courts, Executive Tribunals | Half a point off credit standing; ceiling +10; Devout −5% political strength. Judged as Free Trade; the Industrialists or Petite Bourgeoisie ask for it |
+| Jury Trials | Statutory Courts, Constitutional Review | Ceiling +10; +3 legitimacy; suppression 10% dearer. Judged as Guaranteed Liberties; offered while either law is enacted |
+| Military Tribunals for Civilians | Executive Tribunals, Statutory Courts | Suppression 15% cheaper; Armed Forces +10% political strength; ceiling −20%. Judged as Outlawed Dissent; the Armed Forces ask for it in unrest |
+| People's Tribunals | Executive Tribunals under a Single-Party State | Suppression 20% cheaper; movements give 10% more loyalists; half a point on credit standing. It lapses without the Single-Party State. Judged as Single-Party State |
+| Human-in-the-Loop Appeals | Algorithmic Jurisprudence | +5 legitimacy; ceiling +10; local administration costs 5% more; ends the override a captured court gives under Algorithmic Governance. Judged as Strong Privacy Rights; offered while the law is enacted |
 
 The mod also changes one base-game amendment. Anarchy holds elections, so the
 Tradition of Free Elections attaches to it as to the voting laws. Keeping
@@ -670,6 +707,34 @@ Protected Class, the higher LGBTQ+ Rights laws and related technologies.
 
 All three need a voting franchise and take national names in some countries,
 such as Die Grünen or Movimento 5 Stelle.
+
+### Two-party politics
+
+The First Past the Post amendment gives each seat to whoever tops the poll, so a
+vote for a small party is wasted. While it is on your voting law, the two
+parties whose members hold the most clout win interest groups more easily (+5
+affiliation) and every other party far less easily (−20). A third party forms
+only around a group that fits it strongly. The party affiliation tooltips show
+both lines. The two are re-ranked every month, so a party that gains clout can
+take a major party's place at the next campaign. Until two parties exist the
+amendment does nothing to parties.
+
+Each major party is a broad coalition, so the government loses 25% less
+legitimacy to disagreement inside it, and 5 legitimacy for the voters left
+without a winning party. The United States starts with the amendment, and the
+Confederacy gains it if the Civil War breaks out; it replaces the base game's
+fixed two-party rule for American countries.
+
+A law's amendments leave with it, so while you hold first past the post, a
+change of voting law brings the Counting the Votes event, asking whether to keep
+it. Keeping it puts it on the new law; declining adopts proportional
+representation, and a later change of voting law won't bring it back. If you
+move to a law without elections, the question comes when elections return, and
+the same holds for a revolution that wins on a new voting law. Once two parties
+hold most of the clout, other countries can adopt it through The Winner Takes
+All event while a voting law is enacted, or the Two Parties Are Enough
+petition. You can repeal it when legitimacy is high enough, as with other
+amendments; the AI keeps it.
 
 ### New political movements
 
@@ -848,8 +913,8 @@ again. Decentralized countries are exempt.
 
 ## New decrees
 
-The mod adds 15 decrees, and development builds a 16th under the Demographics
-rule's Full setting. They cost authority like the base game's, 100 unless noted,
+The mod adds 16 decrees, one of them only under the Demographics rule's Full
+setting. They cost authority like the base game's, 100 unless noted,
 scaled by your rank.
 
 | Decree | Unlocked by | Effect in the state |
@@ -862,7 +927,7 @@ scaled by your rank.
 | Pollution Control | Pollution Control | −50% pollution |
 | Cultural Integration | | +5 cultural acceptance a year |
 | Natalism Initiative | Mass Media | +15% birth rate |
-| Medical Outreach (development builds only; Demographics, Full only) | Medical Degrees | New medicine reaches the state faster; see [States and population](08-states.md#demographics) |
+| Medical Outreach (Demographics, Full only) | Medical Degrees | New medicine reaches the state faster; see [States and population](08-states.md#demographics) |
 | Tax Breaks (50) | Keynesian Economics | −50% taxes, fewer radicals, more migration |
 | Trade Reform | Containerization | +25% trade advantage and capacity, lower tariffs |
 | Anti-Terrorism Campaign | Terrorism and Antiterrorism | Fewer radicals from movements, less turmoil |

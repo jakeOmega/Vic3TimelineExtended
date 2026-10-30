@@ -213,6 +213,23 @@ te_demog_lx_state_bio_pyr_sgui = {
 	effect = { }
 }
 
+# The biological pyramid's rows past 85 (issue #1075; te_dg_bpyr_top, te_dg_bpx<f|m><0-6>, te_demog_old_rows_show), where
+# its bodies past 100 are 1% of the people or more: as the calendar pyramid's te_demog_pyr_split_sgui.
+te_demog_lx_bio_pyr_split_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_bpxf0 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+te_demog_lx_state_bio_pyr_split_sgui = {
+	scope = state
+	is_shown = { has_variable = te_dg_bpxf0 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Some of those ever treated are out of care (te_dg_cover below 1: eligibility fell; bodies keep their age).
 te_demog_lx_state_cover_sgui = {
 	scope = state

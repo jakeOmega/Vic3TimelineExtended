@@ -5,33 +5,84 @@
 # (scripts/generators/gen_launch_windows.py: sr_window_open_<body>,
 # sr_window_body_in_play_<body>, the cache readers sr_window_wait_months_<body>
 # and sr_window_premium_now_<body>, and per body sr_launch_cost_<body>, which
-# calls the two triggers below). This file holds the rule; the generated files
-# hold the sky.
+# calls the two triggers below and prices a launch at the premium this
+# country's engines pay, sr_window_premium_country_<body>). This file holds the
+# rule; the generated files hold the sky.
 #
 # The three steps of propulsion, for one country:
-#   chemical          (no Asteroid Mining) a body's sites depart only in its window
-#   propellant depots (asteroid_mining)     outside a window too, at the premium,
-#                                           when the approach's test passes
+#   chemical          (no depots) a body's sites depart only in its window
+#   propellant depots (asteroid_mining, or Shackleton Crater's Propellant Depot)
+#                                           outside a window too, at the premium,
+#                                           when the approach's test passes; with
+#                                           nuclear_thermal_propulsion at a smaller
+#                                           premium (sr_launch_has_ntp)
 #   fusion drives     (compact_fusion_reactors) any month, free: no windows
 # The Moon, Mercury and the probes are never gated. Players and the AI run the
 # same rule: the AI keeps funding and its approach decides off-window launches.
+# The antimatter drive (slices 2-3 design § 1) leaves any month too.
 #
 # $BODY$ is a window body's token (mars, ceres, vesta, psyche, pallas, hygiea,
 # jupiter, venus, saturn, uranus, neptune, kuiper). Country scope throughout.
 # ============================================================================
 
+# Fusion drives that leave any month: the torch (Muon-Catalyzed Fusion
+# Reactors) or the antimatter drive.
 sr_launch_has_fusion = {
-	has_technology_researched = compact_fusion_reactors
+	OR = {
+		has_technology_researched = compact_fusion_reactors
+		sr_launch_has_antimatter = yes
+	}
 }
 
+# The antimatter drive: the technology and an Antimatter Containment Facility
+# to fill its tanks (scope § 5.3). The fastest of the four (sr_drive_level 3).
+sr_launch_has_antimatter = {
+	has_technology_researched = antimatter_production
+	any_scope_building = {
+		is_building_type = building_antimatter_facility
+	}
+}
+
+# Propellant depots: Asteroid Mining, or a lunar propellant colony's
+# (country_sr_propellant_depots_bool, which Shackleton Crater's Propellant Depot
+# carries on the solar colonization entry; lunar colonization design § 3.5).
+# The specialization ships, so a blockade of Shackleton (its multiplier 0)
+# should take the boolean away: the propellant_depots_bool self-check
+# (sr_launch_window_effects.txt) compares it with the record below.
 sr_launch_has_depots = {
-	has_technology_researched = asteroid_mining
+	OR = {
+		has_technology_researched = asteroid_mining
+		modifier:country_sr_propellant_depots_bool = yes
+	}
+}
+
+# What the boolean should read: THIS holds Shackleton Crater with a level of
+# its Propellant Depot (the founding choice, or a module: the condition the
+# sync shows the modifier on), and the world is neither blockaded (the
+# specialization ships, so its multiplier is 0) nor occupied (it shows to no
+# one). The self-check's reference, and the fallback if the boolean fails in
+# game.
+sr_depots_by_record = {
+	global_var:sr_site_holder_shackleton ?= this
+	sr_site_lvl_a_value_shackleton >= 1
+	NOT = { has_global_variable = sr_site_blockaded_shackleton }
+	NOT = { has_global_variable = sr_site_occupier_shackleton }
+}
+
+# Nuclear thermal engines (lunar colonization design § 9): the same transfers
+# at about 9 km/s of exhaust velocity, not 3.7, so an off-window launch pays
+# the smaller premium curve (sr_launch_premium_ntp_<body>; read through
+# sr_window_premium_country_<body>). It makes off-window launches cheaper, not
+# possible: they still need propellant depots (sr_launch_has_depots). Reads
+# the technology's marker, so its tooltip line and the effect share one source.
+sr_launch_has_ntp = {
+	modifier:country_sr_nuclear_thermal_launches_bool = yes
 }
 
 # Launch windows bind this country: the space race rule is on and it has no
 # fusion drives.
 sr_launch_windows_apply = {
-	has_game_rule = space_race_enabled
+	sr_space_race_on = yes
 	NOT = { sr_launch_has_fusion = yes }
 }
 
@@ -58,6 +109,20 @@ sr_launch_departs_paid = {
 	sr_launch_months_cost_$BODY$ <= sr_launch_months_allowed
 }
 
+# A fleet bound for a chosen world of the body (a target, or the automatic pick
+# under simple and full colonies; slices 2-3 design § 4) can leave now outside
+# the window, at the premium: as sr_launch_departs_paid, but the months saved
+# are the body's own wait for its window, not the stage's soonest window,
+# because the programme has already chosen where it goes.
+sr_launch_target_departs_paid = {
+	sr_window_body_in_play_$BODY$ = yes
+	sr_launch_windows_apply = yes
+	NOT = { has_global_variable = sr_window_is_open_$BODY$ }
+	sr_launch_has_depots = yes
+	NOT = { has_variable = sr_safe_solar_colonization }
+	sr_launch_months_cost_$BODY$ <= sr_launch_target_months_allowed_$BODY$
+}
+
 # The colony draw (sr_establish_colony_effect): a site of this body may be
 # drawn when a fleet can leave for it and no unclaimed site is cheaper. With
 # sr_launch_best_cost at sr_launch_never nothing can depart and no site passes,
@@ -67,8 +132,8 @@ sr_launch_site_departs = {
 	sr_launch_cost_$BODY$ <= sr_launch_best_cost
 }
 
-# Mercury is never gated: drawn whenever the cheapest launch is free.
-sr_launch_mercury_departs = {
+# Mercury and the Moon are never gated: drawn whenever the cheapest launch is free.
+sr_launch_ungated_departs = {
 	sr_launch_best_cost <= 0
 }
 

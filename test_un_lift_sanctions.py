@@ -162,8 +162,12 @@ class ForgetTheMonthsTests(unittest.TestCase):
     the same country would start old and be easier to lift."""
 
     def test_the_enforcers_button(self):
+        # The button and the panel's Lift Ours both run un_sanctions_lift_ours
+        # (the 2026-10-27 audit, UN-9 and UN-10).
         button = _flat(_block(_read(BUTTONS), "un_lift_sanctions_button"))
-        loop = button[button.index("every_country"):]
+        self.assertIn("un_sanctions_lift_ours = yes", button)
+        helper = _flat(_block(_read(JUSTICE_EFFECTS), "un_sanctions_lift_ours"))
+        loop = helper[helper.index("every_country"):]
         self.assertIn("remove_modifier = un_sanctions_target_modifier", loop)
         self.assertIn("remove_variable = un_sanctions_months", loop)
 
@@ -184,7 +188,6 @@ class ForgetTheMonthsTests(unittest.TestCase):
                         if "remove_modifier = un_sanctions_target_modifier" in _read(path):
                             sites.append(os.path.relpath(path, REPO))
         self.assertEqual(sorted(sites), sorted([
-            os.path.join("common", "scripted_buttons", "un_buttons.txt"),
             os.path.join("common", "scripted_effects", "un_justice_effects.txt"),
             os.path.join("common", "scripted_effects", "un_ladder_effects.txt"),
         ]))

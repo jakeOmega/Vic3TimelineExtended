@@ -72,15 +72,17 @@ class TestGenerated(unittest.TestCase):
         test_demographics_modifiers pins the lines on the laws)."""
         self.assertNotIn("te_demog_wc_land_term = {", self.values)
         for name, typ in (("te_demog_child_work", P.CHILD_WORK_TYPE), ("te_demog_pr_target_lm", P.LM_FARMS_TYPE),
-                          # stage 3 (2026-10-19): the migrant profile's women at work and families' transport
-                          ("te_demog_female_work_share", P.FEMALE_WORK_SHARE_TYPE),
+                          # stage 3 (2026-10-19): the migrant profile's families' transport
                           ("te_demog_family_transport", P.FAMILY_MIGRATION_TYPE)):
             body = self.values.split(f"{name} = {{", 1)[1].split("\n}\n", 1)[0]
             self.assertIn(f"modifier:{typ}", body, name)
             self.assertNotIn("has_law", body, name)
             self.assertNotIn("has_technology_researched", body, name)
-        body = self.values.split("te_demog_female_work_share = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertIn(f"value = {gen.lit(P.FEMALE_WORK_SHARE_DEFAULT)}", body, "the base the laws' lines add to")
+        # Late Marriage's women's work reads women's share of the workers, the census's own (2026-10-25)
+        body = self.values.split("te_demog_pr_target_lm = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn(f"multiply = te_demog_women_worker_share multiply = "
+                      f"{gen.lit(P.LM_WOMENS_WORK / P.WOMEN_WORKER_PARITY)}", body)
+        self.assertNotIn("te_demog_female_work_share", self.values)
 
     def test_means_read_the_modifier(self):
         body = self.values.split("te_demog_means = {", 1)[1].split("\n}\n", 1)[0]
@@ -238,10 +240,14 @@ class TestGenerated(unittest.TestCase):
         names = [f"te_dg_b{s}{b}" for b in range(P.BANDS) for s in "fm"]
         names += [f"te_dg_c{s}{c}" for c in range(len(P.MIGRANT_CLASSES)) for s in "fm"]
         names += ["te_dg_faw", "te_dg_fam"]   # the pool's sums (phase 2 step 4), which replaced the 18-40 sums
-        for name in names:
+        # the people past the pyramid's row starts past 85 (issue #1075), each pair where it exists
+        rows = [f"te_dg_o{s}{i}" for i in range(1, len(P.OLD_ROWS)) for s in "fm"]
+        for name in names + rows:
             self.assertEqual(body.count(f"change_variable = {{ name = {name} multiply = local_var:te_dg_norm_e5 }}"), 1, name)
             self.assertEqual(body.count(f"change_variable = {{ name = {name} divide = 100000 }}"), 1, name)
-        self.assertEqual(body.count("change_variable"), 2 * len(names))
+        for i in range(1, len(P.OLD_ROWS)):
+            self.assertIn(f"limit = {{ has_variable = te_dg_of{i} }}", body)
+        self.assertEqual(body.count("change_variable"), 2 * len(names + rows))
 
     def test_maternal_comment_says_it_is_a_rate(self):
         head = self.values.split("te_demog_mult_maternal = {", 1)[0].rsplit("\n\n", 1)[-1]

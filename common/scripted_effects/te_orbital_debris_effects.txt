@@ -6,11 +6,13 @@
 # common/scripted_triggers/te_orbital_debris_triggers.txt.
 #
 # WHO WRITES WHAT
-#   orbital_debris_low / _high (global)   te_debris_global_monthly, te_debris_add
+#   orbital_debris_low / _high (global)   te_debris_global_monthly, te_debris_add;
+#                                         the low pool also sr_battery_sweep_step
+#                                         (sr_earth_orbit_effects.txt)
 #   te_debris_removal_month, te_debris_cleaners, te_debris_top_cleaner,
 #   te_debris_programs (global)           te_debris_global_monthly
-#   te_asat_last_strike_month, te_asat_strikes_total (global)
-#                                         te_asat_strike_effect
+#   te_asat_last_strike_month, te_asat_strikes_total, te_asat_last_striker,
+#   te_asat_last_target (global)          te_asat_strike_effect
 #   te_asat_struck_month (country)        te_asat_strike_effect, on the target
 #   te_orbital_debris, te_debris_cleaner_prestige (country modifiers)
 #                                         te_debris_country_monthly, their one
@@ -65,7 +67,9 @@ te_debris_add = {
 #      cascade into the high pool when last month's index reached it.
 #   2. Decay: each pool loses its share.
 #   3. Removal: the world's removal, from the high pool first (real removal
-#      missions go after large, long-lived objects), the rest from the low.
+#      missions go after large, long-lived objects), the rest from the low;
+#      then the ground-to-orbit batteries' lasers, in peace, from the low pool
+#      alone (solar colonization fleets design § 15, sr_battery_sweep_step).
 #   4. The ceiling.
 #   5. The panel's readings: removal, cleaners, the largest cleaner.
 #   6. The removal self-check, once a game.
@@ -102,6 +106,9 @@ te_debris_global_monthly = {
 			remove_global_variable = te_debris_removal_left
 		}
 	}
+	# Ground lasers sweep only the low pool: they can't reach the debris high
+	# above (sr_earth_orbit_effects.txt).
+	sr_battery_sweep_step = yes
 	# 4. The ceiling (and the floor at 0 the low pool may have crossed).
 	te_debris_clamp_pools = yes
 	# 5. The panel's readings.
@@ -157,10 +164,56 @@ te_asat_rebuild_disruption = {
 		}
 		else_if = {
 			limit = { NOT = { has_modifier = te_orbital_network_disrupted } }
-			add_modifier = {
-				name = te_orbital_network_disrupted
-				days = te_asat_disruption_days_left
-				multiplier = te_asat_disruption_factor_held
+			# The months left at 30 days each, a literal per month: add_modifier's
+			# days reads a computed script value as 0 (scripting_best_practices.md,
+			# "Modifier & Cooldown Duration Units"). Twelve months is the longest
+			# a strike disrupts (te_asat_disruption_days).
+			if = {
+				limit = { te_asat_disruption_months_left <= 1 }
+				add_modifier = { name = te_orbital_network_disrupted days = 30 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 2 }
+				add_modifier = { name = te_orbital_network_disrupted days = 60 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 3 }
+				add_modifier = { name = te_orbital_network_disrupted days = 90 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 4 }
+				add_modifier = { name = te_orbital_network_disrupted days = 120 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 5 }
+				add_modifier = { name = te_orbital_network_disrupted days = 150 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 6 }
+				add_modifier = { name = te_orbital_network_disrupted days = 180 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 7 }
+				add_modifier = { name = te_orbital_network_disrupted days = 210 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 8 }
+				add_modifier = { name = te_orbital_network_disrupted days = 240 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 9 }
+				add_modifier = { name = te_orbital_network_disrupted days = 270 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 10 }
+				add_modifier = { name = te_orbital_network_disrupted days = 300 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 11 }
+				add_modifier = { name = te_orbital_network_disrupted days = 330 multiplier = te_asat_disruption_factor_held }
+			}
+			else = {
+				add_modifier = { name = te_orbital_network_disrupted days = 360 multiplier = te_asat_disruption_factor_held }
 			}
 		}
 	}
@@ -309,6 +362,10 @@ te_asat_strike_effect = {
 	te_debris_add = { LOW = te_asat_debris_low HIGH = te_asat_debris_high }
 	# The records the UN phase reads.
 	set_global_variable = { name = te_asat_last_strike_month value = te_history_month_index }
+	# Who struck whom, for the Orbit section's hover (te_asat_record_sgui, the
+	# Space Race tab of the Timeline Extended window). Display only.
+	set_global_variable = { name = te_asat_last_striker value = ROOT }
+	set_global_variable = { name = te_asat_last_target value = scope:te_asat_target }
 	if = {
 		limit = { NOT = { has_global_variable = te_asat_strikes_total } }
 		set_global_variable = { name = te_asat_strikes_total value = 0 }

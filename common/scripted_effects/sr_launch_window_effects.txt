@@ -3,7 +3,8 @@
 # ============================================================================
 # Global Commons spec § 5. Chemical propulsion reaches each world only in its
 # launch window; propellant depots (Asteroid Mining) buy launches outside one
-# at the premium the extra propellant costs; fusion drives end the waiting.
+# at the premium the extra propellant costs, a smaller one with Nuclear Thermal
+# Propulsion (lunar colonization design § 9); fusion drives end the waiting.
 # While no fleet can leave, the programme keeps building: progress past the
 # goal is fleets staged in orbit, and they depart one a month while a window
 # is open. The windows are generated (scripts/generators/gen_launch_windows.py);
@@ -22,6 +23,9 @@
 #   sr_window_is_open_<body>  present while its window is open
 #   sr_window_wait_<body>     months to its next window (0 while open)
 #   sr_window_cost_<body>     this month's off-window premium (0 while open)
+#   sr_window_cost_ntp_<body> the same for nuclear thermal engines (a country
+#                             with Nuclear Thermal Propulsion pays it:
+#                             sr_window_premium_country_<body>)
 #   sr_window_cache_month     the te_history_month_index these were taken for
 # Filled from the global monthly pulse (sr_launch_windows_on_actions.txt) and,
 # when that has not yet run this month, by the first journal entry that needs
@@ -46,6 +50,12 @@ sr_launch_windows_refresh_cache = {
 sr_launch_window_cache_body = {
 	set_global_variable = { name = sr_window_wait_$BODY$ value = sr_window_months_to_next_$BODY$ }
 	set_global_variable = { name = sr_window_cost_$BODY$ value = sr_launch_premium_$BODY$ }
+	set_global_variable = { name = sr_window_cost_ntp_$BODY$ value = sr_launch_premium_ntp_$BODY$ }
+	# A colony fleet's transit leaving this month, by drive (slices 2-3 design
+	# § 2; chemical is a constant): read by sr_transit_months_<body>.
+	set_global_variable = { name = sr_window_transit_fusion_$BODY$ value = sr_transit_fusion_$BODY$ }
+	set_global_variable = { name = sr_window_transit_torch_$BODY$ value = sr_transit_torch_$BODY$ }
+	set_global_variable = { name = sr_window_transit_antimatter_$BODY$ value = sr_transit_antimatter_$BODY$ }
 	if = {
 		limit = { sr_window_open_$BODY$ = yes }
 		set_global_variable = { name = sr_window_is_open_$BODY$ value = yes }
@@ -75,7 +85,35 @@ sr_launch_windows_ensure_cache = {
 sr_launch_month = {
 	sr_launch_restore_banked_fleets = yes
 	sr_launch_windows_ensure_cache = yes
+	sr_depots_self_check = yes
+	# A target (the Solar System list's Target button; sr_colony_fleet_effects.txt)
+	# that a rival claimed first is dropped: the programme picks for itself again.
 	if = {
+		limit = {
+			has_variable = sr_cf_target
+			NOT = { sr_cf_target_valid = yes }
+		}
+		remove_variable = sr_cf_target
+	}
+	# Simple and full colonies: a colony fleet travels and claims on arrival
+	# (slices 2-3 design § 4).
+	if = {
+		limit = { sr_colonies_contested_enabled = yes }
+		sr_cf_launch_month = yes
+	}
+	# Races only with a target (the owner's D19): founded at once, at the
+	# stage's goal, when its body can be reached this month.
+	else_if = {
+		limit = { has_variable = sr_cf_target }
+		if = {
+			limit = { sr_cf_target_ready = yes }
+			sr_cf_found_target_now = yes
+		}
+		else = {
+			sr_launch_note_held = yes
+		}
+	}
+	else_if = {
 		limit = { sr_launch_fleet_ready = yes }
 		# Read before the colony effect, which may advance the stage and raise the goal.
 		set_variable = { name = sr_goal_before_colony value = sr_launch_fleet_cost }
@@ -85,21 +123,18 @@ sr_launch_month = {
 			limit = { local_var:sr_launch_claimed_before < sr_total_global_colonies }
 			change_variable = { name = sr_progress_solar_colonization subtract = var:sr_goal_before_colony }
 		}
+		else = {
+			# A ready fleet the draw found nowhere for: no branch's departs
+			# trigger held. The lunar_stage0_draw self-check's evidence
+			# (sr_launch_note_held). Debug only.
+			sr_launch_note_held = yes
+		}
 		remove_variable = sr_goal_before_colony
 	}
-	else_if = {
-		limit = {
-			has_variable = sr_progress_solar_colonization
-			var:sr_progress_solar_colonization >= sr_solar_colonization_goal
-			NOT = { has_global_variable = sr_all_colonies_complete }
-		}
+	else = {
 		# A full bar held by closed windows: the window_gate self-check's
 		# evidence that the gate has held a fleet (below). Debug only.
-		if = {
-			limit = { NOT = { has_variable = sr_launch_held_months } }
-			set_variable = { name = sr_launch_held_months value = 0 }
-		}
-		change_variable = { name = sr_launch_held_months add = 1 }
+		sr_launch_note_held = yes
 	}
 }
 
@@ -120,7 +155,7 @@ sr_launch_bank_staged_fleets = {
 		limit = {
 			has_variable = sr_progress_solar_colonization
 			sr_launch_staged_whole_fleets >= 1
-			NOT = { has_global_variable = sr_all_colonies_complete }
+			sr_any_site_unclaimed = yes
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_launch_banked_fleets } }
@@ -132,12 +167,13 @@ sr_launch_bank_staged_fleets = {
 
 # From sr_launch_month, the running programme's pulse: the banked fleets back
 # into progress, at the current stage's goal (a stage that moved on while the
-# programme was stopped takes them as it would staged progress).
+# programme was stopped takes them as it would staged progress), and an old
+# Moon Base's carried progress as it is (sr_launch_banked_progress, below).
 sr_launch_restore_banked_fleets = {
 	if = {
 		limit = { has_variable = sr_launch_banked_fleets }
 		if = {
-			limit = { NOT = { has_global_variable = sr_all_colonies_complete } }
+			limit = { sr_any_site_unclaimed = yes }
 			if = {
 				limit = { NOT = { has_variable = sr_progress_solar_colonization } }
 				set_variable = { name = sr_progress_solar_colonization value = 0 }
@@ -147,6 +183,90 @@ sr_launch_restore_banked_fleets = {
 			change_variable = { name = sr_progress_solar_colonization add = local_var:sr_launch_restored }
 		}
 		remove_variable = sr_launch_banked_fleets
+	}
+	if = {
+		limit = { has_variable = sr_launch_banked_progress }
+		if = {
+			limit = { sr_any_site_unclaimed = yes }
+			if = {
+				limit = { NOT = { has_variable = sr_progress_solar_colonization } }
+				set_variable = { name = sr_progress_solar_colonization value = 0 }
+			}
+			change_variable = { name = sr_progress_solar_colonization add = var:sr_launch_banked_progress }
+		}
+		remove_variable = sr_launch_banked_progress
+	}
+}
+
+# ---- An old save's open Moon Base (lunar colonization design § 10) -------------
+# Country scope, from the monthly country pulse (space_race_on_actions.txt), on
+# the line before sr_cleanup_inactive_space_race_milestones. The retired
+# Moon Base's entry is never possible, so an old save's open copy deactivates,
+# and that cleanup then deletes its progress: this runs first. The progress
+# moves onto Solar System Colonization's bar, up to one lunar goal
+# (sr_lunar_carry_value), banked as sr_launch_banked_progress until the
+# programme's next launch month restores it (sr_launch_restore_banked_fleets),
+# so it never becomes an activation's baseline (je_space_race.txt's header).
+# The milestone's other variables go too, as sr_cleanup_milestone_variables_effect
+# clears them, but without its cost repost: the cleanup on the next line reposts
+# once, for the flag set here (two reposts in one effect stack the cost
+# modifier). Consuming the progress keeps a copy the engine left active from
+# carrying twice; the self-check says if it did.
+sr_lunar_carry_moon_base = {
+	if = {
+		limit = {
+			has_variable = sr_progress_moon_base
+			NOT = { has_variable = sr_completed_moon_base }
+		}
+		sr_lunar_carry_self_check = yes
+		set_variable = { name = sr_launch_banked_progress value = sr_lunar_carry_value }
+		remove_variable = sr_progress_moon_base
+		if = { limit = { has_variable = sr_active_moon_base } remove_variable = sr_active_moon_base }
+		if = { limit = { has_variable = sr_funding_moon_base } remove_variable = sr_funding_moon_base }
+		if = { limit = { has_variable = sr_safe_moon_base } remove_variable = sr_safe_moon_base }
+		if = { limit = { has_variable = sr_ambitious_moon_base } remove_variable = sr_ambitious_moon_base }
+		set_variable = { name = sr_space_race_cleanup_changed value = yes }
+	}
+}
+
+# Self-check lunar_migration, the carry's half (lunar colonization plan, review
+# focus 2). Country scope, before the carry. OK once a game, on the first carry
+# of progress above 0: the progress and what the bank will hold. The BROKEN
+# half is the retired entry's own pulse (sr_lunar_carry_lingering_check): the
+# carry removes its active flag, so a copy the engine left active moves nothing
+# (its pulse is guarded), and only that pulse can see it still open. The carry
+# records when it ran (sr_lunar_carried, and sr_lunar_carry_grace for two
+# months, one month's lag before the entry deactivates being normal).
+sr_lunar_carry_self_check = {
+	if = {
+		limit = {
+			NOT = { has_variable = sr_lunar_carried }
+			var:sr_progress_moon_base > 0
+			NOT = { has_global_variable = sr_lunar_carry_ok_logged }
+		}
+		set_global_variable = { name = sr_lunar_carry_ok_logged value = yes }
+		debug_log = "TE_SELF_CHECK OK lunar_migration carried=[THIS.Var('sr_progress_moon_base').GetValue|1] banked=[THIS.ScriptValue('sr_lunar_carry_value')|1] country=[THIS.GetCountry.GetNameNoFormatting] (an open Moon Base's progress moved onto Solar System Colonization, at most 300; its bar should show it in the programme's next launch month) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_lunar_carried } }
+		set_variable = { name = sr_lunar_carried value = yes }
+	}
+	set_variable = { name = sr_lunar_carry_grace value = yes days = 62 }
+}
+
+# The retired Moon Base's pulse, once its active flag is gone (je_space_race.txt):
+# the entry is still open two months after its carry, so its `possible = { always
+# = no }` didn't deactivate it (can_deactivate). BROKEN once a game. Country
+# scope. Fallback: `fail = { always = yes }` with an empty `on_fail`.
+sr_lunar_carry_lingering_check = {
+	if = {
+		limit = {
+			has_variable = sr_lunar_carried
+			NOT = { has_variable = sr_lunar_carry_grace }
+			NOT = { has_global_variable = sr_lunar_carry_broken_logged }
+		}
+		set_global_variable = { name = sr_lunar_carry_broken_logged value = yes }
+		debug_log = "TE_SELF_CHECK BROKEN lunar_migration still open: country=[THIS.GetCountry.GetNameNoFormatting] (the retired Moon Base entry is still active two months after its progress was carried; it moves nothing, but shows in the journal; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 }
 
@@ -203,47 +323,116 @@ sr_launch_window_gate_check = {
 # character before it is lost and the closing $ stays; scripting_best_practices.md,
 # "No $PARAM$ inside the string"), so the lines read these through
 # GetGlobalVariable and name the body by its code (sr_window_body_code_<body>,
-# legend BODY_CODE_LEGEND in scripts/generators/gen_launch_windows.py). Any
-# scope; the country-dependent figures are this scope's. Debug only: nothing
-# else reads the sr_window_log_*_now globals.
+# legend BODY_CODE_LEGEND in scripts/generators/gen_launch_windows.py). Country
+# scope: the premiums are the ones this country's engines pay, nuclear thermal
+# with Nuclear Thermal Propulsion, cached and by date. Debug only: nothing else
+# reads the sr_window_log_*_now globals.
 sr_window_log_copy = {
 	set_global_variable = { name = sr_window_log_body_now value = sr_window_body_code_$BODY$ }
 	set_global_variable = { name = sr_window_log_wait_date_now value = sr_window_months_to_next_$BODY$ }
 	set_global_variable = { name = sr_window_log_wait_cached_now value = sr_window_wait_months_$BODY$ }
 	set_global_variable = { name = sr_window_log_offset_now value = sr_launch_offset_$BODY$ }
-	set_global_variable = { name = sr_window_log_premium_cached_now value = sr_window_premium_now_$BODY$ }
-	set_global_variable = { name = sr_window_log_premium_date_now value = sr_launch_premium_$BODY$ }
+	set_global_variable = { name = sr_window_log_premium_cached_now value = sr_window_premium_country_$BODY$ }
+	if = {
+		limit = { sr_launch_has_ntp = yes }
+		set_global_variable = { name = sr_window_log_premium_date_now value = sr_launch_premium_ntp_$BODY$ }
+	}
+	else = {
+		set_global_variable = { name = sr_window_log_premium_date_now value = sr_launch_premium_$BODY$ }
+	}
 	set_global_variable = { name = sr_window_log_cost_now value = sr_launch_cost_$BODY$ }
 	set_global_variable = { name = sr_window_log_months_cost_now value = sr_launch_months_cost_$BODY$ }
 	set_global_variable = { name = sr_window_log_verdict_now value = sr_window_disp_verdict_$BODY$ }
 }
 
-# ---- Setbacks hit only the fleet being readied (spec § 5.2) ------------------------
-# Country scope. Solar colonization's share of a setback: (1 - $MULT$) x
-# min(progress, goal). Progress past one goal is fleets staged in orbit, which
-# a setback never touches, so a large staged bank doesn't make every setback
-# ruinous (and gives no reason to cut funding while waiting). $MULT$ is the
-# retention factor sr_apply_progress_loss_base takes (0.75 ambitious, 0.85
-# safe); the other milestones keep that base. The flat amounts some options
-# add are smaller than any goal, so they need no cap.
-sr_apply_solar_colonization_progress_loss = {
+# ---- Self-check: propellant_depots_bool (lunar colonization plan, review focus 3) ----
+# Country scope, from sr_launch_month. Shackleton Crater's Propellant Depot
+# carries country_sr_propellant_depots_bool on the solar colonization entry
+# (je:je_space_race_solar_colonization), and a blockade sets the shipping
+# specialization's multiplier to 0. Nothing yet shows that a journal entry's
+# boolean reaches the country's modifier:, or that a 0 multiplier turns it
+# off. This compares the modifier with the record (sr_depots_by_record) for
+# every country that holds the depot, held it, or reads the boolean.
+# OK once a game, once both answers have matched: a holder reading yes, and a
+# country that held the depot reading no after losing it (or its blockade).
+# BROKEN once a game on a mismatch two launch months running (a modifier sum
+# can lag a day). The fallback, named in docs/testing/solar-colonies-playtest.md,
+# is sr_depots_by_record in sr_launch_has_depots.
+sr_depots_self_check = {
 	if = {
 		limit = {
-			exists = scope:sr_setback_solar_colonization
-			has_variable = sr_progress_solar_colonization
+			OR = {
+				sr_depots_by_record = yes
+				has_variable = sr_depots_had_record
+				modifier:country_sr_propellant_depots_bool = yes
+			}
 		}
 		if = {
-			limit = { var:sr_progress_solar_colonization > sr_solar_colonization_goal }
-			set_local_variable = { name = sr_setback_readied value = sr_solar_colonization_goal }
-			change_local_variable = { name = sr_setback_readied multiply = $MULT$ }
-			change_variable = { name = sr_progress_solar_colonization subtract = sr_solar_colonization_goal }
-			change_variable = { name = sr_progress_solar_colonization add = local_var:sr_setback_readied }
+			limit = { sr_depots_by_record = yes }
+			set_variable = { name = sr_depots_had_record value = yes }
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						sr_depots_by_record = yes
+						modifier:country_sr_propellant_depots_bool = yes
+					}
+					AND = {
+						NOT = { sr_depots_by_record = yes }
+						NOT = { modifier:country_sr_propellant_depots_bool = yes }
+					}
+				}
+			}
+			if = {
+				limit = { has_variable = sr_depots_mismatch_months }
+				remove_variable = sr_depots_mismatch_months
+			}
+			if = {
+				limit = { sr_depots_by_record = yes }
+				set_global_variable = { name = sr_depots_seen_yes value = yes }
+			}
+			else = {
+				set_global_variable = { name = sr_depots_seen_no value = yes }
+			}
+			if = {
+				limit = {
+					has_global_variable = sr_depots_seen_yes
+					has_global_variable = sr_depots_seen_no
+					NOT = { has_global_variable = sr_depots_ok_logged }
+				}
+				set_global_variable = { name = sr_depots_ok_logged value = yes }
+				debug_log = "TE_SELF_CHECK OK propellant_depots_bool country=[THIS.GetCountry.GetNameNoFormatting] (the depots boolean read yes for a Shackleton holder and no for a country that lost it or its depots; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
 		}
 		else = {
-			change_variable = { name = sr_progress_solar_colonization multiply = $MULT$ }
+			if = {
+				limit = { NOT = { has_variable = sr_depots_mismatch_months } }
+				set_variable = { name = sr_depots_mismatch_months value = 0 }
+			}
+			change_variable = { name = sr_depots_mismatch_months add = 1 }
+			if = {
+				limit = {
+					var:sr_depots_mismatch_months >= 2
+					NOT = { has_global_variable = sr_depots_broken_logged }
+				}
+				set_global_variable = { name = sr_depots_broken_logged value = yes }
+				if = {
+					limit = { sr_depots_by_record = yes }
+					debug_log = "TE_SELF_CHECK BROKEN propellant_depots_bool record=yes boolean=no country=[THIS.GetCountry.GetNameNoFormatting] (Shackleton's Propellant Depot is held, unblockaded, but modifier:country_sr_propellant_depots_bool reads no: the entry's boolean does not reach the country; fall back to sr_depots_by_record, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN propellant_depots_bool record=no boolean=yes country=[THIS.GetCountry.GetNameNoFormatting] (the depots boolean reads yes with no Propellant Depot held and serving: a 0 multiplier leaves a boolean on; fall back to sr_depots_by_record, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
 		}
 	}
 }
+
+# ---- Setbacks hit only the fleet being readied (spec § 5.2) ------------------------
+# A setback, or an in-progress event's loss, never takes more than one goal from
+# solar colonization, so fleets staged in orbit are safe: sr_lose_progress_months
+# (space_race_effects.txt) caps every loss at the milestone's goal.
 
 # ---- Display: the destinations' lines -----------------------------------------------
 # Printed by sr_launch_windows_sgui (common/scripted_guis/sr_launch_window_sguis.txt)
@@ -269,8 +458,13 @@ sr_launch_window_line = {
 	}
 }
 
-# Every destination of the stage, in the panel's order.
+# Every destination of the stage, in the panel's order: the Moon first (no
+# window; founded the month a fleet leaves, lunar colonization design § 3.3).
 sr_launch_window_lines = {
+	if = {
+		limit = { sr_window_moon_in_play = yes }
+		custom_tooltip_no_bullet = sr_window_line_moon
+	}
 	sr_launch_window_line = { BODY = mars }
 	sr_launch_window_line = { BODY = ceres }
 	sr_launch_window_line = { BODY = vesta }

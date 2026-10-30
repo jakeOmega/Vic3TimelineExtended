@@ -125,6 +125,11 @@ un_vote_cast_yes = {
 				custom_tooltip = un_asat_terms_tt
 			}
 			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
+				add_modifier = { name = un_colony_protection_modifier multiplier = un_convention_multiplier }
+				custom_tooltip = un_colony_protection_terms_tt
+			}
+			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
 				add_modifier = { name = un_cultural_diversity_modifier multiplier = un_convention_multiplier }
 				un_cultural_diversity_terms_tt = yes
@@ -403,17 +408,21 @@ un_vote_cast_veto = {
 				# tally (the graduated form needs a majority). Every veto is a
 				# credibility debit weighted by the vetoer's weight in world affairs.
 				un_resolution_record_veto = yes
-				add_modifier = {
-					name = un_veto_authority_drain_modifier
-					days = long_modifier_time
-					is_decaying = yes
-				}
-				# Diplomatic isolation
-				add_modifier = {
-					name = un_veto_isolation_modifier
-					days = normal_modifier_time
-					is_decaying = yes
-				}
+				# The veto record, the case for expelling us from the seat
+				# (un_dossier_effects.txt); the tooltip names it.
+				un_veto_record_add = yes
+			}
+			# Outside the wrapper, so the vote prints the modifiers' own lines.
+			add_modifier = {
+				name = un_veto_authority_drain_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			# Diplomatic isolation
+			add_modifier = {
+				name = un_veto_isolation_modifier
+				days = normal_modifier_time
+				is_decaying = yes
 			}
 
 			# Infamy hit on punitive resolutions (vetoing humanitarian intervention,

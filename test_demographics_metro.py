@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 import demographics_metro as DMT  # noqa: E402
 import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
+import demographics_effects as DE  # noqa: E402
 
 METRO_VALUES = ROOT / "common" / "script_values" / "te_demog_metro_values.txt"
 METRO_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_metro_effects.txt"
@@ -55,7 +56,7 @@ PINNED = {
     "te_demog_k_mt_planned_capital": P.MT_PLANNED_CAPITAL, "te_demog_k_mt_plan_min": P.MT_PLAN_MIN,
     "te_demog_k_mt_effect_from": P.MT_EFFECT_FROM, "te_demog_k_mt_effect_full": P.MT_EFFECT_FULL,
     "te_demog_k_mt_dispersed_from": P.MT_DISPERSED_FROM, "te_demog_k_mt_dispersed_full": P.MT_DISPERSED_FULL,
-    "te_demog_k_mt_crowding": P.MT_EFFECTS["state_migration_crowding_density_mult"],
+    "te_demog_k_mt_crowding": P.MT_CROWDING["state_migration_crowding_density_mult"],
     "te_demog_k_mt_infra_up": P.MT_EFFECTS["state_infrastructure_from_population_mult"],
     "te_demog_k_mt_services": P.MT_EFFECTS["building_urban_center_throughput_add"],
     "te_demog_k_mt_turmoil": P.MT_EFFECTS["state_turmoil_effects_mult"],
@@ -275,7 +276,7 @@ class TestUpdate(unittest.TestCase):
         hook = _block(_text(DEMOG_ON_ACTIONS), "te_demog_state_yearly_on_action")
         self.assertLess(hook.index("te_demog_mt_state_update = yes"), hook.index("te_demog_state_yearly = yes"))
         self.assertLess(hook.index("te_demog_pc_state_check = yes"), hook.index("te_demog_mt_state_refresh = yes"))
-        for name in ("te_demog_mt_metropolis", "te_demog_mt_dispersed"):
+        for name in ("te_demog_mt_metropolis", "te_demog_mt_crowding", "te_demog_mt_dispersed"):
             sites = [p for p in (ROOT / "common").rglob("*.txt") if f"name = {name}" in _text(p)]
             self.assertEqual(sites, [METRO_EFFECTS], name)
 
@@ -296,10 +297,16 @@ class TestRefresh(unittest.TestCase):
         return eng
 
     def test_a_metropolis_takes_the_concentrated_side(self):
-        for share in (45.0, 50.0, 60.0, 80.0):
+        """Metropolis on the extended strength (full at 60, 1.5 at 80; the 2026-10-22 effects design), its crowding
+        line on the 0-1 ramp beside it: crowding feeds the share's target, a model term."""
+        for share in (45.0, 50.0, 60.0, 80.0, 95.0):
             eng = self.refresh(share)
-            self.assertEqual(eng.modifiers, {"te_demog_mt_metropolis": DMT.concentrated(share)}, share)
-            self.assertEqual(eng.vars["te_dg_mt_mult"], DMT.concentrated(share))
+            self.assertEqual(set(eng.modifiers), {"te_demog_mt_metropolis", "te_demog_mt_crowding"}, share)
+            self.assertAlmostEqual(eng.modifiers["te_demog_mt_metropolis"], DMT.concentrated_strength(share), places=6)
+            self.assertAlmostEqual(eng.modifiers["te_demog_mt_crowding"], DMT.concentrated(share), places=6)
+            self.assertAlmostEqual(eng.vars["te_dg_mt_mult"], DMT.concentrated_strength(share), places=6)
+            self.assertAlmostEqual(eng.vars["te_dg_mt_crowd_mult"], DMT.concentrated(share), places=6)
+            self.assertAlmostEqual(DMT.concentrated_strength(share), DE.metro_up(share), places=6)
 
     def test_market_towns_take_the_dispersed_side(self):
         for share in (15.0, 10.0, 5.0):
@@ -313,16 +320,22 @@ class TestRefresh(unittest.TestCase):
     def test_nothing_outside_full_and_the_old_modifier_comes_off(self):
         eng = self.refresh(80.0, full=False, held=("te_demog_mt_metropolis", "te_demog_mt_dispersed"))
         self.assertEqual(eng.modifiers, {})
-        eng = self.refresh(10.0, held=("te_demog_mt_metropolis",))
+        eng = self.refresh(10.0, held=("te_demog_mt_metropolis", "te_demog_mt_crowding"))
         self.assertEqual(set(eng.modifiers), {"te_demog_mt_dispersed"})
+
+    def test_both_go_outside_full(self):
+        eng = self.refresh(80.0, full=False, held=("te_demog_mt_metropolis", "te_demog_mt_crowding"))
+        self.assertEqual(eng.modifiers, {})
 
     def test_the_multiplier_variable_is_never_removed(self):
         self.assertNotIn("remove_variable = te_dg_mt_mult", _text(METRO_EFFECTS))
+        self.assertNotIn("remove_variable = te_dg_mt_crowd_mult", _text(METRO_EFFECTS))
 
     def test_the_strengths_match_the_model(self):
         for share in range(0, 101, 5):
             eng = _engine(DMT.Place(0.5, 0.5), share=float(share))
             self.assertAlmostEqual(eng.number("te_demog_mt_e_pos"), DMT.concentrated(share), places=6)
+            self.assertAlmostEqual(eng.number("te_demog_mt_e_pos_strength"), DMT.concentrated_strength(share), places=6)
             self.assertAlmostEqual(eng.number("te_demog_mt_e_neg"), DMT.dispersed(share), places=6)
             self.assertEqual(eng.number("te_demog_mt_label"), DMT.label(share), share)
             self.assertFalse(DMT.concentrated(share) and DMT.dispersed(share), share)
@@ -359,19 +372,27 @@ class TestModifiers(unittest.TestCase):
     def test_the_fields_are_the_values(self):
         k = _constants()
         self.assertEqual(_modifier("te_demog_mt_metropolis"), {
-            "state_migration_crowding_density_mult": k["te_demog_k_mt_crowding"],
             "state_infrastructure_from_population_mult": k["te_demog_k_mt_infra_up"],
             "building_urban_center_throughput_add": k["te_demog_k_mt_services"],
             "state_turmoil_effects_mult": k["te_demog_k_mt_turmoil"]})
+        self.assertEqual(_modifier("te_demog_mt_crowding"), {
+            "state_migration_crowding_density_mult": k["te_demog_k_mt_crowding"]})
         self.assertEqual(_modifier("te_demog_mt_dispersed"), {
             "state_infrastructure_from_population_mult": k["te_demog_k_mt_infra_down"]})
         self.assertEqual(_modifier("te_demog_mt_metropolis"), P.MT_EFFECTS)
+        self.assertEqual(_modifier("te_demog_mt_crowding"), P.MT_CROWDING)
         self.assertEqual(_modifier("te_demog_mt_dispersed"), P.MT_DISPERSED_EFFECTS)
+        for name in ("te_demog_mt_metropolis", "te_demog_mt_crowding", "te_demog_mt_dispersed"):
+            self.assertEqual(_modifier(name), DE.SIZES[name], name)
 
-    def test_every_effect_is_within_a_tenth(self):
-        """Owner, 2026-10-19: each effect at most 10% at the Metropolis label (the extreme)."""
-        for size in (*P.MT_EFFECTS.values(), *P.MT_DISPERSED_EFFECTS.values(), P.MT_FERTILITY):
-            self.assertLessEqual(abs(size), 0.10)
+    def test_every_effect_is_within_a_fifth(self):
+        """The 2026-10-22 effects design lifted the owner's 10% cap of 2026-10-19: about 20% on the main line."""
+        for size in (*P.MT_EFFECTS.values(), *P.MT_CROWDING.values(), *P.MT_DISPERSED_EFFECTS.values(), P.MT_FERTILITY):
+            self.assertLessEqual(abs(size), 0.20)
+
+    def test_crowding_is_hidden_bookkeeping(self):
+        """A model term, not an effect the player plans around: the blank icon and the state rows' hidden list."""
+        self.assertIn("modifier_system.dds", _block(_text(METRO_MODIFIERS), "te_demog_mt_crowding"))
 
     def test_the_metropolis_crowds_sooner(self):
         """state_population_density divides by 1 + state_migration_crowding_density_mult (a positive value is
@@ -379,7 +400,7 @@ class TestModifiers(unittest.TestCase):
         self.assertIn("add = modifier:state_migration_crowding_density_mult",
                       _block(_text(ROOT / "common" / "script_values" / "extra_script_values.txt"),
                              "state_population_density"))
-        self.assertLess(P.MT_EFFECTS["state_migration_crowding_density_mult"], 0)
+        self.assertLess(P.MT_CROWDING["state_migration_crowding_density_mult"], 0)
 
     def test_every_field_is_an_engine_modifier(self):
         """modifiers.log lists a throughput type for every building, but a static modifier can use only a type that
@@ -390,7 +411,7 @@ class TestModifiers(unittest.TestCase):
         registered = set(json.load(open(VANILLA_MODIFIER_TYPES, encoding="utf-8")))
         for path in MOD_MODIFIER_TYPES.glob("*.txt"):
             registered |= set(re.findall(r"^(?:INJECT:|REPLACE:)?(\w+)\s*=\s*\{", _text(path), re.M))
-        for name in ("te_demog_mt_metropolis", "te_demog_mt_dispersed"):
+        for name in ("te_demog_mt_metropolis", "te_demog_mt_crowding", "te_demog_mt_dispersed"):
             for field in _modifier(name):
                 self.assertIn(field, known, f"{name}: {field}")
                 self.assertIn(field, registered, f"{name}: {field} is not a registered modifier type")
@@ -405,7 +426,7 @@ class TestModifiers(unittest.TestCase):
                 m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
                 if m:
                     names[m.group(1)] = m.group(2)
-        for name in ("te_demog_mt_metropolis", "te_demog_mt_dispersed"):
+        for name in ("te_demog_mt_metropolis", "te_demog_mt_crowding", "te_demog_mt_dispersed"):
             for field in _modifier(name):
                 self.assertIn(field, names, f"{name}: {field}")
                 self.assertIn(f"{field}_desc", names, f"{name}: {field}_desc")
@@ -520,9 +541,12 @@ class TestSelfCheck(unittest.TestCase):
         self.assertIn("TE_SELF_CHECK OK metro_world_market_hub", body)
         self.assertIn("TE_SELF_CHECK BROKEN metro_world_market_hub", body)
         self.assertIn("metro_world_market_hub", _text(PLAYTEST))
-        # review M1 (2026-10-20): OK needs hubs, every hub with a Port and some Port states that aren't hubs
-        for cond in ("var:te_dg_mt_chk_hubs > 0", "var:te_dg_mt_chk_hub_noport = 0", "var:te_dg_mt_chk_port_nohub > 0"):
+        # review M1 (2026-10-20): OK needs hubs and some Port states that aren't hubs. Not every hub with a Port: the
+        # base game puts a hub in a market capital without one (2026-10-25: 100 of 234), so that count is printed only
+        for cond in ("var:te_dg_mt_chk_hubs > 0", "var:te_dg_mt_chk_port_nohub > 0",
+                     "var:te_dg_mt_chk_hubs <= var:te_dg_mt_chk_countries"):
             self.assertIn(cond, body)
+        self.assertNotIn("var:te_dg_mt_chk_hub_noport = 0", body)
         self.assertIn("b:building_port ?= { level > 0 }", body)
         self.assertNotIn("te_debug_demog_mt_hub_most", body + _text(METRO_VALUES))
 

@@ -453,7 +453,9 @@ INJECT:building_power_plant = {
 	production_method_groups = {
 		pmg_power_automation
 		pmg_emissions_control
-		pmg_maintenance_heavy
+		# Upkeep by base method: a fossil plant level is far smaller than a renewable,
+		# hydro, nuclear or fusion level (pm_maintenance_graded_light, extra_pms.txt)
+		pmg_maintenance_graded
 	}
 
 	# Resource Transition (issue #660): a Fossil Expansion Moratorium or a
@@ -953,8 +955,10 @@ REPLACE_OR_CREATE:building_space_mine = {
 	city_type = city
 	levels_per_mesh = -1
 
+	# Era 10 with Regolith Processing; Asteroid Mining (era 11) brings the
+	# Asteroid Mine method (lunar colonization design § 6)
 	unlocking_technologies = {
-		asteroid_mining
+		in_situ_resource_utilization
 	}
 
 	production_method_groups = {
@@ -965,6 +969,17 @@ REPLACE_OR_CREATE:building_space_mine = {
 	}
 
 	required_construction = construction_cost_space_mine
+	# Simple and full colonies (colony modules design § 9): room for levels comes
+	# from the near-Earth asteroids (with Asteroid Mining) and the colonies held,
+	# and a level past it works at -50%. No private investor builds past the
+	# room, and no AI government; a player's government can, at the penalty.
+	# Under races only both always pass (sr_ebase_has_room).
+	can_build_government = {
+		owner ?= { sr_ebase_may_build_government = yes }
+	}
+	can_build_private = {
+		owner ?= { sr_ebase_may_build_private = yes }
+	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -984,6 +999,7 @@ REPLACE_OR_CREATE:building_ocean_mine = {
 
 	production_method_groups = {
 		pmg_base_building_ocean_mine
+		pmg_support_vessels_building_ocean_mine
 		pmg_maintenance_intensive
 	}
 
@@ -1022,6 +1038,7 @@ REPLACE_OR_CREATE:building_space_program = {
 	production_method_groups = {
 		pmg_base_building_space_program
 		pmg_space_program_debris_removal # orbital debris cleanup (te_orbital_debris_pmgs.txt)
+		pmg_space_program_module_fabrication # colony modules (sr_colony_module_pmgs.txt)
 	}
 
 	possible = {
@@ -1120,7 +1137,8 @@ INJECT:building_port = {
 	production_method_groups = {
 		pmg_water_personal_transport
 		pmg_emissions_control
-		pmg_maintenance_heavy
+		# Upkeep by base method (pm_maintenance_graded_light, extra_pms.txt)
+		pmg_maintenance_graded
 	}
 
 	possible = {
@@ -1133,7 +1151,8 @@ INJECT:building_port = {
 
 INJECT:building_railway = {
 	production_method_groups = {
-		pmg_maintenance_heavy
+		# Upkeep by base method (pm_maintenance_graded_light, extra_pms.txt)
+		pmg_maintenance_graded
 	}
 }
 
@@ -1301,7 +1320,7 @@ REPLACE_OR_CREATE:building_manganese_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_iron_mine
 		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
@@ -1332,7 +1351,7 @@ REPLACE_OR_CREATE:building_chromium_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_iron_mine
 		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
@@ -1363,7 +1382,7 @@ REPLACE_OR_CREATE:building_specialty_alloy_metal_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_iron_mine
 		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
@@ -1394,7 +1413,7 @@ REPLACE_OR_CREATE:building_copper_mine = {
 		pmg_steam_automation_building_lead_mine
 		pmg_train_automation_building_lead_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_lead_mine
 		pmg_carbon_capture_steam_automation_building_lead_mine
 	}
@@ -1425,7 +1444,7 @@ REPLACE_OR_CREATE:building_bauxite_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_iron_mine
 		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
@@ -1456,7 +1475,7 @@ REPLACE_OR_CREATE:building_precious_minor_base_metal_mine = {
 		pmg_steam_automation_building_lead_mine
 		pmg_train_automation_building_lead_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_lead_mine
 		pmg_carbon_capture_steam_automation_building_lead_mine
 	}
@@ -1611,7 +1630,7 @@ REPLACE_OR_CREATE:building_graphite_mine = {
 		pmg_steam_automation_building_coal_mine
 		pmg_train_automation_building_coal_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_coal_mine
 		pmg_carbon_capture_steam_automation_building_coal_mine
 	}
@@ -1642,7 +1661,7 @@ REPLACE_OR_CREATE:building_phosphate_mine = {
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_sulfur_mine
 		pmg_carbon_capture_steam_automation_building_sulfur_mine
 	}
@@ -1673,7 +1692,7 @@ REPLACE_OR_CREATE:building_potash_mine = {
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_sulfur_mine
 		pmg_carbon_capture_steam_automation_building_sulfur_mine
 	}
@@ -1704,7 +1723,7 @@ REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_sulfur_mine
 		pmg_carbon_capture_steam_automation_building_sulfur_mine
 	}
@@ -1935,6 +1954,12 @@ REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
 		OR = {
 			NOT = { has_building = building_orbital_battlestation }
 			b:building_orbital_battlestation.level < 5
+		}
+		# A ten-year freeze conceded in a nuclear crisis (dispute 10,
+		# nd_crisis_concede_orbital).
+		custom_tooltip = {
+			text = nd_tt_orbital_frozen
+			owner = { NOT = { has_variable = nd_crisis_orbital_freeze } }
 		}
 	}
 

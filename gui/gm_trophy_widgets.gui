@@ -24,21 +24,24 @@
 ### * Numbers come from ScriptValue reads: the country's gm_tr_disp_* and the
 ###   container's gm_tr_disp_* (gm_trophy_values.txt), every one guarded.
 ### * Buttons pass the row's state as gm_state or its trophy as gm_tr, and are
-###   shown by their scripted GUI's is_shown (gm_trophy_sguis.txt).
+###   shown by their scripted GUI's is_shown (gm_trophy_sguis.txt). The
+###   buttons on the state card check Not( GetMetaPlayer.IsObserver ) first:
+###   an observer has no GetPlayer, and the is_shown logs a null-country
+###   error every frame the card draws (log triage 2026-10-25).
 ### * The collapse flags say their default: *_closed sections are open until
 ###   closed (test_grand_monuments_layout.py).
 
 types gm_trophy_widget_types
 {
-	### A line of a trophy row, beside its picture (96 + 8 + 376 = 480, as a
-	### monument's row).
+	### A line of a trophy row, beside its picture (96 + 8 + 376 = 480), at the
+	### panel's row size (gm_fontsize_row, grand_monuments_widget.gui).
 	type gm_tr_line = textbox {
 		autoresize = yes
 		multiline = yes
 		minimumsize = { 376 -1 }
 		maximumsize = { 376 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = gm_fontsize_row
 	}
 
 	### A trophy row's or card's button: its scripted GUI and label from the
@@ -48,7 +51,7 @@ types gm_trophy_widget_types
 	type gm_tr_button = button {
 		using = default_button_action
 		block "tr_button_layout" {
-			size = { 200 26 }
+			size = { 200 28 }
 			parentanchor = hcenter
 			margin_top = 2
 		}
@@ -63,7 +66,7 @@ types gm_trophy_widget_types
 				max_width = 190
 			}
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			block "tr_button_text" {}
 		}
 	}
@@ -74,7 +77,7 @@ types gm_trophy_widget_types
 	### gm_state_tr_view (unset is Full).
 	type gm_tr_view_button = button {
 		using = default_button_action
-		size = { 76 22 }
+		size = { 88 24 }
 		parentanchor = vcenter
 
 		block "tr_view_button" {}
@@ -83,7 +86,7 @@ types gm_trophy_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			using = fontsize_small
+			using = gm_fontsize_row
 			block "tr_view_button_text" {}
 		}
 	}
@@ -93,11 +96,11 @@ types gm_trophy_widget_types
 	### holding a monument we did not raise).
 	type gm_tr_take_button = button {
 		using = default_button_action
-		size = { 200 26 }
+		size = { 200 28 }
 		parentanchor = hcenter
 		margin_top = 4
 		datacontext = "[GetScriptedGui('gm_tr_take_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End ) )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
 		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
 		tooltip = "gm_button_tr_take_tooltip"
@@ -108,7 +111,7 @@ types gm_trophy_widget_types
 			autoresize = yes
 			max_width = 190
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			text = "gm_button_tr_take"
 		}
 	}
@@ -956,6 +959,361 @@ types gm_trophy_widget_types
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/landmark_pompeii__forum.dds"
 		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000088' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_walhalla__hall_of_fame.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000089' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_bunker_hill_monument__obelisk.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000090' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_obelisk_of_the_second_of_may__obelisk.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000091' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_muhammad_ali_mosque__faith.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000092' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_nelsons_column__column.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000093' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_washington_monument__obelisk.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000094' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_pyramids_of_giza__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000095' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_petra__rock_cut.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000096' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_moscow_kremlin__tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000097' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_fasil_ghebbi__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000098' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_valley_of_the_temples__pantheon.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000099' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_borobudur__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000100' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_old_city_of_sanaa__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000101' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_shibam__tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000102' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_amphitheatre_of_el_djem__forum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000103' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_abu_simbel__rock_cut.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000104' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_temple_of_seti_abydos__colonnade.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000105' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_pyramids_of_meroe__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000106' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_windsor_castle__tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000107' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_pont_du_gard__arch.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000108' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_palais_des_papes__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000109' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_mont_saint_michel__tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000110' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_chateau_de_chambord__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000111' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_jeronimos_monastery__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000112' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_alhambra__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000113' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_mezquita_of_cordoba__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000114' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_shore_temple__pillar.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000115' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_charminar__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000116' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_gwalior_fort__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000117' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_meteora__memorial_church.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000118' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_citadel_of_aleppo__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000119' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_naqsh_e_jahan_square__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000120' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_buddhas_of_bamiyan__statue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000121' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_musalla_of_herat__tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000122' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_grand_palace_bangkok__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000123' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_changdeokgung__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000124' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_bulguksa__pagoda.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000125' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_kinkaku_ji__pagoda.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000126' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_todai_ji__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000127' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_itsukushima_shrine__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000128' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_potala_palace__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000129' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_swayambhunath__pagoda.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000130' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_leshan_giant_buddha__statue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000131' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_temple_of_confucius__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000132' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_yungang_grottoes__rock_cut.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000133' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_humble_administrators_garden__pagoda.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000134' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_longmen_grottoes__rock_cut.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000135' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_registan__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000136' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_itchan_kala__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000137' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_mausoleum_of_sultan_sanjar__mausoleum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000138' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_kazan_kremlin__tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000139' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_saint_sophia_kiev__memorial_church.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000140' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_diocletians_palace__colonnade.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000141' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_marksburg__tower.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000142' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_aachen_cathedral__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000143' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_basilica_of_saint_francis__hall.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000144' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_walls_of_tallinn__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000145' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_ephesus__colonnade.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000146' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_tikal__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000147' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_chichen_itza__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000148' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_teotihuacan__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000149' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_monte_alban__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000150' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_leptis_magna__forum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000151' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_cyrene__pantheon.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000152' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_merida_theatre__forum.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000153' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_chogha_zanbil__pyramid.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000154' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_hattusa__gate.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000155' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_mount_nemrut__statue.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000156' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_mogao_caves__rock_cut.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000157' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_khajuraho__pillar.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), '(CFixedPoint)1000158' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/landmark_hampi__pillar.dds"
+		}
 	}
 
 	### A trophy's row picture (Trophies, Held Abroad, Trophies on Display): its
@@ -1404,6 +1762,361 @@ types gm_trophy_widget_types
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/trophy_pompeii.dds"
 		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000088' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_walhalla.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000089' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_bunker_hill_monument.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000090' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_obelisk_of_the_second_of_may.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000091' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_muhammad_ali_mosque.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000092' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_nelsons_column.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000093' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_washington_monument.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000094' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_pyramids_of_giza.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000095' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_petra.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000096' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_moscow_kremlin.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000097' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_fasil_ghebbi.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000098' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_valley_of_the_temples.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000099' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_borobudur.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000100' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_old_city_of_sanaa.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000101' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_shibam.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000102' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_amphitheatre_of_el_djem.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000103' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_abu_simbel.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000104' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_temple_of_seti_abydos.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000105' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_pyramids_of_meroe.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000106' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_windsor_castle.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000107' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_pont_du_gard.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000108' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_palais_des_papes.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000109' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_mont_saint_michel.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000110' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_chateau_de_chambord.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000111' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_jeronimos_monastery.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000112' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_alhambra.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000113' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_mezquita_of_cordoba.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000114' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_shore_temple.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000115' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_charminar.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000116' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_gwalior_fort.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000117' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_meteora.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000118' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_citadel_of_aleppo.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000119' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_naqsh_e_jahan_square.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000120' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_buddhas_of_bamiyan.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000121' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_musalla_of_herat.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000122' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_grand_palace_bangkok.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000123' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_changdeokgung.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000124' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_bulguksa.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000125' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_kinkaku_ji.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000126' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_todai_ji.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000127' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_itsukushima_shrine.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000128' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_potala_palace.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000129' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_swayambhunath.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000130' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_leshan_giant_buddha.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000131' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_temple_of_confucius.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000132' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_yungang_grottoes.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000133' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_humble_administrators_garden.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000134' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_longmen_grottoes.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000135' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_registan.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000136' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_itchan_kala.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000137' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_mausoleum_of_sultan_sanjar.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000138' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_kazan_kremlin.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000139' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_saint_sophia_kiev.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000140' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_diocletians_palace.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000141' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_marksburg.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000142' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_aachen_cathedral.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000143' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_basilica_of_saint_francis.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000144' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_walls_of_tallinn.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000145' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_ephesus.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000146' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_tikal.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000147' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_chichen_itza.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000148' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_teotihuacan.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000149' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_monte_alban.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000150' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_leptis_magna.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000151' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_cyrene.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000152' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_merida_theatre.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000153' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_chogha_zanbil.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000154' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_hattusa.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000155' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_mount_nemrut.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000156' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_mogao_caves.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000157' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_khajuraho.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_trophy_picture_code'), '(CFixedPoint)2000158' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/trophy_hampi.dds"
+		}
 	}
 
 	### A trophy we hold: its name, what it was and where from, what it counts
@@ -1427,7 +2140,7 @@ types gm_trophy_widget_types
 				spacing = 2
 
 				gm_tr_line = {
-					using = fontsize_large
+					using = gm_fontsize_heading
 					text = "gm_tr_row_title"
 				}
 				gm_tr_line = {
@@ -1492,7 +2205,7 @@ types gm_trophy_widget_types
 			spacing = 2
 
 			gm_tr_line = {
-				using = fontsize_large
+				using = gm_fontsize_heading
 				text = "gm_tr_row_title"
 			}
 			gm_tr_line = {
@@ -1541,7 +2254,7 @@ types gm_trophy_widget_types
 				spacing = 2
 
 				gm_tr_line = {
-					using = fontsize_large
+					using = gm_fontsize_heading
 					text = "gm_tr_row_title"
 				}
 				gm_tr_line = {
@@ -1574,7 +2287,7 @@ types gm_trophy_widget_types
 		gm_tr_button = {
 			blockoverride "tr_button" {
 				datacontext = "[GetScriptedGui('gm_tr_take_site_sgui')]"
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End ) )]"
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
 				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
 				tooltip = "gm_button_tr_take_site_tooltip"
@@ -1589,7 +2302,8 @@ types gm_trophy_widget_types
 	### Its name and what it counts for; the rest (the dedication, where it came
 	### from and when, the levels, a landmark's history) on hover. Carry It Off
 	### (Bring It Home) ends the line, small, while our armies hold the state.
-	### 392 + 6 + 112 = 510, the card's width inside its margins.
+	### 374 + 6 + 130 = 510, the card's width inside its margins: the button at
+	### the row size fits "Bring It Home".
 	type gm_tr_row_short = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -1598,10 +2312,10 @@ types gm_trophy_widget_types
 		textbox = {
 			autoresize = yes
 			multiline = yes
-			minimumsize = { 392 -1 }
-			maximumsize = { 392 -1 }
+			minimumsize = { 374 -1 }
+			maximumsize = { 374 -1 }
 			align = left|nobaseline
-			using = fontsize_medium
+			using = gm_fontsize_row
 			default_format = "#tooltippable"
 			tooltip = "gm_tr_short_tt"
 			text = "gm_tr_short_line"
@@ -1609,15 +2323,15 @@ types gm_trophy_widget_types
 
 		gm_tr_button = {
 			blockoverride "tr_button_layout" {
-				size = { 112 22 }
+				size = { 130 26 }
 				parentanchor = vcenter
 			}
 			blockoverride "tr_button_text_width" {
-				max_width = 104
+				max_width = 124
 			}
 			blockoverride "tr_button" {
 				datacontext = "[GetScriptedGui('gm_tr_take_site_sgui')]"
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End ) )]"
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
 				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
 				tooltip = "gm_button_tr_take_site_tooltip"
@@ -1763,7 +2477,7 @@ types gm_trophy_widget_types
 				}
 
 				### The header: the title, and the three views at its right.
-				### 76 * 3 + 4 * 2 = 236 beside a title of about 190.
+				### 88 * 3 + 4 * 2 = 272 beside a title of about 210.
 				widget = {
 					size = { 510 26 }
 
@@ -1771,7 +2485,7 @@ types gm_trophy_widget_types
 						parentanchor = left|vcenter
 						autoresize = yes
 						align = left|nobaseline
-						using = fontsize_large
+						using = gm_fontsize_heading
 						default_format = "#tooltippable"
 						tooltip = "gm_state_tr_header_tt"
 						text = "gm_state_tr_header"
@@ -1824,7 +2538,7 @@ types gm_trophy_widget_types
 					multiline = yes
 					maximumsize = { 510 -1 }
 					align = left|nobaseline
-					using = fontsize_medium
+					using = gm_fontsize_row
 					default_format = "#tooltippable"
 					tooltip = "gm_state_tr_summary_tt"
 					text = "gm_state_tr_summary"
@@ -1864,11 +2578,11 @@ types gm_trophy_widget_types
 	### Its monument is the row's container.
 	type gm_mon_take_button = button {
 		using = default_button_action
-		size = { 200 26 }
+		size = { 200 28 }
 		parentanchor = hcenter
 		margin_top = 2
 		datacontext = "[GetScriptedGui('gm_mon_take_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End ) )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
 		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
 		tooltip = "gm_mon_take_button_tooltip"
@@ -1879,7 +2593,7 @@ types gm_trophy_widget_types
 			autoresize = yes
 			max_width = 190
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			text = "gm_button_tr_take"
 		}
 	}
@@ -1889,7 +2603,7 @@ types gm_trophy_widget_types
 	### shape of the journal entry's gm_choice_button.
 	type gm_mon_choice_button = button {
 		using = default_button_action
-		size = { 150 24 }
+		size = { 156 28 }
 		margin_top = 2
 
 		block "choice_context" {}
@@ -1903,9 +2617,9 @@ types gm_trophy_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 140
+			max_width = 150
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			block "choice_text" {}
 		}
 	}
@@ -1933,7 +2647,7 @@ types gm_trophy_widget_types
 				spacing = 2
 
 				gm_tr_line = {
-					using = fontsize_large
+					using = gm_fontsize_heading
 					text = "gm_tr_row_title"
 				}
 				gm_tr_line = {
@@ -2005,7 +2719,7 @@ types gm_trophy_widget_types
 		textbox = {
 			autoresize = yes
 			align = left|nobaseline
-			using = fontsize_large
+			using = gm_fontsize_heading
 			default_format = "#tooltippable"
 			tooltip = "gm_state_mon_header_tt"
 			text = "gm_state_mon_header"
@@ -2017,7 +2731,7 @@ types gm_trophy_widget_types
 			multiline = yes
 			maximumsize = { 510 -1 }
 			align = left|nobaseline
-			using = fontsize_medium
+			using = gm_fontsize_row
 			text = "gm_state_mon_summary"
 		}
 

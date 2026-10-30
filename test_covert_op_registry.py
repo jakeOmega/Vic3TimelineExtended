@@ -52,6 +52,9 @@ OPS = (
     ("cultivate_assets", 12, "ideological", "mild", None),
     ("secure_material", 13, "military", "mild", None),
     ("counterintel_support", 14, "ideological", "mild", "covert_counterintel_support"),
+    ("incite_autonomy", 15, "ideological", "moderate", None),
+    ("sabotage_colony", 16, "military", "severe", None),
+    ("survey_defences", 17, "military", "moderate", None),
 )
 
 # Operations that work FOR their target, not against it: Counterintelligence
@@ -69,13 +72,16 @@ FRIENDLY = {"counterintel_support"}
 # lens_toolbar_icons byte copy, then deletes the entry, which re-arms the
 # icon and lens tests for that type. Until then the engine logs a VFSOpen
 # error for the missing lens icon once a session.
-PLACEHOLDER_ICON = {"counterintel_support": "cultivate_assets"}
+PLACEHOLDER_ICON = {}
 
 # Types with no target marker that still act in the monthly pulse, on
 # something that is not a modifier: secure material finds warheads in the
-# loose pool (nuclear_loose_effects.txt). Every other marker-less type
-# (cultivate assets) acts on nothing but its network.
-ACTS_WITHOUT_MODIFIER = {"secure_material"}
+# loose pool (nuclear_loose_effects.txt); inciting colonial autonomy and
+# colony sabotage move the target's colonies' autonomy and people (the space
+# race's sr_cov_* hooks); surveying colony defences gives the operator's fleets
+# an edge and its panel the target's figures (sr_cov_survey_defences). Every
+# other marker-less type (cultivate assets) acts on nothing but its network.
+ACTS_WITHOUT_MODIFIER = {"secure_material", "incite_autonomy", "sabotage_colony", "survey_defences"}
 
 TIER_NAMES = ("mild", "moderate", "severe", "war")
 NUMBER_WORDS = ("Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",

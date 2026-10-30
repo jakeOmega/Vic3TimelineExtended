@@ -1,0 +1,60 @@
+﻿# First Past the Post: plurality voting squeezes politics into two parties.
+#
+# While this amendment is on the voting law, every party's join_weight gives
+# the two largest parties +5 and every other party -20
+# (te_fptp_major_party_join_weight / te_fptp_minor_party_join_weight,
+# common/script_values/te_fptp_values.txt). The terms sit in each party's
+# join_weight: the vanilla parties' through the generated
+# common/parties/zz_te_party_join_weights.txt (which also drops vanilla's
+# culture-based usa_two_party_system terms), the mod's three in their own
+# files. te_fptp_effects.txt ranks the parties by their members' clout monthly.
+#
+# Big tents cost less (a party of mismatched groups is normal under plurality
+# voting), and the voters whose party can't win cost the government a flat 5.
+#
+# No parent law: a group's view of it follows its party's size, not its
+# ideology, so it is sponsored by members of the two largest parties.
+# Ways in: the USA's history, a once-per-country seed for the countries
+# vanilla's two-party term covered, te_fptp_events.2 while a voting law is
+# enacted, amendment_petition_events.28, and te_fptp_events.1, which asks
+# whether to keep it when the voting law changes.
+# Design: docs/superpowers/specs/2026-10-25-first-past-the-post-design.md.
+amendment_first_past_the_post = {
+	# The voting laws that hold elections. Oligarchy grants no voting power.
+	# te_fptp_allowed_voting_law and te_ap_law_ok_first_past_the_post restate
+	# this list; keep the three in step.
+	allowed_laws = {
+		law_landed_voting
+		law_wealth_voting
+		law_census_voting
+		law_universal_suffrage
+		law_anarchy
+	}
+
+	modifier = {
+		country_legitimacy_ideological_incoherence_mult = -0.25
+		country_legitimacy_base_add = -5
+	}
+
+	possible = {
+		always = yes
+	}
+
+	# Members of the two largest parties back it during an enactment, once those
+	# parties hold most of the clout (as the petition asks), so negotiation
+	# doesn't spread it to every multi-party AI democracy.
+	would_sponsor = {
+		has_variable = te_fptp_major_member
+		owner = { te_fptp_major_clout >= 0.6 }
+	}
+
+	ai_will_revoke = {
+		always = no
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}

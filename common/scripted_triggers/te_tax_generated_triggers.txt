@@ -372,6 +372,7 @@ te_tax_gen_goods_drift = {
 		has_consumption_tax = g:explosives
 		has_consumption_tax = g:fertilizer
 		has_consumption_tax = g:gold
+		has_consumption_tax = g:grid_power
 		has_consumption_tax = g:hardwood
 		has_consumption_tax = g:iron
 		has_consumption_tax = g:ironclads

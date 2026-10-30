@@ -470,6 +470,8 @@ remove_banking_market_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = banking_foreign_borrowing_limits         MARK = off_cb_foreign_borrowing_limits }
 	banking_strip_tool = { MODIFIER = banking_fx_surrender                     MARK = off_cb_fx_surrender }
 	banking_strip_tool = { MODIFIER = banking_emergency_import_financing       MARK = off_cb_emergency_import_financing }
+	# ...and the two tools' weekly bills with them (banking_external_end_charges).
+	banking_external_end_charges = yes
 	banking_strip_tool = { MODIFIER = banking_capital_controls_out             MARK = off_cb_capital_controls_outflow }
 	banking_strip_tool = { MODIFIER = banking_export_credit_facility           MARK = off_cb_export_credit_facility }
 	banking_strip_tool = { MODIFIER = banking_asset_relief_program             MARK = off_cb_asset_relief_program }
@@ -505,6 +507,25 @@ nuclear_industrial_strike = {
 		days = short_modifier_time
 		is_decaying = yes
 	}
+	nuclear_strike_attribute = yes
+}
+
+# State scope, after a strike's damage: who struck the state and its owner,
+# and the owner's war support. Shared by the city strike and the counterforce
+# strike (nd_counterforce_strike_damage).
+nuclear_strike_attribute = {
+	# Who struck this state, for as long as the aftermath lasts: an answer
+	# must answer its striker or the striker's side (nd_was_struck_by, #526).
+	# A terror detonation (nuclear_loose_effects.txt) has neither scope and
+	# names nobody.
+	if = {
+		limit = { exists = scope:nd_current_strike_launcher }
+		set_variable = { name = nd_struck_by value = scope:nd_current_strike_launcher days = short_modifier_time }
+	}
+	else_if = {
+		limit = { exists = scope:attacking_country }
+		set_variable = { name = nd_struck_by value = scope:attacking_country days = short_modifier_time }
+	}
 	# Track who nuked the state's owner (for AI retaliation targeting)
 	owner = {
 		if = {
@@ -527,6 +548,29 @@ nuclear_industrial_strike = {
 			}
 		}
 	}
+}
+
+# A Forces salvo's warhead on a missile field or base (rework spec §6.2): a
+# quarter of a city strike's deaths and devastation. The warheads it destroys
+# are counted once for the salvo (nd_salvo_counterforce). State scope.
+nd_counterforce_strike_damage = {
+	state_region = {
+		add_devastation = 25
+	}
+	set_variable = {
+		name = nuclear_strike_killed_population
+		value = nd_counterforce_strike_killed_population
+	}
+	te_demog_note_kills = { VALUE = var:nuclear_strike_killed_population }
+	kill_population_percent_in_state = {
+		percent = 0.025
+	}
+	add_modifier = {
+		name = nuclear_strike_aftermath
+		days = short_modifier_time
+		is_decaying = yes
+	}
+	nuclear_strike_attribute = yes
 }
 
 nuclear_first_strike = { # Scope is target state
@@ -553,28 +597,39 @@ nuclear_first_strike = { # Scope is target state
 					# Landed: nd_record_nuclear_use spurs the world's programmes.
 					set_variable = { name = nd_strike_landed value = 1 }
 
-					# UN: a nuclear first strike is a world moment and a lasting
-					# blow to the order pillar, whoever strikes (un_authority_effects.txt).
-					un_authority_actor_shock_on = { AMOUNT = -3 REASON = 8 SUBJECT = scope:target_state }
-					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -4 REASON = 8 SUBJECT = scope:target_state }
-					# ...and a record the Assembly can hold against the striker
-					# (redesign phase 3, un_dossier_effects.txt).
-					un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_first_strike }
-					# ...and a grievance the struck country may bring before the
-					# Assembly (redesign phase 4, un_docket_effects.txt).
-					un_docket_note_grievance = { KIND = nuclear VICTIM = scope:target_country }
-					# ...and a crime the International Criminal Court may
-					# indict the striker's ruler for (redesign phase 5).
-					un_regime_icc_note_crime = { CRIME = 1 }
-					# ...and a blow to the nuclear taboo (nuclear_taboo_effects.txt).
-					# An answer to a strike on us or on a country we cover counts
-					# half; every caller is at war with the target, which
+					# An answer to a strike on us or on a country we cover is
+					# retaliation, for the UN and the nuclear taboo alike, booked
+					# as the dedicated answers book it (nuclear_response_strike).
+					# It used to take a first strike's UN record whatever the
+					# taboo made of it (#527). Every caller is at war with the
+					# target, or in a peacetime exchange with it, as
 					# nd_was_struck_by needs.
 					if = {
 						limit = { nd_was_struck_by = { ENEMY = scope:target_country } }
+						# UN: retaliation still erodes the order pillar, less than a
+						# first strike (un_authority_effects.txt), and the dossier
+						# holds it at the retaliation figure. No authority shock,
+						# grievance or crime.
+						un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 SUBJECT = scope:target_state }
+						un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_retaliation }
+						# Half a first use's blow to the nuclear taboo
+						# (nuclear_taboo_effects.txt).
 						nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					}
 					else = {
+						# UN: a nuclear first strike is a world moment and a lasting
+						# blow to the order pillar (un_authority_effects.txt).
+						un_authority_actor_shock_on = { AMOUNT = -3 REASON = 8 SUBJECT = scope:target_state }
+						un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -4 REASON = 8 SUBJECT = scope:target_state }
+						# ...and a record the Assembly can hold against the striker
+						# (redesign phase 3, un_dossier_effects.txt).
+						un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_first_strike }
+						# ...and a grievance the struck country may bring before the
+						# Assembly (redesign phase 4, un_docket_effects.txt).
+						un_docket_note_grievance = { KIND = nuclear VICTIM = scope:target_country }
+						# ...and a crime the International Criminal Court may
+						# indict the striker's ruler for (redesign phase 5).
+						un_regime_icc_note_crime = { CRIME = 1 }
 						# First use pays in infamy and the world's goodwill in
 						# proportion to the taboo, before the taboo falls
 						# (nuclear_taboo_values.txt). An answer pays neither.
@@ -588,9 +643,19 @@ nuclear_first_strike = { # Scope is target state
 						}
 						nd_taboo_note_use = { KIND = strategic RETALIATION = no }
 					}
+					# Before the victim hears of it: whether the launcher says it
+					# was unauthorized (nuclear crisis rework spec §5.4).
+					hidden_effect = { nd_record_claim = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
-						owner = { trigger_event = { id = nuclear_weapon_events.1 popup = yes } }
+						owner = {
+							# One warhead: not an old salvo's text (nd_salvo_aftermath).
+							if = {
+								limit = { has_variable = nd_salvo_seen_by }
+								remove_variable = nd_salvo_seen_by
+							}
+							trigger_event = { id = nuclear_weapon_events.1 popup = yes }
+						}
 					}
 					scope:target_country = {
 						change_relations = {
@@ -725,7 +790,14 @@ nuclear_response_response_strike = {  # Scope is target state
 					nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
-						owner = { trigger_event = { id = nuclear_weapon_events.1 popup = yes } }
+						owner = {
+							# One warhead: not an old salvo's text (nd_salvo_aftermath).
+							if = {
+								limit = { has_variable = nd_salvo_seen_by }
+								remove_variable = nd_salvo_seen_by
+							}
+							trigger_event = { id = nuclear_weapon_events.1 popup = yes }
+						}
 					}
 					trigger_event = { id = nuclear_weapon_events.2 popup = yes }
 					every_country = {
@@ -808,6 +880,12 @@ nuclear_tactical_strike = {
 		name = tactical_nuke_aftermath
 		days = short_modifier_time
 		is_decaying = yes
+	}
+	# Who struck this state, as nuclear_industrial_strike records it
+	# (nd_was_struck_by, #526).
+	if = {
+		limit = { exists = scope:attacking_country }
+		set_variable = { name = nd_struck_by value = scope:attacking_country days = short_modifier_time }
 	}
 	# Track who nuked the state's owner (for AI retaliation targeting)
 	owner = {

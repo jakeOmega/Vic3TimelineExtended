@@ -1,0 +1,170 @@
+{
+ "state_trait_atacama_copper_belt": {
+  "en": "Atacama Copper Belt",
+  "es": "Cinturón de cobre de Atacama"
+ },
+ "state_trait_atacama_copper_belt_desc": {
+  "en": "Porphyry copper deposits of unmatched scale beneath the driest desert on Earth, including Chuquicamata and Escondida.",
+  "es": "Yacimientos de cobre porfídico de una escala sin igual bajo el desierto más seco de la Tierra, entre ellos Chuquicamata y Escondida."
+ },
+ "state_trait_bayan_obo": {
+  "en": "Bayan Obo",
+  "es": "Bayan Obo"
+ },
+ "state_trait_bayan_obo_desc": {
+  "en": "The largest known rare-earth deposit in the world, a hydrothermal complex yielding cerium, neodymium, and niobium in industrial quantities.",
+  "es": "El mayor yacimiento de tierras raras conocido del mundo, un complejo hidrotermal que produce cerio, neodimio y niobio en cantidades industriales."
+ },
+ "state_trait_bushveld_complex": {
+  "en": "Bushveld Igneous Complex",
+  "es": "Complejo ígneo de Bushveld"
+ },
+ "state_trait_bushveld_complex_desc": {
+  "en": "The world's richest reserves of platinum-group metals and chromium, layered through a vast magmatic intrusion two billion years old.",
+  "es": "Las reservas más ricas del mundo de metales del grupo del platino y de cromo, estratificadas en una vasta intrusión magmática de dos mil millones de años."
+ },
+ "state_trait_ceylon_graphite": {
+  "en": "Ceylon Graphite Veins",
+  "es": "Vetas de grafito de Ceilán"
+ },
+ "state_trait_ceylon_graphite_desc": {
+  "en": "Vein graphite of exceptional crystallinity — prized for crucibles, brushes, and electrodes since the earliest days of industrial chemistry.",
+  "es": "Grafito en vetas de una cristalinidad excepcional, apreciado para crisoles, escobillas y electrodos desde los albores de la química industrial."
+ },
+ "state_trait_chiatura_manganese": {
+  "en": "Chiatura Manganese Deposits",
+  "es": "Yacimientos de manganeso de Chiatura"
+ },
+ "state_trait_chiatura_manganese_desc": {
+  "en": "Georgia's Imereti region holds high-grade manganese ores that fed steelworks across the Russian Empire and the Soviet Union.",
+  "es": "La región de Imericia, en Georgia, alberga menas de manganeso de alta ley que abastecieron a las acerías de todo el Imperio Ruso y la Unión Soviética."
+ },
+ "state_trait_copperbelt": {
+  "en": "Central African Copperbelt",
+  "es": "Cinturón de cobre centroafricano"
+ },
+ "state_trait_copperbelt_desc": {
+  "en": "An arc of sediment-hosted copper deposits running from Katanga into Northern Rhodesia, exceptionally rich and shallow enough for open-pit mining.",
+  "es": "Un arco de yacimientos de cobre alojados en sedimentos que se extiende desde Katanga hasta Rodesia del Norte, excepcionalmente ricos y lo bastante someros para la minería a cielo abierto."
+ },
+ "state_trait_cornish_tin": {
+  "en": "Cornish Tin Lodes",
+  "es": "Filones de estaño de Cornualles"
+ },
+ "state_trait_cornish_tin_desc": {
+  "en": "Granite-hosted tin and tungsten veins worked since antiquity, the historic heart of European base-metal mining.",
+  "es": "Vetas de estaño y wolframio alojadas en granito, explotadas desde la Antigüedad, corazón histórico de la minería europea de metales comunes."
+ },
+ "state_trait_dead_sea_potash": {
+  "en": "Dead Sea Mineral Works",
+  "es": "Industrias minerales del mar Muerto"
+ },
+ "state_trait_dead_sea_potash_desc": {
+  "en": "Solar evaporation of the world's saltiest natural body of water yields potash, bromine, and salt in industrial quantities.",
+  "es": "La evaporación solar de la masa de agua natural más salada del mundo produce potasa, bromo y sal en cantidades industriales."
+ },
+ "state_trait_erzgebirge": {
+  "en": "Erzgebirge Mineral District",
+  "es": "Distrito mineral de Erzgebirge"
+ },
+ "state_trait_erzgebirge_desc": {
+  "en": "The 'Ore Mountains' yield a remarkable variety of base, precious, and rare metals — tin, silver, cobalt, bismuth, and the lithium ores that gave the element its name.",
+  "es": "Los «Montes Metálicos» producen una notable variedad de metales comunes, preciosos y raros: estaño, plata, cobalto, bismuto y las menas de litio que dieron nombre al elemento."
+ },
+ "state_trait_great_basin_borates": {
+  "en": "Great Basin Borates",
+  "es": "Boratos de la Gran Cuenca"
+ },
+ "state_trait_great_basin_borates_desc": {
+  "en": "Dry lake beds rich in borax, soda ash, and lithium brines — the chemical foundation of countless industrial processes.",
+  "es": "Lechos de lagos secos ricos en bórax, carbonato sódico y salmueras de litio: la base química de innumerables procesos industriales."
+ },
+ "state_trait_jamaican_bauxite": {
+  "en": "Jamaican Bauxite",
+  "es": "Bauxita jamaicana"
+ },
+ "state_trait_jamaican_bauxite_desc": {
+  "en": "Tropical weathering of the island's limestone bedrock has left behind some of the most accessible high-grade bauxite in the Americas.",
+  "es": "La meteorización tropical del lecho de roca caliza de la isla ha dejado algunas de las bauxitas de alta ley más accesibles de América."
+ },
+ "state_trait_kola_apatite": {
+  "en": "Kola Apatite-Nepheline Complex",
+  "es": "Complejo de apatito y nefelina de Kola"
+ },
+ "state_trait_kola_apatite_desc": {
+  "en": "Vast intrusive bodies on the Kola Peninsula yield apatite, nepheline, and the rare-earth-bearing loparite that anchored Soviet strategic-mineral production.",
+  "es": "Vastos cuerpos intrusivos de la península de Kola producen apatito, nefelina y la loparita, rica en tierras raras, que fue el pilar de la producción soviética de minerales estratégicos."
+ },
+ "state_trait_madagascar_graphite": {
+  "en": "Madagascan Graphite",
+  "es": "Grafito malgache"
+ },
+ "state_trait_madagascar_graphite_desc": {
+  "en": "Coarse-flake crystalline graphite of unusual purity, the global benchmark for electrode-grade ore.",
+  "es": "Grafito cristalino de escamas gruesas y pureza inusual, la referencia mundial para el mineral de grado electrodo."
+ },
+ "state_trait_moroccan_phosphate": {
+  "en": "Moroccan Phosphate Plateau",
+  "es": "Meseta fosfatada marroquí"
+ },
+ "state_trait_moroccan_phosphate_desc": {
+  "en": "The Khouribga plateau and its neighbours host the largest phosphate reserves on Earth, the foundation of modern fertilizer production.",
+  "es": "La meseta de Juribga y sus vecinas albergan las mayores reservas de fosfato de la Tierra, base de la producción moderna de fertilizantes."
+ },
+ "state_trait_nauru_phosphate": {
+  "en": "Nauru Guano Deposits",
+  "es": "Yacimientos de guano de Nauru"
+ },
+ "state_trait_nauru_phosphate_desc": {
+  "en": "Centuries of seabird droppings on a raised coral island have produced the purest phosphate rock ever mined commercially.",
+  "es": "Siglos de excrementos de aves marinas sobre una isla coralina elevada han producido la roca fosfórica más pura jamás extraída comercialmente."
+ },
+ "state_trait_nikopol_manganese": {
+  "en": "Nikopol Manganese Basin",
+  "es": "Cuenca de manganeso de Nikopol"
+ },
+ "state_trait_nikopol_manganese_desc": {
+  "en": "The world's largest sedimentary manganese deposit, central to the Russian and Soviet steel industries for over a century.",
+  "es": "El mayor yacimiento sedimentario de manganeso del mundo, fundamental para las industrias siderúrgicas rusa y soviética durante más de un siglo."
+ },
+ "state_trait_pilbara": {
+  "en": "Pilbara Mineral Province",
+  "es": "Provincia mineral de Pilbara"
+ },
+ "state_trait_pilbara_desc": {
+  "en": "Among the oldest exposed crust on Earth, the Pilbara hosts enormous deposits of iron and manganese alongside emerging reserves of bauxite and rare metals.",
+  "es": "Con la corteza expuesta más antigua de la Tierra, Pilbara alberga enormes yacimientos de hierro y manganeso junto con reservas emergentes de bauxita y metales raros."
+ },
+ "state_trait_saskatchewan_potash": {
+  "en": "Saskatchewan Potash Beds",
+  "es": "Lechos de potasa de Saskatchewan"
+ },
+ "state_trait_saskatchewan_potash_desc": {
+  "en": "Buried evaporite formations holding nearly half the world's recoverable potash, mined for fertilizer at industrial scale.",
+  "es": "Formaciones evaporíticas enterradas que contienen casi la mitad de la potasa recuperable del mundo, explotadas como fertilizante a escala industrial."
+ },
+ "state_trait_stassfurt_salts": {
+  "en": "Stassfurt Salt Beds",
+  "es": "Lechos de sal de Stassfurt"
+ },
+ "state_trait_stassfurt_salts_desc": {
+  "en": "The first commercially exploited potash deposits in the world, layered with rock salt and the unusual potassium-magnesium minerals that founded modern fertilizer chemistry.",
+  "es": "Los primeros yacimientos de potasa explotados comercialmente en el mundo, estratificados con sal gema y los singulares minerales de potasio y magnesio que fundaron la química moderna de los fertilizantes."
+ },
+ "state_trait_sudbury_basin": {
+  "en": "Sudbury Basin",
+  "es": "Cuenca de Sudbury"
+ },
+ "state_trait_sudbury_basin_desc": {
+  "en": "A meteoritic impact crater whose shattered crust concentrates nickel, copper, and platinum-group metals in quantities found nowhere else.",
+  "es": "Un cráter de impacto meteorítico cuya corteza fracturada concentra níquel, cobre y metales del grupo del platino en cantidades que no se encuentran en ningún otro lugar."
+ },
+ "state_trait_weipa_bauxite": {
+  "en": "Weipa Bauxite",
+  "es": "Bauxita de Weipa"
+ },
+ "state_trait_weipa_bauxite_desc": {
+  "en": "Vast laterite plateaus along the Cape York coast hold some of the largest and richest bauxite reserves in the world.",
+  "es": "Vastas mesetas de laterita a lo largo de la costa del cabo York albergan algunas de las mayores y más ricas reservas de bauxita del mundo."
+ }
+}

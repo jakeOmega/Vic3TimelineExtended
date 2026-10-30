@@ -9,18 +9,23 @@ Units. Death rates are yearly probabilities per 100,000 people, fertility shapes
 (scripting_best_practices.md: values are stored in units of 1e-5).
 """
 
-RING_YEARS = 150            # spec §1: slots reach about age 150; 150+ folds into a pool
+# spec §1: one slot per single year of age, the people past the ring's last in a pool. 150 until issue #1075 (owner,
+# 2026-10-20): ages 0-299 since, so nobody a player can reach falls into the pool (someone born in 1836 is 264 in 2100),
+# and a save from before re-files its ring at its state's next step (te_demog_ring_migrate).
+RING_YEARS = 300
 COHORT_WIDTH = 1            # spec §1 decision rule; owner to confirm (§13). Only 1 is built.
 FEMALE_BIRTH_PER_100K = 48780   # 100 girls per 205 births (§3)
 MALE_BIRTH_PER_100K = 51220
 
-# Abridged age groups (start, width). Rates are constant inside a group.
+# Abridged age groups (start, width). Rates are constant inside a group. They stop at 145-149, inside the ring (issue
+# #1075): every base rate is flat from 110, so the last group's rates hold at every older rate age, as the pool's did
+# when the ring ended at 150; the life tables close at 150 on them (LT_TAIL_RATE_MIN's note).
 GROUPS = [(0, 1), (1, 4)] + [(a, 5) for a in range(5, 150, 5)]
 GROUP_STARTS = [g[0] for g in GROUPS]
 
 
 def group_of(age):
-    """Index into GROUPS for a rate age 0..149 (150+ uses the last group)."""
+    """Index into GROUPS for a rate age 0..149 (150 and over use the last group)."""
     age = min(age, 149)
     for i in range(len(GROUPS) - 1, -1, -1):
         if age >= GROUPS[i][0]:
@@ -284,8 +289,9 @@ HEALTH_NEED_CAP = 1.0
 HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine", "genetic_engineering",
                 "molecular_assemblers", "biological_immortality")
 HEALTH_TECH_STEP = 0.05
-# Work deaths follow the participation model under Full (§2.5): women's share of the census's own workers aged
-# WORK_SPLIT_AGES (first, last), from the last count; the laws' share (female_work_share) before one.
+# Work deaths follow the participation model (§2.5): women's share of the census's own workers aged WORK_SPLIT_AGES
+# (first, last), from the last count; before one, the share the sexes' rates give (women_worker_share). Under Full
+# alone until 2026-10-25, the women's-rights laws' own share outside it.
 WORK_SPLIT_AGES = (15, 64)
 # The AI's yearly pulse (§2.2, §9): the same weights for every country; is_ai only decides whom the pulse acts for. A
 # bill over PENSION_AI_BILL_HIGH of revenue, or debt over PENSION_AI_DEBT of its ceiling, pushes toward the cheaper
@@ -334,8 +340,10 @@ YOUTH_AGES = (20, 29)          # calendar (life stage)
 YOUTH_FROM = 0.18
 YOUTH_SPAN = 0.06
 YOUTH_UNEMPLOYMENT_FULL = 0.2
-YOUTH_RADICALS = 0.15          # state_radicals_from_political_movements_mult at y = 1
-YOUTH_TURMOIL = 0.10           # state_turmoil_effects_mult at y = 1
+# The 2026-10-22 effects design: the main demographic source of general unrest, and each factor keeps rising past 1 at
+# half the slope, the product at most EFFECT_CAP (demographics_effects.youth).
+YOUTH_RADICALS = 0.25          # state_radicals_from_political_movements_mult at y = 1
+YOUTH_TURMOIL = 0.15           # state_turmoil_effects_mult at y = 1
 # On with conscription (above): step 4 held it back because 73% of the 1898 save's bulge states sat outside 90-110 men
 # per 100 women, the booking's young men; re-walked with the booking, no state's 20-29 share passes 0.183 to 1901.
 # Written as te_demog_k_youth_effects.
@@ -359,10 +367,16 @@ SEX_FEWER_FROM = 90.0
 SEX_FEWER_FULL = 80.0
 SEX_BIRTHS_FLOOR = 0.8
 SEX_WOMEN_RATE = 0.07           # in the game's units, as MEN_RATE (0.1 x 0.7)
-SEX_FEMINIST = 0.10            # state_pop_support_movement_feminist_mult (a percentage; the _add form is not one)
+# The 2026-10-22 effects design: the modifiers' strengths keep rising past full at half the slope, at most EFFECT_CAP
+# (70 or 150 men give 1.5, 60 or 170 give 2); the model terms (births, the women's rate) keep the 0-1 ramps. More Men
+# is full at 130 (was 150) and brings turmoil, standing in for the crime and violence of a surplus of young men.
+SEX_FEMINIST = 0.25            # state_pop_support_movement_feminist_mult (a percentage; the _add form is not one)
 SEX_MORE_FROM = 110.0
-SEX_MORE_FULL = 150.0
-SEX_RADICALS = 0.10            # state_radicals_from_political_movements_mult at full
+SEX_MORE_FULL = 130.0
+SEX_RADICALS = 0.15            # state_radicals_from_political_movements_mult at full
+SEX_MORE_TURMOIL = 0.15        # state_turmoil_effects_mult at full
+# The extended strengths' cap where a scale has no natural end (the sex balance, the youth bulge).
+EFFECT_CAP = 2.0
 
 
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
@@ -432,7 +446,8 @@ PRACTICE_EROSION_SPAN = 0.2
 PRACTICE_EROSION_ACCESS = {"lm": 0.0, "bs": 0.3}
 PRACTICE_ACCESS_SPAN = 0.5
 # Late Marriage's drivers (call 6): impartible inheritance x the agrarian share; women's paid work before marriage,
-# x the women's job share x the law's women's work share / FULL_FEMALE_WORK_SHARE. Impartible inheritance is a
+# x the women's job share x women's share of the workers / WOMEN_WORKER_PARITY (women_worker_share; the women's-rights
+# laws' own share / 0.48 until 2026-10-25). Impartible inheritance is a
 # census-only type (since 2026-10-17, so its tooltip says it), 0.15 on Primogeniture (extra_laws.txt) and on Undivided
 # Farm Succession (extra_amendments.txt, an amendment: load_carriers' kind "amendment"). The two never meet: the
 # amendment sits only on Forced Heirship and Customary Inheritance.
@@ -632,11 +647,6 @@ DIFFUSION_BASE = 0.1
 DIFFUSION_MAX = 1.0
 MEDICINE_SNAP = 0.005
 MEDICAL_OUTREACH_DIFFUSION = 0.2   # decree_medical_outreach's line (a test pins the decree to it)
-
-# Women's share of the workforce (§2.4, §2.5): this base plus the women's-rights laws' FEMALE_WORK_SHARE_TYPE line (stage 3
-# of the modifier-types design, 2026-10-19, below), for the migrant profile, Late Marriage's women's work and, outside
-# Full, splitting work deaths.
-FEMALE_WORK_SHARE_DEFAULT = 0.1
 
 # ---- War dead and migrants (§2.5) -------------------------------------------------
 # The war dead come from the conscription pool's ages (phase 2 step 4, below: POOL_FROM, POOL_TO), 95% of them men.
@@ -854,8 +864,9 @@ LIVE_WORKFORCE_LINES = frozenset({
     ("extra_companies_flavored.txt", "company_rosen_association"),
     ("unique_pms.txt", "pm_rosen_association_hq"),
 })
-# Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
-MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
+# Age classes for migrant profiles: (first age, last age) by rate age (the age before the step). The last class runs to
+# the ring's end, so the people past 150 move with the rest of the old since the ring's 300 years (issue #1075).
+MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, RING_YEARS)]
 # Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee
 # kinds split evenly between women and men; the labour kind's split is the LABOUR_FEMALE_SHARE range.
 MIGRANT_PROFILE = {
@@ -864,9 +875,14 @@ MIGRANT_PROFILE = {
     "refugee": {"weights": [0.27, 0.05, 0.3, 0.25, 0.13]},
 }
 LABOUR_FEMALE_SHARE_MIN, LABOUR_FEMALE_SHARE_MAX = 0.1, 0.6
-FAMILY_BASE = 0.2                 # families' weight before transport (FAMILY_MIGRATION_TYPE), rights and chain migration
-FAMILY_RIGHTS_WEIGHT = 0.2        # x women's work share / FULL_FEMALE_WORK_SHARE
-FULL_FEMALE_WORK_SHARE = 0.48     # Protected Class's share: women's rights at their fullest
+# Women's share of the workers at which women work as much as men: the labour kind's women's share and Late Marriage's
+# women's work read women_worker_share over it (2026-10-25; they read the women's-rights laws' own share over Protected
+# Class's 0.48 before)
+WOMEN_WORKER_PARITY = 0.5
+# Families' weight before transport (FAMILY_MIGRATION_TYPE) and chain migration. 0.2 until 2026-10-25, when the women's
+# rights term (0.2 x the laws' share / 0.48) went: women who can move on their own account don't make families move
+# more. The 0.0417 it gave No Women's Rights stays here, so a state under that law books families as before.
+FAMILY_BASE = 0.2417
 CHAIN_STEP, CHAIN_CAP = 0.02, 0.2  # per consecutive year of net inflow, at most
 CRISIS_AT_WAR = 0.3               # refugees' weight while the owner is at war, before devastation and turmoil
 # ---- The residual's booking keeps the structure plausible (migrant booking, 2026-10-12) ---------------------------
@@ -929,6 +945,20 @@ GINI_SHOWN_EQUALITY = 0.7
 # ---- Display ----------------------------------------------------------------------
 BAND_WIDTH = 5
 BANDS = 18          # 0-4 ... 80-84, then 85+
+# The pyramid's rows past 85 (issue #1075; owner, 2026-10-20: show the late game's ages, gated on people being in them).
+# The census keeps 85+ as its last band for every figure; the pyramid can split it into rows starting at OLD_ROWS, the
+# last the pool (RING_YEARS and over). A row past 85-99 shows while the people of its age and over are OLD_ROW_GATE or
+# more of all the people, so an 1836-2000 pyramid ends at 85+ as before; the highest row shown takes everyone older
+# ("125+"). A row of more than five years draws its people per five years of age, as wide as the rows below it
+# (OLD_ROW_DRAW); the pool's row, open-ended, at its count, as 85+ is. The census stores each state's and country's
+# people aged OLD_ROWS[i] and over, i >= 1 (te_dg_o<f|m><i>, the country's te_dg_co<f|m><i>, only where someone is),
+# and, where the pyramid splits, the rows it shows (te_dg_pyr_top, te_dg_px<f|m><i>); the biological pyramid the same
+# by biological age (te_dg_bo, te_dg_cbo, te_dg_bpyr_top, te_dg_bpx).
+OLD_ROWS = tuple(a for a in (85, 100, 125, 150, 200, 250) if a < RING_YEARS) + (RING_YEARS,)
+OLD_ROW_GATE = 0.01
+OLD_ROW_WIDTHS = tuple(b - a for a, b in zip(OLD_ROWS, OLD_ROWS[1:])) + (BAND_WIDTH,)
+OLD_ROW_DRAW = tuple(round(BAND_WIDTH / w, 5) for w in OLD_ROW_WIDTHS)
+assert OLD_ROWS[0] == BAND_WIDTH * (BANDS - 1), "the rows split the pyramid's last band"
 
 # ---- Phase 2 step 3b: the census reads the Family Policy measures and laws ------------------------------------
 # docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.2, §3.5. Six script-only state types
@@ -973,8 +1003,9 @@ AGEING_RATE_LINES = {"mrna_therapeutics": -0.10, "personalized_medicine": -0.10,
                      "synthetic_biology": -0.05, "biological_immortality": -0.70}
 REJUVENATION_LINES = {"biological_immortality": 0.03}
 # Who is treated (§1.2-§1.3, call 8): a treated share te_dg_s<j> and their mean deficit te_dg_d<j> (calendar less
-# biological age) per five-year birth band j = slot // LX_BAND_WIDTH (birth year / 5 mod 30), adults only: a cohort
-# reaching LX_JOIN_AGE joins at the state's eligibility E. The pool (150+) keeps its own (te_dg_lx_ps, te_dg_lx_pd).
+# biological age) per five-year birth band j = slot // LX_BAND_WIDTH (birth year / 5 mod 60), adults only: a cohort
+# reaching LX_JOIN_AGE joins at the state's eligibility E. The pool (RING_YEARS and over) keeps its own (te_dg_lx_ps,
+# te_dg_lx_pd).
 LX_JOIN_AGE = 25
 LX_BAND_WIDTH = 5
 LX_BANDS = RING_YEARS // LX_BAND_WIDTH
@@ -1055,18 +1086,16 @@ LX_POLITICS_LABOR = 0.10
 PENSION_AI_GAP = 0.2
 PENSION_AI_GAP_LOW = 0.1
 
-# ---- The migrant profile's inputs as modifier types (modifier-types design, stage 3, 2026-10-19) ----
-# docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md. Two census-only state types
-# (demographics_modifier_types.txt) on their carriers in the game files, which demographics_modifiers.py resolves; they
-# replaced the FEMALE_WORK_SHARE law table and the FAMILY_TRANSPORT_TECHS table. Women's share of the workforce is
-# FEMALE_WORK_SHARE_DEFAULT + the women's-rights law's line, at most 1 (Women in the Fields 0.15, Women Own Property
-# 0.20, Women in the Workplace 0.35, Women's Suffrage 0.37, Protected Class 0.38: the old table less the base), so
-# FULL_FEMALE_WORK_SHARE is the base plus Protected Class's line. The family kind's weight takes the transport
-# technologies' line on top of FAMILY_BASE: Paddle Steamer and Railways 0.10, Combustion Engine 0.15, and the aviation
-# techs §2.5 names, Commercial Aviation and Jet Engine Technology 0.05 each (owner, 2026-10-19).
-FEMALE_WORK_SHARE_TYPE = "state_female_work_share_add"
+# ---- The migrant profile's input as a modifier type (modifier-types design, stage 3, 2026-10-19) ----
+# docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md. A census-only state type
+# (demographics_modifier_types.txt) on its carriers in the game files, which demographics_modifiers.py resolves; it
+# replaced the FAMILY_TRANSPORT_TECHS table. The family kind's weight takes the transport technologies' line on top of
+# FAMILY_BASE: Paddle Steamer and Railways 0.10, Combustion Engine 0.15, and the aviation techs §2.5 names, Commercial
+# Aviation and Jet Engine Technology 0.05 each (owner, 2026-10-19). Stage 3's other type, the women's-rights laws'
+# women's share of the workforce (state_female_work_share_add), went on 2026-10-25: the census's own count of women
+# among its workers (women_worker_share) took its place, and the families' rights term went with it.
 FAMILY_MIGRATION_TYPE = "state_family_migration_add"
-MIGRANT_PROFILE_TYPES = (FEMALE_WORK_SHARE_TYPE, FAMILY_MIGRATION_TYPE)
+MIGRANT_PROFILE_TYPES = (FAMILY_MIGRATION_TYPE,)
 DEMOG_TYPES = DEMOG_TYPES + MIGRANT_PROFILE_TYPES
 
 # ---- Internal Resettlement's known moves (2026-10-19) ----
@@ -1095,10 +1124,10 @@ RESETTLE_KINDS = {
 }
 # Each programme's movers as (kind, weight, women's share) parts, the weights summing to 1. The family and refugee kinds
 # split evenly (None: the kind's own share); the labour kind takes the women's share given, or "jobs": the destination's
-# jobs, as the residual's labour kind (LABOUR_FEMALE_SHARE_MIN + its female_job_share x women's rights x the range; no
-# balance ramp, LABOUR_BALANCE_*: a known move is not an estimate). Owner calls, 2026-10-19; Penal Transportation's class
-# split (above) was confirmed on 2026-10-20, and the Development Program's 60/40 was being confirmed as this was built:
-# one edit here if it changes.
+# jobs, as the residual's labour kind (LABOUR_FEMALE_SHARE_MIN + its female_job_share x women's share of its workers /
+# WOMEN_WORKER_PARITY x the range; no balance ramp, LABOUR_BALANCE_*: a known move is not an estimate). Owner calls,
+# 2026-10-19; Penal Transportation's class split (above) was confirmed on 2026-10-20, and the Development Program's
+# 60/40 was being confirmed as this was built: one edit here if it changes.
 RESETTLE_PROFILES = {
     "land_grants": (("family", 1.0, None),),
     "military_colonies": (("labour", 0.5, 0.2), ("family", 0.5, None)),   # half the labour kind at 80% men, half families
@@ -1140,29 +1169,29 @@ RESETTLE_PROFILES = {
 # Tennessee 98.8, Ohio 107.2. Indiana (107.7) stays as one of the first build's West: the 110 rule is for additions.
 FRONTIER_1840_WHITE = {
     "STATE_MICHIGAN": {(15, 19): (10887, 10819), (20, 29): (22759, 18706), (30, 39): (16025, 11864),
-                       (40, 49): (8276, 6109), (50, 59): (4442, 3394), (60, 149): (2629, 1985)},
+                       (40, 49): (8276, 6109), (50, 59): (4442, 3394), (60, RING_YEARS - 1): (2629, 1985)},
     "STATE_INDIANA": {(15, 19): (36599, 36904), (20, 29): (60002, 55176), (30, 39): (37565, 32708),
-                      (40, 49): (21678, 19967), (50, 59): (13789, 10759), (60, 149): (9086, 7319)},
+                      (40, 49): (21678, 19967), (50, 59): (13789, 10759), (60, RING_YEARS - 1): (9086, 7319)},
     "STATE_ILLINOIS": {(15, 19): (24876, 24078), (20, 29): (52580, 38823), (30, 39): (31428, 22676),
-                       (40, 49): (15809, 12712), (50, 59): (8755, 6514), (60, 149): (5084, 4032)},
+                       (40, 49): (15809, 12712), (50, 59): (8755, 6514), (60, RING_YEARS - 1): (5084, 4032)},
     "STATE_MISSOURI": {(15, 19): (16784, 16952), (20, 29): (33772, 26330), (30, 39): (20568, 14889),
-                       (40, 49): (11384, 8580), (50, 59): (5620, 4259), (60, 149): (3469, 2808)},
+                       (40, 49): (11384, 8580), (50, 59): (5620, 4259), (60, RING_YEARS - 1): (3469, 2808)},
     "STATE_ARKANSAS": {(15, 19): (3863, 3911), (20, 29): (8532, 5881), (30, 39): (5129, 3317),
-                       (40, 49): (2751, 1715), (50, 59): (1194, 805), (60, 149): (727, 504)},
+                       (40, 49): (2751, 1715), (50, 59): (1194, 805), (60, RING_YEARS - 1): (727, 504)},
     "STATE_IOWA": {(15, 19): (2179, 2064), (20, 29): (6207, 3789), (30, 39): (3310, 1865),             # Iowa Territory
-                   (40, 49): (1512, 979), (50, 59): (698, 494), (60, 149): (357, 245)},
+                   (40, 49): (1512, 979), (50, 59): (698, 494), (60, RING_YEARS - 1): (357, 245)},
     "STATE_WISCONSIN": {(15, 19): (1344, 1200), (20, 29): (6328, 2713), (30, 39): (3348, 1423),        # Wisconsin Territory
-                        (40, 49): (1191, 612), (50, 59): (554, 360), (60, 149): (269, 175)},
+                        (40, 49): (1191, 612), (50, 59): (554, 360), (60, RING_YEARS - 1): (269, 175)},
     # the Old Southwest and Florida (owner, 2026-10-20): 1840c-04.pdf PDF pp.5-6, 9-10, 13-14 (Compendium pp.52-61) and
     # 1840c-06.pdf pp.13-14 (pp.96-97)
     "STATE_MISSISSIPPI": {(15, 19): (8662, 8911), (20, 29): (20084, 14464), (30, 39): (11995, 7847),
-                          (40, 49): (6001, 4284), (50, 59): (3289, 2250), (60, 149): (2044, 1580)},
+                          (40, 49): (6001, 4284), (50, 59): (3289, 2250), (60, RING_YEARS - 1): (2044, 1580)},
     "STATE_ALABAMA": {(15, 19): (16222, 17911), (20, 29): (31455, 25574), (30, 39): (19340, 15152),
-                      (40, 49): (11783, 9184), (50, 59): (6024, 4647), (60, 149): (4223, 3518)},
+                      (40, 49): (11783, 9184), (50, 59): (6024, 4647), (60, RING_YEARS - 1): (4223, 3518)},
     "STATE_LOUISIANA": {(15, 19): (7218, 7947), (20, 29): (20795, 13602), (30, 39): (16304, 7907),
-                        (40, 49): (7940, 4099), (50, 59): (3309, 1967), (60, 149): (1762, 1315)},
+                        (40, 49): (7940, 4099), (50, 59): (3309, 1967), (60, RING_YEARS - 1): (1762, 1315)},
     "STATE_FLORIDA": {(15, 19): (1305, 1322), (20, 29): (4388, 2220), (30, 39): (2801, 1219),         # Florida Territory
-                      (40, 49): (1193, 704), (50, 59): (530, 354), (60, 149): (317, 218)},
+                      (40, 49): (1193, 704), (50, 59): (530, 354), (60, RING_YEARS - 1): (317, 218)},
 }
 # The census counts free whites; the game's 1836 state also holds enslaved and free Black people and Native nations
 # (Arkansas's state region takes in the Cherokee, Iowa's the Sauk and Meskwaki and the Dakota), whose numbers of men
@@ -1282,19 +1311,21 @@ MT_MINISTRY_PER_LEVEL = -1
 MT_PLANNED_TOWNS_PER_LEVEL = -2
 MT_PLANNED_CAPITAL = -10
 MT_PLAN_MIN = -30
-# The effects (Full only), each at most 10% (owner, 2026-10-19). The concentrated side grows in a straight line from
-# nothing at MT_EFFECT_FROM (Leading City's floor) to full at MT_EFFECT_FULL (Metropolis's); the dispersed side, the
-# infrastructure loss alone, from nothing at MT_DISPERSED_FROM (Market Towns' ceiling) to full at MT_DISPERSED_FULL (the
-# target's floor, MT_MIN).
+# The effects (Full only), about 20% on the main line (the 2026-10-22 effects design lifted the owner's 10% cap of
+# 2026-10-19). The concentrated side grows in a straight line from nothing at MT_EFFECT_FROM (Leading City's floor) to
+# full at MT_EFFECT_FULL (Metropolis's) and on at half the slope (1.5 at 80, 1.875 at the target's ceiling of 95); the
+# dispersed side, the infrastructure loss alone, from nothing at MT_DISPERSED_FROM (Market Towns' ceiling) to full at
+# MT_DISPERSED_FULL (the target's floor, MT_MIN). Crowding is a model term (it feeds the share's target), so it keeps
+# the 0-1 ramp on a modifier of its own (te_demog_mt_crowding).
 MT_EFFECT_FROM = 40
 MT_EFFECT_FULL = 60
 MT_DISPERSED_FROM = 20
 MT_DISPERSED_FULL = 5
-MT_EFFECTS = {"state_migration_crowding_density_mult": -0.10,     # crowds sooner (a positive value is capacity)
-              "state_infrastructure_from_population_mult": 0.10,  # a compact city is cheaper to serve
-              "building_urban_center_throughput_add": 0.05,       # agglomeration: the city's services
-              "state_turmoil_effects_mult": 0.05}                 # one city concentrates its radicals (a little)
-MT_DISPERSED_EFFECTS = {"state_infrastructure_from_population_mult": -0.10}
+MT_EFFECTS = {"state_infrastructure_from_population_mult": 0.20,  # a compact city is cheaper to serve
+              "building_urban_center_throughput_add": 0.10,       # agglomeration: the city's services
+              "state_turmoil_effects_mult": 0.10}                 # one city concentrates its radicals
+MT_CROWDING = {"state_migration_crowding_density_mult": -0.10}    # crowds sooner (a positive value is capacity)
+MT_DISPERSED_EFFECTS = {"state_infrastructure_from_population_mult": -0.20}
 # Fertility: the census's urban term (URBAN_WEIGHT x urban x relief) is raised by MT_FERTILITY x the concentrated
 # side's strength, so at full strength by a tenth.
 MT_FERTILITY = 0.10
@@ -1303,8 +1334,9 @@ MT_FERTILITY = 0.10
 # The life tables (demographics_model.life_table, te_demog_lt_finish) sum person-years over GROUPS, which end at 145-149;
 # the survivors at 150 live on at the death rate past 150, q a year (per 100,000): l150 x (1 - q/2) / q more person-years
 # (life_table's mid-year convention for an open interval), in e0 and in e65 (owner, 2026-10-20). q is the last group's
-# in the plain table and the untreated's; in the late game's treated and blended tables the rate the pool (150+) dies
-# at, its treated part at its biological rate age. LT_TAIL_RATE_MIN floors q: one per 100,000, the fixed point's
+# in the plain table and the untreated's; in the late game's treated and blended tables the rate the pool (RING_YEARS
+# and over) dies at, its treated part at its biological rate age, and the table's own last group's where the pool is
+# empty, as it is in play since the ring's 300 years (issue #1075): the last group then holds every rate age from 145. LT_TAIL_RATE_MIN floors q: one per 100,000, the fixed point's
 # smallest step for a yearly probability, so the tail is at most about 100,000 years and stays inside the script's
 # range (survivors at a radix of 100,000 x 100,000 / q). The old-age threshold still reads the table to 150.
 LT_TAIL_RATE_MIN = 1.0

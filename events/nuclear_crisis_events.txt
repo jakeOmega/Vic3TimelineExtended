@@ -109,6 +109,12 @@ nuclear_crisis.1 = {
 				trigger = { ruler_is_cautious = yes }
 				add = 2
 			}
+			# Not when conceding a deployment would end a treaty that holds an
+			# alliance or a defensive pact: a treaty is left whole.
+			modifier = {
+				trigger = { nd_concession_costs_an_alliance = yes }
+				factor = 0
+			}
 		}
 	}
 
@@ -139,17 +145,23 @@ nuclear_crisis.1 = {
 		}
 	}
 
-	# Answer threat with threat. Armed targets only.
+	# Answer threat with threat. Armed targets whose weapons reach the issuer.
 	option = {
 		name = nuclear_crisis.1.c
 		nd_log_context = yes
 		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.1.c; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
-		trigger = { nd_is_armed = yes }
+		trigger = {
+			nd_is_armed = yes
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_issuer } }
+		}
 		nd_crisis_option = { ACT = counter_threat }
 		ai_chance = {
 			base = 1
 			modifier = {
-				trigger = { nd_effective_survivability >= 50 }
+				trigger = {
+					has_variable = nd_survivors_crisis
+					var:nd_survivors_crisis >= 3
+				}
 				add = 3
 			}
 			modifier = {
@@ -256,6 +268,15 @@ nuclear_crisis.2 = {
 					var:nd_credibility >= 60
 				}
 				add = 2
+			}
+			# Last: the AI never makes a bluff public (reasons 5-8:
+			# doctrine, law, No First Use, reach).
+			modifier = {
+				trigger = {
+					has_variable = nd_ft_reason
+					var:nd_ft_reason >= 5
+				}
+				factor = 0
 			}
 		}
 	}
@@ -531,6 +552,44 @@ nuclear_crisis.4 = {
 		}
 	}
 
+	# Offer a trade (rework spec §8.6): the matching concession of our own. The
+	# AI offers only here, as the issuer (ruling R5), and never more than it gets.
+	option = {
+		name = nuclear_crisis.4.h
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.4.h; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		trigger = { nd_can_offer_trade = yes }
+		nd_crisis_option = { ACT = offer_trade }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					has_variable = nd_crisis_danger
+					var:nd_crisis_danger >= nd_ai_trade_danger_line
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { nd_trade_balance_value < 0 }
+				factor = 0
+			}
+			modifier = {
+				trigger = { nd_trade_costs_us_an_alliance = yes }
+				factor = 0
+			}
+			# Never spend the deadline on an offer we can see refused: the
+			# other side judged by the AI's own rule.
+			modifier = {
+				trigger = { scope:nd_target = { NOT = { nd_ai_accepts_trade = yes } } }
+				factor = 0
+			}
+		}
+	}
+
 	# Let it go.
 	option = {
 		name = nuclear_crisis.4.e
@@ -565,6 +624,8 @@ nuclear_crisis.4 = {
 			custom_tooltip = { text = nd_tt_doctrine_permits_strike nd_doctrine_permits_strike = { ENEMY = scope:nd_target } }
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_target } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
+			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_target } }
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -702,6 +763,11 @@ nuclear_crisis.5 = {
 				}
 				add = 8
 			}
+			# As in nuclear_crisis.1.a: not at the cost of an alliance.
+			modifier = {
+				trigger = { nd_concession_costs_an_alliance = yes }
+				factor = 0
+			}
 		}
 	}
 
@@ -786,6 +852,10 @@ nuclear_crisis.6 = {
 				desc = nuclear_crisis.6.t_use
 			}
 			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 11 } }
+				desc = nuclear_crisis.6.t_trade
+			}
+			triggered_desc = {
 				trigger = { always = yes }
 				desc = nuclear_crisis.6.t
 			}
@@ -852,6 +922,10 @@ nuclear_crisis.6 = {
 			triggered_desc = {
 				trigger = { nd_crisis_last_outcome_is = { O = 8 } }
 				desc = nuclear_crisis.6.d_expired
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 11 } }
+				desc = nuclear_crisis.6.d_trade
 			}
 			triggered_desc = {
 				trigger = { always = yes }
@@ -945,6 +1019,8 @@ nuclear_crisis.7 = {
 			custom_tooltip = { text = nd_tt_doctrine_permits_strike nd_doctrine_permits_strike = { ENEMY = scope:nd_target } }
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_target } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
+			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_target } }
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -997,6 +1073,60 @@ nuclear_crisis.7 = {
 	}
 }
 
+# ---- .8 A trade offered ---------------------------------------------------------
+# To the other party, when one side offers the matching concession of its own
+# (nd_crisis_act_offer_trade; rework spec §8.6). The default refuses: giving
+# something up takes a click (ruling R3).
+nuclear_crisis.8 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_crisis.8.t
+	desc = nuclear_crisis.8.d
+	flavor = nuclear_crisis.8.f
+
+	duration = 3
+
+	trigger = {
+		nd_crisis_event_matches = yes
+	}
+
+	option = {
+		name = nuclear_crisis.8.a
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.8.a; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		nd_crisis_option = { ACT = accept_trade }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { NOT = { nd_ai_accepts_trade = yes } }
+				factor = 0
+			}
+		}
+	}
+
+	option = {
+		name = nuclear_crisis.8.b
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.8.b; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		default_option = yes
+		nd_crisis_option = { ACT = refuse_trade }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_ai_accepts_trade = yes }
+				factor = 0
+			}
+		}
+	}
+}
+
 # ---- .20 A guarantee is tested ------------------------------------------------
 # To an armed guarantor, when its beneficiary is put under a nuclear warning
 # (nd_guarantee_context 1) or struck (2). Expects scope:nd_guarantee_attacker
@@ -1026,6 +1156,22 @@ nuclear_crisis.20 = {
 		first_valid = {
 			triggered_desc = {
 				trigger = {
+					has_variable = nd_guarantee_basis
+					var:nd_guarantee_basis = 3
+					has_variable = nd_guarantee_context
+					var:nd_guarantee_context = 2
+				}
+				desc = nuclear_crisis.20.d_cobelligerent_struck
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_basis
+					var:nd_guarantee_basis = 3
+				}
+				desc = nuclear_crisis.20.d_cobelligerent
+			}
+			triggered_desc = {
+				trigger = {
 					has_variable = nd_guarantee_context
 					var:nd_guarantee_context = 2
 				}
@@ -1041,6 +1187,10 @@ nuclear_crisis.20 = {
 
 	duration = 3
 
+
+	immediate = {
+		nd_guarantor_store_survivors = yes
+	}
 	trigger = {
 		exists = scope:nd_guarantee_attacker
 		exists = scope:nd_guarantee_beneficiary
@@ -1084,6 +1234,8 @@ nuclear_crisis.20 = {
 			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
+			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_guarantee_attacker } }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes
@@ -1119,8 +1271,8 @@ nuclear_crisis.20 = {
 			modifier = {
 				trigger = {
 					scope:nd_guarantee_attacker = { nd_believed_armed = yes }
-					has_variable = nd_survivability
-					nd_effective_survivability < 30
+					has_variable = nd_survivors_vs_attacker
+					var:nd_survivors_vs_attacker < 3
 				}
 				add = 3
 			}
@@ -1130,6 +1282,7 @@ nuclear_crisis.20 = {
 
 # ---- .21 The guarantor's answer -----------------------------------------------
 # To the beneficiary. nd_guarantee_answer: 1 stood by us, 0 walked away,
+# 3 an armed co-belligerent stood by us, 4 it would not (rework spec §8.3),
 # 2 declined to answer for a strike we made first (.24.c).
 nuclear_crisis.21 = {
 	type = country_event
@@ -1158,6 +1311,20 @@ nuclear_crisis.21 = {
 				desc = nuclear_crisis.21.t_abandoned
 			}
 			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 3
+				}
+				desc = nuclear_crisis.21.t_ally_stands
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 4
+				}
+				desc = nuclear_crisis.21.t_ally_alone
+			}
+			triggered_desc = {
 				trigger = { always = yes }
 				desc = nuclear_crisis.21.t
 			}
@@ -1178,6 +1345,20 @@ nuclear_crisis.21 = {
 					var:nd_guarantee_answer = 0
 				}
 				desc = nuclear_crisis.21.d_abandoned
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 3
+				}
+				desc = nuclear_crisis.21.d_ally_stands
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 4
+				}
+				desc = nuclear_crisis.21.d_ally_alone
 			}
 			triggered_desc = {
 				trigger = { always = yes }
@@ -1224,10 +1405,13 @@ nuclear_crisis.22 = {
 					has_war_with = scope:attacking_country
 					nd_is_armed = yes
 					nd_forces_assembled = yes
+					nd_command_intact = yes
+					nd_reaches_country = { TARGET = scope:attacking_country }
 				}
 				save_scope_as = target_country
 				scope:attacking_country = {
 					ordered_scope_state = {
+						limit = { nd_state_in_reach_of = { COUNTRY = scope:target_country } }
 						order_by = nuclear_strike_target_score
 						position = 0
 						nuclear_response_strike = yes
@@ -1346,6 +1530,8 @@ nuclear_crisis.24 = {
 			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
 			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
 			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
+			custom_tooltip = { text = nd_tt_command_intact nd_command_intact = yes }
+			custom_tooltip = { text = nd_tt_in_reach nd_reaches_country = { TARGET = scope:nd_guarantee_attacker } }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes
@@ -1383,6 +1569,129 @@ nuclear_crisis.24 = {
 				trigger = { ruler_is_cautious = yes }
 				add = 2
 			}
+		}
+	}
+}
+
+# ---- .25 Hidden: the Suez self-check ---------------------------------------------
+# A day after the first war concession that dropped goals (nd_crisis_concede_war,
+# rework spec §8.1): does the yielding side still hold a goal against the other
+# side? Read a day later, as the probe read its removals (2026-10-28), not in
+# the block that removed them. If the war is already over, nothing is judged
+# and the next concession checks again, so an ended war cannot read as OK. A
+# goal script added stays (the probe), and a goal from another war between the
+# two counts too, so read a BROKEN line against the war it names
+# (docs/testing/nuclear-playtest.md).
+nuclear_crisis.25 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = nd_suez_check_other
+	}
+
+	immediate = {
+		var:nd_suez_check_other = { save_scope_as = nd_suez_check_other }
+		if = {
+			limit = { has_war_with = scope:nd_suez_check_other }
+			if = {
+				limit = { nd_side_holds_any_goal_against = { TARGET = scope:nd_suez_check_other } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_suez_goals: the side of [THIS.GetCountry.GetNameNoFormatting] still holds a goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_suez_goals: the side of [THIS.GetCountry.GetNameNoFormatting] holds no goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal"
+			}
+		}
+		else = {
+			remove_global_variable = nd_suez_self_check_done
+		}
+		remove_variable = nd_suez_check_other
+	}
+}
+
+# ---- .26 Hidden: a concession's self-check ------------------------------------
+# A day after a yield over a dispute 7–10 (nd_crisis_concession_check_schedule,
+# once a game per code): does the dispute still hold against the yielder? Each
+# code adds its branch; a code with none logs nothing.
+nuclear_crisis.26 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = nd_cc_target
+	}
+
+	immediate = {
+		var:nd_cc_target = { save_scope_as = nd_cc_target }
+		if = {
+			limit = { var:nd_cc_code = 7 }
+			if = {
+				limit = { nd_dispute_deployment_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_7: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] still deploys next to [THIS.GetCountry.GetNameNoFormatting] a day after withdraw and activate_production_method"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_7: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] deploys nothing next to [THIS.GetCountry.GetNameNoFormatting] a day after withdraw and activate_production_method"
+			}
+		}
+		if = {
+			limit = { var:nd_cc_code = 8 }
+			if = {
+				limit = { nd_dispute_claims_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_8: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] still claims a state of [THIS.GetCountry.GetNameNoFormatting] a day after remove_claim"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_8: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] claims no state of [THIS.GetCountry.GetNameNoFormatting] a day after remove_claim"
+			}
+		}
+		if = {
+			limit = { var:nd_cc_code = 9 }
+			if = {
+				limit = { nd_dispute_covert_ops_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_9: [THIS.GetCountry.GetNameNoFormatting] still has a record of an operation by [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] a day after remove_diplomatic_pact"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_9: [THIS.GetCountry.GetNameNoFormatting] has no record of an operation by [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] a day after remove_diplomatic_pact"
+			}
+		}
+		if = {
+			limit = { var:nd_cc_code = 10 }
+			if = {
+				limit = { nd_dispute_orbital_by = { TARGET = scope:nd_cc_target } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_concession_10: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] still has an Orbital Battlestation site a day after remove_building"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK nd_concession_10: [SCOPE.sCountry('nd_cc_target').GetNameNoFormatting] has no Orbital Battlestation site a day after remove_building"
+			}
+		}
+		remove_variable = nd_cc_target
+		remove_variable = nd_cc_code
+	}
+}
+
+# ---- .27 Hidden: did both halves of a trade take? -----------------------------
+# A day after the first trade over each dispute code
+# (nd_crisis_trade_check_schedule): TE_SELF_CHECK OK or BROKEN nd_trade_<code>,
+# the BROKEN line naming the half that survived. The pattern of .26.
+nuclear_crisis.27 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = nd_tc_other
+	}
+
+	immediate = {
+		save_scope_as = nd_tc_self
+		var:nd_tc_other = { save_scope_as = nd_tc_other }
+		nd_crisis_trade_check_log = { CODE = 7 WHAT = deployment }
+		nd_crisis_trade_check_log = { CODE = 8 WHAT = claims }
+		nd_crisis_trade_check_log = { CODE = 9 WHAT = covert_ops }
+		nd_crisis_trade_check_log = { CODE = 10 WHAT = orbital }
+		remove_variable = nd_tc_other
+		remove_variable = nd_tc_code
+		if = {
+			limit = { has_variable = nd_tc_swap }
+			remove_variable = nd_tc_swap
 		}
 	}
 }

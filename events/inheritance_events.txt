@@ -2,7 +2,7 @@
 
 # ======================================================================
 #  INHERITANCE EVENTS
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 #  Docs: docs/systems/mod_systems.md § Inheritance.
 #
 #    1       hidden: every country's score set at game start
@@ -11,6 +11,9 @@
 #    2-5     generation events (§5, first wave), rolled yearly from
 #            te_inh_generation_* (te_inheritance_on_actions.txt) once the
 #            law has been held for a generation; 25-year cooldowns
+#    14-16   generation events (§5, second wave): State as Universal
+#            Heir's and Possession by Use's on the same clock, and the
+#            Birthright Endowment's first stakes, once per tenure
 #    6-7     Posthumous Title (§6), from Mind Backups or Biological
 #            Immortality, once per country
 #    10-13   amendment debate events (§2), pooled in
@@ -300,11 +303,16 @@ inheritance_events.4 = {
 		}
 	}
 
-	option = { # The heirs go to court
+	# The heirs go to court: the estate is split among every claimant and the
+	# fees take the rest, the deepest cut (the Vanderbilt contest, 1877-79;
+	# Jarndyce and Jarndyce). The extra points outlast the foundation's ten
+	# years of perks, so it is the choice for a country that wants
+	# concentration down most.
+	option = {
 		name = inheritance_events.4.c
 		custom_tooltip = {
 			text = inheritance_events.4.c.tt
-			te_inh_shift_concentration = { AMOUNT = -2 }
+			te_inh_shift_concentration = { AMOUNT = -10 }
 		}
 		add_modifier = { name = inh_probate_litigation years = 5 }
 		ai_chance = {
@@ -994,6 +1002,209 @@ inheritance_events.13 = {
 		}
 		scope:rural_folk_ig ?= {
 			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+}
+
+# ======================================================================
+#  14 – The Hidden Estates  (State as Universal Heir)
+#  The law says every estate goes to the state. A generation on, the
+#  officials who administer them have found ways to leave their children
+#  the dacha, the flat and the account abroad.
+# ======================================================================
+inheritance_events.14 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.14.t
+	desc = inheritance_events.14.d
+	flavor = inheritance_events.14.f
+
+	event_image = { video = "middleeast_upperclass_party" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { years = 25 }
+
+	trigger = {
+		has_law = law_type:law_state_universal_heir
+		te_inh_generation_due = yes
+	}
+
+	option = { # Audit every estate
+		name = inheritance_events.14.a
+		custom_tooltip = {
+			text = inheritance_events.14.a.tt
+			te_inh_shift_concentration = { AMOUNT = -3 }
+		}
+		add_modifier = { name = inh_estates_audited years = 5 is_decaying = yes }
+		add_radicals = {
+			value = very_small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { authority > 500 }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Look away
+		name = inheritance_events.14.b
+		default_option = yes
+		custom_tooltip = {
+			text = inheritance_events.14.b.tt
+			te_inh_shift_concentration = { AMOUNT = 5 }
+		}
+		add_modifier = { name = inh_estates_overlooked years = 10 }
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  15 – The Empty Holding  (Possession by Use)
+#  A holder has died, and the land goes back to the commune that uses
+#  it. The family that worked it says it is still theirs to use.
+# ======================================================================
+inheritance_events.15 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.15.t
+	desc = inheritance_events.15.d
+	flavor = inheritance_events.15.f
+
+	event_image = { video = "asia_farmers_market" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	cooldown = { years = 25 }
+
+	trigger = {
+		has_law = law_type:law_non_inheritable_usage_rights
+		te_inh_generation_due = yes
+	}
+
+	option = { # The commune reallocates it
+		name = inheritance_events.15.a
+		default_option = yes
+		custom_tooltip = {
+			text = inheritance_events.15.a.tt
+			te_inh_shift_concentration = { AMOUNT = -2 }
+		}
+		# Nobody improves land the next repartition may take away (the Russian
+		# mir's periodic redivision).
+		add_modifier = { name = inh_commune_repartition years = 10 }
+		ig:ig_rural_folk ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # The family keeps it by continuity of use
+		name = inheritance_events.15.b
+		custom_tooltip = {
+			text = inheritance_events.15.b.tt
+			te_inh_shift_concentration = { AMOUNT = 5 }
+		}
+		# A holding the children will keep is worth improving.
+		add_modifier = { name = inh_holding_continuity years = 10 }
+		every_interest_group = {
+			limit = { has_ideology = ideology:ideology_anarchist }
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ======================================================================
+#  16 – The First Cohort  (Birthright Endowment)
+#  The first young adults to receive the estate duty's capital stake
+#  have had it for a few years, and the question is what it is for.
+#  Once per tenure: te_inh_first_cohort_paid lasts while the Endowment
+#  does (te_inh_count_endowment_years).
+# ======================================================================
+inheritance_events.16 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.16.t
+	desc = inheritance_events.16.d
+	flavor = inheritance_events.16.f
+
+	event_image = { video = "middleeast_middleclass_cafe" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	trigger = {
+		te_inh_has_birthright_endowment = yes
+		has_variable = te_inh_endowment_years
+		var:te_inh_endowment_years >= 5
+		NOT = { has_variable = te_inh_first_cohort_paid }
+	}
+
+	immediate = {
+		set_variable = te_inh_first_cohort_paid
+	}
+
+	option = { # Steer the stake into education
+		name = inheritance_events.16.a
+		add_modifier = { name = inh_cohort_schooled years = 10 }
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # Let them found businesses
+		name = inheritance_events.16.b
+		add_modifier = { name = inh_cohort_enterprise years = 10 }
+		ig:ig_petty_bourgeoisie ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	# Paine's stake was the holder's to use as they chose. Spent, it ends up
+	# with whoever sold the goods, so some of the levelling comes undone.
+	option = { # Let it be spent
+		name = inheritance_events.16.c
+		default_option = yes
+		custom_tooltip = {
+			text = inheritance_events.16.c.tt
+			te_inh_shift_concentration = { AMOUNT = 3 }
+		}
+		add_modifier = { name = inh_cohort_spent years = 10 }
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 1
 		}
 	}
 }

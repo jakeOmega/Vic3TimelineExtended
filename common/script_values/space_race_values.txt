@@ -24,36 +24,61 @@ sr_interstellar_probe_goal = {
 	value = 600
 }
 sr_solar_colonization_goal = {
-	# Base goal scales with stage - further out = harder
-	value = 400
+	# Base goal scales with stage - further out = harder: 300 for the Moon (stage
+	# 0), then 450, 525, 600, 700, 800 (sr_colonization_goal_stage_<n>,
+	# gen_solar_sites.STAGE_GOALS; lunar colonization design § 3.2). Under simple
+	# and full colonies, with a target, the target's own goal (the stages are no
+	# locks there; slices 2-3 design § 9), the landing site's discount included.
+	value = sr_colonization_goal_stage_0
 	if = {
 		limit = {
-			has_global_variable = sr_colonization_stage
-			global_var:sr_colonization_stage >= 2
+			sr_colonies_contested_enabled = yes
+			has_variable = sr_cf_target
 		}
-		add = 50
+		value = sr_cf_target_goal
 	}
-	if = {
-		limit = {
-			has_global_variable = sr_colonization_stage
-			global_var:sr_colonization_stage >= 3
-		}
-		add = 50
-	}
-	if = {
-		limit = {
-			has_global_variable = sr_colonization_stage
-			global_var:sr_colonization_stage >= 4
-		}
-		add = 50
-	}
-	if = {
+	else_if = {
 		limit = {
 			has_global_variable = sr_colonization_stage
 			global_var:sr_colonization_stage >= 5
 		}
-		add = 100
+		value = sr_colonization_goal_stage_5
 	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 4
+		}
+		value = sr_colonization_goal_stage_4
+	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 3
+		}
+		value = sr_colonization_goal_stage_3
+	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 2
+		}
+		value = sr_colonization_goal_stage_2
+	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 1
+		}
+		value = sr_colonization_goal_stage_1
+	}
+}
+
+# The Moon Landing's site choice (space_race_events.txt, sr_moon_site_<site>):
+# the lunar world it names costs this share of its goal for that country
+# (lunar colonization design § 3.4; gen_solar_sites.LANDING_SITES).
+sr_landing_site_factor = {
+	value = 0.75
 }
 
 # Script value for interstellar transit progress display. Guarded: the journal
@@ -78,7 +103,7 @@ sr_interstellar_months_left = {
 # replaced that state (owner's play-test, round 2).
 # Base progress from space program PM, techs, buildings, companies, partnerships, AND funding
 # All contribute via country_space_race_progress_add modifier (visible in tooltip breakdown)
-# Funding: sr_funding_progress modifier on each JE (0.5 per funding level and +25% building_space_program throughput per funding level, stacks across JEs)
+# Funding: sr_funding_progress modifier on each JE (0.5 per effective funding level, stacks across JEs: a level up to the cap counts in full, the levels past it 1/2, 1/3, ... 1/7, sr_funding_<m>_effective); the +25% building_space_program throughput per level is sr_funding_throughput's
 # Approach: ambitious gives country_space_race_progress_mult = 0.5 per JE
 sr_progress = {
 	value = modifier:country_space_race_progress_add
@@ -90,6 +115,45 @@ sr_progress = {
 	min = 0.5
 }
 
+# ======= Event progress, in months of the pace =======
+# A month of progress, for every event that moves a milestone's progress
+# (space_race_effects.txt, "Progress in months"): the pace sr_record_event_pace
+# stored when the event fired, or the live pace for an event that fired before
+# it recorded one (an event already open in a save from before 2026-10-25).
+sr_event_pace_value = {
+	if = {
+		limit = { has_variable = sr_event_pace }
+		value = var:sr_event_pace
+	}
+	else = {
+		value = sr_progress
+	}
+}
+# N months of it, for the option tooltips (SR_*_MONTHS_TT). Display only.
+sr_event_months_1 = {
+	value = sr_event_pace_value
+}
+sr_event_months_2 = {
+	value = sr_event_pace_value
+	multiply = 2
+}
+sr_event_months_3 = {
+	value = sr_event_pace_value
+	multiply = 3
+}
+sr_event_months_4 = {
+	value = sr_event_pace_value
+	multiply = 4
+}
+sr_event_months_5 = {
+	value = sr_event_pace_value
+	multiply = 5
+}
+sr_event_months_6 = {
+	value = sr_event_pace_value
+	multiply = 6
+}
+
 # ======= After the race: Commercial Space Industry =======
 # The points of sr_commercial_space_dividend (space_race_modifiers.txt), each
 # worth +5% Extraplanetary Base throughput: the flat progress the country's
@@ -98,8 +162,9 @@ sr_progress = {
 # - The flat sum, not sr_progress: its 0.5 floor would pay every finished
 #   country for nothing, and the progress bonuses (Antimatter Engines alone
 #   reach +250%) would let the dividend run away.
-# - Funding is already out of it: sr_funding_progress sits only on a billed
-#   entry (sr_apply_milestone_cost_modifiers_base), and nothing is billed then.
+# - Funding is already out of it: sr_funding_progress (and its throughput twin,
+#   sr_funding_throughput) sits only on a billed entry
+#   (sr_apply_milestone_cost_modifiers_base), and nothing is billed then.
 # - Capped: the Space Elevator alone gives up to 20 points, twice what all 33
 #   progress-granting colony specialisations give together (9.25). At 5% a
 #   point a progress specialisation (0.28 on average) is worth about a quarter
@@ -222,13 +287,41 @@ sr_risk_pct_solar_colonization = {
 
 # ======= Per-JE System Values =======
 
-# Maximum funding level (base 3, increased by technology)
+# The funding cap (base 3, increased by technology). Soft since 2026-10-29
+# (lunar colonization design § 5.1): a milestone may be funded up to
+# sr_funding_past_cap_steps levels past it, each worth less pace than the one
+# before (sr_funding_<m>_effective below), each still costing in full and
+# adding its full throughput. Country scope.
 sr_max_funding_level = {
 	value = 3
 	add = modifier:country_space_race_max_funding_add
 }
 
-# Per-JE funding level values for JE-scoped sr_funding_progress modifier
+# How many levels past the cap a milestone may be funded: the ladder's length.
+# A seventh would add 1/8 of a level for a full level's cost.
+sr_funding_past_cap_steps = {
+	value = 6
+}
+
+# The ceiling sr_possible_fund_up tests: the cap plus the ladder. A player may
+# fund up to it; the AI stops at the cap (sr_possible_fund_up_within_cap;
+# owner, 2026-10-29, design § 15.6). Country scope.
+sr_max_funding_level_soft = {
+	value = sr_max_funding_level
+	add = sr_funding_past_cap_steps
+}
+
+# Each level past the cap adds this share of a level's pace: the first 1/2, the
+# second 1/3, up to the sixth 1/7. Read by every sr_funding_<m>_past_cap_effective.
+sr_funding_past_cap_step_1 = { value = 1 divide = 2 }
+sr_funding_past_cap_step_2 = { value = 1 divide = 3 }
+sr_funding_past_cap_step_3 = { value = 1 divide = 4 }
+sr_funding_past_cap_step_4 = { value = 1 divide = 5 }
+sr_funding_past_cap_step_5 = { value = 1 divide = 6 }
+sr_funding_past_cap_step_6 = { value = 1 divide = 7 }
+
+# Per-JE funding level values: the multiplier of sr_funding_throughput (every
+# level in full) and of the cost (sr_<m>_cost reads the variable itself).
 # Uses owner = { } wrapper for JE-to-country scope access
 sr_funding_suborbital_level = {
 	value = 0
@@ -263,6 +356,245 @@ sr_funding_solar_colonization_level = {
 	owner = { if = { limit = { has_variable = sr_funding_solar_colonization } add = var:sr_funding_solar_colonization } }
 }
 
+# ---- Funding past the cap (lunar colonization design § 5.1) ----------------
+# Per milestone, in country scope:
+# - sr_funding_<m>_within_cap: the level, up to the cap.
+# - sr_funding_<m>_past_cap: the levels past the cap (0 at or below it). Not
+#   capped at the ladder's length: a cap that falls below a milestone's level
+#   (a power bloc principle lost) leaves the level standing, and the excess
+#   simply counts past the cap. Nothing clamps the level down to the cap.
+# - sr_funding_<m>_past_cap_effective: what those levels are worth in levels of
+#   pace, the ladder 1/2 + 1/3 + ... + 1/7 (0.50, 0.83, 1.08, 1.28, 1.45,
+#   1.59). A level past the sixth step, reachable only by a falling cap, adds
+#   nothing.
+# And in journal-entry scope, sr_funding_<m>_effective: the two added up, the
+# multiplier of the entry's sr_funding_progress. Every country read sits inside
+# owner = { }, as sr_funding_<m>_level's does (je_multiplier_scope_audit).
+sr_funding_suborbital_within_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_suborbital } add = var:sr_funding_suborbital }
+	max = sr_max_funding_level
+	min = 0
+}
+sr_funding_suborbital_past_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_suborbital } add = var:sr_funding_suborbital }
+	subtract = sr_max_funding_level
+	min = 0
+}
+sr_funding_suborbital_past_cap_effective = {
+	value = 0
+	if = { limit = { sr_funding_suborbital_past_cap >= 1 } add = sr_funding_past_cap_step_1 }
+	if = { limit = { sr_funding_suborbital_past_cap >= 2 } add = sr_funding_past_cap_step_2 }
+	if = { limit = { sr_funding_suborbital_past_cap >= 3 } add = sr_funding_past_cap_step_3 }
+	if = { limit = { sr_funding_suborbital_past_cap >= 4 } add = sr_funding_past_cap_step_4 }
+	if = { limit = { sr_funding_suborbital_past_cap >= 5 } add = sr_funding_past_cap_step_5 }
+	if = { limit = { sr_funding_suborbital_past_cap >= 6 } add = sr_funding_past_cap_step_6 }
+}
+sr_funding_suborbital_effective = {
+	value = 0
+	owner = {
+		add = sr_funding_suborbital_within_cap
+		add = sr_funding_suborbital_past_cap_effective
+	}
+}
+sr_funding_orbital_within_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_orbital } add = var:sr_funding_orbital }
+	max = sr_max_funding_level
+	min = 0
+}
+sr_funding_orbital_past_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_orbital } add = var:sr_funding_orbital }
+	subtract = sr_max_funding_level
+	min = 0
+}
+sr_funding_orbital_past_cap_effective = {
+	value = 0
+	if = { limit = { sr_funding_orbital_past_cap >= 1 } add = sr_funding_past_cap_step_1 }
+	if = { limit = { sr_funding_orbital_past_cap >= 2 } add = sr_funding_past_cap_step_2 }
+	if = { limit = { sr_funding_orbital_past_cap >= 3 } add = sr_funding_past_cap_step_3 }
+	if = { limit = { sr_funding_orbital_past_cap >= 4 } add = sr_funding_past_cap_step_4 }
+	if = { limit = { sr_funding_orbital_past_cap >= 5 } add = sr_funding_past_cap_step_5 }
+	if = { limit = { sr_funding_orbital_past_cap >= 6 } add = sr_funding_past_cap_step_6 }
+}
+sr_funding_orbital_effective = {
+	value = 0
+	owner = {
+		add = sr_funding_orbital_within_cap
+		add = sr_funding_orbital_past_cap_effective
+	}
+}
+sr_funding_moon_landing_within_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_moon_landing } add = var:sr_funding_moon_landing }
+	max = sr_max_funding_level
+	min = 0
+}
+sr_funding_moon_landing_past_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_moon_landing } add = var:sr_funding_moon_landing }
+	subtract = sr_max_funding_level
+	min = 0
+}
+sr_funding_moon_landing_past_cap_effective = {
+	value = 0
+	if = { limit = { sr_funding_moon_landing_past_cap >= 1 } add = sr_funding_past_cap_step_1 }
+	if = { limit = { sr_funding_moon_landing_past_cap >= 2 } add = sr_funding_past_cap_step_2 }
+	if = { limit = { sr_funding_moon_landing_past_cap >= 3 } add = sr_funding_past_cap_step_3 }
+	if = { limit = { sr_funding_moon_landing_past_cap >= 4 } add = sr_funding_past_cap_step_4 }
+	if = { limit = { sr_funding_moon_landing_past_cap >= 5 } add = sr_funding_past_cap_step_5 }
+	if = { limit = { sr_funding_moon_landing_past_cap >= 6 } add = sr_funding_past_cap_step_6 }
+}
+sr_funding_moon_landing_effective = {
+	value = 0
+	owner = {
+		add = sr_funding_moon_landing_within_cap
+		add = sr_funding_moon_landing_past_cap_effective
+	}
+}
+sr_funding_probe_within_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_probe } add = var:sr_funding_probe }
+	max = sr_max_funding_level
+	min = 0
+}
+sr_funding_probe_past_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_probe } add = var:sr_funding_probe }
+	subtract = sr_max_funding_level
+	min = 0
+}
+sr_funding_probe_past_cap_effective = {
+	value = 0
+	if = { limit = { sr_funding_probe_past_cap >= 1 } add = sr_funding_past_cap_step_1 }
+	if = { limit = { sr_funding_probe_past_cap >= 2 } add = sr_funding_past_cap_step_2 }
+	if = { limit = { sr_funding_probe_past_cap >= 3 } add = sr_funding_past_cap_step_3 }
+	if = { limit = { sr_funding_probe_past_cap >= 4 } add = sr_funding_past_cap_step_4 }
+	if = { limit = { sr_funding_probe_past_cap >= 5 } add = sr_funding_past_cap_step_5 }
+	if = { limit = { sr_funding_probe_past_cap >= 6 } add = sr_funding_past_cap_step_6 }
+}
+sr_funding_probe_effective = {
+	value = 0
+	owner = {
+		add = sr_funding_probe_within_cap
+		add = sr_funding_probe_past_cap_effective
+	}
+}
+sr_funding_moon_base_within_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base }
+	max = sr_max_funding_level
+	min = 0
+}
+sr_funding_moon_base_past_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base }
+	subtract = sr_max_funding_level
+	min = 0
+}
+sr_funding_moon_base_past_cap_effective = {
+	value = 0
+	if = { limit = { sr_funding_moon_base_past_cap >= 1 } add = sr_funding_past_cap_step_1 }
+	if = { limit = { sr_funding_moon_base_past_cap >= 2 } add = sr_funding_past_cap_step_2 }
+	if = { limit = { sr_funding_moon_base_past_cap >= 3 } add = sr_funding_past_cap_step_3 }
+	if = { limit = { sr_funding_moon_base_past_cap >= 4 } add = sr_funding_past_cap_step_4 }
+	if = { limit = { sr_funding_moon_base_past_cap >= 5 } add = sr_funding_past_cap_step_5 }
+	if = { limit = { sr_funding_moon_base_past_cap >= 6 } add = sr_funding_past_cap_step_6 }
+}
+sr_funding_moon_base_effective = {
+	value = 0
+	owner = {
+		add = sr_funding_moon_base_within_cap
+		add = sr_funding_moon_base_past_cap_effective
+	}
+}
+sr_funding_mars_landing_within_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_mars_landing } add = var:sr_funding_mars_landing }
+	max = sr_max_funding_level
+	min = 0
+}
+sr_funding_mars_landing_past_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_mars_landing } add = var:sr_funding_mars_landing }
+	subtract = sr_max_funding_level
+	min = 0
+}
+sr_funding_mars_landing_past_cap_effective = {
+	value = 0
+	if = { limit = { sr_funding_mars_landing_past_cap >= 1 } add = sr_funding_past_cap_step_1 }
+	if = { limit = { sr_funding_mars_landing_past_cap >= 2 } add = sr_funding_past_cap_step_2 }
+	if = { limit = { sr_funding_mars_landing_past_cap >= 3 } add = sr_funding_past_cap_step_3 }
+	if = { limit = { sr_funding_mars_landing_past_cap >= 4 } add = sr_funding_past_cap_step_4 }
+	if = { limit = { sr_funding_mars_landing_past_cap >= 5 } add = sr_funding_past_cap_step_5 }
+	if = { limit = { sr_funding_mars_landing_past_cap >= 6 } add = sr_funding_past_cap_step_6 }
+}
+sr_funding_mars_landing_effective = {
+	value = 0
+	owner = {
+		add = sr_funding_mars_landing_within_cap
+		add = sr_funding_mars_landing_past_cap_effective
+	}
+}
+sr_funding_interstellar_probe_within_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_interstellar_probe } add = var:sr_funding_interstellar_probe }
+	max = sr_max_funding_level
+	min = 0
+}
+sr_funding_interstellar_probe_past_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_interstellar_probe } add = var:sr_funding_interstellar_probe }
+	subtract = sr_max_funding_level
+	min = 0
+}
+sr_funding_interstellar_probe_past_cap_effective = {
+	value = 0
+	if = { limit = { sr_funding_interstellar_probe_past_cap >= 1 } add = sr_funding_past_cap_step_1 }
+	if = { limit = { sr_funding_interstellar_probe_past_cap >= 2 } add = sr_funding_past_cap_step_2 }
+	if = { limit = { sr_funding_interstellar_probe_past_cap >= 3 } add = sr_funding_past_cap_step_3 }
+	if = { limit = { sr_funding_interstellar_probe_past_cap >= 4 } add = sr_funding_past_cap_step_4 }
+	if = { limit = { sr_funding_interstellar_probe_past_cap >= 5 } add = sr_funding_past_cap_step_5 }
+	if = { limit = { sr_funding_interstellar_probe_past_cap >= 6 } add = sr_funding_past_cap_step_6 }
+}
+sr_funding_interstellar_probe_effective = {
+	value = 0
+	owner = {
+		add = sr_funding_interstellar_probe_within_cap
+		add = sr_funding_interstellar_probe_past_cap_effective
+	}
+}
+sr_funding_solar_colonization_within_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_solar_colonization } add = var:sr_funding_solar_colonization }
+	max = sr_max_funding_level
+	min = 0
+}
+sr_funding_solar_colonization_past_cap = {
+	value = 0
+	if = { limit = { has_variable = sr_funding_solar_colonization } add = var:sr_funding_solar_colonization }
+	subtract = sr_max_funding_level
+	min = 0
+}
+sr_funding_solar_colonization_past_cap_effective = {
+	value = 0
+	if = { limit = { sr_funding_solar_colonization_past_cap >= 1 } add = sr_funding_past_cap_step_1 }
+	if = { limit = { sr_funding_solar_colonization_past_cap >= 2 } add = sr_funding_past_cap_step_2 }
+	if = { limit = { sr_funding_solar_colonization_past_cap >= 3 } add = sr_funding_past_cap_step_3 }
+	if = { limit = { sr_funding_solar_colonization_past_cap >= 4 } add = sr_funding_past_cap_step_4 }
+	if = { limit = { sr_funding_solar_colonization_past_cap >= 5 } add = sr_funding_past_cap_step_5 }
+	if = { limit = { sr_funding_solar_colonization_past_cap >= 6 } add = sr_funding_past_cap_step_6 }
+}
+sr_funding_solar_colonization_effective = {
+	value = 0
+	owner = {
+		add = sr_funding_solar_colonization_within_cap
+		add = sr_funding_solar_colonization_past_cap_effective
+	}
+}
+
 # Per-JE cost values for JE-scoped funding modifiers
 # Uses owner = { } wrapper for universal scope compatibility (country scope = no-op, JE scope = owner country)
 # The approach terms (safe 1, ambitious 2) count only for a country that
@@ -280,7 +612,20 @@ sr_cost_factor_probe              = { value = 2   } # Era 7
 sr_cost_factor_moon_base          = { value = 5   } # Era 10
 sr_cost_factor_mars_landing       = { value = 6   } # Era 10
 sr_cost_factor_interstellar_probe = { value = 12  } # Era 12
-sr_cost_factor_solar_colonization = { value = 8   } # Era 11
+# Era 10 to 11 (lunar colonization design § 4): 5, the Moon Base's, until the
+# country's own Mars Landing, then 8. Read through owner, so it holds in the
+# entry's scope (the cost modifier's multiplier) and in the country's (the
+# panel). The Mars Landing's completion re-posts the cost
+# (sr_complete_milestone_effect runs sr_recalculate_cost).
+sr_cost_factor_solar_colonization = {
+	value = 5
+	owner = {
+		if = {
+			limit = { has_variable = sr_completed_mars_landing }
+			add = 3
+		}
+	}
+}
 
 # The weekly innovation one cost level stands for: the magnitude of
 # sr_space_program_cost's country_weekly_innovation_add, which the entries
@@ -291,7 +636,7 @@ sr_innovation_per_cost_level = {
 }
 
 # Per-JE innovation cost multipliers (scaling with tech era)
-# Suborbital=1x, Orbital=1.5x, Moon=2x, Probe=2x, Moon Base=5x, Mars=6x, Solar=8x, Interstellar=12x
+# Suborbital=1x, Orbital=1.5x, Moon=2x, Probe=2x, Moon Base=5x, Mars=6x, Solar=5x (8x after the Mars Landing), Interstellar=12x
 
 sr_suborbital_cost = {
 	value = 0
@@ -402,11 +747,15 @@ sr_progress_solar_colonization_value = {
 # Normalized 0-100 percentage for progress bar display
 # goal_add_value is locked at JE activation, so dynamic goals break the bar
 # This SV computes (progress / current_dynamic_goal) * 100
-# Returns 100 when colonization is fully complete
+# Returns 100 when colonization is fully complete (not while resumed for the
+# Moon: its bar runs again, lunar colonization 2b)
 sr_progress_solar_colonization_percent = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_completed_solar_colonization }
+		limit = {
+			has_variable = sr_completed_solar_colonization
+			NOT = { has_variable = sr_colonization_resumed }
+		}
 		add = 100
 	}
 	else = {
@@ -424,7 +773,8 @@ sr_progress_solar_colonization_percent = {
 	}
 }
 
-# GUI helper: current colonization stage (0 if not started)
+# GUI helper: current colonization stage (0 if not started, and at the Moon,
+# stage 0: the overview reads both as "the Moon")
 sr_current_colonization_stage = {
 	value = 0
 	if = {
@@ -433,49 +783,9 @@ sr_current_colonization_stage = {
 	}
 }
 
-# GUI helper: total colonies established globally
-sr_total_global_colonies = {
-	value = 0
-	# Stage 1
-	if = { limit = { has_global_variable = sr_colony_valles_marineris } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_olympus_mons } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_hellas_planitia } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_utopia_planitia } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_arcadia_planitia } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_ceres } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_vesta } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_psyche } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_pallas } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_hygiea } add = 1 }
-	# Stage 2
-	if = { limit = { has_global_variable = sr_colony_io } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_europa } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_ganymede } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_callisto } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_himalia } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_amalthea } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_venus } add = 1 }
-	# Stage 3
-	if = { limit = { has_global_variable = sr_colony_mercury } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_titan } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_enceladus } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_rhea } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_mimas } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_iapetus } add = 1 }
-	# Stage 4
-	if = { limit = { has_global_variable = sr_colony_titania } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_oberon } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_miranda } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_ariel } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_triton } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_proteus } add = 1 }
-	# Stage 5
-	if = { limit = { has_global_variable = sr_colony_pluto } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_eris } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_makemake } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_haumea } add = 1 }
-	if = { limit = { has_global_variable = sr_colony_sedna } add = 1 }
-}
+# GUI helper: total colonies established globally (sr_total_global_colonies)
+# and the worlds there are (sr_sites_world_count): generated per world in
+# common/script_values/sr_sites_generated.txt (scripts/generators/gen_solar_sites.py).
 
 # The monthly rate the panel quotes, and the rate its estimate divides by: the
 # rate the pulse adds, whatever the approach. Kept per milestone so the panel's
@@ -787,6 +1097,55 @@ sr_rival_est_open_solar_colonization = {
 	max = 1
 }
 
+# ======= The Space Powers standings (display) =======
+# The Space Race tab of the Timeline Extended window lists every power in the
+# race (sr_powers_refresh, space_race_effects.txt). Both values read only what
+# the rows' programme icons show, never progress, so the order leaks nothing.
+
+# A power's furthest milestone under way, as a code: 0 none, then
+# je_space_race.txt's order, 1 Suborbital Flight to 7 the Interstellar Probe,
+# and 8 Solar System Colonization while it colonizes. The wait for the probe's
+# data has no progress to estimate, so it is left out. Scope: country
+sr_power_lead_code = {
+	value = 0
+	if = { limit = { sr_solar_colonization_running = yes } value = 8 }
+	else_if = { limit = { has_variable = sr_active_interstellar_probe } value = 7 }
+	else_if = { limit = { has_variable = sr_active_mars_landing } value = 6 }
+	else_if = { limit = { has_variable = sr_active_moon_base } value = 5 }
+	else_if = { limit = { has_variable = sr_active_probe } value = 4 }
+	else_if = { limit = { has_variable = sr_active_moon_landing } value = 3 }
+	else_if = { limit = { has_variable = sr_active_orbital } value = 2 }
+	else_if = { limit = { has_variable = sr_active_suborbital } value = 1 }
+}
+
+# How many of the eight entries with a goal a power has achieved: the rows'
+# lit icons as a figure, for a row's name hover (sr_disp_power_achieved).
+# Scope: country
+sr_power_achieved = {
+	value = 0
+	if = { limit = { has_variable = sr_completed_suborbital } add = 1 }
+	if = { limit = { has_variable = sr_completed_orbital } add = 1 }
+	if = { limit = { has_variable = sr_completed_moon_landing } add = 1 }
+	if = { limit = { has_variable = sr_completed_probe } add = 1 }
+	if = { limit = { has_variable = sr_completed_moon_base } add = 1 }
+	if = { limit = { has_variable = sr_completed_mars_landing } add = 1 }
+	if = { limit = { has_variable = sr_completed_interstellar_probe } add = 1 }
+	if = { limit = { has_variable = sr_completed_solar_colonization } add = 1 }
+}
+
+# The standings' order: 100 for each entry achieved, 2 for each colony held
+# (at most 68, so colonies never outrank a milestone) and the furthest
+# milestone under way. Scope: country
+sr_power_rank_score = {
+	value = sr_power_achieved
+	multiply = 100
+	add = sr_power_lead_code
+	add = {
+		value = sr_colony_count_value
+		multiply = 2
+	}
+}
+
 # ======= Space Program mission bills (AI decisions) =======
 # The weekly Launch Capacity bill of each mission at full staffing, for the AI
 # weights of te_decision_found_space_program and te_decision_space_mission_*
@@ -798,7 +1157,7 @@ sr_rival_est_open_solar_colonization = {
 sr_mission_units_earth_orbit = 500
 sr_mission_units_moon = 1500
 sr_mission_units_mars = 5000
-sr_mission_units_solar = 25000
+sr_mission_units_solar = 10000
 sr_mission_units_deep_space = 50000
 sr_mission_units_interstellar = 100000
 

@@ -5,16 +5,18 @@
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
 # Two ACTION handlers, parameterized by a saved scope `op` (the Strategic
-# Reserve / nuclear programme pattern), and seventeen DISPLAY handlers: the six
-# yes/no questions and names below (nd_umbrella_sgui draws the umbrella
-# line), three that hide the moves our side cannot
+# Reserve / nuclear programme pattern), and twenty DISPLAY handlers: the
+# seven yes/no questions and names below (nd_umbrella_sgui draws the umbrella
+# line, nd_loose_sgui the warheads unaccounted for, nd_crisis_opponent_sgui
+# the crisis headline), three that hide the moves our side cannot
 # make (nd_crisis_we_issued_sgui, nd_crisis_we_are_target_sgui,
-# nd_crisis_private_sgui), and three that print script-built text
+# nd_crisis_private_sgui), and four that print script-built text
 # (nd_crisis_pressure_breakdown_sgui, nd_crisis_danger_breakdown_sgui,
-# nd_crisis_next_pressure_sgui) — plus the World Crises list's gate, rows and
-# row hovers (nd_world_crises_sgui, nd_world_crisis_row_sgui,
-# nd_world_crisis_detail_sgui), and the At Home list and its footer,
-# nd_home_list_sgui and nd_home_footer_sgui. The op
+# nd_crisis_next_pressure_sgui, nd_risk_breakdown_sgui) — plus the World
+# Crises list's gate and row hovers (nd_world_crises_sgui,
+# nd_world_crisis_item_detail_sgui), and the At Home list and its footer,
+# nd_home_list_sgui and nd_home_footer_sgui, and the Strike section's gate
+# and target (nd_plan_shown_sgui, nd_plan_enemy_sgui). The op
 # tables are repeated in the .gui header and in
 # docs/systems/journal_entry_systems.md — keep all three in step.
 #
@@ -28,6 +30,11 @@
 #   62      lift the ceiling              -> nd_taboo_ceiling_lift
 #   63      dismantle the arsenal         -> nd_taboo_dismantle_start
 #   64      halt the dismantling          -> nd_taboo_dismantle_halt
+#   70 / 71 Disavow our strikes on / off  -> nd_disavow_strikes
+#   72 / 73 Strike: previous / next enemy -> nd_plan_step_enemy
+#   74..76  Strike: mission 1..3          -> nd_plan_set_mission
+#   77 / 78 Strike: warheads - / +        -> nd_plan_step_size
+#   79      Strike: order the salvo       -> nd_plan_order (Launch Order, .31)
 #
 # ---- nd_crisis_action_sgui — op table ---------------------------------------
 #   1  go public (issuer)                 -> nd_crisis_act_go_public
@@ -35,6 +42,7 @@
 #   3  a demonstration exercise (armed)   -> nd_crisis_act_exercise
 #   4  concede (target)                   -> nd_crisis_act_yield
 #   5  let it go (issuer)                 -> nd_crisis_act_back_down
+#   6  offer a trade (either side)        -> nd_crisis_act_offer_trade
 #
 # Every `is_valid` delegates to a scripted trigger in
 # nuclear_deterrence_triggers.txt and every effect to the same scripted effect
@@ -156,6 +164,57 @@ nd_posture_sgui = {
 			limit = { exists = scope:op  scope:op = 64 }
 			nd_taboo_can_halt = yes
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 70 }
+			custom_tooltip = {
+				text = nd_tt_disavow_needs_arsenal
+				nd_is_armed = yes
+			}
+			custom_tooltip = {
+				text = nd_tt_disavow_already_on
+				NOT = { has_variable = nd_disavow_strikes }
+			}
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 71 }
+			custom_tooltip = {
+				text = nd_tt_disavow_already_off
+				has_variable = nd_disavow_strikes
+			}
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 72 }
+			nd_plan_can_step_enemy = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 73 }
+			nd_plan_can_step_enemy = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 74 }
+			nd_plan_can_set_mission = { M = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 75 }
+			nd_plan_can_set_mission = { M = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 76 }
+			nd_plan_can_set_mission = { M = 3 }
+			nd_plan_can_set_leadership = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 77 }
+			nd_plan_can_step_size_down = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 78 }
+			nd_plan_can_step_size_up = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 79 }
+			nd_plan_can_order = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -254,6 +313,48 @@ nd_posture_sgui = {
 			limit = { exists = scope:op  scope:op = 64 }
 			nd_taboo_dismantle_halt = yes
 		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 70 }
+			custom_tooltip = nd_tt_disavow_on
+			hidden_effect = { set_variable = nd_disavow_strikes }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 71 }
+			custom_tooltip = nd_tt_disavow_off
+			hidden_effect = { remove_variable = nd_disavow_strikes }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 72 }
+			nd_plan_step_enemy = { OP = subtract }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 73 }
+			nd_plan_step_enemy = { OP = add }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 74 }
+			nd_plan_set_mission = { M = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 75 }
+			nd_plan_set_mission = { M = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 76 }
+			nd_plan_set_mission = { M = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 77 }
+			nd_plan_step_size = { OP = subtract }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 78 }
+			nd_plan_step_size = { OP = add }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 79 }
+			nd_plan_order = yes
+		}
 	}
 }
 
@@ -286,6 +387,10 @@ nd_crisis_action_sgui = {
 			limit = { exists = scope:op  scope:op = 5 }
 			nd_can_back_down = yes
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 6 }
+			nd_can_offer_trade = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -316,10 +421,75 @@ nd_crisis_action_sgui = {
 			limit = { exists = scope:op  scope:op = 5 }
 			nd_crisis_act_back_down = yes
 		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 6 }
+			nd_crisis_act_offer_trade = yes
+		}
 	}
 }
 
 # ---- Yes/no questions the .gui asks (scope-free is_shown) --------------------
+# Forces: survivors against the main rival, while we have one
+# (nd_refresh_main_rival).
+# The Forces section's Reach row (rework spec §7, §10): shown while armed
+# without ICBMs (nd_reach_limited); display only. Its hover lists the
+# countries in nd_reach through ExecuteTooltip (vanilla's
+# je_hispanoamerica_not_recognized_countries_sgui shape), each host of our
+# weapons marked on its own line: a heading over a script-built list prints
+# above all of it (gui_modding_guide.md gotcha #18).
+nd_reach_limited_sgui = {
+	scope = country
+	is_shown = { nd_reach_limited = yes }
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+nd_reach_list_sgui = {
+	scope = country
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		if = {
+			limit = { has_variable_list = nd_reach }
+			every_in_list = {
+				variable = nd_reach
+				if = {
+					limit = { nd_hosts_weapons_of = { GUEST = root } }
+					custom_tooltip = nd_w_reach_entry_host
+				}
+				else = {
+					custom_tooltip = nd_w_reach_entry
+				}
+			}
+		}
+	}
+}
+
+nd_has_main_rival_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_armed = yes
+		has_variable = nd_main_rival
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# Posture: whether we disavow our strikes (ops 70 / 71), scope-free for the
+# rows' visibility.
+nd_disavowing_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_armed = yes
+		has_variable = nd_disavow_strikes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
 nd_armed_sgui = {
 	scope = country
 	is_shown = {
@@ -377,7 +547,39 @@ nd_in_crisis_sgui = {
 	effect = { }
 }
 
-# ---- Names: the opponent, and last time's opponent ---------------------------
+# The Strike section (rework spec §6.1): armed, with an enemy the planner
+# picked (nd_plan_refresh). Cheap: the planner's pass runs in script.
+nd_plan_shown_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_armed = yes
+		has_variable = nd_plan_enemy
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# The Strike section's target, printed through a temporary scope saved on the
+# branch that prints it (gui_modding_guide.md gotchas #11 and #25, as
+# nd_crisis_opponent_sgui).
+nd_plan_enemy_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = nd_plan_enemy
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		if = {
+			limit = { exists = var:nd_plan_enemy }
+			var:nd_plan_enemy = { save_temporary_scope_as = nd_plan_enemy_disp }
+			custom_tooltip_no_bullet = nd_w_strike_target_name
+		}
+	}
+}
+
+# ---- Names: the crisis headline, and last time's opponent ---------------------
 # A country held in a variable is printed from inside its own scope
 # ([THIS.GetCountry.GetName]) — gui_modding_guide.md gotchas #11 and #15.
 nd_crisis_opponent_sgui = {
@@ -388,11 +590,17 @@ nd_crisis_opponent_sgui = {
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
 	effect = {
+		# The headline (NUC-7): printed in our own scope, so it can name our
+		# side and the dispute; the opponent is read through a temporary scope
+		# saved only on the branch that prints it (gotcha #25, as
+		# nd_world_crisis_row_at reads its target).
 		if = {
-			limit = { nd_in_crisis = yes }
-			var:nd_crisis_opponent ?= {
-				custom_tooltip_no_bullet = nd_crisis_opponent_line
+			limit = {
+				nd_in_crisis = yes
+				exists = var:nd_crisis_opponent
 			}
+			var:nd_crisis_opponent = { save_temporary_scope_as = nd_crisis_opp_disp }
+			custom_tooltip_no_bullet = nd_crisis_headline
 		}
 	}
 }
@@ -451,6 +659,18 @@ nd_crisis_private_sgui = {
 	effect = { }
 }
 
+# Crisis: the trade's move (op 6) and outcome row, in a crisis over a dispute
+# that can trade (rework spec §8.6). Whether this one can is op 6's is_valid.
+nd_crisis_tradeable_sgui = {
+	scope = country
+	is_shown = {
+		nd_crisis_dispute_tradeable = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
 # ---- Script-built text: breakdowns and the next pressure event ---------------
 # Printed with ExecuteTooltip; every line reads our own stored figures
 # (nd_crisis_refresh_figures mirrors them onto both parties).
@@ -464,6 +684,7 @@ nd_crisis_pressure_breakdown_sgui = {
 	effect = {
 		nd_crisis_breakdown_line = { C = nd_yp_base KEY = nd_yp_base_line }
 		nd_crisis_breakdown_line = { C = nd_yp_answer KEY = nd_yp_answer_line }
+		nd_crisis_breakdown_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line }
 		nd_crisis_breakdown_line = { C = nd_yp_protector KEY = nd_yp_protector_line }
 		nd_crisis_breakdown_line = { C = nd_yp_credibility KEY = nd_yp_credibility_line }
 		nd_crisis_breakdown_line = { C = nd_yp_alert KEY = nd_yp_alert_line }
@@ -472,6 +693,7 @@ nd_crisis_pressure_breakdown_sgui = {
 		nd_crisis_breakdown_line = { C = nd_yp_exercise KEY = nd_yp_exercise_line }
 		nd_crisis_breakdown_line = { C = nd_yp_temperament KEY = nd_yp_temperament_line }
 		nd_crisis_breakdown_line = { C = nd_yp_war KEY = nd_yp_war_line }
+		nd_crisis_breakdown_line = { C = nd_yp_stakes KEY = nd_yp_stakes_line }
 		nd_crisis_breakdown_line = { C = nd_yp_follow_through KEY = nd_yp_follow_through_line }
 		nd_crisis_breakdown_line = { C = nd_yp_taboo KEY = nd_yp_taboo_line }
 		custom_tooltip_no_bullet = nd_yp_total_line
@@ -496,6 +718,7 @@ nd_crisis_danger_breakdown_sgui = {
 		nd_crisis_breakdown_line = { C = nd_cd_talks KEY = nd_cd_talks_line }
 		nd_crisis_breakdown_line = { C = nd_cd_backed KEY = nd_cd_backed_line }
 		nd_crisis_breakdown_line = { C = nd_cd_exercise KEY = nd_cd_exercise_line }
+		nd_crisis_breakdown_line = { C = nd_cd_vulnerability KEY = nd_cd_vulnerability_line }
 		if = {
 			limit = {
 				has_variable = nd_cd_dampened
@@ -504,6 +727,34 @@ nd_crisis_danger_breakdown_sgui = {
 			custom_tooltip_no_bullet = nd_cd_dampened_line
 		}
 		custom_tooltip_no_bullet = nd_cd_total_line
+	}
+}
+
+# Incident exposure's factors (NUC-17): what multiplies the weekly roll, one
+# line each, in the shape of the crisis breakdowns. Multipliers, not a
+# probability (nuclear_crisis_design.md §10: no fake precision about hidden
+# risk); the band word on the row is the reading. In a crisis its danger adds
+# misreadings of its own, said in a word.
+nd_risk_breakdown_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_armed = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		custom_tooltip_no_bullet = nd_risk_factor_readiness
+		custom_tooltip_no_bullet = nd_risk_factor_doctrine
+		custom_tooltip_no_bullet = nd_risk_factor_strain
+		custom_tooltip_no_bullet = nd_risk_factor_reliability
+		if = {
+			limit = { nd_in_crisis = yes }
+			custom_tooltip_no_bullet = nd_risk_factor_crisis
+		}
+		if = {
+			limit = { nd_war_danger_band > nd_own_danger_band }
+			custom_tooltip_no_bullet = nd_risk_factor_war
+		}
 	}
 }
 
@@ -530,182 +781,42 @@ nd_crisis_next_pressure_sgui = {
 }
 
 # ---- World Crises: every crisis running anywhere ------------------------------
-# The section lists the slots nd_world_crises_refresh writes
-# (global_var:nd_wc_1 … nd_wc_8, most dangerous first; nuclear_crisis_effects.txt),
-# private warnings included: the public may not know of one, but governments
-# do. Nothing here sorts or counts the world's countries per frame.
+# The section draws nd_crises, the list nd_world_crises_refresh keeps on the
+# panel's global store (nuclear_crisis_effects.txt), as a datamodel of the
+# issuers' capitals, private warnings included: the public may not know of
+# one, but governments do. Nothing here sorts or counts the world's countries
+# per frame.
 #
-# The section's gate: any slot holds a running crisis. Scope-free.
+# The section's gate: any crisis running. Scope-free.
 nd_world_crises_sgui = {
 	scope = country
 	is_shown = {
-		OR = {
-			nd_world_crisis_slot_live = { SLOT = 1 }
-			nd_world_crisis_slot_live = { SLOT = 2 }
-			nd_world_crisis_slot_live = { SLOT = 3 }
-			nd_world_crisis_slot_live = { SLOT = 4 }
-			nd_world_crisis_slot_live = { SLOT = 5 }
-			nd_world_crisis_slot_live = { SLOT = 6 }
-			nd_world_crisis_slot_live = { SLOT = 7 }
-			nd_world_crisis_slot_live = { SLOT = 8 }
-		}
+		has_global_variable = nd_wc_count
+		global_var:nd_wc_count > 0
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
 	effect = { }
 }
 
-# The rows, one GUI row and one ExecuteTooltip each, so a crisis's two
-# countries never share a block with another crisis's (gui_modding_guide.md
-# gotchas #18 and #27).
-#   op 1-8  slot N: issuer → target, stage, public or private, danger
-#   op 9    "…and N more", past the eighth crisis
-# is_shown fails OPEN, like nuclear_program_powers_sgui: with no scope:op every
-# row shows and the effect prints nothing for an empty slot (gotcha #22; the
-# saved scope has been seen to arrive, 2026-09-29).
-nd_world_crisis_row_sgui = {
+# A row's hover, rooted at the row's issuer (the list item's country): the
+# dispute, the clock, talks, a guarantor, and whether the warning was private.
+nd_world_crisis_item_detail_sgui = {
 	scope = country
-	saved_scopes = { op }
-
 	is_shown = {
-		trigger_if = {
-			limit = { NOT = { exists = scope:op } }
-			always = yes
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op  scope:op = 1 }
-			nd_world_crisis_slot_live = { SLOT = 1 }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op  scope:op = 2 }
-			nd_world_crisis_slot_live = { SLOT = 2 }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op  scope:op = 3 }
-			nd_world_crisis_slot_live = { SLOT = 3 }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op  scope:op = 4 }
-			nd_world_crisis_slot_live = { SLOT = 4 }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op  scope:op = 5 }
-			nd_world_crisis_slot_live = { SLOT = 5 }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op  scope:op = 6 }
-			nd_world_crisis_slot_live = { SLOT = 6 }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op  scope:op = 7 }
-			nd_world_crisis_slot_live = { SLOT = 7 }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op  scope:op = 8 }
-			nd_world_crisis_slot_live = { SLOT = 8 }
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op  scope:op = 9 }
-			has_global_variable = nd_wc_count
-			global_var:nd_wc_count > 8
-		}
-		trigger_else = {
-			always = no
-		}
+		nd_is_crisis_owner = yes
 	}
-
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
-
 	effect = {
 		if = {
-			limit = { exists = scope:op  scope:op = 1 }
-			nd_world_crisis_row_at = { SLOT = 1 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 2 }
-			nd_world_crisis_row_at = { SLOT = 2 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 3 }
-			nd_world_crisis_row_at = { SLOT = 3 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 4 }
-			nd_world_crisis_row_at = { SLOT = 4 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 5 }
-			nd_world_crisis_row_at = { SLOT = 5 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 6 }
-			nd_world_crisis_row_at = { SLOT = 6 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 7 }
-			nd_world_crisis_row_at = { SLOT = 7 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 8 }
-			nd_world_crisis_row_at = { SLOT = 8 }
-		}
-		else_if = {
-			limit = {
-				exists = scope:op
-				scope:op = 9
-				has_global_variable = nd_wc_count
-				global_var:nd_wc_count > 8
+			limit = { nd_is_crisis_owner = yes }
+			if = {
+				limit = { exists = var:nd_crisis_opponent }
+				var:nd_crisis_opponent = { save_temporary_scope_as = nd_wc_target }
+				custom_tooltip_no_bullet = nd_wc_detail_parties
 			}
-			custom_tooltip_no_bullet = nd_wc_more_text
-		}
-	}
-}
-
-# A row's hover: the dispute, the clock, talks, a guarantor, and whether the
-# warning was private. op 1-8 as for the rows.
-nd_world_crisis_detail_sgui = {
-	scope = country
-	saved_scopes = { op }
-
-	is_shown = {
-		has_journal_entry = je_nuclear_program
-	}
-	is_valid = { always = no }
-	ai_is_valid = { always = no }
-
-	effect = {
-		if = {
-			limit = { exists = scope:op  scope:op = 1 }
-			nd_world_crisis_detail_at = { SLOT = 1 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 2 }
-			nd_world_crisis_detail_at = { SLOT = 2 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 3 }
-			nd_world_crisis_detail_at = { SLOT = 3 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 4 }
-			nd_world_crisis_detail_at = { SLOT = 4 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 5 }
-			nd_world_crisis_detail_at = { SLOT = 5 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 6 }
-			nd_world_crisis_detail_at = { SLOT = 6 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 7 }
-			nd_world_crisis_detail_at = { SLOT = 7 }
-		}
-		else_if = {
-			limit = { exists = scope:op  scope:op = 8 }
-			nd_world_crisis_detail_at = { SLOT = 8 }
+			nd_world_crisis_detail_lines = yes
 		}
 	}
 }

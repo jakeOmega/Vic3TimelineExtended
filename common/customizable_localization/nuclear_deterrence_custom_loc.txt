@@ -200,6 +200,587 @@ nd_authority_name = {
 	}
 }
 
+# ---- The crisis headline and readings (NUC-7, 2026-10-27) --------------------
+# The headline's words, lower case for the middle of a line ("Against France ·
+# we made the threat · over a war, in public"): which side we are on, and the
+# dispute and whether the threat is public, read from the issuer whichever
+# side we are (the same tests as nd_crisis_dispute_word below).
+nd_crisis_role_phrase = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_crisis_role
+			var:nd_crisis_role = 1
+		}
+		localization_key = nd_crisis_role_phrase_1
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_role
+			var:nd_crisis_role = 2
+		}
+		localization_key = nd_crisis_role_phrase_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+nd_crisis_dispute_phrase = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 1
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 1
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_1
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 2
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 2
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_2
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 3
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 3
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_3
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 4
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 4
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_4
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 6
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 6
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_6
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 8
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 8
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_8
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 10
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 10
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_10
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 9
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 9
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_9
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 7
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 7
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_7
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 5
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 5
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_phrase_5
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+nd_crisis_public_phrase = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_public
+					var:nd_crisis_public = 1
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_public
+						var:nd_crisis_public = 1
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_public_phrase_1
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_crisis_public_phrase_0
+	}
+}
+
+# Who decides at the deadline: the side that made the threat.
+nd_crisis_deadline_who = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_is_crisis_target = yes }
+		localization_key = nd_crisis_deadline_who_them
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_crisis_deadline_who_us
+	}
+}
+
+# The pressure to concede in a word, by the bands its events use: below 50 the
+# threatened government never concedes; from 70 it does about half the time,
+# from 85 about two times in three.
+nd_crisis_pressure_band = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_display_yield_pressure >= 85 }
+		localization_key = nd_crisis_pressure_band_4
+	}
+	text = {
+		trigger = { nd_display_yield_pressure >= 70 }
+		localization_key = nd_crisis_pressure_band_3
+	}
+	text = {
+		trigger = { nd_display_yield_pressure >= 50 }
+		localization_key = nd_crisis_pressure_band_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_crisis_pressure_band_1
+	}
+}
+
+# The Outcomes table: who backs down, and what each outcome does to our
+# credibility. The figures are the ones nd_crisis_record_outcome and
+# nd_crisis_talks_credibility_lines apply (the stakes texts say the same).
+nd_crisis_backdown_label = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_is_crisis_target = yes }
+		localization_key = nd_w_crisis_backdown_label_them
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_crisis_backdown_label_us
+	}
+}
+
+nd_crisis_cred_if_concede = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_is_crisis_target = yes }
+		localization_key = nd_crisis_cred_down_5
+	}
+	text = {
+		trigger = { nd_crisis_is_public = yes }
+		localization_key = nd_crisis_cred_up_15
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_crisis_cred_up_10
+	}
+}
+
+nd_crisis_cred_if_backdown = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_is_crisis_target = yes }
+		localization_key = nd_crisis_cred_up_10
+	}
+	text = {
+		trigger = { nd_crisis_is_public = yes }
+		localization_key = nd_crisis_cred_down_15
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_crisis_cred_down_5
+	}
+}
+
+nd_crisis_cred_if_standdown = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			nd_is_crisis_owner = yes
+			nd_crisis_is_public = yes
+			nd_crisis_issuer_is_defensive = no
+		}
+		localization_key = nd_crisis_cred_down_5
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_crisis_cred_up_5
+	}
+}
+
+# ---- The posture in force, for the axis rows and the overview (NUC-3, NUC-21) --
+# The doctrine in force's modifier lines (each target prints one static
+# modifier's GetDesc and reads no country).
+nd_doctrine_effects = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_doctrine
+			var:nd_doctrine = 1
+		}
+		localization_key = nd_doctrine_effects_1
+	}
+	text = {
+		trigger = {
+			has_variable = nd_doctrine
+			var:nd_doctrine = 3
+		}
+		localization_key = nd_doctrine_effects_3
+	}
+	text = {
+		trigger = {
+			has_variable = nd_doctrine
+			var:nd_doctrine = 4
+		}
+		localization_key = nd_doctrine_effects_4
+	}
+	text = {
+		trigger = {
+			has_variable = nd_doctrine
+			var:nd_doctrine = 5
+		}
+		localization_key = nd_doctrine_effects_5
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_doctrine_effects_2
+	}
+}
+
+# The readiness in force's lines: its display terms, and for Heightened and
+# High Alert the modifier the country carries.
+nd_readiness_effects = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_readiness
+			var:nd_readiness = 0
+		}
+		localization_key = nd_readiness_effects_0
+	}
+	text = {
+		trigger = {
+			has_variable = nd_readiness
+			var:nd_readiness = 2
+		}
+		localization_key = nd_readiness_effects_2
+	}
+	text = {
+		trigger = {
+			has_variable = nd_readiness
+			var:nd_readiness = 3
+		}
+		localization_key = nd_readiness_effects_3
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_readiness_effects_1
+	}
+}
+
+# The launch authority in force's display terms.
+nd_authority_effects = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_authority
+			var:nd_authority = 2
+		}
+		localization_key = nd_authority_effects_2
+	}
+	text = {
+		trigger = {
+			has_variable = nd_authority
+			var:nd_authority = 3
+		}
+		localization_key = nd_authority_effects_3
+	}
+	text = {
+		trigger = {
+			has_variable = nd_authority
+			var:nd_authority = 4
+		}
+		localization_key = nd_authority_effects_4
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_authority_effects_1
+	}
+}
+
+# The doctrine's short name, for the overview's 154-wide cell (style guide
+# rule 3: a shorter label, the full name on hover).
+nd_doctrine_short = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_doctrine
+			var:nd_doctrine = 1
+		}
+		localization_key = nd_doctrine_short_1
+	}
+	text = {
+		trigger = {
+			has_variable = nd_doctrine
+			var:nd_doctrine = 3
+		}
+		localization_key = nd_doctrine_short_3
+	}
+	text = {
+		trigger = {
+			has_variable = nd_doctrine
+			var:nd_doctrine = 4
+		}
+		localization_key = nd_doctrine_short_4
+	}
+	text = {
+		trigger = {
+			has_variable = nd_doctrine
+			var:nd_doctrine = 5
+		}
+		localization_key = nd_doctrine_short_5
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_doctrine_short_2
+	}
+}
+
+# Launch authority's short name, for the overview's cell.
+nd_authority_short = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_authority
+			var:nd_authority = 2
+		}
+		localization_key = nd_authority_short_2
+	}
+	text = {
+		trigger = {
+			has_variable = nd_authority
+			var:nd_authority = 3
+		}
+		localization_key = nd_authority_short_3
+	}
+	text = {
+		trigger = {
+			has_variable = nd_authority
+			var:nd_authority = 4
+		}
+		localization_key = nd_authority_short_4
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_authority_short_1
+	}
+}
+
+# Credibility in a word, for the overview's cell: what our threats can lean on.
+# A crisis reads (credibility - 50) / 2 into the target's pressure
+# (nd_credibility_pressure_term), so the middle band adds or takes little.
+nd_credibility_band = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_credibility
+			var:nd_credibility < 35
+		}
+		localization_key = nd_credibility_band_low
+	}
+	text = {
+		trigger = {
+			has_variable = nd_credibility
+			var:nd_credibility > 65
+		}
+		localization_key = nd_credibility_band_high
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_credibility_band_mid
+	}
+}
+
 # Incident exposure, from the band nd_apply_posture_modifiers projects (never a raw per-mille: §10).
 nd_risk_band_word = {
 	type = country
@@ -238,29 +819,6 @@ nd_risk_band_word = {
 	}
 }
 
-# Which side of the crisis we are on.
-nd_crisis_role_word = {
-	type = country
-	random_valid = no
-	text = {
-		trigger = {
-			has_variable = nd_crisis_role
-			var:nd_crisis_role = 1
-		}
-		localization_key = nd_crisis_role_1
-	}
-	text = {
-		trigger = {
-			has_variable = nd_crisis_role
-			var:nd_crisis_role = 2
-		}
-		localization_key = nd_crisis_role_2
-	}
-	text = {
-		trigger = { always = yes }
-		localization_key = nd_empty
-	}
-}
 
 # What the crisis is about — read from the issuer, whichever side we are.
 nd_crisis_dispute_word = {
@@ -349,6 +907,111 @@ nd_crisis_dispute_word = {
 			}
 		}
 		localization_key = nd_crisis_dispute_4
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 6
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 6
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_6
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 8
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 8
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_8
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 10
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 10
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_10
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 9
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 9
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_9
+	}
+	text = {
+		trigger = {
+			OR = {
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 1
+					has_variable = nd_crisis_dispute
+					var:nd_crisis_dispute = 7
+				}
+				AND = {
+					has_variable = nd_crisis_role
+					var:nd_crisis_role = 2
+					var:nd_crisis_opponent ?= {
+						has_variable = nd_crisis_dispute
+						var:nd_crisis_dispute = 7
+					}
+				}
+			}
+		}
+		localization_key = nd_crisis_dispute_7
 	}
 	text = {
 		trigger = {
@@ -450,36 +1113,6 @@ nd_crisis_stage_word = {
 	}
 }
 
-# Whether the threat has been made in public.
-nd_crisis_public_word = {
-	type = country
-	random_valid = no
-	text = {
-		trigger = {
-			OR = {
-				AND = {
-					has_variable = nd_crisis_role
-					var:nd_crisis_role = 1
-					has_variable = nd_crisis_public
-					var:nd_crisis_public = 1
-				}
-				AND = {
-					has_variable = nd_crisis_role
-					var:nd_crisis_role = 2
-					var:nd_crisis_opponent ?= {
-						has_variable = nd_crisis_public
-						var:nd_crisis_public = 1
-					}
-				}
-			}
-		}
-		localization_key = nd_crisis_public_1
-	}
-	text = {
-		trigger = { always = yes }
-		localization_key = nd_crisis_public_0
-	}
-}
 
 # The shared danger assessment in words (the issuer's nd_crisis_danger, 0–100).
 nd_crisis_danger_word = {
@@ -589,6 +1222,41 @@ nd_crisis_demand_text = {
 	text = {
 		trigger = {
 			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = 6
+		}
+		localization_key = nd_crisis_demand_6
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = 8
+		}
+		localization_key = nd_crisis_demand_8
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = 10
+		}
+		localization_key = nd_crisis_demand_10
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = 9
+		}
+		localization_key = nd_crisis_demand_9
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = 7
+		}
+		localization_key = nd_crisis_demand_7
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_dispute
 			var:nd_crisis_dispute = 5
 		}
 		localization_key = nd_crisis_demand_5
@@ -645,6 +1313,51 @@ nd_crisis_concession_past = {
 		trigger = {
 			has_variable = nd_crisis_pending_role
 			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 6
+		}
+		localization_key = nd_concession_past_they_6
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 8
+		}
+		localization_key = nd_concession_past_they_8
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 10
+		}
+		localization_key = nd_concession_past_they_10
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 9
+		}
+		localization_key = nd_concession_past_they_9
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 7
+		}
+		localization_key = nd_concession_past_they_7
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
 		}
 		localization_key = nd_concession_past_they_5
 	}
@@ -675,6 +1388,41 @@ nd_crisis_concession_past = {
 			var:nd_crisis_pending_dispute = 4
 		}
 		localization_key = nd_concession_past_we_4
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 6
+		}
+		localization_key = nd_concession_past_we_6
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 8
+		}
+		localization_key = nd_concession_past_we_8
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 10
+		}
+		localization_key = nd_concession_past_we_10
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 9
+		}
+		localization_key = nd_concession_past_we_9
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 7
+		}
+		localization_key = nd_concession_past_we_7
 	}
 	text = {
 		trigger = {
@@ -786,6 +1534,13 @@ nd_crisis_last_outcome_word = {
 		localization_key = nd_last_outcome_expired
 	}
 	text = {
+		trigger = {
+			has_variable = nd_crisis_last_outcome
+			var:nd_crisis_last_outcome = 11
+		}
+		localization_key = nd_last_outcome_trade
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = nd_last_outcome_neutral
 	}
@@ -883,6 +1638,26 @@ nd_crisis_concession_short = {
 		localization_key = nd_concession_short_4
 	}
 	text = {
+		trigger = { nd_crisis_dispute_is = { D = 6 } }
+		localization_key = nd_concession_short_6
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 8 } }
+		localization_key = nd_concession_short_8
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 10 } }
+		localization_key = nd_concession_short_10
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 9 } }
+		localization_key = nd_concession_short_9
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 7 } }
+		localization_key = nd_concession_short_7
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = nd_concession_short_5
 	}
@@ -908,6 +1683,26 @@ nd_crisis_concession_long = {
 		localization_key = nd_concession_long_4
 	}
 	text = {
+		trigger = { nd_crisis_dispute_is = { D = 6 } }
+		localization_key = nd_concession_long_6
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 8 } }
+		localization_key = nd_concession_long_8
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 10 } }
+		localization_key = nd_concession_long_10
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 9 } }
+		localization_key = nd_concession_long_9
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 7 } }
+		localization_key = nd_concession_long_7
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = nd_concession_long_5
 	}
@@ -923,6 +1718,21 @@ nd_crisis_ft_label = {
 	text = {
 		trigger = { always = yes }
 		localization_key = nd_w_crisis_ft_label_us
+	}
+}
+
+# The Reach row's value (nd_w_reach_value): the countries our bombers reach,
+# and every coast once we have missile submarines.
+nd_reach_value = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_technology_researched = advanced_submarine_technology }
+		localization_key = nd_w_reach_value_subs
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_reach_value_bombers
 	}
 }
 
@@ -1006,25 +1816,15 @@ nd_crisis_ft_reason = {
 		localization_key = nd_ft_reason_7
 	}
 	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 8
+		}
+		localization_key = nd_ft_reason_8
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = nd_ft_reason_unknown
-	}
-}
-
-nd_crisis_stakes_short = {
-	type = country
-	random_valid = no
-	text = {
-		trigger = { nd_is_crisis_target = yes }
-		localization_key = nd_stakes_short_target
-	}
-	text = {
-		trigger = { nd_crisis_is_public = yes }
-		localization_key = nd_stakes_short_public
-	}
-	text = {
-		trigger = { always = yes }
-		localization_key = nd_stakes_short_private
 	}
 }
 

@@ -294,7 +294,7 @@ types te_demographics_widgets
 	### "women_next" (each a `value`), "next_visible" (the outline's gate),
 	### "men_range" and "women_range" (min and max; the country's
 	### te_dg_pyr_max by default, so a state's pyramid overrides them),
-	### and "row_tooltip".
+	### and "row_tooltip". Every row sets a tooltip, so the ages are underlined.
 	type te_demog_pyramid_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -352,6 +352,7 @@ types te_demographics_widgets
 			parentanchor = vcenter
 			align = hcenter|nobaseline
 			using = te_demog_fontsize_row
+			default_format = "#tooltippable"
 			block "band_label" {}
 		}
 
@@ -646,32 +647,58 @@ types te_demographics_widgets
 		}
 	}
 
-	### One of the three largest cities (te_dg_cities; datacontext State): the
-	### state, which counts as one city, and its urban people. Fixed cells,
-	### 300 + 176 and a 4 px gap = 480.
-	type te_demog_city_row = flowcontainer {
-		direction = horizontal
-		ignoreinvisible = yes
-		spacing = 4
-		tooltip = "te_demog_city_row_tt"
+	### A state a list names (datacontext State; 2026-10-27 audit, DEM-6 and DEM-8): a button that opens the state on its
+	### Demographics subtab with te_demog_state_row's two onclicks, its map highlight and its right-click menu, the
+	### state's name on the left and one figure on the right. Fixed cells, 4 + 184 + 284 and a 4 px gap = 476 inside
+	### the 480 row: "100% aged 20–29, strength 100%", 30 characters, is the widest figure, and the name shrinks to 12
+	### before it would elide, as the States table's does. The instance sets "link_tooltip" and "link_value". The
+	### largest cities, the Youth row's states and the Metropolises use it.
+	type te_demog_state_link_row = button {
+		using = default_button
+		size = { 480 28 }
+		block "link_tooltip" {}
+		onclick = "[InformationPanelBar.OpenStatePanel( State.AccessSelf )]"
+		onclick = "[GetVariableSystem.Set('population_subtab', 'te_demog')]"
+		onrightclick = "[RightClickMenuManager.ShowForState(State.AccessSelf)]"
+		onmousehierarchyenter = "[AccessHighlightManager.HighlightState(State.Self)]"
+		onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
 
-		textbox = {
-			autoresize = yes
-			minimumsize = { 300 -1 }
-			maximumsize = { 300 -1 }
-			align = left|nobaseline
-			using = te_demog_fontsize_row
-			fontsize_min = 12
-			elide = right
-			text = "[State.GetNameNoFormatting]"
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			position = { 4 0 }
+			parentanchor = vcenter
+
+			textbox = {
+				autoresize = yes
+				minimumsize = { 184 -1 }
+				maximumsize = { 184 -1 }
+				align = left|nobaseline
+				using = te_demog_fontsize_row
+				fontsize_min = 12
+				elide = right
+				text = "[State.GetNameNoFormatting]"
+			}
+			textbox = {
+				autoresize = yes
+				minimumsize = { 284 -1 }
+				maximumsize = { 284 -1 }
+				align = right|nobaseline
+				using = te_demog_fontsize_row
+				elide = right
+				block "link_value" {}
+			}
 		}
-		textbox = {
-			autoresize = yes
-			minimumsize = { 176 -1 }
-			maximumsize = { 176 -1 }
-			align = right|nobaseline
-			using = te_demog_fontsize_row
-			elide = right
+	}
+
+	### One of the three largest cities (te_dg_cities; datacontext State): the state, which counts as one city, and its
+	### urban people.
+	type te_demog_city_row = te_demog_state_link_row {
+		blockoverride "link_tooltip" {
+			tooltip = "te_demog_city_row_tt"
+		}
+		blockoverride "link_value" {
 			text = "te_demog_city_row_value"
 		}
 	}
@@ -711,7 +738,9 @@ types te_demographics_widgets
 	### caption, reading and third line is held to it (test_demographics_layout's WidthTest). A reading with an arrow
 	### carries it over the icon box's top-right corner ("trend", a te_demog_trend_* type), where Banking's crash badge
 	### sits. The instance sets the cell's tooltip (the old row's hover, rule 2), "icon" (a texture), "caption", "word"
-	### and "third_line" (texts) and, where the reading has one, "trend".
+	### and "third_line" (texts) and, where the reading has one, "trend". A cell whose icon changes with its reading
+	### (the Leading Cause of Death) also sets "icon_layers": icons 44 square over the same spot, each with its own
+	### visible, and its "icon" a visible of its own.
 	type te_demog_ov_cell = widget {
 		size = { 238 70 }
 
@@ -735,6 +764,7 @@ types te_demographics_widgets
 				parentanchor = center
 				block "icon" {}
 			}
+			block "icon_layers" {}
 		}
 		textbox = {
 			position = { 78 2 }
@@ -966,7 +996,7 @@ types te_demographics_widgets
 	### rows it dropped are in their sections: the sex balance in the pyramid's, old age from and youth in Work and
 	### Retirement's, Living to 100 and biological age in Longevity's, the urban pattern in Where People Live.
 	### Every figure is picked by its gate (a stepped census for the rates, deaths by cause for the leading cause),
-	### so a figure not yet written is never read. Icons are placeholders: docs/systems/demographics_gui_icons.md.
+	### so a figure not yet written is never read. Icons: docs/systems/demographics_gui_icons.md.
 	type te_demog_overview = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -985,7 +1015,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_nat_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/population.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_natural_change.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_nat"
@@ -1013,7 +1043,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_mig_cell_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/state_status_icons/mass_migration_target.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_migration.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_mig"
@@ -1031,7 +1061,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_lx_e0_over_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_e0_tt_100', 'te_demog_ov_e0_tt' )]"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/healthcare_aid.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_life_expectancy.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_e0"
@@ -1058,8 +1088,54 @@ types te_demographics_widgets
 				}
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_lead_tt', 'te_demog_ov_lead_pending_tt' )]"
+					### The headstone until the first count of deaths by cause, then the leading cause's icon.
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+						visible = "[Not( GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+						texture = "gfx/interface/icons/demographics_icons/ov_leading_cause.dds"
+					}
+					blockoverride "icon_layers" {
+						### The leading cause's own icon, by te_dg_dc_lead (the pie's codes; the reading's text falls
+						### through to War for any other, as the old code 6 of a save from before 2026-10-22 would).
+						widget = {
+							size = { 44 44 }
+							parentanchor = center
+							visible = "[GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_infection.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_chronic.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_external.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_work.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)5' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_maternal.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)7' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_killed.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)8' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)6' ) )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_war.dds"
+							}
+						}
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_lead"
@@ -1077,7 +1153,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_tfr_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/decree/decree_natalism_initiative.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_fertility.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_fert"
@@ -1105,7 +1181,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_median_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/clock.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_median_age.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_median"
@@ -1136,7 +1212,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_work_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_working_age_tt', 'te_demog_ov_working_age_pending_tt' )]"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/institution_icons/institution_ministry_of_labor.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_working_age.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_working_age"
@@ -1151,7 +1227,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_gini_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/money.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_gini.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_gini"
@@ -1517,7 +1593,143 @@ types te_demographics_widgets
 				spacing = 3
 				visible = "[Not( And( GetVariableSystem.Exists('te_demog_pyr_bio_open'), GetScriptedGui('te_demog_lx_bio_pyr_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 
+				### Issue #1075: where the people past 100 are 1% of the people or more, the rows past 85 in 85+'s place, the
+				### highest shown taking everyone older; a row wider than five years drawn per five years of age
+				### (demographics_params.OLD_ROWS, OLD_ROW_DRAW; te_demog_old_rows_show)
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 3
+					visible = "[GetScriptedGui('te_demog_pyr_split_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)6' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "te_demog_pyr_old_tt_6"
+						}
+						blockoverride "band_label" {
+							raw_text = "300+"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pxm6').GetValue ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pxf6').GetValue )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)5' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)5' ), 'te_demog_pyr_old_tt_open_5', 'te_demog_pyr_old_tt_5' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)5' ), 'te_demog_pyr_row_open_5', 'te_demog_pyr_row_5' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxm5').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxf5').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)4' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)4' ), 'te_demog_pyr_old_tt_open_4', 'te_demog_pyr_old_tt_4' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)4' ), 'te_demog_pyr_row_open_4', 'te_demog_pyr_row_4' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxm4').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxf4').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)3' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)3' ), 'te_demog_pyr_old_tt_open_3', 'te_demog_pyr_old_tt_3' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)3' ), 'te_demog_pyr_row_open_3', 'te_demog_pyr_row_3' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxm3').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxf3').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)2' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)2' ), 'te_demog_pyr_old_tt_open_2', 'te_demog_pyr_old_tt_2' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)2' ), 'te_demog_pyr_row_open_2', 'te_demog_pyr_row_2' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxm2').GetValue, '(CFixedPoint)0.2' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxf2').GetValue, '(CFixedPoint)0.2' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)1' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)1' ), 'te_demog_pyr_old_tt_open_1', 'te_demog_pyr_old_tt_1' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)1' ), 'te_demog_pyr_row_open_1', 'te_demog_pyr_row_1' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxm1').GetValue, '(CFixedPoint)0.2' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxf1').GetValue, '(CFixedPoint)0.2' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						blockoverride "row_tooltip" {
+							tooltip = "te_demog_pyr_old_tt_0"
+						}
+						blockoverride "band_label" {
+							raw_text = "85–99"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxm0').GetValue, '(CFixedPoint)0.33333' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_pxf0').GetValue, '(CFixedPoint)0.33333' ) )]"
+						}
+					}
+				}
 				te_demog_pyramid_row = {
+					visible = "[Not( GetScriptedGui('te_demog_pyr_split_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					blockoverride "row_tooltip" {
 						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_17', 'te_demog_pyr_tt_now_17' )]"
 					}
@@ -1938,7 +2150,143 @@ types te_demographics_widgets
 				spacing = 3
 				visible = "[And( GetVariableSystem.Exists('te_demog_pyr_bio_open'), GetScriptedGui('te_demog_lx_bio_pyr_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 
+				### Issue #1075: where the people past 100 are 1% of the people or more, the rows past 85 in 85+'s place, the
+				### highest shown taking everyone older; a row wider than five years drawn per five years of age
+				### (demographics_params.OLD_ROWS, OLD_ROW_DRAW; te_demog_old_rows_show)
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 3
+					visible = "[GetScriptedGui('te_demog_lx_bio_pyr_split_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)6' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "te_demog_pyr_bio_old_tt_6"
+						}
+						blockoverride "band_label" {
+							raw_text = "300+"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_bpxm6').GetValue ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_bpxf6').GetValue )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)5' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)5' ), 'te_demog_pyr_bio_old_tt_open_5', 'te_demog_pyr_bio_old_tt_5' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)5' ), 'te_demog_pyr_row_open_5', 'te_demog_pyr_row_5' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxm5').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxf5').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)4' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)4' ), 'te_demog_pyr_bio_old_tt_open_4', 'te_demog_pyr_bio_old_tt_4' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)4' ), 'te_demog_pyr_row_open_4', 'te_demog_pyr_row_4' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxm4').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxf4').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)3' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)3' ), 'te_demog_pyr_bio_old_tt_open_3', 'te_demog_pyr_bio_old_tt_3' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)3' ), 'te_demog_pyr_row_open_3', 'te_demog_pyr_row_3' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxm3').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxf3').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)2' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)2' ), 'te_demog_pyr_bio_old_tt_open_2', 'te_demog_pyr_bio_old_tt_2' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)2' ), 'te_demog_pyr_row_open_2', 'te_demog_pyr_row_2' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxm2').GetValue, '(CFixedPoint)0.2' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxf2').GetValue, '(CFixedPoint)0.2' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)1' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)1' ), 'te_demog_pyr_bio_old_tt_open_1', 'te_demog_pyr_bio_old_tt_1' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)1' ), 'te_demog_pyr_row_open_1', 'te_demog_pyr_row_1' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxm1').GetValue, '(CFixedPoint)0.2' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxf1').GetValue, '(CFixedPoint)0.2' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						blockoverride "row_tooltip" {
+							tooltip = "te_demog_pyr_bio_old_tt_0"
+						}
+						blockoverride "band_label" {
+							raw_text = "85–99"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxm0').GetValue, '(CFixedPoint)0.33333' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_bpxf0').GetValue, '(CFixedPoint)0.33333' ) )]"
+						}
+					}
+				}
 				te_demog_pyramid_row = {
+					visible = "[Not( GetScriptedGui('te_demog_lx_bio_pyr_split_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					blockoverride "row_tooltip" {
 						tooltip = "te_demog_pyr_bio_tt_17"
 					}
@@ -2312,8 +2660,9 @@ types te_demographics_widgets
 					ignoreinvisible = yes
 					spacing = 8
 
+					### The dash's note only while the dash shows (2026-10-27 audit, DEM-8), on the value's own gate.
 					te_demog_wealth_cell = {
-						tooltip = "te_demog_gini_tt"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_gini_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_gini_tt', 'te_demog_gini_pending_tt' )]"
 						blockoverride "cell_size" {
 							minimumsize = { 120 -1 }
 							maximumsize = { 120 -1 }
@@ -2575,6 +2924,18 @@ types te_demographics_widgets
 					blockoverride "row_value" {
 						text = "te_demog_wc_top_value"
 					}
+					### 2026-10-27 audit, DEM-8: a goto in the trend slot opens the state on its Demographics subtab, as the
+					### States table's rows do. The datacontext sits under the row's gate, never beside it.
+					blockoverride "row_trend" {
+						button_icon_goto = {
+							datacontext = "[GetPlayer.MakeScope.Var('te_dg_wc_top').GetState]"
+							size = { 22 22 }
+							parentanchor = center
+							tooltip = "te_demog_wc_open_tt"
+							onclick = "[InformationPanelBar.OpenStatePanel( State.AccessSelf )]"
+							onclick = "[GetVariableSystem.Set('population_subtab', 'te_demog')]"
+						}
+					}
 				}
 				te_demog_figure_row = {
 					visible = "[GetScriptedGui('te_demog_wc_bottom_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -2584,6 +2945,18 @@ types te_demographics_widgets
 					}
 					blockoverride "row_value" {
 						text = "te_demog_wc_bottom_value"
+					}
+					### 2026-10-27 audit, DEM-8: a goto in the trend slot opens the state on its Demographics subtab, as the
+					### States table's rows do. The datacontext sits under the row's gate, never beside it.
+					blockoverride "row_trend" {
+						button_icon_goto = {
+							datacontext = "[GetPlayer.MakeScope.Var('te_dg_wc_bottom').GetState]"
+							size = { 22 22 }
+							parentanchor = center
+							tooltip = "te_demog_wc_open_tt"
+							onclick = "[InformationPanelBar.OpenStatePanel( State.AccessSelf )]"
+							onclick = "[GetVariableSystem.Set('population_subtab', 'te_demog')]"
+						}
 					}
 				}
 			}
@@ -2674,6 +3047,27 @@ types te_demographics_widgets
 				}
 				blockoverride "row_value" {
 					text = "te_demog_mt_pl_value"
+				}
+			}
+			### 2026-10-27 audit, DEM-6: under it, those states, largest share first (te_dg_mt_states, at the country
+			### census; up to ten), a row each that opens the state on its subtab, where its Settlement row has the terms.
+			### The count above is live, so a state that crossed 60% since the census is counted before it is listed.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				datamodel = "[GetPlayer.MakeScope.GetList('te_dg_mt_states')]"
+
+				item = {
+					te_demog_state_link_row = {
+						datacontext = "[Scope.GetState]"
+						blockoverride "link_tooltip" {
+							tooltip = "te_demog_mt_list_tt"
+						}
+						blockoverride "link_value" {
+							text = "te_demog_mt_list_value"
+						}
+					}
 				}
 			}
 
@@ -2777,9 +3171,11 @@ types te_demographics_widgets
 		}
 	}
 
-	### The pips over a year's bar in every History chart (issue #1029), each on a row of its own so two never hide each
+	### The pips above a year's bar in every History chart (issue #1029), each on a row of its own so two never hide each
 	### other: the war dead the states' counts took (te_dg_h_mk_war), a month of famine (te_dg_h_mk_famine), a demographic
-	### event (te_dg_h_mk_event; te_demog_history_effects.txt). Mouse-through: the bar's tooltip names them.
+	### event (te_dg_h_mk_event; te_demog_history_effects.txt). They sit in the 36 px lane each chart keeps over its bars
+	### (its frame is 132 tall, the bars' 96 at its foot), at negative positions from the column's top, so they never
+	### cover the top of a bar (owner, 2026-10-22). Mouse-through: the bar's tooltip names them.
 	type te_demog_hist_pips = widget {
 		size = { 100% 100% }
 		alwaystransparent = yes
@@ -2787,26 +3183,26 @@ types te_demographics_widgets
 		icon = {
 			visible = "[ScriptContainer.HasVariable( 'te_dg_h_mk_war' )]"
 			parentanchor = hcenter
-			position = { 0 2 }
+			position = { 0 -38 }
 			alwaystransparent = yes
 			size = { 10 10 }
-			texture = "gfx/interface/icons/generic_icons/battalions.dds"
+			texture = "gfx/interface/icons/demographics_icons/pip_war.dds"
 		}
 		icon = {
 			visible = "[ScriptContainer.HasVariable( 'te_dg_h_mk_famine' )]"
 			parentanchor = hcenter
-			position = { 0 14 }
+			position = { 0 -26 }
 			alwaystransparent = yes
 			size = { 10 10 }
-			texture = "gfx/interface/icons/generic_icons/goods_shortage.dds"
+			texture = "gfx/interface/icons/demographics_icons/pip_famine.dds"
 		}
 		icon = {
 			visible = "[ScriptContainer.HasVariable( 'te_dg_h_mk_event' )]"
 			parentanchor = hcenter
-			position = { 0 26 }
+			position = { 0 -14 }
 			alwaystransparent = yes
 			size = { 9 9 }
-			texture = "gfx/interface/icons/generic_icons/information.dds"
+			texture = "gfx/interface/icons/demographics_icons/pip_event.dds"
 		}
 	}
 
@@ -2828,7 +3224,7 @@ types te_demographics_widgets
 				parentanchor = vcenter
 				alwaystransparent = yes
 				size = { 10 10 }
-				texture = "gfx/interface/icons/generic_icons/battalions.dds"
+				texture = "gfx/interface/icons/demographics_icons/pip_war.dds"
 			}
 			textbox = {
 				parentanchor = vcenter
@@ -2849,7 +3245,7 @@ types te_demographics_widgets
 				parentanchor = vcenter
 				alwaystransparent = yes
 				size = { 10 10 }
-				texture = "gfx/interface/icons/generic_icons/goods_shortage.dds"
+				texture = "gfx/interface/icons/demographics_icons/pip_famine.dds"
 			}
 			textbox = {
 				parentanchor = vcenter
@@ -2870,7 +3266,7 @@ types te_demographics_widgets
 				parentanchor = vcenter
 				alwaystransparent = yes
 				size = { 9 9 }
-				texture = "gfx/interface/icons/generic_icons/information.dds"
+				texture = "gfx/interface/icons/demographics_icons/pip_event.dds"
 			}
 			textbox = {
 				parentanchor = vcenter
@@ -2892,8 +3288,10 @@ types te_demographics_widgets
 	### Hegemony's annual chart does: 5 / 20 / 100 years at 80 / 20 / 4 px are 400 px of bars, in a frame of 48 px for the
 	### axis labels + 400 + the plots' 8 px right margin. A sample that lacks a figure draws an empty slot, not a zero (a
 	### seed year has no births or deaths; a year before #1029 no causes). Titles take the panel's heading type, legends
-	### and axis labels the tooltip face's medium, as Banking's charts do. Over each bar the year's pips
-	### (te_demog_hist_pips): war dead, a famine, a demographic event, with their key above the charts.
+	### and axis labels the tooltip face's medium, as Banking's charts do. Above each bar the year's pips
+	### (te_demog_hist_pips): war dead, a famine, a demographic event, with their key above the charts. They have a lane
+	### of their own: the frame is 132 tall and each "plot_layouts" (and the zero axis) sits in a 96 px box at its foot,
+	### as te_history_chart's 96 px frame holds them, so the bars and their labels keep their places.
 	type te_demog_sec_history = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2966,7 +3364,7 @@ types te_demographics_widgets
 				}
 			}
 
-			### What the pips over a bar mean (the year's war dead, a famine, a demographic event)
+			### What the pips above a bar mean (the year's war dead, a famine, a demographic event)
 			te_demog_hist_pip_legend = {
 				visible = "[Not( IsDataModelEmpty( GetPlayer.MakeScope.GetList('te_dg_hist') ) )]"
 			}
@@ -3041,40 +3439,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "60"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "60"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3111,14 +3515,21 @@ types te_demographics_widgets
 					te_demog_hist_pips = {}
 				}
 				blockoverride "zero_axis" {
+					### Centred on the bars, not on the frame, which the pips' lane makes taller.
 					widget = {
-						size = { 100% 2 }
-						parentanchor = vcenter
+						size = { 100% 96 }
+						parentanchor = bottom
 						alwaystransparent = yes
 
-						background = {
-							using = dark_area
-							alpha = 0.7
+						widget = {
+							size = { 100% 2 }
+							parentanchor = vcenter
+							alwaystransparent = yes
+
+							background = {
+								using = dark_area
+								alpha = 0.7
+							}
 						}
 					}
 				}
@@ -3154,40 +3565,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "+20"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "-20"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "+20"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "-20"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3244,40 +3661,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "100"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "100"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3332,40 +3755,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "8"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "8"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3420,40 +3849,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "60"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "60"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3601,40 +4036,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "100%"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "100%"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3689,40 +4130,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "1"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "1"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3777,40 +4224,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "100"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "100"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -4401,6 +4854,36 @@ types te_demographics_widgets
 			te_demog_note = {
 				text = "te_demog_how_causes"
 			}
+			### Work and Retirement and Longevity (2026-10-27 audit, DEM-3): the rules their live hovers taught, so each
+			### hover keeps its title, a line and its figures.
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_work"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_work"
+			}
+			te_demog_note = {
+				text = "te_demog_how_pensions"
+			}
+			te_demog_note = {
+				text = "te_demog_how_men"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_longevity"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_longevity"
+			}
+			te_demog_note = {
+				text = "te_demog_how_longevity_laws"
+			}
+			te_demog_note = {
+				text = "te_demog_how_minds"
+			}
 			te_demog_subheader = {
 				blockoverride "subheader_text" {
 					text = "te_demog_how_sub_family"
@@ -4623,6 +5106,29 @@ types te_demographics_widgets
 						text = "te_demog_ov_youth_value"
 					}
 				}
+				### 2026-10-27 audit, DEM-6: under it, the states with a youth bulge, strongest first (te_dg_yb_states, built
+				### beside the count at the country census; up to ten), a row each that opens the state, in place of
+				### "each state's subtab shows its own". Script values only, so a state that has since lost its count
+				### reads 0, not a missing variable.
+				flowcontainer = {
+					visible = "[GetScriptedGui('te_demog_youth_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[GetPlayer.MakeScope.GetList('te_dg_yb_states')]"
+
+					item = {
+						te_demog_state_link_row = {
+							datacontext = "[Scope.GetState]"
+							blockoverride "link_tooltip" {
+								tooltip = "te_demog_yb_list_tt"
+							}
+							blockoverride "link_value" {
+								text = "te_demog_yb_list_value"
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -4754,7 +5260,7 @@ types te_demographics_widgets
 	### rows it dropped are in their sections: the sex balance in the pyramid's, old age from and youth in Work and
 	### Retirement's, Living to 100 and biological age in Longevity's, the urban share in the pyramid's.
 	### Every figure is picked by its gate (a stepped census for the rates, deaths by cause for the leading cause),
-	### so a figure not yet written is never read. Icons are placeholders: docs/systems/demographics_gui_icons.md.
+	### so a figure not yet written is never read. Icons: docs/systems/demographics_gui_icons.md.
 	type te_state_demog_overview = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -4773,7 +5279,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_nat_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/population.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_natural_change.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_nat"
@@ -4801,7 +5307,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_mig_cell_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/state_status_icons/mass_migration_target.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_migration.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_mig"
@@ -4819,7 +5325,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_lx_state_e0_over_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_e0_tt_100', 'te_demog_st_e0_tt' )]"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/healthcare_aid.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_life_expectancy.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_e0"
@@ -4846,8 +5352,54 @@ types te_demographics_widgets
 				}
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_state_dc_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_lead_tt', 'te_demog_st_lead_pending_tt' )]"
+					### The headstone until the first count of deaths by cause, then the leading cause's icon.
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+						visible = "[Not( GetScriptedGui('te_demog_state_dc_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
+						texture = "gfx/interface/icons/demographics_icons/ov_leading_cause.dds"
+					}
+					blockoverride "icon_layers" {
+						### The leading cause's own icon, by te_dg_dc_lead (the pie's codes; the reading's text falls
+						### through to War for any other, as the old code 6 of a save from before 2026-10-22 would).
+						widget = {
+							size = { 44 44 }
+							parentanchor = center
+							visible = "[GetScriptedGui('te_demog_state_dc_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_infection.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_chronic.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_external.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_work.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)5' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_maternal.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)7' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_killed.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[Or( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)8' ), EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)6' ) )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_war.dds"
+							}
+						}
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_lead"
@@ -4865,7 +5417,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_tfr_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/decree/decree_natalism_initiative.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_fertility.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_fert"
@@ -4893,7 +5445,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_median_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/clock.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_median_age.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_median"
@@ -4924,7 +5476,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_state_work_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_working_age_tt', 'te_demog_ov_working_age_pending_tt' )]"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/institution_icons/institution_ministry_of_labor.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_working_age.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_working_age"
@@ -4939,7 +5491,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_gini_cell_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/money.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_gini.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_gini"
@@ -5522,7 +6074,199 @@ types te_demographics_widgets
 				spacing = 3
 				visible = "[Not( And( GetVariableSystem.Exists('te_demog_st_pyr_bio_open'), GetScriptedGui('te_demog_lx_state_bio_pyr_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) ) )]"
 
+				### Issue #1075: where the people past 100 are 1% of the people or more, the rows past 85 in 85+'s place, the
+				### highest shown taking everyone older; a row wider than five years drawn per five years of age
+				### (demographics_params.OLD_ROWS, OLD_ROW_DRAW; te_demog_old_rows_show)
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 3
+					visible = "[GetScriptedGui('te_demog_state_pyr_split_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)6' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "te_demog_st_pyr_old_tt_6"
+						}
+						blockoverride "band_label" {
+							raw_text = "300+"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pxm6').GetValue ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pxf6').GetValue )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)5' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)5' ), 'te_demog_st_pyr_old_tt_open_5', 'te_demog_st_pyr_old_tt_5' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)5' ), 'te_demog_pyr_row_open_5', 'te_demog_pyr_row_5' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxm5').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxf5').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)4' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)4' ), 'te_demog_st_pyr_old_tt_open_4', 'te_demog_st_pyr_old_tt_4' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)4' ), 'te_demog_pyr_row_open_4', 'te_demog_pyr_row_4' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxm4').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxf4').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)3' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)3' ), 'te_demog_st_pyr_old_tt_open_3', 'te_demog_st_pyr_old_tt_3' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)3' ), 'te_demog_pyr_row_open_3', 'te_demog_pyr_row_3' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxm3').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxf3').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)2' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)2' ), 'te_demog_st_pyr_old_tt_open_2', 'te_demog_st_pyr_old_tt_2' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)2' ), 'te_demog_pyr_row_open_2', 'te_demog_pyr_row_2' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxm2').GetValue, '(CFixedPoint)0.2' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxf2').GetValue, '(CFixedPoint)0.2' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)1' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)1' ), 'te_demog_st_pyr_old_tt_open_1', 'te_demog_st_pyr_old_tt_1' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_pyr_top').GetValue, '(CFixedPoint)1' ), 'te_demog_pyr_row_open_1', 'te_demog_pyr_row_1' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxm1').GetValue, '(CFixedPoint)0.2' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxf1').GetValue, '(CFixedPoint)0.2' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						blockoverride "row_tooltip" {
+							tooltip = "te_demog_st_pyr_old_tt_0"
+						}
+						blockoverride "band_label" {
+							raw_text = "85–99"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxm0').GetValue, '(CFixedPoint)0.33333' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_pxf0').GetValue, '(CFixedPoint)0.33333' ) )]"
+						}
+					}
+				}
 				te_demog_pyramid_row = {
+					visible = "[Not( GetScriptedGui('te_demog_state_pyr_split_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
 					blockoverride "row_tooltip" {
 						tooltip = "te_demog_st_pyr_tt_17"
 					}
@@ -5979,7 +6723,199 @@ types te_demographics_widgets
 				spacing = 3
 				visible = "[And( GetVariableSystem.Exists('te_demog_st_pyr_bio_open'), GetScriptedGui('te_demog_lx_state_bio_pyr_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
 
+				### Issue #1075: where the people past 100 are 1% of the people or more, the rows past 85 in 85+'s place, the
+				### highest shown taking everyone older; a row wider than five years drawn per five years of age
+				### (demographics_params.OLD_ROWS, OLD_ROW_DRAW; te_demog_old_rows_show)
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 3
+					visible = "[GetScriptedGui('te_demog_lx_state_bio_pyr_split_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)6' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "te_demog_st_pyr_bio_old_tt_6"
+						}
+						blockoverride "band_label" {
+							raw_text = "300+"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bpxm6').GetValue ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bpxf6').GetValue )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)5' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)5' ), 'te_demog_st_pyr_bio_old_tt_open_5', 'te_demog_st_pyr_bio_old_tt_5' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)5' ), 'te_demog_pyr_row_open_5', 'te_demog_pyr_row_5' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxm5').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxf5').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)4' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)4' ), 'te_demog_st_pyr_bio_old_tt_open_4', 'te_demog_st_pyr_bio_old_tt_4' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)4' ), 'te_demog_pyr_row_open_4', 'te_demog_pyr_row_4' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxm4').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxf4').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)3' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)3' ), 'te_demog_st_pyr_bio_old_tt_open_3', 'te_demog_st_pyr_bio_old_tt_3' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)3' ), 'te_demog_pyr_row_open_3', 'te_demog_pyr_row_3' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxm3').GetValue, '(CFixedPoint)0.1' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxf3').GetValue, '(CFixedPoint)0.1' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)2' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)2' ), 'te_demog_st_pyr_bio_old_tt_open_2', 'te_demog_st_pyr_bio_old_tt_2' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)2' ), 'te_demog_pyr_row_open_2', 'te_demog_pyr_row_2' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxm2').GetValue, '(CFixedPoint)0.2' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxf2').GetValue, '(CFixedPoint)0.2' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)1' )]"
+						blockoverride "row_tooltip" {
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)1' ), 'te_demog_st_pyr_bio_old_tt_open_1', 'te_demog_st_pyr_bio_old_tt_1' )]"
+						}
+						blockoverride "band_label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_bpyr_top').GetValue, '(CFixedPoint)1' ), 'te_demog_pyr_row_open_1', 'te_demog_pyr_row_1' )]"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxm1').GetValue, '(CFixedPoint)0.2' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxf1').GetValue, '(CFixedPoint)0.2' ) )]"
+						}
+					}
+					te_demog_pyramid_row = {
+						blockoverride "row_tooltip" {
+							tooltip = "te_demog_st_pyr_bio_old_tt_0"
+						}
+						blockoverride "band_label" {
+							raw_text = "85–99"
+						}
+						blockoverride "next_visible" {
+							visible = no
+						}
+						blockoverride "men_range" {
+							min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
+							max = 0
+						}
+						blockoverride "women_range" {
+							min = 0
+							max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
+						}
+						blockoverride "men_now" {
+							value = "[Negate_float( FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxm0').GetValue, '(CFixedPoint)0.33333' ) ) )]"
+						}
+						blockoverride "women_now" {
+							value = "[FixedPointToFloat( Multiply_CFixedPoint( State.MakeScope.Var('te_dg_bpxf0').GetValue, '(CFixedPoint)0.33333' ) )]"
+						}
+					}
+				}
 				te_demog_pyramid_row = {
+					visible = "[Not( GetScriptedGui('te_demog_lx_state_bio_pyr_split_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
 					blockoverride "row_tooltip" {
 						tooltip = "te_demog_st_pyr_bio_tt_17"
 					}
@@ -6841,6 +7777,36 @@ types te_demographics_widgets
 			}
 			te_demog_note = {
 				text = "te_demog_how_causes"
+			}
+			### Work and Retirement and Longevity (2026-10-27 audit, DEM-3): the rules their live hovers taught, so each
+			### hover keeps its title, a line and its figures.
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_work"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_work"
+			}
+			te_demog_note = {
+				text = "te_demog_how_pensions"
+			}
+			te_demog_note = {
+				text = "te_demog_how_men"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_longevity"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_longevity"
+			}
+			te_demog_note = {
+				text = "te_demog_how_longevity_laws"
+			}
+			te_demog_note = {
+				text = "te_demog_how_minds"
 			}
 			te_demog_subheader = {
 				blockoverride "subheader_text" {

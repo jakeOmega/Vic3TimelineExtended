@@ -1,0 +1,68 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — Space Command (fleets design § 5)
+# ============================================================================
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md.
+# A government building, built where the Space Program stands, under Full
+# Colonies. Its methods (sr_space_command_pms.txt) carry the fleet strength a
+# level builds a month as a workforce-scaled state modifier
+# (state_sr_ship_construction_add), which sr_sc_rate sums over the states the
+# country controls; the month's construction joins the home fleet at Earth
+# (sr_sc_month, sr_fleet_effects.txt). The fleets' upkeep is a modifier on
+# this building that raises its input goods (sr_fl_upkeep_refresh).
+#
+# bg_government, not bg_military: vanilla's bg_military is the parent of the
+# army and navy groups (barracks and naval bases, is_military = yes, tied to
+# formations and conscription) and has no building of its own; the mod's
+# Military Base is bg_government too. An AI government builds no further than
+# sr_sc_may_build_government allows (2 + its colonies, at most 10 levels).
+# ============================================================================
+
+building_space_command = {
+	building_group = bg_government
+	icon = "gfx/interface/icons/building_icons/building_space_command.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		space_militarization
+	}
+
+	production_method_groups = {
+		pmg_space_command_yards
+	}
+
+	potential = {
+		sr_colonies_full_enabled = yes
+	}
+
+	possible = {
+		has_building = building_space_program
+	}
+
+	required_construction = construction_cost_very_high
+
+	can_build_government = {
+		owner ?= { sr_sc_may_build_government = yes }
+	}
+
+	can_build_private = {
+		always = no
+	}
+
+	ai_value = {
+		value = 2000
+		if = {
+			limit = {
+				owner ?= {
+					OR = {
+						is_at_war = yes
+						sr_has_space_colony = yes
+					}
+				}
+			}
+			add = 2000
+		}
+	}
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds"
+}

@@ -8,7 +8,7 @@ your people by age and sex. The state panel gains tiles that show most of these.
 Everything in this chapter is always on except internal resettlement, which the
 Internal Resettlement game rule controls (see the
 [Introduction](01-introduction.md)), and the census, which is experimental and
-not yet in released versions (see [Demographics](#demographics)).
+has a game rule of its own (see [Demographics](#demographics)).
 
 ## State panel additions
 
@@ -21,16 +21,17 @@ tooltip breaks the numbers down.
 
 | Tile | Shown | What it tells you |
 |---|---|---|
-| Homeland Dynamics | Always | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why nothing can change. |
+| Homeland Dynamics | Where a culture could gain or lose a homeland, even while changes are paused | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why progress is paused. |
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
 | Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
 | Wealth Concentration | While the state carries a modifier from its wealth concentration or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
-| Solar Collector | Once your country has one | Receiver slots available and generated (3 per staffed level). A megaproject; see [The extended timeline](02-timeline.md). |
-| Antimatter Facility | Once your country has one | Engine and warhead-plant slots available and generated (5 per staffed level). |
-| Seabed Licences | On a coastal state, once your country has had its first share of seabed licences | The state's ocean basin, the licences its Deep-Sea Mine levels hold and how many are long-haul, your unused claims in that basin and the claim weight the state adds there; see [Seabed licences](02-timeline.md#seabed-licences). |
+| Solar Collector | In a state with a Solar Collector or a Solar Receiver | Your country's receiver slots available and generated (3 per staffed level); a receiver's build tooltip also gives the free slots. A megaproject; see [The extended timeline](02-timeline.md). |
+| Antimatter Facility | In a state with the Facility, an engine or a warhead plant | Your country's engine and warhead-plant slots available and generated (5 per staffed level). |
+| Seabed Licenses | On a coastal state, once your country has had its first share of seabed licenses | The state's ocean basin, the licenses its Deep-Sea Mine levels hold and how many are long-haul, your unused claims in that basin and the claim weight the state adds there; see [Seabed licenses](02-timeline.md#seabed-licenses). |
+| Ocean Basin | On a coastal state without the Seabed Licenses tile (another country's, or one that never shared licenses), once you have researched Abyssal Plain Mining | The ocean basin the state faces, whose license pool its mines and ports would count in. |
 | UN Mission | While a UN mission works in the state | The mission's type, months, strength and progress; see [The United Nations](10-united-nations.md). |
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |
-| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, its levels and age once finished, and what it gives the state: Tourism Industry throughput and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
+| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, its levels and age once finished, and what it gives the state: tourism output and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
 | Grand Monument (Under Construction) card | While a Grand Monument is being built in the state | The levels built, the grandeur they come to, what a level finished now adds, whether levels are still being built, and on your own state the Dedicate button. |
 
 In every version of the mod, the birth, death and workforce effects of laws,
@@ -86,9 +87,12 @@ and tolerance figures for their sources.
 | Modern Urban Planning, Advanced Structural Engineering | +20% each |
 | Urban Planning power bloc principle | +25% at tiers I to III, +50% at IV, +100% at V, plus +5% per Ministry of Urban Planning level (+10% at IV, +20% at V) |
 | National Park building on National Park, National Forest or National Wildlife Refuge | −5%, −7.5% or −10% per level, scaled by staffing |
+| Metropolitan Crowding, under the Demographics rule's Full setting (see [The urban pattern and a planned capital](#the-urban-pattern-and-a-planned-capital)) | Up to −10%: it starts when more than 40% of the state's urban people live in its largest city and is full at 60% |
+| Green Belt or Urban Sprawl, from the Overspill event (see [Demographic events](#demographic-events)) | −10% or +20%, for twenty years |
 
 Ministries are explained in [Ministries](06-politics.md#ministries). The same
-tolerance also raises the densities that open and close a resettlement frontier.
+tolerance multiplies the densities that open and close a resettlement frontier
+(see [The Settlement Authority](#the-settlement-authority)).
 
 ## Dynamic homelands
 
@@ -199,14 +203,17 @@ Throughput.
 
 ### Tourism output
 
-Two sources on the card set a state's output bonus:
+Three sources on the card set a state's output bonus:
 
 | Source | Bonus |
 |---|---|
-| Base Appeal | A fixed score for each state region, from its scenery, climate and history. It runs up to +100%; Wyoming scores 90%, Nebraska 20%, and any region without its own score gets 20%. Nothing changes it. |
+| Base Appeal | A score for each state region, from its scenery, climate and townscape. It runs up to +100%; Wyoming scores 90%, Nebraska 20%, and any region without its own score gets 20%. A region's historical monuments count under Monuments and in its Grand Monuments instead, so their share goes with them: Attica's Acropolis takes 40 of its 100, and Base Appeal reads +60% while the Parthenon gives it back; Lower Egypt's pyramids take 50 and the Pyramids of Giza give it back. Ruins still buried, such as Teotihuacan, take theirs until they are dug up. The tooltip says how much has moved. |
 | Cities | +100% for the largest city in the world, 5% less for each place below it, nothing below 20th. See [World city rankings](#world-city-rankings). |
+| Monuments | +10% for each monument. The wonders that stood in 1836 give more: the Taj Mahal +40%, Angkor Wat +30%, and Hagia Sophia, the Vatican, the Forbidden City, Saint Basil's Cathedral and the White House +20%; the Great Mosque of Djenné gives +20% once rebuilt in Eastern Mali. |
 
-The card's "All modifiers" line adds everything else that changes output. An
+The card's "All modifiers" line adds everything else that changes output. A
+Grand Monument adds +10% for each step of its grandeur (see [Grand
+monuments](02-timeline.md#grand-monuments)). An
 Airport or Spaceport adds +15% per level, scaled by staffing. A Highway adds +5%
 on the Civil, Electric Civil and Autonomous Highway methods and +2.5% on the
 Industrial and Electric Industrial ones. Laws add between
@@ -225,15 +232,14 @@ toward its cap:
 | Excess Infrastructure | The infrastructure the state produces less what its buildings use: +25% at 10,000, +50% at 30,000, +75% at 90,000. Each point adds less than the one before. | +100%, never quite reached |
 | Art | +1% per Creative Industry level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
 | Parks | +25% with a National Park, rising with Base Appeal to +37.5% | +37.5% |
-| Monuments | +10% for a Skyscraper, +25% for each monument | none |
+| Skyscraper | +10% | none |
 
 Railways and Highways raise Excess Infrastructure by supplying infrastructure.
 Each building you add uses some, so a crowded industrial state has little to
 spare for visitors.
 
 The "All modifiers" line for throughput also carries the Promote Tourism decree
-(+50%), a Grand Monument (+25% for each step of its grandeur, see [Grand
-monuments](02-timeline.md#grand-monuments)) and bonuses from events.
+(+50%) and bonuses from events.
 
 ## World city rankings
 
@@ -246,11 +252,13 @@ uses the ranking.
 
 ## Demographics
 
-The census is experimental, and released versions of the mod leave it out. A
-development build offers it as the Demographics (Experimental) game rule, off by
-default: set it to Full or Display only when you start a new game. A save from
-an earlier version keeps it off. The rest of this section describes the census
-with the rule on.
+The census is experimental. The Demographics game rule controls it, set to
+Full by default: choose Display only or Disabled when you start a new game. A save from
+an earlier version keeps the setting it was started with: off, unless you
+chose otherwise. With it off, some laws, technologies and
+decrees still list lines only the census reads, such as Contraception or Health
+Care Access; their names end in (Demographics off), since they do nothing. The
+rest of this section describes the census with the rule on.
 
 With it on, every state keeps a census of its people by single year of age and
 by sex. It is taken when the game starts and again once a year, and it opens a
@@ -258,7 +266,7 @@ Demographics tab in the Population panel, beside the base game's four, and a
 Demographics subtab on the state panel's Population section. The tab is open
 from the first day.
 
-Under the Demographics (Experimental) rule's Full setting, the census sets each
+Under the Demographics rule's Full setting, the census sets each
 state's births and deaths from its age structure, children per woman and causes
 of death, described below. From its first step in a state, the Laws and
 Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
@@ -270,7 +278,8 @@ An effect on some of a state's people, such as severe starvation, applies to
 their rate in the base game. Private Health Insurance's cut for the wealthy
 works at the census's rate, and no pop's deaths fall below half of it. A state's
 birth rate and mortality tooltips show the census's part as Census: Births and
-Census: Deaths.
+Census: Deaths. The Birth Rate and Mortality lines it takes over, on most laws and
+technologies, end in (Demographics).
 
 Under Full the census also sets each state's workforce, from who is of working
 age and how many of them work. The working ages run from 15 (children of 10 to
@@ -283,7 +292,9 @@ a state works about as in the base game, but a rich modern country has a sixth
 to a quarter fewer workers than the flat lines would give it. Each yearly count
 sets a state's workforce to the census's figure, shown as Census: Workforce in
 its workforce tooltip, and the game's own count moves toward it over the years
-that follow.
+that follow. Under Full, the laws' and technologies' Workforce Ratio lines say
+what the census does with them: the ones it counts toward how many women work
+read Women's Work, and the rest read Workforce Ratio (replaced by the census).
 
 With Old Age Pension, you choose the pension age with five buttons on the
 Demographics tab. A setting holds for five years once chosen, and the AI picks
@@ -311,7 +322,7 @@ census's health need rises above 1836's, and 5% more for each of six chronic-car
 technologies (Modern Pharmaceuticals, Telemedicine, Personalized Medicine, Genetic
 Engineering, Molecular Assemblers, Biological Immortality): about two fifths more
 for a rich country today. Outside Full none of this changes
-anything, and the buttons are greyed.
+anything, and the buttons are grayed.
 
 The census also counts each state's men of fighting age, 20 to 39, its young
 adults and its men per 100 women aged 20 to 59, and takes war dead from the men
@@ -326,17 +337,21 @@ state's yearly census:
   Men row on the Demographics tab shows the figure.
 - **Census: Youth Bulge** appears where young adults aged 20 to 29 are more than
   18% of the people while work is short. At full strength (24% young adults and
-  a fifth of the workforce without work) radicals from movements rise by 15% and
-  the effects of turmoil by 10%.
+  a fifth of the workforce without work) radicals from movements rise by 25% and
+  the effects of turmoil by 15%. Past that each factor keeps adding at half the
+  pace, up to twice the full size.
 - **Census: Fewer Men** appears below 90 men per 100 women, as after a war with
   many dead. Fewer women marry, so children per woman fall with the balance (by
   at most a fifth), more women work, and support for women's rights movements
-  rises, by up to 10% at 80. **Census: More Men** appears from 110 men per 100
-  women and raises radicals from movements, by up to 10% at 150.
+  rises, by 25% at 80. **Census: More Men** appears from 110 men per 100
+  women and raises radicals from movements and the effects of turmoil, by 15%
+  each at 130. Past those marks both keep growing at half the pace, up to twice
+  their size at 60 or 170.
 
 Under Full the state's Gini sets one more: **Census: Inequality** appears where
-it is above 0.45 and raises radicals from movements by 5% for each 0.1 above
-that, with no cap.
+it is above 0.45 and raises radicals from movements, and support for the
+socialist and labor movements, by 5% for each 0.1 above that, twice as fast
+above 0.70, with no cap.
 
 The census books migration as whole families once a state gains or loses many
 people in a year, so migration alone seldom carries a state's balance past 90
@@ -347,8 +362,8 @@ Missouri and Arkansas, also starts with the surplus of men the 1840 census found
 there, and so do the Old Southwest and Florida.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
-follow the base game's rules, and the tab reports what they produce. Disabled,
-the default, also removes the census and both tabs. Wealth Concentration and its
+follow the base game's rules, and the tab reports what they produce. Disabled
+also removes the census and both tabs. Wealth Concentration and its
 effects on each state (see
 [Who inherits](06-politics.md#who-inherits)) keep working under all three.
 
@@ -361,15 +376,18 @@ them, and some break the figure down for your capital.
 |---|---|
 | Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (over 10,000 past 10,000 years; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Wealth Concentration and its target). Hover a reading for more. |
 | Causes of Death | Last year's deaths per 1,000 people and a pie of those deaths by cause; see below. |
-| Population pyramid | Men per 100 women, then people by five-year age band, with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
-| Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages; old age from (the age with fifteen years of life left; None when no age has); under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, the men of fighting age with the conscription they give, and young adults where they are many while work is short. |
+| Population pyramid | Men per 100 women, then people by five-year age band (wider rows past 85 where many live past 100), with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
+| Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages; old age from (the age with fifteen years of life left; None when no age has); under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, the men of fighting age with the conscription they give, and young adults where they are many while work is short, with up to ten of the states where they are, strongest first. |
 | Longevity | Once longevity care exists: Living to 100, the mean biological age beside the calendar one, the share of people within the care's reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | History | Eight charts by year, over 5, 20 or 100 years: births and deaths per 1,000 people, net migration, life expectancy, children per woman, median age, deaths by cause, the Gini coefficient and Wealth Concentration. A mark over a year shows war dead, a famine or a demographic event. |
-| Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
-| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises, and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
+| Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states; the arrow beside each opens it. |
+| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises with up to ten of them listed, and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
 | States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Wealth Concentration, and click it to open the state. Show All lists up to 40. |
-| How Demographics Works | A collapsed section that explains the method. |
+| How Demographics Works | A collapsed section that explains the method, topic by topic, from the census to work and retirement and longevity. |
+
+Every state the tab lists, in States, Where people live and Work and
+Retirement, opens on its Demographics subtab when you click it.
 
 The subtab shows one state's overview, causes of death, pyramid, work and
 retirement (without the buttons), longevity, wealth and modifiers, in the tab's
@@ -388,7 +406,15 @@ baby boom or a gap.
 The pyramid has a row for each five years of age, from 0 to 4 at the bottom to 85
 and over at the top, with men on the left and women on the right. A wide base
 means many children; a column that narrows slowly means few births and long
-lives. Hover a row for the numbers. The pale outline behind the bars carries
+lives. Hover a row for the numbers.
+
+Where people aged 100 and over make up at least 1% of a state or country, its top
+row splits into wider rows: 85 to 99, 100 to 124, 125 to 149, 150 to 199, 200 to
+249, 250 to 299, and 300 and over. A row shows while the people of its age and
+older are at least 1% of the people, and the highest row shown also holds
+everyone older. A row wider than five years is drawn per five years of age, so
+its bar compares with the rows below it; hover it for the people in it. These
+rows have no outline. The biological view splits the same way by biological age. The pale outline behind the bars carries
 your people twenty years forward at the census's own birth and death rates for
 this year, five years at a time. It leaves out migration and holds the rates where they are, so it
 shows where today's course leads, not a forecast. Only your own country gets it.
@@ -405,7 +431,7 @@ mid-twenties and many never marry. Under birth spacing, strongest in Japan and
 slight in China and Korea, couples space and stop births by custom. Modern
 contraception wears both away, and health care wears away birth spacing; women's
 paid work and farms that pass whole to one heir make late marriage more common.
-Both customs also spread slowly from neighbouring states.
+Both customs also spread slowly from neighboring states.
 The figure then falls with literacy, child survival and city life, and family policy moves it (see [Family policy measures](#family-policy-measures)). Under Full, the figure shown is what births came to that
 year, so decrees, famine and other effects on births count in it; its tooltip
 lists them as births added on top of the census. The means to plan a family
@@ -414,7 +440,7 @@ Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and
 State-Sponsored Family Planning adds more, whoever can read. Their tooltips show
 each line. Under Full, family limitation adds to them too: the share of couples
 who stop at the family size they want by older methods, which France starts with
-at 60%. It spreads from neighbouring countries that practise it, grows under
+at 60%. It spreads from neighboring countries that practice it, grows under
 Forced Heirship in farming countries and in nearly universally literate ones,
 less under a state religion, and never falls back, though modern contraception takes over its part
 of the means as it arrives. It shows as Family Limitation among a country's
@@ -455,8 +481,9 @@ Electric Telegraph, Modern Nursing, Radio, the World Wide Web and Telemedicine
 are researched. A party to the Global Pandemic Response, the convention that
 founds the World Health Organization, closes a further share, larger as the
 UN's enforcement rises. Under Full, the Medical Outreach decree closes a
-further fifth of the gap at each count in one state, and it ends once the
-state has caught up. Turmoil raises deaths from accidents and
+further fifth of the gap at each count in one state. It can be issued only in a
+state whose next count would leave its medicine short of the targets, and it
+ends once the state has caught up. Turmoil raises deaths from accidents and
 violence, by half at full turmoil. Where the map marks a state with malaria
 (most of tropical Africa, parts of Indonesia and the Pacific islands), deaths
 from infection run higher, more so with severe malaria, until Malaria
@@ -499,12 +526,16 @@ Dominant from 25%, Balanced from 10% and Dispersed below that.
 
 Under the Full setting a Dominant or Primate pattern has effects; Balanced and
 Dispersed are the baseline. Your largest city gets Primate City, with more Urban
-Center throughput and migration attraction. Every other state gets Provincial
-Neglect, with less migration attraction and higher penalties from turmoil. Both
-grow with the largest city's share of urban people, from nothing at 25% to their
-full size at 60%: Urban Center throughput +10% and migration attraction +15% for
-the city, migration attraction −10% and turmoil penalties +10% for the rest. A
-country of fewer than three states gets neither. Each state takes the new figure
+Center and University throughput and migration attraction. Every other state gets
+Provincial Neglect, with less migration attraction, higher penalties from turmoil
+and, where the state has a culture of its own, more support for its Cultural
+Minority Movement. Both grow with the largest city's share of urban people, from
+nothing at 25% to their full size at 50%: Urban Center throughput +20%,
+University throughput +10% and migration attraction +25% for the city, migration
+attraction −15%, turmoil penalties +15% and cultural minority support +15% for
+the rest. Past 50% they keep growing at half the pace, to twice their full size
+when one city holds all the urban people. A country of fewer than three states
+gets neither. Each state takes the new figure
 at its yearly count, and the Urban Pattern tooltip names your largest city and
 shows the current figures. Under Display only it says what Full would do.
 
@@ -520,10 +551,11 @@ planning (the Ministry of Urban Planning, Planned Towns and a Planned Capital)
 lower it, and a country's urbanization raises it most at half its people in towns
 and lowers it a little below a tenth or past nine tenths.
 Hover the row for each term as a bar. Under Full a share above 40% has effects,
-full at 60%: the state crowds 10% sooner, its people give 10% more infrastructure,
-its Urban Center works at 5% more throughput, turmoil penalties rise 5% and
-families are a little smaller. Below 20% its towns give up to 10% less
-infrastructure. Where People Live counts your Metropolises.
+full at 60%: the state crowds 10% sooner, its people give 20% more infrastructure,
+its Urban Center works at 10% more throughput, turmoil penalties rise 10% and
+families are a little smaller. Past 60% all but the crowding keep growing at half
+the pace, to nearly twice their size at the highest shares. Below 20% its towns
+give up to 20% less infrastructure. Where People Live counts your Metropolises.
 
 The decision Plan a New Capital, also under Full, moves your seat of government
 away from your largest city. It appears once you research Modern Sewerage and
@@ -545,13 +577,13 @@ lapse. A site you lose, or a war that starts, while the choice is open takes
 that site off the list. A planned capital draws migrants and building to a
 region your largest city leaves behind, so over the years it can lower that
 city's share and with it Provincial Neglect. The AI plans one only with a
-Primate pattern of 45% or more, eight states or more, a largest city crowded to
+Primate pattern of 42.5% or more, eight states or more, a largest city crowded to
 Migration Crowding's ceiling (ten times the reference density), and the money
 in its treasury.
 
 ### Life extension
 
-From mRNA Therapeutics on, medicine slows ageing itself as well as treating
+From mRNA Therapeutics on, medicine slows aging itself as well as treating
 illness, and the census tracks each person's body apart from the calendar.
 People in longevity care age nine-tenths of a year each year with mRNA
 Therapeutics, seven-tenths once Personalized Medicine, Genetic Engineering and
@@ -571,7 +603,7 @@ lists its part among its modifiers.
 | Regulated Augmentation Market | The market's price falls half again as fast; with Private Health Insurance, two and a half times as fast. |
 | Human Purity | None. |
 
-The market reaches the rich first: from your first ageing technology, people
+The market reaches the rich first: from your first aging technology, people
 from wealth 80 can buy care, and the line falls about a level a year, faster with
 the technologies that spread medicine. Care rolls out as fast as new medicine
 spreads, and a ban winds it down the same way; people who lose care keep the
@@ -585,7 +617,7 @@ health system's share of the care costs your Ministry of Health more bureaucracy
 Women in care can have children they put off, and births nobody planned go on as
 long as their bodies allow, even past 50 by the calendar; State Youth Centers on
 Ectogenesis carry a share of planned births with no risk in childbirth. A society
-that stops ageing turns a slow decline into slow growth, about 1% a year at 1.6
+that stops aging turns a slow decline into slow growth, about 1% a year at 1.6
 children per woman: the brakes are the means to plan a family and the size of
 family people want. Old Age From rises with longer lives and reads None once no
 age has fifteen years left; Linked to Average Longevity follows it, Linked to
@@ -621,7 +653,7 @@ Family & Reproductive Policy law. It shows the law in force, a row for each
 measure that law allows, with its running cost, its term and a button, and,
 dimmed, the measures only another law allows; hover one for the laws that allow
 it. Under Display only the rows show what each measure would do and the buttons
-are greyed.
+are grayed.
 
 A measure takes effect as soon as you start it and costs its upkeep while it
 runs: a weekly share of GDP for the ones paid in money, recalculated each year,
@@ -637,7 +669,7 @@ doesn't allow a measure ends it at once, with a notice, and taking it up again
 under another law starts a new term. Under Communal Child-Rearing your form of
 government adds measures: a Council Republic or Anarchy also allows Sex
 Education, and a Single-Party State or Autocracy that has outlawed dissent also
-allows Honours for Large Families and Restricted Contraception. A change of
+allows Honors for Large Families and Restricted Contraception. A change of
 government ends what the new laws don't allow. Birth Limit's button moves from two
 children to one child, then ends the limit. The Crash Campaign ends itself after
 five years and can't return for ten.
@@ -646,7 +678,7 @@ five years and can't return for ten.
 |---|---|---|---|
 | Child Allowance | Pro-Natalist Policy, Communal Child-Rearing | Families want more children | 0.5% of GDP a year, more where children are many |
 | Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing | Offsets half of city life's pull toward smaller families | 0.25% of GDP a year, by the share of people in cities |
-| Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families want a few more children | 50 authority |
+| Honors for Large Families | Traditional Family Structure, Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families want a few more children | 50 authority |
 | Restricted Contraception | Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families have less means to plan their children; more mothers die; the feminist movement gains support | 200 authority |
 | Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year if every woman of working age worked, less as fewer do |
 | Free Contraception | State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Families have more means to plan their children | 0.1% of GDP a year |
@@ -663,7 +695,7 @@ researched, how many boys are born per 100 girls. Births follow over the year
 after. Under Full, Pro-Natalist Policy itself makes families want a few more
 children, and the law's own boost to births and Population Control Measures' cut
 no longer apply: the measures carry those laws' force. Pro-Natalist Policy with
-Child Allowance, Family Housing and Honours adds about 0.3 children per woman in
+Child Allowance, Family Housing and Honors adds about 0.3 children per woman in
 a rich country that has few, for 0.4–0.5% of GDP a year. Restricted
 Contraception, Birth Limit and the Crash Campaign move births further, at their
 political price. The Children per Woman tooltips list family policy beside the
@@ -683,7 +715,7 @@ when the need is pressing and its legitimacy is high.
 Under the Full setting, ten events mark the moments the census records: the
 Demographic Dividend (the working-age share a tenth above 1836's), the Baby Boom
 (after a long war with heavy losses), the Lost Generation (war dead past a
-twentieth of the men of fighting age), the Greying of the Nation (pensioners at a
+twentieth of the men of fighting age), the Graying of the Nation (pensioners at a
 fifth of the people), the Youth Bulge (a fifth of the people in their twenties
 while work is short), Missing Girls (110 boys born per 100 girls under Birth
 Limit), Bare Branches (110 men per 100 women), the Empty Villages (an old,
@@ -725,10 +757,19 @@ frontier, measured over the whole state region whoever owns each part:
 - an existing one keeps running, and can add levels, until the region reaches
 10 people per km².
 
-Both densities scale with Migration Crowding Tolerance, and the building's
-requirements show the region's current density against them. In an 1836 start
-the open frontiers include the American West, Siberia, the Kazakh steppe,
-Hokkaido and the Argentine pampas.
+These figures hold at a world population of one billion, about the world's
+population at the 1836 start, and grow in proportion to it: at two billion
+people they are 4 and 20. A frontier is thin compared with the rest of the
+world, so it closes only when its region fills faster than the world grows.
+
+[Migration Crowding Tolerance](#raising-crowding-tolerance) multiplies both
+densities as it does the crowding threshold: at +50% tolerance and one billion
+people they are 3 and 15. The tolerance that counts is that of the state the
+Authority stands in, although the density is the whole region's, so two owners
+of one region can face different limits. The building's requirements show the
+region's current density against each limit, with the two multipliers. In an
+1836 start the open frontiers include the American West, Siberia, the Kazakh
+steppe, Hokkaido and the Argentine pampas.
 
 An Authority can have up to 5 levels. Nationalism, Civilizing Mission, Mass
 Propaganda, Keynesian Economics and Civil Rights Movement each add 5, to a
@@ -864,7 +905,8 @@ event list](19-appendix-events.md#resettlement-event-list).
 
 The AI values a Settlement Authority on an open frontier when one of its states
 has more than 10% of its workforce out of work or migration crowding, and on any
-frontier emptier than 0.5 people per km². It stops founding new ones once it has
-three. It issues the Recruitment Drive in states with more than 10% of the
+frontier emptier than 0.5 people per km² (at one billion people, scaled with
+world population like the frontier densities). It stops founding new ones once
+it has three. It issues the Recruitment Drive in states with more than 10% of the
 workforce out of work or a crowding penalty above 10%. The mod gives the coercive programs a low AI weight, but only
 the AI Voluntary Only rule guarantees that AI countries stay off them.

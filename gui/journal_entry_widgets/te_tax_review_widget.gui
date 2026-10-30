@@ -3,9 +3,9 @@
 ### each with the existing law's timeline (the enacted rate, its scheduled
 ### expiry, the passed bills that change it) above what the bill would make of
 ### it (its rate from the commencement month, its expiry and the rate it then
-### reverts to). Changes to the baseline since the draft was written come
-### first, each with its Accept button. Collapsed until opened: the summary's
-### Review button opens it.
+### reverts to). Changes to the baseline since the draft was written, each
+### with its Accept button, are at the top of the workbench (GUI audit TAX-3).
+### Collapsed until opened: the summary's Review button opens it.
 ###
 ### "Then reverts to" is te_tax_succ_dr_<key>, the scheduler's rule at the
 ### draft's commencement month: the pending successor if the tax has an
@@ -14,26 +14,28 @@
 ### (state 2 conflict, 3 missed) says so on its line, as it will not commence
 ### as shown. Rows read only guarded views of the player's draft and passed
 ### bills (te_tax_view_dr_*, te_tax_view_p<s>_*); a package's pending relief
-### marks are never shown. Relief entries also say who benefits and what
-### revenue the relief forgoes, in the words the capability ledger verified
-### (agricultural relief: the wage tax of agricultural workers; regional
-### relief: every tax collected from the named states' pops).
+### marks are never shown. Relief entries also say who benefits, on the
+### provision's name (the fixed text, GUI audit TAX-17), and what revenue the
+### relief forgoes, in the words the capability ledger verified (agricultural
+### relief: the wage tax of agricultural workers; regional relief: every tax
+### collected from the named states' pops).
 ###
 ### Customs levels (plan Task 15) come after the goods: each changed level
 ### and each good a treaty or the tariff cooldown blocked. They have no
 ### revenue estimate (tariff receipts depend on trade volumes).
 ###
-### The revenue estimate (plan Task 14) closes the review: per Budget line the
-### draft changes, today's receipts scaled by the draft's and existing law's
-### rates against the economy snapshot's (te_tax_take_snapshot, never run from
-### a panel), labelled a static estimate and marked once out of date.
+### The revenue estimate (plan Task 14) closes the review: a table, one row per
+### Budget line the draft changes (GUI audit TAX-4), of today's receipts scaled
+### by existing law's and the draft's rates against the economy snapshot's
+### (te_tax_take_snapshot, never run from a panel), and the change; labelled a
+### static estimate and marked once out of date. Its sum is the draft
+### summary's Revenue row.
 
 types te_tax_review_widget_types
 {
 	### A line of an entry: a label, then its text, which may wrap.
-	### 4 + 160 + 312 + 4 = 480. The label holds the longest catalog good name
-	### at 7 px a character ("Electronic Components", 147; final review B-I2,
-	### test_tax_code_layout.py); an instance whose label has a hover sets
+	### 4 + 200 + 272 + 4 = 480. The label holds the longest catalog good name
+	### at 17 (test_tax_code_layout.py); an instance whose label has a hover sets
 	### default_format = "#tooltippable" itself, so a label without one is
 	### never drawn as hoverable.
 	type te_tax_review_line = flowcontainer {
@@ -43,21 +45,21 @@ types te_tax_review_widget_types
 		block "line_visible" {}
 
 		textbox = {
-			minimumsize = { 160 -1 }
-			maximumsize = { 160 -1 }
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
 			autoresize = yes
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 			elide = right
 			block "line_label" {}
 		}
 		textbox = {
-			minimumsize = { 312 -1 }
-			maximumsize = { 312 -1 }
+			minimumsize = { 272 -1 }
+			maximumsize = { 272 -1 }
 			autoresize = yes
 			multiline = yes
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 			block "line_value" {}
 		}
 	}
@@ -68,9 +70,9 @@ types te_tax_review_widget_types
 	### A customs level the draft changes (the generated te_tax_rv_customs_rows,
 	### plan Task 15): the good, imports or exports, existing law's level in the
 	### commencement month, and the bill's. Each level cell holds seven
-	### te_tax_cu_level_text, one shown. 4 + 160 + 4 + 70 + 4 + 88 + 4 + 18 + 4 + 88 + 4 = 448;
-	### the name cell holds the longest customs good at 7 px a character and the
-	### level cells the longest level name (final review B-I2).
+	### te_tax_cu_level_icon, one shown (GUI audit TAX-26).
+	### 4 + 200 + 4 + 70 + 4 + 30 + 4 + 10 + 4 + 30 + 4 = 364; the name cell
+	### holds the longest customs good at 17.
 	type te_tax_review_customs_line = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -78,46 +80,106 @@ types te_tax_review_widget_types
 		margin = { 4 1 }
 
 		widget = {
-			size = { 160 24 }
+			size = { 200 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 160
+				max_width = 200
 				elide = right
 				align = left|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
 				block "good_name" {}
 			}
 		}
 		widget = {
-			size = { 70 24 }
+			size = { 70 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
 				max_width = 70
 				elide = right
 				align = left|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
 				block "direction" {}
 			}
 		}
 		widget = {
-			size = { 88 24 }
+			size = { 30 26 }
 			block "law_level" {}
 		}
 		widget = {
-			size = { 18 24 }
+			size = { 10 26 }
 			textbox = {
 				parentanchor = center
 				autoresize = yes
 				align = center|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
 				text = "te_tax_wb_arrow"
 			}
 		}
 		widget = {
-			size = { 88 24 }
+			size = { 30 26 }
 			block "bill_level" {}
+		}
+	}
+
+	### A row of the Revenue Estimate (GUI audit TAX-4): the Budget line, its
+	### receipts a week under existing law and with the bill, and the change.
+	### 4 + 104 + 4 + 114 + 4 + 110 + 4 + 128 + 4 = 476. A figure holds "99.9K",
+	### a range "99.9K–99.9K" and a change "+99.9K–+99.9K", each with the money icon.
+	type te_tax_estimate_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		widget = {
+			size = { 104 26 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 104
+				elide = right
+				align = left|nobaseline
+				using = te_tax_fontsize_row
+				block "est_label" {}
+			}
+		}
+		widget = {
+			size = { 114 26 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 114
+				elide = right
+				align = right|nobaseline
+				using = te_tax_fontsize_row
+				block "est_law" {}
+			}
+		}
+		widget = {
+			size = { 110 26 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 110
+				elide = right
+				align = right|nobaseline
+				using = te_tax_fontsize_row
+				block "est_bill" {}
+			}
+		}
+		widget = {
+			size = { 128 26 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 128
+				elide = right
+				align = right|nobaseline
+				using = te_tax_fontsize_row
+				block "est_delta" {}
+			}
 		}
 	}
 
@@ -136,7 +198,7 @@ types te_tax_review_widget_types
 			minimumsize = { 480 -1 }
 			maximumsize = { 480 -1 }
 			align = left|nobaseline
-			using = fontsize_large
+			using = te_tax_fontsize_heading
 			default_format = "#title"
 			block "provision_name" {}
 		}
@@ -219,7 +281,7 @@ types te_tax_review_widget_types
 			multiline = yes
 			parentanchor = vcenter
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 			block "rebase_text" {}
 		}
 		block "rebase_button" {}
@@ -252,162 +314,6 @@ types te_tax_review_widget_types
 
 		te_tax_panel = {
 			visible = "[GetVariableSystem.Exists('te_tax_review_open')]"
-
-			te_tax_text = {
-				text = "te_tax_rv_unchanged"
-			}
-
-			# The baseline moved under the draft: accept each change before
-			# introducing it. Op = the instrument's code (1 wage ... 5 cons),
-			# 6 the goods, 7 relief.
-			flowcontainer = {
-				visible = "[GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 2
-
-				te_tax_subheader = {
-					blockoverride "subheader_text" {
-						text = "te_tax_rv_rebase_header"
-					}
-				}
-				te_tax_rebase_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_wage_rebase'), '(CFixedPoint)0' )]"
-					blockoverride "rebase_text" {
-						text = "te_tax_rv_rebase_wage"
-					}
-					blockoverride "rebase_button" {
-						button = {
-							using = default_button
-							size = { 96 28 }
-							parentanchor = vcenter
-							text = "te_tax_rv_accept"
-							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
-						}
-					}
-				}
-				te_tax_rebase_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_div_rebase'), '(CFixedPoint)0' )]"
-					blockoverride "rebase_text" {
-						text = "te_tax_rv_rebase_div"
-					}
-					blockoverride "rebase_button" {
-						button = {
-							using = default_button
-							size = { 96 28 }
-							parentanchor = vcenter
-							text = "te_tax_rv_accept"
-							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-						}
-					}
-				}
-				te_tax_rebase_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_land_rebase'), '(CFixedPoint)0' )]"
-					blockoverride "rebase_text" {
-						text = "te_tax_rv_rebase_land"
-					}
-					blockoverride "rebase_button" {
-						button = {
-							using = default_button
-							size = { 96 28 }
-							parentanchor = vcenter
-							text = "te_tax_rv_accept"
-							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
-						}
-					}
-				}
-				te_tax_rebase_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_head_rebase'), '(CFixedPoint)0' )]"
-					blockoverride "rebase_text" {
-						text = "te_tax_rv_rebase_head"
-					}
-					blockoverride "rebase_button" {
-						button = {
-							using = default_button
-							size = { 96 28 }
-							parentanchor = vcenter
-							text = "te_tax_rv_accept"
-							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
-						}
-					}
-				}
-				te_tax_rebase_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_cons_rebase'), '(CFixedPoint)0' )]"
-					blockoverride "rebase_text" {
-						text = "te_tax_rv_rebase_cons"
-					}
-					blockoverride "rebase_button" {
-						button = {
-							using = default_button
-							size = { 96 28 }
-							parentanchor = vcenter
-							text = "te_tax_rv_accept"
-							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
-						}
-					}
-				}
-				te_tax_rebase_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_rebase'), '(CFixedPoint)0' )]"
-					blockoverride "rebase_text" {
-						text = "te_tax_rv_rebase_goods"
-					}
-					blockoverride "rebase_button" {
-						button = {
-							using = default_button
-							size = { 96 28 }
-							parentanchor = vcenter
-							text = "te_tax_rv_accept"
-							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
-						}
-					}
-				}
-				te_tax_rebase_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_rebase'), '(CFixedPoint)0' )]"
-					blockoverride "rebase_text" {
-						text = "te_tax_rv_rebase_relief"
-					}
-					blockoverride "rebase_button" {
-						button = {
-							using = default_button
-							size = { 96 28 }
-							parentanchor = vcenter
-							text = "te_tax_rv_accept"
-							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
-						}
-					}
-				}
-				te_tax_rebase_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_rebase'), '(CFixedPoint)0' )]"
-					blockoverride "rebase_text" {
-						text = "te_tax_rv_rebase_customs"
-					}
-					blockoverride "rebase_button" {
-						button = {
-							using = default_button
-							size = { 96 28 }
-							parentanchor = vcenter
-							text = "te_tax_rv_accept"
-							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
-						}
-					}
-				}
-			}
 
 			# Nothing changed yet.
 			te_tax_text = {
@@ -606,14 +512,17 @@ types te_tax_review_widget_types
 				spacing = 1
 				margin_top = 6
 
+				# Who benefits, and for the goods what they forgo, on the name's
+				# hover: the same text every time (GUI audit TAX-17).
 				textbox = {
 					autoresize = yes
 					minimumsize = { 480 -1 }
 					maximumsize = { 480 -1 }
 					align = left|nobaseline
-					using = fontsize_large
+					using = te_tax_fontsize_heading
 					default_format = "#title"
-					text = "te_tax_en_goods"
+					text = "te_tax_en_goods_title"
+					tooltip = "te_tax_rv_goods_tt"
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
@@ -636,22 +545,6 @@ types te_tax_review_widget_types
 					}
 				}
 				te_tax_rv_goods_rows = {}
-				te_tax_review_line = {
-					blockoverride "line_label" {
-						text = "te_tax_rv_relief_benefit"
-					}
-					blockoverride "line_value" {
-						text = "te_tax_rv_goods_benefit"
-					}
-				}
-				te_tax_review_line = {
-					blockoverride "line_label" {
-						text = "te_tax_rv_relief_forgoes"
-					}
-					blockoverride "line_value" {
-						text = "te_tax_rv_goods_forgoes"
-					}
-				}
 			}
 
 			# The draft's customs changes were dropped when the market was lost
@@ -676,7 +569,7 @@ types te_tax_review_widget_types
 					minimumsize = { 480 -1 }
 					maximumsize = { 480 -1 }
 					align = left|nobaseline
-					using = fontsize_large
+					using = te_tax_fontsize_heading
 					default_format = "#title"
 					text = "te_tax_rv_customs_header"
 				}
@@ -695,14 +588,17 @@ types te_tax_review_widget_types
 				spacing = 1
 				margin_top = 6
 
+				# Who benefits, and for the goods what they forgo, on the name's
+				# hover: the same text every time (GUI audit TAX-17).
 				textbox = {
 					autoresize = yes
 					minimumsize = { 480 -1 }
 					maximumsize = { 480 -1 }
 					align = left|nobaseline
-					using = fontsize_large
+					using = te_tax_fontsize_heading
 					default_format = "#title"
-					text = "te_tax_en_agrel"
+					text = "te_tax_en_agrel_title"
+					tooltip = "te_tax_rv_agrel_tt"
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
@@ -714,6 +610,29 @@ types te_tax_review_widget_types
 						text = "te_tax_rv_agrel_law"
 					}
 				}
+				# A passed bill that sets it (GUI audit TAX-12).
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_agrel_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_passed"
+						tooltip = "te_tax_rv_passed_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_pk_a_agrel"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_agrel_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_passed"
+						tooltip = "te_tax_rv_passed_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_pk_b_agrel"
+					}
+				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
 						default_format = "#tooltippable"
@@ -722,14 +641,6 @@ types te_tax_review_widget_types
 					}
 					blockoverride "line_value" {
 						text = "te_tax_rv_agrel"
-					}
-				}
-				te_tax_review_line = {
-					blockoverride "line_label" {
-						text = "te_tax_rv_relief_benefit"
-					}
-					blockoverride "line_value" {
-						text = "te_tax_rv_agrel_benefit"
 					}
 				}
 				te_tax_review_line = {
@@ -748,14 +659,17 @@ types te_tax_review_widget_types
 				spacing = 1
 				margin_top = 6
 
+				# Who benefits, and for the goods what they forgo, on the name's
+				# hover: the same text every time (GUI audit TAX-17).
 				textbox = {
 					autoresize = yes
 					minimumsize = { 480 -1 }
 					maximumsize = { 480 -1 }
 					align = left|nobaseline
-					using = fontsize_large
+					using = te_tax_fontsize_heading
 					default_format = "#title"
-					text = "te_tax_en_regrel"
+					text = "te_tax_en_regrel_title"
+					tooltip = "te_tax_rv_regrel_tt"
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
@@ -765,6 +679,29 @@ types te_tax_review_widget_types
 					}
 					blockoverride "line_value" {
 						text = "te_tax_rv_regrel_law"
+					}
+				}
+				# A passed bill that sets it (GUI audit TAX-12).
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_regrel_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_passed"
+						tooltip = "te_tax_rv_passed_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_pk_a_regrel"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_regrel_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_passed"
+						tooltip = "te_tax_rv_passed_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_pk_b_regrel"
 					}
 				}
 				# The states existing law names in the commencement month.
@@ -781,7 +718,7 @@ types te_tax_review_widget_types
 							maximumsize = { 480 -1 }
 							margin_left = 24
 							align = left|nobaseline
-							using = fontsize_medium
+							using = te_tax_fontsize_row
 							multiline = yes
 							# A state the draft drops pays its taxes again: its estimate
 							# (plan Task 14), wrapped rather than cut off. One the draft
@@ -815,18 +752,10 @@ types te_tax_review_widget_types
 							maximumsize = { 480 -1 }
 							margin_left = 24
 							align = left|nobaseline
-							using = fontsize_medium
+							using = te_tax_fontsize_row
 							multiline = yes
 							text = "te_tax_rv_regrel_state_est"
 						}
-					}
-				}
-				te_tax_review_line = {
-					blockoverride "line_label" {
-						text = "te_tax_rv_relief_benefit"
-					}
-					blockoverride "line_value" {
-						text = "te_tax_rv_regrel_benefit"
 					}
 				}
 				te_tax_review_line = {
@@ -840,13 +769,14 @@ types te_tax_review_widget_types
 			}
 
 			# The revenue estimate (plan Task 14; tax_code_schema.md, "Economy
-			# snapshot and estimates"): each Budget line the draft changes, as
-			# today's receipts (the Budget's own getter) scaled by existing law's
-			# and the draft's rates in its month against the rates at the economy
-			# snapshot (te_tax_view_est_<line>_*), dated, and marked out of date once
-			# the snapshot is (te_tax_view_snap_current). A tax not collected at the
-			# snapshot has no base and no figure. Goods and relief are labelled;
-			# regional relief's figures are on its state lines above.
+			# snapshot and estimates"): a table, one row per Budget line the draft
+			# changes (GUI audit TAX-4), of today's receipts (the Budget's own
+			# getter) scaled by existing law's and the draft's rates in its month
+			# against the rates at the economy snapshot (te_tax_view_est_<line>_*),
+			# and the change; dated, and marked out of date once the snapshot is
+			# (te_tax_view_snap_current). A tax not collected at the snapshot has no
+			# base and no figure. Goods and relief are labelled; regional relief's
+			# figures are on its state lines above.
 			flowcontainer = {
 				visible = "[Not( And( And( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_changed'), '(CFixedPoint)0' ) ) )]"
 				direction = vertical
@@ -864,49 +794,95 @@ types te_tax_review_widget_types
 					# no date to print and no base to scale.
 					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_est_static', 'te_tax_est_stale' ) )]"
 					tooltip = "te_tax_est_header_tt"
+					default_format = "#tooltippable"
 				}
-				te_tax_review_line = {
+				# The table's heads, the cells of te_tax_estimate_row. A line with no
+				# base prints a dash, and why on its hover.
+				te_tax_estimate_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' )]"
+					blockoverride "est_label" {
+						text = "te_tax_est_col_line"
+					}
+					blockoverride "est_law" {
+						default_format = "#tooltippable"
+						text = "te_tax_est_col_law"
+						tooltip = "te_tax_rv_law_tt"
+					}
+					blockoverride "est_bill" {
+						default_format = "#tooltippable"
+						text = "te_tax_est_col_bill"
+						tooltip = "te_tax_rv_bill_tt"
+					}
+					blockoverride "est_delta" {
+						text = "te_tax_est_col_delta"
+					}
+				}
+				te_tax_estimate_row = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_on'), '(CFixedPoint)0' )]"
-					blockoverride "line_label" {
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_ch_income_tt' )]"
+					blockoverride "est_label" {
 						default_format = "#tooltippable"
 						text = "te_tax_est_ch_income"
-						tooltip = "te_tax_est_ch_income_tt"
 					}
-					blockoverride "line_value" {
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_income' )]"
+					blockoverride "est_law" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', 'te_tax_est_income_law' )]"
+					}
+					blockoverride "est_bill" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', 'te_tax_est_income_bill' )]"
+					}
+					blockoverride "est_delta" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', 'te_tax_est_income_delta' )]"
 					}
 				}
-				te_tax_review_line = {
+				te_tax_estimate_row = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_on'), '(CFixedPoint)0' )]"
-					blockoverride "line_label" {
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_ch_dividends_tt' )]"
+					blockoverride "est_label" {
 						default_format = "#tooltippable"
 						text = "te_tax_est_ch_dividends"
-						tooltip = "te_tax_est_ch_dividends_tt"
 					}
-					blockoverride "line_value" {
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_dividends' )]"
+					blockoverride "est_law" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', 'te_tax_est_dividends_law' )]"
+					}
+					blockoverride "est_bill" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', 'te_tax_est_dividends_bill' )]"
+					}
+					blockoverride "est_delta" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', 'te_tax_est_dividends_delta' )]"
 					}
 				}
-				te_tax_review_line = {
+				te_tax_estimate_row = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_on'), '(CFixedPoint)0' )]"
-					blockoverride "line_label" {
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_ch_poll_tt' )]"
+					blockoverride "est_label" {
 						default_format = "#tooltippable"
 						text = "te_tax_est_ch_poll"
-						tooltip = "te_tax_est_ch_poll_tt"
 					}
-					blockoverride "line_value" {
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), 'te_tax_est_poll_range', 'te_tax_est_poll' ) )]"
+					blockoverride "est_law" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), 'te_tax_est_poll_law_range', 'te_tax_est_poll_law' ) )]"
+					}
+					blockoverride "est_bill" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), 'te_tax_est_poll_bill_range', 'te_tax_est_poll_bill' ) )]"
+					}
+					blockoverride "est_delta" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), 'te_tax_est_poll_delta_range', 'te_tax_est_poll_delta' ) )]"
 					}
 				}
-				te_tax_review_line = {
+				te_tax_estimate_row = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_on'), '(CFixedPoint)0' )]"
-					blockoverride "line_label" {
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_ch_consumption_tt' )]"
+					blockoverride "est_label" {
 						default_format = "#tooltippable"
 						text = "te_tax_est_ch_consumption"
-						tooltip = "te_tax_est_ch_consumption_tt"
 					}
-					blockoverride "line_value" {
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_consumption' )]"
+					blockoverride "est_law" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', 'te_tax_est_consumption_law' )]"
+					}
+					blockoverride "est_bill" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', 'te_tax_est_consumption_bill' )]"
+					}
+					blockoverride "est_delta" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_nobase'), '(CFixedPoint)1' ), 'te_tax_est_dash', 'te_tax_est_consumption_delta' )]"
 					}
 				}
 				te_tax_text = {

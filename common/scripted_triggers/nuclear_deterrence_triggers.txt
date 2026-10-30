@@ -152,6 +152,14 @@ nd_authority_delegated_or_warning = {
 	}
 }
 
+# Central Authorization: authority 1, or none set yet.
+nd_authority_central = {
+	OR = {
+		NOT = { has_variable = nd_authority }
+		var:nd_authority = 1
+	}
+}
+
 nd_authority_launch_on_warning = {
 	has_variable = nd_authority
 	var:nd_authority = 3
@@ -207,6 +215,7 @@ nd_readiness_locked = {
 # country we cover? Retaliation is permitted under every doctrine, including
 # no first use.
 nd_was_struck_by = {
+	save_temporary_scope_as = nd_wsb_self
 	OR = {
 		# Outside war, permission is pair-specific and ends with the exchange.
 		AND = {
@@ -218,8 +227,23 @@ nd_was_struck_by = {
 			has_war_with = $ENEMY$
 			OR = {
 				AND = { has_variable = nuked_by_country var:nuked_by_country ?= $ENEMY$ }
+				# A state of ours still carrying a strike's aftermath, struck by
+				# $ENEMY$ or by a country fighting us in a war $ENEMY$ is in.
+				# The state names its striker (nd_struck_by, set by
+				# nuclear_industrial_strike and nuclear_tactical_strike). A
+				# terror detonation names nobody, so its aftermath licenses
+				# nothing; nor does a strike by a country we are not fighting,
+				# or one from an earlier war (nd_country_monthly_cleanup).
+				# The aftermath alone used to count, whoever caused it (#526).
 				any_scope_state = {
 					OR = { has_modifier = nuclear_strike_aftermath has_modifier = tactical_nuke_aftermath }
+					var:nd_struck_by ?= {
+						has_war_with = scope:nd_wsb_self
+						any_scope_war = {
+							is_war_participant = scope:nd_wsb_self
+							is_war_participant = $ENEMY$
+						}
+					}
 				}
 				nd_covered_country_struck_by = { ENEMY = $ENEMY$ }
 			}
@@ -247,6 +271,25 @@ nd_covered_country_struck_by = {
 					var:nuked_by_country ?= $ENEMY$
 				}
 			}
+		}
+		# A country hosting our weapons: a strike on it struck them (Nuclear
+		# Basing, rework spec §7.3).
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_basing
+				source_country = scope:nd_ccs_self
+				target_country = {
+					has_variable = nuked_by_country
+					var:nuked_by_country ?= $ENEMY$
+				}
+			}
+		}
+		# An unarmed co-belligerent in the war with $ENEMY$ (rework spec §8.3).
+		any_cobelligerent_in_war = {
+			nd_believed_armed = no
+			has_war_with = $ENEMY$
+			has_variable = nuked_by_country
+			var:nuked_by_country ?= $ENEMY$
 		}
 	}
 }
@@ -280,6 +323,16 @@ nd_covered_country_struck = {
 				}
 			}
 		}
+		# An unarmed co-belligerent in one of our wars (rework spec §8.3).
+		any_cobelligerent_in_war = {
+			nd_believed_armed = no
+			any_scope_state = {
+				OR = {
+					has_modifier = nuclear_strike_aftermath
+					has_modifier = tactical_nuke_aftermath
+				}
+			}
+		}
 	}
 }
 
@@ -300,8 +353,21 @@ nd_enemy_threatens_existence = {
 	}
 }
 
-# One of our incorporated states is a war-goal target of $ENEMY$.
+# One of our incorporated states is a war-goal target of $ENEMY$, and its side
+# holds a goal that takes a state. Both: in a war is_target_of_wargoal also
+# flags our capital under any country-level goal, a humiliation say (probed
+# 2026-10-28, scripting_best_practices.md § "War Goals, Plays, Adjacency and
+# Claims"). In a play it finds nothing, so this is a war test.
 nd_core_threatened_by = {
+	save_temporary_scope_as = nd_ct_self
+	$ENEMY$ = {
+		OR = {
+			war_side_has_war_goal_of_type_against = { type = conquer_state target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = return_state target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = take_treaty_port target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = liberate_country target = scope:nd_ct_self }
+		}
+	}
 	any_scope_state = {
 		is_incorporated = yes
 		is_target_of_wargoal = $ENEMY$
@@ -493,9 +559,362 @@ nd_threat_existential_stake = {
 	}
 }
 
+# Dispute 6 (rework spec §8.5): $TARGET$ struck us, or a country we cover by
+# treaty or umbrella, outside a war in the last 24 months
+# (nd_peacetime_struck_by, set by nd_record_nuclear_use). The grievance is the
+# struck side's, and the concession its reparations.
+nd_dispute_peacetime_strike_by = {
+	save_temporary_scope_as = nd_dps_self
+	OR = {
+		var:nd_peacetime_struck_by ?= $TARGET$
+		any_direct_subject = {
+			nd_under_umbrella_of = { OVERLORD = scope:nd_dps_self }
+			var:nd_peacetime_struck_by ?= $TARGET$
+		}
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_guarantee
+				source_country = scope:nd_dps_self
+				target_country = { var:nd_peacetime_struck_by ?= $TARGET$ }
+			}
+		}
+	}
+}
+
+# Dispute 7 (rework spec §8.5): $TARGET$ deploys next to us — its weapons
+# based in a country adjacent to us (Nuclear Basing, §7.3), its nuclear
+# guarantee over one, or its missile defense in a state next to ours. The
+# articles are read live: the same ones the concession leaves, so a day after
+# it the self-check sees the result. Adjacency is is_adjacent_to_country, not
+# strategic adjacency, which a war goal would stretch to anyone (rulings R4).
+# An overlord's umbrella over a subject is not a deployment: every armed
+# overlord's subjects are under it by default (R2).
+nd_dispute_deployment_by = {
+	save_temporary_scope_as = nd_dd_self
+	OR = {
+		$TARGET$ = {
+			any_scope_treaty = {
+				any_scope_article = {
+					OR = {
+						has_type = nuclear_basing
+						has_type = nuclear_guarantee
+					}
+					source_country = $TARGET$
+					target_country = {
+						NOT = { THIS = scope:nd_dd_self }
+						is_adjacent_to_country = scope:nd_dd_self
+					}
+				}
+			}
+		}
+		$TARGET$ = {
+			any_scope_state = {
+				nd_state_has_missile_defense = yes
+				any_neighbouring_state = { owner = scope:nd_dd_self }
+			}
+		}
+	}
+}
+
+# State scope: a military base here runs a Missile Defense method (the
+# battery, or directed-energy point defense in the same slot).
+nd_state_has_missile_defense = {
+	any_scope_building = {
+		is_building_type = building_military_base
+		OR = {
+			has_active_production_method = pm_missile_defense_battery
+			has_active_production_method = pm_directed_energy_point_defense
+		}
+	}
+}
+
+# Dispute 8 (rework spec §8.5): $TARGET$ claims one of our incorporated
+# states. A claim sits on the state region, so the claimer's has_claim is
+# tested against the region, not has_claim_by on our part of a split state
+# (the decentralized-claims sweep's pattern, extra_on_actions.txt).
+nd_dispute_claims_by = {
+	any_scope_state = {
+		is_incorporated = yes
+		state_region = { $TARGET$ = { has_claim = PREV } }
+	}
+}
+
+# Dispute 9 (rework spec §8.5): $TARGET$ runs a covert operation against us
+# that we have caught: our record of it (covert_watch_record_create), which
+# goes with the operation (covert_op_destroy, covert_op_sync's reap), so a
+# record means running and caught. Counterintelligence Support is help, not
+# an operation against us.
+nd_dispute_covert_ops_by = {
+	has_variable_list = iw_known_ops
+	any_in_list = {
+		variable = iw_known_ops
+		var:iw_attacker ?= $TARGET$
+		NOT = { has_tag = iw_known_counterintel_support }
+	}
+}
+
+# Dispute 10 (rework spec §8.5): $TARGET$ is building an Orbital Battlestation.
+# A finished one gives every state its owner holds nuclear defense (the strike
+# odds, mod_systems.md), so it weakens our deterrent; the dispute is the
+# construction site, before a level is done, and not one left on its Paused
+# method (a battlestation actually going up).
+nd_dispute_orbital_by = {
+	$TARGET$ = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_orbital_battlestation_construction_site
+				NOT = { has_active_production_method = pm_orbital_battlestation_construction_paused }
+			}
+		}
+	}
+}
+
+# Issuer scope: a dispute that nd_crisis_classify_dispute ranks above code 7
+# holds against $TARGET$ (2, 1, 3, 6, 4), so a crisis opened now would be
+# about that instead. The AI's licences for codes 7–10 read it.
+nd_dispute_weightier_than_7 = {
+	OR = {
+		nd_dispute_war_with = { TARGET = $TARGET$ }
+		nd_dispute_play_with = { TARGET = $TARGET$ }
+		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
+		nd_dispute_proliferation_by = { TARGET = $TARGET$ }
+	}
+}
+
+# Target scope, scope:nd_issuer saved: conceding a deployment crisis (dispute
+# 7) would leave a treaty that also holds an alliance or a defensive pact — a
+# treaty is left whole. An AI doesn't give up an ally to a nuclear threat
+# (nuclear_crisis.1.a and .5.a).
+nd_concession_costs_an_alliance = {
+	nd_crisis_dispute_is = { D = 7 }
+	exists = scope:nd_issuer
+	save_temporary_scope_as = nd_cca_self
+	any_scope_treaty = {
+		any_scope_article = {
+			OR = {
+				has_type = nuclear_basing
+				has_type = nuclear_guarantee
+			}
+			source_country = scope:nd_cca_self
+			target_country = {
+				NOT = { THIS = scope:nd_issuer }
+				is_adjacent_to_country = scope:nd_issuer
+			}
+		}
+		any_scope_article = {
+			OR = {
+				has_type = alliance
+				has_type = defensive_pact
+			}
+		}
+	}
+}
+
+# The struck country (victim scope): $ENEMY$'s strike on us carried the claim
+# we hold from it (rework spec §5.4). The claim record stands until its truth
+# comes out, months later; nd_strike_claim_id says, for 30 days after a
+# strike's first warhead, which claim that strike made (0 for none), so a later
+# strike that made none, or a strike's later warheads after the window, do not
+# read as the old claim (nd_record_claim).
+nd_strike_carries_claim = {
+	var:nd_claim_by ?= $ENEMY$
+	has_variable = nd_claim_id
+	has_variable = nd_strike_claim_id
+	var:nd_strike_claim_id = var:nd_claim_id
+}
+
+# Our command can order a launch: not cut off by a strike on our capital
+# (rework spec §6.3, nd_salvo_decapitation; nd_decapitated lasts two to four
+# weeks). Only a Central Authorization country is ever cut off.
+nd_command_intact = {
+	NOT = { has_variable = nd_decapitated }
+}
+
+# REACH (rework spec §7; nd_reach_refresh). State scope: can $COUNTRY$ strike
+# this state? ICBMs reach every state; bombers the countries in its nd_reach;
+# submarines (Advanced Submarine Technology) every coastal state. Our own
+# strategic adjacency is also read live (final review): the list is weekly,
+# and a war begun mid-week brings its war-goal adjacency at once.
+nd_state_in_reach_of = {
+	OR = {
+		$COUNTRY$ = { has_technology_researched = ICBMs }
+		AND = {
+			exists = owner
+			owner = { save_temporary_scope_as = nd_reach_owner }
+			$COUNTRY$ = {
+				OR = {
+					has_strategic_adjacency = scope:nd_reach_owner
+					AND = {
+						has_variable_list = nd_reach
+						is_target_in_variable_list = { name = nd_reach target = scope:nd_reach_owner }
+					}
+				}
+			}
+		}
+		AND = {
+			is_coastal = yes
+			$COUNTRY$ = { has_technology_researched = advanced_submarine_technology }
+		}
+	}
+}
+
+# Country scope (the attacker): can we strike any state of $TARGET$? The same
+# three branches as nd_state_in_reach_of over its states, without walking them
+# all: the list holds countries, and only the coast is per state.
+nd_reaches_country = {
+	OR = {
+		has_technology_researched = ICBMs
+		has_strategic_adjacency = $TARGET$
+		AND = {
+			has_variable_list = nd_reach
+			is_target_in_variable_list = { name = nd_reach target = $TARGET$ }
+		}
+		AND = {
+			has_technology_researched = advanced_submarine_technology
+			$TARGET$ = { any_scope_state = { is_coastal = yes } }
+		}
+	}
+}
+
+# Reach is limited: armed, without ICBMs (the panel's Reach row).
+nd_reach_limited = {
+	nd_is_armed = yes
+	NOT = { has_technology_researched = ICBMs }
+}
+
+# We reach $ENEMY$'s capital, a Leadership salvo's every target (plan 4a R6):
+# a submarine-only reach can miss an inland capital. Country scope = us.
+nd_leadership_in_reach = {
+	save_temporary_scope_as = nd_lir_self
+	$ENEMY$ = {
+		exists = capital
+		capital = { nd_state_in_reach_of = { COUNTRY = scope:nd_lir_self } }
+	}
+}
+
+# A country the Strike section can aim a salvo at (rework spec §6.1): another
+# living country with states, with which we are at war or in a peacetime
+# nuclear exchange (the strike actions' own reach), and that our delivery
+# reaches (§7). Country scope = us.
+nd_planner_candidate = {
+	exists = $ENEMY$
+	NOT = { THIS = $ENEMY$ }
+	OR = {
+		has_war_with = $ENEMY$
+		nd_in_peacetime_exchange_with = { ENEMY = $ENEMY$ }
+	}
+	$ENEMY$ = {
+		any_scope_state = { always = yes }
+	}
+	nd_reaches_country = { TARGET = $ENEMY$ }
+}
+
+# Everything an ordered salvo needs (rework spec §6.1), each clause with its
+# own failure line: the strike action's gates and the command's. Country
+# scope = the attacker.
+nd_can_order_salvo = {
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_forces_assembled
+		nd_forces_assembled = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_salvo_candidate
+		nd_planner_candidate = { ENEMY = $ENEMY$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_capital_in_reach
+		OR = {
+			NOT = { var:nd_salvo_mission ?= 3 }
+			nd_leadership_in_reach = { ENEMY = $ENEMY$ }
+		}
+	}
+	custom_tooltip = {
+		text = nd_tt_doctrine_permits_strike
+		nd_doctrine_permits_strike = { ENEMY = $ENEMY$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_pledge_permits_strike
+		nd_pledge_permits_strike = { ENEMY = $ENEMY$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_war_law_permits_strike
+		nd_war_law_permits_strategic_strike = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_command_intact
+		nd_command_intact = yes
+	}
+}
+
+# The Strike section's buttons (nd_posture_sgui ops 72-79), each clause with
+# its own failure line. Country scope = us.
+nd_plan_can_step_enemy = {
+	custom_tooltip = {
+		text = nd_tt_plan_two_enemies
+		has_variable = nd_plan_count
+		var:nd_plan_count > 1
+	}
+}
+
+nd_plan_can_set_mission = {
+	custom_tooltip = {
+		text = nd_tt_already_current
+		NOT = { var:nd_salvo_mission ?= $M$ }
+	}
+}
+
+# Op 76 also: Leadership needs the planned enemy's capital in reach (plan 4a
+# R6). With no enemy planned there is nothing to check, and the order is
+# greyed anyway.
+nd_plan_can_set_leadership = {
+	trigger_if = {
+		limit = { exists = var:nd_plan_enemy }
+		var:nd_plan_enemy ?= { save_temporary_scope_as = nd_plan_victim }
+		custom_tooltip = {
+			text = nd_tt_capital_in_reach
+			nd_leadership_in_reach = { ENEMY = scope:nd_plan_victim }
+		}
+	}
+}
+
+nd_plan_can_step_size_down = {
+	custom_tooltip = {
+		text = nd_tt_plan_size_at_least_one
+		nd_salvo_size_value > 1
+	}
+}
+
+nd_plan_can_step_size_up = {
+	custom_tooltip = {
+		text = nd_tt_plan_size_at_most
+		nd_salvo_size_value < nd_salvo_size_cap
+	}
+}
+
+# The order: the enemy the planner picked, through a temporary scope (the
+# gates compare it with ?=, which takes no var: on its right), and every gate
+# of an ordered salvo.
+nd_plan_can_order = {
+	custom_tooltip = {
+		text = nd_tt_plan_no_enemy
+		exists = var:nd_plan_enemy
+	}
+	trigger_if = {
+		limit = { exists = var:nd_plan_enemy }
+		var:nd_plan_enemy ?= { save_temporary_scope_as = nd_plan_victim }
+		nd_can_order_salvo = { ENEMY = scope:nd_plan_victim }
+	}
+}
+
 nd_threat_backed = {
 	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
 	nd_threat_law_permits = { TARGET = $TARGET$ }
+	nd_reaches_country = { TARGET = $TARGET$ }
 	OR = {
 		AND = {
 			has_war_with = $TARGET$
@@ -509,6 +928,7 @@ nd_threat_uncertain = {
 	NOT = { nd_threat_backed = { TARGET = $TARGET$ } }
 	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
 	nd_threat_law_permits = { TARGET = $TARGET$ }
+	nd_reaches_country = { TARGET = $TARGET$ }
 	NOT = { has_war_with = $TARGET$ }
 	OR = {
 		nd_doctrine_flexible = yes
@@ -603,6 +1023,17 @@ nd_retaliation_permitted = {
 		text = nd_tt_forces_assembled
 		nd_forces_assembled = yes
 	}
+	# Cut off by a strike on our capital (rework spec §6.3): the answer waits
+	# for the command (nuclear_weapon_events.24).
+	custom_tooltip = {
+		text = nd_tt_command_intact
+		nd_command_intact = yes
+	}
+	# An answer flies as far as a first strike does (rework spec §7).
+	custom_tooltip = {
+		text = nd_tt_in_reach
+		nd_reaches_country = { TARGET = $ENEMY$ }
+	}
 }
 
 # ----------------------------------------------------------------------------
@@ -674,11 +1105,24 @@ nd_has_armed_guarantor_against = {
 				}
 			}
 		}
+		# A guest whose weapons we host (Nuclear Basing, rework spec §7.3).
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_basing
+				target_country = scope:nd_guarantee_ben
+				source_country = {
+					nd_believed_armed = yes
+					NOT = { this = $AGAINST$ }
+				}
+			}
+		}
 		# The umbrella of an overlord that is not $AGAINST$.
 		AND = {
 			nd_under_an_umbrella = yes
 			overlord ?= { NOT = { this = $AGAINST$ } }
 		}
+		# An armed co-belligerent in the war against $AGAINST$.
+		nd_cobelligerent_cover_against = { AGAINST = $AGAINST$ }
 	}
 }
 
@@ -699,11 +1143,31 @@ nd_has_ready_guarantor_against = {
 				}
 			}
 		}
+		# A guest's weapons based with us are ready at full weight whatever
+		# its readiness at home: they are forward (rework spec §7.3).
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_basing
+				target_country = scope:nd_guarantee_ben4
+				source_country = {
+					nd_believed_armed = yes
+					NOT = { this = $AGAINST$ }
+				}
+			}
+		}
 		AND = {
 			nd_under_an_umbrella = yes
 			overlord ?= {
 				nd_forces_assembled = yes
 				NOT = { this = $AGAINST$ }
+			}
+		}
+		AND = {
+			nd_cobelligerent_cover_against = { AGAINST = $AGAINST$ }
+			any_cobelligerent_in_war = {
+				nd_believed_armed = yes
+				nd_forces_assembled = yes
+				has_war_with = $AGAINST$
 			}
 		}
 	}
@@ -745,6 +1209,42 @@ nd_is_guaranteed_by = {
 	OR = {
 		nd_is_guaranteed_by_treaty = { GUARANTOR = $GUARANTOR$ }
 		nd_under_umbrella_of = { OVERLORD = $GUARANTOR$ }
+		nd_cobelligerent_of = { GUARANTOR = $GUARANTOR$ }
+	}
+}
+
+# Co-belligerent cover (rework spec §8.3, owner 2026-10-28): an unarmed country
+# fighting a war against $AGAINST$ beside a country believed armed is covered
+# by it, for that war only. Nothing was promised: the cover lapses with the
+# war, and walking away costs little (nd_guarantee_act_abandon). Plays don't
+# count until they become wars. Beneficiary scope.
+nd_cobelligerent_cover_against = {
+	nd_believed_armed = no
+	has_war_with = $AGAINST$
+	any_cobelligerent_in_war = {
+		nd_believed_armed = yes
+		has_war_with = $AGAINST$
+		NOT = { this = $AGAINST$ }
+	}
+}
+
+# ...by $GUARANTOR$ in particular, in any war they fight side by side.
+nd_cobelligerent_of = {
+	nd_believed_armed = no
+	$GUARANTOR$ = { nd_believed_armed = yes }
+	any_cobelligerent_in_war = { this = $GUARANTOR$ }
+}
+
+# Host scope: does $GUEST$ station its weapons with us (Nuclear Basing,
+# rework spec §7.3)?
+nd_hosts_weapons_of = {
+	save_temporary_scope_as = nd_basing_host
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = nuclear_basing
+			source_country = $GUEST$
+			target_country = scope:nd_basing_host
+		}
 	}
 }
 
@@ -810,6 +1310,41 @@ nd_local_monopoly_over = {
 			}
 		}
 	}
+}
+
+# A restraint government (rework spec §4.4, the At Home restraint class): not a
+# militarist regime, and a powerful interest group in government whose class
+# or leader leans to restraint.
+nd_regime_is_restraint = {
+	nd_regime_is_militarist = no
+	any_interest_group = {
+		is_in_government = yes
+		is_powerful = yes
+		nd_ig_is_restraint = yes
+	}
+}
+
+# Spending more than we take in, counting fixed income and expenses only.
+nd_in_budget_deficit = {
+	OR = {
+		in_default = yes
+		net_fixed_income < 0
+	}
+}
+
+# AI posture review (rework spec §4.4): fewer than three survivors against the
+# main rival at Heightened with no launch credit (nd_refresh_main_rival).
+nd_ai_vulnerable_to_main_rival = {
+	nd_has_plausible_attacker = yes
+	has_variable = nd_survivors_main_bare_r2
+	var:nd_survivors_main_bare_r2 < 3
+}
+
+# ...and still fewer at the survivability our technology allows: hardening
+# would not close the gap.
+nd_ai_hardening_cannot_close = {
+	has_variable = nd_survivors_main_ceiling_bare_r2
+	var:nd_survivors_main_ceiling_bare_r2 < 3
 }
 
 # A militarist or expansionist regime, for AI judgement and the Monopoly Window.
@@ -1066,15 +1601,6 @@ nd_is_crisis_target = {
 	var:nd_crisis_role = 2
 }
 
-# Any scope. Slot SLOT (1-8) of the world's crisis list holds an issuer whose
-# crisis is still running (nd_world_crises_refresh, nuclear_crisis_effects.txt).
-# The live check matters between refreshes: an annexed issuer leaves a
-# reference to a country that no longer exists.
-nd_world_crisis_slot_live = {
-	has_global_variable = nd_wc_$SLOT$
-	exists = global_var:nd_wc_$SLOT$
-	global_var:nd_wc_$SLOT$ ?= { nd_is_crisis_owner = yes }
-}
 
 # Both records still point at each other with the same id. Owner scope.
 nd_crisis_pair_intact = {
@@ -1202,6 +1728,10 @@ nd_crisis_issuer_is_defensive = {
 	var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_def_opp }
 	OR = {
 		var:nd_crisis_dispute = 3
+		var:nd_crisis_dispute = 6
+		var:nd_crisis_dispute = 7
+		var:nd_crisis_dispute = 8
+		var:nd_crisis_dispute = 9
 		AND = {
 			var:nd_crisis_dispute = 1
 			scope:nd_def_opp = { is_diplomatic_play_initiator = yes }
@@ -1225,10 +1755,19 @@ nd_crisis_parties_free = {
 }
 
 # The 24-month cooldown after a crisis with the same country (anti-farming,
-# §7). Waived in war.
+# §7). Waived in war, and after a crisis that ended in $TARGET$'s nuclear
+# strike (outcome 7) while the strike's record stands: the strike is the
+# grievance (dispute 6), not a crisis chosen to farm, as nuclear_incident.5's
+# option c skips it for a recalled launch. Once a crisis over the strike has
+# closed, its outcome replaces 7 and the cooldown holds again.
 nd_crisis_cooldown_clear = {
 	OR = {
 		has_war_with = $TARGET$
+		AND = {
+			var:nd_crisis_last_outcome ?= 7
+			var:nd_crisis_last_opponent ?= $TARGET$
+			nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
+		}
 		NOT = { has_variable = nd_crisis_cooldown_target }
 		NOT = { var:nd_crisis_cooldown_target ?= $TARGET$ }
 		NOT = { has_variable = nd_crisis_cooldown_months }
@@ -1285,7 +1824,14 @@ nd_dispute_guarantee_against = {
 
 # Dispute 4: $TARGET$ is building a bomb and is our rival or antagonist.
 nd_dispute_proliferation_by = {
-	$TARGET$ = { nuclear_program_is_proliferating = yes }
+	# Not an armed rival's buildup, which is arms control's business (the
+	# nuclear_arms_limitation article): only a country the world believes
+	# unarmed, so one crisis cannot freeze a rival's arsenal for ten years.
+	# Public belief: an untested secret arsenal still counts (rework spec §8.4).
+	$TARGET$ = {
+		nuclear_program_is_proliferating = yes
+		nd_believed_armed = no
+	}
 	OR = {
 		has_diplomatic_pact = { who = $TARGET$ type = rivalry }
 		has_attitude = { who = $TARGET$ attitude = antagonistic }
@@ -1308,7 +1854,12 @@ nd_has_crisis_dispute_with = {
 		nd_dispute_play_with = { TARGET = $TARGET$ }
 		nd_dispute_war_with = { TARGET = $TARGET$ }
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		nd_dispute_proliferation_by = { TARGET = $TARGET$ }
+		nd_dispute_deployment_by = { TARGET = $TARGET$ }
+		nd_dispute_claims_by = { TARGET = $TARGET$ }
+		nd_dispute_covert_ops_by = { TARGET = $TARGET$ }
+		nd_dispute_orbital_by = { TARGET = $TARGET$ }
 		nd_dispute_alert_by = { TARGET = $TARGET$ }
 	}
 }
@@ -1383,6 +1934,9 @@ nd_proliferation_guarantee_candidate = {
 	NOT = { has_war_with = scope:nd_pg_guarantor }
 	scope:nd_pg_guarantor = {
 		nd_is_armed = yes
+		# A deployment conceded in a crisis bars a guarantee next to the
+		# country conceded to, as the article's can_ratify does (dispute 7).
+		NOT = { var:nd_crisis_deploy_bar ?= { is_adjacent_to_country = scope:nd_pg_beneficiary } }
 		scope:nd_pg_beneficiary.relations:this > relations_threshold:poor
 		OR = {
 			any_scope_treaty = {
@@ -1412,25 +1966,63 @@ nd_proliferation_guarantee_candidate = {
 # INCIDENT ELIGIBILITY (§8) — country scope
 # ----------------------------------------------------------------------------
 
+# The government's launch under attack (nuclear_incident.1.c, rework spec
+# §5.3): a warning of an attack by $SUSPECT$ comes in a war with it, or in an
+# Acute crisis against it...
+nd_launch_under_attack_context = {
+	OR = {
+		has_war_with = $SUSPECT$
+		AND = {
+			nd_crisis_stage_at_least = { STAGE = 3 }
+			var:nd_crisis_opponent ?= $SUSPECT$
+		}
+	}
+}
+
+# ...and the doctrine is not No First Use, unless $SUSPECT$ has already
+# struck us (retaliation is allowed under every doctrine).
+nd_launch_under_attack_doctrine = {
+	OR = {
+		nd_doctrine_nfu = no
+		nd_was_struck_by = { ENEMY = $SUSPECT$ }
+	}
+}
+
 # A plausible attacker exists, as far as our information goes: another country
 # we believe armed that is our crisis opponent, an enemy, a rival or hostile.
 # A monopolist never qualifies — it never gets a known-rival missile warning.
+# The self-check of nd_refresh_main_rival: does a script value see a scope this
+# trigger saves as temporary? $ENEMY$ is believed armed, so its reach is
+# positive when the scope is seen.
+nd_counterforce_reach_visible = {
+	$ENEMY$ = { save_temporary_scope_as = nd_sv_enemy }
+	nd_counterforce_reach_saved > 0
+}
+
 nd_has_plausible_attacker = {
 	save_temporary_scope_as = nd_pa_self
 	any_country = {
-		NOT = { this = scope:nd_pa_self }
-		nd_believed_armed = yes
-		save_temporary_scope_as = nd_pa_cand
-		OR = {
-			scope:nd_pa_self = {
-				nd_in_crisis = yes
-				var:nd_crisis_opponent ?= scope:nd_pa_cand
-			}
-			has_war_with = scope:nd_pa_self
-			has_diplomatic_pact = { who = scope:nd_pa_self type = rivalry }
-			has_attitude = { who = scope:nd_pa_self attitude = antagonistic }
-			has_attitude = { who = scope:nd_pa_self attitude = belligerent }
+		nd_plausible_attacker_of = { TARGET = scope:nd_pa_self }
+	}
+}
+
+# Candidate scope: could this country plausibly strike $TARGET$? Believed
+# armed, and its crisis opponent, its enemy in a war, its rival, or hostile to
+# it. nd_has_plausible_attacker and the main rival (nd_refresh_main_rival)
+# share the test.
+nd_plausible_attacker_of = {
+	NOT = { this = $TARGET$ }
+	nd_believed_armed = yes
+	save_temporary_scope_as = nd_pa_cand
+	OR = {
+		$TARGET$ = {
+			nd_in_crisis = yes
+			var:nd_crisis_opponent ?= scope:nd_pa_cand
 		}
+		has_war_with = $TARGET$
+		has_diplomatic_pact = { who = $TARGET$ type = rivalry }
+		has_attitude = { who = $TARGET$ attitude = antagonistic }
+		has_attitude = { who = $TARGET$ attitude = belligerent }
 	}
 }
 
@@ -1457,6 +2049,37 @@ nd_incident_eligible_commander = {
 
 # A family the crisis part of the week's exposure can draw (nd_fire_incident):
 # the misreadings, not a weapons accident.
+# War exposure band 3 (rework spec §5.1): a war with an enemy believed armed
+# that threatens either side — goals on the other's incorporated states, either
+# side losing, or a nuclear weapon landed on either side.
+nd_war_band_3_against_any = {
+	save_temporary_scope_as = nd_wb_self
+	any_enemy_in_war = {
+		nd_believed_armed = yes
+		save_temporary_scope_as = nd_wb_enemy
+		OR = {
+			nd_core_threatened_by = { ENEMY = scope:nd_wb_self }
+			scope:nd_wb_self = { nd_core_threatened_by = { ENEMY = scope:nd_wb_enemy } }
+			nd_is_losing_war_to = { ENEMY = scope:nd_wb_self }
+			scope:nd_wb_self = { nd_is_losing_war_to = { ENEMY = scope:nd_wb_enemy } }
+			any_scope_state = {
+				OR = {
+					has_modifier = nuclear_strike_aftermath
+					has_modifier = tactical_nuke_aftermath
+				}
+			}
+			scope:nd_wb_self = {
+				any_scope_state = {
+					OR = {
+						has_modifier = nuclear_strike_aftermath
+						has_modifier = tactical_nuke_aftermath
+					}
+				}
+			}
+		}
+	}
+}
+
 nd_incident_misreading_eligible = {
 	OR = {
 		nd_incident_eligible_warning = yes
@@ -1537,6 +2160,7 @@ nd_state_has_military_target = {
 # guarantor) and a six-month pause between first uses bound it.
 nd_ai_nuclear_use_justified = {
 	nd_is_armed = yes
+	nd_reaches_country = { TARGET = $ENEMY$ }
 	# Our own civil war: only when losing badly under laws that already
 	# silence dissent — retaliation included (owner ruling 2026-09-25;
 	# nuclear_custody_triggers.txt).
@@ -1613,6 +2237,8 @@ nd_ai_would_warn = {
 	OR = {
 		# Protecting a country we guarantee.
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		# A strike on us, or on a country we cover, outside a war (dispute 6).
+		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		# Our survival or our core is at stake in a play or war with them.
 		AND = {
 			OR = {
@@ -1648,12 +2274,139 @@ nd_ai_would_warn = {
 			country_rank >= rank_value:great_power
 			nd_doctrine_nfu = no
 		}
+		# Forces next to us, our land, or operations against us, from a rival
+		# (rework spec §8.5; rulings R8: claims and covert operations are
+		# common, so only a rival's). Only when nothing weightier is at stake
+		# between us, since the crisis would then be about that, past its own
+		# licences; and never as a bluff, which an Existential or No First
+		# Use doctrine makes of these.
+		AND = {
+			has_diplomatic_pact = { who = $TARGET$ type = rivalry }
+			OR = {
+				nd_dispute_deployment_by = { TARGET = $TARGET$ }
+				nd_dispute_claims_by = { TARGET = $TARGET$ }
+				nd_dispute_covert_ops_by = { TARGET = $TARGET$ }
+			}
+			NOT = { nd_dispute_weightier_than_7 = { TARGET = $TARGET$ } }
+			OR = {
+				nd_threat_backed = { TARGET = $TARGET$ }
+				nd_threat_uncertain = { TARGET = $TARGET$ }
+			}
+		}
+		# An orbital battlestation going up, for a great power (rework spec
+		# §9), against a country it is hostile to, when the crisis would be
+		# about the battlestation (no weightier dispute, and none of 7–9,
+		# which classify first) and isn't a bluff.
+		AND = {
+			country_rank >= rank_value:great_power
+			nd_dispute_orbital_by = { TARGET = $TARGET$ }
+			OR = {
+				has_diplomatic_pact = { who = $TARGET$ type = rivalry }
+				has_attitude = { who = $TARGET$ attitude = antagonistic }
+				has_attitude = { who = $TARGET$ attitude = belligerent }
+				has_attitude = { who = $TARGET$ attitude = domineering }
+			}
+			NOT = { nd_dispute_weightier_than_7 = { TARGET = $TARGET$ } }
+			NOT = { nd_dispute_deployment_by = { TARGET = $TARGET$ } }
+			NOT = { nd_dispute_claims_by = { TARGET = $TARGET$ } }
+			NOT = { nd_dispute_covert_ops_by = { TARGET = $TARGET$ } }
+			OR = {
+				nd_threat_backed = { TARGET = $TARGET$ }
+				nd_threat_uncertain = { TARGET = $TARGET$ }
+			}
+		}
 	}
 	# A cautious ruler warns only in defence.
 	OR = {
 		ruler_is_cautious = no
 		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
 		nd_enemy_threatens_existence = { ENEMY = $TARGET$ }
+	}
+	# Stakes (rework spec §8.2): not a threat whose demands alone would hold
+	# the pressure on them below the line where an AI concedes. Last, since it
+	# computes the pressure twice; not for a guarantee, whose demands are the
+	# protégé's.
+	OR = {
+		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_dispute_peacetime_strike_by = { TARGET = $TARGET$ }
+		NOT = { nd_ai_stakes_block = { TARGET = $TARGET$ } }
+	}
+}
+
+# Issuer scope: would the stakes alone hold the pressure on $TARGET$ under the
+# AI's concession line (nuclear_crisis.1's yield weights start at 40)? The
+# pressure values read scope:nd_issuer and scope:nd_target, so they are saved
+# here as temporary scopes; nd_ai_would_warn's callers (the opening actions'
+# AI, a proliferation event's weight) run outside any crisis, where neither
+# exists. The demands are ours (nd_stakes_demander).
+nd_ai_stakes_block = {
+	save_temporary_scope_as = nd_issuer
+	save_temporary_scope_as = nd_stakes_demander
+	$TARGET$ = {
+		save_temporary_scope_as = nd_target
+		nd_yield_pressure_unstaked_value >= nd_ai_concession_line
+		nd_yield_pressure_value < nd_ai_concession_line
+	}
+}
+
+# Demander scope: does our side hold a goal of $TYPE$ against $TARGET$, in a
+# play or a war? (No trigger tells a primary demand from another, so every
+# goal counts: rework spec §8.2, owner call 10.)
+nd_side_holds_goal_against = {
+	OR = {
+		play_side_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }
+	}
+}
+
+# Country scope: does our side in a war hold any goal against $TARGET$? The
+# war concession's test (nd_crisis_concede_war), before and after it drops them.
+nd_side_holds_any_goal_against = {
+	OR = {
+		war_side_has_war_goal_of_type_against = { type = annex_country target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = ban_slavery target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = colonization_rights target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = contain_threat target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = enforce_treaty_article target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = force_nationalization target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = foreign_investment_rights target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = increase_autonomy target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = independence target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = join_power_bloc target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = leave_power_bloc target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = liberate_country target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = liberate_subject target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_dominion target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_protectorate target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_tributary target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = open_market target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = reduce_autonomy target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = revoke_all_claims target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = revoke_claim target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = secession target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = take_treaty_port target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = transfer_subject target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = unification_leadership target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = restore_union target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = demand_strait_access target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = demand_toll_exemption target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = demand_no_tolls target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = demand_no_strait_closure target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_personal_union target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_chartered_company target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = make_crown_land target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = break_enforced_treaties target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = release_as_subject target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = te_colonial_independence target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = te_colonial_reconquest target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = te_un_mandate_restore_state target = $TARGET$ }
 	}
 }
 
@@ -1796,6 +2549,12 @@ nd_can_set_authority = {
 		has_variable = nd_authority_months
 		var:nd_authority_months >= nd_authority_tenure_months
 	}
+	# Not while cut off: the new authority's unordered launches would be
+	# refused by the dispatchers' nd_command_intact.
+	custom_tooltip = {
+		text = nd_tt_command_intact
+		nd_command_intact = yes
+	}
 }
 
 nd_can_step_investment_up = {
@@ -1837,18 +2596,199 @@ nd_can_propose_talks = {
 	}
 	custom_tooltip = {
 		text = nd_tt_talks_pending
-		OR = {
-			AND = {
-				nd_is_crisis_owner = yes
+		nd_crisis_no_proposal_pending = yes
+	}
+}
+
+# Either party: no proposal, to stand down or to trade, awaits an answer. Both
+# set the issuer's nd_crisis_talks (a trade offer is talks with terms).
+nd_crisis_no_proposal_pending = {
+	OR = {
+		AND = {
+			nd_is_crisis_owner = yes
+			var:nd_crisis_talks = 0
+		}
+		AND = {
+			nd_is_crisis_target = yes
+			var:nd_crisis_opponent ?= {
+				has_variable = nd_crisis_talks
 				var:nd_crisis_talks = 0
 			}
-			AND = {
-				nd_is_crisis_target = yes
-				var:nd_crisis_opponent ?= {
-					has_variable = nd_crisis_talks
-					var:nd_crisis_talks = 0
+		}
+	}
+}
+
+# ---- Trades (rework spec §8.6, phase 4c) ------------------------------------
+# Either side may offer the matching concession of its own for the one the
+# crisis is about: a base for a base, a claim for a claim. Only the same-code
+# mirrors trade (disputes 7–10; ruling R1): 5's stand-down for a stand-down
+# is outcome 3, 4's target is unarmed and its issuer armed, and 1–3 and 6
+# have no matching concession.
+nd_can_offer_trade = {
+	custom_tooltip = {
+		text = nd_tt_in_crisis
+		nd_in_crisis = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_talks_pending
+		nd_crisis_no_proposal_pending = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_trade_kind
+		nd_crisis_dispute_tradeable = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_trade_matching
+		nd_crisis_trade_holds_for_us = yes
+	}
+}
+
+# Either party: the crisis is over a dispute that can trade.
+nd_crisis_dispute_tradeable = {
+	OR = {
+		nd_crisis_dispute_is = { D = 7 }
+		nd_crisis_dispute_is = { D = 8 }
+		nd_crisis_dispute_is = { D = 9 }
+		nd_crisis_dispute_is = { D = 10 }
+	}
+}
+
+# A trade holds while each side holds the same grievance against the other:
+# the dispute $ISSUER$'s record is about still holds against $TARGET$, and
+# $TARGET$ holds the same code against $ISSUER$. Read when a trade is offered
+# and again when it is accepted, since an offer can go stale before its answer.
+# Neither side may hold that kind's ten-year bar from an earlier crisis (7, 9
+# and 10; claims have none): a bar holds one country, so the trade's own bar
+# would overwrite one held against a third country and free its holder.
+nd_crisis_trade_holds = {
+	exists = $ISSUER$
+	exists = $TARGET$
+	OR = {
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 7
+			}
+			$ISSUER$ = { nd_dispute_deployment_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_deployment_by = { TARGET = $ISSUER$ } }
+			NOT = { $ISSUER$ = { has_variable = nd_crisis_deploy_bar } }
+			NOT = { $TARGET$ = { has_variable = nd_crisis_deploy_bar } }
+		}
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 8
+			}
+			$ISSUER$ = { nd_dispute_claims_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_claims_by = { TARGET = $ISSUER$ } }
+		}
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 9
+			}
+			$ISSUER$ = { nd_dispute_covert_ops_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_covert_ops_by = { TARGET = $ISSUER$ } }
+			NOT = { $ISSUER$ = { has_variable = nd_crisis_covert_bar } }
+			NOT = { $TARGET$ = { has_variable = nd_crisis_covert_bar } }
+		}
+		AND = {
+			$ISSUER$ = {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = 10
+			}
+			$ISSUER$ = { nd_dispute_orbital_by = { TARGET = $TARGET$ } }
+			$TARGET$ = { nd_dispute_orbital_by = { TARGET = $ISSUER$ } }
+			NOT = { $ISSUER$ = { has_variable = nd_crisis_orbital_freeze } }
+			NOT = { $TARGET$ = { has_variable = nd_crisis_orbital_freeze } }
+		}
+	}
+}
+
+# Either party, parties saved, in a deployment crisis: our half of a trade
+# would leave a treaty that also holds an alliance or a defensive pact of ours
+# (a treaty is left whole). The target's half is nd_concession_costs_an_alliance;
+# the issuer's is the same read the other way. An AI keeps an ally.
+nd_trade_costs_us_an_alliance = {
+	nd_crisis_dispute_is = { D = 7 }
+	exists = scope:nd_issuer
+	exists = scope:nd_target
+	OR = {
+		AND = {
+			THIS = scope:nd_target
+			nd_concession_costs_an_alliance = yes
+		}
+		AND = {
+			THIS = scope:nd_issuer
+			any_scope_treaty = {
+				any_scope_article = {
+					OR = {
+						has_type = nuclear_basing
+						has_type = nuclear_guarantee
+					}
+					source_country = scope:nd_issuer
+					target_country = {
+						NOT = { THIS = scope:nd_target }
+						is_adjacent_to_country = scope:nd_target
+					}
+				}
+				any_scope_article = {
+					OR = {
+						has_type = alliance
+						has_type = defensive_pact
+					}
 				}
 			}
+		}
+	}
+}
+
+# The AI's answer to a trade (nuclear_crisis.8; rework spec §8.6, ruling R4),
+# parties saved: a target accepts at the pressure where it would start to
+# yield (nd_ai_concession_line), an issuer once the crisis is dangerous
+# (nd_ai_trade_danger_line) and its threat has run to a first deadline
+# (nd_ai_trade_min_weeks): a public ultimatum opens near danger 40, so danger
+# alone let a target trade out in its first week. Each accepts only if it gives no more than it
+# gets (nd_trade_balance_value) and loses no ally by its own half.
+nd_ai_accepts_trade = {
+	exists = scope:nd_issuer
+	exists = scope:nd_target
+	nd_crisis_trade_holds = { ISSUER = scope:nd_issuer TARGET = scope:nd_target }
+	NOT = { nd_trade_costs_us_an_alliance = yes }
+	OR = {
+		AND = {
+			THIS = scope:nd_target
+			has_variable = nd_yield_pressure
+			var:nd_yield_pressure >= nd_ai_concession_line
+			nd_trade_balance_value <= 0
+		}
+		AND = {
+			THIS = scope:nd_issuer
+			has_variable = nd_crisis_danger
+			var:nd_crisis_danger >= nd_ai_trade_danger_line
+			var:nd_crisis_weeks >= nd_ai_trade_min_weeks
+			nd_trade_balance_value >= 0
+		}
+	}
+}
+
+# Country scope, in a crisis: nd_crisis_trade_holds, the parties read from our
+# own record (the panel and the deadline event, where no party scopes need be
+# saved). A temporary scope saved inside a `?=` holds for the rest of the
+# trigger (zz_te_war_support_injections.txt, wars of independence).
+nd_crisis_trade_holds_for_us = {
+	OR = {
+		AND = {
+			nd_is_crisis_owner = yes
+			save_temporary_scope_as = nd_tr_issuer
+			var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_tr_target }
+			nd_crisis_trade_holds = { ISSUER = scope:nd_tr_issuer TARGET = scope:nd_tr_target }
+		}
+		AND = {
+			nd_is_crisis_target = yes
+			save_temporary_scope_as = nd_tr_target
+			var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_tr_issuer }
+			nd_crisis_trade_holds = { ISSUER = scope:nd_tr_issuer TARGET = scope:nd_tr_target }
 		}
 	}
 }

@@ -11,7 +11,7 @@
 #   a    replay: step the capital's census one year now and log it (TE_DEMOG_REPLAY);
 #        `scripts/analysis/demographics_harness.py replay debug.log` checks it against
 #        the model. A second run in the same year steps again (the census year goes
-#        back by one first) and folds this year's newborns into the over-150 pool:
+#        back by one first) and folds this year's newborns into the over-300 pool:
 #        use a save you can throw away, or re-seed after (c)
 #   b    start or stop the census log: at each yearly census a TE_DEMOG_CENSUS: line per
 #        country of a million people or more (scripts/analysis/
@@ -547,7 +547,7 @@ te_debug_demog.4 = {
 			limit = {
 				state_region = { has_variable = te_probe_owner_region }
 			}
-			debug_log = "TE_DEMOG_PROBE_OWNER after name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTag] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_DEMOG_PROBE_OWNER after name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTagName] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
 			if = {
 				limit = { has_variable = te_probe_owner_var }
@@ -950,7 +950,7 @@ te_debug_demog.60 = {
 						is_capital = yes
 					}
 				}
-				debug_log = "TE_SELF_CHECK OK planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetName] at_once=[THIS.Var('te_dg_pc_chk_now').GetValue|0] penalty=[THIS.Var('te_dg_pc_chk_penalty').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK OK planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetNameNoFormatting] at_once=[THIS.Var('te_dg_pc_chk_now').GetValue|0] penalty=[THIS.Var('te_dg_pc_chk_penalty').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else_if = {
 				limit = {
@@ -961,7 +961,7 @@ te_debug_demog.60 = {
 					}
 					var:te_dg_pc_chk_site ?= { owner = ROOT }
 				}
-				debug_log = "TE_SELF_CHECK BROKEN planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetName] from=[THIS.Var('te_dg_pc_chk_from').GetState.GetName] (the capital never left the old one: re-run gen_planned_capital.py, or take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetNameNoFormatting] from=[THIS.Var('te_dg_pc_chk_from').GetState.GetNameNoFormatting] (the capital never left the old one: re-run gen_planned_capital.py, or take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
 				debug_log = "TE_SELF_CHECK NO_VERDICT planned_capital_moved tag=[THIS.GetCountry.GetTagName] (the capital is in neither state, moved at once and back again, or one changed hands within the week; the check re-arms) date=[TimeKeeper.GetCurrentDate.GetString]"

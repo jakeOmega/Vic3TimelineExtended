@@ -55,12 +55,14 @@
 # read te_dg_people and te_dg_scale, which the sweep rewrites, so the before lines
 # must come first. A step reads the ring as last year's; te_dg_year goes back to last
 # year first, so the census reads as a state about to step does. Run twice in one
-# year, the second step ages this year's newborns as if they were 150 (both here and
+# year, the second step ages this year's newborns as if they were 300 (both here and
 # in the model, so the replay still matches): use a save you can throw away, or
 # re-seed afterwards (option c). Each run also drifts the census's medicine and the practices one
 # more step (te_demog_medicine_drift and te_demog_practices_step in te_demog_step_begin), a year's
 # spread and drift on top of the yearly ones.
 te_debug_demog_replay = {
+	# a census on the 150-year ring is re-filed at its own year before that year goes back (issue #1075)
+	te_demog_ring_check = yes
 	set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 	te_demog_step_begin = yes
 	set_variable = { name = te_dg_dbg_war value = local_var:te_dg_war }
@@ -261,7 +263,7 @@ te_debug_demog_reseed_late = {
 # three passes; debug.log's timestamps (whole seconds) around each pass time it (spec
 # §14 Q9's late-game re-run). Each state's census year goes back a year first, so every
 # pass is a second step in the same year and leaves the census wrong (this year's newborns
-# folded into the over-150 pool); after the timed passes, untimed, every state with a census
+# folded into the over-300 pool); after the timed passes, untimed, every state with a census
 # is seeded again from its population now, so the save stays playable.
 te_debug_demog_benchmark = {
 	set_local_variable = { name = te_dg_dbg_n value = 0 }
@@ -321,6 +323,8 @@ te_debug_demog_bench_walk = {
 te_debug_demog_bench_pass = {
 	every_state = {
 		limit = { te_demog_has_census = yes }
+		# a census on the 150-year ring is re-filed at its own year first (issue #1075)
+		te_demog_ring_check = yes
 		set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 		te_demog_step = yes
 	}
@@ -418,7 +422,7 @@ te_debug_demog_modifier_reads = {
 te_debug_demog_mods_line = {
 	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] contra=[THIS.ScriptValue('te_debug_demog_mod_contra')|3] fmeans=[THIS.ScriptValue('te_debug_demog_mod_fmeans')|3] means=[THIS.ScriptValue('te_debug_demog_means')|3] date=[TimeKeeper.GetCurrentDate.GetString] impact=[THIS.ScriptValue('te_demog_institution_impact')|3] diff=[THIS.ScriptValue('te_demog_medical_diffusion')|3] lm=[THIS.ScriptValue('te_debug_demog_pr_lm')|3] bs=[THIS.ScriptValue('te_debug_demog_pr_bs')|3] lm_target=[THIS.ScriptValue('te_debug_demog_pr_target_lm')|3] bs_target=[THIS.ScriptValue('te_debug_demog_pr_target_bs')|3] absorbed_b=[THIS.ScriptValue('te_debug_demog_line_absorbed_b')|3] fl_line=[THIS.ScriptValue('te_demog_fl_line_shown')|3] hegemon=[THIS.ScriptValue('te_demog_hegemon_used')|3]"
 	# phase 2 step 1: the census's work figures, the reads no test runs and the working-adult families (TE_DEMOG_WORK)
-	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] fws=[THIS.ScriptValue('te_demog_female_work_share')|2] fam_mig=[THIS.ScriptValue('te_demog_family_transport')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] pair=[THIS.ScriptValue('te_demog_line_working_adults_applied')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] womens=[THIS.ScriptValue('te_debug_demog_womens_mod')|3] replaced=[THIS.ScriptValue('te_debug_demog_replaced_mod')|3] part_m=[THIS.ScriptValue('te_debug_demog_part_m_mod')|3] part=[THIS.ScriptValue('te_debug_demog_part_mod')|3] cap=[THIS.ScriptValue('te_debug_demog_cap_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] fws=[THIS.ScriptValue('te_demog_women_worker_share')|2] fam_mig=[THIS.ScriptValue('te_demog_family_transport')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] pair=[THIS.ScriptValue('te_demog_line_working_adults_applied')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] womens=[THIS.ScriptValue('te_debug_demog_womens_mod')|3] replaced=[THIS.ScriptValue('te_debug_demog_replaced_mod')|3] part_m=[THIS.ScriptValue('te_debug_demog_part_m_mod')|3] part=[THIS.ScriptValue('te_debug_demog_part_mod')|3] cap=[THIS.ScriptValue('te_debug_demog_cap_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 }
 
 # ---- m: the shock terms (phase 2 step 4, probe P1) ------------------------------
@@ -605,7 +609,7 @@ te_debug_demog_probe_owner_start = {
 			state_region = { set_variable = te_probe_owner_region }
 			set_global_variable = { name = te_probe_owner_to value = scope:te_probe_owner_to }
 			set_global_variable = te_probe_owner_on
-			debug_log = "TE_DEMOG_PROBE_OWNER before name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTag] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_DEMOG_PROBE_OWNER before name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTagName] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
 			set_state_owner = scope:te_probe_owner_to
 		}
@@ -619,7 +623,7 @@ te_debug_demog_probe_owner_start = {
 # THIS = ROOT = the state in on_state_owner_change, under its new owner (te_on_state_owner_change, only while
 # global_var:te_probe_owner_on is set): what it holds of the state the probe stamped.
 te_debug_demog_probe_owner_hook = {
-	debug_log = "TE_DEMOG_PROBE_OWNER hook name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTag] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_PROBE_OWNER hook name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTagName] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 	debug_log_scopes = yes
 }
 
@@ -650,7 +654,7 @@ te_debug_demog_province_change = {
 		}
 		if = {
 			limit = { local_var:te_dg_prov_log = 1 }
-			debug_log = "TE_INFO demog_province_change provinces=[THIS.Var('te_dg_provinces').GetValue|0]->[THIS.ScriptValue('te_demog_state_provinces')|0] people=[THIS.Var('te_dg_pop_last').GetValue|0]->[THIS.ScriptValue('te_debug_demog_province_people')|0] owner=[THIS.GetState.GetOwner.GetTag] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_INFO demog_province_change provinces=[THIS.Var('te_dg_provinces').GetValue|0]->[THIS.ScriptValue('te_demog_state_provinces')|0] people=[THIS.Var('te_dg_pop_last').GetValue|0]->[THIS.ScriptValue('te_debug_demog_province_people')|0] owner=[THIS.GetState.GetOwner.GetTagName] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }
@@ -983,7 +987,7 @@ te_debug_demog_wf_term_landing = {
 # THIS = ROOT = the player: the capital's term (TE_DEMOG_WF) and the country's setting and bills (TE_DEMOG_PENSION).
 te_debug_demog_wf_lines = {
 	capital ?= {
-		debug_log = "TE_DEMOG_WF w=[THIS.ScriptValue('te_debug_demog_wf_w_read')|3] w_target=[THIS.ScriptValue('te_demog_wf_term_target')|3] applied=[THIS.ScriptValue('te_demog_census_workforce_applied')|3] rem=[THIS.ScriptValue('te_debug_demog_wf_rem_read')|3] pair=[THIS.ScriptValue('te_demog_line_working_adults_applied')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] set=[THIS.ScriptValue('te_demog_wf_set')|3] engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] census_target=[THIS.ScriptValue('te_demog_wf_engine_target')|3] wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] fws_wk=[THIS.ScriptValue('te_debug_demog_fws_wk_read')|3] fws_law=[THIS.ScriptValue('te_demog_female_work_share')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log = "TE_DEMOG_WF w=[THIS.ScriptValue('te_debug_demog_wf_w_read')|3] w_target=[THIS.ScriptValue('te_demog_wf_term_target')|3] applied=[THIS.ScriptValue('te_demog_census_workforce_applied')|3] rem=[THIS.ScriptValue('te_debug_demog_wf_rem_read')|3] pair=[THIS.ScriptValue('te_demog_line_working_adults_applied')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] set=[THIS.ScriptValue('te_demog_wf_set')|3] engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] census_target=[THIS.ScriptValue('te_demog_wf_engine_target')|3] wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] fws_wk=[THIS.ScriptValue('te_debug_demog_fws_wk_read')|3] fws=[THIS.ScriptValue('te_demog_women_worker_share')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 	debug_log = "TE_DEMOG_PENSION pos=[THIS.ScriptValue('te_demog_pension_pos')|0] age=[THIS.ScriptValue('te_debug_demog_country_pension_age')|0] term_left=[THIS.ScriptValue('te_demog_pension_term_left')|0] link_target=[THIS.ScriptValue('te_demog_pension_link_target')|1] pensioners=[THIS.ScriptValue('te_debug_demog_country_pensioners')|3] b=[THIS.ScriptValue('te_demog_pension_b')|3] bill=[THIS.ScriptValue('te_debug_demog_pension_bill_read')|0] bill_share=[THIS.ScriptValue('te_demog_pension_bill_share')|3] need=[THIS.ScriptValue('te_debug_demog_country_need')|3] health_term=[THIS.ScriptValue('te_debug_demog_health_term_read')|3] health_now=[THIS.ScriptValue('te_debug_demog_health_term_now')|3] unemployment=[THIS.ScriptValue('te_demog_country_unemployment')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 }
@@ -1077,7 +1081,9 @@ te_debug_demog_work_census_line = {
 #                           workforce. BROKEN: it is another figure again, and the conversion is wrong for every reader;
 #                           take unemployment_share_read's fallback (docs/testing/demographics-playtest.md). The same
 #                           comparison as unemployment_share_read (te_unemployment_effects.txt), made from the census's
-#                           walk: one engine fact, read twice.
+#                           walk: one engine fact, read twice. Not while the engine's figure is still 0: on 2026-10-25
+#                           the first census state's walk counted 0.070 idle on 8 January 1836, before the engine had
+#                           computed any, and the check read a false BROKEN (read=0.000).
 te_debug_demog_conscription_selfcheck_start = {
 	if = {
 		limit = {
@@ -1107,6 +1113,7 @@ te_debug_demog_unemployment_selfcheck = {
 			has_variable = te_dg_wf_engine
 			var:te_dg_unemp_walk > 0.02
 			var:te_dg_wf_engine > 0.05
+			te_debug_demog_unemp_engine_read > 0
 		}
 		set_global_variable = { name = te_demog_selfcheck_unemp_done value = yes }
 		set_variable = { name = te_dg_chk_unemp_read value = te_debug_demog_unemp_engine_read }

@@ -1637,7 +1637,7 @@ amendment_collective_algorithmic_commons = {
 
 # ======================================================================
 #  INHERITANCE
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md §2
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md §2
 #  No inheritance law stands for taxing estates, so each amendment takes
 #  its interest-group stances from the law elsewhere whose supporters
 #  backed it in history (vanilla does this for 18 of its 67). Most work

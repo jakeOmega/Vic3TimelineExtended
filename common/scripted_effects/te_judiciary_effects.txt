@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  JUDICIARY — scripted effects (country scope)
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 #  The score lives in var:te_judicial_independence (0-100) and nowhere else,
 #  so a revolution's winner inherits it (te_jud_monthly never seeds the
 #  rebels, whose own score would win the merge) and te_jud_refresh rebuilds
@@ -72,6 +72,26 @@ te_jud_spend = {
 			set_variable = {
 				name = te_judicial_independence
 				value = 0
+			}
+		}
+	}
+}
+
+# Adds AMOUNT to the score, capped at 100 (a ruling obeyed, a promise of
+# tenure, a landmark case). Callers wrap it in a custom_tooltip naming the
+# gain; above the ceiling it erodes at the usual 10 a year.
+te_jud_gain = {
+	if = {
+		limit = { has_variable = te_judicial_independence }
+		change_variable = {
+			name = te_judicial_independence
+			add = $AMOUNT$
+		}
+		if = {
+			limit = { var:te_judicial_independence > 100 }
+			set_variable = {
+				name = te_judicial_independence
+				value = 100
 			}
 		}
 	}
@@ -160,6 +180,40 @@ te_jud_refresh = {
 	}
 }
 
+# ROOT the country (te_jud_monthly). The amendments' standing conditions
+# (phase 3, spec § 14.2): `possible` is read only when an amendment is
+# added, so script lifts the Suspension of Habeas Corpus at peace (its
+# tooltip line, country_amendment_lapses_at_peace_bool) and the People's
+# Tribunals without a single-party state.
+te_jud_amendment_upkeep = {
+	if = {
+		limit = {
+			is_at_war = no
+			modifier:country_amendment_lapses_at_peace_bool = yes
+		}
+		active_law:lawgroup_judiciary ?= {
+			random_scope_amendment = {
+				limit = { amendment_type:amendment_habeas_corpus_suspension ?= this.type }
+				remove_amendment = yes
+			}
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_law = law_type:law_single_party_state }
+			active_law:lawgroup_judiciary ?= {
+				has_amendment = amendment_type:amendment_peoples_tribunals
+			}
+		}
+		active_law:lawgroup_judiciary ?= {
+			random_scope_amendment = {
+				limit = { amendment_type:amendment_peoples_tribunals ?= this.type }
+				remove_amendment = yes
+			}
+		}
+	}
+}
+
 # The starting court by rule (spec § 5): history, and an old save's one-time
 # seeding (te_repair_judiciary_seed). activate_law ignores unlock
 # technologies, as history does.
@@ -216,5 +270,171 @@ te_jud_selfcheck_enacting_scope = {
 		else = {
 			debug_log = "TE_SELF_CHECK BROKEN judiciary_enacting_law_scope country=[THIS.GetCountry.GetNameNoFormatting] currently_enacting_law missing at on_law_enactment_started"
 		}
+	}
+}
+
+# ======================================================================
+#  Phase 2: defying the court (spec § 14.1)
+#  A Forceful Legislation option under a court that reviews forced laws
+#  opens a challenge (te_jud_open_challenge). The monthly pulse files it
+#  once the enactment is over and the law is in force
+#  (te_jud_challenge_monthly), and the court rules 180 days later
+#  (te_judiciary_events.2): it strikes the law down when the score is at
+#  least te_jud_strike_threshold, and the government complies, defies or
+#  packs the court (te_judiciary_events.3).
+#  Variables (country):
+#    te_jud_challenge_pending   a forced enactment is under way
+#    te_jud_challenge_law       its law type
+#    te_jud_replaced_law        the law type it replaces (compliance
+#                               restores it)
+#    te_jud_challenge_tier      1-3, the option taken
+#    te_jud_case_filed          a case is before the court (270 days, a
+#                               backstop for a revolution that drops the
+#                               scheduled ruling)
+#    te_jud_case_law, te_jud_case_replaced, te_jud_case_tier
+#                               the filed case, copied at filing so a
+#                               second forced enactment can't overwrite it
+# ======================================================================
+
+# Called from minor_events_timelineextended.2's three bypass options, inside a
+# custom_tooltip naming the review. TIER is the option (1 Expedite, 2 Push
+# decisively, 3 Force it through). currently_enacting_law is the law being
+# forced, and its group's active law the one it would replace.
+te_jud_open_challenge = {
+	if = {
+		limit = {
+			te_jud_court_can_strike_laws = yes
+			exists = currently_enacting_law
+		}
+		currently_enacting_law = {
+			law_type = { save_scope_as = te_jud_forced_type }
+			currently_active_law_in_group ?= {
+				law_type = { save_scope_as = te_jud_replaced_type }
+			}
+		}
+		set_variable = {
+			name = te_jud_challenge_law
+			value = scope:te_jud_forced_type
+		}
+		if = {
+			limit = { exists = scope:te_jud_replaced_type }
+			set_variable = {
+				name = te_jud_replaced_law
+				value = scope:te_jud_replaced_type
+			}
+		}
+		else_if = {
+			limit = { has_variable = te_jud_replaced_law }
+			remove_variable = te_jud_replaced_law
+		}
+		set_variable = {
+			name = te_jud_challenge_tier
+			value = $TIER$
+		}
+		set_variable = te_jud_challenge_pending
+		te_jud_selfcheck_law_type_variable = yes
+	}
+}
+
+# Once a game (CLAUDE.md "In-game checks"): can a country variable hold a law
+# type? The challenge files only when has_law reads the stored type, and
+# compliance restores the replaced law from one. Only where the forced law's
+# type was found, so a missing scope can't read as OK.
+te_jud_selfcheck_law_type_variable = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jud_selfcheck_law_type_done }
+			exists = scope:te_jud_forced_type
+		}
+		set_global_variable = te_jud_selfcheck_law_type_done
+		if = {
+			limit = {
+				has_variable = te_jud_challenge_law
+				var:te_jud_challenge_law ?= { is_same_law_group_as = scope:te_jud_forced_type }
+			}
+			debug_log = "TE_SELF_CHECK OK judiciary_law_type_variable country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN judiciary_law_type_variable country=[THIS.GetCountry.GetNameNoFormatting] a variable set to a law type does not read back as one"
+		}
+	}
+}
+
+# ROOT the country (te_jud_monthly). Once the forced enactment is over: a law
+# that passed under a reviewing court goes to it, one case at a time; one
+# that failed is forgotten.
+te_jud_challenge_monthly = {
+	if = {
+		limit = {
+			has_variable = te_jud_challenge_pending
+			NOT = { enacting_any_law = yes }
+		}
+		remove_variable = te_jud_challenge_pending
+		if = {
+			limit = {
+				NOT = { has_variable = te_jud_case_filed }
+				has_variable = te_jud_challenge_law
+				has_law = var:te_jud_challenge_law
+				te_jud_court_can_strike_laws = yes
+			}
+			set_variable = { name = te_jud_case_filed days = 270 }
+			set_variable = {
+				name = te_jud_case_law
+				value = var:te_jud_challenge_law
+			}
+			if = {
+				limit = { has_variable = te_jud_replaced_law }
+				set_variable = {
+					name = te_jud_case_replaced
+					value = var:te_jud_replaced_law
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_jud_case_replaced }
+				remove_variable = te_jud_case_replaced
+			}
+			set_variable = {
+				name = te_jud_case_tier
+				value = var:te_jud_challenge_tier
+			}
+			trigger_event = { id = te_judiciary_events.2 days = 180 }
+		}
+	}
+}
+
+# The case is decided, or can no longer be (te_judiciary_events.2-.4).
+te_jud_close_case = {
+	if = {
+		limit = { has_variable = te_jud_case_filed }
+		remove_variable = te_jud_case_filed
+	}
+	if = {
+		limit = { has_variable = te_jud_case_law }
+		remove_variable = te_jud_case_law
+	}
+	if = {
+		limit = { has_variable = te_jud_case_replaced }
+		remove_variable = te_jud_case_replaced
+	}
+	if = {
+		limit = { has_variable = te_jud_case_tier }
+		remove_variable = te_jud_case_tier
+	}
+}
+
+# Packing the court (te_judiciary_events.3, a landmark case's answer): the
+# authority it takes, ten years of a court that challenges nothing and is
+# trusted less, and a year later the choice of what to do with the bench
+# (te_judiciary_events.5). The score's cost is the caller's, in its own
+# custom_tooltip.
+te_jud_pack_court = {
+	add_modifier = { name = te_jud_packing_cost years = 5 is_decaying = yes }
+	if = {
+		limit = { has_modifier = te_jud_court_packed }
+		remove_modifier = te_jud_court_packed
+	}
+	add_modifier = { name = te_jud_court_packed years = 10 }
+	hidden_effect = {
+		trigger_event = { id = te_judiciary_events.5 days = 365 }
 	}
 }

@@ -1,0 +1,25 @@
+﻿# ============================================================================
+# POWER GRID — internal country events
+# ============================================================================
+# Hidden, no loc. te_grid.1 is raised by common/on_actions/power_grid_on_actions.txt
+# on one country with a Grid Transfer Station, on the 1st of each month. ROOT is
+# that country; the effect balances every grid in the world
+# (common/scripted_effects/power_grid_effects.txt).
+#
+# No `is_triggered_only`: that is a CK3 keyword; an event with neither
+# mean_time_to_happen nor a random_events registration is reached only by
+# trigger_event anyway (see events/te_tax_internal_events.txt).
+# ============================================================================
+namespace = te_grid
+
+# The monthly balancing of every grid. Firing it again in the same month
+# (console: event te_grid.1) balances again from the flows just set, which
+# moves them the damping's step further toward their targets.
+te_grid.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_grid_world_update_effect = yes
+	}
+}

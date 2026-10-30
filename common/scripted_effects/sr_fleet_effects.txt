@@ -1,0 +1,806 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: the record, Space Command, movement
+# ============================================================================
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
+# (slice 6a, §§ 2-6, 9.6, 14). Full Colonies only.
+#
+# A country keeps up to nine fleets in country variables sr_fl_<n>_* (n = 1 to
+# 9; a revolution's winner inherits them): at a location (sr_fl_<n>_loc, its
+# code: 1 Earth and the Moon, 2 Mercury and Venus, 3 Mars, 4 the Asteroid Belt,
+# 5 Jupiter, 6 Saturn, 7 Uranus, 8 Neptune, 9 the Kuiper Belt) or in transit
+# (_dest, _depart, _arrive), with each role's strength now and at full, its
+# propellant (_dv, km/s), supply (months), marines, drive and refit. The
+# per-slot blocks are generated (sr_fleets_generated.txt, from
+# scripts/generators/gen_space_fleets.py); the helpers below take the slot as
+# $N$. The numbers are common/script_values/sr_fleet_values.txt's.
+#
+# Two monthly steps: the global one (sr_fl_global_month, from the colony
+# record's sr_sites_global_monthly, after colony fleets and shipments land and
+# before the worlds' step) lands fleets and rebuilds the location records; the
+# country one (sr_fl_country_month, from the country pulse) builds, docks,
+# refits, refuels, resupplies and repairs. Both walk the global list
+# sr_fleet_powers, never every_country.
+# ============================================================================
+
+# ---- The fleet powers (design § 4) ----------------------------------------------------
+# Country scope. Into the list, once; out of it when it has nothing left.
+sr_fl_join_powers = {
+	if = {
+		limit = { NOT = { is_target_in_global_variable_list = { name = sr_fleet_powers target = this } } }
+		add_to_global_variable_list = { name = sr_fleet_powers target = this }
+	}
+}
+
+sr_fl_leave_powers = {
+	if = {
+		limit = { is_target_in_global_variable_list = { name = sr_fleet_powers target = this } }
+		remove_list_global_variable = { name = sr_fleet_powers target = this }
+	}
+	# Its strength at each location (sr_fl_at_<loc>) is rebuilt only while it is
+	# on the list: cleared here, so no stale figure lifts a blockade of Earth
+	# (6d, sr_earth_blockaded) or reads as a fleet.
+	sr_loc_clear_country = yes
+}
+
+# Global scope. A dead power's entry is dropped, one a month (an entry can't
+# leave the list while the list is walked).
+sr_fl_prune_powers = {
+	if = {
+		limit = {
+			has_global_variable_list = sr_fleet_powers
+			any_in_global_list = {
+				variable = sr_fleet_powers
+				NOT = { is_country_alive = yes }
+			}
+		}
+		random_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { NOT = { is_country_alive = yes } }
+			save_temporary_scope_as = sr_fl_dead_power
+		}
+		remove_list_global_variable = { name = sr_fleet_powers target = scope:sr_fl_dead_power }
+	}
+}
+
+# ---- One slot ($N$) ---------------------------------------------------------------------
+# A new fleet at the location CODE, on the nation's drive (sr_drive_level),
+# stationed, empty until strength joins it.
+sr_fl_create = {
+	sr_fl_clear_at = { N = $N$ }
+	set_variable = { name = sr_fl_$N$_loc value = $CODE$ }
+	set_variable = { name = sr_fl_$N$_drive value = sr_drive_level }
+	set_variable = { name = sr_fl_$N$_posture value = 1 }
+	set_variable = { name = sr_fl_$N$_dv value = 0 }
+	set_variable = { name = sr_fl_$N$_supply value = 0 }
+	set_variable = { name = sr_fl_$N$_marines value = 0 }
+	sr_fl_join_powers = yes
+}
+
+sr_fl_new_at_earth_at = {
+	sr_fl_create = { N = $N$ CODE = 1 }
+}
+
+# AMOUNT more strength of ROLE, now and at full.
+sr_fl_add_role = {
+	sr_fl_add_role_part = { N = $N$ VAR = $ROLE$ AMOUNT = $AMOUNT$ }
+	sr_fl_add_role_part = { N = $N$ VAR = $ROLE$_full AMOUNT = $AMOUNT$ }
+}
+
+sr_fl_add_role_part = {
+	if = {
+		limit = { NOT = { has_variable = sr_fl_$N$_$VAR$ } }
+		set_variable = { name = sr_fl_$N$_$VAR$ value = 0 }
+	}
+	change_variable = { name = sr_fl_$N$_$VAR$ add = $AMOUNT$ }
+}
+
+# A battle's cut of ROLE (local_var:sr_fl_cut, at most its strength now): now
+# falls by all of it, full by the destroyed share (design § 4).
+sr_fl_cut_role = {
+	set_variable = {
+		name = sr_fl_$N$_$ROLE$
+		value = {
+			value = sr_fl_$N$_$ROLE$_value
+			subtract = local_var:sr_fl_cut
+			min = 0
+		}
+	}
+	set_variable = {
+		name = sr_fl_$N$_$ROLE$_full
+		value = {
+			value = local_var:sr_fl_cut
+			multiply = sr_fl_loss_destroyed_share
+			multiply = -1
+			add = sr_fl_$N$_$ROLE$_full_value
+			min = sr_fl_$N$_$ROLE$_value
+		}
+	}
+}
+
+# Propellant and supply to capacity (a new fleet; the console).
+sr_fl_fill_at = {
+	if = {
+		limit = { sr_fl_$N$_exists = yes }
+		set_variable = { name = sr_fl_$N$_dv value = sr_fl_$N$_dv_capacity }
+		set_variable = { name = sr_fl_$N$_supply value = sr_fl_$N$_endurance }
+	}
+}
+
+# ---- Orders (design § 6) ------------------------------------------------------------------
+# The fleet leaves for LOC (its code CODE): the leg's delta-v spent, its
+# destination and landing month set, its location and posture cleared, the
+# location records rebuilt. The caller has checked sr_fl_<n>_may_depart_<loc>.
+# The leg is read before the location is cleared: it reads where the fleet is.
+sr_fl_dispatch = {
+	set_local_variable = { name = sr_fl_leg_dv value = sr_fl_$N$_leg_dv_$LOC$ }
+	set_local_variable = { name = sr_fl_leg_months value = sr_fl_$N$_leg_months_$LOC$ }
+	set_variable = {
+		name = sr_fl_$N$_dv
+		value = {
+			value = sr_fl_$N$_dv_value
+			subtract = local_var:sr_fl_leg_dv
+			min = 0
+		}
+	}
+	set_variable = { name = sr_fl_$N$_dest value = $CODE$ }
+	set_variable = { name = sr_fl_$N$_depart value = te_history_month_index }
+	set_variable = { name = sr_fl_$N$_leg_months value = local_var:sr_fl_leg_months }
+	set_variable = {
+		name = sr_fl_$N$_arrive
+		value = {
+			value = te_history_month_index
+			add = local_var:sr_fl_leg_months
+		}
+	}
+	set_local_variable = { name = sr_fl_alert_arr value = var:sr_fl_$N$_arrive }
+	if = { limit = { has_variable = sr_fl_$N$_loc } remove_variable = sr_fl_$N$_loc }
+	if = { limit = { has_variable = sr_fl_$N$_posture } remove_variable = sr_fl_$N$_posture }
+	if = { limit = { has_variable = sr_fl_$N$_target } remove_variable = sr_fl_$N$_target }
+	if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+	if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
+	if = { limit = { has_variable = sr_fl_dest_pick_$N$ } remove_variable = sr_fl_dest_pick_$N$ }
+	sr_fl_dispatch_alert = { LOC = $LOC$ CODE = $CODE$ }
+	sr_loc_rebuild = yes
+}
+
+# Its landing, from the global monthly step: at its destination, posture by the
+# location (Station where we hold a colony, Stand off elsewhere), contact for
+# our colonies there. The fleet_leg self-check reads the months it flew. The
+# AI lands its marines where a garrison is due.
+sr_fl_arrive_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_dest
+			has_variable = sr_fl_$N$_arrive
+			var:sr_fl_$N$_arrive <= te_history_month_index
+		}
+		set_variable = { name = sr_fl_$N$_loc value = var:sr_fl_$N$_dest }
+		sr_fl_leg_self_check = { N = $N$ }
+		remove_variable = sr_fl_$N$_dest
+		remove_variable = sr_fl_$N$_arrive
+		if = { limit = { has_variable = sr_fl_$N$_depart } remove_variable = sr_fl_$N$_depart }
+		if = { limit = { has_variable = sr_fl_$N$_leg_months } remove_variable = sr_fl_$N$_leg_months }
+		sr_fl_arrival_posture_at = { N = $N$ }
+		sr_fl_arrival_contact_at = { N = $N$ }
+		if = {
+			limit = {
+				is_ai = yes
+				sr_fl_$N$_can_land = yes
+			}
+			sr_fl_land_at = { N = $N$ }
+		}
+	}
+}
+
+# ---- A slot's month (the country step) ------------------------------------------------------
+# Docked (at Earth, or where we hold a Spaceport): a refit to the nation's
+# drive starts or ends; propellant refills (fully at Earth or a propellant
+# world's Spaceport, else a quarter); supply refills; repair; marines refill
+# at Earth. Away: a month of supply, and attrition once it runs out. A fleet
+# with nothing left is gone. In transit: nothing (it carries its own).
+sr_fl_month_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_loc }
+		if = {
+			limit = { sr_fl_$N$_strength < sr_fl_minimum_strength }
+			sr_fl_clear_at = { N = $N$ }
+		}
+		else_if = {
+			limit = { sr_fl_$N$_docked = yes }
+			if = {
+				limit = {
+					has_variable = sr_fl_$N$_refit_until
+					var:sr_fl_$N$_refit_until <= te_history_month_index
+				}
+				set_variable = { name = sr_fl_$N$_drive value = sr_drive_level }
+				remove_variable = sr_fl_$N$_refit_until
+			}
+			else_if = {
+				limit = {
+					NOT = { has_variable = sr_fl_$N$_refit_until }
+					sr_fl_$N$_drive_value < sr_drive_level
+				}
+				set_variable = {
+					name = sr_fl_$N$_refit_until
+					value = {
+						value = te_history_month_index
+						add = sr_fl_refit_months
+					}
+				}
+			}
+			if = {
+				limit = { sr_fl_$N$_refills_fully = yes }
+				set_variable = { name = sr_fl_$N$_dv value = sr_fl_$N$_dv_capacity }
+			}
+			else = {
+				set_variable = {
+					name = sr_fl_$N$_dv
+					value = {
+						value = sr_fl_$N$_dv_capacity
+						multiply = sr_fl_port_refill_share
+						add = sr_fl_$N$_dv_value
+						max = sr_fl_$N$_dv_capacity
+					}
+				}
+			}
+			set_variable = { name = sr_fl_$N$_supply value = sr_fl_$N$_endurance }
+			set_local_variable = { name = sr_fl_share value = sr_fl_$N$_repair_share }
+			if = {
+				limit = { local_var:sr_fl_share > 0 }
+				sr_fl_repair_roles_at = { N = $N$ }
+			}
+			if = {
+				limit = { var:sr_fl_$N$_loc = 1 }
+				set_variable = { name = sr_fl_$N$_marines value = sr_fl_$N$_marine_capacity }
+			}
+		}
+		else = {
+			set_variable = {
+				name = sr_fl_$N$_supply
+				value = {
+					value = sr_fl_$N$_supply_value
+					subtract = 1
+					min = 0
+				}
+			}
+			if = {
+				limit = { sr_fl_$N$_supply_value <= 0 }
+				sr_fl_attrition_at = { N = $N$ }
+			}
+		}
+		# Marines past the carriers' room are lost (a carrier lost in battle).
+		if = {
+			limit = {
+				sr_fl_$N$_exists = yes
+				sr_fl_$N$_marines_value > sr_fl_$N$_marine_capacity
+			}
+			set_variable = { name = sr_fl_$N$_marines value = sr_fl_$N$_marine_capacity }
+		}
+	}
+}
+
+# ---- Marines (design § 9.6) ------------------------------------------------------------------
+# Every battalion aboard lands at the world KEY (ours), as its garrison.
+sr_fl_land_marines = {
+	set_global_variable = {
+		name = sr_site_marines_$KEY$
+		value = {
+			value = sr_site_marines_value_$KEY$
+			add = sr_fl_$N$_marines_value
+		}
+	}
+	set_variable = { name = sr_fl_$N$_marines value = 0 }
+}
+
+# Ours at the world KEY back aboard, up to the carriers' room.
+sr_fl_embark_marines = {
+	set_local_variable = {
+		name = sr_fl_take
+		value = {
+			value = sr_fl_$N$_marine_capacity
+			subtract = sr_fl_$N$_marines_value
+			max = sr_site_marines_value_$KEY$
+			min = 0
+		}
+	}
+	change_variable = { name = sr_fl_$N$_marines add = local_var:sr_fl_take }
+	set_global_variable = {
+		name = sr_site_marines_$KEY$
+		value = {
+			value = sr_site_marines_value_$KEY$
+			subtract = local_var:sr_fl_take
+		}
+	}
+	if = {
+		limit = { sr_site_marines_value_$KEY$ <= 0 }
+		remove_global_variable = sr_site_marines_$KEY$
+	}
+}
+
+# Country scope. AMOUNT battalions come home to Earth, aboard our first fleet
+# there (a cession to a non-ally, an occupation's end); with none at Earth
+# they are lost. The month caps them at its carriers' room.
+sr_fl_marines_home = {
+	set_local_variable = { name = sr_fl_marines_in value = $AMOUNT$ }
+	sr_fl_find_at_earth = yes
+	if = {
+		limit = { local_var:sr_fl_n > 0 }
+		sr_fl_by_local = { DO = take_marines }
+	}
+}
+
+sr_fl_take_marines_at = {
+	set_variable = {
+		name = sr_fl_$N$_marines
+		value = {
+			value = sr_fl_$N$_marines_value
+			add = local_var:sr_fl_marines_in
+		}
+	}
+}
+
+# ---- The location records (design § 4) ---------------------------------------------------------
+# Global scope, or any: cleared, then every power's slots counted again, and its
+# interdiction lists (6c, sr_icpt_rebuild); then the strongest two powers at
+# each location. On every departure and arrival, and monthly.
+sr_loc_rebuild = {
+	sr_loc_clear_records = yes
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes }
+			sr_loc_clear_country = yes
+			sr_fl_each_slot = { DO = note }
+			sr_icpt_rebuild = yes
+		}
+		sr_loc_rank = yes
+	}
+}
+
+# Country scope, with local_var:sr_fl_str: a fleet at LOC.
+sr_loc_add_present = {
+	if = {
+		limit = { NOT = { has_variable = sr_fl_at_$LOC$ } }
+		set_variable = { name = sr_fl_at_$LOC$ value = 0 }
+	}
+	change_variable = { name = sr_fl_at_$LOC$ add = local_var:sr_fl_str }
+	if = {
+		limit = { NOT = { has_global_variable = sr_loc_present_$LOC$ } }
+		set_global_variable = { name = sr_loc_present_$LOC$ value = 0 }
+		set_global_variable = { name = sr_loc_strength_$LOC$ value = 0 }
+	}
+	change_global_variable = { name = sr_loc_present_$LOC$ add = 1 }
+	change_global_variable = { name = sr_loc_strength_$LOC$ add = local_var:sr_fl_str }
+}
+
+# Country scope, with local_var:sr_fl_arr: a fleet bound for LOC, landing then
+# (as slice 3's per-world inbound record).
+sr_loc_add_inbound = {
+	if = {
+		limit = { NOT = { has_global_variable = sr_loc_inbound_$LOC$ } }
+		set_global_variable = { name = sr_loc_inbound_$LOC$ value = 0 }
+	}
+	change_global_variable = { name = sr_loc_inbound_$LOC$ add = 1 }
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_global_variable = sr_loc_inbound_first_$LOC$ }
+				global_var:sr_loc_inbound_first_$LOC$ > local_var:sr_fl_arr
+			}
+		}
+		set_global_variable = { name = sr_loc_inbound_first_$LOC$ value = local_var:sr_fl_arr }
+		set_global_variable = { name = sr_loc_inbound_by_$LOC$ value = this }
+	}
+}
+
+# ---- The global monthly step (sr_sites_global_monthly; no ROOT) -------------------------------------
+# Full colonies: every fleet whose month has come lands, the location records
+# are rebuilt, then the month's fighting (6b, sr_fleet_combat_effects.txt).
+sr_fl_global_month = {
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes }
+			sr_fl_each_slot = { DO = arrive }
+		}
+		sr_loc_rebuild = yes
+		sr_combat_global_monthly = yes
+		sr_fl_prune_powers = yes
+	}
+}
+
+# ---- The country's month (space_race_on_actions.txt) ----------------------------------------------
+# Country scope, a fleet power under Full Colonies: Space Command's
+# construction, every slot's month, the upkeep, war support's records, orbital
+# fire support (6d), the AI's review, a player's Locations snapshot.
+sr_fl_country_month = {
+	sr_fl_join_powers = yes
+	sr_sc_month = yes
+	sr_fl_each_slot = { DO = month }
+	sr_fl_upkeep_refresh = yes
+	sr_fl_ws_refresh = yes
+	sr_orbital_superiority_refresh = yes
+	if = {
+		limit = { is_ai = yes }
+		sr_fl_ai_review = yes
+	}
+	if = {
+		limit = { is_player = yes }
+		sr_loc_refresh_snapshot = yes
+	}
+	if = {
+		limit = { NOT = { sr_fleet_power = yes } }
+		sr_fl_leave_powers = yes
+	}
+}
+
+# ---- Space Command (design §§ 5, 15) ---------------------------------------------------------------
+# Country scope. The month's construction (sr_sc_rate) into the ground reserve
+# (6d, sr_reserve_<role>), shared by the build mix; then, with the toggle on
+# and no hostile fleet at Earth, the reserve launches itself into the home
+# fleet (sr_reserve_auto_step, sr_earth_orbit_effects.txt), which is 6a's
+# behaviour. Otherwise it waits on the ground for Launch.
+sr_sc_month = {
+	sr_sc_self_check = yes
+	set_local_variable = { name = sr_sc_points value = sr_sc_rate }
+	set_variable = { name = sr_sc_built_last value = local_var:sr_sc_points }
+	if = {
+		limit = { local_var:sr_sc_points > 0 }
+		sr_reserve_build = yes
+	}
+	sr_reserve_auto_step = yes
+}
+
+# Country scope, the fleets' month: the upkeep's one refresh site (design § 5).
+# Space Command's input goods rise 1% a 10 points of fleet strength at full:
+# a modifier on each Space Command building, removed first, at
+# root.var:sr_fleet_upkeep_units (buildings have no variables, so the
+# multiplier is read through ROOT, the country, as resettlement's readouts
+# are). Never on the country: the goods' input multipliers are building-masked
+# and would raise every building's use of them. sr_fleet_upkeep_goods carries
+# the three good-specific multipliers; the generic building_goods_input_mult
+# (sr_fleet_upkeep) waits on the upkeep_inputs probe (te_debug_space_race.6).
+sr_fl_upkeep_refresh = {
+	set_variable = { name = sr_fleet_upkeep_units value = sr_fleet_upkeep_units_value }
+	# The probe holds its candidate on the building for fourteen days.
+	if = {
+		limit = { NOT = { has_variable = sr_fl_probe_candidate } }
+		sr_fl_upkeep_apply = yes
+	}
+}
+
+sr_fl_upkeep_apply = {
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_space_command }
+			if = {
+				limit = { has_modifier = sr_fleet_upkeep_goods }
+				remove_modifier = sr_fleet_upkeep_goods
+			}
+			if = {
+				limit = { root.var:sr_fleet_upkeep_units > 0 }
+				add_modifier = { name = sr_fleet_upkeep_goods multiplier = root.var:sr_fleet_upkeep_units }
+			}
+		}
+	}
+}
+
+# ---- Garrisons under Full Colonies (design § 9.6) ----------------------------------------------------
+# Global scope, the world's step: a garrison due at KEY (slice 5's "Garrison
+# it", space_race_events.94) takes effect once two battalions or more stand
+# there; past its month unanswered it lapses, and a player hears it (.107).
+sr_site_garrison_due_step = {
+	if = {
+		limit = { sr_site_marines_value_$KEY$ >= sr_garrison_marines_needed }
+		remove_global_variable = sr_site_garrison_due_$KEY$
+		global_var:sr_site_holder_$KEY$ ?= {
+			if = {
+				limit = { is_country_alive = yes }
+				sr_site_garrison_take_effect = { KEY = $KEY$ }
+			}
+		}
+	}
+	else_if = {
+		limit = { global_var:sr_site_garrison_due_$KEY$ <= te_history_month_index }
+		remove_global_variable = sr_site_garrison_due_$KEY$
+		global_var:sr_site_holder_$KEY$ ?= {
+			if = {
+				limit = {
+					is_player = yes
+					NOT = { has_variable = sr_garrison_lapsed_site }
+				}
+				sr_site_event_open = { VAR = sr_garrison_lapsed_site INDEX = $INDEX$ }
+				trigger_event = { id = space_race_events.107 days = 1 }
+			}
+		}
+	}
+}
+
+# Country scope, the holder: slice 5's garrison (its ten years, its cut to
+# autonomy, its resentment and upkeep).
+sr_site_garrison_take_effect = {
+	set_global_variable = { name = sr_site_garrison_$KEY$ value = yes days = 3650 }
+	set_local_variable = { name = sr_aut_delta value = sr_aut_garrison_cut }
+	sr_site_aut_add_at = { KEY = $KEY$ }
+}
+
+# Called from sr_site_transfer_<key> (global scope, scope:sr_site_to_<key> and,
+# for a treaty, scope:sr_site_from_<key> saved). Marines stay with the world
+# when the new holder is their owner's ally; otherwise they come home; a dead
+# holder's are lost. While it is occupied they are the occupier's, and stay.
+sr_site_transfer_marines = {
+	if = {
+		limit = {
+			has_global_variable = sr_site_marines_$KEY$
+			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+		}
+		if = {
+			limit = { scope:sr_site_from_$KEY$ ?= { is_country_alive = yes } }
+			if = {
+				limit = {
+					scope:sr_site_from_$KEY$ = {
+						NOT = { has_treaty_alliance_with = { TARGET = scope:sr_site_to_$KEY$ } }
+					}
+				}
+				scope:sr_site_from_$KEY$ = { sr_fl_marines_home = { AMOUNT = sr_site_marines_value_$KEY$ } }
+				remove_global_variable = sr_site_marines_$KEY$
+			}
+		}
+		else = {
+			remove_global_variable = sr_site_marines_$KEY$
+		}
+	}
+}
+
+# ---- The AI (design § 14, 6a) -------------------------------------------------------------------------
+# Country scope, an AI fleet power's month. Space Command it builds through the
+# building's own AI, held to its cap by can_build_government
+# (sr_sc_may_build_government); the mix stays at its start. The home fleet
+# stays at Earth except to land a garrison that is due (sr_fl_ai_send_garrisons;
+# its marines land on arrival, sr_fl_arrive_at), and a fleet with nothing left
+# to do away from Earth comes home. Every order passes the same
+# sr_fl_<n>_may_depart_<loc> a player's does. The defence's rules (6b) are
+# sr_fl_ai_defend, the offence's (6c) sr_fl_ai_attack
+# (sr_fleet_combat_effects.txt); the reserve's launch (6d), first so the
+# defence can send what it put up, is sr_fl_ai_reserve, and its batteries'
+# method sr_fl_ai_batteries (sr_earth_orbit_effects.txt).
+sr_fl_ai_review = {
+	sr_fl_ai_reserve = yes
+	sr_fl_ai_batteries = yes
+	sr_fl_ai_defend = yes
+	sr_fl_ai_send_garrisons = yes
+	sr_fl_each_slot = { DO = ai_home }
+	sr_fl_ai_attack = yes
+}
+
+# ---- Self-checks (design § 18) ---------------------------------------------------------------------
+# Country scope, from sr_sc_month. TE_SELF_CHECK ship_construction: a Space
+# Command at half staff or more in a state its owner controls must give
+# sr_sc_rate above 0. Armed on the first such country, the verdict a month
+# later (a modifier sum can lag a day after a method changes); re-armed if it
+# no longer qualifies by then. Once a game.
+sr_sc_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = sr_sc_checked }
+			sr_sc_qualifies = yes
+		}
+		if = {
+			limit = {
+				has_variable = sr_sc_check_armed
+				te_history_month_index > var:sr_sc_check_armed
+			}
+			set_global_variable = { name = sr_sc_checked value = yes }
+			if = {
+				limit = { sr_sc_rate > 0 }
+				debug_log = "TE_SELF_CHECK OK ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.MakeScope.ScriptValue('sr_sc_rate')|2] (Space Command's state modifier reaches its state) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.MakeScope.ScriptValue('sr_sc_rate')|2] (a Space Command has run at half staff or more for a month and sr_sc_rate reads 0: the method's state modifier does not reach its state; fall back to computing the rate in script; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		else_if = {
+			limit = { NOT = { has_variable = sr_sc_check_armed } }
+			set_variable = { name = sr_sc_check_armed value = te_history_month_index }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_sc_check_armed }
+		remove_variable = sr_sc_check_armed
+	}
+}
+
+# Country scope, from sr_fl_arrive_at before the slot's legs are cleared.
+# TE_SELF_CHECK fleet_leg: OK once a game on the first fleet that lands in
+# its month, with the months it flew against its leg's; BROKEN once if a fleet
+# lands two or more months late (the step missed it). The figures go through
+# globals: a debug line reads no local variable.
+sr_fl_leg_self_check = {
+	set_global_variable = {
+		name = sr_fl_log_late
+		value = {
+			value = te_history_month_index
+			subtract = var:sr_fl_$N$_arrive
+		}
+	}
+	set_global_variable = { name = sr_fl_log_flown value = 0 }
+	if = {
+		limit = { has_variable = sr_fl_$N$_depart }
+		set_global_variable = {
+			name = sr_fl_log_flown
+			value = {
+				value = te_history_month_index
+				subtract = var:sr_fl_$N$_depart
+			}
+		}
+	}
+	set_global_variable = { name = sr_fl_log_leg value = 0 }
+	if = {
+		limit = { has_variable = sr_fl_$N$_leg_months }
+		set_global_variable = { name = sr_fl_log_leg value = var:sr_fl_$N$_leg_months }
+	}
+	set_global_variable = { name = sr_fl_log_dest value = var:sr_fl_$N$_dest }
+	set_global_variable = { name = sr_fl_log_drive value = sr_fl_$N$_drive_value }
+	if = {
+		limit = {
+			global_var:sr_fl_log_late >= 2
+			NOT = { has_global_variable = sr_fl_leg_broken_logged }
+		}
+		set_global_variable = { name = sr_fl_leg_broken_logged value = yes }
+		debug_log = "TE_SELF_CHECK BROKEN fleet_leg location=[GetGlobalVariable('sr_fl_log_dest').GetValue|0] drive=[GetGlobalVariable('sr_fl_log_drive').GetValue|0] leg=[GetGlobalVariable('sr_fl_log_leg').GetValue|0] flown=[GetGlobalVariable('sr_fl_log_flown').GetValue|0] late=[GetGlobalVariable('sr_fl_log_late').GetValue|0] country=[THIS.GetCountry.GetTagName] (a fleet landed two or more months after its month: the global step missed it; land fleets from the country pulse as well; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	else_if = {
+		limit = {
+			global_var:sr_fl_log_late < 1
+			NOT = { has_global_variable = sr_fl_leg_ok_logged }
+		}
+		set_global_variable = { name = sr_fl_leg_ok_logged value = yes }
+		debug_log = "TE_SELF_CHECK OK fleet_leg location=[GetGlobalVariable('sr_fl_log_dest').GetValue|0] drive=[GetGlobalVariable('sr_fl_log_drive').GetValue|0] leg=[GetGlobalVariable('sr_fl_log_leg').GetValue|0] flown=[GetGlobalVariable('sr_fl_log_flown').GetValue|0] country=[THIS.GetCountry.GetTagName] (a fleet landed in its month; flown should equal leg, the months docs/engine/launch_windows_report.md gives the leg) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
+# ---- The upkeep_inputs probe (design § 18; te_debug_space_race.6) ---------------------------------
+# Country scope. One candidate (CANDIDATE: sr_fleet_upkeep, the generic
+# building_goods_input_mult; sr_fleet_upkeep_goods, the three good-specific
+# multipliers) at multiplier 50 (+50% inputs) on our Space Command, or on our
+# Space Program before one is built (it buys Launch Capacity too). The
+# market's Launch Capacity buy orders are logged now and, by
+# te_debug_space_race.7 fourteen days later, again, and the modifier removed.
+# The owner reads the building's input tooltip, the definitive read.
+sr_fl_probe_upkeep = {
+	set_variable = { name = sr_fl_probe_candidate value = $CODE$ }
+	set_global_variable = { name = sr_fl_probe_before value = sr_fl_probe_lc_orders }
+	if = {
+		limit = { sr_has_space_command = yes }
+		every_scope_state = {
+			every_scope_building = {
+				limit = { is_building_type = building_space_command }
+				if = { limit = { has_modifier = $CANDIDATE$ } remove_modifier = $CANDIDATE$ }
+				add_modifier = { name = $CANDIDATE$ multiplier = 50 }
+			}
+		}
+	}
+	else = {
+		every_scope_state = {
+			every_scope_building = {
+				limit = { is_building_type = building_space_program }
+				if = { limit = { has_modifier = $CANDIDATE$ } remove_modifier = $CANDIDATE$ }
+				add_modifier = { name = $CANDIDATE$ multiplier = 50 }
+			}
+		}
+	}
+	debug_log = "TE_SR_PROBE upkeep_inputs candidate=[THIS.Var('sr_fl_probe_candidate').GetValue|0] before=[GetGlobalVariable('sr_fl_probe_before').GetValue|0] (candidate 1 sr_fleet_upkeep, the generic building_goods_input_mult; 2 sr_fleet_upkeep_goods, the three good-specific multipliers; the market's Launch Capacity buy orders; the after line comes in 14 days) country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+	trigger_event = { id = te_debug_space_race.7 days = 14 }
+}
+
+# te_debug_space_race.7: the after line, and the candidate removed (CANDIDATE);
+# then the live upkeep goes back on.
+sr_fl_probe_upkeep_end = {
+	set_global_variable = { name = sr_fl_probe_after value = sr_fl_probe_lc_orders }
+	debug_log = "TE_SR_PROBE upkeep_inputs candidate=[THIS.Var('sr_fl_probe_candidate').GetValue|0] after=[GetGlobalVariable('sr_fl_probe_after').GetValue|0] before=[GetGlobalVariable('sr_fl_probe_before').GetValue|0] (a jump of about half the building's Launch Capacity bill means the candidate raised its inputs; check the building's input tooltip) country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				OR = {
+					is_building_type = building_space_command
+					is_building_type = building_space_program
+				}
+			}
+			if = { limit = { has_modifier = $CANDIDATE$ } remove_modifier = $CANDIDATE$ }
+		}
+	}
+	if = { limit = { has_variable = sr_fl_probe_candidate } remove_variable = sr_fl_probe_candidate }
+	sr_fl_upkeep_refresh = yes
+}
+
+# ---- The build mix (sr_sc_mix_sgui) -----------------------------------------------------------------
+# Country scope: ROLE's weight steps 0 to sr_sc_mix_max, then back to 0.
+sr_sc_mix_step = {
+	if = {
+		limit = { sr_sc_mix_$ROLE$_value >= sr_sc_mix_max }
+		set_variable = { name = sr_sc_mix_$ROLE$ value = 0 }
+	}
+	else = {
+		set_variable = { name = sr_sc_mix_$ROLE$ value = { value = sr_sc_mix_$ROLE$_value add = 1 } }
+	}
+}
+
+# ---- Console (te_debug_space_race.6) ----------------------------------------------------------------
+# The slot's drive one up, at most antimatter.
+sr_fl_debug_drive_at = {
+	if = {
+		limit = {
+			sr_fl_$N$_exists = yes
+			sr_fl_$N$_drive_value < 3
+		}
+		set_variable = { name = sr_fl_$N$_drive value = { value = sr_fl_$N$_drive_value add = 1 } }
+	}
+}
+
+# The world KEY's integrity to 0 (sr_site_by_index).
+sr_site_debug_integrity_at = {
+	set_global_variable = { name = sr_site_integrity_$KEY$ value = 0 }
+}
+
+# The world KEY occupied by the strongest country ROOT is at war with, or, if it
+# is occupied, returned (no notice).
+sr_site_debug_occupy_at = {
+	if = {
+		limit = { has_global_variable = sr_site_occupier_$KEY$ }
+		sr_site_end_occupation_quiet = { KEY = $KEY$ }
+		sr_site_sync_$KEY$ = yes
+	}
+	else_if = {
+		limit = { any_country = { has_war_with = root } }
+		ordered_country = {
+			limit = { has_war_with = root }
+			order_by = prestige
+			max = 1
+			save_temporary_scope_as = sr_debug_occupier
+		}
+		set_global_variable = { name = sr_site_occupier_$KEY$ value = scope:sr_debug_occupier }
+		sr_site_sync_$KEY$ = yes
+	}
+	sr_sites_refresh_players = yes
+}
+
+# ---- Survey Colony Defences (covert operation 17; design § 11) ----------------------------------
+# Called from covert_ops_apply_all_phase_effects (ROOT = the operator), which
+# runs monthly while the operator's covert funding is above zero. The reset
+# comes first; then, for each established survey, the target's scope calls
+# sr_cov_survey_defences, reading local_var:sr_cov_mult (the operation's
+# covert_op_effect_mult, 1 to 3.2). The operator keeps the list of countries it
+# surveys, the strongest operation's multiplier, and a 35-day marker, so a
+# survey whose funding stops lapses within the month after. The fleets read it
+# through sr_cov_surveys_<key> (sr_fleets_generated.txt): +20% x the multiplier
+# on our fire at the target's defences (sr_cb_edge_<key>), and the target's
+# Defences, integrity and marines exactly in the Fleets row's target hover.
+sr_cov_survey_reset = {
+	if = {
+		limit = { has_variable_list = sr_cov_survey_targets }
+		clear_variable_list = sr_cov_survey_targets
+	}
+	if = {
+		limit = { has_variable = sr_cov_survey_mult }
+		remove_variable = sr_cov_survey_mult
+	}
+}
+
+sr_cov_survey_defences = {
+	save_temporary_scope_as = sr_cov_survey_target
+	ROOT = {
+		add_to_variable_list = { name = sr_cov_survey_targets target = scope:sr_cov_survey_target }
+		set_variable = { name = sr_cov_survey_live value = yes days = 35 }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = sr_cov_survey_mult }
+					var:sr_cov_survey_mult < local_var:sr_cov_mult
+				}
+			}
+			set_variable = { name = sr_cov_survey_mult value = local_var:sr_cov_mult }
+		}
+	}
+}

@@ -1,6 +1,9 @@
-# Steam Workshop description (draft)
+# Steam Workshop description
 
-Paste the contents of the fenced block below into the Steam Workshop description field. Steam Workshop renders BBCode, not Markdown.
+The description as published on the Workshop (1.2.0, 2026-10-26). Paste the contents of the fenced block below into the Steam Workshop description field. Steam Workshop renders BBCode, not Markdown.
+
+- **Length.** Steam caps a description at 8,000 characters. This one is 7,789 characters (7,843 UTF-8 bytes, 7,882 counting each line break as two), so it fits however Steam counts. Measure after an edit: `python3 -c "import sys;t=open(sys.argv[1],encoding='utf-8').read().strip();print(len(t),len(t.encode()),len(t)+t.count(chr(10)))" <file>`.
+- **Player guide link.** Point it at the release's tag (`/tree/<version>/docs/player_guide/README.md`), not `main`, so it shows the guide that shipped. See `docs/guides/release_checklist.md`.
 
 ## Images to add
 
@@ -16,112 +19,96 @@ When you have screenshots ready, paste `[img]<steam-hosted-url>[/img]` at these 
 ```bbcode
 [h1]Vic3TimelineExtended[/h1]
 
-[i]A large content mod for Victoria 3 that pushes the timeline past 1936 into the 20th century, the modern era, and a speculative near-future. Banking cycles, climate change, the space race, the UN, decolonization — playable, opt-in, woven into the existing economy.[/i]
+[b]Updated for Victoria 3: 1.14.5.[/b]
 
-[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/blob/main/docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf]player guide[/url] (PDF) explains every system. You can also [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/main/docs/player_guide]read it chapter by chapter[/url] on GitHub.
+[i]Extend Victoria 3 past 1936 into the modern era and a speculative future. Banking, climate change, the space race, the UN, and decolonization become playable systems woven into the economy, with game rules to tailor your campaign.[/i]
 
-[hr][/hr]
+[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/1.2.0/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
 
 [h1]At a glance[/h1]
 [list]
-[*]161 new technologies across 7 new eras, interwar through far-future
-[*]13 new goods plus PM chains
-[*]~280 company-unique flavor buildings, plus ~40 wonders and megastructures
-[*]100+ new laws across the timeline — from monetary and family-policy early; financial regulation and rights ladders mid-game; to surveillance, AI, post-scarcity late
-[*]New combat units, mobilization options, ship classes, treaty articles, decrees, and companies
-[*]Hundreds of events; ~15,000 lines of new English localization with concept tooltips and breakdowns
-[*]13 toggleable game rules to mix-and-match the major systems
+[*]Around 160 technologies across 7 new eras, from interwar industry to a speculative future
+[*]New goods, production chains, company buildings, wonders, and megastructures
+[*]100+ new laws, plus new combat units, ship classes, treaty articles, decrees, and companies
+[*]Hundreds of events, concept tooltips, and mechanical breakdowns
+[*]Visual dashboards and dedicated controls, with new tabs in the Budget, Society, Diplomacy, Military, and Market panels
+[*]Toggleable game rules for the major systems
+[*]English, plus machine-translated German and Spanish; English fallback for other languages
 [/list]
 
 [hr][/hr]
 
 [h1]New systems[/h1]
 
-[h2]The big systems[/h2]
+[b]Banking and Monetary Policy[/b] — Navigate booms, bubbles, crashes, and contagion. Set interest rates, manage inflation and gold reserves, intervene in currency flows, or negotiate pegs and monetary unions. Delegate policy or take direct control.
 
-[b]Banking Cycle[/b] — A boom-and-bust cycle with speculative bubbles, trade-route contagion, and policy levers fitted to your economy type. Time your spree to the boom; don't let frenzy tip into panic.
+[b]Space Race[/b] — Compete from suborbital flight to solar-system colonies and an interstellar probe. Choose your approach, fund your programme, and estimate rivals' progress. Launch in real orbital windows, manage orbital debris, and earn lasting rewards. An optional rule adds colony fleets, settlers, and modules.
 
-[b]Space Race[/b] — Eight competitive milestones from suborbital flight to solar-system colonization. Pick safe or ambitious approaches. Plant the first flag on Mars and the world-first bonus is permanent — or watch a rival do it.
+[b]Global Warming[/b] — Track rising temperatures, the largest emitters, and your own emissions. Tax carbon, retire fossil capacity, and build renewables, carbon capture, and adaptation. Treaties can bind rivals to emissions cuts, and penalties grow as the climate degrades.
 
-[b]Global Warming[/b] — Track emissions and rising temperatures; events and scaling penalties land as climate degrades. Policy toggles (carbon tax, renewables, adaptation) slow warming or help you adapt, and a treaty article can bind rivals to emissions reductions.
+[b]Demographics[/b] — Every state keeps a census by age and sex that sets its births, deaths, and workforce. Set the pension age and family policy, extend lives, and watch your population age.
 
-[b]United Nations[/b] — Found or join the UN: an authority bar, Security Council vetoes, specialized agencies (UNESCO, IAEA, WHO), and 16 vote topics. Sanctions, peacekeeping, and non-proliferation become real diplomatic tools.
+[b]United Nations[/b] — Pass resolutions, wield Security Council vetoes, and build agencies and conventions. Lobby delegations, impose sanctions, fund peacekeeping and aid, and refer crimes to the court. Its authority sets how much its decisions matter.
 
-[b]Nuclear Weapons[/b] — Race to the bomb, build a stockpile, and use it — or pursue disarmament. Strikes deal real damage but bring infamy and risk retaliation; world-first grants permanent prestige; treaties can pause programs.
+[b]Global Commons[/b] — Deep-sea mines need licences from five ocean basins, shared out by coastline and naval power. Protect, lease, or blockade claims, and negotiate the Law of the Sea and an Antarctic Treaty.
 
-[b]Decolonization[/b] — Colonies hold a stability bar shaped by investment, garrisons, assimilation, or planned release. Stage a managed handover that preserves your assets, or solidify your hold and keep the empire.
+[b]Nuclear Weapons[/b] — Build a deterrent, choose doctrine and readiness, and navigate proliferation crises and retaliation. A shifting nuclear taboo shapes the cost of possession, threats, and use. Negotiate arsenal limits or renounce the bomb.
 
-[b]Covert Warfare[/b] — Cyber and espionage operations: election interference, financial subversion, infrastructure sabotage, communications disruption. Manage operation slots, funding, and detection risk.
+[b]Decolonization[/b] — Colonial stability responds to investment, garrisons, assimilation, and pressure for independence. Arrange a managed handover, or fight a war of independence that is hard to win and buys years, not peace.
 
-[b]Cultural Hegemony[/b] — A global cultural share built from prestige, art, tech leadership, and monuments — Hollywood-style soft power that pulls migration, fuels tourism, and bends rivals' ideologies.
+[b]Covert Warfare[/b] — Build intelligence networks and run election interference, financial subversion, sabotage, and cyber operations. Weigh funding against detection, and watch the operations you catch.
 
-[b]Modern Military[/b] — Mix unit types in your formations to earn combined-arms bonuses, with new aviation, missile, and drone formations plus modern ship classes extending the vanilla roster forward.
+[b]Cultural Hegemony[/b] — Compete for global cultural influence through prestige, art, technology, and monuments. Promote your political model, attract migrants and tourists, and pressure rivals.
 
-[b]Social Movements[/b] — Civil rights, feminism, LGBTQ+, environmentalism, secularization, augmentation, digital rights, and the post-scarcity transition — event chains for all of them, with journal entries for the most impactful.
+[b]Modern Military[/b] — Mix unit types for combined-arms bonuses. Aviation, missiles, drones, and modern ships extend the vanilla roster.
 
-[b]Free Market Construction[/b] — A construction industry produces a construction good at a market-set price; your government picks how much to buy each month. Based on TOGFan's mod (credited below).
+[b]Social Movements[/b] — Civil rights, feminism, LGBTQ+ rights, environmentalism, secularization, human augmentation, digital rights, and the post-scarcity transition bring event chains and journal entries.
 
-[h2]Smaller systems[/h2]
+[b]Free Market Construction[/b] — Construction is a traded good that governments and private investors buy, and upkeep and retooling compete for it. Based on TOGFan's mod.
 
-[b]Tourism[/b] — Turn Hawaii or the French Riviera into a global destination. Pollution, turmoil, infrastructure, and air-travel capacity gate how much demand you can capture; coal-fired industrial states are a hard sell to vacationers.
+[b]Power Grids[/b] — Grid Transfer Stations share electricity between states, and undersea interconnectors and grid agreements join grids across seas and borders.
 
-[b]Strategic Reserves[/b] — Stockpile oil, grain, military equipment, and ammunition in dedicated hubs while supplies are cheap. When war hits or embargoes land, the reserve drains into your market rather than letting prices spike.
+[b]Courts and Judiciary[/b] — Six court laws, from Executive Tribunals to Algorithmic Jurisprudence. Independent courts can strike down laws you force through: comply, defy, or pack them.
 
-[b]Migration crowding[/b] — Dense states (population vs. arable land) attract fewer migrants, capping how concentrated populations get naturally. The Ministry of Urban Planning stretches the tolerance so big cities keep absorbing arrivals.
+[b]Grand Monuments and Archaeology[/b] — Raise monuments to your regime, ruler, faith, or nation, as grand as their cost to their age. In 1836, 93 landmarks already stand; carry them off as trophies, bring them home, and dig up 36 buried sites such as Pompeii.
 
-[b]Dynamic homelands[/b] — Homelands aren't fixed by history. As cultural acceptance and population shift, homelands form or dissolve to match — diaspora communities can establish new ones, minorities can lose them.
+[b]Legislated Tax Code (experimental)[/b] — Pass tax bills, win votes with concessions, and offer relief, while AI governments legislate their own.
 
-[b]Standard-of-living expectations[/b] — Pops remember the last good year. A long boom raises the bar they measure against, so a dip after sustained prosperity hurts more than the same dip from baseline.
+[b]Healthcare and Biotechnology[/b] — Pops demand healthcare, met by pharmaceuticals, biotech companies, and new laws.
 
-[b]Power bloc principles[/b] — Extra principles and identities, with naming variants tied to member composition.
+[b]Internal Resettlement[/b] — Settle sparse regions through Settlement Authorities, by voluntary or coercive programmes, or retreat from environmental damage.
 
-[h2]Tech and the era expansion[/h2]
+[h2]More ways to shape your country[/h2]
 
-161 new technologies across 7 new eras, the spine of the timeline extension:
-[list]
-[*]6 (1919–45): aviation, atomics, propaganda, plastics
-[*]7 (1946–67): jets, early computing, satellites, antibiotics
-[*]8 (1968–87): microchips, environmental science, telecoms
-[*]9 (1988–2012): internet, mobile, biotech, global supply chains
-[*]10 (today): AI, surveillance, climate adaptation, social media
-[*]11 (near future): fusion, gene editing, advanced AI, brain-computer interfaces
-[*]12 (far future): antimatter, post-scarcity, space colonization, transhumanism
-[/list]
-
-Endgame megastructures include space elevators, orbital solar collectors, and antimatter facilities.
-
-[h2]Personal play opt-ins[/h2]
-
-Heir Education, Custom Religion (player-defined tenets, taboos, and governance), universal aptitude traits, and a World War system. Opt-in to taste.
+[b]Tourism[/b] — Historic sites, pollution, turmoil, infrastructure, and air travel shape demand.
+[b]Strategic Reserves[/b] — Stockpile food, fuel, and military supplies; buy low, release in shortages.
+[b]Wealth Concentration[/b] — Inheritance laws decide who inherits; great fortunes strengthen elites and feed bubbles.
+[b]Migration and Homelands[/b] — Crowded states attract fewer migrants, and homelands form or dissolve with acceptance and population.
+[b]Living-Standard Expectations[/b] — A long boom makes a later downturn harder to accept.
+[b]Power Blocs[/b] — New principles and identities, with names that reflect your bloc's members.
+[b]Personal Play Options[/b] — Heir education, custom religions, aptitude traits for all adults, and a World War system.
 
 [hr][/hr]
 
-[h1]Laws and ideologies[/h1]
+[h1]Technology, laws, and society[/h1]
 
-The law tree spans the full timeline. A small sample: the 19th century gives access to new inheritance, state power, and minority rights. Mid-game adds financial regulation, LGBTQ+ rights ladders, and family and reproductive policy. Late-game handles internet governance, genetic modification, and UBI. New ministries — science, environment, intelligence, urban planning, and more — each pull government in a different direction; build your preferred society.
+Progress from interwar aviation and atomics through computing, biotechnology, AI, fusion, and space colonization. Build space elevators, orbital solar collectors, and antimatter facilities.
 
-The ideology system is expanded to support these laws, with new factions (environmentalists, anti-colonialists, transhumanists, business-interest movements) plus three modern parties: Green, Populist, Technocratic.
-
-[hr][/hr]
+Shape inheritance, minority rights, the courts, financial regulation, family policy, internet governance, genetic modification, and universal basic income, or entrench two parties with first past the post. New ministries cover science, the environment, intelligence, and urban planning. New ideologies include environmentalists, anti-colonialists, transhumanists, and business-interest movements, alongside Green, Populist, and Technocratic parties.
 
 [h1]Compatibility[/h1]
 
-Vanilla ideologies, ~60 vanilla PMs, state-region map data, and 20 vanilla GUI panels are overridden — avoid pairing with other mods that touch those. Otherwise the mod uses INJECT to extend rather than replace vanilla content, so most non-overlapping mods coexist. Load this mod [b]last[/b].
-
-[hr][/hr]
+The mod changes vanilla ideologies, production methods, state-region data, and several interface panels, so mods editing the same content may conflict. Load this mod [b]last[/b]. Major systems can be switched off at game setup, but the baseline technologies, laws, and buildings remain.
 
 [h1]Feedback and AI-generated content[/h1]
 
-Bugs and strange interactions are likely in a mod this size. Detailed reports — what you did, what you expected, what happened, with [i]error.log[/i] / [i]debug.log[/i] snippets and a save — help most. Concept tooltips and breakdowns are wired throughout; if a mechanic feels under-explained, that's also useful feedback. Post on the Workshop page or the [url=https://github.com/jakeOmega/Vic3TimelineExtended/issues]issue tracker[/url].
+Report bugs here or on the [url=https://github.com/jakeOmega/Vic3TimelineExtended/issues]issue tracker[/url], ideally with steps to reproduce, [i]error.log[/i] or [i]debug.log[/i] snippets, and a save. Feedback on unclear mechanics is welcome.
 
-The mod contains AI-generated event images and some AI flavor text. To replace AI content with hand-written text or hand-drawn art, open an issue or PR on the [url=https://github.com/jakeOmega/Vic3TimelineExtended]GitHub repo[/url].
-
-[hr][/hr]
+The mod contains AI-generated event images, icons, and some flavor text. Hand-written text and hand-drawn art are welcome through issues or pull requests.
 
 [h1]Links and credits[/h1]
 [list]
-[*][url=https://github.com/jakeOmega/Vic3TimelineExtended/blob/main/docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf]Player guide (PDF)[/url]
 [*][url=https://github.com/jakeOmega/Vic3TimelineExtended]Source repository[/url]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3257202613]Free Market Construction[/url] by [b]TOGFan[/b] — basis for the construction-market subsystem; recommended on its own if you want just that mechanic.
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3257202613]Free Market Construction[/url] by [b]TOGFan[/b] — the basis for the construction-market subsystem; recommended on its own if you want just that mechanic.
 [/list]
 ```

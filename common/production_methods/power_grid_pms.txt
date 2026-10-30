@@ -1,0 +1,65 @@
+﻿# ============================================================================
+# Power Grid Production Methods
+# ============================================================================
+# The base 1-unit input and output of both goods is LOAD-BEARING, as in
+# strategic_reserve_pms.txt: goods_input_*_add and goods_output_*_add only move
+# goods from a method's modifier blocks, not from a runtime add_modifier, so the
+# station's upload and download modifiers are _mult modifiers that scale these
+# lines. Idle, both modifiers sit at -1 and every line is zero.
+#
+# The four lines are unscaled (the station is always level 1, so they are the
+# same size as level_scaled ones). Whatever the block, a station moves its
+# occupancy's share of its order: in Arkansas, level_scaled lines ran 20.7% of
+# their setting with 20.8% of the staff and 19.9% with 20.0%, and unscaled ones
+# 19.7% with 20.0% (2026-10-25). The balancing's factor
+# (te_grid_station_factor_value) makes up for that down to a fifth staffed, and
+# the station is a very attractive job (building_job_attractiveness_mult), so
+# its engineers and clerks stay and it fills quickly. TE_GRID staffing
+# (power_grid_effects.txt) counts how well staffed the stations are a year on.
+# A station with no staff keeps its order and modifiers and runs again from its
+# first hire.
+# ============================================================================
+
+pm_grid_transfer_base = {
+	texture = "gfx/interface/icons/production_method_icons/power_plant.dds"
+	building_modifiers = {
+		unscaled = {
+			goods_input_electricity_add = 1
+			goods_output_electricity_add = 1
+			goods_input_grid_power_add = 1
+			goods_output_grid_power_add = 1
+			# +500%: pops take the job over others, and since an employed
+			# pop's job satisfaction grows with it (JOB_SATISFACTION_FROM_JOB_
+			# ATTRACTIVENESS), they stay. Vanilla's sugar plantation uses -0.9
+			# for the reverse.
+			building_job_attractiveness_mult = 5
+		}
+		level_scaled = {
+			building_employment_engineers_add = 500
+			building_employment_clerks_add = 500
+		}
+	}
+}
+
+# The HVDC Undersea Interconnector's cable (building_grid_hvdc_interconnector):
+# converter valves and a cable to the far shore. Its only effect is the range
+# the balancing reads, one Sea Node (building_grid_undersea_cable_range_add,
+# te_grid_cable_range_value), to which technology adds. What it costs is the
+# electronics and the engineers. The AI builds the building where it has a
+# grid of its own or a partner's across the sea
+# (te_grid_ai_interconnectors_effect), and reckons with
+# te_grid_hvdc_method_range, so keep that value equal to the range here.
+pm_grid_hvdc_interconnector = {
+	texture = "gfx/interface/icons/production_method_icons/pm_grid_hvdc_interconnector.dds"
+	building_modifiers = {
+		unscaled = {
+			building_grid_undersea_cable_range_add = 1
+		}
+		workforce_scaled = {
+			goods_input_electronic_components_add = 5
+		}
+		level_scaled = {
+			building_employment_engineers_add = 250
+		}
+	}
+}

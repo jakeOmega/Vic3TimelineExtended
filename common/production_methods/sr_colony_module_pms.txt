@@ -1,0 +1,108 @@
+﻿# ============================================================================
+# COLONY MODULE FABRICATION — the Space Program's module methods (colony modules design § 5)
+# ============================================================================
+# The production methods of pmg_space_program_module_fabrication
+# (sr_colony_module_pmgs.txt), a secondary group on building_space_program.
+# Each gives module fabrication points a month through
+# country_sr_module_fabrication_add (workforce-scaled, so a half-staffed
+# programme fabricates at half the rate); every queued colony module costs
+# sr_module_points (100) of them (sr_mod_month, sr_colony_module_effects.txt).
+# The points do something only under the Simple and Full Colonies settings of
+# the Space Race rule; a method can't be gated by a game rule
+# (scripting_best_practices.md § Locking Production Methods), so its loc says so.
+#
+#   method               gate                      Launch Capacity/wk  Adv. Materials/wk  points/mo
+#   None (default)       -                         0                   0                  0
+#   Orbital Assembly     cislunar_infrastructure   1,500               10                 5
+#   Orbital Foundries    space_colonization        2,000               15                 12
+#   Fusion Shipyards     compact_fusion_reactors   2,000               10                 25
+#
+# Orbital Foundries keeps its first name's key, pm_sr_fabrication_lunar_foundries
+# (renamed for Mare Imbrium's Mass Driver, lunar colonization design § 15.4).
+#
+# No method employs anyone: the programme's own mission method staffs the
+# building, and these ride on its workforce, as debris removal does
+# (pm_employment_audit stays clean).
+# ============================================================================
+
+pm_sr_fabrication_none = {
+	texture = "gfx/interface/icons/production_method_icons/no_automation.dds"
+}
+
+pm_sr_fabrication_orbital_assembly = {
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
+
+	unlocking_technologies = {
+		cislunar_infrastructure
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_launch_capacity_add = 1500               # Price:  200, Total cost: 300000.0 (88.24%)
+			goods_input_advanced_materials_add = 10              # Price: 4000, Total cost:  40000.0 (11.76%)
+			# Output goods
+			# Total input cost: 340000.0
+			# Total output cost: 0
+			# Profit: -340000.0
+			# Profit margin: -100.00%
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_sr_module_fabrication_add = 5
+		}
+	}
+}
+
+pm_sr_fabrication_lunar_foundries = {
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p1.dds"
+
+	unlocking_technologies = {
+		space_colonization
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_launch_capacity_add = 2000               # Price:  200, Total cost: 400000.0 (86.96%)
+			goods_input_advanced_materials_add = 15              # Price: 4000, Total cost:  60000.0 (13.04%)
+			# Output goods
+			# Total input cost: 460000.0
+			# Total output cost: 0
+			# Profit: -460000.0
+			# Profit margin: -100.00%
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_sr_module_fabrication_add = 12
+		}
+	}
+}
+
+pm_sr_fabrication_fusion_shipyards = {
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p2.dds"
+
+	unlocking_technologies = {
+		compact_fusion_reactors
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_launch_capacity_add = 2000               # Price:  200, Total cost: 400000.0 (90.91%)
+			goods_input_advanced_materials_add = 10              # Price: 4000, Total cost:  40000.0 (9.09%)
+			# Output goods
+			# Total input cost: 440000.0
+			# Total output cost: 0
+			# Profit: -440000.0
+			# Profit margin: -100.00%
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_sr_module_fabrication_add = 25
+		}
+	}
+}

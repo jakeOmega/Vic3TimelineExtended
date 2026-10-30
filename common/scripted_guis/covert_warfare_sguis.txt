@@ -24,8 +24,9 @@
 #    documented "Using SGUIs to build lists in loc" pattern; see
 #    game/common/scripted_guis/scripted_guis.md.
 #
-# 3. YES/NO QUESTIONS (covert_ops_dormant_sgui, covert_last_exposed_known_sgui,
-#    covert_ops_phase_ready_sgui, covert_ops_priority_ready_sgui). `.gui` has no
+# 3. YES/NO QUESTIONS (covert_ops_dormant_sgui, covert_funding_ready_sgui,
+#    covert_last_exposed_known_sgui, covert_ops_phase_ready_sgui,
+#    covert_ops_priority_ready_sgui). `.gui` has no
 #    way to ask script a question, so each of these is an is_shown-only entry
 #    read as `[GetScriptedGui('…').IsShown(…)]`. They exist so the widget never
 #    re-encodes a threshold or an existence check itself. See
@@ -100,6 +101,32 @@ covert_ops_dormant_sgui = {
 			NOT = { has_variable = iw_funding_level }
 			var:iw_funding_level < 1
 		}
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = { }
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- YES/NO: funded, with nothing running? ----------------------------------
+# The Funding section's state line shows only then (COV-11): it is the one
+# state the line says something new in, that base maintenance still buys the
+# defensive benefits. Zero funding is said in the overview's funding cell and
+# once above the operations; a running agency needs no line. The same test as
+# covert_funding_state_line's "ready" branch, which the line prints.
+covert_funding_ready_sgui = {
+	scope = country
+
+	is_shown = {
+		has_variable = iw_funding_level
+		var:iw_funding_level >= 1
+		covert_operations_active < 1
 	}
 
 	is_valid = {
@@ -541,6 +568,69 @@ covert_stand_down_counterintel_support_sgui = {
 	}
 }
 
+covert_stand_down_incite_autonomy_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = incite_autonomy }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = incite_autonomy ACTION = covert_incite_autonomy_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_sabotage_colony_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = sabotage_colony }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = sabotage_colony ACTION = covert_sabotage_colony_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_survey_defences_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = survey_defences }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = survey_defences ACTION = covert_survey_defences_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
 # ---- PRIORITY: the row stepper ----------------------------------------------
 # Two handlers, up and down, so the row's container can travel alone in a
 # SINGLE AddScope — the shape the stand-down handlers use. Both delegate to
@@ -658,16 +748,30 @@ covert_expose_known_sgui = {
 	}
 
 	is_valid = {
-		custom_tooltip = {
-			text = iw_expose_known_exists_tt
-			exists = scope:iw_known
+		# The first two are guards, printed only when they fail (COV-9b, as
+		# covert_possible_stand_down): a held guard would be a tick on every row.
+		trigger_if = {
+			limit = { NOT = { exists = scope:iw_known } }
+			custom_tooltip = {
+				text = iw_expose_known_exists_tt
+				always = no
+			}
 		}
-		custom_tooltip = {
-			text = iw_expose_known_ours_tt
-			exists = scope:iw_known
-			has_variable_list = iw_known_ops
-			is_target_in_variable_list = { name = iw_known_ops target = scope:iw_known }
-			scope:iw_known ?= { has_tag = iw_known_rec }
+		trigger_if = {
+			limit = {
+				NOT = {
+					AND = {
+						exists = scope:iw_known
+						has_variable_list = iw_known_ops
+						is_target_in_variable_list = { name = iw_known_ops target = scope:iw_known }
+						scope:iw_known ?= { has_tag = iw_known_rec }
+					}
+				}
+			}
+			custom_tooltip = {
+				text = iw_expose_known_ours_tt
+				always = no
+			}
 		}
 		custom_tooltip = {
 			text = iw_expose_known_unordered_tt

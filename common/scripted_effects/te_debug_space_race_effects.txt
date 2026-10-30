@@ -61,7 +61,8 @@ te_debug_sr_flag_setback_base = {
 }
 
 # One real setback on every running milestone, down the same path the monthly
-# pulse takes: flag, progress loss, safety review on the journal entry, cooldown.
+# pulse takes: flag, progress loss (two months, a minor setback's default
+# answer), safety review on the journal entry, cooldown.
 # No event fires (option j does that). Ends on sr_recalculate_cost so the panel's status flips to
 # "shielded" immediately instead of next month. Scope: country.
 te_debug_sr_force_setback = {
@@ -73,7 +74,8 @@ te_debug_sr_force_setback = {
 	te_debug_sr_flag_setback_base = { MILESTONE = mars_landing       }
 	te_debug_sr_flag_setback_base = { MILESTONE = interstellar_probe }
 	te_debug_sr_flag_setback_base = { MILESTONE = solar_colonization }
-	sr_apply_safe_setback_progress_loss = yes
+	sr_record_event_pace = yes
+	sr_setback_lose_months = { MONTHS = 2 }
 	sr_temporary_safety_review_effect = yes
 	set_variable = { name = sr_failure_cooldown value = 6 }
 	sr_recalculate_cost = yes

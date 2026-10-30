@@ -95,3 +95,507 @@ te_debug_space_race.1 = { # REVIEWED 2026-09-18: console-only test event (`event
 		name = te_debug_space_race.1.z
 	}
 }
+
+# ============================================================================
+# THE COLONY RECORD — `event te_debug_space_race.2` (design § 13)
+# ============================================================================
+# The colony record's own console: every world's record to debug.log, a world
+# claimed or given away, the monthly step run now. A holder dying is tested with
+# the console's own `annex <TAG>` (docs/testing/solar-colonies-playtest.md).
+te_debug_space_race.2 = { # REVIEWED 2026-10-25: console-only test event (`event te_debug_space_race.2`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.2.t
+	desc = te_debug_space_race.2.d
+	flavor = te_debug_space_race.2.f
+
+	# Every world's record, one TE_SR_SITES line each.
+	option = {
+		name = te_debug_space_race.2.a
+		default_option = yes
+		sr_sites_debug_log = yes
+	}
+
+	# The first unclaimed world, ours, with its first specialization.
+	option = {
+		name = te_debug_space_race.2.b
+		trigger = { sr_any_site_unclaimed = yes }
+		sr_sites_debug_claim_first_free = yes
+	}
+
+	# Our first colony to the largest other great power, through Cede Colony's
+	# own transfer (the notice and the receiver's entry included).
+	option = {
+		name = te_debug_space_race.2.c
+		trigger = { sr_has_space_colony = yes }
+		ordered_country = {
+			limit = {
+				NOT = { this = root }
+				is_country_alive = yes
+				is_great_or_major_power = yes
+			}
+			order_by = gdp
+			max = 1
+			save_scope_as = sr_debug_receiver
+		}
+		if = {
+			limit = { exists = scope:sr_debug_receiver }
+			sr_sites_debug_give_first_held = yes
+		}
+	}
+
+	# Our first colony released, as a dead holder with no heir would leave it.
+	option = {
+		name = te_debug_space_race.2.r
+		trigger = { sr_has_space_colony = yes }
+		sr_sites_debug_release_first_held = yes
+	}
+
+	# The monthly step now (migration on its first run, the dead-holder rule,
+	# adoption or release, the projection, every player's rows).
+	option = {
+		name = te_debug_space_race.2.e
+		sr_sites_global_monthly = yes
+	}
+}
+
+# Colony fleets and settlers (slices 2-3 design § 12), simple and full colonies.
+te_debug_space_race.3 = { # REVIEWED 2026-10-25: console-only test event (`event te_debug_space_race.3`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.3.t
+	desc = te_debug_space_race.3.d
+	flavor = te_debug_space_race.3.f
+
+	# Our fleets, every world's inbound record and people: TE_SR_FLEETS and
+	# TE_SR_SETTLERS lines.
+	option = {
+		name = te_debug_space_race.3.a
+		default_option = yes
+		sr_cf_debug_log = yes
+	}
+
+	# A fleet now for the first world we may target, the bar unchanged.
+	option = {
+		name = te_debug_space_race.3.b
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_cf_has_free_slot = yes
+		}
+		sr_cf_debug_dispatch_first = yes
+	}
+
+	# Every fleet in flight lands now (the colony_fleet_arrival self-check).
+	option = {
+		name = te_debug_space_race.3.c
+		trigger = { sr_colonies_contested_enabled = yes }
+		sr_cf_debug_land_all_now = yes
+	}
+
+	# Emigration on High, and this month's settlers sent now (the
+	# emigration_batch self-check).
+	option = {
+		name = te_debug_space_race.3.e
+		trigger = { sr_colonies_contested_enabled = yes }
+		sr_emig_set_level = { LEVEL = 3 }
+		sr_emig_month = yes
+		sr_emig_refresh_modifiers = yes
+	}
+
+	# Our colonies filled to half their room (the off-world bonus).
+	option = {
+		name = te_debug_space_race.3.g
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_cf_debug_half_fill = yes
+		sr_emig_refresh_modifiers = yes
+	}
+}
+
+te_debug_space_race.4 = { # REVIEWED 2026-10-25: console-only test event (`event te_debug_space_race.4`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.4.t
+	desc = te_debug_space_race.4.d
+	flavor = te_debug_space_race.4.f
+
+	# Every colony's modules and caps: TE_SR_MODULES lines.
+	option = {
+		name = te_debug_space_race.4.a
+		default_option = yes
+		sr_mod_debug_log = yes
+	}
+
+	# Our fabrication stock full.
+	option = {
+		name = te_debug_space_race.4.b
+		trigger = { sr_colonies_contested_enabled = yes }
+		set_variable = { name = sr_fab_stock value = sr_mod_fab_stock_cap }
+	}
+
+	# One of each module our first colony allows, queued, and this month's
+	# fabrication run now.
+	option = {
+		name = te_debug_space_race.4.c
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_mod_debug_queue_first = yes
+		sr_mod_month = yes
+	}
+
+	# Every one of our shipments lands now (the modifier_seen_same_effect
+	# self-check), then the entry's modifiers.
+	option = {
+		name = te_debug_space_race.4.e
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			has_variable = sr_ms_count
+		}
+		sr_ms_debug_land_all_now = yes
+		sr_emig_refresh_modifiers = yes
+	}
+
+	# Our Extraplanetary Base room recomputed now.
+	option = {
+		name = te_debug_space_race.4.g
+		trigger = { has_technology_researched = in_situ_resource_utilization }
+		sr_ebase_refresh = yes
+		debug_log = "TE_SR_MODULES Extraplanetary Base room: [THIS.Var('sr_ebase_room').GetValue|0] levels, grade [THIS.Var('sr_ebase_grade').GetValue|2]% over [THIS.ScriptValue('sr_ebase_levels')|0] built"
+	}
+}
+
+te_debug_space_race.5 = { # REVIEWED 2026-10-26: console-only test event (`event te_debug_space_race.5`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/mars_communication_room.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.5.t
+	desc = te_debug_space_race.5.d
+	flavor = te_debug_space_race.5.f
+
+	# Every world's autonomy, freedom and ties: TE_SR_AUTONOMY lines.
+	option = {
+		name = te_debug_space_race.5.a
+		default_option = yes
+		sr_aut_debug_log = yes
+	}
+
+	# Our first colony's autonomy to 80, its cooldown cleared: the next month's
+	# step asks us (space_race_events.94).
+	option = {
+		name = te_debug_space_race.5.b
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_aut_debug_first_held = yes
+		set_local_variable = { name = sr_aut_delta value = 80 }
+		sr_site_by_index = { DO = debug_aut }
+	}
+
+	# Our first colony let go now: a free colony, ties 50 with us.
+	option = {
+		name = te_debug_space_race.5.c
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_aut_debug_first_held = yes
+		sr_site_by_index = { DO = let_go }
+	}
+
+	# Every free colony supplied by us, then the entry's modifiers.
+	option = {
+		name = te_debug_space_race.5.e
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_free_any = yes
+		}
+		sr_free_debug_supply_all = yes
+		sr_emig_refresh_modifiers = yes
+	}
+
+	# Full ties with every free colony we supply: a petition in the next
+	# month's step.
+	option = {
+		name = te_debug_space_race.5.g
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_free_any = yes
+		}
+		sr_free_debug_full_ties = yes
+	}
+
+	# Our first colony's abandonment question (space_race_events.93).
+	option = {
+		name = te_debug_space_race.5.h
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+			NOT = { has_variable = sr_abandon_site }
+		}
+		sr_aut_debug_first_held = yes
+		sr_aut_debug_abandon_ask = yes
+	}
+}
+
+te_debug_space_race.6 = { # REVIEWED 2026-10-26: console-only test event (`event te_debug_space_race.6`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/orbital_battlestation_construction.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.6.t
+	desc = te_debug_space_race.6.d
+	flavor = te_debug_space_race.6.f
+
+	# Our fleets and every location's forces: TE_SR_FLEET lines.
+	option = {
+		name = te_debug_space_race.6.a
+		default_option = yes
+		sr_fl_debug_log_all = yes
+		sr_loc_debug_log = yes
+	}
+
+	# 100 strength of each role at Earth, in our home fleet, propellant and
+	# supply full.
+	option = {
+		name = te_debug_space_race.6.b
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_fl_find_home = yes
+		if = {
+			limit = { local_var:sr_fl_n > 0 }
+			sr_fl_by_local = { DO = debug_strength }
+			sr_fl_by_local = { DO = fill }
+		}
+		sr_loc_rebuild = yes
+	}
+
+	# Every fleet of ours in transit lands now.
+	option = {
+		name = te_debug_space_race.6.c
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_fl_each_slot = { DO = debug_land }
+		sr_loc_rebuild = yes
+	}
+
+	# Propellant and supply full, every fleet of ours.
+	option = {
+		name = te_debug_space_race.6.e
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_fl_each_slot = { DO = fill }
+	}
+
+	# Our fleets' drive one up (the nation's is unchanged: a docked fleet refits
+	# back to it).
+	option = {
+		name = te_debug_space_race.6.g
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_fl_each_slot = { DO = debug_drive }
+	}
+
+	# 6b: our first colony's integrity to 0; the month's combat now.
+	option = {
+		name = te_debug_space_race.6.h
+		trigger = {
+			sr_colonies_full_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_aut_debug_first_held = yes
+		sr_site_by_index = { DO = debug_integrity }
+	}
+	option = {
+		name = te_debug_space_race.6.i
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_combat_global_monthly = yes
+	}
+
+	# 6b: our first colony occupied by the strongest power we are at war with, or
+	# returned if it is occupied.
+	option = {
+		name = te_debug_space_race.6.j
+		trigger = {
+			sr_colonies_full_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_aut_debug_first_held = yes
+		sr_site_by_index = { DO = debug_occupy }
+	}
+
+	# 6c: the first of our fleets at a location where a country at peace with us
+	# (not our ally) holds a world begins interdicting it, at its price.
+	option = {
+		name = te_debug_space_race.6.m
+		trigger = {
+			sr_colonies_full_enabled = yes
+			sr_fl_has_any = yes
+		}
+		sr_fl_each_slot = { DO = debug_icpt }
+	}
+
+	# 6d: 100 strength of each role into our ground reserve.
+	option = {
+		name = te_debug_space_race.6.n
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_reserve_debug_fill = yes
+	}
+
+	# 6d: our Earth blockaded by the strongest country at war with us, which
+	# gets a fleet of 100 of each role at Earth (ours must not be there).
+	option = {
+		name = te_debug_space_race.6.o
+		trigger = {
+			sr_colonies_full_enabled = yes
+			is_at_war = yes
+		}
+		sr_earth_debug_blockade = yes
+	}
+
+	# The upkeep_inputs probe (design § 18): the generic building_goods_input_mult,
+	# then, in a second run, the three good-specific multipliers, at +50% on our
+	# Space Command (or Space Program); te_debug_space_race.7 logs the after
+	# figure fourteen days later and removes it.
+	option = {
+		name = te_debug_space_race.6.k
+		trigger = {
+			NOT = { has_variable = sr_fl_probe_candidate }
+			OR = {
+				sr_has_space_command = yes
+				sr_has_space_program = yes
+			}
+		}
+		sr_fl_probe_upkeep = { CANDIDATE = sr_fleet_upkeep CODE = 1 }
+	}
+	option = {
+		name = te_debug_space_race.6.l
+		trigger = {
+			NOT = { has_variable = sr_fl_probe_candidate }
+			OR = {
+				sr_has_space_command = yes
+				sr_has_space_program = yes
+			}
+		}
+		sr_fl_probe_upkeep = { CANDIDATE = sr_fleet_upkeep_goods CODE = 2 }
+	}
+}
+
+# The upkeep_inputs probe's end (te_debug_space_race.6 options k and l): the after
+# line and the candidate removed. Hidden.
+te_debug_space_race.7 = { # REVIEWED 2026-10-26: fired only by the console's probe (sr_fl_probe_upkeep), fourteen days on
+	type = country_event
+	hidden = yes
+
+	trigger = { has_variable = sr_fl_probe_candidate }
+
+	immediate = {
+		if = {
+			limit = { var:sr_fl_probe_candidate = 1 }
+			sr_fl_probe_upkeep_end = { CANDIDATE = sr_fleet_upkeep }
+		}
+		else = {
+			sr_fl_probe_upkeep_end = { CANDIDATE = sr_fleet_upkeep_goods }
+		}
+	}
+}
+
+# The retired Moon Base's migration (lunar colonization design § 10;
+# sr_lunar_migrate, sr_site_effects.txt): its self-check again, or an old
+# save's state staged in a new game, so the migration and the carry can be
+# watched without one.
+te_debug_space_race.8 = { # REVIEWED 2026-10-29: console-only test event (`event te_debug_space_race.8`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/lunar_base_dome.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.8.t
+	desc = te_debug_space_race.8.d
+	flavor = te_debug_space_race.8.f
+
+	# The lunar_migration self-check now, whatever it logged before:
+	# TE_SELF_CHECK OK or BROKEN lunar_migration. Read after a real migration:
+	# later, a country that founded a lunar colony and ceded it reads BROKEN.
+	option = {
+		name = te_debug_space_race.8.a
+		default_option = yes
+		sr_lunar_selfcheck_migration = yes
+	}
+
+	# As if we had finished the old Moon Base as a scientific outpost: the
+	# migration runs again next month and gives us Daedalus Crater (or the next
+	# free lunar world). It skips any country already holding one.
+	option = {
+		name = te_debug_space_race.8.b
+		trigger = { NOT = { sr_holds_lunar_world = yes } }
+		set_variable = { name = sr_completed_moon_base value = yes }
+		if = {
+			limit = { NOT = { sr_moon_base_choice_made = yes } }
+			set_variable = { name = sr_moon_base_scientific value = yes }
+		}
+		if = {
+			limit = { has_global_variable = sr_lunar_initialized }
+			remove_global_variable = sr_lunar_initialized
+		}
+	}
+
+	# As if an old Moon Base were open with 120 progress: next month's pulse
+	# carries it onto Solar System Colonization (TE_SELF_CHECK OK lunar_migration
+	# carried=120), and the programme's next launch month adds it to the bar.
+	option = {
+		name = te_debug_space_race.8.c
+		trigger = { NOT = { has_variable = sr_completed_moon_base } }
+		set_variable = { name = sr_progress_moon_base value = 120 }
+		set_variable = { name = sr_funding_moon_base value = 1 }
+		if = {
+			limit = { has_global_variable = sr_lunar_carry_ok_logged }
+			remove_global_variable = sr_lunar_carry_ok_logged
+		}
+		# the carry logs OK only on a country's first carry (review M3)
+		if = {
+			limit = { has_variable = sr_lunar_carried }
+			remove_variable = sr_lunar_carried
+		}
+		if = {
+			limit = { has_variable = sr_lunar_carry_grace }
+			remove_variable = sr_lunar_carry_grace
+		}
+	}
+}

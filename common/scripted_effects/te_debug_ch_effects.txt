@@ -48,18 +48,14 @@ te_debug_ch_repeal_ministry = {
 	}
 }
 
-# Fill one board slot with a country and a plausible set of component scores.
+# Fill one board slot with a country and a share. The board's row takes the
+# country's own components and model when the helper rebuilds it
+# (ch_board_rebuild), as at a recount.
 # Parameters: $SLOT$ = 1-10, $WHO$ = a country scope, $SCORE$ = share percentage
 # Scope: any
 te_debug_ch_fill_slot = {
 	set_global_variable = { name = ch_rank_$SLOT$ value = $WHO$ }
 	set_global_variable = { name = ch_rank_$SLOT$_score value = $SCORE$ }
-	set_global_variable = { name = ch_rank_$SLOT$_delta value = 0 }
-	set_global_variable = { name = ch_rank_$SLOT$_art value = $SCORE$ }
-	set_global_variable = { name = ch_rank_$SLOT$_prs value = $SCORE$ }
-	set_global_variable = { name = ch_rank_$SLOT$_sol value = 0 }
-	set_global_variable = { name = ch_rank_$SLOT$_tech value = 0 }
-	set_global_variable = { name = ch_rank_$SLOT$_raw value = $SCORE$ }
 }
 
 # Put us at the top of the board. Row 1 should carry the "us" marker and our
@@ -73,6 +69,7 @@ te_debug_ch_make_us_rank_1 = {
 	set_variable = { name = ch_total value = 31 }
 	ch_set_display_state = yes
 	ch_leaders_display_write = yes
+	ch_board_rebuild = yes
 }
 
 # Fill all ten slots with other countries and put us well outside them. The board
@@ -138,6 +135,7 @@ te_debug_ch_push_us_outside = {
 	set_global_variable = { name = ch_ranked_total value = 168 }
 	ch_set_display_state = yes
 	ch_leaders_display_write = yes
+	ch_board_rebuild = yes
 }
 
 # Empty board slot 5, the way an annexation between yearly recounts does. Row 5
@@ -145,6 +143,7 @@ te_debug_ch_push_us_outside = {
 # Scope: any
 te_debug_ch_empty_slot_5 = {
 	remove_global_variable = ch_rank_5
+	ch_board_rebuild = yes
 }
 
 # ---- Political-model events (cultural_hegemony.17-20) ----

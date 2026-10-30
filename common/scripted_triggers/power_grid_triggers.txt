@@ -1,0 +1,211 @@
+﻿# ============================================================================
+# Power Grid scripted triggers (te_grid_*)
+# ============================================================================
+
+# State scope. The state has a Grid Transfer Station, built, under construction
+# or queued. A queued building exists at level 0 (the Solar Power Receiver and
+# the seabed licences count queued levels the same way), but has_building only
+# sees it once it is built.
+te_grid_state_has_station = {
+	any_scope_building = { is_building_type = building_grid_transfer_station }
+}
+
+# State scope. The state's Grid Transfer Station is built, so it takes part in
+# its grid's balancing this month; one still under construction is set idle.
+# Staffing doesn't decide it. A station moves its staffing's share of its
+# order (power_grid_pms.txt), which the balancing's factor makes up for, and a
+# station with no staff keeps its order and its modifiers, so it moves from its
+# first hire rather than from the next month's balancing. An empty building
+# runs none of its lines, so until then its grid's uploads and downloads differ
+# by its share.
+# Until 2026-10-25 the lines were workforce_scaled and a station needed a
+# quarter of its staff, so one that lost workers dropped its state off the grid.
+te_grid_station_online = {
+	any_scope_building = {
+		is_building_type = building_grid_transfer_station
+		level >= 1
+	}
+}
+
+# State scope. The state's station has staff now.
+te_grid_station_staffed = {
+	any_scope_building = {
+		is_building_type = building_grid_transfer_station
+		occupancy > 0
+	}
+}
+
+# State scope, a member of the grid being balanced, before its figures are
+# overwritten. The station had staff at last month's run (te_grid_staffed, set
+# by te_grid_set_station_flow_effect) and has staff now, so it most likely ran
+# all last week, and the self-checks can judge what it moved. A station that
+# sat empty moved nothing, which says nothing about the balancing.
+te_grid_station_staffed_throughout = {
+	has_variable = te_grid_staffed
+	te_grid_station_staffed = yes
+}
+
+# State scope. The state has an HVDC Undersea Interconnector, built, under
+# construction or queued (te_grid_state_has_station's read), so the AI queues
+# no second one.
+te_grid_state_has_interconnector = {
+	any_scope_building = { is_building_type = building_grid_hvdc_interconnector }
+}
+
+# State scope. The state's station has an undersea cable: the state lays one
+# (te_grid_lays_cable, a built HVDC Undersea Interconnector) with a range of 1
+# or more (te_grid_cable_range_value), on a coast. It joins the station to
+# another with a cable across the sea (te_grid_sea_link,
+# te_grid_cable_links_effect). The balancing reads it only on a state whose
+# station is online, so an interconnector left without one joins nothing.
+te_grid_has_interconnector = {
+	is_coastal = yes
+	te_grid_lays_cable = yes
+	te_grid_cable_range_value >= 1
+}
+
+# State scope. The state lays an undersea cable: its HVDC Undersea
+# Interconnector is built. One queued exists at level 0 and lays none yet.
+te_grid_lays_cable = {
+	any_scope_building = {
+		is_building_type = building_grid_hvdc_interconnector
+		level >= 1
+	}
+}
+
+# State scope, during the balancing: the owner and the owner of $FROM$ (a state)
+# have a Grid Interconnection Agreement in force. Reads the partner list each
+# owner's stations are refreshed with at the start of the run
+# (te_grid_refresh_partners_effect), so no treaty is walked per neighbour.
+te_grid_owners_interconnected = {
+	owner = {
+		is_target_in_variable_list = { name = te_grid_partners target = $FROM$.owner }
+	}
+}
+
+# State scope (a station within reach of $FROM$, a member station, across the
+# sea), during the balancing: the two may be joined by cable. Both have one;
+# whether either reaches the other is te_grid_cable_in_range (the caller,
+# te_grid_cable_links_effect, walks the sea from $FROM$). Within one country
+# that is enough; between two it takes a Grid Interconnection Agreement, in one
+# market or across two (te_grid_cross_market_effect settles what crosses).
+te_grid_sea_link = {
+	te_grid_has_interconnector = yes
+	OR = {
+		owner = $FROM$.owner
+		te_grid_owners_interconnected = { FROM = $FROM$ }
+	}
+}
+
+# State scope, during the balancing: a station within the sea reach of
+# scope:te_grid_link_from (var:te_grid_sea_hops, the Sea Nodes between them,
+# te_grid_sea_reach_effect), whose range sits in
+# local_var:te_grid_cable_from_range. Either end's cable reaches the other, so
+# a station with a short cable still joins one whose cable reaches it.
+te_grid_cable_in_range = {
+	OR = {
+		var:te_grid_sea_hops <= local_var:te_grid_cable_from_range
+		var:te_grid_sea_hops <= te_grid_cable_range_value
+	}
+}
+
+# State scope (a waiting station), during the balancing: joined to the grid of
+# $FROM$ (a member station of another country) across a land border. The two
+# states border each other (the caller iterates $FROM$'s
+# every_neighbouring_state) and their owners have a Grid Interconnection
+# Agreement in force, in one market or across two.
+te_grid_land_link = {
+	NOT = { owner = $FROM$.owner }
+	te_grid_owners_interconnected = { FROM = $FROM$ }
+}
+
+# State scope (an AI's coastal station, saved as scope:te_grid_ai_end), in
+# te_grid_ai_interconnectors_effect, after te_grid_sea_reach_effect has walked
+# the sea as far as its cable would reach. A station within that reach would
+# join it to another grid by cable: one of the same country in another market
+# area, or an agreement partner's.
+te_grid_ai_interconnector_wanted = {
+	any_in_global_list = {
+		variable = te_grid_sea_reach
+		NOT = { this = scope:te_grid_ai_end }
+		te_grid_state_has_station = yes
+		OR = {
+			AND = {
+				owner = scope:te_grid_ai_end.owner
+				NOT = { is_in_same_market_area = scope:te_grid_ai_end }
+			}
+			AND = {
+				NOT = { owner = scope:te_grid_ai_end.owner }
+				te_grid_owners_interconnected = { FROM = scope:te_grid_ai_end }
+			}
+		}
+	}
+}
+
+# ---- AI -----------------------------------------------------------------------
+
+# State scope. Its owner makes Electricity in a state of its market area, this
+# one included, so a station here joins a grid with power to share. A station
+# that downloads counts as making it, so a group fed through an interconnector
+# or an agreement counts too.
+te_grid_ai_market_area_has_power = {
+	save_temporary_scope_as = te_grid_ai_powered
+	owner = {
+		any_scope_state = {
+			is_in_same_market_area = scope:te_grid_ai_powered
+			te_grid_electricity_production > 0
+		}
+	}
+}
+
+# State scope. The building's possible, for the AI's own pass, which runs in
+# country scope where ROOT is not the state: the owner's first station in the
+# market area may go anywhere there, and every later one must border a state
+# of the owner's that has one, built or queued. Keep the two in step.
+te_grid_station_placeable = {
+	save_temporary_scope_as = te_grid_ai_placed
+	OR = {
+		any_neighbouring_state = {
+			owner = scope:te_grid_ai_placed.owner
+			te_grid_state_has_station = yes
+		}
+		NOT = {
+			owner = {
+				any_scope_state = {
+					is_in_same_market_area = scope:te_grid_ai_placed
+					te_grid_state_has_station = yes
+				}
+			}
+		}
+	}
+}
+
+# State scope, in te_grid_ai_build_effect: a state the AI queues a station in.
+te_grid_ai_station_site = {
+	te_grid_state_has_station = no
+	te_grid_ai_market_area_has_power = yes
+	te_grid_station_placeable = yes
+}
+
+# State scope, for TE_SELF_CHECK grid_price: a sending state whose station
+# bought at least half as much Electricity last week as the rest of the state
+# uses, at a sell/buy ratio of 1.31 to 3.7, which the formula prices at about
+# 0.9 to 0.1 of base. So its price tells a formula that counts the station's
+# purchase from one that doesn't (which would put it far lower), and neither
+# end of the range hides a gap.
+te_grid_chk_price_sender = {
+	te_grid_own_uploaded >= 100
+	te_grid_chk_station_share_value >= 0.5
+	te_grid_chk_now_ratio_value >= 1.31
+	te_grid_chk_now_ratio_value <= 3.7
+}
+
+# State scope, for TE_SELF_CHECK grid_price_above_base: a state at a sell/buy
+# ratio of 0.28 to 0.48, which the formula prices at about 1.86 to 1.36 of
+# base, where its branch above base and the obvious alternative
+# (1 + range x (1 - x) / steps) are 0.19 or more apart.
+te_grid_chk_price_above_base = {
+	te_grid_electricity_consumption >= 100
+	te_grid_chk_now_ratio_value >= 0.28
+	te_grid_chk_now_ratio_value <= 0.48
+}

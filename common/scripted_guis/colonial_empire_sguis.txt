@@ -5,9 +5,11 @@
 # surface for je_colonial_empire now that the vanilla button grid is AI-only.
 #
 # Every action handler delegates: `is_valid` calls a colonial_empire_possible_*
-# trigger and `effect` a colonial_empire_effect_* effect. A decision's trigger
-# and effect are also its scripted button's `possible` and `effect`; a
-# programme's are the gates and steps the AI's monthly review uses too. Nothing
+# trigger and `effect` a colonial_empire_effect_* effect. Planned Full
+# Decolonization's trigger and effect are also its scripted button's `possible`
+# and `effect`; a programme's are the gates and steps the AI's monthly review
+# uses too; the per-target buttons' are the player's alone, and the
+# confirmation events they open read the same gates. Nothing
 # here restates a condition or an action, so the AI and the player's widget
 # cannot drift apart. Change the shared helper in
 # common/scripted_triggers/colonial_empire_triggers.txt or
@@ -28,14 +30,22 @@
 #   2  raise Military Garrison           3  lower Military Garrison
 #   4  raise Cultural Assimilation       5  lower Cultural Assimilation
 #
-# OP TABLE — colonial_empire_decision_sgui (saved_scopes = { op })
-#   0  Release a Colonial Territory   (-> decolonization_events.400)
-#   1  Planned Full Decolonization    (-> decolonization_events.401)
-#   2  Round Table Conference         (-> decolonization_events.400)
-#
-# Both tables are repeated in the .gui header and in
+# The table is repeated in the .gui header and in
 # docs/systems/journal_entry_systems.md § Colonial Stability Widget. Keep all
 # three in step.
+#
+# PER-TARGET BUTTONS (the Colonial Holdings section): one handler per action,
+# each taking its one target as its only saved scope, the shape gm_sguis.txt's
+# monument rows use (AddScope( 'gm_state', State.MakeScope )):
+#   colonial_empire_release_state_sgui     ce_state    -> decolonization_events.402
+#   colonial_empire_free_subject_sgui      ce_capital  -> decolonization_events.403
+#   colonial_empire_dominion_subject_sgui  ce_capital  -> decolonization_events.404
+#   colonial_empire_open_talks_sgui        ce_state    -> decolonization_events.80
+#                                          (a war's row: the rebels' capital)
+# A subject travels as its capital (gotcha #11: the panel reaches a country
+# through a stored state), and script takes the capital's owner. Each is_valid
+# fails closed on a missing scope. Planned Full Decolonization, which acts on
+# the whole empire, is colonial_empire_planned_sgui.
 #
 # ---------------------------------------------------------------------------
 # WHY THE OP CODE DECIDES WHAT A CONTROL *DOES* BUT NEVER WHETHER IT IS *DRAWN*
@@ -73,24 +83,6 @@ colonial_empire_display_ready = {
 	scope = country
 	is_shown = {
 		has_variable = colonial_empire_tier
-	}
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
-
-
-# ---------------------------------------------------------------------------
-# Read-only: is there a territory the decolonization decisions could act on?
-#
-# colonial_empire_refresh_display removes colonial_empire_largest_eligible_state
-# when nothing qualifies, so the row that names it needs its own guard rather
-# than sharing colonial_empire_display_ready's.
-# ---------------------------------------------------------------------------
-colonial_empire_has_candidates = {
-	scope = country
-	is_shown = {
-		has_variable = colonial_empire_largest_eligible_state
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -143,129 +135,50 @@ colonial_empire_active_assimilation_sgui = {
 
 
 # ---------------------------------------------------------------------------
-# Read-only text: which great powers are pressing on the empire.
-#
-# Rendered with ScriptedGui.ExecuteTooltip. The great powers are walked LIVE
-# here rather than read out of stored slot variables, because
-# `Var('x').GetCountry.GetName` is recorded as rendering blank in this mod
-# (gui_modding_guide gotcha #11) and because a live walk cannot go stale or name
-# an annexed country.
-#
-# Cost: two every_country walks per frame while the section is open. That is why
-# the widget keeps International Pressure COLLAPSED by default and puts this
-# textbox inside the collapsed container -- nothing runs until the player asks.
-#
-# Each entry names its own side (gotcha #18: a header above a script-built
-# country list renders above the whole undivided list, not above its own group),
-# and no entry adds a flag icon (gotcha #19: a custom_tooltip inside a country
-# scope change already gets a bullet and a flag for free).
+# Read-only text: one row of the territory list, a release bloc (its seed
+# passed as ce_state), on its name's hover. The people a release forms with,
+# the states it takes with their people (eight, largest GDP first, then a
+# count), and its weight on stability. Built only while hovered; every figure
+# is the monthly assessment's (colonial_empire_mark_release_blocs).
 # ---------------------------------------------------------------------------
-colonial_empire_pressure_sgui = {
+colonial_empire_bloc_sgui = {
 	scope = country
+	saved_scopes = { ce_state }
 	is_shown = { always = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 
 	effect = {
-		# Cheap short-circuit: `any_country` stops at the first match, where the
-		# condemner/supporter script values would walk every country twice.
 		if = {
-			limit = {
-				NOT = {
-					any_country = {
-						NOT = { THIS = ROOT }
-						country_rank >= rank_value:great_power
-						OR = {
-							has_variable = gp_anti_colonial_stance
-							has_variable = gp_pro_colonial_stance
-						}
-					}
-				}
-			}
-			custom_tooltip = je_colonial_empire_pressure_quiet_tt
-		}
-		# One line above the whole list (gotcha #18 is about per-group headers;
-		# this one describes every entry): each entry below shows its power's
-		# prestige, and this line shows ours and how the two combine.
-		else = {
-			custom_tooltip = je_colonial_empire_pressure_scaling_tt
-			# The monthly snapshot, not a live walk. has_variable guards the first
-			# month of a save upgraded mid-entry, which has no snapshot yet.
+			limit = { exists = scope:ce_state }
+			custom_tooltip = je_colonial_empire_bloc_head
 			if = {
-				limit = {
-					has_variable = colonial_empire_condemner_share
-					var:colonial_empire_condemner_share > 0
+				limit = { scope:ce_state = { has_variable = colonial_bloc_culture } }
+				scope:ce_state = {
+					var:colonial_bloc_culture = { save_temporary_scope_as = ce_bloc_culture }
 				}
-				custom_tooltip = je_colonial_empire_pressure_share_tt
+				custom_tooltip = je_colonial_empire_bloc_people
 			}
-			# The supporters' share, beside it, with a hover that says it does
-			# not offset the escalations (only the condemners' share counts).
 			if = {
-				limit = {
-					has_variable = colonial_empire_supporter_share
-					var:colonial_empire_supporter_share > 0
+				limit = { scope:ce_state = { colonial_bloc_disp_extra > 0 } }
+				custom_tooltip = je_colonial_empire_bloc_states
+				colonial_empire_bloc_member_line = { POS = 0 }
+				colonial_empire_bloc_member_line = { POS = 1 }
+				colonial_empire_bloc_member_line = { POS = 2 }
+				colonial_empire_bloc_member_line = { POS = 3 }
+				colonial_empire_bloc_member_line = { POS = 4 }
+				colonial_empire_bloc_member_line = { POS = 5 }
+				colonial_empire_bloc_member_line = { POS = 6 }
+				colonial_empire_bloc_member_line = { POS = 7 }
+				if = {
+					limit = { scope:ce_state = { colonial_bloc_disp_states > 8 } }
+					custom_tooltip = je_colonial_empire_bloc_states_tail
 				}
-				custom_tooltip = je_colonial_empire_pressure_support_share_tt
 			}
-		}
-
-		every_country = {
-			limit = {
-				NOT = { THIS = ROOT }
-				country_rank >= rank_value:great_power
-				has_variable = gp_anti_colonial_stance
+			else = {
+				custom_tooltip = je_colonial_empire_bloc_alone
 			}
-			custom_tooltip = je_colonial_empire_condemner_entry_tt
-		}
-
-		every_country = {
-			limit = {
-				NOT = { THIS = ROOT }
-				country_rank >= rank_value:great_power
-				has_variable = gp_pro_colonial_stance
-			}
-			custom_tooltip = je_colonial_empire_supporter_entry_tt
-		}
-	}
-}
-
-
-# ---------------------------------------------------------------------------
-# Read-only text: the eligible territories the list's eight rows leave out,
-# by GDP. The hover on the list's "+N more" line (colonial_empire_widget.gui,
-# te_ce_territory_list), built only while hovered. Sixteen names, then a count
-# of any beyond them.
-# ---------------------------------------------------------------------------
-colonial_empire_territories_sgui = {
-	scope = country
-	is_shown = { always = yes }
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-
-	effect = {
-		custom_tooltip = je_colonial_empire_territories_more_head
-		colonial_empire_more_territory_line = { POS = 8 }
-		colonial_empire_more_territory_line = { POS = 9 }
-		colonial_empire_more_territory_line = { POS = 10 }
-		colonial_empire_more_territory_line = { POS = 11 }
-		colonial_empire_more_territory_line = { POS = 12 }
-		colonial_empire_more_territory_line = { POS = 13 }
-		colonial_empire_more_territory_line = { POS = 14 }
-		colonial_empire_more_territory_line = { POS = 15 }
-		colonial_empire_more_territory_line = { POS = 16 }
-		colonial_empire_more_territory_line = { POS = 17 }
-		colonial_empire_more_territory_line = { POS = 18 }
-		colonial_empire_more_territory_line = { POS = 19 }
-		colonial_empire_more_territory_line = { POS = 20 }
-		colonial_empire_more_territory_line = { POS = 21 }
-		colonial_empire_more_territory_line = { POS = 22 }
-		colonial_empire_more_territory_line = { POS = 23 }
-		if = {
-			limit = {
-				has_variable = colonial_empire_eligible_count
-				var:colonial_empire_eligible_count > 24
-			}
-			custom_tooltip = je_colonial_empire_territories_more_tail
+			custom_tooltip = je_colonial_empire_bloc_weight
 		}
 	}
 }
@@ -350,57 +263,167 @@ colonial_empire_policy_sgui = {
 
 
 # ---------------------------------------------------------------------------
-# The three decolonization decisions.
+# Planned Full Decolonization: every eligible territory at once.
 #
-# `is_shown = { always = yes }` deliberately: a decision with nothing to release
-# stays visible and disabled, with the reason in the button's IsValidTooltip. A
+# `is_shown = { always = yes }` deliberately: with nothing to release it stays
+# visible and disabled, with the reason in the button's IsValidTooltip. A
 # control that vanishes teaches nothing.
 #
-# These are NOT armed-then-confirmed in the GUI. Each one fires
-# decolonization_events.400 / .401, which previews up to three candidate
-# territories (with the state count and culture of each release region) and
-# offers a "Reconsider" option that clears every marker. That confirmation is
-# real game state: it survives a save, it cannot be left half-armed by closing
-# the panel, and it lets the player pick WHICH territory. A GetVariableSystem
-# arm flag would be client-side, have no lifetime, and greet a returning player
-# still armed -- strictly worse. Nothing is released by pressing these.
+# Not armed-then-confirmed in the GUI: the effect fires
+# decolonization_events.401, which lists every territory and offers a
+# Reconsider option that clears every marker. That confirmation is real game
+# state: it survives a save and cannot be left half-armed by closing the panel.
+# A GetVariableSystem arm flag would be client-side, have no lifetime, and
+# greet a returning player still armed. Nothing is released by pressing this.
 # ---------------------------------------------------------------------------
-colonial_empire_decision_sgui = {
+colonial_empire_planned_sgui = {
 	scope = country
-	saved_scopes = { op }
 
 	is_shown = { always = yes }
 
 	ai_is_valid = { always = no }
 
 	is_valid = {
-		trigger_if = {
-			limit = { exists = scope:op scope:op = 0 }
-			colonial_empire_possible_release_territory = yes
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 1 }
-			colonial_empire_possible_planned_decolonization = yes
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 2 }
-			colonial_empire_possible_round_table = yes
-		}
-		trigger_else = { always = no }
+		colonial_empire_possible_planned_decolonization = yes
 	}
 
 	effect = {
+		colonial_empire_effect_planned_decolonization = yes
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+# The per-target buttons of the Colonial Holdings section: Release beside a
+# territory, Release and Dominion beside a colonial subject. Each opens
+# the confirmation event for its one target; nothing is released or changed
+# by the click. The gates and effects are the shared helpers in
+# colonial_empire_triggers.txt and decolonization.txt (PER-TARGET GATES /
+# PER-TARGET DECISIONS).
+#
+# Always drawn; a target that cannot be acted on greys its button with the
+# reason in IsValidTooltip. `exists` first, so a scope that did not arrive
+# greys the button instead of acting on nothing.
+# ---------------------------------------------------------------------------
+colonial_empire_release_state_sgui = {
+	scope = country
+	saved_scopes = { ce_state }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_state
+		colonial_empire_possible_release_state = { STATE = scope:ce_state }
+	}
+
+	effect = {
+		colonial_empire_effect_release_state = { STATE = scope:ce_state }
+	}
+}
+
+colonial_empire_free_subject_sgui = {
+	scope = country
+	saved_scopes = { ce_capital }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_capital
+		colonial_empire_possible_free_subject = { CAPITAL = scope:ce_capital }
+	}
+
+	effect = {
+		colonial_empire_effect_free_subject = { CAPITAL = scope:ce_capital }
+	}
+}
+
+colonial_empire_dominion_subject_sgui = {
+	scope = country
+	saved_scopes = { ce_capital }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_capital
+		colonial_empire_possible_dominion_subject = { CAPITAL = scope:ce_capital }
+	}
+
+	effect = {
+		colonial_empire_effect_dominion_subject = { CAPITAL = scope:ce_capital }
+	}
+}
+
+
+# Open Talks beside a war of independence (the Wars of Independence block of
+# Colonial Holdings): the confirmation for the war whose rebels' capital is
+# ce_state. Greyed while talks already run or the war has not begun.
+colonial_empire_open_talks_sgui = {
+	scope = country
+	saved_scopes = { ce_state }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_state
+		decol_iw_state_can_open_talks = yes
+	}
+
+	effect = {
+		decol_iw_effect_open_talks = yes
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+# TE_SELF_CHECK ce_subject_row (CE-1 of the 2026-10-27 GUI audit): whether a
+# datamodel item's State reaches its country. The subject list is a datamodel
+# over colonial_empire_subject_capitals since then, each row reading its
+# subject as State.GetCountry; from a datamodel item that is unproven in this
+# mod (gui_modding_guide gotcha #15, which proves it only from a stored
+# variable). The first subject row drawn in a game reports once, from a 1x1
+# widget's _show state (the naming line's proven shape, gm_naming_line):
+# ce_check 1 when the row read a country name, 0 when it read none. Its fallback
+# is in docs/testing/colonial-holdings-playtest.md. Writes a global variable and
+# a log line, nothing else; players only, as the list is.
+# ---------------------------------------------------------------------------
+colonial_empire_selfcheck_subject_sgui = {
+	scope = country
+	saved_scopes = { ce_capital ce_check }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_capital
+		exists = scope:ce_check
+	}
+
+	effect = {
+		# A capital with no owner is not a test of the read, so it never reports.
 		if = {
-			limit = { exists = scope:op scope:op = 0 }
-			colonial_empire_effect_release_territory = yes
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 1 }
-			colonial_empire_effect_planned_decolonization = yes
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 2 }
-			colonial_empire_effect_round_table = yes
+			limit = {
+				exists = scope:ce_capital
+				exists = scope:ce_check
+				scope:ce_capital = { exists = owner }
+				NOT = { has_global_variable = te_selfcheck_ce_subject_row }
+			}
+			set_global_variable = te_selfcheck_ce_subject_row
+			if = {
+				limit = { scope:ce_check = 1 }
+				debug_log = "TE_SELF_CHECK OK ce_subject_row country=[THIS.GetCountry.GetTagName] (a colonial subject's row named its subject through State.GetCountry from a datamodel item) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ce_subject_row country=[THIS.GetCountry.GetTagName] (a colonial subject's row read no country through State.GetCountry from a datamodel item, though its capital has an owner; take the fallback in docs/testing/colonial-holdings-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
 		}
 	}
 }

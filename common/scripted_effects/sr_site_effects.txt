@@ -1,0 +1,508 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the colony record's shared effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md.
+#
+# Every world has a global record (sr_site_holder_<key>, sr_site_spec_<key>,
+# ...), the truth. The holder's <modifier>_held variables and its journal
+# entry's modifiers are its projection, written by sr_site_sync_<key>. The
+# per-world blocks are generated (sr_sites_generated.txt, from
+# scripts/generators/gen_solar_sites.py); this file holds what they call.
+# ============================================================================
+
+# Country scope. One modifier of a world we hold, shown: its record and, where
+# the entry is open, the modifier on it. The entry's immediate puts back a
+# modifier the record names when the entry opens later
+# (sr_sync_solar_colonization_entry).
+sr_site_show_modifier = {
+	if = {
+		limit = { NOT = { has_variable = $MODIFIER$_held } }
+		set_variable = { name = $MODIFIER$_held value = yes }
+	}
+	je:je_space_race_solar_colonization ?= {
+		if = {
+			limit = { NOT = { has_modifier = $MODIFIER$ } }
+			add_modifier = { name = $MODIFIER$ }
+		}
+	}
+}
+
+# Country scope. A specialization of a world we hold, at MULT (its level times
+# the colony's staffing, sr_site_mult_<a|b>_<key>; slice 4 design § 3): the
+# record, and where the entry is open the modifier at that multiplier. The
+# multiplier applied is recorded as <modifier>_mult, and only a change of it
+# (or no record) removes the old copy and adds the new: the test is the
+# variable, never has_modifier, so a second sync in the same effect adds
+# nothing even if has_modifier cannot yet see this one's add. MULT reads
+# global variables only, so it evaluates alike in the entry's scope.
+sr_site_show_modifier_at = {
+	if = {
+		limit = { NOT = { has_variable = $MODIFIER$_held } }
+		set_variable = { name = $MODIFIER$_held value = yes }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = $MODIFIER$_mult }
+				NOT = { var:$MODIFIER$_mult = $MULT$ }
+			}
+		}
+		je:je_space_race_solar_colonization ?= {
+			if = {
+				limit = { has_modifier = $MODIFIER$ }
+				remove_modifier = $MODIFIER$
+			}
+			add_modifier = { name = $MODIFIER$ multiplier = $MULT$ }
+			owner = { set_variable = { name = $MODIFIER$_mult value = $MULT$ } }
+			sr_mod_seen_self_check = { MODIFIER = $MODIFIER$ }
+		}
+	}
+}
+
+# Country scope. One modifier of a world we no longer hold (or of the option we
+# did not take), hidden: record and modifier. A discovery's modifier, shown by
+# sr_site_show_modifier, has no multiplier record; a specialization's goes
+# through sr_site_hide_modifier_at, which also clears the multiplier it was
+# shown at. Reading <modifier>_mult here for a discovery logged "Variable is
+# used but is never set" for all 40 at every launch (2026-10-25).
+sr_site_hide_modifier = {
+	if = {
+		limit = { has_variable = $MODIFIER$_held }
+		remove_variable = $MODIFIER$_held
+	}
+	je:je_space_race_solar_colonization ?= {
+		if = {
+			limit = { has_modifier = $MODIFIER$ }
+			remove_modifier = $MODIFIER$
+		}
+	}
+}
+
+# Country scope. A specialization hidden (sr_site_show_modifier_at shows it):
+# as sr_site_hide_modifier, and the multiplier it was shown at.
+sr_site_hide_modifier_at = {
+	sr_site_hide_modifier = { MODIFIER = $MODIFIER$ }
+	if = {
+		limit = { has_variable = $MODIFIER$_mult }
+		remove_variable = $MODIFIER$_mult
+	}
+}
+
+# Country scope. A discovery of a world we hold: made, so it never rolls again
+# for us (sr_roll_colony_discovery reads _done).
+sr_site_set_discovery_done = {
+	if = {
+		limit = { NOT = { has_variable = sr_discovery_$DISCOVERY$_done } }
+		set_variable = { name = sr_discovery_$DISCOVERY$_done value = yes }
+	}
+	if = {
+		limit = { has_variable = sr_discovery_$DISCOVERY$_pending }
+		remove_variable = sr_discovery_$DISCOVERY$_pending
+	}
+}
+
+# Country scope. A discovery of a world we hold, rolled at its founding and not
+# yet made: ours to roll each month (sr_monthly_colony_discoveries). A world we
+# received carries no survey timer, so its roll starts at once.
+sr_site_set_discovery_pending = {
+	if = {
+		limit = {
+			NOT = { has_variable = sr_discovery_$DISCOVERY$_pending }
+			NOT = { has_variable = sr_discovery_$DISCOVERY$_done }
+		}
+		set_variable = { name = sr_discovery_$DISCOVERY$_pending value = yes }
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_discovery_$DISCOVERY$_rolled } }
+		set_variable = { name = sr_discovery_$DISCOVERY$_rolled value = yes }
+	}
+}
+
+# Country scope. A discovery of a world we no longer hold.
+sr_site_clear_discovery = {
+	if = {
+		limit = { has_variable = sr_discovery_$DISCOVERY$_pending }
+		remove_variable = sr_discovery_$DISCOVERY$_pending
+	}
+	if = {
+		limit = { has_variable = sr_discovery_$DISCOVERY$_done }
+		remove_variable = sr_discovery_$DISCOVERY$_done
+	}
+}
+
+# ===== After a transfer (sr_site_transfer_<key> = { CAUSE = ... }) =====
+# Country scope: the receiver (sr_site_gained_<cause>) or the giver
+# (sr_site_lost_<cause>). INDEX is the world's place in gen_solar_sites.SITES,
+# which the notices' custom loc names it from.
+
+# Common to every gain: the entry that holds the colony's modifiers opens for a
+# country that has none (design § 8), and a receiver without the Moon Base and
+# Mars Landing is watched by the site_receiver_entry self-check.
+sr_site_gained_base = {
+	if = {
+		limit = {
+			NOT = { has_journal_entry = je_space_race_solar_colonization }
+			sr_space_race_on = yes
+		}
+		add_journal_entry = { type = je_space_race_solar_colonization }
+	}
+	if = {
+		limit = {
+			NOT = { sr_solar_colonization_qualified = yes }
+			NOT = { has_global_variable = sr_sites_receiver_checked }
+			NOT = { has_variable = sr_site_receiver_check }
+		}
+		set_variable = { name = sr_site_receiver_check value = $INDEX$ }
+		set_variable = { name = sr_site_receiver_check_timer value = yes days = 70 }
+	}
+}
+
+# Record a world for the notice: the first world gained (lost, inherited) is
+# named, any more are counted. SIDE: gained, lost or heir.
+sr_site_note_for_notice = {
+	if = {
+		limit = { NOT = { has_variable = sr_site_notice_$SIDE$ } }
+		set_variable = { name = sr_site_notice_$SIDE$ value = $INDEX$ }
+	}
+	else_if = {
+		limit = { has_variable = sr_site_notice_$SIDE$_more }
+		change_variable = { name = sr_site_notice_$SIDE$_more add = 1 }
+	}
+	else = {
+		set_variable = { name = sr_site_notice_$SIDE$_more value = 1 }
+	}
+}
+
+sr_site_gained_treaty = {
+	sr_site_gained_base = { INDEX = $INDEX$ }
+	if = {
+		limit = { is_player = yes }
+		sr_site_note_for_notice = { SIDE = gained INDEX = $INDEX$ }
+		sr_site_fire_treaty_notice = yes
+	}
+}
+
+sr_site_gained_heir = {
+	sr_site_gained_base = { INDEX = $INDEX$ }
+	if = {
+		limit = { is_player = yes }
+		sr_site_note_for_notice = { SIDE = heir INDEX = $INDEX$ }
+		if = {
+			limit = { NOT = { has_variable = sr_site_heir_notice_queued } }
+			set_variable = { name = sr_site_heir_notice_queued value = yes days = 30 }
+			trigger_event = { id = space_race_events.91 days = 1 }
+		}
+	}
+}
+
+# An adoption: a claim with no holder taken up by the country already showing
+# it, after a save from before the record. Nothing to tell.
+sr_site_gained_quiet = {
+	sr_site_gained_base = { INDEX = $INDEX$ }
+}
+
+sr_site_lost_treaty = {
+	if = {
+		limit = { is_player = yes }
+		sr_site_note_for_notice = { SIDE = lost INDEX = $INDEX$ }
+		sr_site_fire_treaty_notice = yes
+	}
+}
+
+# An heir's or an adoption's giver is dead or held nothing, so the transfer
+# saves none and these never run; they exist because sr_site_lost_<cause> is
+# named for every cause. The variable is the console's record of a loss.
+sr_site_lost_heir = {
+	set_variable = { name = sr_site_last_lost value = $INDEX$ }
+}
+
+sr_site_lost_quiet = {
+	set_variable = { name = sr_site_last_lost value = $INDEX$ }
+}
+
+# One treaty notice for every world a treaty moved to or from us that day.
+sr_site_fire_treaty_notice = {
+	if = {
+		limit = { NOT = { has_variable = sr_site_treaty_notice_queued } }
+		set_variable = { name = sr_site_treaty_notice_queued value = yes days = 30 }
+		trigger_event = { id = space_race_events.90 days = 1 }
+	}
+}
+
+# Clear the notices' variables once each event has shown them (its after block).
+sr_site_clear_notice = {
+	if = { limit = { has_variable = sr_site_notice_gained } remove_variable = sr_site_notice_gained }
+	if = { limit = { has_variable = sr_site_notice_gained_more } remove_variable = sr_site_notice_gained_more }
+	if = { limit = { has_variable = sr_site_notice_lost } remove_variable = sr_site_notice_lost }
+	if = { limit = { has_variable = sr_site_notice_lost_more } remove_variable = sr_site_notice_lost_more }
+	if = { limit = { has_variable = sr_site_treaty_notice_queued } remove_variable = sr_site_treaty_notice_queued }
+}
+
+sr_site_clear_heir_notice = {
+	if = { limit = { has_variable = sr_site_notice_heir } remove_variable = sr_site_notice_heir }
+	if = { limit = { has_variable = sr_site_notice_heir_more } remove_variable = sr_site_notice_heir_more }
+	if = { limit = { has_variable = sr_site_heir_notice_queued } remove_variable = sr_site_heir_notice_queued }
+}
+
+# Every player's Solar System rows, after a transfer.
+sr_sites_refresh_players = {
+	every_country = {
+		limit = { is_player = yes }
+		sr_sites_refresh_snapshot = yes
+	}
+}
+
+# ===== The global monthly step (sr_sites_on_actions.txt; no ROOT) =====
+sr_sites_global_monthly = {
+	# A save from before the record: build it from what countries carry
+	# (design § 7), once, then a grace of 45 days before a claim with no
+	# holder is released, so a founding event still open can be answered.
+	if = {
+		limit = { NOT = { has_global_variable = sr_sites_initialized } }
+		every_country = {
+			limit = { sr_has_space_colony = yes }
+			sr_sites_migrate_country = yes
+		}
+		set_global_variable = { name = sr_sites_initialized value = yes }
+		set_global_variable = { name = sr_sites_grace value = yes days = 45 }
+	}
+	# A save from before the Moon Base was retired (lunar colonization design
+	# § 10), once a game: in a new game it finds no one and only sets the flag.
+	if = {
+		limit = { NOT = { has_global_variable = sr_lunar_initialized } }
+		set_global_variable = { name = sr_lunar_initialized value = yes }
+		sr_lunar_migrate = yes
+	}
+	# Colony fleets land first (simple and full; sr_colony_fleet_effects.txt), so
+	# the world's step syncs the colonies they founded; then the inbound record
+	# and the stage follow the month's landings.
+	if = {
+		limit = { sr_colonies_contested_enabled = yes }
+		sr_cf_global_arrivals = yes
+		# Colony modules leave and land (sr_colony_module_effects.txt), so the
+		# world's step below syncs the modules that landed.
+		sr_ms_global_month = yes
+		# Full colonies: fleets land, then the month's fighting, before the
+		# worlds' step (slice 6 design § 6; sr_fleet_effects.txt).
+		if = {
+			limit = { sr_colonies_full_enabled = yes }
+			sr_fl_global_month = yes
+		}
+	}
+	sr_sites_monthly = yes
+	if = {
+		limit = { sr_colonies_contested_enabled = yes }
+		sr_cf_global_after = yes
+	}
+	sr_sites_refresh_players = yes
+}
+
+# ===== The retired Moon Base's old saves (lunar colonization design § 10) =====
+# Global scope, once a game (sr_sites_global_monthly, behind sr_lunar_initialized).
+# Every country that finished the old milestone (sr_completed_moon_base) keeps
+# its reward and record and is given one lunar world (sr_lunar_migrate_country,
+# generated): the world first, in order of completion where the save can tell
+# (the world first, sr_was_first_moon_base), then as every_country finds them.
+# An open Moon Base's progress is carried by the country pulse instead
+# (sr_lunar_carry_moon_base, sr_launch_window_effects.txt). The colonization
+# prerequisites (§ 4) apply at once: the Moon Landing, and the Mars Landing for
+# every world beyond the Moon.
+sr_lunar_migrate = {
+	set_global_variable = { name = sr_lunar_migrated_count value = 0 }
+	every_country = {
+		limit = { has_variable = sr_was_first_moon_base }
+		sr_lunar_migrate_country = yes
+	}
+	every_country = {
+		limit = {
+			has_variable = sr_completed_moon_base
+			NOT = { has_variable = sr_was_first_moon_base }
+		}
+		sr_lunar_migrate_country = yes
+	}
+	# A save whose race had ended before the Moon existed: a player who could
+	# colonize it (a finished programme, or the colonization method) is told
+	# the Moon is open by choice (sr_lunar_note_moon_open).
+	if = {
+		limit = { sr_race_over_moon_free = yes }
+		every_country = {
+			limit = {
+				is_player = yes
+				OR = {
+					has_variable = sr_completed_solar_colonization
+					modifier:country_sr_solar_colonization_program_bool = yes
+				}
+			}
+			sr_lunar_note_moon_open = yes
+		}
+	}
+	# The stage follows the claims once, as after any claim: Races Only steps it
+	# when its worlds are all claimed, Simple and Full recompute it (the lowest
+	# stage with a free world, the Moon in an old save).
+	if = {
+		limit = { has_global_variable = sr_colonization_stage }
+		sr_sites_stage_after_claim = yes
+	}
+	sr_lunar_selfcheck_migration = yes
+}
+
+# Country scope, from sr_lunar_migrate_take_<key> (generated): count the world
+# for the self-check, and tell a player which world its Moon Base became
+# (space_race_events.109). INDEX is the world's place in gen_solar_sites.SITES.
+sr_lunar_note_migrated = {
+	change_global_variable = { name = sr_lunar_migrated_count add = 1 }
+	if = {
+		limit = { is_player = yes }
+		set_variable = { name = sr_lunar_notice_site value = $INDEX$ }
+		sr_lunar_fire_notice = yes
+	}
+}
+
+# One .109 for a player both migrated and told the Moon is open (review M2):
+# both notes set their variable and queue it here, so it fires once and reads
+# both (d_both), as sr_site_fire_treaty_notice does for .90.
+sr_lunar_fire_notice = {
+	if = {
+		limit = { NOT = { has_variable = sr_lunar_notice_queued } }
+		set_variable = { name = sr_lunar_notice_queued value = yes days = 30 }
+		trigger_event = { id = space_race_events.109 days = 1 }
+	}
+}
+
+# Country scope (a player), from sr_lunar_migrate. A save from before the six
+# lunar worlds existed (34 worlds; build 2a added the Moon) in which every world
+# was claimed carries sr_all_colonies_complete, and its colony holders finished
+# colonization. They keep it all (owner, 2026-10-29): the record
+# (sr_completed_solar_colonization), Interplanetary Trade Networks, and the
+# Commercial Space Industry dividend, since the flag stays as history and
+# sr_space_race_concluded keeps holding. Colonizing the Moon is a choice there
+# for every country (sr_colonization_by_choice): Resume Solar System
+# Colonization, or Begin Solar Colonization, which pauses the dividend while
+# the programme runs. This notice says so (.109).
+sr_lunar_note_moon_open = {
+	set_variable = { name = sr_lunar_notice_reopened value = yes }
+	sr_lunar_fire_notice = yes
+}
+
+# Country scope, from te_decision_resume_solar_colonization (and Begin Solar
+# Colonization's marker) with the race over and a lunar world free: the
+# country chooses to colonize the Moon. A finished programme keeps its
+# completion record and Interplanetary Trade Networks: the marker
+# sr_colonization_resumed makes it running (sr_solar_colonization_running), so
+# it is billed, its four controls and Target work, and its dividend pauses
+# (sr_has_running_milestone). With the entry open the programme starts here,
+# at one funding level if none is left; with it closed, the marker lets the
+# entry open (its `possible`) and its `immediate` starts it. The entry's pulse
+# stops a resumed holder once no lunar world is free, removing the marker and
+# adding no second modifier; sr_colonization_resumed_expire clears it from a
+# country that holds no colony.
+sr_resume_solar_colonization = {
+	set_variable = { name = sr_colonization_resumed value = yes }
+	if = {
+		limit = { has_journal_entry = je_space_race_solar_colonization }
+		if = {
+			limit = { NOT = { has_variable = sr_active_solar_colonization } }
+			set_variable = { name = sr_active_solar_colonization value = yes }
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_progress_solar_colonization } }
+			set_variable = { name = sr_progress_solar_colonization value = 0 }
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_funding_solar_colonization } }
+			set_variable = { name = sr_funding_solar_colonization value = 1 }
+		}
+		sr_recalculate_cost = yes
+	}
+}
+
+# Country scope, the monthly space race pulse: the choice is for this Moon.
+# Once no lunar world is free and the programme has stopped, the marker goes,
+# so a lunar world freed later is a new choice.
+sr_colonization_resumed_expire = {
+	if = {
+		limit = {
+			has_variable = sr_colonization_resumed
+			NOT = { sr_sites_lunar_open = yes }
+			NOT = { has_variable = sr_active_solar_colonization }
+		}
+		remove_variable = sr_colonization_resumed
+	}
+}
+
+# Self-check lunar_migration (lunar colonization plan, review focus 1). Global
+# scope, at the end of sr_lunar_migrate, once a game. BROKEN when a country
+# that finished the old Moon Base ends without a lunar world while one is free
+# (the chain gave it none). OK when at least
+# one country was migrated, so a new game, where no one is, can't pass it.
+# The open Moon Base's carry logs its own lines (sr_lunar_carry_self_check).
+# te_debug_space_race.8 option a runs it again.
+sr_lunar_selfcheck_migration = {
+	if = {
+		limit = {
+			sr_lunar_world_free_any = yes
+			any_country = {
+				has_variable = sr_completed_moon_base
+				NOT = { sr_holds_lunar_world = yes }
+			}
+		}
+		random_country = {
+			limit = {
+				has_variable = sr_completed_moon_base
+				NOT = { sr_holds_lunar_world = yes }
+			}
+			debug_log = "TE_SELF_CHECK BROKEN lunar_migration country=[THIS.GetCountry.GetNameNoFormatting] migrated=[GetGlobalVariable('sr_lunar_migrated_count').GetValue|0] (a country that finished the old Moon Base holds no lunar world while one is free: sr_lunar_migrate_country gave it none; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_lunar_migrated_count
+			global_var:sr_lunar_migrated_count > 0
+		}
+		debug_log = "TE_SELF_CHECK OK lunar_migration migrated=[GetGlobalVariable('sr_lunar_migrated_count').GetValue|0] (each country that finished the old Moon Base holds a lunar world, or none was free; check each one's world and specialization against its purpose in the Solar System list) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
+# Country scope, from the monthly country pulse. The site_receiver_entry
+# self-check (design § 13): a country that received a colony without the Moon
+# Base and Mars Landing should have the entry open and the colony's modifiers
+# on it once the timer set at the transfer has run out.
+sr_site_receiver_check_step = {
+	if = {
+		limit = {
+			has_variable = sr_site_receiver_check
+			NOT = { has_variable = sr_site_receiver_check_timer }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = sr_sites_receiver_checked } }
+			set_global_variable = { name = sr_sites_receiver_checked value = yes }
+			if = {
+				limit = {
+					has_journal_entry = je_space_race_solar_colonization
+					sr_has_space_colony = yes
+				}
+				debug_log = "TE_SELF_CHECK OK site_receiver_entry: [THIS.GetCountry.GetNameNoFormatting] holds the entry and the colony"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN site_receiver_entry: [THIS.GetCountry.GetNameNoFormatting] has no entry, or lost the colony"
+			}
+		}
+		remove_variable = sr_site_receiver_check
+	}
+}
+
+# Cede Colony's apply, its last step (design § 13): once a game, whether the
+# article's input named a world the source held.
+sr_cede_colony_self_check = {
+	if = {
+		limit = { NOT = { has_global_variable = sr_cede_colony_checked } }
+		set_global_variable = { name = sr_cede_colony_checked value = yes }
+		if = {
+			limit = { has_local_variable = sr_cede_matched }
+			debug_log = "TE_SELF_CHECK OK cede_colony_input: the input building type named a world the source held"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cede_colony_input: no world matched the article's input"
+		}
+	}
+}

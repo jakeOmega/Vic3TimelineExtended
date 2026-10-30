@@ -76,6 +76,11 @@ sr_recalculate_cost = {
 	else = {
 		set_variable = { name = sr_cost_participation value = 0 } # REVIEWED 2026-09-26: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
 	}
+	# The funding cap the pace multipliers above were computed with
+	# (sr_funding_<m>_effective reads sr_max_funding_level; lunar colonization
+	# design § 5.1). Technologies and a power bloc principle move the cap with
+	# no button press, so space_race_on_action recalculates when this is stale.
+	set_variable = { name = sr_cost_funding_cap value = sr_max_funding_level } # REVIEWED 2026-10-29: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 	# Whether solar colonization was billed (sr_milestone_billed_solar_colonization).
 	# Its production method can be switched off with no button press, so
 	# space_race_on_action recalculates when this is stale.
@@ -162,7 +167,7 @@ sr_cleanup_inactive_space_race_milestones = {
 # sr_fire_ambitious_failure_event / sr_fire_safe_setback_event save the country
 # as scope:sr_setback_<milestone> before they dispatch, and saved scopes travel
 # with trigger_event, so the event and each of its options know which milestone
-# failed. The five helpers below act on that marked milestone only — never on
+# failed. The four helpers below act on that marked milestone only — never on
 # "every running milestone", and never on the sr_failed_<milestone> flags, which
 # two journal entries can raise in the same month (each entry's pulse is its own
 # script run, so markers never mix between entries).
@@ -192,32 +197,21 @@ sr_temporary_safety_review_effect = {
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = solar_colonization }
 }
 
-sr_apply_ambitious_failure_progress_loss = {
+# The failed milestone loses $MONTHS$ months of progress (see "Progress in
+# months" below): a minor setback (Safe, Standard) 1 to 4 months, the default
+# answer 2 or 3; an Ambitious failure 4 months with the six-month review, 5 or
+# 6 for the answers that press on without it. Ambitious months are of its
+# faster pace.
+sr_setback_lose_months = {
 	sr_resolve_setback_markers = yes
-	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = probe              MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = moon_base          MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = mars_landing       MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = interstellar_probe MULT = 0.75 }
-	# Solar colonization: a share of at most one goal, never of the fleets
-	# staged in orbit (Global Commons § 5.2, sr_launch_window_effects.txt).
-	sr_apply_solar_colonization_progress_loss = { MULT = 0.75 }
-}
-
-sr_apply_safe_setback_progress_loss = {
-	sr_resolve_setback_markers = yes
-	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = probe              MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = moon_base          MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = mars_landing       MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = interstellar_probe MULT = 0.85 }
-	# Solar colonization: a share of at most one goal, never of the fleets
-	# staged in orbit (Global Commons § 5.2, sr_launch_window_effects.txt).
-	sr_apply_solar_colonization_progress_loss = { MULT = 0.85 }
+	sr_setback_lose_months_base = { MILESTONE = suborbital         MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = orbital            MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = moon_landing       MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = probe              MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = moon_base          MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = mars_landing       MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = interstellar_probe MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = solar_colonization MONTHS = $MONTHS$ }
 }
 
 sr_clear_failed_milestone_flags = {
@@ -230,23 +224,6 @@ sr_clear_failed_milestone_flags = {
 	sr_clear_failed_flag_base = { MILESTONE = mars_landing       }
 	sr_clear_failed_flag_base = { MILESTONE = interstellar_probe }
 	sr_clear_failed_flag_base = { MILESTONE = solar_colonization }
-}
-
-# Add var:sr_progress_boost (negative in every failure event) to the failed
-# milestone only. The failure events' counterpart of sr_boost_active_milestones,
-# which the in-progress events (49, 50, 52) use to push every running milestone.
-# Set sr_progress_boost before calling.
-sr_boost_setback_milestone = {
-	sr_resolve_setback_markers = yes
-	sr_boost_setback_milestone_base = { MILESTONE = suborbital         }
-	sr_boost_setback_milestone_base = { MILESTONE = orbital            }
-	sr_boost_setback_milestone_base = { MILESTONE = moon_landing       }
-	sr_boost_setback_milestone_base = { MILESTONE = probe              }
-	sr_boost_setback_milestone_base = { MILESTONE = moon_base          }
-	sr_boost_setback_milestone_base = { MILESTONE = mars_landing       }
-	sr_boost_setback_milestone_base = { MILESTONE = interstellar_probe }
-	sr_boost_setback_milestone_base = { MILESTONE = solar_colonization }
-	remove_variable = sr_progress_boost
 }
 
 # "A more cautious approach" (space_race_events.10.b, .15.c): switch the failed
@@ -270,24 +247,84 @@ sr_switch_setback_milestone_to_safe = {
 	}
 }
 
-# Boost progress for all active milestones
-# Set sr_progress_boost before calling (can be negative for penalties)
+# Every running milestone gains $MONTHS$ months of progress (see "Progress in
+# months" below). The in-progress events that push the whole programme (20, 31,
+# 49, 50, 52) use it.
 sr_boost_active_milestones = {
-	sr_boost_active_milestone_base = { MILESTONE = suborbital         }
-	sr_boost_active_milestone_base = { MILESTONE = orbital            }
-	sr_boost_active_milestone_base = { MILESTONE = moon_landing       }
-	sr_boost_active_milestone_base = { MILESTONE = probe              }
-	sr_boost_active_milestone_base = { MILESTONE = moon_base          }
-	sr_boost_active_milestone_base = { MILESTONE = mars_landing       }
-	sr_boost_active_milestone_base = { MILESTONE = interstellar_probe }
+	sr_boost_active_milestone_base = { MILESTONE = suborbital         MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = orbital            MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = moon_landing       MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = probe              MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = moon_base          MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = mars_landing       MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = interstellar_probe MONTHS = $MONTHS$ }
 	# Solar colonization's journal entry stays open, frozen, while its production
 	# method is switched off (and after the last colony); its pulse adds nothing
 	# then, and neither does an event.
 	if = {
 		limit = { sr_solar_colonization_running = yes }
-		sr_boost_active_milestone_base = { MILESTONE = solar_colonization }
+		sr_boost_active_milestone_base = { MILESTONE = solar_colonization MONTHS = $MONTHS$ }
 	}
-	remove_variable = sr_progress_boost
+}
+
+# --- Progress in months -------------------------------------------------------
+# Every event that moves a milestone's progress moves it by whole months of the
+# programme's pace: sr_progress, what the monthly pulse adds to each running
+# milestone (2026-10-25). Until then a setback kept x0.75 (Ambitious) or x0.85
+# (Safe, Standard) of the progress, most options took a flat 3 to 10 points on
+# top, and the in-progress events gave flat 2 to 30. Both scaled badly. The risk
+# is a monthly roll, so a milestone sees setbacks in proportion to the time it
+# takes, and each one took a share of a progress that grows toward a goal up to
+# 13 times larger by the end of the race: a slow programme settled where its
+# pace equalled its losses. Simulated on Standard, the Mars Landing at a pace of
+# 4 a month took 880 months on average against 113 without setbacks (151 now),
+# and at 2 never finished. The flat amounts meant nothing past the first
+# milestones.
+# In months, a setback costs every milestone the same share of its time,
+# whatever its goal or pace, and the risk alone makes later milestones harder.
+#
+# A month is the pace sr_record_event_pace stored when the event fired (each
+# such event calls it from its immediate), so changing funding while an event
+# waits changes neither what it costs nor what it pays (sr_event_pace_value).
+# Two such events open at once share the variable; the second records the pace
+# of a moment later, which differs only if funding changed in between.
+sr_record_event_pace = {
+	set_variable = { name = sr_event_pace value = sr_progress }
+}
+
+# Add $MONTHS$ months of progress to one milestone. Country scope.
+sr_gain_progress_months = {
+	if = {
+		limit = { has_variable = sr_progress_$MILESTONE$ }
+		change_variable = {
+			name = sr_progress_$MILESTONE$
+			add = {
+				value = sr_event_pace_value
+				multiply = $MONTHS$
+			}
+		}
+	}
+}
+
+# Take $MONTHS$ months of progress from one milestone: never more than it has,
+# nor more than one goal. Progress past one goal is Solar System Colonization's
+# fleets staged in orbit (Global Commons § 5.2), which a setback never touches,
+# so a large staged bank doesn't make every setback ruinous (and gives no
+# reason to cut funding while waiting); every other milestone completes at its
+# goal. Country scope.
+sr_lose_progress_months = {
+	if = {
+		limit = { has_variable = sr_progress_$MILESTONE$ }
+		change_variable = {
+			name = sr_progress_$MILESTONE$
+			subtract = {
+				value = sr_event_pace_value
+				multiply = $MONTHS$
+				max = sr_$MILESTONE$_goal
+				max = var:sr_progress_$MILESTONE$
+			}
+		}
+	}
 }
 
 # Called when a milestone is completed - handles cleanup
@@ -433,9 +470,9 @@ sr_cleanup_milestone_variables_effect = {
 }
 
 # --- Per-milestone iteration bases (Style B inline orchestrator pattern) -----
-# Five top-level helpers (sr_temporary_safety_review_effect,
-# sr_apply_ambitious_failure_progress_loss, sr_apply_safe_setback_progress_loss,
-# sr_clear_failed_milestone_flags, sr_boost_active_milestones) all walk the
+# The top-level helpers (sr_temporary_safety_review_effect,
+# sr_setback_lose_months, sr_clear_failed_milestone_flags,
+# sr_switch_setback_milestone_to_safe, sr_boost_active_milestones) all walk the
 # same 8 milestones (suborbital..solar_colonization). Each delegates to one of
 # these bases and the orchestrator lists the tokens explicitly so the support
 # matrix stays grep-able at the call site.
@@ -458,15 +495,11 @@ sr_apply_safety_review_to_milestone_base = {
 	}
 }
 
-# Multiplicatively reduce the failed milestone's progress. Country scope.
-# $MULT$ is the retention factor (0.75 ambitious, 0.85 safe).
-sr_apply_progress_loss_base = {
+# sr_setback_lose_months' body: the failed milestone only. Country scope.
+sr_setback_lose_months_base = {
 	if = {
-		limit = {
-			exists = scope:sr_setback_$MILESTONE$
-			has_variable = sr_progress_$MILESTONE$
-		}
-		change_variable = { name = sr_progress_$MILESTONE$ multiply = $MULT$ }
+		limit = { exists = scope:sr_setback_$MILESTONE$ }
+		sr_lose_progress_months = { MILESTONE = $MILESTONE$ MONTHS = $MONTHS$ }
 	}
 }
 
@@ -478,14 +511,6 @@ sr_clear_failed_flag_base = {
 			has_variable = sr_failed_$MILESTONE$
 		}
 		remove_variable = sr_failed_$MILESTONE$
-	}
-}
-
-# sr_boost_setback_milestone's body: the failed milestone only. Country scope.
-sr_boost_setback_milestone_base = {
-	if = {
-		limit = { exists = scope:sr_setback_$MILESTONE$ }
-		sr_boost_active_milestone_base = { MILESTONE = $MILESTONE$ }
 	}
 }
 
@@ -528,34 +553,37 @@ sr_resolve_setback_marker_base = {
 	}
 }
 
-# Add var:sr_progress_boost (signed) to one active milestone's progress, clamped
-# at zero. Country scope. Caller sets sr_progress_boost before the orchestrator
-# and removes it afterwards.
+# sr_boost_active_milestones' body: $MONTHS$ months of progress to one milestone
+# if it is under way. Country scope.
 sr_boost_active_milestone_base = {
 	if = {
 		limit = { has_variable = sr_active_$MILESTONE$ }
-		change_variable = { name = sr_progress_$MILESTONE$ add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_$MILESTONE$ < 0 }
-			set_variable = { name = sr_progress_$MILESTONE$ value = 0 }
-		}
+		sr_gain_progress_months = { MILESTONE = $MILESTONE$ MONTHS = $MONTHS$ }
 	}
 }
 
-# Strip the cost and funding-progress modifiers from one milestone's JE.
-# Country scope. Uses ?= so an inactive JE silently no-ops instead of erroring.
+# Strip the cost and the two funding modifiers (pace and throughput) from one
+# milestone's JE. Country scope. Uses ?= so an inactive JE silently no-ops
+# instead of erroring. sr_recalculate_cost runs it on every entry before
+# sr_apply_milestone_cost_modifiers_base, so each modifier is removed before it
+# is added again (a same-name add_modifier stacks).
 sr_clear_milestone_cost_modifiers_base = {
 	je:je_space_race_$MILESTONE$ ?= {
 		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
 		if = { limit = { has_modifier = sr_funding_progress   } remove_modifier = sr_funding_progress   }
+		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
 	}
 }
 
-# Re-apply the cost and funding-progress modifiers to one milestone's JE,
+# Re-apply the cost and the two funding modifiers to one milestone's JE,
 # gated on sr_milestone_billed_<X> (the active flag; for solar colonization,
-# its programme actually running). Multiplier names interpolate from
-# $MILESTONE$ (sr_<X>_cost and sr_funding_<X>_level — verified to exist for
-# all 8 tokens). Country scope. ?= because each milestone entry's immediate
+# its programme actually running). The pace (sr_funding_progress) takes the
+# effective level, which counts the levels past the cap for less; the
+# throughput (sr_funding_throughput) and the cost take the level itself, so a
+# level past the cap still costs in full and adds its full +25% (lunar
+# colonization design § 5.1). Multiplier names interpolate from $MILESTONE$
+# (sr_<X>_cost, sr_funding_<X>_effective and sr_funding_<X>_level — verified to
+# exist for all 8 tokens). Country scope. ?= because each milestone entry's immediate
 # sets sr_active_<X> and then runs sr_recalculate_cost, and when a
 # revolution's winner inherits the entry that immediate runs before je: can
 # find it ("Failed to scope to journal entry by tag", Spain's moon landing in
@@ -565,8 +593,9 @@ sr_apply_milestone_cost_modifiers_base = {
 	if = {
 		limit = { sr_milestone_billed_$MILESTONE$ = yes }
 		je:je_space_race_$MILESTONE$ ?= {
-			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost          }
-			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_level }
+			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost              }
+			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_effective }
+			add_modifier = { name = sr_funding_throughput multiplier = sr_funding_$MILESTONE$_level     }
 		}
 	}
 }
@@ -681,6 +710,42 @@ sr_effect_fund_up = {
 		text = "SR_INCREASE_FUNDING_EFFECT"
 		change_variable = { name = sr_funding_$MILESTONE$ add = 1 }
 		sr_recalculate_cost = yes
+	}
+	# The next level is past the cap: say what share of a level's pace it adds
+	# (lunar colonization design § 5.1). Tooltip lines only; each renders
+	# while its limit holds. The level is at or past the cap when the level up
+	# to the cap fills it (a guarded read, unlike var:); sr_funding_<m>_past_cap
+	# counts the levels already past, so the next is that plus one. Nothing is
+	# printed once the ladder is used up (six past: the button is greyed, or a
+	# falling cap left the level further past), since no further share exists.
+	if = {
+		limit = {
+			sr_funding_$MILESTONE$_within_cap >= sr_max_funding_level
+			sr_funding_$MILESTONE$_past_cap < sr_funding_past_cap_steps
+		}
+		if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 5 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_7
+		}
+		else_if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 4 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_6
+		}
+		else_if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 3 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_5
+		}
+		else_if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 2 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_4
+		}
+		else_if = {
+			limit = { sr_funding_$MILESTONE$_past_cap >= 1 }
+			custom_tooltip = SR_FUND_UP_PAST_CAP_3
+		}
+		else = {
+			custom_tooltip = SR_FUND_UP_PAST_CAP_2
+		}
 	}
 }
 
@@ -807,473 +872,39 @@ sr_apply_moon_base_reward          = { sr_apply_milestone_reward_base = { MILEST
 sr_apply_mars_landing_reward       = { sr_apply_milestone_reward_base = { MILESTONE = mars_landing       } }
 sr_apply_interstellar_probe_reward = { sr_apply_milestone_reward_base = { MILESTONE = interstellar_probe } }
 
-# Solar System Colonization - establish a colony at a random unclaimed location.
-# Only a site a fleet can leave for now is drawn, and only among the cheapest
-# (Global Commons § 5.2): each site's trigger asks sr_launch_site_departs for
-# its window body (Mercury, never gated, sr_launch_mercury_departs). The body of
-# each site is the generator's BODIES table (scripts/generators/
-# gen_launch_windows.py; test_launch_windows.py holds the two equal). Called
-# from sr_launch_month only, which checks first that some site can depart.
-sr_establish_colony_effect = {
-	# Initialize stage if needed
+# --- The first lunar colony (lunar colonization design § 3.6) ------------------
+# The Moon Base milestone is retired (§ 7): the first lunar world a country
+# founds with its own fleet takes its place in the race. Called by each lunar
+# world's sr_site_found_<key> and lunar draw branch (gen_solar_sites.py), after
+# the world's sync, so a world received by treaty, inheritance, seizure, a
+# petition or the old-save migration (sr_lunar_migrate_take_<key>) never counts.
+# The record keeps the Moon Base's names, so every reader of
+# sr_completed_moon_base, sr_was_first_moon_base and sr_global_first_moon_base
+# (the Program row, Space Powers, the UN count, covert "ahead in space", the
+# Grand Monument) works unchanged. The bookkeeping is
+# sr_complete_milestone_effect_base's without its sr_recalculate_cost: this runs
+# inside the colonization pulse, where a second cost repost would stack the
+# cost modifier (add/remove are not visible within one effect). The reward is
+# paid by space_race_events.6's option, which plays the day after the founding
+# event. Country scope: the founder.
+sr_lunar_colony_founded = {
 	if = {
-		limit = { NOT = { has_global_variable = sr_colonization_stage } }
-		set_global_variable = { name = sr_colonization_stage value = 1 }
-	}
-	# Count the world's claimed sites before the draw. Once every site is
-	# claimed (stage 5 full) the stage lists below have no valid entry and
-	# claim nothing, so the colony count and the first-colony charter must
-	# follow an actual claim, not the bar filling.
-	set_local_variable = { name = sr_colonies_claimed_before value = sr_total_global_colonies }
-
-	# ===== STAGE 1: Mars & Asteroids =====
-	if = {
-		limit = { global_var:sr_colonization_stage = 1 }
-		random_list = {
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_valles_marineris }
-					sr_launch_site_departs = { BODY = mars }
-				}
-				set_global_variable = { name = sr_colony_valles_marineris value = yes }
-				sr_launch_window_gate_check = { BODY = mars }
-				trigger_event = { id = space_race_colony_events.1 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_olympus_mons }
-					sr_launch_site_departs = { BODY = mars }
-				}
-				set_global_variable = { name = sr_colony_olympus_mons value = yes }
-				sr_launch_window_gate_check = { BODY = mars }
-				sr_seed_colony_discovery = { DISCOVERY = olympus_tubes }
-				trigger_event = { id = space_race_colony_events.2 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_hellas_planitia }
-					sr_launch_site_departs = { BODY = mars }
-				}
-				set_global_variable = { name = sr_colony_hellas_planitia value = yes }
-				sr_launch_window_gate_check = { BODY = mars }
-				sr_seed_colony_discovery = { DISCOVERY = hellas_fossils }
-				trigger_event = { id = space_race_colony_events.3 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_utopia_planitia }
-					sr_launch_site_departs = { BODY = mars }
-				}
-				set_global_variable = { name = sr_colony_utopia_planitia value = yes }
-				sr_launch_window_gate_check = { BODY = mars }
-				sr_seed_colony_discovery = { DISCOVERY = utopia_glacier }
-				trigger_event = { id = space_race_colony_events.4 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_arcadia_planitia }
-					sr_launch_site_departs = { BODY = mars }
-				}
-				set_global_variable = { name = sr_colony_arcadia_planitia value = yes }
-				sr_launch_window_gate_check = { BODY = mars }
-				sr_seed_colony_discovery = { DISCOVERY = arcadia_brines }
-				trigger_event = { id = space_race_colony_events.5 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_ceres }
-					sr_launch_site_departs = { BODY = ceres }
-				}
-				set_global_variable = { name = sr_colony_ceres value = yes }
-				sr_launch_window_gate_check = { BODY = ceres }
-				sr_seed_colony_discovery = { DISCOVERY = ceres_reservoir }
-				trigger_event = { id = space_race_colony_events.6 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_vesta }
-					sr_launch_site_departs = { BODY = vesta }
-				}
-				set_global_variable = { name = sr_colony_vesta value = yes }
-				sr_launch_window_gate_check = { BODY = vesta }
-				sr_seed_colony_discovery = { DISCOVERY = vesta_impactor }
-				trigger_event = { id = space_race_colony_events.7 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_psyche }
-					sr_launch_site_departs = { BODY = psyche }
-				}
-				set_global_variable = { name = sr_colony_psyche value = yes }
-				sr_launch_window_gate_check = { BODY = psyche }
-				sr_seed_colony_discovery = { DISCOVERY = psyche_metal }
-				trigger_event = { id = space_race_colony_events.8 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_pallas }
-					sr_launch_site_departs = { BODY = pallas }
-				}
-				set_global_variable = { name = sr_colony_pallas value = yes }
-				sr_launch_window_gate_check = { BODY = pallas }
-				sr_seed_colony_discovery = { DISCOVERY = pallas_water }
-				trigger_event = { id = space_race_colony_events.9 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_hygiea }
-					sr_launch_site_departs = { BODY = hygiea }
-				}
-				set_global_variable = { name = sr_colony_hygiea value = yes }
-				sr_launch_window_gate_check = { BODY = hygiea }
-				trigger_event = { id = space_race_colony_events.10 }
-			}
-		}
-	}
-	# ===== STAGE 2: Jupiter System & Venus =====
-	else_if = {
-		limit = { global_var:sr_colonization_stage = 2 }
-		random_list = {
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_io }
-					sr_launch_site_departs = { BODY = jupiter }
-				}
-				set_global_variable = { name = sr_colony_io value = yes }
-				sr_launch_window_gate_check = { BODY = jupiter }
-				sr_seed_colony_discovery = { DISCOVERY = io_roof }
-				trigger_event = { id = space_race_colony_events.11 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_europa }
-					sr_launch_site_departs = { BODY = jupiter }
-				}
-				set_global_variable = { name = sr_colony_europa value = yes }
-				sr_launch_window_gate_check = { BODY = jupiter }
-				sr_seed_colony_discovery = { DISCOVERY = europa_life }
-				sr_seed_colony_discovery = { DISCOVERY = europa_vents }
-				trigger_event = { id = space_race_colony_events.12 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_ganymede }
-					sr_launch_site_departs = { BODY = jupiter }
-				}
-				set_global_variable = { name = sr_colony_ganymede value = yes }
-				sr_launch_window_gate_check = { BODY = jupiter }
-				sr_seed_colony_discovery = { DISCOVERY = ganymede_layers }
-				trigger_event = { id = space_race_colony_events.13 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_callisto }
-					sr_launch_site_departs = { BODY = jupiter }
-				}
-				set_global_variable = { name = sr_colony_callisto value = yes }
-				sr_launch_window_gate_check = { BODY = jupiter }
-				sr_seed_colony_discovery = { DISCOVERY = callisto_archive }
-				trigger_event = { id = space_race_colony_events.14 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_himalia }
-					sr_launch_site_departs = { BODY = jupiter }
-				}
-				set_global_variable = { name = sr_colony_himalia value = yes }
-				sr_launch_window_gate_check = { BODY = jupiter }
-				trigger_event = { id = space_race_colony_events.15 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_amalthea }
-					sr_launch_site_departs = { BODY = jupiter }
-				}
-				set_global_variable = { name = sr_colony_amalthea value = yes }
-				sr_launch_window_gate_check = { BODY = jupiter }
-				trigger_event = { id = space_race_colony_events.16 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_venus }
-					sr_launch_site_departs = { BODY = venus }
-				}
-				set_global_variable = { name = sr_colony_venus value = yes }
-				sr_launch_window_gate_check = { BODY = venus }
-				sr_seed_colony_discovery = { DISCOVERY = venus_waves }
-				trigger_event = { id = space_race_colony_events.17 }
-			}
-		}
-	}
-	# ===== STAGE 3: Mercury & Saturn System =====
-	else_if = {
-		limit = { global_var:sr_colonization_stage = 3 }
-		random_list = {
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_mercury }
-					sr_launch_mercury_departs = yes
-				}
-				set_global_variable = { name = sr_colony_mercury value = yes }
-				sr_seed_colony_discovery = { DISCOVERY = mercury_archive }
-				trigger_event = { id = space_race_colony_events.18 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_titan }
-					sr_launch_site_departs = { BODY = saturn }
-				}
-				set_global_variable = { name = sr_colony_titan value = yes }
-				sr_launch_window_gate_check = { BODY = saturn }
-				sr_seed_colony_discovery = { DISCOVERY = titan_chemistry }
-				trigger_event = { id = space_race_colony_events.19 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_enceladus }
-					sr_launch_site_departs = { BODY = saturn }
-				}
-				set_global_variable = { name = sr_colony_enceladus value = yes }
-				sr_launch_window_gate_check = { BODY = saturn }
-				sr_seed_colony_discovery = { DISCOVERY = enceladus_life }
-				trigger_event = { id = space_race_colony_events.20 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_rhea }
-					sr_launch_site_departs = { BODY = saturn }
-				}
-				set_global_variable = { name = sr_colony_rhea value = yes }
-				sr_launch_window_gate_check = { BODY = saturn }
-				trigger_event = { id = space_race_colony_events.21 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_mimas }
-					sr_launch_site_departs = { BODY = saturn }
-				}
-				set_global_variable = { name = sr_colony_mimas value = yes }
-				sr_launch_window_gate_check = { BODY = saturn }
-				trigger_event = { id = space_race_colony_events.22 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_iapetus }
-					sr_launch_site_departs = { BODY = saturn }
-				}
-				set_global_variable = { name = sr_colony_iapetus value = yes }
-				sr_launch_window_gate_check = { BODY = saturn }
-				trigger_event = { id = space_race_colony_events.23 }
-			}
-		}
-	}
-	# ===== STAGE 4: Uranus & Neptune Systems =====
-	else_if = {
-		limit = { global_var:sr_colonization_stage = 4 }
-		random_list = {
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_titania }
-					sr_launch_site_departs = { BODY = uranus }
-				}
-				set_global_variable = { name = sr_colony_titania value = yes }
-				sr_launch_window_gate_check = { BODY = uranus }
-				sr_seed_colony_discovery = { DISCOVERY = titania_ocean }
-				trigger_event = { id = space_race_colony_events.24 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_oberon }
-					sr_launch_site_departs = { BODY = uranus }
-				}
-				set_global_variable = { name = sr_colony_oberon value = yes }
-				sr_launch_window_gate_check = { BODY = uranus }
-				trigger_event = { id = space_race_colony_events.25 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_miranda }
-					sr_launch_site_departs = { BODY = uranus }
-				}
-				set_global_variable = { name = sr_colony_miranda value = yes }
-				sr_launch_window_gate_check = { BODY = uranus }
-				trigger_event = { id = space_race_colony_events.26 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_ariel }
-					sr_launch_site_departs = { BODY = uranus }
-				}
-				set_global_variable = { name = sr_colony_ariel value = yes }
-				sr_launch_window_gate_check = { BODY = uranus }
-				trigger_event = { id = space_race_colony_events.27 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_triton }
-					sr_launch_site_departs = { BODY = neptune }
-				}
-				set_global_variable = { name = sr_colony_triton value = yes }
-				sr_launch_window_gate_check = { BODY = neptune }
-				sr_seed_colony_discovery = { DISCOVERY = triton_jet }
-				trigger_event = { id = space_race_colony_events.28 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_proteus }
-					sr_launch_site_departs = { BODY = neptune }
-				}
-				set_global_variable = { name = sr_colony_proteus value = yes }
-				sr_launch_window_gate_check = { BODY = neptune }
-				trigger_event = { id = space_race_colony_events.29 }
-			}
-		}
-	}
-	# ===== STAGE 5: Kuiper Belt & Beyond =====
-	else_if = {
-		limit = { global_var:sr_colonization_stage = 5 }
-		random_list = {
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_pluto }
-					sr_launch_site_departs = { BODY = kuiper }
-				}
-				set_global_variable = { name = sr_colony_pluto value = yes }
-				sr_launch_window_gate_check = { BODY = kuiper }
-				sr_seed_colony_discovery = { DISCOVERY = pluto_antifreeze }
-				trigger_event = { id = space_race_colony_events.30 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_eris }
-					sr_launch_site_departs = { BODY = kuiper }
-				}
-				set_global_variable = { name = sr_colony_eris value = yes }
-				sr_launch_window_gate_check = { BODY = kuiper }
-				trigger_event = { id = space_race_colony_events.31 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_makemake }
-					sr_launch_site_departs = { BODY = kuiper }
-				}
-				set_global_variable = { name = sr_colony_makemake value = yes }
-				sr_launch_window_gate_check = { BODY = kuiper }
-				trigger_event = { id = space_race_colony_events.32 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_haumea }
-					sr_launch_site_departs = { BODY = kuiper }
-				}
-				set_global_variable = { name = sr_colony_haumea value = yes }
-				sr_launch_window_gate_check = { BODY = kuiper }
-				trigger_event = { id = space_race_colony_events.33 }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_global_variable = sr_colony_sedna }
-					sr_launch_site_departs = { BODY = kuiper }
-				}
-				set_global_variable = { name = sr_colony_sedna value = yes }
-				sr_launch_window_gate_check = { BODY = kuiper }
-				trigger_event = { id = space_race_colony_events.34 }
-			}
-		}
-	}
-
-	# A site was claimed: count it for this country. The national/
-	# international charter story follows a real first colony. Delay it past
-	# the location's own specialization event (duration = 3).
-	if = {
-		limit = { local_var:sr_colonies_claimed_before < sr_total_global_colonies }
-		change_variable = { name = sr_colony_count add = 1 }
+		limit = { NOT = { has_variable = sr_completed_moon_base } }
+		set_variable = { name = sr_completed_moon_base value = yes }
 		if = {
-			limit = {
-				var:sr_colony_count = 1
-				NOT = { has_variable = ste_event_18_fired }
-			}
-			set_variable = { name = sr_colony_charter_pending value = yes days = 14 }
-			trigger_event = { id = society_technology_events.18 days = 7 }
+			limit = { NOT = { has_global_variable = sr_global_first_moon_base } }
+			set_global_variable = { name = sr_global_first_moon_base value = yes }
+			set_variable = { name = sr_was_first_moon_base value = yes }
 		}
-	}
-
-	# Check stage advancement after establishing colony
-	sr_check_colony_stage_effect = yes
-}
-
-# Check if current colonization stage is complete and advance
-sr_check_colony_stage_effect = {
-	# Stage 1 complete → Stage 2
-	if = {
-		limit = {
-			global_var:sr_colonization_stage = 1
-			has_global_variable = sr_colony_valles_marineris
-			has_global_variable = sr_colony_olympus_mons
-			has_global_variable = sr_colony_hellas_planitia
-			has_global_variable = sr_colony_utopia_planitia
-			has_global_variable = sr_colony_arcadia_planitia
-			has_global_variable = sr_colony_ceres
-			has_global_variable = sr_colony_vesta
-			has_global_variable = sr_colony_psyche
-			has_global_variable = sr_colony_pallas
-			has_global_variable = sr_colony_hygiea
-		}
-		set_global_variable = { name = sr_colonization_stage value = 2 }
-	}
-	# Stage 2 complete → Stage 3
-	else_if = {
-		limit = {
-			global_var:sr_colonization_stage = 2
-			has_global_variable = sr_colony_io
-			has_global_variable = sr_colony_europa
-			has_global_variable = sr_colony_ganymede
-			has_global_variable = sr_colony_callisto
-			has_global_variable = sr_colony_himalia
-			has_global_variable = sr_colony_amalthea
-			has_global_variable = sr_colony_venus
-		}
-		set_global_variable = { name = sr_colonization_stage value = 3 }
-	}
-	# Stage 3 complete → Stage 4
-	else_if = {
-		limit = {
-			global_var:sr_colonization_stage = 3
-			has_global_variable = sr_colony_mercury
-			has_global_variable = sr_colony_titan
-			has_global_variable = sr_colony_enceladus
-			has_global_variable = sr_colony_rhea
-			has_global_variable = sr_colony_mimas
-			has_global_variable = sr_colony_iapetus
-		}
-		set_global_variable = { name = sr_colonization_stage value = 4 }
-	}
-	# Stage 4 complete → Stage 5
-	else_if = {
-		limit = {
-			global_var:sr_colonization_stage = 4
-			has_global_variable = sr_colony_titania
-			has_global_variable = sr_colony_oberon
-			has_global_variable = sr_colony_miranda
-			has_global_variable = sr_colony_ariel
-			has_global_variable = sr_colony_triton
-			has_global_variable = sr_colony_proteus
-		}
-		set_global_variable = { name = sr_colonization_stage value = 5 }
-	}
-	# Stage 5 complete → All done
-	else_if = {
-		limit = {
-			global_var:sr_colonization_stage = 5
-			has_global_variable = sr_colony_pluto
-			has_global_variable = sr_colony_eris
-			has_global_variable = sr_colony_makemake
-			has_global_variable = sr_colony_haumea
-			has_global_variable = sr_colony_sedna
-		}
-		set_global_variable = { name = sr_all_colonies_complete value = yes }
+		sr_notify_milestone_achievement = { MILESTONE = moon_base }
+		trigger_event = { id = space_race_events.6 days = 1 }
 	}
 }
+
+# Solar System Colonization's founding draw (sr_establish_colony_effect) and stage
+# check (sr_check_colony_stage_effect) are generated from one table of the 40
+# worlds: common/scripted_effects/sr_sites_generated.txt, from
+# scripts/generators/gen_solar_sites.py.
 
 # Mission failure effect - the progress setback is applied in the JE pulse before the event fires
 sr_mission_failure_effect = {
@@ -1450,63 +1081,40 @@ sr_fire_safe_setback_event = {
 	}
 }
 
-# --- Display-only: who else is racing for one milestone ----------------------
-# Rendered by sr_rivals_sgui through ExecuteTooltip, so nothing here ever runs.
-# Country scope (ROOT = the panel's owner). $MILESTONE$ is one of the eight
-# milestone tokens.
-#
-# The participation test is deliberately the same one the monthly pulse uses:
-# sr_ai_should_participate. A great power outside the top three can hold
-# sr_active_$MILESTONE$ and never tick a single month of progress, and listing it
-# as a competitor would be a lie.
-#
-# What this does NOT show is how far along a rival is. Programmes are announced;
-# their internal schedules are not, and reading another country's
-# sr_progress_$MILESTONE$ would hand the player omniscience the system has never
-# given. The claim on "the first" is public — it is a global variable — and the
-# panel's overview shows it (sr_disp_first_claimed_<m>). Solar colonization has
-# no first: no sr_first_solar_colonization reward, and no sr_global_first_ flag
-# is ever written for it (it does not go through
-# sr_complete_milestone_effect_base).
-sr_rivals_participants_base = {
-	if = {
-		limit = {
-			any_country = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
-		}
-		custom_tooltip_no_bullet = sr_rivals_intro
-		every_country = {
-			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
-			custom_tooltip = sr_rivals_entry
-		}
-	}
-	else = {
-		custom_tooltip_no_bullet = sr_rivals_none
-	}
-}
-
 # --- Display-only: rivals' estimated progress --------------------------------
-# The Rivals rows (space_race_widget.gui, te_sr_rival_row) show up to five
-# rivals, each as an estimate of its progress inside a band. The owner asked for
-# "a bar with some fuzz ... less if you have an intelligence network there".
+# The Rivals section (space_race_widget.gui, te_sr_sec_rivals) lists every
+# other power whose programme is running this milestone and moving, each as an
+# estimate of its progress inside a band. The owner asked for "a bar with some
+# fuzz ... less if you have an intelligence network there".
 #
+# - Who: sr_is_rival, the participation test the monthly pulse uses
+#   (sr_ai_should_participate). A great power outside the top three can hold
+#   sr_active_$MILESTONE$ and never tick a single month of progress, and
+#   listing it as a competitor would be a lie.
 # - The fuzz is one random offset per rival and milestone, sr_fuzz_<m> (−1 to
 #   +1 in nine steps), drawn again a year after it was drawn (sr_fuzz_until_<m>,
 #   a month index). Script values cannot roll dice, so it is a variable.
 # - The band around it is the viewer's: ±25% of the goal, ±10% or ±5% with a
 #   covert network of intelligence tier 1 or 2 in the rival
 #   (sr_disp_rival_band). The estimate is progress + offset × band, so the true
-#   figure is always inside the band drawn around it.
-# - The rows' order and names come from here, once a month, into the viewer's
-#   own variables: sr_rival_total_<m> (how many rivals), and
-#   sr_rival_<m>_<1..5>, each rival's capital (gotcha #11: the GUI reaches a
-#   country through a stored state). The numbers are read live, per frame,
-#   through script values with the rival passed in as scope:sr_rival.
+#   figure is always inside the band drawn around it. Programmes are announced;
+#   their schedules are not, so no row ever reads a rival's sr_progress_<m>
+#   straight.
+# - The rows come from here, once a month, into the viewer's own variable
+#   list sr_rivals_list_<m>: every rival's capital, by the open estimate
+#   (sr_rival_est_open_<m>), furthest first (audit SPC-9). The panel draws it as
+#   a datamodel of states and reaches each country through its capital
+#   (gotcha #11); the numbers are read live, per frame, through script values
+#   with the rival passed in as scope:sr_rival.
+# - Solar colonization lists its rivals the same way; it has no first to race
+#   for (no sr_first_solar_colonization reward, no sr_global_first_ flag: it
+#   does not go through sr_complete_milestone_effect_base).
 #
 # Players only: nobody else looks, and the draws happen here, on the rivals a
 # player can see, so no AI pulse carries any of it. Several players seeing one
 # rival share its offset, and a month index (not a countdown) dates it, so a
-# second player's pulse cannot age it twice. Everything is a variable, so a
-# revolution's winner keeps it; the snapshot is rebuilt every month anyway.
+# second player's pulse cannot age it twice. A revolution's winner inherits the
+# offsets (variables) but not the list, which the next month rebuilds.
 # Scope: country (a player); ROOT is the same country (the monthly pulse).
 sr_rivals_estimate_refresh = {
 	sr_rivals_estimate_refresh_base = { MILESTONE = suborbital         }
@@ -1520,6 +1128,7 @@ sr_rivals_estimate_refresh = {
 }
 
 sr_rivals_estimate_refresh_base = {
+	sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }
 	if = {
 		limit = { has_variable = sr_active_$MILESTONE$ }
 		save_scope_as = sr_rivals_viewer
@@ -1535,48 +1144,26 @@ sr_rivals_estimate_refresh_base = {
 				sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
 			}
 		}
-		# 2. How many rivals, then the first five by the open estimate.
-		set_variable = { name = sr_rival_total_$MILESTONE$ value = 0 } # REVIEWED 2026-09-29: a display snapshot rebuilt every month; nothing a revolution's winner could lose
-		every_country = {
-			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
-			scope:sr_rivals_viewer = { change_variable = { name = sr_rival_total_$MILESTONE$ add = 1 } }
-		}
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 1 POS = 0 }
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 2 POS = 1 }
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 3 POS = 2 }
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 4 POS = 3 }
-		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 5 POS = 4 }
-	}
-	else = {
-		sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }
-	}
-}
-
-# Slot $N$ (1-5) gets the rival at position $POS$ ($N$ - 1) of the open
-# estimate's order. An ordered_ position past the end of the list clamps to the
-# last element instead of skipping (un_overview_display_effects.txt), so the
-# count is checked first. Scope: the viewer (scope:sr_rivals_viewer is set).
-sr_rival_slot = {
-	if = {
-		limit = {
-			any_country = {
-				sr_is_rival = { MILESTONE = $MILESTONE$ }
-				count >= $N$
+		# 2. Every rival's capital, by the open estimate, furthest first. 40 is
+		# a cap no game reaches (players and the top three); min/max with
+		# check_range_bounds walks the whole list (scripting_best_practices.md,
+		# "remove_list_variable Does Not Preserve List Order").
+		if = {
+			limit = {
+				any_country = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+			}
+			ordered_country = {
+				limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+				order_by = sr_rival_est_open_$MILESTONE$
+				min = 0
+				max = 40
+				check_range_bounds = no
+				capital = { save_scope_as = sr_rival_capital }
+				scope:sr_rivals_viewer = {
+					add_to_variable_list = { name = sr_rivals_list_$MILESTONE$ target = scope:sr_rival_capital }
+				}
 			}
 		}
-		ordered_country = {
-			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
-			order_by = sr_rival_est_open_$MILESTONE$
-			position = $POS$
-			capital = { save_scope_as = sr_rival_capital }
-		}
-		scope:sr_rivals_viewer = {
-			set_variable = { name = sr_rival_$MILESTONE$_$N$ value = scope:sr_rival_capital } # REVIEWED 2026-09-29: a display snapshot rebuilt every month; nothing a revolution's winner could lose
-		}
-	}
-	else_if = {
-		limit = { has_variable = sr_rival_$MILESTONE$_$N$ }
-		remove_variable = sr_rival_$MILESTONE$_$N$
 	}
 }
 
@@ -1599,14 +1186,152 @@ sr_roll_rival_fuzz = {
 	change_variable = { name = sr_fuzz_until_$MILESTONE$ add = 12 }
 }
 
-# The viewer's snapshot for a milestone it no longer runs. Scope: the viewer.
+# The viewer's snapshot for a milestone: the list, and the five slots and the
+# count that held it before audit SPC-9 (2026-10-27), so an older save drops
+# them at its first refresh. Scope: the viewer.
 sr_clear_rival_slots = {
+	if = { limit = { has_variable_list = sr_rivals_list_$MILESTONE$ } clear_variable_list = sr_rivals_list_$MILESTONE$ }
 	if = { limit = { has_variable = sr_rival_total_$MILESTONE$ } remove_variable = sr_rival_total_$MILESTONE$ }
 	if = { limit = { has_variable = sr_rival_$MILESTONE$_1 } remove_variable = sr_rival_$MILESTONE$_1 }
 	if = { limit = { has_variable = sr_rival_$MILESTONE$_2 } remove_variable = sr_rival_$MILESTONE$_2 }
 	if = { limit = { has_variable = sr_rival_$MILESTONE$_3 } remove_variable = sr_rival_$MILESTONE$_3 }
 	if = { limit = { has_variable = sr_rival_$MILESTONE$_4 } remove_variable = sr_rival_$MILESTONE$_4 }
 	if = { limit = { has_variable = sr_rival_$MILESTONE$_5 } remove_variable = sr_rival_$MILESTONE$_5 }
+}
+
+# --- Display-only: the Space Powers standings --------------------------------
+# The Timeline Extended window's Space Race tab stays open once a country is in
+# the race (sr_in_space_race), and opens with Space Powers (te_sr_sec_powers,
+# space_race_widget.gui): our programme, then every other power, each as its
+# programme's icons and an estimate of its furthest milestone under way.
+# Unlike the Rivals rows, which exist only inside a milestone we run, it shows
+# between milestones and powers on milestones we never ran.
+#
+# - Who: every other power in the race (sr_is_space_power), in the order of
+#   sr_power_rank_score (space_race_values.txt): what each has achieved and
+#   which milestone it is on, never its progress.
+# - Into the viewer's own variables, once a month: sr_power_total (how many;
+#   missing until the first refresh, so the panel can say "next month"), and
+#   the list sr_powers_list, each power's capital in that order (audit SPC-9;
+#   gotcha #11), which the panel draws as a datamodel of states. The icons and
+#   the estimate are read live, per frame.
+# - The estimate is the Rivals rows' (sr_disp_rival_*_<m> with the power passed
+#   in as scope:sr_rival), so each power's offset (sr_fuzz_<m>) is drawn here
+#   for every milestone it runs, when missing or a year old, as
+#   sr_rivals_estimate_refresh_base draws it: the same offset in both places.
+#
+# Players only, from the monthly pulse (space_race_on_actions.txt). Everything
+# is rebuilt every month; a revolution's winner inherits the count, not the
+# list, for that month.
+# Scope: country (a player in the race); ROOT is the same country.
+sr_powers_refresh = {
+	save_scope_as = sr_powers_viewer
+	every_country = {
+		limit = { sr_is_space_power = yes }
+		sr_power_fuzz_base = { MILESTONE = suborbital         }
+		sr_power_fuzz_base = { MILESTONE = orbital            }
+		sr_power_fuzz_base = { MILESTONE = moon_landing       }
+		sr_power_fuzz_base = { MILESTONE = probe              }
+		sr_power_fuzz_base = { MILESTONE = moon_base          }
+		sr_power_fuzz_base = { MILESTONE = mars_landing       }
+		sr_power_fuzz_base = { MILESTONE = interstellar_probe }
+		sr_power_fuzz_base = { MILESTONE = solar_colonization }
+	}
+	sr_powers_clear = yes
+	set_variable = { name = sr_power_total value = 0 } # REVIEWED 2026-10-25: a display snapshot rebuilt every month; nothing a revolution's winner could lose
+	every_country = {
+		limit = { sr_is_space_power = yes }
+		scope:sr_powers_viewer = { change_variable = { name = sr_power_total add = 1 } }
+	}
+	# Every power's capital, furthest along first. 40 is a cap no game
+	# reaches; min/max with check_range_bounds walks the whole list
+	# (sr_rivals_estimate_refresh_base).
+	if = {
+		limit = { var:sr_power_total >= 1 }
+		ordered_country = {
+			limit = { sr_is_space_power = yes }
+			order_by = sr_power_rank_score
+			min = 0
+			max = 40
+			check_range_bounds = no
+			capital = { save_scope_as = sr_power_capital }
+			scope:sr_powers_viewer = {
+				add_to_variable_list = { name = sr_powers_list target = scope:sr_power_capital }
+			}
+		}
+	}
+	sr_powers_list_selfcheck = yes
+}
+
+# TE_SELF_CHECK sr_powers_list (audit SPC-9, 2026-10-27), once a game: the
+# first time a player's standings hold 2 to 40 other powers, the list must hold
+# every one of them (sr_power_total, counted by every_country), which says the
+# ordered_country walk with min/max reached the whole field rather than one
+# power. Fewer than two can't tell a walk from a single pick, so it waits. That
+# the panel draws the list (a datamodel of capitals, State.GetCountry on each)
+# is the game's to show: docs/testing/space-race-playtest.md.
+# Scope: the viewer (scope:sr_powers_viewer is set).
+sr_powers_list_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = sr_selfcheck_powers_list_done }
+			var:sr_power_total >= 2
+			var:sr_power_total <= 40
+		}
+		set_global_variable = { name = sr_selfcheck_powers_list_done value = yes }
+		set_variable = { name = sr_selfcheck_powers_listed value = 0 }
+		if = {
+			limit = { has_variable_list = sr_powers_list }
+			every_in_list = {
+				variable = sr_powers_list
+				scope:sr_powers_viewer = { change_variable = { name = sr_selfcheck_powers_listed add = 1 } }
+			}
+		}
+		if = {
+			limit = {
+				var:sr_selfcheck_powers_listed >= var:sr_power_total
+				var:sr_power_total >= var:sr_selfcheck_powers_listed
+			}
+			debug_log = "TE_SELF_CHECK OK sr_powers_list country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] powers=[THIS.Var('sr_power_total').GetValue|0] listed=[THIS.Var('sr_selfcheck_powers_listed').GetValue|0] (the Space Powers list holds every other power in the race)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN sr_powers_list country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] powers=[THIS.Var('sr_power_total').GetValue|0] listed=[THIS.Var('sr_selfcheck_powers_listed').GetValue|0] (the Space Powers and Rivals lists miss powers: ordered_country with min/max did not walk the whole field; take the fallback in docs/testing/space-race-playtest.md)"
+		}
+		remove_variable = sr_selfcheck_powers_listed
+	}
+}
+
+# A power's offset for $MILESTONE$, while it runs it: drawn if it has none,
+# again a year after. Scope: the power.
+sr_power_fuzz_base = {
+	if = {
+		limit = { has_variable = sr_active_$MILESTONE$ }
+		if = {
+			limit = { NOT = { has_variable = sr_fuzz_until_$MILESTONE$ } }
+			sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
+		}
+		else_if = {
+			limit = { var:sr_fuzz_until_$MILESTONE$ <= te_history_month_index }
+			sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
+		}
+	}
+}
+
+# The snapshot: the list and the count, and the eight slots that held it
+# before audit SPC-9 (2026-10-27), so an older save drops them at its first
+# refresh. From the refresh, and for a country that no longer views it (no
+# longer played). Scope: the country.
+sr_powers_clear = {
+	if = { limit = { has_variable_list = sr_powers_list } clear_variable_list = sr_powers_list }
+	if = { limit = { has_variable = sr_power_total } remove_variable = sr_power_total }
+	if = { limit = { has_variable = sr_power_1 } remove_variable = sr_power_1 }
+	if = { limit = { has_variable = sr_power_2 } remove_variable = sr_power_2 }
+	if = { limit = { has_variable = sr_power_3 } remove_variable = sr_power_3 }
+	if = { limit = { has_variable = sr_power_4 } remove_variable = sr_power_4 }
+	if = { limit = { has_variable = sr_power_5 } remove_variable = sr_power_5 }
+	if = { limit = { has_variable = sr_power_6 } remove_variable = sr_power_6 }
+	if = { limit = { has_variable = sr_power_7 } remove_variable = sr_power_7 }
+	if = { limit = { has_variable = sr_power_8 } remove_variable = sr_power_8 }
 }
 
 # --- A launch complex that can no longer carry a milestone -------------------
@@ -1695,7 +1420,8 @@ sr_record_probe_result = {
 #   - sr_commercial_space_dividend (country): from the variables
 #     sr_space_race_concluded reads, by sr_refresh_space_dividend, which
 #     re-applies it every month anyway (end of this file).
-#   - sr_space_program_cost / sr_funding_progress (entry): from sr_funding_<m>
+#   - sr_space_program_cost / sr_funding_progress / sr_funding_throughput
+#     (entry): from sr_funding_<m>
 #     and the approach variables, by sr_recalculate_cost, which every
 #     `immediate` runs and the monthly pulse runs when an entry lacks one
 #     (sr_cost_modifiers_missing). The `immediate` alone was not enough: an
@@ -1764,6 +1490,17 @@ sr_restore_milestone_rewards = {
 sr_repair_after_civil_war = {
 	sr_restore_milestone_rewards = yes
 	sr_sync_probe_data = yes
+	# The worlds the old government held are the winner's (sr_sites_generated.txt).
+	sr_sites_repoint_loser = yes
+	# Its fleets are the winner's (the sr_fl_* variables are inherited): it
+	# joins the fleet powers now, not at its next monthly pulse; the loser's
+	# entry is pruned (sr_fl_prune_powers).
+	if = {
+		limit = { sr_fleet_power = yes }
+		sr_fl_join_powers = yes
+	}
+	# Interdiction's records that name the old government (6c).
+	sr_icpt_repair_after_civil_war = yes
 }
 
 # The interstellar probe's result: one of four permanent country modifiers,
@@ -1809,16 +1546,21 @@ sr_sync_probe_data = {
 }
 
 # A colony's specialisation: one of 68 modifiers on the solar colonization
-# entry, granted by an option of space_race_colony_events.1-34. Recorded as
+# entry, granted by an option of space_race_colony_events.1-40. Recorded as
 # <modifier>_held in the same effect. Country scope.
 sr_grant_colony_modifier = {
 	je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }
 	set_variable = { name = $MODIFIER$_held value = yes }
+	# The world's record (sr_sites_generated.txt): which specialization or
+	# discovery outcome it carries, whoever holds it later. Bookkeeping behind
+	# the modifier the option already shows, so hidden from its tooltip.
+	hidden_effect = { sr_site_choose_$MODIFIER$ = yes }
 }
 
 # Country scope. One colony modifier, both ways, as sr_sync_probe_data_base.
 # The entry is open whenever a colony is held (its `possible`), so both
-# directions can always reach it.
+# directions can always reach it. A discovery's outcome; a specialization
+# takes sr_sync_colony_spec_base below.
 sr_sync_colony_modifier_base = {
 	if = {
 		limit = {
@@ -1833,6 +1575,29 @@ sr_sync_colony_modifier_base = {
 			je:je_space_race_solar_colonization ?= { NOT = { has_modifier = $MODIFIER$ } }
 		}
 		je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }
+	}
+}
+
+# Country scope. One colony specialization, both ways, as the above. A record
+# with no modifier (a revolution's winner, whose inherited entry arrives empty)
+# gets it back at MULT, its level times the colony's staffing
+# (sr_site_mult_<a|b>_<key>; colony modules design § 7), and the multiplier
+# applied is recorded as the world's sync records it (sr_site_show_modifier_at).
+sr_sync_colony_spec_base = {
+	if = {
+		limit = {
+			NOT = { has_variable = $MODIFIER$_held }
+			je:je_space_race_solar_colonization ?= { has_modifier = $MODIFIER$ }
+		}
+		set_variable = { name = $MODIFIER$_held value = yes }
+	}
+	else_if = {
+		limit = {
+			has_variable = $MODIFIER$_held
+			je:je_space_race_solar_colonization ?= { NOT = { has_modifier = $MODIFIER$ } }
+		}
+		je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ multiplier = $MULT$ } }
+		set_variable = { name = $MODIFIER$_mult value = $MULT$ } # REVIEWED 2026-10-25: records the multiplier just applied, recomputed from the world's global record; nothing built up is lost
 	}
 }
 
@@ -1934,75 +1699,9 @@ sr_sync_solar_colonization_entry = {
 	if = {
 		limit = { sr_has_space_colony = yes }
 		sr_sync_colony_discovery_modifiers = yes
-		# The colony specialisations, in space_race_colony_events order.
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_valles_marineris_research }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_valles_marineris_mining   }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_olympus_mons_atmospheric  }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_olympus_mons_geothermal   }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_hellas_settlement         }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_hellas_astrobiology       }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_utopia_ice                }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_utopia_agriculture        }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_arcadia_civilian          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_arcadia_military          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ceres_waystation          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ceres_observatory         }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_vesta_mining              }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_vesta_science             }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_psyche_industrial         }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_psyche_careful            }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_pallas_composites         }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_pallas_observatory        }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_hygiea_volatiles          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_hygiea_automated          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_io_mining                 }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_io_research               }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_europa_drilling           }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_europa_surface            }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ganymede_settlement       }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ganymede_command          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_callisto_gateway          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_callisto_agricultural     }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_himalia_telescope         }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_himalia_depot             }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_amalthea_physics          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_amalthea_rings            }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_venus_atmospheric         }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_venus_extraction          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_mercury_solar             }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_mercury_ice               }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_titan_hydrocarbons        }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_titan_prebiotic           }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_enceladus_astrobiology    }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_enceladus_water           }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_rhea_propellant           }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_rhea_observation          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_mimas_installation        }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_mimas_gravity             }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_iapetus_ridge             }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_iapetus_organics          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_titania_mining            }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_titania_geophysics        }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_oberon_relay              }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_oberon_research           }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_miranda_rupes             }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_miranda_drilling          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ariel_cryovolcanic        }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ariel_quarrying           }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_triton_geyser             }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_triton_gateway            }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_proteus_probe             }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_proteus_extraction        }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_pluto_research            }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_pluto_harvesting          }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_eris_selfsufficiency      }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_eris_monitoring           }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_makemake_chemistry        }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_makemake_solarwind        }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_haumea_dynamics           }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_haumea_rings              }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_sedna_outpost             }
-		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_sedna_interstellar        }
+		# The colony specialisations, each at its level times the colony's
+		# staffing (sr_sites_generated.txt; colony modules design § 7).
+		sr_sites_sync_entry_specs = yes
 		# The all-colonies reward: the entry's pulse adds it in the block that
 		# sets sr_completed_solar_colonization, so the variable alone records it.
 		if = {

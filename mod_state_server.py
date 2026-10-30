@@ -37,7 +37,7 @@ from typing import Optional
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
 
-from mod_state import VANILLA_COMMON_DIRS, ModState, iter_loc_lines, iter_script_files
+from mod_state import ModState, entity_paths, iter_loc_lines, iter_script_files
 from paradox_file_parser import ParadoxFileParser
 import path_constants
 from path_constants import (
@@ -61,6 +61,8 @@ import annotators
 import pm_balance_lib  # noqa: F401 — imported for its annotator side effect
 import tech_unlocks_lib
 import vanilla_parsed
+import external_mod_overlap  # GET /external-mod-overlap (#1170)
+import external_mod_state  # GET /external-mod-overlap/state (#1184)
 
 # Also loaded by name in POST_LOAD_AUDITS; imported here so
 # /scripted-helpers/unresolved, /script-args and /pm-employment can call them
@@ -69,6 +71,7 @@ import effect_trigger_validity_audit
 import pm_employment_audit
 import script_argument_audit
 import variable_usage
+import loc_accessor_usage  # GET /loc-accessors (#1246)
 
 PORT = 8950
 PID_FILE = os.path.join(mod_path, "mod_state_server.pid")
@@ -114,7 +117,11 @@ _parser_logger.addHandler(_file_handler)
 _server_start_time: float = 0.0  # set in main()
 
 # ---------------------------------------------------------------------------
-# Path configuration (mirrors mod_state_script.py)
+# Path configuration
+#
+# Built by mod_state.entity_paths from VANILLA_COMMON_DIRS (the one list of
+# vanilla entity types; vanilla_parsed snapshots exactly the same set) and
+# MOD_ONLY_DIRS. mod_state_script.py builds the same pair.
 #
 # Use forward slashes everywhere; path_constants exposes Linux-rooted paths,
 # and the win-style backslash trick from the pre-WSL repo no longer works.
@@ -122,78 +129,7 @@ _server_start_time: float = 0.0  # set in main()
 _BASE_COMMON = os.path.join(base_game_path, "game", "common")
 _MOD_COMMON = os.path.join(mod_path, "common")
 
-# Built from mod_state.VANILLA_COMMON_DIRS, the one list of vanilla entity
-# types — vanilla_parsed snapshots exactly the same set.
-base_game_paths = {
-    entity_type: os.path.join(_BASE_COMMON, *rel.split("/"))
-    for entity_type, rel in VANILLA_COMMON_DIRS.items()
-}
-
-mod_paths = {
-    "Building Groups": os.path.join(_MOD_COMMON, "building_groups"),
-    "Buildings": os.path.join(_MOD_COMMON, "buildings"),
-    "Technologies": os.path.join(_MOD_COMMON, "technology", "technologies"),
-    "PM Groups": os.path.join(_MOD_COMMON, "production_method_groups"),
-    "PMs": os.path.join(_MOD_COMMON, "production_methods"),
-    "Ideologies": os.path.join(_MOD_COMMON, "ideologies"),
-    "Political Movements": os.path.join(_MOD_COMMON, "political_movements"),
-    "Battle Conditions": os.path.join(_MOD_COMMON, "battle_conditions"),
-    "Buy Packages": os.path.join(_MOD_COMMON, "buy_packages"),
-    "Character Interactions": os.path.join(_MOD_COMMON, "character_interactions"),
-    "Character Traits": os.path.join(_MOD_COMMON, "character_traits"),
-    "Combat Unit Groups": os.path.join(_MOD_COMMON, "combat_unit_groups"),
-    "Combat Unit Types": os.path.join(_MOD_COMMON, "combat_unit_types"),
-    "Company Types": os.path.join(_MOD_COMMON, "company_types"),
-    "Diplomatic Actions": os.path.join(_MOD_COMMON, "diplomatic_actions"),
-    "Diplomatic Plays": os.path.join(_MOD_COMMON, "diplomatic_plays"),
-    "Goods": os.path.join(_MOD_COMMON, "goods"),
-    "Government Types": os.path.join(_MOD_COMMON, "government_types"),
-    "Institutions": os.path.join(_MOD_COMMON, "institutions"),
-    "Interest Groups": os.path.join(_MOD_COMMON, "interest_groups"),
-    "Laws": os.path.join(_MOD_COMMON, "laws"),
-    "Law Groups": os.path.join(_MOD_COMMON, "law_groups"),
-    "Messages": os.path.join(_MOD_COMMON, "messages"),
-    "Mobilization Option Groups": os.path.join(_MOD_COMMON, "mobilization_option_groups"),
-    "Mobilization Options": os.path.join(_MOD_COMMON, "mobilization_options"),
-    "Modifier Types": os.path.join(_MOD_COMMON, "modifier_type_definitions"),
-    "Modifiers": os.path.join(_MOD_COMMON, "static_modifiers"),
-    "Pop Needs": os.path.join(_MOD_COMMON, "pop_needs"),
-    "Subject Types": os.path.join(_MOD_COMMON, "subject_types"),
-    "Script Values": os.path.join(_MOD_COMMON, "script_values"),
-    "Scripted Effects": os.path.join(_MOD_COMMON, "scripted_effects"),
-    "Scripted Triggers": os.path.join(_MOD_COMMON, "scripted_triggers"),
-    "Scripted Buttons": os.path.join(_MOD_COMMON, "scripted_buttons"),
-    "Scripted GUIs": os.path.join(_MOD_COMMON, "scripted_guis"),
-    "Scripted Progress Bars": os.path.join(_MOD_COMMON, "scripted_progress_bars"),
-    "Ship Types": os.path.join(_MOD_COMMON, "ship_types"),
-    "Ship Groups": os.path.join(_MOD_COMMON, "ship_groups"),
-    "Ship Modifications": os.path.join(_MOD_COMMON, "ship_modifications"),
-    "Ship Modification Slots": os.path.join(_MOD_COMMON, "ship_modification_slots"),
-    "Ship Name Definitions": os.path.join(_MOD_COMMON, "ship_name_definitions"),
-    "Journal Entries": os.path.join(_MOD_COMMON, "journal_entries"),
-    "Journal Entry Groups": os.path.join(_MOD_COMMON, "journal_entry_groups"),
-    "Decisions": os.path.join(_MOD_COMMON, "decisions"),
-    "Country Formation": os.path.join(_MOD_COMMON, "country_formation"),
-    "On Actions": os.path.join(_MOD_COMMON, "on_actions"),
-    "Treaty Articles": os.path.join(_MOD_COMMON, "treaty_articles"),
-    "Religions": os.path.join(_MOD_COMMON, "religions"),
-    "Decrees": os.path.join(_MOD_COMMON, "decrees"),
-    "Principles": os.path.join(_MOD_COMMON, "power_bloc_principles"),
-    "Principle Groups": os.path.join(_MOD_COMMON, "power_bloc_principle_groups"),
-    "Amendments": os.path.join(_MOD_COMMON, "amendments"),
-    "Interest Group Traits": os.path.join(_MOD_COMMON, "interest_group_traits"),
-    "Harvest Condition Types": os.path.join(_MOD_COMMON, "harvest_condition_types"),
-    "Power Bloc Identities": os.path.join(_MOD_COMMON, "power_bloc_identities"),
-    "Events": os.path.join(mod_path, "events"),
-    # Mod-side counterparts of the new vocabularies (most are vanilla-only, but
-    # listed so the mod can override them in future).
-    "Cultures": os.path.join(_MOD_COMMON, "cultures"),
-    "Country Ranks": os.path.join(_MOD_COMMON, "country_ranks"),
-    "Discrimination Traits": os.path.join(_MOD_COMMON, "discrimination_traits"),
-    "Pop Types": os.path.join(_MOD_COMMON, "pop_types"),
-    "Terrains": os.path.join(_MOD_COMMON, "terrain"),
-    "Game Concepts": os.path.join(_MOD_COMMON, "game_concepts"),
-}
+base_game_paths, mod_paths = entity_paths(base_game_path, mod_path)
 
 # ---------------------------------------------------------------------------
 # Globals
@@ -203,6 +139,7 @@ startup_elapsed: float = 0.0
 engine_docs: dict = {}  # Parsed engine documentation (effects, triggers, etc.)
 dev_reference_docs: dict = {}  # .md files from base game common/ dirs
 _company_catalog_cache: tuple[ModState, list[dict]] | None = None
+_party_catalog_cache: tuple[ModState, list[dict]] | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -250,6 +187,7 @@ ENTITY_TYPE_TO_DATATYPE: dict[str, str] = {
     "Institutions": "Institution",
     "Game Concepts": "Concept",
     "Country Formation": "CountryFormation",
+    "Parties": "Party",
 }
 
 # Field role -> set of GUI accessor method names that render that field.
@@ -1506,6 +1444,34 @@ def _get_variable_usage_index():
         index = variable_usage.build_index(mod_path)
         _variable_usage_cache = (gen, index)
         return index
+
+
+# /loc-accessors (#1246): vanilla loc (and vanilla `.gui` when the game is
+# installed) indexed by data type, about 2 s. Vanilla changes only on a full
+# load, which replaces _VANILLA_LOC_CACHE, so the index is kept until that
+# object changes; a mod-only reload leaves it. (loc, Index, catalog) or None.
+_loc_accessor_cache: tuple | None = None
+_loc_accessor_lock = threading.Lock()
+
+
+def _get_loc_accessor_index():
+    global _loc_accessor_cache
+    loc = _VANILLA_LOC_CACHE
+    if loc is None:
+        raise DataNotLoaded("Localization")
+    with _loc_accessor_lock:
+        cached = _loc_accessor_cache
+        if cached is not None and cached[0] is loc:
+            return cached[1], cached[2]
+        catalog = loc_accessor_usage.load_catalog(os.path.join(mod_path, "docs", "engine"))
+        actions = ms.base_parsers.get("Diplomatic Actions") if ms else None
+        index = loc_accessor_usage.build_index(
+            loc, catalog,
+            diplo_keys=set(actions.data or {}) if actions else set(),
+            gui_dirs=[os.path.join(base_game_path, "game", "gui")],
+        )
+        _loc_accessor_cache = (loc, index, catalog)
+        return index, catalog
 
 
 def _get_call_index() -> dict:
@@ -2824,6 +2790,7 @@ _IMAGE_FIELDS_BY_TYPE: list[tuple[str, str]] = [
     ("Interest Group Traits",   "icon"),
     ("Harvest Condition Types", "icon"),
     ("Power Bloc Identities",   "icon"),
+    ("Parties",                 "icon"),
 ]
 
 # YAML file → canonical entity-type-name mapping. The YAML is keyed by lowercase
@@ -2942,16 +2909,22 @@ def _image_content_hash(rel_path: str) -> str:
 
 def _entity_image(raw, field: str) -> str | None:
     """An entity's `field` as a path, without the quotes the parser keeps (so
-    it matches the unquoted paths in the YAML allowlist), or None."""
+    it matches the unquoted paths in the YAML allowlist), or None.
+
+    A party's icon is a block, `icon = { default = "/gfx/…" }`: its `default`
+    is the path. A leading `/` is dropped, as the engine reads the path from
+    the game root either way; joined as is, it would resolve nowhere."""
     data = get_entity_data(raw)
     if not isinstance(data, dict):
         return None
     image = get_field(data, field)
+    if isinstance(image, dict):
+        image = get_field(image, "default")
     if not isinstance(image, str):
         return None
     if len(image) >= 2 and image[0] == image[-1] and image[0] in ('"', "'"):
         image = image[1:-1]
-    return image or None
+    return image.lstrip("/") or None
 
 
 def _principle_group_of() -> dict[str, str]:
@@ -4231,6 +4204,31 @@ def _company_catalog():
     return rows
 
 
+def _party_catalog():
+    """party_catalog rows for the loaded state, cached on `ms` like
+    _company_catalog (a reload clears it). The vanilla side's files are the
+    game's, or the snapshot's JSON when vanilla came from vanilla_parsed/."""
+    global _party_catalog_cache
+    import party_catalog
+
+    parties = ms.get_data("Parties") if ms is not None else None
+    if not parties:
+        raise DataNotLoaded("Parties")
+    if _party_catalog_cache is not None and _party_catalog_cache[0] is ms:
+        return _party_catalog_cache[1]
+    vanilla_parser = ms.base_parsers.get("Parties")
+    vanilla = (vanilla_parser.data if vanilla_parser is not None else None) or {}
+    if _vanilla_source.get("kind") == "vanilla_parsed":
+        sites = [party_catalog.snapshot_site(vanilla)] if vanilla else []
+    else:
+        sites = party_catalog.directory_sites(
+            base_game_paths.get("Parties"), base_game_path, "vanilla")
+    sites += party_catalog.directory_sites(mod_paths.get("Parties"), mod_path, "mod")
+    rows = party_catalog.party_rows(parties, vanilla, sites)
+    _party_catalog_cache = (ms, rows)
+    return rows
+
+
 def _data_contains_string(obj, needle):
     """Recursively check if *needle* appears as a string value anywhere in the data tree."""
     if isinstance(obj, str):
@@ -5076,6 +5074,51 @@ class DataNotLoaded(_ServiceNotReady):
         }, 503)
 
 
+_overlap_vanilla_cache: dict = {}
+
+
+def _overlap_vanilla_index():
+    """Vanilla for /external-mod-overlap: the game files when installed (with
+    file names), else the committed vanilla_parsed/ snapshot (#1170). Kept
+    until a reload that re-reads vanilla (not mod_only), so a folder read
+    from /mnt/c once is not read again on the next request.
+
+    A server loaded from a snapshot that isn't fresh against the installed
+    game (VIC3_VANILLA_SOURCE=vanilla_parsed) reads the snapshot here too, so
+    /state's vanilla values are the vanilla behind server_value (#1184). A
+    fresh snapshot is the game files' parse, so the game files serve."""
+    game_common = os.path.join(base_game_path, "game", "common")
+    if (_vanilla_source.get("kind") == "vanilla_parsed"
+            and not (_vanilla_source.get("freshness") or {}).get("fresh")):
+        game_common = None
+    key = game_common or "<vanilla_parsed>"
+    if key not in _overlap_vanilla_cache:
+        _overlap_vanilla_cache[key] = external_mod_overlap.VanillaIndex(game_common=game_common)
+    return _overlap_vanilla_cache[key]
+
+
+# GET /external-mod-overlap/state: one LayeredState per mod root, newest
+# last. It holds the server's ModState's parsers, so every reload drops it.
+_overlap_state_cache: dict = {}
+_OVERLAP_STATE_CACHE_SIZE = 4
+
+
+def _overlap_state(root: str, refresh: bool = False):
+    """(the LayeredState for the mod at `root`, whether it came from the
+    cache): this mod's ModState with that mod's common/ entries layered in by
+    the probed load order (#1184)."""
+    key = os.path.realpath(root)
+    if not refresh and key in _overlap_state_cache:
+        _overlap_state_cache[key] = _overlap_state_cache.pop(key)
+        return _overlap_state_cache[key], True
+    state = external_mod_state.build(ms, root, mod_path, vanilla=_overlap_vanilla_index())
+    _overlap_state_cache.pop(key, None)
+    _overlap_state_cache[key] = state
+    while len(_overlap_state_cache) > _OVERLAP_STATE_CACHE_SIZE:
+        _overlap_state_cache.pop(next(iter(_overlap_state_cache)))
+    return state, False
+
+
 def _resolve_mod_relative_path(raw: str, *, param: str = "file") -> str:
     """Resolve a caller-supplied path param to an absolute path guaranteed to
     live under `mod_path`. Raises BadRequest (400) otherwise.
@@ -5869,8 +5912,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "movements": lambda: self._movements(rest),
             # Analytical endpoints
             "movement-stances": lambda: self._movement_stances(rest, params),
+            # Party types and their merged join_weight terms (#1164)
+            "parties": lambda: self._parties(rest, params),
             "references": lambda: self._references(rest),
             "diff": lambda: self._diff(rest, params),
+            # Another mod's entries that land on ours, and which side wins (#1170)
+            "external-mod-overlap": lambda: self._external_mod_overlap(rest, params),
             "tech-tree": lambda: self._tech_tree(rest),
             "modifier-search": lambda: self._modifier_search(params),
             "modifier-grants": lambda: self._modifier_grants(rest, params),
@@ -5903,6 +5950,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "script-args": lambda: self._script_args(rest, params),
             # How each site uses a variable or variable list (#973)
             "variable-usage": lambda: self._variable_usage(rest, params),
+            # Which accessors vanilla loc and GUI chain on a data type (#1246)
+            "loc-accessors": lambda: self._loc_accessors(rest, params),
             "decrees": lambda: self._decrees(rest),
             "principles": lambda: self._principles(rest),
             "amendments": lambda: self._amendments(rest),
@@ -5997,6 +6046,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/ideologies/<id?>", "desc": "Ideology defs and IG-stance maps."},
                 {"path": "/movements/<id?>", "desc": "Political movements (mod ∪ vanilla): category, ideology, set_core_ideology alternates, creation_trigger keys and tech gate (#838)."},
                 {"path": "/movement-stances?lawgroup=<g>|law=<l>[&current=<law>]", "desc": "Each movement's stance on every law of a group (variants take the parent's; unnamed laws neutral) and two readings of backing: unbacked_laws (no movement rates the law approve or better) and never_backed_laws (no movement rates it above any other law of the group); current= (mode=comparative) lists the laws each rates above it. /movement-stances/gaps: law groups no movement rates, and every group's unbacked and never-backed laws (#838)."},
+                {"path": "/parties/<key?>?desc=<desc>", "desc": "Party types (mod ∪ vanilla, #1164): source vanilla|mod|both, defining files, the file whose join_weight the merged party carries (an injected join_weight replaces the field), and join_weight_terms, the desc of each term in source order (a desc-less term as `value = 0` / `if = {...}`). ?desc= keeps the parties naming it; /<key> adds per-term detail. Merged AST: /raw/Parties/<key>."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
                 {"path": "/pm-employment/<building>?select=<pm|glob>[,...]&bucket=level_scaled|workforce_scaled|unscaled|all&limit=", "desc": "Per-profession employment of every valid PM combination (pm_employment_audit's rules), grouped by identical totals with a count and an example combination, plus min/max totals per bucket (#990). Without a building, ?select= runs it for every building with a matching PM."},
                 {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
@@ -6006,6 +6056,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/script-values/<id?>", "desc": "Script value definitions."},
                 {"path": "/script-args/<helper?>", "desc": "Scripted effect/trigger calls whose arguments don't match the callee's $X$ names (#732); with a helper, its params and every caller's unknown/missing args."},
                 {"path": "/variable-usage/<name?>?kind=var|list&store=scope|global|local&unfiltered_by=<trigger>&patterns=false", "desc": "Every mod site that writes, reads or iterates a variable or variable list, with file:line, entity, op, scope hint and an iterator's limit (#973). unfiltered_by keeps the iterations whose limit names neither the trigger nor a scripted trigger that names it. Bare: every name with its counts (?prefix=)."},
+                {"path": "/loc-accessors/<Type?>?context=&examples=&min_uses=", "desc": "Which accessors vanilla loc (and vanilla .gui when the game is installed) chains on a data type (#1246): each with its use count, per-context counts (events, notification, ui, gui, ...), the type it returns, and example expressions, plus the SCOPE.sX / gsX saved-scope accessor for the type. <Type> is PoliticalLobby, political_lobby or politicallobby. ?context= keeps only uses in that context. Bare: every type with its use count."},
                 {"path": "/decrees/<id?>", "desc": "Decree catalog."},
                 {"path": "/on-actions/<id?>", "desc": "On-action wiring (mod-only)."},
                 {"path": "/events/<id?>", "desc": "Events (mod-only)."},
@@ -6029,6 +6080,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/unlocalized", "desc": "Mod-introduced keys missing English loc."},
                 {"path": "/vocabularies/<name?>", "desc": "Placeholder vocab tables (cultures, religions, IGs, ...)."},
                 {"path": "/validate/<id?>", "desc": "Mod-vs-engine validation report."},
+                {"path": "/external-mod-overlap?path=<mod root>&trace=true", "desc": "Read-only compatibility check of another mod (a Workshop folder or any mod root) against this one (#1170): keys of common/ databases both define with a load-order verdict (ours_wiped / theirs_wiped / both_merge / both_wiped / depends_on_playset / undetermined; facts: scripting_best_practices.md § Load Order (probed 2026-10-26)), defines both set, shared on_action hooks and effect conflicts, event namespaces and ids, English loc keys, and same-path files (gui/ included). Also `python3 external_mod_overlap.py <root>`."},
+                {"path": "/external-mod-overlap/state[/<EntityType>[/<key>]]?path=<mod root>&refresh=true", "desc": "This mod's ModState with another mod's common/ entries layered in by the probed load order (#1184): the summary (keys recomputed per entity type, by status: changed / added / removed / undetermined / parse_failed / unchanged / not_created), one type's keys, or one key's merged entry (value as /raw gives it, the server's value, every definition, the simulated load, and every candidate when an unknown decides it). Cached per path until a reload."},
                 {"path": "/duplicate-images", "desc": "Detect duplicated unique-per-entity image fields."},
                 {"path": "/placeholder-icons", "desc": "Classify every mod-set icon: borrowed vanilla, shared, unique, stand-in or missing."},
                 {"path": "/auto-generated", "desc": "Generator-ownership map for auto-generated mod files."},
@@ -7613,6 +7666,23 @@ class ModStateHandler(BaseHTTPRequestHandler):
             raise NotFound(lawgroup)
         return out
 
+    def _parties(self, parts, params):
+        """GET /parties[?desc=<desc>], GET /parties/<key> (#1164): who defines
+        each party and the descs of its merged join_weight, in source order
+        (party_catalog.py)."""
+        rows = _party_catalog()
+        if parts:
+            row = next((r for r in rows if r["key"] == parts[0]), None)
+            if row is None:
+                raise NotFound(parts[0])
+            return json.loads(json.dumps(row))  # a copy: the cached row stays as built
+        desc = (params.get("desc") or [None])[0]
+        return [
+            {k: v for k, v in row.items() if k != "terms"}
+            for row in rows
+            if desc is None or desc in row["join_weight_terms"]
+        ]
+
     # ---- analytical: references -------------------------------------------
     def _references(self, parts):
         """GET /references/<key>  - find all entities that reference a given key."""
@@ -8662,6 +8732,65 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         return [{"type": "Script Values", "id": svid} for svid in svs]
 
+    # ---- another mod's overlap with ours (#1170) ---------------------------
+    def _external_mod_overlap(self, parts, params):
+        """GET /external-mod-overlap?path=<mod root>[&trace=true]
+        GET /external-mod-overlap/state[/<EntityType>[/<key>]]?path=<mod root>[&refresh=true]
+
+        Read-only: scans the other mod's folder and this mod's, reports the
+        entries both define and which side the load order keeps. The logic and
+        the load-order model live in external_mod_overlap.py. `/state` is
+        this mod's ModState with the other mod's common/ entries layered in by
+        that model (external_mod_state.py, #1184): the summary, one entity
+        type's recomputed keys, or one key's merged entry (its value as /raw
+        gives it, the server's value, every definition and the simulated
+        load, and every candidate when an unknown decides it)."""
+        if parts and parts[0] == "state":
+            return self._external_mod_state(parts[1:], params)
+        if parts:
+            raise NotFound("/".join(["external-mod-overlap", *parts]))
+        usage = "GET /external-mod-overlap?path=<mod root>[&trace=true]"
+        root = self._overlap_root(params, usage)
+        trace = self._bool_param(params, "trace", usage)
+        return external_mod_overlap.analyze(
+            root, mod_path, vanilla=_overlap_vanilla_index(), include_trace=trace)
+
+    def _overlap_root(self, params, usage):
+        try:
+            root = external_mod_overlap.validate_root((params.get("path") or [""])[0])
+        except ValueError as exc:
+            raise BadRequest(str(exc), usage=usage)
+        if os.path.realpath(root) == os.path.realpath(mod_path):
+            raise BadRequest(f"{root} is this mod; pass another mod's root", usage=usage)
+        return root
+
+    @staticmethod
+    def _bool_param(params, name, usage):
+        value = (params.get(name) or ["false"])[0].lower()
+        if value not in ("true", "false"):
+            raise BadRequest(f"{name} must be true or false, got {value!r}", usage=usage)
+        return value == "true"
+
+    def _external_mod_state(self, parts, params):
+        usage = ("GET /external-mod-overlap/state[/<EntityType>[/<key>]]"
+                 "?path=<mod root>[&refresh=true]")
+        if len(parts) > 2:
+            raise NotFound("/".join(["external-mod-overlap", "state", *parts]))
+        root = self._overlap_root(params, usage)
+        refresh = self._bool_param(params, "refresh", usage)
+        if ms is None:
+            raise DataNotLoaded("ModState")
+        etype = self._resolve_entity_type_or_404(parts[0]) if parts else None
+        state, cached = _overlap_state(root, refresh)
+        if etype is None:
+            return {**state.summary(), "cached": cached}
+        if len(parts) == 1:
+            return {**state.entity_type(etype), "cached": cached}
+        entry = state.entity(etype, parts[1])
+        if entry is None:
+            raise NotFound(parts[1])
+        return {**entry, "cached": cached}
+
     # ---- mod-vs-vanilla diff ----------------------------------------------
     def _diff(self, parts, params):
         """GET /diff/<EntityType>/<id>[?format=text]"""
@@ -8763,6 +8892,48 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "flags": [script_argument_audit.flag_dict(f) for f in flags],
             "stale_tags": [{"file": t.file, "line": t.line} for t in result.stale_tags],
         }
+
+    def _loc_accessors(self, parts, params):
+        """GET /loc-accessors[/<Type>] — which accessors vanilla loc and GUI
+        chain on a data type (#1246), from loc_accessor_usage's index.
+
+        Bare: every type with its accessor and use counts. With a type
+        (`PoliticalLobby`, `political_lobby`, …): each accessor with `uses`,
+        per-context counts, the catalog's `returns` type (null when
+        localization_accessor_audit doesn't list it) and `examples`, plus the
+        `scope_accessor` that builds the type from `SCOPE`. `?context=` keeps
+        one context's uses, `?min_uses=` drops rarer accessors, `?examples=`
+        caps the examples per accessor. `gui_scanned` says whether vanilla
+        `.gui` files were on disk."""
+        def one(key):
+            return (params.get(key) or [None])[0] or None
+
+        def number(key, default, low, high):
+            raw = one(key)
+            if raw is None:
+                return default
+            try:
+                return min(max(int(raw), low), high)
+            except ValueError:
+                raise BadRequest(f"{key} must be an integer, not {raw!r}")
+
+        index, catalog = _get_loc_accessor_index()
+        if not parts:
+            return loc_accessor_usage.list_types(index)
+        if len(parts) > 1:
+            raise NotFound("/loc-accessors/" + "/".join(parts))
+        context = one("context")
+        seen = loc_accessor_usage.contexts_seen(index)
+        if context is not None and context not in seen:
+            raise BadRequest(f"unknown context {context!r}; use one of " + ", ".join(seen))
+        out = loc_accessor_usage.lookup(
+            index, catalog, parts[0], context=context,
+            examples=number("examples", loc_accessor_usage.DEFAULT_EXAMPLES, 0,
+                            loc_accessor_usage.MAX_EXAMPLES),
+            min_uses=number("min_uses", 1, 1, 10 ** 9))
+        if out is None:
+            raise NotFound(parts[0], did_you_mean=loc_accessor_usage.suggest(index, catalog, parts[0]))
+        return out
 
     def _variable_usage(self, parts, params):
         """GET /variable-usage[/<name>] — how each mod site uses a variable or
@@ -9614,6 +9785,8 @@ POST_LOAD_REGENERATORS = [
     ("gen_covert_tech_theft",         "scripts.generators.gen_covert_tech_theft"),
     ("gen_seabed_basins",             "scripts.generators.gen_seabed_basins"),
     ("gen_launch_windows",            "scripts.generators.gen_launch_windows"),
+    ("gen_solar_sites",               "scripts.generators.gen_solar_sites"),
+    ("gen_space_fleets",              "scripts.generators.gen_space_fleets"),
     ("organize_loc",                  "organize_loc"),
     ("gen_event_inventory",           "gen_event_inventory"),
     # Keep LAST: prepend UTF-8 BOM to any mod .txt the generators above (or a
@@ -9660,6 +9833,13 @@ POST_LOAD_AUDITS = [
     ("amendment_reachability_audit",  "amendment_reachability_audit"),
     ("ideology_lawgroup_audit",       "ideology_lawgroup_audit"),
     ("script_argument_audit",         "script_argument_audit"),
+    ("modifier_duration_audit",       "modifier_duration_audit"),
+    ("loc_script_value_audit",        "loc_script_value_audit"),
+    ("texture_reference_audit",       "texture_reference_audit"),
+    ("long_tooltip_audit",            "long_tooltip_audit"),
+    ("hidden_modifier_audit",         "hidden_modifier_audit"),
+    ("unmarked_hover_audit",          "unmarked_hover_audit"),
+    ("button_reason_audit",           "button_reason_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
@@ -9694,8 +9874,11 @@ PARTIAL_VANILLA_FILE_REGENERATORS = {
 
 # Return-dict keys whose nonzero values indicate "actionable issue surfaced
 # by this generator." Audits use a small set of conventional names; if a new
-# audit invents one, add it here so the warning fires automatically.
-_POST_LOAD_WARN_KEYS = ("unreviewed", "hard_fails")
+# audit invents one, add it here so the warning fires automatically. A bool
+# True counts (it is an int): texture_reference_audit's `catalog_stale` says
+# the committed asset catalog no longer matches the install, so CI resolves
+# against stale vanilla until `--bootstrap` reruns.
+_POST_LOAD_WARN_KEYS = ("unreviewed", "hard_fails", "catalog_stale")
 
 # Most-recent post-load run's actionable findings. Reset on every
 # _run_post_load_generators call. Read by /reload POST handler so callers
@@ -9793,6 +9976,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
     None.
     """
     global _tech_unlocks_index_cache, _last_validation_report, _company_catalog_cache
+    global _party_catalog_cache
     t0 = time.monotonic()
     try:
         mod_state.reload_mod(mod_paths)
@@ -9809,6 +9993,8 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
                 mod_state.add_localization(loc_dir)
         _tech_unlocks_index_cache = None
         _company_catalog_cache = None
+        _party_catalog_cache = None
+        _overlap_state_cache.clear()
         _invalidate_call_index()
         _last_validation_report = None
         _annotator_compute_cache.clear()
@@ -10117,7 +10303,7 @@ _vanilla_source_warnings: list[dict] = []
 
 def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
-    global _company_catalog_cache
+    global _company_catalog_cache, _party_catalog_cache
     global _VANILLA_LOC_CACHE, _vanilla_source, _vanilla_source_warnings
 
     if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
@@ -10132,6 +10318,8 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
         mode_tag += " (audits-only)"
     logger.info(f"Loading mod state{mode_tag}…")
     t0 = time.time()
+    # Layered states hold the old ModState's parsers (#1184).
+    _overlap_state_cache.clear()
 
     if mod_only:
         try:
@@ -10140,6 +10328,8 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
             logger.error(f"Failed to reload mod state: {e}\n{traceback.format_exc()}")
             raise
     else:
+        # Vanilla is re-read: drop the overlap endpoint's vanilla index too.
+        _overlap_vanilla_cache.clear()
         _vanilla_source, _vanilla_source_warnings = _choose_vanilla_source()
         for w in _vanilla_source_warnings:
             logger.warning(f"[vanilla] {w['detail']}")
@@ -10165,6 +10355,7 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     _last_validation_report = None
     _tech_unlocks_index_cache = None
     _company_catalog_cache = None
+    _party_catalog_cache = None
     _invalidate_call_index()
     _annotator_compute_cache.clear()
 

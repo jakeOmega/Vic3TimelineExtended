@@ -127,7 +127,9 @@ SECTIONS = {
         # The Antarctic research station and the Antarctic regime
         "te_antarctic_station_modifier", "un_antarctic_*", "un_regime_antarctic_station_modifier",
         # Seabed policy
-        "te_seabed_policy_*", "te_seabed_long_haul",
+        "te_seabed_policy_*",
+        # Extraplanetary Base room from the near-Earth asteroids and colonies
+        "sr_ebase_room_*",
         # The Mind Upload Nexus's research at its hosted minds (the Demographics rule's uploaded minds, under Full)
         "te_demog_um_research",
     ),
@@ -135,7 +137,7 @@ SECTIONS = {
         # UN conventions a country is bound by outside the organisation's entry
         "un_asat_moratorium_modifier", "un_cultural_diversity_modifier", "un_icc_member_modifier",
         "un_law_of_sea_modifier", "un_narcotics_control_modifier", "un_nuclear_ban_modifier",
-        "un_physical_protection_modifier",
+        "un_physical_protection_modifier", "un_colony_protection_modifier",
         # Membership and its absence, NPT disarmament
         "un_membership_benefits_modifier", "un_nonmember_pariah_*", "un_npt_disarmament_modifier",
         # Regime terms, embargoes, sanctions, mandates, development grants, observers
@@ -178,6 +180,8 @@ KEEP_IN_LIST = {
     "te_debug_*": "debug",
     "te_tp_*": "debug (the developer-only tax probes)",
     "te_demog_fast_*": "debug (the fast demographic clock)",
+    "sr_orbital_superiority": "a wartime edge from holding Earth orbit, refreshed monthly with the fleets there: it "
+                              "belongs beside the anti-satellite strike's timed te_orbital_network_disrupted in the list",
 }
 
 # Where the rest land. Hiding them would cost the filter a comparison each and
@@ -205,7 +209,17 @@ NOT_ON_COUNTRY = {
     "nd_posture_*": "interest groups",
     "sr_colony_*": "je_space_race_solar_colonization", "sr_discovery_*": "je_space_race_solar_colonization",
     "sr_solar_system_trade": "je_space_race_solar_colonization",
+    "sr_emigration_programme": "je_space_race_solar_colonization",
+    "sr_offworld_population": "je_space_race_solar_colonization",
+    "sr_module_upkeep": "je_space_race_solar_colonization",
+    "sr_free_colony_supply": "je_space_race_solar_colonization",
+    "sr_free_colony_trade": "je_space_race_solar_colonization",
+    "sr_colonial_garrisons": "je_space_race_solar_colonization",
+    "sr_fleet_upkeep": "a Space Command building (the upkeep_inputs probe's candidate)",
+    "sr_fleet_upkeep_goods": "a Space Command building",
+    "te_seabed_long_haul": "a Deep-Sea Mine building (Long-Haul Seabed Operations)",
     "sr_funding_progress": "the running milestone's entry", "sr_space_program_cost": "the running milestone's entry",
+    "sr_funding_throughput": "the running milestone's entry",
     "un_bloc_vacuum_modifier": "power blocs", "un_sovereignty_*": "interest groups",
     "un_standing_*": "je_united_nations", "un_member_*": "je_united_nations",
     "un_founding_member_modifier": "je_united_nations", "un_headquarters_modifier": "je_united_nations",
@@ -238,6 +252,7 @@ NOT_ON_COUNTRY = {
     "resettlement_*_destination": "states", "resettlement_arrivals": "the destination's buildings",
     "resettlement_transit_deaths": "the destination's buildings", "resettlement_recruits": "states",
     "st_res_*_flow": "the reserve hub's building",
+    "modifier_grid_station_*": "the grid transfer station's building",
     "te_demog_um_nexus_*": "the Mind Upload Nexus's building",
     "te_construction_market_capacity_modifier": "construction sites",
 }
@@ -326,7 +341,7 @@ TYPE_ROWS = {
         "space_and_seabed": (
             "country_space_race_progress_mult", "country_space_race_risk_mult", "building_space_mine_throughput_add",
             "building_solar_receiver_throughput_add", "building_space_elevator_throughput_add",
-            "building_orbital_battlestation_throughput_add", "building_ocean_mine_throughput_add",
+            "building_orbital_battlestation_throughput_add",
         ),
     },
     "international": {
@@ -787,8 +802,40 @@ def generated_loc_file(types):
 
 
 _EMPTY = 'visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"'
+_HIDDEN = "Country.MakeScope.ScriptValue('gui_country_hidden_modifier_count')"
 _SHOWN = ("visible = \"[GreaterThan_int32(GetDataModelSize(Country.GetTimedModifiers), "
-          "FixedPointToInt(Country.MakeScope.ScriptValue('gui_country_hidden_modifier_count')))]\"")
+          f"FixedPointToInt({_HIDDEN}))]\"")
+# Under the list, while it leaves one of the country's modifiers out: how many,
+# and where they went (2026-10-27 audit, NAT-1). For the player's own country
+# the goto opens the window on the Nation tab (rule 9's goto, as the state
+# view's Grand Monument card does); another country's have no tab to go to.
+_WHERE = [
+    "flowcontainer = {",
+    f"\tvisible = \"[GreaterThan_CFixedPoint( {_HIDDEN}, '(CFixedPoint)0' )]\"",
+    "\tdirection = horizontal",
+    "\tparentanchor = hcenter",
+    "\tminimumsize = { @panel_width -1 }",
+    "\tmargin_top = 5",
+    "\tspacing = 10",
+    "\tignoreinvisible = yes",
+    "\tbutton_icon_goto = {",
+    "\t\tvisible = \"[Country.IsLocalPlayer]\"",
+    "\t\tsize = { 25 25 }",
+    "\t\ttooltip = \"te_nation_panel_goto_tt\"",
+    "\t\tonclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'nation')]\"",
+    "\t\tonclick = \"[GetVariableSystem.Set('com_open_window', 'te_systems_window')]\"",
+    "\t}",
+    "\ttextbox = {",
+    "\t\ttext = \"te_nation_panel_line\"",
+    "\t\ttooltip = \"[SelectLocalization( Country.IsLocalPlayer, 'te_nation_panel_line_tt', "
+    "'te_nation_panel_line_other_tt' )]\"",
+    "\t\tautoresize = yes",
+    "\t\talign = nobaseline",
+    "\t\tparentanchor = vcenter",
+    "\t\tdefault_format = \"#tooltippable\"",
+    "\t}",
+    "}",
+]
 
 
 def _mod_block(indent, why, vanilla, new):
@@ -799,10 +846,12 @@ def _mod_block(indent, why, vanilla, new):
 
 def generated_panel(vanilla_text=None):
     """Vanilla's country_panel_information_content with its modifier list
-    filtered: the header and the list shown while a modifier the Nation tab
-    doesn't show is left, the items the tab shows hidden
-    (te_nation_hidden_filter), and the list ignoring the hidden ones. Raises
-    if vanilla moved a line the filter hooks onto."""
+    filtered: the list shown while a modifier the Nation tab doesn't show is
+    left, the items the tab shows hidden (te_nation_hidden_filter), the list
+    ignoring the hidden ones, and under it a line counting them, with a goto
+    to the tab for the player's own country (_WHERE). The header keeps
+    vanilla's test, since the list or the line shows whenever the country has
+    a modifier. Raises if vanilla moved a line the filter hooks onto."""
     text = VANILLA_PANEL.read_text(encoding="utf-8-sig") if vanilla_text is None else vanilla_text
     lines = text.splitlines()
     head = [line for line in lines if re.match(r"@panel_width\w* = ", line)]
@@ -825,10 +874,16 @@ def generated_panel(vanilla_text=None):
     timed = next((i for i, line in enumerate(body) if line.strip() == "### TIMED MODIFIERS"), None)
     if timed is None:
         raise moved("its modifier list (no `### TIMED MODIFIERS`)")
-    out, empties, item = body[:timed], 0, None
+    out, empties, item, list_end, where = body[:timed], 0, None, None, False
     for line in body[timed:]:
         indent = line[:len(line) - len(line.lstrip())]
-        if item is not None:
+        if list_end is not None and line == list_end:
+            # the list's own flowcontainer closes: the line goes under it
+            out.append(line)
+            out += _mod_block(indent, "where the modifiers the list leaves out went (te_nation_panel_line)",
+                              [], _WHERE)
+            list_end, where = None, True
+        elif item is not None:
             # The filter goes on the item's root, so a hidden row leaves no
             # blank item: the line after `item = {` must open it.
             if line.strip() != "container = {" or indent != item + "\t":
@@ -839,10 +894,12 @@ def generated_panel(vanilla_text=None):
                               [], ["using = te_nation_hidden_filter"])
         elif line.strip() == _EMPTY:
             empties += 1
-            new = [_SHOWN] + (["ignoreinvisible = yes"] if empties == 2 else [])
-            why = ("the header shows while a modifier the Nation tab doesn't show is left" if empties == 1
-                   else "the list skips what the Nation tab shows")
-            out += _mod_block(indent, why, [line], new)
+            if empties == 1:
+                out.append(line)    # the header: vanilla's test (the docstring)
+            else:
+                out += _mod_block(indent, "the list skips what the Nation tab shows", [line],
+                                  [_SHOWN, "ignoreinvisible = yes"])
+                list_end = indent[:-1] + "}"
         elif line.strip() == "item = {":
             item = indent
             out.append(line)
@@ -850,6 +907,8 @@ def generated_panel(vanilla_text=None):
             out.append(line)
     if empties != 2 or item is not None or not any("te_nation_hidden_filter" in line for line in out):
         raise moved("its modifier list (its two IsDataModelEmpty lines or its item)")
+    if not where:
+        raise moved("its modifier list (the list's flowcontainer never closes)")
     parts = [
         f"### {HEADER}",
         f"### Vanilla's {PANEL_TYPE} (gui/country_panel.gui, the country panel's Information",

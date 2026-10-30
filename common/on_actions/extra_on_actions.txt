@@ -1962,6 +1962,37 @@ international_relations_events_on_action = {
 # ============================================================================
 decolonization_events_on_action = {
 	effect = {
+		# Wars of independence (decolonization_war_effects.txt): the monthly
+		# settle, before the pool and whatever the entry's state, since a war can
+		# outlast a failed entry. A colonial subject at war with us for its
+		# independence takes a record here too.
+		if = {
+			limit = {
+				OR = {
+					decol_iw_any_record = yes
+					AND = {
+						is_at_war = yes
+						any_subject_or_below = {
+							is_direct_subject_of = root
+							has_war_with = root
+							is_qualifying_colonial_subject = yes
+						}
+					}
+				}
+			}
+			decol_iw_track_subject_wars = yes
+			decol_iw_monthly = yes
+		}
+		# A great power arming a colony's rebels pays them each month.
+		if = {
+			limit = { has_variable = decol_iw_arming }
+			decol_iw_backer_monthly = yes
+		}
+		# A great power arming a colonial power: a month of its arms gone.
+		if = {
+			limit = { has_variable = decol_iw_allied_arming }
+			decol_iw_allied_backer_monthly = yes
+		}
 		if = {
 			limit = {
 				NOT = { is_country_type = decentralized }
@@ -2124,7 +2155,7 @@ decolonization_events_on_action = {
 						any_scope_state = {
 							NOT = { is_homeland_of_country_cultures = ROOT }
 							state_population >= 100000
-							is_overseas_from_capital = yes
+							is_separated_from_capital = yes
 							NOT = {
 								any_scope_pop = {
 									pop_acceptance < acceptance_status_4
@@ -2161,6 +2192,27 @@ decolonization_events_on_action = {
 						}
 					}
 					trigger_event = { id = decolonization_events.12 }
+				}
+				# Declaration of Independence: below bar 40 a colony whose people
+				# are severely unaccepted declares (decolonization_events.70); twice
+				# as likely below 20. Two years between declarations
+				# (decol_iw_next_declaration), ten for a territory that declared or
+				# was reconquered (decol_declared).
+				20 = {
+					trigger = {
+						has_journal_entry = je_colonial_empire
+						decol_iw_bar_below_40 = yes
+						NOT = { has_variable = decol_iw_next_declaration }
+						colonial_empire_no_offer_pending = yes
+						any_scope_state = { decol_iw_can_declare = yes }
+					}
+					modifier = {
+						if = {
+							limit = { decol_iw_bar_crumbling = yes }
+							add = 20
+						}
+					}
+					trigger_event = { id = decolonization_events.70 }
 				}
 				# Colonial Uprising (high unrest)
 				10 = {
@@ -2322,11 +2374,24 @@ decolonization_events_on_action = {
 				# Metropole pressure: The Veterans' Protest — fires after sustained
 				# garrison campaigns. Returning soldiers organize against further
 				# deployment.
+				# A lost war of independence brings the veterans out too
+				# (decol_iw_lost_modifier, decolonization_events.73).
 				8 = {
 					trigger = {
-						has_variable = colonial_garrison_months
 						any_scope_state = { is_overseas_colonial_state = yes }
-						var:colonial_garrison_months > 36
+						OR = {
+							AND = {
+								has_variable = colonial_garrison_months
+								var:colonial_garrison_months > 36
+							}
+							has_modifier = decol_iw_lost_modifier
+						}
+					}
+					modifier = {
+						if = {
+							limit = { has_modifier = decol_iw_lost_modifier }
+							add = 8
+						}
 					}
 					trigger_event = { id = decolonization_events.54 }
 				}
@@ -2593,7 +2658,7 @@ society_technology_events_on_action = {
 					NOT = { has_variable = ste_event_18_fired }
 					OR = {
 						AND = {
-							has_game_rule = space_race_enabled
+							sr_space_race_on = yes
 							has_variable = sr_colony_count
 							var:sr_colony_count > 0
 							NOT = { has_variable = sr_colony_charter_pending }
@@ -2611,7 +2676,7 @@ society_technology_events_on_action = {
 				trigger = {
 					OR = {
 						AND = {
-							has_game_rule = space_race_enabled
+							sr_space_race_on = yes
 							has_variable = sr_colony_count
 							var:sr_colony_count > 0
 							has_variable = ste_event_18_fired

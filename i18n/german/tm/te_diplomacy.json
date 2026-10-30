@@ -67,6 +67,10 @@
   "en": "We are disrupting military communications of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], degrading their combat effectiveness.",
   "de": "Wir stören die militärische Kommunikation von [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und schwächen damit deren Kampfkraft."
  },
+ "covert_counterintel_support_action_pact_desc": {
+  "en": "We are supporting the counterintelligence services of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "de": "Wir unterstützen die Spionageabwehr [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetAltName('GEN')]."
+ },
  "covert_cultivate_assets_action_pact_desc": {
   "en": "We are cultivating intelligence assets in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "de": "Wir bauen Geheimdienstquellen in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] auf."
@@ -251,6 +255,10 @@
   "en": "Foreign Affairs Ministry: Diplomacy Stall",
   "de": "Ministerium für Äußere Angelegenheiten: Diplomatischer Stillstand"
  },
+ "mutual_assistance_pact": {
+  "en": "Mutual Assistance Pact",
+  "de": "Beistandspakt"
+ },
  "nd_withdraw_umbrella_action_pact_desc": {
   "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] has withdrawn its nuclear umbrella from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "de": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] hat seinen nuklearen Schutzschirm für [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] zurückgezogen."
@@ -430,6 +438,18 @@
  "te_diplomatic_relations_drain": {
   "en": "Diplomatic Friction",
   "de": "Diplomatische Reibung"
+ },
+ "te_seabed_administer_claims_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] administers the seabed claims of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]",
+  "de": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetAltName('NOM')|U] verwaltet die Meeresbodenansprüche [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetAltName('GEN')]"
+ },
+ "te_seabed_administer_subject_claimant_tt": {
+  "en": "The subject has researched $abyssal_plain_mining$ and has a coastal state",
+  "de": "Das Klientelland hat $abyssal_plain_mining$ erforscht und besitzt einen Küstenstaat"
+ },
+ "te_seabed_administer_subject_tt": {
+  "en": "The country is still our direct subject",
+  "de": "Das Land ist weiterhin unser direktes Klientelland"
  },
  "trade_diplomacy_modifier": {
   "en": "Trade Diplomacy",

@@ -71,9 +71,20 @@ te_seabed_assertive_navy_mult = 2
 # (docs/testing/global-commons-playtest.md).
 te_seabed_power_projection_scale = 300
 # Policy factors (§ 2.5).
-te_seabed_policy_factor_survey = 0.25
+te_seabed_policy_factor_survey = 0.75
 te_seabed_policy_factor_sponsor = 1
 te_seabed_policy_factor_unilateral = 1
+# A coastal country without Abyssal Plain Mining is weighed at this in place
+# of a policy factor, and its share waits for it (model: LATENT_FACTOR, the
+# owner 2026-10-27): every sharing weighs every coastal country, so the first
+# claimant wins only what its weight does against everyone's, at most
+# 1 / this times its share once all have the technology on one policy. The
+# race's dial, with Survey's factor beside it: 0 hands the first claimant
+# every pool, 1 leaves no head start. 0.75, not the first 0.25 (owner,
+# 2026-10-27: Sponsor Contractors' 4x over a waiting country was too large).
+# Survey's factor, so researching the technology moves nothing until a
+# policy is chosen.
+te_seabed_latent_factor = 0.75
 
 # ---- Policy (§ 2.5; seabed claims spec §§ 2.3-2.4) ----
 # Influence held while the policy stands: unit modifiers
@@ -112,7 +123,7 @@ te_seabed_fee_rate = 0.02
 
 # ---- Long-haul (§ 2.4) ----
 # Display figure: te_seabed_long_haul (te_global_commons_seabed_modifiers.txt)
-# carries building_ocean_mine_throughput_add = -0.25 at multiplier 1.
+# carries building_throughput_add = -0.25 at multiplier 1, on the Deep-Sea Mine.
 te_seabed_long_haul_penalty_pct = 25
 
 # ============================================================================
@@ -224,6 +235,17 @@ te_seabed_policy_factor = {
 	else_if = {
 		limit = { te_seabed_policy_value = 3 }
 		value = te_seabed_policy_factor_unilateral
+	}
+}
+
+# Country scope: the factor its claim weight is multiplied by (model:
+# compute_weights): the policy factor, or te_seabed_latent_factor without
+# Abyssal Plain Mining.
+te_seabed_claim_factor = {
+	value = te_seabed_latent_factor
+	if = {
+		limit = { has_technology_researched = abyssal_plain_mining }
+		value = te_seabed_policy_factor
 	}
 }
 
@@ -1061,6 +1083,25 @@ te_seabed_tile_shown = {
 	}
 }
 
+# State scope, the state view's Ocean Basin tile (GUI audit VAN-8b, owner
+# 2026-10-27): a coastal state whose owner has no Seabed Licences tile (it
+# never took part in a sharing, or is another country) shows its basin, once
+# the viewing player has researched abyssal_plain_mining
+# (te_seabed_basin_tile_sgui). The basin decides, say, which pool a port there
+# would weigh in.
+te_seabed_basin_tile_shown = {
+	value = 0
+	if = {
+		limit = {
+			te_global_commons_enabled = yes
+			is_coastal = yes
+			has_variable = te_seabed_basin
+			NOT = { owner = { has_variable = te_seabed_shared } }
+		}
+		value = 1
+	}
+}
+
 # State scope, the tile's Basin row: the state's basin, 0 when it has none yet
 # (a state scope newer than its owner's last monthly recording).
 te_seabed_state_basin_disp = {
@@ -1099,16 +1140,14 @@ te_seabed_state_coast_count = {
 }
 
 # 1 where the owner's weight in this state's basin counts, 0 where
-# te_seabed_compute_weights gives it none there: no claimant
-# (te_seabed_zero_weights), the basin relinquished (te_seabed_weight_set), or
-# the Southern under the Antarctic Treaty (te_seabed_southern_barred).
+# te_seabed_compute_weights gives it none there: the basin relinquished
+# (te_seabed_weight_set), or the Southern under the Antarctic Treaty
+# (te_seabed_southern_barred). An owner without the technology is weighed too,
+# at te_seabed_latent_factor (te_seabed_state_owner_factor_disp).
 te_seabed_state_weight_counts = {
 	value = 0
 	if = {
-		limit = {
-			has_variable = te_seabed_basin
-			owner = { te_seabed_is_claimant = yes }
-		}
+		limit = { has_variable = te_seabed_basin }
 		value = 1
 		if = {
 			limit = {
@@ -1153,11 +1192,12 @@ te_seabed_state_weight_counts = {
 	}
 }
 
-# The owner's policy factor and its coast at the last sharing
-# (te_seabed_coast_all), read from the state.
+# The owner's claim factor (its policy's, or te_seabed_latent_factor without
+# the technology) and its coast at the last sharing (te_seabed_coast_all),
+# read from the state.
 te_seabed_state_owner_factor_disp = {
 	value = 0
-	owner = { add = te_seabed_policy_factor }
+	owner = { add = te_seabed_claim_factor }
 }
 
 te_seabed_state_owner_coast_all_disp = {
@@ -2154,13 +2194,25 @@ te_seabed_built_disp_pacific = {
 }
 
 # Country scope: what is left of the pool for rivals' unused claims (and any
-# not yet shared): the pool bar's dark background.
+# not yet shared), less the shares waiting for countries without the
+# technology. The pool bar's dark background holds both.
 te_seabed_rival_claims_pacific = {
 	value = te_seabed_bar_pool_pacific
 	subtract = te_seabed_our_lic_pacific
 	subtract = te_seabed_unbuilt_disp_pacific
 	subtract = te_seabed_rival_lic_pacific
+	subtract = te_seabed_wait_world_disp_pacific
 	min = 0
+}
+
+# Any scope: the shares waiting here for the countries without Abyssal Plain
+# Mining, as of the last sharing (te_seabed_world_totals).
+te_seabed_wait_world_disp_pacific = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_wait_pacific }
+		value = global_var:te_seabed_world_wait_pacific
+	}
 }
 
 te_seabed_coast_disp_pacific = {
@@ -2227,13 +2279,25 @@ te_seabed_built_disp_atlantic = {
 }
 
 # Country scope: what is left of the pool for rivals' unused claims (and any
-# not yet shared): the pool bar's dark background.
+# not yet shared), less the shares waiting for countries without the
+# technology. The pool bar's dark background holds both.
 te_seabed_rival_claims_atlantic = {
 	value = te_seabed_bar_pool_atlantic
 	subtract = te_seabed_our_lic_atlantic
 	subtract = te_seabed_unbuilt_disp_atlantic
 	subtract = te_seabed_rival_lic_atlantic
+	subtract = te_seabed_wait_world_disp_atlantic
 	min = 0
+}
+
+# Any scope: the shares waiting here for the countries without Abyssal Plain
+# Mining, as of the last sharing (te_seabed_world_totals).
+te_seabed_wait_world_disp_atlantic = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_wait_atlantic }
+		value = global_var:te_seabed_world_wait_atlantic
+	}
 }
 
 te_seabed_coast_disp_atlantic = {
@@ -2300,13 +2364,25 @@ te_seabed_built_disp_indian = {
 }
 
 # Country scope: what is left of the pool for rivals' unused claims (and any
-# not yet shared): the pool bar's dark background.
+# not yet shared), less the shares waiting for countries without the
+# technology. The pool bar's dark background holds both.
 te_seabed_rival_claims_indian = {
 	value = te_seabed_bar_pool_indian
 	subtract = te_seabed_our_lic_indian
 	subtract = te_seabed_unbuilt_disp_indian
 	subtract = te_seabed_rival_lic_indian
+	subtract = te_seabed_wait_world_disp_indian
 	min = 0
+}
+
+# Any scope: the shares waiting here for the countries without Abyssal Plain
+# Mining, as of the last sharing (te_seabed_world_totals).
+te_seabed_wait_world_disp_indian = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_wait_indian }
+		value = global_var:te_seabed_world_wait_indian
+	}
 }
 
 te_seabed_coast_disp_indian = {
@@ -2373,13 +2449,25 @@ te_seabed_built_disp_arctic = {
 }
 
 # Country scope: what is left of the pool for rivals' unused claims (and any
-# not yet shared): the pool bar's dark background.
+# not yet shared), less the shares waiting for countries without the
+# technology. The pool bar's dark background holds both.
 te_seabed_rival_claims_arctic = {
 	value = te_seabed_bar_pool_arctic
 	subtract = te_seabed_our_lic_arctic
 	subtract = te_seabed_unbuilt_disp_arctic
 	subtract = te_seabed_rival_lic_arctic
+	subtract = te_seabed_wait_world_disp_arctic
 	min = 0
+}
+
+# Any scope: the shares waiting here for the countries without Abyssal Plain
+# Mining, as of the last sharing (te_seabed_world_totals).
+te_seabed_wait_world_disp_arctic = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_wait_arctic }
+		value = global_var:te_seabed_world_wait_arctic
+	}
 }
 
 te_seabed_coast_disp_arctic = {
@@ -2446,13 +2534,25 @@ te_seabed_built_disp_southern = {
 }
 
 # Country scope: what is left of the pool for rivals' unused claims (and any
-# not yet shared): the pool bar's dark background.
+# not yet shared), less the shares waiting for countries without the
+# technology. The pool bar's dark background holds both.
 te_seabed_rival_claims_southern = {
 	value = te_seabed_bar_pool_southern
 	subtract = te_seabed_our_lic_southern
 	subtract = te_seabed_unbuilt_disp_southern
 	subtract = te_seabed_rival_lic_southern
+	subtract = te_seabed_wait_world_disp_southern
 	min = 0
+}
+
+# Any scope: the shares waiting here for the countries without Abyssal Plain
+# Mining, as of the last sharing (te_seabed_world_totals).
+te_seabed_wait_world_disp_southern = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_seabed_world_wait_southern }
+		value = global_var:te_seabed_world_wait_southern
+	}
 }
 
 te_seabed_coast_disp_southern = {
@@ -2521,34 +2621,8 @@ te_seabed_policy_locked_disp = {
 	}
 }
 
-# Country scope (Pacific): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_pacific = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_pacific }
-		value = var:te_seabed_rkcap_count_pacific
-	}
-}
-
-te_seabed_rk_more_disp_pacific = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_pacific }
-		value = global_var:te_seabed_rk_more_pacific
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_pacific
-				var:te_seabed_rank_pacific > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Pacific): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_pacific = {
 	value = 0
 	if = {
@@ -2563,34 +2637,8 @@ te_seabed_us_shown_pacific = {
 	}
 }
 
-# Country scope (Atlantic): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_atlantic = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_atlantic }
-		value = var:te_seabed_rkcap_count_atlantic
-	}
-}
-
-te_seabed_rk_more_disp_atlantic = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_atlantic }
-		value = global_var:te_seabed_rk_more_atlantic
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_atlantic
-				var:te_seabed_rank_atlantic > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Atlantic): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_atlantic = {
 	value = 0
 	if = {
@@ -2605,34 +2653,8 @@ te_seabed_us_shown_atlantic = {
 	}
 }
 
-# Country scope (Indian): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_indian = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_indian }
-		value = var:te_seabed_rkcap_count_indian
-	}
-}
-
-te_seabed_rk_more_disp_indian = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_indian }
-		value = global_var:te_seabed_rk_more_indian
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_indian
-				var:te_seabed_rank_indian > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Indian): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_indian = {
 	value = 0
 	if = {
@@ -2647,34 +2669,8 @@ te_seabed_us_shown_indian = {
 	}
 }
 
-# Country scope (Arctic): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_arctic = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_arctic }
-		value = var:te_seabed_rkcap_count_arctic
-	}
-}
-
-te_seabed_rk_more_disp_arctic = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_arctic }
-		value = global_var:te_seabed_rk_more_arctic
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_arctic
-				var:te_seabed_rank_arctic > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Arctic): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_arctic = {
 	value = 0
 	if = {
@@ -2689,34 +2685,8 @@ te_seabed_us_shown_arctic = {
 	}
 }
 
-# Country scope (Southern): the rivals' flags filled on this player,
-# the claimants past the six shown (not counting us: our own row shows us),
-# and whether our own row shows (we claim,
-# hold or relinquished here).
-te_seabed_rkcap_count_disp_southern = {
-	value = 0
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_southern }
-		value = var:te_seabed_rkcap_count_southern
-	}
-}
-
-te_seabed_rk_more_disp_southern = {
-	value = 0
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_southern }
-		value = global_var:te_seabed_rk_more_southern
-		if = {
-			limit = {
-				has_variable = te_seabed_rank_southern
-				var:te_seabed_rank_southern > 6
-			}
-			subtract = 1
-		}
-		min = 0
-	}
-}
-
+# Country scope (Southern): whether our own row shows under the basin's claimants
+# (we claim, hold or relinquished here).
 te_seabed_us_shown_southern = {
 	value = 0
 	if = {

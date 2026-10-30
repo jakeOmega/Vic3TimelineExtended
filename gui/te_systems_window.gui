@@ -48,7 +48,8 @@
 ### carry none.
 
 ### Which tab is shown. U = the tab is open (te_window_<system>_tab_sgui: its
-### rule on and an entry running), R = the tab is on the strip
+### rule on and an entry running; the Space Race's stays open once the country
+### is in the race, sr_in_space_race), R = the tab is on the strip
 ### (te_window_<system>_tab_unlock_sgui: its rule on), S = the player last chose
 ### it (te_systems_window_tab), T = the developer tax tab is chosen and armed.
 ### With V = "a system tab last chosen is open" (S and U for one of the four):
@@ -143,7 +144,7 @@ types te_systems_window_types
 				### unlock conditions with a tick or a cross. When they all pass but the
 				### entry is not running (in a save whose entry had run its course, the
 				### checklist came out empty: play-test 2026-09-30), the tooltip says so
-				### instead (te_window_tab_met_tt). tab_buttons defaults both
+				### instead (te_system_tab_met_tt). tab_buttons defaults both
 				### halves of a slot to `visible = no`, so each visibility block says
 				### when its half shows: the templates above.
 				###
@@ -189,7 +190,7 @@ types te_systems_window_types
 						text = "te_window_tab_space_race"
 					}
 					blockoverride "second_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 					}
 					blockoverride "second_button_click" {
 						enabled = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -210,7 +211,7 @@ types te_systems_window_types
 						text = "te_window_tab_grand_monuments"
 					}
 					blockoverride "third_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 					}
 					blockoverride "third_button_click" {
 						enabled = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -231,7 +232,7 @@ types te_systems_window_types
 						text = "te_window_tab_colonial_empire"
 					}
 					blockoverride "fourth_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 					}
 					blockoverride "fourth_button_click" {
 						enabled = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -321,16 +322,23 @@ types te_systems_window_types
 
 				### ------------------------------------------------------------------
 				### TAB: SPACE RACE (the nine je_space_race_* entries;
-				### gui/journal_entry_widgets/space_race_widget.gui). GetPlayerJournalEntry
-				### takes one literal key, so each entry has its own block, in
-				### je_space_race.txt's order, each shown only while the player holds
-				### that entry active (te_window_space_race_<m>_sgui, on a parent of
-				### the datacontext). Several can run at once, so each block has its
-				### own header, the entry's name, then the types its journal roots
-				### wrap (the milestone's overview and live sections, or the waiting
-				### entry's transit), then Open Journal Entry for that entry. How the
-				### Space Race Works, the reference all nine entries share, comes once,
-				### at the end.
+				### gui/journal_entry_widgets/space_race_widget.gui). Open from the
+				### first milestone on, with or without one running
+				### (te_window_space_race_tab_sgui, sr_in_space_race). First the
+				### entries (owner, 2026-10-27): GetPlayerJournalEntry takes one literal key, so
+				### each entry has its own block, in je_space_race.txt's order, each
+				### shown only while the player holds that entry active
+				### (te_window_space_race_<m>_sgui, on a parent of the datacontext),
+				### and a note in their place while none is
+				### (te_window_space_race_idle_sgui). Several can run at once, so each
+				### block has its own header, the entry's name, then the types its
+				### journal roots wrap (the milestone's overview and live sections, or
+				### the waiting entry's transit; the debris row overridden out, as
+				### Orbit has it), then Open Journal Entry for that entry. Then the
+				### tab's own sections, which read no entry: Space Powers (our
+				### program and every other power's) and Orbit (debris, satellites,
+				### strikes). How the Space Race Works, the reference all nine
+				### entries share, comes once, at the end.
 				###
 				### Not drawn, as in the journal: the goal bar (every entry mounts the
 				### bars-on-top marker, and the overview draws the progress), the
@@ -347,6 +355,30 @@ types te_systems_window_types
 					spacing = 10
 					margin_top = 10
 					margin_bottom = 15
+
+					### No milestone running: one note in the entries' place, so the
+					### tab never ends on the reference alone.
+					flowcontainer = {
+						name = "te_systems_window_space_race_idle"
+						visible = "[GetScriptedGui('te_window_space_race_idle_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+						minimumsize = { 520 -1 }
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "te_window_space_race_idle_header"
+							}
+						}
+						te_sr_panel = {
+							te_sr_text = {
+								text = "te_window_space_race_idle_note"
+							}
+						}
+					}
 
 					### suborbital
 					flowcontainer = {
@@ -372,7 +404,9 @@ types te_systems_window_types
 							minimumsize = { 520 -1 }
 
 							te_sr_suborbital_overview = {}
-							te_sr_suborbital_status = {}
+							te_sr_suborbital_status = {
+								blockoverride "sr_debris" {}
+							}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"
@@ -410,7 +444,9 @@ types te_systems_window_types
 							minimumsize = { 520 -1 }
 
 							te_sr_orbital_overview = {}
-							te_sr_orbital_status = {}
+							te_sr_orbital_status = {
+								blockoverride "sr_debris" {}
+							}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"
@@ -448,7 +484,9 @@ types te_systems_window_types
 							minimumsize = { 520 -1 }
 
 							te_sr_moon_landing_overview = {}
-							te_sr_moon_landing_status = {}
+							te_sr_moon_landing_status = {
+								blockoverride "sr_debris" {}
+							}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"
@@ -486,7 +524,9 @@ types te_systems_window_types
 							minimumsize = { 520 -1 }
 
 							te_sr_probe_overview = {}
-							te_sr_probe_status = {}
+							te_sr_probe_status = {
+								blockoverride "sr_debris" {}
+							}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"
@@ -524,7 +564,9 @@ types te_systems_window_types
 							minimumsize = { 520 -1 }
 
 							te_sr_moon_base_overview = {}
-							te_sr_moon_base_status = {}
+							te_sr_moon_base_status = {
+								blockoverride "sr_debris" {}
+							}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"
@@ -562,7 +604,9 @@ types te_systems_window_types
 							minimumsize = { 520 -1 }
 
 							te_sr_mars_landing_overview = {}
-							te_sr_mars_landing_status = {}
+							te_sr_mars_landing_status = {
+								blockoverride "sr_debris" {}
+							}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"
@@ -600,7 +644,9 @@ types te_systems_window_types
 							minimumsize = { 520 -1 }
 
 							te_sr_interstellar_probe_overview = {}
-							te_sr_interstellar_probe_status = {}
+							te_sr_interstellar_probe_status = {
+								blockoverride "sr_debris" {}
+							}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"
@@ -675,7 +721,9 @@ types te_systems_window_types
 							minimumsize = { 520 -1 }
 
 							te_sr_solar_colonization_overview = {}
-							te_sr_solar_colonization_status = {}
+							te_sr_solar_colonization_status = {
+								blockoverride "sr_debris" {}
+							}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"
@@ -687,6 +735,24 @@ types te_systems_window_types
 								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 							}
 						}
+					}
+
+					### Space Powers and Orbit (space_race_widget.gui), after the
+					### milestones' blocks (owner, 2026-10-27: the milestone we run is
+					### the summary a player acts on), under the tab's own gate: they
+					### read the player and the powers' capitals, never an entry, so
+					### they show between milestones too. Orbit holds the debris row.
+					flowcontainer = {
+						name = "te_systems_window_space_race_summary"
+						visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 4
+						minimumsize = { 520 -1 }
+
+						te_sr_sec_powers = {}
+						te_sr_sec_orbit = {}
 					}
 
 					### How the Space Race Works, once for every entry. The journal wraps
@@ -718,7 +784,9 @@ types te_systems_window_types
 				### gate, so it shows whenever the tab does; the gate
 				### (te_window_grand_monuments_tab_sgui) sits on a parent of the
 				### GetPlayerJournalEntry datacontext, never on the widget carrying it;
-				### the column is a fixed 520, the journal roots' width, centred.
+				### the column is a fixed 520, the journal roots' width, centred. The
+				### header is the tab's own name, as every other tab's is; the entry
+				### keeps its short "Monuments" in the journal (2026-10-27 audit, WIN-4).
 				flowcontainer = {
 					name = "te_systems_window_grand_monuments_tab"
 					using = te_systems_window_grand_monuments_selected
@@ -732,7 +800,7 @@ types te_systems_window_types
 					default_header = {
 						using = default_list_position
 						blockoverride "text" {
-							text = "je_grand_monuments"
+							text = "te_window_tab_grand_monuments"
 						}
 					}
 

@@ -1,0 +1,108 @@
+﻿# First Past the Post values (amendment_first_past_the_post).
+# Design: docs/superpowers/specs/2026-10-25-first-past-the-post-design.md.
+
+# Join-weight terms, read by every party's join_weight (the generated
+# common/parties/zz_te_party_join_weights.txt and the mod's three parties).
+# An interest group joins a party at affiliation 1 or more
+# (MIN_AFFILIATION_TO_JOIN_PARTY); every party's base is -5. Vanilla's
+# culture-based American term was -10 to five parties and +3 to the Liberals,
+# and its ordinary terms run from 2 to 10, so -20 leaves a third party open
+# only to a group that fits it strongly.
+te_fptp_major_party_join_weight = 5
+te_fptp_minor_party_join_weight = -20
+
+# Party scope. The party's size: its member groups' clout.
+te_fptp_party_clout = {
+	value = 0
+	every_member = {
+		add = ig_clout
+	}
+}
+
+# Country scope. The clout of the groups in the two largest parties
+# (te_fptp_major_member, set by te_fptp_refresh_major_parties).
+te_fptp_major_clout = {
+	value = 0
+	every_interest_group = {
+		limit = { has_variable = te_fptp_major_member }
+		add = ig_clout
+	}
+}
+
+# Country scope. The second largest party's clout (for the self-check).
+te_fptp_second_party_clout = {
+	value = 0
+	ordered_active_party = {
+		limit = { NOT = { is_party_type = revolutionary_party } }
+		order_by = te_fptp_party_clout
+		position = 1
+		check_range_bounds = no
+		add = te_fptp_party_clout
+	}
+}
+
+# Country scope, with scope:te_fptp_country saved: parties marked major.
+te_fptp_marked_party_count = {
+	value = 0
+	every_active_party = {
+		limit = { te_fptp_party_is_major = yes }
+		add = 1
+	}
+}
+
+# Country scope, with scope:te_fptp_country saved: unmarked parties larger
+# than either marked party (should be none). Pairwise, so a ranking that
+# ignored its order can't pass by agreeing with itself.
+te_fptp_outranking_minor_count = {
+	value = 0
+	every_active_party = {
+		limit = {
+			NOT = { is_party_type = revolutionary_party }
+			NOT = { te_fptp_party_is_major = yes }
+			save_temporary_scope_value_as = {
+				name = te_fptp_chk_unmarked
+				value = te_fptp_party_clout
+			}
+			scope:te_fptp_country = {
+				any_active_party = {
+					te_fptp_party_is_major = yes
+					te_fptp_party_clout < scope:te_fptp_chk_unmarked
+				}
+			}
+		}
+		add = 1
+	}
+}
+
+# Country scope, with scope:te_fptp_country saved: the positive control for
+# te_fptp_outranking_minor_count. Unmarked parties that some marked party is at
+# least as large as: with three or more parties and a working comparison, at
+# least 1. 0 means the comparison itself failed (the saved value didn't read),
+# which would otherwise pass as "none outranked".
+te_fptp_outranked_control_count = {
+	value = 0
+	every_active_party = {
+		limit = {
+			NOT = { is_party_type = revolutionary_party }
+			NOT = { te_fptp_party_is_major = yes }
+			save_temporary_scope_value_as = {
+				name = te_fptp_chk_unmarked
+				value = te_fptp_party_clout
+			}
+			scope:te_fptp_country = {
+				any_active_party = {
+					te_fptp_party_is_major = yes
+					te_fptp_party_clout >= scope:te_fptp_chk_unmarked
+				}
+			}
+		}
+		add = 1
+	}
+}
+
+# Self-check readouts (debug_log can only print a script value).
+te_fptp_chk_marked_g = { value = global_var:te_fptp_chk_marked }
+te_fptp_chk_outranked_g = { value = global_var:te_fptp_chk_outranked }
+te_fptp_chk_second_g = { value = global_var:te_fptp_chk_second }
+te_fptp_chk_parties_g = { value = global_var:te_fptp_chk_parties }
+te_fptp_chk_control_g = { value = global_var:te_fptp_chk_control }

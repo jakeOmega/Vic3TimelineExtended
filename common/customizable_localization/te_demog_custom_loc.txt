@@ -1,0 +1,138 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the census's inputs while the census doesn't run
+# ============================================================================
+# Every modifier type in common/modifier_type_definitions/demographics_modifier_types.txt
+# is read only by the census. Under the Demographics rule's Disabled setting no
+# census runs, yet the techs, laws and institutions that carry those types still
+# list their lines. So each type's name ends in te_demog_census_off_name and its
+# description in te_demog_census_off_desc (te_modifiers_l_english.yml): empty
+# while te_demog_cohorts_run holds (Full, Display only), a tag and a note
+# otherwise. test_demographics_modifiers.py holds every type to both.
+#
+# A modifier name renders with no scope of its own, so the entries are country
+# entries reached through GetPlayer, as vanilla's concept text reaches
+# enactment_phase_0. A name also renders where there is no player: a loading-
+# screen concept tip (Pollution Impact lists state_region_pollution_health's
+# lines) and an observer's session, where GetCustom logs "Object of type
+# 'country' is not valid" every frame. So every entry in this file is called
+# behind vanilla's loading-tip guard,
+# [SelectLocalization(GetPlayer.IsValid,'<entry>_ingame','<plain key>')], and
+# only <entry>_ingame (te_miscellaneous_l_english.yml) calls GetCustom.
+# The trigger reads the scripted gate, not the rule, so a
+# release (scripts/release/comment_out_census_inputs.py sets the gate to
+# always = no and removes the rule) leaves nothing reading a missing rule.
+# ============================================================================
+
+te_demog_census_off_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_cohorts_run = yes }
+		localization_key = te_demog_census_off_none
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_census_off_tag
+	}
+}
+
+te_demog_census_off_desc = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_cohorts_run = yes }
+		localization_key = te_demog_census_off_none
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_census_off_note
+	}
+}
+
+# ============================================================================
+# DEMOGRAPHICS — the moved Workforce Ratio lines while the census sets the workforce
+# ============================================================================
+# Every engine working-adult line on laws, technologies and the rest sits on one
+# of two script-only types that read "Workforce Ratio"
+# (demographics_workforce_line_types.txt). The mod re-applies both flat while no
+# census term sets a state's workforce (te_demog_workforce_lines_refresh). Under
+# Full the census's first step in a state clears them: it reads the women's-work
+# family as women's participation (te_demog_women_rate_law), and the replaced
+# family does nothing, since the census carries it through its ages and who works.
+# So under Full the replaced family's name ends in a tag saying so, and the
+# women's-work family's whole name and description change to what the census reads
+# it as, "Women's Work": the reading in force comes first (owner, 2026-10-25; it read
+# "Women's Work (Workforce Ratio)" until the women's-rights laws' Women's Work Outside
+# the Home line went). Under Display only and Disabled the lines apply as written and both
+# read plain Workforce Ratio. A state the census hasn't stepped yet keeps the flat
+# lines for up to a year; the names are per country. A release's effects gate reads
+# always = no, so the Full names never show there.
+te_demog_wf_replaced_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_effects_run = yes }
+		localization_key = te_demog_wf_replaced_tag
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_census_off_none
+	}
+}
+
+te_demog_wf_womens_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_effects_run = yes }
+		localization_key = te_demog_wf_womens_full
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_wf_plain
+	}
+}
+
+te_demog_wf_womens_desc = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_effects_run = yes }
+		localization_key = te_demog_wf_womens_desc_full
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_wf_womens_desc_plain
+	}
+}
+
+# ============================================================================
+# DEMOGRAPHICS — the moved birth and death lines while the census sets them
+# ============================================================================
+# The engine's birth and mortality lines on laws, technologies and institutions sit
+# on script-only types (demographics_engine_line_types.txt) whose names are the
+# vanilla ones: Birth Rate, Mortality, the professions' mortality. The mod
+# re-applies them flat under Display only and Disabled (te_demog_lines_refresh).
+# Under Full the census folds the absorbed family into its own rates and applies
+# the on-top family at its rate (te_demog_rates_refresh), so the lines still act,
+# through the census. Under Full each name ends in "(Demographics)" to say so
+# (owner, 2026-10-25); otherwise it is plain. Per country, like the Workforce Ratio
+# tags: a state the census hasn't stepped keeps the flat lines for up to a year.
+te_demog_line_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_effects_run = yes }
+		localization_key = te_demog_line_tag
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_census_off_none
+	}
+}

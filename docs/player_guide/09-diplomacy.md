@@ -1,6 +1,6 @@
 # Diplomacy
 
-The mod adds 39 treaty articles, extra escalation in diplomatic plays, events
+The mod adds 41 treaty articles, extra escalation in diplomatic plays, events
 between rival powers, a reunification system for divided nations, two more tiers
 of power bloc principles, and ten late-game formable countries. None of this has
 a game rule or journal entry of its own: it works through the base game's treaty
@@ -48,6 +48,12 @@ back.
 Excavation Concession and Excavation Permit leave nothing on the state. They
 let the other side dig there only while the treaty is in force and the conceding
 country owns the state, so a dig under one stops as soon as either ends.
+
+The four Grand Monument articles appear in a draft only where they have
+something to act on. Surrender a Monument is listed for a conceding country
+that owns a monument it could give up, Return Cultural Property for one that
+holds a trophy from the other side's lands, and the two excavation articles for
+one with a buried site open to the other side.
 
 ![Choosing the company for a Disband Company article. The list holds the conceding country's companies.](images/disband_company.png)
 
@@ -124,6 +130,8 @@ The remaining articles belong to systems with chapters of their own.
 | Require UN Membership | United Nations | [The United Nations](10-united-nations.md) |
 | Enforce Emissions Reduction | Global Warming | [Climate and pollution](15-climate.md) |
 | Lease Pacific, Atlantic, Indian, Arctic and Southern Seabed Claims | Global Commons | [The extended timeline](02-timeline.md#leasing-seabed-claims) |
+| Cede Colony | Space Race set to Simple Colonies or Full Colonies | [The space race](16-space.md#ceding-a-colony) |
+| Grid Interconnection Agreement | None | [Economy and construction](03-economy.md#power-grids) |
 
 ### Treaty article events
 

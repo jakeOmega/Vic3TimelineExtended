@@ -13,7 +13,7 @@
 
 building_grand_monument_site = {
 	building_group = bg_grand_monuments
-	icon = "gfx/interface/icons/building_icons/building_grand_monument.dds"
+	icon = "gfx/interface/icons/building_icons/building_grand_monument_site.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -70,7 +70,7 @@ building_grand_monument_site = {
 			add = 25
 		}
 
-		# The Tourism Industry throughput pays off where one exists.
+		# The monument's tourism output pays off where a Tourism Industry exists.
 		if = {
 			limit = { has_building = building_tourism_industry }
 			add = 50

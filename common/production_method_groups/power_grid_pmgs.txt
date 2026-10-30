@@ -1,0 +1,20 @@
+﻿# ============================================================================
+# Power Grid Production Method Groups
+# ============================================================================
+
+pmg_grid_transfer_station = {
+	texture = "gfx/interface/icons/goods_icons/grid_power.dds"
+	production_methods = {
+		pm_grid_transfer_base
+	}
+}
+
+# The HVDC Undersea Interconnector's cable (building_grid_hvdc_interconnector,
+# power_grid.txt), which joins its station's grid to another station's with a
+# cable across the sea (te_grid_sea_link).
+pmg_grid_interconnector = {
+	texture = "gfx/interface/icons/production_method_icons/pm_grid_hvdc_interconnector.dds"
+	production_methods = {
+		pm_grid_hvdc_interconnector
+	}
+}

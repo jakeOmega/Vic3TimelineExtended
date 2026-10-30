@@ -183,7 +183,11 @@ class TestActs(unittest.TestCase):
         self.loose = strip_comments(read(LOOSE_EFFECTS))
 
     def test_note_use_scales_and_cuts_the_clock(self):
-        body = block(self.taboo, "nd_taboo_note_use")
+        # A single use is the scaled form at 1 (a salvo passes the square root
+        # of its warheads, rework spec §14.3).
+        self.assertIn("nd_taboo_note_use_scaled = { KIND = $KIND$ RETALIATION = $RETALIATION$ SCALE = 1 }",
+                      block(self.taboo, "nd_taboo_note_use"))
+        body = block(self.taboo, "nd_taboo_note_use_scaled")
         for needle in ("value = nd_taboo_shock_$KIND$", "value = nd_taboo_ledger_$KIND$",
                        "always = $RETALIATION$", "multiply = nd_taboo_clock_keep_retaliation",
                        "multiply = nd_taboo_clock_keep_first_use",
@@ -206,6 +210,35 @@ class TestActs(unittest.TestCase):
             self.assertIn("nd_was_struck_by = { ENEMY = scope:target_country }", body, name)
             self.assertIn(f"nd_taboo_note_use = {{ KIND = {kind} RETALIATION = yes }}", body, name)
             self.assertIn(f"nd_taboo_note_use = {{ KIND = {kind} RETALIATION = no }}", body, name)
+
+    def test_strategic_answer_is_retaliation_for_the_un_too(self):
+        # #527: the strike action's answer took a first strike's UN record
+        # (40 dossier points, the authority shock, a grievance, an ICC crime)
+        # while the taboo booked it as retaliation. Both now follow one test,
+        # and the answer is booked as nuclear_response_strike books it.
+        body = block(self.extra, "nuclear_first_strike")
+        test = body.index("limit = { nd_was_struck_by = { ENEMY = scope:target_country } }")
+        opened = body.rindex("if = {", 0, test)
+        answer = block(body[opened:], "if")
+        rest = body[opened + len("if = {") + len(answer) + 1:].lstrip()
+        self.assertTrue(rest.startswith("else = {"))
+        first_use = block(rest, "else")
+        first_strike_record = ("un_authority_actor_shock_on", "REASON = 8",
+                               "POINTS = un_dos_points_first_strike",
+                               "un_docket_note_grievance", "un_regime_icc_note_crime")
+        for needle in first_strike_record:
+            self.assertIn(needle, first_use, needle)
+            self.assertNotIn(needle, answer, needle)
+            # Nowhere outside the two branches either.
+            self.assertEqual(body.count(needle), first_use.count(needle), needle)
+        retaliation = block(self.extra, "nuclear_response_strike")
+        for needle in ("un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 "
+                       "SUBJECT = scope:target_state }",
+                       "un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_retaliation }",
+                       "nd_taboo_note_use = { KIND = strategic RETALIATION = yes }"):
+            self.assertIn(needle, retaliation, needle)
+            self.assertIn(needle, answer, needle)
+        self.assertNotIn("change_infamy", answer)
 
     def test_dispatch_is_always_at_war(self):
         # nd_was_struck_by opens with has_war_with; every detonation site is

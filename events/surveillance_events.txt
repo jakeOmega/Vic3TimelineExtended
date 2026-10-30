@@ -425,9 +425,20 @@ surveillance_events.5 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = surveillance_events.5.t
+	# With covert warfare on, the text names the country whose operation we
+	# exposed (scope:surv_cyber_spy, from immediate); the unnamed text is the
+	# fallback for a record whose country no longer exists. With it off, no
+	# country spied (a rival only stands in for one), so none is named.
 	desc = {
 		first_valid = {
 			# Covert warfare on: the event follows an operation our counterintelligence exposed.
+			triggered_desc = {
+				trigger = {
+					has_game_rule = covert_warfare_enabled
+					exists = scope:surv_cyber_spy
+				}
+				desc = surveillance_events.5.d_exposed_named
+			}
 			triggered_desc = {
 				trigger = { has_game_rule = covert_warfare_enabled }
 				desc = surveillance_events.5.d_exposed
@@ -470,6 +481,16 @@ surveillance_events.5 = {
 				has_variable = iw_last_exposed_age
 				var:iw_last_exposed_age < 24
 			}
+		}
+	}
+
+	immediate = {
+		# The spy, for the text: the country whose operation we exposed
+		# (covert_op_burn's record, the same write as the type the trigger
+		# reads).
+		if = {
+			limit = { has_game_rule = covert_warfare_enabled }
+			var:iw_last_exposed_country ?= { save_scope_as = surv_cyber_spy }
 		}
 	}
 

@@ -9,13 +9,15 @@
 #   - je_colonial_empire's `immediate` block  (so a freshly activated entry is
 #     populated on the first frame instead of showing dashes for a month)
 #   - je_colonial_empire's `on_monthly_pulse` tail
-#   - the tail of all nine colonial_empire_effect_* button actions
-#     (so a click moves the numbers immediately)
+#   - the tail of the panel's actions (colonial_programme_after_step and the
+#     three decision effects) and of the options of the per-target
+#     confirmations decolonization_events.402-.404 that change a holding (so a
+#     click or a release moves the numbers immediately)
 #
 # SCOPE: country.
 #
 # The whole body is wrapped in `hidden_effect` -- the same reason
-# te_history_record_sample is. The nine button actions are rendered as widget
+# te_history_record_sample is. The button actions are rendered as widget
 # button tooltips through ScriptedGui.ExecuteTooltip, which re-renders every
 # frame the panel is open; this effect must contribute no tooltip text and must
 # not have its iterators walked during that render.
@@ -157,18 +159,18 @@ colonial_empire_refresh_display = {
 		set_variable = { name = colonial_empire_d_acceptance value = colonial_stability_drift_acceptance }
 
 		# Condemners' share of great-power prestige (0-1), the number the two
-		# great-power escalations fire on. Read by colonial_empire_pressure_sgui
-		# and the overview's pie.
+		# great-power escalations fire on. Read by the overview's pie.
 		set_variable = { name = colonial_empire_condemner_share value = colonial_gp_condemner_prestige_share }
 
-		# The supporters' share of the same pool: the pie's second slice and a
-		# roster line. Display only; no escalation reads it.
+		# The supporters' share of the same pool: the pie's second slice.
+		# Display only; no escalation reads it.
 		set_variable = { name = colonial_empire_supporter_share value = colonial_gp_supporter_prestige_share }
 
 		# Which of those two escalations applies: 0 neither, 1 diplomatic
 		# isolation, 2 international consensus (the two stack, so 2 means
 		# both). Read off the bar's own escalation leaves, so the share
-		# thresholds stay in colonial_empire_values.txt. The overview's alert.
+		# thresholds stay in colonial_empire_values.txt. The overview's Great
+		# Powers cell and International Pressure's escalation lines.
 		set_variable = { name = colonial_empire_pressure_level value = 0 }
 		if = {
 			limit = { colonial_stability_term_gp_extreme_pressure < 0 }
@@ -184,222 +186,372 @@ colonial_empire_refresh_display = {
 		# panel headline and the signed history series.
 		set_variable = { name = colonial_empire_d_total value = colonial_stability_drift_total }
 
-		# --- Decolonization candidates -------------------------------------
-		# Counts only, plus the name of the state the player would be offered
-		# first. The three-candidate flood-fill preview stays inside the button
-		# actions, on click: running it here would walk it every month for every
-		# colonial country, and the confirmation event (decolonization_events.400
-		# / .401) already previews all three picks properly.
+		# --- What the entry is held by -------------------------------------
+		# The overview's colonies and subjects line: the colonies (is_overseas_colonial_state,
+		# what keeps the entry running) and the colonial subjects. The eligible
+		# count is every territory the Colonial Holdings list and Planned Full
+		# Decolonization can take (is_decolonization_eligible_state, a superset
+		# of the colonies); the list's rows and "+N more" read it.
+		set_variable = { name = colonial_empire_colony_count value = colonial_state_count }
+		# And every other state of ours, the overreach ratio's denominator: the
+		# territory list's per-territory weight reads the two counts.
+		set_variable = { name = colonial_empire_metropole_count value = metropole_state_count }
+		set_variable = { name = colonial_empire_subject_count value = colonial_subject_count }
 		set_variable = { name = colonial_empire_eligible_count value = colonial_eligible_state_count }
-		set_variable = { name = colonial_empire_round_table_count value = colonial_round_table_state_count }
 
-		remove_variable = colonial_empire_largest_eligible_state
-		ordered_scope_state = {
-			limit = { is_decolonization_eligible_state = yes }
-			order_by = state_population
-			max = 1
-			save_temporary_scope_as = colonial_empire_largest_candidate
-			prev = {
-				set_variable = {
-					name = colonial_empire_largest_eligible_state
-					value = scope:colonial_empire_largest_candidate
-				}
-			}
-		}
-
-		# --- Eligible territories, for the list under Why Stability ---------
-		# The first eight eligible territories by GDP, stored as state scopes
-		# (colonial_empire_territory_1..8) for the panel's rows, which read
-		# everything else live from the stored state (colonial_territory_disp_*
-		# in colonial_empire_values.txt). Players only: no AI reads a panel.
-		# Each position is taken only while the count reaches it, because
-		# `check_range_bounds = no` clamps an out-of-range `position` to the
-		# last one rather than skipping it (the note in
-		# colonial_empire_effect_release_territory). Each listed state also
-		# gets its primary-culture share, the one figure that walks its pops.
-		remove_variable = colonial_empire_territory_1
-		remove_variable = colonial_empire_territory_2
-		remove_variable = colonial_empire_territory_3
-		remove_variable = colonial_empire_territory_4
-		remove_variable = colonial_empire_territory_5
-		remove_variable = colonial_empire_territory_6
-		remove_variable = colonial_empire_territory_7
-		remove_variable = colonial_empire_territory_8
+		# --- Eligible territories, for the Colonial Holdings list -----------
+		# One row per release bloc (colonial_empire_mark_release_blocs: a
+		# territory and the states a release would take with it), every bloc
+		# by its GDP, largest first: the seeds in colonial_empire_blocs, which
+		# the panel's datamodel draws in this order (CE-1 of the 2026-10-27
+		# GUI audit: eight fixed slots and a "+N more" hover before), each row
+		# reading its bloc's figures from the seed (colonial_bloc_disp_* in
+		# colonial_empire_values.txt). Players only: no AI reads a panel.
+		clear_variable_list = colonial_empire_blocs
+		set_variable = { name = colonial_empire_bloc_count value = 0 }
 		if = {
-			limit = {
-				is_player = yes
-				has_variable = colonial_empire_eligible_count
-			}
-			if = {
-				limit = { var:colonial_empire_eligible_count >= 1 }
-				ordered_scope_state = {
-					limit = { is_decolonization_eligible_state = yes }
-					order_by = gdp
-					position = 0
-					check_range_bounds = no
-					colonial_territory_record_primary_share = yes
-					save_temporary_scope_as = colonial_empire_territory_pick
-					prev = {
-						set_variable = {
-							name = colonial_empire_territory_1
-							value = scope:colonial_empire_territory_pick
-						}
-					}
+			limit = { is_player = yes }
+			colonial_empire_mark_release_blocs = yes
+			ordered_scope_state = {
+				limit = { has_variable = colonial_bloc_seed }
+				order_by = colonial_bloc_disp_gdp
+				max = 1000
+				check_range_bounds = no
+				owner = {
+					add_to_variable_list = { name = colonial_empire_blocs target = prev }
 				}
 			}
-			if = {
-				limit = { var:colonial_empire_eligible_count >= 2 }
-				ordered_scope_state = {
-					limit = { is_decolonization_eligible_state = yes }
-					order_by = gdp
-					position = 1
-					check_range_bounds = no
-					colonial_territory_record_primary_share = yes
-					save_temporary_scope_as = colonial_empire_territory_pick
-					prev = {
-						set_variable = {
-							name = colonial_empire_territory_2
-							value = scope:colonial_empire_territory_pick
-						}
-					}
+		}
+
+		# --- Colonial subjects, for the Colonial Holdings list --------------
+		# Every qualifying subject by GDP, largest first, stored as its capital
+		# in colonial_empire_subject_capitals: gotcha #11, the panel reaches a
+		# country through a stored state (the Space Race rivals' and the covert
+		# networks' shape). Players only, as for the territories.
+		clear_variable_list = colonial_empire_subject_capitals
+		if = {
+			limit = { is_player = yes }
+			save_scope_as = ce_subject_empire
+			ordered_subject_or_below = {
+				limit = {
+					is_qualifying_colonial_subject = yes
+					exists = capital
+				}
+				order_by = gdp
+				max = 1000
+				check_range_bounds = no
+				capital = { save_scope_as = colonial_empire_subject_capital }
+				scope:ce_subject_empire = {
+					add_to_variable_list = { name = colonial_empire_subject_capitals target = scope:colonial_empire_subject_capital }
 				}
 			}
-			if = {
-				limit = { var:colonial_empire_eligible_count >= 3 }
-				ordered_scope_state = {
-					limit = { is_decolonization_eligible_state = yes }
-					order_by = gdp
-					position = 2
-					check_range_bounds = no
-					colonial_territory_record_primary_share = yes
-					save_temporary_scope_as = colonial_empire_territory_pick
-					prev = {
-						set_variable = {
-							name = colonial_empire_territory_3
-							value = scope:colonial_empire_territory_pick
-						}
-					}
-				}
+		}
+
+		# --- The great powers pressing us, for International Pressure -----
+		# A row per great power with a stance, condemners first, each by its
+		# prestige (CE-2): colonial_empire_refresh_gp_rows.
+		colonial_empire_refresh_gp_rows = yes
+	}
+}
+
+# One state of a release bloc on its row's hover (colonial_empire_bloc_sgui):
+# the member at position $POS$ (0-based) of the seed's colonial_bloc_members
+# by GDP, printed at the country's scope (gui_modding_guide gotcha #27's shape
+# (a)) and only while the bloc reaches the position (gotcha #25).
+# Country scope; scope:ce_state is the bloc's seed.
+colonial_empire_bloc_member_line = {
+	if = {
+		limit = { scope:ce_state = { colonial_bloc_disp_states > $POS$ } }
+		scope:ce_state = {
+			ordered_in_list = {
+				variable = colonial_bloc_members
+				limit = { exists = this }
+				order_by = gdp
+				position = $POS$
+				check_range_bounds = no
+				save_temporary_scope_as = ce_bloc_member
 			}
-			if = {
-				limit = { var:colonial_empire_eligible_count >= 4 }
-				ordered_scope_state = {
-					limit = { is_decolonization_eligible_state = yes }
-					order_by = gdp
-					position = 3
-					check_range_bounds = no
-					colonial_territory_record_primary_share = yes
-					save_temporary_scope_as = colonial_empire_territory_pick
-					prev = {
-						set_variable = {
-							name = colonial_empire_territory_4
-							value = scope:colonial_empire_territory_pick
-						}
-					}
-				}
+		}
+		custom_tooltip = je_colonial_empire_bloc_member_line
+	}
+}
+
+# ---------------------------------------------------------------------------
+# RELEASE BLOCS: the territory list's rows (owner's request, 2026-10-24)
+#
+# A release takes the territory and every connected state of ours where the
+# people it forms with are at home (form_decolonized_country). Henan and
+# Southern Anhui, neighbours and both homelands of the Han alone, leave
+# together whichever is released, so the list shows them as one row: a bloc.
+#
+# Once a month, players only, the eligible territories are walked largest GDP
+# first. One not yet covered seeds a bloc: the people its release would form
+# with and the region it would take (_decolonization_preview_region, the
+# preview .402 shows). Each eligible state of that region whose own release
+# would form with the same people is covered and gets no row of its own. One
+# whose own release would form with other people (a Hui-majority state in a
+# Han region) keeps a row, since releasing it alone is a different release;
+# so every release the decisions can make keeps a row, and a state can sit in
+# two blocs.
+#
+# The seed holds the bloc: colonial_bloc_seed, the people
+# (colonial_bloc_culture), its members (the colonial_bloc_members list, for the
+# name's hover) and the sums the row prints (colonial_bloc_* below, read
+# through colonial_bloc_disp_* in colonial_empire_values.txt). Every state
+# gets colonial_bloc_covered once a bloc covers it. Last month's marks are
+# cleared first; the entry's cleanup clears them at its end.
+# Scope: country (the empire), from colonial_empire_refresh_display.
+# ---------------------------------------------------------------------------
+colonial_empire_mark_release_blocs = {
+	every_scope_state = {
+		limit = {
+			OR = {
+				has_variable = colonial_bloc_seed
+				has_variable = colonial_bloc_covered
 			}
-			if = {
-				limit = { var:colonial_empire_eligible_count >= 5 }
-				ordered_scope_state = {
-					limit = { is_decolonization_eligible_state = yes }
-					order_by = gdp
-					position = 4
-					check_range_bounds = no
-					colonial_territory_record_primary_share = yes
-					save_temporary_scope_as = colonial_empire_territory_pick
-					prev = {
-						set_variable = {
-							name = colonial_empire_territory_5
-							value = scope:colonial_empire_territory_pick
-						}
-					}
-				}
-			}
-			if = {
-				limit = { var:colonial_empire_eligible_count >= 6 }
-				ordered_scope_state = {
-					limit = { is_decolonization_eligible_state = yes }
-					order_by = gdp
-					position = 5
-					check_range_bounds = no
-					colonial_territory_record_primary_share = yes
-					save_temporary_scope_as = colonial_empire_territory_pick
-					prev = {
-						set_variable = {
-							name = colonial_empire_territory_6
-							value = scope:colonial_empire_territory_pick
-						}
-					}
-				}
-			}
-			if = {
-				limit = { var:colonial_empire_eligible_count >= 7 }
-				ordered_scope_state = {
-					limit = { is_decolonization_eligible_state = yes }
-					order_by = gdp
-					position = 6
-					check_range_bounds = no
-					colonial_territory_record_primary_share = yes
-					save_temporary_scope_as = colonial_empire_territory_pick
-					prev = {
-						set_variable = {
-							name = colonial_empire_territory_7
-							value = scope:colonial_empire_territory_pick
-						}
-					}
-				}
-			}
-			if = {
-				limit = { var:colonial_empire_eligible_count >= 8 }
-				ordered_scope_state = {
-					limit = { is_decolonization_eligible_state = yes }
-					order_by = gdp
-					position = 7
-					check_range_bounds = no
-					colonial_territory_record_primary_share = yes
-					save_temporary_scope_as = colonial_empire_territory_pick
-					prev = {
-						set_variable = {
-							name = colonial_empire_territory_8
-							value = scope:colonial_empire_territory_pick
-						}
-					}
-				}
-			}
+		}
+		colonial_bloc_clear_state = yes
+	}
+	ordered_scope_state = {
+		limit = { is_decolonization_eligible_state = yes }
+		order_by = gdp
+		max = 1000
+		check_range_bounds = no
+		if = {
+			limit = { NOT = { has_variable = colonial_bloc_covered } }
+			colonial_bloc_seed_here = yes
+			owner = { change_variable = { name = colonial_empire_bloc_count add = 1 } }
 		}
 	}
 }
 
-# State scope: record the share of the state's people of its owner's primary
-# cultures, for the eligible-territories list (colonial_territory_disp_primary).
-# Walks the state's pops, so it runs from the monthly refresh, not per frame.
-colonial_territory_record_primary_share = {
-	set_variable = {
-		name = colonial_territory_primary_share
-		value = colonial_territory_primary_share_value
+# Last month's bloc marks on one state. Scope: state.
+colonial_bloc_clear_state = {
+	remove_variable = colonial_bloc_seed
+	remove_variable = colonial_bloc_covered
+	remove_variable = colonial_bloc_culture
+	remove_variable = colonial_bloc_size
+	remove_variable = colonial_bloc_gdp
+	remove_variable = colonial_bloc_population
+	remove_variable = colonial_bloc_primary
+	remove_variable = colonial_bloc_sol
+	remove_variable = colonial_bloc_colonies
+	remove_variable = colonial_bloc_others
+	remove_variable = colonial_bloc_indigenous
+	remove_variable = colonial_bloc_disparity
+	remove_variable = colonial_bloc_unincorporated
+	remove_variable = colonial_bloc_acceptance
+	clear_variable_list = colonial_bloc_members
+}
+
+# Seed a bloc at this territory: the people its release forms with, its
+# region, and the sums of every state in the region. Scope: state (an eligible
+# territory no bloc covers yet).
+colonial_bloc_seed_here = {
+	save_scope_as = colonial_bloc_seed_state
+	set_variable = colonial_bloc_seed
+	_decolonization_preview_region = {
+		REGION_VAR = colonial_bloc_region
+		COUNT_VAR = colonial_bloc_region_count
+		CULTURE_SCOPE = colonial_bloc_culture_pick
+	}
+	# The helper's count, for .402's text; the bloc counts its own members.
+	owner = { remove_variable = colonial_bloc_region_count }
+	if = {
+		limit = { exists = scope:colonial_bloc_culture_pick }
+		set_variable = { name = colonial_bloc_culture value = scope:colonial_bloc_culture_pick }
+	}
+	set_variable = { name = colonial_bloc_size value = 0 }
+	set_variable = { name = colonial_bloc_gdp value = 0 }
+	set_variable = { name = colonial_bloc_population value = 0 }
+	set_variable = { name = colonial_bloc_primary value = 0 }
+	set_variable = { name = colonial_bloc_sol value = 0 }
+	set_variable = { name = colonial_bloc_colonies value = 0 }
+	set_variable = { name = colonial_bloc_others value = 0 }
+	set_variable = { name = colonial_bloc_indigenous value = 0 }
+	set_variable = { name = colonial_bloc_disparity value = 0 }
+	set_variable = { name = colonial_bloc_unincorporated value = 0 }
+	set_variable = { name = colonial_bloc_acceptance value = 0 }
+	owner = {
+		every_scope_state = {
+			limit = { has_variable = colonial_bloc_region }
+			colonial_bloc_add_member = yes
+			remove_variable = colonial_bloc_region
+		}
 	}
 }
 
-# One line of the "+N more" hover on the eligible-territories list
-# (colonial_empire_territories_sgui): the eligible territory at GDP position
-# $POS$ (0-based), named from the country's own scope, gui_modding_guide
-# gotcha #27's shape (a): the pick is saved and the line printed at country
-# scope, and only while the count reaches the position (gotcha #25; and see
-# the note on `check_range_bounds` in colonial_empire_refresh_display).
-# Country scope.
-colonial_empire_more_territory_line = {
+# One state of the region scope:colonial_bloc_seed_state's release would take:
+# add it to the bloc's members and sums, and cover it if its own release would
+# form with the same people. The figures go through local variables (proven
+# across a scope change: scripting_best_practices.md, "One effect walk can fill
+# any number of sums"). Scope: state.
+colonial_bloc_add_member = {
+	save_temporary_scope_as = colonial_bloc_member
+	set_local_variable = { name = colonial_bloc_m_gdp value = colonial_territory_disp_gdp }
+	set_local_variable = { name = colonial_bloc_m_pop value = colonial_territory_disp_population }
+	set_local_variable = { name = colonial_bloc_m_primary value = colonial_territory_primary_population }
+	set_local_variable = { name = colonial_bloc_m_sol value = colonial_territory_sol_population }
+	set_local_variable = { name = colonial_bloc_m_acceptance value = colonial_territory_disp_weight_acceptance }
+	set_local_variable = { name = colonial_bloc_m_colony value = colonial_territory_disp_colony }
+	set_local_variable = { name = colonial_bloc_m_indigenous value = colonial_territory_disp_indigenous }
+	set_local_variable = { name = colonial_bloc_m_disparity value = colonial_territory_disp_disparity }
+	set_local_variable = { name = colonial_bloc_m_unincorporated value = colonial_territory_disp_unincorporated }
+	scope:colonial_bloc_seed_state = {
+		add_to_variable_list = { name = colonial_bloc_members target = scope:colonial_bloc_member }
+		change_variable = { name = colonial_bloc_size add = 1 }
+		change_variable = { name = colonial_bloc_gdp add = local_var:colonial_bloc_m_gdp }
+		change_variable = { name = colonial_bloc_population add = local_var:colonial_bloc_m_pop }
+		change_variable = { name = colonial_bloc_primary add = local_var:colonial_bloc_m_primary }
+		change_variable = { name = colonial_bloc_sol add = local_var:colonial_bloc_m_sol }
+		change_variable = { name = colonial_bloc_acceptance add = local_var:colonial_bloc_m_acceptance }
+		change_variable = { name = colonial_bloc_unincorporated add = local_var:colonial_bloc_m_unincorporated }
+		if = {
+			limit = { local_var:colonial_bloc_m_colony > 0 }
+			change_variable = { name = colonial_bloc_colonies add = 1 }
+		}
+		else = {
+			change_variable = { name = colonial_bloc_others add = 1 }
+		}
+		if = {
+			limit = { local_var:colonial_bloc_m_indigenous > 0 }
+			set_variable = { name = colonial_bloc_indigenous value = 1 }
+		}
+		if = {
+			limit = { local_var:colonial_bloc_m_disparity > 0 }
+			set_variable = { name = colonial_bloc_disparity value = 1 }
+		}
+	}
 	if = {
 		limit = {
-			has_variable = colonial_empire_eligible_count
-			var:colonial_empire_eligible_count > $POS$
+			NOT = { has_variable = colonial_bloc_covered }
+			is_decolonization_eligible_state = yes
 		}
-		ordered_scope_state = {
-			limit = { is_decolonization_eligible_state = yes }
-			order_by = gdp
-			position = $POS$
+		if = {
+			limit = { this = scope:colonial_bloc_seed_state }
+			set_variable = colonial_bloc_covered
+		}
+		else = {
+			decol_choose_release_culture = { CULTURE_SCOPE = colonial_bloc_member_culture }
+			if = {
+				limit = {
+					exists = scope:colonial_bloc_culture_pick
+					exists = scope:colonial_bloc_member_culture
+					scope:colonial_bloc_member_culture = { this = scope:colonial_bloc_culture_pick }
+				}
+				set_variable = colonial_bloc_covered
+			}
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# INTERNATIONAL PRESSURE: the great powers' table (CE-2 of the 2026-10-27 GUI
+# audit; a script-built roster before)
+#
+# One script container per great power with a stance (gp_anti_colonial_stance
+# or gp_pro_colonial_stance, never the empire itself): its capital (the panel
+# reaches the country through it, gotcha #11), its stance (-1 condemning, 1
+# supporting), its prestige and its signed monthly weight on stability, the
+# one term of colonial_stability_term_gp_condemnation or _support that power
+# makes (its prestige over ours, clamped to 0.25-2, times
+# colonial_gp_condemnation_per_power or colonial_gp_support_per_power). The
+# weight is relative to our prestige, so it is the empire's to store, not the
+# power's. Condemners first, each group by prestige, largest first; the
+# panel's datamodel draws colonial_empire_gp_rows in that order.
+#
+# The rows are a month's snapshot, as the drift groups are: a capital that
+# changes hands between assessments shows its new owner until the next one
+# (any release or step refreshes it sooner).
+#
+# Last month's containers are destroyed first, from a temporary copy (never
+# mutate a persistent list while iterating it), and the entry's cleanup does
+# the same (colonial_empire_clear_gp_rows). Players only: no AI reads a panel.
+# Scope: country (the empire), inside colonial_empire_refresh_display.
+# ---------------------------------------------------------------------------
+colonial_empire_refresh_gp_rows = {
+	colonial_empire_clear_gp_rows = yes
+	if = {
+		limit = { is_player = yes }
+		save_scope_as = ce_gp_empire
+		ordered_country = {
+			limit = {
+				NOT = { this = scope:ce_gp_empire }
+				country_rank >= rank_value:great_power
+				has_variable = gp_anti_colonial_stance
+			}
+			order_by = prestige
+			max = 1000
 			check_range_bounds = no
-			save_temporary_scope_as = colonial_empire_more_state
+			colonial_empire_gp_row = { STANCE = -1 PER = colonial_gp_condemnation_per_power }
 		}
-		custom_tooltip = je_colonial_empire_territory_more_line
+		ordered_country = {
+			limit = {
+				NOT = { this = scope:ce_gp_empire }
+				country_rank >= rank_value:great_power
+				has_variable = gp_pro_colonial_stance
+			}
+			order_by = prestige
+			max = 1000
+			check_range_bounds = no
+			colonial_empire_gp_row = { STANCE = 1 PER = colonial_gp_support_per_power }
+		}
+	}
+}
+
+# Country scope: the empire. Its great-power rows and their containers go.
+# Hidden: the entry's on_complete and on_fail run it through the cleanup, and
+# the panel renders those as tooltips.
+colonial_empire_clear_gp_rows = {
+	hidden_effect = {
+		if = {
+			limit = { has_variable_list = colonial_empire_gp_rows }
+			every_in_list = {
+				variable = colonial_empire_gp_rows
+				add_to_temporary_list = ce_gp_old_rows
+			}
+			clear_variable_list = colonial_empire_gp_rows
+			every_in_list = {
+				list = ce_gp_old_rows
+				destroy_container = yes
+			}
+		}
+	}
+}
+
+# Country scope: a great power with a stance; scope:ce_gp_empire the empire.
+# Its row's container, as the header says. A power with no capital has no row.
+colonial_empire_gp_row = {
+	save_scope_as = ce_gp_power
+	if = {
+		limit = { exists = capital }
+		capital = { save_scope_as = ce_gp_capital }
+		clear_saved_scope = ce_gp_new
+		create_container = {
+			tags = { ce_gp_row }
+			parent = scope:ce_gp_empire
+			save_scope_as = ce_gp_new
+		}
+		if = {
+			limit = { exists = scope:ce_gp_new }
+			scope:ce_gp_new = {
+				set_variable = { name = ce_gp_capital value = scope:ce_gp_capital }
+				set_variable = { name = ce_gp_stance value = $STANCE$ }
+				set_variable = { name = ce_gp_prestige value = scope:ce_gp_power.prestige }
+				set_variable = {
+					name = ce_gp_weight
+					value = {
+						value = scope:ce_gp_power.prestige
+						divide = { value = scope:ce_gp_empire.prestige min = 1 }
+						min = 0.25
+						max = 2
+						multiply = $PER$
+					}
+				}
+			}
+			scope:ce_gp_empire = {
+				add_to_variable_list = { name = colonial_empire_gp_rows target = scope:ce_gp_new }
+			}
+		}
 	}
 }

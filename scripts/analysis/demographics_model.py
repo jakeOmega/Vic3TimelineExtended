@@ -8,9 +8,10 @@ logged before and after one in-game step replays here to within rounding
 
 The ring: RING_YEARS slots, one per birth year, slot = birth year mod RING_YEARS. After
 the step of year Y, slot Y mod RING_YEARS holds that year's births (age 0) and the slot
-for age a holds the people born in Y - a. Ages 150 and over live in a pool.
+for age a holds the people born in Y - a. Ages RING_YEARS and over live in a pool (300 since issue #1075).
 """
 
+import math
 from dataclasses import dataclass, field, replace
 
 try:  # repo layout: scripts/analysis/ on sys.path, or imported as a namespace package
@@ -52,8 +53,8 @@ class Inputs:
     birth_limit: float = 0.0             # Birth Limit's part of P.DESIRED_TYPE (its modifier's line: 0, -0.3 or -0.45;
                                          # the script's te_demog_ms_birth_limit_part), which the Rural Exemption relieves
     malaria: int = 0                     # the state region's malaria trait level (P.MALARIA_TRAITS; calibration step 3)
-    # phase 2 step 2 (§2.5): under Full, women's share of the census's own workers aged P.WORK_SPLIT_AGES at the last
-    # count (te_dg_fws_wk), which splits work deaths; None = the law table (outside Full, or before a count)
+    # phase 2 step 2 (§2.5): women's share of the census's own workers aged P.WORK_SPLIT_AGES at the last count
+    # (te_dg_fws_wk; women_worker_share); None = before a count
     work_female_share: float | None = None
     sex_balance: float | None = None     # men per 100 women aged 20-59 the step reads (te_dg_sxb); None = no term
     # phase 3, the late game (late-game §4.2, §3.5): people by the Gini's wealth band {k: people} (the walk's
@@ -88,10 +89,16 @@ def wealth_tfr(sol):
     return lerp_sol(sol, P.WEALTH_TFR_LOW, P.WEALTH_TFR_HIGH)
 
 
-def female_work_share(inp):
-    """Women's share of the workforce (te_demog_female_work_share): the base plus the women's-rights laws'
-    P.FEMALE_WORK_SHARE_TYPE line, within 0-1 (modifier-types stage 3)."""
-    return clamp(P.FEMALE_WORK_SHARE_DEFAULT + inp.mods.get(P.FEMALE_WORK_SHARE_TYPE, 0.0), 0.0, 1.0)
+def women_worker_share(inp):
+    """Women's share of the workers (te_demog_women_worker_share): the census's own count of women among its workers
+    aged P.WORK_SPLIT_AGES at the last count (te_dg_fws_wk), else, before a count, what the sexes' rates give equal
+    numbers of working-age women and men (sex_rates). It splits work deaths and sets the labour migrants' women's share
+    and Late Marriage's women's work, under every setting the census runs (2026-10-25: outside Full, and for the flows
+    and Late Marriage everywhere, they read the women's-rights laws' own share before)."""
+    if inp.work_female_share is not None:
+        return inp.work_female_share
+    rf, rm = sex_rates(inp)
+    return rf / max(rf + rm, 1e-4)
 
 
 def plain_multiplier(inp, cause):
@@ -209,15 +216,10 @@ def rates_from_multipliers(mult, work_f, work_m, adult):
     return qf, qm
 
 
-def work_death_share(inp):
-    """Women's share of work deaths (te_demog_work_death_share): under Full the census's own count of women among the
-    workers aged P.WORK_SPLIT_AGES at the last count (phase 2 step 2, §2.5), else the laws' share (female_work_share)."""
-    return female_work_share(inp) if inp.work_female_share is None else inp.work_female_share
-
-
 def work_split(inp, work_mult):
-    """(women's, men's) work-death multipliers: the cause multiplier x 2 x each sex's share."""
-    fw = work_death_share(inp)
+    """(women's, men's) work-death multipliers: the cause multiplier x 2 x each sex's share of the workers
+    (women_worker_share; phase 2 step 2, §2.5)."""
+    fw = women_worker_share(inp)
     return work_mult * 2 * fw, work_mult * 2 * (1 - fw)
 
 
@@ -314,6 +316,53 @@ def band_sums(ring):
         bf[b] += f
         bm[b] += m
     return bf, bm
+
+
+def old_rows(rows):
+    """The people past each of the pyramid's row starts past 85 (issue #1075; te_dg_o<f|m><i>, te_demog_old_rows_close):
+    (women, men) lists over P.OLD_ROWS, index i the people aged OLD_ROWS[i] and over (0 unused), from [(age, women, men)]
+    such as Ring.by_age's, whose pool (age N) is past every start."""
+    n = len(P.OLD_ROWS)
+    of, om = [0.0] * n, [0.0] * n
+    for a, f, m in rows:
+        for i in range(1, n):
+            if a >= P.OLD_ROWS[i]:
+                of[i] += f
+                om[i] += m
+    return of, om
+
+
+def old_rows_shown(last_f, last_m, of, om, people):
+    """The pyramid's rows past 85 as it shows them (te_demog_old_rows_show): (top, rows). top is the highest row i >= 1
+    whose people aged OLD_ROWS[i] and over are P.OLD_ROW_GATE of `people` or more, 0 where none is (the pyramid ends at
+    85+ and rows is None). rows: (women, men) for every row, 0 (85 to the next start; last_f, last_m are 85 and over)
+    to the pool's: the top row everyone from its start, the rows above it 0."""
+    n = len(P.OLD_ROWS)
+    top = next((i for i in range(n - 1, 0, -1) if of[i] + om[i] > 0 and of[i] + om[i] >= P.OLD_ROW_GATE * people), 0)
+    if top == 0:
+        return 0, None
+    rows = []
+    for i in range(n):
+        here = (last_f, last_m) if i == 0 else (of[i], om[i])
+        if i < top:
+            rows.append((max(here[0] - of[i + 1], 0.0), max(here[1] - om[i + 1], 0.0)))
+        elif i == top:
+            rows.append(here)
+        else:
+            rows.append((0.0, 0.0))
+    return top, rows
+
+
+def pyramid_scale(bf, bm, shown=None):
+    """The pyramid's scale (te_dg_pyr_max): its largest bar, at least 1. Below 85 the bands; past it the rows shown, each
+    per five years of age (P.OLD_ROW_DRAW), or 85 and over where the pyramid doesn't split it."""
+    last = P.BANDS - 1
+    bars = [x for b in range(last) for x in (bf[b], bm[b])]
+    if shown is not None and shown[0] > 0:
+        bars += [x * d for (f, m), d in zip(shown[1], P.OLD_ROW_DRAW) for x in (f, m)]
+    else:
+        bars += [bf[last], bm[last]]
+    return max([1.0, *bars])
 
 
 def cause_deaths_estimate(bands_f, bands_m, mult, work_f, work_m, adult, rates=None):
@@ -483,11 +532,12 @@ def practice_erosion(practice, inp):
 def practice_target(practice, inp, start):
     """Where a practice's share drifts (§4.2, §4.3; te_demog_pr_target_<P>): the start less its erosion, plus Late
     Marriage's drivers, impartible inheritance on the farms (the laws' P.LM_FARMS_TYPE line x the agrarian share:
-    Primogeniture, Undivided Farm Succession) and women's paid work, within 0-1."""
+    Primogeniture, Undivided Farm Succession) and women's paid work (the women's job share x women's share of the
+    workers over parity), within 0-1."""
     target = start * (1 - practice_erosion(practice, inp))
     if practice == "lm":
         target += inp.mods.get(P.LM_FARMS_TYPE, 0.0) * inp.agrarian_share
-        target += P.LM_WOMENS_WORK * inp.female_job_share * female_work_share(inp) / P.FULL_FEMALE_WORK_SHARE
+        target += P.LM_WOMENS_WORK * inp.female_job_share * women_worker_share(inp) / P.WOMEN_WORKER_PARITY
     return clamp(target, 0.0, 1.0)
 
 
@@ -629,8 +679,9 @@ def slot_births(f, r, rb, tfr, planned_share):
 
 
 def band_value(table, age):
-    """A {first age: value} table's value at an age (P.CAPACITY, P.HEALTH_NEED)."""
-    return table[max(k for k in table if k <= age)]
+    """A {first age: value} table's value at an age (P.CAPACITY, P.HEALTH_NEED); below its first age, the first band's,
+    as the script's lookup trees read it (a near-empty pool's mean age, with its deficit taken off, can fall under 0)."""
+    return table[max((k for k in table if k <= age), default=min(table))]
 
 
 def child_work_share(inp):
@@ -693,6 +744,27 @@ def sex_more_men(balance):
     return clamp((balance - P.SEX_MORE_FROM) / (P.SEX_MORE_FULL - P.SEX_MORE_FROM), 0.0, 1.0)
 
 
+def _extended(x):
+    """The 2026-10-22 effects design's curve: x up to 1, then half the slope, at most P.EFFECT_CAP."""
+    x = max(x, 0.0)
+    return min((x + min(x, 1.0)) / 2, P.EFFECT_CAP)
+
+
+def sex_fewer_men_strength(balance):
+    """te_demog_census_fewer_men's multiplier (te_demog_sex_fewer_men_strength): the Fewer Men ramp without its
+    ceiling, extended past full; 0 with no balance or while P.SEX_BALANCE_EFFECTS is off."""
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
+        return 0.0
+    return _extended((P.SEX_FEWER_FROM - balance) / (P.SEX_FEWER_FROM - P.SEX_FEWER_FULL))
+
+
+def sex_more_men_strength(balance):
+    """te_demog_census_more_men's multiplier (te_demog_sex_more_men_strength)."""
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
+        return 0.0
+    return _extended((balance - P.SEX_MORE_FROM) / (P.SEX_MORE_FULL - P.SEX_MORE_FROM))
+
+
 def sex_births(balance):
     """Children per woman's sex-balance term (te_demog_tfr_sex): the balance / SEX_FEWER_FROM, at most 1 and at least
     SEX_BIRTHS_FLOOR; 1 with no balance, or while P.SEX_BALANCE_EFFECTS is off."""
@@ -732,9 +804,10 @@ def youth_share(ring):
 
 
 def youth_bulge(share, unemployment):
-    """y, the youth-bulge modifier's multiplier (te_demog_youth_bulge_now)."""
-    return (clamp((share - P.YOUTH_FROM) / P.YOUTH_SPAN, 0.0, 1.0)
-            * clamp(unemployment / P.YOUTH_UNEMPLOYMENT_FULL, 0.0, 1.0))
+    """y, the youth-bulge modifier's multiplier (te_demog_youth_bulge_now): each factor extended past 1 at half the
+    slope, the product at most P.EFFECT_CAP (the 2026-10-22 effects design)."""
+    return min(_extended((share - P.YOUTH_FROM) / P.YOUTH_SPAN)
+               * _extended(unemployment / P.YOUTH_UNEMPLOYMENT_FULL), P.EFFECT_CAP)
 
 
 def consequence_figures(ring, unemployment=0.0):
@@ -781,7 +854,7 @@ def working_ages_old_age(ring, qf, qm):
 
 
 def work_figures(ring, inp, old_age):
-    """Phase 2 step 1's figures over ring.by_age() (ages after the step; the pool at 150): te_demog_work_slot and
+    """Phase 2 step 1's figures over ring.by_age() (ages after the step; the pool at N): te_demog_work_slot and
     te_demog_work_finish. The biological age is the calendar one until phase 3."""
     end, after_on, bill_on = working_ages_end(inp, old_age)
     rate_f, rate_m = sex_rates(inp)
@@ -928,12 +1001,12 @@ def migrant_profile(inp, balance=None, sign=0):
     """Per (class, sex) share of a net migration, summing to 1 (§2.5). balance and sign (the migration's) move the
     labour kind's women's share toward LABOUR_BALANCE_SHARE (labour_balance_weight)."""
     refugee = clamp(inp.crisis, 0.0, 1.0)
-    rights = female_work_share(inp) / P.FULL_FEMALE_WORK_SHARE
+    women = women_worker_share(inp) / P.WOMEN_WORKER_PARITY
     family = P.FAMILY_BASE + inp.mods.get(P.FAMILY_MIGRATION_TYPE, 0.0)   # the transport technologies' line
-    family += P.FAMILY_RIGHTS_WEIGHT * rights + min(P.CHAIN_CAP, P.CHAIN_STEP * inp.inflow_years)
+    family += min(P.CHAIN_CAP, P.CHAIN_STEP * inp.inflow_years)
     family = clamp(family, 0.0, 1.0 - refugee)
     labour = max(0.0, 1.0 - family - refugee)
-    labour_f = clamp(P.LABOUR_FEMALE_SHARE_MIN + inp.female_job_share * rights
+    labour_f = clamp(P.LABOUR_FEMALE_SHARE_MIN + inp.female_job_share * women
                      * (P.LABOUR_FEMALE_SHARE_MAX - P.LABOUR_FEMALE_SHARE_MIN),
                      P.LABOUR_FEMALE_SHARE_MIN, P.LABOUR_FEMALE_SHARE_MAX)
     labour_f += (P.LABOUR_BALANCE_SHARE - labour_f) * labour_balance_weight(balance, sign)
@@ -989,7 +1062,7 @@ class Ring:
     m: list = field(default_factory=lambda: [0.0] * N)
     pool_f: float = 0.0
     pool_m: float = 0.0
-    pool_age: float = 150.0
+    pool_age: float = float(N)
     scale: float = 1.0                  # applied lazily at the next sweep
     year: int | None = None
     class_f: list = field(default_factory=lambda: [0.0] * len(P.MIGRANT_CLASSES))
@@ -1013,6 +1086,9 @@ class Ring:
     lx_slot: dict = field(default_factory=dict)
     lx_out: dict = field(default_factory=dict)
     births: float = 0.0                 # the last step's births (te_dg_births; 0 after a seed): ectogenesis's share
+    # women's share of the workers aged P.WORK_SPLIT_AGES at the last count (te_dg_fws_wk; None without workers there):
+    # the next step's women_worker_share (2026-10-25)
+    fws_work: float | None = None
 
     def age_of_slot(self, k):
         """Age of slot k's people after the step of self.year."""
@@ -1022,12 +1098,12 @@ class Ring:
         return self.scale * (sum(self.f) + sum(self.m) + self.pool_f + self.pool_m)
 
     def by_age(self):
-        """[(age, women, men)] for ages 0..149, scaled, then the pool as age 150."""
+        """[(age, women, men)] for ages 0..N-1, scaled, then the pool as age N."""
         rows = []
         for a in range(N):
             k = (self.year - a) % N
             rows.append((a, self.f[k] * self.scale, self.m[k] * self.scale))
-        rows.append((150, self.pool_f * self.scale, self.pool_m * self.scale))
+        rows.append((N, self.pool_f * self.scale, self.pool_m * self.scale))
         return rows
 
 
@@ -1138,6 +1214,8 @@ def seed(inp, year, engine_pop):
     ring.total = engine_pop
     # phase 3: a state seeded once ageing is slowed starts its bands at the steady state (te_demog_lx_seed)
     lx_seed(ring, inp, year)
+    # the seed's count of women among the workers (te_demog_work_finish), which the first step reads
+    ring.fws_work = work_figures(ring, inp, old_age(qf, qm))["fws_work"]
     return ring
 
 
@@ -1175,6 +1253,64 @@ def _refresh_denominators(ring):
         elif in_pool(a, a):                     # the biological index is the calendar one before treatment
             ring.fam += m
             ring.faw += f
+
+
+# ---- The ring's 300 years (issue #1075) -----------------------------------------------------------------------------
+OLD_RING_YEARS = 150   # the ring before issue #1075: slot = birth year mod 150, the pool from age 150
+
+
+def ring_migrate(ring):
+    """A census taken on the 150-year ring (a save from before issue #1075: its state has no te_dg_ring), re-filed on the
+    N-year ring before its next step (te_demog_ring_migrate). ring.f and ring.m hold the old slots 0..149.
+
+    Each cohort of age a moves from slot (Y - a) mod 150 to (Y - a) mod N, Y the last count's year, and the late game's
+    five-year birth bands go with their slots; the band holding the open slot keeps its share and deficit with its
+    oldest cohorts, as the late sweep does (its other slots hold children). The pool goes to its mean age rounded, with
+    its treated share and deficit merged into that age's band by people (owner, 2026-10-20: something simple), where
+    that age is under N; the pool then holds ages N and over. The age-149 cohort and the pool's people, who folded before
+    and flow now, join the last migrant class's sums. The conscription pool's sums (fam, faw) wait for the step, which
+    recounts them: until then they leave out the treated past 149 of fighting age."""
+    old, w, y = OLD_RING_YEARS, P.LX_BAND_WIDTH, ring.year
+    assert N == 2 * old, "the migration re-files a 150-year ring on a 300-year one"
+    last = len(P.MIGRANT_CLASSES) - 1
+    f, m = [0.0] * N, [0.0] * N
+    for k in range(old):
+        a = (y - k) % old
+        f[(y - a) % N], m[(y - a) % N] = ring.f[k], ring.m[k]
+        if a == old - 1:
+            ring.class_f[last] += ring.f[k] * ring.scale
+            ring.class_m[last] += ring.m[k] * ring.scale
+    ring.f, ring.m = f, m
+    ring.lx_slot = {(y - (y - k) % old) % N: v for k, v in ring.lx_slot.items()}
+    s, d = [None] * P.LX_BANDS, [None] * P.LX_BANDS
+    for j in range(old // w):
+        top = w * j + w - 1
+        to = ((y - (y - top) % old) % N) // w
+        s[to], d[to] = ring.lx_s[j], ring.lx_d[j]
+    ring.lx_s, ring.lx_d = s, d
+    pool = ring.pool_f + ring.pool_m
+    if pool > 0:
+        age = max(math.floor(ring.pool_age + 0.5), old)
+        if age >= N:
+            return ring
+        k = (y - age) % N
+        j = lx_band(k)
+        ps, pd = ring.lx_ps or 0.0, ring.lx_pd or 0.0
+        sj, dj = ring.lx_s[j] or 0.0, ring.lx_d[j] or 0.0
+        people = sum(ring.f[x] + ring.m[x] for x in range(w * j, w * j + w))
+        treated = sj * people + ps * pool
+        if treated > 0:
+            ring.lx_d[j] = (dj * sj * people + pd * ps * pool) / treated
+            ring.lx_s[j] = treated / (people + pool)
+        ring.f[k] += ring.pool_f
+        ring.m[k] += ring.pool_m
+        if age <= N - 2:
+            ring.class_f[last] += ring.pool_f * ring.scale
+            ring.class_m[last] += ring.pool_m * ring.scale
+        ring.pool_f = ring.pool_m = 0.0
+    ring.lx_ps = ring.lx_pd = None
+    ring.pool_age = float(N)
+    return ring
 
 
 def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0):
@@ -1344,6 +1480,10 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         # the sex balance the step's fertility and women's rate read (te_demog_sex_births_store): the ring's before its
         # sweep, which is the census's last figure (phase 2 step 4)
         inp = replace(inp, sex_balance=structure(ring)["men_per_100_women"])
+        # women's share of the workers at the last count (te_dg_fws_wk; women_worker_share, 2026-10-25): it splits the
+        # year's work deaths and sets the labour migrants' women and Late Marriage's women's work
+        if inp.work_female_share is None:
+            inp = replace(inp, work_female_share=ring.fws_work)
         # uploaded minds' call 2: Mind Backups' restore at last step's longevity care (te_demog_cause_inputs_store)
         inp = replace(inp, backup_elig=ring.lx_elig or 0.0)
         # medicine spreads (the Causes of Death plan): the drifted values move, then the year's rates use them
@@ -1355,8 +1495,11 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         fert = fertility(inp, e0)
         tfr = fert["tfr"]
         prof = migrant_profile(inp, inp.sex_balance, migration)
+        # the old age the step's working ages end at, read before the step (te_demog_work_setup's te_dg_wa_oa)
+        wk_old = working_ages_old_age(ring, qf, qm)
     else:
         qf, qm, mmr, tfr, prof = rates
+        wk_old = working_ages_old_age(ring, qf, qm)
         lt_f, lt_m = life_table(qf), life_table(qm)
         e0 = (lt_f["e0"] + lt_m["e0"]) / 2
         fert = {"tfr": tfr}
@@ -1409,7 +1552,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     births = deaths = 0.0
     birth_age = 0.0
     open_k = year % N
-    # ages 1..150 at this step; the slot at 150 is the open slot, folded then refilled
+    # ages 1..N at this step; the slot at N is the open slot, folded then refilled
     for a in range(1, N + 1):
         k = (year - a) % N
         f, m = ring.f[k] * s, ring.m[k] * s
@@ -1496,6 +1639,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             ring.lx_out["b50"] = lx["b50"] / births
     else:
         ring.lx_out = {}
+    # the step's count of women among the workers (te_demog_work_finish after te_demog_step_finish), for the next step
+    ring.fws_work = work_figures(ring, inp, wk_old)["fws_work"]
     out = {"lx": ring.lx_out, "mab": birth_age / births + 0.5 if births > 0 else None, "births": births, "deaths": deaths, "tfr": tfr_model, "e0": e0, "e0_f": lt_f["e0"], "e0_m": lt_m["e0"],
             "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "q0_per_1000": q0_model,
             "fertility": fert, "raw": raw,
@@ -1810,7 +1955,7 @@ def lx_slot(lx, ring, k, r, g, f, m, bm, mmr, qf, qm, qf0, qm0, war_f, war_m):
 
 
 def lx_fold(ring, k, f, m, s):
-    """The age-150 cohort joins the pool (te_demog_lx_fold): the pool's treated share and deficit take its band's, by
+    """The age-N cohort joins the pool (te_demog_lx_fold): the pool's treated share and deficit take its band's, by
     people and by treated people, before the pool ages and dies."""
     j = lx_band(k)
     sj, dj = ring.lx_s[j] or 0.0, ring.lx_d[j] or 0.0
@@ -2030,6 +2175,21 @@ def lx_bio_bands(ring):
             bf[lx_band_of(bio)] += f * sh
             bm[lx_band_of(bio)] += m * sh
     return [max(0.0, x) for x in bf], [max(0.0, x) for x in bm]
+
+
+def lx_bio_old_rows(ring):
+    """The biological pyramid's people past each row start past 85 (issue #1075; te_dg_bo<f|m><i>): old_rows with each
+    cohort's treated part at its biological age, the pool's at its mean age less its deficit."""
+    parts = []
+    for a, f, m in ring.by_age():
+        if a == N:
+            sh, bio = (ring.lx_ps or 0.0), ring.pool_age - (ring.lx_pd or 0.0)
+        else:
+            sh, bio = ring.lx_slot.get((ring.year - a) % N, (0.0, a))
+        parts.append((a, f - f * sh, m - m * sh))
+        if sh > 0:
+            parts.append((bio, f * sh, m * sh))
+    return old_rows(parts)
 
 
 def lx_seed(ring, inp, year):

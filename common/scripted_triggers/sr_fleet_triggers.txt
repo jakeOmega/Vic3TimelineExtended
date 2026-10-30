@@ -1,0 +1,364 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: shared triggers
+# ============================================================================
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
+# (slice 6). Full Colonies only. The per-slot and per-location triggers are
+# generated (common/scripted_triggers/sr_fleets_generated.txt, from
+# scripts/generators/gen_space_fleets.py).
+# ============================================================================
+
+# State scope. The state is under its owner's control (design § 5.1). Vanilla
+# keeps buildings working in an occupied state, so this test is the only thing
+# that stops Space Command building, the Orbital Battlestation fighting, and
+# (6d) the batteries firing and the launch site launching, in a state its owner
+# doesn't control. Every read of those buildings goes through it.
+sr_state_held_by_owner = {
+	controller = owner
+}
+
+# Country scope. It has a Space Command, anywhere (its levels count only in the
+# states it controls: sr_sc_rate).
+sr_has_space_command = {
+	any_scope_building = {
+		is_building_type = building_space_command
+	}
+}
+
+# Country scope. A fleet power (design § 4): a fleet, or a Space Command to
+# build one (6d: or a reserve, or a battery), under Full Colonies. The monthly
+# steps walk only these, through the global list sr_fleet_powers.
+sr_fleet_power = {
+	sr_colonies_full_enabled = yes
+	OR = {
+		sr_fl_has_any = yes
+		sr_has_space_command = yes
+		# 6d: hulls in its ground reserve, or a ground-to-orbit battery.
+		sr_reserve_total > 0
+		sr_has_battery = yes
+	}
+}
+
+# Country scope, Space Command's can_build_government: a player's government
+# always may; an AI's up to sr_sc_ai_cap levels counting those queued, while it
+# is a top-three space power, out of default, with a positive weekly income
+# (design § 14).
+sr_sc_may_build_government = {
+	OR = {
+		is_ai = no
+		custom_tooltip = {
+			text = sr_sc_ai_cap_tt
+			sr_ai_should_participate = yes
+			in_default = no
+			net_fixed_income > 0
+			sr_sc_queued_levels < sr_sc_ai_cap
+		}
+	}
+}
+
+# Country scope. The ship_construction self-check's subject (design § 18): a
+# Space Command at half staff or more in a state its owner controls.
+sr_sc_qualifies = {
+	any_scope_building = {
+		is_building_type = building_space_command
+		occupancy >= 0.5
+		state = { sr_state_held_by_owner = yes }
+	}
+}
+
+# ---- Combat (6b; sr_fleet_combat_effects.txt) -------------------------------------------------
+# Country scope, the attacker. A world it may close in on (KEY): claimed, not
+# ruined, and free (§ 9.5), or held by a country at war with it and not
+# occupied, or occupied by a country at war with it (a liberation).
+sr_site_hostile_target = {
+	has_global_variable = sr_colony_$KEY$
+	NOT = { has_global_variable = sr_site_ruined_$KEY$ }
+	OR = {
+		has_global_variable = sr_site_free_$KEY$
+		AND = {
+			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+			global_var:sr_site_holder_$KEY$ ?= { has_war_with = prev }
+		}
+		AND = {
+			has_global_variable = sr_site_occupier_$KEY$
+			global_var:sr_site_occupier_$KEY$ ?= { has_war_with = prev }
+		}
+	}
+}
+
+# Country scope, the AI (6c, design § 14). A world its offence may close in on
+# (KEY): a hostile one (sr_site_hostile_target: held by a country at war with
+# it, or one of its own an enemy occupies), never a free colony.
+sr_site_ai_attack_target = {
+	sr_site_hostile_target = { KEY = $KEY$ }
+	NOT = { has_global_variable = sr_site_free_$KEY$ }
+}
+
+# Country scope, the AI (lunar colonization § 8.4). A lunar world (KEY) its
+# strongest fleet at Earth may close in on: one its offence may attack, while
+# it holds Earth orbit against the enemy there, the world's holder or, for a
+# world of its own an enemy occupies, the occupier: that enemy's Earth is
+# blockaded (sr_earth_blockaded: none of its fleets at Earth, and a fleet of a
+# country at war with it there; ours is, since the fleet that closes in is).
+# Its one caller, sr_fl_ai_lunar_assault, reads it only while no enemy fleet is
+# at Earth (NOT sr_earth_hostile_present), and that gate decides: with our
+# fleet there and none of the enemy's, the blockade clause always holds. It is
+# kept as the design's rule, for a caller without the gate.
+sr_site_ai_lunar_target = {
+	sr_site_ai_attack_target = { KEY = $KEY$ }
+	OR = {
+		AND = {
+			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+			global_var:sr_site_holder_$KEY$ ?= { sr_earth_blockaded = yes }
+		}
+		global_var:sr_site_occupier_$KEY$ ?= { sr_earth_blockaded = yes }
+	}
+}
+
+# Country scope, the interdictor (6c, design § 12). A world it may interdict
+# (KEY): a colony, not ruined, free or occupied, whose holder is another
+# country it is at peace with and not allied to (no alliance or defensive pact;
+# owner, 2026-10-26). Its fleet standing off there under the Interdict posture
+# blockades that holder's colonies at the location while no fleet of the
+# holder holds orbit there (sr_site_blockade_step).
+sr_site_interdict_target = {
+	has_global_variable = sr_colony_$KEY$
+	NOT = { has_global_variable = sr_site_ruined_$KEY$ }
+	NOT = { has_global_variable = sr_site_free_$KEY$ }
+	NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+	save_temporary_scope_as = sr_icpt_by
+	global_var:sr_site_holder_$KEY$ ?= {
+		is_country_alive = yes
+		NOT = { this = scope:sr_icpt_by }
+		NOT = { has_war_with = scope:sr_icpt_by }
+		NOT = { has_treaty_alliance_with = { TARGET = scope:sr_icpt_by } }
+		NOT = { has_treaty_defensive_pact_with = { TARGET = scope:sr_icpt_by } }
+	}
+}
+
+# Country scope, the interdictor. It holds TARGET (a country) to account for
+# an interdiction within five years: Cede Colony's war goal against it costs
+# TARGET no infamy (124_cede_colony.txt reads the same record).
+sr_interdicted_recently = {
+	has_variable = sr_interdiction_recent
+	has_variable_list = sr_interdiction_targets
+	is_target_in_variable_list = { name = sr_interdiction_targets target = $TARGET$ }
+}
+
+# Country scope. It interdicts the country of the scope saved as
+# sr_icpt_victim at LOC this month (its sr_icpt_<loc> list, rebuilt with the
+# location records: sr_icpt_rebuild).
+sr_icpt_interdicts_at = {
+	has_variable_list = sr_icpt_$LOC$
+	is_target_in_variable_list = { name = sr_icpt_$LOC$ target = scope:sr_icpt_victim }
+}
+
+# Country scope, a power at the location being fought over (its sr_cb_* record
+# standing). It fought this month: it lost strength, or its enemies did.
+sr_cb_fought = {
+	has_variable = sr_cb_present
+	OR = {
+		AND = {
+			has_variable = sr_cb_lost
+			var:sr_cb_lost > 0
+		}
+		sr_cb_enemy_lost > 0
+	}
+}
+
+# It holds orbit there: stationed or standing off (a blockade's test, § 8).
+sr_cb_holds_orbit = {
+	has_variable = sr_cb_present
+	sr_cb_hold_value > 0
+}
+
+# It closes in to destroy the world KEY with its fire on defences above the
+# Defences' own, and no hostile fleet is stationed against it (§ 9.3).
+sr_cb_destroys = {
+	has_variable = sr_cb_dfd_$KEY$
+	var:sr_cb_dfd_$KEY$ > sr_site_def_fire_$KEY$
+	sr_cb_hs_value <= 0
+}
+
+# It closes in to seize the world KEY with marines above its garrison and
+# militia, and no hostile fleet is stationed against it (§ 9.1).
+sr_cb_seizes = {
+	has_variable = sr_cb_mar_$KEY$
+	var:sr_cb_mar_$KEY$ > sr_site_garrison_need_$KEY$
+	sr_cb_hs_value <= 0
+}
+
+# Country scope. An Orbital Battlestation, and one in a state it controls,
+# which alone fights for it (§ 7.5, § 5.1).
+sr_has_battlestation = {
+	any_scope_building = {
+		is_building_type = building_orbital_battlestation
+	}
+}
+
+sr_battlestation_held = {
+	any_scope_building = {
+		is_building_type = building_orbital_battlestation
+		state = { sr_state_held_by_owner = yes }
+	}
+}
+
+# Country scope. A party to the Convention on the Settlement of Outer Space in
+# force (6c, design § 13): its member modifier, or the mirror a revolution's
+# winner keeps (un_state_effects.txt). A party's destruction of a colony, and
+# its assault on a free one, cost twice the infamy and twice the case
+# (sr_fleet_values.txt's prices of force).
+sr_colony_convention_party = {
+	has_global_variable = un_agency_copuos
+	OR = {
+		has_modifier = un_colony_protection_modifier
+		has_variable = un_colony_protection_modifier_on
+	}
+}
+
+# ---- Earth orbit (6d; sr_earth_orbit_effects.txt) ---------------------------------------------
+# Country scope. The ground reserve launches itself each month (design § 15):
+# its toggle, on by default (sr_reserve_auto absent or 1).
+sr_reserve_auto_on = {
+	OR = {
+		NOT = { has_variable = sr_reserve_auto }
+		var:sr_reserve_auto > 0
+	}
+}
+
+# Country scope. A fleet of a country at war with it is at Earth (the location
+# records, sr_fl_at_earth, rebuilt on every arrival and departure).
+sr_earth_hostile_present = {
+	sr_loc_ai_enemy_fleets_earth > 0
+}
+
+# Country scope, under Full Colonies. Its launch site is lost (design § 5.1,
+# § 15): it has a Space Program, and none in a state it controls. Vanilla keeps
+# the building working under occupation, so this test is what stops every
+# launch and module fabrication; only retaking the state lifts it.
+sr_launch_site_lost = {
+	sr_colonies_full_enabled = yes
+	sr_has_space_program = yes
+	NOT = {
+		any_scope_building = {
+			is_building_type = building_space_program
+			state = { sr_state_held_by_owner = yes }
+		}
+	}
+}
+
+# Country scope, under Full Colonies. Its Earth is blockaded (design § 15, §
+# 8's rule at Earth): a fleet of a country at war with it is at Earth and none
+# of its own is. Every fleet at Earth engages every other (§ 7.1), so posture
+# doesn't enter; its batteries and its Orbital Battlestation fire on the
+# blockaders but are no fleet holding orbit. Read live from the location
+# records (sr_fl_at_earth, rebuilt on every arrival and departure), so a
+# country with no fleet of its own, a colony holder, is blockaded too.
+sr_earth_blockaded = {
+	sr_colonies_full_enabled = yes
+	NOT = { has_variable = sr_fl_at_earth }
+	sr_earth_hostile_present = yes
+}
+
+# Country scope. Nothing leaves Earth (design § 15): no colony fleet, module
+# shipment, settler or fleet departing Earth. Blockaded, or the launch site
+# occupied; Launch from the reserve reads only the second (sr_reserve_may_launch),
+# and module fabrication only the second too (sr_mod_month). Every departure
+# path reads this one test.
+sr_launches_barred = {
+	OR = {
+		sr_earth_blockaded = yes
+		sr_launch_site_lost = yes
+	}
+}
+
+# Country scope. Launch (the panel's, the AI's): hulls on the ground, the
+# launch site held (a blockade in orbit doesn't stop it: that is what the
+# reserve is for), and a slot to take them: an empty one, or a fleet of ours
+# at Earth.
+sr_reserve_may_launch = {
+	sr_reserve_total > 0
+	NOT = { sr_launch_site_lost = yes }
+	OR = {
+		sr_fl_has_free_slot = yes
+		sr_fl_any_at = { CODE = 1 }
+	}
+}
+
+# Country scope, the AI (design § 14): its reserve and its fleets at Earth
+# match the enemy's fleets there.
+sr_fl_ai_reserve_matches = {
+	sr_earth_reserve_and_ours >= sr_loc_ai_enemy_fleets_earth
+}
+
+# Country scope. A ground-to-orbit battery, anywhere (its levels count only in
+# the states it controls: sr_battery_fire, sr_battery_sweep).
+sr_has_battery = {
+	any_scope_building = {
+		is_building_type = building_orbital_defense_battery
+	}
+}
+
+# Country scope. The AI wants batteries (design § 14): at war with a country
+# that has fleets.
+sr_battery_ai_wants = {
+	is_at_war = yes
+	has_global_variable_list = sr_fleet_powers
+	any_in_global_list = {
+		variable = sr_fleet_powers
+		is_country_alive = yes
+		has_war_with = prev
+		sr_fl_has_any = yes
+	}
+}
+
+# Country scope, the battery's can_build_government: a player's government
+# always may; an AI's only while it wants them, up to sr_battery_ai_max_levels
+# counting those queued.
+sr_battery_may_build_government = {
+	OR = {
+		is_ai = no
+		custom_tooltip = {
+			text = sr_battery_ai_cap_tt
+			sr_battery_ai_wants = yes
+			sr_battery_queued_levels < sr_battery_ai_max_levels
+		}
+	}
+}
+
+# Country scope. The battery_sweep self-check's subject (design § 18): at
+# peace, a battery running Ground Lasers at half staff or more in a state it
+# controls.
+sr_battery_sweep_qualifies = {
+	is_at_war = no
+	any_scope_building = {
+		is_building_type = building_orbital_defense_battery
+		has_active_production_method = pm_orbital_battery_lasers
+		occupancy >= 0.5
+		state = { sr_state_held_by_owner = yes }
+	}
+}
+
+# Global scope, the battery_sweep self-check: the low pool fell by the whole
+# sweep, or to 0 where it held less, and the high pool kept its figure.
+sr_battery_sweep_took_all = {
+	OR = {
+		global_var:sr_battery_log_low_after <= 0
+		global_var:sr_battery_log_low_after <= {
+			value = global_var:sr_battery_log_low_before
+			subtract = global_var:sr_battery_sweep_month
+			add = 0.0001
+		}
+	}
+	global_var:sr_battery_log_high_after <= { value = global_var:sr_battery_log_high_before add = 0.0001 }
+	global_var:sr_battery_log_high_after >= { value = global_var:sr_battery_log_high_before subtract = 0.0001 }
+}
+
+# Global scope: some fleet power qualifies (sr_battery_sweep_qualifies).
+sr_battery_sweep_subject = {
+	has_global_variable_list = sr_fleet_powers
+	any_in_global_list = {
+		variable = sr_fleet_powers
+		is_country_alive = yes
+		sr_battery_sweep_qualifies = yes
+	}
+}

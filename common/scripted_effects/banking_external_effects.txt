@@ -24,8 +24,8 @@ banking_external_monthly_update = {
 		limit = { banking_tool_sterilize_inflows_active = yes }
 		if = {
 			limit = { banking_external_eligible_sterilize_inflows = yes gold_reserves >= banking_external_sterilization_cost }
-			add_treasury = banking_external_sterilization_payment
 			set_variable = { name = banking_external_sterilization_funded value = 1 }
+			banking_external_charge_sterilization = yes
 		}
 		else = { banking_effect_cb_disable_sterilize_inflows = yes }
 	}
@@ -37,7 +37,8 @@ banking_external_monthly_update = {
 				te_mon_in_financial_crisis = yes
 				gold_reserves >= banking_external_combined_import_cost
 			}
-			add_treasury = banking_external_import_payment
+			# Charged at this month's rate, then the month counts towards the rise.
+			banking_external_charge_import = yes
 			change_variable = { name = banking_external_import_months add = 1 }
 		}
 		else = { banking_effect_cb_disable_emergency_import_financing = yes }
@@ -45,6 +46,56 @@ banking_external_monthly_update = {
 	else = { change_variable = { name = banking_external_import_months subtract = 1 } }
 	clamp_variable = { name = banking_external_import_months min = 0 max = banking_external_import_fatigue_cap }
 	banking_external_cleanup = yes
+}
+
+# THE TWO BILLS ARE WEEKLY EXPENSES (owner, 2026-10-27, GUI audit BNK-14):
+# Sterilize Capital Inflows and Emergency Import Financing were paid once a
+# month with add_treasury, which no weekly figure includes, so neither the
+# Overview nor the Breakdown showed them. Each is now a charge modifier on the
+# entry (`country_expenses_add = 1` with the Breakdown's mirror field),
+# applied at the month's cost ÷ 4 a week: a year of weekly charges is 13
+# months' worth, where 12 monthly payments were 12 (and the activation's
+# payment a thirteenth). The banking_external_charge_* pair is each charge's one
+# refresh site: the monthly update above re-applies it while the tool stays
+# funded, the Enable effect applies it at once, and the Disable effect and a
+# change of economic system (remove_banking_market_modifiers_effect) take it
+# off with the tool. The treasury test (gold_reserves against a month's cost)
+# still decides whether a tool keeps running.
+#
+# A revolution's winner inherits neither the tool nor its charge (no
+# modifiers cross), and the next update finds no tool to charge for: the
+# refresh is driven by the tool and the inherited variables, never by the
+# charge itself.
+#
+# FX Surrender is NOT moved: its debit is the same amount, the same day, as
+# the gold the vault receives (banking_external_purchase_reserves below), and
+# the purchase is capped by the cash in hand. A weekly expense would pay a
+# different sum at a different time, into debt if the cash ran out.
+banking_external_charge_sterilization = {
+	je:je_banking_cycle ?= {
+		remove_modifier_if_exists_effect = { MODIFIER = banking_external_sterilization_charge }
+		add_modifier = {
+			name = banking_external_sterilization_charge
+			multiplier = banking_external_sterilization_weekly_charge_for_je
+		}
+	}
+}
+
+banking_external_charge_import = {
+	je:je_banking_cycle ?= {
+		remove_modifier_if_exists_effect = { MODIFIER = banking_external_import_charge }
+		add_modifier = {
+			name = banking_external_import_charge
+			multiplier = banking_external_import_weekly_charge_for_je
+		}
+	}
+}
+
+banking_external_end_charges = {
+	je:je_banking_cycle ?= {
+		remove_modifier_if_exists_effect = { MODIFIER = banking_external_sterilization_charge }
+		remove_modifier_if_exists_effect = { MODIFIER = banking_external_import_charge }
+	}
 }
 
 banking_external_purchase_reserves = {

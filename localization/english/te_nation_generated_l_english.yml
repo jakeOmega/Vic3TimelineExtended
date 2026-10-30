@@ -16,8 +16,6 @@
  te_nation_type_building_group_bg_extraction_throughput_add_tt:0 "$building_group_bg_extraction_throughput_add_desc$\n\n$te_nation_note_building$"
  te_nation_type_building_group_bg_heavy_industry_throughput_add:0 "$building_group_bg_heavy_industry_throughput_add$: #v [GetPlayer.GetModifier.GetValueWithBreakdownFor('building_group_bg_heavy_industry_throughput_add')]#!"
  te_nation_type_building_group_bg_heavy_industry_throughput_add_tt:0 "$building_group_bg_heavy_industry_throughput_add_desc$\n\n$te_nation_note_building$"
- te_nation_type_building_ocean_mine_throughput_add:0 "$building_ocean_mine_throughput_add$: #v [GetPlayer.GetModifier.GetValueWithBreakdownFor('building_ocean_mine_throughput_add')]#!"
- te_nation_type_building_ocean_mine_throughput_add_tt:0 "$building_ocean_mine_throughput_add_desc$\n\n$te_nation_note_building$"
  te_nation_type_building_opium_plantation_throughput_add:0 "$building_opium_plantation_throughput_add$: #v [GetPlayer.GetModifier.GetValueWithBreakdownFor('building_opium_plantation_throughput_add')]#!"
  te_nation_type_building_opium_plantation_throughput_add_tt:0 "$building_opium_plantation_throughput_add_desc$\n\n$te_nation_note_building$"
  te_nation_type_building_orbital_battlestation_throughput_add:0 "$building_orbital_battlestation_throughput_add$: #v [GetPlayer.GetModifier.GetValueWithBreakdownFor('building_orbital_battlestation_throughput_add')]#!"

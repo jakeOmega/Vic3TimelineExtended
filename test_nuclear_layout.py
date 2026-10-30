@@ -5,6 +5,8 @@ import os
 import re
 import unittest
 
+import gui_tree
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
 LAYOUT = os.path.join(W, "nuclear_layout_widget.gui")
@@ -16,7 +18,7 @@ JE = os.path.join(REPO, "common", "journal_entries", "je_nuclear_program.txt")
 ICON_DOC = os.path.join(REPO, "docs", "systems", "nuclear_gui_icons.md")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_world_crises", "te_nuclear_sec_posture",
+STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises", "te_nuclear_sec_posture",
           "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
           "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
 REFERENCE = ["te_nuclear_sec_how"]
@@ -126,13 +128,14 @@ class GateTest(unittest.TestCase):
     GATES = {
         "te_nuclear_sec_programme": [_sgui("nuclear_program_has_programme_sgui")],
         "te_nuclear_sec_crisis": [_sgui("nd_in_crisis_sgui")],
+        "te_nuclear_sec_strike": [_sgui("nd_plan_shown_sgui")],
         "te_nuclear_sec_world_crises": [_sgui("nd_world_crises_sgui")],
         "te_nuclear_sec_posture": [_sgui("nd_armed_sgui")],
         "te_nuclear_sec_forces": [_sgui("nd_armed_sgui")],
         "te_nuclear_sec_home": [_sgui("nd_armed_sgui")],
         "te_nuclear_sec_reputation": [_sgui("nd_has_reputation_sgui"), _sgui("nd_last_crisis_sgui")],
         "te_nuclear_sec_taboo": [_sgui("nd_taboo_exists_sgui")],
-        "te_nuclear_sec_powers": [_sgui("nd_taboo_exists_sgui")],
+        "te_nuclear_sec_powers": [_sgui("nd_taboo_exists_sgui"), _sgui("nd_powers_listed_sgui")],
         "te_nuclear_sec_delivery": None,
         "te_nuclear_sec_how": None,
     }
@@ -152,7 +155,7 @@ class GateTest(unittest.TestCase):
     def test_reputation_parts_are_gated_separately(self):
         body = _type_body(ALL_GUI, "te_nuclear_sec_reputation")
         last = body.index("nd_last_crisis_sgui')]")      # the last-crisis line's datacontext
-        cred = body.index('text = "nd_w_credibility_label"')
+        cred = body.index('text = "nd_w_pledge_label"')   # credibility is the overview's (NUC-13)
         self.assertIn(f'visible = "[{_sgui("nd_last_crisis_sgui")}]"', body[:last])
         between = body[last:cred]
         self.assertIn(f'visible = "[{_sgui("nd_has_reputation_sgui")}]"', between)
@@ -175,6 +178,47 @@ class GateTest(unittest.TestCase):
                 self.assertLessEqual(seen, 1, f"{os.path.basename(path)}:{i + 1}")
 
 
+
+def _types(*paths):
+    out = {}
+    for path in paths:
+        out.update({n.name: n for n in gui_tree.parse(_read(path)).walk() if n.kind == "type"})
+    return out
+
+
+def _row_width(node):
+    """A horizontal row of fixed-width children: margins, cells and spacing."""
+    cells = [gui_tree.size(c)[0] for c in gui_tree.widgets(node)]
+    spacing = int(node.prop("spacing").value) if node.prop("spacing") else 0
+    margin = gui_tree.size(node, "margin")
+    return 2 * (margin[0] if margin else 0) + sum(cells) + spacing * (len(cells) - 1)
+
+
+class WidthTest(unittest.TestCase):
+    """A centred panel sized by its content is centred at its first width
+    (gui_modding_guide.md gotcha #43), so each holds the width it grows to."""
+
+    def test_the_powers_head_is_as_wide_as_its_rows(self):
+        # With no rows yet (up to a month after the first warhead) the panel
+        # was centred at the head's 414 and ran past the section once rows came.
+        types = _types(PROGRAM)
+        head, row = types["nuclear_program_powers_head"], types["nuclear_program_power_row"]
+        self.assertEqual(_row_width(head), 414)
+        self.assertEqual(gui_tree.size(head, "minimumsize"), (gui_tree.size(row)[0], -1))
+
+    def test_the_reputation_panel_keeps_one_width(self):
+        # 512 with the pledges' nd_row, 500 with the last crisis's lines alone.
+        types = _types(DETERRENCE)
+        margin = gui_tree.size(types["nd_panel"], "margin")[0]
+        row = _row_width(types["nd_row"])
+        lines = max(gui_tree.size(types["nd_text"], "minimumsize")[0],
+                    2 * gui_tree.size(types["nd_script_line"], "margin")[0]
+                    + gui_tree.size(next(c for c in types["nd_script_line"].children if c.kind == "textbox"),
+                                    "minimumsize")[0])
+        self.assertEqual((row, lines), (492, 480))
+        (panel,) = [c for c in types["te_nuclear_sec_reputation"].children if c.kind == "nd_panel"]
+        self.assertEqual(gui_tree.size(panel, "minimumsize"), (2 * margin + row, -1))
+
 class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", ALL_GUI))
@@ -187,13 +231,15 @@ class FlagTest(unittest.TestCase):
             if f.endswith("_closed"):   # shown unless closed: one bare (show-more), the rest negated
                 self.assertEqual(bare, 1, f)
                 self.assertGreaterEqual(negated, 2, f)
-            else:                        # shown only when opened: one negated (show-more)
+            else:                        # shown only when opened: one negated (a header's show-more
+                # arrow, or an in-row toggle's "Change" word), the content bare
                 self.assertEqual(negated, 1, f)
-                self.assertGreaterEqual(bare, 2, f)
+                self.assertGreaterEqual(bare, 1, f)
 
     def test_live_sections_open_reference_collapsed(self):
         opened = {"te_nuclear_sec_programme": "nuclear_program_programme_closed",
                   "te_nuclear_sec_crisis": "nd_crisis_closed",
+                  "te_nuclear_sec_strike": "nd_strike_closed",
                   "te_nuclear_sec_world_crises": "nd_world_crises_closed",
                   "te_nuclear_sec_posture": "nd_posture_closed",
                   "te_nuclear_sec_forces": "nd_capabilities_closed",
@@ -209,17 +255,73 @@ class FlagTest(unittest.TestCase):
             self.assertEqual(toggles[0], flag, sec)
 
     def test_subsections_are_nested(self):
-        """The choices start collapsed; the taboo's chart is open (owner, 2026-09-29:
+        """The taboo's chart is a nested subsection, open (owner, 2026-09-29:
         history charts open by default)."""
-        for sec, flags in (("te_nuclear_sec_posture", ["nd_doctrine_open", "nd_forces_open"]),
-                           ("te_nuclear_sec_taboo", ["nd_taboo_hist_closed"])):
-            body = _type_body(ALL_GUI, sec)
-            for f in flags:
-                self.assertIn(f"GetVariableSystem.Toggle('{f}')", body, f)
-                i = body.index(f"GetVariableSystem.Toggle('{f}')")
-                header = body.rfind("_header = {", 0, i)
-                self.assertEqual(body[header - len("nd_subsection"):header], "nd_subsection",
-                                 f"{f} is not a nested subsection")
+        body = _type_body(ALL_GUI, "te_nuclear_sec_taboo")
+        i = body.index("GetVariableSystem.Toggle('nd_taboo_hist_closed')")
+        header = body.rfind("_header = {", 0, i)
+        self.assertEqual(body[header - len("nd_subsection"):header], "nd_subsection")
+
+    def test_each_posture_axis_opens_its_own_choices(self):
+        """NUC-3: one row per axis, a Change toggle beside it (rule 6), and the
+        axis's choices directly beneath it, collapsed by default; three flags,
+        not one subsection mixing readiness and authority."""
+        body = _type_body(ALL_GUI, "te_nuclear_sec_posture")
+        rows = [m.start() for m in re.finditer(r"\bnd_axis_row = \{", body)]
+        self.assertEqual(len(rows), 3)
+        for n, (flag, label, first) in enumerate((("nd_doctrine_open", "nd_w_doctrine_label", "nd_w_doctrine_choice_1"),
+                                                  ("nd_readiness_open", "nd_w_readiness_label", "nd_w_readiness_choice_0"),
+                                                  ("nd_authority_open", "nd_w_authority_label", "nd_w_authority_choice_1"))):
+            row = body[rows[n]:]
+            toggle = row.index(f"GetVariableSystem.Toggle('{flag}')")
+            self.assertLess(row.index(f'text = "{label}"'), toggle, flag)
+            self.assertIn(f"SelectLocalization( Not( GetVariableSystem.Exists('{flag}') ), 'nd_w_btn_change', 'nd_w_btn_hide' )",
+                          row[:toggle])
+            opened = row.index(f'visible = "[GetVariableSystem.Exists(\'{flag}\')]"')
+            self.assertLess(toggle, opened, flag)
+            self.assertLess(opened, row.index(f'text = "{first}"'), flag)
+            if n < 2:
+                self.assertLess(row.index(f'text = "{first}"'), rows[n + 1] - rows[n], flag)
+            self.assertIn("[Concept('concept_", _loc(label), label)
+        for old in ("nd_forces_open", "nd_w_forces_header", "nd_w_doctrine_header"):
+            self.assertNotIn(old, ALL_GUI, old)
+
+    def test_the_option_in_force_is_tinted(self):
+        """NUC-5: each list marks its option in force, as Covert's Funding Levels
+        do; readiness marks the level ordered, the one its Order button greys."""
+        body = _type_body(ALL_GUI, "te_nuclear_sec_posture")
+        for value, codes, key in (("nd_display_doctrine_code", range(1, 6), "nd_w_doctrine_choice_{}"),
+                                  ("nd_display_readiness_target_code", range(4), "nd_w_readiness_choice_{}"),
+                                  ("nd_display_authority_code", range(1, 5), "nd_w_authority_choice_{}")):
+            for code in codes:
+                i = body.index(f'text = "{key.format(code)}"')
+                row = body[body.rfind("_row = {", 0, i):i]
+                self.assertIn(f"ScriptValue('{value}'), '(CFixedPoint){code}' )", row, key.format(code))
+                self.assertIn('blockoverride "row_current"', row)
+        for t in ("nd_choice_row", "nd_readiness_row"):
+            self.assertRegex(_type_body(ALL_GUI, t), r'block "row_current" \{\s*visible = no\s*\}', t)
+
+    def test_the_readiness_table(self):
+        """NUC-5: the four levels as rows of a table, upkeep and the survivability
+        a crisis counts side by side, under a head row."""
+        body = _type_body(ALL_GUI, "te_nuclear_sec_posture")
+        self.assertLess(body.index("nd_readiness_head = {}"), body.index('text = "nd_w_readiness_choice_0"'))
+        for r in range(4):
+            self.assertIn(f'text = "nd_w_readiness_upkeep_{r}"', body)
+            self.assertIn(f'text = "nd_w_readiness_survivability_{r}"', body)
+            self.assertIn(f"nd_upkeep_weekly_at_readiness_{r}", _loc(f"nd_w_readiness_upkeep_{r}"))
+            self.assertNotIn("Upkeep at this level", _loc(f"nd_w_readiness_choice_{r}_tt"), r)
+
+    def test_when_the_posture_can_change_is_said(self):
+        """NUC-4: the values script already computes are drawn, above each list
+        and in each axis's hover."""
+        for key, value in (("nd_w_doctrine_legend", "nd_display_doctrine_months_left"),
+                           ("nd_w_authority_legend", "nd_display_authority_months_left"),
+                           ("nd_w_readiness_legend", "nd_display_readiness_lock_months"),
+                           ("nd_w_doctrine_tt", "nd_display_doctrine_months_left"),
+                           ("nd_w_authority_tt", "nd_display_authority_months_left"),
+                           ("nd_w_readiness_tt", "nd_display_readiness_lock_months")):
+            self.assertIn(f"ScriptValue('{value}')", _loc(key), key)
 
     def test_no_old_flag_survives(self):
         for f in OLD_FLAGS:
@@ -229,7 +331,7 @@ class FlagTest(unittest.TestCase):
 # Explanations that live in "How Nuclear Weapons Work", and the live sections they left.
 HOW_KEYS = ["nd_w_home_legend", "nd_w_reputation_legend", "nd_w_crisis_actions_legend",
             "je_nuclear_program_widget_odds_note", "je_nuclear_program_widget_powers_legend",
-            "je_nuclear_how_programme", "je_nuclear_how_posture", "je_nuclear_how_taboo"]
+            "je_nuclear_how_programme", "je_nuclear_how_posture", "je_nuclear_how_taboo", "je_nuclear_how_strike"]
 
 
 class HowItWorksTest(unittest.TestCase):
@@ -256,16 +358,35 @@ def _coded(text, value):
     """{code: [textures]} for the icons gated on ScriptValue(value) == code."""
     found = {}
     pat = (rf"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('{value}'\), "
-           rf"'\(CFixedPoint\)(-?\d+)' \)\]\"(.*?)texture = \"([^\"]+)\"")
+           rf"'\(CFixedPoint\)(-?\d+)' \)\]\"(\s*)texture = \"([^\"]+)\"")
     for m in re.finditer(pat, text, re.S):
         found.setdefault(int(m.group(1)), []).append(m.group(3))
     return found
 
 
+def _cells(text):
+    """Each te_banking_ov_cell instance of the overview, as its body."""
+    out = []
+    for m in re.finditer(r"te_banking_ov_cell = \{", text):
+        depth = 0
+        for k in range(m.end() - 1, len(text)):
+            depth += (text[k] == "{") - (text[k] == "}")
+            if depth == 0:
+                out.append(text[m.end():k])
+                break
+    return out
+
+
 class OverviewTest(unittest.TestCase):
+    """NUC-21 (owner, 2026-10-27): Banking's cells in place of the round-3 rows
+    of icons, each saying what needs the returning player: the weeks to the
+    crisis deadline, the time to the next warhead, when the doctrine can next
+    change."""
+
     @classmethod
     def setUpClass(cls):
         cls.ov = _read(OVERVIEW)
+        cls.panel = _type_body(cls.ov, "te_nuclear_overview_panel")
 
     def test_every_state_has_one_icon(self):
         for value, codes in (("nuclear_program_display_state", range(0, 9)),
@@ -279,17 +400,48 @@ class OverviewTest(unittest.TestCase):
                 for code, textures in found.items():
                     self.assertEqual(len(textures), 1, f"{value} {code}")
 
+    def test_the_cells_are_bankings(self):
+        """Banking's own cell, reused as it is: a size, a tooltip, the caption in
+        the 154 column, an icon, the word and the figure."""
+        cells = _cells(self.panel)
+        self.assertEqual(len(cells), 7)
+        for body in cells:
+            tip = re.search(r'tooltip = "(\w+)"', body).group(1)
+            with self.subTest(cell=tip):
+                self.assertIn("size = { 238 70 }", body)
+                self.assertRegex(body, r'blockoverride "caption_width" \{\s*max_width = 154\s*\}')
+                for block in ("caption", "icons", "word", "third_line"):
+                    self.assertIn(f'blockoverride "{block}"', body)
+                self.assertIn("te_nuclear_ov_figure = {", body)
+                self.assertTrue(_loc(tip), tip)
+        self.assertNotIn("type te_banking_ov_cell", self.ov, "the cell is Banking's, not redefined here")
+        for t in ("te_nuclear_ov_word", "te_nuclear_ov_figure"):
+            self.assertIn("using = te_nuclear_fontsize_overview", _type_body(self.ov, t), t)
+
+    def test_what_needs_the_player_is_on_the_face(self):
+        figure = {re.search(r'tooltip = "(\w+)"', b).group(1): re.search(r'te_nuclear_ov_figure = \{\s*text = "(\w+)"', b).group(1)
+                  for b in _cells(self.panel)}
+        self.assertIn("nd_display_crisis_weeks_left", _loc(figure["je_nuclear_ov_crisis_tt"]))
+        self.assertIn("je_nuclear_ov_crisis_deadline_soon", _loc(figure["je_nuclear_ov_crisis_tt"]))
+        self.assertTrue(_loc("je_nuclear_ov_crisis_deadline_soon").startswith("#R "))
+        self.assertIn("GetCustom('nuclear_program_next_short')", _loc(figure["je_nuclear_ov_prog_tt"]))
+        self.assertIn("nuclear_program_display_months_to_next", _loc("nuclear_program_next_short_estimate"))
+        self.assertIn("nd_display_doctrine_months_left", _loc(figure["nd_w_doctrine_tt"]))
+        self.assertIn("nd_display_authority_months_left", _loc(figure["nd_w_authority_tt"]))
+        self.assertIn("nd_display_public_estimate", _loc(figure["je_nuclear_ov_warheads_tt"]))
+
     def test_the_rows_are_gated(self):
-        body = _type_body(self.ov, "te_nuclear_overview_panel")
+        body = self.panel
         self.assertIn('visible = "[JournalEntry.IsActive]"', body)
-        posture = body.index("nd_display_doctrine_code")
-        self.assertIn(_sgui("nd_armed_sgui"), body[:posture])
+        crisis = body.index('tooltip = "je_nuclear_ov_crisis_tt"')
+        self.assertIn(_sgui("nd_in_crisis_sgui"), body[:crisis])
+        posture = body.index('tooltip = "nd_w_doctrine_tt"')
+        self.assertIn(_sgui("nd_armed_sgui"), body[crisis:posture])
+        for tip, gate in (("nd_w_authority_tt", "nd_armed_sgui"), ("nd_w_credibility_tt", "nd_has_reputation_sgui")):
+            i = body.index(f'tooltip = "{tip}"')
+            self.assertIn(_sgui(gate), body[i - 300:i], tip)
         taboo = body.index("ScriptValue('nd_disp_taboo_bar_low')")
         self.assertIn(_sgui("nd_taboo_exists_sgui"), body[posture:taboo])
-        crisis = body.index('text = "je_nuclear_ov_crisis_label"')
-        self.assertIn(_sgui("nd_in_crisis_sgui"), body[crisis - 900:crisis])
-        cred = body.index('text = "je_nuclear_ov_credibility_label"')
-        self.assertIn(_sgui("nd_has_reputation_sgui"), body[cred - 900:cred])
 
     def _bar(self, text, start_key, end_key):
         """The fixed cell holding a projection bar: from its first layer to the next text."""
@@ -352,27 +504,18 @@ class OverviewTest(unittest.TestCase):
         20 px margins, and no row wider than the column (play-test 2026-09-29)."""
         frame = _type_body(self.ov, "te_nuclear_ov_frame")
         self.assertIn("margin = { 20 8 }", frame)
-        panel = _type_body(self.ov, "te_nuclear_overview_panel")
-        self.assertIn("minimumsize = { 480 -1 }", panel)
-
-        def width(type_name):
-            return int(re.search(r"\n\t\tsize = \{ (\d+) \d+ \}", _type_body(self.ov, type_name)).group(1))
-        credibility = int(re.search(r"size = \{ (\d+) 58 \}\n\t+visible = \"\[GetScriptedGui\('nd_has_reputation_sgui'\)",
-                                    panel).group(1))
-        self.assertLessEqual(3 * width("te_nuclear_ov_icon_label") + credibility + 3 * 6, 480)
-        self.assertLessEqual(3 * width("te_nuclear_ov_posture_cell") + 2 * 6, 480)
-        row3 = panel[panel.index("Row 3"):]
-        cells = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", row3)]
-        bar = int(re.search(r"widget = \{\s*size = \{ (\d+) 18 \}", row3).group(1))
+        self.assertIn("minimumsize = { 480 -1 }", self.panel)
+        rows = [r for r in re.split(r"### Row \d", self.panel)[1:]]
+        self.assertEqual(len(rows), 5)
+        for row in rows[:4]:
+            n = row.count("te_banking_ov_cell = {")
+            self.assertIn(n, (1, 2))
+            self.assertLessEqual(n * 238 + (n - 1) * int(re.search(r"spacing = (\d+)", row).group(1)), 480)
+        taboo = rows[4]
+        cells = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", taboo)]
+        bar = int(re.search(r"widget = \{\s*size = \{ (\d+) 18 \}", taboo).group(1))
         self.assertEqual(len(cells), 2)
         self.assertLessEqual(sum(cells) + bar + 24 + 3 * 8, 480)
-
-    def test_cells_have_a_fixed_width(self):
-        for t, bound in (("te_nuclear_ov_icon_label", "max_width = 112"),
-                         ("te_nuclear_ov_posture_cell", "maximumsize = { 150 -1 }")):
-            body = _type_body(self.ov, t)
-            self.assertRegex(body, r"\n\t\tsize = \{ \d+ \d+ \}\n", t)
-            self.assertIn(bound, body, t)
 
 
 NUCLEAR_ICONS = "gfx/interface/icons/nuclear_icons/"
@@ -391,11 +534,14 @@ CODED_ICONS = {
 # Vanilla marks the overview uses as vanilla does: the taboo's trend arrows.
 VANILLA_KEPT = {"gfx/interface/icons/generic_icons/trend_up.dds", "gfx/interface/icons/generic_icons/trend_down.dds",
                 "gfx/interface/icons/generic_icons/trend_nochange.dds"}
+# Placeholders until the art exists (style guide rule 10), each listed in
+# docs/systems/nuclear_gui_icons.md. None since icon batch 7 painted credibility's.
+PLACEHOLDERS = set()
 
 
 def _all_icon_names():
     names = [n for codes in CODED_ICONS.values() for n in codes.values()]
-    return names + ["warheads", "crisis"]
+    return names + ["warheads", "crisis", "credibility"]
 
 
 class NuclearIconsTest(unittest.TestCase):
@@ -411,8 +557,9 @@ class NuclearIconsTest(unittest.TestCase):
                 self.assertEqual(_coded(self.ov, value),
                                  {code: [f"{NUCLEAR_ICONS}{n}.dds"] for code, n in names.items()})
 
-    def test_warheads_and_crisis(self):
-        for name, tooltip in (("warheads", "je_nuclear_ov_warheads_tt"), ("crisis", "je_nuclear_ov_crisis_tt")):
+    def test_warheads_crisis_and_credibility(self):
+        for name, tooltip in (("warheads", "je_nuclear_ov_warheads_tt"), ("crisis", "je_nuclear_ov_crisis_tt"),
+                              ("credibility", "nd_w_credibility_tt")):
             with self.subTest(cell=name):
                 m = re.search(rf'tooltip = "{tooltip}".*?texture = "([^"]+)"', self.ov, re.S)
                 self.assertEqual(m.group(1), f"{NUCLEAR_ICONS}{name}.dds")
@@ -420,7 +567,10 @@ class NuclearIconsTest(unittest.TestCase):
     def test_no_placeholder_left(self):
         for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.ov):
             with self.subTest(path=path):
-                self.assertTrue(path.startswith(NUCLEAR_ICONS) or path in VANILLA_KEPT, f"placeholder left: {path}")
+                self.assertTrue(path.startswith(NUCLEAR_ICONS) or path in VANILLA_KEPT | PLACEHOLDERS,
+                                f"placeholder left: {path}")
+        for path in PLACEHOLDERS:
+            self.assertIn(path, _read(ICON_DOC), path)
 
     def test_no_icon_is_faded(self):
         # The placeholders faded No Programme and Disarmed to 30% to tell them from
@@ -517,13 +667,16 @@ class StatusDescTest(unittest.TestCase):
 
 
 # ---- Play-test round 3: nothing a player reads may end in "..." ------------------
-# The coordinator's width budget, measured from the owner's screenshots in GUI
-# units per character: the large font about 10, the medium table font about 8.6,
-# plus 10%. The rules give no figure for fontsize_small; it is scaled from the
-# medium one by the ratio measured on the owner's round-1 screenshot of this
-# panel ("Central Authorization" at small and "Launch authority" at medium:
-# 6.4 and 7.2 there), so 8.6 x 6.4 / 7.2 = 7.6.
-LARGE, MEDIUM, SMALL, MARGIN = 10.0, 8.6, 7.6, 1.1
+# The style guide's width budget (rule 3), in GUI units per character: the
+# serif row font about half its size (8.5 at 17, 10 at 20), and 8.6 for the
+# 16-point tooltip face of the overview, plus 10%. Each size is read from the
+# panel's own font templates (NUC-20), so a pass on type moves the budget.
+_TEMPLATES = {m.group(1): int(m.group(2)) for m in re.finditer(
+    r"template te_nuclear_fontsize_(\w+) \{\s*fontsize = (\d+)", _read(DETERRENCE))}
+ROW = 10.0 / 20 * _TEMPLATES["row"]
+HEADING = 10.0 / 20 * _TEMPLATES["heading"]
+OVERVIEW_UNIT = 8.6 / 16 * _TEMPLATES["overview"]
+MARGIN = 1.1
 LONGEST_IG_NAME = "Petty Bourgeoisie"   # the longest vanilla interest-group name
 # Numbers read as 999 unless their range is narrower (the widest they print).
 WIDEST_NUMBER = {"nd_display_safeguards": "3", "nd_display_hardening": "3"}
@@ -560,6 +713,9 @@ def _renderings(key, depth=0):
     for part in re.split(r"(\[[^\]]*\])", value):
         if not part.startswith("["):
             options = [part]
+        elif "SelectLocalization(" in part and depth < 3:
+            keys = re.findall(r"'(\w+)'", part.split("SelectLocalization(", 1)[1])[-2:]
+            options = [r for k in keys for r in _renderings(k, depth + 1)]
         elif "GetCustom(" in part and depth < 3:
             name = re.search(r"GetCustom\('(\w+)'\)", part).group(1)
             options = [r for k in CUSTOM.get(name, []) for r in _renderings(k, depth + 1)] or [""]
@@ -600,8 +756,13 @@ def _wraps_into(text, width, per_char, lines):
     return n <= lines
 
 
+def _block_texts(text, block_name):
+    return set(re.findall(rf'blockoverride "{block_name}" \{{\s*text = "(\w+)"', text))
+
+
 class LabelBudgetTest(unittest.TestCase):
-    """Every static label, and every dynamic word, in a fixed-width cell fits it."""
+    """Every static label, and every dynamic word, in a fixed-width cell fits it,
+    at the panel's type sizes (rows 17, subheadings 20, the overview 16)."""
 
     def _fits(self, keys, width, font, where):
         self.assertTrue(keys, where)
@@ -610,61 +771,122 @@ class LabelBudgetTest(unittest.TestCase):
                 need = len(text) * font * MARGIN
                 self.assertLessEqual(need, width, f"{where}: {key} reads {text!r} ({need:.0f} > {width})")
 
-    def _gui_keys(self, text, block_name):
-        return set(re.findall(rf'blockoverride "{block_name}" \{{\s*text = "(\w+)"', text))
+    def test_the_ladder(self):
+        self.assertEqual(_TEMPLATES, {"row": 17, "heading": 20, "overview": 16})
+        for path in NUCLEAR_GUI:
+            text = _read(path)
+            self.assertNotRegex(text, r"using = fontsize_(small|medium|large)\b", os.path.basename(path))
+        self.assertIn("using = te_nuclear_fontsize_heading", _type_body(_read(DETERRENCE), "nd_subheader"))
 
     def test_table_rows(self):
         det, prog = _read(DETERRENCE), _read(PROGRAM)
         for path, type_name, label_w, value_w in ((det, "nd_row", 210, 266), (prog, "nuclear_program_row", 200, 276)):
             body = _type_body(path, type_name)
             self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 24 \}", body)], [label_w, value_w])
-            self._fits(self._gui_keys(path, "row_label"), label_w, MEDIUM, f"{type_name} label")
-            self._fits(self._gui_keys(path, "row_value"), value_w, MEDIUM, f"{type_name} value")
+            self.assertEqual(body.count("using = te_nuclear_fontsize_row"), 2)
+            self._fits(_block_texts(path, "row_label"), label_w, ROW, f"{type_name} label")
+            self._fits(_block_texts(path, "row_value"), value_w, ROW, f"{type_name} value")
+
+    def test_the_posture_axes(self):
+        det = _read(DETERRENCE)
+        body = _type_body(det, "nd_axis_row")
+        self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 30 \}", body)], [160, 218, 90])
+        self._fits(_block_texts(det, "axis_label"), 160, ROW, "axis label")
+        self._fits(_block_texts(det, "axis_value"), 218, ROW, "axis value")
+        self._fits(["nd_w_btn_change", "nd_w_btn_hide"], 90, ROW, "axis toggle")
 
     def test_steppers_choices_and_buttons(self):
         both = _read(DETERRENCE) + _read(PROGRAM)
         labels = set(re.findall(r'text = "(\w+)"\n\t+size = \{ 170 24 \}', both))
-        values = set(re.findall(r'text = "(\w+)"\n\t+tooltip = "\w+"\n\t+size = \{ 246 24 \}', both))
-        self.assertEqual(len(labels), 4, labels)
-        self.assertEqual(len(values), 4, values)
-        self._fits(labels, 170, MEDIUM, "stepper label")
-        self._fits(values, 246, MEDIUM, "stepper value")
-        choices = set(re.findall(r'size = \{ 360 30 \}[^}]*?text = "(\w+)"', both, re.S))
-        buttons = set(re.findall(r'size = \{ 110 30 \}[^}]*?text = "(\w+)"', both, re.S))
-        self._fits(choices, 360, MEDIUM, "choice")
-        self._fits(buttons, 110, MEDIUM, "button")
+        values = set(re.findall(r'text = "(\w+)"\n\t+tooltip = "\w+"\n\t+default_format = "#tooltippable"\n\t+size = \{ 246 24 \}', both))
+        # Safeguards, hardening, the arsenal ceiling and the programme's own,
+        # then the Strike section's target and warheads (rework phase 3).
+        self.assertEqual(len(labels), 6, labels)
+        self.assertEqual(len(values), 5, values)
+        self._fits(labels, 170, ROW, "stepper label")
+        self._fits(values, 246, ROW, "stepper value")
+        det = _read(DETERRENCE)
+        self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 30 \}", _type_body(det, "nd_choice_row"))], [358, 110])
+        self._fits(_block_texts(det, "choice_name"), 358, ROW, "choice")
+        self._fits(_block_texts(det, "button_text"), 110, ROW, "button")
+        # Every instance fills the type's blocks: a child added straight into the
+        # widget would sit at 0,0 over the type's own row.
+        for t, block in (("nd_choice_row", "choice_name"), ("nd_readiness_row", "level_name")):
+            self.assertEqual(len(re.findall(rf"\b{t} = \{{", det)), det.count(f'blockoverride "{block}"'), t)
+
+    def test_the_readiness_table(self):
+        det = _read(DETERRENCE)
+        self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 30 \}", _type_body(det, "nd_readiness_row"))],
+                         [120, 100, 124, 110])
+        self._fits(_block_texts(det, "level_name"), 120, ROW, "readiness level")
+        self._fits(_block_texts(det, "level_upkeep"), 100, ROW, "readiness upkeep")
+        self._fits(_block_texts(det, "level_survivability"), 124, ROW, "readiness survivability")
+        head = _type_body(det, "nd_readiness_head")
+        for key, width in zip(re.findall(r'text = "(\w+)"', head), (120, 100, 124)):
+            self._fits([key], width, ROW, "readiness head")
+
+    def test_the_crisis(self):
+        det = _read(DETERRENCE)
+        cell = _type_body(det, "nd_crisis_cell") + _type_body(det, "nd_crisis_cell_figure")
+        self.assertEqual(set(re.findall(r"max_width = (\d+)", cell)), {"218"})
+        sec = _type_body(det, "te_nuclear_sec_crisis")
+        for block in ("caption", "word"):
+            self._fits({k for k in _block_texts(sec, block)}, 218, ROW, f"crisis cell {block}")
+        figures = set(re.findall(r'nd_crisis_cell_figure = \{\s*text = "(\w+)"', sec))
+        self.assertEqual(len(figures), 4)
+        self._fits(figures, 218, ROW, "crisis cell figure")
+        self._fits(["nd_next_pressure_none", "nd_next_pressure_paused", "nd_next_pressure_weeks"], 218, ROW, "next pressure")
+        row = _type_body(det, "nd_outcome_row")
+        self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 24 \}", row)], [170, 192, 104])
+        self._fits(_block_texts(sec, "outcome_label"), 170, ROW, "outcome")
+        self._fits(_block_texts(sec, "outcome_effect"), 192, ROW, "outcome effect")
+        self._fits(_block_texts(sec, "outcome_credibility"), 104, ROW, "outcome credibility")
+        head = _type_body(det, "nd_outcome_head")
+        for key, width in zip(re.findall(r'text = "(\w+)"', head), (170, 192, 104)):
+            self._fits([key], width, ROW, "outcome head")
+
+    def test_the_lists(self):
+        det, prog = _read(DETERRENCE), _read(PROGRAM)
+        wc = _type_body(det, "nd_world_crisis_row")
+        self._fits(["nd_wc_item_stage"], 168, ROW, "world crisis stage")
+        self._fits(["nd_wc_item_danger"], 180, ROW, "world crisis danger")
+        for key, width in zip(re.findall(r'text = "(\w+)"', _type_body(det, "nd_world_crisis_head")), (108, 168, 180)):
+            self._fits([key], width, ROW, "world crisis head")
+        self.assertIn("size = { 168 28 }", wc)
+        self._fits(["nuclear_program_power_estimate"], 110, ROW, "power estimate")
+        for key, width in zip(re.findall(r'text = "(\w+)"', _type_body(prog, "nuclear_program_powers_head")), (286, 110)):
+            self._fits([key], width, ROW, "powers head")
 
     def test_overview(self):
         ov = _read(OVERVIEW)
-        self.assertIn("size = { 112 58 }", _type_body(ov, "te_nuclear_ov_icon_label"))
-        row1 = [f"je_nuclear_ov_prog_{n}" for n in range(9)] + ["je_nuclear_ov_warheads_label",
-                                                                 "je_nuclear_ov_crisis_label"]
-        self._fits(row1, 112, SMALL, "overview row 1")
-        self.assertIn("size = { 126 58 }", ov)
-        self._fits(["je_nuclear_ov_credibility_label"], 126, SMALL, "credibility meter")
-        self._fits(["je_nuclear_ov_taboo_label"], 60, MEDIUM, "taboo label")
-        self._fits(["je_nuclear_ov_taboo_value"], 190, MEDIUM, "taboo headline")
-        # The posture's names may wrap: each word fits, in at most two lines.
-        cell = _type_body(ov, "te_nuclear_ov_posture_cell")
-        self.assertIn("multiline = yes", cell)
-        self.assertIn("maximumsize = { 150 -1 }", cell)
-        names = ([f"nd_doctrine_{n}" for n in range(1, 6)] + [f"nd_readiness_{n}" for n in range(4)]
-                 + [f"nd_authority_{n}" for n in range(1, 5)])
-        for key in names:
-            for text in _renderings(key):
-                self.assertTrue(_wraps_into(text, 150, SMALL * MARGIN, 2), f"{key} {text!r}")
+        dash = _read(os.path.join(W, "banking_dashboard_widget.gui"))
+        self.assertIn("using = banking_dash_fontsize_overview", _type_body(dash, "te_banking_ov_cell"))
+        self.assertRegex(dash, r"template banking_dash_fontsize_overview \{\s*fontsize = 16")
+        panel = _type_body(ov, "te_nuclear_overview_panel")
+        for body in _cells(panel):
+            tip = re.search(r'tooltip = "(\w+)"', body).group(1)
+            with self.subTest(cell=tip):
+                self._fits(_block_texts(body, "caption"), 154, OVERVIEW_UNIT, f"{tip} caption")
+                words = set(re.findall(r'te_nuclear_ov_word = \{\s*(?:visible = "[^"]*"\s*)?text = "(\w+)"', body))
+                self._fits(words, 154, OVERVIEW_UNIT, f"{tip} word")
+                figures = set(re.findall(r'te_nuclear_ov_figure = \{\s*text = "(\w+)"', body))
+                self._fits(figures, 154, OVERVIEW_UNIT, f"{tip} figure")
+        for t in ("te_nuclear_ov_word", "te_nuclear_ov_figure"):
+            self.assertIn("max_width = 154", _type_body(ov, t), t)
+        self._fits(["je_nuclear_ov_taboo_label"], 60, OVERVIEW_UNIT, "taboo label")
+        self._fits(["je_nuclear_ov_taboo_value"], 190, OVERVIEW_UNIT, "taboo headline")
 
     def test_forces_and_at_home(self):
         det = _read(DETERRENCE)
-        self._fits(["nd_w_survivability_label"], 170, MEDIUM, "survivability label")
-        self._fits(["nd_w_survivability_value"], 94, MEDIUM, "survivability value")
-        self._fits(["nd_home_ig_name"], 280, MEDIUM, "At Home group")
-        self._fits([f"nd_home_view_{n}" for n in range(1, 11)], 200, MEDIUM, "At Home class")
+        self._fits(["nd_w_survivability_label"], 170, ROW, "survivability label")
+        self._fits(["nd_w_survivability_value"], 94, ROW, "survivability value")
+        self._fits(["nd_home_ig_name"], 280, ROW, "At Home group")
+        self._fits([f"nd_home_view_{n}" for n in range(1, 11)], 200, ROW, "At Home class")
         table = _type_body(det, "nd_home_term_row")
         self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 22 \}", table)], [220, 60])
         terms = ("approval", "doctrine", "readiness", "authority", "strain", "possession", "business", "cap")
-        self._fits([f"nd_home_row_{t}" for t in terms], 220, MEDIUM, "At Home row")
-        self._fits([f"nd_home_row_{t}_value" for t in terms], 60, MEDIUM, "At Home value")
+        self._fits([f"nd_home_row_{t}" for t in terms], 220, ROW, "At Home row")
+        self._fits([f"nd_home_row_{t}_value" for t in terms], 60, ROW, "At Home value")
 
 
 class TidinessTest(unittest.TestCase):
@@ -812,6 +1034,19 @@ class MilitaryTabTest(unittest.TestCase):
                 for _ in range(line.count("}")):
                     if len(stack) > 1:
                         stack.pop()
+
+
+class TestSurvivorsRow(unittest.TestCase):
+    """Forces: survivors against the main rival, shown while there is one
+    (2026-10-28 rework spec §10)."""
+
+    def test_survivors_row_present(self):
+        text = _read(DETERRENCE)
+        i = text.index('text = "nd_w_survivors_label"')
+        row = text[text.rindex("nd_row = {", 0, i):i + 400]
+        self.assertIn("nd_has_main_rival_sgui", row)
+        self.assertIn('text = "nd_w_survivors_value"', row)
+        self.assertIn('tooltip = "nd_w_survivors_tt"', row)
 
 
 if __name__ == "__main__":

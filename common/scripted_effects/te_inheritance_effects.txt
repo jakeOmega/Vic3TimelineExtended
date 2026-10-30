@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  INHERITANCE — scripted effects
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 #  Values: common/script_values/te_inheritance_values.txt.
 #  Modifiers: common/static_modifiers/te_inheritance_modifiers.txt.
 #  Hooks: common/on_actions/te_inheritance_on_actions.txt.
@@ -23,6 +23,10 @@
 #                                generation events wait for it to lapse
 #    te_inh_duty_years           years the estate duty (Estate Duties or
 #                                the Birthright Endowment) has been in force
+#    te_inh_endowment_years      years the Birthright Endowment has been in
+#                                force (The First Cohort waits for 5)
+#    te_inh_first_cohort_paid    The First Cohort came under this tenure of
+#                                the Endowment; cleared when it lapses
 #    te_inh_title_continuity     backed-up minds keep their property: the
 #                                target is pinned at the score
 #    te_inh_posthumous_decided   the Posthumous Title question was answered
@@ -67,6 +71,7 @@ te_inh_yearly_update = {
 	}
 	te_inh_tidy_amendments = yes
 	te_inh_count_duty_years = yes
+	te_inh_count_endowment_years = yes
 }
 
 # Country scope; ROOT the country (inheritance_events.1 at game start).
@@ -208,6 +213,33 @@ te_inh_count_duty_years = {
 	else_if = {
 		limit = { has_variable = te_inh_duty_years }
 		remove_variable = te_inh_duty_years
+	}
+}
+
+# Country scope. Years the Birthright Endowment has been in force, for The
+# First Cohort (inheritance_events.16), which comes once a tenure: the flag
+# it sets goes when the Endowment does, so a later Endowment pays a new
+# first cohort.
+te_inh_count_endowment_years = {
+	if = {
+		limit = { te_inh_has_birthright_endowment = yes }
+		if = {
+			limit = { has_variable = te_inh_endowment_years }
+			change_variable = { name = te_inh_endowment_years add = 1 }
+		}
+		else = {
+			set_variable = { name = te_inh_endowment_years value = 1 }
+		}
+	}
+	else = {
+		if = {
+			limit = { has_variable = te_inh_endowment_years }
+			remove_variable = te_inh_endowment_years
+		}
+		if = {
+			limit = { has_variable = te_inh_first_cohort_paid }
+			remove_variable = te_inh_first_cohort_paid
+		}
 	}
 }
 

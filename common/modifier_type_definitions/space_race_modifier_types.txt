@@ -41,3 +41,25 @@ country_space_race_risk_mult = {
 		ai_value = -5000
 	}
 }
+
+# Colony module fabrication points a month (colony modules design § 5): the
+# Space Program's Module Fabrication methods give it, workforce-scaled, and
+# sr_mod_month builds the queued modules from it. The engine consumes nothing.
+country_sr_module_fabrication_add = {
+	color = good
+	percent = no
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+# Propellant depots from the Moon (lunar colonization design § 3.5): Shackleton
+# Crater's Propellant Depot specialization carries it on the solar colonization
+# entry, and sr_launch_has_depots reads it beside Asteroid Mining (off-window
+# launches at the premium). Read by script only; the engine consumes nothing.
+country_sr_propellant_depots_bool = {
+	color = good
+	boolean = yes
+}

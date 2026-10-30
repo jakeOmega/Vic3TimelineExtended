@@ -445,8 +445,9 @@ Serves S11. Result: ___
 
 Rule *on*. Read the overview, Enacted Code and History after the game starts, after a
 commencement and after an expiry; collapse and reopen each section.
-Expect "Tax Code, Version N", a history row for the migration, expiry cells like
-"→ 0.43 from 1842.12" without elision, and collapsed sections staying collapsed.
+Expect the Tax Code cell's "Version N", a history row for the migration, expiry cells like
+"→ 0.425 from 1842.12" without elision, "In force since" on each rate's hover, and
+collapsed sections staying collapsed.
 Serves S12. Result: ___
 
 ### PT-41 Workbench controls and the locked tab
@@ -476,6 +477,72 @@ te_tax_debug.3` prints five pre-scores that are nonzero and differ by tax, and a
 then raises the taxes it ranks cheapest.
 Expect each to load without a `debug.log` error and to print or do the right thing.
 Serves S3, S5. Result: ___
+
+## GUI audit pass (2026-10-27)
+
+The rework of `docs/audits/gui_audit/tax_code.md` (TAX-1 to TAX-26). Nothing in it was seen
+in game. Its script forms have precedents in the mod (a script value compared with `=` to
+another in a trigger, as `te_demog_work_values.txt` does; `max =` on a script value inside
+`if`), so it ships no self-check; these are the things only the game can show.
+
+### PT-43 The overview's cells
+
+Rule *on*, then *light*. Open both hosts with nothing in progress, with a draft (one with a
+change to accept: `event te_tax_debug.5`, draft the wage tax, then let the package take
+effect), with a bill short of support and with offers, with a passed bill held
+(`te_tax_debug.6`, `te_tax_debug.7`) and with a promise failing.
+Expect two cells a row, 16-point words that don't elide, red words for Blocked, Too soon,
+Month has come, Short of support, Held and failing, the bill cell's figure switching to
+"N offers waiting" while it is short, and each hover: the Code cell's next change named
+("when a passed bill takes effect", or which tax expires: `te_tax_ov_next_what`, a
+customizable localization whose triggers compare two script values), its snapshot lines;
+the draft's and the bill's checklists after a blank line, and nothing after them once the
+command is valid (`SelectLocalization( IsValid, … , Concatenate( … ) )`, Banking's
+not-started form). The light code: Taxation Law with the law's short name, Tax Level with
+the tax that sets it.
+Serves S12. Result: ___
+
+### PT-44 Type sizes, widths and icons
+
+Rule *on*, then *customs*. Every Tax Code row, value, button and note at 17 and the
+subheadings at 20 (`te_tax_fontsize_*`), against the Banking tab beside it; the Goods
+Catalog by category with each good's icon; the enacted taxed goods as icon rows under
+Taxed Goods, a passed bill's under its goods line ("Taxes", "Exempts"); the customs levels
+as vanilla's tariff icons with the word on hover; the interest-group cards' `ig_button`
+(click opens the group); the enacted regional-relief states listed.
+Expect no elision (the width test budgets 8.5 units a character at 17 and 8.6 at the
+16-point overview, plus 10%), no missing icon, rows that line up under their heads.
+The overview's cells and the light code's two draw `tax_icons/` art (icon batch 7): Draft
+Reform a red quill in an inkwell, the bill a gavel, Passed Bills a sealed scroll by an hourglass,
+Promises a handshake, Taxation Law a strongbox, Tax Level a dial gauge on coins; Tax Code
+keeps the journal entry's own book. Each reads at 44 px.
+Serves S12. Result: ___
+
+### PT-45 Actions under their conditions, the bill footer and greyed controls
+
+Rule *on*. With a bill under debate: Pass, Revise Bill and Withdraw sit under the
+conditions; Force Through only while committed clout is short; on the Budget tab with no
+draft open, the bill footer (`te_tax_bill_summary`) pinned with its share, debate and
+buttons, and the draft's footer instead once a draft is open. Hover the greyed tax-level
+buttons, the consumption-tax "+", a tariff button (*customs*), the goods panel's toggle and
+a good's right-click Tax item.
+Expect each greyed control's tooltip to start with "Set by the Tax Code…" (light: "Set by
+your heaviest tax…") and a blank line before vanilla's text, and no such line while the
+rule is off.
+Serves S5, S12. Result: ___
+
+### PT-46 Review, summary and history lines
+
+Rule *on*. A draft that changes the wage tax, a staple and agricultural relief; another
+with rural assessment and head tax both collected (the Poll range).
+Expect the draft summary's Revenue row equal to the sum of the Revenue Estimate table's
+Change column (`Add_CFixedPoint` of four `Multiply_CFixedPoint`s), a range when Poll is
+shared, "in part" when a changed line has no base and "Not estimated" before the first
+snapshot; the provisions' names underlined with who benefits on hover; a passed bill's
+relief in the review's timeline. Keep and break a promise (PT-28): its history row names
+the group ("A promise to the Rural Folk was kept."), and a row that changed the code
+shows its version.
+Serves S12. Result: ___
 
 ## Script profiler
 

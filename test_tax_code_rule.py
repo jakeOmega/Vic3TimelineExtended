@@ -199,7 +199,7 @@ class GateTriggerTest(unittest.TestCase):
 
     def test_the_entry_opens_under_either_code(self):
         self.assertEqual(self.triggers["te_tax_entry_unlocked"], {"custom_tooltip": {
-            "text": "te_tax_tt_code_in_force",
+            "text": "te_tax_tt_unlock_code",
             "OR": {"te_tax_code_in_force": "yes", "te_tax_light_in_force": "yes"},
         }})
 

@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  INHERITANCE — on actions
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 #  Effects: common/scripted_effects/te_inheritance_effects.txt.
 #  Docs: docs/systems/mod_systems.md § Inheritance.
 # ======================================================================
@@ -38,6 +38,9 @@ on_yearly_pulse_country = {
 		te_inh_generation_forced_heirship
 		te_inh_generation_free_testation
 		te_inh_generation_estate_duties
+		te_inh_generation_universal_heir
+		te_inh_generation_possession_by_use
+		te_inh_first_cohort
 		te_inh_posthumous_title
 	}
 }
@@ -86,6 +89,31 @@ te_inh_generation_estate_duties = {
 	random_events = {
 		900 = 0
 		100 = inheritance_events.5
+	}
+}
+
+# The Hidden Estates (State as Universal Heir).
+te_inh_generation_universal_heir = {
+	random_events = {
+		900 = 0
+		100 = inheritance_events.14
+	}
+}
+
+# The Empty Holding (Possession by Use).
+te_inh_generation_possession_by_use = {
+	random_events = {
+		900 = 0
+		100 = inheritance_events.15
+	}
+}
+
+# The First Cohort (the Birthright Endowment, in force for 5 years, once a
+# tenure): 25% a year, so the first stakes are seldom a decade old.
+te_inh_first_cohort = {
+	random_events = {
+		750 = 0
+		250 = inheritance_events.16
 	}
 }
 

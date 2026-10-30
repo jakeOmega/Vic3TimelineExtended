@@ -607,6 +607,14 @@ st_res_policy_grain_sgui = {
 	is_shown = {
 		has_journal_entry = je_strategic_reserve
 		st_res_grain_unlocked_trigger = yes
+		# The policy or preset in force draws as selected, not as a button
+		# (SR-10). Read only with the op present: a check without it, or an
+		# engine that does not hand is_shown the saved scope, reads every
+		# control as shown, as before (the safe direction).
+		trigger_if = {
+			limit = { exists = scope:op }
+			NOT = { st_res_policy_op_in_force = { GOOD = grain } }
+		}
 	}
 
 	ai_is_valid = {
@@ -1145,6 +1153,14 @@ st_res_policy_ammunition_sgui = {
 	is_shown = {
 		has_journal_entry = je_strategic_reserve
 		st_res_ammunition_unlocked_trigger = yes
+		# The policy or preset in force draws as selected, not as a button
+		# (SR-10). Read only with the op present: a check without it, or an
+		# engine that does not hand is_shown the saved scope, reads every
+		# control as shown, as before (the safe direction).
+		trigger_if = {
+			limit = { exists = scope:op }
+			NOT = { st_res_policy_op_in_force = { GOOD = ammunition } }
+		}
 	}
 
 	ai_is_valid = {
@@ -1683,6 +1699,14 @@ st_res_policy_oil_sgui = {
 	is_shown = {
 		has_journal_entry = je_strategic_reserve
 		st_res_oil_unlocked_trigger = yes
+		# The policy or preset in force draws as selected, not as a button
+		# (SR-10). Read only with the op present: a check without it, or an
+		# engine that does not hand is_shown the saved scope, reads every
+		# control as shown, as before (the safe direction).
+		trigger_if = {
+			limit = { exists = scope:op }
+			NOT = { st_res_policy_op_in_force = { GOOD = oil } }
+		}
 	}
 
 	ai_is_valid = {
@@ -2221,6 +2245,14 @@ st_res_policy_small_arms_sgui = {
 	is_shown = {
 		has_journal_entry = je_strategic_reserve
 		st_res_small_arms_unlocked_trigger = yes
+		# The policy or preset in force draws as selected, not as a button
+		# (SR-10). Read only with the op present: a check without it, or an
+		# engine that does not hand is_shown the saved scope, reads every
+		# control as shown, as before (the safe direction).
+		trigger_if = {
+			limit = { exists = scope:op }
+			NOT = { st_res_policy_op_in_force = { GOOD = small_arms } }
+		}
 	}
 
 	ai_is_valid = {
@@ -2759,6 +2791,14 @@ st_res_policy_artillery_sgui = {
 	is_shown = {
 		has_journal_entry = je_strategic_reserve
 		st_res_artillery_unlocked_trigger = yes
+		# The policy or preset in force draws as selected, not as a button
+		# (SR-10). Read only with the op present: a check without it, or an
+		# engine that does not hand is_shown the saved scope, reads every
+		# control as shown, as before (the safe direction).
+		trigger_if = {
+			limit = { exists = scope:op }
+			NOT = { st_res_policy_op_in_force = { GOOD = artillery } }
+		}
 	}
 
 	ai_is_valid = {
@@ -3297,6 +3337,14 @@ st_res_policy_aeroplanes_sgui = {
 	is_shown = {
 		has_journal_entry = je_strategic_reserve
 		st_res_aeroplanes_unlocked_trigger = yes
+		# The policy or preset in force draws as selected, not as a button
+		# (SR-10). Read only with the op present: a check without it, or an
+		# engine that does not hand is_shown the saved scope, reads every
+		# control as shown, as before (the safe direction).
+		trigger_if = {
+			limit = { exists = scope:op }
+			NOT = { st_res_policy_op_in_force = { GOOD = aeroplanes } }
+		}
 	}
 
 	ai_is_valid = {
@@ -3835,6 +3883,14 @@ st_res_policy_tanks_sgui = {
 	is_shown = {
 		has_journal_entry = je_strategic_reserve
 		st_res_tanks_unlocked_trigger = yes
+		# The policy or preset in force draws as selected, not as a button
+		# (SR-10). Read only with the op present: a check without it, or an
+		# engine that does not hand is_shown the saved scope, reads every
+		# control as shown, as before (the safe direction).
+		trigger_if = {
+			limit = { exists = scope:op }
+			NOT = { st_res_policy_op_in_force = { GOOD = tanks } }
+		}
 	}
 
 	ai_is_valid = {
@@ -4373,6 +4429,14 @@ st_res_policy_fertilizer_sgui = {
 	is_shown = {
 		has_journal_entry = je_strategic_reserve
 		st_res_fertilizer_unlocked_trigger = yes
+		# The policy or preset in force draws as selected, not as a button
+		# (SR-10). Read only with the op present: a check without it, or an
+		# engine that does not hand is_shown the saved scope, reads every
+		# control as shown, as before (the safe direction).
+		trigger_if = {
+			limit = { exists = scope:op }
+			NOT = { st_res_policy_op_in_force = { GOOD = fertilizer } }
+		}
 	}
 
 	ai_is_valid = {
@@ -5064,6 +5128,84 @@ st_res_all_manual_sgui = {
 		custom_tooltip = st_res_all_manual_sgui_effect_tt
 		hidden_effect = {
 			st_res_all_goods_manual_effect = yes
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The overview's Blocked cell's hover (SR-9, 2026-10-27): one line per good
+# that is full (status 5) or empty with a release set (6) this week, from the
+# status the weekly pulse and every click write. Read-only: only ever
+# rendered through ExecuteTooltip; nothing here runs. Root: the country.
+# ---------------------------------------------------------------------------
+st_res_ov_held_sgui = {
+	scope = country
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		if = {
+			limit = { var:st_res_grain_last_status ?= 5 }
+			custom_tooltip = st_res_ov_held_grain_full
+		}
+		if = {
+			limit = { var:st_res_grain_last_status ?= 6 }
+			custom_tooltip = st_res_ov_held_grain_empty
+		}
+		if = {
+			limit = { var:st_res_ammunition_last_status ?= 5 }
+			custom_tooltip = st_res_ov_held_ammunition_full
+		}
+		if = {
+			limit = { var:st_res_ammunition_last_status ?= 6 }
+			custom_tooltip = st_res_ov_held_ammunition_empty
+		}
+		if = {
+			limit = { var:st_res_oil_last_status ?= 5 }
+			custom_tooltip = st_res_ov_held_oil_full
+		}
+		if = {
+			limit = { var:st_res_oil_last_status ?= 6 }
+			custom_tooltip = st_res_ov_held_oil_empty
+		}
+		if = {
+			limit = { var:st_res_small_arms_last_status ?= 5 }
+			custom_tooltip = st_res_ov_held_small_arms_full
+		}
+		if = {
+			limit = { var:st_res_small_arms_last_status ?= 6 }
+			custom_tooltip = st_res_ov_held_small_arms_empty
+		}
+		if = {
+			limit = { var:st_res_artillery_last_status ?= 5 }
+			custom_tooltip = st_res_ov_held_artillery_full
+		}
+		if = {
+			limit = { var:st_res_artillery_last_status ?= 6 }
+			custom_tooltip = st_res_ov_held_artillery_empty
+		}
+		if = {
+			limit = { var:st_res_aeroplanes_last_status ?= 5 }
+			custom_tooltip = st_res_ov_held_aeroplanes_full
+		}
+		if = {
+			limit = { var:st_res_aeroplanes_last_status ?= 6 }
+			custom_tooltip = st_res_ov_held_aeroplanes_empty
+		}
+		if = {
+			limit = { var:st_res_tanks_last_status ?= 5 }
+			custom_tooltip = st_res_ov_held_tanks_full
+		}
+		if = {
+			limit = { var:st_res_tanks_last_status ?= 6 }
+			custom_tooltip = st_res_ov_held_tanks_empty
+		}
+		if = {
+			limit = { var:st_res_fertilizer_last_status ?= 5 }
+			custom_tooltip = st_res_ov_held_fertilizer_full
+		}
+		if = {
+			limit = { var:st_res_fertilizer_last_status ?= 6 }
+			custom_tooltip = st_res_ov_held_fertilizer_empty
 		}
 	}
 }

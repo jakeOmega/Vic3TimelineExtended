@@ -2027,3 +2027,747 @@ amendment_petition_events.20 = {
 		}
 	}
 }
+
+# ======================================================================
+#  21 – The Writ Suspended  (Suspension of Habeas Corpus)
+# ======================================================================
+amendment_petition_events.21 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.21.t
+	desc = amendment_petition_events.21.d
+	flavor = amendment_petition_events.21.f
+
+	event_image = { video = "middleeast_police_breaking_door" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_habeas_corpus_suspension = yes
+		# amendment_habeas_corpus_suspension's `possible`
+		is_at_war = yes
+		ig:ig_armed_forces ?= {
+			is_marginal = no
+			te_ap_ig_strong = yes
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_judiciary ?= { save_scope_as = petition_law }
+		ig:ig_armed_forces ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_habeas_corpus_suspension = yes }
+	}
+
+	option = { # Suspend the writ for the war
+		name = amendment_petition_events.21.a
+		trigger = { exists = scope:petition_sponsor_ig }
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_habeas_corpus_suspension
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # The writ runs in war as in peace
+		name = amendment_petition_events.21.b
+		default_option = yes
+		scope:petition_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  22 – Let the People Choose Their Judges  (Judicial Elections)
+# ======================================================================
+amendment_petition_events.22 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.22.t
+	desc = amendment_petition_events.22.d
+	flavor = amendment_petition_events.22.f
+
+	event_image = { video = "southamerica_election" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_judicial_elections = yes
+		# amendment_judicial_elections's `possible`
+		te_jud_elected_government = yes
+		any_interest_group = {
+			is_marginal = no
+			te_ap_ig_strong = yes
+			leader ?= {
+				OR = {
+					has_ideology = ideology:ideology_jacksonian_democrat
+					has_ideology = ideology:ideology_populist
+				}
+			}
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_judiciary ?= { save_scope_as = petition_law }
+		ordered_interest_group = {
+			limit = {
+				is_marginal = no
+				te_ap_ig_strong = yes
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_jacksonian_democrat
+						has_ideology = ideology:ideology_populist
+					}
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = petition_sponsor_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_judicial_elections = yes }
+	}
+
+	option = { # Put the judges on the ballot
+		name = amendment_petition_events.22.a
+		trigger = { exists = scope:petition_sponsor_ig }
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_judicial_elections
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Judges must not court votes
+		name = amendment_petition_events.22.b
+		default_option = yes
+		scope:petition_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  23 – Courts for the Merchants  (Mixed Commercial Courts)
+# ======================================================================
+amendment_petition_events.23 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.23.t
+	desc = amendment_petition_events.23.d
+	flavor = amendment_petition_events.23.f
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_mixed_commercial_courts = yes
+		# amendment_mixed_commercial_courts's `possible`
+		NOT = { has_law_or_variant = law_type:law_isolationism }
+		any_interest_group = {
+			is_marginal = no
+			te_ap_ig_strong = yes
+			OR = {
+				is_interest_group_type = ig_industrialists
+				is_interest_group_type = ig_petty_bourgeoisie
+			}
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_judiciary ?= { save_scope_as = petition_law }
+		ordered_interest_group = {
+			limit = {
+				is_marginal = no
+				te_ap_ig_strong = yes
+				OR = {
+					is_interest_group_type = ig_industrialists
+					is_interest_group_type = ig_petty_bourgeoisie
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = petition_sponsor_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_mixed_commercial_courts = yes }
+	}
+
+	option = { # Open the commercial courts
+		name = amendment_petition_events.23.a
+		trigger = { exists = scope:petition_sponsor_ig }
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_mixed_commercial_courts
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_devout ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = clergymen
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Disputes go before our own judges
+		name = amendment_petition_events.23.b
+		default_option = yes
+		scope:petition_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_devout ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  24 – Twelve Good Citizens  (Jury Trials)
+# ======================================================================
+amendment_petition_events.24 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.24.t
+	desc = amendment_petition_events.24.d
+	flavor = amendment_petition_events.24.f
+
+	event_image = { video = "middleeast_courtroom_upheaval" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_jury_trials = yes
+		# amendment_jury_trials has no `possible` condition
+		ig:ig_intelligentsia ?= {
+			is_marginal = no
+			te_ap_ig_strong = yes
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_judiciary ?= { save_scope_as = petition_law }
+		ig:ig_intelligentsia ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_jury_trials = yes }
+	}
+
+	option = { # Let juries decide
+		name = amendment_petition_events.24.a
+		trigger = { exists = scope:petition_sponsor_ig }
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_jury_trials
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Judging is for judges
+		name = amendment_petition_events.24.b
+		default_option = yes
+		scope:petition_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  25 – Courts-Martial for Rebels  (Military Tribunals for Civilians)
+# ======================================================================
+amendment_petition_events.25 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.25.t
+	desc = amendment_petition_events.25.d
+	flavor = amendment_petition_events.25.f
+
+	event_image = { video = "africa_soldiers_breaking_protest" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_military_tribunals = yes
+		# amendment_military_tribunals has no `possible` condition
+		te_ap_unrest = yes
+		ig:ig_armed_forces ?= {
+			is_marginal = no
+			te_ap_ig_strong = yes
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_judiciary ?= { save_scope_as = petition_law }
+		ig:ig_armed_forces ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_military_tribunals = yes }
+	}
+
+	option = { # Rebels go before the army's courts
+		name = amendment_petition_events.25.a
+		trigger = { exists = scope:petition_sponsor_ig }
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_military_tribunals
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Civilians answer to civilian courts
+		name = amendment_petition_events.25.b
+		default_option = yes
+		scope:petition_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  26 – Justice of the Party  (People's Tribunals)
+# ======================================================================
+amendment_petition_events.26 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.26.t
+	desc = amendment_petition_events.26.d
+	flavor = amendment_petition_events.26.f
+
+	event_image = { video = "europenorthamerica_political_extremism" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_peoples_tribunals = yes
+		# amendment_peoples_tribunals's `possible`
+		has_law = law_type:law_single_party_state
+		any_interest_group = {
+			is_marginal = no
+			is_in_government = yes
+			leader ?= {
+				OR = {
+					has_ideology = ideology:ideology_vanguardist
+					has_ideology = ideology:ideology_fascist
+				}
+			}
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_judiciary ?= { save_scope_as = petition_law }
+		ordered_interest_group = {
+			limit = {
+				is_marginal = no
+				is_in_government = yes
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_vanguardist
+						has_ideology = ideology:ideology_fascist
+					}
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = petition_sponsor_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_peoples_tribunals = yes }
+	}
+
+	option = { # Let the people's courts judge
+		name = amendment_petition_events.26.a
+		trigger = { exists = scope:petition_sponsor_ig }
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_peoples_tribunals
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # The tribunals we have will do
+		name = amendment_petition_events.26.b
+		default_option = yes
+		scope:petition_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  27 – A Human Signature  (Human-in-the-Loop Appeals)
+# ======================================================================
+amendment_petition_events.27 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.27.t
+	desc = amendment_petition_events.27.d
+	flavor = amendment_petition_events.27.f
+
+	event_image = { video = "middleeast_engineer_blueprint" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_human_in_the_loop = yes
+		# amendment_human_in_the_loop has no `possible` condition
+		any_interest_group = {
+			is_marginal = no
+			OR = {
+				is_interest_group_type = ig_intelligentsia
+				is_interest_group_type = ig_trade_unions
+			}
+		}
+		OR = {
+			legitimacy < 50
+			any_interest_group = {
+				is_marginal = no
+				te_ap_ig_strong = yes
+				OR = {
+					is_interest_group_type = ig_intelligentsia
+					is_interest_group_type = ig_trade_unions
+				}
+			}
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_judiciary ?= { save_scope_as = petition_law }
+		ordered_interest_group = {
+			limit = {
+				is_marginal = no
+				OR = {
+					is_interest_group_type = ig_intelligentsia
+					is_interest_group_type = ig_trade_unions
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = petition_sponsor_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_human_in_the_loop = yes }
+	}
+
+	option = { # Every appeal goes to a human judge
+		name = amendment_petition_events.27.a
+		trigger = { exists = scope:petition_sponsor_ig }
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_human_in_the_loop
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # The machine's rulings stand
+		name = amendment_petition_events.27.b
+		default_option = yes
+		scope:petition_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  28 – Two Parties Are Enough  (First Past the Post)
+#  The two largest parties' groups hold most of the clout; the strongest
+#  of them asks that elections go to whoever tops the poll.
+# ======================================================================
+amendment_petition_events.28 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.28.t
+	desc = amendment_petition_events.28.d
+	flavor = amendment_petition_events.28.f
+
+	event_image = { video = "unspecific_politicians_arguing" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_first_past_the_post = yes
+		has_variable = te_fptp_two_majors
+		te_fptp_major_clout >= 0.6
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_distribution_of_power ?= { save_scope_as = petition_law }
+		te_fptp_save_sponsor = yes
+		scope:te_fptp_sponsor_ig = { save_scope_as = petition_sponsor_ig }
+		te_fptp_save_outsider = yes
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_first_past_the_post = yes }
+	}
+
+	option = { # Whoever tops the poll wins the seat
+		name = amendment_petition_events.28.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_first_past_the_post
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		custom_tooltip = te_fptp_two_party_tt
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		scope:te_fptp_outsider_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Every vote should count
+		name = amendment_petition_events.28.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+		}
+	}
+}

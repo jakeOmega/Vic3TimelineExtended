@@ -1,0 +1,79 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — ground-to-orbit batteries' methods (fleets design § 15)
+# ============================================================================
+# pmg_orbital_defense_battery (sr_orbital_defense_battery_pmgs.txt). Each method
+# carries its figures as workforce-scaled state modifiers (script-only: the
+# engine consumes nothing; they still render in the method's tooltip and the
+# state's modifiers), which the script sums over the states the country
+# controls (sr_fleet_values.txt):
+#   state_orbital_battery_fire_add   fire on hostile fleets at Earth a month
+#                                    (sr_battery_fire, the Earth battle);
+#                                    Kinetic Interceptors' adds 0.02 low debris
+#                                    a point fired (sr_battery_debris_low)
+#   state_orbital_debris_sweep_add   low-orbit debris swept a month, in peace
+#                                    only (sr_battery_sweep, the debris step)
+# One field each, no building-scoped copy, which the game would list a second
+# time (scripting_best_practices.md).
+#
+#   method                gate                       fire/level/mo  sweep/level/mo  inputs a level a week
+#   Kinetic Interceptors  space_militarization       1              -               Launch Capacity 25, Electronic Components 10
+#   Ground Lasers         directed_energy_weapons    2              0.01            electricity 200, Electronic Components 15
+#
+# Every level employs 100 officers, 300 engineers and 600 machinists. First
+# guesses (design § 20).
+# ============================================================================
+
+pm_orbital_battery_kinetic = {
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p1.dds"
+
+	unlocking_technologies = {
+		space_militarization
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_launch_capacity_add = 25
+			goods_input_electronic_components_add = 10
+		}
+
+		level_scaled = {
+			building_employment_officers_add = 100
+			building_employment_engineers_add = 300
+			building_employment_machinists_add = 600
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_orbital_battery_fire_add = 1
+		}
+	}
+}
+
+pm_orbital_battery_lasers = {
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p2.dds"
+
+	unlocking_technologies = {
+		directed_energy_weapons
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_electricity_add = 200
+			goods_input_electronic_components_add = 15
+		}
+
+		level_scaled = {
+			building_employment_officers_add = 100
+			building_employment_engineers_add = 300
+			building_employment_machinists_add = 600
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_orbital_battery_fire_add = 2
+			state_orbital_debris_sweep_add = 0.01
+		}
+	}
+}

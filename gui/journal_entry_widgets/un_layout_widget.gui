@@ -162,8 +162,14 @@ types un_layout_widget_types
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)32' )]"
 							texture = "gfx/interface/icons/un_icons/topic_asat.dds"
 						}
-						# Phase 7 (§0.12): each topic's icon is, for now, a copy of its
-						# nearest older topic's, under its own name, so new art drops in.
+						# The outer-space convention (solar colonization fleets § 13):
+						# COPUOS's icon under the scroll (icon batch 6).
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)33' )]"
+							texture = "gfx/interface/icons/un_icons/topic_colony_protection.dds"
+						}
+						# Phase 7 (§0.12): each topic's own icon (docs/systems/un_gui_icons.md).
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)18' )]"
@@ -273,32 +279,41 @@ types un_layout_widget_types
 								}
 								# two-thirds mark: expulsion and charter reform pass on two
 								# thirds of the members with a vote (un_vote_supermajority_passed);
-								# 200 is two thirds of the bar's 300.
+								# 200 is two thirds of the bar's 300. A thin cream line with a
+								# hover of its own, as Global Warming's thresholds are (the
+								# 2026-10-27 audit, UN-17; it was the eye-shaped marker the
+								# style guide retired).
 								icon = {
 									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_supermajority'), '(CFixedPoint)1' )]"
-									size = { 3 22 }
-									position = { 199 -2 }
-									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+									size = { 3 24 }
+									position = { 199 -3 }
+									texture = "gfx/interface/backgrounds/white.dds"
+									color = { 0.96 0.90 0.72 0.95 }
+									tooltip = "je_un_tally_two_thirds_tt"
 								}
 							}
 							textbox = {
+								using = un_fontsize_row
 								autoresize = yes
 								parentanchor = vcenter
 								align = left|nobaseline
+								default_format = "#tooltippable"
 								text = "je_un_tally_counts"
 							}
 						}
 						textbox = {
 							autoresize = yes
 							align = left|nobaseline
-							using = fontsize_medium
+							using = un_fontsize_row
 							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_supermajority'), '(CFixedPoint)1' ), 'je_un_tally_rule_super', 'je_un_tally_rule_simple' )]"
 						}
 
-						### Time in session
+						### Time in session: the report-back rule on hover (UN-3; it was a
+						### line of the session card).
 						flowcontainer = {
 							direction = horizontal
 							spacing = 6
+							tooltip = "je_un_session_months_tt"
 
 							default_progressbar_horizontal = {
 								size = { 300 12 }
@@ -310,13 +325,171 @@ types un_layout_widget_types
 								}
 							}
 							textbox = {
+								using = un_fontsize_row
 								autoresize = yes
 								parentanchor = vcenter
 								align = left|nobaseline
+								default_format = "#tooltippable"
 								text = "je_un_session_months"
 							}
 						}
 					}
+				}
+			}
+
+			# Our ballot, under the tally (the 2026-10-27 audit, UN-2): how we
+			# voted, or that our vote is due (un_disp_our_vote_code), then the
+			# three vote controls, and how the Assembly reads our position, one
+			# row with its terms on hover (UN-4). They followed the whole
+			# session card until then, and how we had voted showed only in the
+			# greyed buttons' tooltips.
+			#
+			# Every part is a fixed width, centred in a fixed 480: the vote
+			# controls are hidden whenever no vote is open, and a centred block
+			# sized by them would be centred at that empty width and spill out of
+			# the panel when they appeared (gotcha #43).
+			flowcontainer = {
+				direction = vertical
+				spacing = 4
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				minimumsize = { 480 -1 }
+				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					align = hcenter|nobaseline
+					using = un_fontsize_row
+					text = "je_un_our_vote_line"
+				}
+				# ---- Our ballot ----
+				# Available from the day the resolution opens; the un_vote.1 popup that
+				# arrives on day 30 is the same three options and is skipped entirely
+				# once a ballot is on the record (its trigger is re-evaluated when it
+				# fires). One scripted GUI, one op code per control:
+				#
+				#   op 0  Vote in Favour    op 1  Vote Against    op 2  Veto
+				#
+				# The table is repeated in common/scripted_guis/un_chamber_sguis.txt;
+				# keep the two in step. Each tooltip is IsValidTooltip (why the control
+				# is greyed out) concatenated with ExecuteTooltip (what the vote does),
+				# which is the un_vote.1 option's own consequence text, lobbying
+				# keep/break line included.
+				# For and Against show together (one is_shown); the veto row's two
+				# slots sit under them, Veto or Confirm under For and Cancel under
+				# Against: 236 + 4 + 236 = 476 whichever shows.
+				flowcontainer = {
+					direction = vertical
+					spacing = 4
+					ignoreinvisible = yes
+					parentanchor = hcenter
+					minimumsize = { 476 -1 }
+					datacontext = "[GetScriptedGui('un_chamber_vote_sgui')]"
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						ignoreinvisible = yes
+
+						un_chamber_action_button = {
+							blockoverride "action_label" {
+								text = "je_un_chamber_vote_yes_label"
+							}
+							blockoverride "action_binding" {
+								visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+							}
+						}
+
+						un_chamber_action_button = {
+							blockoverride "action_label" {
+								text = "je_un_chamber_vote_no_label"
+							}
+							blockoverride "action_binding" {
+								visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+							}
+						}
+					}
+
+					# The veto is armed before it is cast. A scripted GUI's documented
+					# confirm_title / confirm_text fields have no usage anywhere in
+					# vanilla to copy, and this cannot be tested without running the
+					# game, so the confirmation is built out of the expander mechanism
+					# this widget already relies on: GetVariableSystem state, which is
+					# client-side, never saved and never gameplay state.
+					# Veto, and once armed Confirm, take turns in the slot under For;
+					# Cancel has the slot under Against.
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+
+						widget = {
+							size = { 236 30 }
+
+							un_chamber_action_button = {
+								blockoverride "action_label" {
+									text = "je_un_chamber_vote_veto_label"
+								}
+								blockoverride "action_binding" {
+									visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Not(GetVariableSystem.Exists('un_chamber_veto_armed')) )]"
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+								}
+							}
+
+							un_chamber_action_button = {
+								blockoverride "action_label" {
+									text = "je_un_chamber_vote_veto_confirm_label"
+								}
+								blockoverride "action_binding" {
+									visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+								}
+							}
+						}
+						widget = {
+							size = { 236 30 }
+
+							button = {
+								using = default_button_action
+								size = { 236 30 }
+								parentanchor = vcenter
+								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
+								onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+								tooltip = "je_un_chamber_vote_veto_cancel_tt"
+
+								textbox = {
+									parentanchor = center
+									align = center|nobaseline
+									autoresize = yes
+									max_width = 226
+									elide = right
+									using = un_fontsize_row
+									text = "je_un_chamber_vote_veto_cancel_label"
+								}
+							}
+						}
+					}
+				}
+				un_chamber_text = {
+					visible = "[GetScriptedGui('un_chamber_position_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					parentanchor = hcenter
+					align = hcenter|nobaseline
+					default_format = "#tooltippable"
+					text = "[GetScriptedGui('un_chamber_position_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+					tooltip = "[GetScriptedGui('un_chamber_position_terms_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 				}
 			}
 
@@ -386,6 +559,9 @@ types un_layout_widget_types
 				}
 			}
 			te_un_help_authority = {}
+			un_chamber_note = {
+				text = "je_un_auth_log_intro"
+			}
 			un_chamber_subheader = {
 				blockoverride "subheader_text" {
 					text = "je_un_how_sub_standing"
@@ -410,6 +586,9 @@ types un_layout_widget_types
 			}
 			un_chamber_note = {
 				text = "je_un_chamber_deleg_intro"
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_reasons_intro"
 			}
 			un_chamber_subheader = {
 				blockoverride "subheader_text" {

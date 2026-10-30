@@ -1536,12 +1536,12 @@ pm_laser_excavation_technology_tech_metals_mine = {
 	required_input_goods = electricity
 }
 
+# The tech metals mines' first and simplest equipment, and the group's fallback, so it
+# carries no technology: the group has no hand-worked method, and three of the four
+# tech metals mines (lithium, rare earths, platinum group metals) unlock without
+# watertube_boiler upstream. Every later pump carries its iron mine twin's technology.
 pm_condensing_engine_pump_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/production_method_icons/condensing_engine_pump.dds"
-
-	unlocking_technologies = {
-		watertube_boiler
-	}
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -1835,6 +1835,10 @@ pm_high_pressure_hydraulic_pump_building_gold_mine = {
 
 pm_high_pressure_hydraulic_pump_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/production_method_icons/highpressurehydraulics.dds"
+
+	unlocking_technologies = {
+		modern_materials
+	}
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -7989,6 +7993,9 @@ pm_ai_managed_chemical_plant = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -8045,6 +8052,9 @@ pm_ai_managed_explosives_factory = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -11518,6 +11528,9 @@ pm_ai_managed_power_plant = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -11569,6 +11582,9 @@ pm_ai_managed_power_plant_reactor = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -11616,6 +11632,9 @@ pm_ai_managed_power_plant_hydro = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12686,6 +12705,9 @@ pm_ai_managed_building_tooling_workshop = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12744,6 +12766,9 @@ pm_ai_managed_building_tooling_workshop_handling = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12795,6 +12820,9 @@ pm_ai_managed_building_motor_industry = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12845,6 +12873,9 @@ pm_ai_managed_building_motor_industry_turbine = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12903,6 +12934,9 @@ pm_ai_managed_building_arms_industry = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12963,6 +12997,9 @@ pm_ai_managed_building_artillery_foundry = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -13023,6 +13060,9 @@ pm_ai_managed_building_munition_plant = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -13080,6 +13120,9 @@ pm_ai_managed_building_munition_plant_shells = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -13368,6 +13411,9 @@ pm_ai_managed_fab = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -16057,8 +16103,51 @@ pm_ai_optimized_operations = {
 	required_input_goods = digital_access
 }
 
+# Regolith Processing (lunar colonization design § 6): the Extraplanetary Base's era-10
+# method, with the building and no technology of its own. Half the Asteroid Mine's
+# inputs for metals and glass from regolith; weak on purpose, a foothold that lunar
+# room makes worth a few levels. Its return on construction is a fifth of the Asteroid
+# Mine's; per worker it pays a little above the era-10 median.
+pm_regolith_processing = {
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 15           # Price:   80, Total cost:  1200.0 (8.00%)
+			goods_input_radios_add = 15                          # Price:   80, Total cost:  1200.0 (8.00%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (4.00%)
+			goods_input_launch_capacity_add = 60                 # Price:  200, Total cost: 12000.0 (80.00%)
+			# Output goods
+			goods_output_iron_add = 175                          # Price:   40, Total cost:  7000.0 (42.17%)
+			goods_output_tech_metals_add = 95                    # Price:   80, Total cost:  7600.0 (45.78%)
+			goods_output_glass_add = 50                          # Price:   40, Total cost:  2000.0 (12.05%)
+			# Total input cost: 15000.0
+			# Total output cost: 16600.0
+			# Profit: 1600.0
+			# Profit margin: 10.67%
+			# Zero profit price multiplier: 0.90
+			# Employment: 800
+			# Wage breakeven: 2.00
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+			building_employment_academics_add = 50
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
 pm_space_mine = {
 	texture = "gfx/interface/icons/production_method_icons/picks_and_shovels.dds"
+
+	unlocking_technologies = {
+		asteroid_mining
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -16176,9 +16265,11 @@ pm_space_colony_vacation = {
 # Extraplanetary Base's era-11 method (pm_space_mine) every output is at least as large,
 # inputs are lower, the workforce is the same and construction is a quarter of the cost.
 # The advanced and automated methods produce twice the base output on their own inputs.
-# It out-earns the Extraplanetary Base per level until that building has Space Colonization
-# and both era-12 logistics upgrades (te_global_commons_logistics_pms.txt).
-# test_deep_sea_rebalance.py holds both orderings at base prices.
+# Its ships are in the support-vessels group (the tenders after these methods), and the
+# comparisons count them. It out-earns the Extraplanetary Base per level until that
+# building has Space Colonization and both era-12 logistics upgrades
+# (te_global_commons_logistics_pms.txt). test_deep_sea_rebalance.py holds both orderings
+# at base prices.
 pm_ocean_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
 	is_hidden_when_unavailable = yes
@@ -16186,26 +16277,25 @@ pm_ocean_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_motor_ships_add = 40                     # Price:   90, Total cost:  3600.0 (16.36%)
-			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.73%)
-			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (4.55%)
-			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (10.91%)
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (14.55%)
-			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (29.09%)
-			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (21.82%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (3.26%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (5.43%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (13.04%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (17.39%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (34.78%)
+			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (26.09%)
 			# Output goods
 			goods_output_lead_add = 150                          # Price:   40, Total cost:  6000.0 (13.42%)
 			goods_output_sulfur_add = 50                         # Price:   50, Total cost:  2500.0 (5.59%)
 			goods_output_tech_metals_add = 260                   # Price:   80, Total cost: 20800.0 (46.53%)
 			goods_output_gold_add = 50                           # Price:  100, Total cost:  5000.0 (11.19%)
 			goods_output_iron_add = 260                          # Price:   40, Total cost: 10400.0 (23.27%)
-			# Total input cost: 22000.0
+			# Total input cost: 18400.0
 			# Total output cost: 44700.0
-			# Profit: 22700.0
-			# Profit margin: 103.18%
-			# Zero profit price multiplier: 0.49
+			# Profit: 26300.0
+			# Profit margin: 142.93%
+			# Zero profit price multiplier: 0.41
 			# Employment: 1000
-			# Wage breakeven: 22.70
+			# Wage breakeven: 26.30
 		}
 
 		level_scaled = {
@@ -16230,28 +16320,26 @@ pm_advanced_ocean_mine  = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_motor_ships_add = 20                     # Price:   90, Total cost:  1800.0 (7.06%)
-			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (5.10%)
-			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.35%)
-			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.92%)
-			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (9.41%)
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (12.55%)
-			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (25.10%)
-			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (18.82%)
-			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (15.69%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.68%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (4.46%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (10.71%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (14.29%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (28.57%)
+			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (21.43%)
+			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (17.86%)
 			# Output goods
 			goods_output_lead_add = 300                          # Price:   40, Total cost: 12000.0 (13.42%)
 			goods_output_sulfur_add = 100                        # Price:   50, Total cost:  5000.0 (5.59%)
 			goods_output_tech_metals_add = 520                   # Price:   80, Total cost: 41600.0 (46.53%)
 			goods_output_gold_add = 100                          # Price:  100, Total cost: 10000.0 (11.19%)
 			goods_output_iron_add = 520                          # Price:   40, Total cost: 20800.0 (23.27%)
-			# Total input cost: 25500.0
+			# Total input cost: 22400.0
 			# Total output cost: 89400.0
-			# Profit: 63900.0
-			# Profit margin: 250.59%
-			# Zero profit price multiplier: 0.29
+			# Profit: 67000.0
+			# Profit margin: 299.11%
+			# Zero profit price multiplier: 0.25
 			# Employment: 1000
-			# Wage breakeven: 63.90
+			# Wage breakeven: 67.00
 		}
 
 		level_scaled = {
@@ -16275,28 +16363,26 @@ pm_automated_ocean_mine  = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_motor_ships_add = 20                     # Price:   90, Total cost:  1800.0 (5.94%)
-			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (4.29%)
-			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (1.98%)
-			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.30%)
-			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (7.92%)
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (10.56%)
-			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (21.12%)
-			goods_input_digital_access_add = 80                  # Price:  120, Total cost:  9600.0 (31.68%)
-			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (13.20%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.21%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.68%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (8.82%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (11.76%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (23.53%)
+			goods_input_digital_access_add = 80                  # Price:  120, Total cost:  9600.0 (35.29%)
+			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (14.71%)
 			# Output goods
 			goods_output_lead_add = 300                          # Price:   40, Total cost: 12000.0 (13.42%)
 			goods_output_sulfur_add = 100                        # Price:   50, Total cost:  5000.0 (5.59%)
 			goods_output_tech_metals_add = 520                   # Price:   80, Total cost: 41600.0 (46.53%)
 			goods_output_gold_add = 100                          # Price:  100, Total cost: 10000.0 (11.19%)
 			goods_output_iron_add = 520                          # Price:   40, Total cost: 20800.0 (23.27%)
-			# Total input cost: 30300.0
+			# Total input cost: 27200.0
 			# Total output cost: 89400.0
-			# Profit: 59100.0
-			# Profit margin: 195.05%
-			# Zero profit price multiplier: 0.34
+			# Profit: 62200.0
+			# Profit margin: 228.68%
+			# Zero profit price multiplier: 0.30
 			# Employment: 10
-			# Wage breakeven: 5910.00
+			# Wage breakeven: 6220.00
 		}
 
 		level_scaled = {
@@ -16320,26 +16406,25 @@ pm_ocean_mine_uncapped = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_motor_ships_add = 40                     # Price:   90, Total cost:  3600.0 (16.36%)
-			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.73%)
-			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (4.55%)
-			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (10.91%)
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (14.55%)
-			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (29.09%)
-			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (21.82%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (3.26%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (5.43%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (13.04%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (17.39%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (34.78%)
+			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (26.09%)
 			# Output goods
 			goods_output_lead_add = 260                          # Price:   40, Total cost: 10400.0 (36.88%)
 			goods_output_sulfur_add = 100                        # Price:   50, Total cost:  5000.0 (17.73%)
 			goods_output_tech_metals_add = 100                   # Price:   80, Total cost:  8000.0 (28.37%)
 			goods_output_gold_add = 40                           # Price:  100, Total cost:  4000.0 (14.18%)
 			goods_output_iron_add = 20                           # Price:   40, Total cost:   800.0 (2.84%)
-			# Total input cost: 22000.0
+			# Total input cost: 18400.0
 			# Total output cost: 28200.0
-			# Profit: 6200.0
-			# Profit margin: 28.18%
-			# Zero profit price multiplier: 0.78
+			# Profit: 9800.0
+			# Profit margin: 53.26%
+			# Zero profit price multiplier: 0.65
 			# Employment: 2000
-			# Wage breakeven: 3.10
+			# Wage breakeven: 4.90
 		}
 
 		level_scaled = {
@@ -16364,28 +16449,26 @@ pm_advanced_ocean_mine_uncapped = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_motor_ships_add = 20                     # Price:   90, Total cost:  1800.0 (7.06%)
-			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (5.10%)
-			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.35%)
-			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.92%)
-			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (9.41%)
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (12.55%)
-			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (25.10%)
-			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (18.82%)
-			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (15.69%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.68%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (4.46%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (10.71%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (14.29%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (28.57%)
+			goods_input_digital_access_add = 40                  # Price:  120, Total cost:  4800.0 (21.43%)
+			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (17.86%)
 			# Output goods
 			goods_output_lead_add = 520                          # Price:   40, Total cost: 20800.0 (36.88%)
 			goods_output_sulfur_add = 200                        # Price:   50, Total cost: 10000.0 (17.73%)
 			goods_output_tech_metals_add = 200                   # Price:   80, Total cost: 16000.0 (28.37%)
 			goods_output_gold_add = 80                           # Price:  100, Total cost:  8000.0 (14.18%)
 			goods_output_iron_add = 40                           # Price:   40, Total cost:  1600.0 (2.84%)
-			# Total input cost: 25500.0
+			# Total input cost: 22400.0
 			# Total output cost: 56400.0
-			# Profit: 30900.0
-			# Profit margin: 121.18%
-			# Zero profit price multiplier: 0.45
+			# Profit: 34000.0
+			# Profit margin: 151.79%
+			# Zero profit price multiplier: 0.40
 			# Employment: 1000
-			# Wage breakeven: 30.90
+			# Wage breakeven: 34.00
 		}
 
 		level_scaled = {
@@ -16409,28 +16492,26 @@ pm_automated_ocean_mine_uncapped = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_motor_ships_add = 20                     # Price:   90, Total cost:  1800.0 (5.94%)
-			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (4.29%)
-			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (1.98%)
-			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.30%)
-			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (7.92%)
-			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (10.56%)
-			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (21.12%)
-			goods_input_digital_access_add = 80                  # Price:  120, Total cost:  9600.0 (31.68%)
-			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (13.20%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (2.21%)
+			goods_input_explosives_add = 20                      # Price:   50, Total cost:  1000.0 (3.68%)
+			goods_input_engines_add = 40                         # Price:   60, Total cost:  2400.0 (8.82%)
+			goods_input_electronic_components_add = 40           # Price:   80, Total cost:  3200.0 (11.76%)
+			goods_input_radios_add = 80                          # Price:   80, Total cost:  6400.0 (23.53%)
+			goods_input_digital_access_add = 80                  # Price:  120, Total cost:  9600.0 (35.29%)
+			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (14.71%)
 			# Output goods
 			goods_output_lead_add = 520                          # Price:   40, Total cost: 20800.0 (36.88%)
 			goods_output_sulfur_add = 200                        # Price:   50, Total cost: 10000.0 (17.73%)
 			goods_output_tech_metals_add = 200                   # Price:   80, Total cost: 16000.0 (28.37%)
 			goods_output_gold_add = 80                           # Price:  100, Total cost:  8000.0 (14.18%)
 			goods_output_iron_add = 40                           # Price:   40, Total cost:  1600.0 (2.84%)
-			# Total input cost: 30300.0
+			# Total input cost: 27200.0
 			# Total output cost: 56400.0
-			# Profit: 26100.0
-			# Profit margin: 86.14%
-			# Zero profit price multiplier: 0.54
+			# Profit: 29200.0
+			# Profit margin: 107.35%
+			# Zero profit price multiplier: 0.48
 			# Employment: 10
-			# Wage breakeven: 2610.00
+			# Wage breakeven: 2920.00
 		}
 
 		level_scaled = {
@@ -16440,6 +16521,62 @@ pm_automated_ocean_mine_uncapped = {
 	}
 
 	required_input_goods = digital_access
+}
+
+# Deep-Sea Mine support vessels (pmg_support_vessels_building_ocean_mine), shared by both
+# families above. The ships sit in their own group so a mine can move to Magnetic Drive
+# Ships once its owner has modern_material_science, the technology both methods that make
+# them need (pm_advanced_metamaterials_shipbuilding, pm_advanced_company_shipbuilding)
+# and the ports', wharves' and whaling stations' magnetic-drive methods unlock with. It
+# is on a separate branch from abyssal_plain_mining, so the mine starts on Motor Ships.
+# Magnetic Drive Tenders need 20 hulls against 40, so they cost less at base prices
+# (2,600 against 3,600 a level a week). Switching retools the mine: 1,300 construction
+# for each 1 a week of maintenance (extra_defines.txt), so 260 a level on
+# pm_maintenance_intensive's 0.2, about 5 years of the saving at base prices. ai_value
+# ranks the two for the AI (the group's comment in extra_pm_groups.txt).
+pm_motor_ship_tenders_building_ocean_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+	is_default = yes
+	ai_value = 1000
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_motor_ships_add = 40                     # Price:   90, Total cost:  3600.0 (100.00%)
+			# Output goods
+			# Total input cost: 3600.0
+			# Total output cost: 0
+			# Profit: -3600.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
+pm_magnetic_drive_tenders_building_ocean_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p4.dds"
+	ai_value = 3000
+
+	unlocking_technologies = {
+		modern_material_science
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_magnetic_drive_ships_add = 20            # Price:  130, Total cost:  2600.0 (100.00%)
+			# Output goods
+			# Total input cost: 2600.0
+			# Total output cost: 0
+			# Profit: -2600.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
 }
 
 REPLACE:pm_wooden_buildings = {
@@ -17979,22 +18116,24 @@ pm_mars_mission = {
 pm_solar_colonization = {
 	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p4.dds"
 
+	# Era 10 (lunar colonization design § 4): 10,000 a week, sized for Reusable
+	# Rockets; the 25,000 it had was sized for era 11's Ablative Rockets.
 	unlocking_technologies = {
-		directed_energy_weapons
+		cislunar_infrastructure
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 25000              # Price:  200, Total cost: 5000000.0 (100.00%)
+			goods_input_launch_capacity_add = 10000              # Price:  200, Total cost: 2000000.0 (100.00%)
 			# Output goods
-			# Total input cost: 5000000.0
+			# Total input cost: 2000000.0
 			# Total output cost: 0
-			# Profit: -5000000.0
+			# Profit: -2000000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 40000
-			# Wage breakeven: -125.00
+			# Wage breakeven: -50.00
 		}
 
 		level_scaled = {
@@ -19480,7 +19619,7 @@ pm_maintenance = {
 	is_hidden_when_unavailable = yes
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.1                # Price:  500, Total cost: 50.0
+			goods_input_construction_add = 0.1                # Price: 1000, Total cost: 100.0
 		}
 	}
 }
@@ -19495,7 +19634,7 @@ pm_maintenance_light = {
 	is_hidden_when_unavailable = yes
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.05               # Price:  500, Total cost: 25.0
+			goods_input_construction_add = 0.05               # Price: 1000, Total cost: 50.0
 		}
 	}
 }
@@ -19505,7 +19644,7 @@ pm_maintenance_heavy = {
 	is_hidden_when_unavailable = yes
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.15               # Price:  500, Total cost: 75.0
+			goods_input_construction_add = 0.15               # Price: 1000, Total cost: 150.0
 		}
 	}
 }
@@ -19515,7 +19654,7 @@ pm_maintenance_intensive = {
 	is_hidden_when_unavailable = yes
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.2                # Price:  500, Total cost: 100.0
+			goods_input_construction_add = 0.2                # Price: 1000, Total cost: 200.0
 		}
 	}
 }
@@ -19526,8 +19665,12 @@ pm_maintenance_intensive = {
 # from the condensing engine on unlocks the paid method, and the free one swaps to it
 # through replacement_if_valid (as the train methods swap to their principle variants),
 # so the change comes with the equipment switch that caused it. Going back to picks and
-# shovels or the atmospheric pump leaves only the free method valid. The discoverable
-# mines have no hand-worked tier and use pmg_maintenance_light.
+# shovels or the atmospheric pump leaves only the free method valid. The ten discoverable
+# mines that share these mines' equipment groups (bauxite, chromium, manganese and
+# specialty alloys on the iron mine's; copper and precious metals on the lead mine's;
+# phosphate, potash and salt on the sulfur mine's; graphite on the coal mine's) take this
+# group too. The four tech metals mines have no hand-worked tier (their equipment starts
+# at the condensing engine pump) and use pmg_maintenance_light.
 pm_maintenance_traditional = {
 	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -19568,7 +19711,91 @@ pm_maintenance_mechanized_mine = {
 
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.05               # Price:  500, Total cost: 25.0
+			goods_input_construction_add = 0.05               # Price: 1000, Total cost: 50.0
+		}
+	}
+}
+
+# Power plants, railways and ports: upkeep follows the base method (pmg_maintenance_graded).
+# A level of these buildings is small on its early methods and grows several times over
+# up the ladder, while maintenance is charged per level. A fossil power plant level sells
+# 750-4,200 a week at base prices (25-140 electricity), against 13,500-360,000 for a
+# renewable, hydro, nuclear or fusion level, so the heavy tier's flat 0.15 took 20% of an
+# early plant's revenue and under 1% of the others'. Early trains and the basic port add
+# 90-135 a level over their inputs. So each building pays by the method it runs:
+#   light 0.05     early trains, steam trains; anchorage, basic and industrial ports;
+#                  early and coal-fired power plants
+#   standard 0.10  electric and diesel trains, Centralized Traffic Control; the modern
+#                  port; oil-fired and both modern fossil plants
+#   heavy 0.15     containerized cargo onward; container ports onward
+# The mines' mechanism (pm_maintenance_traditional above): the light method is first and
+# needs no other method, so it is the default and the fallback, and each tier hands over
+# to the next through replacement_if_valid. The standard method's list holds every method
+# of the heavy tier too, so a jump from a light-tier method straight to a heavy-tier one
+# goes light -> standard -> heavy. Going down, the dearer method loses its last unlocking
+# method and the building falls back to one that still fits. Transport-principle variants
+# sit in their base method's tier, so the principle swap changes no maintenance.
+# Renewable, hydro, nuclear and fusion plants keep pmg_maintenance_heavy / _intensive.
+pm_maintenance_graded_light = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+	replacement_if_valid = pm_maintenance_graded_standard
+
+	building_modifiers = {
+		level_scaled = {
+			goods_input_construction_add = 0.05               # Price: 1000, Total cost: 50.0
+		}
+	}
+}
+
+pm_maintenance_graded_standard = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+	replacement_if_valid = pm_maintenance_graded_heavy
+
+	unlocking_production_methods = {
+		# standard tier
+		pm_electric_trains
+		pm_electric_trains_principle_transport_3
+		pm_diesel_trains
+		pm_diesel_trains_principle_transport_3
+		pm_centralized_traffic_control
+		pm_modern_port
+		pm_oil-fired_plant
+		pm_modern_coal-fired_plant
+		pm_modern_oil-fired_plant
+		# heavy tier, so the light method can step up through this one
+		pm_containerized_cargo
+		pm_automated_loading_and_unloading
+		pm_autonomous_trains
+		pm_container_ports
+		pm_global_ports
+		pm_magnetic_drive_ports
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			goods_input_construction_add = 0.1                # Price: 1000, Total cost: 100.0
+		}
+	}
+}
+
+pm_maintenance_graded_heavy = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_production_methods = {
+		pm_containerized_cargo
+		pm_automated_loading_and_unloading
+		pm_autonomous_trains
+		pm_container_ports
+		pm_global_ports
+		pm_magnetic_drive_ports
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			goods_input_construction_add = 0.15               # Price: 1000, Total cost: 150.0
 		}
 	}
 }
@@ -21744,6 +21971,10 @@ REPLACE:pm_trade_center_principle_external_trade_2 = {
 ### focus PM applies the same `goods_output_<civilian-ship>_mult` to
 ### every civilian-hull good the shipyard might be producing, so the
 ### percentage lands on whichever era-good the active base PM emits.
+### The percentages sit in `unscaled`, as every vanilla building-scope
+### `_mult` does: under `workforce_scaled` they multiplied by the
+### shipyard's staffed levels, so Naval Priority cut a full level-10
+### yard's civilian output by 200% (-0.20 x 10), to below zero.
 ### The naval and wartime tiers stack `country_ship_construction_add`
 ### additively on the base PM's value (same modifier vanilla shipyards
 ### already use at +5/+10/+15/+20 per shipyard).
@@ -21775,7 +22006,7 @@ pm_focus_civilian_production = {
 	}
 
 	building_modifiers = {
-		workforce_scaled = {
+		unscaled = {
 			goods_output_clippers_mult = 0.25
 			goods_output_steamers_mult = 0.25
 			goods_output_motor_ships_mult = 0.25
@@ -21798,7 +22029,7 @@ pm_focus_naval_production = {
 	}
 
 	building_modifiers = {
-		workforce_scaled = {
+		unscaled = {
 			goods_output_clippers_mult = -0.20
 			goods_output_steamers_mult = -0.20
 			goods_output_motor_ships_mult = -0.20
@@ -21821,7 +22052,7 @@ pm_focus_wartime_mobilization = {
 	}
 
 	building_modifiers = {
-		workforce_scaled = {
+		unscaled = {
 			goods_output_clippers_mult = -0.40
 			goods_output_steamers_mult = -0.40
 			goods_output_motor_ships_mult = -0.40

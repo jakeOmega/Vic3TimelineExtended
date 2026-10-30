@@ -12,8 +12,8 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 
 - **Deploy** per CLAUDE.md, "Play-testing unmerged work" (or from `main`). Check the playset has no Workshop copy of
   the mod.
-- **Rule.** The Demographics (Experimental) rule is chosen in the lobby: Disabled (the default, and every release),
-  Display only, or Full. Each item names its setting.
+- **Rule.** The Demographics rule is chosen in the lobby: Full (the default since 2026-10-25),
+  Display only, or Disabled (every release leaves the rule out and the census off). Each item names its setting.
 - **Console.** Vic3's console has no `effect` command: the census's console is `event te_debug_demog.1`, on the
   player's country, with lettered options (the list is at the top of `events/te_debug_demog_events.txt`).
 - **Logs.** Read `debug.log`, not `error.log`. Grep it for `TE_SELF_CHECK` first, then `TE_DEMOG`.
@@ -47,7 +47,7 @@ No `primogeniture_scaled` line at all after a game's first year means no state t
 | `TE_SELF_CHECK … cause_deaths_estimate` | Display only or Full: once a game, at the first census step of a state with at least 1,000 deaths from natural causes and no late game (issue #1029) | the estimate the pie's shares come from, the four causes' rates over the bands last counted, matches the sweep's own deaths (`fit` 0.9–1.1; the model's states read 0.97–1.00), and the slices add up to the deaths, the war dead and the killed (`slices` = `deaths` + `war` + `killed`) | `fit` outside 0.9–1.1: the bands at the step's start aren't the people the sweep killed, so every pie leans; slices that don't add up: a slice read a stale figure | count deaths by cause in the sweep itself (issue #1029's method b): each age group's deaths split by its own causes' rates in `te_demog_sweep` (generated), summed into the eight slices, and drop the estimate and its fit (the late sweep already counts its own this way: `te_demog_lx_cause_deaths`) |
 | `TE_SELF_CHECK … cause_tags_read` | Full: once a game, at the census's deaths term (`te_demog_rates_refresh`) of the first state whose engine lines on top of the census come to a tenth or more either way (a polluted, devastated or famine-struck state) (owner, 2026-10-22) | the five Causes of Death tags add up to those lines (`tags` ≈ `on_top`, within 0.03 and a twentieth): the engine scales each tag with the mortality line beside it, in pollution's and devastation's code static modifiers, under a multiplier and as an event modifier decays | `tags` well off `on_top`: a tag isn't scaled with its line (in a code static modifier the engine scales itself, most likely), or a line has no tag (another mod's, or one of the five `DEATH_CAUSE_UNTAGGED` vanilla lines). Either way the deaths that line adds spread over the census's own causes, not their own | a tag the engine doesn't scale: read that source in script instead (devastation is `devastation` × 1.0, pollution its `state_region.pollution_amount` through `P.POLLUTION_HEALTH_MORTALITY`) in `te_demog_on_top_start_part` and `te_demog_on_top_cause`, and drop its tag; a line with no tag: tag it in `DEATH_CAUSE_TAGS` |
 | `TE_SELF_CHECK … resettle_moves_booked` | Display only or Full: once a game, at the first census step of a state whose Internal Resettlement arrivals since its last step were 5% of its people or more and at least 1,000 (2026-10-19; `te_demog_rs_selfcheck`) | the residual left after the counted arrivals (`rest`) is not below minus a quarter of them: the walk's `move_partial_pop` moved the people it counts, and they are in the state's population change. A positive `rest` is the engine's own migration, or, on a save continued across this build, the year's months before the counters began (`residual` is the whole, arrivals included) | `rest` below −0.25 × `arrived`: about minus `arrived` means the counted moves aren't in the population change, about minus half that they are counted twice, so every destination books arrivals the engine didn't make | take the known moves back out of the residual's sum in `te_demog_flows` (the `te_dg_rk_on` block's two lines) and leave their booking off (`te_demog_rs_take` keeps `te_dg_rk_on` at 0), so the moves go back to the residual's booking, with only the transit dead kept as known kills |
-| `TE_SELF_CHECK … metro_world_market_hub` | any rule's census (Display only or Full), development builds only: once a game, at the first state's metropolitan-share count (its first yearly pulse; spec §5.2) | `is_world_market_hub` reads the market area's hub, which the base game creates where a market area has a Port: some states read yes (`hubs=`), every hub has a Port (`hubs_without_port=0`) and some Port states are not hubs (`ports_not_hub=` above 0); the line also gives `port_states=` and `countries=` | `hubs=0`: the trigger reads no in state scope, so no state takes the gateway term and New York and Buenos Aires read lower than intended; `hubs_without_port=` above 0: it reads something other than the hub; `ports_not_hub=0`: it reads "has a Port", so every port state takes +30 | in `te_demog_mt_t_gateway` (`te_demog_metro_values.txt`) read the gateway from a large port instead, `b:building_port ?= { level >= 5 }`, and say so in the Port or Finance bar's hover (`te_demog_mt_bar_gateway_tt`) |
+| `TE_SELF_CHECK … metro_world_market_hub` | any rule's census (Display only or Full), development builds only: once a game, at the first state's metropolitan-share count (its first yearly pulse; spec §5.2) | `is_world_market_hub` reads the market area's hub, which the base game creates where a market area has a Port and places in its best-scoring state, often a market capital with no Port (`WORLD_MARKET_HUB_SCORE_*`): some states read yes (`hubs=`), some Port states are not hubs (`ports_not_hub=` above 0) and there are no more hubs than countries; `hubs_without_port=` is printed, not judged (since 2026-10-25), with `port_states=` and `countries=` | `hubs=0`: the trigger reads no in state scope, so no state takes the gateway term and New York and Buenos Aires read lower than intended; `ports_not_hub=0`: it reads "has a Port", so every port state takes +30; more hubs than countries: it reads some other state property | in `te_demog_mt_t_gateway` (`te_demog_metro_values.txt`) read the gateway from a large port instead, `b:building_port ?= { level >= 5 }`, and say so in the Trade and Finance bar's hover (`te_demog_mt_bar_gateway_tt`) |
 | `TE_SELF_CHECK … um_nexus_scaling` | Full: once a game, `START` when a Mind Upload Nexus's monthly refresh finds its country's hosting at 0.9 full or less with the advanced materials input figure at +100% or more (about a quarter full), the verdict a week later (`te_debug_demog.130`). No line means no country's hosting reached a quarter under Full (an observer run past 2100, or the harness's transition) | the building reads its digital assets output and advanced materials input axes at what the refresh expected (each good's other bonuses plus its own multiplier, (1 + those) × (utilisation × factor − 1)), within 0.05: the engine applies a building's runtime goods `_mult` axes from a state's pulse at the state's multiplier, the newly registered mod-good input axis too. It compares the building's read with itself, so it says nothing about the state's and country's lines (`um_nexus_cascade`) | a good reading only its other bonuses: digital assets so (an axis registered long ago, which companies use) means the modifier or its multiplier failed, so under Full every Nexus produces as outside Full; advanced materials alone so means the new registration failed; another figure: a source changed within the week (read the goods tooltip). A state that lost its Nexus within the week re-arms the check | digital assets: apply the modifiers from a building iterator in the state pulse (`every_scope_building = { limit = { is_building_type = building_mind_upload_nexus } … }`) instead of `b:`, and if that fails too, put each good's modifier on a ladder of static modifiers at tenths of its multiplier, as `family_limitation_scaled`'s fallback does; advanced materials: check `goods_input_advanced_materials_mult` and its two siblings in `mod_entity_modifier_types.txt` |
 | `TE_SELF_CHECK … um_nexus_cascade` | Full: once a game, `START` at a Nexus's monthly refresh in a state whose own tourism output read is +30% or more (airports, `tourism_output`), the verdict a week later (`te_debug_demog.131`). No line means no Nexus stood in such a state under Full | the building's other tourism (its read of the axis less the Nexus's own modifier) is the state's read, up to 0.25 more (a company's +0.2 is the only building-level tourism line) and at most 0.05 less: a building's goods read carries its state's lines (and through them the country's), which the refresh's offset rests on, so an empty Nexus makes nothing there | below the state's (at least 0.1 below, since the state reads 0.3 or more and a company at most 0.2): the building's read leaves the state's lines out, so an empty Nexus makes their share of its tourism and services (the airports' tourism, the financial cycle's services). `NO_VERDICT` (more than 0.25 above: a building-level line the check doesn't know) re-arms | read the state's and the country's axis too (`modifier:goods_<axis>_<good>_mult` on the state; the country's on `owner`) and add them to the other bonuses in `te_demog_um_nexus_good` |
 | `TE_SELF_CHECK … rate_below_measured` | Full, normal speed: once a game, at the census step after a state's deaths fell in one step from the probes' measured range (the window just measured at −0.9 or above at both ends, the walk's average total) to −0.95 or below (the new window's start), with no war dead, kills or Internal Resettlement's moves and that window's residual within a quarter of the new window's deaths (at least 100 a year). It arms only where a stop at −0.9 would show: the deficit such a stop leaves must clear the OK band's low side (half the deaths and a month at the old rate) by that quarter of the deaths, so a drop from an old window above about 0.3 of the bare curve doesn't arm (its month's lag would swallow the deficit: the review of #1082). The verdict needs the window's end at −0.95 or below too (2026-10-20; `te_demog_rbm_selfcheck_flows`). Such a quiet state is rare (late states' deaths are about 1 per 1,000 a year, their migration often tens): the likeliest place is a save from before this build, whose late states drop from the old −0.8 (a fifth of the bare curve) to their own rate at their first step, or a late medical leap from a low old rate. The console's replay (option a) runs no walk and doesn't touch the check. A game may show no line at all | a year below −0.95 ran as the walk's linear line expects: the residual (the walk applies the census's wealth line per pop, as the engine does) is within half of the expected deaths (the low side widened by a month's `lag`, Q7's "within a month"). The engine's per-pop rate holds its line from −0.9 to −1, and the census's floor at −1 stands | `residual` below that band: near minus `if_stopped_at_0_9` (the deaths a stop at −0.9 would add), the engine stops at −0.9; a figure far from it (the size of the `baseline`) is emigration the baseline missed, so read the state's population over the year before taking the fallback. A residual above the band is migration (a stop at −0.9 only adds deaths): no line, and a later state can arm | the floor back at −0.9: `RATE_TOTAL_FLOOR` in `scripts/analysis/demographics_params.py` to −0.9, then `scripts/generators/gen_demographics.py` |
@@ -97,7 +97,10 @@ Unions' two traits, which the engine scales ×0.5 while the group is marginal an
 
 1. **Full.** Issue Medical Outreach in a state behind its medicine targets. Once the state has caught up, the decree
    ends on its own; the decree panel names the reason as "This state's medicine is still behind what our technology
-   and laws allow", not a raw comparison.
+   and laws allow, and the next yearly count won't close the gap on its own", not a raw comparison. A state whose
+   Causes of Death section shows no arrow (medicine at its targets) can't be picked, and an issued decree is still in
+   place a week later (2026-10-23: a held decree is judged without its own line; if it ends at once,
+   `te_demog_medicine_behind_without_outreach` misreads the state's spread).
 2. **Full, an observer run of a few decades:** AI countries issue it in states behind and let it lapse; few states
    hold it once caught up.
 
@@ -260,7 +263,9 @@ The national urban pattern's effects and the Plan a New Capital decision (spec �
 4. **A country of one or two states**: no modifier, though its primacy reads near 100%; the tooltip says why.
 5. **The decision** (Full; Modern Sewerage shows it, Steel-Frame Buildings opens it): the greyed reasons read right
    (pattern, peace and plays, moved recently, the 50 years with the next year, 100 authority, a site). Take it: the
-   event offers up to three sites, largest first, never the capital or the largest city. Choosing one: the capital
+   event offers up to three sites, largest first, never the capital or the largest city. Each site's tooltip gives
+   Building the New Capital for 1825 days and Planned Capital for 7300 days (it said 0 days for both before the
+   durations became literals, 2026-10-23). Choosing one: the capital
    moves at once; the treasury drops by about 3% of a year's GDP; Building the New Capital takes 100 authority for five
    years; the new capital shows Planned Capital for 20 years; the decision is greyed "the next from <year + 50>". Not
    Now (the default) spends nothing and the decision stays open. While the event is open the decision is greyed "Our
@@ -368,9 +373,10 @@ What the offline evidence already says (2026-10-12):
     Rich-today inputs (a 2020-like structure) and B on the 1953 save's revenue over GDP (median 0.27 among the 15
     largest economies). Keep a plain-text save of a rich country around 2000-2020 (debug mode) and run
     `demographics_harness.py workforce SAVE`-style checks on it; `pensions SAVE` reads its revenue over GDP.
-11. **Work deaths' split.** Under Full, option r's `fws_wk=` (the census's women among workers 15-64) replaces
-    `fws_law=` in the split at the next step: about 0.17 in a 1836 farming state (No Women's Rights' 0.1), about 0.46
-    under Protected Class (0.48). The Causes of Death section's work row still adds up.
+11. **Work deaths' split.** Under Full, option r's `fws_wk=` (the census's women among workers 15-64) splits work
+    deaths at the next step: about 0.17 in a 1836 farming state (No Women's Rights' 0.1), about 0.46 under Protected
+    Class (0.48). Since 2026-10-25 under Display only too, and option r logs `fws=` beside it, the same figure once the
+    state has a count (§ Women's share of the workers). The Causes of Death section's work row still adds up.
 12. **A revolution that wins** under Full, the old government holding Raised and a bill: at once the winner shows the
     same pension age and position, the Trade Unions' −2 modifier, the Old-Age Pensions expense and the health bill; its
     states' "Census: Workforce" continues the old values (option r's `w=` on the capital) rather than the flat lines.
@@ -735,7 +741,7 @@ only the game can show:
    above, then Natural Change and Net Migration, Life Expectancy and Leading Cause, Fertility and Median Age, Working
    Age and Gini. Before the second count the stepped figures read "Next count" in grey; the arrows show from the
    third. Each cell's hover is the old row's; Life Expectancy's adds women's and men's figures (on an old save, a grey
-   line until the next yearly census). The icons are placeholders (`docs/systems/demographics_gui_icons.md`):
+   line until the next yearly census). The icons are the mod's own since icon batch 6 (`docs/systems/demographics_gui_icons.md`):
    note any that reads badly at 44 px.
 2. **The pie (Display only or Full, after the first step).** Causes of Death shows a ringed pie, slices clockwise from
    12 o'clock in the legend's order, its colours matching the legend's swatches, and the slices' shares adding to
@@ -799,6 +805,9 @@ script value, as the other factors), so no self-check. What only the game can sh
 
 ## Women at work and families among migrants on their carriers (modifier-types stage 3, 2026-10-19)
 
+Since 2026-10-25 the women's-rights laws carry no Women's Work Outside the Home line: the census's own count of women
+among its workers took its place (§ Women's share of the workers, below, which replaces this section's law half).
+
 The migrant profile's two inputs were a `has_law` ladder and a `has_technology_researched` ladder; they are now
 census-only types on their carriers, so each law's and technology's tooltip says what it does (`docs/systems/mod_systems.md`
 § The census, Flows). The values are the old tables', so no figure moves, except that Commercial Aviation and Jet Engine
@@ -806,16 +815,38 @@ Technology now add families too, which moves a late-game state's migrant profile
 state type on a tech's or law's `modifier` read in state scope is check a (option l, 2026-10-10), and a mod tech carrying
 a census type is the Contraceptive Pill's. So no self-check. What only the game can show:
 
-1. **The tooltips.** Women in the Fields "Women's Work Outside the Home +15%", Women Own Property +20%, Women in the
-   Workplace +35%, Women's Suffrage +37%, Protected Class +38%; No Women's Rights shows no such line. Paddle Steamer and
-   Railways "Families Among Migrants +10%", Combustion Engine +15% (beside its Deaths from Violence and Accidents line),
-   Commercial Aviation and Jet Engine Technology +5%. None shows a raw key, each hover gives its description, and
-   `debug.log` holds no `Unknown modifier type` for them.
-2. **The capital's reads (option l, any rule).** `TE_DEMOG_WORK` logs `fws=` (0.10 under No Women's Rights, 0.48 under
-   Protected Class) and `fam_mig=` (0.20 with Paddle Steamer and Railways, 0.45 with all five: the techs' lines alone, without the families' 0.2 base).
+1. **The tooltips.** Paddle Steamer and Railways "Families Among Migrants +10%", Combustion Engine +15% (beside its
+   Deaths from Violence and Accidents line), Commercial Aviation and Jet Engine Technology +5%. None shows a raw key,
+   each hover gives its description, and `debug.log` holds no `Unknown modifier type` for them.
+2. **The capital's reads (option l, any rule).** `TE_DEMOG_WORK` logs `fam_mig=` (0.20 with Paddle Steamer and
+   Railways, 0.45 with all five: the techs' lines alone, without the families' base).
 3. **The census reads them (Full or Display only).** A state with net migration keeps the profile it had before the
    change, unless its owner has an aviation tech: there the young-adult bulge of its arrivals or departures is a little
    flatter.
+
+## Women's share of the workers (2026-10-25)
+
+The census's own count of women among its workers (`te_dg_fws_wk`; before a count, what the sexes' rates give:
+`te_demog_women_worker_share`) now splits work deaths under Display only as under Full, and sets the labour migrants'
+women's share and Late Marriage's women's-work term under both. The women's-rights laws' Women's Work Outside the Home
+line went, and so did the families' women's-rights term (`docs/systems/mod_systems.md` § The census, Flows). No new
+engine fact: the count has run under both settings since phase 2 step 2, and the new value reads script values the
+panel already shows, so no self-check. What only the game can show:
+
+1. **The tooltips.** Women in the Fields, Women Own Property, Women in the Workplace, Women's Suffrage and Protected
+   Class show no "Women's Work Outside the Home" line, and `debug.log` holds no `Unknown modifier type` for
+   `state_female_work_share_add`.
+2. **The capital's reads (option l, either rule).** `TE_DEMOG_WORK`'s `fws=` is the census's count: about 0.17 in a 1836
+   farming state (0.10 before, No Women's Rights' share), about 0.4 to 0.46 under Protected Class with the late
+   technologies.
+3. **Display only.** A farming state's Causes of Death work row: women's share of the work deaths moves from 10% to about
+   17%, and the row still adds up.
+4. **Migration (either rule).** In a state with net migration and three in ten jobs women-typical, about a quarter of
+   the labour migrants are women under Women in the Fields (18% before) and about a fifth under Women's Suffrage
+   without the late technologies (a quarter before). Under Women in the Workplace, Women's Suffrage or Protected Class
+   the families' share of migrants is 15 or 16 points lower than before; under No Women's Rights it is unchanged.
+5. **The outline.** The Demographics tab's twenty-year outline splits work deaths by its states' counts, not by the
+   owner's law, so under Full it agrees with the states' own Causes of Death rows.
 
 ## Wealth Concentration's remaining shocks, r > g and the Inequality effect (2026-10-19)
 
@@ -920,6 +951,22 @@ ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto w
    `resettle_moves_booked` reads OK with a positive `rest` (its first step's counters cover only the months since the
    load).
 
+## The Settlement Authority's frontier scales with world population (2026-10-25)
+
+Both frontier densities (2 and 10 people per km²) and the AI's 0.5 per km² bonus now hold at a world population of one
+billion and scale in proportion to `global_population` (`resettlement_world_population_scale`,
+`mod_systems.md` § Internal Resettlement). `test_resettlement_programme_registry.py` pins the wiring; only the game
+shows the numbers.
+
+1. **1836.** In a new game, the Settlement Authority's build requirements on an open frontier (Siberia, the American
+   West) read an opening density a little above 2 (world population over a billion) and a closing density about five
+   times it; Migration Crowding Tolerance raises both as before. The line's second sentence (2026-10-25) renders the
+   base (2, or 10 on a state that has one), "×1.xx for today's world population" and "×1.xx for this state's Migration
+   Crowding Tolerance" with numbers, not raw keys, and base × the two factors matches the limit shown (to rounding).
+2. **Late game.** On a save with about 4 billion people, the same tooltip reads about 4× the 1836 figures before
+   tolerance, and `event te_debug_resettlement.1` (option d) logs the same thresholds in its `TE_RESETTLEMENT: frontier`
+   lines.
+
 ## The metropolitan share (spec §5.2, 2026-10-19)
 
 A state's metropolitan share, 0-100: the share of its urban people living in its largest city, a modelled stock that
@@ -935,7 +982,7 @@ can show:
    yearly count (before that the row is absent). A state with fewer than 5,000 urban people reads None, with the reason
    on hover. No label or value cut short.
 2. **The hover's bars.** The tooltip gives the share, the target and the labels' edges, then the eight terms as bars
-   (Capital, Port or Finance, Area, Farms and Mines, Urbanization, Infrastructure, Crowding, Urban Planning), each with
+   (Capital, Trade and Finance, Area, Farms and Mines, Urbanization, Infrastructure, Crowding, Urban Planning), each with
    its signed figure, then the effects paragraph. The bars add up with 40 to the target (within 5 and 95). Lock the
    tooltip: each bar's own hover gives its reason. **If the bars don't draw** (an empty band under the text, or no
    tooltip at all), the custom tooltip type failed: take the fallback in `gui/te_demographics_metro.gui`'s header (the
@@ -1313,3 +1360,232 @@ join the war dead, civilians of every age. The self-check `cause_tags_read` is i
    pollution line's value.
 7. **The history chart.** A save from before this build: its older years keep their Added on Top layer (and the
    year's hover lists it); the years after show none.
+
+## Stronger demographic effects (2026-10-22)
+
+The effects design (`docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md`): Wealth Concentration
+(every rule setting) and the census's Inequality, urban pattern, metropolitan share, sex balance and youth bulge (Full),
+now worth about one vanilla law at their reference and rising past it. No self-check: every field is a registered type
+on a modifier with a multiplier, and the bubble line rests on the banking cycle's own scaled script-only modifiers
+(`scripting_best_practices.md`).
+
+1. **The tooltips show the new figures.** Any rule: a state's Wealth Concentration tile lists Concentrated Property at
+   up to +20% investment, political strength from wealth +20%, qualifications −20%, education access −10% (at a score
+   of 80); a Forced Heirship country (France) shows Dispersed Property with no investment line. Full: the Urban
+   Pattern, Settlement, sex balance and Youth hovers give the new sizes.
+2. **Past the reference.** A state at a score of 90 or more carries Concentrated Property at more than its full size
+   (the multiplier above 100%); a primate country past 50% primacy shows Primate City above 100%.
+3. **The bubble line.** A country whose banking cycle runs, with a national figure of 80: the Banking dashboard's
+   next-month bubble range reads about 0.3 more than its other sources (Dispersed Wealth at 20: 0.4 less).
+4. **Land Reform.** A land-hungry farm state with the Land Reform movement present: the movement's support breakdown
+   names Land Hunger, and the field's description reads (not a raw key).
+5. **Socialist and labor support.** Full, a late state with a Gini above 0.70: the socialist and labor movements'
+   support names Census: Inequality.
+6. **Cultural minority support.** Full, a primate country with a minority-culture province: Provincial Neglect there
+   lifts its Cultural Minority Movement.
+7. **Metropolitan Crowding.** Full, a Metropolis state: the new modifier stays out of the state's rows but shows in
+   Migration Crowding's breakdown at 10% at a share of 60; Metropolis itself shows the other three lines.
+8. **Fewer Men after a great war.** Full, a country that lost a twentieth of its men: the women's rights movement's
+   support rises in the hardest-hit states, by up to 25% at 80 men per 100 women.
+9. **Primate City's fade** (Phase 0): in a late game, the primate city's Migration Crowding hover. Crowding near its
+   ceiling would argue for fading Primate City's upside with development (the spec's Phase 3).
+10. **Primate countries past full strength.** Full, 1836: the save readout (`puerto rico_1836_01_20.v3`) puts 41 of
+    the 66 countries with an urban pattern past full primacy strength (23 at 1–1.5×, 18 at 1.5–2×; about 93 M
+    people), where the old curve capped 47 of them at 1×. The worst (Kandy, Chile, Tidore, Brunei) give their
+    provinces Provincial Neglect turmoil of about +28% and their capital about +37% Urban Center throughput. Check
+    those countries stay governable; the levers are a lower cap than 2 on the primacy strength, or the reference back
+    toward 60%.
+11. **Observer run to about 1950.** AI stability and law paths under the stronger Wealth Concentration (AI Britain's
+    reforms slower under more aristocratic clout, historically right until 1911), and the worst radicals and turmoil
+    stacks (`demographics_harness.py effects SAVE`; an ordinary save works).
+
+## The Leading Cause of Death's icons and the Famine pip (2026-10-22)
+
+The Leading Cause of Death cell shows a headstone until deaths by cause are first counted, then the leading cause's own
+icon, one for each of the pie's seven causes (`demographics_gui_icons.md`). The History charts' Famine pip is an amber
+bowl in place of vanilla's goods-shortage box.
+
+1. **Before the first count.** A new game, on the country tab and a state's subtab: the cell shows the headstone and
+   reads Next count, and `error.log` and `debug.log` have no line about `te_dg_dc_lead` (the hidden cause icons read
+   it; their container's visible waits for the count).
+2. **The cause's icon.** After the first count, on both: the icon is the cause the reading names (Infection beside the
+   virus, and so on). A state whose leading cause differs from its country's shows its own.
+3. **No overlap.** At most one icon in the cell at once, never the headstone under a cause's icon.
+4. **The Famine pip.** A country that had a famine year: its pip over the year's bars and in the key reads as an amber
+   bowl at 10 px, distinct from the War and event pips.
+
+## The History pips' lane and the War and event pips (2026-10-22)
+
+Each History chart keeps a 36 px lane above its bars for the pips (the frame 132 tall, the bars' 96 px at its foot),
+so a pip no longer covers the top of a bar. The War pip is a pair of red crossed swords, the event pip a blue disc with
+a white dot; all three pips have a dark rim.
+
+1. **The lane.** A census history with war, famine and event years, at 5, 20 and 100 years: the pips sit above the
+   bars, never on them, in their three rows, and a bar at the chart's maximum reaches the top of the bars' area, not the
+   frame's.
+2. **Labels and axis.** Each chart's top and bottom axis labels still line up with the bars' top and foot, and Net
+   Migration's zero line still runs through the middle of its bars.
+3. **Drawn outside the column.** The pips are placed above their column (negative positions); if they don't show at
+   all, the engine clips a child to its parent, and the lane needs the pips moved into the plot's own box.
+4. **The key.** The key above the charts shows the same three pips at the same sizes.
+
+## The census's inputs with the rule off (2026-10-24)
+
+Under Disabled, every census-only modifier's name ends in a grey "(Demographics off)" and its hover in a note that no
+census runs (`te_demog_custom_loc.txt`, through the `te_demog_census_off_name` entry in the name). The
+name has no scope of its own, so the call goes through `GetPlayer`, as vanilla's `concept_enactment_phase_ingame_added`
+does; no modifier name in vanilla or the mod has used it before.
+
+1. **Disabled.** A new game with the rule on Disabled: Vulcanization's tooltip reads "Contraception (Demographics
+   off)", the tag grey and one space after the name, and the line's hover ends in "The Demographics game
+   rule is off, so no census runs and this does nothing." The Medical Outreach decree (Spread of Medicine) and Public
+   Health Insurance (Health Care Access) read the same. Longevity Care Banned, a boolean, shows the tag after its name.
+2. **Full and Display only.** The same tooltips with no tag and no note, and no trailing space before a colon on the
+   Nation tab's census rows (Rural Exemption from the Birth Limit).
+3. **German or Spanish.** With the game in German, the name is the translation with "(Demografie aus)" after it, not the
+   English name.
+4. **The log.** `error.log` has no `not valid for 'te_demog_census_off_name'` or `_desc` burst (the Banking Cycle title's
+   `GetPlayer.GetCustom` writes one, `docs/audits/open_issues.md` L11). If it does, or the tag shows a raw key, the
+   fallback is the release's: comment the lines out of a build that ships with the census off
+   (`scripts/release/comment_out_census_inputs.py`), and take the calls back out of the loc. The 2026-10-27 08:03
+   launch logged one such burst, before its save had loaded: the Pollution Impact loading tip, with no player. The
+   calls are guarded since (§ Modifier names with no player).
+
+## The Workforce Ratio lines under Full (2026-10-24)
+
+Under Full, the two moved Workforce Ratio families name what the census does with them instead
+(`te_demog_wf_replaced_name`, `te_demog_wf_womens_name` and `te_demog_wf_womens_desc` in `te_demog_custom_loc.txt`), by
+the same `GetPlayer.GetCustom` call as the section above. The women's-work family's name is the call alone, so it reads
+women's work first (owner, 2026-10-25).
+
+1. **Full.** Old Age Pension's institution effects read "Workforce Ratio (replaced by the census)", the tag grey;
+   Women's Suffrage reads "Women’s Work" (no parenthesis since 2026-10-25), and the line's description, where the
+   game shows one (the Nation tab row's tooltip), starts "How far women's rights" and names +35%, not a raw
+   `ScriptValue` call. The Nation tab's women's-work row reads "Women’s Work: …".
+2. **Display only and Disabled.** The same tooltips read plain "Workforce Ratio", with no trailing space, and the
+   women's-work description starts with the base game's "The ratio of Workforce to Dependents". If the name is blank
+   or a raw key here, the macro in `te_demog_wf_plain` doesn't expand through custom loc: write the vanilla name's text
+   into the key instead.
+3. **The log.** As above: no `not valid for 'te_demog_wf_` burst in `error.log`.
+
+## The birth and death lines under Full (2026-10-25)
+
+Under Full, the moved birth and mortality lines on laws, technologies and institutions keep their vanilla names with a
+grey "(Demographics)" after them (`te_demog_line_name` in `te_demog_custom_loc.txt`; owner, 2026-10-25).
+
+1. **Full.** Women's Suffrage reads "Birth Rate (Demographics)"; Public Health Insurance's institution effects read
+   "Mortality (Demographics)". In German, the base game's own name for Birth Rate, then "(Demografie)".
+2. **Display only and Disabled.** The same lines read plain "Birth Rate" and "Mortality".
+3. **Unmoved lines.** A state's own birth rate and mortality tooltips, and pops' lines such as severe starvation, keep
+   vanilla's names: only the moved types carry the tag.
+4. **The log.** As above: no `not valid for 'te_demog_line_name'` burst in `error.log`.
+
+## Log triage 2026-10-25 (night)
+
+The owner's new 1836 game under Full (from 17:29, to about 1877) printed these verdicts.
+
+- **`metro_world_market_hub`: the trigger is fine, the check's premise was wrong.** `hubs=234 port_states=241
+  hubs_without_port=100 ports_not_hub=107 countries=285`. The base game places a market area's hub in its best-scoring
+  state: ten a Port level, one per 100,000 GDP, 100 for the market capital (`WORLD_MARKET_HUB_SCORE_*`). So a market
+  capital without a Port is often the hub, and 100 hubs without one is the engine's placement, not a bad read. The check
+  no longer requires every hub to have a Port; it prints the count and asks for no more hubs than countries instead.
+  The gateway term therefore lands on many portless market capitals, which also take the Capital term. **Owner's call
+  (2026-10-25):** keep the hub and rename the bar, from Port or Finance to Trade and Finance; its hover no longer calls
+  the hub a port. Check: the Settlement row's hover lists Trade and Finance, and a hub without a Port takes its +30.
+- **`unemployment_rate_read`: a false BROKEN.** `read=0.000 walk=0.070` on 8 January 1836: the engine hadn't computed
+  any unemployment yet. `unemployment_share_read` read OK in the same game a fortnight later (`read=0.048
+  per_people=0.048`, Mecklenburg-Strelitz). The check now arms only once the engine's figure is above 0.
+- **`workforce_follows_target`: BROKEN, the verdict item 4 above waited for.** `engine_at_landing=0.257 set=0.287
+  engine=0.265` in 1842: in five census years the engine covered 0.008 of a 0.030 move (half was 0.015). The engine's
+  own pull is slow, so a state's workers trail the census's figures for years. No script change (the row's fallback);
+  the Workforce row's hover shows the gap.
+- OK: `primate_state_flag`, `pop_workforce_read` (0.249), `workforce_ratio_scale`, `famine_reserves_absorbed`,
+  `working_conditions_read`, `malaria_trait_read`, `fl_neighbours_read`, `neighbouring_state_reads`,
+  `cause_deaths_estimate`, `cause_tags_read`.
+
+## The ring's 300 years and the pyramid past 85 (issue #1075, 2026-10-27)
+
+No self-check: every read the build makes is proven (`modulo` on the census year, as the open slot's; the GUI's
+`Multiply_CFixedPoint`, `SelectLocalization` in a text and `GreaterThanOrEqualTo_CFixedPoint` on a stored variable).
+`mod_systems.md` § The ring's 300 years has the design.
+
+1. **A save from before, re-filed** (any rule with the census on). Load the France → European Union autosave of
+   2057-11-01, made before this build, and play a year. Each state re-files its ring at its own next step
+   (`te_dg_ring` appears, 300): its people and the 85+ band are what they were (the step's own births, deaths and
+   migrants aside), and Franche-Comté's pool of 9.4 million at a mean age of 165 shows in its 150–199 row, its pool
+   (`te_dg_pf`, `te_dg_pm`) at 0. `scripts/analysis/save_country_probe.py --states` on a save a year on reads no pool
+   past 1% of any state's people.
+2. **The rows past 85** (any rule). In that game, Île-de-France's subtab and the European Union's tab draw rows past 85
+   in 85+'s place (85–99, 100–124 and up, the highest labelled "N+"), each bar per five years of age; the hover
+   gives the people in the row and says how the bar is drawn. The
+   Biological button's view splits by biological age, with fewer rows. No "Failed to fetch variable" line in
+   `error.log` with the pyramid open on a split state and an unsplit one.
+3. **An ordinary pyramid.** A new 1836 game, and a 2000 save: every pyramid ends at 85+ as before, with the outline
+   on it.
+4. **Cost.** The benchmark (`event te_debug_demog.1`, option d) in the 2057 save and in an 1836 game: a plain state's
+   step costs about 30% more statements than before in the test interpreter (16,200 to 20,900, nobody past 150);
+   a late state with people past 150 up to twice the occupied slots. The issue's estimate was a few percent of a
+   month's tick at worst.
+5. **Save size.** The 2057 save as plain text before and after a year: up to about 300 more ring variables and a few
+   dozen row variables in each state with people past 150.
+
+## Modifier names with no player (log triage 2026-10-27)
+
+Every name that reaches Demographics' custom loc (the census inputs' "(Demographics off)", the moved Workforce Ratio
+and birth and death lines, Women's Work) now calls it as
+`[SelectLocalization(GetPlayer.IsValid,'<entry>_ingame','<plain key>')]`, vanilla's guard for loading-tip text. The
+08:03 launch on 2026-10-27 showed why: before the save loaded, the Pollution Impact loading tip listed
+`state_region_pollution_health`'s lines, and its three census lines logged `Object of type 'country' is not valid for
+'te_demog_census_off_name'` (and `_desc`, `te_demog_wf_replaced_name`): 1,980 lines in three seconds. No self-check:
+loc can't run one.
+
+1. **An observer.** Start an observer game, open a law tooltip with a census line (Restorative Justice: Deaths from
+   Violence and Accidents, Census: Men at Work) and the Pollution Impact concept. The names read plain, with no tag and no raw
+   `_ingame` key, and `error.log` has no `not valid for 'te_demog` line and no line naming `IsValid`.
+2. **The loading screen.** On a load whose tip is Pollution Impact ("Show me another tip!" rolls a new one), the effects
+   list reads plain, and `error.log` has no `jomini_custom_text.h:91` line for a `te_demog` entry.
+3. **In game, unchanged.** § The census's inputs with the rule off items 1–3, and the Workforce Ratio and birth and
+   death lines' tags under Full, read as before.
+
+Fallback: if `GetPlayer.IsValid` logs or a name shows the raw `_ingame` key, put the bare calls back (the burst is
+cosmetic) and register the loading-tip burst in `docs/audits/mod_known_noise.md`.
+
+## The GUI and localization audit (2026-10-27)
+
+The Demographics slice of the audit (`docs/audits/gui_audit/demog_nation_window.md`, DEM-1 to DEM-8, and #1202's loc
+fixes). Offline: `test_demographics_layout.py` (the link rows' widths, the lists' builder and markup),
+`test_demographics_registry.py` (`test_the_youth_and_metropolis_lists`, the fertility wording), the GUI lint and the
+audits. Nothing here rests on an engine fact a script can check, so there is no self-check: these are GUI reads.
+
+1. **Children per Woman (Display only or Full, both hosts).** The hover is the title, one line, the capital's (the
+   state's) terms, then "Mean age at childbirth: 29.4" and, where any are stored, the share of births to women of 50
+   and over; "after the next count" in a census from before mean age was stored. No sentence points at "the figures
+   above". The model's text is in How → Children per Woman.
+2. **How Demographics Works (both hosts).** Work and Retirement and Longevity sit after Causes of Death, each with
+   its notes. The Work note's last paragraph splices three rules: the fighting-age one prints the 1836 reference as a
+   percentage (it reads `GetPlayer`, so check it on the state subtab too), then the youth-bulge and sex-balance
+   rules.
+3. **The trimmed hovers.** Pension Age, Workforce, Pension Bill, Fighting-Age Men, Youth, Sex Balance, Longevity
+   Care, Longevity Gap, Biological Age, Backed Up and Uploaded Minds each show a title, a line and their figures, and
+   none ends in a blank line. The held-back switches still show their grey "Not applied yet" lines where a switch is
+   off.
+4. **The Youth list (Full or Display only, a country with a youth bulge).** Under the Youth row, up to ten rows,
+   strongest first: the state's name and "26% aged 20–29, strength 80%", no elision at 17. The count in the Youth
+   row's hover matches the rows (up to ten). A click opens the state on its Demographics subtab (as the States table's
+   rows do: note the tab it lands on), hovering highlights the state, a right click opens its menu, and the hover is
+   the state's Youth Bulge tooltip with the click note.
+5. **The Metropolises list.** Under Where People Live's Metropolises row, its states, largest share first, with
+   "61% in its largest city". The row's count is live and the list is drawn at the country census, so a state that
+   crossed 60% this year can be counted before it is listed: note it if the two disagree for longer than a year.
+6. **Every named state opens.** The three largest cities' rows are buttons like the States table's ("1.2M urban
+   people"); Most and Least Concentrated have a goto arrow in their right-hand slot that opens that state. Nothing
+   logs `Failed to fetch variable` for `te_dg_wc_top` or `te_dg_wc_bottom` while the Wealth section is open (the
+   arrows' datacontext sits under the rows' gate).
+7. **Small points.** The Gini cell's hover drops "A dash means…" once a Gini shows. The youth-bulge and more-men
+   lines print their radicals and turmoil figures in red, and the state's lines name the modifier its Modifiers
+   section lists.
+8. **The pension buttons (#1202, Full under Old Age Pension).** Each button's hover prints its interest groups'
+   reactions as the static modifier's own coloured lines (`GetStaticModifier('te_demog_pension_pos_*').GetDesc`),
+   then its failing conditions and its effect. Standard's says no group reacts.
+9. **The greyed tab.** Before the first census (a country released mid-game), the Population panel's Demographics
+   tab is greyed with "#b Demographics#!", "Not open yet. It opens once:" and the census line ticked or crossed.

@@ -1,0 +1,137 @@
+﻿# ============================================================================
+# COLONIAL GEOGRAPHY — the monthly separation cache
+#
+# A colony is separated from its ruler: no state of it is joined to our
+# capital over land through states we own (is_separated_from_capital,
+# colonial_empire_triggers.txt; the strait rule and the fill's tests are in
+# common/scripted_triggers/colonial_geography_triggers.txt). No trigger answers
+# "connected over land through our states", and an effect cannot run inside a
+# trigger, so this works it out once a month and caches the answer:
+#
+#   ce_linked      on a state of ours joined to the capital; value: us
+#   ce_separated   on a state of ours that is not; value: us
+#   ce_subject_separated
+#                  on a protectorate of ours none of whose states borders a
+#                  state of ours joined to the capital; value: us
+#   ce_separation_cached
+#                  on us, once our first pass has run: the entry's voluntary
+#                  end (je_colonial_empire's fail) waits for it, so a save from
+#                  before the cache does not read "no colonies" and end the
+#                  entry before the first pass fills it
+#
+# The values name the country, not a flag, so a state that has changed hands
+# since the pass matches no one: it reads as not separated until its new
+# owner's pass, which errs toward "not a colony" for at most a month.
+#
+# WHEN: monthly for every country with a non-homeland state of
+# colonial_territory_min_population people or more, or a protectorate
+# (colonial_geography_on_action, common/on_actions/colonial_geography_on_actions.txt),
+# and at game start. Not only for countries with the decolonization
+# technology: naval laws' AI weights, the anti-colonialist ideology and the UN
+# votes read is_overseas_colonial_state for any country at any date.
+#
+# COST. One pass is a ring fill (the while loop form_decolonized_country and
+# _decolonization_preview_region already run): about two neighbour tests per
+# state per ring, a few hundred a month for a large empire and under two
+# thousand for Russia at its widest, against the dozens of region comparisons
+# each call of the old macro-region test cost. Every colony test reads one
+# variable instead.
+#
+# SCOPE: country.
+# ============================================================================
+
+ce_refresh_separation = {
+	save_scope_as = ce_fill_country
+
+	# 1. Last month's links go. Our strait ends are tagged, so the fill's pair
+	#    test runs only between two of them.
+	every_scope_state = {
+		limit = { has_variable = ce_linked }
+		remove_variable = ce_linked
+	}
+	every_scope_state = {
+		limit = {
+			NOT = { has_variable = ce_strait_end }
+			ce_is_strait_endpoint = yes
+		}
+		set_variable = ce_strait_end
+	}
+
+	# 2. The capital, then ring after ring of our states joined to a marked
+	#    one: by land (a crossing only between two of our homelands,
+	#    ce_fill_land_link), or by a crossing between two homelands the
+	#    iterator does not return (ce_fill_homeland_strait). A state marked in
+	#    a pass counts for the states after it in the same pass, so a pass may
+	#    take several rings; the loop stops at the first pass that marks none.
+	capital = {
+		set_variable = { name = ce_linked value = scope:ce_fill_country }
+	}
+	set_variable = ce_fill_grew
+	while = {
+		limit = { has_variable = ce_fill_grew }
+		remove_variable = ce_fill_grew
+		every_scope_state = {
+			limit = {
+				NOT = { var:ce_linked ?= scope:ce_fill_country }
+				save_temporary_scope_as = ce_strait_other
+				OR = {
+					any_neighbouring_state = {
+						owner = scope:ce_fill_country
+						var:ce_linked ?= scope:ce_fill_country
+						ce_fill_land_link = yes
+					}
+					ce_fill_homeland_strait = yes
+				}
+			}
+			set_variable = { name = ce_linked value = scope:ce_fill_country }
+			scope:ce_fill_country = { set_variable = ce_fill_grew }
+		}
+	}
+
+	# 3. Every state of ours the fill did not reach is separated.
+	every_scope_state = {
+		if = {
+			limit = { var:ce_linked ?= scope:ce_fill_country }
+			remove_variable = ce_separated
+		}
+		else = {
+			set_variable = { name = ce_separated value = scope:ce_fill_country }
+		}
+	}
+
+	# 4. Our protectorates: separated while none of their states borders a
+	#    state of ours joined to the capital (is_qualifying_colonial_subject).
+	every_subject_or_below = {
+		limit = {
+			is_subject_type = subject_type_protectorate
+			is_direct_subject_of = scope:ce_fill_country
+		}
+		if = {
+			limit = {
+				any_scope_state = {
+					save_temporary_scope_as = ce_strait_other
+					ce_protectorate_state_borders_linked = yes
+				}
+			}
+			remove_variable = ce_subject_separated
+		}
+		else = {
+			set_variable = { name = ce_subject_separated value = scope:ce_fill_country }
+		}
+	}
+
+	set_variable = ce_separation_cached
+}
+
+# The monthly or game-start step for one country: the pass when it needs one,
+# and the cached flag either way (a country with nothing to separate has
+# nothing the voluntary end would misread). Scope: country.
+ce_separation_step = {
+	if = {
+		limit = { ce_needs_separation = yes }
+		ce_refresh_separation = yes
+	}
+	else = {
+		set_variable = ce_separation_cached
+	}
+}

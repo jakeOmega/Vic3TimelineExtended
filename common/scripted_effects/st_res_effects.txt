@@ -887,31 +887,47 @@ st_res_set_good_policy_base = {
 # auto-clamp is deliberately NOT a takeover — it only ever moves the rate
 # variable, never the policy, which is why the weekly evaluator can safely
 # rewrite the rate it zeroed.
+#
+# Each base says what the click does to the rate, "Rate Setting: +100 -> +200 a
+# week", in a custom_tooltip the row buttons show through ExecuteTooltip
+# (SR-7, 2026-10-27): a change_variable renders nothing in a tooltip. The work
+# itself is in a hidden_effect, so the hub's flow modifiers and the policy
+# re-evaluation it runs print nothing there. The figure after the click is
+# st_res_<good>_rate_after_up / _down, the clamp below worked out ahead.
 st_res_increase_rate_base = {
-	st_res_init_effect = yes
-	st_res_switch_to_manual_base = { GOOD = $GOOD$ }
-	change_variable = { name = st_res_$GOOD$_rate add = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
+	custom_tooltip = st_res_row_$GOOD$_rate_up_tt
+	hidden_effect = {
+		st_res_init_effect = yes
+		st_res_switch_to_manual_base = { GOOD = $GOOD$ }
+		change_variable = { name = st_res_$GOOD$_rate add = st_res_adjust_step_value }
+		st_res_refresh_hub_flow_effect = yes
+		st_res_clamp_stockpiles_effect = yes
+	}
 }
 
 st_res_decrease_rate_base = {
-	st_res_init_effect = yes
-	st_res_switch_to_manual_base = { GOOD = $GOOD$ }
-	change_variable = { name = st_res_$GOOD$_rate subtract = st_res_adjust_step_value }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
+	custom_tooltip = st_res_row_$GOOD$_rate_down_tt
+	hidden_effect = {
+		st_res_init_effect = yes
+		st_res_switch_to_manual_base = { GOOD = $GOOD$ }
+		change_variable = { name = st_res_$GOOD$_rate subtract = st_res_adjust_step_value }
+		st_res_refresh_hub_flow_effect = yes
+		st_res_clamp_stockpiles_effect = yes
+	}
 }
 
-# "Stop" — park one good's lane at 0/week without touching any other good.
+# "Stop" — park one good's rate at 0/week without touching any other good.
 # Same shape as the increase/decrease bases so the hub refresh and the stockpile
 # clamp run exactly as they do for a stepped adjustment.
 st_res_stop_rate_base = {
-	st_res_init_effect = yes
-	st_res_switch_to_manual_base = { GOOD = $GOOD$ }
-	set_variable = { name = st_res_$GOOD$_rate value = 0 }
-	st_res_refresh_hub_flow_effect = yes
-	st_res_clamp_stockpiles_effect = yes
+	custom_tooltip = st_res_row_$GOOD$_rate_stop_tt
+	hidden_effect = {
+		st_res_init_effect = yes
+		st_res_switch_to_manual_base = { GOOD = $GOOD$ }
+		set_variable = { name = st_res_$GOOD$_rate value = 0 }
+		st_res_refresh_hub_flow_effect = yes
+		st_res_clamp_stockpiles_effect = yes
+	}
 }
 
 # --- Concrete per-good wrappers (kept as named entry points for buttons) ----

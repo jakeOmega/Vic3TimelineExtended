@@ -95,6 +95,12 @@ TECH_GATES = {"artistic": "romanticism", "naturalist": "romanticism", "scientifi
 # method whose technology its owner lacks, which would strip five landmarks of
 # their dedications.
 PM_TECH_GATES = {k: TECH_GATES[k] for k in ("industrial", "athletic")}
+# To History (tourism heritage spec 2026-10-23 § 7): the landmarks of 1836 and
+# dug sites that took heritage off base appeal. Never offered by the ceremony,
+# with no local or national effect, no interest group, no anniversary, so it is
+# kept out of DEDICATIONS, every row of which has those; HistoryDedicationTests
+# pins where it is wired.
+HISTORIC = "historic"
 # Dedications that take heritage skins (spec §1.1; the War Memorial takes no
 # faith skin, plan decision 4).
 HERITAGE_SKINNED = ("crown", "republic", "revolution", "leader", "civic", "war_memorial")
@@ -358,7 +364,10 @@ class ModifierTests(unittest.TestCase):
         self.assertAlmostEqual(float(mirror.group(1)), expected, msg=step_name)
 
     def test_national_pairs(self):
-        self.assert_pair("gm_national_prestige", "country_prestige_add", "gm_step_prestige", 25)
+        # Policy spec 2026-10-23 § 8: +10 a step plus +1% a step.
+        self.assert_pair("gm_national_prestige", "country_prestige_add", "gm_step_prestige", 10)
+        self.assert_pair("gm_national_prestige_pct", "country_prestige_mult", "gm_step_prestige_pct", 0.01)
+        self.assert_pair("gm_national_education", "state_education_access_add", "gm_step_education", 0.01)
         self.assert_pair("gm_national_legitimacy", "country_legitimacy_base_add", "gm_step_legitimacy", 2)
         self.assert_pair("gm_national_teardown", "country_legitimacy_base_add", "gm_step_teardown", 3)
         self.assert_pair("gm_national_vanity", "country_legitimacy_base_add", "gm_step_vanity", -1)
@@ -368,16 +377,35 @@ class ModifierTests(unittest.TestCase):
                              d.national_step)
         self.assertEqual({d.key for d in DEDICATIONS if d.national_field}, set(NATIONAL))
 
+    def test_prestige_pct_rides_the_standing_steps(self):
+        apply = squash(block(read(EFFECTS), "gm_apply_national_modifiers"))
+        self.assertIn("gm_add_national = { NAME = gm_national_prestige_pct VAR = gm_s_standing }", apply)
+        self.assertIn("remove_modifier = gm_national_prestige_pct",
+                      squash(block(read(EFFECTS), "gm_remove_national_modifiers")))
+        self.assertIn("gm_display_prestige_pct", loc()["gm_je_val_prestige_pct"])
+
     def test_ig_pairs(self):
         for ig in IGS:
             self.assert_pair(f"gm_ig_approval_{ig}", f"interest_group_ig_{ig}_approval_add",
                              "gm_step_ig", 1)
 
     def test_local_pairs(self):
-        self.assert_pair("gm_local_tourism", "building_tourism_industry_throughput_add",
-                         "gm_step_tourism", 0.25)
+        self.assert_pair("gm_local_tourism", "goods_output_tourism_mult", "gm_step_tourism", 0.10)
         for d in DEDICATIONS:
             self.assert_pair(f"gm_local_{d.key}", d.local_field, f"gm_step_local_{d.key}", d.local_step)
+
+    def test_pilgrim_hostels_is_output(self):
+        # Tourism heritage spec 2026-10-23 § 5.1: monument tourism is output, as base appeal is.
+        body = block(read(MODIFIERS), "gm_evt_pilgrim_hostels")
+        self.assertAlmostEqual(number(body, "goods_output_tourism_mult"), 0.05)
+        self.assertNotIn("throughput", body)
+
+    def test_no_monument_loc_promises_throughput(self):
+        L = loc()
+        keys = [k for k in L if k.startswith(("gm_state_", "gm_sig_", "gm_policy_")) or k == "monument_events.2.common_tt"]
+        for k in keys:
+            self.assertNotIn("building_tourism_industry_throughput_add", L[k], k)
+            self.assertNotIn("Tourism Industry throughput", L[k], k)
 
     def test_culture_step(self):
         self.assertRegex(strip_comments(read(VALUES)), r"(?m)^gm_step_culture = 1\s*$")
@@ -642,9 +670,10 @@ class LocalPulseTests(unittest.TestCase):
         self.assertTrue(body.startswith("gm_state_count_site_levels = yes gm_remove_local_modifiers = yes"))
         self.assertIn("set_variable = { name = gm_curve_in value = gm_state_grandeur }", body)
         # The monument policy (v2 §5) scales the steps: tourism and the local
-        # effect separately (each dedication's, SecondaryFitTests).
+        # effect separately (each dedication's, SecondaryFitTests). Tourism's
+        # factor counts To History's share at half (HistoryDedicationTests).
         self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_lin_f5 "
-                      "multiply = gm_policy_factor_tourism } }", body)
+                      "multiply = gm_policy_factor_tourism_here } }", body)
         self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }", body)
         # Upkeep by the records (UpkeepTests).
         self.assertIn("add_modifier = { name = gm_upkeep multiplier = root.var:gm_upkeep_mult }", body)
@@ -757,22 +786,25 @@ class NationalTests(unittest.TestCase):
                       "WIDTH = gm_w_standing F = 5 }", body)
         self.assertIn("gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture "
                       "WIDTH = gm_w_culture F = 10 }", body)
-        self.assertEqual(body.count("gm_set_steps_lin_open"), 2)
-        self.assertIn("gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
+        self.assertEqual(body.count("gm_set_steps_lin_open"), 3, "prestige, pull and Public Education")
+        # Legitimacy's input carries State Ceremonial's share (policy spec 2026-10-23 § 4.2).
+        self.assertIn("gm_set_steps = { IN = gm_g_regime_in OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }", body)
         # The monument policy (v2 §5) scales the steps after the curve, so the
         # effect itself moves by the factor (halving grandeur before the curve
         # would take off about one step, not half).
         for g in ("standing", "regime", "leader"):
             self.assertIn(f"set_variable = {{ name = gm_g_{g} value = gm_sum_{g} }}", body)
-        for steps, factor in (("standing", "standing"), ("culture", "standing"), ("regime", "regime"),
-                              ("leader", "regime")):
+        # Each with To History's share at half (policy spec 2026-10-23 § 4.5).
+        for steps, factor in (("standing", "prestige_standing"), ("culture", "culture_standing")):
             call = f"gm_policy_scale_steps = {{ S = {steps} FACTOR = gm_policy_factor_{factor} }}"
             self.assertIn(call, body)
             self.assertGreater(body.find(call), body.find(f"OUT = gm_s_{steps} "), "after the curve")
         for key in NATIONAL:
             self.assertIn(f"set_variable = {{ name = gm_g_{key} value = gm_sum_{key} }}", body)
-            self.assertIn(f"gm_set_steps = {{ IN = gm_g_{key} OUT = gm_s_{key} NEXT = gm_n_{key} F = 5 }}", body)
+            # The Leader's input carries State Ceremonial's share too (policy spec § 4.2).
+            src = "gm_g_leader_in" if key == "leader" else f"gm_g_{key}"
+            self.assertIn(f"gm_set_steps = {{ IN = {src} OUT = gm_s_{key} NEXT = gm_n_{key} F = 5 }}", body)
         for ig in IGS:
             self.assertIn(f"gm_compute_ig = {{ IG = {ig} }}", body)
         steps = squash(block(self.e, "gm_set_steps"))
@@ -958,7 +990,10 @@ class ContestTests(unittest.TestCase):
         self.assertIn("limit = { gm_state_is_dedicated = yes gm_state_is_bound = yes "
                       "NOT = { has_variable = gm_ceremony_pending } NOT = { has_variable = gm_restore_pm } "
                       "has_variable = gm_seen }", body)
-        self.assertIn("owner = { has_variable = gm_cw_adopting } } gm_state_adopt_for_winner = yes", body)
+        # A civil war's winner adopted the loser's monuments at the win
+        # (gm_repair_after_civil_war): nothing here looks for the loser, who is
+        # deleted within two weeks (issue #1136).
+        self.assertNotIn("gm_cw_", body)
         # A shrine this country did not raise always becomes heritage, whatever
         # the route it arrived by (conquest, a secession that drops te_cw_role,
         # or a civil war of this country's own), and this branch must run
@@ -995,11 +1030,34 @@ class ContestTests(unittest.TestCase):
         self.assertLess(won.find("te_civil_war_resolve_sides = yes"), won.find("gm_repair_after_civil_war = yes"))
         self.assertLess(won.find("gm_repair_after_civil_war = yes"), won.find("te_civil_war_clear = yes"))
         repair = squash(block(self.e, "gm_repair_after_civil_war"))
-        self.assertIn("set_variable = { name = gm_cw_loser value = scope:te_cw_loser days = 30 }", repair)
-        self.assertIn("set_variable = { name = gm_cw_adopting value = yes days = 30 }", repair)
-        adopt = squash(block(self.e, "gm_state_adopt_for_winner"))
-        self.assertIn("var:gm_raised_by = scope:gm_tmp_loser", adopt)
-        self.assertIn("set_variable = { name = gm_raised_by value = owner }", adopt)
+        repoint = ("limit = { var:gm_raised_by ?= scope:te_cw_loser } "
+                   "set_variable = { name = gm_raised_by value = root }")
+        # A dead loser was the nation: every monument it raised, wherever it
+        # stands, is repointed while the loser still resolves (issue #1136).
+        dead = repair.index("scope:te_cw_loser = { is_country_alive = no }")
+        alive = repair.index("else = {", dead)
+        self.assertIn("every_state = { " + repoint + " }", repair[dead:alive])
+        for lst in ("gm_monuments", "gm_trophies", "gm_shadows"):
+            self.assertIn(f"gm_cw_repoint_list = {{ LIST = {lst} }}", repair[dead:alive])
+        # And a shadow's last owner, which an orphan settles by: else a merge of
+        # the two sides' parts of its state loses it (2026-10-25, Haiti).
+        self.assertIn("every_in_global_list = { variable = gm_shadows "
+                      "limit = { var:gm_sh_owner ?= scope:te_cw_loser } "
+                      "set_variable = { name = gm_sh_owner value = root } }", repair[dead:alive])
+        one = squash(block(self.e, "gm_cw_repoint_list"))
+        self.assertIn("every_in_global_list = { variable = $LIST$ "
+                      "limit = { var:gm_tr_raised_by ?= scope:te_cw_loser } "
+                      "set_variable = { name = gm_tr_raised_by value = root } }", one)
+        # A live loser (a secession that won) keeps all but the winner's states'.
+        self.assertIn("every_scope_state = { " + repoint + " }", repair[alive:])
+        self.assertNotIn("every_state =", repair[alive:])
+        # No window to adopt later: the loser would be gone by then.
+        self.assertNotIn("gm_cw_loser", repair)
+        self.assertNotIn("gm_cw_adopting", repair)
+        mon = read(MON_EFFECTS)
+        for name in ("gm_state_adopt_for_winner", "gm_mon_adopt_for_winner"):
+            self.assertIsNone(block(self.e, name))
+            self.assertIsNone(block(mon, name))
 
     def test_ledger_helper_covers_every_ig(self):
         body = squash(block(self.e, "gm_state_ledger_ig"))
@@ -1152,7 +1210,7 @@ class ContestTests(unittest.TestCase):
         body = squash(block(self.e, "gm_country_refresh"))
         # A monument, an open commission (v2 §2.7) or a trophy held or abroad
         # (trophies spec §6) keeps the pulse running.
-        self.assertTrue(body.startswith("gm_init_ledgers = yes if = { limit = { OR = { any_scope_state = "
+        self.assertTrue(body.startswith("gm_policy_migrate = yes gm_init_ledgers = yes if = { limit = { OR = { any_scope_state = "
                                         "{ has_building = building_grand_monument } has_variable = gm_com_open "
                                         "gm_tr_country_has_any = yes gm_arch_country_has_any = yes } } set_variable = gm_active }"),
                         body[:240])
@@ -1329,6 +1387,79 @@ LANDMARKS = (
              year=1840),
     Landmark("washington_monument", "STATE_DISTRICT_OF_COLUMBIA", None, "republic", "obelisk", ("generic", "obelisk"),
              10, False, year=1848),
+    # Added 2026-10-25 (tourism heritage spec 2026-10-23 § 9, Appendix B): To History, standing in 1836,
+    # each taking the base appeal of the heritage it stands for. Owners from the 1836 history: Gondar is
+    # Begemder's part of Gonder, Sana'a the Zaydi imam's and Shibam the Kathiri's part of Yemen, Merv
+    # Bukhara's part of Merz, Tallinn the United Baltic Provinces'; Tōdai-ji stands at Nara, in Kansai.
+    # Levels by the points each takes (§ 6.2). The stand-ins date from before their pictures were
+    # drawn: Giza and Meroë took the obelisk, not a Mesoamerican pyramid.
+    Landmark("pyramids_of_giza", "STATE_LOWER_EGYPT", "EGY", "historic", "pyramid", ("generic", "obelisk"), 15),
+    Landmark("petra", "STATE_TRANSJORDAN", "EGY", "historic", "rock_cut", ("heritage_aramaic", "rock_cut"), 3, beside=True),
+    Landmark("moscow_kremlin", "STATE_MOSCOW", "RUS", "historic", "tower", ("heritage_slavonic", "bell_tower"), 3),
+    Landmark("fasil_ghebbi", "STATE_GONDER", "BGM", "historic", "hall", ("heritage_gothic", "tower"), 3),
+    Landmark("valley_of_the_temples", "STATE_SICILY", "SIC", "historic", "pantheon", ("heritage_greek", "pantheon"), 3),
+    Landmark("borobudur", "STATE_CENTRAL_JAVA", "DEI", "historic", "gate", ("heritage_sanskrit", "gate"), 3),
+    Landmark("old_city_of_sanaa", "STATE_YEMEN", "ZAI", "historic", "hall", ("heritage_arabic", "hall"), 3),
+    Landmark("shibam", "STATE_YEMEN", "KAT", "historic", "tower", ("heritage_arabic", "hall"), 3),
+    Landmark("amphitheatre_of_el_djem", "STATE_TUNISIA", "TUN", "historic", "forum", ("heritage_latin", "stadium"), 3),
+    Landmark("abu_simbel", "STATE_EGYPTIAN_DESERT", "EGY", "historic", "rock_cut", ("heritage_aramaic", "rock_cut"), 10),
+    Landmark("temple_of_seti_abydos", "STATE_MIDDLE_EGYPT", "EGY", "historic", "colonnade", ("heritage_aramaic", "colonnade"), 3),
+    Landmark("pyramids_of_meroe", "STATE_DONGOLA", "EGY", "historic", "pyramid", ("generic", "obelisk"), 6),
+    Landmark("windsor_castle", "STATE_HOME_COUNTIES", "GBR", "historic", "tower", ("heritage_gothic", "tower"), 3),
+    Landmark("pont_du_gard", "STATE_LANGUEDOC", "FRA", "historic", "arch", ("heritage_latin", "arch"), 3),
+    Landmark("palais_des_papes", "STATE_PROVENCE", "FRA", "historic", "hall", ("heritage_gothic", "tower"), 3),
+    Landmark("mont_saint_michel", "STATE_NORMANDY", "FRA", "historic", "tower", ("heritage_gothic", "tower"), 3),
+    Landmark("chateau_de_chambord", "STATE_ORLEANS", "FRA", "historic", "hall", ("generic", "hall"), 3),
+    Landmark("jeronimos_monastery", "STATE_ESTREMADURA", "POR", "historic", "hall", ("faith_catholic", "faith"), 3),
+    Landmark("alhambra", "STATE_UPPER_ANDALUSIA", "SPA", "historic", "hall", ("heritage_arabic", "hall"), 3),
+    Landmark("mezquita_of_cordoba", "STATE_LOWER_ANDALUSIA", "SPA", "historic", "hall", ("faith_sunni", "faith"), 3),
+    Landmark("shore_temple", "STATE_MADRAS", "BIC", "historic", "pillar", ("faith_hindu", "faith"), 3),
+    Landmark("charminar", "STATE_HYDERABAD", "HYD", "historic", "gate", ("heritage_arabic", "gate"), 3),
+    Landmark("gwalior_fort", "STATE_MALWA", "GWA", "historic", "gate", ("heritage_sanskrit", "gate"), 3),
+    Landmark("meteora", "STATE_THESSALIA", "TUR", "historic", "memorial_church", ("faith_orthodox", "faith"), 3),
+    Landmark("citadel_of_aleppo", "STATE_ALEPPO", "EGY", "historic", "gate", ("heritage_arabic", "gate"), 6),
+    Landmark("naqsh_e_jahan_square", "STATE_ISFAHAN", "PER", "historic", "hall", ("heritage_avestan", "gate"), 10),
+    Landmark("buddhas_of_bamiyan", "STATE_CENTRAL_HIGHLANDS", "KAB", "historic", "statue", ("generic", "statue"), 3),
+    Landmark("musalla_of_herat", "STATE_HERAT", "HER", "historic", "tower", ("faith_sunni", "faith"), 3),
+    Landmark("grand_palace_bangkok", "STATE_BANGKOK", "SIA", "historic", "hall", ("faith_theravada", "faith"), 6),
+    Landmark("changdeokgung", "STATE_SEOUL", "KOR", "historic", "hall", ("heritage_chinese", "hall"), 6),
+    Landmark("bulguksa", "STATE_BUSAN", "KOR", "historic", "pagoda", ("heritage_chinese", "pagoda"), 3),
+    Landmark("kinkaku_ji", "STATE_KYOTO", "JAP", "historic", "pagoda", ("heritage_chinese", "pagoda"), 10),
+    Landmark("todai_ji", "STATE_KANSAI", "JAP", "historic", "hall", ("faith_mahayana", "faith"), 5),
+    Landmark("itsukushima_shrine", "STATE_CHUGOKU", "JAP", "historic", "gate", ("faith_shinto", "faith"), 3),
+    Landmark("potala_palace", "STATE_LHASA", "TIB", "historic", "hall", ("faith_gelugpa", "faith"), 3),
+    Landmark("swayambhunath", "STATE_HIMALAYAS", "NEP", "historic", "pagoda", ("faith_mahayana", "faith"), 3),
+    Landmark("leshan_giant_buddha", "STATE_SICHUAN", "CHI", "historic", "statue", ("generic", "statue"), 3),
+    Landmark("temple_of_confucius", "STATE_SHANDONG", "CHI", "historic", "hall", ("faith_confucian", "faith"), 3),
+    Landmark("yungang_grottoes", "STATE_SHANXI", "CHI", "historic", "rock_cut", ("generic", "statue"), 3),
+    Landmark("humble_administrators_garden", "STATE_SUZHOU", "CHI", "historic", "pagoda", ("heritage_chinese", "gardens"), 3),
+    Landmark("longmen_grottoes", "STATE_HENAN", "CHI", "historic", "rock_cut", ("generic", "statue"), 3),
+    Landmark("registan", "STATE_UZBEKIA", "BUK", "historic", "gate", ("heritage_avestan", "gate"), 10),
+    Landmark("itchan_kala", "STATE_KHIVA", "KHI", "historic", "gate", ("heritage_arabic", "gate"), 6),
+    Landmark("mausoleum_of_sultan_sanjar", "STATE_MERZ", "BUK", "historic", "mausoleum", ("faith_sunni", "faith"), 3),
+    Landmark("kazan_kremlin", "STATE_KAZAN", "RUS", "historic", "tower", ("heritage_slavonic", "bell_tower"), 3),
+    Landmark("saint_sophia_kiev", "STATE_KIEV", "RUS", "historic", "memorial_church", ("heritage_slavonic", "memorial_church"), 3),
+    Landmark("diocletians_palace", "STATE_DALMATIA", "AUS", "historic", "colonnade", ("heritage_latin", "forum"), 3),
+    Landmark("marksburg", "STATE_RHINELAND", "PRU", "historic", "tower", ("heritage_gothic", "tower"), 3),
+    Landmark("aachen_cathedral", "STATE_NORTH_RHINE", "PRU", "historic", "hall", ("faith_catholic", "faith"), 3),
+    Landmark("basilica_of_saint_francis", "STATE_UMBRIA", "PAP", "historic", "hall", ("faith_catholic", "faith"), 3),
+    Landmark("walls_of_tallinn", "STATE_TALINN", "UBD", "historic", "gate", ("heritage_gothic", "tower"), 3),
+    # Added 2026-10-25 (tourism heritage spec 2026-10-23 § 9, Appendix C): buried, To History when dug,
+    # each taking the base appeal of the ruins it stands for. Hampi lies in Kurnool (Bellary), not Mysore.
+    Landmark("ephesus", "STATE_AYDIN", None, "historic", "colonnade", ("heritage_greek", "stoa"), 3, False, False, True),
+    Landmark("tikal", "STATE_GUATEMALA", None, "historic", "pyramid", ("heritage_mayan", "pyramid"), 3, False, False, True),
+    Landmark("chichen_itza", "STATE_YUCATAN", None, "historic", "pyramid", ("heritage_mayan", "pyramid"), 3, False, False, True),
+    Landmark("teotihuacan", "STATE_MEXICO", None, "historic", "pyramid", ("heritage_nahuatl", "pyramid"), 6, False, False, True),
+    Landmark("monte_alban", "STATE_OAXACA", None, "historic", "pyramid", ("heritage_nahuatl", "pyramid"), 3, False, False, True),
+    Landmark("leptis_magna", "STATE_TRIPOLI", None, "historic", "forum", ("heritage_latin", "forum"), 6, False, False, True),
+    Landmark("cyrene", "STATE_LIBYA", None, "historic", "pantheon", ("heritage_greek", "pantheon"), 3, False, False, True),
+    Landmark("merida_theatre", "STATE_EXTREMADURA", None, "historic", "forum", ("heritage_latin", "stadium"), 3, False, False, True),
+    Landmark("chogha_zanbil", "STATE_KHUZESTAN", None, "historic", "pyramid", ("heritage_avestan", "gate"), 3, False, False, True),
+    Landmark("hattusa", "STATE_ANKARA", None, "historic", "gate", ("generic", "gate"), 6, False, False, True),
+    Landmark("mount_nemrut", "STATE_DIYARBAKIR", None, "historic", "statue", ("generic", "statue"), 3, False, False, True),
+    Landmark("mogao_caves", "STATE_GANSU", None, "historic", "rock_cut", ("faith_mahayana", "faith"), 3, False, False, True),
+    Landmark("khajuraho", "STATE_BUNDELKHAND", None, "historic", "pillar", ("faith_hindu", "faith"), 3, False, False, True),
+    Landmark("hampi", "STATE_KURNOOL", None, "historic", "pillar", ("heritage_sanskrit", "pillar"), 3, False, False, True),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
@@ -1366,6 +1497,24 @@ BUILT = {
     "terracotta_army": -210, "tomb_of_philip_ii": -336, "tomb_of_marquis_yi": -433, "royal_tombs_of_sipan": 250,
     "otzi_the_iceman": -3300, "caral_supe": -2600, "gobekli_tepe": -9500, "olympia": -456, "delphi": -330,
     "sidon_necropolis": -330, "villa_of_the_papyri": -50, "tomb_of_alexander": -320, "pompeii": 79,
+    # To History landmarks standing in 1836 (tourism heritage phase 2).
+    "pyramids_of_giza": -2560, "petra": -100, "moscow_kremlin": 1495, "fasil_ghebbi": 1636,
+    "valley_of_the_temples": -500, "borobudur": 825, "old_city_of_sanaa": 600, "shibam": 1530,
+    "amphitheatre_of_el_djem": 238, "abu_simbel": -1264, "temple_of_seti_abydos": -1290, "pyramids_of_meroe": -300,
+    "windsor_castle": 1070, "pont_du_gard": 50, "palais_des_papes": 1364, "mont_saint_michel": 1228,
+    "chateau_de_chambord": 1547, "jeronimos_monastery": 1601, "alhambra": 1354, "mezquita_of_cordoba": 987,
+    "shore_temple": 700, "charminar": 1591, "gwalior_fort": 1486, "meteora": 1382, "citadel_of_aleppo": 1213,
+    "naqsh_e_jahan_square": 1629, "buddhas_of_bamiyan": 570, "musalla_of_herat": 1417, "grand_palace_bangkok": 1782,
+    "changdeokgung": 1610, "bulguksa": 774, "kinkaku_ji": 1397, "todai_ji": 752, "itsukushima_shrine": 1168,
+    "potala_palace": 1694, "swayambhunath": 460, "leshan_giant_buddha": 803, "temple_of_confucius": 1499,
+    "yungang_grottoes": 494, "humble_administrators_garden": 1513, "longmen_grottoes": 675, "registan": 1660,
+    "itchan_kala": 1800, "mausoleum_of_sultan_sanjar": 1157, "kazan_kremlin": 1562, "saint_sophia_kiev": 1037,
+    "diocletians_palace": 305, "marksburg": 1283, "aachen_cathedral": 805, "basilica_of_saint_francis": 1253,
+    "walls_of_tallinn": 1355,
+    # To History sites, buried until the game (tourism heritage phase 3).
+    "ephesus": -550, "tikal": 750, "chichen_itza": 1000, "teotihuacan": 200, "monte_alban": -500,
+    "leptis_magna": 200, "cyrene": -630, "merida_theatre": -16, "chogha_zanbil": -1250, "hattusa": -1650,
+    "mount_nemrut": -62, "mogao_caves": 1000, "khajuraho": 1000, "hampi": 1500,
 }
 
 
@@ -1658,8 +1807,13 @@ class WidgetTests(unittest.TestCase):
         for name, _ in self.ROOTS:
             self.assertIn(f'name = "{name}" visible = "[JournalEntry.IsActive]"', g, name)
         self.assertIn('datamodel = "[JournalEntry.GetCountry.MakeScope.GetList(\'gm_states\')]"', g)
+        # Our Monuments lists every finished monument but the contested, which
+        # Awaiting a Decision lists (GM-3, owner 2026-10-27).
+        self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" visible = "[And( EqualTo_CFixedPoint( '
+                      'State.MakeScope.ScriptValue(\'gm_state_disp_listed\'), \'(CFixedPoint)1\' ), NotEqualTo_CFixedPoint( '
+                      'State.MakeScope.ScriptValue(\'gm_status_code\'), \'(CFixedPoint)4\' ) )]" }', g)
         self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" visible = "[EqualTo_CFixedPoint( '
-                      'State.MakeScope.ScriptValue(\'gm_state_disp_listed\'), \'(CFixedPoint)1\' )]" }', g)
+                      'State.MakeScope.ScriptValue(\'gm_status_code\'), \'(CFixedPoint)4\' )]" }', g)
 
     def _shown_text(self):
         """The widget and the loc of every key it renders, followed through
@@ -1756,8 +1910,7 @@ class LocFixTests(unittest.TestCase):
 class FlavourTests(unittest.TestCase):
     def test_dispatch(self):
         body = squash(block(read(ON_ACTIONS), "monument_events_on_action"))
-        self.assertIn("trigger = { gm_system_enabled = yes "
-                      "NOT = { gm_policy_is = { P = mothballed STANDARD = no } } }", body)
+        self.assertIn("trigger = { gm_system_enabled = yes }", body)
         # Every monument of the dedication, those beside another too (ageing
         # spec 2026-10-16 §5; AnniversaryAgeTests).
         for d in DEDICATIONS:
@@ -2920,15 +3073,18 @@ class NameTests(unittest.TestCase):
 POLICY_EFFECTS = "common/scripted_effects/gm_policy_effects.txt"
 POLICY_TRIGGERS = "common/scripted_triggers/gm_policy_triggers.txt"
 MODIFIER_TYPES = "common/modifier_type_definitions/mod_entity_modifier_types.txt"
-# policy -> its factor on each per-step value (§5), and gm_policy_upkeep's multiplier.
+# policy -> its factor on each per-step value (policy spec 2026-10-23 § 3). Cultural
+# Promotion is the default: a country that never chose one reads as it (STANDARD = yes).
 POLICIES = {
-    "standard": {"standing": 1, "regime": 1, "tourism": 1, "local": 1, "upkeep": 0},
-    "open": {"standing": 1, "regime": 1, "tourism": 1.5, "local": 1, "upkeep": 1},
-    "ceremonial": {"standing": 1, "regime": 1.5, "tourism": 0.5, "local": 1, "upkeep": 0},
-    "mothballed": {"standing": 0.5, "regime": 1, "tourism": 0.5, "local": 0.5, "upkeep": -1},
+    "open": {"tourism": 1.5, "culture": 1, "prestige": 1},
+    "ceremonial": {"tourism": 1, "culture": 1, "prestige": 1},
+    # Pull with the Cultural Hegemony rule on, prestige with it off (spec § 4.3).
+    "culture": {"tourism": 1, "culture": 1.5, "prestige": 1.5},
+    "education": {"tourism": 1, "culture": 1, "prestige": 1},
 }
-FACTOR_VALUES = {"standing": "gm_policy_factor_standing", "regime": "gm_policy_factor_regime",
-                 "tourism": "gm_policy_factor_tourism", "local": "gm_policy_factor_local"}
+DEFAULT_POLICY = "culture"
+FACTOR_VALUES = {"tourism": "gm_policy_factor_tourism", "culture": "gm_policy_factor_culture",
+                 "prestige": "gm_policy_factor_prestige"}
 
 
 def _policy_value(body, policy):
@@ -2956,16 +3112,12 @@ class PolicyTests(unittest.TestCase):
                 self.assertEqual(_policy_value(body, policy), factors[what], f"{policy} {what}")
 
     def test_upkeep_is_on_the_building(self):
-        """The maintenance input is level_scaled, which throughput does not
-        touch, so the policy scales the building's construction input (as the
-        engine's pm_retooling does), on the monument only."""
+        """No policy changes upkeep now (policy spec 2026-10-23 § 5); the two
+        old policy modifiers stay defined only so the pulse removes them from
+        older saves."""
         mods = read(MODIFIERS)
-        for policy, factors in POLICIES.items():
-            body = block(mods, f"gm_policy_upkeep_{policy}")
-            if factors["upkeep"] == 0:
-                self.assertIsNone(body, policy)
-                continue
-            self.assertAlmostEqual(number(body, "goods_input_construction_mult"), factors["upkeep"] * 0.5, msg=policy)
+        for old in ("gm_policy_upkeep_open", "gm_policy_upkeep_mothballed"):
+            self.assertIsNotNone(block(mods, old), old)
         self.assertNotIn("building_grand_monument_throughput_add", strip_comments(mods))
         local = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
         self.assertIn("b:building_grand_monument ?= { remove_modifier = gm_upkeep remove_modifier = gm_policy_upkeep_open "
@@ -2980,7 +3132,7 @@ class PolicyTests(unittest.TestCase):
             body = squash(block(sguis, f"gm_policy_{policy}_sgui"))
             self.assertIsNotNone(body, policy)
             self.assertIn(f"NOT = {{ gm_policy_is = {{ P = {policy} STANDARD = "
-                          f"{'yes' if policy == 'standard' else 'no'} }} }}", body)
+                          f"{'yes' if policy == DEFAULT_POLICY else 'no'} }} }}", body)
             self.assertIn("gm_policy_can_change = yes", body)
             self.assertIn(f"custom_tooltip = {{ text = gm_policy_{policy}_effect_tt gm_policy_set = {{ P = {policy} }} }}",
                           body)
@@ -2988,6 +3140,15 @@ class PolicyTests(unittest.TestCase):
             for key in (f"gm_policy_{policy}", f"gm_policy_effects_{policy}", f"gm_button_policy_{policy}",
                         f"gm_button_policy_{policy}_tooltip", f"gm_policy_{policy}_effect_tt"):
                 self.assertIn(key, loc(), key)
+        # Cultural Promotion raises pull with Cultural Hegemony on, prestige with it off (spec § 4.3).
+        culture = squash(block(sguis, "gm_policy_culture_sgui"))
+        self.assertIn("if = { limit = { has_game_rule = cultural_hegemony_enabled } custom_tooltip = "
+                      "{ text = gm_policy_culture_effect_tt gm_policy_set = { P = culture } } } else = "
+                      "{ custom_tooltip = { text = gm_policy_culture_prestige_effect_tt gm_policy_set = "
+                      "{ P = culture } } }", culture)
+        self.assertIn("gm_policy_culture_prestige_effect_tt", loc())
+        for gone in ("standard", "mothballed"):
+            self.assertIsNone(block(sguis, f"gm_policy_{gone}_sgui"), gone)
         setter = squash(block(self.e, "gm_policy_set"))
         self.assertIn("has_variable = gm_policy_chosen } set_variable = { name = gm_policy_cooldown value = yes "
                       "months = 60 }", setter)
@@ -2996,19 +3157,190 @@ class PolicyTests(unittest.TestCase):
                          "NOT = { has_variable = gm_policy_cooldown }")
 
     def test_the_ai(self):
+        # Policy spec 2026-10-23 § 7: no policy saves money, so nothing to mothball in a crisis.
         ai = squash(block(self.e, "gm_policy_ai_choose"))
-        for s_ in ("is_ai = yes", "month = 0", "gm_policy_can_change = yes"):
+        for s_ in ("is_ai = yes", "month = 0", "gm_policy_can_change = yes",
+                   "set_variable = { name = gm_policy_pick value = flag:culture }",
+                   "government_legitimacy < 40", "gm_policy_ceremonial_input_if_chosen >= 10",
+                   "literacy_rate < 0.5", "has_building = building_tourism_industry"):
             self.assertIn(s_, ai)
-        self.assertLess(ai.find("flag:mothballed"), ai.find("flag:ceremonial"))
-        self.assertLess(ai.find("flag:ceremonial"), ai.find("flag:open"))
+        order = [ai.find(f"value = flag:{p} }}") for p in ("ceremonial", "open", "education")]
+        self.assertNotIn(-1, order)
+        self.assertEqual(order, sorted(order))
+        self.assertNotIn("scaled_debt", ai)
+        self.assertNotIn("gm_country_hard_times", ai)
         for policy in POLICIES:
-            self.assertIn(f"gm_policy_ai_apply = {{ P = {policy} ", ai, policy)
+            self.assertIn(f"gm_policy_ai_apply = {{ P = {policy} STANDARD = "
+                          f"{'yes' if policy == DEFAULT_POLICY else 'no'} }}", ai, policy)
+        share = squash(block(self.values, "gm_policy_ceremonial_input_if_chosen"))
+        self.assertIn("var:gm_g_venues multiply = gm_policy_ceremonial_share", share)
+        self.assertIn("var:gm_g_regime", share)
         self.assertIn("gm_policy_ai_choose = yes", squash(block(read(EFFECTS), "gm_country_monthly")))
 
-    def test_anniversaries(self):
-        body = squash(block(read(ON_ACTIONS), "monument_events_on_action"))
-        self.assertIn("800 = { modifier = { if = { limit = { gm_policy_is = { P = open STANDARD = no } } "
-                      "multiply = 0.5 } } }", body)
+    def test_ceremonial_adds_before_the_curve(self):
+        # Owner, 2026-10-23: under Ceremonial legitimacy counts regime grandeur as
+        # normal plus a quarter of every monument's, the Leader's authority too.
+        totals = squash(block(read(EFFECTS), "gm_compute_totals"))
+        self.assertIn("set_variable = { name = gm_g_venues value = gm_sum_venues }", totals)
+        self.assertIn("set_variable = { name = gm_g_ceremonial value = gm_policy_ceremonial_grandeur }", totals)
+        for g in ("regime", "leader"):
+            self.assertIn(f"set_variable = {{ name = gm_g_{g}_in value = {{ value = var:gm_g_{g} "
+                          f"add = var:gm_g_ceremonial }} }}", totals, g)
+            self.assertLess(totals.find(f"name = gm_g_{g}_in "), totals.find(f"IN = gm_g_{g}_in "), g)
+        self.assertLess(totals.find("name = gm_g_ceremonial "), totals.find("name = gm_g_regime_in "))
+        self.assertIn("gm_set_steps = { IN = gm_g_regime_in OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", totals)
+        self.assertIn("gm_set_steps = { IN = gm_g_leader_in OUT = gm_s_leader NEXT = gm_n_leader F = 5 }", totals)
+        self.assertNotIn("gm_policy_factor_regime", totals)
+        self.assertIsNone(block(self.values, "gm_policy_factor_regime"))
+        self.assertRegex(strip_comments(self.values), r"(?m)^gm_policy_ceremonial_share = 0\.25\s*$")
+        share = squash(block(self.values, "gm_policy_ceremonial_grandeur"))
+        self.assertEqual(share, "value = 0 if = { limit = { gm_policy_is = { P = ceremonial STANDARD = no } "
+                                "has_variable = gm_g_venues } value = var:gm_g_venues "
+                                "multiply = gm_policy_ceremonial_share }")
+
+    def test_venues(self):
+        # Contested monuments are out; heritage and held trophies are in (plan Review Focus 4).
+        trig = squash(block(read(TRIGGERS), "gm_state_counts_venue"))
+        self.assertIn("has_building = building_grand_monument", trig)
+        self.assertIn("gm_state_is_contested = no", trig)
+        self.assertIn("OR = { gm_state_is_dedicated = yes gm_state_is_heritage = yes }", trig)
+        mon = squash(block(read(MON_TRIGGERS), "gm_mon_counts_venue"))
+        self.assertIn("gm_mon_is_contested = no", mon)
+        self.assertIn("OR = { has_variable = gm_tr_dedication gm_mon_is_heritage = yes }", mon)
+        venues = squash(block(self.values, "gm_sum_venues"))
+        self.assertIn("gm_state_counts_venue = yes", venues)
+        self.assertIn("gm_mon_counts_venue = yes", venues)
+        self.assertIn("add = gm_tr_disp_held_grandeur", venues)
+
+    def test_rows_read_the_real_input(self):
+        # A country with no regime monuments under Ceremonial: the bar and hover
+        # read the curve's input, not regime grandeur alone (plan Review Focus 3).
+        for frac, var in (("gm_disp_frac_legitimacy", "gm_g_regime_in"), ("gm_disp_frac_leader", "gm_g_leader_in")):
+            self.assertIn(f"value = var:{var} ", squash(block(self.values, frac)), frac)
+        for key in ("gm_je_tt_legitimacy", "gm_je_tt_leader"):
+            self.assertIn("gm_display_g_ceremonial", loc()[key], key)
+
+    def test_education_only_under_its_policy(self):
+        # Switching away leaves no education behind (plan Review Focus 2).
+        totals = squash(block(read(EFFECTS), "gm_compute_totals"))
+        self.assertIn("if = { limit = { gm_policy_is = { P = education STANDARD = no } } gm_set_steps_lin_open = "
+                      "{ IN = gm_g_education OUT = gm_s_education NEXT = gm_n_education WIDTH = gm_w_education "
+                      "F = 10 } } else = { set_variable = { name = gm_s_education value = 0 } }", totals)
+        self.assertIn("gm_add_national = { NAME = gm_national_education VAR = gm_s_education }",
+                      squash(block(read(EFFECTS), "gm_apply_national_modifiers")))
+        self.assertIn("remove_modifier = gm_national_education",
+                      squash(block(read(EFFECTS), "gm_remove_national_modifiers")))
+
+    def test_education_self_check(self):
+        # Spec § 4.4: a JE-held state_* field reaching the states is unverified.
+        check = squash(block(self.e, "gm_policy_education_self_check"))
+        self.assertIn("has_global_variable = gm_education_self_checked", check)
+        self.assertIn("TE_SELF_CHECK OK gm_education_reaches_states", check)
+        self.assertIn("TE_SELF_CHECK BROKEN gm_education_reaches_states", check)
+        self.assertIn("capital.modifier:state_education_access_add", check)
+        self.assertIn("var:gm_s_education >= 1", check, "no OK on nothing")
+        monthly = squash(block(read(EFFECTS), "gm_country_monthly"))
+        self.assertLess(monthly.find("gm_country_refresh = yes"), monthly.find("gm_policy_education_self_check = yes"))
+        # The base is taken only while the modifier is off: under Public Education
+        # with under a step it is already on, so the check stands down instead
+        # (final review I2). A capital that moved since the base skips the check.
+        stand_down = ("else_if = { limit = { gm_policy_is = { P = education STANDARD = no } } "
+                      "gm_policy_education_self_check_reset = yes }")
+        self.assertIn(stand_down, check)
+        self.assertLess(check.find(stand_down), check.find("set_variable = { name = gm_edu_check_base "))
+        self.assertIn("capital = { this = root.var:gm_edu_check_capital }", check)
+        self.assertIn("set_variable = { name = gm_edu_check_capital value = capital }", check)
+
+    def test_cultural_promotion_follows_the_rule(self):
+        # With the rule on, prestige never moves by policy; with it off, pull never does (plan Review Focus 5).
+        culture = squash(block(self.values, "gm_policy_factor_culture"))
+        prestige = squash(block(self.values, "gm_policy_factor_prestige"))
+        self.assertIn("has_game_rule = cultural_hegemony_enabled", culture)
+        self.assertNotIn("NOT = { has_game_rule", culture)
+        self.assertIn("NOT = { has_game_rule = cultural_hegemony_enabled }", prestige)
+        totals = squash(block(read(EFFECTS), "gm_compute_totals"))
+        self.assertIn("gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_prestige_standing }", totals)
+        self.assertIn("gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_culture_standing }", totals)
+        # The standing variants start from the rule-bound factors (HistoryDedicationTests).
+        self.assertTrue(squash(block(self.values, "gm_policy_factor_culture_standing"))
+                        .startswith("value = gm_policy_factor_culture "))
+        self.assertTrue(squash(block(self.values, "gm_policy_factor_prestige_standing"))
+                        .startswith("value = gm_policy_factor_prestige "))
+        sig = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps_lin_open"))
+        self.assertIn("gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_culture }", sig)
+
+    def test_migration_drops_old_flags_only(self):
+        body = squash(block(self.e, "gm_policy_migrate"))
+        for old in ("mothballed", "standard"):
+            self.assertIn(f"var:gm_policy = flag:{old}", body)
+        self.assertIn("remove_variable = gm_policy", body)
+        # An older save in its five-year wait keeps waiting (plan Review Focus 1).
+        for kept in ("gm_policy_cooldown", "gm_policy_chosen"):
+            self.assertNotIn(kept, body)
+        self.assertTrue(squash(strip_comments(block(read(EFFECTS), "gm_country_refresh")))
+                        .startswith("gm_policy_migrate = yes"))
+
+    def test_no_policy_reads_the_old_keys(self):
+        for path in ROOT.glob("common/**/*.txt"):
+            text = strip_comments(read(path.relative_to(ROOT).as_posix()))
+            if path.name == "gm_policy_effects.txt":
+                text = text.replace(block(text, "gm_policy_migrate"), "")
+            if path.name == "gm_policy_triggers.txt":
+                text = text.replace(block(text, "gm_policy_is"), "")
+            self.assertNotRegex(text, r"P = (mothballed|standard)\b|flag:(mothballed|standard)\b", str(path))
+            self.assertNotRegex(text, r"gm_policy_factor_(standing|local|age|upkeep|regime)\b", str(path))
+        # Loc and GUI too: a deleted script value read there renders as 0 (mid-branch review).
+        for path in list(ROOT.glob("localization/english/*.yml")) + list(ROOT.glob("gui/**/*.gui")):
+            text = path.read_text(encoding="utf-8-sig")
+            self.assertNotRegex(text, r"gm_policy_factor_(standing|local|age|upkeep|regime)\b", str(path))
+
+    def test_monument_loc_reads_only_defined_script_values(self):
+        # A ScriptValue('x') naming no script value renders as 0 and logs an error.
+        import json
+        defined = set()
+        for path in ROOT.glob("common/script_values/*.txt"):
+            defined |= set(re.findall(r"(?m)^([A-Za-z_]\w*)\s*=", read(path.relative_to(ROOT).as_posix())))
+        defined |= set(json.loads((ROOT / "vanilla_parsed/common/script_values.json").read_text(encoding="utf-8")))
+        missing = sorted({(key, name) for key, text in loc().items()
+                          if key.startswith(("gm_", "monument_events", "te_state_gm"))
+                          for name in re.findall(r"ScriptValue\('(\w+)'\)", text) if name not in defined})
+        self.assertEqual(missing, [])
+
+    def test_an_unmigrated_save_reads_as_the_default(self):
+        # Until the first monthly pulse migrates it, an older save's Mothballed or
+        # Standard reads as Cultural Promotion, so its button isn't valid and
+        # can't start a wait for nothing (mid-branch review, spec § 6).
+        body = squash(block(read(POLICY_TRIGGERS), "gm_policy_is"))
+        self.assertIn("always = $STANDARD$ OR = { NOT = { has_variable = gm_policy } var:gm_policy = flag:standard "
+                      "var:gm_policy = flag:mothballed }", body)
+
+    def test_hovers_name_cultural_promotions_factor(self):
+        # The per-step figures don't add up to the headline without the x1.5 (mid-branch review).
+        L = loc()
+        # The monuments' own pull takes the factor with To History at half;
+        # Antiquity's takes it whole (policy spec 2026-10-23 § 4.5).
+        self.assertIn("'gm_policy_culture_standing_tt_line'", L["gm_je_tt_culture"])
+        self.assertIn("ScriptValue('gm_policy_factor_culture_standing')", L["gm_je_tt_culture"])
+        self.assertIn("ScriptValue('gm_policy_factor_culture_standing')", L["gm_policy_culture_standing_tt_line"])
+        self.assertIn("'gm_policy_culture_tt_line'", L["gm_je_tt_sig_antiquity"])
+        self.assertIn("ScriptValue('gm_policy_factor_culture')", L["gm_je_tt_sig_antiquity"])
+        for key in ("gm_je_tt_prestige", "gm_je_tt_prestige_pct"):
+            self.assertIn("'gm_policy_prestige_tt_line'", L[key], key)
+            self.assertIn("ScriptValue('gm_policy_factor_prestige')", L[key], key)
+        self.assertIn("ScriptValue('gm_policy_factor_prestige_standing')", L["gm_policy_prestige_tt_line"])
+        self.assertIn("gm_step_prestige_pct", L["monument_events.2.common_tt"])
+
+    def test_anniversaries_ignore_the_policy(self):
+        # Owner, 2026-10-23: Open no longer makes anniversaries more frequent.
+        self.assertNotIn("gm_policy_is", squash(block(read(ON_ACTIONS), "monument_events_on_action")))
+
+    def test_signature_local_steps_take_a_factor(self):
+        # Open's x1.5 covers the two signatures whose local effect is tourism (spec § 4.1).
+        monthly = squash(block(read(EFFECTS), "gm_state_monthly"))
+        self.assertIn("gm_state_sig_local_steps_one = { SIG = antiquity FACTOR = gm_policy_factor_tourism }", monthly)
+        self.assertIn("gm_state_sig_local_steps_one = { SIG = first_emperor FACTOR = gm_policy_factor_tourism }",
+                      monthly)
+        self.assertIn("gm_state_sig_local_steps_one = { SIG = archive FACTOR = 1 }", monthly)
 
 
 
@@ -3343,6 +3675,77 @@ PICTURES = {
     1000085: ("landmark_villa_of_the_papyri", "hall", None),
     1000086: ("landmark_tomb_of_alexander", "mausoleum", None),
     1000087: ("landmark_pompeii", "forum", None),
+    1000088: ("landmark_walhalla", "hall_of_fame", None),
+    1000089: ("landmark_bunker_hill_monument", "obelisk", None),
+    1000090: ("landmark_obelisk_of_the_second_of_may", "obelisk", None),
+    1000091: ("landmark_muhammad_ali_mosque", "faith", None),
+    1000092: ("landmark_nelsons_column", "column", None),
+    1000093: ("landmark_washington_monument", "obelisk", None),
+    1000094: ("landmark_pyramids_of_giza", "pyramid", None),
+    1000095: ("landmark_petra", "rock_cut", None),
+    1000096: ("landmark_moscow_kremlin", "tower", None),
+    1000097: ("landmark_fasil_ghebbi", "hall", None),
+    1000098: ("landmark_valley_of_the_temples", "pantheon", None),
+    1000099: ("landmark_borobudur", "gate", None),
+    1000100: ("landmark_old_city_of_sanaa", "hall", None),
+    1000101: ("landmark_shibam", "tower", None),
+    1000102: ("landmark_amphitheatre_of_el_djem", "forum", None),
+    1000103: ("landmark_abu_simbel", "rock_cut", None),
+    1000104: ("landmark_temple_of_seti_abydos", "colonnade", None),
+    1000105: ("landmark_pyramids_of_meroe", "pyramid", None),
+    1000106: ("landmark_windsor_castle", "tower", None),
+    1000107: ("landmark_pont_du_gard", "arch", None),
+    1000108: ("landmark_palais_des_papes", "hall", None),
+    1000109: ("landmark_mont_saint_michel", "tower", None),
+    1000110: ("landmark_chateau_de_chambord", "hall", None),
+    1000111: ("landmark_jeronimos_monastery", "hall", None),
+    1000112: ("landmark_alhambra", "hall", None),
+    1000113: ("landmark_mezquita_of_cordoba", "hall", None),
+    1000114: ("landmark_shore_temple", "pillar", None),
+    1000115: ("landmark_charminar", "gate", None),
+    1000116: ("landmark_gwalior_fort", "gate", None),
+    1000117: ("landmark_meteora", "memorial_church", None),
+    1000118: ("landmark_citadel_of_aleppo", "gate", None),
+    1000119: ("landmark_naqsh_e_jahan_square", "hall", None),
+    1000120: ("landmark_buddhas_of_bamiyan", "statue", None),
+    1000121: ("landmark_musalla_of_herat", "tower", None),
+    1000122: ("landmark_grand_palace_bangkok", "hall", None),
+    1000123: ("landmark_changdeokgung", "hall", None),
+    1000124: ("landmark_bulguksa", "pagoda", None),
+    1000125: ("landmark_kinkaku_ji", "pagoda", None),
+    1000126: ("landmark_todai_ji", "hall", None),
+    1000127: ("landmark_itsukushima_shrine", "gate", None),
+    1000128: ("landmark_potala_palace", "hall", None),
+    1000129: ("landmark_swayambhunath", "pagoda", None),
+    1000130: ("landmark_leshan_giant_buddha", "statue", None),
+    1000131: ("landmark_temple_of_confucius", "hall", None),
+    1000132: ("landmark_yungang_grottoes", "rock_cut", None),
+    1000133: ("landmark_humble_administrators_garden", "pagoda", None),
+    1000134: ("landmark_longmen_grottoes", "rock_cut", None),
+    1000135: ("landmark_registan", "gate", None),
+    1000136: ("landmark_itchan_kala", "gate", None),
+    1000137: ("landmark_mausoleum_of_sultan_sanjar", "mausoleum", None),
+    1000138: ("landmark_kazan_kremlin", "tower", None),
+    1000139: ("landmark_saint_sophia_kiev", "memorial_church", None),
+    1000140: ("landmark_diocletians_palace", "colonnade", None),
+    1000141: ("landmark_marksburg", "tower", None),
+    1000142: ("landmark_aachen_cathedral", "hall", None),
+    1000143: ("landmark_basilica_of_saint_francis", "hall", None),
+    1000144: ("landmark_walls_of_tallinn", "gate", None),
+    1000145: ("landmark_ephesus", "colonnade", None),
+    1000146: ("landmark_tikal", "pyramid", None),
+    1000147: ("landmark_chichen_itza", "pyramid", None),
+    1000148: ("landmark_teotihuacan", "pyramid", None),
+    1000149: ("landmark_monte_alban", "pyramid", None),
+    1000150: ("landmark_leptis_magna", "forum", None),
+    1000151: ("landmark_cyrene", "pantheon", None),
+    1000152: ("landmark_merida_theatre", "forum", None),
+    1000153: ("landmark_chogha_zanbil", "pyramid", None),
+    1000154: ("landmark_hattusa", "gate", None),
+    1000155: ("landmark_mount_nemrut", "statue", None),
+    1000156: ("landmark_mogao_caves", "rock_cut", None),
+    1000157: ("landmark_khajuraho", "pillar", None),
+    1000158: ("landmark_hampi", "pillar", None),
 }
 # Codes of pairs no monument can reach any more (a retired form or style).
 RETIRED_PICTURES = set()
@@ -3440,7 +3843,84 @@ TROPHY_PICTURES = {
     2000085: "trophy_villa_of_the_papyri",
     2000086: "trophy_tomb_of_alexander",
     2000087: "trophy_pompeii",
+    2000088: "trophy_walhalla",
+    2000089: "trophy_bunker_hill_monument",
+    2000090: "trophy_obelisk_of_the_second_of_may",
+    2000091: "trophy_muhammad_ali_mosque",
+    2000092: "trophy_nelsons_column",
+    2000093: "trophy_washington_monument",
+    2000094: "trophy_pyramids_of_giza",
+    2000095: "trophy_petra",
+    2000096: "trophy_moscow_kremlin",
+    2000097: "trophy_fasil_ghebbi",
+    2000098: "trophy_valley_of_the_temples",
+    2000099: "trophy_borobudur",
+    2000100: "trophy_old_city_of_sanaa",
+    2000101: "trophy_shibam",
+    2000102: "trophy_amphitheatre_of_el_djem",
+    2000103: "trophy_abu_simbel",
+    2000104: "trophy_temple_of_seti_abydos",
+    2000105: "trophy_pyramids_of_meroe",
+    2000106: "trophy_windsor_castle",
+    2000107: "trophy_pont_du_gard",
+    2000108: "trophy_palais_des_papes",
+    2000109: "trophy_mont_saint_michel",
+    2000110: "trophy_chateau_de_chambord",
+    2000111: "trophy_jeronimos_monastery",
+    2000112: "trophy_alhambra",
+    2000113: "trophy_mezquita_of_cordoba",
+    2000114: "trophy_shore_temple",
+    2000115: "trophy_charminar",
+    2000116: "trophy_gwalior_fort",
+    2000117: "trophy_meteora",
+    2000118: "trophy_citadel_of_aleppo",
+    2000119: "trophy_naqsh_e_jahan_square",
+    2000120: "trophy_buddhas_of_bamiyan",
+    2000121: "trophy_musalla_of_herat",
+    2000122: "trophy_grand_palace_bangkok",
+    2000123: "trophy_changdeokgung",
+    2000124: "trophy_bulguksa",
+    2000125: "trophy_kinkaku_ji",
+    2000126: "trophy_todai_ji",
+    2000127: "trophy_itsukushima_shrine",
+    2000128: "trophy_potala_palace",
+    2000129: "trophy_swayambhunath",
+    2000130: "trophy_leshan_giant_buddha",
+    2000131: "trophy_temple_of_confucius",
+    2000132: "trophy_yungang_grottoes",
+    2000133: "trophy_humble_administrators_garden",
+    2000134: "trophy_longmen_grottoes",
+    2000135: "trophy_registan",
+    2000136: "trophy_itchan_kala",
+    2000137: "trophy_mausoleum_of_sultan_sanjar",
+    2000138: "trophy_kazan_kremlin",
+    2000139: "trophy_saint_sophia_kiev",
+    2000140: "trophy_diocletians_palace",
+    2000141: "trophy_marksburg",
+    2000142: "trophy_aachen_cathedral",
+    2000143: "trophy_basilica_of_saint_francis",
+    2000144: "trophy_walls_of_tallinn",
+    2000145: "trophy_ephesus",
+    2000146: "trophy_tikal",
+    2000147: "trophy_chichen_itza",
+    2000148: "trophy_teotihuacan",
+    2000149: "trophy_monte_alban",
+    2000150: "trophy_leptis_magna",
+    2000151: "trophy_cyrene",
+    2000152: "trophy_merida_theatre",
+    2000153: "trophy_chogha_zanbil",
+    2000154: "trophy_hattusa",
+    2000155: "trophy_mount_nemrut",
+    2000156: "trophy_mogao_caves",
+    2000157: "trophy_khajuraho",
+    2000158: "trophy_hampi",
 }
+
+# The landmarks still on a stand-in picture (tourism heritage spec 2026-10-23
+# § 10): no PICTURES code of their own yet, so they show their stand-in pair's.
+# Kept in step both ways by LandmarkPictureTests, so none is forgotten; the art
+# backlog (docs/systems/grand_monuments_gui_icons.md) lists the same keys.
+PLACEHOLDER_PICTURES = ()
 
 
 def _frozen_problems(pictures, retired, reachable):
@@ -3481,7 +3961,7 @@ class PictureTests(unittest.TestCase):
         cls.body = squash(block(cls.e, "gm_picture_from_look"))
 
     def test_the_table(self):
-        self.assertEqual(len(PICTURES), 167)
+        self.assertEqual(len(PICTURES), 238)
         # Every reachable pair has a picture.
         pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
         for form, skins in FORMS.items():
@@ -3542,7 +4022,7 @@ class PictureTests(unittest.TestCase):
                             f"{'yes' if skin == 'generic' else 'no'} CODE = {code} }}")
         codes = sorted(PICTURES)
         expected += [f"gm_state_picture_skin = {{ SKIN = {PICTURES[c][0]} GENERIC = no CODE = {c} }}"
-                     for c in codes if PICTURES[c][1] == "faith"]
+                     for c in codes if PICTURES[c][1] == "faith" and c < LANDMARK_CODE_BASE]
         expected += [f"gm_state_picture_pair = {{ SKIN = {PICTURES[c][0]} GENERIC = "
                      f"{'yes' if PICTURES[c][0] == 'generic' else 'no'} FORM = {PICTURES[c][1]} CODE = {c} }}"
                      for c in codes if c != 1 and PICTURES[c][2] is None and PICTURES[c][1] != "faith"
@@ -3652,24 +4132,29 @@ class LandmarkTests(unittest.TestCase):
     def test_the_table(self):
         keys = [lm.key for lm in LANDMARKS]
         self.assertEqual(len(keys), len(set(keys)))
-        # One standing monument per state; an unplaced row shares its origin
-        # state with whatever stands there (loot spec §2.2).
-        states = [lm.state for lm in PLACED_LANDMARKS if not lm.beside]
+        # One standing monument per state, a state being a region's part an
+        # owner holds (Yemen's Sana'a and Shibam, Gonder's Aksum and Gondar); an
+        # unplaced row shares its origin state with whatever stands there (loot
+        # spec §2.2).
+        states = [(lm.state, lm.tag) for lm in PLACED_LANDMARKS if not lm.beside]
         self.assertEqual(len(states), len(set(states)),
                          "one landmark per state (§2); a second is beside=True, after the first")
         for i, lm in enumerate(PLACED_LANDMARKS):
             if lm.beside:
-                self.assertTrue(any(o.state == lm.state and not o.beside for o in PLACED_LANDMARKS[:i]),
+                self.assertTrue(any((o.state, o.tag) == (lm.state, lm.tag) and not o.beside
+                                    for o in PLACED_LANDMARKS[:i]),
                                 f"{lm.key}: seeded beside a landmark that is seeded first")
         for lm in LANDMARKS:
-            self.assertIn(lm.dedication, BY_KEY, lm.key)
+            self.assertTrue(lm.dedication in BY_KEY or lm.dedication == HISTORIC, lm.key)
             # A shrine's form is its faith's own building.
             self.assertTrue(lm.form in FORMS or lm.form in BUILDING_FORMS.values()
                             or (lm.form == "faith" and lm.dedication == "religious"), lm.key)
             if lm.form in BUILDING_FORMS.values():
                 self.assertEqual(BUILDING_FORMS[lm.dedication], lm.form, f"{lm.key}: a building's own form")
             if lm.placed:
-                self.assertGreaterEqual(lm.level, 5, lm.key)
+                # A To History landmark is sized by the base appeal it takes, two
+                # steps at least (tourism heritage spec 2026-10-23 § 6.2).
+                self.assertGreaterEqual(lm.level, 3 if lm.dedication == HISTORIC else 5, lm.key)
             elif lm.year:
                 # A historical opportunity's landmark: its level is the opportunity's target.
                 self.assertIn(lm.level, (5, 10), lm.key)
@@ -3677,7 +4162,7 @@ class LandmarkTests(unittest.TestCase):
             elif lm.buried:
                 # A buried site (issue #939) is placed by an excavation, whoever owns the ground then:
                 # a level of its own, no owner of its own.
-                self.assertGreaterEqual(lm.level, 5, lm.key)
+                self.assertGreaterEqual(lm.level, 3 if lm.dedication == HISTORIC else 5, lm.key)
                 self.assertIsNone(lm.tag, f"{lm.key}: a buried site has the owner who digs it")
             else:
                 self.assertIsNone(lm.level, f"{lm.key}: an unplaced landmark's levels are its trophy's")
@@ -3697,8 +4182,11 @@ class LandmarkTests(unittest.TestCase):
         self.assertIn("on_game_started_after_lobby = { on_actions = { gm_landmarks_on_game_started_after_lobby } }",
                       squash(strip_comments(on)))
         body = squash(block(on, "gm_landmarks_on_game_started_after_lobby"))
+        # gm_landmarks_seeded_2: the To History landmarks are in this game, so
+        # base appeal gives up their heritage (tourism heritage spec 2026-10-23 § 6.3).
         self.assertEqual(body, "effect = { if = { limit = { gm_system_enabled = yes NOT = { has_global_variable = "
                                "gm_landmarks_seeded } } set_global_variable = gm_landmarks_seeded "
+                               "set_global_variable = gm_landmarks_seeded_2 "
                                "gm_seed_landmarks = yes gm_seed_trophies = yes gm_monument_self_check = yes } }")
 
     def test_a_call_per_row(self):
@@ -3867,6 +4355,17 @@ class LandmarkPictureTests(unittest.TestCase):
                 lm = LANDMARKS[code - LANDMARK_CODE_BASE - 1]
                 self.assertEqual((skin, form, key), (f"landmark_{lm.key}", lm.form, None), code)
 
+    def test_placeholders_are_listed(self):
+        """A landmark with no picture of its own is in PLACEHOLDER_PICTURES, and
+        one in it has none (spec 2026-10-23 § 10), so the list can't go stale."""
+        own = {LANDMARKS[c - LANDMARK_CODE_BASE - 1].key for c in PICTURES if c >= LANDMARK_CODE_BASE}
+        on_stand_in = [lm.key for lm in LANDMARKS if lm.key not in own]
+        self.assertEqual(list(PLACEHOLDER_PICTURES), on_stand_in, "in LANDMARKS order")
+        backlog = read("docs/systems/grand_monuments_gui_icons.md")
+        for key in PLACEHOLDER_PICTURES:
+            self.assertIn(f"`landmark_{key}__", backlog, f"{key}: a line in the art backlog")
+        print(f"\n{len(PLACEHOLDER_PICTURES)} landmarks on stand-in pictures")
+
     def test_every_stand_in_has_a_picture(self):
         pairs = {(s, f) for s, f, _ in PICTURES.values()}
         for lm in LANDMARKS:
@@ -3883,6 +4382,150 @@ class LandmarkPictureTests(unittest.TestCase):
         self.assertEqual(squash(block(e, "gm_state_picture_landmark")),
                          "if = { limit = { has_variable = gm_landmark var:gm_landmark = flag:$KEY$ } "
                          "set_variable = { name = gm_picture_code value = $CODE$ } }")
+
+
+
+class HistoryDedicationTests(unittest.TestCase):
+    """To History (tourism heritage spec 2026-10-23 § 7): tourism, prestige and
+    cultural pull and nothing else; never offered by the ceremony; timeless, so
+    never contested and never pulled down; every monument policy counts it at
+    half (policy spec 2026-10-23 § 4.5)."""
+
+    PM = "pm_monument_historic"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = read(VALUES)
+        cls.e = read(EFFECTS)
+
+    def test_the_method(self):
+        body = squash(block(read(PMS), self.PM))
+        self.assertIn("unlocking_production_methods = { pm_monument_undedicated pm_monument_historic }", body,
+                      "the ratchet: chosen once")
+        self.assertIn("building_employment_laborers_add = 200 building_employment_clerks_add = 50", body)
+        self.assertNotIn("unlocking_technologies", body, "a landmark's method can't be switched off by the engine")
+        for forbidden in ("country_modifiers", "state_modifiers", "replacement_if_valid", "is_default"):
+            self.assertNotIn(forbidden, body)
+        pmg = squash(block(read(PMG), "pmg_monument_dedication"))
+        self.assertTrue(pmg.endswith("pm_monument_athletic pm_monument_historic }"), pmg[-80:])
+        L = loc()
+        self.assertEqual(L[self.PM], "To History")
+        self.assertIn("#R The dedication is permanent.#!", L[f"{self.PM}_desc"])
+
+    def test_no_ceremony_anniversary_or_opportunity_offers_it(self):
+        # Call 6: a player-built monument would get pure tourism and prestige with no politics.
+        for rel in (EVENTS, ON_ACTIONS, "common/scripted_triggers/gm_commission_triggers.txt",
+                    "common/scripted_effects/gm_commission_effects.txt"):
+            text = strip_comments(read(rel))
+            if rel.endswith("gm_commission_effects.txt"):
+                # Only the restore and its marking, which put a recorded method back.
+                for name in ("gm_state_mark_restore_pm", "gm_state_restore_dedication"):
+                    text = text.replace(block(text, name), "")
+            self.assertNotRegex(text, r"\bhistoric\b", rel)
+
+    def test_timeless_with_no_politics(self):
+        t = read(TRIGGERS)
+        for kind in ("gm_state_kind_regime", "gm_state_kind_ruler", "gm_state_kind_faith"):
+            self.assertNotIn(self.PM, block(t, kind), kind)
+        for ig in IGS:
+            for side in ("approved", "opposed"):
+                self.assertNotIn(self.PM, block(t, f"gm_state_{side}_by_{ig}") or "", f"{side} {ig}")
+                self.assertNotIn("KEY = historic", block(read(MON_TRIGGERS), f"gm_mon_{side}_by_{ig}") or "",
+                                 f"mon {side} {ig}")
+        self.assertIsNone(block(read(MODIFIERS), "gm_local_historic"), "no local effect")
+        self.assertNotIn("KEY = historic", squash(block(self.e, "gm_state_monthly")))
+        self.assertNotIn("historic", squash(block(self.e, "gm_compute_totals")).replace("gm_g_historic", "")
+                         .replace("gm_sum_historic", ""))
+
+    def test_its_records_go_and_come_back(self):
+        # A lost building, a trophy carried off and returned, and a gifted
+        # monument put back on it: each list of dedications names it.
+        lists = (
+            (self.e, "gm_state_record_dedication", "gm_state_record_dedication_one = { KEY = historic }"),
+            (read("common/scripted_effects/gm_commission_effects.txt"), "gm_state_mark_restore_pm",
+             "gm_state_mark_restore_pm_one = { KEY = historic }"),
+            (read("common/scripted_effects/gm_commission_effects.txt"), "gm_state_restore_dedication",
+             "gm_state_restore_dedication_one = { KEY = historic }"),
+            (read("common/scripted_effects/gm_trophy_effects.txt"), "gm_tr_record_dedication",
+             "gm_tr_record_dedication_one = { KEY = historic }"),
+            (read(TRIGGERS), "gm_state_stands_on_dedication",
+             "AND = { var:gm_dedication = flag:historic gm_state_has_pm = { PM = pm_monument_historic } }"),
+            (read(LANDMARK_EFFECTS), "gm_debug_log_landmark", "gm_debug_log_landmark_pm = { KEY = $KEY$ PM = historic }"),
+        )
+        for text, name, line in lists:
+            self.assertIn(line, squash(block(text, name)), name)
+
+    def test_its_name(self):
+        self.assertIn("trigger = { gm_state_has_pm = { PM = pm_monument_historic } } "
+                      "localization_key = pm_monument_historic", squash(block(read(CUSTOM_LOC), "gm_dedication_name")))
+        self.assertIn("trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:historic } "
+                      "localization_key = pm_monument_historic",
+                      squash(block(read("common/customizable_localization/gm_trophy_custom_loc.txt"),
+                                   "gm_tr_dedication_name")))
+
+    def test_every_policy_counts_it_at_half(self):
+        v = self.values
+        self.assertRegex(strip_comments(v), r"(?m)^gm_policy_history_weight = 0\.5\s*$")
+        self.assertEqual(squash(block(v, "gm_policy_history_cut")), "value = 1 subtract = gm_policy_history_weight")
+        # The sum: primaries, those beside another, trophies of one held.
+        hist = squash(block(v, "gm_sum_historic"))
+        self.assertIn("gm_state_counts_standing = yes gm_state_has_pm = { PM = pm_monument_historic } } "
+                      "add = gm_state_primary_grandeur", hist)
+        self.assertIn("gm_mon_counts_standing = yes gm_mon_is = { KEY = historic } } add = gm_mon_grandeur", hist)
+        self.assertIn("variable = gm_trophies_held limit = { gm_mon_is = { KEY = historic } has_variable = "
+                      "gm_tr_grandeur } add = var:gm_tr_grandeur", hist)
+        totals = squash(block(self.e, "gm_compute_totals"))
+        order = [totals.find(f"name = {n} ") for n in ("gm_g_standing", "gm_g_historic", "gm_g_education", "gm_g_venues")]
+        self.assertNotIn(-1, order)
+        self.assertEqual(order, sorted(order), "each read after what it reads")
+        # Ceremonial: half its grandeur in the venues.
+        self.assertTrue(squash(block(v, "gm_sum_venues")).endswith(
+            "if = { limit = { has_variable = gm_g_historic } subtract = { value = var:gm_g_historic "
+            "multiply = gm_policy_history_cut } }"))
+        # Public Education: half its grandeur in the input, which the bar and hover read.
+        self.assertIn("subtract = { value = var:gm_g_historic multiply = gm_policy_history_cut }",
+                      squash(block(v, "gm_sum_education")))
+        self.assertIn("value = var:gm_g_education ", squash(block(v, "gm_disp_frac_education")))
+        self.assertIn("gm_display_g_education", loc()["gm_je_tt_education"])
+        # Open and Cultural Promotion: what the policy adds, on To History's share, at half.
+        cut = ("subtract = {{ value = {f} subtract = 1 multiply = gm_policy_history_cut "
+               "multiply = {h} divide = {g} }}")
+        for name, base, h, g in (
+                ("gm_policy_factor_culture_standing", "gm_policy_factor_culture", "var:gm_g_historic", "var:gm_g_standing"),
+                ("gm_policy_factor_prestige_standing", "gm_policy_factor_prestige", "var:gm_g_historic",
+                 "var:gm_g_standing"),
+                ("gm_policy_factor_tourism_here", "gm_policy_factor_tourism", "gm_state_historic_grandeur",
+                 "gm_state_grandeur")):
+            body = squash(block(v, name))
+            self.assertTrue(body.startswith(f"value = {base} "), name)
+            self.assertIn(f"{base} > 1", body, f"{name}: nothing taken off a factor of 1")
+            self.assertIn(cut.format(f=base, h=h, g=g), body, name)
+        here = squash(block(v, "gm_state_historic_grandeur"))
+        self.assertIn("gm_state_has_pm = { PM = pm_monument_historic } } add = gm_state_primary_grandeur", here)
+        self.assertIn("variable = gm_monuments_here limit = { gm_mon_is = { KEY = historic } } add = gm_mon_grandeur", here)
+
+    def test_the_policy_figures(self):
+        """Open's x1.25 for a state of To History alone, x1.5 for none, between by
+        share; the same rule on Cultural Promotion's x1.5 (spec § 4.5)."""
+        def factor(f, h, g):
+            return f - (f - 1) * (1 - 0.5) * h / g
+        self.assertEqual(factor(1.5, 30, 30), 1.25)
+        self.assertEqual(factor(1.5, 0, 30), 1.5)
+        # Transjordan: Petra (15) beside the Mesha Stele (25).
+        self.assertAlmostEqual(factor(1.5, 15, 40), 1 + 0.5 * (25 + 0.5 * 15) / 40)
+
+    def test_the_texts_say_so(self):
+        L = loc()
+        for key in ("gm_policy_effects_open", "gm_policy_open_effect_tt", "gm_policy_effects_ceremonial",
+                    "gm_policy_ceremonial_effect_tt", "gm_policy_effects_culture", "gm_policy_culture_effect_tt",
+                    "gm_policy_effects_culture_prestige", "gm_policy_culture_prestige_effect_tt",
+                    "gm_policy_effects_education", "gm_policy_education_effect_tt", "gm_policy_history_half_clause",
+                    "gm_state_tourism_history_clause"):
+            self.assertIn("$pm_monument_historic$", L[key], key)
+        self.assertIn("ScriptValue('gm_policy_factor_tourism_here')", L["gm_state_tourism_tt"])
+        for key in ("gm_policy_ceremonial_tt_line", "gm_policy_culture_standing_tt_line", "gm_policy_prestige_tt_line",
+                    "gm_je_tt_education"):
+            self.assertIn("'gm_policy_history_half_clause'", L[key], key)
 
 
 class LandmarkTechTests(unittest.TestCase):
@@ -4442,21 +5085,17 @@ class AgeTests(unittest.TestCase):
 
 class AgeingTests(unittest.TestCase):
     """Ageing rework (spec 2026-10-16 §2): a dedicated monument that is not
-    contested adds 2% of its levels a year to its age grandeur, half that
-    under Mothballed; undedicated monuments and trophies abroad never age."""
+    contested adds 2% of its levels a year to its age grandeur, under every
+    monument policy (policy spec 2026-10-23); undedicated monuments and
+    trophies abroad never age."""
 
     def test_the_monthly_step(self):
         values = read(VALUES)
-        self.assertEqual(squash(block(values, "gm_policy_factor_age")),
-                         "value = 1 if = { limit = { owner = { gm_policy_is = { P = mothballed STANDARD = no } } } "
-                         "value = 0.5 }")
+        self.assertIsNone(block(values, "gm_policy_factor_age"))
         self.assertEqual(squash(block(values, "gm_state_age_step")),
-                         "value = gm_state_primary_start multiply = 2 divide = 1200 multiply = gm_policy_factor_age "
-                         "max = gm_state_age_room")
+                         "value = gm_state_primary_start multiply = 2 divide = 1200 max = gm_state_age_room")
         self.assertEqual(squash(block(read(MON_VALUES), "gm_mon_age_step")),
-                         "value = gm_mon_start multiply = 2 divide = 1200 if = { limit = { var:gm_tr_origin ?= { "
-                         "owner = { gm_policy_is = { P = mothballed STANDARD = no } } } } multiply = 0.5 } "
-                         "max = gm_mon_age_room")
+                         "value = gm_mon_start multiply = 2 divide = 1200 max = gm_mon_age_room")
 
     def test_a_century_then_it_stands(self):
         """Owner, 2026-10-19: ageing stops at a century's worth, twice the
@@ -4652,8 +5291,7 @@ class SecondaryFitTests(unittest.TestCase):
         for s in ("gm_state_has_pm = { PM = pm_monument_$KEY$ } } add = gm_state_primary_grandeur",
                   "every_in_list = { variable = gm_monuments_here limit = { gm_mon_is = { KEY = $KEY$ } } "
                   "add = gm_mon_grandeur }",
-                  "name = gm_local_steps_$KEY$ value = { value = gm_curve_steps_lin_f5 multiply = gm_policy_factor_local "
-                  "max = $CAP$ }",
+                  "name = gm_local_steps_$KEY$ value = { value = gm_curve_steps_lin_f5 max = $CAP$ }",
                   "add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps_$KEY$ }"):
             self.assertIn(s, one)
 
@@ -4711,9 +5349,13 @@ class SecondaryContestTests(unittest.TestCase):
 
     def test_a_civil_wars_winner_adopts_secondaries(self):
         body = squash(strip_comments(block(self.e, "gm_repair_after_civil_war")))
-        self.assertIn("every_in_global_list = { variable = gm_monuments", body)
-        self.assertIn("gm_mon_adopt_for_winner = yes", body)
+        self.assertIn("gm_cw_repoint_list = { LIST = gm_monuments }", body)
+        self.assertIn("every_in_global_list = { variable = gm_monuments limit = { "
+                      "var:gm_tr_origin ?= { owner = root } var:gm_tr_raised_by ?= scope:te_cw_loser } "
+                      "set_variable = { name = gm_tr_raised_by value = root } }", body)
         self.assertIn("gm_monument_pass = yes", body)
+        for name in ("gm_mon_check_contest", "gm_mon_changed_hands"):
+            self.assertNotIn("gm_cw_", squash(block(self.m, name)))
 
     def test_the_choices_go_through_one_hidden_event(self):
         order = squash(block(self.m, "gm_mon_order_choice"))
@@ -4999,7 +5641,7 @@ Signature = namedtuple("Signature", "key kind family name national local ig pare
 # row order is the debug codes' (gm_disp_sig_code).
 SIGNATURES = (
     Signature("antiquity", "family", None, "Ancestral Antiquity", (("", "cultural_pull", 1),),
-              ("building_tourism_industry_throughput_add", 0.10), "intelligentsia", None, None,
+              ("goods_output_tourism_mult", 0.05), "intelligentsia", None, None,
               ("stelae_of_aksum", "obelisks_of_karnak", "persepolis", "luxor_obelisk", "venus_de_milo",
                "piraeus_lion", "horses_of_saint_mark", "great_zimbabwe", "uffizi_gallery", "capitoline_museums",
                "temples_of_baalbek", "palmyra", "xanthos", "arch_of_ctesiphon", "winged_victory_of_samothrace",
@@ -5036,7 +5678,7 @@ SIGNATURES = (
     Signature("glory_of_athens", "one_off", "antiquity", "The Glory of Athens", (("", "country_influence_mult", 0.02),),
               None, None, None, None, ("parthenon",)),
     Signature("first_emperor", "one_off", "antiquity", "The First Emperor’s Army", (),
-              ("building_tourism_industry_throughput_add", 0.25), None, None, None, ("terracotta_army",)),
+              ("goods_output_tourism_mult", 0.10), None, None, None, ("terracotta_army",)),
     Signature("to_victory", "special", None, "To Victory", (("", "country_prestige_mult", 0.02),), None, None,
               "war_memorial", "victory", ()),
     Signature("unknown_soldier", "special", None, "To the Unknown Soldier",
@@ -5057,9 +5699,11 @@ SIG_LOCAL = tuple(s.key for s in SIGNATURES if s.local)
 SPECIAL_SIGS = tuple(s for s in SIGNATURES if s.kind == "special")
 # A special is its opportunity's boon made permanent, a fifth a step (§5.4).
 SPECIAL_BOON_SHARE = 0.2
-# The civic-progress five carry no family (§4.1), and the shrine of §6.4 none.
+# The civic-progress five carry no family (§4.1), the shrine of §6.4 none, and
+# no To History monument one (tourism heritage spec 2026-10-23 call 5: their
+# levels are sized without a signature's tourism).
 NO_SIGNATURE = ("la_scala", "teatro_di_san_carlo", "jantar_mantar", "shalimar_gardens", "jardim_botanico",
-                "muhammad_ali_mosque")
+                "muhammad_ali_mosque") + tuple(lm.key for lm in LANDMARKS if lm.dedication == HISTORIC)
 
 
 def counts_as(key):
@@ -5276,11 +5920,11 @@ class SignatureEffectTests(unittest.TestCase):
             call = "gm_sig_set_steps_lin_open" if k == "antiquity" else "gm_sig_set_steps"
             self.assertIn(f"{call} = {{ SIG = {k} }}", sums, k)
         steps = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps"))
-        self.assertIn("gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }", steps)
+        self.assertNotIn("gm_policy_scale_steps", steps, "no monument policy moves these (policy spec 2026-10-23)")
         lin = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps_lin_open"))
         self.assertEqual(lin, "gm_set_steps_lin_open = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ "
                               "NEXT = gm_n_sig_$SIG$ WIDTH = gm_w_sig_$SIG$ F = 5 } "
-                              "gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }")
+                              "gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_culture }")
         self.assertIn("gm_sig_compute_sums = yes", squash(block(read(EFFECTS), "gm_compute_totals")))
 
     def test_national_hooks_from_root(self):
@@ -5299,7 +5943,7 @@ class SignatureEffectTests(unittest.TestCase):
         remove = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
         zero = squash(block(read(SIG_EFFECTS), "gm_state_sig_zero_local_steps"))
         for k in SIG_LOCAL:
-            self.assertIn(f"gm_state_sig_local_steps_one = {{ SIG = {k} }}", monthly, k)
+            self.assertRegex(monthly, rf"gm_state_sig_local_steps_one = \{{ SIG = {k} FACTOR = [\w.]+ \}}", k)
             self.assertIn(f"remove_modifier = gm_local_sig_{k}", remove, k)
             self.assertIn(f"gm_state_sig_zero_local_steps_one = {{ SIG = {k} }}", zero, k)
         self.assertEqual(monthly.count("gm_state_sig_zero_local_steps = yes"), 1, "in the pulse's else")
@@ -5308,7 +5952,7 @@ class SignatureEffectTests(unittest.TestCase):
         for s_ in ("gm_state_sig_on_parent = yes gm_sig_counts_as_$SIG$ = { VAR = gm_signature }",
                    "add = gm_state_primary_grandeur", "variable = gm_monuments_here",
                    "gm_mon_sig_on_parent = yes gm_sig_counts_as_$SIG$ = { VAR = gm_tr_signature }",
-                   "value = gm_curve_steps_lin_f5 multiply = gm_policy_factor_local",
+                   "value = gm_curve_steps_lin_f5 multiply = $FACTOR$",
                    "add_modifier = { name = gm_local_sig_$SIG$ multiplier = var:gm_sig_local_steps_$SIG$ }"):
             self.assertIn(s_, one)
         self.assertNotIn("remove_variable", one, "zeroed, never removed")
@@ -6277,20 +6921,21 @@ class MergeRecordTests(unittest.TestCase):
 
 
 class UpkeepTests(unittest.TestCase):
-    """Sites spec 2026-10-18 §3.4: a level-1 finished building pays the upkeep
-    of the levels its monuments record (0.1 construction a level, as
-    pm_maintenance), x1.5 Open, nothing Mothballed (owner, 2026-10-18)."""
+    """Sites spec 2026-10-18 §3.4, then policy spec 2026-10-23 § 5: one modifier
+    on the finished building, now at -1, so no Grand Monument pays upkeep."""
 
-    def test_one_modifier_sized_by_the_records(self):
+    def test_upkeep_is_cancelled(self):
+        """Policy spec 2026-10-23 § 5 (owner): Grand Monuments cost nothing to
+        maintain. gm_upkeep at -1 cancels pm_maintenance's level-scaled input
+        whatever the level, as Mothballed did; pmg_maintenance stays on the
+        building (removing a PMG in a running save is unverified)."""
         self.assertEqual(squash(block(read(MODIFIERS), "gm_upkeep")).split("icon = ")[1].split(" ", 1)[1],
                          "goods_input_construction_mult = 1")
-        self.assertEqual(squash(block(read(VALUES), "gm_state_upkeep_mult")),
-                         "value = gm_state_primary_levels add = gm_state_secondary_levels "
-                         "multiply = gm_policy_factor_upkeep subtract = 1 "
-                         "if = { limit = { NOT = { has_variable = gm_migrated } } value = 0 }")
-        self.assertEqual(squash(block(read(VALUES), "gm_policy_factor_upkeep")),
-                         "value = 1 if = { limit = { owner = { gm_policy_is = { P = open STANDARD = no } } } value = 1.5 } "
-                         "if = { limit = { owner = { gm_policy_is = { P = mothballed STANDARD = no } } } value = 0 }")
+        self.assertEqual(squash(block(read(VALUES), "gm_state_upkeep_mult")), "value = -1")
+        self.assertIsNone(block(read(VALUES), "gm_policy_factor_upkeep"))
+        self.assertNotIn("gm_policy_factor_upkeep", "".join(strip_comments(read(p.relative_to(ROOT).as_posix()))
+                                                            for p in ROOT.glob("common/**/*.txt")))
+        self.assertIn("pmg_maintenance", squash(block(read(BUILDING), "building_grand_monument")))
         self.assertIn("gm_upkeep", loc())
 
     def test_the_state_pulse_is_its_one_refresh(self):
@@ -6334,7 +6979,10 @@ class SitePanelTests(unittest.TestCase):
         self.assertEqual(squash(block(values, "gm_state_disp_listed")),
                          "value = 0 if = { limit = { has_building = building_grand_monument } value = 1 }")
         self.assertEqual(squash(block(values, "gm_disp_count_listed")), "value = gm_sum_monuments")
-        self.assertIn("gm_state_has_site = yes", squash(block(values, "gm_disp_count_undedicated")))
+        self.assertIn("gm_state_has_site = yes", squash(block(values, "gm_disp_count_sites")))
+        # The Monuments cell's breakdown counts a finished monument left
+        # undedicated (GM-7: one term per thing).
+        self.assertIn("gm_state_is_dedicated = no", squash(block(values, "gm_disp_count_undedicated")))
 
     def test_the_site_row(self):
         row = self.type_body(WIDGET, "gm_site_row")
@@ -6346,8 +6994,9 @@ class SitePanelTests(unittest.TestCase):
                                     .split("type te_gm_sec_monuments", 1)[0]))
         self.assertIn("gm_site_row = {} gm_dedicate_button = {}", sec)
         mon = squash(strip_comments(read(WIDGET).split("type te_gm_sec_monuments = flowcontainer {", 1)[1]))
-        self.assertIn("visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_listed'), "
-                      "'(CFixedPoint)1' )]\"", mon)
+        self.assertIn("visible = \"[And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_listed'), "
+                      "'(CFixedPoint)1' ), NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), "
+                      "'(CFixedPoint)4' ) )]\"", mon)
 
     def test_the_site_card(self):
         card = self.type_body(self.STATE_WIDGETS, "te_state_gm_site_card")
@@ -6364,9 +7013,12 @@ class SitePanelTests(unittest.TestCase):
         self.assertLess(panel.find("te_state_gm_card = {}"), panel.find("te_state_gm_site_card = {}"))
 
     def test_the_overview_counts_sites(self):
-        self.assertTrue(loc()["gm_je_ov_undedicated"].startswith("Being Built "))
+        # One term per thing (GM-7): the cell is the construction sites'.
+        L = loc()
+        self.assertEqual(L["gm_je_ov_sites_label"], "Sites")
+        self.assertIn("ScriptValue('gm_disp_count_sites_ready')", L["gm_je_ov_sites_ready"])
         self.assertIn("gm_je_ov_building_tt", read(WIDGET))
-        self.assertIn("gm_je_ov_building_tt", loc())
+        self.assertTrue(L["gm_je_ov_building_tt"].startswith("#b Construction Sites#!"))
 
     def test_a_site_opens_the_entry(self):
         site = "any_scope_state = { has_building = building_grand_monument_site }"
@@ -6432,14 +7084,15 @@ class RateTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.2 (Plan B): a level's starting grandeur is
     world GDP in 1836 over world GDP when it is counted, times the grandeur a
     level adds in 1836 (owner, 2026-10-19: five), to the nearest thousandth and
-    at least 0.001. The 1836 figure is a constant (spec §5): 334,465,286 summed
-    from a Timeline Extended save of 1836.1.20, every country's latest GDP."""
+    at least 0.001. The 1836 figure is a constant (spec §5): 402,505,869, the
+    rate's own read at a new game's first pass (gm_world_base, 2026-10-25); the
+    first, 334,465,286 from a save's GDP records, read a sixth low."""
 
     def body(self, path, name):
         return squash(strip_comments(block(read(path), name)))
 
     def test_the_rate(self):
-        self.assertEqual(self.body(VALUES, "gm_world_gdp_1836"), "value = 334000000")
+        self.assertEqual(self.body(VALUES, "gm_world_gdp_1836"), "value = 402500000")
         self.assertEqual(self.body(VALUES, "gm_world_rate_now"),
                          "value = 1 if = { limit = { global_gdp_script_value > 0 } value = gm_world_gdp_1836 "
                          "divide = global_gdp_script_value min = 0.00001 }")
@@ -6544,22 +7197,27 @@ class MeaningCountsGrandeurTests(unittest.TestCase):
 
 class RateDisplayTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.2 (Plan B): the player sees what a level is
-    worth before building: on the site's card and row, in National Effects
-    and in the build menu; and grandeur, often fractional now, prints with a
+    worth before building: on the site's card, on the overview's last line
+    (GM-5, the 2026-10-27 GUI audit: once; moved from Awaiting Dedication,
+    which shows only once there is a site, 2026-10-28) and in the build menu; and grandeur, often fractional now, prints with a
     decimal (Review Focus 5)."""
 
     RATE = "ScriptValue('gm_world_rate_value')|3"
 
-    def test_the_four_places(self):
+    def test_the_places(self):
         L = loc()
         card = squash(strip_comments(read("gui/te_state_panel_widgets.gui")))
         self.assertIn('text = "gm_site_card_rate_lbl"', card)
         self.assertIn('text = "gm_site_card_rate"', card)
         self.assertIn(self.RATE, L["gm_site_card_rate"])
+        # Said once, on the overview's last line, which is always shown, not
+        # on every site's row nor in a section that needs a site (GM-5).
         widget = squash(strip_comments(read(WIDGET)))
-        self.assertIn('text = "gm_site_row_rate"', widget)
-        self.assertIn(self.RATE, L["gm_site_row_rate"])
-        self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate"', widget)
+        overview = widget.split("type te_gm_overview_panel = flowcontainer {", 1)[1].split("type te_gm_sec_", 1)[0]
+        self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate"', overview)
+        self.assertEqual(widget.count('text = "gm_je_world_rate"'), 1)
+        self.assertNotIn("gm_site_row_rate", widget)
+        self.assertNotIn("gm_site_row_rate", L)
         self.assertIn(self.RATE, L["gm_je_world_rate"])
         self.assertIn("ScriptValue('gm_world_wealth_factor')|1", L["gm_je_world_rate_tt"])
         # How many times richer: the stored ratio, not the scaled rate.
@@ -6875,11 +7533,11 @@ class SitesFinalReviewTests(unittest.TestCase):
         self.assertIn("has_building = building_grand_monument has_variable = gm_migrated gm_state_level > 1", settle)
 
     def test_upkeep_waits_for_migration(self):
-        # I3: pm_maintenance is level-scaled, so the multiplier on an older
-        # save's full-height building would square its upkeep.
-        mult = squash(block(read(VALUES), "gm_state_upkeep_mult"))
-        self.assertIn("if = { limit = { NOT = { has_variable = gm_migrated } } value = 0 }", mult)
-        self.assertGreater(mult.index("NOT = { has_variable = gm_migrated }"), mult.index("subtract = 1"))
+        # I3 once kept the multiplier off an older save's full-height building,
+        # since pm_maintenance is level-scaled and a level count would square
+        # it. At -1 (policy spec 2026-10-23 § 5) the modifier is -100% of the
+        # input whatever the level, so that building pays nothing too.
+        self.assertEqual(squash(block(read(VALUES), "gm_state_upkeep_mult")), "value = -1")
 
     def test_every_finished_building_script_makes_is_migrated(self):
         # The upkeep and merge gates rest on it: every create_building of the
@@ -6982,12 +7640,12 @@ class SitesFinalReviewTests(unittest.TestCase):
     def test_rate_prints_small(self):
         # Minor 5, re-graded: past 200 times 1836's wealth |2 reads 0.00.
         L = loc()
-        for key in ("gm_je_world_rate", "gm_site_card_rate", "gm_site_rate_tt", "gm_site_row_rate"):
+        for key in ("gm_je_world_rate", "gm_site_card_rate", "gm_site_rate_tt", "gm_je_com_levels_tt"):
             self.assertIn("ScriptValue('gm_world_rate_value')|3]", L[key], key)
             self.assertNotIn("ScriptValue('gm_world_rate_value')|2]", L[key], key)
         # What a level adds in 1836, spliced, not "N levels make one": the rate
         # passes one in 1836 (owner, 2026-10-19).
-        for key in ("gm_je_world_rate", "gm_site_rate_tt", "gm_site_row_rate", "gm_je_world_rate_tt"):
+        for key in ("gm_je_world_rate", "gm_site_rate_tt", "gm_je_world_rate_tt"):
             self.assertIn("ScriptValue('gm_level_grandeur_1836')|0]#! in 1836", L[key], key)
             self.assertNotIn("levels make one", L[key], key)
         # How It Works reads nothing (test_grand_monuments_layout), so it states the figure.

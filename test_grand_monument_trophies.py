@@ -17,7 +17,7 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    BUILDING_FORMS, BUILT, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, TROPHY_CODE_BASE,
+    BUILDING_FORMS, BUILT, DEDICATIONS, FORMS, HISTORIC, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, TROPHY_CODE_BASE,
     TROPHY_PICTURES, block, committed, loc, picture_key, raw_block_at, read, squash, strip_comments,
 )
 
@@ -241,6 +241,22 @@ class TakingTests(unittest.TestCase):
         self.assertEqual(squash(block(read(ARTICLE_RETURN), "possible")),
                          "gm_system_enabled = yes gm_tr_country_holds_from = { CLAIMANT = scope:other_country }")
 
+    def test_the_articles_show_only_where_there_is_a_monument(self):
+        # owner, 2026-10-23: the draft lists an article only where it has something to act on. ROOT is the
+        # prospective source in visible as in possible (vanilla treaty_port's visible reads the source's coastal
+        # states), so Return Cultural Property shows for a holder of the other side's trophies and Surrender a
+        # Monument for a country with a monument it could give up; possible repeats it for a war goal
+        self.assertEqual(squash(block(read(ARTICLE_RETURN), "visible")),
+                         "gm_system_enabled = yes exists = scope:other_country "
+                         "gm_tr_country_holds_from = { CLAIMANT = scope:other_country }")
+        for gate in ("visible", "possible"):
+            self.assertEqual(squash(block(read(ARTICLE_SURRENDER), gate)),
+                             "gm_system_enabled = yes gm_tr_country_has_takeable = yes", gate)
+        # the states the article can name (its state_valid_trigger) are the ones the gate counts
+        self.assertEqual(squash(block(read(TR_TRIGGERS), "gm_tr_country_has_takeable")),
+                         "any_scope_state = { gm_state_tr_takeable = yes }")
+        self.assertIn("gm_state_tr_takeable = yes", squash(block(read(ARTICLE_SURRENDER), "state_valid_trigger")))
+
     def test_the_hidden_events_do_the_work(self):
         events = strip_comments(read(TR_EVENTS))
         for n, doer in ((10, "gm_state_tr_take = { WHO = scope:gm_tr_order_by ROUTE = occupation }"),
@@ -356,9 +372,10 @@ class ConsequenceTests(unittest.TestCase):
         self.assertIn("gm_tr_country_monthly = yes", squash(block(e, "gm_country_monthly")))
         self.assertEqual(squash(block(read(TR_EFFECTS), "gm_tr_country_monthly")), "gm_tick_boon = { SRC = homecoming }")
         L = loc()
-        for key in ("gm_boon_homecoming", "gm_boon_homecoming_desc", "gm_boon_homecoming_effect"):
+        for key in ("gm_boon_homecoming", "gm_boon_homecoming_desc"):
             self.assertIn(key, L)
-        self.assertTrue(L["gm_boon_homecoming_effect"].startswith("#G +5#!"))
+        # The boon's row renders the modifier itself, so its figure cannot drift (GUI audit, 2026-10-27).
+        self.assertIn("[GetStaticModifier('gm_boon_homecoming').GetDesc]", L["gm_je_tt_boon_homecoming"])
 
     def test_the_ai_follows_law_stances(self):
         minded = squash(block(read(TR_TRIGGERS), "gm_tr_ig_looting_minded"))
@@ -472,9 +489,9 @@ class NameTests(unittest.TestCase):
             self.assertNotIn("State.", L[key].replace("GetState.", ""), f"{key} reads a State context")
 
     def test_dedication_and_honours_names(self):
-        # A unique dedication's names come first (signatures spec §3), the twelve after.
+        # A unique dedication's names come first (signatures spec §3), the twelve after, then To History's.
         plain = [(f, key) for f, key in custom_loc_branches("gm_tr_dedication_name") if key.startswith("pm_monument_")]
-        self.assertEqual({f for f, _ in plain}, {d.key for d in DEDICATIONS})
+        self.assertEqual({f for f, _ in plain}, {d.key for d in DEDICATIONS} | {HISTORIC})
         for d, key in plain:
             self.assertEqual(key, f"pm_monument_{d}")
 
@@ -601,18 +618,19 @@ class StateCardViewTests(unittest.TestCase):
         row = self.type_body("gm_tr_row_short")
         self.assertNotIn("gm_tr_picture", row, "no pictures")
         self.assertIn('tooltip = "gm_tr_short_tt" text = "gm_tr_short_line"', row)
-        # 392 + 6 + 112 = the card's 510 inside its margins.
+        # 374 + 6 + 130 = the card's 510 inside its margins: the button at the
+        # row size (17) fits "Bring It Home" (GM-17).
         self.assertIn("spacing = 6", row)
-        self.assertIn("minimumsize = { 392 -1 } maximumsize = { 392 -1 }", row)
-        self.assertIn('blockoverride "tr_button_layout" { size = { 112 22 } parentanchor = vcenter }', row)
-        self.assertEqual(392 + 6 + 112, 530 - 2 * 10)
+        self.assertIn("minimumsize = { 374 -1 } maximumsize = { 374 -1 }", row)
+        self.assertIn('blockoverride "tr_button_layout" { size = { 130 26 } parentanchor = vcenter }', row)
+        self.assertEqual(374 + 6 + 130, 530 - 2 * 10)
         # The same scripted GUI, shown and run the same way, as the Full row's button.
         pick = r'blockoverride "tr_button" \{ (.*?) \} blockoverride "tr_button_text"'
         self.assertEqual(re.search(pick, row).group(1), re.search(pick, self.type_body("gm_tr_row_site")).group(1))
 
     def test_the_button_keeps_its_size_everywhere_else(self):
         btn = self.type_body("gm_tr_button", "button")
-        self.assertIn('block "tr_button_layout" { size = { 200 26 } parentanchor = hcenter margin_top = 2 }', btn)
+        self.assertIn('block "tr_button_layout" { size = { 200 28 } parentanchor = hcenter margin_top = 2 }', btn)
         self.assertIn('block "tr_button_text_width" { max_width = 190 }', btn)
         for row in ("gm_tr_row_held", "gm_tr_row_site"):
             self.assertNotIn("tr_button_layout", self.type_body(row), row)
@@ -622,8 +640,10 @@ class StateCardViewTests(unittest.TestCase):
         self.assertIn('tooltip = "gm_tr_row_site_value_tt" text = "gm_tr_row_site_value"', site)
         L = loc()
         self.assertEqual(L["gm_tr_row_site_value"], "[concept_grandeur]: #v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_grandeur')|0]#!")
-        for word in ("concept_grandeur", "aggregated", "Timeline Extended", "Journal Entry"):
+        for word in ("concept_grandeur", "aggregated", "Timeline Extended"):
             self.assertIn(word, L["gm_tr_row_site_value_tt"], word)
+        # Style rule 9: name the tab, not the journal entry (GM-16).
+        self.assertNotIn("Journal Entry", L["gm_tr_row_site_value_tt"])
         for word in ("concept_grandeur", "concept_prestige", "concept_cultural_pull", "Armed Forces"):
             self.assertIn(word, L["gm_state_tr_summary_tt"], word)
 
@@ -923,8 +943,10 @@ class ReturnToAStateWithAMonumentTests(unittest.TestCase):
         self.assertEqual(kinds["piraeus_lion"], "apart")
         # Eastern Thrace: Topkapi stands.
         self.assertEqual(kinds["horses_of_saint_mark"], "apart")
+        # Lower Egypt: the Pyramids of Giza stand (tourism heritage phase 2).
+        self.assertEqual(kinds["rosetta_stone"], "apart")
         # Nothing stands where these came from: rebuilt, as before.
-        for key in ("rosetta_stone", "tipus_tiger", "venus_de_milo", "baba_merzoug", "royal_palace_of_kandy"):
+        for key in ("tipus_tiger", "venus_de_milo", "baba_merzoug", "royal_palace_of_kandy"):
             self.assertEqual(kinds[key], "rebuild", key)
 
     def test_the_levels_a_state_of_1836_comes_to(self):
@@ -1235,14 +1257,26 @@ class OurMonumentsListTests(unittest.TestCase):
                       promote)
 
     def test_the_section_lists_primaries_then_secondaries(self):
-        sec = squash(strip_comments(raw_block_at(read(WIDGET), r"(?m)^\ttype te_gm_sec_monuments = flowcontainer \{")))
-        first = sec.find("GetList('gm_states')")
-        second = sec.find("GetList('gm_monuments_held')")
-        self.assertNotEqual(first, -1)
-        self.assertGreater(second, first)
+        """Our Monuments and Awaiting a Decision (GM-3, owner 2026-10-27) each
+        list the states' monuments, then the secondaries; a contested
+        secondary is Awaiting a Decision's, with its three choices."""
+        widget = read(WIDGET)
+        for sec_name in ("te_gm_sec_monuments", "te_gm_sec_decisions"):
+            sec = squash(strip_comments(raw_block_at(widget, rf"(?m)^\ttype {sec_name} = flowcontainer \{{")))
+            first = sec.find("GetList('gm_states')")
+            second = sec.find("GetList('gm_monuments_held')")
+            self.assertNotEqual(first, -1, sec_name)
+            self.assertGreater(second, first, sec_name)
+        rest = squash(strip_comments(raw_block_at(widget, r"(?m)^\ttype te_gm_sec_monuments = flowcontainer \{")))
         self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
-                      "blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
-                      "blockoverride \"mon_choices\" {", sec)
+                      "visible = \"[NotEqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
+                      "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } }",
+                      rest)
+        decide = squash(strip_comments(raw_block_at(widget, r"(?m)^\ttype te_gm_sec_decisions = flowcontainer \{")))
+        self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
+                      "visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
+                      "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
+                      "blockoverride \"mon_choices\" {", decide)
 
     def test_the_row_says_where_it_stands_only_where_asked(self):
         gui = strip_comments(read(TR_GUI))

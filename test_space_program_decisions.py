@@ -28,13 +28,15 @@ BUILDINGS = ROOT / "common/buildings/extra_buildings.txt"
 # decision -> (production method it activates, the method it builds on).
 # The base is the mission the programme must run for the decision to show
 # (its bool held, the target's not): the one below on the Earth Orbit ->
-# Moon -> Mars -> Solar Colonization ladder, and Mars for Deep Space
-# Exploration and the Interstellar Mission, which may follow any mission
-# from Mars up (see the header comment in extra_decisions.txt).
+# Moon -> Mars ladder; the Moon for Solar Colonization, which follows the
+# Moon or the Mars Mission since colonization opens on the Moon Landing
+# (lunar colonization design § 4); and Mars for Deep Space Exploration and
+# the Interstellar Mission, which may follow any mission from Mars up (see
+# the header comment in extra_decisions.txt).
 MISSIONS = {
     "te_decision_space_mission_moon": ("pm_moon_mission", "pm_earth_orbit"),
     "te_decision_space_mission_mars": ("pm_mars_mission", "pm_moon_mission"),
-    "te_decision_space_mission_solar": ("pm_solar_colonization", "pm_mars_mission"),
+    "te_decision_space_mission_solar": ("pm_solar_colonization", "pm_moon_mission"),
     "te_decision_space_mission_deep_space": ("pm_deep_space_exploration", "pm_mars_mission"),
     "te_decision_space_mission_interstellar": ("pm_interstellar_mission", "pm_mars_mission"),
 }
@@ -49,9 +51,12 @@ UNITS_VALUE = {
     "pm_interstellar_mission": "sr_mission_units_interstellar",
 }
 # The milestones on the owner's rule "the milestones the current mission
-# serves are complete", for the decisions that follow it.
-OWNER_RULE = ("te_decision_space_mission_moon", "te_decision_space_mission_mars",
-              "te_decision_space_mission_solar")
+# serves are complete", for the decisions that follow it. Solar Colonization
+# left it with the Moon Base (2026-10-29): it waits for the Moon Landing
+# alone, not for the Deep-Space Probe the Moon Mission also serves, nor for
+# the Mars Landing, which gates each world beyond the Moon instead
+# (lunar colonization design § 4).
+OWNER_RULE = ("te_decision_space_mission_moon", "te_decision_space_mission_mars")
 
 
 def bool_of(pm):
@@ -153,6 +158,33 @@ class SpaceMissionDecisionsTest(unittest.TestCase):
                 have = positive_completions(block(block(self.decisions, name), "possible"))
                 self.assertTrue(self.served(base) <= self.closure(have))
 
+    def test_solar_colonization_opens_on_the_moon_landing(self):
+        """Lunar colonization design § 4: shown on the Moon or the Mars Mission,
+        possible on the Moon Landing, offered while a world is left it reaches."""
+        body = block(self.decisions, "te_decision_space_mission_solar")
+        shown = block(body, "is_shown")
+        self.assertRegex(shown, r"OR\s*=\s*\{\s*modifier:country_sr_moon_mission_program_bool\s*=\s*yes\s*"
+                                r"modifier:country_sr_mars_mission_program_bool\s*=\s*yes\s*\}")
+        self.assertEqual(positive_completions(block(body, "possible")), {"moon_landing"})
+        self.assertIn("text = te_decision_tt_completed_moon_landing", block(body, "possible"))
+        # A lunar world, or beyond the Moon after the Mars Landing: stages 1 and 2,
+        # or any once a colony beyond the Moon is held. A lunar colony alone (or a
+        # treaty's world without our own Mars Landing) reaches no further.
+        self.assertRegex(shown, r"OR\s*=\s*\{\s*sr_sites_lunar_open\s*=\s*yes\s*AND\s*=\s*\{\s*"
+                                r"sr_colonization_beyond_moon\s*=\s*yes\s*OR\s*=\s*\{\s*"
+                                r"sr_has_colony_beyond_moon\s*=\s*yes\s*sr_colonization_inner_open\s*=\s*yes\s*\}\s*\}\s*\}")
+        self.assertNotIn("sr_has_space_colony", shown)
+
+    def test_deep_space_counts_colonies_beyond_the_moon(self):
+        body = block(self.decisions, "te_decision_space_mission_deep_space")
+        shown = block(body, "is_shown")
+        self.assertIn("sr_has_colony_beyond_moon = no", shown)
+        self.assertNotIn("sr_has_space_colony", shown)
+        self.assertEqual(positive_completions(block(body, "possible")), {"mars_landing"})
+
+    def test_no_decision_waits_for_the_retired_moon_base(self):
+        self.assertNotIn("sr_completed_moon_base", self.decisions)
+
     def test_interstellar_waits_for_the_probes_own_prerequisites_only(self):
         have = positive_completions(block(block(self.decisions, "te_decision_space_mission_interstellar"), "possible"))
         self.assertEqual(have, self.milestones["interstellar_probe"][0])
@@ -225,9 +257,9 @@ class LocalizationTest(unittest.TestCase):
         text = strip_comments(read(DECISIONS))
         keys = loc_keys()
         names = re.findall(r"^(te_decision_\w+)\s*=\s*\{", text, re.M)
-        # Establish a Strategic Reserve, the six space decisions and
-        # Restructure the Public Debt (#800).
-        self.assertEqual(len(names), 8)
+        # Establish a Strategic Reserve, the six space decisions, Resume Solar
+        # Colonization (lunar colonization 2b) and Restructure the Public Debt (#800).
+        self.assertEqual(len(names), 9)
         for name in names:
             for key in (name, f"{name}_desc"):
                 with self.subTest(key=key):
@@ -258,6 +290,161 @@ class LocalizationTest(unittest.TestCase):
         # "three times the Launch Capacity" in the Moon Mission's description.
         self.assertIn("three times the $launch_capacity$", loc_value("te_decision_space_mission_moon_desc"))
         self.assertEqual(units["sr_mission_units_moon"], 3 * units["sr_mission_units_earth_orbit"])
+
+
+def _tree(text):
+    """`key op value` triples, nested for blocks, from a comment-free body."""
+    tokens = iter(re.findall(r"\{|\}|[<>=!]=|[<>=]|[^\s{}<>=!]+", text))
+
+    def body():
+        out = []
+        for key in tokens:
+            if key == "}":
+                return out
+            op = next(tokens)
+            value = next(tokens)
+            out.append((key, op, body() if value == "{" else value))
+        return out
+
+    return body()
+
+
+class DecisionOpensTheEntryTest(unittest.TestCase):
+    """Whenever a decision that starts colonizing is offered and taken, Solar
+    System Colonization's `possible` holds and its programme may run
+    (sr_colonization_by_choice, the running gate's new term): review I1, Begin
+    Solar Colonization offered under Races Only past stage 2 with a lunar world
+    free, where the entry couldn't open.
+
+    Every leaf test is a free atom, evaluated over every assignment the facts
+    below allow; the scripted triggers the gate and the running test add are
+    expanded. The decision's own `when_taken` sets what follows it, and with
+    the entry already open its programme must run at once (review R1)."""
+
+    SOLAR = "modifier:country_sr_solar_colonization_program_bool = yes"
+    DEEP = "modifier:country_sr_deep_space_exploration_program_bool = yes"
+    MARKER = "has_variable = sr_colonization_resumed"
+    OPEN = "has_journal_entry = je_space_race_solar_colonization"
+    ACTIVE = "has_variable = sr_active_solar_colonization"
+    DONE = "has_variable = sr_completed_solar_colonization"
+    OVER = "has_global_variable = sr_all_colonies_complete"
+    LUNAR = "sr_sites_lunar_open = yes"
+    ANY = "sr_any_site_unclaimed = yes"
+    # (if this holds, then that does)
+    FACTS = (
+        (DEEP, SOLAR),  # the deep-space method carries the colonization bool
+        (LUNAR, ANY),  # a free lunar world is an unclaimed one
+        ("has_variable = sr_completed_mars_landing", "has_variable = sr_completed_moon_landing"),
+        ("sr_has_colony_beyond_moon = yes", "sr_has_space_colony = yes"),
+        (DONE, OVER),  # a programme finishes only once every world was claimed
+    )
+
+    @classmethod
+    def setUpClass(cls):
+        decisions = strip_comments(read(DECISIONS))
+        cls.decisions = {name: block(decisions, name) for name in (
+            "te_decision_space_mission_solar", "te_decision_space_mission_deep_space",
+            "te_decision_resume_solar_colonization")}
+        entry = block(strip_comments(read(JES)), "je_space_race_solar_colonization")
+        possible = _tree(block(entry, "possible"))
+        branches = possible[0][2]
+        assert possible[0][0] == "OR"
+        cls.colonizing = [v for k, _, v in branches if k == "AND"][0]
+        cls.possible = possible
+        triggers = strip_comments(read(ROOT / "common/scripted_triggers/space_race_triggers.txt"))
+        cls.expand = {name: _tree(block(triggers, name)) for name in (
+            "sr_colonization_by_choice", "sr_race_over_moon_free", "sr_solar_colonization_running",
+            "sr_solar_colonization_qualified")}
+        cls.resume = strip_comments(read(ROOT / "common/scripted_effects/sr_site_effects.txt"))
+        cls.resume = block(cls.resume, "sr_resume_solar_colonization")
+
+    def holds(self, body, state):
+        for key, op, value in body:
+            if key in ("AND", "custom_tooltip"):
+                ok = self.holds([x for x in value if x[0] != "text"], state)
+            elif key == "trigger_if":
+                limit = [v for k, _, v in value if k == "limit"][0]
+                ok = not self.holds(limit, state) or self.holds([x for x in value if x[0] != "limit"], state)
+            elif key == "OR":
+                ok = any(self.holds([x], state) for x in value if x[0] != "text")
+            elif key == "NOT":
+                ok = not self.holds(value, state)
+            elif key in self.expand and value in ("yes", "no"):
+                ok = self.holds(self.expand[key], state) == (value == "yes")
+            else:
+                atom = f"{key} {op} {value}"
+                ok = state.get(atom, False)
+            if not ok:
+                return False
+        return True
+
+    def atoms(self, body, out):
+        for key, op, value in body:
+            if isinstance(value, list):
+                if key in ("AND", "OR", "NOT", "custom_tooltip", "trigger_if", "limit"):
+                    self.atoms(value, out)
+                continue
+            if key == "text":
+                continue
+            if key in self.expand and value in ("yes", "no"):
+                self.atoms(self.expand[key], out)
+            else:
+                out.add(f"{key} {op} {value}")
+        return out
+
+    def check(self, name, takes):
+        import itertools
+        decision = self.decisions[name]
+        shown = _tree(block(decision, "is_shown"))
+        possible = _tree(block(decision, "possible"))
+        gate = [("sr_colonization_by_choice", "=", "yes")]
+        running = [("sr_solar_colonization_running", "=", "yes")]
+        atoms = sorted(self.atoms(shown + possible + self.possible + gate + running, set())
+                       | {b for _, b in self.FACTS} | {self.OPEN, self.DONE})
+        self.assertLessEqual(len(atoms), 22, atoms)
+        offered = 0
+        for bits in itertools.product((False, True), repeat=len(atoms)):
+            state = dict(zip(atoms, bits))
+            if any(state.get(a) and not state.get(b) for a, b in self.FACTS):
+                continue
+            if state.get(self.OPEN) and not state.get(self.DONE) and not state.get(self.ACTIVE):
+                continue  # an open entry's immediate set it, unless it had finished
+            if not (self.holds(shown, state) and self.holds(possible, state)):
+                continue
+            offered += 1
+            after = dict(state, **takes(state))
+            self.assertTrue(self.holds(self.possible + gate, after),
+                            f"{name} is offered but the entry can't colonize: "
+                            f"{sorted(a for a, v in after.items() if v)}")
+            if state.get(self.OPEN):
+                # review R1: with the entry already open, the programme runs at once
+                self.assertTrue(self.holds(running, after),
+                                f"{name} is taken with the entry open but nothing runs: "
+                                f"{sorted(a for a, v in after.items() if v)}")
+        self.assertGreater(offered, 0, name)
+
+    def resumed(self, s):
+        """sr_resume_solar_colonization, as its body reads: the marker, and with
+        the entry open the active flag."""
+        self.assertTrue(self.resume.split()[:7] == "set_variable = { name = sr_colonization_resumed value".split())
+        opened = self.resume[self.resume.index(self.OPEN):]
+        self.assertIn("set_variable = { name = sr_active_solar_colonization value = yes }", opened)
+        return {self.MARKER: True, self.ACTIVE: s.get(self.ACTIVE) or s.get(self.OPEN)}
+
+    def test_begin_solar_colonization(self):
+        when = block(self.decisions["te_decision_space_mission_solar"], "when_taken")
+        self.assertRegex(when, r"if = \{\s*limit = \{ sr_race_over_moon_free = yes \}\s*"
+                               r"sr_resume_solar_colonization = yes")
+        self.check("te_decision_space_mission_solar", lambda s: dict(
+            {self.SOLAR: True}, **(self.resumed(s) if s.get(self.OVER) and s.get(self.LUNAR) else {})))
+
+    def test_begin_deep_space_exploration(self):
+        self.check("te_decision_space_mission_deep_space", lambda s: {self.DEEP: True, self.SOLAR: True})
+
+    def test_resume_solar_colonization(self):
+        self.assertIn("sr_resume_solar_colonization = yes",
+                      block(self.decisions["te_decision_resume_solar_colonization"], "when_taken"))
+        self.check("te_decision_resume_solar_colonization", self.resumed)
 
 
 if __name__ == "__main__":

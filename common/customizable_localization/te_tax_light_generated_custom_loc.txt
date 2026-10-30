@@ -206,6 +206,35 @@ te_tax_lt_law = {
 	}
 }
 
+te_tax_lt_law_short = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_light_law = 1 }
+		localization_key = te_tax_lt_law_short_law_consumption_based_taxation
+	}
+	text = {
+		trigger = { te_tax_view_light_law = 2 }
+		localization_key = te_tax_lt_law_short_law_land_based_taxation
+	}
+	text = {
+		trigger = { te_tax_view_light_law = 3 }
+		localization_key = te_tax_lt_law_short_law_per_capita_based_taxation
+	}
+	text = {
+		trigger = { te_tax_view_light_law = 4 }
+		localization_key = te_tax_lt_law_short_law_proportional_taxation
+	}
+	text = {
+		trigger = { te_tax_view_light_law = 5 }
+		localization_key = te_tax_lt_law_short_law_graduated_taxation
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_tax_lt_law_other
+	}
+}
+
 te_tax_lt_range_wage = {
 	type = country
 	random_valid = no

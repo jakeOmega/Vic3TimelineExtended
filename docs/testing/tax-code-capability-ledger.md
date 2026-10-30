@@ -244,14 +244,14 @@ first. Fill a row's result from its checks: *passed* only when every check passe
 | S2 | January expiry and February replacement | Both timelines execute as reviewed; no stale snapshot restoration | PT-06, PT-31 | | |
 | S3 | Conflicting commencement and same-date transitions | Whole package holds or executes in approved order; no partial collection | PT-01, PT-09, PT-31, PT-38, PT-42 | | |
 | S4 | Zero-rate channel becomes taxable | Estimate base available or approximation explicit; payer/receipt reconciliation | PT-08, PT-15, PT-23, PT-25, PT-34 | | |
-| S5 | Relief, subsidy, treaty and market changes | Correct authority, direction, beneficiaries, costs; no secondary controls | PT-05, PT-11, PT-15, PT-24, PT-36, PT-42 | | |
+| S5 | Relief, subsidy, treaty and market changes | Correct authority, direction, beneficiaries, costs; no secondary controls | PT-05, PT-11, PT-15, PT-24, PT-36, PT-42, PT-45 | | |
 | S6 | Institution delivery and explicit deficit promise | Native costs apply; independent promises fulfil or breach independently | PT-07, PT-15, PT-21, PT-26, PT-28 | | |
 | S7 | Save/load at each lifecycle stage | Dates, revisions, commitments and future changes preserved | PT-29 | | |
 | S8 | Both civil-war outcomes with different wartime reforms | Winner's coherent schedule restored; no loser-only clauses or repeated rewards | PT-10 | | |
 | S9 | Secession, releases, transfers and moved capital | Explicit initialisation and territorial eligibility | PT-10, PT-30 | | |
 | S10 | AI fiscal crisis | Same legal constraints, explainable failures, no free collections | PT-13, PT-16, PT-17, PT-19 | | |
 | S11 | Disabled rule and repeated migration | Existing behaviour retained when disabled; migration idempotent | PT-03, PT-04, PT-27, PT-32, PT-35, PT-39 | | |
-| S12 | Large-country/world performance and open GUI | Meets budgets without per-frame expensive aggregation | PT-12, PT-14, PT-33, PT-40, PT-41 | | |
+| S12 | Large-country/world performance and open GUI | Meets budgets without per-frame expensive aggregation | PT-12, PT-14, PT-33, PT-40, PT-41, PT-43 to PT-46 | | |
 | S13 | AI legislation (package 6) | AI countries draft, bargain, pass and keep promises through the player's commands, with bounded loops and logs | PT-13, PT-16 to PT-22 | | |
 
 ## Known limitations
