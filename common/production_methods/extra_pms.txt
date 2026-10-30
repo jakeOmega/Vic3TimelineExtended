@@ -7993,6 +7993,9 @@ pm_ai_managed_chemical_plant = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -8049,6 +8052,9 @@ pm_ai_managed_explosives_factory = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -11522,6 +11528,9 @@ pm_ai_managed_power_plant = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -11573,6 +11582,9 @@ pm_ai_managed_power_plant_reactor = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -11620,6 +11632,9 @@ pm_ai_managed_power_plant_hydro = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12690,6 +12705,9 @@ pm_ai_managed_building_tooling_workshop = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12748,6 +12766,9 @@ pm_ai_managed_building_tooling_workshop_handling = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12799,6 +12820,9 @@ pm_ai_managed_building_motor_industry = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12849,6 +12873,9 @@ pm_ai_managed_building_motor_industry_turbine = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12907,6 +12934,9 @@ pm_ai_managed_building_arms_industry = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -12967,6 +12997,9 @@ pm_ai_managed_building_artillery_foundry = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -13027,6 +13060,9 @@ pm_ai_managed_building_munition_plant = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -13084,6 +13120,9 @@ pm_ai_managed_building_munition_plant_shells = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -13372,6 +13411,9 @@ pm_ai_managed_fab = {
 
 		unscaled = {
 			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
 		}
 	}
 
