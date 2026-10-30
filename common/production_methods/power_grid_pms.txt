@@ -18,6 +18,10 @@
 # (power_grid_effects.txt) counts how well staffed the stations are a year on.
 # A station with no staff keeps its order and modifiers and runs again from its
 # first hire.
+#
+# The method also gives the state its Power Grid Connection
+# (state_power_grid_connection_bool), which is what puts the station on its
+# grid each month (te_grid_station_online).
 # ============================================================================
 
 pm_grid_transfer_base = {
@@ -37,6 +41,15 @@ pm_grid_transfer_base = {
 		level_scaled = {
 			building_employment_engineers_add = 500
 			building_employment_clerks_add = 500
+		}
+	}
+	# The state's connection to its grid, which the balancing reads
+	# (te_grid_state_connected). Unscaled, so an empty station keeps it, as it
+	# keeps its order; vanilla's naval fortifications grant
+	# state_control_strait_bool the same way.
+	state_modifiers = {
+		unscaled = {
+			state_power_grid_connection_bool = yes
 		}
 	}
 }
