@@ -709,6 +709,19 @@ def _summary_names(path: str) -> set[str]:
     return names
 
 
+def _vanilla_install_missing(base_game_path: str) -> str | None:
+    """Why the bootstraps can't read vanilla under `base_game_path`, or None.
+    Both harvest vanilla's script from game/common and game/events. Without
+    it the valid-key catalog shrinks to the engine-doc names, and the context
+    catalog loses vanilla's scripted effects and triggers and keeps names
+    vanilla uses in both contexts."""
+    for rel in ("common", "events"):
+        path = os.path.join(base_game_path, "game", rel)
+        if not os.path.isdir(path):
+            return f"no vanilla {path}"
+    return None
+
+
 def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
     """Extract the frozen valid-key catalog from vanilla and write it to
     `docs/engine/effect_trigger_valid_keys.txt`. Re-run on a vanilla bump."""
@@ -1243,17 +1256,26 @@ def main(argv: list[str] | None = None, mod_path: str | None = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
     if mod_path is None:
         from path_constants import mod_path
-    if argv[:1] == ["bootstrap"]:
+    if argv[:1] in (["bootstrap"], ["bootstrap-context"]):
         # Only the bootstrap subcommands read vanilla; keep the default audit
         # runnable on a machine with no Victoria 3 install.
         from path_constants import base_game_path
 
+        missing = _vanilla_install_missing(base_game_path)
+        if missing:
+            print(
+                f"{argv[0]}: {missing}, so nothing was written. Run it on the "
+                "machine with the game (vanilla_patch_runbook.md § 4).",
+                file=sys.stderr,
+            )
+            return 2
+    if argv[:1] == ["bootstrap"]:
         print(bootstrap_catalog(base_game_path, mod_path))
         return 0
     if argv[:1] == ["bootstrap-context"]:
         # The effect-only / trigger-only catalog (#1142): engine docs from the
         # pinned snapshot, usage from the live install's game/common + events.
-        from path_constants import base_game_path, vanilla_snapshot_docs_path
+        from path_constants import vanilla_snapshot_docs_path
 
         print(bootstrap_context_catalog(
             base_game_path, mod_path, vanilla_snapshot_docs_path,

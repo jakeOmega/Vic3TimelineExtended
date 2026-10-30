@@ -5,8 +5,10 @@ import io
 import os
 import tempfile
 import unittest
+from unittest import mock
 
 import effect_trigger_validity_audit as eva
+import path_constants
 
 # A minimal "known-good" catalog for the synthetic mods below.
 VALID = {"add_modifier", "name", "multiplier", "if", "limit", "value",
@@ -278,6 +280,37 @@ class BootstrapCatalogTests(unittest.TestCase):
         catalog = eva.load_catalog(mod)
         self.assertIn("has_treaty_alliance_with", catalog)
         self.assertIn("some_vanilla_value", catalog)
+
+
+class BootstrapCliTests(unittest.TestCase):
+    """Run with no vanilla install, a bootstrap would rewrite its catalog from
+    the engine-doc names alone, so the CLI refuses and writes nothing."""
+
+    def _main(self, argv, game):
+        mod = tempfile.mkdtemp()
+        err = io.StringIO()
+        with mock.patch.object(path_constants, "base_game_path", game, create=True), \
+                contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(err):
+            code = eva.main(argv, mod_path=mod)
+        return code, err.getvalue(), mod
+
+    def test_refuses_without_the_install(self):
+        game = tempfile.mkdtemp()
+        os.makedirs(os.path.join(game, "game", "common"))  # no game/events
+        for argv in (["bootstrap"], ["bootstrap-context"]):
+            with self.subTest(argv=argv):
+                code, err, mod = self._main(argv, game)
+                self.assertEqual(code, 2)
+                self.assertIn(os.path.join(game, "game", "events"), err)
+                self.assertFalse(os.path.exists(os.path.join(mod, "docs", "engine")))
+
+    def test_bootstrap_runs_with_the_install(self):
+        game = tempfile.mkdtemp()
+        for rel in ("common", "events"):
+            os.makedirs(os.path.join(game, "game", rel))
+        code, _, mod = self._main(["bootstrap"], game)
+        self.assertEqual(code, 0)
+        self.assertTrue(os.path.isfile(os.path.join(mod, eva._CATALOG_REL)))
 
 
 # --- #1142: effects in trigger context and the reverse ----------------------

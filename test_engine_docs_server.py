@@ -4,12 +4,14 @@
 - `_engine_docs_find_usage`: filters vanilla `common/` for call-site usages,
   excludes definitions and trigger-localization labels by default.
 - `_load_engine_docs` leaves the committed docs/engine/ files alone when the
-  engine logs are incomplete or older than the ones they were rendered from.
+  engine logs are incomplete, older than the ones they were rendered from, or
+  newer than the vanilla the mod targets.
 
 Both are tested by direct module import rather than via the HTTP server (the
 server takes ~90s to warm up; the underlying functions are pure-Python and
 testable in isolation).
 """
+import json
 import os
 import tempfile
 import unittest
@@ -472,9 +474,11 @@ def _fake_log_parser(path: str) -> list[dict]:
 
 
 class EngineDocsRenderGuardTests(unittest.TestCase):
-    """`_load_engine_docs` must not re-render docs/engine/ from missing, empty
-    or older engine logs: in a game-less container that replaced ~30k committed
-    lines with mod-only content, and the audits reading them changed verdicts."""
+    """`_load_engine_docs` must not re-render docs/engine/ from missing, empty,
+    older or too-new engine logs: in a game-less container that replaced ~30k
+    committed lines with mod-only content, and the audits reading them changed
+    verdicts. Too new is a digest folder for a vanilla the mod isn't on yet
+    (Modding-Digests' 1.15.0, published 2026-10-29 while the mod was on 1.14.5)."""
 
     COMMITTED = "# Auto-generated from modifiers.log (engine docs 1.14.5). Do not hand-edit.\ncommitted\n"
 
@@ -485,13 +489,15 @@ class EngineDocsRenderGuardTests(unittest.TestCase):
         self.engine_dir = os.path.join(self.root, "docs", "engine")
         os.makedirs(self.engine_dir)
         self.summary = os.path.join(self.engine_dir, "modifiers_summary.txt")
-        with open(self.summary, "w", encoding="utf-8") as f:
-            f.write(self.COMMITTED)
+        self._write_summary(self.COMMITTED)
         self.render = mock.Mock(return_value={})
         self.source = (os.path.join(self.root, "missing"), "mod_loaded")
+        # The vanilla the mod targets: vanilla_parsed/'s game_version.
+        self.target = ("1.14.5", "vanilla_parsed/manifest.json game_version")
         patches = [
             mock.patch.object(mss, "doc_path", os.path.join(self.root, "docs")),
             mock.patch.object(mss, "_engine_docs_source", lambda: self.source),
+            mock.patch.object(mss, "_engine_docs_target_version", lambda: self.target),
             mock.patch("engine_docs_render.render_all", self.render),
             mock.patch("game_log_reader.render_error_log_digest", return_value=""),
             mock.patch.object(mss, "_build_pattern_data", return_value=([], {}, [], {})),
@@ -516,9 +522,13 @@ class EngineDocsRenderGuardTests(unittest.TestCase):
             p.start()
             self.addCleanup(p.stop)
 
+    def _write_summary(self, text: str) -> None:
+        with open(self.summary, "w", encoding="utf-8") as f:
+            f.write(text)
+
     def _use_logs(self, version_dir: str, *, empty=(), absent=()) -> None:
         docs = os.path.join(self.root, "digests", version_dir, "docs")
-        os.makedirs(docs)
+        os.makedirs(docs, exist_ok=True)
         for name in _ENGINE_LOGS:
             if name in absent:
                 continue
@@ -526,10 +536,10 @@ class EngineDocsRenderGuardTests(unittest.TestCase):
                 f.write("" if name in empty else "## entry\n")
         self.source = (docs, "digest_snapshot")
 
-    def _assert_skipped(self) -> dict:
+    def _assert_skipped(self, committed: str = COMMITTED) -> dict:
         self.render.assert_not_called()
         with open(self.summary, encoding="utf-8") as f:
-            self.assertEqual(f.read(), self.COMMITTED)
+            self.assertEqual(f.read(), committed)
         self.assertEqual(len(mss._engine_docs_warnings), 1)
         warning = mss._engine_docs_warnings[0]
         self.assertEqual(warning["label"], "engine_docs_render_skipped")
@@ -561,13 +571,62 @@ class EngineDocsRenderGuardTests(unittest.TestCase):
         self.assertEqual(warning["rendered_version"], "1.14.5")
 
     def test_complete_logs_render(self):
-        for version in ("1.14.5", "1.14.10"):
-            with self.subTest(version=version):
+        # The rendered version, or a newer one up to the target.
+        for version, target in (("1.14.5", "1.14.5"), ("1.14.10", "1.14.10"),
+                                ("1.14.5", "1.14.10")):
+            with self.subTest(version=version, target=target):
                 self.render.reset_mock()
+                self.target = (target, "vanilla_parsed/manifest.json game_version")
                 self._use_logs(version)
                 mss._load_engine_docs()
                 self.render.assert_called_once()
                 self.assertEqual(mss._engine_docs_warnings, [])
+
+    def test_newer_snapshot_than_target_skips_render(self):
+        self._use_logs("1.15.0")
+        mss._load_engine_docs()
+        warning = self._assert_skipped()
+        self.assertNotIn("missing", warning)
+        self.assertEqual(warning["source_version"], "1.15.0")
+        self.assertEqual(warning["rendered_version"], "1.14.5")
+        self.assertEqual(warning["target_version"], "1.14.5")
+        self.assertIn("newer than 1.14.5, the vanilla the mod targets", warning["detail"])
+        # The way forward is the snapshot rebuild, not a pin to the new dump.
+        self.assertIn("python3 vanilla_parsed.py build", warning["detail"])
+
+    def test_newer_snapshot_renders_once_vanilla_parsed_is_rebuilt(self):
+        # The migration: vanilla_parsed/ rebuilt on the 1.15.0 install moves
+        # the target, and the next load renders the 1.15.0 digest.
+        self._use_logs("1.15.0")
+        self.target = ("1.15.0", "vanilla_parsed/manifest.json game_version")
+        mss._load_engine_docs()
+        self.render.assert_called_once()
+        self.assertEqual(mss._engine_docs_warnings, [])
+
+    def test_trailing_zero_versions_compare_equal(self):
+        self._use_logs("1.15")
+        self.target = ("1.15.0", "vanilla_parsed/manifest.json game_version")
+        mss._load_engine_docs()
+        self.render.assert_called_once()
+
+    def test_target_version_renders_over_files_rendered_past_it(self):
+        # Files a too-new digest already rendered go back to the target's
+        # version, but no further.
+        past = self.COMMITTED.replace("1.14.5", "1.15.0")
+        self._write_summary(past)
+        self._use_logs("1.13.11")
+        mss._load_engine_docs()
+        self.assertEqual(self._assert_skipped(past)["rendered_version"], "1.15.0")
+        self._use_logs("1.14.5")
+        mss._load_engine_docs()
+        self.render.assert_called_once()
+        self.assertEqual(mss._engine_docs_warnings, [])
+
+    def test_unknown_target_does_not_cap_the_render(self):
+        self._use_logs("1.15.0")
+        self.target = (None, "")
+        mss._load_engine_docs()
+        self.render.assert_called_once()
 
     def test_complete_logs_render_without_a_rendered_version(self):
         os.remove(self.summary)
@@ -579,6 +638,50 @@ class EngineDocsRenderGuardTests(unittest.TestCase):
         warnings = mss._reload_engine_only()
         self.assertEqual(
             [w["label"] for w in warnings], ["engine_docs_render_skipped"]
+        )
+
+
+class EngineDocsTargetVersionTests(unittest.TestCase):
+    """`_engine_docs_target_version`: vanilla_parsed/'s game_version, else the
+    installed game's, else none."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.snapshot = tmp.name
+        self.live = None
+        for p in (mock.patch.object(mss, "VANILLA_PARSED_DIR", self.snapshot),
+                  mock.patch.object(mss, "_read_live_game_version", lambda: self.live)):
+            p.start()
+            self.addCleanup(p.stop)
+
+    def _manifest(self, **fields) -> None:
+        with open(os.path.join(self.snapshot, "manifest.json"), "w", encoding="utf-8") as f:
+            json.dump(fields, f)
+
+    def test_snapshot_version_wins_over_the_installed_game(self):
+        # The game updated ahead of the snapshot: the mod still targets 1.14.5.
+        self._manifest(game_version="1.14.5")
+        self.live = "1.15.0"
+        version, source = mss._engine_docs_target_version()
+        self.assertEqual(version, "1.14.5")
+        self.assertIn("vanilla_parsed", source)
+
+    def test_installed_game_without_a_snapshot(self):
+        self.live = "1.14.5"
+        self.assertEqual(mss._engine_docs_target_version()[0], "1.14.5")
+        self._manifest(game_version=None)
+        self.assertEqual(mss._engine_docs_target_version()[0], "1.14.5")
+
+    def test_neither(self):
+        self.assertEqual(mss._engine_docs_target_version(), (None, ""))
+
+    def test_committed_snapshot_is_the_target(self):
+        with mock.patch.object(mss, "VANILLA_PARSED_DIR", mss.vanilla_parsed.DEFAULT_DIR):
+            version, _ = mss._engine_docs_target_version()
+        self.assertEqual(
+            version,
+            mss.vanilla_parsed.read_manifest(mss.vanilla_parsed.DEFAULT_DIR)["game_version"],
         )
 
 

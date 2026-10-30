@@ -3848,6 +3848,31 @@ def _rendered_engine_docs_version(engine_dir: str) -> Optional[str]:
     return m.group(1) if m else None
 
 
+def _version_tuple(version: Optional[str]) -> tuple:
+    """`vanilla_parsed.version_key` of the last version token in `version`,
+    trailing zeros dropped so "1.15" and "1.15.0" compare equal; () when there
+    is none."""
+    key = vanilla_parsed.version_key(_version_from_text(version))
+    while len(key) > 1 and key[-1] == 0:
+        key = key[:-1]
+    return key
+
+
+def _engine_docs_target_version() -> tuple[Optional[str], str]:
+    """(version, where it came from) of the vanilla the mod targets, the
+    newest one docs/engine/ may be rendered from: the committed vanilla_parsed/
+    snapshot's `game_version`, which a vanilla bump rebuilds first (runbook
+    § 4), else the installed game's launcher version, else (None, "")."""
+    manifest = vanilla_parsed.read_manifest(VANILLA_PARSED_DIR) or {}
+    version = manifest.get("game_version")
+    if isinstance(version, str) and _version_tuple(version):
+        return version, "vanilla_parsed/manifest.json game_version"
+    live = _read_live_game_version()
+    if live and _version_tuple(live):
+        return live, "the installed game's launcher-settings.json"
+    return None, ""
+
+
 def _engine_docs_render_blockers(
     chosen_dir: str, source_label: str, failed_logs: list, engine_dir: str
 ) -> list[dict]:
@@ -3858,21 +3883,46 @@ def _engine_docs_render_blockers(
     whatever parsed. With a log missing (no game install, or a fresh machine's
     digest snapshot not cloned yet), that is mod-only content. With a snapshot
     older than the one the files came from (the digest resolver skips open-beta
-    versions, #332), it is a silent downgrade. Either way the audits that read
-    those files change their verdicts. Rendering from the same or a newer
-    version still goes ahead: the mod's own modifier types are unioned in.
+    versions, #332), it is a silent downgrade. With one newer than the vanilla
+    the mod targets (_engine_docs_target_version), it is a silent upgrade: the
+    resolver takes the highest digest folder, and Modding-Digests published
+    1.15.0 a week before that release, while the mod was on 1.14.5. Either way
+    the audits that read those files change their verdicts. Rendering from a
+    version between the two still goes ahead: the mod's own modifier types are
+    unioned in. A source at the target version always renders, so files
+    rendered past the target can be put back.
     """
     source_version = _version_from_text(chosen_dir)
     rendered_version = _rendered_engine_docs_version(engine_dir)
+    target_version, target_from = _engine_docs_target_version()
+    source_key = _version_tuple(source_version)
+    rendered_key = _version_tuple(rendered_version)
+    target_key = _version_tuple(target_version)
+    remedy = (
+        "Set `vanilla_snapshot_docs_path` to a complete script_docs dump of the "
+        "current vanilla version, then reload."
+    )
     if failed_logs:
         reason = (
             f"engine docs incomplete in {chosen_dir} ({source_label}): "
             f"{', '.join(failed_logs)} missing, unparseable or empty"
         )
+    elif source_key and target_key and source_key > target_key:
+        reason = (
+            f"engine docs in {chosen_dir} ({source_label}) are {source_version}, "
+            f"newer than {target_version}, the vanilla the mod targets ({target_from})"
+        )
+        remedy = (
+            f"To move the mod to {source_version}, rebuild vanilla_parsed/ on a "
+            f"{source_version} install (`python3 vanilla_parsed.py build`) and "
+            "reload: the render follows, and the snapshot and docs/engine/ are "
+            "committed together (vanilla_patch_runbook.md § 4). To re-render at "
+            f"{target_version}, set `vanilla_snapshot_docs_path` to a "
+            f"{target_version} script_docs dump, then reload."
+        )
     elif (
-        source_version and rendered_version
-        and tuple(map(int, source_version.split(".")))
-        < tuple(map(int, rendered_version.split(".")))
+        source_key and rendered_key and source_key < rendered_key
+        and source_key != target_key
     ):
         reason = (
             f"engine docs in {chosen_dir} ({source_label}) are {source_version}, "
@@ -3884,14 +3934,13 @@ def _engine_docs_render_blockers(
         "label": "engine_docs_render_skipped",
         "detail": (
             f"{reason}, so the docs/engine/ reference files were left as they "
-            "were, not re-rendered. Endpoints serve whatever did parse. Set "
-            "`vanilla_snapshot_docs_path` to a complete script_docs dump of the "
-            "current vanilla version, then reload."
+            f"were, not re-rendered. Endpoints serve whatever did parse. {remedy}"
         ),
         "source_label": source_label,
         "source_dir": chosen_dir,
         "source_version": source_version,
         "rendered_version": rendered_version,
+        "target_version": target_version,
     }
     if failed_logs:
         warning["missing"] = list(failed_logs)
