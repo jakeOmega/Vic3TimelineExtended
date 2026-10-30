@@ -437,12 +437,16 @@ sr_depots_self_check = {
 # ---- Display: the destinations' lines -----------------------------------------------
 # Printed by sr_launch_windows_sgui (common/scripted_guis/sr_launch_window_sguis.txt)
 # through ExecuteTooltip, so nothing here ever runs. Country scope (ROOT = the
-# panel's owner). One line per window body in play: open now, waiting for its
-# window, or (with propellant depots) the premium to launch now and whether the
-# approach would.
+# panel's owner). One line per window body in play with a world we may target
+# within our drive's reach (sr_window_reach_<body>, as Next Windows' table:
+# colony management design § 6): open now, waiting for its window, or (with
+# propellant depots) the premium to launch now and whether the approach would.
 sr_launch_window_line = {
 	if = {
-		limit = { sr_window_body_in_play_$BODY$ = yes }
+		limit = {
+			sr_window_body_in_play_$BODY$ = yes
+			sr_window_reach_$BODY$ = 1
+		}
 		if = {
 			limit = { has_global_variable = sr_window_is_open_$BODY$ }
 			custom_tooltip_no_bullet = sr_window_line_open_$BODY$
@@ -462,7 +466,10 @@ sr_launch_window_line = {
 # window; founded the month a fleet leaves, lunar colonization design § 3.3).
 sr_launch_window_lines = {
 	if = {
-		limit = { sr_window_moon_in_play = yes }
+		limit = {
+			sr_window_moon_in_play = yes
+			sr_window_reach_moon = 1
+		}
 		custom_tooltip_no_bullet = sr_window_line_moon
 	}
 	sr_launch_window_line = { BODY = mars }
@@ -474,7 +481,10 @@ sr_launch_window_lines = {
 	sr_launch_window_line = { BODY = jupiter }
 	sr_launch_window_line = { BODY = venus }
 	if = {
-		limit = { sr_window_mercury_in_play = yes }
+		limit = {
+			sr_window_mercury_in_play = yes
+			sr_window_reach_mercury = 1
+		}
 		custom_tooltip_no_bullet = sr_window_line_mercury
 	}
 	sr_launch_window_line = { BODY = saturn }

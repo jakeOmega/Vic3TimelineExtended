@@ -96,49 +96,50 @@ sr_sites_world_count = { value = 40 }
 
 # Cede Colony's AI: what the article's input world is worth, 20 plus 5 a
 # stage (design § 11.2), plus 5 a module level past the first (slice 4 design
-# § 7). scope:article in inherent_accept_score.
+# § 7), plus 1 a 2,000 of its people (colony management design § 3).
+# scope:article in inherent_accept_score.
 sr_cede_ai_input_value = {
 	value = 0
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_valles_marineris } value = 25 add = { value = sr_site_extra_levels_valles_marineris multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_olympus_mons } value = 25 add = { value = sr_site_extra_levels_olympus_mons multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_hellas_planitia } value = 25 add = { value = sr_site_extra_levels_hellas_planitia multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_utopia_planitia } value = 25 add = { value = sr_site_extra_levels_utopia_planitia multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_arcadia_planitia } value = 25 add = { value = sr_site_extra_levels_arcadia_planitia multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ceres } value = 25 add = { value = sr_site_extra_levels_ceres multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_vesta } value = 25 add = { value = sr_site_extra_levels_vesta multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_psyche } value = 25 add = { value = sr_site_extra_levels_psyche multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_pallas } value = 25 add = { value = sr_site_extra_levels_pallas multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_hygiea } value = 25 add = { value = sr_site_extra_levels_hygiea multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_io } value = 30 add = { value = sr_site_extra_levels_io multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_europa } value = 30 add = { value = sr_site_extra_levels_europa multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ganymede } value = 30 add = { value = sr_site_extra_levels_ganymede multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_callisto } value = 30 add = { value = sr_site_extra_levels_callisto multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_himalia } value = 30 add = { value = sr_site_extra_levels_himalia multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_amalthea } value = 30 add = { value = sr_site_extra_levels_amalthea multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_venus } value = 30 add = { value = sr_site_extra_levels_venus multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_mercury } value = 35 add = { value = sr_site_extra_levels_mercury multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_titan } value = 35 add = { value = sr_site_extra_levels_titan multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_enceladus } value = 35 add = { value = sr_site_extra_levels_enceladus multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_rhea } value = 35 add = { value = sr_site_extra_levels_rhea multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_mimas } value = 35 add = { value = sr_site_extra_levels_mimas multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_iapetus } value = 35 add = { value = sr_site_extra_levels_iapetus multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_titania } value = 40 add = { value = sr_site_extra_levels_titania multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_oberon } value = 40 add = { value = sr_site_extra_levels_oberon multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_miranda } value = 40 add = { value = sr_site_extra_levels_miranda multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ariel } value = 40 add = { value = sr_site_extra_levels_ariel multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_triton } value = 40 add = { value = sr_site_extra_levels_triton multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_proteus } value = 40 add = { value = sr_site_extra_levels_proteus multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_pluto } value = 45 add = { value = sr_site_extra_levels_pluto multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_eris } value = 45 add = { value = sr_site_extra_levels_eris multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_makemake } value = 45 add = { value = sr_site_extra_levels_makemake multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_haumea } value = 45 add = { value = sr_site_extra_levels_haumea multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_sedna } value = 45 add = { value = sr_site_extra_levels_sedna multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_shackleton } value = 20 add = { value = sr_site_extra_levels_shackleton multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_peary } value = 20 add = { value = sr_site_extra_levels_peary multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_tranquility } value = 20 add = { value = sr_site_extra_levels_tranquility multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_marius_hills } value = 20 add = { value = sr_site_extra_levels_marius_hills multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_daedalus } value = 20 add = { value = sr_site_extra_levels_daedalus multiply = 5 } }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_imbrium } value = 20 add = { value = sr_site_extra_levels_imbrium multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_valles_marineris } value = 25 add = { value = sr_site_extra_levels_valles_marineris multiply = 5 } add = { value = sr_site_pop_value_valles_marineris divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_olympus_mons } value = 25 add = { value = sr_site_extra_levels_olympus_mons multiply = 5 } add = { value = sr_site_pop_value_olympus_mons divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_hellas_planitia } value = 25 add = { value = sr_site_extra_levels_hellas_planitia multiply = 5 } add = { value = sr_site_pop_value_hellas_planitia divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_utopia_planitia } value = 25 add = { value = sr_site_extra_levels_utopia_planitia multiply = 5 } add = { value = sr_site_pop_value_utopia_planitia divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_arcadia_planitia } value = 25 add = { value = sr_site_extra_levels_arcadia_planitia multiply = 5 } add = { value = sr_site_pop_value_arcadia_planitia divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ceres } value = 25 add = { value = sr_site_extra_levels_ceres multiply = 5 } add = { value = sr_site_pop_value_ceres divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_vesta } value = 25 add = { value = sr_site_extra_levels_vesta multiply = 5 } add = { value = sr_site_pop_value_vesta divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_psyche } value = 25 add = { value = sr_site_extra_levels_psyche multiply = 5 } add = { value = sr_site_pop_value_psyche divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_pallas } value = 25 add = { value = sr_site_extra_levels_pallas multiply = 5 } add = { value = sr_site_pop_value_pallas divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_hygiea } value = 25 add = { value = sr_site_extra_levels_hygiea multiply = 5 } add = { value = sr_site_pop_value_hygiea divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_io } value = 30 add = { value = sr_site_extra_levels_io multiply = 5 } add = { value = sr_site_pop_value_io divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_europa } value = 30 add = { value = sr_site_extra_levels_europa multiply = 5 } add = { value = sr_site_pop_value_europa divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ganymede } value = 30 add = { value = sr_site_extra_levels_ganymede multiply = 5 } add = { value = sr_site_pop_value_ganymede divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_callisto } value = 30 add = { value = sr_site_extra_levels_callisto multiply = 5 } add = { value = sr_site_pop_value_callisto divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_himalia } value = 30 add = { value = sr_site_extra_levels_himalia multiply = 5 } add = { value = sr_site_pop_value_himalia divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_amalthea } value = 30 add = { value = sr_site_extra_levels_amalthea multiply = 5 } add = { value = sr_site_pop_value_amalthea divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_venus } value = 30 add = { value = sr_site_extra_levels_venus multiply = 5 } add = { value = sr_site_pop_value_venus divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_mercury } value = 35 add = { value = sr_site_extra_levels_mercury multiply = 5 } add = { value = sr_site_pop_value_mercury divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_titan } value = 35 add = { value = sr_site_extra_levels_titan multiply = 5 } add = { value = sr_site_pop_value_titan divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_enceladus } value = 35 add = { value = sr_site_extra_levels_enceladus multiply = 5 } add = { value = sr_site_pop_value_enceladus divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_rhea } value = 35 add = { value = sr_site_extra_levels_rhea multiply = 5 } add = { value = sr_site_pop_value_rhea divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_mimas } value = 35 add = { value = sr_site_extra_levels_mimas multiply = 5 } add = { value = sr_site_pop_value_mimas divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_iapetus } value = 35 add = { value = sr_site_extra_levels_iapetus multiply = 5 } add = { value = sr_site_pop_value_iapetus divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_titania } value = 40 add = { value = sr_site_extra_levels_titania multiply = 5 } add = { value = sr_site_pop_value_titania divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_oberon } value = 40 add = { value = sr_site_extra_levels_oberon multiply = 5 } add = { value = sr_site_pop_value_oberon divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_miranda } value = 40 add = { value = sr_site_extra_levels_miranda multiply = 5 } add = { value = sr_site_pop_value_miranda divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ariel } value = 40 add = { value = sr_site_extra_levels_ariel multiply = 5 } add = { value = sr_site_pop_value_ariel divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_triton } value = 40 add = { value = sr_site_extra_levels_triton multiply = 5 } add = { value = sr_site_pop_value_triton divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_proteus } value = 40 add = { value = sr_site_extra_levels_proteus multiply = 5 } add = { value = sr_site_pop_value_proteus divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_pluto } value = 45 add = { value = sr_site_extra_levels_pluto multiply = 5 } add = { value = sr_site_pop_value_pluto divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_eris } value = 45 add = { value = sr_site_extra_levels_eris multiply = 5 } add = { value = sr_site_pop_value_eris divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_makemake } value = 45 add = { value = sr_site_extra_levels_makemake multiply = 5 } add = { value = sr_site_pop_value_makemake divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_haumea } value = 45 add = { value = sr_site_extra_levels_haumea multiply = 5 } add = { value = sr_site_pop_value_haumea divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_sedna } value = 45 add = { value = sr_site_extra_levels_sedna multiply = 5 } add = { value = sr_site_pop_value_sedna divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_shackleton } value = 20 add = { value = sr_site_extra_levels_shackleton multiply = 5 } add = { value = sr_site_pop_value_shackleton divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_peary } value = 20 add = { value = sr_site_extra_levels_peary multiply = 5 } add = { value = sr_site_pop_value_peary divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_tranquility } value = 20 add = { value = sr_site_extra_levels_tranquility multiply = 5 } add = { value = sr_site_pop_value_tranquility divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_marius_hills } value = 20 add = { value = sr_site_extra_levels_marius_hills multiply = 5 } add = { value = sr_site_pop_value_marius_hills divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_daedalus } value = 20 add = { value = sr_site_extra_levels_daedalus multiply = 5 } add = { value = sr_site_pop_value_daedalus divide = 2000 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_imbrium } value = 20 add = { value = sr_site_extra_levels_imbrium multiply = 5 } add = { value = sr_site_pop_value_imbrium divide = 2000 } }
 }
 
 # ===== Colony fleets (slices 2-3 design §§ 4-7) =====
@@ -6331,7 +6332,8 @@ sr_site_months_since_contact_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_contact_valles_marineris } value = te_history_month_index subtract = global_var:sr_site_contact_valles_marineris }
 	min = 0
 }
-sr_site_aut_drift_valles_marineris = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_valles_marineris = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_valles_marineris divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6340,6 +6342,12 @@ sr_site_aut_drift_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_garrison_valles_marineris } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_valles_marineris } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_valles_marineris = {
+	value = sr_site_aut_pressure_valles_marineris
+	subtract = { value = sr_site_autonomy_value_valles_marineris multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_valles_marineris = {
 	value = 1
@@ -6371,7 +6379,8 @@ sr_site_months_since_contact_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_contact_olympus_mons } value = te_history_month_index subtract = global_var:sr_site_contact_olympus_mons }
 	min = 0
 }
-sr_site_aut_drift_olympus_mons = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_olympus_mons = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_olympus_mons divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6380,6 +6389,12 @@ sr_site_aut_drift_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_garrison_olympus_mons } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_olympus_mons } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_olympus_mons = {
+	value = sr_site_aut_pressure_olympus_mons
+	subtract = { value = sr_site_autonomy_value_olympus_mons multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_olympus_mons = {
 	value = 1
@@ -6411,7 +6426,8 @@ sr_site_months_since_contact_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_contact_hellas_planitia } value = te_history_month_index subtract = global_var:sr_site_contact_hellas_planitia }
 	min = 0
 }
-sr_site_aut_drift_hellas_planitia = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_hellas_planitia = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_hellas_planitia divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6420,6 +6436,12 @@ sr_site_aut_drift_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_garrison_hellas_planitia } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_hellas_planitia } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_hellas_planitia = {
+	value = sr_site_aut_pressure_hellas_planitia
+	subtract = { value = sr_site_autonomy_value_hellas_planitia multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_hellas_planitia = {
 	value = 1
@@ -6451,7 +6473,8 @@ sr_site_months_since_contact_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_contact_utopia_planitia } value = te_history_month_index subtract = global_var:sr_site_contact_utopia_planitia }
 	min = 0
 }
-sr_site_aut_drift_utopia_planitia = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_utopia_planitia = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_utopia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6460,6 +6483,12 @@ sr_site_aut_drift_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_garrison_utopia_planitia } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_utopia_planitia } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_utopia_planitia = {
+	value = sr_site_aut_pressure_utopia_planitia
+	subtract = { value = sr_site_autonomy_value_utopia_planitia multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_utopia_planitia = {
 	value = 1
@@ -6491,7 +6520,8 @@ sr_site_months_since_contact_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_contact_arcadia_planitia } value = te_history_month_index subtract = global_var:sr_site_contact_arcadia_planitia }
 	min = 0
 }
-sr_site_aut_drift_arcadia_planitia = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_arcadia_planitia = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_arcadia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6500,6 +6530,12 @@ sr_site_aut_drift_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_garrison_arcadia_planitia } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_arcadia_planitia } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_arcadia_planitia = {
+	value = sr_site_aut_pressure_arcadia_planitia
+	subtract = { value = sr_site_autonomy_value_arcadia_planitia multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_arcadia_planitia = {
 	value = 1
@@ -6531,7 +6567,8 @@ sr_site_months_since_contact_ceres = {
 	if = { limit = { has_global_variable = sr_site_contact_ceres } value = te_history_month_index subtract = global_var:sr_site_contact_ceres }
 	min = 0
 }
-sr_site_aut_drift_ceres = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_ceres = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_ceres divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_ceres multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6540,6 +6577,12 @@ sr_site_aut_drift_ceres = {
 	if = { limit = { has_global_variable = sr_site_garrison_ceres } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_ceres } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_ceres = {
+	value = sr_site_aut_pressure_ceres
+	subtract = { value = sr_site_autonomy_value_ceres multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_ceres = {
 	value = 1
@@ -6571,7 +6614,8 @@ sr_site_months_since_contact_vesta = {
 	if = { limit = { has_global_variable = sr_site_contact_vesta } value = te_history_month_index subtract = global_var:sr_site_contact_vesta }
 	min = 0
 }
-sr_site_aut_drift_vesta = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_vesta = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_vesta divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_vesta multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6580,6 +6624,12 @@ sr_site_aut_drift_vesta = {
 	if = { limit = { has_global_variable = sr_site_garrison_vesta } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_vesta } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_vesta = {
+	value = sr_site_aut_pressure_vesta
+	subtract = { value = sr_site_autonomy_value_vesta multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_vesta = {
 	value = 1
@@ -6611,7 +6661,8 @@ sr_site_months_since_contact_psyche = {
 	if = { limit = { has_global_variable = sr_site_contact_psyche } value = te_history_month_index subtract = global_var:sr_site_contact_psyche }
 	min = 0
 }
-sr_site_aut_drift_psyche = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_psyche = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_psyche divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_psyche multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6620,6 +6671,12 @@ sr_site_aut_drift_psyche = {
 	if = { limit = { has_global_variable = sr_site_garrison_psyche } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_psyche } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_psyche = {
+	value = sr_site_aut_pressure_psyche
+	subtract = { value = sr_site_autonomy_value_psyche multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_psyche = {
 	value = 1
@@ -6651,7 +6708,8 @@ sr_site_months_since_contact_pallas = {
 	if = { limit = { has_global_variable = sr_site_contact_pallas } value = te_history_month_index subtract = global_var:sr_site_contact_pallas }
 	min = 0
 }
-sr_site_aut_drift_pallas = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_pallas = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_pallas divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_pallas multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6660,6 +6718,12 @@ sr_site_aut_drift_pallas = {
 	if = { limit = { has_global_variable = sr_site_garrison_pallas } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_pallas } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_pallas = {
+	value = sr_site_aut_pressure_pallas
+	subtract = { value = sr_site_autonomy_value_pallas multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_pallas = {
 	value = 1
@@ -6691,7 +6755,8 @@ sr_site_months_since_contact_hygiea = {
 	if = { limit = { has_global_variable = sr_site_contact_hygiea } value = te_history_month_index subtract = global_var:sr_site_contact_hygiea }
 	min = 0
 }
-sr_site_aut_drift_hygiea = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_hygiea = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_hygiea divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_hygiea multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6700,6 +6765,12 @@ sr_site_aut_drift_hygiea = {
 	if = { limit = { has_global_variable = sr_site_garrison_hygiea } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_hygiea } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_hygiea = {
+	value = sr_site_aut_pressure_hygiea
+	subtract = { value = sr_site_autonomy_value_hygiea multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_hygiea = {
 	value = 1
@@ -6731,7 +6802,8 @@ sr_site_months_since_contact_io = {
 	if = { limit = { has_global_variable = sr_site_contact_io } value = te_history_month_index subtract = global_var:sr_site_contact_io }
 	min = 0
 }
-sr_site_aut_drift_io = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_io = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_io divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6740,6 +6812,12 @@ sr_site_aut_drift_io = {
 	if = { limit = { has_global_variable = sr_site_garrison_io } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_io } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_io = {
+	value = sr_site_aut_pressure_io
+	subtract = { value = sr_site_autonomy_value_io multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_io = {
 	value = 1
@@ -6771,7 +6849,8 @@ sr_site_months_since_contact_europa = {
 	if = { limit = { has_global_variable = sr_site_contact_europa } value = te_history_month_index subtract = global_var:sr_site_contact_europa }
 	min = 0
 }
-sr_site_aut_drift_europa = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_europa = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_europa divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6780,6 +6859,12 @@ sr_site_aut_drift_europa = {
 	if = { limit = { has_global_variable = sr_site_garrison_europa } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_europa } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_europa = {
+	value = sr_site_aut_pressure_europa
+	subtract = { value = sr_site_autonomy_value_europa multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_europa = {
 	value = 1
@@ -6811,7 +6896,8 @@ sr_site_months_since_contact_ganymede = {
 	if = { limit = { has_global_variable = sr_site_contact_ganymede } value = te_history_month_index subtract = global_var:sr_site_contact_ganymede }
 	min = 0
 }
-sr_site_aut_drift_ganymede = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_ganymede = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_ganymede divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6820,6 +6906,12 @@ sr_site_aut_drift_ganymede = {
 	if = { limit = { has_global_variable = sr_site_garrison_ganymede } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_ganymede } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_ganymede = {
+	value = sr_site_aut_pressure_ganymede
+	subtract = { value = sr_site_autonomy_value_ganymede multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_ganymede = {
 	value = 1
@@ -6851,7 +6943,8 @@ sr_site_months_since_contact_callisto = {
 	if = { limit = { has_global_variable = sr_site_contact_callisto } value = te_history_month_index subtract = global_var:sr_site_contact_callisto }
 	min = 0
 }
-sr_site_aut_drift_callisto = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_callisto = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_callisto divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6860,6 +6953,12 @@ sr_site_aut_drift_callisto = {
 	if = { limit = { has_global_variable = sr_site_garrison_callisto } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_callisto } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_callisto = {
+	value = sr_site_aut_pressure_callisto
+	subtract = { value = sr_site_autonomy_value_callisto multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_callisto = {
 	value = 1
@@ -6891,7 +6990,8 @@ sr_site_months_since_contact_himalia = {
 	if = { limit = { has_global_variable = sr_site_contact_himalia } value = te_history_month_index subtract = global_var:sr_site_contact_himalia }
 	min = 0
 }
-sr_site_aut_drift_himalia = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_himalia = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_himalia divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6900,6 +7000,12 @@ sr_site_aut_drift_himalia = {
 	if = { limit = { has_global_variable = sr_site_garrison_himalia } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_himalia } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_himalia = {
+	value = sr_site_aut_pressure_himalia
+	subtract = { value = sr_site_autonomy_value_himalia multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_himalia = {
 	value = 1
@@ -6931,7 +7037,8 @@ sr_site_months_since_contact_amalthea = {
 	if = { limit = { has_global_variable = sr_site_contact_amalthea } value = te_history_month_index subtract = global_var:sr_site_contact_amalthea }
 	min = 0
 }
-sr_site_aut_drift_amalthea = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_amalthea = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_amalthea divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6940,6 +7047,12 @@ sr_site_aut_drift_amalthea = {
 	if = { limit = { has_global_variable = sr_site_garrison_amalthea } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_amalthea } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_amalthea = {
+	value = sr_site_aut_pressure_amalthea
+	subtract = { value = sr_site_autonomy_value_amalthea multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_amalthea = {
 	value = 1
@@ -6971,7 +7084,8 @@ sr_site_months_since_contact_venus = {
 	if = { limit = { has_global_variable = sr_site_contact_venus } value = te_history_month_index subtract = global_var:sr_site_contact_venus }
 	min = 0
 }
-sr_site_aut_drift_venus = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_venus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_venus divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_venus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -6980,6 +7094,12 @@ sr_site_aut_drift_venus = {
 	if = { limit = { has_global_variable = sr_site_garrison_venus } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_venus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_venus = {
+	value = sr_site_aut_pressure_venus
+	subtract = { value = sr_site_autonomy_value_venus multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_venus = {
 	value = 1
@@ -7011,7 +7131,8 @@ sr_site_months_since_contact_mercury = {
 	if = { limit = { has_global_variable = sr_site_contact_mercury } value = te_history_month_index subtract = global_var:sr_site_contact_mercury }
 	min = 0
 }
-sr_site_aut_drift_mercury = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_mercury = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_mercury divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_mercury multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7020,6 +7141,12 @@ sr_site_aut_drift_mercury = {
 	if = { limit = { has_global_variable = sr_site_garrison_mercury } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_mercury } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_mercury = {
+	value = sr_site_aut_pressure_mercury
+	subtract = { value = sr_site_autonomy_value_mercury multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_mercury = {
 	value = 1
@@ -7051,7 +7178,8 @@ sr_site_months_since_contact_titan = {
 	if = { limit = { has_global_variable = sr_site_contact_titan } value = te_history_month_index subtract = global_var:sr_site_contact_titan }
 	min = 0
 }
-sr_site_aut_drift_titan = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_titan = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_titan divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7060,6 +7188,12 @@ sr_site_aut_drift_titan = {
 	if = { limit = { has_global_variable = sr_site_garrison_titan } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_titan } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_titan = {
+	value = sr_site_aut_pressure_titan
+	subtract = { value = sr_site_autonomy_value_titan multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_titan = {
 	value = 1
@@ -7091,7 +7225,8 @@ sr_site_months_since_contact_enceladus = {
 	if = { limit = { has_global_variable = sr_site_contact_enceladus } value = te_history_month_index subtract = global_var:sr_site_contact_enceladus }
 	min = 0
 }
-sr_site_aut_drift_enceladus = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_enceladus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_enceladus divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7100,6 +7235,12 @@ sr_site_aut_drift_enceladus = {
 	if = { limit = { has_global_variable = sr_site_garrison_enceladus } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_enceladus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_enceladus = {
+	value = sr_site_aut_pressure_enceladus
+	subtract = { value = sr_site_autonomy_value_enceladus multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_enceladus = {
 	value = 1
@@ -7131,7 +7272,8 @@ sr_site_months_since_contact_rhea = {
 	if = { limit = { has_global_variable = sr_site_contact_rhea } value = te_history_month_index subtract = global_var:sr_site_contact_rhea }
 	min = 0
 }
-sr_site_aut_drift_rhea = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_rhea = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_rhea divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7140,6 +7282,12 @@ sr_site_aut_drift_rhea = {
 	if = { limit = { has_global_variable = sr_site_garrison_rhea } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_rhea } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_rhea = {
+	value = sr_site_aut_pressure_rhea
+	subtract = { value = sr_site_autonomy_value_rhea multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_rhea = {
 	value = 1
@@ -7171,7 +7319,8 @@ sr_site_months_since_contact_mimas = {
 	if = { limit = { has_global_variable = sr_site_contact_mimas } value = te_history_month_index subtract = global_var:sr_site_contact_mimas }
 	min = 0
 }
-sr_site_aut_drift_mimas = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_mimas = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_mimas divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7180,6 +7329,12 @@ sr_site_aut_drift_mimas = {
 	if = { limit = { has_global_variable = sr_site_garrison_mimas } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_mimas } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_mimas = {
+	value = sr_site_aut_pressure_mimas
+	subtract = { value = sr_site_autonomy_value_mimas multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_mimas = {
 	value = 1
@@ -7211,7 +7366,8 @@ sr_site_months_since_contact_iapetus = {
 	if = { limit = { has_global_variable = sr_site_contact_iapetus } value = te_history_month_index subtract = global_var:sr_site_contact_iapetus }
 	min = 0
 }
-sr_site_aut_drift_iapetus = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_iapetus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_iapetus divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7220,6 +7376,12 @@ sr_site_aut_drift_iapetus = {
 	if = { limit = { has_global_variable = sr_site_garrison_iapetus } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_iapetus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_iapetus = {
+	value = sr_site_aut_pressure_iapetus
+	subtract = { value = sr_site_autonomy_value_iapetus multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_iapetus = {
 	value = 1
@@ -7251,7 +7413,8 @@ sr_site_months_since_contact_titania = {
 	if = { limit = { has_global_variable = sr_site_contact_titania } value = te_history_month_index subtract = global_var:sr_site_contact_titania }
 	min = 0
 }
-sr_site_aut_drift_titania = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_titania = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_titania divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7260,6 +7423,12 @@ sr_site_aut_drift_titania = {
 	if = { limit = { has_global_variable = sr_site_garrison_titania } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_titania } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_titania = {
+	value = sr_site_aut_pressure_titania
+	subtract = { value = sr_site_autonomy_value_titania multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_titania = {
 	value = 1
@@ -7291,7 +7460,8 @@ sr_site_months_since_contact_oberon = {
 	if = { limit = { has_global_variable = sr_site_contact_oberon } value = te_history_month_index subtract = global_var:sr_site_contact_oberon }
 	min = 0
 }
-sr_site_aut_drift_oberon = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_oberon = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_oberon divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7300,6 +7470,12 @@ sr_site_aut_drift_oberon = {
 	if = { limit = { has_global_variable = sr_site_garrison_oberon } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_oberon } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_oberon = {
+	value = sr_site_aut_pressure_oberon
+	subtract = { value = sr_site_autonomy_value_oberon multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_oberon = {
 	value = 1
@@ -7331,7 +7507,8 @@ sr_site_months_since_contact_miranda = {
 	if = { limit = { has_global_variable = sr_site_contact_miranda } value = te_history_month_index subtract = global_var:sr_site_contact_miranda }
 	min = 0
 }
-sr_site_aut_drift_miranda = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_miranda = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_miranda divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7340,6 +7517,12 @@ sr_site_aut_drift_miranda = {
 	if = { limit = { has_global_variable = sr_site_garrison_miranda } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_miranda } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_miranda = {
+	value = sr_site_aut_pressure_miranda
+	subtract = { value = sr_site_autonomy_value_miranda multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_miranda = {
 	value = 1
@@ -7371,7 +7554,8 @@ sr_site_months_since_contact_ariel = {
 	if = { limit = { has_global_variable = sr_site_contact_ariel } value = te_history_month_index subtract = global_var:sr_site_contact_ariel }
 	min = 0
 }
-sr_site_aut_drift_ariel = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_ariel = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_ariel divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7380,6 +7564,12 @@ sr_site_aut_drift_ariel = {
 	if = { limit = { has_global_variable = sr_site_garrison_ariel } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_ariel } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_ariel = {
+	value = sr_site_aut_pressure_ariel
+	subtract = { value = sr_site_autonomy_value_ariel multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_ariel = {
 	value = 1
@@ -7411,7 +7601,8 @@ sr_site_months_since_contact_triton = {
 	if = { limit = { has_global_variable = sr_site_contact_triton } value = te_history_month_index subtract = global_var:sr_site_contact_triton }
 	min = 0
 }
-sr_site_aut_drift_triton = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_triton = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_triton divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_neptune multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7420,6 +7611,12 @@ sr_site_aut_drift_triton = {
 	if = { limit = { has_global_variable = sr_site_garrison_triton } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_triton } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_triton = {
+	value = sr_site_aut_pressure_triton
+	subtract = { value = sr_site_autonomy_value_triton multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_triton = {
 	value = 1
@@ -7451,7 +7648,8 @@ sr_site_months_since_contact_proteus = {
 	if = { limit = { has_global_variable = sr_site_contact_proteus } value = te_history_month_index subtract = global_var:sr_site_contact_proteus }
 	min = 0
 }
-sr_site_aut_drift_proteus = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_proteus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_proteus divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_neptune multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7460,6 +7658,12 @@ sr_site_aut_drift_proteus = {
 	if = { limit = { has_global_variable = sr_site_garrison_proteus } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_proteus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_proteus = {
+	value = sr_site_aut_pressure_proteus
+	subtract = { value = sr_site_autonomy_value_proteus multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_proteus = {
 	value = 1
@@ -7491,7 +7695,8 @@ sr_site_months_since_contact_pluto = {
 	if = { limit = { has_global_variable = sr_site_contact_pluto } value = te_history_month_index subtract = global_var:sr_site_contact_pluto }
 	min = 0
 }
-sr_site_aut_drift_pluto = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_pluto = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_pluto divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7500,6 +7705,12 @@ sr_site_aut_drift_pluto = {
 	if = { limit = { has_global_variable = sr_site_garrison_pluto } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_pluto } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_pluto = {
+	value = sr_site_aut_pressure_pluto
+	subtract = { value = sr_site_autonomy_value_pluto multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_pluto = {
 	value = 1
@@ -7531,7 +7742,8 @@ sr_site_months_since_contact_eris = {
 	if = { limit = { has_global_variable = sr_site_contact_eris } value = te_history_month_index subtract = global_var:sr_site_contact_eris }
 	min = 0
 }
-sr_site_aut_drift_eris = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_eris = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_eris divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7540,6 +7752,12 @@ sr_site_aut_drift_eris = {
 	if = { limit = { has_global_variable = sr_site_garrison_eris } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_eris } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_eris = {
+	value = sr_site_aut_pressure_eris
+	subtract = { value = sr_site_autonomy_value_eris multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_eris = {
 	value = 1
@@ -7571,7 +7789,8 @@ sr_site_months_since_contact_makemake = {
 	if = { limit = { has_global_variable = sr_site_contact_makemake } value = te_history_month_index subtract = global_var:sr_site_contact_makemake }
 	min = 0
 }
-sr_site_aut_drift_makemake = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_makemake = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_makemake divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7580,6 +7799,12 @@ sr_site_aut_drift_makemake = {
 	if = { limit = { has_global_variable = sr_site_garrison_makemake } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_makemake } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_makemake = {
+	value = sr_site_aut_pressure_makemake
+	subtract = { value = sr_site_autonomy_value_makemake multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_makemake = {
 	value = 1
@@ -7611,7 +7836,8 @@ sr_site_months_since_contact_haumea = {
 	if = { limit = { has_global_variable = sr_site_contact_haumea } value = te_history_month_index subtract = global_var:sr_site_contact_haumea }
 	min = 0
 }
-sr_site_aut_drift_haumea = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_haumea = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_haumea divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7620,6 +7846,12 @@ sr_site_aut_drift_haumea = {
 	if = { limit = { has_global_variable = sr_site_garrison_haumea } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_haumea } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_haumea = {
+	value = sr_site_aut_pressure_haumea
+	subtract = { value = sr_site_autonomy_value_haumea multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_haumea = {
 	value = 1
@@ -7651,7 +7883,8 @@ sr_site_months_since_contact_sedna = {
 	if = { limit = { has_global_variable = sr_site_contact_sedna } value = te_history_month_index subtract = global_var:sr_site_contact_sedna }
 	min = 0
 }
-sr_site_aut_drift_sedna = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_sedna = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_sedna divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7660,6 +7893,12 @@ sr_site_aut_drift_sedna = {
 	if = { limit = { has_global_variable = sr_site_garrison_sedna } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_sedna } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_sedna = {
+	value = sr_site_aut_pressure_sedna
+	subtract = { value = sr_site_autonomy_value_sedna multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_sedna = {
 	value = 1
@@ -7691,7 +7930,8 @@ sr_site_months_since_contact_shackleton = {
 	if = { limit = { has_global_variable = sr_site_contact_shackleton } value = te_history_month_index subtract = global_var:sr_site_contact_shackleton }
 	min = 0
 }
-sr_site_aut_drift_shackleton = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_shackleton = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_shackleton divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7700,6 +7940,12 @@ sr_site_aut_drift_shackleton = {
 	if = { limit = { has_global_variable = sr_site_garrison_shackleton } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_shackleton } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_shackleton = {
+	value = sr_site_aut_pressure_shackleton
+	subtract = { value = sr_site_autonomy_value_shackleton multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_shackleton = {
 	value = 1
@@ -7731,7 +7977,8 @@ sr_site_months_since_contact_peary = {
 	if = { limit = { has_global_variable = sr_site_contact_peary } value = te_history_month_index subtract = global_var:sr_site_contact_peary }
 	min = 0
 }
-sr_site_aut_drift_peary = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_peary = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_peary divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7740,6 +7987,12 @@ sr_site_aut_drift_peary = {
 	if = { limit = { has_global_variable = sr_site_garrison_peary } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_peary } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_peary = {
+	value = sr_site_aut_pressure_peary
+	subtract = { value = sr_site_autonomy_value_peary multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_peary = {
 	value = 1
@@ -7771,7 +8024,8 @@ sr_site_months_since_contact_tranquility = {
 	if = { limit = { has_global_variable = sr_site_contact_tranquility } value = te_history_month_index subtract = global_var:sr_site_contact_tranquility }
 	min = 0
 }
-sr_site_aut_drift_tranquility = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_tranquility = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_tranquility divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7780,6 +8034,12 @@ sr_site_aut_drift_tranquility = {
 	if = { limit = { has_global_variable = sr_site_garrison_tranquility } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_tranquility } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_tranquility = {
+	value = sr_site_aut_pressure_tranquility
+	subtract = { value = sr_site_autonomy_value_tranquility multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_tranquility = {
 	value = 1
@@ -7811,7 +8071,8 @@ sr_site_months_since_contact_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_contact_marius_hills } value = te_history_month_index subtract = global_var:sr_site_contact_marius_hills }
 	min = 0
 }
-sr_site_aut_drift_marius_hills = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_marius_hills = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_marius_hills divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7820,6 +8081,12 @@ sr_site_aut_drift_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_garrison_marius_hills } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_marius_hills } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_marius_hills = {
+	value = sr_site_aut_pressure_marius_hills
+	subtract = { value = sr_site_autonomy_value_marius_hills multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_marius_hills = {
 	value = 1
@@ -7851,7 +8118,8 @@ sr_site_months_since_contact_daedalus = {
 	if = { limit = { has_global_variable = sr_site_contact_daedalus } value = te_history_month_index subtract = global_var:sr_site_contact_daedalus }
 	min = 0
 }
-sr_site_aut_drift_daedalus = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_daedalus = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_daedalus divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7860,6 +8128,12 @@ sr_site_aut_drift_daedalus = {
 	if = { limit = { has_global_variable = sr_site_garrison_daedalus } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_daedalus } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_daedalus = {
+	value = sr_site_aut_pressure_daedalus
+	subtract = { value = sr_site_autonomy_value_daedalus multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_daedalus = {
 	value = 1
@@ -7891,7 +8165,8 @@ sr_site_months_since_contact_imbrium = {
 	if = { limit = { has_global_variable = sr_site_contact_imbrium } value = te_history_month_index subtract = global_var:sr_site_contact_imbrium }
 	min = 0
 }
-sr_site_aut_drift_imbrium = {
+# Every term but settling: where autonomy heads (colony management design § 4.2).
+sr_site_aut_pressure_imbrium = {
 	value = sr_aut_home_pull
 	add = { value = sr_site_pop_value_imbrium divide = 10000 multiply = sr_aut_per_10k_people }
 	add = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -7900,6 +8175,12 @@ sr_site_aut_drift_imbrium = {
 	if = { limit = { has_global_variable = sr_site_garrison_imbrium } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_imbrium } add = sr_aut_chartered }
 	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
+}
+# The month's drift: the pressure less settling, a share of the autonomy itself, so
+# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).
+sr_site_aut_drift_imbrium = {
+	value = sr_site_aut_pressure_imbrium
+	subtract = { value = sr_site_autonomy_value_imbrium multiply = sr_aut_settle_rate }
 }
 sr_site_charter_factor_imbrium = {
 	value = 1
@@ -10077,4 +10358,121 @@ sr_ws_colonies_sum = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this global_var:sr_site_occupier_daedalus ?= { has_war_with = root } } subtract = sr_site_ws_weight_daedalus }
 	if = { limit = { global_var:sr_site_occupier_imbrium ?= this global_var:sr_site_holder_imbrium ?= { has_war_with = root } } add = sr_site_ws_weight_imbrium }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this global_var:sr_site_occupier_imbrium ?= { has_war_with = root } } subtract = sr_site_ws_weight_imbrium }
+}
+
+# ===== Destinations in reach (colony management design § 6) =====
+# Country scope, per destination: 1 with a world THIS may target there
+# (sr_cf_targetable_<key>) within its drive's horizon (sr_cf_horizon_months),
+# 2 with one beyond it, 0 with none.
+sr_window_reach_moon = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_shackleton = yes sr_cf_targetable_peary = yes sr_cf_targetable_tranquility = yes sr_cf_targetable_marius_hills = yes sr_cf_targetable_daedalus = yes sr_cf_targetable_imbrium = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_moon <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_mars = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_valles_marineris = yes sr_cf_targetable_olympus_mons = yes sr_cf_targetable_hellas_planitia = yes sr_cf_targetable_utopia_planitia = yes sr_cf_targetable_arcadia_planitia = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_mars <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_ceres = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_ceres = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_ceres <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_vesta = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_vesta = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_vesta <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_psyche = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_psyche = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_psyche <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_pallas = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_pallas = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_pallas <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_hygiea = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_hygiea = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_hygiea <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_jupiter = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_io = yes sr_cf_targetable_europa = yes sr_cf_targetable_ganymede = yes sr_cf_targetable_callisto = yes sr_cf_targetable_himalia = yes sr_cf_targetable_amalthea = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_jupiter <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_venus = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_venus = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_venus <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_mercury = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_mercury = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_mercury <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_saturn = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_titan = yes sr_cf_targetable_enceladus = yes sr_cf_targetable_rhea = yes sr_cf_targetable_mimas = yes sr_cf_targetable_iapetus = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_saturn <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_uranus = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_titania = yes sr_cf_targetable_oberon = yes sr_cf_targetable_miranda = yes sr_cf_targetable_ariel = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_uranus <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_neptune = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_triton = yes sr_cf_targetable_proteus = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_neptune <= sr_cf_horizon_months } value = 1 }
+	}
+}
+sr_window_reach_kuiper = {
+	value = 0
+	if = {
+		limit = { OR = { sr_cf_targetable_pluto = yes sr_cf_targetable_eris = yes sr_cf_targetable_makemake = yes sr_cf_targetable_haumea = yes sr_cf_targetable_sedna = yes } }
+		value = 2
+		if = { limit = { sr_transit_months_kuiper <= sr_cf_horizon_months } value = 1 }
+	}
 }

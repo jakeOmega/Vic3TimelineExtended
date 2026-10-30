@@ -307,8 +307,9 @@ sr_mod_stop_fabrication = {
 }
 
 # ---- AI (design § 10) -----------------------------------------------------------------------
-# Country scope, from the entry's pulse; once a year. A space power with money
-# to spare queues one module at each colony with nothing on the way
+# Country scope, from the entry's pulse; once a year. A holder or top-three
+# space power (sr_ai_tends_colonies) with money to spare queues one module at
+# each colony with nothing on the way
 # (sr_mod_ai_plan_<key>: a Habitat when its people fill three quarters of its
 # room, else its next specialization level its crews can run; never the
 # placeholder Defences or Spaceport), and runs the best fabrication method
@@ -324,7 +325,7 @@ sr_mod_ai_review = {
 		set_variable = { name = sr_mod_ai_reviewed value = yes days = 360 }
 		if = {
 			limit = {
-				sr_ai_should_participate = yes
+				sr_ai_tends_colonies = yes
 				in_default = no
 				net_fixed_income > 0
 			}

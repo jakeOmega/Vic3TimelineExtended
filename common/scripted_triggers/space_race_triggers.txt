@@ -72,6 +72,17 @@ sr_ai_should_participate = {
 	}
 }
 
+# An AI that keeps up its colonies (colony management design § 3): a holder of
+# one, whatever its rank, or a top-three space power. Gates the AI's emigration
+# and module reviews, which until 2026-10-30 read sr_ai_should_participate alone,
+# so a holder outside the top three let its colonies wither.
+sr_ai_tends_colonies = {
+	OR = {
+		sr_has_space_colony = yes
+		sr_ai_should_participate = yes
+	}
+}
+
 # is_shown_when_inactive composer for follow-up space race milestones —
 # milestones that gate on a prior milestone's completion variable plus a
 # tech. Saves 3 lines per use across ~5 milestones.

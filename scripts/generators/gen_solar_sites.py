@@ -216,6 +216,7 @@ STAGE_TITLES = {
 # a lunar world, stage 0, is worth 20).
 AI_VALUE_BASE = 20
 AI_VALUE_PER_STAGE = 5
+AI_VALUE_PEOPLE = 2000  # ... and 1 a this many of its people (colony management design § 3)
 
 # Colony fleets (slices 2-3 design §§ 4-8). Slots per country; the automatic
 # pick's score, 100 - 10 x stage - transit months / 2 - 40 x premium - 10 a
@@ -1067,6 +1068,19 @@ def transit_body(site: Site) -> str:
     return "moon" if site in LUNAR else "mercury"
 
 
+# Mission Control's Next Windows table (colony management design § 6): one row
+# per destination, in sr_launch_window_lines' order. The Moon and Mercury have
+# no window; the rest are gen_launch_windows' window bodies.
+WINDOW_ORDER = ("moon", "mars", "ceres", "vesta", "psyche", "pallas", "hygiea", "jupiter", "venus",
+                "mercury", "saturn", "uranus", "neptune", "kuiper")
+NO_WINDOW = frozenset({"moon", "mercury"})
+
+
+def window_worlds(body: str) -> list[Site]:
+    """The worlds a fleet reaches through the destination's transit."""
+    return [s for s in SITES if transit_body(s) == body]
+
+
 def body_group(site: Site) -> list[Site]:
     """The worlds a fleet bound for this one can divert to: its window body's
     (design § 5). Mercury, alone, has none but itself."""
@@ -1529,16 +1543,18 @@ def render_values() -> str:
             "",
             "# Cede Colony's AI: what the article's input world is worth, 20 plus 5 a",
             "# stage (design § 11.2), plus 5 a module level past the first (slice 4 design",
-            "# § 7). scope:article in inherent_accept_score.",
+            f"# § 7), plus 1 a {AI_VALUE_PEOPLE:,} of its people (colony management design § 3).",
+            "# scope:article in inherent_accept_score.",
             "sr_cede_ai_input_value = {",
             "\tvalue = 0"]
     for site in SITES:
         worth = AI_VALUE_BASE + AI_VALUE_PER_STAGE * site.stage
         out.append(f"\tif = {{ limit = {{ scope:article.input_building_type ?= bt:{site_building(site)} }} value = {worth} "
-                   f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {MODULE_AI_VALUE} }} }}")
+                   f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {MODULE_AI_VALUE} }} "
+                   f"add = {{ value = sr_site_pop_value_{site.key} divide = {AI_VALUE_PEOPLE} }} }}")
     out += ["}", ""]
     out += (render_fleet_values() + [""] + render_population_values() + [""] + render_module_values()
-            + [""] + render_autonomy_values() + [""] + render_slice6_values())
+            + [""] + render_autonomy_values() + [""] + render_slice6_values() + [""] + render_window_values())
     return "\n".join(out) + "\n"
 
 
@@ -2516,7 +2532,8 @@ def render_autonomy_values() -> list[str]:
                 f"value = te_history_month_index subtract = global_var:sr_site_contact_{k} }}",
                 "\tmin = 0",
                 "}",
-                f"sr_site_aut_drift_{k} = {{",
+                "# Every term but settling: where autonomy heads (colony management design § 4.2).",
+                f"sr_site_aut_pressure_{k} = {{",
                 "\tvalue = sr_aut_home_pull",
                 f"\tadd = {{ value = sr_site_pop_value_{k} divide = 10000 multiply = sr_aut_per_10k_people }}",
                 f"\tadd = {{ value = sr_transit_months_{tb} multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }}",
@@ -2526,6 +2543,12 @@ def render_autonomy_values() -> list[str]:
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_charter_{k} }} add = sr_aut_chartered }}",
                 "\tif = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } "
                 "add = sr_aut_destroyed_colony }",
+                "}",
+                "# The month's drift: the pressure less settling, a share of the autonomy itself, so",
+                "# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).",
+                f"sr_site_aut_drift_{k} = {{",
+                f"\tvalue = sr_site_aut_pressure_{k}",
+                f"\tsubtract = {{ value = sr_site_autonomy_value_{k} multiply = sr_aut_settle_rate }}",
                 "}",
                 f"sr_site_charter_factor_{k} = {{",
                 "\tvalue = 1",
@@ -2553,6 +2576,26 @@ def render_autonomy_values() -> list[str]:
     out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this has_global_variable = sr_site_garrison_{s.key} }} add = 1 }}"
             for s in SITES]
     out.append("}")
+    return out
+
+
+def render_window_values() -> list[str]:
+    """Whether a colony fleet of THIS can go to a destination (colony management
+    design § 6): Next Windows' rows and the Staged in Orbit tooltip's lines."""
+    out = ["# ===== Destinations in reach (colony management design § 6) =====",
+           "# Country scope, per destination: 1 with a world THIS may target there",
+           "# (sr_cf_targetable_<key>) within its drive's horizon (sr_cf_horizon_months),",
+           "# 2 with one beyond it, 0 with none."]
+    for body in WINDOW_ORDER:
+        targetable = " ".join(f"sr_cf_targetable_{s.key} = yes" for s in window_worlds(body))
+        out += [f"sr_window_reach_{body} = {{",
+                "\tvalue = 0",
+                "\tif = {",
+                f"\t\tlimit = {{ OR = {{ {targetable} }} }}",
+                "\t\tvalue = 2",
+                f"\t\tif = {{ limit = {{ sr_transit_months_{body} <= sr_cf_horizon_months }} value = 1 }}",
+                "\t}",
+                "}"]
     return out
 
 
@@ -2729,6 +2772,14 @@ def render_autonomy_display() -> list[str]:
                 f"sr_disp_aut_nocontact_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ sr_site_months_since_contact_{k} > sr_aut_no_contact_months }} value = 1 }}",
+                "}",
+                f"sr_disp_aut_settle_{k} = {{ value = sr_site_autonomy_value_{k} multiply = sr_aut_settle_rate multiply = -1 }}",
+                f"sr_disp_aut_target_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} value = sr_site_aut_pressure_{k} divide = sr_aut_settle_rate }}",
+                "\tmin = 0",
+                "\tmax = sr_aut_break_level",
+                "\tfloor = yes",
                 "}"]
     out += ["sr_disp_aut_war = {", "\tvalue = 0", "\tif = { limit = { is_at_war = yes } value = 1 }", "}",
             "sr_disp_aut_destroyed = {", "\tvalue = 0",
@@ -2886,7 +2937,43 @@ def render_display() -> str:
                 "}"]
     out += render_autonomy_display()
     out += render_overview_display()
+    out += render_window_display()
     return "\n".join(out) + "\n"
+
+
+def render_window_display() -> list[str]:
+    """Mission Control's Next Windows table (colony management design § 6).
+    Read by the GUI only."""
+    out = ["",
+           "# Next Windows (colony management design § 6), per destination, the viewer's scope:",
+           "#   sr_disp_win_row_<body>    sr_window_reach_<body>: 1 shown, 2 beyond our drive, 0 neither",
+           "#   sr_disp_win_state_<body>  0 any month (no window, or a drive windows don't bind),",
+           "#                             1 its window is open, 2 waiting, 3 waiting with propellant",
+           "#                             depots (the premium to go now)",
+           "# and the table's counts."]
+    for body in WINDOW_ORDER:
+        out.append(f"sr_disp_win_row_{body} = {{ value = sr_window_reach_{body} }}")
+        if body in NO_WINDOW:
+            out.append(f"sr_disp_win_state_{body} = {{ value = 0 }}")
+        else:
+            # The premium to go now, shown to +999% at most (its cell's width).
+            out.append(f"sr_disp_win_premium_{body} = {{ value = sr_window_premium_country_{body} max = 9.99 }}")
+            out += [f"sr_disp_win_state_{body} = {{",
+                    "\tvalue = 2",
+                    "\tif = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }",
+                    f"\telse_if = {{ limit = {{ has_global_variable = sr_window_is_open_{body} }} value = 1 }}",
+                    "\telse_if = { limit = { sr_launch_has_depots = yes } value = 3 }",
+                    "}"]
+    for name, code in (("shown", 1), ("beyond", 2)):
+        out += [f"sr_disp_win_{name} = {{", "\tvalue = 0"]
+        out += [f"\tif = {{ limit = {{ sr_disp_win_row_{b} = {code} }} add = 1 }}" for b in WINDOW_ORDER]
+        out.append("}")
+    out += ["# 1 once the month's windows are worked out (the global monthly pulse).",
+            "sr_disp_win_cached = {",
+            "\tvalue = 0",
+            "\tif = { limit = { has_global_variable = sr_window_cache_month } value = 1 }",
+            "}"]
+    return out
 
 
 def render_buildings() -> str:
@@ -3122,7 +3209,8 @@ def _colony_row(site: Site) -> list[str]:
     # Autonomy
     out += _override("aut_figure", f'raw_text = "#v [{_sv(f"sr_disp_site_aut_{k}")}|0]%#!"')
     out += _override("aut_drift_tooltip", f'tooltip = "je_space_race_widget_autonomy_drift_tt_{k}"')
-    out += _override("aut_drift", f'raw_text = "[{_sv(f"sr_disp_site_aut_drift_{k}")}|+=2]"')
+    # Signed, positive red: more autonomy is the holder's loss (design § 4.1).
+    out += _override("aut_drift", f'raw_text = "[{_sv(f"sr_disp_site_aut_drift_{k}")}|=-2]"')
     for code, name in enumerate(("none", "charter", "garrison", "both")):
         out += _override(f"aut_{name}_visible", f'visible = "[{_eq(status, code)}]"')
     out += _override("aut_abandon_button",
@@ -3179,6 +3267,26 @@ def _slot_row(n: int) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _window_row(body: str) -> list[str]:
+    """One destination in Next Windows (colony management design § 6): its name,
+    its window and its transit by our drive. Loc: sr_window_name_<body> and
+    je_space_race_widget_win_<wait|paid|transit>_<body>."""
+    row, state = f"sr_disp_win_row_{body}", f"sr_disp_win_state_{body}"
+    out = ["\t\tte_sr_window_row = {"]
+    out += _override("win_visible", f'visible = "[{_eq(row, 1)}]"')
+    out += _override("win_name", f'text = "sr_window_name_{body}"')
+    out += _override("win_any_visible", f'visible = "[{_eq(state, 0)}]"')
+    out += _override("win_open_visible", f'visible = "[{_eq(state, 1)}]"')
+    if body in NO_WINDOW:
+        out += _override("win_wait", "visible = no")
+        out += _override("win_paid", "visible = no")
+    else:
+        out += _override("win_wait", f'visible = "[{_eq(state, 2)}]"', f'text = "je_space_race_widget_win_wait_{body}"')
+        out += _override("win_paid", f'visible = "[{_eq(state, 3)}]"', f'text = "je_space_race_widget_win_paid_{body}"')
+    out += _override("win_transit", f'text = "je_space_race_widget_win_transit_{body}"')
+    return out + ["\t\t}"]
+
+
 def render_gui() -> str:
     out = [HEADER.rstrip("\n"),
            "### Solar System Colonization's per-world and per-slot rows, from",
@@ -3187,8 +3295,10 @@ def render_gui() -> str:
            "### location, in panel_order(), filtered by default), te_sr_colony_row",
            "### (Colonies, every world, shown while ours; audit SPC-5), te_sr_cf_slot_row",
            "### (Colony Fleets, one per fleet slot), te_sr_mq_row (the Modules view's queue,",
-           "### one per place) and te_sr_free_row (the Autonomy view's Free Colonies, every",
-           "### world, shown while free; slice 5 design § 9). Each value is a display value",
+           "### one per place), te_sr_free_row (the Autonomy view's Free Colonies, every",
+           "### world, shown while free; slice 5 design § 9) and te_sr_window_row (Mission",
+           "### Control's Next Windows, one per destination, sr_launch_window_widgets.gui;",
+           "### colony management design § 6). Each value is a display value",
            "### of sr_sites_display_generated.txt (the Defenses view's, of",
            "### sr_fleets_display_generated.txt), the scripted GUIs are in sr_colony_sguis.txt.",
            "",
@@ -3229,6 +3339,13 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for n in range(1, QUEUE_SLOTS + 1):
         out += [""] + _queue_row(n)
+    out += ["\t}", "",
+            "\ttype te_sr_window_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 1"]
+    for body in WINDOW_ORDER:
+        out += [""] + _window_row(body)
     out += ["\t}", "",
             "\ttype te_sr_free_rows = flowcontainer {",
             "\t\tdirection = vertical",

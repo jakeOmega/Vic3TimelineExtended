@@ -3860,11 +3860,27 @@ sr_disp_aut_nocontact_valles_marineris = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_valles_marineris > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_valles_marineris = { value = sr_site_autonomy_value_valles_marineris multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_valles_marineris = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = sr_site_aut_pressure_valles_marineris divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_olympus_mons = { value = sr_site_pop_value_olympus_mons divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_olympus_mons = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_olympus_mons = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_olympus_mons > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_olympus_mons = { value = sr_site_autonomy_value_olympus_mons multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_olympus_mons = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = sr_site_aut_pressure_olympus_mons divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_hellas_planitia = { value = sr_site_pop_value_hellas_planitia divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_hellas_planitia = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3872,11 +3888,27 @@ sr_disp_aut_nocontact_hellas_planitia = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_hellas_planitia > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_hellas_planitia = { value = sr_site_autonomy_value_hellas_planitia multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_hellas_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = sr_site_aut_pressure_hellas_planitia divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_utopia_planitia = { value = sr_site_pop_value_utopia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_utopia_planitia = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_utopia_planitia = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_utopia_planitia > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_utopia_planitia = { value = sr_site_autonomy_value_utopia_planitia multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_utopia_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = sr_site_aut_pressure_utopia_planitia divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_arcadia_planitia = { value = sr_site_pop_value_arcadia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_arcadia_planitia = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3884,11 +3916,27 @@ sr_disp_aut_nocontact_arcadia_planitia = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_arcadia_planitia > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_arcadia_planitia = { value = sr_site_autonomy_value_arcadia_planitia multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_arcadia_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = sr_site_aut_pressure_arcadia_planitia divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_ceres = { value = sr_site_pop_value_ceres divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_ceres = { value = sr_transit_months_ceres multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_ceres = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_ceres > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_ceres = { value = sr_site_autonomy_value_ceres multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_ceres = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ceres ?= this } value = sr_site_aut_pressure_ceres divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_vesta = { value = sr_site_pop_value_vesta divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_vesta = { value = sr_transit_months_vesta multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3896,11 +3944,27 @@ sr_disp_aut_nocontact_vesta = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_vesta > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_vesta = { value = sr_site_autonomy_value_vesta multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_vesta = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_vesta ?= this } value = sr_site_aut_pressure_vesta divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_psyche = { value = sr_site_pop_value_psyche divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_psyche = { value = sr_transit_months_psyche multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_psyche = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_psyche > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_psyche = { value = sr_site_autonomy_value_psyche multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_psyche = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_psyche ?= this } value = sr_site_aut_pressure_psyche divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_pallas = { value = sr_site_pop_value_pallas divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_pallas = { value = sr_transit_months_pallas multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3908,11 +3972,27 @@ sr_disp_aut_nocontact_pallas = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_pallas > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_pallas = { value = sr_site_autonomy_value_pallas multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_pallas = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_pallas ?= this } value = sr_site_aut_pressure_pallas divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_hygiea = { value = sr_site_pop_value_hygiea divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_hygiea = { value = sr_transit_months_hygiea multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_hygiea = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_hygiea > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_hygiea = { value = sr_site_autonomy_value_hygiea multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_hygiea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = sr_site_aut_pressure_hygiea divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_io = { value = sr_site_pop_value_io divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_io = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3920,11 +4000,27 @@ sr_disp_aut_nocontact_io = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_io > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_io = { value = sr_site_autonomy_value_io multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_io = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_io ?= this } value = sr_site_aut_pressure_io divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_europa = { value = sr_site_pop_value_europa divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_europa = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_europa = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_europa > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_europa = { value = sr_site_autonomy_value_europa multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_europa = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_europa ?= this } value = sr_site_aut_pressure_europa divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_ganymede = { value = sr_site_pop_value_ganymede divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_ganymede = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3932,11 +4028,27 @@ sr_disp_aut_nocontact_ganymede = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_ganymede > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_ganymede = { value = sr_site_autonomy_value_ganymede multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_ganymede = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = sr_site_aut_pressure_ganymede divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_callisto = { value = sr_site_pop_value_callisto divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_callisto = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_callisto = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_callisto > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_callisto = { value = sr_site_autonomy_value_callisto multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_callisto = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_callisto ?= this } value = sr_site_aut_pressure_callisto divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_himalia = { value = sr_site_pop_value_himalia divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_himalia = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3944,11 +4056,27 @@ sr_disp_aut_nocontact_himalia = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_himalia > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_himalia = { value = sr_site_autonomy_value_himalia multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_himalia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_himalia ?= this } value = sr_site_aut_pressure_himalia divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_amalthea = { value = sr_site_pop_value_amalthea divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_amalthea = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_amalthea = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_amalthea > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_amalthea = { value = sr_site_autonomy_value_amalthea multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_amalthea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = sr_site_aut_pressure_amalthea divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_venus = { value = sr_site_pop_value_venus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_venus = { value = sr_transit_months_venus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3956,11 +4084,27 @@ sr_disp_aut_nocontact_venus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_venus > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_venus = { value = sr_site_autonomy_value_venus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_venus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_venus ?= this } value = sr_site_aut_pressure_venus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_mercury = { value = sr_site_pop_value_mercury divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_mercury = { value = sr_transit_months_mercury multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_mercury = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_mercury > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_mercury = { value = sr_site_autonomy_value_mercury multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_mercury = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_mercury ?= this } value = sr_site_aut_pressure_mercury divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_titan = { value = sr_site_pop_value_titan divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_titan = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3968,11 +4112,27 @@ sr_disp_aut_nocontact_titan = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_titan > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_titan = { value = sr_site_autonomy_value_titan multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_titan = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_titan ?= this } value = sr_site_aut_pressure_titan divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_enceladus = { value = sr_site_pop_value_enceladus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_enceladus = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_enceladus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_enceladus > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_enceladus = { value = sr_site_autonomy_value_enceladus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_enceladus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = sr_site_aut_pressure_enceladus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_rhea = { value = sr_site_pop_value_rhea divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_rhea = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3980,11 +4140,27 @@ sr_disp_aut_nocontact_rhea = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_rhea > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_rhea = { value = sr_site_autonomy_value_rhea multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_rhea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_rhea ?= this } value = sr_site_aut_pressure_rhea divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_mimas = { value = sr_site_pop_value_mimas divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_mimas = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_mimas = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_mimas > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_mimas = { value = sr_site_autonomy_value_mimas multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_mimas = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_mimas ?= this } value = sr_site_aut_pressure_mimas divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_iapetus = { value = sr_site_pop_value_iapetus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_iapetus = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3992,11 +4168,27 @@ sr_disp_aut_nocontact_iapetus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_iapetus > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_iapetus = { value = sr_site_autonomy_value_iapetus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_iapetus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = sr_site_aut_pressure_iapetus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_titania = { value = sr_site_pop_value_titania divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_titania = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_titania = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_titania > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_titania = { value = sr_site_autonomy_value_titania multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_titania = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_titania ?= this } value = sr_site_aut_pressure_titania divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_oberon = { value = sr_site_pop_value_oberon divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_oberon = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4004,11 +4196,27 @@ sr_disp_aut_nocontact_oberon = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_oberon > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_oberon = { value = sr_site_autonomy_value_oberon multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_oberon = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_oberon ?= this } value = sr_site_aut_pressure_oberon divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_miranda = { value = sr_site_pop_value_miranda divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_miranda = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_miranda = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_miranda > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_miranda = { value = sr_site_autonomy_value_miranda multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_miranda = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_miranda ?= this } value = sr_site_aut_pressure_miranda divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_ariel = { value = sr_site_pop_value_ariel divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_ariel = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4016,11 +4224,27 @@ sr_disp_aut_nocontact_ariel = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_ariel > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_ariel = { value = sr_site_autonomy_value_ariel multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_ariel = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ariel ?= this } value = sr_site_aut_pressure_ariel divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_triton = { value = sr_site_pop_value_triton divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_triton = { value = sr_transit_months_neptune multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_triton = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_triton > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_triton = { value = sr_site_autonomy_value_triton multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_triton = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_triton ?= this } value = sr_site_aut_pressure_triton divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_proteus = { value = sr_site_pop_value_proteus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_proteus = { value = sr_transit_months_neptune multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4028,11 +4252,27 @@ sr_disp_aut_nocontact_proteus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_proteus > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_proteus = { value = sr_site_autonomy_value_proteus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_proteus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_proteus ?= this } value = sr_site_aut_pressure_proteus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_pluto = { value = sr_site_pop_value_pluto divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_pluto = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_pluto = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_pluto > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_pluto = { value = sr_site_autonomy_value_pluto multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_pluto = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_pluto ?= this } value = sr_site_aut_pressure_pluto divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_eris = { value = sr_site_pop_value_eris divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_eris = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4040,11 +4280,27 @@ sr_disp_aut_nocontact_eris = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_eris > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_eris = { value = sr_site_autonomy_value_eris multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_eris = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_eris ?= this } value = sr_site_aut_pressure_eris divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_makemake = { value = sr_site_pop_value_makemake divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_makemake = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_makemake = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_makemake > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_makemake = { value = sr_site_autonomy_value_makemake multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_makemake = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_makemake ?= this } value = sr_site_aut_pressure_makemake divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_haumea = { value = sr_site_pop_value_haumea divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_haumea = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4052,11 +4308,27 @@ sr_disp_aut_nocontact_haumea = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_haumea > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_haumea = { value = sr_site_autonomy_value_haumea multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_haumea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_haumea ?= this } value = sr_site_aut_pressure_haumea divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_sedna = { value = sr_site_pop_value_sedna divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_sedna = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_sedna = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_sedna > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_sedna = { value = sr_site_autonomy_value_sedna multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_sedna = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_sedna ?= this } value = sr_site_aut_pressure_sedna divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_shackleton = { value = sr_site_pop_value_shackleton divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_shackleton = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4064,11 +4336,27 @@ sr_disp_aut_nocontact_shackleton = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_shackleton > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_shackleton = { value = sr_site_autonomy_value_shackleton multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_shackleton = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = sr_site_aut_pressure_shackleton divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_peary = { value = sr_site_pop_value_peary divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_peary = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_peary = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_peary > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_peary = { value = sr_site_autonomy_value_peary multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_peary = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_peary ?= this } value = sr_site_aut_pressure_peary divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_tranquility = { value = sr_site_pop_value_tranquility divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_tranquility = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4076,11 +4364,27 @@ sr_disp_aut_nocontact_tranquility = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_tranquility > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_tranquility = { value = sr_site_autonomy_value_tranquility multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_tranquility = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = sr_site_aut_pressure_tranquility divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_marius_hills = { value = sr_site_pop_value_marius_hills divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_marius_hills = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_marius_hills = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_marius_hills > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_marius_hills = { value = sr_site_autonomy_value_marius_hills multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_marius_hills = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = sr_site_aut_pressure_marius_hills divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_daedalus = { value = sr_site_pop_value_daedalus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_daedalus = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4088,11 +4392,27 @@ sr_disp_aut_nocontact_daedalus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_daedalus > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_daedalus = { value = sr_site_autonomy_value_daedalus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_daedalus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = sr_site_aut_pressure_daedalus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_imbrium = { value = sr_site_pop_value_imbrium divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_imbrium = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_imbrium = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_imbrium > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_imbrium = { value = sr_site_autonomy_value_imbrium multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_target_imbrium = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = sr_site_aut_pressure_imbrium divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_war = {
 	value = 0
@@ -4438,3 +4758,149 @@ sr_disp_aut_restless_count = {
 }
 # ... less the one the cell names.
 sr_disp_aut_restless_more = { value = sr_disp_aut_restless_count subtract = 1 min = 0 }
+
+# Next Windows (colony management design § 6), per destination, the viewer's scope:
+#   sr_disp_win_row_<body>    sr_window_reach_<body>: 1 shown, 2 beyond our drive, 0 neither
+#   sr_disp_win_state_<body>  0 any month (no window, or a drive windows don't bind),
+#                             1 its window is open, 2 waiting, 3 waiting with propellant
+#                             depots (the premium to go now)
+# and the table's counts.
+sr_disp_win_row_moon = { value = sr_window_reach_moon }
+sr_disp_win_state_moon = { value = 0 }
+sr_disp_win_row_mars = { value = sr_window_reach_mars }
+sr_disp_win_premium_mars = { value = sr_window_premium_country_mars max = 9.99 }
+sr_disp_win_state_mars = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_mars } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_ceres = { value = sr_window_reach_ceres }
+sr_disp_win_premium_ceres = { value = sr_window_premium_country_ceres max = 9.99 }
+sr_disp_win_state_ceres = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_ceres } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_vesta = { value = sr_window_reach_vesta }
+sr_disp_win_premium_vesta = { value = sr_window_premium_country_vesta max = 9.99 }
+sr_disp_win_state_vesta = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_vesta } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_psyche = { value = sr_window_reach_psyche }
+sr_disp_win_premium_psyche = { value = sr_window_premium_country_psyche max = 9.99 }
+sr_disp_win_state_psyche = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_psyche } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_pallas = { value = sr_window_reach_pallas }
+sr_disp_win_premium_pallas = { value = sr_window_premium_country_pallas max = 9.99 }
+sr_disp_win_state_pallas = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_pallas } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_hygiea = { value = sr_window_reach_hygiea }
+sr_disp_win_premium_hygiea = { value = sr_window_premium_country_hygiea max = 9.99 }
+sr_disp_win_state_hygiea = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_hygiea } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_jupiter = { value = sr_window_reach_jupiter }
+sr_disp_win_premium_jupiter = { value = sr_window_premium_country_jupiter max = 9.99 }
+sr_disp_win_state_jupiter = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_jupiter } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_venus = { value = sr_window_reach_venus }
+sr_disp_win_premium_venus = { value = sr_window_premium_country_venus max = 9.99 }
+sr_disp_win_state_venus = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_venus } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_mercury = { value = sr_window_reach_mercury }
+sr_disp_win_state_mercury = { value = 0 }
+sr_disp_win_row_saturn = { value = sr_window_reach_saturn }
+sr_disp_win_premium_saturn = { value = sr_window_premium_country_saturn max = 9.99 }
+sr_disp_win_state_saturn = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_saturn } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_uranus = { value = sr_window_reach_uranus }
+sr_disp_win_premium_uranus = { value = sr_window_premium_country_uranus max = 9.99 }
+sr_disp_win_state_uranus = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_uranus } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_neptune = { value = sr_window_reach_neptune }
+sr_disp_win_premium_neptune = { value = sr_window_premium_country_neptune max = 9.99 }
+sr_disp_win_state_neptune = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_neptune } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_kuiper = { value = sr_window_reach_kuiper }
+sr_disp_win_premium_kuiper = { value = sr_window_premium_country_kuiper max = 9.99 }
+sr_disp_win_state_kuiper = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_kuiper } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_shown = {
+	value = 0
+	if = { limit = { sr_disp_win_row_moon = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_mars = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_ceres = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_vesta = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_psyche = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_pallas = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_hygiea = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_jupiter = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_venus = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_mercury = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_saturn = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_uranus = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_neptune = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_kuiper = 1 } add = 1 }
+}
+sr_disp_win_beyond = {
+	value = 0
+	if = { limit = { sr_disp_win_row_moon = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_mars = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_ceres = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_vesta = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_psyche = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_pallas = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_hygiea = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_jupiter = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_venus = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_mercury = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_saturn = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_uranus = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_neptune = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_kuiper = 2 } add = 1 }
+}
+# 1 once the month's windows are worked out (the global monthly pulse).
+sr_disp_win_cached = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cache_month } value = 1 }
+}

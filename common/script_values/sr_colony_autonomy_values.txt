@@ -30,6 +30,11 @@ sr_aut_at_war = { value = 0.25 }
 # A garrison's resentment, for its ten years; a charter's self-government, for good.
 sr_aut_garrisoned = { value = 0.2 }
 sr_aut_chartered = { value = -0.4 }
+# Settling (colony management design § 4.2): a share of the autonomy itself
+# taken off each month, so autonomy settles where the other terms' sum (the
+# pressure, sr_site_aut_pressure_<key>) equals it: at 100 x the pressure. Two
+# thirds of the way there in about eight years.
+sr_aut_settle_rate = { value = 0.01 }
 
 # The autonomy event's answers (space_race_events.94): what each takes off now,
 # and the share of its specializations a chartered colony keeps working for its

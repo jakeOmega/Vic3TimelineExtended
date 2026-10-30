@@ -6688,6 +6688,8 @@
  sr_window_name_jupiter:0 "Jupiter system"
  sr_window_name_kuiper:0 "Kuiper Belt"
  sr_window_name_mars:0 "Mars"
+ sr_window_name_mercury:0 "Mercury"
+ sr_window_name_moon:0 "The Moon"
  sr_window_name_neptune:0 "Neptune system"
  sr_window_name_pallas:0 "Pallas"
  sr_window_name_psyche:0 "Psyche"

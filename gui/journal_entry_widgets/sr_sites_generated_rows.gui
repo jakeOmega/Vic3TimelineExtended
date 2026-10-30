@@ -5,8 +5,10 @@
 ### location, in panel_order(), filtered by default), te_sr_colony_row
 ### (Colonies, every world, shown while ours; audit SPC-5), te_sr_cf_slot_row
 ### (Colony Fleets, one per fleet slot), te_sr_mq_row (the Modules view's queue,
-### one per place) and te_sr_free_row (the Autonomy view's Free Colonies, every
-### world, shown while free; slice 5 design § 9). Each value is a display value
+### one per place), te_sr_free_row (the Autonomy view's Free Colonies, every
+### world, shown while free; slice 5 design § 9) and te_sr_window_row (Mission
+### Control's Next Windows, one per destination, sr_launch_window_widgets.gui;
+### colony management design § 6). Each value is a display value
 ### of sr_sites_display_generated.txt (the Defenses view's, of
 ### sr_fleets_display_generated.txt), the scripted GUIs are in sr_colony_sguis.txt.
 
@@ -2757,7 +2759,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_shackleton"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_shackleton')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_shackleton')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_shackleton'), '(CFixedPoint)0' )]"
@@ -2917,7 +2919,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_peary"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_peary')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_peary')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_peary'), '(CFixedPoint)0' )]"
@@ -3077,7 +3079,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_tranquility"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_tranquility')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_tranquility')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_tranquility'), '(CFixedPoint)0' )]"
@@ -3237,7 +3239,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_marius_hills"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_marius_hills')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_marius_hills')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_marius_hills'), '(CFixedPoint)0' )]"
@@ -3397,7 +3399,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_daedalus"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_daedalus')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_daedalus')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_daedalus'), '(CFixedPoint)0' )]"
@@ -3557,7 +3559,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_imbrium"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_imbrium')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_imbrium')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_imbrium'), '(CFixedPoint)0' )]"
@@ -3720,7 +3722,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_venus"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_venus')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_venus')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_venus'), '(CFixedPoint)0' )]"
@@ -3883,7 +3885,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_mercury"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_mercury')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_mercury')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_mercury'), '(CFixedPoint)0' )]"
@@ -4046,7 +4048,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_valles_marineris"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_valles_marineris')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_valles_marineris')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_valles_marineris'), '(CFixedPoint)0' )]"
@@ -4209,7 +4211,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_olympus_mons"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_olympus_mons')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_olympus_mons')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_olympus_mons'), '(CFixedPoint)0' )]"
@@ -4372,7 +4374,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_hellas_planitia"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_hellas_planitia')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_hellas_planitia')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_hellas_planitia'), '(CFixedPoint)0' )]"
@@ -4535,7 +4537,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_utopia_planitia"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_utopia_planitia')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_utopia_planitia')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_utopia_planitia'), '(CFixedPoint)0' )]"
@@ -4698,7 +4700,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_arcadia_planitia"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_arcadia_planitia')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_arcadia_planitia')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_arcadia_planitia'), '(CFixedPoint)0' )]"
@@ -4861,7 +4863,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_ceres"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_ceres')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_ceres')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ceres'), '(CFixedPoint)0' )]"
@@ -5024,7 +5026,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_vesta"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_vesta')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_vesta')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_vesta'), '(CFixedPoint)0' )]"
@@ -5187,7 +5189,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_psyche"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_psyche')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_psyche')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_psyche'), '(CFixedPoint)0' )]"
@@ -5350,7 +5352,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_pallas"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_pallas')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_pallas')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_pallas'), '(CFixedPoint)0' )]"
@@ -5513,7 +5515,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_hygiea"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_hygiea')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_hygiea')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_hygiea'), '(CFixedPoint)0' )]"
@@ -5676,7 +5678,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_io"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_io')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_io')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_io'), '(CFixedPoint)0' )]"
@@ -5839,7 +5841,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_europa"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_europa')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_europa')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_europa'), '(CFixedPoint)0' )]"
@@ -6002,7 +6004,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_ganymede"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_ganymede')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_ganymede')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ganymede'), '(CFixedPoint)0' )]"
@@ -6165,7 +6167,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_callisto"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_callisto')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_callisto')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_callisto'), '(CFixedPoint)0' )]"
@@ -6328,7 +6330,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_himalia"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_himalia')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_himalia')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_himalia'), '(CFixedPoint)0' )]"
@@ -6491,7 +6493,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_amalthea"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_amalthea')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_amalthea')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_amalthea'), '(CFixedPoint)0' )]"
@@ -6654,7 +6656,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_titan"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_titan')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_titan')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_titan'), '(CFixedPoint)0' )]"
@@ -6817,7 +6819,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_enceladus"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_enceladus')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_enceladus')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_enceladus'), '(CFixedPoint)0' )]"
@@ -6980,7 +6982,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_rhea"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_rhea')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_rhea')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_rhea'), '(CFixedPoint)0' )]"
@@ -7143,7 +7145,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_mimas"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_mimas')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_mimas')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_mimas'), '(CFixedPoint)0' )]"
@@ -7306,7 +7308,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_iapetus"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_iapetus')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_iapetus')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_iapetus'), '(CFixedPoint)0' )]"
@@ -7469,7 +7471,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_titania"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_titania')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_titania')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_titania'), '(CFixedPoint)0' )]"
@@ -7632,7 +7634,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_oberon"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_oberon')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_oberon')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_oberon'), '(CFixedPoint)0' )]"
@@ -7795,7 +7797,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_miranda"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_miranda')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_miranda')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_miranda'), '(CFixedPoint)0' )]"
@@ -7958,7 +7960,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_ariel"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_ariel')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_ariel')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ariel'), '(CFixedPoint)0' )]"
@@ -8121,7 +8123,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_triton"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_triton')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_triton')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_triton'), '(CFixedPoint)0' )]"
@@ -8284,7 +8286,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_proteus"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_proteus')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_proteus')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_proteus'), '(CFixedPoint)0' )]"
@@ -8447,7 +8449,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_pluto"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_pluto')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_pluto')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_pluto'), '(CFixedPoint)0' )]"
@@ -8610,7 +8612,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_eris"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_eris')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_eris')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_eris'), '(CFixedPoint)0' )]"
@@ -8773,7 +8775,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_makemake"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_makemake')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_makemake')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_makemake'), '(CFixedPoint)0' )]"
@@ -8936,7 +8938,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_haumea"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_haumea')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_haumea')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_haumea'), '(CFixedPoint)0' )]"
@@ -9099,7 +9101,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_autonomy_drift_tt_sedna"
 			}
 			blockoverride "aut_drift" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_sedna')|+=2]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_drift_sedna')|=-2]"
 			}
 			blockoverride "aut_none_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_sedna'), '(CFixedPoint)0' )]"
@@ -9784,6 +9786,372 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_queue_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_queue_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End ) ) )]"
+			}
+		}
+	}
+
+	type te_sr_window_rows = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_moon'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_moon"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_moon'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_moon'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = no
+			}
+			blockoverride "win_paid" {
+				visible = no
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_moon"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_mars'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_mars"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_mars'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_mars'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_mars'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_mars"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_mars'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_mars"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_mars"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_ceres'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_ceres"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_ceres'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_ceres'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_ceres'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_ceres"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_ceres'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_ceres"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_ceres"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_vesta'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_vesta"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_vesta'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_vesta'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_vesta'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_vesta"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_vesta'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_vesta"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_vesta"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_psyche'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_psyche"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_psyche'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_psyche'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_psyche'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_psyche"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_psyche'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_psyche"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_psyche"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_pallas'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_pallas"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_pallas'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_pallas'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_pallas'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_pallas"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_pallas'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_pallas"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_pallas"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_hygiea'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_hygiea"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_hygiea'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_hygiea'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_hygiea'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_hygiea"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_hygiea'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_hygiea"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_hygiea"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_jupiter'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_jupiter"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_jupiter'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_jupiter'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_jupiter'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_jupiter"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_jupiter'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_jupiter"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_jupiter"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_venus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_venus"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_venus'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_venus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_venus'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_venus"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_venus'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_venus"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_venus"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_mercury'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_mercury"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_mercury'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_mercury'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = no
+			}
+			blockoverride "win_paid" {
+				visible = no
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_mercury"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_saturn'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_saturn"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_saturn'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_saturn'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_saturn'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_saturn"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_saturn'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_saturn"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_saturn"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_uranus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_uranus"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_uranus'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_uranus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_uranus'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_uranus"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_uranus'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_uranus"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_uranus"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_neptune'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_neptune"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_neptune'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_neptune'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_neptune'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_neptune"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_neptune'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_neptune"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_neptune"
+			}
+		}
+
+		te_sr_window_row = {
+			blockoverride "win_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_row_kuiper'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_name" {
+				text = "sr_window_name_kuiper"
+			}
+			blockoverride "win_any_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_kuiper'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "win_open_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_kuiper'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "win_wait" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_kuiper'), '(CFixedPoint)2' )]"
+				text = "je_space_race_widget_win_wait_kuiper"
+			}
+			blockoverride "win_paid" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_state_kuiper'), '(CFixedPoint)3' )]"
+				text = "je_space_race_widget_win_paid_kuiper"
+			}
+			blockoverride "win_transit" {
+				text = "je_space_race_widget_win_transit_kuiper"
 			}
 		}
 	}

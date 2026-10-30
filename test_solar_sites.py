@@ -1719,12 +1719,21 @@ class FreeColoniesTest(unittest.TestCase):
                 self.assertIn("max = sr_aut_break_level", step)
                 self.assertLess(step.index("sr_aut_break_away"), step.index("sr_aut_ask ="))
                 self.assertIn(f"name = sr_site_aut_asked_{k} value = yes days = 1825", step)
+                # The drift is the pressure less settling (colony management design § 4.2).
                 drift = _block(self.values, f"sr_site_aut_drift_{k}")
+                self.assertIn(f"value = sr_site_aut_pressure_{k}", drift)
+                self.assertIn(f"subtract = {{ value = sr_site_autonomy_value_{k} multiply = sr_aut_settle_rate }}", drift)
+                pressure = _block(self.values, f"sr_site_aut_pressure_{k}")
                 for term in ("sr_aut_home_pull", "sr_aut_per_10k_people", "sr_aut_per_transit_month",
                              "sr_aut_distance_cap", "sr_aut_no_contact", "sr_aut_at_war", "sr_aut_garrisoned",
                              "sr_aut_chartered"):
-                    self.assertIn(term, drift)
-                self.assertIn(f"sr_transit_months_{gss.transit_body(site)}", drift)
+                    self.assertIn(term, pressure)
+                self.assertIn(f"sr_transit_months_{gss.transit_body(site)}", pressure)
+
+    def test_autonomy_settles_at_a_hundred_times_its_pressure(self):
+        """Settling (colony management design § 4.2): 1% of the autonomy a month,
+        so a colony settles at 100 x the other terms' sum."""
+        self.assertEqual(self._number("sr_aut_settle_rate"), 0.01)
 
     def test_the_charter_scales_the_specializations(self):
         self.assertEqual(self._number("sr_aut_charter_share"), 0.8)
