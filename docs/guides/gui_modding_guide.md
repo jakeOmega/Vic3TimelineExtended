@@ -1325,7 +1325,7 @@ Appended after `|` in data binding expressions. Combinable.
 | `+` | Always show sign | `+42` |
 | `=` | Always show sign (alt) | `+42` |
 | `%` | Percentage | `45%` |
-| `-` | Negative/cost | `-42` |
+| `-` | Reverses the color: positive red, negative green. With `=`, `\|=-2` is signed and colored as a cost (vanilla's devastation; a colony's autonomy drift, where up is the holder's loss) | `+0.12` in red |
 | `*` | ×100 (fraction→%) | `0.15 → 15` |
 
 ### Common Combinations

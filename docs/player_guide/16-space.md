@@ -192,8 +192,9 @@ While a full bar waits for a launch window, Staged in Orbit gives the progress
 built so far in colony fleets ("1.4 fleets"); hover it for each destination's
 next window. Under the bar, the Sites pie counts the 40 sites: gold for your
 colonies, red for other powers' and gray for the sites no one holds; hover it
-for the counts. Its Mission Control adds Next Windows, the destinations of the
-stage with a site left and the months to each window (see [Launch
+for the counts. Its Mission Control adds Next Windows, a table of the
+destinations your next colony fleet can reach: each one's next window and how
+long the fleet takes to get there by your drive (see [Launch
 windows](#launch-windows)).
 While the program isn't running, because every site is claimed or your Space
 Program no longer runs the method it needs, the approach reads Idle, the risk
@@ -213,17 +214,19 @@ needs you, with the detail on hover. A word turns red when something is due:
 Solar System Colonization has more sections below Rivals: Colony Fleets,
 Solar System and Colonies, then under Full Colonies Space Command and Space
 Fleets, and How Solar Colonization Works (collapsed), which explains them.
-Colonies (open) has a row for every site you hold, with Colonies Held (out of
-40) at the top. Each row has a small icon for the kind of body it is on (the Moon, Mars,
+Colonies (open) has a box for every site you hold, with Colonies Held (out of
+40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a
-dwarf planet), and hovering its name shows the colony's permanent effects. The
-buttons above the rows switch what each row shows:
+dwarf planet). Hovering its name shows the colony's permanent effects, and
+clicking it opens the colony's page: all four views of that colony at once, with
+Back to return to the list. The buttons above the rows switch what each box
+shows:
 
 | View | Shows | Above the rows |
 |---|---|---|
 | People (the default) | Each colony's people and room, its crews and its settler priority | Emigration, settlers a month and your people off Earth |
-| Modules | Each colony's module levels, its crews' share of them, and a button to queue each | Fabrication, shipments, module upkeep, Extraplanetary Base room and the queue |
-| Autonomy | Each colony's autonomy, how much it moves a month (hover it for that colony's terms), its charter or garrison, and Abandon | Free colony trade; the free colonies are listed below the rows |
+| Modules | Each colony's crews' share of its modules, its slots in use (red past them) and its Extraplanetary Base room, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base room and the queue |
+| Autonomy | Each colony's autonomy, how much it moves a month (hover it for that colony's terms), what it is building of its own, its charter or garrison, and Abandon | Free colony trade; the free colonies are listed below the rows |
 | Defenses | Each colony's Defenses, integrity and marines, and what threatens it | |
 
 The section stays on the panel when the program is Idle, so you can always see
@@ -547,8 +550,10 @@ in a while. A site's launch window is the month of its best departure and the
 month on either side. The windows are worked out from the planets' and
 asteroids' real orbits: Mars opens one every 26 months or so, each asteroid
 every 15 to 17, Venus every 19, Jupiter every 13, and Saturn, Uranus, Neptune
-and the Kuiper Belt about once a year. Next Windows in Mission Control lists the
-stage's destinations with the months to each.
+and the Kuiper Belt about once a year. Next Windows in Mission Control lists
+each destination with a site you can target, its next window, and the months
+your drive takes to get there. A destination beyond your drive's 15-year reach
+is left out and counted under the table.
 
 While no destination with a site left is open, the program keeps building.
 Progress past a colony's goal is fleets staged in orbit, shown on the overview
@@ -684,8 +689,8 @@ modules](#colony-modules)).
 Your people off Earth give Off-World Population on Solar System Colonization:
 +1% prestige and +2% cultural pull for every 100,000 of them, up to a million.
 A colony's people go with it when it changes hands, stay on it when it becomes
-a free colony, and are lost if it is released. AI programs set Emigration to Steady while they are in the top three
-of the space race with money to spare, to Low otherwise, and to Off in default
+a free colony, and are lost if it is released. AI programs set Emigration to Steady while they hold a colony or are in the top three
+of the space race, with money to spare; to Low otherwise; and to Off in default
 or when their colonies are full.
 
 ### Colony modules
@@ -696,9 +701,35 @@ listed in the Colonies section's Modules view in Solar System Colonization:
 | Module | What a level does | Room for it |
 |---|---|---|
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
-| Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports and Defenses: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
+| Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports, Defenses and facilities: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
 | Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a site that makes propellant. Under Simple Colonies, nothing | The colony's slots; none on the Moon |
 | Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | The colony's slots |
+| Facilities | See the table below | The colony's slots |
+
+The facilities each give their bonus for every staffed level, across all your
+colonies:
+
+| Facility | A staffed level gives |
+|---|---|
+| Mining Complex | +10 Extraplanetary Base room at the colony |
+| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month |
+| Research Station | +2% research speed |
+| Cultural Center | +3% cultural pull, +1% prestige |
+| Off-World Resort | +3% tourism output |
+| Black Site | +1 intelligence capacity, +3% covert operation efficiency |
+| Training Ground | +4% army experience gain |
+| Nuclear Command Center | +4 nuclear command reliability, at most +12 |
+| Materials Foundry | +3% advanced materials output |
+| Administration | −0.15 a month to the colony's autonomy |
+
+A blockade stops the Mining Complex, Orbital Yard, resort and foundry; an
+occupied colony's facilities give nothing.
+
+A colony has 1 to 4 slots by its size, and one more each with Advanced
+Nanofabrication and Molecular Assemblers. Past them it still takes up to four
+more modules, each costing 100 fabrication points more than the last: 200, then
+300, 400 and 500. The Modules view's Slots figure turns red past them, and its
+hover gives the next module's price.
 
 The founding event has to be answered before you can add a specialization
 level. Each row's buttons add one more level of a module to the end of your
@@ -717,19 +748,20 @@ group, Module Fabrication, which starts on No Module Fabrication:
 | Orbital Foundries | Space Colonization | 2,000 and 15 | 12 |
 | Fusion Shipyards | Muon-Catalyzed Fusion Reactors | 2,000 and 10 | 25 |
 
-Each module costs 100 points, so a fully staffed Space Program builds one every
+Each module within a colony's slots costs 100 points, so a fully staffed Space Program builds one every
 20, 8 or 4 months, more often with higher funding. Mare Imbrium's Mass Driver
 adds 3 points a month a level of its own, with or without a fabrication method. Fabrication builds the queue
 in order, first in first out: the module at the top is next. The arrow on each
 line from the second on moves that module up a place; Alt+Click moves it to the
-top. Up to 200 points wait in stock while nothing is queued.
+top. Up to 500 points wait in stock while nothing is queued, enough for the
+dearest module.
 
 A finished module waits at Earth for its site's launch window, or leaves at
 once with a fusion torch or antimatter drive, and lands after the transit your
 drive buys (see [Colony fleets in flight](#colony-fleets-in-flight)). Eight
 modules can wait or fly at once; while all eight are taken, fabrication waits.
 A module lands for whoever holds the colony then, and is lost if the site was
-released or its room filled in the meantime.
+released or filled to four past its slots in the meantime.
 
 Every level past the first needs a crew of 5,000 people, except Habitats, which
 house the crews. A colony short of crews runs its modules at the share it can
@@ -739,17 +771,22 @@ each colony's first adds +1% to your Space Program's throughput, raising its
 Launch Capacity bill (Module Upkeep in the Modules view).
 
 A colony's modules stay with it when it changes hands, and the Cede Colony AI
-values a colony more for each of them. AI programs in the top three with money
-to spare queue one module a year at each colony: a Habitat once its people fill
-three quarters of its room, otherwise the next specialization level its crews
-can run, its founding specialization first. They run the best fabrication method
-they have while anything is queued, and never build Spaceports or Defenses.
+values a colony more for each of them. An AI that holds a colony, or is in the
+top three, queues one module a year at each colony when it has money to spare:
+a Habitat once its people fill three quarters of its room, otherwise the next
+specialization level its crews can run, its founding specialization first, then
+a facility: an Administration where autonomy has reached 50, a Mining Complex
+when its bases outgrow their room, a Nuclear Command Center with nuclear
+weapons, an Orbital Yard with a Space Command, otherwise a Research Station. It
+runs the best fabrication method it has while anything is queued, never builds
+Spaceports or Defenses, and never pays for a module past a colony's slots.
 
 ### Extraplanetary Base room
 
 Under Simple Colonies and Full Colonies, Extraplanetary Bases need room. With
 Asteroid Mining, the near-Earth asteroids give every country room for 10 levels,
-and each colony you hold adds its own, from 10 levels on the small outer moons to 60 at 16 Psyche.
+and each colony you hold adds its own, from 10 levels on the small outer moons to 60 at 16 Psyche,
+and 10 more for each staffed level of its Mining Complexes.
 Each colony's room has a grade, which raises or lowers the output of the levels
 that work it:
 
@@ -772,7 +809,8 @@ all your levels, so only the levels past the room pay the penalty: with room for
 10 and 20 levels built, the base works at −25%. A new poor colony adds room
 without lowering what your levels already earn, and taking a rival's Psyche
 colony raises your average and lowers theirs. The Colonies section's Modules
-view shows your levels against your room. Private investors don't build past your room,
+view shows your levels against your room, and each colony's Bases figure its
+own room, with its grade on hover. Private investors don't build past your room,
 and AI governments don't either; your government can, at the penalty. Under
 Races Only, bases have no room limit.
 
@@ -815,8 +853,10 @@ Transfer. It can also be demanded as a war goal, for 5 maneuvers and 10 infamy.
 
 AI powers in the race ask for colonies; an AI that holds a colony with no space
 program of its own offers it. Any AI accepts a cession when the rest of the
-treaty pays more than the colony is worth to it, which rises with the site's
-stage, from the Moon to the Kuiper Belt.
+treaty pays more than the colony is worth to it: 30, plus 10 for each stage past
+the Moon, 8 for each module level past the first and 1 for each 1,000 people, at
+most 170. A giver holds out for 30 more besides, so an empty lunar outpost costs
+60 points of acceptance and a large, built-up colony 200.
 
 ### Colony autonomy and free colonies
 
@@ -834,9 +874,14 @@ the terms that move that colony. It changes every month:
 | You are at war | +0.25 |
 | A garrison | +0.2 |
 | A charter | −0.4 |
+| Its Administration | −0.15 a staffed level |
+| Settling | −1% of its autonomy |
 
-So a Mars colony that keeps receiving settlers barely moves, while a large
-colony at Saturn on chemical rockets gains about five points a year. Better
+Settling makes autonomy level out rather than climb for ever: a colony settles at
+100 times the sum of its other terms, and the hover shows where. A colony whose
+terms add up to +0.3 a month settles near 30; one demands self-government only
+when they reach +0.75, as for a large colony far out that is also at war or out
+of contact. A Mars colony that keeps receiving settlers stays near 0. Better
 drives bring the outer colonies closer: with a fusion torch the distance all but
 disappears. Keep settlers or modules arriving, on Low emigration if nothing
 else, so that no colony goes a year without contact.
@@ -855,8 +900,16 @@ ten years and costs Launch Capacity. Under Full Colonies a garrison is real
 troops: it takes effect only once a fleet lands two marine battalions at the
 colony, within a year of the order, or the order lapses. A colony that reaches 100 declares itself
 free whatever you chose. A charter stays with the colony when it changes hands;
-a garrison goes home. AI powers grant a charter while they race, garrison while
-at war, and let a colony go when they run no colonization program.
+a garrison goes home. AI powers grant a charter, garrison while at war, and let
+a colony go only when they have no Space Program to supply it.
+
+**A colony's own modules.** Autonomy has its use: each month a colony gains its
+autonomy ÷ 100 × its people ÷ 10,000 points toward a module of its own, at most
+5, shown as Building in the Autonomy view. At 100 it builds one, free and at
+once, within its slots: a Habitat once its people fill three quarters of its
+room, a level of its founding specialization (up to 3) or of the other, or a
+Research Station or Cultural Center. A colony at 50 autonomy with 30,000 people
+builds one about every five and a half years.
 
 **Abandoning a colony.** Each colony's row has an Abandon button, which asks
 first. You can bring its people home to your capital, releasing the site and

@@ -54,9 +54,16 @@ the programme was not running, which is any idle holder.
 - **The demand:** a charter is the AI's default for any holder (base 40, +40 while it
   tends colonies); a garrison at war as before; letting go only without a Space
   Program (+60), since then it can't supply the colony at all.
-- **Cede Colony's worth** adds the world's people: +1 a 2,000 people (a full Valles
-  Marineris, 50,000, is worth +25 more), so a peopled colony is not sold for the
-  price of an outpost.
+- **Cede Colony's price** (the owner's follow-up, 2026-10-30: "you can buy colonies
+  off the AI for cheap"; a colony shouldn't weigh as much as most states, but a
+  giver's score should sit between −50 and −200, not −20 to −50). The article's
+  `inherent_accept_score` gives the giver −30 for reluctance (was −10) less the
+  world's worth, `sr_cede_ai_input_value`: 30 plus 10 a stage (was 20 plus 5), 8 a
+  module level past the first (was 5), 1 a 1,000 of its people (new), at most 170.
+  So an empty lunar outpost costs −60, an empty Kuiper outpost −110, a built-up
+  lunar colony of 25,000 with five levels −125, and a peopled Mars colony with
+  eight levels the cap, −200. The receiver gains the same worth (half without a
+  programme), as before.
 - **New modules:** the AI's plan (§ 7.3) reaches the new types.
 
 ## 4. Autonomy (notes 5, 6, 10)
@@ -85,10 +92,10 @@ when S reaches 1. The hover shows the term and where the colony is settling.
 Each held colony that is not occupied gains **self-build points** a month:
 autonomy ÷ 100 × people ÷ 10,000 (`sr_aut_selfbuild_per_10k`, 1), at most 5. At 100
 (`sr_module_points`) it builds a module itself, installed at once, free, never past
-its room: a Habitat once its people fill three quarters of its room, else a level of
-its founding specialization, else of the other, else a Research Station, else a
-Cultural Center (what a self-governing colony wants for itself; never an
-Administration). With nothing it can build, the points wait at 100. A colony at 50
+its slots: a Habitat once its people fill three quarters of its room, else a level of
+its founding specialization up to 3, else of the other, else a Research Station or a
+Cultural Center, whichever it has fewer of (what a self-governing colony wants for
+itself; never an Administration). Specialization levels stay within their 4. With nothing it can build, the points wait at 100. A colony at 50
 autonomy with 30,000 people builds one about every five and a half years. The record
 is `sr_site_self_<key>` (global, so a cession takes it; cleared on release).
 
@@ -162,9 +169,12 @@ a Space Command, else a Research Station.
   Colonies Defenses), its slots, bases and self-build, and a Back button. The view
   switch leaves it. Client state only (`GetVariableSystem`: `sr_colony_view` =
   `detail`, `sr_colony_focus` = the world's key), as the views are.
-- **The Modules view** lays its cells in three lines under three lines of heads:
-  the specializations, Habitat, Spaceport and Defences as before; then Mining, Yard,
-  Lab, Culture, Resort; then Black Site, Training, Command, Foundry, Administration.
+- **The Modules view**: Clear beside the name; under it the crew share, Slots and
+  Bases, then every module in three lines of cells that label themselves (four
+  letters each, the module's hover on the label): I, II, Hab, Port, Def; Mine, Yard,
+  Lab, Arts, Tour; Spy, Camp, Nuke, Mat, Gov. The column heads above the rows stay
+  for People, Autonomy (with Building, § 4.3) and Defenses.
+- **Back** above the rows leaves a colony's page.
 
 ## 9. Saves
 
