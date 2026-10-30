@@ -50,8 +50,8 @@
 #   te_grid_command  the Electricity asked of the station's method (0 idle)
 #   te_grid_factor   share of the order the station moved last time measured,
 #                    its throughput left out
-#   te_grid_throughput  the station's read of building_throughput_add its
-#                    order was set for (te_grid_station_throughput_value)
+#   te_grid_throughput  the station's read of building_throughput_add at this
+#                    run (te_grid_station_throughput_value)
 #   te_grid_delivery the efficiency the station's download was set to
 #   te_grid_power_rate  the Grid Power its lines carry per unit of flow: the
 #                    grid's sending price (te_grid_price) when they were set
@@ -622,9 +622,9 @@ te_grid_balance_region_effect = {
 	te_grid_fixed_price_selfcheck_effect = yes
 	te_grid_price_selfcheck_effect = yes
 
-	# Each member: its factor (from last month's order and the throughput it
-	# ran at, before either is overwritten), its throughput now, its
-	# Electricity without the station, its efficiency.
+	# Each member: its throughput now, its factor (from last month's order,
+	# before it is overwritten, over that throughput), its Electricity without
+	# the station, its efficiency.
 	set_local_variable = { name = te_grid_sum_production value = 0 }
 	set_local_variable = { name = te_grid_sum_consumption value = 0 }
 	set_local_variable = { name = te_grid_members value = 0 }
@@ -635,7 +635,6 @@ te_grid_balance_region_effect = {
 		te_grid_power_rate_selfcheck_effect = yes
 		te_grid_throughput_selfcheck_effect = yes
 		set_variable = { name = te_grid_factor value = te_grid_station_factor_value }
-		set_variable = { name = te_grid_throughput value = local_var:te_grid_throughput_now }
 		set_variable = { name = te_grid_local_production value = te_grid_local_production_value }
 		set_variable = { name = te_grid_local_consumption value = te_grid_local_consumption_value }
 		set_variable = { name = te_grid_efficiency value = te_grid_state_efficiency_value }
@@ -928,17 +927,30 @@ te_grid_clear_cross_market_effect = {
 }
 
 # State scope, a member of the grid being balanced, before its factor is
-# measured. Sets local_var:te_grid_throughput_now to the station's read of
-# building_throughput_add, which te_grid_balance_region_effect stores as
-# te_grid_throughput once the factor has read the old one. A building's read
-# carries its state's and country's lines: in the 2013 Byzantium save every
-# Strategic Reserve Hub's cached read (st_res_hub_throughput_cached) was
-# Global Warming's -0.025 x 1.81 C, to the fifth decimal, alone or with
-# another -0.05, and every BYZ station's factor sat at 1 less the same (#1248).
-# A station that has never stored one takes this as what its last order ran
-# at, so a save from before keeps its factor's measure. The warming modifier
-# is re-applied on the country's monthly pulse and this runs on the global
-# one; whichever comes first, the read is at most a month's warming stale.
+# measured. Stores the station's read of building_throughput_add as
+# te_grid_throughput, which the factor's measurement and this month's order
+# both divide by (te_grid_station_throughput_value). A building's read carries
+# its state's and country's lines: in the 2013 Byzantium save every Strategic
+# Reserve Hub's cached read (st_res_hub_throughput_cached) was Global
+# Warming's -0.025 x 1.81 C, to the fifth decimal, alone or with another
+# -0.05, and every BYZ station's factor sat at 1 less the same (#1248).
+#
+# The read is now's, and last week's output ran at it unless a line landed
+# since the station's last weekly tick. A step earlier in the month is in
+# last week's output already, so measuring over the read the last order was
+# set for and dividing the order by today's would count it twice (review of
+# #1253). For a running station the order is therefore what it was before
+# #1248, the flow times last order over what it moved; the read takes the
+# throughput out of the factor, so a factor kept while the station is idle or
+# barely ordered holds staffing alone, and a station back from idle moves its
+# flow at today's throughput.
+#
+# Also sets local_var:te_grid_throughput_step, how far the read moved since
+# the last run (-10 or less with no earlier read), which the self-checks gate
+# on: a step that landed after the last tick puts last week's output off the
+# read. A factor from before #1248 was measured with its throughput in it:
+# taken out once, at today's read, so that a factor kept at this run reads as
+# a measured one would.
 te_grid_read_throughput_effect = {
 	set_local_variable = { name = te_grid_throughput_now value = 0 }
 	random_scope_building = {
@@ -947,9 +959,19 @@ te_grid_read_throughput_effect = {
 			set_local_variable = { name = te_grid_throughput_now value = prev.modifier:building_throughput_add }
 		}
 	}
+	set_local_variable = { name = te_grid_throughput_step value = local_var:te_grid_throughput_now }
 	if = {
-		limit = { NOT = { has_variable = te_grid_throughput } }
+		limit = { has_variable = te_grid_throughput }
+		change_local_variable = { name = te_grid_throughput_step subtract = var:te_grid_throughput }
 		set_variable = { name = te_grid_throughput value = local_var:te_grid_throughput_now }
+	}
+	else = {
+		change_local_variable = { name = te_grid_throughput_step subtract = 10 }
+		set_variable = { name = te_grid_throughput value = local_var:te_grid_throughput_now }
+		if = {
+			limit = { has_variable = te_grid_factor }
+			change_variable = { name = te_grid_factor divide = te_grid_station_throughput_value }
+		}
 	}
 }
 
@@ -1745,10 +1767,11 @@ te_grid_chk_record_price_effect = {
 # sending station 90% staffed or more, staffed at last month's run too, that
 # was asked for 100 or more at a rate (te_grid_power_rate, the grid's sending
 # price) of 0.5 or less, or 1.7 to 1.9 (short of the ceiling, where a sending
-# state nears the shortage threshold). What it moved on its own account last
-# week, its Grid Power over that rate, as a share of what it was asked and
-# the throughput the order ran at (te_grid_chk_rate_moved_value, #1248), is
-# its staffing: 0.9 to 1.
+# state nears the shortage threshold), whose throughput read moved less than
+# 0.005 since the last run (so last week's output ran at it). What it moved on
+# its own account last week, its Grid Power over that rate, as a share of
+# what it was asked and that throughput (te_grid_chk_rate_moved_value,
+# #1248), is its staffing: 0.9 to 1.
 #   OK      0.8 to 1.25: the Grid Power line carries the rate once, and the
 #           readbacks divide it out.
 #   BROKEN  outside: a line set without the rate reads that over the rate
@@ -1778,6 +1801,8 @@ te_grid_power_rate_selfcheck_effect = {
 			var:te_grid_flow > 0
 			has_variable = te_grid_command
 			var:te_grid_command >= 100
+			local_var:te_grid_throughput_step > -0.005
+			local_var:te_grid_throughput_step < 0.005
 			te_grid_station_staffed_throughout = yes
 			any_scope_building = {
 				is_building_type = building_grid_transfer_station
@@ -1811,28 +1836,28 @@ te_grid_power_rate_selfcheck_effect = {
 }
 
 # State scope, a member of the grid being balanced, after
-# te_grid_read_throughput_effect and before its factor, order and stored
-# throughput are overwritten. TE_SELF_CHECK grid_throughput, once a game: the
-# first station 98% staffed or more, staffed at last month's run too, asked
-# for 100 or more, whose stored throughput read (te_grid_throughput) is 0.04
-# or more either side of none, and whose factor so far is 0.98 or more: full
-# at the last measure as now, so last week was full too (a station still
-# hiring would read low), and on a save from before this build, whose factor
-# carries the throughput, the check waits a month and then judges an order
-# set with the divide. What it moved on its own account last week
-# over its order and that throughput, as a share of its occupancy
-# (te_grid_chk_throughput_share_value), is 1 when the read is what cut its
-# lines, 1 over 1 plus the read when the lines don't feel it, and short by
-# any cut the read leaves out.
-#   OK      0.98 to 1.02: the read is the station's throughput, and the order
-#           makes up for it in the month it is set.
+# te_grid_read_throughput_effect and before its factor and order are
+# overwritten. TE_SELF_CHECK grid_throughput, once a game: the first station
+# 98% staffed or more, staffed at last month's run too, asked for 100 or more,
+# whose throughput read (te_grid_throughput) is 0.04 or more either side of
+# none and moved less than 0.005 since the last run (so last week's output ran
+# at it), and whose factor so far is 0.98 or more (full at the last measure as
+# now, so full last week; a station still hiring would read low). What it
+# moved on its own account last week over its order and that throughput, as a
+# share of its occupancy (te_grid_chk_throughput_share_value), is 1 when the
+# read is what cuts its lines and 1 over 1 plus the read when the lines don't
+# feel it. On a save from before #1248 it waits a month for a read to compare.
+#   OK      0.975 to 1.025: the read is the station's throughput, and the
+#           factor holds staffing alone.
 #   BROKEN  further off. Near 1 over 1 plus the read (1.047 at -0.045): the
-#           read isn't what cuts the lines, and each change in it moves the
-#           order for a month until the factor takes it back out. Low: a
-#           shortage of the station's inputs that began last week.
+#           read isn't what cuts the lines, so a factor kept while a station is
+#           idle is off by it. Low: a shortage of the station's inputs that
+#           began last week.
 # A throughput line the read leaves out (a group's, such as a strike's
 # building_group_bg_infrastructure_throughput_add) keeps the factor under
-# 0.98, and the check waits. Fallbacks: docs/testing/power-grid-playtest.md.
+# 0.98, and the check waits; so does a read that misses the warming line,
+# which leaves te_grid_throughput near 0. Fallbacks:
+# docs/testing/power-grid-playtest.md.
 te_grid_throughput_selfcheck_effect = {
 	if = {
 		limit = {
@@ -1842,6 +1867,8 @@ te_grid_throughput_selfcheck_effect = {
 				var:te_grid_throughput <= -0.04
 				var:te_grid_throughput >= 0.04
 			}
+			local_var:te_grid_throughput_step > -0.005
+			local_var:te_grid_throughput_step < 0.005
 			has_variable = te_grid_flow
 			NOT = { var:te_grid_flow = 0 }
 			has_variable = te_grid_command
@@ -1864,13 +1891,13 @@ te_grid_throughput_selfcheck_effect = {
 		set_global_variable = { name = te_grid_chk_throughput_share value = te_grid_chk_throughput_share_value }
 		if = {
 			limit = {
-				global_var:te_grid_chk_throughput_share >= 0.98
-				global_var:te_grid_chk_throughput_share <= 1.02
+				global_var:te_grid_chk_throughput_share >= 0.975
+				global_var:te_grid_chk_throughput_share <= 1.025
 			}
-			debug_log = "TE_SELF_CHECK OK grid_throughput (a station staffed=[SCOPE.ScriptValue('te_grid_chk_occupancy_g')|2] with throughput=[SCOPE.ScriptValue('te_grid_chk_throughput_read_g')|3] moved [SCOPE.ScriptValue('te_grid_chk_throughput_share_g')|3] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] over its throughput and staffing: the read is what cuts its lines, and the order makes up for it)"
+			debug_log = "TE_SELF_CHECK OK grid_throughput (a station staffed=[SCOPE.ScriptValue('te_grid_chk_occupancy_g')|2] with throughput=[SCOPE.ScriptValue('te_grid_chk_throughput_read_g')|3] moved [SCOPE.ScriptValue('te_grid_chk_throughput_share_g')|3] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] over its throughput and staffing: the read is what cuts its lines, and the factor holds staffing alone)"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN grid_throughput (a station staffed=[SCOPE.ScriptValue('te_grid_chk_occupancy_g')|2] with throughput=[SCOPE.ScriptValue('te_grid_chk_throughput_read_g')|3] moved [SCOPE.ScriptValue('te_grid_chk_throughput_share_g')|3] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] over its throughput and staffing, outside 0.98 to 1.02: near 1 over 1 plus the throughput, the read isn't what cuts the lines; low, a shortage that began last week; see docs/testing/power-grid-playtest.md)"
+			debug_log = "TE_SELF_CHECK BROKEN grid_throughput (a station staffed=[SCOPE.ScriptValue('te_grid_chk_occupancy_g')|2] with throughput=[SCOPE.ScriptValue('te_grid_chk_throughput_read_g')|3] moved [SCOPE.ScriptValue('te_grid_chk_throughput_share_g')|3] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] over its throughput and staffing, outside 0.975 to 1.025: near 1 over 1 plus the throughput, the read isn't what cuts the lines; low, a shortage that began last week; see docs/testing/power-grid-playtest.md)"
 		}
 	}
 }

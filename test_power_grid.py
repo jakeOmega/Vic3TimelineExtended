@@ -708,14 +708,15 @@ class BreakEvenTest(unittest.TestCase):
         self.assertIn("has_variable = te_grid_power_rate", check)
         self.assertIn("te_grid_station_staffed_throughout = yes", check)
         self.assertIn("occupancy >= 0.9", check)
-        # The throughput the order ran at is divided out, so the check judges
+        # The throughput read is divided out, so the check judges
         # stations whatever their throughput (#1248: Global Warming's line put
         # every BYZ station outside the old -0.05 to +0.1 window).
         self.assertNotIn("modifier:building_throughput_add", check)
         self.assertIn("divide = te_grid_station_throughput_value",
                       _top_level(self.values, "te_grid_chk_rate_moved_value"))
-        # Slack for a month's warming drift and a read a little off; a strike's
-        # group line the read misses (-0.2) would fail the check, as before.
+        # Slack for a read a little off what cut last week's output, within the
+        # steady gate (ThroughputTest.test_both_measuring_checks_wait_for_a_steady_read);
+        # a strike's group line the read misses (-0.2) would fail the check, as before.
         thr_lo, thr_hi = -0.05, 0.1
         low = float(re.search(r"OR = \{\s*var:te_grid_power_rate <= ([\d.]+)", check).group(1))
         high_lo, high_hi = (float(x) for x in re.search(
@@ -1154,78 +1155,118 @@ class CableRangeTest(unittest.TestCase):
 class ThroughputTest(unittest.TestCase):
     """A station's lines move its throughput's share of what they are set to
     (1 plus its building's building_throughput_add read, which carries the
-    country's lines, Global Warming's among them), so the order is divided by
-    it in the month it is set, and the factor, measured over the throughput the
-    order ran at, holds staffing and shortages only (#1248: every BYZ station's
-    factor sat at 0.955 in 2013, 1 less the warming line at 1.81 C)."""
+    country's lines, Global Warming's among them). The factor is measured over
+    the read, so it holds staffing and shortages only (#1248: every BYZ
+    station's factor sat at 0.955 in 2013, 1 less the warming line at 1.81 C),
+    and the order is divided by it. A running station's order stays what it
+    was: a step earlier in the month is in last week's output already, and a
+    first build that measured over the read the last order was set for counted
+    it twice (review of #1253)."""
 
     def setUp(self):
         self.effects = _code(_read(EFFECTS))
         self.values = _code(_read(VALUES))
 
     @staticmethod
-    def model(staffing, throughputs, factor=1.0, stored=None, last=None, flow=1000.0):
-        """What a station moves of its flow, month by month, by the values'
-        formulas, and its factor at the end. throughputs[i] is its read at
-        month i's balancing and what its lines run at the week after; stored,
-        the read its last order was set for (None: never stored, as on a save
-        from before); last, that order and what it moved, (command, moved)."""
+    def model(weekly, staffing=1.0, idle=(), factor=1.0, stored=True, read_based=True, flow=1000.0):
+        """What a station moves of its flow each week, by the values' formulas,
+        and its factor at the end. weekly[m] is the throughput its lines run at
+        in each week of month m (the read at month m's run is weekly[m][0]);
+        idle, the months it is ordered nothing; factor, its factor before the
+        first run, and stored, whether a read came with it (False: a save from
+        before #1248, whose factor carries its throughput). read_based=False is
+        the build before: the factor is moved over ordered, and the order the
+        flow over it."""
         shares = []
-        command, moved = last if last else (None, None)
-        for t in throughputs:
-            if stored is None:
-                stored = t  # te_grid_read_throughput_effect seeds it
-            if command is not None and command >= 10 and moved > 0:
-                factor = min(2.0, max(0.2, moved / command / max(0.2, 1 + stored)))
-            stored = t
-            command = flow / factor / max(0.2, 1 + stored)
-            moved = command * max(0.0, 1 + t) * staffing
-            shares.append(moved / flow)
+        command = moved = None
+        for month, weeks in enumerate(weekly):
+            read = max(0.2, 1 + weeks[0]) if read_based else 1.0
+            if not stored:
+                stored = True
+                factor /= read  # te_grid_read_throughput_effect takes it out once
+            if command and command >= 10 and moved > 0:
+                factor = min(2.0, max(0.2, moved / command / read))
+            if month in idle:
+                command = 0
+                shares += [0.0] * len(weeks)
+                continue
+            command = flow / factor / read
+            for t in weeks:
+                moved = command * max(0.0, 1 + t) * staffing
+                shares.append(moved / flow)
         return shares, factor
 
-    def test_the_order_makes_up_for_throughput_in_the_month_it_is_set(self):
-        # Warming at 1.81 C, then a -0.25 line lands (seabed overexploitation):
-        # the station moves its flow the month it lands, not a month late.
-        warm = -0.025 * 1.81
-        shares, factor = self.model(1.0, [warm] * 3 + [warm - 0.25] * 3)
-        for share in shares:
-            self.assertAlmostEqual(share, 1.0)
-        self.assertAlmostEqual(factor, 1.0)
+    WARM = -0.025 * 1.81
+
+    def test_a_running_stations_order_is_unchanged_wherever_a_step_lands(self):
+        # A -0.25 line (seabed overexploitation) lands in each week of month 2
+        # in turn: the station moves what the build before moved, so the step
+        # isn't counted twice the month after (1.355 of its flow in the first
+        # build when it landed in the second week).
+        for week in range(4):
+            weekly = [[self.WARM] * 4 for _ in range(5)]
+            for w in range(week, 4):
+                weekly[2][w] = self.WARM - 0.25
+            for m in (3, 4):
+                weekly[m] = [self.WARM - 0.25] * 4
+            for staffing in (1.0, 0.8):
+                new, _ = self.model(weekly, staffing)
+                old, _ = self.model(weekly, staffing, read_based=False)
+                # From its first measure on (the first month, a new station's
+                # first order, now moves its flow at today's throughput).
+                for a, b in zip(new[4:], old[4:]):
+                    self.assertAlmostEqual(a, b, msg=(week, staffing))
+                for share in new[16:]:
+                    self.assertAlmostEqual(share, 1.0, msg=(week, staffing))
+            new, _ = self.model(weekly)
+            self.assertAlmostEqual(new[0], 1.0)
 
     def test_the_factor_holds_staffing_alone(self):
-        shares, factor = self.model(0.8, [-0.045] * 4)
+        _, factor = self.model([[self.WARM] * 4] * 4, staffing=0.8)
         self.assertAlmostEqual(factor, 0.8)
-        for share in shares[1:]:
-            self.assertAlmostEqual(share, 1.0)
+        _, factor = self.model([[self.WARM] * 4] * 4, staffing=0.8, read_based=False)
+        self.assertAlmostEqual(factor, 0.8 * (1 + self.WARM))
 
-    def test_a_save_from_before_moves_its_flow_from_the_first_run(self):
-        # Its factor carries the warming line and no read is stored. Seeded
-        # with this month's read, the measurement leaves the line out and the
-        # order puts it back once.
-        warm = -0.025 * 1.81
-        shares, factor = self.model(1.0, [warm] * 2, factor=1 + warm, last=(500.0, 500.0 * (1 + warm)))
-        self.assertAlmostEqual(factor, 1.0)
-        self.assertAlmostEqual(shares[0], 1.0)
-        # Unseeded (a read of 0), the first order would carry the line twice.
-        shares, _ = self.model(1.0, [warm], factor=1 + warm, stored=0.0, last=(500.0, 500.0 * (1 + warm)))
-        self.assertAlmostEqual(shares[0], 1 / (1 + warm))
+    def test_a_station_back_from_idle_moves_its_flow_at_todays_throughput(self):
+        # Idle in months 1 and 2 while the -0.25 line lands: its kept factor
+        # holds staffing alone, so it moves its flow the month it is back. The
+        # build before kept a factor with the old throughput in it.
+        weekly = [[self.WARM] * 4, [self.WARM] * 4] + [[self.WARM - 0.25] * 4] * 2
+        new, _ = self.model(weekly, idle=(1, 2))
+        old, _ = self.model(weekly, idle=(1, 2), read_based=False)
+        self.assertAlmostEqual(new[12], 1.0)
+        self.assertAlmostEqual(old[12], (1 + self.WARM - 0.25) / (1 + self.WARM))
 
-    def test_the_balancing_reads_the_throughput_between_the_factor_and_the_order(self):
+    def test_a_save_from_before_keeps_its_factors_measure(self):
+        # Its factor carries the warming line and no read is stored. Taken out
+        # once, a factor measured at the first run and one kept through it both
+        # move the station's flow.
+        weekly = [[self.WARM] * 4] * 3
+        for idle in ((), (0,)):
+            shares, factor = self.model(weekly, factor=1 + self.WARM, stored=False, idle=idle)
+            self.assertAlmostEqual(factor, 1.0, msg=idle)
+            for share in shares:
+                self.assertIn(round(share, 9), (0.0, 1.0), idle)
+
+    def test_the_balancing_reads_the_throughput_before_the_factor(self):
         balance = _top_level(self.effects, "te_grid_balance_region_effect")
         order = [balance.index(s) for s in (
             "te_grid_read_throughput_effect = yes",
             "te_grid_power_rate_selfcheck_effect = yes",
             "te_grid_throughput_selfcheck_effect = yes",
             "name = te_grid_factor ",
-            "set_variable = { name = te_grid_throughput value = local_var:te_grid_throughput_now }",
             "te_grid_set_station_flow_effect = yes")]
         self.assertEqual(order, sorted(order))
         read = _top_level(self.effects, "te_grid_read_throughput_effect")
         self.assertIn("is_building_type = building_grid_transfer_station", read)
         self.assertIn("value = prev.modifier:building_throughput_add", read)
-        # Seeded only where no read is stored.
-        self.assertRegex(read, r"NOT = \{ has_variable = te_grid_throughput \} \}\s*"
-                               r"set_variable = \{ name = te_grid_throughput value = local_var:te_grid_throughput_now \}")
+        # Stored before the factor reads it, on both branches.
+        self.assertEqual(read.count("set_variable = { name = te_grid_throughput value = local_var:te_grid_throughput_now }"), 2)
+        # A factor from before #1248 loses its throughput once, after the read is stored.
+        first = _sub(read, "else")
+        self.assertLess(first.index("name = te_grid_throughput value"),
+                        first.index("change_variable = { name = te_grid_factor divide = te_grid_station_throughput_value }"))
+        self.assertIn("change_local_variable = { name = te_grid_throughput_step subtract = 10 }", first)
         value = _top_level(self.values, "te_grid_station_throughput_value")
         self.assertIn("add = var:te_grid_throughput", value)
         self.assertIn("min = 0.2", value)
@@ -1235,33 +1276,42 @@ class ThroughputTest(unittest.TestCase):
             self.assertIn("divide = te_grid_station_throughput_value", _top_level(self.values, name), name)
         self.assertIn("remove_variable = te_grid_throughput", _top_level(self.effects, "te_grid_clear_state_effect"))
 
+    def test_both_measuring_checks_wait_for_a_steady_read(self):
+        # A step after the station's last tick puts last week's output off the read.
+        for name in ("te_grid_power_rate_selfcheck_effect", "te_grid_throughput_selfcheck_effect"):
+            check = _top_level(self.effects, name)
+            lo = float(re.search(r"local_var:te_grid_throughput_step > (-[\d.]+)", check).group(1))
+            hi = float(re.search(r"local_var:te_grid_throughput_step < ([\d.]+)", check).group(1))
+            self.assertEqual(lo, -hi, name)
+            self.assertLessEqual(hi, 0.01, name)
+            # No earlier read: the step is -10 or less, outside.
+            self.assertFalse(lo < -10 + self.WARM < hi, name)
+
     def test_the_self_check_tells_a_read_that_cuts_the_lines_from_one_that_does_not(self):
         check = _top_level(self.effects, "te_grid_throughput_selfcheck_effect")
         self.assertIn("TE_SELF_CHECK OK grid_throughput", check)
         self.assertIn("TE_SELF_CHECK BROKEN grid_throughput", check)
         self.assertIn("te_grid_station_staffed_throughout = yes", check)
         self.assertIn("var:te_grid_command >= 100", check)
-        # Full at the last measure too, so a station still hiring isn't judged
-        # on last week's thinner staff (and a save from before waits a month).
-        factor_gate = float(re.search(r"var:te_grid_factor >= ([\d.]+)", check).group(1))
-        self.assertGreaterEqual(factor_gate, 0.98)
         gate_lo = float(re.search(r"var:te_grid_throughput <= (-[\d.]+)", check).group(1))
         gate_hi = float(re.search(r"var:te_grid_throughput >= ([\d.]+)", check).group(1))
+        self.assertEqual(gate_lo, -gate_hi)
         occupancy = float(re.search(r"occupancy >= ([\d.]+)", check).group(1))
+        factor_gate = float(re.search(r"var:te_grid_factor >= ([\d.]+)", check).group(1))
         ok_lo = float(re.search(r"global_var:te_grid_chk_throughput_share >= ([\d.]+)", check).group(1))
         ok_hi = float(re.search(r"global_var:te_grid_chk_throughput_share <= ([\d.]+)", check).group(1))
         share = _top_level(self.values, "te_grid_chk_throughput_share_value")
         self.assertIn("divide = te_grid_station_throughput_value", share)
         self.assertIn("divide = global_var:te_grid_chk_occupancy", share)
+        # Read right, the share is last week's staffing over today's occupancy.
+        # Full at the last measure (the factor gate) and now (the occupancy
+        # gate), last week's staffing lies between the two gates and 1.
+        for last_week in (min(occupancy, factor_gate), 1.0):
+            for now in (occupancy, 1.0):
+                self.assertTrue(ok_lo <= last_week / now <= ok_hi, (last_week, now))
+        # Lines that don't feel the read: 1 / (1 + t), at the gate and past it.
         for t in (gate_lo, gate_hi, -0.1, -0.3):
-            # Read right: staffing over occupancy, which the gate keeps within
-            # a hire of 1. Lines that don't feel the read: 1 / (1 + t).
-            for drift in (1.0, occupancy):
-                self.assertTrue(ok_lo <= drift <= ok_hi, (t, drift))
             self.assertFalse(ok_lo <= 1 / (1 + t) <= ok_hi, t)
-        # A cut as large as the gate that the read leaves out (a strike's group line).
-        self.assertFalse(ok_lo <= 1 - gate_hi <= ok_hi)
-        self.assertEqual(gate_lo, -gate_hi)
 
 
 class LocalizationTest(unittest.TestCase):
