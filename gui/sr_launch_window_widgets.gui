@@ -63,7 +63,6 @@ types sr_launch_window_types
 
 			te_sr_window_row = {
 				blockoverride "win_name_format" {
-					default_format = "#tooltippable"
 					tooltip = "je_space_race_widget_win_col_dest_tt"
 				}
 				blockoverride "win_name" {
@@ -71,7 +70,6 @@ types sr_launch_window_types
 				}
 				blockoverride "win_any_visible" {}
 				blockoverride "win_any_text" {
-					default_format = "#tooltippable"
 					tooltip = "je_space_race_widget_win_col_window_tt"
 					text = "je_space_race_widget_win_col_window"
 				}
@@ -85,7 +83,6 @@ types sr_launch_window_types
 					visible = no
 				}
 				blockoverride "win_transit_format" {
-					default_format = "#tooltippable"
 					tooltip = "je_space_race_widget_win_col_transit_tt"
 				}
 				blockoverride "win_transit" {

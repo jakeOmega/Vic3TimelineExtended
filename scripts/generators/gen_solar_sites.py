@@ -3054,8 +3054,7 @@ def _free_row(site: Site) -> list[str]:
     out += _override("free_visible", f'visible = "[{_eq(f"sr_disp_free_{k}", 1)}]"')
     out += _override("free_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
     out += _override("free_name", f'text = "sr_site_name_{k}"')
-    # A figure under its own hover: the type underlines it, and #v here keeps
-    # its value color (unmarked_hover_audit; style rule 3).
+    # A figure under its own hover, in its value color.
     out += _override("free_people", f'raw_text = "#v [{_sv(f"sr_disp_site_pop_{k}")}|K]#!"')
     out += _override("free_ties", f'raw_text = "[{_sv(f"sr_disp_free_ties_{k}")}|0]"')
     out += _override("free_supply_button",
@@ -3466,6 +3465,9 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("module_bases", f'raw_text = "[{_sv(f"sr_disp_site_ebase_room_{k}")}|0]"')
     spec_tt = {slot: f"je_space_race_widget_colony_{m[len('sr_colony_'):]}_tt"
                for slot, m in zip(("a", "b"), spec_modifiers(site))}
+    # A colony's page names its specializations in full (design § 8).
+    for slot, m in zip(("a", "b"), spec_modifiers(site)):
+        out += _override(f"page_name_{slot}", f'text = "{m}"', f'tooltip = "{spec_tt[slot]}"')
     for t in ("a", "b", *generic_types(site)):
         pending = f"sr_disp_mod_pending_{t}_{k}"
         tooltip = spec_tt.get(t, f"je_space_race_widget_mod_{t}_tt")

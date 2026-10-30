@@ -9838,7 +9838,6 @@ POST_LOAD_AUDITS = [
     ("texture_reference_audit",       "texture_reference_audit"),
     ("long_tooltip_audit",            "long_tooltip_audit"),
     ("hidden_modifier_audit",         "hidden_modifier_audit"),
-    ("unmarked_hover_audit",          "unmarked_hover_audit"),
     ("button_reason_audit",           "button_reason_audit"),
 ]
 

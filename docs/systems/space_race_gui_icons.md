@@ -91,6 +91,30 @@ Where a cell names what a building does (audit SPC-6, SPC-16), it showed that bu
 | Defense (44 px, under Full colonies) and Locations' inbound column (16 px) | a dark grey armed spacecraft with a twin turret on its back | `warship.dds` |
 | Modules (44 px) | a silver habitat module in gold foil bands, a docking ring at one end | `module.dds` |
 
+## A colony's page (2026-10-30)
+
+The page a colony's name opens (colony management design § 8, rebuilt on the owner's review of 2026-10-30) shows each reading in a tile with its icon in an inset box at 34 px (`te_sr_page_tile`), and each module on a line with its icon at 24 px (`te_sr_page_mod_row`). Every icon is a literal `texture` line in the page body of `te_sr_colony_row`. The specializations use `module.dds`, the Slots tile too.
+
+**Kept.** Icons that already show the thing: vanilla's population (People), battalions (Marines), construction mark (Building) and level trend (Drift), and the government administration building (Administration); the mod's Extraplanetary Base (Base Room, Mining Complex), Space Command (Orbital Yard), tourism industry (Off-World Resort), covert operation slot (Black Site) and advanced material fabricator (Materials Foundry).
+
+**Placeholders** for the icon pipeline (`space` registry), each a vanilla or borrowed icon until its art is in:
+
+| Where | Placeholder | Should show | Proposed file |
+|---|---|---|---|
+| Crews tile | `character_trait_icons/engineer.dds` | a colonist in an orange pressure suit holding a wrench | `page_crews.dds` |
+| Modules Crewed tile | `generic_icons/employment_not_full.dds` | a silver module with a crew badge on its side, half its windows lit | `page_crewed.dds` |
+| Autonomy tile | `diplomatic_action_icons/liberty_desire.dds` | a colony dome flying a small flag of its own | `page_autonomy.dds` |
+| Autonomy status tile | `ai_strategy_icons/subject_maintain_autonomy.dds` | a colony dome under a wax seal | `page_aut_status.dds` |
+| Defenses tile and module | `building_icons/building_naval_fortification.dds` | twin gun turrets on a crater rim | `module_def.dds` |
+| Integrity tile | `state_status_icons/has_devastation.dds` | a dome with a crack across it | `page_integrity.dds` |
+| Defense status tile | `state_status_icons/colony.dds` | a dome with a radar dish beside it | `page_def_status.dds` |
+| Habitat | `building_icons/urban_center.dds` | a domed habitat with lit windows | `module_hab.dds` |
+| Spaceport | `building_icons/building_port.dds` | a landing pad with a lander docked on it | `module_port.dds` |
+| Research Station | `building_icons/building_university.dds` | a research dome with a telescope on its roof | `module_lab.dds` |
+| Cultural Center | `building_icons/building_arts_academy.dds` | an amphitheater under a glass dome | `module_culture.dds` |
+| Training Ground | `building_icons/building_barracks.dds` | marines in pressure suits drilling in low gravity | `module_train.dds` |
+| Nuclear Command Center | `building_icons/building_nuclear_plant.dds` | a hardened bunker door marked with a radiation trefoil | `module_bunker.dds` |
+
 ## Kept as they are
 
 The pie's frame (`gfx/interface/backgrounds/round_frame_dec.dds`) is vanilla's decoration, used as vanilla uses it. So are the Rivals rows' band marker (`gfx/interface/progressbar/progressbar_marker.dds`) and the transparent track under it (`generic_icons/transparent.dds`), drawn as the UN's authority bar draws them. The rows have no icons of their own.
