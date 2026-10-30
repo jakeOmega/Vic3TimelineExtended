@@ -524,7 +524,8 @@ Where the build departs from the sections above, and why:
   (`### BUILDING TYPE (GENERIC …)`; `test_treaty_article_input_widgets.py`).
   The Add dialog's list first read `ArticleDraft.GetValidBuildingTypes`, which
   crashed the game, from a war goal and from the treaty designer alike
-  (2026-10-30): it lists a company's building types and needs one. The list is
+  (2026-10-30): it lists a company's building types and needs one (the build
+  without it opened in the treaty designer without a crash that day). The list is
   now generated (`te_sr_cede_site_list_war` / `_treaty`,
   `### BUILDING TYPE (CEDE COLONY, TE)`): a tile per world, shown while the
   ceding country holds it (`sr_cede_held_<key>`, the test the input trigger
