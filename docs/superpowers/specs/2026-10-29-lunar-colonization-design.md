@@ -501,8 +501,8 @@ which the global cache refresh reads in no country's scope, so the country
 reader is `sr_window_premium_country_<body>`; the cache holds the NTP curve as
 `sr_window_cost_ntp_<body>`. The country reader acts on the technology's
 marker, `country_sr_nuclear_thermal_launches_bool` (`sr_launch_has_ntp`), not on
-the technology itself, so the tooltip line and the effect share one source. The tree is computed from the extra Δv at 9 km/s,
-rounded once, so it can differ from `(1 + p)^(3.7 / 9) − 1` on the stored,
+the technology itself, so the tooltip line and the effect share one source.
+The tree is computed from the extra Δv at 9 km/s, rounded once, so it can differ from `(1 + p)^(3.7 / 9) − 1` on the stored,
 rounded p by under a hundredth. Transit, drives, fleets, yards and
 refits are untouched: NTP vehicles fly near-Hohmann transfers, so their transit
 is chemical's.
@@ -716,8 +716,9 @@ only); the stage goals stand as drafted; the AI stays within the cap.
   strongest fleet whose marines are enough.
 - The Target button charges the free-colony price only while the fleet closes
   in.
-- After the race, Begin Solar Colonization is hidden from a finished program
-  unless a lunar world is free.
+- Begin Solar Colonization is shown while a site it reaches is free, after
+  the race too (main hid it once the race was over), except to a finished
+  program, which sees it only while a lunar site is free.
 
 **Left for the owner:**
 
@@ -725,9 +726,15 @@ only); the stage goals stand as drafted; the AI stays within the cap.
   colony's garrison is its militia.
 - **Attackers closing in at Earth** are docked: they repair and refill supply
   and marines every month.
-- **A migrated holder** in an all-claimed save is marked finished the next
-  month and gets Interplanetary Trade Networks.
+- **Finished without choosing:** once the race is over
+  (`sr_all_colonies_complete`, which stays set), a colony holder whose
+  colonization program is running and that hasn't chosen to resume for the
+  Moon is marked finished the next month and gets Interplanetary Trade
+  Networks. That covers a migrated holder whose colonization entry was open in
+  an all-claimed save, and one that begins colonization after the race for a
+  released site beyond the Moon.
 - **The Races Only best cost** ignores the stage 3 to 5 Deep Space gate.
-- **The AI past the cap** waits for observer runs.
+- **The AI past the cap:** it stays within the cap, as answered; revisit
+  after observer runs.
 - **German and Spanish:** settle a word for "site" before the next
   translation pass.
