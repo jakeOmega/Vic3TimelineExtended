@@ -1,13 +1,13 @@
 # Vanilla 1.15 preparation (2026-10-22, updated 2026-10-30)
 
-Vanilla 1.15 was due on 2026-10-22 and slipped to **2026-11-05**. This doc reads what is known about it against the mod: what to check the day the patch ships, what has to change before the mod loads and works, which new features are worth building, and where 1.15 overlaps the mod without needing a change. The general bump procedure is still `docs/guides/vanilla_patch_runbook.md`; this doc covers only what is specific to 1.15. After the migration, turn it into the migration record, as `vanilla_1_14_5_migration.md` was.
+Vanilla 1.15 was due on 2026-10-22 and slipped to **2026-11-05**. This doc reads what is known about it against the mod: what to check the day the patch ships, what has to change before the mod loads and works, which new features are worth building, where 1.15 overlaps the mod without needing a change, and what the new mechanics and hooks let each of the mod's systems do better (§ 7). The general bump procedure is still `docs/guides/vanilla_patch_runbook.md`; this doc covers only what is specific to 1.15. After the migration, turn it into the migration record, as `vanilla_1_14_5_migration.md` was.
 
 Sources, in the order they arrived:
 - **Paradox's pre-release modding notes** (pasted by the owner 2026-10-22): journal entry outcomes, map modes, scaling modifiers, styled bars, interface messages, `list_scopes`, regional exile pools, glossary, `play_music_cue`, regnal numbers. §§ 1–5 were first written from these.
 - **The 1.15.0 Modding-Digest** (`<vic3_modding_digests_path>/1.15.0/`, published 2026-10-29): `changes_breaking.md`, `changes_features.md`, the `types/*.md` readmes, and the full 1.15 engine dumps in `docs/` (`effects.log`, `triggers.log`, `modifiers.log`, `event_targets.log`, `on_actions.log`, `custom_localization.log`). § 0 diffs those against 1.14.5's. Two caveats: the digest is a diff against **1.13.11**, so its breaking-change list mixes 1.14 items the mod already migrated with new ones; and its `docs/data_types_*.txt` are byte-identical to 1.14.5's, though `changes_data_types.md` lists new types (`JournalEntryOutcome`, `ConcludedJournalEntry`, `ScalingModifier`), so **GUI data functions are still unchecked** (C4). Its game-file diff (`changes_files.md`) is "TBD, added on release day".
 - **Paradox's release changelog** (pasted by the owner 2026-10-30). It is cumulative too: war support 0–100, war goals enforced mid-war with mirror goals, the infamy rework, AI regional objectives, strait and piracy grievances, `tax_income`/`weeks_until_bankruptcy`/`gdp_owned_by`, `on_won_war` and kin, `is_independent_and_not_being_subjugated` and the war-support script commands all shipped in 1.14.x, and the mod migrated to them (`vanilla_1_14_5_migration.md`, the runbook's rename table). This doc covers only what is new against 1.14.5, checked name by name against `vanilla_parsed/` and the 1.14.5 engine catalogs.
 
-**Nothing here has been checked against 1.15 game files**, which nobody outside Paradox has yet. Statements about 1.15 come from the notes, the changelog and the digest's engine dumps and readmes; anything that needs the files is a release-day check (§ 2). Statements about the mod were first read from `main` at `e5b54f1` and re-checked, with the 2026-10-30 additions, at `e3c0f5d`.
+**Nothing here has been checked against 1.15 game files**, which nobody outside Paradox has yet. Statements about 1.15 come from the notes, the changelog and the digest's engine dumps and readmes; anything that needs the files is a release-day check (§ 2). Statements about the mod were first read from `main` at `e5b54f1` and re-checked, with the 2026-10-30 additions, at `e3c0f5d`; §§ 3.12 and 7 were read at `1335b0c`.
 
 ## 0. Engine surface, 1.14.5 → 1.15 (from the digests)
 
@@ -51,6 +51,7 @@ Rows above *New features* have to be done for the mod to load and work on 1.15; 
 | `double_sided_*` progress bar presets removed | **Breaks** the two banking tug-of-war bars. `default`, `default_green` and `default_bad` stay, so the other six are fine (C5) | 2 bars | Release day (§ 3.3) |
 | Journal entry panel reworked (outcomes, styled bars, map mode) | **Breaks silently.** `gui/journal_entry.gui` is a full copy of the 1.14 panel and calls the completion, failure and timeout tooltips and the bar-preset tests; `gui/te_system_tab_widgets.gui` copies the bar renderer | 2 GUI files; 28 widget files depend on the panel's containers | Release day (§ 3.4) |
 | New syntax in the tooling's inputs | Audits read `complete`/`on_complete` etc. by name; some go blind, some flag false positives once entries use outcomes, and `effect_trigger_validity_audit --strict` (now in CI) fails on the converted entries | See § 3.5 | Dual-shape support can land before Nov 5 |
+| Devastation from battles only, subjects choosing sides in civil wars, a different 1836 world GDP | **Silent.** The UN docket's war item may never fire, a colony backing its overlord's revolutionaries counts as fighting for independence, and Grand Monuments' world-wealth constant goes stale; `money_transfer` already lags 1.14.5 | 5 items | Docket and decolonization fixes before Nov 5 (§ 3.12) |
 | *New features* | | | |
 | Journal entry map modes | **New.** Unblocks the six Demographics maps, the three Cartographic Survey maps (whose hijack is switched off) and the UN map | See § 4.1 | First feature after the migration |
 | Journal entry scaling modifiers | **New.** About 137 modifiers re-added with a `multiplier` on a pulse could become declarations, and button-toggled policies could survive a revolution | See § 4.2 | After the migration |
@@ -63,6 +64,7 @@ Rows above *New features* have to be done for the mod to load and work on 1.15; 
 | `play_music_cue` | **New.** Vanilla cues only, unless the mod ships music | See § 4.9 | Optional |
 | Regnal numbers | Nothing to change: all 12 mod government types are non-hereditary | See § 4.10 | Check only |
 | Smaller modding additions: `progress_condition`, `disable_evaluation`, scripted button `cost`/`tags`/`autocomplete`/`icon`, `fire_only_once`, `enact_law`, the disallow-army/warship/barracks modifiers, treaty article `is_one_time`/`can_propose`/`show_in_lens`, power bloc effects | **New.** Mostly small wins in specific systems | See § 4.11 | Any time after |
+| The changelog's gameplay side: war support and stalemates, military reach, subjects, world journal entries, cold and latitude, new modifier types, institution and formal names | **Opportunities.** Twelve ranked uses across nuclear deterrence, World War, the UN, decolonization, Global Warming, Civil Rights, power blocs, Cultural Hegemony, formables and the space elevator; some hooks are in 1.14.5 already | See § 7 | 1.14.5 items any time; the rest after the migration |
 
 ## 2. Release-day checks
 
@@ -148,6 +150,21 @@ Added 2026-10-30, from the changelog and digest:
 **C19. First-launch log.** Before converting anything, one launch of 1.15 with the mod as it stands answers several questions at once (log-triage skill): `Duplicated key` lines (the communal administration law, the copper mine's modifier type); `Unexpected token` lines (C1) and invalid-scope lines (the old state keys, § 3.7); the `|q` loc errors (§ 3.10); and a `TE_MONUMENTS:` or `TE_SELF_CHECK … nd_trade_` line, which shows how 1.15 treats `$ARG$` inside a quoted string (§ 3.11). Launch with the generators off (`VIC3_SKIP_POST_LOAD_GENERATORS=1`) so nothing is rewritten before the log is read.
 
 **C20. Behaviour to test in game.** Renegotiate a treaty holding a Demilitarized Zone and count the state's `demilitarized_zone_state_modifier` (and whether the old article's withdrawal effect ran first) (§ 4.11). `fire_only_once`: per country or per scope, saved, inherited by a revolution's winner, marked on trigger or on fire. `enact_law`: does it respect `can_enact`, fire `on_law_activated`, and cope with an enactment already running in the group. `progress_condition`: how a factor of 0 and a factor read from a named script value show. And grep vanilla 1.15 `common/` for users of `is_one_time`, `show_in_lens`, `disable_evaluation` and the new birth-rate modifiers (§ 6).
+
+**C21. What § 7's opportunities depend on.** None blocks the migration; each decides whether an item in § 7 is worth building:
+- Contextless entries: whether `should_be_involved` is re-checked for countries created after activation, what `JournalEntry.GetCountry` and `je:` return for one, and whether `effect_all_involved` replaces 1.14.5's `on_*_all_involved` everywhere.
+- `diplomatic_play_acceptance`: its scopes and which sign means "backs down", read by logging it with `debug_log` on 1.14.5.
+- How vanilla wires `will_incorporate_state` into `common/ai_strategies`, and the cost of `military_reach` inside AI loops.
+- Whether `make_independent` already leaves the former overlord's plays (so `leave_plays_supporting` is redundant).
+- The keys of the Scandalous trait and the Hemophilia condition.
+- The `<TAG>_DEF` key's case and what the map-name rule shows without one.
+- The syntax for alternative names of goods, buildings, religions, cultures, interest groups and subject types.
+- How monument trivia is defined.
+- Whether `map_color` takes a scope path such as a `color` link.
+- Whether a non-draft `create_treaty` with `state_transfer` moves the state on creation.
+- Whether `MAX_MANDATES` caps `country_power_bloc_formation_mandates_add`.
+- Whether the Five-Year Plan pays through investment-pool income.
+- Whether the Electoral Confidence notification fires on scripted changes.
 
 ## 3. What has to change
 
@@ -387,7 +404,7 @@ The 1.15 names come from `modifiers.log` (§ 0); how each new law, building or i
 
 | Field | Mod entities that lack it | Fix |
 |---|---|---|
-| Journal entry group `illustration` (1108×200 `.dds`; optional `themed = yes`), used in each member entry's header | All three groups in `common/journal_entry_groups/timeline_extended_je_groups.txt`: `je_group_soft_power` (`je_cultural_hegemony`), `je_group_covert_warfare` (`je_covert_warfare`) and `je_group_environment`, which **no entry uses** (`mod_systems.md:109` says so too) | Two illustrations, or vanilla's own paths as placeholders (C15). Delete `je_group_environment` with its loc (`te_journal_entries_l_english.yml:447`) and translation entries rather than draw art for it |
+| Journal entry group `illustration` (1108×200 `.dds`; optional `themed = yes`), used in each member entry's header | All three groups in `common/journal_entry_groups/timeline_extended_je_groups.txt`: `je_group_soft_power` (`je_cultural_hegemony`), `je_group_covert_warfare` (`je_covert_warfare`) and `je_group_environment`, which **no entry uses** (`mod_systems.md:109` says so too) | Two illustrations, or vanilla's own paths as placeholders (C15). Delete `je_group_environment` with its loc (`te_journal_entries_l_english.yml:447`) and translation entries rather than draw art for it, unless § 7.3's world climate entry is built, which would use it |
 | Mobilization option group `background` (780×224) | `training` (`common/mobilization_option_groups/extra_mobilization_groups.txt:1`), used by six mod options (`extra_mobilization_options.txt:1325`, `:1370`, `:1415`, `:1467`, `:1519`, `:1578`) | One background. Check whether `icon` is still read: the digest's example has none |
 | Objective `illustration` (1108×300) | none: the mod defines no objectives | — |
 | `gene_asian_east` in character DNA | none: the mod has no DNA, templates or ethnicities, and its 42 `create_character` calls (space-race events) pass no `dna` | — |
@@ -453,6 +470,16 @@ A quick catch-all on the day: grep `debug.log` for `define macro is missing` aga
 - `prev_scope_audit`, `localization_accessor_audit`, `je_multiplier_scope_audit` and `empty_effect_audit` would then judge 1.14.5 script by 1.15's names, so 1.15-only names (`enact_law`, `add_decree`, `in_tropics`, `cold_effect`) would validate while the game rejects them. No name the mod uses disappears.
 - The owner's machine appears to pin a 1.14.5 snapshot (a 2026-10-02 plan in `docs/superpowers/plans/` names one); cloud sessions and fresh machines don't. **Fix before Nov 5:** block (or loudly warn on) a render whose source is newer than `vanilla_parsed/manifest.json`'s `game_version`, and until then set `VIC3_VANILLA_DOCS_SNAPSHOT` to a 1.14.5 folder. On the day, the reverse: point it at 1.15.0 (or let it follow the digest) only after `vanilla_parsed.py build` on the 1.15 install.
 - `effect_trigger_validity_audit.py bootstrap` has no dry run, and **without a game install it shrinks the catalog** to the summary names (it harvests vanilla's left-hand keys from the game files). Never run it in a game-less container. `bootstrap-context` reads only `vanilla_snapshot_docs_path` and fails when it is unset, so it never follows the digest; point it at 1.15 by hand. `fold_vanilla_loc_accessors.py` needs the 1.15 loc, since the digest's data types are stale.
+
+### 3.12 Mechanics 1.15 changes under mod content
+
+Found in the 2026-10-30 opportunities pass (§ 7). All are silent: the mod loads and the content quietly stops doing what it says.
+
+- **The UN docket's war item may stop firing.** It needs a member's state devastated past 30% (`un_docket_war_devastation`, `un_docket_values.txt:40`, read at `un_docket_triggers.txt:120`), and so does the grave refugee case (`un_propose_triggers.txt:902`). In 1.15 occupation no longer devastates and devastation recovers after the last battle, so a war won by quick occupation never reaches the docket. Add an `enemy_occupation` alternative, which works on 1.14.5 too.
+- **War devastation now comes only from battles.** The mod's 32 `unit_devastation_mult` values (up to 8, `extra_combat_units.txt:1049`) become the only wartime source, so retune them against vanilla's. Scripted devastation (a nuclear strike 100, `extra_effects.txt:495`; counterforce and tactical strikes 25, `:558`, `:833`; ethnic violence 25 and 10, `extra_on_actions.txt:1645`, `:1708`; a weapons accident 10, `nuclear_deterrence_effects.txt:3507`) now recovers on 1.15's clock. That also shortens the war-support drain the mod injects for devastation (`zz_te_war_support_injections.txt:128`). C20: watch a struck state for a year.
+- **A colony that takes a side in its overlord's civil war counts as fighting for independence.** `decol_iw_track_subject_wars` (`decolonization_war_effects.txt:1067`) opens an independence-war record for any qualifying colonial subject at war with its overlord. In 1.15 subjects choose a side in their overlord's civil war, so one that backs the revolutionaries takes the home-front drain and is settled as an independence war. Skip wars against the overlord's own revolutionaries (`is_revolutionary`, `is_secessionist`, both in 1.14.5). About five lines, harmless on 1.14.5.
+- **`gm_world_gdp_1836`** (`gm_values.txt:2502`, 402,500,000) is a 1.14.5 reading of world GDP in February 1836, and Grand Monuments' world-wealth rate is measured against it. Copper, the hiring rebalance and Russia's lower wood output move that figure. Until the constant is reset, the `gm_world_base` self-check (`docs/testing/grand-monuments-ageing-playtest.md:25`) reads BROKEN. The `print_world_gdp` console command reads the new figure on day one.
+- **The mod's `money_transfer` already lags vanilla.** Its copy (`common/treaty_articles/05_transfer_money.txt`) lacks 1.14.5's `ai_consider_threaten_naval_hostilities` flag (`:7-12`). Diff it against 1.15 along with the other article copies.
 
 ## 4. Features worth building
 
@@ -606,9 +633,10 @@ From the 1.15 engine dumps and readmes (§ 0), checked against the mod. Ranked; 
 - **`disable_evaluation`** (drops an inactive entry for good for a country that can never qualify): about 24 mod entries are gated on a game rule, plus the retired Moon Base. A game rule never changes mid-game, so it is the safe kind of identity check. Never use `is_country_type = decentralized` there: the mod turns decentralized countries into recognized ones (`decolonization.txt:465-561`).
 - **Scripted button `cost`, `tags`, `autocomplete`, `icon`.** Of 376 buttons, 194 are AI-only and most player-visible ones (141) are the custom-religion builder, while players use scripted-GUI copies in the widgets. `tags` could in principle replace about 150 of those copies, but buttons bind when the entry activates (`st_res_scripted_gui.txt:5049`), so not yet. No candidate for `cost` or `autocomplete`. `cost` and `icon` render only in the rebuilt `journal_entry.gui`.
 - **`fire_only_once` / `fire_only_once_globally`**: low value. 36 events guard themselves with a never-removed country variable (23 society-technology, 7 judiciary, 6 others), 32 of which nothing else reads. Converting them would re-fire all 32 in 1.14.5 saves, and probably for a revolution's winner, which inherits variables but likely not a fire record (the mod's "the winner continues the nation" rule). Keep the variables; use the flag for new one-shots. Never use `_globally` on the 11 Global Warming threshold events, which go to every country under one global flag.
-- **New triggers and event targets**: `in_tropics` fits `environmentalism_events.14` (tropical disease, which can fire anywhere today) and a regional variant of the uniform `global_warming` modifier; there are no hand-made latitude lists to replace. Vanilla's `global_average_gdp_per_capita` makes the mod's `global_gdp_per_capita` (`extra_script_values.txt:1588`) redundant, and it has no reader anyway: delete it. The interest group leader-chance modifiers are a gentler alternative to the `set_ideology` leader flips in the environmentalism events. `cold_effect`: see § 6.
+- **New triggers and event targets**: `in_tropics` fits `environmentalism_events.14` (tropical disease, which can fire anywhere today) and a regional variant of the uniform `global_warming` modifier. There is one hand-made latitude list to replace, the space elevator's 92 states (§ 7.5). Vanilla's `global_average_gdp_per_capita` makes the mod's `global_gdp_per_capita` (`extra_script_values.txt:1588`) redundant, and it has no reader anyway: delete it. The interest group leader-chance modifiers are a gentler alternative to the `set_ideology` leader flips in the environmentalism events. `cold_effect`: see § 6.
 - **Birth rate by stratum and acceptance status**: no workaround in the mod to retire; § 6 covers the Demographics side.
-- **No candidate**: `add_decree`/`remove_decree`/`replace_decree` (15 mod decrees, all lapse through their `state_trigger`); `hidden = yes` on modifier types (the mod keeps script-only types visible on purpose, and `hidden_modifier_audit` is about tooltips); institutions' `dynamic_name`; character roles' `can_be_interest_group_leader` and `character_background` (the mod defines no roles); AI regional objectives' `country_target`/`state_target` (none defined, but the mod's `REPLACE` in `te_stake_colonial_claim.txt:267`, `:304`, `:338` calls vanilla's `ai_is_regional_objective_state`, so take vanilla's version in the re-diff); strait `grievance_mult`; weighted music and loading screens (the mod ships neither); objectives' `associated_journal_entries`; the overlord-law, interest-tier and socialist-hostility modifiers (design options only).
+- **Institutions' `dynamic_name`**: the mod's ministries and the three vanilla institutions it renames (§ 7.4).
+- **No candidate**: `add_decree`/`remove_decree`/`replace_decree` (15 mod decrees, all lapse through their `state_trigger`); `hidden = yes` on modifier types (the mod keeps script-only types visible on purpose, and `hidden_modifier_audit` is about tooltips); character roles' `can_be_interest_group_leader` and `character_background` (the mod defines no roles); AI regional objectives' `country_target`/`state_target` (none defined, but the mod's `REPLACE` in `te_stake_colonial_claim.txt:267`, `:304`, `:338` calls vanilla's `ai_is_regional_objective_state`, so take vanilla's version in the re-diff); strait `grievance_mult`; weighted music and loading screens (the mod ships neither); objectives' `associated_journal_entries`; the overlord-law, interest-tier and socialist-hostility modifiers (design options only).
 
 ## 5. Order of work
 
@@ -616,14 +644,15 @@ Before Nov 5 (each can merge to `main` ahead of the patch, because it works on 1
 1. **Guard the engine-doc render** (§ 3.11): refuse, or warn loudly on, a render whose source is newer than `vanilla_parsed/`'s `game_version`. Until it lands, pin `VIC3_VANILLA_DOCS_SNAPSHOT` to a 1.14.5 folder on any machine that starts the server.
 2. **The `|q` conversion** (§ 3.10): the loc files, `gen_pb_principle_unlock_descs.py`, both translation memories and `loc_render_audit.py` together.
 3. **The two owner decisions** (§ 3.8): `law_communal_administration` (adopt vanilla's or rename the mod's) and copper (adopt vanilla's, recommended). Both shape the release-day work.
-4. **Art** (§ 3.9): two journal entry group illustrations (1108×200) and one mobilization group background (780×224); delete `je_group_environment`.
+4. **Art** (§ 3.9): two journal entry group illustrations (1108×200) and one mobilization group background (780×224); delete `je_group_environment`, unless § 7.3's world climate entry is wanted, in which case it keeps the group and needs a third illustration.
 5. **`resources.py`** (§ 3.7): delete stale state-region files, and warn on a config key that matches no state.
 6. **The 20 `debug_log` lines with `$ARG$` inside quotes** (§ 3.11), and the renegotiation guards on the four treaty articles (§ 4.11), which are correct on 1.14.5 either way.
-7. Write the journal entry converter (§ 3.1) and its test; review its dry-run output.
-8. Draft the 45 `conclusion_desc` texts.
-9. Teach the tooling both shapes (§ 3.5), so audits pass before and after the conversion and the release-day diff is script only; give `effect_trigger_validity_audit`'s journal entry root the outcome keys and contexts.
-10. Make sure the vanilla clone holds 1.14.5 (runbook § 0), for the GUI rebuilds and `REPLACE:` re-bases.
-11. Run `scripts/snapshot_balance.py` (runbook § 1).
+7. § 3.12's two script fixes: the docket's `enemy_occupation` alternative and the decolonization tracker's guard against civil-war side picks. Then, if wanted early, the § 7 items marked 1.14.5: log `diplomatic_play_acceptance` first, and turn cessions and reparations into treaties.
+8. Write the journal entry converter (§ 3.1) and its test; review its dry-run output.
+9. Draft the 45 `conclusion_desc` texts.
+10. Teach the tooling both shapes (§ 3.5), so audits pass before and after the conversion and the release-day diff is script only; give `effect_trigger_validity_audit`'s journal entry root the outcome keys and contexts.
+11. Make sure the vanilla clone holds 1.14.5 (runbook § 0), for the GUI rebuilds and `REPLACE:` re-bases.
+12. Run `scripts/snapshot_balance.py` (runbook § 1).
 
 On release day, on a `vanilla-1.15` branch, on the machine with the game:
 1. C19's first launch, with the generators off, and read `debug.log`.
@@ -631,10 +660,10 @@ On release day, on a `vanilla-1.15` branch, on the machine with the game:
 3. `apply_ideologies.py` (not the offline replay), `gen_party_join_weights.py`, `gen_law_consistency`, `gen_tax_code.py`, `pop_needs_curves.py`, `ig_feminism.py` (§ 3.8), then the copper and Communal Administration work as decided.
 4. C1–C5 and C15–C18, recorded here.
 5. The converter (§ 3.1), the five vanilla entries (§ 3.2), the bars (§ 3.3), the GUI rebuilds (§ 3.4), the new-law stances and lists (§ 3.8), the defines (§ 3.11), the remaining runbook steps.
-6. Every check green; `POST /reload` with no new warnings; in game, every mod journal entry opens, shows its outcomes and bars, and its widgets mount; Russia loads with the new states.
+6. Every check green; `POST /reload` with no new warnings; in game, every mod journal entry opens, shows its outcomes and bars, and its widgets mount; Russia loads with the new states; a new game's `gm_world_base` self-check reads OK once `gm_world_gdp_1836` is reset (§ 3.12).
 7. Merge once the mod loads on 1.15. Players on 1.14.5 can't load outcome syntax or the new state keys, so the merge goes with the patch, not ahead of it.
 
-After the migration: C6–C10 and C20, then § 4 in order, then § 6's decisions.
+After the migration: C6–C10, C20 and C21, then § 4 and § 7.1 in order (they interleave: § 7.1's items 1, 3 and 4 are small and high-value), then § 6's decisions.
 
 ## 6. Where 1.15 overlaps the mod without needing a change
 
@@ -675,3 +704,169 @@ Systems, rebalances and UI that touch the mod's design. None blocks the load; ea
 - **Long tooltips now nest their overflow** (journal entries, event options). `long_tooltip_audit` is unaffected: it enforces the house style on the mod's own `.gui` tooltips, not an overflow workaround. But `tooltip.gui` redefines vanilla's base tooltip types (§ 3.4), and would switch the nesting off everywhere if it lives there.
 
 **Already shipped in 1.14.x, and migrated**: war support 0–100 and its script commands, war goals enforced mid-war and mirror war goals, the infamy rework and its game rule, AI regional objectives, ship `ai_ship_category`, strait and piracy grievances and `grievance_mult`, subject `re_establish_war_goal`, `tax_income`, `weeks_until_bankruptcy`, `gdp_owned_by`, `on_won_war` and kin. See `vanilla_1_14_5_migration.md` and the runbook's rename table.
+
+## 7. Opportunities: what 1.15 lets the mod do better
+
+§ 4 ranks the new modding features and § 6 the overlaps. This section reads the rest of the changelog against the mod's systems: subjects, war support, military reach, world journal entries, cold, latitude, characters, the new modifier types and names. For each, it lists the hooks the mod can build on and where in the mod each one plugs in. It was researched on 2026-10-30 at `1335b0c`. Every name was checked against the 1.14.5-openbeta and 1.15.0 digests' engine dumps, and every mod site was read.
+
+The **In** column matters because the changelog is cumulative (§ 0):
+- **1.15** waits for the patch.
+- **1.14.5** is in the game already, so it can land before Nov 5.
+
+Anything the dumps can't show is a release-day check (C21). Fixes this pass found are in § 3.12, not here.
+
+### 7.1 Shortlist
+
+| # | Opportunity | Mod system | Hook | In | Size |
+|---|---|---|---|---|---|
+| 1 | "Losing the war" also counts blockades and enemy pressure | Nuclear deterrence and escalation, covert-ops AI, ASAT AI | `enemy_pressure`, `blockaded_gdp_share` | 1.15 | ~10 lines in 2 triggers; reaches ~10 AI decisions |
+| 2 | One world climate entry carries `global_warming` for every country | Global Warming | contextless entry, `scaling_modifiers_while_active`, `context = none` | 1.14.5 + 1.15 | Medium |
+| 3 | World War's stalemate event and UN ceasefires run on the engine's stalemate | World War, UN, decolonization wars | `war_is_in_stalemate` | 1.15 | 5–20 lines each |
+| 4 | Reach checks replace army-size and "both coastal" heuristics | Decolonization, nuclear, irredentism, UN missions | `has_military_reach`, `military_reach`, `shippable_army_strength_against` | 1.15 | 1–3 lines a site, 6 files |
+| 5 | Era and government names for the mod's institutions | 17 mod institutions, 3 renamed vanilla ones | `dynamic_name` | 1.15 | ~20 loc keys |
+| 6 | Formal names for the mod's tags | 10 tags, 84 dynamic names | `<TAG>_DEF` loc (`GetNameDef`, the map-name game rule) | 1.15 | ~94 loc lines |
+| 7 | One-line modifier hooks | Civil Rights, power blocs, Cultural Hegemony, the left-wing laws | the new modifier types in § 7.4 | 1.15 | Trivial each |
+| 8 | Space elevator sites and tropical disease by latitude | Space, climate events | `in_tropics`, `in_south_hemisphere` | 1.15 | Tiny |
+| 9 | Subjects in wars: leave the overlord's wars on independence, skip subjects already being freed, real independence plays | Colonial Empire, decolonization, UN referendum | `leave_plays_supporting`, `is_subject_of_and_not_being_freed`, `can_start_play_against_overlord` | 1.15 | ~30 lines, 4 files |
+| 10 | The AI backs down under UN pressure or a nuclear threat | UN, nuclear | `diplomatic_play_acceptance` | 1.14.5 | Small, after a logging pass |
+| 11 | Cessions and reparations become treaties | Irredentism, UN court, decolonization, nuclear crisis | `create_treaty` (1.14.5), `is_one_time` (1.15) | both | Medium |
+| 12 | External Trade graded by interest tier | Power blocs | `country_interest_tier_<tier>_trade_advantage_mult` | 1.15 | Small |
+
+### 7.2 War, subjects and the AI
+
+- **Losing a war counts blockades.** `is_losing_war_against` (`nuke_triggers.txt:285`) and `nd_is_losing_war_to` (`nuclear_deterrence_triggers.txt:381`) count only occupation (25%) and lost battles (under 35% of at least 5), so a blockaded country never counts as losing.
+  - Fix: add `enemy_pressure = { target = root value > X }` or `blockaded_gdp_share`.
+  - Reach: the two triggers feed the covert-operations AI (`covert_operations.txt:611`, `:632`, `:785`, `:806`), the ASAT strike AI (`te_asat_strike_action.txt:95`) and nuclear escalation (`nuclear_deterrence_triggers.txt:435`, `:446`, `:2192`), so this one edit changes about ten AI decisions.
+  - Related: `has_stalled_state_wargoal_against` lets `nd_core_threatened_by` (`:361`) ignore war goals nobody is advancing.
+  - The thresholds need a play-test.
+- **Stalemates.** 1.15 ends a war once both leaders have sat at minimum war support long enough.
+  - World War event .31 (`world_war_events.txt:1096-1108`) builds its own stalemate test: 24 months, 10 battles, a stalled goal. Gate it on `war_is_in_stalemate`, keeping the old test as a fallback, and its options become the real decision: "Hold the line" (+5 war support) lifts the country off the floor, and "Armistice" lets the countdown run.
+  - The UN's ceasefire AI (`un_ceasefire_ai_chance`, `un_order_values.txt:247`; `un_lean_interests_ceasefire`, `:195`) should weigh a stalemated war up.
+  - A decolonization war's AI talks (`decolonization_war_effects.txt:499-508`, today after six months at the red line or four years) can open on a stalemate.
+  - `connects_important_war_theaters`, 1.15's rule for violating sovereignty, is a natural weight on World War late entry (`world_war_events.txt:922`).
+- **Military reach.** Six checks hand-roll what `has_military_reach` and `shippable_army_strength_against` answer:
+  - `decol_iw_can_intervene` (`decolonization_war_triggers.txt:141`): a great power backs rebels on rivalry and army size alone.
+  - Event .70's "Fight" AI chance (`decolonization_events.txt:4912` on).
+  - `nd_conventionally_outmatched_by` / `_outmatches` (`nuclear_exchange_triggers.txt:62`, `:71`): army size ×1.5, read by the stand-down event.
+  - `irr_target_reachable` (`irredentism_triggers.txt:34`): "adjacent or both coastal".
+  - `un_mission_ai_join_score` (`un_mission_values.txt:245`).
+  - `te_target_militarily_weaker` (`misc_triggers.txt:314`): 5× army size.
+
+  Keep the nuclear bomber range list (`nuclear_deterrence_effects.txt:2419`): it is strike range, not army reach. The cost inside AI loops is a check (C21).
+- **Subjects in wars.**
+  - `leave_plays_supporting = var:former_overlord` in `on_become_independent` (`extra_on_actions.txt:281`) takes a colony freed mid-war out of its former overlord's wars. There are 8 `make_independent` sites; check first whether `make_independent` already does this.
+  - `is_subject_of_and_not_being_freed` keeps the UN referendum (`un_referendum_subject_eligible`, `un_order_triggers.txt:160`) and decolonization event .1's pick (`decolonization_events.txt:35-50`) off a subject a war goal is already freeing.
+  - `can_start_play_against_overlord` lets event .3's "Fight" option (`:478`) open a real independence play, even while the overlord is at war; § 3.12's tracker then handles the war.
+  - `attitude_towards_overlord` and `secession_tag` are in 1.14.5 and unused.
+- **The AI backing down.** `diplomatic_play_acceptance` is a vanilla 1.14.5 script value (`value = 0`) that the mod doesn't override. Adding to it for a country under a UN ceasefire order, condemned by the Assembly, or facing a nuclear-armed opponent would make the AI yield where the mod's systems say it should. Its scopes and sign are undocumented, so log them with `debug_log` before tuning (C21).
+- **Incorporation.** The AI-strategy field `will_incorporate_state` is in no dump: it is a script field, not an engine name. The 1.14.5 scripted triggers `ai_will_incorporate_state` and `ai_colony_will_incorporate_state` exist, and the mod uses neither; its strategy file has no incorporation block. The Colonial Empire could have an assimilating AI incorporate its colonies and one fighting an independence war hold off. Read how vanilla wires it on release day.
+- **Socialist hostility.** The new `country_other_country_socialist_{economy,government}_hostility_impact_{add,mult}` types steer how the AI reacts to socialist laws. Cultural Hegemony could scale a negative `_mult` with the world's socialist share (`ch_ideology_socialist_share`, `cultural_hegemony_effects.txt:700`), or put one on its exported models (`ch_model_champion`, `ch_model_exemplar`, `extra_modifiers.txt:7217`, `:7224`). It moves AI strategy everywhere, so it is low priority.
+- **No candidate:**
+  - Stationing armies in subjects' states: no effect creates or moves armies, the mod creates none, and the colonial garrison is abstract.
+  - Disbanding's prestige cost: no mod effect disbands units.
+  - Several hubs per market: only Demographics and the financial harvest conditions assume one (§ 6), and `trade_partner_effects.txt:147-150` reads the market's single trade center.
+  - AI ship sales: all 19 mod ship types already have a category.
+
+### 7.3 World journal entries
+
+Contextless ("global") journal entries are in 1.14.5 already.
+- Vanilla runs 10 of them (`je_grunderzeit` shares a bar and a propagated modifier) with `should_be_involved`, `should_show_when_not_involved`, `immediate_all_involved`, `on_become_involved_after_activation`, `on_no_longer_involved` and `add_involved_country`.
+- 1.15 adds a per-entry `context` that overrides the group's, `effect_all_involved` on outcomes, and scaling modifiers that reach every involved country.
+- The mod uses none of it, and its three groups are `context = country`.
+
+Candidates, best first:
+
+- **Global Warming fits best.**
+  - Today: each country's entry removes and re-adds `global_warming` every month (`je_global_warming.txt:157-169`). The multiplier, `temperature_anomaly_display` (`extra_script_values.txt:966`), reads only `global_var:greenhouse_gas_emissions`, so the modifier is identical everywhere. The threshold events already run from one global pulse (`extra_on_actions.txt:975-1013`).
+  - Change: a contextless `je_world_climate` with `scaling_modifiers_while_active = { modifier = global_warming value = temperature_anomaly_display }` applies the modifier once for the world. It hosts the world temperature map (§ 4.1) and the threshold endings, and a revolution's winner gets the modifier back by being involved.
+  - With `context = none` it can sit in `je_group_environment`, which no entry uses, so § 3.9's art for that group serves it instead of the group being deleted.
+  - The 20 policy buttons stay on the per-country entry.
+  - C21: whether `should_be_involved` is re-checked for countries created after activation (revolutions, releases, formables); the fallback is vanilla `je_global_test`'s pulse with `add_involved_country`. Also, what the widget's 35 `JournalEntry.GetCountry` reads (`global_warming_widget.gui`) return, and what `je:` resolves to from a country.
+- **World War comes second.**
+  - Today: every great power runs its own copy and scans `any_country` for peace (`world_war_je.txt:334-355`).
+  - As a world entry: the belligerents are the involved countries, the late-entry button calls `add_involved_country`, and peace is checked once.
+  - Large: 13 `je:` modifier sites move to the country.
+- **Not worth converting:** the UN (566 `je:` references, membership per country), the nuclear taboo (its cost differs by country), the Space Race (per-country milestones).
+
+### 7.4 Politics, laws and characters
+
+- **New modifier types with an obvious home**, a line or two each:
+  - `country_enactment_speed_law_multicultural_mult` on Civil Rights' phase modifiers: positive on `cr_federal_protection_modifier` (`extra_modifiers.txt:2787`), negative on `cr_segregationist_modifier` (`:2819`). The entry completes on Multicultural plus Minority Protection (`je_civil_rights.txt:133-136`).
+  - `country_overlord_law_enactment_success_add` beside the bloc-leader law bonus that Vassalization V already carries (`principle_vassalization_5`, `extra_power_bloc_principles.txt:234`).
+  - `state_pop_support_movement_anti_communist_add`/`_mult` (vanilla registers them for its White Movement) on Cultural Hegemony's junta and fascist models (`cultural_hegemony_effects.txt:1387-1395`, `:1291-1297`).
+  - `country_reform_or_revolution_reform_bonus_add` / `_revolution_bonus_add` let the mod's left-wing content feed the Reform or Revolution global entry. On the reform side: UBI (`extra_laws.txt:285`) and the socialist model (`cultural_hegemony_effects.txt:1323`). On the revolution side: the communist model (`:1267`) and `covert_ideological_subversion` (`extra_modifiers.txt:6884`). Place Communal Administration, Collective Governance, Command Cooperative Economy and State-Owned Banking once vanilla's entry can be read.
+- **Institutions' `dynamic_name`** (this corrects § 4.11). The mod adds 17 institutions (`extra_institutions.txt`) and renames 3 vanilla ones by loc override (`replace/timeline_extended_override_l_english.yml:30-32`).
+  - The Ministry of War (`:1`) becomes the Ministry of Defense in the modern eras.
+  - The National Bank (`:40`) becomes a State Bank under State-Owned Banking, or takes a country's own name (Federal Reserve).
+  - Labor (`:75`), Propaganda (`:117`) and Intelligence (`:96`) follow the form of government.
+
+  Loc only, about 20 keys.
+- **Preferred laws.** The `any_`/`every_`/`ordered_`/`random_preferred_law` iterators were interest-group-only in 1.14.5. 1.15 adds character and political-movement scopes, so event and status text for the mod's three movements (`new_ideological_movements.txt:329`, `:614`, `:920`) and the election issues (`me_election_issue_values.txt`) could name a movement's or a leader's own top law.
+- **Characters.**
+  - `current_career_length = { role = … months = N }` can make the combined-arms traits (`combined_arms_effects.txt:122`, handed out at once today) wait for time in command.
+  - `on_character_returned_from_exile` and the character `home_state` link give § 4.7's ICC sentence an ending: the convict (`un_events.txt:3799`) comes home and radicalizes their home state.
+  - The Scandalous trait suits covert exposure, which today marks only the interest group (`covert_foreign_ties_discredited`, `covert_warfare_effects.txt:629`).
+  - Hemophilia suits a gene-therapy cure (`genetic_engineering`, `era_11.txt:124`). Neither trait is among 1.14.5's 121, so both keys are a check (C21).
+  - The scripted-button tags `unlocked_by_heir` / `unlocked_by_favorite` might show the heir on Heir Education's 16 buttons (`je_heir_education.txt:25-40`), but the readme promises the portrait only on the tsar's decrees.
+- **Release-day questions this pass raised** (C21):
+  - Does 1.15's Five-Year Plan pay through investment-pool income? Under Command Economy the mod zeroes that income monthly (`banking_cycle_update_ce_pool_balance`, `banking_cycle_effects.txt:3027`).
+  - Does 1.15's Electoral Confidence notification also fire on scripted changes? That would double the mod's own notices (`covert_warfare_effects.txt:2690`, `:2701`).
+- **No candidate:**
+  - The Favorite role itself: the mod has no court content.
+  - `is_interest_group_pool_full`: the mod's 42 created characters are throwaway speakers.
+  - `no_aging`: no effect sets a gene, and `biological_immortality` already gives `character_health_add = 100`.
+  - Female command roles by script: the mod gives no roles, and `ig_feminism.py`'s release-day rerun picks up vanilla's new chance lines.
+  - `character_background`: the first passing entry wins, so one added by `INJECT` would land after vanilla's unconditional fallback and never show.
+  - Objectives' `associated_journal_entries`: the mod has no objectives.
+  - Suffrage pressure on autocracies: no script surface.
+
+### 7.5 Map, economy and names
+
+- **Latitude triggers** `in_tropics`, `in_north_hemisphere` and `in_south_hemisphere` (this corrects § 4.11, which found no latitude lists).
+  - The space elevator's `possible` lists 92 state regions by hand (`building_space_elevator_construction_site`, `extra_buildings.txt:829-921`). `in_tropics = yes` replaces it. The band is wider (it adds Cuba, Hawaii and the Sahel), which suits the soft-caps default.
+  - `tropical_disease_spread_modifier` (`extra_modifiers.txt:1693`) applies to a whole country, Siberia included, and the water-shortage and disease events are weighted without regard to geography (`extra_on_actions.txt:1100-1107`, `:1159-1166`). Weight them by the share of tropical incorporated states instead.
+  - The Antarctic station AI (`te_global_commons_un_decisions.txt:55-61`) uses seabed basin 5 as a stand-in for "has a southern coast". `in_south_hemisphere = yes`, `in_tropics = no` and `is_coastal = yes` test that directly.
+- **Cold, the one lever.** Nothing moves cold at runtime (§ 6), but `cold_effect` reads a state's current winter, so mod content can respond to it.
+  - Deep-Sea Mines on ice-bound coasts could take a winter throughput penalty from a monthly state-pulse ladder that shrinks with `temperature_anomaly_display`. It is the only way to make warming "open" the Arctic.
+  - Melting Ice Caps (`environmentalism_events.txt:1210`, gated only on having a coastal state, `:1237`) could give cold coasts a "northern route opens" port bonus in place of the flat −10% to ports.
+  - The mod has no icebreaker, sea-ice or Northern Sea Route content.
+  - `cold_effect` is a state trigger, so a sea node's cold can't be read. The read is seasonal, so the pulse date matters.
+  - `resources.py` writes every state region (§ 3.7), so a config could set cold values too. The mod adds no geography of its own, though, so it should pass vanilla's values through and pin them with a test.
+- **Formal names.** 1.15's `GetNameDef` reads `<TAG>_DEF` loc for a formal name ("Kingdom of France"), and the new Country Names on Map game rule labels countries with it.
+  - 1.14.5 vanilla has no `_DEF` keys, so 1.15 presumably adds them for its own tags.
+  - The mod has none: all 10 mod tags (AFU, INM, EAF, EUN, UNA, ZHO, BHA, NUS, UNE, DAR) and all 84 dynamic names (75 formables, 9 `REPLACE:USA`) lack one.
+  - About 94 loc lines. The key's case and the fallback are a check (C21).
+- **Alternative names** for religions, cultures, goods, interest groups, building types and subject types. The digest shows no syntax (C21).
+  - The mod renames 10 goods (coal "Energy and Carbon Minerals", opium "Drugs", lead "Conductive and Base Metals"), 4 buildings, 3 institutions and 6 citizenship laws by overriding vanilla loc (`replace/timeline_extended_override_l_english.yml:7-37`), and the names read as anachronisms in 1836. Era-conditional names would fix that.
+  - If vanilla gives the same goods alternative names of its own, those may override the mod's renames.
+  - The custom religion's name reads the local player's choice (`te_religion_l_english.yml:178`, `GetPlayer.GetCustom`), which is wrong for the AI and in multiplayer. A per-country name would fix it, if the syntax allows one.
+- **Power bloc modifiers.**
+  - External Trade tiers 4 and 5 (`extra_power_bloc_principles.txt:590`, `:619`) grant a flat +25% and the all-or-nothing `country_no_advantage_loss_from_lack_of_interest_bool`. `country_interest_tier_<tier>_trade_advantage_mult` can grade the bonus by interest tier instead.
+  - If vanilla's tiers 1–3 gain the new types, tiers 4–5 must restate them (`principle_tier_audit` catches it).
+  - `country_power_bloc_formation_mandates_add` could sit on the techs that add the mod's principle slots (`country_te_pb_principle_slots_add`, `era_6.txt:777` and three more), so a newly formed bloc can fill them. Whether `MAX_MANDATES` caps it is a check.
+- **Treaties for transfers.** `create_treaty` is in 1.14.5, and the mod already uses it (`decolonization.txt:1046`). Vanilla 1.15 turns its treaty-flavored decisions into state and money transfer treaties. The mod's direct transfers:
+  - the irredentism cession (`set_state_owner`, `irredentism_events.txt:351-353`);
+  - UN court compliance (`un_justice_effects.txt:328`);
+  - paired `add_treasury` reparations (`decolonization_events.txt:754-761`, `nuclear_crisis_effects.txt:2056-2066`).
+
+  As treaties they show in the diplomacy panel, can be enforced, and stop paying in default. A lump sum suits a mod article with `is_one_time`. C21: whether a non-draft `create_treaty` with `state_transfer` moves the state on creation.
+- **Colors.** The `color` link (country, culture, interest group, party, power bloc, religion, strategic region) suits § 4.1's maps: the UN map in bloc colors, Cultural Hegemony in the hegemon's. C21: whether `map_color` takes a scope path.
+- **AI construction workarounds to re-test** after the profit-prediction and hiring changes. Run the observer game before deleting any:
+  - the AI Trade Center seed (`extra_effects.txt:1743-1759`);
+  - the grid's monthly AI station queue (`power_grid_effects.txt:325-332`);
+  - the Strategic Reserve hub's +10,000 AI value (`strategic_reserve.txt:72-89`);
+  - company flagships at 50,000 (`te_company_ai_values.txt:15-20`).
+- **Monument trivia.** The digest shows no field or loc key, so check on release (C21). Candidates: the 36 real-world wonders (`wonders.txt`), the UN headquarters, the Space Program, the Grand Monument.
+- **No candidate:**
+  - `has_building_levels_in_state_region`: 79 of the mod's 82 flavored companies require levels anywhere in the country, so it is at most an `ai_weight` refinement.
+  - `num_building_assets_of_type`.
+
+### 7.6 Testing and tooling
+
+- **Console commands:**
+  - `print_world_gdp` reads the figure `gm_world_gdp_1836` is calibrated on (§ 3.12).
+  - `ai_print_region_objectives` checks the AI strategy edits.
+  - `fastenforcement` / `noenforcement` shorten World War and decolonization test games.
+
+  They are console commands, so the dumps don't say which version added each.
+- **Weighted loading screens and music.** Loading screens with date windows (`start_date`/`end_date`) and weighted music would let the mod show era art late in the game. It ships neither, so this waits on art.
