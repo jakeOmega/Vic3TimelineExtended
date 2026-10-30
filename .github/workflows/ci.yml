@@ -4,10 +4,10 @@
 # satisfy path_constants' lazy resolution, and no step starts mod_state_server.
 # Audits that need the vanilla game stay out of CI — without the base game they
 # degrade to noise. A few audits build a ModState anyway, taking vanilla from the
-# committed vanilla_parsed/ snapshot; the loc_coverage_audit and pm_employment_audit
-# steps below build the full one (mod_state_server.cli_mod_state, ~7 s each). A
-# stale snapshot (`python3 vanilla_parsed.py check`) could make them flag or hide
-# a vanilla key.
+# committed vanilla_parsed/ snapshot; the loc_coverage_audit, pm_employment_audit
+# and concept_reference_audit steps below build the full one
+# (mod_state_server.cli_mod_state, ~7 s each). A stale snapshot
+# (`python3 vanilla_parsed.py check`) could make them flag or hide a vanilla key.
 name: CI
 
 on:
@@ -337,6 +337,16 @@ jobs:
       - name: Audit — PM combinations that drive employment negative
         if: ${{ !cancelled() }}
         run: python3 pm_employment_audit.py --strict
+
+      # Same ModState-from-snapshot harness, for its registry of game concepts,
+      # vanilla's and the mod's. A loc value linking [concept_x] or
+      # [Concept('x', ...)] with no x in common/game_concepts/ renders a broken
+      # link and logs three errors per render. Before this step only a server
+      # reload ran it: #1257 shipped one (je_space_race_widget_mod_mine_tt
+      # linking concept_sr_extraplanetary_base), fixed in #1258.
+      - name: Audit — loc links to game concepts that don't exist
+        if: ${{ !cancelled() }}
+        run: python3 concept_reference_audit.py --strict
 
       # Fails when a POST_LOAD_REGENERATORS / POST_LOAD_AUDITS module in
       # mod_state_server.py is missing from CLAUDE.md, docs/guides/python_tools.md
