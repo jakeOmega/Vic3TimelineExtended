@@ -186,3 +186,15 @@ te_grid_ai_station_site = {
 	te_grid_ai_market_area_has_power = yes
 	te_grid_station_placeable = yes
 }
+
+# State scope, for TE_SELF_CHECK grid_price: last month's flow had settled on
+# its target (within 5%, te_grid_chk_flow_gap_value) at a station with staff
+# then and now, so the state's price now is the one the balancing aimed at.
+te_grid_flow_settled = {
+	has_variable = te_grid_flow
+	has_variable = te_grid_target
+	has_variable = te_grid_price_target
+	var:te_grid_price_target > 0
+	te_grid_chk_flow_gap_value <= 0.05
+	te_grid_station_staffed_throughout = yes
+}
