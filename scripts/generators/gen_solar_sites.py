@@ -1601,7 +1601,14 @@ def render_values() -> str:
         out.append(f"\tif = {{ limit = {{ scope:article.input_building_type ?= bt:{site_building(site)} }} value = {worth} "
                    f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {MODULE_AI_VALUE} }} "
                    f"add = {{ value = sr_site_pop_value_{site.key} divide = {AI_VALUE_PEOPLE} }} }}")
-    out += [f"\tmax = {AI_VALUE_MAX}", "}", ""]
+    out += [f"\tmax = {AI_VALUE_MAX}", "}", "",
+            "# Cede Colony's picker (te_sr_cede_site_list_*, sr_sites_generated_rows.gui): 1",
+            "# while THIS country holds the world, the test sr_cede_site_input_valid makes.",
+            "# The engine's own list, ArticleDraft.GetValidBuildingTypes, crashes the game",
+            "# without a company (gui_modding_guide.md), so the picker lists the worlds itself."]
+    out += [f"sr_cede_held_{s.key} = {{ value = 0 if = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} value = 1 }} }}"
+            for s in SITES]
+    out += [""]
     out += (render_fleet_values() + [""] + render_population_values() + [""] + render_module_values()
             + [""] + render_autonomy_values() + [""] + render_slice6_values() + [""] + render_window_values())
     return "\n".join(out) + "\n"
@@ -3565,6 +3572,36 @@ def _window_row(body: str) -> list[str]:
     return out + ["\t\t}"]
 
 
+# Cede Colony's picker, one list per place it opens from. A war goal's ceding
+# country is the one the goal is pressed against; a treaty's, the article's
+# source. right_click_menu.gui shows the one that matches, hiding the other as
+# vanilla hides its war-goal company list in a treaty.
+CEDE_SOURCES = (("war", "WarGoalDraft.GetTarget"), ("treaty", "ArticleDraft.GetFirstOrSource"))
+CEDE_ROW = 3  # tiles a row, as the engine's list wrapped them (datamodel_wrap)
+
+
+def _cede_list(name: str, source: str) -> list[str]:
+    out = [f"\ttype te_sr_cede_site_list_{name} = flowcontainer {{",
+           "\t\tdirection = vertical",
+           "\t\tignoreinvisible = yes",
+           "\t\tspacing = 5"]
+    for loc in LOCATIONS:
+        here = [s for s in SITES if s.location == loc]
+        for row in range(0, len(here), CEDE_ROW):
+            out += ["", "\t\tflowcontainer = {",
+                    "\t\t\tparentanchor = hcenter",
+                    "\t\t\tignoreinvisible = yes",
+                    "\t\t\tspacing = 5"]
+            for site in here[row:row + CEDE_ROW]:
+                held = f"{source}.MakeScope.ScriptValue('sr_cede_held_{site.key}')"
+                out += ["", "\t\t\tte_sr_cede_site_tile = {",
+                        f"\t\t\t\tdatacontext = \"[GetBuildingType('{site_building(site)}')]\"",
+                        f"\t\t\t\tvisible = \"[EqualTo_CFixedPoint( {held}, '(CFixedPoint)1' )]\"",
+                        "\t\t\t}"]
+            out += ["\t\t}"]
+    return out + ["\t}"]
+
+
 def render_gui() -> str:
     out = [HEADER.rstrip("\n"),
            "### Solar System Colonization's per-world and per-slot rows, from",
@@ -3579,6 +3616,9 @@ def render_gui() -> str:
            "### colony management design § 6). Each value is a display value",
            "### of sr_sites_display_generated.txt (the Defenses view's, of",
            "### sr_fleets_display_generated.txt), the scripted GUIs are in sr_colony_sguis.txt.",
+           "### te_sr_cede_site_list_war and _treaty are Cede Colony's picker, the worlds the",
+           "### ceding country holds by location; its tile, te_sr_cede_site_tile, is in",
+           "### right_click_menu.gui.",
            "",
            "types sr_sites_generated_rows_types",
            "{",
@@ -3631,7 +3671,10 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for site in panel_order():
         out += [""] + _free_row(site)
-    out += ["\t}", "}"]
+    out += ["\t}"]
+    for name, source in CEDE_SOURCES:
+        out += [""] + _cede_list(name, source)
+    out += ["}"]
     return "\n".join(out) + "\n"
 
 

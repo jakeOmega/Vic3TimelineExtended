@@ -143,6 +143,51 @@ sr_cede_ai_input_value = {
 	max = 170
 }
 
+# Cede Colony's picker (te_sr_cede_site_list_*, sr_sites_generated_rows.gui): 1
+# while THIS country holds the world, the test sr_cede_site_input_valid makes.
+# The engine's own list, ArticleDraft.GetValidBuildingTypes, crashes the game
+# without a company (gui_modding_guide.md), so the picker lists the worlds itself.
+sr_cede_held_valles_marineris = { value = 0 if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = 1 } }
+sr_cede_held_olympus_mons = { value = 0 if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = 1 } }
+sr_cede_held_hellas_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = 1 } }
+sr_cede_held_utopia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = 1 } }
+sr_cede_held_arcadia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = 1 } }
+sr_cede_held_ceres = { value = 0 if = { limit = { global_var:sr_site_holder_ceres ?= this } value = 1 } }
+sr_cede_held_vesta = { value = 0 if = { limit = { global_var:sr_site_holder_vesta ?= this } value = 1 } }
+sr_cede_held_psyche = { value = 0 if = { limit = { global_var:sr_site_holder_psyche ?= this } value = 1 } }
+sr_cede_held_pallas = { value = 0 if = { limit = { global_var:sr_site_holder_pallas ?= this } value = 1 } }
+sr_cede_held_hygiea = { value = 0 if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = 1 } }
+sr_cede_held_io = { value = 0 if = { limit = { global_var:sr_site_holder_io ?= this } value = 1 } }
+sr_cede_held_europa = { value = 0 if = { limit = { global_var:sr_site_holder_europa ?= this } value = 1 } }
+sr_cede_held_ganymede = { value = 0 if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = 1 } }
+sr_cede_held_callisto = { value = 0 if = { limit = { global_var:sr_site_holder_callisto ?= this } value = 1 } }
+sr_cede_held_himalia = { value = 0 if = { limit = { global_var:sr_site_holder_himalia ?= this } value = 1 } }
+sr_cede_held_amalthea = { value = 0 if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = 1 } }
+sr_cede_held_venus = { value = 0 if = { limit = { global_var:sr_site_holder_venus ?= this } value = 1 } }
+sr_cede_held_mercury = { value = 0 if = { limit = { global_var:sr_site_holder_mercury ?= this } value = 1 } }
+sr_cede_held_titan = { value = 0 if = { limit = { global_var:sr_site_holder_titan ?= this } value = 1 } }
+sr_cede_held_enceladus = { value = 0 if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = 1 } }
+sr_cede_held_rhea = { value = 0 if = { limit = { global_var:sr_site_holder_rhea ?= this } value = 1 } }
+sr_cede_held_mimas = { value = 0 if = { limit = { global_var:sr_site_holder_mimas ?= this } value = 1 } }
+sr_cede_held_iapetus = { value = 0 if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = 1 } }
+sr_cede_held_titania = { value = 0 if = { limit = { global_var:sr_site_holder_titania ?= this } value = 1 } }
+sr_cede_held_oberon = { value = 0 if = { limit = { global_var:sr_site_holder_oberon ?= this } value = 1 } }
+sr_cede_held_miranda = { value = 0 if = { limit = { global_var:sr_site_holder_miranda ?= this } value = 1 } }
+sr_cede_held_ariel = { value = 0 if = { limit = { global_var:sr_site_holder_ariel ?= this } value = 1 } }
+sr_cede_held_triton = { value = 0 if = { limit = { global_var:sr_site_holder_triton ?= this } value = 1 } }
+sr_cede_held_proteus = { value = 0 if = { limit = { global_var:sr_site_holder_proteus ?= this } value = 1 } }
+sr_cede_held_pluto = { value = 0 if = { limit = { global_var:sr_site_holder_pluto ?= this } value = 1 } }
+sr_cede_held_eris = { value = 0 if = { limit = { global_var:sr_site_holder_eris ?= this } value = 1 } }
+sr_cede_held_makemake = { value = 0 if = { limit = { global_var:sr_site_holder_makemake ?= this } value = 1 } }
+sr_cede_held_haumea = { value = 0 if = { limit = { global_var:sr_site_holder_haumea ?= this } value = 1 } }
+sr_cede_held_sedna = { value = 0 if = { limit = { global_var:sr_site_holder_sedna ?= this } value = 1 } }
+sr_cede_held_shackleton = { value = 0 if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = 1 } }
+sr_cede_held_peary = { value = 0 if = { limit = { global_var:sr_site_holder_peary ?= this } value = 1 } }
+sr_cede_held_tranquility = { value = 0 if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = 1 } }
+sr_cede_held_marius_hills = { value = 0 if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = 1 } }
+sr_cede_held_daedalus = { value = 0 if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = 1 } }
+sr_cede_held_imbrium = { value = 0 if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = 1 } }
+
 # ===== Colony fleets (slices 2-3 design §§ 4-7) =====
 # A colony's goal at each stage (the races-only bar reads the current stage's
 # through sr_solar_colonization_goal, space_race_values.txt).
