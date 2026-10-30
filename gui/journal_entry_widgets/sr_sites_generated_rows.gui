@@ -9,6 +9,9 @@
 ### world, shown while free; slice 5 design § 9). Each value is a display value
 ### of sr_sites_display_generated.txt (the Defenses view's, of
 ### sr_fleets_display_generated.txt), the scripted GUIs are in sr_colony_sguis.txt.
+### te_sr_cede_site_list_war and _treaty are Cede Colony's picker, the worlds the
+### ceding country holds by location; its tile, te_sr_cede_site_tile, is in
+### right_click_menu.gui.
 
 types sr_sites_generated_rows_types
 {
@@ -10950,6 +10953,526 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "free_stop_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_free_supplied_sedna'), '(CFixedPoint)1' )]"
+			}
+		}
+	}
+
+	type te_sr_cede_site_list_war = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 5
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_shackleton')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_shackleton'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_peary')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_peary'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_tranquility')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_tranquility'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_marius_hills')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_marius_hills'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_daedalus')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_daedalus'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_imbrium')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_imbrium'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_venus')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_venus'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_mercury')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_mercury'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_valles_marineris')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_valles_marineris'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_olympus_mons')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_olympus_mons'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_hellas_planitia')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_hellas_planitia'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_utopia_planitia')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_utopia_planitia'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_arcadia_planitia')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_arcadia_planitia'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_ceres')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_ceres'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_vesta')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_vesta'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_psyche')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_psyche'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_pallas')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_pallas'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_hygiea')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_hygiea'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_io')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_io'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_europa')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_europa'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_ganymede')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_ganymede'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_callisto')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_callisto'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_himalia')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_himalia'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_amalthea')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_amalthea'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_titan')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_titan'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_enceladus')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_enceladus'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_rhea')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_rhea'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_mimas')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_mimas'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_iapetus')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_iapetus'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_titania')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_titania'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_oberon')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_oberon'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_miranda')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_miranda'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_ariel')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_ariel'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_triton')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_triton'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_proteus')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_proteus'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_pluto')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_pluto'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_eris')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_eris'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_makemake')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_makemake'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_haumea')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_haumea'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_sedna')]"
+				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_sedna'), '(CFixedPoint)1' )]"
+			}
+		}
+	}
+
+	type te_sr_cede_site_list_treaty = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 5
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_shackleton')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_shackleton'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_peary')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_peary'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_tranquility')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_tranquility'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_marius_hills')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_marius_hills'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_daedalus')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_daedalus'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_imbrium')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_imbrium'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_venus')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_venus'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_mercury')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_mercury'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_valles_marineris')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_valles_marineris'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_olympus_mons')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_olympus_mons'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_hellas_planitia')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_hellas_planitia'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_utopia_planitia')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_utopia_planitia'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_arcadia_planitia')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_arcadia_planitia'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_ceres')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_ceres'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_vesta')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_vesta'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_psyche')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_psyche'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_pallas')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_pallas'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_hygiea')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_hygiea'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_io')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_io'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_europa')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_europa'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_ganymede')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_ganymede'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_callisto')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_callisto'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_himalia')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_himalia'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_amalthea')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_amalthea'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_titan')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_titan'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_enceladus')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_enceladus'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_rhea')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_rhea'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_mimas')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_mimas'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_iapetus')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_iapetus'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_titania')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_titania'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_oberon')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_oberon'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_miranda')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_miranda'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_ariel')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_ariel'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_triton')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_triton'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_proteus')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_proteus'), '(CFixedPoint)1' )]"
+			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_pluto')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_pluto'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_eris')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_eris'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_makemake')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_makemake'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_haumea')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_haumea'), '(CFixedPoint)1' )]"
+			}
+
+			te_sr_cede_site_tile = {
+				datacontext = "[GetBuildingType('building_sr_site_sedna')]"
+				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_sedna'), '(CFixedPoint)1' )]"
 			}
 		}
 	}
