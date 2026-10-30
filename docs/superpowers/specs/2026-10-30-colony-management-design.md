@@ -197,11 +197,20 @@ the checks only the game can show: a JE-scope `unit_` modifier reaching the army
 
 ## 11. As built (2026-10-30)
 
-Built in #1257, the build order's five steps on one branch. A follow-up finished
-§ 4.1: the drift hover's conditional lines (`sr_aut_line_*`: charter, garrison,
-war, no contact, a destroyed colony) had kept `|+=2`, so a garrison's +0.2 read
-green. They now read `|=-2` like the rest, and `test_space_race_layout.py` holds
-every figure in the hover to it.
+Built in #1257, the build order's five steps on one branch. A follow-up (#1258)
+finished two things:
+
+- **§ 4.1's colors.** The drift hover's conditional lines (`sr_aut_line_*`:
+  charter, garrison, war, no contact, a destroyed colony) had kept `|+=2`, so a
+  garrison's +0.2 read green. They now read `|=-2` like the rest, and
+  `test_space_race_layout.py` holds every figure in the hover to it.
+- **§ 5's technologies as markers** (`scripting_best_practices.md` § Technology
+  markers). #1257 read `has_technology_researched`, so neither technology's
+  tooltip mentioned the slot. Advanced Nanofabrication and Molecular Assemblers
+  now carry +1 `country_sr_colony_slots_add` each (script-only, "Colony Module
+  Slots"), `sr_site_slots_<key>` adds the holder's, and the Slots hover reads its
+  breakdown. Anything else that grants it later, a law or a policy, counts the
+  same way.
 
 **Where the build fills in what the sections leave open:**
 
@@ -264,10 +273,6 @@ every figure in the hover to it.
   waits for the head's whole price, so the fourth module past a colony's slots
   (500 points) holds everything behind it for up to 100 months at Orbital
   Assembly's 5 points a month, or 20 at Fusion Shipyards' 25.
-- **The slot technologies don't say so.** Advanced Nanofabrication's and
-  Molecular Assemblers' tooltips don't mention the slot; the Slots hover and the
-  player guide do. A display modifier, as Nuclear Thermal Propulsion's
-  `country_sr_nuclear_thermal_launches_bool`, would show it.
 - **Not seen in game:** the play-test list's § Colony management (nine checks,
   no self-check), including whether the Training Ground's `unit_` modifier on
   the entry reaches the army, and the fallback if it doesn't.

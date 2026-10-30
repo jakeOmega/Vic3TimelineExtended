@@ -564,6 +564,18 @@ class ColoniesTest(unittest.TestCase):
                     self.assertIn(f"ScriptValue('{term}')", drift)
                 self.assertIn("[concept_sr_colony_autonomy]", drift)
 
+    def test_the_slots_hover_reads_the_slots_modifier(self):
+        """Colony management design § 5: a world's Slots hover gives its size's
+        slots and our Colony Module Slots from the modifier itself, so a new
+        source of the modifier shows there without an edit."""
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(world=k):
+                hover = self.loc[f"je_space_race_widget_slots_tt_{k}"]
+                self.assertIn(f"#v {site.slots}#! here for its size", hover)
+                self.assertIn(f"GetModifier.GetValueWithBreakdownFor('{gss.SLOTS_MODIFIER}')", hover)
+                self.assertIn(f"${gss.SLOTS_MODIFIER}$", hover)
+
     def test_the_drift_and_its_terms_are_colored_as_a_cost(self):
         """Colony management design § 4.1: more autonomy is the holder's loss, so
         the drift and every term in its hover, the conditional lines too, read

@@ -3046,11 +3046,11 @@ sr_site_generic_built_valles_marineris = {
 	add = sr_site_foundry_value_valles_marineris
 	add = sr_site_admin_value_valles_marineris
 }
-# Valles Marineris's slots: 4 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Valles Marineris's slots: 4 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_valles_marineris = {
 	value = 4
-	if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_valles_marineris = { value = sr_site_slots_valles_marineris add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -3262,11 +3262,11 @@ sr_site_generic_built_olympus_mons = {
 	add = sr_site_foundry_value_olympus_mons
 	add = sr_site_admin_value_olympus_mons
 }
-# Olympus Mons's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Olympus Mons's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_olympus_mons = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_olympus_mons } global_var:sr_site_holder_olympus_mons = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_olympus_mons = { value = sr_site_slots_olympus_mons add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -3477,11 +3477,11 @@ sr_site_generic_built_hellas_planitia = {
 	add = sr_site_foundry_value_hellas_planitia
 	add = sr_site_admin_value_hellas_planitia
 }
-# Hellas Planitia's slots: 4 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Hellas Planitia's slots: 4 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_hellas_planitia = {
 	value = 4
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_hellas_planitia } global_var:sr_site_holder_hellas_planitia = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_hellas_planitia = { value = sr_site_slots_hellas_planitia add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -3694,11 +3694,11 @@ sr_site_generic_built_utopia_planitia = {
 	add = sr_site_foundry_value_utopia_planitia
 	add = sr_site_admin_value_utopia_planitia
 }
-# Utopia Planitia's slots: 4 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Utopia Planitia's slots: 4 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_utopia_planitia = {
 	value = 4
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_utopia_planitia } global_var:sr_site_holder_utopia_planitia = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_utopia_planitia = { value = sr_site_slots_utopia_planitia add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -3909,11 +3909,11 @@ sr_site_generic_built_arcadia_planitia = {
 	add = sr_site_foundry_value_arcadia_planitia
 	add = sr_site_admin_value_arcadia_planitia
 }
-# Arcadia Planitia's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Arcadia Planitia's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_arcadia_planitia = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_arcadia_planitia } global_var:sr_site_holder_arcadia_planitia = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_arcadia_planitia = { value = sr_site_slots_arcadia_planitia add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -4125,11 +4125,11 @@ sr_site_generic_built_ceres = {
 	add = sr_site_foundry_value_ceres
 	add = sr_site_admin_value_ceres
 }
-# Ceres's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Ceres's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_ceres = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_ceres ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_ceres ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_ceres } global_var:sr_site_holder_ceres = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_ceres = { value = sr_site_slots_ceres add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -4341,11 +4341,11 @@ sr_site_generic_built_vesta = {
 	add = sr_site_foundry_value_vesta
 	add = sr_site_admin_value_vesta
 }
-# 4 Vesta's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# 4 Vesta's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_vesta = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_vesta ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_vesta ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_vesta } global_var:sr_site_holder_vesta = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_vesta = { value = sr_site_slots_vesta add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -4557,11 +4557,11 @@ sr_site_generic_built_psyche = {
 	add = sr_site_foundry_value_psyche
 	add = sr_site_admin_value_psyche
 }
-# 16 Psyche's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# 16 Psyche's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_psyche = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_psyche ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_psyche ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_psyche } global_var:sr_site_holder_psyche = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_psyche = { value = sr_site_slots_psyche add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -4773,11 +4773,11 @@ sr_site_generic_built_pallas = {
 	add = sr_site_foundry_value_pallas
 	add = sr_site_admin_value_pallas
 }
-# 2 Pallas's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# 2 Pallas's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_pallas = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_pallas ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_pallas ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_pallas } global_var:sr_site_holder_pallas = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_pallas = { value = sr_site_slots_pallas add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -4990,11 +4990,11 @@ sr_site_generic_built_hygiea = {
 	add = sr_site_foundry_value_hygiea
 	add = sr_site_admin_value_hygiea
 }
-# 10 Hygiea's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# 10 Hygiea's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_hygiea = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_hygiea ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_hygiea ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_hygiea } global_var:sr_site_holder_hygiea = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_hygiea = { value = sr_site_slots_hygiea add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -5206,11 +5206,11 @@ sr_site_generic_built_io = {
 	add = sr_site_foundry_value_io
 	add = sr_site_admin_value_io
 }
-# Io's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Io's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_io = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_io ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_io ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_io } global_var:sr_site_holder_io = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_io = { value = sr_site_slots_io add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -5421,11 +5421,11 @@ sr_site_generic_built_europa = {
 	add = sr_site_foundry_value_europa
 	add = sr_site_admin_value_europa
 }
-# Europa's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Europa's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_europa = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_europa ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_europa ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_europa } global_var:sr_site_holder_europa = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_europa = { value = sr_site_slots_europa add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -5636,11 +5636,11 @@ sr_site_generic_built_ganymede = {
 	add = sr_site_foundry_value_ganymede
 	add = sr_site_admin_value_ganymede
 }
-# Ganymede's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Ganymede's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_ganymede = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_ganymede ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_ganymede ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_ganymede } global_var:sr_site_holder_ganymede = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_ganymede = { value = sr_site_slots_ganymede add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -5851,11 +5851,11 @@ sr_site_generic_built_callisto = {
 	add = sr_site_foundry_value_callisto
 	add = sr_site_admin_value_callisto
 }
-# Callisto's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Callisto's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_callisto = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_callisto ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_callisto ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_callisto } global_var:sr_site_holder_callisto = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_callisto = { value = sr_site_slots_callisto add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6067,11 +6067,11 @@ sr_site_generic_built_himalia = {
 	add = sr_site_foundry_value_himalia
 	add = sr_site_admin_value_himalia
 }
-# Himalia's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Himalia's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_himalia = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_himalia ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_himalia ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_himalia } global_var:sr_site_holder_himalia = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_himalia = { value = sr_site_slots_himalia add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6283,11 +6283,11 @@ sr_site_generic_built_amalthea = {
 	add = sr_site_foundry_value_amalthea
 	add = sr_site_admin_value_amalthea
 }
-# Amalthea's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Amalthea's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_amalthea = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_amalthea ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_amalthea ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_amalthea } global_var:sr_site_holder_amalthea = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_amalthea = { value = sr_site_slots_amalthea add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6499,11 +6499,11 @@ sr_site_generic_built_venus = {
 	add = sr_site_foundry_value_venus
 	add = sr_site_admin_value_venus
 }
-# Venus Cloud Habitat's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Venus Cloud Habitat's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_venus = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_venus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_venus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_venus } global_var:sr_site_holder_venus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_venus = { value = sr_site_slots_venus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6716,11 +6716,11 @@ sr_site_generic_built_mercury = {
 	add = sr_site_foundry_value_mercury
 	add = sr_site_admin_value_mercury
 }
-# Mercury's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Mercury's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_mercury = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_mercury ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_mercury ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_mercury } global_var:sr_site_holder_mercury = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_mercury = { value = sr_site_slots_mercury add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6932,11 +6932,11 @@ sr_site_generic_built_titan = {
 	add = sr_site_foundry_value_titan
 	add = sr_site_admin_value_titan
 }
-# Titan's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Titan's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_titan = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_titan ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_titan ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_titan } global_var:sr_site_holder_titan = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_titan = { value = sr_site_slots_titan add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -7148,11 +7148,11 @@ sr_site_generic_built_enceladus = {
 	add = sr_site_foundry_value_enceladus
 	add = sr_site_admin_value_enceladus
 }
-# Enceladus's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Enceladus's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_enceladus = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_enceladus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_enceladus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_enceladus } global_var:sr_site_holder_enceladus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_enceladus = { value = sr_site_slots_enceladus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -7364,11 +7364,11 @@ sr_site_generic_built_rhea = {
 	add = sr_site_foundry_value_rhea
 	add = sr_site_admin_value_rhea
 }
-# Rhea's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Rhea's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_rhea = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_rhea ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_rhea ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_rhea } global_var:sr_site_holder_rhea = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_rhea = { value = sr_site_slots_rhea add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -7579,11 +7579,11 @@ sr_site_generic_built_mimas = {
 	add = sr_site_foundry_value_mimas
 	add = sr_site_admin_value_mimas
 }
-# Mimas's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Mimas's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_mimas = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_mimas ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_mimas ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_mimas } global_var:sr_site_holder_mimas = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_mimas = { value = sr_site_slots_mimas add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -7795,11 +7795,11 @@ sr_site_generic_built_iapetus = {
 	add = sr_site_foundry_value_iapetus
 	add = sr_site_admin_value_iapetus
 }
-# Iapetus's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Iapetus's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_iapetus = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_iapetus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_iapetus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_iapetus } global_var:sr_site_holder_iapetus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_iapetus = { value = sr_site_slots_iapetus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8011,11 +8011,11 @@ sr_site_generic_built_titania = {
 	add = sr_site_foundry_value_titania
 	add = sr_site_admin_value_titania
 }
-# Titania's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Titania's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_titania = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_titania ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_titania ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_titania } global_var:sr_site_holder_titania = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_titania = { value = sr_site_slots_titania add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8226,11 +8226,11 @@ sr_site_generic_built_oberon = {
 	add = sr_site_foundry_value_oberon
 	add = sr_site_admin_value_oberon
 }
-# Oberon's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Oberon's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_oberon = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_oberon ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_oberon ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_oberon } global_var:sr_site_holder_oberon = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_oberon = { value = sr_site_slots_oberon add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8441,11 +8441,11 @@ sr_site_generic_built_miranda = {
 	add = sr_site_foundry_value_miranda
 	add = sr_site_admin_value_miranda
 }
-# Miranda's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Miranda's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_miranda = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_miranda ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_miranda ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_miranda } global_var:sr_site_holder_miranda = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_miranda = { value = sr_site_slots_miranda add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8657,11 +8657,11 @@ sr_site_generic_built_ariel = {
 	add = sr_site_foundry_value_ariel
 	add = sr_site_admin_value_ariel
 }
-# Ariel's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Ariel's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_ariel = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_ariel ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_ariel ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_ariel } global_var:sr_site_holder_ariel = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_ariel = { value = sr_site_slots_ariel add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8873,11 +8873,11 @@ sr_site_generic_built_triton = {
 	add = sr_site_foundry_value_triton
 	add = sr_site_admin_value_triton
 }
-# Triton's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Triton's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_triton = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_triton ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_triton ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_triton } global_var:sr_site_holder_triton = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_triton = { value = sr_site_slots_triton add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9089,11 +9089,11 @@ sr_site_generic_built_proteus = {
 	add = sr_site_foundry_value_proteus
 	add = sr_site_admin_value_proteus
 }
-# Proteus's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Proteus's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_proteus = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_proteus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_proteus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_proteus } global_var:sr_site_holder_proteus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_proteus = { value = sr_site_slots_proteus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9305,11 +9305,11 @@ sr_site_generic_built_pluto = {
 	add = sr_site_foundry_value_pluto
 	add = sr_site_admin_value_pluto
 }
-# Pluto-Charon's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Pluto-Charon's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_pluto = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_pluto ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_pluto ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_pluto } global_var:sr_site_holder_pluto = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_pluto = { value = sr_site_slots_pluto add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9521,11 +9521,11 @@ sr_site_generic_built_eris = {
 	add = sr_site_foundry_value_eris
 	add = sr_site_admin_value_eris
 }
-# Eris's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Eris's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_eris = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_eris ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_eris ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_eris } global_var:sr_site_holder_eris = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_eris = { value = sr_site_slots_eris add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9736,11 +9736,11 @@ sr_site_generic_built_makemake = {
 	add = sr_site_foundry_value_makemake
 	add = sr_site_admin_value_makemake
 }
-# Makemake's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Makemake's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_makemake = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_makemake ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_makemake ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_makemake } global_var:sr_site_holder_makemake = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_makemake = { value = sr_site_slots_makemake add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9952,11 +9952,11 @@ sr_site_generic_built_haumea = {
 	add = sr_site_foundry_value_haumea
 	add = sr_site_admin_value_haumea
 }
-# Haumea's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Haumea's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_haumea = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_haumea ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_haumea ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_haumea } global_var:sr_site_holder_haumea = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_haumea = { value = sr_site_slots_haumea add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -10167,11 +10167,11 @@ sr_site_generic_built_sedna = {
 	add = sr_site_foundry_value_sedna
 	add = sr_site_admin_value_sedna
 }
-# Sedna's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Sedna's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_sedna = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_sedna ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_sedna ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_sedna } global_var:sr_site_holder_sedna = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_sedna = { value = sr_site_slots_sedna add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -10378,11 +10378,11 @@ sr_site_generic_built_shackleton = {
 	add = sr_site_foundry_value_shackleton
 	add = sr_site_admin_value_shackleton
 }
-# Shackleton Crater's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Shackleton Crater's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_shackleton = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_shackleton ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_shackleton ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_shackleton } global_var:sr_site_holder_shackleton = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_shackleton = { value = sr_site_slots_shackleton add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -10586,11 +10586,11 @@ sr_site_generic_built_peary = {
 	add = sr_site_foundry_value_peary
 	add = sr_site_admin_value_peary
 }
-# Peary Crater's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Peary Crater's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_peary = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_peary ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_peary ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_peary } global_var:sr_site_holder_peary = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_peary = { value = sr_site_slots_peary add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -10795,11 +10795,11 @@ sr_site_generic_built_tranquility = {
 	add = sr_site_foundry_value_tranquility
 	add = sr_site_admin_value_tranquility
 }
-# Tranquility Base's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Tranquility Base's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_tranquility = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_tranquility ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_tranquility ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_tranquility } global_var:sr_site_holder_tranquility = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_tranquility = { value = sr_site_slots_tranquility add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -11002,11 +11002,11 @@ sr_site_generic_built_marius_hills = {
 	add = sr_site_foundry_value_marius_hills
 	add = sr_site_admin_value_marius_hills
 }
-# Marius Hills's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Marius Hills's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_marius_hills = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_marius_hills ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_marius_hills ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_marius_hills } global_var:sr_site_holder_marius_hills = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_marius_hills = { value = sr_site_slots_marius_hills add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -11209,11 +11209,11 @@ sr_site_generic_built_daedalus = {
 	add = sr_site_foundry_value_daedalus
 	add = sr_site_admin_value_daedalus
 }
-# Daedalus Crater's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Daedalus Crater's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_daedalus = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_daedalus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_daedalus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_daedalus } global_var:sr_site_holder_daedalus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_daedalus = { value = sr_site_slots_daedalus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -11418,11 +11418,11 @@ sr_site_generic_built_imbrium = {
 	add = sr_site_foundry_value_imbrium
 	add = sr_site_admin_value_imbrium
 }
-# Mare Imbrium's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Mare Imbrium's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_imbrium = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_imbrium ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_imbrium ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_imbrium } global_var:sr_site_holder_imbrium = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_imbrium = { value = sr_site_slots_imbrium add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.

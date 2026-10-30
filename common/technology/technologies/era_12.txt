@@ -39,6 +39,8 @@ advanced_nanofabrication = {
 		# the census's infection treatment (#1045): nanomedicine, machines in the blood that find and destroy pathogens;
 		# with Personalized Medicine's it reaches the cap, 0.99
 		state_infection_treatment_add = 0.02
+		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
+		country_sr_colony_slots_add = 1
 	}
 
 	ai_weight = {
@@ -62,6 +64,8 @@ molecular_assemblers = {
 		country_st_res_small_arms_decay_add = -0.002
 		country_st_res_fertilizer_decay_add = -0.0015
 		state_chronic_treatment_add = 0.12	# the census's chronic treatment (owner, 2026-10-20: the technologies take it to 0.99 by era 12)
+		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
+		country_sr_colony_slots_add = 1
 	}
 
 	ai_weight = {

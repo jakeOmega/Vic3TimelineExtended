@@ -329,6 +329,8 @@
  country_space_race_progress_mult_desc:0 "Multiplicative bonus to [concept_space_race] milestone progress. The Ambitious approach on active milestones provides this bonus at the cost of increased failure risk."
  country_space_race_risk_mult:0 "[concept_space_race] Failure Risk"
  country_space_race_risk_mult_desc:0 "Multiplicative adjustment to [concept_space_race] failure risk. The Safe approach on active milestones reduces failure risk at the cost of slower progress."
+ country_sr_colony_slots_add:0 "Colony Module Slots"
+ country_sr_colony_slots_add_desc:0 "Module slots at every colony we hold, beside those its size gives, under the Simple and Full Colonies settings of the Space Race rule. Habitats, Spaceports, Defenses and the facilities share them, and a colony takes up to #v 4#! [concept_sr_module]s past them at a rising price."
  country_sr_module_fabrication_add:0 "Colony Module Fabrication per Month"
  country_sr_module_fabrication_add_desc:0 "Points a month toward our queued colony modules, under the Simple and Full Colonies settings of the Space Race rule. Each module costs 100."
  country_st_res_aeroplanes_capacity_add:0 "$aeroplanes$ Reserve Capacity"

@@ -292,10 +292,12 @@ MODULE_NAMES = {"a": "Specialization I", "b": "Specialization II", "hab": "Habit
                 "def": "Defences", "port": "Spaceport", **{f.key: f.name for f in FACILITIES}}
 MODULE_AI_VALUE = 8  # Cede Colony's AI value of a module level past the first
 
-# Slots (colony management design § 5): the table's slots, one more with each
-# of these technologies (the holder's), and up to SLOTS_PAST_MAX modules past
-# them, the n-th past costing sr_module_points x (1 + n).
-SLOT_TECHS = ("advanced_nanofabrication", "molecular_assemblers")
+# Slots (colony management design § 5): the table's slots plus the holder's
+# SLOTS_MODIFIER, a script-only type that Advanced Nanofabrication and
+# Molecular Assemblers carry (+1 each), so their tooltips show it, and up to
+# SLOTS_PAST_MAX modules past them, the n-th past costing sr_module_points x
+# (1 + n).
+SLOTS_MODIFIER = "country_sr_colony_slots_add"
 SLOTS_PAST_MAX = 4
 
 # The Modules view's lines of cells (colony management design § 8), in order.
@@ -1860,14 +1862,14 @@ def _slot_values(site: Site) -> list[str]:
     """A world's slots and the price past them (colony management design § 5),
     and each facility's staffed levels (§ 7). Any scope."""
     k = site.key
-    out = [f"# {site.name}'s slots: {site.slots} by its size, +1 with each of the holder's "
-           f"{', '.join(SLOT_TECHS)}; up to {SLOTS_PAST_MAX} modules past them.",
+    out = [f"# {site.name}'s slots: {site.slots} by its size, plus the holder's {SLOTS_MODIFIER};",
+           f"# up to {SLOTS_PAST_MAX} modules past them.",
            f"sr_site_slots_{k} = {{",
-           f"\tvalue = {site.slots}"]
-    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= {{ has_technology_researched = {tech} }} }} add = 1 }}"
-            for tech in SLOT_TECHS]
-    out += ["}",
-            f"sr_site_slots_max_{k} = {{ value = sr_site_slots_{k} add = {SLOTS_PAST_MAX} }}",
+           f"\tvalue = {site.slots}",
+           f"\tif = {{ limit = {{ exists = global_var:sr_site_holder_{k} }} "
+           f"global_var:sr_site_holder_{k} = {{ add = modifier:{SLOTS_MODIFIER} }} }}",
+           "}"]
+    out += [f"sr_site_slots_max_{k} = {{ value = sr_site_slots_{k} add = {SLOTS_PAST_MAX} }}",
             "# Its slots built or on their way, every shipper's: what the queue's head pays past.",
             f"sr_site_generic_pending_{k} = {{",
             f"\tvalue = sr_site_generic_built_{k}"]
