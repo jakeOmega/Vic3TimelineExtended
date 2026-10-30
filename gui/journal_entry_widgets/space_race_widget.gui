@@ -3492,209 +3492,280 @@ types space_race_widget_types
 	### stage, its two specializations' effects, our drive's transit there and
 	### its next window (je_space_race_widget_ss_site_tt_<key>, audit SPC-7).
 	### 24 icon + 180 name + 122 holder + 65 inbound + 66 button + 4 × 3
-	### spacing + 2 × 4 margin = 477, in the column. The instances are generated
+	### spacing + 2 × 4 margin = 477, in the column. Under it, slots and
+	### Extraplanetary Base room (Simple and Full Colonies). The instances are generated
 	### (te_sr_solar_system_rows, sr_sites_generated_rows.gui), each shown
 	### while Solar System lists every world or the world is one our fleets can
 	### go to, ours, or one a fleet is bound for.
 	type te_sr_site_row = flowcontainer {
-		direction = horizontal
+		direction = vertical
 		ignoreinvisible = yes
-		spacing = 3
 		margin = { 4 1 }
 		block "site_visible" {}
 
-		widget = {
-			size = { 24 24 }
-			parentanchor = vcenter
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 3
 
-			icon = {
+			widget = {
 				size = { 24 24 }
-				parentanchor = center
-				block "site_icon" {}
+				parentanchor = vcenter
+
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "site_icon" {}
+				}
+			}
+			widget = {
+				size = { 180 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 180
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					block "site_name" {}
+				}
+			}
+			widget = {
+				size = { 122 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					default_format = "#v"
+					text = "je_space_race_widget_ss_ours"
+					block "site_ours_visible" {}
+				}
+				flowcontainer = {
+					parentanchor = left|vcenter
+					ignoreinvisible = yes
+					block "site_other_visible" {}
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						ignoreinvisible = yes
+						block "site_context" {}
+
+						widget = {
+							size = { 28 24 }
+							parentanchor = vcenter
+
+							tiny_flag = {
+								parentanchor = center
+								datacontext = "[State.GetCountry]"
+							}
+						}
+					}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_ss_unknown"
+					block "site_unknown_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					default_format = "#v"
+					text = "je_space_race_widget_ss_target"
+					block "site_target_mark_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					default_format = "#grey"
+					text = "je_space_race_widget_ss_unclaimed"
+					block "site_unclaimed_visible" {}
+				}
+				### A free colony (slice 5 design § 9): claimed, no holder.
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_ss_free_tt"
+					text = "je_space_race_widget_ss_free"
+					block "site_free_visible" {}
+				}
+				### Occupied, and ruined (Full Colonies; slice 6 design § 16).
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_ss_occupied_tt"
+					text = "je_space_race_widget_ss_occupied"
+					block "site_occupied_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_ss_ruined_tt"
+					text = "je_space_race_widget_ss_ruined"
+					block "site_ruined_visible" {}
+				}
+			}
+			### Fleets on their way: the colonization entry's icon and their number;
+			### on hover the first's landing and whether it is ours.
+			widget = {
+				size = { 65 24 }
+				parentanchor = vcenter
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 2
+					ignoreinvisible = yes
+					parentanchor = left|vcenter
+					block "site_inbound" {}
+
+					icon = {
+						size = { 16 16 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 47
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_inbound_ours" {}
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 47
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_inbound_rival" {}
+					}
+				}
+			}
+			button = {
+				using = default_button_action
+				size = { 66 24 }
+				parentanchor = vcenter
+				block "site_target_button" {}
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 62
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_ss_target_button"
+					block "site_target_set_visible" {}
+				}
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 62
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_ss_target_clear"
+					block "site_target_clear_visible" {}
+				}
 			}
 		}
-		widget = {
-			size = { 180 24 }
-			parentanchor = vcenter
+		### Under the name, what the site offers a colony (the owner, 2026-10-30:
+		### the Colonies list showed slots and base room only for colonies held):
+		### its module slots, its size's and our Colony Module Slots, and its
+		### Extraplanetary Base room and grade, each an icon and a figure with its
+		### meaning on hover. Simple and Full Colonies only.
+		flowcontainer = {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 12
+			margin_left = 27
 
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 180
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				block "site_name" {}
-			}
-		}
-		widget = {
-			size = { 122 24 }
-			parentanchor = vcenter
-
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#v"
-				text = "je_space_race_widget_ss_ours"
-				block "site_ours_visible" {}
-			}
-			flowcontainer = {
-				parentanchor = left|vcenter
-				ignoreinvisible = yes
-				block "site_other_visible" {}
+			widget = {
+				size = { 64 22 }
+				parentanchor = vcenter
+				tooltip = "je_space_race_widget_ss_slots_tt"
 
 				flowcontainer = {
 					direction = horizontal
 					spacing = 4
-					ignoreinvisible = yes
-					block "site_context" {}
+					parentanchor = left|vcenter
 
-					widget = {
-						size = { 28 24 }
+					icon = {
+						size = { 18 18 }
 						parentanchor = vcenter
-
-						tiny_flag = {
-							parentanchor = center
-							datacontext = "[State.GetCountry]"
-						}
+						texture = "gfx/interface/icons/space_race_icons/module.dds"
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 40
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_slots" {}
 					}
 				}
 			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				text = "je_space_race_widget_ss_unknown"
-				block "site_unknown_visible" {}
-			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#v"
-				text = "je_space_race_widget_ss_target"
-				block "site_target_mark_visible" {}
-			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#grey"
-				text = "je_space_race_widget_ss_unclaimed"
-				block "site_unclaimed_visible" {}
-			}
-			### A free colony (slice 5 design § 9): claimed, no holder.
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				tooltip = "je_space_race_widget_ss_free_tt"
-				text = "je_space_race_widget_ss_free"
-				block "site_free_visible" {}
-			}
-			### Occupied, and ruined (Full Colonies; slice 6 design § 16).
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				tooltip = "je_space_race_widget_ss_occupied_tt"
-				text = "je_space_race_widget_ss_occupied"
-				block "site_occupied_visible" {}
-			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				tooltip = "je_space_race_widget_ss_ruined_tt"
-				text = "je_space_race_widget_ss_ruined"
-				block "site_ruined_visible" {}
-			}
-		}
-		### Fleets on their way: the colonization entry's icon and their number;
-		### on hover the first's landing and whether it is ours.
-		widget = {
-			size = { 65 24 }
-			parentanchor = vcenter
+			widget = {
+				size = { 132 22 }
+				parentanchor = vcenter
+				tooltip = "je_space_race_widget_ss_bases_tt"
 
-			flowcontainer = {
-				direction = horizontal
-				spacing = 2
-				ignoreinvisible = yes
-				parentanchor = left|vcenter
-				block "site_inbound" {}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					parentanchor = left|vcenter
 
-				icon = {
-					size = { 16 16 }
-					parentanchor = vcenter
-					texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+					icon = {
+						size = { 18 18 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/building_icons/building_space_mine.dds"
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 108
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_bases" {}
+					}
 				}
-				textbox = {
-					parentanchor = vcenter
-					autoresize = yes
-					max_width = 47
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					block "site_inbound_ours" {}
-				}
-				textbox = {
-					parentanchor = vcenter
-					autoresize = yes
-					max_width = 47
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					block "site_inbound_rival" {}
-				}
-			}
-		}
-		button = {
-			using = default_button_action
-			size = { 66 24 }
-			parentanchor = vcenter
-			block "site_target_button" {}
-
-			textbox = {
-				parentanchor = center
-				align = center|nobaseline
-				autoresize = yes
-				max_width = 62
-				elide = right
-				using = te_sr_fontsize_row
-				text = "je_space_race_widget_ss_target_button"
-				block "site_target_set_visible" {}
-			}
-			textbox = {
-				parentanchor = center
-				align = center|nobaseline
-				autoresize = yes
-				max_width = 62
-				elide = right
-				using = te_sr_fontsize_row
-				text = "je_space_race_widget_ss_target_clear"
-				block "site_target_clear_visible" {}
 			}
 		}
 	}

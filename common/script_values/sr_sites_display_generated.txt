@@ -1759,6 +1759,7 @@ sr_disp_mod_past_valles_marineris = {
 }
 sr_disp_mod_next_cost_valles_marineris = { value = sr_mod_next_cost_valles_marineris }
 sr_disp_site_ebase_room_valles_marineris = { value = sr_site_ebase_room_valles_marineris }
+sr_disp_ss_slots_valles_marineris = { value = 4 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_olympus_mons = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_olympus_mons } add = var:sr_mq_a_olympus_mons }
@@ -1847,6 +1848,7 @@ sr_disp_mod_past_olympus_mons = {
 }
 sr_disp_mod_next_cost_olympus_mons = { value = sr_mod_next_cost_olympus_mons }
 sr_disp_site_ebase_room_olympus_mons = { value = sr_site_ebase_room_olympus_mons }
+sr_disp_ss_slots_olympus_mons = { value = 3 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_hellas_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_hellas_planitia } add = var:sr_mq_a_hellas_planitia }
@@ -1935,6 +1937,7 @@ sr_disp_mod_past_hellas_planitia = {
 }
 sr_disp_mod_next_cost_hellas_planitia = { value = sr_mod_next_cost_hellas_planitia }
 sr_disp_site_ebase_room_hellas_planitia = { value = sr_site_ebase_room_hellas_planitia }
+sr_disp_ss_slots_hellas_planitia = { value = 4 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_utopia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_utopia_planitia } add = var:sr_mq_a_utopia_planitia }
@@ -2023,6 +2026,7 @@ sr_disp_mod_past_utopia_planitia = {
 }
 sr_disp_mod_next_cost_utopia_planitia = { value = sr_mod_next_cost_utopia_planitia }
 sr_disp_site_ebase_room_utopia_planitia = { value = sr_site_ebase_room_utopia_planitia }
+sr_disp_ss_slots_utopia_planitia = { value = 4 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_arcadia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_arcadia_planitia } add = var:sr_mq_a_arcadia_planitia }
@@ -2111,6 +2115,7 @@ sr_disp_mod_past_arcadia_planitia = {
 }
 sr_disp_mod_next_cost_arcadia_planitia = { value = sr_mod_next_cost_arcadia_planitia }
 sr_disp_site_ebase_room_arcadia_planitia = { value = sr_site_ebase_room_arcadia_planitia }
+sr_disp_ss_slots_arcadia_planitia = { value = 3 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_ceres = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_ceres } add = var:sr_mq_a_ceres }
@@ -2199,6 +2204,7 @@ sr_disp_mod_past_ceres = {
 }
 sr_disp_mod_next_cost_ceres = { value = sr_mod_next_cost_ceres }
 sr_disp_site_ebase_room_ceres = { value = sr_site_ebase_room_ceres }
+sr_disp_ss_slots_ceres = { value = 3 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_vesta = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_vesta } add = var:sr_mq_a_vesta }
@@ -2287,6 +2293,7 @@ sr_disp_mod_past_vesta = {
 }
 sr_disp_mod_next_cost_vesta = { value = sr_mod_next_cost_vesta }
 sr_disp_site_ebase_room_vesta = { value = sr_site_ebase_room_vesta }
+sr_disp_ss_slots_vesta = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_psyche = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_psyche } add = var:sr_mq_a_psyche }
@@ -2375,6 +2382,7 @@ sr_disp_mod_past_psyche = {
 }
 sr_disp_mod_next_cost_psyche = { value = sr_mod_next_cost_psyche }
 sr_disp_site_ebase_room_psyche = { value = sr_site_ebase_room_psyche }
+sr_disp_ss_slots_psyche = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_pallas = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_pallas } add = var:sr_mq_a_pallas }
@@ -2463,6 +2471,7 @@ sr_disp_mod_past_pallas = {
 }
 sr_disp_mod_next_cost_pallas = { value = sr_mod_next_cost_pallas }
 sr_disp_site_ebase_room_pallas = { value = sr_site_ebase_room_pallas }
+sr_disp_ss_slots_pallas = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_hygiea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_hygiea } add = var:sr_mq_a_hygiea }
@@ -2551,6 +2560,7 @@ sr_disp_mod_past_hygiea = {
 }
 sr_disp_mod_next_cost_hygiea = { value = sr_mod_next_cost_hygiea }
 sr_disp_site_ebase_room_hygiea = { value = sr_site_ebase_room_hygiea }
+sr_disp_ss_slots_hygiea = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_io = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_io } add = var:sr_mq_a_io }
@@ -2639,6 +2649,7 @@ sr_disp_mod_past_io = {
 }
 sr_disp_mod_next_cost_io = { value = sr_mod_next_cost_io }
 sr_disp_site_ebase_room_io = { value = sr_site_ebase_room_io }
+sr_disp_ss_slots_io = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_europa = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_europa } add = var:sr_mq_a_europa }
@@ -2727,6 +2738,7 @@ sr_disp_mod_past_europa = {
 }
 sr_disp_mod_next_cost_europa = { value = sr_mod_next_cost_europa }
 sr_disp_site_ebase_room_europa = { value = sr_site_ebase_room_europa }
+sr_disp_ss_slots_europa = { value = 3 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_ganymede = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_ganymede } add = var:sr_mq_a_ganymede }
@@ -2815,6 +2827,7 @@ sr_disp_mod_past_ganymede = {
 }
 sr_disp_mod_next_cost_ganymede = { value = sr_mod_next_cost_ganymede }
 sr_disp_site_ebase_room_ganymede = { value = sr_site_ebase_room_ganymede }
+sr_disp_ss_slots_ganymede = { value = 3 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_callisto = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_callisto } add = var:sr_mq_a_callisto }
@@ -2903,6 +2916,7 @@ sr_disp_mod_past_callisto = {
 }
 sr_disp_mod_next_cost_callisto = { value = sr_mod_next_cost_callisto }
 sr_disp_site_ebase_room_callisto = { value = sr_site_ebase_room_callisto }
+sr_disp_ss_slots_callisto = { value = 3 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_himalia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_himalia } add = var:sr_mq_a_himalia }
@@ -2991,6 +3005,7 @@ sr_disp_mod_past_himalia = {
 }
 sr_disp_mod_next_cost_himalia = { value = sr_mod_next_cost_himalia }
 sr_disp_site_ebase_room_himalia = { value = sr_site_ebase_room_himalia }
+sr_disp_ss_slots_himalia = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_amalthea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_amalthea } add = var:sr_mq_a_amalthea }
@@ -3079,6 +3094,7 @@ sr_disp_mod_past_amalthea = {
 }
 sr_disp_mod_next_cost_amalthea = { value = sr_mod_next_cost_amalthea }
 sr_disp_site_ebase_room_amalthea = { value = sr_site_ebase_room_amalthea }
+sr_disp_ss_slots_amalthea = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_venus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_venus } add = var:sr_mq_a_venus }
@@ -3167,6 +3183,7 @@ sr_disp_mod_past_venus = {
 }
 sr_disp_mod_next_cost_venus = { value = sr_mod_next_cost_venus }
 sr_disp_site_ebase_room_venus = { value = sr_site_ebase_room_venus }
+sr_disp_ss_slots_venus = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_mercury = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_mercury } add = var:sr_mq_a_mercury }
@@ -3255,6 +3272,7 @@ sr_disp_mod_past_mercury = {
 }
 sr_disp_mod_next_cost_mercury = { value = sr_mod_next_cost_mercury }
 sr_disp_site_ebase_room_mercury = { value = sr_site_ebase_room_mercury }
+sr_disp_ss_slots_mercury = { value = 3 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_titan = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_titan } add = var:sr_mq_a_titan }
@@ -3343,6 +3361,7 @@ sr_disp_mod_past_titan = {
 }
 sr_disp_mod_next_cost_titan = { value = sr_mod_next_cost_titan }
 sr_disp_site_ebase_room_titan = { value = sr_site_ebase_room_titan }
+sr_disp_ss_slots_titan = { value = 3 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_enceladus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_enceladus } add = var:sr_mq_a_enceladus }
@@ -3431,6 +3450,7 @@ sr_disp_mod_past_enceladus = {
 }
 sr_disp_mod_next_cost_enceladus = { value = sr_mod_next_cost_enceladus }
 sr_disp_site_ebase_room_enceladus = { value = sr_site_ebase_room_enceladus }
+sr_disp_ss_slots_enceladus = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_rhea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_rhea } add = var:sr_mq_a_rhea }
@@ -3519,6 +3539,7 @@ sr_disp_mod_past_rhea = {
 }
 sr_disp_mod_next_cost_rhea = { value = sr_mod_next_cost_rhea }
 sr_disp_site_ebase_room_rhea = { value = sr_site_ebase_room_rhea }
+sr_disp_ss_slots_rhea = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_mimas = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_mimas } add = var:sr_mq_a_mimas }
@@ -3607,6 +3628,7 @@ sr_disp_mod_past_mimas = {
 }
 sr_disp_mod_next_cost_mimas = { value = sr_mod_next_cost_mimas }
 sr_disp_site_ebase_room_mimas = { value = sr_site_ebase_room_mimas }
+sr_disp_ss_slots_mimas = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_iapetus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_iapetus } add = var:sr_mq_a_iapetus }
@@ -3695,6 +3717,7 @@ sr_disp_mod_past_iapetus = {
 }
 sr_disp_mod_next_cost_iapetus = { value = sr_mod_next_cost_iapetus }
 sr_disp_site_ebase_room_iapetus = { value = sr_site_ebase_room_iapetus }
+sr_disp_ss_slots_iapetus = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_titania = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_titania } add = var:sr_mq_a_titania }
@@ -3783,6 +3806,7 @@ sr_disp_mod_past_titania = {
 }
 sr_disp_mod_next_cost_titania = { value = sr_mod_next_cost_titania }
 sr_disp_site_ebase_room_titania = { value = sr_site_ebase_room_titania }
+sr_disp_ss_slots_titania = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_oberon = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_oberon } add = var:sr_mq_a_oberon }
@@ -3871,6 +3895,7 @@ sr_disp_mod_past_oberon = {
 }
 sr_disp_mod_next_cost_oberon = { value = sr_mod_next_cost_oberon }
 sr_disp_site_ebase_room_oberon = { value = sr_site_ebase_room_oberon }
+sr_disp_ss_slots_oberon = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_miranda = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_miranda } add = var:sr_mq_a_miranda }
@@ -3959,6 +3984,7 @@ sr_disp_mod_past_miranda = {
 }
 sr_disp_mod_next_cost_miranda = { value = sr_mod_next_cost_miranda }
 sr_disp_site_ebase_room_miranda = { value = sr_site_ebase_room_miranda }
+sr_disp_ss_slots_miranda = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_ariel = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_ariel } add = var:sr_mq_a_ariel }
@@ -4047,6 +4073,7 @@ sr_disp_mod_past_ariel = {
 }
 sr_disp_mod_next_cost_ariel = { value = sr_mod_next_cost_ariel }
 sr_disp_site_ebase_room_ariel = { value = sr_site_ebase_room_ariel }
+sr_disp_ss_slots_ariel = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_triton = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_triton } add = var:sr_mq_a_triton }
@@ -4135,6 +4162,7 @@ sr_disp_mod_past_triton = {
 }
 sr_disp_mod_next_cost_triton = { value = sr_mod_next_cost_triton }
 sr_disp_site_ebase_room_triton = { value = sr_site_ebase_room_triton }
+sr_disp_ss_slots_triton = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_proteus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_proteus } add = var:sr_mq_a_proteus }
@@ -4223,6 +4251,7 @@ sr_disp_mod_past_proteus = {
 }
 sr_disp_mod_next_cost_proteus = { value = sr_mod_next_cost_proteus }
 sr_disp_site_ebase_room_proteus = { value = sr_site_ebase_room_proteus }
+sr_disp_ss_slots_proteus = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_pluto = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_pluto } add = var:sr_mq_a_pluto }
@@ -4311,6 +4340,7 @@ sr_disp_mod_past_pluto = {
 }
 sr_disp_mod_next_cost_pluto = { value = sr_mod_next_cost_pluto }
 sr_disp_site_ebase_room_pluto = { value = sr_site_ebase_room_pluto }
+sr_disp_ss_slots_pluto = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_eris = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_eris } add = var:sr_mq_a_eris }
@@ -4399,6 +4429,7 @@ sr_disp_mod_past_eris = {
 }
 sr_disp_mod_next_cost_eris = { value = sr_mod_next_cost_eris }
 sr_disp_site_ebase_room_eris = { value = sr_site_ebase_room_eris }
+sr_disp_ss_slots_eris = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_makemake = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_makemake } add = var:sr_mq_a_makemake }
@@ -4487,6 +4518,7 @@ sr_disp_mod_past_makemake = {
 }
 sr_disp_mod_next_cost_makemake = { value = sr_mod_next_cost_makemake }
 sr_disp_site_ebase_room_makemake = { value = sr_site_ebase_room_makemake }
+sr_disp_ss_slots_makemake = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_haumea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_haumea } add = var:sr_mq_a_haumea }
@@ -4575,6 +4607,7 @@ sr_disp_mod_past_haumea = {
 }
 sr_disp_mod_next_cost_haumea = { value = sr_mod_next_cost_haumea }
 sr_disp_site_ebase_room_haumea = { value = sr_site_ebase_room_haumea }
+sr_disp_ss_slots_haumea = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_sedna = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_sedna } add = var:sr_mq_a_sedna }
@@ -4663,6 +4696,7 @@ sr_disp_mod_past_sedna = {
 }
 sr_disp_mod_next_cost_sedna = { value = sr_mod_next_cost_sedna }
 sr_disp_site_ebase_room_sedna = { value = sr_site_ebase_room_sedna }
+sr_disp_ss_slots_sedna = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_shackleton = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_shackleton } add = var:sr_mq_a_shackleton }
@@ -4746,6 +4780,7 @@ sr_disp_mod_past_shackleton = {
 }
 sr_disp_mod_next_cost_shackleton = { value = sr_mod_next_cost_shackleton }
 sr_disp_site_ebase_room_shackleton = { value = sr_site_ebase_room_shackleton }
+sr_disp_ss_slots_shackleton = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_peary = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_peary } add = var:sr_mq_a_peary }
@@ -4829,6 +4864,7 @@ sr_disp_mod_past_peary = {
 }
 sr_disp_mod_next_cost_peary = { value = sr_mod_next_cost_peary }
 sr_disp_site_ebase_room_peary = { value = sr_site_ebase_room_peary }
+sr_disp_ss_slots_peary = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_tranquility = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_tranquility } add = var:sr_mq_a_tranquility }
@@ -4912,6 +4948,7 @@ sr_disp_mod_past_tranquility = {
 }
 sr_disp_mod_next_cost_tranquility = { value = sr_mod_next_cost_tranquility }
 sr_disp_site_ebase_room_tranquility = { value = sr_site_ebase_room_tranquility }
+sr_disp_ss_slots_tranquility = { value = 2 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_marius_hills = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_marius_hills } add = var:sr_mq_a_marius_hills }
@@ -4995,6 +5032,7 @@ sr_disp_mod_past_marius_hills = {
 }
 sr_disp_mod_next_cost_marius_hills = { value = sr_mod_next_cost_marius_hills }
 sr_disp_site_ebase_room_marius_hills = { value = sr_site_ebase_room_marius_hills }
+sr_disp_ss_slots_marius_hills = { value = 3 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_daedalus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_daedalus } add = var:sr_mq_a_daedalus }
@@ -5078,6 +5116,7 @@ sr_disp_mod_past_daedalus = {
 }
 sr_disp_mod_next_cost_daedalus = { value = sr_mod_next_cost_daedalus }
 sr_disp_site_ebase_room_daedalus = { value = sr_site_ebase_room_daedalus }
+sr_disp_ss_slots_daedalus = { value = 1 add = modifier:country_sr_colony_slots_add }
 sr_disp_mod_pending_a_imbrium = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_imbrium } add = var:sr_mq_a_imbrium }
@@ -5161,6 +5200,7 @@ sr_disp_mod_past_imbrium = {
 }
 sr_disp_mod_next_cost_imbrium = { value = sr_mod_next_cost_imbrium }
 sr_disp_site_ebase_room_imbrium = { value = sr_site_ebase_room_imbrium }
+sr_disp_ss_slots_imbrium = { value = 2 add = modifier:country_sr_colony_slots_add }
 
 # Colony Autonomy (slice 5 design § 9), per world:
 #   sr_disp_site_aut_<key>        its autonomy, whole

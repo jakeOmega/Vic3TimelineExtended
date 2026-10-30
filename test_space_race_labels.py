@@ -667,7 +667,7 @@ class FigureBudgetTest(unittest.TestCase):
     FREE = {"free_people": "999.9K", "free_ties": "100"}
     FLEET = {"fl_strength": "9999/9999", "fl_dv": "5000", "fl_supply": "36", "fl_marines": "99"}
     LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}
-    SITE = {"site_inbound_ours": "9·999"}
+    SITE = {"site_inbound_ours": "9·999", "site_slots": "99"}
     QUEUE = {"mq_place": "20."}
 
     def _check(self, typ, figures):
@@ -708,6 +708,17 @@ class FigureBudgetTest(unittest.TestCase):
                 with self.subTest(specialization=mod):
                     need = len(_render(_loc(mod))) * UNITS_PER_CHAR[_font(name_box)] * MARGIN
                     self.assertLessEqual(need, _width(name_box), _loc(mod))
+
+    def test_a_site_s_base_room(self):
+        """Solar System's line under a site's name: its base room and grade,
+        as each generated row prints it (the owner, 2026-10-30)."""
+        box = _textbox_with(_type_body(_read(GUI), "te_sr_site_row"), 'block "site_bases"')
+        figures = re.findall(r'blockoverride "site_bases" \{\s*raw_text = "([^"]*)"', _read(ROWS))
+        self.assertEqual(len(figures), 40)
+        for figure in figures:
+            with self.subTest(figure=figure):
+                text = _render(figure)
+                self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), text)
 
     def test_colony_rows(self):
         self._check("te_sr_colony_row", self.FIGURES)

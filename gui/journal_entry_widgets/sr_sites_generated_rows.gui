@@ -91,6 +91,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_shackleton'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_shackleton')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 15#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -154,6 +160,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_peary'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_peary')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (+0%)"
 			}
 		}
 
@@ -219,6 +231,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_tranquility'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_tranquility')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 20#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -282,6 +300,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_marius_hills'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_marius_hills')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 25#! (+5%)"
 			}
 		}
 
@@ -347,6 +371,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_daedalus'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_daedalus')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -410,6 +440,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_imbrium'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_imbrium')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 25#! (+0%)"
 			}
 		}
 
@@ -482,6 +518,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_venus'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_venus')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (−10%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -545,6 +587,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_mercury'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mercury')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 40#! (+5%)"
 			}
 		}
 
@@ -617,6 +665,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_valles_marineris'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_valles_marineris')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 40#! (+10%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -680,6 +734,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_olympus_mons'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_olympus_mons')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 30#! (+10%)"
 			}
 		}
 
@@ -745,6 +805,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_hellas_planitia'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hellas_planitia')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 40#! (+10%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -809,6 +875,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_utopia_planitia'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_utopia_planitia')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 40#! (+10%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -872,6 +944,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_arcadia_planitia'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_arcadia_planitia')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 30#! (+10%)"
 			}
 		}
 
@@ -944,6 +1022,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_ceres'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ceres')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 40#! (+15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1007,6 +1091,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_vesta'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_vesta')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 40#! (+20%)"
 			}
 		}
 
@@ -1072,6 +1162,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_psyche'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_psyche')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 60#! (+30%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1136,6 +1232,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_pallas'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pallas')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 30#! (+10%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1199,6 +1301,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_hygiea'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hygiea')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 20#! (+5%)"
 			}
 		}
 
@@ -1271,6 +1379,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_io'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_io')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 20#! (−5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1334,6 +1448,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_europa'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_europa')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 20#! (−5%)"
 			}
 		}
 
@@ -1399,6 +1519,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_ganymede'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ganymede')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 30#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1462,6 +1588,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_callisto'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_callisto')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 30#! (+0%)"
 			}
 		}
 
@@ -1527,6 +1659,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_himalia'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_himalia')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 20#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1590,6 +1728,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_amalthea'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_amalthea')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (+0%)"
 			}
 		}
 
@@ -1662,6 +1806,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_titan'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titan')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 20#! (−15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1725,6 +1875,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_enceladus'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_enceladus')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 15#! (−20%)"
 			}
 		}
 
@@ -1790,6 +1946,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_rhea'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_rhea')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 20#! (−15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1854,6 +2016,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_mimas'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mimas')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (−20%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1917,6 +2085,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_iapetus'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_iapetus')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 15#! (−20%)"
 			}
 		}
 
@@ -1989,6 +2163,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_titania'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titania')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 15#! (−25%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2052,6 +2232,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_oberon'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_oberon')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 15#! (−25%)"
 			}
 		}
 
@@ -2117,6 +2303,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_miranda'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_miranda')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (−30%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2180,6 +2372,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_ariel'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ariel')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (−30%)"
 			}
 		}
 
@@ -2252,6 +2450,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_triton'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_triton')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 15#! (−30%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2315,6 +2519,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_proteus'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_proteus')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (−35%)"
 			}
 		}
 
@@ -2387,6 +2597,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_pluto'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pluto')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 15#! (−35%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2450,6 +2666,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_eris'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_eris')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (−40%)"
 			}
 		}
 
@@ -2515,6 +2737,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_makemake'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_makemake')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (−40%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2579,6 +2807,12 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_haumea'), '(CFixedPoint)2' )]"
 			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_haumea')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (−40%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2642,6 +2876,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_target_clear_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_sedna'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "site_slots" {
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_sedna')|0]#!"
+			}
+			blockoverride "site_bases" {
+				raw_text = "#v 10#! (−45%)"
 			}
 		}
 	}

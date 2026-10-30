@@ -3197,7 +3197,9 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ sr_mod_slots_used_{k} > sr_site_slots_{k} }} value = 1 }}",
                 "}",
                 f"sr_disp_mod_next_cost_{k} = {{ value = sr_mod_next_cost_{k} }}",
-                f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}"]
+                f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}",
+                # Solar System's line under the name: the slots it would have as ours.
+                f"sr_disp_ss_slots_{k} = {{ value = {site.slots} add = modifier:{SLOTS_MODIFIER} }}"]
     out += render_autonomy_display()
     out += render_overview_display()
     out += render_window_display()
@@ -3408,6 +3410,11 @@ def _site_row(site: Site) -> list[str]:
                      f'tooltip = "{_reasoned("sr_colony_target_sgui", _site_scope(site))}"')
     out += _override("site_target_set_visible", f'visible = "[{_eq(target, 1)}]"')
     out += _override("site_target_clear_visible", f'visible = "[{_eq(target, 2)}]"')
+    # What the site offers a colony (the owner, 2026-10-30): its slots with our
+    # Colony Module Slots, and its own Extraplanetary Base room and grade.
+    grade = f"{site.ebase_grade:+d}".replace("-", "\u2212")
+    out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_slots_{k}")}|0]#!"')
+    out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({grade}%)"')
     return out + ["\t\t}"]
 
 
