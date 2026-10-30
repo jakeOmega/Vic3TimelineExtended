@@ -793,8 +793,8 @@ Under Simple Colonies and Full Colonies, Extraplanetary Bases need room. With
 Asteroid Mining, the near-Earth asteroids give every country room for 10 levels,
 and each colony you hold adds its own, from 10 levels on the small outer moons to 60 at 16 Psyche,
 and 10 more for each staffed level of its Mining Complexes.
-Each colony's room has a grade, which raises or lowers the output of the levels
-that work it:
+Each colony's room has a base grade (Base Grade, a term you can hover in game),
+which raises or lowers the output of the levels that work it:
 
 | Sites | Grade |
 |---|---|
