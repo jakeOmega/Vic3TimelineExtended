@@ -1391,7 +1391,7 @@ je_space_race_solar_colonization = {
 						NOT = { sr_has_space_colony = yes }
 					}
 				}
-				sr_launch_bank_staged_fleets = yes
+				sr_launch_bank_staged_fleets = yes # REVIEWED 2026-10-29: additive bank of whole staged fleets before the reset below; a re-run after it banks nothing (progress is 0). Flagged once the outer guard became NOT completed OR resumed (lunar colonization 2b)
 				set_variable = { name = sr_progress_solar_colonization value = 0 }
 			}
 			if = { limit = { NOT = { has_variable = sr_funding_solar_colonization } } set_variable = { name = sr_funding_solar_colonization value = 1 } }
