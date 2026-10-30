@@ -424,7 +424,12 @@ covert_exposure_is_costless = {
 # type a pro-country lobby swaps to once its country becomes a subject). THE
 # one place that says which lobbies the backlash reaches: the attacker's home
 # appeasement hit (covert_backlash_home) and the defender's discredited
-# interest groups (covert_backlash_public) both ask it.
+# interest groups (covert_backlash_public) both ask it, and so do the
+# exposure events that pin the lobby to name it (covert_warfare.1-.3).
+# At most one lobby matches: a country has one lobby of a type per target,
+# and lobby_pro_country requires not being the target's subject while
+# lobby_pro_overlord requires being it, so the events pin it with
+# random_political_lobby.
 # Parameters: $TARGET$ = the country the lobby favours (a scope: reference)
 # Scope: political_lobby
 covert_backlash_pro_lobby_of = {

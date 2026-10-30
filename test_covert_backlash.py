@@ -206,17 +206,22 @@ class Effects(unittest.TestCase):
         self.assertIn("exists = scope:detected_by_country", gate)
         self.assertEqual(1, strip_comments(body).count("covert_backlash_home_$SHARE$ = yes"))
 
-    def test_home_appeasement_targets_the_pro_target_lobbies_with_the_mod_factor(self):
+    def test_home_appeasement_targets_the_pinned_lobby_with_the_mod_factor(self):
+        # The lobby is changed through its own scope, the one covert_warfare.1's
+        # immediate pinned (Event1Lobbies), so the option's tooltip names it as
+        # vanilla's lobby events do.
         for share in ("full", "half"):
-            body = scripted_effect("covert_backlash_home_" + share)
-            self.assertEqual(3, body.count("every_political_lobby = {"))
+            body = strip_comments(scripted_effect("covert_backlash_home_" + share))
+            self.assertEqual(3, body.count("scope:iw_home_lobby = {"))
             self.assertEqual(3, body.count("factor = %s" % FACTOR))
-            # Each iteration filters with the shared trigger, plus the one
-            # `any_political_lobby` that asks whether there is a lobby at all.
-            self.assertEqual(1, body.count("any_political_lobby = {"))
-            self.assertEqual(
-                4, body.count("covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country }"),
-            )
+            self.assertNotIn("every_political_lobby", body)
+            self.assertNotIn("any_political_lobby", body)
+            for m in re.finditer(r"change_appeasement", body):
+                self.assertIsNotNone(_innermost_enclosing_at(body, m.start(), "scope:iw_home_lobby = {"))
+            # The effect's first `if` holds every appeasement change.
+            start, end = _block_span(body, body.index("if = {"))
+            self.assertIn("exists = scope:iw_home_lobby", _limit_of(body[start:end]))
+            self.assertEqual(3, body[start:end].count("scope:iw_home_lobby = {"))
         # With no such lobby the appeasement line is replaced by a note, and
         # the legitimacy hit still lands.
         for share in ("full", "half"):
@@ -224,7 +229,7 @@ class Effects(unittest.TestCase):
             self.assertIn("custom_tooltip = covert_backlash_no_lobby_tt", body)
             note = _innermost_enclosing(body, "custom_tooltip = covert_backlash_no_lobby_tt", "else = {")
             self.assertNotIn("add_modifier", note)
-            self.assertIn("any_political_lobby", body)
+            self.assertNotIn("iw_home_lobby", note)
 
     def test_pro_lobby_trigger_matches_both_kinds_and_the_target(self):
         trig = _top_level_block(_text(TRIGGERS), "covert_backlash_pro_lobby_of = {")
@@ -393,6 +398,109 @@ class Event2Text(unittest.TestCase):
 
     def test_defender_flag_is_documented_with_the_rest_of_the_record(self):
         self.assertIn("iw_last_exposed_public", _text(ON_ACTIONS))
+
+
+def _pins(immediate, scope, target):
+    """The `random_political_lobby` block that saves `scope`, asserted to
+    filter with the shared trigger against `target`."""
+    pin = _innermost_enclosing(immediate, "save_scope_as = %s" % scope, "random_political_lobby = {")
+    return "covert_backlash_pro_lobby_of = { TARGET = %s }" % target in _limit_of(pin)
+
+
+class NamedLobbies(unittest.TestCase):
+    """The exposure events name the lobby and its interest groups, as
+    vanilla's lobby events do: the lobby pinned as a saved scope in
+    `immediate`, named in the text, and changed through that scope so the
+    engine's own tooltip line names it."""
+
+    def test_event_1_pins_the_home_and_abroad_lobbies(self):
+        immediate = strip_comments(block(event(".1"), "immediate"))
+        self.assertTrue(_pins(immediate, "iw_home_lobby", "scope:detected_by_country"))
+        self.assertTrue(_pins(immediate, "iw_abroad_lobby", "ROOT"))
+        abroad = _innermost_enclosing(immediate, "save_scope_as = iw_abroad_lobby", "scope:detected_by_country = {")
+        self.assertIn("random_political_lobby", abroad)
+        guard = _innermost_enclosing(immediate, "save_scope_as = iw_home_lobby", "if = {")
+        self.assertIn("exists = scope:detected_by_country", _limit_of(guard))
+        self.assertIn("save_scope_as = iw_abroad_lobby", guard)
+
+    def test_event_1_desc_names_a_lobby_only_where_the_backlash_lands(self):
+        desc = block(event(".1"), "desc")
+        self.assertEqual(1, desc.count("first_valid = {"))
+        variants = re.findall(r"desc = (covert_warfare\.1\.d\w*)", desc)
+        self.assertEqual(
+            ["covert_warfare.1.d_home_abroad", "covert_warfare.1.d_home",
+             "covert_warfare.1.d_abroad", "covert_warfare.1.d"],
+            variants,
+        )
+        for key in variants[:-1]:
+            entry = _innermost_enclosing(desc, "desc = %s\n" % key, "triggered_desc = {")
+            # A wartime operation caught at war costs nothing, so no lobby.
+            self.assertIn("NOT = { covert_exposure_is_costless = yes }", entry, key)
+            # The home lobby is hit only for spying on a friend
+            # (covert_backlash_home's gate).
+            if "_home" in key:
+                self.assertIn("exists = scope:iw_home_lobby", entry, key)
+                self.assertIn("var:iw_burned_friend = 1", entry, key)
+            else:
+                self.assertNotIn("iw_home_lobby", entry, key)
+            self.assertEqual("abroad" in key, "exists = scope:iw_abroad_lobby" in entry, key)
+        last = _innermost_enclosing(desc, "desc = covert_warfare.1.d\n", "triggered_desc = {")
+        self.assertIn("always = yes", last)
+
+    def test_event_2_pins_the_discredited_lobby(self):
+        ev = event(".2")
+        immediate = strip_comments(block(ev, "immediate"))
+        self.assertTrue(_pins(immediate, "iw_exposed_lobby", "scope:iw_exposed_by"))
+        self.assertLess(immediate.index("save_scope_as = iw_exposed_by"),
+                        immediate.index("save_scope_as = iw_exposed_lobby"))
+        guard = _innermost_enclosing(immediate, "save_scope_as = iw_exposed_lobby", "if = {")
+        self.assertIn("has_variable = iw_last_exposed_public", _limit_of(guard))
+        desc = block(ev, "desc")
+        named = _innermost_enclosing(desc, "desc = covert_warfare.2.d_public_lobby", "triggered_desc = {")
+        self.assertIn("exists = scope:iw_exposed_lobby", named)
+        self.assertIn("has_variable = iw_last_exposed_public", named)
+        # First in its first_valid, ahead of the texts that name no lobby.
+        self.assertLess(desc.index("covert_warfare.2.d_public_lobby"),
+                        desc.index("desc = covert_warfare.2.d_public\n"))
+
+    def test_event_3_expose_names_the_lobby(self):
+        ev = event(".3")
+        immediate = strip_comments(block(ev, "immediate"))
+        self.assertTrue(_pins(immediate, "iw_catcher_lobby", "scope:iw_catcher_attacker"))
+        opt = option(ev, "covert_warfare.3.a")
+        line = _innermost_enclosing(opt, "custom_tooltip = covert_warfare.3.a_lobby_tt", "if = {")
+        self.assertIn("exists = scope:iw_catcher_lobby", _limit_of(line))
+        # Wartime sabotage exposed during the war is costless: no backlash.
+        self.assertIn("covert_code_tier_war = { VAR = iw_caught_type_code }", _limit_of(line))
+        self.assertIn("has_war_with = scope:iw_catcher_attacker", _limit_of(line))
+        # For both the exposure now and the one that waits its turn, and not
+        # when the operation is already gone.
+        self.assertNotIn("covert_exposure_in_flight", line)
+        gone = _innermost_enclosing(opt, "custom_tooltip = covert_warfare.3.gone_tt", "else = {")
+        self.assertNotIn("a_lobby_tt", gone)
+        self.assertNotIn("interest group", _loc()["covert_warfare.3.a_tt"])
+
+    def test_texts_name_the_lobby_and_its_members(self):
+        loc = _loc()
+        for key, scope in (
+            ("covert_warfare.1.d_home_line", "iw_home_lobby"),
+            ("covert_warfare.1.d_abroad_line", "iw_abroad_lobby"),
+            ("covert_warfare.2.d_public_lobby", "iw_exposed_lobby"),
+            ("covert_warfare.3.a_lobby_tt", "iw_catcher_lobby"),
+        ):
+            with self.subTest(key=key):
+                self.assertIn("[SCOPE.sPoliticalLobby('%s').GetName]" % scope, loc[key])
+                self.assertIn("[SCOPE.sPoliticalLobby('%s').GetMembersDesc]" % scope, loc[key])
+        for key in ("covert_warfare.1.d_home_line", "covert_warfare.1.d_abroad_line",
+                    "covert_warfare.2.d_public_lobby"):
+            self.assertTrue(loc[key].startswith('"\\n\\n'), key)
+        # The variants splice the paragraphs onto the main text, which exists once.
+        self.assertEqual('"$covert_warfare.1.d$$covert_warfare.1.d_home_line$"', loc["covert_warfare.1.d_home"])
+        self.assertEqual('"$covert_warfare.1.d$$covert_warfare.1.d_abroad_line$"', loc["covert_warfare.1.d_abroad"])
+        self.assertEqual(
+            '"$covert_warfare.1.d$$covert_warfare.1.d_home_line$$covert_warfare.1.d_abroad_line$"',
+            loc["covert_warfare.1.d_home_abroad"],
+        )
 
 
 if __name__ == "__main__":
