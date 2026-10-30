@@ -8,18 +8,18 @@
 # carry it for. For each station state i of a grid, with LP_i and LC_i its
 # Electricity production and consumption without its station:
 #
-#   a sender (LP_i > x(q) x LC_i) sends        U_i = LP_i / x(q) - LC_i
-#   a receiver (LP_i < x(q/eff_i) x LC_i) buys D_i = (x(q/eff_i) x LC_i - LP_i) / eff_i
+#   a sender (LP_i > x(q) x LC_i) sends         U_i = LP_i / x(q) - LC_i
+#   a receiver (LP_i < x(q/eff_i) x LC_i) takes D_i = (x(q/eff_i) x LC_i - LP_i) / eff_i
 #
-# of Grid Power, where x(p) is the ratio of sell to buy orders at which the
-# engine prices a local good at p of its base (te_grid_receive_ratio_value).
+# of Electricity sent, where x(p) is the ratio of sell to buy orders at which
+# the engine prices a local good at p of its base (te_grid_receive_ratio_value).
 # The engine prices a state on its gross orders, and a sending station's
 # Electricity is a buy order there, so a sender's ratio is LP / (LC + U): the
 # rule that came before, which set LP - U = r x LC everywhere, left a large
 # sender at about base whatever the grid's surplus, and its receivers at r
 # (the 2013 Byzantium save: Attica at 29.8, the rest at the floor). A state
 # between the two ratios gains nothing from the grid, as losses would eat it.
-# Grid Power is conserved, sum U = sum D, and sum U - sum D rises
+# The flow is conserved, sum U = sum D, and sum U - sum D rises
 # with q, so te_grid_balance_region_effect bisects for q between the engine's
 # floor and ceiling. Positive flows are uploads (Electricity in), negative
 # ones downloads (Electricity out, after losses), both in Electricity sent.
@@ -31,11 +31,16 @@
 # q / eff, and pays q x D. So every station covers its goods at the prices
 # the balancing aims for, whoever owns it, and the grid's Grid Power balances
 # since its flows do. With one unit of Grid Power a unit of flow (until
-# 2026-10-31) a grid below base made its senders' stations a profit and its
+# 2026-10-30) a grid below base made its senders' stations a profit and its
 # receivers' the same loss, which the government paid as subsidies. What a
-# station loses now is its wages, and any gap between its state's price and
-# the one the grid aims for while it settles. The readbacks divide the rate
-# back out, so everything the balancing reads is in Electricity sent.
+# station loses now is its wages and upkeep, give or take the gap between
+# its state's price and the one the grid aims for while it settles. One case
+# has a loss of its own: a grid so short that q passes the ceiling (1.999)
+# times a receiver's efficiency (above 1.5 at 0.75). That receiver's price
+# stops at the ceiling, so it pays D x (q - 1.999 x eff) more than its
+# power sells for, a quarter of what it pays at most. Before, the senders
+# lost more in that case, (q - 1) x U. The readbacks divide the rate back
+# out, so everything the balancing reads is in Electricity sent.
 #
 # A grid that spans markets (a Grid Interconnection Agreement between two
 # countries in different markets) still uploads what it downloads, but not
@@ -303,8 +308,8 @@ te_grid_receive_shortfall_value = {
 	min = 0
 }
 
-# The state's flow at the grid's price, in Grid Power: a sender's U (+), a
-# receiver's D (-), 0 in between.
+# The state's flow at the grid's price, in Electricity sent: a sender's U (+),
+# a receiver's D (-), 0 in between.
 te_grid_surplus_value = {
 	value = 0
 	if = {
@@ -321,8 +326,8 @@ te_grid_surplus_value = {
 	}
 }
 
-# The state's target flow in Grid Power, its flow at the solved price. Zero
-# while the grid has no demand to share (global te_grid_region_active 0).
+# The state's target flow in Electricity sent, its flow at the solved price.
+# Zero while the grid has no demand to share (global te_grid_region_active 0).
 te_grid_target_value = {
 	value = 0
 	if = {
@@ -795,6 +800,7 @@ te_grid_chk_elec_ratio_g = { value = global_var:te_grid_chk_elec_ratio }
 te_grid_chk_elec_share_g = { value = global_var:te_grid_chk_elec_share }
 te_grid_chk_rate_g = { value = global_var:te_grid_chk_rate }
 te_grid_chk_rate_moved_g = { value = global_var:te_grid_chk_rate_moved }
+te_grid_chk_state_gp_gap_g = { value = global_var:te_grid_chk_state_gp_gap }
 
 # State scope, for TE_SELF_CHECK grid_power_rate: what a sending station moved
 # last week on its own account (its Grid Power over its rate) as a share of
@@ -808,6 +814,23 @@ te_grid_chk_rate_moved_value = {
 		}
 		value = te_grid_own_uploaded
 		divide = var:te_grid_command
+	}
+}
+
+# State scope, for TE_SELF_CHECK grid_power_state_price: how far Grid Power's
+# price in the state is from its base, either way (as
+# te_grid_chk_price_gap_value reads the market's).
+te_grid_chk_state_gp_gap_value = {
+	value = 0
+	sg:grid_power ?= {
+		add = {
+			value = state_goods_pricier
+			min = 0
+		}
+		add = {
+			value = state_goods_cheaper
+			min = 0
+		}
 	}
 }
 

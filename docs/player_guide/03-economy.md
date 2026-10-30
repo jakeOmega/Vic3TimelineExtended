@@ -465,11 +465,13 @@ Stations settle in Grid Power, a good whose price is fixed at 30,
 Electricity's base, and which can't be traded between markets. A sending
 station is paid in Grid Power what the Electricity it buys costs at the
 grid's price, and a receiving station pays in it what the Electricity it
-delivers sells for, so a station covers what its goods cost. Stations are
-private infrastructure that is always subsidized: your government pays
-whatever a station's wages cost beyond what it earns, which is about its
-wages, and more while a grid is still settling and prices are off the
-grid's.
+delivers sells for, so a station covers what its goods cost. The exception
+is a grid so short of power that a receiving state's price would pass its
+ceiling, about twice base: the receiving station then pays more for its power
+than it sells for. Stations are private infrastructure that is always
+subsidized: your government pays whatever a station's wages and upkeep cost
+beyond what it earns. That is about their whole cost, give or take a little
+while a grid is settling and prices are off the grid's.
 
 Two things join grids that don't touch:
 
