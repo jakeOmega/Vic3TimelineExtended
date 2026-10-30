@@ -564,6 +564,27 @@ class ColoniesTest(unittest.TestCase):
                     self.assertIn(f"ScriptValue('{term}')", drift)
                 self.assertIn("[concept_sr_colony_autonomy]", drift)
 
+    def test_the_drift_and_its_terms_are_colored_as_a_cost(self):
+        """Colony management design § 4.1: more autonomy is the holder's loss, so
+        the drift and every term in its hover, the conditional lines too, read
+        signed with positive red (|=-2), never |+=2's positive green."""
+        lines = sorted(k for k in self.loc if k.startswith("sr_aut_line_"))
+        self.assertEqual(lines, ["sr_aut_line_charter", "sr_aut_line_destroyed", "sr_aut_line_garrison",
+                                 "sr_aut_line_nocontact", "sr_aut_line_war"])
+        for key in lines:
+            with self.subTest(line=key):
+                self.assertEqual(re.findall(r"\|([^\]]*)\]", self.loc[key]), ["=-2"])
+        for site in gss.SITES:
+            k = site.key
+            drift = self.loc[f"je_space_race_widget_autonomy_drift_tt_{k}"]
+            with self.subTest(world=k):
+                self.assertEqual(set(re.findall(r"'(sr_aut_line_\w+)'", drift)), set(lines))
+                # Every figure but the last line's level, where it settles.
+                formats = re.findall(r"ScriptValue\('(\w+)'\)\|([^\]]*)\]", drift)
+                self.assertEqual([f for v, f in formats if v != f"sr_disp_aut_target_{k}"],
+                                 ["=-2"] * (len(formats) - 1))
+                self.assertIn(f"ScriptValue('sr_disp_aut_target_{k}')|0]", drift)
+
     def test_next_window_reads_the_moon_at_stage_0(self):
         """Lunar colonization 2b: at stage 0 the Next Window cell's third line
         names the Moon, which needs no window, not 'stage 0 of 5'."""
