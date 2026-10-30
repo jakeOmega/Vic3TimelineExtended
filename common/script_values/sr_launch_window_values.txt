@@ -37,13 +37,16 @@ sr_launch_approach_weight = {
 # A colony fleet's drive (slices 2-3 design § 1), the best of four: 0 chemical,
 # 1 fusion (Fusion Power), 2 the fusion torch (Muon-Catalyzed Fusion Reactors),
 # 3 antimatter (Antimatter Production and an Antimatter Containment Facility).
-# It sets the transit (sr_transit_months_<body>); the torch and antimatter also
-# leave any month (sr_launch_has_fusion). Country scope.
+# Each technology carries its drive's marker, so its tooltip names the drive,
+# and this reads the markers (country_sr_drive_<drive>_bool,
+# space_race_modifier_types.txt; the owner, 2026-10-30). It sets the transit
+# (sr_transit_months_<body>); the torch and antimatter also leave any month
+# (sr_launch_has_fusion). Country scope.
 sr_drive_level = {
 	value = 0
 	if = { limit = { sr_launch_has_antimatter = yes } value = 3 }
-	else_if = { limit = { has_technology_researched = compact_fusion_reactors } value = 2 }
-	else_if = { limit = { has_technology_researched = fusion_power } value = 1 }
+	else_if = { limit = { modifier:country_sr_drive_torch_bool = yes } value = 2 }
+	else_if = { limit = { modifier:country_sr_drive_fusion_bool = yes } value = 1 }
 }
 
 # k x m: the most months of progress an off-window launch may cost every later

@@ -55,6 +55,46 @@ country_sr_module_fabrication_add = {
 	script_only = yes
 }
 
+# Module slots at every colony we hold, beside its size's (colony management
+# design § 5): Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced
+# Nanofabrication, Space Colonization and Molecular Assemblers carry +1 each,
+# and each world's sr_site_slots_<key> adds its holder's. The engine consumes
+# nothing.
+country_sr_colony_slots_add = {
+	color = good
+	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+# A colony fleet's drive (slices 2-3 design § 1), one marker each on the
+# technology that brings it, so its tooltip names the drive (the owner,
+# 2026-10-30). sr_drive_level reads them (sr_launch_window_values.txt), and
+# sr_launch_has_fusion and sr_launch_has_antimatter (sr_launch_window_triggers.txt):
+# the fusion drive on Fusion Power, the torch on Muon-Catalyzed Fusion Reactors,
+# the antimatter drive on Antimatter Production (with an Antimatter Containment
+# Facility to fill its tanks). The engine consumes nothing.
+country_sr_drive_fusion_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
+
+country_sr_drive_torch_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
+
+country_sr_drive_antimatter_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
+
 # Propellant depots from the Moon (lunar colonization design § 3.5): Shackleton
 # Crater's Propellant Depot specialization carries it on the solar colonization
 # entry, and sr_launch_has_depots reads it beside Asteroid Mining (off-window

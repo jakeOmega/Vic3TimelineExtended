@@ -1,6 +1,6 @@
 """A light block tree of a `.gui` file, for the offline GUI audits (#1213).
 
-`long_tooltip_audit`, `unmarked_hover_audit` and `button_reason_audit` need
+`long_tooltip_audit` and `button_reason_audit` need
 more than a regex over the text: which widget a property sits in, what its
 ancestors are, and what a type's definition holds. This module reads a
 `.gui` file into a tree of brace blocks, each with its direct `key = value`

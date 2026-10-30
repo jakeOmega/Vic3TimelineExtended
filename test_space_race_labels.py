@@ -437,6 +437,19 @@ CELLS = {
                             ("te_sr_colony_heads_autonomy", ("autonomy", "drift", "build")),
                             ("te_sr_colony_heads_defences", ("defences", "integrity", "marines")))
        for head in names},
+    # A colony's page (colony management design § 8; the owner's review of 2026-10-30).
+    "a section's heading on a colony's page (te_sr_page_heading)": (
+        ("te_sr_page_heading", 'block "heading_text"'),
+        r"je_space_race_widget_cv_(people|modules|autonomy|defences)"),
+    "a tile's caption on a colony's page (te_sr_page_tile)": (
+        ("te_sr_page_tile", 'block "tile_caption"'),
+        r"je_space_race_widget_(page_(staffing|bases|status)|ch_\w+|modules_col_slots)"),
+    "a word beside a page heading, or a page tile's word (te_sr_page_value)": (
+        ("te_sr_page_value", None),
+        r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+|settlers_agi)"),
+    "a module's name on a colony's page (te_sr_page_mod_row)": (
+        ("te_sr_page_mod_row", 'block "row_name"'),
+        r"je_space_race_widget_mod_name_\w+"),
     "the colony views (te_sr_colony_view_button)": (
         ("te_sr_colony_view_button", 'block "view_label"'),
         r"je_space_race_widget_cv_(people|modules|autonomy|defences|back)"),
@@ -540,7 +553,10 @@ def _cell(gui, type_name, marker):
         assert re.search(rf"type {type_name} = textbox \{{", gui), type_name
         box = _type_body(gui, type_name)
         return _width(box), _font(box)
-    box = _textbox_with(_type_body(gui, type_name), marker)
+    boxes = [b for b in _textboxes(_type_body(gui, type_name)) if marker in b]
+    assert boxes, f"no textbox holds {marker}"
+    # A label shown twice (a colony's list row and its page) is held to the narrower cell.
+    box = boxes[0] if len(boxes) == 1 else min(boxes, key=_width)
     if type_name == "te_sr_ov_pie":  # the label is as wide as the pie's widget
         return int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(gui, type_name)).group(1)), _font(box)
     if type_name == "te_sr_ov_programme":  # centred in the 480 column
@@ -642,16 +658,16 @@ class FigureBudgetTest(unittest.TestCase):
         # a module level and what is on its way, autonomy and drift, Defenses
         "settler_people": "999.9K / 999.9K", "settler_crews": "99", "module_staffing": "100%",
         "aut_figure": "100%", "aut_drift": "+0.99", "def_level": "99", "def_integrity": "100%", "def_marines": "99",
-        # slots used of slots (4 + 2 technologies + 4 past), base room (60 + 10 levels x 10),
+        # slots used of slots (4 + 5 technologies + 4 past), base room (60 + 10 levels x 10),
         # what the colony builds of its own (colony management design §§ 4.3, 5)
-        "module_slots": "10/6", "module_slots_past": "10/6", "module_bases": "160", "aut_build": "100% (+5.0)",
+        "module_slots": "13/9", "module_slots_past": "13/9", "module_bases": "160", "aut_build": "100% (+5.0)",
     }
     # a module cell (te_sr_mod_cell): a level (10 past a world's slots at most) and what is on its way
     CELL = {"cell_level": "8", "cell_pending": "+8"}
     FREE = {"free_people": "999.9K", "free_ties": "100"}
     FLEET = {"fl_strength": "9999/9999", "fl_dv": "5000", "fl_supply": "36", "fl_marines": "99"}
     LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}
-    SITE = {"site_inbound_ours": "9·999"}
+    SITE = {"site_inbound_ours": "9·999", "site_slots": "99"}
     QUEUE = {"mq_place": "20."}
 
     def _check(self, typ, figures):
@@ -662,6 +678,47 @@ class FigureBudgetTest(unittest.TestCase):
                 width, font = _width(box), _font(box)
                 need = len(figure) * UNITS_PER_CHAR[font] * MARGIN
                 self.assertLessEqual(need, width, f"{figure!r}: {need:.0f} units in a {width}-wide cell")
+
+    def test_a_colony_page_s_figures(self):
+        """A colony's page shows the list's figures again, in its tiles'
+        te_sr_page_value (colony management design § 8), and the specialization
+        names in full in its module rows."""
+        gui = _read(GUI)
+        row = _type_body(gui, "te_sr_colony_row")
+        width, font = _width(_type_body(gui, "te_sr_page_value")), _font(_type_body(gui, "te_sr_page_value"))
+        shown = re.findall(r'te_sr_page_value = \{[^{}]*block "(\w+)"', row)
+        self.assertGreaterEqual(len(shown), 12)
+        for block in shown:
+            figure = self.FIGURES.get(block)
+            if figure is None:
+                continue
+            with self.subTest(block=block):
+                need = len(figure) * UNITS_PER_CHAR[font] * MARGIN
+                self.assertLessEqual(need, width, f"{figure!r}: {need:.0f} units in a {width}-wide cell")
+        mod_row = _type_body(gui, "te_sr_page_mod_row")
+        for block, figure in (("row_level", self.CELL["cell_level"]), ("row_pending", self.CELL["cell_pending"])):
+            with self.subTest(block=block):
+                box = _textbox_with(mod_row, f'block "{block}"')
+                self.assertLessEqual(len(figure) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box))
+        name_box = _textbox_with(mod_row, 'block "row_name"')
+        sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+        import gen_solar_sites as gss
+        for site in gss.SITES:
+            for mod in gss.spec_modifiers(site):
+                with self.subTest(specialization=mod):
+                    need = len(_render(_loc(mod))) * UNITS_PER_CHAR[_font(name_box)] * MARGIN
+                    self.assertLessEqual(need, _width(name_box), _loc(mod))
+
+    def test_a_site_s_base_room(self):
+        """Solar System's line under a site's name: its base room and grade,
+        as each generated row prints it (the owner, 2026-10-30)."""
+        box = _textbox_with(_type_body(_read(GUI), "te_sr_site_row"), 'block "site_bases"')
+        figures = re.findall(r'blockoverride "site_bases" \{\s*raw_text = "([^"]*)"', _read(ROWS))
+        self.assertEqual(len(figures), 40)
+        for figure in figures:
+            with self.subTest(figure=figure):
+                text = _render(figure)
+                self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), text)
 
     def test_colony_rows(self):
         self._check("te_sr_colony_row", self.FIGURES)

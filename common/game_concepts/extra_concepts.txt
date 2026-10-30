@@ -101,6 +101,8 @@ concept_sr_space_command = {
 concept_sr_drive = {}
 concept_sr_launch_window = {}
 concept_sr_module = {}
+# How rich a site's ground is for Extraplanetary Bases (the owner, 2026-10-30).
+concept_sr_base_grade = {}
 concept_sr_colony_autonomy = {}
 concept_sr_free_colony = {}
 concept_sr_blockade = {}

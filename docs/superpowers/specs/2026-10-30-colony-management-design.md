@@ -194,3 +194,109 @@ shipments' codes 1 to 5 keep their meaning.
 Not seen in game. The play-test list (`docs/testing/solar-colonies-playtest.md`) gains
 the checks only the game can show: a JE-scope `unit_` modifier reaching the army
 (Training Ground), the soft cap's price at the queue's head, and the detail page.
+
+## 11. As built (2026-10-30)
+
+Built in #1257, the build order's five steps on one branch. A follow-up (#1258)
+finished two of its sections and took the owner's review of the built panel
+(2026-10-30):
+
+- **§ 4.1's colors.** The drift hover's conditional lines (`sr_aut_line_*`:
+  charter, garrison, war, no contact, a destroyed colony) had kept `|+=2`, so a
+  garrison's +0.2 read green. They now read `|=-2` like the rest, and
+  `test_space_race_layout.py` holds every figure in the hover to it.
+- **§ 5's technologies as markers** (`scripting_best_practices.md` § Technology
+  markers). #1257 read `has_technology_researched`, so no technology's tooltip
+  mentioned the slot. The technologies carry +1 `country_sr_colony_slots_add`
+  each (script-only, "Colony Module Slots"), `sr_site_slots_<key>` adds the
+  holder's, and the Slots hover reads its breakdown. The owner added three to
+  the design's two: Nuclear Thermal Propulsion, Orbital Manufacturing,
+  Advanced Nanofabrication, Space Colonization and Molecular Assemblers, so a
+  world has up to 9 slots. Anything else that grants it later, a law or a
+  policy, counts the same way.
+- **The drives as markers** (the owner): Fusion Power, Muon-Catalyzed Fusion
+  Reactors and Antimatter Production carry `country_sr_drive_<fusion|torch|antimatter>_bool`
+  (script-only booleans), which `sr_drive_level`, `sr_launch_has_fusion` and
+  `sr_launch_has_antimatter` read, so each technology's tooltip names its drive.
+  Two self-checks, `drive_marker` and `slot_marker`, read the markers in game.
+- **Underlines** (the owner: far too many across the Space Race GUI). Style rule
+  3 had every hover's text underlined, enforced by `unmarked_hover_audit`;
+  vanilla underlines 1 to 4% of its own text hovers. The rule now follows
+  vanilla, the audit is retired, and the Space Race GUI lost its underlines.
+- **§ 8, revisited.** A colony's name reads as a button (vanilla's
+  `clean_button` and go-to arrow). A colony's page is a body of its own, not
+  the list row with every view stacked: sections with their controls beside
+  the headings, readings in icon tiles two to a row (`te_sr_page_tile`), and
+  the modules one to a line with their full names (`te_sr_page_mod_row`). Its
+  icons are kept art or placeholders listed in `space_race_gui_icons.md`.
+- **A site before it is settled.** Solar System shows under each site's name
+  its slots as ours and its Extraplanetary Base room and grade.
+- **The race to the Moon.** Solar System Colonization's reward hover gave the
+  first lunar colony's prize with no word of why only the Moon has one. It now
+  names the race to the Moon, the old Moon Base milestone's prize and the one
+  race among the sites, and the six lunar sites' hovers point to it.
+
+**Where the build fills in what the sections leave open:**
+
+- **Settling's names.** `sr_site_aut_pressure_<key>` is every term but settling;
+  `sr_site_aut_drift_<key>` is the pressure less `sr_aut_settle_rate` × the
+  autonomy. The hover's last line, "settles near N%", is
+  `sr_disp_aut_target_<key>`: the pressure ÷ the rate, 0 to 100.
+- **A colony's own builds** are `sr_site_self_rate_<key>` (a month's points),
+  `sr_site_self_<key>` (held at `sr_module_points`) and
+  `sr_site_self_build_<key>`, which logs `TE_SR_MODULES <key> built a module of
+  its own`. Its slots and specialization budget count the holder's queue and
+  every shipper's shipments (`sr_mod_slots_used_<key>`,
+  `sr_mod_spec_used_<key>`), so it never takes room a queued module is bound
+  for. Occupation stops it; a blockade doesn't.
+- **The price past the slots** reads the world's built slots and every
+  shipper's shipments (`sr_site_generic_pending_<key>`), not queues, at the
+  queue's head (`sr_mq_head_cost`), saved into `local_var:sr_mq_head_cost_now`
+  before the head leaves. The panel's next price (`sr_mod_next_cost_<key>`)
+  counts our queue too. A landing installs up to the slots plus four
+  (`sr_site_slots_max_<key>`), the + buttons stop there, and past the slots
+  their hover warns of the price (`sr_mod_queue_past_slots_tt`). A
+  specialization level always costs 100.
+- **Two rates split** so the self-checks still test the buildings alone:
+  `sr_mod_fab_rate_method` (the fabrication method; `sr_mod_fab_rate` adds the
+  yards) and `sr_sc_rate_buildings` (Space Command; `sr_sc_rate` adds them).
+- **The facilities** are `gen_solar_sites.FACILITIES`: the six entry modifiers
+  (`sr_module_<key>` at `sr_mod_units_<key>_entry`, read through `owner`,
+  refreshed by the generated `sr_mod_refresh_facilities`) and the four hooks of
+  § 7.1's table. Their levels count in the module upkeep, as every level past a
+  colony's first does. `nuclear_incident_rates.py` reads the Nuclear Command
+  Center's term as 0.
+- **The AI** stops adding Nuclear Command Centers at three staffed levels
+  (`sr_mod_ai_bunker_max`), where the +12 cap is reached, and reads "with a
+  Space Command" as a Space Command building in its states.
+- **Next Windows** lists 14 destinations (`gen_solar_sites.WINDOW_ORDER`), one
+  generated `te_sr_window_row` each, with the premium shown up to +999%.
+  `sr_window_reach_<body>` is 1 within the horizon, 2 beyond it (counted under
+  the table) and 0 with nothing to target.
+- **A colony's page**, as #1257 built it, put each view under a heading and
+  its column heads; #1258 replaced that with the page above.
+
+**The owner's calls** (2026-10-30: fine for now):
+
+- **The numbers are a first guess:** settling at 1% a month, a colony's own
+  builds (a point a month a 10,000 people at full autonomy, at most 5), the
+  price past the slots, the facilities' effects, Administration's −0.15 and the
+  cession worth.
+- **The demand's odds at war.** With § 3's weights a holder's charter (80)
+  outweighs the garrison at war (5 + 60), so at war the AI charters 55% of the
+  time and garrisons 45%, where a top-three power used to garrison 56% of the
+  time. Every holder gets the +40, since holding a colony is half of
+  `sr_ai_tends_colonies`. Raise the garrison's war term if it should stay the
+  AI's answer at war.
+- **Two AI reviews still read the top three alone** (`sr_ai_should_participate`),
+  as § 3 left them: supplying free colonies (`sr_free_ai_review`) and Space
+  Command's build cap (`sr_sc_may_build_government`), so under Full Colonies an
+  AI holder outside the top three builds no Space Command.
+- **A dear module holds the queue.** Fabrication is first in, first out and
+  waits for the head's whole price, so the fourth module past a colony's slots
+  (500 points) holds everything behind it for up to 100 months at Orbital
+  Assembly's 5 points a month, or 20 at Fusion Shipyards' 25.
+- **Not seen in game:** the play-test list's § Colony management (twelve
+  checks and the `drive_marker` and `slot_marker` self-checks), including
+  whether the Training Ground's `unit_` modifier on the entry reaches the army,
+  and the fallback if it doesn't.

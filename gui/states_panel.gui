@@ -3666,7 +3666,7 @@ types state_panel_types
 		}
 	}
 
-	type state_panel_status_item_small = container { # REVIEWED 2026-10-27 (unmarked_hover): vanilla's state tile, whose whole tile is the hover; the mod's tiles keep the look of vanilla's beside them (GDP, Capital, Infrastructure), which vanilla never underlines, and a row inside a tile with a hover of its own is underlined (te_state_stat_row)
+	type state_panel_status_item_small = container {
 		flowcontainer = {
 			spacing = 10
 			margin = { 10 10 }

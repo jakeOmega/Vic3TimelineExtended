@@ -39,6 +39,8 @@ advanced_nanofabrication = {
 		# the census's infection treatment (#1045): nanomedicine, machines in the blood that find and destroy pathogens;
 		# with Personalized Medicine's it reaches the cap, 0.99
 		state_infection_treatment_add = 0.02
+		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
+		country_sr_colony_slots_add = 1
 	}
 
 	ai_weight = {
@@ -62,6 +64,8 @@ molecular_assemblers = {
 		country_st_res_small_arms_decay_add = -0.002
 		country_st_res_fertilizer_decay_add = -0.0015
 		state_chronic_treatment_add = 0.12	# the census's chronic treatment (owner, 2026-10-20: the technologies take it to 0.99 by era 12)
+		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
+		country_sr_colony_slots_add = 1
 	}
 
 	ai_weight = {
@@ -107,6 +111,8 @@ orbital_manufacturing = {
 	modifier = {
 		state_building_airport_max_level_add = 2
 		country_space_race_max_funding_add = 2
+		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
+		country_sr_colony_slots_add = 1
 	}
 
 	ai_weight = {
@@ -164,6 +170,8 @@ compact_fusion_reactors = {
 		ship_supply_efficiency_mult = 0.20
 		ship_movement_speed_mult = 0.05
 		country_st_res_aeroplanes_decay_add = -0.007
+		# a colony fleet's drive (slices 2-3 design § 1; sr_drive_level)
+		country_sr_drive_torch_bool = yes
 	}
 
 	ai_weight = {
@@ -269,6 +277,8 @@ antimatter_production = {
 		ship_hull_damage_mult = 0.20
 		ship_critical_hit_chance_add = 0.10
 		ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult = 0.30
+		# a colony fleet's drive (slices 2-3 design § 1; sr_drive_level)
+		country_sr_drive_antimatter_bool = yes
 	}
 
 	ai_weight = {
@@ -320,6 +330,8 @@ space_colonization = {
 	modifier = {
 		country_space_race_max_funding_add = 2
 		country_space_race_progress_add = 0.2
+		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
+		country_sr_colony_slots_add = 1
 	}
 
 	ai_weight = {

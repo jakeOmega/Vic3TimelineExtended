@@ -8,6 +8,7 @@ explanations live in How the Space Race Works, that each milestone's root reads
 only its own milestone's data, and that the overview's display values are
 guarded and follow the single derivation sites they mirror.
 """
+import functools
 import glob
 import os
 import re
@@ -144,6 +145,16 @@ def _loc(key):
         if m:
             return m.group(1)
     raise AssertionError(f"no loc {key}")
+
+
+@functools.lru_cache(maxsize=None)
+def _all_loc():
+    """Every English loc key and its text, the last file in name order winning."""
+    out = {}
+    for path in sorted(glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True)):
+        for m in re.finditer(r'^ (\w+):\d* "(.*)"\s*$', _read(path), re.M):
+            out[m.group(1)] = m.group(2)
+    return out
 
 
 def _milestones_named(text):
@@ -564,6 +575,39 @@ class ColoniesTest(unittest.TestCase):
                     self.assertIn(f"ScriptValue('{term}')", drift)
                 self.assertIn("[concept_sr_colony_autonomy]", drift)
 
+    def test_the_slots_hover_reads_the_slots_modifier(self):
+        """Colony management design § 5: a world's Slots hover gives its size's
+        slots and our Colony Module Slots from the modifier itself, so a new
+        source of the modifier shows there without an edit."""
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(world=k):
+                hover = self.loc[f"je_space_race_widget_slots_tt_{k}"]
+                self.assertIn(f"#v {site.slots}#! here for its size", hover)
+                self.assertIn(f"GetModifier.GetValueWithBreakdownFor('{gss.SLOTS_MODIFIER}')", hover)
+                self.assertIn(f"${gss.SLOTS_MODIFIER}$", hover)
+
+    def test_the_drift_and_its_terms_are_colored_as_a_cost(self):
+        """Colony management design § 4.1: more autonomy is the holder's loss, so
+        the drift and every term in its hover, the conditional lines too, read
+        signed with positive red (|=-2), never |+=2's positive green."""
+        lines = sorted(k for k in self.loc if k.startswith("sr_aut_line_"))
+        self.assertEqual(lines, ["sr_aut_line_charter", "sr_aut_line_destroyed", "sr_aut_line_garrison",
+                                 "sr_aut_line_nocontact", "sr_aut_line_war"])
+        for key in lines:
+            with self.subTest(line=key):
+                self.assertEqual(re.findall(r"\|([^\]]*)\]", self.loc[key]), ["=-2"])
+        for site in gss.SITES:
+            k = site.key
+            drift = self.loc[f"je_space_race_widget_autonomy_drift_tt_{k}"]
+            with self.subTest(world=k):
+                self.assertEqual(set(re.findall(r"'(sr_aut_line_\w+)'", drift)), set(lines))
+                # Every figure but the last line's level, where it settles.
+                formats = re.findall(r"ScriptValue\('(\w+)'\)\|([^\]]*)\]", drift)
+                self.assertEqual([f for v, f in formats if v != f"sr_disp_aut_target_{k}"],
+                                 ["=-2"] * (len(formats) - 1))
+                self.assertIn(f"ScriptValue('sr_disp_aut_target_{k}')|0]", drift)
+
     def test_next_window_reads_the_moon_at_stage_0(self):
         """Lunar colonization 2b: at stage 0 the Next Window cell's third line
         names the Moon, which needs no window, not 'stage 0 of 5'."""
@@ -614,42 +658,29 @@ class HowItWorksTest(unittest.TestCase):
             self.assertTrue(_loc(c) and _loc(f"{c}_desc"), c)
 
 
-class HoverMarkTest(unittest.TestCase):
-    """A value row's label is underlined when the row has a tooltip, and only
-    then (style guide rule 3; audit SPC-12): te_sr_value_row underlines by
-    default through its "label_format" block, and a row with no tooltip
-    overrides the block empty, so a new row with a hover is marked for free."""
+class NoUnderlineTest(unittest.TestCase):
+    """Style guide rule 3 (owner, 2026-10-30): as in vanilla, a hover's label
+    or figure is not underlined. The Space Race panel underlined nearly every
+    hover under the rule of 2026-10-27; only a word inside running text may
+    open its own tooltip, through a concept link or the inline
+    #tooltippable;tooltip: form."""
 
-    def _rows(self):
-        gui = _read(GUI)
-        out = []
-        for m in re.finditer(r"\bte_sr_value_row = \{", gui):
-            body = gui[m.end():_close(gui, m.end() - 1)]
-            depth, top = 0, []
-            for line in body.split("\n"):
-                if depth == 0:
-                    top.append(line.strip())
-                depth += line.count("{") - line.count("}")
-            label = re.search(r'blockoverride "row_label" \{\s*text = "(\w+)"', body)
-            out.append((label.group(1) if label else body[:80], any(t.startswith("tooltip") for t in top), body))
-        return out
+    FILES = (GUI, os.path.join(REPO, "gui", "sr_launch_window_widgets.gui"),
+             os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_rows.gui"),
+             os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui"))
 
-    def test_the_type_underlines_by_default(self):
-        row = _type_body(_read(GUI), "te_sr_value_row")
-        self.assertRegex(row, r'block "label_format" \{\s*default_format = "#tooltippable"\s*\}\s*block "row_label"')
+    def test_no_widget_underlines_its_text(self):
+        for path in self.FILES:
+            with self.subTest(file=os.path.basename(path)):
+                text = re.sub(r"#[^\n]*", "", _read(path).replace("#tooltippable", "@TT@"))
+                self.assertNotIn("@TT@", text)
 
-    def test_a_row_without_a_tooltip_drops_the_underline(self):
-        rows = self._rows()
-        self.assertGreaterEqual(len(rows), 15)
-        for label, has_tooltip, body in rows:
-            with self.subTest(row=label):
-                overridden = 'blockoverride "label_format" {}' in body
-                self.assertEqual(overridden, not has_tooltip, label)
-
-    def test_labels_do_not_underline_themselves(self):
-        for label, _, _ in self._rows():
-            with self.subTest(row=label):
-                self.assertNotIn("#tooltippable", _loc(label))
+    def test_no_panel_text_wraps_itself_in_an_underline(self):
+        keys = [k for k in _all_loc() if re.match(r"(je_space_race|sr_|te_sr)", k)]
+        self.assertGreater(len(keys), 500)
+        for key in keys:
+            with self.subTest(key=key):
+                self.assertNotRegex(_all_loc()[key], r"#tooltippable(?!;tooltip:)")
 
 
 class ProgrammeRowTest(unittest.TestCase):
@@ -949,6 +980,29 @@ VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 # the module queue's move-up button, the base game's ship construction queue's (#1159)
                 "gfx/interface/icons/generic_icons/up_up.dds",
                 "gfx/interface/progressbar/progressbar_marker.dds"}
+# A colony's page (space_race_gui_icons.md, "A colony's page"): art that already
+# shows the thing, vanilla's or the mod's, and placeholders, each with the file
+# its art will take.
+PAGE_KEPT = {f"gfx/interface/icons/{p}" for p in (
+    "generic_icons/population.dds", "generic_icons/battalions.dds", "state_status_icons/has_construction.dds",
+    "generic_icons/trend_nochange.dds", "building_icons/building_government_administration.dds",
+    "building_icons/building_space_mine.dds", "building_icons/building_space_command.dds",
+    "building_icons/building_tourism_industry.dds", "covert_icons/operation_slot.dds",
+    "building_icons/building_advanced_material_fabricator.dds")}
+PAGE_PLACEHOLDERS = {f"gfx/interface/icons/{p}": f for p, f in (
+    ("character_trait_icons/engineer.dds", "page_crews.dds"),
+    ("generic_icons/employment_not_full.dds", "page_crewed.dds"),
+    ("diplomatic_action_icons/liberty_desire.dds", "page_autonomy.dds"),
+    ("ai_strategy_icons/subject_maintain_autonomy.dds", "page_aut_status.dds"),
+    ("building_icons/building_naval_fortification.dds", "module_def.dds"),
+    ("state_status_icons/has_devastation.dds", "page_integrity.dds"),
+    ("state_status_icons/colony.dds", "page_def_status.dds"),
+    ("building_icons/urban_center.dds", "module_hab.dds"),
+    ("building_icons/building_port.dds", "module_port.dds"),
+    ("building_icons/building_university.dds", "module_lab.dds"),
+    ("building_icons/building_arts_academy.dds", "module_culture.dds"),
+    ("building_icons/building_barracks.dds", "module_train.dds"),
+    ("building_icons/building_nuclear_plant.dds", "module_bunker.dds"))}
 
 
 def _enclosing(text, anchor, opener):
@@ -1009,8 +1063,21 @@ class SpaceRaceIconsTest(unittest.TestCase):
         journal = {f"gfx/interface/icons/event_icons/je_space_race_{m}.dds" for m in ALL}
         for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui):
             with self.subTest(path=path):
-                self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT,
+                self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT
+                                or path in PAGE_KEPT or path in PAGE_PLACEHOLDERS,
                                 f"placeholder left: {path}")
+
+    def test_a_colony_page_s_placeholders_are_listed(self):
+        """Style guide rule 10: each placeholder on a colony's page has a row in
+        the icons doc naming what it is now and the file its art will take, and
+        is still on the page; the page draws no other unlisted icon."""
+        doc = _read(ICONS_DOC)
+        page = _type_body(self.gui, "te_sr_colony_row")
+        for path, target in PAGE_PLACEHOLDERS.items():
+            with self.subTest(path=path):
+                self.assertIn(f'texture = "{path}"', page)
+                short = path[len("gfx/interface/icons/"):]
+                self.assertRegex(doc, rf"(?m)^\|.*\| `{re.escape(short)}` \|.*\| `{re.escape(target)}` \|$")
 
     def test_every_icon_exists_once_the_art_is_in(self):
         tracked = set(subprocess.run(["git", "-C", REPO, "ls-files", SR_ICONS],
@@ -1121,12 +1188,12 @@ class PaceBreakdownTest(unittest.TestCase):
         self.assertNotIn("pace_tt", row)
         self.assertIn('block "sr_progress_tooltip" {}', row)
 
-    def test_every_milestone_headline_marks_its_rate_as_hoverable(self):
+    def test_every_milestone_headline_ends_on_its_rate(self):
         for m in CONTROLLED:
             with self.subTest(milestone=m):
                 text = _loc(f"je_space_race_widget_progress_{m}")
                 self.assertRegex(
-                    text, rf"\(#tooltippable \+\[JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('sr_pace_rate_{m}'\)\|1\]/mo#!\)$")
+                    text, rf"\(\+\[JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('sr_pace_rate_{m}'\)\|1\]/mo\)$")
 
     def test_the_tooltip_breaks_down_both_figures_and_states_the_pace(self):
         tip = _loc("je_space_race_widget_pace_tt")

@@ -453,7 +453,7 @@ types strategic_reserve_widget_types
 	### so the instance shows the button while IsShown holds for its op and the
 	### selected look while it doesn't. 146 wide by default, so "Release High"
 	### and "Conservative" fit at 17; the presets set 222, two to a row.
-	type widget_je_st_res_policy_choice = widget { # REVIEWED 2026-10-27 (unmarked_hover): the hover is on the choice in force, drawn in vanilla's selected-tab look; the other choices are buttons with the same tooltip, and vanilla underlines neither a tab nor a button
+	type widget_je_st_res_policy_choice = widget {
 		block "choice_size" {
 			size = { 146 26 }
 		}

@@ -216,10 +216,8 @@ types space_race_widget_types
 
 	### A table row: a label on the left and its value on the right
 	### (un_chamber_value_row), the value column wide enough for the longest
-	### figure, an estimate of "1300 months". The label is underlined
-	### (#tooltippable, style guide rule 3) because a row's tooltip opens its
-	### breakdown; a row with no tooltip overrides "label_format" empty
-	### (test_space_race_layout.py's HoverMarkTest holds the two together).
+	### figure, an estimate of "1300 months". A row's tooltip opens its
+	### breakdown; nothing is underlined (style guide rule 3, as vanilla).
 	type te_sr_value_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -232,9 +230,6 @@ types space_race_widget_types
 			align = left|nobaseline
 			using = te_sr_fontsize_row
 			elide = right
-			block "label_format" {
-				default_format = "#tooltippable"
-			}
 			block "row_label" {}
 		}
 		textbox = {
@@ -299,7 +294,6 @@ types space_race_widget_types
 			maximumsize = { 154 -1 }
 			align = hcenter|nobaseline
 			using = te_sr_fontsize_overview
-			default_format = "#tooltippable"
 			block "label" {}
 		}
 	}
@@ -359,7 +353,6 @@ types space_race_widget_types
 			parentanchor = vcenter
 			align = left|nobaseline
 			using = te_sr_fontsize_overview
-			default_format = "#tooltippable"
 			block "bar_label" {}
 		}
 		default_progressbar_horizontal = {
@@ -433,7 +426,6 @@ types space_race_widget_types
 			autoresize = yes
 			align = hcenter|nobaseline
 			using = te_sr_fontsize_overview
-			default_format = "#tooltippable"
 			block "pie_label" {}
 		}
 	}
@@ -548,7 +540,6 @@ types space_race_widget_types
 			parentanchor = hcenter
 			align = hcenter|nobaseline
 			using = te_sr_fontsize_overview
-			default_format = "#tooltippable"
 			text = "je_space_race_widget_programme_header"
 			tooltip = "je_space_race_widget_ov_programme_tt"
 		}
@@ -1029,7 +1020,6 @@ types space_race_widget_types
 			### The figures pace and risk leave out (both are in the overview).
 			te_sr_value_row = {
 				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				blockoverride "label_format" {}
 				blockoverride "row_label" {
 					text = "je_space_race_widget_setbacks_label"
 				}
@@ -1113,7 +1103,6 @@ types space_race_widget_types
 				elide = right
 				align = left|nobaseline
 				using = te_sr_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_space_race_widget_rival_name"
 			}
 			flowcontainer = {
@@ -1241,8 +1230,9 @@ types space_race_widget_types
 
 	### One colony in Colonies (audit SPC-5; the colony sections of slices 2-6 in
 	### one table), in its own framed box (colony management design § 8): its
-	### icon and name on the first line, the name's hover its specializations'
-	### effects and a click its page; beside the name the chosen view's status
+	### icon and name on the first line, the name a button (its hover its
+	### specializations' effects, a click its page) with vanilla's go-to arrow
+	### beside it (the owner, 2026-10-30); beside them the chosen view's status
 	### and buttons, and under it the view's figures. The views (te_sr_sec_colonies'
 	### switch, GetVariableSystem's sr_colony_view): People, the default (the
 	### settlers' priority; people / room, crews), Modules (Clear; the crews'
@@ -1251,12 +1241,12 @@ types space_race_widget_types
 	### Abandon; autonomy, its drift a month and what the colony is building
 	### itself) and, under Full Colonies, Defenses (status; Defenses, integrity,
 	### marines). A colony's page (sr_colony_view 'detail', sr_colony_focus its
-	### key) shows that row alone with every view at once: the view parts beside
-	### the name stack, and each view's figures sit under a heading and their
-	### heads. Under Races Only the row is the first line's icon and name.
-	### Line 1: 24 + 180 + the widest view's part (Autonomy's 80 + 80 + 4) + 2 x 4
-	### + 2 x 4 margin = 384; the module cells 4 + 5 x 90 + 4 x 4 + 8 = 478, in
-	### the 480 column. Instances in te_sr_colony_rows
+	### key) shows that row alone: the first line's icon and name, then the page
+	### body at the end of this type, sections with tiles and the modules one to
+	### a line, filled from the same blocks as the list. Under Races Only the row
+	### is the first line's icon and name. Line 1: 24 + 180 + 24 + the widest
+	### view's part (Autonomy's 80 + 80 + 4) + 3 x 4 + 2 x 4 margin = 412; the
+	### module cells 4 + 5 x 90 + 4 x 4 + 8 = 478, in the 480 column. Instances in te_sr_colony_rows
 	### (sr_sites_generated_rows.gui), one per world.
 	type te_sr_colony_row = flowcontainer {
 		direction = vertical
@@ -1285,9 +1275,12 @@ types space_race_widget_types
 				}
 			}
 			### The name: a click opens the colony's page (colony management design § 8).
+			### It reads as a button (vanilla's clean_button, as the countries list's
+			### names), with vanilla's go-to arrow beside it (the owner, 2026-10-30).
 			button = {
 				size = { 180 24 }
 				parentanchor = top
+				using = clean_button
 				block "colony_focus" {}
 
 				textbox = {
@@ -1297,9 +1290,15 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "colony_name" {}
 				}
+			}
+			button_icon_goto = {
+				visible = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
+				size = { 24 24 }
+				parentanchor = top
+				tooltip = "je_space_race_widget_colony_open_tt"
+				block "colony_focus" {}
 			}
 			### The view parts: one in a list, every one stacked on a colony's page.
 			flowcontainer = {
@@ -1309,7 +1308,7 @@ types space_race_widget_types
 
 				### People: the colony's priority for settlers (sr_colony_priority_sgui).
 				button = {
-					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ) ) ) ) )]"
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) )]"
 					using = default_button_action
 					size = { 80 24 }
 					block "priority_button" {}
@@ -1357,7 +1356,7 @@ types space_race_widget_types
 				}
 				### Modules: Clear, which empties the colony's queue.
 				flowcontainer = {
-					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'modules') )]"
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
@@ -1370,7 +1369,7 @@ types space_race_widget_types
 				}
 				### Autonomy: its charter or garrison, and Abandon (sr_colony_abandon_sgui).
 				flowcontainer = {
-					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'autonomy') )]"
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
@@ -1398,7 +1397,6 @@ types space_race_widget_types
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
-							default_format = "#tooltippable"
 							tooltip = "je_space_race_widget_autonomy_charter_tt"
 							text = "je_space_race_widget_autonomy_status_charter"
 							block "aut_charter_visible" {}
@@ -1410,7 +1408,6 @@ types space_race_widget_types
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
-							default_format = "#tooltippable"
 							tooltip = "je_space_race_widget_autonomy_garrison_tt"
 							text = "je_space_race_widget_autonomy_status_garrison"
 							block "aut_garrison_visible" {}
@@ -1422,7 +1419,6 @@ types space_race_widget_types
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
-							default_format = "#tooltippable"
 							tooltip = "je_space_race_widget_autonomy_both_tt"
 							text = "je_space_race_widget_autonomy_status_both"
 							block "aut_both_visible" {}
@@ -1448,7 +1444,7 @@ types space_race_widget_types
 				### Defenses (Full Colonies): calm, blockaded, under assault, occupied
 				### (with the occupier's flag) or interdicted.
 				widget = {
-					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'defences'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') )]"
 					size = { 140 24 }
 					parentanchor = vcenter
 
@@ -1470,7 +1466,6 @@ types space_race_widget_types
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
-						default_format = "#tooltippable"
 						tooltip = "je_space_race_widget_loc_blockaded_tt"
 						text = "je_space_race_widget_def_status_blockaded"
 						block "def_blockaded_visible" {}
@@ -1482,7 +1477,6 @@ types space_race_widget_types
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
-						default_format = "#tooltippable"
 						tooltip = "je_space_race_widget_loc_interdicted_tt"
 						text = "je_space_race_widget_def_status_interdicted"
 						block "def_interdicted_visible" {}
@@ -1494,7 +1488,6 @@ types space_race_widget_types
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
-						default_format = "#tooltippable"
 						tooltip = "je_space_race_widget_def_assault_tt"
 						text = "je_space_race_widget_def_status_assault"
 						block "def_assault_visible" {}
@@ -1513,7 +1506,6 @@ types space_race_widget_types
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
-							default_format = "#tooltippable"
 							tooltip = "je_space_race_widget_def_occupied_tt"
 							text = "je_space_race_widget_def_status_occupied"
 						}
@@ -1535,16 +1527,9 @@ types space_race_widget_types
 				}
 			}
 		}
-		te_sr_colony_detail_heading = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
-			text = "je_space_race_widget_cv_people"
-		}
-		te_sr_colony_heads_people = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
-		}
 		### People: people and room, crews.
 		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ) ) ) ) )]"
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -1562,7 +1547,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "settler_people" {}
 				}
 			}
@@ -1579,7 +1563,6 @@ types space_race_widget_types
 					using = te_sr_fontsize_row
 					elide = right
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)0' )]"
-					default_format = "#tooltippable"
 					block "settler_crews" {}
 				}
 				textbox = {
@@ -1590,21 +1573,16 @@ types space_race_widget_types
 					using = te_sr_fontsize_row
 					elide = right
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					text = "je_space_race_widget_settlers_agi"
 				}
 			}
-		}
-		te_sr_colony_detail_heading = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
-			text = "je_space_race_widget_cv_modules"
 		}
 		### Modules: every type in three lines of cells, each its label, the level
 		### (its hover what it does), "+N" queued or on its way and a button that
 		### queues one more: the specializations, Habitat, Spaceport and Defenses;
 		### then the facilities (colony management design § 7).
 		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'modules') )]"
 			direction = vertical
 			ignoreinvisible = yes
 			spacing = 1
@@ -1634,7 +1612,6 @@ types space_race_widget_types
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
-							default_format = "#tooltippable"
 							text = "je_space_race_widget_modules_col_staffing"
 						}
 						textbox = {
@@ -1666,7 +1643,6 @@ types space_race_widget_types
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
-							default_format = "#tooltippable"
 							text = "je_space_race_widget_modules_col_slots"
 						}
 						textbox = {
@@ -1708,7 +1684,6 @@ types space_race_widget_types
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
-							default_format = "#tooltippable"
 							text = "je_space_race_widget_modules_col_bases"
 						}
 						textbox = {
@@ -1968,16 +1943,9 @@ types space_race_widget_types
 				}
 			}
 		}
-		te_sr_colony_detail_heading = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
-			text = "je_space_race_widget_cv_autonomy"
-		}
-		te_sr_colony_heads_autonomy = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
-		}
 		### Autonomy: autonomy, and its drift a month (that colony's terms on hover).
 		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'autonomy') )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -1995,7 +1963,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "aut_figure" {}
 				}
 			}
@@ -2011,7 +1978,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "aut_drift" {}
 				}
 			}
@@ -2027,21 +1993,13 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "aut_build" {}
 				}
 			}
 		}
-		te_sr_colony_detail_heading = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
-			text = "je_space_race_widget_cv_defences"
-		}
-		te_sr_colony_heads_defences = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
-		}
 		### Defenses: Defenses levels, integrity, marines.
 		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'defences'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -2059,7 +2017,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "def_level" {}
 				}
 			}
@@ -2075,7 +2032,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "def_integrity" {}
 				}
 			}
@@ -2091,8 +2047,706 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "def_marines" {}
+				}
+			}
+		}
+
+		### A colony's page (sr_colony_view 'detail', sr_colony_focus its key;
+		### colony management design § 8, rebuilt on the owner's review of
+		### 2026-10-30): the list's parts give way to sections, each a heading
+		### with its control on the right and its readings in tiles two to a row
+		### (te_sr_page_tile), and the modules one to a line with their icons and
+		### full names (te_sr_page_mod_row). Every figure, hover and button is the
+		### list's own block, filled again here.
+		flowcontainer = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
+			margin_top = 4
+
+			te_sr_page_heading = {
+				blockoverride "heading_text" {
+					text = "je_space_race_widget_cv_people"
+				}
+				blockoverride "heading_controls" {
+					te_sr_page_value = {
+						text = "je_space_race_widget_page_settlers"
+					}
+					button = {
+						using = default_button_action
+						size = { 80 24 }
+						parentanchor = vcenter
+						block "priority_button" {}
+
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							max_width = 74
+							align = center|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							text = "je_space_race_widget_emig_prio_0"
+							block "prio_0_visible" {}
+						}
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							max_width = 74
+							align = center|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							text = "je_space_race_widget_emig_prio_1"
+							block "prio_1_visible" {}
+						}
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							max_width = 74
+							align = center|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							text = "je_space_race_widget_emig_prio_2"
+							block "prio_2_visible" {}
+						}
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							max_width = 74
+							align = center|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							text = "je_space_race_widget_emig_prio_3"
+							block "prio_3_visible" {}
+						}
+					}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+
+				te_sr_page_tile = {
+					blockoverride "tile_tooltip" {
+						tooltip = "je_space_race_widget_settlers_people_tt"
+					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/generic_icons/population.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_ch_people"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							block "settler_people" {}
+						}
+					}
+				}
+				te_sr_page_tile = {
+					blockoverride "tile_tooltip" {
+						tooltip = "je_space_race_widget_settlers_crews_tt"
+					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/character_trait_icons/engineer.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_ch_crews"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)0' )]"
+							block "settler_crews" {}
+						}
+						te_sr_page_value = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)1' )]"
+							text = "je_space_race_widget_settlers_agi"
+						}
+					}
+				}
+			}
+
+			te_sr_page_heading = {
+				blockoverride "heading_text" {
+					text = "je_space_race_widget_cv_modules"
+				}
+				blockoverride "heading_controls" {
+					button_icon_cancel = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						block "module_clear_button" {}
+					}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+
+				te_sr_page_tile = {
+					blockoverride "tile_tooltip" {
+						tooltip = "je_space_race_widget_modules_staffing_tt"
+					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/generic_icons/employment_not_full.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_page_staffing"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							default_format = "#v"
+							block "module_staffing" {}
+						}
+					}
+				}
+				te_sr_page_tile = {
+					blockoverride "tile_tooltip" {
+						block "module_slots_tooltip" {}
+					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/space_race_icons/module.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_modules_col_slots"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							default_format = "#v"
+							block "module_slots" {}
+						}
+						te_sr_page_value = {
+							default_format = "#R"
+							block "module_slots_past" {}
+						}
+					}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+
+				te_sr_page_tile = {
+					blockoverride "tile_tooltip" {
+						block "module_bases_tooltip" {}
+					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/building_icons/building_space_mine.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_page_bases"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							default_format = "#v"
+							block "module_bases" {}
+						}
+					}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/space_race_icons/module.dds"
+				}
+				blockoverride "row_name" {
+					block "page_name_a" {}
+				}
+				blockoverride "row_level" {
+					block "mod_a_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_a_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_a_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/space_race_icons/module.dds"
+				}
+				blockoverride "row_name" {
+					block "page_name_b" {}
+				}
+				blockoverride "row_level" {
+					block "mod_b_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_b_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_b_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/urban_center.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_hab"
+					tooltip = "je_space_race_widget_mod_hab_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_hab_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_hab_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_hab_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_port.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_port"
+					tooltip = "je_space_race_widget_mod_port_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_port_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_port_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_port_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_naval_fortification.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_def"
+					tooltip = "je_space_race_widget_mod_def_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_def_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_def_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_def_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_space_mine.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_mine"
+					tooltip = "je_space_race_widget_mod_mine_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_mine_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_mine_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_mine_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_space_command.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_yard"
+					tooltip = "je_space_race_widget_mod_yard_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_yard_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_yard_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_yard_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_university.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_lab"
+					tooltip = "je_space_race_widget_mod_lab_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_lab_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_lab_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_lab_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_culture"
+					tooltip = "je_space_race_widget_mod_culture_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_culture_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_culture_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_culture_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_tourism_industry.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_resort"
+					tooltip = "je_space_race_widget_mod_resort_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_resort_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_resort_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_resort_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/covert_icons/operation_slot.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_black"
+					tooltip = "je_space_race_widget_mod_black_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_black_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_black_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_black_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_barracks.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_train"
+					tooltip = "je_space_race_widget_mod_train_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_train_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_train_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_train_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_nuclear_plant.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_bunker"
+					tooltip = "je_space_race_widget_mod_bunker_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_bunker_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_bunker_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_bunker_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_advanced_material_fabricator.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_foundry"
+					tooltip = "je_space_race_widget_mod_foundry_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_foundry_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_foundry_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_foundry_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/building_government_administration.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_admin"
+					tooltip = "je_space_race_widget_mod_admin_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_admin_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_admin_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_admin_button" {}
+				}
+			}
+
+			te_sr_page_heading = {
+				blockoverride "heading_text" {
+					text = "je_space_race_widget_cv_autonomy"
+				}
+				blockoverride "heading_controls" {
+					button = {
+						using = default_button_action
+						size = { 80 24 }
+						parentanchor = vcenter
+						block "aut_abandon_button" {}
+
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							max_width = 74
+							align = center|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							text = "je_space_race_widget_autonomy_abandon"
+						}
+					}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+
+				te_sr_page_tile = {
+					blockoverride "tile_tooltip" {
+						tooltip = "je_space_race_widget_autonomy_figure_tt"
+					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/diplomatic_action_icons/liberty_desire.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_ch_autonomy"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							block "aut_figure" {}
+						}
+					}
+				}
+				te_sr_page_tile = {
+					blockoverride "tile_tooltip" {
+						block "aut_drift_tooltip" {}
+					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_ch_drift"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							block "aut_drift" {}
+						}
+					}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+
+				te_sr_page_tile = {
+					blockoverride "tile_tooltip" {
+						block "aut_build_tooltip" {}
+					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/state_status_icons/has_construction.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_ch_build"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							block "aut_build" {}
+						}
+					}
+				}
+				te_sr_page_tile = {
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/ai_strategy_icons/subject_maintain_autonomy.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_page_status"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							default_format = "#grey"
+							block "aut_none_visible" {}
+							text = "je_space_race_widget_autonomy_status_none"
+						}
+						te_sr_page_value = {
+							tooltip = "je_space_race_widget_autonomy_charter_tt"
+							block "aut_charter_visible" {}
+							text = "je_space_race_widget_autonomy_status_charter"
+						}
+						te_sr_page_value = {
+							tooltip = "je_space_race_widget_autonomy_garrison_tt"
+							block "aut_garrison_visible" {}
+							text = "je_space_race_widget_autonomy_status_garrison"
+						}
+						te_sr_page_value = {
+							tooltip = "je_space_race_widget_autonomy_both_tt"
+							block "aut_both_visible" {}
+							text = "je_space_race_widget_autonomy_status_both"
+						}
+					}
+				}
+			}
+
+			te_sr_page_heading = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
+				blockoverride "heading_text" {
+					text = "je_space_race_widget_cv_defences"
+				}
+			}
+			flowcontainer = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
+				direction = vertical
+				spacing = 4
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 6
+
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_def_level_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/building_icons/building_naval_fortification.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_ch_defences"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								block "def_level" {}
+							}
+						}
+					}
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_def_integrity_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/state_status_icons/has_devastation.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_ch_integrity"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								block "def_integrity" {}
+							}
+						}
+					}
+				}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 6
+
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_def_marines_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/generic_icons/battalions.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_ch_marines"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								block "def_marines" {}
+							}
+						}
+					}
+					te_sr_page_tile = {
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/state_status_icons/colony.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_page_status"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								default_format = "#grey"
+								block "def_calm_visible" {}
+								text = "je_space_race_widget_def_status_calm"
+							}
+							te_sr_page_value = {
+								tooltip = "je_space_race_widget_loc_blockaded_tt"
+								block "def_blockaded_visible" {}
+								text = "je_space_race_widget_def_status_blockaded"
+							}
+							te_sr_page_value = {
+								tooltip = "je_space_race_widget_loc_interdicted_tt"
+								block "def_interdicted_visible" {}
+								text = "je_space_race_widget_def_status_interdicted"
+							}
+							te_sr_page_value = {
+								tooltip = "je_space_race_widget_def_assault_tt"
+								block "def_assault_visible" {}
+								text = "je_space_race_widget_def_status_assault"
+							}
+							flowcontainer = {
+								direction = horizontal
+								spacing = 4
+								ignoreinvisible = yes
+								block "def_occupied_visible" {}
+
+								te_sr_page_value = {
+									max_width = 120
+									tooltip = "je_space_race_widget_def_occupied_tt"
+									text = "je_space_race_widget_def_status_occupied"
+								}
+								flowcontainer = {
+									ignoreinvisible = yes
+									block "def_occupier_context" {}
+
+									widget = {
+										size = { 28 22 }
+
+										tiny_flag = {
+											parentanchor = center
+											datacontext = "[State.GetCountry]"
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -2135,7 +2789,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_settlers_people_tt"
 				text = "je_space_race_widget_ch_people"
 			}
@@ -2150,7 +2803,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_settlers_crews_tt"
 				text = "je_space_race_widget_ch_crews"
 			}
@@ -2174,7 +2826,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_autonomy_figure_tt"
 				text = "je_space_race_widget_ch_autonomy"
 			}
@@ -2189,7 +2840,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_autonomy_drift_tt"
 				text = "je_space_race_widget_ch_drift"
 			}
@@ -2204,7 +2854,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_autonomy_build_tt"
 				text = "je_space_race_widget_ch_build"
 			}
@@ -2228,7 +2877,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_def_level_tt"
 				text = "je_space_race_widget_ch_defences"
 			}
@@ -2243,7 +2891,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_def_integrity_tt"
 				text = "je_space_race_widget_ch_integrity"
 			}
@@ -2258,20 +2905,177 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_def_marines_tt"
 				text = "je_space_race_widget_ch_marines"
 			}
 		}
 	}
 
-	### A heading over a view's figures on a colony's page.
-	type te_sr_colony_detail_heading = textbox {
+	### A section's heading on a colony's page: its title with a rule under it,
+	### and on the right the section's control (Settlers' priority, Clear,
+	### Abandon), each of a fixed size, so nothing drifts (style guide rule 8).
+	### 472 wide, the row's inner width.
+	type te_sr_page_heading = widget {
+		size = { 472 30 }
+
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 300
+			align = left|nobaseline
+			using = te_sr_fontsize_heading
+			default_format = "#title"
+			elide = right
+			block "heading_text" {}
+		}
+		flowcontainer = {
+			parentanchor = right|vcenter
+			direction = horizontal
+			spacing = 6
+			ignoreinvisible = yes
+			block "heading_controls" {}
+		}
+		divider_clean = {
+			parentanchor = bottom|left
+			blockoverride "size" {
+				size = { 472 2 }
+			}
+		}
+	}
+
+	### A reading on a colony's page (style guide rule 4): its icon in an inset
+	### box of its own, the caption over the figure, the hover on the whole tile.
+	### Two to a row: 2 x 233 + 6 = 472. The figure's column is 233 - 54 = 179.
+	type te_sr_page_tile = widget {
+		size = { 233 50 }
+		block "tile_tooltip" {}
+
+		background = {
+			using = entry_bg_simple
+		}
+		widget = {
+			size = { 42 42 }
+			position = { 4 0 }
+			parentanchor = left|vcenter
+
+			background = {
+				using = dark_area
+				alpha = 0.3
+			}
+			icon = {
+				size = { 34 34 }
+				parentanchor = center
+				block "tile_icon" {}
+			}
+		}
+		textbox = {
+			position = { 54 3 }
+			autoresize = yes
+			max_width = 175
+			elide = right
+			align = left|nobaseline
+			using = te_sr_fontsize_overview
+			block "tile_caption" {}
+		}
+		flowcontainer = {
+			position = { 54 23 }
+			direction = horizontal
+			spacing = 4
+			ignoreinvisible = yes
+			block "tile_value" {}
+		}
+	}
+
+	### A tile's figure, or a word beside a heading.
+	type te_sr_page_value = textbox {
 		autoresize = yes
-		max_width = 460
+		max_width = 175
+		parentanchor = vcenter
 		align = left|nobaseline
 		using = te_sr_fontsize_row
-		default_format = "#title"
+		elide = right
+	}
+
+	### A module on a colony's page: its icon, its full name (its hover what the
+	### module does), its level and "+N" queued or on its way, and the button that
+	### queues one more. 4 + 28 + 4 + 330 + 4 + 30 + 4 + 34 + 4 + 24 = 466, in 472.
+	type te_sr_page_mod_row = widget {
+		size = { 472 28 }
+
+		flowcontainer = {
+			parentanchor = left|vcenter
+			direction = horizontal
+			spacing = 4
+			margin_left = 4
+
+			widget = {
+				size = { 28 28 }
+				parentanchor = vcenter
+
+				background = {
+					using = dark_area
+					alpha = 0.3
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "row_icon" {}
+				}
+			}
+			widget = {
+				size = { 330 28 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 330
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					block "row_name" {}
+				}
+			}
+			widget = {
+				size = { 30 28 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					max_width = 30
+					align = center|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					block "row_level" {}
+				}
+			}
+			widget = {
+				size = { 34 28 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 34
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					default_format = "#v"
+					block "row_pending" {}
+				}
+			}
+			widget = {
+				size = { 24 28 }
+				parentanchor = vcenter
+
+				button_icon_plus_action = {
+					size = { 22 22 }
+					parentanchor = center
+					block "row_button" {}
+				}
+			}
+		}
 	}
 
 	### A module cell of te_sr_colony_row: its label (its hover what the module
@@ -2294,7 +3098,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				block "cell_label" {}
 			}
 		}
@@ -2309,7 +3112,6 @@ types space_race_widget_types
 				align = center|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				block "cell_level" {}
 			}
 		}
@@ -2393,7 +3195,6 @@ types space_race_widget_types
 			visible = "[Not(GetVariableSystem.Exists('sr_panel_colonies_closed'))]"
 
 			te_sr_value_row = {
-				blockoverride "label_format" {}
 				blockoverride "row_label" {
 					text = "je_space_race_widget_colonies_held_label"
 				}
@@ -2691,215 +3492,280 @@ types space_race_widget_types
 	### stage, its two specializations' effects, our drive's transit there and
 	### its next window (je_space_race_widget_ss_site_tt_<key>, audit SPC-7).
 	### 24 icon + 180 name + 122 holder + 65 inbound + 66 button + 4 × 3
-	### spacing + 2 × 4 margin = 477, in the column. The instances are generated
+	### spacing + 2 × 4 margin = 477, in the column. Under it, slots and
+	### Extraplanetary Base room (Simple and Full Colonies). The instances are generated
 	### (te_sr_solar_system_rows, sr_sites_generated_rows.gui), each shown
 	### while Solar System lists every world or the world is one our fleets can
 	### go to, ours, or one a fleet is bound for.
 	type te_sr_site_row = flowcontainer {
-		direction = horizontal
+		direction = vertical
 		ignoreinvisible = yes
-		spacing = 3
 		margin = { 4 1 }
 		block "site_visible" {}
 
-		widget = {
-			size = { 24 24 }
-			parentanchor = vcenter
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 3
 
-			icon = {
+			widget = {
 				size = { 24 24 }
-				parentanchor = center
-				block "site_icon" {}
+				parentanchor = vcenter
+
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "site_icon" {}
+				}
+			}
+			widget = {
+				size = { 180 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 180
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					block "site_name" {}
+				}
+			}
+			widget = {
+				size = { 122 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					default_format = "#v"
+					text = "je_space_race_widget_ss_ours"
+					block "site_ours_visible" {}
+				}
+				flowcontainer = {
+					parentanchor = left|vcenter
+					ignoreinvisible = yes
+					block "site_other_visible" {}
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						ignoreinvisible = yes
+						block "site_context" {}
+
+						widget = {
+							size = { 28 24 }
+							parentanchor = vcenter
+
+							tiny_flag = {
+								parentanchor = center
+								datacontext = "[State.GetCountry]"
+							}
+						}
+					}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_ss_unknown"
+					block "site_unknown_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					default_format = "#v"
+					text = "je_space_race_widget_ss_target"
+					block "site_target_mark_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					default_format = "#grey"
+					text = "je_space_race_widget_ss_unclaimed"
+					block "site_unclaimed_visible" {}
+				}
+				### A free colony (slice 5 design § 9): claimed, no holder.
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_ss_free_tt"
+					text = "je_space_race_widget_ss_free"
+					block "site_free_visible" {}
+				}
+				### Occupied, and ruined (Full Colonies; slice 6 design § 16).
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_ss_occupied_tt"
+					text = "je_space_race_widget_ss_occupied"
+					block "site_occupied_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 122
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_ss_ruined_tt"
+					text = "je_space_race_widget_ss_ruined"
+					block "site_ruined_visible" {}
+				}
+			}
+			### Fleets on their way: the colonization entry's icon and their number;
+			### on hover the first's landing and whether it is ours.
+			widget = {
+				size = { 65 24 }
+				parentanchor = vcenter
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 2
+					ignoreinvisible = yes
+					parentanchor = left|vcenter
+					block "site_inbound" {}
+
+					icon = {
+						size = { 16 16 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 47
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_inbound_ours" {}
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 47
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_inbound_rival" {}
+					}
+				}
+			}
+			button = {
+				using = default_button_action
+				size = { 66 24 }
+				parentanchor = vcenter
+				block "site_target_button" {}
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 62
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_ss_target_button"
+					block "site_target_set_visible" {}
+				}
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 62
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_ss_target_clear"
+					block "site_target_clear_visible" {}
+				}
 			}
 		}
-		widget = {
-			size = { 180 24 }
-			parentanchor = vcenter
+		### Under the name, what the site offers a colony (the owner, 2026-10-30:
+		### the Colonies list showed slots and base room only for colonies held):
+		### its module slots, its size's and our Colony Module Slots, and its
+		### Extraplanetary Base room and grade, each an icon and a figure with its
+		### meaning on hover. Simple and Full Colonies only.
+		flowcontainer = {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 12
+			margin_left = 27
 
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 180
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#tooltippable"
-				block "site_name" {}
-			}
-		}
-		widget = {
-			size = { 122 24 }
-			parentanchor = vcenter
-
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#v"
-				text = "je_space_race_widget_ss_ours"
-				block "site_ours_visible" {}
-			}
-			flowcontainer = {
-				parentanchor = left|vcenter
-				ignoreinvisible = yes
-				block "site_other_visible" {}
+			widget = {
+				size = { 64 22 }
+				parentanchor = vcenter
+				tooltip = "je_space_race_widget_ss_slots_tt"
 
 				flowcontainer = {
 					direction = horizontal
 					spacing = 4
-					ignoreinvisible = yes
-					block "site_context" {}
+					parentanchor = left|vcenter
 
-					widget = {
-						size = { 28 24 }
+					icon = {
+						size = { 18 18 }
 						parentanchor = vcenter
-
-						tiny_flag = {
-							parentanchor = center
-							datacontext = "[State.GetCountry]"
-						}
+						texture = "gfx/interface/icons/space_race_icons/module.dds"
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 40
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_slots" {}
 					}
 				}
 			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				text = "je_space_race_widget_ss_unknown"
-				block "site_unknown_visible" {}
-			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#v"
-				text = "je_space_race_widget_ss_target"
-				block "site_target_mark_visible" {}
-			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#grey"
-				text = "je_space_race_widget_ss_unclaimed"
-				block "site_unclaimed_visible" {}
-			}
-			### A free colony (slice 5 design § 9): claimed, no holder.
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#tooltippable"
-				tooltip = "je_space_race_widget_ss_free_tt"
-				text = "je_space_race_widget_ss_free"
-				block "site_free_visible" {}
-			}
-			### Occupied, and ruined (Full Colonies; slice 6 design § 16).
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#tooltippable"
-				tooltip = "je_space_race_widget_ss_occupied_tt"
-				text = "je_space_race_widget_ss_occupied"
-				block "site_occupied_visible" {}
-			}
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 122
-				align = left|nobaseline
-				using = te_sr_fontsize_row
-				elide = right
-				default_format = "#tooltippable"
-				tooltip = "je_space_race_widget_ss_ruined_tt"
-				text = "je_space_race_widget_ss_ruined"
-				block "site_ruined_visible" {}
-			}
-		}
-		### Fleets on their way: the colonization entry's icon and their number;
-		### on hover the first's landing and whether it is ours.
-		widget = {
-			size = { 65 24 }
-			parentanchor = vcenter
+			widget = {
+				size = { 132 22 }
+				parentanchor = vcenter
+				tooltip = "je_space_race_widget_ss_bases_tt"
 
-			flowcontainer = {
-				direction = horizontal
-				spacing = 2
-				ignoreinvisible = yes
-				parentanchor = left|vcenter
-				block "site_inbound" {}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					parentanchor = left|vcenter
 
-				icon = {
-					size = { 16 16 }
-					parentanchor = vcenter
-					texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+					icon = {
+						size = { 18 18 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/building_icons/building_space_mine.dds"
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 108
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_bases" {}
+					}
 				}
-				textbox = {
-					parentanchor = vcenter
-					autoresize = yes
-					max_width = 47
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					block "site_inbound_ours" {}
-				}
-				textbox = {
-					parentanchor = vcenter
-					autoresize = yes
-					max_width = 47
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					block "site_inbound_rival" {}
-				}
-			}
-		}
-		button = {
-			using = default_button_action
-			size = { 66 24 }
-			parentanchor = vcenter
-			block "site_target_button" {}
-
-			textbox = {
-				parentanchor = center
-				align = center|nobaseline
-				autoresize = yes
-				max_width = 62
-				elide = right
-				using = te_sr_fontsize_row
-				text = "je_space_race_widget_ss_target_button"
-				block "site_target_set_visible" {}
-			}
-			textbox = {
-				parentanchor = center
-				align = center|nobaseline
-				autoresize = yes
-				max_width = 62
-				elide = right
-				using = te_sr_fontsize_row
-				text = "je_space_race_widget_ss_target_clear"
-				block "site_target_clear_visible" {}
 			}
 		}
 	}
@@ -3065,9 +3931,6 @@ types space_race_widget_types
 			align = left|nobaseline
 			using = te_sr_fontsize_row
 			elide = right
-			block "dest_label_format" {
-				default_format = "#tooltippable"
-			}
 			block "dest_label" {}
 		}
 		textbox = {
@@ -3122,7 +3985,6 @@ types space_race_widget_types
 				blockoverride "dest_row" {
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_target'), '(CFixedPoint)1' )]"
 				}
-				blockoverride "dest_label_format" {}
 				blockoverride "dest_label" {
 					text = "je_space_race_widget_cf_target_label"
 				}
@@ -3175,7 +4037,6 @@ types space_race_widget_types
 				}
 			}
 			te_sr_value_row = {
-				blockoverride "label_format" {}
 				blockoverride "row_label" {
 					text = "je_space_race_widget_cf_drive_label"
 				}
@@ -3185,7 +4046,6 @@ types space_race_widget_types
 			}
 			te_sr_value_row = {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
-				blockoverride "label_format" {}
 				blockoverride "row_label" {
 					text = "je_space_race_widget_cf_in_flight_label"
 				}
@@ -3245,7 +4105,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				block "free_people" {}
 			}
 		}
@@ -3261,7 +4120,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				block "free_ties" {}
 			}
 		}
@@ -3504,7 +4362,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "fl_strength" {}
 				}
 			}
@@ -3520,7 +4377,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "fl_drive" {}
 				}
 				flowcontainer = {
@@ -3540,7 +4396,6 @@ types space_race_widget_types
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
-						default_format = "#tooltippable"
 						text = "je_space_race_widget_fl_refit"
 					}
 					textbox = {
@@ -3566,7 +4421,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "fl_dv" {}
 				}
 			}
@@ -3582,7 +4436,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "fl_supply" {}
 				}
 			}
@@ -3598,7 +4451,6 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					default_format = "#tooltippable"
 					block "fl_marines" {}
 				}
 			}
@@ -3965,7 +4817,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_battle_tt"
 				text = "je_space_race_widget_loc_status_battle"
 				block "loc_battle_visible" {}
@@ -3977,7 +4828,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_blockaded_tt"
 				text = "je_space_race_widget_loc_status_blockaded"
 				block "loc_blockaded_visible" {}
@@ -3989,7 +4839,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_blockading_tt"
 				text = "je_space_race_widget_loc_status_blockading"
 				block "loc_blockading_visible" {}
@@ -4001,7 +4850,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_interdicted_tt"
 				text = "je_space_race_widget_loc_status_interdicted"
 				block "loc_interdicted_visible" {}
@@ -4013,7 +4861,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_interdicting_tt"
 				text = "je_space_race_widget_loc_status_interdicting"
 				block "loc_interdicting_visible" {}
@@ -4026,7 +4873,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_earth_blockaded_tt"
 				text = "je_space_race_widget_loc_status_earth_blockaded"
 				block "loc_earth_blockaded_visible" {}
@@ -4038,7 +4884,6 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "je_space_race_widget_loc_earth_blockading_tt"
 				text = "je_space_race_widget_loc_status_earth_blockading"
 				block "loc_earth_blockading_visible" {}
@@ -4484,7 +5329,6 @@ types space_race_widget_types
 		parentanchor = right|vcenter
 		align = right|nobaseline
 		using = te_sr_fontsize_row
-		default_format = "#tooltippable"
 	}
 
 	### The estimate column of another power's row: its furthest milestone
@@ -4619,7 +5463,6 @@ types space_race_widget_types
 				elide = right
 				align = left|nobaseline
 				using = te_sr_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_space_race_widget_rival_name"
 				tooltip = "je_space_race_widget_power_name_tt"
 			}

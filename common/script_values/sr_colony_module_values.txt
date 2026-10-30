@@ -49,6 +49,17 @@ sr_mod_bunker_reliability = {
 sr_mod_ai_admin_autonomy = { value = 50 }
 sr_mod_ai_bunker_max = { value = 3 }
 
+# The technology markers' self-checks (colony management design § 11): the
+# country's Colony Module Slots, and how far a colony's slots read through its
+# holder fall from them (0 when the scope switch reads it).
+sr_colony_slots_modifier = {
+	value = modifier:country_sr_colony_slots_add
+}
+sr_slots_marker_gap = {
+	value = sr_site_slots_tech_seen
+	subtract = sr_colony_slots_modifier
+}
+
 sr_mod_fab_stock_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fab_stock } value = var:sr_fab_stock }

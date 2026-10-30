@@ -292,10 +292,13 @@ MODULE_NAMES = {"a": "Specialization I", "b": "Specialization II", "hab": "Habit
                 "def": "Defences", "port": "Spaceport", **{f.key: f.name for f in FACILITIES}}
 MODULE_AI_VALUE = 8  # Cede Colony's AI value of a module level past the first
 
-# Slots (colony management design § 5): the table's slots, one more with each
-# of these technologies (the holder's), and up to SLOTS_PAST_MAX modules past
-# them, the n-th past costing sr_module_points x (1 + n).
-SLOT_TECHS = ("advanced_nanofabrication", "molecular_assemblers")
+# Slots (colony management design § 5): the table's slots plus the holder's
+# SLOTS_MODIFIER, a script-only type that five technologies carry (+1 each:
+# Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication,
+# Space Colonization, Molecular Assemblers), so their tooltips show it, and up to
+# SLOTS_PAST_MAX modules past them, the n-th past costing sr_module_points x
+# (1 + n).
+SLOTS_MODIFIER = "country_sr_colony_slots_add"
 SLOTS_PAST_MAX = 4
 
 # The Modules view's lines of cells (colony management design § 8), in order.
@@ -1840,6 +1843,14 @@ def render_module_values() -> list[str]:
                 f"subtract = sr_site_slots_{k} add = 2 multiply = sr_module_points }}",
                 "}"]
     out += render_facility_values()
+    out += ["", "# Country scope, the slot_marker self-check's reading (colony management design",
+            "# § 11): what the holder's Colony Module Slots add at the first colony THIS holds,",
+            "# read through that world's own slots (the holder's scope), or -1 with none.",
+            "sr_site_slots_tech_seen = {", "\tvalue = -1"]
+    for n, s in enumerate(SITES):
+        out.append(f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} "
+                   f"value = sr_site_slots_{s.key} subtract = {s.slots} }}")
+    out.append("}")
     out += ["", "# Country scope: the module levels past the first at the colonies THIS holds, the",
             "# upkeep's multiplier (design § 8).",
             "sr_mod_upkeep_levels = {", "\tvalue = 0"]
@@ -1860,14 +1871,14 @@ def _slot_values(site: Site) -> list[str]:
     """A world's slots and the price past them (colony management design § 5),
     and each facility's staffed levels (§ 7). Any scope."""
     k = site.key
-    out = [f"# {site.name}'s slots: {site.slots} by its size, +1 with each of the holder's "
-           f"{', '.join(SLOT_TECHS)}; up to {SLOTS_PAST_MAX} modules past them.",
+    out = [f"# {site.name}'s slots: {site.slots} by its size, plus the holder's {SLOTS_MODIFIER};",
+           f"# up to {SLOTS_PAST_MAX} modules past them.",
            f"sr_site_slots_{k} = {{",
-           f"\tvalue = {site.slots}"]
-    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= {{ has_technology_researched = {tech} }} }} add = 1 }}"
-            for tech in SLOT_TECHS]
-    out += ["}",
-            f"sr_site_slots_max_{k} = {{ value = sr_site_slots_{k} add = {SLOTS_PAST_MAX} }}",
+           f"\tvalue = {site.slots}",
+           f"\tif = {{ limit = {{ exists = global_var:sr_site_holder_{k} }} "
+           f"global_var:sr_site_holder_{k} = {{ add = modifier:{SLOTS_MODIFIER} }} }}",
+           "}"]
+    out += [f"sr_site_slots_max_{k} = {{ value = sr_site_slots_{k} add = {SLOTS_PAST_MAX} }}",
             "# Its slots built or on their way, every shipper's: what the queue's head pays past.",
             f"sr_site_generic_pending_{k} = {{",
             f"\tvalue = sr_site_generic_built_{k}"]
@@ -3052,8 +3063,7 @@ def _free_row(site: Site) -> list[str]:
     out += _override("free_visible", f'visible = "[{_eq(f"sr_disp_free_{k}", 1)}]"')
     out += _override("free_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
     out += _override("free_name", f'text = "sr_site_name_{k}"')
-    # A figure under its own hover: the type underlines it, and #v here keeps
-    # its value color (unmarked_hover_audit; style rule 3).
+    # A figure under its own hover, in its value color.
     out += _override("free_people", f'raw_text = "#v [{_sv(f"sr_disp_site_pop_{k}")}|K]#!"')
     out += _override("free_ties", f'raw_text = "[{_sv(f"sr_disp_free_ties_{k}")}|0]"')
     out += _override("free_supply_button",
@@ -3196,7 +3206,9 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ sr_mod_slots_used_{k} > sr_site_slots_{k} }} value = 1 }}",
                 "}",
                 f"sr_disp_mod_next_cost_{k} = {{ value = sr_mod_next_cost_{k} }}",
-                f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}"]
+                f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}",
+                # Solar System's line under the name: the slots it would have as ours.
+                f"sr_disp_ss_slots_{k} = {{ value = {site.slots} add = modifier:{SLOTS_MODIFIER} }}"]
     out += render_autonomy_display()
     out += render_overview_display()
     out += render_window_display()
@@ -3407,6 +3419,11 @@ def _site_row(site: Site) -> list[str]:
                      f'tooltip = "{_reasoned("sr_colony_target_sgui", _site_scope(site))}"')
     out += _override("site_target_set_visible", f'visible = "[{_eq(target, 1)}]"')
     out += _override("site_target_clear_visible", f'visible = "[{_eq(target, 2)}]"')
+    # What the site offers a colony (the owner, 2026-10-30): its slots with our
+    # Colony Module Slots, and its own Extraplanetary Base room and grade.
+    grade = f"{site.ebase_grade:+d}".replace("-", "\u2212")
+    out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_slots_{k}")}|0]#!"')
+    out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({grade}%)"')
     return out + ["\t\t}"]
 
 
@@ -3464,6 +3481,9 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("module_bases", f'raw_text = "[{_sv(f"sr_disp_site_ebase_room_{k}")}|0]"')
     spec_tt = {slot: f"je_space_race_widget_colony_{m[len('sr_colony_'):]}_tt"
                for slot, m in zip(("a", "b"), spec_modifiers(site))}
+    # A colony's page names its specializations in full (design § 8).
+    for slot, m in zip(("a", "b"), spec_modifiers(site)):
+        out += _override(f"page_name_{slot}", f'text = "{m}"', f'tooltip = "{spec_tt[slot]}"')
     for t in ("a", "b", *generic_types(site)):
         pending = f"sr_disp_mod_pending_{t}_{k}"
         tooltip = spec_tt.get(t, f"je_space_race_widget_mod_{t}_tt")

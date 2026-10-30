@@ -802,12 +802,35 @@ class TransitTest(unittest.TestCase):
                 self.assertIn(f"value = sr_transit_chemical_{b.key}", reader)
                 self.assertEqual(re.findall(r"sr_drive_level >= (\d)", reader), ["3", "2", "1"])
         level = _block(_strip(_raw("common", "script_values", "sr_launch_window_values.txt")), "sr_drive_level")
-        for tech in ("compact_fusion_reactors", "fusion_power"):
-            self.assertIn(f"has_technology_researched = {tech}", level)
+        for drive in ("torch", "fusion"):
+            self.assertIn(f"modifier:country_sr_drive_{drive}_bool = yes", level)
         self.assertIn("sr_launch_has_antimatter = yes", level)
+        self.assertNotIn("has_technology_researched", level)
         triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
-        self.assertIn("sr_launch_has_antimatter = yes", _block(triggers, "sr_launch_has_fusion"))
-        self.assertIn("building_antimatter_facility", _block(triggers, "sr_launch_has_antimatter"))
+        fusion, antimatter = _block(triggers, "sr_launch_has_fusion"), _block(triggers, "sr_launch_has_antimatter")
+        self.assertIn("sr_launch_has_antimatter = yes", fusion)
+        self.assertIn("modifier:country_sr_drive_torch_bool = yes", fusion)
+        self.assertIn("modifier:country_sr_drive_antimatter_bool = yes", antimatter)
+        self.assertIn("building_antimatter_facility", antimatter)
+        for body in (fusion, antimatter):
+            self.assertNotIn("has_technology_researched", body)
+
+    def test_each_drive_technology_carries_its_marker(self):
+        """Technology markers (scripting_best_practices.md; the owner,
+        2026-10-30): the technology that brings a drive carries its boolean,
+        script-only, so the tooltip names the drive, and only it does."""
+        types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
+        for era, tech, drive in (("era_11.txt", "fusion_power", "fusion"),
+                                 ("era_12.txt", "compact_fusion_reactors", "torch"),
+                                 ("era_12.txt", "antimatter_production", "antimatter")):
+            name = f"country_sr_drive_{drive}_bool"
+            with self.subTest(drive=drive):
+                definition = _block(types, name)
+                self.assertIn("boolean = yes", definition)
+                self.assertIn("script_only = yes", definition)
+                text = _strip(_raw("common", "technology", "technologies", era))
+                self.assertIn(f"{name} = yes", _block(text, tech))
+                self.assertEqual(text.count(f"{name} = yes"), 1)
 
     def test_a_targeted_departure_weighs_its_own_body_s_wait(self):
         triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))

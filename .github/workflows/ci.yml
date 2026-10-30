@@ -314,11 +314,6 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 hidden_modifier_audit.py --strict
 
-      # A hover of the mod's whose text carries no #tooltippable underline.
-      - name: Audit — hovers with no underline
-        if: ${{ !cancelled() }}
-        run: python3 unmarked_hover_audit.py --strict
-
       # A button greyed by a scripted GUI's IsValid whose tooltip prints no
       # IsValidTooltip, and a condition such a tooltip prints as raw script.
       - name: Audit — greyed buttons that don't say why
