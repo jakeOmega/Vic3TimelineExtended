@@ -71,6 +71,7 @@ import effect_trigger_validity_audit
 import pm_employment_audit
 import script_argument_audit
 import variable_usage
+import loc_accessor_usage  # GET /loc-accessors (#1246)
 
 PORT = 8950
 PID_FILE = os.path.join(mod_path, "mod_state_server.pid")
@@ -1443,6 +1444,34 @@ def _get_variable_usage_index():
         index = variable_usage.build_index(mod_path)
         _variable_usage_cache = (gen, index)
         return index
+
+
+# /loc-accessors (#1246): vanilla loc (and vanilla `.gui` when the game is
+# installed) indexed by data type, about 2 s. Vanilla changes only on a full
+# load, which replaces _VANILLA_LOC_CACHE, so the index is kept until that
+# object changes; a mod-only reload leaves it. (loc, Index, catalog) or None.
+_loc_accessor_cache: tuple | None = None
+_loc_accessor_lock = threading.Lock()
+
+
+def _get_loc_accessor_index():
+    global _loc_accessor_cache
+    loc = _VANILLA_LOC_CACHE
+    if loc is None:
+        raise DataNotLoaded("Localization")
+    with _loc_accessor_lock:
+        cached = _loc_accessor_cache
+        if cached is not None and cached[0] is loc:
+            return cached[1], cached[2]
+        catalog = loc_accessor_usage.load_catalog(os.path.join(mod_path, "docs", "engine"))
+        actions = ms.base_parsers.get("Diplomatic Actions") if ms else None
+        index = loc_accessor_usage.build_index(
+            loc, catalog,
+            diplo_keys=set(actions.data or {}) if actions else set(),
+            gui_dirs=[os.path.join(base_game_path, "game", "gui")],
+        )
+        _loc_accessor_cache = (loc, index, catalog)
+        return index, catalog
 
 
 def _get_call_index() -> dict:
@@ -5921,6 +5950,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "script-args": lambda: self._script_args(rest, params),
             # How each site uses a variable or variable list (#973)
             "variable-usage": lambda: self._variable_usage(rest, params),
+            # Which accessors vanilla loc and GUI chain on a data type (#1246)
+            "loc-accessors": lambda: self._loc_accessors(rest, params),
             "decrees": lambda: self._decrees(rest),
             "principles": lambda: self._principles(rest),
             "amendments": lambda: self._amendments(rest),
@@ -6025,6 +6056,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/script-values/<id?>", "desc": "Script value definitions."},
                 {"path": "/script-args/<helper?>", "desc": "Scripted effect/trigger calls whose arguments don't match the callee's $X$ names (#732); with a helper, its params and every caller's unknown/missing args."},
                 {"path": "/variable-usage/<name?>?kind=var|list&store=scope|global|local&unfiltered_by=<trigger>&patterns=false", "desc": "Every mod site that writes, reads or iterates a variable or variable list, with file:line, entity, op, scope hint and an iterator's limit (#973). unfiltered_by keeps the iterations whose limit names neither the trigger nor a scripted trigger that names it. Bare: every name with its counts (?prefix=)."},
+                {"path": "/loc-accessors/<Type?>?context=&examples=&min_uses=", "desc": "Which accessors vanilla loc (and vanilla .gui when the game is installed) chains on a data type (#1246): each with its use count, per-context counts (events, notification, ui, gui, ...), the type it returns, and example expressions, plus the SCOPE.sX / gsX saved-scope accessor for the type. <Type> is PoliticalLobby, political_lobby or politicallobby. ?context= keeps only uses in that context. Bare: every type with its use count."},
                 {"path": "/decrees/<id?>", "desc": "Decree catalog."},
                 {"path": "/on-actions/<id?>", "desc": "On-action wiring (mod-only)."},
                 {"path": "/events/<id?>", "desc": "Events (mod-only)."},
@@ -8860,6 +8892,48 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "flags": [script_argument_audit.flag_dict(f) for f in flags],
             "stale_tags": [{"file": t.file, "line": t.line} for t in result.stale_tags],
         }
+
+    def _loc_accessors(self, parts, params):
+        """GET /loc-accessors[/<Type>] — which accessors vanilla loc and GUI
+        chain on a data type (#1246), from loc_accessor_usage's index.
+
+        Bare: every type with its accessor and use counts. With a type
+        (`PoliticalLobby`, `political_lobby`, …): each accessor with `uses`,
+        per-context counts, the catalog's `returns` type (null when
+        localization_accessor_audit doesn't list it) and `examples`, plus the
+        `scope_accessor` that builds the type from `SCOPE`. `?context=` keeps
+        one context's uses, `?min_uses=` drops rarer accessors, `?examples=`
+        caps the examples per accessor. `gui_scanned` says whether vanilla
+        `.gui` files were on disk."""
+        def one(key):
+            return (params.get(key) or [None])[0] or None
+
+        def number(key, default, low, high):
+            raw = one(key)
+            if raw is None:
+                return default
+            try:
+                return min(max(int(raw), low), high)
+            except ValueError:
+                raise BadRequest(f"{key} must be an integer, not {raw!r}")
+
+        index, catalog = _get_loc_accessor_index()
+        if not parts:
+            return loc_accessor_usage.list_types(index)
+        if len(parts) > 1:
+            raise NotFound("/loc-accessors/" + "/".join(parts))
+        context = one("context")
+        seen = loc_accessor_usage.contexts_seen(index)
+        if context is not None and context not in seen:
+            raise BadRequest(f"unknown context {context!r}; use one of " + ", ".join(seen))
+        out = loc_accessor_usage.lookup(
+            index, catalog, parts[0], context=context,
+            examples=number("examples", loc_accessor_usage.DEFAULT_EXAMPLES, 0,
+                            loc_accessor_usage.MAX_EXAMPLES),
+            min_uses=number("min_uses", 1, 1, 10 ** 9))
+        if out is None:
+            raise NotFound(parts[0], did_you_mean=loc_accessor_usage.suggest(index, catalog, parts[0]))
+        return out
 
     def _variable_usage(self, parts, params):
         """GET /variable-usage[/<name>] — how each mod site uses a variable or

@@ -1169,6 +1169,36 @@ def extract_chains(text: str) -> list[Chain]:
     return out
 
 
+def resolve_first_step(first: str, context: str) -> str:
+    """The type a chain's first step resolves to in `context`, or "unknown".
+
+    `first` is the step's name with any `(...)` already stripped. A magic scope
+    of the context wins, then a global function, then a magic scope of another
+    context.
+    """
+    magic = _MAGIC_SCOPES_BY_CONTEXT.get(context, {})
+    permissive = _MAGIC_SCOPES_BY_CONTEXT["permissive"]
+    if first in magic:
+        return magic[first]
+    if first in _GLOBAL_FUNCTIONS:
+        return _GLOBAL_FUNCTIONS[first]
+    if context != "permissive" and first in permissive:
+        # First step is a magic scope from a different context. We don't
+        # have full per-context resolution data for vanilla, so accept it
+        # as the type the other context resolves it to and walk on. (If
+        # this ever produces false negatives, narrow the per-context
+        # tables and revisit.)
+        return permissive[first]
+    # Unknown first step: treat as type "unknown" and walk subsequent
+    # steps without strict accessor-on-type checking. This matches the
+    # engine's actual behavior (silent fallback) and keeps the audit
+    # focused on its highest-value catch: known-type + wrong-accessor.
+    # Common shapes that land here: capitalized magic scopes specific
+    # to a system we haven't catalogued (e.g. PopsOverviewPanel) or
+    # builder-style global functions we haven't registered.
+    return "unknown"
+
+
 def validate_chain(chain: Chain, context: str, catalog: dict[str, dict[str, str]]) -> str | None:
     """Walk the chain. Return None if every step resolves; else a one-line reason.
 
@@ -1186,9 +1216,6 @@ def validate_chain(chain: Chain, context: str, catalog: dict[str, dict[str, str]
     first_full = chain.steps[0]
     first = _step_name(first_full)
 
-    magic = _MAGIC_SCOPES_BY_CONTEXT.get(context, {})
-    permissive = _MAGIC_SCOPES_BY_CONTEXT["permissive"]
-
     # Context-specific denials take precedence over both the magic table and the
     # permissive fallback: a scope that is bound in some other context but
     # affirmatively unbound here (issue #149).
@@ -1201,26 +1228,7 @@ def validate_chain(chain: Chain, context: str, catalog: dict[str, dict[str, str]
             if _step_name(step_full) in denied_accessors:
                 return denied_accessors[_step_name(step_full)]
 
-    if first in magic:
-        current = magic[first]
-    elif first in _GLOBAL_FUNCTIONS:
-        current = _GLOBAL_FUNCTIONS[first]
-    elif context != "permissive" and first in permissive:
-        # First step is a magic scope from a different context. We don't
-        # have full per-context resolution data for vanilla, so accept it
-        # as the type the other context resolves it to and walk on. (If
-        # this ever produces false negatives, narrow the per-context
-        # tables and revisit.)
-        current = permissive[first]
-    else:
-        # Unknown first step: treat as type "unknown" and walk subsequent
-        # steps without strict accessor-on-type checking. This matches the
-        # engine's actual behavior (silent fallback) and keeps the audit
-        # focused on its highest-value catch: known-type + wrong-accessor.
-        # Common shapes that land here: capitalized magic scopes specific
-        # to a system we haven't catalogued (e.g. PopsOverviewPanel) or
-        # builder-style global functions we haven't registered.
-        current = "unknown"
+    current = resolve_first_step(first, context)
 
     for step_full in chain.steps[1:]:
         step = _step_name(step_full)
