@@ -53,11 +53,11 @@ One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_cod
 | Emission Standards | a red-brick smokestack with a round gauge on its side, the needle in the green | `policy_emission_standards.dds` |
 | Climate Adaptation | a grey stone sea wall with a deep blue wave breaking against it | `policy_climate_adaptation.dds` |
 | Reforestation Subsidies | a young sapling planted in a mound of earth | `policy_reforestation.dds` |
-| Carbon Removal Support | a squat grey air intake tower drawing a blue stream of air down a pipe into a mound of earth | `policy_carbon_removal.dds` |
+| Carbon Removal Support | a pale grey intake tower with fan vents, a blue hose coiling from it into a mound of earth | `policy_carbon_removal.dds` |
 | Public Transit | a green electric tram, front view, its pantograph on top | `policy_public_transit.dds` |
 | Fossil-Fuel Divestment | a black oil barrel, a gold coin flying up and away from it (the list's red arrow was left out) | `policy_fossil_fuel_divestment.dds` |
 | Green Building Codes | a small red-brick building front with a bright green leaf on its wall | `policy_green_building_codes.dds` |
-| Fossil-Fuel Tariffs | a red-and-white striped barrier arm lowered across a coal wagon | `policy_fossil_fuel_tariffs.dds` |
+| Fossil-Fuel Tariffs | a red-and-white striped barrier gate over a small coal wagon | `policy_fossil_fuel_tariffs.dds` |
 
 Beside the name, a 20 px check shows while the policy is in force (play-test round 3; it replaced the "Active"/"Inactive" word) and nothing shows while it is not. It is vanilla's `gfx/interface/icons/generic_icons/green_checkmark.dds`, kept.
 
