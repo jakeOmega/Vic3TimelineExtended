@@ -82,14 +82,17 @@ major power. It switches the Space Program to that method.
 
 Begin Solar Colonization appears only while there are worlds left that Solar
 Colonization can reach: those of the Moon, and after your Mars Landing those of
-stages 1 and 2, or any stage once you hold a colony beyond the Moon. Begin Deep
-Space Exploration appears only when you need it: every world of the Moon and
-stages 1 and 2 is claimed and you hold no colony beyond the Moon.
-If Solar System Colonization has finished for you while a world on the Moon is
-free, the decision Resume Solar Colonization runs it again to settle the Moon.
-You keep Interplanetary Trade Networks. The program bills its funding and
-approach again, and Commercial Space Industry pauses until the Moon is full and
-the program stops by itself.
+stages 1 and 2, or of any stage once you also hold a colony beyond the Moon.
+Every world beyond the Moon needs your Mars Landing. Begin Deep Space
+Exploration appears only when you need it: every world of stages 1 and 2 is
+claimed and you hold no colony beyond the Moon.
+
+Once all 40 worlds have been claimed, a world on the Moon that comes free again
+is settled only by choice. No program starts on its own then. The decision Resume Solar Colonization (or Begin Solar
+Colonization) runs your program for the Moon until it is full. A finished
+program keeps Interplanetary Trade Networks. While it runs, the program bills
+its funding and approach, and Commercial Space Industry pauses, as it does
+whenever one of your programs runs.
 You can begin the Interstellar Mission without finishing colonization, and
 colonization goes on under it.
 
@@ -160,7 +163,8 @@ gains the same pace.
 At the foot of the overview, the Program row has an icon for each entry, in
 order. An icon is lit once you have achieved that milestone, with a flag if you
 were first. It is half-lit while under way, and faint if you haven't begun it
-or another power finished it first. The Interstellar Probe and its wait for data
+or another power finished it first. The Lunar Colony icon has no half-lit state:
+it lights when you found your first colony on the Moon. The Interstellar Probe and its wait for data
 share one icon with four pictures: the probe grayed (not begun), the probe with
 a wrench (under way), radio dishes with a clock (launched, awaiting data) and
 the dishes with a check (data received). Hover any icon for its state.
@@ -245,7 +249,7 @@ Space Powers puts your own program first, then every other power that has
 started the race, furthest along first: the most milestones achieved, then the
 most colonies and the furthest milestone under way. Each row is the country's name, its program as the same
 eight icons as the Program row (lit once achieved, with a flag for a first,
-half-lit while under way, faint otherwise) and its furthest milestone under way
+half-lit while under way, except Lunar Colony, faint otherwise) and its furthest milestone under way
 with its progress, as in "Moon Landing: 35%–85%". Your own progress is exact.
 Another power's is an estimate, in the same band as the Rivals rows, which an
 agent network in its country narrows. Hover an icon for that milestone's state
@@ -421,9 +425,10 @@ who finishes it later gets the smaller one.
 | Interstellar Probe | +10% / +5% | +100 / +50 | +10% / +5% | +10% / +5% | +25% / +10% |
 
 The first figure is the first-to-finish reward, the second the later one.
-The first lunar colony is a milestone of its own: your first colony on the
-Moon plays Foothold on Another World and earns the reward, as the first in
-the race or a later one.
+The first lunar colony is a milestone of its own: the first colony you found
+on the Moon with your own fleet plays Foothold on Another World and earns the
+reward, as the first in the race or a later one. A lunar world gained by
+treaty, inheritance or seizure doesn't count.
 Suborbital Flight's completion event also offers a choice: loyalists, or
 Suborbital Momentum, an extra copy of the later finisher's reward (+1%
 prestige, +10 innovation cap, +3% cultural pull) that fades over two and a half
