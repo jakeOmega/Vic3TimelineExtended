@@ -8987,9 +8987,9 @@ template article_input_items {
 		visible = "[And(ArticleDraft.RequiresInput('company'), Not(ArticleDraft.HasType('acquire_monopoly_for_company')))]"
 	}
 
-	### BUILDING TYPE (GENERIC - NOT A COMPANY MONOPOLY, TE)
-	article_input_building_type_generic = {
-		visible = "[And(ArticleDraft.RequiresInput('building_type'), Not(ArticleDraft.HasType('acquire_monopoly_for_company')))]"
+	### BUILDING TYPE (CEDE COLONY, TE)
+	article_input_building_type_cede_colony = {
+		visible = "[ArticleDraft.HasType('te_cede_colony')]"
 	}
 
 	### LAW LIST
@@ -11554,12 +11554,14 @@ types article_input_types
 		}
 	}
 
-	### BUILDING TYPE (GENERIC - NOT A COMPANY MONOPOLY, TE)
+	### BUILDING TYPE (CEDE COLONY, TE)
 	# Vanilla lists building types only after a company, for
-	# acquire_monopoly_for_company. Cede Colony (te_cede_colony) names a colony
-	# by a building type alone, one hidden type per world, which its
-	# building_type_valid_trigger narrows to the source's colonies.
-	type article_input_building_type_generic = flowcontainer {
+	# acquire_monopoly_for_company: ArticleDraft.GetValidBuildingTypes with no
+	# company crashes the game (gui_modding_guide.md). Cede Colony (te_cede_colony)
+	# names a colony by a building type alone, one hidden type per world, so its
+	# picker lists the worlds the ceding country holds itself, from
+	# gen_solar_sites.py (te_sr_cede_site_list_*, sr_sites_generated_rows.gui).
+	type article_input_building_type_cede_colony = flowcontainer {
 		parentanchor = hcenter
 		direction = vertical
 
@@ -11574,7 +11576,7 @@ types article_input_types
 
 		empty_state = {
 			blockoverride "visible" {
-				visible = "[IsDataModelEmpty(ArticleDraft.GetValidBuildingTypes)]"
+				visible = "[And(PdxGuiWidget.HasContext('WarGoalDraft'), EqualTo_CFixedPoint(WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_sites_held_count'), '(CFixedPoint)0'))]"
 			}
 
 			blockoverride "text" {
@@ -11587,85 +11589,100 @@ types article_input_types
 			}
 		}
 
-		article_input_building_type_list_generic = {
+		empty_state = {
+			blockoverride "visible" {
+				visible = "[And(Not(PdxGuiWidget.HasContext('WarGoalDraft')), EqualTo_CFixedPoint(ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_sites_held_count'), '(CFixedPoint)0'))]"
+			}
+
+			blockoverride "text" {
+				text = "NONE"
+			}
+
+			blockoverride "size" {
+				minimumsize = { 300 -1 }
+				maximumsize = { 300 -1 }
+			}
+		}
+
+		te_sr_cede_site_list_war = {
+			visible = "[PdxGuiWidget.HasContext('WarGoalDraft')]"
 			parentanchor = hcenter
-			datamodel = "[ArticleDraft.GetValidBuildingTypes]"
+		}
+
+		te_sr_cede_site_list_treaty = {
+			visible = "[Not(PdxGuiWidget.HasContext('WarGoalDraft'))]"
+			parentanchor = hcenter
 		}
 	}
 
-	type article_input_building_type_list_generic = dynamicgridbox {
-		datamodel_wrap = 3
-		flipdirection = yes
+	# One world in Cede Colony's picker; the instance sets its BuildingType
+	# datacontext and whether the ceding country holds it.
+	type te_sr_cede_site_tile = container {
+		grid_button = {
+			visible = "[Not(ObjectsEqual(ArticleDraft.GetBuildingType.Self, BuildingType.Self))]"
 
-		item = {
-			container = {
-				grid_button = {
-					visible = "[Not(ObjectsEqual(ArticleDraft.GetBuildingType.Self, BuildingType.Self))]"
+			blockoverride "min_width" {
+				min_width = 100
+			}
 
-					blockoverride "min_width" {
-						min_width = 100
-					}
+			blockoverride "properties" {
+				onclick = "[ArticleDraft.SetBuildingType(BuildingType.Self)]"
+			}
 
-					blockoverride "properties" {
-						onclick = "[ArticleDraft.SetBuildingType(BuildingType.Self)]"
-					}
+			blockoverride "texture" {
+				texture = "[BuildingType.GetIcon]"
+			}
 
-					blockoverride "texture" {
-						texture = "[BuildingType.GetIcon]"
-					}
+			blockoverride "text_middle" {
+				text = "[BuildingType.GetNameNoFormatting]"
+			}
 
-					blockoverride "text_middle" {
-						text = "[BuildingType.GetNameNoFormatting]"
-					}
+			blockoverride "default_button" {
+				using = default_button
+			}
+		}
 
-					blockoverride "default_button" {
-						using = default_button
-					}
+		widget = {
+			visible = "[ObjectsEqual(ArticleDraft.GetBuildingType.Self, BuildingType.Self)]"
+			size = { -1 120 }
+			min_width = 100
+
+			background = {
+				using = paper_bg
+			}
+
+			widget = {
+				parentanchor = hcenter
+				size = { 50 50 }
+				position = { 0 5 }
+
+				icon = {
+					parentanchor = center
+					size = { 200% 200% }
+					using = rotate_glow_animation_02
 				}
 
-				widget = {
-					visible = "[ObjectsEqual(ArticleDraft.GetBuildingType.Self, BuildingType.Self)]"
-					size = { -1 120 }
-					min_width = 100
-
-					background = {
-						using = paper_bg
-					}
-
-					widget = {
-						parentanchor = hcenter
-						size = { 50 50 }
-						position = { 0 5 }
-
-						icon = {
-							parentanchor = center
-							size = { 200% 200% }
-							using = rotate_glow_animation_02
-						}
-
-						icon = {
-							size = { 100% 100% }
-							parentanchor = center
-							texture = "[BuildingType.GetIcon]"
-						}
-					}
-
-					textbox = {
-						align = hcenter|nobaseline
-						position = { 0 -16 }
-						size = { 95% 50 }
-						parentanchor = hcenter|bottom
-						using = fontsize_small
-						multiline = yes
-						margin_left = 5
-						margin_right = 5
-						text = "[BuildingType.GetNameNoFormatting]"
-					}
-
-					icon = {
-						using = highlighted_square_selection
-					}
+				icon = {
+					size = { 100% 100% }
+					parentanchor = center
+					texture = "[BuildingType.GetIcon]"
 				}
+			}
+
+			textbox = {
+				align = hcenter|nobaseline
+				position = { 0 -16 }
+				size = { 95% 50 }
+				parentanchor = hcenter|bottom
+				using = fontsize_small
+				multiline = yes
+				margin_left = 5
+				margin_right = 5
+				text = "[BuildingType.GetNameNoFormatting]"
+			}
+
+			icon = {
+				using = highlighted_square_selection
 			}
 		}
 	}

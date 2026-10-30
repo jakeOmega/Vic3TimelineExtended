@@ -73,7 +73,9 @@ apart from the dead-holder rule and the released worlds (§ 6).
   `is_country_alive = no`. Both are guarded.
 - That the treaty designer offers a building type that can never be built, that
   `scope:input = bt:<type>` compares a building type, and that
-  `input_building_type` reads back in `on_entry_into_force`.
+  `input_building_type` reads back in `on_entry_into_force`. (The designer's own
+  list, `ArticleDraft.GetValidBuildingTypes`, turned out to crash the game with
+  no company, 2026-10-30, so the mod lists the worlds itself: § 17.)
 - That a country given a colony without the Moon Base and Mars Landing gets the
   journal entry through `add_journal_entry` and keeps it under the widened
   `possible`.
@@ -520,3 +522,11 @@ Where the build departs from the sections above, and why:
   opened with nothing to pick. The mod's overrides of `right_click_menu.gui`,
   `treaty_draft_panel.gui` and `treaty_panel.gui` add a generic branch in each
   (`### BUILDING TYPE (GENERIC …)`; `test_treaty_article_input_widgets.py`).
+  The Add dialog's list first read `ArticleDraft.GetValidBuildingTypes`, which
+  crashed the game, from a war goal and from the treaty designer alike
+  (2026-10-30): it lists a company's building types and needs one (the build
+  without it opened in the treaty designer without a crash that day). The list is
+  now generated (`te_sr_cede_site_list_war` / `_treaty`,
+  `### BUILDING TYPE (CEDE COLONY, TE)`): a tile per world, shown while the
+  ceding country holds it (`sr_cede_held_<key>`, the test the input trigger
+  makes). The draft and signed rows read only the picked building type.

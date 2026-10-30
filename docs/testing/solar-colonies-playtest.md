@@ -50,6 +50,14 @@ still reaches the milestones.
    country's colonies by name and icon ("Valles Marineris Colony"), and only those. The list, the picked colony under
    it, the draft row and the signed treaty's row are the mod's own widgets (vanilla shows a building type only for a
    company monopoly): check each shows the colony's name and icon. Under Races Only the article does not appear.
+   The first build crashed the game here (2026-10-30): its list read `ArticleDraft.GetValidBuildingTypes`, which
+   needs a company. The list is now `te_sr_cede_site_list_treaty`, generated, keyed on the article's source
+   (`ArticleDraft.GetFirstOrSource`); the owner opened it without a crash and it looked right the same day. Still to
+   see: no `This data is likely not a container` in that launch's `debug.log`; picking a colony turns the Add button
+   green; a colony the treaty already carries is still listed, and Add should refuse it a second time (`usage_limit`);
+   and what the article button's options count (`TreatyDraft.GetNumAvailableInputOptions`) shows for Cede Colony. A
+   list that reads "None" for a holder, or names the other side's colonies, means the source is the wrong country,
+   which logs nothing; only an accessor that fails to resolve logs, as `FetchData failed` naming `sr_cede_held_`.
 3. **The building types appear nowhere else**: not in the build menu, the production overview, the encyclopedia, a
    company's or an industry charter's list. If one does, note where.
 4. **A sale.** Cede one of our colonies for a Money Transfer to an AI great power: it accepts when the money is large
@@ -57,7 +65,10 @@ still reaches the milestones.
    and Solar System list show it.
 5. **A swap**: one colony each way in one treaty moves both.
 6. **A war goal.** In a diplomatic play against a colony holder, add Cede Colony as a war goal (maneuvers 5, infamy
-   10). Enforced in the peace, the colony moves.
+   10). Enforced in the peace, the colony moves. This crashed the game in the first build too: check that the picker
+   (`te_sr_cede_site_list_war`) opens with no `This data is likely not a container` in `debug.log`, that it lists the
+   colonies of the country the goal is pressed against (`WarGoalDraft.GetTarget`) and only those, and that picking one
+   turns the war goal's Add button green (its own gate, `ArticleDraft.CanAddWarGoal`).
 7. **The AI.** In an observer run past the first colonies, an AI holding a colony with no space programme (an heir's)
    offers it; AI powers in the race ask for colonies; neither spams the treaty screen.
 
