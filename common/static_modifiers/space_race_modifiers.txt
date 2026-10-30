@@ -263,6 +263,45 @@ sr_module_upkeep = {
 	building_space_program_throughput_add = 0.01
 }
 
+# ======= Solar System Colonization - facilities (simple and full colonies;
+# docs/superpowers/specs/2026-10-30-colony-management-design.md § 7)
+# On the entry, each at multiplier = its staffed levels at the colonies that
+# serve us (sr_mod_units_<key>_entry), re-applied monthly by
+# sr_mod_refresh_facilities from sr_emig_refresh_modifiers. The Mining
+# Complex, Orbital Yard, Nuclear Command Center and Administration have no
+# modifier: they feed other numbers (sr_colony_module_values.txt).
+sr_module_lab = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.02
+}
+
+sr_module_culture = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_cultural_pull_mult = 0.03
+	country_prestige_mult = 0.01
+}
+
+sr_module_resort = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_tourism_mult = 0.03
+}
+
+sr_module_black = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_intelligence_capacity_add = 1
+	country_covert_operation_efficiency_mult = 0.03
+}
+
+sr_module_train = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_army_experience_gain_mult = 0.04
+}
+
+sr_module_foundry = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_advanced_materials_mult = 0.03
+}
+
 # ======= Solar System Colonization - autonomy and free colonies (slice 5;
 # docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md)
 # On the entry, each at a multiplier and re-applied monthly with the three

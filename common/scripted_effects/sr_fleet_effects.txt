@@ -594,11 +594,11 @@ sr_sc_self_check = {
 			}
 			set_global_variable = { name = sr_sc_checked value = yes }
 			if = {
-				limit = { sr_sc_rate > 0 }
-				debug_log = "TE_SELF_CHECK OK ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.MakeScope.ScriptValue('sr_sc_rate')|2] (Space Command's state modifier reaches its state) date=[TimeKeeper.GetCurrentDate.GetString]"
+				limit = { sr_sc_rate_buildings > 0 }
+				debug_log = "TE_SELF_CHECK OK ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.MakeScope.ScriptValue('sr_sc_rate_buildings')|2] (Space Command's state modifier reaches its state) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.MakeScope.ScriptValue('sr_sc_rate')|2] (a Space Command has run at half staff or more for a month and sr_sc_rate reads 0: the method's state modifier does not reach its state; fall back to computing the rate in script; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.MakeScope.ScriptValue('sr_sc_rate_buildings')|2] (a Space Command has run at half staff or more for a month and sr_sc_rate reads 0: the method's state modifier does not reach its state; fall back to computing the rate in script; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 		}
 		else_if = {

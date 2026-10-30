@@ -418,18 +418,28 @@ CELLS = {
     "emigration level (te_sr_sec_colonies)": (
         ("te_sr_sec_colonies", 'text = "je_space_race_widget_emig_level_0"'),
         r"je_space_race_widget_emig_level_\d"),
-    "a module column's heading (te_sr_colony_head_row)": (
-        ("te_sr_colony_head_row", 'text = "je_space_race_widget_modules_col_a"'),
-        r"je_space_race_widget_modules_col_(a|b|hab|port|def)"),
+    "a module cell's label (te_sr_mod_cell)": (
+        ("te_sr_mod_cell", 'block "cell_label"'),
+        r"je_space_race_widget_modules_col_(a|b|hab|port|def|mine|yard|lab|culture|resort|black|train|bunker"
+        r"|foundry|admin)"),
+    "a colony's slots label (te_sr_colony_row)": (
+        ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_slots"'),
+        r"je_space_race_widget_modules_col_slots"),
+    "a colony's bases label (te_sr_colony_row)": (
+        ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_bases"'),
+        r"je_space_race_widget_modules_col_bases"),
     "the crew share's label (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_staffing"'),
         r"je_space_race_widget_modules_col_staffing"),
-    **{f"the colonies' {head} head (te_sr_colony_head_row)": (
-        ("te_sr_colony_head_row", f'text = "je_space_race_widget_ch_{head}"'), f"je_space_race_widget_ch_{head}")
-       for head in ("people", "crews", "autonomy", "drift", "defences", "integrity", "marines")},
+    **{f"the colonies' {head} head ({heads})": (
+        (heads, f'text = "je_space_race_widget_ch_{head}"'), f"je_space_race_widget_ch_{head}")
+       for heads, names in (("te_sr_colony_heads_people", ("people", "crews")),
+                            ("te_sr_colony_heads_autonomy", ("autonomy", "drift", "build")),
+                            ("te_sr_colony_heads_defences", ("defences", "integrity", "marines")))
+       for head in names},
     "the colony views (te_sr_colony_view_button)": (
         ("te_sr_colony_view_button", 'block "view_label"'),
-        r"je_space_race_widget_cv_(people|modules|autonomy|defences)"),
+        r"je_space_race_widget_cv_(people|modules|autonomy|defences|back)"),
     "the next fleet's label (te_sr_cf_dest_row)": (
         ("te_sr_cf_dest_row", 'block "dest_label"'),
         r"je_space_race_widget_cf_(target_label|next_label)"),
@@ -631,9 +641,13 @@ class FigureBudgetTest(unittest.TestCase):
         # Colonies (te_sr_colony_row): people and room in K, crews, crew share,
         # a module level and what is on its way, autonomy and drift, Defenses
         "settler_people": "999.9K / 999.9K", "settler_crews": "99", "module_staffing": "100%",
-        "mod_a_level": "4", "mod_a_pending": "+4", "aut_figure": "100%", "aut_drift": "+0.99",
-        "def_level": "99", "def_integrity": "100%", "def_marines": "99",
+        "aut_figure": "100%", "aut_drift": "+0.99", "def_level": "99", "def_integrity": "100%", "def_marines": "99",
+        # slots used of slots (4 + 2 technologies + 4 past), base room (60 + 10 levels x 10),
+        # what the colony builds of its own (colony management design §§ 4.3, 5)
+        "module_slots": "10/6", "module_slots_past": "10/6", "module_bases": "160", "aut_build": "100% (+5.0)",
     }
+    # a module cell (te_sr_mod_cell): a level (10 past a world's slots at most) and what is on its way
+    CELL = {"cell_level": "8", "cell_pending": "+8"}
     FREE = {"free_people": "999.9K", "free_ties": "100"}
     FLEET = {"fl_strength": "9999/9999", "fl_dv": "5000", "fl_supply": "36", "fl_marines": "99"}
     LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}
@@ -651,6 +665,7 @@ class FigureBudgetTest(unittest.TestCase):
 
     def test_colony_rows(self):
         self._check("te_sr_colony_row", self.FIGURES)
+        self._check("te_sr_mod_cell", self.CELL)
         self._check("te_sr_free_row", self.FREE)
         self._check("te_sr_mq_row", self.QUEUE)
         self._check("te_sr_site_row", self.SITE)

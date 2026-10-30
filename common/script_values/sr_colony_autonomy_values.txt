@@ -35,6 +35,14 @@ sr_aut_chartered = { value = -0.4 }
 # pressure, sr_site_aut_pressure_<key>) equals it: at 100 x the pressure. Two
 # thirds of the way there in about eight years.
 sr_aut_settle_rate = { value = 0.01 }
+# An Administration's staffed level at the colony (colony management design § 7).
+sr_aut_per_admin_level = { value = -0.15 }
+
+# A colony builds its own modules (colony management design § 4.3): points a
+# month, autonomy / 100 x its people / 10,000 x this, at most the cap; a
+# module at sr_module_points.
+sr_aut_selfbuild_per_10k = { value = 1 }
+sr_aut_selfbuild_max = { value = 5 }
 
 # The autonomy event's answers (space_race_events.94): what each takes off now,
 # and the share of its specializations a chartered colony keeps working for its

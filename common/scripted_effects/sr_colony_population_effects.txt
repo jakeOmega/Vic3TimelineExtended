@@ -157,6 +157,8 @@ sr_emig_step_prio = {
 # could skip the removal and stack a copy. The multipliers read the country
 # through `owner` (they resolve in the entry's scope, je_multiplier_scope_audit).
 sr_emig_refresh_modifiers = {
+	# The facilities' modifiers (colony management design § 7), generated.
+	sr_mod_refresh_facilities = yes
 	je:je_space_race_solar_colonization ?= {
 		if = {
 			limit = { has_modifier = sr_emigration_programme }

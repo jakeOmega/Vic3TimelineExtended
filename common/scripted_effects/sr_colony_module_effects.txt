@@ -53,7 +53,7 @@ sr_mod_month = {
 			limit = {
 				local_var:sr_fab_built < sr_mod_fab_per_month
 				NOT = { sr_launch_site_lost = yes }
-				sr_mod_fab_stock_value >= sr_module_points
+				sr_mod_fab_stock_value >= sr_mq_head_cost
 				sr_ms_has_free_slot = yes
 				has_variable = sr_mq_1_site
 				has_variable = sr_mq_1_type
@@ -66,10 +66,12 @@ sr_mod_month = {
 
 # Country scope, from sr_mod_fab_head (the queue's first entry, already out of
 # the queue): one module of TYPE (shipment code CODE) for the world KEY (index
-# INDEX) costs its points and fills a shipment slot; the world counts it on its
-# way at once, so the queue's caps see it the same month.
+# INDEX) costs its points (local_var:sr_mq_head_cost_now, the head's price
+# before it left: past the world's slots it costs more, colony management
+# design § 5) and fills a shipment slot; the world counts it on its way at
+# once, so the queue's caps see it the same month.
 sr_mod_fab_build = {
-	change_variable = { name = sr_fab_stock subtract = sr_module_points }
+	change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }
 	sr_ms_count_add = { VAR = sr_site_ship_$TYPE$_$KEY$ }
 	set_local_variable = { name = sr_ms_new_site value = $INDEX$ }
 	set_local_variable = { name = sr_ms_new_type value = $CODE$ }
@@ -421,12 +423,13 @@ sr_mod_fabrication_self_check = {
 				te_history_month_index > var:sr_mod_fab_check_armed
 			}
 			set_global_variable = { name = sr_mod_fab_checked value = yes }
+			# The method's points alone: a colony's Orbital Yards add their own.
 			if = {
-				limit = { sr_mod_fab_rate > 0 }
-				debug_log = "TE_SELF_CHECK OK module_fabrication country=[THIS.GetCountry.GetTagName] points=[THIS.ScriptValue('sr_mod_fab_rate')|2] (a Space Program's fabrication method gives its country points) date=[TimeKeeper.GetCurrentDate.GetString]"
+				limit = { sr_mod_fab_rate_method > 0 }
+				debug_log = "TE_SELF_CHECK OK module_fabrication country=[THIS.GetCountry.GetTagName] points=[THIS.ScriptValue('sr_mod_fab_rate_method')|2] (a Space Program's fabrication method gives its country points) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN module_fabrication country=[THIS.GetCountry.GetTagName] points=[THIS.ScriptValue('sr_mod_fab_rate')|2] (a Space Program has run a fabrication method at half staff or more for a month and its country has no points: the method's country modifier does not reach the country; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN module_fabrication country=[THIS.GetCountry.GetTagName] points=[THIS.ScriptValue('sr_mod_fab_rate_method')|2] (a Space Program has run a fabrication method at half staff or more for a month and its country has no points: the method's country modifier does not reach the country; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 		}
 		else_if = {

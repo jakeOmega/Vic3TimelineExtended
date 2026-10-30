@@ -92,16 +92,18 @@ te_cede_colony = {
 			}
 		}
 
-		# The giver loses the world's worth and is reluctant besides; the
-		# receiver gains its worth, half if it runs no space programme. A Money
-		# Transfer the other way is what makes a sale acceptable.
+		# The giver loses the world's worth and is reluctant besides (-30: with
+		# the worth, -60 for an empty lunar outpost to -200 for a peopled,
+		# built-up colony; colony management design § 3); the receiver gains
+		# its worth, half if it runs no space programme. A Money Transfer the
+		# other way is what makes a sale acceptable.
 		inherent_accept_score = {
 			value = 0
 			if = {
 				limit = { scope:source_country ?= this }
 				add = {
 					desc = "te_cede_colony_ai_give"
-					value = -10
+					value = -30
 				}
 				subtract = {
 					desc = "te_cede_colony_ai_worth_lost"

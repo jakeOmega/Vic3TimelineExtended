@@ -1240,26 +1240,34 @@ types space_race_widget_types
 	}
 
 	### One colony in Colonies (audit SPC-5; the colony sections of slices 2-6 in
-	### one table): its icon and name on the first line, the name's hover its
-	### specializations' effects; beside the name the chosen view's status and
-	### buttons, and on the second line, 28 in, the view's figures under the
-	### column heads (te_sr_colony_head_row). The views (te_sr_sec_colonies'
+	### one table), in its own framed box (colony management design § 8): its
+	### icon and name on the first line, the name's hover its specializations'
+	### effects and a click its page; beside the name the chosen view's status
+	### and buttons, and under it the view's figures. The views (te_sr_sec_colonies'
 	### switch, GetVariableSystem's sr_colony_view): People, the default (the
-	### settlers' priority; people / room, crews), Modules (crew share and
-	### Clear; the five module types, each its level, "+N" queued or on its way
-	### and a button that queues one more), Autonomy (charter or garrison, and
-	### Abandon; autonomy and its drift a month) and, under Full Colonies,
-	### Defenses (status; Defenses, integrity, marines). Under Races Only the row
-	### is the first line's icon and name. Line 1: 24 + 180 + the widest view's
-	### part (80 + 80 Autonomy's) + 3 × 4 + 2 × 4 = 384; line 2: 28 + the
-	### Modules cells (5 × 54 + 4 × 4) + 8 = 322, in the 480 column. Instances
-	### in te_sr_colony_rows (sr_sites_generated_rows.gui), one per world.
+	### settlers' priority; people / room, crews), Modules (Clear; the crews'
+	### share, slots and Extraplanetary Base room, then every module type in three
+	### lines of self-labeled cells, te_sr_mod_cell), Autonomy (charter or garrison, and
+	### Abandon; autonomy, its drift a month and what the colony is building
+	### itself) and, under Full Colonies, Defenses (status; Defenses, integrity,
+	### marines). A colony's page (sr_colony_view 'detail', sr_colony_focus its
+	### key) shows that row alone with every view at once: the view parts beside
+	### the name stack, and each view's figures sit under a heading and their
+	### heads. Under Races Only the row is the first line's icon and name.
+	### Line 1: 24 + 180 + the widest view's part (Autonomy's 80 + 80 + 4) + 2 x 4
+	### + 2 x 4 margin = 384; the module cells 4 + 5 x 90 + 4 x 4 + 8 = 478, in
+	### the 480 column. Instances in te_sr_colony_rows
+	### (sr_sites_generated_rows.gui), one per world.
 	type te_sr_colony_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		spacing = 1
-		margin = { 4 1 }
+		margin = { 4 3 }
 		block "colony_visible" {}
+
+		background = {
+			using = entry_bg_simple
+		}
 
 		flowcontainer = {
 			direction = horizontal
@@ -1268,7 +1276,7 @@ types space_race_widget_types
 
 			widget = {
 				size = { 24 24 }
-				parentanchor = vcenter
+				parentanchor = top
 
 				icon = {
 					size = { 24 24 }
@@ -1276,9 +1284,11 @@ types space_race_widget_types
 					block "colony_icon" {}
 				}
 			}
-			widget = {
+			### The name: a click opens the colony's page (colony management design § 8).
+			button = {
 				size = { 180 24 }
-				parentanchor = vcenter
+				parentanchor = top
+				block "colony_focus" {}
 
 				textbox = {
 					parentanchor = left|vcenter
@@ -1291,166 +1301,18 @@ types space_race_widget_types
 					block "colony_name" {}
 				}
 			}
-			### People: the colony's priority for settlers (sr_colony_priority_sgui).
-			button = {
-				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ) ) ) ) )]"
-				using = default_button_action
-				size = { 80 24 }
-				parentanchor = vcenter
-				block "priority_button" {}
-
-				textbox = {
-					parentanchor = center
-					autoresize = yes
-					max_width = 74
-					align = center|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					text = "je_space_race_widget_emig_prio_0"
-					block "prio_0_visible" {}
-				}
-				textbox = {
-					parentanchor = center
-					autoresize = yes
-					max_width = 74
-					align = center|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					text = "je_space_race_widget_emig_prio_1"
-					block "prio_1_visible" {}
-				}
-				textbox = {
-					parentanchor = center
-					autoresize = yes
-					max_width = 74
-					align = center|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					text = "je_space_race_widget_emig_prio_2"
-					block "prio_2_visible" {}
-				}
-				textbox = {
-					parentanchor = center
-					autoresize = yes
-					max_width = 74
-					align = center|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					text = "je_space_race_widget_emig_prio_3"
-					block "prio_3_visible" {}
-				}
-			}
-			### Modules: the share of its modules its crews run, and Clear.
+			### The view parts: one in a list, every one stacked on a colony's page.
 			flowcontainer = {
-				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'modules') )]"
-				direction = horizontal
+				direction = vertical
 				ignoreinvisible = yes
-				spacing = 4
-				parentanchor = vcenter
+				spacing = 1
 
-				widget = {
-					size = { 88 24 }
-					parentanchor = vcenter
-					tooltip = "je_space_race_widget_modules_staffing_tt"
-
-					flowcontainer = {
-						direction = horizontal
-						spacing = 4
-						parentanchor = left|vcenter
-
-						textbox = {
-							parentanchor = left|vcenter
-							autoresize = yes
-							max_width = 40
-							align = left|nobaseline
-							using = te_sr_fontsize_row
-							elide = right
-							default_format = "#tooltippable"
-							text = "je_space_race_widget_modules_col_staffing"
-						}
-						textbox = {
-							parentanchor = left|vcenter
-							autoresize = yes
-							max_width = 44
-							align = left|nobaseline
-							using = te_sr_fontsize_row
-							elide = right
-							default_format = "#v"
-							block "module_staffing" {}
-						}
-					}
-				}
-				button_icon_cancel = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					block "module_clear_button" {}
-				}
-			}
-			### Autonomy: its charter or garrison, and Abandon (sr_colony_abandon_sgui).
-			flowcontainer = {
-				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'autonomy') )]"
-				direction = horizontal
-				ignoreinvisible = yes
-				spacing = 4
-				parentanchor = vcenter
-
-				widget = {
-					size = { 80 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = left|vcenter
-						autoresize = yes
-						max_width = 80
-						align = left|nobaseline
-						using = te_sr_fontsize_row
-						elide = right
-						default_format = "#grey"
-						text = "je_space_race_widget_autonomy_status_none"
-						block "aut_none_visible" {}
-					}
-					textbox = {
-						parentanchor = left|vcenter
-						autoresize = yes
-						max_width = 80
-						align = left|nobaseline
-						using = te_sr_fontsize_row
-						elide = right
-						default_format = "#tooltippable"
-						tooltip = "je_space_race_widget_autonomy_charter_tt"
-						text = "je_space_race_widget_autonomy_status_charter"
-						block "aut_charter_visible" {}
-					}
-					textbox = {
-						parentanchor = left|vcenter
-						autoresize = yes
-						max_width = 80
-						align = left|nobaseline
-						using = te_sr_fontsize_row
-						elide = right
-						default_format = "#tooltippable"
-						tooltip = "je_space_race_widget_autonomy_garrison_tt"
-						text = "je_space_race_widget_autonomy_status_garrison"
-						block "aut_garrison_visible" {}
-					}
-					textbox = {
-						parentanchor = left|vcenter
-						autoresize = yes
-						max_width = 80
-						align = left|nobaseline
-						using = te_sr_fontsize_row
-						elide = right
-						default_format = "#tooltippable"
-						tooltip = "je_space_race_widget_autonomy_both_tt"
-						text = "je_space_race_widget_autonomy_status_both"
-						block "aut_both_visible" {}
-					}
-				}
+				### People: the colony's priority for settlers (sr_colony_priority_sgui).
 				button = {
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ) ) ) ) )]"
 					using = default_button_action
 					size = { 80 24 }
-					parentanchor = vcenter
-					block "aut_abandon_button" {}
+					block "priority_button" {}
 
 					textbox = {
 						parentanchor = center
@@ -1459,98 +1321,226 @@ types space_race_widget_types
 						align = center|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
-						text = "je_space_race_widget_autonomy_abandon"
+						text = "je_space_race_widget_emig_prio_0"
+						block "prio_0_visible" {}
+					}
+					textbox = {
+						parentanchor = center
+						autoresize = yes
+						max_width = 74
+						align = center|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						text = "je_space_race_widget_emig_prio_1"
+						block "prio_1_visible" {}
+					}
+					textbox = {
+						parentanchor = center
+						autoresize = yes
+						max_width = 74
+						align = center|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						text = "je_space_race_widget_emig_prio_2"
+						block "prio_2_visible" {}
+					}
+					textbox = {
+						parentanchor = center
+						autoresize = yes
+						max_width = 74
+						align = center|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						text = "je_space_race_widget_emig_prio_3"
+						block "prio_3_visible" {}
 					}
 				}
-			}
-			### Defenses (Full Colonies): calm, blockaded, under assault, occupied
-			### (with the occupier's flag) or interdicted.
-			widget = {
-				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') )]"
-				size = { 140 24 }
-				parentanchor = vcenter
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 140
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#grey"
-					text = "je_space_race_widget_def_status_calm"
-					block "def_calm_visible" {}
-				}
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 140
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_loc_blockaded_tt"
-					text = "je_space_race_widget_def_status_blockaded"
-					block "def_blockaded_visible" {}
-				}
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 140
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_loc_interdicted_tt"
-					text = "je_space_race_widget_def_status_interdicted"
-					block "def_interdicted_visible" {}
-				}
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 140
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_def_assault_tt"
-					text = "je_space_race_widget_def_status_assault"
-					block "def_assault_visible" {}
-				}
+				### Modules: Clear, which empties the colony's queue.
 				flowcontainer = {
-					parentanchor = left|vcenter
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
 					direction = horizontal
-					spacing = 4
 					ignoreinvisible = yes
-					block "def_occupied_visible" {}
+					spacing = 4
+
+					button_icon_cancel = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						block "module_clear_button" {}
+					}
+				}
+				### Autonomy: its charter or garrison, and Abandon (sr_colony_abandon_sgui).
+				flowcontainer = {
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+					parentanchor = vcenter
+
+					widget = {
+						size = { 80 24 }
+						parentanchor = vcenter
+
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 80
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#grey"
+							text = "je_space_race_widget_autonomy_status_none"
+							block "aut_none_visible" {}
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 80
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#tooltippable"
+							tooltip = "je_space_race_widget_autonomy_charter_tt"
+							text = "je_space_race_widget_autonomy_status_charter"
+							block "aut_charter_visible" {}
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 80
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#tooltippable"
+							tooltip = "je_space_race_widget_autonomy_garrison_tt"
+							text = "je_space_race_widget_autonomy_status_garrison"
+							block "aut_garrison_visible" {}
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 80
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#tooltippable"
+							tooltip = "je_space_race_widget_autonomy_both_tt"
+							text = "je_space_race_widget_autonomy_status_both"
+							block "aut_both_visible" {}
+						}
+					}
+					button = {
+						using = default_button_action
+						size = { 80 24 }
+						parentanchor = vcenter
+						block "aut_abandon_button" {}
+
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							max_width = 74
+							align = center|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							text = "je_space_race_widget_autonomy_abandon"
+						}
+					}
+				}
+				### Defenses (Full Colonies): calm, blockaded, under assault, occupied
+				### (with the occupier's flag) or interdicted.
+				widget = {
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'defences'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
+					size = { 140 24 }
+					parentanchor = vcenter
 
 					textbox = {
-						parentanchor = vcenter
+						parentanchor = left|vcenter
 						autoresize = yes
-						max_width = 100
+						max_width = 140
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						default_format = "#grey"
+						text = "je_space_race_widget_def_status_calm"
+						block "def_calm_visible" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 140
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
 						default_format = "#tooltippable"
-						tooltip = "je_space_race_widget_def_occupied_tt"
-						text = "je_space_race_widget_def_status_occupied"
+						tooltip = "je_space_race_widget_loc_blockaded_tt"
+						text = "je_space_race_widget_def_status_blockaded"
+						block "def_blockaded_visible" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 140
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						default_format = "#tooltippable"
+						tooltip = "je_space_race_widget_loc_interdicted_tt"
+						text = "je_space_race_widget_def_status_interdicted"
+						block "def_interdicted_visible" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 140
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						default_format = "#tooltippable"
+						tooltip = "je_space_race_widget_def_assault_tt"
+						text = "je_space_race_widget_def_status_assault"
+						block "def_assault_visible" {}
 					}
 					flowcontainer = {
+						parentanchor = left|vcenter
+						direction = horizontal
+						spacing = 4
 						ignoreinvisible = yes
-						block "def_occupier_context" {}
+						block "def_occupied_visible" {}
 
-						widget = {
-							size = { 28 24 }
+						textbox = {
 							parentanchor = vcenter
+							autoresize = yes
+							max_width = 100
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#tooltippable"
+							tooltip = "je_space_race_widget_def_occupied_tt"
+							text = "je_space_race_widget_def_status_occupied"
+						}
+						flowcontainer = {
+							ignoreinvisible = yes
+							block "def_occupier_context" {}
 
-							tiny_flag = {
-								parentanchor = center
-								datacontext = "[State.GetCountry]"
+							widget = {
+								size = { 28 24 }
+								parentanchor = vcenter
+
+								tiny_flag = {
+									parentanchor = center
+									datacontext = "[State.GetCountry]"
+								}
 							}
 						}
 					}
 				}
 			}
+		}
+		te_sr_colony_detail_heading = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
+			text = "je_space_race_widget_cv_people"
+		}
+		te_sr_colony_heads_people = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
 		}
 		### People: people and room, crews.
 		flowcontainer = {
@@ -1605,220 +1595,389 @@ types space_race_widget_types
 				}
 			}
 		}
-		### Modules: a cell per module type, in the heads' order (I, II, Hab,
-		### Port, Def): the level (its hover what the module does), "+N" queued
-		### or on its way, and a button that queues one more.
+		te_sr_colony_detail_heading = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
+			text = "je_space_race_widget_cv_modules"
+		}
+		### Modules: every type in three lines of cells, each its label, the level
+		### (its hover what it does), "+N" queued or on its way and a button that
+		### queues one more: the specializations, Habitat, Spaceport and Defenses;
+		### then the facilities (colony management design § 7).
 		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'modules') )]"
-			direction = horizontal
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
+			direction = vertical
 			ignoreinvisible = yes
-			spacing = 4
-			margin_left = 28
+			spacing = 1
+			margin_left = 4
 
+			### The crews' share of its modules, its slots (red past them, the next
+			### module's price on hover) and its Extraplanetary Base room.
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 8
+
+				widget = {
+					size = { 84 24 }
+					parentanchor = vcenter
+					tooltip = "je_space_race_widget_modules_staffing_tt"
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						parentanchor = left|vcenter
+
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 40
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#tooltippable"
+							text = "je_space_race_widget_modules_col_staffing"
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 40
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#v"
+							block "module_staffing" {}
+						}
+					}
+				}
+				widget = {
+					size = { 96 24 }
+					parentanchor = vcenter
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						parentanchor = left|vcenter
+						block "module_slots_tooltip" {}
+
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 52
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#tooltippable"
+							text = "je_space_race_widget_modules_col_slots"
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 40
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#v"
+							block "module_slots" {}
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 40
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#R"
+							block "module_slots_past" {}
+						}
+					}
+				}
+				widget = {
+					size = { 92 24 }
+					parentanchor = vcenter
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						parentanchor = left|vcenter
+						block "module_bases_tooltip" {}
+
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 52
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#tooltippable"
+							text = "je_space_race_widget_modules_col_bases"
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 36
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#v"
+							block "module_bases" {}
+						}
+					}
+				}
+			}
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = no
-				spacing = 0
-				parentanchor = vcenter
+				spacing = 4
 
-				widget = {
-					size = { 14 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = center
-						autoresize = yes
-						max_width = 14
-						align = center|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#tooltippable"
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_a"
+						tooltip = "je_space_race_widget_modules_col_spec_tt"
+					}
+					blockoverride "cell_level" {
 						block "mod_a_level" {}
 					}
-				}
-				widget = {
-					size = { 20 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = left|vcenter
-						autoresize = yes
-						max_width = 20
-						align = left|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#v"
+					blockoverride "cell_pending" {
 						block "mod_a_pending" {}
 					}
+					blockoverride "cell_button" {
+						block "mod_a_button" {}
+					}
 				}
-				button_icon_plus_action = {
-					size = { 20 20 }
-					parentanchor = vcenter
-					block "mod_a_button" {}
-				}
-			}
-			flowcontainer = {
-				direction = horizontal
-				ignoreinvisible = no
-				spacing = 0
-				parentanchor = vcenter
-
-				widget = {
-					size = { 14 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = center
-						autoresize = yes
-						max_width = 14
-						align = center|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#tooltippable"
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_b"
+						tooltip = "je_space_race_widget_modules_col_spec_tt"
+					}
+					blockoverride "cell_level" {
 						block "mod_b_level" {}
 					}
-				}
-				widget = {
-					size = { 20 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = left|vcenter
-						autoresize = yes
-						max_width = 20
-						align = left|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#v"
+					blockoverride "cell_pending" {
 						block "mod_b_pending" {}
 					}
+					blockoverride "cell_button" {
+						block "mod_b_button" {}
+					}
 				}
-				button_icon_plus_action = {
-					size = { 20 20 }
-					parentanchor = vcenter
-					block "mod_b_button" {}
-				}
-			}
-			flowcontainer = {
-				direction = horizontal
-				ignoreinvisible = no
-				spacing = 0
-				parentanchor = vcenter
-
-				widget = {
-					size = { 14 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = center
-						autoresize = yes
-						max_width = 14
-						align = center|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#tooltippable"
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_hab"
+						tooltip = "je_space_race_widget_mod_hab_tt"
+					}
+					blockoverride "cell_level" {
 						block "mod_hab_level" {}
 					}
-				}
-				widget = {
-					size = { 20 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = left|vcenter
-						autoresize = yes
-						max_width = 20
-						align = left|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#v"
+					blockoverride "cell_pending" {
 						block "mod_hab_pending" {}
 					}
+					blockoverride "cell_button" {
+						block "mod_hab_button" {}
+					}
 				}
-				button_icon_plus_action = {
-					size = { 20 20 }
-					parentanchor = vcenter
-					block "mod_hab_button" {}
-				}
-			}
-			flowcontainer = {
-				direction = horizontal
-				ignoreinvisible = no
-				spacing = 0
-				parentanchor = vcenter
-
-				widget = {
-					size = { 14 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = center
-						autoresize = yes
-						max_width = 14
-						align = center|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#tooltippable"
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_port"
+						tooltip = "je_space_race_widget_mod_port_tt"
+					}
+					blockoverride "cell_level" {
 						block "mod_port_level" {}
 					}
-				}
-				widget = {
-					size = { 20 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = left|vcenter
-						autoresize = yes
-						max_width = 20
-						align = left|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#v"
+					blockoverride "cell_pending" {
 						block "mod_port_pending" {}
 					}
+					blockoverride "cell_button" {
+						block "mod_port_button" {}
+					}
 				}
-				button_icon_plus_action = {
-					size = { 20 20 }
-					parentanchor = vcenter
-					block "mod_port_button" {}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_def"
+						tooltip = "je_space_race_widget_mod_def_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_def_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_def_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_def_button" {}
+					}
 				}
 			}
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = no
-				spacing = 0
-				parentanchor = vcenter
+				spacing = 4
 
-				widget = {
-					size = { 14 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = center
-						autoresize = yes
-						max_width = 14
-						align = center|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#tooltippable"
-						block "mod_def_level" {}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_mine"
+						tooltip = "je_space_race_widget_mod_mine_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_mine_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_mine_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_mine_button" {}
 					}
 				}
-				widget = {
-					size = { 20 24 }
-					parentanchor = vcenter
-
-					textbox = {
-						parentanchor = left|vcenter
-						autoresize = yes
-						max_width = 20
-						align = left|nobaseline
-						using = te_sr_fontsize_row
-						default_format = "#v"
-						block "mod_def_pending" {}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_yard"
+						tooltip = "je_space_race_widget_mod_yard_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_yard_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_yard_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_yard_button" {}
 					}
 				}
-				button_icon_plus_action = {
-					size = { 20 20 }
-					parentanchor = vcenter
-					block "mod_def_button" {}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_lab"
+						tooltip = "je_space_race_widget_mod_lab_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_lab_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_lab_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_lab_button" {}
+					}
+				}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_culture"
+						tooltip = "je_space_race_widget_mod_culture_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_culture_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_culture_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_culture_button" {}
+					}
+				}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_resort"
+						tooltip = "je_space_race_widget_mod_resort_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_resort_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_resort_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_resort_button" {}
+					}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = no
+				spacing = 4
+
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_black"
+						tooltip = "je_space_race_widget_mod_black_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_black_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_black_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_black_button" {}
+					}
+				}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_train"
+						tooltip = "je_space_race_widget_mod_train_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_train_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_train_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_train_button" {}
+					}
+				}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_bunker"
+						tooltip = "je_space_race_widget_mod_bunker_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_bunker_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_bunker_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_bunker_button" {}
+					}
+				}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_foundry"
+						tooltip = "je_space_race_widget_mod_foundry_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_foundry_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_foundry_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_foundry_button" {}
+					}
+				}
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_admin"
+						tooltip = "je_space_race_widget_mod_admin_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_admin_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_admin_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_admin_button" {}
+					}
 				}
 			}
 		}
+		te_sr_colony_detail_heading = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
+			text = "je_space_race_widget_cv_autonomy"
+		}
+		te_sr_colony_heads_autonomy = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
+		}
 		### Autonomy: autonomy, and its drift a month (that colony's terms on hover).
 		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'autonomy') )]"
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -1856,10 +2015,33 @@ types space_race_widget_types
 					block "aut_drift" {}
 				}
 			}
+			widget = {
+				size = { 104 24 }
+				parentanchor = vcenter
+				block "aut_build_tooltip" {}
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 104
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					default_format = "#tooltippable"
+					block "aut_build" {}
+				}
+			}
+		}
+		te_sr_colony_detail_heading = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
+			text = "je_space_race_widget_cv_defences"
+		}
+		te_sr_colony_heads_defences = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
 		}
 		### Defenses: Defenses levels, integrity, marines.
 		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') )]"
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), Or( GetVariableSystem.HasValue('sr_colony_view', 'defences'), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -1916,225 +2098,240 @@ types space_race_widget_types
 		}
 	}
 
-	### The column heads over te_sr_colony_row's second line, for the chosen
-	### view, at the same widths and 28 in. The Modules heads' hovers say what
-	### each module does.
+	### The column heads over te_sr_colony_row's figures (colony management design
+	### § 8): above the rows for the People, Autonomy and Defenses views, and under
+	### each heading on a colony's page; the module cells label themselves. At the
+	### figures' widths and 28 in.
 	type te_sr_colony_head_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		margin = { 4 1 }
 
-		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ) ) ) ) )]"
-			direction = horizontal
-			ignoreinvisible = yes
-			spacing = 4
-			margin_left = 28
-
-			widget = {
-				size = { 144 20 }
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 144
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_settlers_people_tt"
-					text = "je_space_race_widget_ch_people"
-				}
-			}
-			widget = {
-				size = { 60 20 }
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 60
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_settlers_crews_tt"
-					text = "je_space_race_widget_ch_crews"
-				}
-			}
+		te_sr_colony_heads_people = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) )]"
 		}
-		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'modules') )]"
-			direction = horizontal
-			ignoreinvisible = yes
-			spacing = 4
-			margin_left = 28
-
-			widget = {
-				size = { 54 20 }
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 54
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_modules_col_spec_tt"
-					text = "je_space_race_widget_modules_col_a"
-				}
-			}
-			widget = {
-				size = { 54 20 }
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 54
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_modules_col_spec_tt"
-					text = "je_space_race_widget_modules_col_b"
-				}
-			}
-			widget = {
-				size = { 54 20 }
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 54
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_mod_hab_tt"
-					text = "je_space_race_widget_modules_col_hab"
-				}
-			}
-			widget = {
-				size = { 54 20 }
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 54
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_mod_port_tt"
-					text = "je_space_race_widget_modules_col_port"
-				}
-			}
-			widget = {
-				size = { 54 20 }
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 54
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_mod_def_tt"
-					text = "je_space_race_widget_modules_col_def"
-				}
-			}
-		}
-		flowcontainer = {
+		te_sr_colony_heads_autonomy = {
 			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'autonomy') )]"
-			direction = horizontal
-			ignoreinvisible = yes
-			spacing = 4
-			margin_left = 28
+		}
+		te_sr_colony_heads_defences = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') )]"
+		}
+	}
 
-			widget = {
-				size = { 80 20 }
+	### People's heads: people and room, crews.
+	type te_sr_colony_heads_people = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin_left = 28
 
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 80
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_autonomy_figure_tt"
-					text = "je_space_race_widget_ch_autonomy"
-				}
-			}
-			widget = {
-				size = { 70 20 }
+		widget = {
+			size = { 144 20 }
 
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 70
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_autonomy_drift_tt"
-					text = "je_space_race_widget_ch_drift"
-				}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 144
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "je_space_race_widget_settlers_people_tt"
+				text = "je_space_race_widget_ch_people"
 			}
 		}
-		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') )]"
-			direction = horizontal
-			ignoreinvisible = yes
-			spacing = 4
-			margin_left = 28
+		widget = {
+			size = { 60 20 }
 
-			widget = {
-				size = { 84 20 }
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 84
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_def_level_tt"
-					text = "je_space_race_widget_ch_defences"
-				}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 60
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "je_space_race_widget_settlers_crews_tt"
+				text = "je_space_race_widget_ch_crews"
 			}
-			widget = {
-				size = { 88 20 }
+		}
+	}
 
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 88
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_def_integrity_tt"
-					text = "je_space_race_widget_ch_integrity"
-				}
-			}
-			widget = {
-				size = { 76 20 }
+	### Autonomy's heads: autonomy, drift, the colony's own building.
+	type te_sr_colony_heads_autonomy = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin_left = 28
 
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 76
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#tooltippable"
-					tooltip = "je_space_race_widget_def_marines_tt"
-					text = "je_space_race_widget_ch_marines"
-				}
+		widget = {
+			size = { 80 20 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 80
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "je_space_race_widget_autonomy_figure_tt"
+				text = "je_space_race_widget_ch_autonomy"
 			}
+		}
+		widget = {
+			size = { 70 20 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 70
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "je_space_race_widget_autonomy_drift_tt"
+				text = "je_space_race_widget_ch_drift"
+			}
+		}
+		widget = {
+			size = { 104 20 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 104
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "je_space_race_widget_autonomy_build_tt"
+				text = "je_space_race_widget_ch_build"
+			}
+		}
+	}
+
+	### Defenses' heads: Defenses, integrity, marines.
+	type te_sr_colony_heads_defences = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin_left = 28
+
+		widget = {
+			size = { 84 20 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 84
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "je_space_race_widget_def_level_tt"
+				text = "je_space_race_widget_ch_defences"
+			}
+		}
+		widget = {
+			size = { 88 20 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 88
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "je_space_race_widget_def_integrity_tt"
+				text = "je_space_race_widget_ch_integrity"
+			}
+		}
+		widget = {
+			size = { 76 20 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 76
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "je_space_race_widget_def_marines_tt"
+				text = "je_space_race_widget_ch_marines"
+			}
+		}
+	}
+
+	### A heading over a view's figures on a colony's page.
+	type te_sr_colony_detail_heading = textbox {
+		autoresize = yes
+		max_width = 460
+		align = left|nobaseline
+		using = te_sr_fontsize_row
+		default_format = "#title"
+	}
+
+	### A module cell of te_sr_colony_row: its label (its hover what the module
+	### does), its level, "+N" queued or on its way, and a button that queues one
+	### more. 38 + 12 + 20 + 20 = 90.
+	type te_sr_mod_cell = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = no
+		spacing = 0
+		parentanchor = vcenter
+
+		widget = {
+			size = { 38 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 38
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				block "cell_label" {}
+			}
+		}
+		widget = {
+			size = { 12 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = center
+				autoresize = yes
+				max_width = 12
+				align = center|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#tooltippable"
+				block "cell_level" {}
+			}
+		}
+		widget = {
+			size = { 20 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 20
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#v"
+				block "cell_pending" {}
+			}
+		}
+		button_icon_plus_action = {
+			size = { 20 20 }
+			parentanchor = vcenter
+			block "cell_button" {}
 		}
 	}
 
@@ -2158,7 +2355,8 @@ types space_race_widget_types
 	}
 
 	### Colonies (solar colonization; audit SPC-5): every colony we hold, in one
-	### table, where the colony sections of slices 2-6 (Our Colonies, Settlers,
+	### table, each in its own box (a colony's name opens its page: colony
+	### management design § 8), where the colony sections of slices 2-6 (Our Colonies, Settlers,
 	### Colony Modules, Colony Autonomy, Colony Defences) each gave one aspect of
 	### the same worlds. Under Simple and Full Colonies a switch above the rows
 	### picks the view (GetVariableSystem's sr_colony_view: People, the default,
@@ -2220,7 +2418,7 @@ types space_race_widget_types
 				te_sr_colony_view_button = {
 					tooltip = "je_space_race_widget_cv_people_tt"
 					blockoverride "view_button" {
-						enabled = "[Not( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ) ) ) ) ) )]"
+						enabled = "[Not( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) ) )]"
 						onclick = "[GetVariableSystem.Clear('sr_colony_view')]"
 					}
 					blockoverride "view_label" {
@@ -2262,7 +2460,7 @@ types space_race_widget_types
 
 			### People: the emigration program, the settlers it sends, our people off Earth.
 			flowcontainer = {
-				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ) ) ) ) )]"
+				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) )]"
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 2
@@ -2425,6 +2623,24 @@ types space_race_widget_types
 					}
 					blockoverride "row_value" {
 						text = "je_space_race_widget_free_trade_figure"
+					}
+				}
+			}
+
+			### A colony's page (colony management design § 8): Back to the list.
+			flowcontainer = {
+				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'detail') )]"
+				direction = horizontal
+				ignoreinvisible = yes
+				margin = { 0 2 }
+
+				te_sr_colony_view_button = {
+					tooltip = "je_space_race_widget_cv_back_tt"
+					blockoverride "view_button" {
+						onclick = "[GetVariableSystem.Clear('sr_colony_view')]"
+					}
+					blockoverride "view_label" {
+						text = "je_space_race_widget_cv_back"
 					}
 				}
 			}
