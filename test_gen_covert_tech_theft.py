@@ -76,6 +76,29 @@ class RenderTest(unittest.TestCase):
             ladder.count("scope:iw_theft_target ?= { has_technology_researched = "), len(self.production)
         )
 
+    def test_catalog_reads_prerequisites(self):
+        by_key = {tech.key: tech for tech in self.catalog}
+        self.assertEqual(
+            by_key["asteroid_mining"].prereqs, ("in_situ_resource_utilization", "directed_energy_weapons")
+        )
+        self.assertTrue(any(not tech.prereqs for tech in self.catalog))
+
+    def test_ladder_branch_requires_prerequisites(self):
+        # Researching a technology doesn't mean holding its prerequisites: a
+        # save from before #1234 kept LIB and UNA researching asteroid_mining
+        # without in_situ_resource_utilization, and the engine refused the
+        # theft every month (#1244).
+        for tech in self.production:
+            start = self.steal.index(f"\t\t\tis_researching_technology = {tech.key}\n")
+            limit = self.steal[start : self.steal.index("\t\t}", start)]
+            expected = [
+                f"is_researching_technology = {tech.key}",
+                f"NOT = {{ has_technology_researched = {tech.key} }}",
+                *(f"has_technology_researched = {prereq}" for prereq in tech.prereqs),
+                f"scope:iw_theft_target ?= {{ has_technology_researched = {tech.key} }}",
+            ]
+            self.assertEqual([line.strip() for line in limit.splitlines()], expected, tech.key)
+
     def test_random_list_behind_stealable_guard(self):
         guard = self.steal.index("covert_tech_stealable_production = { TARGET = scope:iw_theft_target }")
         self.assertLess(guard, self.steal.index("random_list = {"))
@@ -86,13 +109,24 @@ class RenderTest(unittest.TestCase):
         self.assertEqual(entries.count("can_research = "), len(self.production))
 
     def test_stealable_accepts_current_research(self):
-        # The theft's current-research branch needs no can_research, so the
-        # launch and keep gates must not need it for that technology either:
-        # a gate stricter than the theft would end an operation still stealing.
+        # The gate accepts a technology on the theft's own current-research
+        # terms (researching it, its prerequisites held, no can_research): a
+        # gate stricter than the theft would end an operation still stealing,
+        # and a looser one would keep an operation alive with nothing to take.
         text = gen.render_stealable("production", self.production)
-        self.assertEqual(text.count("\t\tAND = {"), len(self.production))
+        self.assertEqual(text.count("\n\t\tAND = {"), len(self.production))
         for tech in self.production:
-            self.assertIn(f"OR = {{ can_research = {tech.key} is_researching_technology = {tech.key} }}", text)
+            if not tech.prereqs:
+                self.assertIn(f"OR = {{ can_research = {tech.key} is_researching_technology = {tech.key} }}", text)
+                continue
+            current = "".join(
+                f"\t\t\t\t\t{line}\n"
+                for line in (
+                    f"is_researching_technology = {tech.key}",
+                    *(f"has_technology_researched = {prereq}" for prereq in tech.prereqs),
+                )
+            )
+            self.assertIn(f"\t\t\tOR = {{\n\t\t\t\tcan_research = {tech.key}\n\t\t\t\tAND = {{\n{current}\t\t\t\t}}\n", text)
 
     def test_target_reads_are_guarded(self):
         for text in self.outputs.values():

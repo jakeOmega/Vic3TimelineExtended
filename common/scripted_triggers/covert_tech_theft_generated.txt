@@ -2,7 +2,8 @@
 # Covert technology theft: docs/superpowers/archive/specs/2026-10-06-covert-tech-theft-design.md
 # Scope: country (the would-be operator). True when $TARGET$ has researched a
 # technology of the category that we have not and could research now, or are
-# researching: exactly when covert_tech_steal_<category> would take something.
+# researching with its prerequisites held: exactly when
+# covert_tech_steal_<category> would take something.
 # Espionage's launch (possible, will_propose) and keep (requirement_to_maintain)
 # gates.
 
@@ -10,212 +11,482 @@ covert_tech_stealable_production = {
 	OR = {
 		AND = {
 			NOT = { has_technology_researched = abyssal_plain_mining }
-			OR = { can_research = abyssal_plain_mining is_researching_technology = abyssal_plain_mining }
+			OR = {
+				can_research = abyssal_plain_mining
+				AND = {
+					is_researching_technology = abyssal_plain_mining
+					has_technology_researched = additive_manufacturing
+					has_technology_researched = advanced_structural_engineering
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = abyssal_plain_mining }
 		}
 		AND = {
 			NOT = { has_technology_researched = additive_manufacturing }
-			OR = { can_research = additive_manufacturing is_researching_technology = additive_manufacturing }
+			OR = {
+				can_research = additive_manufacturing
+				AND = {
+					is_researching_technology = additive_manufacturing
+					has_technology_researched = robotics
+					has_technology_researched = supply_chain_management
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = additive_manufacturing }
 		}
 		AND = {
 			NOT = { has_technology_researched = advanced_assembly_lines }
-			OR = { can_research = advanced_assembly_lines is_researching_technology = advanced_assembly_lines }
+			OR = {
+				can_research = advanced_assembly_lines
+				AND = {
+					is_researching_technology = advanced_assembly_lines
+					has_technology_researched = transistors
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = advanced_assembly_lines }
 		}
 		AND = {
 			NOT = { has_technology_researched = advanced_nanofabrication }
-			OR = { can_research = advanced_nanofabrication is_researching_technology = advanced_nanofabrication }
+			OR = {
+				can_research = advanced_nanofabrication
+				AND = {
+					is_researching_technology = advanced_nanofabrication
+					has_technology_researched = synthetic_biology
+					has_technology_researched = additive_manufacturing
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = advanced_nanofabrication }
 		}
 		AND = {
 			NOT = { has_technology_researched = advanced_structural_engineering }
-			OR = { can_research = advanced_structural_engineering is_researching_technology = advanced_structural_engineering }
+			OR = {
+				can_research = advanced_structural_engineering
+				AND = {
+					is_researching_technology = advanced_structural_engineering
+					has_technology_researched = robotics
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = advanced_structural_engineering }
 		}
 		AND = {
 			NOT = { has_technology_researched = aluminum_mass_production }
-			OR = { can_research = aluminum_mass_production is_researching_technology = aluminum_mass_production }
+			OR = {
+				can_research = aluminum_mass_production
+				AND = {
+					is_researching_technology = aluminum_mass_production
+					has_technology_researched = arc_welding
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = aluminum_mass_production }
 		}
 		AND = {
 			NOT = { has_technology_researched = aniline }
-			OR = { can_research = aniline is_researching_technology = aniline }
+			OR = {
+				can_research = aniline
+				AND = {
+					is_researching_technology = aniline
+					has_technology_researched = rubber_mastication
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = aniline }
 		}
 		AND = {
 			NOT = { has_technology_researched = arc_welding }
-			OR = { can_research = arc_welding is_researching_technology = arc_welding }
+			OR = {
+				can_research = arc_welding
+				AND = {
+					is_researching_technology = arc_welding
+					has_technology_researched = electric_arc_process
+					has_technology_researched = pneumatic_tools
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = arc_welding }
 		}
 		AND = {
 			NOT = { has_technology_researched = art_silk }
-			OR = { can_research = art_silk is_researching_technology = art_silk }
+			OR = {
+				can_research = art_silk
+				AND = {
+					is_researching_technology = art_silk
+					has_technology_researched = aniline
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = art_silk }
 		}
 		AND = {
 			NOT = { has_technology_researched = artificial_intelligence }
-			OR = { can_research = artificial_intelligence is_researching_technology = artificial_intelligence }
+			OR = {
+				can_research = artificial_intelligence
+				AND = {
+					is_researching_technology = artificial_intelligence
+					has_technology_researched = generative_ai
+					has_technology_researched = programmable_matter
+					has_technology_researched = autonomous_vehicles
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = artificial_intelligence }
 		}
 		AND = {
 			NOT = { has_technology_researched = atmospheric_engine }
-			OR = { can_research = atmospheric_engine is_researching_technology = atmospheric_engine }
+			OR = {
+				can_research = atmospheric_engine
+				AND = {
+					is_researching_technology = atmospheric_engine
+					has_technology_researched = shaft_mining
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = atmospheric_engine }
 		}
 		AND = {
 			NOT = { has_technology_researched = automatic_bottle_blowers }
-			OR = { can_research = automatic_bottle_blowers is_researching_technology = automatic_bottle_blowers }
+			OR = {
+				can_research = automatic_bottle_blowers
+				AND = {
+					is_researching_technology = automatic_bottle_blowers
+					has_technology_researched = vulcanization
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = automatic_bottle_blowers }
 		}
 		AND = {
 			NOT = { has_technology_researched = autonomous_vehicles }
-			OR = { can_research = autonomous_vehicles is_researching_technology = autonomous_vehicles }
+			OR = {
+				can_research = autonomous_vehicles
+				AND = {
+					is_researching_technology = autonomous_vehicles
+					has_technology_researched = machine_learning
+					has_technology_researched = electric_vehicles
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = autonomous_vehicles }
 		}
 		AND = {
 			NOT = { has_technology_researched = baking_powder }
-			OR = { can_research = baking_powder is_researching_technology = baking_powder }
+			OR = {
+				can_research = baking_powder
+				AND = {
+					is_researching_technology = baking_powder
+					has_technology_researched = fractional_distillation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = baking_powder }
 		}
 		AND = {
 			NOT = { has_technology_researched = barcodes_and_scanners }
-			OR = { can_research = barcodes_and_scanners is_researching_technology = barcodes_and_scanners }
+			OR = {
+				can_research = barcodes_and_scanners
+				AND = {
+					is_researching_technology = barcodes_and_scanners
+					has_technology_researched = laser_technology
+					has_technology_researched = photocopiers
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = barcodes_and_scanners }
 		}
 		AND = {
 			NOT = { has_technology_researched = bergius_process }
-			OR = { can_research = bergius_process is_researching_technology = bergius_process }
+			OR = {
+				can_research = bergius_process
+				AND = {
+					is_researching_technology = bergius_process
+					has_technology_researched = aniline
+					has_technology_researched = combustion_engine
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = bergius_process }
 		}
 		AND = {
 			NOT = { has_technology_researched = bessemer_process }
-			OR = { can_research = bessemer_process is_researching_technology = bessemer_process }
+			OR = {
+				can_research = bessemer_process
+				AND = {
+					is_researching_technology = bessemer_process
+					has_technology_researched = steelworking
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = bessemer_process }
 		}
 		AND = {
 			NOT = { has_technology_researched = biotechnology }
-			OR = { can_research = biotechnology is_researching_technology = biotechnology }
+			OR = {
+				can_research = biotechnology
+				AND = {
+					is_researching_technology = biotechnology
+					has_technology_researched = gene_splicing
+					has_technology_researched = computer_networks
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = biotechnology }
 		}
 		AND = {
 			NOT = { has_technology_researched = canneries }
-			OR = { can_research = canneries is_researching_technology = canneries }
+			OR = {
+				can_research = canneries
+				AND = {
+					is_researching_technology = canneries
+					has_technology_researched = lathe
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = canneries }
 		}
 		AND = {
 			NOT = { has_technology_researched = carbon_capture_and_storage }
-			OR = { can_research = carbon_capture_and_storage is_researching_technology = carbon_capture_and_storage }
+			OR = {
+				can_research = carbon_capture_and_storage
+				AND = {
+					is_researching_technology = carbon_capture_and_storage
+					has_technology_researched = clean_energy_technologies
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = carbon_capture_and_storage }
 		}
 		AND = {
 			NOT = { has_technology_researched = cellular_networks }
-			OR = { can_research = cellular_networks is_researching_technology = cellular_networks }
+			OR = {
+				can_research = cellular_networks
+				AND = {
+					is_researching_technology = cellular_networks
+					has_technology_researched = barcodes_and_scanners
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = cellular_networks }
 		}
 		AND = {
 			NOT = { has_technology_researched = chemical_bleaching }
-			OR = { can_research = chemical_bleaching is_researching_technology = chemical_bleaching }
+			OR = {
+				can_research = chemical_bleaching
+				AND = {
+					is_researching_technology = chemical_bleaching
+					has_technology_researched = crystal_glass
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = chemical_bleaching }
 		}
 		AND = {
 			NOT = { has_technology_researched = clean_energy_technologies }
-			OR = { can_research = clean_energy_technologies is_researching_technology = clean_energy_technologies }
+			OR = {
+				can_research = clean_energy_technologies
+				AND = {
+					is_researching_technology = clean_energy_technologies
+					has_technology_researched = personal_computers
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = clean_energy_technologies }
 		}
 		AND = {
 			NOT = { has_technology_researched = cloud_computing }
-			OR = { can_research = cloud_computing is_researching_technology = cloud_computing }
+			OR = {
+				can_research = cloud_computing
+				AND = {
+					is_researching_technology = cloud_computing
+					has_technology_researched = wireless_internet
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = cloud_computing }
 		}
 		AND = {
 			NOT = { has_technology_researched = combustion_engine }
-			OR = { can_research = combustion_engine is_researching_technology = combustion_engine }
+			OR = {
+				can_research = combustion_engine
+				AND = {
+					is_researching_technology = combustion_engine
+					has_technology_researched = rotary_valve_engine
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = combustion_engine }
 		}
 		AND = {
 			NOT = { has_technology_researched = compression_ignition }
-			OR = { can_research = compression_ignition is_researching_technology = compression_ignition }
+			OR = {
+				can_research = compression_ignition
+				AND = {
+					is_researching_technology = compression_ignition
+					has_technology_researched = combustion_engine
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = compression_ignition }
 		}
 		AND = {
 			NOT = { has_technology_researched = computer_aided_design }
-			OR = { can_research = computer_aided_design is_researching_technology = computer_aided_design }
+			OR = {
+				can_research = computer_aided_design
+				AND = {
+					is_researching_technology = computer_aided_design
+					has_technology_researched = mainframe_computers
+					has_technology_researched = computer_networks
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = computer_aided_design }
 		}
 		AND = {
 			NOT = { has_technology_researched = computer_networks }
-			OR = { can_research = computer_networks is_researching_technology = computer_networks }
+			OR = {
+				can_research = computer_networks
+				AND = {
+					is_researching_technology = computer_networks
+					has_technology_researched = mainframe_computers
+					has_technology_researched = cellular_networks
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = computer_networks }
 		}
 		AND = {
 			NOT = { has_technology_researched = conveyors }
-			OR = { can_research = conveyors is_researching_technology = conveyors }
+			OR = {
+				can_research = conveyors
+				AND = {
+					is_researching_technology = conveyors
+					has_technology_researched = vulcanization
+					has_technology_researched = shift_work
+					has_technology_researched = electrical_generation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = conveyors }
 		}
 		AND = {
 			NOT = { has_technology_researched = cotton_gin }
-			OR = { can_research = cotton_gin is_researching_technology = cotton_gin }
+			OR = {
+				can_research = cotton_gin
+				AND = {
+					is_researching_technology = cotton_gin
+					has_technology_researched = manufacturies
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = cotton_gin }
 		}
 		AND = {
 			NOT = { has_technology_researched = crystal_glass }
-			OR = { can_research = crystal_glass is_researching_technology = crystal_glass }
+			OR = {
+				can_research = crystal_glass
+				AND = {
+					is_researching_technology = crystal_glass
+					has_technology_researched = lathe
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = crystal_glass }
 		}
 		AND = {
 			NOT = { has_technology_researched = digital_telecommunications }
-			OR = { can_research = digital_telecommunications is_researching_technology = digital_telecommunications }
+			OR = {
+				can_research = digital_telecommunications
+				AND = {
+					is_researching_technology = digital_telecommunications
+					has_technology_researched = fiber_optics
+					has_technology_researched = cellular_networks
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = digital_telecommunications }
 		}
 		AND = {
 			NOT = { has_technology_researched = distillation }
-			OR = { can_research = distillation is_researching_technology = distillation }
+			OR = {
+				can_research = distillation
+				AND = {
+					is_researching_technology = distillation
+					has_technology_researched = manufacturies
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = distillation }
 		}
 		AND = {
 			NOT = { has_technology_researched = dough_rollers }
-			OR = { can_research = dough_rollers is_researching_technology = dough_rollers }
+			OR = {
+				can_research = dough_rollers
+				AND = {
+					is_researching_technology = dough_rollers
+					has_technology_researched = conveyors
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = dough_rollers }
 		}
 		AND = {
 			NOT = { has_technology_researched = dynamite }
-			OR = { can_research = dynamite is_researching_technology = dynamite }
+			OR = {
+				can_research = dynamite
+				AND = {
+					is_researching_technology = dynamite
+					has_technology_researched = nitroglycerin
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = dynamite }
 		}
 		AND = {
 			NOT = { has_technology_researched = e-commerce }
-			OR = { can_research = e-commerce is_researching_technology = e-commerce }
+			OR = {
+				can_research = e-commerce
+				AND = {
+					is_researching_technology = e-commerce
+					has_technology_researched = world_wide_web
+					has_technology_researched = supply_chain_management
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = e-commerce }
 		}
 		AND = {
 			NOT = { has_technology_researched = early_nanotechnology }
-			OR = { can_research = early_nanotechnology is_researching_technology = early_nanotechnology }
+			OR = {
+				can_research = early_nanotechnology
+				AND = {
+					is_researching_technology = early_nanotechnology
+					has_technology_researched = computer_networks
+					has_technology_researched = computer_aided_design
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = early_nanotechnology }
 		}
 		AND = {
 			NOT = { has_technology_researched = electric_arc_process }
-			OR = { can_research = electric_arc_process is_researching_technology = electric_arc_process }
+			OR = {
+				can_research = electric_arc_process
+				AND = {
+					is_researching_technology = electric_arc_process
+					has_technology_researched = open_hearth_process
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = electric_arc_process }
 		}
 		AND = {
 			NOT = { has_technology_researched = electric_railway }
-			OR = { can_research = electric_railway is_researching_technology = electric_railway }
+			OR = {
+				can_research = electric_railway
+				AND = {
+					is_researching_technology = electric_railway
+					has_technology_researched = electrical_capacitors
+					has_technology_researched = steel_railway_cars
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = electric_railway }
 		}
 		AND = {
 			NOT = { has_technology_researched = electric_vehicles }
-			OR = { can_research = electric_vehicles is_researching_technology = electric_vehicles }
+			OR = {
+				can_research = electric_vehicles
+				AND = {
+					is_researching_technology = electric_vehicles
+					has_technology_researched = clean_energy_technologies
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = electric_vehicles }
 		}
 		AND = {
 			NOT = { has_technology_researched = electrical_capacitors }
-			OR = { can_research = electrical_capacitors is_researching_technology = electrical_capacitors }
+			OR = {
+				can_research = electrical_capacitors
+				AND = {
+					is_researching_technology = electrical_capacitors
+					has_technology_researched = electrical_generation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = electrical_capacitors }
 		}
 		AND = {
 			NOT = { has_technology_researched = electrical_generation }
-			OR = { can_research = electrical_generation is_researching_technology = electrical_generation }
+			OR = {
+				can_research = electrical_generation
+				AND = {
+					is_researching_technology = electrical_generation
+					has_technology_researched = rotary_valve_engine
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = electrical_generation }
 		}
 		AND = {
@@ -225,92 +496,204 @@ covert_tech_stealable_production = {
 		}
 		AND = {
 			NOT = { has_technology_researched = fiber_optics }
-			OR = { can_research = fiber_optics is_researching_technology = fiber_optics }
+			OR = {
+				can_research = fiber_optics
+				AND = {
+					is_researching_technology = fiber_optics
+					has_technology_researched = computer_aided_design
+					has_technology_researched = plastic_mass_production
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = fiber_optics }
 		}
 		AND = {
 			NOT = { has_technology_researched = flash_freezing }
-			OR = { can_research = flash_freezing is_researching_technology = flash_freezing }
+			OR = {
+				can_research = flash_freezing
+				AND = {
+					is_researching_technology = flash_freezing
+					has_technology_researched = pasteurization
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = flash_freezing }
 		}
 		AND = {
 			NOT = { has_technology_researched = fluorescent_lamps }
-			OR = { can_research = fluorescent_lamps is_researching_technology = fluorescent_lamps }
+			OR = {
+				can_research = fluorescent_lamps
+				AND = {
+					is_researching_technology = fluorescent_lamps
+					has_technology_researched = radio
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = fluorescent_lamps }
 		}
 		AND = {
 			NOT = { has_technology_researched = fractional_distillation }
-			OR = { can_research = fractional_distillation is_researching_technology = fractional_distillation }
+			OR = {
+				can_research = fractional_distillation
+				AND = {
+					is_researching_technology = fractional_distillation
+					has_technology_researched = distillation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = fractional_distillation }
 		}
 		AND = {
 			NOT = { has_technology_researched = gene_splicing }
-			OR = { can_research = gene_splicing is_researching_technology = gene_splicing }
+			OR = {
+				can_research = gene_splicing
+				AND = {
+					is_researching_technology = gene_splicing
+					has_technology_researched = green_revolution
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = gene_splicing }
 		}
 		AND = {
 			NOT = { has_technology_researched = generative_ai }
-			OR = { can_research = generative_ai is_researching_technology = generative_ai }
+			OR = {
+				can_research = generative_ai
+				AND = {
+					is_researching_technology = generative_ai
+					has_technology_researched = machine_learning
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = generative_ai }
 		}
 		AND = {
 			NOT = { has_technology_researched = genetic_engineering }
-			OR = { can_research = genetic_engineering is_researching_technology = genetic_engineering }
+			OR = {
+				can_research = genetic_engineering
+				AND = {
+					is_researching_technology = genetic_engineering
+					has_technology_researched = biotechnology
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = genetic_engineering }
 		}
 		AND = {
 			NOT = { has_technology_researched = green_revolution }
-			OR = { can_research = green_revolution is_researching_technology = green_revolution }
+			OR = {
+				can_research = green_revolution
+				AND = {
+					is_researching_technology = green_revolution
+					has_technology_researched = modern_chemical_processes
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = green_revolution }
 		}
 		AND = {
 			NOT = { has_technology_researched = hydraulic_fracturing }
-			OR = { can_research = hydraulic_fracturing is_researching_technology = hydraulic_fracturing }
+			OR = {
+				can_research = hydraulic_fracturing
+				AND = {
+					is_researching_technology = hydraulic_fracturing
+					has_technology_researched = computer_aided_design
+					has_technology_researched = personal_computers
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = hydraulic_fracturing }
 		}
 		AND = {
 			NOT = { has_technology_researched = improved_fertilizer }
-			OR = { can_research = improved_fertilizer is_researching_technology = improved_fertilizer }
+			OR = {
+				can_research = improved_fertilizer
+				AND = {
+					is_researching_technology = improved_fertilizer
+					has_technology_researched = intensive_agriculture
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = improved_fertilizer }
 		}
 		AND = {
 			NOT = { has_technology_researched = integrated_circuits }
-			OR = { can_research = integrated_circuits is_researching_technology = integrated_circuits }
+			OR = {
+				can_research = integrated_circuits
+				AND = {
+					is_researching_technology = integrated_circuits
+					has_technology_researched = transistors
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = integrated_circuits }
 		}
 		AND = {
 			NOT = { has_technology_researched = intensive_agriculture }
-			OR = { can_research = intensive_agriculture is_researching_technology = intensive_agriculture }
+			OR = {
+				can_research = intensive_agriculture
+				AND = {
+					is_researching_technology = intensive_agriculture
+					has_technology_researched = enclosure
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = intensive_agriculture }
 		}
 		AND = {
 			NOT = { has_technology_researched = internet_of_things }
-			OR = { can_research = internet_of_things is_researching_technology = internet_of_things }
+			OR = {
+				can_research = internet_of_things
+				AND = {
+					is_researching_technology = internet_of_things
+					has_technology_researched = wireless_internet
+					has_technology_researched = cloud_computing
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = internet_of_things }
 		}
 		AND = {
 			NOT = { has_technology_researched = isoprene }
-			OR = { can_research = isoprene is_researching_technology = isoprene }
+			OR = {
+				can_research = isoprene
+				AND = {
+					is_researching_technology = isoprene
+					has_technology_researched = plastics
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = isoprene }
 		}
 		AND = {
 			NOT = { has_technology_researched = laser_technology }
-			OR = { can_research = laser_technology is_researching_technology = laser_technology }
+			OR = {
+				can_research = laser_technology
+				AND = {
+					is_researching_technology = laser_technology
+					has_technology_researched = modern_chemical_processes
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = laser_technology }
 		}
 		AND = {
 			NOT = { has_technology_researched = lathe }
-			OR = { can_research = lathe is_researching_technology = lathe }
+			OR = {
+				can_research = lathe
+				AND = {
+					is_researching_technology = lathe
+					has_technology_researched = cotton_gin
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = lathe }
 		}
 		AND = {
 			NOT = { has_technology_researched = machine_learning }
-			OR = { can_research = machine_learning is_researching_technology = machine_learning }
+			OR = {
+				can_research = machine_learning
+				AND = {
+					is_researching_technology = machine_learning
+					has_technology_researched = cloud_computing
+					has_technology_researched = e-commerce
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = machine_learning }
 		}
 		AND = {
 			NOT = { has_technology_researched = mainframe_computers }
-			OR = { can_research = mainframe_computers is_researching_technology = mainframe_computers }
+			OR = {
+				can_research = mainframe_computers
+				AND = {
+					is_researching_technology = mainframe_computers
+					has_technology_researched = transistors
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = mainframe_computers }
 		}
 		AND = {
@@ -320,272 +703,620 @@ covert_tech_stealable_production = {
 		}
 		AND = {
 			NOT = { has_technology_researched = mechanical_tools }
-			OR = { can_research = mechanical_tools is_researching_technology = mechanical_tools }
+			OR = {
+				can_research = mechanical_tools
+				AND = {
+					is_researching_technology = mechanical_tools
+					has_technology_researched = lathe
+					has_technology_researched = steelworking
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = mechanical_tools }
 		}
 		AND = {
 			NOT = { has_technology_researched = mechanized_farming }
-			OR = { can_research = mechanized_farming is_researching_technology = mechanized_farming }
+			OR = {
+				can_research = mechanized_farming
+				AND = {
+					is_researching_technology = mechanized_farming
+					has_technology_researched = threshing_machine
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = mechanized_farming }
 		}
 		AND = {
 			NOT = { has_technology_researched = mechanized_workshops }
-			OR = { can_research = mechanized_workshops is_researching_technology = mechanized_workshops }
+			OR = {
+				can_research = mechanized_workshops
+				AND = {
+					is_researching_technology = mechanized_workshops
+					has_technology_researched = canneries
+					has_technology_researched = mechanical_tools
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = mechanized_workshops }
 		}
 		AND = {
 			NOT = { has_technology_researched = microprocessor }
-			OR = { can_research = microprocessor is_researching_technology = microprocessor }
+			OR = {
+				can_research = microprocessor
+				AND = {
+					is_researching_technology = microprocessor
+					has_technology_researched = integrated_circuits
+					has_technology_researched = plastic_mass_production
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = microprocessor }
 		}
 		AND = {
 			NOT = { has_technology_researched = modern_automotive_technology }
-			OR = { can_research = modern_automotive_technology is_researching_technology = modern_automotive_technology }
+			OR = {
+				can_research = modern_automotive_technology
+				AND = {
+					is_researching_technology = modern_automotive_technology
+					has_technology_researched = compression_ignition
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = modern_automotive_technology }
 		}
 		AND = {
 			NOT = { has_technology_researched = modern_chemical_processes }
-			OR = { can_research = modern_chemical_processes is_researching_technology = modern_chemical_processes }
+			OR = {
+				can_research = modern_chemical_processes
+				AND = {
+					is_researching_technology = modern_chemical_processes
+					has_technology_researched = nitrogen_fixation
+					has_technology_researched = isoprene
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = modern_chemical_processes }
 		}
 		AND = {
 			NOT = { has_technology_researched = modern_material_science }
-			OR = { can_research = modern_material_science is_researching_technology = modern_material_science }
+			OR = {
+				can_research = modern_material_science
+				AND = {
+					is_researching_technology = modern_material_science
+					has_technology_researched = early_nanotechnology
+					has_technology_researched = biotechnology
+					has_technology_researched = additive_manufacturing
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = modern_material_science }
 		}
 		AND = {
 			NOT = { has_technology_researched = modern_materials }
-			OR = { can_research = modern_materials is_researching_technology = modern_materials }
+			OR = {
+				can_research = modern_materials
+				AND = {
+					is_researching_technology = modern_materials
+					has_technology_researched = arc_welding
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = modern_materials }
 		}
 		AND = {
 			NOT = { has_technology_researched = modern_skyscrapers }
-			OR = { can_research = modern_skyscrapers is_researching_technology = modern_skyscrapers }
+			OR = {
+				can_research = modern_skyscrapers
+				AND = {
+					is_researching_technology = modern_skyscrapers
+					has_technology_researched = modern_materials
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = modern_skyscrapers }
 		}
 		AND = {
 			NOT = { has_technology_researched = modern_tools }
-			OR = { can_research = modern_tools is_researching_technology = modern_tools }
+			OR = {
+				can_research = modern_tools
+				AND = {
+					is_researching_technology = modern_tools
+					has_technology_researched = modern_materials
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = modern_tools }
 		}
 		AND = {
 			NOT = { has_technology_researched = molecular_assemblers }
-			OR = { can_research = molecular_assemblers is_researching_technology = molecular_assemblers }
+			OR = {
+				can_research = molecular_assemblers
+				AND = {
+					is_researching_technology = molecular_assemblers
+					has_technology_researched = advanced_nanofabrication
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = molecular_assemblers }
 		}
 		AND = {
 			NOT = { has_technology_researched = nitrogen_fixation }
-			OR = { can_research = nitrogen_fixation is_researching_technology = nitrogen_fixation }
+			OR = {
+				can_research = nitrogen_fixation
+				AND = {
+					is_researching_technology = nitrogen_fixation
+					has_technology_researched = improved_fertilizer
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = nitrogen_fixation }
 		}
 		AND = {
 			NOT = { has_technology_researched = nitroglycerin }
-			OR = { can_research = nitroglycerin is_researching_technology = nitroglycerin }
+			OR = {
+				can_research = nitroglycerin
+				AND = {
+					is_researching_technology = nitroglycerin
+					has_technology_researched = intensive_agriculture
+					has_technology_researched = prospecting
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = nitroglycerin }
 		}
 		AND = {
 			NOT = { has_technology_researched = oil_turbine }
-			OR = { can_research = oil_turbine is_researching_technology = oil_turbine }
+			OR = {
+				can_research = oil_turbine
+				AND = {
+					is_researching_technology = oil_turbine
+					has_technology_researched = steam_turbine
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = oil_turbine }
 		}
 		AND = {
 			NOT = { has_technology_researched = open_hearth_process }
-			OR = { can_research = open_hearth_process is_researching_technology = open_hearth_process }
+			OR = {
+				can_research = open_hearth_process
+				AND = {
+					is_researching_technology = open_hearth_process
+					has_technology_researched = bessemer_process
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = open_hearth_process }
 		}
 		AND = {
 			NOT = { has_technology_researched = orbital_manufacturing }
-			OR = { can_research = orbital_manufacturing is_researching_technology = orbital_manufacturing }
+			OR = {
+				can_research = orbital_manufacturing
+				AND = {
+					is_researching_technology = orbital_manufacturing
+					has_technology_researched = smart_grids
+					has_technology_researched = additive_manufacturing
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = orbital_manufacturing }
 		}
 		AND = {
 			NOT = { has_technology_researched = pasteurization }
-			OR = { can_research = pasteurization is_researching_technology = pasteurization }
+			OR = {
+				can_research = pasteurization
+				AND = {
+					is_researching_technology = pasteurization
+					has_technology_researched = vacuum_canning
+					has_technology_researched = electrical_capacitors
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = pasteurization }
 		}
 		AND = {
 			NOT = { has_technology_researched = personal_appliances }
-			OR = { can_research = personal_appliances is_researching_technology = personal_appliances }
+			OR = {
+				can_research = personal_appliances
+				AND = {
+					is_researching_technology = personal_appliances
+					has_technology_researched = flash_freezing
+					has_technology_researched = radio
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = personal_appliances }
 		}
 		AND = {
 			NOT = { has_technology_researched = personal_computers }
-			OR = { can_research = personal_computers is_researching_technology = personal_computers }
+			OR = {
+				can_research = personal_computers
+				AND = {
+					is_researching_technology = personal_computers
+					has_technology_researched = microprocessor
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = personal_computers }
 		}
 		AND = {
 			NOT = { has_technology_researched = photocopiers }
-			OR = { can_research = photocopiers is_researching_technology = photocopiers }
+			OR = {
+				can_research = photocopiers
+				AND = {
+					is_researching_technology = photocopiers
+					has_technology_researched = transistors
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = photocopiers }
 		}
 		AND = {
 			NOT = { has_technology_researched = plastic_mass_production }
-			OR = { can_research = plastic_mass_production is_researching_technology = plastic_mass_production }
+			OR = {
+				can_research = plastic_mass_production
+				AND = {
+					is_researching_technology = plastic_mass_production
+					has_technology_researched = bergius_process
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = plastic_mass_production }
 		}
 		AND = {
 			NOT = { has_technology_researched = plastics }
-			OR = { can_research = plastics is_researching_technology = plastics }
+			OR = {
+				can_research = plastics
+				AND = {
+					is_researching_technology = plastics
+					has_technology_researched = reinforced_concrete
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = plastics }
 		}
 		AND = {
 			NOT = { has_technology_researched = pneumatic_tools }
-			OR = { can_research = pneumatic_tools is_researching_technology = pneumatic_tools }
+			OR = {
+				can_research = pneumatic_tools
+				AND = {
+					is_researching_technology = pneumatic_tools
+					has_technology_researched = rotary_valve_engine
+					has_technology_researched = reinforced_concrete
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = pneumatic_tools }
 		}
 		AND = {
 			NOT = { has_technology_researched = prefabricated_construction }
-			OR = { can_research = prefabricated_construction is_researching_technology = prefabricated_construction }
+			OR = {
+				can_research = prefabricated_construction
+				AND = {
+					is_researching_technology = prefabricated_construction
+					has_technology_researched = modern_skyscrapers
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = prefabricated_construction }
 		}
 		AND = {
 			NOT = { has_technology_researched = programmable_matter }
-			OR = { can_research = programmable_matter is_researching_technology = programmable_matter }
+			OR = {
+				can_research = programmable_matter
+				AND = {
+					is_researching_technology = programmable_matter
+					has_technology_researched = molecular_assemblers
+					has_technology_researched = quantum_materials
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = programmable_matter }
 		}
 		AND = {
 			NOT = { has_technology_researched = prospecting }
-			OR = { can_research = prospecting is_researching_technology = prospecting }
+			OR = {
+				can_research = prospecting
+				AND = {
+					is_researching_technology = prospecting
+					has_technology_researched = shaft_mining
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = prospecting }
 		}
 		AND = {
 			NOT = { has_technology_researched = pumpjacks }
-			OR = { can_research = pumpjacks is_researching_technology = pumpjacks }
+			OR = {
+				can_research = pumpjacks
+				AND = {
+					is_researching_technology = pumpjacks
+					has_technology_researched = steam_donkey
+					has_technology_researched = dynamite
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = pumpjacks }
 		}
 		AND = {
 			NOT = { has_technology_researched = quantum_computing }
-			OR = { can_research = quantum_computing is_researching_technology = quantum_computing }
+			OR = {
+				can_research = quantum_computing
+				AND = {
+					is_researching_technology = quantum_computing
+					has_technology_researched = machine_learning
+					has_technology_researched = early_nanotechnology
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = quantum_computing }
 		}
 		AND = {
 			NOT = { has_technology_researched = quantum_materials }
-			OR = { can_research = quantum_materials is_researching_technology = quantum_materials }
+			OR = {
+				can_research = quantum_materials
+				AND = {
+					is_researching_technology = quantum_materials
+					has_technology_researched = quantum_computing
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = quantum_materials }
 		}
 		AND = {
 			NOT = { has_technology_researched = radio }
-			OR = { can_research = radio is_researching_technology = radio }
+			OR = {
+				can_research = radio
+				AND = {
+					is_researching_technology = radio
+					has_technology_researched = telephone
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = radio }
 		}
 		AND = {
 			NOT = { has_technology_researched = railways }
-			OR = { can_research = railways is_researching_technology = railways }
+			OR = {
+				can_research = railways
+				AND = {
+					is_researching_technology = railways
+					has_technology_researched = mechanical_tools
+					has_technology_researched = atmospheric_engine
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = railways }
 		}
 		AND = {
 			NOT = { has_technology_researched = reinforced_concrete }
-			OR = { can_research = reinforced_concrete is_researching_technology = reinforced_concrete }
+			OR = {
+				can_research = reinforced_concrete
+				AND = {
+					is_researching_technology = reinforced_concrete
+					has_technology_researched = bessemer_process
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = reinforced_concrete }
 		}
 		AND = {
 			NOT = { has_technology_researched = robotics }
-			OR = { can_research = robotics is_researching_technology = robotics }
+			OR = {
+				can_research = robotics
+				AND = {
+					is_researching_technology = robotics
+					has_technology_researched = computer_networks
+					has_technology_researched = advanced_assembly_lines
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = robotics }
 		}
 		AND = {
 			NOT = { has_technology_researched = rotary_valve_engine }
-			OR = { can_research = rotary_valve_engine is_researching_technology = rotary_valve_engine }
+			OR = {
+				can_research = rotary_valve_engine
+				AND = {
+					is_researching_technology = rotary_valve_engine
+					has_technology_researched = watertube_boiler
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = rotary_valve_engine }
 		}
 		AND = {
 			NOT = { has_technology_researched = rubber_mastication }
-			OR = { can_research = rubber_mastication is_researching_technology = rubber_mastication }
+			OR = {
+				can_research = rubber_mastication
+				AND = {
+					is_researching_technology = rubber_mastication
+					has_technology_researched = fractional_distillation
+					has_technology_researched = chemical_bleaching
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = rubber_mastication }
 		}
 		AND = {
 			NOT = { has_technology_researched = shaft_mining }
-			OR = { can_research = shaft_mining is_researching_technology = shaft_mining }
+			OR = {
+				can_research = shaft_mining
+				AND = {
+					is_researching_technology = shaft_mining
+					has_technology_researched = enclosure
+					has_technology_researched = manufacturies
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = shaft_mining }
 		}
 		AND = {
 			NOT = { has_technology_researched = shift_work }
-			OR = { can_research = shift_work is_researching_technology = shift_work }
+			OR = {
+				can_research = shift_work
+				AND = {
+					is_researching_technology = shift_work
+					has_technology_researched = mechanized_workshops
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = shift_work }
 		}
 		AND = {
 			NOT = { has_technology_researched = smart_grids }
-			OR = { can_research = smart_grids is_researching_technology = smart_grids }
+			OR = {
+				can_research = smart_grids
+				AND = {
+					is_researching_technology = smart_grids
+					has_technology_researched = clean_energy_technologies
+					has_technology_researched = internet_of_things
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = smart_grids }
 		}
 		AND = {
 			NOT = { has_technology_researched = stainless_steel_mass_production }
-			OR = { can_research = stainless_steel_mass_production is_researching_technology = stainless_steel_mass_production }
+			OR = {
+				can_research = stainless_steel_mass_production
+				AND = {
+					is_researching_technology = stainless_steel_mass_production
+					has_technology_researched = aluminum_mass_production
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = stainless_steel_mass_production }
 		}
 		AND = {
 			NOT = { has_technology_researched = steam_donkey }
-			OR = { can_research = steam_donkey is_researching_technology = steam_donkey }
+			OR = {
+				can_research = steam_donkey
+				AND = {
+					is_researching_technology = steam_donkey
+					has_technology_researched = intensive_agriculture
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = steam_donkey }
 		}
 		AND = {
 			NOT = { has_technology_researched = steam_turbine }
-			OR = { can_research = steam_turbine is_researching_technology = steam_turbine }
+			OR = {
+				can_research = steam_turbine
+				AND = {
+					is_researching_technology = steam_turbine
+					has_technology_researched = electrical_generation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = steam_turbine }
 		}
 		AND = {
 			NOT = { has_technology_researched = steel_railway_cars }
-			OR = { can_research = steel_railway_cars is_researching_technology = steel_railway_cars }
+			OR = {
+				can_research = steel_railway_cars
+				AND = {
+					is_researching_technology = steel_railway_cars
+					has_technology_researched = railways
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = steel_railway_cars }
 		}
 		AND = {
 			NOT = { has_technology_researched = steelworking }
-			OR = { can_research = steelworking is_researching_technology = steelworking }
+			OR = {
+				can_research = steelworking
+				AND = {
+					is_researching_technology = steelworking
+					has_technology_researched = shaft_mining
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = steelworking }
 		}
 		AND = {
 			NOT = { has_technology_researched = supply_chain_management }
-			OR = { can_research = supply_chain_management is_researching_technology = supply_chain_management }
+			OR = {
+				can_research = supply_chain_management
+				AND = {
+					is_researching_technology = supply_chain_management
+					has_technology_researched = computer_networks
+					has_technology_researched = advanced_assembly_lines
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = supply_chain_management }
 		}
 		AND = {
 			NOT = { has_technology_researched = synthetic_biology }
-			OR = { can_research = synthetic_biology is_researching_technology = synthetic_biology }
+			OR = {
+				can_research = synthetic_biology
+				AND = {
+					is_researching_technology = synthetic_biology
+					has_technology_researched = genetic_engineering
+					has_technology_researched = modern_material_science
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = synthetic_biology }
 		}
 		AND = {
 			NOT = { has_technology_researched = telephone }
-			OR = { can_research = telephone is_researching_technology = telephone }
+			OR = {
+				can_research = telephone
+				AND = {
+					is_researching_technology = telephone
+					has_technology_researched = shift_work
+					has_technology_researched = electrical_generation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = telephone }
 		}
 		AND = {
 			NOT = { has_technology_researched = television }
-			OR = { can_research = television is_researching_technology = television }
+			OR = {
+				can_research = television
+				AND = {
+					is_researching_technology = television
+					has_technology_researched = personal_appliances
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = television }
 		}
 		AND = {
 			NOT = { has_technology_researched = threshing_machine }
-			OR = { can_research = threshing_machine is_researching_technology = threshing_machine }
+			OR = {
+				can_research = threshing_machine
+				AND = {
+					is_researching_technology = threshing_machine
+					has_technology_researched = steam_donkey
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = threshing_machine }
 		}
 		AND = {
 			NOT = { has_technology_researched = transistors }
-			OR = { can_research = transistors is_researching_technology = transistors }
+			OR = {
+				can_research = transistors
+				AND = {
+					is_researching_technology = transistors
+					has_technology_researched = modern_tools
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = transistors }
 		}
 		AND = {
 			NOT = { has_technology_researched = vacuum_canning }
-			OR = { can_research = vacuum_canning is_researching_technology = vacuum_canning }
+			OR = {
+				can_research = vacuum_canning
+				AND = {
+					is_researching_technology = vacuum_canning
+					has_technology_researched = mechanized_workshops
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = vacuum_canning }
 		}
 		AND = {
 			NOT = { has_technology_researched = vulcanization }
-			OR = { can_research = vulcanization is_researching_technology = vulcanization }
+			OR = {
+				can_research = vulcanization
+				AND = {
+					is_researching_technology = vulcanization
+					has_technology_researched = rubber_mastication
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = vulcanization }
 		}
 		AND = {
 			NOT = { has_technology_researched = watertube_boiler }
-			OR = { can_research = watertube_boiler is_researching_technology = watertube_boiler }
+			OR = {
+				can_research = watertube_boiler
+				AND = {
+					is_researching_technology = watertube_boiler
+					has_technology_researched = atmospheric_engine
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = watertube_boiler }
 		}
 		AND = {
 			NOT = { has_technology_researched = wireless_internet }
-			OR = { can_research = wireless_internet is_researching_technology = wireless_internet }
+			OR = {
+				can_research = wireless_internet
+				AND = {
+					is_researching_technology = wireless_internet
+					has_technology_researched = world_wide_web
+					has_technology_researched = personal_computers
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = wireless_internet }
 		}
 		AND = {
 			NOT = { has_technology_researched = world_wide_web }
-			OR = { can_research = world_wide_web is_researching_technology = world_wide_web }
+			OR = {
+				can_research = world_wide_web
+				AND = {
+					is_researching_technology = world_wide_web
+					has_technology_researched = fiber_optics
+					has_technology_researched = computer_networks
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = world_wide_web }
 		}
 	}
@@ -595,367 +1326,833 @@ covert_tech_stealable_military = {
 	OR = {
 		AND = {
 			NOT = { has_technology_researched = ICBMs }
-			OR = { can_research = ICBMs is_researching_technology = ICBMs }
+			OR = {
+				can_research = ICBMs
+				AND = {
+					is_researching_technology = ICBMs
+					has_technology_researched = guided_missiles
+					has_technology_researched = nuclear_weapons
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = ICBMs }
 		}
 		AND = {
 			NOT = { has_technology_researched = admiralty }
-			OR = { can_research = admiralty is_researching_technology = admiralty }
+			OR = {
+				can_research = admiralty
+				AND = {
+					is_researching_technology = admiralty
+					has_technology_researched = navigation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = admiralty }
 		}
 		AND = {
 			NOT = { has_technology_researched = advanced_body_armor }
-			OR = { can_research = advanced_body_armor is_researching_technology = advanced_body_armor }
+			OR = {
+				can_research = advanced_body_armor
+				AND = {
+					is_researching_technology = advanced_body_armor
+					has_technology_researched = advanced_materials_armor
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = advanced_body_armor }
 		}
 		AND = {
 			NOT = { has_technology_researched = advanced_materials_armor }
-			OR = { can_research = advanced_materials_armor is_researching_technology = advanced_materials_armor }
+			OR = {
+				can_research = advanced_materials_armor
+				AND = {
+					is_researching_technology = advanced_materials_armor
+					has_technology_researched = precision_guided_munitions
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = advanced_materials_armor }
 		}
 		AND = {
 			NOT = { has_technology_researched = advanced_military_aircraft }
-			OR = { can_research = advanced_military_aircraft is_researching_technology = advanced_military_aircraft }
+			OR = {
+				can_research = advanced_military_aircraft
+				AND = {
+					is_researching_technology = advanced_military_aircraft
+					has_technology_researched = bombing_aircraft
+					has_technology_researched = radar
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = advanced_military_aircraft }
 		}
 		AND = {
 			NOT = { has_technology_researched = advanced_submarine_technology }
-			OR = { can_research = advanced_submarine_technology is_researching_technology = advanced_submarine_technology }
+			OR = {
+				can_research = advanced_submarine_technology
+				AND = {
+					is_researching_technology = advanced_submarine_technology
+					has_technology_researched = sonar
+					has_technology_researched = nuclear_energy
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = advanced_submarine_technology }
 		}
 		AND = {
 			NOT = { has_technology_researched = anti_sub_warfare }
-			OR = { can_research = anti_sub_warfare is_researching_technology = anti_sub_warfare }
+			OR = {
+				can_research = anti_sub_warfare
+				AND = {
+					is_researching_technology = anti_sub_warfare
+					has_technology_researched = advanced_submarine_technology
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = anti_sub_warfare }
 		}
 		AND = {
 			NOT = { has_technology_researched = antimatter_production }
-			OR = { can_research = antimatter_production is_researching_technology = antimatter_production }
+			OR = {
+				can_research = antimatter_production
+				AND = {
+					is_researching_technology = antimatter_production
+					has_technology_researched = fusion_power
+					has_technology_researched = quantum_communications
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = antimatter_production }
 		}
 		AND = {
 			NOT = { has_technology_researched = army_reserves }
-			OR = { can_research = army_reserves is_researching_technology = army_reserves }
+			OR = {
+				can_research = army_reserves
+				AND = {
+					is_researching_technology = army_reserves
+					has_technology_researched = line_infantry
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = army_reserves }
 		}
 		AND = {
 			NOT = { has_technology_researched = artillery }
-			OR = { can_research = artillery is_researching_technology = artillery }
+			OR = {
+				can_research = artillery
+				AND = {
+					is_researching_technology = artillery
+					has_technology_researched = gunsmithing
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = artillery }
 		}
 		AND = {
 			NOT = { has_technology_researched = asteroid_mining }
-			OR = { can_research = asteroid_mining is_researching_technology = asteroid_mining }
+			OR = {
+				can_research = asteroid_mining
+				AND = {
+					is_researching_technology = asteroid_mining
+					has_technology_researched = in_situ_resource_utilization
+					has_technology_researched = directed_energy_weapons
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = asteroid_mining }
 		}
 		AND = {
 			NOT = { has_technology_researched = augmented_reality_warfare }
-			OR = { can_research = augmented_reality_warfare is_researching_technology = augmented_reality_warfare }
+			OR = {
+				can_research = augmented_reality_warfare
+				AND = {
+					is_researching_technology = augmented_reality_warfare
+					has_technology_researched = network_centric_warfare
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = augmented_reality_warfare }
 		}
 		AND = {
 			NOT = { has_technology_researched = automated_surveillance }
-			OR = { can_research = automated_surveillance is_researching_technology = automated_surveillance }
+			OR = {
+				can_research = automated_surveillance
+				AND = {
+					is_researching_technology = automated_surveillance
+					has_technology_researched = military_grade_cybersecurity
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = automated_surveillance }
 		}
 		AND = {
 			NOT = { has_technology_researched = automatic_machine_guns }
-			OR = { can_research = automatic_machine_guns is_researching_technology = automatic_machine_guns }
+			OR = {
+				can_research = automatic_machine_guns
+				AND = {
+					is_researching_technology = automatic_machine_guns
+					has_technology_researched = handcranked_machine_gun
+					has_technology_researched = bolt_action_rifles
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = automatic_machine_guns }
 		}
 		AND = {
 			NOT = { has_technology_researched = battlefleet_tactics }
-			OR = { can_research = battlefleet_tactics is_researching_technology = battlefleet_tactics }
+			OR = {
+				can_research = battlefleet_tactics
+				AND = {
+					is_researching_technology = battlefleet_tactics
+					has_technology_researched = battleship_tech
+					has_technology_researched = sea_lane_strategies
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = battlefleet_tactics }
 		}
 		AND = {
 			NOT = { has_technology_researched = battleship_tech }
-			OR = { can_research = battleship_tech is_researching_technology = battleship_tech }
+			OR = {
+				can_research = battleship_tech
+				AND = {
+					is_researching_technology = battleship_tech
+					has_technology_researched = dreadnought_tech
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = battleship_tech }
 		}
 		AND = {
 			NOT = { has_technology_researched = bioenhanced_soldiers }
-			OR = { can_research = bioenhanced_soldiers is_researching_technology = bioenhanced_soldiers }
+			OR = {
+				can_research = bioenhanced_soldiers
+				AND = {
+					is_researching_technology = bioenhanced_soldiers
+					has_technology_researched = swarm_technology
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = bioenhanced_soldiers }
 		}
 		AND = {
 			NOT = { has_technology_researched = bolt_action_rifles }
-			OR = { can_research = bolt_action_rifles is_researching_technology = bolt_action_rifles }
+			OR = {
+				can_research = bolt_action_rifles
+				AND = {
+					is_researching_technology = bolt_action_rifles
+					has_technology_researched = repeaters
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = bolt_action_rifles }
 		}
 		AND = {
 			NOT = { has_technology_researched = bombing_aircraft }
-			OR = { can_research = bombing_aircraft is_researching_technology = bombing_aircraft }
+			OR = {
+				can_research = bombing_aircraft
+				AND = {
+					is_researching_technology = bombing_aircraft
+					has_technology_researched = military_aviation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = bombing_aircraft }
 		}
 		AND = {
 			NOT = { has_technology_researched = breech_loading_artillery }
-			OR = { can_research = breech_loading_artillery is_researching_technology = breech_loading_artillery }
+			OR = {
+				can_research = breech_loading_artillery
+				AND = {
+					is_researching_technology = breech_loading_artillery
+					has_technology_researched = rifling
+					has_technology_researched = shell_gun
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = breech_loading_artillery }
 		}
 		AND = {
 			NOT = { has_technology_researched = carrier_tech }
-			OR = { can_research = carrier_tech is_researching_technology = carrier_tech }
+			OR = {
+				can_research = carrier_tech
+				AND = {
+					is_researching_technology = carrier_tech
+					has_technology_researched = dreadnought_tech
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = carrier_tech }
 		}
 		AND = {
 			NOT = { has_technology_researched = chemical_warfare }
-			OR = { can_research = chemical_warfare is_researching_technology = chemical_warfare }
+			OR = {
+				can_research = chemical_warfare
+				AND = {
+					is_researching_technology = chemical_warfare
+					has_technology_researched = automatic_machine_guns
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = chemical_warfare }
 		}
 		AND = {
 			NOT = { has_technology_researched = cislunar_infrastructure }
-			OR = { can_research = cislunar_infrastructure is_researching_technology = cislunar_infrastructure }
+			OR = {
+				can_research = cislunar_infrastructure
+				AND = {
+					is_researching_technology = cislunar_infrastructure
+					has_technology_researched = reusable_rocketry
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = cislunar_infrastructure }
 		}
 		AND = {
 			NOT = { has_technology_researched = combined_arms }
-			OR = { can_research = combined_arms is_researching_technology = combined_arms }
+			OR = {
+				can_research = combined_arms
+				AND = {
+					is_researching_technology = combined_arms
+					has_technology_researched = mobile_armor
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = combined_arms }
 		}
 		AND = {
 			NOT = { has_technology_researched = compact_fusion_reactors }
-			OR = { can_research = compact_fusion_reactors is_researching_technology = compact_fusion_reactors }
+			OR = {
+				can_research = compact_fusion_reactors
+				AND = {
+					is_researching_technology = compact_fusion_reactors
+					has_technology_researched = fusion_power
+					has_technology_researched = directed_energy_weapons
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = compact_fusion_reactors }
 		}
 		AND = {
 			NOT = { has_technology_researched = concrete_dockyards }
-			OR = { can_research = concrete_dockyards is_researching_technology = concrete_dockyards }
+			OR = {
+				can_research = concrete_dockyards
+				AND = {
+					is_researching_technology = concrete_dockyards
+					has_technology_researched = floating_harbor
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = concrete_dockyards }
 		}
 		AND = {
 			NOT = { has_technology_researched = concrete_fortifications }
-			OR = { can_research = concrete_fortifications is_researching_technology = concrete_fortifications }
+			OR = {
+				can_research = concrete_fortifications
+				AND = {
+					is_researching_technology = concrete_fortifications
+					has_technology_researched = defense_in_depth
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = concrete_fortifications }
 		}
 		AND = {
 			NOT = { has_technology_researched = cryptography }
-			OR = { can_research = cryptography is_researching_technology = cryptography }
+			OR = {
+				can_research = cryptography
+				AND = {
+					is_researching_technology = cryptography
+					has_technology_researched = radar
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = cryptography }
 		}
 		AND = {
 			NOT = { has_technology_researched = cyber_warfare }
-			OR = { can_research = cyber_warfare is_researching_technology = cyber_warfare }
+			OR = {
+				can_research = cyber_warfare
+				AND = {
+					is_researching_technology = cyber_warfare
+					has_technology_researched = network_centric_warfare
+					has_technology_researched = automated_surveillance
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = cyber_warfare }
 		}
 		AND = {
 			NOT = { has_technology_researched = defense_in_depth }
-			OR = { can_research = defense_in_depth is_researching_technology = defense_in_depth }
+			OR = {
+				can_research = defense_in_depth
+				AND = {
+					is_researching_technology = defense_in_depth
+					has_technology_researched = trench_works
+					has_technology_researched = handcranked_machine_gun
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = defense_in_depth }
 		}
 		AND = {
 			NOT = { has_technology_researched = destroyer }
-			OR = { can_research = destroyer is_researching_technology = destroyer }
+			OR = {
+				can_research = destroyer
+				AND = {
+					is_researching_technology = destroyer
+					has_technology_researched = monitor_tech
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = destroyer }
 		}
 		AND = {
 			NOT = { has_technology_researched = directed_energy_defenses }
-			OR = { can_research = directed_energy_defenses is_researching_technology = directed_energy_defenses }
+			OR = {
+				can_research = directed_energy_defenses
+				AND = {
+					is_researching_technology = directed_energy_defenses
+					has_technology_researched = stealth_technology
+					has_technology_researched = missile_defense_systems
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = directed_energy_defenses }
 		}
 		AND = {
 			NOT = { has_technology_researched = directed_energy_weapons }
-			OR = { can_research = directed_energy_weapons is_researching_technology = directed_energy_weapons }
+			OR = {
+				can_research = directed_energy_weapons
+				AND = {
+					is_researching_technology = directed_energy_weapons
+					has_technology_researched = directed_energy_defenses
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = directed_energy_weapons }
 		}
 		AND = {
 			NOT = { has_technology_researched = dreadnought_tech }
-			OR = { can_research = dreadnought_tech is_researching_technology = dreadnought_tech }
+			OR = {
+				can_research = dreadnought_tech
+				AND = {
+					is_researching_technology = dreadnought_tech
+					has_technology_researched = pre_dreadnought_tech
+					has_technology_researched = sea_lane_strategies
+					has_technology_researched = concrete_dockyards
+					has_technology_researched = military_aviation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = dreadnought_tech }
 		}
 		AND = {
 			NOT = { has_technology_researched = drydocks }
-			OR = { can_research = drydocks is_researching_technology = drydocks }
+			OR = {
+				can_research = drydocks
+				AND = {
+					is_researching_technology = drydocks
+					has_technology_researched = navigation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = drydocks }
 		}
 		AND = {
 			NOT = { has_technology_researched = electric_telegraph }
-			OR = { can_research = electric_telegraph is_researching_technology = electric_telegraph }
+			OR = {
+				can_research = electric_telegraph
+				AND = {
+					is_researching_technology = electric_telegraph
+					has_technology_researched = logistics
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = electric_telegraph }
 		}
 		AND = {
 			NOT = { has_technology_researched = electronic_warfare }
-			OR = { can_research = electronic_warfare is_researching_technology = electronic_warfare }
+			OR = {
+				can_research = electronic_warfare
+				AND = {
+					is_researching_technology = electronic_warfare
+					has_technology_researched = network_centric_warfare
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = electronic_warfare }
 		}
 		AND = {
 			NOT = { has_technology_researched = enlistment_offices }
-			OR = { can_research = enlistment_offices is_researching_technology = enlistment_offices }
+			OR = {
+				can_research = enlistment_offices
+				AND = {
+					is_researching_technology = enlistment_offices
+					has_technology_researched = logistics
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = enlistment_offices }
 		}
 		AND = {
 			NOT = { has_technology_researched = field_works }
-			OR = { can_research = field_works is_researching_technology = field_works }
+			OR = {
+				can_research = field_works
+				AND = {
+					is_researching_technology = field_works
+					has_technology_researched = napoleonic_warfare
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = field_works }
 		}
 		AND = {
 			NOT = { has_technology_researched = flamethrowers }
-			OR = { can_research = flamethrowers is_researching_technology = flamethrowers }
+			OR = {
+				can_research = flamethrowers
+				AND = {
+					is_researching_technology = flamethrowers
+					has_technology_researched = trench_works
+					has_technology_researched = automatic_machine_guns
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = flamethrowers }
 		}
 		AND = {
 			NOT = { has_technology_researched = floating_harbor }
-			OR = { can_research = floating_harbor is_researching_technology = floating_harbor }
+			OR = {
+				can_research = floating_harbor
+				AND = {
+					is_researching_technology = floating_harbor
+					has_technology_researched = gantry_cranes
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = floating_harbor }
 		}
 		AND = {
 			NOT = { has_technology_researched = fusion_batteries }
-			OR = { can_research = fusion_batteries is_researching_technology = fusion_batteries }
+			OR = {
+				can_research = fusion_batteries
+				AND = {
+					is_researching_technology = fusion_batteries
+					has_technology_researched = compact_fusion_reactors
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = fusion_batteries }
 		}
 		AND = {
 			NOT = { has_technology_researched = fusion_power }
-			OR = { can_research = fusion_power is_researching_technology = fusion_power }
+			OR = {
+				can_research = fusion_power
+				AND = {
+					is_researching_technology = fusion_power
+					has_technology_researched = directed_energy_defenses
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = fusion_power }
 		}
 		AND = {
 			NOT = { has_technology_researched = gantry_cranes }
-			OR = { can_research = gantry_cranes is_researching_technology = gantry_cranes }
+			OR = {
+				can_research = gantry_cranes
+				AND = {
+					is_researching_technology = gantry_cranes
+					has_technology_researched = hydraulic_cranes
+					has_technology_researched = screw_frigate
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = gantry_cranes }
 		}
 		AND = {
 			NOT = { has_technology_researched = general_staff }
-			OR = { can_research = general_staff is_researching_technology = general_staff }
+			OR = {
+				can_research = general_staff
+				AND = {
+					is_researching_technology = general_staff
+					has_technology_researched = army_reserves
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = general_staff }
 		}
 		AND = {
 			NOT = { has_technology_researched = guided_missiles }
-			OR = { can_research = guided_missiles is_researching_technology = guided_missiles }
+			OR = {
+				can_research = guided_missiles
+				AND = {
+					is_researching_technology = guided_missiles
+					has_technology_researched = inertial_navigation_systems
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = guided_missiles }
 		}
 		AND = {
 			NOT = { has_technology_researched = gunsmithing }
-			OR = { can_research = gunsmithing is_researching_technology = gunsmithing }
+			OR = {
+				can_research = gunsmithing
+				AND = {
+					is_researching_technology = gunsmithing
+					has_technology_researched = standing_army
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = gunsmithing }
 		}
 		AND = {
 			NOT = { has_technology_researched = handcranked_machine_gun }
-			OR = { can_research = handcranked_machine_gun is_researching_technology = handcranked_machine_gun }
+			OR = {
+				can_research = handcranked_machine_gun
+				AND = {
+					is_researching_technology = handcranked_machine_gun
+					has_technology_researched = repeaters
+					has_technology_researched = breech_loading_artillery
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = handcranked_machine_gun }
 		}
 		AND = {
 			NOT = { has_technology_researched = hydraulic_cranes }
-			OR = { can_research = hydraulic_cranes is_researching_technology = hydraulic_cranes }
+			OR = {
+				can_research = hydraulic_cranes
+				AND = {
+					is_researching_technology = hydraulic_cranes
+					has_technology_researched = drydocks
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = hydraulic_cranes }
 		}
 		AND = {
 			NOT = { has_technology_researched = hypersonic_weapons }
-			OR = { can_research = hypersonic_weapons is_researching_technology = hypersonic_weapons }
+			OR = {
+				can_research = hypersonic_weapons
+				AND = {
+					is_researching_technology = hypersonic_weapons
+					has_technology_researched = precision_guided_munitions
+					has_technology_researched = supersonic_aircraft
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = hypersonic_weapons }
 		}
 		AND = {
 			NOT = { has_technology_researched = in_situ_resource_utilization }
-			OR = { can_research = in_situ_resource_utilization is_researching_technology = in_situ_resource_utilization }
+			OR = {
+				can_research = in_situ_resource_utilization
+				AND = {
+					is_researching_technology = in_situ_resource_utilization
+					has_technology_researched = reusable_rocketry
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = in_situ_resource_utilization }
 		}
 		AND = {
 			NOT = { has_technology_researched = inertial_navigation_systems }
-			OR = { can_research = inertial_navigation_systems is_researching_technology = inertial_navigation_systems }
+			OR = {
+				can_research = inertial_navigation_systems
+				AND = {
+					is_researching_technology = inertial_navigation_systems
+					has_technology_researched = rocketry
+					has_technology_researched = radar
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = inertial_navigation_systems }
 		}
 		AND = {
 			NOT = { has_technology_researched = infrared_night_vision }
-			OR = { can_research = infrared_night_vision is_researching_technology = infrared_night_vision }
+			OR = {
+				can_research = infrared_night_vision
+				AND = {
+					is_researching_technology = infrared_night_vision
+					has_technology_researched = nuclear_energy
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = infrared_night_vision }
 		}
 		AND = {
 			NOT = { has_technology_researched = ironclad_tech }
-			OR = { can_research = ironclad_tech is_researching_technology = ironclad_tech }
+			OR = {
+				can_research = ironclad_tech
+				AND = {
+					is_researching_technology = ironclad_tech
+					has_technology_researched = screw_frigate
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = ironclad_tech }
 		}
 		AND = {
 			NOT = { has_technology_researched = jadc2 }
-			OR = { can_research = jadc2 is_researching_technology = jadc2 }
+			OR = {
+				can_research = jadc2
+				AND = {
+					is_researching_technology = jadc2
+					has_technology_researched = network_centric_warfare
+					has_technology_researched = electronic_warfare
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = jadc2 }
 		}
 		AND = {
 			NOT = { has_technology_researched = jet_engine_technology }
-			OR = { can_research = jet_engine_technology is_researching_technology = jet_engine_technology }
+			OR = {
+				can_research = jet_engine_technology
+				AND = {
+					is_researching_technology = jet_engine_technology
+					has_technology_researched = advanced_military_aircraft
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = jet_engine_technology }
 		}
 		AND = {
 			NOT = { has_technology_researched = jeune_ecole }
-			OR = { can_research = jeune_ecole is_researching_technology = jeune_ecole }
+			OR = {
+				can_research = jeune_ecole
+				AND = {
+					is_researching_technology = jeune_ecole
+					has_technology_researched = self_propelled_torpedoes
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = jeune_ecole }
 		}
 		AND = {
 			NOT = { has_technology_researched = landing_craft }
-			OR = { can_research = landing_craft is_researching_technology = landing_craft }
+			OR = {
+				can_research = landing_craft
+				AND = {
+					is_researching_technology = landing_craft
+					has_technology_researched = jeune_ecole
+					has_technology_researched = monitor_tech
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = landing_craft }
 		}
 		AND = {
 			NOT = { has_technology_researched = line_infantry }
-			OR = { can_research = line_infantry is_researching_technology = line_infantry }
+			OR = {
+				can_research = line_infantry
+				AND = {
+					is_researching_technology = line_infantry
+					has_technology_researched = mandatory_service
+					has_technology_researched = military_drill
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = line_infantry }
 		}
 		AND = {
 			NOT = { has_technology_researched = logistics }
-			OR = { can_research = logistics is_researching_technology = logistics }
+			OR = {
+				can_research = logistics
+				AND = {
+					is_researching_technology = logistics
+					has_technology_researched = napoleonic_warfare
+					has_technology_researched = army_reserves
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = logistics }
 		}
 		AND = {
 			NOT = { has_technology_researched = mandatory_service }
-			OR = { can_research = mandatory_service is_researching_technology = mandatory_service }
+			OR = {
+				can_research = mandatory_service
+				AND = {
+					is_researching_technology = mandatory_service
+					has_technology_researched = standing_army
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = mandatory_service }
 		}
 		AND = {
 			NOT = { has_technology_researched = military_aviation }
-			OR = { can_research = military_aviation is_researching_technology = military_aviation }
+			OR = {
+				can_research = military_aviation
+				AND = {
+					is_researching_technology = military_aviation
+					has_technology_researched = handcranked_machine_gun
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = military_aviation }
 		}
 		AND = {
 			NOT = { has_technology_researched = military_drill }
-			OR = { can_research = military_drill is_researching_technology = military_drill }
+			OR = {
+				can_research = military_drill
+				AND = {
+					is_researching_technology = military_drill
+					has_technology_researched = standing_army
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = military_drill }
 		}
 		AND = {
 			NOT = { has_technology_researched = military_grade_cybersecurity }
-			OR = { can_research = military_grade_cybersecurity is_researching_technology = military_grade_cybersecurity }
+			OR = {
+				can_research = military_grade_cybersecurity
+				AND = {
+					is_researching_technology = military_grade_cybersecurity
+					has_technology_researched = cryptography
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = military_grade_cybersecurity }
 		}
 		AND = {
 			NOT = { has_technology_researched = military_statistics }
-			OR = { can_research = military_statistics is_researching_technology = military_statistics }
+			OR = {
+				can_research = military_statistics
+				AND = {
+					is_researching_technology = military_statistics
+					has_technology_researched = electric_telegraph
+					has_technology_researched = general_staff
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = military_statistics }
 		}
 		AND = {
 			NOT = { has_technology_researched = missile_defense_systems }
-			OR = { can_research = missile_defense_systems is_researching_technology = missile_defense_systems }
+			OR = {
+				can_research = missile_defense_systems
+				AND = {
+					is_researching_technology = missile_defense_systems
+					has_technology_researched = guided_missiles
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = missile_defense_systems }
 		}
 		AND = {
 			NOT = { has_technology_researched = mobile_armor }
-			OR = { can_research = mobile_armor is_researching_technology = mobile_armor }
+			OR = {
+				can_research = mobile_armor
+				AND = {
+					is_researching_technology = mobile_armor
+					has_technology_researched = concrete_fortifications
+					has_technology_researched = nco_training
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = mobile_armor }
 		}
 		AND = {
 			NOT = { has_technology_researched = modern_nursing }
-			OR = { can_research = modern_nursing is_researching_technology = modern_nursing }
+			OR = {
+				can_research = modern_nursing
+				AND = {
+					is_researching_technology = modern_nursing
+					has_technology_researched = triage
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = modern_nursing }
 		}
 		AND = {
 			NOT = { has_technology_researched = monitor_tech }
-			OR = { can_research = monitor_tech is_researching_technology = monitor_tech }
+			OR = {
+				can_research = monitor_tech
+				AND = {
+					is_researching_technology = monitor_tech
+					has_technology_researched = ironclad_tech
+					has_technology_researched = breech_loading_artillery
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = monitor_tech }
 		}
 		AND = {
 			NOT = { has_technology_researched = motorized_artillery }
-			OR = { can_research = motorized_artillery is_researching_technology = motorized_artillery }
+			OR = {
+				can_research = motorized_artillery
+				AND = {
+					is_researching_technology = motorized_artillery
+					has_technology_researched = mobile_armor
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = motorized_artillery }
 		}
 		AND = {
 			NOT = { has_technology_researched = napoleonic_warfare }
-			OR = { can_research = napoleonic_warfare is_researching_technology = napoleonic_warfare }
+			OR = {
+				can_research = napoleonic_warfare
+				AND = {
+					is_researching_technology = napoleonic_warfare
+					has_technology_researched = line_infantry
+					has_technology_researched = artillery
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = napoleonic_warfare }
 		}
 		AND = {
 			NOT = { has_technology_researched = naval_convoy_defense }
-			OR = { can_research = naval_convoy_defense is_researching_technology = naval_convoy_defense }
+			OR = {
+				can_research = naval_convoy_defense
+				AND = {
+					is_researching_technology = naval_convoy_defense
+					has_technology_researched = sonar
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = naval_convoy_defense }
 		}
 		AND = {
 			NOT = { has_technology_researched = naval_fire_control_systems }
-			OR = { can_research = naval_fire_control_systems is_researching_technology = naval_fire_control_systems }
+			OR = {
+				can_research = naval_fire_control_systems
+				AND = {
+					is_researching_technology = naval_fire_control_systems
+					has_technology_researched = battlefleet_tactics
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = naval_fire_control_systems }
 		}
 		AND = {
@@ -965,157 +2162,350 @@ covert_tech_stealable_military = {
 		}
 		AND = {
 			NOT = { has_technology_researched = nco_training }
-			OR = { can_research = nco_training is_researching_technology = nco_training }
+			OR = {
+				can_research = nco_training
+				AND = {
+					is_researching_technology = nco_training
+					has_technology_researched = wargaming
+					has_technology_researched = trench_works
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = nco_training }
 		}
 		AND = {
 			NOT = { has_technology_researched = network_centric_warfare }
-			OR = { can_research = network_centric_warfare is_researching_technology = network_centric_warfare }
+			OR = {
+				can_research = network_centric_warfare
+				AND = {
+					is_researching_technology = network_centric_warfare
+					has_technology_researched = military_grade_cybersecurity
+					has_technology_researched = satellite_communications
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = network_centric_warfare }
 		}
 		AND = {
 			NOT = { has_technology_researched = nuclear_energy }
-			OR = { can_research = nuclear_energy is_researching_technology = nuclear_energy }
+			OR = {
+				can_research = nuclear_energy
+				AND = {
+					is_researching_technology = nuclear_energy
+					has_technology_researched = nuclear_weapons
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = nuclear_energy }
 		}
 		AND = {
 			NOT = { has_technology_researched = nuclear_thermal_propulsion }
-			OR = { can_research = nuclear_thermal_propulsion is_researching_technology = nuclear_thermal_propulsion }
+			OR = {
+				can_research = nuclear_thermal_propulsion
+				AND = {
+					is_researching_technology = nuclear_thermal_propulsion
+					has_technology_researched = cislunar_infrastructure
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = nuclear_thermal_propulsion }
 		}
 		AND = {
 			NOT = { has_technology_researched = nuclear_weapons }
-			OR = { can_research = nuclear_weapons is_researching_technology = nuclear_weapons }
+			OR = {
+				can_research = nuclear_weapons
+				AND = {
+					is_researching_technology = nuclear_weapons
+					has_technology_researched = rocketry
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = nuclear_weapons }
 		}
 		AND = {
 			NOT = { has_technology_researched = orbital_weapon_platforms }
-			OR = { can_research = orbital_weapon_platforms is_researching_technology = orbital_weapon_platforms }
+			OR = {
+				can_research = orbital_weapon_platforms
+				AND = {
+					is_researching_technology = orbital_weapon_platforms
+					has_technology_researched = space_militarization
+					has_technology_researched = asteroid_mining
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = orbital_weapon_platforms }
 		}
 		AND = {
 			NOT = { has_technology_researched = paddle_steamer }
-			OR = { can_research = paddle_steamer is_researching_technology = paddle_steamer }
+			OR = {
+				can_research = paddle_steamer
+				AND = {
+					is_researching_technology = paddle_steamer
+					has_technology_researched = admiralty
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = paddle_steamer }
 		}
 		AND = {
 			NOT = { has_technology_researched = percussion_cap }
-			OR = { can_research = percussion_cap is_researching_technology = percussion_cap }
+			OR = {
+				can_research = percussion_cap
+				AND = {
+					is_researching_technology = percussion_cap
+					has_technology_researched = gunsmithing
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = percussion_cap }
 		}
 		AND = {
 			NOT = { has_technology_researched = power_of_the_purse }
-			OR = { can_research = power_of_the_purse is_researching_technology = power_of_the_purse }
+			OR = {
+				can_research = power_of_the_purse
+				AND = {
+					is_researching_technology = power_of_the_purse
+					has_technology_researched = admiralty
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = power_of_the_purse }
 		}
 		AND = {
 			NOT = { has_technology_researched = pre_dreadnought_tech }
-			OR = { can_research = pre_dreadnought_tech is_researching_technology = pre_dreadnought_tech }
+			OR = {
+				can_research = pre_dreadnought_tech
+				AND = {
+					is_researching_technology = pre_dreadnought_tech
+					has_technology_researched = ironclad_tech
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = pre_dreadnought_tech }
 		}
 		AND = {
 			NOT = { has_technology_researched = precision_guided_munitions }
-			OR = { can_research = precision_guided_munitions is_researching_technology = precision_guided_munitions }
+			OR = {
+				can_research = precision_guided_munitions
+				AND = {
+					is_researching_technology = precision_guided_munitions
+					has_technology_researched = guided_missiles
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = precision_guided_munitions }
 		}
 		AND = {
 			NOT = { has_technology_researched = predictive_logistics }
-			OR = { can_research = predictive_logistics is_researching_technology = predictive_logistics }
+			OR = {
+				can_research = predictive_logistics
+				AND = {
+					is_researching_technology = predictive_logistics
+					has_technology_researched = satellite_communications
+					has_technology_researched = guided_missiles
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = predictive_logistics }
 		}
 		AND = {
 			NOT = { has_technology_researched = quantum_communications }
-			OR = { can_research = quantum_communications is_researching_technology = quantum_communications }
+			OR = {
+				can_research = quantum_communications
+				AND = {
+					is_researching_technology = quantum_communications
+					has_technology_researched = network_centric_warfare
+					has_technology_researched = military_grade_cybersecurity
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = quantum_communications }
 		}
 		AND = {
 			NOT = { has_technology_researched = radar }
-			OR = { can_research = radar is_researching_technology = radar }
+			OR = {
+				can_research = radar
+				AND = {
+					is_researching_technology = radar
+					has_technology_researched = military_aviation
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = radar }
 		}
 		AND = {
 			NOT = { has_technology_researched = rapid_deployment_forces }
-			OR = { can_research = rapid_deployment_forces is_researching_technology = rapid_deployment_forces }
+			OR = {
+				can_research = rapid_deployment_forces
+				AND = {
+					is_researching_technology = rapid_deployment_forces
+					has_technology_researched = satellite_communications
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = rapid_deployment_forces }
 		}
 		AND = {
 			NOT = { has_technology_researched = recon_satellites }
-			OR = { can_research = recon_satellites is_researching_technology = recon_satellites }
+			OR = {
+				can_research = recon_satellites
+				AND = {
+					is_researching_technology = recon_satellites
+					has_technology_researched = space_exploration
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = recon_satellites }
 		}
 		AND = {
 			NOT = { has_technology_researched = repeaters }
-			OR = { can_research = repeaters is_researching_technology = repeaters }
+			OR = {
+				can_research = repeaters
+				AND = {
+					is_researching_technology = repeaters
+					has_technology_researched = rifling
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = repeaters }
 		}
 		AND = {
 			NOT = { has_technology_researched = reusable_rocketry }
-			OR = { can_research = reusable_rocketry is_researching_technology = reusable_rocketry }
+			OR = {
+				can_research = reusable_rocketry
+				AND = {
+					is_researching_technology = reusable_rocketry
+					has_technology_researched = satellite_communications
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = reusable_rocketry }
 		}
 		AND = {
 			NOT = { has_technology_researched = rifling }
-			OR = { can_research = rifling is_researching_technology = rifling }
+			OR = {
+				can_research = rifling
+				AND = {
+					is_researching_technology = rifling
+					has_technology_researched = percussion_cap
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = rifling }
 		}
 		AND = {
 			NOT = { has_technology_researched = rocketry }
-			OR = { can_research = rocketry is_researching_technology = rocketry }
+			OR = {
+				can_research = rocketry
+				AND = {
+					is_researching_technology = rocketry
+					has_technology_researched = bombing_aircraft
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = rocketry }
 		}
 		AND = {
 			NOT = { has_technology_researched = satellite_communications }
-			OR = { can_research = satellite_communications is_researching_technology = satellite_communications }
+			OR = {
+				can_research = satellite_communications
+				AND = {
+					is_researching_technology = satellite_communications
+					has_technology_researched = space_exploration
+					has_technology_researched = cryptography
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = satellite_communications }
 		}
 		AND = {
 			NOT = { has_technology_researched = screw_frigate }
-			OR = { can_research = screw_frigate is_researching_technology = screw_frigate }
+			OR = {
+				can_research = screw_frigate
+				AND = {
+					is_researching_technology = screw_frigate
+					has_technology_researched = paddle_steamer
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = screw_frigate }
 		}
 		AND = {
 			NOT = { has_technology_researched = sea_lane_strategies }
-			OR = { can_research = sea_lane_strategies is_researching_technology = sea_lane_strategies }
+			OR = {
+				can_research = sea_lane_strategies
+				AND = {
+					is_researching_technology = sea_lane_strategies
+					has_technology_researched = jeune_ecole
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = sea_lane_strategies }
 		}
 		AND = {
 			NOT = { has_technology_researched = self_propelled_torpedoes }
-			OR = { can_research = self_propelled_torpedoes is_researching_technology = self_propelled_torpedoes }
+			OR = {
+				can_research = self_propelled_torpedoes
+				AND = {
+					is_researching_technology = self_propelled_torpedoes
+					has_technology_researched = power_of_the_purse
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = self_propelled_torpedoes }
 		}
 		AND = {
 			NOT = { has_technology_researched = semiautomatic_rifle }
-			OR = { can_research = semiautomatic_rifle is_researching_technology = semiautomatic_rifle }
+			OR = {
+				can_research = semiautomatic_rifle
+				AND = {
+					is_researching_technology = semiautomatic_rifle
+					has_technology_researched = bolt_action_rifles
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = semiautomatic_rifle }
 		}
 		AND = {
 			NOT = { has_technology_researched = shell_gun }
-			OR = { can_research = shell_gun is_researching_technology = shell_gun }
+			OR = {
+				can_research = shell_gun
+				AND = {
+					is_researching_technology = shell_gun
+					has_technology_researched = artillery
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = shell_gun }
 		}
 		AND = {
 			NOT = { has_technology_researched = sonar }
-			OR = { can_research = sonar is_researching_technology = sonar }
+			OR = {
+				can_research = sonar
+				AND = {
+					is_researching_technology = sonar
+					has_technology_researched = battlefleet_tactics
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = sonar }
 		}
 		AND = {
 			NOT = { has_technology_researched = space_based_solar_power }
-			OR = { can_research = space_based_solar_power is_researching_technology = space_based_solar_power }
+			OR = {
+				can_research = space_based_solar_power
+				AND = {
+					is_researching_technology = space_based_solar_power
+					has_technology_researched = quantum_communications
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = space_based_solar_power }
 		}
 		AND = {
 			NOT = { has_technology_researched = space_elevator }
-			OR = { can_research = space_elevator is_researching_technology = space_elevator }
+			OR = {
+				can_research = space_elevator
+				AND = {
+					is_researching_technology = space_elevator
+					has_technology_researched = asteroid_mining
+					has_technology_researched = compact_fusion_reactors
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = space_elevator }
 		}
 		AND = {
 			NOT = { has_technology_researched = space_exploration }
-			OR = { can_research = space_exploration is_researching_technology = space_exploration }
+			OR = {
+				can_research = space_exploration
+				AND = {
+					is_researching_technology = space_exploration
+					has_technology_researched = ICBMs
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = space_exploration }
 		}
 		AND = {
 			NOT = { has_technology_researched = space_militarization }
-			OR = { can_research = space_militarization is_researching_technology = space_militarization }
+			OR = {
+				can_research = space_militarization
+				AND = {
+					is_researching_technology = space_militarization
+					has_technology_researched = reusable_rocketry
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = space_militarization }
 		}
 		AND = {
@@ -1125,57 +2515,128 @@ covert_tech_stealable_military = {
 		}
 		AND = {
 			NOT = { has_technology_researched = stealth_technology }
-			OR = { can_research = stealth_technology is_researching_technology = stealth_technology }
+			OR = {
+				can_research = stealth_technology
+				AND = {
+					is_researching_technology = stealth_technology
+					has_technology_researched = supersonic_aircraft
+					has_technology_researched = advanced_submarine_technology
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = stealth_technology }
 		}
 		AND = {
 			NOT = { has_technology_researched = stormtroopers }
-			OR = { can_research = stormtroopers is_researching_technology = stormtroopers }
+			OR = {
+				can_research = stormtroopers
+				AND = {
+					is_researching_technology = stormtroopers
+					has_technology_researched = wargaming
+					has_technology_researched = trench_works
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = stormtroopers }
 		}
 		AND = {
 			NOT = { has_technology_researched = submarine }
-			OR = { can_research = submarine is_researching_technology = submarine }
+			OR = {
+				can_research = submarine
+				AND = {
+					is_researching_technology = submarine
+					has_technology_researched = self_propelled_torpedoes
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = submarine }
 		}
 		AND = {
 			NOT = { has_technology_researched = supersonic_aircraft }
-			OR = { can_research = supersonic_aircraft is_researching_technology = supersonic_aircraft }
+			OR = {
+				can_research = supersonic_aircraft
+				AND = {
+					is_researching_technology = supersonic_aircraft
+					has_technology_researched = inertial_navigation_systems
+					has_technology_researched = jet_engine_technology
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = supersonic_aircraft }
 		}
 		AND = {
 			NOT = { has_technology_researched = swarm_technology }
-			OR = { can_research = swarm_technology is_researching_technology = swarm_technology }
+			OR = {
+				can_research = swarm_technology
+				AND = {
+					is_researching_technology = swarm_technology
+					has_technology_researched = rapid_deployment_forces
+					has_technology_researched = unmanned_aerial_vehicles
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = swarm_technology }
 		}
 		AND = {
 			NOT = { has_technology_researched = tactical_nuclear_weapons }
-			OR = { can_research = tactical_nuclear_weapons is_researching_technology = tactical_nuclear_weapons }
+			OR = {
+				can_research = tactical_nuclear_weapons
+				AND = {
+					is_researching_technology = tactical_nuclear_weapons
+					has_technology_researched = ICBMs
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = tactical_nuclear_weapons }
 		}
 		AND = {
 			NOT = { has_technology_researched = trench_works }
-			OR = { can_research = trench_works is_researching_technology = trench_works }
+			OR = {
+				can_research = trench_works
+				AND = {
+					is_researching_technology = trench_works
+					has_technology_researched = general_staff
+					has_technology_researched = electric_telegraph
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = trench_works }
 		}
 		AND = {
 			NOT = { has_technology_researched = triage }
-			OR = { can_research = triage is_researching_technology = triage }
+			OR = {
+				can_research = triage
+				AND = {
+					is_researching_technology = triage
+					has_technology_researched = logistics
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = triage }
 		}
 		AND = {
 			NOT = { has_technology_researched = unmanned_aerial_vehicles }
-			OR = { can_research = unmanned_aerial_vehicles is_researching_technology = unmanned_aerial_vehicles }
+			OR = {
+				can_research = unmanned_aerial_vehicles
+				AND = {
+					is_researching_technology = unmanned_aerial_vehicles
+					has_technology_researched = supersonic_aircraft
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = unmanned_aerial_vehicles }
 		}
 		AND = {
 			NOT = { has_technology_researched = war_propaganda }
-			OR = { can_research = war_propaganda is_researching_technology = war_propaganda }
+			OR = {
+				can_research = war_propaganda
+				AND = {
+					is_researching_technology = war_propaganda
+					has_technology_researched = enlistment_offices
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = war_propaganda }
 		}
 		AND = {
 			NOT = { has_technology_researched = wargaming }
-			OR = { can_research = wargaming is_researching_technology = wargaming }
+			OR = {
+				can_research = wargaming
+				AND = {
+					is_researching_technology = wargaming
+					has_technology_researched = military_statistics
+				}
+			}
 			$TARGET$ ?= { has_technology_researched = wargaming }
 		}
 	}
