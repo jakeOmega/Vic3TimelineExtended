@@ -157,6 +157,8 @@ sr_emig_step_prio = {
 # could skip the removal and stack a copy. The multipliers read the country
 # through `owner` (they resolve in the entry's scope, je_multiplier_scope_audit).
 sr_emig_refresh_modifiers = {
+	# The facilities' modifiers (colony management design § 7), generated.
+	sr_mod_refresh_facilities = yes
 	je:je_space_race_solar_colonization ?= {
 		if = {
 			limit = { has_modifier = sr_emigration_programme }
@@ -242,7 +244,8 @@ sr_emig_refresh_modifiers = {
 # ---- AI (design § 10.6) ---------------------------------------------------------------------
 # Country scope, from the entry's pulse; once a year. Off in default, without
 # a Space Program or with no open colony that has room for a batch; Steady
-# for a top-three space power with a positive weekly income; Low otherwise.
+# for a holder or top-three space power (sr_ai_tends_colonies) with a positive
+# weekly income; Low otherwise.
 # Priorities stay Normal: the weights by free room fill the emptiest first.
 sr_emig_ai_review = {
 	if = {
@@ -267,7 +270,7 @@ sr_emig_ai_review = {
 		}
 		else_if = {
 			limit = {
-				sr_ai_should_participate = yes
+				sr_ai_tends_colonies = yes
 				net_fixed_income > 0
 			}
 			if = {

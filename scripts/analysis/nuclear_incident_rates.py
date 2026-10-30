@@ -121,6 +121,8 @@ class RiskModel:
             return posture.believed_stockpile
         if value == "nd_ai_capital_hit_share":
             return posture.capital_hit_share   # reads modifiers at the enemy's capital
+        if value == "sr_mod_bunker_reliability":
+            return 0.0  # a colony's Nuclear Command Center: the benchmarks hold no colonies
         if value in self.values:
             return self.number(self.values[value], posture)
         return float(value)

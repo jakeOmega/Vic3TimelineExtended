@@ -212,10 +212,16 @@ STAGE_TITLES = {
     5: "Kuiper Belt & Beyond",
 }
 
-# Cede Colony's value of a world to the AI: 20 plus 5 a stage (design § 11.2;
-# a lunar world, stage 0, is worth 20).
-AI_VALUE_BASE = 20
-AI_VALUE_PER_STAGE = 5
+# Cede Colony's value of a world to the AI (colony management design § 3, the
+# owner's 2026-10-30 range: a giver's score of -50 to -200 with the article's
+# -30 reluctance): 30 plus 10 a stage (a lunar world, stage 0, is worth 30), 8 a
+# module level past the first, 1 a 1,000 of its people, at most 170. Until
+# 2026-10-30 it was 20 plus 5 a stage and 5 a level, and an AI sold a colony
+# for a few tens of points.
+AI_VALUE_BASE = 30
+AI_VALUE_PER_STAGE = 10
+AI_VALUE_PEOPLE = 1000
+AI_VALUE_MAX = 170
 
 # Colony fleets (slices 2-3 design §§ 4-8). Slots per country; the automatic
 # pick's score, 100 - 10 x stage - transit months / 2 - 40 x premium - 10 a
@@ -242,16 +248,58 @@ PRIORITY_WEIGHTS = (0, 1, 2, 4)
 # fabrication takes a colony's queue, with the code a shipment slot records.
 SPEC_BUDGET = 4
 HABITAT_ROOM_SHARE = 0.5
-MODULE_TYPES = ("hab", "a", "b", "port", "def")
-MODULE_CODES = {"a": 1, "b": 2, "hab": 3, "def": 4, "port": 5}
-GENERIC_TYPES = ("hab", "def", "port")
-CREWED_TYPES = ("a", "b", "def", "port")  # a Habitat houses the crews
+
+
+# The facilities (colony management design § 7): generic modules that take a
+# slot and need crews, each giving its effect per staffed level, summed over
+# the colonies THIS holds that serve it (sr_mod_units_<key>). `ships`: stopped
+# by a blockade as a goods-shipping specialization is. `modifier`: the entry
+# modifier its units scale (sr_module_<key>), or None for a hook into another
+# system's numbers (Extraplanetary Base room, fabrication and Space Command,
+# command reliability, autonomy). Codes 6 on, in this order: saves keep 1 to 5.
+@dataclass(frozen=True)
+class Facility:
+    key: str
+    name: str
+    head: str  # the Modules view's column head
+    ships: bool
+    modifier: bool
+
+
+FACILITIES: tuple[Facility, ...] = (
+    Facility("mine", "Mining Complex", "Mine", True, False),
+    Facility("yard", "Orbital Yard", "Yard", True, False),
+    Facility("lab", "Research Station", "Lab", False, True),
+    Facility("culture", "Cultural Center", "Arts", False, True),
+    Facility("resort", "Off-World Resort", "Tour", True, True),
+    Facility("black", "Black Site", "Spy", False, True),
+    Facility("train", "Training Ground", "Camp", False, True),
+    Facility("bunker", "Nuclear Command Center", "Nuke", False, False),
+    Facility("foundry", "Materials Foundry", "Mat", True, True),
+    Facility("admin", "Administration", "Gov", False, False),
+)
+FACILITY_TYPES = tuple(f.key for f in FACILITIES)
+FACILITY = {f.key: f for f in FACILITIES}
+MODULE_TYPES = ("hab", "a", "b", "port", "def", *FACILITY_TYPES)
+MODULE_CODES = {"a": 1, "b": 2, "hab": 3, "def": 4, "port": 5,
+                **{t: 6 + n for n, t in enumerate(FACILITY_TYPES)}}
+GENERIC_TYPES = ("hab", "def", "port", *FACILITY_TYPES)
+CREWED_TYPES = ("a", "b", "def", "port", *FACILITY_TYPES)  # a Habitat houses the crews
 SHIP_SLOTS = 8
 QUEUE_SLOTS = 20  # the national module queue, first in first out (owner, 2026-10-25)
 QUEUE_TOP_OP = QUEUE_SLOTS  # the move-up scripted GUI's op for place n's alt-click: n + this
 MODULE_NAMES = {"a": "Specialization I", "b": "Specialization II", "hab": "Habitat",
-                "def": "Defences", "port": "Spaceport"}
-MODULE_AI_VALUE = 5  # Cede Colony's AI value of a module level past the first
+                "def": "Defences", "port": "Spaceport", **{f.key: f.name for f in FACILITIES}}
+MODULE_AI_VALUE = 8  # Cede Colony's AI value of a module level past the first
+
+# Slots (colony management design § 5): the table's slots, one more with each
+# of these technologies (the holder's), and up to SLOTS_PAST_MAX modules past
+# them, the n-th past costing sr_module_points x (1 + n).
+SLOT_TECHS = ("advanced_nanofabrication", "molecular_assemblers")
+SLOTS_PAST_MAX = 4
+
+# The Modules view's lines of cells (colony management design § 8), in order.
+MODULE_LINES = (("a", "b", "hab", "port", "def"), FACILITY_TYPES[:5], FACILITY_TYPES[5:])
 
 # Extraplanetary Bases from colonies (design § 9): every country's near-Earth
 # room, the technology it needs (the Extraplanetary Base itself comes earlier,
@@ -1067,6 +1115,19 @@ def transit_body(site: Site) -> str:
     return "moon" if site in LUNAR else "mercury"
 
 
+# Mission Control's Next Windows table (colony management design § 6): one row
+# per destination, in sr_launch_window_lines' order. The Moon and Mercury have
+# no window; the rest are gen_launch_windows' window bodies.
+WINDOW_ORDER = ("moon", "mars", "ceres", "vesta", "psyche", "pallas", "hygiea", "jupiter", "venus",
+                "mercury", "saturn", "uranus", "neptune", "kuiper")
+NO_WINDOW = frozenset({"moon", "mercury"})
+
+
+def window_worlds(body: str) -> list[Site]:
+    """The worlds a fleet reaches through the destination's transit."""
+    return [s for s in SITES if transit_body(s) == body]
+
+
 def body_group(site: Site) -> list[Site]:
     """The worlds a fleet bound for this one can divert to: its window body's
     (design § 5). Mercury, alone, has none but itself."""
@@ -1527,16 +1588,20 @@ def render_values() -> str:
     out += ["}",
             f"sr_sites_world_count = {{ value = {len(SITES)} }}",
             "",
-            "# Cede Colony's AI: what the article's input world is worth, 20 plus 5 a",
-            "# stage (design § 11.2), plus 5 a module level past the first (slice 4 design",
-            "# § 7). scope:article in inherent_accept_score.",
+            f"# Cede Colony's AI: what the article's input world is worth, {AI_VALUE_BASE} plus "
+            f"{AI_VALUE_PER_STAGE} a",
+            f"# stage, {MODULE_AI_VALUE} a module level past the first and 1 a {AI_VALUE_PEOPLE:,} of its "
+            f"people, at most {AI_VALUE_MAX}",
+            "# (colony management design § 3; design § 11.2 and slice 4 design § 7 before it).",
+            "# scope:article in inherent_accept_score.",
             "sr_cede_ai_input_value = {",
             "\tvalue = 0"]
     for site in SITES:
         worth = AI_VALUE_BASE + AI_VALUE_PER_STAGE * site.stage
         out.append(f"\tif = {{ limit = {{ scope:article.input_building_type ?= bt:{site_building(site)} }} value = {worth} "
-                   f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {MODULE_AI_VALUE} }} }}")
-    out += ["}", "",
+                   f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {MODULE_AI_VALUE} }} "
+                   f"add = {{ value = sr_site_pop_value_{site.key} divide = {AI_VALUE_PEOPLE} }} }}")
+    out += [f"\tmax = {AI_VALUE_MAX}", "}", "",
             "# Cede Colony's picker (te_sr_cede_site_list_*, sr_sites_generated_rows.gui): 1",
             "# while THIS country holds the world, the test sr_cede_site_input_valid makes.",
             "# The engine's own list, ArticleDraft.GetValidBuildingTypes, crashes the game",
@@ -1545,7 +1610,7 @@ def render_values() -> str:
             for s in SITES]
     out += [""]
     out += (render_fleet_values() + [""] + render_population_values() + [""] + render_module_values()
-            + [""] + render_autonomy_values() + [""] + render_slice6_values())
+            + [""] + render_autonomy_values() + [""] + render_slice6_values() + [""] + render_window_values())
     return "\n".join(out) + "\n"
 
 
@@ -1760,12 +1825,21 @@ def render_module_values() -> list[str]:
                 f"sr_site_generic_built_{k} = {{",
                 *[f"\t{'value' if i == 0 else 'add'} = sr_site_{t}_value_{k}" for i, t in enumerate(generic_types(site))],
                 "}"]
+        out += _slot_values(site)
         for name, types, built in (("spec_used", ("a", "b"), "spec_built"), ("slots_used", generic_types(site), "generic_built")):
             out += [f"sr_mod_{name}_{k} = {{", f"\tvalue = sr_site_{built}_{k}"]
             for t in types:
                 out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{k} }} add = var:sr_mq_{t}_{k} }}",
                         f"\tif = {{ limit = {{ has_global_variable = sr_site_ship_{t}_{k} }} add = global_var:sr_site_ship_{t}_{k} }}"]
             out.append("}")
+        out += [f"# The next module THIS queues at {site.name} costs this (design § 5): past its slots,",
+                "# a hundred points more than the last.",
+                f"sr_mod_next_cost_{k} = {{",
+                "\tvalue = sr_module_points",
+                f"\tif = {{ limit = {{ sr_mod_slots_used_{k} >= sr_site_slots_{k} }} value = sr_mod_slots_used_{k} "
+                f"subtract = sr_site_slots_{k} add = 2 multiply = sr_module_points }}",
+                "}"]
+    out += render_facility_values()
     out += ["", "# Country scope: the module levels past the first at the colonies THIS holds, the",
             "# upkeep's multiplier (design § 8).",
             "sr_mod_upkeep_levels = {", "\tvalue = 0"]
@@ -1777,8 +1851,76 @@ def render_module_values() -> list[str]:
             "# and every colony it holds.",
             "sr_ebase_room_total = {", "\tvalue = 0",
             f"\tif = {{ limit = {{ has_technology_researched = {NEAR_EARTH_TECH} }} add = {NEAR_EARTH_ROOM} }}"]
-    out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = {s.ebase_room} }}" for s in SITES]
+    out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = sr_site_ebase_room_{s.key} }}" for s in SITES]
     out.append("}")
+    return out
+
+
+def _slot_values(site: Site) -> list[str]:
+    """A world's slots and the price past them (colony management design § 5),
+    and each facility's staffed levels (§ 7). Any scope."""
+    k = site.key
+    out = [f"# {site.name}'s slots: {site.slots} by its size, +1 with each of the holder's "
+           f"{', '.join(SLOT_TECHS)}; up to {SLOTS_PAST_MAX} modules past them.",
+           f"sr_site_slots_{k} = {{",
+           f"\tvalue = {site.slots}"]
+    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= {{ has_technology_researched = {tech} }} }} add = 1 }}"
+            for tech in SLOT_TECHS]
+    out += ["}",
+            f"sr_site_slots_max_{k} = {{ value = sr_site_slots_{k} add = {SLOTS_PAST_MAX} }}",
+            "# Its slots built or on their way, every shipper's: what the queue's head pays past.",
+            f"sr_site_generic_pending_{k} = {{",
+            f"\tvalue = sr_site_generic_built_{k}"]
+    out += [f"\tif = {{ limit = {{ has_global_variable = sr_site_ship_{t}_{k} }} add = global_var:sr_site_ship_{t}_{k} }}"
+            for t in generic_types(site)]
+    out += ["}",
+            "# A slot module built for it now costs this: past its slots, the n-th past",
+            "# sr_module_points x (1 + n).",
+            f"sr_mod_generic_cost_{k} = {{",
+            "\tvalue = sr_module_points",
+            f"\tif = {{ limit = {{ sr_site_generic_pending_{k} >= sr_site_slots_{k} }} value = sr_site_generic_pending_{k} "
+            f"subtract = sr_site_slots_{k} add = 2 multiply = sr_module_points }}",
+            "}"]
+    for t in FACILITY_TYPES:
+        out.append(f"sr_site_{t}_staffed_{k} = {{ value = sr_site_{t}_value_{k} multiply = sr_site_staffing_{k} }}")
+    out += ["# Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).",
+            f"sr_site_ebase_room_{k} = {{",
+            f"\tvalue = {site.ebase_room}",
+            f"\tadd = {{ value = sr_site_mine_staffed_{k} multiply = sr_mod_mine_room floor = yes }}",
+            "}"]
+    return out
+
+
+def _facility_serves(site: Site, facility: Facility) -> str:
+    """THIS holds the world and its facility works for THIS: never occupied,
+    and not blockaded for one that ships (design § 7.1)."""
+    k = site.key
+    if facility.ships:
+        return site_serves(site)
+    return f"global_var:sr_site_holder_{k} ?= this NOT = {{ has_global_variable = sr_site_occupier_{k} }}"
+
+
+def render_facility_values() -> list[str]:
+    out = ["", "# ===== Facilities (colony management design § 7) =====",
+           "# Country scope: sr_mod_units_<type>, THIS's staffed levels of the facility at the",
+           "# colonies that serve it; entry scope (a modifier's multiplier, read through owner):",
+           "# sr_mod_units_<type>_entry."]
+    for f in FACILITIES:
+        out += [f"# {f.name}", f"sr_mod_units_{f.key} = {{", "\tvalue = 0"]
+        out += [f"\tif = {{ limit = {{ {_facility_serves(s, f)} }} add = sr_site_{f.key}_staffed_{s.key} }}" for s in SITES]
+        out.append("}")
+        if f.modifier:
+            out += [f"sr_mod_units_{f.key}_entry = {{", "\tvalue = 0", f"\towner = {{ add = sr_mod_units_{f.key} }}", "}"]
+    out += ["# The queue's head (sr_mq_1_site, sr_mq_1_type) costs this to build: a slot module",
+            "# (code 3 on) the world's sr_mod_generic_cost_<key>, a specialization level the base.",
+            "sr_mq_head_cost = {",
+            "\tvalue = sr_module_points",
+            "\tif = {",
+            "\t\tlimit = { has_variable = sr_mq_1_site has_variable = sr_mq_1_type var:sr_mq_1_type >= 3 }"]
+    for n, site in enumerate(SITES):
+        out.append(f"\t\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ var:sr_mq_1_site = {site.index} }} "
+                   f"value = sr_mod_generic_cost_{site.key} }}")
+    out += ["\t}", "}"]
     return out
 
 
@@ -1799,7 +1941,7 @@ def _module_install(site: Site) -> list[str]:
         if t in ("a", "b"):
             cap, var = f"sr_site_spec_built_{k} < sr_mod_spec_budget", f"sr_site_lvl_{t}_{k}"
         else:
-            cap, var = f"sr_site_generic_built_{k} < {site.slots}", f"sr_site_{t}_{k}"
+            cap, var = f"sr_site_generic_built_{k} < sr_site_slots_max_{k}", f"sr_site_{t}_{k}"
         out += ["\t\tif = {" if first else "\t\telse_if = {",
                 f"\t\t\tlimit = {{ local_var:sr_ms_type_now = {MODULE_CODES[t]} {cap} }}",
                 f"\t\t\tset_global_variable = {{ name = {var} value = {{ value = {level_value(t, site)} add = 1 }} }}",
@@ -1823,10 +1965,14 @@ def _module_install(site: Site) -> list[str]:
 
 
 def _module_ai(site: Site) -> list[str]:
-    """The AI's one module for a colony with nothing queued or shipping (design § 10)."""
+    """The AI's one module for a colony with nothing queued or shipping (design
+    § 10): a Habitat when it fills up, its specialization levels, then a
+    facility (colony management design § 7.3). Slot modules only within its
+    slots: the AI never pays the price past them."""
     k = site.key
     crew = (f"OR = {{ sr_site_crews_{k} >= sr_site_levels_{k} "
             "has_technology_researched = artificial_intelligence }")
+    room = f"sr_mod_slots_used_{k} < sr_site_slots_{k}"
     out = [f"sr_mod_ai_plan_{k} = {{",
            "\tif = {",
            "\t\tlimit = {",
@@ -1837,6 +1983,7 @@ def _module_ai(site: Site) -> list[str]:
            "\t\tif = {",
            "\t\t\tlimit = {",
            f"\t\t\t\tsr_mod_can_queue_hab_{k} = yes",
+           f"\t\t\t\t{room}",
            f"\t\t\t\tsr_site_fill_{k} >= 0.75",
            "\t\t\t}",
            f"\t\t\t{_queue_call(site, 'hab')}",
@@ -1852,6 +1999,19 @@ def _module_ai(site: Site) -> list[str]:
                     "\t\t\t}",
                     f"\t\t\t{_queue_call(site, slot)}",
                     "\t\t}"]
+    for t, why in (("admin", f"sr_site_autonomy_value_{k} >= sr_mod_ai_admin_autonomy"),
+                   ("mine", "sr_ebase_levels > sr_ebase_room_total"),
+                   ("bunker", "nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max"),
+                   ("yard", "any_scope_building = { is_building_type = building_space_command }"),
+                   ("lab", None)):
+        out += ["\t\telse_if = {",
+                "\t\t\tlimit = {",
+                f"\t\t\t\tsr_mod_can_queue_{t}_{k} = yes",
+                f"\t\t\t\t{room}",
+                f"\t\t\t\t{crew}"]
+        if why:
+            out.append(f"\t\t\t\t{why}")
+        out += ["\t\t\t}", f"\t\t\t{_queue_call(site, t)}", "\t\t}"]
     out += ["\t}", "}"]
     return out
 
@@ -1963,6 +2123,7 @@ def render_module_queue() -> list[str]:
             "# and the stock covers it). It leaves the queue first; an entry for a world THIS no",
             "# longer holds is dropped unbuilt.",
             "sr_mod_fab_head = {",
+            "\tset_local_variable = { name = sr_mq_head_cost_now value = sr_mq_head_cost }",
             "\tset_local_variable = { name = sr_mq_head_site value = var:sr_mq_1_site }",
             "\tset_local_variable = { name = sr_mq_head_type value = var:sr_mq_1_type }",
             "\tsr_mq_remove_1 = yes"]
@@ -2019,8 +2180,26 @@ def render_module_effects() -> list[str]:
             "sr_mod_ai_plan_all = {"]
     out += [f"\tsr_mod_ai_plan_{s.key} = yes" for s in SITES]
     out += ["}", "",
+            "# The facilities' entry modifiers (colony management design § 7), their one refresh",
+            "# site, from sr_emig_refresh_modifiers: removed first, then each at its staffed levels.",
+            "sr_mod_refresh_facilities = {",
+            "\tje:je_space_race_solar_colonization ?= {"]
+    for f in FACILITIES:
+        if f.modifier:
+            out.append(f"\t\tif = {{ limit = {{ has_modifier = sr_module_{f.key} }} remove_modifier = sr_module_{f.key} }}")
+    out += ["\t}", "\tif = {", "\t\tlimit = { sr_colonies_contested_enabled = yes }"]
+    for f in FACILITIES:
+        if f.modifier:
+            out += ["\t\tif = {",
+                    f"\t\t\tlimit = {{ sr_mod_units_{f.key} > 0 }}",
+                    "\t\t\tje:je_space_race_solar_colonization ?= {",
+                    f"\t\t\t\tadd_modifier = {{ name = sr_module_{f.key} multiplier = sr_mod_units_{f.key}_entry }}",
+                    "\t\t\t}",
+                    "\t\t}"]
+    out += ["\t}", "}", "",
             "# The module scripted GUI's world (scope:site) and type (scope:op: 1 the first",
-            "# specialization, 2 the second, 3 Habitat, 4 Defences, 5 Spaceport; 0 clears the queue).",
+            "# specialization, 2 the second, 3 Habitat, 4 Defences, 5 Spaceport, 6 on the facilities;",
+            "# 0 clears the queue).",
             "sr_mod_queue_from_scope = {"]
     for n, site in enumerate(SITES):
         out += ["\tif = {" if n == 0 else "\telse_if = {", f"\t\tlimit = {{ scope:site = {site.index} }}"]
@@ -2048,11 +2227,12 @@ def render_module_effects() -> list[str]:
             "# levels to place, local_var:sr_eb_sum the levels x grade so far (percent).",
             "sr_ebase_fill = {"]
     for tier in ebase_tiers():
-        room = NEAR_EARTH_ROOM if tier is None else tier.ebase_room
+        room = NEAR_EARTH_ROOM if tier is None else f"sr_site_ebase_room_{tier.key}"
         grade = 0 if tier is None else tier.ebase_grade
         name = "near-Earth" if tier is None else tier.name
         held = f" has_technology_researched = {NEAR_EARTH_TECH}" if tier is None else f" {site_serves(tier)}"
-        out += [f"\t# {name}: {room} levels at {grade:+d}%",
+        size = f"{NEAR_EARTH_ROOM} levels" if tier is None else f"{tier.ebase_room} levels and its Mining Complexes'"
+        out += [f"\t# {name}: {size} at {grade:+d}%",
                 "\tif = {",
                 f"\t\tlimit = {{ local_var:sr_eb_left > 0{held} }}",
                 f"\t\tset_local_variable = {{ name = sr_eb_take value = {{ value = local_var:sr_eb_left max = {room} }} }}"]
@@ -2074,7 +2254,8 @@ def render_module_effects() -> list[str]:
         k = site.key
         levels = " ".join(f"{t}=[SCOPE.ScriptValue('{level_value(t, site)}')|0]" for t in ("a", "b", *generic_types(site)))
         queue = (f"specializations [THIS.MakeScope.ScriptValue('sr_mod_spec_used_{k}')|0] of {SPEC_BUDGET}, "
-                 f"generic [THIS.MakeScope.ScriptValue('sr_mod_slots_used_{k}')|0] of {site.slots}")
+                 f"generic [THIS.MakeScope.ScriptValue('sr_mod_slots_used_{k}')|0] of "
+                 f"[THIS.MakeScope.ScriptValue('sr_site_slots_{k}')|0]")
         out += ["\tif = {",
                 f"\t\tlimit = {{ has_global_variable = sr_colony_{k} }}",
                 f"\t\tdebug_log = \"TE_SR_MODULES {k}: {levels.replace('SCOPE.', 'THIS.MakeScope.')} "
@@ -2128,7 +2309,7 @@ def render_module_triggers() -> list[str]:
             out += [f"sr_mod_can_queue_{t}_{k} = {{",
                     f"\tglobal_var:sr_site_holder_{k} ?= this",
                     "\tsr_mq_has_room = yes",
-                    f"\tsr_mod_slots_used_{k} < {site.slots}",
+                    f"\tsr_mod_slots_used_{k} < sr_site_slots_max_{k}",
                     "}"]
         if site.body:
             out.append(f"sr_mod_departs_{k} = {{ sr_mod_departs = {{ BODY = {site.body} }} }}")
@@ -2173,7 +2354,11 @@ def render_module_triggers() -> list[str]:
     out += ["\t}", "}",
             "# It has a slot left for a Habitat, Spaceport or Defences, counting queue and shipments.",
             "sr_mod_scope_slot_room = {", "\tOR = {"]
-    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_slots_used_{s.key} < {s.slots} }}" for s in SITES]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_slots_used_{s.key} < sr_site_slots_max_{s.key} }}" for s in SITES]
+    out += ["\t}", "}",
+            "# ... is at or past its slots, so the next one costs more (design § 5).",
+            "sr_mod_scope_past_slots = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_slots_used_{s.key} >= sr_site_slots_{s.key} }}" for s in SITES]
     out += ["\t}", "}",
             "# ... has a queue to clear.",
             "sr_mod_scope_has_queue = {", "\tOR = {"]
@@ -2199,7 +2384,7 @@ def slice5_vars(site: Site) -> list[str]:
     k = site.key
     return [f"sr_site_free_{k}", f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}",
             f"sr_site_aut_asked_{k}", f"sr_site_contact_{k}", f"sr_site_suppliers_{k}", f"sr_site_born_{k}",
-            f"sr_site_petition_{k}"]
+            f"sr_site_petition_{k}", f"sr_site_self_{k}"]
 
 
 def slice6_vars(site: Site) -> list[str]:
@@ -2240,7 +2425,7 @@ def _autonomy_world(site: Site) -> list[str]:
         f"\tsr_site_sync_{k} = yes",
         *[f"\tif = {{ limit = {{ has_global_variable = {v} }} remove_global_variable = {v} }}"
           for v in (f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}", f"sr_site_aut_asked_{k}",
-                    *slice6_vars(site))],
+                    f"sr_site_self_{k}", *slice6_vars(site))],
         "\tsr_sites_refresh_players = yes",
         f'\tdebug_log = "TE_SR_SITES {k} is a free colony"',
         "}",
@@ -2312,6 +2497,13 @@ def _autonomy_world(site: Site) -> list[str]:
         "\t\t\tmax = sr_aut_break_level",
         "\t\t}",
         "\t}",
+        "\t# The colony builds its own modules (colony management design § 4.3).",
+        "\tif = {",
+        f"\t\tlimit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} sr_site_self_rate_{k} > 0 }}",
+        f"\t\tset_global_variable = {{ name = sr_site_self_{k} value = {{ value = sr_site_self_value_{k} "
+        f"add = sr_site_self_rate_{k} max = sr_module_points }} }}",
+        f"\t\tif = {{ limit = {{ sr_site_self_value_{k} >= sr_module_points }} sr_site_self_build_{k} = yes }}",
+        "\t}",
         "\tif = {",
         f"\t\tlimit = {{ sr_site_autonomy_value_{k} >= sr_aut_break_level }}",
         f"\t\tsr_aut_break_away = {{ KEY = {k} INDEX = {i} }}",
@@ -2326,7 +2518,56 @@ def _autonomy_world(site: Site) -> list[str]:
         f"\t\tsr_aut_ask = {{ INDEX = {i} }}",
         "\t}",
         "}",
+        *_self_build(site),
     ]
+
+
+def _self_build(site: Site) -> list[str]:
+    """The colony's own module, free and installed at once, within its slots and
+    specialization levels (colony management design § 4.3): a Habitat once it
+    fills up, its founding specialization's level up to 3, the other's, then a
+    Research Station or a Cultural Center, whichever it has fewer of. Holder
+    scope. With nothing to build its points wait at sr_module_points."""
+    k = site.key
+    room = f"sr_mod_slots_used_{k} < sr_site_slots_{k}"
+    spec = f"sr_mod_spec_used_{k} < sr_mod_spec_budget"
+
+    def build(var: str, value: str) -> str:
+        return f"set_global_variable = {{ name = {var} value = {{ value = {value} add = 1 }} }}"
+    branches = [(f"{room} sr_site_fill_{k} >= 0.75", build(f"sr_site_hab_{k}", f"sr_site_hab_value_{k}"))]
+    # Its founding specialization (option 1 is a, 2 is b) up to 3 levels, then
+    # the other with the budget's last.
+    for own, option in (("a", 1), ("b", 2)):
+        branches.append((f"has_global_variable = sr_site_spec_{k} global_var:sr_site_spec_{k} = {option} {spec} "
+                         f"sr_site_lvl_{own}_value_{k} < 3",
+                         build(f"sr_site_lvl_{own}_{k}", f"sr_site_lvl_{own}_value_{k}")))
+    branches.append((f"has_global_variable = sr_site_spec_{k} {spec}", "SPEC_OTHER"))
+    branches.append((f"{room} sr_site_lab_value_{k} <= sr_site_culture_value_{k}",
+                     build(f"sr_site_lab_{k}", f"sr_site_lab_value_{k}")))
+    branches.append((room, build(f"sr_site_culture_{k}", f"sr_site_culture_value_{k}")))
+    out = [f"# {site.name} builds a module of its own (its autonomy's step, holder scope).",
+           f"sr_site_self_build_{k} = {{",
+           "\tset_local_variable = { name = sr_self_built value = 1 }"]
+    for n, (limit, effect) in enumerate(branches):
+        out += ["\tif = {" if n == 0 else "\telse_if = {", f"\t\tlimit = {{ {limit} }}"]
+        if effect == "SPEC_OTHER":
+            out += [f"\t\tif = {{ limit = {{ global_var:sr_site_spec_{k} = 1 }} "
+                    f"{build(f'sr_site_lvl_b_{k}', f'sr_site_lvl_b_value_{k}')} }}",
+                    f"\t\telse = {{ {build(f'sr_site_lvl_a_{k}', f'sr_site_lvl_a_value_{k}')} }}"]
+        else:
+            out.append(f"\t\t{effect}")
+        out.append("\t}")
+    out += ["\telse = {",
+            "\t\tset_local_variable = { name = sr_self_built value = 0 }",
+            "\t}",
+            "\tif = {",
+            "\t\tlimit = { local_var:sr_self_built = 1 }",
+            f"\t\tset_global_variable = {{ name = sr_site_self_{k} value = 0 }}",
+            f"\t\tsr_site_sync_{k} = yes",
+            f'\t\tdebug_log = "TE_SR_MODULES {k} built a module of its own"',
+            "\t}",
+            "}"]
+    return out
 
 
 def render_autonomy_effects() -> list[str]:
@@ -2517,13 +2758,15 @@ def render_autonomy_values() -> list[str]:
     for site in SITES:
         k, tb = site.key, transit_body(site)
         out += _opt_var(f"sr_site_autonomy_value_{k}", f"sr_site_autonomy_{k}")
+        out += _opt_var(f"sr_site_self_value_{k}", f"sr_site_self_{k}")
         out += [f"sr_site_months_since_contact_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_contact_{k} }} "
                 f"value = te_history_month_index subtract = global_var:sr_site_contact_{k} }}",
                 "\tmin = 0",
                 "}",
-                f"sr_site_aut_drift_{k} = {{",
+                "# Every term but settling: where autonomy heads (colony management design § 4.2).",
+                f"sr_site_aut_pressure_{k} = {{",
                 "\tvalue = sr_aut_home_pull",
                 f"\tadd = {{ value = sr_site_pop_value_{k} divide = 10000 multiply = sr_aut_per_10k_people }}",
                 f"\tadd = {{ value = sr_transit_months_{tb} multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }}",
@@ -2533,6 +2776,21 @@ def render_autonomy_values() -> list[str]:
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_charter_{k} }} add = sr_aut_chartered }}",
                 "\tif = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } "
                 "add = sr_aut_destroyed_colony }",
+                f"\tadd = {{ value = sr_site_admin_staffed_{k} multiply = sr_aut_per_admin_level }}",
+                "}",
+                "# The month's drift: the pressure less settling, a share of the autonomy itself, so",
+                "# autonomy settles at the pressure / sr_aut_settle_rate (design § 4.2).",
+                f"sr_site_aut_drift_{k} = {{",
+                f"\tvalue = sr_site_aut_pressure_{k}",
+                f"\tsubtract = {{ value = sr_site_autonomy_value_{k} multiply = sr_aut_settle_rate }}",
+                "}",
+                "# The points a month it builds its own modules with (design § 4.3).",
+                f"sr_site_self_rate_{k} = {{",
+                f"\tvalue = sr_site_autonomy_value_{k}",
+                "\tdivide = 100",
+                f"\tmultiply = {{ value = sr_site_pop_value_{k} divide = 10000 }}",
+                "\tmultiply = sr_aut_selfbuild_per_10k",
+                "\tmax = sr_aut_selfbuild_max",
                 "}",
                 f"sr_site_charter_factor_{k} = {{",
                 "\tvalue = 1",
@@ -2560,6 +2818,26 @@ def render_autonomy_values() -> list[str]:
     out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this has_global_variable = sr_site_garrison_{s.key} }} add = 1 }}"
             for s in SITES]
     out.append("}")
+    return out
+
+
+def render_window_values() -> list[str]:
+    """Whether a colony fleet of THIS can go to a destination (colony management
+    design § 6): Next Windows' rows and the Staged in Orbit tooltip's lines."""
+    out = ["# ===== Destinations in reach (colony management design § 6) =====",
+           "# Country scope, per destination: 1 with a world THIS may target there",
+           "# (sr_cf_targetable_<key>) within its drive's horizon (sr_cf_horizon_months),",
+           "# 2 with one beyond it, 0 with none."]
+    for body in WINDOW_ORDER:
+        targetable = " ".join(f"sr_cf_targetable_{s.key} = yes" for s in window_worlds(body))
+        out += [f"sr_window_reach_{body} = {{",
+                "\tvalue = 0",
+                "\tif = {",
+                f"\t\tlimit = {{ OR = {{ {targetable} }} }}",
+                "\t\tvalue = 2",
+                f"\t\tif = {{ limit = {{ sr_transit_months_{body} <= sr_cf_horizon_months }} value = 1 }}",
+                "\t}",
+                "}"]
     return out
 
 
@@ -2725,6 +3003,16 @@ def render_autonomy_display() -> list[str]:
                 f"\tif = {{ limit = {{ has_variable = sr_free_supply_{k} }} value = 1 }}",
                 "}"]
     out += ["",
+            "# What a colony builds of its own (design § 4.3): its points toward a module, whole,",
+            "# and a month's, ours only."]
+    for site in SITES:
+        k = site.key
+        out += [f"sr_disp_site_self_{k} = {{ value = sr_site_self_value_{k} floor = yes }}",
+                f"sr_disp_site_self_rate_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} value = sr_site_self_rate_{k} }}",
+                "}"]
+    out += ["",
             "# A colony's autonomy drift by term (audit SPC-15: its drift hover lists its own",
             "# terms): its people, its distance by our drive, a year without contact. The",
             "# country's terms (a war, a colony we destroyed) are sr_disp_aut_war and",
@@ -2736,6 +3024,15 @@ def render_autonomy_display() -> list[str]:
                 f"sr_disp_aut_nocontact_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ sr_site_months_since_contact_{k} > sr_aut_no_contact_months }} value = 1 }}",
+                "}",
+                f"sr_disp_aut_settle_{k} = {{ value = sr_site_autonomy_value_{k} multiply = sr_aut_settle_rate multiply = -1 }}",
+                f"sr_disp_aut_admin_{k} = {{ value = sr_site_admin_staffed_{k} multiply = sr_aut_per_admin_level }}",
+                f"sr_disp_aut_target_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} value = sr_site_aut_pressure_{k} divide = sr_aut_settle_rate }}",
+                "\tmin = 0",
+                "\tmax = sr_aut_break_level",
+                "\tfloor = yes",
                 "}"]
     out += ["sr_disp_aut_war = {", "\tvalue = 0", "\tif = { limit = { is_at_war = yes } value = 1 }", "}",
             "sr_disp_aut_destroyed = {", "\tvalue = 0",
@@ -2890,10 +3187,55 @@ def render_display() -> str:
                 f"\tvalue = sr_site_staffing_{k}",
                 "\tmultiply = 100",
                 "\tfloor = yes",
-                "}"]
+                "}",
+                # Slots and bases (colony management design § 5): ours, counting our queue.
+                f"sr_disp_site_slots_used_{k} = {{ value = sr_mod_slots_used_{k} }}",
+                f"sr_disp_site_slots_{k} = {{ value = sr_site_slots_{k} }}",
+                f"sr_disp_mod_past_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ sr_mod_slots_used_{k} > sr_site_slots_{k} }} value = 1 }}",
+                "}",
+                f"sr_disp_mod_next_cost_{k} = {{ value = sr_mod_next_cost_{k} }}",
+                f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}"]
     out += render_autonomy_display()
     out += render_overview_display()
+    out += render_window_display()
     return "\n".join(out) + "\n"
+
+
+def render_window_display() -> list[str]:
+    """Mission Control's Next Windows table (colony management design § 6).
+    Read by the GUI only."""
+    out = ["",
+           "# Next Windows (colony management design § 6), per destination, the viewer's scope:",
+           "#   sr_disp_win_row_<body>    sr_window_reach_<body>: 1 shown, 2 beyond our drive, 0 neither",
+           "#   sr_disp_win_state_<body>  0 any month (no window, or a drive windows don't bind),",
+           "#                             1 its window is open, 2 waiting, 3 waiting with propellant",
+           "#                             depots (the premium to go now)",
+           "# and the table's counts."]
+    for body in WINDOW_ORDER:
+        out.append(f"sr_disp_win_row_{body} = {{ value = sr_window_reach_{body} }}")
+        if body in NO_WINDOW:
+            out.append(f"sr_disp_win_state_{body} = {{ value = 0 }}")
+        else:
+            # The premium to go now, shown to +999% at most (its cell's width).
+            out.append(f"sr_disp_win_premium_{body} = {{ value = sr_window_premium_country_{body} max = 9.99 }}")
+            out += [f"sr_disp_win_state_{body} = {{",
+                    "\tvalue = 2",
+                    "\tif = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }",
+                    f"\telse_if = {{ limit = {{ has_global_variable = sr_window_is_open_{body} }} value = 1 }}",
+                    "\telse_if = { limit = { sr_launch_has_depots = yes } value = 3 }",
+                    "}"]
+    for name, code in (("shown", 1), ("beyond", 2)):
+        out += [f"sr_disp_win_{name} = {{", "\tvalue = 0"]
+        out += [f"\tif = {{ limit = {{ sr_disp_win_row_{b} = {code} }} add = 1 }}" for b in WINDOW_ORDER]
+        out.append("}")
+    out += ["# 1 once the month's windows are worked out (the global monthly pulse).",
+            "sr_disp_win_cached = {",
+            "\tvalue = 0",
+            "\tif = { limit = { has_global_variable = sr_window_cache_month } value = 1 }",
+            "}"]
+    return out
 
 
 def render_buildings() -> str:
@@ -3072,6 +3414,11 @@ def _site_row(site: Site) -> list[str]:
 _CONTESTED = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )"
 _FULL = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )"
 _VIEW_DEFENCES = f"And( {_FULL}, GetVariableSystem.HasValue('sr_colony_view', 'defences') )"
+_VIEW_DETAIL = "GetVariableSystem.HasValue('sr_colony_view', 'detail')"
+
+
+def _FOCUS(k: str) -> str:
+    return f"GetVariableSystem.HasValue('sr_colony_focus', '{k}')"
 SS_ALL = "sr_panel_solar_system_all_open"
 
 
@@ -3083,10 +3430,16 @@ def _colony_row(site: Site) -> list[str]:
     k = site.key
     prio, status, dstatus = f"sr_disp_site_prio_{k}", f"sr_disp_site_aut_status_{k}", f"sr_disp_def_status_{k}"
     out = ["\t\tte_sr_colony_row = {"]
+    # A colony's page shows this row alone (colony management design § 8).
+    listed = (f"Or( And( {_VIEW_DEFENCES}, {_eq(f'sr_disp_def_{k}', 1)} ), "
+              f"And( Not( {_VIEW_DEFENCES} ), {_eq(f'sr_disp_site_{k}', 1)} ) )")
+    paged = (f"And( {_FOCUS(k)}, Or( {_eq(f'sr_disp_def_{k}', 1)}, {_eq(f'sr_disp_site_{k}', 1)} ) )")
     out += _override("colony_visible",
-                     f'visible = "[Or( And( {_VIEW_DEFENCES}, {_eq(f"sr_disp_def_{k}", 1)} ), '
-                     f'And( Not( {_VIEW_DEFENCES} ), {_eq(f"sr_disp_site_{k}", 1)} ) )]"')
+                     f'visible = "[Or( And( Not( {_VIEW_DETAIL} ), {listed} ), And( {_VIEW_DETAIL}, {paged} ) )]"')
     out += _override("colony_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
+    out += _override("colony_focus",
+                     f"onclick = \"[GetVariableSystem.Set('sr_colony_focus', '{k}')]\"",
+                     "onclick = \"[GetVariableSystem.Set('sr_colony_view', 'detail')]\"")
     out += _override("colony_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_colony_site_tt_{k}"')
     # People
     out += _override("priority_button",
@@ -3101,6 +3454,14 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("settler_crews", f'raw_text = "[{_sv(f"sr_site_crews_{k}")}|0]"')
     # Modules
     out += _override("module_staffing", f'raw_text = "[{_sv(f"sr_disp_site_staffing_{k}")}|0]%"')
+    # Its slots, red past them, and its Extraplanetary Base room (design § 5).
+    used, slots, past = f"sr_disp_site_slots_used_{k}", f"sr_disp_site_slots_{k}", f"sr_disp_mod_past_{k}"
+    figure = f"[{_sv(used)}|0]/[{_sv(slots)}|0]"
+    out += _override("module_slots_tooltip", f'tooltip = "je_space_race_widget_slots_tt_{k}"')
+    out += _override("module_slots", f'visible = "[{_eq(past, 0)}]"', f'raw_text = "{figure}"')
+    out += _override("module_slots_past", f'visible = "[{_eq(past, 1)}]"', f'raw_text = "{figure}"')
+    out += _override("module_bases_tooltip", f'tooltip = "je_space_race_widget_bases_tt_{k}"')
+    out += _override("module_bases", f'raw_text = "[{_sv(f"sr_disp_site_ebase_room_{k}")}|0]"')
     spec_tt = {slot: f"je_space_race_widget_colony_{m[len('sr_colony_'):]}_tt"
                for slot, m in zip(("a", "b"), spec_modifiers(site))}
     for t in ("a", "b", *generic_types(site)):
@@ -3129,7 +3490,12 @@ def _colony_row(site: Site) -> list[str]:
     # Autonomy
     out += _override("aut_figure", f'raw_text = "#v [{_sv(f"sr_disp_site_aut_{k}")}|0]%#!"')
     out += _override("aut_drift_tooltip", f'tooltip = "je_space_race_widget_autonomy_drift_tt_{k}"')
-    out += _override("aut_drift", f'raw_text = "[{_sv(f"sr_disp_site_aut_drift_{k}")}|+=2]"')
+    # Signed, positive red: more autonomy is the holder's loss (design § 4.1).
+    out += _override("aut_drift", f'raw_text = "[{_sv(f"sr_disp_site_aut_drift_{k}")}|=-2]"')
+    # What it builds of its own (design § 4.3): its points of a module, and a month's.
+    out += _override("aut_build_tooltip", 'tooltip = "je_space_race_widget_autonomy_build_tt"')
+    out += _override("aut_build", f'raw_text = "#v [{_sv(f"sr_disp_site_self_{k}")}|0]%#! '
+                                  f'(+[{_sv(f"sr_disp_site_self_rate_{k}")}|1])"')
     for code, name in enumerate(("none", "charter", "garrison", "both")):
         out += _override(f"aut_{name}_visible", f'visible = "[{_eq(status, code)}]"')
     out += _override("aut_abandon_button",
@@ -3186,6 +3552,26 @@ def _slot_row(n: int) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _window_row(body: str) -> list[str]:
+    """One destination in Next Windows (colony management design § 6): its name,
+    its window and its transit by our drive. Loc: sr_window_name_<body> and
+    je_space_race_widget_win_<wait|paid|transit>_<body>."""
+    row, state = f"sr_disp_win_row_{body}", f"sr_disp_win_state_{body}"
+    out = ["\t\tte_sr_window_row = {"]
+    out += _override("win_visible", f'visible = "[{_eq(row, 1)}]"')
+    out += _override("win_name", f'text = "sr_window_name_{body}"')
+    out += _override("win_any_visible", f'visible = "[{_eq(state, 0)}]"')
+    out += _override("win_open_visible", f'visible = "[{_eq(state, 1)}]"')
+    if body in NO_WINDOW:
+        out += _override("win_wait", "visible = no")
+        out += _override("win_paid", "visible = no")
+    else:
+        out += _override("win_wait", f'visible = "[{_eq(state, 2)}]"', f'text = "je_space_race_widget_win_wait_{body}"')
+        out += _override("win_paid", f'visible = "[{_eq(state, 3)}]"', f'text = "je_space_race_widget_win_paid_{body}"')
+    out += _override("win_transit", f'text = "je_space_race_widget_win_transit_{body}"')
+    return out + ["\t\t}"]
+
+
 # Cede Colony's picker, one list per place it opens from. A war goal's ceding
 # country is the one the goal is pressed against; a treaty's, the article's
 # source. right_click_menu.gui shows the one that matches, hiding the other as
@@ -3224,8 +3610,10 @@ def render_gui() -> str:
            "### location, in panel_order(), filtered by default), te_sr_colony_row",
            "### (Colonies, every world, shown while ours; audit SPC-5), te_sr_cf_slot_row",
            "### (Colony Fleets, one per fleet slot), te_sr_mq_row (the Modules view's queue,",
-           "### one per place) and te_sr_free_row (the Autonomy view's Free Colonies, every",
-           "### world, shown while free; slice 5 design § 9). Each value is a display value",
+           "### one per place), te_sr_free_row (the Autonomy view's Free Colonies, every",
+           "### world, shown while free; slice 5 design § 9) and te_sr_window_row (Mission",
+           "### Control's Next Windows, one per destination, sr_launch_window_widgets.gui;",
+           "### colony management design § 6). Each value is a display value",
            "### of sr_sites_display_generated.txt (the Defenses view's, of",
            "### sr_fleets_display_generated.txt), the scripted GUIs are in sr_colony_sguis.txt.",
            "### te_sr_cede_site_list_war and _treaty are Cede Colony's picker, the worlds the",
@@ -3252,7 +3640,7 @@ def render_gui() -> str:
             "\ttype te_sr_colony_rows = flowcontainer {",
             "\t\tdirection = vertical",
             "\t\tignoreinvisible = yes",
-            "\t\tspacing = 2"]
+            "\t\tspacing = 4"]
     for site in panel_order():
         out += [""] + _colony_row(site)
     out += ["\t}", "",
@@ -3269,6 +3657,13 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for n in range(1, QUEUE_SLOTS + 1):
         out += [""] + _queue_row(n)
+    out += ["\t}", "",
+            "\ttype te_sr_window_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 1"]
+    for body in WINDOW_ORDER:
+        out += [""] + _window_row(body)
     out += ["\t}", "",
             "\ttype te_sr_free_rows = flowcontainer {",
             "\t\tdirection = vertical",

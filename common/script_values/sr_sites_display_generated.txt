@@ -1696,11 +1696,69 @@ sr_disp_mod_pending_port_valles_marineris = {
 	if = { limit = { has_variable = sr_mq_port_valles_marineris } add = var:sr_mq_port_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_port_valles_marineris } add = global_var:sr_site_ship_port_valles_marineris }
 }
+sr_disp_mod_pending_mine_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_valles_marineris } add = var:sr_mq_mine_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_mine_valles_marineris } add = global_var:sr_site_ship_mine_valles_marineris }
+}
+sr_disp_mod_pending_yard_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_valles_marineris } add = var:sr_mq_yard_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_yard_valles_marineris } add = global_var:sr_site_ship_yard_valles_marineris }
+}
+sr_disp_mod_pending_lab_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_valles_marineris } add = var:sr_mq_lab_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_lab_valles_marineris } add = global_var:sr_site_ship_lab_valles_marineris }
+}
+sr_disp_mod_pending_culture_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_valles_marineris } add = var:sr_mq_culture_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_culture_valles_marineris } add = global_var:sr_site_ship_culture_valles_marineris }
+}
+sr_disp_mod_pending_resort_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_valles_marineris } add = var:sr_mq_resort_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_resort_valles_marineris } add = global_var:sr_site_ship_resort_valles_marineris }
+}
+sr_disp_mod_pending_black_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_valles_marineris } add = var:sr_mq_black_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_black_valles_marineris } add = global_var:sr_site_ship_black_valles_marineris }
+}
+sr_disp_mod_pending_train_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_valles_marineris } add = var:sr_mq_train_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_train_valles_marineris } add = global_var:sr_site_ship_train_valles_marineris }
+}
+sr_disp_mod_pending_bunker_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_valles_marineris } add = var:sr_mq_bunker_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_valles_marineris } add = global_var:sr_site_ship_bunker_valles_marineris }
+}
+sr_disp_mod_pending_foundry_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_valles_marineris } add = var:sr_mq_foundry_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_valles_marineris } add = global_var:sr_site_ship_foundry_valles_marineris }
+}
+sr_disp_mod_pending_admin_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_valles_marineris } add = var:sr_mq_admin_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_admin_valles_marineris } add = global_var:sr_site_ship_admin_valles_marineris }
+}
 sr_disp_site_staffing_valles_marineris = {
 	value = sr_site_staffing_valles_marineris
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_valles_marineris = { value = sr_mod_slots_used_valles_marineris }
+sr_disp_site_slots_valles_marineris = { value = sr_site_slots_valles_marineris }
+sr_disp_mod_past_valles_marineris = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_valles_marineris > sr_site_slots_valles_marineris } value = 1 }
+}
+sr_disp_mod_next_cost_valles_marineris = { value = sr_mod_next_cost_valles_marineris }
+sr_disp_site_ebase_room_valles_marineris = { value = sr_site_ebase_room_valles_marineris }
 sr_disp_mod_pending_a_olympus_mons = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_olympus_mons } add = var:sr_mq_a_olympus_mons }
@@ -1726,11 +1784,69 @@ sr_disp_mod_pending_port_olympus_mons = {
 	if = { limit = { has_variable = sr_mq_port_olympus_mons } add = var:sr_mq_port_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_port_olympus_mons } add = global_var:sr_site_ship_port_olympus_mons }
 }
+sr_disp_mod_pending_mine_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_olympus_mons } add = var:sr_mq_mine_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_mine_olympus_mons } add = global_var:sr_site_ship_mine_olympus_mons }
+}
+sr_disp_mod_pending_yard_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_olympus_mons } add = var:sr_mq_yard_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_yard_olympus_mons } add = global_var:sr_site_ship_yard_olympus_mons }
+}
+sr_disp_mod_pending_lab_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_olympus_mons } add = var:sr_mq_lab_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_lab_olympus_mons } add = global_var:sr_site_ship_lab_olympus_mons }
+}
+sr_disp_mod_pending_culture_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_olympus_mons } add = var:sr_mq_culture_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_culture_olympus_mons } add = global_var:sr_site_ship_culture_olympus_mons }
+}
+sr_disp_mod_pending_resort_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_olympus_mons } add = var:sr_mq_resort_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_resort_olympus_mons } add = global_var:sr_site_ship_resort_olympus_mons }
+}
+sr_disp_mod_pending_black_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_olympus_mons } add = var:sr_mq_black_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_black_olympus_mons } add = global_var:sr_site_ship_black_olympus_mons }
+}
+sr_disp_mod_pending_train_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_olympus_mons } add = var:sr_mq_train_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_train_olympus_mons } add = global_var:sr_site_ship_train_olympus_mons }
+}
+sr_disp_mod_pending_bunker_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_olympus_mons } add = var:sr_mq_bunker_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_olympus_mons } add = global_var:sr_site_ship_bunker_olympus_mons }
+}
+sr_disp_mod_pending_foundry_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_olympus_mons } add = var:sr_mq_foundry_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_olympus_mons } add = global_var:sr_site_ship_foundry_olympus_mons }
+}
+sr_disp_mod_pending_admin_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_olympus_mons } add = var:sr_mq_admin_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_admin_olympus_mons } add = global_var:sr_site_ship_admin_olympus_mons }
+}
 sr_disp_site_staffing_olympus_mons = {
 	value = sr_site_staffing_olympus_mons
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_olympus_mons = { value = sr_mod_slots_used_olympus_mons }
+sr_disp_site_slots_olympus_mons = { value = sr_site_slots_olympus_mons }
+sr_disp_mod_past_olympus_mons = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_olympus_mons > sr_site_slots_olympus_mons } value = 1 }
+}
+sr_disp_mod_next_cost_olympus_mons = { value = sr_mod_next_cost_olympus_mons }
+sr_disp_site_ebase_room_olympus_mons = { value = sr_site_ebase_room_olympus_mons }
 sr_disp_mod_pending_a_hellas_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_hellas_planitia } add = var:sr_mq_a_hellas_planitia }
@@ -1756,11 +1872,69 @@ sr_disp_mod_pending_port_hellas_planitia = {
 	if = { limit = { has_variable = sr_mq_port_hellas_planitia } add = var:sr_mq_port_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_port_hellas_planitia } add = global_var:sr_site_ship_port_hellas_planitia }
 }
+sr_disp_mod_pending_mine_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_hellas_planitia } add = var:sr_mq_mine_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_mine_hellas_planitia } add = global_var:sr_site_ship_mine_hellas_planitia }
+}
+sr_disp_mod_pending_yard_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_hellas_planitia } add = var:sr_mq_yard_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_yard_hellas_planitia } add = global_var:sr_site_ship_yard_hellas_planitia }
+}
+sr_disp_mod_pending_lab_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_hellas_planitia } add = var:sr_mq_lab_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_lab_hellas_planitia } add = global_var:sr_site_ship_lab_hellas_planitia }
+}
+sr_disp_mod_pending_culture_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_hellas_planitia } add = var:sr_mq_culture_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_culture_hellas_planitia } add = global_var:sr_site_ship_culture_hellas_planitia }
+}
+sr_disp_mod_pending_resort_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_hellas_planitia } add = var:sr_mq_resort_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_resort_hellas_planitia } add = global_var:sr_site_ship_resort_hellas_planitia }
+}
+sr_disp_mod_pending_black_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_hellas_planitia } add = var:sr_mq_black_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_black_hellas_planitia } add = global_var:sr_site_ship_black_hellas_planitia }
+}
+sr_disp_mod_pending_train_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_hellas_planitia } add = var:sr_mq_train_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_train_hellas_planitia } add = global_var:sr_site_ship_train_hellas_planitia }
+}
+sr_disp_mod_pending_bunker_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_hellas_planitia } add = var:sr_mq_bunker_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_hellas_planitia } add = global_var:sr_site_ship_bunker_hellas_planitia }
+}
+sr_disp_mod_pending_foundry_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_hellas_planitia } add = var:sr_mq_foundry_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_hellas_planitia } add = global_var:sr_site_ship_foundry_hellas_planitia }
+}
+sr_disp_mod_pending_admin_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_hellas_planitia } add = var:sr_mq_admin_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_admin_hellas_planitia } add = global_var:sr_site_ship_admin_hellas_planitia }
+}
 sr_disp_site_staffing_hellas_planitia = {
 	value = sr_site_staffing_hellas_planitia
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_hellas_planitia = { value = sr_mod_slots_used_hellas_planitia }
+sr_disp_site_slots_hellas_planitia = { value = sr_site_slots_hellas_planitia }
+sr_disp_mod_past_hellas_planitia = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_hellas_planitia > sr_site_slots_hellas_planitia } value = 1 }
+}
+sr_disp_mod_next_cost_hellas_planitia = { value = sr_mod_next_cost_hellas_planitia }
+sr_disp_site_ebase_room_hellas_planitia = { value = sr_site_ebase_room_hellas_planitia }
 sr_disp_mod_pending_a_utopia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_utopia_planitia } add = var:sr_mq_a_utopia_planitia }
@@ -1786,11 +1960,69 @@ sr_disp_mod_pending_port_utopia_planitia = {
 	if = { limit = { has_variable = sr_mq_port_utopia_planitia } add = var:sr_mq_port_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_port_utopia_planitia } add = global_var:sr_site_ship_port_utopia_planitia }
 }
+sr_disp_mod_pending_mine_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_utopia_planitia } add = var:sr_mq_mine_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_mine_utopia_planitia } add = global_var:sr_site_ship_mine_utopia_planitia }
+}
+sr_disp_mod_pending_yard_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_utopia_planitia } add = var:sr_mq_yard_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_yard_utopia_planitia } add = global_var:sr_site_ship_yard_utopia_planitia }
+}
+sr_disp_mod_pending_lab_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_utopia_planitia } add = var:sr_mq_lab_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_lab_utopia_planitia } add = global_var:sr_site_ship_lab_utopia_planitia }
+}
+sr_disp_mod_pending_culture_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_utopia_planitia } add = var:sr_mq_culture_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_culture_utopia_planitia } add = global_var:sr_site_ship_culture_utopia_planitia }
+}
+sr_disp_mod_pending_resort_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_utopia_planitia } add = var:sr_mq_resort_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_resort_utopia_planitia } add = global_var:sr_site_ship_resort_utopia_planitia }
+}
+sr_disp_mod_pending_black_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_utopia_planitia } add = var:sr_mq_black_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_black_utopia_planitia } add = global_var:sr_site_ship_black_utopia_planitia }
+}
+sr_disp_mod_pending_train_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_utopia_planitia } add = var:sr_mq_train_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_train_utopia_planitia } add = global_var:sr_site_ship_train_utopia_planitia }
+}
+sr_disp_mod_pending_bunker_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_utopia_planitia } add = var:sr_mq_bunker_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_utopia_planitia } add = global_var:sr_site_ship_bunker_utopia_planitia }
+}
+sr_disp_mod_pending_foundry_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_utopia_planitia } add = var:sr_mq_foundry_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_utopia_planitia } add = global_var:sr_site_ship_foundry_utopia_planitia }
+}
+sr_disp_mod_pending_admin_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_utopia_planitia } add = var:sr_mq_admin_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_admin_utopia_planitia } add = global_var:sr_site_ship_admin_utopia_planitia }
+}
 sr_disp_site_staffing_utopia_planitia = {
 	value = sr_site_staffing_utopia_planitia
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_utopia_planitia = { value = sr_mod_slots_used_utopia_planitia }
+sr_disp_site_slots_utopia_planitia = { value = sr_site_slots_utopia_planitia }
+sr_disp_mod_past_utopia_planitia = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_utopia_planitia > sr_site_slots_utopia_planitia } value = 1 }
+}
+sr_disp_mod_next_cost_utopia_planitia = { value = sr_mod_next_cost_utopia_planitia }
+sr_disp_site_ebase_room_utopia_planitia = { value = sr_site_ebase_room_utopia_planitia }
 sr_disp_mod_pending_a_arcadia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_arcadia_planitia } add = var:sr_mq_a_arcadia_planitia }
@@ -1816,11 +2048,69 @@ sr_disp_mod_pending_port_arcadia_planitia = {
 	if = { limit = { has_variable = sr_mq_port_arcadia_planitia } add = var:sr_mq_port_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_port_arcadia_planitia } add = global_var:sr_site_ship_port_arcadia_planitia }
 }
+sr_disp_mod_pending_mine_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_arcadia_planitia } add = var:sr_mq_mine_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_mine_arcadia_planitia } add = global_var:sr_site_ship_mine_arcadia_planitia }
+}
+sr_disp_mod_pending_yard_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_arcadia_planitia } add = var:sr_mq_yard_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_yard_arcadia_planitia } add = global_var:sr_site_ship_yard_arcadia_planitia }
+}
+sr_disp_mod_pending_lab_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_arcadia_planitia } add = var:sr_mq_lab_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_lab_arcadia_planitia } add = global_var:sr_site_ship_lab_arcadia_planitia }
+}
+sr_disp_mod_pending_culture_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_arcadia_planitia } add = var:sr_mq_culture_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_culture_arcadia_planitia } add = global_var:sr_site_ship_culture_arcadia_planitia }
+}
+sr_disp_mod_pending_resort_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_arcadia_planitia } add = var:sr_mq_resort_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_resort_arcadia_planitia } add = global_var:sr_site_ship_resort_arcadia_planitia }
+}
+sr_disp_mod_pending_black_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_arcadia_planitia } add = var:sr_mq_black_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_black_arcadia_planitia } add = global_var:sr_site_ship_black_arcadia_planitia }
+}
+sr_disp_mod_pending_train_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_arcadia_planitia } add = var:sr_mq_train_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_train_arcadia_planitia } add = global_var:sr_site_ship_train_arcadia_planitia }
+}
+sr_disp_mod_pending_bunker_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_arcadia_planitia } add = var:sr_mq_bunker_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_arcadia_planitia } add = global_var:sr_site_ship_bunker_arcadia_planitia }
+}
+sr_disp_mod_pending_foundry_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_arcadia_planitia } add = var:sr_mq_foundry_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_arcadia_planitia } add = global_var:sr_site_ship_foundry_arcadia_planitia }
+}
+sr_disp_mod_pending_admin_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_arcadia_planitia } add = var:sr_mq_admin_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_admin_arcadia_planitia } add = global_var:sr_site_ship_admin_arcadia_planitia }
+}
 sr_disp_site_staffing_arcadia_planitia = {
 	value = sr_site_staffing_arcadia_planitia
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_arcadia_planitia = { value = sr_mod_slots_used_arcadia_planitia }
+sr_disp_site_slots_arcadia_planitia = { value = sr_site_slots_arcadia_planitia }
+sr_disp_mod_past_arcadia_planitia = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_arcadia_planitia > sr_site_slots_arcadia_planitia } value = 1 }
+}
+sr_disp_mod_next_cost_arcadia_planitia = { value = sr_mod_next_cost_arcadia_planitia }
+sr_disp_site_ebase_room_arcadia_planitia = { value = sr_site_ebase_room_arcadia_planitia }
 sr_disp_mod_pending_a_ceres = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_ceres } add = var:sr_mq_a_ceres }
@@ -1846,11 +2136,69 @@ sr_disp_mod_pending_port_ceres = {
 	if = { limit = { has_variable = sr_mq_port_ceres } add = var:sr_mq_port_ceres }
 	if = { limit = { has_global_variable = sr_site_ship_port_ceres } add = global_var:sr_site_ship_port_ceres }
 }
+sr_disp_mod_pending_mine_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_ceres } add = var:sr_mq_mine_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_mine_ceres } add = global_var:sr_site_ship_mine_ceres }
+}
+sr_disp_mod_pending_yard_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_ceres } add = var:sr_mq_yard_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_yard_ceres } add = global_var:sr_site_ship_yard_ceres }
+}
+sr_disp_mod_pending_lab_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_ceres } add = var:sr_mq_lab_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_lab_ceres } add = global_var:sr_site_ship_lab_ceres }
+}
+sr_disp_mod_pending_culture_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_ceres } add = var:sr_mq_culture_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_culture_ceres } add = global_var:sr_site_ship_culture_ceres }
+}
+sr_disp_mod_pending_resort_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_ceres } add = var:sr_mq_resort_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_resort_ceres } add = global_var:sr_site_ship_resort_ceres }
+}
+sr_disp_mod_pending_black_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_ceres } add = var:sr_mq_black_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_black_ceres } add = global_var:sr_site_ship_black_ceres }
+}
+sr_disp_mod_pending_train_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_ceres } add = var:sr_mq_train_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_train_ceres } add = global_var:sr_site_ship_train_ceres }
+}
+sr_disp_mod_pending_bunker_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_ceres } add = var:sr_mq_bunker_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_ceres } add = global_var:sr_site_ship_bunker_ceres }
+}
+sr_disp_mod_pending_foundry_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_ceres } add = var:sr_mq_foundry_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_ceres } add = global_var:sr_site_ship_foundry_ceres }
+}
+sr_disp_mod_pending_admin_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_ceres } add = var:sr_mq_admin_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_admin_ceres } add = global_var:sr_site_ship_admin_ceres }
+}
 sr_disp_site_staffing_ceres = {
 	value = sr_site_staffing_ceres
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_ceres = { value = sr_mod_slots_used_ceres }
+sr_disp_site_slots_ceres = { value = sr_site_slots_ceres }
+sr_disp_mod_past_ceres = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_ceres > sr_site_slots_ceres } value = 1 }
+}
+sr_disp_mod_next_cost_ceres = { value = sr_mod_next_cost_ceres }
+sr_disp_site_ebase_room_ceres = { value = sr_site_ebase_room_ceres }
 sr_disp_mod_pending_a_vesta = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_vesta } add = var:sr_mq_a_vesta }
@@ -1876,11 +2224,69 @@ sr_disp_mod_pending_port_vesta = {
 	if = { limit = { has_variable = sr_mq_port_vesta } add = var:sr_mq_port_vesta }
 	if = { limit = { has_global_variable = sr_site_ship_port_vesta } add = global_var:sr_site_ship_port_vesta }
 }
+sr_disp_mod_pending_mine_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_vesta } add = var:sr_mq_mine_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_mine_vesta } add = global_var:sr_site_ship_mine_vesta }
+}
+sr_disp_mod_pending_yard_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_vesta } add = var:sr_mq_yard_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_yard_vesta } add = global_var:sr_site_ship_yard_vesta }
+}
+sr_disp_mod_pending_lab_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_vesta } add = var:sr_mq_lab_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_lab_vesta } add = global_var:sr_site_ship_lab_vesta }
+}
+sr_disp_mod_pending_culture_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_vesta } add = var:sr_mq_culture_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_culture_vesta } add = global_var:sr_site_ship_culture_vesta }
+}
+sr_disp_mod_pending_resort_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_vesta } add = var:sr_mq_resort_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_resort_vesta } add = global_var:sr_site_ship_resort_vesta }
+}
+sr_disp_mod_pending_black_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_vesta } add = var:sr_mq_black_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_black_vesta } add = global_var:sr_site_ship_black_vesta }
+}
+sr_disp_mod_pending_train_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_vesta } add = var:sr_mq_train_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_train_vesta } add = global_var:sr_site_ship_train_vesta }
+}
+sr_disp_mod_pending_bunker_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_vesta } add = var:sr_mq_bunker_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_vesta } add = global_var:sr_site_ship_bunker_vesta }
+}
+sr_disp_mod_pending_foundry_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_vesta } add = var:sr_mq_foundry_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_vesta } add = global_var:sr_site_ship_foundry_vesta }
+}
+sr_disp_mod_pending_admin_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_vesta } add = var:sr_mq_admin_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_admin_vesta } add = global_var:sr_site_ship_admin_vesta }
+}
 sr_disp_site_staffing_vesta = {
 	value = sr_site_staffing_vesta
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_vesta = { value = sr_mod_slots_used_vesta }
+sr_disp_site_slots_vesta = { value = sr_site_slots_vesta }
+sr_disp_mod_past_vesta = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_vesta > sr_site_slots_vesta } value = 1 }
+}
+sr_disp_mod_next_cost_vesta = { value = sr_mod_next_cost_vesta }
+sr_disp_site_ebase_room_vesta = { value = sr_site_ebase_room_vesta }
 sr_disp_mod_pending_a_psyche = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_psyche } add = var:sr_mq_a_psyche }
@@ -1906,11 +2312,69 @@ sr_disp_mod_pending_port_psyche = {
 	if = { limit = { has_variable = sr_mq_port_psyche } add = var:sr_mq_port_psyche }
 	if = { limit = { has_global_variable = sr_site_ship_port_psyche } add = global_var:sr_site_ship_port_psyche }
 }
+sr_disp_mod_pending_mine_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_psyche } add = var:sr_mq_mine_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_mine_psyche } add = global_var:sr_site_ship_mine_psyche }
+}
+sr_disp_mod_pending_yard_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_psyche } add = var:sr_mq_yard_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_yard_psyche } add = global_var:sr_site_ship_yard_psyche }
+}
+sr_disp_mod_pending_lab_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_psyche } add = var:sr_mq_lab_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_lab_psyche } add = global_var:sr_site_ship_lab_psyche }
+}
+sr_disp_mod_pending_culture_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_psyche } add = var:sr_mq_culture_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_culture_psyche } add = global_var:sr_site_ship_culture_psyche }
+}
+sr_disp_mod_pending_resort_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_psyche } add = var:sr_mq_resort_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_resort_psyche } add = global_var:sr_site_ship_resort_psyche }
+}
+sr_disp_mod_pending_black_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_psyche } add = var:sr_mq_black_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_black_psyche } add = global_var:sr_site_ship_black_psyche }
+}
+sr_disp_mod_pending_train_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_psyche } add = var:sr_mq_train_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_train_psyche } add = global_var:sr_site_ship_train_psyche }
+}
+sr_disp_mod_pending_bunker_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_psyche } add = var:sr_mq_bunker_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_psyche } add = global_var:sr_site_ship_bunker_psyche }
+}
+sr_disp_mod_pending_foundry_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_psyche } add = var:sr_mq_foundry_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_psyche } add = global_var:sr_site_ship_foundry_psyche }
+}
+sr_disp_mod_pending_admin_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_psyche } add = var:sr_mq_admin_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_admin_psyche } add = global_var:sr_site_ship_admin_psyche }
+}
 sr_disp_site_staffing_psyche = {
 	value = sr_site_staffing_psyche
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_psyche = { value = sr_mod_slots_used_psyche }
+sr_disp_site_slots_psyche = { value = sr_site_slots_psyche }
+sr_disp_mod_past_psyche = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_psyche > sr_site_slots_psyche } value = 1 }
+}
+sr_disp_mod_next_cost_psyche = { value = sr_mod_next_cost_psyche }
+sr_disp_site_ebase_room_psyche = { value = sr_site_ebase_room_psyche }
 sr_disp_mod_pending_a_pallas = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_pallas } add = var:sr_mq_a_pallas }
@@ -1936,11 +2400,69 @@ sr_disp_mod_pending_port_pallas = {
 	if = { limit = { has_variable = sr_mq_port_pallas } add = var:sr_mq_port_pallas }
 	if = { limit = { has_global_variable = sr_site_ship_port_pallas } add = global_var:sr_site_ship_port_pallas }
 }
+sr_disp_mod_pending_mine_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_pallas } add = var:sr_mq_mine_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_mine_pallas } add = global_var:sr_site_ship_mine_pallas }
+}
+sr_disp_mod_pending_yard_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_pallas } add = var:sr_mq_yard_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_yard_pallas } add = global_var:sr_site_ship_yard_pallas }
+}
+sr_disp_mod_pending_lab_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_pallas } add = var:sr_mq_lab_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_lab_pallas } add = global_var:sr_site_ship_lab_pallas }
+}
+sr_disp_mod_pending_culture_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_pallas } add = var:sr_mq_culture_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_culture_pallas } add = global_var:sr_site_ship_culture_pallas }
+}
+sr_disp_mod_pending_resort_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_pallas } add = var:sr_mq_resort_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_resort_pallas } add = global_var:sr_site_ship_resort_pallas }
+}
+sr_disp_mod_pending_black_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_pallas } add = var:sr_mq_black_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_black_pallas } add = global_var:sr_site_ship_black_pallas }
+}
+sr_disp_mod_pending_train_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_pallas } add = var:sr_mq_train_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_train_pallas } add = global_var:sr_site_ship_train_pallas }
+}
+sr_disp_mod_pending_bunker_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_pallas } add = var:sr_mq_bunker_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_pallas } add = global_var:sr_site_ship_bunker_pallas }
+}
+sr_disp_mod_pending_foundry_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_pallas } add = var:sr_mq_foundry_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_pallas } add = global_var:sr_site_ship_foundry_pallas }
+}
+sr_disp_mod_pending_admin_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_pallas } add = var:sr_mq_admin_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_admin_pallas } add = global_var:sr_site_ship_admin_pallas }
+}
 sr_disp_site_staffing_pallas = {
 	value = sr_site_staffing_pallas
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_pallas = { value = sr_mod_slots_used_pallas }
+sr_disp_site_slots_pallas = { value = sr_site_slots_pallas }
+sr_disp_mod_past_pallas = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_pallas > sr_site_slots_pallas } value = 1 }
+}
+sr_disp_mod_next_cost_pallas = { value = sr_mod_next_cost_pallas }
+sr_disp_site_ebase_room_pallas = { value = sr_site_ebase_room_pallas }
 sr_disp_mod_pending_a_hygiea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_hygiea } add = var:sr_mq_a_hygiea }
@@ -1966,11 +2488,69 @@ sr_disp_mod_pending_port_hygiea = {
 	if = { limit = { has_variable = sr_mq_port_hygiea } add = var:sr_mq_port_hygiea }
 	if = { limit = { has_global_variable = sr_site_ship_port_hygiea } add = global_var:sr_site_ship_port_hygiea }
 }
+sr_disp_mod_pending_mine_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_hygiea } add = var:sr_mq_mine_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_mine_hygiea } add = global_var:sr_site_ship_mine_hygiea }
+}
+sr_disp_mod_pending_yard_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_hygiea } add = var:sr_mq_yard_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_yard_hygiea } add = global_var:sr_site_ship_yard_hygiea }
+}
+sr_disp_mod_pending_lab_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_hygiea } add = var:sr_mq_lab_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_lab_hygiea } add = global_var:sr_site_ship_lab_hygiea }
+}
+sr_disp_mod_pending_culture_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_hygiea } add = var:sr_mq_culture_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_culture_hygiea } add = global_var:sr_site_ship_culture_hygiea }
+}
+sr_disp_mod_pending_resort_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_hygiea } add = var:sr_mq_resort_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_resort_hygiea } add = global_var:sr_site_ship_resort_hygiea }
+}
+sr_disp_mod_pending_black_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_hygiea } add = var:sr_mq_black_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_black_hygiea } add = global_var:sr_site_ship_black_hygiea }
+}
+sr_disp_mod_pending_train_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_hygiea } add = var:sr_mq_train_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_train_hygiea } add = global_var:sr_site_ship_train_hygiea }
+}
+sr_disp_mod_pending_bunker_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_hygiea } add = var:sr_mq_bunker_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_hygiea } add = global_var:sr_site_ship_bunker_hygiea }
+}
+sr_disp_mod_pending_foundry_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_hygiea } add = var:sr_mq_foundry_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_hygiea } add = global_var:sr_site_ship_foundry_hygiea }
+}
+sr_disp_mod_pending_admin_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_hygiea } add = var:sr_mq_admin_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_admin_hygiea } add = global_var:sr_site_ship_admin_hygiea }
+}
 sr_disp_site_staffing_hygiea = {
 	value = sr_site_staffing_hygiea
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_hygiea = { value = sr_mod_slots_used_hygiea }
+sr_disp_site_slots_hygiea = { value = sr_site_slots_hygiea }
+sr_disp_mod_past_hygiea = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_hygiea > sr_site_slots_hygiea } value = 1 }
+}
+sr_disp_mod_next_cost_hygiea = { value = sr_mod_next_cost_hygiea }
+sr_disp_site_ebase_room_hygiea = { value = sr_site_ebase_room_hygiea }
 sr_disp_mod_pending_a_io = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_io } add = var:sr_mq_a_io }
@@ -1996,11 +2576,69 @@ sr_disp_mod_pending_port_io = {
 	if = { limit = { has_variable = sr_mq_port_io } add = var:sr_mq_port_io }
 	if = { limit = { has_global_variable = sr_site_ship_port_io } add = global_var:sr_site_ship_port_io }
 }
+sr_disp_mod_pending_mine_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_io } add = var:sr_mq_mine_io }
+	if = { limit = { has_global_variable = sr_site_ship_mine_io } add = global_var:sr_site_ship_mine_io }
+}
+sr_disp_mod_pending_yard_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_io } add = var:sr_mq_yard_io }
+	if = { limit = { has_global_variable = sr_site_ship_yard_io } add = global_var:sr_site_ship_yard_io }
+}
+sr_disp_mod_pending_lab_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_io } add = var:sr_mq_lab_io }
+	if = { limit = { has_global_variable = sr_site_ship_lab_io } add = global_var:sr_site_ship_lab_io }
+}
+sr_disp_mod_pending_culture_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_io } add = var:sr_mq_culture_io }
+	if = { limit = { has_global_variable = sr_site_ship_culture_io } add = global_var:sr_site_ship_culture_io }
+}
+sr_disp_mod_pending_resort_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_io } add = var:sr_mq_resort_io }
+	if = { limit = { has_global_variable = sr_site_ship_resort_io } add = global_var:sr_site_ship_resort_io }
+}
+sr_disp_mod_pending_black_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_io } add = var:sr_mq_black_io }
+	if = { limit = { has_global_variable = sr_site_ship_black_io } add = global_var:sr_site_ship_black_io }
+}
+sr_disp_mod_pending_train_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_io } add = var:sr_mq_train_io }
+	if = { limit = { has_global_variable = sr_site_ship_train_io } add = global_var:sr_site_ship_train_io }
+}
+sr_disp_mod_pending_bunker_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_io } add = var:sr_mq_bunker_io }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_io } add = global_var:sr_site_ship_bunker_io }
+}
+sr_disp_mod_pending_foundry_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_io } add = var:sr_mq_foundry_io }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_io } add = global_var:sr_site_ship_foundry_io }
+}
+sr_disp_mod_pending_admin_io = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_io } add = var:sr_mq_admin_io }
+	if = { limit = { has_global_variable = sr_site_ship_admin_io } add = global_var:sr_site_ship_admin_io }
+}
 sr_disp_site_staffing_io = {
 	value = sr_site_staffing_io
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_io = { value = sr_mod_slots_used_io }
+sr_disp_site_slots_io = { value = sr_site_slots_io }
+sr_disp_mod_past_io = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_io > sr_site_slots_io } value = 1 }
+}
+sr_disp_mod_next_cost_io = { value = sr_mod_next_cost_io }
+sr_disp_site_ebase_room_io = { value = sr_site_ebase_room_io }
 sr_disp_mod_pending_a_europa = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_europa } add = var:sr_mq_a_europa }
@@ -2026,11 +2664,69 @@ sr_disp_mod_pending_port_europa = {
 	if = { limit = { has_variable = sr_mq_port_europa } add = var:sr_mq_port_europa }
 	if = { limit = { has_global_variable = sr_site_ship_port_europa } add = global_var:sr_site_ship_port_europa }
 }
+sr_disp_mod_pending_mine_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_europa } add = var:sr_mq_mine_europa }
+	if = { limit = { has_global_variable = sr_site_ship_mine_europa } add = global_var:sr_site_ship_mine_europa }
+}
+sr_disp_mod_pending_yard_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_europa } add = var:sr_mq_yard_europa }
+	if = { limit = { has_global_variable = sr_site_ship_yard_europa } add = global_var:sr_site_ship_yard_europa }
+}
+sr_disp_mod_pending_lab_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_europa } add = var:sr_mq_lab_europa }
+	if = { limit = { has_global_variable = sr_site_ship_lab_europa } add = global_var:sr_site_ship_lab_europa }
+}
+sr_disp_mod_pending_culture_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_europa } add = var:sr_mq_culture_europa }
+	if = { limit = { has_global_variable = sr_site_ship_culture_europa } add = global_var:sr_site_ship_culture_europa }
+}
+sr_disp_mod_pending_resort_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_europa } add = var:sr_mq_resort_europa }
+	if = { limit = { has_global_variable = sr_site_ship_resort_europa } add = global_var:sr_site_ship_resort_europa }
+}
+sr_disp_mod_pending_black_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_europa } add = var:sr_mq_black_europa }
+	if = { limit = { has_global_variable = sr_site_ship_black_europa } add = global_var:sr_site_ship_black_europa }
+}
+sr_disp_mod_pending_train_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_europa } add = var:sr_mq_train_europa }
+	if = { limit = { has_global_variable = sr_site_ship_train_europa } add = global_var:sr_site_ship_train_europa }
+}
+sr_disp_mod_pending_bunker_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_europa } add = var:sr_mq_bunker_europa }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_europa } add = global_var:sr_site_ship_bunker_europa }
+}
+sr_disp_mod_pending_foundry_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_europa } add = var:sr_mq_foundry_europa }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_europa } add = global_var:sr_site_ship_foundry_europa }
+}
+sr_disp_mod_pending_admin_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_europa } add = var:sr_mq_admin_europa }
+	if = { limit = { has_global_variable = sr_site_ship_admin_europa } add = global_var:sr_site_ship_admin_europa }
+}
 sr_disp_site_staffing_europa = {
 	value = sr_site_staffing_europa
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_europa = { value = sr_mod_slots_used_europa }
+sr_disp_site_slots_europa = { value = sr_site_slots_europa }
+sr_disp_mod_past_europa = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_europa > sr_site_slots_europa } value = 1 }
+}
+sr_disp_mod_next_cost_europa = { value = sr_mod_next_cost_europa }
+sr_disp_site_ebase_room_europa = { value = sr_site_ebase_room_europa }
 sr_disp_mod_pending_a_ganymede = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_ganymede } add = var:sr_mq_a_ganymede }
@@ -2056,11 +2752,69 @@ sr_disp_mod_pending_port_ganymede = {
 	if = { limit = { has_variable = sr_mq_port_ganymede } add = var:sr_mq_port_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_port_ganymede } add = global_var:sr_site_ship_port_ganymede }
 }
+sr_disp_mod_pending_mine_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_ganymede } add = var:sr_mq_mine_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_mine_ganymede } add = global_var:sr_site_ship_mine_ganymede }
+}
+sr_disp_mod_pending_yard_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_ganymede } add = var:sr_mq_yard_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_yard_ganymede } add = global_var:sr_site_ship_yard_ganymede }
+}
+sr_disp_mod_pending_lab_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_ganymede } add = var:sr_mq_lab_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_lab_ganymede } add = global_var:sr_site_ship_lab_ganymede }
+}
+sr_disp_mod_pending_culture_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_ganymede } add = var:sr_mq_culture_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_culture_ganymede } add = global_var:sr_site_ship_culture_ganymede }
+}
+sr_disp_mod_pending_resort_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_ganymede } add = var:sr_mq_resort_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_resort_ganymede } add = global_var:sr_site_ship_resort_ganymede }
+}
+sr_disp_mod_pending_black_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_ganymede } add = var:sr_mq_black_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_black_ganymede } add = global_var:sr_site_ship_black_ganymede }
+}
+sr_disp_mod_pending_train_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_ganymede } add = var:sr_mq_train_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_train_ganymede } add = global_var:sr_site_ship_train_ganymede }
+}
+sr_disp_mod_pending_bunker_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_ganymede } add = var:sr_mq_bunker_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_ganymede } add = global_var:sr_site_ship_bunker_ganymede }
+}
+sr_disp_mod_pending_foundry_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_ganymede } add = var:sr_mq_foundry_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_ganymede } add = global_var:sr_site_ship_foundry_ganymede }
+}
+sr_disp_mod_pending_admin_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_ganymede } add = var:sr_mq_admin_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_admin_ganymede } add = global_var:sr_site_ship_admin_ganymede }
+}
 sr_disp_site_staffing_ganymede = {
 	value = sr_site_staffing_ganymede
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_ganymede = { value = sr_mod_slots_used_ganymede }
+sr_disp_site_slots_ganymede = { value = sr_site_slots_ganymede }
+sr_disp_mod_past_ganymede = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_ganymede > sr_site_slots_ganymede } value = 1 }
+}
+sr_disp_mod_next_cost_ganymede = { value = sr_mod_next_cost_ganymede }
+sr_disp_site_ebase_room_ganymede = { value = sr_site_ebase_room_ganymede }
 sr_disp_mod_pending_a_callisto = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_callisto } add = var:sr_mq_a_callisto }
@@ -2086,11 +2840,69 @@ sr_disp_mod_pending_port_callisto = {
 	if = { limit = { has_variable = sr_mq_port_callisto } add = var:sr_mq_port_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_port_callisto } add = global_var:sr_site_ship_port_callisto }
 }
+sr_disp_mod_pending_mine_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_callisto } add = var:sr_mq_mine_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_mine_callisto } add = global_var:sr_site_ship_mine_callisto }
+}
+sr_disp_mod_pending_yard_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_callisto } add = var:sr_mq_yard_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_yard_callisto } add = global_var:sr_site_ship_yard_callisto }
+}
+sr_disp_mod_pending_lab_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_callisto } add = var:sr_mq_lab_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_lab_callisto } add = global_var:sr_site_ship_lab_callisto }
+}
+sr_disp_mod_pending_culture_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_callisto } add = var:sr_mq_culture_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_culture_callisto } add = global_var:sr_site_ship_culture_callisto }
+}
+sr_disp_mod_pending_resort_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_callisto } add = var:sr_mq_resort_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_resort_callisto } add = global_var:sr_site_ship_resort_callisto }
+}
+sr_disp_mod_pending_black_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_callisto } add = var:sr_mq_black_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_black_callisto } add = global_var:sr_site_ship_black_callisto }
+}
+sr_disp_mod_pending_train_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_callisto } add = var:sr_mq_train_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_train_callisto } add = global_var:sr_site_ship_train_callisto }
+}
+sr_disp_mod_pending_bunker_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_callisto } add = var:sr_mq_bunker_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_callisto } add = global_var:sr_site_ship_bunker_callisto }
+}
+sr_disp_mod_pending_foundry_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_callisto } add = var:sr_mq_foundry_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_callisto } add = global_var:sr_site_ship_foundry_callisto }
+}
+sr_disp_mod_pending_admin_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_callisto } add = var:sr_mq_admin_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_admin_callisto } add = global_var:sr_site_ship_admin_callisto }
+}
 sr_disp_site_staffing_callisto = {
 	value = sr_site_staffing_callisto
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_callisto = { value = sr_mod_slots_used_callisto }
+sr_disp_site_slots_callisto = { value = sr_site_slots_callisto }
+sr_disp_mod_past_callisto = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_callisto > sr_site_slots_callisto } value = 1 }
+}
+sr_disp_mod_next_cost_callisto = { value = sr_mod_next_cost_callisto }
+sr_disp_site_ebase_room_callisto = { value = sr_site_ebase_room_callisto }
 sr_disp_mod_pending_a_himalia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_himalia } add = var:sr_mq_a_himalia }
@@ -2116,11 +2928,69 @@ sr_disp_mod_pending_port_himalia = {
 	if = { limit = { has_variable = sr_mq_port_himalia } add = var:sr_mq_port_himalia }
 	if = { limit = { has_global_variable = sr_site_ship_port_himalia } add = global_var:sr_site_ship_port_himalia }
 }
+sr_disp_mod_pending_mine_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_himalia } add = var:sr_mq_mine_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_mine_himalia } add = global_var:sr_site_ship_mine_himalia }
+}
+sr_disp_mod_pending_yard_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_himalia } add = var:sr_mq_yard_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_yard_himalia } add = global_var:sr_site_ship_yard_himalia }
+}
+sr_disp_mod_pending_lab_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_himalia } add = var:sr_mq_lab_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_lab_himalia } add = global_var:sr_site_ship_lab_himalia }
+}
+sr_disp_mod_pending_culture_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_himalia } add = var:sr_mq_culture_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_culture_himalia } add = global_var:sr_site_ship_culture_himalia }
+}
+sr_disp_mod_pending_resort_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_himalia } add = var:sr_mq_resort_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_resort_himalia } add = global_var:sr_site_ship_resort_himalia }
+}
+sr_disp_mod_pending_black_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_himalia } add = var:sr_mq_black_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_black_himalia } add = global_var:sr_site_ship_black_himalia }
+}
+sr_disp_mod_pending_train_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_himalia } add = var:sr_mq_train_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_train_himalia } add = global_var:sr_site_ship_train_himalia }
+}
+sr_disp_mod_pending_bunker_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_himalia } add = var:sr_mq_bunker_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_himalia } add = global_var:sr_site_ship_bunker_himalia }
+}
+sr_disp_mod_pending_foundry_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_himalia } add = var:sr_mq_foundry_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_himalia } add = global_var:sr_site_ship_foundry_himalia }
+}
+sr_disp_mod_pending_admin_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_himalia } add = var:sr_mq_admin_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_admin_himalia } add = global_var:sr_site_ship_admin_himalia }
+}
 sr_disp_site_staffing_himalia = {
 	value = sr_site_staffing_himalia
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_himalia = { value = sr_mod_slots_used_himalia }
+sr_disp_site_slots_himalia = { value = sr_site_slots_himalia }
+sr_disp_mod_past_himalia = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_himalia > sr_site_slots_himalia } value = 1 }
+}
+sr_disp_mod_next_cost_himalia = { value = sr_mod_next_cost_himalia }
+sr_disp_site_ebase_room_himalia = { value = sr_site_ebase_room_himalia }
 sr_disp_mod_pending_a_amalthea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_amalthea } add = var:sr_mq_a_amalthea }
@@ -2146,11 +3016,69 @@ sr_disp_mod_pending_port_amalthea = {
 	if = { limit = { has_variable = sr_mq_port_amalthea } add = var:sr_mq_port_amalthea }
 	if = { limit = { has_global_variable = sr_site_ship_port_amalthea } add = global_var:sr_site_ship_port_amalthea }
 }
+sr_disp_mod_pending_mine_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_amalthea } add = var:sr_mq_mine_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_mine_amalthea } add = global_var:sr_site_ship_mine_amalthea }
+}
+sr_disp_mod_pending_yard_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_amalthea } add = var:sr_mq_yard_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_yard_amalthea } add = global_var:sr_site_ship_yard_amalthea }
+}
+sr_disp_mod_pending_lab_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_amalthea } add = var:sr_mq_lab_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_lab_amalthea } add = global_var:sr_site_ship_lab_amalthea }
+}
+sr_disp_mod_pending_culture_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_amalthea } add = var:sr_mq_culture_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_culture_amalthea } add = global_var:sr_site_ship_culture_amalthea }
+}
+sr_disp_mod_pending_resort_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_amalthea } add = var:sr_mq_resort_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_resort_amalthea } add = global_var:sr_site_ship_resort_amalthea }
+}
+sr_disp_mod_pending_black_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_amalthea } add = var:sr_mq_black_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_black_amalthea } add = global_var:sr_site_ship_black_amalthea }
+}
+sr_disp_mod_pending_train_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_amalthea } add = var:sr_mq_train_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_train_amalthea } add = global_var:sr_site_ship_train_amalthea }
+}
+sr_disp_mod_pending_bunker_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_amalthea } add = var:sr_mq_bunker_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_amalthea } add = global_var:sr_site_ship_bunker_amalthea }
+}
+sr_disp_mod_pending_foundry_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_amalthea } add = var:sr_mq_foundry_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_amalthea } add = global_var:sr_site_ship_foundry_amalthea }
+}
+sr_disp_mod_pending_admin_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_amalthea } add = var:sr_mq_admin_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_admin_amalthea } add = global_var:sr_site_ship_admin_amalthea }
+}
 sr_disp_site_staffing_amalthea = {
 	value = sr_site_staffing_amalthea
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_amalthea = { value = sr_mod_slots_used_amalthea }
+sr_disp_site_slots_amalthea = { value = sr_site_slots_amalthea }
+sr_disp_mod_past_amalthea = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_amalthea > sr_site_slots_amalthea } value = 1 }
+}
+sr_disp_mod_next_cost_amalthea = { value = sr_mod_next_cost_amalthea }
+sr_disp_site_ebase_room_amalthea = { value = sr_site_ebase_room_amalthea }
 sr_disp_mod_pending_a_venus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_venus } add = var:sr_mq_a_venus }
@@ -2176,11 +3104,69 @@ sr_disp_mod_pending_port_venus = {
 	if = { limit = { has_variable = sr_mq_port_venus } add = var:sr_mq_port_venus }
 	if = { limit = { has_global_variable = sr_site_ship_port_venus } add = global_var:sr_site_ship_port_venus }
 }
+sr_disp_mod_pending_mine_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_venus } add = var:sr_mq_mine_venus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_venus } add = global_var:sr_site_ship_mine_venus }
+}
+sr_disp_mod_pending_yard_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_venus } add = var:sr_mq_yard_venus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_venus } add = global_var:sr_site_ship_yard_venus }
+}
+sr_disp_mod_pending_lab_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_venus } add = var:sr_mq_lab_venus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_venus } add = global_var:sr_site_ship_lab_venus }
+}
+sr_disp_mod_pending_culture_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_venus } add = var:sr_mq_culture_venus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_venus } add = global_var:sr_site_ship_culture_venus }
+}
+sr_disp_mod_pending_resort_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_venus } add = var:sr_mq_resort_venus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_venus } add = global_var:sr_site_ship_resort_venus }
+}
+sr_disp_mod_pending_black_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_venus } add = var:sr_mq_black_venus }
+	if = { limit = { has_global_variable = sr_site_ship_black_venus } add = global_var:sr_site_ship_black_venus }
+}
+sr_disp_mod_pending_train_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_venus } add = var:sr_mq_train_venus }
+	if = { limit = { has_global_variable = sr_site_ship_train_venus } add = global_var:sr_site_ship_train_venus }
+}
+sr_disp_mod_pending_bunker_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_venus } add = var:sr_mq_bunker_venus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_venus } add = global_var:sr_site_ship_bunker_venus }
+}
+sr_disp_mod_pending_foundry_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_venus } add = var:sr_mq_foundry_venus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_venus } add = global_var:sr_site_ship_foundry_venus }
+}
+sr_disp_mod_pending_admin_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_venus } add = var:sr_mq_admin_venus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_venus } add = global_var:sr_site_ship_admin_venus }
+}
 sr_disp_site_staffing_venus = {
 	value = sr_site_staffing_venus
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_venus = { value = sr_mod_slots_used_venus }
+sr_disp_site_slots_venus = { value = sr_site_slots_venus }
+sr_disp_mod_past_venus = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_venus > sr_site_slots_venus } value = 1 }
+}
+sr_disp_mod_next_cost_venus = { value = sr_mod_next_cost_venus }
+sr_disp_site_ebase_room_venus = { value = sr_site_ebase_room_venus }
 sr_disp_mod_pending_a_mercury = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_mercury } add = var:sr_mq_a_mercury }
@@ -2206,11 +3192,69 @@ sr_disp_mod_pending_port_mercury = {
 	if = { limit = { has_variable = sr_mq_port_mercury } add = var:sr_mq_port_mercury }
 	if = { limit = { has_global_variable = sr_site_ship_port_mercury } add = global_var:sr_site_ship_port_mercury }
 }
+sr_disp_mod_pending_mine_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_mercury } add = var:sr_mq_mine_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_mine_mercury } add = global_var:sr_site_ship_mine_mercury }
+}
+sr_disp_mod_pending_yard_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_mercury } add = var:sr_mq_yard_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_yard_mercury } add = global_var:sr_site_ship_yard_mercury }
+}
+sr_disp_mod_pending_lab_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_mercury } add = var:sr_mq_lab_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_lab_mercury } add = global_var:sr_site_ship_lab_mercury }
+}
+sr_disp_mod_pending_culture_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_mercury } add = var:sr_mq_culture_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_culture_mercury } add = global_var:sr_site_ship_culture_mercury }
+}
+sr_disp_mod_pending_resort_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_mercury } add = var:sr_mq_resort_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_resort_mercury } add = global_var:sr_site_ship_resort_mercury }
+}
+sr_disp_mod_pending_black_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_mercury } add = var:sr_mq_black_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_black_mercury } add = global_var:sr_site_ship_black_mercury }
+}
+sr_disp_mod_pending_train_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_mercury } add = var:sr_mq_train_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_train_mercury } add = global_var:sr_site_ship_train_mercury }
+}
+sr_disp_mod_pending_bunker_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_mercury } add = var:sr_mq_bunker_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_mercury } add = global_var:sr_site_ship_bunker_mercury }
+}
+sr_disp_mod_pending_foundry_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_mercury } add = var:sr_mq_foundry_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_mercury } add = global_var:sr_site_ship_foundry_mercury }
+}
+sr_disp_mod_pending_admin_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_mercury } add = var:sr_mq_admin_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_admin_mercury } add = global_var:sr_site_ship_admin_mercury }
+}
 sr_disp_site_staffing_mercury = {
 	value = sr_site_staffing_mercury
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_mercury = { value = sr_mod_slots_used_mercury }
+sr_disp_site_slots_mercury = { value = sr_site_slots_mercury }
+sr_disp_mod_past_mercury = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_mercury > sr_site_slots_mercury } value = 1 }
+}
+sr_disp_mod_next_cost_mercury = { value = sr_mod_next_cost_mercury }
+sr_disp_site_ebase_room_mercury = { value = sr_site_ebase_room_mercury }
 sr_disp_mod_pending_a_titan = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_titan } add = var:sr_mq_a_titan }
@@ -2236,11 +3280,69 @@ sr_disp_mod_pending_port_titan = {
 	if = { limit = { has_variable = sr_mq_port_titan } add = var:sr_mq_port_titan }
 	if = { limit = { has_global_variable = sr_site_ship_port_titan } add = global_var:sr_site_ship_port_titan }
 }
+sr_disp_mod_pending_mine_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_titan } add = var:sr_mq_mine_titan }
+	if = { limit = { has_global_variable = sr_site_ship_mine_titan } add = global_var:sr_site_ship_mine_titan }
+}
+sr_disp_mod_pending_yard_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_titan } add = var:sr_mq_yard_titan }
+	if = { limit = { has_global_variable = sr_site_ship_yard_titan } add = global_var:sr_site_ship_yard_titan }
+}
+sr_disp_mod_pending_lab_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_titan } add = var:sr_mq_lab_titan }
+	if = { limit = { has_global_variable = sr_site_ship_lab_titan } add = global_var:sr_site_ship_lab_titan }
+}
+sr_disp_mod_pending_culture_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_titan } add = var:sr_mq_culture_titan }
+	if = { limit = { has_global_variable = sr_site_ship_culture_titan } add = global_var:sr_site_ship_culture_titan }
+}
+sr_disp_mod_pending_resort_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_titan } add = var:sr_mq_resort_titan }
+	if = { limit = { has_global_variable = sr_site_ship_resort_titan } add = global_var:sr_site_ship_resort_titan }
+}
+sr_disp_mod_pending_black_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_titan } add = var:sr_mq_black_titan }
+	if = { limit = { has_global_variable = sr_site_ship_black_titan } add = global_var:sr_site_ship_black_titan }
+}
+sr_disp_mod_pending_train_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_titan } add = var:sr_mq_train_titan }
+	if = { limit = { has_global_variable = sr_site_ship_train_titan } add = global_var:sr_site_ship_train_titan }
+}
+sr_disp_mod_pending_bunker_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_titan } add = var:sr_mq_bunker_titan }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_titan } add = global_var:sr_site_ship_bunker_titan }
+}
+sr_disp_mod_pending_foundry_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_titan } add = var:sr_mq_foundry_titan }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_titan } add = global_var:sr_site_ship_foundry_titan }
+}
+sr_disp_mod_pending_admin_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_titan } add = var:sr_mq_admin_titan }
+	if = { limit = { has_global_variable = sr_site_ship_admin_titan } add = global_var:sr_site_ship_admin_titan }
+}
 sr_disp_site_staffing_titan = {
 	value = sr_site_staffing_titan
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_titan = { value = sr_mod_slots_used_titan }
+sr_disp_site_slots_titan = { value = sr_site_slots_titan }
+sr_disp_mod_past_titan = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_titan > sr_site_slots_titan } value = 1 }
+}
+sr_disp_mod_next_cost_titan = { value = sr_mod_next_cost_titan }
+sr_disp_site_ebase_room_titan = { value = sr_site_ebase_room_titan }
 sr_disp_mod_pending_a_enceladus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_enceladus } add = var:sr_mq_a_enceladus }
@@ -2266,11 +3368,69 @@ sr_disp_mod_pending_port_enceladus = {
 	if = { limit = { has_variable = sr_mq_port_enceladus } add = var:sr_mq_port_enceladus }
 	if = { limit = { has_global_variable = sr_site_ship_port_enceladus } add = global_var:sr_site_ship_port_enceladus }
 }
+sr_disp_mod_pending_mine_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_enceladus } add = var:sr_mq_mine_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_enceladus } add = global_var:sr_site_ship_mine_enceladus }
+}
+sr_disp_mod_pending_yard_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_enceladus } add = var:sr_mq_yard_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_enceladus } add = global_var:sr_site_ship_yard_enceladus }
+}
+sr_disp_mod_pending_lab_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_enceladus } add = var:sr_mq_lab_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_enceladus } add = global_var:sr_site_ship_lab_enceladus }
+}
+sr_disp_mod_pending_culture_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_enceladus } add = var:sr_mq_culture_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_enceladus } add = global_var:sr_site_ship_culture_enceladus }
+}
+sr_disp_mod_pending_resort_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_enceladus } add = var:sr_mq_resort_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_enceladus } add = global_var:sr_site_ship_resort_enceladus }
+}
+sr_disp_mod_pending_black_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_enceladus } add = var:sr_mq_black_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_black_enceladus } add = global_var:sr_site_ship_black_enceladus }
+}
+sr_disp_mod_pending_train_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_enceladus } add = var:sr_mq_train_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_train_enceladus } add = global_var:sr_site_ship_train_enceladus }
+}
+sr_disp_mod_pending_bunker_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_enceladus } add = var:sr_mq_bunker_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_enceladus } add = global_var:sr_site_ship_bunker_enceladus }
+}
+sr_disp_mod_pending_foundry_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_enceladus } add = var:sr_mq_foundry_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_enceladus } add = global_var:sr_site_ship_foundry_enceladus }
+}
+sr_disp_mod_pending_admin_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_enceladus } add = var:sr_mq_admin_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_enceladus } add = global_var:sr_site_ship_admin_enceladus }
+}
 sr_disp_site_staffing_enceladus = {
 	value = sr_site_staffing_enceladus
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_enceladus = { value = sr_mod_slots_used_enceladus }
+sr_disp_site_slots_enceladus = { value = sr_site_slots_enceladus }
+sr_disp_mod_past_enceladus = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_enceladus > sr_site_slots_enceladus } value = 1 }
+}
+sr_disp_mod_next_cost_enceladus = { value = sr_mod_next_cost_enceladus }
+sr_disp_site_ebase_room_enceladus = { value = sr_site_ebase_room_enceladus }
 sr_disp_mod_pending_a_rhea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_rhea } add = var:sr_mq_a_rhea }
@@ -2296,11 +3456,69 @@ sr_disp_mod_pending_port_rhea = {
 	if = { limit = { has_variable = sr_mq_port_rhea } add = var:sr_mq_port_rhea }
 	if = { limit = { has_global_variable = sr_site_ship_port_rhea } add = global_var:sr_site_ship_port_rhea }
 }
+sr_disp_mod_pending_mine_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_rhea } add = var:sr_mq_mine_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_mine_rhea } add = global_var:sr_site_ship_mine_rhea }
+}
+sr_disp_mod_pending_yard_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_rhea } add = var:sr_mq_yard_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_yard_rhea } add = global_var:sr_site_ship_yard_rhea }
+}
+sr_disp_mod_pending_lab_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_rhea } add = var:sr_mq_lab_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_lab_rhea } add = global_var:sr_site_ship_lab_rhea }
+}
+sr_disp_mod_pending_culture_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_rhea } add = var:sr_mq_culture_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_culture_rhea } add = global_var:sr_site_ship_culture_rhea }
+}
+sr_disp_mod_pending_resort_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_rhea } add = var:sr_mq_resort_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_resort_rhea } add = global_var:sr_site_ship_resort_rhea }
+}
+sr_disp_mod_pending_black_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_rhea } add = var:sr_mq_black_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_black_rhea } add = global_var:sr_site_ship_black_rhea }
+}
+sr_disp_mod_pending_train_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_rhea } add = var:sr_mq_train_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_train_rhea } add = global_var:sr_site_ship_train_rhea }
+}
+sr_disp_mod_pending_bunker_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_rhea } add = var:sr_mq_bunker_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_rhea } add = global_var:sr_site_ship_bunker_rhea }
+}
+sr_disp_mod_pending_foundry_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_rhea } add = var:sr_mq_foundry_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_rhea } add = global_var:sr_site_ship_foundry_rhea }
+}
+sr_disp_mod_pending_admin_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_rhea } add = var:sr_mq_admin_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_admin_rhea } add = global_var:sr_site_ship_admin_rhea }
+}
 sr_disp_site_staffing_rhea = {
 	value = sr_site_staffing_rhea
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_rhea = { value = sr_mod_slots_used_rhea }
+sr_disp_site_slots_rhea = { value = sr_site_slots_rhea }
+sr_disp_mod_past_rhea = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_rhea > sr_site_slots_rhea } value = 1 }
+}
+sr_disp_mod_next_cost_rhea = { value = sr_mod_next_cost_rhea }
+sr_disp_site_ebase_room_rhea = { value = sr_site_ebase_room_rhea }
 sr_disp_mod_pending_a_mimas = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_mimas } add = var:sr_mq_a_mimas }
@@ -2326,11 +3544,69 @@ sr_disp_mod_pending_port_mimas = {
 	if = { limit = { has_variable = sr_mq_port_mimas } add = var:sr_mq_port_mimas }
 	if = { limit = { has_global_variable = sr_site_ship_port_mimas } add = global_var:sr_site_ship_port_mimas }
 }
+sr_disp_mod_pending_mine_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_mimas } add = var:sr_mq_mine_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_mine_mimas } add = global_var:sr_site_ship_mine_mimas }
+}
+sr_disp_mod_pending_yard_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_mimas } add = var:sr_mq_yard_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_yard_mimas } add = global_var:sr_site_ship_yard_mimas }
+}
+sr_disp_mod_pending_lab_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_mimas } add = var:sr_mq_lab_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_lab_mimas } add = global_var:sr_site_ship_lab_mimas }
+}
+sr_disp_mod_pending_culture_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_mimas } add = var:sr_mq_culture_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_culture_mimas } add = global_var:sr_site_ship_culture_mimas }
+}
+sr_disp_mod_pending_resort_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_mimas } add = var:sr_mq_resort_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_resort_mimas } add = global_var:sr_site_ship_resort_mimas }
+}
+sr_disp_mod_pending_black_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_mimas } add = var:sr_mq_black_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_black_mimas } add = global_var:sr_site_ship_black_mimas }
+}
+sr_disp_mod_pending_train_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_mimas } add = var:sr_mq_train_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_train_mimas } add = global_var:sr_site_ship_train_mimas }
+}
+sr_disp_mod_pending_bunker_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_mimas } add = var:sr_mq_bunker_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_mimas } add = global_var:sr_site_ship_bunker_mimas }
+}
+sr_disp_mod_pending_foundry_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_mimas } add = var:sr_mq_foundry_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_mimas } add = global_var:sr_site_ship_foundry_mimas }
+}
+sr_disp_mod_pending_admin_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_mimas } add = var:sr_mq_admin_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_admin_mimas } add = global_var:sr_site_ship_admin_mimas }
+}
 sr_disp_site_staffing_mimas = {
 	value = sr_site_staffing_mimas
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_mimas = { value = sr_mod_slots_used_mimas }
+sr_disp_site_slots_mimas = { value = sr_site_slots_mimas }
+sr_disp_mod_past_mimas = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_mimas > sr_site_slots_mimas } value = 1 }
+}
+sr_disp_mod_next_cost_mimas = { value = sr_mod_next_cost_mimas }
+sr_disp_site_ebase_room_mimas = { value = sr_site_ebase_room_mimas }
 sr_disp_mod_pending_a_iapetus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_iapetus } add = var:sr_mq_a_iapetus }
@@ -2356,11 +3632,69 @@ sr_disp_mod_pending_port_iapetus = {
 	if = { limit = { has_variable = sr_mq_port_iapetus } add = var:sr_mq_port_iapetus }
 	if = { limit = { has_global_variable = sr_site_ship_port_iapetus } add = global_var:sr_site_ship_port_iapetus }
 }
+sr_disp_mod_pending_mine_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_iapetus } add = var:sr_mq_mine_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_iapetus } add = global_var:sr_site_ship_mine_iapetus }
+}
+sr_disp_mod_pending_yard_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_iapetus } add = var:sr_mq_yard_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_iapetus } add = global_var:sr_site_ship_yard_iapetus }
+}
+sr_disp_mod_pending_lab_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_iapetus } add = var:sr_mq_lab_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_iapetus } add = global_var:sr_site_ship_lab_iapetus }
+}
+sr_disp_mod_pending_culture_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_iapetus } add = var:sr_mq_culture_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_iapetus } add = global_var:sr_site_ship_culture_iapetus }
+}
+sr_disp_mod_pending_resort_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_iapetus } add = var:sr_mq_resort_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_iapetus } add = global_var:sr_site_ship_resort_iapetus }
+}
+sr_disp_mod_pending_black_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_iapetus } add = var:sr_mq_black_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_black_iapetus } add = global_var:sr_site_ship_black_iapetus }
+}
+sr_disp_mod_pending_train_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_iapetus } add = var:sr_mq_train_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_train_iapetus } add = global_var:sr_site_ship_train_iapetus }
+}
+sr_disp_mod_pending_bunker_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_iapetus } add = var:sr_mq_bunker_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_iapetus } add = global_var:sr_site_ship_bunker_iapetus }
+}
+sr_disp_mod_pending_foundry_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_iapetus } add = var:sr_mq_foundry_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_iapetus } add = global_var:sr_site_ship_foundry_iapetus }
+}
+sr_disp_mod_pending_admin_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_iapetus } add = var:sr_mq_admin_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_iapetus } add = global_var:sr_site_ship_admin_iapetus }
+}
 sr_disp_site_staffing_iapetus = {
 	value = sr_site_staffing_iapetus
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_iapetus = { value = sr_mod_slots_used_iapetus }
+sr_disp_site_slots_iapetus = { value = sr_site_slots_iapetus }
+sr_disp_mod_past_iapetus = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_iapetus > sr_site_slots_iapetus } value = 1 }
+}
+sr_disp_mod_next_cost_iapetus = { value = sr_mod_next_cost_iapetus }
+sr_disp_site_ebase_room_iapetus = { value = sr_site_ebase_room_iapetus }
 sr_disp_mod_pending_a_titania = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_titania } add = var:sr_mq_a_titania }
@@ -2386,11 +3720,69 @@ sr_disp_mod_pending_port_titania = {
 	if = { limit = { has_variable = sr_mq_port_titania } add = var:sr_mq_port_titania }
 	if = { limit = { has_global_variable = sr_site_ship_port_titania } add = global_var:sr_site_ship_port_titania }
 }
+sr_disp_mod_pending_mine_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_titania } add = var:sr_mq_mine_titania }
+	if = { limit = { has_global_variable = sr_site_ship_mine_titania } add = global_var:sr_site_ship_mine_titania }
+}
+sr_disp_mod_pending_yard_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_titania } add = var:sr_mq_yard_titania }
+	if = { limit = { has_global_variable = sr_site_ship_yard_titania } add = global_var:sr_site_ship_yard_titania }
+}
+sr_disp_mod_pending_lab_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_titania } add = var:sr_mq_lab_titania }
+	if = { limit = { has_global_variable = sr_site_ship_lab_titania } add = global_var:sr_site_ship_lab_titania }
+}
+sr_disp_mod_pending_culture_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_titania } add = var:sr_mq_culture_titania }
+	if = { limit = { has_global_variable = sr_site_ship_culture_titania } add = global_var:sr_site_ship_culture_titania }
+}
+sr_disp_mod_pending_resort_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_titania } add = var:sr_mq_resort_titania }
+	if = { limit = { has_global_variable = sr_site_ship_resort_titania } add = global_var:sr_site_ship_resort_titania }
+}
+sr_disp_mod_pending_black_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_titania } add = var:sr_mq_black_titania }
+	if = { limit = { has_global_variable = sr_site_ship_black_titania } add = global_var:sr_site_ship_black_titania }
+}
+sr_disp_mod_pending_train_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_titania } add = var:sr_mq_train_titania }
+	if = { limit = { has_global_variable = sr_site_ship_train_titania } add = global_var:sr_site_ship_train_titania }
+}
+sr_disp_mod_pending_bunker_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_titania } add = var:sr_mq_bunker_titania }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_titania } add = global_var:sr_site_ship_bunker_titania }
+}
+sr_disp_mod_pending_foundry_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_titania } add = var:sr_mq_foundry_titania }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_titania } add = global_var:sr_site_ship_foundry_titania }
+}
+sr_disp_mod_pending_admin_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_titania } add = var:sr_mq_admin_titania }
+	if = { limit = { has_global_variable = sr_site_ship_admin_titania } add = global_var:sr_site_ship_admin_titania }
+}
 sr_disp_site_staffing_titania = {
 	value = sr_site_staffing_titania
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_titania = { value = sr_mod_slots_used_titania }
+sr_disp_site_slots_titania = { value = sr_site_slots_titania }
+sr_disp_mod_past_titania = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_titania > sr_site_slots_titania } value = 1 }
+}
+sr_disp_mod_next_cost_titania = { value = sr_mod_next_cost_titania }
+sr_disp_site_ebase_room_titania = { value = sr_site_ebase_room_titania }
 sr_disp_mod_pending_a_oberon = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_oberon } add = var:sr_mq_a_oberon }
@@ -2416,11 +3808,69 @@ sr_disp_mod_pending_port_oberon = {
 	if = { limit = { has_variable = sr_mq_port_oberon } add = var:sr_mq_port_oberon }
 	if = { limit = { has_global_variable = sr_site_ship_port_oberon } add = global_var:sr_site_ship_port_oberon }
 }
+sr_disp_mod_pending_mine_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_oberon } add = var:sr_mq_mine_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_mine_oberon } add = global_var:sr_site_ship_mine_oberon }
+}
+sr_disp_mod_pending_yard_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_oberon } add = var:sr_mq_yard_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_yard_oberon } add = global_var:sr_site_ship_yard_oberon }
+}
+sr_disp_mod_pending_lab_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_oberon } add = var:sr_mq_lab_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_lab_oberon } add = global_var:sr_site_ship_lab_oberon }
+}
+sr_disp_mod_pending_culture_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_oberon } add = var:sr_mq_culture_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_culture_oberon } add = global_var:sr_site_ship_culture_oberon }
+}
+sr_disp_mod_pending_resort_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_oberon } add = var:sr_mq_resort_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_resort_oberon } add = global_var:sr_site_ship_resort_oberon }
+}
+sr_disp_mod_pending_black_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_oberon } add = var:sr_mq_black_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_black_oberon } add = global_var:sr_site_ship_black_oberon }
+}
+sr_disp_mod_pending_train_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_oberon } add = var:sr_mq_train_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_train_oberon } add = global_var:sr_site_ship_train_oberon }
+}
+sr_disp_mod_pending_bunker_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_oberon } add = var:sr_mq_bunker_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_oberon } add = global_var:sr_site_ship_bunker_oberon }
+}
+sr_disp_mod_pending_foundry_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_oberon } add = var:sr_mq_foundry_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_oberon } add = global_var:sr_site_ship_foundry_oberon }
+}
+sr_disp_mod_pending_admin_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_oberon } add = var:sr_mq_admin_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_admin_oberon } add = global_var:sr_site_ship_admin_oberon }
+}
 sr_disp_site_staffing_oberon = {
 	value = sr_site_staffing_oberon
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_oberon = { value = sr_mod_slots_used_oberon }
+sr_disp_site_slots_oberon = { value = sr_site_slots_oberon }
+sr_disp_mod_past_oberon = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_oberon > sr_site_slots_oberon } value = 1 }
+}
+sr_disp_mod_next_cost_oberon = { value = sr_mod_next_cost_oberon }
+sr_disp_site_ebase_room_oberon = { value = sr_site_ebase_room_oberon }
 sr_disp_mod_pending_a_miranda = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_miranda } add = var:sr_mq_a_miranda }
@@ -2446,11 +3896,69 @@ sr_disp_mod_pending_port_miranda = {
 	if = { limit = { has_variable = sr_mq_port_miranda } add = var:sr_mq_port_miranda }
 	if = { limit = { has_global_variable = sr_site_ship_port_miranda } add = global_var:sr_site_ship_port_miranda }
 }
+sr_disp_mod_pending_mine_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_miranda } add = var:sr_mq_mine_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_mine_miranda } add = global_var:sr_site_ship_mine_miranda }
+}
+sr_disp_mod_pending_yard_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_miranda } add = var:sr_mq_yard_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_yard_miranda } add = global_var:sr_site_ship_yard_miranda }
+}
+sr_disp_mod_pending_lab_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_miranda } add = var:sr_mq_lab_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_lab_miranda } add = global_var:sr_site_ship_lab_miranda }
+}
+sr_disp_mod_pending_culture_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_miranda } add = var:sr_mq_culture_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_culture_miranda } add = global_var:sr_site_ship_culture_miranda }
+}
+sr_disp_mod_pending_resort_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_miranda } add = var:sr_mq_resort_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_resort_miranda } add = global_var:sr_site_ship_resort_miranda }
+}
+sr_disp_mod_pending_black_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_miranda } add = var:sr_mq_black_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_black_miranda } add = global_var:sr_site_ship_black_miranda }
+}
+sr_disp_mod_pending_train_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_miranda } add = var:sr_mq_train_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_train_miranda } add = global_var:sr_site_ship_train_miranda }
+}
+sr_disp_mod_pending_bunker_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_miranda } add = var:sr_mq_bunker_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_miranda } add = global_var:sr_site_ship_bunker_miranda }
+}
+sr_disp_mod_pending_foundry_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_miranda } add = var:sr_mq_foundry_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_miranda } add = global_var:sr_site_ship_foundry_miranda }
+}
+sr_disp_mod_pending_admin_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_miranda } add = var:sr_mq_admin_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_admin_miranda } add = global_var:sr_site_ship_admin_miranda }
+}
 sr_disp_site_staffing_miranda = {
 	value = sr_site_staffing_miranda
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_miranda = { value = sr_mod_slots_used_miranda }
+sr_disp_site_slots_miranda = { value = sr_site_slots_miranda }
+sr_disp_mod_past_miranda = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_miranda > sr_site_slots_miranda } value = 1 }
+}
+sr_disp_mod_next_cost_miranda = { value = sr_mod_next_cost_miranda }
+sr_disp_site_ebase_room_miranda = { value = sr_site_ebase_room_miranda }
 sr_disp_mod_pending_a_ariel = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_ariel } add = var:sr_mq_a_ariel }
@@ -2476,11 +3984,69 @@ sr_disp_mod_pending_port_ariel = {
 	if = { limit = { has_variable = sr_mq_port_ariel } add = var:sr_mq_port_ariel }
 	if = { limit = { has_global_variable = sr_site_ship_port_ariel } add = global_var:sr_site_ship_port_ariel }
 }
+sr_disp_mod_pending_mine_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_ariel } add = var:sr_mq_mine_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_mine_ariel } add = global_var:sr_site_ship_mine_ariel }
+}
+sr_disp_mod_pending_yard_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_ariel } add = var:sr_mq_yard_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_yard_ariel } add = global_var:sr_site_ship_yard_ariel }
+}
+sr_disp_mod_pending_lab_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_ariel } add = var:sr_mq_lab_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_lab_ariel } add = global_var:sr_site_ship_lab_ariel }
+}
+sr_disp_mod_pending_culture_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_ariel } add = var:sr_mq_culture_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_culture_ariel } add = global_var:sr_site_ship_culture_ariel }
+}
+sr_disp_mod_pending_resort_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_ariel } add = var:sr_mq_resort_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_resort_ariel } add = global_var:sr_site_ship_resort_ariel }
+}
+sr_disp_mod_pending_black_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_ariel } add = var:sr_mq_black_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_black_ariel } add = global_var:sr_site_ship_black_ariel }
+}
+sr_disp_mod_pending_train_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_ariel } add = var:sr_mq_train_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_train_ariel } add = global_var:sr_site_ship_train_ariel }
+}
+sr_disp_mod_pending_bunker_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_ariel } add = var:sr_mq_bunker_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_ariel } add = global_var:sr_site_ship_bunker_ariel }
+}
+sr_disp_mod_pending_foundry_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_ariel } add = var:sr_mq_foundry_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_ariel } add = global_var:sr_site_ship_foundry_ariel }
+}
+sr_disp_mod_pending_admin_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_ariel } add = var:sr_mq_admin_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_admin_ariel } add = global_var:sr_site_ship_admin_ariel }
+}
 sr_disp_site_staffing_ariel = {
 	value = sr_site_staffing_ariel
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_ariel = { value = sr_mod_slots_used_ariel }
+sr_disp_site_slots_ariel = { value = sr_site_slots_ariel }
+sr_disp_mod_past_ariel = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_ariel > sr_site_slots_ariel } value = 1 }
+}
+sr_disp_mod_next_cost_ariel = { value = sr_mod_next_cost_ariel }
+sr_disp_site_ebase_room_ariel = { value = sr_site_ebase_room_ariel }
 sr_disp_mod_pending_a_triton = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_triton } add = var:sr_mq_a_triton }
@@ -2506,11 +4072,69 @@ sr_disp_mod_pending_port_triton = {
 	if = { limit = { has_variable = sr_mq_port_triton } add = var:sr_mq_port_triton }
 	if = { limit = { has_global_variable = sr_site_ship_port_triton } add = global_var:sr_site_ship_port_triton }
 }
+sr_disp_mod_pending_mine_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_triton } add = var:sr_mq_mine_triton }
+	if = { limit = { has_global_variable = sr_site_ship_mine_triton } add = global_var:sr_site_ship_mine_triton }
+}
+sr_disp_mod_pending_yard_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_triton } add = var:sr_mq_yard_triton }
+	if = { limit = { has_global_variable = sr_site_ship_yard_triton } add = global_var:sr_site_ship_yard_triton }
+}
+sr_disp_mod_pending_lab_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_triton } add = var:sr_mq_lab_triton }
+	if = { limit = { has_global_variable = sr_site_ship_lab_triton } add = global_var:sr_site_ship_lab_triton }
+}
+sr_disp_mod_pending_culture_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_triton } add = var:sr_mq_culture_triton }
+	if = { limit = { has_global_variable = sr_site_ship_culture_triton } add = global_var:sr_site_ship_culture_triton }
+}
+sr_disp_mod_pending_resort_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_triton } add = var:sr_mq_resort_triton }
+	if = { limit = { has_global_variable = sr_site_ship_resort_triton } add = global_var:sr_site_ship_resort_triton }
+}
+sr_disp_mod_pending_black_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_triton } add = var:sr_mq_black_triton }
+	if = { limit = { has_global_variable = sr_site_ship_black_triton } add = global_var:sr_site_ship_black_triton }
+}
+sr_disp_mod_pending_train_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_triton } add = var:sr_mq_train_triton }
+	if = { limit = { has_global_variable = sr_site_ship_train_triton } add = global_var:sr_site_ship_train_triton }
+}
+sr_disp_mod_pending_bunker_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_triton } add = var:sr_mq_bunker_triton }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_triton } add = global_var:sr_site_ship_bunker_triton }
+}
+sr_disp_mod_pending_foundry_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_triton } add = var:sr_mq_foundry_triton }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_triton } add = global_var:sr_site_ship_foundry_triton }
+}
+sr_disp_mod_pending_admin_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_triton } add = var:sr_mq_admin_triton }
+	if = { limit = { has_global_variable = sr_site_ship_admin_triton } add = global_var:sr_site_ship_admin_triton }
+}
 sr_disp_site_staffing_triton = {
 	value = sr_site_staffing_triton
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_triton = { value = sr_mod_slots_used_triton }
+sr_disp_site_slots_triton = { value = sr_site_slots_triton }
+sr_disp_mod_past_triton = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_triton > sr_site_slots_triton } value = 1 }
+}
+sr_disp_mod_next_cost_triton = { value = sr_mod_next_cost_triton }
+sr_disp_site_ebase_room_triton = { value = sr_site_ebase_room_triton }
 sr_disp_mod_pending_a_proteus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_proteus } add = var:sr_mq_a_proteus }
@@ -2536,11 +4160,69 @@ sr_disp_mod_pending_port_proteus = {
 	if = { limit = { has_variable = sr_mq_port_proteus } add = var:sr_mq_port_proteus }
 	if = { limit = { has_global_variable = sr_site_ship_port_proteus } add = global_var:sr_site_ship_port_proteus }
 }
+sr_disp_mod_pending_mine_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_proteus } add = var:sr_mq_mine_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_proteus } add = global_var:sr_site_ship_mine_proteus }
+}
+sr_disp_mod_pending_yard_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_proteus } add = var:sr_mq_yard_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_proteus } add = global_var:sr_site_ship_yard_proteus }
+}
+sr_disp_mod_pending_lab_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_proteus } add = var:sr_mq_lab_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_proteus } add = global_var:sr_site_ship_lab_proteus }
+}
+sr_disp_mod_pending_culture_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_proteus } add = var:sr_mq_culture_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_proteus } add = global_var:sr_site_ship_culture_proteus }
+}
+sr_disp_mod_pending_resort_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_proteus } add = var:sr_mq_resort_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_proteus } add = global_var:sr_site_ship_resort_proteus }
+}
+sr_disp_mod_pending_black_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_proteus } add = var:sr_mq_black_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_black_proteus } add = global_var:sr_site_ship_black_proteus }
+}
+sr_disp_mod_pending_train_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_proteus } add = var:sr_mq_train_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_train_proteus } add = global_var:sr_site_ship_train_proteus }
+}
+sr_disp_mod_pending_bunker_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_proteus } add = var:sr_mq_bunker_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_proteus } add = global_var:sr_site_ship_bunker_proteus }
+}
+sr_disp_mod_pending_foundry_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_proteus } add = var:sr_mq_foundry_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_proteus } add = global_var:sr_site_ship_foundry_proteus }
+}
+sr_disp_mod_pending_admin_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_proteus } add = var:sr_mq_admin_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_proteus } add = global_var:sr_site_ship_admin_proteus }
+}
 sr_disp_site_staffing_proteus = {
 	value = sr_site_staffing_proteus
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_proteus = { value = sr_mod_slots_used_proteus }
+sr_disp_site_slots_proteus = { value = sr_site_slots_proteus }
+sr_disp_mod_past_proteus = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_proteus > sr_site_slots_proteus } value = 1 }
+}
+sr_disp_mod_next_cost_proteus = { value = sr_mod_next_cost_proteus }
+sr_disp_site_ebase_room_proteus = { value = sr_site_ebase_room_proteus }
 sr_disp_mod_pending_a_pluto = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_pluto } add = var:sr_mq_a_pluto }
@@ -2566,11 +4248,69 @@ sr_disp_mod_pending_port_pluto = {
 	if = { limit = { has_variable = sr_mq_port_pluto } add = var:sr_mq_port_pluto }
 	if = { limit = { has_global_variable = sr_site_ship_port_pluto } add = global_var:sr_site_ship_port_pluto }
 }
+sr_disp_mod_pending_mine_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_pluto } add = var:sr_mq_mine_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_mine_pluto } add = global_var:sr_site_ship_mine_pluto }
+}
+sr_disp_mod_pending_yard_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_pluto } add = var:sr_mq_yard_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_yard_pluto } add = global_var:sr_site_ship_yard_pluto }
+}
+sr_disp_mod_pending_lab_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_pluto } add = var:sr_mq_lab_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_lab_pluto } add = global_var:sr_site_ship_lab_pluto }
+}
+sr_disp_mod_pending_culture_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_pluto } add = var:sr_mq_culture_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_culture_pluto } add = global_var:sr_site_ship_culture_pluto }
+}
+sr_disp_mod_pending_resort_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_pluto } add = var:sr_mq_resort_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_resort_pluto } add = global_var:sr_site_ship_resort_pluto }
+}
+sr_disp_mod_pending_black_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_pluto } add = var:sr_mq_black_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_black_pluto } add = global_var:sr_site_ship_black_pluto }
+}
+sr_disp_mod_pending_train_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_pluto } add = var:sr_mq_train_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_train_pluto } add = global_var:sr_site_ship_train_pluto }
+}
+sr_disp_mod_pending_bunker_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_pluto } add = var:sr_mq_bunker_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_pluto } add = global_var:sr_site_ship_bunker_pluto }
+}
+sr_disp_mod_pending_foundry_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_pluto } add = var:sr_mq_foundry_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_pluto } add = global_var:sr_site_ship_foundry_pluto }
+}
+sr_disp_mod_pending_admin_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_pluto } add = var:sr_mq_admin_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_admin_pluto } add = global_var:sr_site_ship_admin_pluto }
+}
 sr_disp_site_staffing_pluto = {
 	value = sr_site_staffing_pluto
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_pluto = { value = sr_mod_slots_used_pluto }
+sr_disp_site_slots_pluto = { value = sr_site_slots_pluto }
+sr_disp_mod_past_pluto = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_pluto > sr_site_slots_pluto } value = 1 }
+}
+sr_disp_mod_next_cost_pluto = { value = sr_mod_next_cost_pluto }
+sr_disp_site_ebase_room_pluto = { value = sr_site_ebase_room_pluto }
 sr_disp_mod_pending_a_eris = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_eris } add = var:sr_mq_a_eris }
@@ -2596,11 +4336,69 @@ sr_disp_mod_pending_port_eris = {
 	if = { limit = { has_variable = sr_mq_port_eris } add = var:sr_mq_port_eris }
 	if = { limit = { has_global_variable = sr_site_ship_port_eris } add = global_var:sr_site_ship_port_eris }
 }
+sr_disp_mod_pending_mine_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_eris } add = var:sr_mq_mine_eris }
+	if = { limit = { has_global_variable = sr_site_ship_mine_eris } add = global_var:sr_site_ship_mine_eris }
+}
+sr_disp_mod_pending_yard_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_eris } add = var:sr_mq_yard_eris }
+	if = { limit = { has_global_variable = sr_site_ship_yard_eris } add = global_var:sr_site_ship_yard_eris }
+}
+sr_disp_mod_pending_lab_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_eris } add = var:sr_mq_lab_eris }
+	if = { limit = { has_global_variable = sr_site_ship_lab_eris } add = global_var:sr_site_ship_lab_eris }
+}
+sr_disp_mod_pending_culture_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_eris } add = var:sr_mq_culture_eris }
+	if = { limit = { has_global_variable = sr_site_ship_culture_eris } add = global_var:sr_site_ship_culture_eris }
+}
+sr_disp_mod_pending_resort_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_eris } add = var:sr_mq_resort_eris }
+	if = { limit = { has_global_variable = sr_site_ship_resort_eris } add = global_var:sr_site_ship_resort_eris }
+}
+sr_disp_mod_pending_black_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_eris } add = var:sr_mq_black_eris }
+	if = { limit = { has_global_variable = sr_site_ship_black_eris } add = global_var:sr_site_ship_black_eris }
+}
+sr_disp_mod_pending_train_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_eris } add = var:sr_mq_train_eris }
+	if = { limit = { has_global_variable = sr_site_ship_train_eris } add = global_var:sr_site_ship_train_eris }
+}
+sr_disp_mod_pending_bunker_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_eris } add = var:sr_mq_bunker_eris }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_eris } add = global_var:sr_site_ship_bunker_eris }
+}
+sr_disp_mod_pending_foundry_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_eris } add = var:sr_mq_foundry_eris }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_eris } add = global_var:sr_site_ship_foundry_eris }
+}
+sr_disp_mod_pending_admin_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_eris } add = var:sr_mq_admin_eris }
+	if = { limit = { has_global_variable = sr_site_ship_admin_eris } add = global_var:sr_site_ship_admin_eris }
+}
 sr_disp_site_staffing_eris = {
 	value = sr_site_staffing_eris
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_eris = { value = sr_mod_slots_used_eris }
+sr_disp_site_slots_eris = { value = sr_site_slots_eris }
+sr_disp_mod_past_eris = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_eris > sr_site_slots_eris } value = 1 }
+}
+sr_disp_mod_next_cost_eris = { value = sr_mod_next_cost_eris }
+sr_disp_site_ebase_room_eris = { value = sr_site_ebase_room_eris }
 sr_disp_mod_pending_a_makemake = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_makemake } add = var:sr_mq_a_makemake }
@@ -2626,11 +4424,69 @@ sr_disp_mod_pending_port_makemake = {
 	if = { limit = { has_variable = sr_mq_port_makemake } add = var:sr_mq_port_makemake }
 	if = { limit = { has_global_variable = sr_site_ship_port_makemake } add = global_var:sr_site_ship_port_makemake }
 }
+sr_disp_mod_pending_mine_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_makemake } add = var:sr_mq_mine_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_mine_makemake } add = global_var:sr_site_ship_mine_makemake }
+}
+sr_disp_mod_pending_yard_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_makemake } add = var:sr_mq_yard_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_yard_makemake } add = global_var:sr_site_ship_yard_makemake }
+}
+sr_disp_mod_pending_lab_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_makemake } add = var:sr_mq_lab_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_lab_makemake } add = global_var:sr_site_ship_lab_makemake }
+}
+sr_disp_mod_pending_culture_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_makemake } add = var:sr_mq_culture_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_culture_makemake } add = global_var:sr_site_ship_culture_makemake }
+}
+sr_disp_mod_pending_resort_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_makemake } add = var:sr_mq_resort_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_resort_makemake } add = global_var:sr_site_ship_resort_makemake }
+}
+sr_disp_mod_pending_black_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_makemake } add = var:sr_mq_black_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_black_makemake } add = global_var:sr_site_ship_black_makemake }
+}
+sr_disp_mod_pending_train_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_makemake } add = var:sr_mq_train_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_train_makemake } add = global_var:sr_site_ship_train_makemake }
+}
+sr_disp_mod_pending_bunker_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_makemake } add = var:sr_mq_bunker_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_makemake } add = global_var:sr_site_ship_bunker_makemake }
+}
+sr_disp_mod_pending_foundry_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_makemake } add = var:sr_mq_foundry_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_makemake } add = global_var:sr_site_ship_foundry_makemake }
+}
+sr_disp_mod_pending_admin_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_makemake } add = var:sr_mq_admin_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_admin_makemake } add = global_var:sr_site_ship_admin_makemake }
+}
 sr_disp_site_staffing_makemake = {
 	value = sr_site_staffing_makemake
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_makemake = { value = sr_mod_slots_used_makemake }
+sr_disp_site_slots_makemake = { value = sr_site_slots_makemake }
+sr_disp_mod_past_makemake = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_makemake > sr_site_slots_makemake } value = 1 }
+}
+sr_disp_mod_next_cost_makemake = { value = sr_mod_next_cost_makemake }
+sr_disp_site_ebase_room_makemake = { value = sr_site_ebase_room_makemake }
 sr_disp_mod_pending_a_haumea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_haumea } add = var:sr_mq_a_haumea }
@@ -2656,11 +4512,69 @@ sr_disp_mod_pending_port_haumea = {
 	if = { limit = { has_variable = sr_mq_port_haumea } add = var:sr_mq_port_haumea }
 	if = { limit = { has_global_variable = sr_site_ship_port_haumea } add = global_var:sr_site_ship_port_haumea }
 }
+sr_disp_mod_pending_mine_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_haumea } add = var:sr_mq_mine_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_mine_haumea } add = global_var:sr_site_ship_mine_haumea }
+}
+sr_disp_mod_pending_yard_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_haumea } add = var:sr_mq_yard_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_yard_haumea } add = global_var:sr_site_ship_yard_haumea }
+}
+sr_disp_mod_pending_lab_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_haumea } add = var:sr_mq_lab_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_lab_haumea } add = global_var:sr_site_ship_lab_haumea }
+}
+sr_disp_mod_pending_culture_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_haumea } add = var:sr_mq_culture_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_culture_haumea } add = global_var:sr_site_ship_culture_haumea }
+}
+sr_disp_mod_pending_resort_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_haumea } add = var:sr_mq_resort_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_resort_haumea } add = global_var:sr_site_ship_resort_haumea }
+}
+sr_disp_mod_pending_black_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_haumea } add = var:sr_mq_black_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_black_haumea } add = global_var:sr_site_ship_black_haumea }
+}
+sr_disp_mod_pending_train_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_haumea } add = var:sr_mq_train_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_train_haumea } add = global_var:sr_site_ship_train_haumea }
+}
+sr_disp_mod_pending_bunker_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_haumea } add = var:sr_mq_bunker_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_haumea } add = global_var:sr_site_ship_bunker_haumea }
+}
+sr_disp_mod_pending_foundry_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_haumea } add = var:sr_mq_foundry_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_haumea } add = global_var:sr_site_ship_foundry_haumea }
+}
+sr_disp_mod_pending_admin_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_haumea } add = var:sr_mq_admin_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_admin_haumea } add = global_var:sr_site_ship_admin_haumea }
+}
 sr_disp_site_staffing_haumea = {
 	value = sr_site_staffing_haumea
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_haumea = { value = sr_mod_slots_used_haumea }
+sr_disp_site_slots_haumea = { value = sr_site_slots_haumea }
+sr_disp_mod_past_haumea = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_haumea > sr_site_slots_haumea } value = 1 }
+}
+sr_disp_mod_next_cost_haumea = { value = sr_mod_next_cost_haumea }
+sr_disp_site_ebase_room_haumea = { value = sr_site_ebase_room_haumea }
 sr_disp_mod_pending_a_sedna = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_sedna } add = var:sr_mq_a_sedna }
@@ -2686,11 +4600,69 @@ sr_disp_mod_pending_port_sedna = {
 	if = { limit = { has_variable = sr_mq_port_sedna } add = var:sr_mq_port_sedna }
 	if = { limit = { has_global_variable = sr_site_ship_port_sedna } add = global_var:sr_site_ship_port_sedna }
 }
+sr_disp_mod_pending_mine_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_sedna } add = var:sr_mq_mine_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_mine_sedna } add = global_var:sr_site_ship_mine_sedna }
+}
+sr_disp_mod_pending_yard_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_sedna } add = var:sr_mq_yard_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_yard_sedna } add = global_var:sr_site_ship_yard_sedna }
+}
+sr_disp_mod_pending_lab_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_sedna } add = var:sr_mq_lab_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_lab_sedna } add = global_var:sr_site_ship_lab_sedna }
+}
+sr_disp_mod_pending_culture_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_sedna } add = var:sr_mq_culture_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_culture_sedna } add = global_var:sr_site_ship_culture_sedna }
+}
+sr_disp_mod_pending_resort_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_sedna } add = var:sr_mq_resort_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_resort_sedna } add = global_var:sr_site_ship_resort_sedna }
+}
+sr_disp_mod_pending_black_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_sedna } add = var:sr_mq_black_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_black_sedna } add = global_var:sr_site_ship_black_sedna }
+}
+sr_disp_mod_pending_train_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_sedna } add = var:sr_mq_train_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_train_sedna } add = global_var:sr_site_ship_train_sedna }
+}
+sr_disp_mod_pending_bunker_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_sedna } add = var:sr_mq_bunker_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_sedna } add = global_var:sr_site_ship_bunker_sedna }
+}
+sr_disp_mod_pending_foundry_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_sedna } add = var:sr_mq_foundry_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_sedna } add = global_var:sr_site_ship_foundry_sedna }
+}
+sr_disp_mod_pending_admin_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_sedna } add = var:sr_mq_admin_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_admin_sedna } add = global_var:sr_site_ship_admin_sedna }
+}
 sr_disp_site_staffing_sedna = {
 	value = sr_site_staffing_sedna
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_sedna = { value = sr_mod_slots_used_sedna }
+sr_disp_site_slots_sedna = { value = sr_site_slots_sedna }
+sr_disp_mod_past_sedna = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_sedna > sr_site_slots_sedna } value = 1 }
+}
+sr_disp_mod_next_cost_sedna = { value = sr_mod_next_cost_sedna }
+sr_disp_site_ebase_room_sedna = { value = sr_site_ebase_room_sedna }
 sr_disp_mod_pending_a_shackleton = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_shackleton } add = var:sr_mq_a_shackleton }
@@ -2711,11 +4683,69 @@ sr_disp_mod_pending_def_shackleton = {
 	if = { limit = { has_variable = sr_mq_def_shackleton } add = var:sr_mq_def_shackleton }
 	if = { limit = { has_global_variable = sr_site_ship_def_shackleton } add = global_var:sr_site_ship_def_shackleton }
 }
+sr_disp_mod_pending_mine_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_shackleton } add = var:sr_mq_mine_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_mine_shackleton } add = global_var:sr_site_ship_mine_shackleton }
+}
+sr_disp_mod_pending_yard_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_shackleton } add = var:sr_mq_yard_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_yard_shackleton } add = global_var:sr_site_ship_yard_shackleton }
+}
+sr_disp_mod_pending_lab_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_shackleton } add = var:sr_mq_lab_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_lab_shackleton } add = global_var:sr_site_ship_lab_shackleton }
+}
+sr_disp_mod_pending_culture_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_shackleton } add = var:sr_mq_culture_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_culture_shackleton } add = global_var:sr_site_ship_culture_shackleton }
+}
+sr_disp_mod_pending_resort_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_shackleton } add = var:sr_mq_resort_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_resort_shackleton } add = global_var:sr_site_ship_resort_shackleton }
+}
+sr_disp_mod_pending_black_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_shackleton } add = var:sr_mq_black_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_black_shackleton } add = global_var:sr_site_ship_black_shackleton }
+}
+sr_disp_mod_pending_train_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_shackleton } add = var:sr_mq_train_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_train_shackleton } add = global_var:sr_site_ship_train_shackleton }
+}
+sr_disp_mod_pending_bunker_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_shackleton } add = var:sr_mq_bunker_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_shackleton } add = global_var:sr_site_ship_bunker_shackleton }
+}
+sr_disp_mod_pending_foundry_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_shackleton } add = var:sr_mq_foundry_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_shackleton } add = global_var:sr_site_ship_foundry_shackleton }
+}
+sr_disp_mod_pending_admin_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_shackleton } add = var:sr_mq_admin_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_admin_shackleton } add = global_var:sr_site_ship_admin_shackleton }
+}
 sr_disp_site_staffing_shackleton = {
 	value = sr_site_staffing_shackleton
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_shackleton = { value = sr_mod_slots_used_shackleton }
+sr_disp_site_slots_shackleton = { value = sr_site_slots_shackleton }
+sr_disp_mod_past_shackleton = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_shackleton > sr_site_slots_shackleton } value = 1 }
+}
+sr_disp_mod_next_cost_shackleton = { value = sr_mod_next_cost_shackleton }
+sr_disp_site_ebase_room_shackleton = { value = sr_site_ebase_room_shackleton }
 sr_disp_mod_pending_a_peary = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_peary } add = var:sr_mq_a_peary }
@@ -2736,11 +4766,69 @@ sr_disp_mod_pending_def_peary = {
 	if = { limit = { has_variable = sr_mq_def_peary } add = var:sr_mq_def_peary }
 	if = { limit = { has_global_variable = sr_site_ship_def_peary } add = global_var:sr_site_ship_def_peary }
 }
+sr_disp_mod_pending_mine_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_peary } add = var:sr_mq_mine_peary }
+	if = { limit = { has_global_variable = sr_site_ship_mine_peary } add = global_var:sr_site_ship_mine_peary }
+}
+sr_disp_mod_pending_yard_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_peary } add = var:sr_mq_yard_peary }
+	if = { limit = { has_global_variable = sr_site_ship_yard_peary } add = global_var:sr_site_ship_yard_peary }
+}
+sr_disp_mod_pending_lab_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_peary } add = var:sr_mq_lab_peary }
+	if = { limit = { has_global_variable = sr_site_ship_lab_peary } add = global_var:sr_site_ship_lab_peary }
+}
+sr_disp_mod_pending_culture_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_peary } add = var:sr_mq_culture_peary }
+	if = { limit = { has_global_variable = sr_site_ship_culture_peary } add = global_var:sr_site_ship_culture_peary }
+}
+sr_disp_mod_pending_resort_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_peary } add = var:sr_mq_resort_peary }
+	if = { limit = { has_global_variable = sr_site_ship_resort_peary } add = global_var:sr_site_ship_resort_peary }
+}
+sr_disp_mod_pending_black_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_peary } add = var:sr_mq_black_peary }
+	if = { limit = { has_global_variable = sr_site_ship_black_peary } add = global_var:sr_site_ship_black_peary }
+}
+sr_disp_mod_pending_train_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_peary } add = var:sr_mq_train_peary }
+	if = { limit = { has_global_variable = sr_site_ship_train_peary } add = global_var:sr_site_ship_train_peary }
+}
+sr_disp_mod_pending_bunker_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_peary } add = var:sr_mq_bunker_peary }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_peary } add = global_var:sr_site_ship_bunker_peary }
+}
+sr_disp_mod_pending_foundry_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_peary } add = var:sr_mq_foundry_peary }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_peary } add = global_var:sr_site_ship_foundry_peary }
+}
+sr_disp_mod_pending_admin_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_peary } add = var:sr_mq_admin_peary }
+	if = { limit = { has_global_variable = sr_site_ship_admin_peary } add = global_var:sr_site_ship_admin_peary }
+}
 sr_disp_site_staffing_peary = {
 	value = sr_site_staffing_peary
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_peary = { value = sr_mod_slots_used_peary }
+sr_disp_site_slots_peary = { value = sr_site_slots_peary }
+sr_disp_mod_past_peary = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_peary > sr_site_slots_peary } value = 1 }
+}
+sr_disp_mod_next_cost_peary = { value = sr_mod_next_cost_peary }
+sr_disp_site_ebase_room_peary = { value = sr_site_ebase_room_peary }
 sr_disp_mod_pending_a_tranquility = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_tranquility } add = var:sr_mq_a_tranquility }
@@ -2761,11 +4849,69 @@ sr_disp_mod_pending_def_tranquility = {
 	if = { limit = { has_variable = sr_mq_def_tranquility } add = var:sr_mq_def_tranquility }
 	if = { limit = { has_global_variable = sr_site_ship_def_tranquility } add = global_var:sr_site_ship_def_tranquility }
 }
+sr_disp_mod_pending_mine_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_tranquility } add = var:sr_mq_mine_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_mine_tranquility } add = global_var:sr_site_ship_mine_tranquility }
+}
+sr_disp_mod_pending_yard_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_tranquility } add = var:sr_mq_yard_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_yard_tranquility } add = global_var:sr_site_ship_yard_tranquility }
+}
+sr_disp_mod_pending_lab_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_tranquility } add = var:sr_mq_lab_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_lab_tranquility } add = global_var:sr_site_ship_lab_tranquility }
+}
+sr_disp_mod_pending_culture_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_tranquility } add = var:sr_mq_culture_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_culture_tranquility } add = global_var:sr_site_ship_culture_tranquility }
+}
+sr_disp_mod_pending_resort_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_tranquility } add = var:sr_mq_resort_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_resort_tranquility } add = global_var:sr_site_ship_resort_tranquility }
+}
+sr_disp_mod_pending_black_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_tranquility } add = var:sr_mq_black_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_black_tranquility } add = global_var:sr_site_ship_black_tranquility }
+}
+sr_disp_mod_pending_train_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_tranquility } add = var:sr_mq_train_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_train_tranquility } add = global_var:sr_site_ship_train_tranquility }
+}
+sr_disp_mod_pending_bunker_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_tranquility } add = var:sr_mq_bunker_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_tranquility } add = global_var:sr_site_ship_bunker_tranquility }
+}
+sr_disp_mod_pending_foundry_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_tranquility } add = var:sr_mq_foundry_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_tranquility } add = global_var:sr_site_ship_foundry_tranquility }
+}
+sr_disp_mod_pending_admin_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_tranquility } add = var:sr_mq_admin_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_admin_tranquility } add = global_var:sr_site_ship_admin_tranquility }
+}
 sr_disp_site_staffing_tranquility = {
 	value = sr_site_staffing_tranquility
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_tranquility = { value = sr_mod_slots_used_tranquility }
+sr_disp_site_slots_tranquility = { value = sr_site_slots_tranquility }
+sr_disp_mod_past_tranquility = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_tranquility > sr_site_slots_tranquility } value = 1 }
+}
+sr_disp_mod_next_cost_tranquility = { value = sr_mod_next_cost_tranquility }
+sr_disp_site_ebase_room_tranquility = { value = sr_site_ebase_room_tranquility }
 sr_disp_mod_pending_a_marius_hills = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_marius_hills } add = var:sr_mq_a_marius_hills }
@@ -2786,11 +4932,69 @@ sr_disp_mod_pending_def_marius_hills = {
 	if = { limit = { has_variable = sr_mq_def_marius_hills } add = var:sr_mq_def_marius_hills }
 	if = { limit = { has_global_variable = sr_site_ship_def_marius_hills } add = global_var:sr_site_ship_def_marius_hills }
 }
+sr_disp_mod_pending_mine_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_marius_hills } add = var:sr_mq_mine_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_mine_marius_hills } add = global_var:sr_site_ship_mine_marius_hills }
+}
+sr_disp_mod_pending_yard_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_marius_hills } add = var:sr_mq_yard_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_yard_marius_hills } add = global_var:sr_site_ship_yard_marius_hills }
+}
+sr_disp_mod_pending_lab_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_marius_hills } add = var:sr_mq_lab_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_lab_marius_hills } add = global_var:sr_site_ship_lab_marius_hills }
+}
+sr_disp_mod_pending_culture_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_marius_hills } add = var:sr_mq_culture_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_culture_marius_hills } add = global_var:sr_site_ship_culture_marius_hills }
+}
+sr_disp_mod_pending_resort_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_marius_hills } add = var:sr_mq_resort_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_resort_marius_hills } add = global_var:sr_site_ship_resort_marius_hills }
+}
+sr_disp_mod_pending_black_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_marius_hills } add = var:sr_mq_black_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_black_marius_hills } add = global_var:sr_site_ship_black_marius_hills }
+}
+sr_disp_mod_pending_train_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_marius_hills } add = var:sr_mq_train_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_train_marius_hills } add = global_var:sr_site_ship_train_marius_hills }
+}
+sr_disp_mod_pending_bunker_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_marius_hills } add = var:sr_mq_bunker_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_marius_hills } add = global_var:sr_site_ship_bunker_marius_hills }
+}
+sr_disp_mod_pending_foundry_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_marius_hills } add = var:sr_mq_foundry_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_marius_hills } add = global_var:sr_site_ship_foundry_marius_hills }
+}
+sr_disp_mod_pending_admin_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_marius_hills } add = var:sr_mq_admin_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_admin_marius_hills } add = global_var:sr_site_ship_admin_marius_hills }
+}
 sr_disp_site_staffing_marius_hills = {
 	value = sr_site_staffing_marius_hills
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_marius_hills = { value = sr_mod_slots_used_marius_hills }
+sr_disp_site_slots_marius_hills = { value = sr_site_slots_marius_hills }
+sr_disp_mod_past_marius_hills = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_marius_hills > sr_site_slots_marius_hills } value = 1 }
+}
+sr_disp_mod_next_cost_marius_hills = { value = sr_mod_next_cost_marius_hills }
+sr_disp_site_ebase_room_marius_hills = { value = sr_site_ebase_room_marius_hills }
 sr_disp_mod_pending_a_daedalus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_daedalus } add = var:sr_mq_a_daedalus }
@@ -2811,11 +5015,69 @@ sr_disp_mod_pending_def_daedalus = {
 	if = { limit = { has_variable = sr_mq_def_daedalus } add = var:sr_mq_def_daedalus }
 	if = { limit = { has_global_variable = sr_site_ship_def_daedalus } add = global_var:sr_site_ship_def_daedalus }
 }
+sr_disp_mod_pending_mine_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_daedalus } add = var:sr_mq_mine_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_daedalus } add = global_var:sr_site_ship_mine_daedalus }
+}
+sr_disp_mod_pending_yard_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_daedalus } add = var:sr_mq_yard_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_daedalus } add = global_var:sr_site_ship_yard_daedalus }
+}
+sr_disp_mod_pending_lab_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_daedalus } add = var:sr_mq_lab_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_daedalus } add = global_var:sr_site_ship_lab_daedalus }
+}
+sr_disp_mod_pending_culture_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_daedalus } add = var:sr_mq_culture_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_daedalus } add = global_var:sr_site_ship_culture_daedalus }
+}
+sr_disp_mod_pending_resort_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_daedalus } add = var:sr_mq_resort_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_daedalus } add = global_var:sr_site_ship_resort_daedalus }
+}
+sr_disp_mod_pending_black_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_daedalus } add = var:sr_mq_black_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_black_daedalus } add = global_var:sr_site_ship_black_daedalus }
+}
+sr_disp_mod_pending_train_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_daedalus } add = var:sr_mq_train_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_train_daedalus } add = global_var:sr_site_ship_train_daedalus }
+}
+sr_disp_mod_pending_bunker_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_daedalus } add = var:sr_mq_bunker_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_daedalus } add = global_var:sr_site_ship_bunker_daedalus }
+}
+sr_disp_mod_pending_foundry_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_daedalus } add = var:sr_mq_foundry_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_daedalus } add = global_var:sr_site_ship_foundry_daedalus }
+}
+sr_disp_mod_pending_admin_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_daedalus } add = var:sr_mq_admin_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_daedalus } add = global_var:sr_site_ship_admin_daedalus }
+}
 sr_disp_site_staffing_daedalus = {
 	value = sr_site_staffing_daedalus
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_daedalus = { value = sr_mod_slots_used_daedalus }
+sr_disp_site_slots_daedalus = { value = sr_site_slots_daedalus }
+sr_disp_mod_past_daedalus = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_daedalus > sr_site_slots_daedalus } value = 1 }
+}
+sr_disp_mod_next_cost_daedalus = { value = sr_mod_next_cost_daedalus }
+sr_disp_site_ebase_room_daedalus = { value = sr_site_ebase_room_daedalus }
 sr_disp_mod_pending_a_imbrium = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_imbrium } add = var:sr_mq_a_imbrium }
@@ -2836,11 +5098,69 @@ sr_disp_mod_pending_def_imbrium = {
 	if = { limit = { has_variable = sr_mq_def_imbrium } add = var:sr_mq_def_imbrium }
 	if = { limit = { has_global_variable = sr_site_ship_def_imbrium } add = global_var:sr_site_ship_def_imbrium }
 }
+sr_disp_mod_pending_mine_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_mine_imbrium } add = var:sr_mq_mine_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_mine_imbrium } add = global_var:sr_site_ship_mine_imbrium }
+}
+sr_disp_mod_pending_yard_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_yard_imbrium } add = var:sr_mq_yard_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_yard_imbrium } add = global_var:sr_site_ship_yard_imbrium }
+}
+sr_disp_mod_pending_lab_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_lab_imbrium } add = var:sr_mq_lab_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_lab_imbrium } add = global_var:sr_site_ship_lab_imbrium }
+}
+sr_disp_mod_pending_culture_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_culture_imbrium } add = var:sr_mq_culture_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_culture_imbrium } add = global_var:sr_site_ship_culture_imbrium }
+}
+sr_disp_mod_pending_resort_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_resort_imbrium } add = var:sr_mq_resort_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_resort_imbrium } add = global_var:sr_site_ship_resort_imbrium }
+}
+sr_disp_mod_pending_black_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_black_imbrium } add = var:sr_mq_black_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_black_imbrium } add = global_var:sr_site_ship_black_imbrium }
+}
+sr_disp_mod_pending_train_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_train_imbrium } add = var:sr_mq_train_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_train_imbrium } add = global_var:sr_site_ship_train_imbrium }
+}
+sr_disp_mod_pending_bunker_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_bunker_imbrium } add = var:sr_mq_bunker_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_imbrium } add = global_var:sr_site_ship_bunker_imbrium }
+}
+sr_disp_mod_pending_foundry_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_foundry_imbrium } add = var:sr_mq_foundry_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_imbrium } add = global_var:sr_site_ship_foundry_imbrium }
+}
+sr_disp_mod_pending_admin_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_admin_imbrium } add = var:sr_mq_admin_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_admin_imbrium } add = global_var:sr_site_ship_admin_imbrium }
+}
 sr_disp_site_staffing_imbrium = {
 	value = sr_site_staffing_imbrium
 	multiply = 100
 	floor = yes
 }
+sr_disp_site_slots_used_imbrium = { value = sr_mod_slots_used_imbrium }
+sr_disp_site_slots_imbrium = { value = sr_site_slots_imbrium }
+sr_disp_mod_past_imbrium = {
+	value = 0
+	if = { limit = { sr_mod_slots_used_imbrium > sr_site_slots_imbrium } value = 1 }
+}
+sr_disp_mod_next_cost_imbrium = { value = sr_mod_next_cost_imbrium }
+sr_disp_site_ebase_room_imbrium = { value = sr_site_ebase_room_imbrium }
 
 # Colony Autonomy (slice 5 design § 9), per world:
 #   sr_disp_site_aut_<key>        its autonomy, whole
@@ -3850,6 +6170,209 @@ sr_disp_free_supplied_imbrium = {
 	if = { limit = { has_variable = sr_free_supply_imbrium } value = 1 }
 }
 
+# What a colony builds of its own (design § 4.3): its points toward a module, whole,
+# and a month's, ours only.
+sr_disp_site_self_valles_marineris = { value = sr_site_self_value_valles_marineris floor = yes }
+sr_disp_site_self_rate_valles_marineris = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = sr_site_self_rate_valles_marineris }
+}
+sr_disp_site_self_olympus_mons = { value = sr_site_self_value_olympus_mons floor = yes }
+sr_disp_site_self_rate_olympus_mons = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = sr_site_self_rate_olympus_mons }
+}
+sr_disp_site_self_hellas_planitia = { value = sr_site_self_value_hellas_planitia floor = yes }
+sr_disp_site_self_rate_hellas_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = sr_site_self_rate_hellas_planitia }
+}
+sr_disp_site_self_utopia_planitia = { value = sr_site_self_value_utopia_planitia floor = yes }
+sr_disp_site_self_rate_utopia_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = sr_site_self_rate_utopia_planitia }
+}
+sr_disp_site_self_arcadia_planitia = { value = sr_site_self_value_arcadia_planitia floor = yes }
+sr_disp_site_self_rate_arcadia_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = sr_site_self_rate_arcadia_planitia }
+}
+sr_disp_site_self_ceres = { value = sr_site_self_value_ceres floor = yes }
+sr_disp_site_self_rate_ceres = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ceres ?= this } value = sr_site_self_rate_ceres }
+}
+sr_disp_site_self_vesta = { value = sr_site_self_value_vesta floor = yes }
+sr_disp_site_self_rate_vesta = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_vesta ?= this } value = sr_site_self_rate_vesta }
+}
+sr_disp_site_self_psyche = { value = sr_site_self_value_psyche floor = yes }
+sr_disp_site_self_rate_psyche = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_psyche ?= this } value = sr_site_self_rate_psyche }
+}
+sr_disp_site_self_pallas = { value = sr_site_self_value_pallas floor = yes }
+sr_disp_site_self_rate_pallas = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_pallas ?= this } value = sr_site_self_rate_pallas }
+}
+sr_disp_site_self_hygiea = { value = sr_site_self_value_hygiea floor = yes }
+sr_disp_site_self_rate_hygiea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = sr_site_self_rate_hygiea }
+}
+sr_disp_site_self_io = { value = sr_site_self_value_io floor = yes }
+sr_disp_site_self_rate_io = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_io ?= this } value = sr_site_self_rate_io }
+}
+sr_disp_site_self_europa = { value = sr_site_self_value_europa floor = yes }
+sr_disp_site_self_rate_europa = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_europa ?= this } value = sr_site_self_rate_europa }
+}
+sr_disp_site_self_ganymede = { value = sr_site_self_value_ganymede floor = yes }
+sr_disp_site_self_rate_ganymede = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = sr_site_self_rate_ganymede }
+}
+sr_disp_site_self_callisto = { value = sr_site_self_value_callisto floor = yes }
+sr_disp_site_self_rate_callisto = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_callisto ?= this } value = sr_site_self_rate_callisto }
+}
+sr_disp_site_self_himalia = { value = sr_site_self_value_himalia floor = yes }
+sr_disp_site_self_rate_himalia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_himalia ?= this } value = sr_site_self_rate_himalia }
+}
+sr_disp_site_self_amalthea = { value = sr_site_self_value_amalthea floor = yes }
+sr_disp_site_self_rate_amalthea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = sr_site_self_rate_amalthea }
+}
+sr_disp_site_self_venus = { value = sr_site_self_value_venus floor = yes }
+sr_disp_site_self_rate_venus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_venus ?= this } value = sr_site_self_rate_venus }
+}
+sr_disp_site_self_mercury = { value = sr_site_self_value_mercury floor = yes }
+sr_disp_site_self_rate_mercury = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_mercury ?= this } value = sr_site_self_rate_mercury }
+}
+sr_disp_site_self_titan = { value = sr_site_self_value_titan floor = yes }
+sr_disp_site_self_rate_titan = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_titan ?= this } value = sr_site_self_rate_titan }
+}
+sr_disp_site_self_enceladus = { value = sr_site_self_value_enceladus floor = yes }
+sr_disp_site_self_rate_enceladus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = sr_site_self_rate_enceladus }
+}
+sr_disp_site_self_rhea = { value = sr_site_self_value_rhea floor = yes }
+sr_disp_site_self_rate_rhea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_rhea ?= this } value = sr_site_self_rate_rhea }
+}
+sr_disp_site_self_mimas = { value = sr_site_self_value_mimas floor = yes }
+sr_disp_site_self_rate_mimas = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_mimas ?= this } value = sr_site_self_rate_mimas }
+}
+sr_disp_site_self_iapetus = { value = sr_site_self_value_iapetus floor = yes }
+sr_disp_site_self_rate_iapetus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = sr_site_self_rate_iapetus }
+}
+sr_disp_site_self_titania = { value = sr_site_self_value_titania floor = yes }
+sr_disp_site_self_rate_titania = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_titania ?= this } value = sr_site_self_rate_titania }
+}
+sr_disp_site_self_oberon = { value = sr_site_self_value_oberon floor = yes }
+sr_disp_site_self_rate_oberon = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_oberon ?= this } value = sr_site_self_rate_oberon }
+}
+sr_disp_site_self_miranda = { value = sr_site_self_value_miranda floor = yes }
+sr_disp_site_self_rate_miranda = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_miranda ?= this } value = sr_site_self_rate_miranda }
+}
+sr_disp_site_self_ariel = { value = sr_site_self_value_ariel floor = yes }
+sr_disp_site_self_rate_ariel = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ariel ?= this } value = sr_site_self_rate_ariel }
+}
+sr_disp_site_self_triton = { value = sr_site_self_value_triton floor = yes }
+sr_disp_site_self_rate_triton = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_triton ?= this } value = sr_site_self_rate_triton }
+}
+sr_disp_site_self_proteus = { value = sr_site_self_value_proteus floor = yes }
+sr_disp_site_self_rate_proteus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_proteus ?= this } value = sr_site_self_rate_proteus }
+}
+sr_disp_site_self_pluto = { value = sr_site_self_value_pluto floor = yes }
+sr_disp_site_self_rate_pluto = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_pluto ?= this } value = sr_site_self_rate_pluto }
+}
+sr_disp_site_self_eris = { value = sr_site_self_value_eris floor = yes }
+sr_disp_site_self_rate_eris = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_eris ?= this } value = sr_site_self_rate_eris }
+}
+sr_disp_site_self_makemake = { value = sr_site_self_value_makemake floor = yes }
+sr_disp_site_self_rate_makemake = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_makemake ?= this } value = sr_site_self_rate_makemake }
+}
+sr_disp_site_self_haumea = { value = sr_site_self_value_haumea floor = yes }
+sr_disp_site_self_rate_haumea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_haumea ?= this } value = sr_site_self_rate_haumea }
+}
+sr_disp_site_self_sedna = { value = sr_site_self_value_sedna floor = yes }
+sr_disp_site_self_rate_sedna = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_sedna ?= this } value = sr_site_self_rate_sedna }
+}
+sr_disp_site_self_shackleton = { value = sr_site_self_value_shackleton floor = yes }
+sr_disp_site_self_rate_shackleton = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = sr_site_self_rate_shackleton }
+}
+sr_disp_site_self_peary = { value = sr_site_self_value_peary floor = yes }
+sr_disp_site_self_rate_peary = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_peary ?= this } value = sr_site_self_rate_peary }
+}
+sr_disp_site_self_tranquility = { value = sr_site_self_value_tranquility floor = yes }
+sr_disp_site_self_rate_tranquility = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = sr_site_self_rate_tranquility }
+}
+sr_disp_site_self_marius_hills = { value = sr_site_self_value_marius_hills floor = yes }
+sr_disp_site_self_rate_marius_hills = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = sr_site_self_rate_marius_hills }
+}
+sr_disp_site_self_daedalus = { value = sr_site_self_value_daedalus floor = yes }
+sr_disp_site_self_rate_daedalus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = sr_site_self_rate_daedalus }
+}
+sr_disp_site_self_imbrium = { value = sr_site_self_value_imbrium floor = yes }
+sr_disp_site_self_rate_imbrium = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = sr_site_self_rate_imbrium }
+}
+
 # A colony's autonomy drift by term (audit SPC-15: its drift hover lists its own
 # terms): its people, its distance by our drive, a year without contact. The
 # country's terms (a war, a colony we destroyed) are sr_disp_aut_war and
@@ -3860,11 +6383,29 @@ sr_disp_aut_nocontact_valles_marineris = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_valles_marineris > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_valles_marineris = { value = sr_site_autonomy_value_valles_marineris multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_valles_marineris = { value = sr_site_admin_staffed_valles_marineris multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_valles_marineris = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = sr_site_aut_pressure_valles_marineris divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_olympus_mons = { value = sr_site_pop_value_olympus_mons divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_olympus_mons = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_olympus_mons = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_olympus_mons > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_olympus_mons = { value = sr_site_autonomy_value_olympus_mons multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_olympus_mons = { value = sr_site_admin_staffed_olympus_mons multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_olympus_mons = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = sr_site_aut_pressure_olympus_mons divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_hellas_planitia = { value = sr_site_pop_value_hellas_planitia divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_hellas_planitia = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3872,11 +6413,29 @@ sr_disp_aut_nocontact_hellas_planitia = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_hellas_planitia > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_hellas_planitia = { value = sr_site_autonomy_value_hellas_planitia multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_hellas_planitia = { value = sr_site_admin_staffed_hellas_planitia multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_hellas_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = sr_site_aut_pressure_hellas_planitia divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_utopia_planitia = { value = sr_site_pop_value_utopia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_utopia_planitia = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_utopia_planitia = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_utopia_planitia > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_utopia_planitia = { value = sr_site_autonomy_value_utopia_planitia multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_utopia_planitia = { value = sr_site_admin_staffed_utopia_planitia multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_utopia_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = sr_site_aut_pressure_utopia_planitia divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_arcadia_planitia = { value = sr_site_pop_value_arcadia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_arcadia_planitia = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3884,11 +6443,29 @@ sr_disp_aut_nocontact_arcadia_planitia = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_arcadia_planitia > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_arcadia_planitia = { value = sr_site_autonomy_value_arcadia_planitia multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_arcadia_planitia = { value = sr_site_admin_staffed_arcadia_planitia multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_arcadia_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = sr_site_aut_pressure_arcadia_planitia divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_ceres = { value = sr_site_pop_value_ceres divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_ceres = { value = sr_transit_months_ceres multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_ceres = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_ceres > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_ceres = { value = sr_site_autonomy_value_ceres multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_ceres = { value = sr_site_admin_staffed_ceres multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_ceres = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ceres ?= this } value = sr_site_aut_pressure_ceres divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_vesta = { value = sr_site_pop_value_vesta divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_vesta = { value = sr_transit_months_vesta multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3896,11 +6473,29 @@ sr_disp_aut_nocontact_vesta = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_vesta > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_vesta = { value = sr_site_autonomy_value_vesta multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_vesta = { value = sr_site_admin_staffed_vesta multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_vesta = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_vesta ?= this } value = sr_site_aut_pressure_vesta divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_psyche = { value = sr_site_pop_value_psyche divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_psyche = { value = sr_transit_months_psyche multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_psyche = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_psyche > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_psyche = { value = sr_site_autonomy_value_psyche multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_psyche = { value = sr_site_admin_staffed_psyche multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_psyche = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_psyche ?= this } value = sr_site_aut_pressure_psyche divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_pallas = { value = sr_site_pop_value_pallas divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_pallas = { value = sr_transit_months_pallas multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3908,11 +6503,29 @@ sr_disp_aut_nocontact_pallas = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_pallas > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_pallas = { value = sr_site_autonomy_value_pallas multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_pallas = { value = sr_site_admin_staffed_pallas multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_pallas = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_pallas ?= this } value = sr_site_aut_pressure_pallas divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_hygiea = { value = sr_site_pop_value_hygiea divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_hygiea = { value = sr_transit_months_hygiea multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_hygiea = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_hygiea > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_hygiea = { value = sr_site_autonomy_value_hygiea multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_hygiea = { value = sr_site_admin_staffed_hygiea multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_hygiea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = sr_site_aut_pressure_hygiea divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_io = { value = sr_site_pop_value_io divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_io = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3920,11 +6533,29 @@ sr_disp_aut_nocontact_io = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_io > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_io = { value = sr_site_autonomy_value_io multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_io = { value = sr_site_admin_staffed_io multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_io = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_io ?= this } value = sr_site_aut_pressure_io divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_europa = { value = sr_site_pop_value_europa divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_europa = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_europa = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_europa > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_europa = { value = sr_site_autonomy_value_europa multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_europa = { value = sr_site_admin_staffed_europa multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_europa = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_europa ?= this } value = sr_site_aut_pressure_europa divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_ganymede = { value = sr_site_pop_value_ganymede divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_ganymede = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3932,11 +6563,29 @@ sr_disp_aut_nocontact_ganymede = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_ganymede > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_ganymede = { value = sr_site_autonomy_value_ganymede multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_ganymede = { value = sr_site_admin_staffed_ganymede multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_ganymede = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = sr_site_aut_pressure_ganymede divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_callisto = { value = sr_site_pop_value_callisto divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_callisto = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_callisto = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_callisto > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_callisto = { value = sr_site_autonomy_value_callisto multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_callisto = { value = sr_site_admin_staffed_callisto multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_callisto = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_callisto ?= this } value = sr_site_aut_pressure_callisto divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_himalia = { value = sr_site_pop_value_himalia divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_himalia = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3944,11 +6593,29 @@ sr_disp_aut_nocontact_himalia = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_himalia > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_himalia = { value = sr_site_autonomy_value_himalia multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_himalia = { value = sr_site_admin_staffed_himalia multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_himalia = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_himalia ?= this } value = sr_site_aut_pressure_himalia divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_amalthea = { value = sr_site_pop_value_amalthea divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_amalthea = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_amalthea = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_amalthea > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_amalthea = { value = sr_site_autonomy_value_amalthea multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_amalthea = { value = sr_site_admin_staffed_amalthea multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_amalthea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = sr_site_aut_pressure_amalthea divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_venus = { value = sr_site_pop_value_venus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_venus = { value = sr_transit_months_venus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3956,11 +6623,29 @@ sr_disp_aut_nocontact_venus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_venus > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_venus = { value = sr_site_autonomy_value_venus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_venus = { value = sr_site_admin_staffed_venus multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_venus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_venus ?= this } value = sr_site_aut_pressure_venus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_mercury = { value = sr_site_pop_value_mercury divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_mercury = { value = sr_transit_months_mercury multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_mercury = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_mercury > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_mercury = { value = sr_site_autonomy_value_mercury multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_mercury = { value = sr_site_admin_staffed_mercury multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_mercury = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_mercury ?= this } value = sr_site_aut_pressure_mercury divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_titan = { value = sr_site_pop_value_titan divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_titan = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3968,11 +6653,29 @@ sr_disp_aut_nocontact_titan = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_titan > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_titan = { value = sr_site_autonomy_value_titan multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_titan = { value = sr_site_admin_staffed_titan multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_titan = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_titan ?= this } value = sr_site_aut_pressure_titan divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_enceladus = { value = sr_site_pop_value_enceladus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_enceladus = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_enceladus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_enceladus > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_enceladus = { value = sr_site_autonomy_value_enceladus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_enceladus = { value = sr_site_admin_staffed_enceladus multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_enceladus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = sr_site_aut_pressure_enceladus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_rhea = { value = sr_site_pop_value_rhea divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_rhea = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3980,11 +6683,29 @@ sr_disp_aut_nocontact_rhea = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_rhea > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_rhea = { value = sr_site_autonomy_value_rhea multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_rhea = { value = sr_site_admin_staffed_rhea multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_rhea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_rhea ?= this } value = sr_site_aut_pressure_rhea divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_mimas = { value = sr_site_pop_value_mimas divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_mimas = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_mimas = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_mimas > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_mimas = { value = sr_site_autonomy_value_mimas multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_mimas = { value = sr_site_admin_staffed_mimas multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_mimas = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_mimas ?= this } value = sr_site_aut_pressure_mimas divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_iapetus = { value = sr_site_pop_value_iapetus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_iapetus = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -3992,11 +6713,29 @@ sr_disp_aut_nocontact_iapetus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_iapetus > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_iapetus = { value = sr_site_autonomy_value_iapetus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_iapetus = { value = sr_site_admin_staffed_iapetus multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_iapetus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = sr_site_aut_pressure_iapetus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_titania = { value = sr_site_pop_value_titania divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_titania = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_titania = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_titania > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_titania = { value = sr_site_autonomy_value_titania multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_titania = { value = sr_site_admin_staffed_titania multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_titania = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_titania ?= this } value = sr_site_aut_pressure_titania divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_oberon = { value = sr_site_pop_value_oberon divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_oberon = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4004,11 +6743,29 @@ sr_disp_aut_nocontact_oberon = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_oberon > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_oberon = { value = sr_site_autonomy_value_oberon multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_oberon = { value = sr_site_admin_staffed_oberon multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_oberon = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_oberon ?= this } value = sr_site_aut_pressure_oberon divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_miranda = { value = sr_site_pop_value_miranda divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_miranda = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_miranda = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_miranda > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_miranda = { value = sr_site_autonomy_value_miranda multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_miranda = { value = sr_site_admin_staffed_miranda multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_miranda = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_miranda ?= this } value = sr_site_aut_pressure_miranda divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_ariel = { value = sr_site_pop_value_ariel divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_ariel = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4016,11 +6773,29 @@ sr_disp_aut_nocontact_ariel = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_ariel > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_ariel = { value = sr_site_autonomy_value_ariel multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_ariel = { value = sr_site_admin_staffed_ariel multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_ariel = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ariel ?= this } value = sr_site_aut_pressure_ariel divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_triton = { value = sr_site_pop_value_triton divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_triton = { value = sr_transit_months_neptune multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_triton = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_triton > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_triton = { value = sr_site_autonomy_value_triton multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_triton = { value = sr_site_admin_staffed_triton multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_triton = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_triton ?= this } value = sr_site_aut_pressure_triton divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_proteus = { value = sr_site_pop_value_proteus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_proteus = { value = sr_transit_months_neptune multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4028,11 +6803,29 @@ sr_disp_aut_nocontact_proteus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_proteus > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_proteus = { value = sr_site_autonomy_value_proteus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_proteus = { value = sr_site_admin_staffed_proteus multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_proteus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_proteus ?= this } value = sr_site_aut_pressure_proteus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_pluto = { value = sr_site_pop_value_pluto divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_pluto = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_pluto = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_pluto > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_pluto = { value = sr_site_autonomy_value_pluto multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_pluto = { value = sr_site_admin_staffed_pluto multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_pluto = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_pluto ?= this } value = sr_site_aut_pressure_pluto divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_eris = { value = sr_site_pop_value_eris divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_eris = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4040,11 +6833,29 @@ sr_disp_aut_nocontact_eris = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_eris > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_eris = { value = sr_site_autonomy_value_eris multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_eris = { value = sr_site_admin_staffed_eris multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_eris = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_eris ?= this } value = sr_site_aut_pressure_eris divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_makemake = { value = sr_site_pop_value_makemake divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_makemake = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_makemake = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_makemake > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_makemake = { value = sr_site_autonomy_value_makemake multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_makemake = { value = sr_site_admin_staffed_makemake multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_makemake = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_makemake ?= this } value = sr_site_aut_pressure_makemake divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_haumea = { value = sr_site_pop_value_haumea divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_haumea = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4052,11 +6863,29 @@ sr_disp_aut_nocontact_haumea = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_haumea > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_haumea = { value = sr_site_autonomy_value_haumea multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_haumea = { value = sr_site_admin_staffed_haumea multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_haumea = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_haumea ?= this } value = sr_site_aut_pressure_haumea divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_sedna = { value = sr_site_pop_value_sedna divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_sedna = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_sedna = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_sedna > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_sedna = { value = sr_site_autonomy_value_sedna multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_sedna = { value = sr_site_admin_staffed_sedna multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_sedna = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_sedna ?= this } value = sr_site_aut_pressure_sedna divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_shackleton = { value = sr_site_pop_value_shackleton divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_shackleton = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4064,11 +6893,29 @@ sr_disp_aut_nocontact_shackleton = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_shackleton > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_shackleton = { value = sr_site_autonomy_value_shackleton multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_shackleton = { value = sr_site_admin_staffed_shackleton multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_shackleton = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = sr_site_aut_pressure_shackleton divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_peary = { value = sr_site_pop_value_peary divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_peary = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_peary = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_peary > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_peary = { value = sr_site_autonomy_value_peary multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_peary = { value = sr_site_admin_staffed_peary multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_peary = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_peary ?= this } value = sr_site_aut_pressure_peary divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_tranquility = { value = sr_site_pop_value_tranquility divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_tranquility = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4076,11 +6923,29 @@ sr_disp_aut_nocontact_tranquility = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_tranquility > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_tranquility = { value = sr_site_autonomy_value_tranquility multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_tranquility = { value = sr_site_admin_staffed_tranquility multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_tranquility = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = sr_site_aut_pressure_tranquility divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_marius_hills = { value = sr_site_pop_value_marius_hills divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_marius_hills = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_marius_hills = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_marius_hills > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_marius_hills = { value = sr_site_autonomy_value_marius_hills multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_marius_hills = { value = sr_site_admin_staffed_marius_hills multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_marius_hills = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = sr_site_aut_pressure_marius_hills divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_people_daedalus = { value = sr_site_pop_value_daedalus divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_daedalus = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
@@ -4088,11 +6953,29 @@ sr_disp_aut_nocontact_daedalus = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_daedalus > sr_aut_no_contact_months } value = 1 }
 }
+sr_disp_aut_settle_daedalus = { value = sr_site_autonomy_value_daedalus multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_daedalus = { value = sr_site_admin_staffed_daedalus multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_daedalus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = sr_site_aut_pressure_daedalus divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
+}
 sr_disp_aut_people_imbrium = { value = sr_site_pop_value_imbrium divide = 10000 multiply = sr_aut_per_10k_people }
 sr_disp_aut_distance_imbrium = { value = sr_transit_months_moon multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
 sr_disp_aut_nocontact_imbrium = {
 	value = 0
 	if = { limit = { sr_site_months_since_contact_imbrium > sr_aut_no_contact_months } value = 1 }
+}
+sr_disp_aut_settle_imbrium = { value = sr_site_autonomy_value_imbrium multiply = sr_aut_settle_rate multiply = -1 }
+sr_disp_aut_admin_imbrium = { value = sr_site_admin_staffed_imbrium multiply = sr_aut_per_admin_level }
+sr_disp_aut_target_imbrium = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = sr_site_aut_pressure_imbrium divide = sr_aut_settle_rate }
+	min = 0
+	max = sr_aut_break_level
+	floor = yes
 }
 sr_disp_aut_war = {
 	value = 0
@@ -4438,3 +7321,149 @@ sr_disp_aut_restless_count = {
 }
 # ... less the one the cell names.
 sr_disp_aut_restless_more = { value = sr_disp_aut_restless_count subtract = 1 min = 0 }
+
+# Next Windows (colony management design § 6), per destination, the viewer's scope:
+#   sr_disp_win_row_<body>    sr_window_reach_<body>: 1 shown, 2 beyond our drive, 0 neither
+#   sr_disp_win_state_<body>  0 any month (no window, or a drive windows don't bind),
+#                             1 its window is open, 2 waiting, 3 waiting with propellant
+#                             depots (the premium to go now)
+# and the table's counts.
+sr_disp_win_row_moon = { value = sr_window_reach_moon }
+sr_disp_win_state_moon = { value = 0 }
+sr_disp_win_row_mars = { value = sr_window_reach_mars }
+sr_disp_win_premium_mars = { value = sr_window_premium_country_mars max = 9.99 }
+sr_disp_win_state_mars = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_mars } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_ceres = { value = sr_window_reach_ceres }
+sr_disp_win_premium_ceres = { value = sr_window_premium_country_ceres max = 9.99 }
+sr_disp_win_state_ceres = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_ceres } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_vesta = { value = sr_window_reach_vesta }
+sr_disp_win_premium_vesta = { value = sr_window_premium_country_vesta max = 9.99 }
+sr_disp_win_state_vesta = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_vesta } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_psyche = { value = sr_window_reach_psyche }
+sr_disp_win_premium_psyche = { value = sr_window_premium_country_psyche max = 9.99 }
+sr_disp_win_state_psyche = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_psyche } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_pallas = { value = sr_window_reach_pallas }
+sr_disp_win_premium_pallas = { value = sr_window_premium_country_pallas max = 9.99 }
+sr_disp_win_state_pallas = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_pallas } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_hygiea = { value = sr_window_reach_hygiea }
+sr_disp_win_premium_hygiea = { value = sr_window_premium_country_hygiea max = 9.99 }
+sr_disp_win_state_hygiea = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_hygiea } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_jupiter = { value = sr_window_reach_jupiter }
+sr_disp_win_premium_jupiter = { value = sr_window_premium_country_jupiter max = 9.99 }
+sr_disp_win_state_jupiter = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_jupiter } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_venus = { value = sr_window_reach_venus }
+sr_disp_win_premium_venus = { value = sr_window_premium_country_venus max = 9.99 }
+sr_disp_win_state_venus = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_venus } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_mercury = { value = sr_window_reach_mercury }
+sr_disp_win_state_mercury = { value = 0 }
+sr_disp_win_row_saturn = { value = sr_window_reach_saturn }
+sr_disp_win_premium_saturn = { value = sr_window_premium_country_saturn max = 9.99 }
+sr_disp_win_state_saturn = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_saturn } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_uranus = { value = sr_window_reach_uranus }
+sr_disp_win_premium_uranus = { value = sr_window_premium_country_uranus max = 9.99 }
+sr_disp_win_state_uranus = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_uranus } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_neptune = { value = sr_window_reach_neptune }
+sr_disp_win_premium_neptune = { value = sr_window_premium_country_neptune max = 9.99 }
+sr_disp_win_state_neptune = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_neptune } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_row_kuiper = { value = sr_window_reach_kuiper }
+sr_disp_win_premium_kuiper = { value = sr_window_premium_country_kuiper max = 9.99 }
+sr_disp_win_state_kuiper = {
+	value = 2
+	if = { limit = { NOT = { sr_launch_windows_apply = yes } } value = 0 }
+	else_if = { limit = { has_global_variable = sr_window_is_open_kuiper } value = 1 }
+	else_if = { limit = { sr_launch_has_depots = yes } value = 3 }
+}
+sr_disp_win_shown = {
+	value = 0
+	if = { limit = { sr_disp_win_row_moon = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_mars = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_ceres = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_vesta = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_psyche = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_pallas = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_hygiea = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_jupiter = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_venus = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_mercury = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_saturn = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_uranus = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_neptune = 1 } add = 1 }
+	if = { limit = { sr_disp_win_row_kuiper = 1 } add = 1 }
+}
+sr_disp_win_beyond = {
+	value = 0
+	if = { limit = { sr_disp_win_row_moon = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_mars = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_ceres = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_vesta = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_psyche = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_pallas = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_hygiea = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_jupiter = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_venus = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_mercury = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_saturn = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_uranus = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_neptune = 2 } add = 1 }
+	if = { limit = { sr_disp_win_row_kuiper = 2 } add = 1 }
+}
+# 1 once the month's windows are worked out (the global monthly pulse).
+sr_disp_win_cached = {
+	value = 0
+	if = { limit = { has_global_variable = sr_window_cache_month } value = 1 }
+}

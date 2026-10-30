@@ -1367,8 +1367,10 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"global_var:sr_site_holder_{k} ?= this", can)
                     self.assertIn(f"has_global_variable = sr_site_spec_{k}", can)
                     self.assertIn(f"sr_mod_spec_used_{k} < sr_mod_spec_budget", can)
+                # Up to SLOTS_PAST_MAX past the world's slots (colony management design § 5).
                 for t in gss.generic_types(site):
-                    self.assertIn(f"sr_mod_slots_used_{k} < {site.slots}", _block(self.triggers, f"sr_mod_can_queue_{t}_{k}"))
+                    self.assertIn(f"sr_mod_slots_used_{k} < sr_site_slots_max_{k}",
+                                  _block(self.triggers, f"sr_mod_can_queue_{t}_{k}"))
                 # no Spaceport on a lunar world: no queue, shipment or level of one
                 no_port = site.key in gss.NO_SPACEPORT
                 self.assertEqual(f"sr_mod_can_queue_port_{k} =" in self.triggers, not no_port)
@@ -1391,7 +1393,7 @@ class ModulesTest(unittest.TestCase):
                 self.assertIn(f"has_global_variable = sr_colony_{k}", body)
                 for t in ("a", "b", *gss.generic_types(site)):
                     cap = (f"sr_site_spec_built_{k} < sr_mod_spec_budget" if t in ("a", "b")
-                           else f"sr_site_generic_built_{k} < {site.slots}")
+                           else f"sr_site_generic_built_{k} < sr_site_slots_max_{k}")
                     self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]} {cap}", body)
                 self.assertIn(f"sr_site_sync_{k} = yes", body)
 
@@ -1426,8 +1428,11 @@ class ModulesTest(unittest.TestCase):
         queue = _block(self.modules, "sr_mod_queue")
         self.assertLess(queue.index("sr_mq_append = yes"), queue.index("sr_mq_count_add"))
         self.assertIn(f"sr_mq_has_room = {{ NOT = {{ has_variable = sr_mq_{q}_site }} }}", self.triggers)
+        # The head's price, read before it leaves the queue (colony management design § 5).
+        self.assertIn("sr_mod_fab_stock_value >= sr_mq_head_cost", _block(loop, "limit"))
+        self.assertLess(head.index("name = sr_mq_head_cost_now value = sr_mq_head_cost"), head.index("sr_mq_remove_1 = yes"))
         build = _block(self.modules, "sr_mod_fab_build")
-        for line in ("change_variable = { name = sr_fab_stock subtract = sr_module_points }",
+        for line in ("change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }",
                      "sr_ms_count_add = { VAR = sr_site_ship_$TYPE$_$KEY$ }", "sr_ms_store_new = yes"):
             self.assertIn(line, build)
         self.assertNotIn("sr_mq_$TYPE$_$KEY$", build)
@@ -1517,10 +1522,15 @@ class ModulesTest(unittest.TestCase):
                 self.assertLess(button.index("click_modifiers = {"), button.index("ondefault"))
 
     def test_the_ai_never_queues_a_placeholder(self):
+        """Never Defences or a Spaceport; a Habitat or a facility only within the
+        world's slots, never at the price past them (colony management design § 7.3)."""
         for site in gss.SITES:
-            body = _block(self.effects, f"sr_mod_ai_plan_{site.key}")
-            with self.subTest(site=site.key):
-                self.assertEqual(set(re.findall(r"sr_mod_queue = \{ KEY = \w+ TYPE = (\w+) ", body)), {"hab", "a", "b"})
+            k = site.key
+            body = _block(self.effects, f"sr_mod_ai_plan_{k}")
+            with self.subTest(site=k):
+                queued = re.findall(r"sr_mod_queue = \{ KEY = \w+ TYPE = (\w+) ", body)
+                self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "bunker", "yard", "lab"})
+                self.assertEqual(body.count(f"sr_mod_slots_used_{k} < sr_site_slots_{k}"), 6)
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
         self.assertIn("days = 360", review)
@@ -1540,7 +1550,8 @@ class ModulesTest(unittest.TestCase):
 
     def test_the_base_room_fills_best_grade_first(self):
         fill = _block(self.effects, "sr_ebase_fill")
-        grades = [int(g) for g in re.findall(r"# [^:]+: \d+ levels at ([+-]\d+)%", _raw(str(gss.EFFECTS_OUT)))]
+        grades = [int(g) for g in re.findall(r"# [^:]+: \d+ levels(?: and its Mining Complexes')? at ([+-]\d+)%",
+                                             _raw(str(gss.EFFECTS_OUT)))]
         self.assertEqual(len(grades), len(gss.SITES) + 1)
         self.assertEqual(grades, sorted(grades, reverse=True))
         self.assertIn(f"value = local_var:sr_eb_left max = {gss.NEAR_EARTH_ROOM}", fill)
@@ -1559,11 +1570,17 @@ class ModulesTest(unittest.TestCase):
         self.assertIn(f"if = {{ limit = {{ has_technology_researched = {gss.NEAR_EARTH_TECH} }} "
                       f"add = {gss.NEAR_EARTH_ROOM} }}", room)
         # Each world's room counts while it serves its holder (gss.site_serves:
-        # held, not blockaded, not occupied; slice 6).
-        self.assertEqual(sum(int(n) for n in re.findall(r"sr_site_occupier_\w+ \} \} add = (\d+)", room)), 865)
+        # held, not blockaded, not occupied; slice 6): the table's, and 10 a
+        # staffed Mining Complex level (colony management design § 7).
+        self.assertEqual(sum(s.ebase_room for s in gss.SITES), 865)
         for site in gss.SITES:
-            with self.subTest(site=site.key):
-                self.assertIn(gss.site_serves(site), room)
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"{gss.site_serves(site)} }} add = sr_site_ebase_room_{k} }}", room)
+                world = _block(self.values, f"sr_site_ebase_room_{k}")
+                self.assertIn(f"value = {site.ebase_room}", world)
+                self.assertIn(f"add = {{ value = sr_site_mine_staffed_{k} multiply = sr_mod_mine_room floor = yes }}", world)
+                self.assertIn(f"max = sr_site_ebase_room_{k}", fill)
 
     def test_the_refresh_averages_over_every_level(self):
         refresh = _block(self.modules, "sr_ebase_refresh")
@@ -1719,12 +1736,21 @@ class FreeColoniesTest(unittest.TestCase):
                 self.assertIn("max = sr_aut_break_level", step)
                 self.assertLess(step.index("sr_aut_break_away"), step.index("sr_aut_ask ="))
                 self.assertIn(f"name = sr_site_aut_asked_{k} value = yes days = 1825", step)
+                # The drift is the pressure less settling (colony management design § 4.2).
                 drift = _block(self.values, f"sr_site_aut_drift_{k}")
+                self.assertIn(f"value = sr_site_aut_pressure_{k}", drift)
+                self.assertIn(f"subtract = {{ value = sr_site_autonomy_value_{k} multiply = sr_aut_settle_rate }}", drift)
+                pressure = _block(self.values, f"sr_site_aut_pressure_{k}")
                 for term in ("sr_aut_home_pull", "sr_aut_per_10k_people", "sr_aut_per_transit_month",
                              "sr_aut_distance_cap", "sr_aut_no_contact", "sr_aut_at_war", "sr_aut_garrisoned",
                              "sr_aut_chartered"):
-                    self.assertIn(term, drift)
-                self.assertIn(f"sr_transit_months_{gss.transit_body(site)}", drift)
+                    self.assertIn(term, pressure)
+                self.assertIn(f"sr_transit_months_{gss.transit_body(site)}", pressure)
+
+    def test_autonomy_settles_at_a_hundred_times_its_pressure(self):
+        """Settling (colony management design § 4.2): 1% of the autonomy a month,
+        so a colony settles at 100 x the other terms' sum."""
+        self.assertEqual(self._number("sr_aut_settle_rate"), 0.01)
 
     def test_the_charter_scales_the_specializations(self):
         self.assertEqual(self._number("sr_aut_charter_share"), 0.8)

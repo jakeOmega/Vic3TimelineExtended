@@ -220,9 +220,14 @@ class OccupiedStateTest(unittest.TestCase):
     """§ 5.1: a building in a state its owner doesn't control counts for no one."""
 
     def test_construction_counts_only_states_held_by_their_owner(self):
-        rate = _block(_strip(_raw(FLEET_VALUES)), "sr_sc_rate")
+        values = _strip(_raw(FLEET_VALUES))
+        rate = _block(values, "sr_sc_rate_buildings")
         self.assertRegex(rate, r"every_scope_state = \{\s*limit = \{ sr_state_held_by_owner = yes \}\s*"
                                r"add = modifier:state_sr_ship_construction_add")
+        # Space Command's, then the colonies' Orbital Yards (colony management design § 7).
+        total = _block(values, "sr_sc_rate")
+        self.assertIn("value = sr_sc_rate_buildings", total)
+        self.assertIn("value = sr_mod_units_yard", total)
 
     def test_the_battlestation_fights_only_from_a_held_state(self):
         gather = _block(_strip(_raw(COMBAT_EFFECTS)), "sr_cb_battlestation_gather")

@@ -73,12 +73,20 @@ sr_sc_mix_max = { value = 3 }
 # Country scope. Fleet strength Space Command builds a month: the methods'
 # workforce-scaled state modifier, summed over the states the country controls
 # (design § 5.1: nothing is built in an occupied state). Staffing is in the
-# number already.
-sr_sc_rate = {
+# number already. Plus the colonies' Orbital Yards (colony management design
+# § 7); sr_sc_rate_buildings, Space Command's alone, is the self-check's.
+sr_sc_rate_buildings = {
 	value = 0
 	every_scope_state = {
 		limit = { sr_state_held_by_owner = yes }
 		add = modifier:state_sr_ship_construction_add
+	}
+}
+sr_sc_rate = {
+	value = sr_sc_rate_buildings
+	add = {
+		value = sr_mod_units_yard
+		multiply = sr_mod_yard_ships
 	}
 }
 
