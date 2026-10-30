@@ -139,6 +139,7 @@ te_grid_world_update_effect = {
 		every_scope_state = {
 			limit = { has_building = building_grid_transfer_station }
 			clear_variable_list = te_grid_cable_links
+			te_grid_connection_selfcheck_effect = yes
 			if = {
 				limit = { te_grid_station_online = yes }
 				set_variable = te_grid_pending
@@ -1272,6 +1273,78 @@ te_grid_cable_range_selfcheck_effect = {
 		}
 		# Refreshed every run until the check is done, then left to lapse.
 		set_variable = { name = te_grid_chk_cable_seen value = yes days = 45 }
+	}
+}
+
+# State scope, a state with a built Grid Transfer Station, in the run's first
+# pass, before te_grid_station_online decides whether it takes part. The
+# station's method gives its state a Power Grid Connection
+# (state_power_grid_connection_bool) from an unscaled state line, and the
+# balancing reads it in the state (te_grid_state_connected). A method's
+# script-only state line has been read with modifier: before (the barracks'
+# state_reserve_battalions_add, workforce_scaled), and so has a script-only
+# state boolean (the laws' state_violence_against_minorities_bool), but not a
+# boolean from a building, nor one at a building with no staff. Each is judged
+# once a game at a station already built at the last run
+# (te_grid_chk_station_seen), so one finished the day before a run, whose
+# modifiers may not have settled, can't read BROKEN:
+#   grid_connection            at a station with staff now. BROKEN: the line
+#                              doesn't reach the read, and no station joins
+#                              any grid.
+#   grid_connection_unstaffed  at a station with no staff at the last run nor
+#                              now (te_grid_chk_unstaffed). BROKEN: an empty
+#                              station loses its connection, and drops off its
+#                              grid until it hires.
+# Fallbacks are in docs/testing/power-grid-playtest.md.
+te_grid_connection_selfcheck_effect = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_global_variable = te_grid_connection_checked }
+				NOT = { has_global_variable = te_grid_connection_unstaffed_checked }
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_grid_connection_checked }
+				has_variable = te_grid_chk_station_seen
+				te_grid_station_staffed = yes
+			}
+			set_global_variable = te_grid_connection_checked
+			if = {
+				limit = { te_grid_state_connected = yes }
+				debug_log = "TE_SELF_CHECK OK grid_connection (a staffed Grid Transfer Station's state reads state_power_grid_connection_bool: the method's unscaled state line reaches modifier: in the state)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN grid_connection (a staffed Grid Transfer Station, built at the last run, leaves its state without state_power_grid_connection_bool: no station joins any grid; see docs/testing/power-grid-playtest.md)"
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_grid_connection_unstaffed_checked }
+				has_variable = te_grid_chk_station_seen
+				has_variable = te_grid_chk_unstaffed
+				te_grid_station_staffed = no
+			}
+			set_global_variable = te_grid_connection_unstaffed_checked
+			if = {
+				limit = { te_grid_state_connected = yes }
+				debug_log = "TE_SELF_CHECK OK grid_connection_unstaffed (a Grid Transfer Station with no staff at the last run nor now still gives its state state_power_grid_connection_bool, so it stays on its grid)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN grid_connection_unstaffed (a Grid Transfer Station with no staff at the last run nor now leaves its state without state_power_grid_connection_bool: an empty station drops off its grid until it hires; see docs/testing/power-grid-playtest.md)"
+			}
+		}
+		# Refreshed every run until both checks are done, then left to lapse.
+		set_variable = { name = te_grid_chk_station_seen value = yes days = 45 }
+		if = {
+			limit = { te_grid_station_staffed = no }
+			set_variable = { name = te_grid_chk_unstaffed value = yes days = 45 }
+		}
+		else_if = {
+			limit = { has_variable = te_grid_chk_unstaffed }
+			remove_variable = te_grid_chk_unstaffed
+		}
 	}
 }
 

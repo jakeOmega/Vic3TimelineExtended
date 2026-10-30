@@ -1645,6 +1645,21 @@ building_grid_undersea_cable_range_add = {
 	script_only = yes
 }
 
+# The state is joined to a power grid. The Grid Transfer Station's method
+# grants it (pm_grid_transfer_base), so the station's tooltip says what it
+# does, and the balancing reads it to decide which stations take part each
+# month (te_grid_state_connected). The station still moves the state's power,
+# so another source of the connection joins only a state with one. Read by
+# script only.
+state_power_grid_connection_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
 # Grid Transfer Stations always run subsidized, from base_values: the
 # pattern Interventionism uses for highways and airports.
 country_building_grid_transfer_station_require_subsidies_bool = {

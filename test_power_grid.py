@@ -16,7 +16,8 @@ lengthen it, the build walks the sea far enough that either end's range joins
 the two, and cables that reach each other let the agreement be signed. Since
 the interconnector became a building of its own: it needs a station in its
 state, is offered only on a coast, and the AI builds it rather than switching a
-method.
+method. Since the Power Grid Connection: the station's method gives its state the
+connection, and a station takes part only where its state is connected.
 
 Run: python3 test_power_grid.py
 """
@@ -1314,6 +1315,61 @@ class ThroughputTest(unittest.TestCase):
             self.assertFalse(ok_lo <= 1 / (1 + t) <= ok_hi, t)
 
 
+class ConnectionTest(unittest.TestCase):
+    """The Power Grid Connection: the station's method gives its state the
+    connection, so its tooltip says the station joins the state to a grid, and
+    the balancing reads the same line to decide which stations take part."""
+
+    def test_connection_is_a_script_only_state_boolean(self):
+        body = _code(_top_level(_read(TYPES), "state_power_grid_connection_bool"))
+        self.assertRegex(body, r"\bboolean = yes\b")
+        self.assertRegex(body, r"\bscript_only = yes\b")
+        self.assertRegex(body, r"\bcolor = good\b")
+
+    def test_the_method_grants_it_unscaled_on_the_state(self):
+        # Unscaled, so an empty station keeps its connection as it keeps its order.
+        method = _code(_top_level(_read(PMS), "pm_grid_transfer_base"))
+        state = _sub(method, "state_modifiers")
+        self.assertRegex(_sub(state, "unscaled"), r"\bstate_power_grid_connection_bool = yes\b")
+        self.assertNotRegex(_sub(method, "building_modifiers"), r"\bstate_power_grid_connection_bool\b")
+
+    def test_a_station_is_online_when_its_state_is_connected(self):
+        triggers = _code(_read(TRIGGERS))
+        connected = _top_level(triggers, "te_grid_state_connected")
+        self.assertIn("modifier:state_power_grid_connection_bool = yes", connected)
+        online = _top_level(triggers, "te_grid_station_online")
+        self.assertIn("te_grid_state_connected = yes", online)
+        # The station still moves the power, so it must be built as well.
+        self.assertIn("is_building_type = building_grid_transfer_station", online)
+        self.assertIn("level >= 1", online)
+
+    def test_its_name_links_the_concept(self):
+        loc = {}
+        for name in os.listdir(LOC_DIR):
+            if name.endswith(".yml"):
+                loc.update(re.findall(r'(?m)^ ([\w.]+):\d* "(.*)"\s*$', _read(os.path.join(LOC_DIR, name))))
+        self.assertIn("[concept_power_grid]", loc["state_power_grid_connection_bool"])
+        self.assertIn("[concept_power_grid]", loc["state_power_grid_connection_bool_desc"])
+
+    def test_self_checks_read_the_connection_before_the_run_uses_it(self):
+        world = _code(_top_level(_read(EFFECTS), "te_grid_world_update_effect"))
+        self.assertLess(world.index("te_grid_connection_selfcheck_effect = yes"),
+                        world.index("limit = { te_grid_station_online = yes }"))
+        check = _code(_top_level(_read(EFFECTS), "te_grid_connection_selfcheck_effect"))
+        for name in ("grid_connection ", "grid_connection_unstaffed "):
+            self.assertIn(f"TE_SELF_CHECK OK {name}", check)
+            self.assertIn(f"TE_SELF_CHECK BROKEN {name}", check)
+        self.assertIn("te_grid_state_connected = yes", check)
+        # Judged at a station already built at the last run, so its modifiers have settled,
+        # and the empty one at a station with no staff then and now.
+        self.assertLess(check.index("has_variable = te_grid_chk_station_seen"), check.index("TE_SELF_CHECK OK"))
+        self.assertIn("set_variable = { name = te_grid_chk_station_seen value = yes days = 45 }", check)
+        unstaffed = check[check.index("te_grid_connection_unstaffed_checked }"):]
+        self.assertLess(unstaffed.index("has_variable = te_grid_chk_unstaffed"),
+                        unstaffed.index("TE_SELF_CHECK OK grid_connection_unstaffed"))
+        self.assertIn("set_variable = { name = te_grid_chk_unstaffed value = yes days = 45 }", check)
+
+
 class LocalizationTest(unittest.TestCase):
     def test_every_new_key_is_localized(self):
         keys = set()
@@ -1338,7 +1394,8 @@ class LocalizationTest(unittest.TestCase):
                     "te_grid_market_send_more", "te_grid_market_receive_more",
                     "building_grid_undersea_cable_range_add", "building_grid_undersea_cable_range_add_desc",
                     "TE_STATE_GRID_ROW_CABLES", "TE_STATE_GRID_ROW_CABLES_TT", "te_grid_cable_link_line",
-                    "te_grid_cables_intro", "te_grid_cables_none"):
+                    "te_grid_cables_intro", "te_grid_cables_none",
+                    "state_power_grid_connection_bool", "state_power_grid_connection_bool_desc"):
             self.assertIn(key, keys)
 
 
