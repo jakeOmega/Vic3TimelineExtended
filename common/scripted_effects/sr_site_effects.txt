@@ -324,10 +324,7 @@ sr_lunar_migrate = {
 	# colonize it (a finished programme, or the colonization method) is told
 	# the Moon is open by choice (sr_lunar_note_moon_open).
 	if = {
-		limit = {
-			has_global_variable = sr_all_colonies_complete
-			sr_sites_lunar_open = yes
-		}
+		limit = { sr_race_over_moon_free = yes }
 		every_country = {
 			limit = {
 				is_player = yes
@@ -379,9 +376,9 @@ sr_lunar_fire_notice = {
 # (sr_completed_solar_colonization), Interplanetary Trade Networks, and the
 # Commercial Space Industry dividend, since the flag stays as history and
 # sr_space_race_concluded keeps holding. Colonizing the Moon is a choice there
-# for every country (sr_colonization_by_choice): Resume Solar Colonization, or
-# Begin Solar Colonization, which pauses the dividend while the programme runs.
-# This notice says so (.109).
+# for every country (sr_colonization_by_choice): Resume Solar System
+# Colonization, or Begin Solar Colonization, which pauses the dividend while
+# the programme runs. This notice says so (.109).
 sr_lunar_note_moon_open = {
 	set_variable = { name = sr_lunar_notice_reopened value = yes }
 	sr_lunar_fire_notice = yes

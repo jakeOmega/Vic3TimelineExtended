@@ -5322,7 +5322,18 @@ space_race_events.109 = {
 			}
 		}
 	}
-	flavor = space_race_events.109.f
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = sr_lunar_notice_site }
+				desc = space_race_events.109.f
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = space_race_events.109.f_moon_open
+			}
+		}
+	}
 
 	duration = 3
 

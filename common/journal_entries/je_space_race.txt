@@ -1348,10 +1348,14 @@ je_space_race_solar_colonization = {
 					sr_any_site_unclaimed = yes
 				}
 				# With the race over and a lunar world free, only by choice
-				# (sr_colonization_by_choice; owner, 2026-10-29).
-				custom_tooltip = {
-					text = sr_colonization_by_choice_tt
-					sr_colonization_by_choice = yes
+				# (sr_colonization_by_choice, written so its line shows only
+				# where it applies; owner, 2026-10-29).
+				trigger_if = {
+					limit = { sr_race_over_moon_free = yes }
+					custom_tooltip = {
+						text = sr_colonization_by_choice_tt
+						has_variable = sr_colonization_resumed
+					}
 				}
 				is_great_or_major_power = yes
 			}
@@ -1391,7 +1395,7 @@ je_space_race_solar_colonization = {
 						NOT = { sr_has_space_colony = yes }
 					}
 				}
-				sr_launch_bank_staged_fleets = yes # REVIEWED 2026-10-29: additive bank of whole staged fleets before the reset below; a re-run after it banks nothing (progress is 0). Flagged once the outer guard became NOT completed OR resumed (lunar colonization 2b)
+				sr_launch_bank_staged_fleets = yes # REVIEWED 2026-10-29: banks the whole fleets staged now, and the reset below always follows, so a re-run moves only what was staged since and never counts a fleet twice. Flagged once the outer guard became NOT completed OR resumed (lunar colonization 2b)
 				set_variable = { name = sr_progress_solar_colonization value = 0 }
 			}
 			if = { limit = { NOT = { has_variable = sr_funding_solar_colonization } } set_variable = { name = sr_funding_solar_colonization value = 1 } }

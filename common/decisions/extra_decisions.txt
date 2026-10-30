@@ -678,6 +678,14 @@ te_decision_space_mission_solar = {
 		# A world left (sr_all_colonies_complete is history: an old save keeps
 		# it with the Moon free, lunar colonization 2b).
 		sr_any_site_unclaimed = yes
+		# A finished programme starts again only for the Moon, by choice
+		# (sr_resume_solar_colonization below). A world beyond it released
+		# after the race stays out of its reach (main's end-of-race rule), so
+		# the method would be bought for nothing (review R4).
+		OR = {
+			NOT = { has_variable = sr_completed_solar_colonization }
+			sr_sites_lunar_open = yes
+		}
 		# A world left that the method reaches: a lunar world, or, after our
 		# Mars Landing, a world of stages 1 and 2 (past stage 2 a country with
 		# no colony beyond the Moon needs Deep Space Exploration; under simple
@@ -717,13 +725,13 @@ te_decision_space_mission_solar = {
 				production_method = pm_solar_colonization
 			}
 			# With the race over and a lunar world free, taking this is the
-			# choice to colonize the Moon (sr_colonization_by_choice).
+			# choice to colonize the Moon (sr_colonization_by_choice), and it
+			# starts the programme as Resume does: with the entry already open
+			# (a finished holder on the Moon or Mars Mission), nothing else
+			# would set its active flag (review R1).
 			if = {
-				limit = {
-					has_global_variable = sr_all_colonies_complete
-					sr_sites_lunar_open = yes
-				}
-				set_variable = { name = sr_colonization_resumed value = yes }
+				limit = { sr_race_over_moon_free = yes }
+				sr_resume_solar_colonization = yes
 			}
 		}
 	}
@@ -741,8 +749,8 @@ te_decision_space_mission_solar = {
 	}
 }
 
-# Resume Solar Colonization (lunar colonization 2b, owner 2026-10-29). With the
-# race over (sr_all_colonies_complete, history) and a lunar world free, as in a
+# Resume Solar System Colonization (lunar colonization 2b, owner 2026-10-29).
+# With the race over and a lunar world free (sr_race_over_moon_free), as in a
 # save whose worlds were all claimed before the Moon existed, colonizing the
 # Moon is a choice (sr_colonization_by_choice): finished programmes keep their
 # record, Interplanetary Trade Networks and the Commercial Space Industry
@@ -758,8 +766,7 @@ te_decision_resume_solar_colonization = {
 	is_shown = {
 		sr_space_race_on = yes
 		modifier:country_sr_solar_colonization_program_bool = yes
-		has_global_variable = sr_all_colonies_complete
-		sr_sites_lunar_open = yes
+		sr_race_over_moon_free = yes
 		NOT = { has_variable = sr_colonization_resumed }
 	}
 
@@ -781,12 +788,17 @@ te_decision_resume_solar_colonization = {
 		}
 	}
 
+	# The mission decisions' gates (review R2). The method is already paid
+	# for (its bool is held), so the bill it adds is the programme's funding
+	# and approach, in innovation: the income test asks only that the budget
+	# isn't already in deficit on fixed expenses.
 	ai_chance = {
 		value = 0
 		if = {
 			limit = {
 				sr_ai_should_participate = yes
 				in_default = no
+				net_fixed_income > 0
 			}
 			add = 100
 		}

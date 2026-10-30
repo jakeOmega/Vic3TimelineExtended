@@ -531,8 +531,7 @@ class LunarMigrationTest(unittest.TestCase):
         self.assertNotIn("sr_lunar_reopen_colonization", self.shared)
         self.assertNotIn("remove_global_variable = sr_all_colonies_complete", self.shared)
         migrate = _block(self.shared, "sr_lunar_migrate")
-        self.assertRegex(migrate, r"limit = \{\s*has_global_variable = sr_all_colonies_complete\s*"
-                                  r"sr_sites_lunar_open = yes\s*\}\s*every_country = \{\s*limit = \{\s*"
+        self.assertRegex(migrate, r"limit = \{ sr_race_over_moon_free = yes \}\s*every_country = \{\s*limit = \{\s*"
                                   r"is_player = yes\s*OR = \{\s*has_variable = sr_completed_solar_colonization\s*"
                                   r"modifier:country_sr_solar_colonization_program_bool = yes\s*\}\s*\}\s*"
                                   r"sr_lunar_note_moon_open = yes")
@@ -562,8 +561,9 @@ class LunarMigrationTest(unittest.TestCase):
         # with the race over and a lunar world free, nothing runs unchosen
         self.assertIn("sr_colonization_by_choice = yes", running)
         self.assertEqual(_block(triggers, "sr_colonization_by_choice").split(),
-                         "OR = { NOT = { has_global_variable = sr_all_colonies_complete } "
-                         "NOT = { sr_sites_lunar_open = yes } has_variable = sr_colonization_resumed }".split())
+                         "OR = { NOT = { sr_race_over_moon_free = yes } has_variable = sr_colonization_resumed }".split())
+        self.assertEqual(_block(triggers, "sr_race_over_moon_free").split(),
+                         "has_global_variable = sr_all_colonies_complete sr_sites_lunar_open = yes".split())
         # the dividend's pause, billing and the controls all read `running`
         self.assertIn("sr_solar_colonization_running = yes", _block(triggers, "sr_has_running_milestone"))
         self.assertIn("sr_solar_colonization_running = yes", _block(triggers, "sr_milestone_billed_solar_colonization"))
@@ -590,13 +590,20 @@ class LunarMigrationTest(unittest.TestCase):
         # any country with the method that hasn't chosen, finished or not
         self.assertEqual(_block(decision, "is_shown").split(),
                          "sr_space_race_on = yes modifier:country_sr_solar_colonization_program_bool = yes "
-                         "has_global_variable = sr_all_colonies_complete sr_sites_lunar_open = yes "
-                         "NOT = { has_variable = sr_colonization_resumed }".split())
+                         "sr_race_over_moon_free = yes NOT = { has_variable = sr_colonization_resumed }".split())
         self.assertIn("sr_resume_solar_colonization = yes", _block(decision, "when_taken"))
-        # Begin Solar Colonization in that state is the same choice
+        # Begin Solar Colonization in that state is the same choice, and starts
+        # the programme the same way (review R1: an entry already open)
         begin = _block(_block(decisions, "te_decision_space_mission_solar"), "when_taken")
-        self.assertRegex(begin, r"has_global_variable = sr_all_colonies_complete\s*sr_sites_lunar_open = yes\s*\}\s*"
-                                r"set_variable = \{ name = sr_colonization_resumed value = yes \}")
+        self.assertRegex(begin, r"if = \{\s*limit = \{ sr_race_over_moon_free = yes \}\s*"
+                                r"sr_resume_solar_colonization = yes")
+        # and a finished programme is offered it only for the Moon: a world beyond
+        # it released after the race stays out of reach (review R4)
+        self.assertRegex(_block(_block(decisions, "te_decision_space_mission_solar"), "is_shown"),
+                         r"OR = \{\s*NOT = \{ has_variable = sr_completed_solar_colonization \}\s*"
+                         r"sr_sites_lunar_open = yes\s*\}")
+        # its income check, as the mission decisions' (review R2)
+        self.assertIn("net_fixed_income > 0", _block(decision, "ai_chance"))
         # it stops again once the Moon is full, keeping one Interplanetary Trade Networks
         entry = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
         pulse = _block(_block(entry, "je_space_race_solar_colonization"), "on_monthly_pulse")
@@ -623,6 +630,13 @@ class LunarMigrationTest(unittest.TestCase):
         self.assertIn("lunar_base_dome.dds", notice)
         # a notice with no migrated world is titled for the Moon, not the base
         self.assertIn("desc = space_race_events.109.t_moon_open", _block(notice, "title"))
+        self.assertIn("desc = space_race_events.109.f_moon_open", _block(notice, "flavor"))
+        # the entry's choice line shows only where it applies (re-review nit)
+        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
+        possible = _block(_block(je, "je_space_race_solar_colonization"), "possible")
+        self.assertRegex(possible, r"trigger_if = \{\s*limit = \{ sr_race_over_moon_free = yes \}\s*"
+                                   r"custom_tooltip = \{\s*text = sr_colonization_by_choice_tt\s*"
+                                   r"has_variable = sr_colonization_resumed\s*\}\s*\}")
         trigger = _block(notice[notice.index("duration = "):], "trigger")
         for var in ("sr_lunar_notice_site", "sr_lunar_notice_reopened"):
             self.assertIn(f"has_variable = {var}", trigger)

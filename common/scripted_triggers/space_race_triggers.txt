@@ -219,20 +219,28 @@ sr_solar_colonization_running = {
 	sr_colonization_by_choice = yes
 }
 
+# The race is over (every world was once claimed: sr_all_colonies_complete,
+# kept as history) and a lunar world is free, as in a save whose worlds were
+# all claimed before the Moon existed. Settling the Moon is then a choice
+# (sr_colonization_by_choice). Read by that trigger, the entry's `possible`
+# (to show its line only here), Begin Solar Colonization, Resume Solar System
+# Colonization and the old-save notice. Any scope.
+sr_race_over_moon_free = {
+	has_global_variable = sr_all_colonies_complete
+	sr_sites_lunar_open = yes
+}
+
 # Colonizing the Moon after the race is over is a choice (owner, 2026-10-29).
-# Once every world was claimed (sr_all_colonies_complete, kept as history) and
-# a lunar world is free again, as in a save whose worlds were all claimed
-# before the Moon existed, a programme colonizes only once the country chose
-# it: Resume Solar Colonization or Begin Solar Colonization set
-# sr_colonization_resumed. Otherwise a method carrying the colonization bool,
-# which every power that finished the race runs, would start it on its own and
-# pause its Commercial Space Industry. Read by the entry's `possible` and
-# sr_solar_colonization_running (its pulse, billing, controls and the
-# dividend's pause). Country scope.
+# While sr_race_over_moon_free holds, a programme colonizes only once the
+# country chose it: Resume Solar System Colonization or Begin Solar
+# Colonization set sr_colonization_resumed. Otherwise a method carrying the
+# colonization bool, which every power that finished the race runs, would
+# start it on its own and pause its Commercial Space Industry. Read by the
+# entry's `possible` and sr_solar_colonization_running (its pulse, billing,
+# controls and the dividend's pause). Country scope.
 sr_colonization_by_choice = {
 	OR = {
-		NOT = { has_global_variable = sr_all_colonies_complete }
-		NOT = { sr_sites_lunar_open = yes }
+		NOT = { sr_race_over_moon_free = yes }
 		has_variable = sr_colonization_resumed
 	}
 }

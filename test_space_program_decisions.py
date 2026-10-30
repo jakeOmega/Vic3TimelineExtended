@@ -321,12 +321,16 @@ class DecisionOpensTheEntryTest(unittest.TestCase):
     free, where the entry couldn't open.
 
     Every leaf test is a free atom, evaluated over every assignment the facts
-    below allow; the one scripted trigger the gate adds is expanded. The
-    decision's own `when_taken` sets what follows it."""
+    below allow; the scripted triggers the gate and the running test add are
+    expanded. The decision's own `when_taken` sets what follows it, and with
+    the entry already open its programme must run at once (review R1)."""
 
     SOLAR = "modifier:country_sr_solar_colonization_program_bool = yes"
     DEEP = "modifier:country_sr_deep_space_exploration_program_bool = yes"
     MARKER = "has_variable = sr_colonization_resumed"
+    OPEN = "has_journal_entry = je_space_race_solar_colonization"
+    ACTIVE = "has_variable = sr_active_solar_colonization"
+    DONE = "has_variable = sr_completed_solar_colonization"
     OVER = "has_global_variable = sr_all_colonies_complete"
     LUNAR = "sr_sites_lunar_open = yes"
     ANY = "sr_any_site_unclaimed = yes"
@@ -336,6 +340,7 @@ class DecisionOpensTheEntryTest(unittest.TestCase):
         (LUNAR, ANY),  # a free lunar world is an unclaimed one
         ("has_variable = sr_completed_mars_landing", "has_variable = sr_completed_moon_landing"),
         ("sr_has_colony_beyond_moon = yes", "sr_has_space_colony = yes"),
+        (DONE, OVER),  # a programme finishes only once every world was claimed
     )
 
     @classmethod
@@ -351,12 +356,19 @@ class DecisionOpensTheEntryTest(unittest.TestCase):
         cls.colonizing = [v for k, _, v in branches if k == "AND"][0]
         cls.possible = possible
         triggers = strip_comments(read(ROOT / "common/scripted_triggers/space_race_triggers.txt"))
-        cls.expand = {"sr_colonization_by_choice": _tree(block(triggers, "sr_colonization_by_choice"))}
+        cls.expand = {name: _tree(block(triggers, name)) for name in (
+            "sr_colonization_by_choice", "sr_race_over_moon_free", "sr_solar_colonization_running",
+            "sr_solar_colonization_qualified")}
+        cls.resume = strip_comments(read(ROOT / "common/scripted_effects/sr_site_effects.txt"))
+        cls.resume = block(cls.resume, "sr_resume_solar_colonization")
 
     def holds(self, body, state):
         for key, op, value in body:
             if key in ("AND", "custom_tooltip"):
                 ok = self.holds([x for x in value if x[0] != "text"], state)
+            elif key == "trigger_if":
+                limit = [v for k, _, v in value if k == "limit"][0]
+                ok = not self.holds(limit, state) or self.holds([x for x in value if x[0] != "limit"], state)
             elif key == "OR":
                 ok = any(self.holds([x], state) for x in value if x[0] != "text")
             elif key == "NOT":
@@ -373,7 +385,7 @@ class DecisionOpensTheEntryTest(unittest.TestCase):
     def atoms(self, body, out):
         for key, op, value in body:
             if isinstance(value, list):
-                if key in ("AND", "OR", "NOT", "custom_tooltip"):
+                if key in ("AND", "OR", "NOT", "custom_tooltip", "trigger_if", "limit"):
                     self.atoms(value, out)
                 continue
             if key == "text":
@@ -390,13 +402,17 @@ class DecisionOpensTheEntryTest(unittest.TestCase):
         shown = _tree(block(decision, "is_shown"))
         possible = _tree(block(decision, "possible"))
         gate = [("sr_colonization_by_choice", "=", "yes")]
-        atoms = sorted(self.atoms(shown + possible + self.possible + gate, set()) | {b for _, b in self.FACTS})
+        running = [("sr_solar_colonization_running", "=", "yes")]
+        atoms = sorted(self.atoms(shown + possible + self.possible + gate + running, set())
+                       | {b for _, b in self.FACTS} | {self.OPEN, self.DONE})
         self.assertLessEqual(len(atoms), 22, atoms)
         offered = 0
         for bits in itertools.product((False, True), repeat=len(atoms)):
             state = dict(zip(atoms, bits))
             if any(state.get(a) and not state.get(b) for a, b in self.FACTS):
                 continue
+            if state.get(self.OPEN) and not state.get(self.DONE) and not state.get(self.ACTIVE):
+                continue  # an open entry's immediate set it, unless it had finished
             if not (self.holds(shown, state) and self.holds(possible, state)):
                 continue
             offered += 1
@@ -404,16 +420,32 @@ class DecisionOpensTheEntryTest(unittest.TestCase):
             self.assertTrue(self.holds(self.possible + gate, after),
                             f"{name} is offered but the entry can't colonize: "
                             f"{sorted(a for a, v in after.items() if v)}")
+            if state.get(self.OPEN):
+                # review R1: with the entry already open, the programme runs at once
+                self.assertTrue(self.holds(running, after),
+                                f"{name} is taken with the entry open but nothing runs: "
+                                f"{sorted(a for a, v in after.items() if v)}")
         self.assertGreater(offered, 0, name)
+
+    def resumed(self, s):
+        """sr_resume_solar_colonization, as its body reads: the marker, and with
+        the entry open the active flag."""
+        self.assertTrue(self.resume.split()[:7] == "set_variable = { name = sr_colonization_resumed value".split())
+        opened = self.resume[self.resume.index(self.OPEN):]
+        self.assertIn("set_variable = { name = sr_active_solar_colonization value = yes }", opened)
+        return {self.MARKER: True, self.ACTIVE: s.get(self.ACTIVE) or s.get(self.OPEN)}
 
     def test_begin_solar_colonization(self):
         when = block(self.decisions["te_decision_space_mission_solar"], "when_taken")
-        self.assertIn("set_variable = { name = sr_colonization_resumed value = yes }", when)
-        self.check("te_decision_space_mission_solar", lambda s: {
-            self.SOLAR: True, self.MARKER: s.get(self.MARKER) or (s.get(self.OVER) and s.get(self.LUNAR))})
+        self.assertRegex(when, r"if = \{\s*limit = \{ sr_race_over_moon_free = yes \}\s*"
+                               r"sr_resume_solar_colonization = yes")
+        self.check("te_decision_space_mission_solar", lambda s: dict(
+            {self.SOLAR: True}, **(self.resumed(s) if s.get(self.OVER) and s.get(self.LUNAR) else {})))
 
     def test_begin_deep_space_exploration(self):
         self.check("te_decision_space_mission_deep_space", lambda s: {self.DEEP: True, self.SOLAR: True})
 
     def test_resume_solar_colonization(self):
-        self.check("te_decision_resume_solar_colonization", lambda s: {self.MARKER: True})
+        self.assertIn("sr_resume_solar_colonization = yes",
+                      block(self.decisions["te_decision_resume_solar_colonization"], "when_taken"))
+        self.check("te_decision_resume_solar_colonization", self.resumed)
