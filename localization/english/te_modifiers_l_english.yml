@@ -126,7 +126,7 @@
  country_greenhouse_gas_emissions_mult:0 "[concept_greenhouse_gas_emissions]"
  country_greenhouse_gas_emissions_mult_desc:0 "Modifies the rate at which this country contributes to global [concept_greenhouse_gas_emissions]."
  country_grid_transmission_efficiency_add:0 "Grid Transmission Efficiency"
- country_grid_transmission_efficiency_add_desc:0 "The share of the $grid_power$ a $building_grid_transfer_station$ receives that it turns back into $electricity$. The rest is lost in transmission."
+ country_grid_transmission_efficiency_add_desc:0 "The share of the $electricity$ sent to a $building_grid_transfer_station$ over its grid that arrives. The rest is lost in transmission."
  country_household_greenhouse_gas_emissions_mult:0 "Household Greenhouse Gas Emissions"
  country_household_greenhouse_gas_emissions_mult_desc:0 "Changes the household fossil-heating contribution to climate emissions. Reductions stack and are capped at complete elimination."
  country_ideology_resistance_mult:0 "Ideology Resistance"
