@@ -80,19 +80,19 @@ major power. It switches the Space Program to that method.
 | Begin Deep Space Exploration | Mars Mission or Solar Colonization | Mars Landing |
 | Begin the Interstellar Mission | Mars Mission or any later method | Deep-Space Probe and Mars Landing |
 
-Begin Solar Colonization appears only while there are worlds left that Solar
+Begin Solar Colonization appears only while there are sites left that Solar
 Colonization can reach: those of the Moon, and after your Mars Landing those of
 stages 1 and 2, or of any stage once you also hold a colony beyond the Moon.
-Every world beyond the Moon needs your Mars Landing. Begin Deep Space
-Exploration appears only when you need it: every world of stages 1 and 2 is
+Every site beyond the Moon needs your Mars Landing. Begin Deep Space
+Exploration appears only when you need it: every site of stages 1 and 2 is
 claimed and you hold no colony beyond the Moon. You can begin the Interstellar
 Mission without finishing colonization, and colonization goes on under it.
 
-Once all 40 worlds have been claimed, a world on the Moon that comes free again
+Once all 40 sites have been claimed, a site on the Moon that comes free again
 is settled only by choice, and no program starts on its own. The decision Resume
 Solar System Colonization (or Begin Solar Colonization) runs your program for
 the Moon until it is full. A finished program keeps Interplanetary Trade
-Networks, and it doesn't start again for a world beyond the Moon. While it runs,
+Networks, and it doesn't start again for a site beyond the Moon. While it runs,
 the program bills its funding and approach, and Commercial Space Industry
 pauses, as it does whenever one of your programs runs.
 
@@ -113,7 +113,7 @@ Program runs a method that supports it.
 | Mars Landing | Moon Landing | Knowledge Economy (era 9) | 450 | 9% | ×6 |
 | Interstellar Probe | Deep-Space Probe and Mars Landing | Muon-Catalyzed Fusion Reactors (era 12) | 600 | 9% | ×12 |
 | Interstellar Probe: Awaiting Data | Interstellar Probe | none | 132 months | none | none |
-| Solar System Colonization | Moon Landing (Mars Landing for the worlds beyond the Moon) | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
+| Solar System Colonization | Moon Landing (Mars Landing for the sites beyond the Moon) | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
 
 The setback risk is the base chance each month; the cost factor scales the
 milestone's innovation cost (see [Space race funding and
@@ -190,12 +190,12 @@ Solar System Colonization's overview shows its stage (Stage: the Moon, then Stag
 of the first, and its bar is Next Colony, the progress toward your next colony.
 While a full bar waits for a launch window, Staged in Orbit gives the progress
 built so far in colony fleets ("1.4 fleets"); hover it for each destination's
-next window. Under the bar, the Worlds pie counts the 40 worlds: gold for your
-colonies, red for other powers' and gray for the worlds no one holds; hover it
+next window. Under the bar, the Sites pie counts the 40 sites: gold for your
+colonies, red for other powers' and gray for the sites no one holds; hover it
 for the counts. Its Mission Control adds Next Windows, the destinations of the
-stage with a world left and the months to each window (see [Launch
+stage with a site left and the months to each window (see [Launch
 windows](#launch-windows)).
-While the program isn't running, because every world is claimed or your Space
+While the program isn't running, because every site is claimed or your Space
 Program no longer runs the method it needs, the approach reads Idle, the risk
 and progress rows are hidden, and Mission Control shows only the Mission
 Profile.
@@ -208,13 +208,13 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Colonies | Loyal, with the colonies you hold; or, in red, the name of a colony at autonomy 75 or more, which wants self-rule, and how many more do. Hover it for all of them. |
 | Defense | Under Full Colonies only. Calm; or, in red, what threatens you (Under assault, Blockaded, Occupied, Interdicted, Earth blockaded or Launch site lost) and the colony it threatens. Hover it for every colony under threat and any hostile fleet on its way. |
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
-| Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No world left; and the stage. |
+| Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
 
 Solar System Colonization has more sections below Rivals: Colony Fleets,
 Solar System and Colonies, then under Full Colonies Space Command and Space
 Fleets, and How Solar Colonization Works (collapsed), which explains them.
-Colonies (open) has a row for every world you hold, with Colonies Held (out of
-40) at the top. Each row has a small icon for its kind of world (the Moon, Mars,
+Colonies (open) has a row for every site you hold, with Colonies Held (out of
+40) at the top. Each row has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a
 dwarf planet), and hovering its name shows the colony's permanent effects. The
 buttons above the rows switch what each row shows:
@@ -228,7 +228,7 @@ buttons above the rows switch what each row shows:
 
 The section stays on the panel when the program is Idle, so you can always see
 where your colony modifiers come from. Under Races Only, Colonies lists your
-worlds and their effects without the views.
+sites and their effects without the views.
 
 Interstellar Probe: Awaiting Data has nothing to control, so it has no Mission
 Control or Rivals. Its overview is the Transit bar ("40 / 132 months") and the
@@ -427,7 +427,7 @@ who finishes it later gets the smaller one.
 The first figure is the first-to-finish reward, the second the later one.
 The first lunar colony is a milestone of its own: the first colony you found
 on the Moon with your own fleet plays Foothold on Another World and earns the
-reward, as the first in the race or a later one. A lunar world gained by
+reward, as the first in the race or a later one. A lunar site gained by
 treaty, inheritance or seizure doesn't count.
 Suborbital Flight's completion event also offers a choice: loyalists, or
 Suborbital Momentum, an extra copy of the later finisher's reward (+1%
@@ -458,18 +458,18 @@ confirms its discovery; the reward is the same.
 ## Colonizing the solar system
 
 Solar System Colonization is repeatable. Each time its bar fills, a colony fleet
-leaves for an unclaimed world: the one you chose with Target in the Solar System
-list (see [Choosing a colony's world](#choosing-a-colonys-world)), or otherwise
+leaves for an unclaimed site: the one you chose with Target in the Solar System
+list (see [Choosing a colony's site](#choosing-a-colonys-site)), or otherwise
 one the program picks among those it can reach that month (see [Launch
-windows](#launch-windows)). Under Races Only the program picks a random world of
+windows](#launch-windows)). Under Races Only the program picks a random site of
 the current stage, and the colony is founded the month its fleet leaves. Under
 Simple Colonies and Full Colonies the fleet travels and founds the colony when it
-lands (see [Colony fleets in flight](#colony-fleets-in-flight)). Each world can be
+lands (see [Colony fleets in flight](#colony-fleets-in-flight)). Each site can be
 claimed once, by anyone, so every other country racing for colonies competes for
-the same 40 sites. Under Races Only a stage opens for everyone once every world in
+the same 40 sites. Under Races Only a stage opens for everyone once every site in
 the one before it has been claimed. Each stage needs more progress per colony.
 
-| Stage | Worlds | Colonies | Progress per colony |
+| Stage | Sites | Colonies | Progress per colony |
 |---|---|---|---|
 | 0 | The Moon (Shackleton Crater, Peary Crater, Tranquility Base, Marius Hills, Daedalus Crater, Mare Imbrium) | 6 | 300 |
 | 1 | Mars (Valles Marineris, Olympus Mons, Hellas Planitia, Utopia Planitia, Arcadia Planitia) and the asteroids (Ceres, 4 Vesta, 16 Psyche, 2 Pallas, 10 Hygiea) | 10 | 450 |
@@ -481,14 +481,14 @@ the one before it has been claimed. Each stage needs more progress per colony.
 From stage 3, a country that doesn't yet hold a colony beyond the Moon needs the
 Deep Space Exploration or Interstellar Mission method to colonize there; a
 country that already holds one carries on through every stage with Solar
-Colonization. Under Simple Colonies and Full Colonies the same rule applies world
-by world: a country holding no colony beyond the Moon needs one of those methods
+Colonization. Under Simple Colonies and Full Colonies the same rule applies site
+by site: a country holding no colony beyond the Moon needs one of those methods
 to send a fleet to Mercury, Saturn or beyond. A colony on the Moon keeps the
 program open, but alone it reaches no further than stage 2.
 Each colony's event offers two specializations, and the one you choose becomes a
 small permanent modifier on the journal entry. Under Simple Colonies and Full
 Colonies you can raise it, and add the other, with modules (see [Colony
-modules](#colony-modules)). The options differ by world:
+modules](#colony-modules)). The options differ by site:
 research speed, military research speed, innovation cap, space race progress,
 Extraplanetary Base, Fusion Plant or Orbital Solar Collector throughput,
 Advanced Materials or Launch Capacity output, cultural pull, influence,
@@ -498,9 +498,9 @@ the event Beyond the Blue.
 The entry stays open for as long as you hold a colony, even if you switch off
 the Solar Colonization method, so your colony modifiers are never lost; the
 program simply stops (its panel reads Idle), and bills no funding or approach
-cost, until the method returns. Once all 40 worlds are claimed, Solar System
+cost, until the method returns. Once all 40 sites are claimed, Solar System
 Colonization finishes within a month for every country that holds a colony,
-whoever took the last world and whether or not its program is running.
+whoever took the last site and whether or not its program is running.
 Finishing grants Interplanetary Trade Networks: +10% prestige, +5% research
 speed, +10% influence and +15% cultural pull.
 
@@ -508,13 +508,13 @@ speed, +10% influence and +15% cultural pull.
 
 The Moon is stage 0, settled before Mars. You can colonize it once your Moon
 Landing is complete, with Cislunar Infrastructure and the Solar Colonization
-method; the worlds beyond it wait for your Mars Landing, and a Target button on
-one says so until then. Its six worlds need no launch window
+method; the sites beyond it wait for your Mars Landing, and a Target button on
+one says so until then. Its six sites need no launch window
 and no transit: under every setting, a colony fleet bound for the Moon founds its
 colony the month it leaves, and it never takes one of the six places for fleets
 in flight.
 
-| World | People room | Slots | Base room | Specializations |
+| Site | People room | Slots | Base room | Specializations |
 |---|---|---|---|---|
 | Shackleton Crater | 25,000 | 2 | 15 | Propellant Depot, Polar Outpost |
 | Peary Crater | 15,000 | 1 | 10 | Solar Power, Polar Observatory |
@@ -523,12 +523,12 @@ in flight.
 | Daedalus Crater | 10,000 | 1 | 10 | Radio Telescope, Deep-Space Relay |
 | Mare Imbrium | 25,000 | 2 | 25 | Mass Driver, KREEP Mining |
 
-The site your Moon Landing chose (Where the Eagle Shall Land) takes 25% off the
-progress of one lunar world, for you alone: Shackleton Crater for a Shackleton
+The landing site your Moon Landing chose (Where the Eagle Shall Land) takes 25% off the
+progress of one lunar colony site, for you alone: Shackleton Crater for a Shackleton
 landing, Tranquility Base for the Sea of Tranquility, Marius Hills for the
-Equatorial Plain and Daedalus Crater for the far side. A world's hover in the
+Equatorial Plain and Daedalus Crater for the far side. A site's hover in the
 Solar System list says when the discount is yours. Under Races Only it counts
-when you choose that world with Target, not when the program draws one for you.
+when you choose that site with Target, not when the program draws one for you.
 
 Shackleton's Propellant Depot cracks the crater's ice into rocket fuel. While you
 hold it, with its specialization built and the colony neither blockaded nor
@@ -542,21 +542,21 @@ with Earth orbit (see [Battles in space](#battles-in-space)).
 
 ### Launch windows
 
-Every world but Mercury and the Moon's six is reached on a transfer orbit that lines up only once
-in a while. A world's launch window is the month of its best departure and the
+Every site but Mercury and the Moon's six is reached on a transfer orbit that lines up only once
+in a while. A site's launch window is the month of its best departure and the
 month on either side. The windows are worked out from the planets' and
 asteroids' real orbits: Mars opens one every 26 months or so, each asteroid
 every 15 to 17, Venus every 19, Jupiter every 13, and Saturn, Uranus, Neptune
 and the Kuiper Belt about once a year. Next Windows in Mission Control lists the
 stage's destinations with the months to each.
 
-While no destination with a world left is open, the program keeps building.
+While no destination with a site left is open, the program keeps building.
 Progress past a colony's goal is fleets staged in orbit, shown on the overview
 as Staged in Orbit. When a window opens, one fleet departs each month it stays
 open while staged progress covers a colony, so a three-month window can send
 three. What is left waits for the next window. It carries on to the next stage
-if rivals take the stage's last worlds, and is lost when the last of the 40
-worlds is claimed. Cutting funding while you wait gains nothing: whatever you
+if rivals take the stage's last sites, and is lost when the last of the 40
+sites is claimed. Cutting funding while you wait gains nothing: whatever you
 build now leaves in a later window.
 
 Until you hold a colony, the program starts over whenever it stops: when your
@@ -594,29 +594,29 @@ Fusion Power doesn't change when a fleet can leave, only how long it takes to
 arrive under Simple Colonies and Full Colonies (see [Colony fleets in
 flight](#colony-fleets-in-flight)).
 
-### Choosing a colony's world
+### Choosing a colony's site
 
 The Solar System list in Solar System Colonization has a Target button on each
-unclaimed world your program can send its next fleet to, while the program
-runs. It lists those worlds, your own and any a fleet is on its way to; Show
-all lists all 40. Hover a world's name for what it offers: its stage, its two
+unclaimed site your program can send its next fleet to, while the program
+runs. It lists those sites, your own and any a fleet is on its way to; Show
+all lists all 40. Hover a site's name for what it offers: its stage, its two
 specializations, how long your drive takes to reach it, and its next launch
-window. Click Target to choose that world: its row reads Our target, and the
-Colony Fleets section names it, with a Clear button beside it. The next fleet waits for that world's launch window, even
-if another world's window opens first. Outside the window it leaves at the
-premium when your approach judges it worth it, weighing the wait for that world's
-own window. Under Simple Colonies and Full Colonies a chosen world costs the
+window. Click Target to choose that site: its row reads Our target, and the
+Colony Fleets section names it, with a Clear button beside it. The next fleet waits for that site's launch window, even
+if another site's window opens first. Outside the window it leaves at the
+premium when your approach judges it worth it, weighing the wait for that site's
+own window. Under Simple Colonies and Full Colonies a chosen site costs the
 progress of its own stage. Click Clear on the row to let the program pick again;
-it also picks again when someone else claims the world first.
+it also picks again when someone else claims the site first.
 
-Under Races Only you can choose any world of the current stage, or a released
-world of an earlier stage. The colony is still founded the month its fleet
+Under Races Only you can choose any site of the current stage, or a released
+site of an earlier stage. The colony is still founded the month its fleet
 leaves. AI programs don't choose ahead; they pick when a fleet is ready.
 
 ### Colony fleets in flight
 
 Under Simple Colonies and Full Colonies, a colony fleet takes months or years to
-reach its world, and claims it only when it lands. Your drive sets how long:
+reach its site, and claims it only when it lands. Your drive sets how long:
 
 | Drive | Technology | Leaves | Mars | Jupiter | Uranus | Kuiper Belt |
 |---|---|---|---|---|---|---|
@@ -629,23 +629,23 @@ Fusion's times are for a departure in the window; a fusion fleet that leaves
 outside one, at the premium, takes longer, much longer to the outer planets.
 Mercury takes 4 months by chemical rocket, and the Moon none (see [The
 Moon](#the-moon)). Colony Fleets names your drive, lists
-each fleet in flight with its world and the month it lands, and holds up to six;
+each fleet in flight with its site and the month it lands, and holds up to six;
 with six in flight the bar waits.
 
-The stages are not locks: a fleet can leave for any unclaimed world, and distance
-gates the outer system instead. A world costs its own stage's progress, 300 for
+The stages are not locks: a fleet can leave for any unclaimed site, and distance
+gates the outer system instead. A site costs its own stage's progress, 300 for
 the Moon and 450 for Mars and the asteroids, up to 800 for the Kuiper Belt. Without a choice of yours,
-the program sends each fleet to the best world it can reach within 15 years:
-nearer, cheaper and inner worlds first, and away from worlds a fleet already on
+the program sends each fleet to the best site it can reach within 15 years:
+nearer, cheaper and inner sites first, and away from sites a fleet already on
 its way, yours or another country's, will reach first. So a chemical program
 settles Mars, the asteroids and Jupiter, and waits for better drives before
-Uranus. AI programs pick the same way. You can still choose a world farther out
+Uranus. AI programs pick the same way. You can still choose a site farther out
 by hand.
 
-Each world's row in the Solar System list shows the fleets on their way, as the
+Each site's row in the Solar System list shows the fleets on their way, as the
 number of fleets and the months until the first lands, in a brighter color when
-the first is yours. The first fleet to land claims the world. A fleet that lands to
-find its world taken founds another unclaimed world of the same planet or belt
+the first is yours. The first fleet to land claims the site. A fleet that lands to
+find its site taken founds another unclaimed site of the same planet or belt
 (Mars, Jupiter, Saturn, Uranus, Neptune or the Kuiper Belt) instead. If none is
 free, or it was bound for an asteroid, Venus or Mercury, it is lost with the
 progress it cost. Either way an event tells you.
@@ -697,7 +697,7 @@ listed in the Colonies section's Modules view in Solar System Colonization:
 |---|---|---|
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
 | Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports and Defenses: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
-| Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a world that makes propellant. Under Simple Colonies, nothing | The colony's slots; none on the Moon |
+| Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a site that makes propellant. Under Simple Colonies, nothing | The colony's slots; none on the Moon |
 | Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | The colony's slots |
 
 The founding event has to be answered before you can add a specialization
@@ -724,11 +724,11 @@ in order, first in first out: the module at the top is next. The arrow on each
 line from the second on moves that module up a place; Alt+Click moves it to the
 top. Up to 200 points wait in stock while nothing is queued.
 
-A finished module waits at Earth for its world's launch window, or leaves at
+A finished module waits at Earth for its site's launch window, or leaves at
 once with a fusion torch or antimatter drive, and lands after the transit your
 drive buys (see [Colony fleets in flight](#colony-fleets-in-flight)). Eight
 modules can wait or fly at once; while all eight are taken, fabrication waits.
-A module lands for whoever holds the colony then, and is lost if the world was
+A module lands for whoever holds the colony then, and is lost if the site was
 released or its room filled in the meantime.
 
 Every level past the first needs a crew of 5,000 people, except Habitats, which
@@ -753,13 +753,13 @@ and each colony you hold adds its own, from 10 levels on the small outer moons t
 Each colony's room has a grade, which raises or lowers the output of the levels
 that work it:
 
-| Worlds | Grade |
+| Sites | Grade |
 |---|---|
 | 16 Psyche | +30% |
 | 4 Vesta, Ceres | +20%, +15% |
 | Mars, 2 Pallas | +10% |
 | 10 Hygiea, Himalia, Mercury, Tranquility Base, Marius Hills | +5% |
-| The near-Earth asteroids, the Moon's other four worlds, Ganymede, Callisto, Amalthea | 0 |
+| The near-Earth asteroids, the Moon's other four sites, Ganymede, Callisto, Amalthea | 0 |
 | Io, Europa, Venus | −5% to −10% |
 | Saturn's moons | −15% to −20% |
 | Uranus's and Neptune's moons | −25% to −35% |
@@ -778,7 +778,7 @@ Races Only, bases have no room limit.
 
 ### Who holds a colony
 
-Every world records which country holds it. Solar System Colonization's Solar
+Every site records which country holds it. Solar System Colonization's Solar
 System section, with Show all, lists all 40 under their places in the solar
 system: Ours, the holder's flag (hover it for the country's name, click it to
 open the country), Another power, or Unclaimed.
@@ -788,7 +788,7 @@ Colonies and Full Colonies, until a treaty moves it ([Ceding a
 colony](#ceding-a-colony)) or it leaves on its own ([Colony autonomy and free
 colonies](#colony-autonomy-and-free-colonies)). When a holder is annexed, each of its colonies passes, with its
 specialization and its discoveries, to whoever owns the state region of its last
-capital. If no country there can take it, the world reads Unclaimed again: the
+capital. If no country there can take it, the site reads Unclaimed again: the
 next colony fleet that can reach it claims it, at the current stage's cost, even
 when its stage is long past or the race is over. Under Simple Colonies and Full
 Colonies a colony of 1,000 people or more becomes a free colony instead (see
@@ -815,7 +815,7 @@ Transfer. It can also be demanded as a war goal, for 5 maneuvers and 10 infamy.
 
 AI powers in the race ask for colonies; an AI that holds a colony with no space
 program of its own offers it. Any AI accepts a cession when the rest of the
-treaty pays more than the colony is worth to it, which rises with the world's
+treaty pays more than the colony is worth to it, which rises with the site's
 stage, from the Moon to the Kuiper Belt.
 
 ### Colony autonomy and free colonies
@@ -859,7 +859,7 @@ a garrison goes home. AI powers grant a charter while they race, garrison while
 at war, and let a colony go when they run no colonization program.
 
 **Abandoning a colony.** Each colony's row has an Abandon button, which asks
-first. You can bring its people home to your capital, releasing the world and
+first. You can bring its people home to your capital, releasing the site and
 losing its modules, or, with 1,000 people or more, leave them to govern
 themselves as a free colony. An outpost with almost no one in it can only be
 closed. The AI never abandons a colony.
@@ -911,7 +911,7 @@ founded. A successful founding roll starts a year of surveying. After that,
 the discovery has a 1% monthly chance for biological finds or 2% for other finds.
 A country can receive at most one discovery every six months. Each discovery
 occurs once, and other possible finds wait through that spacing period.
-Surveys continue while colonization is idle and after all worlds are claimed.
+Surveys continue while colonization is idle and after all sites are claimed.
 Colonies founded in an older save receive no new founding rolls.
 
 Each event reports a confirmed discovery by an established colony. The
@@ -977,7 +977,7 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 
 A fleet in flight can be neither attacked nor recalled. It docks at Earth and at
 your colonies with a Spaceport: supply and propellant refill (at a Spaceport,
-propellant only on a world that makes it, such as Utopia Planitia, Ceres, Europa
+propellant only on a site that makes it, such as Utopia Planitia, Ceres, Europa
 or Titan), damage is repaired, and a fleet on an older drive refits to your best
 in three months. Away from a dock supply runs down, and a fleet without it loses
 5% of its strength a month. Marines fill up at Earth only. A fleet that arrives
@@ -994,8 +994,8 @@ What a fleet fights depends on its posture, set by the posture button:
 |---|---|---|
 | Station | Every enemy fleet there | Guard your colonies. A fleet arriving where you hold a colony stations |
 | Stand off | Enemy fleets that stand off or are stationed, out of the colonies' guns | Blockade an enemy's colonies |
-| Close in | The target world's Defenses and the enemy fleets stationed there | Seize or destroy a colony |
-| Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its world | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
+| Close in | The target site's Defenses and the enemy fleets stationed there | Seize or destroy a colony |
+| Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its site | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
 
 At Earth every fleet is stationed and fights every enemy fleet, an Orbital
 Battlestation fights for its owner (25 strength a level, regaining 10% a month;
@@ -1024,16 +1024,16 @@ ships goods home (mining, industry, propellant) stops; research and observatory
 specializations keep running. The Colonies section's Defenses view lists your
 colonies with their Defenses, integrity, marines and status.
 
-A fleet closing in on a world brings its integrity down, from 100 to 0, faster
-with siege ships and against fewer Defenses; the world's Defenses fire back.
+A fleet closing in on a site brings its integrity down, from 100 to 0, faster
+with siege ships and against fewer Defenses; the site's Defenses fire back.
 Integrity returns by 5 a month when the attack stops, 10 with a Spaceport. At
 0, with no enemy fleet stationed there, the fleet's next step depends on its
 Seize or Destroy button:
 
 | Choice | Needs | What follows | Price |
 |---|---|---|---|
-| Seize | More marines than the world's garrison and militia (a battalion for every 20,000 people, at least one) | The world is occupied: it gives its holder nothing, counts as Colonies occupied in space in the war support breakdown, and goes back at the peace unless a Cede Colony article takes it. Its holder, or anyone at war with the occupier, frees it the same way, with more marines than the occupier's garrison | None |
-| Destroy | Three months closing in with more fire than its Defenses | The colony and everyone in it are lost, and the world lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies and their resentment for ten years |
+| Seize | More marines than the site's garrison and militia (a battalion for every 20,000 people, at least one) | The site is occupied: it gives its holder nothing, counts as Colonies occupied in space in the war support breakdown, and goes back at the peace unless a Cede Colony article takes it. Its holder, or anyone at war with the occupier, frees it the same way, with more marines than the occupier's garrison | None |
+| Destroy | Three months closing in with more fire than its Defenses | The colony and everyone in it are lost, and the site lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies and their resentment for ten years |
 
 A free colony can be attacked without a war: closing in costs 10 infamy at
 once, and seizing it makes it yours at autonomy 60. A party to the
@@ -1041,7 +1041,7 @@ once, and seizing it makes it yours at autonomy 60. A party to the
 pays twice the infamy and twice the UN record for destroying a colony or
 closing in on a free one. Seizing a colony at war costs a party no more than
 anyone else. Without Survey Colony
-Defenses against its holder, the target's hover gives a world's Defenses only
+Defenses against its holder, the target's hover gives a site's Defenses only
 roughly, and its integrity and marines not at all.
 
 ### Interdiction
@@ -1050,7 +1050,7 @@ You can blockade a rival's colonies without going to war, as the United States
 quarantined Cuba in 1962. Send a fleet to a location other than Earth where a
 country at peace with you, and not your ally (no alliance or defensive pact),
 holds a colony, and
-step its posture to Interdict; the target button picks which country's world.
+step its posture to Interdict; the target button picks which country's site.
 While none of that country's fleets is stationed or standing off there, its
 colonies at that location are blockaded as an enemy's would be, and its
 Locations row reads Interdicted. Nobody fires. If its fleet holds orbit there,
@@ -1063,7 +1063,7 @@ war.
 
 An interdiction ends, and the fleet stands off, when its target goes to war
 with you, signs an alliance or defensive pact with you, or no longer holds a
-colony there. A world that passes to another country at peace with you is a new
+colony there. A site that passes to another country at peace with you is a new
 interdiction, at the same price. In a war against the country you were
 interdicting, your fleet standing off blockades it anyway, now as an enemy.
 
@@ -1144,8 +1144,8 @@ Ground Lasers at war, and in peace once debris is Cluttered.
 ## After the space race
 
 The race is over for you once you have finished all six single-goal
-milestones, all 40 worlds have been claimed by anyone, and no program of yours is
-still running. A power that gets there after the last world is gone qualifies as
+milestones, all 40 sites have been claimed by anyone, and no program of yours is
+still running. A power that gets there after the last site is gone qualifies as
 soon as its own six milestones are done. From then on, the progress your
 sources still give each month goes into your Extraplanetary Bases as
 Commercial Space Industry: each point of monthly progress adds +5%
@@ -1298,7 +1298,7 @@ milestone; AI major powers lean toward Safe. The AI raises funding, never past
 the cap, while it has innovation to spare and cuts it when innovation runs short. Launch windows bind
 the AI as they bind you, and its approach decides its launches outside a window
 the same way. Under Simple Colonies and Full Colonies the AI sends its colony
-fleets where the program picks for you when you choose no world, and sets its
+fleets where the program picks for you when you choose no site, and sets its
 emigration and queues its colony modules once a year (see [Colony
 settlers](#colony-settlers) and [Colony modules](#colony-modules)).
 
