@@ -339,7 +339,8 @@ nuclear_thermal_propulsion = {
 	# off-window launch premium (design § 9): a country with it pays the nuclear
 	# thermal curve (sr_launch_premium_ntp_<body>, the same extra delta-v at
 	# 9 km/s) through sr_launch_has_ntp. Launching outside a window still needs
-	# propellant depots. The boolean below only shows that in the tooltip.
+	# propellant depots. The boolean below is that marker: it shows the effect in
+	# the tooltip and is what sr_launch_has_ntp reads.
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/nuclear_thermal_propulsion.dds"
 	category = military
