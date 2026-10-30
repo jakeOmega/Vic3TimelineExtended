@@ -946,7 +946,7 @@ te_grid_clear_cross_market_effect = {
 # flow at today's throughput.
 #
 # Also sets local_var:te_grid_throughput_step, how far the read moved since
-# the last run (-10 or less with no earlier read), which the self-checks gate
+# the last run (about -10 with no earlier read), which the self-checks gate
 # on: a step that landed after the last tick puts last week's output off the
 # read. A factor from before #1248 was measured with its throughput in it:
 # taken out once, at today's read, so that a factor kept at this run reads as
