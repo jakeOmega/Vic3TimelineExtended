@@ -476,22 +476,24 @@ covert_backlash_home = {
 }
 
 # The full share: appeasement -3 / -5 / -8 and legitimacy -3 / -5 / -8 (mild /
-# moderate / severe), the latter fading over short_modifier_time. With no
-# lobby at home that favours the target the appeasement line is replaced by a
-# note saying so, rather than a lobby that is not there; legitimacy still falls.
-# The lobby's interest groups lose approval through the lobby itself, so no
-# separate approval hit. appeasement_covert_spying_exposed is always usable, so
-# the lobby types need not list it (te_covert_appeasement.txt).
-# Scope: operator country; scope:detected_by_country is the target
+# moderate / severe), the latter fading over short_modifier_time. The lobby is
+# the one covert_warfare.1's immediate pinned as scope:iw_home_lobby, changed
+# through its own scope so the option's tooltip names it (vanilla's lobby
+# events do the same); a lobby formed after the event opened is missed. With
+# no lobby at home that favours the target, or one that has disbanded since,
+# the appeasement line is replaced by a note saying so, rather than a lobby
+# that is not there; legitimacy still falls. The lobby's interest groups lose
+# approval through the lobby itself, so no separate approval hit.
+# appeasement_covert_spying_exposed is always usable, so the lobby types need
+# not list it (te_covert_appeasement.txt).
+# Scope: operator country; scope:detected_by_country is the target,
+# scope:iw_home_lobby the lobby at home that favours it
 covert_backlash_home_full = {
 	if = {
-		limit = {
-			any_political_lobby = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
-		}
+		limit = { exists = scope:iw_home_lobby }
 		if = {
 			limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -3 factor = appeasement_covert_spying_exposed }
 			}
 		}
@@ -502,14 +504,12 @@ covert_backlash_home_full = {
 					covert_code_tier_war = { VAR = iw_burned_type_code }
 				}
 			}
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -8 factor = appeasement_covert_spying_exposed }
 			}
 		}
 		else = {
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -5 factor = appeasement_covert_spying_exposed }
 			}
 		}
@@ -537,16 +537,14 @@ covert_backlash_home_full = {
 
 # The half share, for Deny: appeasement and legitimacy -2 / -3 / -4. Same shape
 # as covert_backlash_home_full; only the literals differ.
-# Scope: operator country; scope:detected_by_country is the target
+# Scope: operator country; scope:detected_by_country is the target,
+# scope:iw_home_lobby the lobby at home that favours it
 covert_backlash_home_half = {
 	if = {
-		limit = {
-			any_political_lobby = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
-		}
+		limit = { exists = scope:iw_home_lobby }
 		if = {
 			limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -2 factor = appeasement_covert_spying_exposed }
 			}
 		}
@@ -557,14 +555,12 @@ covert_backlash_home_half = {
 					covert_code_tier_war = { VAR = iw_burned_type_code }
 				}
 			}
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -4 factor = appeasement_covert_spying_exposed }
 			}
 		}
 		else = {
-			every_political_lobby = {
-				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+			scope:iw_home_lobby = {
 				change_appeasement = { amount = -3 factor = appeasement_covert_spying_exposed }
 			}
 		}
