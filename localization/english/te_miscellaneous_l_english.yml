@@ -7006,6 +7006,7 @@
  st_res_tanks_store_flow:0 "Strategic Reserve Tanks Intake"
  st_res_tanks_withdraw_flow:0 "Strategic Reserve Tanks Release"
  state_power_grid_connection_bool:0 "[concept_power_grid] Connection"
+ state_power_grid_disrupted_bool:0 "[concept_power_grid] Disruption"
  state_violence_against_minorities_bool:0 "Violence Against Minorities"
  statepower_autonomy_debate_advance:0 "State Power: Autonomy Debate Advance"
  statepower_autonomy_debate_concession:0 "State Power: Autonomy Debate Concession"

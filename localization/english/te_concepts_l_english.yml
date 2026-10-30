@@ -2749,6 +2749,7 @@
  st_res_tanks_store_flow_desc:0 "This hub is purchasing tanks for the strategic reserve."
  st_res_tanks_withdraw_flow_desc:0 "This hub is releasing tanks from the strategic reserve."
  state_power_grid_connection_bool_desc:0 "This state is joined to a [concept_power_grid]. Once a month the grid moves $electricity$ through the state's $building_grid_transfer_station$, from states where it is cheap to states where it is dear."
+ state_power_grid_disrupted_bool_desc:0 "This state is cut off from its [concept_power_grid]. Its $building_grid_transfer_station$ moves no $electricity$ until the disruption ends, then rejoins the grid."
  state_violence_against_minorities_bool_desc:0 "The state engages in violence against minority groups, leading to occasional deaths and injuries."
  statepower_autonomy_debate_advance_desc:0 "A strong positive boost to law enactment progress from a recent event."
  statepower_autonomy_debate_concession_desc:0 "The bill went back for redrafting to answer its critics, which slows law enactment progress."

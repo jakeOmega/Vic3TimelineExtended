@@ -16,11 +16,15 @@ te_grid_state_has_station = {
 # line, and anything else that grants it (a law, a technology, another
 # building) counts the same way. The station still moves the state's power,
 # so a state takes part only with one (te_grid_station_online, and the
-# balancing's loops over has_building). The once-a-game self-checks
-# grid_connection and grid_connection_unstaffed read whether the method's
-# line reaches this read (te_grid_connection_selfcheck_effect).
+# balancing's loops over has_building). A Power Grid Disruption
+# (state_power_grid_disrupted_bool) cuts the connection while it lasts: a
+# boolean only takes yes, so an outage can't take the connection away and
+# grants its own line instead. Nothing grants it yet. The once-a-game
+# self-checks grid_connection and grid_connection_unstaffed read whether the
+# method's line reaches this read (te_grid_connection_selfcheck_effect).
 te_grid_state_connected = {
 	modifier:state_power_grid_connection_bool = yes
+	modifier:state_power_grid_disrupted_bool = no
 }
 
 # State scope. The state is connected (te_grid_state_connected) and its Grid

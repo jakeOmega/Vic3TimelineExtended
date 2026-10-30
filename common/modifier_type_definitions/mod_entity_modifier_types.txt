@@ -1660,6 +1660,20 @@ state_power_grid_connection_bool = {
 	script_only = yes
 }
 
+# The state's grid connection is cut: its station moves nothing while it lasts
+# (te_grid_state_connected), and keeps its factor for when it ends. A boolean
+# only takes yes, so nothing can take state_power_grid_connection_bool away;
+# an outage (a cyberattack, sabotage) grants this instead, and its source shows
+# in the state's modifiers. Nothing grants it yet. Read by script only.
+state_power_grid_disrupted_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
 # Grid Transfer Stations always run subsidized, from base_values: the
 # pattern Interventionism uses for highways and airports.
 country_building_grid_transfer_station_require_subsidies_bool = {

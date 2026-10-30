@@ -1326,6 +1326,15 @@ class ConnectionTest(unittest.TestCase):
         self.assertRegex(body, r"\bscript_only = yes\b")
         self.assertRegex(body, r"\bcolor = good\b")
 
+    def test_a_disruption_is_its_own_boolean_and_cuts_the_connection(self):
+        # A boolean only takes yes, so an outage can't take the connection away: it grants its own line.
+        body = _code(_top_level(_read(TYPES), "state_power_grid_disrupted_bool"))
+        self.assertRegex(body, r"\bboolean = yes\b")
+        self.assertRegex(body, r"\bscript_only = yes\b")
+        self.assertRegex(body, r"\bcolor = bad\b")
+        connected = _top_level(_code(_read(TRIGGERS)), "te_grid_state_connected")
+        self.assertIn("modifier:state_power_grid_disrupted_bool = no", connected)
+
     def test_the_method_grants_it_unscaled_on_the_state(self):
         # Unscaled, so an empty station keeps its connection as it keeps its order.
         method = _code(_top_level(_read(PMS), "pm_grid_transfer_base"))
@@ -1350,6 +1359,7 @@ class ConnectionTest(unittest.TestCase):
                 loc.update(re.findall(r'(?m)^ ([\w.]+):\d* "(.*)"\s*$', _read(os.path.join(LOC_DIR, name))))
         self.assertIn("[concept_power_grid]", loc["state_power_grid_connection_bool"])
         self.assertIn("[concept_power_grid]", loc["state_power_grid_connection_bool_desc"])
+        self.assertIn("[concept_power_grid]", loc["state_power_grid_disrupted_bool"])
 
     def test_self_checks_read_the_connection_before_the_run_uses_it(self):
         world = _code(_top_level(_read(EFFECTS), "te_grid_world_update_effect"))
@@ -1359,7 +1369,10 @@ class ConnectionTest(unittest.TestCase):
         for name in ("grid_connection ", "grid_connection_unstaffed "):
             self.assertIn(f"TE_SELF_CHECK OK {name}", check)
             self.assertIn(f"TE_SELF_CHECK BROKEN {name}", check)
-        self.assertIn("te_grid_state_connected = yes", check)
+        # They judge the connection's own line, at states with no disruption, which would cut it.
+        self.assertNotIn("te_grid_state_connected", check)
+        self.assertEqual(check.count("limit = { modifier:state_power_grid_connection_bool = yes }"), 2)
+        self.assertEqual(check.count("modifier:state_power_grid_disrupted_bool = no"), 2)
         # Judged at a station already built at the last run, so its modifiers have settled,
         # and the empty one at a station with no staff then and now.
         self.assertLess(check.index("has_variable = te_grid_chk_station_seen"), check.index("TE_SELF_CHECK OK"))
@@ -1395,7 +1408,8 @@ class LocalizationTest(unittest.TestCase):
                     "building_grid_undersea_cable_range_add", "building_grid_undersea_cable_range_add_desc",
                     "TE_STATE_GRID_ROW_CABLES", "TE_STATE_GRID_ROW_CABLES_TT", "te_grid_cable_link_line",
                     "te_grid_cables_intro", "te_grid_cables_none",
-                    "state_power_grid_connection_bool", "state_power_grid_connection_bool_desc"):
+                    "state_power_grid_connection_bool", "state_power_grid_connection_bool_desc",
+                    "state_power_grid_disrupted_bool", "state_power_grid_disrupted_bool_desc"):
             self.assertIn(key, keys)
 
 

@@ -1287,7 +1287,10 @@ te_grid_cable_range_selfcheck_effect = {
 # boolean from a building, nor one at a building with no staff. Each is judged
 # once a game at a station already built at the last run
 # (te_grid_chk_station_seen), so one finished the day before a run, whose
-# modifiers may not have settled, can't read BROKEN:
+# modifiers may not have settled, can't read BROKEN, and not in a state with a
+# Power Grid Disruption (state_power_grid_disrupted_bool), which
+# te_grid_state_connected reads too. The checks read the connection's line
+# alone:
 #   grid_connection            at a station with staff now. BROKEN: the line
 #                              doesn't reach the read, and no station joins
 #                              any grid.
@@ -1308,11 +1311,12 @@ te_grid_connection_selfcheck_effect = {
 			limit = {
 				NOT = { has_global_variable = te_grid_connection_checked }
 				has_variable = te_grid_chk_station_seen
+				modifier:state_power_grid_disrupted_bool = no
 				te_grid_station_staffed = yes
 			}
 			set_global_variable = te_grid_connection_checked
 			if = {
-				limit = { te_grid_state_connected = yes }
+				limit = { modifier:state_power_grid_connection_bool = yes }
 				debug_log = "TE_SELF_CHECK OK grid_connection (a staffed Grid Transfer Station's state reads state_power_grid_connection_bool: the method's unscaled state line reaches modifier: in the state)"
 			}
 			else = {
@@ -1324,11 +1328,12 @@ te_grid_connection_selfcheck_effect = {
 				NOT = { has_global_variable = te_grid_connection_unstaffed_checked }
 				has_variable = te_grid_chk_station_seen
 				has_variable = te_grid_chk_unstaffed
+				modifier:state_power_grid_disrupted_bool = no
 				te_grid_station_staffed = no
 			}
 			set_global_variable = te_grid_connection_unstaffed_checked
 			if = {
-				limit = { te_grid_state_connected = yes }
+				limit = { modifier:state_power_grid_connection_bool = yes }
 				debug_log = "TE_SELF_CHECK OK grid_connection_unstaffed (a Grid Transfer Station with no staff at the last run nor now still gives its state state_power_grid_connection_bool, so it stays on its grid)"
 			}
 			else = {
