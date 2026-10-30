@@ -27,6 +27,7 @@ DISPLAY = os.path.join(REPO, "common", "script_values", "space_race_display_valu
 SITES_DISPLAY = os.path.join(REPO, "common", "script_values", "sr_sites_display_generated.txt")
 # The per-world and per-slot rows that read them (gen_solar_sites.py too).
 SITES_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_rows.gui")
+WINDOWS_GUI = os.path.join(REPO, "gui", "sr_launch_window_widgets.gui")  # Next Windows (colony management § 6)
 # The fleets (slice 6): a hand-written file of panel figures and a generated one.
 FLEETS_DISPLAY = (os.path.join(REPO, "common", "script_values", "sr_fleet_display_values.txt"),
                   os.path.join(REPO, "common", "script_values", "sr_fleets_display_generated.txt"))
@@ -1036,7 +1037,8 @@ class DisplayValuesTest(unittest.TestCase):
         cls.site_names |= set(re.findall(r"(?m)^(sr_disp_\w+) = \{", "\n".join(_read(p) for p in FLEETS_DISPLAY)))
 
     def test_every_value_the_panel_reads_exists(self):
-        used = set(re.findall(r"ScriptValue\('(sr_disp_\w+)'\)", _read(GUI) + _read(SITES_ROWS) + _read(FLEETS_ROWS)))
+        used = set(re.findall(r"ScriptValue\('(sr_disp_\w+)'\)",
+                              _read(GUI) + _read(SITES_ROWS) + _read(FLEETS_ROWS) + _read(WINDOWS_GUI)))
         for key in re.findall(r"ScriptValue\('(sr_disp_\w+)'\)",
                               "\n".join(_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml")))):
             used.add(key)

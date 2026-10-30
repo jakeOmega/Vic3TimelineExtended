@@ -35,6 +35,7 @@ GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui"
 # types above, so their keys are measured against those types' cells.
 ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_rows.gui")
 FLEET_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui")  # gen_space_fleets.py
+WINDOWS = os.path.join(REPO, "gui", "sr_launch_window_widgets.gui")  # Next Windows (colony management design § 6)
 VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
 SITES_VALUES = os.path.join(REPO, "common", "script_values", "sr_sites_generated.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
@@ -82,6 +83,9 @@ FLEET_UPKEEP_PCT = 9999   # sr_disp_sc_upkeep_pct: full strength / 10 (sr_fleet_
 MIX_WEIGHT = 3            # sr_disp_sc_mix_<role>: sr_sc_mix_max
 QUEUE_PLACES = 20         # sr_disp_mq_count: gen_solar_sites.QUEUE_SLOTS
 WINDOW_MONTHS = 999       # sr_window_disp_next: capped at 999 (the cell reads "No site left" there)
+WINDOW_WAIT = 99          # sr_window_wait_months_<body>: the longest wait is Mars's synodic period, 26 months
+WINDOW_PREMIUM_SHOWN = 9.99  # sr_disp_win_premium_<body>: capped at +999% for its cell
+WINDOW_DESTINATIONS = 14  # sr_disp_win_beyond: gen_solar_sites.WINDOW_ORDER
 
 
 def _read(path):
@@ -242,6 +246,12 @@ def _longest_figure(name):
         return 1.0  # a share of the goal, clamped to 0..1: "100%"
     if re.fullmatch(r"sr_disp_cf_slot_\d_months|sr_disp_fl_\d_months_left", name):
         return TRANSIT_CEILING
+    if re.fullmatch(r"sr_window_wait_months_\w+", name):
+        return WINDOW_WAIT
+    if re.fullmatch(r"sr_transit_months_\w+", name):
+        return TRANSIT_CEILING
+    if re.fullmatch(r"sr_disp_win_premium_\w+", name):
+        return WINDOW_PREMIUM_SHOWN
     if re.fullmatch(r"sr_disp_sc_mix_\w+", name):
         return MIX_WEIGHT
     if re.fullmatch(r"sr_disp_cf_slot_\d_year", name):
@@ -259,7 +269,8 @@ def _longest_figure(name):
              "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT, "sr_disp_reserve": FLEET_STRENGTH,
              # the colonization overview's cells (audit SPC-6)
              "sr_disp_aut_restless_more": WORLDS - 1, "sr_disp_mq_count": QUEUE_PLACES,
-             "sr_mod_fab_stock_cap": FAB_STOCK, "sr_window_disp_next": WINDOW_MONTHS}
+             "sr_mod_fab_stock_cap": FAB_STOCK, "sr_window_disp_next": WINDOW_MONTHS,
+             "sr_disp_win_beyond": WINDOW_DESTINATIONS}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
 
@@ -309,7 +320,7 @@ def _render(value):
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty"
-             r"|howc_(?!sub_)\w+)")
+             r"|howc_(?!sub_)\w+|win_none|win_beyond)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -357,7 +368,8 @@ CELLS = {
         r"je_space_race_widget_rival_range_\w+"),
     "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
-        r"je_space_race_widget_(ss_loc_\w+|powers_others|mq_header|free_header|sc_mix_header|howc_sub_\w+)"),
+        r"je_space_race_widget_(ss_loc_\w+|powers_others|mq_header|free_header|sc_mix_header|howc_sub_\w+"
+        r"|windows_header)"),
     "a world's holder: ours (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ours"'),
         r"je_space_race_widget_ss_ours"),
@@ -406,18 +418,28 @@ CELLS = {
     "emigration level (te_sr_sec_colonies)": (
         ("te_sr_sec_colonies", 'text = "je_space_race_widget_emig_level_0"'),
         r"je_space_race_widget_emig_level_\d"),
-    "a module column's heading (te_sr_colony_head_row)": (
-        ("te_sr_colony_head_row", 'text = "je_space_race_widget_modules_col_a"'),
-        r"je_space_race_widget_modules_col_(a|b|hab|port|def)"),
+    "a module cell's label (te_sr_mod_cell)": (
+        ("te_sr_mod_cell", 'block "cell_label"'),
+        r"je_space_race_widget_modules_col_(a|b|hab|port|def|mine|yard|lab|culture|resort|black|train|bunker"
+        r"|foundry|admin)"),
+    "a colony's slots label (te_sr_colony_row)": (
+        ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_slots"'),
+        r"je_space_race_widget_modules_col_slots"),
+    "a colony's bases label (te_sr_colony_row)": (
+        ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_bases"'),
+        r"je_space_race_widget_modules_col_bases"),
     "the crew share's label (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_staffing"'),
         r"je_space_race_widget_modules_col_staffing"),
-    **{f"the colonies' {head} head (te_sr_colony_head_row)": (
-        ("te_sr_colony_head_row", f'text = "je_space_race_widget_ch_{head}"'), f"je_space_race_widget_ch_{head}")
-       for head in ("people", "crews", "autonomy", "drift", "defences", "integrity", "marines")},
+    **{f"the colonies' {head} head ({heads})": (
+        (heads, f'text = "je_space_race_widget_ch_{head}"'), f"je_space_race_widget_ch_{head}")
+       for heads, names in (("te_sr_colony_heads_people", ("people", "crews")),
+                            ("te_sr_colony_heads_autonomy", ("autonomy", "drift", "build")),
+                            ("te_sr_colony_heads_defences", ("defences", "integrity", "marines")))
+       for head in names},
     "the colony views (te_sr_colony_view_button)": (
         ("te_sr_colony_view_button", 'block "view_label"'),
-        r"je_space_race_widget_cv_(people|modules|autonomy|defences)"),
+        r"je_space_race_widget_cv_(people|modules|autonomy|defences|back)"),
     "the next fleet's label (te_sr_cf_dest_row)": (
         ("te_sr_cf_dest_row", 'block "dest_label"'),
         r"je_space_race_widget_cf_(target_label|next_label)"),
@@ -473,6 +495,25 @@ CELLS = {
     "a world's holder: ruined (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ruined"'),
         r"je_space_race_widget_ss_ruined"),
+    # Next Windows (colony management design § 6).
+    "a destination's name and its head (te_sr_window_row)": (
+        ("te_sr_window_row", 'block "win_name"'),
+        r"je_space_race_widget_win_col_dest"),
+    "a destination's window, any month, and its head (te_sr_window_row)": (
+        ("te_sr_window_row", 'block "win_any_text"'),
+        r"je_space_race_widget_win_(any|col_window)"),
+    "a destination's window, open (te_sr_window_row)": (
+        ("te_sr_window_row", 'text = "je_space_race_widget_win_open"'),
+        r"je_space_race_widget_win_open"),
+    "a destination's window, waiting (te_sr_window_row)": (
+        ("te_sr_window_row", 'block "win_wait"'),
+        r"je_space_race_widget_win_wait_\w+"),
+    "a destination's window with depots (te_sr_window_row)": (
+        ("te_sr_window_row", 'block "win_paid"'),
+        r"je_space_race_widget_win_paid_\w+"),
+    "a destination's transit and its head (te_sr_window_row)": (
+        ("te_sr_window_row", 'block "win_transit"'),
+        r"je_space_race_widget_win_(col_transit|transit_\w+)"),
     "the build mix, Launch and Auto (te_sr_sc_mix_button)": (
         ("te_sr_sc_mix_button", 'block "mix_label"'),
         r"je_space_race_widget_sc_(mix_(war|rapid|siege|carrier|tender)|launch|auto_on|auto_off)"),
@@ -520,7 +561,11 @@ def _shown_keys(gui):
 class LabelBudgetTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.gui = _read(GUI)
+        # Next Windows' table and its row (the rest of that file, the Staged in
+        # Orbit line, is an overview row measured with the overview's).
+        windows = _read(WINDOWS)
+        cls.gui = _read(GUI) + "".join(f"\ntype {name} = flowcontainer {{{_type_body(windows, name)}}}\n"
+                                       for name in ("te_sr_sec_windows", "te_sr_window_row"))
         cls.keys = _shown_keys(cls.gui + _read(ROWS) + _read(FLEET_ROWS))
 
     def _fits(self, key, width, font, lines=1):
@@ -596,9 +641,13 @@ class FigureBudgetTest(unittest.TestCase):
         # Colonies (te_sr_colony_row): people and room in K, crews, crew share,
         # a module level and what is on its way, autonomy and drift, Defenses
         "settler_people": "999.9K / 999.9K", "settler_crews": "99", "module_staffing": "100%",
-        "mod_a_level": "4", "mod_a_pending": "+4", "aut_figure": "100%", "aut_drift": "+0.99",
-        "def_level": "99", "def_integrity": "100%", "def_marines": "99",
+        "aut_figure": "100%", "aut_drift": "+0.99", "def_level": "99", "def_integrity": "100%", "def_marines": "99",
+        # slots used of slots (4 + 2 technologies + 4 past), base room (60 + 10 levels x 10),
+        # what the colony builds of its own (colony management design §§ 4.3, 5)
+        "module_slots": "10/6", "module_slots_past": "10/6", "module_bases": "160", "aut_build": "100% (+5.0)",
     }
+    # a module cell (te_sr_mod_cell): a level (10 past a world's slots at most) and what is on its way
+    CELL = {"cell_level": "8", "cell_pending": "+8"}
     FREE = {"free_people": "999.9K", "free_ties": "100"}
     FLEET = {"fl_strength": "9999/9999", "fl_dv": "5000", "fl_supply": "36", "fl_marines": "99"}
     LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}
@@ -616,6 +665,7 @@ class FigureBudgetTest(unittest.TestCase):
 
     def test_colony_rows(self):
         self._check("te_sr_colony_row", self.FIGURES)
+        self._check("te_sr_mod_cell", self.CELL)
         self._check("te_sr_free_row", self.FREE)
         self._check("te_sr_mq_row", self.QUEUE)
         self._check("te_sr_site_row", self.SITE)

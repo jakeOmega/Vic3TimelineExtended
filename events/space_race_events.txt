@@ -4619,10 +4619,11 @@ space_race_events.94 = {
 			sr_site_idx_from = { VAR = sr_aut_site }
 			sr_site_by_index = { DO = charter }
 		}
+		# Any holder keeps its colony by default (colony management design § 3).
 		ai_chance = {
-			base = 10
+			base = 40
 			modifier = {
-				trigger = { sr_ai_should_participate = yes }
+				trigger = { sr_ai_tends_colonies = yes }
 				add = 40
 			}
 		}
@@ -4658,10 +4659,12 @@ space_race_events.94 = {
 			sr_site_idx_from = { VAR = sr_aut_site }
 			sr_site_by_index = { DO = let_go }
 		}
+		# Only a holder with no Space Program, which can't supply the colony at
+		# all; an idle programme is no reason (colony management design § 3).
 		ai_chance = {
 			base = 1
 			modifier = {
-				trigger = { NOT = { sr_solar_colonization_running = yes } }
+				trigger = { NOT = { sr_has_space_program = yes } }
 				add = 60
 			}
 		}

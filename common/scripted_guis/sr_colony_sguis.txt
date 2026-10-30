@@ -295,11 +295,91 @@ sr_colony_module_sgui = {
 				sr_mod_queue_from_scope = yes
 			}
 		}
-		else = {
+		else_if = {
+			limit = { scope:op = 5 }
 			custom_tooltip = {
 				text = sr_mod_queue_port_tt
 				sr_mod_queue_from_scope = yes
 			}
+		}
+		# The facilities, 6 on (colony management design § 7).
+		else_if = {
+			limit = { scope:op = 6 }
+			custom_tooltip = {
+				text = sr_mod_queue_mine_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 7 }
+			custom_tooltip = {
+				text = sr_mod_queue_yard_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 8 }
+			custom_tooltip = {
+				text = sr_mod_queue_lab_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 9 }
+			custom_tooltip = {
+				text = sr_mod_queue_culture_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			custom_tooltip = {
+				text = sr_mod_queue_resort_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			custom_tooltip = {
+				text = sr_mod_queue_black_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			custom_tooltip = {
+				text = sr_mod_queue_train_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = sr_mod_queue_bunker_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 14 }
+			custom_tooltip = {
+				text = sr_mod_queue_foundry_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 15 }
+			custom_tooltip = {
+				text = sr_mod_queue_admin_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		# Past the world's slots the module costs more fabrication (design § 5).
+		if = {
+			limit = {
+				scope:op >= 3
+				sr_mod_scope_past_slots = yes
+			}
+			custom_tooltip = sr_mod_queue_past_slots_tt
 		}
 	}
 }

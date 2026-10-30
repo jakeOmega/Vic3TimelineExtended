@@ -4,16 +4,17 @@
 ###   te_sr_ov_staged    the overview's "Staged in Orbit: N fleets" line, while a
 ###                      full bar waits (te_sr_solar_colonization_overview, in
 ###                      its sr_extra_rows)
-###   te_sr_sec_windows  Mission Control's Next Windows block, solar
+###   te_sr_sec_windows  Mission Control's Next Windows table, solar
 ###                      colonization only (te_sr_sec_control's control_extra,
-###                      passed by te_sr_status_sections)
+###                      passed by te_sr_status_sections); its rows are
+###                      te_sr_window_row (te_sr_window_rows, generated)
 ### The datacontext is the milestone's scripted GUI, under the journal entry, as
 ### for every space race section. The numbers are script values
 ### (common/script_values/sr_launch_window_values.txt, and the per-body readers
-### in sr_launch_windows_generated.txt); the destination lines are printed by
-### sr_launch_windows_sgui (common/scripted_guis/sr_launch_window_sguis.txt),
-### one custom_tooltip line each, because a stage lists only the bodies with a
-### site left and .gui has no list of them.
+### in sr_launch_windows_generated.txt); the Staged in Orbit tooltip's lines
+### are printed by sr_launch_windows_sgui (common/scripted_guis/
+### sr_launch_window_sguis.txt), one custom_tooltip line each; the table reads
+### gen_solar_sites' sr_disp_win_* display values.
 
 types sr_launch_window_types
 {
@@ -32,9 +33,14 @@ types sr_launch_window_types
 		}
 	}
 
-	### Next Windows: one line per destination of the stage with a site left.
-	### Gated, as Mission Control's controls are, on the scripted GUI's
-	### is_shown, so a finished or idle programme lists nothing.
+	### Next Windows (colony management design § 6): a table of the
+	### destinations a colony fleet of ours can go to now, one row each
+	### (te_sr_window_rows, generated in sr_sites_generated_rows.gui): its
+	### window and its transit by our drive. A destination shows only with a
+	### world we may target, within the fleets' horizon; a line under the table
+	### counts those beyond our drive. Gated, as Mission Control's controls are,
+	### on the scripted GUI's is_shown, so a finished or idle programme lists
+	### nothing. 176 + 180 + 108 + 2 x 4 + 8 = 480.
 	type te_sr_sec_windows = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -47,7 +53,139 @@ types sr_launch_window_types
 			}
 		}
 		te_sr_text = {
-			text = "[GetScriptedGui('sr_launch_windows_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_cached'), '(CFixedPoint)0' )]"
+			text = "sr_window_list_pending"
+		}
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_cached'), '(CFixedPoint)1' )]"
+
+			te_sr_window_row = {
+				blockoverride "win_name_format" {
+					default_format = "#tooltippable"
+					tooltip = "je_space_race_widget_win_col_dest_tt"
+				}
+				blockoverride "win_name" {
+					text = "je_space_race_widget_win_col_dest"
+				}
+				blockoverride "win_any_visible" {}
+				blockoverride "win_any_text" {
+					default_format = "#tooltippable"
+					tooltip = "je_space_race_widget_win_col_window_tt"
+					text = "je_space_race_widget_win_col_window"
+				}
+				blockoverride "win_open_visible" {
+					visible = no
+				}
+				blockoverride "win_wait" {
+					visible = no
+				}
+				blockoverride "win_paid" {
+					visible = no
+				}
+				blockoverride "win_transit_format" {
+					default_format = "#tooltippable"
+					tooltip = "je_space_race_widget_win_col_transit_tt"
+				}
+				blockoverride "win_transit" {
+					text = "je_space_race_widget_win_col_transit"
+				}
+			}
+			te_sr_window_rows = {}
+			te_sr_text = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_shown'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_win_none"
+			}
+			te_sr_text = {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_beyond'), '(CFixedPoint)1' )]"
+				default_format = "#lore"
+				text = "je_space_race_widget_win_beyond"
+			}
+		}
+	}
+
+	### One destination of Next Windows: its name, its window (any month, open,
+	### in N months, or with depots the premium to go now) and its transit.
+	### The table's head row is one with its cells' texts overridden.
+	type te_sr_window_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "win_visible" {}
+
+		widget = {
+			size = { 176 22 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 176
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "win_name_format" {}
+				block "win_name" {}
+			}
+		}
+		widget = {
+			size = { 180 22 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "win_any_visible" {}
+				block "win_any_text" {
+					text = "je_space_race_widget_win_any"
+				}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				text = "je_space_race_widget_win_open"
+				block "win_open_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "win_wait" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "win_paid" {}
+			}
+		}
+		widget = {
+			size = { 108 22 }
+
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 108
+				align = right|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "win_transit_format" {}
+				block "win_transit" {}
+			}
 		}
 	}
 }

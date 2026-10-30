@@ -50,6 +50,14 @@ still reaches the milestones.
    country's colonies by name and icon ("Valles Marineris Colony"), and only those. The list, the picked colony under
    it, the draft row and the signed treaty's row are the mod's own widgets (vanilla shows a building type only for a
    company monopoly): check each shows the colony's name and icon. Under Races Only the article does not appear.
+   The first build crashed the game here (2026-10-30): its list read `ArticleDraft.GetValidBuildingTypes`, which
+   needs a company. The list is now `te_sr_cede_site_list_treaty`, generated, keyed on the article's source
+   (`ArticleDraft.GetFirstOrSource`); the owner opened it without a crash and it looked right the same day. Still to
+   see: no `This data is likely not a container` in that launch's `debug.log`; picking a colony turns the Add button
+   green; a colony the treaty already carries is still listed, and Add should refuse it a second time (`usage_limit`);
+   and what the article button's options count (`TreatyDraft.GetNumAvailableInputOptions`) shows for Cede Colony. A
+   list that reads "None" for a holder, or names the other side's colonies, means the source is the wrong country,
+   which logs nothing; only an accessor that fails to resolve logs, as `FetchData failed` naming `sr_cede_held_`.
 3. **The building types appear nowhere else**: not in the build menu, the production overview, the encyclopedia, a
    company's or an industry charter's list. If one does, note where.
 4. **A sale.** Cede one of our colonies for a Money Transfer to an AI great power: it accepts when the money is large
@@ -57,7 +65,10 @@ still reaches the milestones.
    and Solar System list show it.
 5. **A swap**: one colony each way in one treaty moves both.
 6. **A war goal.** In a diplomatic play against a colony holder, add Cede Colony as a war goal (maneuvers 5, infamy
-   10). Enforced in the peace, the colony moves.
+   10). Enforced in the peace, the colony moves. This crashed the game in the first build too: check that the picker
+   (`te_sr_cede_site_list_war`) opens with no `This data is likely not a container` in `debug.log`, that it lists the
+   colonies of the country the goal is pressed against (`WarGoalDraft.GetTarget`) and only those, and that picking one
+   turns the war goal's Add button green (its own gate, `ArticleDraft.CanAddWarGoal`).
 7. **The AI.** In an observer run past the first colonies, an AI holding a colony with no space programme (an heir's)
    offers it; AI powers in the race ask for colonies; neither spams the treaty screen.
 
@@ -515,5 +526,19 @@ Design § 9 of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md`:
 
 1. **The tooltip.** Nuclear Thermal Propulsion shows "Smaller Premium for Off-Window Launches" under its funding cap line, with its explanation on hover, and its description ends on the smaller premium.
 2. **An NTP country's off-window cost.** For a country running Solar System Colonization, research Asteroid Mining and Nuclear Thermal Propulsion from the console. The month after a Mars window closes (offset +2; the windows are in the global commons list's Reference line), Mission Control's Next Windows reads Mars at about +16%, where a country with Asteroid Mining alone reads about +43%; the month after, about +46% against +150%. Its "costs N months" is goal × that ÷ pace. `event te_debug_launch_windows.1` option b: the `TE_LAUNCH_WINDOWS mars` line's `premium` and `premium_by_date` are both the NTP figure, and `our_cost` is it too while the approach would launch.
-3. **Cheaper, not possible.** A country with Nuclear Thermal Propulsion but not Asteroid Mining still waits for windows: Next Windows shows "window in N months" lines with no premium.
+3. **Cheaper, not possible.** A country with Nuclear Thermal Propulsion but not Asteroid Mining still waits for windows: Next Windows reads "In N months" with no premium.
 4. **The launch.** Under Standard at a fast pace, the NTP country launches off-window in more months than the chemical one (the report's off-window rule on Mars, NTP columns), and its first such launch logs `TE_SELF_CHECK OK window_gate_paid` with `premium_cached` = `premium_date` = the NTP figure.
+
+## Colony management (2026-10-30)
+
+Design: `docs/superpowers/specs/2026-10-30-colony-management-design.md` (the owner's play-test notes on the Colonies section). Simple and Full Colonies. No new self-check: the one engine fact the build leans on, a `unit_` field in a modifier on a journal entry reaching the army, is what vanilla's `modifiers_while_active` already do (the Caucasus war entries' `unit_offense_*`), and item 6 looks at it. Grep `debug.log` for `TE_SR_MODULES` for a colony's own builds.
+
+1. **Drift colors.** In the Autonomy view a colony whose autonomy is rising shows its drift in red, one falling in green; the hover's terms the same way, and its last line says where the colony settles.
+2. **Settling.** A colony with a hover reading "settles near 30%" moves toward 30 from either side over the following years, and a chartered colony settles near 0 instead of drifting back up.
+3. **Next Windows.** On chemical rockets, with stage-4 and stage-5 worlds unclaimed and targetable: the Uranus, Neptune and Kuiper Belt rows are absent, and the line under the table counts them. Each row's transit matches `docs/engine/launch_windows_report.md` for the month; with a fusion drive the Window column reads Any month, and with Asteroid Mining a closed window reads the premium and the months. The Staged in Orbit hover lists the same destinations.
+4. **Slots and the price past them.** Queue modules at a 2-slot colony until its Slots reads 3/2 (red): the hover's next price reads 300; the module past the slots leaves fabrication's stock 200 lower when it is built, the next 300 lower. Five past the slots, the + buttons grey out with the room line crossed. With Advanced Nanofabrication the colony reads one more slot.
+5. **Facilities.** Build one of each at a fully crewed colony: the entry shows Off-World Research Stations, Cultural Centers, Resorts, Black Sites, Training Grounds and Materials Foundries at multiplier 1; the colony's Bases rises by 10 with a Mining Complex; Module Fabrication's rate rises by 4 with an Orbital Yard (and Space Command's month by 0.5 under Full Colonies); the nuclear Command Reliability target rises by 4 with a Nuclear Command Center; the colony's drift hover shows −0.15 for its Administration. Blockade the colony: the Mining Complex, Yard, Resort and Foundry stop, the rest keep running.
+6. **The Training Ground reaches the army.** With Off-World Training Grounds on the entry, a battalion's experience gain in the military panel's breakdown includes it. If it doesn't, move `sr_module_train` from the entry to the country, refreshed and removed by `sr_mod_refresh_facilities`.
+7. **A colony's own modules.** A colony at autonomy 50 with 30,000 people shows Building climbing by 1.5 a month; at 100% it gains a module (`TE_SR_MODULES <key> built a module of its own`), Building restarts at 0, and a specialization level shows in its modifiers at once. A colony with no slot or specialization level left holds at 100%.
+8. **A colony's page.** Click a colony's name: only that colony shows, with People, Modules, Autonomy and (Full) Defenses one under another, each with its heads; Back returns to the list, and so does any view button. Every button on the page works as it does in the list.
+9. **The AI.** In an observer run, an AI outside the top three that holds a colony sets Emigration to Steady with a positive income, queues a module a year, and answers a self-government demand with a charter; it lets a colony go only after losing its Space Program. Cede Colony: asking an AI for its empty lunar outpost shows about −60 for the colony in the acceptance breakdown, and for a large built-up colony −200.

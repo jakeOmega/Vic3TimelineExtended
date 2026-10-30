@@ -245,6 +245,9 @@ nd_reliability_target = {
 		limit = { has_technology_researched = satellite_communications }
 		add = 5
 	}
+	# A Nuclear Command Center on a colony (colony management design § 7):
+	# 0 without the space race.
+	add = sr_mod_bunker_reliability
 	if = {
 		limit = { has_variable = nd_strain }
 		subtract = {

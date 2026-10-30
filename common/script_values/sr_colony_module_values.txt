@@ -8,15 +8,46 @@
 # ---- Fabrication (design § 5) ------------------------------------------------------
 # Every module's points; at most this many modules a month; the stock kept
 # while fabrication stalls.
+# The stock's cap is the dearest module's price: the fourth past a world's
+# slots, 5 x sr_module_points (colony management design § 5).
 sr_module_points = { value = 100 }
 sr_mod_fab_per_month = { value = 2 }
-sr_mod_fab_stock_cap = { value = 200 }
+sr_mod_fab_stock_cap = { value = 500 }
 
 # Country scope. The month's points: the Space Program's fabrication method
-# (te_colony_module_pms.txt), workforce-scaled.
-sr_mod_fab_rate = {
+# (te_colony_module_pms.txt), workforce-scaled, and the colonies' Orbital Yards
+# (colony management design § 7).
+sr_mod_fab_rate_method = {
 	value = modifier:country_sr_module_fabrication_add
 }
+sr_mod_fab_rate = {
+	value = sr_mod_fab_rate_method
+	add = { value = sr_mod_units_yard multiply = sr_mod_yard_points }
+}
+
+# ---- Facilities (colony management design § 7) ---------------------------------------
+# What a staffed level of the hook facilities gives; the rest are the entry
+# modifiers sr_module_<key> (space_race_modifiers.txt). The units are generated
+# (sr_mod_units_<key>, sr_sites_generated.txt).
+# Mining Complex: Extraplanetary Base room at its world.
+sr_mod_mine_room = { value = 10 }
+# Orbital Yard: module fabrication points a month, and under Full Colonies
+# Space Command strength a month (sr_sc_rate).
+sr_mod_yard_points = { value = 4 }
+sr_mod_yard_ships = { value = 0.5 }
+# Nuclear Command Center: command reliability (nd_reliability_target), at most
+# sr_mod_bunker_reliability_max.
+sr_mod_bunker_reliability_per_level = { value = 4 }
+sr_mod_bunker_reliability_max = { value = 12 }
+sr_mod_bunker_reliability = {
+	value = sr_mod_units_bunker
+	multiply = sr_mod_bunker_reliability_per_level
+	max = sr_mod_bunker_reliability_max
+}
+# The AI's plan (sr_mod_ai_plan_<key>): an Administration at this autonomy, and
+# Nuclear Command Centers up to the staffed levels that reach the cap.
+sr_mod_ai_admin_autonomy = { value = 50 }
+sr_mod_ai_bunker_max = { value = 3 }
 
 sr_mod_fab_stock_value = {
 	value = 0

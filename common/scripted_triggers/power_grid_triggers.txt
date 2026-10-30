@@ -10,17 +10,36 @@ te_grid_state_has_station = {
 	any_scope_building = { is_building_type = building_grid_transfer_station }
 }
 
-# State scope. The state's Grid Transfer Station is built, so it takes part in
-# its grid's balancing this month; one still under construction is set idle.
-# Staffing doesn't decide it. A station moves its staffing's share of its
+# State scope. The state is joined to a power grid: it has a Power Grid
+# Connection (state_power_grid_connection_bool). The Grid Transfer Station's
+# method grants it, so the station's tooltip and the balancing read the same
+# line, and anything else that grants it (a law, a technology, another
+# building) counts the same way. The station still moves the state's power,
+# so a state takes part only with one (te_grid_station_online, and the
+# balancing's loops over has_building). A Power Grid Disruption
+# (state_power_grid_disrupted_bool) cuts the connection while it lasts: a
+# boolean only takes yes, so an outage can't take the connection away and
+# grants its own line instead. Nothing grants it yet. The once-a-game
+# self-checks grid_connection and grid_connection_unstaffed read whether the
+# method's line reaches this read (te_grid_connection_selfcheck_effect).
+te_grid_state_connected = {
+	modifier:state_power_grid_connection_bool = yes
+	modifier:state_power_grid_disrupted_bool = no
+}
+
+# State scope. The state is connected (te_grid_state_connected) and its Grid
+# Transfer Station is built, so it takes part in its grid's balancing this
+# month; one still under construction is set idle. Staffing doesn't decide
+# it. A station moves its staffing's share of its
 # order (power_grid_pms.txt), which the balancing's factor makes up for, and a
-# station with no staff keeps its order and its modifiers, so it moves from its
-# first hire rather than from the next month's balancing. An empty building
-# runs none of its lines, so until then its grid's uploads and downloads differ
-# by its share.
+# station with no staff keeps its order, its modifiers and its connection, so
+# it moves from its first hire rather than from the next month's balancing. An
+# empty building runs none of its lines, so until then its grid's uploads and
+# downloads differ by its share.
 # Until 2026-10-25 the lines were workforce_scaled and a station needed a
 # quarter of its staff, so one that lost workers dropped its state off the grid.
 te_grid_station_online = {
+	te_grid_state_connected = yes
 	any_scope_building = {
 		is_building_type = building_grid_transfer_station
 		level >= 1
