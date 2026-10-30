@@ -542,6 +542,15 @@ CATEGORIES = {
     "party": dict(
         folder="political_parties", size=100, mode="emboss", fill=0.87, gui=(),
         color=(246, 231, 201), color_bottom=(180, 149, 111), style=SILHOUETTE),
+    # The Tax Code panels' overview cells (GUI audit TAX-1; docs/systems/tax_code_schema.md, "Panels"):
+    # Banking's cells, so the system panels' cut-out style. Defined here rather than in _GUI_SYSTEMS
+    # because two of its icons are in the light code's widget, and it needs no part or state category.
+    "tax": dict(
+        folder="tax_icons", size=150, mode="cutout", fill=0.92, grade_strength=0.5,
+        grade_folder="alert_icons", neighbours="alert_icons",
+        gui=("gui/journal_entry_widgets/te_tax_overview_widget.gui",
+             "gui/journal_entry_widgets/te_tax_light_widget.gui"),
+        style=UN_STYLE),
 }
 
 
@@ -700,6 +709,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "hypersonic_weapons": {"subject": "a sleek black arrowhead-shaped hypersonic glide vehicle trailing a streak of glowing plasma", "seed": 0},
         "jadc2": {"subject": "a glowing holographic globe surrounded by small models of a ship, a jet, a tank and a satellite linked by lines of light", "seed": 1},
         "reusable_rocketry": {"subject": "a tall slim grey cylindrical rocket booster with a flat top, standing upright on four thin splayed landing legs, a small flame and smoke at its base", "seed": 0},
+        # Lunar colonization (2026-10-29), on byte copies of Reusable Rocketry and Asteroid Mining until now.
+        "cislunar_infrastructure": {"subject": "a grey cylindrical orbital station module with two wide dark blue solar panel wings and a squat gold-foil-wrapped lander on four splayed legs docked to its end", "seed": None},
+        "in_situ_resource_utilization": {"subject": "a squat boxy grey regolith processing machine on caterpillar treads, its front scoop heaped with grey moon dust, a small glowing orange furnace window on its side", "seed": None},
         "additive_manufacturing": {"subject": "a desktop 3D printer printing an orange plastic gear layer by layer", "seed": 1},
         "advanced_structural_engineering": {"subject": "a short thick steel I-beam welded to a black woven carbon-fibre plate, a bright orange glowing weld seam along the joint with a few sparks", "seed": 3},
         "electric_vehicles": {"subject": "a sleek dark blue electric car plugged into a green charging post by a thick cable", "seed": 1},
@@ -717,6 +729,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "bioenhanced_soldiers": {"subject": "a glowing green serum injector beside an olive-green military helmet", "seed": 1},
         "directed_energy_weapons": {"subject": "a futuristic rifle-shaped energy weapon with glowing blue coils", "seed": 2},
         "fusion_power": {"subject": "a doughnut-shaped tokamak fusion reactor with a glowing pink plasma ring inside", "seed": 0},
+        # Lunar colonization, on a byte copy of Fusion Power until now.
+        "nuclear_thermal_propulsion": {"subject": "a long silver rocket engine with a thick cylindrical reactor section wrapped in copper pipes, a small yellow-and-black radiation trefoil on its side, a short blue flame from its bell nozzle", "seed": None},
         "quantum_communications": {"subject": "two glowing deep violet crystal orbs linked by a bright twisting beam of cyan light", "seed": 1},
         "space_militarization": {"subject": "a dark grey armed military satellite with folded solar wings and a small missile rack", "seed": 1},
         "swarm_technology": {"subject": "a tight cluster of small black quadcopter drones flying in formation", "seed": 0},
@@ -784,6 +798,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "cultural_exchange_program": {"subject": "two hands passing a small painted vase between them", "seed": 1},
         "enforce_emissions_reduction": {"subject": "a factory chimney with a big green cork stopper in its top", "seed": 0},
         "nuclear_guarantee": {"subject": "a large open steel umbrella with a yellow-and-black radiation trefoil painted on its canopy", "seed": 0},
+        # Nuclear crisis rework 4a, on a byte copy of Nuclear Guarantee until now.
+        "nuclear_basing": {"subject": "a stubby olive-green missile standing upright on a concrete launch pad ringed by a low wall of green sandbags, a small yellow-and-black radiation trefoil on its side", "seed": None},
         "population_transfer": {"subject": "a heap of worn suitcases and cloth bundles tied with rope", "seed": 1},
         # The monetary articles, on law icons until now.
         # Owner picks (2026-10-07): the $ on a coin is unreadable at icon size.
@@ -2026,6 +2042,12 @@ ICONS: dict[str, dict[str, dict]] = {
         "policy_green_building_codes": {"subject": "a small red brick building front with a large bright green leaf "
                                                    "emblem on its wall", "seed": 3,
                                         "now": f"{_GI}/production_method_icons/cat_building_green_p1.dds"},
+        "policy_carbon_removal": {"subject": "a squat grey cylindrical air intake tower with wide fan vents, a thick blue ribbon of "
+                                             "air flowing down from it into a pipe that enters a mound of brown earth",
+                                  "seed": None, "now": f"{_GI}/invention_icons/carbon_capture_and_storage.dds"},
+        "policy_fossil_fuel_tariffs": {"subject": "a red-and-white striped barrier arm lowered across a small black coal "
+                                                  "wagon heaped with coal", "seed": None,
+                                       "now": f"{_GI}/trade_icons/max_tariffs.dds"},
     },
     # Grand Monuments (grand_monuments_gui_icons.md): 36 px, faded while a count is zero.
     "gm_part": {
@@ -2079,6 +2101,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "radar": {"subject": "a grey radar dish on a sturdy mount, tilted up", "seed": 2},
         "cabinet": {"subject": "a grey steel mainframe computer cabinet with rows of dials and a big red lamp on top",
                     "seed": 2},
+        # Credibility (NUC-21): the guarantee article's icon until now.
+        "handshake_seal": {"subject": "a round polished brass seal medallion with a raised rim and a raised relief of two "
+                                      "clasped hands in its centre", "seed": None},
     },
     # Colonial Empire (colonial_empire_gui_icons.md): 36 px; the programmes faded while idle.
     "colonial_part": {
@@ -2147,6 +2172,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "colony_dwarf": {"subject": "a small round tan-and-rust-brown dwarf planet with a pale heart-shaped patch and "
                                     "one tiny grey moon beside it",
                          "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+        # Lunar colonization (2026-10-29): a copy of Mercury's until now. Mid-grey with dark seas and evenly
+        # lit, so it neither loses its body in the cut-out nor repeats Mercury's half-lit grey-brown.
+        "colony_moon": {"subject": "a round mid-grey Moon, evenly lit, with large dark grey seas across its face and a "
+                                   "few bright rayed craters",
+                        "seed": None, "now": f"{_GI}/space_race_icons/colony_mercury.dds"},
     },
     # Power grids (#1109): the HVDC Undersea Interconnector's cable (the station's method until 2026-10-25),
     # on vanilla's electric engines until now.
@@ -2228,6 +2258,28 @@ ICONS: dict[str, dict[str, dict]] = {
         # Round 1's compass in a gear read as an A in a circle, vanilla's Anarchist mark, at 32 px.
         "technocratic_party": {"subject": "a thick toothed gear wheel with a big round light bulb set in its centre", "seed": 0,
                                "now": f"{_GI}/political_parties/liberal.dds"},
+    },
+    # The Tax Code overview's cells and the light code's two: vanilla icons until now. The Tax Code cell keeps
+    # the journal entry's own icon (a law book under a wax seal). Paper is drawn as objects, not documents:
+    # a sheet cuts out to holes and gets written on.
+    "tax": {
+        "ov_draft": {"subject": "a black quill feather pen standing in a round brass inkwell", "seed": None,
+                     "now": f"{_GI}/timed_modifier_icons/modifier_documents_positive.dds"},
+        "ov_bill": {"subject": "a dark polished wooden gavel lying on its round wooden sound block", "seed": None,
+                    "now": f"{_GI}/generic_icons/negotiate.dds"},
+        "ov_passed": {"subject": "a rolled scroll of tan-brown parchment tied with a red ribbon and sealed with a red "
+                                 "wax seal, beside a small brass hourglass", "seed": None,
+                      "now": f"{_GI}/generic_icons/clock.dds"},
+        "ov_promises": {"subject": "two hands clasped in a firm handshake, one in a dark blue coat sleeve and one in a "
+                                   "brown tweed coat sleeve", "seed": None,
+                        "now": f"{_GI}/generic_icons/approval_icon.dds"},
+        "ov_law": {"subject": "a sturdy dark wooden strongbox bound with iron bands, a coin slot in its lid, a few "
+                              "plain gold coins stamped with a small star in front of it", "seed": None,
+                   "now": f"{_GI}/law_icons/proportional_taxation.dds"},
+        "ov_level": {"subject": "a round brass dial gauge with a thick red needle, its dark face divided into green, "
+                                "yellow and red zones, standing on a short stack of plain gold coins stamped with a "
+                                "small star", "seed": None,
+                     "now": f"{_GI}/banking_icons/budget.dds"},
     },
     # Grand Monument pictures (spec 2026-10-11 §3.1): one per style and form; keys are
     # test_grand_monument_registry.py's picture_key(code). Archetypes, never a real holy site.
@@ -3337,6 +3389,10 @@ ICONS.update({
         "authority_delegation": _key("cap", f"{_GI}/generic_icons/most_senior_front_commander.dds"),
         "authority_on_warning": _key("radar", f"{_GI}/lens_toolbar_icons/nd_nuclear_warning_action.dds"),
         "authority_automatic": _key("cabinet", f"{_GI}/generic_icons/observer_mode_icon.dds"),
+        # Credibility: the warhead under a brass seal stamped with a handshake.
+        "credibility": {"from": "nuclear_part/warhead",
+                        "marks": [{"part": "nuclear_part/handshake_seal", "at": (0.7, 0.68), "scale": 0.56}],
+                        "now": f"{_DT}/nuclear_guarantee.dds"},
     },
     "colonial_state": {
         # One globe; the tie between home and overseas coasts is the band.

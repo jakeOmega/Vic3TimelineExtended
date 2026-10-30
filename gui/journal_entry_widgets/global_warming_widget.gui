@@ -939,9 +939,8 @@ types global_warming_widget_types
 
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_fossil_fuel_tariffs_sgui')]"
-				# A placeholder until its own art (GW-12): global_warming_gui_icons.md.
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/trade_icons/max_tariffs.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_fossil_fuel_tariffs.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_FOSSIL_FUEL_TARIFFS_ROW"
@@ -1073,9 +1072,8 @@ types global_warming_widget_types
 
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_carbon_removal_sgui')]"
-				# A placeholder until its own art (GW-12): global_warming_gui_icons.md.
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_carbon_removal.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_CARBON_REMOVAL_ROW"

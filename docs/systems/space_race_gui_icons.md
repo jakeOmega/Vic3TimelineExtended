@@ -1,10 +1,10 @@
 # Space Race GUI: Icons
 
-The Space Race panels' overview (the GUI style guide pass, September 2026) draws 25 icons of its own, including three pie layers and nine for the kinds of world in Our Colonies. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
+The Space Race panels' overview (the GUI style guide pass, September 2026) draws 26 icons of its own, including three pie layers and ten for the kinds of world in Our Colonies. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/space_race_widget.gui`, in the type named below, and the states are chosen by a display value's code. No script reads the paths. `SpaceRaceIconsTest` in `test_space_race_layout.py` holds each state to its file. It also fails on any placeholder left in the widget, and, once #586's files are in the repo, on any path that does not exist.
 
-**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`). Their registry entries are the `space_part` (the one rocket), `space` (the first, the first-to-finish mark, the stage, the nine colony kinds) and `space_state` (the five states, the risk, the four interstellar states) categories in `icon_prompts.py`. Each entry's `now` field names the placeholder it replaced. The pies are plain discs from `scripts/image_pipeline/gen_ch_model_pie_textures.py`. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
+**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`). Their registry entries are the `space_part` (the one rocket), `space` (the first, the first-to-finish mark, the stage, the ten colony kinds) and `space_state` (the five states, the risk, the four interstellar states) categories in `icon_prompts.py`. Each entry's `now` field names the placeholder it replaced. The pies are plain discs from `scripts/image_pipeline/gen_ch_model_pie_textures.py`. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
 
 **The rule for the set** is the UN's (`un_gui_icons.md`): simple and easy to recognize at 32–40 px. The five state icons and the risk share one emblem, a silver rocket with red fins, and differ by what surrounds it.
 
@@ -69,7 +69,7 @@ One icon for each of ten kinds of world, not one for each of the 40 worlds. It s
 
 | Kind | Worlds | Shows | File |
 |---|---|---|---|
-| The Moon | Shackleton, Peary, Tranquility, Marius Hills, Daedalus, Imbrium | for now a copy of Mercury's grey planet, until a lunar icon is drawn | `colony_moon.dds` |
+| The Moon | Shackleton, Peary, Tranquility, Marius Hills, Daedalus, Imbrium | a mid-grey Moon, evenly lit, with dark seas across its face and a few bright craters | `colony_moon.dds` |
 | Mars | Valles Marineris, Olympus Mons, Hellas, Utopia, Arcadia | a rust-red planet with canyon scars and a pale polar cap | `colony_mars.dds` |
 | Asteroid | Ceres, Vesta, Psyche, Pallas, Hygiea | a lumpy, cratered grey-brown rock | `colony_asteroid.dds` |
 | Jovian moon | Io, Europa, Ganymede, Callisto, Himalia, Amalthea | a cratered moon before a banded orange gas giant | `colony_jovian.dds` |

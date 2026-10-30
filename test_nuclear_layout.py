@@ -535,13 +535,13 @@ CODED_ICONS = {
 VANILLA_KEPT = {"gfx/interface/icons/generic_icons/trend_up.dds", "gfx/interface/icons/generic_icons/trend_down.dds",
                 "gfx/interface/icons/generic_icons/trend_nochange.dds"}
 # Placeholders until the art exists (style guide rule 10), each listed in
-# docs/systems/nuclear_gui_icons.md: the credibility cell of NUC-21.
-PLACEHOLDERS = {"gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds"}
+# docs/systems/nuclear_gui_icons.md. None since icon batch 7 painted credibility's.
+PLACEHOLDERS = set()
 
 
 def _all_icon_names():
     names = [n for codes in CODED_ICONS.values() for n in codes.values()]
-    return names + ["warheads", "crisis"]
+    return names + ["warheads", "crisis", "credibility"]
 
 
 class NuclearIconsTest(unittest.TestCase):
@@ -557,8 +557,9 @@ class NuclearIconsTest(unittest.TestCase):
                 self.assertEqual(_coded(self.ov, value),
                                  {code: [f"{NUCLEAR_ICONS}{n}.dds"] for code, n in names.items()})
 
-    def test_warheads_and_crisis(self):
-        for name, tooltip in (("warheads", "je_nuclear_ov_warheads_tt"), ("crisis", "je_nuclear_ov_crisis_tt")):
+    def test_warheads_crisis_and_credibility(self):
+        for name, tooltip in (("warheads", "je_nuclear_ov_warheads_tt"), ("crisis", "je_nuclear_ov_crisis_tt"),
+                              ("credibility", "nd_w_credibility_tt")):
             with self.subTest(cell=name):
                 m = re.search(rf'tooltip = "{tooltip}".*?texture = "([^"]+)"', self.ov, re.S)
                 self.assertEqual(m.group(1), f"{NUCLEAR_ICONS}{name}.dds")

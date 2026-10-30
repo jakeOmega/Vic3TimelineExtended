@@ -40,7 +40,7 @@ types te_tax_light_widget_types
 			blockoverride "icons" {
 				icon = {
 					size = { 100% 100% }
-					texture = "gfx/interface/icons/law_icons/proportional_taxation.dds"
+					texture = "gfx/interface/icons/tax_icons/ov_law.dds"
 				}
 			}
 			blockoverride "word" {
@@ -63,7 +63,7 @@ types te_tax_light_widget_types
 			blockoverride "icons" {
 				icon = {
 					size = { 100% 100% }
-					texture = "gfx/interface/icons/banking_icons/budget.dds"
+					texture = "gfx/interface/icons/tax_icons/ov_level.dds"
 				}
 			}
 			blockoverride "word" {

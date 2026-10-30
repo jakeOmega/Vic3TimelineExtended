@@ -288,8 +288,8 @@ types te_tax_overview_widget_types
 	### te_tax_ov_fig). The code and the draft always; the bill and the passed
 	### bills while either is open; the promises while one is made. A cell
 	### whose process is idle and one at work are separate cells with their own
-	### hovers, one of them shown. The icons are placeholders
-	### (docs/systems/tax_code_schema.md, "Panels").
+	### hovers, one of them shown. The icons are in gfx/interface/icons/tax_icons/,
+	### the code's the journal entry's own (docs/systems/tax_code_schema.md, "Panels").
 	type te_tax_overview_panel = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -363,7 +363,7 @@ types te_tax_overview_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+									texture = "gfx/interface/icons/tax_icons/ov_draft.dds"
 								}
 							}
 							blockoverride "word" {
@@ -386,7 +386,7 @@ types te_tax_overview_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+									texture = "gfx/interface/icons/tax_icons/ov_draft.dds"
 								}
 							}
 							blockoverride "word" {
@@ -414,7 +414,7 @@ types te_tax_overview_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+									texture = "gfx/interface/icons/tax_icons/ov_draft.dds"
 								}
 							}
 							blockoverride "word" {
@@ -455,7 +455,7 @@ types te_tax_overview_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/generic_icons/negotiate.dds"
+									texture = "gfx/interface/icons/tax_icons/ov_bill.dds"
 								}
 							}
 							blockoverride "word" {
@@ -478,7 +478,7 @@ types te_tax_overview_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/generic_icons/negotiate.dds"
+									texture = "gfx/interface/icons/tax_icons/ov_bill.dds"
 								}
 							}
 							blockoverride "word" {
@@ -508,7 +508,7 @@ types te_tax_overview_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/generic_icons/clock.dds"
+									texture = "gfx/interface/icons/tax_icons/ov_passed.dds"
 								}
 							}
 							blockoverride "word" {
@@ -531,7 +531,7 @@ types te_tax_overview_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/generic_icons/clock.dds"
+									texture = "gfx/interface/icons/tax_icons/ov_passed.dds"
 								}
 							}
 							blockoverride "word" {
@@ -568,7 +568,7 @@ types te_tax_overview_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/generic_icons/approval_icon.dds"
+									texture = "gfx/interface/icons/tax_icons/ov_promises.dds"
 								}
 							}
 							blockoverride "word" {

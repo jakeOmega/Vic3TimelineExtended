@@ -996,7 +996,7 @@ types te_demographics_widgets
 	### rows it dropped are in their sections: the sex balance in the pyramid's, old age from and youth in Work and
 	### Retirement's, Living to 100 and biological age in Longevity's, the urban pattern in Where People Live.
 	### Every figure is picked by its gate (a stepped census for the rates, deaths by cause for the leading cause),
-	### so a figure not yet written is never read. Icons are placeholders: docs/systems/demographics_gui_icons.md.
+	### so a figure not yet written is never read. Icons: docs/systems/demographics_gui_icons.md.
 	type te_demog_overview = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -5260,7 +5260,7 @@ types te_demographics_widgets
 	### rows it dropped are in their sections: the sex balance in the pyramid's, old age from and youth in Work and
 	### Retirement's, Living to 100 and biological age in Longevity's, the urban share in the pyramid's.
 	### Every figure is picked by its gate (a stepped census for the rates, deaths by cause for the leading cause),
-	### so a figure not yet written is never read. Icons are placeholders: docs/systems/demographics_gui_icons.md.
+	### so a figure not yet written is never read. Icons: docs/systems/demographics_gui_icons.md.
 	type te_state_demog_overview = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter

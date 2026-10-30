@@ -512,6 +512,10 @@ as vanilla's tariff icons with the word on hover; the interest-group cards' `ig_
 (click opens the group); the enacted regional-relief states listed.
 Expect no elision (the width test budgets 8.5 units a character at 17 and 8.6 at the
 16-point overview, plus 10%), no missing icon, rows that line up under their heads.
+The overview's cells and the light code's two draw `tax_icons/` art (icon batch 7): Draft
+Reform a quill in an inkwell, the bill a gavel, Passed Bills a sealed scroll by an hourglass,
+Promises a handshake, Taxation Law a strongbox, Tax Level a dial gauge on coins; Tax Code
+keeps the journal entry's own book. Each reads at 44 px.
 Serves S12. Result: ___
 
 ### PT-45 Actions under their conditions, the bill footer and greyed controls
