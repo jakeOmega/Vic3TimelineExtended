@@ -19,10 +19,7 @@
 # sender at about base whatever the grid's surplus, and its receivers at r
 # (the 2013 Byzantium save: Attica at 29.8, the rest at the floor). A state
 # between the two ratios gains nothing from the grid, as losses would eat it.
-# A sender never goes above base (x(q) is at least 1): the engine doesn't
-# ration a building's inputs above its shortage threshold, so a station
-# bidding for Electricity the state's own buildings use would make Grid Power
-# from nothing. Grid Power is conserved, sum U = sum D, and sum U - sum D rises
+# Grid Power is conserved, sum U = sum D, and sum U - sum D rises
 # with q, so te_grid_balance_region_effect bisects for q between the engine's
 # floor and ceiling. Positive flows are uploads (Electricity in, Grid Power
 # out), negative ones downloads, both in Grid Power.
@@ -206,8 +203,8 @@ te_grid_price_slope = {
 # the grid's sending price (global te_grid_price, over Electricity's base) and
 # the sell/buy ratio senders end at (global te_grid_send_ratio).
 
-# Any scope. The sell/buy ratio at the sending price: 1 + slope x (1 - q),
-# and never under 1 (a sender at most at base).
+# Any scope. The sell/buy ratio at the sending price q: 1 + slope x (1 - q)
+# at or below base, 1 / (1 + slope x (q - 1)) above it.
 te_grid_send_ratio_value = {
 	value = 1
 	if = {
@@ -216,6 +213,16 @@ te_grid_send_ratio_value = {
 		subtract = global_var:te_grid_price
 		multiply = te_grid_price_slope
 		add = 1
+	}
+	else_if = {
+		limit = { global_var:te_grid_price > 1 }
+		value = 1
+		divide = {
+			value = global_var:te_grid_price
+			subtract = 1
+			multiply = te_grid_price_slope
+			add = 1
+		}
 	}
 }
 
@@ -293,28 +300,73 @@ te_grid_target_value = {
 	}
 }
 
-# The price the state's station is set to bring it to, over Electricity's base,
-# for the tile and TE_SELF_CHECK grid_price: a sender's min(q, 1), a receiver's
-# te_grid_receive_price_value. Read once te_grid_flow is set; 0 for a station
-# that moves nothing.
-te_grid_price_target_value = {
+# The engine's price, over its base, at the sell/buy ratio in
+# var:te_grid_ratio_in (set and removed around the read): 1 - range x
+# min(1, (x - 1) / steps) at or above 1, 1 + range x min(1, (1/x - 1) / steps)
+# below it, the ceiling with nothing sold.
+te_grid_price_steps = {
+	value = te_grid_buy_sell_max_factor
+	subtract = 1
+}
+
+te_grid_price_at_ratio_value = {
+	value = 1
+	if = {
+		limit = { var:te_grid_ratio_in >= 1 }
+		subtract = {
+			value = 0
+			add = {
+				value = var:te_grid_ratio_in
+				subtract = 1
+				divide = te_grid_price_steps
+				max = 1
+			}
+			multiply = te_grid_price_range
+		}
+	}
+	else_if = {
+		limit = { var:te_grid_ratio_in > 0 }
+		add = {
+			value = 0
+			add = {
+				value = 1
+				divide = var:te_grid_ratio_in
+				subtract = 1
+				divide = te_grid_price_steps
+				max = 1
+			}
+			multiply = te_grid_price_range
+		}
+	}
+	else = {
+		value = te_grid_price_ceiling
+	}
+}
+
+# The sell/buy ratio the flow just set brings the state to: a sender's
+# LP / (LC + U), a receiver's (LP + D x eff) / LC. Read once te_grid_flow is
+# set, for te_grid_price_target (the price Electricity sells at in the state
+# at that flow, on the tile), so a flow still dying away reads as what it is.
+te_grid_flow_ratio_value = {
 	value = 0
 	if = {
-		limit = {
-			global_var:te_grid_region_active = 1
-			var:te_grid_flow > 0
-		}
-		add = {
-			value = global_var:te_grid_price
-			max = 1
+		limit = { var:te_grid_flow > 0 }
+		value = var:te_grid_local_production
+		divide = {
+			value = var:te_grid_local_consumption
+			add = var:te_grid_flow
 		}
 	}
 	else_if = {
 		limit = {
-			global_var:te_grid_region_active = 1
 			var:te_grid_flow < 0
+			var:te_grid_local_consumption > 0
 		}
-		value = te_grid_receive_price_value
+		value = var:te_grid_flow
+		multiply = var:te_grid_efficiency
+		multiply = -1
+		add = var:te_grid_local_production
+		divide = var:te_grid_local_consumption
 	}
 }
 
@@ -542,8 +594,8 @@ te_grid_region_ratio_disp = {
 	}
 }
 
-# The Electricity price the state's station is set to bring it to, over its
-# base (te_grid_price_target); 0 for a station that moves nothing.
+# The Electricity price the flow set brings the state to, over its base
+# (te_grid_price_target); 0 for a station that moves nothing.
 te_grid_price_target_disp = {
 	value = 0
 	if = {
@@ -701,10 +753,10 @@ te_grid_chk_downloaded_g = { value = global_var:te_grid_chk_downloaded }
 te_grid_chk_stations_g = { value = global_var:te_grid_chk_stations }
 te_grid_chk_through_g = { value = global_var:te_grid_chk_through }
 te_grid_chk_price_gap_g = { value = global_var:te_grid_chk_price_gap }
-te_grid_chk_send_now_g = { value = global_var:te_grid_chk_send_now }
-te_grid_chk_send_target_g = { value = global_var:te_grid_chk_send_target }
-te_grid_chk_receive_now_g = { value = global_var:te_grid_chk_receive_now }
-te_grid_chk_receive_target_g = { value = global_var:te_grid_chk_receive_target }
+te_grid_chk_elec_now_g = { value = global_var:te_grid_chk_elec_now }
+te_grid_chk_elec_model_g = { value = global_var:te_grid_chk_elec_model }
+te_grid_chk_elec_ratio_g = { value = global_var:te_grid_chk_elec_ratio }
+te_grid_chk_elec_share_g = { value = global_var:te_grid_chk_elec_share }
 
 # State scope, for TE_SELF_CHECK grid_price: the state's Electricity price now,
 # over its base, read as 1 + pricier - cheaper with each floored at 0 (as
@@ -723,46 +775,40 @@ te_grid_chk_price_now_value = {
 	}
 }
 
-# How far that is from the price the station was set to bring it to
-# (te_grid_price_target), either way.
-te_grid_chk_price_target_gap_value = {
+# The state's sell/buy ratio now: its Electricity production over its
+# consumption, its station's flows included; 0 with no consumption.
+te_grid_chk_now_ratio_value = {
 	value = 0
-	add = {
-		value = te_grid_chk_price_now_value
-		subtract = var:te_grid_price_target
-		min = 0
-	}
-	add = {
-		value = var:te_grid_price_target
-		subtract = te_grid_chk_price_now_value
-		min = 0
+	if = {
+		limit = { te_grid_electricity_consumption > 0 }
+		value = te_grid_electricity_production
+		divide = te_grid_electricity_consumption
 	}
 }
 
-# How far last month's flow was from its target, as a share of the target.
-te_grid_chk_flow_gap_value = {
+# What the state's station bought last week on its own account, as a share of
+# the rest of the state's Electricity use.
+te_grid_chk_station_share_value = {
+	value = te_grid_own_uploaded
+	divide = {
+		value = te_grid_electricity_consumption
+		subtract = te_grid_own_uploaded
+		min = 1
+	}
+}
+
+# Any scope: how far the price read is from the formula's, either way.
+te_grid_chk_elec_gap_value = {
 	value = 0
 	add = {
-		value = var:te_grid_flow
-		subtract = var:te_grid_target
+		value = global_var:te_grid_chk_elec_now
+		subtract = global_var:te_grid_chk_elec_model
 		min = 0
 	}
 	add = {
-		value = var:te_grid_target
-		subtract = var:te_grid_flow
+		value = global_var:te_grid_chk_elec_model
+		subtract = global_var:te_grid_chk_elec_now
 		min = 0
-	}
-	divide = {
-		value = 0
-		add = {
-			value = var:te_grid_target
-			min = 0
-		}
-		subtract = {
-			value = var:te_grid_target
-			max = 0
-		}
-		min = 1
 	}
 }
 

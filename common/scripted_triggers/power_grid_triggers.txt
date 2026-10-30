@@ -187,14 +187,25 @@ te_grid_ai_station_site = {
 	te_grid_station_placeable = yes
 }
 
-# State scope, for TE_SELF_CHECK grid_price: last month's flow had settled on
-# its target (within 5%, te_grid_chk_flow_gap_value) at a station with staff
-# then and now, so the state's price now is the one the balancing aimed at.
-te_grid_flow_settled = {
-	has_variable = te_grid_flow
-	has_variable = te_grid_target
-	has_variable = te_grid_price_target
-	var:te_grid_price_target > 0
-	te_grid_chk_flow_gap_value <= 0.05
-	te_grid_station_staffed_throughout = yes
+# State scope, for TE_SELF_CHECK grid_price: a sending state whose station
+# bought at least half as much Electricity last week as the rest of the state
+# uses, at a sell/buy ratio of 1.31 to 3.7, which the formula prices at about
+# 0.9 to 0.1 of base. So its price tells a formula that counts the station's
+# purchase from one that doesn't (which would put it far lower), and neither
+# end of the range hides a gap.
+te_grid_chk_price_sender = {
+	te_grid_own_uploaded >= 100
+	te_grid_chk_station_share_value >= 0.5
+	te_grid_chk_now_ratio_value >= 1.31
+	te_grid_chk_now_ratio_value <= 3.7
+}
+
+# State scope, for TE_SELF_CHECK grid_price_above_base: a state at a sell/buy
+# ratio of 0.28 to 0.48, which the formula prices at about 1.86 to 1.36 of
+# base, where its branch above base and the obvious alternative
+# (1 + range x (1 - x) / steps) are 0.19 or more apart.
+te_grid_chk_price_above_base = {
+	te_grid_electricity_consumption >= 100
+	te_grid_chk_now_ratio_value >= 0.28
+	te_grid_chk_now_ratio_value <= 0.48
 }

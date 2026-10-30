@@ -424,10 +424,9 @@ transmission efficiency (below) in the states that receive it. A sending state
 sells its spare power to the grid as Grid Power, and a receiving state buys
 Grid Power and turns it back into Electricity. A grid with more power than it
 uses brings the price down in every state on it, the senders' too, so plants
-that make more than the grid needs earn less. A sending state never goes above
-base price: when the whole grid is short, the senders share only the power
-they don't use themselves, and the receiving states pay more. A grid takes out
-what it puts in, so power never crosses to a grid it isn't joined to. Grid Power
+that make more than the grid needs earn less. A grid short of power raises
+the price in every state on it together, the same way. A grid takes out what
+it puts in, so power never crosses to a grid it isn't joined to. Grid Power
 can't be traded between markets, and its price is fixed at its base of 30.
 After a change, such as a new power plant or a new station, the grid takes a
 few months to settle.
@@ -501,7 +500,7 @@ the market from running short of Grid Power.
 The state panel shows a Power Grid tile on a state with a station: whether its
 station is sending or receiving, the grid's hub (its largest producer, which
 names the grid), the Electricity the station moves a week (its hover gives the
-price the station is set to bring the state to), how many states
+price Electricity sells at in the state at that flow), how many states
 its grid has and your transmission efficiency. A state with a cable also
 shows Sea cables, how many stations from other grids its cable joins to this
 one; the hover names them and gives the cable's range. On a grid that joins two
