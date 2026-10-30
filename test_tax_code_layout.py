@@ -961,6 +961,35 @@ class GoodsIconRowTest(unittest.TestCase):
         self.assertGreaterEqual(seen, 8)
 
 
+TAX_ICONS = "gfx/interface/icons/tax_icons/"
+# The overview's cells and the light code's two (icon batch 7, docs/systems/tax_code_schema.md,
+# "Panels"); the code's cell keeps the journal entry's own icon.
+OVERVIEW_ICONS = {OVERVIEW: {"ov_draft", "ov_bill", "ov_passed", "ov_promises"}, LIGHT_GUI: {"ov_law", "ov_level"}}
+JE_ICON = "gfx/interface/icons/event_icons/je_tax_code.dds"
+
+
+class OverviewIconsTest(unittest.TestCase):
+    """Each cell draws its own tax_icons art, recorded in the schema; no vanilla placeholder is left."""
+
+    def test_each_file_draws_only_its_own_icons(self):
+        for path, names in OVERVIEW_ICONS.items():
+            textures = set(re.findall(r'texture = "(gfx/interface/icons/[^"]+)"', raw(path)))
+            with self.subTest(path=path):
+                self.assertEqual(textures - {JE_ICON}, {f"{TAX_ICONS}{n}.dds" for n in names})
+        self.assertIn(JE_ICON, raw(OVERVIEW))
+
+    def test_every_icon_is_recorded_and_tracked(self):
+        import subprocess
+        schema = raw("docs/systems/tax_code_schema.md")
+        out = subprocess.run(["git", "ls-files", TAX_ICONS], cwd=ROOT, capture_output=True, text=True)
+        tracked = set(out.stdout.split())
+        for name in set().union(*OVERVIEW_ICONS.values()):
+            with self.subTest(icon=name):
+                self.assertIn(f"`{name}.dds`", schema)
+                if out.returncode == 0 and tracked:   # (a tree without gfx/ lists none, as test_nuclear_layout's)
+                    self.assertIn(f"{TAX_ICONS}{name}.dds", tracked)
+
+
 class FlagTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

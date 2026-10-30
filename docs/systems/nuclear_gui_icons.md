@@ -1,6 +1,6 @@
 # Nuclear Weapons GUI: Icons
 
-The overview at the top of the Nuclear Weapons journal entry (`je_nuclear_program`) draws 24 icons of its own: one per state of the programme and of the posture, plus the warheads and crisis cells. They were vanilla placeholders through the Nuclear panels' style pass and its play-tests, and PR #586 replaced them. All of them live in `gfx/interface/icons/nuclear_icons/`. Since the 2026-10-27 audit (NUC-21) the overview is Banking's grid of cells (`te_banking_ov_cell`), each icon filling its cell's 44 px icon box; the Nuclear Powers table (NUC-14) draws the doctrine icons again, 28 px, at the end of each row. One cell, credibility's, still has a placeholder (below).
+The overview at the top of the Nuclear Weapons journal entry (`je_nuclear_program`) draws 25 icons of its own: one per state of the programme and of the posture, plus the warheads, crisis and credibility cells. They were vanilla placeholders through the Nuclear panels' style pass and its play-tests, and PR #586 replaced them. All of them live in `gfx/interface/icons/nuclear_icons/`. Since the 2026-10-27 audit (NUC-21) the overview is Banking's grid of cells (`te_banking_ov_cell`), each icon filling its cell's 44 px icon box; the Nuclear Powers table (NUC-14) draws the doctrine icons again, 28 px, at the end of each row.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/nuclear_overview_widget.gui`. There is one icon widget per state, picked by a display value's code (`EqualTo_CFixedPoint( …ScriptValue('<code value>'), '(CFixedPoint)N' )`). No script reads the paths. `NuclearIconsTest` in `test_nuclear_layout.py` holds each code to its file. It fails on any placeholder left in the overview and on any icon faded to tell it from another. Once the folder is in the tree, it also checks that every file is there.
 
@@ -34,13 +34,13 @@ Code: `nuclear_program_display_state` (`common/script_values/extra_script_values
 | Warheads | always | the warhead alone | `warheads.dds` |
 | Crisis | while in one | the warhead on a red disc, under vanilla's warning mark | `crisis.dds` |
 
-## Row 4: credibility (a placeholder)
+## Row 4: credibility
 
-| Cell | Shown | Now | Final art (icon-pipeline subject) | Proposed file |
-|---|---|---|---|---|
-| Credibility | once there is a record | `gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds`, the guarantee article's icon | the steel warhead lying under a brass seal stamped with a handshake, the shared warhead emblem | `credibility.dds` |
+| Cell | Shown | Shows | File |
+|---|---|---|---|
+| Credibility | once there is a record | the warhead under a round brass seal stamped with two clasped hands | `credibility.dds` |
 
-The cell was a meter until NUC-21 moved the overview to Banking's cells, which need an icon in every box. Swapping the art in is one `texture` line in `nuclear_overview_widget.gui` and one entry out of `PLACEHOLDERS` in `test_nuclear_layout.py`.
+The cell was a meter until NUC-21 moved the overview to Banking's cells, which need an icon in every box. It showed the guarantee article's icon until icon batch 7 (2026-10-30). The seal is the `nuclear_part` entry `handshake_seal`.
 
 ## Rows 3 and 4: the posture (while armed)
 

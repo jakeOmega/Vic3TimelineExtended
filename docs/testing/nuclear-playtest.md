@@ -12,7 +12,7 @@ The panel was reworked from the 2026-10-27 GUI and localization audit (`docs/aud
 2. **The rows.** In a crisis, a Nuclear Crisis cell alone at the top (its stage, "Deadline: N wk", red from two weeks out). Then Program (state, "Next in N mo" or "Not progressing") and Warheads (the count, "World est. N"). While armed, Doctrine (a short name, "Change in N mo" or "Can change now") and Readiness (its name, "→ X" while moving, else the deterrent's weekly upkeep), then Launch Authority (short name, when it can change) and Credibility (Doubted, Steady or Trusted, "N of 100"). The taboo bar's row last.
 3. **Captions are concepts.** Hovering Program, Warheads, Doctrine, Readiness, Launch Authority and Credibility opens the concept; hovering the rest of the cell, its breakdown.
 4. **Nothing ends in "...".** At 16 points "Launch Authority" is the longest caption (budgeted 151 of 154). Check every short name ("No First Use", "Compellence", "On Warning") and "Deadline: 10 wk".
-5. **Credibility's icon** is the guarantee article's as a placeholder (`docs/systems/nuclear_gui_icons.md` lists the art wanted).
+5. **Credibility's icon** (icon batch 7) is the warhead under a round brass seal stamped with clasped hands. At 44 px the seal reads as brass, not as the red wax seal of a frozen program.
 6. **SelectLocalization with JournalEntry data.** The figures that pick between two keys ("Change in N mo" / "Can change now"; the deadline in red or not; readiness moving or its upkeep) read `JournalEntry.GetCountry.MakeScope.ScriptValue` inside the chosen key. Demographics proves the shape with `State`; if a figure is blank here, put the number in the calling key and choose only the words.
 
 ### Posture (NUC-3, NUC-4, NUC-5, NUC-6, NUC-1)

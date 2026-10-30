@@ -219,7 +219,7 @@ against the generators.
 - **Confidence:** medium
 
 ### SPC-16. "Fleets" names two different things; the same icon marks colony and war fleets
-- **Status:** done (2026-10-27): "Space Fleets", "Fleet strength", the two fleet concepts on the words, and Space Command's icon on Locations' inbound column (a placeholder: a drawn warship icon would replace it).
+- **Status:** done (2026-10-27): "Space Fleets", "Fleet strength", the two fleet concepts on the words, and Space Command's icon on Locations' inbound column (a placeholder, replaced by a drawn warship in icon batch 7, 2026-10-30, #1249).
 - **Category:** style (naming)
 - **Where:** section headers "Colony Fleets" (`je_space_race_widget_fleets_header`, `te_journal_entries_l_english.yml:1034`) and "Fleets" (`space_race_widget.gui:4729`, `je_space_race_widget_space_fleets_header` `:1307`), and the Space Command row "Fleets" (`sc_strength_label` `:1279`). The inbound cells of Solar System (colony fleets, `:2597`) and Locations (warships, `:4400`) both use `je_space_race_solar_colonization.dds`. `je_space_race_widget_loc_inbound_tt` (`:1080`) says only "fleets".
 - **Now:** "Staged in Orbit: 1.4 fleets", "Fleets in flight 2 of 6", "Fleets" and "Fleets 120/160" sit within a few sections of each other.

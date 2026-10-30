@@ -3715,7 +3715,7 @@ types space_race_widget_types
 				icon = {
 					size = { 16 16 }
 					parentanchor = vcenter
-					texture = "gfx/interface/icons/building_icons/building_space_command.dds"
+					texture = "gfx/interface/icons/space_race_icons/warship.dds"
 				}
 				textbox = {
 					parentanchor = vcenter
@@ -5986,7 +5986,7 @@ types space_race_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/building_icons/building_space_command.dds"
+									texture = "gfx/interface/icons/space_race_icons/warship.dds"
 								}
 							}
 							blockoverride "word" {
@@ -6016,7 +6016,7 @@ types space_race_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									texture = "gfx/interface/icons/building_icons/building_space_program.dds"
+									texture = "gfx/interface/icons/space_race_icons/module.dds"
 								}
 							}
 							blockoverride "word" {

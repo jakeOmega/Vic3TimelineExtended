@@ -1,10 +1,10 @@
 # Space Race GUI: Icons
 
-The Space Race panels' overview (the GUI style guide pass, September 2026) draws 25 icons of its own, including three pie layers and nine for the kinds of world in Our Colonies. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
+The Space Race panels' overview (the GUI style guide pass, September 2026) draws 28 icons of its own, including three pie layers and ten for the kinds of world in Our Colonies. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/space_race_widget.gui`, in the type named below, and the states are chosen by a display value's code. No script reads the paths. `SpaceRaceIconsTest` in `test_space_race_layout.py` holds each state to its file. It also fails on any placeholder left in the widget, and, once #586's files are in the repo, on any path that does not exist.
 
-**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`). Their registry entries are the `space_part` (the one rocket), `space` (the first, the first-to-finish mark, the stage, the nine colony kinds) and `space_state` (the five states, the risk, the four interstellar states) categories in `icon_prompts.py`. Each entry's `now` field names the placeholder it replaced. The pies are plain discs from `scripts/image_pipeline/gen_ch_model_pie_textures.py`. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
+**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`). Their registry entries are the `space_part` (the one rocket), `space` (the first, the first-to-finish mark, the stage, the ten colony kinds, the warship and the module) and `space_state` (the five states, the risk, the four interstellar states) categories in `icon_prompts.py`. Each entry's `now` field names the placeholder it replaced. The pies are plain discs from `scripts/image_pipeline/gen_ch_model_pie_textures.py`. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
 
 **The rule for the set** is the UN's (`un_gui_icons.md`): simple and easy to recognize at 32–40 px. The five state icons and the risk share one emblem, a silver rocket with red fins, and differ by what surrounds it.
 
@@ -69,7 +69,7 @@ One icon for each of ten kinds of world, not one for each of the 40 worlds. It s
 
 | Kind | Worlds | Shows | File |
 |---|---|---|---|
-| The Moon | Shackleton, Peary, Tranquility, Marius Hills, Daedalus, Imbrium | for now a copy of Mercury's grey planet, until a lunar icon is drawn | `colony_moon.dds` |
+| The Moon | Shackleton, Peary, Tranquility, Marius Hills, Daedalus, Imbrium | a mid-grey Moon, evenly lit, with dark seas across its face and a few bright craters | `colony_moon.dds` |
 | Mars | Valles Marineris, Olympus Mons, Hellas, Utopia, Arcadia | a rust-red planet with canyon scars and a pale polar cap | `colony_mars.dds` |
 | Asteroid | Ceres, Vesta, Psyche, Pallas, Hygiea | a lumpy, cratered grey-brown rock | `colony_asteroid.dds` |
 | Jovian moon | Io, Europa, Ganymede, Callisto, Himalia, Amalthea | a cratered moon before a banded orange gas giant | `colony_jovian.dds` |
@@ -82,8 +82,15 @@ One icon for each of ten kinds of world, not one for each of the 40 worlds. It s
 
 The kinds group worlds by the body they orbit. Each falls inside one stage (the Moon in stage 0, Mars and the asteroids in stage 1, the Jovian moons and Venus in 2, Mercury and the Saturnian moons in 3, the Uranian and Neptunian moons in 4, the dwarf planets in 5), so no kind's icon sits under two stage headings. A world that is mostly white or pale loses its body in the cut-out, so Venus and the dwarf planet are drawn in colour. The modifiers' own icons (`icon =` on the 80 `sr_colony_*` static modifiers) are not these: they are the shared lightbulb and coins glyphs that say what kind of effect it is.
 
+## Colonization overview and Locations: warships and modules
+
+Where a cell names what a building does (audit SPC-6, SPC-16), it showed that building's icon until icon batch 7 (2026-10-30): Space Command's and the Space Program's. Solar System's inbound column keeps the colony fleets' rocket, so warships on their way wear their own.
+
+| Cell | Shows | File |
+|---|---|---|
+| Defense (44 px, under Full colonies) and Locations' inbound column (16 px) | a dark grey armed spacecraft with a twin turret on its back | `warship.dds` |
+| Modules (44 px) | a silver habitat module in gold foil bands, a docking ring at one end | `module.dds` |
+
 ## Kept as they are
 
 The pie's frame (`gfx/interface/backgrounds/round_frame_dec.dds`) is vanilla's decoration, used as vanilla uses it. So are the Rivals rows' band marker (`gfx/interface/progressbar/progressbar_marker.dds`) and the transparent track under it (`generic_icons/transparent.dds`), drawn as the UN's authority bar draws them. The rows have no icons of their own.
-
-Two building icons stand in where a cell names what a building does (audit SPC-6, SPC-16): Space Command's (`building_icons/building_space_command.dds`) on the colonization overview's Defense cell and on Locations' inbound column, so warships on their way don't wear the colony fleets' rocket, which Solar System's inbound column keeps; and the Space Program's (`building_icons/building_space_program.dds`) on the Modules cell. A drawn icon for each (a warship, a module) would replace them; they are listed in `VANILLA_KEPT` in `test_space_race_layout.py`.

@@ -82,18 +82,15 @@ buildings:
   - building_sr_site_utopia_planitia
   - building_sr_site_valles_marineris
   reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-27
-- images:
-  - gfx/interface/icons/space_race_icons/colony_mercury.dds
-  - gfx/interface/icons/space_race_icons/colony_moon.dds
+- image: gfx/interface/icons/space_race_icons/colony_moon.dds
   entities:
   - building_sr_site_daedalus
   - building_sr_site_imbrium
   - building_sr_site_marius_hills
-  - building_sr_site_mercury
   - building_sr_site_peary
   - building_sr_site_shackleton
   - building_sr_site_tranquility
-  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py). The Moon's icon is a copy of Mercury's until its own art exists (lunar colonization, 2026-10-29)
+  reason: solar colony sites are never built (potential always = no); each only names its world in Cede Colony's building picker, on its world kind's Colonies icon (scripts/generators/gen_solar_sites.py); reviewed 2026-10-30
 - image: gfx/interface/icons/space_race_icons/colony_neptunian.dds
   entities:
   - building_sr_site_proteus

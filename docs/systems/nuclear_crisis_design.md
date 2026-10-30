@@ -611,7 +611,7 @@ One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weap
 - a retaliation is judged by the Assembly at the same ±3 as a first use (the use note halves retaliation, the verdict does not);
 - holding the programme reuses the pause flag (final-review.md M5): a country held at its ceiling or dismantling cannot be the source of a `nuclear_program_pause` article, cannot receive `nuclear_program_aid`, and ends a running `covert_nuclear_sabotage_action` against it (an AI trimmed to a ceiling reads as a programme that "has really stopped"). All three are decisions, not bugs;
 - old saves don't mark countries disarmed before the taboo existed as renounced (final-review.md M9, parked): a country under a `nuclear_disarmament` article or `te_nuclear_disarmament_ended_program` at seed time gets no `nd_renounced`, so it is absent from the restraint part and books no breakout if it later rebuilds;
-- the arms-control article's card doesn't show its ceiling, and it uses a placeholder icon (final-review.md M10).
+- the arms-control article's card doesn't show its ceiling (final-review.md M10). Its icon, a placeholder then, is the pipeline's balance scale with a missile on each pan (#535).
 
 #### Expected curves
 

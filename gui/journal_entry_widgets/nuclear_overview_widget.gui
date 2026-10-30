@@ -24,7 +24,7 @@
 ### name blocks do; nd_disp_taboo_step and nd_disp_taboo_trend
 ### (nuclear_taboo_values.txt). One icon per state, filling the cell's 44 px
 ### icon box. Icons are the system's own (gfx/interface/icons/nuclear_icons/,
-### PR #586) but credibility's, a placeholder; what each shows is in
+### PR #586 and icon batch 7); what each shows is in
 ### docs/systems/nuclear_gui_icons.md.
 ###
 ### Type: the cell's caption is te_banking_ov_cell's own (16, the tooltip
@@ -414,7 +414,6 @@ types nuclear_overview_widget_types
 						}
 					}
 					### Credibility, once there is a record: a word for it, the figure beneath.
-					### Its icon is a placeholder (docs/systems/nuclear_gui_icons.md).
 					te_banking_ov_cell = {
 						visible = "[GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						tooltip = "nd_w_credibility_tt"
@@ -428,7 +427,7 @@ types nuclear_overview_widget_types
 						blockoverride "icons" {
 							icon = {
 								size = { 100% 100% }
-								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds"
+								texture = "gfx/interface/icons/nuclear_icons/credibility.dds"
 							}
 						}
 						blockoverride "word" {

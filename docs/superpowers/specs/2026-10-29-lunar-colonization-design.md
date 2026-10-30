@@ -349,7 +349,8 @@ Each new technology needs an invention icon. Placeholders that copy existing
 ones are enough for the first build: `reusable_rocketry.dds` for Cislunar
 Infrastructure, `asteroid_mining.dds` for In-Situ Resource Utilization,
 `fusion_power.dds` for Nuclear Thermal Propulsion. The icon pipeline can replace
-them later. `texture_reference_audit` checks the paths.
+them later. `texture_reference_audit` checks the paths. Icon batch 7 (2026-10-30)
+painted all three, and the Moon's colony icon, which had been a copy of Mercury's.
 
 ## 6. The Extraplanetary Base from era 10
 
