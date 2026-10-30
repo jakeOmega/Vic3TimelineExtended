@@ -10981,6 +10981,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_tranquility')]"
 				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_tranquility'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_marius_hills')]"
@@ -11033,6 +11039,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_hellas_planitia')]"
 				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_hellas_planitia'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_utopia_planitia')]"
@@ -11064,6 +11076,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_psyche')]"
 				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_psyche'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_pallas')]"
@@ -11095,6 +11113,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_ganymede')]"
 				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_ganymede'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_callisto')]"
@@ -11131,6 +11155,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_rhea')]"
 				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_rhea'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_mimas')]"
@@ -11162,6 +11192,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_miranda')]"
 				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_miranda'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_ariel')]"
@@ -11204,6 +11240,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_makemake')]"
 				visible = "[EqualTo_CFixedPoint( WarGoalDraft.GetTarget.MakeScope.ScriptValue('sr_cede_held_makemake'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_haumea')]"
@@ -11241,6 +11283,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_tranquility')]"
 				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_tranquility'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_marius_hills')]"
@@ -11293,6 +11341,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_hellas_planitia')]"
 				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_hellas_planitia'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_utopia_planitia')]"
@@ -11324,6 +11378,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_psyche')]"
 				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_psyche'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_pallas')]"
@@ -11355,6 +11415,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_ganymede')]"
 				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_ganymede'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_callisto')]"
@@ -11391,6 +11457,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_rhea')]"
 				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_rhea'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_mimas')]"
@@ -11422,6 +11494,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_miranda')]"
 				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_miranda'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_ariel')]"
@@ -11464,6 +11542,12 @@ types sr_sites_generated_rows_types
 				datacontext = "[GetBuildingType('building_sr_site_makemake')]"
 				visible = "[EqualTo_CFixedPoint( ArticleDraft.GetFirstOrSource.MakeScope.ScriptValue('sr_cede_held_makemake'), '(CFixedPoint)1' )]"
 			}
+		}
+
+		flowcontainer = {
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 5
 
 			te_sr_cede_site_tile = {
 				datacontext = "[GetBuildingType('building_sr_site_haumea')]"

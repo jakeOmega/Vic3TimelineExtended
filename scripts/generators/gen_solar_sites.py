@@ -3188,9 +3188,10 @@ def _slot_row(n: int) -> list[str]:
 
 # Cede Colony's picker, one list per place it opens from. A war goal's ceding
 # country is the one the goal is pressed against; a treaty's, the article's
-# source. right_click_menu.gui shows the one that matches, so the other's
-# accessor is never read.
+# source. right_click_menu.gui shows the one that matches, hiding the other as
+# vanilla hides its war-goal company list in a treaty.
 CEDE_SOURCES = (("war", "WarGoalDraft.GetTarget"), ("treaty", "ArticleDraft.GetFirstOrSource"))
+CEDE_ROW = 3  # tiles a row, as the engine's list wrapped them (datamodel_wrap)
 
 
 def _cede_list(name: str, source: str) -> list[str]:
@@ -3199,18 +3200,19 @@ def _cede_list(name: str, source: str) -> list[str]:
            "\t\tignoreinvisible = yes",
            "\t\tspacing = 5"]
     for loc in LOCATIONS:
-        out += ["", "\t\tflowcontainer = {",
-                "\t\t\tparentanchor = hcenter",
-                "\t\t\tignoreinvisible = yes",
-                "\t\t\tspacing = 5"]
-        for site in SITES:
-            if site.location == loc:
+        here = [s for s in SITES if s.location == loc]
+        for row in range(0, len(here), CEDE_ROW):
+            out += ["", "\t\tflowcontainer = {",
+                    "\t\t\tparentanchor = hcenter",
+                    "\t\t\tignoreinvisible = yes",
+                    "\t\t\tspacing = 5"]
+            for site in here[row:row + CEDE_ROW]:
                 held = f"{source}.MakeScope.ScriptValue('sr_cede_held_{site.key}')"
                 out += ["", "\t\t\tte_sr_cede_site_tile = {",
                         f"\t\t\t\tdatacontext = \"[GetBuildingType('{site_building(site)}')]\"",
                         f"\t\t\t\tvisible = \"[EqualTo_CFixedPoint( {held}, '(CFixedPoint)1' )]\"",
                         "\t\t\t}"]
-        out += ["\t\t}"]
+            out += ["\t\t}"]
     return out + ["\t}"]
 
 
