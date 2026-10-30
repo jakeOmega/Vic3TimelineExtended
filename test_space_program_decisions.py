@@ -294,3 +294,126 @@ class LocalizationTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def _tree(text):
+    """`key op value` triples, nested for blocks, from a comment-free body."""
+    tokens = iter(re.findall(r"\{|\}|[<>=!]=|[<>=]|[^\s{}<>=!]+", text))
+
+    def body():
+        out = []
+        for key in tokens:
+            if key == "}":
+                return out
+            op = next(tokens)
+            value = next(tokens)
+            out.append((key, op, body() if value == "{" else value))
+        return out
+
+    return body()
+
+
+class DecisionOpensTheEntryTest(unittest.TestCase):
+    """Whenever a decision that starts colonizing is offered and taken, Solar
+    System Colonization's `possible` holds and its programme may run
+    (sr_colonization_by_choice, the running gate's new term): review I1, Begin
+    Solar Colonization offered under Races Only past stage 2 with a lunar world
+    free, where the entry couldn't open.
+
+    Every leaf test is a free atom, evaluated over every assignment the facts
+    below allow; the one scripted trigger the gate adds is expanded. The
+    decision's own `when_taken` sets what follows it."""
+
+    SOLAR = "modifier:country_sr_solar_colonization_program_bool = yes"
+    DEEP = "modifier:country_sr_deep_space_exploration_program_bool = yes"
+    MARKER = "has_variable = sr_colonization_resumed"
+    OVER = "has_global_variable = sr_all_colonies_complete"
+    LUNAR = "sr_sites_lunar_open = yes"
+    ANY = "sr_any_site_unclaimed = yes"
+    # (if this holds, then that does)
+    FACTS = (
+        (DEEP, SOLAR),  # the deep-space method carries the colonization bool
+        (LUNAR, ANY),  # a free lunar world is an unclaimed one
+        ("has_variable = sr_completed_mars_landing", "has_variable = sr_completed_moon_landing"),
+        ("sr_has_colony_beyond_moon = yes", "sr_has_space_colony = yes"),
+    )
+
+    @classmethod
+    def setUpClass(cls):
+        decisions = strip_comments(read(DECISIONS))
+        cls.decisions = {name: block(decisions, name) for name in (
+            "te_decision_space_mission_solar", "te_decision_space_mission_deep_space",
+            "te_decision_resume_solar_colonization")}
+        entry = block(strip_comments(read(JES)), "je_space_race_solar_colonization")
+        possible = _tree(block(entry, "possible"))
+        branches = possible[0][2]
+        assert possible[0][0] == "OR"
+        cls.colonizing = [v for k, _, v in branches if k == "AND"][0]
+        cls.possible = possible
+        triggers = strip_comments(read(ROOT / "common/scripted_triggers/space_race_triggers.txt"))
+        cls.expand = {"sr_colonization_by_choice": _tree(block(triggers, "sr_colonization_by_choice"))}
+
+    def holds(self, body, state):
+        for key, op, value in body:
+            if key in ("AND", "custom_tooltip"):
+                ok = self.holds([x for x in value if x[0] != "text"], state)
+            elif key == "OR":
+                ok = any(self.holds([x], state) for x in value if x[0] != "text")
+            elif key == "NOT":
+                ok = not self.holds(value, state)
+            elif key in self.expand and value in ("yes", "no"):
+                ok = self.holds(self.expand[key], state) == (value == "yes")
+            else:
+                atom = f"{key} {op} {value}"
+                ok = state.get(atom, False)
+            if not ok:
+                return False
+        return True
+
+    def atoms(self, body, out):
+        for key, op, value in body:
+            if isinstance(value, list):
+                if key in ("AND", "OR", "NOT", "custom_tooltip"):
+                    self.atoms(value, out)
+                continue
+            if key == "text":
+                continue
+            if key in self.expand and value in ("yes", "no"):
+                self.atoms(self.expand[key], out)
+            else:
+                out.add(f"{key} {op} {value}")
+        return out
+
+    def check(self, name, takes):
+        import itertools
+        decision = self.decisions[name]
+        shown = _tree(block(decision, "is_shown"))
+        possible = _tree(block(decision, "possible"))
+        gate = [("sr_colonization_by_choice", "=", "yes")]
+        atoms = sorted(self.atoms(shown + possible + self.possible + gate, set()) | {b for _, b in self.FACTS})
+        self.assertLessEqual(len(atoms), 22, atoms)
+        offered = 0
+        for bits in itertools.product((False, True), repeat=len(atoms)):
+            state = dict(zip(atoms, bits))
+            if any(state.get(a) and not state.get(b) for a, b in self.FACTS):
+                continue
+            if not (self.holds(shown, state) and self.holds(possible, state)):
+                continue
+            offered += 1
+            after = dict(state, **takes(state))
+            self.assertTrue(self.holds(self.possible + gate, after),
+                            f"{name} is offered but the entry can't colonize: "
+                            f"{sorted(a for a, v in after.items() if v)}")
+        self.assertGreater(offered, 0, name)
+
+    def test_begin_solar_colonization(self):
+        when = block(self.decisions["te_decision_space_mission_solar"], "when_taken")
+        self.assertIn("set_variable = { name = sr_colonization_resumed value = yes }", when)
+        self.check("te_decision_space_mission_solar", lambda s: {
+            self.SOLAR: True, self.MARKER: s.get(self.MARKER) or (s.get(self.OVER) and s.get(self.LUNAR))})
+
+    def test_begin_deep_space_exploration(self):
+        self.check("te_decision_space_mission_deep_space", lambda s: {self.DEEP: True, self.SOLAR: True})
+
+    def test_resume_solar_colonization(self):
+        self.check("te_decision_resume_solar_colonization", lambda s: {self.MARKER: True})

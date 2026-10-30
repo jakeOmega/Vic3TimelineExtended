@@ -5280,8 +5280,9 @@ space_race_events.108 = {
 
 # The retired Moon Base's old saves (lunar colonization design § 10): a player
 # whose finished Moon Base became a lunar colony (sr_lunar_note_migrated), or
-# whose colonization programme had finished before the Moon existed and may
-# resume for it (sr_lunar_note_moon_open), or both. Players only, a notice.
+# who could colonize the Moon, open by choice in a save whose worlds were all
+# claimed before it existed (sr_lunar_note_moon_open), or both: queued once
+# (sr_lunar_fire_notice). Players only, a notice.
 space_race_events.109 = {
 	type = country_event
 	placement = root
@@ -5341,5 +5342,6 @@ space_race_events.109 = {
 	after = {
 		if = { limit = { has_variable = sr_lunar_notice_site } remove_variable = sr_lunar_notice_site }
 		if = { limit = { has_variable = sr_lunar_notice_reopened } remove_variable = sr_lunar_notice_reopened }
+		if = { limit = { has_variable = sr_lunar_notice_queued } remove_variable = sr_lunar_notice_queued }
 	}
 }

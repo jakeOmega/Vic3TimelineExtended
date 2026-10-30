@@ -716,6 +716,15 @@ te_decision_space_mission_solar = {
 				building_type = building_space_program
 				production_method = pm_solar_colonization
 			}
+			# With the race over and a lunar world free, taking this is the
+			# choice to colonize the Moon (sr_colonization_by_choice).
+			if = {
+				limit = {
+					has_global_variable = sr_all_colonies_complete
+					sr_sites_lunar_open = yes
+				}
+				set_variable = { name = sr_colonization_resumed value = yes }
+			}
 		}
 	}
 
@@ -732,25 +741,26 @@ te_decision_space_mission_solar = {
 	}
 }
 
-# Resume Solar Colonization (lunar colonization 2b, owner 2026-10-29). In a
-# save whose worlds were all claimed before the Moon existed, a country whose
-# programme had finished keeps its record, Interplanetary Trade Networks and
-# the Commercial Space Industry dividend. The Moon's free worlds are open to it
-# only by choice: this runs the programme again (sr_resume_solar_colonization,
-# sr_site_effects.txt), which pauses the dividend while it runs, and the
-# entry's pulse stops it once no lunar world is free. A decision, not the
-# production method: every power that finished the race runs the Interstellar
-# Mission, which carries the colonization method's bool, so the method alone
-# would restart them all. The entry must be open (a finished programme holds
-# colonies, so it is), or the inactive-milestone cleanup would clear the run.
+# Resume Solar Colonization (lunar colonization 2b, owner 2026-10-29). With the
+# race over (sr_all_colonies_complete, history) and a lunar world free, as in a
+# save whose worlds were all claimed before the Moon existed, colonizing the
+# Moon is a choice (sr_colonization_by_choice): finished programmes keep their
+# record, Interplanetary Trade Networks and the Commercial Space Industry
+# dividend, and no programme starts from the method alone. This is that
+# choice, for any country with the colonization method that hasn't made it:
+# sr_resume_solar_colonization (sr_site_effects.txt) sets the marker and starts
+# the programme, which pauses the dividend while it runs (the "no programme
+# running" rule), and the entry's pulse stops a holder's once no lunar world is
+# free. A decision, not the production method: every power that finished the
+# race runs the Interstellar Mission, which carries the colonization bool, so
+# the method alone would restart them all.
 te_decision_resume_solar_colonization = {
 	is_shown = {
 		sr_space_race_on = yes
-		has_variable = sr_completed_solar_colonization
-		NOT = { has_variable = sr_active_solar_colonization }
 		modifier:country_sr_solar_colonization_program_bool = yes
-		has_journal_entry = je_space_race_solar_colonization
+		has_global_variable = sr_all_colonies_complete
 		sr_sites_lunar_open = yes
+		NOT = { has_variable = sr_colonization_resumed }
 	}
 
 	possible = {
@@ -791,11 +801,14 @@ te_decision_space_mission_deep_space = {
 		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { modifier:country_sr_deep_space_exploration_program_bool = yes }
 		NOT = { has_global_variable = sr_all_colonies_complete }
-		# Only where Solar Colonization no longer reaches: the inner worlds are
-		# all claimed and we hold no colony beyond the Moon (a lunar colony alone
-		# doesn't open the outer system: sr_cf_targetable_<key>).
+		sr_any_site_unclaimed = yes
+		# Only where Solar Colonization no longer reaches: the inner worlds
+		# beyond the Moon are all claimed (a free lunar world needs no Deep
+		# Space, so it doesn't hide this) and we hold no colony beyond the Moon
+		# (a lunar colony alone doesn't open the outer system:
+		# sr_cf_targetable_<key>).
 		has_global_variable = sr_colonization_stage
-		NOT = { sr_colonization_inner_open = yes }
+		NOT = { sr_colonization_inner_beyond_moon_open = yes }
 		sr_has_colony_beyond_moon = no
 	}
 

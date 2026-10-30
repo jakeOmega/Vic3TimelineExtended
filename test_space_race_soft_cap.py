@@ -116,6 +116,9 @@ class Script:
         for key, op, value in body:
             if key == "has_variable":
                 ok = value in ctx["vars"]
+            elif key == "has_global_variable":
+                # none set: the race isn't over (sr_colonization_by_choice)
+                ok = value in ctx.get("globals", ())
             elif key in self.triggers and value in ("yes", "no"):
                 ok = self.check(self.triggers[key], ctx) == (value == "yes")
             elif key == "modifier:country_sr_solar_colonization_program_bool":

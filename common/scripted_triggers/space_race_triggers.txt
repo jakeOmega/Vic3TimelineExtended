@@ -205,7 +205,9 @@ sr_possible_fund_down = {
 # move its progress. Also the gate of the entry's four controls.
 # A finished programme runs again only when the country resumed it for the
 # Moon (sr_colonization_resumed, te_decision_resume_solar_colonization), which
-# keeps its completion record: lunar colonization 2b, owner 2026-10-29.
+# keeps its completion record: lunar colonization 2b, owner 2026-10-29. And
+# with the race over and a lunar world free, nothing runs without that choice
+# (sr_colonization_by_choice).
 sr_solar_colonization_running = {
 	has_variable = sr_active_solar_colonization
 	modifier:country_sr_solar_colonization_program_bool = yes
@@ -214,6 +216,25 @@ sr_solar_colonization_running = {
 		has_variable = sr_colonization_resumed
 	}
 	sr_solar_colonization_qualified = yes
+	sr_colonization_by_choice = yes
+}
+
+# Colonizing the Moon after the race is over is a choice (owner, 2026-10-29).
+# Once every world was claimed (sr_all_colonies_complete, kept as history) and
+# a lunar world is free again, as in a save whose worlds were all claimed
+# before the Moon existed, a programme colonizes only once the country chose
+# it: Resume Solar Colonization or Begin Solar Colonization set
+# sr_colonization_resumed. Otherwise a method carrying the colonization bool,
+# which every power that finished the race runs, would start it on its own and
+# pause its Commercial Space Industry. Read by the entry's `possible` and
+# sr_solar_colonization_running (its pulse, billing, controls and the
+# dividend's pause). Country scope.
+sr_colonization_by_choice = {
+	OR = {
+		NOT = { has_global_variable = sr_all_colonies_complete }
+		NOT = { sr_sites_lunar_open = yes }
+		has_variable = sr_colonization_resumed
+	}
 }
 
 # The milestone Solar System Colonization needs to colonize: the Moon Landing

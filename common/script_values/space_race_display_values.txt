@@ -229,6 +229,21 @@ sr_disp_prog_interstellar = {
 	else_if = { limit = { has_variable = sr_probe_launched } value = 2 }
 	else_if = { limit = { has_variable = sr_active_interstellar_probe } value = 1 }
 }
+# 1 while colonization waits for our Mars Landing: no lunar world is free, and
+# every world beyond the Moon needs it (sr_colonization_beyond_moon). The Next
+# Window cell's third line says so (design § 4: "its panel says why"; review).
+# Country scope.
+sr_disp_held_beyond_moon = {
+	value = 0
+	if = {
+		limit = {
+			NOT = { sr_colonization_beyond_moon = yes }
+			NOT = { sr_sites_lunar_open = yes }
+		}
+		value = 1
+	}
+}
+
 # No first and no "taken" for colonization (sr_prog_solar_colonization).
 sr_disp_prog_solar_colonization = {
 	value = 0

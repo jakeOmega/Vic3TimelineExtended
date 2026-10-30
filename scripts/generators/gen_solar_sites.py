@@ -1391,10 +1391,18 @@ def render_fleet_triggers() -> list[str]:
            "\tOR = {"]
     out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in SITES if s.stage <= 2]
     out += ["\t}", "}", "",
-            "# A lunar world (stage 0) is unclaimed. Any scope.",
+            "# A world of stages 1 and 2 is unclaimed: the inner worlds beyond the Moon,",
+            "# where Begin Deep Space Exploration reads the inner rule without the Moon",
+            "# (sr_colonization_inner_beyond_moon_open; lunar colonization 2b, review M4).",
+            "sr_sites_inner_beyond_moon_unclaimed = {",
+            "\tOR = {"]
+    out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in SITES if 1 <= s.stage <= 2]
+    out += ["\t}", "}", "",
+            "# A lunar world (stage 0) is free to colonize: unclaimed and not a ruin, as",
+            "# sr_cf_targetable_<key> reads it (review M4). Any scope.",
             "sr_sites_lunar_open = {",
             "\tOR = {"]
-    out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in LUNAR]
+    out += [f"\t\tsr_lunar_world_free_{s.key} = yes" for s in LUNAR]
     out += ["\t}", "}", "",
             "# THIS holds a lunar world (the old-save migration, sr_lunar_migrate_country).",
             "# Country scope.",

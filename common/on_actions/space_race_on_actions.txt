@@ -50,6 +50,9 @@ space_race_on_action = {
 		# the next line deletes it (sr_launch_window_effects.txt).
 		sr_lunar_carry_moon_base = yes
 		sr_cleanup_inactive_space_race_milestones = yes
+		# A choice to colonize the Moon lasts while a lunar world is free
+		# (sr_site_effects.txt).
+		sr_colonization_resumed_expire = yes
 		sr_monthly_colony_discoveries = yes
 		# The site_receiver_entry self-check (sr_site_effects.txt).
 		sr_site_receiver_check_step = yes

@@ -119,6 +119,26 @@ class MoonBaseRetiredTests(unittest.TestCase):
                         "je_space_race_moon_base")
         cls.events = _read(os.path.join(REPO, "events", "space_race_events.txt"))
 
+    def test_an_old_copy_left_active_moves_nothing(self):
+        """Review M1: the pulse moves the bar only while the active flag stands,
+        which the carry removes; past it, the pulse only checks it is closed."""
+        pulse = _block(self.je, "on_monthly_pulse")
+        self.assertRegex(pulse, r"if = \{\s*limit = \{ has_variable = sr_active_moon_base \}\s*"
+                                r"sr_monthly_progress_update_effect = \{ MILESTONE = moon_base \}\s*\}\s*"
+                                r"else = \{\s*sr_lunar_carry_lingering_check = yes\s*\}")
+        windows = _read(os.path.join(REPO, "common", "scripted_effects", "sr_launch_window_effects.txt"))
+        self.assertIn("remove_variable = sr_active_moon_base", _block(windows, "sr_lunar_carry_moon_base"))
+        lingering = _block(windows, "sr_lunar_carry_lingering_check")
+        self.assertIn("NOT = { has_variable = sr_lunar_carry_grace }", lingering)
+        self.assertIn("TE_SELF_CHECK BROKEN lunar_migration still open", lingering)
+        self.assertIn("set_variable = { name = sr_lunar_carry_grace value = yes days = 62 }",
+                      _block(windows, "sr_lunar_carry_self_check"))
+        # the console's option c can log the carry again (review M3)
+        console = _read(os.path.join(REPO, "events", "te_debug_space_race_events.txt"))
+        c = console[console.index("name = te_debug_space_race.8.c"):]
+        for var in ("sr_lunar_carried", "sr_lunar_carry_grace"):
+            self.assertIn(f"remove_variable = {var}", c)
+
     def test_the_entry_is_never_shown_possible_completed_or_failed(self):
         for name in ("is_shown_when_inactive", "possible", "complete", "fail"):
             with self.subTest(block=name):

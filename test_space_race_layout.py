@@ -569,10 +569,16 @@ class ColoniesTest(unittest.TestCase):
         cell = _enclosing(self.gui, 'tooltip = "je_space_race_widget_ovc_window_tt"', "te_banking_ov_cell = {")
         third = cell[cell.index('blockoverride "third_line"'):]
         stage = "GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' )"
+        waits = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' )"
+        # and, the Moon full without our Mars Landing, why the bar holds (design § 4)
         self.assertEqual(re.findall(r'visible = "\[(.*)\]"\n\s*text = "(\w+)"', third),
-                         [(stage, "je_space_race_widget_ovc_window_fig"),
+                         [(f"And( {stage}, Not( {waits} ) )", "je_space_race_widget_ovc_window_fig"),
+                          (f"And( {stage}, {waits} )", "je_space_race_widget_ovc_window_fig_mars"),
                           (f"Not( {stage} )", "je_space_race_widget_ovc_window_fig_moon")])
         self.assertEqual(self.loc["je_space_race_widget_ovc_window_fig_moon"], "the Moon")
+        waits_value = _block(_read(DISPLAY), "sr_disp_held_beyond_moon")
+        self.assertIn("NOT = { sr_colonization_beyond_moon = yes }", waits_value)
+        self.assertIn("NOT = { sr_sites_lunar_open = yes }", waits_value)
 
 
 class HowItWorksTest(unittest.TestCase):

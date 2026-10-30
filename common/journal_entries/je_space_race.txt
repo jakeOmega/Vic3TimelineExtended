@@ -773,8 +773,19 @@ je_space_race_moon_base = {
 		}
 	}
 
+	# Retired: only while an old save's copy still carries its active flag,
+	# which the carry removes (sr_lunar_carry_moon_base), so a copy that lingers
+	# active after it adds no progress, rolls no risk and recreates nothing.
 	on_monthly_pulse = {
-		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_base } }
+		effect = {
+			if = {
+				limit = { has_variable = sr_active_moon_base }
+				sr_monthly_progress_update_effect = { MILESTONE = moon_base }
+			}
+			else = {
+				sr_lunar_carry_lingering_check = yes
+			}
+		}
 	}
 
 	event_outcome_completed_effect_desc = {
@@ -1314,12 +1325,20 @@ je_space_race_solar_colonization = {
 				modifier:country_sr_solar_colonization_program_bool = yes
 				# Stages 3-5 (outer system) require Deep Space Exploration PM (space_colonization tech, era 12):
 				# past stage 2 under races only, once no inner world is free under
-				# simple and full (sr_colonization_inner_open).
-				custom_tooltip = {
-					text = sr_outer_system_requires_deep_space_tt
-					OR = {
-						sr_colonization_inner_open = yes
-						modifier:country_sr_deep_space_exploration_program_bool = yes
+				# simple and full (sr_colonization_inner_open). A free lunar world
+				# needs neither, at any stage (review I1: Races Only past stage 2
+				# with a lunar world free); stages 3-5 stay gated world by world.
+				OR = {
+					custom_tooltip = {
+						text = sr_lunar_world_free_tt
+						sr_sites_lunar_open = yes
+					}
+					custom_tooltip = {
+						text = sr_outer_system_requires_deep_space_tt
+						OR = {
+							sr_colonization_inner_open = yes
+							modifier:country_sr_deep_space_exploration_program_bool = yes
+						}
 					}
 				}
 				# A world left to claim: never founded, or released by a dead
@@ -1327,6 +1346,12 @@ je_space_race_solar_colonization = {
 				custom_tooltip = {
 					text = sr_world_left_to_claim_tt
 					sr_any_site_unclaimed = yes
+				}
+				# With the race over and a lunar world free, only by choice
+				# (sr_colonization_by_choice; owner, 2026-10-29).
+				custom_tooltip = {
+					text = sr_colonization_by_choice_tt
+					sr_colonization_by_choice = yes
 				}
 				is_great_or_major_power = yes
 			}
@@ -1339,7 +1364,14 @@ je_space_race_solar_colonization = {
 		# must not re-open it: it would bill its cost until a bar fill closed
 		# it a second time, which never comes with the production method off.
 		if = {
-			limit = { NOT = { has_variable = sr_completed_solar_colonization } }
+			limit = {
+				OR = {
+					NOT = { has_variable = sr_completed_solar_colonization }
+					# resumed for the Moon (sr_resume_solar_colonization), whose
+					# entry had closed: it runs again by choice
+					has_variable = sr_colonization_resumed
+				}
+			}
 			set_variable = { name = sr_active_solar_colonization value = yes }
 			# Progress survives only while a colony is held. Then `possible`'s
 			# first branch always holds, so the entry never deactivates, and
@@ -1450,13 +1482,12 @@ je_space_race_solar_colonization = {
 
 	on_monthly_pulse = {
 		effect = {
-			# Skip colonization logic if completed or PM disabled (passive mode — JE stays for modifiers)
+			# Skip colonization logic if completed or PM disabled (passive mode — JE stays for modifiers).
+			# The same test as billing and the controls: a programme that would
+			# colonize the Moon after the race is over without its country's
+			# choice doesn't run (sr_colonization_by_choice).
 			if = {
-				limit = {
-					has_variable = sr_active_solar_colonization
-					modifier:country_sr_solar_colonization_program_bool = yes
-					sr_solar_colonization_qualified = yes
-				}
+				limit = { sr_solar_colonization_running = yes }
 				if = {
 					limit = { sr_ai_should_participate = yes }
 					# Every approach moves and rolls; Standard is neither variable.
@@ -1499,11 +1530,10 @@ je_space_race_solar_colonization = {
 			# `can_deactivate = yes` drops the entry back to inactive;
 			# sr_cleanup_inactive_space_race_milestones then clears its
 			# variables. It is not paid, and not pinned open.
-			# Not while a lunar world is free (lunar colonization 2b, owner
-			# 2026-10-29): an old save whose other worlds were all claimed before
-			# the Moon existed keeps the flag, and a programme still running
-			# there, or one resumed for the Moon (sr_colonization_resumed), goes
-			# on until the Moon is full. A resumed one already holds its record
+			# A programme resumed for the Moon (sr_colonization_resumed; lunar
+			# colonization 2b, owner 2026-10-29) goes on while a lunar world is
+			# free, and stops here once the Moon is full; one that didn't choose
+			# it finishes as before. A resumed one may already hold its record
 			# and Interplanetary Trade Networks, so the modifier is added only
 			# when missing, and the marker goes.
 			if = {
@@ -1511,7 +1541,10 @@ je_space_race_solar_colonization = {
 					has_variable = sr_active_solar_colonization
 					has_global_variable = sr_all_colonies_complete
 					sr_has_space_colony = yes
-					NOT = { sr_sites_lunar_open = yes }
+					OR = {
+						NOT = { has_variable = sr_colonization_resumed }
+						NOT = { sr_sites_lunar_open = yes }
+					}
 				}
 				set_variable = { name = sr_completed_solar_colonization value = yes }
 				if = {

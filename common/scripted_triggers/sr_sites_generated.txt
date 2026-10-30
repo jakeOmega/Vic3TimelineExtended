@@ -126,15 +126,41 @@ sr_sites_inner_unclaimed = {
 	}
 }
 
-# A lunar world (stage 0) is unclaimed. Any scope.
+# A world of stages 1 and 2 is unclaimed: the inner worlds beyond the Moon,
+# where Begin Deep Space Exploration reads the inner rule without the Moon
+# (sr_colonization_inner_beyond_moon_open; lunar colonization 2b, review M4).
+sr_sites_inner_beyond_moon_unclaimed = {
+	OR = {
+		NOT = { has_global_variable = sr_colony_valles_marineris }
+		NOT = { has_global_variable = sr_colony_olympus_mons }
+		NOT = { has_global_variable = sr_colony_hellas_planitia }
+		NOT = { has_global_variable = sr_colony_utopia_planitia }
+		NOT = { has_global_variable = sr_colony_arcadia_planitia }
+		NOT = { has_global_variable = sr_colony_ceres }
+		NOT = { has_global_variable = sr_colony_vesta }
+		NOT = { has_global_variable = sr_colony_psyche }
+		NOT = { has_global_variable = sr_colony_pallas }
+		NOT = { has_global_variable = sr_colony_hygiea }
+		NOT = { has_global_variable = sr_colony_io }
+		NOT = { has_global_variable = sr_colony_europa }
+		NOT = { has_global_variable = sr_colony_ganymede }
+		NOT = { has_global_variable = sr_colony_callisto }
+		NOT = { has_global_variable = sr_colony_himalia }
+		NOT = { has_global_variable = sr_colony_amalthea }
+		NOT = { has_global_variable = sr_colony_venus }
+	}
+}
+
+# A lunar world (stage 0) is free to colonize: unclaimed and not a ruin, as
+# sr_cf_targetable_<key> reads it (review M4). Any scope.
 sr_sites_lunar_open = {
 	OR = {
-		NOT = { has_global_variable = sr_colony_shackleton }
-		NOT = { has_global_variable = sr_colony_peary }
-		NOT = { has_global_variable = sr_colony_tranquility }
-		NOT = { has_global_variable = sr_colony_marius_hills }
-		NOT = { has_global_variable = sr_colony_daedalus }
-		NOT = { has_global_variable = sr_colony_imbrium }
+		sr_lunar_world_free_shackleton = yes
+		sr_lunar_world_free_peary = yes
+		sr_lunar_world_free_tranquility = yes
+		sr_lunar_world_free_marius_hills = yes
+		sr_lunar_world_free_daedalus = yes
+		sr_lunar_world_free_imbrium = yes
 	}
 }
 

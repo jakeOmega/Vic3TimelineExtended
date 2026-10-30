@@ -320,9 +320,9 @@ sr_lunar_migrate = {
 		}
 		sr_lunar_migrate_country = yes
 	}
-	# A save whose race had ended before the Moon existed: a player whose
-	# programme had finished is told the Moon is open to it if it resumes
-	# (sr_lunar_note_moon_open).
+	# A save whose race had ended before the Moon existed: a player who could
+	# colonize it (a finished programme, or the colonization method) is told
+	# the Moon is open by choice (sr_lunar_note_moon_open).
 	if = {
 		limit = {
 			has_global_variable = sr_all_colonies_complete
@@ -331,7 +331,10 @@ sr_lunar_migrate = {
 		every_country = {
 			limit = {
 				is_player = yes
-				has_variable = sr_completed_solar_colonization
+				OR = {
+					has_variable = sr_completed_solar_colonization
+					modifier:country_sr_solar_colonization_program_bool = yes
+				}
 			}
 			sr_lunar_note_moon_open = yes
 		}
@@ -354,6 +357,17 @@ sr_lunar_note_migrated = {
 	if = {
 		limit = { is_player = yes }
 		set_variable = { name = sr_lunar_notice_site value = $INDEX$ }
+		sr_lunar_fire_notice = yes
+	}
+}
+
+# One .109 for a player both migrated and told the Moon is open (review M2):
+# both notes set their variable and queue it here, so it fires once and reads
+# both (d_both), as sr_site_fire_treaty_notice does for .90.
+sr_lunar_fire_notice = {
+	if = {
+		limit = { NOT = { has_variable = sr_lunar_notice_queued } }
+		set_variable = { name = sr_lunar_notice_queued value = yes days = 30 }
 		trigger_event = { id = space_race_events.109 days = 1 }
 	}
 }
@@ -364,34 +378,59 @@ sr_lunar_note_migrated = {
 # colonization. They keep it all (owner, 2026-10-29): the record
 # (sr_completed_solar_colonization), Interplanetary Trade Networks, and the
 # Commercial Space Industry dividend, since the flag stays as history and
-# sr_space_race_concluded keeps holding. The Moon is open to them only if they
-# choose to resume colonization (te_decision_resume_solar_colonization), which
-# pauses the dividend while it runs; this notice says so (.109).
+# sr_space_race_concluded keeps holding. Colonizing the Moon is a choice there
+# for every country (sr_colonization_by_choice): Resume Solar Colonization, or
+# Begin Solar Colonization, which pauses the dividend while the programme runs.
+# This notice says so (.109).
 sr_lunar_note_moon_open = {
 	set_variable = { name = sr_lunar_notice_reopened value = yes }
-	trigger_event = { id = space_race_events.109 days = 1 }
+	sr_lunar_fire_notice = yes
 }
 
-# Country scope, from te_decision_resume_solar_colonization: a finished
-# programme runs again to settle the Moon's free worlds. It keeps its
+# Country scope, from te_decision_resume_solar_colonization (and Begin Solar
+# Colonization's marker) with the race over and a lunar world free: the
+# country chooses to colonize the Moon. A finished programme keeps its
 # completion record and Interplanetary Trade Networks: the marker
 # sr_colonization_resumed makes it running (sr_solar_colonization_running), so
 # it is billed, its four controls and Target work, and its dividend pauses
-# (sr_has_running_milestone). The entry's pulse stops it again once no lunar
-# world is free, removing the marker and adding no second modifier. The bar
-# starts from what is kept, at one funding level if none is left.
+# (sr_has_running_milestone). With the entry open the programme starts here,
+# at one funding level if none is left; with it closed, the marker lets the
+# entry open (its `possible`) and its `immediate` starts it. The entry's pulse
+# stops a resumed holder once no lunar world is free, removing the marker and
+# adding no second modifier; sr_colonization_resumed_expire clears it from a
+# country that holds no colony.
 sr_resume_solar_colonization = {
 	set_variable = { name = sr_colonization_resumed value = yes }
-	set_variable = { name = sr_active_solar_colonization value = yes }
 	if = {
-		limit = { NOT = { has_variable = sr_progress_solar_colonization } }
-		set_variable = { name = sr_progress_solar_colonization value = 0 }
+		limit = { has_journal_entry = je_space_race_solar_colonization }
+		if = {
+			limit = { NOT = { has_variable = sr_active_solar_colonization } }
+			set_variable = { name = sr_active_solar_colonization value = yes }
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_progress_solar_colonization } }
+			set_variable = { name = sr_progress_solar_colonization value = 0 }
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_funding_solar_colonization } }
+			set_variable = { name = sr_funding_solar_colonization value = 1 }
+		}
+		sr_recalculate_cost = yes
 	}
+}
+
+# Country scope, the monthly space race pulse: the choice is for this Moon.
+# Once no lunar world is free and the programme has stopped, the marker goes,
+# so a lunar world freed later is a new choice.
+sr_colonization_resumed_expire = {
 	if = {
-		limit = { NOT = { has_variable = sr_funding_solar_colonization } }
-		set_variable = { name = sr_funding_solar_colonization value = 1 }
+		limit = {
+			has_variable = sr_colonization_resumed
+			NOT = { sr_sites_lunar_open = yes }
+			NOT = { has_variable = sr_active_solar_colonization }
+		}
+		remove_variable = sr_colonization_resumed
 	}
-	sr_recalculate_cost = yes
 }
 
 # Self-check lunar_migration (lunar colonization plan, review focus 1). Global

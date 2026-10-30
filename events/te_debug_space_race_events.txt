@@ -588,5 +588,14 @@ te_debug_space_race.8 = { # REVIEWED 2026-10-29: console-only test event (`event
 			limit = { has_global_variable = sr_lunar_carry_ok_logged }
 			remove_global_variable = sr_lunar_carry_ok_logged
 		}
+		# the carry logs OK only on a country's first carry (review M3)
+		if = {
+			limit = { has_variable = sr_lunar_carried }
+			remove_variable = sr_lunar_carried
+		}
+		if = {
+			limit = { has_variable = sr_lunar_carry_grace }
+			remove_variable = sr_lunar_carry_grace
+		}
 	}
 }

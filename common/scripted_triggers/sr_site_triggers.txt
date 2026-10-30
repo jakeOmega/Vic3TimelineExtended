@@ -70,3 +70,23 @@ sr_colonization_inner_open = {
 		}
 	}
 }
+
+# The same rule without the Moon: Begin Deep Space Exploration's test (lunar
+# colonization 2b, review M4). A free lunar world needs no Deep Space, so under
+# simple and full it mustn't keep the decision hidden once stages 1 and 2 are
+# full. Any scope.
+sr_colonization_inner_beyond_moon_open = {
+	OR = {
+		AND = {
+			NOT = { sr_colonies_contested_enabled = yes }
+			OR = {
+				NOT = { has_global_variable = sr_colonization_stage }
+				global_var:sr_colonization_stage <= 2
+			}
+		}
+		AND = {
+			sr_colonies_contested_enabled = yes
+			sr_sites_inner_beyond_moon_unclaimed = yes
+		}
+	}
+}
