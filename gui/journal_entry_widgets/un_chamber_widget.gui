@@ -638,7 +638,6 @@ types un_chamber_widget_types
 		# rows stay collapsed (the 2026-10-27 audit, UN-14).
 		un_chamber_text = {
 			parentanchor = hcenter
-			default_format = "#tooltippable"
 			text = "[GetScriptedGui('un_chamber_deleg_summary_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			tooltip = "[GetScriptedGui('un_chamber_deleg_firm_list_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
@@ -2629,7 +2628,6 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_0_figures"
 					}
 				}
@@ -2666,7 +2664,6 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_1_figures"
 					}
 				}
@@ -2703,7 +2700,6 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_2_figures"
 					}
 				}
@@ -2740,7 +2736,6 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_3_figures"
 					}
 				}
@@ -2777,7 +2772,6 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_4_figures"
 					}
 				}
@@ -2814,7 +2808,6 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_5_figures"
 					}
 				}
@@ -2851,7 +2844,6 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_6_figures"
 					}
 				}
@@ -2888,7 +2880,6 @@ types un_chamber_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_chamber_mission_slot_7_figures"
 					}
 				}
@@ -4738,181 +4729,151 @@ types un_chamber_widget_types
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)28' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)28' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)28' ) ).End )]"
 				}
 				un_chamber_text = {
 					visible = "[GetScriptedGui('un_chamber_history_brief_row_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_history_brief_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
 					tooltip = "[GetScriptedGui('un_chamber_history_card_row_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
 				}

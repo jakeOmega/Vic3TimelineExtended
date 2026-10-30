@@ -23,14 +23,9 @@
 types te_state_panel_widget_types
 {
 	### One label/value line: an optional 20 px icon, the label column, then
-	### the value column with its text anchored right.
-	###
-	### A row with a hover of its own (row_tooltip, or a te_state_meter's
-	### meter_tooltip around it) underlines its label with
-	### blockoverride "label_format" { default_format = "#tooltippable" }
-	### (gui_style_guide.md rule 3). The default is off, unlike nd_row's: most
-	### rows here sit in a tile whose one hover covers them, and an underline
-	### there would promise a hover of the row's own that it doesn't have.
+	### the value column with its text anchored right. A row's hover
+	### (row_tooltip, or a te_state_meter's meter_tooltip around it) is not
+	### underlined, as vanilla's rows aren't (gui_style_guide.md rule 3).
 	type te_state_stat_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -63,7 +58,6 @@ types te_state_panel_widget_types
 				block "row_font" {
 					using = fontsize_medium
 				}
-				block "label_format" {}
 				block "row_label" {}
 			}
 		}
@@ -209,8 +203,7 @@ types te_state_panel_widget_types
 	### title font, over a divider. Laid out like te_state_wide_row but with
 	### its own textboxes, so the instance's header_label / header_value land
 	### directly on a block of this type rather than being forwarded through a
-	### blockoverride of a nested derived type. Both headers carry a hover, so
-	### the label is underlined.
+	### blockoverride of a nested derived type. Both headers carry a hover.
 	type te_state_column_header = flowcontainer {
 		direction = vertical
 		spacing = 3
@@ -231,7 +224,6 @@ types te_state_panel_widget_types
 					max_width = 186
 					elide = right
 					align = nobaseline
-					default_format = "#tooltippable"
 					block "header_label" {}
 				}
 			}
@@ -315,9 +307,6 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/goods_icons/tourism.dds"
 							}
@@ -341,9 +330,6 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/building_icons/urban_center.dds"
 							}
@@ -369,9 +355,6 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/building_icons/statue_of_liberty.dds"
 							}
@@ -409,9 +392,6 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/state_status_icons/state_infrastructure.dds"
 							}
@@ -438,9 +418,6 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/goods_icons/fine_art.dds"
 							}
@@ -467,9 +444,6 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/state_status_icons/pollution.dds"
 							}
@@ -497,9 +471,6 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/building_icons/skyscraper.dds"
 							}
@@ -526,9 +497,6 @@ types te_state_panel_widget_types
 				spacing = 10
 
 				te_state_wide_row = {
-					blockoverride "label_format" {
-						default_format = "#tooltippable"
-					}
 					blockoverride "row_tooltip" {
 						tooltip = "te_state_tourism_output_applied_tt"
 					}
@@ -541,9 +509,6 @@ types te_state_panel_widget_types
 				}
 
 				te_state_wide_row = {
-					blockoverride "label_format" {
-						default_format = "#tooltippable"
-					}
 					blockoverride "row_tooltip" {
 						tooltip = "te_state_tourism_throughput_applied_tt"
 					}
@@ -830,7 +795,6 @@ types te_state_panel_widget_types
 							maximumsize = { 350 -1 }
 							align = left|nobaseline
 							using = fontsize_medium
-							default_format = "#tooltippable"
 							tooltip = "gm_row_landmark_tt"
 							text = "gm_row_landmark"
 						}
@@ -842,9 +806,6 @@ types te_state_panel_widget_types
 							}
 
 							te_state_gm_row = {
-								blockoverride "label_format" {
-									default_format = "#tooltippable"
-								}
 								blockoverride "row_icon_texture" {
 									texture = "gfx/interface/icons/building_icons/building_grand_monument.dds"
 								}
@@ -876,7 +837,6 @@ types te_state_panel_widget_types
 							maximumsize = { 380 -1 }
 							align = left|nobaseline
 							using = fontsize_medium
-							default_format = "#tooltippable"
 							tooltip = "gm_row_frozen_tt"
 							text = "gm_row_frozen"
 						}
@@ -887,9 +847,6 @@ types te_state_panel_widget_types
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_tourism'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_tourism_tt"
-							}
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
 							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/goods_icons/tourism.dds"
@@ -906,9 +863,6 @@ types te_state_panel_widget_types
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_local'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_local_tt"
-							}
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
 							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
@@ -929,9 +883,6 @@ types te_state_panel_widget_types
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_sig_tourism_tt"
 							}
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/goods_icons/tourism.dds"
 							}
@@ -947,9 +898,6 @@ types te_state_panel_widget_types
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_sig_university'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_sig_university_tt"
-							}
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
 							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
@@ -972,7 +920,6 @@ types te_state_panel_widget_types
 							maximumsize = { 380 -1 }
 							align = left|nobaseline
 							using = fontsize_medium
-							default_format = "#tooltippable"
 							tooltip = "gm_row_com_counts_tt"
 							text = "gm_row_com_counts"
 						}
@@ -987,7 +934,6 @@ types te_state_panel_widget_types
 							maximumsize = { 380 -1 }
 							align = left|nobaseline
 							using = fontsize_medium
-							default_format = "#tooltippable"
 							tooltip = "gm_state_contest_tt"
 							text = "gm_row_contest"
 						}
@@ -1228,9 +1174,6 @@ types te_state_panel_widget_types
 		spacing = 3
 
 		te_state_tile_word_row = {
-			blockoverride "label_format" {
-				default_format = "#tooltippable"
-			}
 			blockoverride "row_visible" {
 				visible = "[GetScriptedGui('te_demog_state_wealth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
 			}

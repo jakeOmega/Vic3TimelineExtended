@@ -20,8 +20,7 @@ types te_budget_breakdown {
 	### wide (5 + 18 + 5 + 12 + 5 + 291 + 5 + 94 + 5 + 60 = 500 at depth 0),
 	### so a label of about 30 characters fits on one line at 17; a longer one
 	### wraps. A row whose hover is on its amount (a vanilla graph template,
-	### gen_budget_breakdown.TOOLTIP_TEMPLATES) clears "label_format", since
-	### its label carries no tooltip of its own.
+	### gen_budget_breakdown.TOOLTIP_TEMPLATES) carries no row tooltip.
 	type te_budget_chart_row = flowcontainer {
 		direction = horizontal
 		spacing = 5
@@ -42,9 +41,6 @@ types te_budget_breakdown {
 			multiline = yes
 			align = left|vcenter|nobaseline
 			using = te_budget_fontsize_row
-			block "label_format" {
-				default_format = "#tooltippable"
-			}
 			block "label" {}
 		}
 		textbox = {

@@ -503,7 +503,6 @@ types market_panel
 
 							blockoverride "heading" {
 								text = "te_market_export_partners"
-								default_format = "#tooltippable"
 								tooltip = "te_market_export_partners_tt"
 							}
 
@@ -556,7 +555,6 @@ types market_panel
 
 							blockoverride "heading" {
 								text = "te_market_import_partners"
-								default_format = "#tooltippable"
 								tooltip = "te_market_import_partners_tt"
 							}
 
@@ -651,7 +649,6 @@ types market_panel
 								autoresize = yes
 								align = right|nobaseline
 								using = te_tp_fontsize_row
-								default_format = "#tooltippable"
 								tooltip = "TP_TRADE_TOOLTIP"
 							}
 							textbox = {
@@ -661,7 +658,6 @@ types market_panel
 								autoresize = yes
 								align = right|nobaseline
 								using = te_tp_fontsize_row
-								default_format = "#tooltippable"
 								tooltip = "TP_GDP_TOOLTIP"
 							}
 						}
@@ -702,8 +698,8 @@ types market_panel
 											}
 										}
 									}
-									### The yearly figure; its hover is the goods behind it,
-									### so it is underlined (MKT-4).
+									### The yearly figure; its hover is the goods behind it
+									### (MKT-4).
 									textbox = {
 										raw_text = "@money![GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).AddScope( 'tp_partner_country', Country.MakeScope ).ScriptValue('gui_tp_annual_trade')|D]"
 										minimumsize = { 110 -1 }
@@ -711,7 +707,6 @@ types market_panel
 										autoresize = yes
 										align = right|nobaseline
 										using = te_tp_fontsize_row
-										default_format = "#tooltippable"
 										tooltipwidget = {
 											RegularTooltip_TE_TradePartnerGoods = {
 												datacontext = "[Scope.GetMarket.GetOwner]"

@@ -140,7 +140,6 @@ types te_tax_overview_widget_types
 			align = left|nobaseline
 			using = te_tax_fontsize_row
 			elide = right
-			default_format = "#tooltippable"
 			block "row_label" {}
 		}
 		textbox = {
@@ -174,7 +173,6 @@ types te_tax_overview_widget_types
 			align = left|nobaseline
 			using = te_tax_fontsize_row
 			elide = right
-			default_format = "#tooltippable"
 			block "row_label" {}
 		}
 		textbox = {
@@ -183,7 +181,6 @@ types te_tax_overview_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_tax_fontsize_row
-			default_format = "#tooltippable"
 			block "row_rate" {}
 		}
 		textbox = {
@@ -193,7 +190,6 @@ types te_tax_overview_widget_types
 			align = left|nobaseline
 			using = te_tax_fontsize_row
 			elide = right
-			default_format = "#tooltippable"
 			tooltip = "te_tax_en_sunset_tt"
 			block "row_sunset" {}
 		}
@@ -231,7 +227,6 @@ types te_tax_overview_widget_types
 			align = right|nobaseline
 			using = te_tax_fontsize_row
 			elide = right
-			default_format = "#tooltippable"
 			tooltip = "te_tax_hist_version_tt"
 			block "row_version" {}
 		}

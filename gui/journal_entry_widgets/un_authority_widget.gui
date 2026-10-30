@@ -173,7 +173,6 @@ types un_authority_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_participation_label"
 					}
 					double_direction_progressbar = {
@@ -231,7 +230,6 @@ types un_authority_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_commitment_label"
 					}
 					double_direction_progressbar = {
@@ -289,7 +287,6 @@ types un_authority_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_credibility_label"
 					}
 					double_direction_progressbar = {
@@ -347,7 +344,6 @@ types un_authority_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_funding_label"
 					}
 					double_direction_progressbar = {
@@ -405,7 +401,6 @@ types un_authority_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_order_label"
 					}
 					double_direction_progressbar = {
@@ -463,7 +458,6 @@ types un_authority_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_delivery_label"
 					}
 					double_direction_progressbar = {
@@ -521,7 +515,6 @@ types un_authority_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_policy_label"
 					}
 					double_direction_progressbar = {
@@ -578,7 +571,6 @@ types un_authority_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_base_label"
 					}
 					widget = {
@@ -609,7 +601,6 @@ types un_authority_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_target_label"
 					}
 					widget = {
@@ -641,7 +632,6 @@ types un_authority_widget_types
 						autoresize = yes
 						align = left|nobaseline
 						using = un_fontsize_row
-						default_format = "#tooltippable"
 						tooltip = "je_un_auth_weight_tt"
 						text = "je_un_auth_weight_value"
 					}

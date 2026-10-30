@@ -798,7 +798,7 @@ class LabelBudgetTest(unittest.TestCase):
     def test_steppers_choices_and_buttons(self):
         both = _read(DETERRENCE) + _read(PROGRAM)
         labels = set(re.findall(r'text = "(\w+)"\n\t+size = \{ 170 24 \}', both))
-        values = set(re.findall(r'text = "(\w+)"\n\t+tooltip = "\w+"\n\t+default_format = "#tooltippable"\n\t+size = \{ 246 24 \}', both))
+        values = set(re.findall(r'text = "(\w+)"\n\t+tooltip = "\w+"\n\t+size = \{ 246 24 \}', both))
         # Safeguards, hardening, the arsenal ceiling and the programme's own,
         # then the Strike section's target and warheads (rework phase 3).
         self.assertEqual(len(labels), 6, labels)

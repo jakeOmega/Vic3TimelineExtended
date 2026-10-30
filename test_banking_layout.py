@@ -222,13 +222,16 @@ class GateTest(unittest.TestCase):
 
 
 class TidyTest(unittest.TestCase):
-    def test_labels_with_a_tooltip_look_hoverable(self):
+    def test_labels_with_a_tooltip_are_plain(self):
+        # Style guide rule 3 (owner, 2026-10-30): as in vanilla, a hover's
+        # label is not underlined.
         dash = _read(DASH)
         for typ, block in (("banking_dash_condition_row", "condition_label"),
                            ("banking_dash_mon_label", "mon_label_text"),
                            ("banking_dash_policy_row", "row_label")):
-            self.assertRegex(_type_body(dash, typ),
-                             rf'default_format = "#tooltippable"\s*block "{block}"', typ)
+            body = _type_body(dash, typ)
+            self.assertIn(f'block "{block}"', body, typ)
+            self.assertNotIn("#tooltippable", body, typ)
 
     def test_one_heading_style(self):
         dash = _read(DASH)

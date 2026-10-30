@@ -175,10 +175,12 @@ class WidthBudgetTest(unittest.TestCase):
         self.fits("XX999.9M", 110)          # @money! and a yearly figure
         self.fits("100.0%", 100)
 
-    def test_the_figure_with_a_hover_is_underlined_and_the_other_has_none(self):
+    def test_the_figure_with_a_hover_is_plain_and_the_other_has_none(self):
+        # Style guide rule 3 (owner, 2026-10-30): a figure's hover is not underlined.
         row = self.table[self.table.index("item = {"):]
         trade = row[row.index("gui_tp_annual_trade"):]
-        self.assertIn('default_format = "#tooltippable"', trade[:600])
+        self.assertIn("tooltip", trade[:600])
+        self.assertNotIn("#tooltippable", trade[:600])
         gdp = row[row.index("gui_tp_trade_pct_gdp"):]
         self.assertNotIn("tooltip", gdp[:400])
 

@@ -54,3 +54,19 @@ comes and goes, two rows with fixed contents, or a fixed width). The layout test
 | **Nuclear Powers.** The panel open as the world's first warhead is built (`event te_debug_nuclear.1`, A), through the first monthly ranking. | The column heads at the left of a 480 panel from the start; the rows fill in under them without the panel moving. | `minimumsize = { 480 -1 }` on `nuclear_program_powers_head` (`nuclear_program_widget.gui`), its 6 margins counted; if the panel is 12 wider than its rows, they aren't, and 468 is the figure. |
 | **Nuclear reputation.** Our Record after a crisis ends (`event te_debug_deterrence.4`), before and after the first pledge. | The panel as wide as the sections around it, whichever lines show. | `minimumsize = { 512 -1 }` on the reputation section's `nd_panel` (`nuclear_deterrence_widget.gui`). It counts the panel's 10 margins, as `te_banking_mon_readout`'s 500 does; if the panel comes out 20 wider than the sections, it doesn't here, and 492 is the figure. |
 | **Banking mandates.** Monetary Policy with mandates by choice; enact a gold standard, or leave one, with the panel open. | Inflation Targeting and Dual Mandate above Growth and Peg Defence, centred; off gold, Growth under Inflation Targeting with a gap beside it. | `minimumsize = { 456 -1 }` on the second row (`banking_dashboard_widget.gui`). |
+
+## Underlines removed (2026-10-30)
+
+`gui_style_guide.md` rule 3 now follows vanilla: a hoverable word in running text is underlined, a hover's label or
+figure is not. The Space Race lost its underlines in #1258 (its checks are in `space-race-playtest.md`); every other
+mod panel lost its `default_format = "#tooltippable"` and the `label_format`, `row_format`, `cell_format` and
+`name_format` blocks that toggled it, and the loc labels written `#tooltippable Word#!` were unwrapped. No color had
+been moved into loc for those underlines outside the Space Race. `test_gui_underlines.py` holds the panels to the rule.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **No labels underlined.** Open each system panel: Banking, Cultural Hegemony, Covert, Colonial Empire, Demographics, Global Warming, Grand Monuments, Nuclear, Seabed, Strategic Reserve, Tax Code, the UN, the Nation tab; the state view's tiles, the construction market rows, the Market panel's trade partners, the Budget breakdown. | No row label, figure, cell or column head is underlined; each still shows its hover. | An underline left: the textbox's type or its loc. |
+| **Underlines that stay.** The UN proposal rows' "None" and "No Case", an agency's "Its terms", a Grand Monument's signature name, the homeland tile's two thresholds, a taxation law's "Tax effects", the Banking notes' "Banking Cycle", any concept link. | Underlined, each opening its own tooltip. | A nested form unwrapped by mistake: the key's `#tooltippable;tooltip:` or `#tooltippable #tooltip:` markup. |
+| **Colors without underlines.** Colonial Empire's red table cells, Banking's phase words (green Expansion, red Panic), the UN chamber's "Firmly for" and "firmly against" counts. | Each keeps its color. | A cream value: its color was the underline's; put it back inline in the loc. |
+| **Subheadings.** Grand Monuments' Interest Group Approval and Monument Policy; the Tax Code review's Taxed Goods, Agricultural Relief, Regional Relief and Revenue Estimate. | In the heading style, as before, with no underline. | |
+| **The Tax Code's estimate note.** Budget > Tax Code with a bill under debate, the line above Interest Groups' cards. | The note's own style (`te_tax_note`'s `#lore`), as the panel's other notes; "Estimate out of date:" still red. | It was plain cream, underlined; if the lore color drowns the red, give the line a `default_format` of its own. |

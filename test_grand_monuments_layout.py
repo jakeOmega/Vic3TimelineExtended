@@ -227,7 +227,7 @@ class StateGatedTest(unittest.TestCase):
 
     def test_contest_line_and_buttons_only_while_contested(self):
         row = _squash(_type_body(_gui(), "gm_monument_row"))
-        self.assertIn(f'visible = "[{self.CONTESTED}]" default_format = "#tooltippable" '
+        self.assertIn(f'visible = "[{self.CONTESTED}]" '
                       f'tooltip = "gm_row_contest_tt" text = "gm_row_contest"', row)
         rows = re.findall(r'flowcontainer = \{ direction = horizontal spacing = 4 (?:ignoreinvisible = yes )?'
                           r'parentanchor = hcenter visible = "\[(.*?)\]" ((?:gm_choice_button = \{.*?\} \} )+)\}', row)
@@ -343,8 +343,7 @@ class StateGatedTest(unittest.TestCase):
         ov = _squash(_strip_comments(_type_body(gui, "te_gm_overview_panel")))
         last = ov.split('text = "gm_je_ov_policy" }', 1)[1]
         self.assertTrue(last.startswith(' textbox = {'), last[:200])
-        self.assertIn('default_format = "#tooltippable" tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate" }',
-                      last)
+        self.assertIn('tooltip = "gm_je_world_rate_tt" text = "gm_je_world_rate" }', last)
         awaiting = _squash(_strip_comments(_type_body(gui, "te_gm_sec_awaiting")).split("gm_panel = {", 1)[1])
         self.assertTrue(awaiting.startswith('visible = "[Not(GetVariableSystem.Exists(\'gm_awaiting_closed\'))]" '
                                             'flowcontainer = {'), awaiting[:300])
@@ -507,7 +506,7 @@ class PolicyLayoutTest(unittest.TestCase):
 
     def test_the_overview_names_the_policy(self):
         ov = _squash(_strip_comments(_type_body(_gui(), "te_gm_overview_panel")))
-        self.assertIn('default_format = "#tooltippable" tooltip = "gm_je_ov_policy_tt" text = "gm_je_ov_policy" }', ov)
+        self.assertIn('tooltip = "gm_je_ov_policy_tt" text = "gm_je_ov_policy" }', ov)
 
     def test_four_buttons_two_to_a_row(self):
         nat = _squash(_type_body(_gui(), "te_gm_sec_national"))

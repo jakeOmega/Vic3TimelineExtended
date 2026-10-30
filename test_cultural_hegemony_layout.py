@@ -931,7 +931,7 @@ class FundingCapTest(unittest.TestCase):
         progs = _type_body(_read(WIDGET), "te_ch_sec_programmes")
         cell = progs[progs.index('text = "je_ch_widget_funding_value"') - 300:progs.index('text = "je_ch_widget_funding_value"') + 120]
         self.assertIn('tooltip = "je_ch_widget_funding_value_tt"', cell)
-        self.assertIn('default_format = "#tooltippable"', cell)
+        self.assertNotIn("#tooltippable", cell)  # style guide rule 3
         loc = _loc()
         tip = loc["je_ch_widget_funding_value_tt"]
         for part in ("institution_ministry_of_culture", "mass_media", "television",

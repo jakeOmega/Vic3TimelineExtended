@@ -557,7 +557,7 @@ class StateCardViewTests(unittest.TestCase):
 
     @staticmethod
     def code(text):
-        """A .gui block without its `###` comment lines (`#tooltippable` is code, so not strip_comments)."""
+        """A .gui block without its `###` comment lines (a `#` inside a string is code, so not strip_comments)."""
         return re.sub(r"(?m)^\s*###.*$", "", text)
 
     def type_body(self, name, kind="flowcontainer"):
@@ -901,7 +901,7 @@ class Trophies1836Tests(unittest.TestCase):
                          "value = 0 if = { limit = { has_variable = gm_tr_landmark } value = 1 }")
         gui = read(TR_GUI)
         line = ("gm_tr_line = { visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue("
-                "'gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]\" default_format = \"#tooltippable\" "
+                "'gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]\" "
                 "tooltip = \"gm_tr_row_landmark_tt\" text = \"gm_row_landmark\" }")
         for row in ("gm_tr_row_held", "gm_tr_row_abroad", "gm_tr_row_site"):
             self.assertIn(line, squash(raw_block_at(gui, rf"(?m)^\ttype {row} = \w+ \{{")), row)

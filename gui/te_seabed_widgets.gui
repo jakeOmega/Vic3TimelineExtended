@@ -117,7 +117,6 @@ types te_seabed_widget_types
 			elide = right
 			align = left|nobaseline
 			using = te_seabed_fontsize_overview
-			default_format = "#tooltippable"
 			block "caption" {}
 		}
 		block "word" {}
@@ -206,7 +205,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_col_free_tt"
 			text = "te_seabed_col_free"
 		}
@@ -216,7 +214,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = center|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_col_pool_tt"
 			text = "te_seabed_col_pool"
 		}
@@ -226,7 +223,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_col_weight_tt"
 			text = "te_seabed_col_weight"
 		}
@@ -236,7 +232,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_col_next_tt"
 			text = "te_seabed_col_next"
 		}
@@ -264,7 +259,6 @@ types te_seabed_widget_types
 				max_width = 82
 				align = left|nobaseline
 				using = te_seabed_fontsize_row
-				default_format = "#tooltippable"
 				block "basin_name" {}
 			}
 		}
@@ -274,7 +268,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			block "basin_free" {}
 		}
 		widget = {
@@ -287,7 +280,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			block "basin_weight" {}
 		}
 		textbox = {
@@ -296,7 +288,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			block "basin_next" {}
 		}
 	}
@@ -399,7 +390,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_rival_col_mines_tt"
 			text = "te_seabed_rival_col_mines"
 		}
@@ -409,7 +399,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_rival_col_claims_tt"
 			text = "te_seabed_rival_col_claims"
 		}
@@ -419,7 +408,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_rival_col_weight_tt"
 			text = "te_seabed_rival_col_weight"
 		}

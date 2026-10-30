@@ -2150,18 +2150,15 @@ types gm_trophy_widget_types
 				### its own line, what it gives on hover.
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_tr_sig_tt"
 					text = "gm_tr_row_sig"
 				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_tr_row_landmark_tt"
 					text = "gm_row_landmark"
 				}
 				gm_tr_line = {
-					default_format = "#tooltippable"
 					tooltip = "gm_tr_row_value_tt"
 					text = "gm_tr_row_value"
 				}
@@ -2215,18 +2212,15 @@ types gm_trophy_widget_types
 			### its own line, what it gives on hover.
 			gm_tr_line = {
 				visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
-				default_format = "#tooltippable"
 				tooltip = "gm_tr_sig_tt"
 				text = "gm_tr_row_sig"
 			}
 			gm_tr_line = {
 				visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
-				default_format = "#tooltippable"
 				tooltip = "gm_tr_row_landmark_tt"
 				text = "gm_row_landmark"
 			}
 			gm_tr_line = {
-				default_format = "#tooltippable"
 				tooltip = "gm_tr_row_held_by_tt"
 				text = "gm_tr_row_held_by"
 			}
@@ -2264,20 +2258,17 @@ types gm_trophy_widget_types
 				### its own line, what it gives on hover.
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_tr_sig_tt"
 					text = "gm_tr_row_sig"
 				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_tr_row_landmark_tt"
 					text = "gm_row_landmark"
 				}
 				### What it counts for: its grandeur, with the effects and where
 				### to view them on hover.
 				gm_tr_line = {
-					default_format = "#tooltippable"
 					tooltip = "gm_tr_row_site_value_tt"
 					text = "gm_tr_row_site_value"
 				}
@@ -2316,7 +2307,6 @@ types gm_trophy_widget_types
 			maximumsize = { 374 -1 }
 			align = left|nobaseline
 			using = gm_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "gm_tr_short_tt"
 			text = "gm_tr_short_line"
 		}
@@ -2372,7 +2362,6 @@ types gm_trophy_widget_types
 
 			gm_text = {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_tr_disp_held_count'), '(CFixedPoint)0' )]"
-				default_format = "#tooltippable"
 				tooltip = "gm_je_tr_summary_tt"
 				text = "gm_je_tr_summary"
 			}
@@ -2430,7 +2419,6 @@ types gm_trophy_widget_types
 			spacing = 2
 
 			gm_text = {
-				default_format = "#tooltippable"
 				tooltip = "gm_je_abroad_ways_tt"
 				text = "gm_je_abroad_summary"
 			}
@@ -2486,7 +2474,6 @@ types gm_trophy_widget_types
 						autoresize = yes
 						align = left|nobaseline
 						using = gm_fontsize_heading
-						default_format = "#tooltippable"
 						tooltip = "gm_state_tr_header_tt"
 						text = "gm_state_tr_header"
 					}
@@ -2539,7 +2526,6 @@ types gm_trophy_widget_types
 					maximumsize = { 510 -1 }
 					align = left|nobaseline
 					using = gm_fontsize_row
-					default_format = "#tooltippable"
 					tooltip = "gm_state_tr_summary_tt"
 					text = "gm_state_tr_summary"
 				}
@@ -2657,39 +2643,33 @@ types gm_trophy_widget_types
 				### its own line, what it gives on hover.
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_has_sig'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_tr_sig_tt"
 					text = "gm_tr_row_sig"
 				}
 				### Its status (ageing spec 2026-10-16 §4.3), a code each.
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), '(CFixedPoint)2' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_je_status_upheld_tt"
 					text = "gm_mon_row_status_upheld"
 				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), '(CFixedPoint)3' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_je_status_heritage_tt"
 					text = "gm_mon_row_status_heritage"
 				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), '(CFixedPoint)4' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_je_status_contested_tt"
 					text = "gm_mon_row_status_contested"
 				}
 				gm_tr_line = {
 					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_tr_row_landmark_tt"
 					text = "gm_row_landmark"
 				}
 				### Its grandeur: its levels and its years, with how the
 				### building sums the levels on hover.
 				gm_tr_line = {
-					default_format = "#tooltippable"
 					tooltip = "gm_mon_row_value_tt"
 					text = "gm_mon_row_value"
 				}
@@ -2720,7 +2700,6 @@ types gm_trophy_widget_types
 			autoresize = yes
 			align = left|nobaseline
 			using = gm_fontsize_heading
-			default_format = "#tooltippable"
 			tooltip = "gm_state_mon_header_tt"
 			text = "gm_state_mon_header"
 		}

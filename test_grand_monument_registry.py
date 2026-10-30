@@ -4543,13 +4543,13 @@ class LandmarkLineTests(unittest.TestCase):
                          "value = 0 if = { limit = { gm_state_is_landmark = yes } value = 1 }")
 
     def test_row_and_card(self):
-        row = squash(read(WIDGET))  # raw: strip_comments would eat "#tooltippable"
-        self.assertIn(f'gm_row_line = {{ visible = "{self.VISIBLE}" default_format = "#tooltippable" '
+        row = squash(read(WIDGET))
+        self.assertIn(f'gm_row_line = {{ visible = "{self.VISIBLE}" '
                       f'tooltip = "gm_row_landmark_tt" text = "gm_row_landmark" }}', row)
         card = squash(read("gui/te_state_panel_widgets.gui"))
         self.assertIn(f'visible = "{self.VISIBLE}" autoresize = yes multiline = yes minimumsize = {{ 350 -1 }} '
                       f'maximumsize = {{ 350 -1 }} align = left|nobaseline using = fontsize_medium '
-                      f'default_format = "#tooltippable" tooltip = "gm_row_landmark_tt" text = "gm_row_landmark"', card)
+                      f'tooltip = "gm_row_landmark_tt" text = "gm_row_landmark"', card)
         L = loc()
         self.assertEqual(L["gm_row_landmark"], "Historical monument")
         self.assertIn("[State.GetCustom('gm_landmark_desc')]", L["gm_row_landmark_tt"])
@@ -6021,7 +6021,7 @@ class SignatureNameTests(unittest.TestCase):
         L = loc()
         gui = read("gui/gm_trophy_widgets.gui")
         line = ('gm_tr_line = { visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('
-                "'gm_tr_disp_has_sig'), '(CFixedPoint)1' )]\" default_format = \"#tooltippable\" "
+                "'gm_tr_disp_has_sig'), '(CFixedPoint)1' )]\" "
                 'tooltip = "gm_tr_sig_tt" text = "gm_tr_row_sig" }')
         self.assertEqual(squash(gui).count(line), 4, "the three trophy rows and a monument beside another")
         self.assertEqual(L["gm_tr_row_sig"], "[ScriptContainer.GetCustom('gm_tr_sig_line')]")

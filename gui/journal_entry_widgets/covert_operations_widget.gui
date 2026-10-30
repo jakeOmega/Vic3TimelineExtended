@@ -175,8 +175,7 @@ types covert_operations_widget_types
 
 	### A table row: a label on the left and its value on the right
 	### (un_chamber_value_row, with a wider value column for money). A row with
-	### a tooltip sets it on the instance and makes its label #tooltippable in
-	### the row_label override.
+	### a tooltip sets it on the instance.
 	type covert_value_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -222,7 +221,6 @@ types covert_operations_widget_types
 			elide = right
 			align = hcenter|nobaseline
 			using = covert_fontsize_overview
-			default_format = "#tooltippable"
 			block "label" {}
 		}
 	}
@@ -385,7 +383,7 @@ types covert_operations_widget_types
 
 	### The row's title, beside the target's flag and the operation's icon
 	### (480 less the 70 flag, the 32 icon and two 8 spacings). Its hover is
-	### what the operation does (COV-1), so it is underlined.
+	### what the operation does (COV-1).
 	type widget_je_covert_operation_text = textbox {
 		autoresize = yes
 		multiline = yes
@@ -394,7 +392,6 @@ types covert_operations_widget_types
 		parentanchor = vcenter
 		align = left|nobaseline
 		using = covert_fontsize_heading
-		default_format = "#tooltippable"
 	}
 
 	### "Stand down" for one row. One instance per operation type, of which exactly one is
@@ -455,7 +452,6 @@ types covert_operations_widget_types
 			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)1') )]"
 			text = "je_iw_priority_stepper_label"
 			tooltip = "je_iw_op_row_priority_1"
-			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
 			using = covert_fontsize_row
@@ -466,7 +462,6 @@ types covert_operations_widget_types
 			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)2') )]"
 			text = "je_iw_priority_stepper_label"
 			tooltip = "je_iw_op_row_priority_2"
-			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
 			using = covert_fontsize_row
@@ -477,7 +472,6 @@ types covert_operations_widget_types
 			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)3') )]"
 			text = "je_iw_priority_stepper_label"
 			tooltip = "je_iw_op_row_priority_3"
-			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
 			using = covert_fontsize_row
@@ -762,19 +756,16 @@ types covert_operations_widget_types
 			visible = "[And3( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)1'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 			text = "je_iw_op_row_phase_prep"
 			tooltip = "je_iw_op_row_phase_prep_tt"
-			default_format = "#tooltippable"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And3( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)2'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 			text = "je_iw_op_row_phase_est"
 			tooltip = "je_iw_op_row_phase_est_tt"
-			default_format = "#tooltippable"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And3( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)3'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 			text = "je_iw_op_row_phase_full"
 			tooltip = "je_iw_op_row_phase_full_tt"
-			default_format = "#tooltippable"
 		}
 
 		# ---- Cultivate assets (slice 6): no phase effect and no priority to
@@ -791,13 +782,11 @@ types covert_operations_widget_types
 			visible = "[Not( ScriptContainer.HasTag('iw_op_counterintel_support') )]"
 			text = "je_iw_op_row_detection"
 			tooltip = "je_iw_op_row_detection_tt"
-			default_format = "#tooltippable"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
 			text = "je_iw_op_row_detection_none"
 			tooltip = "je_iw_op_row_detection_none_tt"
-			default_format = "#tooltippable"
 		}
 
 		# ---- What the world calls the operation if it is caught (COV-4): the
@@ -806,25 +795,21 @@ types covert_operations_widget_types
 		#      Counterintelligence Support is never caught, so it has none ----
 		widget_je_covert_operation_detail = {
 			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)1'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
-			default_format = "#tooltippable"
 			text = "je_iw_op_row_exposure_1"
 			tooltip = "je_iw_op_row_exposure_1_tt"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)2'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
-			default_format = "#tooltippable"
 			text = "je_iw_op_row_exposure_2"
 			tooltip = "je_iw_op_row_exposure_2_tt"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)3'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
-			default_format = "#tooltippable"
 			text = "je_iw_op_row_exposure_3"
 			tooltip = "je_iw_op_row_exposure_3_tt"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)4'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
-			default_format = "#tooltippable"
 			text = "je_iw_op_row_exposure_4"
 			tooltip = "je_iw_op_row_exposure_4_tt"
 		}
@@ -836,13 +821,11 @@ types covert_operations_widget_types
 			visible = "[And( Or( ScriptContainer.HasTag('iw_op_industrial_espionage'), ScriptContainer.HasTag('iw_op_military_espionage') ), ScriptContainer.HasVariable('iw_stolen_total') )]"
 			text = "je_iw_op_row_tech_stolen"
 			tooltip = "je_iw_op_row_tech_stolen_tt"
-			default_format = "#tooltippable"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And( Or( ScriptContainer.HasTag('iw_op_industrial_espionage'), ScriptContainer.HasTag('iw_op_military_espionage') ), Not( ScriptContainer.HasVariable('iw_stolen_total') ) )]"
 			text = "je_iw_op_row_tech_stolen_none"
 			tooltip = "je_iw_op_row_tech_stolen_tt"
-			default_format = "#tooltippable"
 		}
 
 		# ---- Controls, centred under the row: the priority stepper, then
@@ -1008,7 +991,7 @@ types covert_operations_widget_types
 
 	### The operation's name beside its icon, one instance per type (only the
 	### row's own tag is visible). The name is the hover for what the
-	### operation does to us, so it is underlined.
+	### operation does to us.
 	type widget_je_covert_known_op_name = textbox {
 		autoresize = yes
 		multiline = yes
@@ -1017,7 +1000,6 @@ types covert_operations_widget_types
 		parentanchor = vcenter
 		align = left|nobaseline
 		using = covert_fontsize_heading
-		default_format = "#tooltippable"
 	}
 
 	### One operation we caught and let run: a record in the viewer's
@@ -1273,10 +1255,9 @@ types covert_operations_widget_types
 
 		# ---- How long we have watched it (iw_watch_months, written at the record's
 		#      creation and aged monthly, so there is nothing to wait for) ----
-		# Underlined: the row's hover (what watching earns and what the
-		# operation still costs us) is under it.
+		# The row's hover (what watching earns and what the operation still
+		# costs us) is under it.
 		widget_je_covert_operation_detail = {
-			default_format = "#tooltippable"
 			text = "je_iw_known_row_months"
 		}
 
@@ -1285,7 +1266,6 @@ types covert_operations_widget_types
 		#      covert_warfare.1 has burned the operation ----
 		widget_je_covert_operation_detail = {
 			visible = "[ScriptContainer.HasVariable('iw_expose_ordered')]"
-			default_format = "#tooltippable"
 			text = "je_iw_known_ordered"
 			tooltip = "je_iw_known_ordered_tt"
 		}
@@ -1344,9 +1324,6 @@ types covert_operations_widget_types
 				align = left|nobaseline
 			}
 			using = covert_fontsize_row
-			block "cell_format" {
-				default_format = "#tooltippable"
-			}
 			block "cell_text" {}
 		}
 	}
@@ -1365,7 +1342,6 @@ types covert_operations_widget_types
 			blockoverride "cell_size" {
 				size = { 120 24 }
 			}
-			blockoverride "cell_format" {}
 			blockoverride "cell_text" {
 				text = "je_iw_net_head_country"
 			}
@@ -1458,7 +1434,6 @@ types covert_operations_widget_types
 			maximumsize = { 120 -1 }
 			align = left|nobaseline
 			using = covert_fontsize_row
-			default_format = "#tooltippable"
 			text = "je_iw_net_row_country"
 			tooltip = "je_iw_net_row_tt"
 		}
@@ -1574,7 +1549,6 @@ types covert_operations_widget_types
 				max_width = 66
 				elide = right
 				using = covert_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_iw_net_row_report_0"
 				tooltip = "je_iw_net_report_tt"
 			}
@@ -1586,7 +1560,6 @@ types covert_operations_widget_types
 				max_width = 66
 				elide = right
 				using = covert_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_iw_net_row_report_1"
 				tooltip = "je_iw_net_row_report_1_tt"
 			}
@@ -1598,7 +1571,6 @@ types covert_operations_widget_types
 				max_width = 66
 				elide = right
 				using = covert_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_iw_net_row_report_2"
 				tooltip = "je_iw_net_row_report_2_tt"
 			}
@@ -1791,7 +1763,6 @@ types covert_operations_widget_types
 					parentanchor = hcenter
 					align = hcenter|nobaseline
 					using = covert_fontsize_overview
-					default_format = "#tooltippable"
 					text = "je_iw_slots_detail"
 				}
 				### Ten 30 slots at 2 apart, the cap (covert_ops_max_slot_cap): the
@@ -1918,7 +1889,6 @@ types covert_operations_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = covert_fontsize_overview
-						default_format = "#tooltippable"
 						text = "je_iw_capacity_header"
 					}
 					default_progressbar_horizontal = {
@@ -1996,7 +1966,6 @@ types covert_operations_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = covert_fontsize_overview
-						default_format = "#tooltippable"
 						text = "je_iw_tradecraft_header"
 					}
 					default_progressbar_horizontal = {
@@ -2125,7 +2094,6 @@ types covert_operations_widget_types
 				}
 				covert_text = {
 					visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_ops') )]"
-					default_format = "#tooltippable"
 					text = "je_iw_no_operations"
 					tooltip = "je_iw_no_operations_tt"
 				}
@@ -2161,7 +2129,6 @@ types covert_operations_widget_types
 					tooltip = "je_iw_detection_factors_tooltip"
 					blockoverride "row_label" {
 						text = "je_iw_detection_efficiency_label"
-						default_format = "#tooltippable"
 					}
 					blockoverride "row_value" {
 						text = "je_iw_detection_efficiency"
@@ -2288,7 +2255,6 @@ types covert_operations_widget_types
 					text = "je_iw_fund_tbl_head_capacity"
 				}
 				blockoverride "cost_text" {
-					default_format = "#tooltippable"
 					text = "je_iw_fund_tbl_head_cost"
 					tooltip = "je_iw_funding_cost_tt"
 				}
@@ -2300,7 +2266,6 @@ types covert_operations_widget_types
 				}
 				blockoverride "level_text" {
 					text = "je_iw_fund_tbl_level_0"
-					default_format = "#tooltippable"
 				}
 				blockoverride "stealth_text" {
 					text = "je_iw_fund_tbl_none"
@@ -2319,7 +2284,6 @@ types covert_operations_widget_types
 				}
 				blockoverride "level_text" {
 					text = "je_iw_fund_tbl_level_1"
-					default_format = "#tooltippable"
 				}
 				blockoverride "stealth_text" {
 					text = "je_iw_fund_tbl_none"
@@ -2431,7 +2395,6 @@ types covert_operations_widget_types
 			covert_value_row = {
 				tooltip = "je_iw_ci_slots_tt"
 				blockoverride "row_label" {
-					default_format = "#tooltippable"
 					text = "je_iw_ci_slots_label"
 				}
 				blockoverride "row_value" {
@@ -2441,7 +2404,6 @@ types covert_operations_widget_types
 			covert_value_row = {
 				tooltip = "je_iw_ci_funding_tt"
 				blockoverride "row_label" {
-					default_format = "#tooltippable"
 					text = "je_iw_ci_funding_label"
 				}
 				blockoverride "row_value" {
@@ -2451,7 +2413,6 @@ types covert_operations_widget_types
 			covert_value_row = {
 				tooltip = "je_iw_ci_economic_tt"
 				blockoverride "row_label" {
-					default_format = "#tooltippable"
 					text = "je_iw_ci_economic_label"
 				}
 				blockoverride "row_value" {
@@ -2461,7 +2422,6 @@ types covert_operations_widget_types
 			covert_value_row = {
 				tooltip = "je_iw_ci_military_tt"
 				blockoverride "row_label" {
-					default_format = "#tooltippable"
 					text = "je_iw_ci_military_label"
 				}
 				blockoverride "row_value" {
@@ -2471,7 +2431,6 @@ types covert_operations_widget_types
 			covert_value_row = {
 				tooltip = "je_iw_ci_ideological_tt"
 				blockoverride "row_label" {
-					default_format = "#tooltippable"
 					text = "je_iw_ci_ideological_label"
 				}
 				blockoverride "row_value" {

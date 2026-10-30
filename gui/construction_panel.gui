@@ -884,14 +884,10 @@ types construction_panel
 	### in this panel's own body font (no fontsize template, as its other
 	### textboxes), 150 + 4 + 330 = 484 of the 530 the section's text runs to.
 	### test_vanilla_panel_additions.py holds every label and value to its column.
-	### Every row has a hover of its own, so every label is underlined.
 	type te_cm_stat_row = te_state_stat_row {
 		parentanchor = hcenter
 		blockoverride "row_icon" {}
 		blockoverride "row_font" {}
-		blockoverride "label_format" {
-			default_format = "#tooltippable"
-		}
 		blockoverride "label_size" {
 			size = { 150 26 }
 		}

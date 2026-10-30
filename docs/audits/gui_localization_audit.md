@@ -158,6 +158,8 @@ Rule 6 asks every greyed button to list its failing condition.
 
 A label whose row carries a tooltip should be underlined (rule 3).
 
+*Superseded 2026-10-30:* the owner rewrote rule 3 to follow vanilla, which underlines a hoverable word in running text, not a hover's label or value. The Space Race's underlines went in #1258 and every other panel's on the same day; `test_gui_underlines.py` holds the panels to the new rule.
+
 - **Done here:** Nuclear (NUC-1) and the Space Race labels and heads (SPC-12).
 - **Open:**
   - the state view's tile rows (VAN-10, one `label_format` block in `te_state_stat_row`);

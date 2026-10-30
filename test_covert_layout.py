@@ -409,7 +409,7 @@ class OperationRowTest(unittest.TestCase):
             self.assertIn("covert_ops_priority_ready_sgui", gate, n)
             self.assertIn(f"GetVariableValue('iw_priority'), '(CFixedPoint){n}')", gate, n)
             self.assertNotIn(f'text = "je_iw_op_row_priority_{n}"', self.row, n)
-        self.assertEqual(stepper.count('default_format = "#tooltippable"'), 3)
+        self.assertNotIn("#tooltippable", stepper)  # style guide rule 3
 
     def test_row_tooltips_need_no_journal_entry(self):
         # A tooltip inside a datamodel item renders with the item's
@@ -508,7 +508,7 @@ class NetworkTableTest(unittest.TestCase):
         self.assertIn("multiline = yes", cell)
         self.assertNotIn("elide", cell)
         self.assertIn('tooltip = "je_iw_net_row_tt"', cell)
-        self.assertIn('default_format = "#tooltippable"', cell)
+        self.assertNotIn("#tooltippable", cell)  # style guide rule 3
         hover = _shown_raw(self.loc, "je_iw_net_row_tt")
         self.assertIn("covert_net_catch_display", hover)
         self.assertIn("covert_net_catch_max_display", hover)
@@ -638,9 +638,10 @@ class KnownSectionTest(unittest.TestCase):
 
     def test_the_row_says_how_long_and_the_hover_what_it_earns_and_costs(self):
         self.assertIn("GetVariableValue('iw_watch_months')", self.loc["je_iw_known_row_months"])
-        # The months line is underlined: the row's hover is under it (rule 3).
+        # The row's hover is under the months line; as in vanilla, the line
+        # is not underlined (style guide rule 3).
         line = self.row[self.row.rindex("widget_je_covert_operation_detail = {", 0, self.row.index('text = "je_iw_known_row_months"')):]
-        self.assertIn('default_format = "#tooltippable"', line[:120])
+        self.assertNotIn("#tooltippable", line[:120])
         self.assertIn('tooltip = "je_iw_known_row_tt"', self.row)
         hover = self.loc["je_iw_known_row_tt"]
         for part in ("iw_watch_months", "iw_watch_net", "covert_net_watch_gain_p1", "covert_net_watch_gain_p3"):

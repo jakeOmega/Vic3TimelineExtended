@@ -606,12 +606,12 @@ class WidthBudgetTest(unittest.TestCase):
         row = _type_body(gui, "gw_emitter_row")
         name = int(re.search(r'minimumsize = \{ (\d+) -1 \}\s*maximumsize = \{ \d+ -1 \}\s*autoresize = yes\s*'
                              r'elide = right\s*align = left\|nobaseline\s*using = gw_fontsize_row\s*'
-                             r'default_format = "#tooltippable"\s*text = "gw_te_row_name"', row).group(1))
+                             r'text = "gw_te_row_name"', row).group(1))
         cell = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
                                                  r'using = gw_fontsize_row\s*(?:default_format = "#v"\s*)?'
                                                  r'(?:visible = "[^"]*"\s*)?text = "(\w+)"', row)}
         head = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
-                                                 r'using = gw_fontsize_row\s*default_format = "#tooltippable"\s*'
+                                                 r'using = gw_fontsize_row\s*'
                                                  r'text = "(\w+)"', _type_body(gui, "gw_emitter_header"))}
         self.assertEqual(set(cell), {"gw_te_row_annual", "gw_te_row_share", "gw_te_row_cum", "gw_te_ours"})
         self.assertEqual(set(head), {"gw_te_head_annual", "gw_te_head_share", "gw_te_head_cum"})

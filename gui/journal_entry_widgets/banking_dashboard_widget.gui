@@ -91,7 +91,6 @@ types banking_dashboard_widget_types
 				elide = right
 				align = nobaseline
 				using = banking_dash_fontsize_row
-				default_format = "#tooltippable"
 				block "condition_label" {}
 			}
 		}
@@ -175,7 +174,6 @@ types banking_dashboard_widget_types
 				elide = right
 				align = nobaseline
 				using = banking_dash_fontsize_row
-				default_format = "#tooltippable"
 				block "pair_label" {}
 			}
 		}
@@ -211,7 +209,6 @@ types banking_dashboard_widget_types
 				elide = right
 				align = nobaseline
 				using = banking_dash_fontsize_row
-				default_format = "#tooltippable"
 				block "pair_label" {}
 			}
 		}
@@ -283,7 +280,6 @@ types banking_dashboard_widget_types
 			elide = right
 			align = nobaseline
 			using = banking_dash_fontsize_row
-			default_format = "#tooltippable"
 			block "mon_label_text" {}
 		}
 	}
@@ -405,7 +401,6 @@ types banking_dashboard_widget_types
 				elide = right
 				align = nobaseline
 				using = banking_dash_fontsize_row
-				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
@@ -513,7 +508,6 @@ types banking_dashboard_widget_types
 			elide = right
 			align = left|nobaseline
 			using = banking_dash_fontsize_overview
-			default_format = "#tooltippable"
 			block "caption" {}
 		}
 		block "word" {}
@@ -545,15 +539,14 @@ types banking_dashboard_widget_types
 		block "range" {}
 	}
 
-	### One shape of a change line's range. Underlined, as hoverable text is,
-	### since its tooltip is not the cell's.
+	### One shape of a change line's range, with a tooltip of its own (not the
+	### cell's).
 	type te_banking_ov_change_text = textbox {
 		autoresize = yes
 		max_width = 154
 		elide = right
 		align = left|nobaseline
 		using = banking_dash_fontsize_overview
-		default_format = "#tooltippable"
 	}
 
 	### The icons of the cycle's three readings, one per state, each with its own
@@ -812,43 +805,36 @@ types banking_dashboard_widget_types
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_panic_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_downturn_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_stagnation_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_stable_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_expansion_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_boom_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
 						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						text = "banking_dash_phase_frenzy_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 				}
@@ -895,7 +881,6 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_momentum_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_momentum_word_tt"
 					}
 				}
@@ -952,7 +937,6 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_bubble_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_bubble_word_tt"
 					}
 				}
@@ -998,7 +982,6 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_budget_used"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_budget_used_tt"
 					}
 				}
@@ -1006,7 +989,6 @@ types banking_dashboard_widget_types
 					te_banking_ov_word = {
 						position = { 78 46 }
 						text = "banking_dash_budget_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_budget_free_tt"
 					}
 				}
@@ -1066,7 +1048,6 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_mon_stance_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_mon_stance_word_tt"
 					}
 				}
@@ -1135,7 +1116,6 @@ types banking_dashboard_widget_types
 				blockoverride "word" {
 					te_banking_ov_word = {
 						text = "banking_dash_mon_band_value"
-						default_format = "#tooltippable"
 						tooltip = "banking_dash_mon_band_word_tt"
 					}
 				}
@@ -2220,7 +2200,6 @@ types banking_dashboard_widget_types
 										elide = right
 										align = nobaseline
 										using = banking_dash_fontsize_row
-										default_format = "#tooltippable"
 										text = "banking_dash_mon_target_label"
 									}
 								}
@@ -2955,7 +2934,6 @@ types banking_dashboard_widget_types
 								}
 								blockoverride "name" {
 									text = "banking_dash_mon_bs_country_name"
-									default_format = "#tooltippable"
 								}
 								blockoverride "value" {
 									text = "banking_dash_mon_union_member_value"

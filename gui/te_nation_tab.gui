@@ -87,9 +87,7 @@ types te_nation_widget_types
 		default_format = "#lore"
 	}
 
-	### A row: "Label: value", the detail on hover (rule 3), so it is underlined
-	### (#tooltippable); a row with no tooltip overrides "row_format" empty
-	### (test_nation_tab.py's HoverMarkTest holds the two together).
+	### A row: "Label: value", the detail on hover (rule 3).
 	type te_nation_row = textbox {
 		autoresize = yes
 		multiline = yes
@@ -97,9 +95,6 @@ types te_nation_widget_types
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
 		using = te_nation_fontsize_row
-		block "row_format" {
-			default_format = "#tooltippable"
-		}
 	}
 
 	### ----------------------------------------------------------------------
@@ -137,7 +132,6 @@ types te_nation_widget_types
 			elide = right
 			align = left|nobaseline
 			using = te_nation_fontsize_overview
-			default_format = "#tooltippable"
 			block "caption" {}
 		}
 		textbox = {
@@ -357,7 +351,6 @@ types te_nation_widget_types
 			### The bar starts at 0 because every value below it plays the same
 			### (te_nation_override_bar); the figure still shows a negative one.
 			te_nation_row = {
-				blockoverride "row_format" {}
 				text = "te_nation_override_row"
 			}
 			widget = {
@@ -397,28 +390,23 @@ types te_nation_widget_types
 				}
 			}
 			te_nation_row = {
-				blockoverride "row_format" {}
 				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)0' )]"
 				text = "te_nation_override_tier_0"
 			}
 			te_nation_row = {
-				blockoverride "row_format" {}
 				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)1' )]"
 				text = "te_nation_override_tier_1"
 			}
 			te_nation_row = {
-				blockoverride "row_format" {}
 				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)2' )]"
 				text = "te_nation_override_tier_2"
 			}
 			te_nation_row = {
-				blockoverride "row_format" {}
 				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)3' )]"
 				text = "te_nation_override_tier_3"
 			}
 			### While authority produced, not capacity, holds it there.
 			te_nation_row = {
-				blockoverride "row_format" {}
 				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_next_cost'), '(CFixedPoint)0' )]"
 				text = "te_nation_override_short"
 			}
@@ -439,7 +427,6 @@ types te_nation_widget_types
 				### moves, and the ceiling's line sits under the bar (2026-10-27
 				### audit, NAT-4).
 				te_nation_row = {
-					blockoverride "row_format" {}
 					text = "te_nation_jud_row"
 				}
 				te_nation_target_bar = {
@@ -451,12 +438,10 @@ types te_nation_widget_types
 					}
 				}
 				te_nation_row = {
-					blockoverride "row_format" {}
 					visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' ) )]"
 					text = "te_nation_jud_ceiling_row"
 				}
 				te_nation_row = {
-					blockoverride "row_format" {}
 					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' )]"
 					text = "te_nation_jud_ceiling_paper_row"
 				}

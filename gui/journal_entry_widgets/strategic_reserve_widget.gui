@@ -268,8 +268,8 @@ types strategic_reserve_widget_types
 		}
 	}
 
-	### A column heading over the inventory: small, and underlined where it
-	### has a tooltip.
+	### A column heading over the inventory: small, with a tooltip where it
+	### needs one.
 	type st_res_col_heading = textbox {
 		autoresize = no
 		align = left|nobaseline
@@ -680,7 +680,6 @@ types strategic_reserve_widget_types
 			size = { 450 24 }
 			align = left|nobaseline
 			using = st_res_fontsize_row
-			default_format = "#tooltippable"
 			elide = right
 		}
 
@@ -916,7 +915,6 @@ types strategic_reserve_widget_types
 			blockoverride "stepper_label" {
 				text = "st_res_policy_label_ramp"
 				tooltip = "st_res_policy_label_ramp_tt"
-				default_format = "#tooltippable"
 			}
 			blockoverride "stepper_value" { block "policy_value_ramp" {} }
 			blockoverride "stepper_down" {
@@ -1160,7 +1158,7 @@ types strategic_reserve_widget_types
 
 			### The rate the buttons change (SR-1): the Policy Settings
 			### steppers' idiom, the value between - and +. 58 holds "-99.9K".
-			### Underlined for its hover; the figure's sign colors it.
+			### Its hover says what the rate is; the figure's sign colors it.
 			widget = {
 				size = { 58 28 }
 				parentanchor = vcenter
@@ -1173,7 +1171,6 @@ types strategic_reserve_widget_types
 					elide = right
 					align = center|nobaseline
 					using = st_res_fontsize_row
-					default_format = "#tooltippable"
 					block "row_rate_short" {}
 				}
 			}
@@ -1203,7 +1200,7 @@ types strategic_reserve_widget_types
 		### (style rule 5), set in under the name. `row_open` is the same block
 		### the expanded chevron reads. Rate Setting and Decay carry the two
 		### figures that exist nowhere else, the rate the hub actually trades
-		### and the decay's sources, so their labels are underlined.
+		### and the decay's sources, so their rows have a hover.
 		flowcontainer = {
 			direction = vertical
 			ignoreinvisible = yes
@@ -1220,7 +1217,6 @@ types strategic_reserve_widget_types
 				block "row_rate_tooltip" {}
 				blockoverride "row_label" {
 					text = "st_res_row_label_rate"
-					default_format = "#tooltippable"
 				}
 				blockoverride "row_value" { block "row_rate" {} }
 			}
@@ -1232,7 +1228,6 @@ types strategic_reserve_widget_types
 				block "row_decay_tooltip" {}
 				blockoverride "row_label" {
 					text = "st_res_row_label_decay"
-					default_format = "#tooltippable"
 				}
 				blockoverride "row_value" { block "row_decay" {} }
 			}
@@ -1468,14 +1463,12 @@ types strategic_reserve_widget_types
 				}
 				st_res_col_heading = {
 					size = { 92 24 }
-					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_stock"
 					tooltip = "je_strategic_reserve_inv_col_stock_tt"
 				}
 				### Over the status and policy icons (30 + 4 + 30).
 				st_res_col_heading = {
 					size = { 64 24 }
-					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_status"
 					tooltip = "je_strategic_reserve_inv_col_status_tt"
 				}
@@ -1483,7 +1476,6 @@ types strategic_reserve_widget_types
 				### and three 4px gaps).
 				st_res_col_heading = {
 					size = { 148 24 }
-					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_rate"
 					tooltip = "je_strategic_reserve_inv_col_rate_tt"
 				}
