@@ -346,55 +346,246 @@ class BalancingTest(unittest.TestCase):
             self.assertNotRegex(link, r"\bmarket = ", name)
         self.assertNotIn("is_in_same_market_area", _top_level(triggers, "te_grid_land_link"))
 
-    @staticmethod
-    def solve(states, passes=4):
-        """The balancing's ratio and targets, as te_grid_balance_region_effect
-        computes them: lossless P / C, then `passes` re-solves of
-        r = (sum_up LP + sum_down LP/eff) / (sum_up LC + sum_down LC/eff)."""
-        r = sum(lp for lp, _, _ in states) / sum(lc for _, lc, _ in states)
-        for _ in range(passes):
-            num = den = 0.0
-            for lp, lc, eff in states:
-                if lp - lc * r > 0:
-                    num, den = num + lp, den + lc
-                else:
-                    num, den = num + lp / eff, den + lc / eff
-            r = num / den
-        targets = []
+    # The engine's price for a local good (common/defines/extra_defines.txt;
+    # te_grid_price_range and te_grid_buy_sell_max_factor in the values file).
+    RANGE, FACTOR = 0.999, 4
+    SLOPE = (FACTOR - 1) / RANGE
+
+    @classmethod
+    def engine_price(cls, sell, buy):
+        """A local good's price over its base, as the engine sets it from a
+        state's sell and buy orders: matched against Macedonia's Electricity
+        in the 2013 Byzantium save, 19.24 of 30."""
+        d = (buy - sell) / min(buy, sell) / (cls.FACTOR - 1)
+        return 1 + cls.RANGE * max(-1.0, min(1.0, d))
+
+    @classmethod
+    def ratio_at(cls, price):
+        """The sell/buy ratio at which the engine prices a local good at
+        `price` of its base (te_grid_send_ratio_value, te_grid_receive_ratio_value)."""
+        if price < 1:
+            return 1 + cls.SLOPE * (1 - price)
+        if price > 1:
+            return 1 / (1 + cls.SLOPE * (price - 1))
+        return 1.0
+
+    @classmethod
+    def flows_at(cls, states, q):
+        """Each state's flow at the sending price q, in Grid Power, as
+        te_grid_surplus_value reads it: a sender's LP / x(q) - LC, a
+        receiver's shortfall at q / eff over eff."""
+        send = cls.ratio_at(q)
+        out = []
         for lp, lc, eff in states:
-            surplus = lp - lc * r
-            targets.append(surplus if surplus > 0 else surplus / eff)
-        return r, targets
+            if lp > lc * send:
+                out.append(lp / send - lc)
+            else:
+                receive = cls.ratio_at(min(q / eff, 1 + cls.RANGE))
+                out.append(-max(0.0, lc * receive - lp) / eff)
+        return out
+
+    @classmethod
+    def solve(cls, states, passes=12):
+        """The balancing's sending price and targets, as
+        te_grid_balance_region_effect computes them: `passes` halvings of the
+        engine's price range on the sign of the grid's net flow."""
+        lo, hi = 1 - cls.RANGE, 1 + cls.RANGE
+        for _ in range(passes):
+            mid = (lo + hi) / 2
+            if sum(cls.flows_at(states, mid)) > 0:
+                hi = mid
+            else:
+                lo = mid
+        q = (lo + hi) / 2
+        return q, cls.flows_at(states, q)
+
+    @staticmethod
+    def balanced(targets):
+        """The targets with the larger side scaled so uploads equal downloads,
+        as the balancing does after damping."""
+        up = sum(t for t in targets if t > 0)
+        down = -sum(t for t in targets if t < 0)
+        scale_up = down / up if up > down else 1
+        scale_down = up / down if down > up else 1
+        return [t * scale_up if t > 0 else t * scale_down for t in targets]
+
+    def prices_after(self, states, flows):
+        """Each state's Electricity price over its base once its station moves
+        its flow: an upload is a buy order in the sending state, a download's
+        Electricity a sell order in the receiving one."""
+        out = []
+        for (lp, lc, eff), t in zip(states, flows):
+            out.append(self.engine_price(lp, lc + t) if t > 0 else self.engine_price(lp - t * eff, lc))
+        return out
+
+    def test_engine_price_constants_are_the_mod_defines(self):
+        defines = _code(_read(os.path.join(COMMON, "defines", "extra_defines.txt")))
+        values = _code(_read(VALUES))
+        rng = float(re.search(r"\bPRICE_RANGE\s*=\s*([\d.]+)", defines).group(1))
+        factor = float(re.search(r"\bBUY_SELL_DIFF_AT_MAX_FACTOR\s*=\s*([\d.]+)", defines).group(1))
+        self.assertEqual((rng, factor), (self.RANGE, self.FACTOR))
+
+        def constant(name):
+            return float(re.search(rf"(?m)^{name} = ([\d.]+)", values).group(1))
+
+        self.assertEqual(constant("te_grid_price_range"), rng)
+        self.assertEqual(constant("te_grid_buy_sell_max_factor"), factor)
+        self.assertAlmostEqual(constant("te_grid_price_floor"), 1 - rng)
+        self.assertAlmostEqual(constant("te_grid_price_ceiling"), 1 + rng)
 
     def test_the_value_files_hold_the_modelled_formula(self):
         values = _code(_read(VALUES))
-        self.assertIn("multiply = global_var:te_grid_ratio", _top_level(values, "te_grid_surplus_value"))
+        surplus = _top_level(values, "te_grid_surplus_value")
+        self.assertIn("var:te_grid_local_production > te_grid_send_supply_value", surplus)
+        self.assertIn("divide = global_var:te_grid_send_ratio", surplus)
+        self.assertIn("value = te_grid_receive_shortfall_value", surplus)
+        self.assertIn("divide = var:te_grid_efficiency", surplus)
+        # The download is over efficiency once, in the surplus, not again in the target.
         target = _top_level(values, "te_grid_target_value")
         self.assertIn("value = te_grid_surplus_value", target)
-        self.assertIn("divide = var:te_grid_efficiency", target)
+        self.assertNotIn("te_grid_efficiency", target)
+        # Both branches of the ratio for a sender as for a receiver, at the
+        # sending price and at it over the receiver's efficiency.
+        send = _top_level(values, "te_grid_send_ratio_value")
+        self.assertIn("global_var:te_grid_price < 1", send)
+        self.assertIn("global_var:te_grid_price > 1", send)
+        self.assertEqual(send.count("multiply = te_grid_price_slope"), 2)
+        receive_price = _top_level(values, "te_grid_receive_price_value")
+        self.assertIn("divide = var:te_grid_efficiency", receive_price)
+        self.assertIn("max = te_grid_price_ceiling", receive_price)
+        receive = _top_level(values, "te_grid_receive_ratio_value")
+        self.assertEqual(receive.count("multiply = te_grid_price_slope"), 2)
+        self.assertIn("divide = {", receive)
+        shortfall = _top_level(values, "te_grid_receive_shortfall_value")
+        self.assertIn("multiply = te_grid_receive_ratio_value", shortfall)
+        self.assertRegex(shortfall, r"min = 0\s*$")
         balance = _code(_top_level(_read(EFFECTS), "te_grid_balance_region_effect"))
-        self.assertIn("count = 4", balance)
-        self.assertIn("add = te_grid_production_over_efficiency", balance)
-        self.assertIn("add = te_grid_consumption_over_efficiency", balance)
+        self.assertIn("count = 12", balance)
+        self.assertIn("value = te_grid_price_floor", balance)
+        self.assertIn("value = te_grid_price_ceiling", balance)
+        self.assertIn("add = te_grid_surplus_value", balance)
+        self.assertEqual(balance.count("te_grid_set_price_midpoint_effect = yes"), 2)
+        mid = _code(_top_level(_read(EFFECTS), "te_grid_set_price_midpoint_effect"))
+        self.assertIn("multiply = 0.5", mid)
+        self.assertIn("value = te_grid_send_ratio_value", mid)
+
+    def test_the_run_clears_the_price(self):
+        clear = _code(_top_level(_read(EFFECTS), "te_grid_world_clear_effect"))
+        for name in ("te_grid_ratio", "te_grid_region_active", "te_grid_price", "te_grid_send_ratio"):
+            self.assertIn(f"remove_global_variable = {name}\n", clear + "\n")
+
+    def test_a_large_sender_sells_at_the_receivers_price_less_their_losses(self):
+        # The 2013 Byzantium grid in miniature: Attica makes 87.5M a week and
+        # uses 0.16M; four states make little and use the rest. The solve
+        # before 2026-10-30 left Attica at base (its station's purchase was most
+        # of its demand) and sent the others five times what they use, at the
+        # floor.
+        states = [(87.5e6, 0.16e6, 0.98), (0.10e6, 0.85e6, 0.98), (0.015e6, 1.38e6, 0.98),
+                  (0.05e6, 9.0e6, 0.98), (0.2e6, 6.0e6, 0.98)]
+        _, targets = self.solve(states)
+        prices = self.prices_after(states, self.balanced(targets))
+        for (lp, lc, eff), t, p in zip(states[1:], targets[1:], prices[1:]):
+            self.assertLess(t, 0)
+            self.assertAlmostEqual(p * eff, prices[0], delta=0.01)
+        self.assertLess(prices[0], 0.75)
+
+    def test_receivers_pay_more_by_their_losses(self):
+        # Two senders, two receivers at different efficiencies.
+        states = [(4000, 1000, 0.75), (1500, 1000, 0.75), (200, 2000, 0.75), (0, 500, 0.9)]
+        q, targets = self.solve(states)
+        flows = self.balanced(targets)
+        self.assertAlmostEqual(sum(flows), 0, places=6)
+        prices = self.prices_after(states, flows)
+        self.assertAlmostEqual(prices[0], prices[1], delta=0.005)
+        self.assertAlmostEqual(prices[2] * 0.75, prices[0], delta=0.005)
+        self.assertAlmostEqual(prices[3] * 0.9, prices[0], delta=0.005)
+
+    def test_a_state_between_the_two_prices_stays_off_the_grid(self):
+        # At 75% a state whose own ratio lies between the sending and receiving
+        # ones gains nothing from the grid.
+        states = [(4000, 1000, 0.75), (0, 2000, 0.75), (1100, 1000, 0.75)]
+        q, targets = self.solve(states)
+        self.assertLess(self.ratio_at(q / 0.75), 1100 / 1000)
+        self.assertGreater(self.ratio_at(q), 1100 / 1000)
+        self.assertEqual(targets[2], 0)
+
+    def test_a_short_grid_raises_every_price_together(self):
+        # The market is one of orders, not stock: a sending station's purchase
+        # bids the sender's price up with the rest, so a short grid evens out
+        # above base as a long one does below it.
+        states = [(10000, 1000, 0.9), (0, 8000, 0.9), (500, 6000, 0.9)]
+        q, targets = self.solve(states)
+        flows = self.balanced(targets)
+        self.assertGreater(q, 1)
+        self.assertGreater(flows[0], 10000 - 1000)
+        prices = self.prices_after(states, flows)
+        self.assertAlmostEqual(prices[0], q, delta=0.005)
+        for p in prices[1:]:
+            self.assertAlmostEqual(p * 0.9, prices[0], delta=0.005)
+
+    @classmethod
+    def price_at_ratio(cls, x):
+        """te_grid_price_at_ratio_value: the engine's price at sell/buy x."""
+        if x >= 1:
+            return 1 - cls.RANGE * min(1.0, (x - 1) / (cls.FACTOR - 1))
+        if x > 0:
+            return 1 + cls.RANGE * min(1.0, (1 / x - 1) / (cls.FACTOR - 1))
+        return 1 + cls.RANGE
+
+    def test_the_tiles_price_is_the_engines_at_the_ratio_the_flow_sets(self):
+        for x in (0.2, 0.28, 0.48, 0.9, 1.0, 1.31, 2.5, 3.7, 6.0):
+            self.assertAlmostEqual(self.price_at_ratio(x), self.engine_price(x * 100, 100), places=9)
+        for p in (0.05, 0.5, 0.99, 1.0, 1.2, 1.8):
+            self.assertAlmostEqual(self.price_at_ratio(self.ratio_at(p)), p, places=9)
+        values = _code(_read(VALUES))
+        at = _top_level(values, "te_grid_price_at_ratio_value")
+        self.assertEqual(at.count("divide = te_grid_price_steps"), 2)
+        self.assertEqual(at.count("multiply = te_grid_price_range"), 2)
+        self.assertEqual(at.count("max = 1"), 2)
+        self.assertIn("divide = var:te_grid_ratio_in", at)
+        ratio = _top_level(values, "te_grid_flow_ratio_value")
+        self.assertIn("add = var:te_grid_flow", ratio)
+        self.assertIn("multiply = var:te_grid_efficiency", ratio)
+        target = _code(_top_level(_read(EFFECTS), "te_grid_set_price_target_effect"))
+        self.assertIn("value = te_grid_flow_ratio_value", target)
+        self.assertIn("value = te_grid_price_at_ratio_value", target)
+        self.assertIn("remove_variable = te_grid_ratio_in", target)
+
+    def test_the_price_self_checks_pick_states_that_tell_the_formulas_apart(self):
+        triggers = _code(_read(TRIGGERS))
+        sender = _top_level(triggers, "te_grid_chk_price_sender")
+        lo, hi = (float(x) for x in re.findall(r"te_grid_chk_now_ratio_value [<>]= ([\d.]+)", sender))
+        # Between about 0.1 and 0.9 of base: away from the floor and from base.
+        self.assertLess(self.price_at_ratio(hi), 0.15)
+        self.assertGreater(self.price_at_ratio(lo), 0.85)
+        self.assertLess(self.price_at_ratio(lo), 0.95)
+        self.assertIn("te_grid_chk_station_share_value >= 0.5", sender)
+        above = _top_level(triggers, "te_grid_chk_price_above_base")
+        lo, hi = (float(x) for x in re.findall(r"te_grid_chk_now_ratio_value [<>]= ([\d.]+)", above))
+        for x in (lo, hi):
+            alternative = 1 + self.RANGE * (1 - x) / (self.FACTOR - 1)
+            self.assertGreater(self.price_at_ratio(x) - alternative, 0.15)
+            self.assertLess(self.price_at_ratio(x), 1 + self.RANGE)
+
+    def test_a_grid_without_demand_or_without_supply_moves_nothing(self):
+        for states in ([(1000, 0, 0.9), (500, 0, 0.9)],        # no demand: the grid is inactive
+                       [(0, 1000, 0.9), (0, 500, 0.9)],        # no supply: receivers only
+                       [(5000, 10, 0.9), (2000, 5, 0.9)]):     # senders only
+            if sum(lc for _, lc, _ in states) == 0:
+                continue  # te_grid_region_active 0: every target is 0
+            _, targets = self.solve(states)
+            self.assertEqual(self.balanced(targets), [0.0] * len(states), states)
 
     def test_lossless_grid_conserves_and_equalises(self):
         states = [(1000, 1000, 1.0), (0, 1000, 1.0), (5000, 0, 1.0)]
-        r, targets = self.solve(states)
-        self.assertAlmostEqual(sum(targets), 0)
-        self.assertGreater(targets[2], 0)
-        self.assertLess(targets[1], 0)
-
-    def test_lossy_grid_conserves_grid_power_and_equalises_supply(self):
-        # Two surplus states, two short ones at different efficiencies.
-        states = [(4000, 1000, 0.8), (1500, 1000, 0.8), (200, 2000, 0.6), (0, 500, 0.95)]
-        r, targets = self.solve(states)
-        self.assertAlmostEqual(sum(targets), 0, places=6)
-        for (lp, lc, eff), t in zip(states, targets):
-            # A sender keeps LP - t; a receiver gets t's Grid Power less its losses.
-            supply = lp - t if t > 0 else lp - t * eff
-            self.assertAlmostEqual(supply / lc, r, places=6)
-        # Losses leave the grid less than its lossless ratio.
-        self.assertLess(r, sum(s[0] for s in states) / sum(s[1] for s in states))
+        _, targets = self.solve(states)
+        flows = self.balanced(targets)
+        self.assertAlmostEqual(sum(flows), 0, places=6)
+        self.assertGreater(flows[2], 0)
+        self.assertLess(flows[1], 0)
+        prices = self.prices_after(states, flows)
+        for p in prices[:2]:
+            self.assertAlmostEqual(p, prices[2], delta=0.005)
 
 
 class EfficiencyTest(unittest.TestCase):
@@ -552,10 +743,11 @@ class CrossMarketTest(unittest.TestCase):
         return nets, {m: -n for m, n in nets.items() if n < 0}
 
     def test_a_spanning_grid_crosses_what_one_market_sends_and_another_receives(self):
-        solve = BalancingTest.solve
-        # Market A has the plants; market B's two states have none.
+        # Market A has the plants; market B's two states have none. The
+        # market settlement runs on the flows, once the larger side is scaled.
         states = [(5000, 1000, 0.9, "A"), (800, 1000, 0.9, "A"), (0, 1500, 0.8, "B"), (100, 900, 0.8, "B")]
-        r, targets = solve([(lp, lc, eff) for lp, lc, eff, _ in states])
+        _, targets = BalancingTest.solve([(lp, lc, eff) for lp, lc, eff, _ in states])
+        targets = BalancingTest.balanced(targets)
         nets, passes = self.settle([(m, t) for (_, _, _, m), t in zip(states, targets)])
         self.assertAlmostEqual(sum(nets.values()), 0, places=6)
         self.assertGreater(nets["A"], 0)

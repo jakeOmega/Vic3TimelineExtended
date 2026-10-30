@@ -12,10 +12,12 @@
 #     between two with a Grid Interconnection Agreement;
 #   - a neighbouring group of another country across a land border, when the
 #     two have a Grid Interconnection Agreement.
-# Once a month each grid shares its Electricity so that every member state
-# ends up with the same ratio of supply to demand: states with power to spare
-# upload it as Grid Power, short states download it, and a downloading station
-# turns only its owner's transmission efficiency of it back into Electricity.
+# Once a month each grid moves Electricity until it sells at one price in the
+# states that send it and at that price over their transmission efficiency in
+# the states that receive it (te_grid_surplus_value, power_grid_values.txt):
+# states where it is cheap upload it as Grid Power, states where it is dear
+# download it, and a downloading station turns only its owner's transmission
+# efficiency of it back into Electricity.
 # A grid's uploads equal its downloads, so no Grid Power leaves it.
 #
 # An agreement can join countries in different markets. Grid Power has a
@@ -46,8 +48,12 @@
 #                    the Electricity modifiers' multipliers as applied, net of
 #                    the station's other Electricity bonuses
 #   te_grid_region_size / te_grid_region_ratio / te_grid_hub  the grid's
-#                    stations, its supply-to-demand ratio and its hub (largest
-#                    producer, a state), for the state panel tile
+#                    stations, its supply-to-demand ratio without them and its
+#                    hub (largest producer, a state), for the state panel tile
+#   te_grid_price_target  the Electricity price, over its base, the flow set
+#                    brings the state to (0 when it moves nothing)
+#   te_grid_ratio_in  briefly, the sell/buy ratio te_grid_price_at_ratio_value
+#                    prices
 #   te_grid_market_net  on a grid that spans markets, the Grid Power the
 #                    state's market's stations on it send (+) or receive (-)
 #                    across the border this month
@@ -67,8 +73,10 @@
 # in a grid), te_grid_region (the grid being built and balanced) and
 # te_grid_frontier (members whose links are still to be followed), and
 # during a walk across the sea te_grid_sea_reach, te_grid_sea_layer and
-# te_grid_sea_next. Global variables te_grid_ratio and te_grid_region_active
-# hold the grid being balanced's ratio, and te_grid_cable_range_max the
+# te_grid_sea_next. Global variables te_grid_ratio, te_grid_region_active,
+# te_grid_price and te_grid_send_ratio hold the grid being balanced's supply
+# against its demand, whether it has demand, its sending price and the
+# sell/buy ratio senders end at, and te_grid_cable_range_max the
 # longest Undersea Cable Range of any station this run. Country variable
 # lists, refreshed each run: te_grid_partners, the countries each station
 # owner has a Grid Interconnection Agreement with; te_grid_cable_reach, the
@@ -157,8 +165,8 @@ te_grid_world_update_effect = {
 	te_grid_world_clear_effect = yes
 }
 
-# Any scope. Clears the run's lists, the marks on their members and the grid
-# ratio, at the start of a run as well as the end, so nothing a run left
+# Any scope. Clears the run's lists, the marks on their members and the grid's
+# ratio and price, at the start of a run as well as the end, so nothing a run left
 # behind can join two grids.
 te_grid_world_clear_effect = {
 	every_in_global_list = {
@@ -183,6 +191,14 @@ te_grid_world_clear_effect = {
 	if = {
 		limit = { has_global_variable = te_grid_region_active }
 		remove_global_variable = te_grid_region_active
+	}
+	if = {
+		limit = { has_global_variable = te_grid_price }
+		remove_global_variable = te_grid_price
+	}
+	if = {
+		limit = { has_global_variable = te_grid_send_ratio }
+		remove_global_variable = te_grid_send_ratio
 	}
 	if = {
 		limit = { has_global_variable = te_grid_cable_range_max }
@@ -591,6 +607,7 @@ te_grid_balance_region_effect = {
 	te_grid_conservation_selfcheck_effect = yes
 	te_grid_import_selfcheck_effect = yes
 	te_grid_fixed_price_selfcheck_effect = yes
+	te_grid_price_selfcheck_effect = yes
 
 	# Each member: its factor (from last month's order, before it is
 	# overwritten), its Electricity without the station, its efficiency.
@@ -625,38 +642,41 @@ te_grid_balance_region_effect = {
 		}
 	}
 
-	# The grid's ratio: lossless P / C first, then four passes of the
-	# loss-aware formula, each on the split into uploaders and downloaders the
-	# last ratio gives.
+	# The grid's supply against its demand (te_grid_ratio, sum LP / sum LC, for
+	# the tile), and its sending price (te_grid_price, over Electricity's
+	# base): the price at which what senders send equals what receivers buy
+	# (te_grid_surplus_value summed over the grid). The sum rises with the
+	# price, so twelve halvings of the engine's range leave it within 0.0005
+	# of base. A grid that can't balance anywhere in the range ends at its
+	# edge, and the scaling below moves what the smaller side takes.
 	set_global_variable = { name = te_grid_region_active value = 0 }
 	set_global_variable = { name = te_grid_ratio value = 0 }
+	set_global_variable = { name = te_grid_price value = 1 }
+	set_global_variable = { name = te_grid_send_ratio value = 1 }
 	if = {
 		limit = { local_var:te_grid_sum_consumption > 0 }
 		set_global_variable = { name = te_grid_region_active value = 1 }
 		set_global_variable = { name = te_grid_ratio value = local_var:te_grid_sum_production }
 		change_global_variable = { name = te_grid_ratio divide = local_var:te_grid_sum_consumption }
+		set_local_variable = { name = te_grid_price_lo value = te_grid_price_floor }
+		set_local_variable = { name = te_grid_price_hi value = te_grid_price_ceiling }
 		while = {
-			count = 4
-			set_local_variable = { name = te_grid_ratio_num value = 0 }
-			set_local_variable = { name = te_grid_ratio_den value = 0 }
+			count = 12
+			te_grid_set_price_midpoint_effect = yes
+			set_local_variable = { name = te_grid_net_sent value = 0 }
 			every_in_global_list = {
 				variable = te_grid_region
-				if = {
-					limit = { te_grid_surplus_value > 0 }
-					change_local_variable = { name = te_grid_ratio_num add = var:te_grid_local_production }
-					change_local_variable = { name = te_grid_ratio_den add = var:te_grid_local_consumption }
-				}
-				else = {
-					change_local_variable = { name = te_grid_ratio_num add = te_grid_production_over_efficiency }
-					change_local_variable = { name = te_grid_ratio_den add = te_grid_consumption_over_efficiency }
-				}
+				change_local_variable = { name = te_grid_net_sent add = te_grid_surplus_value }
 			}
 			if = {
-				limit = { local_var:te_grid_ratio_den > 0 }
-				set_global_variable = { name = te_grid_ratio value = local_var:te_grid_ratio_num }
-				change_global_variable = { name = te_grid_ratio divide = local_var:te_grid_ratio_den }
+				limit = { local_var:te_grid_net_sent > 0 }
+				set_local_variable = { name = te_grid_price_hi value = global_var:te_grid_price }
+			}
+			else = {
+				set_local_variable = { name = te_grid_price_lo value = global_var:te_grid_price }
 			}
 		}
+		te_grid_set_price_midpoint_effect = yes
 	}
 
 	# Targets, damped toward last month's flows, then the larger side scaled so
@@ -700,6 +720,7 @@ te_grid_balance_region_effect = {
 		}
 		set_variable = { name = te_grid_flow value = var:te_grid_next_flow }
 		remove_variable = te_grid_next_flow
+		te_grid_set_price_target_effect = yes
 		set_variable = { name = te_grid_region_size value = local_var:te_grid_members }
 		set_variable = { name = te_grid_region_ratio value = global_var:te_grid_ratio }
 		set_variable = { name = te_grid_hub value = scope:te_grid_hub_state }
@@ -711,6 +732,16 @@ te_grid_balance_region_effect = {
 		variable = te_grid_region
 		te_grid_set_station_flow_effect = yes
 	}
+}
+
+# Any scope, from te_grid_balance_region_effect: the sending price at the
+# middle of the bisection's bracket (local te_grid_price_lo and _hi), and the
+# sell/buy ratio senders end at there.
+te_grid_set_price_midpoint_effect = {
+	set_global_variable = { name = te_grid_price value = local_var:te_grid_price_lo }
+	change_global_variable = { name = te_grid_price add = local_var:te_grid_price_hi }
+	change_global_variable = { name = te_grid_price multiply = 0.5 }
+	set_global_variable = { name = te_grid_send_ratio value = te_grid_send_ratio_value }
 }
 
 # ---- Between markets -------------------------------------------------------------
@@ -924,6 +955,10 @@ te_grid_idle_station_effect = {
 		remove_variable = te_grid_region_ratio
 	}
 	if = {
+		limit = { has_variable = te_grid_price_target }
+		remove_variable = te_grid_price_target
+	}
+	if = {
 		limit = { has_variable = te_grid_hub }
 		remove_variable = te_grid_hub
 	}
@@ -1087,6 +1122,10 @@ te_grid_clear_state_effect = {
 	if = {
 		limit = { has_variable = te_grid_region_ratio }
 		remove_variable = te_grid_region_ratio
+	}
+	if = {
+		limit = { has_variable = te_grid_price_target }
+		remove_variable = te_grid_price_target
 	}
 	if = {
 		limit = { has_variable = te_grid_hub }
@@ -1544,4 +1583,102 @@ te_grid_fixed_price_selfcheck_effect = {
 			}
 		}
 	}
+}
+
+# State scope, once te_grid_flow is set: the Electricity price the flow brings
+# the state to, over its base (te_grid_price_target, on the tile's Flow
+# hover), from the sell/buy ratio it sets; 0 for a station that moves nothing.
+te_grid_set_price_target_effect = {
+	set_variable = { name = te_grid_price_target value = 0 }
+	if = {
+		limit = {
+			OR = {
+				var:te_grid_flow > 0
+				AND = {
+					var:te_grid_flow < 0
+					var:te_grid_local_consumption > 0
+				}
+			}
+		}
+		set_variable = { name = te_grid_ratio_in value = te_grid_flow_ratio_value }
+		set_variable = { name = te_grid_price_target value = te_grid_price_at_ratio_value }
+		remove_variable = te_grid_ratio_in
+	}
+}
+
+# Country scope, at the start of a grid's balancing. The balancing rests on
+# the engine pricing a local good by te_grid_price_at_ratio_value's formula on
+# a state's gross sell and buy orders, a sending station's purchase among
+# them, which a save confirmed below base only (Macedonia, 2013). Once a game
+# each, a state's Electricity price now against the formula on its production
+# and consumption now (te_grid_chk_now_ratio_value), within 0.05 of base:
+#   TE_SELF_CHECK OK|BROKEN grid_price  a sending state whose station bought
+#           at least half as much as the rest of the state uses, priced by the
+#           formula at 0.1 to 0.9 of base (te_grid_chk_price_sender): if the
+#           engine left the station's purchase out, its price would read well
+#           below the formula's.
+#   TE_SELF_CHECK OK|BROKEN grid_price_above_base  a state the formula prices
+#           at 1.35 to 1.9 of base (te_grid_chk_price_above_base), where the
+#           branch above base, 1 + range x (1/x - 1) / steps, differs from the
+#           obvious alternative by 0.19 or more (near base the two agree).
+# A price read that returns nothing reads 1.000 and fails both. Fallbacks in
+# docs/testing/power-grid-playtest.md.
+te_grid_price_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_price_checked }
+			any_in_global_list = {
+				variable = te_grid_region
+				te_grid_chk_price_sender = yes
+			}
+		}
+		set_global_variable = te_grid_price_checked
+		random_in_global_list = {
+			variable = te_grid_region
+			limit = { te_grid_chk_price_sender = yes }
+			te_grid_chk_record_price_effect = yes
+		}
+		if = {
+			limit = { global_var:te_grid_chk_elec_gap <= 0.05 }
+			debug_log = "TE_SELF_CHECK OK grid_price (now=[SCOPE.ScriptValue('te_grid_chk_elec_now_g')|3] formula=[SCOPE.ScriptValue('te_grid_chk_elec_model_g')|3] of base at sell/buy=[SCOPE.ScriptValue('te_grid_chk_elec_ratio_g')|3]; the station bought [SCOPE.ScriptValue('te_grid_chk_elec_share_g')|2] of the rest of the state's use)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN grid_price (now=[SCOPE.ScriptValue('te_grid_chk_elec_now_g')|3] formula=[SCOPE.ScriptValue('te_grid_chk_elec_model_g')|3] of base at sell/buy=[SCOPE.ScriptValue('te_grid_chk_elec_ratio_g')|3]; the station bought [SCOPE.ScriptValue('te_grid_chk_elec_share_g')|2] of the rest of the state's use; more than 0.05 apart: the engine doesn't price a sending state as the balancing assumes; see docs/testing/power-grid-playtest.md)"
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_price_above_base_checked }
+			any_in_global_list = {
+				variable = te_grid_region
+				te_grid_chk_price_above_base = yes
+			}
+		}
+		set_global_variable = te_grid_price_above_base_checked
+		random_in_global_list = {
+			variable = te_grid_region
+			limit = { te_grid_chk_price_above_base = yes }
+			te_grid_chk_record_price_effect = yes
+		}
+		if = {
+			limit = { global_var:te_grid_chk_elec_gap <= 0.05 }
+			debug_log = "TE_SELF_CHECK OK grid_price_above_base (now=[SCOPE.ScriptValue('te_grid_chk_elec_now_g')|3] formula=[SCOPE.ScriptValue('te_grid_chk_elec_model_g')|3] of base at sell/buy=[SCOPE.ScriptValue('te_grid_chk_elec_ratio_g')|3])"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN grid_price_above_base (now=[SCOPE.ScriptValue('te_grid_chk_elec_now_g')|3] formula=[SCOPE.ScriptValue('te_grid_chk_elec_model_g')|3] of base at sell/buy=[SCOPE.ScriptValue('te_grid_chk_elec_ratio_g')|3]; more than 0.05 apart: the formula's branch above base is not the engine's; see docs/testing/power-grid-playtest.md)"
+		}
+	}
+}
+
+# State scope, from te_grid_price_selfcheck_effect: the state's sell/buy ratio
+# now, the formula's price at it, the price now, its station's share and the
+# gap, in globals for the debug line.
+te_grid_chk_record_price_effect = {
+	set_global_variable = { name = te_grid_chk_elec_ratio value = te_grid_chk_now_ratio_value }
+	set_variable = { name = te_grid_ratio_in value = te_grid_chk_now_ratio_value }
+	set_global_variable = { name = te_grid_chk_elec_model value = te_grid_price_at_ratio_value }
+	remove_variable = te_grid_ratio_in
+	set_global_variable = { name = te_grid_chk_elec_now value = te_grid_chk_price_now_value }
+	set_global_variable = { name = te_grid_chk_elec_share value = te_grid_chk_station_share_value }
+	set_global_variable = { name = te_grid_chk_elec_gap value = te_grid_chk_elec_gap_value }
 }

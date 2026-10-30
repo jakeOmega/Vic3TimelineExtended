@@ -2,24 +2,27 @@
 # Power Grid script values (te_grid_*)
 # ============================================================================
 # The monthly balancing (te_grid_world_update_effect, power_grid_effects.txt)
-# gives every state of one grid the same ratio r of Electricity supply to
-# demand. For each station state i of a grid, with LP_i and LC_i its
+# moves Electricity until it sells at one price q (over its base) in the
+# states that send it, and at q / eff_i in each state that receives it: a
+# unit bought at q arrives as eff_i of a unit, so that is what a trader would
+# carry it for. For each station state i of a grid, with LP_i and LC_i its
 # Electricity production and consumption without its station:
 #
-#   an uploader (LP_i > r x LC_i) sends     U_i = LP_i - r x LC_i
-#   a downloader buys Grid Power            D_i = (r x LC_i - LP_i) / eff_i
+#   a sender (LP_i > x(q) x LC_i) sends        U_i = LP_i / x(q) - LC_i
+#   a receiver (LP_i < x(q/eff_i) x LC_i) buys D_i = (x(q/eff_i) x LC_i - LP_i) / eff_i
 #
-# A downloading station turns only eff_i of the Grid Power it buys back into
-# Electricity (transmission losses, the owner's grid transmission efficiency),
-# so a downloader's D_i x eff_i makes up its shortfall. Grid Power is
-# conserved, sum U = sum D, which fixes r:
-#
-#   r = (sum_up LP + sum_down LP / eff) / (sum_up LC + sum_down LC / eff)
-#
-# Which states upload depends on r, so te_grid_balance_region_effect starts
-# from the lossless r = P / C and re-solves four times. Positive flows are
-# uploads (Electricity in, Grid Power out), negative ones downloads, both in
-# Grid Power.
+# of Grid Power, where x(p) is the ratio of sell to buy orders at which the
+# engine prices a local good at p of its base (te_grid_receive_ratio_value).
+# The engine prices a state on its gross orders, and a sending station's
+# Electricity is a buy order there, so a sender's ratio is LP / (LC + U): the
+# rule that came before, which set LP - U = r x LC everywhere, left a large
+# sender at about base whatever the grid's surplus, and its receivers at r
+# (the 2013 Byzantium save: Attica at 29.8, the rest at the floor). A state
+# between the two ratios gains nothing from the grid, as losses would eat it.
+# Grid Power is conserved, sum U = sum D, and sum U - sum D rises
+# with q, so te_grid_balance_region_effect bisects for q between the engine's
+# floor and ceiling. Positive flows are uploads (Electricity in, Grid Power
+# out), negative ones downloads, both in Grid Power.
 #
 # A grid that spans markets (a Grid Interconnection Agreement between two
 # countries in different markets) still uploads what it downloads, but not
@@ -174,43 +177,196 @@ te_grid_ai_cable_reach_value = {
 	}
 }
 
+# --- The engine's price for a local good ---------------------------------------
+
+# A state's price for a local good, over its base, is 1 + PRICE_RANGE x d with
+# d = (buy - sell) / min(buy, sell) / (BUY_SELL_DIFF_AT_MAX_FACTOR - 1),
+# clamped to -1..1 (NEconomy, common/defines/extra_defines.txt, which the mod
+# sets to 0.999 and 4; test_power_grid.py holds these to it). It matched
+# Macedonia's Electricity in the 2013 Byzantium save, 19.24 of 30.
+te_grid_price_range = 0.999
+te_grid_buy_sell_max_factor = 4
+te_grid_price_floor = 0.001
+te_grid_price_ceiling = 1.999
+
+# How far the sell/buy ratio moves per unit of price, (factor - 1) / range.
+te_grid_price_slope = {
+	value = te_grid_buy_sell_max_factor
+	subtract = 1
+	divide = te_grid_price_range
+}
+
 # --- This month's flow --------------------------------------------------------
 
 # Read during te_grid_balance_region_effect, from the state variables it sets
-# (te_grid_local_production, te_grid_local_consumption, te_grid_efficiency) and
-# the grid's ratio (global te_grid_ratio).
+# (te_grid_local_production, te_grid_local_consumption, te_grid_efficiency),
+# the grid's sending price (global te_grid_price, over Electricity's base) and
+# the sell/buy ratio senders end at (global te_grid_send_ratio).
 
-# What the state has over (+) or short of (-) the grid's ratio.
+# Any scope. The sell/buy ratio at the sending price q: 1 + slope x (1 - q)
+# at or below base, 1 / (1 + slope x (q - 1)) above it.
+te_grid_send_ratio_value = {
+	value = 1
+	if = {
+		limit = { global_var:te_grid_price < 1 }
+		value = 1
+		subtract = global_var:te_grid_price
+		multiply = te_grid_price_slope
+		add = 1
+	}
+	else_if = {
+		limit = { global_var:te_grid_price > 1 }
+		value = 1
+		divide = {
+			value = global_var:te_grid_price
+			subtract = 1
+			multiply = te_grid_price_slope
+			add = 1
+		}
+	}
+}
+
+# The price a receiving state ends at: the sending price over its efficiency,
+# at most the engine's ceiling.
+te_grid_receive_price_value = {
+	value = global_var:te_grid_price
+	divide = var:te_grid_efficiency
+	max = te_grid_price_ceiling
+}
+
+# The sell/buy ratio at that price: 1 + slope x (1 - p) at or below base,
+# 1 / (1 + slope x (p - 1)) above it.
+te_grid_receive_ratio_value = {
+	value = 1
+	if = {
+		limit = { te_grid_receive_price_value < 1 }
+		value = 1
+		subtract = te_grid_receive_price_value
+		multiply = te_grid_price_slope
+		add = 1
+	}
+	else_if = {
+		limit = { te_grid_receive_price_value > 1 }
+		value = 1
+		divide = {
+			value = te_grid_receive_price_value
+			subtract = 1
+			multiply = te_grid_price_slope
+			add = 1
+		}
+	}
+}
+
+# The supply a sender keeps its ratio at, against its own consumption.
+te_grid_send_supply_value = {
+	value = var:te_grid_local_consumption
+	multiply = global_var:te_grid_send_ratio
+}
+
+# What a receiver lacks of its ratio at its price, in Electricity; 0 for a
+# state with as much or more.
+te_grid_receive_shortfall_value = {
+	value = var:te_grid_local_consumption
+	multiply = te_grid_receive_ratio_value
+	subtract = var:te_grid_local_production
+	min = 0
+}
+
+# The state's flow at the grid's price, in Grid Power: a sender's U (+), a
+# receiver's D (-), 0 in between.
 te_grid_surplus_value = {
-	value = var:te_grid_local_consumption
-	multiply = global_var:te_grid_ratio
-	multiply = -1
-	add = var:te_grid_local_production
+	value = 0
+	if = {
+		limit = { var:te_grid_local_production > te_grid_send_supply_value }
+		value = var:te_grid_local_production
+		divide = global_var:te_grid_send_ratio
+		subtract = var:te_grid_local_consumption
+	}
+	else = {
+		subtract = {
+			value = te_grid_receive_shortfall_value
+			divide = var:te_grid_efficiency
+		}
+	}
 }
 
-# A downloader's terms in r: its Electricity over its efficiency.
-te_grid_production_over_efficiency = {
-	value = var:te_grid_local_production
-	divide = var:te_grid_efficiency
-}
-
-te_grid_consumption_over_efficiency = {
-	value = var:te_grid_local_consumption
-	divide = var:te_grid_efficiency
-}
-
-# The state's target flow in Grid Power: its surplus as an upload, or its
-# shortfall over its efficiency as a download. Zero while the grid has no
-# demand to share (global te_grid_region_active 0).
+# The state's target flow in Grid Power, its flow at the solved price. Zero
+# while the grid has no demand to share (global te_grid_region_active 0).
 te_grid_target_value = {
 	value = 0
 	if = {
 		limit = { global_var:te_grid_region_active = 1 }
 		value = te_grid_surplus_value
-		if = {
-			limit = { te_grid_surplus_value < 0 }
-			divide = var:te_grid_efficiency
+	}
+}
+
+# The engine's price, over its base, at the sell/buy ratio in
+# var:te_grid_ratio_in (set and removed around the read): 1 - range x
+# min(1, (x - 1) / steps) at or above 1, 1 + range x min(1, (1/x - 1) / steps)
+# below it, the ceiling with nothing sold.
+te_grid_price_steps = {
+	value = te_grid_buy_sell_max_factor
+	subtract = 1
+}
+
+te_grid_price_at_ratio_value = {
+	value = 1
+	if = {
+		limit = { var:te_grid_ratio_in >= 1 }
+		subtract = {
+			value = 0
+			add = {
+				value = var:te_grid_ratio_in
+				subtract = 1
+				divide = te_grid_price_steps
+				max = 1
+			}
+			multiply = te_grid_price_range
 		}
+	}
+	else_if = {
+		limit = { var:te_grid_ratio_in > 0 }
+		add = {
+			value = 0
+			add = {
+				value = 1
+				divide = var:te_grid_ratio_in
+				subtract = 1
+				divide = te_grid_price_steps
+				max = 1
+			}
+			multiply = te_grid_price_range
+		}
+	}
+	else = {
+		value = te_grid_price_ceiling
+	}
+}
+
+# The sell/buy ratio the flow just set brings the state to: a sender's
+# LP / (LC + U), a receiver's (LP + D x eff) / LC. Read once te_grid_flow is
+# set, for te_grid_price_target (the price Electricity sells at in the state
+# at that flow, on the tile), so a flow still dying away reads as what it is.
+te_grid_flow_ratio_value = {
+	value = 0
+	if = {
+		limit = { var:te_grid_flow > 0 }
+		value = var:te_grid_local_production
+		divide = {
+			value = var:te_grid_local_consumption
+			add = var:te_grid_flow
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_grid_flow < 0
+			var:te_grid_local_consumption > 0
+		}
+		value = var:te_grid_flow
+		multiply = var:te_grid_efficiency
+		multiply = -1
+		add = var:te_grid_local_production
+		divide = var:te_grid_local_consumption
 	}
 }
 
@@ -428,12 +584,23 @@ te_grid_region_size_disp = {
 	}
 }
 
-# The grid's supply as a share of its demand once shared (r).
+# The grid's Electricity supply as a share of its demand, without the stations
+# (sum LP / sum LC).
 te_grid_region_ratio_disp = {
 	value = 0
 	if = {
 		limit = { has_variable = te_grid_region_ratio }
 		value = var:te_grid_region_ratio
+	}
+}
+
+# The Electricity price the flow set brings the state to, over its base
+# (te_grid_price_target); 0 for a station that moves nothing.
+te_grid_price_target_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_price_target }
+		value = var:te_grid_price_target
 	}
 }
 
@@ -586,6 +753,64 @@ te_grid_chk_downloaded_g = { value = global_var:te_grid_chk_downloaded }
 te_grid_chk_stations_g = { value = global_var:te_grid_chk_stations }
 te_grid_chk_through_g = { value = global_var:te_grid_chk_through }
 te_grid_chk_price_gap_g = { value = global_var:te_grid_chk_price_gap }
+te_grid_chk_elec_now_g = { value = global_var:te_grid_chk_elec_now }
+te_grid_chk_elec_model_g = { value = global_var:te_grid_chk_elec_model }
+te_grid_chk_elec_ratio_g = { value = global_var:te_grid_chk_elec_ratio }
+te_grid_chk_elec_share_g = { value = global_var:te_grid_chk_elec_share }
+
+# State scope, for TE_SELF_CHECK grid_price: the state's Electricity price now,
+# over its base, read as 1 + pricier - cheaper with each floored at 0 (as
+# te_grid_chk_price_gap_value reads Grid Power's).
+te_grid_chk_price_now_value = {
+	value = 1
+	sg:electricity ?= {
+		add = {
+			value = state_goods_pricier
+			min = 0
+		}
+		subtract = {
+			value = state_goods_cheaper
+			min = 0
+		}
+	}
+}
+
+# The state's sell/buy ratio now: its Electricity production over its
+# consumption, its station's flows included; 0 with no consumption.
+te_grid_chk_now_ratio_value = {
+	value = 0
+	if = {
+		limit = { te_grid_electricity_consumption > 0 }
+		value = te_grid_electricity_production
+		divide = te_grid_electricity_consumption
+	}
+}
+
+# What the state's station bought last week on its own account, as a share of
+# the rest of the state's Electricity use.
+te_grid_chk_station_share_value = {
+	value = te_grid_own_uploaded
+	divide = {
+		value = te_grid_electricity_consumption
+		subtract = te_grid_own_uploaded
+		min = 1
+	}
+}
+
+# Any scope: how far the price read is from the formula's, either way.
+te_grid_chk_elec_gap_value = {
+	value = 0
+	add = {
+		value = global_var:te_grid_chk_elec_now
+		subtract = global_var:te_grid_chk_elec_model
+		min = 0
+	}
+	add = {
+		value = global_var:te_grid_chk_elec_model
+		subtract = global_var:te_grid_chk_elec_now
+		min = 0
+	}
+}
 
 # State scope, for TE_SELF_CHECK grid_fixed_price: how far Grid Power's price
 # in the state's market is from its base either way, as a fraction. Read as

@@ -417,11 +417,15 @@ Electricity is only available in the state that produces it, as in the base
 game. A Grid Transfer Station, unlocked by Electrical Capacitors, joins its
 state to a power grid so that states can share it.
 
-A grid starts as your stations in one market area. Once a month it shares
-Electricity so that every state on it has the same supply against its demand.
-A state with power to spare sells it to the grid as Grid Power, and a short
-state buys Grid Power and turns it back into Electricity. When the whole grid
-is short, every state on it is short by the same share. A grid takes out what
+A grid starts as your stations in one market area. Once a month it moves
+Electricity from states where it is cheap to states where it is dear, until it
+sells at one price in the states that send it and at that price over their
+transmission efficiency (below) in the states that receive it. A sending state
+sells its spare power to the grid as Grid Power, and a receiving state buys
+Grid Power and turns it back into Electricity. A grid with more power than it
+uses brings the price down in every state on it, the senders' too, so plants
+that make more than the grid needs earn less. A grid short of power raises
+the price in every state on it together, the same way. A grid takes out what
 it puts in, so power never crosses to a grid it isn't joined to. Grid Power
 can't be traded between markets, and its price is fixed at its base of 30.
 After a change, such as a new power plant or a new station, the grid takes a
@@ -441,8 +445,10 @@ technologies also set how far an undersea cable reaches (below):
 | Smart Grids | 11 | 98% | 2 Sea Nodes |
 | Quantum Materials | 12 | 100% | 3 Sea Nodes |
 
-Losses make sharing cost the senders more than the receivers gain, so an early
-grid evens out less than a late one.
+A receiving state pays the senders' price over its efficiency, so at 75% its
+Electricity costs a third more than theirs. A state whose price lies between
+the two neither sends nor receives, since losses would eat what the grid could
+move. An early grid evens prices out less than a late one.
 
 You can build one station per state. Your first station in a market area can
 go in any of your states there, and every later one must border a state of
@@ -493,7 +499,8 @@ the market from running short of Grid Power.
 
 The state panel shows a Power Grid tile on a state with a station: whether its
 station is sending or receiving, the grid's hub (its largest producer, which
-names the grid), the Electricity the station moves a week, how many states
+names the grid), the Electricity the station moves a week (its hover gives the
+price Electricity sells at in the state at that flow), how many states
 its grid has and your transmission efficiency. A state with a cable also
 shows Sea cables, how many stations from other grids its cable joins to this
 one; the hover names them and gives the cable's range. On a grid that joins two
