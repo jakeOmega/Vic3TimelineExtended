@@ -801,6 +801,7 @@ te_grid_chk_elec_share_g = { value = global_var:te_grid_chk_elec_share }
 te_grid_chk_rate_g = { value = global_var:te_grid_chk_rate }
 te_grid_chk_rate_moved_g = { value = global_var:te_grid_chk_rate_moved }
 te_grid_chk_state_gp_gap_g = { value = global_var:te_grid_chk_state_gp_gap }
+te_grid_chk_rate_throughput_g = { value = global_var:te_grid_chk_rate_throughput }
 
 # State scope, for TE_SELF_CHECK grid_power_rate: what a sending station moved
 # last week on its own account (its Grid Power over its rate) as a share of

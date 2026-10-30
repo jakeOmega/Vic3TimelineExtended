@@ -1705,19 +1705,20 @@ te_grid_chk_record_price_effect = {
 
 # State scope, a member of the grid being balanced, before its factor and
 # order are overwritten. TE_SELF_CHECK grid_power_rate, once a game: the first
-# sending station 90% staffed or more, staffed at last month's run too, that
+# sending station 90% staffed or more, staffed at last month's run too, with
+# a throughput read (modifier:building_throughput_add) of -0.05 to +0.1, that
 # was asked for 100 or more at a rate (te_grid_power_rate, the grid's sending
 # price) of 0.5 or less, or 1.7 to 1.9 (short of the ceiling, where a sending
-# state nears the shortage threshold). What it moved on its own account last
-# week, its Grid Power over that rate, as a share of what it was asked
-# (te_grid_chk_rate_moved_value), is its staffing times its throughput:
-# 0.9 to 1.3 with every bonus the game has (Mandatory Augmentation +0.2, a
-# ruler's traits +0.1).
-#   OK      0.8 to 1.4: the Grid Power line carries the rate once, and the
+# state nears the shortage threshold). Throughput has many sources, some
+# negative and one dynamic, so only a station near none is judged. What it
+# moved on its own account last week, its Grid Power over that rate, as a
+# share of what it was asked (te_grid_chk_rate_moved_value), is its staffing
+# times its throughput: 0.86 to 1.1.
+#   OK      0.8 to 1.25: the Grid Power line carries the rate once, and the
 #           readbacks divide it out.
 #   BROKEN  outside: a line set without the rate reads that over the rate
-#           (1.8 or more, or 0.77 or less), one with it twice that times the
-#           rate (0.65 or less, or 1.53 or more), so the factor and every
+#           (1.7 or more, or 0.65 or less), one with it twice that times the
+#           rate (0.55 or less, or 1.45 or more), so the factor and every
 #           readback are off by it.
 # TE_SELF_CHECK grid_power_state_price, at the same station: is Grid Power's
 # price in its state within 2% of base? Settlement assumes each station
@@ -1746,9 +1747,15 @@ te_grid_power_rate_selfcheck_effect = {
 			any_scope_building = {
 				is_building_type = building_grid_transfer_station
 				occupancy >= 0.9
+				modifier:building_throughput_add >= -0.05
+				modifier:building_throughput_add <= 0.1
 			}
 		}
 		set_global_variable = te_grid_power_rate_checked
+		random_scope_building = {
+			limit = { is_building_type = building_grid_transfer_station }
+			set_global_variable = { name = te_grid_chk_rate_throughput value = modifier:building_throughput_add }
+		}
 		set_global_variable = { name = te_grid_chk_rate value = var:te_grid_power_rate }
 		set_global_variable = { name = te_grid_chk_rate_moved value = te_grid_chk_rate_moved_value }
 		set_global_variable = { name = te_grid_chk_ordered value = var:te_grid_command }
@@ -1756,12 +1763,12 @@ te_grid_power_rate_selfcheck_effect = {
 		if = {
 			limit = {
 				te_grid_chk_rate_moved_value >= 0.8
-				te_grid_chk_rate_moved_value <= 1.4
+				te_grid_chk_rate_moved_value <= 1.25
 			}
-			debug_log = "TE_SELF_CHECK OK grid_power_rate (a sending station 90% staffed or more moved [SCOPE.ScriptValue('te_grid_chk_rate_moved_g')|3] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] with its Grid Power at rate=[SCOPE.ScriptValue('te_grid_chk_rate_g')|3] a unit: the line carries the rate and the readback divides it out)"
+			debug_log = "TE_SELF_CHECK OK grid_power_rate (a sending station 90% staffed or more moved [SCOPE.ScriptValue('te_grid_chk_rate_moved_g')|3] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] with its Grid Power at rate=[SCOPE.ScriptValue('te_grid_chk_rate_g')|3] a unit, throughput=[SCOPE.ScriptValue('te_grid_chk_rate_throughput_g')|2]: the line carries the rate and the readback divides it out)"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN grid_power_rate (a sending station 90% staffed or more moved [SCOPE.ScriptValue('te_grid_chk_rate_moved_g')|3] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] with its Grid Power at rate=[SCOPE.ScriptValue('te_grid_chk_rate_g')|3] a unit, outside 0.8 to 1.4: the Grid Power line doesn't carry the rate once; see docs/testing/power-grid-playtest.md)"
+			debug_log = "TE_SELF_CHECK BROKEN grid_power_rate (a sending station 90% staffed or more moved [SCOPE.ScriptValue('te_grid_chk_rate_moved_g')|3] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] with its Grid Power at rate=[SCOPE.ScriptValue('te_grid_chk_rate_g')|3] a unit, throughput=[SCOPE.ScriptValue('te_grid_chk_rate_throughput_g')|2], outside 0.8 to 1.25: the Grid Power line doesn't carry the rate once; see docs/testing/power-grid-playtest.md)"
 		}
 		if = {
 			limit = { global_var:te_grid_chk_state_gp_gap <= 0.02 }

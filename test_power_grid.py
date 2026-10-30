@@ -708,6 +708,8 @@ class BreakEvenTest(unittest.TestCase):
         self.assertIn("has_variable = te_grid_power_rate", check)
         self.assertIn("te_grid_station_staffed_throughout = yes", check)
         self.assertIn("occupancy >= 0.9", check)
+        thr_lo = float(re.search(r"modifier:building_throughput_add >= (-?[\d.]+)", check).group(1))
+        thr_hi = float(re.search(r"modifier:building_throughput_add <= ([\d.]+)", check).group(1))
         low = float(re.search(r"OR = \{\s*var:te_grid_power_rate <= ([\d.]+)", check).group(1))
         high_lo, high_hi = (float(x) for x in re.search(
             r"AND = \{\s*var:te_grid_power_rate >= ([\d.]+)\s*var:te_grid_power_rate <= ([\d.]+)", check).groups())
@@ -715,10 +717,11 @@ class BreakEvenTest(unittest.TestCase):
         ok_hi = float(re.search(r"te_grid_chk_rate_moved_value <= ([\d.]+)", check).group(1))
         # Below the ceiling, where a sending state nears the shortage threshold.
         self.assertLess(high_hi, 1.95)
-        # A correct line reads staffing x throughput (up to 1.3 with every bonus
-        # the game has); one set without the rate reads that over the rate, one
-        # with it twice that times the rate. All three apart at any rate chosen.
-        for read in (0.9, 1.0, 1.3):
+        # A correct line reads staffing x throughput, at a station whose
+        # throughput is near none; one set without the rate reads that over the
+        # rate, one with it twice that times the rate. All three apart at any
+        # rate chosen, whether or not throughput reaches the lines.
+        for read in (0.9 * (1 + thr_lo), 0.9, 1.0, 1.0 * (1 + thr_hi)):
             self.assertTrue(ok_lo <= read <= ok_hi, read)
             for rate in (low, 0.1, high_lo, high_hi):
                 self.assertFalse(ok_lo <= read / rate <= ok_hi, (read, rate))
