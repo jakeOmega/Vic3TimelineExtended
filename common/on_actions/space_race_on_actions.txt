@@ -2,7 +2,8 @@
 
 # Once a month per country (not per journal entry): the inactive-milestone
 # cleanup, the revolution backstop, the post-race dividend, a player's Space
-# Powers standings and the global failure-cooldown tick.
+# Powers standings and, until 2026-12-31, the retired failure cooldown's
+# old-save strip.
 on_monthly_pulse_country = {
 	on_actions = {
 		space_race_on_action
@@ -159,13 +160,13 @@ space_race_on_action = {
 			limit = { has_variable = sr_power_total }
 			sr_powers_clear = yes
 		}
+		# Old saves: the post-setback cooldown is gone (2026-10-31; remove this
+		# strip after 2026-12-31). Drop its counter and re-derive the statuses it
+		# shielded (3 to 5), which the panel no longer draws.
 		if = {
-			limit = { NOT = { has_variable = sr_failure_cooldown } }
-			set_variable = { name = sr_failure_cooldown value = 0 }
-		}
-		if = {
-			limit = { sr_has_failure_cooldown = yes }
-			change_variable = { name = sr_failure_cooldown subtract = 1 }
+			limit = { has_variable = sr_failure_cooldown }
+			remove_variable = sr_failure_cooldown
+			sr_refresh_milestone_statuses = yes
 		}
 	}
 }

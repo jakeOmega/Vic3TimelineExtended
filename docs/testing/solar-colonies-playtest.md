@@ -403,7 +403,7 @@ us put a fleet of 100 of each role at Earth (with none of ours there, a blockade
 
 The colonization sections' share of the GUI and localization audit (`docs/audits/gui_audit/space_seabed.md`, SPC-1 to SPC-19). No self-check: everything here is display and fails visibly (a blank, a raw key, a row in the wrong view). The race-wide items and the `sr_powers_list` self-check are in `docs/testing/space-race-playtest.md` under the same date.
 
-1. **The overview cells (`te_banking_ov_cell`, hovers through `sr_colony_overview_sgui`'s `ExecuteTooltip`: new).** Under Simple Colonies: Colonies reads Loyal with "N of 34 held"; push a colony to autonomy 75 (`event te_debug_space_race.2` or wait) and it reads the colony's name in red, "wants self-rule", then "+N more want it" with a second; its hover lists them by name. Modules reads "N queued", or Queue empty (red once the fabrication stock is full). Next Window reads "in N months", "Open now", "Any month" with a torch drive, or "No site left". Under Full Colonies a Defense cell joins them: Calm, then, with an enemy fleet standing off a colony, Blockaded and the colony's name, its hover listing every threatened colony and an inbound hostile fleet's landing.
+1. **The overview cells (`te_banking_ov_cell`, hovers through `sr_colony_overview_sgui`'s `ExecuteTooltip`: new).** Under Simple Colonies: Colonies reads Loyal with "N of 34 held"; push a colony to autonomy 50 (`event te_debug_space_race.2` or wait) and it reads the colony's name in red, "wants self-rule", then "+N more want it" with a second; its hover lists them by name. Modules reads "N queued", or Queue empty (red once the fabrication stock is full). Next Window reads "in N months", "Open now", "Any month" with a torch drive, or "No site left". Under Full Colonies a Defense cell joins them: Calm, then, with an enemy fleet standing off a colony, Blockaded and the colony's name, its hover listing every threatened colony and an inbound hostile fleet's landing.
 2. **The Colonies view switch (`GetVariableSystem.Set` / `HasValue` on `sr_colony_view`).** People is the default; each button shows its view's figures above the rows and its columns on each row's second line, the active button greyed. Defenses shows only under Full Colonies; an occupied colony appears there, with its occupier, and in no other view. Under Races Only, the switch is gone and each row is the icon and name.
 3. **A colony's name hover (`AddLocalizationIf` of whole keys, each with its `GetStaticModifier(...).GetDesc`).** Lists the specializations we hold there at their levels, nothing for one we don't, and no stray blank lines.
 4. **A colony's drift hover (`AddLocalizationIf` chains with `te_tt_newline`).** The total, the pull of home, its people, its distance by our drive; the no-contact, charter, garrison, war and destroyed-colony lines only when they apply, each with its figure. The total matches the row's Drift figure.
@@ -597,3 +597,26 @@ A colony's page has the table). No script reads them.
    Research Station a silver observatory with a brass telescope, Cultural Center two gold theater masks, Training
    Ground a marine in sand-tan leaping, Nuclear Command Center a blast door with a yellow radiation sign, Defenses the
    turret. None is a speck or reads as something else.
+
+## The owner's UI pass: quick changes (2026-10-31)
+
+No post-setback cooldown, self-government at 50, the grade beside Bases, the queue in its own box, Solar System lower
+(`docs/systems/mod_systems/space_race.md` § Key Mechanics, § Colony modules and Extraplanetary Base room).
+
+1. **No Shielded state.** Force an Ambitious failure (`event te_debug_space_race.1`, option j, on a milestone set to
+   Ambitious) and answer it: the overview keeps reading Ambitious with its risk, never "Shielded", and the next month
+   rolls as usual. The console's "Clear the setback cooldown" option is gone.
+2. **An old save from inside a cooldown.** Load a save taken while a milestone read Shielded: within a month the
+   overview reads its approach again (until then a Safe or Standard one may read Ambitious), and
+   `sr_failure_cooldown` is gone from the country.
+3. **Self-government at 50.** A colony whose autonomy reaches 50 fires `space_race_events.94` (Demands
+   Self-Government), and the overview's Colonies cell names it in red from 50.
+4. **The grade beside Bases.** The Colonies section's Modules view: each colony's Bases reads its room and grade,
+   "160 (+5%)", the minus a true minus at the outer moons; a colony's page shows both in the Base Room tile. Nothing
+   elides.
+5. **The queue's box.** Queue two modules: under the base room, a "Queue (2)" heading, then a darker box with "Next
+   module in N mo" and the two places, and a gap before the colonies' rows. Fill all eight shipment slots with stock
+   in hand: it reads "slots full". With no fabrication method and too little in stock: "stopped", in red; with the stock covering the head, it still reads "in 1 mo" and the module is built. The months match the stock, the
+   rate and the head's price (100, more past the colony's slots).
+6. **Solar System's place.** Solar System sits below Space Fleets (Colonies under Simple Colonies), just above How
+   Solar Colonization Works, in the journal and in the Timeline Extended window's Space Race tab.

@@ -12,57 +12,49 @@
 # ============================================================================
 
 # ---- A milestone's state, from its single derivation site -------------------
-# 0 not running · 1 standard · 2 safe · 3 ambitious · 4 inside the
-# post-setback review (any approach; the roll is skipped). Read from
+# 0 not running · 1 standard · 2 safe · 3 ambitious. Read from
 # sr_<m>_last_status, whose single derivation site is
-# sr_set_milestone_status_base: absent -> 0, then 0 / 1 / 2 / 3-5 -> 1 / 2 / 3 / 4.
+# sr_set_milestone_status_base: absent -> 0, then 0 / 1 / 2 -> 1 / 2 / 3. (An
+# old save's shielded 3-5 reads 3 until its monthly pulse re-derives it.)
 sr_disp_status_suborbital = {
 	value = 0
 	if = { limit = { has_variable = sr_suborbital_last_status } value = 1 add = var:sr_suborbital_last_status }
-	max = 4
+	max = 3
 }
 sr_disp_status_orbital = {
 	value = 0
 	if = { limit = { has_variable = sr_orbital_last_status } value = 1 add = var:sr_orbital_last_status }
-	max = 4
+	max = 3
 }
 sr_disp_status_moon_landing = {
 	value = 0
 	if = { limit = { has_variable = sr_moon_landing_last_status } value = 1 add = var:sr_moon_landing_last_status }
-	max = 4
+	max = 3
 }
 sr_disp_status_probe = {
 	value = 0
 	if = { limit = { has_variable = sr_probe_last_status } value = 1 add = var:sr_probe_last_status }
-	max = 4
+	max = 3
 }
 sr_disp_status_moon_base = {
 	value = 0
 	if = { limit = { has_variable = sr_moon_base_last_status } value = 1 add = var:sr_moon_base_last_status }
-	max = 4
+	max = 3
 }
 sr_disp_status_mars_landing = {
 	value = 0
 	if = { limit = { has_variable = sr_mars_landing_last_status } value = 1 add = var:sr_mars_landing_last_status }
-	max = 4
+	max = 3
 }
 sr_disp_status_interstellar_probe = {
 	value = 0
 	if = { limit = { has_variable = sr_interstellar_probe_last_status } value = 1 add = var:sr_interstellar_probe_last_status }
-	max = 4
+	max = 3
 }
 sr_disp_status_solar_colonization = {
 	value = 0
 	if = { limit = { has_variable = sr_solar_colonization_last_status } value = 1 add = var:sr_solar_colonization_last_status }
-	max = 4
-}
-
-# Months left in the post-setback review. The review is the country's, not a
-# milestone's (sr_has_failure_cooldown), so one value serves every panel.
-sr_disp_cooldown_months = {
-	value = 0
-	if = { limit = { has_variable = sr_failure_cooldown } add = var:sr_failure_cooldown }
-	min = 0
+	max = 3
 }
 
 # ---- Progress as a 0..1 fraction of the goal, for the overview's bar --------
@@ -1212,6 +1204,50 @@ sr_disp_fab_stock = {
 	value = 0
 	if = { limit = { has_variable = sr_fab_stock } value = var:sr_fab_stock }
 	floor = yes
+}
+# The queue's head (the owner, 2026-10-31): 0 nothing queued; 1 being
+# fabricated, built in sr_disp_mq_next_months; 2 its points are in stock but
+# every shipment slot is taken; 3 stopped: the launch site lost, or no points
+# a month and too few in stock. The month's pulse adds the rate and then builds
+# (sr_mod_month), whose build loop asks only the launch site, the stock, a free
+# slot and the queue, never the rate: a head the stock covers is built with no
+# fabrication. So the head waits at least one month.
+sr_disp_mq_next_state = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_mq_1_site }
+		value = 1
+		if = {
+			limit = { sr_launch_site_lost = yes }
+			value = 3
+		}
+		else_if = {
+			limit = { sr_mod_fab_stock_value >= sr_mq_head_cost }
+			if = {
+				limit = { NOT = { sr_ms_has_free_slot = yes } }
+				value = 2
+			}
+		}
+		else_if = {
+			limit = { NOT = { sr_mod_fab_rate > 0 } }
+			value = 3
+		}
+	}
+}
+sr_disp_mq_next_months = {
+	value = 1
+	if = {
+		limit = {
+			sr_mod_fab_rate > 0
+			sr_mod_fab_stock_value < sr_mq_head_cost
+		}
+		value = sr_mq_head_cost
+		subtract = sr_mod_fab_stock_value
+		divide = sr_mod_fab_rate
+		ceiling = yes
+	}
+	min = 1
+	max = 999
 }
 # Our shipments waiting at Earth for a window, and in flight.
 sr_disp_ms_waiting = {

@@ -18,7 +18,7 @@ Shown at 36 px, one at a time, chosen by `sr_disp_status_<m>` (and Idle by the s
 | Standard (where every milestone starts) | the rocket rising on a short flame | `state_standard.dds` |
 | Safe (the word carries the weekly cost) | the rocket on its pad inside a blue shield | `state_safe.dds` |
 | Ambitious (the word carries the weekly cost) | the rocket climbing at a slant on a long flame | `state_ambitious.dds` |
-| Shielded (post-setback review) | the rocket under a glass dome, vanilla's clock at its foot | `state_shielded.dds` |
+| Shielded (post-setback review; no longer shown since the cooldown went, 2026-10-31) | the rocket under a glass dome, vanilla's clock at its foot | `state_shielded.dds` |
 
 The list asked for an empty launch gantry for Idle; at 36 px the gantries were thin lattices, so Idle is the rocket greyed. It also asked for a white rocket, which loses its body in the cut-out, so the rocket is silver.
 

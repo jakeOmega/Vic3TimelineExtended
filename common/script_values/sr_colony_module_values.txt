@@ -49,9 +49,20 @@ sr_mod_bunker_reliability = {
 	multiply = sr_mod_bunker_reliability_per_level
 	max = sr_mod_bunker_reliability_max
 }
-# The AI's plan (sr_mod_ai_plan_<key>): an Administration at this autonomy, and
-# Nuclear Command Centers up to the staffed levels that reach the cap.
-sr_mod_ai_admin_autonomy = { value = 50 }
+# The AI's plan (sr_mod_ai_plan_<key>): an Administration from this autonomy
+# while the colony is still heading for sr_mod_ai_admin_settles_at or more (the
+# owner, 2026-10-31: from 25, a warning ahead of the demand at sr_aut_ask_level
+# 50, "still increasing"; until then from 50, with the demand at 75), and
+# Nuclear Command Centers up to the staffed levels that reach the cap. Autonomy
+# settles at its pressure over sr_aut_settle_rate (100 x the pressure), so the
+# test is on the pressure: the same settling point at any autonomy, where a
+# floor on the month's rise would ask more of a colony the higher it already is.
+sr_mod_ai_admin_autonomy = { value = 25 }
+sr_mod_ai_admin_settles_at = { value = 45 }
+sr_mod_ai_admin_pressure = {
+	value = sr_mod_ai_admin_settles_at
+	multiply = sr_aut_settle_rate
+}
 sr_mod_ai_bunker_max = { value = 3 }
 
 # The technology markers' self-checks (colony management design § 11): the

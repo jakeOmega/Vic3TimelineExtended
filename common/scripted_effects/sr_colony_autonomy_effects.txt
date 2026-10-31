@@ -5,7 +5,7 @@
 # (slice 5 of the scope, §§ 6.4-6.6). Simple and full colonies only.
 #
 # A held colony's autonomy (sr_site_autonomy_<key>, 0-100) drifts each month in
-# the world's step (sr_site_aut_step_<key>, generated); at 75 its holder is asked
+# the world's step (sr_site_aut_step_<key>, generated); at 50 its holder is asked
 # (space_race_events.94: a charter, a garrison, or let it go), at 100 it breaks
 # away. A free colony (sr_site_free_<key>) is a claimed world with no holder: it
 # keeps its people and modules, shows its modifiers to no one, grows only while
@@ -61,7 +61,7 @@ sr_free_petition = {
 }
 
 # ---- Autonomy's thresholds (design § 2) --------------------------------------------
-# Country scope, the holder, from the world's step: autonomy at 75 (the world's
+# Country scope, the holder, from the world's step: autonomy at 50 (the world's
 # five-year cooldown is set; sr_aut_site names it in the event).
 sr_aut_ask = {
 	sr_site_event_open = { VAR = sr_aut_site INDEX = $INDEX$ }

@@ -375,8 +375,10 @@ class GatingTest(unittest.TestCase):
             root = _root(self.gui, f"widget_je_space_race_{m}_overview")
             sv = f"ScriptValue('sr_disp_status_{m}')"
             self.assertIn(f"LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{sv}, '(CFixedPoint)1' )", root)
-            for code in (2, 3, 4):
+            for code in (2, 3):
                 self.assertIn(f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{sv}, '(CFixedPoint){code}' )", root)
+            # Code 4, shielded, went with the post-setback cooldown (2026-10-31).
+            self.assertNotIn(f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{sv}, '(CFixedPoint)4' )", root)
             risk = f"ScriptValue('sr_risk_shown_{m}')"
             self.assertIn(f"NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{risk}, '(CFixedPoint)0' )", root)
             self.assertIn(f"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{risk}, '(CFixedPoint)0' )]", root)
@@ -461,14 +463,14 @@ class ColoniesTest(unittest.TestCase):
                 self.assertNotIn("te_sr_sec_colonies", _type_body(self.gui, f"te_sr_{m}_status"), m)
 
     def test_the_colonization_panel_order(self):
-        """Colony Fleets, then Solar System with its Target buttons (SPC-7),
-        then Colonies, Space Command, Space Fleets and How Solar Colonization
-        Works; the old per-aspect sections are gone (SPC-5)."""
+        """Colony Fleets, Colonies, Space Command, Space Fleets, then Solar
+        System (moved down by the owner, 2026-10-31) just above How Solar
+        Colonization Works; the old per-aspect sections are gone (SPC-5)."""
         status = _type_body(self.gui, "te_sr_solar_colonization_status")
         self.assertIn("direction = vertical", status.split("\n\n")[0])
         self.assertEqual(re.findall(r"^\t\t(te_sr_sec_\w+) = \{\}", status, re.M),
-                         ["te_sr_sec_colony_fleets", "te_sr_sec_solar_system", "te_sr_sec_colonies",
-                          "te_sr_sec_space_command", "te_sr_sec_space_fleets", "te_sr_sec_how_colonies"])
+                         ["te_sr_sec_colony_fleets", "te_sr_sec_colonies", "te_sr_sec_space_command",
+                          "te_sr_sec_space_fleets", "te_sr_sec_solar_system", "te_sr_sec_how_colonies"])
         self.assertLess(status.index("te_sr_status_sections = {"), status.index("te_sr_sec_colony_fleets = {}"))
         for gone in ("te_sr_sec_settlers", "te_sr_sec_modules", "te_sr_sec_autonomy", "te_sr_sec_colony_defences",
                      "te_sr_settler_row", "te_sr_module_row", "te_sr_autonomy_row", "te_sr_defence_row"):
@@ -1034,7 +1036,6 @@ class SpaceRaceIconsTest(unittest.TestCase):
                              ('tooltip = "sr_pace_note_standard"', "state_standard"),
                              ('tooltip = "sr_pace_note_safe"', "state_safe"),
                              ('tooltip = "sr_pace_note_ambitious"', "state_ambitious"),
-                             ('tooltip = "sr_pace_note_shielded"', "state_shielded"),
                              ('block "sr_risk_lit"', "risk"),
                              ('block "sr_risk_unlit"', "risk"),
                              ('tooltip = "sr_rivals_first_open"', "first"),
@@ -1138,7 +1139,7 @@ class DisplayValuesTest(unittest.TestCase):
         for m in CONTROLLED:
             body = _block(self.values, f"sr_disp_status_{m}")
             self.assertIn(f"var:sr_{m}_last_status", body)
-            self.assertIn("max = 4", body)
+            self.assertIn("max = 3", body)
 
     def test_programme_codes_follow_the_tooltip_order(self):
         """first (4) → done (3) → running (1) → taken (2), as sr_prog_<m> tests.
@@ -1240,10 +1241,41 @@ class LocTest(unittest.TestCase):
 
     def test_the_pace_sentence_is_the_state_icon_tooltip(self):
         overview = _type_body(_read(GUI), "te_sr_overview_milestone")
-        for note in ("standard", "safe", "ambitious", "shielded"):
+        for note in ("standard", "safe", "ambitious"):
             self.assertIn(f'tooltip = "sr_pace_note_{note}"', overview)
         self.assertNotRegex(_read(CUSTOM_LOC), r"(?m)^sr_\w+_pace = \{")
 
+
+class QueueNextModuleTest(unittest.TestCase):
+    """The queue's Next module row (the owner, 2026-10-31) follows how
+    sr_mod_month builds: its loop asks the launch site, the stock against the
+    head's price, a free shipment slot and the queue, never the month's rate,
+    so a head the stock covers is built with no fabrication and must not read
+    "stopped" (review of #1274)."""
+
+    def test_the_build_loop_never_asks_the_rate(self):
+        effects = _read(os.path.join(REPO, "common", "scripted_effects", "sr_colony_module_effects.txt"))
+        loop = _block(effects, "sr_mod_month").split("while = {", 1)[1]
+        start = loop.index("limit = {") + len("limit = {")
+        depth, end = 1, start
+        while depth:
+            depth += {"{": 1, "}": -1}.get(loop[end], 0)
+            end += 1
+        limit = loop[start:end]
+        for term in ("sr_launch_site_lost", "sr_mq_head_cost", "sr_ms_has_free_slot", "sr_mq_1_site"):
+            self.assertIn(term, limit)
+        self.assertNotIn("sr_mod_fab_rate", limit)
+
+    def test_stopped_only_when_nothing_can_build(self):
+        state = _block(_read(DISPLAY), "sr_disp_mq_next_state")
+        lost, covered, no_rate = (state.index("sr_launch_site_lost = yes"),
+                                  state.index("sr_mod_fab_stock_value >= sr_mq_head_cost"),
+                                  state.index("NOT = { sr_mod_fab_rate > 0 }"))
+        # The launch site first, then a covered head (built, or waiting for a
+        # slot), and only then no rate: stopped.
+        self.assertLess(lost, covered)
+        self.assertLess(covered, no_rate)
+        self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "2", "3"])
 
 if __name__ == "__main__":
     unittest.main()

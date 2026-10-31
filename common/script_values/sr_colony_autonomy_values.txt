@@ -10,8 +10,9 @@
 
 # ---- Autonomy (design § 2): the thresholds, in points of 0-100 -----------------------
 # At sr_aut_ask_level the holder is asked (space_race_events.94), once in five
-# years per world; at sr_aut_break_level the colony breaks away.
-sr_aut_ask_level = { value = 75 }
+# years per world; at sr_aut_break_level the colony breaks away. The ask came
+# down from 75 to 50 on 2026-10-31 (owner).
+sr_aut_ask_level = { value = 50 }
 sr_aut_break_level = { value = 100 }
 
 # The drift's terms, in points a month (sr_site_aut_drift_<key>, holder scope).

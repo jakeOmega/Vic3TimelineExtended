@@ -149,8 +149,7 @@ under it:
 | Icon | Reads | Means |
 |---|---|---|
 | Approach | Standard, Safe or Ambitious | The approach in force. Under Safe and Ambitious, their weekly innovation cost, as in −30 a week. |
-| Approach, during a post-setback review | Shielded: 4 mo | No milestone can suffer a setback for the months shown. The approach itself is unchanged. |
-| Setback risk | Risk: 6%/mo | This month's chance of a setback. The icon is faint while it reads 0%. |
+| Setback risk | Risk: 6%/mo | This month's chance of a setback. |
 | The first | First: Open or First: Claimed | Whether the larger reward is still there to win. The icon is faint once another power has claimed it. |
 
 Below them, the Progress bar fills toward the goal. Beside it are your progress,
@@ -206,14 +205,14 @@ needs you, with the detail on hover. A word turns red when something is due:
 
 | Cell | Reads |
 |---|---|
-| Colonies | Loyal, with the colonies you hold; or, in red, the name of a colony at autonomy 75 or more, which wants self-rule, and how many more do. Hover it for all of them. |
+| Colonies | Loyal, with the colonies you hold; or, in red, the name of a colony at autonomy 50 or more, which wants self-rule, and how many more do. Hover it for all of them. |
 | Defense | Under Full Colonies only. Calm; or, in red, what threatens you (Under assault, Blockaded, Occupied, Interdicted, Earth blockaded or Launch site lost) and the colony it threatens. Hover it for every colony under threat and any hostile fleet on its way. |
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
 
-Solar System Colonization has more sections below Rivals: Colony Fleets,
-Solar System and Colonies, then under Full Colonies Space Command and Space
-Fleets, and How Solar Colonization Works (collapsed), which explains them.
+Solar System Colonization has more sections below Rivals: Colony Fleets and
+Colonies, then under Full Colonies Space Command and Space Fleets, then Solar
+System, and How Solar Colonization Works (collapsed), which explains them.
 Colonies (open) has a box for every site you hold, with Colonies Held (out of
 40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a
@@ -229,7 +228,7 @@ shows:
 | View | Shows | Above the rows |
 |---|---|---|
 | People (the default) | Each colony's people and room, its crews and its settler priority | Emigration, settlers a month and your people off Earth |
-| Modules | Each colony's crews' share of its modules, its slots in use (red past them) and its Extraplanetary Base room, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base room and the queue |
+| Modules | Each colony's crews' share of its modules, its slots in use (red past them) and its Extraplanetary Base room and grade, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base room, and the queue in a box of its own with when its next module is built |
 | Autonomy | Each colony's autonomy, how much it moves a month (hover it for that colony's terms), what it is building of its own, its charter or garrison, and Abandon | Free colony trade; the free colonies are listed below the rows |
 | Defenses | Each colony's Defenses, integrity and marines, and what threatens it | |
 
@@ -386,20 +385,18 @@ On an Ambitious approach you get a mission failure: an explosion on the pad, a
 lost probe, a habitat breach, a computer that aborts the landing. Most options
 cost 4 months of that milestone's progress, at the faster Ambitious pace, give Space Mission Failure (−2% prestige
 and −25 innovation cap, fading over five years) and radicalize some academics.
-They also start a six-month safety period during which none of your milestones
-can suffer another setback, although they keep moving at full pace; the panel
-reads Shielded, with the months left, and shows the risk as 0%. One
-option usually adds a Temporary Safety Review, which fades over ten years, and
-in some events also switches the milestone to Safe. Another usually presses on
-with 5 or 6 months lost, more radicals and no safety period.
+One option usually adds a Temporary Safety Review, which slows progress but
+lowers the risk of another setback and fades over ten years, and in some events
+also switches the milestone to Safe. Another usually presses on with 5 or 6
+months lost and more radicals. Every milestone keeps rolling for setbacks the
+month after a failure, as in any other month.
 Now and then the roll brings An Unexpected Breakthrough instead: no progress is
 lost, and the Space Program's throughput rises by 15% for 18 or 24 months.
 
 On a Safe or Standard approach you get a minor setback: missing parts, bad weather, a
 scandal, a quarrel with a foreign supplier. It costs 1 to 4 months of the
-milestone's progress, usually 2 or 3, with no lasting modifier and no safety
-period. A few setbacks, on any approach, also cut the Space Program's throughput
-for some months. A setback never takes more progress than the milestone has, and
+milestone's progress, usually 2 or 3, with no lasting modifier. A few setbacks,
+on any approach, also cut the Space Program's throughput for some months. A setback never takes more progress than the milestone has, and
 in Solar System Colonization never more than one colony's, so fleets staged in
 orbit are never lost to a setback.
 
@@ -792,8 +789,8 @@ values a colony more for each of them. An AI that holds a colony, or is in the
 top three, queues one module a year at each colony when it has money to spare:
 a Habitat once its people fill three quarters of its room, otherwise the next
 specialization level its crews can run, its founding specialization first, then
-a facility: an Administration where autonomy has reached 50, a Mining Complex
-when its bases outgrow their room, a Nuclear Command Center with nuclear
+a facility: an Administration where autonomy has reached 25 and is heading for 45
+or more, a Mining Complex when its bases outgrow their room, a Nuclear Command Center with nuclear
 weapons, an Orbital Yard with a Space Command, otherwise a Research Station. It
 runs the best fabrication method it has while anything is queued, never builds
 Spaceports or Defenses, and never pays for a module past a colony's slots.
@@ -827,7 +824,7 @@ all your levels, so only the levels past the room pay the penalty: with room for
 without lowering what your levels already earn, and taking a rival's Psyche
 colony raises your average and lowers theirs. The Colonies section's Modules
 view shows your levels against your room, and each colony's Bases figure its
-own room, with its grade on hover. Private investors don't build past your room,
+own room and grade. Private investors don't build past your room,
 and AI governments don't either; your government can, at the penalty. Under
 Races Only, bases have no room limit.
 
@@ -897,13 +894,13 @@ the terms that move that colony. It changes every month:
 Settling makes autonomy level out rather than climb for ever: a colony settles at
 100 times the sum of its other terms, and the hover shows where. A colony whose
 terms add up to +0.3 a month settles near 30; one demands self-government only
-when they reach +0.75, as for a large colony far out that is also at war or out
-of contact. A Mars colony that keeps receiving settlers stays near 0. Better
+when they reach +0.5, as for a colony far out that goes a year without contact,
+or a large one at war. A Mars colony that keeps receiving settlers stays near 0. Better
 drives bring the outer colonies closer: with a fusion torch the distance all but
 disappears. Keep settlers or modules arriving, on Low emigration if nothing
 else, so that no colony goes a year without contact.
 
-At 75, the colony demands self-government, once in five years at most, and you
+At 50, the colony demands self-government, once in five years at most, and you
 choose:
 
 | Choice | Now | After |

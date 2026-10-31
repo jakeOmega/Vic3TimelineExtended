@@ -6557,7 +6557,6 @@
  sr_outer_system_requires_deep_space_tt:0 "Stages 3-5 (Mercury & Saturn, Uranus & Neptune, Kuiper Belt) require the Deep Space Exploration [concept_production_method]."
  sr_pace_note_ambitious:0 "Aggressive work — much faster, at a real risk of losing months to a failure."
  sr_pace_note_safe:0 "Methodical work: the program's own pace, and far less likely to lose months to a failure."
- sr_pace_note_shielded:0 "The program is inside its post-setback review: no further setback is possible for the moment, and progress continues at full speed."
  sr_pace_note_standard:0 "The standard approach: the program's own pace and the milestone's base setback risk, with no approach cost."
  sr_petition_accept_tt:0 "The colony is ours again, with its people and modules, at #v 20#! autonomy."
  sr_petition_decline_tt:0 "The colony stays free. Our ties with it fall back to #v 50#!."
