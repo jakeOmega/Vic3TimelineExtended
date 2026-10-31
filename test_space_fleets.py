@@ -347,33 +347,31 @@ class UpkeepTest(unittest.TestCase):
         apply = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_apply")
         self.assertIn("is_building_type = building_space_command", apply)
         self.assertLess(apply.index("remove_modifier = sr_fleet_upkeep_goods"), apply.index("add_modifier"))
-        self.assertRegex(apply, r"limit = \{\s*level >= 1\s*root\.var:sr_fleet_upkeep_per_building > 0\s*\}\s*"
-                                r"add_modifier = \{ name = sr_fleet_upkeep_goods multiplier = root\.var:sr_fleet_upkeep_per_building \}")
+        self.assertRegex(apply, r"limit = \{\s*level >= 1\s*root\.var:sr_fleet_upkeep_units > 0\s*\}\s*"
+                                r"add_modifier = \{ name = sr_fleet_upkeep_goods multiplier = root\.var:sr_fleet_upkeep_units \}")
         calls = re.findall(r"sr_fl_upkeep_apply = yes", _strip(_raw(FLEET_EFFECTS)))
         self.assertEqual(len(calls), 1)
         refreshes = re.findall(r"sr_fl_upkeep_refresh = yes", _strip(_raw(FLEET_EFFECTS)) + _strip(_raw(DEBUG_EVENTS)))
         self.assertEqual(len(refreshes), 1)
 
-    def test_a_second_building_doesn_t_charge_twice(self):
-        """I1 (PR 7 task review): the units are split between the Space
-        Command buildings of a level or more, so the fleets pay once."""
+    def test_one_building_carries_the_whole_upkeep(self):
+        """One Space Command a nation (owner, 2026-10-31) replaced PR 7's
+        split: the upkeep sits on the one building at the fleets' units."""
         values = _strip(_raw(FLEET_VALUES))
+        self.assertNotIn("sr_fleet_upkeep_per_building_value", values)
+        refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
+        self.assertRegex(refresh, r"set_variable = \{ name = sr_fleet_upkeep_units value = sr_fleet_upkeep_units_value \}\s*"
+                                  r"if = \{\s*limit = \{ has_variable = sr_fleet_upkeep_per_building \}\s*"
+                                  r"remove_variable = sr_fleet_upkeep_per_building\s*\}\s*sr_fl_upkeep_apply = yes")
+        # Nothing reads the old split's variable any more.
+        everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
+        self.assertNotIn("var:sr_fleet_upkeep_per_building", everything)
+        self.assertNotIn("name = sr_fleet_upkeep_per_building", everything)
+        # The count the sweep reads: every state's buildings (an occupied one's
+        # included), of a level or more, as the apply walks them.
         count = _block(values, "sr_sc_buildings")
         self.assertRegex(count, r"every_scope_state = \{\s*every_scope_building = \{\s*limit = \{\s*"
                                 r"is_building_type = building_space_command\s*level >= 1\s*\}\s*add = 1")
-        per = _block(values, "sr_fleet_upkeep_per_building_value")
-        # The whole block: nothing after the division undoes it.
-        self.assertRegex(per, r"^\s*value = sr_fleet_upkeep_units_value\s*if = \{\s*limit = \{ sr_sc_buildings > 1 \}\s*"
-                              r"divide = sr_sc_buildings\s*\}\s*$")
-        # The count and the apply walk the same buildings: every state's (an
-        # occupied one's included), of a level or more.
-        apply = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_apply")
-        for body in (count, apply):
-            self.assertRegex(body, r"^\s*(value = 0\s*)?every_scope_state = \{\s*every_scope_building = \{\s*limit = \{\s*is_building_type = building_space_command")
-        self.assertIn("level >= 1", apply)
-        refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
-        self.assertRegex(refresh, r"set_variable = \{ name = sr_fleet_upkeep_per_building value = sr_fleet_upkeep_per_building_value \}\s*"
-                                  r"sr_fl_upkeep_apply = yes")
 
     def test_the_upkeep_probe_is_retired(self):
         """§ 10's fixed line answered the 6a upkeep_inputs probe's question."""
@@ -395,7 +393,7 @@ class UpkeepTest(unittest.TestCase):
                         refresh.index("set_variable = { name = sr_fleet_upkeep_units"))
         check = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_self_check")
         self.assertIn("NOT = { has_global_variable = sr_fl_upkeep_line_checked }", check)
-        self.assertIn("var:sr_fleet_upkeep_per_building > 0", check)
+        self.assertIn("var:sr_fleet_upkeep_units > 0", check)
         self.assertIn("has_modifier = sr_fleet_upkeep_goods", check)
         # The three axes registered for the line, each against 9 x the building's units.
         for good, var in (("robotics", "sr_fl_upkeep_line_read"), ("telephones", "sr_fl_upkeep_line_read_tel"),
@@ -404,7 +402,8 @@ class UpkeepTest(unittest.TestCase):
                 self.assertIn(f"set_variable = {{ name = {var} value = prev.modifier:goods_input_{good}_mult }}", check)
                 self.assertIn(f"var:{var} > {{ value = var:sr_fl_upkeep_line_want subtract = 0.01 }}", check)
                 self.assertIn(f"var:{var} < {{ value = var:sr_fl_upkeep_line_want add = 0.01 }}", check)
-        self.assertRegex(check, rf"value = var:sr_fleet_upkeep_per_building\s*multiply = {self.K}")
+        self.assertRegex(check, rf"value = var:sr_fleet_upkeep_units\s*multiply = {self.K}")
+        self.assertNotIn("per_building", check)
         self.assertIn("TE_SELF_CHECK OK fleet_upkeep_line", check)
         self.assertIn("TE_SELF_CHECK BROKEN fleet_upkeep_line", check)
 
@@ -412,6 +411,72 @@ class UpkeepTest(unittest.TestCase):
         shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_upkeep_pct")
         # The whole fleet's, and nothing with no Space Command to carry it.
         self.assertRegex(shown, rf"limit = \{{ sr_sc_buildings >= 1 \}}\s*value = sr_fleet_upkeep_units_value\s*multiply = {self.K * 100}")
+
+
+class OneSpaceCommandTest(unittest.TestCase):
+    """A nation runs one Space Command (owner, 2026-10-31): with two or more of
+    a level or more, the month's first step keeps the one with the most levels
+    (the market capital's on a tie) and dismantles the rest, telling a player
+    of each."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(FLEET_EFFECTS))
+        cls.values = _strip(_raw(FLEET_VALUES))
+        cls.sweep = _block(cls.effects, "sr_sc_one_per_nation")
+
+    def test_it_runs_first_in_the_month(self):
+        month = _block(self.effects, "sr_fl_country_month")
+        self.assertTrue(month.strip().startswith("sr_sc_one_per_nation = yes"))
+        for later in ("sr_sc_month = yes", "sr_fl_upkeep_refresh = yes", "sr_fl_each_slot = { DO = month }"):
+            with self.subTest(step=later):
+                self.assertLess(month.index("sr_sc_one_per_nation = yes"), month.index(later))
+        everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
+        self.assertEqual(everything.count("sr_sc_one_per_nation = yes"), 1)
+
+    def test_it_acts_only_on_a_second_building(self):
+        self.assertRegex(self.sweep, r"^\s*if = \{\s*limit = \{ sr_sc_buildings > 1 \}")
+
+    def test_the_keeper_has_the_most_levels_and_the_capital_breaks_a_tie(self):
+        self.assertRegex(self.sweep, r"ordered_scope_state = \{\s*limit = \{ has_building = building_space_command \}\s*"
+                                     r"order_by = sr_sc_keeper_score\s*max = 1\s*save_scope_as = sr_sc_keeper\s*\}")
+        score = _block(self.values, "sr_sc_keeper_score")
+        self.assertRegex(score, r"limit = \{ has_building = building_space_command \}\s*"
+                                r"value = b:building_space_command\.level\s*multiply = 10")
+        # A level outweighs the capital: 10 a level against 1.
+        self.assertRegex(score, r"limit = \{\s*exists = owner\.market_capital\s*owner\.market_capital = this\s*\}\s*add = 1\s*\}\s*$")
+
+    def test_every_other_one_is_removed(self):
+        m = re.search(r"every_scope_state = \{\s*limit = \{\s*has_building = building_space_command\s*"
+                      r"NOT = \{ this = scope:sr_sc_keeper \}\s*\}", self.sweep)
+        self.assertIsNotNone(m)
+        body = _block("x = {" + self.sweep[m.start() + len("every_scope_state = {"):], "x")
+        self.assertTrue(body.rstrip().endswith("remove_building = building_space_command"))
+        self.assertEqual(self.sweep.count("remove_building"), 1)
+
+    def test_a_player_hears_of_each(self):
+        self.assertRegex(self.sweep, r"limit = \{ owner = \{ is_player = yes \} \}\s*"
+                                     r"save_scope_as = sr_sc_dismantled\s*"
+                                     r"owner = \{ post_notification = sr_space_command_dismantled_notice \}")
+        # Told before the building goes.
+        self.assertLess(self.sweep.index("post_notification"), self.sweep.index("remove_building"))
+        messages = _strip(_raw(ROOT / "common/messages/extra_messages.txt"))
+        body = _block(messages, "sr_space_command_dismantled_notice")
+        self.assertIn("type = country", body)
+        self.assertIn("notification_type = feed", body)
+        loc = _raw(ROOT / "localization/english/te_notifications_l_english.yml")
+        desc = re.search(r'(?m)^ notification_sr_space_command_dismantled_notice_desc:0 "(.*)"$', loc).group(1)
+        self.assertIn("[SCOPE.sState('sr_sc_dismantled').GetName]", desc)
+        self.assertIn("[SCOPE.sState('sr_sc_keeper').GetName]", desc)
+        for suffix in ("_name", "_tooltip"):
+            with self.subTest(key=suffix):
+                self.assertRegex(loc, rf"(?m)^ notification_sr_space_command_dismantled_notice{suffix}:0 ")
+
+    def test_no_text_still_promises_a_split(self):
+        loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
+        for phrase in ("shared between them", "each building's tooltip shows its share"):
+            with self.subTest(phrase=phrase):
+                self.assertNotIn(phrase, loc)
 
 
 class PauseTest(unittest.TestCase):

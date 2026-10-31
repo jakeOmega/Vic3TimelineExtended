@@ -104,8 +104,10 @@ sr_fleet_upkeep_units_value = {
 }
 
 # Country scope. Its Space Command buildings of a level or more, wherever they
-# stand (a second comes with an annexed or formed space power): each has the
-# maintenance line, and the units are split between them.
+# stand. A nation runs one (owner, 2026-10-31): with two or more (a second
+# comes with an annexed or formed country's land) the month's sweep keeps one
+# and dismantles the rest (sr_sc_one_per_nation, before the upkeep reaches
+# them), so the fleets' upkeep has one building to sit on.
 sr_sc_buildings = {
 	value = 0
 	every_scope_state = {
@@ -119,13 +121,23 @@ sr_sc_buildings = {
 	}
 }
 
-# Country scope. The multiplier on each of them: the fleets pay the upkeep
-# once, however many buildings carry it.
-sr_fleet_upkeep_per_building_value = {
-	value = sr_fleet_upkeep_units_value
+# State scope, the sweep's order: the Space Command kept is the one with the
+# most levels, and on a tie the market capital's (not the capital's alone, as
+# the Space Program's is: that would demolish a player's Space Command each
+# time the capital moved).
+sr_sc_keeper_score = {
+	value = 0
 	if = {
-		limit = { sr_sc_buildings > 1 }
-		divide = sr_sc_buildings
+		limit = { has_building = building_space_command }
+		value = b:building_space_command.level
+		multiply = 10
+	}
+	if = {
+		limit = {
+			exists = owner.market_capital
+			owner.market_capital = this
+		}
+		add = 1
 	}
 }
 

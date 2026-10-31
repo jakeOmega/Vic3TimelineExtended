@@ -363,8 +363,8 @@ sr_dome_breach_repairs = {
 # (Space Race UI pass design § 10, owner, 2026-10-31: ten times the old +1% of
 # every method input, the factor of ten in the line's base so the tooltip reads
 # +900% a unit). Six goods, so one shortage or glut can't make it very cheap or
-# very dear. With two Space Command buildings or more each carries it at its
-# share of the units (sr_fleet_upkeep_per_building). test_space_fleets.py keeps
+# very dear. A nation runs one Space Command (sr_sc_one_per_nation dismantles
+# any other first), so it carries all the units. test_space_fleets.py keeps
 # the goods in step with the line.
 sr_fleet_upkeep_goods = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
