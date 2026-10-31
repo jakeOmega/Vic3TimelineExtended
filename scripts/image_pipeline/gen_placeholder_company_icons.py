@@ -39,7 +39,11 @@ SIZE = 256
 # category replaced all eighteen cards on 2026-10-07 (icon batch 3, #813), and
 # a rerun would write the cards back over the art. Add a stem here only for a
 # new company still waiting for its logo.
-ICONS: list[tuple[str, str, tuple[int, int, int]]] = []
+ICONS: list[tuple[str, str, tuple[int, int, int]]] = [
+    # Waiting for their logos (icon_prompts.py company_logo, seed None): drop each once its art is written.
+    ("scifi_ingen", "InGen", (46, 110, 60)),
+    ("scifi_rejoovenesense", "Rejooven\nEsense", (30, 120, 130)),
+]
 
 
 def _font(size: int):

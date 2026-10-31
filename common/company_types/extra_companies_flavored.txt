@@ -5456,9 +5456,11 @@ company_jardine_matheson = {
 # (country_can_use_biotech_companies_bool) in `possible`. Picked for geographic
 # and thematic spread: pharmaceutical biotech (Genentech, Novo Nordisk, Biocon,
 # BioNTech), agricultural biotech (Monsanto), food fermentation (Ajinomoto),
-# genomics (BGI) and one far-future firm (Rosen Association). Six unlock with
-# Biotechnology (era 9), BioNTech with mRNA Therapeutics (era 10) and the Rosen
-# Association with Genetic Engineering (era 11). Their prosperity bonuses sit at
+# genomics (BGI) and three far-future firms from fiction: the Rosen Association
+# (androids), InGen (de-extinction) and RejoovenEsense (longevity). Six unlock
+# with Biotechnology (era 9), BioNTech with mRNA Therapeutics (era 10), the Rosen
+# Association with Genetic Engineering and InGen with Synthetic Biology (era 11),
+# and RejoovenEsense with Biological Immortality (era 12). Their prosperity bonuses sit at
 # about Pfizer's and Roche's level, well above the deliberately lean generic, so
 # meeting a flavored firm's rank gate is worth spending the company slot on.
 # =============================================================================
@@ -6035,6 +6037,165 @@ company_rosen_association = {
 			limit = {
 				any_scope_state = {
 					state_region = s:STATE_WASHINGTON
+				}
+			}
+			add = te_company_ai_weight_home
+		}
+	}
+}
+
+# InGen
+# Oblique ref: Michael Crichton's Jurassic Park (1990): International Genetic
+# Technologies of Palo Alto, which cloned dinosaurs from blood preserved in amber
+# for a biological preserve on Isla Nublar, off Costa Rica
+# Theme: De-extinction: resurrected species for wildlife parks, and engineered livestock
+company_ingen = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_ingen.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_farm_corn.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_CALIFORNIA # Palo Alto
+		STATE_COSTA_RICA # the preserve's island
+	}
+	building_types = {
+		building_tourism_industry # the parks
+		building_livestock_ranch # hardier breeds from the same labs
+		building_ingen_biological_preserve
+	}
+	extension_building_types = {
+		building_synthetics_plant_meat # cultured meat grown from an extinct animal's genes, as Vow's mammoth meatball (2023)
+		building_software_industry # the supercomputers that rebuild a genome from fragments
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = synthetic_biology
+	}
+	possible = {
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_tourism_industry
+				level >= 5
+			}
+		}
+		"goods_production_rank(g:tourism)" <= 5
+		gdp_per_capita_ranking <= 15
+	}
+	prosperity_modifier = {
+		building_tourism_industry_throughput_add = 0.20
+		building_livestock_ranch_throughput_add = 0.20
+		country_prestige_mult = 0.10 # the world comes to see what was extinct
+		state_building_ingen_biological_preserve_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_resort_travel
+		prestige_good_generic_meat
+	}
+	ai_will_do = {
+		has_technology_researched = synthetic_biology
+	}
+	ai_construction_targets = {
+		building_tourism_industry = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					state_region = s:STATE_COSTA_RICA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_tourism_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_CALIFORNIA
+						state_region = s:STATE_COSTA_RICA
+					}
+				}
+			}
+			add = te_company_ai_weight_home
+		}
+	}
+}
+
+# RejoovenEsense
+# Oblique ref: Margaret Atwood's Oryx and Crake (2003): the longevity corporation
+# whose guarded Compound housed Crake's Paradice Project and its BlyssPluss pill.
+# The novel names no city; Massachusetts for Kendall Square, the real world's
+# densest biotech cluster
+# Theme: Longevity and rejuvenation, sold to anyone who can pay
+company_rejoovenesense = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_rejoovenesense.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_MASSACHUSETTS # Kendall Square, Cambridge
+	}
+	building_types = {
+		building_synthetics_plant_opium
+		building_synthetics_plant_biomass # cultured tissue for the treatments
+		building_rejoovenesense_compound
+	}
+	extension_building_types = {
+		building_tourism_industry # rejuvenation retreats for the rich
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = biological_immortality
+	}
+	possible = {
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_synthetics_plant_opium
+				level >= 10
+			}
+		}
+		"goods_production_rank(g:opium)" <= 3
+		gdp_per_capita_ranking <= 10
+	}
+	prosperity_modifier = {
+		# the census's longevity care (demographics late game §4.2): its market reaches pops 10 levels of wealth
+		# poorer, half Unrestricted Augmentation's 20
+		state_longevity_care_market_reach_add = 10
+		state_mortality_mult = -0.05
+		state_death_cause_chr_mult = -0.05
+		building_synthetics_plant_opium_throughput_add = 0.20
+		state_building_rejoovenesense_compound_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_opium
+	}
+	ai_will_do = {
+		has_technology_researched = biological_immortality
+	}
+	ai_construction_targets = {
+		building_synthetics_plant_opium = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MASSACHUSETTS
+					is_capital = yes
+					any_scope_building = { is_building_type = building_synthetics_plant_opium }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_MASSACHUSETTS
 				}
 			}
 			add = te_company_ai_weight_home

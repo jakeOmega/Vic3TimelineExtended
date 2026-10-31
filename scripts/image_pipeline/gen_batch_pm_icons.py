@@ -734,7 +734,8 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"ai_optimized_synthesis|cellulosic|generic_chem|"
      r"food_additive|high_fructose|programmable_sweet|"
      r"basf_ludwigshafen|chr_hansen|pfizer_rd|roche_tower|"
-     r"genentech_dna_way|novo_nordisk_kalundborg|biocon_park|biontech_mainz", "flask"),
+     r"genentech_dna_way|novo_nordisk_kalundborg|biocon_park|biontech_mainz|"
+     r"rejoovenesense_compound", "flask"),
 
     #  Food/beverages 
     (r"wine|liquor|beer|brew|distill|vodka|bodega|vintner|tobacco|"
@@ -794,7 +795,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
     #  Tourism/parks 
     (r"tourism|mass_tourism|jet_age_tourism|modern_tourism|space_tourism|"
      r"national_park|national_forest|national_wildlife|"
-     r"disney_world|universal_studios", "suitcase"),
+     r"disney_world|universal_studios|ingen_biological_preserve", "suitcase"),
 
     #  Media/entertainment 
     (r"sound_film|television|broadcast|video_game|digital_stream|"
