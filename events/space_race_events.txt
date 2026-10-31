@@ -5359,3 +5359,44 @@ space_race_events.109 = {
 		if = { limit = { has_variable = sr_lunar_notice_queued } remove_variable = sr_lunar_notice_queued }
 	}
 }
+
+# A hostile fleet bound for our Earth whose arrival would change something (UI
+# pass design § 9): we have no fleet at Earth to meet it, or what is inbound
+# outmatches ours there (sr_earth_alert_loud). sr_earth_alert_step sets
+# sr_earth_alert_by (the fleet's owner) and sr_earth_alert_arrive (its landing
+# month) and sends it once a leg; a hostile fleet that changes nothing gets the
+# quiet sr_earth_hostile_notice instead.
+space_race_events.111 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/orbital_surveillance_earth.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = space_race_events.111.t
+	desc = space_race_events.111.d
+	flavor = space_race_events.111.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_earth_alert_by }
+
+	immediate = {
+		if = {
+			limit = { has_variable = sr_earth_alert_by }
+			var:sr_earth_alert_by = { save_scope_as = sr_earth_alert_power }
+		}
+	}
+
+	option = {
+		name = space_race_events.111.a
+		default_option = yes
+		custom_tooltip = sr_earth_alert_notice_tt
+	}
+
+	after = {
+		if = { limit = { has_variable = sr_earth_alert_by } remove_variable = sr_earth_alert_by }
+		if = { limit = { has_variable = sr_earth_alert_arrive } remove_variable = sr_earth_alert_arrive }
+	}
+}

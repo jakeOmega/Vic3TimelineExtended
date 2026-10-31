@@ -1277,5 +1277,33 @@ class QueueNextModuleTest(unittest.TestCase):
         self.assertLess(covered, no_rate)
         self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "2", "3"])
 
+class EarthAlertCellTest(unittest.TestCase):
+    """The overview's Hostile Fleet cell (UI pass design § 9): under Full
+    Colonies, while a hostile fleet is bound for Earth; red on 2."""
+
+    def test_the_cell_reads_the_alert_values(self):
+        gui = _read(GUI)
+        m = re.search(r'te_banking_ov_cell = \{\s*visible = "([^"]+)"\s*tooltip = "je_space_race_widget_ovc_earth_tt"', gui)
+        self.assertIsNotNone(m, "no Hostile Fleet cell")
+        shown = m.group(1)
+        self.assertIn("ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1'", shown)
+        self.assertIn("GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), "
+                      "'(CFixedPoint)1' )", shown)
+        brace = gui.index("{", m.start())
+        depth, i = 0, brace
+        while True:
+            depth += {"{": 1, "}": -1}.get(gui[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        cell = gui[brace:i]
+        loud = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )"
+        self.assertRegex(cell, rf'visible = "\[{re.escape(loud)}\]"\s*text = "je_space_race_widget_ovc_earth_word_loud"')
+        self.assertRegex(cell, rf'visible = "\[Not\( {re.escape(loud)} \)\]"\s*text = "je_space_race_widget_ovc_earth_word"')
+        self.assertIn('text = "je_space_race_widget_ovc_earth_fig"', cell)
+        loc = "\n".join(_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml")))
+        self.assertRegex(loc, r'(?m)^ je_space_race_widget_ovc_earth_word_loud:0 "#R ')
+
+
 if __name__ == "__main__":
     unittest.main()

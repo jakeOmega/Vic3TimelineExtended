@@ -1061,5 +1061,104 @@ class LunarAtEarthTest(unittest.TestCase):
         self.assertIn("value = var:sr_fl_at_earth", _block(_strip(_raw(FLEET_VALUES)), "sr_orbital_superiority_margin"))
 
 
+class EarthAlertTest(unittest.TestCase):
+    """The Earth alert (UI pass design § 9): a quiet notice for every hostile
+    fleet leg bound for Earth, a loud one for a leg that would change something,
+    each once per leg and per volume, recorded on the moving fleet."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+        cls.fleet = _strip(_raw(FLEET_EFFECTS))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.events = _strip(_raw(SPACE_RACE_EVENTS))
+        cls.step = _block(cls.generated, "sr_earth_alert_step")
+
+    def _bound(self, n, code):
+        return f"has_variable = sr_fl_{n}_dest var:sr_fl_{n}_dest = {code} NOT = {{ has_variable = sr_fl_{n}_loc }}"
+
+    def test_only_powers_at_war_count(self):
+        for lc in gsf.LOCATIONS:
+            for name in (f"sr_loc_hostile_inbound_count_{lc.key}", f"sr_loc_hostile_inbound_strength_{lc.key}",
+                         f"sr_loc_hostile_inbound_first_{lc.key}"):
+                with self.subTest(value=name):
+                    body = _block(self.values, name)
+                    self.assertIn("variable = sr_fleet_powers", body)
+                    self.assertIn("has_war_with = prev", body)
+                    for n in range(1, gsf.SLOTS + 1):
+                        self.assertIn(self._bound(n, lc.code), body)
+        self.assertIn("variable = sr_fleet_powers", self.step)
+        self.assertIn("has_war_with = scope:sr_alert_viewer", self.step)
+
+    def test_once_per_leg_and_volume(self):
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                self.assertIn(self._bound(n, gsf.EARTH), self.step)
+                for volume in ("quiet", "loud"):
+                    name = f"sr_fl_{n}_warned_{volume}"
+                    self.assertIn(f"is_target_in_variable_list = {{ name = {name} target = scope:sr_alert_viewer }}", self.step)
+                    self.assertIn(f"add_to_variable_list = {{ name = {name} target = scope:sr_alert_viewer }}", self.step)
+        # A new leg, a landing and an emptied slot start the record over.
+        for volume in ("quiet", "loud"):
+            with self.subTest(volume=volume):
+                clear = f"clear_variable_list = sr_fl_$N$_warned_{volume}"
+                self.assertIn(clear, _block(self.fleet, "sr_fl_dispatch"))
+                self.assertIn(clear, _block(self.fleet, "sr_fl_arrive_at"))
+                self.assertIn(clear, _block(self.generated, "sr_fl_clear_at"))
+
+    def test_loud_replaces_quiet_in_the_same_month(self):
+        arm = self.step[self.step.index(self._bound(1, gsf.EARTH)):]
+        arm = arm[:arm.index(self._bound(2, gsf.EARTH))]
+        loud = arm.index("scope:sr_alert_viewer = { sr_earth_alert_loud = yes }")
+        quiet = arm.index("post_notification = sr_earth_hostile_notice")
+        self.assertLess(loud, quiet)
+        self.assertIn("else_if", arm[loud:quiet])
+        # The loud notice marks the quiet one heard too.
+        loud_arm = arm[loud:quiet]
+        self.assertIn("add_to_variable_list = { name = sr_fl_1_warned_quiet target = scope:sr_alert_viewer }", loud_arm)
+        self.assertIn("trigger_event = { id = space_race_events.111 days = 1 }", loud_arm)
+
+    def test_one_loud_notice_pending_at_a_time(self):
+        """A second loud-worthy fleet that month is told quietly, and loudly
+        the month after; the pending record lapses, so a lost event can't
+        silence the loud notice for good."""
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                arm = self.step[self.step.index(self._bound(n, gsf.EARTH)):]
+                limit = arm[:arm.index(f"add_to_variable_list = {{ name = sr_fl_{n}_warned_loud")]
+                self.assertIn("NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }", limit)
+                self.assertIn(f"set_local_variable = {{ name = sr_earth_alert_arr value = var:sr_fl_{n}_arrive }}", arm)
+        self.assertIn("set_variable = { name = sr_earth_alert_by value = prev days = 60 }", self.step)
+        self.assertIn("set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }",
+                      self.step)
+        self.assertIn("remove_variable = sr_earth_alert_arrive", _block(self.events, "space_race_events.111"))
+
+    def test_the_quiet_notice_is_a_bad_feed_message(self):
+        messages = _strip(_raw(gsf.ROOT / "common" / "messages" / "extra_messages.txt"))
+        body = _block(messages, "sr_earth_hostile_notice")
+        self.assertIn("type = country", body)
+        self.assertIn("notification_type = feed", body)
+        self.assertIn("color = bad", body)
+
+    def test_the_loud_test(self):
+        loud = _block(self.triggers, "sr_earth_alert_loud")
+        self.assertIn("sr_loc_hostile_inbound_strength_earth > 0", loud)
+        self.assertIn("NOT = { has_variable = sr_fl_at_earth }", loud)
+        self.assertIn("sr_loc_hostile_inbound_strength_earth > var:sr_fl_at_earth", loud)
+
+    def test_the_loud_notice_has_106_s_shape(self):
+        body = _block(self.events, "space_race_events.111")
+        self.assertIn("type = country_event", body)
+        self.assertIn("event_image", body)
+        self.assertIn("trigger = { has_variable = sr_earth_alert_by }", body)
+        self.assertIn("remove_variable = sr_earth_alert_by", body)
+        self.assertIn("default_option = yes", body)
+
+    def test_the_step_runs_beside_the_blockade_notice(self):
+        on = _strip(_raw(ON_ACTIONS))
+        self.assertRegex(on, r"sr_earth_notice_step = yes\s*sr_earth_alert_step = yes")
+
+
 if __name__ == "__main__":
     unittest.main()

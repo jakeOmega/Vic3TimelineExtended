@@ -7345,6 +7345,47 @@ types space_race_widget_types
 							}
 						}
 					}
+					# The Earth alert (UI pass design § 9; Full Colonies): while a fleet
+					# of a power at war with us is bound for Earth, when the first
+					# lands and its strength against ours there; red while a landing
+					# would change something (sr_earth_alert_loud).
+					flowcontainer = {
+						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) )]"
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = hcenter
+
+						te_banking_ov_cell = {
+							visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) )]"
+							tooltip = "je_space_race_widget_ovc_earth_tt"
+							blockoverride "caption" {
+								text = "je_space_race_widget_ovc_earth_cap"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/space_race_icons/warship.dds"
+								}
+							}
+							blockoverride "word" {
+								te_banking_ov_word = {
+									visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' ) )]"
+									text = "je_space_race_widget_ovc_earth_word"
+								}
+								te_banking_ov_word = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )]"
+									text = "je_space_race_widget_ovc_earth_word_loud"
+								}
+							}
+							blockoverride "third_line" {
+								te_banking_ov_word = {
+									position = { 78 46 }
+									text = "je_space_race_widget_ovc_earth_fig"
+								}
+							}
+						}
+					}
 				}
 			}
 			blockoverride "sr_progress_value" {

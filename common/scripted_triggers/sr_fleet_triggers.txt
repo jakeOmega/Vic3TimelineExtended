@@ -362,3 +362,15 @@ sr_battery_sweep_subject = {
 		sr_battery_sweep_qualifies = yes
 	}
 }
+
+# Country scope, the Earth alert (UI pass design § 9): hostile fleets are in
+# flight to Earth, and their arrival would change something: we have no fleet
+# at Earth to meet them, or they outmatch ours there. Our fleets' strength at
+# Earth is sr_fl_at_earth (sr_loc_add_present).
+sr_earth_alert_loud = {
+	sr_loc_hostile_inbound_strength_earth > 0
+	OR = {
+		NOT = { has_variable = sr_fl_at_earth }
+		sr_loc_hostile_inbound_strength_earth > var:sr_fl_at_earth
+	}
+}

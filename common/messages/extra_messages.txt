@@ -2126,6 +2126,17 @@ covert_severe_exposure_notice = {
 	color = bad
 }
 
+# ---- Space Race: the Earth alert (UI pass design § 9, sr_earth_alert_step) ----
+# A fleet of a power at war with us has set out for Earth, or a war began while
+# it was on the way; once a leg. One that would change something on landing
+# gets space_race_events.111 instead.
+sr_earth_hostile_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
 # ---- UN redesign phase 2 (un_ladder_effects.txt) ----
 # A charter reform may now be tabled (to member major and great powers).
 un_charter_reform_ripe_notice = {

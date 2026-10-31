@@ -35,6 +35,42 @@ sr_disp_sc_upkeep_pct = {
 	value = sr_fleet_upkeep_units_value
 }
 
+# The Earth alert (UI pass design § 9), the overview's Earth cell and
+# space_race_events.111: 0 no fleet of a power at war with us is bound for
+# Earth, 1 some are, 2 one would change something on landing
+# (sr_earth_alert_loud); their count, strength and first landing, in months.
+# Ours at Earth is sr_disp_loc_ours_earth.
+sr_disp_earth_hostile = {
+	value = 0
+	if = { limit = { sr_loc_hostile_inbound_count_earth > 0 } value = 1 }
+	if = { limit = { sr_earth_alert_loud = yes } value = 2 }
+}
+sr_disp_earth_hostile_count = {
+	value = sr_loc_hostile_inbound_count_earth
+}
+sr_disp_earth_hostile_strength = {
+	value = sr_loc_hostile_inbound_strength_earth
+}
+sr_disp_earth_hostile_months = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_earth > 0 }
+		value = sr_loc_hostile_inbound_first_earth
+		subtract = te_history_month_index
+		min = 0
+	}
+}
+# .111's own fleet: months until it lands.
+sr_disp_earth_alert_months = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_earth_alert_arrive }
+		value = var:sr_earth_alert_arrive
+		subtract = te_history_month_index
+		min = 0
+	}
+}
+
 # The notices (space_race_events.100 and .101), read in their text: months
 # until a hostile fleet lands; a battle's strength lost, dealt and left.
 sr_disp_fl_alert_months = {
