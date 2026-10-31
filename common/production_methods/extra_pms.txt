@@ -11240,6 +11240,48 @@ pm_base_building_nuclear_power = {
 	}
 }
 
+pm_base_building_advanced_fission_power = {
+	# Generation IV reactors (era 13 spec § 7.7): molten salt and thorium burn their fuel far more completely, so a
+	# level makes 75% more electricity and needs half the lead shielding and disposal of the light-water method. They
+	# run hotter, on corrosion-proof alloys: more tech metals and electronic components, and some Advanced Materials.
+	# The same staff as every reactor method, so the AI-managed reactor's cut stays exact (#996)
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p1.dds"
+
+	unlocking_technologies = {
+		advanced_fission
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 100                        # Price:   60, Total cost:  6000.0 (10.91%)
+			goods_input_electronic_components_add = 250          # Price:   80, Total cost: 20000.0 (36.36%)
+			goods_input_lead_add = 50                            # Price:   40, Total cost:  2000.0 (3.64%)
+			goods_input_tech_metals_add = 100                    # Price:   80, Total cost:  8000.0 (14.55%)
+			goods_input_iron_add = 50                            # Price:   40, Total cost:  2000.0 (3.64%)
+			goods_input_telephones_add = 100                     # Price:   70, Total cost:  7000.0 (12.73%)
+			goods_input_glass_add = 50                           # Price:   40, Total cost:  2000.0 (3.64%)
+			goods_input_advanced_materials_add = 2               # Price: 4000, Total cost:  8000.0 (14.55%)
+			# Output goods
+			goods_output_electricity_add = 3500                  # Price:   30, Total cost: 105000.0 (100.00%)
+			# Total input cost: 55000.0
+			# Total output cost: 105000.0
+			# Profit: 50000.0
+			# Profit margin: 90.91%
+			# Zero profit price multiplier: 0.52
+			# Employment: 1100
+			# Wage breakeven: 45.45
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 500
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 100
+			building_employment_academics_add = 100
+		}
+	}
+}
+
 pm_base_building_tokamak_fusion_power = {
 	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p1.dds"
 
@@ -11555,6 +11597,7 @@ pm_ai_managed_power_plant_reactor = {
 		pm_base_building_inertial_fusion_power
 		pm_base_building_compact_modular_fusion_power
 		pm_base_building_nuclear_power
+		pm_base_building_advanced_fission_power
 	}
 
 	building_modifiers = {

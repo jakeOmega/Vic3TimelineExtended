@@ -94,8 +94,9 @@ Resource Utilization the Extraplanetary Base.
 
 Era 11 is the near future. Modern Material Science unlocks the Advanced Material
 Fabricator, Abyssal Plain Mining the Deep-Sea Mine, Asteroid Mining the
-Extraplanetary Base's Asteroid Mine method, and Fusion Power the Fusion Plant. Genetic Engineering
-unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
+Extraplanetary Base's Asteroid Mine method, Fusion Power the Fusion Plant, and
+Advanced Fission a second, more productive base method for the Nuclear Plant.
+Genetic Engineering unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
 the Cultured Meat Plant and Cultured Produce Facility, and Synthetic Biology
 adds bioengineered production methods such as Designed Crops. Brain-Computer
 Interfaces and Human Augmentation bring augmentation laws. Era 11 also brings
