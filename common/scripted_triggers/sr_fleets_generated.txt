@@ -226,6 +226,21 @@ sr_fl_1_earth_barred = {
 	var:sr_fl_1_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_1_pick_elsewhere = {
+	has_variable = sr_fl_1_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_1_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_1_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_1_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_1_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_1_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_1_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_1_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_1_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_1_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_1_can_go = {
 	has_variable = sr_fl_dest_pick_1
@@ -859,6 +874,21 @@ sr_fl_2_earth_barred = {
 	has_variable = sr_fl_2_loc
 	var:sr_fl_2_loc = 1
 	sr_launches_barred = yes
+}
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_2_pick_elsewhere = {
+	has_variable = sr_fl_2_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_2_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_2_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_2_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_2_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_2_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_2_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_2_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_2_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_2_loc = 9 } }
+	}
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_2_can_go = {
@@ -1494,6 +1524,21 @@ sr_fl_3_earth_barred = {
 	var:sr_fl_3_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_3_pick_elsewhere = {
+	has_variable = sr_fl_3_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_3_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_3_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_3_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_3_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_3_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_3_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_3_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_3_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_3_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_3_can_go = {
 	has_variable = sr_fl_dest_pick_3
@@ -2127,6 +2172,21 @@ sr_fl_4_earth_barred = {
 	has_variable = sr_fl_4_loc
 	var:sr_fl_4_loc = 1
 	sr_launches_barred = yes
+}
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_4_pick_elsewhere = {
+	has_variable = sr_fl_4_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_4_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_4_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_4_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_4_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_4_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_4_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_4_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_4_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_4_loc = 9 } }
+	}
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_4_can_go = {
@@ -2762,6 +2822,21 @@ sr_fl_5_earth_barred = {
 	var:sr_fl_5_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_5_pick_elsewhere = {
+	has_variable = sr_fl_5_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_5_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_5_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_5_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_5_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_5_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_5_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_5_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_5_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_5_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_5_can_go = {
 	has_variable = sr_fl_dest_pick_5
@@ -3395,6 +3470,21 @@ sr_fl_6_earth_barred = {
 	has_variable = sr_fl_6_loc
 	var:sr_fl_6_loc = 1
 	sr_launches_barred = yes
+}
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_6_pick_elsewhere = {
+	has_variable = sr_fl_6_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_6_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_6_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_6_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_6_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_6_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_6_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_6_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_6_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_6_loc = 9 } }
+	}
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_6_can_go = {
@@ -4030,6 +4120,21 @@ sr_fl_7_earth_barred = {
 	var:sr_fl_7_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_7_pick_elsewhere = {
+	has_variable = sr_fl_7_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_7_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_7_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_7_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_7_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_7_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_7_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_7_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_7_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_7_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_7_can_go = {
 	has_variable = sr_fl_dest_pick_7
@@ -4664,6 +4769,21 @@ sr_fl_8_earth_barred = {
 	var:sr_fl_8_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_8_pick_elsewhere = {
+	has_variable = sr_fl_8_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_8_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_8_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_8_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_8_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_8_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_8_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_8_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_8_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_8_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_8_can_go = {
 	has_variable = sr_fl_dest_pick_8
@@ -5297,6 +5417,21 @@ sr_fl_9_earth_barred = {
 	has_variable = sr_fl_9_loc
 	var:sr_fl_9_loc = 1
 	sr_launches_barred = yes
+}
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_9_pick_elsewhere = {
+	has_variable = sr_fl_9_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_9_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_9_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_9_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_9_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_9_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_9_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_9_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_9_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_9_loc = 9 } }
+	}
 }
 # The panel's Go: its picked destination may be flown now.
 sr_fl_9_can_go = {

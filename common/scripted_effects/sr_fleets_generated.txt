@@ -4,7 +4,7 @@
 # common/scripted_effects/sr_fleet_effects.txt; country scope unless said.
 
 # ===== Slot dispatchers =====
-# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, step_pick, merge, detach, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, step_posture, step_target, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in:
+# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, step_pick, merge, detach, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, step_posture, step_target, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick:
 # every slot; the scripted GUIs' slot (scope:op); local_var:sr_fl_n's.
 sr_fl_each_slot = {
 	sr_fl_$DO$_at = { N = 1 }
@@ -1205,6 +1205,47 @@ sr_fl_step_pick_at = {
 	sr_fl_step_pick_once = yes
 	if = { limit = { local_var:sr_fl_pick = sr_fl_$N$_loc_value } sr_fl_step_pick_once = yes }
 	set_variable = { name = sr_fl_dest_pick_$N$ value = local_var:sr_fl_pick }
+}
+
+# The destination popup's choice (UI pass design § 4): the location whose code
+# is scope:pick (sr_fleet_set_dest_sgui). The step above stays for the console.
+sr_fl_set_pick_at = {
+	if = {
+		limit = { scope:pick = 1 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 1 }
+	}
+	else_if = {
+		limit = { scope:pick = 2 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 2 }
+	}
+	else_if = {
+		limit = { scope:pick = 3 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 3 }
+	}
+	else_if = {
+		limit = { scope:pick = 4 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 4 }
+	}
+	else_if = {
+		limit = { scope:pick = 5 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 5 }
+	}
+	else_if = {
+		limit = { scope:pick = 6 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 6 }
+	}
+	else_if = {
+		limit = { scope:pick = 7 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 7 }
+	}
+	else_if = {
+		limit = { scope:pick = 8 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 8 }
+	}
+	else_if = {
+		limit = { scope:pick = 9 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 9 }
+	}
 }
 
 # The slot into the location records (sr_loc_rebuild): where it is, or where

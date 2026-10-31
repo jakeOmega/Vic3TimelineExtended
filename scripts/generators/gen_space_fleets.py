@@ -114,7 +114,7 @@ SLOT_LISTS = ("warned_quiet", "warned_loud")
 SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go", "step_pick", "merge",
                 "detach", "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
                 "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive",
-                "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in")
+                "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in", "set_pick")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
 # per world closing in; kf (6d) is the ground-to-orbit batteries' kinetic fire.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
@@ -465,6 +465,13 @@ def render_slot_triggers(n: int) -> list[str]:
             f"\thas_variable = {loc}",
             f"\tvar:{loc} = {EARTH}",
             "\tsr_launches_barred = yes",
+            "}",
+            "# The destination popup's pick (scope:pick, a location's code) is not where it is.",
+            f"{var(n, 'pick_elsewhere')} = {{",
+            f"\thas_variable = {loc}",
+            "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {b.code} NOT = {{ var:{loc} = {b.code} }} }}" for b in LOCATIONS],
+            "\t}",
             "}",
             "# The panel's Go: its picked destination may be flown now.",
             f"{var(n, 'can_go')} = {{",
@@ -899,6 +906,12 @@ def render_location_effects() -> list[str]:
             "\tif = { limit = { local_var:sr_fl_pick = sr_fl_$N$_loc_value } sr_fl_step_pick_once = yes }",
             "\tset_variable = { name = sr_fl_dest_pick_$N$ value = local_var:sr_fl_pick }",
             "}", "",
+            "# The destination popup's choice (UI pass design § 4): the location whose code",
+            "# is scope:pick (sr_fleet_set_dest_sgui). The step above stays for the console.",
+            "sr_fl_set_pick_at = {"]
+    out += _chain([(f"scope:pick = {b.code}", [f"set_variable = {{ name = sr_fl_dest_pick_$N$ value = {b.code} }}"])
+                   for b in LOCATIONS])
+    out += ["}", "",
             "# The slot into the location records (sr_loc_rebuild): where it is, or where",
             "# it is bound and when it lands.",
             "sr_fl_note_at = {",
@@ -1570,7 +1583,11 @@ def render_display() -> str:
            "#   sr_disp_fl_<n>_refit_left   months of its refit left",
            "#   sr_disp_fl_<n>_leg_months, _leg_dv  the leg to its picked destination",
            "#   sr_disp_fl_<n>_combat, _posture, _destroy  the 6b orders",
-           "#   sr_disp_fl_<n>_tgt_*        its target world's figures (the target hover)"]
+           "#   sr_disp_fl_<n>_tgt_*        its target world's figures (the target hover)",
+           "#   sr_disp_fl_<n>_why          why it can't leave this month, whatever the leg (the",
+           "#                               destination popup's note): 0 it may, 1 refitting, 2",
+           "#                               below the minimum strength, 3 Earth's launches barred",
+           "#   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)"]
     for n in range(1, SLOTS + 1):
         out += [f"sr_disp_fl_{n} = {{",
                 "\tvalue = 0",
@@ -1592,6 +1609,18 @@ def render_display() -> str:
             out += [f"\tif = {{ limit = {{ has_variable = sr_fl_dest_pick_{n} var:sr_fl_dest_pick_{n} = {b.code} }} "
                     f"value = {var(n, f'leg_{kind}_{b.key}')} }}" for b in LOCATIONS]
             out.append("}")
+        # may_depart_<loc>'s slot-wide terms, in its order; the per-leg one,
+        # delta-v, is each row's own (UI pass design § 4).
+        out += [f"sr_disp_fl_{n}_why = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ {var(n, 'refitting')} = yes }} value = 1 }}",
+                f"\telse_if = {{ limit = {{ {var(n, 'strength')} < sr_fl_minimum_strength }} value = 2 }}",
+                f"\telse_if = {{ limit = {{ {var(n, 'at_earth')} = yes sr_launches_barred = yes }} value = 3 }}",
+                "}",
+                f"sr_disp_fl_{n}_pick = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = sr_fl_dest_pick_{n} }} value = var:sr_fl_dest_pick_{n} }}",
+                "}"]
         out += [f"sr_disp_fl_{n}_combat = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'loc')} NOT = {{ var:{var(n, 'loc')} = {EARTH} }} }} value = 1 }}",
@@ -1605,8 +1634,8 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'destroy')} }} value = 1 }}",
                 "}"]
     out += ["",
-            "# Per location: our strength there, the strongest other power's, and the",
-            "# inbound record (as the Solar System rows)."]
+            "# Per location: our strength there, the strongest other power's, the",
+            "# inbound record (as the Solar System rows), and our worlds there."]
     for lc in LOCATIONS:
         k = lc.key
         out += [f"sr_disp_loc_ours_{k} = {{",
@@ -1635,6 +1664,11 @@ def render_display() -> str:
                 f"sr_disp_loc_inbound_ours_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ global_var:sr_loc_inbound_by_{k} ?= this }} value = 1 }}",
+                "}",
+                # The destination popup's Ours: our worlds there, occupied ones too.
+                f"sr_disp_loc_worlds_{k} = {{",
+                "\tvalue = 0",
+                *[f"\tif = {{ limit = {{ global_var:sr_site_holder_{w.key} ?= this }} add = 1 }}" for w in worlds_at(k)],
                 "}"]
     out += ["", "# Per location, the viewer's status there (6b): 1 a battle this month or last,",
             "# 2 a colony of ours blockaded, 3 an enemy's blockaded by us; 6c: 4 a colony of",
@@ -1839,6 +1873,36 @@ def _reasoned(sgui: str, op: int) -> str:
             f"GetScriptedGui('{sgui}').ExecuteTooltip( {scope} ) ) )]")
 
 
+def _pick_scope(n: int, pick: int) -> str:
+    return (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) )"
+            f".AddScope( 'pick', MakeScopeValue( '(CFixedPoint){pick}' ) ).End")
+
+
+def _pick_call(sgui: str, method: str, n: int, pick: int) -> str:
+    return f"[GetScriptedGui('{sgui}').{method}( {_pick_scope(n, pick)} )]"
+
+
+def _pick_reasoned(sgui: str, n: int, pick: int) -> str:
+    """_reasoned, for a popup row's button: the slot and its choice (scope:pick)."""
+    scope = _pick_scope(n, pick)
+    return (f"[Concatenate( GetScriptedGui('{sgui}').IsValidTooltip( {scope} ), Concatenate( Localize( 'te_tt_break' ), "
+            f"GetScriptedGui('{sgui}').ExecuteTooltip( {scope} ) ) )]")
+
+
+def _pick_button(name: str, sgui: str, n: int, pick: int) -> list[str]:
+    """A popup row's button: the choice runs, then the popup closes (as the
+    colony target popup's Target, UI pass design § 3)."""
+    return _override(name, f'enabled = "{_pick_call(sgui, "IsValid", n, pick)}"',
+                     f'onclick = "{_pick_call(sgui, "Execute", n, pick)}"',
+                     "onclick = \"[GetVariableSystem.Clear('te_popup')]\"",
+                     f'tooltip = "{_pick_reasoned(sgui, n, pick)}"')
+
+
+def _popup_key(kind: str, n: int) -> str:
+    """The client-side te_popup value of slot n's popup (UI pass design § 3)."""
+    return f"sr_{kind}_{n}"
+
+
 def _button(name: str, sgui: str, n: int) -> list[str]:
     return _override(name, f'enabled = "{_op(sgui, "IsValid", n)}"', f'onclick = "{_op(sgui, "Execute", n)}"',
                      f'tooltip = "{_reasoned(sgui, n)}"')
@@ -1860,12 +1924,13 @@ def _fleet_row(n: int) -> list[str]:
     out += _override("fl_supply", f'raw_text = "[{_sv(var(n, "supply_value"))}|0]"')
     out += _override("fl_marines", f'raw_text = "[{_sv(var(n, "marines_value"))}|0]"')
     out += _override("fl_orders_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}", 1)}]"')
-    # The destination button's hover is the leg to the destination picked
-    # (sr_disp_fl_<n>_leg_months / _dv), not the scripted GUI's tooltip; the
-    # key opens with the scripted GUI's IsValidTooltip, so a greyed button says
-    # why (a key that reads JournalEntry can't go through Localize, gotcha #16).
+    # The destination button opens the slot's destination popup (UI pass
+    # design § 4; te_popup sr_dest_<n>). Its hover is the leg to the destination
+    # picked (sr_disp_fl_<n>_leg_months / _dv); the key opens with
+    # sr_fleet_pick_sgui's IsValidTooltip, so a greyed button says why it can't
+    # pick (a key that reads JournalEntry can't go through Localize, gotcha #16).
     out += _override("fl_pick_button", f'enabled = "{_op("sr_fleet_pick_sgui", "IsValid", n)}"',
-                     f'onclick = "{_op("sr_fleet_pick_sgui", "Execute", n)}"',
+                     f"onclick = \"[GetVariableSystem.Set('te_popup', '{_popup_key('dest', n)}')]\"",
                      f'tooltip = "je_space_race_widget_fl_{n}_leg_tt"')
     out += _override("fl_pick", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_pick_name')]\"")
     out += _button("fl_go_button", "sr_fleet_go_sgui", n)
@@ -1913,6 +1978,63 @@ def _location_row(lc: glw.Location) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _dest_row(n: int, b: glw.Location) -> list[str]:
+    """Slot n's row for the location b in its destination popup (UI pass
+    design § 4): hidden for where the fleet is; the leg's months and delta-v
+    (red when the fleet carries less), from Earth the window toward b's body,
+    our worlds there, the enemy's strength there and on its way, and Choose."""
+    k = b.key
+    loc, dv, leg_dv = var(n, "loc_value"), var(n, "dv_value"), var(n, f"leg_dv_{k}")
+    covered = f"GreaterThanOrEqualTo_CFixedPoint( {_sv(dv)}, {_sv(leg_dv)} )"
+    at_earth = _eq(loc, EARTH)
+    wait = f"sr_window_wait_months_{b.body}"
+    out = ["\t\t\t\tte_sr_dest_row = {"]
+    rows = _override("dr_visible", f'visible = "[Not( {_eq(loc, b.code)} )]"')
+    rows += _override("dr_name", f'text = "sr_loc_name_{k}"')
+    rows += _override("dr_months", f'raw_text = "[{_sv(var(n, f"leg_months_{k}"))}|0]"')
+    rows += _override("dr_dv_covered", f'visible = "[{covered}]"', f'raw_text = "[{_sv(leg_dv)}|1]"')
+    rows += _override("dr_dv_short", f'visible = "[Not( {covered} )]"', f'raw_text = "#R [{_sv(leg_dv)}|1]#!"')
+    if b.code == EARTH:
+        # Every leg home has its mean-cycle window, no launch window (design § 4: blank).
+        rows += _override("dr_win_open_visible", "visible = no")
+        rows += _override("dr_win_wait", "visible = no")
+    else:
+        rows += _override("dr_win_open_visible", f'visible = "[And( {at_earth}, {_eq(wait, 0)} )]"')
+        rows += _override("dr_win_wait", f'visible = "[And( {at_earth}, {_ge(wait, 1)} )]"',
+                          f'text = "je_space_race_widget_win_wait_{b.body}"')
+    rows += _override("dr_worlds", f'raw_text = "[{_sv(f"sr_disp_loc_worlds_{k}")}|0]"')
+    rows += _override("dr_enemy", f'raw_text = "[{_sv(f"sr_loc_ai_enemy_fleets_{k}")}|0]"')
+    rows += _override("dr_inbound", f'raw_text = "[{_sv(f"sr_loc_hostile_inbound_strength_{k}")}|0]"')
+    rows += _pick_button("dr_button", "sr_fleet_set_dest_sgui", n, b.code)
+    rows += _override("dr_choose_visible", f'visible = "[Not( {_eq(f"sr_disp_fl_{n}_pick", b.code)} )]"')
+    rows += _override("dr_chosen_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_pick", b.code)}]"')
+    out += ["\t\t" + line for line in rows]
+    return out + ["\t\t\t\t}"]
+
+
+def _dest_slot(n: int) -> list[str]:
+    """Slot n's body in the destination popup: shown on te_popup sr_dest_<n>;
+    while the fleet is at a location, the fleet, the note on why it can't leave
+    this month whatever the leg, and a row per location; else one line."""
+    here = _eq(f"sr_disp_fl_{n}", 1)
+    out = ["\t\tte_sr_dest_slot = {"]
+    out += _override("dp_visible", f"visible = \"[GetVariableSystem.HasValue('te_popup', '{_popup_key('dest', n)}')]\"")
+    out += _override("dp_here_visible", f'visible = "[{here}]"')
+    out += _override("dp_where", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_where_name')]\"")
+    out += _override("dp_strength", f'raw_text = "#v [{_sv(var(n, "strength"))}|0]/[{_sv(var(n, "strength_full"))}|0]#!"',
+                     f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"')
+    out += _override("dp_dv", f'raw_text = "[{_sv(var(n, "dv_value"))}|1]"')
+    out += _override("dp_supply", f'raw_text = "[{_sv(var(n, "supply_value"))}|0]"')
+    for code in (1, 2, 3):
+        out += _override(f"dp_why_{code}_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_why", code)}]"')
+    out += ['\t\t\tblockoverride "dp_rows" {']
+    for b in LOCATIONS:
+        out += _dest_row(n, b)
+    out += ["\t\t\t}"]
+    out += _override("dp_gone_visible", f'visible = "[Not( {here} )]"')
+    return out + ["\t\t}"]
+
+
 def render_gui() -> str:
     out = [HEADER.rstrip("\n"),
            "### Solar System Colonization's Fleets and Locations rows, from",
@@ -1938,6 +2060,16 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for lc in LOCATIONS:
         out += [""] + _location_row(lc)
+    out += ["\t}", "",
+            "\t### The destination popup's slots (UI pass design § 4; te_sr_dest_popup in",
+            "\t### space_race_widget.gui, te_popup sr_dest_<n>): one body a slot, the",
+            "\t### one open shown, each passing its slot and a location's code to",
+            "\t### sr_fleet_set_dest_sgui (scope:op, scope:pick).",
+            "\ttype te_sr_dest_popup_body = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes"]
+    for n in range(1, SLOTS + 1):
+        out += [""] + _dest_slot(n)
     out += ["\t}", "}"]
     return "\n".join(out) + "\n"
 

@@ -208,7 +208,7 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        self.assertEqual(len(names), 12)
+        self.assertEqual(len(names), 13)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -1270,6 +1270,191 @@ class EarthAlertTest(unittest.TestCase):
     def test_the_step_runs_beside_the_blockade_notice(self):
         on = _strip(_raw(ON_ACTIONS))
         self.assertRegex(on, r"sr_earth_notice_step = yes\s*sr_earth_alert_step = yes")
+
+
+def _gui_block(text, opener, start=0):
+    """The body of the first `opener = {` block at or after start, and its end."""
+    i = text.index(opener + " = {", start)
+    depth = 0
+    for j in range(i + len(opener) + 2, len(text)):
+        if text[j] == "{":
+            depth += 1
+        elif text[j] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[i + len(opener) + 4:j], j
+    raise AssertionError(f"unclosed {opener}")
+
+
+def _gui_blocks(text, opener):
+    out, start = [], 0
+    while (opener + " = {") in text[start:]:
+        body, start = _gui_block(text, opener, start)
+        out.append(body)
+    return out
+
+
+def _override_body(text, name):
+    """A blockoverride's body (blockoverride "name" { ... }: no `=`)."""
+    i = text.index(f'blockoverride "{name}" {{')
+    j = text.index("{", i)
+    depth = 0
+    for k in range(j, len(text)):
+        if text[k] == "{":
+            depth += 1
+        elif text[k] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[j + 1:k]
+    raise AssertionError(f"unclosed override {name}")
+
+
+class DestinationPopupTest(unittest.TestCase):
+    """UI pass design § 4: a fleet's destination button opens a popup with a
+    row per location; a row's Choose sets the destination, and closes it."""
+
+    @classmethod
+    def setUpClass(cls):
+        rows = _raw(gsf.ROOT / gsf.GUI_OUT)
+        body = rows[rows.index("type te_sr_dest_popup_body = flowcontainer"):]
+        cls.slots = _gui_blocks(body, "te_sr_dest_slot")
+        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_rows")],
+                                     "te_sr_fleet_row")
+        cls.display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
+        cls.sguis = _strip(_raw(SGUIS))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+
+    def test_one_body_per_slot_and_one_row_per_location(self):
+        self.assertEqual(len(self.slots), gsf.SLOTS)
+        for n, slot in enumerate(self.slots, 1):
+            with self.subTest(slot=n):
+                self.assertEqual(_override_body(slot, "dp_visible").strip(),
+                                 f"visible = \"[GetVariableSystem.HasValue('te_popup', 'sr_dest_{n}')]\"")
+                rows = _gui_blocks(slot, "te_sr_dest_row")
+                self.assertEqual([re.search(r'text = "sr_loc_name_(\w+)"', r).group(1) for r in rows],
+                                 [lc.key for lc in gsf.LOCATIONS])
+                for lc, row in zip(gsf.LOCATIONS, rows):
+                    # hidden for where the fleet is
+                    self.assertIn(f"Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                  f"'sr_fl_{n}_loc_value'), '(CFixedPoint){lc.code}' ) )", _override_body(row, "dr_visible"))
+
+    def test_each_row_passes_its_slot_and_location(self):
+        for n, slot in enumerate(self.slots, 1):
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                button = _override_body(row, "dr_button")
+                with self.subTest(slot=n, location=lc.key):
+                    self.assertEqual(set(re.findall(r"AddScope\( 'op', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)),
+                                     {str(n)})
+                    self.assertEqual(set(re.findall(r"AddScope\( 'pick', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)),
+                                     {str(lc.code)})
+                    self.assertEqual(set(re.findall(r"GetScriptedGui\('(\w+)'\)", button)), {"sr_fleet_set_dest_sgui"})
+                    self.assertIn(".IsValidTooltip(", button)
+                    # the leg's own figures, at this slot's pace from where it is
+                    self.assertIn(f"ScriptValue('sr_fl_{n}_leg_months_{lc.key}')|0]", _override_body(row, "dr_months"))
+                    short = _override_body(row, "dr_dv_short")
+                    self.assertIn(f"Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                  f"'sr_fl_{n}_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_leg_dv_{lc.key}') ) )",
+                                  short)
+                    self.assertIn("#R ", short)
+
+    def test_picking_closes_the_popup(self):
+        for n, slot in enumerate(self.slots, 1):
+            for row in _gui_blocks(slot, "te_sr_dest_row"):
+                onclicks = re.findall(r'(?m)^\s*onclick = "(.*)"$', _override_body(row, "dr_button"))
+                with self.subTest(slot=n):
+                    # the choice first, then the close, on one button
+                    self.assertEqual(len(onclicks), 2)
+                    self.assertTrue(onclicks[0].startswith("[GetScriptedGui('sr_fleet_set_dest_sgui').Execute("))
+                    self.assertEqual(onclicks[1], "[GetVariableSystem.Clear('te_popup')]")
+
+    def test_a_body_for_an_empty_slot_shows_only_its_note(self):
+        """Review Focus 1: the slot's fleet leaves, merges or is destroyed with
+        the popup open; nothing then acts on it. The rows show on the test the
+        fleet row's orders show on (at a location), the note on its negation."""
+        for n, (slot, row) in enumerate(zip(self.slots, self.fleet_rows), 1):
+            with self.subTest(slot=n):
+                here = re.search(r'visible = "\[(.*)\]"', _override_body(row, "fl_orders_visible")).group(1)
+                self.assertEqual(_override_body(slot, "dp_here_visible").strip(), f'visible = "[{here}]"')
+                self.assertEqual(_override_body(slot, "dp_gone_visible").strip(), f'visible = "[Not( {here} )]"')
+        # the gone note sits outside the content's block
+        gui = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
+        slot_type = gui[gui.index("type te_sr_dest_slot = flowcontainer"):]
+        content, end = _gui_block(slot_type, "flowcontainer")
+        self.assertIn('block "dp_here_visible"', content)
+        self.assertIn('block "dp_rows"', content)
+        self.assertNotIn('block "dp_gone_visible"', content)
+        self.assertIn('block "dp_gone_visible"', slot_type[end:slot_type.index("type te_sr_dest_header_row")])
+
+    def test_the_why_value_covers_may_depart_s_slot_terms(self):
+        for n in range(1, gsf.SLOTS + 1):
+            body = _block(self.display, f"sr_disp_fl_{n}_why")
+            depart = _block(self.gen_triggers, f"sr_fl_{n}_may_depart_mars")
+            with self.subTest(slot=n):
+                self.assertIn(f"sr_fl_{n}_refitting = yes", body)
+                self.assertIn(f"sr_fl_{n}_strength < sr_fl_minimum_strength", body)
+                self.assertIn("sr_launches_barred = yes", body)
+                self.assertIn(f"sr_fl_{n}_at_earth = yes", body)
+                # ... the same terms may_depart reads
+                self.assertIn(f"NOT = {{ sr_fl_{n}_refitting = yes }}", depart)
+                self.assertIn(f"sr_fl_{n}_strength >= sr_fl_minimum_strength", depart)
+                self.assertIn("sr_launches_barred = yes", depart)
+
+    def test_the_choice_is_the_step_s_rule(self):
+        """At a location, any location but its own; Go keeps the leg's gate."""
+        sgui = _block(self.sguis, "sr_fleet_set_dest_sgui")
+        self.assertIn("saved_scopes = { op pick }", sgui)
+        valid = _block("x = {" + sgui.split("\n\tis_valid = {", 1)[1], "x")
+        self.assertEqual(re.findall(r"TEST = (\w+)", valid), ["at_location", "pick_elsewhere"])
+        # each reason its own line, a direct child of is_valid
+        self.assertRegex(valid, r"^\s*custom_tooltip = \{\s*text = sr_fl_not_at_location_tt\s*sr_fl_op_check = "
+                                r"\{ TEST = at_location \}\s*\}\s*custom_tooltip = \{\s*text = sr_fl_req_other_location_tt\s*"
+                                r"sr_fl_op_check = \{ TEST = pick_elsewhere \}\s*\}\s*$")
+        self.assertIn("sr_fl_by_op = { DO = set_pick }", sgui)
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                elsewhere = _block(self.gen_triggers, f"sr_fl_{n}_pick_elsewhere")
+                self.assertIn(f"has_variable = sr_fl_{n}_loc", elsewhere)
+                self.assertEqual(re.findall(r"AND = \{ scope:pick = (\d+) NOT = \{ var:sr_fl_\d_loc = (\d+) \} \}", elsewhere),
+                                 [(str(lc.code), str(lc.code)) for lc in gsf.LOCATIONS])
+        setter = _block(self.generated, "sr_fl_set_pick_at")
+        self.assertEqual(re.findall(r"scope:pick = (\d+) \}\s*set_variable = \{ name = sr_fl_dest_pick_\$N\$ value = (\d+) \}",
+                                    setter),
+                         [(str(lc.code), str(lc.code)) for lc in gsf.LOCATIONS])
+        # the step stays, for the console
+        self.assertIn("sr_fl_step_pick_at = {", self.generated)
+
+    def test_the_window_shows_from_earth_only(self):
+        for n, slot in enumerate(self.slots, 1):
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                opened, wait = _override_body(row, "dr_win_open_visible"), _override_body(row, "dr_win_wait")
+                with self.subTest(slot=n, location=lc.key):
+                    if lc.code == gsf.EARTH:
+                        self.assertEqual((opened.strip(), wait.strip()), ("visible = no", "visible = no"))
+                        continue
+                    at_earth = f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_loc_value'), '(CFixedPoint)1' )"
+                    self.assertIn(f"And( {at_earth}, EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                  f"'sr_window_wait_months_{lc.body}'), '(CFixedPoint)0' ) )", opened)
+                    self.assertIn(f"And( {at_earth}, GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                  f"'sr_window_wait_months_{lc.body}'), '(CFixedPoint)1' ) )", wait)
+                    self.assertIn(f'text = "je_space_race_widget_win_wait_{lc.body}"', wait)
+
+    def test_the_chosen_destination_is_marked(self):
+        for n, slot in enumerate(self.slots, 1):
+            pick = _block(self.display, f"sr_disp_fl_{n}_pick")
+            self.assertIn(f"if = {{ limit = {{ has_variable = sr_fl_dest_pick_{n} }} value = var:sr_fl_dest_pick_{n} }}", pick)
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                chosen = f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_{n}_pick'), '(CFixedPoint){lc.code}' )"
+                with self.subTest(slot=n, location=lc.key):
+                    self.assertEqual(_override_body(row, "dr_chosen_visible").strip(), f'visible = "[{chosen}]"')
+                    self.assertEqual(_override_body(row, "dr_choose_visible").strip(), f'visible = "[Not( {chosen} )]"')
+
+    def test_our_worlds_at_each_location(self):
+        for lc in gsf.LOCATIONS:
+            body = _block(self.display, f"sr_disp_loc_worlds_{lc.key}")
+            with self.subTest(location=lc.key):
+                self.assertEqual(sorted(re.findall(r"global_var:sr_site_holder_(\w+) \?= this \} add = 1", body)),
+                                 sorted(w.key for w in gsf.worlds_at(lc.key)))
 
 
 if __name__ == "__main__":

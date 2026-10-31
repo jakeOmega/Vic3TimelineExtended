@@ -11,7 +11,10 @@
 # dispatcher checks (sr_fl_<n>_can_go and the rest, generated).
 # ============================================================================
 
-# A fleet's destination button: the next location, skipping where it is.
+# A fleet's destination button. It opens the slot's destination popup (UI pass
+# design § 4, te_popup sr_dest_<n>), so the panel reads only its is_valid: the
+# button greys, with this reason, while the fleet can't pick. Its effect, the
+# step to the next location, stays for the console.
 sr_fleet_pick_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -36,6 +39,42 @@ sr_fleet_pick_sgui = {
 		custom_tooltip = sr_fl_pick_step_tt
 		hidden_effect = {
 			sr_fl_by_op = { DO = step_pick }
+		}
+	}
+}
+
+# The destination popup's Choose (UI pass design § 4): scope:op the slot,
+# scope:pick a location's code (gen_launch_windows.LOCATIONS). Open wherever
+# the step is: at a location, for any location but its own. A row the fleet
+# couldn't leave for this month still chooses; Go keeps that gate.
+sr_fleet_set_dest_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_other_location_tt
+			sr_fl_op_check = { TEST = pick_elsewhere }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_set_dest_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = set_pick }
 		}
 	}
 }

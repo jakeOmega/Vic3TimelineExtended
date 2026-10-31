@@ -17,6 +17,9 @@ LIBRARY = os.path.join(REPO, "gui", "te_widget_library.gui")
 POPUPS = os.path.join(REPO, "gui", "te_popups.gui")
 REGISTRATION = os.path.join(REPO, "gui", "scripted_widgets", "te_systems_window.txt")
 SR_WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
+# The per-slot popup bodies and the fleet rows (gen_space_fleets.py).
+SR_FLEET_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui")
+SLOTS = 9  # gen_space_fleets.SLOTS
 SR_GATE = ("GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( "
            "GuiScope.SetRoot( GetPlayer.MakeScope ).End )")
 SR_CONTEXT = "datacontext = \"[GetPlayerJournalEntry('je_space_race_solar_colonization')]\""
@@ -158,6 +161,41 @@ class PopupHostTest(unittest.TestCase):
         # An entry that closes under an open popup leaves a line, not an empty frame.
         self.assertIn(f'visible = "[Not( {SR_GATE} )]"', body)
         self.assertIn("je_space_race_widget_tp_gone", body)
+
+    def test_the_destination_popup(self):
+        """UI pass design § 4: one popup for nine slots, open on any slot's
+        value; the body shows the open slot's (sr_fleets_generated_rows.gui)."""
+        body = self.popups["te_sr_dest_popup"]
+        visible = re.search(r'blockoverride "popup_visible" \{\s*visible = "(.*)"\s*\}', body).group(1)
+        self.assertEqual(sorted(re.findall(r"GetVariableSystem\.HasValue\('te_popup', 'sr_dest_(\d)'\)", visible)),
+                         [str(n) for n in range(1, SLOTS + 1)])
+        self.assertNotIn("And(", visible)
+        self.assertIn("te_sr_dest_popup_body = {}", body)
+        self.assertIn('text = "je_space_race_widget_dp_title"', body)
+        self.assertIn(f'visible = "[Not( {SR_GATE} )]"', body)
+        rows = _strip_comments(_read(SR_FLEET_ROWS))
+        slots = re.findall(r"visible = \"\[GetVariableSystem\.HasValue\('te_popup', 'sr_dest_(\d)'\)\]\"",
+                           _type_body(rows, "te_sr_dest_popup_body"))
+        self.assertEqual(slots, [str(n) for n in range(1, SLOTS + 1)])
+
+    def test_the_pick_button_opens_the_popup(self):
+        """A fleet row's destination button opens its slot's popup in place of
+        stepping; it greys, with its reason, on sr_fleet_pick_sgui's is_valid."""
+        rows = _strip_comments(_read(SR_FLEET_ROWS))
+        fleet_rows = _type_body(rows, "te_sr_fleet_rows")
+        found = []
+        for m in re.finditer(r'blockoverride "fl_pick_button" \{', fleet_rows):
+            found.append(fleet_rows[m.end():_close(fleet_rows, m.end() - 1)])
+        self.assertEqual(len(found), SLOTS)
+        for n, override in enumerate(found, 1):
+            with self.subTest(slot=n):
+                self.assertEqual(re.findall(r'onclick = "(.*)"', override),
+                                 [f"[GetVariableSystem.Set('te_popup', 'sr_dest_{n}')]"])
+                self.assertIn(f"enabled = \"[GetScriptedGui('sr_fleet_pick_sgui').IsValid( GuiScope.SetRoot( "
+                              f"JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )]\"",
+                              override)
+                self.assertIn(f'tooltip = "je_space_race_widget_fl_{n}_leg_tt"', override)
+                self.assertNotIn("Execute", override)
 
     def test_every_popup_is_in_the_root(self):
         self.assertTrue(self.popups)
