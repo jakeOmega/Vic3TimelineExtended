@@ -272,13 +272,14 @@ existing mine costs about £260,000 a level in
 years of that saving, so the switch pays back sooner while Motor Ships are
 expensive. The
 Extraplanetary Base (In-Situ Resource Utilization) costs 20,000 construction per
-level. It starts on Regolith Processing, which makes Structural Metals,
+level. Its staff is the same at any size: a large base needs no more workers
+than a small one. It starts on Regolith Processing, which makes Structural Metals,
 Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
 and after Space Colonization the base can switch to the Resort Colony production
 method, which produces art and tourism instead. With
 the Space Race rule on Simple Colonies or Full Colonies its levels need room,
-from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −50% past it (see
+from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −75% past it (see
 [Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
 
 The Deep-Sea Mine costs 5,000 construction per level, a quarter of the

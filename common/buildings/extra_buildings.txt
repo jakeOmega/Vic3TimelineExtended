@@ -971,7 +971,7 @@ REPLACE_OR_CREATE:building_space_mine = {
 	required_construction = construction_cost_space_mine
 	# Simple and full colonies (colony modules design § 9): room for levels comes
 	# from the near-Earth asteroids (with Asteroid Mining) and the colonies held,
-	# and a level past it works at -50%. No private investor builds past the
+	# and a level past it works at -75% (-50% until 2026-10-31). No private investor builds past the
 	# room, and no AI government; a player's government can, at the penalty.
 	# Under races only both always pass (sr_ebase_has_room).
 	can_build_government = {

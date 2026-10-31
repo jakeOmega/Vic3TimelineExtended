@@ -16103,11 +16103,18 @@ pm_ai_optimized_operations = {
 	required_input_goods = digital_access
 }
 
+# The Extraplanetary Base's four base methods hire a flat crew in `unscaled`, the same
+# at any level (owner, 2026-10-31): a base needs its colonies' room to pay, so its
+# levels are off-world work, not jobs on Earth. Each crew is a very attractive job
+# (building_job_attractiveness_mult, as every flat crew: pm_ai_managed_* and the Grid
+# Transfer Station), since the game hires a large group slowly. pm_costs.py reads
+# only level_scaled staff, so the cost comments read Employment 0.
+#
 # Regolith Processing (lunar colonization design § 6): the Extraplanetary Base's era-10
 # method, with the building and no technology of its own. Half the Asteroid Mine's
 # inputs for metals and glass from regolith; weak on purpose, a foothold that lunar
 # room makes worth a few levels. Its return on construction is a fifth of the Asteroid
-# Mine's; per worker it pays a little above the era-10 median.
+# Mine's; at one level it pays its 800 a little above the era-10 median.
 pm_regolith_processing = {
 	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 
@@ -16127,15 +16134,17 @@ pm_regolith_processing = {
 			# Profit: 1600.0
 			# Profit margin: 10.67%
 			# Zero profit price multiplier: 0.90
-			# Employment: 800
-			# Wage breakeven: 2.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
-		level_scaled = {
+		# A flat crew at any level (above pm_regolith_processing)
+		unscaled = {
 			# employment
 			building_employment_machinists_add = 500
 			building_employment_engineers_add = 250
 			building_employment_academics_add = 50
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -16167,15 +16176,17 @@ pm_space_mine = {
 			# Profit: 7250.0
 			# Profit margin: 24.17%
 			# Zero profit price multiplier: 0.81
-			# Employment: 1000
-			# Wage breakeven: 7.25
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
-		level_scaled = {
+		# A flat crew at any level (above pm_regolith_processing)
+		unscaled = {
 			# employment
 			building_employment_machinists_add = 500
 			building_employment_engineers_add = 400
 			building_employment_academics_add = 100
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -16208,14 +16219,16 @@ pm_space_colony_mining = {
 			# Profit: 37000.0
 			# Profit margin: 33.04%
 			# Zero profit price multiplier: 0.75
-			# Employment: 1000
-			# Wage breakeven: 37.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
-		level_scaled = {
+		# A flat crew at any level (above pm_regolith_processing)
+		unscaled = {
 			# employment
 			building_employment_engineers_add = 900
 			building_employment_academics_add = 100
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -16245,15 +16258,17 @@ pm_space_colony_vacation = {
 			# Profit: 38000.0
 			# Profit margin: 33.93%
 			# Zero profit price multiplier: 0.75
-			# Employment: 1000
-			# Wage breakeven: 38.00
+			# Employment: 0
+			# Wage breakeven: 0.00
 		}
 
-		level_scaled = {
+		# A flat crew at any level (above pm_regolith_processing)
+		unscaled = {
 			# employment
 			building_employment_shopkeepers_add = 500
 			building_employment_engineers_add = 400
 			building_employment_academics_add = 100
+			building_job_attractiveness_mult = 5
 		}
 	}
 
@@ -16263,7 +16278,8 @@ pm_space_colony_vacation = {
 # Deep-Sea Mine (Global Commons § 1.1, docs/superpowers/archive/specs/2026-10-16-global-commons-design.md).
 # Seabed licences cap its levels, so each level must be worth claiming. Against the
 # Extraplanetary Base's era-11 method (pm_space_mine) every output is at least as large,
-# inputs are lower, the workforce is the same and construction is a quarter of the cost.
+# inputs are lower, a level's workforce is the base's whole flat crew and construction
+# is a quarter of the cost.
 # The advanced and automated methods produce twice the base output on their own inputs.
 # Its ships are in the support-vessels group (the tenders after these methods), and the
 # comparisons count them. It out-earns the Extraplanetary Base per level until that

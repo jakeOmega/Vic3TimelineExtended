@@ -349,7 +349,7 @@ sr_dome_breach_repairs = {
 
 # Extraplanetary Base room (colony modules design § 9): unit country modifiers,
 # one at a time, at multiplier = the average grade of the country's base levels
-# in percent, past its room at -50%. The one refresh site is sr_ebase_refresh
+# in percent, past its room at -75%. The one refresh site is sr_ebase_refresh
 # (sr_colony_module_effects.txt), monthly from the country pulse.
 # ======= Solar System Colonization - fleets (slice 6;
 # docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md § 5)

@@ -310,7 +310,7 @@ MODULE_LINES = (("a", "b", "hab", "port", "def"), FACILITY_TYPES[:5], FACILITY_T
 # grade of a level past all of its room, in percent.
 NEAR_EARTH_ROOM = 10
 NEAR_EARTH_TECH = "asteroid_mining"
-OVERFLOW_GRADE = -50
+OVERFLOW_GRADE = -75
 
 # The Moon's six worlds (lunar colonization design § 3): stage 0, at Earth's
 # location, never gated, founded the month their fleet leaves (§ 3.3).

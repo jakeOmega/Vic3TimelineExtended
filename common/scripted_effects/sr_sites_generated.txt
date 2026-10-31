@@ -37626,7 +37626,7 @@ sr_ebase_fill = {
 	# Past all of it
 	if = {
 		limit = { local_var:sr_eb_left > 0 }
-		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_left multiply = -50 add = local_var:sr_eb_sum } }
+		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_left multiply = -75 add = local_var:sr_eb_sum } }
 	}
 }
 

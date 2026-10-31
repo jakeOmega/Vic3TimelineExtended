@@ -397,8 +397,9 @@ painted all three, and the Moon's colony icon, which had been a copy of Mercury'
 - **Room before Asteroid Mining.** The near-Earth asteroids' 10 levels
   (`NEAR_EARTH_ROOM`) need Asteroid Mining. Before it, a country's room is its
   lunar (and any other) colonies' room. Levels past the room work at −50% as
-  today. So in era 10, a base without a lunar colony runs a weak method at half
-  output: possible (soft cap), rarely worth it.
+  today (−75% since 2026-10-31, owner). So in era 10, a base without a lunar
+  colony runs a weak method at half output (a quarter since): possible (soft
+  cap), rarely worth it.
   `sr_ebase_room_total`'s constant becomes conditional on the technology.
 - **Balance constraint:** `test_deep_sea_rebalance.py` compares the base with the
   Deep-Sea Mine era by era. Regolith Processing is era 10, when there is no
