@@ -57,7 +57,7 @@ innovation, innovation cap and prestige.
 | Mars Mission | Knowledge Economy | adds Mars Landing | 5,000 |
 | Solar Colonization | Cislunar Infrastructure | adds Solar System Colonization, the Moon and stages 1 and 2 | 10,000 |
 | Deep Space Exploration | Space Colonization | lets a country with no colony beyond the Moon start colonizing at stages 3 to 5 | 50,000 |
-| Interstellar Mission | Muon-Catalyzed Fusion Reactors | adds the Interstellar Probe | 100,000 |
+| Interstellar Mission | Compact Fusion Reactors | adds the Interstellar Probe | 100,000 |
 
 > Lowering the production method, or losing the building, fails every running
 > milestone the new method no longer supports and wipes its progress. The event
@@ -111,7 +111,7 @@ Program runs a method that supports it.
 | Moon Landing | Orbital Flight | Space Exploration (era 7) | 200 | 6% | ×2 |
 | Deep-Space Probe | Moon Landing | Space Exploration (era 7) | 150 | 6% | ×2 |
 | Mars Landing | Moon Landing | Knowledge Economy (era 9) | 450 | 9% | ×6 |
-| Interstellar Probe | Deep-Space Probe and Mars Landing | Muon-Catalyzed Fusion Reactors (era 12) | 600 | 9% | ×12 |
+| Interstellar Probe | Deep-Space Probe and Mars Landing | Compact Fusion Reactors (era 12) | 600 | 9% | ×12 |
 | Interstellar Probe: Awaiting Data | Interstellar Probe | none | 132 months | none | none |
 | Solar System Colonization | Moon Landing (Mars Landing for the sites beyond the Moon) | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
 
@@ -579,7 +579,7 @@ Propulsion technology loosens the windows step by step:
 | Cislunar Infrastructure (opens colonization) | In a window only. |
 | Asteroid Mining, or Shackleton's Propellant Depot | In a window as before; outside one, at a premium of extra progress, when your approach judges it worth it. |
 | Nuclear Thermal Propulsion | Outside a window at a smaller premium, once Asteroid Mining or Shackleton's Propellant Depot lets you launch there at all. |
-| Muon-Catalyzed Fusion Reactors | Any month, with no premium. |
+| Compact Fusion Reactors | Any month, with no premium. |
 | Antimatter Production, with an Antimatter Containment Facility built | Any month, with no premium. |
 
 The premium is the extra propellant an off-window transfer needs, so it climbs
@@ -628,7 +628,7 @@ reach its site, and claims it only when it lands. Your drive sets how long:
 |---|---|---|---|---|---|---|
 | Chemical | (from the start) | In a launch window | 9 months | 33 months | 16 years | 51 years |
 | Fusion | Fusion Power | In a launch window | 2 to 3 months | 7 to 9 months | about 3 years | 11 to 25 years |
-| Fusion torch | Muon-Catalyzed Fusion Reactors | Any month | 1 month | 2 months | 6 months | 1 year |
+| Fusion torch | Compact Fusion Reactors | Any month | 1 month | 2 months | 6 months | 1 year |
 | Antimatter | Antimatter Production, with an Antimatter Containment Facility built | Any month | 1 month | 1 month | 2 months | 4 months |
 
 Fusion's times are for a departure in the window; a fusion fleet that leaves
@@ -760,7 +760,7 @@ group, Module Fabrication, which starts on No Module Fabrication:
 |---|---|---|---|
 | Orbital Assembly | Cislunar Infrastructure | 1,500 and 10 | 5 |
 | Orbital Foundries | Space Colonization | 2,000 and 15 | 12 |
-| Fusion Shipyards | Muon-Catalyzed Fusion Reactors | 2,000 and 10 | 25 |
+| Fusion Shipyards | Compact Fusion Reactors | 2,000 and 10 | 25 |
 
 Each module within a colony's slots costs 100 points, so a fully staffed Space Program builds one every
 20, 8 or 4 months, more often with higher funding. Mare Imbrium's Mass Driver
@@ -1004,7 +1004,7 @@ every month, by its production method:
 |---|---|---|
 | Orbital Shipyards | Space Militarization | 0.5 |
 | Fusion Yards | Fusion Power | 1 |
-| Torch Yards | Muon-Catalyzed Fusion Reactors | 1.5 |
+| Torch Yards | Compact Fusion Reactors | 1.5 |
 | Antimatter Yards | Antimatter Production | 2 |
 
 The figure is scaled by staffing, and the method's tooltip shows it as Fleet
@@ -1288,7 +1288,7 @@ taking it from the high orbits first, and adds a little prestige:
 |---|---|---|---|
 | Active Debris Removal | Reusable Rocketry | 300 | 0.05 |
 | Laser Broom | Directed Energy Weapons | 300, and 500 electricity | 0.15 |
-| Fusion Sweepers | Muon-Catalyzed Fusion Reactors | 150 | 0.5 |
+| Fusion Sweepers | Compact Fusion Reactors | 150 | 0.5 |
 
 Each fully staffed Space Elevator level raises what you remove by 10%, up to
 +100% at ten levels, and its Launch Capacity makes every method cheaper in your

@@ -44,6 +44,12 @@ era_11 = { #near future
 	technology_cost = 800000
 }
 
-era_12 = { #far future
-	technology_cost = 2000000
+# Eras 12 and 13: docs/superpowers/specs/2026-10-31-era-13-technology-tree-design.md § 4.1 (era 12 cost 2,000,000
+# until then). gen_covert_tech_theft.py reads these costs and writes a covert_tech_grant_era_<N> per era.
+era_12 = { #medium-term future
+	technology_cost = 1500000
+}
+
+era_13 = { #speculative future
+	technology_cost = 3000000
 }

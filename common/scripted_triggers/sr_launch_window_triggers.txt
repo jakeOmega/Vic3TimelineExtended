@@ -25,7 +25,7 @@
 # jupiter, venus, saturn, uranus, neptune, kuiper). Country scope throughout.
 # ============================================================================
 
-# Fusion drives that leave any month: the torch (Muon-Catalyzed Fusion
+# Fusion drives that leave any month: the torch (Compact Fusion
 # Reactors' marker) or the antimatter drive.
 sr_launch_has_fusion = {
 	OR = {

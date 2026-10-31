@@ -175,7 +175,7 @@ anyone: they ride on the mission's workforce, as debris removal does.
 | None (default) | — | — | — | 0 |
 | Orbital Assembly | Directed Energy Weapons | 1,500 | 10 | 5 |
 | Lunar Foundries | Space Colonization | 2,000 | 15 | 12 |
-| Fusion Shipyards | Muon-Catalyzed Fusion Reactors | 2,000 | 10 | 25 |
+| Fusion Shipyards | Compact Fusion Reactors | 2,000 | 10 | 25 |
 
 The points are `country_sr_module_fabrication_add` (a new script-only type,
 workforce-scaled, so a half-staffed programme fabricates at half the rate).

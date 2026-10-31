@@ -1818,7 +1818,7 @@ society_technology_events.19 = {
 
 # ============================================================================
 # 13. TELEPATHIC COMMUNITIES (Events 20-21)
-# Tech: telepathic_communities (era_12)
+# Tech: telepathic_communities (era_13)
 # ============================================================================
 
 # Event 20: The First Hive-Mind Commune

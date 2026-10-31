@@ -4,9 +4,10 @@
 	texture = "gfx/interface/icons/invention_icons/artificial_intelligence.dds"
 	category = production
 
+	# Phase 1 of the era 13 spec (2026-10-31): Programmable Matter moved to era 13, so AGI follows Generative AI and
+	# Autonomous Vehicles until phase 2 gives it Self-Driving Laboratories and Humanoid Robotics (§ 5.5)
 	unlocking_technologies = {
 		generative_ai
-		programmable_matter
 		autonomous_vehicles
 	}
 
@@ -39,31 +40,6 @@ advanced_nanofabrication = {
 		# the census's infection treatment (#1045): nanomedicine, machines in the blood that find and destroy pathogens;
 		# with Personalized Medicine's it reaches the cap, 0.99
 		state_infection_treatment_add = 0.02
-		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
-		country_sr_colony_slots_add = 1
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
-molecular_assemblers = {
-	# Nanobot Assemblers PM for Tooling Workshops, Self-Replicating Assemblers for Advanced Material Fabricators,
-	# Utility Fog Phalanx unit, Molecular Scanners mobilization option
-	era = era_12
-	texture = "gfx/interface/icons/invention_icons/molecular_assemblers.dds"
-	category = production
-
-	unlocking_technologies = {
-		advanced_nanofabrication
-	}
-
-	modifier = {
-		country_max_weekly_construction_progress_add = 200
-		country_st_res_small_arms_decay_add = -0.002
-		country_st_res_fertilizer_decay_add = -0.0015
-		state_chronic_treatment_add = 0.12	# the census's chronic treatment (owner, 2026-10-20: the technologies take it to 0.99 by era 12)
 		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
 		country_sr_colony_slots_add = 1
 	}
@@ -120,32 +96,6 @@ orbital_manufacturing = {
 	}
 }
 
-programmable_matter = {
-	# Programmable Matter PM for Furniture and Textile Factories, Programmable Plastics
-	# PM for Glassworks, Bespoke Alloys PM for Steel Mills, Advanced Sel-Replicating Assemblers
-	# PM for Advanced Material Fabricator, Programmable Food Synthesis PM for Food Industries
-	era = era_12
-	texture = "gfx/interface/icons/invention_icons/programmable_matter.dds"
-	category = production
-
-	unlocking_technologies = {
-		molecular_assemblers
-		quantum_materials
-	}
-
-	modifier = {
-		country_max_weekly_construction_progress_add = 75
-		country_st_res_aeroplanes_decay_add = -0.007
-		country_st_res_tanks_decay_add = -0.006
-		country_st_res_artillery_decay_add = -0.002
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
-
 compact_fusion_reactors = {
 	# Spaceport PM for airport, Fusion SSTO Craft PM for Launch Facilities,
 	# Interstellar Mission PM for Space Program, DEW Tank unit
@@ -172,49 +122,6 @@ compact_fusion_reactors = {
 		country_st_res_aeroplanes_decay_add = -0.007
 		# a colony fleet's drive (slices 2-3 design § 1; sr_drive_level)
 		country_sr_drive_torch_bool = yes
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
-fusion_batteries = {
-	# Fusion Battery Motors PM for Motor Industries, Fusion Battery Vehicles PM for Automotive Industries,
-	# Fusion Battery Appliances PM for Consumer Appliance Industries
-	era = era_12
-	texture = "gfx/interface/icons/invention_icons/fusion_batteries.dds"
-	category = military
-
-	unlocking_technologies = {
-		compact_fusion_reactors
-	}
-
-	modifier = {
-		state_market_access_price_impact = 0.01
-		building_group_bg_trade_employee_mult = -0.04
-		military_formation_army_movement_speed_mult = 1
-		state_building_airport_max_level_add = 1
-		state_building_highway_max_level_add = 1
-		country_space_race_max_funding_add = 2
-		ship_movement_speed_mult = 0.10
-		ship_supply_efficiency_mult = 0.20
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
-space_elevator = {
-	# Space Elevator Construction Site building
-	era = era_12
-	texture = "gfx/interface/icons/invention_icons/space_elevator.dds"
-	category = military
-
-	unlocking_technologies = {
-		asteroid_mining
-		compact_fusion_reactors
 	}
 
 	ai_weight = {
@@ -260,55 +167,24 @@ space_based_solar_power = {
 	}
 }
 
-antimatter_production = {
-	# Orbital Precision Antimatter Strikes unit
+bioenhanced_soldiers = {
+	# Mandatory Augmentation law, Bioenhanced Marines and Neural Grafting (era 11 until the era 13 spec, 2026-10-31)
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/antimatter_production.dds"
+	texture = "gfx/interface/icons/invention_icons/bioenhanced_soldiers.dds"
 	category = military
 
 	unlocking_technologies = {
-		fusion_power
-		quantum_communications
+		swarm_technology
 	}
 
 	modifier = {
-		building_aerospace_industry_throughput_add = 0.25
-		military_formation_army_movement_speed_mult = 1
-		ship_hull_damage_mult = 0.20
-		ship_critical_hit_chance_add = 0.10
-		ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult = 0.30
-		# a colony fleet's drive (slices 2-3 design § 1; sr_drive_level)
-		country_sr_drive_antimatter_bool = yes
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
-biological_immortality = {
-	era = era_12
-	texture = "gfx/interface/icons/invention_icons/biological_immortality.dds"
-	category = society
-
-	unlocking_technologies = {
-		biohacking_and_human_augmentation
-		personalized_medicine
-	}
-
-	modifier = {
-		building_economy_of_scale_level_cap_add = 10
-		country_company_throughput_bonus_add = 0.25
-		# demographics phase 3 (the late-game design §8.4, call 19): under Full the census carries this line as the ageing
-		# rate and the pull below; outside Full the flat line stays
-		state_demog_absorbed_mortality_mult = -0.2
-		# the census's ageing stops for those in longevity care and the body winds back toward 35 (demographics phase 3,
-		# the late-game design's calls 3 and 4; -0.75 until 2026-10-16, when Synthetic Biology took 0.05 of it)
-		state_ageing_rate_add = -0.70
-		state_rejuvenation_add = 0.03
-		state_chronic_treatment_add = 0.12	# the census's chronic treatment (owner, 2026-10-20: the technologies take it to 0.99 by era 12)
-		character_health_add = 100
-		state_arable_land_mult = 0.25
+		country_weekly_innovation_max_add = 100
+		unit_recovery_rate_add = 0.5
+		unit_army_offense_mult = 0.1
+		unit_army_defense_mult = 0.1
+		country_institution_ministry_of_war_max_investment_add = 1
+		state_building_barrack_max_level_add = 100
+		character_battle_condition_exhausted_mult = -0.5
 	}
 
 	ai_weight = {
@@ -339,92 +215,6 @@ space_colonization = {
 	}
 }
 
-telepathic_communities = {
-	# Neural Lace Telepathy PM for Wireless Telecommunications Industries,
-	# AI-Mediated Mind Sharing PM for Software Industries
-	era = era_12
-	texture = "gfx/interface/icons/invention_icons/telepathic_communities.dds"
-	category = society
-
-	unlocking_technologies = {
-		neural_lace
-		mental_health_awareness
-	}
-
-	modifier = {
-		country_influence_mult = 1
-		country_max_companies_add = 2
-		country_radicals_from_conquest_mult = -0.5
-		country_infamy_generation_mult = -0.1
-		building_economy_of_scale_level_cap_add = 100
-		country_institution_ministry_of_foreign_affairs_max_investment_add = 2
-		country_intelligence_capacity_add = 5
-		country_covert_operation_efficiency_mult = 0.20
-		character_coup_strength_mult = -0.20
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
-mind_backups = {
-	era = era_12
-	texture = "gfx/interface/icons/invention_icons/mind_backups.dds"
-	category = society
-
-	unlocking_technologies = {
-		biological_immortality
-		neural_lace
-	}
-
-	modifier = {
-		building_economy_of_scale_level_cap_add = 10
-		country_max_weekly_construction_progress_add = 50
-		# demographics phase 3 (the late-game design §8.4, call 19): under Full the census carries this line as half the
-		# deaths from accidents, violence and work (the backed-up are restored); outside Full the flat line stays.
-		# Uploaded minds (call 2, 2026-10-19): only those in longevity care are backed up, so the two restore lines are
-		# their own census-only types, which the census takes x the state's share in care (1 - 0.5 x E)
-		state_demog_absorbed_mortality_mult = -0.05
-		state_backup_external_mortality_mult = -0.5
-		state_backup_work_mortality_mult = -0.5
-		character_health_add = 10000
-		state_literacy_growth_add = 0.0001
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
-post-scarcity_economy = {
-	# Smart LED Streetlights PM for Urban Centers,
-	# Post-Scarcity Economy law
-	era = era_12
-	texture = "gfx/interface/icons/invention_icons/post-scarcity_economy.dds"
-	category = society
-
-	unlocking_technologies = {
-		universal_basic_income
-	}
-
-	modifier = {
-		country_sol_expectations_target_add = 0.5
-		country_max_weekly_construction_progress_add = 50
-		state_migration_crowding_density_mult = 0.15
-		state_building_airport_max_level_add = 1
-		state_building_highway_max_level_add = 1
-		state_building_national_park_max_level_add = 1
-		country_institution_social_security_max_investment_add = 2
-		country_institution_ministry_of_the_environment_max_investment_add = 1
-		country_voting_power_mult = 0.2
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
 neural_lace = {
 	# Neural Lace Communications PM for Wired Telecommunications Industries
 	era = era_12
@@ -439,6 +229,59 @@ neural_lace = {
 		country_max_companies_add = 1
 		country_voting_power_mult = 0.2
 		state_literacy_growth_add = 0.0001
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+rejuvenation_therapies = {
+	# Life extension short of its end (era 13 spec § 5.1): senolytics, partial reprogramming and organ renewal slow
+	# ageing for those in longevity care, while Biological Immortality (era 13) stops it. RejoovenEsense company
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/biological_immortality.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		personalized_medicine
+	}
+
+	modifier = {
+		# the census's chronic treatment: 0.75 after era 11, 0.90 after this; era 13's two carriers take it to the cap
+		# (era 13 spec call 6, which updates the owner's call of 2026-10-20 that the cap came in era 12)
+		state_chronic_treatment_add = 0.15
+		# the census's ageing rate for those in longevity care: era 11's 0.70 to half speed (era 13 spec § 5.1; the
+		# line came from Biological Immortality's -0.70)
+		state_ageing_rate_add = -0.20
+		# its share of Biological Immortality's flat line outside Full (the late-game design §8.4, call 19): the ageing
+		# line split, so the -0.40 mortality budget's total is unchanged
+		state_demog_absorbed_mortality_mult = -0.05
+		character_health_add = 25
+		country_institution_health_system_max_investment_add = 1
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+post_work_society = {
+	# Opens the Post-Scarcity Transition journal entry (era 13 spec § 5.3); Post-Scarcity Economy (era 13) requires it.
+	# Automation has made paid work optional for most: people turn to art, study, care and politics
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/universal_basic_income.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		universal_basic_income
+	}
+
+	modifier = {
+		country_sol_expectations_target_add = 0.25
+		country_institution_social_security_max_investment_add = 1
+		building_art_academy_throughput_add = 0.2
+		country_voting_power_mult = 0.1
 	}
 
 	ai_weight = {

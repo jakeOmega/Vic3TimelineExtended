@@ -200,7 +200,7 @@ units](13-military.md#new-combat-units).
 | Heavy Tanks | Main Battle Tanks | Guided Missiles | 7 | 1000 |
 | Heavy Tanks | Reactive Armor Tank | Advanced Materials Armor | 8 | 1000 |
 | Heavy Tanks | Railgun Tank | Hypersonic Weapons | 10 | 1000 |
-| Heavy Tanks | DEW Tank | Muon-Catalyzed Fusion Reactors | 12 | 1000 |
+| Heavy Tanks | DEW Tank | Compact Fusion Reactors | 12 | 1000 |
 | Aircraft | Propeller Aircraft | Bombing Aircraft | 6 | 200 |
 | Aircraft | Jet-Powered Aircraft | Jet Engine Technology | 7 | 200 |
 | Aircraft | Stealth Aircraft | Stealth Technology | 8 | 200 |

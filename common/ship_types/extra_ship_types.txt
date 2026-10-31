@@ -33,7 +33,7 @@
 #   era 11 directed_energy_weapons      → pulsed_laser_escort               (escort)
 #   era 11 swarm_technology             → swarm_coordination_vessel         (capital/support)
 #   era 11 swarm_technology             → autonomous_swarm_submarine        (raider, terminal)
-#   era 12 antimatter_production        → antimatter_battleship             (capital, terminal)
+#   era 13 antimatter_production        → antimatter_battleship             (capital, terminal)
 #   era 12 orbital_weapon_platforms     → orbital_support_amphibious_mothership (troop, terminal)
 #
 # Power projection (ship_power_projection_add, vanilla 1.14.5's per-ship value):
@@ -1635,7 +1635,7 @@ ship_type_autonomous_swarm_submarine = {
 }
 
 
-### ANTIMATTER BATTLESHIP — era 12, antimatter_production
+### ANTIMATTER BATTLESHIP — era 13, antimatter_production
 ### Capital, terminal. Mass-driver / antimatter-armed late-game flagship.
 ship_type_antimatter_battleship = {
 	ship_group = ship_group_capital_ships
