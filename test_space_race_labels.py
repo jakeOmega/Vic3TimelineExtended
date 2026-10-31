@@ -444,6 +444,12 @@ CELLS = {
     "a module's name on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'block "row_name"'),
         r"je_space_race_widget_mod_name_\w+"),
+    "the colonization tabs (te_sr_tab_button)": (
+        ("te_sr_tab_button", 'block "tab_label"'),
+        r"je_space_race_widget_tab_(fleets|colonies)"),
+    "the wide colonization tabs (te_sr_tab_button_wide)": (
+        ("te_sr_tab_button_wide", 'block "tab_label"'),
+        r"je_space_race_widget_tab_(mission|system)"),
     "the colony views (te_sr_colony_view_button)": (
         ("te_sr_colony_view_button", 'block "view_label"'),
         r"je_space_race_widget_cv_(people|modules|autonomy|defences|back)"),

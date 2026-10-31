@@ -119,6 +119,18 @@ def _type_body(text, name):
     return text[m.end():_close(text, m.end() - 1)]
 
 
+def _instances(section, type_name):
+    """The bodies of every `type_name = { ... }` instance in a section."""
+    out = []
+    for m in re.finditer(rf"\b{type_name} = \{{", section):
+        depth, i = 1, m.end()
+        while depth:
+            depth += {"{": 1, "}": -1}.get(section[i], 0)
+            i += 1
+        out.append(section[m.end():i])
+    return out
+
+
 def _root(text, name):
     """A journal root as the journal renders it: the wrapper, and the body of the
     milestone's own type it wraps (te_sr_<m>_overview, te_sr_<m>_status), which
@@ -468,9 +480,11 @@ class ColoniesTest(unittest.TestCase):
         Colonization Works; the old per-aspect sections are gone (SPC-5)."""
         status = _type_body(self.gui, "te_sr_solar_colonization_status")
         self.assertIn("direction = vertical", status.split("\n\n")[0])
-        self.assertEqual(re.findall(r"^\t\t(te_sr_sec_\w+) = \{\}", status, re.M),
-                         ["te_sr_sec_colony_fleets", "te_sr_sec_colonies", "te_sr_sec_space_command",
-                          "te_sr_sec_space_fleets", "te_sr_sec_solar_system", "te_sr_sec_how_colonies"])
+        # Across the tabs (UI pass design § 11), Mission Control's own launch
+        # windows aside.
+        self.assertEqual([s for s in re.findall(r"^\t+(te_sr_sec_\w+) = \{\}", status, re.M) if s != "te_sr_sec_windows"],
+                         ["te_sr_sec_colony_fleets", "te_sr_sec_space_command", "te_sr_sec_space_fleets",
+                          "te_sr_sec_colonies", "te_sr_sec_solar_system", "te_sr_sec_how_colonies"])
         self.assertLess(status.index("te_sr_status_sections = {"), status.index("te_sr_sec_colony_fleets = {}"))
         for gone in ("te_sr_sec_settlers", "te_sr_sec_modules", "te_sr_sec_autonomy", "te_sr_sec_colony_defences",
                      "te_sr_settler_row", "te_sr_module_row", "te_sr_autonomy_row", "te_sr_defence_row"):
@@ -1276,6 +1290,80 @@ class QueueNextModuleTest(unittest.TestCase):
         self.assertLess(lost, covered)
         self.assertLess(covered, no_rate)
         self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "2", "3"])
+
+class TabTest(unittest.TestCase):
+    """The colonization status's tabs (UI pass design § 11): a row of four
+    buttons on the client-side sr_tab (absent for Mission Control), and one
+    wrapper per tab around its sections, inside te_sr_solar_colonization_status
+    so both hosts draw them."""
+
+    TABS = (("mission", "[Not( GetVariableSystem.Exists('sr_tab') )]", ["te_sr_status_sections"]),
+            ("fleets", "[GetVariableSystem.HasValue('sr_tab', 'fleets')]",
+             ["te_sr_sec_colony_fleets", "te_sr_sec_space_command", "te_sr_sec_space_fleets"]),
+            ("colonies", "[GetVariableSystem.HasValue('sr_tab', 'colonies')]", ["te_sr_sec_colonies"]),
+            ("system", "[GetVariableSystem.HasValue('sr_tab', 'system')]", ["te_sr_sec_solar_system", "te_sr_sec_how_colonies"]))
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.status = _type_body(cls.gui, "te_sr_solar_colonization_status")
+
+    def _wrapper(self, visible):
+        i = self.status.index(f'visible = "{visible}"')
+        opener = self.status.rindex("flowcontainer = {", 0, i)
+        depth, j = 0, opener + len("flowcontainer = ")
+        while True:
+            depth += {"{": 1, "}": -1}.get(self.status[j], 0)
+            if depth == 0:
+                return self.status[opener:j]
+            j += 1
+
+    def test_each_tab_holds_its_sections(self):
+        starts = []
+        for key, visible, sections in self.TABS:
+            with self.subTest(tab=key):
+                body = self._wrapper(visible)
+                found = [x for x in re.findall(r"^\t+(te_sr_sec_\w+|te_sr_status_sections) = \{", body, re.M)
+                         if x != "te_sr_sec_windows"]
+                self.assertEqual(found, sections)
+                starts.append(self.status.index(body))
+        self.assertEqual(starts, sorted(starts), "the tabs' wrappers are out of order")
+        # Every section sits in a tab: none left at the status's own level.
+        self.assertEqual(re.findall(r"^\t\t(te_sr_sec_\w+|te_sr_status_sections) = \{", self.status, re.M), [])
+
+    def test_the_default_tab_is_mission_control(self):
+        first = re.search(r'flowcontainer = \{\s*visible = "([^"]+)"\s*direction = vertical', self.status)
+        self.assertEqual(first.group(1), "[Not( GetVariableSystem.Exists('sr_tab') )]")
+
+    def test_each_button_sets_its_tab_and_greys_on_it(self):
+        row = self.status[:self.status.index(self._wrapper(self.TABS[0][1]))]
+        buttons = _instances(row, r"te_sr_tab_button(?:_wide)?")
+        self.assertEqual(len(buttons), 4)
+        wants = (("mission", "GetVariableSystem.Exists('sr_tab')", "[GetVariableSystem.Clear('sr_tab')]"),
+                 ("fleets", "Not( GetVariableSystem.HasValue('sr_tab', 'fleets') )", "[GetVariableSystem.Set('sr_tab', 'fleets')]"),
+                 ("colonies", "Not( GetVariableSystem.HasValue('sr_tab', 'colonies') )", "[GetVariableSystem.Set('sr_tab', 'colonies')]"),
+                 ("system", "Not( GetVariableSystem.HasValue('sr_tab', 'system') )", "[GetVariableSystem.Set('sr_tab', 'system')]"))
+        for button, (key, enabled, onclick) in zip(buttons, wants):
+            with self.subTest(tab=key):
+                self.assertIn(f'enabled = "[{enabled}]"', button)
+                self.assertIn(f'onclick = "{onclick}"', button)
+                self.assertIn(f'text = "je_space_race_widget_tab_{key}"', button)
+                self.assertIn(f'tooltip = "je_space_race_widget_tab_{key}_tt"', button)
+        # Set and Clear, never Toggle (FlagTest counts Toggle's flags).
+        self.assertNotIn("Toggle('sr_tab')", self.gui)
+
+    def test_the_tab_row_shows_while_the_entry_runs(self):
+        row = self.status[:self.status.index(self._wrapper(self.TABS[0][1]))]
+        m = re.search(r'flowcontainer = \{\s*direction = horizontal\s*parentanchor = hcenter\s*spacing = 4\s*visible = "([^"]+)"', row)
+        self.assertIsNotNone(m)
+        self.assertEqual(m.group(1), "[JournalEntry.IsActive]")
+        # Four buttons in the panel's 520: two of 96, two of 148, three gaps.
+        widths = {t: int(re.search(r"size = \{ (\d+) 28 \}", _type_body(self.gui, t)).group(1))
+                  for t in ("te_sr_tab_button", "te_sr_tab_button_wide")}
+        used = [widths["te_sr_tab_button_wide" if "_wide = {" in m.group(0) else "te_sr_tab_button"]
+                for m in re.finditer(r"\bte_sr_tab_button(?:_wide)? = \{", row)]
+        self.assertLessEqual(sum(used) + 4 * (len(used) - 1), 520)
+
 
 if __name__ == "__main__":
     unittest.main()

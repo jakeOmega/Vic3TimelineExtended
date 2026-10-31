@@ -141,7 +141,7 @@ a note stands in their place. Two sections of its own follow, Space Powers and
 Orbit (see [The Space Race tab](#the-space-race-tab)), and How the Space Race
 Works comes once at the end.
 
-![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies.](images/solar_system_colonization_tab.png)
+![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies (since moved to the Colonies tab).](images/solar_system_colonization_tab.png)
 
 The overview is always shown. Its first row is three icons, each with a label
 under it:
@@ -210,9 +210,16 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
 
-Solar System Colonization has more sections below Rivals: Colony Fleets and
-Colonies, then under Full Colonies Space Command and Space Fleets, then Solar
-System, and How Solar Colonization Works (collapsed), which explains them.
+Below its overview, Solar System Colonization has four tabs, and the one you
+were last on stays chosen while you play:
+
+| Tab | Holds |
+|---|---|
+| Mission Control | Mission Control (with Next Windows) and Rivals, as every milestone has. Shown first. |
+| Fleets | Colony Fleets, then under Full Colonies Space Command and Space Fleets. |
+| Colonies | Colonies. |
+| Solar System | Solar System, then How Solar Colonization Works (collapsed), which explains them. |
+
 Colonies (open) has a box for every site you hold, with Colonies Held (out of
 40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a

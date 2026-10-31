@@ -620,3 +620,19 @@ No post-setback cooldown, self-government at 50, the grade beside Bases, the que
    rate and the head's price (100, more past the colony's slots).
 6. **Solar System's place.** Solar System sits below Space Fleets (Colonies under Simple Colonies), just above How
    Solar Colonization Works, in the journal and in the Timeline Extended window's Space Race tab.
+
+## The owner's UI pass: tabs (PR 8, 2026-10-31)
+
+Solar System Colonization's four tabs (UI pass design § 11; `docs/systems/mod_systems/space_race.md` § Tabs).
+**Fallback** if the tab row misbehaves in one host: drop the wrappers' `visible`, which brings back the one long panel.
+
+1. **The default.** A new session opens Solar System Colonization on Mission Control: the approach, funding, setbacks,
+   Next Windows and Rivals, with the overview above the tab row. The Mission Control button is greyed.
+2. **Each tab.** Fleets shows Colony Fleets, and under Full Colonies Space Command and Space Fleets; Colonies shows
+   Colonies; Solar System shows Solar System and How Solar Colonization Works. Each tab's button greys while it is
+   shown; the labels read in full.
+3. **Remembered.** Pick Colonies, close the journal and reopen it: still on Colonies. The same in the Timeline Extended
+   window's Space Race tab, which shares the choice.
+4. **Both hosts.** The tab row and every tab draw in the journal entry and in the Timeline Extended window.
+5. **Other milestones.** The Moon Base, Mars Landing and the rest keep their one panel, with no tab row.
+
