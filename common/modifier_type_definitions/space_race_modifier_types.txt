@@ -74,7 +74,7 @@ country_sr_colony_slots_add = {
 # technology that brings it, so its tooltip names the drive (the owner,
 # 2026-10-30). sr_drive_level reads them (sr_launch_window_values.txt), and
 # sr_launch_has_fusion and sr_launch_has_antimatter (sr_launch_window_triggers.txt):
-# the fusion drive on Fusion Power, the torch on Muon-Catalyzed Fusion Reactors,
+# the fusion drive on Fusion Power, the torch on Compact Fusion Reactors,
 # the antimatter drive on Antimatter Production (with an Antimatter Containment
 # Facility to fill its tanks). The engine consumes nothing.
 country_sr_drive_fusion_bool = {

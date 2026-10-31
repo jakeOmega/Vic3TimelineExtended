@@ -215,7 +215,7 @@ combat_unit_type_grey_goo = {
 		unit_provinces_lost_mult = -0.25
 	}
 
-	unlocking_technologies = { molecular_assemblers }  # era 12
+	unlocking_technologies = { molecular_assemblers }  # era 13
 
 	combat_unit_image = {
 		# fallback
@@ -479,7 +479,7 @@ combat_unit_type_orbital_precision_antimatter_strikes = {
 		unit_devastation_mult = 6
 	}
 
-	unlocking_technologies = { antimatter_production }  # era 12
+	unlocking_technologies = { antimatter_production }  # era 13
 
 	combat_unit_image = {
 		texture = "gfx/unit_illustrations/orbital2.dds"
@@ -1260,7 +1260,7 @@ combat_unit_type_networked_marines = {
 	}
 }
 
-### Bioenhanced Marines — era 11 (bioenhanced_soldiers)
+### Bioenhanced Marines — era 12 (bioenhanced_soldiers)
 ### Gene-modified, pharmacologically-augmented operators. Small elite detachments
 ### with combat output rivaling much larger conventional formations.
 combat_unit_type_bioenhanced_marines = {
@@ -1274,12 +1274,12 @@ combat_unit_type_bioenhanced_marines = {
 		}
 	}
 
-	# Combined-arms-in-miniature: 60% grey_goo (era 12 nanobot infantry) + 10% each
-	# of orbital_precision_antimatter_strikes (era 12), DEW_tank (era 12),
+	# Combined-arms-in-miniature: 60% grey_goo (era 13 nanobot infantry) + 10% each
+	# of orbital_precision_antimatter_strikes (era 13), DEW_tank (era 12),
 	# holographic_ambush_combat_vehicle (era 11, last available light tank), and
 	# orbital_weapons_platforms (era 12). Goods +25% elite premium; offense/defense
-	# +10% combat bonus. Four of the five unlock an era after these marines, so this
-	# mix borrows goods from units not yet available. Bioenhanced marine fireteams operate alongside their own
+	# +10% combat bonus. Two of the five (the nanobot infantry and the antimatter strikes) unlock an era
+	# after these marines, so this mix borrows goods from units not yet available. Bioenhanced marine fireteams operate alongside their own
 	# nanoswarm support, energy-weapon armor, and orbital strike platforms.
 	upkeep_modifier = {
 		goods_input_small_arms_add = 22                       # Price:   60, Total cost:  1320.0 (2.41%)
@@ -1306,7 +1306,7 @@ combat_unit_type_bioenhanced_marines = {
 		unit_kill_rate_add = 0.25
 	}
 
-	unlocking_technologies = { bioenhanced_soldiers }  # era 11
+	unlocking_technologies = { bioenhanced_soldiers }  # era 12
 
 	combat_unit_image = {
 		texture = "gfx/unit_illustrations/bioenhanced_marines.dds"

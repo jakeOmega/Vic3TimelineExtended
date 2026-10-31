@@ -764,7 +764,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "lab-grown_food": {"subject": "a round petri dish holding a pink cultured meat steak", "seed": 0},
         "personalized_medicine": {"subject": "a single capsule pill with a DNA helix pattern on its shell", "seed": 1},
         "universal_digital_identity": {"subject": "a plain pale blue identity card with a glowing blue fingerprint and a gold chip", "seed": 1},
-        # era 12
+        # eras 12 and 13 (era 13 split from era 12, 2026-10-31)
         "antimatter_production": {"subject": "a glowing magnetic containment bottle with a bright violet sphere suspended inside", "seed": 1},
         "compact_fusion_reactors": {"subject": "a compact barrel-sized cylindrical fusion reactor core glowing blue-white at its centre", "seed": 1},
         "fusion_batteries": {"subject": "a chunky cylindrical battery cell with a glowing sun-like core behind a glass window", "seed": 3},
@@ -782,6 +782,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "neural_lace": {"subject": "a delicate glowing silver mesh net shaped like a human brain", "seed": 1},
         "post-scarcity_economy": {"subject": "an overflowing cornucopia horn spilling fruit, bread and gleaming gadgets", "seed": 1},
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
+        "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
+        "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
     "treaty_article": {

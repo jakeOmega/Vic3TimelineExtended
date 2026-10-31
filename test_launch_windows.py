@@ -822,7 +822,7 @@ class TransitTest(unittest.TestCase):
         types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
         for era, tech, drive in (("era_11.txt", "fusion_power", "fusion"),
                                  ("era_12.txt", "compact_fusion_reactors", "torch"),
-                                 ("era_12.txt", "antimatter_production", "antimatter")):
+                                 ("era_13.txt", "antimatter_production", "antimatter")):
             name = f"country_sr_drive_{drive}_bool"
             with self.subTest(drive=drive):
                 definition = _block(types, name)

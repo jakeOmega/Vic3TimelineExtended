@@ -1338,8 +1338,8 @@ class ModulesTest(unittest.TestCase):
         types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
         self.assertIn("script_only = yes", _block(types, name))
         carriers = {"era_11.txt": ("nuclear_thermal_propulsion",),
-                    "era_12.txt": ("orbital_manufacturing", "advanced_nanofabrication", "space_colonization",
-                                   "molecular_assemblers")}
+                    "era_12.txt": ("orbital_manufacturing", "advanced_nanofabrication", "space_colonization"),
+                    "era_13.txt": ("molecular_assemblers",)}
         for era, techs in carriers.items():
             text = _strip(_raw("common", "technology", "technologies", era))
             for tech in techs:

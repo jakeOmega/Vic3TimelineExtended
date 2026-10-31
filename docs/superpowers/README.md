@@ -48,7 +48,7 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 
 | Doc | Status | What's left |
 |-----|--------|-------------|
-| [specs/2026-10-31-era-13-technology-tree-design.md](specs/2026-10-31-era-13-technology-tree-design.md): today's era 12 split into a grounded era 12 and a hard-science-fiction era 13 (costs 1.5M and 3M), Bioenhanced Soldiers up from 11, sixteen new technologies (the era 11 AI wave, Rejuvenation Therapies, Post-Work Society, Compact and Aneutronic Fusion, Von Neumann Machines, the identity line to Self-Directed Evolution), a law-group trio (Bodily Autonomy, Automation Policy, Frontier AI Control), Superintelligence reserved for its own design | Design only (2026-10-31): the owner's calls in § 1 | All of it: phase 1 (the split), phase 2 (the AI wave), phase 3 (new content, one PR per item) |
+| [specs/2026-10-31-era-13-technology-tree-design.md](specs/2026-10-31-era-13-technology-tree-design.md): today's era 12 split into a grounded era 12 and a hard-science-fiction era 13 (costs 1.5M and 3M), Bioenhanced Soldiers up from 11, sixteen new technologies (the era 11 AI wave, Rejuvenation Therapies, Post-Work Society, Compact and Aneutronic Fusion, Von Neumann Machines, the identity line to Self-Directed Evolution), a law-group trio (Bodily Autonomy, Automation Policy, Frontier AI Control), Superintelligence reserved for its own design | Phase 1 built (2026-10-31): the split, Rejuvenation Therapies, Post-Work Society, the repairs | Phase 1's observer runs (§ 4.1, `docs/testing/era-13-playtest.md`), phase 2 (the AI wave), phase 3 (new content, one PR per item) |
 
 ## Archived — `archive/`
 

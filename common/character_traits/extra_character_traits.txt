@@ -7,7 +7,7 @@
 # (see common/technology/technologies/era_8.txt..era_11.txt).
 #
 # trait_biological_immortality, trait_mind_backups removed for the same reason:
-# post-1.13 the era_12 immortality techs apply character_health_add directly
+# post-1.13 the era_13 immortality techs apply character_health_add directly
 # via tech-scope cascade, so the per-character trait wrapper was redundant
 # (and was double-counting the modifier on every character).
 

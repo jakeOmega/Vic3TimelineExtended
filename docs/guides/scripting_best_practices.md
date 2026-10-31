@@ -4055,13 +4055,17 @@ Some modifiers are summed across multiple techs to reach a deliberate
 end-game total. Examples found in this codebase:
 - `state_mortality_mult` totals exactly −0.40 across `modern_vaccines`
   (era_6) + `antibiotic_mass_production` (era_7) + `mental_health_awareness`
-  (era_10) + `biological_immortality` (era_12) + `mind_backups` (era_12),
-  designed so mortality hits zero with brain uploading. All five sit on the
-  census's script-only types, which apply as `state_mortality_mult` outside the
-  Demographics rule's Full setting: the two medical techs' on
-  `state_demog_absorbed_mortality_mult` (under Full the census's treatment
-  terms, `state_<cause>_treatment_add`, carry medicine instead), the other three
-  on `state_demog_ontop_mortality_mult` (under Full at the census's rate). New
+  (era_10) + `rejuvenation_therapies` (era_12) + `biological_immortality`
+  (era_13) + `mind_backups` (era_13), designed so mortality hits zero with brain
+  uploading. When the era 13 split (2026-10-31) moved Biological Immortality up
+  an era, its −0.20 split with the ageing line it stands for, −0.05 to
+  Rejuvenation Therapies and −0.15 kept: a move between carriers, not a net
+  addition. All six sit on the census's script-only
+  `state_demog_absorbed_mortality_mult`, which applies as `state_mortality_mult`
+  outside the Demographics rule's Full setting; under Full the census's own terms
+  carry them instead (the treatment terms, `state_<cause>_treatment_add`, for the
+  two medical techs; the ageing ladder and the backups for the late ones, since
+  the late-game design's §8.4 moved those off the on-top family). New
   medicine goes in as census treatment. A tech, law or institution must not
   carry an engine birth or mortality field directly: put the line on a
   `state_demog_*` type (`demographics_engine_line_types.txt`), or

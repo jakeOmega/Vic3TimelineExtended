@@ -35,7 +35,7 @@ sr_launch_approach_weight = {
 }
 
 # A colony fleet's drive (slices 2-3 design § 1), the best of four: 0 chemical,
-# 1 fusion (Fusion Power), 2 the fusion torch (Muon-Catalyzed Fusion Reactors),
+# 1 fusion (Fusion Power), 2 the fusion torch (Compact Fusion Reactors),
 # 3 antimatter (Antimatter Production and an Antimatter Containment Facility).
 # Each technology carries its drive's marker, so its tooltip names the drive,
 # and this reads the markers (country_sr_drive_<drive>_bool,
@@ -122,7 +122,7 @@ sr_window_disp_cache_month = {
 
 # The colonization overview's Next Window cell (audit SPC-6): the months to the
 # stage's next free window (999 while no world of the stage is left), and 1
-# while windows apply at all (before Muon-Catalyzed Fusion Reactors).
+# while windows apply at all (before Compact Fusion Reactors).
 sr_window_disp_next = {
 	value = sr_window_stage_wait
 	max = 999
