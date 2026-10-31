@@ -193,3 +193,17 @@ Industry's freight is now local Transportation (× 50/30), Merchant Marine is bo
 | **Railway and port levels.** Where levels grow, and the world's port levels against the #1050 saves. | Railways grow where Transportation is dear. Port levels fall several-fold to match trade's demand; no state piles up levels with a large surplus. | Ports still piling up: something else still buys Merchant Marine (list its consumers in a save). |
 | **Retooling.** Passenger-group switching and the `pm_retooling` share on ports and railways. | Not above the #933/#1050 baselines. | Ports flipping between passenger tiers: reconsider `most_productive` on `pmg_water_personal_transport` with the new inputs. |
 | **Bankruptcy.** Bankrupt AI countries. | No more than the 80–83 of about 110 in the #1050 saves. | More: rank their deficits by building type. |
+
+## Public Housing (2026-10-31)
+
+`building_public_housing` (`common/buildings/extra_buildings.txt`) raises its state's crowding threshold through Urban
+Engineering. Its `ai_value` is 0 until the state's `migration_crowding_ratio` passes 0.1, then 300 + 2,000 × the
+ratio, at most 4,300, and its group is `most_productive` with each method's `ai_value` double the last
+(`docs/systems/mod_systems/pops_and_migration.md` § Public Housing). No self-check: the modifier is the one the
+technologies already grant, and the tile's breakdown shows it.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The threshold.** Build two levels in a crowded state and hover the Migration Crowding tile. | Urban Engineering's breakdown lists Public Housing at +10 a staffed level (Model Dwellings), and the threshold rises by 10,000 people a level × (1 + tolerance) at the next yearly refresh. | No line: the state modifier doesn't reach the state from a government building's method; check `state_modifiers` on the method. |
+| **The AI builds it.** Observer run to about 1900; count AI Public Housing levels in the states with the highest crowding ratio (`building="building_public_housing"` records under `building_manager` in a plain-text save). | Some levels in the most crowded states, none in states below their threshold. | None anywhere: the construction AI ignores the value (`scripting_best_practices.md` § AI and Cost-Only Buildings); add a monthly AI pass that queues a level in the most crowded state with `start_building_construction`, as the Grid Transfer Station's does. |
+| **The AI's method.** The same run, after Steel-Frame Buildings. | AI housing on the newest method it has the technology and goods for, not stuck on Model Dwellings. | It holds the first method: `most_productive` with cost-only methods doesn't follow `ai_value`; try `ai_selection` unset. |

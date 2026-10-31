@@ -989,6 +989,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_solar_receiver": {"subject": "a vast circular field of dark mesh antenna panels in rows on a desert plain around a central control building, a pale beam of light descending from the sky onto its centre", "seed": 0},
         "building_antimatter_facility": {"subject": "a futuristic research complex around a huge ring-shaped particle accelerator, with a round steel and glass containment dome at its centre holding a small glowing violet sphere", "seed": 0},
         "building_antimatter_engine": {"subject": "a colossal futuristic rocket engine on a concrete test stand, its polished steel nozzle glowing violet, with fuel tanks, pipes and a gantry beside it", "seed": 0},
+        # On vanilla's urban_center.dds until rendered (2026-10-31).
+        "building_public_housing": {"subject": "a city block of plain six-storey brick apartment buildings around a shared courtyard with trees and washing lines, a newer tower block of pale concrete rising behind them", "seed": None},
         "te_construction_market_site": {"subject": "a construction site with cranes, scaffolding and stacked building materials", "seed": KEEP},  # a construction camp fits
         # Industry variants: vanilla's industrial layout, the plant behind and
         # its product large in the foreground. They were on goods icons.

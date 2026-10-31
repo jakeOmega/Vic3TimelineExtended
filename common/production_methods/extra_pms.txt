@@ -22060,3 +22060,236 @@ pm_focus_wartime_mobilization = {
 		}
 	}
 }
+
+# ============================================================================
+# PUBLIC HOUSING (building_public_housing, extra_buildings.txt)
+# ============================================================================
+# Each method grants its state Urban Engineering
+# (state_building_construction_sector_max_level_add, relocalized), which
+# Migration Crowding counts as 1,000 people a point before tolerance
+# (migration_crowding_urban_engineering_capacity, extra_script_values.txt).
+# Workforce-scaled, so an unstaffed level houses no one. Later methods house
+# more people a level for more and dearer goods; per 1,000 people housed the
+# goods cost about the same on every method.
+# docs/systems/mod_systems/pops_and_migration.md § Public Housing.
+pm_public_housing_model_dwellings = {
+	texture = "gfx/interface/icons/production_method_icons/wooden_buildings.dds"
+	ai_value = 1000
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_laborers_add = 700
+			building_employment_clerks_add = 200
+			building_employment_bureaucrats_add = 100
+		}
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 15                            # Price:   20, Total cost:   300.0 (100.00%)
+			# Output goods
+			# Total input cost: 300.0
+			# Total output cost: 0
+			# Profit: -300.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1000
+			# Wage breakeven: -0.30
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_construction_sector_max_level_add = 10
+		}
+	}
+}
+
+pm_public_housing_sanitary_tenements = {
+	texture = "gfx/interface/icons/production_method_icons/iron_frame_buildings.dds"
+	ai_value = 2000
+
+	unlocking_technologies = {
+		modern_sewerage
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_laborers_add = 650
+			building_employment_machinists_add = 100
+			building_employment_clerks_add = 150
+			building_employment_bureaucrats_add = 100
+		}
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 10                            # Price:   20, Total cost:   200.0 (33.33%)
+			goods_input_iron_add = 5                             # Price:   40, Total cost:   200.0 (33.33%)
+			goods_input_glass_add = 5                            # Price:   40, Total cost:   200.0 (33.33%)
+			# Output goods
+			# Total input cost: 600.0
+			# Total output cost: 0
+			# Profit: -600.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1000
+			# Wage breakeven: -0.60
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_construction_sector_max_level_add = 15
+		}
+	}
+}
+
+pm_public_housing_steel_frame_apartments = {
+	texture = "gfx/interface/icons/production_method_icons/steel_frame_buildings.dds"
+	ai_value = 4000
+
+	unlocking_technologies = {
+		steel_frame_buildings
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_laborers_add = 550
+			building_employment_machinists_add = 200
+			building_employment_clerks_add = 150
+			building_employment_bureaucrats_add = 100
+		}
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (55.56%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (44.44%)
+			# Output goods
+			# Total input cost: 900.0
+			# Total output cost: 0
+			# Profit: -900.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1000
+			# Wage breakeven: -0.90
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_construction_sector_max_level_add = 20
+		}
+	}
+}
+
+pm_public_housing_high_rise_apartments = {
+	texture = "gfx/interface/icons/production_method_icons/arc_welded_buildings.dds"
+	ai_value = 8000
+
+	unlocking_technologies = {
+		elevator
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_laborers_add = 450
+			building_employment_machinists_add = 250
+			building_employment_engineers_add = 50
+			building_employment_clerks_add = 150
+			building_employment_bureaucrats_add = 100
+		}
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (41.67%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (33.33%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (25.00%)
+			# Output goods
+			# Total input cost: 1200.0
+			# Total output cost: 0
+			# Profit: -1200.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1000
+			# Wage breakeven: -1.20
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_construction_sector_max_level_add = 30
+		}
+	}
+}
+
+pm_public_housing_tower_blocks = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p5.dds"
+	ai_value = 16000
+
+	unlocking_technologies = {
+		prefabricated_construction
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_laborers_add = 350
+			building_employment_machinists_add = 300
+			building_employment_engineers_add = 100
+			building_employment_clerks_add = 150
+			building_employment_bureaucrats_add = 100
+		}
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (46.88%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (25.00%)
+			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (28.12%)
+			# Output goods
+			# Total input cost: 1600.0
+			# Total output cost: 0
+			# Profit: -1600.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1000
+			# Wage breakeven: -1.60
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_construction_sector_max_level_add = 45
+		}
+	}
+}
+
+pm_public_housing_arcologies = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p7.dds"
+	ai_value = 32000
+
+	unlocking_technologies = {
+		advanced_structural_engineering
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_machinists_add = 300
+			building_employment_engineers_add = 300
+			building_employment_clerks_add = 300
+			building_employment_bureaucrats_add = 100
+		}
+		workforce_scaled = {
+			# Input goods
+			goods_input_advanced_materials_add = 0.5             # Price: 4000, Total cost:  2000.0 (66.89%)
+			goods_input_electricity_add = 25                     # Price:   30, Total cost:   750.0 (25.08%)
+			goods_input_robotics_add = 3                         # Price:   80, Total cost:   240.0 (8.03%)
+			# Output goods
+			# Total input cost: 2990.0
+			# Total output cost: 0
+			# Profit: -2990.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 1000
+			# Wage breakeven: -2.99
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_building_construction_sector_max_level_add = 70
+		}
+	}
+}

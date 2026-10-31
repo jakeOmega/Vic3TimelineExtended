@@ -58,6 +58,21 @@ people before crowding. That barely moves a large farming province, but it
 doubles the threshold of a state with three units of arable land, so a small
 state can still hold a large city.
 
+Public Housing, a government building unlocked by Urban Planning, adds Urban
+Engineering to its own state, for each staffed level:
+
+| Method | Needs | Urban Engineering per level |
+|---|---|---|
+| Model Dwellings | | +10 |
+| Sanitary Tenements | Modern Sewerage | +15 |
+| Steel-Frame Apartments | Steel-Frame Buildings | +20 |
+| High-Rise Apartments | Elevators | +30 |
+| Prefabricated Tower Blocks | Prefabricated Construction | +45 |
+| Arcologies | Advanced Structural Engineering | +70 |
+
+Its upkeep comes out of your budget, so build it where crowding bites: in a
+state below its threshold it does nothing.
+
 The penalty starts gently and then climbs fast. Up to ten times the threshold it
 grows with the square of the excess; beyond that it adds 10 percentage points
 for each further multiple.
