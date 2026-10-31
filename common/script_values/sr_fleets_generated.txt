@@ -9399,6 +9399,1254 @@ sr_fl_9_leg_dv_kuiper = {
 	}
 }
 
+# Slot 1's transfer (UI pass design § 6): each amount held to 0 and what the
+# slot has, what stays, and what the fleet it goes into then carries.
+sr_fl_1_xf_war = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_war } value = var:sr_det_amt_war }
+	max = sr_fl_1_war_value
+	min = 0
+}
+sr_fl_1_xf_rapid = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_rapid } value = var:sr_det_amt_rapid }
+	max = sr_fl_1_rapid_value
+	min = 0
+}
+sr_fl_1_xf_siege = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_siege } value = var:sr_det_amt_siege }
+	max = sr_fl_1_siege_value
+	min = 0
+}
+sr_fl_1_xf_carrier = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_carrier } value = var:sr_det_amt_carrier }
+	max = sr_fl_1_carrier_value
+	min = 0
+}
+sr_fl_1_xf_tender = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_tender } value = var:sr_det_amt_tender }
+	max = sr_fl_1_tender_value
+	min = 0
+}
+sr_fl_1_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_1_marines_value
+	min = 0
+}
+sr_fl_1_xf_strength = {
+	value = 0
+	add = sr_fl_1_xf_war
+	add = sr_fl_1_xf_rapid
+	add = sr_fl_1_xf_siege
+	add = sr_fl_1_xf_carrier
+	add = sr_fl_1_xf_tender
+}
+sr_fl_1_xf_left = { value = sr_fl_1_strength subtract = sr_fl_1_xf_strength }
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_1_xf_marines_moved = {
+	value = sr_fl_1_xf_marines
+	if = { limit = { sr_fl_1_xf_left <= 0 } value = sr_fl_1_marines_value }
+}
+sr_fl_1_xf_stay_war = { value = sr_fl_1_war_value subtract = sr_fl_1_xf_war }
+sr_fl_1_xf_there_war = {
+	value = sr_fl_1_xf_war
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_war_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_war_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_war_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_war_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_war_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_war_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_war_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_war_value }
+}
+sr_fl_1_xf_stay_rapid = { value = sr_fl_1_rapid_value subtract = sr_fl_1_xf_rapid }
+sr_fl_1_xf_there_rapid = {
+	value = sr_fl_1_xf_rapid
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_rapid_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_rapid_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_rapid_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_rapid_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_rapid_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_rapid_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_rapid_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_rapid_value }
+}
+sr_fl_1_xf_stay_siege = { value = sr_fl_1_siege_value subtract = sr_fl_1_xf_siege }
+sr_fl_1_xf_there_siege = {
+	value = sr_fl_1_xf_siege
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_siege_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_siege_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_siege_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_siege_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_siege_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_siege_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_siege_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_siege_value }
+}
+sr_fl_1_xf_stay_carrier = { value = sr_fl_1_carrier_value subtract = sr_fl_1_xf_carrier }
+sr_fl_1_xf_there_carrier = {
+	value = sr_fl_1_xf_carrier
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_carrier_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_carrier_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_carrier_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_carrier_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_carrier_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_carrier_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_carrier_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_carrier_value }
+}
+sr_fl_1_xf_stay_tender = { value = sr_fl_1_tender_value subtract = sr_fl_1_xf_tender }
+sr_fl_1_xf_there_tender = {
+	value = sr_fl_1_xf_tender
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_tender_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_tender_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_tender_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_tender_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_tender_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
+}
+sr_fl_1_xf_stay_marines = { value = sr_fl_1_marines_value subtract = sr_fl_1_xf_marines_moved }
+sr_fl_1_xf_there_marines = {
+	value = sr_fl_1_xf_marines_moved
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+sr_fl_1_xf_there_strength = {
+	value = sr_fl_1_xf_strength
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_strength }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_strength }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_strength }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_strength }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_strength }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_strength }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_strength }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_strength }
+}
+sr_fl_1_xf_stay_room = { value = sr_fl_1_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
+sr_fl_1_xf_there_room = { value = sr_fl_1_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+
+# Slot 2's transfer (UI pass design § 6): each amount held to 0 and what the
+# slot has, what stays, and what the fleet it goes into then carries.
+sr_fl_2_xf_war = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_war } value = var:sr_det_amt_war }
+	max = sr_fl_2_war_value
+	min = 0
+}
+sr_fl_2_xf_rapid = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_rapid } value = var:sr_det_amt_rapid }
+	max = sr_fl_2_rapid_value
+	min = 0
+}
+sr_fl_2_xf_siege = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_siege } value = var:sr_det_amt_siege }
+	max = sr_fl_2_siege_value
+	min = 0
+}
+sr_fl_2_xf_carrier = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_carrier } value = var:sr_det_amt_carrier }
+	max = sr_fl_2_carrier_value
+	min = 0
+}
+sr_fl_2_xf_tender = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_tender } value = var:sr_det_amt_tender }
+	max = sr_fl_2_tender_value
+	min = 0
+}
+sr_fl_2_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_2_marines_value
+	min = 0
+}
+sr_fl_2_xf_strength = {
+	value = 0
+	add = sr_fl_2_xf_war
+	add = sr_fl_2_xf_rapid
+	add = sr_fl_2_xf_siege
+	add = sr_fl_2_xf_carrier
+	add = sr_fl_2_xf_tender
+}
+sr_fl_2_xf_left = { value = sr_fl_2_strength subtract = sr_fl_2_xf_strength }
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_2_xf_marines_moved = {
+	value = sr_fl_2_xf_marines
+	if = { limit = { sr_fl_2_xf_left <= 0 } value = sr_fl_2_marines_value }
+}
+sr_fl_2_xf_stay_war = { value = sr_fl_2_war_value subtract = sr_fl_2_xf_war }
+sr_fl_2_xf_there_war = {
+	value = sr_fl_2_xf_war
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_war_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_war_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_war_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_war_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_war_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_war_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_war_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_war_value }
+}
+sr_fl_2_xf_stay_rapid = { value = sr_fl_2_rapid_value subtract = sr_fl_2_xf_rapid }
+sr_fl_2_xf_there_rapid = {
+	value = sr_fl_2_xf_rapid
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_rapid_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_rapid_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_rapid_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_rapid_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_rapid_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_rapid_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_rapid_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_rapid_value }
+}
+sr_fl_2_xf_stay_siege = { value = sr_fl_2_siege_value subtract = sr_fl_2_xf_siege }
+sr_fl_2_xf_there_siege = {
+	value = sr_fl_2_xf_siege
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_siege_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_siege_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_siege_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_siege_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_siege_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_siege_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_siege_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_siege_value }
+}
+sr_fl_2_xf_stay_carrier = { value = sr_fl_2_carrier_value subtract = sr_fl_2_xf_carrier }
+sr_fl_2_xf_there_carrier = {
+	value = sr_fl_2_xf_carrier
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_carrier_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_carrier_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_carrier_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_carrier_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_carrier_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_carrier_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_carrier_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_carrier_value }
+}
+sr_fl_2_xf_stay_tender = { value = sr_fl_2_tender_value subtract = sr_fl_2_xf_tender }
+sr_fl_2_xf_there_tender = {
+	value = sr_fl_2_xf_tender
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_tender_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_tender_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_tender_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_tender_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_tender_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
+}
+sr_fl_2_xf_stay_marines = { value = sr_fl_2_marines_value subtract = sr_fl_2_xf_marines_moved }
+sr_fl_2_xf_there_marines = {
+	value = sr_fl_2_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+sr_fl_2_xf_there_strength = {
+	value = sr_fl_2_xf_strength
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_strength }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_strength }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_strength }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_strength }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_strength }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_strength }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_strength }
+}
+sr_fl_2_xf_stay_room = { value = sr_fl_2_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
+sr_fl_2_xf_there_room = { value = sr_fl_2_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+
+# Slot 3's transfer (UI pass design § 6): each amount held to 0 and what the
+# slot has, what stays, and what the fleet it goes into then carries.
+sr_fl_3_xf_war = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_war } value = var:sr_det_amt_war }
+	max = sr_fl_3_war_value
+	min = 0
+}
+sr_fl_3_xf_rapid = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_rapid } value = var:sr_det_amt_rapid }
+	max = sr_fl_3_rapid_value
+	min = 0
+}
+sr_fl_3_xf_siege = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_siege } value = var:sr_det_amt_siege }
+	max = sr_fl_3_siege_value
+	min = 0
+}
+sr_fl_3_xf_carrier = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_carrier } value = var:sr_det_amt_carrier }
+	max = sr_fl_3_carrier_value
+	min = 0
+}
+sr_fl_3_xf_tender = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_tender } value = var:sr_det_amt_tender }
+	max = sr_fl_3_tender_value
+	min = 0
+}
+sr_fl_3_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_3_marines_value
+	min = 0
+}
+sr_fl_3_xf_strength = {
+	value = 0
+	add = sr_fl_3_xf_war
+	add = sr_fl_3_xf_rapid
+	add = sr_fl_3_xf_siege
+	add = sr_fl_3_xf_carrier
+	add = sr_fl_3_xf_tender
+}
+sr_fl_3_xf_left = { value = sr_fl_3_strength subtract = sr_fl_3_xf_strength }
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_3_xf_marines_moved = {
+	value = sr_fl_3_xf_marines
+	if = { limit = { sr_fl_3_xf_left <= 0 } value = sr_fl_3_marines_value }
+}
+sr_fl_3_xf_stay_war = { value = sr_fl_3_war_value subtract = sr_fl_3_xf_war }
+sr_fl_3_xf_there_war = {
+	value = sr_fl_3_xf_war
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_war_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_war_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_war_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_war_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_war_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_war_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_war_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_war_value }
+}
+sr_fl_3_xf_stay_rapid = { value = sr_fl_3_rapid_value subtract = sr_fl_3_xf_rapid }
+sr_fl_3_xf_there_rapid = {
+	value = sr_fl_3_xf_rapid
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_rapid_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_rapid_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_rapid_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_rapid_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_rapid_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_rapid_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_rapid_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_rapid_value }
+}
+sr_fl_3_xf_stay_siege = { value = sr_fl_3_siege_value subtract = sr_fl_3_xf_siege }
+sr_fl_3_xf_there_siege = {
+	value = sr_fl_3_xf_siege
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_siege_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_siege_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_siege_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_siege_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_siege_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_siege_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_siege_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_siege_value }
+}
+sr_fl_3_xf_stay_carrier = { value = sr_fl_3_carrier_value subtract = sr_fl_3_xf_carrier }
+sr_fl_3_xf_there_carrier = {
+	value = sr_fl_3_xf_carrier
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_carrier_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_carrier_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_carrier_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_carrier_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_carrier_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_carrier_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_carrier_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_carrier_value }
+}
+sr_fl_3_xf_stay_tender = { value = sr_fl_3_tender_value subtract = sr_fl_3_xf_tender }
+sr_fl_3_xf_there_tender = {
+	value = sr_fl_3_xf_tender
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_tender_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_tender_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_tender_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_tender_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_tender_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
+}
+sr_fl_3_xf_stay_marines = { value = sr_fl_3_marines_value subtract = sr_fl_3_xf_marines_moved }
+sr_fl_3_xf_there_marines = {
+	value = sr_fl_3_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+sr_fl_3_xf_there_strength = {
+	value = sr_fl_3_xf_strength
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_strength }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_strength }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_strength }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_strength }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_strength }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_strength }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_strength }
+}
+sr_fl_3_xf_stay_room = { value = sr_fl_3_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
+sr_fl_3_xf_there_room = { value = sr_fl_3_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+
+# Slot 4's transfer (UI pass design § 6): each amount held to 0 and what the
+# slot has, what stays, and what the fleet it goes into then carries.
+sr_fl_4_xf_war = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_war } value = var:sr_det_amt_war }
+	max = sr_fl_4_war_value
+	min = 0
+}
+sr_fl_4_xf_rapid = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_rapid } value = var:sr_det_amt_rapid }
+	max = sr_fl_4_rapid_value
+	min = 0
+}
+sr_fl_4_xf_siege = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_siege } value = var:sr_det_amt_siege }
+	max = sr_fl_4_siege_value
+	min = 0
+}
+sr_fl_4_xf_carrier = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_carrier } value = var:sr_det_amt_carrier }
+	max = sr_fl_4_carrier_value
+	min = 0
+}
+sr_fl_4_xf_tender = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_tender } value = var:sr_det_amt_tender }
+	max = sr_fl_4_tender_value
+	min = 0
+}
+sr_fl_4_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_4_marines_value
+	min = 0
+}
+sr_fl_4_xf_strength = {
+	value = 0
+	add = sr_fl_4_xf_war
+	add = sr_fl_4_xf_rapid
+	add = sr_fl_4_xf_siege
+	add = sr_fl_4_xf_carrier
+	add = sr_fl_4_xf_tender
+}
+sr_fl_4_xf_left = { value = sr_fl_4_strength subtract = sr_fl_4_xf_strength }
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_4_xf_marines_moved = {
+	value = sr_fl_4_xf_marines
+	if = { limit = { sr_fl_4_xf_left <= 0 } value = sr_fl_4_marines_value }
+}
+sr_fl_4_xf_stay_war = { value = sr_fl_4_war_value subtract = sr_fl_4_xf_war }
+sr_fl_4_xf_there_war = {
+	value = sr_fl_4_xf_war
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_war_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_war_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_war_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_war_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_war_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_war_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_war_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_war_value }
+}
+sr_fl_4_xf_stay_rapid = { value = sr_fl_4_rapid_value subtract = sr_fl_4_xf_rapid }
+sr_fl_4_xf_there_rapid = {
+	value = sr_fl_4_xf_rapid
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_rapid_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_rapid_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_rapid_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_rapid_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_rapid_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_rapid_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_rapid_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_rapid_value }
+}
+sr_fl_4_xf_stay_siege = { value = sr_fl_4_siege_value subtract = sr_fl_4_xf_siege }
+sr_fl_4_xf_there_siege = {
+	value = sr_fl_4_xf_siege
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_siege_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_siege_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_siege_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_siege_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_siege_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_siege_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_siege_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_siege_value }
+}
+sr_fl_4_xf_stay_carrier = { value = sr_fl_4_carrier_value subtract = sr_fl_4_xf_carrier }
+sr_fl_4_xf_there_carrier = {
+	value = sr_fl_4_xf_carrier
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_carrier_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_carrier_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_carrier_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_carrier_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_carrier_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_carrier_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_carrier_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_carrier_value }
+}
+sr_fl_4_xf_stay_tender = { value = sr_fl_4_tender_value subtract = sr_fl_4_xf_tender }
+sr_fl_4_xf_there_tender = {
+	value = sr_fl_4_xf_tender
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_tender_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_tender_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_tender_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_tender_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_tender_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
+}
+sr_fl_4_xf_stay_marines = { value = sr_fl_4_marines_value subtract = sr_fl_4_xf_marines_moved }
+sr_fl_4_xf_there_marines = {
+	value = sr_fl_4_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+sr_fl_4_xf_there_strength = {
+	value = sr_fl_4_xf_strength
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_strength }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_strength }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_strength }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_strength }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_strength }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_strength }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_strength }
+}
+sr_fl_4_xf_stay_room = { value = sr_fl_4_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
+sr_fl_4_xf_there_room = { value = sr_fl_4_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+
+# Slot 5's transfer (UI pass design § 6): each amount held to 0 and what the
+# slot has, what stays, and what the fleet it goes into then carries.
+sr_fl_5_xf_war = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_war } value = var:sr_det_amt_war }
+	max = sr_fl_5_war_value
+	min = 0
+}
+sr_fl_5_xf_rapid = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_rapid } value = var:sr_det_amt_rapid }
+	max = sr_fl_5_rapid_value
+	min = 0
+}
+sr_fl_5_xf_siege = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_siege } value = var:sr_det_amt_siege }
+	max = sr_fl_5_siege_value
+	min = 0
+}
+sr_fl_5_xf_carrier = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_carrier } value = var:sr_det_amt_carrier }
+	max = sr_fl_5_carrier_value
+	min = 0
+}
+sr_fl_5_xf_tender = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_tender } value = var:sr_det_amt_tender }
+	max = sr_fl_5_tender_value
+	min = 0
+}
+sr_fl_5_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_5_marines_value
+	min = 0
+}
+sr_fl_5_xf_strength = {
+	value = 0
+	add = sr_fl_5_xf_war
+	add = sr_fl_5_xf_rapid
+	add = sr_fl_5_xf_siege
+	add = sr_fl_5_xf_carrier
+	add = sr_fl_5_xf_tender
+}
+sr_fl_5_xf_left = { value = sr_fl_5_strength subtract = sr_fl_5_xf_strength }
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_5_xf_marines_moved = {
+	value = sr_fl_5_xf_marines
+	if = { limit = { sr_fl_5_xf_left <= 0 } value = sr_fl_5_marines_value }
+}
+sr_fl_5_xf_stay_war = { value = sr_fl_5_war_value subtract = sr_fl_5_xf_war }
+sr_fl_5_xf_there_war = {
+	value = sr_fl_5_xf_war
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_war_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_war_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_war_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_war_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_war_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_war_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_war_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_war_value }
+}
+sr_fl_5_xf_stay_rapid = { value = sr_fl_5_rapid_value subtract = sr_fl_5_xf_rapid }
+sr_fl_5_xf_there_rapid = {
+	value = sr_fl_5_xf_rapid
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_rapid_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_rapid_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_rapid_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_rapid_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_rapid_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_rapid_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_rapid_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_rapid_value }
+}
+sr_fl_5_xf_stay_siege = { value = sr_fl_5_siege_value subtract = sr_fl_5_xf_siege }
+sr_fl_5_xf_there_siege = {
+	value = sr_fl_5_xf_siege
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_siege_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_siege_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_siege_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_siege_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_siege_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_siege_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_siege_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_siege_value }
+}
+sr_fl_5_xf_stay_carrier = { value = sr_fl_5_carrier_value subtract = sr_fl_5_xf_carrier }
+sr_fl_5_xf_there_carrier = {
+	value = sr_fl_5_xf_carrier
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_carrier_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_carrier_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_carrier_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_carrier_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_carrier_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_carrier_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_carrier_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_carrier_value }
+}
+sr_fl_5_xf_stay_tender = { value = sr_fl_5_tender_value subtract = sr_fl_5_xf_tender }
+sr_fl_5_xf_there_tender = {
+	value = sr_fl_5_xf_tender
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_tender_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_tender_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_tender_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_tender_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_tender_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
+}
+sr_fl_5_xf_stay_marines = { value = sr_fl_5_marines_value subtract = sr_fl_5_xf_marines_moved }
+sr_fl_5_xf_there_marines = {
+	value = sr_fl_5_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+sr_fl_5_xf_there_strength = {
+	value = sr_fl_5_xf_strength
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_strength }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_strength }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_strength }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_strength }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_strength }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_strength }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_strength }
+}
+sr_fl_5_xf_stay_room = { value = sr_fl_5_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
+sr_fl_5_xf_there_room = { value = sr_fl_5_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+
+# Slot 6's transfer (UI pass design § 6): each amount held to 0 and what the
+# slot has, what stays, and what the fleet it goes into then carries.
+sr_fl_6_xf_war = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_war } value = var:sr_det_amt_war }
+	max = sr_fl_6_war_value
+	min = 0
+}
+sr_fl_6_xf_rapid = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_rapid } value = var:sr_det_amt_rapid }
+	max = sr_fl_6_rapid_value
+	min = 0
+}
+sr_fl_6_xf_siege = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_siege } value = var:sr_det_amt_siege }
+	max = sr_fl_6_siege_value
+	min = 0
+}
+sr_fl_6_xf_carrier = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_carrier } value = var:sr_det_amt_carrier }
+	max = sr_fl_6_carrier_value
+	min = 0
+}
+sr_fl_6_xf_tender = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_tender } value = var:sr_det_amt_tender }
+	max = sr_fl_6_tender_value
+	min = 0
+}
+sr_fl_6_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_6_marines_value
+	min = 0
+}
+sr_fl_6_xf_strength = {
+	value = 0
+	add = sr_fl_6_xf_war
+	add = sr_fl_6_xf_rapid
+	add = sr_fl_6_xf_siege
+	add = sr_fl_6_xf_carrier
+	add = sr_fl_6_xf_tender
+}
+sr_fl_6_xf_left = { value = sr_fl_6_strength subtract = sr_fl_6_xf_strength }
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_6_xf_marines_moved = {
+	value = sr_fl_6_xf_marines
+	if = { limit = { sr_fl_6_xf_left <= 0 } value = sr_fl_6_marines_value }
+}
+sr_fl_6_xf_stay_war = { value = sr_fl_6_war_value subtract = sr_fl_6_xf_war }
+sr_fl_6_xf_there_war = {
+	value = sr_fl_6_xf_war
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_war_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_war_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_war_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_war_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_war_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_war_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_war_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_war_value }
+}
+sr_fl_6_xf_stay_rapid = { value = sr_fl_6_rapid_value subtract = sr_fl_6_xf_rapid }
+sr_fl_6_xf_there_rapid = {
+	value = sr_fl_6_xf_rapid
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_rapid_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_rapid_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_rapid_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_rapid_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_rapid_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_rapid_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_rapid_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_rapid_value }
+}
+sr_fl_6_xf_stay_siege = { value = sr_fl_6_siege_value subtract = sr_fl_6_xf_siege }
+sr_fl_6_xf_there_siege = {
+	value = sr_fl_6_xf_siege
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_siege_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_siege_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_siege_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_siege_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_siege_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_siege_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_siege_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_siege_value }
+}
+sr_fl_6_xf_stay_carrier = { value = sr_fl_6_carrier_value subtract = sr_fl_6_xf_carrier }
+sr_fl_6_xf_there_carrier = {
+	value = sr_fl_6_xf_carrier
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_carrier_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_carrier_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_carrier_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_carrier_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_carrier_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_carrier_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_carrier_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_carrier_value }
+}
+sr_fl_6_xf_stay_tender = { value = sr_fl_6_tender_value subtract = sr_fl_6_xf_tender }
+sr_fl_6_xf_there_tender = {
+	value = sr_fl_6_xf_tender
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_tender_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_tender_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_tender_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_tender_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_tender_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
+}
+sr_fl_6_xf_stay_marines = { value = sr_fl_6_marines_value subtract = sr_fl_6_xf_marines_moved }
+sr_fl_6_xf_there_marines = {
+	value = sr_fl_6_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+sr_fl_6_xf_there_strength = {
+	value = sr_fl_6_xf_strength
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_strength }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_strength }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_strength }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_strength }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_strength }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_strength }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_strength }
+}
+sr_fl_6_xf_stay_room = { value = sr_fl_6_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
+sr_fl_6_xf_there_room = { value = sr_fl_6_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+
+# Slot 7's transfer (UI pass design § 6): each amount held to 0 and what the
+# slot has, what stays, and what the fleet it goes into then carries.
+sr_fl_7_xf_war = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_war } value = var:sr_det_amt_war }
+	max = sr_fl_7_war_value
+	min = 0
+}
+sr_fl_7_xf_rapid = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_rapid } value = var:sr_det_amt_rapid }
+	max = sr_fl_7_rapid_value
+	min = 0
+}
+sr_fl_7_xf_siege = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_siege } value = var:sr_det_amt_siege }
+	max = sr_fl_7_siege_value
+	min = 0
+}
+sr_fl_7_xf_carrier = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_carrier } value = var:sr_det_amt_carrier }
+	max = sr_fl_7_carrier_value
+	min = 0
+}
+sr_fl_7_xf_tender = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_tender } value = var:sr_det_amt_tender }
+	max = sr_fl_7_tender_value
+	min = 0
+}
+sr_fl_7_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_7_marines_value
+	min = 0
+}
+sr_fl_7_xf_strength = {
+	value = 0
+	add = sr_fl_7_xf_war
+	add = sr_fl_7_xf_rapid
+	add = sr_fl_7_xf_siege
+	add = sr_fl_7_xf_carrier
+	add = sr_fl_7_xf_tender
+}
+sr_fl_7_xf_left = { value = sr_fl_7_strength subtract = sr_fl_7_xf_strength }
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_7_xf_marines_moved = {
+	value = sr_fl_7_xf_marines
+	if = { limit = { sr_fl_7_xf_left <= 0 } value = sr_fl_7_marines_value }
+}
+sr_fl_7_xf_stay_war = { value = sr_fl_7_war_value subtract = sr_fl_7_xf_war }
+sr_fl_7_xf_there_war = {
+	value = sr_fl_7_xf_war
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_war_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_war_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_war_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_war_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_war_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_war_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_war_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_war_value }
+}
+sr_fl_7_xf_stay_rapid = { value = sr_fl_7_rapid_value subtract = sr_fl_7_xf_rapid }
+sr_fl_7_xf_there_rapid = {
+	value = sr_fl_7_xf_rapid
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_rapid_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_rapid_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_rapid_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_rapid_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_rapid_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_rapid_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_rapid_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_rapid_value }
+}
+sr_fl_7_xf_stay_siege = { value = sr_fl_7_siege_value subtract = sr_fl_7_xf_siege }
+sr_fl_7_xf_there_siege = {
+	value = sr_fl_7_xf_siege
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_siege_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_siege_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_siege_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_siege_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_siege_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_siege_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_siege_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_siege_value }
+}
+sr_fl_7_xf_stay_carrier = { value = sr_fl_7_carrier_value subtract = sr_fl_7_xf_carrier }
+sr_fl_7_xf_there_carrier = {
+	value = sr_fl_7_xf_carrier
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_carrier_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_carrier_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_carrier_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_carrier_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_carrier_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_carrier_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_carrier_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_carrier_value }
+}
+sr_fl_7_xf_stay_tender = { value = sr_fl_7_tender_value subtract = sr_fl_7_xf_tender }
+sr_fl_7_xf_there_tender = {
+	value = sr_fl_7_xf_tender
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_tender_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_tender_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_tender_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_tender_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_tender_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_tender_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
+}
+sr_fl_7_xf_stay_marines = { value = sr_fl_7_marines_value subtract = sr_fl_7_xf_marines_moved }
+sr_fl_7_xf_there_marines = {
+	value = sr_fl_7_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+sr_fl_7_xf_there_strength = {
+	value = sr_fl_7_xf_strength
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_strength }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_strength }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_strength }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_strength }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_strength }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_strength }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_strength }
+}
+sr_fl_7_xf_stay_room = { value = sr_fl_7_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
+sr_fl_7_xf_there_room = { value = sr_fl_7_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+
+# Slot 8's transfer (UI pass design § 6): each amount held to 0 and what the
+# slot has, what stays, and what the fleet it goes into then carries.
+sr_fl_8_xf_war = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_war } value = var:sr_det_amt_war }
+	max = sr_fl_8_war_value
+	min = 0
+}
+sr_fl_8_xf_rapid = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_rapid } value = var:sr_det_amt_rapid }
+	max = sr_fl_8_rapid_value
+	min = 0
+}
+sr_fl_8_xf_siege = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_siege } value = var:sr_det_amt_siege }
+	max = sr_fl_8_siege_value
+	min = 0
+}
+sr_fl_8_xf_carrier = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_carrier } value = var:sr_det_amt_carrier }
+	max = sr_fl_8_carrier_value
+	min = 0
+}
+sr_fl_8_xf_tender = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_tender } value = var:sr_det_amt_tender }
+	max = sr_fl_8_tender_value
+	min = 0
+}
+sr_fl_8_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_8_marines_value
+	min = 0
+}
+sr_fl_8_xf_strength = {
+	value = 0
+	add = sr_fl_8_xf_war
+	add = sr_fl_8_xf_rapid
+	add = sr_fl_8_xf_siege
+	add = sr_fl_8_xf_carrier
+	add = sr_fl_8_xf_tender
+}
+sr_fl_8_xf_left = { value = sr_fl_8_strength subtract = sr_fl_8_xf_strength }
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_8_xf_marines_moved = {
+	value = sr_fl_8_xf_marines
+	if = { limit = { sr_fl_8_xf_left <= 0 } value = sr_fl_8_marines_value }
+}
+sr_fl_8_xf_stay_war = { value = sr_fl_8_war_value subtract = sr_fl_8_xf_war }
+sr_fl_8_xf_there_war = {
+	value = sr_fl_8_xf_war
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_war_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_war_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_war_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_war_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_war_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_war_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_war_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_war_value }
+}
+sr_fl_8_xf_stay_rapid = { value = sr_fl_8_rapid_value subtract = sr_fl_8_xf_rapid }
+sr_fl_8_xf_there_rapid = {
+	value = sr_fl_8_xf_rapid
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_rapid_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_rapid_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_rapid_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_rapid_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_rapid_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_rapid_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_rapid_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_rapid_value }
+}
+sr_fl_8_xf_stay_siege = { value = sr_fl_8_siege_value subtract = sr_fl_8_xf_siege }
+sr_fl_8_xf_there_siege = {
+	value = sr_fl_8_xf_siege
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_siege_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_siege_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_siege_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_siege_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_siege_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_siege_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_siege_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_siege_value }
+}
+sr_fl_8_xf_stay_carrier = { value = sr_fl_8_carrier_value subtract = sr_fl_8_xf_carrier }
+sr_fl_8_xf_there_carrier = {
+	value = sr_fl_8_xf_carrier
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_carrier_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_carrier_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_carrier_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_carrier_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_carrier_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_carrier_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_carrier_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_carrier_value }
+}
+sr_fl_8_xf_stay_tender = { value = sr_fl_8_tender_value subtract = sr_fl_8_xf_tender }
+sr_fl_8_xf_there_tender = {
+	value = sr_fl_8_xf_tender
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_tender_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_tender_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_tender_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_tender_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_tender_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_tender_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
+}
+sr_fl_8_xf_stay_marines = { value = sr_fl_8_marines_value subtract = sr_fl_8_xf_marines_moved }
+sr_fl_8_xf_there_marines = {
+	value = sr_fl_8_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+sr_fl_8_xf_there_strength = {
+	value = sr_fl_8_xf_strength
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_strength }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_strength }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_strength }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_strength }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_strength }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_strength }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_strength }
+}
+sr_fl_8_xf_stay_room = { value = sr_fl_8_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
+sr_fl_8_xf_there_room = { value = sr_fl_8_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+
+# Slot 9's transfer (UI pass design § 6): each amount held to 0 and what the
+# slot has, what stays, and what the fleet it goes into then carries.
+sr_fl_9_xf_war = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_war } value = var:sr_det_amt_war }
+	max = sr_fl_9_war_value
+	min = 0
+}
+sr_fl_9_xf_rapid = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_rapid } value = var:sr_det_amt_rapid }
+	max = sr_fl_9_rapid_value
+	min = 0
+}
+sr_fl_9_xf_siege = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_siege } value = var:sr_det_amt_siege }
+	max = sr_fl_9_siege_value
+	min = 0
+}
+sr_fl_9_xf_carrier = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_carrier } value = var:sr_det_amt_carrier }
+	max = sr_fl_9_carrier_value
+	min = 0
+}
+sr_fl_9_xf_tender = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_tender } value = var:sr_det_amt_tender }
+	max = sr_fl_9_tender_value
+	min = 0
+}
+sr_fl_9_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_9_marines_value
+	min = 0
+}
+sr_fl_9_xf_strength = {
+	value = 0
+	add = sr_fl_9_xf_war
+	add = sr_fl_9_xf_rapid
+	add = sr_fl_9_xf_siege
+	add = sr_fl_9_xf_carrier
+	add = sr_fl_9_xf_tender
+}
+sr_fl_9_xf_left = { value = sr_fl_9_strength subtract = sr_fl_9_xf_strength }
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_9_xf_marines_moved = {
+	value = sr_fl_9_xf_marines
+	if = { limit = { sr_fl_9_xf_left <= 0 } value = sr_fl_9_marines_value }
+}
+sr_fl_9_xf_stay_war = { value = sr_fl_9_war_value subtract = sr_fl_9_xf_war }
+sr_fl_9_xf_there_war = {
+	value = sr_fl_9_xf_war
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_war_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_war_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_war_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_war_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_war_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_war_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_war_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_war_value }
+}
+sr_fl_9_xf_stay_rapid = { value = sr_fl_9_rapid_value subtract = sr_fl_9_xf_rapid }
+sr_fl_9_xf_there_rapid = {
+	value = sr_fl_9_xf_rapid
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_rapid_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_rapid_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_rapid_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_rapid_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_rapid_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_rapid_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_rapid_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_rapid_value }
+}
+sr_fl_9_xf_stay_siege = { value = sr_fl_9_siege_value subtract = sr_fl_9_xf_siege }
+sr_fl_9_xf_there_siege = {
+	value = sr_fl_9_xf_siege
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_siege_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_siege_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_siege_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_siege_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_siege_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_siege_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_siege_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_siege_value }
+}
+sr_fl_9_xf_stay_carrier = { value = sr_fl_9_carrier_value subtract = sr_fl_9_xf_carrier }
+sr_fl_9_xf_there_carrier = {
+	value = sr_fl_9_xf_carrier
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_carrier_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_carrier_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_carrier_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_carrier_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_carrier_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_carrier_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_carrier_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_carrier_value }
+}
+sr_fl_9_xf_stay_tender = { value = sr_fl_9_tender_value subtract = sr_fl_9_xf_tender }
+sr_fl_9_xf_there_tender = {
+	value = sr_fl_9_xf_tender
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_tender_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_tender_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_tender_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_tender_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_tender_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_tender_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
+}
+sr_fl_9_xf_stay_marines = { value = sr_fl_9_marines_value subtract = sr_fl_9_xf_marines_moved }
+sr_fl_9_xf_there_marines = {
+	value = sr_fl_9_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+}
+sr_fl_9_xf_there_strength = {
+	value = sr_fl_9_xf_strength
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_strength }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_strength }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_strength }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_strength }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_strength }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_strength }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_strength }
+}
+sr_fl_9_xf_stay_room = { value = sr_fl_9_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
+sr_fl_9_xf_there_room = { value = sr_fl_9_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+
+# Where a transfer goes (sr_det_to): 0 a new fleet, else that slot.
+sr_det_to_value = {
+	value = 0
+	if = { limit = { has_variable = sr_det_to } value = var:sr_det_to }
+}
+
 # ===== Totals, country scope =====
 sr_fl_strength_total = {
 	value = 0

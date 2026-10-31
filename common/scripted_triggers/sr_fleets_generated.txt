@@ -5711,6 +5711,167 @@ sr_fl_9_ai_attacks_kuiper = {
 	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_1_can_transfer = { OR = { sr_fl_1_can_merge = yes sr_fl_1_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_1_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_1_loc var:sr_fl_2_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_1_loc var:sr_fl_3_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_1_loc var:sr_fl_4_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_1_loc var:sr_fl_5_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_1_loc var:sr_fl_6_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_1_loc var:sr_fl_7_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_1_loc var:sr_fl_8_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_1_loc var:sr_fl_9_loc = var:sr_fl_1_loc }
+	}
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_2_can_transfer = { OR = { sr_fl_2_can_merge = yes sr_fl_2_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_2_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_2_loc var:sr_fl_1_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_2_loc var:sr_fl_3_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_2_loc var:sr_fl_4_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_2_loc var:sr_fl_5_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_2_loc var:sr_fl_6_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_2_loc var:sr_fl_7_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_2_loc var:sr_fl_8_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_2_loc var:sr_fl_9_loc = var:sr_fl_2_loc }
+	}
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_3_can_transfer = { OR = { sr_fl_3_can_merge = yes sr_fl_3_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_3_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_3_loc var:sr_fl_1_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_3_loc var:sr_fl_2_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_3_loc var:sr_fl_4_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_3_loc var:sr_fl_5_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_3_loc var:sr_fl_6_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_3_loc var:sr_fl_7_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_3_loc var:sr_fl_8_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_3_loc var:sr_fl_9_loc = var:sr_fl_3_loc }
+	}
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_4_can_transfer = { OR = { sr_fl_4_can_merge = yes sr_fl_4_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_4_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_4_loc var:sr_fl_1_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_4_loc var:sr_fl_2_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_4_loc var:sr_fl_3_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_4_loc var:sr_fl_5_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_4_loc var:sr_fl_6_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_4_loc var:sr_fl_7_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_4_loc var:sr_fl_8_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_4_loc var:sr_fl_9_loc = var:sr_fl_4_loc }
+	}
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_5_can_transfer = { OR = { sr_fl_5_can_merge = yes sr_fl_5_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_5_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_5_loc var:sr_fl_1_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_5_loc var:sr_fl_2_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_5_loc var:sr_fl_3_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_5_loc var:sr_fl_4_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_5_loc var:sr_fl_6_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_5_loc var:sr_fl_7_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_5_loc var:sr_fl_8_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_5_loc var:sr_fl_9_loc = var:sr_fl_5_loc }
+	}
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_6_can_transfer = { OR = { sr_fl_6_can_merge = yes sr_fl_6_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_6_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_6_loc var:sr_fl_1_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_6_loc var:sr_fl_2_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_6_loc var:sr_fl_3_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_6_loc var:sr_fl_4_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_6_loc var:sr_fl_5_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_6_loc var:sr_fl_7_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_6_loc var:sr_fl_8_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_6_loc var:sr_fl_9_loc = var:sr_fl_6_loc }
+	}
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_7_can_transfer = { OR = { sr_fl_7_can_merge = yes sr_fl_7_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_7_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_7_loc var:sr_fl_1_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_7_loc var:sr_fl_2_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_7_loc var:sr_fl_3_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_7_loc var:sr_fl_4_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_7_loc var:sr_fl_5_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_7_loc var:sr_fl_6_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_7_loc var:sr_fl_8_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_7_loc var:sr_fl_9_loc = var:sr_fl_7_loc }
+	}
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_8_can_transfer = { OR = { sr_fl_8_can_merge = yes sr_fl_8_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_8_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_8_loc var:sr_fl_1_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_8_loc var:sr_fl_2_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_8_loc var:sr_fl_3_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_8_loc var:sr_fl_4_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_8_loc var:sr_fl_5_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_8_loc var:sr_fl_6_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_8_loc var:sr_fl_7_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_8_loc var:sr_fl_9_loc = var:sr_fl_8_loc }
+	}
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_9_can_transfer = { OR = { sr_fl_9_can_merge = yes sr_fl_9_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_9_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_9_loc var:sr_fl_1_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_9_loc var:sr_fl_2_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_9_loc var:sr_fl_3_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_9_loc var:sr_fl_4_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_9_loc var:sr_fl_5_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_9_loc var:sr_fl_6_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_9_loc var:sr_fl_7_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_9_loc var:sr_fl_8_loc = var:sr_fl_9_loc }
+	}
+}
+
+# An Into button's choice (scope:pick, 0 a new fleet or a slot) is already the
+# transfer's (sr_det_to): the button greys, as the approach selector's does.
+sr_xf_pick_chosen = {
+	OR = {
+		AND = { scope:pick = 0 sr_det_to_value = 0 }
+		AND = { scope:pick = 1 sr_det_to_value = 1 }
+		AND = { scope:pick = 2 sr_det_to_value = 2 }
+		AND = { scope:pick = 3 sr_det_to_value = 3 }
+		AND = { scope:pick = 4 sr_det_to_value = 4 }
+		AND = { scope:pick = 5 sr_det_to_value = 5 }
+		AND = { scope:pick = 6 sr_det_to_value = 6 }
+		AND = { scope:pick = 7 sr_det_to_value = 7 }
+		AND = { scope:pick = 8 sr_det_to_value = 8 }
+		AND = { scope:pick = 9 sr_det_to_value = 9 }
+	}
+}
+
 # ===== Per world: Survey Colony Defences (6b, design § 11) =====
 # Country scope, the operator: it surveys the world's holder this month
 # (sr_cov_survey_defences, from covert_ops_apply_all_phase_effects).
