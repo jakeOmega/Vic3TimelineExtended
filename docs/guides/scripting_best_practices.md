@@ -238,6 +238,10 @@ The channel that *does* work at fractional magnitudes is **expectations**. `stat
 
 An interest group's approval is shown as a whole number, but the engine adds its contributions together first and rounds the total (owner, 2026-10-16). So a fractional `interest_group_ig_*_approval_add`, a −1 unit line behind `add_modifier { multiplier = … }` or a −3 line at a multiplier of 0.3, counts. Two lines that would each round to 0 can move approval by a point together. This differs from standard of living (above), where a fraction alone does nothing. Rounding each line to whole points before applying it, as the tax code's light reactions do (`gen_tax_code.py`), is not needed for the engine and throws those fractions away. The longevity gap's politics (`te_demog_lx_gap_politics`, demographics phase 3) apply −3 × a 0–1 multiplier on this basis.
 
+## A Rounded Stock Moved by a Fraction of Its Gap Stalls Short of Its Target
+
+A stored figure that eases toward a target each month by a share of the gap (`mask + (target − mask) × 0.08`) and is then rounded (`multiply = 100 round = yes divide = 100`, to keep a displayed reading in hundredths) stops moving once the share is under half a unit: at 0.08 a month that is any gap below 0.07, so the stock never arrives and a "back to 0" never happens. Floor the step at one unit, signed, and cap it at the gap, inside the script value (`if = { limit = { gap > 0 } min = 0.01 max = gap }`, the mirror for a negative gap). Geoengineering's aerosol mask does this (`gw_aerosol_mask_next`, `global_warming_aerosol_values.txt`), and `test_gw_geoengineering.py` runs the step in Python to show the stock arrives.
+
 ## Modifier Value Scale: The Suffix Doesn't Tell You
 
 A modifier's `_add` / `_mult` suffix tells you the *operation* (additive vs multiplicative), not the *unit* the engine reads. Whether a value should be a 0–1 fraction, a raw percentage point integer, or a small integer on a custom scale is set per-modifier by the engine — and it's not always intuitive.
