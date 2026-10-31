@@ -212,7 +212,7 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN ship_construction country=… rate=…` | once a game, a month after a Space Command first runs at half staff or more in a state its owner controls | `sr_sc_rate`, the sum of `modifier:state_sr_ship_construction_add` over the states its owner controls, reads above 0: a production method's workforce-scaled `state_modifiers` reach the state | it reads 0 | compute the rate in script, level × occupancy × the method's rate by `has_active_production_method`, and state the rates in the methods' descriptions |
-| `TE_SELF_CHECK OK/BROKEN fleet_upkeep_line country=… per_building=… robotics_mult=… telephones_mult=… software_mult=… want=…` | once a game, the month after a Space Command first carries the upkeep with units above 0 (Space Race UI pass design § 10) | the building's Robotics, Wired Telecommunication Gear and Software input multipliers are each 9 × its units: the newly registered mults reach the building (that they multiply the unscaled line is item 2's tooltip read) | one reads 0 (unregistered, or not on the building) or another figure (other lines reach that input) | for 0, check the `goods_input_<good>_mult` with `/modifier-search`; for another figure, read the building's input tooltip and compare the six goods' lines |
+| `TE_SELF_CHECK OK/BROKEN fleet_upkeep_line country=… units=… robotics_mult=… telephones_mult=… software_mult=… want=…` | once a game, the month after a Space Command first carries the upkeep with units above 0 (Space Race UI pass design § 10) | the building's Robotics, Wired Telecommunication Gear and Software input multipliers are each 9 × its units: the newly registered mults reach the building (that they multiply the unscaled line is item 2's tooltip read) | one reads 0 (unregistered, or not on the building) or another figure (other lines reach that input) | for 0, check the `goods_input_<good>_mult` with `/modifier-search`; for another figure, read the building's input tooltip and compare the six goods' lines |
 | `TE_SELF_CHECK OK/BROKEN fleet_leg location=… drive=… leg=… flown=…` | OK once a game, on the first fleet that lands in its month; BROKEN once, if any fleet lands two or more months late | `flown` equals `leg`, the months `docs/engine/launch_windows_report.md` gives that leg and drive | the global monthly step missed an arrival | land fleets from the country pulse as well |
 
 **What checks itself, and what needs a hand.**
@@ -729,6 +729,51 @@ The maintenance line and no fleet orders without a Space Command (UI pass design
    flight lands. An AI at war without one sends no fleets.
 4. **Occupation.** With Space Command's state occupied, the same as 3. (Unasked: the occupied building still pays its
    line and the upkeep while its staff work.)
-5. **Two Space Commands.** Annex or form a country holding a second one: each building's Fleet Upkeep reads half (at
-   10 units, +4,500%), and the panel's Upkeep still +9000%. Demolish one: the other carries it all the next month.
+5. **Two Space Commands.** A nation runs one since "Pausing Space Command" below: annexing or forming a country that
+   holds a second one dismantles the smaller within a month (item 5 there), and the one kept carries the whole Fleet
+   Upkeep (at 10 units, +9,000%).
+
+## Pausing Space Command (2026-10-31)
+
+Pause and Resume, the AI's fiscal pause, one Space Command a nation and half fire without one
+(`docs/systems/mod_systems/space_race.md` § *Fleets, Space Command and combat*: the Pause, One Space Command a nation
+and No Space Command bullets). All under Full Colonies. No self-check line: each rests on a read below.
+
+1. **Pause.** With a Space Command running Fusion Yards and a fleet, press Pause: the button turns to Resume, Built a
+   month reads Paused at once, and the building's modifiers list Construction Paused. At the next monthly step
+   nothing is built: Fleet strength at full doesn't rise, nor the Reserve with Auto off. A fleet still takes Go,
+   posture and target orders, Launch still sends a reserve up, and with Auto on a reserve built before the pause still
+   launches itself. Resume: the next month builds the full month's figure again, and Built a month shows it.
+2. **The inputs' tooltip read (unverified engine fact).** Paused, the building's input tooltip shows Launch Capacity
+   and Advanced Materials at 0, each with a −100% Construction Paused line, while the six maintenance goods keep
+   their lines and Fleet Upkeep. **Fallback** if a −100% sum doesn't zero an input (it shows a small figure, or
+   the building still buys it in the market panel): fold the method's own +100% into the cut, as the uploaded minds'
+   Nexus does (`te_demog_um_nexus_good`: the multiplier × (1 + the building's other bonuses on that good)).
+3. **Below −100%.** Run Torch or Antimatter Yards under Green Building Codes (the Global Warming entry's
+   `green_building_codes_modifier`, −2.5% electricity on every building) and pause: electricity sums to −102.5%. It
+   should read 0, not a negative figure, and the building shouldn't sell electricity or show a negative input.
+   That is the only other source on the three goods that reaches a Space Command (`/modifier-grants`: the others sit
+   on Deep-Sea Mines, the Nexus and grid stations). **Fallback** if it goes negative: the cut at −1 minus the
+   building's other bonuses on the good, read as `prev.modifier:goods_input_electricity_mult` at the apply.
+4. **The AI's pause (observer).** In an observer run past 2000 with AI fleet powers, find one in default or in
+   deficit at peace: its Space Command carries Construction Paused (the building's modifiers), and its reserve and
+   fleets stop growing. It resumes no sooner than six months later, and only once out of default with a surplus, or
+   at war. An AI in deficit at war keeps building. Watch that a budget near zero doesn't flip it every month.
+5. **One Space Command a nation.** Annex or form a country with a Space Command while you hold one: within a month
+   the one with fewer levels is dismantled, and the feed says "Space Command Dismantled", naming its state and the
+   one kept (the state names, not blanks). With the same levels, the one in your market capital stays. Two removed
+   the same month bring two notices, each naming its own state (each saves its state before it posts; unverified that
+   a notice keeps it). Move the market capital and build a new Space Command there: when it reaches level 1 it is the
+   smaller and goes. The month a building is dismantled may build that month from both (the modifier sum can lag a
+   day): note it if Built a month jumps once.
+6. **Half fire.** At war, fight a battle at a location with a Space Command and note a month's losses on both sides
+   (the battle report). Demolish Space Command, or have its state occupied, and fight a comparable month: our fleets
+   deal about half the losses, take the same, and Space Fleets' note and the orders' hover say they fight at half
+   strength. At Earth, Orbital Superiority falls by about half the margin, and an inbound hostile fleet that our
+   fleet's full strength would hold now brings the Earth Is Threatened popup. The battlestation and the batteries fire
+   as before.
+7. **Pause micromanagement (known limit).** Construction is counted at the country's monthly step, and Pause cuts the
+   inputs at once, so pausing just after the step and resuming just before the next would build a month for a few
+   days' inputs. Note whether that is practical to do by hand (the step's day isn't shown); the owner chose no cost
+   or delay on the toggle.
 
