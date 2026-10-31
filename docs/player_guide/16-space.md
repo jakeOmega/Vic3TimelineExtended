@@ -141,7 +141,7 @@ a note stands in their place. Two sections of its own follow, Space Powers and
 Orbit (see [The Space Race tab](#the-space-race-tab)), and How the Space Race
 Works comes once at the end.
 
-![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies.](images/solar_system_colonization_tab.png)
+![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, and Rivals.](images/solar_system_colonization_tab.png)
 
 The overview is always shown. Its first row is three icons, each with a label
 under it:
@@ -212,9 +212,16 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels against your room, red once your built and queued levels pass it, and the grade the next level would work at, queued levels counted (see [Extraplanetary Base room](#extraplanetary-base-room)). |
 | Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
 
-Solar System Colonization has more sections below Rivals: Colony Fleets and
-Colonies, then under Full Colonies Space Command and Space Fleets, then Solar
-System, and How Solar Colonization Works (collapsed), which explains them.
+Below its overview, Solar System Colonization has four tabs, and the one you
+were last on stays chosen while you play:
+
+| Tab | Holds |
+|---|---|
+| Mission Control | Mission Control (with Next Windows) and Rivals, as every milestone has. Shown first. |
+| Fleets | Colony Fleets, then under Full Colonies Space Command and Space Fleets. |
+| Colonies | Colonies. |
+| Solar System | Solar System, then How Solar Colonization Works (collapsed), which explains them. |
+
 Colonies (open) has a box for every site you hold, with Colonies Held (out of
 40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a

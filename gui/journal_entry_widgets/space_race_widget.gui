@@ -3344,6 +3344,43 @@ types space_race_widget_types
 		}
 	}
 
+	### A colonization tab's button (UI pass design § 11): the colony views'
+	### switch's shape (te_sr_colony_view_button); the one for the tab shown is
+	### greyed. 96 wide for Fleets and Colonies, 148 (_wide) for Mission Control
+	### and Solar System: 2 × 148 + 2 × 96 + 3 × 4 = 500, in the panel's 520.
+	type te_sr_tab_button = button {
+		using = default_button
+		size = { 96 28 }
+		parentanchor = vcenter
+		block "tab_button" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 90
+			elide = right
+			using = te_sr_fontsize_row
+			block "tab_label" {}
+		}
+	}
+	type te_sr_tab_button_wide = button {
+		using = default_button
+		size = { 148 28 }
+		parentanchor = vcenter
+		block "tab_button" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 142
+			elide = right
+			using = te_sr_fontsize_row
+			block "tab_label" {}
+		}
+	}
+
 	### Colonies (solar colonization; audit SPC-5): every colony we hold, in one
 	### table, each in its own box (a colony's name opens its page: colony
 	### management design § 8), where the colony sections of slices 2-6 (Our Colonies, Settlers,
@@ -7698,82 +7735,176 @@ types space_race_widget_types
 		spacing = 4
 		datacontext = "[GetScriptedGui('sr_milestone_solar_colonization_sgui')]"
 
-		te_sr_status_sections = {
-			blockoverride "status_debris" {
-				block "sr_debris" {
-					te_sr_debris_row = {}
+		# The tabs (UI pass design § 11): the client-side sr_tab, absent for
+		# Mission Control (the default), else fleets, colonies or system; Set and
+		# Clear, as the colony views' sr_colony_view, so a tab is remembered for
+		# the session in both hosts. 500 wide (te_sr_tab_button).
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			spacing = 4
+			visible = "[JournalEntry.IsActive]"
+
+			te_sr_tab_button_wide = {
+				tooltip = "je_space_race_widget_tab_mission_tt"
+				blockoverride "tab_button" {
+					enabled = "[GetVariableSystem.Exists('sr_tab')]"
+					onclick = "[GetVariableSystem.Clear('sr_tab')]"
+				}
+				blockoverride "tab_label" {
+					text = "je_space_race_widget_tab_mission"
 				}
 			}
-			blockoverride "sr_control_onclick" {
-				onclick = "[GetVariableSystem.Toggle('sr_panel_control_solar_colonization_closed')]"
+			te_sr_tab_button = {
+				tooltip = "je_space_race_widget_tab_fleets_tt"
+				blockoverride "tab_button" {
+					enabled = "[Not( GetVariableSystem.HasValue('sr_tab', 'fleets') )]"
+					onclick = "[GetVariableSystem.Set('sr_tab', 'fleets')]"
+				}
+				blockoverride "tab_label" {
+					text = "je_space_race_widget_tab_fleets"
+				}
 			}
-			blockoverride "sr_control_showmore" {
-				visible = "[GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed')]"
+			te_sr_tab_button = {
+				tooltip = "je_space_race_widget_tab_colonies_tt"
+				blockoverride "tab_button" {
+					enabled = "[Not( GetVariableSystem.HasValue('sr_tab', 'colonies') )]"
+					onclick = "[GetVariableSystem.Set('sr_tab', 'colonies')]"
+				}
+				blockoverride "tab_label" {
+					text = "je_space_race_widget_tab_colonies"
+				}
 			}
-			blockoverride "sr_control_showless" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed'))]"
-			}
-			blockoverride "sr_control_visible" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed'))]"
-			}
-			blockoverride "sr_funding_value" {
-				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_solar_colonization_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_solar_colonization', 'je_space_race_widget_funding_solar_colonization' )]"
-			}
-			blockoverride "sr_setbacks_value" {
-				text = "je_space_race_widget_setbacks_solar_colonization"
-			}
-			blockoverride "sr_eta_value" {
-				text = "je_space_race_widget_eta_solar_colonization"
-			}
-			blockoverride "sr_profile_text" {
-				text = "je_space_race_widget_profile_solar_colonization"
-			}
-			# Launch windows (gui/sr_launch_window_widgets.gui).
-			blockoverride "sr_control_extra" {
-				te_sr_sec_windows = {}
-			}
-			blockoverride "sr_rivals_onclick" {
-				onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_solar_colonization_closed')]"
-			}
-			blockoverride "sr_rivals_showmore" {
-				visible = "[GetVariableSystem.Exists('sr_panel_rivals_solar_colonization_closed')]"
-			}
-			blockoverride "sr_rivals_showless" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_solar_colonization_closed'))]"
-			}
-			blockoverride "sr_rivals_visible" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_solar_colonization_closed'))]"
-			}
-			blockoverride "sr_rivals_none" {
-				visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('sr_rivals_list_solar_colonization') )]"
-			}
-			blockoverride "sr_rivals_datamodel" {
-				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sr_rivals_list_solar_colonization')]"
-			}
-			blockoverride "sr_rival_tooltip" {
-				tooltip = "je_space_race_widget_rival_tt_solar_colonization"
-			}
-			blockoverride "sr_rival_lo" {
-				value = "[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_solar_colonization') )]"
-			}
-			blockoverride "sr_rival_hi" {
-				value = "[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_solar_colonization') )]"
-			}
-			blockoverride "sr_rival_est" {
-				value = "[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_solar_colonization') )]"
-			}
-			blockoverride "sr_rival_range" {
-				text = "je_space_race_widget_rival_range_solar_colonization"
+			te_sr_tab_button_wide = {
+				tooltip = "je_space_race_widget_tab_system_tt"
+				blockoverride "tab_button" {
+					enabled = "[Not( GetVariableSystem.HasValue('sr_tab', 'system') )]"
+					onclick = "[GetVariableSystem.Set('sr_tab', 'system')]"
+				}
+				blockoverride "tab_label" {
+					text = "je_space_race_widget_tab_system"
+				}
 			}
 		}
 
-		te_sr_sec_colony_fleets = {}
-		te_sr_sec_colonies = {}
-		te_sr_sec_space_command = {}
-		te_sr_sec_space_fleets = {}
-		### The worlds sit below the sections a player acts in (owner, 2026-10-31).
-		te_sr_sec_solar_system = {}
-		te_sr_sec_how_colonies = {}
+		# Mission Control: approach, funding, setbacks, launch windows, Rivals.
+		flowcontainer = {
+			visible = "[Not( GetVariableSystem.Exists('sr_tab') )]"
+			direction = vertical
+			parentanchor = hcenter
+			minimumsize = { 520 -1 }
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_sr_status_sections = {
+				blockoverride "status_debris" {
+					block "sr_debris" {
+						te_sr_debris_row = {}
+					}
+				}
+				blockoverride "sr_control_onclick" {
+					onclick = "[GetVariableSystem.Toggle('sr_panel_control_solar_colonization_closed')]"
+				}
+				blockoverride "sr_control_showmore" {
+					visible = "[GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed')]"
+				}
+				blockoverride "sr_control_showless" {
+					visible = "[Not(GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed'))]"
+				}
+				blockoverride "sr_control_visible" {
+					visible = "[Not(GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed'))]"
+				}
+				blockoverride "sr_funding_value" {
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_solar_colonization_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_solar_colonization', 'je_space_race_widget_funding_solar_colonization' )]"
+				}
+				blockoverride "sr_setbacks_value" {
+					text = "je_space_race_widget_setbacks_solar_colonization"
+				}
+				blockoverride "sr_eta_value" {
+					text = "je_space_race_widget_eta_solar_colonization"
+				}
+				blockoverride "sr_profile_text" {
+					text = "je_space_race_widget_profile_solar_colonization"
+				}
+				# Launch windows (gui/sr_launch_window_widgets.gui).
+				blockoverride "sr_control_extra" {
+					te_sr_sec_windows = {}
+				}
+				blockoverride "sr_rivals_onclick" {
+					onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_solar_colonization_closed')]"
+				}
+				blockoverride "sr_rivals_showmore" {
+					visible = "[GetVariableSystem.Exists('sr_panel_rivals_solar_colonization_closed')]"
+				}
+				blockoverride "sr_rivals_showless" {
+					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_solar_colonization_closed'))]"
+				}
+				blockoverride "sr_rivals_visible" {
+					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_solar_colonization_closed'))]"
+				}
+				blockoverride "sr_rivals_none" {
+					visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('sr_rivals_list_solar_colonization') )]"
+				}
+				blockoverride "sr_rivals_datamodel" {
+					datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sr_rivals_list_solar_colonization')]"
+				}
+				blockoverride "sr_rival_tooltip" {
+					tooltip = "je_space_race_widget_rival_tt_solar_colonization"
+				}
+				blockoverride "sr_rival_lo" {
+					value = "[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_solar_colonization') )]"
+				}
+				blockoverride "sr_rival_hi" {
+					value = "[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_solar_colonization') )]"
+				}
+				blockoverride "sr_rival_est" {
+					value = "[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_solar_colonization') )]"
+				}
+				blockoverride "sr_rival_range" {
+					text = "je_space_race_widget_rival_range_solar_colonization"
+				}
+			}
+		}
+
+		# Fleets: Colony Fleets, then under Full Colonies Space Command and Space
+		# Fleets.
+		flowcontainer = {
+			visible = "[GetVariableSystem.HasValue('sr_tab', 'fleets')]"
+			direction = vertical
+			parentanchor = hcenter
+			minimumsize = { 520 -1 }
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_sr_sec_colony_fleets = {}
+			te_sr_sec_space_command = {}
+			te_sr_sec_space_fleets = {}
+		}
+
+		# Colonies.
+		flowcontainer = {
+			visible = "[GetVariableSystem.HasValue('sr_tab', 'colonies')]"
+			direction = vertical
+			parentanchor = hcenter
+			minimumsize = { 520 -1 }
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_sr_sec_colonies = {}
+		}
+
+		# Solar System: the worlds, then How Solar Colonization Works.
+		flowcontainer = {
+			visible = "[GetVariableSystem.HasValue('sr_tab', 'system')]"
+			direction = vertical
+			parentanchor = hcenter
+			minimumsize = { 520 -1 }
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_sr_sec_solar_system = {}
+			te_sr_sec_how_colonies = {}
+		}
 	}
 
 }
