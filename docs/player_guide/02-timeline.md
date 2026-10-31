@@ -1,7 +1,7 @@
 # The extended timeline
 
 The base game ends in 1936 after five eras of technology. This mod moves the end
-date to 2136 and adds seven more eras, numbered 6 to 12, with 171 new
+date to 2136 and adds eight more eras, numbered 6 to 13, with 177 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
 a flagship building for every company, 37 wonders and seven megaprojects. None
@@ -11,12 +11,15 @@ technologies start. The one exception is the International Space Station
 wonder, which needs a Moon landing from the space race. The repeatable [Grand
 Monument](#grand-monuments) has a game rule of its own.
 
-## Eras six to twelve
+## Eras six to thirteen
 
 The technology tree continues past the base game's fifth era. Eras 6 to 9 follow
-the twentieth century, and eras 10 to 12 run from the present into the future.
-The game shows eras only by number; the periods below are the ones the mod's
-technologies were chosen to fit, so treat them as a rough guide.
+the twentieth century, and eras 10 to 13 run from the present into the future.
+The game shows eras only by number. The years for eras 6 to 9 are the periods
+the mod's technologies were chosen to fit, so treat them as a rough guide. The
+later eras are told apart by how far off their technologies are. Era 11's are on
+today's roadmaps. Era 12's are known to be possible, with no near-term path to
+them. Era 13's need breakthroughs nobody yet knows how to plan for.
 
 ![Part of the production tree in eras 6 to 8, from Modern Materials and Television down to Cellular Networks and Personal Computers. The numeral under each icon is its era.](images/tech_tree_production_era_6_7_8.jpg)
 
@@ -26,22 +29,23 @@ technologies were chosen to fit, so treat them as a rough guide.
 | 7 | 1946–1967 | 65,000 | 29 | Transistors, nuclear power, jets, the Green Revolution, missiles and satellites |
 | 8 | 1968–1987 | 115,000 | 21 | Computer networks, robotics, containerization, pharmaceuticals, stealth |
 | 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defense |
-| 10 | the present to about 2030 | 450,000 | 17 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
-| 11 | about 2030–2060 | 800,000 | 20 | Advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
-| 12 | after 2060 | 2,000,000 | 18 | General AI, nanofabrication, megaprojects in orbit, antimatter, mind uploading, post-scarcity |
+| 10 | the present day | 450,000 | 20 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
+| 11 | the near future | 800,000 | 20 | Advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
+| 12 | the medium-term future | 1,500,000 | 12 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
+| 13 | the speculative future | 3,000,000 | 9 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
 
 ### Research costs in the new eras
 
 Each technology costs its era's base research cost, before the usual modifiers.
 The base game's last era costs 17,500 per technology; era 6 is only a small step
-up at 20,000, but era 7 more than triples it, and an era 12 technology costs a
-hundred times as much as an era 6 one. The base game's surcharge for researching
+up at 20,000, but era 7 more than triples it, and an era 13 technology costs
+150 times as much as an era 6 one. The base game's surcharge for researching
 ahead of unresearched technologies in the same tree still applies, and it grows
 with the number of eras between them.
 
 Your innovation has to grow to match. Many of the new technologies raise the
 weekly innovation cap by 10 to 100 each, adding between 250 and 1,000 per era
-through era 11. Five [wonders](#wonders) raise it further, and new University
+through era 11 and 100 in era 12. Five [wonders](#wonders) raise it further, and new University
 production methods (National Labs, Academic Computing and AI Assisted Research)
 raise the innovation each university produces.
 
@@ -94,13 +98,20 @@ the Cultured Meat Plant and Cultured Produce Facility, and Synthetic Biology
 adds bioengineered production methods such as Designed Crops. Brain-Computer
 Interfaces and Human Augmentation bring augmentation laws.
 
-Era 12 is the far future. Artificial General Intelligence adds AI-managed
-production methods to many industries, and Molecular Assemblers, Programmable
-Matter and Orbital Manufacturing add a final tier to many more. Space Elevator,
-Space-Based Solar Power, Orbital Weapon Platforms, Antimatter Production, Mind
+Era 12 is the medium-term future. Artificial General Intelligence adds AI-managed
+production methods to many industries, and Orbital Manufacturing and Advanced
+Nanofabrication add a late tier to many more. Compact Fusion Reactors brings the
+fusion torch, Space-Based Solar Power and Orbital Weapon Platforms each unlock a
+[megaproject](#megaprojects), and Bioenhanced Soldiers brings the Mandatory
+Augmentation law. Rejuvenation Therapies halves the pace of aging for those in
+longevity care, and Post-Work Society opens the [Post-Scarcity
+Transition](07-social-movements.md#movement-journal-entries-at-a-glance).
+
+Era 13 is the speculative future. Molecular Assemblers and Programmable Matter
+add a final tier to many industries. Space Elevator, Antimatter Production, Mind
 Backups, Molecular Assemblers and Telepathic Communities each unlock a
-[megaproject](#megaprojects). Space Colonization, Biological Immortality and
-Post-Scarcity Economy are among the last technologies in the tree.
+megaproject. Biological Immortality and Post-Scarcity Economy are among the last
+technologies in the tree.
 
 Some of the mod's buildings arrive earlier, with base-game technologies: the
 Aerospace Industry with Military Aviation, the Highway with Paved Roads, and the
@@ -110,12 +121,13 @@ Tourism Industry with Romanticism.
 
 The further the world's leading powers advance, the faster everyone else
 catches up. Once a year, every country checks a list of 54 mid-century and later
-technologies, from Television and Cryptography to Space Colonization. Each one
+technologies, from Television and Cryptography to Post-Scarcity Economy. Each one
 that any great power has researched adds a bonus to technology spread, the
 trickle of innovation that pulls you toward technologies others already have.
 The bonuses add up, and the later the technology, the more it is worth: the
-earliest tier adds a small step, and the last tier (Artificial Intelligence,
-Space Colonization and their peers) adds ten times as much. Only great powers count, so a technology first reached by a
+earliest tier adds a small step, era 12's (Artificial Intelligence, Space
+Colonization and their peers) ten times as much, and era 13's two (Biological
+Immortality and Post-Scarcity Economy) fifteen times. Only great powers count, so a technology first reached by a
 minor country does not move the world's pace until a great power follows.
 
 The bonus appears on your country as the Global Technological Development
@@ -125,8 +137,8 @@ gains the most from it, because spread only works on technologies you lack. The
 leaders gain little, since spread only ever feeds technologies someone has
 already researched. The further ahead the great powers pull, the larger the
 bonus, but it closes the gap less than that suggests. The bonus is a flat amount
-of spread, and technology costs climb much faster than its tiers do: an era 12
-technology costs a hundred times as much as an era 6 one. So the same bonus
+of spread, and technology costs climb much faster than its tiers do: an era 13
+technology costs 150 times as much as an era 6 one. So the same bonus
 pays for less of each technology as the eras go on. The tooltip on the modifier shows your current figure. It sits alongside the
 usual sources of spread (literacy, laws and power bloc principles) and is
 separate from [agricultural diffusion](#agricultural-diffusion), which grants
@@ -286,10 +298,10 @@ The Deep-Sea Mine costs 5,000 construction per level, a quarter of the
 Extraplanetary Base's, and at base prices earns more per level: about three
 times as much in era 11, and still more than a Mining Colony after Advanced
 Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
-Capacity, and in era 12 two production method groups each cut that bill by 30%:
-Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (not
-an elevator of your own), and Transport in Space, whose Fusion Tugs need
-Muon-Catalyzed Fusion Reactors. A Mining Colony with Fusion Tugs already earns
+Capacity, and two late production method groups each cut that bill by 30%:
+Transport in Space, whose Fusion Tugs need Compact Fusion Reactors (era 12), and
+Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (era
+13; not an elevator of your own). A Mining Colony with Fusion Tugs already earns
 about as much per level as an Advanced Deep-Sea Mine, and with both upgrades half
 as much again. With the Global Commons rule off, the Deep-Sea Mine has no
 licenses and keeps its older, smaller output.
@@ -528,7 +540,7 @@ Genentech and BioNTech, also need the Corporate Genetic Licensing law
 Biotechnology unlocks. Three of them come from fiction and unlock late: the
 Rosen Association's androids with Genetic Engineering, InGen's resurrected
 species with Synthetic Biology, and RejoovenEsense's longevity treatments with
-Biological Immortality.
+Rejuvenation Therapies.
 
 ## Wonders
 
@@ -574,7 +586,7 @@ changes](09-diplomacy.md#other-power-bloc-changes).
 
 ## Megaprojects
 
-Megaprojects are the far-future wonders of era 12, too large to build with
+Megaprojects are the wonders of eras 12 and 13, too large to build with
 construction points alone. Instead you feed a construction site vast quantities
 of goods and specialists for one to four years.
 

@@ -276,7 +276,7 @@ sr_ms_count_slot = {
 
 # ---- Fabrication methods ---------------------------------------------------------------
 # Country scope. The best Module Fabrication method the country has, for the
-# AI's review (design § 10): Fusion Shipyards with Muon-Catalyzed Fusion
+# AI's review (design § 10): Fusion Shipyards with Compact Fusion
 # Reactors, else Orbital Foundries (pm_sr_fabrication_lunar_foundries) with
 # Space Colonization, else Orbital Assembly with Cislunar Infrastructure; with
 # none of them, nothing (a holder that was given its colony may have none).

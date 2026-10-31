@@ -1,6 +1,6 @@
 # Military and war
 
-The mod carries the army and navy through to era 12. It adds 25 battalion types,
+The mod carries the army and navy through to era 13. It adds 25 battalion types,
 two new unit groups (Heavy Tanks and Aircraft) and 19 ship types, and it rewards
 armies that mix their arms. Military Bases fortify states against invasion and
 missiles, several of the mod's systems feed war support, and mobilization drives
@@ -46,8 +46,8 @@ the upgrade options of the older units in their line, so you can upgrade
 battalions in place. The base game's Heavy Tanks (Mobile Armor, era 5) move from
 the artillery group to the new Heavy Tanks group, with lower stats than in the
 base game, and aircraft form a group of their own. Each group gains three to
-five units, from Armored Infantry and Propeller Aircraft in era 6 to the Utility
-Fog Phalanx and Orbital Weapons Platforms in era 12, and later units come in
+five units, from Armored Infantry and Propeller Aircraft in era 6 to the Orbital
+Weapons Platforms of era 12 and the Utility Fog Phalanx of era 13, and later units come in
 smaller battalions, down to 100 for the orbital ones. [Combat unit
 list](20-appendix-reference-lists.md#combat-unit-list) gives each unit's
 technology, era and battalion size.
@@ -75,7 +75,7 @@ method costs little in peacetime. Switch back to a fast one before a long war.
 |---|---|---|---|
 | Officer Academies | Combined Arms (era 6) | 26 | 30% of the staff are officers. Academy Officer Corps raises the Armed Forces' political strength by up to 20% and their attraction by up to 10%, in proportion to the share of your regular battalions trained this way |
 | Expeditionary Logistics | Predictive Logistics (era 8) | 10 | Cuts the base goods surcharge while the battalion is mobilized by a tenth. Mobilization options' own goods are unchanged |
-| Neural Grafting | Bioenhanced Soldiers (era 11) and the Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation law | 120 | Buys Drugs and Electronic Components, and raises its servicemen's mortality by 25% |
+| Neural Grafting | Bioenhanced Soldiers (era 12) and the Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation law | 120 | Buys Drugs and Electronic Components, and raises its servicemen's mortality by 25% |
 | Reserve Cadre | Public Works Programs (era 6) and the National Militia or Mass Conscription law | 12 | Each staffed level gives the state two reserve battalions. Each one raises the state's conscription rate and its conscription-center limit by enough for one more conscript battalion, so it still counts in a state already at the limit |
 | Political Commissars | Mass Media (era 6) and the Single-Party State or Council Republic law | 20 | 5% of the staff are officers. Commissar Indoctrination raises attraction to the interest groups in government by up to 15%, in proportion to the share of your regular battalions trained this way |
 
@@ -93,8 +93,8 @@ Logistics or Reserve Cadre.
 
 Nineteen ship types extend the navy from era 6, with escorts, submarines,
 carriers, battle-line ships and troop transports in most eras: from the Fleet
-Carrier and ASW Destroyer of era 6 to the Antimatter Battleship and Orbital
-Support Mothership of era 12. [Ship list](20-appendix-reference-lists.md#ship-list)
+Carrier and ASW Destroyer of era 6 to the Orbital Support Mothership of era 12
+and the Antimatter Battleship of era 13. [Ship list](20-appendix-reference-lists.md#ship-list)
 gives each ship's class, role and technology, and the technology that makes it
 obsolete.
 

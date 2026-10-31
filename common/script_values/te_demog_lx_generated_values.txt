@@ -34,6 +34,7 @@ te_demog_lx_country_carrier = {
 				has_technology_researched = genetic_engineering
 				has_technology_researched = mrna_therapeutics
 				has_technology_researched = personalized_medicine
+				has_technology_researched = rejuvenation_therapies
 				has_technology_researched = synthetic_biology
 			}
 		}

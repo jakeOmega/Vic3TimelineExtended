@@ -256,6 +256,32 @@ No era_12 entries appear miscategorized.
 
 ---
 
+## Update, 2026-10-31: era 13
+
+The era 13 design (`docs/superpowers/specs/2026-10-31-era-13-technology-tree-design.md`)
+replaced this audit's two speculative windows with four tests, one per era from 10, and no
+years beyond the internal guide (the owner: dates age badly):
+
+| Era | Internal guide | Test for belonging |
+|---|---|---|
+| era_10 | now to about 2030 | exists or is being deployed |
+| era_11 | about 2030–2055 | on a current roadmap |
+| era_12 | about 2055–2090 | known to be possible, but no near-term path to it |
+| era_13 | after about 2090 | needs breakthroughs nobody knows how to plan for |
+
+The era_12 table above failed the third test for half its rows. Phase 1 of the design moved
+nine to a new era_13: `molecular_assemblers`, `programmable_matter`, `fusion_batteries`,
+`space_elevator`, `antimatter_production`, `biological_immortality`, `mind_backups`,
+`telepathic_communities` and `post-scarcity_economy`. `bioenhanced_soldiers` moved up from
+era_11 to era_12. Two new era_12 technologies, `rejuvenation_therapies` and `post_work_society`,
+keep the chains whole. `artificial_intelligence` stays in era_12: the owner noted that its
+AI-managed methods all but decouple economic strength from population. The design's phases 2
+and 3 add era_11's AI technologies and more of era_12 and era_13; its § 3 has the full tree.
+This audit's "Possible era_10 moves" stay open; the design leaves Lab-Grown Food and Augmented
+Reality Warfare in era_11 for now.
+
+---
+
 ## Summary
 
 - **Total mod techs audited:** 171 (era_6 through era_12).

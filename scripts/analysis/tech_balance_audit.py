@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Tech balance audit: vanilla-normalized modifier density + structure checks.
 
-Walks `common/technology/technologies/era_6.txt` … `era_12.txt` and emits a
+Walks `common/technology/technologies/era_6.txt` … `era_13.txt` and emits a
 table per tech with: id, era, category, modifier_count, sum_abs, scaled_sum,
 polarity counts, flag, plus an unlock summary (counts per entity type, with
 PM `balance` annotator output where applicable).
@@ -59,6 +59,7 @@ ERAS = [
     "era_10.txt",
     "era_11.txt",
     "era_12.txt",
+    "era_13.txt",
 ]
 
 VANILLA_COMMON_DIR = Path(base_game_path) / "game" / "common"

@@ -644,6 +644,27 @@ need Morphological Freedom and Geoengineering first).
    Control (their technologies already exist); § 7.1's Bodily Autonomy with
    § 7.2; § 7.3; § 7.11.
 
+**Phase 1, as built (2026-10-31).** As § 3 to § 5 describe, with these
+differences:
+- **Post-Work Society's block** is SoL expectations +0.25, Art Academy
+  throughput +20% and voting power +10%.
+- **No institution lines on the new technologies.** Neither carries an
+  institution's maximum investment: those totals are a calibrated budget
+  (`scripting_best_practices.md` § Calibrated modifier budgets).
+- **Icons:** both new technologies borrow an existing icon (Biological
+  Immortality's, Universal Basic Income's) marked `# Placeholder Icon`, with
+  unreviewed prompts in `icon_prompts.py`, instead of copied textures.
+- **Release script:** `comment_out_census_inputs.py` finds census lines by
+  their type, so Rejuvenation Therapies' lines needed no list entry; only the
+  test's rows changed (§ 5.1).
+- **Balance snapshot:** `docs/data/balance_snapshot.json` was left alone. A
+  rerun rewrote about 4,000 unrelated lines; it is refreshed before vanilla
+  patches, not per change.
+- **The fusion rename** also covers the Fusion Plant's method (Compact Fusion
+  Power) and the German and Spanish memories' two names.
+
+The observer runs (the gate) are still to do.
+
 **Play-test list** (a new `docs/testing/era-13-playtest.md`): the technology
 tree draws a thirteenth era column; old saves load with the moved methods and
 units (§ 5.6); an active Post-Scarcity Transition in an old save; each phase-3
