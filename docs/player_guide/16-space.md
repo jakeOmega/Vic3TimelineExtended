@@ -209,6 +209,8 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Defense | Under Full Colonies only. Calm; or, in red, what threatens you (Under assault, Blockaded, Occupied, Interdicted, Earth blockaded or Launch site lost) and the colony it threatens. Hover it for every colony under threat and any hostile fleet on its way. |
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
+| Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels against your room, red once your built and queued levels pass it, and the grade the next level would work at, queued levels counted (see [Extraplanetary Base room](#extraplanetary-base-room)). |
+| Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
 
 Solar System Colonization has more sections below Rivals: Colony Fleets and
 Colonies, then under Full Colonies Space Command and Space Fleets, then Solar
@@ -827,8 +829,12 @@ country modifier, Extraplanetary Base Room, carries the average over
 all your levels, so only the levels past the room pay the penalty: with room for
 10 and 20 levels built, the base works at −37.5%. A new poor colony adds room
 without lowering what your levels already earn, and taking a rival's Psyche
-colony raises your average and lowers theirs. The Colonies section's Modules
-view shows your levels against your room, and each colony's Bases figure its
+colony raises your average and lowers theirs. The overview's Base Room cell
+shows your levels against your room and the grade the next level would work at,
+counting the levels you have queued; that grade updates monthly and the day after
+a level finishes, except that it reads −75% at once when your queue passes all
+of your room. The Colonies section's Modules view shows
+your levels against your room, any queued, and each colony's Bases figure its
 own room and grade. Private investors don't build past your room,
 and AI governments don't either; your government can, at the penalty. Under
 Races Only, bases have no room limit.
@@ -1160,6 +1166,18 @@ it up together as one fleet at Earth, with full propellant, supply and marines,
 blockade or not. A blockade therefore faces everything you have built since it
 began, not a month's worth at a time. Turn Auto off to keep a reserve in peace
 and launch it when you choose; it costs the same upkeep on the ground.
+
+You hear of each fleet of a country at war with you that is on its way to
+Earth, once a leg, within a month of its setting out, or of a war beginning with
+it already on its way. A notice in the feed tells you of one whose landing would
+change nothing. A popup, Earth Is Threatened, tells you once of one whose
+landing would tip the balance: it would find no fleet of yours at Earth (and
+Earth not blockaded already), or yours holds against what is there now but not
+against that and what is coming. That can come later in the leg too, if your
+fleet leaves Earth or theirs grows. One popup a month covers every such fleet
+that month, and the others you hadn't heard of get the feed notice. The
+overview's Hostile Fleet cell shows the first landing; hover it for each
+country's fleets on their way.
 
 Ground-to-orbit batteries are a government building, unlocked by Space
 Militarization and built in any state. Each level fires on every enemy fleet at
