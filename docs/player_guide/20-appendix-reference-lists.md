@@ -141,6 +141,38 @@ groups](06-politics.md#new-laws-in-base-game-law-groups).
 | Corporate Autocracy | Neocameralism without a voting franchise | Director |
 | Algorithmic Directorate | Algorithmic Governance, except under Collective Governance or Neocameralism | Director |
 
+## City-state list
+
+The 22 city-states from [Releasable city-states](09-diplomacy.md#releasable-city-states),
+with the state each is carved from and its owner at the 1836 start. Dakar and
+Calabar start inside decentralized nations, which can't release them, so they
+become releasable once another country holds the city.
+
+| City-state | State | Held at the start by |
+|---|---|---|
+| New York | New York | United States |
+| San Francisco | California | Mexico |
+| Singapore | Malaya | Great Britain |
+| Hong Kong | Eastern Guangdong | Great Qing |
+| Shanghai | Suzhou | Great Qing |
+| Constantinople | Eastern Thrace | Ottoman Empire |
+| Macau | Western Guangdong | Portugal |
+| Kuwait | Basra | Ottoman Empire |
+| Fiume | Croatia | Croatia |
+| Bombay | Bombay | East India Company |
+| Goa | Bombay | Portugal |
+| Pondicherry | Carnatic | France |
+| Aden | Yemen | Lahej |
+| Dubai | Trucial Coast | Trucial States |
+| Tangier | al Rif | Morocco |
+| Lagos | Yoruba States | Oyo |
+| Dakar | Senegal | Cayor |
+| Djibouti | Eritrea | Aussa |
+| Calabar | Niger Delta | Igbo |
+| Guayaquil | Ecuador | Ecuador |
+| Cartagena | Antioquia | New Granada |
+| Buenos Aires | Buenos Aires | Argentine Confederation |
+
 ## Combat unit list
 
 The mod's battalion types by unit group, with the technology that unlocks each.

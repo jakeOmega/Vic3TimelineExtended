@@ -35,7 +35,7 @@ share = (regular_provinces + 5×prime_provinces) / total_(regular + 5×prime)
 
 "Prime" provinces (those holding hubs and key features) count five-times-heavier than regular ones — this is why losing a hub province hurts a split owner disproportionately. **Sea-based resources (fishing, whaling, ports, naval bases) are unavailable to a split-state owner with no coastal province**, but the resources are still apportioned to that owner by share — they reduce other owners' availability without being usable themselves. This is occasionally a balance footgun; the loser of the coast suffers, the rest of the region loses its full sea-resource potential.
 
-Three ways split states get created during gameplay: treaty ports, colonization landing in an existing-state region, or scripted effects (revolutions, releasable countries, events). Two split-state naming conventions:
+Three ways split states get created during gameplay: treaty ports, colonization landing in an existing-state region, or scripted effects (revolutions, releasable countries, events). A releasable country (`common/country_creation/`) that lists `provinces` instead of `states` takes only those provinces when released, splitting the state: vanilla's free cities (Hamburg, Bremen, Danzig, Krakow) and the mod's city-states work this way. Two split-state naming conventions:
 - A split state owning more than half of the region takes the region's name.
 - A split state with only a single hub-province takes the hub's name (so a country owning only the Hudson's Bay portion of an Arctic region gets a state named for the relevant hub).
 - A one-state country owning only its split portion typically gets the country's name.
