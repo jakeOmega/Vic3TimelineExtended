@@ -368,6 +368,39 @@ sr_sc_mix_sgui = {
 	}
 }
 
+# Space Command's Pause and Resume (owner, 2026-10-31): paused, it builds no
+# fleet strength and its yards buy no inputs; fleets, the reserve and Auto
+# carry on. The AI pauses through the same effect (sr_sc_ai_pause_review).
+sr_sc_pause_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { sr_sc_is_paused = yes }
+			custom_tooltip = sr_sc_resume_tt
+		}
+		else = {
+			custom_tooltip = sr_sc_pause_tt
+		}
+		hidden_effect = {
+			sr_sc_toggle_pause = yes
+		}
+	}
+}
+
 # 6d: Launch: the whole ground reserve into orbit as one fleet at Earth, any
 # month, blockade or not (design § 15). Only an occupied launch site stops it.
 sr_reserve_launch_sgui = {

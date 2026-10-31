@@ -5387,9 +5387,10 @@ types space_race_widget_types
 	}
 
 	### Space Command (Full Colonies; slice 6 design § 5): what it builds a month
-	### and its levels, the fleets' strength and its upkeep, then the build mix,
-	### five buttons each stepping a role's weight 0 → 3 (sr_sc_mix_sgui,
-	### scope:op the role). Open by default; the flag is
+	### and its levels, the fleets' strength and its upkeep, the reserve with
+	### Launch, Auto and Pause / Resume (sr_sc_pause_sgui; owner, 2026-10-31),
+	### then the build mix, five buttons each stepping a role's weight 0 → 3
+	### (sr_sc_mix_sgui, scope:op the role). Open by default; the flag is
 	### sr_panel_space_command_closed.
 	type te_sr_sc_mix_button = button {
 		using = default_button_action
@@ -5445,12 +5446,24 @@ types space_race_widget_types
 				text = "je_space_race_widget_sc_site_lost_note"
 			}
 			te_sr_value_row = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)0' )]"
 				tooltip = "je_space_race_widget_sc_rate_tt"
 				blockoverride "row_label" {
 					text = "je_space_race_widget_sc_rate_label"
 				}
 				blockoverride "row_value" {
 					text = "je_space_race_widget_sc_rate_figure"
+				}
+			}
+			### Paused (owner, 2026-10-31): the same row, reading Paused.
+			te_sr_value_row = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)1' )]"
+				tooltip = "je_space_race_widget_sc_rate_paused_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_sc_rate_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_sc_rate_paused"
 				}
 			}
 			te_sr_value_row = {
@@ -5517,6 +5530,29 @@ types space_race_widget_types
 					}
 					blockoverride "mix_label" {
 						text = "je_space_race_widget_sc_auto_off"
+					}
+				}
+				### Space Command's Pause / Resume (owner, 2026-10-31; sr_sc_pause_sgui).
+				te_sr_sc_mix_button = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)0' )]"
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_sc_pause_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_sc_pause_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_sc_pause_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_pause_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_pause"
+					}
+				}
+				te_sr_sc_mix_button = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)1' )]"
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_sc_pause_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_sc_pause_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_sc_pause_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_pause_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_resume"
 					}
 				}
 			}

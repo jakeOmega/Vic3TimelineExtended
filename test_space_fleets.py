@@ -208,7 +208,7 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        self.assertEqual(len(names), 12)
+        self.assertEqual(len(names), 13)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -412,6 +412,166 @@ class UpkeepTest(unittest.TestCase):
         shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_upkeep_pct")
         # The whole fleet's, and nothing with no Space Command to carry it.
         self.assertRegex(shown, rf"limit = \{{ sr_sc_buildings >= 1 \}}\s*value = sr_fleet_upkeep_units_value\s*multiply = {self.K * 100}")
+
+
+class PauseTest(unittest.TestCase):
+    """Pausing Space Command (owner, 2026-10-31): paused, a country builds no
+    fleet strength and its yards buy none of their inputs; fleets, the reserve
+    and Auto carry on. The AI pauses in default, or in deficit at peace."""
+
+    INPUTS = ("launch_capacity", "advanced_materials", "electricity")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(FLEET_EFFECTS))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.sguis = _strip(_raw(SGUIS))
+        cls.earth = _strip(_raw(EARTH_EFFECTS))
+
+    def test_the_toggle_and_its_variable(self):
+        self.assertRegex(_block(self.triggers, "sr_sc_is_paused"), r"^\s*has_variable = sr_sc_paused\s*$")
+        toggle = _block(self.effects, "sr_sc_toggle_pause")
+        # Paused is yes; building is the variable's absence, the default.
+        self.assertRegex(toggle, r"limit = \{ sr_sc_is_paused = yes \}\s*remove_variable = sr_sc_paused\s*\}\s*"
+                                 r"else = \{\s*set_variable = \{ name = sr_sc_paused value = yes \}\s*\}\s*"
+                                 r"sr_sc_pause_apply = yes\s*$")
+        sgui = _block(self.sguis, "sr_sc_pause_sgui")
+        self.assertIn("always = no", _block("x = {" + sgui.split("ai_is_valid = {", 1)[1], "x"))
+        # The tooltip says what each state's click does; the variable is set out of sight.
+        self.assertRegex(sgui, r"limit = \{ sr_sc_is_paused = yes \}\s*custom_tooltip = sr_sc_resume_tt\s*\}\s*"
+                               r"else = \{\s*custom_tooltip = sr_sc_pause_tt\s*\}\s*"
+                               r"hidden_effect = \{\s*sr_sc_toggle_pause = yes\s*\}")
+        # No cost and no wait: the toggle does nothing else.
+        self.assertEqual(re.findall(r"(\w+) = ", toggle),
+                         ["if", "limit", "sr_sc_is_paused", "remove_variable", "else", "set_variable", "name", "value",
+                          "sr_sc_pause_apply"])
+
+    def test_the_month_builds_nothing_while_paused(self):
+        month = _block(self.effects, "sr_sc_month")
+        gate = re.search(r"if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*"
+                         r"set_variable = \{ name = sr_sc_built_last value = 0 \}\s*\}\s*else = \{", month)
+        self.assertIsNotNone(gate, "no paused branch reading Built a month 0")
+        build = _block("x = {" + month[gate.end():], "x")
+        self.assertIn("value = sr_sc_rate", build)
+        self.assertRegex(build, r"limit = \{ local_var:sr_sc_points > 0 \}\s*sr_reserve_build = yes")
+        # The month's strength (Space Command's and the Orbital Yards', both in
+        # sr_sc_rate) joins the reserve only there.
+        rest = month.replace(build, "")
+        for name in ("sr_sc_rate", "sr_reserve_build", "sr_mod_units_yard"):
+            with self.subTest(name=name):
+                self.assertNotIn(name, rest)
+        calls = re.findall(r"sr_reserve_build = yes", self.effects + self.earth + _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)))
+        self.assertEqual(len(calls), 1)
+        self.assertIn("add = {\n\t\tvalue = sr_mod_units_yard", _block(_strip(_raw(FLEET_VALUES)), "sr_sc_rate"))
+
+    def test_the_panel_reads_paused(self):
+        shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_paused")
+        self.assertIn("if = { limit = { sr_sc_is_paused = yes } value = 1 }", shown)
+        gui = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
+        section = _block(gui.replace("\ttype te_sr_sec_space_command = flowcontainer", "te_sr_sec_space_command ="),
+                         "te_sr_sec_space_command")
+        paused = "ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)1' )]\""
+        building = "ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)0' )]\""
+        for key, state in (("je_space_race_widget_sc_rate_figure", building), ("je_space_race_widget_sc_rate_paused", paused),
+                           ("je_space_race_widget_sc_pause", building), ("je_space_race_widget_sc_resume", paused)):
+            with self.subTest(key=key):
+                i = section.index(f'text = "{key}"')
+                self.assertIn(state, _block_around(section, i, 3))
+        self.assertEqual(section.count("GetScriptedGui('sr_sc_pause_sgui').Execute("), 2)
+
+    def test_the_modifier_cuts_the_yards_inputs(self):
+        body = _block(_strip(_raw(STATIC)), "sr_space_command_paused")
+        self.assertEqual(re.findall(r"(\w+) = (\S+)", body)[1:],
+                         [(f"goods_input_{g}_mult", "-1") for g in self.INPUTS])
+        # The three are every workforce-scaled input of every yard method, and
+        # none is the maintenance line's (the upkeep stays).
+        text = _strip(_raw(METHODS))
+        for m in re.finditer(r"(?m)^(pm_sr_space_command_\w+) = \{", text):
+            body = _block(text, m.group(1))
+            at = body.index("workforce_scaled = {")
+            self.assertLess(body.index("building_modifiers = {"), at)
+            self.assertLess(at, body.index("state_modifiers = {"))
+            scaled = _block(body[at:], "workforce_scaled")
+            with self.subTest(method=m.group(1)):
+                goods = set(re.findall(r"goods_input_(\w+)_add", scaled))
+                self.assertTrue(goods)
+                self.assertLessEqual(goods, set(self.INPUTS))
+        self.assertFalse(set(self.INPUTS) & set(UpkeepTest.LINE))
+
+    def test_one_apply_site_removed_first(self):
+        everything = "\n".join(_strip(p.read_text(encoding="utf-8-sig"))
+                               for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
+        self.assertEqual(everything.count("add_modifier = { name = sr_space_command_paused"), 1)
+        apply = _block(self.effects, "sr_sc_pause_apply")
+        self.assertIn("is_building_type = building_space_command", apply)
+        self.assertLess(apply.index("remove_modifier = sr_space_command_paused"), apply.index("add_modifier"))
+        self.assertRegex(apply, r"limit = \{\s*level >= 1\s*root = \{ sr_sc_is_paused = yes \}\s*\}\s*"
+                                r"add_modifier = \{ name = sr_space_command_paused \}")
+        # Two callers: the monthly step, first, and the toggle.
+        self.assertEqual(everything.count("sr_sc_pause_apply = yes"), 2)
+        self.assertTrue(_block(self.effects, "sr_sc_month").strip().startswith("sr_sc_pause_apply = yes"))
+        self.assertIn("sr_sc_pause_apply = yes", _block(self.effects, "sr_sc_toggle_pause"))
+        # The toggle's callers: the button and the AI.
+        self.assertEqual(everything.count("sr_sc_toggle_pause = yes"), 3)
+        self.assertEqual(_block(self.effects, "sr_sc_ai_pause_review").count("sr_sc_toggle_pause = yes"), 2)
+        # A building modifier, never the country's.
+        self.assertIn('"sr_space_command_paused": "a Space Command building"',
+                      _raw(ROOT / "scripts/generators/gen_nation_tab.py"))
+
+    def test_the_ai_pauses_under_fiscal_stress(self):
+        should = _block(self.triggers, "sr_sc_ai_should_pause")
+        self.assertRegex(should, r"^\s*OR = \{\s*in_default = yes\s*AND = \{\s*net_fixed_income < 0\s*"
+                                 r"is_at_war = no\s*\}\s*\}\s*$")
+        # The same fiscal terms the AI builds Space Command on, turned round.
+        build = _block(self.triggers, "sr_sc_may_build_government")
+        self.assertIn("in_default = no", build)
+        self.assertIn("net_fixed_income > 0", build)
+
+    def test_the_ai_resumes_out_of_it_six_months_on(self):
+        resume = _block(self.triggers, "sr_sc_ai_may_resume")
+        self.assertRegex(resume, r"^\s*in_default = no\s*OR = \{\s*net_fixed_income > 0\s*is_at_war = yes\s*\}\s*"
+                                 r"NOT = \{ has_variable = sr_sc_pause_hold \}\s*$")
+        review = _block(self.effects, "sr_sc_ai_pause_review")
+        self.assertRegex(review, r"limit = \{\s*NOT = \{ sr_sc_is_paused = yes \}\s*sr_sc_ai_should_pause = yes\s*\}\s*"
+                                 r"sr_sc_toggle_pause = yes\s*"
+                                 r"set_variable = \{ name = sr_sc_pause_hold value = yes months = 6 \}\s*\}\s*"
+                                 r"else_if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*sr_sc_ai_may_resume = yes\s*\}\s*"
+                                 r"sr_sc_toggle_pause = yes\s*\}\s*$")
+        # The hold is the AI's alone, on the country (not a container: a timed
+        # variable there runs down).
+        everything = "\n".join(_strip(_raw(p)) for p in (ROOT / "common").rglob("*.txt"))
+        self.assertEqual(everything.count("name = sr_sc_pause_hold"), 1)
+        # In the AI branch of the country's month, after its construction.
+        month = _block(self.effects, "sr_fl_country_month")
+        self.assertRegex(month, r"limit = \{ is_ai = yes \}\s*sr_fl_ai_review = yes\s*sr_sc_ai_pause_review = yes\s*\}")
+        self.assertLess(month.index("sr_sc_month = yes"), month.index("sr_sc_ai_pause_review = yes"))
+
+    def test_orders_the_reserve_and_auto_are_untouched(self):
+        generated = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        bodies = {
+            "sr_sc_operational": _block(self.triggers, "sr_sc_operational"),
+            "sr_reserve_may_launch": _block(self.triggers, "sr_reserve_may_launch"),
+            "sr_reserve_auto_on": _block(self.triggers, "sr_reserve_auto_on"),
+            "sr_reserve_launch": _block(self.earth, "sr_reserve_launch"),
+            "sr_reserve_auto_step": _block(self.earth, "sr_reserve_auto_step"),
+            "sr_reserve_toggle_auto": _block(self.earth, "sr_reserve_toggle_auto"),
+            "sr_fl_1_may_depart_mars": _block(generated, "sr_fl_1_may_depart_mars"),
+        }
+        for name, body in bodies.items():
+            with self.subTest(name=name):
+                self.assertNotIn("sr_sc_paused", body)
+                self.assertNotIn("sr_sc_is_paused", body)
+        # Auto's step runs every month, paused or not.
+        month = _block(self.effects, "sr_sc_month")
+        self.assertTrue(month.rstrip().endswith("}\n\tsr_reserve_auto_step = yes"))
+        for lim in _enclosing_limits(month, month.index("sr_reserve_auto_step = yes")):
+            self.assertNotIn("sr_sc_is_paused", lim)
+        # Only Space Command's own month, its panel, its button and the AI read it.
+        readers = set()
+        for path in (ROOT / "common").rglob("*.txt"):
+            if "sr_sc_is_paused = yes" in _strip(_raw(path)):
+                readers.add(path.name)
+        self.assertEqual(readers, {"sr_fleet_effects.txt", "sr_fleet_sguis.txt", "sr_fleet_display_values.txt"})
 
 
 class ShippingTest(unittest.TestCase):

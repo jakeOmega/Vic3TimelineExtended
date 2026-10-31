@@ -376,6 +376,23 @@ sr_fleet_upkeep_goods = {
 	goods_input_fertilizer_mult = 9
 }
 
+# Space Command paused (owner, 2026-10-31): while a country's construction is
+# paused (sr_sc_paused, a country variable), each of its Space Command
+# buildings of a level or more carries this, cutting the three goods the yard
+# methods' workforce-scaled inputs use (sr_space_command_pms.txt) by 100%, so
+# a paused yard buys none of them; sr_sc_month builds nothing meanwhile. The
+# maintenance line and the fleets' upkeep (sr_fleet_upkeep_goods) are on six
+# other goods and stay. These three multipliers were the old upkeep's, seen in
+# game. Derived from the variable: its one apply site sr_sc_pause_apply,
+# removed first, from sr_sc_month and the toggle (sr_sc_toggle_pause). A
+# building modifier, under NOT_ON_COUNTRY in gen_nation_tab.py.
+sr_space_command_paused = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_input_launch_capacity_mult = -1
+	goods_input_advanced_materials_mult = -1
+	goods_input_electricity_mult = -1
+}
+
 # Orbital fire support (fleets design § 15, 6d): at war, a country whose
 # fleets at Earth outmatch the hostile fleets there (or face none while it has
 # some), on the country at multiplier = the margin, min(1, (ours - theirs) /

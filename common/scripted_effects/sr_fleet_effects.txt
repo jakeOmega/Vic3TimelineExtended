@@ -431,7 +431,8 @@ sr_fl_global_month = {
 # ---- The country's month (space_race_on_actions.txt) ----------------------------------------------
 # Country scope, a fleet power under Full Colonies: Space Command's
 # construction, every slot's month, the upkeep, war support's records, orbital
-# fire support (6d), the AI's review, a player's Locations snapshot.
+# fire support (6d), the AI's review and its pause, a player's Locations
+# snapshot.
 sr_fl_country_month = {
 	sr_fl_join_powers = yes
 	sr_sc_month = yes
@@ -442,6 +443,7 @@ sr_fl_country_month = {
 	if = {
 		limit = { is_ai = yes }
 		sr_fl_ai_review = yes
+		sr_sc_ai_pause_review = yes
 	}
 	if = {
 		limit = { is_player = yes }
@@ -458,16 +460,67 @@ sr_fl_country_month = {
 # (6d, sr_reserve_<role>), shared by the build mix; then, with the toggle on
 # and no hostile fleet at Earth, the reserve launches itself into the home
 # fleet (sr_reserve_auto_step, sr_earth_orbit_effects.txt), which is 6a's
-# behaviour. Otherwise it waits on the ground for Launch.
+# behaviour. Otherwise it waits on the ground for Launch. While construction
+# is paused (sr_sc_is_paused, owner, 2026-10-31) nothing is built, neither
+# Space Command's nor the colonies' Orbital Yards' strength, and the yards
+# buy none of their inputs (sr_sc_pause_apply); the reserve, Auto and the
+# fleets' orders carry on.
 sr_sc_month = {
+	sr_sc_pause_apply = yes
 	sr_sc_self_check = yes
-	set_local_variable = { name = sr_sc_points value = sr_sc_rate }
-	set_variable = { name = sr_sc_built_last value = local_var:sr_sc_points }
 	if = {
-		limit = { local_var:sr_sc_points > 0 }
-		sr_reserve_build = yes
+		limit = { sr_sc_is_paused = yes }
+		set_variable = { name = sr_sc_built_last value = 0 }
+	}
+	else = {
+		set_local_variable = { name = sr_sc_points value = sr_sc_rate }
+		set_variable = { name = sr_sc_built_last value = local_var:sr_sc_points }
+		if = {
+			limit = { local_var:sr_sc_points > 0 }
+			sr_reserve_build = yes
+		}
 	}
 	sr_reserve_auto_step = yes
+}
+
+# Country scope: the pause's building modifier, derived from sr_sc_paused.
+# Its one apply site (a same-name add_modifier stacks, so removed first), on
+# each Space Command building of a level or more, wherever it stands: the
+# monthly step (sr_sc_month, which also reaches a building built or expanded
+# since) and the toggle (sr_sc_toggle_pause), so a pause or a resume reaches
+# the yards' inputs, and the building's tooltip, at once.
+sr_sc_pause_apply = {
+	every_scope_state = {
+		limit = { has_building = building_space_command }
+		every_scope_building = {
+			limit = { is_building_type = building_space_command }
+			if = {
+				limit = { has_modifier = sr_space_command_paused }
+				remove_modifier = sr_space_command_paused
+			}
+			if = {
+				limit = {
+					level >= 1
+					root = { sr_sc_is_paused = yes }
+				}
+				add_modifier = { name = sr_space_command_paused }
+			}
+		}
+	}
+}
+
+# Country scope: Pause or Resume (sr_sc_pause_sgui; the AI, sr_sc_ai_pause_review).
+# Paused is recorded as yes; building is the variable's absence. No cost and
+# no wait either way: a paused month buys nothing and builds nothing.
+sr_sc_toggle_pause = {
+	if = {
+		limit = { sr_sc_is_paused = yes }
+		remove_variable = sr_sc_paused
+	}
+	else = {
+		set_variable = { name = sr_sc_paused value = yes }
+	}
+	sr_sc_pause_apply = yes
 }
 
 # Country scope, the fleets' month: the upkeep's one refresh site (design § 5;
@@ -664,6 +717,30 @@ sr_fl_ai_review = {
 	sr_fl_ai_send_garrisons = yes
 	sr_fl_each_slot = { DO = ai_home }
 	sr_fl_ai_attack = yes
+}
+
+# Country scope, an AI fleet power's month, after its construction (sr_sc_month)
+# and beside its review (owner, 2026-10-31): it pauses Space Command under
+# fiscal stress (sr_sc_ai_should_pause) and resumes once out of it, not before
+# six months (sr_sc_ai_may_resume). The toggle applies the inputs' cut at
+# once, so a pause decided this month saves the coming month's inputs and the
+# next month's step builds nothing; a resume buys them again from now.
+sr_sc_ai_pause_review = {
+	if = {
+		limit = {
+			NOT = { sr_sc_is_paused = yes }
+			sr_sc_ai_should_pause = yes
+		}
+		sr_sc_toggle_pause = yes
+		set_variable = { name = sr_sc_pause_hold value = yes months = 6 }
+	}
+	else_if = {
+		limit = {
+			sr_sc_is_paused = yes
+			sr_sc_ai_may_resume = yes
+		}
+		sr_sc_toggle_pause = yes
+	}
 }
 
 # ---- Self-checks (design § 18) ---------------------------------------------------------------------
