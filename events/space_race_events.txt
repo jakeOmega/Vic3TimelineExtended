@@ -5360,6 +5360,25 @@ space_race_events.109 = {
 	}
 }
 
+# Base Room's refresh when an Extraplanetary Base is built or gains a level
+# (Space Race UI pass design § 8): fired on the owner the next day, once a day,
+# by sr_ebase_hook_fire (from te_on_building_built and te_on_building_expanded,
+# extra_on_actions.txt), so the refresh's multipliers resolve against the
+# country. Hidden; the monthly pulse stays.
+space_race_events.110 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_technology_researched = in_situ_resource_utilization
+	}
+
+	immediate = {
+		if = { limit = { has_variable = sr_ebase_hook_pending } remove_variable = sr_ebase_hook_pending }
+		sr_ebase_refresh = yes
+	}
+}
+
 # A hostile fleet bound for our Earth whose landing would tip the balance (UI
 # pass design § 9, sr_earth_alert_loud): we have no fleet at Earth and it isn't
 # blockaded already, or ours holds against theirs there now but not with what

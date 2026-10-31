@@ -5460,7 +5460,7 @@ company_jardine_matheson = {
 # (androids), InGen (de-extinction) and RejoovenEsense (longevity). Six unlock
 # with Biotechnology (era 9), BioNTech with mRNA Therapeutics (era 10), the Rosen
 # Association with Genetic Engineering and InGen with Synthetic Biology (era 11),
-# and RejoovenEsense with Biological Immortality (era 12). Their prosperity bonuses sit at
+# and RejoovenEsense with Rejuvenation Therapies (era 12). Their prosperity bonuses sit at
 # about Pfizer's and Roche's level, well above the deliberately lean generic, so
 # meeting a flavored firm's rank gate is worth spending the company slot on.
 # =============================================================================
@@ -6149,8 +6149,9 @@ company_rejoovenesense = {
 	potential = {
 		always = yes
 	}
+	# Rejuvenation Therapies, the technology its name describes (Biological Immortality until the era 13 spec, § 5.1)
 	attainable = {
-		has_technology_researched = biological_immortality
+		has_technology_researched = rejuvenation_therapies
 	}
 	possible = {
 		modifier:country_can_use_biotech_companies_bool = yes
@@ -6176,7 +6177,7 @@ company_rejoovenesense = {
 		prestige_good_generic_opium
 	}
 	ai_will_do = {
-		has_technology_researched = biological_immortality
+		has_technology_researched = rejuvenation_therapies
 	}
 	ai_construction_targets = {
 		building_synthetics_plant_opium = {

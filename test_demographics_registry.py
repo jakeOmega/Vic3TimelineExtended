@@ -1762,12 +1762,13 @@ class TestEngineLinesMoved(unittest.TestCase):
         ("law", "law_womens_suffrage", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
         ("technology", "antibiotic_mass_production", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
         ("technology", "antibiotic_mass_production", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
-        ("technology", "biological_immortality", "modifier", "state_mortality_mult"): ("absorbed", -0.2),   # phase 3 (§8.4)
+        ("technology", "biological_immortality", "modifier", "state_mortality_mult"): ("absorbed", -0.15),   # phase 3 (§8.4); -0.2 until the era 13 spec
         ("technology", "contraceptive_pill", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
         ("technology", "mental_health_awareness", "modifier", "state_mortality_mult"): ("absorbed", -0.05),   # phase 3 (§8.4)
         ("technology", "mind_backups", "modifier", "state_mortality_mult"): ("absorbed", -0.05),   # phase 3 (§8.4)
         ("technology", "modern_vaccines", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
         ("technology", "modern_vaccines", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("technology", "rejuvenation_therapies", "modifier", "state_mortality_mult"): ("absorbed", -0.05),   # era 13 spec § 5.1: its share of immortality's
         ("technology", "second_wave_feminism", "modifier", "state_birth_rate_mult"): ("ontop", -0.025),
         ("technology", "sexual_revolution", "modifier", "state_birth_rate_mult"): ("ontop", -0.025),
     }

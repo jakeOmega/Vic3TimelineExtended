@@ -6,9 +6,11 @@
 		post_scarcity_transition_active_modifier
 	}
 
+	# Opens at Post-Work Society (era 12), Post-Scarcity Economy's prerequisite; Universal Basic Income (era 10)
+	# until the era 13 spec (2026-10-31, § 5.3) moved Post-Scarcity Economy to era 13, past the 30-year timeout's reach
 	is_shown_when_inactive = {
 		has_game_rule = social_movements_enabled
-		has_technology_researched = universal_basic_income
+		has_technology_researched = post_work_society
 		NOT = { is_country_type = decentralized }
 		NOT = {
 			has_law = law_type:law_post-scarcity
@@ -16,7 +18,7 @@
 	}
 
 	possible = {
-		has_technology_researched = universal_basic_income
+		has_technology_researched = post_work_society
 		NOT = {
 			has_law = law_type:law_post-scarcity
 		}

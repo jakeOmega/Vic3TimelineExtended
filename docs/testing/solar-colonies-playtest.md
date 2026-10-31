@@ -621,6 +621,56 @@ No post-setback cooldown, self-government at 50, the grade beside Bases, the que
 6. **Solar System's place.** Solar System sits below Space Fleets (Colonies under Simple Colonies), just above How
    Solar Colonization Works, in the journal and in the Timeline Extended window's Space Race tab.
 
+## The owner's UI pass: the Base Room cell (PR 5, 2026-10-31)
+
+The colonization overview's Base Room cell and the refresh when a base is built (UI pass design § 8;
+`docs/systems/mod_systems/space_race.md` § Colony modules and Extraplanetary Base room).
+
+1. **The cell.** With In-Situ Resource Utilization, the overview's third row shows Base Room: our Extraplanetary Base
+   levels against our room ("120 / 400"), and "next at +5%" under it. Without the technology the row is gone.
+2. **Queued levels.** Queue 20 levels: the hover counts them at once, the Modules view gains "Extraplanetary Base levels
+   queued +20", and by the next month (or the day after a level finishes) "next at" moves to the grade of the room
+   those levels would leave (counting them, not only the built ones). Queue past all of our room: the figure turns red
+   and reads "next at -75%" at once.
+3. **On completion.** When a queued level finishes, the cell's average and "next at" change the next day, not at the
+   next month. If nothing changes until the month turns, `on_building_built` / `on_building_expanded` never reached
+   `te_on_building_*` (unverified, `scripting_best_practices.md`); fallback: drop the hook, the monthly pulse stays.
+4. **A batch stacks nothing.** Let several levels finish on one day (queue them in several states at once) and compare
+   the country's Extraplanetary Base Room modifier before and after: one copy, at the new average, not two.
+5. **No stutter.** With the panel open and many states holding bases, scrolling the overview stays smooth (the levels,
+   queue and room are read live, each a loop over our buildings). Fallback if it stutters: read copies the refresh
+   stores.
+## The owner's UI pass: the popup and the colony target (PR 2, 2026-10-31)
+
+The mod's first centred popup (`te_ui_popup` in `gui/te_widget_library.gui`, the `te_popups` root in `gui/te_popups.gui`)
+and the colony target popup it carries (`docs/systems/mod_systems/space_race.md` § Popups; UI pass design §§ 3, 5).
+**Fallback** if the popup layer misbehaves: draw `te_sr_target_popup_body` inline in Colony Fleets, under the row that
+opened it.
+
+1. **It opens over both hosts.** Colony Fleets' Choose (Change once there is a target) opens Colony Target in the middle
+   of the screen, the rest dimmed, over the journal panel and over the Timeline Extended window's Space Race tab.
+2. **It closes three ways.** Escape closes the popup and leaves the journal panel or the Timeline Extended window open
+   behind it; a click outside the popup closes it; so does its close button. Reopen it each time.
+3. **The rows read.** With the popup open from either host, every listed site shows its slots, base room and grade,
+   holder, inbound fleets and launch window (slots, room and fleets under Simple and Full Colonies; "Any month" at the
+   Moon and Mercury; "Open now", "In N months", or with
+   depots "+N% now, N mo" elsewhere), with figures, not raw keys or zeros. The count reads "N of 40 sites can be
+   targeted"; Show all lists all 40.
+4. **Target and Clear.** Target on a site closes the popup; Colony Fleets names the site, with Change and Clear, and
+   Solar System's row reads Our target. Reopened with Change, the popup shows that site's button as Clear. Both
+   clicks run once (the choice, then the close, on one button). A site beyond the Moon before the Mars Landing is
+   greyed, its hover naming the Mars Landing.
+5. **Solar System is a list to read.** Its rows have no button; the row ends after the inbound fleets.
+6. **The entry closing under it** (hard to reach on purpose; note it if seen). With the popup open while the
+   colonization entry goes away, the popup says "Solar System Colonization isn't running." instead of an empty frame.
+7. **The screen behind takes nothing.** The shell carries `filter_mouse = left|right|wheel`, as vanilla's windows do.
+   With the popup open, the wheel and a right-click outside its body neither scroll the journal panel nor move the
+   map; a left-click there closes the popup.
+8. **The launcher.** The Timeline Extended launcher (`layer = top`) draws over the dim. Note whether it still opens the
+   window while the popup is up; that's acceptable either way.
+9. **A long window figure fits.** With depots and a closed window, a site's window reads "+N% now, N mo" in full,
+   months included, not cut off with an ellipsis.
+
 ## The owner's UI pass: the Earth alert (PR 6, 2026-10-31)
 
 Hostile fleets bound for Earth (UI pass design § 9; `docs/systems/mod_systems/space_race.md` § Earth orbit): the

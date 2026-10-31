@@ -119,7 +119,6 @@ covert_tech_stealable_production = {
 				AND = {
 					is_researching_technology = artificial_intelligence
 					has_technology_researched = generative_ai
-					has_technology_researched = programmable_matter
 					has_technology_researched = autonomous_vehicles
 				}
 			}

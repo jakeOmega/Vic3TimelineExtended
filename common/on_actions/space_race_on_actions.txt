@@ -13,9 +13,10 @@ on_monthly_pulse_country = {
 space_race_on_action = {
 	effect = {
 		# Extraplanetary Base room (sr_colony_module_effects.txt; colony modules
-		# design § 9): its one refresh site, for every country that can build
+		# design § 9): its monthly refresh, for every country that can build
 		# a base (In-Situ Resource Utilization, the building's technology),
-		# colony or not.
+		# colony or not; space_race_events.110 refreshes it too, the day after
+		# a base is built or gains a level (UI pass design § 8).
 		if = {
 			limit = { has_technology_researched = in_situ_resource_utilization }
 			sr_ebase_refresh = yes

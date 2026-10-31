@@ -333,9 +333,9 @@ under Old-Age Pensions. A rich country at Standard with a
 fifth of its people pensioned pays about a fifth of its revenue. Universal Basic
 Income and the Post-Scarcity Economy pay everyone already and have no pension bill. An older
 people also needs more care: the Ministry of Health costs more bureaucracy as the
-census's health need rises above 1836's, and 5% more for each of six chronic-care
+census's health need rises above 1836's, and 5% more for each of seven chronic-care
 technologies (Modern Pharmaceuticals, Telemedicine, Personalized Medicine, Genetic
-Engineering, Molecular Assemblers, Biological Immortality): about two fifths more
+Engineering, Rejuvenation Therapies, Molecular Assemblers, Biological Immortality): about two fifths more
 for a rich country today. Outside Full none of this changes
 anything, and the buttons are grayed.
 
@@ -494,8 +494,9 @@ cuts adults' deaths from infection by more than children's, since it cures the
 tuberculosis and pneumonia that killed adults in 1836, so in a rich country
 adults die of infection about as rarely as in the rich world today; Personalized
 Medicine and Advanced Nanofabrication cut deaths from infection to about a sixth
-of that. Genetic Engineering, Molecular Assemblers and Biological Immortality
-let medicine prevent nearly every death from chronic disease where it reaches. Life
+of that. Genetic Engineering and Rejuvenation Therapies let medicine prevent nine
+in ten deaths from chronic disease where it reaches, and Molecular Assemblers and
+Biological Immortality nearly every one. Life
 expectancy and infant mortality are the census's own figures, before famine, war
 and disasters.
 
@@ -612,8 +613,9 @@ From mRNA Therapeutics on, medicine slows aging itself as well as treating
 illness, and the census tracks each person's body apart from the calendar.
 People in longevity care age nine-tenths of a year each year with mRNA
 Therapeutics, seven-tenths once Personalized Medicine, Genetic Engineering and
-Synthetic Biology follow, and not at all with Biological Immortality, under which bodies older than
-35 also wind back toward 35. Children are never treated: people join at 25.
+Synthetic Biology follow, half a year with Rejuvenation Therapies, and not at all
+with Biological Immortality, under which bodies older than 35 also wind back
+toward 35. Children are never treated: people join at 25.
 
 Who is in care depends on your laws and your people's wealth. Each law below
 lists its part among its modifiers.
