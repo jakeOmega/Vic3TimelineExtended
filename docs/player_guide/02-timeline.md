@@ -296,8 +296,11 @@ level. Its staff is the same at any size: a large base needs no more workers
 than a small one. It starts on Regolith Processing, which makes Structural Metals,
 Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
-and after Space Colonization the base can switch to the Resort Colony production
-method, which produces art and tourism instead. With
+and Space Colonization the larger Mining Colony, or the Resort Colony production
+method, which produces art and tourism instead. Von Neumann Machines (era 13)
+brings Self-Replicating Miners, which build their copies from the ore they dig:
+against a Mining Colony, a level uses a third less Launch Capacity and mines a
+quarter more of each good. With
 the Space Race rule on Simple Colonies or Full Colonies its levels need room,
 from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −75% past it (see
 [Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
@@ -311,7 +314,9 @@ Transport in Space, whose Fusion Tugs need Compact Fusion Reactors (era 12), and
 Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (era
 13; not an elevator of your own). A Mining Colony with Fusion Tugs already earns
 about as much per level as an Advanced Deep-Sea Mine, and with both upgrades half
-as much again. With the Global Commons rule off, the Deep-Sea Mine has no
+as much again. Self-Replicating Miners with neither upgrade earn more than a
+Mining Colony with both, and the upgrades add less to them, since they launch
+less. With the Global Commons rule off, the Deep-Sea Mine has no
 licenses and keeps its older, smaller output.
 
 ### Seabed licenses

@@ -103,3 +103,33 @@ ahead, raised if they fall short.
 |---|---|---|---|---|---|
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
+
+## Phase 3: Von Neumann Machines
+
+1. **The tree.** Von Neumann Machines sits in era 13's production column with
+   arrows from Molecular Assemblers and Orbital Manufacturing. It borrows
+   Molecular Assemblers' icon until its own is painted. Its tooltip names
+   Self-Replicating Construction and Self-Replicating Miners and lists +100
+   maximum weekly construction progress.
+2. **Construction Sector (market game).** Self-Replicating Construction is the
+   last method of the base group, after Nanomaterial Buildings, and makes 24
+   construction a level before throughput (Nanomaterial Buildings: 16). It
+   borrows Nanorobots' icon. All four automation methods stay selectable on it
+   (Prefabricated Building Components, Tower Cranes, Computer-Aided Design, 3D
+   Printed Buildings), and none takes its employment below zero. The
+   construction principle's method applies to it. An AI sector moves up to it
+   once the technology arrives (the group is `most_productive`).
+3. **Construction Site (direct game).** The site lists eight tiers, the new one
+   hidden until researched, and gives 24 points a level on it. The construction
+   panel's Construction Capacity hover reads "from 1 a week for Wooden
+   Buildings to 24 for Self-Replicating Construction". An AI site on the new
+   tier that the AI downsizes comes back on the new tier at the next weekly
+   pulse (the guard's tier 8). In a market game the direct tier never shows.
+4. **Extraplanetary Base.** Self-Replicating Miners is the last base method,
+   after Resort Colony, with Intelligent Drilling Rigs' borrowed icon. Its
+   crew (400 engineers, 100 academics) fills at any level. With neither
+   logistics upgrade the method's tooltip shows 320 Launch Capacity a level;
+   Fusion Tugs and Tethered Launch each still cut it by 30%. The
+   `logistics_input_cut` self-check reads OK on a base running it, since the
+   method carries no launch multiplier of its own. An AI base on Mining Colony
+   switches to it (the group's default `most_profitable`).
