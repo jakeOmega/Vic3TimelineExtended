@@ -1207,29 +1207,30 @@ sr_disp_fab_stock = {
 }
 # The queue's head (the owner, 2026-10-31): 0 nothing queued; 1 being
 # fabricated, built in sr_disp_mq_next_months; 2 its points are in stock but
-# every shipment slot is taken; 3 no fabrication (no points a month, or the
-# launch site lost). The month's pulse adds the rate and then builds
-# (sr_mod_month), so the head waits at least one month.
+# every shipment slot is taken; 3 stopped: the launch site lost, or no points
+# a month and too few in stock. The month's pulse adds the rate and then builds
+# (sr_mod_month), whose build loop asks only the launch site, the stock, a free
+# slot and the queue, never the rate: a head the stock covers is built with no
+# fabrication. So the head waits at least one month.
 sr_disp_mq_next_state = {
 	value = 0
 	if = {
 		limit = { has_variable = sr_mq_1_site }
 		value = 1
 		if = {
-			limit = {
-				OR = {
-					NOT = { sr_mod_fab_rate > 0 }
-					sr_launch_site_lost = yes
-				}
-			}
+			limit = { sr_launch_site_lost = yes }
 			value = 3
 		}
 		else_if = {
-			limit = {
-				sr_mod_fab_stock_value >= sr_mq_head_cost
-				NOT = { sr_ms_has_free_slot = yes }
+			limit = { sr_mod_fab_stock_value >= sr_mq_head_cost }
+			if = {
+				limit = { NOT = { sr_ms_has_free_slot = yes } }
+				value = 2
 			}
-			value = 2
+		}
+		else_if = {
+			limit = { NOT = { sr_mod_fab_rate > 0 } }
+			value = 3
 		}
 	}
 }

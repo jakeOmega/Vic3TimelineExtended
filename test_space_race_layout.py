@@ -1248,3 +1248,35 @@ class LocTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class QueueNextModuleTest(unittest.TestCase):
+    """The queue's Next module row (the owner, 2026-10-31) follows how
+    sr_mod_month builds: its loop asks the launch site, the stock against the
+    head's price, a free shipment slot and the queue, never the month's rate,
+    so a head the stock covers is built with no fabrication and must not read
+    "stopped" (review of #1274)."""
+
+    def test_the_build_loop_never_asks_the_rate(self):
+        effects = _read(os.path.join(REPO, "common", "scripted_effects", "sr_colony_module_effects.txt"))
+        loop = _block(effects, "sr_mod_month").split("while = {", 1)[1]
+        start = loop.index("limit = {") + len("limit = {")
+        depth, end = 1, start
+        while depth:
+            depth += {"{": 1, "}": -1}.get(loop[end], 0)
+            end += 1
+        limit = loop[start:end]
+        for term in ("sr_launch_site_lost", "sr_mq_head_cost", "sr_ms_has_free_slot", "sr_mq_1_site"):
+            self.assertIn(term, limit)
+        self.assertNotIn("sr_mod_fab_rate", limit)
+
+    def test_stopped_only_when_nothing_can_build(self):
+        state = _block(_read(DISPLAY), "sr_disp_mq_next_state")
+        lost, covered, no_rate = (state.index("sr_launch_site_lost = yes"),
+                                  state.index("sr_mod_fab_stock_value >= sr_mq_head_cost"),
+                                  state.index("NOT = { sr_mod_fab_rate > 0 }"))
+        # The launch site first, then a covered head (built, or waiting for a
+        # slot), and only then no rate: stopped.
+        self.assertLess(lost, covered)
+        self.assertLess(covered, no_rate)
+        self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "2", "3"])

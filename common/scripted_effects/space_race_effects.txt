@@ -195,7 +195,7 @@ sr_temporary_safety_review_effect = {
 
 # The failed milestone loses $MONTHS$ months of progress (see "Progress in
 # months" below): a minor setback (Safe, Standard) 1 to 4 months, the default
-# answer 2 or 3; an Ambitious failure 4 months with the six-month review, 5 or
+# answer 2 or 3; an Ambitious failure 4 months with the safety review, 5 or
 # 6 for the answers that press on without it. Ambitious months are of its
 # faster pace.
 sr_setback_lose_months = {

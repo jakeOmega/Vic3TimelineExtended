@@ -1462,7 +1462,7 @@
  je_space_race_widget_mq_next_label:0 "Next module"
  je_space_race_widget_mq_next_months:0 "in [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_months')|0] mo"
  je_space_race_widget_mq_next_none:0 "#R stopped#!"
- je_space_race_widget_mq_next_tt:0 "#header Next Module#!\nWhen the queue's first module is built: the points it still needs, at this month's fabrication. A module past its colony's slots costs more. A built module takes one of the eight shipment slots, so while all eight are taken it waits, its points in stock. With no fabrication (no Module Fabrication method, or the launch site lost) nothing is built."
+ je_space_race_widget_mq_next_tt:0 "#header Next Module#!\nWhen the queue's first module is built: the points it still needs, at this month's fabrication. A module past its colony's slots costs more. A built module takes one of the eight shipment slots, so while all eight are taken it waits, its points in stock. With no fabrication (no Module Fabrication method) only what the stock already covers is built; with the launch site lost, nothing is."
  je_space_race_widget_offworld_figure:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_offworld_pop')|D]"
  je_space_race_widget_offworld_label:0 "People off Earth"
  je_space_race_widget_offworld_tt:0 "#header Off-World Population#!\nFor every 100,000 of our people on other worlds, up to a million, now ×[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_offworld_units')|1]:\n[GetStaticModifier('sr_offworld_population').GetDesc]"

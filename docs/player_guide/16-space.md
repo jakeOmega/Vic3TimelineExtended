@@ -149,7 +149,7 @@ under it:
 | Icon | Reads | Means |
 |---|---|---|
 | Approach | Standard, Safe or Ambitious | The approach in force. Under Safe and Ambitious, their weekly innovation cost, as in −30 a week. |
-| Setback risk | Risk: 6%/mo | This month's chance of a setback. The icon is faint while it reads 0%. |
+| Setback risk | Risk: 6%/mo | This month's chance of a setback. |
 | The first | First: Open or First: Claimed | Whether the larger reward is still there to win. The icon is faint once another power has claimed it. |
 
 Below them, the Progress bar fills toward the goal. Beside it are your progress,
@@ -395,9 +395,8 @@ lost, and the Space Program's throughput rises by 15% for 18 or 24 months.
 
 On a Safe or Standard approach you get a minor setback: missing parts, bad weather, a
 scandal, a quarrel with a foreign supplier. It costs 1 to 4 months of the
-milestone's progress, usually 2 or 3, with no lasting modifier and no safety
-period. A few setbacks, on any approach, also cut the Space Program's throughput
-for some months. A setback never takes more progress than the milestone has, and
+milestone's progress, usually 2 or 3, with no lasting modifier. A few setbacks,
+on any approach, also cut the Space Program's throughput for some months. A setback never takes more progress than the milestone has, and
 in Solar System Colonization never more than one colony's, so fleets staged in
 orbit are never lost to a setback.
 

@@ -2,7 +2,8 @@
 
 # Once a month per country (not per journal entry): the inactive-milestone
 # cleanup, the revolution backstop, the post-race dividend, a player's Space
-# Powers standings and the global failure-cooldown tick.
+# Powers standings and, until 2026-12-31, the retired failure cooldown's
+# old-save strip.
 on_monthly_pulse_country = {
 	on_actions = {
 		space_race_on_action

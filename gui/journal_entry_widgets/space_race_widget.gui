@@ -748,7 +748,8 @@ types space_race_widget_types
 					}
 				}
 
-				### Setback risk: lit while the monthly roll is made, faint at 0%.
+				### Setback risk: lit while the monthly roll is made, faint at 0%
+				### (no longer reached: the risk is at least 1% since the cooldown went).
 				flowcontainer = {
 					ignoreinvisible = yes
 					tooltip = "je_space_race_widget_ov_risk_tt"
