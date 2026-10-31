@@ -29,6 +29,10 @@ OPEN = re.compile(rf"({IDENT})\s*=\s*\{{")
 _CREATING = frozenset(p[:-1] for p in directive_prefixes if p.endswith("_OR_CREATE:"))
 _DIRECTIVES = "|".join(re.escape(p[:-1]) for p in directive_prefixes)
 _DEPTH0_KEY = re.compile(rf"[{{}}]|(?<![@\w:])(?:({_DIRECTIVES}):\s*)?({IDENT})\s*=")
+# Vanilla's copies of the .gui files the mod replaces whole, byte for byte, kept for each patch's merge.
+VANILLA_GUI_FIXTURES = "test_fixtures/vanilla_gui"
+VANILLAS_DETAIL = "unresolved on a line vanilla's own copy of the file holds (test_fixtures/vanilla_gui): vanilla's reference"
+
 CALLS = {
     "scripted_guis": "GetScriptedGui",
     "script_values": "ScriptValue",
@@ -283,7 +287,7 @@ def audit(mod_path: str | Path | None = None, vanilla_path: str | Path | None = 
     def flag(file, line, kind, name, severity, detail):
         result.flags.append(Flag(file, line, kind, name, severity, detail))
 
-    def reference(file, line, kind, name):
+    def reference(file, line, kind, name, vanillas=False):
         resolved = name in index.keys[kind]
         result.references[file].setdefault(kind, []).append({"name": name, "line": line, "resolved": resolved})
         if not resolved:
@@ -293,8 +297,9 @@ def audit(mod_path: str | Path | None = None, vanilla_path: str | Path | None = 
             # The mod only INJECTs/REPLACEs it, and vanilla's definitions of
             # this kind weren't read: presumably vanilla's, unconfirmable here.
             presumed = name in index.merge_targets.get(kind, ()) and kind not in index.vanilla_covered
-            severity = "error" if complete and not presumed else "warn"
+            severity = "error" if complete and not presumed and not vanillas else "warn"
             detail = ("unresolved" if severity == "error"
+                      else VANILLAS_DETAIL if vanillas
                       else "only an INJECT/REPLACE names it; presumed vanilla, can't confirm offline" if presumed
                       else "unresolved; vanilla category unavailable")
             flag(file, line, kind, name, severity, detail)
@@ -329,8 +334,15 @@ def audit(mod_path: str | Path | None = None, vanilla_path: str | Path | None = 
         for kind, call in CALLS.items():
             for m in re.finditer(rf"\b{call}\(\s*'([^']+)'\s*\)", code):
                 reference(file, line(m.start()), kind, m[1])
+        # A full-file override whose vanilla base is committed (test_fixtures/vanilla_gui/<same name>) keeps
+        # vanilla's lines as they are: a key one of them names is vanilla's reference, whatever it resolves to.
+        fixture = root / VANILLA_GUI_FIXTURES / path.name
+        vanilla_lines = ({ln.strip() for ln in fixture.read_text(encoding="utf-8-sig").splitlines()}
+                         if path.parent == root / "gui" and fixture.is_file() else set())
+        source_lines = text.splitlines()
         for m in re.finditer(r'\b(?:text|tooltip|default_format|header|desc)\s*=\s*"([A-Za-z_][\w.\-]*)"', code):
-            reference(file, line(m.start()), "loc_keys", m[1])
+            ln = line(m.start())
+            reference(file, ln, "loc_keys", m[1], vanillas=source_lines[ln - 1].strip() in vanilla_lines)
         # Only actual widget instances and inheritance bases, outside strings.
         for m in re.finditer(rf"\b({IDENT})\s*=\s*\{{|\btype\s+{IDENT}\s*=\s*({IDENT})", syntax):
             name = m[1] or m[2]

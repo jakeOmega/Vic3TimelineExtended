@@ -401,6 +401,15 @@ demographic event give, stay in the list with their time left. The first count o
 death rates would settle into, so 1836 opens with a settled population, not a
 baby boom or a gap.
 
+The Census Data window, which the Population panel's button opens for your
+country and which shows any other country's pops too, has the census as well.
+A strip over the window holds two tabs: Pops, the base game's list, and
+Demographics, the same sections as the tab for whichever country the window
+shows, in three columns. For another country it leaves out what only a played
+country has: the buttons, the pyramid's twenty-year outline, and, for a country
+that is not a major power, the history charts. The strip shows while the
+Demographics rule is on.
+
 ### Reading the pyramid
 
 The pyramid has a row for each five years of age, from 0 to 4 at the bottom to 85

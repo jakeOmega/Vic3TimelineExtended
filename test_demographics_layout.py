@@ -2,7 +2,8 @@
 
 Issue #1029 rebuilt the Population panel's Demographics tab and the state panel's
 Demographics subtab on the Banking panel's model (test_banking_layout.py):
-one layout file sets the sections' order for both hosts, an overview of icon
+one layout file sets the sections' order for every host (the Census Data
+window's Demographics tab takes the tab's, in three columns), an overview of icon
 cells on top, Causes of Death with a pie at both levels, History's charts with
 marker pips, States rows that open the state, and every collapse flag named for
 its default. This file holds those to the markup, and every fixed cell's
@@ -19,6 +20,7 @@ GUI = os.path.join(REPO, "gui")
 WIDGETS = os.path.join(GUI, "te_demographics_widgets.gui")
 LAYOUT = os.path.join(GUI, "te_demographics_layout.gui")
 POPS = os.path.join(GUI, "pops_overview.gui")
+BROWSER = os.path.join(GUI, "pop_browser_panel.gui")
 STATES = os.path.join(GUI, "states_panel.gui")
 CHART = os.path.join(GUI, "journal_entry_widgets", "te_history_chart.gui")
 LOC_DIR = os.path.join(REPO, "localization", "english")
@@ -39,6 +41,8 @@ STATE = ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyr
          "te_state_demog_longevity", "te_state_demog_wealth", "te_state_demog_modifiers"]
 STATE_ONLY = ["te_state_demog_modifiers"]
 HOW = {"te_demog_tab_sections": "te_demog_sec_how", "te_state_demog_content": "te_state_demog_how"}
+# The Census Data window's composer: the tab's sections for the window's country, in three columns.
+BROWSER_COMPOSER = "te_demog_browser_sections"
 
 # The history chart's slices, from the foot (te_dg_dc_lead's codes 1-8): the loc and variable name, the texture. The
 # pie's are the same less the deaths added on top (code 6), which count under their causes since 2026-10-22 (owner); the
@@ -145,18 +149,42 @@ class OrderTest(unittest.TestCase):
                       for s in STATE if s not in STATE_ONLY]
         self.assertEqual(as_country, [s for s in COUNTRY if s in as_country], "the state keeps the country's order")
 
-    def test_the_layout_file_holds_only_the_two_composers(self):
-        self.assertEqual(sorted(_types(self.layout)), ["te_demog_tab_sections", "te_state_demog_content"])
-        for composer in HOW:
+    def test_the_census_window_takes_the_tabs_order_in_three_columns(self):
+        body = _type_body(self.layout, BROWSER_COMPOSER)
+        inner = [b for b in _instances(body, "flowcontainer") if "visible" in b and "direction = horizontal" in b]
+        self.assertEqual(len(inner), 1, "one gated row of columns")
+        self.assertEqual(_children(inner[0][1:-1]), ["flowcontainer"] * 3)
+        columns = [b for b in _instances(inner[0][1:-1], "flowcontainer")]
+        self.assertEqual(len(columns), 3)
+        for column in columns:
+            with self.subTest(column=_children(column[1:-1])):
+                self.assertIn("minimumsize = { 520 -1 }", column)
+                self.assertIn("maximumsize = { 520 -1 }", column)
+        listed = [c for column in columns for c in _children(column[1:-1]) if c not in ("minimumsize", "maximumsize")]
+        self.assertEqual(listed, COUNTRY + [HOW["te_demog_tab_sections"]], "read down each column, then across")
+
+    def test_the_layout_file_holds_only_the_three_composers(self):
+        self.assertEqual(sorted(_types(self.layout)),
+                         sorted(["te_demog_tab_sections", "te_state_demog_content", BROWSER_COMPOSER]))
+        for composer in list(HOW) + [BROWSER_COMPOSER]:
             self.assertNotIn(f"type {composer} =", self.widgets)
 
     def test_every_section_is_a_type_and_each_is_placed_once(self):
         defined = set(_types(self.widgets))
         placed = COUNTRY + STATE + list(HOW.values())
+        hosts = {"te_demog_tab_sections": COUNTRY + [HOW["te_demog_tab_sections"]],
+                 BROWSER_COMPOSER: COUNTRY + [HOW["te_demog_tab_sections"]],
+                 "te_state_demog_content": STATE + [HOW["te_state_demog_content"]]}
+        for composer, sections in hosts.items():
+            body = _type_body(self.layout, composer)
+            for section in sections:
+                with self.subTest(composer=composer, section=section):
+                    self.assertIn(section, defined)
+                    self.assertEqual(len(re.findall(rf"\b{section} = \{{\}}", body)), 1)
         for section in placed:
             with self.subTest(section=section):
-                self.assertIn(section, defined)
-                self.assertEqual(len(re.findall(rf"\b{section} = \{{\}}", self.layout)), 1)
+                expected = 1 if section.startswith("te_state_demog_") else 2
+                self.assertEqual(len(re.findall(rf"\b{section} = \{{\}}", self.layout)), expected)
         sections = {t for t in defined if t.startswith("te_demog_sec_") or t == "te_demog_overview"}
         sections |= {t for t in defined if t.startswith("te_state_demog_") and not t.endswith("_row")}
         self.assertEqual(sections, set(placed), "a section type the layout doesn't place")
@@ -166,6 +194,7 @@ class OrderTest(unittest.TestCase):
 
     def test_each_host_instances_its_composer_once(self):
         self.assertEqual(_read(POPS).count("te_demog_tab_sections = {}"), 1)
+        self.assertEqual(_read(BROWSER).count(f"{BROWSER_COMPOSER} = {{}}"), 1)
         self.assertEqual(_read(STATES).count("te_state_demog_content = {}"), 1)
 
 
@@ -620,7 +649,7 @@ class PieTest(unittest.TestCase):
         self.assertEqual([t for t, _ in _pie_colours()], [f"pie_{tex}" for _, tex in SLICES])
 
     def test_each_pie_reads_its_hosts_sums(self):
-        for section, root in (("te_demog_sec_causes", "GetPlayer.MakeScope"),
+        for section, root in (("te_demog_sec_causes", "Country.MakeScope"),
                               ("te_state_demog_causes", "State.MakeScope")):
             pies = _instances(_type_body(self.widgets, section), "te_demog_cause_pie")
             self.assertEqual(len(pies), 1, section)
@@ -639,7 +668,7 @@ class PieTest(unittest.TestCase):
         self.assertIn(f"value = te_demog_dc_share_{SLICES[0][0]}", first)
 
     def test_each_legend_names_the_slices_in_order(self):
-        for section, root in (("te_demog_sec_causes", "GetPlayer"), ("te_state_demog_causes", "State")):
+        for section, root in (("te_demog_sec_causes", "Country"), ("te_state_demog_causes", "State")):
             rows = _instances(_type_body(self.widgets, section), "te_demog_cause_row")
             self.assertEqual(len(rows), 7, section)
             for row, (name, tex) in zip(rows, PIE_SLICES):
@@ -752,7 +781,7 @@ class StatesTest(unittest.TestCase):
 
     def test_ten_rows_then_show_all(self):
         body = _type_body(self.widgets, "te_demog_sec_states")
-        self.assertEqual(re.findall(r"datamodel = \"\[GetPlayer\.MakeScope\.GetList\('(\w+)'\)\]\"", body),
+        self.assertEqual(re.findall(r"datamodel = \"\[Country\.MakeScope\.GetList\('(\w+)'\)\]\"", body),
                          ["te_dg_states_top", "te_dg_states"])
         effects = _read(EFFECTS)
         lists = _block_from(effects, effects.index("te_demog_country_lists = {"))
@@ -780,7 +809,7 @@ class StatesTest(unittest.TestCase):
         for section, name in (("te_demog_sec_work", "te_dg_yb_states"), ("te_demog_sec_places", "te_dg_mt_states")):
             with self.subTest(section=section):
                 body = _type_body(self.widgets, section)
-                at = body.index(f"datamodel = \"[GetPlayer.MakeScope.GetList('{name}')]\"")
+                at = body.index(f"datamodel = \"[Country.MakeScope.GetList('{name}')]\"")
                 item = _block_from(body, body.index("item = {", at))
                 self.assertIn("te_demog_state_link_row = {", item)
                 self.assertIn('datacontext = "[Scope.GetState]"', item)
@@ -831,9 +860,12 @@ class StateWealthTermsTest(unittest.TestCase):
         self.assertEqual(len(got), 9)
 
     def test_never_the_players_figures(self):
+        # nor the context's Country: the state's owner's terms read State.GetOwner.MakeScope
         for row in self.rows:
             self.assertNotIn("GetPlayer", row)
+            self.assertNotRegex(row, r"(?<![\w.])Country\.")
         self.assertNotIn("GetPlayer", self.section)
+        self.assertNotRegex(self.section, r"(?<![\w.])Country\.")
 
     def test_the_rows_sit_under_the_scored_gate(self):
         gate = "GetScriptedGui('te_demog_state_wealth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )"

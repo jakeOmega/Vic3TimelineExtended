@@ -1663,6 +1663,8 @@ Data error in loc string 'te_hist_tt_markers'
 
 44. **`Country.GetName` draws the country's small flag in front of its name; beside a flag widget, print `GetNameNoFlag`.** The same audit put a `tiny_flag` or `flag` widget beside the names in the UN's Delegations, the covert networks, operation cards and known operations, the Cultural Hegemony leaderboard and the Banking balance sheet, and every row showed two flags (play-test, 2026-10-28). `GetNameNoFlag` keeps the name's link and hover; `GetNameNoFormatting` is the plain string, with neither. `test_gui_flag_names.py` scans every `.gui` for a flag widget followed by a country's `GetName`, and checks the Delegations rows' scripted-GUI text by key.
 
+45. **To draw a section for any country, read the `Country` in its context, not `GetPlayer`.** The vanilla windows set one: the Population panel's window `AccessPlayer` (`pops_overview.gui`), the Census Data window `PopBrowserPanel.GetCountry` (`pop_browser_panel.gui`), so `Country.MakeScope.Var(...)` and `GuiScope.SetRoot( Country.MakeScope ).End` give the player's figures in one and the window's country's in the other, and a loc key rendered as a widget's text or tooltip reads the same `Country`. The Demographics sections moved over on 2026-10-31 so the Census Data window could show them for any country. Three limits: a tooltip on a `datamodel` item has only the item's context (gotcha #24), so a key it reaches can't read `Country`; a loc key a state panel also shows can't either, since that panel has a `State` and no `Country` (`te_demog_fam_rule` keeps `GetPlayer` for a constant); and a control that changes the country (a scripted GUI's `Execute`) needs `visible = "[Country.IsLocalPlayer]"`, or the player could set another country's policy. Text that says "our" reads wrong for another country: write "the country's". Not yet seen in game: `docs/testing/demographics-playtest.md` § The Census Data window's Demographics tab.
+
 ---
 
 ## Patterns from Workshop Mods
@@ -1753,7 +1755,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 47 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 20 additive files (marked below):
+Currently 48 GUI files at the top of `gui/`: 28 full-file replacements of vanilla panels plus 20 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1776,6 +1778,7 @@ Currently 47 GUI files at the top of `gui/`: 27 full-file replacements of vanill
 | `panel_military.gui` | Military overview | Modified military overview; a fourth tab, Nuclear: the nuclear journal entry's panel types and its goal bar under `GetPlayerJournalEntry('je_nuclear_program')` (gotcha #29), greyed until the entry runs; a fifth tab, Covert: the covert journal entry's three composers under `GetPlayerJournalEntry('je_covert_warfare')`, greyed the same way |
 | `politics_panel_institutions.gui` | Institutions tab | Custom institution display |
 | `politics_panel_overview.gui` | Politics overview | Modified politics |
+| `pop_browser_panel.gui` | Census Data (the pop browser, fullscreen) | A strip of two tabs over the window, vanilla's pops (Pops) and Demographics: the census of the country the window shows, whichever it is, one instance of `te_demog_browser_sections` (`te_demographics_layout.gui`: the Population tab's sections in three columns). The strip shows while the demographics rule runs the census (`te_pops_demog_tab_sgui`); the Demographics tab is greyed until that country's first census (`te_pops_demog_tab_unlock_sgui`). The tab shown is the client-side flag `te_pop_browser_demog`. Otherwise vanilla 1.14.5, changed only in `### MOD: Demographics tab` blocks that add lines; the base is committed as `test_fixtures/vanilla_gui/pop_browser_panel.gui` and `test_demographics_census_window.py` holds the override to it |
 | `pops_overview.gui` | Population | A fifth tab, Demographics (`te_demog`): the census, one instance of `te_demog_tab_sections` (`te_demographics_layout.gui`), whose section types are in `te_demographics_widgets.gui`. On the strip while the demographics rule runs the census (`te_pops_demog_tab_sgui`), greyed until the country's first census (`te_pops_demog_tab_unlock_sgui`'s `is_valid`). Otherwise vanilla 1.14.5 (the fifth slot's blockoverrides and the content block, each in a `### MOD: Demographics tab` block): a full replacement re-merged every vanilla patch, holding only instances. The sidebar's Population button cycles only vanilla's first three tabs, so it never lands on Demographics |
 | `power_bloc_formation_panel.gui` | Power bloc creation | Custom formation |
 | `power_bloc_panel.gui` | Power bloc details | Enhanced bloc info |
@@ -1861,7 +1864,7 @@ git merge-file -p /tmp/<file>.work /tmp/<file>.old /tmp/<file>.new > /tmp/<file>
 echo "Conflicts: $(grep -c '<<<<<<<' /tmp/<file>.merged)"
 ```
 
-`gui/topbar.gui` also has its base committed, as `test_fixtures/vanilla_gui/topbar.gui`: after merging a patch into it, replace that file with the new vanilla copy (BOM kept), or `test_topbar_banking.py` fails. `gui/goods_panel.gui` and `gui/add_consumption_tax_menu.gui` have theirs too, as `test_fixtures/vanilla_gui/goods_panel.gui` and `add_consumption_tax_menu.gui`, byte-for-byte vanilla (no BOM, unlike the overrides): `test_tax_code_bypass.py` fails when the installed game no longer matches them, so merge the patch into the override and replace the fixture together.
+`gui/topbar.gui` also has its base committed, as `test_fixtures/vanilla_gui/topbar.gui`: after merging a patch into it, replace that file with the new vanilla copy (BOM kept), or `test_topbar_banking.py` fails. `gui/goods_panel.gui` and `gui/add_consumption_tax_menu.gui` have theirs too, as `test_fixtures/vanilla_gui/goods_panel.gui` and `add_consumption_tax_menu.gui`, byte-for-byte vanilla (no BOM, unlike the overrides): `test_tax_code_bypass.py` fails when the installed game no longer matches them, so merge the patch into the override and replace the fixture together. `gui/pop_browser_panel.gui` has its base as `test_fixtures/vanilla_gui/pop_browser_panel.gui`, byte-for-byte vanilla too: `test_demographics_census_window.py` fails when the override differs from it outside its `### MOD: Demographics tab` blocks, and, on a machine with the game, when the installed file no longer matches it.
 
 For the 1.13 migration this resolved 14 of 17 GUI overrides cleanly; the giants (`right_click_menu.gui` 4845-line vanilla diff, `military_formation_panel.gui` 5012-line) had only 0 and 4 conflicts respectively.
 

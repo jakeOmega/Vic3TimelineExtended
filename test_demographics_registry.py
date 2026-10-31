@@ -3937,8 +3937,8 @@ class TestNaturalFertilityScript(unittest.TestCase):
             for sv in ("te_demog_pr_term_lm", "te_demog_pr_term_bs", "te_demog_marriage_age"):
                 self.assertIn(f"ScriptValue('{sv}')", line, f"{key}: {sv}")
         capital = re.search(r"(?m)^ te_demog_ov_tfr_capital:0 \"(.*)\"$", loc).group(1)
-        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_marriage_age')", capital)
-        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_pr_share_bs')", capital)
+        self.assertIn("Country.MakeScope.ScriptValue('te_demog_marriage_age')", capital)
+        self.assertIn("Country.MakeScope.ScriptValue('te_demog_pr_share_bs')", capital)
         for key in ("te_demog_ov_tfr_tt", "te_demog_st_tfr_tt", "te_demog_how_fertility"):
             text = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             self.assertNotIn("who marries", text, "women's legal standing no longer claims marriage (plan D2)")
@@ -5408,9 +5408,9 @@ class TestGiniGate(unittest.TestCase):
     def test_every_country_gini_the_gui_shows_is_picked_by_the_gini_gate(self):
         gui, loc = _text(DEMOG_GUI), _text(MISC_LOC)
         # the loc keys that read the country's Gini
-        keys = re.findall(r'^ (\w+):0 "[^"\n]*GetPlayer\.MakeScope\.Var\(\'te_dg_gini\'\)', loc, re.M)
+        keys = re.findall(r'^ (\w+):0 "[^"\n]*Country\.MakeScope\.Var\(\'te_dg_gini\'\)', loc, re.M)
         self.assertEqual(sorted(keys), ["te_demog_gini_value", "te_demog_ov_gini_value"])
-        gate = r"GetScriptedGui\('te_demog_gini_ready_sgui'\)\.IsShown\( GuiScope\.SetRoot\( GetPlayer\.MakeScope \)\.End \)"
+        gate = r"GetScriptedGui\('te_demog_gini_ready_sgui'\)\.IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \)"
         for key in keys:
             uses = [m.start() for m in re.finditer(rf"['\"]{key}['\"]", gui)]
             self.assertTrue(uses, f"{key} is not used")
@@ -5715,7 +5715,7 @@ class TestInheritanceBalance(unittest.TestCase):
         self.assertIn("add = owner.te_demog_wc_public_term", _block(_text(VALUES), "te_demog_wc_target"))
         self.assertIn("set_variable = { name = te_dg_wc_t_public value = te_demog_wc_public_term }",
                       _block(_text(WEALTH_EFFECTS), "te_demog_wc_national"))
-        for scope in ("GetPlayer", "State.GetOwner"):
+        for scope in ("Country", "State.GetOwner"):
             self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_public_term')", _text(DEMOG_GUI), scope)
 
     def test_the_shown_target_follows_a_public_goods_law_at_once(self):
@@ -5744,7 +5744,7 @@ class TestInheritanceBalance(unittest.TestCase):
         self.assertIn("add = owner.te_demog_wc_slavery_term", _block(_text(VALUES), "te_demog_wc_target"))
         self.assertIn("set_variable = { name = te_dg_wc_t_slavery value = te_demog_wc_slavery_term }",
                       _block(_text(WEALTH_EFFECTS), "te_demog_wc_national"))
-        for scope in ("GetPlayer", "State.GetOwner"):
+        for scope in ("Country", "State.GetOwner"):
             self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_slavery_term')", _text(DEMOG_GUI), scope)
 
     def test_the_shown_target_follows_the_slavery_law_at_once(self):

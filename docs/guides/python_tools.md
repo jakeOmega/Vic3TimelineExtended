@@ -1017,3 +1017,8 @@ checks warn instead of claiming resolution. Reads of saved scopes in
 `is_shown` also warn for visibility-context review (GUI guide gotcha #22);
 they are not automatically invalid. Scripted progress bars are indexed by
 the server, and `loc_coverage_audit` checks their explicit `name`/`desc` keys.
+A full-file override whose vanilla base is committed as
+`test_fixtures/vanilla_gui/<same name>` keeps vanilla's lines unchanged, so an
+unresolved loc key on a line that file also holds is vanilla's reference and
+warns (`VANILLAS_DETAIL`): `pop_browser_panel.gui`'s `text = "STATE"`, which
+vanilla's English loc has only as `state`. A key the mod adds still errors.

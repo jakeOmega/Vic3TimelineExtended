@@ -1,17 +1,22 @@
-﻿### Demographics — layout. The one place that sets the order of the Demographics sections, for both hosts (issue #1029;
-### Banking's banking_layout_widget.gui): the Population panel's Demographics tab (gui/pops_overview.gui instances
-### te_demog_tab_sections) and the state panel's Demographics subtab (gui/states_panel.gui instances
-### te_state_demog_content). The sections are types in gui/te_demographics_widgets.gui. The order: the people's health
-### (the overview, Causes of Death, the pyramid), then the levers (Work and Retirement, Longevity, Family Policy), then
-### the record (History), with the per-state detail last (Wealth, Where People Live, States) and How Demographics Works
-### collapsed at the foot. The state subtab takes the same order, less the sections a state has no figures for (Family
-### Policy, History, Where People Live, States), and with one of its own after Wealth: the state's Modifiers, the nine
-### standing modifiers the census gives it, which its modifier rows leave out. test_demographics_layout.py holds both
-### orders, the flags and the widths.
+﻿### Demographics — layout. The one place that sets the order of the Demographics sections, for all three hosts (issue
+### #1029; Banking's banking_layout_widget.gui): the Population panel's Demographics tab (gui/pops_overview.gui instances
+### te_demog_tab_sections), the Census Data window's Demographics tab (gui/pop_browser_panel.gui instances
+### te_demog_browser_sections, the same sections for whichever country the window shows) and the state panel's
+### Demographics subtab (gui/states_panel.gui instances te_state_demog_content). The sections are types in
+### gui/te_demographics_widgets.gui, and the country's read the Country in their context: the player's in the Population
+### panel (its window's AccessPlayer), the window's in the Census Data window (PopBrowserPanel.GetCountry).
+###
+### The order: the people's health (the overview, Causes of Death, the pyramid), then the levers (Work and Retirement,
+### Longevity, Family Policy), then the record (History), with the per-state detail last (Wealth, Where People Live,
+### States) and How Demographics Works collapsed at the foot. The Census Data window takes the tab's order in three
+### columns. The state subtab takes the same order, less the sections a state has no figures for (Family Policy,
+### History, Where People Live, States), and with one of its own after Wealth: the state's Modifiers, the nine standing
+### modifiers the census gives it, which its modifier rows leave out. test_demographics_layout.py holds the orders, the
+### flags and the widths.
 ###
 ### Collapse flags say their default: *_closed sections are open until closed, *_open ones collapsed until opened. The
-### state's flags are its own (te_demog_st_*), so collapsing a section on one host leaves the other alone. Neither host
-### has a journal entry, so there is no Open Journal Entry button (rule 9).
+### state's flags are its own (te_demog_st_*), so collapsing a section on one host leaves the other alone; the tab and
+### the Census Data window share theirs. No host has a journal entry, so there is no Open Journal Entry button (rule 9).
 
 types te_demographics_layout
 {
@@ -26,7 +31,7 @@ types te_demographics_layout
 		maximumsize = { 520 -1 }
 
 		te_demog_panel = {
-			visible = "[Not( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			visible = "[Not( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 			te_demog_text = {
 				text = "te_demog_pending"
@@ -34,7 +39,7 @@ types te_demographics_layout
 		}
 
 		flowcontainer = {
-			visible = "[GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			visible = "[GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			direction = vertical
 			parentanchor = hcenter
 			ignoreinvisible = yes
@@ -54,6 +59,71 @@ types te_demographics_layout
 		}
 
 		te_demog_sec_how = {}
+	}
+
+	### The Census Data window, a fullscreen one: the tab's sections in three columns of a fixed 520 (rule 8), 30 apart,
+	### read down each column and then across, so the order is the tab's: the people's health, then the levers and the
+	### record, then the per-state detail with How Demographics Works at the foot. Until the country's first census the
+	### pending line alone, at the column's width.
+	type te_demog_browser_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_demog_panel = {
+			visible = "[Not( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+
+			te_demog_text = {
+				text = "te_demog_pending"
+			}
+		}
+
+		flowcontainer = {
+			visible = "[GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 30
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				minimumsize = { 520 -1 }
+				maximumsize = { 520 -1 }
+
+				te_demog_overview = {}
+				te_demog_sec_causes = {}
+				te_demog_sec_pyramid = {}
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				minimumsize = { 520 -1 }
+				maximumsize = { 520 -1 }
+
+				te_demog_sec_work = {}
+				### phase 3: shown once the country's late figures exist
+				te_demog_sec_longevity = {}
+				te_demog_sec_family = {}
+				te_demog_sec_history = {}
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				minimumsize = { 520 -1 }
+				maximumsize = { 520 -1 }
+
+				te_demog_sec_wealth = {}
+				te_demog_sec_places = {}
+				te_demog_sec_states = {}
+				te_demog_sec_how = {}
+			}
+		}
 	}
 
 	### The subtab, at a fixed 520 (rule 8). A state with no census shows "Census pending" and the collapsed explanation.

@@ -1589,3 +1589,33 @@ audits. Nothing here rests on an engine fact a script can check, so there is no 
    then its failing conditions and its effect. Standard's says no group reacts.
 9. **The greyed tab.** Before the first census (a country released mid-game), the Population panel's Demographics
    tab is greyed with "#b Demographics#!", "Not open yet. It opens once:" and the census line ticked or crossed.
+
+## The Census Data window's Demographics tab (2026-10-31)
+
+The Census Data window (vanilla's pop browser, `gui/pop_browser_panel.gui`) gains a strip over it: Pops, vanilla's
+window, and Demographics, the census of whichever country the window shows (§ The Census Data window in
+`docs/systems/mod_systems/demographics.md`). For it the country's sections read the `Country` in their context instead of
+`GetPlayer`, which the Population panel's tab now relies on too. Offline: `test_demographics_census_window.py` (the
+override against vanilla's file, the strip, no `GetPlayer` or "our" in what the sections reach, the controls),
+`test_demographics_layout.py` (the three columns) and the GUI lint. These are GUI reads, with no engine fact a script
+can check, so there is no self-check.
+
+1. **The Population panel's tab is unchanged (Full).** Every section shows the player's figures as before, every
+   hover renders (no raw `[Country...]` text, no blank tooltip), and `debug.log` has no `wanted context of type
+   'Country'` or `Failed to fetch variable` lines while the tab is open. This is the change's main risk: the tab now
+   reads the window's `AccessPlayer` context where it read the global `GetPlayer`.
+2. **The strip (Full or Display only).** The Population panel's Census Data button opens the window with two tabs
+   centred over it, Pops selected; vanilla's filters, charts and table are as before. Demographics shows the census
+   in three columns that scroll; Pops brings vanilla's window back. The window reopens on the tab last chosen. With
+   the rule Disabled there is no strip and the window is vanilla's.
+3. **Another country.** Open a foreign country's Census Data window ("French Census Data"): its Demographics tab
+   shows France's figures, not the player's (compare its overview with France's own Population panel figures, the
+   population and the capital's name in the Causes of Death hovers). Its Work and Retirement section has no pension
+   buttons or their grey notes, its Family Policy rows no buttons, and the columns stay aligned.
+4. **What only a played country has.** For an AI country the pyramid draws no pale outline and its legend says the
+   outline is drawn only for played countries; a minor power's History charts each say the census keeps a yearly
+   record only for played countries and major powers; a major power's show its record.
+5. **A state row.** Clicking a state in the window's States, Where People Live or Wealth rows opens that state on its
+   Demographics subtab (note whether the Census Data window stays open behind it).
+6. **The greyed tab.** For a country released mid-game, before its first census, Demographics is greyed and its hover
+   says it opens with the country's first census.
