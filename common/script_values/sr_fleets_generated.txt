@@ -10861,6 +10861,533 @@ sr_loc_ai_enemy_fleets_kuiper = {
 		}
 	}
 }
+
+# ===== Per location, country scope: hostile fleets on their way (UI pass design § 9) =====
+#   sr_loc_hostile_inbound_count_<loc>     the fleets in flight there of countries at war with us
+#   sr_loc_hostile_inbound_strength_<loc>  their strength
+#   sr_loc_hostile_inbound_first_<loc>     the earliest of their landing months, 0 with none
+sr_loc_hostile_inbound_count_earth = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 1 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 1 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 1 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 1 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 1 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 1 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+		}
+	}
+}
+sr_loc_hostile_inbound_strength_earth = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 1 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 1 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 1 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 1 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 1 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 1 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+		}
+	}
+}
+sr_loc_hostile_inbound_first_earth = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_earth > 0 }
+		value = 99999
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 1 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 1 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 1 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 1 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 1 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 1 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		}
+	}
+}
+sr_loc_hostile_inbound_count_inner = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 2 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 2 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 2 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 2 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 2 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 2 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 2 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 2 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 2 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+		}
+	}
+}
+sr_loc_hostile_inbound_strength_inner = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 2 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 2 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 2 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 2 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 2 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 2 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 2 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 2 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 2 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+		}
+	}
+}
+sr_loc_hostile_inbound_first_inner = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_inner > 0 }
+		value = 99999
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 2 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 2 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 2 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 2 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 2 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 2 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 2 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 2 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 2 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		}
+	}
+}
+sr_loc_hostile_inbound_count_mars = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 3 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 3 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 3 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 3 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 3 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 3 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 3 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 3 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 3 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+		}
+	}
+}
+sr_loc_hostile_inbound_strength_mars = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 3 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 3 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 3 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 3 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 3 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 3 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 3 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 3 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 3 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+		}
+	}
+}
+sr_loc_hostile_inbound_first_mars = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_mars > 0 }
+		value = 99999
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 3 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 3 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 3 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 3 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 3 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 3 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 3 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 3 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 3 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		}
+	}
+}
+sr_loc_hostile_inbound_count_asteroids = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 4 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 4 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 4 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 4 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 4 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 4 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 4 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 4 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 4 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+		}
+	}
+}
+sr_loc_hostile_inbound_strength_asteroids = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 4 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 4 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 4 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 4 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 4 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 4 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 4 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 4 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 4 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+		}
+	}
+}
+sr_loc_hostile_inbound_first_asteroids = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_asteroids > 0 }
+		value = 99999
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 4 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 4 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 4 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 4 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 4 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 4 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 4 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 4 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 4 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		}
+	}
+}
+sr_loc_hostile_inbound_count_jupiter = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 5 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 5 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 5 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 5 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 5 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 5 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 5 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 5 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 5 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+		}
+	}
+}
+sr_loc_hostile_inbound_strength_jupiter = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 5 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 5 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 5 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 5 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 5 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 5 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 5 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 5 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 5 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+		}
+	}
+}
+sr_loc_hostile_inbound_first_jupiter = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_jupiter > 0 }
+		value = 99999
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 5 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 5 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 5 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 5 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 5 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 5 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 5 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 5 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 5 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		}
+	}
+}
+sr_loc_hostile_inbound_count_saturn = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 6 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 6 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 6 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 6 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 6 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 6 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 6 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 6 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 6 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+		}
+	}
+}
+sr_loc_hostile_inbound_strength_saturn = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 6 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 6 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 6 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 6 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 6 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 6 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 6 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 6 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 6 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+		}
+	}
+}
+sr_loc_hostile_inbound_first_saturn = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_saturn > 0 }
+		value = 99999
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 6 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 6 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 6 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 6 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 6 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 6 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 6 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 6 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 6 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		}
+	}
+}
+sr_loc_hostile_inbound_count_uranus = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 7 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 7 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 7 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 7 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 7 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 7 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 7 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 7 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 7 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+		}
+	}
+}
+sr_loc_hostile_inbound_strength_uranus = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 7 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 7 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 7 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 7 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 7 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 7 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 7 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 7 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 7 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+		}
+	}
+}
+sr_loc_hostile_inbound_first_uranus = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_uranus > 0 }
+		value = 99999
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 7 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 7 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 7 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 7 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 7 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 7 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 7 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 7 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 7 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		}
+	}
+}
+sr_loc_hostile_inbound_count_neptune = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 8 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 8 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 8 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 8 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 8 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 8 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 8 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 8 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 8 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+		}
+	}
+}
+sr_loc_hostile_inbound_strength_neptune = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 8 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 8 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 8 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 8 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 8 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 8 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 8 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 8 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 8 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+		}
+	}
+}
+sr_loc_hostile_inbound_first_neptune = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_neptune > 0 }
+		value = 99999
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 8 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 8 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 8 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 8 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 8 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 8 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 8 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 8 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 8 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		}
+	}
+}
+sr_loc_hostile_inbound_count_kuiper = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 9 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 9 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 9 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 9 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 9 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 9 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 9 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 9 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 9 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+		}
+	}
+}
+sr_loc_hostile_inbound_strength_kuiper = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 9 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 9 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 9 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 9 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 9 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 9 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 9 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 9 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 9 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+		}
+	}
+}
+sr_loc_hostile_inbound_first_kuiper = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_kuiper > 0 }
+		value = 99999
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev }
+			if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 9 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+			if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 9 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+			if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 9 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+			if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 9 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+			if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 9 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+			if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 9 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+			if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 9 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+			if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 9 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+			if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 9 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		}
+	}
+}
 sr_loc_ai_enemy_force_inner = {
 	value = sr_loc_ai_enemy_fleets_inner
 	if = { limit = { sr_site_ai_attack_target = { KEY = venus } } add = sr_site_target_strength_venus }

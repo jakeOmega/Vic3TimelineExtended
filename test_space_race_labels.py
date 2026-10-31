@@ -238,7 +238,7 @@ def _longest_figure(name):
         return FUNDING_CEILING
     if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+|sr_disp_progress_frac_\w+", name):
         return 1.0  # a share of the goal, clamped to 0..1: "100%"
-    if re.fullmatch(r"sr_disp_cf_slot_\d_months|sr_disp_fl_\d_months_left", name):
+    if re.fullmatch(r"sr_disp_cf_slot_\d_months|sr_disp_fl_\d_months_left|sr_disp_earth_(?:hostile|alert)_months", name):
         return TRANSIT_CEILING
     if re.fullmatch(r"sr_window_wait_months_\w+", name):
         return WINDOW_WAIT
@@ -258,9 +258,11 @@ def _longest_figure(name):
              "sr_disp_ms_waiting": SHIP_SLOTS, "sr_disp_ms_flying": SHIP_SLOTS,
              "sr_disp_mod_upkeep_pct": UPKEEP_CEILING, "sr_disp_ebase_levels": EBASE_LEVELS,
              "sr_disp_ebase_room": EBASE_LEVELS, "sr_disp_free_supplied_count": FREE_WORLDS,
+             "sr_disp_ebase_queued": EBASE_LEVELS, "sr_disp_ebase_next_grade": -75,
              "sr_disp_free_trade_research": FREE_TRADE_RESEARCH, "sr_disp_sc_rate": SC_RATE_CEILING,
              "sr_disp_fl_strength": FLEET_STRENGTH, "sr_disp_fl_strength_full": FLEET_STRENGTH,
              "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT, "sr_disp_reserve": FLEET_STRENGTH,
+             "sr_disp_earth_hostile_total": FLEET_STRENGTH, "sr_disp_loc_ours_earth": FLEET_STRENGTH,
              # the colonization overview's cells (audit SPC-6)
              "sr_disp_aut_restless_more": WORLDS - 1, "sr_disp_mq_count": QUEUE_PLACES,
              "sr_mod_fab_stock_cap": FAB_STOCK, "sr_window_disp_next": WINDOW_MONTHS,
@@ -334,12 +336,12 @@ CELLS = {
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
         r"|emig_month_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
-        r"|ebase_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label|sc_reserve_label"
+        r"|ebase_label|ebase_queued_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label|sc_reserve_label"
         r"|cf_drive_label|mq_next_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
-        r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure"
+        r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure|ebase_queued_figure"
         r"|free_trade_figure|sc_rate_figure|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure"
         r"|cf_drive_value|mq_next_(?:months|full|none))"),
     "approach label (te_sr_sec_control)": (

@@ -159,6 +159,10 @@ sr_fl_dispatch = {
 	if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
 	if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
 	if = { limit = { has_variable = sr_fl_dest_pick_$N$ } remove_variable = sr_fl_dest_pick_$N$ }
+	# A new leg: the players told of the last one hear of this one again (the
+	# Earth alert, UI pass design § 9).
+	if = { limit = { has_variable_list = sr_fl_$N$_warned_quiet } clear_variable_list = sr_fl_$N$_warned_quiet }
+	if = { limit = { has_variable_list = sr_fl_$N$_warned_loud } clear_variable_list = sr_fl_$N$_warned_loud }
 	sr_fl_dispatch_alert = { LOC = $LOC$ CODE = $CODE$ }
 	sr_loc_rebuild = yes
 }
@@ -180,6 +184,9 @@ sr_fl_arrive_at = {
 		remove_variable = sr_fl_$N$_arrive
 		if = { limit = { has_variable = sr_fl_$N$_depart } remove_variable = sr_fl_$N$_depart }
 		if = { limit = { has_variable = sr_fl_$N$_leg_months } remove_variable = sr_fl_$N$_leg_months }
+		# Landed: the Earth alert's record of the leg goes with it.
+		if = { limit = { has_variable_list = sr_fl_$N$_warned_quiet } clear_variable_list = sr_fl_$N$_warned_quiet }
+		if = { limit = { has_variable_list = sr_fl_$N$_warned_loud } clear_variable_list = sr_fl_$N$_warned_loud }
 		sr_fl_arrival_posture_at = { N = $N$ }
 		sr_fl_arrival_contact_at = { N = $N$ }
 		if = {

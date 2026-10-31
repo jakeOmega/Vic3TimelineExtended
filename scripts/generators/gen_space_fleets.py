@@ -103,6 +103,11 @@ POSTURES = {1: "station", 2: "standoff", 3: "closein", 4: "interdict"}
 SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_months", "dv", "supply", "marines", "drive",
              "refit_until", "posture", "target", "destroy", "charged", "icpt")
 
+# A slot's variable lists, cleared with it, and on each new leg and landing
+# (sr_fl_dispatch, sr_fl_arrive_at): the players already told of the leg, by
+# volume (the Earth alert, UI pass design § 9).
+SLOT_LISTS = ("warned_quiet", "warned_loud")
+
 # The per-slot helpers a dispatcher reaches as sr_fl_<do>_at = { N = <n> }
 # (sr_fl_each_slot, sr_fl_by_op, sr_fl_by_local). Each names $N$, so every one
 # takes the dispatchers' one argument (script_argument_audit).
@@ -256,6 +261,28 @@ def render_slot_values(n: int) -> list[str]:
     return out
 
 
+def _bound(n: int, code: int) -> str:
+    """Slot n is in flight to the location of this code."""
+    return f"has_variable = sr_fl_{n}_dest var:sr_fl_{n}_dest = {code} NOT = {{ has_variable = sr_fl_{n}_loc }}"
+
+
+def _hostile_inbound(lc: glw.Location) -> list[str]:
+    """The hostile fleets in flight to a location, for the country reading it:
+    their strength, and the earliest landing month (each leg caps the value
+    with max =, from a ceiling only set when some leg exists)."""
+    count = [f"\t\t\tif = {{ limit = {{ {_bound(n, lc.code)} }} add = 1 }}" for n in range(1, SLOTS + 1)]
+    each = [f"\t\t\tif = {{ limit = {{ {_bound(n, lc.code)} }} add = sr_fl_{n}_strength }}" for n in range(1, SLOTS + 1)]
+    first = [f"\t\t\tif = {{ limit = {{ {_bound(n, lc.code)} }} max = var:sr_fl_{n}_arrive }}" for n in range(1, SLOTS + 1)]
+    head = ["\t\tevery_in_global_list = {", "\t\t\tvariable = sr_fleet_powers",
+            "\t\t\tlimit = { is_country_alive = yes has_war_with = prev }"]
+    listed = ["\tif = {", "\t\tlimit = { has_global_variable_list = sr_fleet_powers }", *head]
+    return [f"sr_loc_hostile_inbound_count_{lc.key} = {{", "\tvalue = 0", *listed, *count, "\t\t}", "\t}", "}",
+            f"sr_loc_hostile_inbound_strength_{lc.key} = {{", "\tvalue = 0", *listed, *each, "\t\t}", "\t}", "}",
+            f"sr_loc_hostile_inbound_first_{lc.key} = {{", "\tvalue = 0",
+            "\tif = {", f"\t\tlimit = {{ sr_loc_hostile_inbound_count_{lc.key} > 0 }}", "\t\tvalue = 99999",
+            *head, *first, "\t\t}", "\t}", "}"]
+
+
 def render_values() -> str:
     out = [HEADER.rstrip("\n"),
            "# The fleets' per-slot and per-location values, from gen_space_fleets (slice 6",
@@ -339,6 +366,11 @@ def render_values() -> str:
                "\t\tevery_in_global_list = {", "\t\t\tvariable = sr_fleet_powers",
                f"\t\t\tlimit = {{ is_country_alive = yes has_war_with = prev has_variable = sr_fl_at_{lc.key} }}",
                f"\t\t\tadd = var:sr_fl_at_{lc.key}", "\t\t}", "\t}", "}"]],
+            "", "# ===== Per location, country scope: hostile fleets on their way (UI pass design § 9) =====",
+            "#   sr_loc_hostile_inbound_count_<loc>     the fleets in flight there of countries at war with us",
+            "#   sr_loc_hostile_inbound_strength_<loc>  their strength",
+            "#   sr_loc_hostile_inbound_first_<loc>     the earliest of their landing months, 0 with none",
+            *[line for lc in LOCATIONS for line in _hostile_inbound(lc)],
             *[line for lc in LOCATIONS[1:] for line in
               [f"sr_loc_ai_enemy_force_{lc.key} = {{", f"\tvalue = sr_loc_ai_enemy_fleets_{lc.key}",
                *[f"\tif = {{ limit = {{ sr_site_ai_attack_target = {{ KEY = {w.key} }} }} add = sr_site_target_strength_{w.key} }}"
@@ -676,6 +708,8 @@ def render_role_effects() -> list[str]:
            "sr_fl_clear_at = {"]
     names = [*SLOT_VARS, *[r.key for r in ROLES], *[f"{r.key}_full" for r in ROLES]]
     out += [f"\tif = {{ limit = {{ has_variable = sr_fl_$N$_{x} }} remove_variable = sr_fl_$N$_{x} }}" for x in names]
+    out += [f"\tif = {{ limit = {{ has_variable_list = sr_fl_$N$_{x} }} clear_variable_list = sr_fl_$N$_{x} }}"
+            for x in SLOT_LISTS]
     out += ["}", "",
             "# The month's construction (local_var:sr_sc_points) into the ground reserve (6d,",
             "# design § 15), shared by the build mix; it reaches orbit at full when launched.",
@@ -1345,6 +1379,111 @@ def render_debug() -> list[str]:
     return out
 
 
+def render_earth_alert() -> list[str]:
+    """The Earth alert (UI pass design § 9), for a player in its country pulse:
+    every slot of a power at war with it, in flight to Earth, is told once per
+    leg at each volume. Loud (space_race_events.111) while a landing would tip
+    the balance at Earth (sr_earth_alert_loud), in place of the quiet notice;
+    quiet (a feed notice) otherwise. One popup a month, given first to a loud
+    fleet nobody has been told of (the first pass), else to the first loud one;
+    the month's other loud fleets are marked told, and each not yet told
+    quietly gets its feed notice, so every hostile owner is named somewhere.
+    The players told are on the moving fleet's lists (SLOT_LISTS), cleared with
+    each new leg and landing, so a war declared mid-flight is heard the next
+    month and a quiet leg can turn loud. Also the cell's hover, a line a power
+    (sr_ov_list_earth)."""
+    heard = lambda name: f"is_target_in_variable_list = {{ name = {name} target = scope:sr_alert_viewer }}"  # noqa: E731
+    add = lambda name: f"add_to_variable_list = {{ name = {name} target = scope:sr_alert_viewer }}"  # noqa: E731
+
+    def popup(n: int, ind: str) -> list[str]:
+        return [f"{ind}set_local_variable = {{ name = sr_earth_loud_sent value = 1 }}",
+                f"{ind}set_local_variable = {{ name = sr_earth_alert_arr value = var:sr_fl_{n}_arrive }}",
+                f"{ind}scope:sr_alert_viewer = {{",
+                f"{ind}\tset_variable = {{ name = sr_earth_alert_by value = prev }}",
+                f"{ind}\tset_variable = {{ name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }}",
+                f"{ind}\ttrigger_event = {{ id = space_race_events.111 days = 1 }}",
+                f"{ind}}}"]
+
+    def feed(n: int, ind: str) -> list[str]:
+        return [f"{ind}{add(f'sr_fl_{n}_warned_quiet')}",
+                f"{ind}save_scope_as = sr_earth_alert_power",
+                f"{ind}scope:sr_alert_viewer = {{ post_notification = sr_earth_hostile_notice }}"]
+
+    walk = ["\tif = {",
+            "\t\tlimit = { has_global_variable_list = sr_fleet_powers }",
+            "\t\tevery_in_global_list = {",
+            "\t\t\tvariable = sr_fleet_powers",
+            "\t\t\tlimit = { is_country_alive = yes has_war_with = scope:sr_alert_viewer }"]
+    out = ["# ===== The Earth alert (UI pass design § 9), a player's country pulse =====",
+           "# Each hostile fleet in flight to Earth, once per leg: loud (.111) while a",
+           "# landing would tip the balance at Earth (sr_earth_alert_loud, read once: it",
+           "# reads the location records and the fleets' strengths, which nothing here",
+           "# changes), else quiet (sr_earth_hostile_notice). The players told sit on the",
+           "# fleet's sr_fl_<n>_warned_<volume> lists. One popup a month, naming its",
+           "# fleet's owner (sr_earth_alert_by) and landing (sr_earth_alert_arrive): first",
+           "# pass, a loud fleet nobody was told of; second, the first loud one left. The",
+           "# month's other loud fleets are marked told, and each not yet told quietly",
+           "# gets its feed notice.",
+           "sr_earth_alert_step = {",
+           "\tsave_scope_as = sr_alert_viewer",
+           "\tset_local_variable = { name = sr_earth_loud value = 0 }",
+           "\tif = { limit = { sr_earth_alert_loud = yes } set_local_variable = { name = sr_earth_loud value = 1 } }",
+           "\tset_local_variable = { name = sr_earth_loud_sent value = 0 }",
+           "\t# First pass: the popup for a loud fleet nobody has been told of."]
+    out += walk
+    for n in range(1, SLOTS + 1):
+        quiet, loud = f"sr_fl_{n}_warned_quiet", f"sr_fl_{n}_warned_loud"
+        out += ["\t\t\tif = {",
+                f"\t\t\t\tlimit = {{ local_var:sr_earth_loud = 1 local_var:sr_earth_loud_sent = 0 {_bound(n, EARTH)} "
+                f"NOT = {{ {heard(loud)} }} NOT = {{ {heard(quiet)} }} }}",
+                f"\t\t\t\t{add(loud)}",
+                f"\t\t\t\t{add(quiet)}",
+                *popup(n, "\t\t\t\t"),
+                "\t\t\t}"]
+    out += ["\t\t}", "\t}",
+            "\t# Second pass: every other fleet bound for Earth."]
+    out += walk
+    for n in range(1, SLOTS + 1):
+        quiet, loud = f"sr_fl_{n}_warned_quiet", f"sr_fl_{n}_warned_loud"
+        out += ["\t\t\tif = {",
+                f"\t\t\t\tlimit = {{ {_bound(n, EARTH)} }}",
+                "\t\t\t\tif = {",
+                f"\t\t\t\t\tlimit = {{ local_var:sr_earth_loud = 1 NOT = {{ {heard(loud)} }} }}",
+                f"\t\t\t\t\t{add(loud)}",
+                "\t\t\t\t\tif = {",
+                "\t\t\t\t\t\tlimit = { local_var:sr_earth_loud_sent = 0 }",
+                f"\t\t\t\t\t\tif = {{ limit = {{ NOT = {{ {heard(quiet)} }} }} {add(quiet)} }}",
+                *popup(n, "\t\t\t\t\t\t"),
+                "\t\t\t\t\t}",
+                "\t\t\t\t\telse_if = {",
+                f"\t\t\t\t\t\tlimit = {{ NOT = {{ {heard(quiet)} }} }}",
+                *feed(n, "\t\t\t\t\t\t"),
+                "\t\t\t\t\t}",
+                "\t\t\t\t}",
+                "\t\t\t\telse_if = {",
+                f"\t\t\t\t\tlimit = {{ local_var:sr_earth_loud = 0 NOT = {{ {heard(quiet)} }} }}",
+                *feed(n, "\t\t\t\t\t"),
+                "\t\t\t\t}",
+                "\t\t\t}"]
+    out += ["\t\t}", "\t}", "}", "",
+            "# The Hostile Fleet cell's hover (sr_colony_overview_sgui, op 3): a line a power",
+            "# at war with the viewer with a fleet in flight to Earth, its name and its",
+            "# sr_disp_earth_power_* (read in its scope: gui_modding_guide.md gotcha #15).",
+            "sr_ov_list_earth = {",
+            "\tif = {",
+            "\t\tlimit = { has_global_variable_list = sr_fleet_powers }",
+            "\t\tevery_in_global_list = {",
+            "\t\t\tvariable = sr_fleet_powers",
+            "\t\t\tlimit = {", "\t\t\t\tis_country_alive = yes", "\t\t\t\thas_war_with = root", "\t\t\t\tOR = {",
+            *[f"\t\t\t\t\tAND = {{ {_bound(n, EARTH)} }}" for n in range(1, SLOTS + 1)],
+            "\t\t\t\t}", "\t\t\t}",
+            "\t\t\tcustom_tooltip = je_space_race_widget_ovc_earth_line",
+            "\t\t}",
+            "\t}",
+            "}"]
+    return out
+
+
 def render_effects() -> str:
     parts = [HEADER.rstrip("\n"),
              "# The fleets' per-slot and per-location effects, from gen_space_fleets (slice 6",
@@ -1353,7 +1492,7 @@ def render_effects() -> str:
              ""]
     for block in (render_dispatchers(), render_role_effects(), render_merge_detach(), render_location_effects(),
                   render_finders(), render_records(), render_ai_effects(), render_combat(), render_ai_defend(),
-                  render_ai_attack(), render_debug(), render_overview_list()):
+                  render_ai_attack(), render_debug(), render_overview_list(), render_earth_alert()):
         parts += block + [""]
     return "\n".join(parts)
 
@@ -1572,6 +1711,21 @@ def render_display() -> str:
             *[f"sr_disp_sc_mix_{r.key} = {{ value = sr_sc_mix_{r.key}_value }}" for r in ROLES],
             "", "# The ground reserve by role (6d; Space Command's Reserve hover).",
             *[f"sr_disp_reserve_{r.key} = {{ value = sr_reserve_{r.key}_value }}" for r in ROLES]]
+    # The Hostile Fleet cell's hover (UI pass design § 9): one line a power at
+    # war with the viewer (sr_ov_list_earth), read in the power's own scope.
+    bound = [_bound(n, EARTH) for n in range(1, SLOTS + 1)]
+    out += ["", "# Per power, in its own scope (the Hostile Fleet cell's hover, a line a power at",
+            "# war with the viewer, sr_ov_list_earth): its fleets in flight to Earth, their",
+            "# strength, and the months until the first lands.",
+            "sr_disp_earth_power_count = {", "\tvalue = 0",
+            *[f"\tif = {{ limit = {{ {b} }} add = 1 }}" for b in bound], "}",
+            "sr_disp_earth_power_strength = {", "\tvalue = 0",
+            *[f"\tif = {{ limit = {{ {b} }} add = sr_fl_{n}_strength }}" for n, b in enumerate(bound, 1)], "}",
+            "sr_disp_earth_power_months = {", "\tvalue = 0", "\tif = {",
+            "\t\tlimit = {", "\t\t\tOR = {", *[f"\t\t\t\tAND = {{ {b} }}" for b in bound], "\t\t\t}", "\t\t}",
+            "\t\tvalue = 99999",
+            *[f"\t\tif = {{ limit = {{ {b} }} max = var:sr_fl_{n}_arrive }}" for n, b in enumerate(bound, 1)],
+            "\t\tsubtract = te_history_month_index", "\t\tmin = 0", "\t}", "}"]
     return "\n".join(out) + "\n"
 
 

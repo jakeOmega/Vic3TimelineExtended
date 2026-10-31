@@ -13,9 +13,10 @@ on_monthly_pulse_country = {
 space_race_on_action = {
 	effect = {
 		# Extraplanetary Base room (sr_colony_module_effects.txt; colony modules
-		# design § 9): its one refresh site, for every country that can build
+		# design § 9): its monthly refresh, for every country that can build
 		# a base (In-Situ Resource Utilization, the building's technology),
-		# colony or not.
+		# colony or not; space_race_events.110 refreshes it too, the day after
+		# a base is built or gains a level (UI pass design § 8).
 		if = {
 			limit = { has_technology_researched = in_situ_resource_utilization }
 			sr_ebase_refresh = yes
@@ -33,7 +34,9 @@ space_race_on_action = {
 			remove_modifier = sr_orbital_superiority
 		}
 		# Earth orbit (slice 6d, sr_earth_orbit_effects.txt): a player told when
-		# its Earth is blockaded, or its launch site lost and back.
+		# its Earth is blockaded, or its launch site lost and back; and of each
+		# hostile fleet bound for Earth (the Earth alert, UI pass design § 9,
+		# sr_fleets_generated.txt).
 		if = {
 			limit = {
 				is_player = yes
@@ -45,6 +48,7 @@ space_race_on_action = {
 				}
 			}
 			sr_earth_notice_step = yes
+			sr_earth_alert_step = yes
 		}
 		# An old save's open Moon Base (lunar colonization design § 10): its
 		# progress moves onto Solar System Colonization before the cleanup on

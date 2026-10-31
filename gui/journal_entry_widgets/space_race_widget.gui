@@ -3626,6 +3626,18 @@ types space_race_widget_types
 						text = "je_space_race_widget_ebase_figure"
 					}
 				}
+				### The levels queued and not yet built, while there are any
+				### (UI pass design § 8).
+				te_sr_value_row = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_queued'), '(CFixedPoint)0' )]"
+					tooltip = "je_space_race_widget_ebase_tt"
+					blockoverride "row_label" {
+						text = "je_space_race_widget_ebase_queued_label"
+					}
+					blockoverride "row_value" {
+						text = "je_space_race_widget_ebase_queued_figure"
+					}
+				}
 				### The queue on its own (the owner, 2026-10-31: "visually separate
 				### the Queue better"): its heading with the count, then an inset
 				### box holding when the next module is built and the places, and
@@ -7604,6 +7616,91 @@ types space_race_widget_types
 									position = { 78 46 }
 									visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ) )]"
 									text = "je_space_race_widget_ovc_window_fig_moon"
+								}
+							}
+						}
+					}
+					### Base Room (UI pass design § 8, the parallel to Seabed's Long-haul):
+					### our Extraplanetary Base levels against our room, red once built and
+					### queued levels pass it; the grade the next level would work at; on
+					### hover the queued levels, the average now and the rule. Five-digit
+					### figures leave the word no room for the queued count. Shown once the building is ours to
+					### build. Levels, queue and room are read live; the grades come from the
+					### monthly refresh and the one when a base is built (space_race_events.110).
+					### The row also holds the Earth alert's Hostile Fleet cell (§ 9), so it
+					### shows while either cell does.
+					flowcontainer = {
+						visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) ) )]"
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = hcenter
+
+						te_banking_ov_cell = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]"
+							tooltip = "je_space_race_widget_ovc_ebase_tt"
+							blockoverride "caption" {
+								text = "je_space_race_widget_ovc_ebase_cap"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/building_icons/building_space_mine.dds"
+								}
+							}
+							blockoverride "word" {
+								te_banking_ov_word = {
+									visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' ) )]"
+									text = "je_space_race_widget_ovc_ebase_word"
+								}
+								te_banking_ov_word = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' )]"
+									text = "je_space_race_widget_ovc_ebase_word_past"
+								}
+							}
+							blockoverride "third_line" {
+								te_banking_ov_word = {
+									position = { 78 46 }
+									visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' )]"
+									text = "je_space_race_widget_ovc_ebase_fig_plus"
+								}
+								te_banking_ov_word = {
+									position = { 78 46 }
+									visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' ) )]"
+									text = "je_space_race_widget_ovc_ebase_fig"
+								}
+							}
+						}
+						# The Earth alert (UI pass design § 9; Full Colonies): while a fleet
+						# of a power at war with us is bound for Earth, when the first
+						# lands and its strength against ours there; red while a landing
+						# would tip the balance at Earth (sr_earth_alert_loud).
+						te_banking_ov_cell = {
+							visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) )]"
+							tooltip = "je_space_race_widget_ovc_earth_tt"
+							blockoverride "caption" {
+								text = "je_space_race_widget_ovc_earth_cap"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/space_race_icons/warship.dds"
+								}
+							}
+							blockoverride "word" {
+								te_banking_ov_word = {
+									visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' ) )]"
+									text = "je_space_race_widget_ovc_earth_word"
+								}
+								te_banking_ov_word = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )]"
+									text = "je_space_race_widget_ovc_earth_word_loud"
+								}
+							}
+							blockoverride "third_line" {
+								te_banking_ov_word = {
+									position = { 78 46 }
+									text = "je_space_race_widget_ovc_earth_fig"
 								}
 							}
 						}

@@ -1417,6 +1417,41 @@ class ColonyTargetOpenerTest(unittest.TestCase):
         # Two 66-wide buttons on the target row, the most it holds.
         self.assertLessEqual(sum(widths) + 2 * 66 + 3 * spacing + 2 * margin, 480)
 
+class EarthAlertCellTest(unittest.TestCase):
+    """The overview's Hostile Fleet cell (UI pass design § 9): under Full
+    Colonies, while a hostile fleet is bound for Earth; red on 2."""
+
+    def test_the_cell_reads_the_alert_values(self):
+        gui = _read(GUI)
+        m = re.search(r'te_banking_ov_cell = \{\s*visible = "([^"]+)"\s*tooltip = "je_space_race_widget_ovc_earth_tt"', gui)
+        self.assertIsNotNone(m, "no Hostile Fleet cell")
+        shows = ("ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1'",
+                 "GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), "
+                 "'(CFixedPoint)1' )")
+        # Shown by its own visible, and its row (shared with Base Room) shows
+        # while either cell does.
+        row = gui.rindex("flowcontainer = {", 0, m.start())
+        row_shown = re.match(r'flowcontainer = \{\s*visible = "([^"]+)"', gui[row:]).group(1)
+        self.assertTrue(row_shown.startswith("[Or( "), row_shown)
+        for cond in shows:
+            self.assertIn(cond, m.group(1))
+            self.assertIn(cond, row_shown)
+        self.assertIn("ScriptValue('sr_disp_ebase_shown')", row_shown)
+        brace = gui.index("{", m.start())
+        depth, i = 0, brace
+        while True:
+            depth += {"{": 1, "}": -1}.get(gui[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        cell = gui[brace:i]
+        loud = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )"
+        self.assertRegex(cell, rf'visible = "\[{re.escape(loud)}\]"\s*text = "je_space_race_widget_ovc_earth_word_loud"')
+        self.assertRegex(cell, rf'visible = "\[Not\( {re.escape(loud)} \)\]"\s*text = "je_space_race_widget_ovc_earth_word"')
+        self.assertIn('text = "je_space_race_widget_ovc_earth_fig"', cell)
+        loc = "\n".join(_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml")))
+        self.assertRegex(loc, r'(?m)^ je_space_race_widget_ovc_earth_word_loud:0 "#R ')
+
 
 if __name__ == "__main__":
     unittest.main()
