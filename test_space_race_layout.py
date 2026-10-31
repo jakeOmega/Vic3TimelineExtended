@@ -1246,10 +1246,6 @@ class LocTest(unittest.TestCase):
         self.assertNotRegex(_read(CUSTOM_LOC), r"(?m)^sr_\w+_pace = \{")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class QueueNextModuleTest(unittest.TestCase):
     """The queue's Next module row (the owner, 2026-10-31) follows how
     sr_mod_month builds: its loop asks the launch site, the stock against the
@@ -1280,3 +1276,6 @@ class QueueNextModuleTest(unittest.TestCase):
         self.assertLess(lost, covered)
         self.assertLess(covered, no_rate)
         self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "2", "3"])
+
+if __name__ == "__main__":
+    unittest.main()
