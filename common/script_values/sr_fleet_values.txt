@@ -505,3 +505,10 @@ sr_orbital_superiority_margin = {
 		min = 0
 	}
 }
+
+# Country scope, the Earth alert (UI pass design § 9): the strength of the
+# fleets of powers at war with us at Earth and in flight to it.
+sr_earth_hostile_total = {
+	value = sr_loc_hostile_inbound_strength_earth
+	add = sr_loc_ai_enemy_fleets_earth
+}

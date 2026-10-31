@@ -670,3 +670,33 @@ opened it.
    window while the popup is up; that's acceptable either way.
 9. **A long window figure fits.** With depots and a closed window, a site's window reads "+N% now, N mo" in full,
    months included, not cut off with an ellipsis.
+
+## The owner's UI pass: the Earth alert (PR 6, 2026-10-31)
+
+Hostile fleets bound for Earth (UI pass design § 9; `docs/systems/mod_systems/space_race.md` § Earth orbit): the
+quiet feed notice `sr_earth_hostile_notice`, the loud `space_race_events.111`, and the overview's Hostile Fleet cell,
+all under Full Colonies. **Fallback** if the feed notice doesn't show: a popup in `.106`'s shape for the quiet case
+too.
+
+1. **The quiet notice.** At war with a fleet power, with a stronger fleet of ours at Earth, watch one of its fleets set
+   out for Earth: one notice in the feed, "A Hostile Fleet Is Bound for Earth", naming the country, not a popup and
+   not every month after. Its color is the feed's bad one.
+2. **The loud notice.** With no fleet of ours at Earth and Earth not blockaded (or ours weaker than theirs there plus
+   what is coming), a hostile fleet setting out for Earth brings the popup Earth Is Threatened, once, with the
+   country's name, the months to its landing and both strengths as figures, not zeros. No feed notice for that fleet.
+   **Not when already blockaded:** with Earth blockaded, their fleets flying home bring feed notices, not popups.
+3. **Loud later in the leg.** With a quiet notice heard, take our fleet away from Earth while theirs is on the way:
+   the popup comes the next month, once.
+4. **A war declared mid-flight.** A country's fleet already on its way to Earth (coming home, say) when it declares
+   war on us: the notice comes the next month.
+5. **Two loud fleets in one month.** Two hostile fleets that would each tip the balance set out the same month: one
+   popup, naming one fleet's country, and a feed notice for the other fleet; no second popup the month after. With
+   one of them heard quietly before (item 3's setup), the popup names the other, the one we hadn't heard of.
+6. **The cell.** While a hostile fleet is on its way, the overview's third row shows Hostile Fleet, "Earth in N mo"
+   and "theirs vs ours" (theirs at Earth and on the way); red in the loud case. The hover has a line a country, its name, fleets, strength
+   and first landing, with the figures not zeros (they're read in that country's scope). Gone once they land or the
+   war ends, and absent under Races Only and Simple Colonies.
+7. **Two powers' notices.** Fleets of two different powers set out for Earth the same month, each quiet: the two feed
+   notices name different countries (each saves its owner before it posts; unverified that a notice keeps it).
+8. **No stutter at war.** At war with several fleet powers, scrolling the overview stays smooth (the cell walks their
+   nine slots each frame). Fallback: read copies the step stores.

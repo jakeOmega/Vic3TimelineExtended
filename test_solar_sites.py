@@ -1987,12 +1987,15 @@ class EbaseCellTest(unittest.TestCase):
         self.assertIn("has_technology_researched = in_situ_resource_utilization", _block(self.display, "sr_disp_ebase_shown"))
 
     def test_the_cell(self):
-        cell = re.search(r'te_banking_ov_cell = \{\s*tooltip = "je_space_race_widget_ovc_ebase_tt"', self.widget)
+        cell = re.search(r'te_banking_ov_cell = \{\s*visible = "([^"]+)"\s*tooltip = "je_space_race_widget_ovc_ebase_tt"', self.widget)
         self.assertIsNotNone(cell)
         start = self.widget.rindex("flowcontainer = {", 0, cell.start())
         body = self.widget[cell.start():]
         body = body[:body.index("\n\t\t\t\t\t\t}\n")]
+        # The row it shares with the Hostile Fleet cell shows while either does;
+        # the cell itself only with the technology.
         self.assertIn("ScriptValue('sr_disp_ebase_shown')", self.widget[start:cell.start()])
+        self.assertEqual(cell.group(1), "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]")
         self.assertIn('text = "je_space_race_widget_ovc_ebase_cap"', body)
         for word in ("word", "word_past", "fig", "fig_plus"):
             with self.subTest(word=word):

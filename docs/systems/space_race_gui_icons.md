@@ -88,7 +88,7 @@ Where a cell names what a building does (audit SPC-6, SPC-16), it showed that bu
 
 | Cell | Shows | File |
 |---|---|---|
-| Defense (44 px, under Full colonies) and Locations' inbound column (16 px) | a dark grey armed spacecraft with a twin turret on its back | `warship.dds` |
+| Defense and Hostile Fleet (44 px, under Full colonies) and Locations' inbound column (16 px) | a dark grey armed spacecraft with a twin turret on its back | `warship.dds` |
 | Modules (44 px) | a silver habitat module in gold foil bands, a docking ring at one end | `module.dds` |
 
 ## A colony's page (2026-10-30)

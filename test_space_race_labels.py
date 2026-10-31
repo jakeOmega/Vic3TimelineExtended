@@ -238,7 +238,7 @@ def _longest_figure(name):
         return FUNDING_CEILING
     if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+|sr_disp_progress_frac_\w+", name):
         return 1.0  # a share of the goal, clamped to 0..1: "100%"
-    if re.fullmatch(r"sr_disp_cf_slot_\d_months|sr_disp_fl_\d_months_left", name):
+    if re.fullmatch(r"sr_disp_cf_slot_\d_months|sr_disp_fl_\d_months_left|sr_disp_earth_(?:hostile|alert)_months", name):
         return TRANSIT_CEILING
     if re.fullmatch(r"sr_window_wait_months_\w+", name):
         return WINDOW_WAIT
@@ -262,6 +262,7 @@ def _longest_figure(name):
              "sr_disp_free_trade_research": FREE_TRADE_RESEARCH, "sr_disp_sc_rate": SC_RATE_CEILING,
              "sr_disp_fl_strength": FLEET_STRENGTH, "sr_disp_fl_strength_full": FLEET_STRENGTH,
              "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT, "sr_disp_reserve": FLEET_STRENGTH,
+             "sr_disp_earth_hostile_total": FLEET_STRENGTH, "sr_disp_loc_ours_earth": FLEET_STRENGTH,
              # the colonization overview's cells (audit SPC-6)
              "sr_disp_aut_restless_more": WORLDS - 1, "sr_disp_mq_count": QUEUE_PLACES,
              "sr_mod_fab_stock_cap": FAB_STOCK, "sr_window_disp_next": WINDOW_MONTHS,
