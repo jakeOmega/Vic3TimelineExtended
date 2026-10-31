@@ -4,14 +4,15 @@
 	texture = "gfx/interface/icons/invention_icons/artificial_intelligence.dds"
 	category = production
 
-	# Phase 1 of the era 13 spec (2026-10-31): Programmable Matter moved to era 13, so AGI follows Generative AI and
-	# Autonomous Vehicles until phase 2 gives it Self-Driving Laboratories and Humanoid Robotics (§ 5.5)
+	# The era 13 spec (2026-10-31, § 5.5): era 11's AI technologies lead here (Generative AI, Programmable Matter
+	# and Autonomous Vehicles until then)
 	unlocking_technologies = {
-		generative_ai
-		autonomous_vehicles
+		self_driving_laboratories
+		humanoid_robotics
 	}
 
 	modifier = {
+		country_weekly_innovation_max_add = 300	# the late tree's innovation budget (era 13 spec § 4.2)
 		country_st_res_tanks_decay_add = -0.006
 	}
 
@@ -226,6 +227,7 @@ neural_lace = {
 	}
 
 	modifier = {
+		country_weekly_innovation_max_add = 100	# the late tree's innovation budget (era 13 spec § 4.2)
 		country_max_companies_add = 1
 		country_voting_power_mult = 0.2
 		state_literacy_growth_add = 0.0001

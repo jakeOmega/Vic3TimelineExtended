@@ -147,7 +147,8 @@ combat_unit_type_robotic_soldiers = {
 		unit_provinces_lost_mult = -0.25
 	}
 
-	unlocking_technologies = { jadc2 }  # era 10
+	# Autonomous Weapons, era 11 (JADC2 until the era 13 spec, § 6.4)
+	unlocking_technologies = { autonomous_weapons }
 
 	combat_unit_image = {
 		# fallback
@@ -1218,10 +1219,10 @@ combat_unit_type_networked_marines = {
 		}
 	}
 
-	# Combined-arms-in-miniature: 60% robotic_soldiers + 10% each of orbital_bombardment
-	# (era 11), railgun_tank (era 10), stealth_reconnaissance_drone_carrier (era 9, last
+	# Combined-arms-in-miniature: 60% robotic_soldiers (era 11 since the era 13 spec) + 10% each of
+	# orbital_bombardment (era 11), railgun_tank (era 10), stealth_reconnaissance_drone_carrier (era 9, last
 	# light tank before era 11), and orbital_tactical_vehicles (era 11). Goods +25% elite
-	# premium; offense/defense +10% combat bonus. The two orbital arms unlock an era
+	# premium; offense/defense +10% combat bonus. The robots and the two orbital arms unlock an era
 	# after these marines, so this mix borrows goods from units not yet available. Marines acquire orbital-insertion
 	# launch_capacity from the orbital arty/aircraft mix, modeling drone-marine
 	# fireteams that drop from orbit with their own organic fire support.

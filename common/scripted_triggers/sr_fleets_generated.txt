@@ -155,6 +155,7 @@ sr_fl_1_may_depart_earth = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_earth
+	sr_sc_operational = yes
 }
 sr_fl_1_may_depart_inner = {
 	has_variable = sr_fl_1_loc
@@ -162,6 +163,7 @@ sr_fl_1_may_depart_inner = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_inner
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_mars = {
@@ -170,6 +172,7 @@ sr_fl_1_may_depart_mars = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_mars
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_asteroids = {
@@ -178,6 +181,7 @@ sr_fl_1_may_depart_asteroids = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_asteroids
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_jupiter = {
@@ -186,6 +190,7 @@ sr_fl_1_may_depart_jupiter = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_jupiter
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_saturn = {
@@ -194,6 +199,7 @@ sr_fl_1_may_depart_saturn = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_saturn
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_uranus = {
@@ -202,6 +208,7 @@ sr_fl_1_may_depart_uranus = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_uranus
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_neptune = {
@@ -210,6 +217,7 @@ sr_fl_1_may_depart_neptune = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_neptune
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_1_may_depart_kuiper = {
@@ -218,6 +226,7 @@ sr_fl_1_may_depart_kuiper = {
 	NOT = { sr_fl_1_refitting = yes }
 	sr_fl_1_strength >= sr_fl_minimum_strength
 	sr_fl_1_dv_value >= sr_fl_1_leg_dv_kuiper
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_1_loc = 1 sr_launches_barred = yes } }
 }
 # 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
@@ -860,6 +869,7 @@ sr_fl_2_may_depart_earth = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_earth
+	sr_sc_operational = yes
 }
 sr_fl_2_may_depart_inner = {
 	has_variable = sr_fl_2_loc
@@ -867,6 +877,7 @@ sr_fl_2_may_depart_inner = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_inner
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_mars = {
@@ -875,6 +886,7 @@ sr_fl_2_may_depart_mars = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_mars
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_asteroids = {
@@ -883,6 +895,7 @@ sr_fl_2_may_depart_asteroids = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_asteroids
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_jupiter = {
@@ -891,6 +904,7 @@ sr_fl_2_may_depart_jupiter = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_jupiter
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_saturn = {
@@ -899,6 +913,7 @@ sr_fl_2_may_depart_saturn = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_saturn
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_uranus = {
@@ -907,6 +922,7 @@ sr_fl_2_may_depart_uranus = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_uranus
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_neptune = {
@@ -915,6 +931,7 @@ sr_fl_2_may_depart_neptune = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_neptune
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_2_may_depart_kuiper = {
@@ -923,6 +940,7 @@ sr_fl_2_may_depart_kuiper = {
 	NOT = { sr_fl_2_refitting = yes }
 	sr_fl_2_strength >= sr_fl_minimum_strength
 	sr_fl_2_dv_value >= sr_fl_2_leg_dv_kuiper
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_2_loc = 1 sr_launches_barred = yes } }
 }
 # 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
@@ -1565,6 +1583,7 @@ sr_fl_3_may_depart_earth = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_earth
+	sr_sc_operational = yes
 }
 sr_fl_3_may_depart_inner = {
 	has_variable = sr_fl_3_loc
@@ -1572,6 +1591,7 @@ sr_fl_3_may_depart_inner = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_inner
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_mars = {
@@ -1580,6 +1600,7 @@ sr_fl_3_may_depart_mars = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_mars
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_asteroids = {
@@ -1588,6 +1609,7 @@ sr_fl_3_may_depart_asteroids = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_asteroids
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_jupiter = {
@@ -1596,6 +1618,7 @@ sr_fl_3_may_depart_jupiter = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_jupiter
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_saturn = {
@@ -1604,6 +1627,7 @@ sr_fl_3_may_depart_saturn = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_saturn
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_uranus = {
@@ -1612,6 +1636,7 @@ sr_fl_3_may_depart_uranus = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_uranus
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_neptune = {
@@ -1620,6 +1645,7 @@ sr_fl_3_may_depart_neptune = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_neptune
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_3_may_depart_kuiper = {
@@ -1628,6 +1654,7 @@ sr_fl_3_may_depart_kuiper = {
 	NOT = { sr_fl_3_refitting = yes }
 	sr_fl_3_strength >= sr_fl_minimum_strength
 	sr_fl_3_dv_value >= sr_fl_3_leg_dv_kuiper
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_3_loc = 1 sr_launches_barred = yes } }
 }
 # 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
@@ -2270,6 +2297,7 @@ sr_fl_4_may_depart_earth = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_earth
+	sr_sc_operational = yes
 }
 sr_fl_4_may_depart_inner = {
 	has_variable = sr_fl_4_loc
@@ -2277,6 +2305,7 @@ sr_fl_4_may_depart_inner = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_inner
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_mars = {
@@ -2285,6 +2314,7 @@ sr_fl_4_may_depart_mars = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_mars
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_asteroids = {
@@ -2293,6 +2323,7 @@ sr_fl_4_may_depart_asteroids = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_asteroids
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_jupiter = {
@@ -2301,6 +2332,7 @@ sr_fl_4_may_depart_jupiter = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_jupiter
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_saturn = {
@@ -2309,6 +2341,7 @@ sr_fl_4_may_depart_saturn = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_saturn
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_uranus = {
@@ -2317,6 +2350,7 @@ sr_fl_4_may_depart_uranus = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_uranus
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_neptune = {
@@ -2325,6 +2359,7 @@ sr_fl_4_may_depart_neptune = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_neptune
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_4_may_depart_kuiper = {
@@ -2333,6 +2368,7 @@ sr_fl_4_may_depart_kuiper = {
 	NOT = { sr_fl_4_refitting = yes }
 	sr_fl_4_strength >= sr_fl_minimum_strength
 	sr_fl_4_dv_value >= sr_fl_4_leg_dv_kuiper
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_4_loc = 1 sr_launches_barred = yes } }
 }
 # 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
@@ -2975,6 +3011,7 @@ sr_fl_5_may_depart_earth = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_earth
+	sr_sc_operational = yes
 }
 sr_fl_5_may_depart_inner = {
 	has_variable = sr_fl_5_loc
@@ -2982,6 +3019,7 @@ sr_fl_5_may_depart_inner = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_inner
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_mars = {
@@ -2990,6 +3028,7 @@ sr_fl_5_may_depart_mars = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_mars
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_asteroids = {
@@ -2998,6 +3037,7 @@ sr_fl_5_may_depart_asteroids = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_asteroids
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_jupiter = {
@@ -3006,6 +3046,7 @@ sr_fl_5_may_depart_jupiter = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_jupiter
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_saturn = {
@@ -3014,6 +3055,7 @@ sr_fl_5_may_depart_saturn = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_saturn
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_uranus = {
@@ -3022,6 +3064,7 @@ sr_fl_5_may_depart_uranus = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_uranus
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_neptune = {
@@ -3030,6 +3073,7 @@ sr_fl_5_may_depart_neptune = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_neptune
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_5_may_depart_kuiper = {
@@ -3038,6 +3082,7 @@ sr_fl_5_may_depart_kuiper = {
 	NOT = { sr_fl_5_refitting = yes }
 	sr_fl_5_strength >= sr_fl_minimum_strength
 	sr_fl_5_dv_value >= sr_fl_5_leg_dv_kuiper
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_5_loc = 1 sr_launches_barred = yes } }
 }
 # 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
@@ -3680,6 +3725,7 @@ sr_fl_6_may_depart_earth = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_earth
+	sr_sc_operational = yes
 }
 sr_fl_6_may_depart_inner = {
 	has_variable = sr_fl_6_loc
@@ -3687,6 +3733,7 @@ sr_fl_6_may_depart_inner = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_inner
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_mars = {
@@ -3695,6 +3742,7 @@ sr_fl_6_may_depart_mars = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_mars
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_asteroids = {
@@ -3703,6 +3751,7 @@ sr_fl_6_may_depart_asteroids = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_asteroids
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_jupiter = {
@@ -3711,6 +3760,7 @@ sr_fl_6_may_depart_jupiter = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_jupiter
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_saturn = {
@@ -3719,6 +3769,7 @@ sr_fl_6_may_depart_saturn = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_saturn
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_uranus = {
@@ -3727,6 +3778,7 @@ sr_fl_6_may_depart_uranus = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_uranus
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_neptune = {
@@ -3735,6 +3787,7 @@ sr_fl_6_may_depart_neptune = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_neptune
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_6_may_depart_kuiper = {
@@ -3743,6 +3796,7 @@ sr_fl_6_may_depart_kuiper = {
 	NOT = { sr_fl_6_refitting = yes }
 	sr_fl_6_strength >= sr_fl_minimum_strength
 	sr_fl_6_dv_value >= sr_fl_6_leg_dv_kuiper
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_6_loc = 1 sr_launches_barred = yes } }
 }
 # 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
@@ -4385,6 +4439,7 @@ sr_fl_7_may_depart_earth = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_earth
+	sr_sc_operational = yes
 }
 sr_fl_7_may_depart_inner = {
 	has_variable = sr_fl_7_loc
@@ -4392,6 +4447,7 @@ sr_fl_7_may_depart_inner = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_inner
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_mars = {
@@ -4400,6 +4456,7 @@ sr_fl_7_may_depart_mars = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_mars
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_asteroids = {
@@ -4408,6 +4465,7 @@ sr_fl_7_may_depart_asteroids = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_asteroids
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_jupiter = {
@@ -4416,6 +4474,7 @@ sr_fl_7_may_depart_jupiter = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_jupiter
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_saturn = {
@@ -4424,6 +4483,7 @@ sr_fl_7_may_depart_saturn = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_saturn
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_uranus = {
@@ -4432,6 +4492,7 @@ sr_fl_7_may_depart_uranus = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_uranus
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_neptune = {
@@ -4440,6 +4501,7 @@ sr_fl_7_may_depart_neptune = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_neptune
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_7_may_depart_kuiper = {
@@ -4448,6 +4510,7 @@ sr_fl_7_may_depart_kuiper = {
 	NOT = { sr_fl_7_refitting = yes }
 	sr_fl_7_strength >= sr_fl_minimum_strength
 	sr_fl_7_dv_value >= sr_fl_7_leg_dv_kuiper
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_7_loc = 1 sr_launches_barred = yes } }
 }
 # 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
@@ -5090,6 +5153,7 @@ sr_fl_8_may_depart_earth = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_earth
+	sr_sc_operational = yes
 }
 sr_fl_8_may_depart_inner = {
 	has_variable = sr_fl_8_loc
@@ -5097,6 +5161,7 @@ sr_fl_8_may_depart_inner = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_inner
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_mars = {
@@ -5105,6 +5170,7 @@ sr_fl_8_may_depart_mars = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_mars
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_asteroids = {
@@ -5113,6 +5179,7 @@ sr_fl_8_may_depart_asteroids = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_asteroids
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_jupiter = {
@@ -5121,6 +5188,7 @@ sr_fl_8_may_depart_jupiter = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_jupiter
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_saturn = {
@@ -5129,6 +5197,7 @@ sr_fl_8_may_depart_saturn = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_saturn
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_uranus = {
@@ -5137,6 +5206,7 @@ sr_fl_8_may_depart_uranus = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_uranus
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_neptune = {
@@ -5145,6 +5215,7 @@ sr_fl_8_may_depart_neptune = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_neptune
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_8_may_depart_kuiper = {
@@ -5153,6 +5224,7 @@ sr_fl_8_may_depart_kuiper = {
 	NOT = { sr_fl_8_refitting = yes }
 	sr_fl_8_strength >= sr_fl_minimum_strength
 	sr_fl_8_dv_value >= sr_fl_8_leg_dv_kuiper
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_8_loc = 1 sr_launches_barred = yes } }
 }
 # 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).
@@ -5795,6 +5867,7 @@ sr_fl_9_may_depart_earth = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_earth
+	sr_sc_operational = yes
 }
 sr_fl_9_may_depart_inner = {
 	has_variable = sr_fl_9_loc
@@ -5802,6 +5875,7 @@ sr_fl_9_may_depart_inner = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_inner
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_mars = {
@@ -5810,6 +5884,7 @@ sr_fl_9_may_depart_mars = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_mars
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_asteroids = {
@@ -5818,6 +5893,7 @@ sr_fl_9_may_depart_asteroids = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_asteroids
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_jupiter = {
@@ -5826,6 +5902,7 @@ sr_fl_9_may_depart_jupiter = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_jupiter
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_saturn = {
@@ -5834,6 +5911,7 @@ sr_fl_9_may_depart_saturn = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_saturn
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_uranus = {
@@ -5842,6 +5920,7 @@ sr_fl_9_may_depart_uranus = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_uranus
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_neptune = {
@@ -5850,6 +5929,7 @@ sr_fl_9_may_depart_neptune = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_neptune
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 sr_fl_9_may_depart_kuiper = {
@@ -5858,6 +5938,7 @@ sr_fl_9_may_depart_kuiper = {
 	NOT = { sr_fl_9_refitting = yes }
 	sr_fl_9_strength >= sr_fl_minimum_strength
 	sr_fl_9_dv_value >= sr_fl_9_leg_dv_kuiper
+	sr_sc_operational = yes
 	NOT = { AND = { var:sr_fl_9_loc = 1 sr_launches_barred = yes } }
 }
 # 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).

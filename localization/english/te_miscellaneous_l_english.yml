@@ -6448,6 +6448,7 @@
  sr_fl_req_other_location_tt:0 "The destination is somewhere the fleet isn't"
  sr_fl_req_pick_hostile_tt:0 "The site is held by a country at war with us, is free, or is ours under an enemy's occupation"
  sr_fl_req_pick_interdictable_tt:0 "The site is held by a country at peace with us that is not our ally"
+ sr_fl_req_space_command_tt:0 "We have a $building_space_command$ in a state we control: without one our fleets can't leave, change posture or target, refit or repair."
  sr_fl_req_standoff_not_earth_tt:0 "The fleet is not at Earth, where every fleet is stationed unless it closes in on the Moon"
  sr_fl_req_world_here_tt:0 "The site is where the fleet is"
  sr_fl_seize_tt:0 "The fleet goes back to seizing its target: at integrity #v 0#!, with more marines than its garrison and militia, the site is ours to occupy."

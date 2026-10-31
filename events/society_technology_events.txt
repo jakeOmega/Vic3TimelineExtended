@@ -2278,7 +2278,7 @@ society_technology_events.24 = {
 
 # ============================================================================
 # 15. ARTIFICIAL INTELLIGENCE (Events 25-27)
-# Techs: machine_learning (era_10), generative_ai (era_10),
+# Techs: machine_learning (era_10), generative_ai (era_10), ai_agents (era_11),
 #         artificial_intelligence (era_12)
 # ============================================================================
 
@@ -2449,9 +2449,10 @@ society_technology_events.26 = {
 }
 
 # Event 27: Automated Administration Proposal
-# AI proposes to manage bureaucratic decisions. Fires with Generative AI, which
-# unlocks law_automated_bureaucracy; a country that already holds that law
-# (Algorithmic Governance installs it) has made this choice.
+# AI proposes to manage bureaucratic decisions. Fires with AI Agents, which
+# unlocks law_automated_bureaucracy (Generative AI until the era 13 spec, § 6.1);
+# a country that already holds that law (Algorithmic Governance installs it) has
+# made this choice.
 society_technology_events.27 = {
 	type = country_event
 	placement = root
@@ -2468,7 +2469,7 @@ society_technology_events.27 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_technology_researched = generative_ai
+		has_technology_researched = ai_agents
 		NOT = { has_modifier = ste_algo_gov_adopt }
 		NOT = { has_modifier = ste_algo_gov_reject }
 		NOT = { has_variable = ste_event_27_fired }

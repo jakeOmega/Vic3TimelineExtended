@@ -256,7 +256,7 @@ directed_energy_defenses = {
 }
 
 jadc2 = {
-	# Robotic Soldiers unit
+	# Networked Marines unit (Robotic Soldiers moved to Autonomous Weapons, era 13 spec § 6.4)
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/jadc2.dds"
 	category = military

@@ -218,7 +218,6 @@ NOT_ON_COUNTRY = {
     "sr_free_colony_supply": "je_space_race_solar_colonization",
     "sr_free_colony_trade": "je_space_race_solar_colonization",
     "sr_colonial_garrisons": "je_space_race_solar_colonization",
-    "sr_fleet_upkeep": "a Space Command building (the upkeep_inputs probe's candidate)",
     "sr_fleet_upkeep_goods": "a Space Command building",
     "te_seabed_long_haul": "a Deep-Sea Mine building (Long-Haul Seabed Operations)",
     "sr_funding_progress": "the running milestone's entry", "sr_space_program_cost": "the running milestone's entry",
