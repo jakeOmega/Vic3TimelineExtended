@@ -2674,3 +2674,61 @@ sr_disp_reserve_rapid = { value = sr_reserve_rapid_value }
 sr_disp_reserve_siege = { value = sr_reserve_siege_value }
 sr_disp_reserve_carrier = { value = sr_reserve_carrier_value }
 sr_disp_reserve_tender = { value = sr_reserve_tender_value }
+
+# Per power, in its own scope (the Hostile Fleet cell's hover, a line a power at
+# war with the viewer, sr_ov_list_earth): its fleets in flight to Earth, their
+# strength, and the months until the first lands.
+sr_disp_earth_power_count = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
+	if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 1 NOT = { has_variable = sr_fl_2_loc } } add = 1 }
+	if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 1 NOT = { has_variable = sr_fl_3_loc } } add = 1 }
+	if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 1 NOT = { has_variable = sr_fl_4_loc } } add = 1 }
+	if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 1 NOT = { has_variable = sr_fl_5_loc } } add = 1 }
+	if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 1 NOT = { has_variable = sr_fl_6_loc } } add = 1 }
+	if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 1 NOT = { has_variable = sr_fl_7_loc } } add = 1 }
+	if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } } add = 1 }
+	if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } } add = 1 }
+}
+sr_disp_earth_power_strength = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } } add = sr_fl_1_strength }
+	if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 1 NOT = { has_variable = sr_fl_2_loc } } add = sr_fl_2_strength }
+	if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 1 NOT = { has_variable = sr_fl_3_loc } } add = sr_fl_3_strength }
+	if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 1 NOT = { has_variable = sr_fl_4_loc } } add = sr_fl_4_strength }
+	if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 1 NOT = { has_variable = sr_fl_5_loc } } add = sr_fl_5_strength }
+	if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 1 NOT = { has_variable = sr_fl_6_loc } } add = sr_fl_6_strength }
+	if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 1 NOT = { has_variable = sr_fl_7_loc } } add = sr_fl_7_strength }
+	if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
+	if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
+}
+sr_disp_earth_power_months = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				AND = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } }
+				AND = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 1 NOT = { has_variable = sr_fl_2_loc } }
+				AND = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 1 NOT = { has_variable = sr_fl_3_loc } }
+				AND = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 1 NOT = { has_variable = sr_fl_4_loc } }
+				AND = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 1 NOT = { has_variable = sr_fl_5_loc } }
+				AND = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 1 NOT = { has_variable = sr_fl_6_loc } }
+				AND = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 1 NOT = { has_variable = sr_fl_7_loc } }
+				AND = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } }
+				AND = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } }
+			}
+		}
+		value = 99999
+		if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
+		if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 1 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
+		if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 1 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }
+		if = { limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 1 NOT = { has_variable = sr_fl_4_loc } } max = var:sr_fl_4_arrive }
+		if = { limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 1 NOT = { has_variable = sr_fl_5_loc } } max = var:sr_fl_5_arrive }
+		if = { limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 1 NOT = { has_variable = sr_fl_6_loc } } max = var:sr_fl_6_arrive }
+		if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 1 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
+		if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
+		if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
+		subtract = te_history_month_index
+		min = 0
+	}
+}

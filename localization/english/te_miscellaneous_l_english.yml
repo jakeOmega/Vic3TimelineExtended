@@ -6399,7 +6399,7 @@
  sr_discovery_vesta_impactor_a:0 "A Visitor Preserved in Vesta: Research"
  sr_discovery_vesta_impactor_b:0 "A Visitor Preserved in Vesta: Materials Processing"
  sr_dome_breach_repairs:0 "Dome Breach Repairs"
- sr_earth_alert_notice_tt:0 "Whatever we have at Earth when it lands meets it. With a $building_space_command$, launch the reserve from the Space Command section; a fleet of ours elsewhere can be brought home in time. The overview's Hostile Fleet cell shows what is at and bound for Earth against what we have there."
+ sr_earth_alert_notice_tt:0 "Whatever we have at Earth when it lands meets it. With Auto on, the reserve joins the home fleet each month until an enemy fleet is at Earth; Launch, in the Space Command section, sends it up at any time. A fleet of ours elsewhere can be ordered home, if it lands first. The overview's Hostile Fleet cell shows what is at and bound for Earth against what we have there."
  sr_earth_blockade_notice_tt:0 "Launch the reserve from the Space Command section to put a fleet in orbit: any fleet of ours at Earth breaks the blockade. Our ground-to-orbit batteries fire on the blockaders every month."
  sr_ebase_room_bonus:0 "Extraplanetary Base Room"
  sr_ebase_room_full_tt:0 "Our Extraplanetary Base levels, built and queued, are within our room: 10 levels from the near-Earth asteroids with $asteroid_mining$, and the room of each colony we hold"

@@ -100,7 +100,8 @@ sr_cf_target_clear_sgui = {
 # The colonization overview's cells (audit SPC-6), display only: never
 # Executed. scope:op 1 lists the colonies demanding self-government
 # (sr_ov_list_restless, gen_solar_sites), 2 what threatens our colonies
-# (sr_ov_list_defense, gen_space_fleets).
+# (sr_ov_list_defense, gen_space_fleets), 3 the powers at war with us with a
+# fleet in flight to Earth (sr_ov_list_earth, gen_space_fleets).
 sr_colony_overview_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -121,6 +122,10 @@ sr_colony_overview_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 2 }
 			sr_ov_list_defense = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			sr_ov_list_earth = yes
 		}
 	}
 }

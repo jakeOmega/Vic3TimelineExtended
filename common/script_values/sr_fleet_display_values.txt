@@ -38,18 +38,17 @@ sr_disp_sc_upkeep_pct = {
 # The Earth alert (UI pass design § 9), the overview's Hostile Fleet cell and
 # space_race_events.111: 0 no fleet of a power at war with us is bound for
 # Earth, 1 some are, 2 a landing would tip the balance (sr_earth_alert_loud);
-# their count, strength and first landing, in months; the hostile fleets at
-# Earth already, and both together. Ours at Earth is sr_disp_loc_ours_earth.
+# the months to the first landing; the hostile fleets at Earth already, and
+# those with the ones in flight. Ours at Earth is sr_disp_loc_ours_earth; each
+# power's own count, strength and first landing, in the cell's hover, are
+# sr_disp_earth_power_* (gen_space_fleets).
 sr_disp_earth_hostile = {
 	value = 0
-	if = { limit = { sr_loc_hostile_inbound_count_earth > 0 } value = 1 }
-	if = { limit = { sr_earth_alert_loud = yes } value = 2 }
-}
-sr_disp_earth_hostile_count = {
-	value = sr_loc_hostile_inbound_count_earth
-}
-sr_disp_earth_hostile_strength = {
-	value = sr_loc_hostile_inbound_strength_earth
+	if = {
+		limit = { sr_loc_hostile_inbound_count_earth > 0 }
+		value = 1
+		if = { limit = { sr_earth_alert_loud = yes } value = 2 }
+	}
 }
 sr_disp_earth_hostile_present = {
 	value = sr_loc_ai_enemy_fleets_earth

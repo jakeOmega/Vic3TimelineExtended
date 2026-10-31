@@ -5360,12 +5360,14 @@ space_race_events.109 = {
 	}
 }
 
-# A hostile fleet bound for our Earth whose arrival would change something (UI
-# pass design § 9): we have no fleet at Earth to meet it, or what is inbound
-# outmatches ours there (sr_earth_alert_loud). sr_earth_alert_step sets
+# A hostile fleet bound for our Earth whose landing would tip the balance (UI
+# pass design § 9, sr_earth_alert_loud): we have no fleet at Earth and it isn't
+# blockaded already, or ours holds against theirs there now but not with what
+# is coming. sr_earth_alert_step sets
 # sr_earth_alert_by (the fleet's owner) and sr_earth_alert_arrive (its landing
-# month) and sends it once a leg; a hostile fleet that changes nothing gets the
-# quiet sr_earth_hostile_notice instead.
+# month) and sends it once a leg, one a month: the other loud fleets that month
+# are marked told, and get the feed notice if they had none. A hostile fleet
+# whose landing changes nothing gets the quiet sr_earth_hostile_notice instead.
 space_race_events.111 = {
 	type = country_event
 	placement = root

@@ -640,10 +640,12 @@ too.
 4. **A war declared mid-flight.** A country's fleet already on its way to Earth (coming home, say) when it declares
    war on us: the notice comes the next month.
 5. **Two loud fleets in one month.** Two hostile fleets that would each tip the balance set out the same month: one
-   popup, no feed notice and no second popup the month after.
+   popup, naming one fleet's country, and a feed notice for the other fleet; no second popup the month after. With
+   one of them heard quietly before (item 3's setup), the popup names the other, the one we hadn't heard of.
 6. **The cell.** While a hostile fleet is on its way, the overview's third row shows Hostile Fleet, "Earth in N mo"
-   and "theirs vs ours" (theirs at Earth and on the way); red in the loud case. The hover counts the fleets. Gone once they land or turn away, and
-   absent under Races Only and Simple Colonies.
+   and "theirs vs ours" (theirs at Earth and on the way); red in the loud case. The hover has a line a country, its name, fleets, strength
+   and first landing, with the figures not zeros (they're read in that country's scope). Gone once they land or the
+   war ends, and absent under Races Only and Simple Colonies.
 7. **Two powers' notices.** Fleets of two different powers set out for Earth the same month, each quiet: the two feed
    notices name different countries (each saves its owner before it posts; unverified that a notice keeps it).
 8. **No stutter at war.** At war with several fleet powers, scrolling the overview stays smooth (the cell walks their

@@ -1147,15 +1147,6 @@ Space Command shows a red note, and you are told which country holds your
 orbit. Your batteries and your Orbital Battlestation fire on the blockaders but
 don't lift the blockade: only a fleet of yours at Earth does.
 
-You hear of each fleet of a country at war with you as it sets out for Earth,
-once a leg, and of one already on its way when a war begins. A notice in the
-feed tells you of one whose landing would change nothing. A popup, Earth Is
-Threatened, tells you once of one whose landing would tip the balance: it would
-find no fleet of yours at Earth (and Earth not blockaded already), or it would
-give them more than yours there. It comes as the fleet sets out, or later in the
-leg if your fleet leaves Earth or theirs grows; one popup a month covers every
-such fleet that month. The overview's Hostile Fleet cell shows the first landing.
-
 That fleet comes from the reserve. Space Command's construction waits on the
 ground there, in the five roles, and its Reserve row gives the strength (hover
 it for the roles). With Auto on, the default, it joins your home fleet at Earth
@@ -1165,6 +1156,18 @@ it up together as one fleet at Earth, with full propellant, supply and marines,
 blockade or not. A blockade therefore faces everything you have built since it
 began, not a month's worth at a time. Turn Auto off to keep a reserve in peace
 and launch it when you choose; it costs the same upkeep on the ground.
+
+You hear of each fleet of a country at war with you that is on its way to
+Earth, once a leg, within a month of its setting out, or of a war beginning with
+it already on its way. A notice in the feed tells you of one whose landing would
+change nothing. A popup, Earth Is Threatened, tells you once of one whose
+landing would tip the balance: it would find no fleet of yours at Earth (and
+Earth not blockaded already), or yours holds against what is there now but not
+against that and what is coming. That can come later in the leg too, if your
+fleet leaves Earth or theirs grows. One popup a month covers every such fleet
+that month, and the others you hadn't heard of get the feed notice. The
+overview's Hostile Fleet cell shows the first landing; hover it for each
+country's fleets on their way.
 
 Ground-to-orbit batteries are a government building, unlocked by Space
 Militarization and built in any state. Each level fires on every enemy fleet at
