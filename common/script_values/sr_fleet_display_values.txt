@@ -38,8 +38,12 @@ sr_disp_sc_operational = {
 	if = { limit = { sr_sc_operational = yes } value = 1 }
 }
 sr_disp_sc_upkeep_pct = {
-	value = sr_fleet_upkeep_units_value
-	multiply = 900
+	value = 0
+	if = {
+		limit = { sr_sc_buildings >= 1 }
+		value = sr_fleet_upkeep_units_value
+		multiply = 900
+	}
 }
 
 # The notices (space_race_events.100 and .101), read in their text: months

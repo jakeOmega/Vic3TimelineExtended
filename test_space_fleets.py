@@ -362,8 +362,15 @@ class UpkeepTest(unittest.TestCase):
         self.assertRegex(count, r"every_scope_state = \{\s*every_scope_building = \{\s*limit = \{\s*"
                                 r"is_building_type = building_space_command\s*level >= 1\s*\}\s*add = 1")
         per = _block(values, "sr_fleet_upkeep_per_building_value")
-        self.assertRegex(per, r"value = sr_fleet_upkeep_units_value\s*if = \{\s*limit = \{ sr_sc_buildings > 1 \}\s*"
-                              r"divide = sr_sc_buildings\s*\}")
+        # The whole block: nothing after the division undoes it.
+        self.assertRegex(per, r"^\s*value = sr_fleet_upkeep_units_value\s*if = \{\s*limit = \{ sr_sc_buildings > 1 \}\s*"
+                              r"divide = sr_sc_buildings\s*\}\s*$")
+        # The count and the apply walk the same buildings: every state's (an
+        # occupied one's included), of a level or more.
+        apply = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_apply")
+        for body in (count, apply):
+            self.assertRegex(body, r"^\s*(value = 0\s*)?every_scope_state = \{\s*every_scope_building = \{\s*limit = \{\s*is_building_type = building_space_command")
+        self.assertIn("level >= 1", apply)
         refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
         self.assertRegex(refresh, r"set_variable = \{ name = sr_fleet_upkeep_per_building value = sr_fleet_upkeep_per_building_value \}\s*"
                                   r"sr_fl_upkeep_apply = yes")
@@ -374,6 +381,13 @@ class UpkeepTest(unittest.TestCase):
         for name in ("sr_fl_probe", "te_debug_space_race.7", "te_debug_space_race.6.k", "te_debug_space_race.6.l"):
             with self.subTest(name=name):
                 self.assertNotIn(name, texts)
+        # Nor does the text a tester or player reads still describe it, or the old +1%.
+        loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
+        playtest = _raw(ROOT / "docs/testing/solar-colonies-playtest.md")
+        for text, where in ((loc, "loc"), (playtest, "play-test list")):
+            for phrase in ("TE_SR_PROBE", "upkeep probe", "+1% for every 10 strength"):
+                with self.subTest(where=where, phrase=phrase):
+                    self.assertNotIn(phrase, text)
 
     def test_the_self_check_reads_last_month_s_apply(self):
         refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
@@ -396,8 +410,8 @@ class UpkeepTest(unittest.TestCase):
 
     def test_the_panel_shows_the_percent(self):
         shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_upkeep_pct")
-        self.assertIn("value = sr_fleet_upkeep_units_value", shown)
-        self.assertIn(f"multiply = {self.K * 100}", shown)
+        # The whole fleet's, and nothing with no Space Command to carry it.
+        self.assertRegex(shown, rf"limit = \{{ sr_sc_buildings >= 1 \}}\s*value = sr_fleet_upkeep_units_value\s*multiply = {self.K * 100}")
 
 
 class ShippingTest(unittest.TestCase):
@@ -1296,6 +1310,11 @@ class NoSpaceCommandTest(unittest.TestCase):
         start = month[month.index("sr_fl_$N$_drive_value < sr_drive_level") - 200:month.index("sr_fl_$N$_drive_value < sr_drive_level") + 80]
         self.assertIn("sr_sc_operational = yes", start)
         self.assertRegex(month, r"limit = \{ local_var:sr_fl_share > 0 sr_sc_operational = yes \}\s*sr_fl_repair_roles_at")
+
+    def test_the_month_gates_three_things_only(self):
+        """The refit's pause, the refit's start and the repair: refill,
+        propellant at a Spaceport and marines run without a Space Command."""
+        self.assertEqual(_block(self.effects, "sr_fl_month_at").count("sr_sc_operational"), 3)
 
     def test_refill_still_runs(self):
         month = _block(self.effects, "sr_fl_month_at")

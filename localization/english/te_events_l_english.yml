@@ -5967,7 +5967,7 @@
  te_debug_space_race.6.a:0 "Log our fleets and every location's forces"
  te_debug_space_race.6.b:0 "Add 100 strength of each role to our home fleet at Earth, full"
  te_debug_space_race.6.c:0 "Land every fleet of ours in transit now"
- te_debug_space_race.6.d:0 "Test the fleets (slice 6): log them, build and move them, and try combat, occupation, interdiction, the ground reserve, a blockade of Earth and the upkeep probe. The log lines are tagged TE_SR_FLEET, TE_SR_COMBAT and TE_SR_PROBE."
+ te_debug_space_race.6.d:0 "Test the fleets (slice 6): log them, build and move them, and try combat, occupation, interdiction, the ground reserve, and a blockade of Earth. The log lines are tagged TE_SR_FLEET and TE_SR_COMBAT."
  te_debug_space_race.6.e:0 "Fill every fleet's propellant and supply"
  te_debug_space_race.6.f:0 "docs/testing/solar-colonies-playtest.md, Fleets."
  te_debug_space_race.6.g:0 "Raise our fleets' drive by one (a docked fleet refits back)"

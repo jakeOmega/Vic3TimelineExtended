@@ -206,8 +206,8 @@ Design: `docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-des
 it departs). Everything here needs the Space Race rule at Full Colonies; under Simple Colonies and Races Only none of
 it shows. The console is `event te_debug_space_race.6` (log our fleets and every location's forces; 100 strength of
 each role at Earth; land our fleets now; fill propellant and supply; our fleets' drive one up; our first colony's
-integrity to 0; this month's combat now; occupy our first colony by our strongest enemy, or return it; the two upkeep
-probes). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC` and `TE_SR_COMBAT`.
+integrity to 0; this month's combat now; occupy our first colony by our strongest enemy, or return it; start an
+interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC` and `TE_SR_COMBAT`.
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
@@ -236,8 +236,9 @@ probes). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC` a
    built last month and the levels; the home fleet appears at Earth in Fleets; `ship_construction` logs OK.
 3. **The build mix.** Each role's button steps 0, 1, 2, 3, 0; the next month's construction follows the weights
    (option a's per-role figures, or the strength hover).
-4. **Upkeep.** As the fleets grow, Space Command's input tooltip shows Fleet Upkeep, +1% for every 10 strength at
-   full, and the section's Upkeep figure matches. Nothing else's inputs change.
+4. **Upkeep.** As the fleets grow, Space Command's input tooltip shows Fleet Upkeep on its six maintenance goods,
+   +900% for every 10 strength at full, and the section's Upkeep figure matches (the UI pass section, PR 7, has the
+   detail). The methods' other inputs don't change.
 5. **Orders.** Pick a destination (the button steps through the other eight; its hover gives the leg's months and
    km/s), then Go: Go is disabled with the reason when the leg can't leave or the propellant is short (a chemical fleet
    at Earth outside Mars's window, for instance). In transit the row reads "→ Mars" and its landing month; on landing
