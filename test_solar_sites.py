@@ -1760,8 +1760,9 @@ class FreeColoniesTest(unittest.TestCase):
                 self.assertIn("sr_colonies_contested_enabled = yes", choice)
                 self.assertIn(f"sr_site_pop_value_{k} >= sr_free_colony_minimum", choice)
 
-    def test_autonomy_breaks_at_100_and_asks_at_75_once_in_five_years(self):
-        self.assertEqual(self._number("sr_aut_ask_level"), 75)
+    def test_autonomy_breaks_at_100_and_asks_at_50_once_in_five_years(self):
+        # 75 until 2026-10-31 (owner).
+        self.assertEqual(self._number("sr_aut_ask_level"), 50)
         self.assertEqual(self._number("sr_aut_break_level"), 100)
         for site in gss.SITES:
             k = site.key

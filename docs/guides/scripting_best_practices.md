@@ -1767,7 +1767,7 @@ building_modifiers = {
 When multiple JEs can be active simultaneously (like the space race), shared variables cause subtle bugs:
 
 ### Multi-Decrement Bug
-If multiple JE `on_monthly_pulse` blocks each decrement a shared counter (e.g. `sr_failure_cooldown`), the counter ticks N times per month with N active JEs. **Fix:** Move the decrement to a single `on_monthly_pulse_country` on_action instead of per-JE pulse.
+If multiple JE `on_monthly_pulse` blocks each decrement a shared counter (e.g. the space race's `sr_failure_cooldown`, retired 2026-10-31), the counter ticks N times per month with N active JEs. **Fix:** Move the decrement to a single `on_monthly_pulse_country` on_action instead of per-JE pulse.
 
 ### Weekly Pulse Emulation
 There is no engine-provided weekly pulse on_action. If you need effectively weekly behavior, schedule a custom on_action from a monthly pulse with delayed `trigger_event` calls:
@@ -2305,7 +2305,7 @@ Script values (`common/script_values/`) evaluate mathematical expressions with t
 - `is_in_colonial_macroregion_*` and `is_in_or_adjacent_colonial_macroregion_*` for 14 regions
 
 **`space_race_triggers.txt`** — Space race checks (country scope):
-- `sr_has_space_program`, `sr_has_running_milestone`, `sr_has_failure_cooldown`
+- `sr_has_space_program`, `sr_has_running_milestone`
 
 **`wonder_triggers.txt`** — Wonder building checks:
 - `state_is_in_recognized_continent`, `continent_has_no_building_of_type`, `building_unique_per_owner_potential`

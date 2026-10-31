@@ -52,7 +52,7 @@
 ###   pace                -> ScriptValue('sr_pace_rate_<m>'), the rate the pulse
 ###                          actually applies
 ###   setback risk        -> ScriptValue('sr_risk_shown_<m>'), the value the roll
-###                          uses, forced to zero during the post-setback review
+###                          uses
 ###   the first           -> ScriptValue('sr_disp_first_claimed_<m>')
 ###   setbacks, estimate  -> sr_setbacks_<m>_value, sr_eta_months_<m>
 ###   mission profile     -> GetCustom('sr_<m>_profile')
@@ -710,7 +710,7 @@ types space_race_widget_types
 				parentanchor = hcenter
 				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 
-				### The state: one of four cells shows.
+				### The state: one of three cells shows.
 				flowcontainer = {
 					ignoreinvisible = yes
 
@@ -744,16 +744,6 @@ types space_race_widget_types
 						}
 						blockoverride "label" {
 							block "sr_label_ambitious" {}
-						}
-					}
-					te_sr_ov_icon_label = {
-						block "sr_status_shielded" {}
-						tooltip = "sr_pace_note_shielded"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/space_race_icons/state_shielded.dds"
-						}
-						blockoverride "label" {
-							text = "je_space_race_widget_ov_shielded"
 						}
 					}
 				}
@@ -1589,7 +1579,7 @@ types space_race_widget_types
 			margin_left = 4
 
 			### The crews' share of its modules, its slots (red past them, the next
-			### module's price on hover) and its Extraplanetary Base room.
+			### module's price on hover) and its Extraplanetary Base room and grade.
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = yes
@@ -1667,8 +1657,10 @@ types space_race_widget_types
 						}
 					}
 				}
+				### Bases: the room, then its grade (the owner, 2026-10-31: "mine
+				### quality next to Bases"), as Solar System prints them.
 				widget = {
-					size = { 92 24 }
+					size = { 156 24 }
 					parentanchor = vcenter
 
 					flowcontainer = {
@@ -1695,6 +1687,15 @@ types space_race_widget_types
 							elide = right
 							default_format = "#v"
 							block "module_bases" {}
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 60
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							block "module_grade" {}
 						}
 					}
 				}
@@ -2239,6 +2240,9 @@ types space_race_widget_types
 						te_sr_page_value = {
 							default_format = "#v"
 							block "module_bases" {}
+						}
+						te_sr_page_value = {
+							block "module_grade" {}
 						}
 					}
 				}
@@ -3541,7 +3545,7 @@ types space_race_widget_types
 			}
 
 			### Modules: fabrication, shipments, upkeep, the Extraplanetary Base room,
-			### then the queue in order (place 1 is built next).
+			### then the queue in its own box, in order (place 1 is built next).
 			flowcontainer = {
 				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'modules') )]"
 				direction = vertical
@@ -3584,13 +3588,45 @@ types space_race_widget_types
 						text = "je_space_race_widget_ebase_figure"
 					}
 				}
-				te_sr_subheader = {
+				### The queue on its own (the owner, 2026-10-31: "visually separate
+				### the Queue better"): its heading with the count, then an inset
+				### box holding when the next module is built and the places, and
+				### a gap before the colonies' rows.
+				flowcontainer = {
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_1'), '(CFixedPoint)1' )]"
-					blockoverride "subheader_text" {
-						text = "je_space_race_widget_mq_header"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					margin_bottom = 8
+
+					te_sr_subheader = {
+						blockoverride "subheader_text" {
+							text = "je_space_race_widget_mq_header"
+						}
+					}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+						margin = { 0 4 }
+
+						background = {
+							using = dark_area
+							alpha = 0.3
+						}
+
+						te_sr_value_row = {
+							tooltip = "je_space_race_widget_mq_next_tt"
+							blockoverride "row_label" {
+								text = "je_space_race_widget_mq_next_label"
+							}
+							blockoverride "row_value" {
+								text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)3' ), 'je_space_race_widget_mq_next_none', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)2' ), 'je_space_race_widget_mq_next_full', 'je_space_race_widget_mq_next_months' ) )]"
+							}
+						}
+						te_sr_mq_rows = {}
 					}
 				}
-				te_sr_mq_rows = {}
 			}
 
 			### Autonomy: what the free colonies we supply trade us.
@@ -6163,9 +6199,6 @@ types space_race_widget_types
 			blockoverride "sr_status_ambitious" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)3' )]"
 			}
-			blockoverride "sr_status_shielded" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)4' )]"
-			}
 			blockoverride "sr_risk_lit" {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital'), '(CFixedPoint)0' )]"
 			}
@@ -6297,9 +6330,6 @@ types space_race_widget_types
 			}
 			blockoverride "sr_status_ambitious" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "sr_status_shielded" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)4' )]"
 			}
 			blockoverride "sr_risk_lit" {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital'), '(CFixedPoint)0' )]"
@@ -6433,9 +6463,6 @@ types space_race_widget_types
 			blockoverride "sr_status_ambitious" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)3' )]"
 			}
-			blockoverride "sr_status_shielded" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)4' )]"
-			}
 			blockoverride "sr_risk_lit" {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing'), '(CFixedPoint)0' )]"
 			}
@@ -6567,9 +6594,6 @@ types space_race_widget_types
 			}
 			blockoverride "sr_status_ambitious" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "sr_status_shielded" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)4' )]"
 			}
 			blockoverride "sr_risk_lit" {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe'), '(CFixedPoint)0' )]"
@@ -6703,9 +6727,6 @@ types space_race_widget_types
 			blockoverride "sr_status_ambitious" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)3' )]"
 			}
-			blockoverride "sr_status_shielded" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)4' )]"
-			}
 			blockoverride "sr_risk_lit" {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base'), '(CFixedPoint)0' )]"
 			}
@@ -6837,9 +6858,6 @@ types space_race_widget_types
 			}
 			blockoverride "sr_status_ambitious" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "sr_status_shielded" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)4' )]"
 			}
 			blockoverride "sr_risk_lit" {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing'), '(CFixedPoint)0' )]"
@@ -6973,9 +6991,6 @@ types space_race_widget_types
 			blockoverride "sr_status_ambitious" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)3' )]"
 			}
-			blockoverride "sr_status_shielded" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)4' )]"
-			}
 			blockoverride "sr_risk_lit" {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe'), '(CFixedPoint)0' )]"
 			}
@@ -7107,9 +7122,6 @@ types space_race_widget_types
 			}
 			blockoverride "sr_status_ambitious" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "sr_status_shielded" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)4' )]"
 			}
 			blockoverride "sr_risk_lit" {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization'), '(CFixedPoint)0' )]"
@@ -7426,10 +7438,11 @@ types space_race_widget_types
 		}
 
 		te_sr_sec_colony_fleets = {}
-		te_sr_sec_solar_system = {}
 		te_sr_sec_colonies = {}
 		te_sr_sec_space_command = {}
 		te_sr_sec_space_fleets = {}
+		### The worlds sit below the sections a player acts in (owner, 2026-10-31).
+		te_sr_sec_solar_system = {}
 		te_sr_sec_how_colonies = {}
 	}
 

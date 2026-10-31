@@ -37,8 +37,7 @@ te_debug_space_race.1 = { # REVIEWED 2026-09-18: console-only test event (`event
 		te_debug_sr_finish_now = yes
 	}
 
-	# A real setback on every running milestone, cooldown included, so the panel
-	# flips to its shielded reading.
+	# A real setback on every running milestone, safety review included.
 	option = {
 		name = te_debug_space_race.1.c
 		te_debug_sr_force_setback = yes
@@ -57,13 +56,6 @@ te_debug_space_race.1 = { # REVIEWED 2026-09-18: console-only test event (`event
 	option = {
 		name = te_debug_space_race.1.k
 		te_debug_sr_mock_notices = yes
-	}
-
-	# Back to an exposed programme showing a real risk figure.
-	option = {
-		name = te_debug_space_race.1.e
-		trigger = { sr_has_failure_cooldown = yes }
-		te_debug_sr_clear_cooldown = yes
 	}
 
 	# Populate "Who else is racing".

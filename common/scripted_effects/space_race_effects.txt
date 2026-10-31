@@ -7,9 +7,9 @@
 # as "Setback risk" — there is no longer a sr_base_risk proxy variable and no
 # RISK parameter.
 #
-# NOTE ON THE COOLDOWN (existing behaviour, displayed as-is by the widget): the
-# cooldown suppresses only the roll. Progress is added above it, so a programme
-# inside its cooldown runs at full speed with zero chance of a setback.
+# No cooldown (2026-10-31): a programme rolls every month it runs, the month
+# after a setback included. The six-month post-setback review that skipped the
+# roll made Ambitious free while it ran, on every milestone at once (owner).
 #
 # Every running milestone moves and rolls, whatever its approach: Standard (no
 # sr_safe_ / sr_ambitious_ variable) is an approach with no modifier and no
@@ -24,20 +24,17 @@ sr_monthly_progress_update_effect = {
 	if = {
 		limit = { sr_ai_should_participate = yes }
 		change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress }
-		if = {
-			limit = { NOT = { sr_has_failure_cooldown = yes } }
-			random = {
-				chance = sr_risk_pct_$MILESTONE$
-				set_variable = { name = sr_failed_$MILESTONE$ value = yes }
-				sr_count_setback_base = { MILESTONE = $MILESTONE$ }
-				# Ambitious fails big; Safe and Standard suffer the minor setbacks.
-				if = {
-					limit = { has_variable = sr_ambitious_$MILESTONE$ }
-					sr_fire_ambitious_failure_event = { MILESTONE = $MILESTONE$ }
-				}
-				else = {
-					sr_fire_safe_setback_event = { MILESTONE = $MILESTONE$ }
-				}
+		random = {
+			chance = sr_risk_pct_$MILESTONE$
+			set_variable = { name = sr_failed_$MILESTONE$ value = yes }
+			sr_count_setback_base = { MILESTONE = $MILESTONE$ }
+			# Ambitious fails big; Safe and Standard suffer the minor setbacks.
+			if = {
+				limit = { has_variable = sr_ambitious_$MILESTONE$ }
+				sr_fire_ambitious_failure_event = { MILESTONE = $MILESTONE$ }
+			}
+			else = {
+				sr_fire_safe_setback_event = { MILESTONE = $MILESTONE$ }
 			}
 		}
 	}
@@ -100,10 +97,9 @@ sr_recalculate_cost = {
 }
 
 # Re-derive every milestone's widget status (sr_<m>_last_status). The tail of
-# sr_recalculate_cost, and of the two mission-failure effects: those start the
-# post-setback cooldown, which moves a running milestone from "exposed" (1/2) to
-# "shielded" (3/4) — without this the panel showed the old state until the next
-# monthly pulse, even right after an option switched the approach.
+# sr_recalculate_cost, and of the two mission-failure effects, whose options may
+# switch the approach — without this the panel showed the old state until the
+# next monthly pulse.
 sr_refresh_milestone_statuses = {
 	sr_set_milestone_status_base = { MILESTONE = suborbital         }
 	sr_set_milestone_status_base = { MILESTONE = orbital            }
@@ -766,19 +762,16 @@ sr_effect_fund_down = {
 # and the profile custom loc branch on. Country scope. Called from two places:
 # sr_refresh_milestone_statuses (the tail of sr_recalculate_cost — every button,
 # every journal entry's `immediate`, completion and cleanup — and of the two
-# mission-failure effects, which start the cooldown) and the tail of the monthly
-# progress pulse.
+# mission-failure effects) and the tail of the monthly progress pulse.
 #
 #   (no variable)  the milestone is not running — the panel shows it as Idle
-#   0              standard approach (neither variable), exposed to setbacks
-#   1              safe approach, exposed to setbacks
-#   2              ambitious approach, exposed to setbacks
-#   3              safe approach, inside the post-setback cooldown
-#   4              ambitious approach, inside the post-setback cooldown
-#   5              standard approach, inside the post-setback cooldown
+#   0              standard approach (neither variable)
+#   1              safe approach
+#   2              ambitious approach
 #
-# States 3 to 5 are "shielded, not paused": the cooldown suppresses only the
-# failure roll, so progress continues at full rate. The widget says exactly that.
+# States 3 to 5 ("shielded", inside the post-setback cooldown) went with the
+# cooldown on 2026-10-31; the monthly country pulse re-derives an old save's
+# (space_race_on_actions.txt, its cooldown strip).
 # Deliberately no "programme incompatible" state — that is the journal entry's
 # own `fail` block, which already explains itself through
 # sr_space_program_incompatible_tt, and it would need a second parameter because
@@ -792,34 +785,16 @@ sr_set_milestone_status_base = {
 	else_if = {
 		limit = { has_variable = sr_safe_$MILESTONE$ }
 		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
-		if = {
-			limit = { sr_has_failure_cooldown = yes }
-			set_variable = { name = sr_$MILESTONE$_last_status value = 3 }
-		}
-		else = {
-			set_variable = { name = sr_$MILESTONE$_last_status value = 1 }
-		}
+		set_variable = { name = sr_$MILESTONE$_last_status value = 1 }
 	}
 	else_if = {
 		limit = { has_variable = sr_ambitious_$MILESTONE$ }
 		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
-		if = {
-			limit = { sr_has_failure_cooldown = yes }
-			set_variable = { name = sr_$MILESTONE$_last_status value = 4 }
-		}
-		else = {
-			set_variable = { name = sr_$MILESTONE$_last_status value = 2 }
-		}
+		set_variable = { name = sr_$MILESTONE$_last_status value = 2 }
 	}
 	else = {
 		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
-		if = {
-			limit = { sr_has_failure_cooldown = yes }
-			set_variable = { name = sr_$MILESTONE$_last_status value = 5 }
-		}
-		else = {
-			set_variable = { name = sr_$MILESTONE$_last_status value = 0 }
-		}
+		set_variable = { name = sr_$MILESTONE$_last_status value = 0 }
 	}
 }
 
@@ -913,7 +888,6 @@ sr_mission_failure_effect = {
 		days = normal_modifier_time
 		is_decaying = yes
 	}
-	set_variable = { name = sr_failure_cooldown value = 6 }
 	add_radicals = { value = medium_radicals pop_type = academics }
 	sr_refresh_milestone_statuses = yes
 }
@@ -925,7 +899,6 @@ sr_mission_catastrophic_failure_effect = {
 		days = long_modifier_time
 		is_decaying = yes
 	}
-	set_variable = { name = sr_failure_cooldown value = 6 }
 	add_radicals = { value = large_radicals pop_type = academics }
 	add_radicals = { value = medium_radicals }
 	sr_refresh_milestone_statuses = yes

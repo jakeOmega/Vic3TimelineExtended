@@ -62,9 +62,9 @@ te_debug_sr_flag_setback_base = {
 
 # One real setback on every running milestone, down the same path the monthly
 # pulse takes: flag, progress loss (two months, a minor setback's default
-# answer), safety review on the journal entry, cooldown.
-# No event fires (option j does that). Ends on sr_recalculate_cost so the panel's status flips to
-# "shielded" immediately instead of next month. Scope: country.
+# answer), safety review on the journal entry.
+# No event fires (option j does that). Ends on sr_recalculate_cost so the panel
+# redraws at once. Scope: country.
 te_debug_sr_force_setback = {
 	te_debug_sr_flag_setback_base = { MILESTONE = suborbital         }
 	te_debug_sr_flag_setback_base = { MILESTONE = orbital            }
@@ -77,7 +77,6 @@ te_debug_sr_force_setback = {
 	sr_record_event_pace = yes
 	sr_setback_lose_months = { MONTHS = 2 }
 	sr_temporary_safety_review_effect = yes
-	set_variable = { name = sr_failure_cooldown value = 6 }
 	sr_recalculate_cost = yes
 }
 
@@ -159,13 +158,6 @@ te_debug_sr_mock_notices = {
 		position = 1
 		sr_notify_milestone_achievement = { MILESTONE = suborbital }
 	}
-}
-
-# Drop the cooldown, so the panel goes back to showing a real setback risk.
-# Scope: country.
-te_debug_sr_clear_cooldown = {
-	set_variable = { name = sr_failure_cooldown value = 0 }
-	sr_recalculate_cost = yes
 }
 
 # Copy one of our running milestones onto another country so it shows up in

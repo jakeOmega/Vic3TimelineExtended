@@ -3573,6 +3573,11 @@ def _reasoned(sgui: str, scope: str) -> str:
             f"GetScriptedGui('{sgui}').ExecuteTooltip( {scope} ) ) )]")
 
 
+def _signed(n: int) -> str:
+    """A signed whole percent with a true minus, as the rows print grades: +5, −20."""
+    return f"{n:+d}".replace("-", "\u2212")
+
+
 def _override(name: str, *lines: str) -> list[str]:
     return [f'\t\t\tblockoverride "{name}" {{', *[f"\t\t\t\t{line}" for line in lines], "\t\t\t}"]
 
@@ -3607,9 +3612,8 @@ def _site_row(site: Site) -> list[str]:
     out += _override("site_target_clear_visible", f'visible = "[{_eq(target, 2)}]"')
     # What the site offers a colony (the owner, 2026-10-30): its slots with our
     # Colony Module Slots, and its own Extraplanetary Base room and grade.
-    grade = f"{site.ebase_grade:+d}".replace("-", "\u2212")
     out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_slots_{k}")}|0]#!"')
-    out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({grade}%)"')
+    out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({_signed(site.ebase_grade)}%)"')
     return out + ["\t\t}"]
 
 
@@ -3665,6 +3669,8 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("module_slots_past", f'visible = "[{_eq(past, 1)}]"', f'raw_text = "{figure}"')
     out += _override("module_bases_tooltip", f'tooltip = "je_space_race_widget_bases_tt_{k}"')
     out += _override("module_bases", f'raw_text = "[{_sv(f"sr_disp_site_ebase_room_{k}")}|0]"')
+    # Its grade beside the room, as Solar System prints it (the owner, 2026-10-31).
+    out += _override("module_grade", f'raw_text = "({_signed(site.ebase_grade)}%)"')
     spec_tt = {slot: f"je_space_race_widget_colony_{m[len('sr_colony_'):]}_tt"
                for slot, m in zip(("a", "b"), spec_modifiers(site))}
     # A colony's page names its specializations in full (design § 8).

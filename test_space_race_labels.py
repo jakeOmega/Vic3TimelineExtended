@@ -174,12 +174,6 @@ class _Script:
             self.cost_factor[m] = (float(re.search(r"value = ([\d.]+)", body).group(1))
                                    + sum(float(v) for v in re.findall(r"\badd = ([\d.]+)", body)))
         self.values = values
-        cooldowns = []
-        for sub in ("common", "events"):
-            for path in glob.glob(os.path.join(REPO, sub, "**", "*.txt"), recursive=True):
-                cooldowns += [int(v) for v in
-                              re.findall(r"name = sr_failure_cooldown value = (\d+)", _read(path))]
-        self.cooldown = max(cooldowns)
 
     def goal(self, m):
         """The goal at its largest: the base plus every stage's addition, or for
@@ -256,7 +250,7 @@ def _longest_figure(name):
         return MIX_WEIGHT
     if re.fullmatch(r"sr_disp_cf_slot_\d_year", name):
         return END_YEAR
-    fixed = {"sr_disp_cooldown_months": SCRIPT.cooldown, "sr_current_colonization_stage": STAGE_CEILING,
+    fixed = {"sr_current_colonization_stage": STAGE_CEILING, "sr_disp_mq_next_months": 999,
              "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS, "sr_sites_world_count": WORLDS,
              "sr_disp_colonies_held": WORLDS, "sr_disp_cf_in_flight": FLEET_SLOTS,
              "sr_disp_emig_per_month": SETTLERS_A_MONTH, "sr_disp_offworld_pop": OFFWORLD_PEOPLE,
@@ -325,7 +319,7 @@ CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
         ("te_sr_ov_icon_label", 'block "label"'),
-        r"je_space_race_widget_(ov_idle|standard_label|ov_safe_\w+|ov_ambitious_\w+|ov_shielded|risk_\w+"
+        r"je_space_race_widget_(ov_idle|standard_label|ov_safe_\w+|ov_ambitious_\w+|risk_\w+"
         r"|ov_first_open|ov_first_claimed|ov_stage(?:_moon)?)"),
     "approach buttons (te_sr_action_button)": (
         ("te_sr_action_button", 'block "action_label"'),
@@ -341,13 +335,13 @@ CELLS = {
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
         r"|emig_month_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
         r"|ebase_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label|sc_reserve_label"
-        r"|cf_drive_label)"),
+        r"|cf_drive_label|mq_next_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
         r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure"
         r"|free_trade_figure|sc_rate_figure|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure"
-        r"|cf_drive_value)"),
+        r"|cf_drive_value|mq_next_(?:months|full|none))"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
         r"je_space_race_widget_approach_label"),
@@ -575,6 +569,8 @@ def _shown_keys(gui):
     at and past the cap (lunar colonization design § 5.1)."""
     keys = set(re.findall(r'\btext = "(je_space_race_widget_\w+)"', gui))
     keys |= set(re.findall(r"'(je_space_race_widget_funding_\w+)'", gui))
+    # and the queue's next-module figure, which one picks among three
+    keys |= set(re.findall(r"'(je_space_race_widget_mq_next_\w+)'", gui))
     return sorted(keys)
 
 
@@ -635,7 +631,6 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(_render(_loc("je_space_race_widget_eta_solar_colonization")), "1600 months")
         self.assertEqual(_render(_loc("je_space_race_widget_funding_past_cap_suborbital")), "99 / 99 (+1.6)")
         self.assertEqual(_render(_loc("je_space_race_widget_progress_interstellar_results")), "132 / 132 months")
-        self.assertEqual(_render(_loc("je_space_race_widget_ov_shielded")), "Shielded: 6 mo")
         self.assertEqual(_render(_loc("je_space_race_widget_risk_mars_landing")), "Risk: 50%/mo")
         self.assertEqual(_render(_loc("je_space_race_widget_ov_colony_label")), "Next Colony")
         self.assertEqual(_render(_loc("je_space_race_widget_approach_label")), "Approach")
@@ -665,6 +660,8 @@ class FigureBudgetTest(unittest.TestCase):
         # slots used of slots (4 + 5 technologies + 4 past), base room (60 + 10 levels x 10),
         # what the colony builds of its own (colony management design §§ 4.3, 5)
         "module_slots": "13/9", "module_slots_past": "13/9", "module_bases": "160", "aut_build": "100% (+5.0)",
+        # a site's grade beside its room (gen_solar_sites.SITES: -45% to +30%)
+        "module_grade": "(\u221245%)",
     }
     # a module cell (te_sr_mod_cell): a level (10 past a world's slots at most) and what is on its way
     CELL = {"cell_level": "8", "cell_pending": "+8"}

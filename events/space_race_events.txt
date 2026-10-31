@@ -4592,7 +4592,7 @@ space_race_events.93 = {
 	}
 }
 
-# <World> Demands Self-Government: a colony's autonomy has reached 75
+# <World> Demands Self-Government: a colony's autonomy has reached 50
 # (sr_site_aut_step_<key>, once in five years per world).
 space_race_events.94 = {
 	type = country_event
