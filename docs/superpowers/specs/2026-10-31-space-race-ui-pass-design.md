@@ -78,10 +78,11 @@ already overrides that file):
 
 **State:** the open key is a client-side `GetVariableSystem` value
 (`te_popup` = `<picker>_<slot>`), set by the button that opens it. Client-side
-means per player and per session, which is right for an open popup. The popup
-reads the player's country through `GetPlayer` (it has no `JournalEntry`), so its
-scripted GUIs root on `GuiScope.SetRoot( GetPlayer.MakeScope )`, as the Timeline
-Extended window's do.
+means per player and per session, which is right for an open popup. A popup has
+no `JournalEntry` of its own, so each body sits under the scope-free gate and a
+`GetPlayerJournalEntry( 'je_space_race_solar_colonization' )` datacontext, as the
+Timeline Extended window's Space Race tab does (plan, 2026-10-31). The generated
+rows' `JournalEntry.GetCountry` reads and scripted GUI calls then work unchanged.
 
 **Which fleet slot the popup is for.** The panel's rows pass their slot as a
 literal (`AddScope( 'op', MakeScopeValue( '(CFixedPoint)N' ) )`). A popup has no
@@ -204,12 +205,13 @@ role in place of 0.5, the amount ÷ the role's strength, for each role's
 `_<role>` and `_<role>_full` alike (so a damaged role keeps its damage ratio),
 and for the marines. M is an empty slot (it then takes N's location, posture and drive, as
 `sr_fl_detach` does) or a fleet at N's location (the shares then follow
-`sr_fl_merge`'s weighting). The target is a fifth `scope:pick` range. All of N
-into another fleet clears N, as Merge does. Refused, with the reason in
+`sr_fl_merge`'s weighting). The target is its own scripted GUI (`sr_det_to`). All
+of N into another fleet clears N, as Merge does. Refused, with the reason in
 Transfer's tooltip (my call): a transfer that moves nothing, one that leaves N or
 the new fleet below `sr_fl_minimum_strength` (all of N into an existing fleet
 excepted), and one that leaves marines in a fleet with no room to carry them.
-The AI keeps calling `sr_fl_detach` and `sr_fl_merge`, now thin wrappers.
+The AI keeps calling `sr_fl_detach` and `sr_fl_merge`, whose bodies stay as they are
+(plan, 2026-10-31: less risk than rewriting them as wrappers).
 
 ## 7. Posture and target rows
 
@@ -403,8 +405,9 @@ so this adds one.
 - **Engine work:**
   - A mod-defined good's `goods_input_<good>_mult` needs registering
     (`scripting_best_practices.md:292`). `electronic_components` and `fertilizer`
-    have theirs (`mod_entity_modifier_types.txt`); `telephones`, `radios`,
-    `digital_assets` and `robotics` don't yet. Validate all six with
+    have theirs (`mod_entity_modifier_types.txt`) and `radios` is vanilla's
+    (`01_building_modifier_types.txt:2668`); `telephones`, `digital_assets` and
+    `robotics` don't yet. Validate all six with
     `/modifier-search` after the reload.
   - No method read and no refresh on a method change.
   - A self-check line compares the line's input with base × (1 + k × units) a
