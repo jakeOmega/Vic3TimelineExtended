@@ -789,8 +789,8 @@ values a colony more for each of them. An AI that holds a colony, or is in the
 top three, queues one module a year at each colony when it has money to spare:
 a Habitat once its people fill three quarters of its room, otherwise the next
 specialization level its crews can run, its founding specialization first, then
-a facility: an Administration where autonomy has reached 25 and is still rising,
-a Mining Complex when its bases outgrow their room, a Nuclear Command Center with nuclear
+a facility: an Administration where autonomy has reached 25 and is heading for 45
+or more, a Mining Complex when its bases outgrow their room, a Nuclear Command Center with nuclear
 weapons, an Orbital Yard with a Space Command, otherwise a Research Station. It
 runs the best fabrication method it has while anything is queued, never builds
 Spaceports or Defenses, and never pays for a module past a colony's slots.
