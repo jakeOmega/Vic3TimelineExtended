@@ -55,6 +55,18 @@ the build order, and phases 2 and 3 get a plan per pull request.
 17. **Lab-Grown Food and Augmented Reality Warfare** (the 2026-05 audit's
     "defensible in era 10" pair) stay in era 11 for now; the owner is undecided.
 
+Follow-up calls, the same day (PR #1276):
+
+18. **The health bill rises to +0.35.** Rejuvenation Therapies joins as a
+    seventh carrier at the same 0.05 step (this updates the call of 2026-10-20,
+    +0.30 at full technology).
+19. **Pacing target: a leading great power finishes era 13 by about 2136.**
+    Today's late game runs ahead of schedule, though games usually run behind
+    around eras 6 and 7, so the higher late-era costs push in the right
+    direction (§ 4.1).
+20. **The trio's law names stand for now** (§ 7.1); phase 3's plans can
+    revisit them.
+
 ## 2. The eras
 
 | Era | Internal guide | Player-guide label | Test for belonging |
@@ -219,10 +231,14 @@ The research needed to finish eras 11 to 13:
 | After phase 1 | 20 × 0.8M = 16M | 12 × 1.5M = 18M | 9 × 3.0M = 27M | 61M |
 | Finished | 26 × 0.8M = 20.8M | 16 × 1.5M = 24M | 13 × 3.0M = 39M | 83.8M (+59%) |
 
-**Pacing is measured, not guessed** (§ 10, question 1). Phase 1 ends with an
-AI-observer run before and after, read with `scripts/analysis/save_world_report.py`
-(technologies acquired per era, by country), recording the year the leading
-great powers enter eras 11, 12 and 13.
+**Pacing target (call 19): a leading great power finishes era 13 by about
+2136.** The owner reads today's late game as ahead of schedule, so the +59% is
+in the right direction. Phase 1 ends with an AI-observer run before and after,
+read with `scripts/analysis/save_world_report.py` (technologies acquired per
+era, by country), recording the year the leading great powers enter eras 11,
+12 and 13 and finish era 13. § 4.2's budget is then sized to land that finish
+near 2136: trimmed if the leaders still run ahead, raised if they fall short.
+The lag around eras 6 and 7 is a separate question (§ 8).
 
 ### 4.2 Innovation cap
 
@@ -278,8 +294,8 @@ so each change below restates the call it updates.
 - **The health bill** (`te_demog_health_tech_term`, `HEALTH_TECHS` in
   `scripts/analysis/demographics_params.py`) counts every chronic carrier,
   0.05 each, up to +0.30 at full technology (owner, 2026-10-20). Rejuvenation
-  Therapies joins it as the seventh carrier, and the step becomes 0.30 / 7 so
-  the total holds (§ 10, question 2).
+  Therapies joins it as the seventh carrier at the same step, so full technology
+  adds +0.35 (call 18).
 - **Characters:** Rejuvenation Therapies adds `character_health_add = 25`;
   Biological Immortality keeps its 100.
 - **Release without the census:** each of Rejuvenation Therapies' census lines
@@ -382,7 +398,7 @@ method whose technology it lacks, before the month's repair runs is unread
   (`molecular_assemblers`'s carrier row), `test_release_census_inputs.py`,
   `test_demographics_model.py` (`test_chronic_treatment_reaches_its_cap_by_era_12`
   becomes 0.90 by era 12 and 0.99 by era 13; the six-carrier health bill becomes
-  seven), and `test_deep_sea_rebalance.py` (its space-method eras: Tethered
+  seven, at +0.35), and `test_deep_sea_rebalance.py` (its space-method eras: Tethered
   Launch moves with Space Elevator).
 - **Self-checks that list carriers:** `sr_colony_module_effects.txt`'s slot
   marker and `sr_marker_self_check` name technologies, not eras; check them
@@ -604,6 +620,10 @@ Geoengineering, the same practice at home.
   argues against moving the second.
 - **Headlines:** `common/on_actions/headlines.txt` announces many late
   technologies; new ones may get a line where a headline is worth it.
+- **The lag around eras 6 and 7:** the owner notes that games usually run
+  behind schedule there while the late game runs ahead. Its causes are outside
+  this spec; phase 1's observer runs record the early eras' entry years beside
+  the late ones, so the data is there for that work.
 
 ## 9. Build order
 
@@ -629,12 +649,7 @@ tree draws a thirteenth era column; old saves load with the moved methods and
 units (§ 5.6); an active Post-Scarcity Transition in an old save; each phase-3
 item's own checks.
 
-## 10. Open questions for the owner
+## 10. Open questions
 
-1. **Pacing target.** Should a leading great power finish era 13 by 2136,
-   reach it and not finish, or rarely reach it? Phase 1's observer runs give the
-   current answer; the target decides whether § 4.2's budget grows.
-2. **The health bill.** Keep +0.30 at full technology with seven carriers
-   (0.30 / 7 each, this spec's default), or let Rejuvenation Therapies add a
-   seventh 0.05 (+0.35)?
-3. **Law names.** The trio's twelve laws are working names.
+None at the end of drafting. Calls 18 to 20 settled the three the first
+version left open: the pacing target, the health bill and the law names.
