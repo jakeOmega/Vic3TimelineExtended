@@ -765,7 +765,12 @@ and No Space Command bullets). All under Full Colonies. No self-check line: each
    the same month bring two notices, each naming its own state (each saves its state before it posts; unverified that
    a notice keeps it). Move the market capital and build a new Space Command there: when it reaches level 1 it is the
    smaller and goes. The month a building is dismantled may build that month from both (the modifier sum can lag a
-   day): note it if Built a month jumps once.
+   day): note it if Built a month jumps once. **The AI (observer):** an AI that annexes a Space Command with more
+   levels than its own keeps the annexed one, in a state with no Space Program, where Space Command can't grow
+   (`possible`). Below its level cap it may queue a new one in its capital, which is dismantled at level 1 as the
+   smaller, again and again: watch whether Space Command keeps appearing and vanishing there. **Fallback** (owner's
+   call): refuse a second building at the source, in `sr_sc_may_build_government` or `possible`, while another state
+   has one of a level or more.
 6. **Half fire.** At war, fight a battle at a location with a Space Command and note a month's losses on both sides
    (the battle report). Demolish Space Command, or have its state occupied, and fight a comparable month: our fleets
    deal about half the losses, take the same, and Space Fleets' note and the orders' hover say they fight at half
