@@ -435,17 +435,14 @@ sr_battery_fire = {
 	}
 }
 
-# ... the part of it Kinetic Interceptors fire (one battery a state, so a
-# state's method is its battery's), which leaves debris.
+# ... the part of it Kinetic Interceptors fire (one Military Base a state, so
+# a state's weapon is its base's), which leaves debris.
 sr_battery_fire_kinetic = {
 	value = 0
 	every_scope_state = {
 		limit = {
 			sr_state_held_by_owner = yes
-			any_scope_building = {
-				is_building_type = building_orbital_defense_battery
-				has_active_production_method = pm_orbital_battery_kinetic
-			}
+			sr_state_runs_battery = { PM = pm_orbital_battery_kinetic }
 		}
 		add = modifier:state_orbital_battery_fire_add
 	}
@@ -468,18 +465,27 @@ sr_battery_sweep = {
 # Low debris a point of Kinetic Interceptors' fire leaves at Earth.
 sr_battery_debris_low = { value = 0.02 }
 
-# The AI builds batteries only at war with a country that has fleets, up to
-# this many levels (design § 14; a first guess).
+# The AI arms its Military Bases' batteries only at war with a country that
+# has fleets, up to this many levels (design § 14; a first guess). A base has
+# five levels at most, so the first always fits (sr_battery_ai_arm).
 sr_battery_ai_max_levels = { value = 5 }
 
-# Its battery levels, built and queued.
-sr_battery_queued_levels = {
+# Country scope. Its armed battery levels: the levels of the Military Bases
+# running a battery weapon, wherever they stand.
+sr_battery_levels = {
 	value = 0
 	every_scope_state = {
-		every_scope_building = {
-			limit = { is_building_type = building_orbital_defense_battery }
-			add = level_after_queued_constructions
-		}
+		limit = { sr_state_has_battery = yes }
+		add = sr_state_military_base_level
+	}
+}
+
+# State scope. The level of its Military Base (0 with none).
+sr_state_military_base_level = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_military_base }
+		add = level
 	}
 }
 

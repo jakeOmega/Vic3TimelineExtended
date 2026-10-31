@@ -178,7 +178,7 @@ directed_energy_weapons = {
 	# Ablative Rockets PM for Launch Facilities, Laser Excavation PMs for mines,
 	# Electromagnetic Projectors PM for Artillery Foundries, Inertial Fusion Reactors PM
 	# for Fusion Plants, Pulsed Laser Escort unit, Laser Broom PM for the Space
-	# Program's debris removal, Ground Lasers PM for Ground-to-Orbit Batteries.
+	# Program's debris removal, Ground Lasers PM for the Military Base's batteries.
 	# Solar System Colonization and Orbital Assembly moved to Cislunar
 	# Infrastructure (era 10; lunar colonization design § 5).
 	era = era_11

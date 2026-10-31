@@ -154,16 +154,25 @@ space_race_rule = {
 		flag = space_race_colonies_full
 	}
 
+	# The Military Base's ground-to-orbit batteries fire on fleets at Earth,
+	# which only Full Colonies has (sr_orbital_defense_battery_pms.txt): every
+	# other setting disables both weapons, so the group stays at None.
 	space_race_colonies_simple = {
 		flag = space_race_colonies_simple
+		flag = disable_pm_orbital_battery_kinetic
+		flag = disable_pm_orbital_battery_lasers
 	}
 
 	space_race_enabled = {
 		flag = space_race_enabled
+		flag = disable_pm_orbital_battery_kinetic
+		flag = disable_pm_orbital_battery_lasers
 	}
 
 	space_race_disabled = {
 		flag = space_race_disabled
+		flag = disable_pm_orbital_battery_kinetic
+		flag = disable_pm_orbital_battery_lasers
 		# Orbital debris belongs to the space race (Global Commons § 6): with
 		# no debris to remove, the Space Program's removal methods would cost
 		# Launch Capacity for nothing (te_orbital_debris_pms.txt).

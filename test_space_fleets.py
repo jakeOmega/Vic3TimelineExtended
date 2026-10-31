@@ -38,7 +38,9 @@ DEBUG_EVENTS = ROOT / "events/te_debug_space_race_events.txt"
 CEDE_COLONY = ROOT / "common/treaty_articles/124_cede_colony.txt"
 SPACE_RACE_EVENTS = ROOT / "events/space_race_events.txt"
 EARTH_EFFECTS = ROOT / "common/scripted_effects/sr_earth_orbit_effects.txt"
-BATTERY = ROOT / "common/buildings/sr_orbital_defense_battery.txt"
+MILITARY_BASE = ROOT / "common/buildings/extra_buildings.txt"
+PM_GROUPS = ROOT / "common/production_method_groups/extra_pm_groups.txt"
+GAME_RULES = ROOT / "common/game_rules/extra_game_rules.txt"
 BATTERY_METHODS = ROOT / "common/production_methods/sr_orbital_defense_battery_pms.txt"
 MODIFIER_TYPES = ROOT / "common/modifier_type_definitions/sr_fleet_modifier_types.txt"
 DEBRIS_EFFECTS = ROOT / "common/scripted_effects/te_orbital_debris_effects.txt"
@@ -630,12 +632,30 @@ class BatteryTest(unittest.TestCase):
         cls.combat = _strip(_raw(COMBAT_EFFECTS))
         cls.earth = _strip(_raw(EARTH_EFFECTS))
 
-    def test_the_building(self):
-        building = _block(_strip(_raw(BATTERY)), "building_orbital_defense_battery")
-        self.assertIn("sr_colonies_full_enabled = yes", _block("x = {" + building.split("potential = {", 1)[1], "x"))
-        self.assertIn("space_militarization", _block("x = {" + building.split("unlocking_technologies = {", 1)[1], "x"))
-        self.assertIn("owner ?= { sr_battery_may_build_government = yes }", building)
-        self.assertIn("pmg_orbital_defense_battery", building)
+    def test_the_military_base_carries_them_as_a_group(self):
+        base = _block(_strip(_raw(MILITARY_BASE)), "building_military_base")
+        self.assertIn("pmg_military_base_orbital_battery",
+                      _block("x = {" + base.split("production_method_groups = {", 1)[1], "x"))
+        group = _block(_strip(_raw(PM_GROUPS)), "pmg_military_base_orbital_battery")
+        self.assertEqual(re.findall(r"\b(pm_\w+)", group),
+                         ["pm_no_orbital_battery", "pm_orbital_battery_kinetic", "pm_orbital_battery_lasers"])
+        # The first method is the ungated "none", so every base has one.
+        self.assertNotIn("unlocking", _block(self.methods, "pm_no_orbital_battery"))
+        self.assertIn("space_militarization", _block(self.methods, "pm_orbital_battery_kinetic"))
+        # The old building is gone.
+        self.assertFalse((ROOT / "common/buildings/sr_orbital_defense_battery.txt").exists())
+
+    def test_every_space_race_setting_but_full_colonies_disables_the_weapons(self):
+        rule = _block(_strip(_raw(GAME_RULES)), "space_race_rule")
+        weapons = {"disable_pm_orbital_battery_kinetic", "disable_pm_orbital_battery_lasers"}
+        for setting in ("space_race_colonies_full", "space_race_colonies_simple",
+                        "space_race_enabled", "space_race_disabled"):
+            flags = set(re.findall(r"flag = (\w+)", _block("x = {" + rule.split(f"{setting} = {{", 1)[1], "x")))
+            with self.subTest(setting=setting):
+                if setting == "space_race_colonies_full":
+                    self.assertFalse(flags & weapons)
+                else:
+                    self.assertEqual(flags & weapons, weapons)
 
     def test_each_method_carries_its_figures_as_state_modifiers_only(self):
         expected = {"pm_orbital_battery_kinetic": {"state_orbital_battery_fire_add": 1.0},
@@ -806,25 +826,44 @@ class OrbitalSuperiorityTest(unittest.TestCase):
 class EarthOrbitAiAndConsoleTest(unittest.TestCase):
     """6d (design § 14, § 18): the AI's batteries, and the console's options."""
 
-    def test_the_ai_builds_batteries_only_at_war_with_a_fleet_power(self):
+    def test_the_ai_arms_batteries_only_at_war_with_a_fleet_power(self):
         triggers = _strip(_raw(FLEET_TRIGGERS))
-        may = _block(triggers, "sr_battery_may_build_government")
-        self.assertIn("is_ai = no", may)
-        self.assertIn("sr_battery_ai_wants = yes", may)
-        self.assertIn("sr_battery_queued_levels < sr_battery_ai_max_levels", may)
         wants = _block(triggers, "sr_battery_ai_wants")
         self.assertIn("is_at_war = yes", wants)
         self.assertIn("has_war_with = prev", wants)
         self.assertIn("sr_fl_has_any = yes", wants)
         self.assertEqual(_number(_raw(FLEET_VALUES), "sr_battery_ai_max_levels"), 5)
+        earth = _strip(_raw(EARTH_EFFECTS))
+        ai = _block(earth, "sr_fl_ai_batteries")
+        self.assertRegex(ai, r"^\s*if = \{\s*limit = \{\s*sr_battery_ai_wants = yes\s*"
+                             r"has_technology_researched = space_militarization\s*\}")
+        # Bases are armed state by state, the largest first, within the cap.
+        arm = _block(earth, "sr_battery_ai_arm")
+        self.assertIn("subtract = sr_battery_levels", arm)
+        self.assertIn("value = sr_battery_ai_max_levels", arm)
+        self.assertIn("order_by = sr_state_military_base_level", arm)
+        self.assertIn("limit = { sr_state_military_base_level <= local_var:sr_bat_room }", arm)
+        self.assertIn("sr_state_held_by_owner = yes", _block(triggers, "sr_state_battery_ai_may_arm"))
+        setter = _block(earth, "sr_state_set_battery")
+        self.assertIn("building_type = building_military_base", setter)
+        # Every switch goes through the state-scoped setter.
+        self.assertNotIn("activate_production_method", ai + arm)
+        # An AI that isn't a fleet power yet runs it from the country pulse.
+        pulse = _strip(_raw(ON_ACTIONS))
+        self.assertRegex(pulse, r"is_ai = yes\s*sr_colonies_full_enabled = yes\s*sr_battery_ai_wants = yes\s*"
+                                r"NOT = \{ sr_fleet_power = yes \}\s*\}\s*sr_fl_ai_batteries = yes")
+        self.assertLess(pulse.index("sr_fl_ai_batteries = yes"), pulse.index("sr_fl_country_month = yes"))
 
-    def test_the_ai_runs_lasers_at_war_or_from_cluttered(self):
+    def test_the_ai_runs_lasers_at_war_or_from_cluttered_and_none_otherwise(self):
         self.assertIn("sr_fl_ai_batteries = yes", _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_ai_review"))
         ai = _block(_strip(_raw(EARTH_EFFECTS)), "sr_fl_ai_batteries")
         self.assertIn("has_technology_researched = directed_energy_weapons", ai)
-        self.assertRegex(ai, r"OR = \{\s*is_at_war = yes\s*te_debris_index >= te_debris_tier_cluttered\s*\}")
-        self.assertIn("production_method = pm_orbital_battery_lasers", ai)
-        self.assertIn("production_method = pm_orbital_battery_kinetic", ai)
+        self.assertIn("sr_battery_ai_arm = { PM = pm_orbital_battery_lasers OTHER = pm_orbital_battery_kinetic }", ai)
+        self.assertIn("sr_battery_ai_arm = { PM = pm_orbital_battery_kinetic OTHER = pm_orbital_battery_lasers }", ai)
+        self.assertRegex(ai, r"is_at_war = no\s*has_technology_researched = directed_energy_weapons\s*"
+                             r"te_debris_index >= te_debris_tier_cluttered")
+        self.assertIn("sr_state_set_battery = { PM = pm_orbital_battery_lasers }", ai)
+        self.assertIn("sr_state_set_battery = { PM = pm_no_orbital_battery }", ai)
 
     def test_the_console_options(self):
         event = _block(_strip(_raw(DEBUG_EVENTS)), "te_debug_space_race.6")

@@ -1159,9 +1159,13 @@ blockade or not. A blockade therefore faces everything you have built since it
 began, not a month's worth at a time. Turn Auto off to keep a reserve in peace
 and launch it when you choose; it costs the same upkeep on the ground.
 
-Ground-to-orbit batteries are a government building, unlocked by Space
-Militarization and built in any state. Each level fires on every enemy fleet at
-Earth every month and takes no losses:
+Ground-to-orbit batteries are a production method group of the Military Base,
+unlocked by Space Militarization, so any state with a base can have one. Pick a
+weapon in the base's Ground-to-Orbit Battery group and each level of the base
+fires on every enemy fleet at Earth every month, taking no losses. A base has
+at most five levels, so twenty levels of batteries take four bases. Each armed
+level employs another 1,000 officers, engineers and machinists; No
+Ground-to-Orbit Battery, the default, costs nothing.
 
 | Method | Technology | Each level a month |
 |---|---|---|
@@ -1207,9 +1211,10 @@ colony with the most people and modules, and its strongest fleet there whose
 marines outnumber that colony's garrison and militia closes in on it. Its other
 fleets at Earth stay stationed. An AI never destroys a colony, never attacks a free one and never
 interdicts. With an enemy fleet at Earth, it launches its reserve once the
-reserve and its fleets at Earth match the enemy's there. It builds batteries
-only while at war with a country that has fleets, up to five levels, and runs
-Ground Lasers at war, and in peace once debris is Cluttered.
+reserve and its fleets at Earth match the enemy's there. It arms its Military
+Bases' batteries only while at war with a country that has fleets, up to five
+levels, with Ground Lasers once it has them. At peace it switches them off,
+except that bases on Ground Lasers keep sweeping while debris is Cluttered.
 
 ## After the space race
 

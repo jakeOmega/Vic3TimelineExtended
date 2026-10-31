@@ -1085,9 +1085,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_grid_transfer_station": {"subject": "an electrical substation yard: rows of big grey transformers and steel lattice gantries strung with high-voltage lines behind a wire fence, the lines leaving on tall steel pylons across green fields, loosely hand-painted with visible brush strokes", "seed": 0},
         # The station's method until 2026-10-25, now a building of its own, on that method's icon until painted.
         "building_grid_hvdc_interconnector": {"subject": "a coastal HVDC converter station: a large plain grey hall beside a row of tall white valve towers on a rocky shore, a thick black power cable running from it down the beach into blue sea, loosely hand-painted with visible brush strokes", "seed": 1},
-        # Solar colonization slice 6 (#1179), on the Military Base's and the Battlestation's icons
-        # until now. Both stand on the ground, so the building style, not ORBIT.
-        "building_orbital_defense_battery": {"subject": "a ground-to-orbit missile battery: a fenced concrete compound with a row of open round interceptor silos, a tall radar dish and a low bunker, one slim grey missile rising from a silo on a plume of white smoke, loosely hand-painted with visible brush strokes", "seed": 1},
+        # Solar colonization slice 6 (#1179), on the Battlestation's icon until now. It stands on
+        # the ground, so the building style, not ORBIT.
         "building_space_command": {"subject": "a military space command base: a long low concrete headquarters with two white radar domes and a big dish antenna, beside a tall rocket assembly hangar and a launch tower holding a grey rocket, loosely hand-painted with visible brush strokes", "seed": 1},
         # Grand Monuments sites (#1058), on the finished monument's icon until now, as the megaproject
         # sites were before batch 2.

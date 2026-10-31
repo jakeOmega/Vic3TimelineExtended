@@ -6245,7 +6245,6 @@
  sr_aut_line_garrison:0 "• its garrison: #v [GetPlayer.MakeScope.ScriptValue('sr_aut_garrisoned')|=-2]#!"
  sr_aut_line_nocontact:0 "• no settlers or modules for over a year: #v [GetPlayer.MakeScope.ScriptValue('sr_aut_no_contact')|=-2]#!"
  sr_aut_line_war:0 "• we are at war: #v [GetPlayer.MakeScope.ScriptValue('sr_aut_at_war')|=-2]#!"
- sr_battery_ai_cap_tt:0 "An AI country builds ground-to-orbit batteries only while it is at war with a country that has fleets, and up to a cap."
  sr_battle_report_tt:0 "We lost #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_battle_lost')|1]#! strength and destroyed or damaged #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_battle_dealt')|1]#! of theirs. #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_battle_left')|1]#! of ours is left there."
  sr_cf_drive_antimatter:0 "Antimatter"
  sr_cf_drive_chemical:0 "Chemical"

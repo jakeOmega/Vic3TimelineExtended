@@ -302,3 +302,5 @@ bases](13-military.md#military-bases).
 | Base Purpose | Logistics Hub | Trench Works | +10 infrastructure, −3% supply consumption for your whole army |
 | Missile Defense | Missile Defense Battery | Missile Defense Systems | +2% Nuclear Strike Defense Chance in this state |
 | Missile Defense | Directed Energy Point Defense | Directed Energy Defenses | +3% Nuclear Strike Defense Chance in this state |
+| Ground-to-Orbit Battery | Kinetic Interceptors | Space Militarization | 1 fire a month on enemy fleets at Earth (Full Colonies only) |
+| Ground-to-Orbit Battery | Ground Lasers | Directed Energy Weapons | 2 fire a month on enemy fleets at Earth; 0.01 low-orbit debris swept a month in peace (Full Colonies only) |

@@ -1022,6 +1022,9 @@ nuclear_strike_military_base_pms = {
 	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_no_missile_defense }
 	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_missile_defense_battery }
 	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_directed_energy_point_defense }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_no_orbital_battery }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_orbital_battery_kinetic }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_orbital_battery_lasers }
 }
 
 nuclear_strike_pm_record = {

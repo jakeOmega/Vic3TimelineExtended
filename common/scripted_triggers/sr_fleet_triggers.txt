@@ -290,12 +290,45 @@ sr_fl_ai_reserve_matches = {
 	sr_earth_reserve_and_ours >= sr_loc_ai_enemy_fleets_earth
 }
 
-# Country scope. A ground-to-orbit battery, anywhere (its levels count only in
-# the states it controls: sr_battery_fire, sr_battery_sweep).
+# Country scope. A ground-to-orbit battery, anywhere: a Military Base running
+# one of its weapons (pmg_military_base_orbital_battery; its levels count only
+# in the states it controls: sr_battery_fire, sr_battery_sweep).
 sr_has_battery = {
 	any_scope_building = {
-		is_building_type = building_orbital_defense_battery
+		is_building_type = building_military_base
+		OR = {
+			has_active_production_method = pm_orbital_battery_kinetic
+			has_active_production_method = pm_orbital_battery_lasers
+		}
 	}
+}
+
+# State scope. Its Military Base runs a battery weapon.
+sr_state_has_battery = {
+	any_scope_building = {
+		is_building_type = building_military_base
+		OR = {
+			has_active_production_method = pm_orbital_battery_kinetic
+			has_active_production_method = pm_orbital_battery_lasers
+		}
+	}
+}
+
+# State scope. Its Military Base runs the battery weapon $PM$.
+sr_state_runs_battery = {
+	any_scope_building = {
+		is_building_type = building_military_base
+		has_active_production_method = $PM$
+	}
+}
+
+# State scope, the AI's arming (sr_battery_ai_arm): a base of a level or more,
+# not yet armed, in a state its owner controls (a base in a state it doesn't
+# control fires for no one).
+sr_state_battery_ai_may_arm = {
+	sr_state_held_by_owner = yes
+	sr_state_military_base_level > 0
+	NOT = { sr_state_has_battery = yes }
 }
 
 # Country scope. The AI wants batteries (design § 14): at war with a country
@@ -311,27 +344,13 @@ sr_battery_ai_wants = {
 	}
 }
 
-# Country scope, the battery's can_build_government: a player's government
-# always may; an AI's only while it wants them, up to sr_battery_ai_max_levels
-# counting those queued.
-sr_battery_may_build_government = {
-	OR = {
-		is_ai = no
-		custom_tooltip = {
-			text = sr_battery_ai_cap_tt
-			sr_battery_ai_wants = yes
-			sr_battery_queued_levels < sr_battery_ai_max_levels
-		}
-	}
-}
-
 # Country scope. The battery_sweep self-check's subject (design § 18): at
-# peace, a battery running Ground Lasers at half staff or more in a state it
-# controls.
+# peace, a Military Base running Ground Lasers at half staff or more in a state
+# it controls.
 sr_battery_sweep_qualifies = {
 	is_at_war = no
 	any_scope_building = {
-		is_building_type = building_orbital_defense_battery
+		is_building_type = building_military_base
 		has_active_production_method = pm_orbital_battery_lasers
 		occupancy >= 0.5
 		state = { sr_state_held_by_owner = yes }

@@ -19,6 +19,19 @@ space_race_on_action = {
 			limit = { has_technology_researched = in_situ_resource_utilization }
 			sr_ebase_refresh = yes
 		}
+		# The AI's batteries (6d, sr_earth_orbit_effects.txt): an AI that is no
+		# fleet power yet arms its Military Bases' batteries once at war with
+		# one (a fleet power's review does it in its month, below). An armed
+		# base makes it a fleet power.
+		if = {
+			limit = {
+				is_ai = yes
+				sr_colonies_full_enabled = yes
+				sr_battery_ai_wants = yes
+				NOT = { sr_fleet_power = yes }
+			}
+			sr_fl_ai_batteries = yes
+		}
 		# Fleets (solar colonization slice 6, sr_fleet_effects.txt): a fleet
 		# power's month under Full Colonies, Space Command's construction first.
 		if = {

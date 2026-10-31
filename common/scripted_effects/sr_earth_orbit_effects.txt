@@ -8,8 +8,9 @@
 #   - the ground reserve: Space Command's construction waits on the ground
 #     (sr_reserve_<role>) and goes up together, by Launch or, with no hostile
 #     fleet at Earth, by itself each month;
-#   - ground-to-orbit batteries fire on hostile fleets at Earth every month,
-#     and with lasers sweep low-orbit debris in peace;
+#   - ground-to-orbit batteries (a Military Base's weapons) fire on hostile
+#     fleets at Earth every month, and with lasers sweep low-orbit debris in
+#     peace;
 #   - Earth can be blockaded: a fleet at war with us at Earth and none of ours
 #     there stops our launches, as an occupied launch site stops them;
 #   - holding Earth orbit at war gives fire support on the ground.
@@ -261,51 +262,97 @@ sr_orbital_superiority_refresh = {
 }
 
 # ---- The AI's batteries (design § 14, 6d) ---------------------------------------------------------
-# Country scope, an AI fleet power's month (sr_fl_ai_review). It builds
-# batteries through the building's own AI, held by can_build_government to
-# wars with a country that has fleets (sr_battery_may_build_government). With
-# Directed Energy Weapons it runs Ground Lasers at war (twice the fire and no
-# debris) and in peace once the debris is Cluttered (they sweep it);
-# otherwise the cheaper Kinetic Interceptors. A method is switched only when a
-# battery runs the other, so a month with nothing to change changes nothing.
+# Country scope, an AI's month: a fleet power's review (sr_fl_ai_review), and
+# the country pulse for an AI that isn't one yet but wants batteries
+# (space_race_on_actions.txt; an armed base makes it one). The batteries are a
+# group of the Military Base (pmg_military_base_orbital_battery), which the AI
+# builds through the base's own AI; this only picks each base's weapon, state
+# by state. While the AI wants batteries (at war with a country that has
+# fleets: sr_battery_ai_wants) it arms its bases (sr_battery_ai_arm) with
+# Ground Lasers once it has Directed Energy Weapons (twice the fire and no
+# debris), else Kinetic Interceptors. Once it no longer wants them, an armed
+# base keeps Ground Lasers in peace while the debris is Cluttered (they sweep
+# it), and otherwise goes back to None, which costs nothing. A base is switched
+# only when it runs another method, so a month with nothing to change changes
+# nothing.
 sr_fl_ai_batteries = {
 	if = {
 		limit = {
-			sr_has_battery = yes
-			has_technology_researched = directed_energy_weapons
+			sr_battery_ai_wants = yes
+			has_technology_researched = space_militarization
 		}
 		if = {
+			limit = { has_technology_researched = directed_energy_weapons }
+			sr_battery_ai_arm = { PM = pm_orbital_battery_lasers OTHER = pm_orbital_battery_kinetic }
+		}
+		else = {
+			sr_battery_ai_arm = { PM = pm_orbital_battery_kinetic OTHER = pm_orbital_battery_lasers }
+		}
+	}
+	else_if = {
+		limit = { sr_has_battery = yes }
+		if = {
 			limit = {
-				OR = {
-					is_at_war = yes
-					te_debris_index >= te_debris_tier_cluttered
-				}
+				is_at_war = no
+				has_technology_researched = directed_energy_weapons
+				te_debris_index >= te_debris_tier_cluttered
 			}
+			every_scope_state = {
+				limit = { sr_state_runs_battery = { PM = pm_orbital_battery_kinetic } }
+				sr_state_set_battery = { PM = pm_orbital_battery_lasers }
+			}
+		}
+		else = {
+			every_scope_state = {
+				limit = { sr_state_has_battery = yes }
+				sr_state_set_battery = { PM = pm_no_orbital_battery }
+			}
+		}
+	}
+}
+
+# Country scope, sr_fl_ai_batteries at war: armed bases running $OTHER$ switch
+# to $PM$, then unarmed bases in states it controls are armed with $PM$, the
+# largest first, each only while it fits under sr_battery_ai_max_levels with
+# the levels armed before it. The count is kept in a local variable, since a
+# switch isn't read back in the same effect.
+sr_battery_ai_arm = {
+	every_scope_state = {
+		limit = { sr_state_runs_battery = { PM = $OTHER$ } }
+		sr_state_set_battery = { PM = $PM$ }
+	}
+	set_local_variable = {
+		name = sr_bat_room
+		value = {
+			value = sr_battery_ai_max_levels
+			subtract = sr_battery_levels
+		}
+	}
+	if = {
+		limit = {
+			local_var:sr_bat_room > 0
+			any_scope_state = { sr_state_battery_ai_may_arm = yes }
+		}
+		ordered_scope_state = {
+			limit = { sr_state_battery_ai_may_arm = yes }
+			order_by = sr_state_military_base_level
+			max = 1000
+			check_range_bounds = no
 			if = {
-				limit = {
-					any_scope_building = {
-						is_building_type = building_orbital_defense_battery
-						NOT = { has_active_production_method = pm_orbital_battery_lasers }
-					}
-				}
-				activate_production_method = {
-					building_type = building_orbital_defense_battery
-					production_method = pm_orbital_battery_lasers
-				}
+				limit = { sr_state_military_base_level <= local_var:sr_bat_room }
+				change_local_variable = { name = sr_bat_room subtract = sr_state_military_base_level }
+				sr_state_set_battery = { PM = $PM$ }
 			}
 		}
-		else_if = {
-			limit = {
-				any_scope_building = {
-					is_building_type = building_orbital_defense_battery
-					NOT = { has_active_production_method = pm_orbital_battery_kinetic }
-				}
-			}
-			activate_production_method = {
-				building_type = building_orbital_defense_battery
-				production_method = pm_orbital_battery_kinetic
-			}
-		}
+	}
+}
+
+# State scope: its Military Base runs the battery method $PM$ (state-scoped
+# activate_production_method, as nd_missile_defense_off).
+sr_state_set_battery = {
+	activate_production_method = {
+		building_type = building_military_base
+		production_method = $PM$
 	}
 }
 

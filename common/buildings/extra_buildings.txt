@@ -2333,6 +2333,7 @@ building_military_base = {
 		pmg_fortification_type
 		pmg_military_base_purpose
 		pmg_military_base_missile_defense
+		pmg_military_base_orbital_battery
 	}
 
 	required_construction = construction_cost_very_high

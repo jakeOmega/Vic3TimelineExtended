@@ -1799,6 +1799,21 @@ pmg_military_base_missile_defense = {
 	}
 }
 
+# Ground-to-orbit batteries (solar colonization fleets design § 15, 6d): guns
+# that fire on enemy fleets at Earth, from Space Militarization under Full
+# Colonies (the other Space Race settings disable both weapons:
+# extra_game_rules.txt). The methods are sr_orbital_defense_battery_pms.txt.
+# No ai_selection: the AI's method is the fleets' monthly review's
+# (sr_fl_ai_batteries, sr_earth_orbit_effects.txt), state by state.
+pmg_military_base_orbital_battery = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_no_orbital_battery
+		pm_orbital_battery_kinetic
+		pm_orbital_battery_lasers
+	}
+}
+
 # Extend vanilla's naval fortification PMG with mod-added Era 7 and Era 9 tiers.
 # Vanilla caps at concrete_fortifications; these add guided_missiles- and
 # missile_defense_systems-gated upgrades to keep coastal defense relevant

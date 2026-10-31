@@ -1,11 +1,18 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — ground-to-orbit batteries' methods (fleets design § 15)
 # ============================================================================
-# pmg_orbital_defense_battery (sr_orbital_defense_battery_pmgs.txt). Each method
-# carries its figures as workforce-scaled state modifiers (script-only: the
-# engine consumes nothing; they still render in the method's tooltip and the
-# state's modifiers), which the script sums over the states the country
-# controls (sr_fleet_values.txt):
+# pmg_military_base_orbital_battery, the Military Base's fourth group
+# (extra_pm_groups.txt): guns on the ground that fire on any enemy fleet at
+# Earth every month, so a fleet that has taken Earth orbit can't simply hold it
+# for a whole war. An extension of the anti-satellite strike
+# (te_asat_strike_action.txt). Every Space Race setting but Full Colonies
+# disables both weapons (extra_game_rules.txt), so there they stay at None.
+#
+# Each weapon carries its figures as workforce-scaled state modifiers
+# (script-only: the engine consumes nothing; they still render in the method's
+# tooltip and the state's modifiers), which the script sums over the states the
+# country controls (sr_fleet_values.txt; § 5.1: a base in an occupied state
+# fires for no one):
 #   state_orbital_battery_fire_add   fire on hostile fleets at Earth a month
 #                                    (sr_battery_fire, the Earth battle);
 #                                    Kinetic Interceptors' adds 0.02 low debris
@@ -13,18 +20,24 @@
 #   state_orbital_debris_sweep_add   low-orbit debris swept a month, in peace
 #                                    only (sr_battery_sweep, the debris step)
 # One field each, no building-scoped copy, which the game would list a second
-# time (scripting_best_practices.md).
+# time (scripting_best_practices.md). Like the base's other groups, they scale
+# with its level: five levels of base with a battery are five levels of battery.
 #
 #   method                gate                       fire/level/mo  sweep/level/mo  inputs a level a week
+#   None (default)        -                          -              -               -
 #   Kinetic Interceptors  space_militarization       1              -               Launch Capacity 25, Electronic Components 10
 #   Ground Lasers         directed_energy_weapons    2              0.01            electricity 200, Electronic Components 15
 #
-# Every level employs 100 officers, 300 engineers and 600 machinists. First
-# guesses (design § 20).
+# Every armed level employs 100 officers, 300 engineers and 600 machinists, on
+# top of the base's own staff. First guesses (design § 20).
 # ============================================================================
 
+pm_no_orbital_battery = {
+	texture = "gfx/interface/icons/production_method_icons/no_artillery.dds"
+}
+
 pm_orbital_battery_kinetic = {
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p1.dds"
 
 	unlocking_technologies = {
 		space_militarization
@@ -51,7 +64,7 @@ pm_orbital_battery_kinetic = {
 }
 
 pm_orbital_battery_lasers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_purple_p2.dds"
 
 	unlocking_technologies = {
 		directed_energy_weapons

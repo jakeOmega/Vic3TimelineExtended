@@ -377,11 +377,13 @@ us put a fleet of 100 of each role at Earth (with none of ours there, a blockade
    shipments wait at Earth, settlers stop, Go on a fleet at Earth is greyed with "Nothing leaves Earth", and our
    colonies' autonomy counts months without contact (no fleet arrival or module landing renews it). Modules are still
    fabricated, and a fleet already away can still move between other locations.
-4. **Batteries.** Build a Ground-to-Orbit Battery (Space Militarization) in a few states. Its method's tooltip and the
+4. **Batteries.** In a few states with a Military Base, set its Ground-to-Orbit Battery group (Space Militarization)
+   to Kinetic Interceptors. The base's staff grows by 1,000 a level, and its method's tooltip and the
    state's modifiers show "Fire on Hostile Fleets at Earth" (and with Ground Lasers "Low-Orbit Debris Swept in Peace",
    +0.01 a level, not +0). With an enemy fleet at Earth the battle report comes each month and the enemy loses about
    0.1 × the batteries' fire a month; the batteries lose nothing and don't lift a blockade. Kinetic Interceptors raise
-   the low debris pool a little (0.02 a point fired); Ground Lasers don't.
+   the low debris pool a little (0.02 a point fired); Ground Lasers don't. In a game on any other Space Race setting
+   the group stays at No Ground-to-Orbit Battery, both weapons greyed out by the game rule.
 5. **Sweeping.** At peace with Ground Lasers running, the Orbit row's low pool falls each month by 0.01 a level beyond
    its decay and the high pool is untouched; at war the sweep stops. The `battery_sweep` line above reads OK.
 6. **Orbital superiority.** At war with our fleets at Earth and the enemy's weaker there (or absent): our country's
@@ -393,9 +395,14 @@ us put a fleet of 100 of each role at Earth (with none of ours there, a blockade
    and that each resumes when the state is retaken. "Our Launch Site Is Occupied" arrives once, and "Our Launch Site
    Is Ours Again" when it is back. Record at how many provinces `controller` turned, as for Space Command (6a/6b's
    step 20).
-8. **The AI's batteries.** In an observer run: an AI builds batteries only while at war with a country that has
-   fleets, up to five levels, and switches to Ground Lasers at war or once debris is Cluttered when it has Directed
-   Energy Weapons. Whether the building's own AI then keeps the method it was given is a watch item.
+8. **The AI's batteries.** In an observer run: an AI arms its Military Bases' batteries only while at war with a
+   country that has fleets, up to five levels (its largest bases first), on Ground Lasers once it has Directed Energy
+   Weapons; an AI with no fleets of its own arms them too. At the peace its bases go back to No Ground-to-Orbit
+   Battery, or stay on Ground Lasers while debris is Cluttered. Watch item: the group has no `ai_selection`, so the
+   engine's own method choice (most_profitable) may drop an armed base back to the free None between the monthly
+   reviews. Diff two consecutive monthly saves at war: a base flipping None, armed, None every month, and paying for
+   the switch each time, needs a fix (`ai_selection = most_productive` with an `ai_value` on the fire type, as
+   the barracks methods do).
 9. **The default.** A new game's setup screen shows Full Colonies selected for the Space Race rule, its description
    naming fleets, blockades of Earth and batteries. A save from before keeps its setting.
 

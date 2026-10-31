@@ -145,12 +145,15 @@ in Depth, Concrete Fortifications, Guided Missiles and Precision Guided
 Munitions. Each level employs 200 soldiers and 50 officers, buys small arms and
 ammunition, and adds +5 infrastructure.
 
-Three production method groups set what it does. The Fortification Type and Base
+Four production method groups set what it does. The Fortification Type and Base
 Purpose methods decide the state's fortification level, 1 to 4 for each level of
 the base. The purpose can instead
 calm turmoil and add war support (Garrison Duty), or add infrastructure and cut
 your whole army's supply use (Logistics Hub). A Missile Defense method, from
 Missile Defense Systems, raises the state's chance of stopping a nuclear strike.
+Under the Space Race rule's Full Colonies, a Ground-to-Orbit Battery method, from
+Space Militarization, fires on enemy fleets in Earth orbit (see [Holding Earth
+orbit](16-space.md#holding-earth-orbit)).
 [Military base production method
 list](20-appendix-reference-lists.md#military-base-production-method-list) gives
 each method's unlock and its effect per fully staffed level. The AI values bases
