@@ -1097,9 +1097,12 @@ class LunarAtEarthTest(unittest.TestCase):
         whose Earth arm is the lunar worlds (checked above)."""
         sgui = _block(_strip(_raw(SGUIS)), "sr_fleet_set_posture_sgui")
         valid = _block("x = {" + sgui.split("\n\tis_valid = {", 1)[1], "x")
-        rules = {int(m.group(1)): _block("x = {" + valid[m.end():], "x")
-                 for m in re.finditer(r"(?m)^\t\ttrigger_if = \{\s*limit = \{ scope:pick = (\d) \}", valid)}
+        opener = r"(?m)^\t\ttrigger_if = \{\s*limit = \{\s*scope:pick = (\d)(\s*sr_fl_op_check = \{ TEST = at_earth \})?\s*\}"
+        rules = {int(m.group(1)): _block("x = {" + valid[m.end():], "x") for m in re.finditer(opener, valid)}
+        at_earth_only = {int(m.group(1)) for m in re.finditer(opener, valid) if m.group(2)}
         self.assertEqual(sorted(rules), [2, 3, 4])
+        # Stand off's rule applies at Earth alone, where it fails
+        self.assertEqual(at_earth_only, {2})
         self.assertIn("NOT = { sr_fl_op_check = { TEST = at_earth } }", rules[2])
         self.assertIn("NOT = { sr_fl_op_check = { TEST = at_earth } }", rules[4])
         self.assertIn("sr_fl_op_check = { TEST = has_interdict_world }", rules[4])
@@ -1519,19 +1522,21 @@ class NoSpaceCommandTest(unittest.TestCase):
                     self.assertIn("sr_sc_operational = yes", _block(self.generated, f"sr_fl_{n}_may_depart_{lc.key}"))
 
     def test_posture_and_target_orders_need_it(self):
-        reason = "custom_tooltip = {\n\t\t\ttext = sr_fl_req_space_command_tt\n\t\t\tsr_sc_operational = yes\n\t\t}"
+        def reason(key):
+            return f"custom_tooltip = {{\n\t\t\ttext = {key}\n\t\t\tsr_sc_operational = yes\n\t\t}}"
         # A direct child of is_valid (one tab deeper than is_valid itself), not
         # nested in the line before: last in posture's and target's, before
-        # can_go's in Go's.
-        for sgui, after in (("sr_fleet_go_sgui", "\n\t\tcustom_tooltip = {\n\t\t\ttext = sr_fl_short_tt"),
-                            ("sr_fleet_posture_sgui", "\n\t}\n\n\teffect = {"),
-                            ("sr_fleet_target_sgui", "\n\t}\n\n\teffect = {"),
-                            # the posture buttons and the target popup's Target (UI pass design § 7)
-                            ("sr_fleet_set_posture_sgui", "\n\t}\n\n\teffect = {"),
-                            ("sr_fleet_set_target_sgui", "\n\t}\n\n\teffect = {")):
+        # can_go's in Go's. The posture buttons and the target popup's Target
+        # (UI pass design § 7) give the short line, for the hover's length.
+        for sgui, key, after in (("sr_fleet_go_sgui", "sr_fl_req_space_command_tt",
+                                  "\n\t\tcustom_tooltip = {\n\t\t\ttext = sr_fl_short_tt"),
+                                 ("sr_fleet_posture_sgui", "sr_fl_req_space_command_tt", "\n\t}\n\n\teffect = {"),
+                                 ("sr_fleet_target_sgui", "sr_fl_req_space_command_tt", "\n\t}\n\n\teffect = {"),
+                                 ("sr_fleet_set_posture_sgui", "sr_fl_req_space_command_short_tt", "\n\t}\n\n\teffect = {"),
+                                 ("sr_fleet_set_target_sgui", "sr_fl_req_space_command_short_tt", "\n\t}\n\n\teffect = {")):
             with self.subTest(sgui=sgui):
                 body = _block(self.sguis, sgui)
-                self.assertRegex(body, r"\t\t\}\n\s*" + re.escape(reason) + re.escape(after))
+                self.assertRegex(body, r"\t\t\}\n\s*(#[^\n]*\n\s*)*" + re.escape(reason(key)) + re.escape(after))
         # The destination popup's Choose isn't an order: it only picks.
         self.assertNotIn("sr_sc_operational", _block(self.sguis, "sr_fleet_set_dest_sgui"))
         # Go gives this reason before the generic one can_go would.
@@ -1837,17 +1842,31 @@ class PostureRowTest(unittest.TestCase):
 
     def test_each_pick_s_rule_is_its_own_line(self):
         valid = _block("x = {" + self.sgui.split("\n\tis_valid = {", 1)[1], "x")
-        # direct children of is_valid: two reasons, a trigger_if a posture, then
-        # no Space Command (NoSpaceCommandTest)
+        # direct children of is_valid: the unlisted checks, a trigger_if for
+        # Stand off at Earth, Close in and Interdict, then no Space Command
+        # (NoSpaceCommandTest)
         self.assertEqual(re.findall(r"(?m)^\t\t(\w+) = \{", valid),
-                         ["custom_tooltip", "custom_tooltip", "trigger_if", "trigger_if", "trigger_if", "custom_tooltip"])
-        self.assertIn("text = sr_fl_not_at_location_tt", valid)
-        self.assertRegex(valid, r"text = sr_fl_req_new_posture_tt\s*NOT = \{ sr_fl_op_check = \{ TEST = pick_is_posture \} \}")
-        # inside each trigger_if, every reason is a sibling, none nested in another
-        for m in re.finditer(r"(?m)^\t\ttrigger_if = \{", valid):
-            block = _block("x = {" + valid[m.end():], "x")
+                         ["hidden_trigger", "trigger_if", "trigger_if", "trigger_if", "custom_tooltip"])
+        # true wherever the button shows (at a location; the held posture is lit,
+        # not a button), so checked without a line (the hover's length)
+        hidden = _block("x = {" + valid.split("hidden_trigger = {", 1)[1], "x")
+        self.assertRegex(hidden, r"^\s*sr_fl_op_check = \{ TEST = at_location \}\s*"
+                                 r"NOT = \{ sr_fl_op_check = \{ TEST = pick_is_posture \} \}\s*$")
+        # Stand off's and Interdict's Earth lines show only at Earth, where they fail
+        self.assertRegex(valid, r"limit = \{\s*scope:pick = 2\s*sr_fl_op_check = \{ TEST = at_earth \}\s*\}\s*"
+                                r"custom_tooltip = \{\s*text = sr_fl_req_standoff_not_earth_tt\s*"
+                                r"NOT = \{ sr_fl_op_check = \{ TEST = at_earth \} \}\s*\}\s*\}")
+        self.assertRegex(valid, r"limit = \{ scope:pick = 3 \}\s*custom_tooltip = \{\s*text = sr_fl_req_hostile_world_tt\s*"
+                                r"sr_fl_op_check = \{ TEST = has_hostile_world \}\s*\}\s*\}")
+        self.assertRegex(valid, r"limit = \{ scope:pick = 4 \}\s*trigger_if = \{\s*limit = \{ sr_fl_op_check = \{ TEST = at_earth \} \}\s*"
+                                r"custom_tooltip = \{\s*text = sr_fl_req_interdict_not_earth_tt\s*"
+                                r"NOT = \{ sr_fl_op_check = \{ TEST = at_earth \} \}\s*\}\s*\}\s*trigger_else = \{\s*"
+                                r"custom_tooltip = \{\s*text = sr_fl_req_interdict_world_tt\s*"
+                                r"sr_fl_op_check = \{ TEST = has_interdict_world \}\s*\}\s*\}\s*\}")
+        # no reason nested in another
+        for m in re.finditer(r"custom_tooltip = \{", valid):
             with self.subTest(at=m.start()):
-                self.assertEqual(len(re.findall(r"(?m)^\t\t\tcustom_tooltip = \{", block)), block.count("custom_tooltip"))
+                self.assertNotIn("custom_tooltip", _block("x = {" + valid[m.end():], "x"))
         self.assertIn("sr_fl_by_op = { DO = set_posture }", self.sgui)
         for n in range(1, gsf.SLOTS + 1):
             body = _block(_strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT)), f"sr_fl_{n}_pick_is_posture")
@@ -1865,6 +1884,10 @@ def _parse_script(text):
         out = []
         while i < len(tokens) and tokens[i] != "}":
             key, op = tokens[i], tokens[i + 1]
+            if op not in ("=", "<", ">", "<=", ">="):
+                out.append((key, None, None))  # a bare word (saved_scopes = { op pick })
+                i += 1
+                continue
             if tokens[i + 2] == "{":
                 value, i = block(i + 3)
                 i += 1
@@ -1968,6 +1991,114 @@ class CloseInPriceTest(unittest.TestCase):
                                   r"NOT = \{ sr_fl_\$N\$_target_hostile = yes \}\s*\}\s*\}\s*sr_fl_step_hostile_target_at")
 
 
+def _loc_english():
+    out = {}
+    for path in sorted((ROOT / "localization/english").rglob("*_l_english.yml")):
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            m = re.match(r'^\s+([\w.]+):\d*\s+"(.*)"\s*(#.*)?$', line)
+            if m:
+                out[m.group(1)] = m.group(2)
+    return out
+
+
+def _rendered_length(loc, key):
+    """A loc key's length as the review of #1285 measured it: $key$ spliced,
+    each [..] two characters, formatting codes dropped."""
+    text = re.sub(r"\$(\w+)\$", lambda m: "x" * _rendered_length(loc, m.group(1)) if m.group(1) in loc else m.group(0),
+                  loc[key])
+    text = re.sub(r"\[[^\[\]]*(\[[^\[\]]*\][^\[\]]*)*\]", "xx", text)
+    text = re.sub(r"#[a-zA-Z_]+ ?|#!", "", text)
+    return len(text.replace("\\n", "\n"))
+
+
+class HoverLengthTest(unittest.TestCase):
+    """Review of #1285: the posture buttons' and Target's hovers, built at
+    runtime (IsValidTooltip, te_tt_break, ExecuteTooltip) where
+    long_tooltip_audit can't see them, stay under 500 rendered characters in
+    the worst case: every listed reason, every price that may show."""
+
+    LIMIT = 500
+
+    @classmethod
+    def setUpClass(cls):
+        cls.sguis = _strip(_raw(SGUIS))
+        cls.loc = _loc_english()
+
+    @staticmethod
+    def _decide(limit, ctx):
+        """True, False, or None (unknown: either may hold) for a limit's
+        terms, from the pick and whether the fleet is at Earth."""
+        def term(key, op, value):
+            if key == "scope:pick":
+                return ctx["pick"] == int(value)
+            if key == "sr_fl_op_check" and isinstance(value, list) and value == [("TEST", "=", "at_earth")]:
+                return ctx["at_earth"]
+            if key == "OR":
+                parts = [term(*t) for t in value]
+                return True if True in parts else (None if None in parts else False)
+            if key == "AND":
+                return HoverLengthTest._decide(value, ctx)
+            if key == "NOT":
+                inner = HoverLengthTest._decide(value, ctx)
+                return None if inner is None else not inner
+            return None
+        parts = [term(*t) for t in limit]
+        return False if False in parts else (None if None in parts else True)
+
+    def _lines(self, stmts, ctx):
+        """The worst case's listed keys: an undecided branch counts its longest
+        arm, an if-chain its longest taken arm."""
+        out, i = [], 0
+        while i < len(stmts):
+            key, _, value = stmts[i]
+            if key == "custom_tooltip":
+                out.append(value if isinstance(value, str) else dict((k, v) for k, _, v in value)["text"])
+            elif key in ("if", "trigger_if"):
+                arms, j = [], i
+                while j < len(stmts) and (j == i or stmts[j][0] in ("else_if", "else", "trigger_else")):
+                    body = stmts[j][2]
+                    limit = next((v for k, _, v in body if k == "limit"), None)
+                    arms.append((self._decide(limit, ctx) if limit is not None else True,
+                                 [s for s in body if s[0] != "limit"]))
+                    j += 1
+                worst = []
+                for decided, body in arms:
+                    if decided is False:
+                        continue
+                    lines = self._lines(body, ctx)
+                    worst = max(worst, lines, key=lambda ks: sum(_rendered_length(self.loc, k) + 1 for k in ks))
+                    if decided is True:
+                        break
+                out += worst
+                i = j
+                continue
+            elif key in ("AND", "OR"):
+                out += self._lines(value, ctx)
+            i += 1
+        return out
+
+    def _hover(self, sgui, ctx):
+        body = _parse_script(_block(self.sguis, sgui))
+        valid = next(v for k, _, v in body if k == "is_valid")
+        effect = next(v for k, _, v in body if k == "effect")
+        keys = self._lines(valid, ctx), self._lines(effect, ctx)
+        total = sum(sum(_rendered_length(self.loc, k) for k in part) + max(len(part) - 1, 0) for part in keys) + 2
+        return total, keys
+
+    def test_the_posture_buttons_and_target_stay_short(self):
+        worst = {}
+        for sgui, picks in (("sr_fleet_set_posture_sgui", (1, 2, 3, 4)), ("sr_fleet_set_target_sgui", (1,))):
+            for pick in picks:
+                for at_earth in (False, True):
+                    total, keys = self._hover(sgui, {"pick": pick, "at_earth": at_earth})
+                    worst[(sgui, pick, at_earth)] = total
+                    with self.subTest(sgui=sgui, pick=pick, at_earth=at_earth, keys=keys):
+                        self.assertLessEqual(total, self.LIMIT)
+                        self.assertTrue(keys[1], "no effect lines read")
+        # the walk reads the prices: Interdict's is its longest case
+        self.assertGreater(worst[("sr_fleet_set_posture_sgui", 4, False)], 400)
+
+
 class TargetPopupTest(unittest.TestCase):
     """UI pass design § 7: the target button opens a list of the worlds at
     the fleet's location; Target sets the world and charges as the step."""
@@ -2028,8 +2159,10 @@ class TargetPopupTest(unittest.TestCase):
 
     def test_the_pick_is_held_to_the_step_s_rule(self):
         valid = _block("x = {" + self.sgui.split("\n\tis_valid = {", 1)[1], "x")
-        self.assertIn("sr_fl_op_check = { TEST = at_location }", valid)
-        self.assertIn("sr_fl_op_check = { TEST = pick_world_here }", valid)
+        # true wherever the popup shows the button: checked without a line
+        hidden = _block("x = {" + valid.split("hidden_trigger = {", 1)[1], "x")
+        self.assertRegex(hidden, r"^\s*sr_fl_op_check = \{ TEST = at_location \}\s*"
+                                 r"sr_fl_op_check = \{ TEST = pick_world_here \}\s*$")
         self.assertRegex(valid, r"trigger_if = \{\s*limit = \{ sr_fl_op_check = \{ TEST = interdicting \} \}\s*"
                                 r"custom_tooltip = \{\s*text = sr_fl_req_pick_interdictable_tt\s*sr_fl_pick_interdictable = yes\s*\}\s*\}\s*"
                                 r"trigger_else = \{\s*custom_tooltip = \{\s*text = sr_fl_req_pick_hostile_tt\s*sr_fl_pick_hostile = yes")
