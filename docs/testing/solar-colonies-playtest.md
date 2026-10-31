@@ -214,6 +214,7 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
 | `TE_SELF_CHECK OK/BROKEN ship_construction country=… rate=…` | once a game, a month after a Space Command first runs at half staff or more in a state its owner controls | `sr_sc_rate`, the sum of `modifier:state_sr_ship_construction_add` over the states its owner controls, reads above 0: a production method's workforce-scaled `state_modifiers` reach the state | it reads 0 | compute the rate in script, level × occupancy × the method's rate by `has_active_production_method`, and state the rates in the methods' descriptions |
 | `TE_SELF_CHECK OK/BROKEN fleet_upkeep_line country=… per_building=… robotics_mult=… telephones_mult=… software_mult=… want=…` | once a game, the month after a Space Command first carries the upkeep with units above 0 (Space Race UI pass design § 10) | the building's Robotics, Wired Telecommunication Gear and Software input multipliers are each 9 × its units: the newly registered mults reach the building (that they multiply the unscaled line is item 2's tooltip read) | one reads 0 (unregistered, or not on the building) or another figure (other lines reach that input) | for 0, check the `goods_input_<good>_mult` with `/modifier-search`; for another figure, read the building's input tooltip and compare the six goods' lines |
 | `TE_SELF_CHECK OK/BROKEN fleet_leg location=… drive=… leg=… flown=…` | OK once a game, on the first fleet that lands in its month; BROKEN once, if any fleet lands two or more months late | `flown` equals `leg`, the months `docs/engine/launch_windows_report.md` gives that leg and drive | the global monthly step missed an arrival | land fleets from the country pulse as well |
+| `TE_SELF_CHECK OK/BROKEN xfer_step_scope` | once a game, the first − or + clicked in a fleet's Transfer popup | the step code, the third chained `AddScope` (`scope:step`, after `op` and `pick`), reached `sr_fleet_xfer_step_sgui` | no step code matched: the third scope didn't arrive, and the amount didn't move | pass two scopes: `pick` = role × 100 + step code, decoded in `sr_fl_xfer_step_at` |
 
 **What checks itself, and what needs a hand.**
 
@@ -732,3 +733,36 @@ The maintenance line and no fleet orders without a Space Command (UI pass design
 5. **Two Space Commands.** Annex or form a country holding a second one: each building's Fleet Upkeep reads half (at
    10 units, +4,500%), and the panel's Upkeep still +9000%. Demolish one: the other carries it all the next month.
 
+## The owner's UI pass: Transfer (PR 4, 2026-10-31)
+
+A fleet's Transfer popup, which took in Merge and Detach (UI pass design § 6; `docs/systems/mod_systems/space_race.md`
+§ Popups, Transfer). Full Colonies. Self-check `xfer_step_scope` above. **Fallback** if the − and + keys don't reach the
+scripted GUI: one scripted GUI per step size, as the construction market has.
+
+1. **It opens.** A fleet at a location with another fleet of ours there, or a free slot and some strength, has
+   Transfer in its orders line; it opens Transfer in the middle of the screen, from the journal panel and from the
+   Timeline Extended window. Each role and the marines start at half, rounded; Into has New fleet greyed as already
+   chosen (or, with all nine slots full, the first fleet there). The row's figures read, not zeros or raw keys.
+2. **The keys, on a scripted GUI's button** (the construction market's, there on a GUI-local value): on a role of
+   several thousand, a click on + adds 1, Shift+click 10, Ctrl+click 100, Alt+click 1,000, and a right-click sets all
+   of it; on −, the same down, and a right-click sets none. Each click moves the figure once. Note whether Shift,
+   Ctrl and Alt need the button's hover first.
+3. **The three-scope call.** The first click logs `TE_SELF_CHECK OK xfer_step_scope`; BROKEN, or no line, means the
+   third scope didn't arrive (fallback in the table).
+4. **Held to what is there.** Set warships to all, then let a battle cut them (or `event te_debug_space_race.6`'s
+   combat now) with the popup open: the amount reads the new strength, never more, and Transfer moves no more than
+   that.
+5. **Into another fleet.** With two fleets at one location, Into lists the other as "Fleet of N" (its strength), and
+   choosing it greys it. There after reads that fleet's figures with the amounts added. Transfer moves them; the other
+   fleet keeps its posture. All of every row into it: the first fleet is gone and the second holds both, with the
+   slower drive, the later refit and the lower share of propellant and supply, as Merge did.
+6. **A damaged role keeps its ratio.** Damage a fleet (a battle), then move half its warships into a new fleet: in
+   each fleet's strength hover, the warships' now over full is the old fleet's ratio, and the two fleets' warships add
+   up to the old figures, now and at full.
+7. **The refusals.** Transfer greys, with the reason on hover: everything at 0; all of a fleet into a new fleet (it
+   would keep nothing); marines moved into a fleet whose assault carriers can't hold them, or carriers moved away from
+   the marines they carry; the other fleet leaving before the click (its Into button goes, and Transfer says the fleet
+   it goes into isn't here).
+8. **The fleet gone.** With the popup open, send the fleet away in another window, or let it be destroyed: the popup
+   says "This fleet has left, or is gone." and nothing in it acts. Transfer closes the popup.
+9. **No Space Command.** Transfer still works without one (Merge and Detach did); the owner may want it gated.

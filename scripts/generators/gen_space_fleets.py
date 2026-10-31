@@ -36,7 +36,14 @@ common/scripted_effects/sr_fleet_effects.txt and sr_fleet_combat_effects.txt):
 - ``common/customizable_localization/sr_fleets_generated_custom_loc.txt``: a
   slot's location, destination, target world and drive by name.
 - ``gui/journal_entry_widgets/sr_fleets_generated_rows.gui``: the Fleets and
-  Locations rows (the colonies' Defenses are a view of gen_solar_sites' Colonies rows).
+  Locations rows (the colonies' Defenses are a view of gen_solar_sites' Colonies rows),
+  and the Transfer popup's bodies, one a slot (UI pass design § 6).
+
+Transfer (UI pass design § 6) took in Merge and Detach on the panel: the amounts
+are country variables (``sr_det_amt_<key>``, ``sr_det_to``) read only through
+``sr_fl_<n>_xf_<key>``, which holds each to what the slot has; ``sr_fl_transfer_new``
+and ``sr_fl_transfer_into`` move them. ``sr_fl_merge`` and ``sr_fl_detach`` stay,
+with no caller left (the AI never merged or detached).
 
 Run ``python3 scripts/generators/gen_space_fleets.py [--dry-run | --check]``.
 A post-load regenerator (``mod_state_server.POST_LOAD_REGENERATORS``).
@@ -599,7 +606,8 @@ def render_triggers() -> str:
            "# Country scope. Per slot n: sr_fl_<n>_exists, _all_rapid, _refitting, _docked,",
            "# _refills_fully, _may_depart_<loc> (at a location, not there, not refitting,",
            "# its propellant covering the leg), and the panel's _can_go, _can_merge,",
-           "# _can_detach, _can_land, _can_embark.",
+           "# _can_detach, _can_land, _can_embark; the Transfer popup's _can_transfer,",
+           "# _xf_pick_here and its refusals (_xf_moves, _xf_keeps, ...).",
            ""]
     for n in range(1, SLOTS + 1):
         out += render_slot_triggers(n) + [""]
@@ -2339,7 +2347,8 @@ def render_gui() -> str:
            "### space_race_widget.gui: te_sr_fleet_row (Fleets, one per slot) and",
            "### te_sr_location_row (Locations, one per location). Each value is a display",
            "### value of sr_fleets_display_generated.txt; the scripted GUIs are in",
-           "### sr_fleet_sguis.txt and take the slot as scope:op. The colonies' Defenses",
+           "### sr_fleet_sguis.txt and take the slot as scope:op. Then the Transfer popup's",
+           "### bodies (te_sr_xfer_popup_body). The colonies' Defenses",
            "### (sr_disp_def_*) show in gen_solar_sites' Colonies rows (audit SPC-5).",
            "",
            "types sr_fleets_generated_rows_types",

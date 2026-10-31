@@ -5,7 +5,9 @@
 # § 16. The buttons of the Fleets rows (gui/journal_entry_widgets/
 # sr_fleets_generated_rows.gui, one per slot, which pass the slot as scope:op)
 # and of Space Command's build mix (scope:op the role: 1 warships, 2 rapid
-# response, 3 siege ships, 4 assault carriers, 5 tenders). Full Colonies only;
+# response, 3 siege ships, 4 assault carriers, 5 tenders), and of a fleet's
+# Transfer popup (scope:op the slot, with scope:pick and scope:step; under
+# Transfer below). Full Colonies only;
 # player-only: the AI orders its fleets through the same effects from its
 # monthly review (sr_fl_ai_review). Each is_valid is the trigger its effect's
 # dispatcher checks (sr_fl_<n>_can_go and the rest, generated).

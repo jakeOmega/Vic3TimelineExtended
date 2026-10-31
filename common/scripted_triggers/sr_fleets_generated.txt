@@ -3,7 +3,8 @@
 # Country scope. Per slot n: sr_fl_<n>_exists, _all_rapid, _refitting, _docked,
 # _refills_fully, _may_depart_<loc> (at a location, not there, not refitting,
 # its propellant covering the leg), and the panel's _can_go, _can_merge,
-# _can_detach, _can_land, _can_embark.
+# _can_detach, _can_land, _can_embark; the Transfer popup's _can_transfer,
+# _xf_pick_here and its refusals (_xf_moves, _xf_keeps, ...).
 
 # --- Slot 1 ---
 sr_fl_1_exists = { OR = { has_variable = sr_fl_1_loc has_variable = sr_fl_1_dest } }

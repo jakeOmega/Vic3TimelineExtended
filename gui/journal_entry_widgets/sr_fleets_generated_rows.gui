@@ -4,7 +4,8 @@
 ### space_race_widget.gui: te_sr_fleet_row (Fleets, one per slot) and
 ### te_sr_location_row (Locations, one per location). Each value is a display
 ### value of sr_fleets_display_generated.txt; the scripted GUIs are in
-### sr_fleet_sguis.txt and take the slot as scope:op. The colonies' Defenses
+### sr_fleet_sguis.txt and take the slot as scope:op. Then the Transfer popup's
+### bodies (te_sr_xfer_popup_body). The colonies' Defenses
 ### (sr_disp_def_*) show in gen_solar_sites' Colonies rows (audit SPC-5).
 
 types sr_fleets_generated_rows_types
