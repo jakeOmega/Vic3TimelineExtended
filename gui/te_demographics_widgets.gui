@@ -22,8 +22,9 @@
 ###   te_demog_sec_family       open: the Family & Reproductive Policy law and its measures, a row and a button each;
 ###                             the measures other laws allow, dimmed (phase 2 step 3a)
 ###   te_demog_sec_history      open: eight charts by census year, with pips for war, famine and demographic events
-###   te_demog_sec_wealth       open: the Gini beside the strata's incomes, Wealth Concentration as a bar heading for
-###                             its target, the target's nine terms, the most and least concentrated states
+###   te_demog_sec_wealth       open: the Gini beside the strata's incomes (the Census Data window leaves the incomes
+###                             out), Wealth Concentration as a bar heading for its target, the target's nine terms,
+###                             the most and least concentrated states
 ###   te_demog_sec_places       open: urban share, primacy, the effective number of cities, the pattern, the three
 ###                             largest cities
 ###   te_demog_sec_states       open: the ten largest states, a row each that opens the state, and Show All for the 40
@@ -2671,7 +2672,7 @@ types te_demographics_widgets
 					}
 					### The strata's incomes are vanilla's figures, which read the Population panel itself (PopsOverviewPanel):
 					### the Census Data window has no such panel in its context, so it blanks this block
-					### (te_demog_browser_sections) and shows the Gini alone, as the state's Wealth does.
+					### (te_demog_browser_sections) and leaves them out, as the state's Wealth does.
 					block "te_demog_wealth_strata_incomes" {
 						te_demog_wealth_cell = {
 							tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_LOW_LABEL_TOOLTIP"

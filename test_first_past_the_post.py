@@ -101,6 +101,14 @@ class GeneratorTest(unittest.TestCase):
         between = self.text[bonus:chain_head]
         self.assertNotIn("else_if", between)
 
+    def test_the_terms_read_no_ruler(self):
+        # vanilla_known_bugs.md tags every `Event target link 'ruler' returned an invalid object` in the generated file
+        # as vanilla's two council-republic reads, so a ruler read in the mod's terms would log unseen.
+        terms = "\n".join(g.major_term_lines("example_party") + g.minor_term_lines("example_party"))
+        self.assertNotRegex(terms, r"\bruler\b")
+        with open(os.path.join(ROOT, "common", "scripted_triggers", "te_fptp_triggers.txt"), encoding="utf-8-sig") as f:
+            self.assertNotRegex(f.read(), r"(?m)^[^#\n]*\bruler\b")
+
     def test_penalty_comes_last(self):
         self.assertGreater(self.text.index("te_fptp_minor_party_join"), self.text.index("from_three_or_more_prior_members"))
         self.assertIn("te_fptp_major_example_party", self.text)

@@ -127,10 +127,12 @@ def without_blocks(text, names):
     return text
 
 
-def blanked_blocks(composer):
-    """For each section a composer instances, the blocks it blanks with an empty blockoverride."""
+def blanked_blocks(composer, sections):
+    """For each of `sections` a composer instances, the blocks it blanks with an empty blockoverride."""
     out = {}
     for m in re.finditer(r"(?m)^\s*(\w+) = \{", composer):
+        if m.group(1) not in sections:
+            continue
         instance = block_from(composer, m.end() - 1)
         names = re.findall(r'blockoverride "(\w+)" \{\s*\}', instance)
         if names:
@@ -301,12 +303,16 @@ class BrowserContextTest(unittest.TestCase):
         cls.loc.update(load_loc())
         widgets = {name: body for name, body in type_bodies(read(WIDGETS)).items() if not name.startswith("te_state_")}
         layout = type_bodies(read(LAYOUT))
-        browser = code(layout["te_demog_browser_sections"])
-        blanked = blanked_blocks(browser)
-        cls.browser = {name: code(without_blocks(body, blanked.get(name, ()))) for name, body in widgets.items()}
-        cls.browser["te_demog_browser_sections"] = browser
-        cls.tab = {name: code(body) for name, body in widgets.items()}
-        cls.tab["te_demog_tab_sections"] = code(layout["te_demog_tab_sections"])
+        cls.browser = cls.host(widgets, code(layout["te_demog_browser_sections"]), "te_demog_browser_sections")
+        cls.tab = cls.host(widgets, code(layout["te_demog_tab_sections"]), "te_demog_tab_sections")
+
+    @staticmethod
+    def host(widgets, composer, name):
+        """What a host draws: the sections less the blocks its composer blanks, and the composer."""
+        blanked = blanked_blocks(composer, widgets)
+        out = {section: code(without_blocks(body, blanked.get(section, ()))) for section, body in widgets.items()}
+        out[name] = composer
+        return out
 
     def reached(self, bodies):
         return loc_closure(set().union(*(gui_keys(b, self.loc) for b in bodies.values())), self.loc)

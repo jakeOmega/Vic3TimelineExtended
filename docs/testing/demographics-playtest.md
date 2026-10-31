@@ -1622,7 +1622,8 @@ can check, so there is no self-check.
 7. **Wealth's strata incomes (added 2026-10-31).** In the window, Wealth shows the Gini and no Lower, Middle or Upper
    income cells, for the player's country and another alike; the Population panel's tab still shows all four. With the
    window's Demographics tab open, `debug.log` has no `PopsOverviewPanel` lines. The first build logged nine a frame
-   there, about 40,000 in two minutes, from those three cells.
+   there, about 40,000 across debug.log and error.log in two minutes, from those three cells. Note whether the Gini
+   cell, now alone in its row at the left, reads as intended or wants centring.
 
 ## RejoovenEsense's longevity care (2026-10-31)
 
