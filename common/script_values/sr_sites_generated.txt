@@ -3088,7 +3088,7 @@ sr_site_foundry_staffed_valles_marineris = { value = sr_site_foundry_value_valle
 sr_site_admin_staffed_valles_marineris = { value = sr_site_admin_value_valles_marineris multiply = sr_site_staffing_valles_marineris }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_valles_marineris = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_valles_marineris multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_valles_marineris = {
@@ -3304,7 +3304,7 @@ sr_site_foundry_staffed_olympus_mons = { value = sr_site_foundry_value_olympus_m
 sr_site_admin_staffed_olympus_mons = { value = sr_site_admin_value_olympus_mons multiply = sr_site_staffing_olympus_mons }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_olympus_mons = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_olympus_mons multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_olympus_mons = {
@@ -3519,7 +3519,7 @@ sr_site_foundry_staffed_hellas_planitia = { value = sr_site_foundry_value_hellas
 sr_site_admin_staffed_hellas_planitia = { value = sr_site_admin_value_hellas_planitia multiply = sr_site_staffing_hellas_planitia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_hellas_planitia = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_hellas_planitia multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_hellas_planitia = {
@@ -3736,7 +3736,7 @@ sr_site_foundry_staffed_utopia_planitia = { value = sr_site_foundry_value_utopia
 sr_site_admin_staffed_utopia_planitia = { value = sr_site_admin_value_utopia_planitia multiply = sr_site_staffing_utopia_planitia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_utopia_planitia = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_utopia_planitia multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_utopia_planitia = {
@@ -3951,7 +3951,7 @@ sr_site_foundry_staffed_arcadia_planitia = { value = sr_site_foundry_value_arcad
 sr_site_admin_staffed_arcadia_planitia = { value = sr_site_admin_value_arcadia_planitia multiply = sr_site_staffing_arcadia_planitia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_arcadia_planitia = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_arcadia_planitia multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_arcadia_planitia = {
@@ -4167,7 +4167,7 @@ sr_site_foundry_staffed_ceres = { value = sr_site_foundry_value_ceres multiply =
 sr_site_admin_staffed_ceres = { value = sr_site_admin_value_ceres multiply = sr_site_staffing_ceres }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_ceres = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_ceres multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_ceres = {
@@ -4383,7 +4383,7 @@ sr_site_foundry_staffed_vesta = { value = sr_site_foundry_value_vesta multiply =
 sr_site_admin_staffed_vesta = { value = sr_site_admin_value_vesta multiply = sr_site_staffing_vesta }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_vesta = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_vesta multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_vesta = {
@@ -4599,7 +4599,7 @@ sr_site_foundry_staffed_psyche = { value = sr_site_foundry_value_psyche multiply
 sr_site_admin_staffed_psyche = { value = sr_site_admin_value_psyche multiply = sr_site_staffing_psyche }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_psyche = {
-	value = 60
+	value = 300
 	add = { value = sr_site_mine_staffed_psyche multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_psyche = {
@@ -4815,7 +4815,7 @@ sr_site_foundry_staffed_pallas = { value = sr_site_foundry_value_pallas multiply
 sr_site_admin_staffed_pallas = { value = sr_site_admin_value_pallas multiply = sr_site_staffing_pallas }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_pallas = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_pallas multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_pallas = {
@@ -5032,7 +5032,7 @@ sr_site_foundry_staffed_hygiea = { value = sr_site_foundry_value_hygiea multiply
 sr_site_admin_staffed_hygiea = { value = sr_site_admin_value_hygiea multiply = sr_site_staffing_hygiea }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_hygiea = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_hygiea multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_hygiea = {
@@ -5248,7 +5248,7 @@ sr_site_foundry_staffed_io = { value = sr_site_foundry_value_io multiply = sr_si
 sr_site_admin_staffed_io = { value = sr_site_admin_value_io multiply = sr_site_staffing_io }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_io = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_io multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_io = {
@@ -5463,7 +5463,7 @@ sr_site_foundry_staffed_europa = { value = sr_site_foundry_value_europa multiply
 sr_site_admin_staffed_europa = { value = sr_site_admin_value_europa multiply = sr_site_staffing_europa }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_europa = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_europa multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_europa = {
@@ -5678,7 +5678,7 @@ sr_site_foundry_staffed_ganymede = { value = sr_site_foundry_value_ganymede mult
 sr_site_admin_staffed_ganymede = { value = sr_site_admin_value_ganymede multiply = sr_site_staffing_ganymede }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_ganymede = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_ganymede multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_ganymede = {
@@ -5893,7 +5893,7 @@ sr_site_foundry_staffed_callisto = { value = sr_site_foundry_value_callisto mult
 sr_site_admin_staffed_callisto = { value = sr_site_admin_value_callisto multiply = sr_site_staffing_callisto }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_callisto = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_callisto multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_callisto = {
@@ -6109,7 +6109,7 @@ sr_site_foundry_staffed_himalia = { value = sr_site_foundry_value_himalia multip
 sr_site_admin_staffed_himalia = { value = sr_site_admin_value_himalia multiply = sr_site_staffing_himalia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_himalia = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_himalia multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_himalia = {
@@ -6325,7 +6325,7 @@ sr_site_foundry_staffed_amalthea = { value = sr_site_foundry_value_amalthea mult
 sr_site_admin_staffed_amalthea = { value = sr_site_admin_value_amalthea multiply = sr_site_staffing_amalthea }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_amalthea = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_amalthea multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_amalthea = {
@@ -6541,7 +6541,7 @@ sr_site_foundry_staffed_venus = { value = sr_site_foundry_value_venus multiply =
 sr_site_admin_staffed_venus = { value = sr_site_admin_value_venus multiply = sr_site_staffing_venus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_venus = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_venus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_venus = {
@@ -6758,7 +6758,7 @@ sr_site_foundry_staffed_mercury = { value = sr_site_foundry_value_mercury multip
 sr_site_admin_staffed_mercury = { value = sr_site_admin_value_mercury multiply = sr_site_staffing_mercury }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_mercury = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_mercury multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_mercury = {
@@ -6974,7 +6974,7 @@ sr_site_foundry_staffed_titan = { value = sr_site_foundry_value_titan multiply =
 sr_site_admin_staffed_titan = { value = sr_site_admin_value_titan multiply = sr_site_staffing_titan }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_titan = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_titan multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_titan = {
@@ -7190,7 +7190,7 @@ sr_site_foundry_staffed_enceladus = { value = sr_site_foundry_value_enceladus mu
 sr_site_admin_staffed_enceladus = { value = sr_site_admin_value_enceladus multiply = sr_site_staffing_enceladus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_enceladus = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_enceladus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_enceladus = {
@@ -7406,7 +7406,7 @@ sr_site_foundry_staffed_rhea = { value = sr_site_foundry_value_rhea multiply = s
 sr_site_admin_staffed_rhea = { value = sr_site_admin_value_rhea multiply = sr_site_staffing_rhea }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_rhea = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_rhea multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_rhea = {
@@ -7621,7 +7621,7 @@ sr_site_foundry_staffed_mimas = { value = sr_site_foundry_value_mimas multiply =
 sr_site_admin_staffed_mimas = { value = sr_site_admin_value_mimas multiply = sr_site_staffing_mimas }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_mimas = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_mimas multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_mimas = {
@@ -7837,7 +7837,7 @@ sr_site_foundry_staffed_iapetus = { value = sr_site_foundry_value_iapetus multip
 sr_site_admin_staffed_iapetus = { value = sr_site_admin_value_iapetus multiply = sr_site_staffing_iapetus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_iapetus = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_iapetus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_iapetus = {
@@ -8053,7 +8053,7 @@ sr_site_foundry_staffed_titania = { value = sr_site_foundry_value_titania multip
 sr_site_admin_staffed_titania = { value = sr_site_admin_value_titania multiply = sr_site_staffing_titania }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_titania = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_titania multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_titania = {
@@ -8268,7 +8268,7 @@ sr_site_foundry_staffed_oberon = { value = sr_site_foundry_value_oberon multiply
 sr_site_admin_staffed_oberon = { value = sr_site_admin_value_oberon multiply = sr_site_staffing_oberon }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_oberon = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_oberon multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_oberon = {
@@ -8483,7 +8483,7 @@ sr_site_foundry_staffed_miranda = { value = sr_site_foundry_value_miranda multip
 sr_site_admin_staffed_miranda = { value = sr_site_admin_value_miranda multiply = sr_site_staffing_miranda }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_miranda = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_miranda multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_miranda = {
@@ -8699,7 +8699,7 @@ sr_site_foundry_staffed_ariel = { value = sr_site_foundry_value_ariel multiply =
 sr_site_admin_staffed_ariel = { value = sr_site_admin_value_ariel multiply = sr_site_staffing_ariel }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_ariel = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_ariel multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_ariel = {
@@ -8915,7 +8915,7 @@ sr_site_foundry_staffed_triton = { value = sr_site_foundry_value_triton multiply
 sr_site_admin_staffed_triton = { value = sr_site_admin_value_triton multiply = sr_site_staffing_triton }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_triton = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_triton multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_triton = {
@@ -9131,7 +9131,7 @@ sr_site_foundry_staffed_proteus = { value = sr_site_foundry_value_proteus multip
 sr_site_admin_staffed_proteus = { value = sr_site_admin_value_proteus multiply = sr_site_staffing_proteus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_proteus = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_proteus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_proteus = {
@@ -9347,7 +9347,7 @@ sr_site_foundry_staffed_pluto = { value = sr_site_foundry_value_pluto multiply =
 sr_site_admin_staffed_pluto = { value = sr_site_admin_value_pluto multiply = sr_site_staffing_pluto }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_pluto = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_pluto multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_pluto = {
@@ -9563,7 +9563,7 @@ sr_site_foundry_staffed_eris = { value = sr_site_foundry_value_eris multiply = s
 sr_site_admin_staffed_eris = { value = sr_site_admin_value_eris multiply = sr_site_staffing_eris }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_eris = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_eris multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_eris = {
@@ -9778,7 +9778,7 @@ sr_site_foundry_staffed_makemake = { value = sr_site_foundry_value_makemake mult
 sr_site_admin_staffed_makemake = { value = sr_site_admin_value_makemake multiply = sr_site_staffing_makemake }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_makemake = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_makemake multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_makemake = {
@@ -9994,7 +9994,7 @@ sr_site_foundry_staffed_haumea = { value = sr_site_foundry_value_haumea multiply
 sr_site_admin_staffed_haumea = { value = sr_site_admin_value_haumea multiply = sr_site_staffing_haumea }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_haumea = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_haumea multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_haumea = {
@@ -10209,7 +10209,7 @@ sr_site_foundry_staffed_sedna = { value = sr_site_foundry_value_sedna multiply =
 sr_site_admin_staffed_sedna = { value = sr_site_admin_value_sedna multiply = sr_site_staffing_sedna }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_sedna = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_sedna multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_sedna = {
@@ -10419,7 +10419,7 @@ sr_site_foundry_staffed_shackleton = { value = sr_site_foundry_value_shackleton 
 sr_site_admin_staffed_shackleton = { value = sr_site_admin_value_shackleton multiply = sr_site_staffing_shackleton }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_shackleton = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_shackleton multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_shackleton = {
@@ -10627,7 +10627,7 @@ sr_site_foundry_staffed_peary = { value = sr_site_foundry_value_peary multiply =
 sr_site_admin_staffed_peary = { value = sr_site_admin_value_peary multiply = sr_site_staffing_peary }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_peary = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_peary multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_peary = {
@@ -10836,7 +10836,7 @@ sr_site_foundry_staffed_tranquility = { value = sr_site_foundry_value_tranquilit
 sr_site_admin_staffed_tranquility = { value = sr_site_admin_value_tranquility multiply = sr_site_staffing_tranquility }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_tranquility = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_tranquility multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_tranquility = {
@@ -11043,7 +11043,7 @@ sr_site_foundry_staffed_marius_hills = { value = sr_site_foundry_value_marius_hi
 sr_site_admin_staffed_marius_hills = { value = sr_site_admin_value_marius_hills multiply = sr_site_staffing_marius_hills }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_marius_hills = {
-	value = 25
+	value = 125
 	add = { value = sr_site_mine_staffed_marius_hills multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_marius_hills = {
@@ -11250,7 +11250,7 @@ sr_site_foundry_staffed_daedalus = { value = sr_site_foundry_value_daedalus mult
 sr_site_admin_staffed_daedalus = { value = sr_site_admin_value_daedalus multiply = sr_site_staffing_daedalus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_daedalus = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_daedalus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_daedalus = {
@@ -11459,7 +11459,7 @@ sr_site_foundry_staffed_imbrium = { value = sr_site_foundry_value_imbrium multip
 sr_site_admin_staffed_imbrium = { value = sr_site_admin_value_imbrium multiply = sr_site_staffing_imbrium }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_imbrium = {
-	value = 25
+	value = 125
 	add = { value = sr_site_mine_staffed_imbrium multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_imbrium = {

@@ -522,12 +522,12 @@ in flight.
 
 | Site | People room | Slots | Base room | Specializations |
 |---|---|---|---|---|
-| Shackleton Crater | 25,000 | 2 | 15 | Propellant Depot, Polar Outpost |
-| Peary Crater | 15,000 | 1 | 10 | Solar Power, Polar Observatory |
-| Tranquility Base | 20,000 | 2 | 20 | Heritage Site, Helium-3 Extraction |
-| Marius Hills | 40,000 | 3 | 25 | Lava Tube City, Hardened Installation |
-| Daedalus Crater | 10,000 | 1 | 10 | Radio Telescope, Deep-Space Relay |
-| Mare Imbrium | 25,000 | 2 | 25 | Mass Driver, KREEP Mining |
+| Shackleton Crater | 25,000 | 2 | 75 | Propellant Depot, Polar Outpost |
+| Peary Crater | 15,000 | 1 | 50 | Solar Power, Polar Observatory |
+| Tranquility Base | 20,000 | 2 | 100 | Heritage Site, Helium-3 Extraction |
+| Marius Hills | 40,000 | 3 | 125 | Lava Tube City, Hardened Installation |
+| Daedalus Crater | 10,000 | 1 | 50 | Radio Telescope, Deep-Space Relay |
+| Mare Imbrium | 25,000 | 2 | 125 | Mass Driver, KREEP Mining |
 
 The landing site your Moon Landing chose (Where the Eagle Shall Land) takes 25% off the
 progress of one lunar colony site, for you alone: Shackleton Crater for a Shackleton
@@ -714,7 +714,7 @@ colonies:
 
 | Facility | A staffed level gives |
 |---|---|
-| Mining Complex | +10 Extraplanetary Base room at the colony |
+| Mining Complex | +50 Extraplanetary Base room at the colony |
 | Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month |
 | Research Station | +2% research speed |
 | Cultural Center | +3% cultural pull, +1% prestige |
@@ -791,8 +791,8 @@ Spaceports or Defenses, and never pays for a module past a colony's slots.
 
 Under Simple Colonies and Full Colonies, Extraplanetary Bases need room. With
 Asteroid Mining, the near-Earth asteroids give every country room for 10 levels,
-and each colony you hold adds its own, from 10 levels on the small outer moons to 60 at 16 Psyche,
-and 10 more for each staffed level of its Mining Complexes.
+and each colony you hold adds its own, from 50 levels on the small outer moons to 300 at 16 Psyche,
+and 50 more for each staffed level of its Mining Complexes.
 Each colony's room has a base grade (Base Grade, a term you can hover in game),
 which raises or lowers the output of the levels that work it:
 

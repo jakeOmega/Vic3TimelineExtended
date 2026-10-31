@@ -102,6 +102,10 @@ colony events (slice 5).
 | `ebase_room` | Extraplanetary Base levels the world's room holds | 10 to 60 (16 Psyche); 760 in all |
 | `ebase_grade` | the throughput a level in its room gets, in percent | +30 (16 Psyche) to −45 (Sedna) |
 
+Since 2026-10-31 (owner) every world's `ebase_room` is five times the figure
+designed here, 50 to 300 (4,325 over the 40 worlds since the Moon), and a staffed
+Mining Complex level gives 50; the near-Earth room stays at 10.
+
 The grades follow scope § 8.2: the metal asteroids rich and close (Psyche
 +30, Vesta +20, Ceres +15), the Martian sites good (+10), Jupiter's big moons
 ordinary (0), Venus and Saturn's moons poor (−10 to −20), Uranus, Neptune and

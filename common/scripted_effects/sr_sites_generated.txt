@@ -37344,98 +37344,98 @@ sr_mq_move_up_from_scope = {
 # Extraplanetary Base room filled best grade first (design § 9): local_var:sr_eb_left
 # levels to place, local_var:sr_eb_sum the levels x grade so far (percent).
 sr_ebase_fill = {
-	# 16 Psyche: 60 levels and its Mining Complexes' at +30%
+	# 16 Psyche: 300 levels and its Mining Complexes' at +30%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_psyche } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 30 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# 4 Vesta: 40 levels and its Mining Complexes' at +20%
+	# 4 Vesta: 200 levels and its Mining Complexes' at +20%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_vesta } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 20 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Ceres: 40 levels and its Mining Complexes' at +15%
+	# Ceres: 200 levels and its Mining Complexes' at +15%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_ceres } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 15 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Valles Marineris: 40 levels and its Mining Complexes' at +10%
+	# Valles Marineris: 200 levels and its Mining Complexes' at +10%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_valles_marineris } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 10 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Olympus Mons: 30 levels and its Mining Complexes' at +10%
+	# Olympus Mons: 150 levels and its Mining Complexes' at +10%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_olympus_mons } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 10 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Hellas Planitia: 40 levels and its Mining Complexes' at +10%
+	# Hellas Planitia: 200 levels and its Mining Complexes' at +10%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_hellas_planitia } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 10 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Utopia Planitia: 40 levels and its Mining Complexes' at +10%
+	# Utopia Planitia: 200 levels and its Mining Complexes' at +10%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_utopia_planitia } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 10 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Arcadia Planitia: 30 levels and its Mining Complexes' at +10%
+	# Arcadia Planitia: 150 levels and its Mining Complexes' at +10%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_arcadia_planitia } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 10 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# 2 Pallas: 30 levels and its Mining Complexes' at +10%
+	# 2 Pallas: 150 levels and its Mining Complexes' at +10%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_pallas } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 10 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# 10 Hygiea: 20 levels and its Mining Complexes' at +5%
+	# 10 Hygiea: 100 levels and its Mining Complexes' at +5%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_hygiea } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 5 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Himalia: 20 levels and its Mining Complexes' at +5%
+	# Himalia: 100 levels and its Mining Complexes' at +5%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_himalia } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 5 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Mercury: 40 levels and its Mining Complexes' at +5%
+	# Mercury: 200 levels and its Mining Complexes' at +5%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_mercury } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 5 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Tranquility Base: 20 levels and its Mining Complexes' at +5%
+	# Tranquility Base: 100 levels and its Mining Complexes' at +5%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_tranquility } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = 5 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Marius Hills: 25 levels and its Mining Complexes' at +5%
+	# Marius Hills: 125 levels and its Mining Complexes' at +5%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_marius_hills } }
@@ -37448,175 +37448,175 @@ sr_ebase_fill = {
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = 10 } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Ganymede: 30 levels and its Mining Complexes' at +0%
+	# Ganymede: 150 levels and its Mining Complexes' at +0%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_ganymede } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Callisto: 30 levels and its Mining Complexes' at +0%
+	# Callisto: 150 levels and its Mining Complexes' at +0%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_callisto } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Amalthea: 10 levels and its Mining Complexes' at +0%
+	# Amalthea: 50 levels and its Mining Complexes' at +0%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_amalthea } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Shackleton Crater: 15 levels and its Mining Complexes' at +0%
+	# Shackleton Crater: 75 levels and its Mining Complexes' at +0%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_shackleton } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Peary Crater: 10 levels and its Mining Complexes' at +0%
+	# Peary Crater: 50 levels and its Mining Complexes' at +0%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_peary } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Daedalus Crater: 10 levels and its Mining Complexes' at +0%
+	# Daedalus Crater: 50 levels and its Mining Complexes' at +0%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_daedalus } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Mare Imbrium: 25 levels and its Mining Complexes' at +0%
+	# Mare Imbrium: 125 levels and its Mining Complexes' at +0%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_imbrium } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Io: 20 levels and its Mining Complexes' at -5%
+	# Io: 100 levels and its Mining Complexes' at -5%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_io } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -5 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Europa: 20 levels and its Mining Complexes' at -5%
+	# Europa: 100 levels and its Mining Complexes' at -5%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_europa } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -5 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Venus Cloud Habitat: 10 levels and its Mining Complexes' at -10%
+	# Venus Cloud Habitat: 50 levels and its Mining Complexes' at -10%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_venus } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -10 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Titan: 20 levels and its Mining Complexes' at -15%
+	# Titan: 100 levels and its Mining Complexes' at -15%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_titan } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -15 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Rhea: 20 levels and its Mining Complexes' at -15%
+	# Rhea: 100 levels and its Mining Complexes' at -15%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_rhea } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -15 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Enceladus: 15 levels and its Mining Complexes' at -20%
+	# Enceladus: 75 levels and its Mining Complexes' at -20%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_enceladus } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -20 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Mimas: 10 levels and its Mining Complexes' at -20%
+	# Mimas: 50 levels and its Mining Complexes' at -20%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_mimas } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -20 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Iapetus: 15 levels and its Mining Complexes' at -20%
+	# Iapetus: 75 levels and its Mining Complexes' at -20%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_iapetus } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -20 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Titania: 15 levels and its Mining Complexes' at -25%
+	# Titania: 75 levels and its Mining Complexes' at -25%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_titania } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -25 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Oberon: 15 levels and its Mining Complexes' at -25%
+	# Oberon: 75 levels and its Mining Complexes' at -25%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_oberon } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -25 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Miranda: 10 levels and its Mining Complexes' at -30%
+	# Miranda: 50 levels and its Mining Complexes' at -30%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_miranda } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -30 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Ariel: 10 levels and its Mining Complexes' at -30%
+	# Ariel: 50 levels and its Mining Complexes' at -30%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_ariel } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -30 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Triton: 15 levels and its Mining Complexes' at -30%
+	# Triton: 75 levels and its Mining Complexes' at -30%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_triton } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -30 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Proteus: 10 levels and its Mining Complexes' at -35%
+	# Proteus: 50 levels and its Mining Complexes' at -35%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_proteus } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -35 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Pluto-Charon: 15 levels and its Mining Complexes' at -35%
+	# Pluto-Charon: 75 levels and its Mining Complexes' at -35%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_pluto } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -35 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Eris: 10 levels and its Mining Complexes' at -40%
+	# Eris: 50 levels and its Mining Complexes' at -40%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_eris } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -40 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Makemake: 10 levels and its Mining Complexes' at -40%
+	# Makemake: 50 levels and its Mining Complexes' at -40%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_makemake } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -40 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Haumea: 10 levels and its Mining Complexes' at -40%
+	# Haumea: 50 levels and its Mining Complexes' at -40%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_haumea } }
 		set_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take multiply = -40 add = local_var:sr_eb_sum } }
 		change_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }
 	}
-	# Sedna: 10 levels and its Mining Complexes' at -45%
+	# Sedna: 50 levels and its Mining Complexes' at -45%
 	if = {
 		limit = { local_var:sr_eb_left > 0 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_blockaded_sedna } NOT = { has_global_variable = sr_site_occupier_sedna } }
 		set_local_variable = { name = sr_eb_take value = { value = local_var:sr_eb_left max = sr_site_ebase_room_sedna } }

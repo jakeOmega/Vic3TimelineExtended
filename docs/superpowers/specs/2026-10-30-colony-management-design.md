@@ -35,7 +35,9 @@ Colonies only, as those slices are; Races Only is untouched.
   and Spaceport (no Spaceport on the Moon). 84 over the 40 worlds: eleven worlds
   have 1, seventeen 2, nine 3, three 4. A hard cap.
 - **Mining (Extraplanetary Base room):** 10 to 60 levels per world (`ebase_room`),
-  865 in all, plus 10 near Earth with Asteroid Mining.
+  865 in all, plus 10 near Earth with Asteroid Mining. Since 2026-10-31 (owner)
+  five times that: 50 to 300, 4,325 in all, and a Mining Complex level +50 (§ 7);
+  near Earth still 10.
 
 Both are possible, and this design does both (§ 5): technology adds slots, and past
 its slots a world can still take modules at a rising price.

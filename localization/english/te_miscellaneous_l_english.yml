@@ -6499,7 +6499,7 @@
  sr_mod_queue_foundry_tt:0 "Queue a Materials Foundry: #v +3%#! advanced materials output a staffed level."
  sr_mod_queue_hab_tt:0 "Queue a Habitat: half of the colony's starting room again for people."
  sr_mod_queue_lab_tt:0 "Queue a Research Station: #v +2%#! research speed a staffed level."
- sr_mod_queue_mine_tt:0 "Queue a Mining Complex: #v 10#! more Extraplanetary Base room here a staffed level."
+ sr_mod_queue_mine_tt:0 "Queue a Mining Complex: #v 50#! more Extraplanetary Base room here a staffed level."
  sr_mod_queue_past_slots_tt:0 "#R Past its slots:#! this module costs more fabrication points than the last (the colony's Slots)."
  sr_mod_queue_port_tt:0 "Queue a Spaceport, a dock for our [concept_sr_space_fleet]s (Full Colonies only)."
  sr_mod_queue_resort_tt:0 "Queue an Off-World Resort: #v +3%#! tourism output a staffed level."
