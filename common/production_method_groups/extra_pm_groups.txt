@@ -687,6 +687,7 @@ REPLACE_OR_CREATE:pmg_base_te_construction_market_site = {
 		pm_te_direct_construction_reinforced_concrete
 		pm_te_direct_construction_advanced
 		pm_te_direct_construction_nanomaterial
+		pm_te_direct_construction_self_replicating
 	}
 
 }
@@ -1012,6 +1013,7 @@ REPLACE_OR_CREATE:pmg_base_building_space_mine = {
 		pm_space_mine
 		pm_space_colony_mining
 		pm_space_colony_vacation
+		pm_self_replicating_miners
 	}
 }
 REPLACE_OR_CREATE:pmg_base_building_ocean_mine = {
@@ -1379,6 +1381,7 @@ INJECT:pmg_base_building_construction_sector = {
 		pm_reinforced_concrete_buildings
 		pm_advanced_construction
 		pm_nanomaterial_buildings
+		pm_self_replicating_construction
 	}
 }
 

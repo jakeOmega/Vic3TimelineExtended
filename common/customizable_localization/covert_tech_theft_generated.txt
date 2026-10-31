@@ -932,26 +932,30 @@ covert_stolen_tech_name = {
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 232 }
-		localization_key = vulcanization
+		localization_key = von_neumann_machines
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 233 }
-		localization_key = war_propaganda
+		localization_key = vulcanization
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 234 }
-		localization_key = wargaming
+		localization_key = war_propaganda
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 235 }
-		localization_key = watertube_boiler
+		localization_key = wargaming
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 236 }
-		localization_key = wireless_internet
+		localization_key = watertube_boiler
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 237 }
+		localization_key = wireless_internet
+	}
+	text = {
+		trigger = { var:iw_stolen_last = 238 }
 		localization_key = world_wide_web
 	}
 }
