@@ -1288,3 +1288,24 @@ sr_disp_ebase_grade = {
 	value = 0
 	if = { limit = { has_variable = sr_ebase_grade } value = var:sr_ebase_grade }
 }
+# The overview's Extraplanetary Bases cell (UI pass design § 8): levels queued
+# and not yet built; the grade the next level would work at (the refresh's,
+# queued levels counted); 1 once built and queued levels pass the room; and
+# 1 once the building is ours to build (its technology).
+sr_disp_ebase_queued = {
+	value = sr_ebase_queued_levels
+	subtract = sr_ebase_levels
+	min = 0
+}
+sr_disp_ebase_next_grade = {
+	value = 0
+	if = { limit = { has_variable = sr_ebase_next_grade } value = var:sr_ebase_next_grade }
+}
+sr_disp_ebase_past = {
+	value = 0
+	if = { limit = { sr_ebase_queued_levels > sr_ebase_room_total } value = 1 }
+}
+sr_disp_ebase_shown = {
+	value = 0
+	if = { limit = { has_technology_researched = in_situ_resource_utilization } value = 1 }
+}

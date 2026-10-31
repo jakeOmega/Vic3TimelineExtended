@@ -2264,7 +2264,36 @@ def render_module_effects() -> list[str]:
             "\t\tset_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_left "
             f"multiply = {OVERFLOW_GRADE} add = local_var:sr_eb_sum }} }}",
             "\t}",
-            "}", "",
+            "}", ""]
+    # Where the next level would work (UI pass design § 8): the same room in
+    # the same order, filled with built and queued levels, so "next at" in the
+    # overview doesn't overstate while levels are queued.
+    out += ["# The grade the next Extraplanetary Base level would work at (UI pass design § 8):",
+            "# built and queued levels fill the room best grade first, as sr_ebase_fill does;",
+            "# the first room left unfilled is where the next one goes, past all of it",
+            f"# {OVERFLOW_GRADE}%. Into var:sr_ebase_next_grade, from sr_ebase_refresh.",
+            "sr_ebase_next_fill = {",
+            "\tset_local_variable = { name = sr_eb_next_left value = sr_ebase_queued_levels }",
+            "\tset_local_variable = { name = sr_eb_next_found value = 0 }",
+            f"\tset_variable = {{ name = sr_ebase_next_grade value = {OVERFLOW_GRADE} }}"]
+    for tier in ebase_tiers():
+        room = NEAR_EARTH_ROOM if tier is None else f"sr_site_ebase_room_{tier.key}"
+        grade = 0 if tier is None else tier.ebase_grade
+        name = "near-Earth" if tier is None else tier.name
+        held = f" has_technology_researched = {NEAR_EARTH_TECH}" if tier is None else f" {site_serves(tier)}"
+        out += [f"\t# {name} at {grade:+d}%",
+                "\tif = {",
+                f"\t\tlimit = {{ local_var:sr_eb_next_found = 0{held} }}",
+                "\t\tif = {",
+                f"\t\t\tlimit = {{ local_var:sr_eb_next_left >= {room} }}",
+                f"\t\t\tchange_local_variable = {{ name = sr_eb_next_left subtract = {room} }}",
+                "\t\t}",
+                "\t\telse = {",
+                f"\t\t\tset_variable = {{ name = sr_ebase_next_grade value = {grade} }}",
+                "\t\t\tset_local_variable = { name = sr_eb_next_found value = 1 }",
+                "\t\t}",
+                "\t}"]
+    out += ["}", "",
             "# Console (te_debug_space_race.4): every colony's modules, and its caps' use counting",
             "# our queue and every shipment.",
             "sr_mod_debug_log = {"]

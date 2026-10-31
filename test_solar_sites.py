@@ -1879,5 +1879,69 @@ class FreeColoniesTest(unittest.TestCase):
         self.assertEqual(solar.count('blockoverride "site_free_visible"'), len(gss.SITES))
 
 
+class EbaseCellTest(unittest.TestCase):
+    """The Extraplanetary Base cell (UI pass design § 8): where the next level
+    would work, counting queued levels, and the overview cell that shows it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        cls.modules = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
+        cls.display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
+        cls.widget = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
+
+    def test_next_fill_walks_the_tiers_with_queued_levels(self):
+        fill = _block(self.effects, "sr_ebase_next_fill")
+        self.assertIn("set_local_variable = { name = sr_eb_next_left value = sr_ebase_queued_levels }", fill)
+        # Past all of the room by default; each tier, best first, either takes its
+        # room from the levels left or is where the next level goes.
+        self.assertIn(f"set_variable = {{ name = sr_ebase_next_grade value = {gss.OVERFLOW_GRADE} }}", fill)
+        rooms = re.findall(r"local_var:sr_eb_next_left >= (\w+) \}", fill)
+        expected = [str(gss.NEAR_EARTH_ROOM) if t is None else f"sr_site_ebase_room_{t.key}" for t in gss.ebase_tiers()]
+        self.assertEqual(rooms, expected)
+        grades = re.findall(r"set_variable = \{ name = sr_ebase_next_grade value = (-?\d+) \}", fill)
+        self.assertEqual(grades[1:], [str(0 if t is None else t.ebase_grade) for t in gss.ebase_tiers()])
+        # A tier is skipped once the next level has found its place.
+        self.assertEqual(fill.count("local_var:sr_eb_next_found = 0"), len(gss.ebase_tiers()))
+
+    def test_the_refresh_sets_the_next_grade(self):
+        refresh = _block(self.modules, "sr_ebase_refresh")
+        self.assertIn("sr_ebase_next_fill = yes", refresh)
+        self.assertLess(refresh.index("sr_colonies_contested_enabled = yes"), refresh.index("sr_ebase_next_fill = yes"))
+
+    def test_the_display_values(self):
+        queued = _block(self.display, "sr_disp_ebase_queued")
+        self.assertIn("value = sr_ebase_queued_levels", queued)
+        self.assertIn("subtract = sr_ebase_levels", queued)
+        self.assertIn("min = 0", queued)
+        self.assertIn("var:sr_ebase_next_grade", _block(self.display, "sr_disp_ebase_next_grade"))
+        self.assertIn("sr_ebase_queued_levels > sr_ebase_room_total", _block(self.display, "sr_disp_ebase_past"))
+        self.assertIn("has_technology_researched = in_situ_resource_utilization", _block(self.display, "sr_disp_ebase_shown"))
+
+    def test_the_cell(self):
+        cell = re.search(r'te_banking_ov_cell = \{\s*tooltip = "je_space_race_widget_ovc_ebase_tt"', self.widget)
+        self.assertIsNotNone(cell)
+        start = self.widget.rindex("flowcontainer = {", 0, cell.start())
+        body = self.widget[cell.start():]
+        body = body[:body.index("\n\t\t\t\t\t\t}\n")]
+        self.assertIn("ScriptValue('sr_disp_ebase_shown')", self.widget[start:cell.start()])
+        self.assertIn('text = "je_space_race_widget_ovc_ebase_cap"', body)
+        for word in ("word", "word_past", "fig", "fig_plus"):
+            with self.subTest(word=word):
+                self.assertIn(f'text = "je_space_race_widget_ovc_ebase_{word}"', body)
+        self.assertIn("ScriptValue('sr_disp_ebase_past')", body)
+        self.assertIn("ScriptValue('sr_disp_ebase_next_grade')", body)
+        self.assertIn("building_space_mine.dds", body)
+        # It sits after the Modules cell, on a row of its own.
+        self.assertLess(self.widget.index('tooltip = "je_space_race_widget_ovc_modules_tt"'), cell.start())
+
+    def test_the_modules_view_shows_queued_levels(self):
+        row = self.widget.index('text = "je_space_race_widget_ebase_queued_label"')
+        opener = self.widget.rindex("te_sr_value_row = {", 0, row)
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_queued'), "
+                      "'(CFixedPoint)0' )]\"", self.widget[opener:row])
+        self.assertIn('text = "je_space_race_widget_ebase_queued_figure"', self.widget[row:row + 300])
+
+
 if __name__ == "__main__":
     unittest.main()
