@@ -283,9 +283,11 @@ though high funding still hides most of them. Capacity also gives separatism
 and coup resistance (the Intelligence Capacity modifier), growing up to a
 capacity of 125.
 
-Each operation occupies one slot. Beyond the rank and ministry slots, Mainframe
-Computers, Computer Networks, Cyber Warfare and Quantum Computing each add one,
-to a maximum of ten. You can run one operation of each type at first, and one
+Each operation fills one slot for each level of its
+[priority](#operation-phases-and-priority): one at priority 1, three at
+priority 3. Beyond the rank and ministry slots, Mainframe Computers, Computer
+Networks, Cyber Warfare and Quantum Computing each add one, to a maximum of
+ten. You can run one operation of each type at first, and one
 more of each type with Mainframe Computers, with Cyber Warfare and with a
 [Veteran](#tradecraft) agency.
 
@@ -415,13 +417,19 @@ strength.
 
 Each row also has a priority stepper from 1 to 3; hover the word Priority for
 what the current level multiplies. Priority multiplies what the operation does,
-but costs and exposure rise faster:
+but costs and exposure rise faster, and each level fills another operation slot,
+so each step up needs a free one:
 
-| Priority | Effect | Share of upkeep | Detection risk |
-|---|---|---|---|
-| 1 | ×1 | 1 | Base |
-| 2 | ×1.35 | 1.6 | +2 points |
-| 3 | ×1.6 | 2.4 | +4 points |
+| Priority | Effect | Slots | Share of upkeep | Detection risk |
+|---|---|---|---|---|
+| 1 | ×1 | 1 | 1 | Base |
+| 2 | ×1.35 | 2 | 1.6 | +2 points |
+| 3 | ×1.6 | 3 | 2.4 | +4 points |
+
+A slot spent on a second operation does more than one spent on priority, so
+priority pays when the per-type limit or the targets worth hitting run out.
+Stepping down frees the slot at once. If you lose slots, your operations keep
+their priorities, but none can rise until a slot is free again.
 
 Priority 3 needs an Established agency; a fully operational operation at
 priority 3 works at 3.2 times base strength. A click changes detection risk at

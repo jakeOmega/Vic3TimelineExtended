@@ -74,12 +74,14 @@ covert_disp_standing_floor_4_frac = {
 
 # ---- Operation slots ---------------------------------------------------------
 
-# How many slot icons the overview draws: every slot we hold, or every
-# operation running if losing a slot left more running than we hold (the
-# operations keep running; only launching is gated). At most
+# How many slot icons the overview draws: every slot we hold, or every slot
+# filled if losing a slot left more filled than we hold (the operations and
+# their priorities keep running; only launching and raising priority are
+# gated). An operation fills one slot per level of its priority
+# (covert_operation_slots_used), and the icons lit are those filled. At most
 # covert_ops_max_slot_cap, the most icons the overview has.
 covert_disp_slots_shown = {
-	value = covert_operations_active
+	value = covert_operation_slots_used
 	min = covert_operation_max_slots
 	max = covert_ops_max_slot_cap
 }

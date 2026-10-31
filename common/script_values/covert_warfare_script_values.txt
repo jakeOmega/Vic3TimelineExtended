@@ -439,11 +439,35 @@ covert_operations_active = {
 	max = 10
 }
 
+# Slots in use (2026-10-31): an operation fills one slot for each level of
+# its priority, so raising one competes with launching another. One slot per
+# pact (a pact counts before the sync gives it a container), plus each
+# container's priority above 1 (missing reads as 1). Not capped at
+# covert_ops_max_slot_cap: an agency that has lost slots can fill more than it
+# holds, and covert_operations_available_slots must then read 0.
+# Scope: country
+covert_operation_slots_used = {
+	value = covert_operations_active
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			limit = { covert_op_priority_at_least = { N = 2 } }
+			add = {
+				value = var:iw_priority
+				subtract = 1
+			}
+		}
+	}
+}
+
+# Free slots: what launching an operation (one slot, at priority 1) and each
+# step up in priority (covert_possible_priority_up) need.
 covert_operations_available_slots = {
 	value = 0
 	owner = {
 		add = covert_operation_max_slots
-		subtract = covert_operations_active
+		subtract = covert_operation_slots_used
 	}
 	min = 0
 }
@@ -674,6 +698,12 @@ covert_slots_display = {
 covert_active_display = {
 	value = 0
 	owner = { add = covert_operations_active }
+	round = yes
+}
+
+covert_slots_used_display = {
+	value = 0
+	owner = { add = covert_operation_slots_used }
 	round = yes
 }
 

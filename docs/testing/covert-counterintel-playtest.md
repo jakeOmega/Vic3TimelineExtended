@@ -116,3 +116,16 @@ those prerequisite lines. Load the Byzantium save before #1252's repair runs, or
 |---|---|---|
 | **Stranded research.** Load the Byzantium game's 2013 autosaves, where LIB and UNA research Asteroid Mining without In-Situ Resource Utilization, and run a few months. | No `You need to acquire the technology before adding progress ... covert_tech_theft_generated.txt` line in `error.log`. LIB's military espionage on BYZ steals another military technology it could research now, or ends for want of one. | The line still names a `covert_tech_grant_era_N` grant: find the thief's operation in the save (`iw_stolen_last` is the technology's number in `covert_stolen_tech_name`) and compare its `acquired_technologies` with that technology's `unlocking_technologies`. |
 | **Current research still stolen.** A country researching a technology its espionage target has. | The row's latest technology is that research, month after month, until it completes. | The prerequisite lines in `covert_tech_steal_<category>` don't hold for current research: check the generated branch against the technology's `unlocking_technologies`. |
+
+## Priority fills operation slots (2026-10-31)
+
+An operation now fills one operation slot per level of its priority (`covert_operation_slots_used`). No self-check: the
+count is a script value over `iw_ops` the way the Grand Monuments values already sum their lists. Launch two or three
+operations by hand, or with `te_debug_covert.1`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Overview.** Raise one operation to 2, then 3. | "Operation Slots: n of m in use" and the lit case files rise by one a step, on the click; the hover reads "n in use by k operations, f free". Counterintelligence's unused-slot line falls by one a step. | Icons don't move until the next month: the GUI caches the script value; nothing in script waits for the pulse. |
+| **Gate.** Fill every slot, then hover + on a row. | The button is greyed with a cross on "We have a free operation slot: each level of priority fills one more". − still works and frees a slot at once; a launch is refused for want of a free slot while they're all filled. | + stays clickable: `covert_possible_priority_up` isn't reading the live count. |
+| **Lost slots.** Drop a slot (`remove_modifier` on a slot source, or lose rank) with an operation at 3. | It stays at 3 and keeps running; + is greyed until a slot is free; nothing is stood down. | |
+| **AI.** Observer run, then switch to a great power at war with a rival. | Its overview never shows more slots in use than it holds, unless it lost slots while its operations stood higher. | |

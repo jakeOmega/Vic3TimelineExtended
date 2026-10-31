@@ -317,6 +317,59 @@ class StepperTests(unittest.TestCase):
             self.assertIn(" %s:" % key, loc, key)
 
 
+class SlotTests(unittest.TestCase):
+    """An operation fills one slot per level of its priority (2026-10-31)."""
+
+    def test_slots_used_add_each_priority_above_one_to_the_pact_count(self):
+        block = _top_level_block(_text(VALUES), "covert_operation_slots_used = {")
+        self.assertIn("value = covert_operations_active", block)
+        self.assertIn("variable = iw_ops", block)
+        self.assertIn("covert_op_priority_at_least = { N = 2 }", block)
+        self.assertRegex(block, r"add = \{\s*value = var:iw_priority\s*subtract = 1\s*\}")
+        # Not capped: an agency that lost slots must read no free slot.
+        self.assertNotIn("max =", block)
+
+    def test_free_slots_subtract_the_slots_used_not_the_operations(self):
+        block = _top_level_block(_text(VALUES), "covert_operations_available_slots = {")
+        self.assertIn("subtract = covert_operation_slots_used", block)
+        self.assertNotIn("covert_operations_active", block)
+
+    def test_a_step_up_needs_a_free_slot_and_a_step_down_does_not(self):
+        body = _text(TRIGGERS)
+        up = _top_level_block(body, "covert_possible_priority_up = {")
+        self.assertRegex(
+            up,
+            r"custom_tooltip = \{\s*text = iw_priority_needs_free_slot_tt\s*"
+            r"covert_operations_available_slots >= 1\s*\}",
+        )
+        down = _top_level_block(body, "covert_possible_priority_down = {")
+        self.assertNotIn("covert_operations_available_slots", down)
+        self.assertIn(" iw_priority_needs_free_slot_tt:", _all_loc())
+
+    def test_the_overview_counts_slots_filled(self):
+        disp = (ROOT / "common/script_values/covert_display_values.txt").read_text(encoding="utf-8-sig")
+        shown = _top_level_block(disp, "covert_disp_slots_shown = {")
+        self.assertIn("value = covert_operation_slots_used", shown)
+        used = _top_level_block(_text(VALUES), "covert_slots_used_display = {")
+        self.assertIn("add = covert_operation_slots_used", used)
+        loc = _all_loc()
+        line = next(ln for ln in loc.splitlines() if ln.startswith(" je_iw_slots_detail:"))
+        self.assertIn("covert_slots_used_display", line)
+        self.assertNotIn("covert_active_display", line)
+
+    def test_each_level_says_how_many_slots_it_fills(self):
+        loc = _all_loc().splitlines()
+        for key, needle in (
+            ("iw_priority_to_2_tt", "fills #R 2#!"),
+            ("iw_priority_to_3_tt", "fills #R 3#!"),
+            ("je_iw_op_row_priority_2", "Fills #R 2#!"),
+            ("je_iw_op_row_priority_3", "Fills #R 3#!"),
+        ):
+            line = next(ln for ln in loc if ln.startswith(" %s:" % key))
+            self.assertIn(needle, line, key)
+            self.assertIn("concept_operation_slots", line, key)
+
+
 class AITests(unittest.TestCase):
     def test_ai_steps_through_the_shared_gates(self):
         block = _top_level_block(_text(EFFECTS), "covert_ai_manage_priorities = {")
