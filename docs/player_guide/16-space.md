@@ -1047,6 +1047,13 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 | Detach | Splits half of each role into a new fleet |
 | Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
 
+Your fleets take orders only while you have a Space Command level in a state
+you control. Without one, none can leave, change posture or target, start a
+refit or be repaired, and a refit under way pauses; Space Fleets says so above
+its rows. Fleets already on their way land, and every fleet fights where it is
+at the posture it had and still takes on supply and propellant. Demolishing
+Space Command ends its upkeep, but grounds your fleets with it.
+
 A fleet in flight can be neither attacked nor recalled. It docks at Earth and at
 your colonies with a Spaceport: supply and propellant refill (at a Spaceport,
 propellant only on a site that makes it, such as Utopia Planitia, Ceres, Europa
