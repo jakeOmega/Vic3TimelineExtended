@@ -1270,9 +1270,9 @@ class ModulesTest(unittest.TestCase):
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(site.slots, range(1, 5))
-                self.assertIn(site.ebase_room, range(10, 61))
+                self.assertIn(site.ebase_room, range(50, 301))
                 self.assertIn(site.ebase_grade, range(-45, 31))
-        self.assertEqual(sum(s.ebase_room for s in gss.SITES), 865)
+        self.assertEqual(sum(s.ebase_room for s in gss.SITES), 4325)
         best = max(gss.SITES, key=lambda s: s.ebase_grade)
         self.assertEqual(best.key, "psyche")
         # The outer worlds are poorer than the inner, stage by stage on average.
@@ -1603,9 +1603,9 @@ class ModulesTest(unittest.TestCase):
         self.assertIn(f"if = {{ limit = {{ has_technology_researched = {gss.NEAR_EARTH_TECH} }} "
                       f"add = {gss.NEAR_EARTH_ROOM} }}", room)
         # Each world's room counts while it serves its holder (gss.site_serves:
-        # held, not blockaded, not occupied; slice 6): the table's, and 10 a
+        # held, not blockaded, not occupied; slice 6): the table's, and 50 a
         # staffed Mining Complex level (colony management design § 7).
-        self.assertEqual(sum(s.ebase_room for s in gss.SITES), 865)
+        self.assertEqual(sum(s.ebase_room for s in gss.SITES), 4325)
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):

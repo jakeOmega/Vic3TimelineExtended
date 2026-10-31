@@ -30,7 +30,7 @@ sr_mod_fab_rate = {
 # modifiers sr_module_<key> (space_race_modifiers.txt). The units are generated
 # (sr_mod_units_<key>, sr_sites_generated.txt).
 # Mining Complex: Extraplanetary Base room at its world.
-sr_mod_mine_room = { value = 10 }
+sr_mod_mine_room = { value = 50 }
 # Orbital Yard: module fabrication points a month, and under Full Colonies
 # Space Command strength a month (sr_sc_rate).
 sr_mod_yard_points = { value = 4 }

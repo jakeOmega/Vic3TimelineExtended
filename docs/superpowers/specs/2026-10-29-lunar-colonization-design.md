@@ -94,6 +94,8 @@ are first guesses for the balance pass (§ 11).
 
 Notes:
 
+- Base room is five times the column's since 2026-10-31 (owner): 75, 50, 100,
+  125, 50 and 125.
 - Every modifier named above is registered today. Shackleton's propellant depots
   need one new script-only boolean, `country_sr_propellant_depots_bool`
   (`common/modifier_type_definitions/`), read by `sr_launch_has_depots`.
