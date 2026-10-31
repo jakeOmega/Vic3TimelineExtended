@@ -289,10 +289,37 @@ methods' inputs per level are:
 | Antimatter Yards | 700 | 20 | 400 |
 
 So the same fleet costs more to keep under a better yard. A player not building
-switches down, and switches back up when building.
+switches down, and switches back up when building. The inputs are also
+`workforce_scaled`, per level, so upkeep grows with Space Command's size too:
+downsizing to one level after the fleet is built cuts its upkeep in proportion.
 
-**Options:**
-1. **Normalize the multiplier by the method (recommended).** Each good's upkeep
+**Recommended (owner's idea, 2026-10-31): upkeep on goods the methods don't
+change.** None of Space Command's inputs stays the same across its methods today,
+so this adds one.
+- **The maintenance line:** every yard method carries an identical maintenance
+  input of a good no method otherwise uses, in `unscaled`. Which good is the
+  owner's call; `electronic_components` reads as spare parts.
+- **Upkeep:** `sr_fleet_upkeep_goods` multiplies only that good, at
+  `multiplier = units` as now. Launch Capacity, Advanced Materials and
+  electricity drop out of upkeep.
+- **What it fixes:** upkeep stops depending on the method, so there's nothing to
+  gain by switching. It also stops depending on Space Command's levels, since
+  `unscaled` goods lines aren't multiplied by level
+  (`scripting_best_practices.md:1686-1696`).
+- **Balancing:** upkeep for a fleet of strength S is base × k × S ÷ 10 a week,
+  one figure set in one place, where k is the multiplier per unit.
+- **What stays:** a goods line still runs at the building's occupancy, so an
+  understaffed Space Command pays less; and a country with no Space Command
+  still pays nothing (the gap below).
+- **Engine work:**
+  - A mod-defined good's `goods_input_<good>_mult` needs registering
+    (`scripting_best_practices.md:292`).
+  - No method read and no refresh on a method change.
+  - A self-check line compares the line's input with base × (1 + k × units) a
+    week after the change.
+
+**The other options, kept for the record:**
+1. **Normalize the multiplier by the method.** Each good's upkeep
    multiplier is scaled so that a unit of fleet costs what it would under Orbital
    Shipyards: Launch Capacity × 500 ÷ the method's, Advanced Materials × 10 ÷ the
    method's. Electricity is dropped from upkeep, since the cheapest method uses
@@ -404,8 +431,9 @@ and adds its in-game checks to `docs/testing/solar-colonies-playtest.md`.
 
 ## 15. Open questions for the owner
 
-1. **Upkeep (§ 10):** option 1, 2 or 3; and what a fleet with no Space Command
-   should cost.
+1. **Upkeep (§ 10):** which good carries the maintenance line (the owner chose
+   the approach on 2026-10-31); and what a fleet with no Space Command should
+   cost.
 2. **Detach (§ 6):** also into an existing fleet (a general Transfer that folds
    Merge in)?
 3. **Earth alert (§ 9):** the cell and a notification, or a popup event too?
