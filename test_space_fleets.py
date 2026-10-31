@@ -1170,7 +1170,7 @@ class OrbitalSuperiorityTest(unittest.TestCase):
 
     def test_the_margin(self):
         margin = _block(_strip(_raw(FLEET_VALUES)), "sr_orbital_superiority_margin")
-        for line in ("limit = { has_variable = sr_fl_at_earth }", "value = var:sr_fl_at_earth",
+        for line in ("limit = { has_variable = sr_fl_at_earth }", "value = sr_fl_at_earth_ready",
                      "subtract = sr_loc_ai_enemy_fleets_earth", "min = sr_orbital_superiority_floor",
                      "max = 1", "min = 0"):
             with self.subTest(line=line):
@@ -1447,7 +1447,9 @@ class LunarAtEarthTest(unittest.TestCase):
         self.assertIn("sr_loc_add_present = { LOC = earth }", note)
         self.assertNotIn("posture", note)
         self.assertNotIn("posture", _block(_strip(_raw(FLEET_EFFECTS)), "sr_loc_add_present"))
-        self.assertIn("value = var:sr_fl_at_earth", _block(_strip(_raw(FLEET_VALUES)), "sr_orbital_superiority_margin"))
+        values = _strip(_raw(FLEET_VALUES))
+        self.assertIn("value = sr_fl_at_earth_ready", _block(values, "sr_orbital_superiority_margin"))
+        self.assertIn("value = var:sr_fl_at_earth", _block(values, "sr_fl_at_earth_ready"))
 
 
 class EarthAlertTest(unittest.TestCase):
@@ -1642,8 +1644,8 @@ class EarthAlertTest(unittest.TestCase):
         self.assertIn("sr_loc_hostile_inbound_strength_earth > 0", loud)
         self.assertRegex(loud, r"AND = \{\s*NOT = \{ has_variable = sr_fl_at_earth \}\s*NOT = \{ sr_earth_blockaded = yes \}\s*\}")
         self.assertRegex(loud, r"AND = \{\s*has_variable = sr_fl_at_earth\s*"
-                               r"var:sr_fl_at_earth >= sr_loc_ai_enemy_fleets_earth\s*"
-                               r"sr_earth_hostile_total > var:sr_fl_at_earth\s*\}")
+                               r"sr_fl_at_earth_ready >= sr_loc_ai_enemy_fleets_earth\s*"
+                               r"sr_earth_hostile_total > sr_fl_at_earth_ready\s*\}")
         total = _block(_strip(_raw(FLEET_VALUES)), "sr_earth_hostile_total")
         self.assertIn("value = sr_loc_hostile_inbound_strength_earth", total)
         self.assertIn("add = sr_loc_ai_enemy_fleets_earth", total)
@@ -1659,6 +1661,71 @@ class EarthAlertTest(unittest.TestCase):
     def test_the_step_runs_beside_the_blockade_notice(self):
         on = _strip(_raw(ON_ACTIONS))
         self.assertRegex(on, r"sr_earth_notice_step = yes\s*sr_earth_alert_step = yes")
+
+class ReadinessTest(unittest.TestCase):
+    """Half fire without a Space Command (owner, 2026-10-31): a country with no
+    Space Command level in a state it controls fires at half strength on
+    fleets and on colony Defences, and its fleets at Earth weigh half in
+    orbital fire support and the Earth alert. Losses, the battlestation, the
+    batteries, the panel and the AI's estimates are unchanged."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(FLEET_VALUES))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+
+    def test_the_value(self):
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_fleet_readiness_grounded"), 0.5)
+        body = _block(self.values, "sr_fleet_readiness")
+        self.assertRegex(body, r"^\s*value = 1\s*if = \{\s*limit = \{ NOT = \{ sr_sc_operational = yes \} \}\s*"
+                               r"value = sr_fleet_readiness_grounded\s*\}\s*$")
+
+    def test_both_fire_locals_take_it_beside_quality(self):
+        gather = _block(self.combat, "sr_fl_gather_at")
+        self.assertIn("set_local_variable = { name = sr_cb_f value = { value = sr_fl_$N$_fire_fleets "
+                      "multiply = sr_fleet_quality multiply = sr_fleet_readiness } }", gather)
+        target = _block(self.combat, "sr_cb_add_target")
+        self.assertRegex(target, r"name = sr_cb_fd\s*value = \{\s*value = sr_fl_\$N\$_fire_defences\s*"
+                                 r"multiply = sr_fleet_quality\s*multiply = sr_fleet_readiness\s*multiply = sr_cb_edge_\$KEY\$")
+        # Read in the fleet's owner's scope, as sr_fleet_quality is: the gather
+        # runs inside the fleet powers' walk.
+        at = _block(self.combat, "sr_combat_at")
+        self.assertRegex(at, r"every_in_global_list = \{\s*variable = sr_fleet_powers\s*limit = \{ is_country_alive = yes \}\s*"
+                             r"sr_cb_clear_\$LOC\$ = yes\s*if = \{\s*limit = \{ has_variable = sr_fl_at_\$LOC\$ \}\s*"
+                             r"sr_fl_each_slot = \{ DO = gather \}")
+
+    def test_only_the_fleets_fire_is_halved(self):
+        """The battlestation and the batteries are buildings: their fire and
+        every loss are as before."""
+        everything = self.combat + self.values + _strip(_raw(EARTH_EFFECTS)) + _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)) \
+            + _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+        self.assertEqual(everything.count("multiply = sr_fleet_readiness"), 3)
+        self.assertNotIn("sr_fleet_readiness", _block(self.values, "sr_battlestation_fire"))
+        self.assertNotIn("sr_fleet_readiness", _block(self.combat, "sr_cb_battery_gather"))
+        self.assertNotIn("sr_fleet_readiness", _strip(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt")))
+
+    def test_earth_weighs_ours_at_it(self):
+        ready = _block(self.values, "sr_fl_at_earth_ready")
+        self.assertRegex(ready, r"limit = \{ has_variable = sr_fl_at_earth \}\s*value = var:sr_fl_at_earth\s*"
+                                r"multiply = sr_fleet_readiness")
+        margin = _block(self.values, "sr_orbital_superiority_margin")
+        self.assertIn("value = sr_fl_at_earth_ready", margin)
+        self.assertNotIn("var:sr_fl_at_earth", margin)
+        loud = _block(self.triggers, "sr_earth_alert_loud")
+        # Ours only: the hostile side stays hull strength.
+        self.assertNotIn("var:sr_fl_at_earth >=", loud)
+        self.assertNotIn("> var:sr_fl_at_earth", loud)
+        self.assertEqual(loud.count("sr_fl_at_earth_ready"), 2)
+        self.assertNotIn("sr_fleet_readiness", _block(self.values, "sr_earth_hostile_total"))
+
+    def test_the_player_is_told(self):
+        loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
+        for key in ("je_space_race_widget_space_fleets_no_sc", "sr_fl_req_space_command_tt"):
+            with self.subTest(key=key):
+                line = re.search(rf'(?m)^ {key}:0 "(.*)"$', loc).group(1)
+                self.assertIn("half strength", line)
+
 
 class NoSpaceCommandTest(unittest.TestCase):
     """No Space Command, no fleet orders (UI pass design § 10): with no Space

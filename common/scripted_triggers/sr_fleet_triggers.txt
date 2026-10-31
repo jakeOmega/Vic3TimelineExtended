@@ -423,7 +423,8 @@ sr_battery_sweep_subject = {
 # have no fleet at Earth and it isn't blockaded already (a blockade has its own
 # notice, space_race_events.106, and every hostile fleet's home is Earth, so a
 # leg coming home to a blockade it already holds changes nothing); or ours at
-# Earth (sr_fl_at_earth) holds against the hostile fleets there now
+# Earth (sr_fl_at_earth, at its readiness: half without a Space Command,
+# sr_fl_at_earth_ready) holds against the hostile fleets there now
 # (sr_loc_ai_enemy_fleets_earth) but not against those and the inbound
 # together (sr_earth_hostile_total).
 sr_earth_alert_loud = {
@@ -435,8 +436,8 @@ sr_earth_alert_loud = {
 		}
 		AND = {
 			has_variable = sr_fl_at_earth
-			var:sr_fl_at_earth >= sr_loc_ai_enemy_fleets_earth
-			sr_earth_hostile_total > var:sr_fl_at_earth
+			sr_fl_at_earth_ready >= sr_loc_ai_enemy_fleets_earth
+			sr_earth_hostile_total > sr_fl_at_earth_ready
 		}
 	}
 }

@@ -1755,7 +1755,7 @@
  je_space_race_widget_solar_system_header:0 "Solar System"
  je_space_race_widget_space_fleets_empty:0 "We have no fleets. A $building_space_command$ builds the first at Earth."
  je_space_race_widget_space_fleets_header:0 "Space Fleets"
- je_space_race_widget_space_fleets_no_sc:0 "#R No $building_space_command$ in a state we control:#! our fleets can't leave, change posture or target, refit or repair. They still land, fight where they are, and refill when docked."
+ je_space_race_widget_space_fleets_no_sc:0 "#R No $building_space_command$ in a state we control:#! our fleets can't leave, change posture or target, refit or repair. They still land, fight where they are at half strength, and refill when docked."
  je_space_race_widget_ss_all:0 "All [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown"
  je_space_race_widget_ss_bases_tt:0 "#header Extraplanetary Base Room#!\nThe levels of $building_space_mine$ this site gives its holder room for, and the throughput a level in that room works at, its [concept_sr_base_grade]. A colony's Mining Complexes add #v 50#! levels a staffed level. A site that is blockaded or occupied gives none."
  je_space_race_widget_ss_filtered:0 "#v [GetPlayer.MakeScope.ScriptValue('sr_disp_ss_filtered')|0]#! of [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown"

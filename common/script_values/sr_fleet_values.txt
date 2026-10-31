@@ -192,6 +192,20 @@ sr_fleet_quality = {
 	if = { limit = { has_technology_researched = orbital_weapon_platforms } add = sr_fleet_quality_step }
 	if = { limit = { has_technology_researched = antimatter_production } add = sr_fleet_quality_step }
 }
+# Fleet readiness (owner, 2026-10-31): without a Space Command level in a state
+# it controls (sr_sc_operational), a country's fleets fire at half strength,
+# on fleets and on colony Defences alike (sr_fl_gather_at, sr_cb_add_target),
+# and weigh half at Earth in orbital fire support and the Earth alert. Their
+# losses, the battlestation, the batteries, the panel's strengths and the AI's
+# estimates don't change. Country scope.
+sr_fleet_readiness_grounded = { value = 0.5 }
+sr_fleet_readiness = {
+	value = 1
+	if = {
+		limit = { NOT = { sr_sc_operational = yes } }
+		value = sr_fleet_readiness_grounded
+	}
+}
 
 # Colony Defences (design § 7.3): strength a level, its fire factor (+25%
 # with Orbital Weapon Platforms), and the hardness integrity is measured by:
@@ -511,7 +525,8 @@ sr_battery_queued_levels = {
 
 # Orbital fire support (design § 15): the margin by which our fleets at Earth
 # outmatch the hostile fleets there, min(1, (ours - theirs) / max(theirs,
-# sr_orbital_superiority_floor)); 0 with no fleet of ours there. Every fleet at
+# sr_orbital_superiority_floor)), ours at their readiness (sr_fl_at_earth_ready:
+# half without a Space Command); 0 with no fleet of ours there. Every fleet at
 # Earth counts, whatever its posture: sr_fl_at_<loc> is posture-blind, so one
 # closing in on a lunar world counts as at Earth (lunar colonization § 8.5). The
 # multiplier of sr_orbital_superiority, so a full margin gives +10% offense
@@ -521,7 +536,7 @@ sr_orbital_superiority_margin = {
 	value = 0
 	if = {
 		limit = { has_variable = sr_fl_at_earth }
-		value = var:sr_fl_at_earth
+		value = sr_fl_at_earth_ready
 		subtract = sr_loc_ai_enemy_fleets_earth
 		divide = {
 			value = sr_loc_ai_enemy_fleets_earth
@@ -529,6 +544,19 @@ sr_orbital_superiority_margin = {
 		}
 		max = 1
 		min = 0
+	}
+}
+
+# Country scope: our fleets' strength at Earth (sr_fl_at_earth) at their
+# readiness, half without a Space Command (sr_fleet_readiness): what orbital
+# fire support and the Earth alert's loud test weigh against the hostile
+# fleets, whose strength stays as it is. 0 with none there.
+sr_fl_at_earth_ready = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_at_earth }
+		value = var:sr_fl_at_earth
+		multiply = sr_fleet_readiness
 	}
 }
 
