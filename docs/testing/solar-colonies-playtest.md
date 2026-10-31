@@ -597,3 +597,26 @@ A colony's page has the table). No script reads them.
    Research Station a silver observatory with a brass telescope, Cultural Center two gold theater masks, Training
    Ground a marine in sand-tan leaping, Nuclear Command Center a blast door with a yellow radiation sign, Defenses the
    turret. None is a speck or reads as something else.
+
+## The owner's UI pass: quick changes (2026-10-31)
+
+No post-setback cooldown, self-government at 50, the grade beside Bases, the queue in its own box, Solar System lower
+(`docs/systems/mod_systems/space_race.md` § Key Mechanics, § Colony modules and Extraplanetary Base room).
+
+1. **No Shielded state.** Force an Ambitious failure (`event te_debug_space_race.1`, option j, on a milestone set to
+   Ambitious) and answer it: the overview keeps reading Ambitious with its risk, never "Shielded", and the next month
+   rolls as usual. The console's "Clear the setback cooldown" option is gone.
+2. **An old save from inside a cooldown.** Load a save taken while a milestone read Shielded: within a month the
+   overview reads its approach again (until then a Safe or Standard one may read Ambitious), and
+   `sr_failure_cooldown` is gone from the country.
+3. **Self-government at 50.** A colony whose autonomy reaches 50 fires `space_race_events.94` (Demands
+   Self-Government), and the overview's Colonies cell names it in red from 50.
+4. **The grade beside Bases.** The Colonies section's Modules view: each colony's Bases reads its room and grade,
+   "160 (+5%)", the minus a true minus at the outer moons; a colony's page shows both in the Base Room tile. Nothing
+   elides.
+5. **The queue's box.** Queue two modules: under the base room, a "Queue (2)" heading, then a darker box with "Next
+   module in N mo" and the two places, and a gap before the colonies' rows. Fill all eight shipment slots with stock
+   in hand: it reads "slots full". With no fabrication method: "stopped", in red. The months match the stock, the
+   rate and the head's price (100, more past the colony's slots).
+6. **Solar System's place.** Solar System sits below Space Fleets (Colonies under Simple Colonies), just above How
+   Solar Colonization Works, in the journal and in the Timeline Extended window's Space Race tab.
