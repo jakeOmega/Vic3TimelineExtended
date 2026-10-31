@@ -16,7 +16,6 @@ still reaches the milestones.
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK site_dead_holder <world>: …` | once a game, the first month a world's holder is no longer alive | which guard caught the dead holder: `exists` on the stored country, or `is_country_alive = no` on a stored country that still exists. Either is fine; record which | `TE_SELF_CHECK BROKEN site_dead_holder <world>: the heir did not take it`: the transfer to the capital region's owner left the dead holder on the record | if neither guard catches it (the world stays on a dead holder, no line), store the holder's tag as well and compare tags (`c:<TAG>` and `exists`) |
 | `TE_SELF_CHECK OK/BROKEN site_receiver_entry: …` | once a game, 70 days after a country without the Moon Base and Mars Landing received a colony | it holds Solar System Colonization and the colony | it has no entry (`add_journal_entry` or the widened `possible` failed) or lost the colony | put a received colony's modifiers on the country instead of the entry for a country that cannot hold the entry (`sr_site_show_modifier` would need a country branch) |
-| `TE_SELF_CHECK OK/BROKEN ebase_on_complete country=… levels=… last_refresh=…` | once a game, the first time an Extraplanetary Base is built or gains a level after a refresh has counted levels (Space Race UI pass design § 8) | the completion hook (`space_race_events.110`, from `te_on_building_built` / `te_on_building_expanded`) sees the new level, so Base Room and the throughput modifiers refresh at once | the hook runs before the level counts, so its refresh changes nothing until the monthly pulse | drop the hook and keep the monthly refresh (a month's lag, which the owner accepted) |
 
 ## The record
 
@@ -625,16 +624,19 @@ No post-setback cooldown, self-government at 50, the grade beside Bases, the que
 ## The owner's UI pass: the Base Room cell (PR 5, 2026-10-31)
 
 The colonization overview's Base Room cell and the refresh when a base is built (UI pass design § 8;
-`docs/systems/mod_systems/space_race.md` § Colony modules and Extraplanetary Base room). Self-check `ebase_on_complete`
-above.
+`docs/systems/mod_systems/space_race.md` § Colony modules and Extraplanetary Base room).
 
 1. **The cell.** With In-Situ Resource Utilization, the overview's third row shows Base Room: our Extraplanetary Base
    levels against our room ("120 / 400"), and "next at +5%" under it. Without the technology the row is gone.
-2. **Queued levels.** Queue 20 levels: the hover counts them, the Modules view gains "Extraplanetary Base levels queued
-   +20", and "next at" moves to the grade of the room those levels would leave (counting them, not only the built
-   ones). Queue past all of our room: the figure turns red and reads "next at -75%".
-3. **On completion.** When a queued level finishes, the cell's average and "next at" change that day, not at the next
-   month (and `ebase_on_complete` reads OK in `debug.log`).
-4. **No stutter.** With the panel open and many states holding bases, scrolling the overview stays smooth (the levels,
+2. **Queued levels.** Queue 20 levels: the hover counts them at once, the Modules view gains "Extraplanetary Base levels
+   queued +20", and by the next month (or the day after a level finishes) "next at" moves to the grade of the room
+   those levels would leave (counting them, not only the built ones). Queue past all of our room: the figure turns red
+   and reads "next at -75%" at once.
+3. **On completion.** When a queued level finishes, the cell's average and "next at" change the next day, not at the
+   next month. If nothing changes until the month turns, `on_building_built` / `on_building_expanded` never reached
+   `te_on_building_*` (unverified, `scripting_best_practices.md`); fallback: drop the hook, the monthly pulse stays.
+4. **A batch stacks nothing.** Let several levels finish on one day (queue them in several states at once) and compare
+   the country's Extraplanetary Base Room modifier before and after: one copy, at the new average, not two.
+5. **No stutter.** With the panel open and many states holding bases, scrolling the overview stays smooth (the levels,
    queue and room are read live, each a loop over our buildings). Fallback if it stutters: read copies the refresh
    stores.

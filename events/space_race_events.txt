@@ -5361,9 +5361,10 @@ space_race_events.109 = {
 }
 
 # Base Room's refresh when an Extraplanetary Base is built or gains a level
-# (Space Race UI pass design § 8): fired on the owner by te_on_building_built
-# and te_on_building_expanded (extra_on_actions.txt), so the refresh's
-# multipliers resolve against the country. Hidden; the monthly pulse stays.
+# (Space Race UI pass design § 8): fired on the owner the next day, once a day,
+# by sr_ebase_hook_fire (from te_on_building_built and te_on_building_expanded,
+# extra_on_actions.txt), so the refresh's multipliers resolve against the
+# country. Hidden; the monthly pulse stays.
 space_race_events.110 = {
 	type = country_event
 	hidden = yes
@@ -5373,7 +5374,7 @@ space_race_events.110 = {
 	}
 
 	immediate = {
-		sr_ebase_hook_self_check = yes
+		if = { limit = { has_variable = sr_ebase_hook_pending } remove_variable = sr_ebase_hook_pending }
 		sr_ebase_refresh = yes
 	}
 }

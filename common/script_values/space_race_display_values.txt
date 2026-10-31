@@ -1300,6 +1300,9 @@ sr_disp_ebase_queued = {
 sr_disp_ebase_next_grade = {
 	value = 0
 	if = { limit = { has_variable = sr_ebase_next_grade } value = var:sr_ebase_next_grade }
+	# Live past all of the room, where the refresh's figure would lag a
+	# freshly queued batch (or read 0 before any refresh has run).
+	if = { limit = { sr_ebase_queued_levels >= sr_ebase_room_total } value = -75 }
 }
 sr_disp_ebase_past = {
 	value = 0

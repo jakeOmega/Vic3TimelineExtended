@@ -1903,6 +1903,21 @@ class EbaseCellTest(unittest.TestCase):
         self.assertEqual(grades[1:], [str(0 if t is None else t.ebase_grade) for t in gss.ebase_tiers()])
         # A tier is skipped once the next level has found its place.
         self.assertEqual(fill.count("local_var:sr_eb_next_found = 0"), len(gss.ebase_tiers()))
+        # Each tier, in order: counted only while held, as sr_ebase_fill counts
+        # it; a full tier takes its own room from the levels left, else the next
+        # level works there.
+        arms = fill.split("limit = { local_var:sr_eb_next_found = 0")[1:]
+        self.assertEqual(len(arms), len(gss.ebase_tiers()))
+        for tier, arm in zip(gss.ebase_tiers(), arms):
+            room = str(gss.NEAR_EARTH_ROOM) if tier is None else f"sr_site_ebase_room_{tier.key}"
+            held = (f"has_technology_researched = {gss.NEAR_EARTH_TECH}" if tier is None else gss.site_serves(tier))
+            grade = 0 if tier is None else tier.ebase_grade
+            with self.subTest(tier="near-Earth" if tier is None else tier.key):
+                self.assertTrue(arm.startswith(f" {held} }}"), arm[:120])
+                self.assertRegex(arm, rf"limit = \{{ local_var:sr_eb_next_left >= {re.escape(room)} \}}\s*"
+                                      rf"change_local_variable = \{{ name = sr_eb_next_left subtract = {re.escape(room)} \}}")
+                self.assertRegex(arm, rf"else = \{{\s*set_variable = \{{ name = sr_ebase_next_grade value = {grade} \}}\s*"
+                                      r"set_local_variable = \{ name = sr_eb_next_found value = 1 \}")
 
     def test_the_refresh_sets_the_next_grade(self):
         refresh = _block(self.modules, "sr_ebase_refresh")
@@ -1914,7 +1929,12 @@ class EbaseCellTest(unittest.TestCase):
         self.assertIn("value = sr_ebase_queued_levels", queued)
         self.assertIn("subtract = sr_ebase_levels", queued)
         self.assertIn("min = 0", queued)
-        self.assertIn("var:sr_ebase_next_grade", _block(self.display, "sr_disp_ebase_next_grade"))
+        next_grade = _block(self.display, "sr_disp_ebase_next_grade")
+        self.assertIn("var:sr_ebase_next_grade", next_grade)
+        # Past all of the room it reads the overflow grade live, after the record.
+        live = f"if = {{ limit = {{ sr_ebase_queued_levels >= sr_ebase_room_total }} value = {gss.OVERFLOW_GRADE} }}"
+        self.assertIn(live, next_grade)
+        self.assertLess(next_grade.index("var:sr_ebase_next_grade"), next_grade.index(live))
         self.assertIn("sr_ebase_queued_levels > sr_ebase_room_total", _block(self.display, "sr_disp_ebase_past"))
         self.assertIn("has_technology_researched = in_situ_resource_utilization", _block(self.display, "sr_disp_ebase_shown"))
 
@@ -1932,8 +1952,18 @@ class EbaseCellTest(unittest.TestCase):
         self.assertIn("ScriptValue('sr_disp_ebase_past')", body)
         self.assertIn("ScriptValue('sr_disp_ebase_next_grade')", body)
         self.assertIn("building_space_mine.dds", body)
-        # It sits after the Modules cell, on a row of its own.
+        # It sits after the Modules cell, on a row of its own, in the grid that
+        # shows under Simple and Full Colonies only.
         self.assertLess(self.widget.index('tooltip = "je_space_race_widget_ovc_modules_tt"'), cell.start())
+        grid = self.widget.rindex("ScriptValue('sr_disp_colonies_contested')", 0, cell.start())
+        opener = self.widget.rindex("flowcontainer = {", 0, grid)
+        depth, i = 0, opener + len("flowcontainer = ")
+        while True:
+            depth += {"{": 1, "}": -1}.get(self.widget[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        self.assertGreater(i, cell.end(), "the cell is outside the Simple and Full Colonies grid")
 
     def test_the_modules_view_shows_queued_levels(self):
         row = self.widget.index('text = "je_space_race_widget_ebase_queued_label"')
@@ -1963,7 +1993,16 @@ class EbaseRefreshTest(unittest.TestCase):
                 self.assertNotIn("effect", hook)   # never an effect on a vanilla on_action
                 body = _block(self.on_actions, ours)
                 arm = body[body.index("is_building_type = building_space_mine"):]
-                self.assertIn("owner = { trigger_event = { id = space_race_events.110 } }", arm)
+                self.assertIn("owner = { sr_ebase_hook_fire = yes }", arm)
+                self.assertNotIn("space_race_events.110", body)
+
+    def test_one_event_a_day_the_next_day(self):
+        """However many levels finish on one day, the refresh runs once, the
+        next day: a second same-day run of its remove-and-add might stack."""
+        fire = _block(self.modules, "sr_ebase_hook_fire")
+        self.assertRegex(fire, r"limit = \{ NOT = \{ has_variable = sr_ebase_hook_pending \} \}\s*"
+                               r"set_variable = \{ name = sr_ebase_hook_pending value = yes days = 2 \}\s*"
+                               r"trigger_event = \{ id = space_race_events\.110 days = 1 \}")
 
     def test_the_event_is_hidden_and_refreshes(self):
         event = _block(self.events, "space_race_events.110")
@@ -1971,16 +2010,7 @@ class EbaseRefreshTest(unittest.TestCase):
         self.assertIn("hidden = yes", event)
         immediate = _block(event, "immediate")
         self.assertIn("sr_ebase_refresh = yes", immediate)
-        self.assertLess(immediate.index("sr_ebase_hook_self_check = yes"), immediate.index("sr_ebase_refresh = yes"))
-
-    def test_the_self_check(self):
-        check = _block(self.modules, "sr_ebase_hook_self_check")
-        self.assertIn("NOT = { has_global_variable = sr_ebase_hook_checked }", check)
-        self.assertIn("has_variable = sr_ebase_levels_seen", check)
-        self.assertIn("TE_SELF_CHECK OK ebase_on_complete", check)
-        self.assertIn("TE_SELF_CHECK BROKEN ebase_on_complete", check)
-        self.assertIn("set_variable = { name = sr_ebase_levels_seen value = local_var:sr_eb_levels }",
-                      _block(self.modules, "sr_ebase_refresh"))
+        self.assertLess(immediate.index("remove_variable = sr_ebase_hook_pending"), immediate.index("sr_ebase_refresh = yes"))
 
 
 if __name__ == "__main__":

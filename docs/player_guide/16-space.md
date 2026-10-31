@@ -825,7 +825,9 @@ all your levels, so only the levels past the room pay the penalty: with room for
 without lowering what your levels already earn, and taking a rival's Psyche
 colony raises your average and lowers theirs. The overview's Base Room cell
 shows your levels against your room and the grade the next level would work at,
-counting the levels you have queued. The Colonies section's Modules view shows
+counting the levels you have queued; that grade updates monthly and the day after
+a level finishes, except that it reads −75% at once when your queue passes all
+of your room. The Colonies section's Modules view shows
 your levels against your room, any queued, and each colony's Bases figure its
 own room and grade. Private investors don't build past your room,
 and AI governments don't either; your government can, at the penalty. Under

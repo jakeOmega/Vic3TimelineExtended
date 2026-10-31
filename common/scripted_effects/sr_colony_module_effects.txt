@@ -389,8 +389,6 @@ sr_ebase_refresh = {
 		set_local_variable = { name = sr_eb_left value = local_var:sr_eb_levels }
 		set_local_variable = { name = sr_eb_sum value = 0 }
 		sr_ebase_fill = yes
-		# The levels this refresh counted, for the completion hook's self-check.
-		set_variable = { name = sr_ebase_levels_seen value = local_var:sr_eb_levels }
 		# Where the next level would work, counting queued levels (UI pass
 		# design § 8): the overview's Extraplanetary Bases cell.
 		sr_ebase_next_fill = yes
@@ -424,32 +422,22 @@ sr_ebase_refresh = {
 	}
 }
 
-# ---- Self-checks (design § 12) -----------------------------------------------------------
-# Country scope, from space_race_events.110 before its refresh. TE_SELF_CHECK
-# ebase_on_complete (Space Race UI pass design § 8): when an Extraplanetary
-# Base is built or expanded, the hook's refresh must already see the new level,
-# or it changes nothing until the monthly pulse. OK when our levels exceed the
-# ones the last refresh counted (var:sr_ebase_levels_seen); skipped until a
-# refresh has counted any, so a first base can't pass on an empty record. Once
-# a game.
-sr_ebase_hook_self_check = {
+# Country scope, the owner of an Extraplanetary Base just built or expanded
+# (te_on_building_built, te_on_building_expanded): Base Room's refresh the next
+# day (space_race_events.110), when the new level surely counts. One event a
+# day however many levels finish: each refresh removes and re-adds its
+# modifier, and whether a second same-day run's has_modifier sees the first's
+# add is unverified, so a batch must not run it twice. The marker lapses in
+# two days if the event never fires.
+sr_ebase_hook_fire = {
 	if = {
-		limit = {
-			NOT = { has_global_variable = sr_ebase_hook_checked }
-			has_variable = sr_ebase_levels_seen
-			sr_colonies_contested_enabled = yes
-		}
-		set_global_variable = { name = sr_ebase_hook_checked value = yes }
-		if = {
-			limit = { sr_ebase_levels > var:sr_ebase_levels_seen }
-			debug_log = "TE_SELF_CHECK OK ebase_on_complete country=[THIS.GetCountry.GetTagName] levels=[THIS.ScriptValue('sr_ebase_levels')|0] last_refresh=[THIS.Var('sr_ebase_levels_seen').GetValue|0] (an Extraplanetary Base's completion hook sees its new level) date=[TimeKeeper.GetCurrentDate.GetString]"
-		}
-		else = {
-			debug_log = "TE_SELF_CHECK BROKEN ebase_on_complete country=[THIS.GetCountry.GetTagName] levels=[THIS.ScriptValue('sr_ebase_levels')|0] last_refresh=[THIS.Var('sr_ebase_levels_seen').GetValue|0] (the completion hook ran before the new level counted, so its refresh changes nothing until the monthly pulse; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
-		}
+		limit = { NOT = { has_variable = sr_ebase_hook_pending } }
+		set_variable = { name = sr_ebase_hook_pending value = yes days = 2 }
+		trigger_event = { id = space_race_events.110 days = 1 }
 	}
 }
 
+# ---- Self-checks (design § 12) -----------------------------------------------------------
 # Country scope, from sr_mod_month. TE_SELF_CHECK module_fabrication: a Space
 # Program that runs a fabrication method at half staff or more must give its
 # country points. Armed on the first such country, the verdict a month later

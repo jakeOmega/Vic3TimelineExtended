@@ -655,7 +655,7 @@ te_on_building_built = {
 				is_building_type = building_space_mine
 				exists = owner
 			}
-			owner = { trigger_event = { id = space_race_events.110 } }
+			owner = { sr_ebase_hook_fire = yes }
 		}
 	}
 }
@@ -666,7 +666,7 @@ te_on_building_expanded = {
 				is_building_type = building_space_mine
 				exists = owner
 			}
-			owner = { trigger_event = { id = space_race_events.110 } }
+			owner = { sr_ebase_hook_fire = yes }
 		}
 	}
 }
