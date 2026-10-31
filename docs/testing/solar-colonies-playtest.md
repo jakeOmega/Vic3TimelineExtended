@@ -207,14 +207,13 @@ it departs). Everything here needs the Space Race rule at Full Colonies; under S
 it shows. The console is `event te_debug_space_race.6` (log our fleets and every location's forces; 100 strength of
 each role at Earth; land our fleets now; fill propellant and supply; our fleets' drive one up; our first colony's
 integrity to 0; this month's combat now; occupy our first colony by our strongest enemy, or return it; the two upkeep
-probes). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC`, `TE_SR_COMBAT` and `TE_SR_PROBE`.
+probes). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC` and `TE_SR_COMBAT`.
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN ship_construction country=… rate=…` | once a game, a month after a Space Command first runs at half staff or more in a state its owner controls | `sr_sc_rate`, the sum of `modifier:state_sr_ship_construction_add` over the states its owner controls, reads above 0: a production method's workforce-scaled `state_modifiers` reach the state | it reads 0 | compute the rate in script, level × occupancy × the method's rate by `has_active_production_method`, and state the rates in the methods' descriptions |
-| `TE_SELF_CHECK OK/BROKEN fleet_upkeep_line country=… units=… robotics_mult=… want=…` | once a game, the month after a Space Command first carries the upkeep with units above 0 (Space Race UI pass design § 10) | the building's Robotics input multiplier is 9 × the units: `sr_fleet_upkeep_goods`'s newly registered mults reach the building's unscaled maintenance line | it reads 0 (unregistered, or not on the building) or another figure (other lines reach the building's Robotics input) | for 0, check `goods_input_robotics_mult` with `/modifier-search`; for another figure, read the building's input tooltip and compare the six goods' lines |
+| `TE_SELF_CHECK OK/BROKEN fleet_upkeep_line country=… per_building=… robotics_mult=… telephones_mult=… software_mult=… want=…` | once a game, the month after a Space Command first carries the upkeep with units above 0 (Space Race UI pass design § 10) | the building's Robotics, Wired Telecommunication Gear and Software input multipliers are each 9 × its units: the newly registered mults reach the building (that they multiply the unscaled line is item 2's tooltip read) | one reads 0 (unregistered, or not on the building) or another figure (other lines reach that input) | for 0, check the `goods_input_<good>_mult` with `/modifier-search`; for another figure, read the building's input tooltip and compare the six goods' lines |
 | `TE_SELF_CHECK OK/BROKEN fleet_leg location=… drive=… leg=… flown=…` | OK once a game, on the first fleet that lands in its month; BROKEN once, if any fleet lands two or more months late | `flown` equals `leg`, the months `docs/engine/launch_windows_report.md` gives that leg and drive | the global monthly step missed an arrival | land fleets from the country pulse as well |
-| `TE_SR_PROBE upkeep_inputs candidate=… before=… after=…` | console options k and l, fourteen days apart | see the probe below | | |
 
 **What checks itself, and what needs a hand.**
 
@@ -224,20 +223,10 @@ probes). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC`, 
   space power in an observer run, or you.
 - **Logged after one action:**
   - `fleet_leg` logs on the first fleet that lands, so send one (AI fleets seldom leave Earth outside a war).
-  - The probe needs console options k and l, and a read of the input tooltip.
   - `TE_SR_FLEET` and `TE_SR_LOC` are console option a's.
   - `TE_SR_COMBAT` lines log every occupation, liberation, seizure and destruction as it happens.
 - **Set up by hand and read by eye:** steps 1 to 22 below. Console option b gives a fleet, h and i force an assault
   and a month's combat, and j an occupation, which shortens most of them.
-
-**The upkeep probe (open call, owner).** The fleets' upkeep ships as `sr_fleet_upkeep_goods`, the three good-specific
-input multipliers (Launch Capacity, Advanced Materials, electricity), which the mod already uses. The design prefers
-`sr_fleet_upkeep`, the generic `building_goods_input_mult`, which follows any change to the methods, but the owner
-recalls trouble with it. With a Space Command (or, before one, a Space Program) built: option k, wait fourteen days,
-read the Space Command's input tooltip and the two `TE_SR_PROBE` lines (the market's Launch Capacity buy orders before
-and after; a jump of about half the building's bill means the candidate worked). Then option l and the same. If the
-generic one raises every input, switch `sr_fl_upkeep_apply` to `sr_fleet_upkeep` and record the answer in
-`docs/guides/scripting_best_practices.md`.
 
 1. **The rule.** Under Simple Colonies, no Space Command building, no Space Command, Fleets or Colony Defences
    sections, no Survey Colony Defences operation, and `.94`'s Send a garrison works as slice 5 built it. Switch to Full.
@@ -631,11 +620,15 @@ The maintenance line and no fleet orders without a Space Command (UI pass design
    Telecommunication Gear, 10 Software, 20 Industrial Robotics and 40 Chemicals at full staff, under every yard method,
    and the same at one level as at four. With no fleet, nothing more.
 2. **The upkeep.** With a fleet of 100 strength at full (10 units), each of the six reads +9,000% on the building
-   (Fleet Upkeep), and the panel's Upkeep reads +9000%. Launch Capacity, Advanced Materials and electricity show no
-   Fleet Upkeep line. Switching the yards to Orbital Shipyards changes none of the six.
+   (Fleet Upkeep), and the panel's Upkeep reads +9000%. At full staff Industrial Robotics reads 1,820 a week (20 ×
+   91): the unscaled line takes the multiplier. Launch Capacity, Advanced Materials and electricity show no Fleet Upkeep
+   line. Switching the yards to Orbital Shipyards changes none of the six.
 3. **No Space Command.** Demolish Space Command with a fleet at Earth: Space Fleets' red note shows; Go, the posture
    button and the target button are greyed, each saying why; a refit under way stops counting down and resumes when a
    Space Command is built again; a damaged fleet isn't repaired, but its supply and propellant refill. A fleet in
    flight lands. An AI at war without one sends no fleets.
-4. **Occupation.** With Space Command's state occupied, the same as 3.
+4. **Occupation.** With Space Command's state occupied, the same as 3. (Unasked: the occupied building still pays its
+   line and the upkeep while its staff work.)
+5. **Two Space Commands.** Annex or form a country holding a second one: each building's Fleet Upkeep reads half (at
+   10 units, +4,500%), and the panel's Upkeep still +9000%. Demolish one: the other carries it all the next month.
 

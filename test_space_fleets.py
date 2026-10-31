@@ -235,6 +235,64 @@ class OccupiedStateTest(unittest.TestCase):
         self.assertIn("sr_state_held_by_owner = yes", _block(_strip(_raw(FLEET_TRIGGERS)), "sr_battlestation_held"))
 
 
+def _enclosing_limits(text, i):
+    """The limit = { } of every block enclosing position i, innermost first."""
+    stack = []
+    for j, ch in enumerate(text[:i]):
+        if ch == "{":
+            stack.append(j)
+        elif ch == "}" and stack:
+            stack.pop()
+    limits = []
+    for j in reversed(stack):
+        body = text[j + 1:].lstrip()
+        if body.startswith("limit = {"):
+            depth = 0
+            for k, ch in enumerate(body):
+                depth += ch == "{"
+                depth -= ch == "}"
+                if ch == "}" and depth == 0:
+                    limits.append(body[:k + 1])
+                    break
+    return limits
+
+
+def _block_around(text, i, up):
+    """The block `up` levels out from position i (1: the innermost), braces included."""
+    stack = []
+    for j, ch in enumerate(text[:i]):
+        if ch == "{":
+            stack.append(j)
+        elif ch == "}" and stack:
+            stack.pop()
+    start, depth = stack[-up], 0
+    for k in range(start, len(text)):
+        depth += text[k] == "{"
+        depth -= text[k] == "}"
+        if depth == 0:
+            return text[start:k + 1]
+    return text[start:]
+
+
+def _top_block(text, i):
+    """The outermost { } block around position i, braces included."""
+    depth, start = 0, None
+    for j, ch in enumerate(text[:i]):
+        if ch == "{":
+            if depth == 0:
+                start = j
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+    depth = 0
+    for k in range(start, len(text)):
+        depth += text[k] == "{"
+        depth -= text[k] == "}"
+        if depth == 0:
+            return text[start:k + 1]
+    return text[start:]
+
+
 class UpkeepTest(unittest.TestCase):
     """The fleets' upkeep (UI pass design § 10): an identical unscaled
     maintenance line of six goods no method otherwise uses, on every yard
@@ -256,6 +314,10 @@ class UpkeepTest(unittest.TestCase):
             with self.subTest(method=name):
                 m = re.search(r"(?m)^\s*unscaled = \{", body)
                 self.assertIsNotNone(m, "no unscaled block")
+                # The line is a building modifier of the method's.
+                bm = body.index("building_modifiers = {") + len("building_modifiers = {")
+                block = _top_block(body, bm)
+                self.assertTrue(bm - 1 < m.start() < bm - 1 + len(block), "the line isn't in building_modifiers")
                 unscaled = _block(body[m.start():].lstrip(), "unscaled")
                 line = {g: int(v) for g, v in re.findall(r"goods_input_(\w+)_add = (\d+)", unscaled)}
                 self.assertEqual(line, self.LINE)
@@ -266,6 +328,9 @@ class UpkeepTest(unittest.TestCase):
         upkeep = _block(_raw(STATIC), "sr_fleet_upkeep_goods")
         mults = {g: v for g, v in re.findall(r"goods_input_(\w+)_mult = (\S+)", upkeep)}
         self.assertEqual(mults, {g: str(self.K) for g in self.LINE})
+        # Nothing else in it: the generic input multiplier would follow the method.
+        self.assertEqual(re.findall(r"(\w+) = ", upkeep), ["icon", *[f"goods_input_{g}_mult" for g in self.LINE]])
+        self.assertNotRegex(_raw(STATIC), r"(?m)^sr_fleet_upkeep = \{")
 
     def test_every_mult_and_add_is_registered(self):
         """A mod good's goods_input_<good>_mult is silently inert unregistered
@@ -282,8 +347,33 @@ class UpkeepTest(unittest.TestCase):
         apply = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_apply")
         self.assertIn("is_building_type = building_space_command", apply)
         self.assertLess(apply.index("remove_modifier = sr_fleet_upkeep_goods"), apply.index("add_modifier"))
+        self.assertRegex(apply, r"limit = \{\s*level >= 1\s*root\.var:sr_fleet_upkeep_per_building > 0\s*\}\s*"
+                                r"add_modifier = \{ name = sr_fleet_upkeep_goods multiplier = root\.var:sr_fleet_upkeep_per_building \}")
         calls = re.findall(r"sr_fl_upkeep_apply = yes", _strip(_raw(FLEET_EFFECTS)))
         self.assertEqual(len(calls), 1)
+        refreshes = re.findall(r"sr_fl_upkeep_refresh = yes", _strip(_raw(FLEET_EFFECTS)) + _strip(_raw(DEBUG_EVENTS)))
+        self.assertEqual(len(refreshes), 1)
+
+    def test_a_second_building_doesn_t_charge_twice(self):
+        """I1 (PR 7 task review): the units are split between the Space
+        Command buildings of a level or more, so the fleets pay once."""
+        values = _strip(_raw(FLEET_VALUES))
+        count = _block(values, "sr_sc_buildings")
+        self.assertRegex(count, r"every_scope_state = \{\s*every_scope_building = \{\s*limit = \{\s*"
+                                r"is_building_type = building_space_command\s*level >= 1\s*\}\s*add = 1")
+        per = _block(values, "sr_fleet_upkeep_per_building_value")
+        self.assertRegex(per, r"value = sr_fleet_upkeep_units_value\s*if = \{\s*limit = \{ sr_sc_buildings > 1 \}\s*"
+                              r"divide = sr_sc_buildings\s*\}")
+        refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
+        self.assertRegex(refresh, r"set_variable = \{ name = sr_fleet_upkeep_per_building value = sr_fleet_upkeep_per_building_value \}\s*"
+                                  r"sr_fl_upkeep_apply = yes")
+
+    def test_the_upkeep_probe_is_retired(self):
+        """§ 10's fixed line answered the 6a upkeep_inputs probe's question."""
+        texts = _strip(_raw(FLEET_EFFECTS)) + _strip(_raw(FLEET_VALUES)) + _strip(_raw(DEBUG_EVENTS))
+        for name in ("sr_fl_probe", "te_debug_space_race.7", "te_debug_space_race.6.k", "te_debug_space_race.6.l"):
+            with self.subTest(name=name):
+                self.assertNotIn(name, texts)
 
     def test_the_self_check_reads_last_month_s_apply(self):
         refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
@@ -291,10 +381,16 @@ class UpkeepTest(unittest.TestCase):
                         refresh.index("set_variable = { name = sr_fleet_upkeep_units"))
         check = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_self_check")
         self.assertIn("NOT = { has_global_variable = sr_fl_upkeep_line_checked }", check)
-        self.assertIn("var:sr_fleet_upkeep_units > 0", check)
+        self.assertIn("var:sr_fleet_upkeep_per_building > 0", check)
         self.assertIn("has_modifier = sr_fleet_upkeep_goods", check)
-        self.assertIn("prev.modifier:goods_input_robotics_mult", check)
-        self.assertIn(f"multiply = {self.K}", check)
+        # The three axes registered for the line, each against 9 x the building's units.
+        for good, var in (("robotics", "sr_fl_upkeep_line_read"), ("telephones", "sr_fl_upkeep_line_read_tel"),
+                          ("digital_assets", "sr_fl_upkeep_line_read_sw")):
+            with self.subTest(good=good):
+                self.assertIn(f"set_variable = {{ name = {var} value = prev.modifier:goods_input_{good}_mult }}", check)
+                self.assertIn(f"var:{var} > {{ value = var:sr_fl_upkeep_line_want subtract = 0.01 }}", check)
+                self.assertIn(f"var:{var} < {{ value = var:sr_fl_upkeep_line_want add = 0.01 }}", check)
+        self.assertRegex(check, rf"value = var:sr_fleet_upkeep_per_building\s*multiply = {self.K}")
         self.assertIn("TE_SELF_CHECK OK fleet_upkeep_line", check)
         self.assertIn("TE_SELF_CHECK BROKEN fleet_upkeep_line", check)
 
@@ -1131,8 +1227,43 @@ class NoSpaceCommandTest(unittest.TestCase):
 
     def test_operational_needs_a_held_level(self):
         body = _block(self.triggers, "sr_sc_operational")
-        self.assertRegex(body, r"any_scope_state = \{\s*sr_state_held_by_owner = yes\s*any_scope_building = \{\s*"
-                               r"is_building_type = building_space_command\s*level >= 1\s*\}\s*\}")
+        self.assertRegex(body, r"has_building = building_space_command\s*"
+                               r"any_scope_state = \{\s*sr_state_held_by_owner = yes\s*has_building = building_space_command\s*"
+                               r"any_scope_building = \{\s*is_building_type = building_space_command\s*level >= 1\s*\}\s*\}")
+
+    def test_every_dispatch_is_behind_a_may_depart(self):
+        """Every departure goes through sr_fl_<n>_may_depart_<loc>, which
+        carries the gate: the player's Go, the AI's moves and the recall,
+        directly or through a generated trigger. The AI's picks test it in the
+        pass that chooses the slot (sr_fl_n), in the block around the dispatch."""
+        triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+
+        def gated(lim, n, loc):
+            gate = f"sr_fl_{n}_may_depart_{loc} = yes"
+            if gate in lim:
+                return True
+            return any(gate in _block(triggers, name)
+                       for name in re.findall(rf"\b(sr_fl_{re.escape(n)}_\w+) = yes", lim)
+                       if re.search(rf"(?m)^{name} = \{{", triggers))
+
+        sites = 0
+        for path in (FLEET_EFFECTS, COMBAT_EFFECTS, gsf.ROOT / gsf.EFFECTS_OUT):
+            text = _strip(_raw(path))
+            for m in re.finditer(r"(?m)^[\t ]+sr_fl_dispatch = \{ N = (\S+) LOC = (\w+)", text):
+                sites += 1
+                n, loc = m.group(1), m.group(2)
+                with self.subTest(path=path.name, slot=n, loc=loc, at=m.start()):
+                    limits = _enclosing_limits(text, m.start())
+                    if any(gated(lim, n, loc) for lim in limits):
+                        continue
+                    picked = re.search(r"local_var:sr_fl_n = (\d+)", limits[0] if limits else "")
+                    self.assertTrue(picked and picked.group(1) == n, "no may_depart around it")
+                    around = _block_around(text, m.start(), 2)
+                    picks = [p.start() for p in re.finditer(rf"set_local_variable = \{{ name = sr_fl_n value = {n} \}}", around)]
+                    self.assertTrue(picks)
+                    for at in picks:
+                        self.assertTrue(any(gated(lim, n, loc) for lim in _enclosing_limits(around, at)))
+        self.assertGreater(sites, 200)
 
     def test_every_may_depart_needs_it(self):
         for n in range(1, gsf.SLOTS + 1):
@@ -1172,8 +1303,9 @@ class NoSpaceCommandTest(unittest.TestCase):
                      "set_variable = { name = sr_fl_$N$_supply value = sr_fl_$N$_endurance }"):
             with self.subTest(line=line):
                 i = month.index(line)
-                # not inside a block that tests sr_sc_operational
-                self.assertNotIn("sr_sc_operational", month[month.rindex("limit", 0, i):i])
+                # no enclosing block tests sr_sc_operational
+                for lim in _enclosing_limits(month, i):
+                    self.assertNotIn("sr_sc_operational", lim)
 
     def test_the_ai_s_voluntary_orders_need_it(self):
         """The lunar assault and the offensive set postures directly; the

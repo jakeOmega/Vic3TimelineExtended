@@ -363,10 +363,9 @@ sr_dome_breach_repairs = {
 # (Space Race UI pass design § 10, owner, 2026-10-31: ten times the old +1% of
 # every method input, the factor of ten in the line's base so the tooltip reads
 # +900% a unit). Six goods, so one shortage or glut can't make it very cheap or
-# very dear. sr_fleet_upkeep, the generic building_goods_input_mult, would now
-# raise the methods' own inputs too; it stays only for the upkeep_inputs probe
-# (te_debug_space_race.6). test_space_fleets.py keeps the goods in step with
-# the line.
+# very dear. With two Space Command buildings or more each carries it at its
+# share of the units (sr_fleet_upkeep_per_building). test_space_fleets.py keeps
+# the goods in step with the line.
 sr_fleet_upkeep_goods = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	goods_input_electronic_components_mult = 9
@@ -375,10 +374,6 @@ sr_fleet_upkeep_goods = {
 	goods_input_digital_assets_mult = 9
 	goods_input_robotics_mult = 9
 	goods_input_fertilizer_mult = 9
-}
-sr_fleet_upkeep = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_goods_input_mult = 0.01
 }
 
 # Orbital fire support (fleets design § 15, 6d): at war, a country whose

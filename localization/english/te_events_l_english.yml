@@ -5974,8 +5974,6 @@
  te_debug_space_race.6.h:0 "Our first colony's integrity to 0"
  te_debug_space_race.6.i:0 "Run this month's combat now"
  te_debug_space_race.6.j:0 "Occupy our first colony by our strongest enemy, or return it"
- te_debug_space_race.6.k:0 "Upkeep probe: the generic input multiplier at +50% (14 days)"
- te_debug_space_race.6.l:0 "Upkeep probe: the three good-specific input multipliers at +50% (14 days)"
  te_debug_space_race.6.m:0 "6c: our first fleet that may interdict begins an interdiction (at its price)"
  te_debug_space_race.6.n:0 "6d: add 100 strength of each role to our ground reserve"
  te_debug_space_race.6.o:0 "6d: our strongest enemy puts a fleet of 100 of each role at Earth (a blockade if none of ours is there)"

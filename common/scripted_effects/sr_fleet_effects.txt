@@ -463,38 +463,40 @@ sr_sc_month = {
 	sr_reserve_auto_step = yes
 }
 
-# Country scope, the fleets' month: the upkeep's one refresh site (design § 5).
-# Space Command's input goods rise 1% a 10 points of fleet strength at full:
-# a modifier on each Space Command building, removed first, at
-# root.var:sr_fleet_upkeep_units (buildings have no variables, so the
-# multiplier is read through ROOT, the country, as resettlement's readouts
-# are). Never on the country: the goods' input multipliers are building-masked
-# and would raise every building's use of them. sr_fleet_upkeep_goods carries
-# the three good-specific multipliers; the generic building_goods_input_mult
-# (sr_fleet_upkeep) waits on the upkeep_inputs probe (te_debug_space_race.6).
+# Country scope, the fleets' month: the upkeep's one refresh site (design § 5;
+# Space Race UI pass design § 10). The six goods of Space Command's fixed
+# maintenance line rise +900% a unit (10 points of fleet strength at full, the
+# ground reserve's included): sr_fleet_upkeep_goods, removed first, on each
+# Space Command building of a level or more, at
+# root.var:sr_fleet_upkeep_per_building, the units split between them, so a
+# second building (an annexed or formed space power's) doesn't charge the
+# fleets twice. Buildings have no variables, so the multiplier is read through
+# ROOT, the country, as resettlement's readouts are. Never on the country: the
+# goods' input multipliers are building-masked and would raise every
+# building's use of them.
 sr_fl_upkeep_refresh = {
 	sr_fl_upkeep_self_check = yes
 	set_variable = { name = sr_fleet_upkeep_units value = sr_fleet_upkeep_units_value }
-	# The probe holds its candidate on the building for fourteen days.
-	if = {
-		limit = { NOT = { has_variable = sr_fl_probe_candidate } }
-		sr_fl_upkeep_apply = yes
-	}
+	set_variable = { name = sr_fleet_upkeep_per_building value = sr_fleet_upkeep_per_building_value }
+	sr_fl_upkeep_apply = yes
 }
 
 # TE_SELF_CHECK fleet_upkeep_line (Space Race UI pass design § 10): a Space
-# Command carrying the upkeep reads +900% Robotics input a unit, from the
-# units last month's refresh applied. Run before the refresh re-applies it, so
-# it reads that apply a month on, not this one's (unseen in the same effect).
-# Skipped while the probe holds its candidate, and with no units, so OK can't
-# pass on a zero. Once a game.
+# Command carrying the upkeep reads 9 x the units it was given on each of the
+# three input multipliers registered for it (Wired Telecommunication Gear,
+# Software, Industrial Robotics), from last month's refresh. That shows the
+# multipliers reach the building; that the engine multiplies the unscaled line
+# by them is the play-test's read of the input tooltip (the Grid Transfer
+# Station's unscaled lines take a runtime _mult, seen 2026-10-25). Run before
+# the refresh re-applies it, so it reads that apply a month on, not this one's
+# (unseen in the same effect). Skipped with no units, so OK can't pass on a
+# zero. Once a game.
 sr_fl_upkeep_self_check = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = sr_fl_upkeep_line_checked }
-			NOT = { has_variable = sr_fl_probe_candidate }
-			has_variable = sr_fleet_upkeep_units
-			var:sr_fleet_upkeep_units > 0
+			has_variable = sr_fleet_upkeep_per_building
+			var:sr_fleet_upkeep_per_building > 0
 			any_scope_state = {
 				any_scope_building = {
 					is_building_type = building_space_command
@@ -515,13 +517,17 @@ sr_fl_upkeep_self_check = {
 					is_building_type = building_space_command
 					has_modifier = sr_fleet_upkeep_goods
 				}
-				root = { set_variable = { name = sr_fl_upkeep_line_read value = prev.modifier:goods_input_robotics_mult } }
+				root = {
+					set_variable = { name = sr_fl_upkeep_line_read value = prev.modifier:goods_input_robotics_mult }
+					set_variable = { name = sr_fl_upkeep_line_read_tel value = prev.modifier:goods_input_telephones_mult }
+					set_variable = { name = sr_fl_upkeep_line_read_sw value = prev.modifier:goods_input_digital_assets_mult }
+				}
 			}
 		}
 		set_variable = {
 			name = sr_fl_upkeep_line_want
 			value = {
-				value = var:sr_fleet_upkeep_units
+				value = var:sr_fleet_upkeep_per_building
 				multiply = 9
 			}
 		}
@@ -529,13 +535,19 @@ sr_fl_upkeep_self_check = {
 			limit = {
 				var:sr_fl_upkeep_line_read > { value = var:sr_fl_upkeep_line_want subtract = 0.01 }
 				var:sr_fl_upkeep_line_read < { value = var:sr_fl_upkeep_line_want add = 0.01 }
+				var:sr_fl_upkeep_line_read_tel > { value = var:sr_fl_upkeep_line_want subtract = 0.01 }
+				var:sr_fl_upkeep_line_read_tel < { value = var:sr_fl_upkeep_line_want add = 0.01 }
+				var:sr_fl_upkeep_line_read_sw > { value = var:sr_fl_upkeep_line_want subtract = 0.01 }
+				var:sr_fl_upkeep_line_read_sw < { value = var:sr_fl_upkeep_line_want add = 0.01 }
 			}
-			debug_log = "TE_SELF_CHECK OK fleet_upkeep_line country=[THIS.GetCountry.GetTagName] units=[THIS.Var('sr_fleet_upkeep_units').GetValue|2] robotics_mult=[THIS.Var('sr_fl_upkeep_line_read').GetValue|2] want=[THIS.Var('sr_fl_upkeep_line_want').GetValue|2] (Space Command's maintenance line carries +900% a unit) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK fleet_upkeep_line country=[THIS.GetCountry.GetTagName] per_building=[THIS.Var('sr_fleet_upkeep_per_building').GetValue|2] robotics_mult=[THIS.Var('sr_fl_upkeep_line_read').GetValue|2] telephones_mult=[THIS.Var('sr_fl_upkeep_line_read_tel').GetValue|2] software_mult=[THIS.Var('sr_fl_upkeep_line_read_sw').GetValue|2] want=[THIS.Var('sr_fl_upkeep_line_want').GetValue|2] (the three newly registered input multipliers reach Space Command at +900% a unit; the input tooltip shows whether the maintenance line takes them) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN fleet_upkeep_line country=[THIS.GetCountry.GetTagName] units=[THIS.Var('sr_fleet_upkeep_units').GetValue|2] robotics_mult=[THIS.Var('sr_fl_upkeep_line_read').GetValue|2] want=[THIS.Var('sr_fl_upkeep_line_want').GetValue|2] (the building's Robotics input multiplier isn't 9 x the units: unregistered, or other lines reach it; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN fleet_upkeep_line country=[THIS.GetCountry.GetTagName] per_building=[THIS.Var('sr_fleet_upkeep_per_building').GetValue|2] robotics_mult=[THIS.Var('sr_fl_upkeep_line_read').GetValue|2] telephones_mult=[THIS.Var('sr_fl_upkeep_line_read_tel').GetValue|2] software_mult=[THIS.Var('sr_fl_upkeep_line_read_sw').GetValue|2] want=[THIS.Var('sr_fl_upkeep_line_want').GetValue|2] (an input multiplier isn't 9 x the building's units: unregistered, or other lines reach it; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		remove_variable = sr_fl_upkeep_line_read
+		remove_variable = sr_fl_upkeep_line_read_tel
+		remove_variable = sr_fl_upkeep_line_read_sw
 		remove_variable = sr_fl_upkeep_line_want
 	}
 }
@@ -549,8 +561,11 @@ sr_fl_upkeep_apply = {
 				remove_modifier = sr_fleet_upkeep_goods
 			}
 			if = {
-				limit = { root.var:sr_fleet_upkeep_units > 0 }
-				add_modifier = { name = sr_fleet_upkeep_goods multiplier = root.var:sr_fleet_upkeep_units }
+				limit = {
+					level >= 1
+					root.var:sr_fleet_upkeep_per_building > 0
+				}
+				add_modifier = { name = sr_fleet_upkeep_goods multiplier = root.var:sr_fleet_upkeep_per_building }
 			}
 		}
 	}
@@ -728,60 +743,6 @@ sr_fl_leg_self_check = {
 		set_global_variable = { name = sr_fl_leg_ok_logged value = yes }
 		debug_log = "TE_SELF_CHECK OK fleet_leg location=[GetGlobalVariable('sr_fl_log_dest').GetValue|0] drive=[GetGlobalVariable('sr_fl_log_drive').GetValue|0] leg=[GetGlobalVariable('sr_fl_log_leg').GetValue|0] flown=[GetGlobalVariable('sr_fl_log_flown').GetValue|0] country=[THIS.GetCountry.GetTagName] (a fleet landed in its month; flown should equal leg, the months docs/engine/launch_windows_report.md gives the leg) date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
-}
-
-# ---- The upkeep_inputs probe (design § 18; te_debug_space_race.6) ---------------------------------
-# Country scope. One candidate (CANDIDATE: sr_fleet_upkeep, the generic
-# building_goods_input_mult; sr_fleet_upkeep_goods, the three good-specific
-# multipliers) at multiplier 50 (+50% inputs) on our Space Command, or on our
-# Space Program before one is built (it buys Launch Capacity too). The
-# market's Launch Capacity buy orders are logged now and, by
-# te_debug_space_race.7 fourteen days later, again, and the modifier removed.
-# The owner reads the building's input tooltip, the definitive read.
-sr_fl_probe_upkeep = {
-	set_variable = { name = sr_fl_probe_candidate value = $CODE$ }
-	set_global_variable = { name = sr_fl_probe_before value = sr_fl_probe_lc_orders }
-	if = {
-		limit = { sr_has_space_command = yes }
-		every_scope_state = {
-			every_scope_building = {
-				limit = { is_building_type = building_space_command }
-				if = { limit = { has_modifier = $CANDIDATE$ } remove_modifier = $CANDIDATE$ }
-				add_modifier = { name = $CANDIDATE$ multiplier = 50 }
-			}
-		}
-	}
-	else = {
-		every_scope_state = {
-			every_scope_building = {
-				limit = { is_building_type = building_space_program }
-				if = { limit = { has_modifier = $CANDIDATE$ } remove_modifier = $CANDIDATE$ }
-				add_modifier = { name = $CANDIDATE$ multiplier = 50 }
-			}
-		}
-	}
-	debug_log = "TE_SR_PROBE upkeep_inputs candidate=[THIS.Var('sr_fl_probe_candidate').GetValue|0] before=[GetGlobalVariable('sr_fl_probe_before').GetValue|0] (candidate 1 sr_fleet_upkeep, the generic building_goods_input_mult; 2 sr_fleet_upkeep_goods, the three good-specific multipliers; the market's Launch Capacity buy orders; the after line comes in 14 days) country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
-	trigger_event = { id = te_debug_space_race.7 days = 14 }
-}
-
-# te_debug_space_race.7: the after line, and the candidate removed (CANDIDATE);
-# then the live upkeep goes back on.
-sr_fl_probe_upkeep_end = {
-	set_global_variable = { name = sr_fl_probe_after value = sr_fl_probe_lc_orders }
-	debug_log = "TE_SR_PROBE upkeep_inputs candidate=[THIS.Var('sr_fl_probe_candidate').GetValue|0] after=[GetGlobalVariable('sr_fl_probe_after').GetValue|0] before=[GetGlobalVariable('sr_fl_probe_before').GetValue|0] (a jump of about half the building's Launch Capacity bill means the candidate raised its inputs; check the building's input tooltip) country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
-	every_scope_state = {
-		every_scope_building = {
-			limit = {
-				OR = {
-					is_building_type = building_space_command
-					is_building_type = building_space_program
-				}
-			}
-			if = { limit = { has_modifier = $CANDIDATE$ } remove_modifier = $CANDIDATE$ }
-		}
-	}
-	if = { limit = { has_variable = sr_fl_probe_candidate } remove_variable = sr_fl_probe_candidate }
-	sr_fl_upkeep_refresh = yes
 }
 
 # ---- The build mix (sr_sc_mix_sgui) -----------------------------------------------------------------
