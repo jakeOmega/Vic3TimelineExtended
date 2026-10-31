@@ -98,9 +98,9 @@ orbital_manufacturing = {
 }
 
 compact_fusion_reactors = {
-	# Spaceport PM for airport, Fusion SSTO Craft PM for Launch Facilities,
-	# Interstellar Mission PM for Space Program, DEW Tank unit
-	# Better Fusion Reactors PM for Fusion Plants
+	# Spaceport PM for airport, Fusion SSTO Craft PM for Launch Facilities, DEW Tank unit,
+	# Compact Fusion Power PM for Fusion Plants (the Interstellar Mission PM moved to Aneutronic
+	# Fusion in era 13 spec phase 3, 2026-10-31)
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/compact_fusion_reactors.dds"
 	category = military

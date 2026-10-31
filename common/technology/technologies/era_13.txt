@@ -54,6 +54,23 @@ programmable_matter = {
 	}
 }
 
+aneutronic_fusion = {
+	# Aneutronic Fusion Power PM for Fusion Plants, Fusion Torch Reclamation PM for Steel Mills,
+	# Interstellar Mission PM for Space Program (the Interstellar Probe milestone; moved from Compact
+	# Fusion Reactors in era 13 spec phase 3, 2026-10-31)
+	era = era_13
+	texture = "gfx/interface/icons/invention_icons/compact_fusion_reactors.dds" # Placeholder Icon
+	category = military
+
+	unlocking_technologies = {
+		compact_fusion_reactors
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
 fusion_batteries = {
 	# Fusion Battery Motors PM for Motor Industries, Fusion Battery Vehicles PM for Automotive Industries,
 	# Fusion Battery Appliances PM for Consumer Appliance Industries
@@ -62,7 +79,7 @@ fusion_batteries = {
 	category = military
 
 	unlocking_technologies = {
-		compact_fusion_reactors
+		aneutronic_fusion	# Compact Fusion Reactors until era 13 spec phase 3 (2026-10-31)
 	}
 
 	modifier = {

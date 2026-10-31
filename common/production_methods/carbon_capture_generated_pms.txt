@@ -7019,7 +7019,7 @@ pm_no_carbon_capture_steelmaking_process = {
 pm_carbon_capture_na_steelmaking_process = {
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
 	is_hidden_when_unavailable = yes
-	unlocking_production_methods = { pm_microgravity_alloying }
+	unlocking_production_methods = { pm_microgravity_alloying pm_fusion_torch_reclamation }
 }
 
 pm_carbon_capture_1_steelmaking_process_coal10_oil0 = {

@@ -33,6 +33,8 @@
  ai_agents_desc:0 "Software that doesn't just answer questions but gets things done: it plans the steps, uses the tools, checks its own work and comes back when the job is finished. Whole departments now supervise agents instead of doing the work themselves, and some are finding there is little left to supervise."
  aluminum_mass_production:0 "Aluminum Mass Production"
  aluminum_mass_production_desc:0 "We've figured out how to make aluminum on a large scale. This lightweight metal is useful in all sorts of industries, so expect to see it everywhere."
+ aneutronic_fusion:0 "Aneutronic Fusion"
+ aneutronic_fusion_desc:0 "Fusing protons with boron releases its energy as charged particles instead of neutrons, so the current can be drawn straight from the plasma with no boiler and no turbine. The reactors barely irradiate their own walls and leave no radioactive waste behind, though the fuel has to burn at temperatures that make an ordinary fusion plant look lukewarm."
  animation:0 "Animation"
  animation_desc:0 "By making drawings appear to move, we've created a new form of entertainment. It's a popular way to tell stories and express artistic ideas, for better or worse."
  anti_sub_warfare:0 "Anti-Submarine Warfare"
