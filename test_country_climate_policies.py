@@ -239,7 +239,9 @@ class RenewableInvestmentCostTest(unittest.TestCase):
         self.assertEqual(sync["else_if"]["remove_modifier"], self.COST)
         sweep = effects["gw_refresh_policy_costs_effect"]["every_country"]
         self.assertEqual(sweep["gw_renewable_investment_cost_sync"], "yes")
-        self.assertEqual(sweep["limit"]["OR"], {"has_journal_entry": "je_global_warming", "has_modifier": self.COST})
+        self.assertEqual(sweep["limit"]["OR"]["has_journal_entry"], "je_global_warming")
+        held = sweep["limit"]["OR"]["has_modifier"]
+        self.assertIn(self.COST, held if isinstance(held, list) else [held])
         pulse = load("common/on_actions/extra_on_actions.txt")["global_warming_events_on_action"]["effect"]
         self.assertEqual(pulse["gw_refresh_policy_costs_effect"], "yes")
 

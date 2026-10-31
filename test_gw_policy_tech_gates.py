@@ -36,6 +36,8 @@ GATES = {
     "green_building_codes": "clean_energy_technologies",
     "carbon_removal": "carbon_capture_and_storage",
     "fossil_fuel_tariffs": None,
+    # Geoengineering is the will to use it, not a building (era 13 spec § 7.5).
+    "aerosol_injection": "geoengineering",
 }
 
 # What each technology is there for: (file, entity, technology it names).

@@ -288,3 +288,21 @@ post_work_society = {
 		value = 1
 	}
 }
+
+geoengineering = {
+	# The Stratospheric Aerosol Injection climate policy in the Global Warming entry (era 13 spec § 7.5);
+	# Terraforming (era 13) will require it. Society, not production: aircraft can already loft the aerosols,
+	# so what it stands for is the will to cool the world on purpose
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/environmental_movement.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		environmental_movement
+		globalization
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}

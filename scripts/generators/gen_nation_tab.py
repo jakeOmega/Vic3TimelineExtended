@@ -195,6 +195,7 @@ NOT_ON_COUNTRY = {
     "fossil_fuel_*": "je_global_warming", "green_building_codes_modifier": "je_global_warming",
     "public_transit_modifier": "je_global_warming", "reforestation_subsidies_modifier": "je_global_warming",
     "renewable_investment_modifier": "je_global_warming", "global_warming": "je_global_warming",
+    "aerosol_injection_modifier": "je_global_warming", "gw_aerosol_monsoon_modifier": "je_global_warming",
     "ch_cultural_*": "je_cultural_hegemony", "ch_global_media_campaign": "je_cultural_hegemony",
     "ch_world_exposition": "je_cultural_hegemony", "cultural_hegemony_*": "je_cultural_hegemony",
     "civil_rights_phase_*": "je_civil_rights",

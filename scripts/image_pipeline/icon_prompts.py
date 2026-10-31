@@ -788,6 +788,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
         "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
         "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
+        "geoengineering": {"subject": "a white high-altitude jet trailing a pale haze across a deep blue sky, the sun dimmed behind it", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
     "treaty_article": {
@@ -2081,6 +2082,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "policy_fossil_fuel_tariffs": {"subject": "a red-and-white striped barrier arm lowered across a small black coal "
                                                   "wagon heaped with coal", "seed": 0,
                                        "now": f"{_GI}/trade_icons/max_tariffs.dds"},
+        "policy_aerosol_injection": {"subject": "a small white jet aircraft high over a blue globe, a pale grey haze "
+                                                "spreading behind it under a dimmed yellow sun", "seed": None,
+                                     "now": f"{_GI}/un_icons/topic_climate.dds"},
     },
     # Grand Monuments (grand_monuments_gui_icons.md): 36 px, faded while a count is zero.
     "gm_part": {
