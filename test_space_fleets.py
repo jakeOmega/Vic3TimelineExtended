@@ -208,7 +208,7 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        self.assertEqual(len(names), 13)
+        self.assertEqual(len(names), 14)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -1752,6 +1752,147 @@ class TransferPopupTest(unittest.TestCase):
         self.assertNotIn("sr_fleet_detach_sgui", self.sguis)
         self.assertRegex(self.effects, r"(?m)^sr_fl_merge = \{")
         self.assertRegex(self.effects, r"(?m)^sr_fl_detach = \{")
+
+
+class TransferTest(unittest.TestCase):
+    """Transfer itself (UI pass design § 6): slot N's chosen share of each role,
+    now and at full by the one share, and its marines, into a new fleet
+    (Detach's shape) or one of ours there (Merge's rules); the refusals on
+    the button match what the effect assumes."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.sguis = _strip(_raw(SGUIS))
+        cls.new = _block(cls.effects, "sr_fl_transfer_new")
+        cls.into = _block(cls.effects, "sr_fl_transfer_into")
+
+    def test_amounts_are_clamped_before_moving(self):
+        """Shares read the clamped amount (sr_fl_$N$_xf_<role>, held to what N
+        has), never the raw variable, and are all read before the first move."""
+        for name, body in (("new", self.new), ("into", self.into)):
+            with self.subTest(effect=name):
+                self.assertNotIn("sr_det_amt_", body)
+                first_move = body.index("sr_fl_add_role_part")
+                for r in gsf.ROLES:
+                    share = body.index(f"value = {{ value = sr_fl_$N$_xf_{r.key} divide = sr_fl_$N$_{r.key}_value max = 1 }}")
+                    self.assertLess(share, first_move)
+                for read in ("sr_xf_marines value = sr_fl_$N$_xf_marines_moved", "sr_xf_ships value = sr_fl_$N$_xf_strength",
+                             "sr_fl_$N$_xf_left <= 0"):
+                    self.assertLess(body.index(read), first_move)
+        self.assertNotIn("sr_det_amt_", _block(self.effects, "sr_fl_1_transfer_now"))
+
+    def test_full_and_current_move_by_one_share(self):
+        for name, body in (("new", self.new), ("into", self.into)):
+            for r in gsf.ROLES:
+                for v in (r.key, f"{r.key}_full"):
+                    with self.subTest(effect=name, var=v):
+                        self.assertRegex(body, rf"limit = \{{ has_variable = sr_fl_\$N\$_{v} local_var:sr_xf_share_{r.key} > 0 \}}\s*"
+                                               rf"set_local_variable = \{{ name = sr_xf_part value = \{{ value = var:sr_fl_\$N\$_{v} "
+                                               rf"multiply = local_var:sr_xf_share_{r.key} \}} \}}\s*"
+                                               rf"sr_fl_add_role_part = \{{ N = \$M\$ VAR = {v} AMOUNT = local_var:sr_xf_part \}}\s*"
+                                               rf"set_variable = \{{ name = sr_fl_\$N\$_{v} value = \{{ value = var:sr_fl_\$N\$_{v} "
+                                               r"subtract = local_var:sr_xf_part min = 0 \} \}")
+                self.assertIn(f"if = {{ limit = {{ local_var:sr_xf_all = 1 }} set_local_variable = {{ name = sr_xf_share_{r.key} value = 1 }} }}",
+                              body)
+            self.assertIn("set_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value "
+                          "add = local_var:sr_xf_marines } }", body)
+            self.assertIn("set_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value "
+                          "subtract = local_var:sr_xf_marines min = 0 } }", body)
+
+    def test_all_into_an_existing_fleet_clears_the_source(self):
+        """All of N: every role at share 1 (a role damaged to nothing takes its
+        full along), every marine, and N cleared after, as Merge did."""
+        self.assertRegex(self.into, r"limit = \{ sr_fl_\$N\$_strength < sr_fl_minimum_strength \}\s*sr_fl_clear_at = \{ N = \$N\$ \}")
+        self.assertLess(self.into.rindex("sr_fl_add_role_part"), self.into.index("sr_fl_clear_at = { N = $N$ }"))
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                moved = _block(_strip(_raw(gsf.ROOT / gsf.VALUES_OUT)), f"sr_fl_{n}_xf_marines_moved")
+                self.assertIn(f"if = {{ limit = {{ sr_fl_{n}_xf_left <= 0 }} value = sr_fl_{n}_marines_value }}", moved)
+        self.assertNotIn("sr_fl_clear_at = { N = $N$ }", self.new)
+
+    def test_a_new_fleet_copies_location_posture_drive_and_refit(self):
+        body = self.new
+        clear = body.index("sr_fl_clear_at = { N = $M$ }")
+        for line in ("set_variable = { name = sr_fl_$M$_loc value = var:sr_fl_$N$_loc }",
+                     "set_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value }",
+                     "set_variable = { name = sr_fl_$M$_posture value = sr_fl_$N$_posture_value }",
+                     "set_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until }"):
+            with self.subTest(line=line):
+                self.assertLess(clear, body.index(line))
+                self.assertLess(body.index(line), body.index("sr_fl_add_role_part"))
+        for slot in ("N", "M"):
+            self.assertIn(f"set_variable = {{ name = sr_fl_${slot}$_dv value = {{ value = sr_fl_${slot}$_dv_capacity "
+                          "multiply = local_var:sr_fl_dv_share } }", body)
+            self.assertIn(f"set_variable = {{ name = sr_fl_${slot}$_supply value = {{ value = sr_fl_${slot}$_endurance "
+                          "multiply = local_var:sr_fl_supply_share } }", body)
+        self.assertIn("sr_loc_rebuild = yes", body)
+
+    def test_into_a_fleet_keeps_merge_s_rules(self):
+        """The slower drive, the later refit and the lower shares, only with ships
+        joining; marines alone change none of it."""
+        ships = _block("x = {" + self.into.split("limit = { local_var:sr_xf_ships > 0 }", 1)[1], "x")
+        self.assertIn("set_local_variable = { name = sr_xf_m_dv_share value = local_var:sr_fl_dv_share }", ships)
+        self.assertIn("set_local_variable = { name = sr_xf_m_supply_share value = local_var:sr_fl_supply_share }", ships)
+        self.assertIn("limit = { sr_fl_$N$_drive_value < sr_fl_$M$_drive_value }", ships)
+        self.assertIn("var:sr_fl_$M$_refit_until < var:sr_fl_$N$_refit_until", ships)
+        self.assertNotIn("sr_fl_$M$_posture", self.into)
+        self.assertIn("set_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity "
+                      "multiply = local_var:sr_xf_m_dv_share } }", self.into)
+
+    def test_each_slot_pair_is_generated_once(self):
+        """9 × 8 into a fleet there, and 9 × 8 into the lowest empty slot."""
+        for kind in ("new", "into"):
+            calls = re.findall(rf"sr_fl_transfer_{kind} = \{{ N = (\d) M = (\d) \}}", self.effects)
+            with self.subTest(kind=kind):
+                self.assertEqual(sorted(calls), sorted((str(n), str(m)) for n in range(1, gsf.SLOTS + 1) for m in gsf._others(n)))
+        for n in range(1, gsf.SLOTS + 1):
+            body = _block(self.effects, f"sr_fl_{n}_transfer_now")
+            with self.subTest(slot=n):
+                self.assertRegex(body, r"^\s*if = \{\s*limit = \{ sr_det_to_value = 0 \}")
+                for m in gsf._others(n):
+                    self.assertIn(f"limit = {{ sr_det_to_value = {m} has_variable = sr_fl_{m}_loc has_variable = sr_fl_{n}_loc "
+                                  f"var:sr_fl_{m}_loc = var:sr_fl_{n}_loc }}\n\t\tsr_fl_transfer_into = {{ N = {n} M = {m} }}", body)
+        self.assertRegex(self.effects, r"(?m)^sr_fl_transfer_at = \{ sr_fl_\$N\$_transfer_now = yes \}")
+
+    def test_the_refusals(self):
+        """Each refusal is its own line, a direct child of is_valid or of the
+        trigger_if on where it goes, so a greyed Transfer names it."""
+        valid = _block(_block(self.sguis, "sr_fleet_transfer_sgui").replace("\n\t", "\n"), "is_valid")
+        top = [m.group(1) for m in re.finditer(r"(?m)^\t(\w+) = \{", valid)]
+        self.assertEqual(top, ["custom_tooltip", "custom_tooltip", "trigger_if", "trigger_else", "custom_tooltip"])
+        texts = re.findall(r"text = (\w+)\s*([^\n]*\n[^\n]*)", valid)
+        self.assertEqual([t for t, _ in texts],
+                         ["sr_fl_not_at_location_tt", "sr_fl_xf_moves_tt", "sr_fl_xf_free_slot_tt", "sr_fl_xf_new_min_tt",
+                          "sr_fl_xf_keeps_tt", "sr_fl_xf_partner_here_tt", "sr_fl_xf_keeps_or_all_tt", "sr_fl_xf_room_tt"])
+        self.assertRegex(valid, r"trigger_if = \{\s*limit = \{ sr_det_to_value = 0 \}")
+        for test in ("xf_moves", "xf_new_min", "xf_keeps", "xf_partner_here", "xf_keeps_or_all", "xf_room"):
+            self.assertIn(f"sr_fl_op_check = {{ TEST = {test} }}", valid)
+        effect = _block(_block(self.sguis, "sr_fleet_transfer_sgui").replace("\n\t", "\n"), "effect")
+        self.assertRegex(effect, r"custom_tooltip = sr_fl_xf_transfer_tt\s*hidden_effect = \{\s*sr_fl_by_op = \{ DO = transfer \}")
+        n = 4
+        t = self.triggers
+        self.assertIn(f"sr_fl_{n}_xf_keeps = {{ sr_fl_{n}_xf_left >= sr_fl_minimum_strength }}", t)
+        self.assertIn(f"sr_fl_{n}_xf_keeps_or_all = {{ OR = {{ sr_fl_{n}_xf_left >= sr_fl_minimum_strength sr_fl_{n}_xf_left <= 0 }} }}", t)
+        self.assertIn(f"sr_fl_{n}_xf_new_min = {{ sr_fl_{n}_xf_strength >= sr_fl_minimum_strength }}", t)
+        room = _block(t, f"sr_fl_{n}_xf_room")
+        self.assertIn(f"sr_fl_{n}_xf_there_marines <= sr_fl_{n}_xf_there_room", room)
+        self.assertIn(f"OR = {{ sr_fl_{n}_xf_left <= 0 sr_fl_{n}_xf_stay_marines <= sr_fl_{n}_xf_stay_room }}", room)
+        partner = _block(t, f"sr_fl_{n}_xf_partner_here")
+        self.assertEqual(sorted(int(m) for m in re.findall(r"sr_det_to_value = (\d)", partner)), gsf._others(n))
+
+    def test_the_button_closes_the_popup(self):
+        rows = _raw(gsf.ROOT / gsf.GUI_OUT)
+        body = rows[rows.index("type te_sr_xfer_popup_body"):]
+        go = _instances(body, "te_sr_xf_go_row")
+        self.assertEqual(len(go), gsf.SLOTS)
+        for n, row in enumerate(go, start=1):
+            with self.subTest(slot=n):
+                self.assertIn(f"GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
+                              f".AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )", row)
+                self.assertIn("onclick = \"[GetVariableSystem.Clear('te_popup')]\"", row)
+                self.assertIn("IsValidTooltip", row)
 
 
 if __name__ == "__main__":

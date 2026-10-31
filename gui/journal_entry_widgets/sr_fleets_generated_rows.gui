@@ -1845,6 +1845,14 @@ types sr_fleets_generated_rows_types
 						visible = no
 					}
 				}
+				te_sr_xf_go_row = {
+					blockoverride "xf_go_btn" {
+						enabled = "[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_fleet_transfer_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_transfer_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+					}
+				}
 			}
 		}
 
@@ -2241,6 +2249,14 @@ types sr_fleets_generated_rows_types
 					}
 					blockoverride "xf_more" {
 						visible = no
+					}
+				}
+				te_sr_xf_go_row = {
+					blockoverride "xf_go_btn" {
+						enabled = "[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_fleet_transfer_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_transfer_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 					}
 				}
 			}
@@ -2641,6 +2657,14 @@ types sr_fleets_generated_rows_types
 						visible = no
 					}
 				}
+				te_sr_xf_go_row = {
+					blockoverride "xf_go_btn" {
+						enabled = "[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_fleet_transfer_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_transfer_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+					}
+				}
 			}
 		}
 
@@ -3037,6 +3061,14 @@ types sr_fleets_generated_rows_types
 					}
 					blockoverride "xf_more" {
 						visible = no
+					}
+				}
+				te_sr_xf_go_row = {
+					blockoverride "xf_go_btn" {
+						enabled = "[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_fleet_transfer_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_transfer_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 					}
 				}
 			}
@@ -3437,6 +3469,14 @@ types sr_fleets_generated_rows_types
 						visible = no
 					}
 				}
+				te_sr_xf_go_row = {
+					blockoverride "xf_go_btn" {
+						enabled = "[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_fleet_transfer_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_transfer_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+					}
+				}
 			}
 		}
 
@@ -3833,6 +3873,14 @@ types sr_fleets_generated_rows_types
 					}
 					blockoverride "xf_more" {
 						visible = no
+					}
+				}
+				te_sr_xf_go_row = {
+					blockoverride "xf_go_btn" {
+						enabled = "[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_fleet_transfer_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_transfer_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 					}
 				}
 			}
@@ -4233,6 +4281,14 @@ types sr_fleets_generated_rows_types
 						visible = no
 					}
 				}
+				te_sr_xf_go_row = {
+					blockoverride "xf_go_btn" {
+						enabled = "[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_fleet_transfer_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_transfer_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+					}
+				}
 			}
 		}
 
@@ -4631,6 +4687,14 @@ types sr_fleets_generated_rows_types
 						visible = no
 					}
 				}
+				te_sr_xf_go_row = {
+					blockoverride "xf_go_btn" {
+						enabled = "[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_fleet_transfer_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_transfer_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+					}
+				}
 			}
 		}
 
@@ -5027,6 +5091,14 @@ types sr_fleets_generated_rows_types
 					}
 					blockoverride "xf_more" {
 						visible = no
+					}
+				}
+				te_sr_xf_go_row = {
+					blockoverride "xf_go_btn" {
+						enabled = "[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_fleet_transfer_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_transfer_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 					}
 				}
 			}

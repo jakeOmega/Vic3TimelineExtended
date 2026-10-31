@@ -220,6 +220,75 @@ sr_fleet_xfer_to_sgui = {
 	}
 }
 
+# Transfer: the chosen share of each role and the marines into a new fleet
+# (sr_det_to 0, Detach's shape) or the fleet chosen under Into (Merge's), each
+# amount held to what the slot has (sr_fl_<n>_xf_<role>). Refused, each its own
+# line: nothing moves; no slot is free for a new fleet, or the fleet chosen has
+# left; the fleet would keep less than sr_fl_minimum_strength (all of it into
+# another fleet excepted) or a new fleet get less; a fleet would carry more
+# marines than its assault carriers hold. Not gated by Space Command, as Merge
+# and Detach weren't (UI pass design § 10; an open owner's call).
+sr_fleet_transfer_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+		custom_tooltip = {
+			text = sr_fl_xf_moves_tt
+			sr_fl_op_check = { TEST = xf_moves }
+		}
+		trigger_if = {
+			limit = { sr_det_to_value = 0 }
+			custom_tooltip = {
+				text = sr_fl_xf_free_slot_tt
+				sr_fl_has_free_slot = yes
+			}
+			custom_tooltip = {
+				text = sr_fl_xf_new_min_tt
+				sr_fl_op_check = { TEST = xf_new_min }
+			}
+			custom_tooltip = {
+				text = sr_fl_xf_keeps_tt
+				sr_fl_op_check = { TEST = xf_keeps }
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_fl_xf_partner_here_tt
+				sr_fl_op_check = { TEST = xf_partner_here }
+			}
+			custom_tooltip = {
+				text = sr_fl_xf_keeps_or_all_tt
+				sr_fl_op_check = { TEST = xf_keeps_or_all }
+			}
+		}
+		custom_tooltip = {
+			text = sr_fl_xf_room_tt
+			sr_fl_op_check = { TEST = xf_room }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_xf_transfer_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = transfer }
+		}
+	}
+}
+
 # Land the marines aboard at a colony of ours here; take ours back aboard.
 sr_fleet_land_sgui = {
 	scope = country

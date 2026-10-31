@@ -5294,6 +5294,32 @@ types space_race_widget_types
 		}
 	}
 
+	### The popup's foot: Transfer (sr_fleet_transfer_sgui, scope:op the slot).
+	### `xf_go_btn` carries its four properties: greyed, its hover names the
+	### refusal; a click moves what is chosen and closes the popup.
+	type te_sr_xf_go_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 4 }
+
+		button = {
+			using = default_button_action
+			size = { 140 30 }
+			parentanchor = vcenter
+			block "xf_go_btn" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 134
+				elide = right
+				using = te_sr_fontsize_row
+				text = "je_space_race_widget_xf_go"
+			}
+		}
+	}
+
 	### The Transfer popup (UI pass design § 6), opened from a fleet's Transfer
 	### (te_popup = sr_xfer_<n>, n the slot); instanced in te_popups
 	### (gui/te_popups.gui). Its content is generated, a body a slot

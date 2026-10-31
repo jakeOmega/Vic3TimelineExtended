@@ -498,6 +498,9 @@ CELLS = {
     **{f"the Transfer popup's {col} head (te_sr_xf_head_row)": (
         ("te_sr_xf_head_row", f'text = "je_space_race_widget_xf_col_{col}"'), f"je_space_race_widget_xf_col_{col}")
        for col in ("now", "move", "stay", "there")},
+    "Transfer at the popup's foot (te_sr_xf_go_row)": (
+        ("te_sr_xf_go_row", 'text = "je_space_race_widget_xf_go"'),
+        r"je_space_race_widget_xf_go"),
     "a role's name in the Transfer popup (te_sr_xf_role_row)": (
         ("te_sr_xf_role_row", 'block "xf_name"'),
         r"je_space_race_widget_xf_role_\w+"),

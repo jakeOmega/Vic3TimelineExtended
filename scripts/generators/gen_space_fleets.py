@@ -115,7 +115,7 @@ SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marine
                 "detach", "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
                 "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive",
                 "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in",
-                "xfer_open", "xfer_step")
+                "xfer_open", "xfer_step", "transfer")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
 # per world closing in; kf (6d) is the ground-to-orbit batteries' kinetic fire.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
@@ -937,7 +937,22 @@ def render_transfer_triggers(n: int) -> list[str]:
             f"{var(n, 'can_transfer')} = {{ OR = {{ {var(n, 'can_merge')} = yes {var(n, 'can_detach')} = yes }} }}",
             "# An Into button's slot (scope:pick) is a fleet of ours here.",
             f"{var(n, 'xf_pick_here')} = {{", "\tOR = {",
-            *[f"\t\tAND = {{ scope:pick = {m} {_here(m, n)} }}" for m in others], "\t}", "}"]
+            *[f"\t\tAND = {{ scope:pick = {m} {_here(m, n)} }}" for m in others], "\t}", "}",
+            "# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet",
+            "# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new",
+            "# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no",
+            "# fleet is left with more marines than its assault carriers hold.",
+            f"{var(n, 'xf_moves')} = {{ OR = {{ {var(n, 'xf_strength')} > 0 {var(n, 'xf_marines_moved')} > 0 }} }}",
+            f"{var(n, 'xf_keeps')} = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength }}",
+            f"{var(n, 'xf_keeps_or_all')} = {{ OR = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength "
+            f"{var(n, 'xf_left')} <= 0 }} }}",
+            f"{var(n, 'xf_new_min')} = {{ {var(n, 'xf_strength')} >= sr_fl_minimum_strength }}",
+            f"{var(n, 'xf_partner_here')} = {{", "\tOR = {",
+            *[f"\t\tAND = {{ sr_det_to_value = {m} {_here(m, n)} }}" for m in others], "\t}", "}",
+            f"{var(n, 'xf_room')} = {{",
+            f"\t{var(n, 'xf_there_marines')} <= {var(n, 'xf_there_room')}",
+            f"\tOR = {{ {var(n, 'xf_left')} <= 0 {var(n, 'xf_stay_marines')} <= {var(n, 'xf_stay_room')} }}",
+            "}"]
 
 
 def render_transfer_effects() -> list[str]:
@@ -990,7 +1005,131 @@ def render_transfer_effects() -> list[str]:
             "# 0 a new fleet, else that slot.",
             "sr_xf_set_to = {"]
     out += _chain([(f"scope:pick = {m}", [f"set_variable = {{ name = sr_det_to value = {m} }}"]) for m in range(0, SLOTS + 1)])
-    out += ["}"]
+    out += ["}", "", *render_transfer()]
+    return out
+
+
+def _xf_shares() -> list[str]:
+    """Read before anything moves (the values follow the variables): each role's
+    share, the amount held to what N has over its strength now, or all of it
+    when nothing of N's strength stays (a role damaged to nothing then takes its
+    full strength along, as Merge did); the marines; whether ships move; N's
+    propellant and supply shares (Merge's and Detach's)."""
+    out = ["\tset_local_variable = { name = sr_xf_all value = 0 }",
+           "\tif = { limit = { sr_fl_$N$_xf_left <= 0 } set_local_variable = { name = sr_xf_all value = 1 } }",
+           "\tset_local_variable = { name = sr_xf_ships value = sr_fl_$N$_xf_strength }",
+           "\tset_local_variable = { name = sr_xf_marines value = sr_fl_$N$_xf_marines_moved }"]
+    for r in ROLES:
+        k = r.key
+        out += [f"\tset_local_variable = {{ name = sr_xf_share_{k} value = 0 }}",
+                f"\tif = {{ limit = {{ local_var:sr_xf_all = 1 }} set_local_variable = {{ name = sr_xf_share_{k} value = 1 }} }}",
+                f"\telse_if = {{ limit = {{ sr_fl_$N$_{k}_value > 0 }} set_local_variable = {{ name = sr_xf_share_{k} "
+                f"value = {{ value = sr_fl_$N$_xf_{k} divide = sr_fl_$N$_{k}_value max = 1 }} }} }}"]
+    out += ["\tset_local_variable = { name = sr_fl_dv_share value = 1 }",
+            "\tif = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share "
+            "value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }",
+            "\tset_local_variable = { name = sr_fl_supply_share value = 1 }",
+            "\tif = { limit = { sr_fl_$N$_endurance > 0 } set_local_variable = { name = sr_fl_supply_share "
+            "value = { value = sr_fl_$N$_supply_value divide = sr_fl_$N$_endurance max = 1 } } }"]
+    return out
+
+
+def _xf_move() -> list[str]:
+    """Each role's share of N into M, now and at full by the one share (so a
+    damaged role keeps its damage ratio), then the marines by amount."""
+    out = []
+    for r in ROLES:
+        for suffix in ("", "_full"):
+            v = f"{r.key}{suffix}"
+            out += ["\tif = {",
+                    f"\t\tlimit = {{ has_variable = sr_fl_$N$_{v} local_var:sr_xf_share_{r.key} > 0 }}",
+                    f"\t\tset_local_variable = {{ name = sr_xf_part value = {{ value = var:sr_fl_$N$_{v} "
+                    f"multiply = local_var:sr_xf_share_{r.key} }} }}",
+                    f"\t\tsr_fl_add_role_part = {{ N = $M$ VAR = {v} AMOUNT = local_var:sr_xf_part }}",
+                    f"\t\tset_variable = {{ name = sr_fl_$N$_{v} value = {{ value = var:sr_fl_$N$_{v} "
+                    "subtract = local_var:sr_xf_part min = 0 } }",
+                    "\t}"]
+    out += ["\tset_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value add = local_var:sr_xf_marines } }",
+            "\tset_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value "
+            "subtract = local_var:sr_xf_marines min = 0 } }"]
+    return out
+
+
+def render_transfer() -> list[str]:
+    """Transfer (UI pass design § 6): slot N's chosen share of each role and its
+    marines into slot M, a new fleet (Detach's shape) or one of ours there
+    (Merge's). sr_fl_merge and sr_fl_detach stay as they are."""
+    out = ["# Transfer (sr_fleet_transfer_sgui): into the lowest empty slot (sr_det_to 0),",
+           "# or into that slot while it is still here."]
+    for n in range(1, SLOTS + 1):
+        new = _chain([(f"NOT = {{ {var(m, 'exists')} = yes }}", [f"sr_fl_transfer_new = {{ N = {n} M = {m} }}"])
+                      for m in _others(n)], 0)
+        cases = [("sr_det_to_value = 0", new)]
+        cases += [(f"sr_det_to_value = {m} {_here(m, n)}", [f"sr_fl_transfer_into = {{ N = {n} M = {m} }}"])
+                  for m in _others(n)]
+        out += [f"sr_fl_{n}_transfer_now = {{", *_chain(cases), "}"]
+    out += ["sr_fl_transfer_at = { sr_fl_$N$_transfer_now = yes }", "",
+            "# N into the empty M, Detach's shape: M at N's location, on its drive, posture",
+            "# and refit; then both fleets N's shares of propellant and supply, of their",
+            "# new capacities (with the roles halved, as Detach's, the same months).",
+            "sr_fl_transfer_new = {",
+            *_xf_shares(),
+            "\tsr_fl_clear_at = { N = $M$ }",
+            "\tset_variable = { name = sr_fl_$M$_loc value = var:sr_fl_$N$_loc }",
+            "\tset_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value }",
+            "\tset_variable = { name = sr_fl_$M$_posture value = sr_fl_$N$_posture_value }",
+            "\tif = { limit = { has_variable = sr_fl_$N$_refit_until } set_variable = { name = sr_fl_$M$_refit_until "
+            "value = var:sr_fl_$N$_refit_until } }",
+            "\tset_variable = { name = sr_fl_$M$_marines value = 0 }",
+            *_xf_move(),
+            "\tset_variable = { name = sr_fl_$N$_dv value = { value = sr_fl_$N$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
+            "\tset_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
+            "\tset_variable = { name = sr_fl_$N$_supply value = { value = sr_fl_$N$_endurance multiply = local_var:sr_fl_supply_share } }",
+            "\tset_variable = { name = sr_fl_$M$_supply value = { value = sr_fl_$M$_endurance multiply = local_var:sr_fl_supply_share } }",
+            "\tsr_loc_rebuild = yes",
+            "}",
+            "# N into M, one of ours there, Merge's rules: with ships joining, M takes the",
+            "# slower drive, the later refit, and the lower of the two shares of propellant",
+            "# and supply; it keeps its posture. N, with nothing of its strength left, is",
+            "# cleared, as Merge did; else it keeps its shares, of its new capacities.",
+            "sr_fl_transfer_into = {",
+            *_xf_shares(),
+            "\tset_local_variable = { name = sr_xf_m_dv_share value = 1 }",
+            "\tif = { limit = { sr_fl_$M$_dv_capacity > 0 } set_local_variable = { name = sr_xf_m_dv_share "
+            "value = { value = sr_fl_$M$_dv_value divide = sr_fl_$M$_dv_capacity max = 1 } } }",
+            "\tset_local_variable = { name = sr_xf_m_supply_share value = 1 }",
+            "\tif = { limit = { sr_fl_$M$_endurance > 0 } set_local_variable = { name = sr_xf_m_supply_share "
+            "value = { value = sr_fl_$M$_supply_value divide = sr_fl_$M$_endurance max = 1 } } }",
+            "\tif = {",
+            "\t\tlimit = { local_var:sr_xf_ships > 0 }",
+            "\t\tif = { limit = { local_var:sr_fl_dv_share < local_var:sr_xf_m_dv_share } "
+            "set_local_variable = { name = sr_xf_m_dv_share value = local_var:sr_fl_dv_share } }",
+            "\t\tif = { limit = { local_var:sr_fl_supply_share < local_var:sr_xf_m_supply_share } "
+            "set_local_variable = { name = sr_xf_m_supply_share value = local_var:sr_fl_supply_share } }",
+            "\t\tif = { limit = { sr_fl_$N$_drive_value < sr_fl_$M$_drive_value } "
+            "set_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value } }",
+            "\t\tif = {",
+            "\t\t\tlimit = { has_variable = sr_fl_$N$_refit_until }",
+            "\t\t\tif = {",
+            "\t\t\t\tlimit = { OR = { NOT = { has_variable = sr_fl_$M$_refit_until } "
+            "var:sr_fl_$M$_refit_until < var:sr_fl_$N$_refit_until } }",
+            "\t\t\t\tset_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until }",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}",
+            *_xf_move(),
+            "\tset_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_xf_m_dv_share } }",
+            "\tset_variable = { name = sr_fl_$M$_supply value = { value = sr_fl_$M$_endurance multiply = local_var:sr_xf_m_supply_share } }",
+            "\tif = {",
+            "\t\tlimit = { sr_fl_$N$_strength < sr_fl_minimum_strength }",
+            "\t\tsr_fl_clear_at = { N = $N$ }",
+            "\t}",
+            "\telse = {",
+            "\t\tset_variable = { name = sr_fl_$N$_dv value = { value = sr_fl_$N$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
+            "\t\tset_variable = { name = sr_fl_$N$_supply value = { value = sr_fl_$N$_endurance multiply = local_var:sr_fl_supply_share } }",
+            "\t}",
+            "\tsr_loc_rebuild = yes",
+            "}"]
     return out
 
 
@@ -2145,8 +2284,8 @@ def _xf_role_row(n: int, k: str | None) -> list[str]:
 def _xfer_body(n: int) -> list[str]:
     """Slot n's Transfer popup (UI pass design § 6), shown on its own te_popup
     value: Into (a new fleet, or each other fleet of ours here, three a line),
-    then a row a role and the marines with − and +, and the strength's total.
-    A slot no longer at a location shows one line instead."""
+    then a row a role and the marines with − and +, the strength's total, and
+    Transfer. A slot no longer at a location shows one line instead."""
     shown = _eq(f"sr_disp_fl_{n}", 1)
     picks = [0, *_others(n)]
     lines = [picks[i:i + 3] for i in range(0, len(picks), 3)]
@@ -2181,6 +2320,14 @@ def _xfer_body(n: int) -> list[str]:
     for k in XF_KEYS:
         out += _xf_role_row(n, k)
     out += _xf_role_row(n, None)
+    # Transfer: greyed with the refusal named; the click also closes the popup.
+    sgui, scope = "sr_fleet_transfer_sgui", _xf_scope(n)
+    out += ["\t\t\t\tte_sr_xf_go_row = {",
+            *_xf_override("xf_go_btn", f'enabled = "{_xf_call(sgui, "IsValid", scope)}"',
+                          f'onclick = "{_xf_call(sgui, "Execute", scope)}"',
+                          "onclick = \"[GetVariableSystem.Clear('te_popup')]\"",
+                          f'tooltip = "{_xf_reasoned(sgui, scope)}"'),
+            "\t\t\t\t}"]
     out += ["\t\t\t}", "\t\t}"]
     return out
 

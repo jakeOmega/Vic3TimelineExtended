@@ -1894,6 +1894,7 @@
  je_space_race_widget_xf_col_stay:0 "Here after"
  je_space_race_widget_xf_col_there:0 "There after"
  je_space_race_widget_xf_col_there_tt:0 "#header There After#!\nWhat the fleet chosen under Into carries after the transfer: the new fleet, or the other fleet with what it has already."
+ je_space_race_widget_xf_go:0 "Transfer"
  je_space_race_widget_xf_gone:0 "This fleet has left, or is gone."
  je_space_race_widget_xf_intro:0 "Move ships and marines from this fleet into a new fleet here, or into another fleet of ours here. All of it into another fleet merges the two."
  je_space_race_widget_xf_new:0 "New fleet"
