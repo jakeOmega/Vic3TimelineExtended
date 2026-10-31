@@ -278,7 +278,7 @@ Filtered from log triage via `docs/audits/mod_known_noise.md`.
 ### L28. Zero construction speed with a queued project (unattributed)
 **Files:** none named; the engine's `country.cpp:9608` (`:9594`, worded "queues", in the 2026-10-11 logs)
 
-**Problem (2026-10-25):** `Failed to approximate weeks left in construction queue: The total construction speed is zero. Returning max int...` logs 20 to 40 times a minute through a long game, a third of `error.log` on 2026-10-24 (3,208 lines in three and a half hours), with no country and no script frame. The 2026-10-11 observer runs logged it too. Some country holds a construction queue and has no construction at all. Two candidates, neither checked: a country with no states (vanilla's base construction, `country_gdp_construction`, scales with GDP, which is 0 there), or a construction-market country whose sites produce nothing (§ Construction as a Market Good, `docs/systems/mod_systems.md`).
+**Problem (2026-10-25):** `Failed to approximate weeks left in construction queue: The total construction speed is zero. Returning max int...` logs 20 to 40 times a minute through a long game, a third of `error.log` on 2026-10-24 (3,208 lines in three and a half hours), with no country and no script frame. The 2026-10-11 observer runs logged it too. Some country holds a construction queue and has no construction at all. Two candidates, neither checked: a country with no states (vanilla's base construction, `country_gdp_construction`, scales with GDP, which is 0 there), or a construction-market country whose sites produce nothing (§ Construction as a Market Good, `docs/systems/mod_systems/construction.md`).
 
 Filtered from log triage via `docs/audits/mod_known_noise.md`.
 

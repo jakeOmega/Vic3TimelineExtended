@@ -1,6 +1,6 @@
 ﻿# Construction-market subsystem — direct construction, the model games run
 # with free_market_construction_rule disabled (te_free_market_construction_off).
-# See docs/systems/mod_systems.md, "Free Market Construction off".
+# See docs/systems/mod_systems/construction.md, "Free Market Construction off".
 #
 # The rule's production-method flags do the work (common/game_rules/extra_game_rules.txt):
 # the Construction Site is the buildable Construction Sector, its tiers turn

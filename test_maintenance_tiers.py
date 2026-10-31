@@ -2,7 +2,7 @@
 _light, _heavy, _intensive), the mines' equipment-driven group (_mine), the
 method-driven group of power plants, railways and ports (_graded), every tier
 switched off by the no-maintenance settings of free_market_construction_rule,
-and every group hidden in the PM panels (docs/systems/mod_systems.md,
+and every group hidden in the PM panels (docs/systems/mod_systems/construction.md,
 "Maintenance tiers")."""
 import json
 import os

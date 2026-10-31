@@ -2,7 +2,7 @@
 # Monetary Policy — the convertibility crisis (§12.3)
 # ============================================================================
 # Spec: docs/systems/monetary_policy_design.md §12.3, and §0.5 for what phase 3
-# shipped (rulings Q9-Q12). System overview: docs/systems/mod_systems.md
+# shipped (rulings Q9-Q12). System overview: docs/systems/mod_systems/monetary_policy.md
 # § Banking Cycle -> Monetary Policy (phase 3); the variable contract is in the
 # header of common/script_values/te_monetary_script_values.txt.
 #

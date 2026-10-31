@@ -4,7 +4,7 @@ What the next play-test of the space race should look at. In-game checks don't g
 
 ## Progress in months (2026-10-25)
 
-Every event that moves a milestone's progress moves it by whole months of the programme's pace, recorded when the event fires (`docs/systems/mod_systems.md` → Space Race → *Progress in months*). Nothing here rests on an unverified engine fact (the pace is a `set_variable` of a script value, the amount an inline script value in `change_variable`), so there is no self-check; these are display and feel checks.
+Every event that moves a milestone's progress moves it by whole months of the programme's pace, recorded when the event fires (`docs/systems/mod_systems/space_race.md` → Space Race → *Progress in months*). Nothing here rests on an unverified engine fact (the pace is a `set_variable` of a script value, the amount an inline script value in `change_variable`), so there is no self-check; these are display and feel checks.
 
 1. **A setback's tooltip.** Run a milestone at a pace you can read on the overview (the headline's "+N/mo"), then fire a setback (`event te_debug_space_race.1` option j, or wait for the roll). Each option reads "Lose N months of this milestone's progress (-X)", with X = N × the pace to one decimal, and not 0. A minor setback (Safe or Standard) offers 1 to 4 months, an Ambitious failure 4 to 6. On Ambitious the pace, and so X, is half again as large.
 2. **The bar drops by what the tooltip said.** Pick an option and read the milestone's progress before and after: it falls by X, or to 0 when the milestone had less than X. On Solar System Colonization with fleets staged in orbit (more than one goal of progress), it falls by X and never by more than one goal.
@@ -15,7 +15,7 @@ Every event that moves a milestone's progress moves it by whole months of the pr
 
 ## The Space Race tab between milestones (2026-10-25)
 
-The Timeline Extended window's Space Race tab stays open once the country is in the race, and opens with Space Powers and Orbit (`docs/systems/mod_systems.md` → Space Race → *The tab's own sections*). No self-check: everything here is display, and each item fails visibly (an empty row, a raw key, a blank name). Three accessors are new to the mod and are named with their fallback.
+The Timeline Extended window's Space Race tab stays open once the country is in the race, and opens with Space Powers and Orbit (`docs/systems/mod_systems/space_race.md` → Space Race → *The tab's own sections*). No self-check: everything here is display, and each item fails visibly (an empty row, a raw key, a blank name). Three accessors are new to the mod and are named with their fallback.
 
 1. **The tab stays open.** Complete Suborbital Flight with Orbital Flight not yet possible (no Guided Missiles): the tab stays enabled, its Milestones note shows, and How the Space Race Works is still at the foot. Start Orbital Flight: the note goes and the milestone's block appears.
 2. **Our row (`GetPlayer.GetCapital` as a datacontext: new).** The first Space Powers row names us, with our programme's eight icons matching the overview's Programme row and "<milestone>: N%" equal to that milestone's own progress. If the row is blank, store our capital in the monthly refresh (an `sr_power_self` slot) and read it like the others.

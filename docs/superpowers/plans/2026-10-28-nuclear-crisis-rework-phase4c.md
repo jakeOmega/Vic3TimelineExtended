@@ -158,7 +158,7 @@
   - `docs/systems/nuclear_crisis_design.md` (§0.3's outcomes table gains row 11; new §0.17 for trades, with R1–R7)
   - `docs/player_guide/14-nuclear.md` (Moves during a crisis; the outcomes) and the PDF
   - `docs/testing/nuclear-playtest.md` (items for the trade per code, the lapse, the AI's deadline offer; Self-checks row `nd_trade_<N>`)
-  - `docs/systems/mod_systems.md` (the crisis paragraph)
+  - `docs/systems/mod_systems/nuclear.md` (the crisis paragraph)
   - the spec's status line
 
 - [ ] **Step 1: Write the failing test** `TestTradeDocs`:

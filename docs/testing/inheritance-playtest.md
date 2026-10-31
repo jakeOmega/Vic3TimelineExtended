@@ -1,7 +1,7 @@
 # Inheritance second-wave events: play-test list
 
 The second wave of generation events (2026-10-25; `docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md`
-§ 11; `docs/systems/mod_systems.md` § Inheritance). They passed the offline gate. In-game checks don't gate a merge
+§ 11; `docs/systems/mod_systems/inheritance.md` § Inheritance). They passed the offline gate. In-game checks don't gate a merge
 (CLAUDE.md, "In-game checks"); the play-test before a release works through this list. Nothing here rests on an
 unverified engine fact, so there is no self-check.
 

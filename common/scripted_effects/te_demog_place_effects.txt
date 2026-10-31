@@ -7,7 +7,7 @@
 #
 # Under Full only (te_demog_effects_run): the census computes the pattern wherever it runs (Full or Display only), but
 # its effects and the decision act only under Full, as the census's births and deaths do (the release precondition:
-# nothing changes outside Full; mod_systems.md § Demographics).
+# nothing changes outside Full; mod_systems/demographics.md § Demographics).
 #
 # Variables:
 #   country  te_dg_primate_state  its largest city at the last census (a state: the census state with the most urban

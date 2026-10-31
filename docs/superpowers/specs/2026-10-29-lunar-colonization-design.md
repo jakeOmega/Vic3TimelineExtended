@@ -604,7 +604,7 @@ Mars for a strong power entering era 11.
   - each founding event's `event_image` (an existing space race image will
     do; `event_image_audit`).
 - **Docs:**
-  - `docs/systems/mod_systems.md`, Space Race;
+  - `docs/systems/mod_systems/space_race.md`, Space Race;
   - `docs/player_guide/16-space.md`, `02-timeline.md`, `17-reference.md` and
     the events appendix, then the PDF;
   - `docs/testing/solar-colonies-playtest.md`;

@@ -3,7 +3,7 @@
 The Colonial Holdings pass (2026-10-24) answered two of the owner's asks: the panel shows why the Colonial Empire
 entry runs (the overview's "Colonies · Colonial subjects" line, and the two lists under it), and every action that
 targets one territory or one subject sits on that target's row and opens a confirmation for it alone. What it
-built is described in `mod_systems.md` § Decolonization System → Colonial Holdings and `journal_entry_systems.md`
+built is described in `mod_systems/decolonization.md` § Decolonization System → Colonial Holdings and `journal_entry_systems.md`
 § Colonial Stability Widget → Per-target decisions. This file holds what it left for the owner to decide, and ideas
 it did not build. Each item says what the change would be and what it costs.
 

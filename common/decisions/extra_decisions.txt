@@ -458,7 +458,7 @@ te_decision_establish_strategic_reserve = {
 }
 
 # ============================================================================
-# Found a Space Program (mod_systems.md § Space Race)
+# Found a Space Program (mod_systems/space_race.md § Space Race)
 # Places the Space Program in the market capital at once, for free, on Earth
 # Orbit. The programme's expense is its weekly Launch Capacity bill, which
 # climbs with every mission (te_decision_space_mission_* below).
@@ -520,7 +520,7 @@ te_decision_found_space_program = {
 }
 
 # ============================================================================
-# Begin the next space mission (mod_systems.md § Space Race)
+# Begin the next space mission (mod_systems/space_race.md § Space Race)
 # One decision per mission. Each switches the Space Program to that mission's
 # production method; a player can still switch by hand in the building panel.
 #
@@ -913,7 +913,7 @@ te_decision_space_mission_interstellar = {
 }
 
 # ============================================================================
-# Restructure the Public Debt (#800, mod_systems.md § Banking Cycle)
+# Restructure the Public Debt (#800, mod_systems/banking_cycle.md § Banking Cycle)
 # A country whose debt the markets price (banking_sovereign_debt_is_priced,
 # where the debt-load premium starts) or that is in default opens talks with
 # its creditors, and chooses the haircut there (banking_debt_events.1): 10%,

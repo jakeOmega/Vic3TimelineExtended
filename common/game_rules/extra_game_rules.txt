@@ -199,7 +199,7 @@ universal_aptitude_traits_rule = {
 	}
 }
 
-# Free Market Construction (docs/systems/mod_systems.md, "Construction as a
+# Free Market Construction (docs/systems/mod_systems/construction.md, "Construction as a
 # Market Good"). Five settings, four of them market games:
 #   enabled         construction is a market good; Construction Sectors sell
 #                   it, the government and investors buy it, Construction

@@ -280,7 +280,7 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
         # A full 5 / 20 / 100 years reaches from the axis labels to the frame's
         # right edge: the bars once filled 400 of the monthly charts' 496px and
         # left ~90px empty on the left. Integer bar widths must divide evenly
-        # (mod_systems.md, History Store and Charts), and the bars sit 6px clear
+        # (mod_systems/history_charts.md, History Store and Charts), and the bars sit 6px clear
         # of the frame top and bottom, where the axis labels are placed.
         history = _type_body(read("gui/journal_entry_widgets/cultural_hegemony_widget.gui"), "te_ch_sec_history")
         chart = history[history.index("te_history_chart = {"):]

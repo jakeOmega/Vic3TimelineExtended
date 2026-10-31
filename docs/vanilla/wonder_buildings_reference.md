@@ -264,7 +264,7 @@ The `antimatter_production` tech modifiers remain unchanged — these techs are 
 
 ## Wonder 4: Mind Upload Nexus
 
-> **As built (2026-10-19):** the design below predates the build. Under the Demographics rule's Full setting the Nexus hosts uploaded minds (1,000,000 a level, country-wide) and its goods and research follow how full it is; outside Full it produces as its production method says. `docs/systems/mod_systems.md` § Demographics, Uploaded minds.
+> **As built (2026-10-19):** the design below predates the build. Under the Demographics rule's Full setting the Nexus hosts uploaded minds (1,000,000 a level, country-wide) and its goods and research follow how full it is; outside Full it produces as its production method says. `docs/systems/mod_systems/demographics.md` § Demographics, Uploaded minds.
 
 **Fantasy:** True digital immortality. Consciousness can be copied and uploaded to digital substrate, granting a form of immortality. The societal implications are staggering.
 

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # HISTORY STORE — script values
 # ============================================================================
-# Shared by every charted series (see docs/systems/mod_systems.md, "History
+# Shared by every charted series (see docs/systems/mod_systems/history_charts.md, "History
 # store and charts"). Nothing here reads a system-specific variable, so a new
 # series never has to touch this file.
 #

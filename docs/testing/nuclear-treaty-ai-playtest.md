@@ -1,6 +1,6 @@
 # Nuclear treaty AI: play-test
 
-The AI demands a Nuclear Program Freeze or a Nuclear Disarmament only of a country the article would stop (2026-10-16). Before this, an AI India pressed a freeze as a secondary war goal against insignificant Mekong, which had the Nuclear Weapons technology but no standing to build. The gates are `nuclear_program_freeze_matters` and `nuclear_disarmament_matters` (`common/scripted_triggers/nuke_triggers.txt`), and the weights the articles use as `proposal_weight` and `wargoal_score_multiplier` (`nuclear_program_pause_ai_demand_weight`, `nuclear_disarmament_ai_demand_weight`, `common/script_values/extra_script_values.txt`). Design notes: `docs/systems/mod_systems.md` § Nuclear Program Pause.
+The AI demands a Nuclear Program Freeze or a Nuclear Disarmament only of a country the article would stop (2026-10-16). Before this, an AI India pressed a freeze as a secondary war goal against insignificant Mekong, which had the Nuclear Weapons technology but no standing to build. The gates are `nuclear_program_freeze_matters` and `nuclear_disarmament_matters` (`common/scripted_triggers/nuke_triggers.txt`), and the weights the articles use as `proposal_weight` and `wargoal_score_multiplier` (`nuclear_program_pause_ai_demand_weight`, `nuclear_disarmament_ai_demand_weight`, `common/script_values/extra_script_values.txt`). Design notes: `docs/systems/mod_systems/nuclear.md` § Nuclear Program Pause.
 
 Nothing here can be read from script, so there is no self-check line.
 

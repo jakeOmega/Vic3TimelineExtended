@@ -4,7 +4,7 @@
 amendment on the voting laws. It passed the offline gate (`test_first_past_the_post.py`, the CI audits); what the
 join weights do in a running game only the game shows. In-game checks don't gate a merge (CLAUDE.md, "In-game
 checks"). Design: `docs/superpowers/specs/2026-10-25-first-past-the-post-design.md`; system notes:
-`docs/systems/mod_systems.md` § First Past the Post.
+`docs/systems/mod_systems/amendments.md` § First Past the Post.
 
 ## How to run
 

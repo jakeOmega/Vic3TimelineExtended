@@ -1,5 +1,5 @@
 ﻿# ============================================================================
-# Begin Orbital Debris Removal (Global Commons § 6.4; mod_systems.md § Space Race)
+# Begin Orbital Debris Removal (Global Commons § 6.4; mod_systems/space_race.md § Space Race)
 # ============================================================================
 # Switches the Space Program's debris removal group to the best method the
 # country has (te_debris_activate_best_removal): Fusion Sweepers with

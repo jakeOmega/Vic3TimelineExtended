@@ -14,7 +14,7 @@
 ### variable, so stored samples cannot feed a plotline. The column chart below
 ### is the supported way to draw script-held history.
 ###
-### HOW TO ADD A SERIES (see docs/systems/mod_systems.md)
+### HOW TO ADD A SERIES (see docs/systems/mod_systems/history_charts.md)
 ###   1. `te_history_record_sample = { METRIC = <m> VALUE = <v> }` from the
 ###      system's monthly pulse.
 ###   2. Instantiate te_history_chart with blockoverrides for the title, the

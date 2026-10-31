@@ -4,7 +4,7 @@
 #  Values: common/script_values/te_inheritance_values.txt.
 #  Modifiers: common/static_modifiers/te_inheritance_modifiers.txt.
 #  Hooks: common/on_actions/te_inheritance_on_actions.txt.
-#  Docs: docs/systems/mod_systems.md § Inheritance.
+#  Docs: docs/systems/mod_systems/inheritance.md § Inheritance.
 #
 #  Variables (country):
 #    te_inh_concentration        0-100, the wealth-concentration score: the

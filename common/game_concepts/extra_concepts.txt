@@ -331,8 +331,8 @@ concept_subjugation_strength = {
 }
 
 # Inheritance: the wealth-concentration score (te_inh_concentration,
-# docs/systems/mod_systems.md § Inheritance)
+# docs/systems/mod_systems/inheritance.md § Inheritance)
 concept_inheritance_concentration = {}
 
-# the census's health-care access (docs/systems/mod_systems.md § Demographics, Causes of Death)
+# the census's health-care access (docs/systems/mod_systems/demographics.md § Demographics, Causes of Death)
 concept_health_care_access = {}

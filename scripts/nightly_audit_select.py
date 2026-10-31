@@ -203,7 +203,8 @@ ALWAYS_READ = [
 _DOC_MAPPING_RAW: list[tuple[str, list[str], str]] = [
     # Events — most-specific first, generic fallback last
     (r"^events/(economic|banking|te_construction_market)",
-     ["docs/guides/event_creation_guide.md", "docs/vanilla/vanilla_economy_reference.md", "docs/systems/mod_systems.md"],
+     ["docs/guides/event_creation_guide.md", "docs/vanilla/vanilla_economy_reference.md",
+      "docs/systems/mod_systems/banking_cycle.md", "docs/systems/mod_systems/construction.md"],
      "events"),
     (r"^events/(political|modern_election|movement|extra_law|ministry_law|social_tensions|irredentism|heir_education|religious_revival|mental_health|environmentalism|augmentation|post_scarcity)",
      ["docs/guides/event_creation_guide.md", "docs/vanilla/vanilla_politics_reference.md"],

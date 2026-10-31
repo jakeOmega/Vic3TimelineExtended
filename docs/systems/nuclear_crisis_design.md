@@ -52,7 +52,7 @@ There are three independent axes, stored separately: `nd_doctrine` 1–5, `nd_re
 
 | Doctrine | First use is permitted against an enemy we are at war with when… |
 |---|---|
-| 1 No first use | never; retaliation only. Leaving it counts as a **repudiation**: credibility −20, infamy +10, a 10-year decaying `nd_pledge_broken_mod`, and dovish groups disapprove. A launch nobody ordered breaks the pledge without moving the doctrine (#448); `nuclear_incident.6` then lets the government reaffirm it or repudiate it at half price (#803, `mod_systems.md`) |
+| 1 No first use | never; retaliation only. Leaving it counts as a **repudiation**: credibility −20, infamy +10, a 10-year decaying `nd_pledge_broken_mod`, and dovish groups disapprove. A launch nobody ordered breaks the pledge without moving the doctrine (#448); `nuclear_incident.6` then lets the government reaffirm it or repudiate it at half price (#803, `mod_systems/nuclear.md`) |
 | 2 Existential deterrence (default) | their side holds an annexation or subjugation goal against us (annex, reunify, protectorate, dominion, tributary, personal union, crown land, chartered company), or holds goals on our incorporated states while we are losing to them |
 | 3 Flexible first use | any of the above, or we are losing to them, or they hold goals on any of our incorporated states |
 | 4 Nuclear compellence | any of the above, or they defied a public ultimatum of ours (`nd_defied_us`), or they are the target of our crisis at stage 2 or higher |
@@ -530,7 +530,7 @@ The order agreed with the owner for closing the §11 gap ("handle annexation, ci
 
 ### 0.11 The nuclear taboo
 
-One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weapons are: born at 20 with the first warhead, moved each month toward a target of named parts, knocked down by use and worn by threats, and scaling every nuclear cost up to making possession itself a burden. The design, with every owner ruling, is `docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md`; `mod_systems.md` § Nuclear Weapons has the summary. Built 2026-09-26; nothing here has run in a game yet.
+One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weapons are: born at 20 with the first warhead, moved each month toward a target of named parts, knocked down by use and worn by threats, and scaling every nuclear cost up to making possession itself a burden. The design, with every owner ruling, is `docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md`; `mod_systems/nuclear.md` § Nuclear Weapons has the summary. Built 2026-09-26; nothing here has run in a game yet.
 
 #### Where it lives
 
@@ -569,7 +569,7 @@ One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weap
 | `events/un_vote_events.txt`, `common/scripted_effects/un_docket_effects.txt`, `events/un_events.txt` | the Assembly's verdict: `un_vote.2` books it (`nd_taboo_verdict`); `un_docket_effects.txt` sets `nd_taboo_verdict_pending` (730 days) when the docket takes up a nuclear grievance; `un_events.2` option A tags the resolution `un_res_nuclear_grievance` |
 | `localization/english/te_miscellaneous_l_english.yml`, `te_events_l_english.yml`, `te_journal_entries_l_english.yml`, `te_concepts_l_english.yml` | loc |
 | `test_nuclear_deterrence.py` | pressure parts, IG vars, go-public pin |
-| `docs/systems/nuclear_crisis_design.md`, `docs/systems/mod_systems.md`, `docs/systems/journal_entry_systems.md`, `docs/README.md` | what shipped |
+| `docs/systems/nuclear_crisis_design.md`, `docs/systems/mod_systems/nuclear.md`, `docs/systems/journal_entry_systems.md`, `docs/README.md` | what shipped |
 
 #### Deviations from the spec
 
@@ -776,7 +776,7 @@ Success is not measured by how often bombs fall. It is measured by varied, under
 
 ## 2. Existing implementation and seams
 
-Read [mod_systems.md](mod_systems.md) and [journal_entry_systems.md](journal_entry_systems.md) before implementation.
+Read [mod_systems/nuclear.md](mod_systems/nuclear.md) and [journal_entry_systems.md](journal_entry_systems.md) before implementation.
 
 | Existing component | Evidence / reuse |
 |---|---|
