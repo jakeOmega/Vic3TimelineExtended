@@ -3650,6 +3650,8 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
         out += _override("site_target_button",
                          f'enabled = "{_sgui_call("sr_colony_target_sgui", "IsValid", site)}"',
                          f'onclick = "{_sgui_call("sr_colony_target_sgui", "Execute", site)}"',
+                         # Choosing closes the popup, as a picked destination does.
+                         "onclick = \"[GetVariableSystem.Clear('te_popup')]\"",
                          f'tooltip = "{_reasoned("sr_colony_target_sgui", _site_scope(site))}"')
         out += _override("site_target_set_visible", f'visible = "[Not( {_eq(target, 2)} )]"')
         out += _override("site_target_clear_visible", f'visible = "[{_eq(target, 2)}]"')

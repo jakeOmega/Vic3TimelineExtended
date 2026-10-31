@@ -2607,6 +2607,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -2692,6 +2693,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)36' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)36' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -2777,6 +2779,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -2862,6 +2865,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)38' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)38' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)38' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)38' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -2947,6 +2951,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3032,6 +3037,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)40' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)40' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3126,6 +3132,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3211,6 +3218,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3305,6 +3313,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3392,6 +3401,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3479,6 +3489,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3566,6 +3577,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3653,6 +3665,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3747,6 +3760,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3834,6 +3848,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -3921,6 +3936,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4008,6 +4024,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4095,6 +4112,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)10' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4189,6 +4207,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4276,6 +4295,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4363,6 +4383,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4450,6 +4471,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4537,6 +4559,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4624,6 +4647,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4718,6 +4742,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4805,6 +4830,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4892,6 +4918,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -4979,6 +5006,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)22' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)22' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5066,6 +5094,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5160,6 +5189,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5247,6 +5277,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5334,6 +5365,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)26' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)26' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5421,6 +5453,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5515,6 +5548,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5602,6 +5636,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5696,6 +5731,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5783,6 +5819,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5870,6 +5907,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)32' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)32' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -5957,6 +5995,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {
@@ -6044,6 +6083,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_target_button" {
 				enabled = "[GetScriptedGui('sr_colony_target_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_target_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_target_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)34' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_target_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)34' ) ).End ) ) )]"
 			}
 			blockoverride "site_target_set_visible" {

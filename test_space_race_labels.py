@@ -450,6 +450,9 @@ CELLS = {
     "the next fleet's label (te_sr_cf_dest_row)": (
         ("te_sr_cf_dest_row", 'block "dest_label"'),
         r"je_space_race_widget_cf_(target_label|next_label)"),
+    "the next fleet's Change and Choose (te_sr_sec_colony_fleets)": (
+        ("te_sr_sec_colony_fleets", 'text = "je_space_race_widget_cf_change"'),
+        r"je_space_race_widget_cf_(change|choose)"),
     "the next fleet's world (te_sr_cf_dest_row)": (
         ("te_sr_cf_dest_row", 'block "dest_value"'),
         r"je_space_race_widget_cf_(target_value|next_auto)"),

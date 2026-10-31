@@ -4158,9 +4158,10 @@ types space_race_widget_types
 
 	### Solar System (solar colonization only): the worlds under their locations
 	### (the owner's nine, less Earth and the Moon), with who holds them (design
-	### § 9). Open by default, directly under Colony Fleets (audit SPC-7: Target
-	### beside the destination it sets), and filtered by default to the worlds
-	### that matter now: those our next colony fleet can go to, ours and any a
+	### § 9), a list to read: a target is picked in the colony target popup,
+	### from Colony Fleets (UI pass design § 5). Open by default, near the foot
+	### of the panel (#1274), and filtered by default to the worlds that matter
+	### now: those our next colony fleet can go to, ours and any a
 	### fleet is bound for (sr_disp_ss_filtered_<location>), with "Show all 40"
 	### beside the count. Rows in gen_solar_sites.panel_order(), written from the
 	### table and held to it by test_solar_sites.py. The flags are
@@ -4299,9 +4300,11 @@ types space_race_widget_types
 	}
 
 	### Where our next colony fleet goes, in Colony Fleets (audit SPC-7): a
-	### label, the world or "chosen at launch", and Clear beside our target.
-	### 110 + 250 + 66 + 2 × 4 + 2 × 4 = 442, in the 480 column. The label is
-	### underlined where the row has a hover (the pick's rule).
+	### label, the world or "chosen at launch", then Change and Clear beside
+	### our target, or Choose (UI pass design § 5): both open the colony
+	### target popup. 110 + 184 + 66 + 66 + 3 × 4 + 2 × 4 = 446 at most, in
+	### the 480 column. The label is underlined where the row has a hover
+	### (the pick's rule).
 	type te_sr_cf_dest_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -4321,8 +4324,8 @@ types space_race_widget_types
 		}
 		textbox = {
 			autoresize = yes
-			minimumsize = { 250 -1 }
-			maximumsize = { 250 -1 }
+			minimumsize = { 184 -1 }
+			maximumsize = { 184 -1 }
 			parentanchor = vcenter
 			align = left|nobaseline
 			using = te_sr_fontsize_row
@@ -4337,8 +4340,9 @@ types space_race_widget_types
 	### next colony fleet goes, as a value row with Clear beside our target
 	### (sr_cf_target_clear_sgui; audit SPC-7), the drive it flies on
 	### ([concept_sr_drive]), and under simple and full colonies our colony fleets
-	### in flight, one row per slot. Solar System, with the Target buttons,
-	### follows directly. Open by default; the flag is sr_panel_fleets_closed.
+	### in flight, one row per slot. Change and Choose open the colony target
+	### popup (te_sr_target_popup; UI pass design § 5). Open by default; the
+	### flag is sr_panel_fleets_closed.
 	type te_sr_sec_colony_fleets = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -4382,6 +4386,23 @@ types space_race_widget_types
 						using = default_button_action
 						size = { 66 24 }
 						parentanchor = vcenter
+						onclick = "[GetVariableSystem.Set('te_popup', 'sr_target')]"
+						tooltip = "je_space_race_widget_cf_change_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 62
+							elide = right
+							using = te_sr_fontsize_row
+							text = "je_space_race_widget_cf_change"
+						}
+					}
+					button = {
+						using = default_button_action
+						size = { 66 24 }
+						parentanchor = vcenter
 						enabled = "[GetScriptedGui('sr_cf_target_clear_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						onclick = "[GetScriptedGui('sr_cf_target_clear_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('sr_cf_target_clear_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_cf_target_clear_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
@@ -4409,6 +4430,25 @@ types space_race_widget_types
 				blockoverride "dest_value" {
 					text = "je_space_race_widget_cf_next_auto"
 				}
+				blockoverride "dest_button" {
+					button = {
+						using = default_button_action
+						size = { 66 24 }
+						parentanchor = vcenter
+						onclick = "[GetVariableSystem.Set('te_popup', 'sr_target')]"
+						tooltip = "je_space_race_widget_cf_change_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 62
+							elide = right
+							using = te_sr_fontsize_row
+							text = "je_space_race_widget_cf_choose"
+						}
+					}
+				}
 			}
 			te_sr_cf_dest_row = {
 				blockoverride "dest_row" {
@@ -4420,6 +4460,25 @@ types space_race_widget_types
 				}
 				blockoverride "dest_value" {
 					text = "je_space_race_widget_cf_next_auto"
+				}
+				blockoverride "dest_button" {
+					button = {
+						using = default_button_action
+						size = { 66 24 }
+						parentanchor = vcenter
+						onclick = "[GetVariableSystem.Set('te_popup', 'sr_target')]"
+						tooltip = "je_space_race_widget_cf_change_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 62
+							elide = right
+							using = te_sr_fontsize_row
+							text = "je_space_race_widget_cf_choose"
+						}
+					}
 				}
 			}
 			te_sr_value_row = {

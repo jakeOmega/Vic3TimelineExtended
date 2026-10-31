@@ -768,6 +768,9 @@ class PanelTest(unittest.TestCase):
                 self.assertEqual(set(re.findall(r"MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", row)), {str(site.index)})
                 for method in ("IsValid", "Execute", "IsValidTooltip", "ExecuteTooltip"):
                     self.assertIn(f"GetScriptedGui('sr_colony_target_sgui').{method}(", row)
+                # Choosing closes the popup, after the choice runs.
+                self.assertLess(row.index("GetScriptedGui('sr_colony_target_sgui').Execute("),
+                                row.index("onclick = \"[GetVariableSystem.Clear('te_popup')]\""))
                 body = gss.transit_body(site)
                 window = _instances(row, "te_sr_site_window_cell")
                 self.assertEqual(len(window), 1)
