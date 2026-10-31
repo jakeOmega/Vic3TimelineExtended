@@ -116,21 +116,24 @@ Space Fleets (`te_sr_fleet_row`, the `fl_pick_button` block, `sr_fleet_pick_sgui
   - our colonies there, and the strongest hostile strength there and inbound
     (from the location records `sr_loc_*`).
 - **Click:** sets the destination: a new scripted GUI, `sr_fleet_set_dest_sgui`,
-  with `scope:op` the slot and `scope:pick` the location. Go stays on the row
-  (see the builder's call below).
-- **Unavailable rows** are greyed, with the reason (`IsValidTooltip`): no delta-v
-  for the leg, still refitting, a closed window, or Earth's launch bar.
+  with `scope:op` the slot and `scope:pick` the location. **Go stays on the row**
+  (my call: the owner asked for a destination selector, and a fleet often picks
+  now and leaves later, once it has refitted or its window has opened).
+- **Picking is open wherever today's step is** (the fleet at a location, the
+  pick not its own location). A row that the fleet couldn't leave for this month
+  still shows, with **why** as information: short of delta-v for the leg,
+  refitting, below the minimum strength, or Earth's launch bar
+  (`sr_fl_<n>_may_depart_<loc>`'s terms). Go keeps the gate, as `can_go` does now.
+- **A closed window is never a gate.** It only raises a leg's delta-v (fleets
+  design § 6), so it shows inside the delta-v figure. The window column
+  ("open", or months to the next) exists only for legs out of Earth
+  (`sr_window_months_to_next_<body>`); other legs leave it blank (my call: no new
+  generated values for cycle and fixed legs).
 
-**Script:** a new scripted GUI with a `possible` per location, built from the
-per-slot, per-location triggers that already exist
-(`sr_fl_<n>_may_depart_<loc>`). The step-through `sr_fl_dest_pick_<n>` stays
-for the AI and the console until nothing uses it.
-
-**Builder's call:** whether the popup sets the destination only, keeping Go on
-the row, or dispatches at once. The owner asked for a destination selector;
-dispatching at once saves a click, but a player can't then look before leaving.
-Recommend: **pick sets the destination, Go stays on the row**, because a fleet
-often waits for its window.
+**Script:** a new scripted GUI with a `possible` of "at a location, not this
+one", and the rows' reasons from the per-slot, per-location triggers that
+already exist. The step-through `sr_fl_dest_pick_<n>` stays for the AI and the
+console until nothing uses it.
 
 ## 5. Colony target picker
 
@@ -174,8 +177,10 @@ resets them to ½. They are game state, so a share click is a command, as every
 fleet order already is.
 
 **Script:** `sr_fl_detach` (generated) takes a share per role in place of 0.5,
-for each role's `_<role>` and `_<role>_full`, and for the marines. Detaching
-nothing, or everything, is refused, with the reason in Detach's tooltip.
+for each role's `_<role>` and `_<role>_full`, and for the marines. Refused, with
+the reason in Detach's tooltip (my call): a split that leaves either fleet below
+`sr_fl_minimum_strength` (detaching nothing or everything included), and one that
+leaves marines in a fleet with no room to carry them.
 
 **Open question (owner):** should Detach also take an existing fleet at the
 same location as its target, not only a new slot? That makes it a general
@@ -191,7 +196,9 @@ on a fleet's row (6b, 6c).
   offered, Interdict, under Earth's own rules (lunar colonization design § 8:
   Close in at Earth only against a lunar world).
   The current one is lit. Each is enabled where its step allows it today, with the
-  reason when it isn't.
+  reason when it isn't. Setting a posture directly keeps everything the step's
+  effect does on the way (my call): Close in picks a target, and the free-colony
+  and interdiction prices are charged as now.
 - **Target and interdiction target:** a world list, so they open the popup shell
   (§ 3) with the worlds at the fleet's location.
 
@@ -220,9 +227,10 @@ It holds:
   measure with the panel open and fall back to the refresh's copy if it
   stutters.
 - **From the refresh:** the average grade, and the next level's grade, a new
-  variable `sr_ebase_next_grade` that `sr_ebase_fill` records (the grade of the
-  first room it leaves unfilled, or −75%). Both change only when a level
-  finishes or the room changes.
+  variable `sr_ebase_next_grade`: the grade of the first room left unfilled once
+  built **and queued** levels have filled the best room (my call, so "next at"
+  doesn't overstate while levels are queued), or −75% past all the room. The
+  refresh runs the fill a second time with the queued levels for it.
 - **The owner's refresh on construction:**
   - The engine has no on_action for queuing a construction.
   - `on_start_expanding_building` fires when work starts. It changes nothing the
@@ -243,31 +251,40 @@ It holds:
 ## 9. Earth alert
 
 **Today:** a fleet bound for a location where an enemy player holds a colony
-fires `space_race_events.100` once, at departure. For Earth it never fires:
-`sr_loc_held_earth` is `always = no`, although six lunar sites sit at Earth.
-Nothing in the panel warns of an enemy fleet heading to Earth. The inbound
+fires `space_race_events.100` once, at departure. For Earth it never fires, **by
+design**: the generator writes `sr_loc_held_earth = { always = no }` "since a
+fleet bound for Earth is nearly always one coming home" (`gen_space_fleets.py:597-600`).
+Every power's home is Earth, so a hostile fleet returning to refit looks the same
+as one coming to blockade. Nothing in the panel warns of either. The inbound
 counts (`sr_loc_inbound_<loc>`) include our own and allied fleets.
 
+An alert on every hostile fleet bound for Earth would fire on every homecoming,
+so it fires only when an arrival would **change something** (recommended; the
+owner's call, § 15): we have no fleet at Earth to meet it, or what is inbound
+outmatches our strength there.
+
 **What:**
-- **A warning cell in the overview** while any power at war with us has a fleet
-  bound for Earth: "Hostile fleet: Earth in N mo", with its strength. The hover
-  lists each fleet with its owner.
-- **A notice the month one sets out, or a war starts while one is in flight**,
-  for a player with a Space Program or a fleet. It fires once per fleet leg, on
-  the pattern of `sr_earth_notice_step` (`sr_earth_orbit_effects.txt:192-240`)
-  with a noted marker. Departure alone misses a war declared mid-flight.
-- **The Earth arm of `.100`:** a lunar colony's holder is alerted like any other
-  colony's. Earth holds the lunar sites, so `sr_loc_held_earth` should read the
-  six lunar sites.
+- **A warning cell in the overview** while an arrival would change something:
+  "Hostile fleet: Earth in N mo", with its strength against ours there. The
+  hover lists each hostile fleet bound for Earth with its owner, including the
+  ones that don't light the cell.
+- **A notice when the cell first lights** for a fleet leg (it sets out, a war
+  starts while it is in flight, or our own fleet leaves Earth), for a player with
+  a Space Program or a fleet. Once per leg, on the pattern of
+  `sr_earth_notice_step` (`sr_earth_orbit_effects.txt:192-240`) with a noted
+  marker.
+- **This notice replaces `.100`'s Earth arm.** `sr_loc_held_earth` stays
+  `always = no`, so a lunar colony's holder hears once, not twice.
 
 **Script:** a generated value per location for the hostile inbound (the earliest
 landing month and the strength, over the hostile powers' nine slots), in
 `gen_space_fleets.py`. The trigger is
 `any_in_global_list = { variable = sr_fleet_powers has_war_with = prev sr_fl_any_bound = { CODE = 1 } }`.
 
-**Open question (owner):** a popup event as well as the cell, or only the cell
-and an alert-style notification? Recommend the cell plus a one-line notification
-event (no options), as the blockade notices are.
+**Delivery (owner's call, § 15):** either a popup event with one option and an
+image, like the blockade notice `space_race_events.106`, or an optionless
+`post_notification`, like Seabed's, the UN's and covert's notices. Recommend
+`post_notification`: it doesn't stop play for a warning the cell repeats.
 
 ## 10. Fleet upkeep and the Space Command method
 
@@ -308,6 +325,15 @@ so this adds one.
   (`scripting_best_practices.md:1686-1696`).
 - **Balancing:** upkeep for a fleet of strength S is base × k × S ÷ 10 a week,
   one figure set in one place, where k is the multiplier per unit.
+- **Size (proposed, the owner's call):** today a unit (10 strength) costs, at full
+  staff and per Space Command level, 1% of the method's inputs: 1,400 a week
+  under Orbital Shipyards, 1,800 under Fusion Yards, 2,320 under Antimatter Yards
+  (Launch Capacity 200, Advanced Materials 4,000, electricity 30). Match **four
+  levels of Fusion Yards**, the AI's cap with two colonies (`sr_sc_ai_cap`):
+  7,200 a week a unit, or 90 electronic components at 80. So base **10** a week
+  and k **+900%** a unit. The base, 800 a week, is a new running cost on every
+  Space Command, fleet or not. A fleet of 300 then costs 216,000 a week
+  wherever it is built, as four Fusion levels charge today.
 - **What stays:** a goods line still runs at the building's occupancy, so an
   understaffed Space Command pays less; and a country with no Space Command
   still pays nothing (the gap below).
@@ -426,16 +452,19 @@ works:
 | later | The full-page window and the schematic; the widget library's migration | — |
 
 PRs 5, 6 and 8 are independent of the popup and can run in parallel with 2–4.
+Every piece branches from `main` once #1274 has merged (the queue box, the
+Solar System move and the removed Shielded state are its; my call), so none is
+stacked on an open PR.
 Every PR updates `docs/player_guide/16-space.md` where players see the change,
 and adds its in-game checks to `docs/testing/solar-colonies-playtest.md`.
 
 ## 15. Open questions for the owner
 
-1. **Upkeep (§ 10):** which good carries the maintenance line (the owner chose
-   the approach on 2026-10-31); and what a fleet with no Space Command should
-   cost.
-2. **Detach (§ 6):** also into an existing fleet (a general Transfer that folds
+1. **Earth alert (§ 9):** alert only when an arrival would change something (no
+   fleet of ours at Earth, or outmatched), or on every hostile fleet bound for
+   Earth? And `post_notification` or a popup event?
+2. **Upkeep (§ 10):** which good carries the maintenance line (the owner chose
+   the approach on 2026-10-31); the size (the four-Fusion-levels match); and what
+   a fleet with no Space Command should cost.
+3. **Detach (§ 6):** also into an existing fleet (a general Transfer that folds
    Merge in)?
-3. **Earth alert (§ 9):** the cell and a notification, or a popup event too?
-4. **Destination (§ 4):** the popup sets the destination with Go on the row
-   (recommended), or dispatches at once?
