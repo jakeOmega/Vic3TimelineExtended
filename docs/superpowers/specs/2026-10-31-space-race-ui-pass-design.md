@@ -499,7 +499,7 @@ works:
 | 4 | Transfer (§ 6), replacing Detach and Merge | 2 |
 | 5 | The Extraplanetary Base cell and the on-completion refresh (§ 8) | — |
 | 6 | The Earth alert (§ 9) | — |
-| 7 | Fleet upkeep and no departures without a Space Command (§ 10) | the size (§ 15) |
+| 7 | Fleet upkeep, and no fleet orders without a Space Command (§ 10) | — |
 | 8 | Tabs (§ 11) | — |
 | later | The full-page window and the schematic; the widget library's migration | — |
 
