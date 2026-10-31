@@ -38,9 +38,11 @@
 # Left out on purpose:
 #   - base methods that set what a building makes and from what, not who does
 #     the work: Industrial Robotics and Nanobot Assemblers (Tooling Workshop),
-#     Robotic Ship Assembly (Shipyard), Automated Chemical Reactors (the same
-#     staff as every fertilizer method);
-#   - methods that make robots or chips: the Robotics Industry's, Neuromorphic
+#     Robotic Ship Assembly (Shipyard, whose later Advanced Metamaterials
+#     method employs fewer still and would have to go too), Automated Chemical
+#     Reactors (the same staff as every fertilizer method);
+#   - methods that make robots or chips: the Robotics Industry's base methods
+#     (its electronics automation, the AI-managed fab, counts), Neuromorphic
 #     Computing;
 #   - methods that assist people rather than replace them: AI Assisted
 #     Research;

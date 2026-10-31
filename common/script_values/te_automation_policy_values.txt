@@ -38,9 +38,8 @@ te_ap_automatable_levels = {
 	}
 }
 
-# Levels of those that run one (te_ap_runs_automated_method). A building that
-# runs two (a Tooling Workshop's robotic tier and its base method's) counts
-# once.
+# Levels of those that run one (te_ap_runs_automated_method). A building
+# counts once, however many of its groups run one.
 te_ap_automated_levels = {
 	value = 0
 	every_scope_state = {
