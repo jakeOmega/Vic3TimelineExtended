@@ -1624,8 +1624,10 @@ class ModulesTest(unittest.TestCase):
         modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
         self.assertIn("building_space_mine_throughput_add = 0.01", _block(modifiers, "sr_ebase_room_bonus"))
         self.assertIn("building_space_mine_throughput_add = -0.01", _block(modifiers, "sr_ebase_room_penalty"))
-        # The owner's example: room for 10, 20 levels built, -50% past the room, -25% in all.
-        self.assertEqual(10 * 0 + 10 * gss.OVERFLOW_GRADE, -25 * 20)
+        # The owner's example: room for 10, 20 levels built, -75% past the room (owner,
+        # 2026-10-31; -50% before), -37.5% in all.
+        self.assertEqual(gss.OVERFLOW_GRADE, -75)
+        self.assertEqual(10 * 0 + 10 * gss.OVERFLOW_GRADE, -37.5 * 20)
 
     def test_the_build_gates_hold_the_ai_and_private_investors_to_the_room(self):
         buildings = _strip(_raw("common", "buildings", "extra_buildings.txt"))

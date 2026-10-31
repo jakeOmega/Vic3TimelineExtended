@@ -1221,7 +1221,7 @@
  je_space_race_widget_def_status_occupied:0 "#R Occupied#!"
  je_space_race_widget_ebase_figure:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_levels')|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_room')|0]"
  je_space_race_widget_ebase_label:0 "Extraplanetary Base levels / room"
- je_space_race_widget_ebase_tt:0 "#header Extraplanetary Base Room#!\nWith $asteroid_mining$, the near-Earth asteroids give room for 10 Extraplanetary Base levels, and each colony we hold adds its own, from 50 levels to 300 at 16 Psyche, and 50 more a staffed level of its Mining Complexes. Our levels work the best room first, at its [concept_sr_base_grade]: the metal asteroids raise their output, the outer moons lower it. A level past all of our room works at -50%. Our levels now work at [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_grade')|+1]% throughput on average."
+ je_space_race_widget_ebase_tt:0 "#header Extraplanetary Base Room#!\nWith $asteroid_mining$, the near-Earth asteroids give room for 10 Extraplanetary Base levels, and each colony we hold adds its own, from 50 levels to 300 at 16 Psyche, and 50 more a staffed level of its Mining Complexes. Our levels work the best room first, at its [concept_sr_base_grade]: the metal asteroids raise their output, the outer moons lower it. A level past all of our room works at -75%. Our levels now work at [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_grade')|+1]% throughput on average."
  je_space_race_widget_emig_label:0 "Emigration"
  je_space_race_widget_emig_level_0:0 "Off"
  je_space_race_widget_emig_level_1:0 "Low"

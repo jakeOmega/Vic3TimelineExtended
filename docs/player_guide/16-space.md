@@ -809,10 +809,10 @@ which raises or lowers the output of the levels that work it:
 | The Kuiper Belt | −35% to −45% |
 
 Your levels fill the best room first, and any past all of your room work at
-−50%. Before Asteroid Mining, a country with no colony has no room at all. One
+−75%. Before Asteroid Mining, a country with no colony has no room at all. One
 country modifier, Extraplanetary Base Room, carries the average over
 all your levels, so only the levels past the room pay the penalty: with room for
-10 and 20 levels built, the base works at −25%. A new poor colony adds room
+10 and 20 levels built, the base works at −37.5%. A new poor colony adds room
 without lowering what your levels already earn, and taking a rival's Psyche
 colony raises your average and lowers theirs. The Colonies section's Modules
 view shows your levels against your room, and each colony's Bases figure its
