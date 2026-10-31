@@ -732,3 +732,41 @@ The maintenance line and no fleet orders without a Space Command (UI pass design
 5. **Two Space Commands.** Annex or form a country holding a second one: each building's Fleet Upkeep reads half (at
    10 units, +4,500%), and the panel's Upkeep still +9000%. Demolish one: the other carries it all the next month.
 
+
+## The owner's UI pass: the fleet popups and posture buttons (PR 3, 2026-10-31)
+
+Fleet Destination, Fleet Target and the posture buttons on a fleet's row (UI pass design §§ 4, 7;
+`docs/systems/mod_systems/space_race.md` § Fleets, Orders), under Full Colonies. Both popups use PR 2's shell; its
+items above (layer, Escape, click outside, mouse filter) apply to them too. **Fallback** if a body shows the wrong
+slot: one body, read from a country variable the opening click sets (design § 3's rejected route; mind the same-click
+gotcha).
+
+1. **Nine bodies switch with the slot.** With three fleets at different locations, open each one's destination button
+   in turn: the popup names that fleet's location, strength, propellant and supply, and lists every location but its
+   own. The same from the Timeline Extended window's Space Race tab (Fleets tab): identical rows and figures.
+2. **The rows read.** Each row has the trip's months and propellant to a tenth, red where the fleet carries less (the
+   hover says so); from Earth a window reading "Open now" or "In N months", blank from anywhere else; our colonies
+   there, and the enemy's strength there and on its way (0 at peace). No raw keys, nothing cut off with an ellipsis.
+3. **Choosing, then Go.** Choose on a row closes the popup, and the fleet's destination button names the location;
+   reopened, that row reads Chosen. Go then works as before, and stays greyed where the propellant is short. Both of
+   Choose's clicks run once (the choice, then the close).
+4. **Why it can't leave.** A refitting fleet's popup says it is refitting; with Earth blockaded, a fleet at Earth's
+   says the launches are barred; with no Space Command in a state we control, it says so (before a refit). Each can
+   still choose.
+5. **A fleet gone under the popup.** With the popup open, let the month tick on a fleet that loses its last battle
+   (or merge it away from the console): the popup reads "This fleet has left, or is gone." and has no buttons.
+6. **The posture buttons.** Away from Earth, a fleet's row shows Station, Stand off, Close in and Interdict on their
+   own line under its orders, the one in force lit (not greyed). Each other one sets its posture on one click; a
+   greyed one's hover gives the reason (no hostile site here; no site of a country at peace with us; never at Earth).
+7. **A posture's price is charged once.** Close in on a free colony: 10 infamy and the UN record once; click Station
+   and Close in again on the same site: nothing more. Interdict a country's site: 5 infamy once; Station, then
+   Interdict the same country: charged again (a new interdiction, as the step did).
+8. **At Earth.** With an enemy's lunar colony, the posture line shows at Earth: Station and Close in can be chosen,
+   Stand off and Interdict greyed with "not at Earth". With none, no posture line at Earth.
+9. **Fleet Target.** The target button opens the sites at the fleet's location with their holders (flag, Ours, Free,
+   Occupied, Unclaimed). Target on a hostile site closes the popup and the row's target names it; reopened, it reads
+   Targeted. Closing in, targeting a free colony charges its price; interdicting, a new country's site charges the
+   interdiction's. A site the posture can't take is greyed with the reason.
+10. **No stutter.** Opening and closing either popup, and scrolling Fleet Target at Jupiter (six sites), stays smooth:
+    the target popup holds 360 rows, 9 slots × 40 worlds, all but a few hidden. Fallback if it stutters: one body per
+    location, the slot read from a country variable.
