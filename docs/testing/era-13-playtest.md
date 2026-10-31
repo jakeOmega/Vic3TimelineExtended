@@ -21,7 +21,7 @@ Grep `debug.log` for `TE_ERA13_TECH_REPAIR` after loading an old save.
    - Rejuvenation Therapies (after Personalized Medicine) lists chronic
      treatment, ageing rate, its share of the absorbed deaths line and
      character health in its tooltip.
-   - Post-Work Society (after Universal Basic Income) lists its four
+   - Post-Work Society (after Universal Basic Income) lists its three
      modifiers.
    - Both draw a borrowed icon until the icon pipeline paints theirs:
      Biological Immortality's hourglass, and Universal Basic Income's.
