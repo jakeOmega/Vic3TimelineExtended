@@ -507,7 +507,7 @@ Launch Systems.
 
 ### Companies added by the mod
 
-The mod adds 93 company types. 82 are flavored companies, mostly real firms of
+The mod adds 95 company types. 84 are flavored companies, mostly real firms of
 the twentieth and twenty-first centuries (Volkswagen, Intel, SpaceX, Pfizer,
 Saudi Aramco and many more) plus a few fictional far-future ones such as
 Tessier-Ashpool S.A. The other eleven are generic companies for the new sectors:
@@ -522,10 +522,13 @@ the leading producer of their good. Japan can found Saudi Aramco and the United
 States can found Volkswagen if they meet those conditions. Generic companies
 need a large enough building of their industry.
 
-Biotechnology companies, the generic one and eight flavored ones such as
+Biotechnology companies, the generic one and ten flavored ones such as
 Genentech and BioNTech, also need the Corporate Genetic Licensing law
 ([Economic law groups](06-politics.md#economic-law-groups)), which
-Biotechnology unlocks.
+Biotechnology unlocks. Three of them come from fiction and unlock late: the
+Rosen Association's androids with Genetic Engineering, InGen's resurrected
+species with Synthetic Biology, and RejoovenEsense's longevity treatments with
+Biological Immortality.
 
 ## Wonders
 

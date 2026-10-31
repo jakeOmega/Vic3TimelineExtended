@@ -3109,6 +3109,18 @@ state_building_rosen_association_hq_max_level_add = {
 	decimals = 0
 }
 
+state_building_ingen_biological_preserve_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_rejoovenesense_compound_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
 
 # === Combat units (offense/defense for mod unit types) ===
 

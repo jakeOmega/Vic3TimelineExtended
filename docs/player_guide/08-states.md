@@ -627,6 +627,9 @@ lists its part among its modifiers.
 | Regulated Augmentation Market | The market's price falls half again as fast; with Private Health Insurance, two and a half times as fast. |
 | Human Purity | None. |
 
+The RejoovenEsense company also brings the market 10 levels of wealth further
+down while its prosperity bonus is active.
+
 The market reaches the rich first: from your first aging technology, people
 from wealth 80 can buy care, and the line falls about a level a year, faster with
 the technologies that spread medicine. Care rolls out as fast as new medicine

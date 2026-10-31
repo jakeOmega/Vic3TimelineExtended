@@ -1712,6 +1712,11 @@ ICONS: dict[str, dict[str, dict]] = {
                  "now": f"{_GI}/company_icons/historical_company_icons/german_biontech.dds"},
         "scifi_rosen_association": {"subject": "a lifelike artificial owl made of brass and glass, its eyes glowing amber", "seed": 1,
                  "now": f"{_GI}/company_icons/historical_company_icons/scifi_rosen_association.dds"},
+        # Fictional too: once a seed is picked, drop the stem from gen_placeholder_company_icons.py's ICONS.
+        "scifi_ingen": {"subject": "a polished chunk of golden amber with a mosquito preserved inside it", "seed": None,
+                 "now": f"{_GI}/company_icons/historical_company_icons/scifi_ingen.dds"},
+        "scifi_rejoovenesense": {"subject": "a glass hourglass lying on its side, a fresh green sprout growing out of the sand inside it", "seed": None,
+                 "now": f"{_GI}/company_icons/historical_company_icons/scifi_rejoovenesense.dds"},
     },
     # Mod goods drawn by older generators: flat vector art and badges, not
     # vanilla's painted objects. Keys are the file names (written in place).

@@ -807,8 +807,9 @@ DEATH_CAUSE_TAGS = {
         "drugs_shortage_rationing", "addiction_public_health_modifier", "institutional_reform_modifier",
         "gm_national_sig_olympic", "gm_boon_tech_athletic", "augment_health_panic", "nd_weapons_accident_contamination",
         "te_demog_wave_almshouses", "te_demog_wave_villages_alone",
-        "company_roche", "company_cochlear", "company_novo_nordisk", "company_biocon",
+        "company_roche", "company_cochlear", "company_novo_nordisk", "company_biocon", "company_rejoovenesense",
         "pm_roche_tower", "pm_cochlear_global_hq", "pm_novo_nordisk_kalundborg_plant", "pm_biocon_park",
+        "pm_rejoovenesense_compound",
     ),
     # accidents and violence: disasters, massacres, crackdowns, ordeals, suicide
     "ext": (

@@ -1619,3 +1619,19 @@ can check, so there is no self-check.
    Demographics subtab (note whether the Census Data window stays open behind it).
 6. **The greyed tab.** For a country released mid-game, before its first census, Demographics is greyed and its hover
    says it opens with the country's first census.
+
+## RejoovenEsense's longevity care (2026-10-31)
+
+RejoovenEsense, a biotechnology company that unlocks with Biological Immortality, carries the census's market reach
+(+10 levels of wealth, half Unrestricted Augmentation's 20) on its prosperity bonus, and its flagship, the RejoovenEsense
+Compound, carries the census's rejuvenation (+2% a year, workforce-scaled) on its own state. Both are script-only state
+types a country modifier carries to the states, which item 15 of § Phase 3: the late game proved for the laws, so there
+is no self-check. Offline: `prestige_good_roster_audit`, `loc_coverage_audit` and `test_demographics_cause_tags.py` (its
+chronic illness tags).
+
+1. **The tooltips.** The company's prosperity bonus shows "Longevity Care Market Reach +10" and the Compound's method
+   "Rejuvenation +2%", neither a raw key, each hover giving its description.
+2. **The read (Full, late game).** In a country with Biological Immortality and the company prosperous, option u's
+   `reach=` reads 10 more than the laws give (30 under Unrestricted Augmentation) and `threshold=` 10 lower; in the
+   Compound's state, fully staffed, `pull=` reads 0.05 (immortality's 0.03 and the Compound's 0.02). When the bonus
+   lapses (prosperity below 75), `reach=` drops back by 10.

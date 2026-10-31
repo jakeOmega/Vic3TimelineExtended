@@ -19,11 +19,11 @@ Each company building follows this pattern:
 - **Company integration:** Company's `prosperity_modifier` includes `state_building_X_max_level_add = 1`. That is the building's only max level, so it can be built only while the company is prosperous (bonus on at prosperity 100, off below 75)
 - **AI:** `ai_value = { value = te_company_flagship_ai_value }` (50000); see docs/systems/mod_systems/ai.md § "Company AI"
 
-Counts as of 2026-10-02: `common/buildings/company_buildings.txt` defines **323** company buildings. **11** are retired (`potential = { always = no }`, kept so saves load), leaving **312 active flagships**:
-- **278 named flagships** for flavored companies, vanilla and mod alike;
+Counts as of 2026-10-31: `common/buildings/company_buildings.txt` defines **325** company buildings. **11** are retired (`potential = { always = no }`, kept so saves load), leaving **314 active flagships**:
+- **280 named flagships** for flavored companies, vanilla and mod alike;
 - **34 generic flagships** (`building_generic_*`) for generic company types.
 
-Every one of the 221 base-game companies and all 93 mod companies has a flagship, and no company has more than one. (Two generic flagships are shared by two companies each: the Granary Complex and the Textile Depot.) The retired eleven are `building_generic_mega_factory`, `_exhibition_centre`, `_shipping_terminal`, `_corporate_university`, `_industrial_city`, `_pipeline_terminus`, `_rail_nexus`, `_financial_center`, `_monument_to_industry`, `_spaceport` and `_hq_skyscraper`; the monthly company-building cleanup removes any that still stand.
+Every one of the 221 base-game companies and all 95 mod companies has a flagship, and no company has more than one. (Two generic flagships are shared by two companies each: the Granary Complex and the Textile Depot.) The retired eleven are `building_generic_mega_factory`, `_exhibition_centre`, `_shipping_terminal`, `_corporate_university`, `_industrial_city`, `_pipeline_terminus`, `_rail_nexus`, `_financial_center`, `_monument_to_industry`, `_spaceport` and `_hq_skyscraper`; the monthly company-building cleanup removes any that still stand.
 
 **Flavored company buildings** have ~2000 employment, significant goods I/O, and strong state modifiers.
 **Generic company buildings** have ~10000 employment, weaker modifiers, and simpler goods setups.
