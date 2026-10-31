@@ -370,7 +370,9 @@ sr_mod_ai_review = {
 # lunar colonization design § 6); the average grade over all of them, past the
 # room at -75%, is one country modifier, so only the levels past the room pay
 # the penalty (owner, 2026-10-25). Both are removed first; under races only
-# neither is added.
+# neither is added. It also stores the grade the next level would work at,
+# built and queued levels counted (var:sr_ebase_next_grade, sr_ebase_next_fill),
+# for the overview's Extraplanetary Bases cell (UI pass design § 8).
 sr_ebase_refresh = {
 	if = {
 		limit = { has_modifier = sr_ebase_room_bonus }
@@ -387,6 +389,9 @@ sr_ebase_refresh = {
 		set_local_variable = { name = sr_eb_left value = local_var:sr_eb_levels }
 		set_local_variable = { name = sr_eb_sum value = 0 }
 		sr_ebase_fill = yes
+		# Where the next level would work, counting queued levels (UI pass
+		# design § 8): the overview's Extraplanetary Bases cell.
+		sr_ebase_next_fill = yes
 		set_variable = { name = sr_ebase_grade value = 0 }
 		if = {
 			limit = { local_var:sr_eb_levels > 0 }
@@ -414,6 +419,21 @@ sr_ebase_refresh = {
 			}
 			add_modifier = { name = sr_ebase_room_penalty multiplier = var:sr_ebase_units }
 		}
+	}
+}
+
+# Country scope, the owner of an Extraplanetary Base just built or expanded
+# (te_on_building_built, te_on_building_expanded): Base Room's refresh the next
+# day (space_race_events.110), when the new level surely counts. One event a
+# day however many levels finish: each refresh removes and re-adds its
+# modifier, and whether a second same-day run's has_modifier sees the first's
+# add is unverified, so a batch must not run it twice. The marker lapses in
+# two days if the event never fires.
+sr_ebase_hook_fire = {
+	if = {
+		limit = { NOT = { has_variable = sr_ebase_hook_pending } }
+		set_variable = { name = sr_ebase_hook_pending value = yes days = 2 }
+		trigger_event = { id = space_race_events.110 days = 1 }
 	}
 }
 

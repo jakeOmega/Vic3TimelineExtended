@@ -621,6 +621,25 @@ No post-setback cooldown, self-government at 50, the grade beside Bases, the que
 6. **Solar System's place.** Solar System sits below Space Fleets (Colonies under Simple Colonies), just above How
    Solar Colonization Works, in the journal and in the Timeline Extended window's Space Race tab.
 
+## The owner's UI pass: the Base Room cell (PR 5, 2026-10-31)
+
+The colonization overview's Base Room cell and the refresh when a base is built (UI pass design § 8;
+`docs/systems/mod_systems/space_race.md` § Colony modules and Extraplanetary Base room).
+
+1. **The cell.** With In-Situ Resource Utilization, the overview's third row shows Base Room: our Extraplanetary Base
+   levels against our room ("120 / 400"), and "next at +5%" under it. Without the technology the row is gone.
+2. **Queued levels.** Queue 20 levels: the hover counts them at once, the Modules view gains "Extraplanetary Base levels
+   queued +20", and by the next month (or the day after a level finishes) "next at" moves to the grade of the room
+   those levels would leave (counting them, not only the built ones). Queue past all of our room: the figure turns red
+   and reads "next at -75%" at once.
+3. **On completion.** When a queued level finishes, the cell's average and "next at" change the next day, not at the
+   next month. If nothing changes until the month turns, `on_building_built` / `on_building_expanded` never reached
+   `te_on_building_*` (unverified, `scripting_best_practices.md`); fallback: drop the hook, the monthly pulse stays.
+4. **A batch stacks nothing.** Let several levels finish on one day (queue them in several states at once) and compare
+   the country's Extraplanetary Base Room modifier before and after: one copy, at the new average, not two.
+5. **No stutter.** With the panel open and many states holding bases, scrolling the overview stays smooth (the levels,
+   queue and room are read live, each a loop over our buildings). Fallback if it stutters: read copies the refresh
+   stores.
 ## The owner's UI pass: the popup and the colony target (PR 2, 2026-10-31)
 
 The mod's first centred popup (`te_ui_popup` in `gui/te_widget_library.gui`, the `te_popups` root in `gui/te_popups.gui`)
