@@ -106,6 +106,12 @@ Since 2026-10-31 (owner) every world's `ebase_room` is five times the figure
 designed here, 50 to 300 (4,325 over the 40 worlds since the Moon), and a staffed
 Mining Complex level gives 50; the near-Earth room stays at 10.
 
+Also since 2026-10-31 (owner), a level past all of the room works at −75%, not
+the −50% designed here (`OVERFLOW_GRADE`), so room for 10 with 20 levels works
+at −37.5%; and since bases now need colonies to pay, the Extraplanetary Base's
+staff is a flat crew (`unscaled`, as the `pm_ai_managed_*` methods'), not a
+crew a level.
+
 The grades follow scope § 8.2: the metal asteroids rich and close (Psyche
 +30, Vesta +20, Ceres +15), the Martian sites good (+10), Jupiter's big moons
 ordinary (0), Venus and Saturn's moons poor (−10 to −20), Uranus, Neptune and

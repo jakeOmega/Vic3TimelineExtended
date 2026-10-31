@@ -13,7 +13,8 @@ ships arrives. Every Deep-Sea figure counts them: a claim that the mine earns mo
 on the dearer tenders, and a claim that it earns less holds on the cheaper.
 
 Everything is read from the files: the buildings' method groups, each method's goods and
-staff, the logistics methods' input multipliers, the technologies' eras and the goods'
+staff (the Deep-Sea Mine's a level, the Extraplanetary Base's a flat crew at any level,
+owner 2026-10-31), the logistics methods' input multipliers, the technologies' eras and the goods'
 base prices (vanilla_parsed plus the mod's goods file, as pm_costs.py prices them). The
 two buildings share their other groups (maintenance), which cancel in every comparison.
 
@@ -167,10 +168,15 @@ class _Data:
         return {key[len(prefix):-len(suffix)]: float(_unwrap(v)) for key, v in block.items()
                 if key.startswith(prefix) and key.endswith(suffix)}
 
-    def employment(self, pm):
-        block = _block(self.pms[pm], "building_modifiers", "level_scaled")
+    def employment(self, pm, bucket="level_scaled"):
+        """The method's staff in one building_modifiers block: level_scaled is a level's,
+        unscaled a flat crew's at any level."""
+        block = _block(self.pms[pm], "building_modifiers", bucket)
         return sum(float(_unwrap(v)) for key, v in block.items()
                    if key.startswith("building_employment_") and key.endswith("_add"))
+
+    def crew(self, pm):
+        return self.employment(pm, "unscaled")
 
     def input_mults(self, pm):
         """{good: mult} for every goods_input_<good>_mult the method carries in unscaled."""
@@ -279,7 +285,8 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
                 self.assertLess(self.d.value(base[0], "input") + dearest,
                                 self.d.value(pm, "input"))
             with self.subTest(extraplanetary=pm, axis="workforce"):
-                self.assertEqual(self.d.employment(base[0]), self.d.employment(pm))
+                # The base's flat crew is one Deep-Sea Mine level's staff (owner, 2026-10-31).
+                self.assertEqual(self.d.employment(base[0]), self.d.crew(pm))
 
     def test_era_12_methods_double_the_base_output(self):
         base = [pm for pm in self.deep if self.d.method_era(pm, DEEP_SEA) == 11]
@@ -338,8 +345,41 @@ class RegolithProcessing(unittest.TestCase):
         profit = self.d.profit(self.REGOLITH)
         self.assertGreater(profit, 0)
         self.assertLess(4 * profit, self.d.profit(self.ASTEROID))  # under a quarter of its return a level
-        self.assertEqual(self.d.employment(self.REGOLITH), 800)
-        self.assertAlmostEqual(profit / self.d.employment(self.REGOLITH), 2.0)  # the wage it can pay
+        self.assertEqual(self.d.crew(self.REGOLITH), 800)
+        self.assertAlmostEqual(profit / self.d.crew(self.REGOLITH), 2.0)  # the wage one level can pay
+
+
+class ExtraplanetaryBaseFlatCrew(unittest.TestCase):
+    """Owner, 2026-10-31: a base needs its colonies' room to pay, so it hires a flat crew
+    at any level, in `unscaled`, and no staff a level. Like every flat crew
+    (test_ai_managed_flat_staff.py), the job is very attractive so the crew fills."""
+
+    MIN_ATTRACTIVENESS = 5  # +500%, as pm_grid_transfer_base and the pm_ai_managed_* crews
+
+    def setUp(self):
+        self.d = _DATA
+
+    def test_every_base_method_hires_a_flat_crew_only(self):
+        for pm in self.d.group_methods(self.d.base_group(SPACE), None):
+            with self.subTest(method=pm):
+                self.assertGreater(self.d.crew(pm), 0)
+                for bucket in ("level_scaled", "workforce_scaled"):
+                    self.assertEqual(self.d.employment(pm, bucket), 0, bucket)
+
+    def test_the_other_groups_hire_no_one(self):
+        for group in self.d.building_groups(SPACE)[1:]:
+            for pm in self.d.group_methods(group, None):
+                for bucket in ("level_scaled", "workforce_scaled", "unscaled"):
+                    with self.subTest(group=group, method=pm, bucket=bucket):
+                        self.assertEqual(self.d.employment(pm, bucket), 0)
+
+    def test_every_crew_is_a_very_attractive_job(self):
+        for pm in self.d.group_methods(self.d.base_group(SPACE), None):
+            unscaled = _block(self.d.pms[pm], "building_modifiers", "unscaled")
+            with self.subTest(method=pm):
+                value = _unwrap(unscaled.get("building_job_attractiveness_mult"))
+                self.assertIsNotNone(value, "no building_job_attractiveness_mult in unscaled")
+                self.assertGreaterEqual(float(value), self.MIN_ATTRACTIVENESS)
 
 
 class RuleOffKeepsTheOldMine(unittest.TestCase):
@@ -534,7 +574,8 @@ def print_table():
                 inp = sum(d.value(m, "input") for m in (pm, *secondary))
                 out, profit = d.value(pm, "output"), d.profit(pm, secondary)
                 label = f"{pm} + {tender.split('_')[1]}" if tender else pm
-                row = (f"{label:42} {d.method_era(pm, building):>3} {d.employment(pm):>6.0f} "
+                staff = d.employment(pm) if building == DEEP_SEA else d.crew(pm)  # a level / flat
+                row = (f"{label:42} {d.method_era(pm, building):>3} {staff:>6.0f} "
                        f"{inp:>9,.0f} {out:>9,.0f} {profit:>9,.0f} {profit / inp:>7.0%}")
                 if building == SPACE:
                     row += f" {d.profit(pm, upgrades[1:]):>9,.0f} {d.profit(pm, upgrades):>9,.0f}"

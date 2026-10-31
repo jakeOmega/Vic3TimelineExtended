@@ -354,7 +354,7 @@ sr_mod_ai_review = {
 # site of the two room modifiers. Its built levels fill its room best grade
 # first (sr_ebase_fill; the near-Earth asteroids' room needs Asteroid Mining,
 # lunar colonization design § 6); the average grade over all of them, past the
-# room at -50%, is one country modifier, so only the levels past the room pay
+# room at -75%, is one country modifier, so only the levels past the room pay
 # the penalty (owner, 2026-10-25). Both are removed first; under races only
 # neither is added.
 sr_ebase_refresh = {
