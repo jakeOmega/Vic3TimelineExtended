@@ -103,3 +103,34 @@ ahead, raised if they fall short.
 |---|---|---|---|---|---|
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
+
+## Phase 3: AI Tutors
+
+1. **The tree.** AI Tutors sits in era 11's society column, its arrow from
+   Digital Education (era 9), and borrows Digital Education's icon until its
+   own is painted. Its tooltip lists qualifications +10%, literacy growth,
+   education access +10 and the Ministry of Thought Control's maximum
+   investment +1.
+2. **The ministry's ceiling.** Human Augmentation now lists +2 for the
+   Ministry of Thought Control, not +3. Under the Ministry of Thought Control
+   law with Cyber Warfare, Brain-Computer Interfaces, Human Augmentation and AI
+   Tutors researched, the ministry's maximum investment reads 9.
+3. **Education access.** A state's education access rises by 10 points when
+   AI Tutors completes, and its breakdown names the technology.
+4. **Lessons Between the Lines** (`event society_technology_events.36` in a
+   country under Unregulated Internet with AI Tutors). It shows the
+   whistleblower picture. The first option gives Open Curricula, capitalist
+   radicals, and the Intelligentsia's and Industrialists' approval lines; the
+   second gives Contracted Curriculum and the reverse approvals.
+5. **The Ministry's Syllabus** (`event society_technology_events.37`). Its
+   description names the Ministry of Thought Control, the Ministry of
+   Propaganda, or the censors under State-Controlled Internet alone. The
+   second option radicalizes bureaucrats.
+6. **The loyalty line.** Contracted Curriculum and The State Syllabus show a
+   Monthly Loyalists line of 0.1%. The type sets no `decimals`, so confirm it
+   doesn't render as 0%. After either, an incorporated state's pops gain
+   loyalists each month, even in a country without a Ministry of Thought
+   Control (the state's Monthly Loyalists breakdown names the modifier), and
+   the line fades over ten years.
+7. **Once each.** Neither event comes back in the same country, whichever
+   option was taken.

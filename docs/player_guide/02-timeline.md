@@ -187,6 +187,23 @@ Each of the four also raises the Schools institution's maximum investment by one
 level. Funding schools and the laws that raise education access are how a
 country holds its literacy against the drop.
 
+AI Tutors (era 11, after Digital Education) works the other way. A personal
+tutor for every child adds 10 points of education access, speeds literacy growth
+and raises qualifications by 10%, so pops retrain for new jobs sooner. With all
+five researched, education access ends 30 points down rather than 40.
+
+What the tutors teach is the catch. AI Tutors raises the Ministry of Thought
+Control's maximum investment by one level, and two events can follow, each at
+most once. Under Unregulated Internet, a private tutoring platform is caught
+steering its pupils' politics. Under State-Controlled Internet, or with a
+Ministry of Propaganda or of Thought Control, the state has written the syllabus
+every tutor will teach. Each event trades loyalty against trust and research.
+Controlling the lessons turns a small share of your people loyalist every month
+for ten years, fading, at a cost in legitimacy and research speed. Opening them
+up gives legitimacy and research speed instead, pleases the Intelligentsia, and
+radicalizes whoever lost control of them: the platform's capitalist owners or
+the ministry's bureaucrats.
+
 ### Technologies that open the mod's systems
 
 Several of the new technologies first bring a system from another chapter into
