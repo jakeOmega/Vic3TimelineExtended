@@ -1759,6 +1759,9 @@ types sr_fleets_generated_rows_types
 			blockoverride "dp_why_3_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_why'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "dp_why_4_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_why'), '(CFixedPoint)4' )]"
+			}
 			blockoverride "dp_rows" {
 				te_sr_dest_row = {
 					blockoverride "dr_visible" {
@@ -2216,6 +2219,9 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "dp_why_3_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_why'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "dp_why_4_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_why'), '(CFixedPoint)4' )]"
 			}
 			blockoverride "dp_rows" {
 				te_sr_dest_row = {
@@ -2675,6 +2681,9 @@ types sr_fleets_generated_rows_types
 			blockoverride "dp_why_3_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_why'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "dp_why_4_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_why'), '(CFixedPoint)4' )]"
+			}
 			blockoverride "dp_rows" {
 				te_sr_dest_row = {
 					blockoverride "dr_visible" {
@@ -3132,6 +3141,9 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "dp_why_3_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_why'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "dp_why_4_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_why'), '(CFixedPoint)4' )]"
 			}
 			blockoverride "dp_rows" {
 				te_sr_dest_row = {
@@ -3591,6 +3603,9 @@ types sr_fleets_generated_rows_types
 			blockoverride "dp_why_3_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_why'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "dp_why_4_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_why'), '(CFixedPoint)4' )]"
+			}
 			blockoverride "dp_rows" {
 				te_sr_dest_row = {
 					blockoverride "dr_visible" {
@@ -4048,6 +4063,9 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "dp_why_3_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_why'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "dp_why_4_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_why'), '(CFixedPoint)4' )]"
 			}
 			blockoverride "dp_rows" {
 				te_sr_dest_row = {
@@ -4507,6 +4525,9 @@ types sr_fleets_generated_rows_types
 			blockoverride "dp_why_3_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_why'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "dp_why_4_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_why'), '(CFixedPoint)4' )]"
+			}
 			blockoverride "dp_rows" {
 				te_sr_dest_row = {
 					blockoverride "dr_visible" {
@@ -4965,6 +4986,9 @@ types sr_fleets_generated_rows_types
 			blockoverride "dp_why_3_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_why'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "dp_why_4_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_why'), '(CFixedPoint)4' )]"
+			}
 			blockoverride "dp_rows" {
 				te_sr_dest_row = {
 					blockoverride "dr_visible" {
@@ -5422,6 +5446,9 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "dp_why_3_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_why'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "dp_why_4_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_why'), '(CFixedPoint)4' )]"
 			}
 			blockoverride "dp_rows" {
 				te_sr_dest_row = {

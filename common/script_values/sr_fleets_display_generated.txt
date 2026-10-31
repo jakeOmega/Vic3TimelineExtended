@@ -9,8 +9,10 @@
 #   sr_disp_fl_<n>_combat, _posture, _destroy  the 6b orders
 #   sr_disp_fl_<n>_tgt_*        its target world's figures (the target hover)
 #   sr_disp_fl_<n>_why          why it can't leave this month, whatever the leg (the
-#                               destination popup's note): 0 it may, 1 refitting, 2
-#                               below the minimum strength, 3 Earth's launches barred
+#                               destination popup's note): 0 it may, 4 no Space
+#                               Command of ours (it pauses a refit, so first), 1
+#                               refitting, 2 below the minimum strength, 3 Earth's
+#                               launches barred
 #   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)
 #   sr_disp_fl_<n>_target       its target world's index, 0 none (the target popup's Targeted)
 sr_disp_fl_1 = {
@@ -53,7 +55,8 @@ sr_disp_fl_1_leg_dv = {
 }
 sr_disp_fl_1_why = {
 	value = 0
-	if = { limit = { sr_fl_1_refitting = yes } value = 1 }
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_1_refitting = yes } value = 1 }
 	else_if = { limit = { sr_fl_1_strength < sr_fl_minimum_strength } value = 2 }
 	else_if = { limit = { sr_fl_1_at_earth = yes sr_launches_barred = yes } value = 3 }
 }
@@ -117,7 +120,8 @@ sr_disp_fl_2_leg_dv = {
 }
 sr_disp_fl_2_why = {
 	value = 0
-	if = { limit = { sr_fl_2_refitting = yes } value = 1 }
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_2_refitting = yes } value = 1 }
 	else_if = { limit = { sr_fl_2_strength < sr_fl_minimum_strength } value = 2 }
 	else_if = { limit = { sr_fl_2_at_earth = yes sr_launches_barred = yes } value = 3 }
 }
@@ -181,7 +185,8 @@ sr_disp_fl_3_leg_dv = {
 }
 sr_disp_fl_3_why = {
 	value = 0
-	if = { limit = { sr_fl_3_refitting = yes } value = 1 }
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_3_refitting = yes } value = 1 }
 	else_if = { limit = { sr_fl_3_strength < sr_fl_minimum_strength } value = 2 }
 	else_if = { limit = { sr_fl_3_at_earth = yes sr_launches_barred = yes } value = 3 }
 }
@@ -245,7 +250,8 @@ sr_disp_fl_4_leg_dv = {
 }
 sr_disp_fl_4_why = {
 	value = 0
-	if = { limit = { sr_fl_4_refitting = yes } value = 1 }
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_4_refitting = yes } value = 1 }
 	else_if = { limit = { sr_fl_4_strength < sr_fl_minimum_strength } value = 2 }
 	else_if = { limit = { sr_fl_4_at_earth = yes sr_launches_barred = yes } value = 3 }
 }
@@ -309,7 +315,8 @@ sr_disp_fl_5_leg_dv = {
 }
 sr_disp_fl_5_why = {
 	value = 0
-	if = { limit = { sr_fl_5_refitting = yes } value = 1 }
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_5_refitting = yes } value = 1 }
 	else_if = { limit = { sr_fl_5_strength < sr_fl_minimum_strength } value = 2 }
 	else_if = { limit = { sr_fl_5_at_earth = yes sr_launches_barred = yes } value = 3 }
 }
@@ -373,7 +380,8 @@ sr_disp_fl_6_leg_dv = {
 }
 sr_disp_fl_6_why = {
 	value = 0
-	if = { limit = { sr_fl_6_refitting = yes } value = 1 }
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_6_refitting = yes } value = 1 }
 	else_if = { limit = { sr_fl_6_strength < sr_fl_minimum_strength } value = 2 }
 	else_if = { limit = { sr_fl_6_at_earth = yes sr_launches_barred = yes } value = 3 }
 }
@@ -437,7 +445,8 @@ sr_disp_fl_7_leg_dv = {
 }
 sr_disp_fl_7_why = {
 	value = 0
-	if = { limit = { sr_fl_7_refitting = yes } value = 1 }
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_7_refitting = yes } value = 1 }
 	else_if = { limit = { sr_fl_7_strength < sr_fl_minimum_strength } value = 2 }
 	else_if = { limit = { sr_fl_7_at_earth = yes sr_launches_barred = yes } value = 3 }
 }
@@ -501,7 +510,8 @@ sr_disp_fl_8_leg_dv = {
 }
 sr_disp_fl_8_why = {
 	value = 0
-	if = { limit = { sr_fl_8_refitting = yes } value = 1 }
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_8_refitting = yes } value = 1 }
 	else_if = { limit = { sr_fl_8_strength < sr_fl_minimum_strength } value = 2 }
 	else_if = { limit = { sr_fl_8_at_earth = yes sr_launches_barred = yes } value = 3 }
 }
@@ -565,7 +575,8 @@ sr_disp_fl_9_leg_dv = {
 }
 sr_disp_fl_9_why = {
 	value = 0
-	if = { limit = { sr_fl_9_refitting = yes } value = 1 }
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_9_refitting = yes } value = 1 }
 	else_if = { limit = { sr_fl_9_strength < sr_fl_minimum_strength } value = 2 }
 	else_if = { limit = { sr_fl_9_at_earth = yes sr_launches_barred = yes } value = 3 }
 }

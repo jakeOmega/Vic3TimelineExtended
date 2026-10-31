@@ -393,6 +393,11 @@ sr_fleet_set_posture_sgui = {
 				sr_fl_op_check = { TEST = has_interdict_world }
 			}
 		}
+		# UI pass design § 10: no Space Command, no fleet orders.
+		custom_tooltip = {
+			text = sr_fl_req_space_command_tt
+			sr_sc_operational = yes
+		}
 	}
 
 	effect = {
@@ -472,6 +477,11 @@ sr_fleet_set_target_sgui = {
 				text = sr_fl_req_pick_hostile_tt
 				sr_fl_pick_hostile = yes
 			}
+		}
+		# UI pass design § 10: no Space Command, no fleet orders.
+		custom_tooltip = {
+			text = sr_fl_req_space_command_tt
+			sr_sc_operational = yes
 		}
 	}
 

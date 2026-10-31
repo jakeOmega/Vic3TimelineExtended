@@ -1631,8 +1631,10 @@ def render_display() -> str:
            "#   sr_disp_fl_<n>_combat, _posture, _destroy  the 6b orders",
            "#   sr_disp_fl_<n>_tgt_*        its target world's figures (the target hover)",
            "#   sr_disp_fl_<n>_why          why it can't leave this month, whatever the leg (the",
-           "#                               destination popup's note): 0 it may, 1 refitting, 2",
-           "#                               below the minimum strength, 3 Earth's launches barred",
+           "#                               destination popup's note): 0 it may, 4 no Space",
+           "#                               Command of ours (it pauses a refit, so first), 1",
+           "#                               refitting, 2 below the minimum strength, 3 Earth's",
+           "#                               launches barred",
            "#   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)",
            "#   sr_disp_fl_<n>_target       its target world's index, 0 none (the target popup's Targeted)"]
     for n in range(1, SLOTS + 1):
@@ -1660,7 +1662,8 @@ def render_display() -> str:
         # delta-v, is each row's own (UI pass design § 4).
         out += [f"sr_disp_fl_{n}_why = {{",
                 "\tvalue = 0",
-                f"\tif = {{ limit = {{ {var(n, 'refitting')} = yes }} value = 1 }}",
+                "\tif = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }",
+                f"\telse_if = {{ limit = {{ {var(n, 'refitting')} = yes }} value = 1 }}",
                 f"\telse_if = {{ limit = {{ {var(n, 'strength')} < sr_fl_minimum_strength }} value = 2 }}",
                 f"\telse_if = {{ limit = {{ {var(n, 'at_earth')} = yes sr_launches_barred = yes }} value = 3 }}",
                 "}",
@@ -2085,7 +2088,7 @@ def _dest_slot(n: int) -> list[str]:
                      f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"')
     out += _override("dp_dv", f'raw_text = "[{_sv(var(n, "dv_value"))}|1]"')
     out += _override("dp_supply", f'raw_text = "[{_sv(var(n, "supply_value"))}|0]"')
-    for code in (1, 2, 3):
+    for code in (1, 2, 3, 4):
         out += _override(f"dp_why_{code}_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_why", code)}]"')
     out += ['\t\t\tblockoverride "dp_rows" {']
     for b in LOCATIONS:

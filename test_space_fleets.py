@@ -1525,10 +1525,15 @@ class NoSpaceCommandTest(unittest.TestCase):
         # can_go's in Go's.
         for sgui, after in (("sr_fleet_go_sgui", "\n\t\tcustom_tooltip = {\n\t\t\ttext = sr_fl_short_tt"),
                             ("sr_fleet_posture_sgui", "\n\t}\n\n\teffect = {"),
-                            ("sr_fleet_target_sgui", "\n\t}\n\n\teffect = {")):
+                            ("sr_fleet_target_sgui", "\n\t}\n\n\teffect = {"),
+                            # the posture buttons and the target popup's Target (UI pass design § 7)
+                            ("sr_fleet_set_posture_sgui", "\n\t}\n\n\teffect = {"),
+                            ("sr_fleet_set_target_sgui", "\n\t}\n\n\teffect = {")):
             with self.subTest(sgui=sgui):
                 body = _block(self.sguis, sgui)
                 self.assertRegex(body, r"\t\t\}\n\s*" + re.escape(reason) + re.escape(after))
+        # The destination popup's Choose isn't an order: it only picks.
+        self.assertNotIn("sr_sc_operational", _block(self.sguis, "sr_fleet_set_dest_sgui"))
         # Go gives this reason before the generic one can_go would.
         go = _block(self.sguis, "sr_fleet_go_sgui")
         self.assertLess(go.index("sr_fl_req_space_command_tt"), go.index("TEST = can_go"))
@@ -1692,10 +1697,21 @@ class DestinationPopupTest(unittest.TestCase):
                 self.assertIn(f"sr_fl_{n}_strength < sr_fl_minimum_strength", body)
                 self.assertIn("sr_launches_barred = yes", body)
                 self.assertIn(f"sr_fl_{n}_at_earth = yes", body)
+                # no Space Command first: it pauses a refit, so "leave when the
+                # refit ends" would mislead
+                self.assertRegex(body, r"value = 0\s*if = \{ limit = \{ NOT = \{ sr_sc_operational = yes \} \} value = 4 \}")
                 # ... the same terms may_depart reads
                 self.assertIn(f"NOT = {{ sr_fl_{n}_refitting = yes }}", depart)
                 self.assertIn(f"sr_fl_{n}_strength >= sr_fl_minimum_strength", depart)
                 self.assertIn("sr_launches_barred = yes", depart)
+                self.assertIn("sr_sc_operational = yes", depart)
+                self.assertEqual(sorted(int(v) for v in re.findall(r"value = (\d) \}", body)), [1, 2, 3, 4])
+        # each code its note
+        for n, slot in enumerate(self.slots, 1):
+            for code in (1, 2, 3, 4):
+                with self.subTest(slot=n, code=code):
+                    self.assertIn(f"ScriptValue('sr_disp_fl_{n}_why'), '(CFixedPoint){code}'",
+                                  _override_body(slot, f"dp_why_{code}_visible"))
 
     def test_the_choice_is_the_step_s_rule(self):
         """At a location, any location but its own; Go keeps the leg's gate."""
@@ -1821,9 +1837,10 @@ class PostureRowTest(unittest.TestCase):
 
     def test_each_pick_s_rule_is_its_own_line(self):
         valid = _block("x = {" + self.sgui.split("\n\tis_valid = {", 1)[1], "x")
-        # direct children of is_valid: two reasons, then a trigger_if a posture
+        # direct children of is_valid: two reasons, a trigger_if a posture, then
+        # no Space Command (NoSpaceCommandTest)
         self.assertEqual(re.findall(r"(?m)^\t\t(\w+) = \{", valid),
-                         ["custom_tooltip", "custom_tooltip", "trigger_if", "trigger_if", "trigger_if"])
+                         ["custom_tooltip", "custom_tooltip", "trigger_if", "trigger_if", "trigger_if", "custom_tooltip"])
         self.assertIn("text = sr_fl_not_at_location_tt", valid)
         self.assertRegex(valid, r"text = sr_fl_req_new_posture_tt\s*NOT = \{ sr_fl_op_check = \{ TEST = pick_is_posture \} \}")
         # inside each trigger_if, every reason is a sibling, none nested in another

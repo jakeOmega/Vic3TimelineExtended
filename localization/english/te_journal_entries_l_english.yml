@@ -1241,6 +1241,7 @@
  je_space_race_widget_dp_gone:0 "This fleet has left, or is gone."
  je_space_race_widget_dp_title:0 "Fleet Destination"
  je_space_race_widget_dp_why_barred:0 "Earth's launches are barred by a blockade or an occupied launch site: it can choose now and leave once they resume."
+ je_space_race_widget_dp_why_no_sc:0 "No $building_space_command$ of ours in a state we control: it can choose now and leave once we have one."
  je_space_race_widget_dp_why_refit:0 "Refitting: it can choose now and leave when the refit ends."
  je_space_race_widget_dp_why_weak:0 "Below the minimum strength: it can choose now and leave once it is repaired or merged."
  je_space_race_widget_ebase_figure:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_levels')|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_room')|0]"

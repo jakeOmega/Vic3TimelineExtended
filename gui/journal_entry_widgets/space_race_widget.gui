@@ -5251,8 +5251,9 @@ types space_race_widget_types
 	### te_sr_dest_popup_body). While the fleet is at a location: the fleet
 	### (te_sr_fleet_row's Where, Strength, km/s and Supply, its ships on the
 	### strength's hover), a note while it can't leave this month whatever the
-	### leg (sr_disp_fl_<n>_why: refitting, below the minimum strength, Earth's
-	### launches barred), and a row per other location. Otherwise one line, so
+	### leg (sr_disp_fl_<n>_why: no Space Command of ours, refitting, below the
+	### minimum strength, Earth's launches barred), and a row per other
+	### location. Otherwise one line, so
 	### nothing acts on a slot that has left or is gone.
 	type te_sr_dest_slot = flowcontainer {
 		direction = vertical
@@ -5383,6 +5384,10 @@ types space_race_widget_types
 			te_sr_note = {
 				text = "je_space_race_widget_dp_why_barred"
 				block "dp_why_3_visible" {}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_dp_why_no_sc"
+				block "dp_why_4_visible" {}
 			}
 
 			te_sr_dest_header_row = {}
