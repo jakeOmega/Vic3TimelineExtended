@@ -712,7 +712,7 @@ class TestAI(unittest.TestCase):
         loc = "".join(_text(p) for p in sorted(LOC_DIR.glob("*.yml")))
         for key in ("honours", "restricted_contraception", "later_longer_fewer", "crash_campaign"):
             self.assertIn(f' te_demog_ms_{key}_upkeep:0 "@aut! {cost[key]}"', loc, key)
-        self.assertIn(" te_demog_ms_birth_limit_upkeep:0 \"@aut! [GetPlayer.MakeScope.ScriptValue("
+        self.assertIn(" te_demog_ms_birth_limit_upkeep:0 \"@aut! [Country.MakeScope.ScriptValue("
                       "'te_demog_ms_authority_birth_limit_shown')|0]\"", loc)
 
     def test_the_one_child_needs_its_further_upkeep(self):

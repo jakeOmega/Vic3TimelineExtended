@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — display gates for the Population panel's Demographics tab
-# (gui/te_demographics_widgets.gui; plan Task 13)
+# and the Census Data window's (gui/te_demographics_widgets.gui; plan Task 13)
 # ============================================================================
 # A .gui read of a variable that does not exist logs "Failed to fetch variable"
 # every frame (gui_modding_guide.md gotchas #14 and #23), and no Scope in GUI
@@ -11,8 +11,9 @@
 # label the country census writes exists with it. These cover the rest. Each
 # reads only its root (is_shown only: none changes anything, so none is valid
 # or does anything), but for phase 2 step 2's five pension buttons at the end,
-# the only ones the player presses. The first eight are country scope, rooted at the player's
-# country; the six at the end are state scope, rooted at the state the panel
+# the only ones the player presses. The first eight are country scope, rooted at the country
+# the panel shows (Country.MakeScope: the player's in the Population panel, any country's in the
+# Census Data window); the six at the end are state scope, rooted at the state the panel
 # shows (the state panel's Demographics subtab, plan Task 14; the last three its
 # Causes of Death section, docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md):
 # GuiScope.SetRoot( State.MakeScope ).End. Phase 2 step 4's five come last, three country and two state.
@@ -91,12 +92,30 @@ te_demog_wc_pinned_sgui = {
 	effect = { }
 }
 
-# The outline twenty years ahead (te_dg_pjf<b>, te_dg_pjm<b>): written for the
-# player's country at its census (te_demog_project), so it is missing for a
-# country the player took over since its last census.
+# The outline twenty years ahead (te_dg_pjf<b>, te_dg_pjm<b>): written for a
+# played country at its census (te_demog_project), so it is missing for a
+# country the player took over since its last census, and for every AI country
+# the Census Data window shows. is_ai = no keeps a country the player has left
+# from showing the outline of its last census as a player.
 te_demog_outline_ready_sgui = {
 	scope = country
-	is_shown = { has_variable = te_dg_pjf0 }
+	is_shown = {
+		is_ai = no
+		has_variable = te_dg_pjf0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The yearly history (te_dg_hist, te_demog_history_record) is kept only for the
+# countries te_history_country_is_tracked names: played ones and major powers.
+# The History section's empty charts say which case they are in: nothing
+# recorded yet, or a country (a minor AI one, in the Census Data window) with no
+# record kept.
+te_demog_hist_tracked_sgui = {
+	scope = country
+	is_shown = { te_history_country_is_tracked = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }

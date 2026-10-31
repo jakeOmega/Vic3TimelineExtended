@@ -531,8 +531,8 @@ class TestOldRowsWiring(unittest.TestCase):
     def test_the_gui_draws_each_view_split_where_the_census_says(self):
         gui = GUI.read_text(encoding="utf-8-sig")
         loc = "".join(f.read_text(encoding="utf-8-sig") for f in LOC.glob("*_l_english.yml"))
-        views = (("GetPlayer.MakeScope", "te_demog_pyr_split_sgui", "te_dg_px", "te_dg_pyr_top", "te_demog_pyr_old_tt"),
-                 ("GetPlayer.MakeScope", "te_demog_lx_bio_pyr_split_sgui", "te_dg_bpx", "te_dg_bpyr_top",
+        views = (("Country.MakeScope", "te_demog_pyr_split_sgui", "te_dg_px", "te_dg_pyr_top", "te_demog_pyr_old_tt"),
+                 ("Country.MakeScope", "te_demog_lx_bio_pyr_split_sgui", "te_dg_bpx", "te_dg_bpyr_top",
                   "te_demog_pyr_bio_old_tt"),
                  ("State.MakeScope", "te_demog_state_pyr_split_sgui", "te_dg_px", "te_dg_pyr_top", "te_demog_st_pyr_old_tt"),
                  ("State.MakeScope", "te_demog_lx_state_bio_pyr_split_sgui", "te_dg_bpx", "te_dg_bpyr_top",

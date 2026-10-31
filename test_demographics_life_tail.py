@@ -182,7 +182,7 @@ class TestE0DisplayCap(unittest.TestCase):
         self.assertNotIn("stops at 150", self.loc["te_demog_lx_e0_100_note"])
 
     def test_the_readings_switch_on_the_figure(self):
-        for scope, value in (("GetPlayer.MakeScope", "te_demog_ov_e0_value"), ("State.MakeScope", "te_demog_st_e0_value")):
+        for scope, value in (("Country.MakeScope", "te_demog_ov_e0_value"), ("State.MakeScope", "te_demog_st_e0_value")):
             self.assertIn(f"[SelectLocalization( GreaterThan_CFixedPoint( {scope}.Var('te_dg_e0').GetValue, {OVER} ), "
                           f"'te_demog_ov_e0_over', '{value}' )]", self.gui, scope)
 
@@ -198,7 +198,7 @@ class TestE0ChartAxis(unittest.TestCase):
         gui = _text(GUI)
         start = gui.index('text = "te_demog_hist_e0_title"')
         chart = gui[start:gui.index('blockoverride "plot_size"', start)]
-        axis = "GetPlayer.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown')"
+        axis = "Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown')"
         self.assertEqual(chart.count(f'max = "[FixedPointToFloat( {axis} )]"'), 2)
         self.assertEqual(chart.count(axis), 4)
         self.assertEqual(chart.count(f"Min_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_e0'), {OVER} )"), 2)
