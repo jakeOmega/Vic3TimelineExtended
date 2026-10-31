@@ -69,8 +69,8 @@ class EffectMultiplierTests(unittest.TestCase):
         body = _text(VALUES)
         for name, value in (
             ("covert_op_priority_max", "3"),
-            ("covert_op_priority_2_effect_mult", "1.35"),
-            ("covert_op_priority_3_effect_mult", "1.6"),
+            ("covert_op_priority_2_effect_mult", "1.65"),
+            ("covert_op_priority_3_effect_mult", "2"),
             ("covert_op_priority_2_cost_mult", "1.6"),
             ("covert_op_priority_3_cost_mult", "2.4"),
             ("covert_op_priority_detect_add", "2"),
