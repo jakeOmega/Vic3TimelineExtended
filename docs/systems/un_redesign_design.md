@@ -3258,7 +3258,7 @@ extreme within decades. The swing between the last two examples is about 70 poin
 - **Pillar breakdown:** one bar per pillar with its value, and for the two power-weighted
   pillars the three largest contributors by name.
 - **History chart:** authority and target, using `te_history_record_global_sample` and the
-  existing `te_history_chart` widget. The chart's recipe in `mod_systems.md` § "History
+  existing `te_history_chart` widget. The chart's recipe in `mod_systems/history_charts.md` § "History
   Store and Charts" already anticipates a UN series.
 - **World-moment markers** on that chart (`te_history_record_global_marker`).
 

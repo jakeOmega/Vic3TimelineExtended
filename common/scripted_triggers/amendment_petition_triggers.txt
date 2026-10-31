@@ -4,7 +4,7 @@
 #  Rare yearly events (events/amendment_petition_events.txt) in which an
 #  interest group asks for one of the mod's amendments on a law that is
 #  already in force. Pool: common/on_actions/amendment_petition_on_actions.txt.
-#  Design notes: docs/systems/mod_systems.md § Amendment Petitions.
+#  Design notes: docs/systems/mod_systems/amendments.md § Amendment Petitions.
 #
 #  Country scope throughout.
 # ======================================================================

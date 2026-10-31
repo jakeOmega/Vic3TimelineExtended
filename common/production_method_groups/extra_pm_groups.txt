@@ -1030,7 +1030,7 @@ REPLACE_OR_CREATE:pmg_base_building_ocean_mine = {
 # design notes are with the mine's in extra_pms.txt. Both only cost ships, so under the
 # default most_profitable the AI would switch between them whenever Motor and Magnetic
 # Drive Ship prices cross, each switch a five-year retool, as the pure-cost
-# emissions-control tiers did (mod_systems.md § Construction as a Market Good, "AI
+# emissions-control tiers did (mod_systems/construction.md § Construction as a Market Good, "AI
 # production-method switching"). Under most_productive they should score alike, so the
 # stickiness holds the current one (not yet observed for cost-only methods), and the
 # methods' ai_value (1000 / 3000) is meant to move the AI up to Magnetic Drive Tenders,
@@ -1485,7 +1485,7 @@ REPLACE_OR_CREATE:pmg_maintenance = {
 # pmg_maintenance: one rate, and pm_no_maintenance under the game rule. The GUI hides
 # every maintenance group by key (production_methods.gui and the building panels), so
 # a new tier group must be added to those checks too. Which building takes which tier:
-# docs/systems/mod_systems.md, "Maintenance tiers".
+# docs/systems/mod_systems/construction.md, "Maintenance tiers".
 REPLACE_OR_CREATE:pmg_maintenance_light = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive

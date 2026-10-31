@@ -3,7 +3,7 @@
 # ======================================================================
 #  INHERITANCE EVENTS
 #  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
-#  Docs: docs/systems/mod_systems.md § Inheritance.
+#  Docs: docs/systems/mod_systems/inheritance.md § Inheritance.
 #
 #    1       hidden: every country's score set at game start
 #    8       hidden state event: a state's Wealth Concentration modifiers

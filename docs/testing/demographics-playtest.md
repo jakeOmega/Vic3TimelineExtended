@@ -244,7 +244,7 @@ others; check the switching, the costs and the politics.
 
 ## Phase 3: the urban pattern and Planned Capital
 
-The national urban pattern's effects and the Plan a New Capital decision (spec §5.1; mod_systems.md § Demographics,
+The national urban pattern's effects and the Plan a New Capital decision (spec §5.1; mod_systems/demographics.md § Demographics,
 "The urban pattern's effects and Planned Capital"). Everything here acts under Full only.
 
 1. **Full, a new game, a country of three states or more whose Urban Pattern row reads Primate or Dominant** (in the
@@ -285,7 +285,7 @@ The national urban pattern's effects and the Plan a New Capital decision (spec �
    event is open (the move's 675 branches sit behind a click-only marker).
 ## Family Policy in the census (step 3b)
 
-The census reads the measures and the family laws (spec §3.2, §3.5; `docs/systems/mod_systems.md`, § Family Policy in
+The census reads the measures and the family laws (spec §3.2, §3.5; `docs/systems/mod_systems/demographics.md`, § Family Policy in
 the census). Console option x writes the capital's `TE_DEMOG_FAMILY` line: the six types it reads, the policy term,
 Birth Limit's part, the sex ratio's add in force and the census's stored terms. No new self-check: the one unverified
 engine fact (a country modifier's script-only type reaching the state) is step 3a's `measure_country_types` row above,
@@ -431,7 +431,7 @@ below are written for them on. Spec: `docs/superpowers/archive/specs/2026-10-12-
 ## Phase 3: the event wave
 
 Ten events (the parent spec's §9) fire when the census crosses their thresholds, at most once a generation per country,
-under Full only: `events/te_demog_wave_events.txt`, `docs/systems/mod_systems.md` § Phase 3: the event wave. The owner
+under Full only: `events/te_demog_wave_events.txt`, `docs/systems/mod_systems/demographics.md` § Phase 3: the event wave. The owner
 judges their text and balance here (owner, 2026-10-12). No plan document; the self-check is in the table above.
 
 1. **Each event from the console (Full, any date).** `event te_debug_demog.1`, option w, then each of the ten in the
@@ -469,7 +469,7 @@ judges their text and balance here (owner, 2026-10-12). No plan document; the se
 
 ## Phase 3: the late game
 
-Built 2026-10-12 from the late-game design (`docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md`; `docs/systems/mod_systems.md` § Phase 3: the late game). No new self-check: every engine fact it reads is proven (a script-only type on a technology reaching a state, #892; a pop's `wealth` as a value, the Gini walk; the wealth pair's per-pop scaling, probe P6; a building's active method in a state value, `te_state_railway_train_code`). Console option **v** researches the ageing ladder at once, so the items below run in an evening: a Full game, any year, then `observe` or fast mode (h) for some census years. Option **u** logs the capital's late figures (`TE_DEMOG_LATE`) and the country's.
+Built 2026-10-12 from the late-game design (`docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md`; `docs/systems/mod_systems/demographics.md` § Phase 3: the late game). No new self-check: every engine fact it reads is proven (a script-only type on a technology reaching a state, #892; a pop's `wealth` as a value, the Gini walk; the wealth pair's per-pop scaling, probe P6; a building's active method in a state value, `te_state_railway_train_code`). Console option **v** researches the ageing ladder at once, so the items below run in an evening: a Full game, any year, then `observe` or fast mode (h) for some census years. Option **u** logs the capital's late figures (`TE_DEMOG_LATE`) and the country's.
 
 1. **The ladder starts the late game.** After v, each state's next census holds `te_dg_elig` (option u's `elig=`), rising toward its target at the medical diffusion rate; `rate=` reads 0 (immortality's r) and `pull=` 0.03; `s5=`/`d5=` show a band's treated share and deficit. A country with no ladder logs `elig=-1`.
 2. **Who is reached.** Under Public Health Insurance with a large health system nearly everyone (`hs_cover=1.00`); under Private Health Insurance only the rich at first (`hs_cover=0.00`, `threshold=` falling about 2 a year from 80); under Human Purity nobody (`banned=1`, `elig=` drifting to 0 while bodies keep their age: `d5=` holds); under Mandatory Augmentation at least 0.9 (`floor=0.90`); under Unrestricted Augmentation `reach=20` and `threshold=` 20 lower.
@@ -554,7 +554,7 @@ effect on. Display only shows the same pyramids as Full; neither changes the gam
 ## Modern safety and the gap's politics (2026-10-16)
 
 Modern safety: work deaths and deaths from accidents and violence × (1 − the share the era 7-9 technologies prevent),
-a factor of its own beside laws (`docs/systems/mod_systems.md` § Causes of Death). The gap's politics: call 15 on at
+a factor of its own beside laws (`docs/systems/mod_systems/demographics.md` § Causes of Death). The gap's politics: call 15 on at
 the late-game design's sizes. Both act on the game under Full only; under Display only the census's figures (the
 hovers, life expectancy) move with safety but births and deaths don't. Neither rests on a new engine fact (a script-only
 type on a technology reaching a state is #892's; approval sums its lines before it rounds, owner 2026-10-16), so no
@@ -590,7 +590,7 @@ self-check.
 
 The Ministry of Public Safety and the criminal-justice laws on accidents and violence, Autonomous Vehicles as modern
 safety, Synthetic Biology's step on the ageing ladder and the Family Policy measures' new authority upkeep
-(`docs/systems/mod_systems.md` § Causes of Death, § Phase 3: the late game, § Family Policy measures). Every line is a
+(`docs/systems/mod_systems/demographics.md` § Causes of Death, § Phase 3: the late game, § Family Policy measures). Every line is a
 script-only type on a carrier the census already reads (#892's fact), so no self-check.
 
 1. **The carriers' tooltips.** Each police law's institution lines show Deaths from Violence and Accidents a level of
@@ -626,7 +626,7 @@ script-only type on a carrier the census already reads (#892's fact), so no self
 ## The laws' census and Wealth Concentration lines (2026-10-17)
 
 Five more terms that read laws with `has_law` now read lines the laws carry, so each law's tooltip says what it does
-(`docs/systems/mod_systems.md` § Wealth Concentration, § Phase 2 step 1, § Late Marriage and Birth Spacing, § Family
+(`docs/systems/mod_systems/demographics.md` § Wealth Concentration, § Phase 2 step 1, § Late Marriage and Birth Spacing, § Family
 Limitation). The values are the old ones, so no figure moves. Every engine fact but one is proven: a script-only state
 type on a law reaching the states (the augmentation laws' chronic treatment) and a script-only country type read with
 `modifier:` (the Banking panel's intervention points). The one that isn't, a state type on an amendment (Undivided Farm
@@ -652,7 +652,7 @@ Succession), is the `workforce_amendment_type` self-check's.
 ## UBI's working ages in the late game, and the Workforce row (2026-10-17)
 
 Under UBI and Post-Scarcity a late-game state's working ages end at its blended old-age threshold, the one the
-Demographics tab's Old age from row shows, no longer at the untreated's (`docs/systems/mod_systems.md` § Phase 2 step
+Demographics tab's Old age from row shows, no longer at the untreated's (`docs/systems/mod_systems/demographics.md` § Phase 2 step
 1). A threshold of None ends them nowhere. The Workforce row and its hover now add up and name their scales. Pure
 script order and loc, pinned by `test_demographics_late.py` and `test_demographics_work.py`, so no self-check.
 
@@ -809,7 +809,7 @@ Since 2026-10-25 the women's-rights laws carry no Women's Work Outside the Home 
 among its workers took its place (§ Women's share of the workers, below, which replaces this section's law half).
 
 The migrant profile's two inputs were a `has_law` ladder and a `has_technology_researched` ladder; they are now
-census-only types on their carriers, so each law's and technology's tooltip says what it does (`docs/systems/mod_systems.md`
+census-only types on their carriers, so each law's and technology's tooltip says what it does (`docs/systems/mod_systems/demographics.md`
 § The census, Flows). The values are the old tables', so no figure moves, except that Commercial Aviation and Jet Engine
 Technology now add families too, which moves a late-game state's migrant profile toward families. No new engine fact: a
 state type on a tech's or law's `modifier` read in state scope is check a (option l, 2026-10-10), and a mod tech carrying
@@ -829,7 +829,7 @@ a census type is the Contraceptive Pill's. So no self-check. What only the game 
 The census's own count of women among its workers (`te_dg_fws_wk`; before a count, what the sexes' rates give:
 `te_demog_women_worker_share`) now splits work deaths under Display only as under Full, and sets the labour migrants'
 women's share and Late Marriage's women's-work term under both. The women's-rights laws' Women's Work Outside the Home
-line went, and so did the families' women's-rights term (`docs/systems/mod_systems.md` § The census, Flows). No new
+line went, and so did the families' women's-rights term (`docs/systems/mod_systems/demographics.md` § The census, Flows). No new
 engine fact: the count has run under both settings since phase 2 step 2, and the new value reads script values the
 panel already shows, so no self-check. What only the game can show:
 
@@ -894,7 +894,7 @@ banking triggers and the radicals type Concentrated Property carries, so no self
 
 A Settlement Authority's moves are booked by their programme's own profile at both ends and taken out of the migration
 residual, its transit dead are known kills, and the US frontier's 1836 seed starts young and male
-(`docs/systems/mod_systems.md` § Demographics, "Internal Resettlement in the census, and the US frontier").
+(`docs/systems/mod_systems/demographics.md` § Demographics, "Internal Resettlement in the census, and the US frontier").
 `test_demographics_resettle.py` holds the script to the model; `demographics_harness.py resettle` and `frontier` print
 what it should do, with the Full effects below. One self-check, `resettle_moves_booked` (table above). Under Display
 only nothing changes outside the census's own figures. **Under Full the census's consequence modifiers follow the new
@@ -955,7 +955,7 @@ ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto w
 
 Both frontier densities (2 and 10 people per km²) and the AI's 0.5 per km² bonus now hold at a world population of one
 billion and scale in proportion to `global_population` (`resettlement_world_population_scale`,
-`mod_systems.md` § Internal Resettlement). `test_resettlement_programme_registry.py` pins the wiring; only the game
+`mod_systems/pops_and_migration.md` § Internal Resettlement). `test_resettlement_programme_registry.py` pins the wiring; only the game
 shows the numbers.
 
 1. **1836.** In a new game, the Settlement Authority's build requirements on an open frontier (Siberia, the American
@@ -970,7 +970,7 @@ shows the numbers.
 ## The metropolitan share (spec §5.2, 2026-10-19)
 
 A state's metropolitan share, 0-100: the share of its urban people living in its largest city, a modelled stock that
-starts at its target and moves a twentieth of the way there at each yearly count (mod_systems.md § Demographics, "The
+starts at its target and moves a twentieth of the way there at each yearly count (mod_systems/demographics.md § Demographics, "The
 metropolitan share"). It is computed and shown under Display only and Full; its two modifiers and its fertility term act
 under Full only. `test_demographics_metro.py` holds the script's target to `demographics_metro.py` (its twin) term by
 term, the update, the refresh, the fertility term and the Overspill's trigger; `demographics_metro.py` prints the
@@ -1016,7 +1016,7 @@ can show:
 ## Uploaded minds (2026-10-19)
 
 The uploaded-minds spec's build (`docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md`; § Uploaded
-minds in `mod_systems.md`). `test_demographics_uploads.py` holds the step's uploads, the country's year and Mind Backups'
+minds in `mod_systems/demographics.md`). `test_demographics_uploads.py` holds the step's uploads, the country's year and Mind Backups'
 restore to the model; `demographics_harness.py uploads` prints the calibration and the scenarios. One self-check,
 `um_nexus_scaling` (above). Everything here is under Full; a game needs Mind Backups (after Biological Immortality and
 Neural Lace) and a completed Nexus, so an observer run past 2100 or the console's research is the way in. What only the
@@ -1129,7 +1129,7 @@ line gives no verdict.
 
 ## The safeguards pass: medicine, floors and the life table's tail (2026-10-20)
 
-The owner's calls of 2026-10-20 (`docs/systems/mod_systems.md` § The safeguards pass): chronic treatment to 0.99 with
+The owner's calls of 2026-10-20 (`docs/systems/mod_systems/demographics.md` § The safeguards pass): chronic treatment to 0.99 with
 Genetic Engineering (0.05), Molecular Assemblers and Biological Immortality (0.12 each); no floor on a cause's laws factor
 but 0 (was 0.2); no ceiling on crowding's infection term (was +50%); the means' cap 1 (was 0.95); the life tables' open
 last interval, so late e0 runs into the thousands; the display capped at "over 10,000". `test_demographics_life_tail`,
@@ -1168,7 +1168,7 @@ engine fact (script values and locals as the tables already use), so no self-che
 
 The owner's call: the census's birth and death terms go down to the engine's own per-pop floor, a total of −1 (until
 then −0.8), and lose their ceilings (M's +3, the step's scales' −0.9 and +4). Everything here is under Full; Display
-only and Disabled are unchanged. `docs/systems/mod_systems.md` § Phase 2 step 4 ("The floor"). The owner's 2057 EU
+only and Disabled are unchanged. `docs/systems/mod_systems/demographics.md` § Phase 2 step 4 ("The floor"). The owner's 2057 EU
 game is the test: continue its last save on this build, run a year or two, and compare with the 2057-11-01 figures.
 
 1. **Late deaths at the census's rate.** In the late EU states the mod held at −0.8 (about 260 of them, 1.9 billion
@@ -1200,7 +1200,7 @@ game is the test: continue its last save on this build, run a year or two, and c
 The hyperinflation crisis's Wealth Concentration shock (every Demographics rule), no cap on the Inequality effect, the
 Old Southwest and Florida in the 1836 frontier, a note on the state's Deaths Added on Top hover under Private Health
 Insurance and all six chronic carriers in the health bill (the last four under Full only, the frontier also under
-Display only). `docs/systems/mod_systems.md` § Demographics. `test_demographics_wc_shocks.py`,
+Display only). `docs/systems/mod_systems/demographics.md` § Demographics. `test_demographics_wc_shocks.py`,
 `test_demographics_resettle.py`, `test_demographics_rate_floor.py` and `test_demographics_model.py` pin the script. No
 new engine fact, so no self-check: the shock is the banking crash's `te_demog_wc_shock` in an event's `immediate`, and
 the note's scripted GUI reads the owner's law as the panel's other state-scope GUIs do.
@@ -1233,7 +1233,7 @@ the note's scripted GUI reads the owner's law as the panel's other state-scope G
 The owner's request: the standing modifiers the census gives a state move out of the state panel's modifier rows and into
 a Modifiers section on the state's Demographics subtab, as the Wealth Concentration six moved to their tile. Nine of
 them: Census: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City
-and Provincial Neglect. `docs/systems/mod_systems.md`, item 6 of its opening list. `test_hidden_state_modifiers.py`
+and Provincial Neglect. `docs/systems/mod_systems/demographics.md`, item 6 of its opening list. `test_hidden_state_modifiers.py`
 and `test_demographics_layout.py` pin the script and the markup. No new engine fact, so no self-check; what only the
 game shows is below.
 
@@ -1260,7 +1260,7 @@ game shows is below.
 
 ## Public goods: the health, school and IP laws' Wealth Concentration lines (2026-10-21)
 
-An eighth term on Wealth Concentration's target (`docs/systems/mod_systems.md` § Wealth Concentration, "Public goods"):
+An eighth term on Wealth Concentration's target (`docs/systems/mod_systems/demographics.md` § Wealth Concentration, "Public goods"):
 Private Health Insurance, Private Schools, Terakoya and Traditional IP Protection +5, Strict IP Protection +10, Public
 Health Insurance and Public Schools −5. It is a script-only country type read with `modifier:`, like the economic laws'
 term, so no engine fact is new. Offline the sums and the wiring are tested; the game shows the rest.
@@ -1283,7 +1283,7 @@ term, so no engine fact is new. Offline the sums and the wiring are tested; the 
 ## Slavery's Wealth Concentration line (2026-10-21)
 
 A ninth term on the target: Colonial Slavery, Legacy Slavery and Debt Slavery +10, Slave Trade +5, Slavery Banned 0
-(`docs/systems/mod_systems.md` § Wealth Concentration, "Slavery"). The same wiring as Public Goods (above), so no new
+(`docs/systems/mod_systems/demographics.md` § Wealth Concentration, "Slavery"). The same wiring as Public Goods (above), so no new
 engine fact; the line is flat and national, so it counts the law in force and not the slaves.
 
 1. **The tooltips.** The four laws show "Wealth Concentration: Slavery" with +5 or +10, and Slavery Banned shows nothing.
@@ -1293,7 +1293,7 @@ engine fact; the line is flat and national, so it counts the law in force and no
    Slavery Banned: the bar reads 0.
 3. **1836's start.** Countries that open under a slavery law (read an 1836 save; the USA, Brazil and several others do) show a
    Slavery bar of +5 or +10, and their national figure should not have moved by more than that. If it looks too heavy for a
-   country with few slaves, the line wants weighting by the state's slaves (`mod_systems.md` says what that takes).
+   country with few slaves, the line wants weighting by the state's slaves (`mod_systems/demographics.md` says what that takes).
 4. **Closing the trade and abolition.** A country that moves from Slave Trade to Legacy Slavery gains 5 on every state's
    target at once (the "heading for" figure), and one that then moves to Slavery Banned loses 10; the scores follow by 3% of
    the gap a year.
@@ -1302,7 +1302,7 @@ engine fact; the line is flat and national, so it counts the law in force and no
 
 The inheritance law and its amendments now carry their part of the target as a line,
 `country_wealth_concentration_inheritance_add`, where #822 read them with `has_law` and `has_amendment`; until now only
-each law's on-enact text named its figure (`docs/systems/mod_systems.md` § Inheritance). The values are the old targets less 50, so no figure moves. A
+each law's on-enact text named its figure (`docs/systems/mod_systems/inheritance.md` § Inheritance). The values are the old targets less 50, so no figure moves. A
 script-only country type on an amendment read with `modifier:` is vanilla's own pattern (Reinstated Fueros'
 `country_two_spains_conservative_drift_add`, Tradition of Free Elections' `country_forbid_electoral_fraud_bool`), so no
 engine fact is new.
@@ -1507,7 +1507,7 @@ The owner's new 1836 game under Full (from 17:29, to about 1877) printed these v
 
 No self-check: every read the build makes is proven (`modulo` on the census year, as the open slot's; the GUI's
 `Multiply_CFixedPoint`, `SelectLocalization` in a text and `GreaterThanOrEqualTo_CFixedPoint` on a stored variable).
-`mod_systems.md` § The ring's 300 years has the design.
+`mod_systems/demographics.md` § The ring's 300 years has the design.
 
 1. **A save from before, re-filed** (any rule with the census on). Load the France → European Union autosave of
    2057-11-01, made before this build, and play a year. Each state re-files its ring at its own next step

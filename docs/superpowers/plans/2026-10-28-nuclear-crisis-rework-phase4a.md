@@ -90,7 +90,7 @@
 ### Task 6: The Reach row, docs, the play-test list; gate, PR, review
 
 - [ ] Reach row (R15) with its display sgui and loc; `test_nuclear_layout.py` keeps passing; GUI lint clean.
-- [ ] Design §0.15 (what shipped, R1–R16, what 4b consumes: the article type, the host walk, `nd_reach`, "next to us" = `is_adjacent_to_country`; war-goal adjacency makes bomber reach nearly universal in a war, so range bites in peacetime crises); `mod_systems.md`; `journal_entry_systems.md` (CRLF); chapter 14 (Nuclear strikes gain reach; the article where its peers sit; the host's accidents under incidents) and the PDF; play-test items from 47 and the `nd_reach` self-check row; `scripting_best_practices.md`: the Modding-Digests trigger list is incomplete, search `vanilla_parsed/` before calling a trigger missing; the spec's status line and its §7.1 provenance slip.
+- [ ] Design §0.15 (what shipped, R1–R16, what 4b consumes: the article type, the host walk, `nd_reach`, "next to us" = `is_adjacent_to_country`; war-goal adjacency makes bomber reach nearly universal in a war, so range bites in peacetime crises); `mod_systems/nuclear.md`; `journal_entry_systems.md` (CRLF); chapter 14 (Nuclear strikes gain reach; the article where its peers sit; the host's accidents under incidents) and the PDF; play-test items from 47 and the `nd_reach` self-check row; `scripting_best_practices.md`: the Modding-Digests trigger list is incomplete, search `vanilla_parsed/` before calling a trigger missing; the spec's status line and its §7.1 provenance slip.
 - [ ] Full gate; PR with `--base main`; the two-reviewer final review; one fix pass; merge on green CI.
 
 ## Review Focus

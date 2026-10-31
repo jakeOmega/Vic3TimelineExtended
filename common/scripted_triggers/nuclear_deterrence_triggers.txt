@@ -655,7 +655,7 @@ nd_dispute_covert_ops_by = {
 
 # Dispute 10 (rework spec §8.5): $TARGET$ is building an Orbital Battlestation.
 # A finished one gives every state its owner holds nuclear defense (the strike
-# odds, mod_systems.md), so it weakens our deterrent; the dispute is the
+# odds, mod_systems/nuclear.md), so it weakens our deterrent; the dispute is the
 # construction site, before a level is done, and not one left on its Paused
 # method (a battlestation actually going up).
 nd_dispute_orbital_by = {

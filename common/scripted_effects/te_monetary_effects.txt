@@ -1251,7 +1251,7 @@ te_monetary_update_monetisation = {
 # market reaction to a looser rule, and the slow build of a tighter rule's
 # credibility.
 #
-# The AI rule is a documented exception to mod_systems.md's "do not move AI
+# The AI rule is a documented exception to mod_systems/banking_cycle.md's "do not move AI
 # logic out of the buttons" — the mandate is a shared player/AI mechanic, every
 # discrete banking button keeps its ai_chance, and no ai_chance is bypassed.
 # Precedent: je_covert_warfare.txt:125-202. The AI branch deliberately carries

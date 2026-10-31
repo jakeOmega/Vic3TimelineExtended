@@ -14,7 +14,7 @@ vanilla's own sizes (`vanilla_parsed/common/*.json`) found four reasons:
    Customary-inheritance country: 50, plus Serfdom's +15 × an agrarian share near 0.8, plus 0 to +10 from the economic
    laws), so Concentrated Property runs at 10–40% of its size and moves radicals and qualifications by 1–4%. Only
    Primogeniture or Forced Heirship countries feel it. The sex-balance effects reach 0.1–0.6% of states since the
-   migrant booking (`docs/systems/mod_systems.md` § Phase 2 step 4). These figures come from the formulas, not saves:
+   migrant booking (`docs/systems/mod_systems/demographics.md` § Phase 2 step 4). These figures come from the formulas, not saves:
    Phase 0 measures them.
 2. **Full strength is small against vanilla.** The modifiers top out at 10–20%. A vanilla law moves the same fields by
    25–50%: Monarchy +25% Aristocrats' clout, the Guild System −20% qualifications, Laissez-Faire +25% Capitalists'

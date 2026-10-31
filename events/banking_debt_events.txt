@@ -4,7 +4,7 @@
 # SOVEREIGN DEBT CRISES AS A PROCESS (#800)
 # The chosen restructuring and the conditional rescue. Effects, triggers and
 # values: banking_debt_effects.txt, banking_debt_triggers.txt and
-# banking_debt_values.txt; mod_systems.md § Banking Cycle has the design.
+# banking_debt_values.txt; mod_systems/banking_cycle.md § Banking Cycle has the design.
 #
 #  1. Restructuring Talks       - from te_decision_restructure_debt
 #  2. The Rescue's Terms        - to the partner, from banking_cycle_events.45 E

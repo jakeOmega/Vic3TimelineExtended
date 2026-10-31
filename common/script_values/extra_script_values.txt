@@ -1644,7 +1644,7 @@ target_construction_per_week = {
 # modifier's (base + value) x levels cap. Where the pool's funds bind (direct
 # construction with an emptied pool), spending falls below the modelled use,
 # the estimate falls below the price and the overflow reads high (see
-# docs/systems/mod_systems.md § Excess Private Construction). 0 while
+# docs/systems/mod_systems/construction.md § Excess Private Construction). 0 while
 # private_construction_used is 0 or less (an empty queue or no private share),
 # which also keeps curr_cost_per_construction_point from dividing by 0.
 too_much_private_construction_overflow = {

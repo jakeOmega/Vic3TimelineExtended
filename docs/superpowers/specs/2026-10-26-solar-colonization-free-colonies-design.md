@@ -358,5 +358,5 @@ open:
   mod or vanilla.
 - **The covert operations** were built on the registry's pattern
   (`test_covert_op_registry.py`), each with no target modifier and its own block
-  in `covert_ops_apply_all_phase_effects`; mod_systems.md § Covert Warfare
+  in `covert_ops_apply_all_phase_effects`; mod_systems/covert_warfare.md § Covert Warfare
   System has their gates and AI.

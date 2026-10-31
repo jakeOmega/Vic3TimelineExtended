@@ -1,7 +1,7 @@
 # Judiciary play-test checklist
 
 What the next play-test of the Judiciary law group should look at (spec:
-`docs/superpowers/archive/specs/2026-10-17-judiciary-design.md`; systems doc: `docs/systems/mod_systems.md` § Judiciary). In-game
+`docs/superpowers/archive/specs/2026-10-17-judiciary-design.md`; systems doc: `docs/systems/mod_systems/judiciary.md` § Judiciary). In-game
 checks don't gate a merge (CLAUDE.md, "In-game checks"): phase 1 landed on the offline gate, and the play-test before a
 release works through this list. Where the build rests on an engine fact nobody has verified, it ships the preferred
 version with a self-check line in `debug.log` and names its fallback below; a BROKEN line means swap the fallback in.

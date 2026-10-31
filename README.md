@@ -2,7 +2,7 @@
 
 A large content mod for **Victoria 3** (Paradox Clausewitz engine) that extends the timeline well past the vanilla 1936 endpoint and adds a layered set of new gameplay systems on top — banking cycles, climate change, decolonization, nuclear weapons, a UN, a space race, cultural / cyber soft power, social-movement journal entries, treaty articles with entity selection, wonder buildings, a market-driven construction economy, and more. New eras run from 1919 (era 6) through "far future" (era 12), each with their own technologies, laws, buildings, production methods, ideologies, and events.
 
-The repo is both a Paradox-script content mod *and* a Python toolchain that parses the mod (and vanilla) into a queryable HTTP service, regenerates derived files on save, and validates the script against engine constraints. Most of the systems below are layered — they share scripted-effect helpers, on-action wiring, and a common dynamic-modifier pattern documented in `docs/guides/scripting_best_practices.md` and `docs/systems/mod_systems.md`.
+The repo is both a Paradox-script content mod *and* a Python toolchain that parses the mod (and vanilla) into a queryable HTTP service, regenerates derived files on save, and validates the script against engine constraints. Most of the systems below are layered — they share scripted-effect helpers, on-action wiring, and a common dynamic-modifier pattern documented in `docs/guides/scripting_best_practices.md` and `docs/systems/mod_systems/dynamic_modifier_pattern.md`.
 
 > **Playing the mod?** The [player guide](docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf) (PDF) explains every system for players who know Victoria 3 but not this mod. It can also be [read chapter by chapter on GitHub](docs/player_guide/). The rest of this README is about developing the mod.
 
@@ -89,13 +89,13 @@ third, *simplified* setting, the second three more market settings, *without AI 
 *display only* setting between full and disabled, and the last a second enabled
 setting that adds customs and a third, light setting (see the table above).
 
-Loc keys for each rule live in `localization/english/te_game_rules_l_english.yml`, except the tax code's, which sit with the rest of its loc in `te_tax_l_english.yml`. The gating pattern (`is_shown_when_inactive`, on-action `return = yes` guards, etc.) is documented in `docs/systems/mod_systems.md` § Game Rules.
+Loc keys for each rule live in `localization/english/te_game_rules_l_english.yml`, except the tax code's, which sit with the rest of its loc in `te_tax_l_english.yml`. The gating pattern (`is_shown_when_inactive`, on-action `return = yes` guards, etc.) is documented in `docs/systems/mod_systems/game_rules.md` § Game Rules.
 
 ---
 
 ## Gameplay systems
 
-This section is a high-level catalog. Each system has a more detailed entry in `docs/systems/mod_systems.md` and (for journal-entry-driven systems) `docs/systems/journal_entry_systems.md`. File-path pointers below cover the *script* side; localization is split across `localization/english/te_*_l_english.yml` (auto-organized by `organize_loc.py` — never hand-edit categorization, only keys).
+This section is a high-level catalog. Each system has a more detailed file in `docs/systems/mod_systems/` (indexed by `docs/systems/mod_systems.md`) and (for journal-entry-driven systems) `docs/systems/journal_entry_systems.md`. File-path pointers below cover the *script* side; localization is split across `localization/english/te_*_l_english.yml` (auto-organized by `organize_loc.py` — never hand-edit categorization, only keys).
 
 ### Economy & finance
 
@@ -109,7 +109,7 @@ This section is a high-level catalog. Each system has a more detailed entry in `
 - **Excess private construction penalty** — same pattern, multiplier-scaled static modifier reapplied yearly when private construction exceeds capacity.
 - **Strategic reserve (`je_strategic_reserve`)** — national stockpile system for grain, ammunition, and oil. Storing/withdrawing interacts with the market through transient hub-building modifiers; per-good signed weekly rate plus a shared step size, decay continuously. Skill `add-strategic-reserve-good` walks through extending it.
   - Files: `common/journal_entries/je_strategic_reserve.txt`, `common/buildings/strategic_reserve.txt`, `common/scripted_buttons/st_res_buttons.txt`, `common/scripted_effects/st_res_effects.txt`, `common/script_values/st_res_script_values.txt`, `common/static_modifiers/extra_modifiers.txt` (search `sr_`), `common/modifier_type_definitions/st_res_modifier_types.txt`, `gui/journal_entry_widgets/strategic_reserve_widget.gui`, `docs/systems/strategic_reserve_system.md`.
-- **Transport goods** — Transportation (local) is all movement inside a state, pops' travel and industry's freight alike, made by railways, highways, airports and logistics companies; Merchant Marine is shipping between markets, made by ports and shipping companies and bought by Trade Centers. Railway and port infrastructure counts per level. See `docs/systems/mod_systems.md` § Transport goods.
+- **Transport goods** — Transportation (local) is all movement inside a state, pops' travel and industry's freight alike, made by railways, highways, airports and logistics companies; Merchant Marine is shipping between markets, made by ports and shipping companies and bought by Trade Centers. Railway and port infrastructure counts per level. See `docs/systems/mod_systems/transport_goods.md` § Transport goods.
 - **Resource deposits** — `deposits_config.json` + `resources.py` regenerate map state-region files with mod-tuned deposits.
 - **Pop needs curves & buy packages** — `pop_needs_curves.py` regenerates `common/buy_packages/00_buy_packages.txt`; covers convenience, services, and luxury good consumption against SoL/strata.
 - **SoL Expectations System** — adaptive expectation lag: when SoL rises suddenly, expectations follow with a configurable half-life (default 5 years), creating contentment-then-correction dynamics. Vanilla `state_expected_sol_*` modifiers from techs/laws/IG traits are converted to `country_sol_expectations_target_add` via `INJECT:` files. Files: `common/scripted_effects/sol_expectations_effects.txt`, `common/static_modifiers/sol_expectations_modifiers.txt`, `common/on_actions/sol_expectations_on_actions.txt`, plus `sol_expectations_vanilla_injections.txt` under `technologies/`, `laws/`, `interest_group_traits/`.
@@ -141,7 +141,7 @@ This section is a high-level catalog. Each system has a more detailed entry in `
 
 ### Society, culture & demographics
 
-Several **social-movement journal entries** model major modern movements. Most carry a `modifiers_while_active` modifier (`je_civil_rights` does not), and each has monthly pulse events and AI-tuned multi-option choices. Fail states vary: `je_human_augmentation` fails on `law_human_purity`, `je_digital_rights` on the full surveillance state, `je_mental_health` on punitive justice past its era, `je_civil_rights` when support drains to 0 — while `je_post_scarcity` has `fail = { always = no }` and can only time out. Documented at `docs/systems/mod_systems.md` § Social Movement Journal Entries; the JE files themselves are the authority — `ls common/journal_entries/` is the live roster.
+Several **social-movement journal entries** model major modern movements. Most carry a `modifiers_while_active` modifier (`je_civil_rights` does not), and each has monthly pulse events and AI-tuned multi-option choices. Fail states vary: `je_human_augmentation` fails on `law_human_purity`, `je_digital_rights` on the full surveillance state, `je_mental_health` on punitive justice past its era, `je_civil_rights` when support drains to 0 — while `je_post_scarcity` has `fail = { always = no }` and can only time out. Documented at `docs/systems/mod_systems/social_movements.md` § Social Movement Journal Entries; the JE files themselves are the authority — `ls common/journal_entries/` is the live roster.
 
 | JE | Trigger tech | Win condition (`complete`) | Files |
 |---|---|---|---|
@@ -228,7 +228,7 @@ The `common/` directory is the bulk of the mod. Highlights of less-obvious subdi
 - `common/scripted_progress_bars/` — per-system bars (`extra_progress_bars.txt`, `heir_education_progress_bars.txt`, `st_res_progress_bars.txt`, `un_progress_bars.txt`).
 - `common/static_modifiers/` — `extra_modifiers.txt` is the catch-all (large); per-system files for SOL expectations, space race, heir education, law / ministry-law enactment, FMC.
 - `common/modifier_type_definitions/` — every dynamic modifier type registered for mod entities. The catch-all is `mod_entity_modifier_types.txt`, plus per-system files (`st_res_modifier_types.txt`, `tech_gate_modifier_types.txt`, …). Note the per-entity registration requirement for `building_*`, `goods_output_*`, `state_building_*`, and `ship_battle_against_ship_type_*` axes (see `docs/guides/scripting_best_practices.md`).
-- `common/on_actions/` — 19 files; the spine is `extra_on_actions.txt`, which wires monthly/yearly pulses, immediate triggers (on_company_disbanded, on_building_built, on_law_activated, …), and FMC market hooks. Pulse routing for every system is enumerated in `docs/systems/mod_systems.md` § On-Actions Reference.
+- `common/on_actions/` — 19 files; the spine is `extra_on_actions.txt`, which wires monthly/yearly pulses, immediate triggers (on_company_disbanded, on_building_built, on_law_activated, …), and FMC market hooks. Pulse routing for every system is enumerated in `docs/systems/mod_systems/on_actions.md` § On-Actions Reference.
 - `common/customizable_localization/` — custom loc functions (e.g. dynamic strategic-reserve labels, lobby naming).
 - `common/game_concepts/` — concept definitions (`extra_concepts.txt`) used in tooltip cross-links.
 - `common/institutions/_institutions.info`, `common/diplomatic_plays/_diplomatic_plays.info`, etc. — Paradox `.info` schema files (informational, not loaded by the engine).
@@ -315,7 +315,7 @@ All under `docs/engine/`:
 **Player guide:** `player_guide/` holds the player-facing guide: numbered Markdown chapters, the Typst page template, `STYLE.md` (house style) and the built PDF. `scripts/build_player_guide.py` builds the PDF (needs `requirements-docs.txt`); `scripts/analysis/check_player_guide_style.py` lints the chapters. Both run in CI (the build as `--check`, which fails if the PDF is older than its sources).
 
 **Design docs (hand-written):**
-- `systems/mod_systems.md` — every gameplay system's files and mechanics. The single most useful design reference.
+- `systems/mod_systems.md` — index over `systems/mod_systems/`, one file per gameplay system covering its files and mechanics. The single most useful design reference.
 - `systems/journal_entry_systems.md` — detailed reference for the JE-driven systems.
 - `systems/strategic_reserve_system.md` — architecture of the Strategic Reserve JE + Hub building.
 - `guides/python_tools.md` — full mod-state-server endpoint list and AI-agent workflow.

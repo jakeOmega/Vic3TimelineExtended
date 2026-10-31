@@ -63,7 +63,7 @@ The mod is a layered set of independent **systems**, most of which follow the sa
 7. **Events** in `events/<system>_events.txt` plus localization YAML.
 8. **Modifier type definitions** in `common/modifier_type_definitions/` registering any dynamic-pattern modifiers.
 
-**Dynamic-modifier scaling pattern**: define a static modifier with unit values, then in an `on_yearly_pulse_*` re-apply it as `add_modifier = { name = X multiplier = <script_value> }`, **removing the old copy first** (`remove_modifier_if_exists_effect = { MODIFIER = X }`): a same-name `add_modifier` stacks, so a bare re-add grows the modifier on every pulse (Renewable Investment's cost, 2026-10-20). The engine multiplies every field by the multiplier each tick. State-scoped scaling **must** run from a *state* pulse — `on_yearly_pulse_state`, or `on_monthly_pulse_state` when the multiplier's inputs move monthly (e.g. `tourism_on_action`) — because law/treaty/building hooks have unreliable scope chains for state-targeted script values. Give each modifier exactly one refresh site. See `docs/systems/mod_systems.md` and `docs/guides/scripting_best_practices.md`.
+**Dynamic-modifier scaling pattern**: define a static modifier with unit values, then in an `on_yearly_pulse_*` re-apply it as `add_modifier = { name = X multiplier = <script_value> }`, **removing the old copy first** (`remove_modifier_if_exists_effect = { MODIFIER = X }`): a same-name `add_modifier` stacks, so a bare re-add grows the modifier on every pulse (Renewable Investment's cost, 2026-10-20). The engine multiplies every field by the multiplier each tick. State-scoped scaling **must** run from a *state* pulse — `on_yearly_pulse_state`, or `on_monthly_pulse_state` when the multiplier's inputs move monthly (e.g. `tourism_on_action`) — because law/treaty/building hooks have unreliable scope chains for state-targeted script values. Give each modifier exactly one refresh site. See `docs/systems/mod_systems/dynamic_modifier_pattern.md` and `docs/guides/scripting_best_practices.md`.
 
 ### Game rules
 `common/game_rules/extra_game_rules.txt` exposes toggles for the major systems. When disabled, the journal entry doesn't appear but related laws/events still provide their non-system effects. See `README.md`.
@@ -77,7 +77,7 @@ The mod is a layered set of independent **systems**, most of which follow the sa
 ## Working in this repo
 
 ### Read the docs before scripting
-Before redesigning, rebalancing, or extending an existing gameplay system, read its section in `docs/systems/mod_systems.md` first — these sections document modifier hooks, threshold tables, button-gate patterns, and architectural conventions specific to that system.
+Before redesigning, rebalancing, or extending an existing gameplay system, read its file in `docs/systems/mod_systems/` first (one file per system; the index, `docs/systems/mod_systems.md`, lists them and every `##` section) — these files document modifier hooks, threshold tables, button-gate patterns, and architectural conventions specific to that system. A new system gets its own file and an index row; `test_mod_systems_index.py` fails on a file or `##` section the index leaves out.
 
 `docs/README.md` is the index. The most-likely-relevant docs:
 - `docs/guides/scripting_best_practices.md` — modifier validation, scope rules, `days` vs `months`, dynamic-pattern registration, `any_*` triggers don't take `limit`, modifier stacking gotchas, top-level database collisions, global-variable initialization timing, decimals/visibility, fast-scaling event audits, tech tree authoring, system-scope cheat sheet, audit/research workflow.
@@ -90,7 +90,7 @@ Before redesigning, rebalancing, or extending an existing gameplay system, read 
 - `docs/vanilla/vanilla_pops_reference.md` — concept primer on the pop / culture / religion / profession layer (acceptance, assimilation, conversion, social hierarchies, qualifications, literacy, dependents, job satisfaction).
 - `docs/vanilla/vanilla_colonization_reference.md` — concept primer on colonization (malaria gating, native uprising, Colonial Administration JE, company colonization).
 - `docs/vanilla/vanilla_formable_countries_reference.md` — concept primer on formable-country mechanics (minor / major / special unifications); complement to the `add-formable-country` skill.
-- `docs/systems/mod_systems.md`, `docs/systems/journal_entry_systems.md` — every gameplay system's files and mechanics.
+- `docs/systems/mod_systems.md` (index over `docs/systems/mod_systems/`, one file per system), `docs/systems/journal_entry_systems.md` — every gameplay system's files and mechanics.
 - `docs/guides/python_tools.md` — full server endpoint list and AI-agent workflow.
 - `docs/guides/gui_style_guide.md` — the house style for system panels (owner-endorsed defaults): who a panel is for, dynamic content visual and open, explanations collapsed, brief labels with the detail on hover. Read before designing any panel; `gui_modding_guide.md` has the how.
 - `docs/guides/gui_modding_guide.md`, `docs/vanilla/treaty_articles_reference.md`, `docs/vanilla/wonder_buildings_reference.md`, `docs/vanilla/vanilla_company_buildings_reference.md`.

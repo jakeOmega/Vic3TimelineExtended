@@ -2,7 +2,7 @@
 #  INHERITANCE — modifiers
 #  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 #  Applied by common/scripted_effects/te_inheritance_effects.txt and
-#  events/inheritance_events.txt. Docs: docs/systems/mod_systems.md
+#  events/inheritance_events.txt. Docs: docs/systems/mod_systems/inheritance.md
 #  § Inheritance.
 # ======================================================================
 

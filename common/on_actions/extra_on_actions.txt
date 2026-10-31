@@ -1339,7 +1339,7 @@ war_propaganda_on_action = {
 	}
 }
 
-# Excess Private Construction (docs/systems/mod_systems.md § Excess Private
+# Excess Private Construction (docs/systems/mod_systems/construction.md § Excess Private
 # Construction). too_much_private_construction raises every project's weekly
 # construction cap so an investment pool the private queue can't spend gets
 # spent, and charges a construction-efficiency penalty that scales with it.

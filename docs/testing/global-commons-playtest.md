@@ -49,7 +49,7 @@ what only the game can show.
 Spec: `docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` § 2, and for the claims, the
 holding fee, Sponsor's protection, the policy lock and the panel
 `docs/superpowers/archive/specs/2026-10-17-seabed-claims-and-panel-design.md` (phase 1). System doc:
-`docs/systems/mod_systems.md` § Global Commons. The offline gate is `test_seabed_basins.py`,
+`docs/systems/mod_systems/global_commons.md` § Global Commons. The offline gate is `test_seabed_basins.py`,
 `test_seabed_allocation.py` (the model), `test_seabed_script.py`, `test_seabed_loc.py` and
 `test_seabed_layout.py`; this list is what only the game can show.
 
@@ -385,7 +385,7 @@ The Seabed tab's share of the GUI and localization audit (`docs/audits/gui_audit
 ## The UN layer: the Law of the Sea, the Antarctic Treaty and the anti-satellite moratorium (§ 3, § 4, § 6.5)
 
 The UN's part of the Global Commons (`docs/superpowers/archive/specs/2026-10-16-global-commons-design.md`
-§3, §4, §6.5; `docs/systems/mod_systems.md` § Global Commons: the UN layer). In-game checks
+§3, §4, §6.5; `docs/systems/mod_systems/global_commons.md` § Global Commons: the UN layer). In-game checks
 don't gate the merge (CLAUDE.md, "In-game checks"); the play-test before a release works through
 this list.
 
@@ -561,7 +561,7 @@ Logged once a game each. Nothing logged means the premise never came up (no chem
 ## Orbital debris and the anti-satellite strike (§ 6)
 
 Spec: `docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` § 6.1–6.4 and § 7's
-event `.31`. Systems doc: `docs/systems/mod_systems.md` → Space Race → *Orbital debris*.
+event `.31`. Systems doc: `docs/systems/mod_systems/space_race.md` → Space Race → *Orbital debris*.
 In-game checks don't gate the merge (CLAUDE.md § "In-game checks"); the play-test before a
 release works through this list. The console harness is `event te_debug_orbital_debris.1`:
 it sets the pools to each tier, runs the month's step at once, fires a ribbon strike and puts
@@ -592,7 +592,7 @@ decision Begin Orbital Debris Removal and wait a month.
    Orbital Debris in its modifiers at multiplier 60 (setback risk +60%, pace −18%), the
    panel's risk and pace move with it, and an Extraplanetary Base, Space Elevator, Orbital
    Battlestation and Solar Receiver each show −12% throughput. The Orbital Solar Collector
-   itself must show no throughput change (deliberate: see mod_systems.md). Check the
+   itself must show no throughput change (deliberate: see mod_systems/space_race.md). Check the
    Battlestation's unit bonuses fall with its throughput (the mod's docs say workforce-scaled
    country modifiers scale with throughput; if they don't, the Battlestation's penalty only
    saves upkeep, and should move to a unit modifier instead). A country with none of those
