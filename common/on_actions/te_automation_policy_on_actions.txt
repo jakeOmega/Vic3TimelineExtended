@@ -1,0 +1,22 @@
+﻿# ============================================================================
+# AUTOMATION POLICY — country pulse (era 13 spec § 7.1)
+# ============================================================================
+# Counts the automated share and refreshes the Robot Tax's and the Automation
+# Dividend's scaled modifiers (te_ap_monthly_update,
+# common/scripted_effects/te_automation_policy_effects.txt). A country pulse,
+# so the share's inputs, building levels and methods, are read in the
+# country's own scope. A country without Humanoid Robotics or one of the
+# group's laws skips the building walk: a few law and modifier checks a month.
+# ============================================================================
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_ap_country_monthly_on_action
+	}
+}
+
+te_ap_country_monthly_on_action = {
+	effect = {
+		te_ap_monthly_update = yes
+	}
+}

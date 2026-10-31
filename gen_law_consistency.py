@@ -133,6 +133,8 @@ LAWGROUP_PRIORITY = [
     "lawgroup_family_reproductive_policy",
     "lawgroup_language_policy",
     "lawgroup_antitrust",
+    # Era 13 spec § 7.1: no law in it needs another law.
+    "lawgroup_automation_policy",
     "lawgroup_financial_regulation",
     "lawgroup_internet_governance",
     "lawgroup_privacy_rights",

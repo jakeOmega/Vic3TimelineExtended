@@ -4268,6 +4268,8 @@ pm_automated_labs = {
 		artificial_intelligence
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	building_modifiers = {
 		level_scaled = {
 			building_employment_academics_add = 25
@@ -4576,6 +4578,8 @@ pm_drone_delivery_systems = {
 		autonomous_vehicles
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	unlocking_production_methods = {
 		pm_high_pressure_sodium_streetlights
 		pm_led_streetlights
@@ -4627,6 +4631,8 @@ pm_robotic_service_providers = {
 	unlocking_technologies = {
 		humanoid_robotics
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	unlocking_production_methods = {
 		pm_led_streetlights
@@ -6207,6 +6213,8 @@ pm_robotic_food_processing = {
 	unlocking_technologies = {
 		supply_chain_management
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
 	unlocking_production_methods = {
@@ -7967,6 +7975,8 @@ pm_ai_managed_chemical_plant = {
 		artificial_intelligence
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -8017,6 +8027,8 @@ pm_ai_managed_explosives_factory = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Explosives-specific split of pm_ai_managed_chemical_plant (shared across 14
 	# chemical/synthetic plants). Gated to explosives' advanced base PMs so the
@@ -9680,6 +9692,8 @@ pm_automated_harvesters_and_planters = {
 		autonomous_vehicles
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	unlocking_production_methods = {
 		pm_modern_farming
 		pm_designed_crops
@@ -9805,6 +9819,8 @@ pm_automated_harvesters_and_planters_building_rice_farm = {
 	unlocking_technologies = {
 		autonomous_vehicles
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	unlocking_production_methods = {
 		pm_modern_farming_rice_farm
@@ -10488,6 +10504,8 @@ pm_robotic_assembly_lines = {
 		robotics
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = 10
@@ -10524,6 +10542,8 @@ pm_intelligent_manufacturing_systems = {
 	unlocking_technologies = {
 		supply_chain_management
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -10565,6 +10585,8 @@ pm_self_optimizing_production  = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -10987,6 +11009,8 @@ pm_autonomous_highway = {
 	unlocking_technologies = {
 		autonomous_vehicles
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -11492,6 +11516,8 @@ pm_ai_managed_power_plant = {
 		smart_grids
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
 	unlocking_production_methods = {
@@ -11548,6 +11574,8 @@ pm_ai_managed_power_plant_reactor = {
 		smart_grids
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
 	unlocking_production_methods = {
@@ -11601,6 +11629,8 @@ pm_ai_managed_power_plant_hydro = {
 	unlocking_technologies = {
 		smart_grids
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
@@ -12473,6 +12503,8 @@ pm_robotic_assembly_lines_building_furniture_manufactory = {
 		robotics
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = 10
@@ -12518,6 +12550,8 @@ pm_robotic_assembly_lines_building_tooling_workshop = {
 	unlocking_technologies = {
 		robotics
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -12570,6 +12604,8 @@ pm_robotic_assembly_lines_building_motor_industry = {
 		robotics
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	state_modifiers = {
 		workforce_scaled = {
 			state_pollution_generation_add = 10
@@ -12620,6 +12656,8 @@ pm_ai_managed_building_furniture_manufactory = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Gated to base PMs that employ enough to absorb this PM's employment
 	# cut (laborers -3000 / machinists -1250 / engineers -740). Without the
@@ -12672,6 +12710,8 @@ pm_ai_managed_building_tooling_workshop = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
@@ -12733,6 +12773,8 @@ pm_ai_managed_building_tooling_workshop_handling = {
 		artificial_intelligence
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
 	unlocking_production_methods = {
@@ -12787,6 +12829,8 @@ pm_ai_managed_building_motor_industry = {
 		artificial_intelligence
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
 	unlocking_production_methods = {
@@ -12840,6 +12884,8 @@ pm_ai_managed_building_motor_industry_turbine = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
@@ -12901,6 +12947,8 @@ pm_ai_managed_building_arms_industry = {
 		artificial_intelligence
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
 	unlocking_production_methods = {
@@ -12961,6 +13009,8 @@ pm_ai_managed_building_artillery_foundry = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
@@ -13025,6 +13075,8 @@ pm_ai_managed_building_munition_plant = {
 		artificial_intelligence
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
 	unlocking_production_methods = {
@@ -13087,6 +13139,8 @@ pm_ai_managed_building_munition_plant_shells = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	# Split by base method so every cut is exact (#996); hidden when
 	# unavailable, so a building shows one AI-managed option.
@@ -13250,6 +13304,8 @@ pm_ai_managed_textile_factory = {
 		artificial_intelligence
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	# Gated to base PMs that employ enough to absorb this PM's employment
 	# cut (laborers -3000 / machinists -1000 / engineers -490). See pm_employment_audit.
 	unlocking_production_methods = {
@@ -13383,6 +13439,8 @@ pm_ai_managed_fab = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -14310,6 +14368,8 @@ pm_autonomous_trains = {
 	unlocking_technologies = {
 		autonomous_vehicles
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15298,6 +15358,8 @@ pm_autonomous_networks = {
 		smart_grids
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -15570,6 +15632,8 @@ pm_fully_automated_content_creation = {
 		ai_agents
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -15601,6 +15665,8 @@ pm_ai_mediated_mind_sharing = {
 	unlocking_technologies = {
 		telepathic_communities
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -16043,6 +16109,8 @@ pm_robotic_assembly_handling = {
 		robotics
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -16076,6 +16144,8 @@ pm_ai_optimized_operations = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -16380,6 +16450,8 @@ pm_automated_ocean_mine  = {
 		artificial_intelligence
 	}
 
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -16508,6 +16580,8 @@ pm_automated_ocean_mine_uncapped = {
 	unlocking_technologies = {
 		artificial_intelligence
 	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	building_modifiers = {
 		workforce_scaled = {

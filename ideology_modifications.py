@@ -884,6 +884,75 @@ JUDICIARY_STANCES = {
 }
 
 
+# --- lawgroup_automation_policy (era 13 spec § 7.1) ---
+# Every list names all four laws, in file order (the ideology_lawgroup audit;
+# test_automation_policy.py). Applied to the vanilla ideologies in
+# AUTOMATION_STANCES by the loop after `modifications`; the mod's own
+# ideologies (Corporate, Optimist Transhumanist) carry theirs by hand in
+# extra_ideologies.txt. The Trade Unions' proletarian and populist ideologies
+# back Human Labor Quotas; the Industrialists' plutocratic, laissez-faire and
+# individualist ones back Unrestricted Automation.
+_AUTOMATION_LAWS = (
+    "law_unrestricted_automation",
+    "law_robot_tax",
+    "law_human_labor_quotas",
+    "law_automation_dividend",
+)
+
+
+def automation_constructor(*codes):
+    """Four stance codes, in _AUTOMATION_LAWS order, as (law, stance) pairs."""
+    assert len(codes) == len(_AUTOMATION_LAWS)
+    return [(law, _STANCE_CODES[code]) for law, code in zip(_AUTOMATION_LAWS, codes)]
+
+
+AUTOMATION_LISTS = {
+    #                                         Unres Tax  Quota Divid
+    # Owners put machines to work as they see fit.
+    "free": automation_constructor("++", "-", "--", "-"),
+    # Markets first, without the owners' fervor.
+    "market": automation_constructor("+", "0", "-", "-"),
+    # Keep the machines and tax them: the reforming middle.
+    "tax": automation_constructor("0", "+", "-", "0"),
+    # Efficiency and national strength: machines over make-work.
+    "technocratic": automation_constructor("+", "+", "--", "0"),
+    # Work is what the movement defends.
+    "labor": automation_constructor("-", "+", "++", "0"),
+    # Work as a moral and social order: the church, the land, the old ways.
+    "traditional": automation_constructor("0", "0", "+", "-"),
+    # Share what the machines make.
+    "welfare": automation_constructor("-", "+", "0", "+"),
+    # The machines belong to everyone.
+    "socialist": automation_constructor("--", "0", "0", "++"),
+}
+
+AUTOMATION_STANCES = {
+    **{k: "free" for k in ("ideology_plutocratic", "ideology_laissez_faire", "ideology_market_liberal")},
+    **{k: "market" for k in (
+        "ideology_individualist", "ideology_meritocratic", "ideology_liberal", "ideology_liberal_movement",
+    )},
+    **{k: "tax" for k in ("ideology_liberal_modern", "ideology_reformer", "ideology_corporatist")},
+    **{k: "technocratic" for k in ("ideology_technocratic", "ideology_positivist", "ideology_jingoist")},
+    **{k: "labor" for k in (
+        "ideology_proletarian", "ideology_populist", "ideology_proletarian_movement", "ideology_fascist",
+        "ideology_fascist_movement",
+    )},
+    **{k: "traditional" for k in (
+        "ideology_pious", "ideology_moralist", "ideology_agrarian", "ideology_paternalistic",
+        "ideology_traditionalist", "ideology_reactionary",
+    )},
+    **{k: "welfare" for k in (
+        "ideology_social_democrat", "ideology_egalitarian", "ideology_egalitarian_modern", "ideology_radical",
+        "ideology_radical_movement", "ideology_humanitarian",
+    )},
+    **{k: "socialist" for k in (
+        "ideology_socialist", "ideology_socialist_movement", "ideology_communist", "ideology_communist_movement",
+        "ideology_vanguardist", "ideology_vanguardist_movement", "ideology_anarchist",
+        "ideology_anarchist_movement", "ideology_utopian",
+    )},
+}
+
+
 modifications = {
     "ideology_paternalistic": {
         "lawgroup_monetary_policy": simple_currency,
@@ -3965,3 +4034,6 @@ modifications = {
 
 for _ideology, _list in JUDICIARY_STANCES.items():
     modifications.setdefault(_ideology, {})["lawgroup_judiciary"] = JUDICIARY_LISTS[_list]
+
+for _ideology, _list in AUTOMATION_STANCES.items():
+    modifications.setdefault(_ideology, {})["lawgroup_automation_policy"] = AUTOMATION_LISTS[_list]

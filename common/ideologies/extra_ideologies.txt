@@ -559,6 +559,14 @@ ideology_optimist_transhumanist = {
 		law_state_eugenics_program = strongly_disapprove
 	}
 
+	# Automation Policy (era 13 spec § 7.1): the machines' abundance, shared.
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = neutral
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = strongly_approve
+	}
+
 	country_trigger = {
 		owner = { has_technology_researched = brain_computer_interfaces }
 	}
@@ -706,6 +714,14 @@ ideology_corporate = {
 		law_corporate_genetic_licensing = strongly_approve
 		law_open_source_genetics = disapprove
 		law_state_eugenics_program = strongly_disapprove
+	}
+
+	# Automation Policy (era 13 spec § 7.1): the owners decide (AUTOMATION_LISTS' "free").
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_approve
+		law_robot_tax = disapprove
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = disapprove
 	}
 
 	lawgroup_bureaucracy = {

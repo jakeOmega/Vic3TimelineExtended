@@ -337,6 +337,14 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_automation_dividend }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_automation_robot_tax }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_capital_controls_fatigue }
 		add = 1
 	}
@@ -1253,6 +1261,14 @@ te_nation_list_economy_count = {
 	}
 	if = {
 		limit = { has_modifier = quiet_assimilation_path_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_automation_dividend }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_automation_robot_tax }
 		add = 1
 	}
 	if = {
@@ -3588,6 +3604,10 @@ te_nation_types_society_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_automation_dividend }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_demog_family_limitation }
 		add = 1
 	}
@@ -3697,6 +3717,10 @@ te_nation_group_living_standards_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_automation_dividend }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_inflation_band_elevated }
 		add = 1
 	}
@@ -3735,6 +3759,24 @@ te_nation_type_state_standard_of_living_add_count = {
 	}
 	if = {
 		limit = { has_modifier = un_regime_refugee_source_modifier }
+		add = 1
+	}
+}
+
+# Used by: the state_lower_strata_standard_of_living_add row
+te_nation_type_state_lower_strata_standard_of_living_add_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_automation_dividend }
+		add = 1
+	}
+}
+
+# Used by: the state_middle_strata_standard_of_living_add row
+te_nation_type_state_middle_strata_standard_of_living_add_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_automation_dividend }
 		add = 1
 	}
 }
@@ -4299,6 +4341,10 @@ te_nation_types_economy_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_automation_robot_tax }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_capital_controls_fatigue }
 		add = 1
 	}
@@ -4597,6 +4643,10 @@ te_nation_type_building_tourism_industry_throughput_add_count = {
 te_nation_group_taxes_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = te_automation_robot_tax }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_inflation_band_high }
 		add = 1
 	}
@@ -4669,6 +4719,10 @@ te_nation_group_taxes_count = {
 # Used by: the state_tax_collection_mult row
 te_nation_type_state_tax_collection_mult_count = {
 	value = 0
+	if = {
+		limit = { has_modifier = te_automation_robot_tax }
+		add = 1
+	}
 	if = {
 		limit = { has_modifier = te_tax_relief_region_1 }
 		add = 1
