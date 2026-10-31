@@ -53,6 +53,7 @@ is worth flipping back and forth.
 | Upkeep size | Ten times the four-Fusion-levels match (§ 10). |
 | Earth alert | A quiet notification for every hostile fleet bound for Earth, a loud one for a fleet that would change something (§ 9). |
 | Detach | Also into an existing fleet at the same location, so it becomes Transfer and takes in Merge (§ 6). |
+| Transfer amounts | −/+ buttons with the construction market's keys (Shift, Ctrl, Alt, right-click) for any whole amount, no typing (§ 6). |
 | Colony AI | Plans an Administration from autonomy 25 while heading for 45 or more. Shipped in #1274. |
 
 ## 3. The popup shell (shared)
@@ -169,27 +170,39 @@ the lowest empty slot.
 
 **The popup:**
 - **One row per role** (warships, rapid, siege, carriers, tenders) and marines,
-  each with its current strength and five share buttons: none, ¼, ½, ¾, all.
-  The default is ½, today's behavior.
+  each with its current strength and an amount to move between a − and a +
+  button (owner, 2026-10-31: "the same mechanism as construction purchasing",
+  any integer, no typing). The keys are the construction market's
+  (`gui/construction_panel.gui:1146-1190`, `TE_CM_INCREASE_TT`): click ±1,
+  Shift ±10, Ctrl ±100, Alt ±1,000, right-click on − for none and on + for all
+  (the market's right-click + adds 10,000, which here would land on all
+  anyway). The amount is clamped to 0 and the role's strength, so the top of
+  the range is the role's whole strength even when that isn't a whole number,
+  and a role under 1 is none or all. The default is half the role, rounded
+  (`round = yes`), today's Detach to within a point. Each button's tooltip
+  lists the keys, as the market's do.
 - **Where it goes (owner, 2026-10-31: Detach also into an existing fleet):** a
-  row of buttons above the shares: a new fleet (the lowest empty slot, today's
+  row of buttons above the amounts: a new fleet (the lowest empty slot, today's
   Detach), or each of our other fleets at the same location. With another fleet
-  chosen it is a transfer, and "all" on every row is today's Merge, so the
+  chosen it is a transfer, and all of every row is today's Merge, so the
   popup replaces both buttons. Merging into a fleet keeps today's merge rules
   for the drive, the refit and the delta-v and supply shares (`sr_fl_merge`).
 - **A footer:** what each fleet would carry afterwards, and Transfer.
 
 **State:** a typed number can't reach script (only base-game rename popups take
 text, `gui_modding_guide.md:1380`), and a `GetVariableSystem` value can't be
-read back as a number. So the shares are **country variables**,
-`sr_det_share_<role>`, set by a scripted GUI per button (`scope:op` the slot,
-`scope:pick` role × 10 + share). Transfer applies them, and opening the popup
-resets them to ½. They are game state, so a share click is a command, as every
-fleet order already is.
+read back as a number. So the amounts are **country variables**,
+`sr_det_amt_<role>`, stepped by a scripted GUI per button (`scope:op` the slot,
+`scope:pick` role × 100 + step code; how the step is coded is the builder's).
+Transfer applies them, and opening the popup resets them to half. They are game
+state, so a step click is a command, as every fleet order already is. The
+amounts are re-clamped when the fleet changes under an open popup (a battle, a
+repair), so Transfer never moves more than is there.
 
 **Script:** one generated transfer, `sr_fl_transfer = { N M }`, takes a share per
-role in place of 0.5, for each role's `_<role>` and `_<role>_full`, and for the
-marines. M is an empty slot (it then takes N's location, posture and drive, as
+role in place of 0.5, the amount ÷ the role's strength, for each role's
+`_<role>` and `_<role>_full` alike (so a damaged role keeps its damage ratio),
+and for the marines. M is an empty slot (it then takes N's location, posture and drive, as
 `sr_fl_detach` does) or a fleet at N's location (the shares then follow
 `sr_fl_merge`'s weighting). The target is a fifth `scope:pick` range. All of N
 into another fleet clears N, as Merge does. Refused, with the reason in
