@@ -118,7 +118,11 @@ types te_demographics_layout
 				minimumsize = { 520 -1 }
 				maximumsize = { 520 -1 }
 
-				te_demog_sec_wealth = {}
+				### less the strata's incomes: vanilla's keys read the Population panel (PopsOverviewPanel), which this
+				### window doesn't have, and logged nine lines a frame here (2026-10-31)
+				te_demog_sec_wealth = {
+					blockoverride "te_demog_wealth_strata_incomes" {}
+				}
 				te_demog_sec_places = {}
 				te_demog_sec_states = {}
 				te_demog_sec_how = {}

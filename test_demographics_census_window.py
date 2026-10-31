@@ -17,10 +17,13 @@ file holds:
 * that nothing the country's sections draw reads GetPlayer, in the markup or in
   any loc key they reach, and that none of that text says "our" or "your";
 * that the controls which change a country (the pension and Family Policy
-  buttons) show only for the player's own.
+  buttons) show only for the player's own;
+* that nothing the Census Data window draws reads the Population panel's own
+  data (PopsOverviewPanel), which only that panel's window holds.
 """
 import difflib
 import glob
+import json
 import os
 import re
 import unittest
@@ -33,6 +36,7 @@ WIDGETS = ROOT / "gui" / "te_demographics_widgets.gui"
 LAYOUT = ROOT / "gui" / "te_demographics_layout.gui"
 SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
 LOC_DIR = ROOT / "localization" / "english"
+VANILLA_LOC = ROOT / "vanilla_parsed" / "localization_english.json"
 
 MOD_OPEN = "### MOD: Demographics tab"
 MOD_CLOSE = "### END MOD ###"
@@ -50,6 +54,9 @@ KEPT_GETPLAYER = "GetPlayer.MakeScope.ScriptValue('te_history_current_year')"
 # Country is in context, and read only a constant (te_demog_k_conscription_ref).
 SHARED_WITH_THE_STATE = {"te_demog_fam_rule"}
 PERSONAL = re.compile(r"\b(you|your|yours|we|our|ours|us)\b", re.I)
+# The Population panel's own data: its window holds it and the Census Data window doesn't, so a key that reads it (as
+# vanilla's POPS_OVERVIEW_AVERAGE_INCOME_* keys do) renders only in the Population panel.
+POPULATION_PANEL_ONLY = "PopsOverviewPanel."
 
 
 def read(path):
@@ -109,6 +116,28 @@ def loc_closure(keys, loc):
         stack.extend(re.findall(r"\$([\w.\-]+)\$", value))
         stack.extend(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
     return seen
+
+
+def without_blocks(text, names):
+    """`text` less each `block "<name>" { ... }` for a name in `names`: what a host draws that blanks them."""
+    for name in names:
+        while (m := re.search(rf'(?<![\w"])block "{name}" \{{', text)):
+            body = block_from(text, m.end() - 1)
+            text = text[:m.start()] + text[m.end() - 1 + len(body):]
+    return text
+
+
+def blanked_blocks(composer, sections):
+    """For each of `sections` a composer instances, the blocks it blanks with an empty blockoverride."""
+    out = {}
+    for m in re.finditer(r"(?m)^\s*(\w+) = \{", composer):
+        if m.group(1) not in sections:
+            continue
+        instance = block_from(composer, m.end() - 1)
+        names = re.findall(r'blockoverride "(\w+)" \{\s*\}', instance)
+        if names:
+            out.setdefault(m.group(1), set()).update(names)
+    return out
 
 
 def installed_game():
@@ -259,6 +288,49 @@ class CountryContextTest(unittest.TestCase):
                     "te_demog_pyr_outline_played"):
             with self.subTest(key=key):
                 self.assertIn(key, self.loc)
+
+
+class BrowserContextTest(unittest.TestCase):
+    """The Census Data window has no Population panel in its context, so nothing it draws may read that panel's data.
+    Vanilla's POPS_OVERVIEW_AVERAGE_INCOME_* keys read PopsOverviewPanel: in the window's Wealth section they logged nine
+    lines a frame, about 40,000 in two minutes (2026-10-31). The checks above read only the mod's loc, so vanilla's keys
+    passed them; these read vanilla's under the mod's."""
+
+    @classmethod
+    def setUpClass(cls):
+        with open(VANILLA_LOC, encoding="utf-8") as f:
+            cls.loc = dict(json.load(f))
+        cls.loc.update(load_loc())
+        widgets = {name: body for name, body in type_bodies(read(WIDGETS)).items() if not name.startswith("te_state_")}
+        layout = type_bodies(read(LAYOUT))
+        cls.browser = cls.host(widgets, code(layout["te_demog_browser_sections"]), "te_demog_browser_sections")
+        cls.tab = cls.host(widgets, code(layout["te_demog_tab_sections"]), "te_demog_tab_sections")
+
+    @staticmethod
+    def host(widgets, composer, name):
+        """What a host draws: the sections less the blocks its composer blanks, and the composer."""
+        blanked = blanked_blocks(composer, widgets)
+        out = {section: code(without_blocks(body, blanked.get(section, ()))) for section, body in widgets.items()}
+        out[name] = composer
+        return out
+
+    def reached(self, bodies):
+        return loc_closure(set().union(*(gui_keys(b, self.loc) for b in bodies.values())), self.loc)
+
+    def test_the_window_draws_nothing_that_reads_the_population_panel(self):
+        for name, body in self.browser.items():
+            with self.subTest(type=name):
+                self.assertNotIn(POPULATION_PANEL_ONLY, body)
+        for key in sorted(self.reached(self.browser)):
+            with self.subTest(key=key):
+                self.assertNotIn(POPULATION_PANEL_ONLY, self.loc[key])
+
+    def test_the_population_panel_keeps_the_strata_incomes(self):
+        keys = self.reached(self.tab)
+        for strata in ("LOW", "MIDDLE", "UPPER"):
+            for suffix in ("", "_TOOLTIP"):
+                with self.subTest(key=f"POPS_OVERVIEW_AVERAGE_INCOME_{strata}_LABEL{suffix}"):
+                    self.assertIn(f"POPS_OVERVIEW_AVERAGE_INCOME_{strata}_LABEL{suffix}", keys)
 
 
 class ControlsTest(unittest.TestCase):
