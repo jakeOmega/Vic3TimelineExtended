@@ -385,9 +385,12 @@ Transportation is produced by:
 - Railways, on every train method. In a power bloc with tier III or higher of
 the Transportation Infrastructure principle, each railway switches its steam,
 electric or diesel trains to a stronger version on its own, which carries
-20–28% more and adds more infrastructure. That switch costs no retooling.
-- Railways' Rolling Stock (passenger carriages up to Maglev Trains) and ports'
-Passenger Ships, which add more Transportation for a few more inputs.
+20–28% more and adds more infrastructure. That switch costs no retooling. The
+last train method, Vactrain Freight (from the era 12 technology Vactrains), runs
+on Electricity and burns no oil.
+- Railways' Rolling Stock (passenger carriages up to Maglev Trains and
+Vactrains) and ports' Passenger Ships, which add more Transportation for a few
+more inputs.
 - Highways and Airports, and Urban Centers' public transit.
 - Railway, logistics and fulfillment company buildings.
 
