@@ -5,7 +5,7 @@
 # (slice 3 of the scope, §§ 3-9).
 #
 # Under every setting but off a programme can choose its next world (the
-# Solar System list's Target button: var:sr_cf_target, a world's index in
+# colony target popup's Target button, UI pass design § 5: var:sr_cf_target, a world's index in
 # gen_solar_sites.SITES). Under races only the target is founded at once, as
 # the draw founds. Under simple and full a colony fleet travels: it leaves
 # with the transit time its drive buys (sr_transit_months_<body>,

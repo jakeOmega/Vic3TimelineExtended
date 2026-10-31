@@ -7,3 +7,7 @@
 # with its Nation, Space Race, Grand Monuments, Colonial Empire and Seabed tabs.
 gui/te_systems_window.gui = te_systems_window_launcher
 gui/te_systems_window.gui = te_systems_window
+#
+# The mod's centred popups (Space Race UI pass design § 3): one root, a popup
+# type instanced in it per picker.
+gui/te_popups.gui = te_popups

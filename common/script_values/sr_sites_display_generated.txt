@@ -8071,6 +8071,249 @@ sr_disp_ss_filtered = {
 	add = sr_disp_ss_filtered_kuiper
 }
 
+# The colony target popup (UI pass design § 5): 1 while we can target the
+# world (or it is our target); how many such worlds each location and the
+# whole system has.
+sr_disp_tp_shown_valles_marineris = {
+	value = 0
+	if = { limit = { sr_disp_site_target_valles_marineris >= 1 } value = 1 }
+}
+sr_disp_tp_shown_olympus_mons = {
+	value = 0
+	if = { limit = { sr_disp_site_target_olympus_mons >= 1 } value = 1 }
+}
+sr_disp_tp_shown_hellas_planitia = {
+	value = 0
+	if = { limit = { sr_disp_site_target_hellas_planitia >= 1 } value = 1 }
+}
+sr_disp_tp_shown_utopia_planitia = {
+	value = 0
+	if = { limit = { sr_disp_site_target_utopia_planitia >= 1 } value = 1 }
+}
+sr_disp_tp_shown_arcadia_planitia = {
+	value = 0
+	if = { limit = { sr_disp_site_target_arcadia_planitia >= 1 } value = 1 }
+}
+sr_disp_tp_shown_ceres = {
+	value = 0
+	if = { limit = { sr_disp_site_target_ceres >= 1 } value = 1 }
+}
+sr_disp_tp_shown_vesta = {
+	value = 0
+	if = { limit = { sr_disp_site_target_vesta >= 1 } value = 1 }
+}
+sr_disp_tp_shown_psyche = {
+	value = 0
+	if = { limit = { sr_disp_site_target_psyche >= 1 } value = 1 }
+}
+sr_disp_tp_shown_pallas = {
+	value = 0
+	if = { limit = { sr_disp_site_target_pallas >= 1 } value = 1 }
+}
+sr_disp_tp_shown_hygiea = {
+	value = 0
+	if = { limit = { sr_disp_site_target_hygiea >= 1 } value = 1 }
+}
+sr_disp_tp_shown_io = {
+	value = 0
+	if = { limit = { sr_disp_site_target_io >= 1 } value = 1 }
+}
+sr_disp_tp_shown_europa = {
+	value = 0
+	if = { limit = { sr_disp_site_target_europa >= 1 } value = 1 }
+}
+sr_disp_tp_shown_ganymede = {
+	value = 0
+	if = { limit = { sr_disp_site_target_ganymede >= 1 } value = 1 }
+}
+sr_disp_tp_shown_callisto = {
+	value = 0
+	if = { limit = { sr_disp_site_target_callisto >= 1 } value = 1 }
+}
+sr_disp_tp_shown_himalia = {
+	value = 0
+	if = { limit = { sr_disp_site_target_himalia >= 1 } value = 1 }
+}
+sr_disp_tp_shown_amalthea = {
+	value = 0
+	if = { limit = { sr_disp_site_target_amalthea >= 1 } value = 1 }
+}
+sr_disp_tp_shown_venus = {
+	value = 0
+	if = { limit = { sr_disp_site_target_venus >= 1 } value = 1 }
+}
+sr_disp_tp_shown_mercury = {
+	value = 0
+	if = { limit = { sr_disp_site_target_mercury >= 1 } value = 1 }
+}
+sr_disp_tp_shown_titan = {
+	value = 0
+	if = { limit = { sr_disp_site_target_titan >= 1 } value = 1 }
+}
+sr_disp_tp_shown_enceladus = {
+	value = 0
+	if = { limit = { sr_disp_site_target_enceladus >= 1 } value = 1 }
+}
+sr_disp_tp_shown_rhea = {
+	value = 0
+	if = { limit = { sr_disp_site_target_rhea >= 1 } value = 1 }
+}
+sr_disp_tp_shown_mimas = {
+	value = 0
+	if = { limit = { sr_disp_site_target_mimas >= 1 } value = 1 }
+}
+sr_disp_tp_shown_iapetus = {
+	value = 0
+	if = { limit = { sr_disp_site_target_iapetus >= 1 } value = 1 }
+}
+sr_disp_tp_shown_titania = {
+	value = 0
+	if = { limit = { sr_disp_site_target_titania >= 1 } value = 1 }
+}
+sr_disp_tp_shown_oberon = {
+	value = 0
+	if = { limit = { sr_disp_site_target_oberon >= 1 } value = 1 }
+}
+sr_disp_tp_shown_miranda = {
+	value = 0
+	if = { limit = { sr_disp_site_target_miranda >= 1 } value = 1 }
+}
+sr_disp_tp_shown_ariel = {
+	value = 0
+	if = { limit = { sr_disp_site_target_ariel >= 1 } value = 1 }
+}
+sr_disp_tp_shown_triton = {
+	value = 0
+	if = { limit = { sr_disp_site_target_triton >= 1 } value = 1 }
+}
+sr_disp_tp_shown_proteus = {
+	value = 0
+	if = { limit = { sr_disp_site_target_proteus >= 1 } value = 1 }
+}
+sr_disp_tp_shown_pluto = {
+	value = 0
+	if = { limit = { sr_disp_site_target_pluto >= 1 } value = 1 }
+}
+sr_disp_tp_shown_eris = {
+	value = 0
+	if = { limit = { sr_disp_site_target_eris >= 1 } value = 1 }
+}
+sr_disp_tp_shown_makemake = {
+	value = 0
+	if = { limit = { sr_disp_site_target_makemake >= 1 } value = 1 }
+}
+sr_disp_tp_shown_haumea = {
+	value = 0
+	if = { limit = { sr_disp_site_target_haumea >= 1 } value = 1 }
+}
+sr_disp_tp_shown_sedna = {
+	value = 0
+	if = { limit = { sr_disp_site_target_sedna >= 1 } value = 1 }
+}
+sr_disp_tp_shown_shackleton = {
+	value = 0
+	if = { limit = { sr_disp_site_target_shackleton >= 1 } value = 1 }
+}
+sr_disp_tp_shown_peary = {
+	value = 0
+	if = { limit = { sr_disp_site_target_peary >= 1 } value = 1 }
+}
+sr_disp_tp_shown_tranquility = {
+	value = 0
+	if = { limit = { sr_disp_site_target_tranquility >= 1 } value = 1 }
+}
+sr_disp_tp_shown_marius_hills = {
+	value = 0
+	if = { limit = { sr_disp_site_target_marius_hills >= 1 } value = 1 }
+}
+sr_disp_tp_shown_daedalus = {
+	value = 0
+	if = { limit = { sr_disp_site_target_daedalus >= 1 } value = 1 }
+}
+sr_disp_tp_shown_imbrium = {
+	value = 0
+	if = { limit = { sr_disp_site_target_imbrium >= 1 } value = 1 }
+}
+sr_disp_tp_count_earth = {
+	value = 0
+	add = sr_disp_tp_shown_shackleton
+	add = sr_disp_tp_shown_peary
+	add = sr_disp_tp_shown_tranquility
+	add = sr_disp_tp_shown_marius_hills
+	add = sr_disp_tp_shown_daedalus
+	add = sr_disp_tp_shown_imbrium
+}
+sr_disp_tp_count_inner = {
+	value = 0
+	add = sr_disp_tp_shown_venus
+	add = sr_disp_tp_shown_mercury
+}
+sr_disp_tp_count_mars = {
+	value = 0
+	add = sr_disp_tp_shown_valles_marineris
+	add = sr_disp_tp_shown_olympus_mons
+	add = sr_disp_tp_shown_hellas_planitia
+	add = sr_disp_tp_shown_utopia_planitia
+	add = sr_disp_tp_shown_arcadia_planitia
+}
+sr_disp_tp_count_asteroids = {
+	value = 0
+	add = sr_disp_tp_shown_ceres
+	add = sr_disp_tp_shown_vesta
+	add = sr_disp_tp_shown_psyche
+	add = sr_disp_tp_shown_pallas
+	add = sr_disp_tp_shown_hygiea
+}
+sr_disp_tp_count_jupiter = {
+	value = 0
+	add = sr_disp_tp_shown_io
+	add = sr_disp_tp_shown_europa
+	add = sr_disp_tp_shown_ganymede
+	add = sr_disp_tp_shown_callisto
+	add = sr_disp_tp_shown_himalia
+	add = sr_disp_tp_shown_amalthea
+}
+sr_disp_tp_count_saturn = {
+	value = 0
+	add = sr_disp_tp_shown_titan
+	add = sr_disp_tp_shown_enceladus
+	add = sr_disp_tp_shown_rhea
+	add = sr_disp_tp_shown_mimas
+	add = sr_disp_tp_shown_iapetus
+}
+sr_disp_tp_count_uranus = {
+	value = 0
+	add = sr_disp_tp_shown_titania
+	add = sr_disp_tp_shown_oberon
+	add = sr_disp_tp_shown_miranda
+	add = sr_disp_tp_shown_ariel
+}
+sr_disp_tp_count_neptune = {
+	value = 0
+	add = sr_disp_tp_shown_triton
+	add = sr_disp_tp_shown_proteus
+}
+sr_disp_tp_count_kuiper = {
+	value = 0
+	add = sr_disp_tp_shown_pluto
+	add = sr_disp_tp_shown_eris
+	add = sr_disp_tp_shown_makemake
+	add = sr_disp_tp_shown_haumea
+	add = sr_disp_tp_shown_sedna
+}
+sr_disp_tp_count = {
+	value = 0
+	add = sr_disp_tp_count_earth
+	add = sr_disp_tp_count_inner
+	add = sr_disp_tp_count_mars
+	add = sr_disp_tp_count_asteroids
+	add = sr_disp_tp_count_jupiter
+	add = sr_disp_tp_count_saturn
+	add = sr_disp_tp_count_uranus
+	add = sr_disp_tp_count_neptune
+	add = sr_disp_tp_count_kuiper
+}
+
 # The overview's Colonies cell (audit SPC-6): our colonies at or past the
 # autonomy that demands self-government (sr_aut_ask_level).
 sr_disp_aut_restless_count = {
