@@ -103,3 +103,41 @@ ahead, raised if they fall short.
 |---|---|---|---|---|---|
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
+
+## Phase 3: Frontier AI Control
+
+1. **A new game.** The laws panel shows Frontier AI Control among the power
+   structure groups from 1836, every country on No Frontier AI Policy, and no
+   other law of the group enactable. The six laws borrow other laws' icons (No
+   Internet Policy's, Corporate Genetic Licensing's, Ministry of Science's,
+   State Intellectual Property's, Ministry of International Aid's and Open
+   Source Innovation's) until theirs are painted.
+2. **The opening.** The day a country researches AI Agents (or gets it by
+   spread) it moves to Private Labs, with no enactment. No Frontier AI Policy then reads as not enactable, with its
+   tooltip.
+3. **Tooltips.** Each law lists its lines: innovation, Economic Covert Defense,
+   authority, intelligence capacity, diplomatic reputation, technology spread,
+   the interest group lines and International Oversight's UN Authority Target
+   +0.50. Open Weights' enactment tooltip names the 100 and the 300;
+   International Oversight's says it falls to National Licensing.
+4. **International Oversight.** With the United Nations rule off the law is not
+   in the panel. A non-member sees it greyed with "We are a member of the
+   United Nations". A member enacts it; then pressing Leave the United Nations
+   shows the line that the law falls to National Licensing, and the law is
+   National Licensing the same day. The same on the UN's dissolution, for every
+   member holding it.
+5. **Open Weights' world share.** With a great or major power holding Open
+   Weights, the Global Technological Development tooltip of every country,
+   recognized or not, rises by 100 at the next yearly pulse (up to 300 with
+   three or more holders). A minor power's Open Weights adds nothing.
+6. **Interest groups.** In a late game, the Armed Forces back State Monopoly,
+   the Industrialists Private Labs and the Intelligentsia Open Weights in the
+   law panel's interest group view, and most others National Licensing.
+7. **Old saves.** Load a save from before this change. Every country holds No
+   Frontier AI Policy (the group's first law), with no `two laws are active in
+   the same group` assert in `error.log`, and each AI Agents holder moves to
+   Private Labs at its next technology, law change or yearly pulse.
+8. **New countries.** A country released or formed after AI Agents holds a law
+   of the group (copied from its parent or the placeholder), and one that is
+   not a UN member does not keep International Oversight past its next yearly
+   pulse.

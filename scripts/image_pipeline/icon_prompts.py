@@ -1390,6 +1390,14 @@ ICONS: dict[str, dict[str, dict]] = {
         # Distribution of Power (a vanilla group)
         "law_post-scarcity": {"subject": "a large overflowing cornucopia horn spilling out fruit, bread and small machine gears", "seed": 1},
         "law_universal_basic_income": {"subject": "a sturdy knotted rope safety net slung taut between two thick wooden posts", "seed": 1},
+        # Frontier AI Control (era 13 spec § 7.1): placeholders borrow other laws'
+        # icons until these are painted. Unreviewed subjects.
+        "law_no_frontier_ai_policy": {"subject": "a plain closed cardboard box with a coiled unplugged power cable lying on its lid", "seed": None},
+        "law_private_ai_labs": {"subject": "a glowing blue computer chip resting on a short stack of gold coins", "seed": None},
+        "law_national_ai_licensing": {"subject": "a glowing blue computer chip with a paper license tag tied to it by a string and stamped with a plain red wax seal", "seed": None},
+        "law_state_ai_monopoly": {"subject": "a glowing blue computer chip locked inside a small heavy steel safe with its door ajar", "seed": None},
+        "law_international_ai_oversight": {"subject": "a glowing blue computer chip under a large brass magnifying glass held on a stand, a small globe beside it", "seed": None},
+        "law_open_weights": {"subject": "a glowing blue computer chip in an open wooden box, its lid thrown back and rays of light spilling out", "seed": None},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {

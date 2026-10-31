@@ -884,6 +884,115 @@ JUDICIARY_STANCES = {
 }
 
 
+# --- lawgroup_frontier_ai_control (era 13 spec § 7.1; common/laws/te_frontier_ai_laws.txt) ---
+# Who builds the most capable AI. Every list names all six laws, in file order
+# (the ideology_lawgroup audit; test_frontier_ai_control.py). The placeholder
+# held before AI Agents is neutral everywhere: nothing else can be enacted
+# while it is held, and the group leaves it once AI Agents arrives. The spec's
+# backers: the Armed Forces' ideologies peak at State Monopoly, the
+# Industrialists' at Private Labs and the Intelligentsia's at Open Weights;
+# most others meet at National Licensing. Applied to the vanilla ideologies
+# in FRONTIER_AI_STANCES by the loop after `modifications`; the mod's own
+# ideologies carry the same lists by hand in extra_ideologies.txt.
+_FRONTIER_AI_LAWS = (
+    "law_no_frontier_ai_policy",
+    "law_private_ai_labs",
+    "law_national_ai_licensing",
+    "law_state_ai_monopoly",
+    "law_international_ai_oversight",
+    "law_open_weights",
+)
+
+
+def frontier_ai_constructor(*codes):
+    """Five stance codes, Private Labs to Open Weights, as (law, stance) pairs
+    after the neutral placeholder."""
+    assert len(codes) == len(_FRONTIER_AI_LAWS) - 1
+    return [(_FRONTIER_AI_LAWS[0], "neutral")] + [
+        (law, _STANCE_CODES[code]) for law, code in zip(_FRONTIER_AI_LAWS[1:], codes)
+    ]
+
+
+FRONTIER_AI_LISTS = {
+    #                                          Priv  Lic   State Intl  Open
+    # The frontier as a weapon, kept at home.
+    "military": frontier_ai_constructor("0", "+", "++", "--", "--"),
+    # No laboratory answers to anyone but the state.
+    "statist": frontier_ai_constructor("-", "+", "++", "-", "--"),
+    # Control at home, and no foreign inspectors.
+    "national": frontier_ai_constructor("0", "+", "+", "--", "-"),
+    # A proprietary model is the moat.
+    "market": frontier_ai_constructor("++", "-", "--", "-", "-"),
+    # Build what you like, and publish it if you like.
+    "libertarian": frontier_ai_constructor("+", "-", "--", "-", "+"),
+    # Open science, held to account.
+    "liberal": frontier_ai_constructor("0", "+", "--", "+", "++"),
+    # A danger to everyone is everyone's business.
+    "internationalist": frontier_ai_constructor("-", "+", "-", "++", "+"),
+    # Not the bosses' machines: public control and shared gains.
+    "labour": frontier_ai_constructor("--", "+", "+", "+", "+"),
+    "vanguard": frontier_ai_constructor("--", "0", "++", "-", "0"),
+    "totalitarian": frontier_ai_constructor("-", "0", "++", "--", "--"),
+    # Whoever builds a mind answers for it.
+    "religious": frontier_ai_constructor("-", "++", "0", "0", "--"),
+    "traditional": frontier_ai_constructor("0", "+", "+", "-", "--"),
+    "populist": frontier_ai_constructor("-", "+", "0", "-", "0"),
+    "technocratic": frontier_ai_constructor("+", "++", "0", "+", "0"),
+    "anarchist": frontier_ai_constructor("-", "--", "--", "-", "++"),
+    # Faster, and in everyone's hands.
+    "accelerationist": frontier_ai_constructor("+", "-", "-", "--", "++"),
+}
+
+FRONTIER_AI_STANCES = {
+    **{k: "military" for k in ("ideology_jingoist", "ideology_jingoist_leader")},
+    **{k: "statist" for k in (
+        "ideology_loyalist", "ideology_authoritarian", "ideology_military_absolutist",
+        "ideology_caudillismo", "ideology_corporatist_movement",
+    )},
+    **{k: "national" for k in (
+        "ideology_patriotic", "ideology_reactionary", "ideology_isolationist", "ideology_ethno_nationalist",
+        "ideology_reactionary_movement", "ideology_ethno_nationalist_movement",
+    )},
+    **{k: "market" for k in ("ideology_plutocratic", "ideology_laissez_faire", "ideology_market_liberal")},
+    "ideology_individualist": "libertarian",
+    **{k: "liberal" for k in (
+        "ideology_liberal", "ideology_liberal_modern", "ideology_liberal_leader", "ideology_republican",
+        "ideology_republican_leader", "ideology_constitutionalist", "ideology_anti_clerical",
+        "ideology_radical", "ideology_liberal_movement", "ideology_radical_movement",
+    )},
+    **{k: "internationalist" for k in ("ideology_humanitarian", "ideology_pacifist")},
+    **{k: "labour" for k in (
+        "ideology_proletarian", "ideology_egalitarian", "ideology_egalitarian_modern", "ideology_socialist",
+        "ideology_social_democrat", "ideology_proletarian_movement", "ideology_socialist_movement",
+    )},
+    **{k: "vanguard" for k in (
+        "ideology_communist", "ideology_vanguardist", "ideology_communist_movement",
+        "ideology_vanguardist_movement",
+    )},
+    **{k: "totalitarian" for k in ("ideology_fascist", "ideology_fascist_movement")},
+    **{k: "religious" for k in (
+        "ideology_pious", "ideology_moralist", "ideology_theocrat", "ideology_traditionalist_movement",
+        "ideology_buddhist_moralist", "ideology_hindu_moralist", "ideology_hindu_moralist_british_india",
+        "ideology_sikh_moralist", "ideology_shinto_moralist", "ideology_papal_moralist",
+        "ideology_montenegrin_moralist", "ideology_orthodox_patriarch",
+        "ideology_oriental_orthodox_patriarch", "ideology_russian_patriarch",
+    )},
+    **{k: "traditional" for k in (
+        "ideology_paternalistic", "ideology_hierarchic", "ideology_patriarchal",
+        "ideology_junker_paternalistic", "ideology_scholar_paternalistic", "ideology_papal_paternalistic",
+        "ideology_republican_paternalistic", "ideology_japan_paternalistic", "ideology_japan_hierarchic",
+    )},
+    **{k: "populist" for k in (
+        "ideology_populist", "ideology_agrarian", "ideology_particularist", "ideology_jacksonian_democrat",
+        "ideology_agrarian_jeffersonian",
+    )},
+    **{k: "technocratic" for k in (
+        "ideology_technocratic", "ideology_positivist", "ideology_meritocratic", "ideology_positivist_movement",
+    )},
+    **{k: "anarchist" for k in ("ideology_anarchist", "ideology_anarchist_movement")},
+}
+
+
 modifications = {
     "ideology_paternalistic": {
         "lawgroup_monetary_policy": simple_currency,
@@ -3965,3 +4074,6 @@ modifications = {
 
 for _ideology, _list in JUDICIARY_STANCES.items():
     modifications.setdefault(_ideology, {})["lawgroup_judiciary"] = JUDICIARY_LISTS[_list]
+
+for _ideology, _list in FRONTIER_AI_STANCES.items():
+    modifications.setdefault(_ideology, {})["lawgroup_frontier_ai_control"] = FRONTIER_AI_LISTS[_list]

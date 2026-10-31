@@ -995,7 +995,8 @@ gw_emission_multiplier_script_value = {
 
 # Tiers by era, from 20 up: era 12's technologies add 200 and era 13's 300 (era 13 spec § 4.3, 2026-10-31; Biological
 # Immortality and Post-Scarcity Economy added 200 in era 12 until then). Self-Driving Laboratories joins era 11's 100
-# (phase 2): the one era 11 AI technology on the list, since it is the one that does research.
+# (phase 2): the one era 11 AI technology on the list, since it is the one that does research. The last line is no
+# technology: the Open Weights law's share (era 13 spec § 7.1), read from a monthly count.
 global_tech_spread_script_value = {
 	value = 0
 	if = {
@@ -1493,6 +1494,10 @@ global_tech_spread_script_value = {
 		}
 		add = 200
 	}
+	# Open Weights (Frontier AI Control, era 13 spec § 7.1): 100 for each major
+	# power or greater that holds the law, up to 300. A read of the monthly
+	# count, not another sweep (te_frontier_ai_values.txt).
+	add = te_frontier_ai_open_weights_spread
 }
 
 tmp_tst = {

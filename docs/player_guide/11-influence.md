@@ -597,9 +597,10 @@ Each unused slot becomes Domestic Intelligence Focus: +2 intelligence capacity,
 more separatism and coup resistance, calmer movements and better colonial
 garrisons. You also have three covert defenses, economic, military and
 ideological, each added to your capacity against operations of its kind. Strict
-IP Protection and Central Bank Independence raise economic defense and Publicly
-Funded Elections ideological defense, by 10 each; No IP Protection, Unregulated
-Banking and No Campaign Finance Laws lower them. A friend's Counterintelligence
+IP Protection, Central Bank Independence and State Monopoly (Frontier AI
+Control) raise economic defense and Publicly Funded Elections ideological
+defense, by 10 each; No IP Protection, Unregulated Banking, Private Labs, Open
+Weights and No Campaign Finance Laws lower them. A friend's Counterintelligence
 Support raises all three at once, by 8 each at base strength and up to 32 fully
 operational at priority 3. Against an agency of about 100 capacity, 10 points
 of defense add about 1.5 points to its Detection Risk. The Intelligence Sharing

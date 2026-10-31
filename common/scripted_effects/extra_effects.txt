@@ -1192,6 +1192,9 @@ fix_incompatible_laws = {
 		}
 		activate_law = law_type:law_unregulated_internet
 	}
+	# Frontier AI Control opens with AI Agents, and International Oversight
+	# needs UN membership while held (te_frontier_ai_effects.txt).
+	te_frontier_ai_fix_law = yes
 	if = {
 		limit = {
 			has_law = law_type:law_post-scarcity
