@@ -49,9 +49,14 @@ sr_mod_bunker_reliability = {
 	multiply = sr_mod_bunker_reliability_per_level
 	max = sr_mod_bunker_reliability_max
 }
-# The AI's plan (sr_mod_ai_plan_<key>): an Administration at this autonomy, and
-# Nuclear Command Centers up to the staffed levels that reach the cap.
-sr_mod_ai_admin_autonomy = { value = 50 }
+# The AI's plan (sr_mod_ai_plan_<key>): an Administration at this autonomy while
+# it is still rising by this much a month (the owner, 2026-10-31: 25, a warning
+# ahead of the demand at sr_aut_ask_level 50; until then 50, with the demand at
+# 75), and Nuclear Command Centers up to the staffed levels that reach the cap.
+# Autonomy nears where it settles ever more slowly, so "still rising" is a floor
+# on the drift, not any rise at all.
+sr_mod_ai_admin_autonomy = { value = 25 }
+sr_mod_ai_admin_rising = { value = 0.05 }
 sr_mod_ai_bunker_max = { value = 3 }
 
 # The technology markers' self-checks (colony management design § 11): the

@@ -2014,7 +2014,10 @@ def _module_ai(site: Site) -> list[str]:
                     "\t\t\t}",
                     f"\t\t\t{_queue_call(site, slot)}",
                     "\t\t}"]
-    for t, why in (("admin", f"sr_site_autonomy_value_{k} >= sr_mod_ai_admin_autonomy"),
+    # An Administration once autonomy reaches 25 and is still rising (the owner,
+    # 2026-10-31, when the demand came down to 50).
+    for t, why in (("admin", f"sr_site_autonomy_value_{k} >= sr_mod_ai_admin_autonomy"
+                             f" sr_site_aut_drift_{k} >= sr_mod_ai_admin_rising"),
                    ("mine", "sr_ebase_levels > sr_ebase_room_total"),
                    ("bunker", "nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max"),
                    ("yard", "any_scope_building = { is_building_type = building_space_command }"),
