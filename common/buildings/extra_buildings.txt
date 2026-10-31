@@ -2378,9 +2378,7 @@ building_military_base = {
 # docs/systems/mod_systems/pops_and_migration.md § Public Housing.
 building_public_housing = {
 	building_group = bg_government
-	# Borrowed until the icon pipeline renders its own
-	# (scripts/image_pipeline/icon_prompts.py, ICONS["building"]).
-	icon = "gfx/interface/icons/building_icons/urban_center.dds"
+	icon = "gfx/interface/icons/building_icons/building_public_housing.dds"
 	city_type = city
 
 	unlocking_technologies = {

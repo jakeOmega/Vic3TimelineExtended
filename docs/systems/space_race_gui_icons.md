@@ -1,10 +1,10 @@
 # Space Race GUI: Icons
 
-The Space Race panels' overview (the GUI style guide pass, September 2026) draws 28 icons of its own, including three pie layers and ten for the kinds of world in Our Colonies. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
+The Space Race panels' overview (the GUI style guide pass, September 2026) draws 41 icons of its own, including three pie layers, ten for the kinds of world in Our Colonies and thirteen on a colony's page. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
 
-**Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/space_race_widget.gui`, in the type named below, and the states are chosen by a display value's code. No script reads the paths. `SpaceRaceIconsTest` in `test_space_race_layout.py` holds each state to its file. It also fails on any placeholder left in the widget, and, once #586's files are in the repo, on any path that does not exist.
+**Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/space_race_widget.gui`, in the type named below, and the states are chosen by a display value's code. No script reads the paths. `SpaceRaceIconsTest` in `test_space_race_layout.py` holds each state to its file, and each tile and module row on a colony's page to its own. It also fails on any placeholder left in the widget, and, once #586's files are in the repo, on any path that does not exist.
 
-**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`). Their registry entries are the `space_part` (the one rocket), `space` (the first, the first-to-finish mark, the stage, the ten colony kinds, the warship and the module) and `space_state` (the five states, the risk, the four interstellar states) categories in `icon_prompts.py`. Each entry's `now` field names the placeholder it replaced. The pies are plain discs from `scripts/image_pipeline/gen_ch_model_pie_textures.py`. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
+**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`). Their registry entries are the `space_part` (the one rocket, the colony's pennant), `space` (the first, the first-to-finish mark, the stage, the ten colony kinds, the warship, the module, and a colony page's crew and seven modules) and `space_state` (the five states, the risk, the four interstellar states, and a colony page's five derived tiles) categories in `icon_prompts.py`. Each entry's `now` field names the placeholder it replaced. The pies are plain discs from `scripts/image_pipeline/gen_ch_model_pie_textures.py`. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
 
 **The rule for the set** is the UN's (`un_gui_icons.md`): simple and easy to recognize at 32–40 px. The five state icons and the risk share one emblem, a silver rocket with red fins, and differ by what surrounds it.
 
@@ -97,23 +97,25 @@ The page a colony's name opens (colony management design § 8, rebuilt on the ow
 
 **Kept.** Icons that already show the thing: vanilla's population (People), battalions (Marines), construction mark (Building) and level trend (Drift), and the government administration building (Administration); the mod's Extraplanetary Base (Base Room, Mining Complex), Space Command (Orbital Yard), tourism industry (Off-World Resort), covert operation slot (Black Site) and advanced material fabricator (Materials Foundry).
 
-**Placeholders** for the icon pipeline (`space` registry), each a vanilla or borrowed icon until its art is in:
+**Its own** (icon batch 8, 2026-10-31), each a vanilla or borrowed placeholder until then. Four tiles are the Habitat's dome with something drawn on or around it (`space_state`, derived), so the Autonomy and Defenses sections read as one family; Modules Crewed is the Modules cell's module with vanilla's population mark as its crew badge. `PAGE_ICONS` in `test_space_race_layout.py` holds each to its tile or row.
 
-| Where | Placeholder | Should show | Proposed file |
+| Where | Was | Shows | File |
 |---|---|---|---|
-| Crews tile | `character_trait_icons/engineer.dds` | a colonist in an orange pressure suit holding a wrench | `page_crews.dds` |
-| Modules Crewed tile | `generic_icons/employment_not_full.dds` | a silver module with a crew badge on its side, half its windows lit | `page_crewed.dds` |
-| Autonomy tile | `diplomatic_action_icons/liberty_desire.dds` | a colony dome flying a small flag of its own | `page_autonomy.dds` |
-| Autonomy status tile | `ai_strategy_icons/subject_maintain_autonomy.dds` | a colony dome under a wax seal | `page_aut_status.dds` |
-| Defenses tile and module | `building_icons/building_naval_fortification.dds` | twin gun turrets on a crater rim | `module_def.dds` |
-| Integrity tile | `state_status_icons/has_devastation.dds` | a dome with a crack across it | `page_integrity.dds` |
-| Defense status tile | `state_status_icons/colony.dds` | a dome with a radar dish beside it | `page_def_status.dds` |
-| Habitat | `building_icons/urban_center.dds` | a domed habitat with lit windows | `module_hab.dds` |
-| Spaceport | `building_icons/building_port.dds` | a landing pad with a lander docked on it | `module_port.dds` |
-| Research Station | `building_icons/building_university.dds` | a research dome with a telescope on its roof | `module_lab.dds` |
-| Cultural Center | `building_icons/building_arts_academy.dds` | an amphitheater under a glass dome | `module_culture.dds` |
-| Training Ground | `building_icons/building_barracks.dds` | marines in pressure suits drilling in low gravity | `module_train.dds` |
-| Nuclear Command Center | `building_icons/building_nuclear_plant.dds` | a hardened bunker door marked with a radiation trefoil | `module_bunker.dds` |
+| Crews tile | `character_trait_icons/engineer.dds` | a colonist in an orange pressure suit with a gold visor, a big wrench in hand, seen from the side | `page_crews.dds` |
+| Modules Crewed tile | `generic_icons/employment_not_full.dds` | the silver module with vanilla's population mark at its lower right | `page_crewed.dds` |
+| Autonomy tile | `diplomatic_action_icons/liberty_desire.dds` | the Habitat's dome flying a teal flag of its own | `page_autonomy.dds` |
+| Autonomy status tile | `ai_strategy_icons/subject_maintain_autonomy.dds` | the Habitat's dome with a red wax seal on a blue ribbon | `page_aut_status.dds` |
+| Defenses tile and module | `building_icons/building_naval_fortification.dds` | a grey armored gun turret on a stepped armored base, on moon rock | `module_def.dds` |
+| Integrity tile | `state_status_icons/has_devastation.dds` | the Habitat's dome with a crack down it | `page_integrity.dds` |
+| Defense status tile | `state_status_icons/colony.dds` | the Habitat's dome with a radar dish beside it | `page_def_status.dds` |
+| Habitat | `building_icons/urban_center.dds` | a dome of blue-tinted panes over a band of lit yellow windows | `module_hab.dds` |
+| Spaceport | `building_icons/building_port.dds` | a gold lander on four legs on a grey pad ringed in orange | `module_port.dds` |
+| Research Station | `building_icons/building_university.dds` | a silver observatory dome, a brass telescope out of its slot | `module_lab.dds` |
+| Cultural Center | `building_icons/building_arts_academy.dds` | two gold theater masks, comedy and tragedy, on an amber glass dome | `module_culture.dds` |
+| Training Ground | `building_icons/building_barracks.dds` | a marine in a sand-tan pressure suit leaping, rifle raised | `module_train.dds` |
+| Nuclear Command Center | `building_icons/building_nuclear_plant.dds` | a steel blast door in a concrete frame, a yellow radiation sign beside it | `module_bunker.dds` |
+
+Three of the briefs changed in review, because at 24 px they were scenes: the amphitheater under a dome was a ring of steps, so Cultural Center shows the theater masks; the twin turrets on a crater rim were specks on a large rock, so Defenses is one turret; two marines drilling were two specks, so Training Ground is one marine (in sand-tan: the first round's olive armor and orange visor drew Halo's Master Chief). The Habitat is the lighter of its candidates, so the drawn crack shows on Integrity.
 
 ## Kept as they are
 

@@ -582,3 +582,18 @@ now*; `TE_SR_MODULES <key>: a module level of type N dismantled` in `debug.log`.
 5. **Under fire (Full Colonies).** While an enemy fleet blockades the colony, the months left stand still; when the
    colony is occupied or ceded, the line goes and the level stands. Taken back, it has the level.
 6. **Lunar worlds.** A Moon colony's page shows no Spaceport row's minus button.
+
+## A colony's page: its own icons (icon batch 8, 2026-10-31)
+
+Thirteen tiles and module rows on a colony's page had vanilla or borrowed placeholders (`space_race_gui_icons.md` §
+A colony's page has the table). No script reads them.
+
+1. **The tiles (34 px).** Open a colony's page under Full Colonies: Crews shows a colonist in an orange suit with a
+   wrench; Modules Crewed the silver module with a people mark; Autonomy the Habitat's dome flying a teal flag; the
+   Autonomy section's Status the dome with a red wax seal; Defenses a grey gun turret on rock; Integrity the dome
+   with a crack down it; the Defenses section's Status the dome with a radar dish. Each reads at its size, the crack
+   included.
+2. **The module rows (24 px).** Habitat a blue dome over lit windows, Spaceport a gold lander on an orange-ringed pad,
+   Research Station a silver observatory with a brass telescope, Cultural Center two gold theater masks, Training
+   Ground a marine in sand-tan leaping, Nuclear Command Center a blast door with a yellow radiation sign, Defenses the
+   turret. None is a speck or reads as something else.
