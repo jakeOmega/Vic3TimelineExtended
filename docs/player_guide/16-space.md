@@ -463,8 +463,8 @@ confirms its discovery; the reward is the same.
 ## Colonizing the solar system
 
 Solar System Colonization is repeatable. Each time its bar fills, a colony fleet
-leaves for an unclaimed site: the one you chose with Target in the Solar System
-list (see [Choosing a colony's site](#choosing-a-colonys-site)), or otherwise
+leaves for an unclaimed site: the one you chose as its target (see [Choosing a
+colony's site](#choosing-a-colonys-site)), or otherwise
 one the program picks among those it can reach that month (see [Launch
 windows](#launch-windows)). Under Races Only the program picks a random site of
 the current stage, and the colony is founded the month its fleet leaves. Under
@@ -513,7 +513,7 @@ speed, +10% influence and +15% cultural pull.
 
 The Moon is stage 0, settled before Mars. You can colonize it once your Moon
 Landing is complete, with Cislunar Infrastructure and the Solar Colonization
-method; the sites beyond it wait for your Mars Landing, and a Target button on
+method; the sites beyond it wait for your Mars Landing, and the Target button on
 one says so until then. Its six sites need no launch window
 and no transit: under every setting, a colony fleet bound for the Moon founds its
 colony the month it leaves, and it never takes one of the six places for fleets
@@ -533,7 +533,7 @@ progress of one lunar colony site, for you alone: Shackleton Crater for a Shackl
 landing, Tranquility Base for the Sea of Tranquility, Marius Hills for the
 Equatorial Plain and Daedalus Crater for the far side. A site's hover in the
 Solar System list says when the discount is yours. Under Races Only it counts
-when you choose that site with Target, not when the program draws one for you.
+when you choose that site as your target, not when the program draws one for you.
 
 Shackleton's Propellant Depot cracks the crater's ice into rocket fuel. While you
 hold it, with its specialization built and the colony neither blockaded nor
@@ -603,18 +603,22 @@ flight](#colony-fleets-in-flight)).
 
 ### Choosing a colony's site
 
-The Solar System list in Solar System Colonization has a Target button on each
-unclaimed site your program can send its next fleet to, while the program
-runs. It lists those sites, your own and any a fleet is on its way to; Show
-all lists all 40. Hover a site's name for what it offers: its stage, its two
-specializations, how long your drive takes to reach it, and its next launch
-window. Click Target to choose that site: its row reads Our target, and the
-Colony Fleets section names it, with a Clear button beside it. The next fleet waits for that site's launch window, even
+Colony Fleets, in Solar System Colonization, says where your next colony fleet
+goes. Click Choose there (Change once you have a target) to open the Colony
+Target window. It lists the unclaimed sites your program can send its next fleet
+to this month, under their locations, each with who holds it and its launch
+window (under Simple and Full Colonies, also its slots, its base room and grade,
+and the fleets on their way); Show all
+lists all 40, and a site you can't target says why on its button. Hover a site's
+name for what it offers: its stage, its two specializations and how long your
+drive takes to reach it. Click Target to choose that site: Colony Fleets names
+it, with Clear beside Change, and its row in the Solar System list reads Our
+target. The next fleet waits for that site's launch window, even
 if another site's window opens first. Outside the window it leaves at the
 premium when your approach judges it worth it, weighing the wait for that site's
 own window. Under Simple Colonies and Full Colonies a chosen site costs the
-progress of its own stage. Click Clear on the row to let the program pick again;
-it also picks again when someone else claims the site first.
+progress of its own stage. Click Clear to let the program pick again; it also
+picks again when someone else claims the site first.
 
 Under Races Only you can choose any site of the current stage, or a released
 site of an earlier stage. The colony is still founded the month its fleet

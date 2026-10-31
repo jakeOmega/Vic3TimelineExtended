@@ -176,7 +176,7 @@ class RegistrationTest(unittest.TestCase):
             self.assertTrue(os.path.isfile(path), m.group(1))
             _top_level(_read(path), m.group(2))
             found.append(m.group(2))
-        self.assertEqual(found, ["te_systems_window_launcher", "te_systems_window"])
+        self.assertEqual(found, ["te_systems_window_launcher", "te_systems_window", "te_popups"])
 
     def test_the_files_carry_a_bom(self):
         for path in (REGISTRATION, GUI):

@@ -10,8 +10,9 @@
 # (sr_cf_pick_auto, sr_emig_ai_review).
 # ============================================================================
 
-# Solar System: send our next colony fleet to the world, or, on our target,
-# let the programme choose again.
+# The colony target popup (te_sr_target_popup; UI pass design § 5): send our
+# next colony fleet to the world, or, on our target, let the programme choose
+# again.
 sr_colony_target_sgui = {
 	scope = country
 	saved_scopes = { site }
@@ -70,7 +71,7 @@ sr_colony_target_sgui = {
 }
 
 # Colony Fleets: Clear, beside our target (audit SPC-7): the programme chooses
-# again, as Clear on the world's Solar System row does.
+# again, as Clear on our target's row in the colony target popup does.
 sr_cf_target_clear_sgui = {
 	scope = country
 
