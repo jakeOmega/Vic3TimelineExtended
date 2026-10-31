@@ -2607,7 +2607,9 @@ types te_demographics_widgets
 	}
 
 	### Wealth: the Gini beside the strata's average incomes (vanilla's own
-	### figures and hovers), Wealth Concentration as a bar heading for its
+	### figures and hovers, in the Population panel only: they read that panel,
+	### so the Census Data window blanks te_demog_wealth_strata_incomes),
+	### Wealth Concentration as a bar heading for its
 	### target, the target's nine terms as pillars, and the most and least
 	### concentrated states. Wealth Concentration's national figures exist once
 	### a state has a score (te_demog_wealth_ready_sgui); until then one line.
@@ -2667,31 +2669,36 @@ types te_demographics_widgets
 							text = "[SelectLocalization( GetScriptedGui('te_demog_gini_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_gini_value', 'te_demog_gini_pending' )]"
 						}
 					}
-					te_demog_wealth_cell = {
-						tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_LOW_LABEL_TOOLTIP"
-						blockoverride "cell_label" {
-							text = "LOWER_NO_ICON"
+					### The strata's incomes are vanilla's figures, which read the Population panel itself (PopsOverviewPanel):
+					### the Census Data window has no such panel in its context, so it blanks this block
+					### (te_demog_browser_sections) and shows the Gini alone, as the state's Wealth does.
+					block "te_demog_wealth_strata_incomes" {
+						te_demog_wealth_cell = {
+							tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_LOW_LABEL_TOOLTIP"
+							blockoverride "cell_label" {
+								text = "LOWER_NO_ICON"
+							}
+							blockoverride "cell_value" {
+								text = "POPS_OVERVIEW_AVERAGE_INCOME_LOW_LABEL"
+							}
 						}
-						blockoverride "cell_value" {
-							text = "POPS_OVERVIEW_AVERAGE_INCOME_LOW_LABEL"
+						te_demog_wealth_cell = {
+							tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_MIDDLE_LABEL_TOOLTIP"
+							blockoverride "cell_label" {
+								text = "MIDDLE_NO_ICON"
+							}
+							blockoverride "cell_value" {
+								text = "POPS_OVERVIEW_AVERAGE_INCOME_MIDDLE_LABEL"
+							}
 						}
-					}
-					te_demog_wealth_cell = {
-						tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_MIDDLE_LABEL_TOOLTIP"
-						blockoverride "cell_label" {
-							text = "MIDDLE_NO_ICON"
-						}
-						blockoverride "cell_value" {
-							text = "POPS_OVERVIEW_AVERAGE_INCOME_MIDDLE_LABEL"
-						}
-					}
-					te_demog_wealth_cell = {
-						tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL_TOOLTIP"
-						blockoverride "cell_label" {
-							text = "UPPER_NO_ICON"
-						}
-						blockoverride "cell_value" {
-							text = "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL"
+						te_demog_wealth_cell = {
+							tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL_TOOLTIP"
+							blockoverride "cell_label" {
+								text = "UPPER_NO_ICON"
+							}
+							blockoverride "cell_value" {
+								text = "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL"
+							}
 						}
 					}
 				}

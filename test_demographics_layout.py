@@ -43,6 +43,9 @@ STATE_ONLY = ["te_state_demog_modifiers"]
 HOW = {"te_demog_tab_sections": "te_demog_sec_how", "te_state_demog_content": "te_state_demog_how"}
 # The Census Data window's composer: the tab's sections for the window's country, in three columns.
 BROWSER_COMPOSER = "te_demog_browser_sections"
+# A section placed as it is (`= {}`) or with blocks a host leaves out (`= { blockoverride ... }`): the Census Data window
+# blanks Wealth's strata incomes, which read the Population panel (2026-10-31).
+PLACED = r"\s*(?:\}|blockoverride )"
 
 # The history chart's slices, from the foot (te_dg_dc_lead's codes 1-8): the loc and variable name, the texture. The
 # pie's are the same less the deaths added on top (code 6), which count under their causes since 2026-10-22 (owner); the
@@ -180,11 +183,11 @@ class OrderTest(unittest.TestCase):
             for section in sections:
                 with self.subTest(composer=composer, section=section):
                     self.assertIn(section, defined)
-                    self.assertEqual(len(re.findall(rf"\b{section} = \{{\}}", body)), 1)
+                    self.assertEqual(len(re.findall(rf"\b{section} = \{{{PLACED}", body)), 1)
         for section in placed:
             with self.subTest(section=section):
                 expected = 1 if section.startswith("te_state_demog_") else 2
-                self.assertEqual(len(re.findall(rf"\b{section} = \{{\}}", self.layout)), expected)
+                self.assertEqual(len(re.findall(rf"\b{section} = \{{{PLACED}", self.layout)), expected)
         sections = {t for t in defined if t.startswith("te_demog_sec_") or t == "te_demog_overview"}
         sections |= {t for t in defined if t.startswith("te_state_demog_") and not t.endswith("_row")}
         self.assertEqual(sections, set(placed), "a section type the layout doesn't place")
