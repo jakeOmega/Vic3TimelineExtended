@@ -150,7 +150,7 @@ become releasable once another country holds the city.
 
 | City-state | State | Held at the start by |
 |---|---|---|
-| New York | New York | United States |
+| New York | New York | United States of America |
 | San Francisco | California | Mexico |
 | Singapore | Malaya | Great Britain |
 | Hong Kong | Eastern Guangdong | Great Qing |
@@ -158,7 +158,7 @@ become releasable once another country holds the city.
 | Constantinople | Eastern Thrace | Ottoman Empire |
 | Macau | Western Guangdong | Portugal |
 | Kuwait | Basra | Ottoman Empire |
-| Fiume | Croatia | Croatia |
+| Fiume | Croatia | Croatia-Slavonia |
 | Bombay | Bombay | East India Company |
 | Goa | Bombay | Portugal |
 | Pondicherry | Carnatic | France |
