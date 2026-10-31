@@ -445,6 +445,72 @@ sr_colony_module_queue_up_sgui = {
 	}
 }
 
+# Dismantling (owner, 2026-10-31), on a colony's page: scope:op (a module's
+# code, as sr_colony_module_sgui's) starts one level of that module at the world
+# (scope:site) coming down, over sr_mod_dismantle_months; on the module already
+# coming down there, it stops. One at a time a world. Losing the world or its
+# occupation ends the order; a blockade holds it. A founding specialization
+# keeps its first level, and a Habitat stays while its people need its room.
+sr_colony_dismantle_sgui = {
+	scope = country
+	saved_scopes = { site op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { sr_md_scope_is_this = yes }
+			always = yes
+		}
+		# Each condition its own line (the failing one gets the cross).
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_cf_req_held_tt
+				sr_cf_scope_site_held = yes
+			}
+			custom_tooltip = {
+				text = sr_md_req_not_occupied_tt
+				sr_md_scope_not_occupied = yes
+			}
+			custom_tooltip = {
+				text = sr_md_req_idle_tt
+				sr_md_scope_idle = yes
+			}
+			custom_tooltip = {
+				text = sr_md_req_level_tt
+				sr_md_scope_above_floor = yes
+			}
+			custom_tooltip = {
+				text = sr_md_req_room_tt
+				sr_md_scope_room_kept = yes
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { sr_md_scope_is_this = yes }
+			custom_tooltip = {
+				text = sr_md_stop_tt
+				sr_md_cancel_from_scope = yes
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = sr_md_start_tt
+				sr_md_start_from_scope = yes
+			}
+		}
+	}
+}
+
 # Colony Autonomy (slice 5 design § 4): abandon one of our colonies, after the
 # question (space_race_events.93), which names it through sr_abandon_site.
 sr_colony_abandon_sgui = {

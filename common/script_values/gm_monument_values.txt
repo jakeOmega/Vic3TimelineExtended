@@ -346,3 +346,76 @@ gm_sh_log_buildings = {
 	}
 }
 
+
+# ---- Clear Away (owner, 2026-10-31) -------------------------------------------------
+# Once six monuments stand in a state (gm_state_monument_count, the gate on a new
+# construction site), its owner may clear away the least grand of them to make
+# room for a grander one. Contested monuments have their own three choices and
+# are left out.
+
+# Container scope. The order ordered_in_list takes the least grand first by
+# (it sorts the highest first).
+gm_mon_grandeur_neg = {
+	value = gm_mon_grandeur
+	multiply = -1
+}
+
+# State scope. The least grandeur among the monuments here that may be cleared
+# away (gm_state_primary_clear_eligible, gm_mon_clear_eligible); 0 with none.
+gm_state_least_grandeur = {
+	value = 0
+	if = {
+		limit = { gm_state_has_clear_eligible_secondary = yes }
+		ordered_in_list = {
+			variable = gm_monuments_here
+			limit = { gm_mon_clear_eligible = yes }
+			order_by = gm_mon_grandeur_neg
+			position = 0
+			check_range_bounds = no
+			add = gm_mon_grandeur
+		}
+		if = {
+			limit = { gm_state_primary_clear_eligible = yes }
+			max = gm_state_primary_grandeur
+		}
+	}
+	else_if = {
+		limit = { gm_state_primary_clear_eligible = yes }
+		value = gm_state_primary_grandeur
+	}
+}
+
+# Container scope. How far a monument beside another stands above the least
+# grand in its state: 0 for the least.
+gm_mon_least_gap = {
+	value = gm_mon_grandeur
+	if = {
+		limit = { exists = var:gm_tr_origin }
+		var:gm_tr_origin = { subtract = gm_state_least_grandeur }
+	}
+}
+
+# State scope, for the state card's and the journal entry's Clear Away button on
+# the state's own monument: 1 while six stand here and it is the least grand.
+gm_state_disp_clearable = {
+	value = 0
+	if = {
+		limit = {
+			gm_state_monument_count >= 6
+			gm_state_primary_is_least = yes
+		}
+		value = 1
+	}
+}
+
+# Container scope, for the same button on a monument beside it.
+gm_mon_disp_clearable = {
+	value = 0
+	if = {
+		limit = {
+			gm_mon_is_least = yes
+			var:gm_tr_origin ?= { gm_state_monument_count >= 6 }
+		}
+		value = 1
+	}
+}

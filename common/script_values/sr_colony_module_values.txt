@@ -14,6 +14,11 @@ sr_module_points = { value = 100 }
 sr_mod_fab_per_month = { value = 2 }
 sr_mod_fab_stock_cap = { value = 500 }
 
+# Dismantling (owner, 2026-10-31): the months a module level takes to come
+# down, one level at a time a world, so a colony can't be stripped bare when a
+# rival moves on it. A blockade holds the count; losing the world ends it.
+sr_mod_dismantle_months = { value = 12 }
+
 # Country scope. The month's points: the Space Program's fabrication method
 # (te_colony_module_pms.txt), workforce-scaled, and the colonies' Orbital Yards
 # (colony management design § 7).

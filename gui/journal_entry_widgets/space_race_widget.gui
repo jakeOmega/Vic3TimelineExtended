@@ -2259,6 +2259,15 @@ types space_race_widget_types
 				blockoverride "row_button" {
 					block "mod_a_button" {}
 				}
+				blockoverride "row_dismantling" {
+					block "mod_a_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_a_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_a_dismantle_button" {}
+				}
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
@@ -2275,6 +2284,15 @@ types space_race_widget_types
 				}
 				blockoverride "row_button" {
 					block "mod_b_button" {}
+				}
+				blockoverride "row_dismantling" {
+					block "mod_b_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_b_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_b_dismantle_button" {}
 				}
 			}
 			te_sr_page_mod_row = {
@@ -2294,6 +2312,15 @@ types space_race_widget_types
 				blockoverride "row_button" {
 					block "mod_hab_button" {}
 				}
+				blockoverride "row_dismantling" {
+					block "mod_hab_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_hab_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_hab_dismantle_button" {}
+				}
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
@@ -2311,6 +2338,15 @@ types space_race_widget_types
 				}
 				blockoverride "row_button" {
 					block "mod_port_button" {}
+				}
+				blockoverride "row_dismantling" {
+					block "mod_port_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_port_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_port_dismantle_button" {}
 				}
 			}
 			te_sr_page_mod_row = {
@@ -2330,6 +2366,15 @@ types space_race_widget_types
 				blockoverride "row_button" {
 					block "mod_def_button" {}
 				}
+				blockoverride "row_dismantling" {
+					block "mod_def_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_def_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_def_dismantle_button" {}
+				}
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
@@ -2347,6 +2392,15 @@ types space_race_widget_types
 				}
 				blockoverride "row_button" {
 					block "mod_mine_button" {}
+				}
+				blockoverride "row_dismantling" {
+					block "mod_mine_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_mine_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_mine_dismantle_button" {}
 				}
 			}
 			te_sr_page_mod_row = {
@@ -2366,6 +2420,15 @@ types space_race_widget_types
 				blockoverride "row_button" {
 					block "mod_yard_button" {}
 				}
+				blockoverride "row_dismantling" {
+					block "mod_yard_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_yard_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_yard_dismantle_button" {}
+				}
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
@@ -2383,6 +2446,15 @@ types space_race_widget_types
 				}
 				blockoverride "row_button" {
 					block "mod_lab_button" {}
+				}
+				blockoverride "row_dismantling" {
+					block "mod_lab_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_lab_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_lab_dismantle_button" {}
 				}
 			}
 			te_sr_page_mod_row = {
@@ -2402,6 +2474,15 @@ types space_race_widget_types
 				blockoverride "row_button" {
 					block "mod_culture_button" {}
 				}
+				blockoverride "row_dismantling" {
+					block "mod_culture_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_culture_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_culture_dismantle_button" {}
+				}
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
@@ -2419,6 +2500,15 @@ types space_race_widget_types
 				}
 				blockoverride "row_button" {
 					block "mod_resort_button" {}
+				}
+				blockoverride "row_dismantling" {
+					block "mod_resort_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_resort_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_resort_dismantle_button" {}
 				}
 			}
 			te_sr_page_mod_row = {
@@ -2438,6 +2528,15 @@ types space_race_widget_types
 				blockoverride "row_button" {
 					block "mod_black_button" {}
 				}
+				blockoverride "row_dismantling" {
+					block "mod_black_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_black_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_black_dismantle_button" {}
+				}
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
@@ -2455,6 +2554,15 @@ types space_race_widget_types
 				}
 				blockoverride "row_button" {
 					block "mod_train_button" {}
+				}
+				blockoverride "row_dismantling" {
+					block "mod_train_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_train_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_train_dismantle_button" {}
 				}
 			}
 			te_sr_page_mod_row = {
@@ -2474,6 +2582,15 @@ types space_race_widget_types
 				blockoverride "row_button" {
 					block "mod_bunker_button" {}
 				}
+				blockoverride "row_dismantling" {
+					block "mod_bunker_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_bunker_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_bunker_dismantle_button" {}
+				}
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
@@ -2492,6 +2609,15 @@ types space_race_widget_types
 				blockoverride "row_button" {
 					block "mod_foundry_button" {}
 				}
+				blockoverride "row_dismantling" {
+					block "mod_foundry_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_foundry_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_foundry_dismantle_button" {}
+				}
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
@@ -2509,6 +2635,15 @@ types space_race_widget_types
 				}
 				blockoverride "row_button" {
 					block "mod_admin_button" {}
+				}
+				blockoverride "row_dismantling" {
+					block "mod_admin_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_admin_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_admin_dismantle_button" {}
 				}
 			}
 
@@ -2997,83 +3132,131 @@ types space_race_widget_types
 	}
 
 	### A module on a colony's page: its icon, its full name (its hover what the
-	### module does), its level and "+N" queued or on its way, and the button that
-	### queues one more. 4 + 28 + 4 + 330 + 4 + 30 + 4 + 34 + 4 + 24 = 466, in 472.
-	type te_sr_page_mod_row = widget {
-		size = { 472 28 }
+	### module does), its level and "+N" queued or on its way, the button that
+	### queues one more and the one that takes a level down, or stops it
+	### (dismantling, owner 2026-10-31). 4 + 28 + 4 + 318 + 4 + 20 + 4 + 24 + 4 +
+	### 24 + 4 + 24 = 466, in 472. While a level comes down, a second line under
+	### the name says so, with its months to go.
+	type te_sr_page_mod_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
 
+		widget = {
+			size = { 472 28 }
+
+			flowcontainer = {
+				parentanchor = left|vcenter
+				direction = horizontal
+				spacing = 4
+				margin_left = 4
+
+				widget = {
+					size = { 28 28 }
+					parentanchor = vcenter
+
+					background = {
+						using = dark_area
+						alpha = 0.3
+					}
+					icon = {
+						size = { 24 24 }
+						parentanchor = center
+						block "row_icon" {}
+					}
+				}
+				widget = {
+					size = { 318 28 }
+					parentanchor = vcenter
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 318
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "row_name" {}
+					}
+				}
+				widget = {
+					size = { 20 28 }
+					parentanchor = vcenter
+
+					textbox = {
+						parentanchor = center
+						autoresize = yes
+						max_width = 20
+						align = center|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "row_level" {}
+					}
+				}
+				widget = {
+					size = { 24 28 }
+					parentanchor = vcenter
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 24
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						default_format = "#v"
+						block "row_pending" {}
+					}
+				}
+				widget = {
+					size = { 24 28 }
+					parentanchor = vcenter
+
+					button_icon_plus_action = {
+						size = { 22 22 }
+						parentanchor = center
+						block "row_button" {}
+					}
+				}
+				widget = {
+					size = { 24 28 }
+					parentanchor = vcenter
+
+					button_icon_minus_action = {
+						size = { 22 22 }
+						parentanchor = center
+						block "row_dismantle" {}
+					}
+				}
+			}
+		}
+		### Coming down: under the name (4 + 28 + 4 = 36 in), its months to go.
 		flowcontainer = {
-			parentanchor = left|vcenter
 			direction = horizontal
+			ignoreinvisible = yes
 			spacing = 4
-			margin_left = 4
+			margin_left = 36
+			tooltip = "je_space_race_widget_mod_dismantling_tt"
+			block "row_dismantling" {}
 
-			widget = {
-				size = { 28 28 }
+			textbox = {
 				parentanchor = vcenter
-
-				background = {
-					using = dark_area
-					alpha = 0.3
-				}
-				icon = {
-					size = { 24 24 }
-					parentanchor = center
-					block "row_icon" {}
-				}
+				autoresize = yes
+				max_width = 300
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#R"
+				text = "je_space_race_widget_mod_coming_down"
 			}
-			widget = {
-				size = { 330 28 }
+			textbox = {
 				parentanchor = vcenter
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 330
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					block "row_name" {}
-				}
-			}
-			widget = {
-				size = { 30 28 }
-				parentanchor = vcenter
-
-				textbox = {
-					parentanchor = center
-					autoresize = yes
-					max_width = 30
-					align = center|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					block "row_level" {}
-				}
-			}
-			widget = {
-				size = { 34 28 }
-				parentanchor = vcenter
-
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 34
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					default_format = "#v"
-					block "row_pending" {}
-				}
-			}
-			widget = {
-				size = { 24 28 }
-				parentanchor = vcenter
-
-				button_icon_plus_action = {
-					size = { 22 22 }
-					parentanchor = center
-					block "row_button" {}
-				}
+				autoresize = yes
+				max_width = 60
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#v"
+				block "row_dismantling_months" {}
 			}
 		}
 	}

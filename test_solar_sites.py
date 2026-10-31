@@ -1183,7 +1183,8 @@ class PopulationTest(unittest.TestCase):
                 growth = monthly[monthly.index("# 5.") if "# 5." in monthly else monthly.index("sr_colonies_contested_enabled"):]
                 self.assertIn("sr_colonies_contested_enabled = yes", growth)
                 self.assertIn(f"multiply = {1 + gss.GROWTH_PER_MONTH}", growth)
-                self.assertIn(f"max = sr_site_room_{k}", growth)
+                # Less a Habitat's share while one comes down (dismantling, owner 2026-10-31).
+                self.assertIn(f"max = sr_site_room_held_{k}", growth)
                 share = _block(self.effects, "sr_emig_distribute")
                 self.assertIn(f"max = sr_site_free_room_{k}", share)
 

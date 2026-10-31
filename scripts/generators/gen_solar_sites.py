@@ -597,8 +597,9 @@ def _unmirror(site: Site) -> list[str]:
                 f"\tsr_site_hide_modifier = {{ MODIFIER = {db} }}",
                 f"\tsr_site_clear_discovery = {{ DISCOVERY = {d} }}"]
     out += [f"\tif = {{ limit = {{ has_variable = sr_emig_prio_{site.key} }} remove_variable = sr_emig_prio_{site.key} }}"]
-    # The world leaves the holder's module queue (slice 4 design § 7).
-    out += [f"\tsr_mq_drop_site = {{ INDEX = {site.index} }}"]
+    # The world leaves the holder's module queue (slice 4 design § 7), and any
+    # level it was taking down stays up (dismantling, owner 2026-10-31).
+    out += [f"\tsr_mq_drop_site = {{ INDEX = {site.index} }}", f"\tsr_md_clear_{site.key} = yes"]
     out += ["\tset_variable = { name = sr_colony_count value = sr_sites_held_count }", "}"]
     return out
 
@@ -785,8 +786,9 @@ def _monthly(site: Site) -> list[str]:
         f"\t\tlimit = {{ has_global_variable = sr_site_free_{k} }}",
         f"\t\tsr_site_free_step_{k} = yes",
         "\t}",
-        "\t# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2); at a",
-        "\t# free colony only while someone supplies it.",
+        "\t# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a",
+        "\t# Habitat's share while one comes down (sr_site_room_held_<key>); at a free",
+        "\t# colony only while someone supplies it.",
         "\tif = {",
         "\t\tlimit = {",
         "\t\t\tsr_colonies_contested_enabled = yes",
@@ -802,7 +804,7 @@ def _monthly(site: Site) -> list[str]:
         "\t\t\tvalue = {",
         f"\t\t\t\tvalue = global_var:sr_site_pop_{k}",
         f"\t\t\t\tmultiply = {1 + GROWTH_PER_MONTH}",
-        f"\t\t\t\tmax = sr_site_room_{k}",
+        f"\t\t\t\tmax = sr_site_room_held_{k}",
         "\t\t\t}",
         "\t\t}",
         "\t}",
@@ -1418,7 +1420,7 @@ def render_effects() -> str:
     parts += ["", *render_dispatcher(), "", *render_monthly_list(), "", *render_migration(), "",
               *render_lunar_migration(), "", *render_repoint(), "", *render_snapshot(), "", *render_cede_apply(), "", *render_debug(),
               "", *render_fleet_effects(), "", *render_population_effects(), "", *render_module_effects(),
-              "", *render_autonomy_effects(), "", *render_overview_effects()]
+              "", *render_dismantle_effects(), "", *render_autonomy_effects(), "", *render_overview_effects()]
     return "\n".join(parts) + "\n"
 
 
@@ -1442,7 +1444,8 @@ def render_triggers() -> str:
             "\tOR = {"]
     out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in SITES]
     out += ["\t}", "}", ""]
-    out += render_fleet_triggers() + [""] + render_module_triggers() + [""] + render_autonomy_triggers()
+    out += (render_fleet_triggers() + [""] + render_module_triggers() + [""] + render_dismantle_triggers()
+            + [""] + render_autonomy_triggers())
     return "\n".join(out) + "\n"
 
 
@@ -1613,7 +1616,7 @@ def render_values() -> str:
             for s in SITES]
     out += [""]
     out += (render_fleet_values() + [""] + render_population_values() + [""] + render_module_values()
-            + [""] + render_autonomy_values() + [""] + render_slice6_values() + [""] + render_window_values())
+            + [""] + render_dismantle_values() + [""] + render_autonomy_values() + [""] + render_slice6_values() + [""] + render_window_values())
     return "\n".join(out) + "\n"
 
 
@@ -1691,7 +1694,8 @@ def render_population_values() -> list[str]:
            f"sr_site_crew_per_level = {{ value = {CREW_PER_LEVEL} }}",
            "",
            "# Per world, any scope: its base room (people, before Habitats), its room (+50% of",
-           "# the base a Habitat level, slice 4 design § 3), its people, its free room, and",
+           "# the base a Habitat level, slice 4 design § 3), its people, its free room (of the",
+           "# room held while a Habitat comes down, sr_site_room_held_<key>), and",
            "# the module levels above the first its people can crew. Country scope:",
            "# THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when",
            "# unset) and its emigration weight, priority x free room, 0 unless THIS holds it."]
@@ -1709,7 +1713,7 @@ def render_population_values() -> list[str]:
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_pop_{k} }} value = global_var:sr_site_pop_{k} }}",
                 "}",
                 f"sr_site_free_room_{k} = {{",
-                f"\tvalue = sr_site_room_{k}",
+                f"\tvalue = sr_site_room_held_{k}",
                 f"\tsubtract = sr_site_pop_value_{k}",
                 "\tmin = 0",
                 "}",
@@ -2375,6 +2379,187 @@ def render_module_triggers() -> list[str]:
             "sr_mod_scope_has_queue = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} sr_mq_any_{s.key} = yes }}" for s in SITES]
     out += ["\t}", "}"]
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Dismantling (owner, 2026-10-31): a module level taken down, one at a time
+# ---------------------------------------------------------------------------
+# The holder takes down one module level at a world at a time, over
+# sr_mod_dismantle_months months (sr_colony_module_values.txt), so a colony
+# can't be stripped bare the moment someone moves on it. The order is the
+# holder's (country variables sr_md_type_<key>, the module's code, and
+# sr_md_left_<key>, the months still to go): the world leaving the holder, or
+# its occupation, ends it (sr_site_unmirror_<key>, and the month's check), and a
+# blockade holds it where it is. A founding specialization keeps its first
+# level (the outpost itself, which no module built); a Habitat can't come down
+# while its people need its room, and while one does the colony takes in no
+# more people than the room it will have (sr_site_room_held_<key>).
+
+def md_floor(t: str, site: Site) -> str:
+    """The level a dismantle stops at: a specialization's founding level, else 0."""
+    return f"sr_md_floor_{t}_{site.key}" if t in ("a", "b") else "0"
+
+
+def md_level_var(t: str, site: Site) -> str:
+    k = site.key
+    return f"sr_site_lvl_{t}_{k}" if t in ("a", "b") else f"sr_site_{t}_{k}"
+
+
+def render_dismantle_values() -> list[str]:
+    out = ["# ===== Dismantling (owner, 2026-10-31) =====",
+           "# Per world, any scope:",
+           "#   sr_md_floor_<a|b>_<key>      1 for the founding specialization, else 0: a",
+           "#                                dismantle never takes the outpost's own level",
+           "#   sr_md_room_less_hab_<key>    its room with one Habitat fewer",
+           "#   sr_site_room_held_<key>      its room, less a Habitat's share while its holder",
+           "#                                takes one down: what growth and settlers fill"]
+    for site in SITES:
+        k = site.key
+        for slot, option in (("a", 1), ("b", 2)):
+            out.append(f"sr_md_floor_{slot}_{k} = {{ value = 0 if = {{ limit = {{ has_global_variable = sr_site_spec_{k} "
+                       f"global_var:sr_site_spec_{k} = {option} }} value = 1 }} }}")
+        out += [f"sr_md_room_less_hab_{k} = {{",
+                f"\tvalue = sr_site_hab_value_{k}",
+                "\tsubtract = 1",
+                "\tmin = 0",
+                f"\tmultiply = {HABITAT_ROOM_SHARE}",
+                "\tadd = 1",
+                f"\tmultiply = sr_site_base_room_{k}",
+                "}",
+                f"sr_site_room_held_{k} = {{",
+                f"\tvalue = sr_site_room_{k}",
+                f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= {{ has_variable = sr_md_type_{k} "
+                f"var:sr_md_type_{k} = {MODULE_CODES['hab']} }} }} value = sr_md_room_less_hab_{k} }}",
+                "}"]
+    return out
+
+
+def _md_world(site: Site) -> list[str]:
+    k = site.key
+    types = ("a", "b", *generic_types(site))
+    out = [f"# {site.name}: the month's work, country scope (the holder's). Ended when the",
+           "# world is no longer ours or is occupied; held while it is blockaded.",
+           f"sr_md_month_{k} = {{",
+           "\tif = {",
+           f"\t\tlimit = {{ has_variable = sr_md_type_{k} }}",
+           "\t\tif = {",
+           "\t\t\tlimit = {",
+           "\t\t\t\tOR = {",
+           f"\t\t\t\t\tNOT = {{ global_var:sr_site_holder_{k} ?= this }}",
+           f"\t\t\t\t\thas_global_variable = sr_site_occupier_{k}",
+           "\t\t\t\t}",
+           "\t\t\t}",
+           f"\t\t\tsr_md_clear_{k} = yes",
+           "\t\t}",
+           "\t\telse_if = {",
+           f"\t\t\tlimit = {{ NOT = {{ has_global_variable = sr_site_blockaded_{k} }} }}",
+           f"\t\t\tif = {{ limit = {{ NOT = {{ has_variable = sr_md_left_{k} }} }} set_variable = {{ name = sr_md_left_{k} value = 1 }} }}",
+           f"\t\t\tchange_variable = {{ name = sr_md_left_{k} subtract = 1 }}",
+           "\t\t\tif = {",
+           f"\t\t\t\tlimit = {{ var:sr_md_left_{k} <= 0 }}",
+           f"\t\t\t\tsr_md_finish_{k} = yes",
+           "\t\t\t}",
+           "\t\t}",
+           "\t}",
+           "}",
+           "# One level of the ordered type comes down (never below its floor), then the",
+           "# record is cleared and the world's modifiers follow (the sync).",
+           f"sr_md_finish_{k} = {{",
+           "\tset_variable = { name = sr_md_last_type value = 0 }"]
+    for n, t in enumerate(types):
+        out += ["\tif = {" if n == 0 else "\telse_if = {",
+                f"\t\tlimit = {{ var:sr_md_type_{k} = {MODULE_CODES[t]} {level_value(t, site)} > {md_floor(t, site)} }}",
+                f"\t\tset_global_variable = {{ name = {md_level_var(t, site)} value = {{ value = {level_value(t, site)} subtract = 1 }} }}",
+                f"\t\tset_variable = {{ name = sr_md_last_type value = {MODULE_CODES[t]} }}",
+                "\t}"]
+    out += [f"\tsr_md_clear_{k} = yes",
+            f"\tsr_site_sync_{k} = yes",
+            f"\tdebug_log = \"TE_SR_MODULES {k}: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] "
+            "dismantled country=[THIS.GetCountry.GetTagName]\"",
+            "}",
+            f"sr_md_clear_{k} = {{",
+            f"\tif = {{ limit = {{ has_variable = sr_md_type_{k} }} remove_variable = sr_md_type_{k} }}",
+            f"\tif = {{ limit = {{ has_variable = sr_md_left_{k} }} remove_variable = sr_md_left_{k} }}",
+            "}"]
+    return out
+
+
+def render_dismantle_effects() -> list[str]:
+    out = ["# ===== Dismantling (owner, 2026-10-31) =====",
+           "# Per world: the month's work (sr_md_month_<key>), the level's removal",
+           "# (sr_md_finish_<key>) and the record's end (sr_md_clear_<key>; also from the",
+           "# unmirror). The scripted GUI's dispatchers follow."]
+    for site in SITES:
+        out += [""] + _md_world(site)
+    out += ["", "# Country scope, from sr_mod_month: every world's dismantle, a month on.",
+            "sr_md_month = {"]
+    out += [f"\tsr_md_month_{s.key} = yes" for s in SITES]
+    out += ["}", "",
+            "# The dismantle scripted GUI's world and type (scope:site, scope:op, the module's",
+            "# code): the order is given (sr_md_start, sr_colony_module_effects.txt).",
+            "sr_md_start_from_scope = {"]
+    for n, site in enumerate(SITES):
+        out += ["\tif = {" if n == 0 else "\telse_if = {", f"\t\tlimit = {{ scope:site = {site.index} }}"]
+        for m, t in enumerate(("a", "b", *generic_types(site))):
+            out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ scope:op = {MODULE_CODES[t]} }} "
+                       f"sr_md_start = {{ KEY = {site.key} CODE = {MODULE_CODES[t]} }} }}")
+        out.append("\t}")
+    out += ["}"]
+    out += _by_index("sr_md_cancel_from_scope", "scope:site", "sr_md_clear_{k} = yes")
+    out += ["", "# Console (te_debug_space_race.4): every dismantle of ours finishes now.",
+            "sr_md_debug_finish_all = {"]
+    out += [f"\tif = {{ limit = {{ has_variable = sr_md_type_{s.key} }} sr_md_finish_{s.key} = yes }}" for s in SITES]
+    out += ["}"]
+    return out
+
+
+def render_dismantle_triggers() -> list[str]:
+    out = ["# ===== Dismantling (owner, 2026-10-31) =====",
+           "# The dismantle scripted GUI's conditions, one by one (scope:site, scope:op the",
+           "# module's code), each its own line in its is_valid; country scope.",
+           "# The world is not occupied.",
+           "sr_md_scope_not_occupied = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} NOT = {{ has_global_variable = sr_site_occupier_{s.key} }} }}"
+            for s in SITES]
+    out += ["\t}", "}",
+            "# Nothing is being dismantled there.",
+            "sr_md_scope_idle = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} NOT = {{ has_variable = sr_md_type_{s.key} }} }}" for s in SITES]
+    out += ["\t}", "}",
+            "# The type is the one being dismantled there (the button stops it).",
+            "sr_md_scope_is_this = {", "\tOR = {"]
+    for site in SITES:
+        for t in ("a", "b", *generic_types(site)):
+            out.append(f"\t\tAND = {{ scope:site = {site.index} scope:op = {MODULE_CODES[t]} "
+                       f"has_variable = sr_md_type_{site.key} var:sr_md_type_{site.key} = {MODULE_CODES[t]} }}")
+    out += ["\t}", "}",
+            "# It has a level of the type above its floor (a founding specialization's first",
+            "# level is the outpost's own).",
+            "sr_md_scope_above_floor = {", "\tOR = {"]
+    for site in SITES:
+        for t in ("a", "b", *generic_types(site)):
+            out.append(f"\t\tAND = {{ scope:site = {site.index} scope:op = {MODULE_CODES[t]} "
+                       f"{level_value(t, site)} > {md_floor(t, site)} }}")
+    out += ["\t}", "}",
+            "# Its people would fit in the room left (only a Habitat's dismantle asks).",
+            "sr_md_scope_room_kept = {", "\tOR = {",
+            f"\t\tNOT = {{ scope:op = {MODULE_CODES['hab']} }}"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_site_pop_value_{s.key} <= sr_md_room_less_hab_{s.key} }}"
+            for s in SITES]
+    out += ["\t}", "}"]
+    return out
+
+
+def render_dismantle_display() -> list[str]:
+    out = ["", "# Dismantling (owner, 2026-10-31), country scope: sr_disp_md_<type>_<key> 1 while",
+           "# we take a level of the type down there; sr_disp_md_left_<key> the months to go."]
+    for site in SITES:
+        k = site.key
+        for t in ("a", "b", *generic_types(site)):
+            out.append(f"sr_disp_md_{t}_{k} = {{ value = 0 if = {{ limit = {{ has_variable = sr_md_type_{k} "
+                       f"var:sr_md_type_{k} = {MODULE_CODES[t]} }} value = 1 }} }}")
+        out += _opt_var(f"sr_disp_md_left_{k}", f"sr_md_left_{k}", global_=False)
     return out
 
 
@@ -3209,6 +3394,7 @@ def render_display() -> str:
                 f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}",
                 # Solar System's line under the name: the slots it would have as ours.
                 f"sr_disp_ss_slots_{k} = {{ value = {site.slots} add = modifier:{SLOTS_MODIFIER} }}"]
+    out += render_dismantle_display()
     out += render_autonomy_display()
     out += render_overview_display()
     out += render_window_display()
@@ -3495,12 +3681,22 @@ def _colony_row(site: Site) -> list[str]:
                          f"enabled = \"[GetScriptedGui('sr_colony_module_sgui').IsValid( {site_op} )]\"",
                          f"onclick = \"[GetScriptedGui('sr_colony_module_sgui').Execute( {site_op} )]\"",
                          f'tooltip = "{_reasoned("sr_colony_module_sgui", site_op)}"')
+        # Dismantling, on the colony's page (owner, 2026-10-31): a level coming
+        # down, its months to go, and the button that starts or stops it.
+        out += _override(f"mod_{t}_dismantling", f'visible = "[{_eq(f"sr_disp_md_{t}_{k}", 1)}]"')
+        out += _override(f"mod_{t}_dismantling_months", f'raw_text = "[{_sv(f"sr_disp_md_left_{k}")}|0]"')
+        out += _override(f"mod_{t}_dismantle_button",
+                         f"enabled = \"[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( {site_op} )]\"",
+                         f"onclick = \"[GetScriptedGui('sr_colony_dismantle_sgui').Execute( {site_op} )]\"",
+                         f'tooltip = "{_reasoned("sr_colony_dismantle_sgui", site_op)}"')
     if k in NO_SPACEPORT:
         # No Spaceport on the Moon (lunar colonization design § 3.1): a dash where
         # its level would be, the column kept, no queue button.
         out += _override("mod_port_level", 'raw_text = "-"', 'tooltip = "je_space_race_widget_mod_port_none_tt"')
         out += _override("mod_port_pending", "visible = no")
         out += _override("mod_port_button", "visible = no")
+        out += _override("mod_port_dismantling", "visible = no")
+        out += _override("mod_port_dismantle_button", "visible = no")
     clear = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( "
              f"'(CFixedPoint){site.index}' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End")
     out += _override("module_clear_button",
