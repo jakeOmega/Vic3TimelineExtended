@@ -618,13 +618,24 @@ banking_law_cascade_on_law_activated = {
 # yearly.
 
 # ============================================================================
-# BUILDING BUILT (Root = Building)
+# BUILDING BUILT AND EXPANDED (Root = Building)
 # When a barracks is built, a new combat unit type enters a formation.
 # Recalculate combined arms bonuses immediately for the owning country.
+# When an Extraplanetary Base is built or gains a level, refresh the owner's
+# Base Room (sr_ebase_refresh, Space Race UI pass design § 8) at once rather
+# than at the next monthly pulse, which stays the backstop: a hidden country
+# event on the owner, since the refresh's modifiers take a multiplier, which
+# resolves against ROOT (scripting_best_practices.md, "dispatch through a
+# hidden country event").
 # ============================================================================
 on_building_built = {
 	on_actions = {
 		te_on_building_built
+	}
+}
+on_building_expanded = {
+	on_actions = {
+		te_on_building_expanded
 	}
 }
 te_on_building_built = {
@@ -638,6 +649,24 @@ te_on_building_built = {
 			owner = {
 				apply_combined_arms_bonuses = yes
 			}
+		}
+		if = {
+			limit = {
+				is_building_type = building_space_mine
+				exists = owner
+			}
+			owner = { trigger_event = { id = space_race_events.110 } }
+		}
+	}
+}
+te_on_building_expanded = {
+	effect = {
+		if = {
+			limit = {
+				is_building_type = building_space_mine
+				exists = owner
+			}
+			owner = { trigger_event = { id = space_race_events.110 } }
 		}
 	}
 }

@@ -1943,5 +1943,45 @@ class EbaseCellTest(unittest.TestCase):
         self.assertIn('text = "je_space_race_widget_ebase_queued_figure"', self.widget[row:row + 300])
 
 
+class EbaseRefreshTest(unittest.TestCase):
+    """The Base Room cell refreshed when a base is built (UI pass design § 8):
+    the building hooks fire a hidden country event on the owner, whose ROOT is
+    the country the refresh's multipliers resolve against."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.on_actions = _strip(_raw("common", "on_actions", "extra_on_actions.txt"))
+        cls.events = _strip(_raw("events", "space_race_events.txt"))
+        cls.modules = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
+
+    def test_the_hooks_fire_a_hidden_country_event_on_the_owner(self):
+        for vanilla, ours in (("on_building_built", "te_on_building_built"),
+                              ("on_building_expanded", "te_on_building_expanded")):
+            with self.subTest(hook=vanilla):
+                hook = _block(self.on_actions, vanilla)
+                self.assertIn(ours, _block(hook, "on_actions"))
+                self.assertNotIn("effect", hook)   # never an effect on a vanilla on_action
+                body = _block(self.on_actions, ours)
+                arm = body[body.index("is_building_type = building_space_mine"):]
+                self.assertIn("owner = { trigger_event = { id = space_race_events.110 } }", arm)
+
+    def test_the_event_is_hidden_and_refreshes(self):
+        event = _block(self.events, "space_race_events.110")
+        self.assertIn("type = country_event", event)
+        self.assertIn("hidden = yes", event)
+        immediate = _block(event, "immediate")
+        self.assertIn("sr_ebase_refresh = yes", immediate)
+        self.assertLess(immediate.index("sr_ebase_hook_self_check = yes"), immediate.index("sr_ebase_refresh = yes"))
+
+    def test_the_self_check(self):
+        check = _block(self.modules, "sr_ebase_hook_self_check")
+        self.assertIn("NOT = { has_global_variable = sr_ebase_hook_checked }", check)
+        self.assertIn("has_variable = sr_ebase_levels_seen", check)
+        self.assertIn("TE_SELF_CHECK OK ebase_on_complete", check)
+        self.assertIn("TE_SELF_CHECK BROKEN ebase_on_complete", check)
+        self.assertIn("set_variable = { name = sr_ebase_levels_seen value = local_var:sr_eb_levels }",
+                      _block(self.modules, "sr_ebase_refresh"))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -5359,3 +5359,21 @@ space_race_events.109 = {
 		if = { limit = { has_variable = sr_lunar_notice_queued } remove_variable = sr_lunar_notice_queued }
 	}
 }
+
+# Base Room's refresh when an Extraplanetary Base is built or gains a level
+# (Space Race UI pass design § 8): fired on the owner by te_on_building_built
+# and te_on_building_expanded (extra_on_actions.txt), so the refresh's
+# multipliers resolve against the country. Hidden; the monthly pulse stays.
+space_race_events.110 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_technology_researched = in_situ_resource_utilization
+	}
+
+	immediate = {
+		sr_ebase_hook_self_check = yes
+		sr_ebase_refresh = yes
+	}
+}
