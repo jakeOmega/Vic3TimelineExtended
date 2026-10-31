@@ -788,6 +788,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
         "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
         "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
+        "morphological_freedom": {"subject": "a glass petri dish holding a small curled tuft of russet fox fur, beside a pair of steel tweezers", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
     "treaty_article": {
@@ -1313,6 +1314,11 @@ ICONS: dict[str, dict[str, dict]] = {
             "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
         "law_regulated_augmentation_market": {"subject": "a sleek robotic cybernetic hand standing upright on a small velvet-topped display pedestal", "seed": 0},
         "law_unrestricted_augmentation": {"subject": "a bulky cybernetic arm bristling with drills, blades and dangling wires, crudely bolted together", "seed": 2},
+        # Bodily Autonomy (era 13 spec § 7.1): placeholders borrow Human Purity's, Basic
+        # Protections' and Anti-Discrimination Laws' icons until these are painted.
+        "law_natural_form": {"subject": "a plain unpainted wooden artist's mannequin standing upright on its round wooden stand", "seed": None},
+        "law_licensed_modification": {"subject": "a small brass hand mirror lying on a folded paper certificate with a red wax seal", "seed": None},
+        "law_morphological_freedom": {"subject": "a soft fox tail and a pair of pointed fox ears lying on a folded silk scarf", "seed": None},
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
         # 2026-10-08 redesign (#822). Testation: a pen lying across the scroll
@@ -1555,6 +1561,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_grand_monuments": {"subject": "a tall grey stone obelisk with a golden pyramid tip on a stepped stone base", "seed": 0},
         "je_heir_education": {"subject": "a small gold crown resting on a stack of three closed leather-bound books with blank covers", "seed": 1},
         "je_human_augmentation": {"subject": "a polished steel prosthetic hand with an open palm, brass pistons and gears showing at the wrist", "seed": 3},
+        "je_morphological_freedom": {"subject": "a tall oval standing mirror on a wooden frame, a pair of pointed fox ears on a headband hanging from one corner", "seed": None},
         "je_mental_health_crisis": {"subject": "a featureless grey plaster mannequin head in profile with a tangled knot of black wire rising from the top of it", "seed": 0},
         "je_post_scarcity": {"subject": "a golden cornucopia horn spilling ripe fruit, golden wheat and small brass gears", "seed": 1},
         "je_strategic_reserve": {"subject": "a neat stack of olive-green wooden ammunition crates and rust-red steel oil barrels with a brown burlap grain sack on top", "seed": 1},

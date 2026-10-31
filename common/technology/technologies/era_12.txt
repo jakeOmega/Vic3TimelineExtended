@@ -288,3 +288,25 @@ post_work_society = {
 		value = 1
 	}
 }
+
+morphological_freedom = {
+	# Bodily Autonomy law group: Licensed Modification and Morphological Freedom laws (era 13 spec § 7.1); opens the
+	# Morphological Freedom Debate journal entry (§ 7.2). Body modification for self-expression, not capability:
+	# appearance, sex characteristics, fur, tails. Clade Citizenship comes with Self-Directed Evolution (era 13)
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/genetic_engineering.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		biohacking_and_human_augmentation
+		LGBTQ_rights_movement
+	}
+
+	modifier = {
+		goods_output_services_mult = 0.03	# the clinics, studios and salons of a new trade in bodies
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}

@@ -1,0 +1,585 @@
+﻿namespace = morphological_freedom_events
+
+# ============================================================================
+# MORPHOLOGICAL FREEDOM DEBATE EVENTS (era 13 spec § 7.2)
+# ============================================================================
+#
+# Pooled from je_morphological_freedom's monthly pulse (240 = 0 beside six
+# 10s). All six share a two-year lockout, te_mf_event_recent, so one never
+# follows another within two years. .1, .3, .4 and .6 fire once (their
+# twenty-year cooldown is the debate's whole length); .2 and .5 can return
+# after ten years. A debate that runs its twenty years brings about eight
+# events at most. .4 and .6 need clinics working legally, so not under
+# Natural Form.
+#
+# .100 and .200 are the outcomes, fired by the entry's on_timeout (Natural
+# Form held to the end) and on_complete.
+
+# Event 1: The First Clinics
+morphological_freedom_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/neural_interface_consumer.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = morphological_freedom_events.1.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_law = law_type:law_natural_form }
+				desc = morphological_freedom_events.1.d_natural
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = morphological_freedom_events.1.d
+			}
+		}
+	}
+	flavor = morphological_freedom_events.1.f
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		has_technology_researched = morphological_freedom
+		NOT = { has_variable = te_mf_event_recent }
+	}
+
+	immediate = {
+		set_variable = { name = te_mf_event_recent days = 730 }
+	}
+
+	# Inspect them like any other clinic
+	option = {
+		name = morphological_freedom_events.1.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_treasury = { value = sv_treasury_event_small multiply = -1 }
+		add_modifier = {
+			name = mf_clinic_inspections_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Leave the clinics to their customers
+	option = {
+		name = morphological_freedom_events.1.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+		add_modifier = {
+			name = mf_clinic_boom_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# Shut them down: only while the law allows no such clinics
+	option = {
+		name = morphological_freedom_events.1.c
+		trigger = {
+			has_law = law_type:law_natural_form
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_devout ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+}
+
+# Event 2: A Face Everyone Knows (a public figure's transformation)
+morphological_freedom_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/media_moral_panic.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = morphological_freedom_events.2.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_law = law_type:law_natural_form }
+				desc = morphological_freedom_events.2.d_natural
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = morphological_freedom_events.2.d
+			}
+		}
+	}
+	flavor = morphological_freedom_events.2.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = morphological_freedom
+		NOT = { has_variable = te_mf_event_recent }
+	}
+
+	immediate = {
+		set_variable = { name = te_mf_event_recent days = 730 }
+	}
+
+	# Praise her courage
+	option = {
+		name = morphological_freedom_events.2.a
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+		add_modifier = {
+			name = mf_public_figure_praised_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# No comment: the faithful wanted a word against it and hear none
+	option = {
+		name = morphological_freedom_events.2.b
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = ig:ig_devout
+		}
+	}
+
+	# Condemn the spectacle
+	option = {
+		name = morphological_freedom_events.2.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_devout ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+}
+
+# Event 3: Fair Play (sport and eligibility)
+morphological_freedom_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/augmented_athlete_arena.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = morphological_freedom_events.3.t
+	desc = morphological_freedom_events.3.d
+	flavor = morphological_freedom_events.3.f
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		has_technology_researched = morphological_freedom
+		NOT = { has_variable = te_mf_event_recent }
+	}
+
+	immediate = {
+		set_variable = { name = te_mf_event_recent days = 730 }
+	}
+
+	# Every body competes
+	option = {
+		name = morphological_freedom_events.3.a
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+		add_modifier = {
+			name = mf_open_competition_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# Events of their own
+	option = {
+		name = morphological_freedom_events.3.b
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_treasury = { value = sv_treasury_event_tiny multiply = -1 }
+	}
+
+	# Natural bodies only on the national team
+	option = {
+		name = morphological_freedom_events.3.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_natural_form }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = mf_natural_teams_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+}
+
+# Event 4: Old Enough to Choose (parents and children)
+morphological_freedom_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/youth_mental_health_crisis.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = morphological_freedom_events.4.t
+	desc = morphological_freedom_events.4.d
+	flavor = morphological_freedom_events.4.f
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		has_technology_researched = morphological_freedom
+		# A question for clinics working within the law.
+		NOT = { has_law = law_type:law_natural_form }
+		NOT = { has_variable = te_mf_event_recent }
+	}
+
+	immediate = {
+		set_variable = { name = te_mf_event_recent days = 730 }
+	}
+
+	# Not before eighteen
+	option = {
+		name = morphological_freedom_events.4.a
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_devout ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	}
+
+	# From sixteen, with a parent's consent
+	option = {
+		name = morphological_freedom_events.4.b
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_treasury = { value = sv_treasury_event_tiny multiply = -1 }
+	}
+
+	# At any age, after counseling
+	option = {
+		name = morphological_freedom_events.4.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier      DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_negative_modifier      DAYS = normal_modifier_time }
+	}
+}
+
+# Event 5: The Pulpits Speak (a religious backlash)
+morphological_freedom_events.5 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/lgbtq_religious_backlash.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = morphological_freedom_events.5.t
+	desc = morphological_freedom_events.5.d
+	flavor = morphological_freedom_events.5.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = morphological_freedom
+		any_interest_group = {
+			is_interest_group_type = ig_devout
+			is_powerful = yes
+		}
+		NOT = { has_variable = te_mf_event_recent }
+	}
+
+	immediate = {
+		set_variable = { name = te_mf_event_recent days = 730 }
+		random_interest_group = {
+			limit = {
+				is_interest_group_type = ig_devout
+				is_powerful = yes
+			}
+			save_scope_as = devout_ig
+		}
+	}
+
+	# Keep the clinic doors open
+	option = {
+		name = morphological_freedom_events.5.a
+		ai_chance = {
+			base = 2
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = mf_devout_rebuffed_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	}
+
+	# A conscience clause for the faithful
+	option = {
+		name = morphological_freedom_events.5.b
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# Promise the clergy the law goes no further
+	option = {
+		name = morphological_freedom_events.5.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_devout ?= { is_in_government = yes } }
+				add = 3
+			}
+		}
+		scope:devout_ig = {
+			add_modifier = {
+				name = mf_devout_emboldened_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# Event 6: Everyone Has Ears Now (a fashion that sweeps a generation)
+morphological_freedom_events.6 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/art_renaissance_future.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = morphological_freedom_events.6.t
+	desc = morphological_freedom_events.6.d
+	flavor = morphological_freedom_events.6.f
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		has_technology_researched = morphological_freedom
+		# A fashion needs clinics on the high street.
+		NOT = { has_law = law_type:law_natural_form }
+		NOT = { has_variable = te_mf_event_recent }
+	}
+
+	immediate = {
+		set_variable = { name = te_mf_event_recent days = 730 }
+	}
+
+	# Let them have their fashion
+	option = {
+		name = morphological_freedom_events.6.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+		}
+		add_modifier = {
+			name = mf_fashion_export_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# Tax the salons
+	option = {
+		name = morphological_freedom_events.6.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = mf_salon_tax_modifier
+			multiplier = sv_money_flow_event_small  # 0.01% GDP / week
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# Remind them it is for life
+	option = {
+		name = morphological_freedom_events.6.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_devout ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+		add_treasury = { value = sv_treasury_event_tiny multiply = -1 }
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	}
+}
+
+# Event 100: The Body as Given (Natural Form held to the end of the debate)
+morphological_freedom_events.100 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/underground_augmentation_clinic.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = morphological_freedom_events.100.t
+	desc = morphological_freedom_events.100.d
+	flavor = morphological_freedom_events.100.f
+
+	duration = 3
+
+	# Fired only by je_morphological_freedom's on_timeout under law_natural_form.
+	# The question left is what to do about those already changed.
+
+	# The law is the law
+	option = {
+		name = morphological_freedom_events.100.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = natural_form_enforced_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_devout         MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_rural_folk     MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# Leave them be
+	option = {
+		name = morphological_freedom_events.100.b
+		ai_chance = {
+			base = 2
+		}
+		add_modifier = {
+			name = natural_form_tolerated_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 200: The Chosen Body (law_morphological_freedom enacted)
+morphological_freedom_events.200 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/augmented_harmony.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = morphological_freedom_events.200.t
+	desc = morphological_freedom_events.200.d
+	flavor = morphological_freedom_events.200.f
+
+	duration = 3
+
+	option = {
+		name = morphological_freedom_events.200.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_modifier = {
+			name = morphological_freedom_embraced_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}

@@ -3,6 +3,11 @@
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/paternalistic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -173,6 +178,11 @@ REPLACE:ideology_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_policing
 REPLACE:ideology_particularist = {
 	icon = "gfx/interface/icons/ideology_icons/particularist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = approve
 		law_freedom_of_contract = disapprove
@@ -267,6 +277,11 @@ REPLACE:ideology_particularist = {
 # Forced REPLACE due to existing section(s): lawgroup_navy_model, lawgroup_policing
 REPLACE:ideology_patriotic = {
 	icon = "gfx/interface/icons/ideology_icons/patriotic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -388,6 +403,11 @@ REPLACE:ideology_patriotic = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women, lawgroup_policing
 REPLACE:ideology_liberal = {
 	icon = "gfx/interface/icons/ideology_icons/liberal.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -567,6 +587,11 @@ REPLACE:ideology_liberal = {
 REPLACE:ideology_liberal_modern = {
 	icon = "gfx/interface/icons/ideology_icons/liberal.dds"
 	priority = 100
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -754,6 +779,11 @@ REPLACE:ideology_liberal_modern = {
 REPLACE:ideology_market_liberal = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_market_liberal.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -1336,6 +1366,11 @@ REPLACE:ideology_market_liberal = {
 REPLACE:ideology_traditionalist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_traditionalist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = approve
 		law_freedom_of_contract = disapprove
@@ -1619,6 +1654,11 @@ REPLACE:ideology_traditionalist = {
 REPLACE:ideology_reformer = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_reformer.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = neutral
@@ -1938,6 +1978,11 @@ REPLACE:ideology_reformer = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_distribution_of_power
 REPLACE:ideology_populist = {
 	icon = "gfx/interface/icons/ideology_icons/populist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = neutral
@@ -2043,6 +2088,11 @@ REPLACE:ideology_populist = {
 REPLACE:ideology_radical = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_radical.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_no_police = neutral
@@ -2613,6 +2663,11 @@ REPLACE:ideology_radical = {
 REPLACE:ideology_social_democrat = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_social_democrat.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -3068,6 +3123,11 @@ REPLACE:ideology_social_democrat = {
 REPLACE:ideology_vanguardist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_vanguardist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -3716,6 +3776,11 @@ REPLACE:ideology_vanguardist = {
 REPLACE:ideology_fascist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_fascist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -4395,6 +4460,11 @@ REPLACE:ideology_fascist = {
 REPLACE:ideology_anarchist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_anarchist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_bureaucracy = {
 		law_automated_bureaucracy = disapprove
 		law_contracted_administration = disapprove
@@ -4952,6 +5022,11 @@ REPLACE:ideology_anarchist = {
 # Forced REPLACE due to existing section(s): lawgroup_navy_model
 REPLACE:ideology_laissez_faire = {
 	icon = "gfx/interface/icons/ideology_icons/laissez_faire.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -5093,6 +5168,11 @@ REPLACE:ideology_laissez_faire = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -5217,12 +5297,22 @@ INJECT:ideology_egalitarian = {
 		law_judicial_supremacy = disapprove
 		law_algorithmic_jurisprudence = neutral
 	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 }
 
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women
 REPLACE:ideology_egalitarian_modern = {
 	icon = "gfx/interface/icons/ideology_icons/egalitarian.dds"
 	priority = 100
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -5299,6 +5389,11 @@ REPLACE:ideology_egalitarian_modern = {
 # Forced REPLACE due to existing section(s): lawgroup_bureaucracy, lawgroup_distribution_of_power
 REPLACE:ideology_meritocratic = {
 	icon = "gfx/interface/icons/ideology_icons/meritocratic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = strongly_disapprove
@@ -5423,6 +5518,11 @@ REPLACE:ideology_meritocratic = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_colonization
 REPLACE:ideology_jingoist = {
 	icon = "gfx/interface/icons/ideology_icons/jingoist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -5505,6 +5605,11 @@ REPLACE:ideology_jingoist = {
 REPLACE:ideology_jingoist_leader = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_jingoist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_no_police = disapprove
@@ -5813,6 +5918,11 @@ REPLACE:ideology_jingoist_leader = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_individualist = {
 	icon = "gfx/interface/icons/ideology_icons/individualist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -5890,6 +6000,11 @@ REPLACE:ideology_individualist = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_proletarian = {
 	icon = "gfx/interface/icons/ideology_icons/proletarian.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -6027,6 +6142,11 @@ REPLACE:ideology_proletarian = {
 REPLACE:ideology_communist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_communist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -6794,6 +6914,11 @@ REPLACE:ideology_pacifist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_colonization, lawgroup_distribution_of_power
 REPLACE:ideology_plutocratic = {
 	icon = "gfx/interface/icons/ideology_icons/plutocratic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -6893,6 +7018,11 @@ REPLACE:ideology_plutocratic = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women
 REPLACE:ideology_patriarchal = {
 	icon = "gfx/interface/icons/ideology_icons/patriarchal.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -6934,6 +7064,11 @@ REPLACE:ideology_patriarchal = {
 REPLACE:ideology_patriarchal_suffrage = {
 	icon = "gfx/interface/icons/ideology_icons/patriarchal.dds"
 	priority = 100 # Overrides other non-leader ideologies with a lower prio
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_approve
 		law_pro_natalist_subsidies = approve
@@ -6967,6 +7102,11 @@ REPLACE:ideology_patriarchal_suffrage = {
 REPLACE:ideology_feminist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_womens_liberation.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -7237,6 +7377,11 @@ REPLACE:ideology_feminist = {
 REPLACE:ideology_feminist_ig = {
 	icon = "gfx/interface/icons/ideology_icons/womens_liberation.dds"
 	priority = 250 # Overrides other non-leader ideologies with a lower prio
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_disapprove
 		law_pro_natalist_subsidies = strongly_disapprove
@@ -7264,6 +7409,11 @@ REPLACE:ideology_feminist_ig = {
 REPLACE:ideology_humanitarian = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarism.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -7605,6 +7755,11 @@ REPLACE:ideology_humanitarian = {
 REPLACE:ideology_humanitarian_royalist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarian_royalist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_minority_rights = {
 		law_minority_rights_violent_hostility = strongly_disapprove
 		law_minority_rights_ghettoization = strongly_disapprove
@@ -7931,6 +8086,11 @@ REPLACE:ideology_humanitarian_royalist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_reactionary = {
 	icon = "gfx/interface/icons/ideology_icons/reactionary.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = neutral
@@ -8082,6 +8242,11 @@ REPLACE:ideology_reactionary = {
 REPLACE:ideology_theocrat = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_theocrat.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -8303,6 +8468,11 @@ REPLACE:ideology_theocrat = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_republican = {
 	icon = "gfx/interface/icons/ideology_icons/republican.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -8339,6 +8509,11 @@ REPLACE:ideology_republican = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_republican_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/republican_paternalistic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = approve
 		law_pro_natalist_subsidies = neutral
@@ -8424,6 +8599,11 @@ REPLACE:ideology_republican_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_socialist = {
 	icon = "gfx/interface/icons/ideology_icons/socialist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -8510,6 +8690,11 @@ REPLACE:ideology_socialist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_scholar_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/scholar_paternalistic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_approve
 		law_pro_natalist_subsidies = neutral
@@ -8600,6 +8785,11 @@ REPLACE:ideology_scholar_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_junker_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/junker_paternalistic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = approve
 		law_pro_natalist_subsidies = neutral
@@ -8685,6 +8875,11 @@ REPLACE:ideology_junker_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_papal_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/paternalistic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -8778,6 +8973,11 @@ REPLACE:ideology_papal_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_papal_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/papal_moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -8820,6 +9020,11 @@ REPLACE:ideology_papal_moralist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_confucian = {
 	icon = "gfx/interface/icons/ideology_icons/confucian.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_inheritance = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
@@ -8913,6 +9118,11 @@ REPLACE:ideology_bakufu = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_shinto_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/shinto_moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -9015,6 +9225,11 @@ REPLACE:ideology_caudillismo = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_buddhist_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/buddhist_moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -9062,6 +9277,11 @@ REPLACE:ideology_buddhist_moralist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_bureaucracy
 REPLACE:ideology_hindu_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/hindu_moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -9118,6 +9338,11 @@ REPLACE:ideology_hindu_moralist = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_bureaucracy
 REPLACE:ideology_sikh_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/sikh_moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -9176,6 +9401,11 @@ REPLACE:ideology_sikh_moralist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_heavenly_kingdom_theocratic = {
 	icon = "gfx/interface/icons/ideology_icons/moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = disapprove
 		law_ministry_of_religion = strongly_approve
@@ -10065,6 +10295,11 @@ REPLACE:ideology_bonapartist = {
 REPLACE:ideology_republican_leader = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_republican.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -10717,6 +10952,11 @@ REPLACE:ideology_jacksonian_democrat = {
 REPLACE:ideology_positivist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_positivist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = strongly_disapprove
@@ -11050,6 +11290,11 @@ REPLACE:ideology_positivist = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women, lawgroup_distribution_of_power
 REPLACE:ideology_russian_patriarch = {
 	icon = "gfx/interface/icons/ideology_icons/russian_patriarch.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -11103,6 +11348,11 @@ REPLACE:ideology_russian_patriarch = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women, lawgroup_distribution_of_power
 REPLACE:ideology_orthodox_patriarch = {
 	icon = "gfx/interface/icons/ideology_icons/orthodox_patriarch.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -11149,6 +11399,11 @@ REPLACE:ideology_orthodox_patriarch = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women, lawgroup_distribution_of_power
 REPLACE:ideology_oriental_orthodox_patriarch = {
 	icon = "gfx/interface/icons/ideology_icons/coptic_patriarch.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -11201,6 +11456,11 @@ REPLACE:ideology_oriental_orthodox_patriarch = {
 REPLACE:ideology_authoritarian = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/authoritarian.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = neutral
@@ -11560,11 +11820,21 @@ INJECT:ideology_ethno_nationalist = {
 		law_minority_rights_protection = strongly_disapprove
 		law_minority_rights_affirmative_action = strongly_disapprove
 	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 }
 
 # Forced REPLACE due to existing section(s): lawgroup_bureaucracy
 REPLACE:ideology_anti_clerical = {
 	icon = "gfx/interface/icons/ideology_icons/anti_clerical.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -11639,11 +11909,21 @@ INJECT:ideology_pious = {
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = strongly_disapprove
 	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 }
 
 # Forced REPLACE due to existing section(s): lawgroup_colonization, lawgroup_navy_model
 REPLACE:ideology_isolationist = {
 	icon = "gfx/interface/icons/ideology_icons/isolationist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_ministry_of_refugee_affairs = {
 		law_no_ministry_of_refugee_affairs = approve
 		law_ministry_of_refugee_affairs = neutral
@@ -11762,6 +12042,11 @@ INJECT:ideology_agrarian = {
 		law_constitutional_review = disapprove
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
 	}
 }
 
@@ -12098,6 +12383,11 @@ REPLACE:ideology_corporatist_leader = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power
 REPLACE:ideology_agrarian_jeffersonian = {
 	icon = "gfx/interface/icons/ideology_icons/frontier_expansionist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_inheritance = {
 		law_primogeniture = disapprove
 		law_partible = approve
@@ -12169,6 +12459,11 @@ REPLACE:ideology_agrarian_jeffersonian = {
 REPLACE:ideology_integralist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_integralist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_ministry_of_propaganda = {
 		law_no_ministry_of_propaganda = neutral
 		law_ministry_of_propaganda = approve
@@ -12663,6 +12958,11 @@ REPLACE:ideology_integralist = {
 REPLACE:ideology_liberal_leader = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_liberal.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -13626,6 +13926,11 @@ REPLACE:ideology_communist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_policing
 REPLACE:ideology_anarchist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/anarchist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_bureaucracy = {
 		law_communal_administration = strongly_approve
 		law_appointed_bureaucrats = disapprove
@@ -13844,6 +14149,11 @@ REPLACE:ideology_vanguardist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles, lawgroup_army_model
 REPLACE:ideology_fascist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/fascist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -14027,6 +14337,11 @@ REPLACE:ideology_corporatist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_liberal_movement = {
 	icon = "gfx/interface/icons/ideology_icons/liberal.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -14126,6 +14441,11 @@ REPLACE:ideology_liberal_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles
 REPLACE:ideology_radical_movement = {
 	icon = "gfx/interface/icons/ideology_icons/radical.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_no_police = neutral
@@ -14482,6 +14802,11 @@ REPLACE:ideology_positivist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women
 REPLACE:ideology_feminist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/womens_liberation.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_disapprove
 		law_pro_natalist_subsidies = strongly_disapprove
@@ -14508,6 +14833,11 @@ REPLACE:ideology_feminist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_reactionary_movement = {
 	icon = "gfx/interface/icons/ideology_icons/reactionary.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = neutral
@@ -14608,6 +14938,11 @@ INJECT:ideology_modernizer = {
 		law_no_national_bank = disapprove
 		law_national_bank = strongly_approve
 	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 }
 
 INJECT:ideology_regenerator = {
@@ -14638,6 +14973,11 @@ INJECT:ideology_modernizer_movement_2 = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women
 REPLACE:ideology_traditionalist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/traditionalist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_state_power = {
 		law_feudal_contracts = strongly_approve
 		law_unitary_state = disapprove
@@ -14752,6 +15092,11 @@ INJECT:ideology_ethno_nationalist_movement = {
 		law_minority_rights_indifference = disapprove
 		law_minority_rights_protection = strongly_disapprove
 		law_minority_rights_affirmative_action = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
 	}
 }
 
@@ -15048,6 +15393,11 @@ REPLACE:ideology_legitimist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_welfare
 REPLACE:ideology_hierarchic = {
 	icon = "gfx/interface/icons/ideology_icons/hierarchic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -16197,6 +16547,11 @@ REPLACE:ideology_enclavist = {
 # Forced REPLACE due to existing section(s): lawgroup_bureaucracy, lawgroup_governance_principles
 REPLACE:ideology_hindu_moralist_british_india = {
 	icon = "gfx/interface/icons/ideology_icons/hindu_moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -17521,6 +17876,11 @@ REPLACE:ideology_liberal_praetorian = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_rights_of_women
 REPLACE:ideology_ibadi_imamate = {
 	icon = "gfx/interface/icons/ideology_icons/ibadi_imamate.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = disapprove
 		law_neocameralism = disapprove # preference for theocracy over monarchy
@@ -17550,6 +17910,11 @@ REPLACE:ideology_ibadi_imamate = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power
 REPLACE:ideology_ibadi_shura = {
 	icon = "gfx/interface/icons/ideology_icons/ibadi_shura.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_distribution_of_power = {
 		law_algorithmic_governance = disapprove # Strong theological emphasis on community endorsement of an imam means that extreme autocracy is begrudged by even the most reactionary clerics
 		law_single_party_state = disapprove
@@ -17573,6 +17938,11 @@ REPLACE:ideology_ibadi_shura = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_policing
 REPLACE:ideology_integralist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/integralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_militarized_police = strongly_approve
@@ -17630,6 +18000,11 @@ REPLACE:ideology_integralist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_policing
 REPLACE:ideology_montenegrin_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -18009,6 +18384,11 @@ REPLACE:ideology_rangaku = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_technocratic = {
 	icon = "gfx/interface/icons/ideology_icons/technocratic.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = strongly_disapprove
@@ -19089,6 +19469,11 @@ INJECT:ideology_loyalist = {
 		law_constitutional_review = strongly_disapprove
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
 	}
 }
 

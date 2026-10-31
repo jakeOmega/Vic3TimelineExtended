@@ -64,6 +64,14 @@ lawgroup_human_augmentation = {
 	affected_by_regime_change = yes
 }
 
+# Bodily Autonomy (era 13 spec § 7.1): what people may do to how their bodies
+# look, apart from what augmentation lets them do. common/laws/te_bodily_autonomy_laws.txt.
+lawgroup_bodily_autonomy = {
+	law_group_category = human_rights
+	ideological_opinion_impact = 0.5
+	affected_by_regime_change = yes
+}
+
 lawgroup_state_power = {
 	law_group_category = power_structure
 	ideological_opinion_impact = 0
