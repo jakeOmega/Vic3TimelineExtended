@@ -1,0 +1,93 @@
+﻿### Timeline Extended: the widget library (Space Race UI pass design § 13,
+### docs/superpowers/specs/2026-10-31-space-race-ui-pass-design.md). Types the
+### mod's panels share, prefixed te_ui_ (GUI type names are global, and the
+### Community Mod Framework redefines some vanilla ones: gui_modding_guide.md
+### gotcha #30). Additive: types only, nothing drawn on its own.
+###
+### te_ui_popup  a centred popup over a dimmed screen (design § 3), the shell of
+###              every picker. Its shape is vanilla's principle_selection_window:
+###              a full-size dim, a full-size button behind the body that closes
+###              it (a click outside), and the body with a header whose close
+###              button carries vanilla's shortcut = "close_window" (Escape).
+###              Both close the popup by clearing the client-side te_popup key,
+###              which says which popup is open (one at a time). A popup is a
+###              type deriving from this one, instanced in te_popups
+###              (gui/te_popups.gui). Blocks:
+###                popup_visible  its visible (on te_popup's value)
+###                popup_title    the header's text
+###                popup_size     the body's size, 640 × 620 by default
+###                popup_list     the scrolled content
+###                popup_footer   under the scrollarea, empty by default
+###              Not yet seen in game (docs/testing/solar-colonies-playtest.md):
+###              the layer over the journal panel and the Timeline Extended
+###              window, Escape, and the panel behind still scrolling.
+
+types te_widget_library_types
+{
+	type te_ui_popup = widget {
+		size = { 100% 100% }
+		block "popup_visible" {}
+
+		using = Animation_ShowHide_Quick
+		using = Background_Full_Dim
+
+		### A click outside the body: this button fills the screen behind it.
+		button_normal = {
+			size = { 100% 100% }
+			onclick = "[GetVariableSystem.Clear('te_popup')]"
+			using = close_button_sound
+		}
+
+		widget = {
+			parentanchor = center
+			alwaystransparent = no
+			block "popup_size" {
+				size = { 640 620 }
+			}
+
+			using = Window_Background
+			using = Window_Decoration_Spike
+
+			vbox = {
+				using = Window_Margins
+
+				header_pattern = {
+					layoutpolicy_horizontal = expanding
+
+					blockoverride "header_text" {
+						block "popup_title" {}
+					}
+					blockoverride "button_close" {
+						onclick = "[GetVariableSystem.Clear('te_popup')]"
+					}
+				}
+
+				scrollarea = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+					scrollbaralign_vertical = right
+					scrollbarpolicy_horizontal = always_off
+
+					scrollwidget = {
+						flowcontainer = {
+							direction = vertical
+							ignoreinvisible = yes
+							margin = { 10 6 }
+							spacing = 4
+							block "popup_list" {}
+						}
+					}
+
+					scrollbar_vertical = {
+						using = vertical_scrollbar
+					}
+					scrollbar_horizontal = {
+						using = horizontal_scrollbar
+					}
+				}
+
+				block "popup_footer" {}
+			}
+		}
+	}
+}
