@@ -47,10 +47,11 @@ is worth flipping back and forth.
 | Posture and targets | A row of buttons like the approach selector instead of step-through buttons. |
 | Less scrolling | Tabs at the top of the panel are good; a full-page window, like the Census Data window's Demographics tab, would also be fine (§ 11). |
 | Solar system schematic | Wanted eventually, not a priority (§ 12). |
-| Earth alert | Wanted (§ 9). |
 | Order | Quick changes PR first (#1274), then this scoping doc, then the pieces. |
 | Fleet upkeep | On a maintenance line no yard method changes (the owner's idea), spread over six goods: electronic components, wired and wireless telecom gear, software, robotics and chemicals (§ 10). |
-| No Space Command | Fleets can't move without one (§ 10). |
+| No Space Command | Fleets can't move, change posture, refit or repair without one (§ 10). |
+| Upkeep size | Ten times the four-Fusion-levels match (§ 10). |
+| Earth alert | A quiet notification for every hostile fleet bound for Earth, a loud one for a fleet that would change something (§ 9). |
 | Detach | Also into an existing fleet at the same location, so it becomes Transfer and takes in Merge (§ 6). |
 | Colony AI | Plans an Administration from autonomy 25 while heading for 45 or more. Shipped in #1274. |
 
@@ -269,33 +270,35 @@ Every power's home is Earth, so a hostile fleet returning to refit looks the sam
 as one coming to blockade. Nothing in the panel warns of either. The inbound
 counts (`sr_loc_inbound_<loc>`) include our own and allied fleets.
 
-An alert on every hostile fleet bound for Earth would fire on every homecoming,
-so it fires only when an arrival would **change something** (recommended; the
-owner's call, § 15): we have no fleet at Earth to meet it, or what is inbound
+Because every homecoming would trip an alert on all hostile fleets, it comes at
+two volumes (owner, 2026-10-31: "every for a quiet notification", and "a loud
+notification for a fleet that would change something"). An arrival **changes
+something** when we have no fleet at Earth to meet it, or what is inbound
 outmatches our strength there.
 
 **What:**
-- **A warning cell in the overview** while an arrival would change something:
-  "Hostile fleet: Earth in N mo", with its strength against ours there. The
-  hover lists each hostile fleet bound for Earth with its owner, including the
-  ones that don't light the cell.
-- **A notice when the cell first lights** for a fleet leg (it sets out, a war
-  starts while it is in flight, or our own fleet leaves Earth), for a player with
-  a Space Program or a fleet. Once per leg, on the pattern of
-  `sr_earth_notice_step` (`sr_earth_orbit_effects.txt:192-240`) with a noted
-  marker.
-- **This notice replaces `.100`'s Earth arm.** `sr_loc_held_earth` stays
-  `always = no`, so a lunar colony's holder hears once, not twice.
+- **A warning cell in the overview** while any hostile fleet is bound for Earth:
+  "Hostile fleet: Earth in N mo", with its strength against ours there; red while
+  an arrival would change something. The hover lists each hostile fleet bound
+  for Earth with its owner and landing month.
+- **A quiet notice for every hostile fleet leg bound for Earth**: an optionless
+  `post_notification` (as Seabed's, the UN's and covert's notices are) when it
+  sets out, or when a war starts while it is in flight.
+- **A loud notice when a leg first changes something**: a popup event with one
+  option and an image, like the blockade notice `space_race_events.106`. It also
+  fires when our own fleet leaves Earth, or theirs grows past ours, while the
+  leg is in flight.
+- **Both once per leg and per volume**, for a player with a Space Program or a
+  fleet, on the pattern of `sr_earth_notice_step`
+  (`sr_earth_orbit_effects.txt:192-240`), with a noted marker per leg. The loud
+  notice comes in place of the quiet one when both are due in the same month.
+- **These replace `.100`'s Earth arm.** `sr_loc_held_earth` stays `always = no`,
+  so a lunar colony's holder hears once per volume, not twice.
 
 **Script:** a generated value per location for the hostile inbound (the earliest
 landing month and the strength, over the hostile powers' nine slots), in
 `gen_space_fleets.py`. The trigger is
 `any_in_global_list = { variable = sr_fleet_powers has_war_with = prev sr_fl_any_bound = { CODE = 1 } }`.
-
-**Delivery (owner's call, § 15):** either a popup event with one option and an
-image, like the blockade notice `space_race_events.106`, or an optionless
-`post_notification`, like Seabed's, the UN's and covert's notices. Recommend
-`post_notification`: it doesn't stop play for a warning the cell repeats.
 
 ## 10. Fleet upkeep and the Space Command method
 
@@ -340,28 +343,30 @@ so this adds one.
   (`scripting_best_practices.md:1686-1696`).
 - **Balancing:** upkeep for a fleet of strength S is base × k × S ÷ 10 a week,
   one figure set in one place, where k is the multiplier per unit.
-- **Size (proposed, the owner's call):** today a unit (10 strength) costs, at full
-  staff and per Space Command level, 1% of the method's inputs: 1,400 a week
-  under Orbital Shipyards, 1,800 under Fusion Yards, 2,320 under Antimatter Yards
-  (Launch Capacity 200, Advanced Materials 4,000, electricity 30). Match **four
-  levels of Fusion Yards**, the AI's cap with two colonies (`sr_sc_ai_cap`):
-  7,200 a week a unit. The base, about equal in value across the six at their
-  base prices, is 840 a week:
+- **Size (owner, 2026-10-31: ten times today's, "economies at this stage are
+  often very large"):** today a unit (10 strength) costs, at full staff and per
+  Space Command level, 1% of the method's inputs: 1,400 a week under Orbital
+  Shipyards, 1,800 under Fusion Yards, 2,320 under Antimatter Yards (Launch
+  Capacity 200, Advanced Materials 4,000, electricity 30). Four levels of Fusion
+  Yards, the AI's cap with two colonies (`sr_sc_ai_cap`), charge 7,200 a week a
+  unit; the new upkeep is about ten times that. The base, about equal in value
+  across the six at their base prices, is 8,400 a week:
 
   | Good | Base a week | Price | Value |
   |---|---|---|---|
-  | Electronic Components | 2 | 80 | 160 |
-  | Wired Telecommunication Gear | 2 | 70 | 140 |
-  | Wireless Telecommunication Gear | 2 | 80 | 160 |
-  | Software | 1 | 100 | 100 |
-  | Robotics | 2 | 80 | 160 |
-  | Chemicals | 4 | 30 | 120 |
+  | Electronic Components | 20 | 80 | 1,600 |
+  | Wired Telecommunication Gear | 20 | 70 | 1,400 |
+  | Wireless Telecommunication Gear | 20 | 80 | 1,600 |
+  | Software | 10 | 100 | 1,000 |
+  | Robotics | 20 | 80 | 1,600 |
+  | Chemicals | 40 | 30 | 1,200 |
 
-  With k **+900%** a unit, a unit costs 7,560 a week, and a fleet of 300 about
-  227,000, wherever it is built. The base itself is a new running cost on every
-  Space Command, fleet or not. The building's tooltip shows the upkeep as a large
-  percentage on small lines ("+2,700%" for a fleet of 300), so the upkeep's hover
-  in the panel gives the goods a week.
+  With k **+900%** a unit, a unit costs 75,600 a week, and a fleet of 300 about
+  2.3 million, wherever it is built. The factor of ten is in the base rather
+  than in k (my call), so the building's tooltip reads +900% a unit, as today's
+  +1% does, and not +9,000%. The base itself is a new running cost on every
+  Space Command, fleet or not: 8,400 a week, about 5% of one Fusion Yards level's
+  own inputs. The upkeep's hover in the panel gives the goods a week.
 - **What stays:** a goods line still runs at the building's occupancy, so an
   understaffed Space Command pays less. A country with no Space Command pays
   nothing, but its fleets can't move (below).
@@ -398,19 +403,25 @@ so this adds one.
    per method above Orbital Shipyards. A reason to keep the better method, but
    it's a balance change, so it's the owner's call.
 
-**No Space Command, no departures (owner, 2026-10-31: "disable moving fleets").**
-The upkeep sits on Space Command, so a country that demolishes it after building
-its fleet would keep that fleet for nothing.
+**No Space Command, no fleet orders (owner, 2026-10-31: "disable moving fleets",
+then "also no posture change and refit").** The upkeep sits on Space Command, so
+a country that demolishes it after building its fleet would keep that fleet for
+nothing.
 - **The rule:** with no Space Command level in a state it controls
-  (`sr_state_held_by_owner`), a country's fleets can't depart. A new trigger,
-  `sr_sc_operational`, joins every `sr_fl_<n>_may_depart_<loc>`. Downsizing to one
+  (`sr_state_held_by_owner`), a country's fleets can't depart, change posture,
+  start a drive refit (`sr_fl_refit_months`) or repair (`sr_fl_repair_earth`,
+  `sr_fl_repair_port_level`). A refit under way pauses. A new trigger,
+  `sr_sc_operational`, joins every `sr_fl_<n>_may_depart_<loc>`, the posture and
+  target orders' `possible`, and the refit and repair steps. Downsizing to one
   level no longer helps either, since the maintenance line is `unscaled`.
-- **What still runs:** fleets in transit finish their leg; fleets fight where they
-  are, change posture, and refit and refill under today's rules (my call: only
-  movement stops, as asked).
-- **Seen by the player:** the destination popup's rows and Go give the reason, and
-  Space Fleets says so once above its rows (style guide rule 6). The AI follows,
-  since it reads the same triggers.
+- **What still runs:** fleets in transit finish their leg, and fleets fight where
+  they are, at the posture they had. Supply and propellant still refill
+  (`sr_fl_port_refill_share`, Earth's), so a stranded fleet doesn't also wither
+  from attrition (my call: the owner named refit, and a fleet that can neither
+  move nor resupply would only shrink).
+- **Seen by the player:** the destination popup's rows, Go and the posture
+  buttons give the reason, and Space Fleets says so once above its rows (style
+  guide rule 6). The AI follows, since it reads the same triggers.
 - **Occupation:** an occupied Space Command's state also stops departures, which
   matches construction already stopping there (§ 5.1 of the fleets design).
 
@@ -501,12 +512,11 @@ and adds its in-game checks to `docs/testing/solar-colonies-playtest.md`.
 
 ## 15. Open questions for the owner
 
-1. **Earth alert (§ 9):** alert only when an arrival would change something (no
-   fleet of ours at Earth, or outmatched), or on every hostile fleet bound for
-   Earth? And `post_notification` or a popup event?
-2. **Upkeep size (§ 10):** the four-Fusion-levels match (840 a week of base, +900%
-   a unit), or another reference.
-
-Answered 2026-10-31: the upkeep goods (six, § 10), no departures without a Space
-Command (§ 10), Transfer into an existing fleet (§ 6), and the AI's Administration
-from autonomy 25 while heading for 45 or more (shipped in #1274).
+None left. Answered 2026-10-31:
+- **The Earth alert (§ 9):** quiet for every hostile fleet bound for Earth, loud
+  for one that would change something.
+- **The upkeep (§ 10):** six goods, at ten times the four-Fusion-levels match.
+- **No Space Command (§ 10):** no departures, posture changes, refits or repairs.
+- **Transfer (§ 6):** into an existing fleet too.
+- **The colony AI:** an Administration from autonomy 25 while heading for 45 or
+  more (shipped in #1274).
