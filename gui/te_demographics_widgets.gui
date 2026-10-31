@@ -165,7 +165,6 @@ types te_demographics_widgets
 			parentanchor = vcenter
 			align = left|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			elide = right
 			block "row_label" {}
 		}
@@ -294,7 +293,7 @@ types te_demographics_widgets
 	### "women_next" (each a `value`), "next_visible" (the outline's gate),
 	### "men_range" and "women_range" (min and max; the country's
 	### te_dg_pyr_max by default, so a state's pyramid overrides them),
-	### and "row_tooltip". Every row sets a tooltip, so the ages are underlined.
+	### and "row_tooltip". Every row sets a tooltip.
 	type te_demog_pyramid_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -352,7 +351,6 @@ types te_demographics_widgets
 			parentanchor = vcenter
 			align = hcenter|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			block "band_label" {}
 		}
 
@@ -426,7 +424,6 @@ types te_demographics_widgets
 			parentanchor = vcenter
 			align = left|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			elide = right
 			block "row_label" {}
 		}
@@ -508,7 +505,6 @@ types te_demographics_widgets
 			maximumsize = { 146 -1 }
 			align = left|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_states_head_state"
 			tooltip = "te_demog_states_head_state_tt"
 		}
@@ -518,7 +514,6 @@ types te_demographics_widgets
 			maximumsize = { 60 -1 }
 			align = right|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_states_head_people"
 			tooltip = "te_demog_states_head_people_tt"
 		}
@@ -528,7 +523,6 @@ types te_demographics_widgets
 			maximumsize = { 56 -1 }
 			align = right|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_states_head_e0"
 			tooltip = "te_demog_states_head_e0_tt"
 		}
@@ -538,7 +532,6 @@ types te_demographics_widgets
 			maximumsize = { 60 -1 }
 			align = right|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_states_head_median"
 			tooltip = "te_demog_states_head_median_tt"
 		}
@@ -548,7 +541,6 @@ types te_demographics_widgets
 			maximumsize = { 76 -1 }
 			align = right|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_states_head_tfr"
 			tooltip = "te_demog_states_head_tfr_tt"
 		}
@@ -558,7 +550,6 @@ types te_demographics_widgets
 			maximumsize = { 56 -1 }
 			align = right|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_states_head_gini"
 			tooltip = "te_demog_states_head_gini_tt"
 		}
@@ -720,7 +711,6 @@ types te_demographics_widgets
 			parentanchor = hcenter
 			align = hcenter|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			block "cell_label" {}
 		}
 		textbox = {
@@ -773,7 +763,6 @@ types te_demographics_widgets
 			elide = right
 			align = left|nobaseline
 			using = te_demog_fontsize_overview
-			default_format = "#tooltippable"
 			block "caption" {}
 		}
 		textbox = {
@@ -910,7 +899,6 @@ types te_demographics_widgets
 			maximumsize = { 186 -1 }
 			align = left|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_dc_head_cause"
 			tooltip = "te_demog_dc_head_cause_tt"
 		}
@@ -920,7 +908,6 @@ types te_demographics_widgets
 			maximumsize = { 84 -1 }
 			align = right|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_dc_head_deaths"
 			tooltip = "te_demog_dc_head_deaths_tt"
 		}
@@ -930,7 +917,6 @@ types te_demographics_widgets
 			maximumsize = { 56 -1 }
 			align = right|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_dc_head_share"
 			tooltip = "te_demog_dc_head_share_tt"
 		}
@@ -960,7 +946,6 @@ types te_demographics_widgets
 			parentanchor = vcenter
 			align = left|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			elide = right
 			block "cause" {}
 		}
@@ -1006,7 +991,6 @@ types te_demographics_widgets
 			spacing = 4
 
 			te_demog_text = {
-				default_format = "#tooltippable"
 				text = "te_demog_ov_census"
 				tooltip = "te_demog_ov_census_tt"
 			}
@@ -3231,7 +3215,6 @@ types te_demographics_widgets
 				autoresize = yes
 				align = nobaseline
 				using = fontsize_medium
-				default_format = "#tooltippable"
 				text = "te_demog_hist_pip_war"
 			}
 		}
@@ -3252,7 +3235,6 @@ types te_demographics_widgets
 				autoresize = yes
 				align = nobaseline
 				using = fontsize_medium
-				default_format = "#tooltippable"
 				text = "te_demog_hist_pip_famine"
 			}
 		}
@@ -3273,7 +3255,6 @@ types te_demographics_widgets
 				autoresize = yes
 				align = nobaseline
 				using = fontsize_medium
-				default_format = "#tooltippable"
 				text = "te_demog_hist_pip_event"
 			}
 		}
@@ -4303,7 +4284,6 @@ types te_demographics_widgets
 			maximumsize = { 164 -1 }
 			align = left|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_ms_head_measure"
 			tooltip = "te_demog_ms_head_measure_tt"
 		}
@@ -4313,7 +4293,6 @@ types te_demographics_widgets
 			maximumsize = { 100 -1 }
 			align = right|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_ms_head_cost"
 			tooltip = "te_demog_ms_head_cost_tt"
 		}
@@ -4323,7 +4302,6 @@ types te_demographics_widgets
 			maximumsize = { 132 -1 }
 			align = right|nobaseline
 			using = te_demog_fontsize_row
-			default_format = "#tooltippable"
 			text = "te_demog_ms_head_term"
 			tooltip = "te_demog_ms_head_term_tt"
 		}
@@ -4352,7 +4330,6 @@ types te_demographics_widgets
 			align = left|nobaseline
 			using = te_demog_fontsize_row
 			multiline = yes
-			default_format = "#tooltippable"
 			elide = right
 			block "measure_name" {}
 		}
@@ -4414,7 +4391,6 @@ types te_demographics_widgets
 			align = left|nobaseline
 			using = te_demog_fontsize_row
 			multiline = yes
-			default_format = "#tooltippable"
 			elide = right
 			block "measure_name" {}
 		}
@@ -4470,7 +4446,6 @@ types te_demographics_widgets
 					maximumsize = { 120 -1 }
 					align = left|nobaseline
 					using = te_demog_fontsize_row
-					default_format = "#tooltippable"
 					text = "te_demog_ms_law"
 					tooltip = "te_demog_ms_law_tt"
 				}
@@ -5270,7 +5245,6 @@ types te_demographics_widgets
 			spacing = 4
 
 			te_demog_text = {
-				default_format = "#tooltippable"
 				text = "[SelectLocalization( GetScriptedGui('te_demog_state_count_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_census_next', 'te_demog_st_census' )]"
 				tooltip = "te_demog_st_census_tt"
 			}
@@ -7707,7 +7681,6 @@ types te_demographics_widgets
 							align = left|nobaseline
 							parentanchor = vcenter
 							using = te_demog_fontsize_row
-							default_format = "#tooltippable"
 						}
 					}
 				}

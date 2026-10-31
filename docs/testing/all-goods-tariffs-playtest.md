@@ -41,10 +41,10 @@ the gates and the loc; the checks below are what only the game shows.
 The GUI audit's MKT-5 (`docs/audits/gui_audit/climate_reserve_market.md`). A bulk set records its day
 (`te_bulk_tariff_cd_day_<direction>`, a `game_date` value), and while the row waits each level's hover says about how
 many days are left (`te_bulk_tariff_cd_days_left_<direction>`, 91 days less the days since, at least 1). The row's label
-is underlined as hoverable. Offline, `test_bulk_tariffs.py` pins the variable, the value and the wait line.
+carries a hover (not underlined since 2026-10-30, `gui_style_guide.md` rule 3). Offline, `test_bulk_tariffs.py` pins the variable, the value and the wait line.
 
 | Check | Expect | If it fails |
 |---|---|---|
 | **Days left.** Set Imports, wait past the week's grace, then hover an import level on three dates a month apart. | "Imports can be set for all goods again in about N days": about 84 a week after the set, then 30 fewer each month, and the levels free up when it would reach 0. | A figure that doesn't fall: `game_date` stored as a value does not count days; fall back to the fixed "3 months" line. A figure off by a few days from when the levels free up: the timed variable's three months are not 91 days; adjust the 91. |
 | **A save from before.** Load a save with a bulk set inside its cooldown from before this change. | The line from before, "…within a week, then not for 3 months" (the day was never recorded), until the next set. | "About 0 days": the `else_if` in `te_bulk_tariff_apply` no longer asks for `te_bulk_tariff_cd_day_<direction>`. |
-| **Label.** Hover the Imports and Exports labels. | Underlined, with their tooltips as before. | Not underlined: the `#tooltippable` format in `te_bulk_tariff_widgets.gui`. |
+| **Label.** Hover the Imports and Exports labels. | Plain text (no underline, 2026-10-30), with their tooltips as before. | No tooltip: the label textbox's `tooltip` in `te_bulk_tariff_widgets.gui`. |

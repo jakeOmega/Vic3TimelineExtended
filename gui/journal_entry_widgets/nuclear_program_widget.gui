@@ -116,11 +116,6 @@ types nuclear_program_widget_types
 			parentanchor = vcenter
 			elide = right
 			alwaystransparent = yes
-			### Underlined, since the row carries a tooltip (style rule 3). A row
-			### without one overrides this block empty.
-			block "label_format" {
-				default_format = "#tooltippable"
-			}
 			block "row_label" {}
 		}
 
@@ -169,7 +164,6 @@ types nuclear_program_widget_types
 		textbox = {
 			text = "je_nuclear_program_widget_funding_value"
 			tooltip = "je_nuclear_program_widget_funding_tt"
-			default_format = "#tooltippable"
 			size = { 246 24 }
 			align = center|nobaseline
 			using = te_nuclear_fontsize_row
@@ -294,7 +288,6 @@ types nuclear_program_widget_types
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
-			default_format = "#tooltippable"
 			text = "je_nuclear_program_widget_powers_head_warheads"
 			tooltip = "je_nuclear_program_widget_powers_head_warheads_tt"
 		}
@@ -363,7 +356,6 @@ types nuclear_program_widget_types
 			}
 
 			nuclear_program_row = {
-				blockoverride "label_format" {}
 				blockoverride "row_label" {
 					text = "je_nuclear_program_widget_first_device_label"
 				}

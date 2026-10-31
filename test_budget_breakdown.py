@@ -591,11 +591,12 @@ class BreakdownTooltipTest(unittest.TestCase):
                         # vanilla's graph, on the amount as the Overview has it
                         self.assertIsNone(tip)
                         self.assertIn(f'using = {template} }}', body)
-                        self.assertIn('blockoverride "label_format" {}', body)
                     else:
                         self.assertIsNotNone(tip)
                         self.assertIn(tip.group(1), self.loc)
-                        self.assertNotIn('blockoverride "label_format"', body)
+                    # style rule 3 (owner, 2026-10-30): no row's label is underlined
+                    self.assertNotIn("tooltippable", body)
+                    self.assertNotIn("label_format", body)
         self.assertNotIn("te_budget_chart_row_tt", self.loc)
 
     def test_templates_are_the_overviews_own(self):

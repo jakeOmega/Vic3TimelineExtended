@@ -57,7 +57,6 @@ types te_tax_politics_widget_types
 			align = left|nobaseline
 			using = te_tax_fontsize_row
 			elide = right
-			default_format = "#tooltippable"
 			block "row_label" {}
 		}
 		widget = {
@@ -97,7 +96,6 @@ types te_tax_politics_widget_types
 			using = te_tax_fontsize_row
 			parentanchor = vcenter
 			elide = right
-			default_format = "#tooltippable"
 			block "row_label" {}
 		}
 		textbox = {
@@ -159,7 +157,6 @@ types te_tax_politics_widget_types
 				using = te_tax_fontsize_row
 				parentanchor = vcenter
 				elide = right
-				default_format = "#tooltippable"
 				text = "te_tax_ig_clout"
 				tooltip = "te_tax_ig_clout_tt"
 			}
@@ -169,7 +166,6 @@ types te_tax_politics_widget_types
 				using = te_tax_fontsize_row
 				parentanchor = vcenter
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "te_tax_ig_stance_tt"
 				text = "[SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)1' ), 'te_tax_ig_stance_1', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)2' ), 'te_tax_ig_stance_2', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)3' ), 'te_tax_ig_stance_3', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)4' ), 'te_tax_ig_stance_4', 'te_tax_ig_stance_5' ) ) ) )]"
 			}
@@ -179,7 +175,6 @@ types te_tax_politics_widget_types
 				using = te_tax_fontsize_row
 				parentanchor = vcenter
 				elide = right
-				default_format = "#tooltippable"
 				text = "te_tax_ig_score"
 				tooltip = "te_tax_ig_score_tt"
 			}
@@ -271,7 +266,6 @@ types te_tax_politics_widget_types
 				align = left|nobaseline
 				parentanchor = vcenter
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_ig_offer_line"
 				tooltip = "te_tax_ig_offer_tt"
 			}
@@ -331,7 +325,6 @@ types te_tax_politics_widget_types
 				align = left|nobaseline
 				using = te_tax_fontsize_row
 				elide = right
-				default_format = "#tooltippable"
 				tooltip = "te_tax_obl_ig_tt"
 				block "obl_ig" {}
 			}
@@ -342,7 +335,6 @@ types te_tax_politics_widget_types
 				multiline = yes
 				align = left|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				tooltip = "te_tax_obl_what_tt"
 				block "obl_what" {}
 			}
@@ -361,7 +353,6 @@ types te_tax_politics_widget_types
 				align = left|nobaseline
 				parentanchor = vcenter
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				tooltip = "te_tax_obl_state_tt"
 				block "obl_state" {}
 			}
@@ -534,7 +525,6 @@ types te_tax_politics_widget_types
 									elide = right
 									align = left|nobaseline
 									using = te_tax_fontsize_row
-									default_format = "#tooltippable"
 									text = "te_tax_pol_bar_value"
 								}
 							}
@@ -683,7 +673,6 @@ types te_tax_politics_widget_types
 				te_tax_note = {
 					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_pol_est_note', 'te_tax_pol_est_note_stale' ) )]"
 					tooltip = "te_tax_pol_est_tt"
-					default_format = "#tooltippable"
 				}
 				flowcontainer = {
 					direction = vertical

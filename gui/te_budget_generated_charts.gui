@@ -210,7 +210,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_INCOME_TAXES" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_income_tax')|D]" using = tax_income_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_income_tax_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_poll_tax = flowcontainer {
@@ -224,7 +223,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_POLL_TAXES" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_poll_tax')|D]" using = tax_poll_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_poll_tax_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_consumption_tax = flowcontainer {
@@ -238,7 +236,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_CONSUMPTION_TAXES" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_consumption_tax')|D]" using = consumption_tax_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_consumption_tax_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_dividends_tax = flowcontainer {
@@ -252,7 +249,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_DIVIDENDS_TAXES" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_dividends_tax')|D]" using = dividends_tax_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_dividends_tax_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_tariffs = flowcontainer {
@@ -266,7 +262,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_TARIFFS" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_tariffs')|D]" using = tariffs_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_tariffs_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_war_tax = flowcontainer {
@@ -318,7 +313,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_DIPLOMATIC_PACTS" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_pacts')|D]" using = diplomatic_pacts_income_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_pacts_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_treaties = flowcontainer {
@@ -332,7 +326,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_TREATIES" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_treaties')|D]" using = treaty_income_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_treaties_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_minting = flowcontainer {
@@ -346,7 +339,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_MINTING" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_minting')|D]" using = minting_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_minting_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_government_dividends = flowcontainer {
@@ -360,7 +352,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "DIVIDENDS_FROM_GOVERNMENT_SHARES" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_government_dividends')|D]" using = government_share_dividends_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_government_dividends_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_income_row_un = flowcontainer {
@@ -1991,7 +1982,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_DIPLOMATIC_PACTS" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_pacts')|D]" using = diplomatic_pacts_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_pacts_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_treaties = flowcontainer {
@@ -2005,7 +1995,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_TREATIES" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_treaties')|D]" using = treaty_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_treaties_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_civil = flowcontainer {
@@ -2047,7 +2036,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_WELFARE_PAYMENTS" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_welfare')|D]" using = welfare_payments_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_welfare_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_subsidies = flowcontainer {
@@ -2061,7 +2049,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_SUBSIDIES" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subsidies')|D]" using = subsidies_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_subsidies_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_subventions = flowcontainer {
@@ -2075,7 +2062,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_SUBVENTIONS" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subventions')|D]" using = subventions_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_subventions_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_government_losses = flowcontainer {
@@ -2089,7 +2075,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "LOSSES_FROM_GOVERNMENT_SHARES" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_government_losses')|D]" using = government_share_losses_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_government_losses_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_interest = flowcontainer {
@@ -2103,7 +2088,6 @@ types te_budget_generated_charts {
 			blockoverride "label" { text = "BUDGET_INTEREST" }
 			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_interest')|D]" using = interest_expense_tooltip_with_graph }
 			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_interest_share')|%1]" }
-			blockoverride "label_format" {}
 		}
 	}
 	type te_budget_expense_row_additional = flowcontainer {

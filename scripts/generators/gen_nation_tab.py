@@ -835,7 +835,6 @@ _WHERE = [
     "\t\tautoresize = yes",
     "\t\talign = nobaseline",
     "\t\tparentanchor = vcenter",
-    "\t\tdefault_format = \"#tooltippable\"",
     "\t}",
     "}",
 ]

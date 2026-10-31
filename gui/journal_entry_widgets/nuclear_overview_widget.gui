@@ -479,7 +479,6 @@ types nuclear_overview_widget_types
 						align = left|nobaseline
 						using = te_nuclear_fontsize_overview
 						elide = right
-						default_format = "#tooltippable"
 						text = "je_nuclear_ov_taboo_label"
 					}
 					widget = {

@@ -86,7 +86,6 @@ types te_tax_workbench_widget_types
 				elide = right
 				align = right|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_col_law"
 				tooltip = "te_tax_wb_col_law_tt"
 			}
@@ -148,7 +147,6 @@ types te_tax_workbench_widget_types
 				elide = right
 				align = left|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
@@ -391,7 +389,6 @@ types te_tax_workbench_widget_types
 				align = left|nobaseline
 				elide = right
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_cu_col_imp"
 				tooltip = "te_tax_wb_cu_col_imp_tt"
 			}
@@ -405,7 +402,6 @@ types te_tax_workbench_widget_types
 				align = left|nobaseline
 				elide = right
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_cu_col_exp"
 				tooltip = "te_tax_wb_cu_col_exp_tt"
 			}
@@ -461,7 +457,6 @@ types te_tax_workbench_widget_types
 						autoresize = yes
 						align = center|nobaseline
 						using = te_tax_fontsize_row
-						default_format = "#tooltippable"
 						text = "te_tax_cu_changed"
 						tooltip = "te_tax_cu_changed_tt"
 						block "imp_changed" {}
@@ -508,7 +503,6 @@ types te_tax_workbench_widget_types
 						autoresize = yes
 						align = center|nobaseline
 						using = te_tax_fontsize_row
-						default_format = "#tooltippable"
 						text = "te_tax_cu_changed"
 						tooltip = "te_tax_cu_changed_tt"
 						block "exp_changed" {}
@@ -576,7 +570,6 @@ types te_tax_workbench_widget_types
 				elide = right
 				align = right|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_relief_state_pop"
 				tooltip = "te_tax_wb_relief_state_pop_tt"
 			}
@@ -590,7 +583,6 @@ types te_tax_workbench_widget_types
 				elide = right
 				align = right|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_relief_state_tax"
 				tooltip = "te_tax_wb_relief_state_tax_tt"
 			}
@@ -1317,7 +1309,6 @@ types te_tax_workbench_widget_types
 								elide = right
 								align = left|nobaseline
 								using = te_tax_fontsize_row
-								default_format = "#tooltippable"
 								text = "te_tax_wb_due"
 								tooltip = "te_tax_wb_due_tt"
 							}
@@ -1463,7 +1454,6 @@ types te_tax_workbench_widget_types
 					blockoverride "row_value" {
 						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_sum_revenue_none', SelectLocalization( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_on'), '(CFixedPoint)0' ) ), 'te_tax_sum_revenue_range', SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_nobase_any'), '(CFixedPoint)0' ), 'te_tax_sum_revenue_partial', 'te_tax_sum_revenue_value' ) ) )]"
 						tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', 'te_tax_sum_revenue_lines_tt' )]"
-						default_format = "#tooltippable"
 					}
 				}
 				# Customs levels the draft changes (plan Task 15; the customs option only).

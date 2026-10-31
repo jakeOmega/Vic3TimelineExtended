@@ -134,13 +134,13 @@ an Urban Center of level 5, the test that used to activate the entry
 The word under each overview caption (and both words of the Budget cell) has a tooltip of its own, saying what that
 reading does. The cell's old tooltip is unchanged and still shows over the caption, the icon and the cell's blank
 space. Two engine facts rest on the pattern's other uses and have not been seen in this arrangement: a
-`[GetStaticModifier('x').GetDesc]` inside a key that `GetCustom` returns, and the underline of `#tooltippable` under a
-coloured word (`#green Expansion#!`).
+`[GetStaticModifier('x').GetDesc]` inside a key that `GetCustom` returns, and a word's own tooltip inside a cell that
+has one. Since 2026-10-30 the words are not underlined (`gui_style_guide.md` rule 3), as vanilla's readings aren't.
 
-19. **Each word is hoverable.** Underlined, six cells: Cycle Phase, Momentum, Bubble Pressure, Budget (the used line and
-    the free line separately), Policy Stance (needs a dial) and Inflation (full Banking System). Hovering the word shows
-    its own tooltip; hovering the caption or the icon still shows the cell's. *Fallback if the coloured words lose their
-    underline:* the hover still works; drop `default_format` from the coloured words (phase, momentum, bubble) only.
+19. **Each word is hoverable.** Six cells: Cycle Phase, Momentum, Bubble Pressure, Budget (the used line and the free
+    line separately), Policy Stance (needs a dial) and Inflation (full Banking System). Each word keeps its color (green
+    Expansion, red Panic) with no underline. Hovering the word shows its own tooltip; hovering the caption or the icon
+    still shows the cell's.
 20. **The phase shows its own economy's modifiers.** In a market economy, Expansion reads "Financial Cycle: Expansion"
     and lists services output, manufacturing, the investment pool, bubble pressure and momentum; under Command Economy
     it reads "Planning Cycle: Expansion" with construction and bureaucracy; under Cooperative Ownership "Cooperative

@@ -193,7 +193,6 @@ types grand_monuments_widget_types
 			align = left|nobaseline
 			using = gm_fontsize_row
 			elide = right
-			default_format = "#tooltippable"
 			block "row_label" {}
 		}
 		default_progressbar_horizontal = {
@@ -231,7 +230,6 @@ types grand_monuments_widget_types
 			align = left|nobaseline
 			using = gm_fontsize_row
 			elide = right
-			default_format = "#tooltippable"
 			block "row_label" {}
 		}
 		textbox = {
@@ -1493,7 +1491,6 @@ types grand_monuments_widget_types
 			elide = right
 			align = hcenter|nobaseline
 			using = gm_fontsize_overview
-			default_format = "#tooltippable"
 			text = "gm_row_status"
 		}
 	}
@@ -1711,7 +1708,6 @@ types grand_monuments_widget_types
 				text = "gm_site_row_title"
 			}
 			gm_row_line = {
-				default_format = "#tooltippable"
 				tooltip = "gm_site_row_detail_tt"
 				text = "gm_site_row_detail"
 			}
@@ -1807,32 +1803,27 @@ types grand_monuments_widget_types
 				# A landmark standing since 1836 (phase 4): its history on hover.
 				gm_row_line = {
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_is_landmark'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_row_landmark_tt"
 					text = "gm_row_landmark"
 				}
 				gm_row_line = {
-					default_format = "#tooltippable"
 					tooltip = "gm_row_detail_tt"
 					text = "gm_row_detail"
 				}
 				# Finished: its levels and its years (ageing spec 2026-10-16 §3).
 				gm_row_line = {
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_frozen'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_row_frozen_tt"
 					text = "gm_row_frozen"
 				}
 				# It counts toward the open opportunity (usability §4).
 				gm_row_line = {
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_row_com_counts_tt"
 					text = "gm_row_com_counts"
 				}
 				gm_row_line = {
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
-					default_format = "#tooltippable"
 					tooltip = "gm_row_contest_tt"
 					text = "gm_row_contest"
 				}
@@ -1979,7 +1970,6 @@ types grand_monuments_widget_types
 						blockoverride "third_line" {
 							gm_ov_line = {
 								position = { 78 46 }
-								default_format = "#tooltippable"
 								tooltip = "gm_je_status_heritage_tt"
 								text = "gm_je_ov_heritage"
 							}
@@ -2104,7 +2094,6 @@ types grand_monuments_widget_types
 					margin_top = 2
 					align = hcenter|nobaseline
 					using = gm_fontsize_overview
-					default_format = "#tooltippable"
 					tooltip = "gm_je_ov_policy_tt"
 					text = "gm_je_ov_policy"
 				}
@@ -2120,7 +2109,6 @@ types grand_monuments_widget_types
 					maximumsize = { 480 -1 }
 					align = hcenter|nobaseline
 					using = gm_fontsize_overview
-					default_format = "#tooltippable"
 					tooltip = "gm_je_world_rate_tt"
 					text = "gm_je_world_rate"
 				}
@@ -2161,12 +2149,10 @@ types grand_monuments_widget_types
 			spacing = 2
 
 			gm_text = {
-				default_format = "#tooltippable"
 				tooltip = "gm_je_com_occasion_tt"
 				text = "gm_je_com_occasion"
 			}
 			gm_text = {
-				default_format = "#tooltippable"
 				tooltip = "gm_je_com_ask_tt"
 				text = "gm_je_com_ask"
 			}
@@ -2216,7 +2202,6 @@ types grand_monuments_widget_types
 				text = "gm_je_com_building"
 			}
 			gm_text = {
-				default_format = "#tooltippable"
 				tooltip = "gm_je_com_reward_tt"
 				text = "gm_je_com_reward"
 			}

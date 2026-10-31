@@ -99,7 +99,6 @@ types te_tax_light_widget_types
 				elide = right
 				align = right|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_lt_col_range"
 				tooltip = "te_tax_lt_col_range_tt"
 			}
@@ -131,7 +130,6 @@ types te_tax_light_widget_types
 				elide = right
 				align = right|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_lt_col_step"
 				tooltip = "te_tax_lt_col_step_tt"
 			}

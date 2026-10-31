@@ -35,9 +35,8 @@ types te_tax_review_widget_types
 {
 	### A line of an entry: a label, then its text, which may wrap.
 	### 4 + 200 + 272 + 4 = 480. The label holds the longest catalog good name
-	### at 17 (test_tax_code_layout.py); an instance whose label has a hover sets
-	### default_format = "#tooltippable" itself, so a label without one is
-	### never drawn as hoverable.
+	### at 17 (test_tax_code_layout.py). An instance whose label has a hover sets
+	### its tooltip itself.
 	type te_tax_review_line = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -204,7 +203,6 @@ types te_tax_review_widget_types
 		}
 		te_tax_review_line = {
 			blockoverride "line_label" {
-				default_format = "#tooltippable"
 				text = "te_tax_rv_law"
 				tooltip = "te_tax_rv_law_tt"
 			}
@@ -225,7 +223,6 @@ types te_tax_review_widget_types
 				block "law_pa_visible" {}
 			}
 			blockoverride "line_label" {
-				default_format = "#tooltippable"
 				text = "te_tax_rv_passed"
 				tooltip = "te_tax_rv_passed_tt"
 			}
@@ -238,7 +235,6 @@ types te_tax_review_widget_types
 				block "law_pb_visible" {}
 			}
 			blockoverride "line_label" {
-				default_format = "#tooltippable"
 				text = "te_tax_rv_passed"
 				tooltip = "te_tax_rv_passed_tt"
 			}
@@ -248,7 +244,6 @@ types te_tax_review_widget_types
 		}
 		te_tax_review_line = {
 			blockoverride "line_label" {
-				default_format = "#tooltippable"
 				text = "te_tax_rv_bill"
 				tooltip = "te_tax_rv_bill_tt"
 			}
@@ -521,12 +516,11 @@ types te_tax_review_widget_types
 					align = left|nobaseline
 					using = te_tax_fontsize_heading
 					default_format = "#title"
-					text = "te_tax_en_goods_title"
+					text = "te_tax_en_goods"
 					tooltip = "te_tax_rv_goods_tt"
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_law"
 						tooltip = "te_tax_rv_law_tt"
 					}
@@ -536,7 +530,6 @@ types te_tax_review_widget_types
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_bill"
 						tooltip = "te_tax_rv_bill_tt"
 					}
@@ -597,12 +590,11 @@ types te_tax_review_widget_types
 					align = left|nobaseline
 					using = te_tax_fontsize_heading
 					default_format = "#title"
-					text = "te_tax_en_agrel_title"
+					text = "te_tax_en_agrel"
 					tooltip = "te_tax_rv_agrel_tt"
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_law"
 						tooltip = "te_tax_rv_law_tt"
 					}
@@ -614,7 +606,6 @@ types te_tax_review_widget_types
 				te_tax_review_line = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_agrel_on'), '(CFixedPoint)0' )]"
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_passed"
 						tooltip = "te_tax_rv_passed_tt"
 					}
@@ -625,7 +616,6 @@ types te_tax_review_widget_types
 				te_tax_review_line = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_agrel_on'), '(CFixedPoint)0' )]"
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_passed"
 						tooltip = "te_tax_rv_passed_tt"
 					}
@@ -635,7 +625,6 @@ types te_tax_review_widget_types
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_bill"
 						tooltip = "te_tax_rv_bill_tt"
 					}
@@ -668,12 +657,11 @@ types te_tax_review_widget_types
 					align = left|nobaseline
 					using = te_tax_fontsize_heading
 					default_format = "#title"
-					text = "te_tax_en_regrel_title"
+					text = "te_tax_en_regrel"
 					tooltip = "te_tax_rv_regrel_tt"
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_law"
 						tooltip = "te_tax_rv_law_tt"
 					}
@@ -685,7 +673,6 @@ types te_tax_review_widget_types
 				te_tax_review_line = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_regrel_on'), '(CFixedPoint)0' )]"
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_passed"
 						tooltip = "te_tax_rv_passed_tt"
 					}
@@ -696,7 +683,6 @@ types te_tax_review_widget_types
 				te_tax_review_line = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_regrel_on'), '(CFixedPoint)0' )]"
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_passed"
 						tooltip = "te_tax_rv_passed_tt"
 					}
@@ -729,7 +715,6 @@ types te_tax_review_widget_types
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_rv_bill"
 						tooltip = "te_tax_rv_bill_tt"
 					}
@@ -794,7 +779,6 @@ types te_tax_review_widget_types
 					# no date to print and no base to scale.
 					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_est_static', 'te_tax_est_stale' ) )]"
 					tooltip = "te_tax_est_header_tt"
-					default_format = "#tooltippable"
 				}
 				# The table's heads, the cells of te_tax_estimate_row. A line with no
 				# base prints a dash, and why on its hover.
@@ -804,12 +788,10 @@ types te_tax_review_widget_types
 						text = "te_tax_est_col_line"
 					}
 					blockoverride "est_law" {
-						default_format = "#tooltippable"
 						text = "te_tax_est_col_law"
 						tooltip = "te_tax_rv_law_tt"
 					}
 					blockoverride "est_bill" {
-						default_format = "#tooltippable"
 						text = "te_tax_est_col_bill"
 						tooltip = "te_tax_rv_bill_tt"
 					}
@@ -821,7 +803,6 @@ types te_tax_review_widget_types
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_on'), '(CFixedPoint)0' )]"
 					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_ch_income_tt' )]"
 					blockoverride "est_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_est_ch_income"
 					}
 					blockoverride "est_law" {
@@ -838,7 +819,6 @@ types te_tax_review_widget_types
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_on'), '(CFixedPoint)0' )]"
 					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_ch_dividends_tt' )]"
 					blockoverride "est_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_est_ch_dividends"
 					}
 					blockoverride "est_law" {
@@ -855,7 +835,6 @@ types te_tax_review_widget_types
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_on'), '(CFixedPoint)0' )]"
 					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_ch_poll_tt' )]"
 					blockoverride "est_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_est_ch_poll"
 					}
 					blockoverride "est_law" {
@@ -872,7 +851,6 @@ types te_tax_review_widget_types
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_on'), '(CFixedPoint)0' )]"
 					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_ch_consumption_tt' )]"
 					blockoverride "est_label" {
-						default_format = "#tooltippable"
 						text = "te_tax_est_ch_consumption"
 					}
 					blockoverride "est_law" {

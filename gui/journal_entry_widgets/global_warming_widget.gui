@@ -315,7 +315,6 @@ types global_warming_widget_types
 				elide = right
 				align = nobaseline
 				using = gw_fontsize_row
-				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
@@ -406,7 +405,6 @@ types global_warming_widget_types
 			elide = right
 			align = hcenter|nobaseline
 			using = gw_fontsize_overview
-			default_format = "#tooltippable"
 			block "label" {}
 		}
 	}
@@ -664,7 +662,6 @@ types global_warming_widget_types
 							elide = right
 							align = left|nobaseline
 							text = "gw_ov_temp_label"
-							default_format = "#tooltippable"
 						}
 					}
 					widget = {
@@ -788,7 +785,6 @@ types global_warming_widget_types
 						tooltip = "gw_cond_emis_tt"
 						blockoverride "row_label" {
 							text = "gw_emis_market_label"
-							default_format = "#tooltippable"
 						}
 						blockoverride "row_value" {
 							text = "gw_emis_market_value"
@@ -801,7 +797,6 @@ types global_warming_widget_types
 						tooltip = "gw_emis_capture_tt"
 						blockoverride "row_label" {
 							text = "gw_emis_capture_label"
-							default_format = "#tooltippable"
 						}
 						blockoverride "row_value" {
 							text = "gw_emis_capture_value"
@@ -811,7 +806,6 @@ types global_warming_widget_types
 						tooltip = "gw_emis_world_tt"
 						blockoverride "row_label" {
 							text = "gw_emis_world_label"
-							default_format = "#tooltippable"
 						}
 						blockoverride "row_value" {
 							text = "gw_emis_world_value"
@@ -821,7 +815,6 @@ types global_warming_widget_types
 						tooltip = "gw_cond_trend_tt"
 						blockoverride "row_label" {
 							text = "gw_emis_warming_label"
-							default_format = "#tooltippable"
 						}
 						blockoverride "row_value" {
 							text = "gw_cond_trend_value"
@@ -1294,7 +1287,6 @@ types global_warming_widget_types
 				elide = right
 				align = right|nobaseline
 				using = gw_fontsize_row
-				default_format = "#tooltippable"
 				text = "gw_te_head_annual"
 				tooltip = "gw_te_head_annual_tt"
 			}
@@ -1309,7 +1301,6 @@ types global_warming_widget_types
 				elide = right
 				align = right|nobaseline
 				using = gw_fontsize_row
-				default_format = "#tooltippable"
 				text = "gw_te_head_share"
 				tooltip = "gw_te_head_share_tt"
 			}
@@ -1324,7 +1315,6 @@ types global_warming_widget_types
 				elide = right
 				align = right|nobaseline
 				using = gw_fontsize_row
-				default_format = "#tooltippable"
 				text = "gw_te_head_cum"
 				tooltip = "gw_te_head_cum_tt"
 			}
@@ -1361,7 +1351,6 @@ types global_warming_widget_types
 				elide = right
 				align = left|nobaseline
 				using = gw_fontsize_row
-				default_format = "#tooltippable"
 				text = "gw_te_row_name"
 			}
 			flowcontainer = {
@@ -1840,7 +1829,6 @@ types global_warming_widget_types
 				elide = right
 				align = nobaseline
 				using = gw_fontsize_row
-				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
@@ -1905,7 +1893,6 @@ types global_warming_widget_types
 			gw_text = {
 				text = "rt_law_line"
 				tooltip = "rt_law_line_tt"
-				default_format = "#tooltippable"
 			}
 			# Until the first monthly snapshot (a save from before #660).
 			gw_text = {
@@ -2005,7 +1992,6 @@ types global_warming_widget_types
 				tooltip = "rt_clean_tt"
 				blockoverride "row_label" {
 					text = "rt_clean_label"
-					default_format = "#tooltippable"
 				}
 				blockoverride "row_value" {
 					text = "rt_clean_value"
@@ -2015,7 +2001,6 @@ types global_warming_widget_types
 				tooltip = "rt_synth_tt"
 				blockoverride "row_label" {
 					text = "rt_synth_label"
-					default_format = "#tooltippable"
 				}
 				blockoverride "row_value" {
 					text = "rt_synth_value"
@@ -2034,7 +2019,6 @@ types global_warming_widget_types
 				tooltip = "rt_mkt_coal_tt"
 				blockoverride "row_label" {
 					text = "rt_mkt_coal_label"
-					default_format = "#tooltippable"
 				}
 				blockoverride "row_value" {
 					text = "rt_mkt_coal_value"
@@ -2044,7 +2028,6 @@ types global_warming_widget_types
 				tooltip = "rt_mkt_oil_tt"
 				blockoverride "row_label" {
 					text = "rt_mkt_oil_label"
-					default_format = "#tooltippable"
 				}
 				blockoverride "row_value" {
 					text = "rt_mkt_oil_value"
@@ -2059,7 +2042,6 @@ types global_warming_widget_types
 				tooltip = "rt_emis_tt"
 				blockoverride "row_label" {
 					text = "gw_emis_market_label"
-					default_format = "#tooltippable"
 				}
 				blockoverride "row_value" {
 					text = "gw_emis_market_value"

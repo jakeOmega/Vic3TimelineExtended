@@ -1626,7 +1626,7 @@
  gw_sect_history:0 "History"
  gw_sect_policies:0 "Mitigation Policies"
  gw_sect_world:0 "Adoption Around the World"
- gw_te_more:0 "#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_more')|0] more countries#!"
+ gw_te_more:0 "+[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_more')|0] more countries"
  gw_te_ours:0 "#b Our country#!"
  hacker_collaboration_modifier:0 "Hacker Collaboration Program"
  hacker_collaboration_modifier_desc:0 "Recruiting the hackers who breached us into government service has spurred innovation, but rewarding an attack on the state has cost it authority."

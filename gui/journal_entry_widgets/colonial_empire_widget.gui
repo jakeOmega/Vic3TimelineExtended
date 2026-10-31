@@ -240,7 +240,6 @@ types colonial_empire_widget_types
 			parentanchor = vcenter
 			align = left|nobaseline
 			using = colonial_empire_fontsize_row
-			default_format = "#tooltippable"
 			elide = right
 			block "row_label" {}
 		}
@@ -287,7 +286,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = left|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_territory_head_name"
 				tooltip = "je_colonial_empire_territory_head_name_tt"
 			}
@@ -301,7 +299,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = right|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_territory_head_primary"
 				tooltip = "je_colonial_empire_territory_head_primary_tt"
 			}
@@ -315,7 +312,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = right|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_territory_head_sol"
 				tooltip = "je_colonial_empire_territory_head_sol_tt"
 			}
@@ -329,7 +325,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = right|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_territory_head_gdp"
 				tooltip = "je_colonial_empire_territory_head_gdp_tt"
 			}
@@ -406,7 +401,6 @@ types colonial_empire_widget_types
 					elide = right
 					align = left|nobaseline
 					using = colonial_empire_fontsize_row
-					default_format = "#tooltippable"
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_extra'), '(CFixedPoint)0' )]"
 					text = "[State.GetName]"
 				}
@@ -424,7 +418,6 @@ types colonial_empire_widget_types
 						elide = right
 						align = left|nobaseline
 						using = colonial_empire_fontsize_row
-						default_format = "#tooltippable"
 						text = "[State.GetName]"
 					}
 					textbox = {
@@ -451,7 +444,6 @@ types colonial_empire_widget_types
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_indigenous'), '(CFixedPoint)1' )]"
 					text = "je_colonial_empire_territory_primary_bad"
 					tooltip = "je_colonial_empire_territory_primary_bad_tt"
-					default_format = "#tooltippable"
 				}
 				textbox = {
 					parentanchor = right|vcenter
@@ -463,7 +455,6 @@ types colonial_empire_widget_types
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_indigenous'), '(CFixedPoint)0' )]"
 					text = "je_colonial_empire_territory_primary"
 					tooltip = "je_colonial_empire_territory_primary_tt"
-					default_format = "#tooltippable"
 				}
 			}
 			widget = {
@@ -480,7 +471,6 @@ types colonial_empire_widget_types
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_disparity'), '(CFixedPoint)1' )]"
 					text = "je_colonial_empire_territory_sol_bad"
 					tooltip = "je_colonial_empire_territory_sol_bad_tt"
-					default_format = "#tooltippable"
 				}
 				textbox = {
 					parentanchor = right|vcenter
@@ -492,7 +482,6 @@ types colonial_empire_widget_types
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_disparity'), '(CFixedPoint)0' )]"
 					text = "je_colonial_empire_territory_sol"
 					tooltip = "je_colonial_empire_territory_sol_tt"
-					default_format = "#tooltippable"
 				}
 			}
 			widget = {
@@ -507,7 +496,6 @@ types colonial_empire_widget_types
 					elide = right
 					align = right|nobaseline
 					using = colonial_empire_fontsize_row
-					default_format = "#tooltippable"
 					text = "je_colonial_empire_territory_gdp"
 				}
 			}
@@ -561,7 +549,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = left|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_war_head_name"
 				tooltip = "je_colonial_empire_war_head_name_tt"
 			}
@@ -575,7 +562,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = right|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_war_head_months"
 				tooltip = "je_colonial_empire_war_head_months_tt"
 			}
@@ -589,7 +575,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = right|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_war_head_backers"
 				tooltip = "je_colonial_empire_war_head_backers_tt"
 			}
@@ -645,7 +630,6 @@ types colonial_empire_widget_types
 					elide = right
 					align = left|nobaseline
 					using = colonial_empire_fontsize_row
-					default_format = "#tooltippable"
 					text = "je_colonial_empire_war_name"
 				}
 			}
@@ -663,7 +647,6 @@ types colonial_empire_widget_types
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_red'), '(CFixedPoint)1' )]"
 					text = "je_colonial_empire_war_months_bad"
 					tooltip = "je_colonial_empire_war_months_bad_tt"
-					default_format = "#tooltippable"
 				}
 				textbox = {
 					parentanchor = right|vcenter
@@ -675,7 +658,6 @@ types colonial_empire_widget_types
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_red'), '(CFixedPoint)0' )]"
 					text = "je_colonial_empire_war_months"
 					tooltip = "je_colonial_empire_war_months_tt"
-					default_format = "#tooltippable"
 				}
 			}
 			widget = {
@@ -690,7 +672,6 @@ types colonial_empire_widget_types
 					elide = right
 					align = right|nobaseline
 					using = colonial_empire_fontsize_row
-					default_format = "#tooltippable"
 					text = "je_colonial_empire_war_backers"
 				}
 			}
@@ -766,7 +747,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = left|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_subject_head_name"
 				tooltip = "je_colonial_empire_subject_head_name_tt"
 			}
@@ -780,7 +760,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = center|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_subject_head_kind"
 				tooltip = "je_colonial_empire_subject_head_kind_tt"
 			}
@@ -803,7 +782,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = right|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_subject_head_gdp"
 				tooltip = "je_colonial_empire_subject_head_gdp_tt"
 			}
@@ -881,7 +859,6 @@ types colonial_empire_widget_types
 					elide = right
 					align = left|nobaseline
 					using = colonial_empire_fontsize_row
-					default_format = "#tooltippable"
 					text = "je_colonial_empire_subject_name"
 				}
 			}
@@ -908,7 +885,6 @@ types colonial_empire_widget_types
 					elide = right
 					align = right|nobaseline
 					using = colonial_empire_fontsize_row
-					default_format = "#tooltippable"
 					text = "je_colonial_empire_subject_ld"
 				}
 			}
@@ -924,7 +900,6 @@ types colonial_empire_widget_types
 					elide = right
 					align = right|nobaseline
 					using = colonial_empire_fontsize_row
-					default_format = "#tooltippable"
 					text = "je_colonial_empire_subject_gdp"
 				}
 			}
@@ -1000,7 +975,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = left|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_gp_head_name"
 				tooltip = "je_colonial_empire_gp_head_name_tt"
 			}
@@ -1014,7 +988,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = left|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_gp_head_stance"
 				tooltip = "je_colonial_empire_gp_head_stance_tt"
 			}
@@ -1028,7 +1001,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = right|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_gp_head_prestige"
 				tooltip = "je_colonial_empire_gp_head_prestige_tt"
 			}
@@ -1042,7 +1014,6 @@ types colonial_empire_widget_types
 				elide = right
 				align = right|nobaseline
 				using = colonial_empire_fontsize_row
-				default_format = "#tooltippable"
 				text = "je_colonial_empire_gp_head_effect"
 				tooltip = "je_colonial_empire_gp_head_effect_tt"
 			}
@@ -1091,7 +1062,6 @@ types colonial_empire_widget_types
 					elide = right
 					align = left|nobaseline
 					using = colonial_empire_fontsize_row
-					default_format = "#tooltippable"
 					visible = "[ScriptContainer.HasVariable('ce_gp_capital')]"
 					text = "je_colonial_empire_gp_name"
 				}
@@ -1168,7 +1138,6 @@ types colonial_empire_widget_types
 			elide = right
 			align = left|nobaseline
 			using = colonial_empire_fontsize_row
-			default_format = "#tooltippable"
 			block "escalation_label" {}
 		}
 		textbox = {
@@ -1210,7 +1179,6 @@ types colonial_empire_widget_types
 			align = left|nobaseline
 			elide = right
 			using = colonial_empire_fontsize_row
-			default_format = "#tooltippable"
 			block "row_label" {}
 		}
 
@@ -1287,7 +1255,6 @@ types colonial_empire_widget_types
 			parentanchor = vcenter
 			align = left|nobaseline
 			using = colonial_empire_fontsize_row
-			default_format = "#tooltippable"
 			block "row_text" {}
 		}
 
@@ -1419,7 +1386,6 @@ types colonial_empire_widget_types
 			parentanchor = vcenter
 			align = nobaseline
 			using = colonial_empire_fontsize_overview
-			default_format = "#tooltippable"
 			block "legend_text" {}
 		}
 	}
@@ -1608,7 +1574,6 @@ types colonial_empire_widget_types
 								parentanchor = vcenter
 								align = left|nobaseline
 								using = colonial_empire_fontsize_overview
-								default_format = "#tooltippable"
 								elide = right
 								text = "je_colonial_empire_ov_stability_value"
 								tooltip = "je_colonial_empire_ov_heading_tt"
@@ -1713,7 +1678,6 @@ types colonial_empire_widget_types
 								te_ce_ov_line = {
 									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_next_tick'), '(CFixedPoint)1' )]"
 									position = { 78 46 }
-									default_format = "#tooltippable"
 									tooltip = "je_colonial_empire_ov_tick_tt"
 									text = "je_colonial_empire_ov_next"
 								}
@@ -1754,13 +1718,11 @@ types colonial_empire_widget_types
 								}
 								te_ce_ov_line = {
 									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
-									default_format = "#tooltippable"
 									tooltip = "je_colonial_empire_ov_isolation_tt"
 									text = "je_colonial_empire_ov_isolation"
 								}
 								te_ce_ov_line = {
 									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
-									default_format = "#tooltippable"
 									tooltip = "je_colonial_empire_ov_consensus_tt"
 									text = "je_colonial_empire_ov_consensus"
 								}
@@ -1905,7 +1867,6 @@ types colonial_empire_widget_types
 							parentanchor = hcenter
 							align = hcenter|nobaseline
 							using = colonial_empire_fontsize_overview
-							default_format = "#tooltippable"
 							text = "je_colonial_empire_ov_hold"
 						}
 						default_progressbar_horizontal = {
@@ -1930,7 +1891,6 @@ types colonial_empire_widget_types
 							parentanchor = hcenter
 							align = hcenter|nobaseline
 							using = colonial_empire_fontsize_overview
-							default_format = "#tooltippable"
 							text = "je_colonial_empire_ov_act"
 						}
 						default_progressbar_horizontal = {

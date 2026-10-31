@@ -158,11 +158,6 @@ types nuclear_deterrence_widget_types
 			parentanchor = vcenter
 			elide = right
 			alwaystransparent = yes
-			### Underlined, since the row carries a tooltip (style rule 3). A row
-			### without one overrides this block empty.
-			block "label_format" {
-				default_format = "#tooltippable"
-			}
 			block "row_label" {}
 		}
 
@@ -178,8 +173,7 @@ types nuclear_deterrence_widget_types
 	}
 
 	### A choice: its name and one action button, in a row 480 wide (6 + 358
-	### + 6 + 110). The name says what the option is on hover (underlined;
-	### a row whose name has no hover overrides "name_format" empty); the
+	### + 6 + 110). The name says what the option is on hover; the
 	### button says why it is greyed and what pressing it does. The option in
 	### force is tinted, as Covert's Funding Levels table does: the instance's
 	### "row_current" sets the tint's visible. The instance sets the row's
@@ -209,9 +203,6 @@ types nuclear_deterrence_widget_types
 				using = te_nuclear_fontsize_row
 				parentanchor = vcenter
 				elide = right
-				block "name_format" {
-					default_format = "#tooltippable"
-				}
 				block "choice_name" {}
 			}
 			button = {
@@ -226,7 +217,7 @@ types nuclear_deterrence_widget_types
 
 	### One axis of the posture (style guide rules 3 and 6): the axis, a
 	### concept, so hovering the word explains the term; what is in force,
-	### underlined, its hover saying what it does now and when it can next
+	### its hover saying what it does now and when it can next
 	### change; and a toggle beside it that opens the axis's choices directly
 	### beneath (6 + 160 + 4 + 218 + 4 + 90 + 6 = 488, an nd_row's width).
 	### The label is not alwaystransparent, or the concept could not hover.
@@ -250,7 +241,6 @@ types nuclear_deterrence_widget_types
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
-			default_format = "#tooltippable"
 			block "axis_value" {}
 		}
 		button = {
@@ -290,7 +280,6 @@ types nuclear_deterrence_widget_types
 				using = te_nuclear_fontsize_row
 				parentanchor = vcenter
 				elide = right
-				default_format = "#tooltippable"
 				block "level_name" {}
 			}
 			textbox = {
@@ -344,7 +333,6 @@ types nuclear_deterrence_widget_types
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
-			default_format = "#tooltippable"
 			text = "nd_w_readiness_head_upkeep"
 			tooltip = "nd_w_readiness_head_upkeep_tt"
 		}
@@ -354,7 +342,6 @@ types nuclear_deterrence_widget_types
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
-			default_format = "#tooltippable"
 			text = "nd_w_readiness_head_survivability"
 			tooltip = "nd_w_readiness_head_survivability_tt"
 		}
@@ -379,7 +366,6 @@ types nuclear_deterrence_widget_types
 			elide = right
 			align = left|nobaseline
 			using = te_nuclear_fontsize_row
-			default_format = "#tooltippable"
 			block "caption" {}
 		}
 		textbox = {
@@ -420,7 +406,6 @@ types nuclear_deterrence_widget_types
 			parentanchor = vcenter
 			elide = right
 			alwaystransparent = yes
-			default_format = "#tooltippable"
 			block "outcome_label" {}
 		}
 		textbox = {
@@ -488,7 +473,7 @@ types nuclear_deterrence_widget_types
 	}
 
 	### A line built in script (a country's name out of a variable). A line
-	### with a hover sets its tooltip and underline in "line_format".
+	### with a hover sets its tooltip in "line_tooltip".
 	type nd_script_line = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -502,7 +487,7 @@ types nuclear_deterrence_widget_types
 			maximumsize = { 468 -1 }
 			align = left|nobaseline
 			using = te_nuclear_fontsize_row
-			block "line_format" {}
+			block "line_tooltip" {}
 			block "line_text" {}
 		}
 	}
@@ -534,9 +519,6 @@ types nuclear_deterrence_widget_types
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
-			block "label_format" {
-				default_format = "#tooltippable"
-			}
 			block "row_label" {}
 		}
 		textbox = {
@@ -882,7 +864,6 @@ types nuclear_deterrence_widget_types
 				parentanchor = vcenter
 				elide = right
 				alwaystransparent = yes
-				default_format = "#tooltippable"
 				text = "nd_wc_item_stage"
 			}
 			textbox = {
@@ -971,8 +952,7 @@ types nuclear_deterrence_widget_types
 
 			nd_script_line = {
 				datacontext = "[GetScriptedGui('nd_crisis_opponent_sgui')]"
-				blockoverride "line_format" {
-					default_format = "#tooltippable"
+				blockoverride "line_tooltip" {
 					tooltip = "nd_w_crisis_headline_tt"
 				}
 				blockoverride "line_text" {
@@ -1088,7 +1068,6 @@ types nuclear_deterrence_widget_types
 			nd_choice_row = {
 				visible = "[GetScriptedGui('nd_crisis_private_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "name_format" {}
 				blockoverride "choice_name" {
 					text = "nd_w_crisis_act_public"
 				}
@@ -1103,7 +1082,6 @@ types nuclear_deterrence_widget_types
 			}
 			nd_choice_row = {
 				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "name_format" {}
 				blockoverride "choice_name" {
 					text = "nd_w_crisis_act_talks"
 				}
@@ -1119,7 +1097,6 @@ types nuclear_deterrence_widget_types
 			nd_choice_row = {
 				visible = "[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "name_format" {}
 				blockoverride "choice_name" {
 					text = "nd_w_crisis_act_trade"
 				}
@@ -1135,7 +1112,6 @@ types nuclear_deterrence_widget_types
 			nd_choice_row = {
 				visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "name_format" {}
 				blockoverride "choice_name" {
 					text = "nd_w_crisis_act_exercise"
 				}
@@ -1151,7 +1127,6 @@ types nuclear_deterrence_widget_types
 			nd_choice_row = {
 				visible = "[GetScriptedGui('nd_crisis_we_are_target_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "name_format" {}
 				blockoverride "choice_name" {
 					text = "nd_w_crisis_act_yield"
 				}
@@ -1167,7 +1142,6 @@ types nuclear_deterrence_widget_types
 			nd_choice_row = {
 				visible = "[GetScriptedGui('nd_crisis_we_issued_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "name_format" {}
 				blockoverride "choice_name" {
 					text = "nd_w_crisis_act_back_down"
 				}
@@ -1304,7 +1278,6 @@ types nuclear_deterrence_widget_types
 				textbox = {
 					text = "[GetScriptedGui('nd_plan_enemy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "nd_w_strike_target_tt"
-					default_format = "#tooltippable"
 					size = { 246 24 }
 					align = center|nobaseline
 					using = te_nuclear_fontsize_row
@@ -1401,7 +1374,6 @@ types nuclear_deterrence_widget_types
 				textbox = {
 					text = "nd_w_strike_size_value"
 					tooltip = "nd_w_strike_size_tt"
-					default_format = "#tooltippable"
 					size = { 246 24 }
 					align = center|nobaseline
 					using = te_nuclear_fontsize_row
@@ -1419,7 +1391,6 @@ types nuclear_deterrence_widget_types
 
 			nd_choice_row = {
 				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "name_format" {}
 				blockoverride "choice_name" {
 					text = "nd_w_strike_order"
 				}
@@ -2002,7 +1973,6 @@ types nuclear_deterrence_widget_types
 					parentanchor = vcenter
 					elide = right
 					alwaystransparent = yes
-					default_format = "#tooltippable"
 					text = "nd_w_survivability_label"
 				}
 				widget = {
@@ -2184,7 +2154,6 @@ types nuclear_deterrence_widget_types
 				textbox = {
 					text = "nd_w_safeguards_value"
 					tooltip = "nd_w_safeguards_tt"
-					default_format = "#tooltippable"
 					size = { 246 24 }
 					align = center|nobaseline
 					using = te_nuclear_fontsize_row
@@ -2220,7 +2189,6 @@ types nuclear_deterrence_widget_types
 				textbox = {
 					text = "nd_w_hardening_value"
 					tooltip = "nd_w_hardening_tt"
-					default_format = "#tooltippable"
 					size = { 246 24 }
 					align = center|nobaseline
 					using = te_nuclear_fontsize_row
@@ -2278,7 +2246,6 @@ types nuclear_deterrence_widget_types
 				textbox = {
 					text = "nd_taboo_w_ceiling_value"
 					tooltip = "nd_taboo_w_ceiling_tt"
-					default_format = "#tooltippable"
 					size = { 246 24 }
 					align = center|nobaseline
 					using = te_nuclear_fontsize_row

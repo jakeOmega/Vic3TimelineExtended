@@ -297,7 +297,6 @@ types un_layout_widget_types
 								autoresize = yes
 								parentanchor = vcenter
 								align = left|nobaseline
-								default_format = "#tooltippable"
 								text = "je_un_tally_counts"
 							}
 						}
@@ -329,7 +328,6 @@ types un_layout_widget_types
 								autoresize = yes
 								parentanchor = vcenter
 								align = left|nobaseline
-								default_format = "#tooltippable"
 								text = "je_un_session_months"
 							}
 						}
@@ -487,7 +485,6 @@ types un_layout_widget_types
 					visible = "[GetScriptedGui('un_chamber_position_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					parentanchor = hcenter
 					align = hcenter|nobaseline
-					default_format = "#tooltippable"
 					text = "[GetScriptedGui('un_chamber_position_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 					tooltip = "[GetScriptedGui('un_chamber_position_terms_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 				}

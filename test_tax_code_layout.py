@@ -637,12 +637,12 @@ class NameWidthTest(unittest.TestCase):
         self.assertEqual(len(names), expected)
         self.assertTrue(all(text == tooltip for text, tooltip in names))
 
-    def test_a_label_without_a_hover_is_not_drawn_hoverable(self):
-        self.assertNotIn("#tooltippable", type_body(self.review, "te_tax_review_line"))
-        for path in (REVIEW, POLITICS):
-            for body in re.findall(r'blockoverride "line_label" \{([^}]*)\}', gui(path)):
-                with self.subTest(path=path, body=" ".join(body.split())):
-                    self.assertEqual("tooltip =" in body, '#tooltippable' in body)
+    def test_no_label_is_drawn_underlined(self):
+        # Style guide rule 3 (owner, 2026-10-30): as in vanilla, a label's
+        # hover is not underlined.
+        for path in NEW_GUI:
+            with self.subTest(path=path):
+                self.assertNotIn("#tooltippable", gui(path))
 
     def test_rows_fit_the_section(self):
         # 4 + 156 + 4 + 154 + 4 + 154 + 4 = 480, the heads in the same cells.

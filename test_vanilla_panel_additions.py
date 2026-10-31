@@ -110,7 +110,9 @@ class ConstructionMarketTableTest(unittest.TestCase):
         self.assertNotRegex(self.text, r'text = "TE_CM_STAT_\w+"\s*tooltip')
         # The panel's own body font: the row type sets no fontsize template.
         self.assertRegex(self.row_type, r'blockoverride "row_font" \{\}')
-        self.assertIn('default_format = "#tooltippable"', self.row_type)
+        # Every row has a hover; as in vanilla, no label is underlined (style
+        # guide rule 3, owner 2026-10-30).
+        self.assertNotIn("#tooltippable", self.row_type)
         for _, body in rows:
             label = re.search(r'blockoverride "row_label" \{\s*text = "(\w+)"', body).group(1)
             with self.subTest(row=label):
@@ -130,37 +132,28 @@ class ConstructionMarketTableTest(unittest.TestCase):
                     self.assertLessEqual(need, width, f"{key} shows {text!r}: {need:.0f} units in {width}")
 
 
-class StateRowUnderlineTest(unittest.TestCase):
+class StateRowNoUnderlineTest(unittest.TestCase):
+    """Style guide rule 3 (owner, 2026-10-30): as in vanilla's state view, a
+    row's hover is not underlined, whether the row has a hover of its own or
+    sits under its tile's."""
+
     ROWS = ["te_state_stat_row", "te_state_tile_row", "te_state_tile_word_row", "te_state_wide_row", "te_state_gm_row"]
 
-    def rows(self):
-        for path in (STATES, WIDGETS):
-            text = _read(path)
-            meters = [_block_from(text, m.end() - 1) for m in re.finditer(r"(?m)^\t+te_state_meter = \{", text)]
-            for kind, body in _instances(text, self.ROWS):
-                in_meter = any(body in meter for meter in meters)
-                yield os.path.basename(path), kind, body, in_meter
-
-    def test_a_row_with_its_own_hover_is_underlined(self):
+    def test_no_row_underlines_its_label(self):
         seen = 0
-        for name, kind, body, in_meter in self.rows():
-            own_hover = 'blockoverride "row_tooltip"' in body or in_meter
-            underlined = re.search(r'blockoverride "label_format" \{\s*default_format = "#tooltippable"', body)
-            # The homeland project row's hover is its own label (the culture's
-            # name, which can elide), not a hover of its own to find.
-            if "te_homeland_project_culture_sgui" in body:
-                self.assertIsNone(underlined)
-                continue
-            with self.subTest(file=name, row=body[:160]):
-                self.assertEqual(bool(underlined), own_hover)
-            seen += own_hover
-        self.assertGreaterEqual(seen, 25)
+        for path in (STATES, WIDGETS, CONSTRUCTION):
+            for kind, body in _instances(_read(path), self.ROWS + ["te_cm_stat_row"]):
+                with self.subTest(file=os.path.basename(path), row=body[:160]):
+                    self.assertNotIn("#tooltippable", body)
+                    self.assertNotIn("label_format", body)
+                seen += 1
+        self.assertGreaterEqual(seen, 40)
 
-    def test_the_row_type_leaves_the_label_plain(self):
+    def test_the_row_types_have_no_underline_toggle(self):
         text = _read(WIDGETS)
-        m = re.search(r"type te_state_stat_row = flowcontainer \{", text)
-        body = _block_from(text, m.end() - 1)
-        self.assertIn('block "label_format" {}', body)
+        self.assertNotIn("label_format", text)
+        self.assertNotIn("#tooltippable", text)
+        self.assertNotIn("label_format", _read(CONSTRUCTION))
 
 
 class HomelandTileTest(unittest.TestCase):

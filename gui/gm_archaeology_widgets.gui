@@ -72,13 +72,11 @@ types gm_archaeology_widget_types
 		gm_arch_line = {
 			visible = "[GetScriptedGui('gm_arch_abroad_concession_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
 			text = "gm_arch_row_abroad_concession"
-			default_format = "#tooltippable"
 			tooltip = "gm_arch_row_abroad_concession_tt"
 		}
 		gm_arch_line = {
 			visible = "[GetScriptedGui('gm_arch_abroad_permit_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
 			text = "gm_arch_row_abroad_permit"
-			default_format = "#tooltippable"
 			tooltip = "gm_arch_row_abroad_permit_tt"
 		}
 		gm_arch_line = {
@@ -86,7 +84,6 @@ types gm_archaeology_widget_types
 			text = "gm_arch_row_resume"
 		}
 		gm_arch_line = {
-			default_format = "#tooltippable"
 			tooltip = "gm_tr_row_landmark_tt"
 			text = "gm_row_landmark"
 		}
@@ -156,17 +153,14 @@ types gm_archaeology_widget_types
 		gm_arch_line = {
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_terms'), '(CFixedPoint)1' )]"
 			text = "gm_arch_row_dig_concession"
-			default_format = "#tooltippable"
 			tooltip = "gm_arch_row_abroad_concession_tt"
 		}
 		gm_arch_line = {
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_terms'), '(CFixedPoint)2' )]"
 			text = "gm_arch_row_dig_permit"
-			default_format = "#tooltippable"
 			tooltip = "gm_arch_row_abroad_permit_tt"
 		}
 		gm_arch_line = {
-			default_format = "#tooltippable"
 			tooltip = "gm_tr_row_landmark_tt"
 			text = "gm_row_landmark"
 		}
@@ -216,13 +210,11 @@ types gm_archaeology_widget_types
 			spacing = 2
 
 			gm_text = {
-				default_format = "#tooltippable"
 				tooltip = "gm_je_arch_summary_tt"
 				text = "gm_je_arch_summary"
 			}
 			gm_text = {
 				visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_arch_disp_dig_count'), '(CFixedPoint)0' )]"
-				default_format = "#tooltippable"
 				tooltip = "gm_je_arch_costs_tt"
 				text = "gm_je_arch_costs"
 			}

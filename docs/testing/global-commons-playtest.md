@@ -99,7 +99,8 @@ even in that save, and the scale comes from those lines.
    why. A state just conquered has no basin until the next monthly update: Basin, Claims and Weight
    are hidden until then. Tile hover (since the 2026-10-27 GUI audit, VAN-8): the country's licences
    in use, its share and long-haul ones, and the room to build, then a pointer to the Seabed tab for
-   each basin's figures. The rows with a hover of their own are underlined.
+   each basin's figures. The rows with a hover of their own show that row's text, not the tile's, with no
+   underline (2026-10-30).
    No "Failed to fetch variable" in `debug.log` while hovering, on a coastal state that never had a
    mine. **At 1080p no row ends in "…"**: "Southern" in the Basin row's 96 px value column, "Long-haul"
    in the 96 px label column.

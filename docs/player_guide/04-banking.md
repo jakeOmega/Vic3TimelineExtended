@@ -264,8 +264,8 @@ and each heading opens or closes its section:
 | History | Open | The charts in [Banking history charts](#banking-history-charts). |
 | How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate and the stance, the mandates, gold and the peg, the exchange rate, international arrangements, what borrowing costs and prices. |
 
-Each tool's name is underlined: hover it for what the tool does, its full name
-and what it requires. A grayed button means you cannot use the tool now, and
+Hover a tool's name for what the tool does, its full name and what it
+requires. A grayed button means you cannot use the tool now, and
 its tooltip says why. Enabling a tool moves it to Active Policies. Some rows
 carry a shortened name: under Directed Credit each row names only its sector,
 and Counter-cyclical Buffer stands for Enable Counter-cyclical Buffer. The

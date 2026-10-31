@@ -1077,7 +1077,6 @@ types te_country_panel_information
 				autoresize = yes
 				align = nobaseline
 				parentanchor = vcenter
-				default_format = "#tooltippable"
 			}
 		}
 		### END MOD ###
