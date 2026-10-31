@@ -184,16 +184,16 @@ units](13-military.md#new-combat-units).
 | Infantry | Armored Infantry | Combined Arms | 6 | 1000 |
 | Infantry | Robotic Soldiers | Joint All-Domain Command and Control (JADC2) | 10 | 600 |
 | Infantry | Swarm Bots | Swarm Technology | 11 | 400 |
-| Infantry | Utility Fog Phalanx | Molecular Assemblers | 12 | 250 |
+| Infantry | Utility Fog Phalanx | Molecular Assemblers | 13 | 250 |
 | Marines | Combined Arms Marines | Combined Arms | 6 | 1000 |
 | Marines | Stealth Marines | Stealth Technology | 8 | 800 |
 | Marines | Networked Marines | JADC2 | 10 | 600 |
-| Marines | Bioenhanced Marines | Bioenhanced Soldiers | 11 | 500 |
+| Marines | Bioenhanced Marines | Bioenhanced Soldiers | 12 | 500 |
 | Artillery | Motorized Artillery | Motorized Artillery | 6 | 1000 |
 | Artillery | Guided Artillery Projectiles | Guided Missiles | 7 | 1000 |
 | Artillery | Networked Guided Artillery Projectiles | Network Centric Warfare | 9 | 800 |
 | Artillery | Orbital Bombardment | Space Militarization | 11 | 100 |
-| Artillery | Orbital Precision Antimatter Strikes | Antimatter Production | 12 | 100 |
+| Artillery | Orbital Precision Antimatter Strikes | Antimatter Production | 13 | 100 |
 | Cavalry | Modern Scout Tank | Inertial Navigation Systems | 7 | 1000 |
 | Cavalry | Stealth Reconnaissance Drone Carrier | Rapid Deployment Forces | 9 | 1000 |
 | Cavalry | Holographic Ambush Combat Vehicle | Augmented Reality Warfare | 11 | 1000 |
@@ -232,7 +232,7 @@ modifications](13-military.md#ships-and-ship-modifications).
 | Pulsed Laser Escort | Cruisers | Escort | Directed Energy Weapons | 11 | |
 | Swarm Coordination Vessel | Cruisers | Escort | Swarm Technology | 11 | |
 | Autonomous Swarm Submarine | Torpedo Craft | Submarine | Swarm Technology | 11 | |
-| Antimatter Battleship | Capital Ships | Battle line | Antimatter Production | 12 | |
+| Antimatter Battleship | Capital Ships | Battle line | Antimatter Production | 13 | |
 | Orbital Support Mothership | Cruisers | Transport | Orbital Weapon Platforms | 12 | |
 
 ## Ship utility modification list

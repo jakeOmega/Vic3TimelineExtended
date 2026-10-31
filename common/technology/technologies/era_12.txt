@@ -258,7 +258,6 @@ rejuvenation_therapies = {
 		# line split, so the -0.40 mortality budget's total is unchanged
 		state_demog_absorbed_mortality_mult = -0.05
 		character_health_add = 25
-		country_institution_health_system_max_investment_add = 1
 	}
 
 	ai_weight = {
@@ -279,7 +278,6 @@ post_work_society = {
 
 	modifier = {
 		country_sol_expectations_target_add = 0.25
-		country_institution_social_security_max_investment_add = 1
 		building_art_academy_throughput_add = 0.2
 		country_voting_power_mult = 0.1
 	}

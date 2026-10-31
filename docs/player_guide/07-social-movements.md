@@ -21,7 +21,7 @@ described in [The mod's new laws](06-politics.md#the-mods-new-laws).
 | Human Augmentation Debate | Human Augmentation or Brain-Computer Interfaces (era 11) | Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation | Human Purity | 20 years |
 | Digital Rights & Surveillance | Automated Surveillance or Cybersecurity (era 9) | Strong Privacy Rights | Intrusive Surveillance System and Ministry of Intelligence and Security Established, both at once | 15 years |
 | Mental Health Crisis | Mental Health Awareness (era 10) | Rehabilitation-Focused Criminal Justice and the Social Security institution at level 4 or higher | Punishment-Focused Criminal Justice or Penal Labor Camps still in force 10 years after the entry opens | 20 years |
-| Post-Scarcity Transition | Universal Basic Income (era 10) | Post-Scarcity Economy law | Never | 30 years |
+| Post-Scarcity Transition | Post-Work Society (era 12) | Post-Scarcity Economy law | Never | 30 years |
 
 ## The Civil Rights Movement journal entry
 
@@ -186,9 +186,10 @@ PTSD and a care-home scandal.
 
 ### The post-scarcity debate
 
-This entry can't fail: it succeeds or times out. It opens in era 10, while the
-Post-Scarcity Economy law needs the era 12 technology of that name, so the 30
-years are a race through two eras (see [The extended timeline](02-timeline.md)).
+This entry can't fail: it succeeds or times out. It opens with Post-Work Society
+in era 12, while the Post-Scarcity Economy law needs the era 13 technology of
+that name, which requires Post-Work Society: the 30 years are a race into the
+last era (see [The extended timeline](02-timeline.md)).
 The events bring unemployment protests, a crisis of meaning, AI replacing
 bureaucrats, neo-Luddite terrorism and an art renaissance.
 

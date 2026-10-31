@@ -323,9 +323,10 @@ milestone is finished it also decides a reward that fades over ten years.
 
 Each milestone has its own funding level, from 0 to six levels past your cap. The cap starts
 at 3 and rises with technology: thirteen space-related technologies from era 7
-to era 11 raise it by 1 each, and Cislunar Infrastructure (era 10) and four
-technologies in era 12 raise it by 2 each. With all of them the cap is 13 by the
-end of era 10, 18 by the end of era 11 and 26 by the end of era 12. Tier V of the
+to era 11 raise it by 1 each, and Cislunar Infrastructure (era 10), three
+technologies in era 12 and Fusion Batteries in era 13 raise it by 2 each. With
+all of them the cap is 13 by the end of era 10, 18 by the end of era 11, 24 by
+the end of era 12 and 26 in era 13. Tier V of the
 Advanced Research power bloc principle, its highest, adds another level.
 
 Every funding level up to the cap, on any milestone, adds 0.5 to your monthly pace, and so to
