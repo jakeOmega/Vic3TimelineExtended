@@ -1,7 +1,7 @@
 # Reform movements against entail: play-test list
 
 The liberal, liberal-republican, national-liberal, radical, socialist and land-reformer movements gained inheritance
-stances (2026-10-22, `ideology_modifications.py`; sets in `docs/systems/mod_systems.md` § Inheritance, "Ideology
+stances (2026-10-22, `ideology_modifications.py`; sets in `docs/systems/mod_systems/inheritance.md` § Inheritance, "Ideology
 stances"). Before them only the traditionalist movements held one, and they defend Primogeniture & Entail. The owner's
 2019 observer save held 77 countries and 2.7 B people on it, against Britain and Japan in 1836. The change passed the
 offline gate (`ideology_lawgroup_audit --strict`, `test_apply_ideologies.py`); what it does to the AI and to movements

@@ -348,7 +348,7 @@ class ReviewFixTest(unittest.TestCase):
         self.assertIn("set_variable = { name = iw_stolen_total value = 0 }", text)
 
     def test_system_doc_drops_retired_spread_pick(self):
-        doc = (ROOT / "docs/systems/mod_systems.md").read_text(encoding="utf-8")
+        doc = "".join(p.read_text(encoding="utf-8") for p in (ROOT / "docs/systems/mod_systems").glob("*.md"))
         self.assertNotIn("covert_op_target_ahead_in_tech", doc)
         self.assertNotIn("Military espionage's conditional tech spread", doc)
 

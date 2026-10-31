@@ -6,7 +6,7 @@ a fight is a war of reconquest whose goal never self-enforces. The engine logs
 nothing when a goal grows a mirror, a record outlives its war, or a deferred
 legacy runs early, so the wiring is pinned here
 (docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md
-§ 4; mod_systems.md § Wars of Independence).
+§ 4; mod_systems/decolonization.md § Wars of Independence).
 """
 
 import os

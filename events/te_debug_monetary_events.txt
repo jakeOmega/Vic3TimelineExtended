@@ -570,7 +570,7 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 	# volatility profile — directed credit runs
 	# country_banking_random_momentum_mult at -0.2 rather than +0.10 (read off
 	# law_directed_credit_development_banks in common/laws/extra_laws.txt, not
-	# off mod_systems.md's law table, which says -25% for this row), so the
+	# off mod_systems/banking_cycle.md's law table, which says -25% for this row), so the
 	# financial cycle is quieter than the paragraph below describes. Take the
 	# baseline off .1 either way. (A country that lands on CBI instead — no
 	# central planning — would fail the verify at the foot of the option and

@@ -862,7 +862,7 @@ te_demog_rate_clamp = {
 }
 
 # THIS = ROOT = a state: the one refresh site of te_demog_census_*. Removed and re-applied
-# (docs/systems/mod_systems.md, the dynamic-modifier scaling pattern); one of each pair at most.
+# (docs/systems/mod_systems/dynamic_modifier_pattern.md, the dynamic-modifier scaling pattern); one of each pair at most.
 te_demog_rates_apply = {
 	te_demog_rates_remove = yes
 	if = {

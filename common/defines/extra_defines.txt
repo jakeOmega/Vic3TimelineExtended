@@ -23,7 +23,7 @@
 # railway or power plant at base price. Spread over five years (a downgrade,
 # usually a price swing) that is a 23-150% better AI score per level for those
 # buildings; over twenty years (an upgrade), 6-38%. 0.6 and 0.9 ask for 67% and
-# 11%. Arithmetic and observer-game evidence: docs/systems/mod_systems.md
+# 11%. Arithmetic and observer-game evidence: docs/systems/mod_systems/construction.md
 # § Construction as a Market Good, "AI production-method switching".
 # Only AI choices read these; players are untouched.
 NAI = {

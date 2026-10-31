@@ -500,7 +500,7 @@ law_strong_privacy_rights = {
 #  group's systemic effects come from script rather than from these blocks:
 #  the score (te_inh_concentration), rural-scaled birth and migration
 #  effects, generation events and four amendments. See
-#  te_inheritance_effects.txt and docs/systems/mod_systems.md § Inheritance.
+#  te_inheritance_effects.txt and docs/systems/mod_systems/inheritance.md § Inheritance.
 #  Keys stay where a law keeps its meaning, so saves keep their laws; only
 #  the display names changed. The two new laws come after the old four in
 #  file order: a law inserted at the head of an existing group switched on

@@ -170,7 +170,7 @@
 
 ## Task 9: Docs and the player guide
 
-- [ ] **9.1** `docs/systems/mod_systems.md` § Space Race: the site record and its projection, the monthly step, the dead-holder rule, released worlds, the rule's settings, Cede Colony; the variables table (`sr_site_*`).
+- [ ] **9.1** `docs/systems/mod_systems/space_race.md` § Space Race: the site record and its projection, the monthly step, the dead-holder rule, released worlds, the rule's settings, Cede Colony; the variables table (`sr_site_*`).
 - [ ] **9.2** `docs/systems/journal_entry_systems.md` (CRLF): the entry's new conditions and the Solar System section.
 - [ ] **9.3** `docs/vanilla/treaty_articles_reference.md` (CRLF): Cede Colony, with the hidden building types as the engine constraint it rests on.
 - [ ] **9.4** Player guide: `16-space.md` § Colonizing the solar system (who holds a colony, a holder that is annexed, released worlds, the Solar System list, Cede Colony under simple and full, the AI); `01-introduction.md` § Game rules (the Space Race rule's four settings; recount the rules if the count changes); `09-diplomacy.md` where it lists the mod's treaty articles. Match the depth of the text around it (`CLAUDE.md` § Keep the player guide current). `python3 scripts/analysis/check_player_guide_style.py --strict`, then `.venv/bin/python scripts/build_player_guide.py` (needs `requirements-docs.txt`) and commit chapter and PDF together; `scripts/build_player_guide.py --check`.

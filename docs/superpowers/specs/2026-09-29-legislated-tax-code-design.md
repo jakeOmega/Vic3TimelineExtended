@@ -51,7 +51,7 @@ These are existing repository references, not a claim that the proposed system i
 
 - [Amendments](../../../common/amendments/extra_amendments.txt): sponsors, allowed laws,
   modifiers, conditions, and repeal restrictions.
-- [Temporary amendments](../../systems/mod_systems.md#temporary-amendments-sunset-clauses):
+- [Temporary amendments](../../systems/mod_systems/amendments.md#temporary-amendments-sunset-clauses):
   timed concessions and expiry handling.
 - [Legislative override capacity](../../../common/laws/legislative_override_capacity.txt):
   government-dependent ability to bypass normal procedure.

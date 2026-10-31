@@ -246,7 +246,7 @@ te_demog_wave_pick_city = {
 
 # ---- Option effects (THIS = ROOT = the country) --------------------------------------------------------------------
 # The Overspill's new towns: every Settlement Authority's settlement plan switches to Planned Towns (Internal
-# Resettlement, docs/systems/mod_systems.md: the PM needs Modern Urban Planning, which the option's branch checks).
+# Resettlement, docs/systems/mod_systems/pops_and_migration.md: the PM needs Modern Urban Planning, which the option's branch checks).
 te_demog_wave_plan_towns = {
 	every_scope_state = {
 		limit = { has_building = building_resettlement_colony }

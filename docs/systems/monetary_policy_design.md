@@ -1,6 +1,6 @@
 # Monetary Policy — Design
 
-> **External policy expansion (2026-09-27):** Five banking interventions now influence positive capital flows, sterilization, FX debt exposure, paid reserve accumulation, and emergency import credit. See `mod_systems.md` → External & Currency tools for costs, gates, monthly ordering and modeling limits. Exchange rates remain endogenous and treaty arrangements retain their existing role; the retired direct FX buttons are not restored.
+> **External policy expansion (2026-09-27):** Five banking interventions now influence positive capital flows, sterilization, FX debt exposure, paid reserve accumulation, and emergency import credit. See `mod_systems/banking_cycle.md` → External & Currency tools for costs, gates, monthly ordering and modeling limits. Exchange rates remain endogenous and treaty arrangements retain their existing role; the retired direct FX buttons are not restored.
 
 > **Deflation exit for mandate-run banks (2026-10-01):** a delegated, AI or independent bank that wants a lower rate than its floor allows now buys assets itself, sized by how far under the floor its virtual rate sits (`te_mon_virtual_rate`, `te_mon_pressure_bank_qe`). See [§0.12](#012-the-mandate-banks-own-asset-purchases-at-the-floor--2026-10-01), §9.1 and §11.
 
@@ -57,11 +57,11 @@
 > verification checklist — one list, numbered 1–14 for phase 1, 15–35 for phase 2 and 36–47
 > for phase 3.
 > Sections 1–22 remain the *design*, not a description of the code — where they disagree with
-> §0, §0 is what shipped. The implemented parts are folded into `mod_systems.md` § Banking
+> §0, §0 is what shipped. The implemented parts are folded into `mod_systems/monetary_policy.md` § Banking
 > Cycle → **Monetary Policy (phase 1)** and **(phase 2)**, and `journal_entry_systems.md`
 > § Banking Cycle (plus **(phase 3)**); this file stays the spec for the remaining phases.
 
-This extends the Banking Cycle (`je_banking_cycle` — see `mod_systems.md` § Banking Cycle
+This extends the Banking Cycle (`je_banking_cycle` — see `mod_systems/banking_cycle.md` § Banking Cycle
 and `journal_entry_systems.md`). Read those first.
 
 ---
@@ -96,7 +96,7 @@ Phase 1 (§19 row 1) was implemented on `feat/monetary-policy-phase1` over seven
 verified against the files; every claim about *behaviour* is not.
 
 File inventory and the architectural rules (variable contract, single owner, hidden state,
-the cancel-INJECT assumption, the migration window): `mod_systems.md` § Banking Cycle →
+the cancel-INJECT assumption, the migration window): `mod_systems/monetary_policy.md` § Banking Cycle →
 **Monetary Policy (phase 1)**. This section carries only what the design sections below get
 wrong or leave open. **Phase 2 has its own equivalent in [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks)**
 — its rulings, its deferred list, its roughnesses and its half of the checklist (items
@@ -346,7 +346,7 @@ them.
 Phase 1's §0.3 checklist is **inherited unchanged** (ruling P10) — items 2–5, the unwalked
 parts of 6 and 8–14 are still open and are not repeated here. The phase-2 list continues the same numbering from
 item 15, so an older note citing "checklist 7" still points at the right thing. File
-inventory and the new architectural rules: `mod_systems.md` § Banking Cycle →
+inventory and the new architectural rules: `mod_systems/monetary_policy.md` § Banking Cycle →
 **Monetary Policy (phase 2)**.
 
 #### Owner decisions to review
@@ -872,7 +872,7 @@ confidence and the convertibility crisis (§12.3), the peg-defence mandate's rea
 the dashboard rows and a console harness for §19 row 3. **Nothing below has been seen in a
 running game either** — phases 1 and 2's open checks are inherited unchanged (ruling P10's
 logic), and the checklist continues from item 36. File inventory and the architectural rules:
-`mod_systems.md` § Banking Cycle → **Monetary Policy (phase 3)**.
+`mod_systems/monetary_policy.md` § Banking Cycle → **Monetary Policy (phase 3)**.
 
 **What §19 row 3 lists that phase 3 did *not* have to do.** "Regime law stances" shipped with
 phase 2 (§13 "Delivered"; rulings T7). "FX buttons unchanged" is row 3's own interim rule, so
@@ -1263,7 +1263,7 @@ dashboard rows, a seventh history chart, the §18.2 deletion with its save migra
 events re-pointed at `te_fx_shock`, and a console harness (`te_debug_monetary.9`). **Nothing
 below has been seen in a running game**; phases 1–3's open checks are inherited unchanged.
 Both reloads (`mod_only + audits_only`) came back with no parse failures and no audit
-findings. File inventory and the architectural rules: `mod_systems.md` § Banking Cycle →
+findings. File inventory and the architectural rules: `mod_systems/monetary_policy.md` § Banking Cycle →
 **Monetary Policy (phase 4)**.
 
 #### Owner decisions to review (phase 4)
@@ -1354,7 +1354,7 @@ event) — each still cuttable. **Nothing below has been seen in a running game,
 built on a phase 4 that has not been either** (§0.7): phases 1–4's open checks are inherited
 unchanged, and phase 5 leans on phase 4's `te_fx_shadow` / `te_mon_overvaluation` for every
 pressure gauge it has. Every reload (`mod_only`, generators on) came back with no parse
-failures and no audit findings. File inventory and the architectural rules: `mod_systems.md`
+failures and no audit findings. File inventory and the architectural rules: `mod_systems/monetary_policy.md`
 § Banking Cycle → **Monetary Policy (phase 5)**.
 
 #### Owner decisions to review (phase 5)
@@ -2476,7 +2476,7 @@ rule or the formulas assumed 25. The investigation found the `scaled_debt ≥ 0.
 growth helped push China into the trap (a 2045 deficit of 30% of GDP put it on growth at 13%
 inflation); it is left as it is, a clean-up for a later call. This runs inside the
 monthly update for `is_player = no` — a **documented exception** to
-`mod_systems.md` "Do not move AI logic out of the buttons". Precedent:
+`mod_systems/banking_cycle.md` "Do not move AI logic out of the buttons". Precedent:
 `common/journal_entries/je_covert_warfare.txt:125-202`. That rule protects the discrete
 toggle buttons, which all stay; here the mandate is a shared player/AI mechanic and no
 `ai_chance` is bypassed. Avoid the orphan-gate trap recorded at
@@ -2485,7 +2485,7 @@ toggle buttons, which all stay; here the mandate is a shared player/AI mechanic 
 A national-bank country **without the JE** (no `stock_exchange` or no level-5 urban
 center) has no dashboard and is auto-delegated to the dual mandate (under CBI, to its act). Since #805 it
 reads its rate, mandate, exchange rate and peg confidence in the Budget panel's Banking tab,
-read-only (`te_banking_mon_readout`; `mod_systems.md` § Policy Dashboard), as does an
+read-only (`te_banking_mon_readout`; `mod_systems/banking_cycle.md` § Policy Dashboard), as does an
 anchored country without the JE.
 
 ---
@@ -4212,7 +4212,7 @@ anchored state lapses — and, under the swap-line change above, the line is cal
 | GUI | the *Backstops* row gains a *drawn / limit* line |
 | loc | the two `desc` keys and the tooltip keys — `te_miscellaneous_l_english.yml`, `te_events_l_english.yml` |
 | harness | `te_debug_monetary.10` (or a `.11` if `.10`'s six options are enough already): pin a debug swap line the way `.10`'s option a pins an anchor; force `te_mon_in_financial_crisis` for a month; set `te_mon_lolr_calls` |
-| docs | `mod_systems.md` § Monetary Policy (phase 5) → a phase-6 paragraph; `treaty_articles_reference.md`'s monetary table; a §0.10 here; §21 rows |
+| docs | `mod_systems/monetary_policy.md` § Monetary Policy (phase 5) → a phase-6 paragraph; `treaty_articles_reference.md`'s monetary table; a §0.10 here; §21 rows |
 
 **Audits.** The new variables are clocks or balances and are never removed
 (`modifier_multiplier_var_audit`); every new AI line carries `desc =`; every new tooltip key
@@ -4374,7 +4374,7 @@ counter; `te_mon_is_imposed_pegger` (the peg article walk with the type); the `O
 has_type … }` edits listed under C1; the `te_peg.2` option trigger; the AI `desc` keys and
 the two articles' name / desc / effects / short-desc keys (all in
 `te_concepts_l_english.yml` — §0.8's `te_unused` roughness was fixed by #366 / #357);
-`treaty_articles_reference.md` gains two rows; `mod_systems.md`.
+`treaty_articles_reference.md` gains two rows; `mod_systems/monetary_policy.md`.
 
 ### 15C.4 Checks and the harness (P6-1…13)
 
@@ -4788,7 +4788,7 @@ Deleting `cb_policy_rate_hike` / `cb_disable_policy_rate_hike` touches:
 - loc: `te_miscellaneous_l_english.yml:105-106,120-121,1215,1267,1293` (uppercase keys — a
   lowercase grep misses them; `grep -i policy_rate_hike`); `te_concepts_l_english.yml:351`
 - `scripts/generators/add_tech_modifiers.py:257,285` hardcodes the OMO button name and loc
-- docs: `mod_systems.md` banking section; examples at
+- docs: `mod_systems/banking_cycle.md`; examples at
   `scripting_best_practices.md:2199-2202,2355` go stale but break nothing
 
 No `events/` file and no `test_*.py` references either tool.
@@ -4848,7 +4848,7 @@ Surveyed 2026-09-20; line numbers are of that date. **Delete the two as a pair**
   re-written to describe the §12.3 option and a weak float
 - loc: `te_miscellaneous_l_english.yml` (≈25 keys, upper- and lower-case — `grep -i`), and
   **`te_concepts_l_english.yml:66-67,344-347,772,789-790`**, the easy ones to miss
-- docs: `mod_systems.md` and `journal_entry_systems.md` § Banking Cycle tool tables
+- docs: `mod_systems/banking_cycle.md` and `journal_entry_systems.md` § Banking Cycle tool tables
 
 **Save migration**, same recipe as phase 1: keep both static modifiers defined for one
 release; `extra_effects.txt:390-391` and `legacy_modifier_cleanup.txt:39-40` already strip
@@ -5065,8 +5065,8 @@ P6-1…13).
 
 Found while researching this design; **not** fixed here (tracked in #328; the
 `/modifier-grants` coverage gap that forced a manual file walk for §7.5 is #327):
-`journal_entry_systems.md` and `mod_systems.md` disagree with `je_banking.txt` on widget
-slot numbers; the banking-law table in `mod_systems.md` omits `law_state_owned_banking` and
+`journal_entry_systems.md` and `mod_systems/banking_cycle.md` disagree with `je_banking.txt` on widget
+slot numbers; the banking-law table in `mod_systems/banking_cycle.md` omits `law_state_owned_banking` and
 carries stale values; the documented 12-month event cooldown is 18 in script; event counts
 are out of date (82 blocks); `banking_points_max_from_law` is written monthly and read by
 nothing; a comment in `banking_cycle_effects.txt` says the Great Depression needs 20% of

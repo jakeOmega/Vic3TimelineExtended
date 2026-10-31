@@ -1041,13 +1041,13 @@ class DebugTests(unittest.TestCase):
 
 # ---- the docs and the concept (Task 8) -------------------------------------------------
 
-MOD_SYSTEMS = "docs/systems/mod_systems.md"
+MOD_SYSTEMS = "docs/systems/mod_systems/pops_and_migration.md"
 
 
 class DocsTests(unittest.TestCase):
     def test_the_system_section_names_every_programme(self):
         text = read(MOD_SYSTEMS)
-        m = re.search(r"(?ms)^## Internal Resettlement \(Settlement Authority\)\n(.*?)(?=^## )", text)
+        m = re.search(r"(?ms)^## Internal Resettlement \(Settlement Authority\)\n(.*?)(?=^## |\Z)", text)
         self.assertIsNotNone(m)
         section = m.group(1)
         L = loc()
@@ -1059,7 +1059,9 @@ class DocsTests(unittest.TestCase):
                       "across all Authorities", section)
 
     def test_no_doc_names_the_old_transfer(self):
-        self.assertNotIn("resettlement_transfer_on_action", read(MOD_SYSTEMS))
+        for path in sorted((ROOT / "docs/systems/mod_systems").glob("*.md")):
+            with self.subTest(file=path.name):
+                self.assertNotIn("resettlement_transfer_on_action", path.read_text(encoding="utf-8"))
 
     def test_concept(self):
         self.assertIsNotNone(block(read("common/game_concepts/extra_concepts.txt"), "concept_internal_resettlement"))

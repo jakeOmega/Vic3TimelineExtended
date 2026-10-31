@@ -637,7 +637,7 @@ colonial_state_sol_qualifying_floor = {
 # number to the bar, the widget, the charts or any loc string. To add a term:
 # add a leaf, add it to its group below, and add one `add` line to the bar
 # with a matching `desc` key. The full old-term -> leaf mapping is tabulated
-# in docs/systems/mod_systems.md § Stability Bar Formula.
+# in docs/systems/mod_systems/decolonization.md § Stability Bar Formula.
 #
 # The bar's 23rd and last line, colonial_stability_term_cap, is not one of
 # these leaves: it caps the sum of all 22 and lives in the MONTHLY CAP

@@ -100,7 +100,7 @@ Mecklenburg-Strelitz in January 1836 it read 0.048 where the pops held 0.195 of 
 (Demographics' `unemployment_rate_read`, `docs/testing/demographics-playtest.md` § Log triage 2026-10-17). Owner's call:
 fix it. Every mod reader outside the Demographics census now reads `te_state_unemployment_share`: the engine's figure,
 read live, over the workforce's share of the state's people, which a yearly walk of each state's pops counts
-(`common/script_values/te_unemployment_values.txt`; § Unemployment as a Share of the Workforce in `mod_systems.md`).
+(`common/script_values/te_unemployment_values.txt`; § Unemployment as a Share of the Workforce in `mod_systems/pops_and_migration.md`).
 Their thresholds now mean a share of the workforce, so each bites at about a quarter of the unemployment it did. The
 Settlement Authority's was raised from 5% to 10% as well (owner, 2026-10-17). The Demographics census stores the same
 conversion at its walk (`te_dg_unemp`), which its youth bulge, event wave, pension AI and panel read (owner, 2026-10-17:

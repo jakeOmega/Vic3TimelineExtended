@@ -449,7 +449,7 @@ generated file, and its stage test admits the earlier stages' worlds.
 
 ## 15. Docs
 
-`mod_systems.md` § Space Race (the record, the dead-holder rule, Cede Colony,
+`mod_systems/space_race.md` § Space Race (the record, the dead-holder rule, Cede Colony,
 the rule), `journal_entry_systems.md` (the entry's conditions, the Solar System
 section; CRLF), `treaty_articles_reference.md` (Cede Colony; CRLF), the player
 guide's `16-space.md` (who holds a colony, a dead holder, the Solar System

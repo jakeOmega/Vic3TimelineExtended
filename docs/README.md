@@ -52,7 +52,7 @@ Build with `scripts/build_player_guide.py` (pandoc + Typst from `requirements-do
 
 | File | Contents | Read When... |
 |------|----------|--------------|
-| [`systems/mod_systems.md`](systems/mod_systems.md) | All key mod systems: banking cycle, global warming, construction scaling, migration crowding, nuclear, colonial collapse, wonders, etc. | Understanding or modifying a mod system |
+| [`systems/mod_systems.md`](systems/mod_systems.md) | Index over [`systems/mod_systems/`](systems/mod_systems/), one file per mod system: banking cycle, monetary policy, global warming, construction, demographics, nuclear, space race, covert warfare, decolonization, etc. | Understanding or modifying a mod system |
 | [`systems/journal_entry_systems.md`](systems/journal_entry_systems.md) | All 10+ custom journal-entry systems in detail | Working on or debugging a journal entry system |
 | [`systems/economy_growth_sim.md`](systems/economy_growth_sim.md) | The economy growth sim and its calibration dataset (#1034): France → EU playthrough series 1867–2045, why the structural hindcast fails, the construction-cost counterfactual from data, and the cost-curve recommendation | Tuning growth, construction costs, automation or the peasant/unemployment shape; reading a save's economy series |
 | [`systems/budget_breakdown.md`](systems/budget_breakdown.md) | Budget charts, institution cost allocation and recurring journal-system source attribution | Editing or validating the Budget Breakdown tab |
