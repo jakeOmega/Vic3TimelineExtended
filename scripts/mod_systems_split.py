@@ -6,7 +6,8 @@ The single file grew to 1.2 MB and 70 top-level sections. On 2026-10-31 it
 became an index (``docs/systems/mod_systems.md``) over one file per system in
 ``docs/systems/mod_systems/``. ``SYSTEMS`` below is the map: which ``##``
 sections each file holds, in what order. Section text moved word for word; each
-file adds only a title and a link back to the index. The Banking Cycle section
+file adds only a title and a link back to the index, and relative links gain
+the ``../`` the move needs. The Banking Cycle section
 is the one section cut in two: its Monetary Policy subsections went to
 ``monetary_policy.md``.
 
@@ -231,10 +232,18 @@ def pull_subsections(section: str, prefix: str) -> tuple[str, str]:
     return "".join(kept), "".join(moved)
 
 
+RELATIVE_LINK = re.compile(r"\]\((?![a-z]+:|#|/)([^)\s]+)\)")
+
+
+def relink(text: str) -> str:
+    """Relative link targets were written from docs/systems/; the system files sit one folder down."""
+    return RELATIVE_LINK.sub(lambda m: f"](../{m.group(1)})", text)
+
+
 def render(file: str, blocks: list[str]) -> str:
     system = BY_FILE.get(file)
     title = system.title if system else file[:-3].replace("_", " ").title()
-    body = "\n\n".join(b.strip("\n") for b in blocks if b.strip())
+    body = relink("\n\n".join(b.strip("\n") for b in blocks if b.strip()))
     return f"# {title}\n\n{BACKLINK}\n\n{body}\n"
 
 
