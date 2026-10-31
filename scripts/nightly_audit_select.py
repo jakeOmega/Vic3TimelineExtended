@@ -246,7 +246,7 @@ _DOC_MAPPING_RAW: list[tuple[str, list[str], str]] = [
     (r"^common/(companies|company_types|company_charter_types)/",
      ["docs/vanilla/vanilla_company_buildings_reference.md"],
      "production_methods_and_buildings"),
-    (r"^common/(country_formation|dynamic_country_names|dynamic_treaty_names|country_definitions|country_ranks|flag_definitions)/",
+    (r"^common/(country_formation|country_creation|coat_of_arms|dynamic_country_names|dynamic_treaty_names|country_definitions|country_ranks|flag_definitions)/",
      ["docs/vanilla/vanilla_formable_countries_reference.md"],
      "laws_and_politics"),
     # Production / buildings / goods / pop needs

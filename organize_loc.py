@@ -117,6 +117,26 @@ def find_company_keys(project_directory):
     return company_keys
 
 
+def find_country_keys(project_directory):
+    """Finds the name and adjective keys of every country tag the mod defines.
+
+    The engine reads `TAG` and `TAG_ADJ` for each entry in
+    common/country_definitions/ without any script naming them, so a releasable
+    or formable whose adjective no dynamic name repeats would otherwise be
+    filed to te_unused_l_english.yml.
+    """
+    country_keys = set()
+    path = os.path.join(project_directory, "common", "country_definitions")
+    if not os.path.isdir(path):
+        return country_keys
+    for file in sorted(os.listdir(path)):
+        if file.endswith(".txt"):
+            with open(os.path.join(path, file), "r", encoding="utf-8-sig") as f:
+                for tag in re.findall(r"^([A-Z][A-Z0-9]{2})\s*=\s*\{", f.read(), re.MULTILINE):
+                    country_keys.update((tag, f"{tag}_ADJ"))
+    return country_keys
+
+
 def find_law_keys(project_directory):
     """Finds implicit law keys for effects tooltips."""
     law_keys = set()
@@ -496,9 +516,18 @@ def find_journal_entry_keys(project_directory):
 # <namespace>.<number>.<suffix> or <namespace>.<number> are EVENTS.
 _EVENT_KEY_RE = re.compile(r"^([\w]+)\.\d+")
 
+# Releasable city-states (common/country_creation/te_city_states.txt): each tag's
+# name and adjective file in te_city_states_l_english.yml.
+CITY_STATE_TAGS = (
+    "NYC", "SFO", "SGP", "HKG", "SHG", "CST", "MCU", "KUW", "FIU", "BOM", "GOA",
+    "PDY", "ADN", "DXB", "TAN", "LAG", "DKR", "DJI", "OCL", "GYE", "CTG", "BUE",
+)
+CITY_STATE_LOC_KEYS = frozenset(CITY_STATE_TAGS) | {f"{t}_ADJ" for t in CITY_STATE_TAGS}
+
 # Ordered list of output categories.
 CATEGORIES = [
     "BUILDINGS",
+    "CITY_STATES",
     "COMBAT_UNITS",
     "COMPANIES",
     "CONCEPTS",
@@ -671,6 +700,8 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
         return "COMPANIES"
     if key.startswith("ideology_"):
         return "IDEOLOGIES"
+    if key in CITY_STATE_LOC_KEYS:
+        return "CITY_STATES"
     if (
         key.startswith("dyn_c_")
         or key.startswith("dp_unify_")
@@ -940,6 +971,7 @@ def build_output_plan(project_directory):
         find_notification_keys,
         find_game_rule_keys,
         find_company_keys,
+        find_country_keys,
         find_law_keys,
         find_diplo_action_keys,
         find_treaty_article_keys,

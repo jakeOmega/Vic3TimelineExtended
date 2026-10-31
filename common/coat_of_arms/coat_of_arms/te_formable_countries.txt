@@ -1,0 +1,206 @@
+﻿# Flags of the mod's formable countries (common/country_formation/te_formable_countries.txt).
+# No flag_definitions entry: the engine falls back to the coat of arms named after the
+# tag. China (ZHO) and the mod's India and Indonesia reuse vanilla art through
+# common/flag_definitions/te_formable_countries.txt. Vanilla textures only.
+
+AFU = { # African Union: a white sun in a ring of gold stars, on green
+	pattern = "pattern_solid.tga"
+	color1 = "green"
+
+	colored_emblem = {
+		texture = "ce_sun_radiant.dds"
+		color1 = "white"
+		color2 = "white"
+		instance = { scale = { 0.62 0.62 } position = { 0.5 0.5 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_circle.dds"
+		color1 = color1
+		color2 = color1
+		instance = { scale = { 0.42 0.42 } position = { 0.5 0.5 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_star_05.dds"
+		color1 = "yellow"
+		color2 = "yellow"
+		instance = { scale = { 0.06 0.06 } position = { 0.500 0.100 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.569 0.114 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.633 0.154 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.689 0.217 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.731 0.300 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.758 0.396 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.767 0.500 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.758 0.604 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.731 0.700 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.689 0.783 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.633 0.846 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.569 0.886 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.500 0.900 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.431 0.886 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.367 0.846 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.311 0.783 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.269 0.700 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.242 0.604 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.233 0.500 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.242 0.396 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.269 0.300 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.311 0.217 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.367 0.154 } }
+		instance = { scale = { 0.06 0.06 } position = { 0.431 0.114 } }
+	}
+}
+
+INM = { # Intermarium: the white eagle between two seas
+	pattern = "pattern_solid.tga"
+	color1 = "red"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = "medium_blue"
+		color2 = "medium_blue"
+		instance = { scale = { 1.0 0.16 } position = { 0.5 0.08 } }
+		instance = { scale = { 1.0 0.16 } position = { 0.5 0.92 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_eagle_crown.dds"
+		color1 = "white"
+		color2 = "yellow"
+		instance = { scale = { 0.58 0.58 } position = { 0.5 0.5 } }
+	}
+}
+
+EAF = { # East African Federation: light blue over white, black, green and yellow, with a gold star
+	pattern = "pattern_solid.tga"
+	color1 = "blue_light"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = "white"
+		color2 = "white"
+		instance = { scale = { 1.0 0.05 } position = { 0.5 0.725 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = "black"
+		color2 = "black"
+		instance = { scale = { 1.0 0.09 } position = { 0.5 0.795 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = "green"
+		color2 = "green"
+		instance = { scale = { 1.0 0.09 } position = { 0.5 0.885 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = "yellow"
+		color2 = "yellow"
+		instance = { scale = { 1.0 0.09 } position = { 0.5 0.965 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_frame_circle_outline.dds"
+		color1 = "white"
+		color2 = "white"
+		instance = { scale = { 0.42 0.42 } position = { 0.5 0.36 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_star_05.dds"
+		color1 = "yellow"
+		color2 = "yellow"
+		instance = { scale = { 0.2 0.2 } position = { 0.5 0.36 } }
+	}
+}
+
+EUN = { # European Union: twelve gold stars on blue
+	pattern = "pattern_solid.tga"
+	color1 = "azure"
+
+	colored_emblem = {
+		texture = "ce_star_05.dds"
+		color1 = "yellow"
+		color2 = "yellow"
+		instance = { scale = { 0.12 0.12 } position = { 0.500 0.167 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.611 0.212 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.692 0.334 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.722 0.500 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.692 0.666 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.611 0.788 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.500 0.833 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.389 0.788 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.308 0.666 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.278 0.500 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.308 0.333 } }
+		instance = { scale = { 0.12 0.12 } position = { 0.389 0.212 } }
+	}
+}
+
+UNA = { # North American Union: a north star over sky and land
+	pattern = "pattern_solid.tga"
+	color1 = "blue"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = "white"
+		color2 = "white"
+		instance = { scale = { 1.0 0.54 } position = { 0.5 0.73 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = "green"
+		color2 = "green"
+		instance = { scale = { 1.0 0.46 } position = { 0.5 0.77 } }
+	}
+
+	colored_emblem = {
+		texture = "ce_star_08.dds"
+		color1 = "white"
+		color2 = "white"
+		instance = { scale = { 0.3 0.3 } position = { 0.2 0.26 } }
+	}
+}
+
+UNE = { # United Earth: seven interlocking rings, after the International Flag of Planet Earth
+	pattern = "pattern_solid.tga"
+	color1 = "medium_blue"
+
+	colored_emblem = {
+		texture = "ce_frame_circle_outline.dds"
+		color1 = "white"
+		color2 = "white"
+		instance = { scale = { 0.4 0.4 } position = { 0.500 0.500 } }
+		instance = { scale = { 0.4 0.4 } position = { 0.500 0.300 } }
+		instance = { scale = { 0.4 0.4 } position = { 0.385 0.400 } }
+		instance = { scale = { 0.4 0.4 } position = { 0.385 0.600 } }
+		instance = { scale = { 0.4 0.4 } position = { 0.500 0.700 } }
+		instance = { scale = { 0.4 0.4 } position = { 0.615 0.600 } }
+		instance = { scale = { 0.4 0.4 } position = { 0.615 0.400 } }
+	}
+}
+
+DAR = { # Dar-Al-Islam: an upturned crescent holding a star, white on green
+	pattern = "pattern_solid.tga"
+	color1 = "green_dark"
+
+	colored_emblem = {
+		texture = "ce_crescent.dds"
+		color1 = "white"
+		color2 = "white"
+		instance = { scale = { 0.75 0.75 } position = { 0.5 0.55 } rotation = -90 }
+	}
+
+	colored_emblem = {
+		texture = "ce_star_05.dds"
+		color1 = "white"
+		color2 = "white"
+		instance = { scale = { 0.2 0.2 } position = { 0.5 0.4 } }
+	}
+}

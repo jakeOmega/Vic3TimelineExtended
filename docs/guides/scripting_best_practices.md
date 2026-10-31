@@ -3851,6 +3851,8 @@ The keys still resolve at runtime: **all `te_*_l_english.yml` files in `localiza
 
 **Don't try to "fix" this** by renaming the file, registering the keys, or adding a fake script reference. The placement is benign. If the categorizer's misclassification is itself confusing — e.g. a code reviewer flags "why are the political_lobby `_name` keys in te_unused?" — leave a comment on the keys or call it out in the relevant design doc rather than relocating them.
 
+`organize_loc.py` does recognize some conventions structurally, through its `find_*_keys` functions (company `_desc` keys, journal-entry suites, a country tag's `TAG` and `TAG_ADJ` for every entry in `common/country_definitions/`). A convention with a fixed shape is worth one more finder there; one-off keys are not.
+
 Caveat: if `organize_loc.py` ever changes to *delete* unused keys instead of relocating them, this convention breaks. Today (2026-05) it relocates, and there's no plan to change that. If the runbook for `organize_loc.py` gains a deletion mode in the future, engine-convention keys need an explicit script reference (e.g. a comment block with `# referenced-by-engine: lobby_<id>_name` that the categorizer learns to recognize, similar to the existing `POWER_BLOC_UNLOCKS` / `UN_BUTTON_EFFECTS` rules).
 
 ### Law enactment preview: text in `on_enact`, work in `on_activate`
@@ -3933,6 +3935,10 @@ dst_path.write_bytes(cleaned)
 ```
 
 Verify post-write with `python3 -c "data=open(p,'rb').read(); ...; positions=[]; ..."` (find every BOM and check the only position is 0). The engine *will* load files with mid-content BOMs and `POST /reload` won't error, so this gotcha hides — explicitly scan for it.
+
+## A New Country Tag Needs a Flag, or the Engine Draws a Random One
+
+A tag defined in `common/country_definitions/` with no coat of arms of the same name and no `common/flag_definitions/` entry gets a procedurally random flag, with no log line. The mod's eight new formables flew random flags this way until their coats of arms were added (`common/coat_of_arms/coat_of_arms/te_formable_countries.txt`). Build a flag from vanilla patterns and colored emblems: an emblem's `color1` fills its body and `color2` its details (a lion's claws, an elephant's tusks, a ship's sails), a `ce_rhombus.dds` at `position = { 0 0.5 }` is a hoist triangle (vanilla Cuba), and a coat of arms can refer to its own colors (`color1 = color2`). `texture_reference_audit` fails on a texture name that doesn't exist. Avoid a key vanilla already uses as a coat of arms even for an unused tag (`MAC` is Manchester's). A releasable can name `provinces = { x… }` in `common/country_creation/` to take only part of a state; check that each province is where the city is, since a hub's loc name can sit far from its province (New York's "New York" city hub is on Lake Ontario).
 
 ## Formables: `geographic_region = X` Reads `state_regions = {...}` Only
 

@@ -1,0 +1,147 @@
+﻿# The mod's releasable city-states. A releasable that lists provinces instead of
+# states takes only those provinces, splitting the state region, as vanilla's
+# Hamburg, Bremen, Danzig and Krakow do. Each lists the city's own coastal
+# province(s); most are a hub province, which counts five times when the
+# region's resources are shared out between the split states.
+#
+#   Root                  = the country that would give up the land
+#   scope:war_goal_holder = the country pressing a Liberate Country war goal, if any
+#
+# Flags: common/coat_of_arms/coat_of_arms/te_city_states.txt.
+# Definitions: common/country_definitions/te_city_states.txt.
+
+NYC = { # New York: Manhattan to Long Island; Mayor Fernando Wood's 1861 "Free City of Tri-Insula"
+	provinces = { x1BAD55 x377E55 }
+
+	ai_will_do = { always = no }
+}
+
+SFO = { # San Francisco: the Bay; hidden under the Plausible Releasable Nations rule, as vanilla hides Jan Mayen
+	provinces = { x1116AA }
+
+	ai_will_do = { always = no }
+
+	possible = {
+		NOT = { has_game_rule = plausible_releasable_nations }
+	}
+}
+
+SGP = { # Singapore: Malaya's port hub; independent since 1965
+	provinces = { xC00130 }
+
+	ai_will_do = { always = no }
+}
+
+HKG = { # Hong Kong: Shaozhou's port hub, so also the province a treaty port of Shaozhou takes
+	provinces = { xB03161 }
+
+	ai_will_do = { always = no }
+}
+
+SHG = { # Shanghai: Suzhou's city hub; the International Settlement governed itself 1854-1943
+	provinces = { xB01101 }
+
+	ai_will_do = { always = no }
+}
+
+CST = { # Constantinople: Eastern Thrace's city hub and the Bosphorus strait's European end; Allied occupation 1918-23
+	provinces = { xF0A020 }
+
+	ai_will_do = { always = no }
+}
+
+MCU = { # Macau: Guangdong's port hub, Portugal's whole holding at start
+	provinces = { xB031E0 }
+
+	ai_will_do = { always = no }
+}
+
+KUW = { # Kuwait: Basra's port hub; independent in 1961
+	provinces = { x00F060 }
+
+	ai_will_do = { always = no }
+}
+
+FIU = { # Fiume: Croatia's port hub; the Free State of Fiume, 1920-24
+	provinces = { xF021C0 }
+
+	ai_will_do = { always = no }
+}
+
+BOM = { # Bombay: Bombay's city hub; the 1955-56 plan for a separate, centrally run city-state
+	provinces = { xB0D0E0 }
+
+	ai_will_do = { always = no }
+}
+
+GOA = { # Goa: Bombay's port hub, Portugal's whole holding at start; Portuguese India until 1961
+	provinces = { x51F0A0 }
+
+	ai_will_do = { always = no }
+}
+
+PDY = { # Pondicherry: Madras's port hub, France's whole holding at start; capital of French India until 1954
+	provinces = { xABADB1 }
+
+	ai_will_do = { always = no }
+}
+
+ADN = { # Aden: Yemen's city hub, also part of vanilla's Lahej; a British colony 1839-1967
+	provinces = { x319060 }
+
+	ai_will_do = { always = no }
+}
+
+DXB = { # Dubai: the coast between Abu Dhabi and Sharjah; the Maktoums broke from Abu Dhabi in 1833
+	provinces = { x8C6854 }
+
+	ai_will_do = { always = no }
+}
+
+TAN = { # Tangier: Al Rif's city hub; the Tangier International Zone, 1923-56
+	provinces = { x20B0C0 }
+
+	ai_will_do = { always = no }
+}
+
+LAG = { # Lagos: the Yoruba States' port hub; the Kingdom of Lagos, a British colony of its own 1861-1906
+	provinces = { x01E011 }
+
+	ai_will_do = { always = no }
+}
+
+DKR = { # Dakar: Senegal's port hub; the Lebou Republic, independent of Cayor c.1795-1857
+	provinces = { xBCFFB5 }
+
+	ai_will_do = { always = no }
+}
+
+DJI = { # Djibouti: Eritrea's port hub; French Somaliland, independent in 1977
+	provinces = { x40E050 }
+
+	ai_will_do = { always = no }
+}
+
+OCL = { # Calabar: the Niger Delta's city hub; the Efik trading towns of Old Calabar
+	provinces = { x255D8A }
+
+	ai_will_do = { always = no }
+}
+
+GYE = { # Guayaquil: Ecuador's farm hub; the Free Province of Guayaquil, 1820-22
+	provinces = { x5A704F }
+
+	ai_will_do = { always = no }
+}
+
+CTG = { # Cartagena: Antioquia's farm hub; the Free State of Cartagena, 1811-15
+	provinces = { x4E89E7 }
+
+	ai_will_do = { always = no }
+}
+
+BUE = { # Buenos Aires: Buenos Aires's city hub; the State of Buenos Aires seceded 1852-61
+	provinces = { x365A5B }
+
+	ai_will_do = { always = no }
+}
