@@ -240,7 +240,9 @@ sr_fleet_embark_sgui = {
 # world there: at war with its holder, or free); 6c: then Interdict (a world
 # there of a country at peace with us, not our ally; its price is in the
 # tooltip when that is the next step). At Earth (lunar colonization § 8.1),
-# Station and Close in on a lunar world alone, with their own tooltip.
+# Station and Close in on a lunar world alone, with their own tooltip. The
+# panel sets a posture with sr_fleet_set_posture_sgui's four buttons (UI pass
+# design § 7); the step stays for the console.
 sr_fleet_posture_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -285,7 +287,9 @@ sr_fleet_posture_sgui = {
 
 # The world it closes in on: the next hostile world at its location; while it
 # interdicts (6c), the next world it may interdict, a new country's at the
-# interdiction's price.
+# interdiction's price. The panel's target button opens the target popup (UI
+# pass design § 7, te_popup sr_ftarget_<n>) and reads only this is_valid, for
+# its greyed state and reason; the step stays for the console.
 sr_fleet_target_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -316,6 +320,164 @@ sr_fleet_target_sgui = {
 		}
 		hidden_effect = {
 			sr_fl_by_op = { DO = step_target }
+		}
+	}
+}
+
+# The posture buttons (UI pass design § 7): scope:op the slot, scope:pick the
+# posture (1 Station, 2 Stand off, 3 Close in, 4 Interdict), set at once with
+# what the step does on the way (sr_fl_set_posture_at). Each is valid where the
+# step would land on it, each rule its own line: never Stand off or Interdict
+# at Earth (lunar colonization §§ 8.1, 8.3), Close in on a hostile world here
+# (at Earth, a lunar one), Interdict on a world here of a country at peace with
+# us and not our ally.
+sr_fleet_set_posture_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_new_posture_tt
+			NOT = { sr_fl_op_check = { TEST = pick_is_posture } }
+		}
+		trigger_if = {
+			limit = { scope:pick = 2 }
+			custom_tooltip = {
+				text = sr_fl_req_standoff_not_earth_tt
+				NOT = { sr_fl_op_check = { TEST = at_earth } }
+			}
+		}
+		trigger_if = {
+			limit = { scope:pick = 3 }
+			custom_tooltip = {
+				text = sr_fl_req_hostile_world_tt
+				sr_fl_op_check = { TEST = has_hostile_world }
+			}
+		}
+		trigger_if = {
+			limit = { scope:pick = 4 }
+			custom_tooltip = {
+				text = sr_fl_req_interdict_not_earth_tt
+				NOT = { sr_fl_op_check = { TEST = at_earth } }
+			}
+			custom_tooltip = {
+				text = sr_fl_req_interdict_world_tt
+				sr_fl_op_check = { TEST = has_interdict_world }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:pick = 1 }
+			if = {
+				limit = { sr_fl_op_check = { TEST = at_earth } }
+				custom_tooltip = sr_fl_set_posture_1_earth_tt
+			}
+			else = {
+				custom_tooltip = sr_fl_set_posture_1_tt
+			}
+		}
+		else_if = {
+			limit = { scope:pick = 2 }
+			custom_tooltip = sr_fl_set_posture_2_tt
+		}
+		else_if = {
+			limit = { scope:pick = 3 }
+			if = {
+				limit = { sr_fl_op_check = { TEST = at_earth } }
+				custom_tooltip = sr_fl_set_posture_3_earth_tt
+			}
+			else = {
+				custom_tooltip = sr_fl_set_posture_3_tt
+			}
+			if = {
+				limit = { sr_fl_op_check = { TEST = closes_on_free } }
+				custom_tooltip = sr_fl_free_price_tt
+			}
+		}
+		else = {
+			custom_tooltip = sr_fl_set_posture_4_tt
+			custom_tooltip = sr_fl_interdict_price_tt
+		}
+		hidden_effect = {
+			sr_fl_by_op = { DO = set_posture }
+		}
+	}
+}
+
+# The target popup's Target (UI pass design § 7): scope:op the slot,
+# scope:pick a world's index (gen_solar_sites.SITES). Valid for a world at the
+# fleet's location that its posture may take: interdicting, one it may
+# interdict; else one it may close in on, as the step's rule.
+sr_fleet_set_target_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_world_here_tt
+			sr_fl_op_check = { TEST = pick_world_here }
+		}
+		trigger_if = {
+			limit = { sr_fl_op_check = { TEST = interdicting } }
+			custom_tooltip = {
+				text = sr_fl_req_pick_interdictable_tt
+				sr_fl_pick_interdictable = yes
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_fl_req_pick_hostile_tt
+				sr_fl_pick_hostile = yes
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { sr_fl_op_check = { TEST = interdicting } }
+			custom_tooltip = sr_fl_set_icpt_target_tt
+			custom_tooltip = sr_fl_interdict_price_tt
+		}
+		else = {
+			custom_tooltip = sr_fl_set_target_tt
+			if = {
+				limit = {
+					sr_fl_op_check = { TEST = closing_in }
+					sr_fl_pick_free = yes
+				}
+				custom_tooltip = sr_fl_free_price_tt
+			}
+		}
+		hidden_effect = {
+			sr_fl_by_op = { DO = set_target }
 		}
 	}
 }

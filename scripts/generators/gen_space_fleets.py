@@ -114,7 +114,7 @@ SLOT_LISTS = ("warned_quiet", "warned_loud")
 SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go", "step_pick", "merge",
                 "detach", "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
                 "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive",
-                "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in", "set_pick")
+                "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in", "set_pick", "set_posture", "set_target")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
 # per world closing in; kf (6d) is the ground-to-orbit batteries' kinetic fire.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
@@ -539,6 +539,20 @@ def render_slot_triggers(n: int) -> list[str]:
             *[f"\t\tAND = {{ var:{var(n, 'target')} = {w.index} sr_site_interdict_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
             "\t}", "}",
             f"{var(n, 'interdicting')} = {{ {var(n, 'posture_value')} = 4 }}",
+            f"{var(n, 'closing_in')} = {{ {var(n, 'posture_value')} = 3 }}",
+            "# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.",
+            f"{var(n, 'pick_is_posture')} = {{",
+            "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {p} {var(n, 'posture_value')} = {p} }}" for p in POSTURES],
+            "\t}",
+            "}",
+            "# The target popup's pick (scope:pick, a world's index) is a world where it is.",
+            f"{var(n, 'pick_world_here')} = {{",
+            f"\thas_variable = {loc}",
+            "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {w.index} var:{loc} = {CODE[w.location]} }}" for w in gss.SITES],
+            "\t}",
+            "}",
             "# At Earth, closing in on a lunar world (the AI's offence leaves it there).",
             f"{var(n, 'closing_at_earth')} = {{ {var(n, 'at_earth')} = yes {var(n, 'posture_value')} = 3 }}",
             "# The target button: interdicting, the worlds it may interdict; else the",
@@ -629,6 +643,19 @@ def render_triggers() -> str:
             "sr_fl_any_bound = {", "\tOR = {"]
     out += [f"\t\tAND = {{ has_variable = {var(n, 'dest')} var:{var(n, 'dest')} = $CODE$ }}" for n in range(1, SLOTS + 1)]
     out += ["\t}", "}",
+            "", "# The target popup's pick (scope:pick, a world's index): a world we may close",
+            "# in on (sr_site_hostile_target), interdict (sr_site_interdict_target; never",
+            "# at Earth, lunar colonization § 8.3), and a free colony.",
+            "sr_fl_pick_hostile = {", "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {w.index} sr_site_hostile_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
+            "\t}", "}",
+            "sr_fl_pick_interdictable = {", "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {w.index} sr_site_interdict_target = {{ KEY = {w.key} }} }}"
+              for w in gss.SITES if w.location != "earth"],
+            "\t}", "}",
+            "sr_fl_pick_free = {", "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {w.index} has_global_variable = sr_site_free_{w.key} }}" for w in gss.SITES],
+            "\t}", "}",
             "", "# The scripted GUIs' slot (scope:op) passes the slot's TEST (exists, can_go, ...).",
             "sr_fl_op_check = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:op = {n} sr_fl_{n}_$TEST$ = yes }}" for n in range(1, SLOTS + 1)]
@@ -1090,6 +1117,23 @@ def render_combat() -> list[str]:
             "\t}",
             "\telse = {",
             "\t\tsr_fl_step_hostile_target_at = { N = $N$ }",
+            "\t}",
+            "}", "",
+            "# The target popup's choice (UI pass design § 7; sr_fleet_set_target_sgui): the",
+            "# world whose index is scope:pick, then the step's charge: interdicting, the",
+            "# interdiction's price when its holder is a new one; closing in, a free",
+            "# colony's. The scripted GUI holds the pick to the step's rule.",
+            "sr_fl_set_target_at = {"]
+    out += _chain([(f"scope:pick = {w.index}", [f"set_variable = {{ name = sr_fl_$N$_target value = {w.index} }}"])
+                   for w in gss.SITES])
+    out += ["\tif = {",
+            "\t\tlimit = { sr_fl_$N$_posture_value = 4 }",
+            "\t\tsr_fl_charge_icpt_at = { N = $N$ }",
+            "\t\tsr_icpt_rebuild = yes",
+            "\t}",
+            "\telse_if = {",
+            "\t\tlimit = { sr_fl_$N$_posture_value = 3 }",
+            "\t\tsr_fl_charge_free_at = { N = $N$ }",
             "\t}",
             "}", ""]
     out += _step_target("sr_fl_step_hostile_target_at", "sr_site_hostile_target",
@@ -1587,7 +1631,8 @@ def render_display() -> str:
            "#   sr_disp_fl_<n>_why          why it can't leave this month, whatever the leg (the",
            "#                               destination popup's note): 0 it may, 1 refitting, 2",
            "#                               below the minimum strength, 3 Earth's launches barred",
-           "#   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)"]
+           "#   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)",
+           "#   sr_disp_fl_<n>_target       its target world's index, 0 none (the target popup's Targeted)"]
     for n in range(1, SLOTS + 1):
         out += [f"sr_disp_fl_{n} = {{",
                 "\tvalue = 0",
@@ -1620,6 +1665,10 @@ def render_display() -> str:
                 f"sr_disp_fl_{n}_pick = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = sr_fl_dest_pick_{n} }} value = var:sr_fl_dest_pick_{n} }}",
+                "}",
+                f"sr_disp_fl_{n}_target = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = {var(n, 'target')} }} value = var:{var(n, 'target')} }}",
                 "}"]
         out += [f"sr_disp_fl_{n}_combat = {{",
                 "\tvalue = 0",
@@ -1941,13 +1990,22 @@ def _fleet_row(n: int) -> list[str]:
     # 6b: posture, target, seize or destroy; at Earth, where everything else is
     # stationed, only while a lunar world may be closed in on (lunar colonization § 8.1).
     out += _override("fl_combat_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_combat", 1)}]"')
-    out += _button("fl_posture_button", "sr_fleet_posture_sgui", n)
+    # The posture buttons (UI pass design § 7): each sets its posture
+    # (sr_fleet_set_posture_sgui, scope:pick the posture), greyed with the
+    # reason where the step wouldn't land on it; the one in force is lit.
     for p_code in POSTURES:
-        out += _override(f"fl_posture_{p_code}_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_posture", p_code)}]"')
-    # The target button's hover is what we know of the target (sr_fl_<n>_target_intel),
-    # after the scripted GUI's IsValidTooltip, as the destination button's.
+        held = _eq(f"sr_disp_fl_{n}_posture", p_code)
+        out += _override(f"fl_posture_{p_code}_choice", f'visible = "[Not( {held} )]"')
+        out += _override(f"fl_posture_{p_code}_selected", f'visible = "[{held}]"')
+        out += _override(f"fl_posture_{p_code}_button",
+                         f'enabled = "{_pick_call("sr_fleet_set_posture_sgui", "IsValid", n, p_code)}"',
+                         f'onclick = "{_pick_call("sr_fleet_set_posture_sgui", "Execute", n, p_code)}"',
+                         f'tooltip = "{_pick_reasoned("sr_fleet_set_posture_sgui", n, p_code)}"')
+    # The target button opens the slot's target popup (te_popup sr_ftarget_<n>).
+    # Its hover is what we know of the target (sr_fl_<n>_target_intel), after
+    # sr_fleet_target_sgui's IsValidTooltip, as the destination button's.
     out += _override("fl_target_button", f'enabled = "{_op("sr_fleet_target_sgui", "IsValid", n)}"',
-                     f'onclick = "{_op("sr_fleet_target_sgui", "Execute", n)}"',
+                     f"onclick = \"[GetVariableSystem.Set('te_popup', '{_popup_key('ftarget', n)}')]\"",
                      f'tooltip = "je_space_race_widget_fl_{n}_target_tt"')
     out += _override("fl_target", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_target_name')]\"")
     out += _button("fl_destroy_button", "sr_fleet_destroy_sgui", n)
@@ -2035,6 +2093,47 @@ def _dest_slot(n: int) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _ftarget_row(n: int, w: gss.Site) -> list[str]:
+    """Slot n's row for the world w in its target popup (UI pass design § 7):
+    shown while the fleet is at w's location; the world, its holder (as Solar
+    System shows it), and Target, greyed with the reason where the fleet's
+    posture can't take it; the fleet's target reads Targeted."""
+    k = w.key
+    disp, target = f"sr_disp_site_{k}", f"sr_disp_fl_{n}_target"
+    out = ["\t\t\t\tte_sr_ftarget_row = {"]
+    rows = _override("fr_visible", f'visible = "[{_eq(var(n, "loc_value"), CODE[w.location])}]"')
+    rows += _override("fr_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{w.kind}.dds"')
+    rows += _override("fr_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_ss_site_tt_{k}"')
+    rows += _override("fr_ours_visible", f'visible = "[{_eq(disp, 1)}]"')
+    rows += _override("fr_other_visible", f'visible = "[{_eq(disp, 2)}]"')
+    rows += _override("fr_context", f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_{k}').GetState]\"")
+    rows += _override("fr_unknown_visible", f'visible = "[{_eq(disp, 3)}]"')
+    rows += _override("fr_unclaimed_visible", f'visible = "[{_eq(disp, 0)}]"')
+    rows += _override("fr_free_visible", f'visible = "[{_eq(disp, 4)}]"')
+    rows += _override("fr_occupied_visible", f'visible = "[{_eq(disp, 5)}]"')
+    rows += _override("fr_ruined_visible", f'visible = "[{_eq(disp, 6)}]"')
+    rows += _pick_button("fr_button", "sr_fleet_set_target_sgui", n, w.index)
+    rows += _override("fr_target_visible", f'visible = "[Not( {_eq(target, w.index)} )]"')
+    rows += _override("fr_targeted_visible", f'visible = "[{_eq(target, w.index)}]"')
+    out += ["\t\t" + line for line in rows]
+    return out + ["\t\t\t\t}"]
+
+
+def _ftarget_slot(n: int) -> list[str]:
+    """Slot n's body in the target popup: shown on te_popup sr_ftarget_<n>;
+    while the fleet is at a location, the worlds there; else one line."""
+    here = _eq(f"sr_disp_fl_{n}", 1)
+    out = ["\t\tte_sr_ftarget_slot = {"]
+    out += _override("ft_visible", f"visible = \"[GetVariableSystem.HasValue('te_popup', '{_popup_key('ftarget', n)}')]\"")
+    out += _override("ft_here_visible", f'visible = "[{here}]"')
+    out += ['\t\t\tblockoverride "ft_rows" {']
+    for w in gss.panel_order():
+        out += _ftarget_row(n, w)
+    out += ["\t\t\t}"]
+    out += _override("ft_gone_visible", f'visible = "[Not( {here} )]"')
+    return out + ["\t\t}"]
+
+
 def render_gui() -> str:
     out = [HEADER.rstrip("\n"),
            "### Solar System Colonization's Fleets and Locations rows, from",
@@ -2070,6 +2169,17 @@ def render_gui() -> str:
             "\t\tignoreinvisible = yes"]
     for n in range(1, SLOTS + 1):
         out += [""] + _dest_slot(n)
+    out += ["\t}", "",
+            "\t### The target popup's slots (UI pass design § 7; te_sr_ftarget_popup in",
+            "\t### space_race_widget.gui, te_popup sr_ftarget_<n>): one body a slot, each",
+            "\t### a row per world (Solar System's order), the worlds at the fleet's",
+            "\t### location shown, passing its slot and the world's index to",
+            "\t### sr_fleet_set_target_sgui (scope:op, scope:pick).",
+            "\ttype te_sr_ftarget_popup_body = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes"]
+    for n in range(1, SLOTS + 1):
+        out += [""] + _ftarget_slot(n)
     out += ["\t}", "}"]
     return "\n".join(out) + "\n"
 

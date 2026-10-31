@@ -430,6 +430,62 @@ sr_fl_1_target_interdictable = {
 	}
 }
 sr_fl_1_interdicting = { sr_fl_1_posture_value = 4 }
+sr_fl_1_closing_in = { sr_fl_1_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_1_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_1_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_1_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_1_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_1_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_1_pick_world_here = {
+	has_variable = sr_fl_1_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_1_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_1_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_1_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_1_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_1_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_1_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_1_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_1_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_1_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_1_closing_at_earth = { sr_fl_1_at_earth = yes sr_fl_1_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -1079,6 +1135,62 @@ sr_fl_2_target_interdictable = {
 	}
 }
 sr_fl_2_interdicting = { sr_fl_2_posture_value = 4 }
+sr_fl_2_closing_in = { sr_fl_2_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_2_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_2_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_2_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_2_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_2_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_2_pick_world_here = {
+	has_variable = sr_fl_2_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_2_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_2_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_2_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_2_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_2_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_2_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_2_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_2_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_2_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_2_closing_at_earth = { sr_fl_2_at_earth = yes sr_fl_2_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -1728,6 +1840,62 @@ sr_fl_3_target_interdictable = {
 	}
 }
 sr_fl_3_interdicting = { sr_fl_3_posture_value = 4 }
+sr_fl_3_closing_in = { sr_fl_3_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_3_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_3_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_3_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_3_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_3_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_3_pick_world_here = {
+	has_variable = sr_fl_3_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_3_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_3_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_3_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_3_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_3_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_3_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_3_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_3_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_3_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_3_closing_at_earth = { sr_fl_3_at_earth = yes sr_fl_3_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -2377,6 +2545,62 @@ sr_fl_4_target_interdictable = {
 	}
 }
 sr_fl_4_interdicting = { sr_fl_4_posture_value = 4 }
+sr_fl_4_closing_in = { sr_fl_4_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_4_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_4_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_4_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_4_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_4_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_4_pick_world_here = {
+	has_variable = sr_fl_4_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_4_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_4_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_4_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_4_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_4_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_4_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_4_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_4_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_4_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_4_closing_at_earth = { sr_fl_4_at_earth = yes sr_fl_4_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -3026,6 +3250,62 @@ sr_fl_5_target_interdictable = {
 	}
 }
 sr_fl_5_interdicting = { sr_fl_5_posture_value = 4 }
+sr_fl_5_closing_in = { sr_fl_5_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_5_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_5_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_5_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_5_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_5_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_5_pick_world_here = {
+	has_variable = sr_fl_5_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_5_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_5_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_5_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_5_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_5_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_5_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_5_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_5_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_5_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_5_closing_at_earth = { sr_fl_5_at_earth = yes sr_fl_5_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -3675,6 +3955,62 @@ sr_fl_6_target_interdictable = {
 	}
 }
 sr_fl_6_interdicting = { sr_fl_6_posture_value = 4 }
+sr_fl_6_closing_in = { sr_fl_6_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_6_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_6_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_6_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_6_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_6_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_6_pick_world_here = {
+	has_variable = sr_fl_6_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_6_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_6_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_6_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_6_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_6_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_6_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_6_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_6_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_6_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_6_closing_at_earth = { sr_fl_6_at_earth = yes sr_fl_6_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -4324,6 +4660,62 @@ sr_fl_7_target_interdictable = {
 	}
 }
 sr_fl_7_interdicting = { sr_fl_7_posture_value = 4 }
+sr_fl_7_closing_in = { sr_fl_7_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_7_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_7_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_7_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_7_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_7_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_7_pick_world_here = {
+	has_variable = sr_fl_7_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_7_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_7_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_7_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_7_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_7_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_7_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_7_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_7_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_7_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_7_closing_at_earth = { sr_fl_7_at_earth = yes sr_fl_7_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -4973,6 +5365,62 @@ sr_fl_8_target_interdictable = {
 	}
 }
 sr_fl_8_interdicting = { sr_fl_8_posture_value = 4 }
+sr_fl_8_closing_in = { sr_fl_8_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_8_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_8_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_8_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_8_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_8_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_8_pick_world_here = {
+	has_variable = sr_fl_8_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_8_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_8_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_8_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_8_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_8_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_8_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_8_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_8_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_8_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_8_closing_at_earth = { sr_fl_8_at_earth = yes sr_fl_8_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -5622,6 +6070,62 @@ sr_fl_9_target_interdictable = {
 	}
 }
 sr_fl_9_interdicting = { sr_fl_9_posture_value = 4 }
+sr_fl_9_closing_in = { sr_fl_9_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_9_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_9_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_9_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_9_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_9_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_9_pick_world_here = {
+	has_variable = sr_fl_9_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_9_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_9_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_9_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_9_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_9_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_9_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_9_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_9_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_9_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_9_closing_at_earth = { sr_fl_9_at_earth = yes sr_fl_9_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -6167,6 +6671,136 @@ sr_fl_any_bound = {
 		AND = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = $CODE$ }
 		AND = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = $CODE$ }
 		AND = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = $CODE$ }
+	}
+}
+
+# The target popup's pick (scope:pick, a world's index): a world we may close
+# in on (sr_site_hostile_target), interdict (sr_site_interdict_target; never
+# at Earth, lunar colonization § 8.3), and a free colony.
+sr_fl_pick_hostile = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_hostile_target = { KEY = valles_marineris } }
+		AND = { scope:pick = 2 sr_site_hostile_target = { KEY = olympus_mons } }
+		AND = { scope:pick = 3 sr_site_hostile_target = { KEY = hellas_planitia } }
+		AND = { scope:pick = 4 sr_site_hostile_target = { KEY = utopia_planitia } }
+		AND = { scope:pick = 5 sr_site_hostile_target = { KEY = arcadia_planitia } }
+		AND = { scope:pick = 6 sr_site_hostile_target = { KEY = ceres } }
+		AND = { scope:pick = 7 sr_site_hostile_target = { KEY = vesta } }
+		AND = { scope:pick = 8 sr_site_hostile_target = { KEY = psyche } }
+		AND = { scope:pick = 9 sr_site_hostile_target = { KEY = pallas } }
+		AND = { scope:pick = 10 sr_site_hostile_target = { KEY = hygiea } }
+		AND = { scope:pick = 11 sr_site_hostile_target = { KEY = io } }
+		AND = { scope:pick = 12 sr_site_hostile_target = { KEY = europa } }
+		AND = { scope:pick = 13 sr_site_hostile_target = { KEY = ganymede } }
+		AND = { scope:pick = 14 sr_site_hostile_target = { KEY = callisto } }
+		AND = { scope:pick = 15 sr_site_hostile_target = { KEY = himalia } }
+		AND = { scope:pick = 16 sr_site_hostile_target = { KEY = amalthea } }
+		AND = { scope:pick = 17 sr_site_hostile_target = { KEY = venus } }
+		AND = { scope:pick = 18 sr_site_hostile_target = { KEY = mercury } }
+		AND = { scope:pick = 19 sr_site_hostile_target = { KEY = titan } }
+		AND = { scope:pick = 20 sr_site_hostile_target = { KEY = enceladus } }
+		AND = { scope:pick = 21 sr_site_hostile_target = { KEY = rhea } }
+		AND = { scope:pick = 22 sr_site_hostile_target = { KEY = mimas } }
+		AND = { scope:pick = 23 sr_site_hostile_target = { KEY = iapetus } }
+		AND = { scope:pick = 24 sr_site_hostile_target = { KEY = titania } }
+		AND = { scope:pick = 25 sr_site_hostile_target = { KEY = oberon } }
+		AND = { scope:pick = 26 sr_site_hostile_target = { KEY = miranda } }
+		AND = { scope:pick = 27 sr_site_hostile_target = { KEY = ariel } }
+		AND = { scope:pick = 28 sr_site_hostile_target = { KEY = triton } }
+		AND = { scope:pick = 29 sr_site_hostile_target = { KEY = proteus } }
+		AND = { scope:pick = 30 sr_site_hostile_target = { KEY = pluto } }
+		AND = { scope:pick = 31 sr_site_hostile_target = { KEY = eris } }
+		AND = { scope:pick = 32 sr_site_hostile_target = { KEY = makemake } }
+		AND = { scope:pick = 33 sr_site_hostile_target = { KEY = haumea } }
+		AND = { scope:pick = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { scope:pick = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { scope:pick = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { scope:pick = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { scope:pick = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { scope:pick = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { scope:pick = 40 sr_site_hostile_target = { KEY = imbrium } }
+	}
+}
+sr_fl_pick_interdictable = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { scope:pick = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { scope:pick = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { scope:pick = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { scope:pick = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { scope:pick = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { scope:pick = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { scope:pick = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { scope:pick = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { scope:pick = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { scope:pick = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { scope:pick = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { scope:pick = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { scope:pick = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { scope:pick = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { scope:pick = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { scope:pick = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { scope:pick = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { scope:pick = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { scope:pick = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { scope:pick = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { scope:pick = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { scope:pick = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { scope:pick = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { scope:pick = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { scope:pick = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { scope:pick = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { scope:pick = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { scope:pick = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { scope:pick = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { scope:pick = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { scope:pick = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { scope:pick = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { scope:pick = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_pick_free = {
+	OR = {
+		AND = { scope:pick = 1 has_global_variable = sr_site_free_valles_marineris }
+		AND = { scope:pick = 2 has_global_variable = sr_site_free_olympus_mons }
+		AND = { scope:pick = 3 has_global_variable = sr_site_free_hellas_planitia }
+		AND = { scope:pick = 4 has_global_variable = sr_site_free_utopia_planitia }
+		AND = { scope:pick = 5 has_global_variable = sr_site_free_arcadia_planitia }
+		AND = { scope:pick = 6 has_global_variable = sr_site_free_ceres }
+		AND = { scope:pick = 7 has_global_variable = sr_site_free_vesta }
+		AND = { scope:pick = 8 has_global_variable = sr_site_free_psyche }
+		AND = { scope:pick = 9 has_global_variable = sr_site_free_pallas }
+		AND = { scope:pick = 10 has_global_variable = sr_site_free_hygiea }
+		AND = { scope:pick = 11 has_global_variable = sr_site_free_io }
+		AND = { scope:pick = 12 has_global_variable = sr_site_free_europa }
+		AND = { scope:pick = 13 has_global_variable = sr_site_free_ganymede }
+		AND = { scope:pick = 14 has_global_variable = sr_site_free_callisto }
+		AND = { scope:pick = 15 has_global_variable = sr_site_free_himalia }
+		AND = { scope:pick = 16 has_global_variable = sr_site_free_amalthea }
+		AND = { scope:pick = 17 has_global_variable = sr_site_free_venus }
+		AND = { scope:pick = 18 has_global_variable = sr_site_free_mercury }
+		AND = { scope:pick = 19 has_global_variable = sr_site_free_titan }
+		AND = { scope:pick = 20 has_global_variable = sr_site_free_enceladus }
+		AND = { scope:pick = 21 has_global_variable = sr_site_free_rhea }
+		AND = { scope:pick = 22 has_global_variable = sr_site_free_mimas }
+		AND = { scope:pick = 23 has_global_variable = sr_site_free_iapetus }
+		AND = { scope:pick = 24 has_global_variable = sr_site_free_titania }
+		AND = { scope:pick = 25 has_global_variable = sr_site_free_oberon }
+		AND = { scope:pick = 26 has_global_variable = sr_site_free_miranda }
+		AND = { scope:pick = 27 has_global_variable = sr_site_free_ariel }
+		AND = { scope:pick = 28 has_global_variable = sr_site_free_triton }
+		AND = { scope:pick = 29 has_global_variable = sr_site_free_proteus }
+		AND = { scope:pick = 30 has_global_variable = sr_site_free_pluto }
+		AND = { scope:pick = 31 has_global_variable = sr_site_free_eris }
+		AND = { scope:pick = 32 has_global_variable = sr_site_free_makemake }
+		AND = { scope:pick = 33 has_global_variable = sr_site_free_haumea }
+		AND = { scope:pick = 34 has_global_variable = sr_site_free_sedna }
+		AND = { scope:pick = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { scope:pick = 36 has_global_variable = sr_site_free_peary }
+		AND = { scope:pick = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { scope:pick = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { scope:pick = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { scope:pick = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 

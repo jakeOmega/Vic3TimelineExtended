@@ -1175,6 +1175,62 @@ sr_fl_step_posture_at = {
 	sr_icpt_rebuild = yes
 }
 
+# Country scope (sr_fleet_set_posture_sgui, UI pass design § 7): the posture
+# buttons set scope:pick's posture at once, doing what the step's branch that
+# lands on it does: Close in takes the first hostile world here as its target
+# unless its target is one, and begins a free colony's price; Interdict drops
+# Destroy, takes the first world here it may interdict unless its target is
+# one, and begins the interdiction's price; Station and Stand off drop Destroy
+# and the interdiction's record, as leaving Close in or Interdict does. Close
+# in drops that record too, since the step only reaches it from Station or
+# Stand off, where there is none. The scripted GUI holds each pick to the
+# step's rules (Earth's among them), so none lands where the step wouldn't.
+sr_fl_set_posture_at = {
+	if = {
+		limit = { scope:pick = 3 }
+		set_variable = { name = sr_fl_$N$_posture value = 3 }
+		if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = sr_fl_$N$_target }
+					NOT = { sr_fl_$N$_target_hostile = yes }
+				}
+			}
+			sr_fl_step_hostile_target_at = { N = $N$ }
+		}
+		sr_fl_charge_free_at = { N = $N$ }
+	}
+	else_if = {
+		limit = { scope:pick = 4 }
+		set_variable = { name = sr_fl_$N$_posture value = 4 }
+		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+		if = {
+			limit = { NOT = { sr_fl_$N$_target_interdictable = yes } }
+			sr_fl_step_icpt_target_at = { N = $N$ }
+		}
+		sr_fl_charge_icpt_at = { N = $N$ }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				scope:pick = 1
+				scope:pick = 2
+			}
+		}
+		if = {
+			limit = { scope:pick = 1 }
+			set_variable = { name = sr_fl_$N$_posture value = 1 }
+		}
+		else = {
+			set_variable = { name = sr_fl_$N$_posture value = 2 }
+		}
+		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+		if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
+	}
+	sr_icpt_rebuild = yes
+}
+
 sr_fl_toggle_destroy_at = {
 	if = {
 		limit = { has_variable = sr_fl_$N$_destroy }

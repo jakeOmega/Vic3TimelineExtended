@@ -12,6 +12,7 @@
 #                               destination popup's note): 0 it may, 1 refitting, 2
 #                               below the minimum strength, 3 Earth's launches barred
 #   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)
+#   sr_disp_fl_<n>_target       its target world's index, 0 none (the target popup's Targeted)
 sr_disp_fl_1 = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_loc } value = 1 }
@@ -59,6 +60,10 @@ sr_disp_fl_1_why = {
 sr_disp_fl_1_pick = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_dest_pick_1 } value = var:sr_fl_dest_pick_1 }
+}
+sr_disp_fl_1_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_1_target } value = var:sr_fl_1_target }
 }
 sr_disp_fl_1_combat = {
 	value = 0
@@ -120,6 +125,10 @@ sr_disp_fl_2_pick = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_dest_pick_2 } value = var:sr_fl_dest_pick_2 }
 }
+sr_disp_fl_2_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_2_target } value = var:sr_fl_2_target }
+}
 sr_disp_fl_2_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_loc NOT = { var:sr_fl_2_loc = 1 } } value = 1 }
@@ -179,6 +188,10 @@ sr_disp_fl_3_why = {
 sr_disp_fl_3_pick = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_dest_pick_3 } value = var:sr_fl_dest_pick_3 }
+}
+sr_disp_fl_3_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_3_target } value = var:sr_fl_3_target }
 }
 sr_disp_fl_3_combat = {
 	value = 0
@@ -240,6 +253,10 @@ sr_disp_fl_4_pick = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_dest_pick_4 } value = var:sr_fl_dest_pick_4 }
 }
+sr_disp_fl_4_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_4_target } value = var:sr_fl_4_target }
+}
 sr_disp_fl_4_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_loc NOT = { var:sr_fl_4_loc = 1 } } value = 1 }
@@ -299,6 +316,10 @@ sr_disp_fl_5_why = {
 sr_disp_fl_5_pick = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_dest_pick_5 } value = var:sr_fl_dest_pick_5 }
+}
+sr_disp_fl_5_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_5_target } value = var:sr_fl_5_target }
 }
 sr_disp_fl_5_combat = {
 	value = 0
@@ -360,6 +381,10 @@ sr_disp_fl_6_pick = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_dest_pick_6 } value = var:sr_fl_dest_pick_6 }
 }
+sr_disp_fl_6_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_6_target } value = var:sr_fl_6_target }
+}
 sr_disp_fl_6_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_loc NOT = { var:sr_fl_6_loc = 1 } } value = 1 }
@@ -419,6 +444,10 @@ sr_disp_fl_7_why = {
 sr_disp_fl_7_pick = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_dest_pick_7 } value = var:sr_fl_dest_pick_7 }
+}
+sr_disp_fl_7_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_7_target } value = var:sr_fl_7_target }
 }
 sr_disp_fl_7_combat = {
 	value = 0
@@ -480,6 +509,10 @@ sr_disp_fl_8_pick = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_dest_pick_8 } value = var:sr_fl_dest_pick_8 }
 }
+sr_disp_fl_8_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_8_target } value = var:sr_fl_8_target }
+}
 sr_disp_fl_8_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_loc NOT = { var:sr_fl_8_loc = 1 } } value = 1 }
@@ -539,6 +572,10 @@ sr_disp_fl_9_why = {
 sr_disp_fl_9_pick = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_dest_pick_9 } value = var:sr_fl_dest_pick_9 }
+}
+sr_disp_fl_9_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_9_target } value = var:sr_fl_9_target }
 }
 sr_disp_fl_9_combat = {
 	value = 0

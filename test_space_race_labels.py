@@ -316,7 +316,7 @@ def _render(value):
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty"
-             r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|dp_why_\w+|dp_gone)")
+             r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|dp_why_\w+|dp_gone|ft_intro)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -483,8 +483,8 @@ CELLS = {
     "a fleet's landing (te_sr_fleet_row)": (
         ("te_sr_fleet_row", 'block "fl_transit"'),
         r"je_space_race_widget_fl_\d_transit"),
-    "a fleet's posture (te_sr_fleet_row)": (
-        ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_posture_1"'),
+    "a fleet's posture (te_sr_posture_choice, UI pass design § 7)": (
+        ("te_sr_posture_choice", 'block "pc_label"'),
         r"je_space_race_widget_fl_posture_\d"),
     "seize or destroy (te_sr_fleet_row)": (
         ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_seize"'),
@@ -503,6 +503,14 @@ CELLS = {
     "a destination's window, waiting (te_sr_dest_row)": (
         ("te_sr_dest_row", 'block "dr_win_wait"'),
         r"je_space_race_widget_win_wait_\w+"),
+    # The target popup (UI pass design § 7): Solar System's holder words and
+    # Target, and Targeted, in the target row's cells.
+    **{f"a world's holder in the target popup: {word} (te_sr_ftarget_row)": (
+        ("te_sr_ftarget_row", f'text = "je_space_race_widget_ss_{word}"'), f"je_space_race_widget_ss_{word}")
+       for word in ("ours", "unknown", "unclaimed", "free", "occupied", "ruined")},
+    "the target popup's Target and Targeted (te_sr_ftarget_row)": (
+        ("te_sr_ftarget_row", 'text = "je_space_race_widget_ss_target_button"'),
+        r"je_space_race_widget_(ss_target_button|ft_targeted)"),
     "a destination's Choose and Chosen (te_sr_dest_row)": (
         ("te_sr_dest_row", 'text = "je_space_race_widget_dp_choose"'),
         r"je_space_race_widget_dp_(choose|chosen)"),
@@ -567,7 +575,7 @@ CELLS = {
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|powers_header|orbit_header|howc_header"
-                   r"|sc_header|space_fleets_header|locations_header|tp_title|dp_title)")
+                   r"|sc_header|space_fleets_header|locations_header|tp_title|dp_title|ft_title)")
 
 
 # Cells that wrap to a second line on purpose: the overview's state cell, where
@@ -797,6 +805,16 @@ class FigureBudgetTest(unittest.TestCase):
         self.assertEqual(width, int(re.search(r"minimumsize = \{ (\d+) -1 \}", _type_body(gui, "te_sr_dest_slot")).group(1)))
         heads = [int(w) for w in re.findall(r"size = \{ (\d+) 20 \}", _type_body(gui, "te_sr_dest_header_row"))]
         self.assertEqual(heads, cells[:7])
+
+    def test_the_target_popup(self):
+        """Every world's name fits the target row's name cell (UI pass design § 7)."""
+        gui = _read(GUI)
+        box = _textbox_with(_type_body(gui, "te_sr_ftarget_row"), 'block "fr_name"')
+        names = set(re.findall(r'text = "(sr_site_name_\w+)"', _read(FLEET_ROWS)))
+        self.assertEqual(len(names), 40)
+        for key in names:
+            with self.subTest(key=key):
+                self.assertLessEqual(len(_render(_loc(key))) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
 
     def test_the_fleet_names(self):
         """A fleet's where, drive and target are custom loc: their longest option."""
