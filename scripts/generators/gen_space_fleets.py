@@ -978,7 +978,8 @@ def render_location_effects() -> list[str]:
             "\tset_variable = { name = sr_fl_dest_pick_$N$ value = local_var:sr_fl_pick }",
             "}", "",
             "# The destination popup's choice (UI pass design § 4): the location whose code",
-            "# is scope:pick (sr_fleet_set_dest_sgui). The step above stays for the console.",
+            "# is scope:pick (sr_fleet_set_dest_sgui). The step above runs from nowhere since",
+            "# the popups (sr_fleet_pick_sgui's effect): kept for a revert.",
             "sr_fl_set_pick_at = {"]
     out += _chain([(f"scope:pick = {b.code}", [f"set_variable = {{ name = sr_fl_dest_pick_$N$ value = {b.code} }}"])
                    for b in LOCATIONS])

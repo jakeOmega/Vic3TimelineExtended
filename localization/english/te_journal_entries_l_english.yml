@@ -1238,7 +1238,7 @@
  je_space_race_widget_dp_col_where:0 "Location"
  je_space_race_widget_dp_col_window:0 "Window"
  je_space_race_widget_dp_col_window_tt:0 "#header Window#!\nFrom Earth, whether the leg's [concept_sr_launch_window] is open, or the months until it opens. A closed window never stops a fleet: it only raises the leg's propellant. Legs that don't start at Earth show none."
- je_space_race_widget_dp_dv_short_tt:0 "The fleet carries less propellant than this leg needs. Go waits until it refills: at Earth, or at a Spaceport on a site that makes propellant."
+ je_space_race_widget_dp_dv_short_tt:0 "The fleet carries less propellant than this leg needs. Go stays grayed until it carries enough: it refills at Earth, or at a Spaceport on a site that makes propellant, and from Earth a leg needs less as its [concept_sr_launch_window] opens."
  je_space_race_widget_dp_gone:0 "This fleet has left, or is gone."
  je_space_race_widget_dp_title:0 "Fleet Destination"
  je_space_race_widget_dp_why_barred:0 "Earth's launches are barred by a blockade or an occupied launch site: it can choose now and leave once they resume."

@@ -6460,7 +6460,7 @@
  sr_fl_set_posture_3_tt:0 "#v Close in#!: fight the target site's defenses and the fleets that guard it, to seize or destroy it. Without a hostile target, the first hostile site here becomes its target."
  sr_fl_set_posture_4_tt:0 "#v Interdict#!: blockade the target holder's colonies here without a shot, while none of its fleets holds orbit. If the target doesn't fit, it takes the first site here that does."
  sr_fl_set_target_tt:0 "This site becomes the fleet's target: closing in, it attacks it."
- sr_fl_short_tt:0 "The leg can leave this month, and the fleet has the propellant for it"
+ sr_fl_short_tt:0 "The fleet has at least the minimum strength, and carries the propellant the leg needs this month"
  sr_fl_target_free_price_tt:0 "\nWhile the fleet closes in, targeting a free colony costs #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_infamy_cost')|0]#! [concept_infamy] and adds #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_dossier_cost')|0]#! to our hostile acts in space in the UN's record, at once (twice as much for a party to the Convention on the Settlement of Outer Space)."
  sr_fl_target_hostile_tt:0 "The fleet's target is held by a country at war with us, or is free"
  sr_fl_target_intel_none:0 "No site here can be closed in on: none is held by a country at war with us, or free."

@@ -758,8 +758,11 @@ gotcha).
 6. **The posture buttons.** Away from Earth, a fleet's row shows Station, Stand off, Close in and Interdict on their
    own line under its orders, the one in force lit (not greyed). Each other one sets its posture on one click; a
    greyed one's hover gives the reason (no hostile site here; no site of a country at peace with us; never at Earth).
+   Hovering the lit one says what the fleet does in that posture. No hover is cut off or overflows the screen (the
+   longest, Interdict's and Close in's at Earth, are about 490 characters).
 7. **A posture's price is charged once.** Close in on a free colony: 10 infamy and the UN record once; click Station
-   and Close in again on the same site: nothing more. Interdict a country's site: 5 infamy once; Station, then
+   and Close in again on the same site: nothing more. With no target and a free colony the first hostile site here,
+   Close in's hover lists the free colony's price before the click, and the click charges it. Interdict a country's site: 5 infamy once; Station, then
    Interdict the same country: charged again (a new interdiction, as the step did).
 8. **At Earth.** With an enemy's lunar colony, the posture line shows at Earth: Station and Close in can be chosen,
    Stand off and Interdict greyed with "not at Earth". With none, no posture line at Earth.
@@ -769,4 +772,6 @@ gotcha).
    interdiction's. A site the posture can't take is greyed with the reason.
 10. **No stutter.** Opening and closing either popup, and scrolling Fleet Target at Jupiter (six sites), stays smooth:
     the target popup holds 360 rows, 9 slots × 40 worlds, all but a few hidden. Fallback if it stutters: one body per
-    location, the slot read from a country variable.
+    location, the slot read from a country variable. Scroll Space Fleets with nine fleets at locations too: each row
+    now asks four posture buttons' `IsValid` (36 a frame for nine fleets), where the step button asked one. Fallback
+    if that stutters: the four buttons' state from one display value a fleet, set monthly and on each order.
