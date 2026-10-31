@@ -49,6 +49,10 @@ is worth flipping back and forth.
 | Solar system schematic | Wanted eventually, not a priority (§ 12). |
 | Earth alert | Wanted (§ 9). |
 | Order | Quick changes PR first (#1274), then this scoping doc, then the pieces. |
+| Fleet upkeep | On a maintenance line no yard method changes (the owner's idea), spread over six goods: electronic components, wired and wireless telecom gear, software, robotics and chemicals (§ 10). |
+| No Space Command | Fleets can't move without one (§ 10). |
+| Detach | Also into an existing fleet at the same location, so it becomes Transfer and takes in Merge (§ 6). |
+| Colony AI | Plans an Administration from autonomy 25 while heading for 45 or more. Shipped in #1274. |
 
 ## 3. The popup shell (shared)
 
@@ -157,7 +161,7 @@ Colony Fleets is where the target already shows.
 popup's generated rows (`gen_solar_sites.py`). There is one target, not one per
 slot, so this popup needs one body.
 
-## 6. Detach: choose how much of each role
+## 6. Transfer: choose how much of each role, and where it goes
 
 **Today:** `sr_fl_detach` moves half of every role, and half the marines, into
 the lowest empty slot.
@@ -166,25 +170,32 @@ the lowest empty slot.
 - **One row per role** (warships, rapid, siege, carriers, tenders) and marines,
   each with its current strength and five share buttons: none, ¼, ½, ¾, all.
   The default is ½, today's behavior.
-- **A footer:** what the new fleet would carry, and Detach.
+- **Where it goes (owner, 2026-10-31: Detach also into an existing fleet):** a
+  row of buttons above the shares: a new fleet (the lowest empty slot, today's
+  Detach), or each of our other fleets at the same location. With another fleet
+  chosen it is a transfer, and "all" on every row is today's Merge, so the
+  popup replaces both buttons. Merging into a fleet keeps today's merge rules
+  for the drive, the refit and the delta-v and supply shares (`sr_fl_merge`).
+- **A footer:** what each fleet would carry afterwards, and Transfer.
 
 **State:** a typed number can't reach script (only base-game rename popups take
 text, `gui_modding_guide.md:1380`), and a `GetVariableSystem` value can't be
 read back as a number. So the shares are **country variables**,
 `sr_det_share_<role>`, set by a scripted GUI per button (`scope:op` the slot,
-`scope:pick` role × 10 + share). Detach applies them, and opening the popup
+`scope:pick` role × 10 + share). Transfer applies them, and opening the popup
 resets them to ½. They are game state, so a share click is a command, as every
 fleet order already is.
 
-**Script:** `sr_fl_detach` (generated) takes a share per role in place of 0.5,
-for each role's `_<role>` and `_<role>_full`, and for the marines. Refused, with
-the reason in Detach's tooltip (my call): a split that leaves either fleet below
-`sr_fl_minimum_strength` (detaching nothing or everything included), and one that
-leaves marines in a fleet with no room to carry them.
-
-**Open question (owner):** should Detach also take an existing fleet at the
-same location as its target, not only a new slot? That makes it a general
-Transfer and folds Merge into it. It costs one more row of buttons in the popup.
+**Script:** one generated transfer, `sr_fl_transfer = { N M }`, takes a share per
+role in place of 0.5, for each role's `_<role>` and `_<role>_full`, and for the
+marines. M is an empty slot (it then takes N's location, posture and drive, as
+`sr_fl_detach` does) or a fleet at N's location (the shares then follow
+`sr_fl_merge`'s weighting). The target is a fifth `scope:pick` range. All of N
+into another fleet clears N, as Merge does. Refused, with the reason in
+Transfer's tooltip (my call): a transfer that moves nothing, one that leaves N or
+the new fleet below `sr_fl_minimum_strength` (all of N into an existing fleet
+excepted), and one that leaves marines in a fleet with no room to carry them.
+The AI keeps calling `sr_fl_detach` and `sr_fl_merge`, now thin wrappers.
 
 ## 7. Posture and target rows
 
@@ -314,10 +325,14 @@ downsizing to one level after the fleet is built cuts its upkeep in proportion.
 change.** None of Space Command's inputs stays the same across its methods today,
 so this adds one.
 - **The maintenance line:** every yard method carries an identical maintenance
-  input of a good no method otherwise uses, in `unscaled`. Which good is the
-  owner's call; `electronic_components` reads as spare parts.
-- **Upkeep:** `sr_fleet_upkeep_goods` multiplies only that good, at
-  `multiplier = units` as now. Launch Capacity, Advanced Materials and
+  input, in `unscaled`, of six goods no method otherwise uses (owner,
+  2026-10-31): Electronic Components (`electronic_components`), Wired and
+  Wireless Telecommunication Gear (`telephones`, `radios`), Software
+  (`digital_assets`), Robotics (`robotics`) and Chemicals (`fertilizer`). Spread
+  over six goods, one shortage or glut can't make the upkeep very cheap or very
+  dear.
+- **Upkeep:** `sr_fleet_upkeep_goods` multiplies only those six, each by the same
+  k, at `multiplier = units` as now. Launch Capacity, Advanced Materials and
   electricity drop out of upkeep.
 - **What it fixes:** upkeep stops depending on the method, so there's nothing to
   gain by switching. It also stops depending on Space Command's levels, since
@@ -330,16 +345,32 @@ so this adds one.
   under Orbital Shipyards, 1,800 under Fusion Yards, 2,320 under Antimatter Yards
   (Launch Capacity 200, Advanced Materials 4,000, electricity 30). Match **four
   levels of Fusion Yards**, the AI's cap with two colonies (`sr_sc_ai_cap`):
-  7,200 a week a unit, or 90 electronic components at 80. So base **10** a week
-  and k **+900%** a unit. The base, 800 a week, is a new running cost on every
-  Space Command, fleet or not. A fleet of 300 then costs 216,000 a week
-  wherever it is built, as four Fusion levels charge today.
+  7,200 a week a unit. The base, about equal in value across the six at their
+  base prices, is 840 a week:
+
+  | Good | Base a week | Price | Value |
+  |---|---|---|---|
+  | Electronic Components | 2 | 80 | 160 |
+  | Wired Telecommunication Gear | 2 | 70 | 140 |
+  | Wireless Telecommunication Gear | 2 | 80 | 160 |
+  | Software | 1 | 100 | 100 |
+  | Robotics | 2 | 80 | 160 |
+  | Chemicals | 4 | 30 | 120 |
+
+  With k **+900%** a unit, a unit costs 7,560 a week, and a fleet of 300 about
+  227,000, wherever it is built. The base itself is a new running cost on every
+  Space Command, fleet or not. The building's tooltip shows the upkeep as a large
+  percentage on small lines ("+2,700%" for a fleet of 300), so the upkeep's hover
+  in the panel gives the goods a week.
 - **What stays:** a goods line still runs at the building's occupancy, so an
-  understaffed Space Command pays less; and a country with no Space Command
-  still pays nothing (the gap below).
+  understaffed Space Command pays less. A country with no Space Command pays
+  nothing, but its fleets can't move (below).
 - **Engine work:**
   - A mod-defined good's `goods_input_<good>_mult` needs registering
-    (`scripting_best_practices.md:292`).
+    (`scripting_best_practices.md:292`). `electronic_components` and `fertilizer`
+    have theirs (`mod_entity_modifier_types.txt`); `telephones`, `radios`,
+    `digital_assets` and `robotics` don't yet. Validate all six with
+    `/modifier-search` after the reload.
   - No method read and no refresh on a method change.
   - A self-check line compares the line's input with base × (1 + k × units) a
     week after the change.
@@ -367,11 +398,21 @@ so this adds one.
    per method above Orbital Shipyards. A reason to keep the better method, but
    it's a balance change, so it's the owner's call.
 
-**Related gap, for the owner:** the upkeep sits only on Space Command buildings.
-A country that demolishes or downsizes Space Command after building its fleet
-seems to pay little or nothing to keep it. Should a fleet with no Space Command
-to keep it lose strength or readiness, or should upkeep then fall on the Space
-Program building?
+**No Space Command, no departures (owner, 2026-10-31: "disable moving fleets").**
+The upkeep sits on Space Command, so a country that demolishes it after building
+its fleet would keep that fleet for nothing.
+- **The rule:** with no Space Command level in a state it controls
+  (`sr_state_held_by_owner`), a country's fleets can't depart. A new trigger,
+  `sr_sc_operational`, joins every `sr_fl_<n>_may_depart_<loc>`. Downsizing to one
+  level no longer helps either, since the maintenance line is `unscaled`.
+- **What still runs:** fleets in transit finish their leg; fleets fight where they
+  are, change posture, and refit and refill under today's rules (my call: only
+  movement stops, as asked).
+- **Seen by the player:** the destination popup's rows and Go give the reason, and
+  Space Fleets says so once above its rows (style guide rule 6). The AI follows,
+  since it reads the same triggers.
+- **Occupation:** an occupied Space Command's state also stops departures, which
+  matches construction already stopping there (§ 5.1 of the fleets design).
 
 ## 11. Less scrolling: tabs now, a full-page window later
 
@@ -444,10 +485,10 @@ works:
 | 1 | #1274: the quick changes | — |
 | 2 | The popup shell (§ 3, in the widget library file) and the colony target picker (§ 5): one body, no slot | — |
 | 3 | The destination picker (§ 4) and the posture and target rows (§ 7) | 2 |
-| 4 | Detach shares (§ 6) | 2 |
+| 4 | Transfer (§ 6), replacing Detach and Merge | 2 |
 | 5 | The Extraplanetary Base cell and the on-completion refresh (§ 8) | — |
 | 6 | The Earth alert (§ 9) | — |
-| 7 | Fleet upkeep (§ 10) | the owner's choice |
+| 7 | Fleet upkeep and no departures without a Space Command (§ 10) | the size (§ 15) |
 | 8 | Tabs (§ 11) | — |
 | later | The full-page window and the schematic; the widget library's migration | — |
 
@@ -463,8 +504,9 @@ and adds its in-game checks to `docs/testing/solar-colonies-playtest.md`.
 1. **Earth alert (§ 9):** alert only when an arrival would change something (no
    fleet of ours at Earth, or outmatched), or on every hostile fleet bound for
    Earth? And `post_notification` or a popup event?
-2. **Upkeep (§ 10):** which good carries the maintenance line (the owner chose
-   the approach on 2026-10-31); the size (the four-Fusion-levels match); and what
-   a fleet with no Space Command should cost.
-3. **Detach (§ 6):** also into an existing fleet (a general Transfer that folds
-   Merge in)?
+2. **Upkeep size (§ 10):** the four-Fusion-levels match (840 a week of base, +900%
+   a unit), or another reference.
+
+Answered 2026-10-31: the upkeep goods (six, § 10), no departures without a Space
+Command (§ 10), Transfer into an existing fleet (§ 6), and the AI's Administration
+from autonomy 25 while heading for 45 or more (shipped in #1274).
