@@ -16,6 +16,10 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 LIBRARY = os.path.join(REPO, "gui", "te_widget_library.gui")
 POPUPS = os.path.join(REPO, "gui", "te_popups.gui")
 REGISTRATION = os.path.join(REPO, "gui", "scripted_widgets", "te_systems_window.txt")
+SR_WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
+SR_GATE = ("GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( "
+           "GuiScope.SetRoot( GetPlayer.MakeScope ).End )")
+SR_CONTEXT = "datacontext = \"[GetPlayerJournalEntry('je_space_race_solar_colonization')]\""
 CLEAR = "onclick = \"[GetVariableSystem.Clear('te_popup')]\""
 ROOT_VISIBLE = ("[And( And( GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, Not( GetMetaPlayer.IsObserver ) ), "
                 "GetVariableSystem.Exists('te_popup') )]")
@@ -122,6 +126,51 @@ class PopupRootTest(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertTrue(head.startswith(b"\xef\xbb\xbf"))
                 self.assertFalse(head[3:].startswith(b"\xef\xbb\xbf"))
+
+
+def _popup_types(text):
+    """Every Space Race popup: a type deriving from the shell."""
+    return {m.group(1): _type_body(text, m.group(1))
+            for m in re.finditer(r"type (te_sr_\w+_popup) = te_ui_popup \{", text)}
+
+
+class PopupHostTest(unittest.TestCase):
+    """The Space Race's popups (UI pass design §§ 3, 5)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.widget = _strip_comments(_read(SR_WIDGET))
+        cls.popups = _popup_types(cls.widget)
+        cls.root = _top_level(_strip_comments(_read(POPUPS)), "te_popups")
+
+    def test_the_target_popup(self):
+        body = self.popups["te_sr_target_popup"]
+        self.assertRegex(body, r'blockoverride "popup_visible" \{\s*visible = '
+                               r'"\[GetVariableSystem\.HasValue\(\'te_popup\', \'sr_target\'\)\]"\s*\}')
+        self.assertIn("te_sr_target_popup_body = {}", body)
+        self.assertIn('text = "je_space_race_widget_tp_title"', body)
+        # An entry that closes under an open popup leaves a line, not an empty frame.
+        self.assertIn(f'visible = "[Not( {SR_GATE} )]"', body)
+        self.assertIn("je_space_race_widget_tp_gone", body)
+
+    def test_every_popup_is_in_the_root(self):
+        self.assertTrue(self.popups)
+        for name in self.popups:
+            with self.subTest(popup=name):
+                self.assertEqual(self.root.count(f"{name} = {{}}"), 1)
+
+    def test_bodies_read_the_entry_through_get_player_journal_entry(self):
+        """The scope-free gate on a parent, the datacontext on a child (gotchas
+        #22 and #29), so the rows' JournalEntry.GetCountry reads resolve."""
+        for name, body in self.popups.items():
+            with self.subTest(popup=name):
+                gate = body.index(f'visible = "[{SR_GATE}]"')
+                context = body.index(SR_CONTEXT, gate)
+                content = re.search(r"te_sr_\w+_popup_body = \{\}", body[context:])
+                self.assertIsNotNone(content)
+                # The datacontext's block holds the body.
+                start = body.rindex("{", 0, context)
+                self.assertGreater(_close(body, start), context + content.end())
 
 
 if __name__ == "__main__":

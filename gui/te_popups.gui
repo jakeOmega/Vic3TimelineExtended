@@ -26,4 +26,6 @@ widget = {
 	size = { 100% 100% }
 	layer = popups
 	visible = "[And( And( GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, Not( GetMetaPlayer.IsObserver ) ), GetVariableSystem.Exists('te_popup') )]"
+
+	te_sr_target_popup = {}
 }

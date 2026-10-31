@@ -748,9 +748,53 @@ class PanelTest(unittest.TestCase):
                 self.assertIn(f"ScriptValue('sr_disp_site_{site.key}')", row)
                 self.assertIn(f"ScriptValue('sr_disp_site_target_{site.key}')", row)
                 self.assertIn(f"ScriptValue('sr_disp_site_inbound_{site.key}')", row)
-                # The Target button names this world's index, and only this one.
+                # Solar System is a list to read (UI pass design § 5): the Target
+                # button moved to the colony target popup.
+                self.assertNotIn("sr_colony_target_sgui", row)
+                self.assertRegex(row, r'blockoverride "site_target_button" \{\s*visible = no\s*\}')
+
+    def test_the_target_picker_rows_follow_the_table(self):
+        """The colony target popup (UI pass design § 5): every world under its
+        location, shown while the popup lists all or the world is one we can
+        target, its Target button naming its own index, and its launch window."""
+        section = _gui_type(self.rows, "te_sr_target_picker_rows")
+        rows = _instances(section, "te_sr_site_row")
+        self.assertEqual(re.findall(r"text = \"sr_site_name_(\w+)\"", section), [s.key for s in gss.panel_order()])
+        for site, row in zip(gss.panel_order(), rows):
+            with self.subTest(site=site.key):
+                visible = re.search(r'blockoverride "site_visible" \{\s*visible = "(.*)"', row).group(1)
+                self.assertIn("GetVariableSystem.Exists('sr_panel_target_popup_all_open')", visible)
+                self.assertIn(f"ScriptValue('sr_disp_tp_shown_{site.key}')", visible)
                 self.assertEqual(set(re.findall(r"MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", row)), {str(site.index)})
-                self.assertIn("GetScriptedGui('sr_colony_target_sgui')", row)
+                for method in ("IsValid", "Execute", "IsValidTooltip", "ExecuteTooltip"):
+                    self.assertIn(f"GetScriptedGui('sr_colony_target_sgui').{method}(", row)
+                body = gss.transit_body(site)
+                window = _instances(row, "te_sr_site_window_cell")
+                self.assertEqual(len(window), 1)
+                self.assertIn(f"ScriptValue('sr_disp_win_state_{body}')", window[0])
+                for part in ("win_wait", "win_paid"):
+                    if body in gss.NO_WINDOW:
+                        self.assertRegex(window[0], rf'blockoverride "{part}" \{{\s*visible = no\s*\}}')
+                    else:
+                        self.assertIn(f"je_space_race_widget_{part}_{body}", window[0])
+
+    def test_the_target_picker_counts(self):
+        """The popup's headings and count read their own values: a world counts
+        while we can target it (sr_disp_site_target_<key> 1 or 2)."""
+        section = _gui_type(self.rows, "te_sr_target_picker_rows")
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"sr_disp_site_target_{site.key} >= 1", _block(self.display, f"sr_disp_tp_shown_{site.key}"))
+        for loc in gss.LOCATIONS:
+            with self.subTest(location=loc):
+                body = _block(self.display, f"sr_disp_tp_count_{loc}")
+                self.assertEqual(re.findall(r"add = sr_disp_tp_shown_(\w+)", body),
+                                 [s.key for s in gss.SITES if s.location == loc])
+                self.assertIn(f"ScriptValue('sr_disp_tp_count_{loc}')", section)
+        self.assertEqual(re.findall(r"add = sr_disp_tp_count_(\w+)", _block(self.display, "sr_disp_tp_count")),
+                         list(gss.LOCATIONS))
+        self.assertEqual(section.count("GetVariableSystem.Exists('sr_panel_target_popup_all_open')"),
+                         len(gss.LOCATIONS) + len(gss.SITES))
 
     def test_the_colony_and_fleet_rows_follow_the_table(self):
         """The Colonies table's rows (audit SPC-5) in place of the Settlers rows."""
@@ -1872,7 +1916,7 @@ class FreeColoniesTest(unittest.TestCase):
             rows = rows[:rows.index("\ttype ", 1)] if "\ttype " in rows[1:] else rows
             with self.subTest(rows=row_type):
                 self.assertEqual(re.findall(r'text = "sr_site_name_(\w+)"', rows), [s.key for s in gss.panel_order()])
-        solar = self.rows[self.rows.index("type te_sr_solar_system_rows"):]
+        solar = _gui_type(self.rows, "te_sr_solar_system_rows")
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(f"has_global_variable = sr_site_free_{site.key} }} value = 4", self.display)

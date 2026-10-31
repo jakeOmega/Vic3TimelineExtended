@@ -3704,19 +3704,26 @@ types space_race_widget_types
 	### through the inner container's datacontext, as the Rivals rows do
 	### (gui_modding_guide.md gotcha #15): its visible is on the outer
 	### container, so an empty slot is never read. Then the colony fleets on
-	### their way there (simple and full colonies; slices 2-3 design § 8) and
-	### the Target button (§ 3: sr_colony_target_sgui, scope:site = the world's
-	### index; Clear on our target). The fleets read "count·months": how many
-	### are on their way and the months until the first lands, highlighted
-	### when the first is ours. The name's hover is what the world offers: its
-	### stage, its two specializations' effects, our drive's transit there and
-	### its next window (je_space_race_widget_ss_site_tt_<key>, audit SPC-7).
-	### 24 icon + 180 name + 122 holder + 65 inbound + 66 button + 4 × 3
-	### spacing + 2 × 4 margin = 477, in the column. Under it, slots and
-	### Extraplanetary Base room (Simple and Full Colonies). The instances are generated
-	### (te_sr_solar_system_rows, sr_sites_generated_rows.gui), each shown
-	### while Solar System lists every world or the world is one our fleets can
-	### go to, ours, or one a fleet is bound for.
+	### their way there (simple and full colonies; slices 2-3 design § 8). The
+	### fleets read "count·months": how many are on their way and the months
+	### until the first lands, highlighted when the first is ours. The name's
+	### hover is what the world offers: its stage, its two specializations'
+	### effects, our drive's transit there and its next window
+	### (je_space_race_widget_ss_site_tt_<key>, audit SPC-7). Under it, slots
+	### and Extraplanetary Base room (Simple and Full Colonies).
+	### Two lists instance it, both generated (sr_sites_generated_rows.gui):
+	### - Solar System (te_sr_solar_system_rows), a list to read: no window, no
+	###   button. 24 icon + 180 name + 122 holder + 65 inbound + 3 × 4 spacing
+	###   + 2 × 4 margin = 411, in the column. Shown while Solar System lists
+	###   every world or the world is one our fleets can go to, ours, or one a
+	###   fleet is bound for.
+	### - The colony target popup (te_sr_target_picker_rows, UI pass design
+	###   § 5): the launch window toward it (te_sr_site_window_cell, block
+	###   site_window) and the Target button (sr_colony_target_sgui,
+	###   scope:site = the world's index; Clear on our target), on every world
+	###   so a greyed one says why. 411 + 124 + 66 + 2 × 4 = 609, in the
+	###   popup's 700. Shown while the popup lists every world or we can
+	###   target it.
 	type te_sr_site_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -3895,6 +3902,7 @@ types space_race_widget_types
 					}
 				}
 			}
+			block "site_window" {}
 			button = {
 				using = default_button_action
 				size = { 66 24 }
@@ -3986,6 +3994,164 @@ types space_race_widget_types
 						block "site_bases" {}
 					}
 				}
+			}
+		}
+	}
+
+	### A site's launch window in the colony target popup (UI pass design § 5):
+	### the four states of Next Windows' row (te_sr_window_row,
+	### sr_launch_window_widgets.gui) on sr_disp_win_state_<body> for the body
+	### our transit to the site is read for (gen_solar_sites.transit_body).
+	### 124 wide: "+25% now, 12 mo" with depots.
+	type te_sr_site_window_cell = widget {
+		size = { 124 24 }
+		parentanchor = vcenter
+		tooltip = "je_space_race_widget_tp_window_tt"
+
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 124
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_win_any"
+			block "win_any_visible" {}
+		}
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 124
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_win_open"
+			block "win_open_visible" {}
+		}
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 124
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "win_wait" {}
+		}
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 124
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "win_paid" {}
+		}
+	}
+
+	### The colony target popup's content (UI pass design § 5), under the
+	### popup's journal-entry datacontext: what it is for, how many worlds we
+	### can target with Show all beside the count (the client-side
+	### sr_panel_target_popup_all_open, as Solar System's own toggle), every world under
+	### its location, and a line while no world can be targeted.
+	type te_sr_target_popup_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		minimumsize = { 609 -1 }
+		spacing = 2
+
+		te_sr_note = {
+			text = "je_space_race_widget_tp_intro"
+		}
+
+		### The count reads the player: SelectLocalization renders its key
+		### without the journal entry (gotcha #16).
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			margin = { 4 1 }
+
+			textbox = {
+				autoresize = yes
+				minimumsize = { 352 -1 }
+				maximumsize = { 352 -1 }
+				parentanchor = vcenter
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				text = "[SelectLocalization( GetVariableSystem.Exists('sr_panel_target_popup_all_open'), 'je_space_race_widget_tp_all', 'je_space_race_widget_tp_count' )]"
+			}
+			button = {
+				using = default_button
+				size = { 116 26 }
+				parentanchor = vcenter
+				onclick = "[GetVariableSystem.Toggle('sr_panel_target_popup_all_open')]"
+				tooltip = "je_space_race_widget_tp_toggle_tt"
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 110
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_ss_show_all"
+					visible = "[Not(GetVariableSystem.Exists('sr_panel_target_popup_all_open'))]"
+				}
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 110
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_ss_show_fewer"
+					visible = "[GetVariableSystem.Exists('sr_panel_target_popup_all_open')]"
+				}
+			}
+		}
+
+		te_sr_target_picker_rows = {}
+
+		te_sr_note = {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_tp_count'), '(CFixedPoint)0' )]"
+			text = "je_space_race_widget_tp_none"
+		}
+	}
+
+	### The colony target popup (UI pass design § 5), opened from Colony
+	### Fleets' Change and Choose (te_popup = sr_target); instanced in
+	### te_popups (gui/te_popups.gui). The content sits under the entry's
+	### scope-free gate and its GetPlayerJournalEntry datacontext on a child
+	### (gotchas #22, #29); with the entry gone, one line says so.
+	type te_sr_target_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'sr_target')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_space_race_widget_tp_title"
+		}
+		### The rows' 609, the list's margins, the window's and a scrollbar.
+		blockoverride "popup_size" {
+			size = { 700 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
+					direction = vertical
+					ignoreinvisible = yes
+
+					te_sr_target_popup_body = {}
+				}
+			}
+			te_sr_note = {
+				visible = "[Not( GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "je_space_race_widget_tp_gone"
 			}
 		}
 	}

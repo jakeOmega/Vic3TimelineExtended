@@ -287,8 +287,9 @@ class FlagTest(unittest.TestCase):
         # Autonomy and Colony Defences showed) and How Solar Colonization
         # Works; the shared reference; the Space Race tab's Space Powers and
         # Orbit; and under Full Colonies Space Command, Space Fleets and
-        # Locations (slice 6)
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 11)
+        # Locations (slice 6); and the colony target popup's "show all"
+        # (UI pass design § 5)
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 12)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
