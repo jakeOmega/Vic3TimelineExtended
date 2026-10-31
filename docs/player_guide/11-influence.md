@@ -283,9 +283,11 @@ though high funding still hides most of them. Capacity also gives separatism
 and coup resistance (the Intelligence Capacity modifier), growing up to a
 capacity of 125.
 
-Each operation occupies one slot. Beyond the rank and ministry slots, Mainframe
-Computers, Computer Networks, Cyber Warfare and Quantum Computing each add one,
-to a maximum of ten. You can run one operation of each type at first, and one
+Each operation fills one slot for each level of its
+[priority](#operation-phases-and-priority): one at priority 1, three at
+priority 3. Beyond the rank and ministry slots, Mainframe Computers, Computer
+Networks, Cyber Warfare and Quantum Computing each add one, to a maximum of
+ten. You can run one operation of each type at first, and one
 more of each type with Mainframe Computers, with Cyber Warfare and with a
 [Veteran](#tradecraft) agency.
 
@@ -352,7 +354,7 @@ have agencies of their own.
 | Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Pop Culture; target has a political movement | 100 |
 | Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Social Media; target has a political movement | 100 |
 | Regime Change | Target −5 legitimacy, −1 coup resistance, more radical movements; once fully operational, a coup under way there gains 5 progress a month | Satellite Communications; a rivalry; target not your subject; Seasoned [Tradecraft](#tradecraft) | 100 |
-| Nuclear Program Sabotage | Target's nuclear program 25% slower | Target runs a funded program; Seasoned Tradecraft | 100 |
+| Nuclear Program Sabotage | Target's nuclear program 20% slower | Target runs a funded program; Seasoned Tradecraft | 100 |
 | Space Program Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not | 25 |
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject | 25 |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on | 25 |
@@ -394,7 +396,7 @@ technology in that tree that the target has and you could research now. Once
 the target has nothing left that you could take, the operation ends.
 
 Each theft is 5% of the technology's era cost at base strength, 10% once fully
-operational, and 16% fully operational at priority 3. Progress that reaches a
+operational, and 20% fully operational at priority 3. Progress that reaches a
 technology's cost completes it. Each operation's row shows how much it has
 stolen and the latest technology.
 
@@ -415,16 +417,22 @@ strength.
 
 Each row also has a priority stepper from 1 to 3; hover the word Priority for
 what the current level multiplies. Priority multiplies what the operation does,
-but costs and exposure rise faster:
+but costs and exposure rise faster, and each level fills another operation slot,
+so each step up needs a free one:
 
-| Priority | Effect | Share of upkeep | Detection risk |
-|---|---|---|---|
-| 1 | ×1 | 1 | Base |
-| 2 | ×1.35 | 1.6 | +2 points |
-| 3 | ×1.6 | 2.4 | +4 points |
+| Priority | Effect | Slots | Share of upkeep | Detection risk |
+|---|---|---|---|---|
+| 1 | ×1 | 1 | 1 | Base |
+| 2 | ×1.65 | 2 | 1.6 | +2 points |
+| 3 | ×2 | 3 | 2.4 | +4 points |
+
+A slot spent on a second operation does more than one spent on priority, so
+priority pays when the per-type limit or the targets worth hitting run out.
+Stepping down frees the slot at once. If you lose slots, your operations keep
+their priorities, but none can rise until a slot is free again.
 
 Priority 3 needs an Established agency; a fully operational operation at
-priority 3 works at 3.2 times base strength. A click changes detection risk at
+priority 3 works at four times base strength. A click changes detection risk at
 once, in either direction, but the effects only at the start of the next month.
 Raising priority raises upkeep at once; lowering it cuts upkeep only when the
 effects fall. Cultivate Assets stays at priority 1. Election Interference's cut
@@ -550,7 +558,7 @@ chose it.
 
 If the country lets the operation run, you are not told, and it keeps working
 against that country at full strength. In return its network inside yours stops
-decaying and grows each month, by 4 to 6.4 depending on the operation's
+decaying and grows each month, by 4 to 8 depending on the operation's
 priority (more with Tradecraft, more slowly above half strength), and the
 operation is not caught again. The country can expose it whenever it likes from
 Known Foreign Operations, a section of its Covert Warfare journal entry and
@@ -592,7 +600,7 @@ ideological, each added to your capacity against operations of its kind. Strict
 IP Protection and Central Bank Independence raise economic defense and Publicly
 Funded Elections ideological defense, by 10 each; No IP Protection, Unregulated
 Banking and No Campaign Finance Laws lower them. A friend's Counterintelligence
-Support raises all three at once, by 8 each at base strength and up to 26 fully
+Support raises all three at once, by 8 each at base strength and up to 32 fully
 operational at priority 3. Against an agency of about 100 capacity, 10 points
 of defense add about 1.5 points to its Detection Risk. The Intelligence Sharing
 Pact treaty article adds intelligence capacity and lends the weaker partner part

@@ -313,10 +313,13 @@ class OverviewTest(unittest.TestCase):
         # Distinct from every other icon in the row.
         self.assertFalse(set(TRADECRAFT_ICONS.values()) & (set(STANDING_ICONS.values()) | set(OTHER_ICONS.values())))
 
-    def test_ten_slots_lit_by_the_operations_running(self):
+    def test_ten_slots_lit_by_the_slots_filled(self):
+        # An operation fills one slot per level of its priority, so the icons
+        # lit are the slots filled, not the operations running.
         for n in range(1, 11):
             self.assertIn(f"ScriptValue('covert_disp_slots_shown'), '(CFixedPoint){n}' )", self.ov, n)
-            self.assertEqual(self.ov.count(f"ScriptValue('covert_active_display'), '(CFixedPoint){n}' )"), 2, n)
+            self.assertEqual(self.ov.count(f"ScriptValue('covert_slots_used_display'), '(CFixedPoint){n}' )"), 2, n)
+        self.assertNotIn("ScriptValue('covert_active_display'), '(CFixedPoint)", self.ov)
         self.assertNotIn("(CFixedPoint)11' )", self.ov)
 
     def test_the_rows_keep_their_width_whichever_cells_show(self):

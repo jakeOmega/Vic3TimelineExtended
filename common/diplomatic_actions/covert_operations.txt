@@ -2827,7 +2827,7 @@ covert_counterintel_support_action = {
 # Agitators, money and a story about home rule, carried out to the target's
 # colonies in the solar system. No modifier: once established, every colony
 # the target holds gains autonomy each month, sr_cov_incite_autonomy_base
-# (0.5) x the operation's phase x priority (1 to 3.2), through the space
+# (0.5) x the operation's phase x priority (1 to 4), through the space
 # race's sr_cov_incite_autonomy (covert_ops_apply_all_phase_effects). A colony
 # at 100 breaks away and becomes a free colony. Moderate tier: meddling in how
 # the target governs its own. Only under the Space Race rule's simple and
@@ -3014,7 +3014,7 @@ covert_incite_autonomy_action = {
 # populous colony. No modifier: once established, that colony loses
 # sr_cov_sabotage_share (1%) of its people each month and gains
 # sr_cov_sabotage_autonomy (0.25) autonomy, both x the operation's phase x
-# priority (1 to 3.2), through the space race's sr_cov_sabotage_colony
+# priority (1 to 4), through the space race's sr_cov_sabotage_colony
 # (covert_ops_apply_all_phase_effects). Severe tier: people die. Needs a
 # Seasoned agency to launch (possible only: a running operation survives the
 # agency's score falling, as nuclear sabotage does). Only under the simple and
@@ -3211,7 +3211,7 @@ covert_sabotage_colony_action = {
 # Agents in the target's colonies and its tracking network, mapping their
 # guns, their hulls and the marines that hold them. No modifier: once
 # established, the operator's fleets fire +20% x the operation's phase x
-# priority (1 to 3.2) on the defences of every colony the target holds, and
+# priority (1 to 4) on the defences of every colony the target holds, and
 # the operator's Fleets panel shows those colonies' Defences, integrity and
 # marines exactly, through the space race's sr_cov_survey_reset and
 # sr_cov_survey_defences (covert_ops_apply_all_phase_effects; read by

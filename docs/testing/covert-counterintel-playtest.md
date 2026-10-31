@@ -33,7 +33,7 @@ the things only the game can show. Strike a fixed item through with the commit t
 | Check | Expect | If it fails |
 |---|---|---|
 | **Catch reaches a player defender.** An AI's operation against a player with the Covert Warfare entry is caught (`te_debug_covert.7` a). | `covert_warfare.3` opens, naming the attacker and the operation; Expose is the default. | No event and a BROKEN line: take the fallback above. |
-| **Let it run.** Choose it. | The attacker gets no event and its panel doesn't change. Our Agent Networks row inside the attacker appears that day and grows about 4 a month at priority 1 (more with Tradecraft), trend growing, not reaped. `.3.b`'s tooltip shows 4 and 6.4. | |
+| **Let it run.** Choose it. | The attacker gets no event and its panel doesn't change. Our Agent Networks row inside the attacker appears that day and grows about 4 a month at priority 1 (more with Tradecraft), trend growing, not reaped. `.3.b`'s tooltip shows 4 and 8.0. | |
 | **Expose from `.3`.** | `.1` opens on the attacker the same day; infamy, relations, Tradecraft loss and the backlash apply; `.2` reaches us (its 24-month cooldown permitting). | |
 | **Lockout.** A second exposure of one attacker while its first `.1` is still open (a player attacker can leave it open for up to a month). | The second waits; `.3.a`'s tooltip shows the wait line; `.4` four days later exposes it if the first `.1` has been answered by then, otherwise the target's first monthly pass after the answer does; never two `.1` open on one attacker. | |
 | **Slow answer / stall.** As a player attacker, leave a `.1` unanswered. | It opens itself at once (a one-month event), still names and burns the right operation when answered or when it expires to Acknowledge after a month; the lock holds only that long, so a stall skips at most one monthly detection roll per catch; no `TE_SELF_CHECK BROKEN covert_exposure_lock` line. | If the lock outlives the event, the watchdog's threshold (`covert_open_event_stale_passes`) is too high; if stalling is still worth it, decouple the roll from the lock (roll while locked and queue the catch). |
@@ -79,7 +79,7 @@ the things only the game can show. Strike a fixed item through with the commit t
 | **Notification.** | The ally gets "[us] has begun supporting our counterintelligence services." | |
 | **Launch toast on a hostile operation.** An AI launches an operation against a player. | Unknown, a question from before this branch: every covert action defines an `_action_notification_desc` addressed to its target. If the target gets a toast naming the initiator, targets learn of every launch by name, which undercuts detection as a whole, and the guide's detection section needs a sentence. The Notification row above is the same mechanism. | Nothing to fix in this branch. The fix is modelling operations without pacts (spec § D, option 3). |
 | **Row.** The Operations section. | The ally's flag, its own icon (a black glove holding up a steel shield), "Counterintelligence Support in X", phase, priority stepper, "Detection Risk: none" with its hover, Stand down. Stand down clears the protector mark, so another country can launch it there. | |
-| **Effect.** From month 6. | The ally's covert defences rise by +8 per axis, ×2 from month 12, ×1.35 / ×1.6 at priority 2 / 3 (its modifier breakdown). | |
+| **Effect.** From month 6. | The ally's covert defences rise by +8 per axis, ×2 from month 12, ×1.65 / ×2 at priority 2 / 3 (its modifier breakdown). | |
 | **Nothing for the protector.** | No Agent Networks row for the ally; Tradecraft doesn't rise from it; with only Counterintelligence Support running, Tradecraft decays. | |
 | **Logs.** | No `failed for unknown arguments`, no unknown trigger for `covert_op_is_hostile` or `has_diplomatic_pact … is_initiator = yes`. No `VFSOpen` line for the lens icon `covert_counterintel_support_action.dds`. | |
 | **Protector mark survives.** One month after launch. | The ally still carries `iw_cis_protector`; a third country's launch there is still refused. | If the mark vanishes while the operation runs, `is_initiator = yes` reads the other way: walk the pacts from the protector instead (`any_scope_diplomatic_pact = { is_diplomatic_action_type = covert_counterintel_support_action first_country = <protector> … }`). |
@@ -116,3 +116,16 @@ those prerequisite lines. Load the Byzantium save before #1252's repair runs, or
 |---|---|---|
 | **Stranded research.** Load the Byzantium game's 2013 autosaves, where LIB and UNA research Asteroid Mining without In-Situ Resource Utilization, and run a few months. | No `You need to acquire the technology before adding progress ... covert_tech_theft_generated.txt` line in `error.log`. LIB's military espionage on BYZ steals another military technology it could research now, or ends for want of one. | The line still names a `covert_tech_grant_era_N` grant: find the thief's operation in the save (`iw_stolen_last` is the technology's number in `covert_stolen_tech_name`) and compare its `acquired_technologies` with that technology's `unlocking_technologies`. |
 | **Current research still stolen.** A country researching a technology its espionage target has. | The row's latest technology is that research, month after month, until it completes. | The prerequisite lines in `covert_tech_steal_<category>` don't hold for current research: check the generated branch against the technology's `unlocking_technologies`. |
+
+## Priority fills operation slots (2026-10-31)
+
+An operation now fills one operation slot per level of its priority (`covert_operation_slots_used`). No self-check: the
+count is a script value over `iw_ops` the way the Grand Monuments values already sum their lists. Launch two or three
+operations by hand, or with `te_debug_covert.1`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Overview.** Raise one operation to 2, then 3. | "Operation Slots: n of m in use" and the lit case files rise by one a step, on the click; the hover reads "n in use by k operations, f free". Counterintelligence's unused-slot line falls by one a step. | Icons don't move until the next month: the GUI caches the script value; nothing in script waits for the pulse. |
+| **Gate.** Fill every slot, then hover + on a row. | The button is greyed with a cross on "We have a free operation slot: each level of priority fills one more". − still works and frees a slot at once; a launch is refused for want of a free slot while they're all filled. | + stays clickable: `covert_possible_priority_up` isn't reading the live count. |
+| **Lost slots.** Drop a slot (`remove_modifier` on a slot source, or lose rank) with an operation at 3. | It stays at 3 and keeps running; + is greyed until a slot is free; nothing is stood down. | |
+| **AI.** Observer run, then switch to a great power at war with a rival. | Its overview never shows more slots in use than it holds, unless it lost slots while its operations stood higher. | |

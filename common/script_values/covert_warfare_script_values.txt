@@ -124,12 +124,16 @@ iw_funding_level_max = 5
 
 # ---- Per-operation priority (slice 3) ----
 # An operation's priority (iw_priority on its container, 1 when missing)
-# multiplies what it does, what it costs and how exposed it is. Cost outruns
-# effect at every step: that is the diminishing return that stops "everything
-# at 3" from being the answer.
+# multiplies what it does, what it costs and how exposed it is, and it fills
+# one operation slot per level (covert_operation_slots_used). The slots are the
+# main price: a slot buys x1 as a new operation but +0.65, then +0.35, as a
+# priority step, so priority is for the target that matters most, once the
+# per-type cap or the targets worth hitting run out. Priority 3 doubles the
+# effect (owner, 2026-10-31; it was x1.35 / x1.6 before slots cost anything),
+# and the second step still buys less than the first for more upkeep.
 covert_op_priority_max = 3
-covert_op_priority_2_effect_mult = 1.35
-covert_op_priority_3_effect_mult = 1.6
+covert_op_priority_2_effect_mult = 1.65
+covert_op_priority_3_effect_mult = 2
 # Each operation's share of the covert budget (priority 1 = one share).
 covert_op_priority_2_cost_mult = 1.6
 covert_op_priority_3_cost_mult = 2.4
@@ -260,9 +264,9 @@ covert_cultivate_ai_net_ceiling = 50
 covert_cultivate_ai_net_done = 75
 # Secure loose material (nuclear_crisis_design.md §0.10 step 5): the monthly
 # chance, in percent, of finding one of the target line's missing warheads,
-# times covert_op_effect_mult (1 established, 2 fully operational, x1.35 /
-# x1.6 at priority 2 / 3): 3 % a month established at priority 1, 6 % fully
-# operational (about one a year and a half), 9.6 % at priority 3.
+# times covert_op_effect_mult (1 established, 2 fully operational, x1.65 /
+# x2 at priority 2 / 3): 3 % a month established at priority 1, 6 % fully
+# operational (about one a year and a half), 12 % at priority 3.
 covert_secure_material_base_chance = 3
 # ---- Network intelligence (slice 7) ----
 # A network this strong reports on the service it has penetrated: from tier 1
@@ -291,15 +295,21 @@ covert_ai_influence_floor = 300
 # Each operation a defender watches grows its network inside the attacker by
 # this much a month, as an operation of its own would but more (a busy
 # operation shows more of the other service): 4 at priority 1, x the priority
-# effect multipliers (1.35, 1.6) above it. Through covert_net_gain, so the
+# effect multipliers above it (6.6 and 8). Through covert_net_gain, so the
 # diminishing return above half strength applies, and x the defender's
 # Tradecraft (and UN host) multiplier (covert_net_watch_tick_gain). An
 # operation of one's own grows a network by 2, and a "retaliate in kind" seed
 # is 25 once, so one watched operation outgrows the seed in about six months:
 # what watching costs is the harm the operation keeps doing meanwhile.
 covert_net_watch_gain_p1 = 4
-covert_net_watch_gain_p2 = 5.4
-covert_net_watch_gain_p3 = 6.4
+covert_net_watch_gain_p2 = {
+	value = covert_net_watch_gain_p1
+	multiply = covert_op_priority_2_effect_mult
+}
+covert_net_watch_gain_p3 = {
+	value = covert_net_watch_gain_p1
+	multiply = covert_op_priority_3_effect_mult
+}
 # The AI defender's choice at the catch (covert_ai_watch_chance), in percent:
 # watch a mild, moderate or wartime operation at 60, a severe one at 15 (it is
 # attacking the state), 20 more when the attacker is a friend (watching keeps
@@ -439,11 +449,35 @@ covert_operations_active = {
 	max = 10
 }
 
+# Slots in use (2026-10-31): an operation fills one slot for each level of
+# its priority, so raising one competes with launching another. One slot per
+# pact (a pact counts before the sync gives it a container), plus each
+# container's priority above 1 (missing reads as 1). Not capped at
+# covert_ops_max_slot_cap: an agency that has lost slots can fill more than it
+# holds, and covert_operations_available_slots must then read 0.
+# Scope: country
+covert_operation_slots_used = {
+	value = covert_operations_active
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			limit = { covert_op_priority_at_least = { N = 2 } }
+			add = {
+				value = var:iw_priority
+				subtract = 1
+			}
+		}
+	}
+}
+
+# Free slots: what launching an operation (one slot, at priority 1) and each
+# step up in priority (covert_possible_priority_up) need.
 covert_operations_available_slots = {
 	value = 0
 	owner = {
 		add = covert_operation_max_slots
-		subtract = covert_operations_active
+		subtract = covert_operation_slots_used
 	}
 	min = 0
 }
@@ -674,6 +708,12 @@ covert_slots_display = {
 covert_active_display = {
 	value = 0
 	owner = { add = covert_operations_active }
+	round = yes
+}
+
+covert_slots_used_display = {
+	value = 0
+	owner = { add = covert_operation_slots_used }
 	round = yes
 }
 

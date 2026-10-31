@@ -452,6 +452,8 @@
  building_precious_minor_base_metal_mine_throughput_add:0 "$building_precious_minor_base_metal_mine$ building [concept_throughput]"
  building_precious_minor_base_metal_mine_throughput_add_desc:0 "$building_precious_minor_base_metal_mine$ building [concept_throughput]"
  building_prussian_railway_directorate:0 "Prussian Railway Directorate"
+ building_public_housing:0 "Public Housing"
+ building_public_housing_desc:0 "Dwellings the state builds and runs, so a city can grow without [concept_migration_crowding] turning migrants away. Each staffed level adds [concept_urban_engineering] to its [concept_state], more on each later method, and each point houses #v 1,000#! more people before crowding sets in, multiplied by the state's $state_migration_crowding_density_mult$. A state below its crowding threshold gains nothing from it."
  building_putilov_works:0 "Putilov Works"
  building_putilov_works_desc:0 "The Putilov iron and steel works in Saint Petersburg, producing heavy machinery, railway equipment, and artillery for the Russian Empire."
  building_rac_sitka_trading_post:0 "Russian-American Company Sitka Trading Post"
