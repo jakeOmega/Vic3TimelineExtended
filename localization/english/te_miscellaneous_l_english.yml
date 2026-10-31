@@ -518,6 +518,7 @@
  LAW_REGULATED_AUGMENTATION_MARKET_INSTITUTION_MODIFIER_TT:0 "#n The above [concept_institution] info is misleading. Please see below for the actual effect.#!\n\nFor each [concept_investment_level] in [GetInstitutionType('institution_ministry_of_consumer_protection').GetName]:\n #g -2%#! $state_mortality_mult$\n #g +3%#! $country_tech_research_speed_mult$"
  LAW_STATE_LED_LANGUAGE_REFORM_EVENTS_EFFECT:0 "Upon enactment, further events will occur in which the specifics of the language reform will be determined, shaping the cultural landscape of the nation for years to come."
  LAW_STATE_UNIVERSAL_HEIR_INHERITANCE_TT:0 "The law lowers the [concept_inheritance_concentration] as far as any inheritance law, so the Aristocrats and Capitalists lose strength and bubbles build more slowly once the banking cycle runs, and in its states wealth buys less clout, more people qualify for better jobs, schooling is easier to reach and radicals find fewer followers."
+ LIQUID_DEMOCRACY_TT_CONTINUOUS_VOTE:0 "With #b $neural_lace$#! researched, votes are cast through implants as each question arises. Once a year the country gains the #b $te_continuous_vote$#!:"
  MOMENTUM_1_DESC:0 "[concept_banking_momentum]: #P +1#!"
  MOMENTUM_2_DESC:0 "[concept_banking_momentum]: #P +2#!"
  MOMENTUM_3_DESC:0 "[concept_banking_momentum]: #P +3#!"

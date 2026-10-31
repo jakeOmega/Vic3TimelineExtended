@@ -206,6 +206,7 @@ policy](04-banking.md).
 | Communal Administration | Bureaucracy | Council Republic, Anarchy or Collective Governance | Local assemblies and recallable delegates run the administration; see [Who staffs the administration](#who-staffs-the-administration). |
 | Automated Bureaucracy | Bureaucracy | AI Agents | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
 | Algorithmic Governance | Distribution of Power | Artificial General Intelligence | Machines hold supreme authority and run the administration too. |
+| Liquid Democracy | Distribution of Power | Liquid Democracy | Everyone votes on every question or lends the vote to someone they trust, and can take it back at any time. A voting law with Universal Suffrage's franchise: ideological incoherence costs less legitimacy and enacted laws stir their opponents less, but laws pass more slowly. With Neural Lace you also gain the Continuous Vote, checked once a year: more enactment success and fewer radicals from movements, but the groups in government draw less support. Women's Suffrage, Elected Bureaucrats, the campaign finance laws and the Tradition of Free Elections work with it as with any voting law; First Past the Post and the voting-age amendments don't. |
 | Neocolonialism | Colonization | Decolonization | See [Colonial empires and decolonization](12-decolonization.md). |
 | Private Policing | Policing | Computer Networks, with Laissez-Faire or Interventionism | Licensed private firms do most police work for whoever pays them; see [Who polices](#who-polices). |
 | Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
@@ -480,8 +481,8 @@ What it allows depends on your **Legislative Override Capacity**, summed from
 your laws, your institutions and a few technologies and power bloc principles.
 The [Nation tab](01-introduction.md#the-nation-tab) shows it with every source.
 Among the laws, Autocracy and Single-Party State give 3, Algorithmic Governance
-2 and Unitary State 1; Universal Suffrage, Anarchy and Traditional Vassalage
-take away 3, and Guaranteed Liberties, Devolved Administration and Communal
+2 and Unitary State 1; Universal Suffrage, Liquid Democracy, Anarchy and
+Traditional Vassalage take away 3, and Guaranteed Liberties, Devolved Administration and Communal
 Administration 2. Among the courts, Executive Tribunals give 1 and Algorithmic
 Jurisprudence 2 under Algorithmic Governance; Constitutional Review takes away
 2 and Judicial Supremacy 3.
@@ -638,8 +639,8 @@ Collective Governance is a governance principle in which nobody holds supreme
 executive power: a body of equals governs, and its chair is first among equals.
 It unlocks with Political Agitation and needs one of these Distribution of Power
 laws: Landed Voting, Wealth Voting, Census Suffrage, Universal Suffrage,
-Single-Party State, Technocracy, Oligarchy, Organic Regulation, Anarchy or
-Algorithmic Governance. Cooperative Ownership, which Anarchy needs, is open to
+Liquid Democracy, Single-Party State, Technocracy, Oligarchy, Organic
+Regulation, Anarchy or Algorithmic Governance. Cooperative Ownership, which Anarchy needs, is open to
 it as to a Council Republic. Under it you have 15% less authority and laws pass 10% more slowly, but broad
 coalitions earn more legitimacy and ideological incoherence costs less. The
 chair's interest group gets no head-of-state legitimacy bonus.
@@ -690,7 +691,7 @@ group that dislikes the current law doesn't back a new law it has no view on.
 | Multiculturalist | Leaders; also added to the Intelligentsia | Leaders once a Civil Rights Movement exists; the group ideology with the Civil Rights Movement technology |
 | Inclusive Multiculturalist | Leaders | As Multiculturalist, after the Sexual Revolution; adds LGBTQ+ rights |
 | Anti-Colonialist | Leaders; also added to the Trade Unions and Intelligentsia | With the Decolonization technology; opposes colonial laws |
-| Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy and Algorithmic Governance |
+| Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy, Algorithmic Governance and Liquid Democracy |
 | Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism, Contracted Administration and Private Policing |
 | Islamic Inheritance | The Devout in Sunni and Shiite countries | From the start; favors Customary Inheritance and Forced Heirship |
 

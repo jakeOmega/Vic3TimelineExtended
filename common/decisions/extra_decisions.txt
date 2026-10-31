@@ -226,6 +226,7 @@ imperial_federation_act_civilizing_mission = {
 		# Broad-franchise DP
 		OR = {
 			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_census_voting
 			has_law = law_type:law_wealth_voting
 		}
@@ -284,6 +285,7 @@ mandate_system_decision = {
 		# Broad-franchise DP — selling this requires legitimacy
 		OR = {
 			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_census_voting
 			has_law = law_type:law_wealth_voting
 		}

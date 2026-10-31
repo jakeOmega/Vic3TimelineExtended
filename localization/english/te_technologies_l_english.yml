@@ -184,6 +184,8 @@
  lab-grown_food_desc:0 "We can now grow food in a lab, from cultured meat to other synthetic products. It could be a more sustainable and ethical way to feed the world, if people are willing to eat it."
  laser_technology:0 "Laser Technology"
  laser_technology_desc:0 "The laser has found its way into all sorts of applications, from telecommunications to medicine to manufacturing. It's a precise and powerful tool with a seemingly endless number of uses."
+ liquid_democracy:0 "Liquid Democracy"
+ liquid_democracy_desc:0 "With a secure digital identity for every citizen, a vote can be counted on any question at any time. Each voter decides an issue directly or lends the vote to someone they trust, and can take it back whenever they like. Trust still pools around a few popular delegates, but none of them keeps it a day longer than people allow."
  machine_learning:0 "Machine Learning"
  machine_learning_desc:0 "We can now build computers that can learn from data. This has led to a host of new technologies and applications, and it's only going to get more powerful."
  mainframe_computers:0 "Mainframe Computers"

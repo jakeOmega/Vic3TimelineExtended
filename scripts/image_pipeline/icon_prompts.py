@@ -788,6 +788,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
         "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
         "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
+        "liquid_democracy": {"subject": "a glowing blue fingerprint pressed onto a paper ballot, thin lines of light running from it to many small hands", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
     "treaty_article": {
@@ -1272,6 +1273,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_restorative_justice": {"subject": "a cracked clay pot held together by thick metal staples across its cracks and a tight band of twine", "seed": 0},
         # Distribution of Power (a vanilla group)
         "law_algorithmic_governance": {"subject": "a large square computer microchip with gold pins resting on a tasselled royal velvet cushion", "seed": 2},
+        "law_liquid_democracy": {"subject": "a wooden ballot box with a stream of small glowing paper ballots flowing in and out of its slot like water", "seed": None},
         # Electoral Finance
         "law_donation_limits": {"subject": "a fat leather money bag cinched tight around its middle by a thick buckled leather belt", "seed": 0},
         "law_no_campaign_finance_laws": {"from": "law/law_publicly_funded_elections", "base": {"scale": 0.78},

@@ -240,6 +240,7 @@ te_jud_assign_court_by_rule = {
 				has_law = law_type:law_wealth_voting
 				has_law = law_type:law_census_voting
 				has_law = law_type:law_universal_suffrage
+				has_law = law_type:law_liquid_democracy
 			}
 		}
 		activate_law = law_type:law_statutory_courts

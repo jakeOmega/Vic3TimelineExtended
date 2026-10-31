@@ -288,3 +288,23 @@ post_work_society = {
 		value = 1
 	}
 }
+
+liquid_democracy = {
+	# Liquid Democracy law, Distribution of Power (era 13 spec § 7.4); its Continuous Vote needs Neural Lace too
+	# Everyone may vote on every question or lend the vote to anyone they trust, and take it back at any time
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/universal_digital_identity.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		universal_digital_identity
+	}
+
+	modifier = {
+		country_voting_power_mult = 0.1
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
