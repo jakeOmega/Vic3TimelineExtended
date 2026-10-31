@@ -182,12 +182,12 @@ units](13-military.md#new-combat-units).
 | Group | Unit | Technology | Era | Battalion size |
 |---|---|---|---|---|
 | Infantry | Armored Infantry | Combined Arms | 6 | 1000 |
-| Infantry | Robotic Soldiers | Joint All-Domain Command and Control (JADC2) | 10 | 600 |
+| Infantry | Robotic Soldiers | Autonomous Weapons | 11 | 600 |
 | Infantry | Swarm Bots | Swarm Technology | 11 | 400 |
 | Infantry | Utility Fog Phalanx | Molecular Assemblers | 13 | 250 |
 | Marines | Combined Arms Marines | Combined Arms | 6 | 1000 |
 | Marines | Stealth Marines | Stealth Technology | 8 | 800 |
-| Marines | Networked Marines | JADC2 | 10 | 600 |
+| Marines | Networked Marines | Joint All-Domain Command and Control (JADC2) | 10 | 600 |
 | Marines | Bioenhanced Marines | Bioenhanced Soldiers | 12 | 500 |
 | Artillery | Motorized Artillery | Motorized Artillery | 6 | 1000 |
 | Artillery | Guided Artillery Projectiles | Guided Missiles | 7 | 1000 |

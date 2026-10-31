@@ -204,7 +204,7 @@ policy](04-banking.md).
 | Collective Governance | Governance Principles | Political Agitation | No single head of state; see [Collective Governance](#collective-governance). |
 | Contracted Administration | Bureaucracy | Supply Chain Management, with Laissez-Faire or Interventionism | Private firms run the administration under contract; see [Who staffs the administration](#who-staffs-the-administration). |
 | Communal Administration | Bureaucracy | Council Republic, Anarchy or Collective Governance | Local assemblies and recallable delegates run the administration; see [Who staffs the administration](#who-staffs-the-administration). |
-| Automated Bureaucracy | Bureaucracy | Generative AI | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
+| Automated Bureaucracy | Bureaucracy | AI Agents | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
 | Algorithmic Governance | Distribution of Power | Artificial General Intelligence | Machines hold supreme authority and run the administration too. |
 | Neocolonialism | Colonization | Decolonization | See [Colonial empires and decolonization](12-decolonization.md). |
 | Private Policing | Policing | Computer Networks, with Laissez-Faire or Interventionism | Licensed private firms do most police work for whoever pays them; see [Who polices](#who-polices). |
@@ -224,7 +224,7 @@ rule](#machine-administration-and-machine-rule).
 
 | | Contracted Administration | Communal Administration | Automated Bureaucracy |
 |---|---|---|---|
-| Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | In a Council Republic, under Anarchy or under Collective Governance; not with Technocracy or Elder Council | From Generative AI |
+| Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | In a Council Republic, under Anarchy or under Collective Governance; not with Technocracy or Elder Council | From AI Agents |
 | Staffing | Service Contractors: 250 bureaucrats a level, buying 20 Services | Recallable Delegates: 250 bureaucrats and 250 clerks a level | Automated Casework: 150 bureaucrats and 100 engineers a level, buying Digital Access and Software |
 | You gain | Institutions change size 25% faster; capitalists +15% political strength | Movements 5% less radical; Trade Unions and Rural Folk +10% political strength | Institutions cost 20% less bureaucracy and change size 50% faster; engineers +15% political strength; Legislative Override Capacity +1 |
 | You pay | Institutions cost 5% more bureaucracy | Tax capacity −10%; Legislative Override Capacity −2 | Nothing beyond the staffing |

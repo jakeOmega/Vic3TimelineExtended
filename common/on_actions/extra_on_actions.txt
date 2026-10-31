@@ -2779,7 +2779,7 @@ society_technology_events_on_action = {
 			}
 			5 = {
 				trigger = {
-					has_technology_researched = generative_ai
+					has_technology_researched = ai_agents
 					NOT = { has_law = law_type:law_automated_bureaucracy }
 				}
 				trigger_event = { id = society_technology_events.27 }

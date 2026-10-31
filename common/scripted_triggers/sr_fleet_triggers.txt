@@ -55,6 +55,26 @@ sr_sc_may_build_government = {
 	}
 }
 
+# Country scope. Its fleets take orders (Space Race UI pass design § 10): a
+# Space Command level in a state it controls. Without one they can't depart
+# (every sr_fl_<n>_may_depart_<loc>), change posture or target, start a refit
+# or repair, and a refit under way pauses (sr_fl_month_at); the AI's offence
+# waits too (sr_fl_ai_attack). Fleets in flight land, fight where they are at
+# the posture they had, and refill. The upkeep sits on Space Command, so this
+# is what stops a country demolishing it to keep its fleet for nothing. An
+# occupied Space Command's state stops them too, as it stops construction.
+sr_sc_operational = {
+	has_building = building_space_command
+	any_scope_state = {
+		sr_state_held_by_owner = yes
+		has_building = building_space_command
+		any_scope_building = {
+			is_building_type = building_space_command
+			level >= 1
+		}
+	}
+}
+
 # Country scope. The ship_construction self-check's subject (design § 18): a
 # Space Command at half staff or more in a state its owner controls.
 sr_sc_qualifies = {

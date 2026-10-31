@@ -1039,9 +1039,16 @@ the reserve until it is launched (see [Holding Earth orbit](#holding-earth-orbit
 | Assault carrier | 0.25 | 0.25 | 12 | Carries 2 marine battalions a point of strength |
 | Tender | 0.1 | 0.1 | 36 | Adds propellant and supply to its fleet |
 
-Fleets cost upkeep as more of every input Space Command uses: 1% for every 10
-points of strength at full, the reserve's included. A large fleet makes the
-yards dearer to run, not slower. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
+Every Space Command uses a maintenance line, the same whatever its method and
+however many levels it has: 20 Electronic Components, 20 Wired and 20 Wireless
+Telecommunication Gear, 10 Software, 20 Industrial Robotics and 40 Chemicals a
+week at full staff, about 8,400 at base prices. Fleets cost upkeep as +900% of
+that line for every 10 points of strength at full, the reserve's included, so a
+fleet of 300 costs about 2.3 million a week. Switching the yards to a cheaper
+method or cutting levels doesn't lower it, and with a second Space Command (one
+that came with a country you annexed, say) the fleets' share is split between
+them, so you pay it once. A large fleet makes Space Command dearer to run; it
+builds as fast while those goods can be bought. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
 Production each raise your fleets' fire by a quarter.
 
 ### Moving fleets
@@ -1059,6 +1066,15 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 | Merge | Joins another of your fleets at the same location |
 | Detach | Splits half of each role into a new fleet |
 | Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
+
+Your fleets take orders only while you have a Space Command level in a state
+you control. Without one, none can leave, change posture or target, start a
+refit or be repaired, and a refit under way pauses; Space Fleets says so above
+its rows. Fleets already on their way land, every fleet fights where it is at the
+posture it had, and a docked fleet still takes on supply, propellant and
+marines. Demolishing Space Command ends the upkeep and grounds your fleets: one
+at Earth still fights there and keeps Earth from being blockaded, but can't
+leave or be repaired.
 
 A fleet in flight can be neither attacked nor recalled. It docks at Earth and at
 your colonies with a Spaceport: supply and propellant refill (at a Spaceport,

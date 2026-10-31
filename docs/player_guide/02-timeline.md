@@ -1,7 +1,7 @@
 # The extended timeline
 
 The base game ends in 1936 after five eras of technology. This mod moves the end
-date to 2136 and adds eight more eras, numbered 6 to 13, with 177 new
+date to 2136 and adds eight more eras, numbered 6 to 13, with 181 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
 a flagship building for every company, 37 wonders and seven megaprojects. None
@@ -30,7 +30,7 @@ them. Era 13's need breakthroughs nobody yet knows how to plan for.
 | 8 | 1968–1987 | 115,000 | 21 | Computer networks, robotics, containerization, pharmaceuticals, stealth |
 | 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defense |
 | 10 | the present day | 450,000 | 20 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
-| 11 | the near future | 800,000 | 20 | Advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
+| 11 | the near future | 800,000 | 24 | AI agents and robots, advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
 | 12 | the medium-term future | 1,500,000 | 12 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
 | 13 | the speculative future | 3,000,000 | 9 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
 
@@ -44,8 +44,10 @@ ahead of unresearched technologies in the same tree still applies, and it grows
 with the number of eras between them.
 
 Your innovation has to grow to match. Many of the new technologies raise the
-weekly innovation cap by 10 to 100 each, adding between 250 and 1,000 per era
-through era 11 and 100 in era 12. Five [wonders](#wonders) raise it further, and new University
+weekly innovation cap by 10 to 300 each, adding between 250 and 1,000 per era
+through era 11, 500 in era 12 and 200 in era 13. Self-Driving Laboratories (era
+11) and Artificial General Intelligence (era 12) give the largest steps. Five
+[wonders](#wonders) raise it further, and new University
 production methods (National Labs, Academic Computing and AI Assisted Research)
 raise the innovation each university produces.
 
@@ -96,7 +98,13 @@ Extraplanetary Base's Asteroid Mine method, and Fusion Power the Fusion Plant. G
 unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
 the Cultured Meat Plant and Cultured Produce Facility, and Synthetic Biology
 adds bioengineered production methods such as Designed Crops. Brain-Computer
-Interfaces and Human Augmentation bring augmentation laws.
+Interfaces and Human Augmentation bring augmentation laws. Era 11 also brings
+the AI that works on its own: AI Agents (the Automated Bureaucracy law and
+Fully Automated Content Creation), Self-Driving Laboratories (the University's
+AI Assisted Research), Humanoid Robotics (Robotic Service Providers and
+Neuromorphic Computing) and Autonomous Weapons (Robotic Soldiers). Artificial
+General Intelligence in era 12 needs Self-Driving Laboratories and Humanoid
+Robotics.
 
 Era 12 is the medium-term future. Artificial General Intelligence adds AI-managed
 production methods to many industries, and Orbital Manufacturing and Advanced
@@ -120,7 +128,7 @@ Tourism Industry with Romanticism.
 ### Global technological development
 
 The further the world's leading powers advance, the faster everyone else
-catches up. Once a year, every country checks a list of 54 mid-century and later
+catches up. Once a year, every country checks a list of 55 mid-century and later
 technologies, from Television and Cryptography to Post-Scarcity Economy. Each one
 that any great power has researched adds a bonus to technology spread, the
 trickle of innovation that pulls you toward technologies others already have.

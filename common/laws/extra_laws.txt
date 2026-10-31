@@ -4706,8 +4706,9 @@ law_automated_bureaucracy = {
 	# bureaucracy law falls back here.
 	progressiveness = -10
 
+	# AI Agents (Generative AI until the era 13 spec, § 6.1)
 	unlocking_technologies = {
-		generative_ai
+		ai_agents
 	}
 
 	# Vanilla's Appointed Bureaucrats tooltips: pop IG weights key on Elected

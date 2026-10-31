@@ -455,7 +455,9 @@ def render_slot_triggers(n: int) -> list[str]:
                 f"\tNOT = {{ var:{loc} = {b.code} }}",
                 f"\tNOT = {{ {var(n, 'refitting')} = yes }}",
                 f"\t{var(n, 'strength')} >= sr_fl_minimum_strength",
-                f"\t{var(n, 'dv_value')} >= {var(n, f'leg_dv_{b.key}')}"]
+                f"\t{var(n, 'dv_value')} >= {var(n, f'leg_dv_{b.key}')}",
+                # UI pass design § 10: no Space Command, no fleet orders.
+                "\tsr_sc_operational = yes"]
         if b.code != EARTH:
             # 6d (design § 15): nothing leaves Earth blockaded or with the launch site lost.
             out.append(f"\tNOT = {{ AND = {{ var:{loc} = {EARTH} sr_launches_barred = yes }} }}")
