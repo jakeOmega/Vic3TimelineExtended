@@ -752,6 +752,7 @@ class PanelTest(unittest.TestCase):
                 # button moved to the colony target popup.
                 self.assertNotIn("sr_colony_target_sgui", row)
                 self.assertRegex(row, r'blockoverride "site_target_button" \{\s*visible = no\s*\}')
+                self.assertNotIn('blockoverride "site_window"', row)
 
     def test_the_target_picker_rows_follow_the_table(self):
         """The colony target popup (UI pass design § 5): every world under its

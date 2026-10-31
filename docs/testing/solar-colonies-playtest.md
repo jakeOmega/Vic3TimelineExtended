@@ -633,7 +633,8 @@ opened it.
 2. **It closes three ways.** Escape closes the popup and leaves the journal panel or the Timeline Extended window open
    behind it; a click outside the popup closes it; so does its close button. Reopen it each time.
 3. **The rows read.** With the popup open from either host, every listed site shows its slots, base room and grade,
-   holder, inbound fleets and launch window ("Any month" at the Moon and Mercury; "Open now", "In N months", or with
+   holder, inbound fleets and launch window (slots, room and fleets under Simple and Full Colonies; "Any month" at the
+   Moon and Mercury; "Open now", "In N months", or with
    depots "+N% now, N mo" elsewhere), with figures, not raw keys or zeros. The count reads "N of 40 sites can be
    targeted"; Show all lists all 40.
 4. **Target and Clear.** Target on a site closes the popup; Colony Fleets names the site, with Change and Clear, and
@@ -643,5 +644,10 @@ opened it.
 5. **Solar System is a list to read.** Its rows have no button; the row ends after the inbound fleets.
 6. **The entry closing under it** (hard to reach on purpose; note it if seen). With the popup open while the
    colonization entry goes away, the popup says "Solar System Colonization isn't running." instead of an empty frame.
-7. **The panel behind.** With the popup open, the journal panel behind it still scrolls with the wheel outside the
-   popup's body (or the popup closes on the click: either is fine; note which).
+7. **The screen behind takes nothing.** The shell carries `filter_mouse = left|right|wheel`, as vanilla's windows do.
+   With the popup open, the wheel and a right-click outside its body neither scroll the journal panel nor move the
+   map; a left-click there closes the popup.
+8. **The launcher.** The Timeline Extended launcher (`layer = top`) draws over the dim. Note whether it still opens the
+   window while the popup is up; that's acceptable either way.
+9. **A long window figure fits.** With depots and a closed window, a site's window reads "+N% now, N mo" in full,
+   months included, not cut off with an ellipsis.

@@ -3713,16 +3713,16 @@ types space_race_widget_types
 	### and Extraplanetary Base room (Simple and Full Colonies).
 	### Two lists instance it, both generated (sr_sites_generated_rows.gui):
 	### - Solar System (te_sr_solar_system_rows), a list to read: no window, no
-	###   button. 24 icon + 180 name + 122 holder + 65 inbound + 3 × 4 spacing
-	###   + 2 × 4 margin = 411, in the column. Shown while Solar System lists
+	###   button. 24 icon + 180 name + 122 holder + 65 inbound + 3 × 3 spacing
+	###   + 2 × 4 margin = 408, in the column. Shown while Solar System lists
 	###   every world or the world is one our fleets can go to, ours, or one a
 	###   fleet is bound for.
 	### - The colony target popup (te_sr_target_picker_rows, UI pass design
 	###   § 5): the launch window toward it (te_sr_site_window_cell, block
 	###   site_window) and the Target button (sr_colony_target_sgui,
 	###   scope:site = the world's index; Clear on our target), on every world
-	###   so a greyed one says why. 411 + 124 + 66 + 2 × 4 = 609, in the
-	###   popup's 700. Shown while the popup lists every world or we can
+	###   so a greyed one says why. 391 + 152 window + 66 button + 5 × 3
+	###   spacing + 2 × 4 margin = 632, in the popup's 760. Shown while the popup lists every world or we can
 	###   target it.
 	type te_sr_site_row = flowcontainer {
 		direction = vertical
@@ -4002,16 +4002,16 @@ types space_race_widget_types
 	### the four states of Next Windows' row (te_sr_window_row,
 	### sr_launch_window_widgets.gui) on sr_disp_win_state_<body> for the body
 	### our transit to the site is read for (gen_solar_sites.transit_body).
-	### 124 wide: "+25% now, 12 mo" with depots.
+	### 152 wide: "+999% now, 99 mo" with depots, at its longest.
 	type te_sr_site_window_cell = widget {
-		size = { 124 24 }
+		size = { 152 24 }
 		parentanchor = vcenter
 		tooltip = "je_space_race_widget_tp_window_tt"
 
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 124
+			max_width = 152
 			align = left|nobaseline
 			using = te_sr_fontsize_row
 			elide = right
@@ -4021,7 +4021,7 @@ types space_race_widget_types
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 124
+			max_width = 152
 			align = left|nobaseline
 			using = te_sr_fontsize_row
 			elide = right
@@ -4031,7 +4031,7 @@ types space_race_widget_types
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 124
+			max_width = 152
 			align = left|nobaseline
 			using = te_sr_fontsize_row
 			elide = right
@@ -4040,7 +4040,7 @@ types space_race_widget_types
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 124
+			max_width = 152
 			align = left|nobaseline
 			using = te_sr_fontsize_row
 			elide = right
@@ -4056,7 +4056,7 @@ types space_race_widget_types
 	type te_sr_target_popup_body = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
-		minimumsize = { 609 -1 }
+		minimumsize = { 632 -1 }
 		spacing = 2
 
 		te_sr_note = {
@@ -4131,9 +4131,10 @@ types space_race_widget_types
 		blockoverride "popup_title" {
 			text = "je_space_race_widget_tp_title"
 		}
-		### The rows' 609, the list's margins, the window's and a scrollbar.
+		### The rows' 632, plus the window's margins (2 × 35), the list's
+		### (2 × 10) and a scrollbar: 760.
 		blockoverride "popup_size" {
-			size = { 700 640 }
+			size = { 760 640 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {

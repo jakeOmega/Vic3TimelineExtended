@@ -521,6 +521,20 @@ CELLS = {
     "a destination's window with depots (te_sr_window_row)": (
         ("te_sr_window_row", 'block "win_paid"'),
         r"je_space_race_widget_win_paid_\w+"),
+    # The colony target popup's window column (UI pass design § 5): Next
+    # Windows' keys, in a narrower cell.
+    "a site's window, any month (te_sr_site_window_cell)": (
+        ("te_sr_site_window_cell", 'text = "je_space_race_widget_win_any"'),
+        r"je_space_race_widget_win_any"),
+    "a site's window, open (te_sr_site_window_cell)": (
+        ("te_sr_site_window_cell", 'text = "je_space_race_widget_win_open"'),
+        r"je_space_race_widget_win_open"),
+    "a site's window, waiting (te_sr_site_window_cell)": (
+        ("te_sr_site_window_cell", 'block "win_wait"'),
+        r"je_space_race_widget_win_wait_\w+"),
+    "a site's window with depots (te_sr_site_window_cell)": (
+        ("te_sr_site_window_cell", 'block "win_paid"'),
+        r"je_space_race_widget_win_paid_\w+"),
     "a destination's transit and its head (te_sr_window_row)": (
         ("te_sr_window_row", 'block "win_transit"'),
         r"je_space_race_widget_win_(col_transit|transit_\w+)"),

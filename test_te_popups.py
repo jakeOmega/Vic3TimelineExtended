@@ -95,12 +95,18 @@ class PopupTypeTest(unittest.TestCase):
         self.assertLess(behind.start(), body.start())
         self.assertIn("alwaystransparent = no", self.shell[body.start():])
 
-    def test_the_header_closes_on_escape(self):
-        # Vanilla's close button carries shortcut = "close_window"
-        # (frontend/shared/buttons.gui, buttons_window_control's close_button).
+    def test_the_header_close_button_closes(self):
+        # Escape comes with it: vanilla's close button carries
+        # shortcut = "close_window" (frontend/shared/buttons.gui,
+        # buttons_window_control's close_button), and the override sets only
+        # the click.
         header = _child(self.shell, "header_pattern = {")
         close = _child(header, 'blockoverride "button_close" {')
         self.assertIn(CLEAR, close)
+        self.assertNotIn("shortcut", close)
+
+    def test_the_shell_keeps_the_mouse_from_the_screen_behind(self):
+        self.assertRegex(self.shell, r"(?m)^\t\tfilter_mouse = left\|right\|wheel$")
 
     def test_the_blocks(self):
         for name in ("popup_visible", "popup_title", "popup_size", "popup_list", "popup_footer"):
@@ -171,6 +177,9 @@ class PopupHostTest(unittest.TestCase):
                 # The datacontext's block holds the body.
                 start = body.rindex("{", 0, context)
                 self.assertGreater(_close(body, start), context + content.end())
+                # The gate's block holds the datacontext's.
+                gate_start = body.rindex("{", 0, gate)
+                self.assertGreater(_close(body, gate_start), _close(body, start))
 
 
 if __name__ == "__main__":

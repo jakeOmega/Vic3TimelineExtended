@@ -30,6 +30,9 @@ types te_widget_library_types
 
 		using = Animation_ShowHide_Quick
 		using = Background_Full_Dim
+		### A window gets this from vanilla's defaults; a widget doesn't, so the
+		### wheel and right-clicks would reach the panel or map behind.
+		filter_mouse = left|right|wheel
 
 		### A click outside the body: this button fills the screen behind it.
 		button_normal = {

@@ -71,7 +71,7 @@ sr_colony_target_sgui = {
 }
 
 # Colony Fleets: Clear, beside our target (audit SPC-7): the programme chooses
-# again, as Clear on the world's Solar System row does.
+# again, as Clear on our target's row in the colony target popup does.
 sr_cf_target_clear_sgui = {
 	scope = country
 
