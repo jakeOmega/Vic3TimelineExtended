@@ -31,6 +31,12 @@ sr_disp_fl_strength = {
 sr_disp_fl_strength_full = {
 	value = sr_fl_strength_full_total
 }
+# Space Fleets' note (UI pass design § 10): 1 while our fleets take orders, a
+# Space Command level in a state we control (sr_sc_operational).
+sr_disp_sc_operational = {
+	value = 0
+	if = { limit = { sr_sc_operational = yes } value = 1 }
+}
 sr_disp_sc_upkeep_pct = {
 	value = sr_fleet_upkeep_units_value
 	multiply = 900

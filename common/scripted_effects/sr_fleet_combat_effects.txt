@@ -1287,8 +1287,10 @@ sr_fl_ai_defend = {
 # Earth is blockaded, to seize it when its marines suffice; else it stays
 # stationed. The dispatch then leaves that fleet where it is.
 sr_fl_ai_attack = {
+	# No Space Command, no orders (UI pass design § 10): the lunar assault and
+	# the offensive set postures directly, so they wait as a player does.
 	if = {
-		limit = { is_at_war = yes }
+		limit = { is_at_war = yes sr_sc_operational = yes }
 		sr_fl_ai_lunar_assault = yes
 		sr_fl_ai_attack_all = yes
 		sr_fl_each_slot = { DO = ai_assault }

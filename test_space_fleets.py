@@ -545,7 +545,7 @@ class AiOffenceTest(unittest.TestCase):
         # At war: the lunar step at Earth (lunar colonization § 8.4), then the
         # dispatch, then each slot's assault.
         self.assertRegex(_block(self.combat, "sr_fl_ai_attack"),
-                         r"limit = \{ is_at_war = yes \}\s*sr_fl_ai_lunar_assault = yes\s*sr_fl_ai_attack_all = yes\s*"
+                         r"limit = \{ is_at_war = yes sr_sc_operational = yes \}\s*sr_fl_ai_lunar_assault = yes\s*sr_fl_ai_attack_all = yes\s*"
                          r"sr_fl_each_slot = \{ DO = ai_assault \}")
         review = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_ai_review")
         self.assertLess(review.index("sr_fl_ai_defend = yes"), review.index("sr_fl_ai_attack = yes"))
@@ -1113,6 +1113,76 @@ class LunarAtEarthTest(unittest.TestCase):
         self.assertNotIn("posture", note)
         self.assertNotIn("posture", _block(_strip(_raw(FLEET_EFFECTS)), "sr_loc_add_present"))
         self.assertIn("value = var:sr_fl_at_earth", _block(_strip(_raw(FLEET_VALUES)), "sr_orbital_superiority_margin"))
+
+
+class NoSpaceCommandTest(unittest.TestCase):
+    """No Space Command, no fleet orders (UI pass design § 10): with no Space
+    Command level in a state it controls, a country's fleets can't depart,
+    change posture or target, start a refit or repair; a refit under way
+    pauses. Fleets in flight land, fight where they are, and refill."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.sguis = _strip(_raw(SGUIS))
+        cls.effects = _strip(_raw(FLEET_EFFECTS))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+
+    def test_operational_needs_a_held_level(self):
+        body = _block(self.triggers, "sr_sc_operational")
+        self.assertRegex(body, r"any_scope_state = \{\s*sr_state_held_by_owner = yes\s*any_scope_building = \{\s*"
+                               r"is_building_type = building_space_command\s*level >= 1\s*\}\s*\}")
+
+    def test_every_may_depart_needs_it(self):
+        for n in range(1, gsf.SLOTS + 1):
+            for lc in gsf.LOCATIONS:
+                with self.subTest(slot=n, loc=lc.key):
+                    self.assertIn("sr_sc_operational = yes", _block(self.generated, f"sr_fl_{n}_may_depart_{lc.key}"))
+
+    def test_posture_and_target_orders_need_it(self):
+        reason = "custom_tooltip = {\n\t\t\ttext = sr_fl_req_space_command_tt\n\t\t\tsr_sc_operational = yes\n\t\t}"
+        # A direct child of is_valid (one tab deeper than is_valid itself), not
+        # nested in the line before: last in posture's and target's, before
+        # can_go's in Go's.
+        for sgui, after in (("sr_fleet_go_sgui", "\n\t\tcustom_tooltip = {\n\t\t\ttext = sr_fl_short_tt"),
+                            ("sr_fleet_posture_sgui", "\n\t}\n\n\teffect = {"),
+                            ("sr_fleet_target_sgui", "\n\t}\n\n\teffect = {")):
+            with self.subTest(sgui=sgui):
+                body = _block(self.sguis, sgui)
+                self.assertRegex(body, r"\t\t\}\n\s*" + re.escape(reason) + re.escape(after))
+        # Go gives this reason before the generic one can_go would.
+        go = _block(self.sguis, "sr_fleet_go_sgui")
+        self.assertLess(go.index("sr_fl_req_space_command_tt"), go.index("TEST = can_go"))
+
+    def test_refit_pauses_and_repair_waits(self):
+        month = _block(self.effects, "sr_fl_month_at")
+        pause = re.search(r"limit = \{\s*NOT = \{ sr_sc_operational = yes \}\s*has_variable = sr_fl_\$N\$_refit_until\s*\}\s*"
+                          r"change_variable = \{ name = sr_fl_\$N\$_refit_until add = 1 \}", month)
+        self.assertIsNotNone(pause, "a refit under way doesn't pause")
+        # The pause comes first, so a paused refit can't also complete.
+        self.assertLess(pause.start(), month.index("var:sr_fl_$N$_refit_until <= te_history_month_index"))
+        start = month[month.index("sr_fl_$N$_drive_value < sr_drive_level") - 200:month.index("sr_fl_$N$_drive_value < sr_drive_level") + 80]
+        self.assertIn("sr_sc_operational = yes", start)
+        self.assertRegex(month, r"limit = \{ local_var:sr_fl_share > 0 sr_sc_operational = yes \}\s*sr_fl_repair_roles_at")
+
+    def test_refill_still_runs(self):
+        month = _block(self.effects, "sr_fl_month_at")
+        for line in ("set_variable = { name = sr_fl_$N$_dv value = sr_fl_$N$_dv_capacity }",
+                     "set_variable = { name = sr_fl_$N$_supply value = sr_fl_$N$_endurance }"):
+            with self.subTest(line=line):
+                i = month.index(line)
+                # not inside a block that tests sr_sc_operational
+                self.assertNotIn("sr_sc_operational", month[month.rindex("limit", 0, i):i])
+
+    def test_the_ai_s_voluntary_orders_need_it(self):
+        """The lunar assault and the offensive set postures directly; the
+        combat model's own fallbacks (sr_cb_check_target and the rest) stay."""
+        attack = _block(self.combat, "sr_fl_ai_attack")
+        self.assertRegex(attack, r"limit = \{ is_at_war = yes sr_sc_operational = yes \}\s*sr_fl_ai_lunar_assault = yes")
+        self.assertIn("sr_fl_each_slot = { DO = ai_assault }", attack)
+        calls = re.findall(r"sr_fl_ai_lunar_assault = yes", self.combat + _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)) + self.effects)
+        self.assertEqual(len(calls), 1)
 
 
 if __name__ == "__main__":

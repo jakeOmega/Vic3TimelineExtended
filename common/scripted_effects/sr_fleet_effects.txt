@@ -207,7 +207,16 @@ sr_fl_month_at = {
 		}
 		else_if = {
 			limit = { sr_fl_$N$_docked = yes }
+			# No Space Command (UI pass design § 10): a refit under way pauses,
+			# its end a month later each month; none starts; repair waits.
 			if = {
+				limit = {
+					NOT = { sr_sc_operational = yes }
+					has_variable = sr_fl_$N$_refit_until
+				}
+				change_variable = { name = sr_fl_$N$_refit_until add = 1 }
+			}
+			else_if = {
 				limit = {
 					has_variable = sr_fl_$N$_refit_until
 					var:sr_fl_$N$_refit_until <= te_history_month_index
@@ -219,6 +228,7 @@ sr_fl_month_at = {
 				limit = {
 					NOT = { has_variable = sr_fl_$N$_refit_until }
 					sr_fl_$N$_drive_value < sr_drive_level
+					sr_sc_operational = yes
 				}
 				set_variable = {
 					name = sr_fl_$N$_refit_until
@@ -246,7 +256,7 @@ sr_fl_month_at = {
 			set_variable = { name = sr_fl_$N$_supply value = sr_fl_$N$_endurance }
 			set_local_variable = { name = sr_fl_share value = sr_fl_$N$_repair_share }
 			if = {
-				limit = { local_var:sr_fl_share > 0 }
+				limit = { local_var:sr_fl_share > 0 sr_sc_operational = yes }
 				sr_fl_repair_roles_at = { N = $N$ }
 			}
 			if = {
