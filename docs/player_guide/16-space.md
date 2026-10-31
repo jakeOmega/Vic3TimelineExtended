@@ -57,7 +57,7 @@ innovation, innovation cap and prestige.
 | Mars Mission | Knowledge Economy | adds Mars Landing | 5,000 |
 | Solar Colonization | Cislunar Infrastructure | adds Solar System Colonization, the Moon and stages 1 and 2 | 10,000 |
 | Deep Space Exploration | Space Colonization | lets a country with no colony beyond the Moon start colonizing at stages 3 to 5 | 50,000 |
-| Interstellar Mission | Compact Fusion Reactors | adds the Interstellar Probe | 100,000 |
+| Interstellar Mission | Aneutronic Fusion | adds the Interstellar Probe | 100,000 |
 
 > Lowering the production method, or losing the building, fails every running
 > milestone the new method no longer supports and wipes its progress. The event
@@ -111,7 +111,7 @@ Program runs a method that supports it.
 | Moon Landing | Orbital Flight | Space Exploration (era 7) | 200 | 6% | ×2 |
 | Deep-Space Probe | Moon Landing | Space Exploration (era 7) | 150 | 6% | ×2 |
 | Mars Landing | Moon Landing | Knowledge Economy (era 9) | 450 | 9% | ×6 |
-| Interstellar Probe | Deep-Space Probe and Mars Landing | Compact Fusion Reactors (era 12) | 600 | 9% | ×12 |
+| Interstellar Probe | Deep-Space Probe and Mars Landing | Aneutronic Fusion (era 13) | 600 | 9% | ×12 |
 | Interstellar Probe: Awaiting Data | Interstellar Probe | none | 132 months | none | none |
 | Solar System Colonization | Moon Landing (Mars Landing for the sites beyond the Moon) | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
 

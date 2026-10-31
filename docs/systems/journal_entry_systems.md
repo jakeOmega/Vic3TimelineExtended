@@ -1784,7 +1784,7 @@ Multi-stage competitive space race system across nine journal entries — seven 
 | Outer Solar System Probe | space_exploration | Orbital + Moon Landing complete (shown once Orbital is done) |
 | Moon Base | — | Retired 2026-10-29: never shown or possible; the first lunar colony takes its place (`sr_lunar_colony_founded`) and an old save's Moon Base becomes a lunar colony (mod_systems/space_race.md → Space Race → *The Moon Base retired*) |
 | Mars Landing | knowledge_economy | Orbital + Moon Landing complete (shown once Orbital is done) |
-| Interstellar Probe | compact_fusion_reactors | Deep-Space Probe + Mars Landing complete |
+| Interstellar Probe | aneutronic_fusion (compact_fusion_reactors until 2026-10-31) | Deep-Space Probe + Mars Landing complete |
 | Interstellar Probe: Awaiting Data | — | Interstellar Probe launched (passive, 132 months) |
 | Solar System Colonization | cislunar_infrastructure | Moon Landing complete, and the Mars Landing for each world beyond the Moon; or any colony held (given by treaty or inherited), which opens it without colonizing (`sr_solar_colonization_qualified`) |
 
