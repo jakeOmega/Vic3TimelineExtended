@@ -1021,9 +1021,14 @@ the reserve until it is launched (see [Holding Earth orbit](#holding-earth-orbit
 | Assault carrier | 0.25 | 0.25 | 12 | Carries 2 marine battalions a point of strength |
 | Tender | 0.1 | 0.1 | 36 | Adds propellant and supply to its fleet |
 
-Fleets cost upkeep as more of every input Space Command uses: 1% for every 10
-points of strength at full, the reserve's included. A large fleet makes the
-yards dearer to run, not slower. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
+Every Space Command uses a maintenance line, the same whatever its method and
+however many levels it has: 20 Electronic Components, 20 Wired and 20 Wireless
+Telecommunication Gear, 10 Software, 20 Industrial Robotics and 40 Chemicals a
+week at full staff, about 8,400 at base prices. Fleets cost upkeep as +900% of
+that line for every 10 points of strength at full, the reserve's included, so a
+fleet of 300 costs about 2.3 million a week. Switching the yards to a cheaper
+method or cutting levels doesn't lower it. A large fleet makes Space Command
+dearer to run, not slower. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
 Production each raise your fleets' fire by a quarter.
 
 ### Moving fleets

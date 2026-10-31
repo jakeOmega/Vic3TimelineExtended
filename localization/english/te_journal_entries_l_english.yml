@@ -1675,7 +1675,7 @@
  je_space_race_widget_sc_strength_tt:0 "#header Fleet Strength#!\nAll our fleets' strength now, and at full. Damage is repaired at a dock: #v 20%#! of the gap a month at Earth, #v 10%#! a Spaceport level at a colony."
  je_space_race_widget_sc_upkeep_figure:0 "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_upkeep_pct')|0]%#!"
  je_space_race_widget_sc_upkeep_label:0 "Upkeep"
- je_space_race_widget_sc_upkeep_tt:0 "#header Fleet Upkeep#!\nOur fleets' upkeep, as more of every input our $building_space_command$ buildings use: #v 1%#! for every 10 strength at full, the reserve on the ground included. It slows nothing down, it costs goods. The building's input tooltip shows it."
+ je_space_race_widget_sc_upkeep_tt:0 "#header Fleet Upkeep#!\nOur fleets' upkeep, as more of the maintenance goods our $building_space_command$ uses: #v +900%#! for every 10 strength at full, the reserve on the ground included. The maintenance itself is #v 20#! $electronic_components$, #v 20#! $telephones$, #v 20#! $radios$, #v 10#! $digital_assets$, #v 20#! $robotics$ and #v 40#! $fertilizer$ a week at full staff, whatever the method and however many levels, fleet or not. It slows nothing down, it costs goods. The building's input tooltip shows it."
  je_space_race_widget_setbacks_interstellar_probe:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_setbacks_interstellar_probe_value')|0]"
  je_space_race_widget_setbacks_label:0 "Setbacks So Far"
  je_space_race_widget_setbacks_mars_landing:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_setbacks_mars_landing_value')|0]"

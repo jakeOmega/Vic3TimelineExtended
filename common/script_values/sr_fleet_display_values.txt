@@ -33,6 +33,7 @@ sr_disp_fl_strength_full = {
 }
 sr_disp_sc_upkeep_pct = {
 	value = sr_fleet_upkeep_units_value
+	multiply = 900
 }
 
 # The notices (space_race_events.100 and .101), read in their text: months

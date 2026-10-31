@@ -236,11 +236,47 @@ class OccupiedStateTest(unittest.TestCase):
 
 
 class UpkeepTest(unittest.TestCase):
-    def test_the_goods_upkeep_covers_every_input_of_every_method(self):
-        inputs = set(re.findall(r"goods_input_(\w+)_add = ", _raw(METHODS)))
-        upkeep = set(re.findall(r"goods_input_(\w+)_mult = 0\.01", _block(_raw(STATIC), "sr_fleet_upkeep_goods")))
-        self.assertEqual(inputs, upkeep)
-        self.assertEqual(inputs, {"launch_capacity", "advanced_materials", "electricity"})
+    """The fleets' upkeep (UI pass design § 10): an identical unscaled
+    maintenance line of six goods no method otherwise uses, on every yard
+    method, multiplied by +900% a unit, so it follows neither the method nor
+    Space Command's levels."""
+
+    LINE = {"electronic_components": 20, "telephones": 20, "radios": 20,
+            "digital_assets": 10, "robotics": 20, "fertilizer": 40}
+    K = 9
+
+    def _methods(self):
+        text = _strip(_raw(METHODS))
+        return {m.group(1): _block(text, m.group(1)) for m in re.finditer(r"(?m)^(pm_sr_space_command_\w+) = \{", text)}
+
+    def test_the_upkeep_goods_are_the_maintenance_line(self):
+        methods = self._methods()
+        self.assertEqual(len(methods), 4)
+        for name, body in methods.items():
+            with self.subTest(method=name):
+                m = re.search(r"(?m)^\s*unscaled = \{", body)
+                self.assertIsNotNone(m, "no unscaled block")
+                unscaled = _block(body[m.start():].lstrip(), "unscaled")
+                line = {g: int(v) for g, v in re.findall(r"goods_input_(\w+)_add = (\d+)", unscaled)}
+                self.assertEqual(line, self.LINE)
+                # No other input of the method names one of the six.
+                rest = body.replace(unscaled, "")
+                for good in self.LINE:
+                    self.assertNotIn(f"goods_input_{good}_", rest)
+        upkeep = _block(_raw(STATIC), "sr_fleet_upkeep_goods")
+        mults = {g: v for g, v in re.findall(r"goods_input_(\w+)_mult = (\S+)", upkeep)}
+        self.assertEqual(mults, {g: str(self.K) for g in self.LINE})
+
+    def test_every_mult_and_add_is_registered(self):
+        """A mod good's goods_input_<good>_mult is silently inert unregistered
+        (scripting_best_practices.md); vanilla registers some of the six."""
+        mod = "\n".join(p.read_text(encoding="utf-8-sig") for p in (ROOT / "common/modifier_type_definitions").glob("*.txt"))
+        vanilla = (ROOT / "vanilla_parsed/common/modifier_types.json").read_text(encoding="utf-8")
+        for good in self.LINE:
+            for kind in ("add", "mult"):
+                name = f"goods_input_{good}_{kind}"
+                with self.subTest(modifier=name):
+                    self.assertTrue(re.search(rf"(?m)^{name} = \{{", mod) or f'"{name}"' in vanilla, name)
 
     def test_the_upkeep_is_on_the_building_and_refreshed_once(self):
         apply = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_apply")
@@ -248,6 +284,24 @@ class UpkeepTest(unittest.TestCase):
         self.assertLess(apply.index("remove_modifier = sr_fleet_upkeep_goods"), apply.index("add_modifier"))
         calls = re.findall(r"sr_fl_upkeep_apply = yes", _strip(_raw(FLEET_EFFECTS)))
         self.assertEqual(len(calls), 1)
+
+    def test_the_self_check_reads_last_month_s_apply(self):
+        refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
+        self.assertLess(refresh.index("sr_fl_upkeep_self_check = yes"),
+                        refresh.index("set_variable = { name = sr_fleet_upkeep_units"))
+        check = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_self_check")
+        self.assertIn("NOT = { has_global_variable = sr_fl_upkeep_line_checked }", check)
+        self.assertIn("var:sr_fleet_upkeep_units > 0", check)
+        self.assertIn("has_modifier = sr_fleet_upkeep_goods", check)
+        self.assertIn("prev.modifier:goods_input_robotics_mult", check)
+        self.assertIn(f"multiply = {self.K}", check)
+        self.assertIn("TE_SELF_CHECK OK fleet_upkeep_line", check)
+        self.assertIn("TE_SELF_CHECK BROKEN fleet_upkeep_line", check)
+
+    def test_the_panel_shows_the_percent(self):
+        shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_upkeep_pct")
+        self.assertIn("value = sr_fleet_upkeep_units_value", shown)
+        self.assertIn(f"multiply = {self.K * 100}", shown)
 
 
 class ShippingTest(unittest.TestCase):
