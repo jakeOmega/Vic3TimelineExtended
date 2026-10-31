@@ -679,6 +679,34 @@ ste_av_crash_continue = {
 	country_legitimacy_base_add = -5
 }
 
+# ======= AI Tutors (society_technology_events.36-.37, era 13 spec § 7.6)
+# Loyalty is a monthly loyalist trickle, one level of the Ministry of Thought
+# Control's own lever (state_monthly_loyalists_add, read per incorporated state
+# by thought_control_loyalists_update); trust is legitimacy, innovation research
+# speed.
+ste_ai_tutor_open_curricula = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_legitimacy_base_add = 5
+	country_tech_research_speed_mult = 0.05
+}
+ste_ai_tutor_platform_contract = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_monthly_loyalists_add = 0.001
+	country_legitimacy_base_add = -5
+	country_tech_research_speed_mult = -0.05
+}
+ste_ai_tutor_state_syllabus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_monthly_loyalists_add = 0.001
+	country_legitimacy_base_add = -5
+	country_tech_research_speed_mult = -0.05
+}
+ste_ai_tutor_scholars_syllabus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 5
+	country_tech_research_speed_mult = 0.05
+}
+
 # ======= Institution-Gated Options (new)
 
 # Nuclear - proactive safety audit catches issues early
