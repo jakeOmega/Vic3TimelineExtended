@@ -2,10 +2,11 @@
 
 The later eras bring social questions your government must answer: equal rights
 for discriminated minorities, human augmentation, the freedom to change how your
-body looks, digital privacy, mental health and life after work. Each has a journal entry that opens with a technology and
-ends when you settle the question, mostly by passing a law, or when time runs
-out. Other movements arrive as events without a journal entry, and religious
-revival events push back against secularization. The Social Movements game rule
+body looks, digital privacy, mental health and life after work. Each has a
+journal entry that opens with a technology and ends when you settle the
+question, mostly by passing a law, or when time runs out. Other movements
+arrive as events without a journal entry, and religious revival events push
+back against secularization. The Social Movements game rule
 (on by default) controls the six journal entries and their events; the
 movements carried by events run either way.
 

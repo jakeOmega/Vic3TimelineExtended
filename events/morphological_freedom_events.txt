@@ -478,12 +478,9 @@ morphological_freedom_events.6 = {
 		ai_chance = {
 			base = 2
 		}
-		add_modifier = {
-			name = mf_salon_tax_modifier
-			multiplier = sv_money_flow_event_small  # 0.01% GDP / week
-			days = normal_modifier_time
-			is_decaying = yes
-		}
+		# A one-off levy, not a weekly tax: a recurring income line would need a
+		# Budget breakdown source of its own (gen_budget_breakdown.py).
+		add_treasury = sv_treasury_event_medium
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
 

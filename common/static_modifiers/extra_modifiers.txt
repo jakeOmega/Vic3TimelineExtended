@@ -6045,12 +6045,6 @@ mf_fashion_export_modifier = {
 	country_cultural_hegemony_art_mult = 0.05
 }
 
-mf_salon_tax_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	# Base 1 — apply with multiplier = sv_money_flow_event_<tier> for GDP-scaled tax income.
-	country_tax_income_add = 1
-}
-
 # ============================================================================
 # ENVIRONMENTAL CRISIS RESPONSE MODIFIERS
 # ============================================================================

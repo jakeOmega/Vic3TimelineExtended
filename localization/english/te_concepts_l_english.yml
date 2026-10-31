@@ -1923,7 +1923,6 @@
  mf_natural_teams_modifier_desc:0 "Our national teams field only unmodified athletes, and some of our best compete elsewhere or not at all."
  mf_open_competition_modifier_desc:0 "Every body may compete, records keep falling, and the world tunes in to watch."
  mf_public_figure_praised_modifier_desc:0 "The government's praise for a famous face has drawn the world's attention to our open society."
- mf_salon_tax_modifier_desc:0 "A levy on body-modification salons brings in revenue."
  migration_crowding:0 "Population Pressure"
  migration_crowding_desc:0 "Densely populated states become less attractive to migrants as living space, [concept_infrastructure], and resources become strained. States with more [concept_arable_land] or [concept_urban_engineering] can support more people before this effect kicks in."
  military_disarmament_anger_modifier_desc:0 "The armed forces are furious about nuclear disarmament obligations."
