@@ -764,6 +764,10 @@ ICONS: dict[str, dict[str, dict]] = {
         "lab-grown_food": {"subject": "a round petri dish holding a pink cultured meat steak", "seed": 0},
         "personalized_medicine": {"subject": "a single capsule pill with a DNA helix pattern on its shell", "seed": 1},
         "universal_digital_identity": {"subject": "a plain pale blue identity card with a glowing blue fingerprint and a gold chip", "seed": 1},
+        "ai_agents": {"subject": "a small glowing blue robot hand moving a cursor across a stack of paper forms and ticking boxes", "seed": None},
+        "self_driving_laboratories": {"subject": "a white robotic arm pipetting into a rack of glowing test tubes on a lab bench", "seed": None},
+        "humanoid_robotics": {"subject": "a friendly white humanoid robot carrying a cardboard box in both arms", "seed": None},
+        "autonomous_weapons": {"subject": "a dark grey four-legged robot with a sensor turret and a red targeting light", "seed": None},
         # eras 12 and 13 (era 13 split from era 12, 2026-10-31)
         "antimatter_production": {"subject": "a glowing magnetic containment bottle with a bright violet sphere suspended inside", "seed": 1},
         "compact_fusion_reactors": {"subject": "a compact barrel-sized cylindrical fusion reactor core glowing blue-white at its centre", "seed": 1},

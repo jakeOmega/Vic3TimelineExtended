@@ -166,6 +166,8 @@ mind_backups = {
 	}
 
 	modifier = {
+		# uploaded minds think at machine speed; the large step is left for Superintelligence (era 13 spec § 4.2)
+		country_weekly_innovation_max_add = 200
 		building_economy_of_scale_level_cap_add = 10
 		country_max_weekly_construction_progress_add = 50
 		# demographics phase 3 (the late-game design §8.4, call 19): under Full the census carries this line as half the

@@ -665,6 +665,23 @@ differences:
 
 The observer runs (the gate) are still to do.
 
+**Phase 2, as built (2026-10-31).** As § 4.2 and § 6 describe, with these
+differences:
+- **The budget came before the runs.** § 4.2's innovation figures shipped as
+  proposed (era 11 1,000, era 12 500, era 13 200), so one "after" run covers
+  both phases and trims or raises the budget.
+- **The new technologies' own lines:** Humanoid Robotics' trade employment is
+  −5%, half Autonomous Vehicles'. Autonomous Weapons adds +5% unit offense. AI
+  Agents and Self-Driving Laboratories carry only their innovation.
+- **Administration by Algorithm** (`society_technology_events.27`) moves with
+  the law it is about, to AI Agents.
+- **Spread:** Self-Driving Laboratories joins at 100, so the list counts 55.
+- **The repair's phase 2 rows** run under their own flag, since a save from
+  between the phases already has phase 1's.
+- **Icons:** all four borrow existing icons, as in phase 1.
+- **Covert theft:** the regenerated catalog renumbers its indices. An old save's
+  "last stolen" line can name the wrong technology until its next theft.
+
 **Play-test list** (a new `docs/testing/era-13-playtest.md`): the technology
 tree draws a thirteenth era column; old saves load with the moved methods and
 units (§ 5.6); an active Post-Scarcity Transition in an old save; each phase-3

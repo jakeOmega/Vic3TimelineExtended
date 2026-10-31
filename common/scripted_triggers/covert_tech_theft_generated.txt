@@ -68,6 +68,17 @@ covert_tech_stealable_production = {
 			$TARGET$ ?= { has_technology_researched = advanced_structural_engineering }
 		}
 		AND = {
+			NOT = { has_technology_researched = ai_agents }
+			OR = {
+				can_research = ai_agents
+				AND = {
+					is_researching_technology = ai_agents
+					has_technology_researched = generative_ai
+				}
+			}
+			$TARGET$ ?= { has_technology_researched = ai_agents }
+		}
+		AND = {
 			NOT = { has_technology_researched = aluminum_mass_production }
 			OR = {
 				can_research = aluminum_mass_production
@@ -118,8 +129,8 @@ covert_tech_stealable_production = {
 				can_research = artificial_intelligence
 				AND = {
 					is_researching_technology = artificial_intelligence
-					has_technology_researched = generative_ai
-					has_technology_researched = autonomous_vehicles
+					has_technology_researched = self_driving_laboratories
+					has_technology_researched = humanoid_robotics
 				}
 			}
 			$TARGET$ ?= { has_technology_researched = artificial_intelligence }
@@ -581,6 +592,18 @@ covert_tech_stealable_production = {
 				}
 			}
 			$TARGET$ ?= { has_technology_researched = green_revolution }
+		}
+		AND = {
+			NOT = { has_technology_researched = humanoid_robotics }
+			OR = {
+				can_research = humanoid_robotics
+				AND = {
+					is_researching_technology = humanoid_robotics
+					has_technology_researched = ai_agents
+					has_technology_researched = autonomous_vehicles
+				}
+			}
+			$TARGET$ ?= { has_technology_researched = humanoid_robotics }
 		}
 		AND = {
 			NOT = { has_technology_researched = hydraulic_fracturing }
@@ -1103,6 +1126,18 @@ covert_tech_stealable_production = {
 			$TARGET$ ?= { has_technology_researched = rubber_mastication }
 		}
 		AND = {
+			NOT = { has_technology_researched = self_driving_laboratories }
+			OR = {
+				can_research = self_driving_laboratories
+				AND = {
+					is_researching_technology = self_driving_laboratories
+					has_technology_researched = ai_agents
+					has_technology_researched = additive_manufacturing
+				}
+			}
+			$TARGET$ ?= { has_technology_researched = self_driving_laboratories }
+		}
+		AND = {
 			NOT = { has_technology_researched = shaft_mining }
 			OR = {
 				can_research = shaft_mining
@@ -1482,6 +1517,18 @@ covert_tech_stealable_military = {
 				}
 			}
 			$TARGET$ ?= { has_technology_researched = automatic_machine_guns }
+		}
+		AND = {
+			NOT = { has_technology_researched = autonomous_weapons }
+			OR = {
+				can_research = autonomous_weapons
+				AND = {
+					is_researching_technology = autonomous_weapons
+					has_technology_researched = swarm_technology
+					has_technology_researched = jadc2
+				}
+			}
+			$TARGET$ ?= { has_technology_researched = autonomous_weapons }
 		}
 		AND = {
 			NOT = { has_technology_researched = battlefleet_tactics }

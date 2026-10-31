@@ -275,8 +275,10 @@ nine to a new era_13: `molecular_assemblers`, `programmable_matter`, `fusion_bat
 `telepathic_communities` and `post-scarcity_economy`. `bioenhanced_soldiers` moved up from
 era_11 to era_12. Two new era_12 technologies, `rejuvenation_therapies` and `post_work_society`,
 keep the chains whole. `artificial_intelligence` stays in era_12: the owner noted that its
-AI-managed methods all but decouple economic strength from population. The design's phases 2
-and 3 add era_11's AI technologies and more of era_12 and era_13; its § 3 has the full tree.
+AI-managed methods all but decouple economic strength from population. Phase 2 added era_11's
+AI technologies, each on a current roadmap: `ai_agents`, `self_driving_laboratories`,
+`humanoid_robotics` and `autonomous_weapons`. Phase 3 adds more of era_12 and era_13; the
+design's § 3 has the full tree.
 This audit's "Possible era_10 moves" stay open; the design leaves Lab-Grown Food and Augmented
 Reality Warfare in era_11 for now.
 

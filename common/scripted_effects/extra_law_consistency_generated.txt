@@ -1976,7 +1976,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = generative_ai
+				has_technology_researched = ai_agents
 			}
 			activate_law = law_type:law_automated_bureaucracy
 		}
@@ -2055,7 +2055,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = generative_ai
+				has_technology_researched = ai_agents
 			}
 			activate_law = law_type:law_automated_bureaucracy
 		}
@@ -2138,7 +2138,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = generative_ai
+				has_technology_researched = ai_agents
 			}
 			activate_law = law_type:law_automated_bureaucracy
 		}
@@ -2255,7 +2255,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = generative_ai
+				has_technology_researched = ai_agents
 			}
 			activate_law = law_type:law_automated_bureaucracy
 		}
@@ -2309,7 +2309,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = generative_ai
+				has_technology_researched = ai_agents
 			}
 			activate_law = law_type:law_automated_bureaucracy
 		}
@@ -2426,7 +2426,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = generative_ai
+				has_technology_researched = ai_agents
 			}
 			activate_law = law_type:law_automated_bureaucracy
 		}

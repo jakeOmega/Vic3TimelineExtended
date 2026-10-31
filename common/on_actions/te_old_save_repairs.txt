@@ -331,6 +331,17 @@ te_repair_lunar_technologies = {
 # technology only where one the country holds now requires it. A new game sets
 # the flag in its first month with no one to repair. An active Post-Scarcity
 # Transition in an old save stays active and keeps its timer (§ 5.3).
+#
+# Phase 2 (the AI wave), under its own flag, since a save from between the
+# phases has the first: Artificial General Intelligence now requires
+# Self-Driving Laboratories and Humanoid Robotics, so a holder is given them and
+# AI Agents under them. Content moved to the new technologies is kept where it
+# is in use, by the same rule: a Brain-Computer Interfaces holder running one of
+# its three old AI methods gets the method's new technology and AI Agents; a
+# Generative AI holder under Automated Bureaucracy gets AI Agents; a JADC2
+# holder fielding Robotic Soldiers gets Autonomous Weapons. Whether the engine
+# moves a building off a method, or keeps an orphaned unit type's battalions,
+# before this month comes is unread (docs/testing/era-13-playtest.md).
 te_repair_era_13_technologies = {
 	effect = {
 		if = {
@@ -351,6 +362,74 @@ te_repair_era_13_technologies = {
 				}
 				add_technology_researched = post_work_society
 				debug_log = "TE_ERA13_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given Post-Work Society"
+			}
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_era_13_ai_techs_repaired } }
+			set_global_variable = te_era_13_ai_techs_repaired
+			# AI Agents first: the other three require it
+			every_country = {
+				limit = {
+					NOT = { has_technology_researched = ai_agents }
+					OR = {
+						has_technology_researched = artificial_intelligence
+						AND = {
+							has_technology_researched = brain_computer_interfaces
+							any_scope_building = {
+								OR = {
+									has_active_production_method = pm_fully_automated_content_creation
+									has_active_production_method = pm_ai_assisted_research
+									has_active_production_method = pm_neuromorphic_computing
+								}
+							}
+						}
+						AND = {
+							has_technology_researched = generative_ai
+							has_law = law_type:law_automated_bureaucracy
+						}
+					}
+				}
+				add_technology_researched = ai_agents
+				debug_log = "TE_ERA13_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given AI Agents"
+			}
+			every_country = {
+				limit = {
+					NOT = { has_technology_researched = self_driving_laboratories }
+					OR = {
+						has_technology_researched = artificial_intelligence
+						AND = {
+							has_technology_researched = brain_computer_interfaces
+							any_scope_building = { has_active_production_method = pm_ai_assisted_research }
+						}
+					}
+				}
+				add_technology_researched = self_driving_laboratories
+				debug_log = "TE_ERA13_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given Self-Driving Laboratories"
+			}
+			every_country = {
+				limit = {
+					NOT = { has_technology_researched = humanoid_robotics }
+					OR = {
+						has_technology_researched = artificial_intelligence
+						AND = {
+							has_technology_researched = brain_computer_interfaces
+							any_scope_building = { has_active_production_method = pm_neuromorphic_computing }
+						}
+					}
+				}
+				add_technology_researched = humanoid_robotics
+				debug_log = "TE_ERA13_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given Humanoid Robotics"
+			}
+			every_country = {
+				limit = {
+					has_technology_researched = jadc2
+					NOT = { has_technology_researched = autonomous_weapons }
+					any_military_formation = {
+						any_combat_unit = { has_unit_type = unit_type:combat_unit_type_robotic_soldiers }
+					}
+				}
+				add_technology_researched = autonomous_weapons
+				debug_log = "TE_ERA13_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given Autonomous Weapons"
 			}
 		}
 	}
