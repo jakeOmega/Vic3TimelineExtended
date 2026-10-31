@@ -1,0 +1,28 @@
+# Transport Goods
+
+Part of the [mod systems reference](../mod_systems.md), which indexes every system.
+
+## Transport goods: Transportation and Merchant Marine (#1050)
+
+> Cross-reference: `docs/vanilla/vanilla_economy_reference.md` § 17.1. Design: `docs/superpowers/archive/specs/2026-10-21-transport-goods-design.md`.
+
+The two goods are cut by geography, as vanilla cuts them:
+
+- **`transportation` (local to the state, base 30): all movement inside a state.** Pops buy it to travel. Buildings buy it to move their own inputs and outputs: rail and road tiers in extraction and agriculture, the cold chain, construction, mine techniques, advanced industry and automation, and retail. Railways, highways, airports, urban transit, ports' passenger ships and the land logistics companies produce it.
+- **`merchant_marine` (priced across the market, base 50): movement between markets.** Trade Centres are its only production-method consumers (vanilla's four methods and the mod's `pm_trade_center_trade_quantity_advanced_1`–`_4`). The engine also spends it on port connections and convoys. Ports, airports (air cargo, the smaller part of their output) and the shipping and trading companies produce it.
+- **Infrastructure** is a free capacity stat. Railway and port methods grant it **per level** (`state_modifiers > level_scaled`), so a railway or port that loses money and sheds staff still supplies its network. Vanilla's three port methods are restated (`REPLACE:` in `extra_pms.txt`) for this.
+
+**Why.** Until #1050 the mod renamed Merchant Marine "Bulk Transportation" and had railways, highways and ports make it for industry across the market, while "Personal Transportation" was the passenger good. Freight paid for infrastructure market-wide, so it said nothing about where infrastructure was short, and the passenger methods on freight-sized ports and railways flooded their own states at the price floor. That was the AI's permanent port and railway subsidy bill (£24–55M a week on ports in the late saves read). Now industry buys its freight in its own state: a state short of railways has dear transport and its railways earn and expand (vanilla's railway `should_auto_expand` has a dear-transport branch), and a state with a surplus stops paying for it. The AI no longer subsidizes railways or ports (`common/ai_strategies/te_ai_subsidy_strategies.txt`).
+
+**The conversion.** `scripts/generators/convert_transport_goods.py` holds the classification and rewrote the methods: every merchant marine input outside the Trade Centre methods became transportation, and the listed producers' merchant marine output moved with it, each quantity × 50/30 (the base prices) so a method's spend is unchanged. `test_transport_goods.py` reads the same tables. Construction is the largest consumer by far (about 70% of the freight buildings bought in the late saves), so its hubs need railways in their own state. If that chokes construction, the fallback is `--construction-good merchant_marine` plus `CONSTRUCTION_GOOD = "merchant_marine"` in the script, which hands only the construction methods back.
+
+**Passenger tiers.** The passenger-trains group (loc "Rolling Stock") and the ports' passenger-ships group (`pmg_water_personal_transport`, `most_productive`) are upgrades that make more transportation for more inputs. From double-decker carriages up, and in every water tier, the inputs cost about 40–45% of the output at base prices (the two early carriage tiers, unchanged, about 55%), so a tier on a state that's already supplied loses little.
+
+**Prestige goods** stay on merchant marine (a local good can't carry one): `prestige_good_generic_merchant_marine` and `prestige_good_integrated_logistics`. Each company that lists one keeps a roster port. SAP and Shopify no longer list Integrated Logistics, since their rosters make transportation now (`prestige_good_roster_audit`).
+
+**A market with no Trade Center can neither import nor export.** With the mod's `PRICE_RANGE = 0.999` (`common/defines/extra_defines.txt`), such a market's prices run to the ends of the range: a good it lacks costs twice base, a good it has in surplus sells for a thousandth of base. Ports take both ends at once. They can't import their ships and fuel, and the shortage cuts their output to about a quarter. They can't export the Merchant Marine they make, and it sells for nearly nothing. As a subsidized building group (`bg_private_infrastructure`), they bill the treasury for the gap: AI Jamaica in 1969 had a level-6 Industrial Port losing £21.8K a week, against £1.8K of weekly income. The construction AI does not reliably build a market's first Trade Center, so `te_ai_seed_trade_center_effect` (`extra_effects.txt`, yearly from `on_yearly_pulse_country`) gives an AI country that leads a market with none (`is_junior_in_customs_union = no`, `market ?= { NOT = { has_building = building_trade_center } }`) a government-owned level-1 Trade Center. It goes in the market capital, or else in the most populous state that may host one. `trade_center_construction_allowed` keeps Isolationism, the Canton System and Sakoku in force. Decentralized nations and players are left out.
+
+**Implications for mod authors:**
+
+- A building that moves goods within its state (extraction tiers, cold chain, automation, retail) takes `goods_input_transportation_add`. Only trade between markets takes `goods_input_merchant_marine_add`; add a new such method to `KEEP_MM_INPUT` in the conversion script, or `test_transport_goods.py` fails.
+- A land transport building produces `goods_output_transportation_add`; a shipping or trading one produces `goods_output_merchant_marine_add`. A railway or port method's `state_infrastructure_add` goes under `level_scaled`.
