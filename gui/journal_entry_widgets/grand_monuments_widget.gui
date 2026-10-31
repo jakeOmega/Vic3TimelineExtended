@@ -1911,6 +1911,9 @@ types grand_monuments_widget_types
 		# Carry It Off (trophies spec §2.2): a monument we did not raise, in a
 		# state we have not incorporated (gui/gm_trophy_widgets.gui).
 		gm_tr_take_button = {}
+		# Clear It Away (owner, 2026-10-31): six stand in the state and this is
+		# the least grand (gui/gm_trophy_widgets.gui).
+		gm_clear_button = {}
 	}
 
 	### ======================================================================

@@ -1801,6 +1801,25 @@ monument_events.30 = {
 }
 
 # ============================================================================
+# Event 33: Clear Away (owner, 2026-10-31)
+# ============================================================================
+# Hidden plumbing. From gm_clear_sgui and gm_mon_clear_sgui: the least grand
+# monument of a state where six stand is cleared away (gm_state_run_clear),
+# outside the tooltip walk a button's effect gets.
+monument_events.33 = {
+	type = state_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+	}
+
+	immediate = {
+		gm_state_run_clear = yes
+	}
+}
+
+# ============================================================================
 # Event 27: Raise It (opportunities usability §1)
 # ============================================================================
 # Hidden plumbing. From gm_com_raise_sgui and monument_events.21's Seize It and

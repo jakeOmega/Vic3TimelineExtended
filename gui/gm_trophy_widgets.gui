@@ -2584,6 +2584,56 @@ types gm_trophy_widget_types
 		}
 	}
 
+	### Clear It Away (owner, 2026-10-31), on our own state's monument (its State
+	### the datacontext: the state view's card and Our Monuments' row): while six
+	### stand in the state, a construction site among them, and it is the least
+	### grand of them, contested ones aside (gm_clear_sgui, gm_monument_sguis.txt).
+	type gm_clear_button = button {
+		using = default_button_action
+		size = { 200 28 }
+		parentanchor = hcenter
+		margin_top = 4
+		datacontext = "[GetScriptedGui('gm_clear_sgui')]"
+		visible = "[And( ObjectsEqual( State.GetOwner, GetPlayer.Self ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_clearable'), '(CFixedPoint)1' ) )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		tooltip = "gm_button_clear_tooltip"
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 190
+			elide = right
+			using = gm_fontsize_row
+			text = "gm_button_clear"
+		}
+	}
+
+	### Clear It Away on a monument beside another (its container the
+	### datacontext; gm_mon_clear_sgui): the same, in our own state.
+	type gm_mon_clear_button = button {
+		using = default_button_action
+		size = { 200 28 }
+		parentanchor = hcenter
+		margin_top = 2
+		datacontext = "[GetScriptedGui('gm_mon_clear_sgui')]"
+		visible = "[And( ObjectsEqual( ScriptContainer.MakeScope.Var('gm_tr_origin').GetState.GetOwner, GetPlayer.Self ), EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_disp_clearable'), '(CFixedPoint)1' ) )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		tooltip = "gm_mon_clear_button_tooltip"
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 190
+			elide = right
+			using = gm_fontsize_row
+			text = "gm_button_clear"
+		}
+	}
+
 	### A choice on a monument beside another, in the journal entry's row
 	### (gm_mon_tear_down_sgui and its siblings), its monument as gm_mon: the
 	### shape of the journal entry's gm_choice_button.
@@ -2680,6 +2730,8 @@ types gm_trophy_widget_types
 		}
 
 		gm_mon_take_button = {}
+		### Clear It Away, while six stand here and it is the least grand.
+		gm_mon_clear_button = {}
 		### The journal entry's rows: a contested one's choices.
 		block "mon_choices" {}
 	}

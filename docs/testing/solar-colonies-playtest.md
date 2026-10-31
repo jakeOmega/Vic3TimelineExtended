@@ -559,3 +559,26 @@ Owner, 2026-10-31: a level past all of a country's room works at −75% (`gen_so
 1. **Past the room.** Under Simple or Full Colonies, with room for 10 (Asteroid Mining, no colony) and 20 levels, the Extraplanetary Base Room modifier reads −37.5% Extraplanetary Base throughput, and the Modules view's room hover and Base Grade's concept −75% past the room.
 2. **The crew.** A base of 20 levels or more on the Asteroid Mine shows about 500 machinists, 400 engineers and 100 academics, and no more after another level. Its output is the method's per level × its levels (× throughput), as the output tooltip lists, once the crew is in.
 3. **The crew fills.** A month or two after a base is built or grows, its staff reads at or near the crew; if many bases sit well below it, look for a state short of engineers before raising the attractiveness.
+
+## Taking a module down (2026-10-31)
+
+Owner, 2026-10-31: on a colony's page each module has a minus button that takes one level down over 12 months
+(`sr_mod_dismantle_months`), one level at a time a world (`sr_colony_dismantle_sgui`; the record is the holder's
+`sr_md_type_<key>` and `sr_md_left_<key>`, the work `sr_md_month_<key>` from `sr_mod_month`). It rests on nothing new
+the engine has to prove (a variable counted down by the entry's pulse, the generated level write the landing already
+uses), so no self-check. Console: `event te_debug_space_race.4`, option *Finish every module level we are taking down
+now*; `TE_SR_MODULES <key>: a module level of type N dismantled` in `debug.log`.
+
+1. **A level comes down.** Under Simple or Full Colonies, with a Research Station at level 2 on a colony, open the
+   colony's page and press its minus button. A red line under its name reads *Coming down, months left: 12*, one less
+   each month; the button greys on every other module of that colony (*Nothing else is being taken down*). Twelve
+   months on the level reads 1, Slots one fewer, and Research Station's entry modifier its new size the same month.
+2. **Stop it.** Press the minus button again on the module coming down: the line goes, the level stays.
+3. **The founding specialization.** Its minus button is greyed at level 1 (*the outpost itself*); at level 2 it takes
+   it to 1. The other specialization goes to 0, and its modifier leaves the entry.
+4. **A Habitat.** With the colony's people above the room one Habitat fewer would leave, its minus button is greyed.
+   With room to spare, start it: settlers stop at the smaller room (the colony's emigration weight falls), growth
+   stops there, and when it comes down no one is lost.
+5. **Under fire (Full Colonies).** While an enemy fleet blockades the colony, the months left stand still; when the
+   colony is occupied or ceded, the line goes and the level stands. Taken back, it has the level.
+6. **Lunar worlds.** A Moon colony's page shows no Spaceport row's minus button.

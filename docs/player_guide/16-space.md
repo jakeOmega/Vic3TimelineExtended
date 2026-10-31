@@ -221,7 +221,8 @@ dwarf planet). Hovering its name shows the colony's permanent effects, and
 clicking it, or the arrow beside it, opens the colony's page. The page sets out
 People, Modules, Autonomy and (under Full Colonies) Defenses one under another,
 each with its control beside its heading (the settler priority, Clear, Abandon),
-its figures in tiles and every module on a line of its own with its full name.
+its figures in tiles and every module on a line of its own with its full name,
+with buttons to queue one more level or take one down.
 Back returns to the list. The buttons above the rows switch what each box
 shows:
 
@@ -742,8 +743,18 @@ level. Each row's buttons add one more level of a module to the end of your
 module queue, counting what is already queued and on its way against the
 colony's room, and its last button takes all of that colony's modules out of
 the queue. The queue holds up to 20 modules and is listed in order above the
-rows, each with a button that removes it. You can't take a module down once it
-is built.
+rows, each with a button that removes it.
+
+On a colony's page, the minus button beside a module takes one level of it
+down. That takes 12 months, one level at a time at each colony, and the module
+works until it comes down; a line under its name counts the months left. A
+blockade pauses the count, and losing the colony, or its occupation, ends it
+with the level still standing, so a colony can't be stripped bare once a rival
+moves on it. The founding specialization keeps its first level. A Habitat can't
+come down while the colony's people need its room, and while one comes down the
+colony takes in no more people than the room it will have. Pressing the button
+again stops the work; the months spent are lost. The freed slot takes a new
+module once the level is gone.
 
 Modules are built at Earth by your Space Program's third production method
 group, Module Fabrication, which starts on No Module Fabrication:

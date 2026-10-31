@@ -280,6 +280,15 @@ te_debug_space_race.4 = { # REVIEWED 2026-10-25: console-only test event (`event
 		sr_emig_refresh_modifiers = yes
 	}
 
+	# Every level we are dismantling comes down now (dismantling, owner
+	# 2026-10-31), then the entry's modifiers.
+	option = {
+		name = te_debug_space_race.4.h
+		trigger = { sr_colonies_contested_enabled = yes }
+		sr_md_debug_finish_all = yes
+		sr_emig_refresh_modifiers = yes
+	}
+
 	# Our Extraplanetary Base room recomputed now.
 	option = {
 		name = te_debug_space_race.4.g

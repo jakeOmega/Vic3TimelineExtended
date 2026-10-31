@@ -1363,7 +1363,8 @@ sr_cf_target_goal = {
 sr_site_crew_per_level = { value = 5000 }
 
 # Per world, any scope: its base room (people, before Habitats), its room (+50% of
-# the base a Habitat level, slice 4 design § 3), its people, its free room, and
+# the base a Habitat level, slice 4 design § 3), its people, its free room (of the
+# room held while a Habitat comes down, sr_site_room_held_<key>), and
 # the module levels above the first its people can crew. Country scope:
 # THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when
 # unset) and its emigration weight, priority x free room, 0 unless THIS holds it.
@@ -1379,7 +1380,7 @@ sr_site_pop_value_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_pop_valles_marineris } value = global_var:sr_site_pop_valles_marineris }
 }
 sr_site_free_room_valles_marineris = {
-	value = sr_site_room_valles_marineris
+	value = sr_site_room_held_valles_marineris
 	subtract = sr_site_pop_value_valles_marineris
 	min = 0
 }
@@ -1414,7 +1415,7 @@ sr_site_pop_value_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_pop_olympus_mons } value = global_var:sr_site_pop_olympus_mons }
 }
 sr_site_free_room_olympus_mons = {
-	value = sr_site_room_olympus_mons
+	value = sr_site_room_held_olympus_mons
 	subtract = sr_site_pop_value_olympus_mons
 	min = 0
 }
@@ -1449,7 +1450,7 @@ sr_site_pop_value_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_pop_hellas_planitia } value = global_var:sr_site_pop_hellas_planitia }
 }
 sr_site_free_room_hellas_planitia = {
-	value = sr_site_room_hellas_planitia
+	value = sr_site_room_held_hellas_planitia
 	subtract = sr_site_pop_value_hellas_planitia
 	min = 0
 }
@@ -1484,7 +1485,7 @@ sr_site_pop_value_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_pop_utopia_planitia } value = global_var:sr_site_pop_utopia_planitia }
 }
 sr_site_free_room_utopia_planitia = {
-	value = sr_site_room_utopia_planitia
+	value = sr_site_room_held_utopia_planitia
 	subtract = sr_site_pop_value_utopia_planitia
 	min = 0
 }
@@ -1519,7 +1520,7 @@ sr_site_pop_value_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_pop_arcadia_planitia } value = global_var:sr_site_pop_arcadia_planitia }
 }
 sr_site_free_room_arcadia_planitia = {
-	value = sr_site_room_arcadia_planitia
+	value = sr_site_room_held_arcadia_planitia
 	subtract = sr_site_pop_value_arcadia_planitia
 	min = 0
 }
@@ -1554,7 +1555,7 @@ sr_site_pop_value_ceres = {
 	if = { limit = { has_global_variable = sr_site_pop_ceres } value = global_var:sr_site_pop_ceres }
 }
 sr_site_free_room_ceres = {
-	value = sr_site_room_ceres
+	value = sr_site_room_held_ceres
 	subtract = sr_site_pop_value_ceres
 	min = 0
 }
@@ -1589,7 +1590,7 @@ sr_site_pop_value_vesta = {
 	if = { limit = { has_global_variable = sr_site_pop_vesta } value = global_var:sr_site_pop_vesta }
 }
 sr_site_free_room_vesta = {
-	value = sr_site_room_vesta
+	value = sr_site_room_held_vesta
 	subtract = sr_site_pop_value_vesta
 	min = 0
 }
@@ -1624,7 +1625,7 @@ sr_site_pop_value_psyche = {
 	if = { limit = { has_global_variable = sr_site_pop_psyche } value = global_var:sr_site_pop_psyche }
 }
 sr_site_free_room_psyche = {
-	value = sr_site_room_psyche
+	value = sr_site_room_held_psyche
 	subtract = sr_site_pop_value_psyche
 	min = 0
 }
@@ -1659,7 +1660,7 @@ sr_site_pop_value_pallas = {
 	if = { limit = { has_global_variable = sr_site_pop_pallas } value = global_var:sr_site_pop_pallas }
 }
 sr_site_free_room_pallas = {
-	value = sr_site_room_pallas
+	value = sr_site_room_held_pallas
 	subtract = sr_site_pop_value_pallas
 	min = 0
 }
@@ -1694,7 +1695,7 @@ sr_site_pop_value_hygiea = {
 	if = { limit = { has_global_variable = sr_site_pop_hygiea } value = global_var:sr_site_pop_hygiea }
 }
 sr_site_free_room_hygiea = {
-	value = sr_site_room_hygiea
+	value = sr_site_room_held_hygiea
 	subtract = sr_site_pop_value_hygiea
 	min = 0
 }
@@ -1729,7 +1730,7 @@ sr_site_pop_value_io = {
 	if = { limit = { has_global_variable = sr_site_pop_io } value = global_var:sr_site_pop_io }
 }
 sr_site_free_room_io = {
-	value = sr_site_room_io
+	value = sr_site_room_held_io
 	subtract = sr_site_pop_value_io
 	min = 0
 }
@@ -1764,7 +1765,7 @@ sr_site_pop_value_europa = {
 	if = { limit = { has_global_variable = sr_site_pop_europa } value = global_var:sr_site_pop_europa }
 }
 sr_site_free_room_europa = {
-	value = sr_site_room_europa
+	value = sr_site_room_held_europa
 	subtract = sr_site_pop_value_europa
 	min = 0
 }
@@ -1799,7 +1800,7 @@ sr_site_pop_value_ganymede = {
 	if = { limit = { has_global_variable = sr_site_pop_ganymede } value = global_var:sr_site_pop_ganymede }
 }
 sr_site_free_room_ganymede = {
-	value = sr_site_room_ganymede
+	value = sr_site_room_held_ganymede
 	subtract = sr_site_pop_value_ganymede
 	min = 0
 }
@@ -1834,7 +1835,7 @@ sr_site_pop_value_callisto = {
 	if = { limit = { has_global_variable = sr_site_pop_callisto } value = global_var:sr_site_pop_callisto }
 }
 sr_site_free_room_callisto = {
-	value = sr_site_room_callisto
+	value = sr_site_room_held_callisto
 	subtract = sr_site_pop_value_callisto
 	min = 0
 }
@@ -1869,7 +1870,7 @@ sr_site_pop_value_himalia = {
 	if = { limit = { has_global_variable = sr_site_pop_himalia } value = global_var:sr_site_pop_himalia }
 }
 sr_site_free_room_himalia = {
-	value = sr_site_room_himalia
+	value = sr_site_room_held_himalia
 	subtract = sr_site_pop_value_himalia
 	min = 0
 }
@@ -1904,7 +1905,7 @@ sr_site_pop_value_amalthea = {
 	if = { limit = { has_global_variable = sr_site_pop_amalthea } value = global_var:sr_site_pop_amalthea }
 }
 sr_site_free_room_amalthea = {
-	value = sr_site_room_amalthea
+	value = sr_site_room_held_amalthea
 	subtract = sr_site_pop_value_amalthea
 	min = 0
 }
@@ -1939,7 +1940,7 @@ sr_site_pop_value_venus = {
 	if = { limit = { has_global_variable = sr_site_pop_venus } value = global_var:sr_site_pop_venus }
 }
 sr_site_free_room_venus = {
-	value = sr_site_room_venus
+	value = sr_site_room_held_venus
 	subtract = sr_site_pop_value_venus
 	min = 0
 }
@@ -1974,7 +1975,7 @@ sr_site_pop_value_mercury = {
 	if = { limit = { has_global_variable = sr_site_pop_mercury } value = global_var:sr_site_pop_mercury }
 }
 sr_site_free_room_mercury = {
-	value = sr_site_room_mercury
+	value = sr_site_room_held_mercury
 	subtract = sr_site_pop_value_mercury
 	min = 0
 }
@@ -2009,7 +2010,7 @@ sr_site_pop_value_titan = {
 	if = { limit = { has_global_variable = sr_site_pop_titan } value = global_var:sr_site_pop_titan }
 }
 sr_site_free_room_titan = {
-	value = sr_site_room_titan
+	value = sr_site_room_held_titan
 	subtract = sr_site_pop_value_titan
 	min = 0
 }
@@ -2044,7 +2045,7 @@ sr_site_pop_value_enceladus = {
 	if = { limit = { has_global_variable = sr_site_pop_enceladus } value = global_var:sr_site_pop_enceladus }
 }
 sr_site_free_room_enceladus = {
-	value = sr_site_room_enceladus
+	value = sr_site_room_held_enceladus
 	subtract = sr_site_pop_value_enceladus
 	min = 0
 }
@@ -2079,7 +2080,7 @@ sr_site_pop_value_rhea = {
 	if = { limit = { has_global_variable = sr_site_pop_rhea } value = global_var:sr_site_pop_rhea }
 }
 sr_site_free_room_rhea = {
-	value = sr_site_room_rhea
+	value = sr_site_room_held_rhea
 	subtract = sr_site_pop_value_rhea
 	min = 0
 }
@@ -2114,7 +2115,7 @@ sr_site_pop_value_mimas = {
 	if = { limit = { has_global_variable = sr_site_pop_mimas } value = global_var:sr_site_pop_mimas }
 }
 sr_site_free_room_mimas = {
-	value = sr_site_room_mimas
+	value = sr_site_room_held_mimas
 	subtract = sr_site_pop_value_mimas
 	min = 0
 }
@@ -2149,7 +2150,7 @@ sr_site_pop_value_iapetus = {
 	if = { limit = { has_global_variable = sr_site_pop_iapetus } value = global_var:sr_site_pop_iapetus }
 }
 sr_site_free_room_iapetus = {
-	value = sr_site_room_iapetus
+	value = sr_site_room_held_iapetus
 	subtract = sr_site_pop_value_iapetus
 	min = 0
 }
@@ -2184,7 +2185,7 @@ sr_site_pop_value_titania = {
 	if = { limit = { has_global_variable = sr_site_pop_titania } value = global_var:sr_site_pop_titania }
 }
 sr_site_free_room_titania = {
-	value = sr_site_room_titania
+	value = sr_site_room_held_titania
 	subtract = sr_site_pop_value_titania
 	min = 0
 }
@@ -2219,7 +2220,7 @@ sr_site_pop_value_oberon = {
 	if = { limit = { has_global_variable = sr_site_pop_oberon } value = global_var:sr_site_pop_oberon }
 }
 sr_site_free_room_oberon = {
-	value = sr_site_room_oberon
+	value = sr_site_room_held_oberon
 	subtract = sr_site_pop_value_oberon
 	min = 0
 }
@@ -2254,7 +2255,7 @@ sr_site_pop_value_miranda = {
 	if = { limit = { has_global_variable = sr_site_pop_miranda } value = global_var:sr_site_pop_miranda }
 }
 sr_site_free_room_miranda = {
-	value = sr_site_room_miranda
+	value = sr_site_room_held_miranda
 	subtract = sr_site_pop_value_miranda
 	min = 0
 }
@@ -2289,7 +2290,7 @@ sr_site_pop_value_ariel = {
 	if = { limit = { has_global_variable = sr_site_pop_ariel } value = global_var:sr_site_pop_ariel }
 }
 sr_site_free_room_ariel = {
-	value = sr_site_room_ariel
+	value = sr_site_room_held_ariel
 	subtract = sr_site_pop_value_ariel
 	min = 0
 }
@@ -2324,7 +2325,7 @@ sr_site_pop_value_triton = {
 	if = { limit = { has_global_variable = sr_site_pop_triton } value = global_var:sr_site_pop_triton }
 }
 sr_site_free_room_triton = {
-	value = sr_site_room_triton
+	value = sr_site_room_held_triton
 	subtract = sr_site_pop_value_triton
 	min = 0
 }
@@ -2359,7 +2360,7 @@ sr_site_pop_value_proteus = {
 	if = { limit = { has_global_variable = sr_site_pop_proteus } value = global_var:sr_site_pop_proteus }
 }
 sr_site_free_room_proteus = {
-	value = sr_site_room_proteus
+	value = sr_site_room_held_proteus
 	subtract = sr_site_pop_value_proteus
 	min = 0
 }
@@ -2394,7 +2395,7 @@ sr_site_pop_value_pluto = {
 	if = { limit = { has_global_variable = sr_site_pop_pluto } value = global_var:sr_site_pop_pluto }
 }
 sr_site_free_room_pluto = {
-	value = sr_site_room_pluto
+	value = sr_site_room_held_pluto
 	subtract = sr_site_pop_value_pluto
 	min = 0
 }
@@ -2429,7 +2430,7 @@ sr_site_pop_value_eris = {
 	if = { limit = { has_global_variable = sr_site_pop_eris } value = global_var:sr_site_pop_eris }
 }
 sr_site_free_room_eris = {
-	value = sr_site_room_eris
+	value = sr_site_room_held_eris
 	subtract = sr_site_pop_value_eris
 	min = 0
 }
@@ -2464,7 +2465,7 @@ sr_site_pop_value_makemake = {
 	if = { limit = { has_global_variable = sr_site_pop_makemake } value = global_var:sr_site_pop_makemake }
 }
 sr_site_free_room_makemake = {
-	value = sr_site_room_makemake
+	value = sr_site_room_held_makemake
 	subtract = sr_site_pop_value_makemake
 	min = 0
 }
@@ -2499,7 +2500,7 @@ sr_site_pop_value_haumea = {
 	if = { limit = { has_global_variable = sr_site_pop_haumea } value = global_var:sr_site_pop_haumea }
 }
 sr_site_free_room_haumea = {
-	value = sr_site_room_haumea
+	value = sr_site_room_held_haumea
 	subtract = sr_site_pop_value_haumea
 	min = 0
 }
@@ -2534,7 +2535,7 @@ sr_site_pop_value_sedna = {
 	if = { limit = { has_global_variable = sr_site_pop_sedna } value = global_var:sr_site_pop_sedna }
 }
 sr_site_free_room_sedna = {
-	value = sr_site_room_sedna
+	value = sr_site_room_held_sedna
 	subtract = sr_site_pop_value_sedna
 	min = 0
 }
@@ -2569,7 +2570,7 @@ sr_site_pop_value_shackleton = {
 	if = { limit = { has_global_variable = sr_site_pop_shackleton } value = global_var:sr_site_pop_shackleton }
 }
 sr_site_free_room_shackleton = {
-	value = sr_site_room_shackleton
+	value = sr_site_room_held_shackleton
 	subtract = sr_site_pop_value_shackleton
 	min = 0
 }
@@ -2604,7 +2605,7 @@ sr_site_pop_value_peary = {
 	if = { limit = { has_global_variable = sr_site_pop_peary } value = global_var:sr_site_pop_peary }
 }
 sr_site_free_room_peary = {
-	value = sr_site_room_peary
+	value = sr_site_room_held_peary
 	subtract = sr_site_pop_value_peary
 	min = 0
 }
@@ -2639,7 +2640,7 @@ sr_site_pop_value_tranquility = {
 	if = { limit = { has_global_variable = sr_site_pop_tranquility } value = global_var:sr_site_pop_tranquility }
 }
 sr_site_free_room_tranquility = {
-	value = sr_site_room_tranquility
+	value = sr_site_room_held_tranquility
 	subtract = sr_site_pop_value_tranquility
 	min = 0
 }
@@ -2674,7 +2675,7 @@ sr_site_pop_value_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_pop_marius_hills } value = global_var:sr_site_pop_marius_hills }
 }
 sr_site_free_room_marius_hills = {
-	value = sr_site_room_marius_hills
+	value = sr_site_room_held_marius_hills
 	subtract = sr_site_pop_value_marius_hills
 	min = 0
 }
@@ -2709,7 +2710,7 @@ sr_site_pop_value_daedalus = {
 	if = { limit = { has_global_variable = sr_site_pop_daedalus } value = global_var:sr_site_pop_daedalus }
 }
 sr_site_free_room_daedalus = {
-	value = sr_site_room_daedalus
+	value = sr_site_room_held_daedalus
 	subtract = sr_site_pop_value_daedalus
 	min = 0
 }
@@ -2744,7 +2745,7 @@ sr_site_pop_value_imbrium = {
 	if = { limit = { has_global_variable = sr_site_pop_imbrium } value = global_var:sr_site_pop_imbrium }
 }
 sr_site_free_room_imbrium = {
-	value = sr_site_room_imbrium
+	value = sr_site_room_held_imbrium
 	subtract = sr_site_pop_value_imbrium
 	min = 0
 }
@@ -12159,6 +12160,574 @@ sr_ebase_room_total = {
 	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_ebase_room_marius_hills }
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_ebase_room_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_ebase_room_imbrium }
+}
+
+# ===== Dismantling (owner, 2026-10-31) =====
+# Per world, any scope:
+#   sr_md_floor_<a|b>_<key>      1 for the founding specialization, else 0: a
+#                                dismantle never takes the outpost's own level
+#   sr_md_room_less_hab_<key>    its room with one Habitat fewer
+#   sr_site_room_held_<key>      its room, less a Habitat's share while its holder
+#                                takes one down: what growth and settlers fill
+sr_md_floor_a_valles_marineris = { value = 0 if = { limit = { has_global_variable = sr_site_spec_valles_marineris global_var:sr_site_spec_valles_marineris = 1 } value = 1 } }
+sr_md_floor_b_valles_marineris = { value = 0 if = { limit = { has_global_variable = sr_site_spec_valles_marineris global_var:sr_site_spec_valles_marineris = 2 } value = 1 } }
+sr_md_room_less_hab_valles_marineris = {
+	value = sr_site_hab_value_valles_marineris
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_valles_marineris
+}
+sr_site_room_held_valles_marineris = {
+	value = sr_site_room_valles_marineris
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 3 } } value = sr_md_room_less_hab_valles_marineris }
+}
+sr_md_floor_a_olympus_mons = { value = 0 if = { limit = { has_global_variable = sr_site_spec_olympus_mons global_var:sr_site_spec_olympus_mons = 1 } value = 1 } }
+sr_md_floor_b_olympus_mons = { value = 0 if = { limit = { has_global_variable = sr_site_spec_olympus_mons global_var:sr_site_spec_olympus_mons = 2 } value = 1 } }
+sr_md_room_less_hab_olympus_mons = {
+	value = sr_site_hab_value_olympus_mons
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_olympus_mons
+}
+sr_site_room_held_olympus_mons = {
+	value = sr_site_room_olympus_mons
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 3 } } value = sr_md_room_less_hab_olympus_mons }
+}
+sr_md_floor_a_hellas_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_hellas_planitia global_var:sr_site_spec_hellas_planitia = 1 } value = 1 } }
+sr_md_floor_b_hellas_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_hellas_planitia global_var:sr_site_spec_hellas_planitia = 2 } value = 1 } }
+sr_md_room_less_hab_hellas_planitia = {
+	value = sr_site_hab_value_hellas_planitia
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_hellas_planitia
+}
+sr_site_room_held_hellas_planitia = {
+	value = sr_site_room_hellas_planitia
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 3 } } value = sr_md_room_less_hab_hellas_planitia }
+}
+sr_md_floor_a_utopia_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_utopia_planitia global_var:sr_site_spec_utopia_planitia = 1 } value = 1 } }
+sr_md_floor_b_utopia_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_utopia_planitia global_var:sr_site_spec_utopia_planitia = 2 } value = 1 } }
+sr_md_room_less_hab_utopia_planitia = {
+	value = sr_site_hab_value_utopia_planitia
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_utopia_planitia
+}
+sr_site_room_held_utopia_planitia = {
+	value = sr_site_room_utopia_planitia
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 3 } } value = sr_md_room_less_hab_utopia_planitia }
+}
+sr_md_floor_a_arcadia_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_arcadia_planitia global_var:sr_site_spec_arcadia_planitia = 1 } value = 1 } }
+sr_md_floor_b_arcadia_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_arcadia_planitia global_var:sr_site_spec_arcadia_planitia = 2 } value = 1 } }
+sr_md_room_less_hab_arcadia_planitia = {
+	value = sr_site_hab_value_arcadia_planitia
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_arcadia_planitia
+}
+sr_site_room_held_arcadia_planitia = {
+	value = sr_site_room_arcadia_planitia
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 3 } } value = sr_md_room_less_hab_arcadia_planitia }
+}
+sr_md_floor_a_ceres = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ceres global_var:sr_site_spec_ceres = 1 } value = 1 } }
+sr_md_floor_b_ceres = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ceres global_var:sr_site_spec_ceres = 2 } value = 1 } }
+sr_md_room_less_hab_ceres = {
+	value = sr_site_hab_value_ceres
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_ceres
+}
+sr_site_room_held_ceres = {
+	value = sr_site_room_ceres
+	if = { limit = { global_var:sr_site_holder_ceres ?= { has_variable = sr_md_type_ceres var:sr_md_type_ceres = 3 } } value = sr_md_room_less_hab_ceres }
+}
+sr_md_floor_a_vesta = { value = 0 if = { limit = { has_global_variable = sr_site_spec_vesta global_var:sr_site_spec_vesta = 1 } value = 1 } }
+sr_md_floor_b_vesta = { value = 0 if = { limit = { has_global_variable = sr_site_spec_vesta global_var:sr_site_spec_vesta = 2 } value = 1 } }
+sr_md_room_less_hab_vesta = {
+	value = sr_site_hab_value_vesta
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_vesta
+}
+sr_site_room_held_vesta = {
+	value = sr_site_room_vesta
+	if = { limit = { global_var:sr_site_holder_vesta ?= { has_variable = sr_md_type_vesta var:sr_md_type_vesta = 3 } } value = sr_md_room_less_hab_vesta }
+}
+sr_md_floor_a_psyche = { value = 0 if = { limit = { has_global_variable = sr_site_spec_psyche global_var:sr_site_spec_psyche = 1 } value = 1 } }
+sr_md_floor_b_psyche = { value = 0 if = { limit = { has_global_variable = sr_site_spec_psyche global_var:sr_site_spec_psyche = 2 } value = 1 } }
+sr_md_room_less_hab_psyche = {
+	value = sr_site_hab_value_psyche
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_psyche
+}
+sr_site_room_held_psyche = {
+	value = sr_site_room_psyche
+	if = { limit = { global_var:sr_site_holder_psyche ?= { has_variable = sr_md_type_psyche var:sr_md_type_psyche = 3 } } value = sr_md_room_less_hab_psyche }
+}
+sr_md_floor_a_pallas = { value = 0 if = { limit = { has_global_variable = sr_site_spec_pallas global_var:sr_site_spec_pallas = 1 } value = 1 } }
+sr_md_floor_b_pallas = { value = 0 if = { limit = { has_global_variable = sr_site_spec_pallas global_var:sr_site_spec_pallas = 2 } value = 1 } }
+sr_md_room_less_hab_pallas = {
+	value = sr_site_hab_value_pallas
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_pallas
+}
+sr_site_room_held_pallas = {
+	value = sr_site_room_pallas
+	if = { limit = { global_var:sr_site_holder_pallas ?= { has_variable = sr_md_type_pallas var:sr_md_type_pallas = 3 } } value = sr_md_room_less_hab_pallas }
+}
+sr_md_floor_a_hygiea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_hygiea global_var:sr_site_spec_hygiea = 1 } value = 1 } }
+sr_md_floor_b_hygiea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_hygiea global_var:sr_site_spec_hygiea = 2 } value = 1 } }
+sr_md_room_less_hab_hygiea = {
+	value = sr_site_hab_value_hygiea
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_hygiea
+}
+sr_site_room_held_hygiea = {
+	value = sr_site_room_hygiea
+	if = { limit = { global_var:sr_site_holder_hygiea ?= { has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 3 } } value = sr_md_room_less_hab_hygiea }
+}
+sr_md_floor_a_io = { value = 0 if = { limit = { has_global_variable = sr_site_spec_io global_var:sr_site_spec_io = 1 } value = 1 } }
+sr_md_floor_b_io = { value = 0 if = { limit = { has_global_variable = sr_site_spec_io global_var:sr_site_spec_io = 2 } value = 1 } }
+sr_md_room_less_hab_io = {
+	value = sr_site_hab_value_io
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_io
+}
+sr_site_room_held_io = {
+	value = sr_site_room_io
+	if = { limit = { global_var:sr_site_holder_io ?= { has_variable = sr_md_type_io var:sr_md_type_io = 3 } } value = sr_md_room_less_hab_io }
+}
+sr_md_floor_a_europa = { value = 0 if = { limit = { has_global_variable = sr_site_spec_europa global_var:sr_site_spec_europa = 1 } value = 1 } }
+sr_md_floor_b_europa = { value = 0 if = { limit = { has_global_variable = sr_site_spec_europa global_var:sr_site_spec_europa = 2 } value = 1 } }
+sr_md_room_less_hab_europa = {
+	value = sr_site_hab_value_europa
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_europa
+}
+sr_site_room_held_europa = {
+	value = sr_site_room_europa
+	if = { limit = { global_var:sr_site_holder_europa ?= { has_variable = sr_md_type_europa var:sr_md_type_europa = 3 } } value = sr_md_room_less_hab_europa }
+}
+sr_md_floor_a_ganymede = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ganymede global_var:sr_site_spec_ganymede = 1 } value = 1 } }
+sr_md_floor_b_ganymede = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ganymede global_var:sr_site_spec_ganymede = 2 } value = 1 } }
+sr_md_room_less_hab_ganymede = {
+	value = sr_site_hab_value_ganymede
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_ganymede
+}
+sr_site_room_held_ganymede = {
+	value = sr_site_room_ganymede
+	if = { limit = { global_var:sr_site_holder_ganymede ?= { has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 3 } } value = sr_md_room_less_hab_ganymede }
+}
+sr_md_floor_a_callisto = { value = 0 if = { limit = { has_global_variable = sr_site_spec_callisto global_var:sr_site_spec_callisto = 1 } value = 1 } }
+sr_md_floor_b_callisto = { value = 0 if = { limit = { has_global_variable = sr_site_spec_callisto global_var:sr_site_spec_callisto = 2 } value = 1 } }
+sr_md_room_less_hab_callisto = {
+	value = sr_site_hab_value_callisto
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_callisto
+}
+sr_site_room_held_callisto = {
+	value = sr_site_room_callisto
+	if = { limit = { global_var:sr_site_holder_callisto ?= { has_variable = sr_md_type_callisto var:sr_md_type_callisto = 3 } } value = sr_md_room_less_hab_callisto }
+}
+sr_md_floor_a_himalia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_himalia global_var:sr_site_spec_himalia = 1 } value = 1 } }
+sr_md_floor_b_himalia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_himalia global_var:sr_site_spec_himalia = 2 } value = 1 } }
+sr_md_room_less_hab_himalia = {
+	value = sr_site_hab_value_himalia
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_himalia
+}
+sr_site_room_held_himalia = {
+	value = sr_site_room_himalia
+	if = { limit = { global_var:sr_site_holder_himalia ?= { has_variable = sr_md_type_himalia var:sr_md_type_himalia = 3 } } value = sr_md_room_less_hab_himalia }
+}
+sr_md_floor_a_amalthea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_amalthea global_var:sr_site_spec_amalthea = 1 } value = 1 } }
+sr_md_floor_b_amalthea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_amalthea global_var:sr_site_spec_amalthea = 2 } value = 1 } }
+sr_md_room_less_hab_amalthea = {
+	value = sr_site_hab_value_amalthea
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_amalthea
+}
+sr_site_room_held_amalthea = {
+	value = sr_site_room_amalthea
+	if = { limit = { global_var:sr_site_holder_amalthea ?= { has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 3 } } value = sr_md_room_less_hab_amalthea }
+}
+sr_md_floor_a_venus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_venus global_var:sr_site_spec_venus = 1 } value = 1 } }
+sr_md_floor_b_venus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_venus global_var:sr_site_spec_venus = 2 } value = 1 } }
+sr_md_room_less_hab_venus = {
+	value = sr_site_hab_value_venus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_venus
+}
+sr_site_room_held_venus = {
+	value = sr_site_room_venus
+	if = { limit = { global_var:sr_site_holder_venus ?= { has_variable = sr_md_type_venus var:sr_md_type_venus = 3 } } value = sr_md_room_less_hab_venus }
+}
+sr_md_floor_a_mercury = { value = 0 if = { limit = { has_global_variable = sr_site_spec_mercury global_var:sr_site_spec_mercury = 1 } value = 1 } }
+sr_md_floor_b_mercury = { value = 0 if = { limit = { has_global_variable = sr_site_spec_mercury global_var:sr_site_spec_mercury = 2 } value = 1 } }
+sr_md_room_less_hab_mercury = {
+	value = sr_site_hab_value_mercury
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_mercury
+}
+sr_site_room_held_mercury = {
+	value = sr_site_room_mercury
+	if = { limit = { global_var:sr_site_holder_mercury ?= { has_variable = sr_md_type_mercury var:sr_md_type_mercury = 3 } } value = sr_md_room_less_hab_mercury }
+}
+sr_md_floor_a_titan = { value = 0 if = { limit = { has_global_variable = sr_site_spec_titan global_var:sr_site_spec_titan = 1 } value = 1 } }
+sr_md_floor_b_titan = { value = 0 if = { limit = { has_global_variable = sr_site_spec_titan global_var:sr_site_spec_titan = 2 } value = 1 } }
+sr_md_room_less_hab_titan = {
+	value = sr_site_hab_value_titan
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_titan
+}
+sr_site_room_held_titan = {
+	value = sr_site_room_titan
+	if = { limit = { global_var:sr_site_holder_titan ?= { has_variable = sr_md_type_titan var:sr_md_type_titan = 3 } } value = sr_md_room_less_hab_titan }
+}
+sr_md_floor_a_enceladus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_enceladus global_var:sr_site_spec_enceladus = 1 } value = 1 } }
+sr_md_floor_b_enceladus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_enceladus global_var:sr_site_spec_enceladus = 2 } value = 1 } }
+sr_md_room_less_hab_enceladus = {
+	value = sr_site_hab_value_enceladus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_enceladus
+}
+sr_site_room_held_enceladus = {
+	value = sr_site_room_enceladus
+	if = { limit = { global_var:sr_site_holder_enceladus ?= { has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 3 } } value = sr_md_room_less_hab_enceladus }
+}
+sr_md_floor_a_rhea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_rhea global_var:sr_site_spec_rhea = 1 } value = 1 } }
+sr_md_floor_b_rhea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_rhea global_var:sr_site_spec_rhea = 2 } value = 1 } }
+sr_md_room_less_hab_rhea = {
+	value = sr_site_hab_value_rhea
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_rhea
+}
+sr_site_room_held_rhea = {
+	value = sr_site_room_rhea
+	if = { limit = { global_var:sr_site_holder_rhea ?= { has_variable = sr_md_type_rhea var:sr_md_type_rhea = 3 } } value = sr_md_room_less_hab_rhea }
+}
+sr_md_floor_a_mimas = { value = 0 if = { limit = { has_global_variable = sr_site_spec_mimas global_var:sr_site_spec_mimas = 1 } value = 1 } }
+sr_md_floor_b_mimas = { value = 0 if = { limit = { has_global_variable = sr_site_spec_mimas global_var:sr_site_spec_mimas = 2 } value = 1 } }
+sr_md_room_less_hab_mimas = {
+	value = sr_site_hab_value_mimas
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_mimas
+}
+sr_site_room_held_mimas = {
+	value = sr_site_room_mimas
+	if = { limit = { global_var:sr_site_holder_mimas ?= { has_variable = sr_md_type_mimas var:sr_md_type_mimas = 3 } } value = sr_md_room_less_hab_mimas }
+}
+sr_md_floor_a_iapetus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_iapetus global_var:sr_site_spec_iapetus = 1 } value = 1 } }
+sr_md_floor_b_iapetus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_iapetus global_var:sr_site_spec_iapetus = 2 } value = 1 } }
+sr_md_room_less_hab_iapetus = {
+	value = sr_site_hab_value_iapetus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_iapetus
+}
+sr_site_room_held_iapetus = {
+	value = sr_site_room_iapetus
+	if = { limit = { global_var:sr_site_holder_iapetus ?= { has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 3 } } value = sr_md_room_less_hab_iapetus }
+}
+sr_md_floor_a_titania = { value = 0 if = { limit = { has_global_variable = sr_site_spec_titania global_var:sr_site_spec_titania = 1 } value = 1 } }
+sr_md_floor_b_titania = { value = 0 if = { limit = { has_global_variable = sr_site_spec_titania global_var:sr_site_spec_titania = 2 } value = 1 } }
+sr_md_room_less_hab_titania = {
+	value = sr_site_hab_value_titania
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_titania
+}
+sr_site_room_held_titania = {
+	value = sr_site_room_titania
+	if = { limit = { global_var:sr_site_holder_titania ?= { has_variable = sr_md_type_titania var:sr_md_type_titania = 3 } } value = sr_md_room_less_hab_titania }
+}
+sr_md_floor_a_oberon = { value = 0 if = { limit = { has_global_variable = sr_site_spec_oberon global_var:sr_site_spec_oberon = 1 } value = 1 } }
+sr_md_floor_b_oberon = { value = 0 if = { limit = { has_global_variable = sr_site_spec_oberon global_var:sr_site_spec_oberon = 2 } value = 1 } }
+sr_md_room_less_hab_oberon = {
+	value = sr_site_hab_value_oberon
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_oberon
+}
+sr_site_room_held_oberon = {
+	value = sr_site_room_oberon
+	if = { limit = { global_var:sr_site_holder_oberon ?= { has_variable = sr_md_type_oberon var:sr_md_type_oberon = 3 } } value = sr_md_room_less_hab_oberon }
+}
+sr_md_floor_a_miranda = { value = 0 if = { limit = { has_global_variable = sr_site_spec_miranda global_var:sr_site_spec_miranda = 1 } value = 1 } }
+sr_md_floor_b_miranda = { value = 0 if = { limit = { has_global_variable = sr_site_spec_miranda global_var:sr_site_spec_miranda = 2 } value = 1 } }
+sr_md_room_less_hab_miranda = {
+	value = sr_site_hab_value_miranda
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_miranda
+}
+sr_site_room_held_miranda = {
+	value = sr_site_room_miranda
+	if = { limit = { global_var:sr_site_holder_miranda ?= { has_variable = sr_md_type_miranda var:sr_md_type_miranda = 3 } } value = sr_md_room_less_hab_miranda }
+}
+sr_md_floor_a_ariel = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ariel global_var:sr_site_spec_ariel = 1 } value = 1 } }
+sr_md_floor_b_ariel = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ariel global_var:sr_site_spec_ariel = 2 } value = 1 } }
+sr_md_room_less_hab_ariel = {
+	value = sr_site_hab_value_ariel
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_ariel
+}
+sr_site_room_held_ariel = {
+	value = sr_site_room_ariel
+	if = { limit = { global_var:sr_site_holder_ariel ?= { has_variable = sr_md_type_ariel var:sr_md_type_ariel = 3 } } value = sr_md_room_less_hab_ariel }
+}
+sr_md_floor_a_triton = { value = 0 if = { limit = { has_global_variable = sr_site_spec_triton global_var:sr_site_spec_triton = 1 } value = 1 } }
+sr_md_floor_b_triton = { value = 0 if = { limit = { has_global_variable = sr_site_spec_triton global_var:sr_site_spec_triton = 2 } value = 1 } }
+sr_md_room_less_hab_triton = {
+	value = sr_site_hab_value_triton
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_triton
+}
+sr_site_room_held_triton = {
+	value = sr_site_room_triton
+	if = { limit = { global_var:sr_site_holder_triton ?= { has_variable = sr_md_type_triton var:sr_md_type_triton = 3 } } value = sr_md_room_less_hab_triton }
+}
+sr_md_floor_a_proteus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_proteus global_var:sr_site_spec_proteus = 1 } value = 1 } }
+sr_md_floor_b_proteus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_proteus global_var:sr_site_spec_proteus = 2 } value = 1 } }
+sr_md_room_less_hab_proteus = {
+	value = sr_site_hab_value_proteus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_proteus
+}
+sr_site_room_held_proteus = {
+	value = sr_site_room_proteus
+	if = { limit = { global_var:sr_site_holder_proteus ?= { has_variable = sr_md_type_proteus var:sr_md_type_proteus = 3 } } value = sr_md_room_less_hab_proteus }
+}
+sr_md_floor_a_pluto = { value = 0 if = { limit = { has_global_variable = sr_site_spec_pluto global_var:sr_site_spec_pluto = 1 } value = 1 } }
+sr_md_floor_b_pluto = { value = 0 if = { limit = { has_global_variable = sr_site_spec_pluto global_var:sr_site_spec_pluto = 2 } value = 1 } }
+sr_md_room_less_hab_pluto = {
+	value = sr_site_hab_value_pluto
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_pluto
+}
+sr_site_room_held_pluto = {
+	value = sr_site_room_pluto
+	if = { limit = { global_var:sr_site_holder_pluto ?= { has_variable = sr_md_type_pluto var:sr_md_type_pluto = 3 } } value = sr_md_room_less_hab_pluto }
+}
+sr_md_floor_a_eris = { value = 0 if = { limit = { has_global_variable = sr_site_spec_eris global_var:sr_site_spec_eris = 1 } value = 1 } }
+sr_md_floor_b_eris = { value = 0 if = { limit = { has_global_variable = sr_site_spec_eris global_var:sr_site_spec_eris = 2 } value = 1 } }
+sr_md_room_less_hab_eris = {
+	value = sr_site_hab_value_eris
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_eris
+}
+sr_site_room_held_eris = {
+	value = sr_site_room_eris
+	if = { limit = { global_var:sr_site_holder_eris ?= { has_variable = sr_md_type_eris var:sr_md_type_eris = 3 } } value = sr_md_room_less_hab_eris }
+}
+sr_md_floor_a_makemake = { value = 0 if = { limit = { has_global_variable = sr_site_spec_makemake global_var:sr_site_spec_makemake = 1 } value = 1 } }
+sr_md_floor_b_makemake = { value = 0 if = { limit = { has_global_variable = sr_site_spec_makemake global_var:sr_site_spec_makemake = 2 } value = 1 } }
+sr_md_room_less_hab_makemake = {
+	value = sr_site_hab_value_makemake
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_makemake
+}
+sr_site_room_held_makemake = {
+	value = sr_site_room_makemake
+	if = { limit = { global_var:sr_site_holder_makemake ?= { has_variable = sr_md_type_makemake var:sr_md_type_makemake = 3 } } value = sr_md_room_less_hab_makemake }
+}
+sr_md_floor_a_haumea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_haumea global_var:sr_site_spec_haumea = 1 } value = 1 } }
+sr_md_floor_b_haumea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_haumea global_var:sr_site_spec_haumea = 2 } value = 1 } }
+sr_md_room_less_hab_haumea = {
+	value = sr_site_hab_value_haumea
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_haumea
+}
+sr_site_room_held_haumea = {
+	value = sr_site_room_haumea
+	if = { limit = { global_var:sr_site_holder_haumea ?= { has_variable = sr_md_type_haumea var:sr_md_type_haumea = 3 } } value = sr_md_room_less_hab_haumea }
+}
+sr_md_floor_a_sedna = { value = 0 if = { limit = { has_global_variable = sr_site_spec_sedna global_var:sr_site_spec_sedna = 1 } value = 1 } }
+sr_md_floor_b_sedna = { value = 0 if = { limit = { has_global_variable = sr_site_spec_sedna global_var:sr_site_spec_sedna = 2 } value = 1 } }
+sr_md_room_less_hab_sedna = {
+	value = sr_site_hab_value_sedna
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_sedna
+}
+sr_site_room_held_sedna = {
+	value = sr_site_room_sedna
+	if = { limit = { global_var:sr_site_holder_sedna ?= { has_variable = sr_md_type_sedna var:sr_md_type_sedna = 3 } } value = sr_md_room_less_hab_sedna }
+}
+sr_md_floor_a_shackleton = { value = 0 if = { limit = { has_global_variable = sr_site_spec_shackleton global_var:sr_site_spec_shackleton = 1 } value = 1 } }
+sr_md_floor_b_shackleton = { value = 0 if = { limit = { has_global_variable = sr_site_spec_shackleton global_var:sr_site_spec_shackleton = 2 } value = 1 } }
+sr_md_room_less_hab_shackleton = {
+	value = sr_site_hab_value_shackleton
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_shackleton
+}
+sr_site_room_held_shackleton = {
+	value = sr_site_room_shackleton
+	if = { limit = { global_var:sr_site_holder_shackleton ?= { has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 3 } } value = sr_md_room_less_hab_shackleton }
+}
+sr_md_floor_a_peary = { value = 0 if = { limit = { has_global_variable = sr_site_spec_peary global_var:sr_site_spec_peary = 1 } value = 1 } }
+sr_md_floor_b_peary = { value = 0 if = { limit = { has_global_variable = sr_site_spec_peary global_var:sr_site_spec_peary = 2 } value = 1 } }
+sr_md_room_less_hab_peary = {
+	value = sr_site_hab_value_peary
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_peary
+}
+sr_site_room_held_peary = {
+	value = sr_site_room_peary
+	if = { limit = { global_var:sr_site_holder_peary ?= { has_variable = sr_md_type_peary var:sr_md_type_peary = 3 } } value = sr_md_room_less_hab_peary }
+}
+sr_md_floor_a_tranquility = { value = 0 if = { limit = { has_global_variable = sr_site_spec_tranquility global_var:sr_site_spec_tranquility = 1 } value = 1 } }
+sr_md_floor_b_tranquility = { value = 0 if = { limit = { has_global_variable = sr_site_spec_tranquility global_var:sr_site_spec_tranquility = 2 } value = 1 } }
+sr_md_room_less_hab_tranquility = {
+	value = sr_site_hab_value_tranquility
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_tranquility
+}
+sr_site_room_held_tranquility = {
+	value = sr_site_room_tranquility
+	if = { limit = { global_var:sr_site_holder_tranquility ?= { has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 3 } } value = sr_md_room_less_hab_tranquility }
+}
+sr_md_floor_a_marius_hills = { value = 0 if = { limit = { has_global_variable = sr_site_spec_marius_hills global_var:sr_site_spec_marius_hills = 1 } value = 1 } }
+sr_md_floor_b_marius_hills = { value = 0 if = { limit = { has_global_variable = sr_site_spec_marius_hills global_var:sr_site_spec_marius_hills = 2 } value = 1 } }
+sr_md_room_less_hab_marius_hills = {
+	value = sr_site_hab_value_marius_hills
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_marius_hills
+}
+sr_site_room_held_marius_hills = {
+	value = sr_site_room_marius_hills
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= { has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 3 } } value = sr_md_room_less_hab_marius_hills }
+}
+sr_md_floor_a_daedalus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_daedalus global_var:sr_site_spec_daedalus = 1 } value = 1 } }
+sr_md_floor_b_daedalus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_daedalus global_var:sr_site_spec_daedalus = 2 } value = 1 } }
+sr_md_room_less_hab_daedalus = {
+	value = sr_site_hab_value_daedalus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_daedalus
+}
+sr_site_room_held_daedalus = {
+	value = sr_site_room_daedalus
+	if = { limit = { global_var:sr_site_holder_daedalus ?= { has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 3 } } value = sr_md_room_less_hab_daedalus }
+}
+sr_md_floor_a_imbrium = { value = 0 if = { limit = { has_global_variable = sr_site_spec_imbrium global_var:sr_site_spec_imbrium = 1 } value = 1 } }
+sr_md_floor_b_imbrium = { value = 0 if = { limit = { has_global_variable = sr_site_spec_imbrium global_var:sr_site_spec_imbrium = 2 } value = 1 } }
+sr_md_room_less_hab_imbrium = {
+	value = sr_site_hab_value_imbrium
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_imbrium
+}
+sr_site_room_held_imbrium = {
+	value = sr_site_room_imbrium
+	if = { limit = { global_var:sr_site_holder_imbrium ?= { has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 3 } } value = sr_md_room_less_hab_imbrium }
 }
 
 # ===== Autonomy and free colonies (slice 5 design §§ 2-3) =====

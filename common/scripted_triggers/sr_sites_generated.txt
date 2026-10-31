@@ -7039,6 +7039,1345 @@ sr_mod_scope_has_queue = {
 	}
 }
 
+# ===== Dismantling (owner, 2026-10-31) =====
+# The dismantle scripted GUI's conditions, one by one (scope:site, scope:op the
+# module's code), each its own line in its is_valid; country scope.
+# The world is not occupied.
+sr_md_scope_not_occupied = {
+	OR = {
+		AND = { scope:site = 1 NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:site = 2 NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:site = 3 NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:site = 4 NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:site = 5 NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:site = 6 NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:site = 7 NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:site = 8 NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:site = 9 NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:site = 10 NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:site = 11 NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:site = 12 NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:site = 13 NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:site = 14 NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:site = 15 NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:site = 16 NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:site = 17 NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:site = 18 NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:site = 19 NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:site = 20 NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:site = 21 NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:site = 22 NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:site = 23 NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:site = 24 NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:site = 25 NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:site = 26 NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:site = 27 NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:site = 28 NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:site = 29 NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:site = 30 NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:site = 31 NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:site = 32 NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:site = 33 NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:site = 34 NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:site = 35 NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:site = 36 NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:site = 37 NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:site = 38 NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:site = 39 NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:site = 40 NOT = { has_global_variable = sr_site_occupier_imbrium } }
+	}
+}
+# Nothing is being dismantled there.
+sr_md_scope_idle = {
+	OR = {
+		AND = { scope:site = 1 NOT = { has_variable = sr_md_type_valles_marineris } }
+		AND = { scope:site = 2 NOT = { has_variable = sr_md_type_olympus_mons } }
+		AND = { scope:site = 3 NOT = { has_variable = sr_md_type_hellas_planitia } }
+		AND = { scope:site = 4 NOT = { has_variable = sr_md_type_utopia_planitia } }
+		AND = { scope:site = 5 NOT = { has_variable = sr_md_type_arcadia_planitia } }
+		AND = { scope:site = 6 NOT = { has_variable = sr_md_type_ceres } }
+		AND = { scope:site = 7 NOT = { has_variable = sr_md_type_vesta } }
+		AND = { scope:site = 8 NOT = { has_variable = sr_md_type_psyche } }
+		AND = { scope:site = 9 NOT = { has_variable = sr_md_type_pallas } }
+		AND = { scope:site = 10 NOT = { has_variable = sr_md_type_hygiea } }
+		AND = { scope:site = 11 NOT = { has_variable = sr_md_type_io } }
+		AND = { scope:site = 12 NOT = { has_variable = sr_md_type_europa } }
+		AND = { scope:site = 13 NOT = { has_variable = sr_md_type_ganymede } }
+		AND = { scope:site = 14 NOT = { has_variable = sr_md_type_callisto } }
+		AND = { scope:site = 15 NOT = { has_variable = sr_md_type_himalia } }
+		AND = { scope:site = 16 NOT = { has_variable = sr_md_type_amalthea } }
+		AND = { scope:site = 17 NOT = { has_variable = sr_md_type_venus } }
+		AND = { scope:site = 18 NOT = { has_variable = sr_md_type_mercury } }
+		AND = { scope:site = 19 NOT = { has_variable = sr_md_type_titan } }
+		AND = { scope:site = 20 NOT = { has_variable = sr_md_type_enceladus } }
+		AND = { scope:site = 21 NOT = { has_variable = sr_md_type_rhea } }
+		AND = { scope:site = 22 NOT = { has_variable = sr_md_type_mimas } }
+		AND = { scope:site = 23 NOT = { has_variable = sr_md_type_iapetus } }
+		AND = { scope:site = 24 NOT = { has_variable = sr_md_type_titania } }
+		AND = { scope:site = 25 NOT = { has_variable = sr_md_type_oberon } }
+		AND = { scope:site = 26 NOT = { has_variable = sr_md_type_miranda } }
+		AND = { scope:site = 27 NOT = { has_variable = sr_md_type_ariel } }
+		AND = { scope:site = 28 NOT = { has_variable = sr_md_type_triton } }
+		AND = { scope:site = 29 NOT = { has_variable = sr_md_type_proteus } }
+		AND = { scope:site = 30 NOT = { has_variable = sr_md_type_pluto } }
+		AND = { scope:site = 31 NOT = { has_variable = sr_md_type_eris } }
+		AND = { scope:site = 32 NOT = { has_variable = sr_md_type_makemake } }
+		AND = { scope:site = 33 NOT = { has_variable = sr_md_type_haumea } }
+		AND = { scope:site = 34 NOT = { has_variable = sr_md_type_sedna } }
+		AND = { scope:site = 35 NOT = { has_variable = sr_md_type_shackleton } }
+		AND = { scope:site = 36 NOT = { has_variable = sr_md_type_peary } }
+		AND = { scope:site = 37 NOT = { has_variable = sr_md_type_tranquility } }
+		AND = { scope:site = 38 NOT = { has_variable = sr_md_type_marius_hills } }
+		AND = { scope:site = 39 NOT = { has_variable = sr_md_type_daedalus } }
+		AND = { scope:site = 40 NOT = { has_variable = sr_md_type_imbrium } }
+	}
+}
+# The type is the one being dismantled there (the button stops it).
+sr_md_scope_is_this = {
+	OR = {
+		AND = { scope:site = 1 scope:op = 1 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 1 }
+		AND = { scope:site = 1 scope:op = 2 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 2 }
+		AND = { scope:site = 1 scope:op = 3 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 3 }
+		AND = { scope:site = 1 scope:op = 4 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 4 }
+		AND = { scope:site = 1 scope:op = 5 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 5 }
+		AND = { scope:site = 1 scope:op = 6 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 6 }
+		AND = { scope:site = 1 scope:op = 7 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 7 }
+		AND = { scope:site = 1 scope:op = 8 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 8 }
+		AND = { scope:site = 1 scope:op = 9 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 9 }
+		AND = { scope:site = 1 scope:op = 10 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 10 }
+		AND = { scope:site = 1 scope:op = 11 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 11 }
+		AND = { scope:site = 1 scope:op = 12 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 12 }
+		AND = { scope:site = 1 scope:op = 13 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 13 }
+		AND = { scope:site = 1 scope:op = 14 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 14 }
+		AND = { scope:site = 1 scope:op = 15 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 15 }
+		AND = { scope:site = 2 scope:op = 1 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 1 }
+		AND = { scope:site = 2 scope:op = 2 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 2 }
+		AND = { scope:site = 2 scope:op = 3 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 3 }
+		AND = { scope:site = 2 scope:op = 4 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 4 }
+		AND = { scope:site = 2 scope:op = 5 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 5 }
+		AND = { scope:site = 2 scope:op = 6 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 6 }
+		AND = { scope:site = 2 scope:op = 7 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 7 }
+		AND = { scope:site = 2 scope:op = 8 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 8 }
+		AND = { scope:site = 2 scope:op = 9 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 9 }
+		AND = { scope:site = 2 scope:op = 10 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 10 }
+		AND = { scope:site = 2 scope:op = 11 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 11 }
+		AND = { scope:site = 2 scope:op = 12 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 12 }
+		AND = { scope:site = 2 scope:op = 13 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 13 }
+		AND = { scope:site = 2 scope:op = 14 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 14 }
+		AND = { scope:site = 2 scope:op = 15 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 15 }
+		AND = { scope:site = 3 scope:op = 1 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 1 }
+		AND = { scope:site = 3 scope:op = 2 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 2 }
+		AND = { scope:site = 3 scope:op = 3 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 3 }
+		AND = { scope:site = 3 scope:op = 4 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 4 }
+		AND = { scope:site = 3 scope:op = 5 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 5 }
+		AND = { scope:site = 3 scope:op = 6 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 6 }
+		AND = { scope:site = 3 scope:op = 7 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 7 }
+		AND = { scope:site = 3 scope:op = 8 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 8 }
+		AND = { scope:site = 3 scope:op = 9 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 9 }
+		AND = { scope:site = 3 scope:op = 10 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 10 }
+		AND = { scope:site = 3 scope:op = 11 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 11 }
+		AND = { scope:site = 3 scope:op = 12 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 12 }
+		AND = { scope:site = 3 scope:op = 13 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 13 }
+		AND = { scope:site = 3 scope:op = 14 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 14 }
+		AND = { scope:site = 3 scope:op = 15 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 15 }
+		AND = { scope:site = 4 scope:op = 1 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 1 }
+		AND = { scope:site = 4 scope:op = 2 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 2 }
+		AND = { scope:site = 4 scope:op = 3 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 3 }
+		AND = { scope:site = 4 scope:op = 4 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 4 }
+		AND = { scope:site = 4 scope:op = 5 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 5 }
+		AND = { scope:site = 4 scope:op = 6 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 6 }
+		AND = { scope:site = 4 scope:op = 7 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 7 }
+		AND = { scope:site = 4 scope:op = 8 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 8 }
+		AND = { scope:site = 4 scope:op = 9 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 9 }
+		AND = { scope:site = 4 scope:op = 10 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 10 }
+		AND = { scope:site = 4 scope:op = 11 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 11 }
+		AND = { scope:site = 4 scope:op = 12 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 12 }
+		AND = { scope:site = 4 scope:op = 13 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 13 }
+		AND = { scope:site = 4 scope:op = 14 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 14 }
+		AND = { scope:site = 4 scope:op = 15 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 15 }
+		AND = { scope:site = 5 scope:op = 1 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 1 }
+		AND = { scope:site = 5 scope:op = 2 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 2 }
+		AND = { scope:site = 5 scope:op = 3 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 3 }
+		AND = { scope:site = 5 scope:op = 4 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 4 }
+		AND = { scope:site = 5 scope:op = 5 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 5 }
+		AND = { scope:site = 5 scope:op = 6 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 6 }
+		AND = { scope:site = 5 scope:op = 7 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 7 }
+		AND = { scope:site = 5 scope:op = 8 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 8 }
+		AND = { scope:site = 5 scope:op = 9 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 9 }
+		AND = { scope:site = 5 scope:op = 10 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 10 }
+		AND = { scope:site = 5 scope:op = 11 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 11 }
+		AND = { scope:site = 5 scope:op = 12 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 12 }
+		AND = { scope:site = 5 scope:op = 13 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 13 }
+		AND = { scope:site = 5 scope:op = 14 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 14 }
+		AND = { scope:site = 5 scope:op = 15 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 15 }
+		AND = { scope:site = 6 scope:op = 1 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 1 }
+		AND = { scope:site = 6 scope:op = 2 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 2 }
+		AND = { scope:site = 6 scope:op = 3 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 3 }
+		AND = { scope:site = 6 scope:op = 4 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 4 }
+		AND = { scope:site = 6 scope:op = 5 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 5 }
+		AND = { scope:site = 6 scope:op = 6 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 6 }
+		AND = { scope:site = 6 scope:op = 7 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 7 }
+		AND = { scope:site = 6 scope:op = 8 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 8 }
+		AND = { scope:site = 6 scope:op = 9 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 9 }
+		AND = { scope:site = 6 scope:op = 10 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 10 }
+		AND = { scope:site = 6 scope:op = 11 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 11 }
+		AND = { scope:site = 6 scope:op = 12 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 12 }
+		AND = { scope:site = 6 scope:op = 13 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 13 }
+		AND = { scope:site = 6 scope:op = 14 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 14 }
+		AND = { scope:site = 6 scope:op = 15 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 15 }
+		AND = { scope:site = 7 scope:op = 1 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 1 }
+		AND = { scope:site = 7 scope:op = 2 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 2 }
+		AND = { scope:site = 7 scope:op = 3 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 3 }
+		AND = { scope:site = 7 scope:op = 4 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 4 }
+		AND = { scope:site = 7 scope:op = 5 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 5 }
+		AND = { scope:site = 7 scope:op = 6 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 6 }
+		AND = { scope:site = 7 scope:op = 7 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 7 }
+		AND = { scope:site = 7 scope:op = 8 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 8 }
+		AND = { scope:site = 7 scope:op = 9 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 9 }
+		AND = { scope:site = 7 scope:op = 10 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 10 }
+		AND = { scope:site = 7 scope:op = 11 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 11 }
+		AND = { scope:site = 7 scope:op = 12 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 12 }
+		AND = { scope:site = 7 scope:op = 13 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 13 }
+		AND = { scope:site = 7 scope:op = 14 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 14 }
+		AND = { scope:site = 7 scope:op = 15 has_variable = sr_md_type_vesta var:sr_md_type_vesta = 15 }
+		AND = { scope:site = 8 scope:op = 1 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 1 }
+		AND = { scope:site = 8 scope:op = 2 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 2 }
+		AND = { scope:site = 8 scope:op = 3 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 3 }
+		AND = { scope:site = 8 scope:op = 4 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 4 }
+		AND = { scope:site = 8 scope:op = 5 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 5 }
+		AND = { scope:site = 8 scope:op = 6 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 6 }
+		AND = { scope:site = 8 scope:op = 7 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 7 }
+		AND = { scope:site = 8 scope:op = 8 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 8 }
+		AND = { scope:site = 8 scope:op = 9 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 9 }
+		AND = { scope:site = 8 scope:op = 10 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 10 }
+		AND = { scope:site = 8 scope:op = 11 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 11 }
+		AND = { scope:site = 8 scope:op = 12 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 12 }
+		AND = { scope:site = 8 scope:op = 13 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 13 }
+		AND = { scope:site = 8 scope:op = 14 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 14 }
+		AND = { scope:site = 8 scope:op = 15 has_variable = sr_md_type_psyche var:sr_md_type_psyche = 15 }
+		AND = { scope:site = 9 scope:op = 1 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 1 }
+		AND = { scope:site = 9 scope:op = 2 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 2 }
+		AND = { scope:site = 9 scope:op = 3 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 3 }
+		AND = { scope:site = 9 scope:op = 4 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 4 }
+		AND = { scope:site = 9 scope:op = 5 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 5 }
+		AND = { scope:site = 9 scope:op = 6 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 6 }
+		AND = { scope:site = 9 scope:op = 7 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 7 }
+		AND = { scope:site = 9 scope:op = 8 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 8 }
+		AND = { scope:site = 9 scope:op = 9 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 9 }
+		AND = { scope:site = 9 scope:op = 10 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 10 }
+		AND = { scope:site = 9 scope:op = 11 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 11 }
+		AND = { scope:site = 9 scope:op = 12 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 12 }
+		AND = { scope:site = 9 scope:op = 13 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 13 }
+		AND = { scope:site = 9 scope:op = 14 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 14 }
+		AND = { scope:site = 9 scope:op = 15 has_variable = sr_md_type_pallas var:sr_md_type_pallas = 15 }
+		AND = { scope:site = 10 scope:op = 1 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 1 }
+		AND = { scope:site = 10 scope:op = 2 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 2 }
+		AND = { scope:site = 10 scope:op = 3 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 3 }
+		AND = { scope:site = 10 scope:op = 4 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 4 }
+		AND = { scope:site = 10 scope:op = 5 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 5 }
+		AND = { scope:site = 10 scope:op = 6 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 6 }
+		AND = { scope:site = 10 scope:op = 7 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 7 }
+		AND = { scope:site = 10 scope:op = 8 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 8 }
+		AND = { scope:site = 10 scope:op = 9 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 9 }
+		AND = { scope:site = 10 scope:op = 10 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 10 }
+		AND = { scope:site = 10 scope:op = 11 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 11 }
+		AND = { scope:site = 10 scope:op = 12 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 12 }
+		AND = { scope:site = 10 scope:op = 13 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 13 }
+		AND = { scope:site = 10 scope:op = 14 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 14 }
+		AND = { scope:site = 10 scope:op = 15 has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 15 }
+		AND = { scope:site = 11 scope:op = 1 has_variable = sr_md_type_io var:sr_md_type_io = 1 }
+		AND = { scope:site = 11 scope:op = 2 has_variable = sr_md_type_io var:sr_md_type_io = 2 }
+		AND = { scope:site = 11 scope:op = 3 has_variable = sr_md_type_io var:sr_md_type_io = 3 }
+		AND = { scope:site = 11 scope:op = 4 has_variable = sr_md_type_io var:sr_md_type_io = 4 }
+		AND = { scope:site = 11 scope:op = 5 has_variable = sr_md_type_io var:sr_md_type_io = 5 }
+		AND = { scope:site = 11 scope:op = 6 has_variable = sr_md_type_io var:sr_md_type_io = 6 }
+		AND = { scope:site = 11 scope:op = 7 has_variable = sr_md_type_io var:sr_md_type_io = 7 }
+		AND = { scope:site = 11 scope:op = 8 has_variable = sr_md_type_io var:sr_md_type_io = 8 }
+		AND = { scope:site = 11 scope:op = 9 has_variable = sr_md_type_io var:sr_md_type_io = 9 }
+		AND = { scope:site = 11 scope:op = 10 has_variable = sr_md_type_io var:sr_md_type_io = 10 }
+		AND = { scope:site = 11 scope:op = 11 has_variable = sr_md_type_io var:sr_md_type_io = 11 }
+		AND = { scope:site = 11 scope:op = 12 has_variable = sr_md_type_io var:sr_md_type_io = 12 }
+		AND = { scope:site = 11 scope:op = 13 has_variable = sr_md_type_io var:sr_md_type_io = 13 }
+		AND = { scope:site = 11 scope:op = 14 has_variable = sr_md_type_io var:sr_md_type_io = 14 }
+		AND = { scope:site = 11 scope:op = 15 has_variable = sr_md_type_io var:sr_md_type_io = 15 }
+		AND = { scope:site = 12 scope:op = 1 has_variable = sr_md_type_europa var:sr_md_type_europa = 1 }
+		AND = { scope:site = 12 scope:op = 2 has_variable = sr_md_type_europa var:sr_md_type_europa = 2 }
+		AND = { scope:site = 12 scope:op = 3 has_variable = sr_md_type_europa var:sr_md_type_europa = 3 }
+		AND = { scope:site = 12 scope:op = 4 has_variable = sr_md_type_europa var:sr_md_type_europa = 4 }
+		AND = { scope:site = 12 scope:op = 5 has_variable = sr_md_type_europa var:sr_md_type_europa = 5 }
+		AND = { scope:site = 12 scope:op = 6 has_variable = sr_md_type_europa var:sr_md_type_europa = 6 }
+		AND = { scope:site = 12 scope:op = 7 has_variable = sr_md_type_europa var:sr_md_type_europa = 7 }
+		AND = { scope:site = 12 scope:op = 8 has_variable = sr_md_type_europa var:sr_md_type_europa = 8 }
+		AND = { scope:site = 12 scope:op = 9 has_variable = sr_md_type_europa var:sr_md_type_europa = 9 }
+		AND = { scope:site = 12 scope:op = 10 has_variable = sr_md_type_europa var:sr_md_type_europa = 10 }
+		AND = { scope:site = 12 scope:op = 11 has_variable = sr_md_type_europa var:sr_md_type_europa = 11 }
+		AND = { scope:site = 12 scope:op = 12 has_variable = sr_md_type_europa var:sr_md_type_europa = 12 }
+		AND = { scope:site = 12 scope:op = 13 has_variable = sr_md_type_europa var:sr_md_type_europa = 13 }
+		AND = { scope:site = 12 scope:op = 14 has_variable = sr_md_type_europa var:sr_md_type_europa = 14 }
+		AND = { scope:site = 12 scope:op = 15 has_variable = sr_md_type_europa var:sr_md_type_europa = 15 }
+		AND = { scope:site = 13 scope:op = 1 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 1 }
+		AND = { scope:site = 13 scope:op = 2 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 2 }
+		AND = { scope:site = 13 scope:op = 3 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 3 }
+		AND = { scope:site = 13 scope:op = 4 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 4 }
+		AND = { scope:site = 13 scope:op = 5 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 5 }
+		AND = { scope:site = 13 scope:op = 6 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 6 }
+		AND = { scope:site = 13 scope:op = 7 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 7 }
+		AND = { scope:site = 13 scope:op = 8 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 8 }
+		AND = { scope:site = 13 scope:op = 9 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 9 }
+		AND = { scope:site = 13 scope:op = 10 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 10 }
+		AND = { scope:site = 13 scope:op = 11 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 11 }
+		AND = { scope:site = 13 scope:op = 12 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 12 }
+		AND = { scope:site = 13 scope:op = 13 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 13 }
+		AND = { scope:site = 13 scope:op = 14 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 14 }
+		AND = { scope:site = 13 scope:op = 15 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 15 }
+		AND = { scope:site = 14 scope:op = 1 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 1 }
+		AND = { scope:site = 14 scope:op = 2 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 2 }
+		AND = { scope:site = 14 scope:op = 3 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 3 }
+		AND = { scope:site = 14 scope:op = 4 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 4 }
+		AND = { scope:site = 14 scope:op = 5 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 5 }
+		AND = { scope:site = 14 scope:op = 6 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 6 }
+		AND = { scope:site = 14 scope:op = 7 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 7 }
+		AND = { scope:site = 14 scope:op = 8 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 8 }
+		AND = { scope:site = 14 scope:op = 9 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 9 }
+		AND = { scope:site = 14 scope:op = 10 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 10 }
+		AND = { scope:site = 14 scope:op = 11 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 11 }
+		AND = { scope:site = 14 scope:op = 12 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 12 }
+		AND = { scope:site = 14 scope:op = 13 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 13 }
+		AND = { scope:site = 14 scope:op = 14 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 14 }
+		AND = { scope:site = 14 scope:op = 15 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 15 }
+		AND = { scope:site = 15 scope:op = 1 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 1 }
+		AND = { scope:site = 15 scope:op = 2 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 2 }
+		AND = { scope:site = 15 scope:op = 3 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 3 }
+		AND = { scope:site = 15 scope:op = 4 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 4 }
+		AND = { scope:site = 15 scope:op = 5 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 5 }
+		AND = { scope:site = 15 scope:op = 6 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 6 }
+		AND = { scope:site = 15 scope:op = 7 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 7 }
+		AND = { scope:site = 15 scope:op = 8 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 8 }
+		AND = { scope:site = 15 scope:op = 9 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 9 }
+		AND = { scope:site = 15 scope:op = 10 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 10 }
+		AND = { scope:site = 15 scope:op = 11 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 11 }
+		AND = { scope:site = 15 scope:op = 12 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 12 }
+		AND = { scope:site = 15 scope:op = 13 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 13 }
+		AND = { scope:site = 15 scope:op = 14 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 14 }
+		AND = { scope:site = 15 scope:op = 15 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 15 }
+		AND = { scope:site = 16 scope:op = 1 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 1 }
+		AND = { scope:site = 16 scope:op = 2 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 2 }
+		AND = { scope:site = 16 scope:op = 3 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 3 }
+		AND = { scope:site = 16 scope:op = 4 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 4 }
+		AND = { scope:site = 16 scope:op = 5 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 5 }
+		AND = { scope:site = 16 scope:op = 6 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 6 }
+		AND = { scope:site = 16 scope:op = 7 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 7 }
+		AND = { scope:site = 16 scope:op = 8 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 8 }
+		AND = { scope:site = 16 scope:op = 9 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 9 }
+		AND = { scope:site = 16 scope:op = 10 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 10 }
+		AND = { scope:site = 16 scope:op = 11 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 11 }
+		AND = { scope:site = 16 scope:op = 12 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 12 }
+		AND = { scope:site = 16 scope:op = 13 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 13 }
+		AND = { scope:site = 16 scope:op = 14 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 14 }
+		AND = { scope:site = 16 scope:op = 15 has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 15 }
+		AND = { scope:site = 17 scope:op = 1 has_variable = sr_md_type_venus var:sr_md_type_venus = 1 }
+		AND = { scope:site = 17 scope:op = 2 has_variable = sr_md_type_venus var:sr_md_type_venus = 2 }
+		AND = { scope:site = 17 scope:op = 3 has_variable = sr_md_type_venus var:sr_md_type_venus = 3 }
+		AND = { scope:site = 17 scope:op = 4 has_variable = sr_md_type_venus var:sr_md_type_venus = 4 }
+		AND = { scope:site = 17 scope:op = 5 has_variable = sr_md_type_venus var:sr_md_type_venus = 5 }
+		AND = { scope:site = 17 scope:op = 6 has_variable = sr_md_type_venus var:sr_md_type_venus = 6 }
+		AND = { scope:site = 17 scope:op = 7 has_variable = sr_md_type_venus var:sr_md_type_venus = 7 }
+		AND = { scope:site = 17 scope:op = 8 has_variable = sr_md_type_venus var:sr_md_type_venus = 8 }
+		AND = { scope:site = 17 scope:op = 9 has_variable = sr_md_type_venus var:sr_md_type_venus = 9 }
+		AND = { scope:site = 17 scope:op = 10 has_variable = sr_md_type_venus var:sr_md_type_venus = 10 }
+		AND = { scope:site = 17 scope:op = 11 has_variable = sr_md_type_venus var:sr_md_type_venus = 11 }
+		AND = { scope:site = 17 scope:op = 12 has_variable = sr_md_type_venus var:sr_md_type_venus = 12 }
+		AND = { scope:site = 17 scope:op = 13 has_variable = sr_md_type_venus var:sr_md_type_venus = 13 }
+		AND = { scope:site = 17 scope:op = 14 has_variable = sr_md_type_venus var:sr_md_type_venus = 14 }
+		AND = { scope:site = 17 scope:op = 15 has_variable = sr_md_type_venus var:sr_md_type_venus = 15 }
+		AND = { scope:site = 18 scope:op = 1 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 1 }
+		AND = { scope:site = 18 scope:op = 2 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 2 }
+		AND = { scope:site = 18 scope:op = 3 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 3 }
+		AND = { scope:site = 18 scope:op = 4 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 4 }
+		AND = { scope:site = 18 scope:op = 5 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 5 }
+		AND = { scope:site = 18 scope:op = 6 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 6 }
+		AND = { scope:site = 18 scope:op = 7 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 7 }
+		AND = { scope:site = 18 scope:op = 8 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 8 }
+		AND = { scope:site = 18 scope:op = 9 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 9 }
+		AND = { scope:site = 18 scope:op = 10 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 10 }
+		AND = { scope:site = 18 scope:op = 11 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 11 }
+		AND = { scope:site = 18 scope:op = 12 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 12 }
+		AND = { scope:site = 18 scope:op = 13 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 13 }
+		AND = { scope:site = 18 scope:op = 14 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 14 }
+		AND = { scope:site = 18 scope:op = 15 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 15 }
+		AND = { scope:site = 19 scope:op = 1 has_variable = sr_md_type_titan var:sr_md_type_titan = 1 }
+		AND = { scope:site = 19 scope:op = 2 has_variable = sr_md_type_titan var:sr_md_type_titan = 2 }
+		AND = { scope:site = 19 scope:op = 3 has_variable = sr_md_type_titan var:sr_md_type_titan = 3 }
+		AND = { scope:site = 19 scope:op = 4 has_variable = sr_md_type_titan var:sr_md_type_titan = 4 }
+		AND = { scope:site = 19 scope:op = 5 has_variable = sr_md_type_titan var:sr_md_type_titan = 5 }
+		AND = { scope:site = 19 scope:op = 6 has_variable = sr_md_type_titan var:sr_md_type_titan = 6 }
+		AND = { scope:site = 19 scope:op = 7 has_variable = sr_md_type_titan var:sr_md_type_titan = 7 }
+		AND = { scope:site = 19 scope:op = 8 has_variable = sr_md_type_titan var:sr_md_type_titan = 8 }
+		AND = { scope:site = 19 scope:op = 9 has_variable = sr_md_type_titan var:sr_md_type_titan = 9 }
+		AND = { scope:site = 19 scope:op = 10 has_variable = sr_md_type_titan var:sr_md_type_titan = 10 }
+		AND = { scope:site = 19 scope:op = 11 has_variable = sr_md_type_titan var:sr_md_type_titan = 11 }
+		AND = { scope:site = 19 scope:op = 12 has_variable = sr_md_type_titan var:sr_md_type_titan = 12 }
+		AND = { scope:site = 19 scope:op = 13 has_variable = sr_md_type_titan var:sr_md_type_titan = 13 }
+		AND = { scope:site = 19 scope:op = 14 has_variable = sr_md_type_titan var:sr_md_type_titan = 14 }
+		AND = { scope:site = 19 scope:op = 15 has_variable = sr_md_type_titan var:sr_md_type_titan = 15 }
+		AND = { scope:site = 20 scope:op = 1 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 1 }
+		AND = { scope:site = 20 scope:op = 2 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 2 }
+		AND = { scope:site = 20 scope:op = 3 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 3 }
+		AND = { scope:site = 20 scope:op = 4 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 4 }
+		AND = { scope:site = 20 scope:op = 5 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 5 }
+		AND = { scope:site = 20 scope:op = 6 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 6 }
+		AND = { scope:site = 20 scope:op = 7 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 7 }
+		AND = { scope:site = 20 scope:op = 8 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 8 }
+		AND = { scope:site = 20 scope:op = 9 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 9 }
+		AND = { scope:site = 20 scope:op = 10 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 10 }
+		AND = { scope:site = 20 scope:op = 11 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 11 }
+		AND = { scope:site = 20 scope:op = 12 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 12 }
+		AND = { scope:site = 20 scope:op = 13 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 13 }
+		AND = { scope:site = 20 scope:op = 14 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 14 }
+		AND = { scope:site = 20 scope:op = 15 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 15 }
+		AND = { scope:site = 21 scope:op = 1 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 1 }
+		AND = { scope:site = 21 scope:op = 2 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 2 }
+		AND = { scope:site = 21 scope:op = 3 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 3 }
+		AND = { scope:site = 21 scope:op = 4 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 4 }
+		AND = { scope:site = 21 scope:op = 5 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 5 }
+		AND = { scope:site = 21 scope:op = 6 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 6 }
+		AND = { scope:site = 21 scope:op = 7 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 7 }
+		AND = { scope:site = 21 scope:op = 8 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 8 }
+		AND = { scope:site = 21 scope:op = 9 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 9 }
+		AND = { scope:site = 21 scope:op = 10 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 10 }
+		AND = { scope:site = 21 scope:op = 11 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 11 }
+		AND = { scope:site = 21 scope:op = 12 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 12 }
+		AND = { scope:site = 21 scope:op = 13 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 13 }
+		AND = { scope:site = 21 scope:op = 14 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 14 }
+		AND = { scope:site = 21 scope:op = 15 has_variable = sr_md_type_rhea var:sr_md_type_rhea = 15 }
+		AND = { scope:site = 22 scope:op = 1 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 1 }
+		AND = { scope:site = 22 scope:op = 2 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 2 }
+		AND = { scope:site = 22 scope:op = 3 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 3 }
+		AND = { scope:site = 22 scope:op = 4 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 4 }
+		AND = { scope:site = 22 scope:op = 5 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 5 }
+		AND = { scope:site = 22 scope:op = 6 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 6 }
+		AND = { scope:site = 22 scope:op = 7 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 7 }
+		AND = { scope:site = 22 scope:op = 8 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 8 }
+		AND = { scope:site = 22 scope:op = 9 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 9 }
+		AND = { scope:site = 22 scope:op = 10 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 10 }
+		AND = { scope:site = 22 scope:op = 11 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 11 }
+		AND = { scope:site = 22 scope:op = 12 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 12 }
+		AND = { scope:site = 22 scope:op = 13 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 13 }
+		AND = { scope:site = 22 scope:op = 14 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 14 }
+		AND = { scope:site = 22 scope:op = 15 has_variable = sr_md_type_mimas var:sr_md_type_mimas = 15 }
+		AND = { scope:site = 23 scope:op = 1 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 1 }
+		AND = { scope:site = 23 scope:op = 2 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 2 }
+		AND = { scope:site = 23 scope:op = 3 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 3 }
+		AND = { scope:site = 23 scope:op = 4 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 4 }
+		AND = { scope:site = 23 scope:op = 5 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 5 }
+		AND = { scope:site = 23 scope:op = 6 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 6 }
+		AND = { scope:site = 23 scope:op = 7 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 7 }
+		AND = { scope:site = 23 scope:op = 8 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 8 }
+		AND = { scope:site = 23 scope:op = 9 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 9 }
+		AND = { scope:site = 23 scope:op = 10 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 10 }
+		AND = { scope:site = 23 scope:op = 11 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 11 }
+		AND = { scope:site = 23 scope:op = 12 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 12 }
+		AND = { scope:site = 23 scope:op = 13 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 13 }
+		AND = { scope:site = 23 scope:op = 14 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 14 }
+		AND = { scope:site = 23 scope:op = 15 has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 15 }
+		AND = { scope:site = 24 scope:op = 1 has_variable = sr_md_type_titania var:sr_md_type_titania = 1 }
+		AND = { scope:site = 24 scope:op = 2 has_variable = sr_md_type_titania var:sr_md_type_titania = 2 }
+		AND = { scope:site = 24 scope:op = 3 has_variable = sr_md_type_titania var:sr_md_type_titania = 3 }
+		AND = { scope:site = 24 scope:op = 4 has_variable = sr_md_type_titania var:sr_md_type_titania = 4 }
+		AND = { scope:site = 24 scope:op = 5 has_variable = sr_md_type_titania var:sr_md_type_titania = 5 }
+		AND = { scope:site = 24 scope:op = 6 has_variable = sr_md_type_titania var:sr_md_type_titania = 6 }
+		AND = { scope:site = 24 scope:op = 7 has_variable = sr_md_type_titania var:sr_md_type_titania = 7 }
+		AND = { scope:site = 24 scope:op = 8 has_variable = sr_md_type_titania var:sr_md_type_titania = 8 }
+		AND = { scope:site = 24 scope:op = 9 has_variable = sr_md_type_titania var:sr_md_type_titania = 9 }
+		AND = { scope:site = 24 scope:op = 10 has_variable = sr_md_type_titania var:sr_md_type_titania = 10 }
+		AND = { scope:site = 24 scope:op = 11 has_variable = sr_md_type_titania var:sr_md_type_titania = 11 }
+		AND = { scope:site = 24 scope:op = 12 has_variable = sr_md_type_titania var:sr_md_type_titania = 12 }
+		AND = { scope:site = 24 scope:op = 13 has_variable = sr_md_type_titania var:sr_md_type_titania = 13 }
+		AND = { scope:site = 24 scope:op = 14 has_variable = sr_md_type_titania var:sr_md_type_titania = 14 }
+		AND = { scope:site = 24 scope:op = 15 has_variable = sr_md_type_titania var:sr_md_type_titania = 15 }
+		AND = { scope:site = 25 scope:op = 1 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 1 }
+		AND = { scope:site = 25 scope:op = 2 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 2 }
+		AND = { scope:site = 25 scope:op = 3 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 3 }
+		AND = { scope:site = 25 scope:op = 4 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 4 }
+		AND = { scope:site = 25 scope:op = 5 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 5 }
+		AND = { scope:site = 25 scope:op = 6 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 6 }
+		AND = { scope:site = 25 scope:op = 7 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 7 }
+		AND = { scope:site = 25 scope:op = 8 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 8 }
+		AND = { scope:site = 25 scope:op = 9 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 9 }
+		AND = { scope:site = 25 scope:op = 10 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 10 }
+		AND = { scope:site = 25 scope:op = 11 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 11 }
+		AND = { scope:site = 25 scope:op = 12 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 12 }
+		AND = { scope:site = 25 scope:op = 13 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 13 }
+		AND = { scope:site = 25 scope:op = 14 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 14 }
+		AND = { scope:site = 25 scope:op = 15 has_variable = sr_md_type_oberon var:sr_md_type_oberon = 15 }
+		AND = { scope:site = 26 scope:op = 1 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 1 }
+		AND = { scope:site = 26 scope:op = 2 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 2 }
+		AND = { scope:site = 26 scope:op = 3 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 3 }
+		AND = { scope:site = 26 scope:op = 4 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 4 }
+		AND = { scope:site = 26 scope:op = 5 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 5 }
+		AND = { scope:site = 26 scope:op = 6 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 6 }
+		AND = { scope:site = 26 scope:op = 7 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 7 }
+		AND = { scope:site = 26 scope:op = 8 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 8 }
+		AND = { scope:site = 26 scope:op = 9 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 9 }
+		AND = { scope:site = 26 scope:op = 10 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 10 }
+		AND = { scope:site = 26 scope:op = 11 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 11 }
+		AND = { scope:site = 26 scope:op = 12 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 12 }
+		AND = { scope:site = 26 scope:op = 13 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 13 }
+		AND = { scope:site = 26 scope:op = 14 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 14 }
+		AND = { scope:site = 26 scope:op = 15 has_variable = sr_md_type_miranda var:sr_md_type_miranda = 15 }
+		AND = { scope:site = 27 scope:op = 1 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 1 }
+		AND = { scope:site = 27 scope:op = 2 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 2 }
+		AND = { scope:site = 27 scope:op = 3 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 3 }
+		AND = { scope:site = 27 scope:op = 4 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 4 }
+		AND = { scope:site = 27 scope:op = 5 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 5 }
+		AND = { scope:site = 27 scope:op = 6 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 6 }
+		AND = { scope:site = 27 scope:op = 7 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 7 }
+		AND = { scope:site = 27 scope:op = 8 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 8 }
+		AND = { scope:site = 27 scope:op = 9 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 9 }
+		AND = { scope:site = 27 scope:op = 10 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 10 }
+		AND = { scope:site = 27 scope:op = 11 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 11 }
+		AND = { scope:site = 27 scope:op = 12 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 12 }
+		AND = { scope:site = 27 scope:op = 13 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 13 }
+		AND = { scope:site = 27 scope:op = 14 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 14 }
+		AND = { scope:site = 27 scope:op = 15 has_variable = sr_md_type_ariel var:sr_md_type_ariel = 15 }
+		AND = { scope:site = 28 scope:op = 1 has_variable = sr_md_type_triton var:sr_md_type_triton = 1 }
+		AND = { scope:site = 28 scope:op = 2 has_variable = sr_md_type_triton var:sr_md_type_triton = 2 }
+		AND = { scope:site = 28 scope:op = 3 has_variable = sr_md_type_triton var:sr_md_type_triton = 3 }
+		AND = { scope:site = 28 scope:op = 4 has_variable = sr_md_type_triton var:sr_md_type_triton = 4 }
+		AND = { scope:site = 28 scope:op = 5 has_variable = sr_md_type_triton var:sr_md_type_triton = 5 }
+		AND = { scope:site = 28 scope:op = 6 has_variable = sr_md_type_triton var:sr_md_type_triton = 6 }
+		AND = { scope:site = 28 scope:op = 7 has_variable = sr_md_type_triton var:sr_md_type_triton = 7 }
+		AND = { scope:site = 28 scope:op = 8 has_variable = sr_md_type_triton var:sr_md_type_triton = 8 }
+		AND = { scope:site = 28 scope:op = 9 has_variable = sr_md_type_triton var:sr_md_type_triton = 9 }
+		AND = { scope:site = 28 scope:op = 10 has_variable = sr_md_type_triton var:sr_md_type_triton = 10 }
+		AND = { scope:site = 28 scope:op = 11 has_variable = sr_md_type_triton var:sr_md_type_triton = 11 }
+		AND = { scope:site = 28 scope:op = 12 has_variable = sr_md_type_triton var:sr_md_type_triton = 12 }
+		AND = { scope:site = 28 scope:op = 13 has_variable = sr_md_type_triton var:sr_md_type_triton = 13 }
+		AND = { scope:site = 28 scope:op = 14 has_variable = sr_md_type_triton var:sr_md_type_triton = 14 }
+		AND = { scope:site = 28 scope:op = 15 has_variable = sr_md_type_triton var:sr_md_type_triton = 15 }
+		AND = { scope:site = 29 scope:op = 1 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 1 }
+		AND = { scope:site = 29 scope:op = 2 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 2 }
+		AND = { scope:site = 29 scope:op = 3 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 3 }
+		AND = { scope:site = 29 scope:op = 4 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 4 }
+		AND = { scope:site = 29 scope:op = 5 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 5 }
+		AND = { scope:site = 29 scope:op = 6 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 6 }
+		AND = { scope:site = 29 scope:op = 7 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 7 }
+		AND = { scope:site = 29 scope:op = 8 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 8 }
+		AND = { scope:site = 29 scope:op = 9 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 9 }
+		AND = { scope:site = 29 scope:op = 10 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 10 }
+		AND = { scope:site = 29 scope:op = 11 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 11 }
+		AND = { scope:site = 29 scope:op = 12 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 12 }
+		AND = { scope:site = 29 scope:op = 13 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 13 }
+		AND = { scope:site = 29 scope:op = 14 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 14 }
+		AND = { scope:site = 29 scope:op = 15 has_variable = sr_md_type_proteus var:sr_md_type_proteus = 15 }
+		AND = { scope:site = 30 scope:op = 1 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 1 }
+		AND = { scope:site = 30 scope:op = 2 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 2 }
+		AND = { scope:site = 30 scope:op = 3 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 3 }
+		AND = { scope:site = 30 scope:op = 4 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 4 }
+		AND = { scope:site = 30 scope:op = 5 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 5 }
+		AND = { scope:site = 30 scope:op = 6 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 6 }
+		AND = { scope:site = 30 scope:op = 7 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 7 }
+		AND = { scope:site = 30 scope:op = 8 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 8 }
+		AND = { scope:site = 30 scope:op = 9 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 9 }
+		AND = { scope:site = 30 scope:op = 10 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 10 }
+		AND = { scope:site = 30 scope:op = 11 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 11 }
+		AND = { scope:site = 30 scope:op = 12 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 12 }
+		AND = { scope:site = 30 scope:op = 13 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 13 }
+		AND = { scope:site = 30 scope:op = 14 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 14 }
+		AND = { scope:site = 30 scope:op = 15 has_variable = sr_md_type_pluto var:sr_md_type_pluto = 15 }
+		AND = { scope:site = 31 scope:op = 1 has_variable = sr_md_type_eris var:sr_md_type_eris = 1 }
+		AND = { scope:site = 31 scope:op = 2 has_variable = sr_md_type_eris var:sr_md_type_eris = 2 }
+		AND = { scope:site = 31 scope:op = 3 has_variable = sr_md_type_eris var:sr_md_type_eris = 3 }
+		AND = { scope:site = 31 scope:op = 4 has_variable = sr_md_type_eris var:sr_md_type_eris = 4 }
+		AND = { scope:site = 31 scope:op = 5 has_variable = sr_md_type_eris var:sr_md_type_eris = 5 }
+		AND = { scope:site = 31 scope:op = 6 has_variable = sr_md_type_eris var:sr_md_type_eris = 6 }
+		AND = { scope:site = 31 scope:op = 7 has_variable = sr_md_type_eris var:sr_md_type_eris = 7 }
+		AND = { scope:site = 31 scope:op = 8 has_variable = sr_md_type_eris var:sr_md_type_eris = 8 }
+		AND = { scope:site = 31 scope:op = 9 has_variable = sr_md_type_eris var:sr_md_type_eris = 9 }
+		AND = { scope:site = 31 scope:op = 10 has_variable = sr_md_type_eris var:sr_md_type_eris = 10 }
+		AND = { scope:site = 31 scope:op = 11 has_variable = sr_md_type_eris var:sr_md_type_eris = 11 }
+		AND = { scope:site = 31 scope:op = 12 has_variable = sr_md_type_eris var:sr_md_type_eris = 12 }
+		AND = { scope:site = 31 scope:op = 13 has_variable = sr_md_type_eris var:sr_md_type_eris = 13 }
+		AND = { scope:site = 31 scope:op = 14 has_variable = sr_md_type_eris var:sr_md_type_eris = 14 }
+		AND = { scope:site = 31 scope:op = 15 has_variable = sr_md_type_eris var:sr_md_type_eris = 15 }
+		AND = { scope:site = 32 scope:op = 1 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 1 }
+		AND = { scope:site = 32 scope:op = 2 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 2 }
+		AND = { scope:site = 32 scope:op = 3 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 3 }
+		AND = { scope:site = 32 scope:op = 4 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 4 }
+		AND = { scope:site = 32 scope:op = 5 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 5 }
+		AND = { scope:site = 32 scope:op = 6 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 6 }
+		AND = { scope:site = 32 scope:op = 7 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 7 }
+		AND = { scope:site = 32 scope:op = 8 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 8 }
+		AND = { scope:site = 32 scope:op = 9 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 9 }
+		AND = { scope:site = 32 scope:op = 10 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 10 }
+		AND = { scope:site = 32 scope:op = 11 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 11 }
+		AND = { scope:site = 32 scope:op = 12 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 12 }
+		AND = { scope:site = 32 scope:op = 13 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 13 }
+		AND = { scope:site = 32 scope:op = 14 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 14 }
+		AND = { scope:site = 32 scope:op = 15 has_variable = sr_md_type_makemake var:sr_md_type_makemake = 15 }
+		AND = { scope:site = 33 scope:op = 1 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 1 }
+		AND = { scope:site = 33 scope:op = 2 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 2 }
+		AND = { scope:site = 33 scope:op = 3 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 3 }
+		AND = { scope:site = 33 scope:op = 4 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 4 }
+		AND = { scope:site = 33 scope:op = 5 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 5 }
+		AND = { scope:site = 33 scope:op = 6 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 6 }
+		AND = { scope:site = 33 scope:op = 7 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 7 }
+		AND = { scope:site = 33 scope:op = 8 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 8 }
+		AND = { scope:site = 33 scope:op = 9 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 9 }
+		AND = { scope:site = 33 scope:op = 10 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 10 }
+		AND = { scope:site = 33 scope:op = 11 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 11 }
+		AND = { scope:site = 33 scope:op = 12 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 12 }
+		AND = { scope:site = 33 scope:op = 13 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 13 }
+		AND = { scope:site = 33 scope:op = 14 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 14 }
+		AND = { scope:site = 33 scope:op = 15 has_variable = sr_md_type_haumea var:sr_md_type_haumea = 15 }
+		AND = { scope:site = 34 scope:op = 1 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 1 }
+		AND = { scope:site = 34 scope:op = 2 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 2 }
+		AND = { scope:site = 34 scope:op = 3 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 3 }
+		AND = { scope:site = 34 scope:op = 4 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 4 }
+		AND = { scope:site = 34 scope:op = 5 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 5 }
+		AND = { scope:site = 34 scope:op = 6 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 6 }
+		AND = { scope:site = 34 scope:op = 7 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 7 }
+		AND = { scope:site = 34 scope:op = 8 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 8 }
+		AND = { scope:site = 34 scope:op = 9 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 9 }
+		AND = { scope:site = 34 scope:op = 10 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 10 }
+		AND = { scope:site = 34 scope:op = 11 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 11 }
+		AND = { scope:site = 34 scope:op = 12 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 12 }
+		AND = { scope:site = 34 scope:op = 13 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 13 }
+		AND = { scope:site = 34 scope:op = 14 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 14 }
+		AND = { scope:site = 34 scope:op = 15 has_variable = sr_md_type_sedna var:sr_md_type_sedna = 15 }
+		AND = { scope:site = 35 scope:op = 1 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 1 }
+		AND = { scope:site = 35 scope:op = 2 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 2 }
+		AND = { scope:site = 35 scope:op = 3 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 3 }
+		AND = { scope:site = 35 scope:op = 4 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 4 }
+		AND = { scope:site = 35 scope:op = 6 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 6 }
+		AND = { scope:site = 35 scope:op = 7 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 7 }
+		AND = { scope:site = 35 scope:op = 8 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 8 }
+		AND = { scope:site = 35 scope:op = 9 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 9 }
+		AND = { scope:site = 35 scope:op = 10 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 10 }
+		AND = { scope:site = 35 scope:op = 11 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 11 }
+		AND = { scope:site = 35 scope:op = 12 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 12 }
+		AND = { scope:site = 35 scope:op = 13 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 13 }
+		AND = { scope:site = 35 scope:op = 14 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 14 }
+		AND = { scope:site = 35 scope:op = 15 has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 15 }
+		AND = { scope:site = 36 scope:op = 1 has_variable = sr_md_type_peary var:sr_md_type_peary = 1 }
+		AND = { scope:site = 36 scope:op = 2 has_variable = sr_md_type_peary var:sr_md_type_peary = 2 }
+		AND = { scope:site = 36 scope:op = 3 has_variable = sr_md_type_peary var:sr_md_type_peary = 3 }
+		AND = { scope:site = 36 scope:op = 4 has_variable = sr_md_type_peary var:sr_md_type_peary = 4 }
+		AND = { scope:site = 36 scope:op = 6 has_variable = sr_md_type_peary var:sr_md_type_peary = 6 }
+		AND = { scope:site = 36 scope:op = 7 has_variable = sr_md_type_peary var:sr_md_type_peary = 7 }
+		AND = { scope:site = 36 scope:op = 8 has_variable = sr_md_type_peary var:sr_md_type_peary = 8 }
+		AND = { scope:site = 36 scope:op = 9 has_variable = sr_md_type_peary var:sr_md_type_peary = 9 }
+		AND = { scope:site = 36 scope:op = 10 has_variable = sr_md_type_peary var:sr_md_type_peary = 10 }
+		AND = { scope:site = 36 scope:op = 11 has_variable = sr_md_type_peary var:sr_md_type_peary = 11 }
+		AND = { scope:site = 36 scope:op = 12 has_variable = sr_md_type_peary var:sr_md_type_peary = 12 }
+		AND = { scope:site = 36 scope:op = 13 has_variable = sr_md_type_peary var:sr_md_type_peary = 13 }
+		AND = { scope:site = 36 scope:op = 14 has_variable = sr_md_type_peary var:sr_md_type_peary = 14 }
+		AND = { scope:site = 36 scope:op = 15 has_variable = sr_md_type_peary var:sr_md_type_peary = 15 }
+		AND = { scope:site = 37 scope:op = 1 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 1 }
+		AND = { scope:site = 37 scope:op = 2 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 2 }
+		AND = { scope:site = 37 scope:op = 3 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 3 }
+		AND = { scope:site = 37 scope:op = 4 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 4 }
+		AND = { scope:site = 37 scope:op = 6 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 6 }
+		AND = { scope:site = 37 scope:op = 7 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 7 }
+		AND = { scope:site = 37 scope:op = 8 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 8 }
+		AND = { scope:site = 37 scope:op = 9 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 9 }
+		AND = { scope:site = 37 scope:op = 10 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 10 }
+		AND = { scope:site = 37 scope:op = 11 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 11 }
+		AND = { scope:site = 37 scope:op = 12 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 12 }
+		AND = { scope:site = 37 scope:op = 13 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 13 }
+		AND = { scope:site = 37 scope:op = 14 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 14 }
+		AND = { scope:site = 37 scope:op = 15 has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 15 }
+		AND = { scope:site = 38 scope:op = 1 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 1 }
+		AND = { scope:site = 38 scope:op = 2 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 2 }
+		AND = { scope:site = 38 scope:op = 3 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 3 }
+		AND = { scope:site = 38 scope:op = 4 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 4 }
+		AND = { scope:site = 38 scope:op = 6 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 6 }
+		AND = { scope:site = 38 scope:op = 7 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 7 }
+		AND = { scope:site = 38 scope:op = 8 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 8 }
+		AND = { scope:site = 38 scope:op = 9 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 9 }
+		AND = { scope:site = 38 scope:op = 10 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 10 }
+		AND = { scope:site = 38 scope:op = 11 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 11 }
+		AND = { scope:site = 38 scope:op = 12 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 12 }
+		AND = { scope:site = 38 scope:op = 13 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 13 }
+		AND = { scope:site = 38 scope:op = 14 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 14 }
+		AND = { scope:site = 38 scope:op = 15 has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 15 }
+		AND = { scope:site = 39 scope:op = 1 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 1 }
+		AND = { scope:site = 39 scope:op = 2 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 2 }
+		AND = { scope:site = 39 scope:op = 3 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 3 }
+		AND = { scope:site = 39 scope:op = 4 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 4 }
+		AND = { scope:site = 39 scope:op = 6 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 6 }
+		AND = { scope:site = 39 scope:op = 7 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 7 }
+		AND = { scope:site = 39 scope:op = 8 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 8 }
+		AND = { scope:site = 39 scope:op = 9 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 9 }
+		AND = { scope:site = 39 scope:op = 10 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 10 }
+		AND = { scope:site = 39 scope:op = 11 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 11 }
+		AND = { scope:site = 39 scope:op = 12 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 12 }
+		AND = { scope:site = 39 scope:op = 13 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 13 }
+		AND = { scope:site = 39 scope:op = 14 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 14 }
+		AND = { scope:site = 39 scope:op = 15 has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 15 }
+		AND = { scope:site = 40 scope:op = 1 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 1 }
+		AND = { scope:site = 40 scope:op = 2 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 2 }
+		AND = { scope:site = 40 scope:op = 3 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 3 }
+		AND = { scope:site = 40 scope:op = 4 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 4 }
+		AND = { scope:site = 40 scope:op = 6 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 6 }
+		AND = { scope:site = 40 scope:op = 7 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 7 }
+		AND = { scope:site = 40 scope:op = 8 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 8 }
+		AND = { scope:site = 40 scope:op = 9 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 9 }
+		AND = { scope:site = 40 scope:op = 10 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 10 }
+		AND = { scope:site = 40 scope:op = 11 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 11 }
+		AND = { scope:site = 40 scope:op = 12 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 12 }
+		AND = { scope:site = 40 scope:op = 13 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 13 }
+		AND = { scope:site = 40 scope:op = 14 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 14 }
+		AND = { scope:site = 40 scope:op = 15 has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 15 }
+	}
+}
+# It has a level of the type above its floor (a founding specialization's first
+# level is the outpost's own).
+sr_md_scope_above_floor = {
+	OR = {
+		AND = { scope:site = 1 scope:op = 1 sr_site_lvl_a_value_valles_marineris > sr_md_floor_a_valles_marineris }
+		AND = { scope:site = 1 scope:op = 2 sr_site_lvl_b_value_valles_marineris > sr_md_floor_b_valles_marineris }
+		AND = { scope:site = 1 scope:op = 3 sr_site_hab_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 4 sr_site_def_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 5 sr_site_port_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 6 sr_site_mine_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 7 sr_site_yard_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 8 sr_site_lab_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 9 sr_site_culture_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 10 sr_site_resort_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 11 sr_site_black_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 12 sr_site_train_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 13 sr_site_bunker_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 14 sr_site_foundry_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 15 sr_site_admin_value_valles_marineris > 0 }
+		AND = { scope:site = 2 scope:op = 1 sr_site_lvl_a_value_olympus_mons > sr_md_floor_a_olympus_mons }
+		AND = { scope:site = 2 scope:op = 2 sr_site_lvl_b_value_olympus_mons > sr_md_floor_b_olympus_mons }
+		AND = { scope:site = 2 scope:op = 3 sr_site_hab_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 4 sr_site_def_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 5 sr_site_port_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 6 sr_site_mine_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 7 sr_site_yard_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 8 sr_site_lab_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 9 sr_site_culture_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 10 sr_site_resort_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 11 sr_site_black_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 12 sr_site_train_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 13 sr_site_bunker_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 14 sr_site_foundry_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 15 sr_site_admin_value_olympus_mons > 0 }
+		AND = { scope:site = 3 scope:op = 1 sr_site_lvl_a_value_hellas_planitia > sr_md_floor_a_hellas_planitia }
+		AND = { scope:site = 3 scope:op = 2 sr_site_lvl_b_value_hellas_planitia > sr_md_floor_b_hellas_planitia }
+		AND = { scope:site = 3 scope:op = 3 sr_site_hab_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 4 sr_site_def_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 5 sr_site_port_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 6 sr_site_mine_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 7 sr_site_yard_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 8 sr_site_lab_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 9 sr_site_culture_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 10 sr_site_resort_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 11 sr_site_black_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 12 sr_site_train_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 13 sr_site_bunker_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 14 sr_site_foundry_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 15 sr_site_admin_value_hellas_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 1 sr_site_lvl_a_value_utopia_planitia > sr_md_floor_a_utopia_planitia }
+		AND = { scope:site = 4 scope:op = 2 sr_site_lvl_b_value_utopia_planitia > sr_md_floor_b_utopia_planitia }
+		AND = { scope:site = 4 scope:op = 3 sr_site_hab_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 4 sr_site_def_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 5 sr_site_port_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 6 sr_site_mine_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 7 sr_site_yard_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 8 sr_site_lab_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 9 sr_site_culture_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 10 sr_site_resort_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 11 sr_site_black_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 12 sr_site_train_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 13 sr_site_bunker_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 14 sr_site_foundry_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 15 sr_site_admin_value_utopia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 1 sr_site_lvl_a_value_arcadia_planitia > sr_md_floor_a_arcadia_planitia }
+		AND = { scope:site = 5 scope:op = 2 sr_site_lvl_b_value_arcadia_planitia > sr_md_floor_b_arcadia_planitia }
+		AND = { scope:site = 5 scope:op = 3 sr_site_hab_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 4 sr_site_def_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 5 sr_site_port_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 6 sr_site_mine_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 7 sr_site_yard_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 8 sr_site_lab_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 9 sr_site_culture_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 10 sr_site_resort_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 11 sr_site_black_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 12 sr_site_train_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 13 sr_site_bunker_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 14 sr_site_foundry_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 15 sr_site_admin_value_arcadia_planitia > 0 }
+		AND = { scope:site = 6 scope:op = 1 sr_site_lvl_a_value_ceres > sr_md_floor_a_ceres }
+		AND = { scope:site = 6 scope:op = 2 sr_site_lvl_b_value_ceres > sr_md_floor_b_ceres }
+		AND = { scope:site = 6 scope:op = 3 sr_site_hab_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 4 sr_site_def_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 5 sr_site_port_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 6 sr_site_mine_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 7 sr_site_yard_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 8 sr_site_lab_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 9 sr_site_culture_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 10 sr_site_resort_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 11 sr_site_black_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 12 sr_site_train_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 13 sr_site_bunker_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 14 sr_site_foundry_value_ceres > 0 }
+		AND = { scope:site = 6 scope:op = 15 sr_site_admin_value_ceres > 0 }
+		AND = { scope:site = 7 scope:op = 1 sr_site_lvl_a_value_vesta > sr_md_floor_a_vesta }
+		AND = { scope:site = 7 scope:op = 2 sr_site_lvl_b_value_vesta > sr_md_floor_b_vesta }
+		AND = { scope:site = 7 scope:op = 3 sr_site_hab_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 4 sr_site_def_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 5 sr_site_port_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 6 sr_site_mine_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 7 sr_site_yard_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 8 sr_site_lab_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 9 sr_site_culture_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 10 sr_site_resort_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 11 sr_site_black_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 12 sr_site_train_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 13 sr_site_bunker_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 14 sr_site_foundry_value_vesta > 0 }
+		AND = { scope:site = 7 scope:op = 15 sr_site_admin_value_vesta > 0 }
+		AND = { scope:site = 8 scope:op = 1 sr_site_lvl_a_value_psyche > sr_md_floor_a_psyche }
+		AND = { scope:site = 8 scope:op = 2 sr_site_lvl_b_value_psyche > sr_md_floor_b_psyche }
+		AND = { scope:site = 8 scope:op = 3 sr_site_hab_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 4 sr_site_def_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 5 sr_site_port_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 6 sr_site_mine_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 7 sr_site_yard_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 8 sr_site_lab_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 9 sr_site_culture_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 10 sr_site_resort_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 11 sr_site_black_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 12 sr_site_train_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 13 sr_site_bunker_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 14 sr_site_foundry_value_psyche > 0 }
+		AND = { scope:site = 8 scope:op = 15 sr_site_admin_value_psyche > 0 }
+		AND = { scope:site = 9 scope:op = 1 sr_site_lvl_a_value_pallas > sr_md_floor_a_pallas }
+		AND = { scope:site = 9 scope:op = 2 sr_site_lvl_b_value_pallas > sr_md_floor_b_pallas }
+		AND = { scope:site = 9 scope:op = 3 sr_site_hab_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 4 sr_site_def_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 5 sr_site_port_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 6 sr_site_mine_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 7 sr_site_yard_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 8 sr_site_lab_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 9 sr_site_culture_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 10 sr_site_resort_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 11 sr_site_black_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 12 sr_site_train_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 13 sr_site_bunker_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 14 sr_site_foundry_value_pallas > 0 }
+		AND = { scope:site = 9 scope:op = 15 sr_site_admin_value_pallas > 0 }
+		AND = { scope:site = 10 scope:op = 1 sr_site_lvl_a_value_hygiea > sr_md_floor_a_hygiea }
+		AND = { scope:site = 10 scope:op = 2 sr_site_lvl_b_value_hygiea > sr_md_floor_b_hygiea }
+		AND = { scope:site = 10 scope:op = 3 sr_site_hab_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 4 sr_site_def_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 5 sr_site_port_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 6 sr_site_mine_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 7 sr_site_yard_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 8 sr_site_lab_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 9 sr_site_culture_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 10 sr_site_resort_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 11 sr_site_black_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 12 sr_site_train_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 13 sr_site_bunker_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 14 sr_site_foundry_value_hygiea > 0 }
+		AND = { scope:site = 10 scope:op = 15 sr_site_admin_value_hygiea > 0 }
+		AND = { scope:site = 11 scope:op = 1 sr_site_lvl_a_value_io > sr_md_floor_a_io }
+		AND = { scope:site = 11 scope:op = 2 sr_site_lvl_b_value_io > sr_md_floor_b_io }
+		AND = { scope:site = 11 scope:op = 3 sr_site_hab_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 4 sr_site_def_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 5 sr_site_port_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 6 sr_site_mine_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 7 sr_site_yard_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 8 sr_site_lab_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 9 sr_site_culture_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 10 sr_site_resort_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 11 sr_site_black_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 12 sr_site_train_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 13 sr_site_bunker_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 14 sr_site_foundry_value_io > 0 }
+		AND = { scope:site = 11 scope:op = 15 sr_site_admin_value_io > 0 }
+		AND = { scope:site = 12 scope:op = 1 sr_site_lvl_a_value_europa > sr_md_floor_a_europa }
+		AND = { scope:site = 12 scope:op = 2 sr_site_lvl_b_value_europa > sr_md_floor_b_europa }
+		AND = { scope:site = 12 scope:op = 3 sr_site_hab_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 4 sr_site_def_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 5 sr_site_port_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 6 sr_site_mine_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 7 sr_site_yard_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 8 sr_site_lab_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 9 sr_site_culture_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 10 sr_site_resort_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 11 sr_site_black_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 12 sr_site_train_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 13 sr_site_bunker_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 14 sr_site_foundry_value_europa > 0 }
+		AND = { scope:site = 12 scope:op = 15 sr_site_admin_value_europa > 0 }
+		AND = { scope:site = 13 scope:op = 1 sr_site_lvl_a_value_ganymede > sr_md_floor_a_ganymede }
+		AND = { scope:site = 13 scope:op = 2 sr_site_lvl_b_value_ganymede > sr_md_floor_b_ganymede }
+		AND = { scope:site = 13 scope:op = 3 sr_site_hab_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 4 sr_site_def_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 5 sr_site_port_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 6 sr_site_mine_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 7 sr_site_yard_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 8 sr_site_lab_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 9 sr_site_culture_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 10 sr_site_resort_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 11 sr_site_black_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 12 sr_site_train_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 13 sr_site_bunker_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 14 sr_site_foundry_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 15 sr_site_admin_value_ganymede > 0 }
+		AND = { scope:site = 14 scope:op = 1 sr_site_lvl_a_value_callisto > sr_md_floor_a_callisto }
+		AND = { scope:site = 14 scope:op = 2 sr_site_lvl_b_value_callisto > sr_md_floor_b_callisto }
+		AND = { scope:site = 14 scope:op = 3 sr_site_hab_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 4 sr_site_def_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 5 sr_site_port_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 6 sr_site_mine_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 7 sr_site_yard_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 8 sr_site_lab_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 9 sr_site_culture_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 10 sr_site_resort_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 11 sr_site_black_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 12 sr_site_train_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 13 sr_site_bunker_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 14 sr_site_foundry_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 15 sr_site_admin_value_callisto > 0 }
+		AND = { scope:site = 15 scope:op = 1 sr_site_lvl_a_value_himalia > sr_md_floor_a_himalia }
+		AND = { scope:site = 15 scope:op = 2 sr_site_lvl_b_value_himalia > sr_md_floor_b_himalia }
+		AND = { scope:site = 15 scope:op = 3 sr_site_hab_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 4 sr_site_def_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 5 sr_site_port_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 6 sr_site_mine_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 7 sr_site_yard_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 8 sr_site_lab_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 9 sr_site_culture_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 10 sr_site_resort_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 11 sr_site_black_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 12 sr_site_train_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 13 sr_site_bunker_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 14 sr_site_foundry_value_himalia > 0 }
+		AND = { scope:site = 15 scope:op = 15 sr_site_admin_value_himalia > 0 }
+		AND = { scope:site = 16 scope:op = 1 sr_site_lvl_a_value_amalthea > sr_md_floor_a_amalthea }
+		AND = { scope:site = 16 scope:op = 2 sr_site_lvl_b_value_amalthea > sr_md_floor_b_amalthea }
+		AND = { scope:site = 16 scope:op = 3 sr_site_hab_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 4 sr_site_def_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 5 sr_site_port_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 6 sr_site_mine_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 7 sr_site_yard_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 8 sr_site_lab_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 9 sr_site_culture_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 10 sr_site_resort_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 11 sr_site_black_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 12 sr_site_train_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 13 sr_site_bunker_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 14 sr_site_foundry_value_amalthea > 0 }
+		AND = { scope:site = 16 scope:op = 15 sr_site_admin_value_amalthea > 0 }
+		AND = { scope:site = 17 scope:op = 1 sr_site_lvl_a_value_venus > sr_md_floor_a_venus }
+		AND = { scope:site = 17 scope:op = 2 sr_site_lvl_b_value_venus > sr_md_floor_b_venus }
+		AND = { scope:site = 17 scope:op = 3 sr_site_hab_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 4 sr_site_def_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 5 sr_site_port_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 6 sr_site_mine_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 7 sr_site_yard_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 8 sr_site_lab_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 9 sr_site_culture_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 10 sr_site_resort_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 11 sr_site_black_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 12 sr_site_train_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 13 sr_site_bunker_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 14 sr_site_foundry_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 15 sr_site_admin_value_venus > 0 }
+		AND = { scope:site = 18 scope:op = 1 sr_site_lvl_a_value_mercury > sr_md_floor_a_mercury }
+		AND = { scope:site = 18 scope:op = 2 sr_site_lvl_b_value_mercury > sr_md_floor_b_mercury }
+		AND = { scope:site = 18 scope:op = 3 sr_site_hab_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 4 sr_site_def_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 5 sr_site_port_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 6 sr_site_mine_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 7 sr_site_yard_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 8 sr_site_lab_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 9 sr_site_culture_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 10 sr_site_resort_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 11 sr_site_black_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 12 sr_site_train_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 13 sr_site_bunker_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 14 sr_site_foundry_value_mercury > 0 }
+		AND = { scope:site = 18 scope:op = 15 sr_site_admin_value_mercury > 0 }
+		AND = { scope:site = 19 scope:op = 1 sr_site_lvl_a_value_titan > sr_md_floor_a_titan }
+		AND = { scope:site = 19 scope:op = 2 sr_site_lvl_b_value_titan > sr_md_floor_b_titan }
+		AND = { scope:site = 19 scope:op = 3 sr_site_hab_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 4 sr_site_def_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 5 sr_site_port_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 6 sr_site_mine_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 7 sr_site_yard_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 8 sr_site_lab_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 9 sr_site_culture_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 10 sr_site_resort_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 11 sr_site_black_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 12 sr_site_train_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 13 sr_site_bunker_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 14 sr_site_foundry_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 15 sr_site_admin_value_titan > 0 }
+		AND = { scope:site = 20 scope:op = 1 sr_site_lvl_a_value_enceladus > sr_md_floor_a_enceladus }
+		AND = { scope:site = 20 scope:op = 2 sr_site_lvl_b_value_enceladus > sr_md_floor_b_enceladus }
+		AND = { scope:site = 20 scope:op = 3 sr_site_hab_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 4 sr_site_def_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 5 sr_site_port_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 6 sr_site_mine_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 7 sr_site_yard_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 8 sr_site_lab_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 9 sr_site_culture_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 10 sr_site_resort_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 11 sr_site_black_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 12 sr_site_train_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 13 sr_site_bunker_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 14 sr_site_foundry_value_enceladus > 0 }
+		AND = { scope:site = 20 scope:op = 15 sr_site_admin_value_enceladus > 0 }
+		AND = { scope:site = 21 scope:op = 1 sr_site_lvl_a_value_rhea > sr_md_floor_a_rhea }
+		AND = { scope:site = 21 scope:op = 2 sr_site_lvl_b_value_rhea > sr_md_floor_b_rhea }
+		AND = { scope:site = 21 scope:op = 3 sr_site_hab_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 4 sr_site_def_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 5 sr_site_port_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 6 sr_site_mine_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 7 sr_site_yard_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 8 sr_site_lab_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 9 sr_site_culture_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 10 sr_site_resort_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 11 sr_site_black_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 12 sr_site_train_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 13 sr_site_bunker_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 14 sr_site_foundry_value_rhea > 0 }
+		AND = { scope:site = 21 scope:op = 15 sr_site_admin_value_rhea > 0 }
+		AND = { scope:site = 22 scope:op = 1 sr_site_lvl_a_value_mimas > sr_md_floor_a_mimas }
+		AND = { scope:site = 22 scope:op = 2 sr_site_lvl_b_value_mimas > sr_md_floor_b_mimas }
+		AND = { scope:site = 22 scope:op = 3 sr_site_hab_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 4 sr_site_def_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 5 sr_site_port_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 6 sr_site_mine_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 7 sr_site_yard_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 8 sr_site_lab_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 9 sr_site_culture_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 10 sr_site_resort_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 11 sr_site_black_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 12 sr_site_train_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 13 sr_site_bunker_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 14 sr_site_foundry_value_mimas > 0 }
+		AND = { scope:site = 22 scope:op = 15 sr_site_admin_value_mimas > 0 }
+		AND = { scope:site = 23 scope:op = 1 sr_site_lvl_a_value_iapetus > sr_md_floor_a_iapetus }
+		AND = { scope:site = 23 scope:op = 2 sr_site_lvl_b_value_iapetus > sr_md_floor_b_iapetus }
+		AND = { scope:site = 23 scope:op = 3 sr_site_hab_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 4 sr_site_def_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 5 sr_site_port_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 6 sr_site_mine_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 7 sr_site_yard_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 8 sr_site_lab_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 9 sr_site_culture_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 10 sr_site_resort_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 11 sr_site_black_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 12 sr_site_train_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 13 sr_site_bunker_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 14 sr_site_foundry_value_iapetus > 0 }
+		AND = { scope:site = 23 scope:op = 15 sr_site_admin_value_iapetus > 0 }
+		AND = { scope:site = 24 scope:op = 1 sr_site_lvl_a_value_titania > sr_md_floor_a_titania }
+		AND = { scope:site = 24 scope:op = 2 sr_site_lvl_b_value_titania > sr_md_floor_b_titania }
+		AND = { scope:site = 24 scope:op = 3 sr_site_hab_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 4 sr_site_def_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 5 sr_site_port_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 6 sr_site_mine_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 7 sr_site_yard_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 8 sr_site_lab_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 9 sr_site_culture_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 10 sr_site_resort_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 11 sr_site_black_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 12 sr_site_train_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 13 sr_site_bunker_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 14 sr_site_foundry_value_titania > 0 }
+		AND = { scope:site = 24 scope:op = 15 sr_site_admin_value_titania > 0 }
+		AND = { scope:site = 25 scope:op = 1 sr_site_lvl_a_value_oberon > sr_md_floor_a_oberon }
+		AND = { scope:site = 25 scope:op = 2 sr_site_lvl_b_value_oberon > sr_md_floor_b_oberon }
+		AND = { scope:site = 25 scope:op = 3 sr_site_hab_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 4 sr_site_def_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 5 sr_site_port_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 6 sr_site_mine_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 7 sr_site_yard_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 8 sr_site_lab_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 9 sr_site_culture_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 10 sr_site_resort_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 11 sr_site_black_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 12 sr_site_train_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 13 sr_site_bunker_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 14 sr_site_foundry_value_oberon > 0 }
+		AND = { scope:site = 25 scope:op = 15 sr_site_admin_value_oberon > 0 }
+		AND = { scope:site = 26 scope:op = 1 sr_site_lvl_a_value_miranda > sr_md_floor_a_miranda }
+		AND = { scope:site = 26 scope:op = 2 sr_site_lvl_b_value_miranda > sr_md_floor_b_miranda }
+		AND = { scope:site = 26 scope:op = 3 sr_site_hab_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 4 sr_site_def_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 5 sr_site_port_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 6 sr_site_mine_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 7 sr_site_yard_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 8 sr_site_lab_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 9 sr_site_culture_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 10 sr_site_resort_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 11 sr_site_black_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 12 sr_site_train_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 13 sr_site_bunker_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 14 sr_site_foundry_value_miranda > 0 }
+		AND = { scope:site = 26 scope:op = 15 sr_site_admin_value_miranda > 0 }
+		AND = { scope:site = 27 scope:op = 1 sr_site_lvl_a_value_ariel > sr_md_floor_a_ariel }
+		AND = { scope:site = 27 scope:op = 2 sr_site_lvl_b_value_ariel > sr_md_floor_b_ariel }
+		AND = { scope:site = 27 scope:op = 3 sr_site_hab_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 4 sr_site_def_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 5 sr_site_port_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 6 sr_site_mine_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 7 sr_site_yard_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 8 sr_site_lab_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 9 sr_site_culture_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 10 sr_site_resort_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 11 sr_site_black_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 12 sr_site_train_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 13 sr_site_bunker_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 14 sr_site_foundry_value_ariel > 0 }
+		AND = { scope:site = 27 scope:op = 15 sr_site_admin_value_ariel > 0 }
+		AND = { scope:site = 28 scope:op = 1 sr_site_lvl_a_value_triton > sr_md_floor_a_triton }
+		AND = { scope:site = 28 scope:op = 2 sr_site_lvl_b_value_triton > sr_md_floor_b_triton }
+		AND = { scope:site = 28 scope:op = 3 sr_site_hab_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 4 sr_site_def_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 5 sr_site_port_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 6 sr_site_mine_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 7 sr_site_yard_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 8 sr_site_lab_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 9 sr_site_culture_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 10 sr_site_resort_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 11 sr_site_black_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 12 sr_site_train_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 13 sr_site_bunker_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 14 sr_site_foundry_value_triton > 0 }
+		AND = { scope:site = 28 scope:op = 15 sr_site_admin_value_triton > 0 }
+		AND = { scope:site = 29 scope:op = 1 sr_site_lvl_a_value_proteus > sr_md_floor_a_proteus }
+		AND = { scope:site = 29 scope:op = 2 sr_site_lvl_b_value_proteus > sr_md_floor_b_proteus }
+		AND = { scope:site = 29 scope:op = 3 sr_site_hab_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 4 sr_site_def_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 5 sr_site_port_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 6 sr_site_mine_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 7 sr_site_yard_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 8 sr_site_lab_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 9 sr_site_culture_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 10 sr_site_resort_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 11 sr_site_black_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 12 sr_site_train_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 13 sr_site_bunker_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 14 sr_site_foundry_value_proteus > 0 }
+		AND = { scope:site = 29 scope:op = 15 sr_site_admin_value_proteus > 0 }
+		AND = { scope:site = 30 scope:op = 1 sr_site_lvl_a_value_pluto > sr_md_floor_a_pluto }
+		AND = { scope:site = 30 scope:op = 2 sr_site_lvl_b_value_pluto > sr_md_floor_b_pluto }
+		AND = { scope:site = 30 scope:op = 3 sr_site_hab_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 4 sr_site_def_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 5 sr_site_port_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 6 sr_site_mine_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 7 sr_site_yard_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 8 sr_site_lab_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 9 sr_site_culture_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 10 sr_site_resort_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 11 sr_site_black_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 12 sr_site_train_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 13 sr_site_bunker_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 14 sr_site_foundry_value_pluto > 0 }
+		AND = { scope:site = 30 scope:op = 15 sr_site_admin_value_pluto > 0 }
+		AND = { scope:site = 31 scope:op = 1 sr_site_lvl_a_value_eris > sr_md_floor_a_eris }
+		AND = { scope:site = 31 scope:op = 2 sr_site_lvl_b_value_eris > sr_md_floor_b_eris }
+		AND = { scope:site = 31 scope:op = 3 sr_site_hab_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 4 sr_site_def_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 5 sr_site_port_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 6 sr_site_mine_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 7 sr_site_yard_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 8 sr_site_lab_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 9 sr_site_culture_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 10 sr_site_resort_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 11 sr_site_black_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 12 sr_site_train_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 13 sr_site_bunker_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 14 sr_site_foundry_value_eris > 0 }
+		AND = { scope:site = 31 scope:op = 15 sr_site_admin_value_eris > 0 }
+		AND = { scope:site = 32 scope:op = 1 sr_site_lvl_a_value_makemake > sr_md_floor_a_makemake }
+		AND = { scope:site = 32 scope:op = 2 sr_site_lvl_b_value_makemake > sr_md_floor_b_makemake }
+		AND = { scope:site = 32 scope:op = 3 sr_site_hab_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 4 sr_site_def_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 5 sr_site_port_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 6 sr_site_mine_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 7 sr_site_yard_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 8 sr_site_lab_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 9 sr_site_culture_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 10 sr_site_resort_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 11 sr_site_black_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 12 sr_site_train_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 13 sr_site_bunker_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 14 sr_site_foundry_value_makemake > 0 }
+		AND = { scope:site = 32 scope:op = 15 sr_site_admin_value_makemake > 0 }
+		AND = { scope:site = 33 scope:op = 1 sr_site_lvl_a_value_haumea > sr_md_floor_a_haumea }
+		AND = { scope:site = 33 scope:op = 2 sr_site_lvl_b_value_haumea > sr_md_floor_b_haumea }
+		AND = { scope:site = 33 scope:op = 3 sr_site_hab_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 4 sr_site_def_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 5 sr_site_port_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 6 sr_site_mine_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 7 sr_site_yard_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 8 sr_site_lab_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 9 sr_site_culture_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 10 sr_site_resort_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 11 sr_site_black_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 12 sr_site_train_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 13 sr_site_bunker_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 14 sr_site_foundry_value_haumea > 0 }
+		AND = { scope:site = 33 scope:op = 15 sr_site_admin_value_haumea > 0 }
+		AND = { scope:site = 34 scope:op = 1 sr_site_lvl_a_value_sedna > sr_md_floor_a_sedna }
+		AND = { scope:site = 34 scope:op = 2 sr_site_lvl_b_value_sedna > sr_md_floor_b_sedna }
+		AND = { scope:site = 34 scope:op = 3 sr_site_hab_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 4 sr_site_def_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 5 sr_site_port_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 6 sr_site_mine_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 7 sr_site_yard_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 8 sr_site_lab_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 9 sr_site_culture_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 10 sr_site_resort_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 11 sr_site_black_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 12 sr_site_train_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 13 sr_site_bunker_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 14 sr_site_foundry_value_sedna > 0 }
+		AND = { scope:site = 34 scope:op = 15 sr_site_admin_value_sedna > 0 }
+		AND = { scope:site = 35 scope:op = 1 sr_site_lvl_a_value_shackleton > sr_md_floor_a_shackleton }
+		AND = { scope:site = 35 scope:op = 2 sr_site_lvl_b_value_shackleton > sr_md_floor_b_shackleton }
+		AND = { scope:site = 35 scope:op = 3 sr_site_hab_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 4 sr_site_def_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 6 sr_site_mine_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 7 sr_site_yard_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 8 sr_site_lab_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 9 sr_site_culture_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 10 sr_site_resort_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 11 sr_site_black_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 12 sr_site_train_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 13 sr_site_bunker_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 14 sr_site_foundry_value_shackleton > 0 }
+		AND = { scope:site = 35 scope:op = 15 sr_site_admin_value_shackleton > 0 }
+		AND = { scope:site = 36 scope:op = 1 sr_site_lvl_a_value_peary > sr_md_floor_a_peary }
+		AND = { scope:site = 36 scope:op = 2 sr_site_lvl_b_value_peary > sr_md_floor_b_peary }
+		AND = { scope:site = 36 scope:op = 3 sr_site_hab_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 4 sr_site_def_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 6 sr_site_mine_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 7 sr_site_yard_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 8 sr_site_lab_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 9 sr_site_culture_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 10 sr_site_resort_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 11 sr_site_black_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 12 sr_site_train_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 13 sr_site_bunker_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 14 sr_site_foundry_value_peary > 0 }
+		AND = { scope:site = 36 scope:op = 15 sr_site_admin_value_peary > 0 }
+		AND = { scope:site = 37 scope:op = 1 sr_site_lvl_a_value_tranquility > sr_md_floor_a_tranquility }
+		AND = { scope:site = 37 scope:op = 2 sr_site_lvl_b_value_tranquility > sr_md_floor_b_tranquility }
+		AND = { scope:site = 37 scope:op = 3 sr_site_hab_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 4 sr_site_def_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 6 sr_site_mine_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 7 sr_site_yard_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 8 sr_site_lab_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 9 sr_site_culture_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 10 sr_site_resort_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 11 sr_site_black_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 12 sr_site_train_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 13 sr_site_bunker_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 14 sr_site_foundry_value_tranquility > 0 }
+		AND = { scope:site = 37 scope:op = 15 sr_site_admin_value_tranquility > 0 }
+		AND = { scope:site = 38 scope:op = 1 sr_site_lvl_a_value_marius_hills > sr_md_floor_a_marius_hills }
+		AND = { scope:site = 38 scope:op = 2 sr_site_lvl_b_value_marius_hills > sr_md_floor_b_marius_hills }
+		AND = { scope:site = 38 scope:op = 3 sr_site_hab_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 4 sr_site_def_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 6 sr_site_mine_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 7 sr_site_yard_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 8 sr_site_lab_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 9 sr_site_culture_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 10 sr_site_resort_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 11 sr_site_black_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 12 sr_site_train_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 13 sr_site_bunker_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 14 sr_site_foundry_value_marius_hills > 0 }
+		AND = { scope:site = 38 scope:op = 15 sr_site_admin_value_marius_hills > 0 }
+		AND = { scope:site = 39 scope:op = 1 sr_site_lvl_a_value_daedalus > sr_md_floor_a_daedalus }
+		AND = { scope:site = 39 scope:op = 2 sr_site_lvl_b_value_daedalus > sr_md_floor_b_daedalus }
+		AND = { scope:site = 39 scope:op = 3 sr_site_hab_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 4 sr_site_def_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 6 sr_site_mine_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 7 sr_site_yard_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 8 sr_site_lab_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 9 sr_site_culture_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 10 sr_site_resort_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 11 sr_site_black_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 12 sr_site_train_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 13 sr_site_bunker_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 14 sr_site_foundry_value_daedalus > 0 }
+		AND = { scope:site = 39 scope:op = 15 sr_site_admin_value_daedalus > 0 }
+		AND = { scope:site = 40 scope:op = 1 sr_site_lvl_a_value_imbrium > sr_md_floor_a_imbrium }
+		AND = { scope:site = 40 scope:op = 2 sr_site_lvl_b_value_imbrium > sr_md_floor_b_imbrium }
+		AND = { scope:site = 40 scope:op = 3 sr_site_hab_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 4 sr_site_def_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 6 sr_site_mine_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 7 sr_site_yard_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 8 sr_site_lab_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 9 sr_site_culture_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 10 sr_site_resort_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 11 sr_site_black_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 12 sr_site_train_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 13 sr_site_bunker_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 14 sr_site_foundry_value_imbrium > 0 }
+		AND = { scope:site = 40 scope:op = 15 sr_site_admin_value_imbrium > 0 }
+	}
+}
+# Its people would fit in the room left (only a Habitat's dismantle asks).
+sr_md_scope_room_kept = {
+	OR = {
+		NOT = { scope:op = 3 }
+		AND = { scope:site = 1 sr_site_pop_value_valles_marineris <= sr_md_room_less_hab_valles_marineris }
+		AND = { scope:site = 2 sr_site_pop_value_olympus_mons <= sr_md_room_less_hab_olympus_mons }
+		AND = { scope:site = 3 sr_site_pop_value_hellas_planitia <= sr_md_room_less_hab_hellas_planitia }
+		AND = { scope:site = 4 sr_site_pop_value_utopia_planitia <= sr_md_room_less_hab_utopia_planitia }
+		AND = { scope:site = 5 sr_site_pop_value_arcadia_planitia <= sr_md_room_less_hab_arcadia_planitia }
+		AND = { scope:site = 6 sr_site_pop_value_ceres <= sr_md_room_less_hab_ceres }
+		AND = { scope:site = 7 sr_site_pop_value_vesta <= sr_md_room_less_hab_vesta }
+		AND = { scope:site = 8 sr_site_pop_value_psyche <= sr_md_room_less_hab_psyche }
+		AND = { scope:site = 9 sr_site_pop_value_pallas <= sr_md_room_less_hab_pallas }
+		AND = { scope:site = 10 sr_site_pop_value_hygiea <= sr_md_room_less_hab_hygiea }
+		AND = { scope:site = 11 sr_site_pop_value_io <= sr_md_room_less_hab_io }
+		AND = { scope:site = 12 sr_site_pop_value_europa <= sr_md_room_less_hab_europa }
+		AND = { scope:site = 13 sr_site_pop_value_ganymede <= sr_md_room_less_hab_ganymede }
+		AND = { scope:site = 14 sr_site_pop_value_callisto <= sr_md_room_less_hab_callisto }
+		AND = { scope:site = 15 sr_site_pop_value_himalia <= sr_md_room_less_hab_himalia }
+		AND = { scope:site = 16 sr_site_pop_value_amalthea <= sr_md_room_less_hab_amalthea }
+		AND = { scope:site = 17 sr_site_pop_value_venus <= sr_md_room_less_hab_venus }
+		AND = { scope:site = 18 sr_site_pop_value_mercury <= sr_md_room_less_hab_mercury }
+		AND = { scope:site = 19 sr_site_pop_value_titan <= sr_md_room_less_hab_titan }
+		AND = { scope:site = 20 sr_site_pop_value_enceladus <= sr_md_room_less_hab_enceladus }
+		AND = { scope:site = 21 sr_site_pop_value_rhea <= sr_md_room_less_hab_rhea }
+		AND = { scope:site = 22 sr_site_pop_value_mimas <= sr_md_room_less_hab_mimas }
+		AND = { scope:site = 23 sr_site_pop_value_iapetus <= sr_md_room_less_hab_iapetus }
+		AND = { scope:site = 24 sr_site_pop_value_titania <= sr_md_room_less_hab_titania }
+		AND = { scope:site = 25 sr_site_pop_value_oberon <= sr_md_room_less_hab_oberon }
+		AND = { scope:site = 26 sr_site_pop_value_miranda <= sr_md_room_less_hab_miranda }
+		AND = { scope:site = 27 sr_site_pop_value_ariel <= sr_md_room_less_hab_ariel }
+		AND = { scope:site = 28 sr_site_pop_value_triton <= sr_md_room_less_hab_triton }
+		AND = { scope:site = 29 sr_site_pop_value_proteus <= sr_md_room_less_hab_proteus }
+		AND = { scope:site = 30 sr_site_pop_value_pluto <= sr_md_room_less_hab_pluto }
+		AND = { scope:site = 31 sr_site_pop_value_eris <= sr_md_room_less_hab_eris }
+		AND = { scope:site = 32 sr_site_pop_value_makemake <= sr_md_room_less_hab_makemake }
+		AND = { scope:site = 33 sr_site_pop_value_haumea <= sr_md_room_less_hab_haumea }
+		AND = { scope:site = 34 sr_site_pop_value_sedna <= sr_md_room_less_hab_sedna }
+		AND = { scope:site = 35 sr_site_pop_value_shackleton <= sr_md_room_less_hab_shackleton }
+		AND = { scope:site = 36 sr_site_pop_value_peary <= sr_md_room_less_hab_peary }
+		AND = { scope:site = 37 sr_site_pop_value_tranquility <= sr_md_room_less_hab_tranquility }
+		AND = { scope:site = 38 sr_site_pop_value_marius_hills <= sr_md_room_less_hab_marius_hills }
+		AND = { scope:site = 39 sr_site_pop_value_daedalus <= sr_md_room_less_hab_daedalus }
+		AND = { scope:site = 40 sr_site_pop_value_imbrium <= sr_md_room_less_hab_imbrium }
+	}
+}
+
 # ===== Autonomy and free colonies (slice 5 design) =====
 # Some world is a free colony. Any scope.
 sr_free_any = {

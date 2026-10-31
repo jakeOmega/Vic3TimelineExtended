@@ -33,6 +33,8 @@ sr_mod_month = {
 	if = {
 		limit = { sr_colonies_contested_enabled = yes }
 		sr_mq_recount = yes
+		# A level being dismantled at each world, a month on (owner, 2026-10-31).
+		sr_md_month = yes
 		sr_mod_fabrication_self_check = yes
 		sr_marker_self_check = yes
 		if = {
@@ -90,6 +92,18 @@ sr_mod_queue = {
 	set_local_variable = { name = sr_mq_new_type value = $CODE$ }
 	sr_mq_append = yes
 	sr_mq_count_add = { VAR = sr_mq_$TYPE$_$KEY$ }
+}
+
+# ---- Dismantling (owner, 2026-10-31) ----------------------------------------------
+# Country scope, from the dismantle scripted GUI (sr_md_start_from_scope,
+# generated): one level of the module of code CODE at the world KEY starts to
+# come down, sr_mod_dismantle_months from now. One at a time a world; the
+# month's work, the removal and the record's end are generated
+# (sr_md_month_<key>, sr_md_finish_<key>, sr_md_clear_<key>): losing the world
+# or its occupation ends the order, a blockade holds it.
+sr_md_start = {
+	set_variable = { name = sr_md_type_$KEY$ value = $CODE$ }
+	set_variable = { name = sr_md_left_$KEY$ value = sr_mod_dismantle_months }
 }
 
 # Country scope. One more of a world's queued modules of a type (VAR, a

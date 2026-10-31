@@ -745,7 +745,7 @@ These sections follow:
 | Awaiting Dedication | Open | Only while one of your Grand Monuments is a construction site: a row for each site, with its levels built, the grandeur they come to and whether levels are still being built, and a Dedicate button under it. |
 | Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
 | National Effects | Open | The four monument policy buttons first. Then a row for each national effect in force: Prestige and Prestige (%), Legitimacy, Cultural Pull, Education Access under Public Education, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total; hover a group for the monuments it approves of, those it objects to, the contested ones it resents and its fading record. Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. |
-| Our Monuments | Open | A row for each finished monument that is not contested: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename and Name It under it, and Clear Name once you have typed a name. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
+| Our Monuments | Open | A row for each finished monument that is not contested: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename and Name It under it, and Clear Name once you have typed a name. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A monument you can carry off as a trophy has Carry It Off, and the least grand of six in one state has Clear It Away. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
 | Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
 | How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, unique dedications, names, the monument policy, trophies and archaeology. |
@@ -801,6 +801,15 @@ there, the site among them; the build tooltip names the reason. Levels already
 under construction always go on. The AI raises new monuments in other states
 before it builds beside one.
 
+Once six stand in one of your states, the least grand of them, contested ones
+aside, has a Clear It Away button on its row and on the state's monument card.
+It is gone for good, with its grandeur and everything it gave, and a site can be
+started again, so you can replace a small monument with a grander one. Nothing
+else follows: no interest group objects and no legitimacy comes of it, as Pull
+Down's does for a contested monument. If it was the state's first monument, the
+grandest of the others takes its place. A historical monument can be cleared
+away too, and its tooltip warns you. The AI never clears one away.
+
 ### Several monuments in one state
 
 A state has one Grand Monument building, so a second monument there stands
@@ -825,8 +834,8 @@ Awaiting a Decision, has Pull Down, Rededicate and Keep as Heritage; rededicatin
 makes it the state's first monument, at half its levels. An army that
 holds the state carries monuments off one at a time, with the Carry It Off on
 the first one's details or on another's row, and the rest stay. If the first
-monument is pulled down or carried off whole, the largest of the others takes
-its place.
+monument is pulled down, cleared away or carried off whole, the largest of the
+others takes its place.
 
 ### Monument dedications
 

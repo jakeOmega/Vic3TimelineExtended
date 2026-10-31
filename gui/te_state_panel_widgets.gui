@@ -952,6 +952,10 @@ types te_state_panel_widget_types
 						### is our own unincorporated state and we did not raise
 						### the monument (gui/gm_trophy_widgets.gui).
 						gm_tr_take_button = {}
+
+						### CLEAR IT AWAY — six stand here and this is the least
+						### grand (gui/gm_trophy_widgets.gui).
+						gm_clear_button = {}
 					}
 				}
 

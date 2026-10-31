@@ -530,6 +530,10 @@ CELLS = {
     "the build mix, Launch and Auto (te_sr_sc_mix_button)": (
         ("te_sr_sc_mix_button", 'block "mix_label"'),
         r"je_space_race_widget_sc_(mix_(war|rapid|siege|carrier|tender)|launch|auto_on|auto_off)"),
+    # Dismantling (owner, 2026-10-31): a module level coming down, under its name.
+    "a module coming down on a colony's page (te_sr_page_mod_row)": (
+        ("te_sr_page_mod_row", 'text = "je_space_race_widget_mod_coming_down"'),
+        r"je_space_race_widget_mod_coming_down"),
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|powers_header|orbit_header|howc_header"
