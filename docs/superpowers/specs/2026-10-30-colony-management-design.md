@@ -216,7 +216,7 @@ finished two of its sections and took the owner's review of the built panel
   Advanced Nanofabrication, Space Colonization and Molecular Assemblers, so a
   world has up to 9 slots. Anything else that grants it later, a law or a
   policy, counts the same way.
-- **The drives as markers** (the owner): Fusion Power, Muon-Catalyzed Fusion
+- **The drives as markers** (the owner): Fusion Power, Compact Fusion
   Reactors and Antimatter Production carry `country_sr_drive_<fusion|torch|antimatter>_bool`
   (script-only booleans), which `sr_drive_level`, `sr_launch_has_fusion` and
   `sr_launch_has_antimatter` read, so each technology's tooltip names its drive.
