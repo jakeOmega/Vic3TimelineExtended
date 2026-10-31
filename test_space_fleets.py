@@ -1108,30 +1108,43 @@ class EarthAlertTest(unittest.TestCase):
                 self.assertIn(clear, _block(self.generated, "sr_fl_clear_at"))
 
     def test_loud_replaces_quiet_in_the_same_month(self):
-        arm = self.step[self.step.index(self._bound(1, gsf.EARTH)):]
-        arm = arm[:arm.index(self._bound(2, gsf.EARTH))]
-        loud = arm.index("scope:sr_alert_viewer = { sr_earth_alert_loud = yes }")
-        quiet = arm.index("post_notification = sr_earth_hostile_notice")
-        self.assertLess(loud, quiet)
-        self.assertIn("else_if", arm[loud:quiet])
-        # The loud notice marks the quiet one heard too.
-        loud_arm = arm[loud:quiet]
-        self.assertIn("add_to_variable_list = { name = sr_fl_1_warned_quiet target = scope:sr_alert_viewer }", loud_arm)
-        self.assertIn("trigger_event = { id = space_race_events.111 days = 1 }", loud_arm)
-
-    def test_one_loud_notice_pending_at_a_time(self):
-        """A second loud-worthy fleet that month is told quietly, and loudly
-        the month after; the pending record lapses, so a lost event can't
-        silence the loud notice for good."""
+        # The loud test is read once, before the walk.
+        self.assertLess(self.step.index("if = { limit = { sr_earth_alert_loud = yes } set_local_variable = { name = sr_earth_loud value = 1 } }"),
+                        self.step.index("every_in_global_list"))
         for n in range(1, gsf.SLOTS + 1):
             with self.subTest(slot=n):
                 arm = self.step[self.step.index(self._bound(n, gsf.EARTH)):]
-                limit = arm[:arm.index(f"add_to_variable_list = {{ name = sr_fl_{n}_warned_loud")]
-                self.assertIn("NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }", limit)
-                self.assertIn(f"set_local_variable = {{ name = sr_earth_alert_arr value = var:sr_fl_{n}_arrive }}", arm)
-        self.assertIn("set_variable = { name = sr_earth_alert_by value = prev days = 60 }", self.step)
-        self.assertIn("set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }",
-                      self.step)
+                if n < gsf.SLOTS:
+                    arm = arm[:arm.index(self._bound(n + 1, gsf.EARTH))]
+                loud = arm.index(f"limit = {{ local_var:sr_earth_loud = 1 NOT = {{ is_target_in_variable_list = "
+                                 f"{{ name = sr_fl_{n}_warned_loud target = scope:sr_alert_viewer }} }} }}")
+                quiet = arm.index("post_notification = sr_earth_hostile_notice")
+                self.assertLess(loud, quiet)
+                self.assertIn("else_if", arm[loud:quiet])
+                # The quiet arm is for a fleet whose landing changes nothing.
+                self.assertIn(f"limit = {{ local_var:sr_earth_loud = 0 NOT = {{ is_target_in_variable_list = "
+                              f"{{ name = sr_fl_{n}_warned_quiet target = scope:sr_alert_viewer }} }} }}", arm)
+                # The loud notice marks the quiet one heard too.
+                loud_arm = arm[loud:quiet]
+                self.assertIn(f"add_to_variable_list = {{ name = sr_fl_{n}_warned_quiet target = scope:sr_alert_viewer }}", loud_arm)
+                self.assertIn("trigger_event = { id = space_race_events.111 days = 1 }", loud_arm)
+
+    def test_one_popup_a_month_covers_the_wave(self):
+        """The month's other loud fleets are marked told and folded into its
+        popup: no feed notice for them, and no second popup next month."""
+        self.assertLess(self.step.index("set_local_variable = { name = sr_earth_loud_sent value = 0 }"),
+                        self.step.index("every_in_global_list"))
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                arm = self.step[self.step.index(self._bound(n, gsf.EARTH)):]
+                told = arm.index(f"add_to_variable_list = {{ name = sr_fl_{n}_warned_loud")
+                sent = arm.index("limit = { local_var:sr_earth_loud_sent = 0 }")
+                self.assertLess(told, sent)
+                self.assertRegex(arm[sent:], r"^limit = \{ local_var:sr_earth_loud_sent = 0 \}\s*"
+                                             r"set_local_variable = \{ name = sr_earth_loud_sent value = 1 \}\s*"
+                                             rf"set_local_variable = \{{ name = sr_earth_alert_arr value = var:sr_fl_{n}_arrive \}}")
+        self.assertIn("set_variable = { name = sr_earth_alert_by value = prev }", self.step)
+        self.assertIn("set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }", self.step)
         self.assertIn("remove_variable = sr_earth_alert_arrive", _block(self.events, "space_race_events.111"))
 
     def test_the_quiet_notice_is_a_bad_feed_message(self):
@@ -1142,10 +1155,18 @@ class EarthAlertTest(unittest.TestCase):
         self.assertIn("color = bad", body)
 
     def test_the_loud_test(self):
+        """A landing tips the balance: no fleet of ours at Earth and no
+        blockade already, or ours holds against what is there now but not
+        against that and the inbound together."""
         loud = _block(self.triggers, "sr_earth_alert_loud")
         self.assertIn("sr_loc_hostile_inbound_strength_earth > 0", loud)
-        self.assertIn("NOT = { has_variable = sr_fl_at_earth }", loud)
-        self.assertIn("sr_loc_hostile_inbound_strength_earth > var:sr_fl_at_earth", loud)
+        self.assertRegex(loud, r"AND = \{\s*NOT = \{ has_variable = sr_fl_at_earth \}\s*NOT = \{ sr_earth_blockaded = yes \}\s*\}")
+        self.assertRegex(loud, r"AND = \{\s*has_variable = sr_fl_at_earth\s*"
+                               r"var:sr_fl_at_earth >= sr_loc_ai_enemy_fleets_earth\s*"
+                               r"sr_earth_hostile_total > var:sr_fl_at_earth\s*\}")
+        total = _block(_strip(_raw(FLEET_VALUES)), "sr_earth_hostile_total")
+        self.assertIn("value = sr_loc_hostile_inbound_strength_earth", total)
+        self.assertIn("add = sr_loc_ai_enemy_fleets_earth", total)
 
     def test_the_loud_notice_has_106_s_shape(self):
         body = _block(self.events, "space_race_events.111")

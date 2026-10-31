@@ -1382,22 +1382,26 @@ def render_debug() -> list[str]:
 def render_earth_alert() -> list[str]:
     """The Earth alert (UI pass design § 9), for a player in its country pulse:
     every slot of a power at war with it, in flight to Earth, is told once per
-    leg at each volume. Loud (space_race_events.111) while an arrival would
-    change something (sr_earth_alert_loud), in place of the quiet notice that
-    month (one pending at a time, with that fleet's landing month); quiet (a
-    feed notice) otherwise. The players told are on the moving fleet's lists
-    (SLOT_LISTS), cleared with each new leg and landing, so a war declared
-    mid-flight is heard the next month."""
+    leg at each volume. Loud (space_race_events.111) while its landing would
+    tip the balance at Earth (sr_earth_alert_loud), in place of the quiet
+    notice; quiet (a feed notice) otherwise. One popup a month: the month's
+    other loud fleets are folded into it (marked told, nothing posted), since
+    its text gives the totals. The players told are on the moving fleet's
+    lists (SLOT_LISTS), cleared with each new leg and landing, so a war
+    declared mid-flight is heard the next month and a quiet leg can turn loud."""
     out = ["# ===== The Earth alert (UI pass design § 9), a player's country pulse =====",
            "# Each hostile fleet in flight to Earth, once per leg: loud (.111) while its",
-           "# arrival would change something, else quiet (sr_earth_hostile_notice). The",
-           "# players told sit on the fleet's sr_fl_<n>_warned_<volume> lists; one loud",
-           "# notice is pending at a time (sr_earth_alert_by, cleared by .111): a second",
-           "# fleet that month is told quietly, and loudly the month after. Both variables",
-           "# lapse in 60 days, so an event lost to a save from an older build can't",
-           "# silence the loud notice for good.",
+           "# landing would tip the balance at Earth (sr_earth_alert_loud, read once: it",
+           "# reads only the location records, which nothing here changes), else quiet",
+           "# (sr_earth_hostile_notice). The players told sit on the fleet's",
+           "# sr_fl_<n>_warned_<volume> lists. One popup a month, naming the first loud",
+           "# fleet's owner (sr_earth_alert_by) and landing (sr_earth_alert_arrive); the",
+           "# month's other loud fleets are marked told and folded into it.",
            "sr_earth_alert_step = {",
            "\tsave_scope_as = sr_alert_viewer",
+           "\tset_local_variable = { name = sr_earth_loud value = 0 }",
+           "\tif = { limit = { sr_earth_alert_loud = yes } set_local_variable = { name = sr_earth_loud value = 1 } }",
+           "\tset_local_variable = { name = sr_earth_loud_sent value = 0 }",
            "\tif = {",
            "\t\tlimit = { has_global_variable_list = sr_fleet_powers }",
            "\t\tevery_in_global_list = {",
@@ -1410,22 +1414,22 @@ def render_earth_alert() -> list[str]:
         out += ["\t\t\tif = {",
                 f"\t\t\t\tlimit = {{ {_bound(n, EARTH)} }}",
                 "\t\t\t\tif = {",
-                "\t\t\t\t\tlimit = {",
-                "\t\t\t\t\t\tscope:sr_alert_viewer = { sr_earth_alert_loud = yes }",
-                f"\t\t\t\t\t\tNOT = {{ {heard(loud)} }}",
-                "\t\t\t\t\t\tNOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }",
-                "\t\t\t\t\t}",
+                f"\t\t\t\t\tlimit = {{ local_var:sr_earth_loud = 1 NOT = {{ {heard(loud)} }} }}",
                 f"\t\t\t\t\t{add(loud)}",
                 f"\t\t\t\t\tif = {{ limit = {{ NOT = {{ {heard(quiet)} }} }} {add(quiet)} }}",
-                f"\t\t\t\t\tset_local_variable = {{ name = sr_earth_alert_arr value = var:sr_fl_{n}_arrive }}",
-                "\t\t\t\t\tscope:sr_alert_viewer = {",
-                "\t\t\t\t\t\tset_variable = { name = sr_earth_alert_by value = prev days = 60 }",
-                "\t\t\t\t\t\tset_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }",
-                "\t\t\t\t\t\ttrigger_event = { id = space_race_events.111 days = 1 }",
+                "\t\t\t\t\tif = {",
+                "\t\t\t\t\t\tlimit = { local_var:sr_earth_loud_sent = 0 }",
+                "\t\t\t\t\t\tset_local_variable = { name = sr_earth_loud_sent value = 1 }",
+                f"\t\t\t\t\t\tset_local_variable = {{ name = sr_earth_alert_arr value = var:sr_fl_{n}_arrive }}",
+                "\t\t\t\t\t\tscope:sr_alert_viewer = {",
+                "\t\t\t\t\t\t\tset_variable = { name = sr_earth_alert_by value = prev }",
+                "\t\t\t\t\t\t\tset_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }",
+                "\t\t\t\t\t\t\ttrigger_event = { id = space_race_events.111 days = 1 }",
+                "\t\t\t\t\t\t}",
                 "\t\t\t\t\t}",
                 "\t\t\t\t}",
                 "\t\t\t\telse_if = {",
-                f"\t\t\t\t\tlimit = {{ NOT = {{ {heard(quiet)} }} }}",
+                f"\t\t\t\t\tlimit = {{ local_var:sr_earth_loud = 0 NOT = {{ {heard(quiet)} }} }}",
                 f"\t\t\t\t\t{add(quiet)}",
                 "\t\t\t\t\tsave_scope_as = sr_earth_alert_power",
                 "\t\t\t\t\tscope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }",

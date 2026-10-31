@@ -10404,14 +10404,17 @@ sr_ov_list_defense = {
 
 # ===== The Earth alert (UI pass design § 9), a player's country pulse =====
 # Each hostile fleet in flight to Earth, once per leg: loud (.111) while its
-# arrival would change something, else quiet (sr_earth_hostile_notice). The
-# players told sit on the fleet's sr_fl_<n>_warned_<volume> lists; one loud
-# notice is pending at a time (sr_earth_alert_by, cleared by .111): a second
-# fleet that month is told quietly, and loudly the month after. Both variables
-# lapse in 60 days, so an event lost to a save from an older build can't
-# silence the loud notice for good.
+# landing would tip the balance at Earth (sr_earth_alert_loud, read once: it
+# reads only the location records, which nothing here changes), else quiet
+# (sr_earth_hostile_notice). The players told sit on the fleet's
+# sr_fl_<n>_warned_<volume> lists. One popup a month, naming the first loud
+# fleet's owner (sr_earth_alert_by) and landing (sr_earth_alert_arrive); the
+# month's other loud fleets are marked told and folded into it.
 sr_earth_alert_step = {
 	save_scope_as = sr_alert_viewer
+	set_local_variable = { name = sr_earth_loud value = 0 }
+	if = { limit = { sr_earth_alert_loud = yes } set_local_variable = { name = sr_earth_loud value = 1 } }
+	set_local_variable = { name = sr_earth_loud_sent value = 0 }
 	if = {
 		limit = { has_global_variable_list = sr_fleet_powers }
 		every_in_global_list = {
@@ -10420,22 +10423,22 @@ sr_earth_alert_step = {
 			if = {
 				limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } }
 				if = {
-					limit = {
-						scope:sr_alert_viewer = { sr_earth_alert_loud = yes }
-						NOT = { is_target_in_variable_list = { name = sr_fl_1_warned_loud target = scope:sr_alert_viewer } }
-						NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }
-					}
+					limit = { local_var:sr_earth_loud = 1 NOT = { is_target_in_variable_list = { name = sr_fl_1_warned_loud target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_1_warned_loud target = scope:sr_alert_viewer }
 					if = { limit = { NOT = { is_target_in_variable_list = { name = sr_fl_1_warned_quiet target = scope:sr_alert_viewer } } } add_to_variable_list = { name = sr_fl_1_warned_quiet target = scope:sr_alert_viewer } }
-					set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_1_arrive }
-					scope:sr_alert_viewer = {
-						set_variable = { name = sr_earth_alert_by value = prev days = 60 }
-						set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }
-						trigger_event = { id = space_race_events.111 days = 1 }
+					if = {
+						limit = { local_var:sr_earth_loud_sent = 0 }
+						set_local_variable = { name = sr_earth_loud_sent value = 1 }
+						set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_1_arrive }
+						scope:sr_alert_viewer = {
+							set_variable = { name = sr_earth_alert_by value = prev }
+							set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }
+							trigger_event = { id = space_race_events.111 days = 1 }
+						}
 					}
 				}
 				else_if = {
-					limit = { NOT = { is_target_in_variable_list = { name = sr_fl_1_warned_quiet target = scope:sr_alert_viewer } } }
+					limit = { local_var:sr_earth_loud = 0 NOT = { is_target_in_variable_list = { name = sr_fl_1_warned_quiet target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_1_warned_quiet target = scope:sr_alert_viewer }
 					save_scope_as = sr_earth_alert_power
 					scope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }
@@ -10444,22 +10447,22 @@ sr_earth_alert_step = {
 			if = {
 				limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 1 NOT = { has_variable = sr_fl_2_loc } }
 				if = {
-					limit = {
-						scope:sr_alert_viewer = { sr_earth_alert_loud = yes }
-						NOT = { is_target_in_variable_list = { name = sr_fl_2_warned_loud target = scope:sr_alert_viewer } }
-						NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }
-					}
+					limit = { local_var:sr_earth_loud = 1 NOT = { is_target_in_variable_list = { name = sr_fl_2_warned_loud target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_2_warned_loud target = scope:sr_alert_viewer }
 					if = { limit = { NOT = { is_target_in_variable_list = { name = sr_fl_2_warned_quiet target = scope:sr_alert_viewer } } } add_to_variable_list = { name = sr_fl_2_warned_quiet target = scope:sr_alert_viewer } }
-					set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_2_arrive }
-					scope:sr_alert_viewer = {
-						set_variable = { name = sr_earth_alert_by value = prev days = 60 }
-						set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }
-						trigger_event = { id = space_race_events.111 days = 1 }
+					if = {
+						limit = { local_var:sr_earth_loud_sent = 0 }
+						set_local_variable = { name = sr_earth_loud_sent value = 1 }
+						set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_2_arrive }
+						scope:sr_alert_viewer = {
+							set_variable = { name = sr_earth_alert_by value = prev }
+							set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }
+							trigger_event = { id = space_race_events.111 days = 1 }
+						}
 					}
 				}
 				else_if = {
-					limit = { NOT = { is_target_in_variable_list = { name = sr_fl_2_warned_quiet target = scope:sr_alert_viewer } } }
+					limit = { local_var:sr_earth_loud = 0 NOT = { is_target_in_variable_list = { name = sr_fl_2_warned_quiet target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_2_warned_quiet target = scope:sr_alert_viewer }
 					save_scope_as = sr_earth_alert_power
 					scope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }
@@ -10468,22 +10471,22 @@ sr_earth_alert_step = {
 			if = {
 				limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 1 NOT = { has_variable = sr_fl_3_loc } }
 				if = {
-					limit = {
-						scope:sr_alert_viewer = { sr_earth_alert_loud = yes }
-						NOT = { is_target_in_variable_list = { name = sr_fl_3_warned_loud target = scope:sr_alert_viewer } }
-						NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }
-					}
+					limit = { local_var:sr_earth_loud = 1 NOT = { is_target_in_variable_list = { name = sr_fl_3_warned_loud target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_3_warned_loud target = scope:sr_alert_viewer }
 					if = { limit = { NOT = { is_target_in_variable_list = { name = sr_fl_3_warned_quiet target = scope:sr_alert_viewer } } } add_to_variable_list = { name = sr_fl_3_warned_quiet target = scope:sr_alert_viewer } }
-					set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_3_arrive }
-					scope:sr_alert_viewer = {
-						set_variable = { name = sr_earth_alert_by value = prev days = 60 }
-						set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }
-						trigger_event = { id = space_race_events.111 days = 1 }
+					if = {
+						limit = { local_var:sr_earth_loud_sent = 0 }
+						set_local_variable = { name = sr_earth_loud_sent value = 1 }
+						set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_3_arrive }
+						scope:sr_alert_viewer = {
+							set_variable = { name = sr_earth_alert_by value = prev }
+							set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }
+							trigger_event = { id = space_race_events.111 days = 1 }
+						}
 					}
 				}
 				else_if = {
-					limit = { NOT = { is_target_in_variable_list = { name = sr_fl_3_warned_quiet target = scope:sr_alert_viewer } } }
+					limit = { local_var:sr_earth_loud = 0 NOT = { is_target_in_variable_list = { name = sr_fl_3_warned_quiet target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_3_warned_quiet target = scope:sr_alert_viewer }
 					save_scope_as = sr_earth_alert_power
 					scope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }
@@ -10492,22 +10495,22 @@ sr_earth_alert_step = {
 			if = {
 				limit = { has_variable = sr_fl_4_dest var:sr_fl_4_dest = 1 NOT = { has_variable = sr_fl_4_loc } }
 				if = {
-					limit = {
-						scope:sr_alert_viewer = { sr_earth_alert_loud = yes }
-						NOT = { is_target_in_variable_list = { name = sr_fl_4_warned_loud target = scope:sr_alert_viewer } }
-						NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }
-					}
+					limit = { local_var:sr_earth_loud = 1 NOT = { is_target_in_variable_list = { name = sr_fl_4_warned_loud target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_4_warned_loud target = scope:sr_alert_viewer }
 					if = { limit = { NOT = { is_target_in_variable_list = { name = sr_fl_4_warned_quiet target = scope:sr_alert_viewer } } } add_to_variable_list = { name = sr_fl_4_warned_quiet target = scope:sr_alert_viewer } }
-					set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_4_arrive }
-					scope:sr_alert_viewer = {
-						set_variable = { name = sr_earth_alert_by value = prev days = 60 }
-						set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }
-						trigger_event = { id = space_race_events.111 days = 1 }
+					if = {
+						limit = { local_var:sr_earth_loud_sent = 0 }
+						set_local_variable = { name = sr_earth_loud_sent value = 1 }
+						set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_4_arrive }
+						scope:sr_alert_viewer = {
+							set_variable = { name = sr_earth_alert_by value = prev }
+							set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }
+							trigger_event = { id = space_race_events.111 days = 1 }
+						}
 					}
 				}
 				else_if = {
-					limit = { NOT = { is_target_in_variable_list = { name = sr_fl_4_warned_quiet target = scope:sr_alert_viewer } } }
+					limit = { local_var:sr_earth_loud = 0 NOT = { is_target_in_variable_list = { name = sr_fl_4_warned_quiet target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_4_warned_quiet target = scope:sr_alert_viewer }
 					save_scope_as = sr_earth_alert_power
 					scope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }
@@ -10516,22 +10519,22 @@ sr_earth_alert_step = {
 			if = {
 				limit = { has_variable = sr_fl_5_dest var:sr_fl_5_dest = 1 NOT = { has_variable = sr_fl_5_loc } }
 				if = {
-					limit = {
-						scope:sr_alert_viewer = { sr_earth_alert_loud = yes }
-						NOT = { is_target_in_variable_list = { name = sr_fl_5_warned_loud target = scope:sr_alert_viewer } }
-						NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }
-					}
+					limit = { local_var:sr_earth_loud = 1 NOT = { is_target_in_variable_list = { name = sr_fl_5_warned_loud target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_5_warned_loud target = scope:sr_alert_viewer }
 					if = { limit = { NOT = { is_target_in_variable_list = { name = sr_fl_5_warned_quiet target = scope:sr_alert_viewer } } } add_to_variable_list = { name = sr_fl_5_warned_quiet target = scope:sr_alert_viewer } }
-					set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_5_arrive }
-					scope:sr_alert_viewer = {
-						set_variable = { name = sr_earth_alert_by value = prev days = 60 }
-						set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }
-						trigger_event = { id = space_race_events.111 days = 1 }
+					if = {
+						limit = { local_var:sr_earth_loud_sent = 0 }
+						set_local_variable = { name = sr_earth_loud_sent value = 1 }
+						set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_5_arrive }
+						scope:sr_alert_viewer = {
+							set_variable = { name = sr_earth_alert_by value = prev }
+							set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }
+							trigger_event = { id = space_race_events.111 days = 1 }
+						}
 					}
 				}
 				else_if = {
-					limit = { NOT = { is_target_in_variable_list = { name = sr_fl_5_warned_quiet target = scope:sr_alert_viewer } } }
+					limit = { local_var:sr_earth_loud = 0 NOT = { is_target_in_variable_list = { name = sr_fl_5_warned_quiet target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_5_warned_quiet target = scope:sr_alert_viewer }
 					save_scope_as = sr_earth_alert_power
 					scope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }
@@ -10540,22 +10543,22 @@ sr_earth_alert_step = {
 			if = {
 				limit = { has_variable = sr_fl_6_dest var:sr_fl_6_dest = 1 NOT = { has_variable = sr_fl_6_loc } }
 				if = {
-					limit = {
-						scope:sr_alert_viewer = { sr_earth_alert_loud = yes }
-						NOT = { is_target_in_variable_list = { name = sr_fl_6_warned_loud target = scope:sr_alert_viewer } }
-						NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }
-					}
+					limit = { local_var:sr_earth_loud = 1 NOT = { is_target_in_variable_list = { name = sr_fl_6_warned_loud target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_6_warned_loud target = scope:sr_alert_viewer }
 					if = { limit = { NOT = { is_target_in_variable_list = { name = sr_fl_6_warned_quiet target = scope:sr_alert_viewer } } } add_to_variable_list = { name = sr_fl_6_warned_quiet target = scope:sr_alert_viewer } }
-					set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_6_arrive }
-					scope:sr_alert_viewer = {
-						set_variable = { name = sr_earth_alert_by value = prev days = 60 }
-						set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }
-						trigger_event = { id = space_race_events.111 days = 1 }
+					if = {
+						limit = { local_var:sr_earth_loud_sent = 0 }
+						set_local_variable = { name = sr_earth_loud_sent value = 1 }
+						set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_6_arrive }
+						scope:sr_alert_viewer = {
+							set_variable = { name = sr_earth_alert_by value = prev }
+							set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }
+							trigger_event = { id = space_race_events.111 days = 1 }
+						}
 					}
 				}
 				else_if = {
-					limit = { NOT = { is_target_in_variable_list = { name = sr_fl_6_warned_quiet target = scope:sr_alert_viewer } } }
+					limit = { local_var:sr_earth_loud = 0 NOT = { is_target_in_variable_list = { name = sr_fl_6_warned_quiet target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_6_warned_quiet target = scope:sr_alert_viewer }
 					save_scope_as = sr_earth_alert_power
 					scope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }
@@ -10564,22 +10567,22 @@ sr_earth_alert_step = {
 			if = {
 				limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 1 NOT = { has_variable = sr_fl_7_loc } }
 				if = {
-					limit = {
-						scope:sr_alert_viewer = { sr_earth_alert_loud = yes }
-						NOT = { is_target_in_variable_list = { name = sr_fl_7_warned_loud target = scope:sr_alert_viewer } }
-						NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }
-					}
+					limit = { local_var:sr_earth_loud = 1 NOT = { is_target_in_variable_list = { name = sr_fl_7_warned_loud target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_7_warned_loud target = scope:sr_alert_viewer }
 					if = { limit = { NOT = { is_target_in_variable_list = { name = sr_fl_7_warned_quiet target = scope:sr_alert_viewer } } } add_to_variable_list = { name = sr_fl_7_warned_quiet target = scope:sr_alert_viewer } }
-					set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_7_arrive }
-					scope:sr_alert_viewer = {
-						set_variable = { name = sr_earth_alert_by value = prev days = 60 }
-						set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }
-						trigger_event = { id = space_race_events.111 days = 1 }
+					if = {
+						limit = { local_var:sr_earth_loud_sent = 0 }
+						set_local_variable = { name = sr_earth_loud_sent value = 1 }
+						set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_7_arrive }
+						scope:sr_alert_viewer = {
+							set_variable = { name = sr_earth_alert_by value = prev }
+							set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }
+							trigger_event = { id = space_race_events.111 days = 1 }
+						}
 					}
 				}
 				else_if = {
-					limit = { NOT = { is_target_in_variable_list = { name = sr_fl_7_warned_quiet target = scope:sr_alert_viewer } } }
+					limit = { local_var:sr_earth_loud = 0 NOT = { is_target_in_variable_list = { name = sr_fl_7_warned_quiet target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_7_warned_quiet target = scope:sr_alert_viewer }
 					save_scope_as = sr_earth_alert_power
 					scope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }
@@ -10588,22 +10591,22 @@ sr_earth_alert_step = {
 			if = {
 				limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } }
 				if = {
-					limit = {
-						scope:sr_alert_viewer = { sr_earth_alert_loud = yes }
-						NOT = { is_target_in_variable_list = { name = sr_fl_8_warned_loud target = scope:sr_alert_viewer } }
-						NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }
-					}
+					limit = { local_var:sr_earth_loud = 1 NOT = { is_target_in_variable_list = { name = sr_fl_8_warned_loud target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_8_warned_loud target = scope:sr_alert_viewer }
 					if = { limit = { NOT = { is_target_in_variable_list = { name = sr_fl_8_warned_quiet target = scope:sr_alert_viewer } } } add_to_variable_list = { name = sr_fl_8_warned_quiet target = scope:sr_alert_viewer } }
-					set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_8_arrive }
-					scope:sr_alert_viewer = {
-						set_variable = { name = sr_earth_alert_by value = prev days = 60 }
-						set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }
-						trigger_event = { id = space_race_events.111 days = 1 }
+					if = {
+						limit = { local_var:sr_earth_loud_sent = 0 }
+						set_local_variable = { name = sr_earth_loud_sent value = 1 }
+						set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_8_arrive }
+						scope:sr_alert_viewer = {
+							set_variable = { name = sr_earth_alert_by value = prev }
+							set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }
+							trigger_event = { id = space_race_events.111 days = 1 }
+						}
 					}
 				}
 				else_if = {
-					limit = { NOT = { is_target_in_variable_list = { name = sr_fl_8_warned_quiet target = scope:sr_alert_viewer } } }
+					limit = { local_var:sr_earth_loud = 0 NOT = { is_target_in_variable_list = { name = sr_fl_8_warned_quiet target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_8_warned_quiet target = scope:sr_alert_viewer }
 					save_scope_as = sr_earth_alert_power
 					scope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }
@@ -10612,22 +10615,22 @@ sr_earth_alert_step = {
 			if = {
 				limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } }
 				if = {
-					limit = {
-						scope:sr_alert_viewer = { sr_earth_alert_loud = yes }
-						NOT = { is_target_in_variable_list = { name = sr_fl_9_warned_loud target = scope:sr_alert_viewer } }
-						NOT = { scope:sr_alert_viewer = { has_variable = sr_earth_alert_by } }
-					}
+					limit = { local_var:sr_earth_loud = 1 NOT = { is_target_in_variable_list = { name = sr_fl_9_warned_loud target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_9_warned_loud target = scope:sr_alert_viewer }
 					if = { limit = { NOT = { is_target_in_variable_list = { name = sr_fl_9_warned_quiet target = scope:sr_alert_viewer } } } add_to_variable_list = { name = sr_fl_9_warned_quiet target = scope:sr_alert_viewer } }
-					set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_9_arrive }
-					scope:sr_alert_viewer = {
-						set_variable = { name = sr_earth_alert_by value = prev days = 60 }
-						set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr days = 60 }
-						trigger_event = { id = space_race_events.111 days = 1 }
+					if = {
+						limit = { local_var:sr_earth_loud_sent = 0 }
+						set_local_variable = { name = sr_earth_loud_sent value = 1 }
+						set_local_variable = { name = sr_earth_alert_arr value = var:sr_fl_9_arrive }
+						scope:sr_alert_viewer = {
+							set_variable = { name = sr_earth_alert_by value = prev }
+							set_variable = { name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }
+							trigger_event = { id = space_race_events.111 days = 1 }
+						}
 					}
 				}
 				else_if = {
-					limit = { NOT = { is_target_in_variable_list = { name = sr_fl_9_warned_quiet target = scope:sr_alert_viewer } } }
+					limit = { local_var:sr_earth_loud = 0 NOT = { is_target_in_variable_list = { name = sr_fl_9_warned_quiet target = scope:sr_alert_viewer } } }
 					add_to_variable_list = { name = sr_fl_9_warned_quiet target = scope:sr_alert_viewer }
 					save_scope_as = sr_earth_alert_power
 					scope:sr_alert_viewer = { post_notification = sr_earth_hostile_notice }

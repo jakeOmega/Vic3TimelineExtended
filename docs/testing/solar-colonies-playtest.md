@@ -631,16 +631,20 @@ too.
 1. **The quiet notice.** At war with a fleet power, with a stronger fleet of ours at Earth, watch one of its fleets set
    out for Earth: one notice in the feed, "A Hostile Fleet Is Bound for Earth", naming the country, not a popup and
    not every month after. Its color is the feed's bad one.
-2. **The loud notice.** With no fleet of ours at Earth (or a weaker one), a hostile fleet setting out for Earth brings
-   the popup Earth Is Threatened, once, with the country's name, the months to its landing and both strengths as
-   figures, not zeros. No feed notice for that fleet the same month.
+2. **The loud notice.** With no fleet of ours at Earth and Earth not blockaded (or ours weaker than theirs there plus
+   what is coming), a hostile fleet setting out for Earth brings the popup Earth Is Threatened, once, with the
+   country's name, the months to its landing and both strengths as figures, not zeros. No feed notice for that fleet.
+   **Not when already blockaded:** with Earth blockaded, their fleets flying home bring feed notices, not popups.
 3. **Loud later in the leg.** With a quiet notice heard, take our fleet away from Earth while theirs is on the way:
    the popup comes the next month, once.
 4. **A war declared mid-flight.** A country's fleet already on its way to Earth (coming home, say) when it declares
    war on us: the notice comes the next month.
-5. **Two loud fleets in one month.** Two hostile fleets that would each change something set out the same month: one
-   popup that month, a feed notice for the other, and its popup the month after.
+5. **Two loud fleets in one month.** Two hostile fleets that would each tip the balance set out the same month: one
+   popup, no feed notice and no second popup the month after.
 6. **The cell.** While a hostile fleet is on its way, the overview's third row shows Hostile Fleet, "Earth in N mo"
-   and "theirs vs ours"; red in the loud case. The hover counts the fleets. Gone once they land or turn away, and
+   and "theirs vs ours" (theirs at Earth and on the way); red in the loud case. The hover counts the fleets. Gone once they land or turn away, and
    absent under Races Only and Simple Colonies.
-
+7. **Two powers' notices.** Fleets of two different powers set out for Earth the same month, each quiet: the two feed
+   notices name different countries (each saves its owner before it posts; unverified that a notice keeps it).
+8. **No stutter at war.** At war with several fleet powers, scrolling the overview stays smooth (the cell walks their
+   nine slots each frame). Fallback: read copies the step stores.

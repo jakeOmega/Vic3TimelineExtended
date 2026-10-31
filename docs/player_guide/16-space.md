@@ -209,7 +209,7 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Defense | Under Full Colonies only. Calm; or, in red, what threatens you (Under assault, Blockaded, Occupied, Interdicted, Earth blockaded or Launch site lost) and the colony it threatens. Hover it for every colony under threat and any hostile fleet on its way. |
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
-| Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and what is bound for Earth against your fleets there. Red while a landing would change something: you have no fleet at Earth, or theirs outmatch yours. Hover it for how many are coming. |
+| Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
 
 Solar System Colonization has more sections below Rivals: Colony Fleets and
 Colonies, then under Full Colonies Space Command and Space Fleets, then Solar
@@ -1150,10 +1150,11 @@ don't lift the blockade: only a fleet of yours at Earth does.
 You hear of each fleet of a country at war with you as it sets out for Earth,
 once a leg, and of one already on its way when a war begins. A notice in the
 feed tells you of one whose landing would change nothing. A popup, Earth Is
-Threatened, tells you once of one that would find no fleet of yours at Earth, or
-more than yours there: as it sets out, or later in the leg if your fleet leaves
-Earth or what is coming grows past it. The overview's Hostile Fleet cell shows
-the first landing.
+Threatened, tells you once of one whose landing would tip the balance: it would
+find no fleet of yours at Earth (and Earth not blockaded already), or it would
+give them more than yours there. It comes as the fleet sets out, or later in the
+leg if your fleet leaves Earth or theirs grows; one popup a month covers every
+such fleet that month. The overview's Hostile Fleet cell shows the first landing.
 
 That fleet comes from the reserve. Space Command's construction waits on the
 ground there, in the five roles, and its Reserve row gives the strength (hover

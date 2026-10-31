@@ -261,7 +261,7 @@ def _longest_figure(name):
              "sr_disp_free_trade_research": FREE_TRADE_RESEARCH, "sr_disp_sc_rate": SC_RATE_CEILING,
              "sr_disp_fl_strength": FLEET_STRENGTH, "sr_disp_fl_strength_full": FLEET_STRENGTH,
              "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT, "sr_disp_reserve": FLEET_STRENGTH,
-             "sr_disp_earth_hostile_strength": FLEET_STRENGTH, "sr_disp_loc_ours_earth": FLEET_STRENGTH,
+             "sr_disp_earth_hostile_strength": FLEET_STRENGTH, "sr_disp_earth_hostile_total": FLEET_STRENGTH, "sr_disp_loc_ours_earth": FLEET_STRENGTH,
              # the colonization overview's cells (audit SPC-6)
              "sr_disp_aut_restless_more": WORLDS - 1, "sr_disp_mq_count": QUEUE_PLACES,
              "sr_mod_fab_stock_cap": FAB_STOCK, "sr_window_disp_next": WINDOW_MONTHS,

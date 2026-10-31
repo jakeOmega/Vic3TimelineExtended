@@ -1283,9 +1283,11 @@ class EarthAlertCellTest(unittest.TestCase):
 
     def test_the_cell_reads_the_alert_values(self):
         gui = _read(GUI)
-        m = re.search(r'te_banking_ov_cell = \{\s*visible = "([^"]+)"\s*tooltip = "je_space_race_widget_ovc_earth_tt"', gui)
+        m = re.search(r'te_banking_ov_cell = \{\s*tooltip = "je_space_race_widget_ovc_earth_tt"', gui)
         self.assertIsNotNone(m, "no Hostile Fleet cell")
-        shown = m.group(1)
+        # Shown by its row, the cell's only one.
+        row = gui.rindex("flowcontainer = {", 0, m.start())
+        shown = re.match(r'flowcontainer = \{\s*visible = "([^"]+)"', gui[row:]).group(1)
         self.assertIn("ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1'", shown)
         self.assertIn("GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), "
                       "'(CFixedPoint)1' )", shown)

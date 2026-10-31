@@ -364,13 +364,24 @@ sr_battery_sweep_subject = {
 }
 
 # Country scope, the Earth alert (UI pass design § 9): hostile fleets are in
-# flight to Earth, and their arrival would change something: we have no fleet
-# at Earth to meet them, or they outmatch ours there. Our fleets' strength at
-# Earth is sr_fl_at_earth (sr_loc_add_present).
+# flight to Earth and their landing would tip the balance there. Either we
+# have no fleet at Earth and it isn't blockaded already (a blockade has its own
+# notice, space_race_events.106, and every hostile fleet's home is Earth, so a
+# leg coming home to a blockade it already holds changes nothing); or ours at
+# Earth (sr_fl_at_earth) holds against the hostile fleets there now
+# (sr_loc_ai_enemy_fleets_earth) but not against those and the inbound
+# together (sr_earth_hostile_total).
 sr_earth_alert_loud = {
 	sr_loc_hostile_inbound_strength_earth > 0
 	OR = {
-		NOT = { has_variable = sr_fl_at_earth }
-		sr_loc_hostile_inbound_strength_earth > var:sr_fl_at_earth
+		AND = {
+			NOT = { has_variable = sr_fl_at_earth }
+			NOT = { sr_earth_blockaded = yes }
+		}
+		AND = {
+			has_variable = sr_fl_at_earth
+			var:sr_fl_at_earth >= sr_loc_ai_enemy_fleets_earth
+			sr_earth_hostile_total > var:sr_fl_at_earth
+		}
 	}
 }
