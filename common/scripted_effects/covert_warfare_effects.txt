@@ -2887,8 +2887,11 @@ covert_effect_priority_down = {
 # otherwise 1. Counterintelligence Support always wants 1: the war and rival
 # levels assume a hostile target. It then steps toward that level one at a
 # time, through the same covert_possible_priority_* gates the stepper uses, so
-# any gate added there (slice 5's Tradecraft requirement) binds the AI as
-# well. Two steps each way covers the whole 1-3 range. The variable is set
+# any gate added there (slice 5's Tradecraft requirement, the free operation
+# slot each step up takes) binds the AI as well: an operation earlier in
+# iw_ops takes the free slots first, and one a later operation frees by
+# stepping down is there from next month. Two steps each way covers the
+# whole 1-3 range. The variable is set
 # directly: the monthly pulse runs the sync and the effects straight after
 # this.
 # Scope: country (is_player = no; the caller guards it)

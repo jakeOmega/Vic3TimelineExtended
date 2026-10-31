@@ -553,8 +553,12 @@ class Growth(unittest.TestCase):
     def test_watch_gain_constants(self):
         values = _text(VALUES)
         self.assertRegex(values, r"(?m)^covert_net_watch_gain_p1 = 4$")
-        self.assertRegex(values, r"(?m)^covert_net_watch_gain_p2 = 5\.4$")
-        self.assertRegex(values, r"(?m)^covert_net_watch_gain_p3 = 6\.4$")
+        # The busier levels are the base gain x the priority effect
+        # multipliers, derived so a retune of priority carries them along.
+        for p in (2, 3):
+            block = script_value("covert_net_watch_gain_p%d" % p)
+            self.assertIn("value = covert_net_watch_gain_p1", block)
+            self.assertIn("multiply = covert_op_priority_%d_effect_mult" % p, block)
 
 
 class Monthly(unittest.TestCase):

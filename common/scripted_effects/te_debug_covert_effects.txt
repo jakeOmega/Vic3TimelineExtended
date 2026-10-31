@@ -163,7 +163,9 @@ te_debug_covert_force_detection = {
 # the scaled effect modifiers only pick up the new priority at the next
 # monthly pulse (covert_apply_priority_change deliberately doesn't re-apply
 # them on the click — see its own comment). Still works if the stepper's
-# saved scope turns out not to arrive.
+# saved scope turns out not to arrive. It skips the stepper's gates
+# (covert_possible_priority_up), so it can fill more operation slots than
+# the country holds.
 # The pick is held as scope:iw_debug_op and re-saved as scope:iw_op before
 # each step: a step runs covert_refresh_funding_state -> covert_ops_sync_all,
 # whose covert_op_refresh_detection re-saves scope:iw_op per container, so

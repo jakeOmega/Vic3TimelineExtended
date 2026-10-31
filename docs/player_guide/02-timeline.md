@@ -451,7 +451,7 @@ too.
 | Power | Hydro Plant, Nuclear Plant, Renewable Energy Plant and Fusion Plant, alongside the base game's Power Plants. |
 | Transport | Airport and Highway, both producing Transportation, and airports some Merchant Marine too ([Transportation and shipping](03-economy.md#transportation-and-shipping)). |
 | Leisure | Tourism Industry and National Park ([States and population](08-states.md)). |
-| Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](13-military.md)). |
+| Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; Military Base ([Military and war](13-military.md)); and Public Housing, which raises its state's crowding threshold ([States and population](08-states.md#migration-crowding)). |
 
 ### Pharmaceutical Industries and Drugs
 

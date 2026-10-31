@@ -17,7 +17,7 @@
 #     1 construction good -> 1 point          a Construction Sector tier's goods
 #     (script places and sizes the sites)     -> its construction as points; the
 #                                             site is the buildable sector
-#   pm_maintenance* (74 building types)     pm_no_maintenance (forced)
+#   pm_maintenance* (75 building types)     pm_no_maintenance (forced)
 #   pm_disney_world, pm_generic_industrial_ pm_<same>_direct (forced): the same
 #     city, pm_generic_monument_to_industry   recipe without the construction good
 #   pm_principle_engineering_and_logistics  pm_principle_engineering_and_logistics

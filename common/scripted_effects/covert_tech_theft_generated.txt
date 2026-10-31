@@ -16,17 +16,17 @@ covert_tech_grant_era_1 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1200 }
+			add_technology_progress = { technology = $TECH$ progress = 1500 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1200 }
+				change_variable = { name = iw_stolen_total add = 1500 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1013 }
+			add_technology_progress = { technology = $TECH$ progress = 1238 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1013 }
+				change_variable = { name = iw_stolen_total add = 1238 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -42,17 +42,17 @@ covert_tech_grant_era_1 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 600 }
+			add_technology_progress = { technology = $TECH$ progress = 750 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 600 }
+				change_variable = { name = iw_stolen_total add = 750 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 506 }
+			add_technology_progress = { technology = $TECH$ progress = 619 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 506 }
+				change_variable = { name = iw_stolen_total add = 619 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -77,17 +77,17 @@ covert_tech_grant_era_2 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1600 }
+			add_technology_progress = { technology = $TECH$ progress = 2000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1600 }
+				change_variable = { name = iw_stolen_total add = 2000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1350 }
+			add_technology_progress = { technology = $TECH$ progress = 1650 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1350 }
+				change_variable = { name = iw_stolen_total add = 1650 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -103,17 +103,17 @@ covert_tech_grant_era_2 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 800 }
+			add_technology_progress = { technology = $TECH$ progress = 1000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 800 }
+				change_variable = { name = iw_stolen_total add = 1000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 675 }
+			add_technology_progress = { technology = $TECH$ progress = 825 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 675 }
+				change_variable = { name = iw_stolen_total add = 825 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -138,17 +138,17 @@ covert_tech_grant_era_3 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 2000 }
+			add_technology_progress = { technology = $TECH$ progress = 2500 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 2000 }
+				change_variable = { name = iw_stolen_total add = 2500 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1688 }
+			add_technology_progress = { technology = $TECH$ progress = 2063 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1688 }
+				change_variable = { name = iw_stolen_total add = 2063 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -164,17 +164,17 @@ covert_tech_grant_era_3 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1000 }
+			add_technology_progress = { technology = $TECH$ progress = 1250 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1000 }
+				change_variable = { name = iw_stolen_total add = 1250 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 844 }
+			add_technology_progress = { technology = $TECH$ progress = 1031 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 844 }
+				change_variable = { name = iw_stolen_total add = 1031 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -199,17 +199,17 @@ covert_tech_grant_era_4 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 2400 }
+			add_technology_progress = { technology = $TECH$ progress = 3000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 2400 }
+				change_variable = { name = iw_stolen_total add = 3000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 2025 }
+			add_technology_progress = { technology = $TECH$ progress = 2475 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 2025 }
+				change_variable = { name = iw_stolen_total add = 2475 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -225,17 +225,17 @@ covert_tech_grant_era_4 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1200 }
+			add_technology_progress = { technology = $TECH$ progress = 1500 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1200 }
+				change_variable = { name = iw_stolen_total add = 1500 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1013 }
+			add_technology_progress = { technology = $TECH$ progress = 1238 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1013 }
+				change_variable = { name = iw_stolen_total add = 1238 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -260,17 +260,17 @@ covert_tech_grant_era_5 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 2800 }
+			add_technology_progress = { technology = $TECH$ progress = 3500 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 2800 }
+				change_variable = { name = iw_stolen_total add = 3500 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 2363 }
+			add_technology_progress = { technology = $TECH$ progress = 2888 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 2363 }
+				change_variable = { name = iw_stolen_total add = 2888 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -286,17 +286,17 @@ covert_tech_grant_era_5 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1400 }
+			add_technology_progress = { technology = $TECH$ progress = 1750 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1400 }
+				change_variable = { name = iw_stolen_total add = 1750 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1181 }
+			add_technology_progress = { technology = $TECH$ progress = 1444 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1181 }
+				change_variable = { name = iw_stolen_total add = 1444 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -321,17 +321,17 @@ covert_tech_grant_era_6 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 3200 }
+			add_technology_progress = { technology = $TECH$ progress = 4000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 3200 }
+				change_variable = { name = iw_stolen_total add = 4000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 2700 }
+			add_technology_progress = { technology = $TECH$ progress = 3300 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 2700 }
+				change_variable = { name = iw_stolen_total add = 3300 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -347,17 +347,17 @@ covert_tech_grant_era_6 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1600 }
+			add_technology_progress = { technology = $TECH$ progress = 2000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1600 }
+				change_variable = { name = iw_stolen_total add = 2000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 1350 }
+			add_technology_progress = { technology = $TECH$ progress = 1650 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 1350 }
+				change_variable = { name = iw_stolen_total add = 1650 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -382,17 +382,17 @@ covert_tech_grant_era_7 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 10400 }
+			add_technology_progress = { technology = $TECH$ progress = 13000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 10400 }
+				change_variable = { name = iw_stolen_total add = 13000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 8775 }
+			add_technology_progress = { technology = $TECH$ progress = 10725 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 8775 }
+				change_variable = { name = iw_stolen_total add = 10725 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -408,17 +408,17 @@ covert_tech_grant_era_7 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 5200 }
+			add_technology_progress = { technology = $TECH$ progress = 6500 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 5200 }
+				change_variable = { name = iw_stolen_total add = 6500 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 4388 }
+			add_technology_progress = { technology = $TECH$ progress = 5363 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 4388 }
+				change_variable = { name = iw_stolen_total add = 5363 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -443,17 +443,17 @@ covert_tech_grant_era_8 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 18400 }
+			add_technology_progress = { technology = $TECH$ progress = 23000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 18400 }
+				change_variable = { name = iw_stolen_total add = 23000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 15525 }
+			add_technology_progress = { technology = $TECH$ progress = 18975 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 15525 }
+				change_variable = { name = iw_stolen_total add = 18975 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -469,17 +469,17 @@ covert_tech_grant_era_8 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 9200 }
+			add_technology_progress = { technology = $TECH$ progress = 11500 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 9200 }
+				change_variable = { name = iw_stolen_total add = 11500 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 7763 }
+			add_technology_progress = { technology = $TECH$ progress = 9488 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 7763 }
+				change_variable = { name = iw_stolen_total add = 9488 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -504,17 +504,17 @@ covert_tech_grant_era_9 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 33600 }
+			add_technology_progress = { technology = $TECH$ progress = 42000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 33600 }
+				change_variable = { name = iw_stolen_total add = 42000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 28350 }
+			add_technology_progress = { technology = $TECH$ progress = 34650 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 28350 }
+				change_variable = { name = iw_stolen_total add = 34650 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -530,17 +530,17 @@ covert_tech_grant_era_9 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 16800 }
+			add_technology_progress = { technology = $TECH$ progress = 21000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 16800 }
+				change_variable = { name = iw_stolen_total add = 21000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 14175 }
+			add_technology_progress = { technology = $TECH$ progress = 17325 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 14175 }
+				change_variable = { name = iw_stolen_total add = 17325 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -565,17 +565,17 @@ covert_tech_grant_era_10 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 72000 }
+			add_technology_progress = { technology = $TECH$ progress = 90000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 72000 }
+				change_variable = { name = iw_stolen_total add = 90000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 60750 }
+			add_technology_progress = { technology = $TECH$ progress = 74250 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 60750 }
+				change_variable = { name = iw_stolen_total add = 74250 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -591,17 +591,17 @@ covert_tech_grant_era_10 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 36000 }
+			add_technology_progress = { technology = $TECH$ progress = 45000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 36000 }
+				change_variable = { name = iw_stolen_total add = 45000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 30375 }
+			add_technology_progress = { technology = $TECH$ progress = 37125 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 30375 }
+				change_variable = { name = iw_stolen_total add = 37125 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -626,17 +626,17 @@ covert_tech_grant_era_11 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 128000 }
+			add_technology_progress = { technology = $TECH$ progress = 160000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 128000 }
+				change_variable = { name = iw_stolen_total add = 160000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 108000 }
+			add_technology_progress = { technology = $TECH$ progress = 132000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 108000 }
+				change_variable = { name = iw_stolen_total add = 132000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -652,17 +652,17 @@ covert_tech_grant_era_11 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 64000 }
+			add_technology_progress = { technology = $TECH$ progress = 80000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 64000 }
+				change_variable = { name = iw_stolen_total add = 80000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 54000 }
+			add_technology_progress = { technology = $TECH$ progress = 66000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 54000 }
+				change_variable = { name = iw_stolen_total add = 66000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -687,17 +687,17 @@ covert_tech_grant_era_12 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 320000 }
+			add_technology_progress = { technology = $TECH$ progress = 400000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 320000 }
+				change_variable = { name = iw_stolen_total add = 400000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 270000 }
+			add_technology_progress = { technology = $TECH$ progress = 330000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 270000 }
+				change_variable = { name = iw_stolen_total add = 330000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -713,17 +713,17 @@ covert_tech_grant_era_12 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 160000 }
+			add_technology_progress = { technology = $TECH$ progress = 200000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 160000 }
+				change_variable = { name = iw_stolen_total add = 200000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 135000 }
+			add_technology_progress = { technology = $TECH$ progress = 165000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 135000 }
+				change_variable = { name = iw_stolen_total add = 165000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}

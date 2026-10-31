@@ -771,7 +771,7 @@ sr_site_debug_occupy_at = {
 # runs monthly while the operator's covert funding is above zero. The reset
 # comes first; then, for each established survey, the target's scope calls
 # sr_cov_survey_defences, reading local_var:sr_cov_mult (the operation's
-# covert_op_effect_mult, 1 to 3.2). The operator keeps the list of countries it
+# covert_op_effect_mult, 1 to 4). The operator keeps the list of countries it
 # surveys, the strongest operation's multiplier, and a 35-day marker, so a
 # survey whose funding stops lapses within the month after. The fleets read it
 # through sr_cov_surveys_<key> (sr_fleets_generated.txt): +20% x the multiplier

@@ -295,6 +295,16 @@ covert_possible_priority_up = {
 			}
 		}
 	}
+	# Slots (2026-10-31): an operation fills one operation slot for each level
+	# of its priority (covert_operation_slots_used), so every step up takes a
+	# free one. Only the step up is gated: an agency that loses slots keeps its
+	# operations at their priorities, as it keeps operations beyond its slot
+	# count, and stepping down is never blocked. The AI steps through this same
+	# trigger; the count is live, so its second step in a month sees the first.
+	custom_tooltip = {
+		text = iw_priority_needs_free_slot_tt
+		covert_operations_available_slots >= 1
+	}
 	# Cultivate assets (slice 6) has no effect for priority to multiply, so it
 	# stays at 1: raising it would only cost upkeep and detection. The AI
 	# steps through this same trigger, so it cannot raise it either. Inside a

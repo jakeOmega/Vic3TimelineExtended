@@ -6965,13 +6965,15 @@ covert_regime_change = {
 
 # Applied to TARGET while a nuclear-programme sabotage operation runs (covert
 # slice 6), scaled by phase x priority. je_nuclear_program multiplies progress
-# by (1 + this): x0.75 at base strength, x0.2 at the strongest operation
-# (fully operational, priority 3), never zero. The tooltip lists the line
+# by (1 + this): x0.8 at base strength, x0.2 at the strongest operation
+# (fully operational, priority 3: x4), never zero. It was -0.25 until priority
+# 3 doubled the effect (2026-10-31), which would have reached x0 at the top.
+# The tooltip lists the line
 # (a script_only type still renders); covert_nuclear_sabotage_desc adds how
 # far phase and priority scale it.
 covert_nuclear_sabotage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_nuclear_program_progress_mult = -0.25
+	country_nuclear_program_progress_mult = -0.2
 }
 
 # Applied to SELF while a space-programme espionage operation runs (covert

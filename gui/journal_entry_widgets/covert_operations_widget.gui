@@ -1778,91 +1778,91 @@ types covert_operations_widget_types
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)1' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)1' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)1' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)1' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)1' ) )]"
 						}
 					}
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)2' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)2' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)2' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)2' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)2' ) )]"
 						}
 					}
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)3' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)3' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)3' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)3' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)3' ) )]"
 						}
 					}
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)4' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)4' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)4' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)4' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)4' ) )]"
 						}
 					}
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)5' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)5' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)5' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)5' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)5' ) )]"
 						}
 					}
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)6' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)6' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)6' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)6' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)6' ) )]"
 						}
 					}
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)7' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)7' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)7' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)7' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)7' ) )]"
 						}
 					}
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)8' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)8' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)8' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)8' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)8' ) )]"
 						}
 					}
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)9' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)9' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)9' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)9' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)9' ) )]"
 						}
 					}
 					covert_ov_slot = {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_slots_shown'), '(CFixedPoint)10' )]"
 						blockoverride "lit" {
-							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)10' )]"
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)10' )]"
 						}
 						blockoverride "unlit" {
-							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display'), '(CFixedPoint)10' ) )]"
+							visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display'), '(CFixedPoint)10' ) )]"
 						}
 					}
 				}

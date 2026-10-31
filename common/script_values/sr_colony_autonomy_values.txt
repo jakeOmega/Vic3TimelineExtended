@@ -93,7 +93,7 @@ sr_garrison_units = {
 }
 
 # ---- Covert operations (design § 6) -------------------------------------------------
-# A month, times the operation's phase x priority multiplier (1 to 3.2):
+# A month, times the operation's phase x priority multiplier (1 to 4):
 # Incite Colonial Autonomy's autonomy at every colony of the target; Sabotage
 # Colony's share of the target's most populous colony's people, and its autonomy.
 sr_cov_incite_autonomy_base = { value = 0.5 }
