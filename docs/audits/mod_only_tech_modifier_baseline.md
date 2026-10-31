@@ -30,7 +30,7 @@ Polarity is heuristically classified; override in
 | modifier | pattern | mod_uses | min | median | max | polarity | target_typical_value |
 |---|---|---|---|---|---|---|---|
 | `building_aerospace_industry_throughput_add` | `building_<X>_throughput_add` | 1 | 0.25 | 0.25 | 0.25 | positive-good | 0.1† |
-| `building_group_bg_trade_employee_mult` | `building_group_<X>_employee_mult` | 4 | -0.5 | 0.175 | -0.04 | positive-good | 0.5† |
+| `building_group_bg_trade_employee_mult` | `building_group_<X>_employee_mult` | 5 | -0.5 | 0.1 | -0.04 | positive-good | 0.5† |
 | `building_network_infrastructure_throughput_add` | `building_<X>_throughput_add` | 1 | 0.1 | 0.1 | 0.1 | positive-good | 0.1† |
 | `character_battle_condition_exhausted_mult` | `character_battle_condition_<X>_mult` | 1 | -0.5 | 0.5 | -0.5 | negative-good | 1† |
 | `country_institution_ministry_of_commerce_max_investment_add` | `country_institution_<X>_max_investment_add` | 8 | 1 | 1 | 1 | positive-good | 1† |
@@ -52,29 +52,31 @@ Polarity is heuristically classified; override in
 | `goods_output_aeroplanes_mult` | `goods_output_<X>_mult` | 1 | 0.2 | 0.2 | 0.2 | positive-good | 0.25† |
 | `goods_output_services_mult` | `goods_output_<X>_mult` | 1 | 0.05 | 0.05 | 0.05 | positive-good | 0.25† |
 | `ship_battle_against_ship_type_arsenal_ship_accuracy_mult` | `ship_battle_against_<X>_accuracy_mult` | 1 | 0.15 | 0.15 | 0.15 | positive-good | 0.8† |
+| `ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult` | `ship_battle_against_<X>_accuracy_mult` | 1 | 0.3 | 0.3 | 0.3 | positive-good | 0.8† |
 | `ship_battle_against_ship_type_guided_missile_ship_accuracy_mult` | `ship_battle_against_<X>_accuracy_mult` | 1 | 0.2 | 0.2 | 0.2 | positive-good | 0.8† |
 | `ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult` | `ship_battle_against_<X>_hull_damage_mult` | 1 | 0.2 | 0.2 | 0.2 | positive-good | 2† |
 | `ship_battle_against_ship_type_nuclear_submarine_accuracy_mult` | `ship_battle_against_<X>_accuracy_mult` | 1 | 0.3 | 0.3 | 0.3 | positive-good | 0.8† |
 | `ship_battle_against_ship_type_nuclear_supercarrier_accuracy_mult` | `ship_battle_against_<X>_accuracy_mult` | 1 | 0.2 | 0.2 | 0.2 | positive-good | 0.8† |
+| `ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult` | `ship_battle_against_<X>_accuracy_mult` | 1 | 0.3 | 0.3 | 0.3 | positive-good | 0.8† |
 | `ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult` | `ship_battle_against_<X>_hull_damage_mult` | 1 | 0.3 | 0.3 | 0.3 | positive-good | 2† |
 | `state_building_airport_max_level_add` | `state_building_<X>_max_level_add` | 9 | 1 | 1 | 2 | positive-good | 1† |
 | `state_building_highway_max_level_add` | `state_building_<X>_max_level_add` | 8 | 1 | 1 | 1 | positive-good | 1† |
 | `state_building_hydro_plant_max_level_add` | `state_building_<X>_max_level_add` | 1 | 5 | 5 | 5 | positive-good | 1† |
 | `state_building_military_base_max_level_add` | `state_building_<X>_max_level_add` | 2 | 1 | 1 | 1 | positive-good | 1† |
 | `state_building_national_park_max_level_add` | `state_building_<X>_max_level_add` | 1 | 1 | 1 | 1 | positive-good | 1† |
-| `state_building_resettlement_camp_max_level_add` | `state_building_<X>_max_level_add` | 2 | 5 | 5 | 5 | positive-good | 1† |
+| `state_building_resettlement_colony_max_level_add` | `state_building_<X>_max_level_add` | 2 | 5 | 5 | 5 | positive-good | 1† |
 | `unit_combat_unit_type_jet_powered_fighters_offense_mult` | `unit_<X>_offense_mult` | 1 | 0.25 | 0.25 | 0.25 | positive-good | 0.15† |
 
 ## Bespoke mod modifiers (no pattern match)
 
 | modifier | mod_uses | min | median | max | polarity | target_typical_value |
 |---|---|---|---|---|---|---|
+| `building_grid_undersea_cable_range_add` | 2 | 1 | 1 | 1 | positive-good | 1‡ |
 | `character_advancement_speed_mult` | 3 | 0.15 | 0.25 | 0.25 | positive-good | 0.2 |
 | `character_blockade_mult` | 1 | 0.1 | 0.1 | 0.1 | positive-good | 0.1‡ |
-| `character_command_limit_add` | 2 | 1 | 1 | 1 | positive-good | 1‡ |
 | `character_command_limit_mult` | 1 | 0.1 | 0.1 | 0.1 | positive-good | 0.1‡ |
 | `character_coup_strength_mult` | 5 | -0.2 | 0.1 | -0.05 | positive-good | 0.1‡ |
-| `character_health_add` | 2 | 100 | 5050 | 10000 | positive-good | 5050‡ |
+| `character_health_add` | 3 | 25 | 100 | 10000 | positive-good | 100‡ |
 | `character_interception_add` | 2 | 0.5 | 0.5 | 0.5 | positive-good | 0.5‡ |
 | `character_loyalty_add` | 1 | 5 | 5 | 5 | positive-good | 5‡ |
 | `character_max_offensive_battles_add` | 1 | 1 | 1 | 1 | positive-good | 1‡ |
@@ -83,16 +85,21 @@ Polarity is heuristically classified; override in
 | `country_acceptance_shared_heritage_trait_group_add` | 2 | 5 | 5 | 5 | positive-good | 5‡ |
 | `country_aggressor_diplomatic_play_escalation_weekly_add` | 14 | 0.5 | 1 | 2 | unknown | 1‡ |
 | `country_aggressor_diplomatic_play_escalation_weekly_mult` | 3 | 0.1 | 0.1 | 0.1 | unknown | 0.1‡ |
+| `country_colonial_stability_drift_add` | 2 | -1.5 | 1.125 | -0.75 | positive-good | 1.125‡ |
 | `country_company_throughput_bonus_add` | 2 | 0.05 | 0.15 | 0.25 | positive-good | 0.15‡ |
 | `country_covert_operation_efficiency_mult` | 12 | 0.05 | 0.1 | 0.2 | positive-good | 0.1‡ |
 | `country_covert_operation_slot_add` | 4 | 1 | 1 | 1 | positive-good | 1‡ |
+| `country_credit_standing_add` | 5 | -0.003 | 0.003 | -0.0015 | positive-good | 0.003‡ |
+| `country_credit_standing_floor_add` | 2 | -0.001 | 0.001 | -0.001 | positive-good | 0.001‡ |
 | `country_cultural_program_max_funding_add` | 2 | 1 | 1 | 1 | positive-good | 1‡ |
 | `country_cultural_pull_mult` | 2 | 0.1 | 0.125 | 0.15 | positive-good | 0.125‡ |
 | `country_diplomatic_play_maneuvers_add` | 3 | 10 | 10 | 10 | positive-good | 10‡ |
 | `country_economic_dependence_leverage_gain_mult` | 1 | 0.5 | 0.5 | 0.5 | positive-good | 0.5‡ |
 | `country_gold_reserve_limit_mult` | 1 | 0.25 | 0.25 | 0.25 | positive-good | 0.25‡ |
+| `country_grid_transmission_efficiency_add` | 6 | 0.02 | 0.03 | 0.1 | positive-good | 0.03‡ |
 | `country_institution_size_change_speed_mult` | 1 | 0.25 | 0.25 | 0.25 | positive-good | 0.25‡ |
 | `country_intelligence_capacity_add` | 20 | 2 | 3 | 5 | positive-good | 3‡ |
+| `country_legislative_override_capacity_add` | 2 | -1 | 1 | 1 | positive-good | 1‡ |
 | `country_legitimacy_ideological_incoherence_mult` | 1 | -0.1 | 0.1 | -0.1 | positive-good | 0.1‡ |
 | `country_leverage_threshold_change_add` | 2 | -100 | 75 | -50 | positive-good | 75‡ |
 | `country_liberty_desire_of_subjects_add` | 1 | 0.05 | 0.05 | 0.05 | negative-good | 0.05‡ |
@@ -100,18 +107,27 @@ Polarity is heuristically classified; override in
 | `country_military_tech_spread_mult` | 1 | 0.25 | 0.25 | 0.25 | positive-good | 0.25‡ |
 | `country_nuclear_weapon_attack_success_add` | 4 | 0.5 | 0.5 | 1 | positive-good | 0.5‡ |
 | `country_radicals_from_conquest_mult` | 2 | -0.5 | 0.375 | 0.25 | negative-good | 0.375‡ |
-| `country_radicals_from_sol_change_mult` | 1 | -0.05 | 0.05 | -0.05 | negative-good | 0.05‡ |
+| `country_ship_crew_starting_veterancy_experience_add` | 2 | 50 | 62.5 | 75 | positive-good | 62.5‡ |
 | `country_ship_group_supply_ships_construction_efficiency_add` | 1 | 0.5 | 0.5 | 0.5 | positive-good | 0.5‡ |
 | `country_ship_type_destroyer_construction_efficiency_add` | 2 | 0.25 | 0.375 | 0.5 | positive-good | 0.375‡ |
 | `country_sol_expectations_middle_offset_add` | 1 | -0.5 | 0.5 | -0.5 | negative-good | 0.5‡ |
-| `country_sol_expectations_target_add` | 3 | 0.5 | 0.5 | 0.5 | negative-good | 0.5‡ |
+| `country_sol_expectations_target_add` | 4 | 0.25 | 0.5 | 0.5 | negative-good | 0.5‡ |
 | `country_sol_expectations_upper_offset_add` | 3 | -1 | 0.5 | 0.5 | negative-good | 0.5‡ |
-| `country_space_race_max_funding_add` | 15 | 1 | 1 | 2 | positive-good | 1‡ |
+| `country_space_race_max_funding_add` | 18 | 1 | 1 | 2 | positive-good | 1‡ |
 | `country_space_race_progress_add` | 2 | 0.2 | 0.2 | 0.2 | positive-good | 0.2‡ |
+| `country_sr_colony_slots_add` | 5 | 1 | 1 | 1 | positive-good | 1‡ |
+| `country_st_res_aeroplanes_decay_add` | 10 | -0.007 | 0.005 | 0.005 | negative-good | 0.005‡ |
 | `country_st_res_ammunition_decay_add` | 2 | -0.005 | 0.005 | -0.005 | negative-good | 0.005‡ |
+| `country_st_res_artillery_decay_add` | 4 | -0.002 | 0.0015 | -0.001 | negative-good | 0.0015‡ |
+| `country_st_res_fertilizer_decay_add` | 6 | -0.0075 | 0.002 | -0.001 | negative-good | 0.002‡ |
 | `country_st_res_oil_decay_add` | 4 | -0.001 | 0.001 | -0.001 | negative-good | 0.001‡ |
+| `country_st_res_small_arms_decay_add` | 5 | -0.002 | 0.002 | -0.001 | negative-good | 0.002‡ |
+| `country_st_res_tanks_decay_add` | 8 | -0.006 | 0.005 | 0.005 | negative-good | 0.005‡ |
 | `country_supply_ship_construction_progress_max_mult` | 1 | 0.25 | 0.25 | 0.25 | positive-good | 0.25‡ |
-| `country_weekly_innovation_max_add` | 50 | 10 | 50 | 100 | positive-good | 50‡ |
+| `country_te_pb_principle_slots_add` | 4 | 1 | 1 | 1 | positive-good | 1‡ |
+| `country_war_support_battles_decrease_mult` | 3 | 0.1 | 0.15 | 0.2 | positive-good | 0.15‡ |
+| `country_war_support_battles_increase_mult` | 3 | 0.05 | 0.1 | 0.15 | positive-good | 0.1‡ |
+| `country_weekly_innovation_max_add` | 55 | 10 | 50 | 300 | positive-good | 50‡ |
 | `military_formation_army_movement_speed_mult` | 4 | 1 | 1 | 1 | positive-good | 1‡ |
 | `political_movement_radicalism_from_enactment_disapproval_mult` | 3 | 0.1 | 0.1 | 0.1 | negative-good | 0.1‡ |
 | `ship_accuracy_mult` | 4 | 0.05 | 0.1 | 0.1 | positive-good | 0.1‡ |
@@ -126,26 +142,42 @@ Polarity is heuristically classified; override in
 | `ship_screening_mult` | 1 | 0.3 | 0.3 | 0.3 | positive-good | 0.3‡ |
 | `ship_supply_efficiency_mult` | 3 | 0.1 | 0.2 | 0.2 | positive-good | 0.2‡ |
 | `ship_visibility_mult` | 2 | -0.1 | 0.1 | -0.1 | positive-good | 0.1‡ |
-| `state_arable_land_mult` | 6 | 0.1 | 0.225 | 0.65 | positive-good | 0.225‡ |
-| `state_birth_rate_mult` | 5 | -0.1 | 0.05 | 0.05 | positive-good | 0.05‡ |
+| `state_ageing_rate_add` | 6 | -0.5 | 0.1 | -0.05 | positive-good | 0.1‡ |
+| `state_arable_land_mult` | 6 | 0.25 | 0.4 | 1.2 | positive-good | 0.4‡ |
+| `state_backup_external_mortality_mult` | 1 | -0.5 | 0.5 | -0.5 | negative-good | 0.5‡ |
+| `state_backup_work_mortality_mult` | 1 | -0.5 | 0.5 | -0.5 | negative-good | 0.5‡ |
+| `state_chronic_treatment_add` | 7 | 0.04 | 0.15 | 0.3 | positive-good | 0.15‡ |
 | `state_colony_growth_creation_factor` | 1 | 0.1 | 0.1 | 0.1 | unknown | 0.1‡ |
+| `state_contraception_add` | 2 | 0.05 | 0.05 | 0.05 | positive-good | 0.05‡ |
+| `state_demog_absorbed_birth_rate_mult` | 3 | -0.1 | 0.05 | 0.05 | positive-good | 0.05‡ |
+| `state_demog_absorbed_mortality_mult` | 6 | -0.15 | 0.05 | -0.05 | negative-good | 0.05‡ |
+| `state_demog_ontop_birth_rate_mult` | 2 | -0.025 | 0.025 | -0.025 | positive-good | 0.025‡ |
+| `state_demog_womens_work_ratio_add` | 3 | 0.025 | 0.025 | 0.05 | positive-good | 0.025‡ |
 | `state_dependent_wage_mult` | 4 | 0.1 | 0.125 | 0.35 | unknown | 0.125‡ |
 | `state_education_access_add` | 4 | -0.1 | 0.1 | -0.1 | positive-good | 0.1‡ |
+| `state_external_mortality_mult` | 1 | -0.1 | 0.1 | -0.1 | negative-good | 0.1‡ |
+| `state_external_safety_add` | 4 | 0.1 | 0.1 | 0.2 | positive-good | 0.1‡ |
+| `state_family_migration_add` | 2 | 0.05 | 0.05 | 0.05 | positive-good | 0.05‡ |
 | `state_homeland_change_speed_mult` | 5 | -0.25 | 0.15 | 0.15 | positive-good | 0.15‡ |
 | `state_homeland_creation_threshold_add` | 3 | -0.05 | 0.05 | 0.05 | negative-good | 0.05‡ |
 | `state_homeland_removal_threshold_add` | 3 | -0.05 | 0.05 | 0.05 | positive-good | 0.05‡ |
+| `state_infection_treatment_add` | 4 | 0.02 | 0.07 | 0.25 | positive-good | 0.07‡ |
+| `state_literacy_growth_add` | 10 | 5e-05 | 7.5e-05 | 0.0001 | positive-good | 7.5e-05‡ |
+| `state_maternal_treatment_add` | 1 | 0.04 | 0.04 | 0.04 | positive-good | 0.04‡ |
+| `state_medical_diffusion_add` | 2 | 0.05 | 0.05 | 0.05 | positive-good | 0.05‡ |
 | `state_migration_crowding_density_mult` | 5 | 0.15 | 0.15 | 0.2 | negative-good | 0.15‡ |
-| `state_mortality_mult` | 5 | -0.2 | 0.05 | -0.05 | negative-good | 0.05‡ |
 | `state_nuclear_weapon_defense_chance_add` | 4 | 0.25 | 0.5 | 0.5 | positive-good | 0.5‡ |
 | `state_pollution_generation_mult` | 1 | -0.05 | 0.05 | -0.05 | negative-good | 0.05‡ |
 | `state_pop_qualifications_mult` | 2 | 0.05 | 0.05 | 0.05 | positive-good | 0.05‡ |
+| `state_radicals_and_loyalists_from_sol_change_mult` | 1 | -0.05 | 0.05 | -0.05 | negative-good | 0.05‡ |
+| `state_rejuvenation_add` | 1 | 0.03 | 0.03 | 0.03 | positive-good | 0.03‡ |
 | `state_standard_of_living_add` | 1 | 1 | 1 | 1 | positive-good | 1‡ |
 | `state_tax_capacity_mult` | 2 | 0.05 | 0.05 | 0.05 | positive-good | 0.05‡ |
 | `state_trade_advantage_mult` | 1 | 0.25 | 0.25 | 0.25 | positive-good | 0.25‡ |
 | `state_trade_capacity_mult` | 1 | 0.1 | 0.1 | 0.1 | positive-good | 0.1‡ |
 | `state_urbanization_per_level_add` | 3 | -5 | 5 | -5 | positive-good | 5‡ |
-| `state_working_adult_ratio_add` | 3 | 0.025 | 0.025 | 0.05 | positive-good | 0.025‡ |
+| `state_work_safety_add` | 4 | 0.15 | 0.2 | 0.35 | positive-good | 0.2‡ |
 | `unit_defense_mult` | 1 | 0.1 | 0.1 | 0.1 | positive-good | 0.1‡ |
-| `unit_offense_mult` | 1 | 0.1 | 0.1 | 0.1 | positive-good | 0.1‡ |
+| `unit_offense_mult` | 2 | 0.05 | 0.075 | 0.1 | positive-good | 0.075‡ |
 | `unit_recovery_rate_add` | 1 | 0.5 | 0.5 | 0.5 | positive-good | 0.5‡ |
-| `unit_supply_consumption_mult` | 1 | -0.1 | 0.1 | -0.1 | positive-good | 0.1‡ |
+| `unit_supply_consumption_mult` | 1 | -0.15 | 0.15 | -0.15 | positive-good | 0.15‡ |

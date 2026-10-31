@@ -103,3 +103,53 @@ ahead, raised if they fall short.
 |---|---|---|---|---|---|
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
+
+## Phase 3: Geoengineering
+
+Stratospheric Aerosol Injection, the climate policy Geoengineering unlocks
+(`docs/systems/mod_systems/global_warming.md` § Geoengineering). `event
+te_debug_gw.1` reaches every state below in minutes: **c** or **d** for the
+warming, **j** to adopt everything (Aerosol Injection included), **n** to run a
+year of the mask (`GW_AEROSOL` in `debug.log`), **k** then **n** for termination
+shock.
+
+1. **The tree.** Geoengineering sits in era 12's society column after
+   Environmental Movement and Globalization, on Environmental Movement's icon,
+   and its description names the policy.
+2. **The row.** Mitigation Policies ends with Aerosol Injection under National,
+   on the UN's climate icon. Before the technology, Adopt is greyed with the
+   technology crossed; below 1.0 °C beneath the haze, with "Warming beneath any
+   aerosol haze has reached 1.0 °C" crossed. The adopt tooltip shows the
+   policy's line (Environmental Movement radicalism +10), the weekly expense at
+   1% of GDP a year and the objection line. Around the World counts it.
+3. **The cost.** The Budget panel's Breakdown lists it under Climate Policy at
+   about 1% of GDP a year, and the figure follows GDP month to month without
+   stacking (one copy of Aerosol Injection: Running Cost in the country's
+   modifiers).
+4. **The mask.** After adopting, the overview's table gains an Aerosol Mask row
+   that grows a little each month (for a country with a fifth of world GDP,
+   about −0.6 °C after a year, heading to −1.00 °C). The temperature headline,
+   the bar, the tier and the Warming Penalty cell fall with it; the Climate
+   Warming modifier's multiplier is the masked reading. The row's hover gives
+   the warming beneath, which keeps rising with emissions.
+5. **Termination shock.** Repeal it with no other deployer: the mask shrinks
+   month by month (two thirds back within a year), Termination Shock fires for
+   every country once if 0.25 °C or more is coming back, and its modifier is
+   scaled by the degrees returning. Re-adopt and repeal again: it fires again.
+6. **Objection.** On adopting, countries in the monsoon regions and those whose
+   will is a band short (the `l` option's `aerosol=` figure below 45) lose 10
+   relations with us; each January while it runs, 5 more. No relations change
+   with ourselves, and no `Attempted to create relations between a country and
+   itself` assertion in `error.log`.
+7. **Weakened Monsoon.** With a mask up, India, Indochina, Indonesia, southern
+   China and West African countries carry Weakened Monsoon on the entry, scaled
+   by the mask; it goes when the mask reaches 0.
+8. **No false recovery.** A mask that pushes the felt reading below 3, 2 or
+   1 °C fires none of the recovery events (The Heat Recedes and the rest); they
+   still fire when the warming beneath falls.
+9. **AI.** In an observer run past 3 °C, some AIs adopt it (laissez-faire
+   exporters first), none adopts while in default, none adopts once the mask
+   is at its 2 °C ceiling, and a deployer doesn't drop it once its mask works.
+   Record when the first AI deploys and whether a termination shock happens.
+10. **Civil war.** A revolution that wins in a deploying country keeps the
+    policy (the row stays lit within a month) and its cost.
