@@ -2099,6 +2099,133 @@ class HoverLengthTest(unittest.TestCase):
         self.assertGreater(worst[("sr_fleet_set_posture_sgui", 4, False)], 400)
 
 
+def _gui_type(text, name):
+    """A GUI type's body (`type <name> = <base> {`)."""
+    m = re.search(rf"(?m)^\ttype {re.escape(name)} = [\w.]+ \{{", text)
+    assert m, f"no type {name}"
+    body, _ = _gui_block(text[m.start():].replace(m.group(0).strip(), "TYPE = {", 1), "TYPE")
+    return body
+
+
+def _enclosing(text, marker):
+    """The opener and body of the innermost block around the one marker."""
+    assert text.count(marker) == 1, f"{marker} {text.count(marker)} times"
+    depth = 0
+    for i in range(text.index(marker), -1, -1):
+        if text[i] == "}":
+            depth += 1
+        elif text[i] == "{":
+            if depth == 0:
+                opener = re.search(r"([\w\"]+)\s*=?\s*$", text[:i]).group(1)
+                body, _ = _gui_block("X = " + text[i:], "X")
+                return opener, body
+            depth -= 1
+    raise AssertionError(f"no block around {marker}")
+
+
+class HandWrittenWiringTest(unittest.TestCase):
+    """Review of #1285: what the generated overrides can't show, the
+    hand-written types' and effects' wiring: which element carries which
+    block, each note's text against its code, each posture's value."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
+        rows = _raw(gsf.ROOT / gsf.GUI_OUT)
+        cls.dest_slots = _gui_blocks(rows[rows.index("type te_sr_dest_popup_body"):rows.index("type te_sr_ftarget_popup_body")],
+                                     "te_sr_dest_slot")
+        cls.display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+
+    def _button_and_lit(self, type_name, button_blocks, lit_blocks, button_text, lit_text, lit_tooltip):
+        body = _gui_type(self.gui, type_name)
+        for marker in button_blocks:
+            with self.subTest(type=type_name, marker=marker):
+                opener, block = _enclosing(body, f'block "{marker}" {{}}')
+                self.assertEqual(opener, "button")
+                self.assertIn("using = default_button_action", block)
+                if button_text:
+                    self.assertIn(f'text = "{button_text}"', block)
+        for marker in lit_blocks:
+            with self.subTest(type=type_name, marker=marker):
+                opener, block = _enclosing(body, f'block "{marker}" {{}}')
+                self.assertEqual(opener, "icon")
+                self.assertIn("using = selected_tabs", block)
+                if lit_text:
+                    self.assertIn(f'text = "{lit_text}"', block)
+                if lit_tooltip:
+                    self.assertIn(f'tooltip = "{lit_tooltip}"', block)
+
+    def test_the_posture_choice_lights_the_held_posture(self):
+        """M16: the button carries pc_shown and pc_action, the lit icon
+        pc_selected and the held posture's hover."""
+        self._button_and_lit("te_sr_posture_choice", ("pc_shown", "pc_action"), ("pc_selected", "pc_held_tooltip"),
+                             None, None, None)
+        row = _gui_type(self.gui, "te_sr_fleet_row")
+        choices = _gui_blocks(row, "te_sr_posture_choice")
+        self.assertEqual(len(choices), 4)
+        for p, choice in zip(gsf.POSTURES, choices):
+            with self.subTest(posture=p):
+                self.assertEqual(_override_body(choice, "pc_label").strip(), f'text = "je_space_race_widget_fl_posture_{p}"')
+                self.assertEqual(_override_body(choice, "pc_shown").strip(), f'block "fl_posture_{p}_choice" {{}}')
+                self.assertEqual(_override_body(choice, "pc_selected").strip(), f'block "fl_posture_{p}_selected" {{}}')
+                self.assertEqual(_override_body(choice, "pc_action").strip(), f'block "fl_posture_{p}_button" {{}}')
+                self.assertEqual(_override_body(choice, "pc_held_tooltip").strip(),
+                                 f'tooltip = "je_space_race_widget_fl_posture_{p}_held_tt"')
+
+    def test_choose_and_target_buttons_and_their_marks(self):
+        """M17: Choose and Target are the buttons, Chosen and Targeted the lit
+        marks, each with its hover."""
+        self._button_and_lit("te_sr_dest_row", ("dr_choose_visible", "dr_button"), ("dr_chosen_visible",),
+                             "je_space_race_widget_dp_choose", "je_space_race_widget_dp_chosen",
+                             "je_space_race_widget_dp_chosen_tt")
+        self._button_and_lit("te_sr_ftarget_row", ("fr_target_visible", "fr_button"), ("fr_targeted_visible",),
+                             "je_space_race_widget_ss_target_button", "je_space_race_widget_ft_targeted",
+                             "je_space_race_widget_ft_targeted_tt")
+
+    def test_each_why_note_reads_its_code(self):
+        """M13: note n's text is the reason code n stands for, and the code
+        is set from that reason."""
+        slot = _gui_type(self.gui, "te_sr_dest_slot")
+        reasons = {1: ("refit", r"sr_fl_{n}_refitting = yes"),
+                   2: ("weak", r"sr_fl_{n}_strength < sr_fl_minimum_strength"),
+                   3: ("barred", r"sr_fl_{n}_at_earth = yes sr_launches_barred = yes"),
+                   4: ("no_sc", r"NOT = { sr_sc_operational = yes }")}
+        for code, (word, condition) in reasons.items():
+            with self.subTest(code=code):
+                opener, note = _enclosing(slot, f'block "dp_why_{code}_visible" {{}}')
+                self.assertEqual(opener, "te_sr_note")
+                self.assertEqual(re.findall(r'text = "(\w+)"', note), [f"je_space_race_widget_dp_why_{word}"])
+                for n in range(1, gsf.SLOTS + 1):
+                    why = _block(self.display, f"sr_disp_fl_{n}_why")
+                    self.assertIn(f"limit = {{ {condition.replace('{n}', str(n))} }} value = {code} }}", why)
+
+    def test_the_propellant_cells_split_on_one_comparison(self):
+        """M20: covered shows where the fleet carries at least the leg's
+        delta-v (equal included), short exactly where it doesn't."""
+        for n, slot in enumerate(self.dest_slots, 1):
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                with self.subTest(slot=n, location=lc.key):
+                    covered = re.search(r'visible = "\[(.*)\]"', _override_body(row, "dr_dv_covered")).group(1)
+                    self.assertEqual(covered, f"GreaterThanOrEqualTo_CFixedPoint( "
+                                              f"JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_dv_value'), "
+                                              f"JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_leg_dv_{lc.key}') )")
+                    self.assertIn(f'visible = "[Not( {covered} )]"', _override_body(row, "dr_dv_short"))
+
+    def test_station_and_stand_off_set_their_own_values(self):
+        """M2: each posture button's branch sets its own posture."""
+        body = _block(self.combat, "sr_fl_set_posture_at")
+        for p in (3, 4):
+            with self.subTest(posture=p):
+                self.assertRegex(body, rf"limit = \{{ scope:pick = {p} \}}\s*"
+                                       rf"set_variable = \{{ name = sr_fl_\$N\$_posture value = {p} \}}")
+        self.assertRegex(body, r"if = \{\s*limit = \{ scope:pick = 1 \}\s*set_variable = \{ name = sr_fl_\$N\$_posture value = 1 \}\s*\}\s*"
+                               r"else = \{\s*set_variable = \{ name = sr_fl_\$N\$_posture value = 2 \}\s*\}")
+        # ... and the else arm is reached only by Stand off
+        self.assertRegex(body, r"OR = \{\s*scope:pick = 1\s*scope:pick = 2\s*\}")
+        self.assertEqual(len(re.findall(r"name = sr_fl_\$N\$_posture value = \d", body)), 4)
+
+
 class TargetPopupTest(unittest.TestCase):
     """UI pass design § 7: the target button opens a list of the worlds at
     the fleet's location; Target sets the world and charges as the step."""
