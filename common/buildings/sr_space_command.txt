@@ -8,7 +8,7 @@
 # (state_sr_ship_construction_add), which sr_sc_rate sums over the states the
 # country controls; the month's construction joins the home fleet at Earth
 # (sr_sc_month, sr_fleet_effects.txt). The fleets' upkeep is a modifier on
-# this building that raises its input goods (sr_fl_upkeep_refresh).
+# this building that multiplies its maintenance line (sr_fl_upkeep_refresh).
 #
 # bg_government, not bg_military: vanilla's bg_military is the parent of the
 # army and navy groups (barracks and naval bases, is_military = yes, tied to

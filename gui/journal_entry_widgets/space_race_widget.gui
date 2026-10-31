@@ -5581,6 +5581,12 @@ types space_race_widget_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_count'), '(CFixedPoint)0' )]"
 				text = "je_space_race_widget_space_fleets_empty"
 			}
+			# No Space Command, no fleet orders (UI pass design § 10): said once,
+			# above the rows; each button's hover gives the reason too.
+			te_sr_text = {
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_count'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ) )]"
+				text = "je_space_race_widget_space_fleets_no_sc"
+			}
 			te_sr_fleet_header_row = {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_count'), '(CFixedPoint)1' )]"
 			}

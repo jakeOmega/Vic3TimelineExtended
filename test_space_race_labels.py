@@ -79,7 +79,7 @@ FREE_WORLDS = 40          # sr_disp_free_supplied_count: at most every world
 FREE_TRADE_RESEARCH = 5   # sr_disp_free_trade_research: sr_free_trade_max_units (5) x 1%
 SC_RATE_CEILING = 99.9    # sr_disp_sc_rate: 2 a level a month at most; ten levels for an AI, more for a player
 FLEET_STRENGTH = 99_999   # sr_disp_fl_strength / _full: every fleet's, unbounded by script; five digits
-FLEET_UPKEEP_PCT = 9999   # sr_disp_sc_upkeep_pct: full strength / 10 (sr_fleet_upkeep_points)
+FLEET_UPKEEP_PCT = 9999 * 900   # sr_disp_sc_upkeep_pct: +900% a unit of full strength / 10 (sr_fleet_upkeep_points)
 MIX_WEIGHT = 3            # sr_disp_sc_mix_<role>: sr_sc_mix_max
 QUEUE_PLACES = 20         # sr_disp_mq_count: gen_solar_sites.QUEUE_SLOTS
 WINDOW_MONTHS = 999       # sr_window_disp_next: capped at 999 (the cell reads "No site left" there)
@@ -315,7 +315,7 @@ def _render(value):
 # Every loc key the panel shows, by the cell it shows in. Keys in more than one
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_empty|solar_system_note"
-             r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty"
+             r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc"
              r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
