@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 136 laws, most of them in 35 new law groups, with the institutions,
+The mod adds 152 laws, most of them in 37 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
@@ -12,7 +12,7 @@ default) and State Collapse, which has no rule.
 ## The mod's new laws
 
 The new law groups sit beside the base game's in the laws panel. Sixteen of them
-are ministries, covered in [Ministries](#ministries). The other nineteen are
+are ministries, covered in [Ministries](#ministries). The other twenty-one are
 grouped here by theme, and ten further laws join base-game law groups.
 
 Many laws need another law in force, and some can't stand beside one. Anarchy
@@ -38,6 +38,7 @@ with it Anarchy, Collectivized Agriculture and Possession by Use.
 | Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Policy, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
+| Bodily Autonomy | Natural Form, Licensed Modification, Morphological Freedom | Changing how your body looks (skin, sex characteristics, fur, tails), from Morphological Freedom (era 12) on. |
 
 The mod renames the base game's six Citizenship laws and changes their effects.
 This guide, like the game, uses the new names:
@@ -79,6 +80,15 @@ Insurance; Regulated Augmentation Market needs a Ministry of Consumer
 Protection; Mandatory Augmentation needs a Ministry of War. The group's laws
 also drive a movement journal entry, described in [The augmentation
 debate](07-social-movements.md#the-augmentation-debate).
+
+Bodily Autonomy is about how a body looks; what it can do is Human
+Augmentation's. Every country holds Natural Form until Morphological Freedom
+opens the other two laws. They raise the acceptance of pops whose culture shares
+no heritage trait with your primary cultures, Licensed Modification by 5 and
+Morphological Freedom by 10, on top of your Citizenship law, and pull more
+migrants. The Devout and the Rural Folk oppose both, and the Intelligentsia
+support them. The group drives [the morphological freedom
+debate](07-social-movements.md#the-morphological-freedom-debate).
 
 ### Laws on state power and information
 
@@ -950,7 +960,8 @@ farming breakthroughs, and under the Legislated Tax Code rule the tax code with
 its passed bills and promises (under the Light Tax Code, its rates), all carry
 over. So do UN sanctions on the nation, which return within a month. A Civil
 Rights Movement, Human
-Augmentation Debate or Mental Health Crisis journal entry you already finished
+Augmentation Debate, Morphological Freedom Debate or Mental Health Crisis
+journal entry you already finished
 does not start over. Some things are still lost: policies switched on from
 journal-entry buttons, such as banking tools and climate policies, have to be
 switched on again, and history charts start empty. The colonial empire is the

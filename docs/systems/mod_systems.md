@@ -43,7 +43,7 @@ Reference for the gameplay systems the mod adds, one file per system in [`mod_sy
 | [Governance, Bureaucracy and Policing Laws](mod_systems/governance_laws.md) | Collective Governance, the bureaucracy laws, machine administration and rule, policing, penal labor | Collective Governance (`law_direct_democracy`)<br>Bureaucracy Laws: Who Staffs the Administration (`law_contracted_administration`, `law_communal_administration`, `amendment_spoils_system`)<br>Machine Administration and Machine Rule (`law_automated_bureaucracy`, `law_algorithmic_governance`)<br>Policing: Private Policing and Its Amendments (`law_private_policing`, `amendment_corporate_security_powers`, `amendment_civilian_police_oversight`, #628)<br>Penal Labor Camps (`law_penal_labor_camps`) |
 | [Inheritance](mod_systems/inheritance.md) | The inheritance laws and what they do through script | Inheritance: Who Inherits (`lawgroup_inheritance`) |
 | [Heir Education](mod_systems/heir_education.md) | Educating the heir: tiers, traits, intelligence and the rebel child | Heir Education System (`je_heir_education`) |
-| [Social Movements and Religious Revival](mod_systems/social_movements.md) | The social-movement journal entries, where the retired ones' content went, religious revival events | Social Movement Journal Entries (history)<br>Religious Revival Events |
+| [Social Movements and Religious Revival](mod_systems/social_movements.md) | The social-movement journal entries, where the retired ones' content went, the Bodily Autonomy laws and their debate, religious revival events | Social Movement Journal Entries (history)<br>Morphological Freedom Debate and Bodily Autonomy<br>Religious Revival Events |
 
 ## Population, culture and society
 

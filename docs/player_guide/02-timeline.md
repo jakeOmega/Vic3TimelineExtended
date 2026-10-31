@@ -202,8 +202,9 @@ view. Each system also needs its game rule, and some have further conditions.
 | Civil Rights Movement | 7 | The civil rights journal entry | [Social movements](07-social-movements.md) |
 | Automated Surveillance or Cybersecurity | 9 | The digital rights journal entry | [Social movements](07-social-movements.md) |
 | Mental Health Awareness | 10 | The mental health journal entry | [Social movements](07-social-movements.md) |
-| Universal Basic Income | 10 | The post-scarcity journal entry | [Social movements](07-social-movements.md) |
 | Brain-Computer Interfaces or Human Augmentation | 11 | The human augmentation journal entry | [Social movements](07-social-movements.md) |
+| Post-Work Society | 12 | The post-scarcity journal entry | [Social movements](07-social-movements.md) |
+| Morphological Freedom | 12 | The morphological freedom journal entry and the Bodily Autonomy laws | [Social movements](07-social-movements.md#the-morphological-freedom-debate) |
 
 Some society technologies also start occasional narrative events (Second Wave
 Feminism, Contraceptive Pill, Social Media and others), covered in [Social

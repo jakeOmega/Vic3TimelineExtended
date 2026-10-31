@@ -54,6 +54,7 @@ campaign meets them. "Rule" names the game rule that can switch the system off;
 | Digital Rights & Surveillance journal entry | Automated Surveillance or Cybersecurity (era 9). | Social Movements | [Social movements](07-social-movements.md#movement-journal-entries-at-a-glance) |
 | Mental Health Crisis and Post-Scarcity Transition journal entries | Mental Health Awareness (era 10) and Post-Work Society (era 12). | Social Movements | [Social movements](07-social-movements.md#movement-journal-entries-at-a-glance) |
 | Human Augmentation Debate journal entry | Human Augmentation or Brain-Computer Interfaces (era 11). | Social Movements | [Social movements](07-social-movements.md#movement-journal-entries-at-a-glance) |
+| Morphological Freedom Debate journal entry | Morphological Freedom (era 12). | Social Movements | [Social movements](07-social-movements.md#the-morphological-freedom-debate) |
 | Seabed licenses, and the Timeline Extended window's Seabed tab | Abyssal Plain Mining (era 11) and a coastal state. Licenses are shared every January among all coastal countries, those without the technology at three quarters of their weight and their shares waiting for them; a new claimant gets its share as claims the month after, in a sharing that divides every pool again, and the tab opens then. | Global Commons | [The extended timeline](02-timeline.md#seabed-licenses) |
 | Megaprojects | Each needs its own era 12 or era 13 technology. | none | [The extended timeline](02-timeline.md#megaprojects) |
 
