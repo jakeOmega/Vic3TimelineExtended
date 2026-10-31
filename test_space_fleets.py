@@ -1856,6 +1856,118 @@ class PostureRowTest(unittest.TestCase):
                                  [(str(p), str(p)) for p in gsf.POSTURES])
 
 
+def _parse_script(text):
+    """A brace block's statements as (key, op, value) triples, value a word or
+    a nested list: enough for the generated triggers' AND/OR/NOT trees."""
+    tokens = re.findall(r"[{}]|[<>]=?|=|[^\s{}<>=]+", text)
+
+    def block(i):
+        out = []
+        while i < len(tokens) and tokens[i] != "}":
+            key, op = tokens[i], tokens[i + 1]
+            if tokens[i + 2] == "{":
+                value, i = block(i + 3)
+                i += 1
+            else:
+                value, i = tokens[i + 2], i + 3
+            out.append((key, op, value))
+        return out, i
+
+    return block(0)[0]
+
+
+def _eval_step_trigger(stmts, loc, target, hostile, free):
+    """The generated hostile-step triggers' terms, for slot $N$ at location
+    code loc, its target index (None without one), and the hostile and free
+    worlds' keys."""
+    def one(key, op, value):
+        if key == "AND":
+            return all(one(*s) for s in value)
+        if key == "OR":
+            return any(one(*s) for s in value)
+        if key == "NOT":
+            assert len(value) == 1, "NOT of more than one term"
+            return not one(*value[0])
+        if key == "has_variable":
+            return {"sr_fl_$N$_loc": True, "sr_fl_$N$_target": target is not None}[value]
+        if key == "var:sr_fl_$N$_loc" and op == "=":
+            return loc == int(value)
+        if key == "var:sr_fl_$N$_target" and op == "<":
+            return target < int(value)
+        if key == "has_global_variable" and value.startswith("sr_site_free_"):
+            return value[len("sr_site_free_"):] in free
+        if key == "sr_site_hostile_target":
+            return dict((k, v) for k, _, v in value)["KEY"] in hostile
+        raise AssertionError(f"unexpected term {key} {op} {value}")
+    return all(one(*s) for s in stmts)
+
+
+class CloseInPriceTest(unittest.TestCase):
+    """Review of #1285: Close in without a hostile target takes the hostile
+    step's world, and its hover must show the free colony's price whenever
+    that world is free (sr_fl_<n>_hostile_step_free)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.effects = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.sgui = _block(_strip(_raw(SGUIS)), "sr_fleet_set_posture_sgui")
+
+    def _step(self, loc, target, hostile):
+        """The world sr_fl_step_hostile_target_at takes, run from its own
+        generated if-lines (first match in file order wins)."""
+        step = _block(self.effects, "sr_fl_step_hostile_target_at")
+        case = _block("x = {" + step.split(f"limit = {{ var:sr_fl_$N$_loc = {loc} }}", 1)[1], "x")
+        tgt = target or 0
+        for m in re.finditer(r"limit = \{ local_var:sr_fl_next = 0 (?:local_var:sr_fl_tgt < (\d+) )?"
+                             r"sr_site_hostile_target = \{ KEY = (\w+) \} \} set_local_variable = \{ name = sr_fl_next "
+                             r"value = (\d+) \}", case):
+            if (m.group(1) is None or tgt < int(m.group(1))) and m.group(2) in hostile:
+                return m.group(2)
+        return None
+
+    def test_each_slot_calls_the_shared_trigger(self):
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                self.assertRegex(self.triggers, rf"(?m)^sr_fl_{n}_hostile_step_free = \{{ "
+                                                rf"sr_fl_hostile_step_free_at = \{{ N = {n} \}} \}}$")
+
+    def test_it_is_true_exactly_when_the_step_takes_a_free_colony(self):
+        import random
+        stmts = _parse_script(_block(self.triggers, "sr_fl_hostile_step_free_at"))
+        rng = random.Random(1285)
+        cases = 0
+        for lc in gsf.CLOSE_IN_LOCATIONS:
+            ws = [w.key for w in gsf.worlds_at(lc.key)]
+            indices = [w.index for w in gsf.worlds_at(lc.key)]
+            targets = [None, 0, 1, 999, *indices]
+            for _ in range(300):
+                hostile = {k for k in ws if rng.random() < 0.5}
+                free = {k for k in ws if rng.random() < 0.5}
+                target = rng.choice(targets)
+                picked = self._step(lc.code, target, hostile)
+                with self.subTest(loc=lc.key, target=target, hostile=sorted(hostile), free=sorted(free)):
+                    self.assertEqual(_eval_step_trigger(stmts, lc.code, target, hostile, free),
+                                     picked is not None and picked in free)
+                cases += 1
+            # a location elsewhere never matches
+            self.assertFalse(_eval_step_trigger(stmts, 9999, None, set(ws), set(ws)))
+        self.assertGreater(cases, 2000)
+
+    def test_close_in_s_hover_lists_the_price_of_the_world_it_takes(self):
+        effect = _block("x = {" + self.sgui.split("\n\teffect = {", 1)[1], "x")
+        close = _block("x = {" + effect.split("limit = { scope:pick = 3 }", 1)[1], "x")
+        self.assertRegex(close, r"limit = \{\s*OR = \{\s*AND = \{\s*sr_fl_op_check = \{ TEST = target_hostile \}\s*"
+                                r"sr_fl_op_check = \{ TEST = closes_on_free \}\s*\}\s*AND = \{\s*"
+                                r"NOT = \{ sr_fl_op_check = \{ TEST = target_hostile \} \}\s*"
+                                r"sr_fl_op_check = \{ TEST = hostile_step_free \}\s*\}\s*\}\s*\}\s*"
+                                r"custom_tooltip = sr_fl_free_price_tt")
+        # ... the same split sr_fl_set_posture_at makes: a hostile target stays
+        posture = _block(_strip(_raw(COMBAT_EFFECTS)), "sr_fl_set_posture_at")
+        self.assertRegex(posture, r"OR = \{\s*NOT = \{ has_variable = sr_fl_\$N\$_target \}\s*"
+                                  r"NOT = \{ sr_fl_\$N\$_target_hostile = yes \}\s*\}\s*\}\s*sr_fl_step_hostile_target_at")
+
+
 class TargetPopupTest(unittest.TestCase):
     """UI pass design § 7: the target button opens a list of the worlds at
     the fleet's location; Target sets the world and charges as the step."""

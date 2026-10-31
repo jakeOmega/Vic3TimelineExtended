@@ -424,8 +424,22 @@ sr_fleet_set_posture_sgui = {
 			else = {
 				custom_tooltip = sr_fl_set_posture_3_tt
 			}
+			# The free colony's price, on the world it will close in on: a
+			# hostile target stays its target; else the hostile step's pick
+			# (sr_fl_set_posture_at).
 			if = {
-				limit = { sr_fl_op_check = { TEST = closes_on_free } }
+				limit = {
+					OR = {
+						AND = {
+							sr_fl_op_check = { TEST = target_hostile }
+							sr_fl_op_check = { TEST = closes_on_free }
+						}
+						AND = {
+							NOT = { sr_fl_op_check = { TEST = target_hostile } }
+							sr_fl_op_check = { TEST = hostile_step_free }
+						}
+					}
+				}
 				custom_tooltip = sr_fl_free_price_tt
 			}
 		}

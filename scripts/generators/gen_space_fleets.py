@@ -525,6 +525,7 @@ def render_slot_triggers(n: int) -> list[str]:
             "\tOR = {",
             *[f"\t\tAND = {{ var:{var(n, 'target')} = {w.index} sr_site_hostile_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
             "\t}", "}",
+            f"{var(n, 'hostile_step_free')} = {{ sr_fl_hostile_step_free_at = {{ N = {n} }} }}",
             "# 6c: a world at its location it may interdict (a country at peace with us,",
             "# not our ally, holds it); its target is one; it interdicts. Never at Earth",
             "# (lunar colonization § 8.3).",
@@ -609,6 +610,46 @@ def render_slot_triggers(n: int) -> list[str]:
     return out
 
 
+def _hostile_step_free() -> list[str]:
+    """sr_fl_hostile_step_free_at (slot N): the world the hostile step would
+    take (sr_fl_step_hostile_target_at, _step_target's rule) is a free colony,
+    so Close in's hover lists the price that taking it charges. The step takes
+    the first hostile world here (table order) whose index is above its
+    target's (0 without one), else the first hostile world here."""
+    target = "sr_fl_$N$_target"
+    after = {w.key: f"OR = {{ NOT = {{ has_variable = {target} }} var:{target} < {w.index} }}" for w in gss.SITES}
+
+    def hostile(w: gss.Site) -> str:
+        return f"sr_site_hostile_target = {{ KEY = {w.key} }}"
+
+    out = ["# Close in's hover (UI pass design § 7): the world the hostile step would take",
+           "# at slot N's location is a free colony (the first hostile world there after",
+           "# its target, table order, else the first; sr_fl_step_hostile_target_at).",
+           "sr_fl_hostile_step_free_at = {",
+           "\thas_variable = sr_fl_$N$_loc",
+           "\tOR = {"]
+    for lc in CLOSE_IN_LOCATIONS:
+        ws = worlds_at(lc.key)
+        out += ["\t\tAND = {", f"\t\t\tvar:sr_fl_$N$_loc = {lc.code}", "\t\t\tOR = {"]
+        none_after = "NOT = { OR = { " + " ".join(f"AND = {{ {after[w.key]} {hostile(w)} }}" for w in ws) + " } }"
+        for i, w in enumerate(ws):
+            first_after, first = after[w.key], none_after
+            if i:
+                first_after += (" NOT = { OR = { " + " ".join(f"AND = {{ {after[e.key]} {hostile(e)} }}" for e in ws[:i])
+                                + " } }")
+                first += " NOT = { OR = { " + " ".join(hostile(e) for e in ws[:i]) + " } }"
+            out += ["\t\t\t\tAND = {",
+                    f"\t\t\t\t\thas_global_variable = sr_site_free_{w.key}",
+                    f"\t\t\t\t\t{hostile(w)}",
+                    "\t\t\t\t\tOR = {",
+                    f"\t\t\t\t\t\tAND = {{ {first_after} }}",
+                    f"\t\t\t\t\t\tAND = {{ {first} }}",
+                    "\t\t\t\t\t}",
+                    "\t\t\t\t}"]
+        out += ["\t\t\t}", "\t\t}"]
+    return out + ["\t}", "}"]
+
+
 def render_triggers() -> str:
     out = [HEADER.rstrip("\n"),
            "# The fleets' per-slot and per-location triggers, from gen_space_fleets.",
@@ -645,6 +686,7 @@ def render_triggers() -> str:
             "sr_fl_any_bound = {", "\tOR = {"]
     out += [f"\t\tAND = {{ has_variable = {var(n, 'dest')} var:{var(n, 'dest')} = $CODE$ }}" for n in range(1, SLOTS + 1)]
     out += ["\t}", "}",
+            "", *_hostile_step_free(),
             "", "# The target popup's pick (scope:pick, a world's index): a world we may close",
             "# in on (sr_site_hostile_target), interdict (sr_site_interdict_target; never",
             "# at Earth, lunar colonization § 8.3), and a free colony.",
