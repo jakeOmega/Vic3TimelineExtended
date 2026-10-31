@@ -4757,7 +4757,8 @@ types space_race_widget_types
 	### button while its posture isn't the fleet's, greyed with the reason where
 	### the fleet can't take it; the posture in force in vanilla's selected-tab
 	### look (the Strategic Reserve's policy choice), not a greyed button that
-	### reads as unavailable.
+	### reads as unavailable, with its own hover (pc_held_tooltip: what the
+	### posture does), as the Strategic Reserve's choice has.
 	type te_sr_posture_choice = widget {
 		size = { 104 22 }
 		parentanchor = vcenter
@@ -4782,6 +4783,7 @@ types space_race_widget_types
 			using = selected_tabs
 			size = { 100% 100% }
 			block "pc_selected" {}
+			block "pc_held_tooltip" {}
 
 			textbox = {
 				parentanchor = center
@@ -5104,6 +5106,9 @@ types space_race_widget_types
 					blockoverride "pc_selected" {
 						block "fl_posture_1_selected" {}
 					}
+					blockoverride "pc_held_tooltip" {
+						tooltip = "je_space_race_widget_fl_posture_1_held_tt"
+					}
 					blockoverride "pc_action" {
 						block "fl_posture_1_button" {}
 					}
@@ -5117,6 +5122,9 @@ types space_race_widget_types
 					}
 					blockoverride "pc_selected" {
 						block "fl_posture_2_selected" {}
+					}
+					blockoverride "pc_held_tooltip" {
+						tooltip = "je_space_race_widget_fl_posture_2_held_tt"
 					}
 					blockoverride "pc_action" {
 						block "fl_posture_2_button" {}
@@ -5132,6 +5140,9 @@ types space_race_widget_types
 					blockoverride "pc_selected" {
 						block "fl_posture_3_selected" {}
 					}
+					blockoverride "pc_held_tooltip" {
+						tooltip = "je_space_race_widget_fl_posture_3_held_tt"
+					}
 					blockoverride "pc_action" {
 						block "fl_posture_3_button" {}
 					}
@@ -5145,6 +5156,9 @@ types space_race_widget_types
 					}
 					blockoverride "pc_selected" {
 						block "fl_posture_4_selected" {}
+					}
+					blockoverride "pc_held_tooltip" {
+						tooltip = "je_space_race_widget_fl_posture_4_held_tt"
 					}
 					blockoverride "pc_action" {
 						block "fl_posture_4_button" {}
@@ -5621,6 +5635,7 @@ types space_race_widget_types
 			icon = {
 				using = selected_tabs
 				size = { 100% 100% }
+				tooltip = "je_space_race_widget_dp_chosen_tt"
 				block "dr_chosen_visible" {}
 
 				textbox = {
@@ -5859,6 +5874,7 @@ types space_race_widget_types
 			icon = {
 				using = selected_tabs
 				size = { 100% 100% }
+				tooltip = "je_space_race_widget_ft_targeted_tt"
 				block "fr_targeted_visible" {}
 
 				textbox = {
