@@ -272,31 +272,6 @@ quantum_communications = {
 	}
 }
 
-bioenhanced_soldiers = {
-	# Mandatory Augmentation law
-	era = era_11
-	texture = "gfx/interface/icons/invention_icons/bioenhanced_soldiers.dds"
-	category = military
-
-	unlocking_technologies = {
-		swarm_technology
-	}
-
-	modifier = {
-		country_weekly_innovation_max_add = 100
-		unit_recovery_rate_add = 0.5
-		unit_army_offense_mult = 0.1
-		unit_army_defense_mult = 0.1
-		country_institution_ministry_of_war_max_investment_add = 1
-		state_building_barrack_max_level_add = 100
-		character_battle_condition_exhausted_mult = -0.5
-	}
-
-	ai_weight = {
-		value = 1
-	}
-}
-
 augmented_reality_warfare = {
 	# Holographic Ambush Vehicle unit
 	era = era_11

@@ -10,8 +10,9 @@
 # (sr_cf_pick_auto, sr_emig_ai_review).
 # ============================================================================
 
-# Solar System: send our next colony fleet to the world, or, on our target,
-# let the programme choose again.
+# The colony target popup (te_sr_target_popup; UI pass design § 5): send our
+# next colony fleet to the world, or, on our target, let the programme choose
+# again.
 sr_colony_target_sgui = {
 	scope = country
 	saved_scopes = { site }
@@ -70,7 +71,7 @@ sr_colony_target_sgui = {
 }
 
 # Colony Fleets: Clear, beside our target (audit SPC-7): the programme chooses
-# again, as Clear on the world's Solar System row does.
+# again, as Clear on our target's row in the colony target popup does.
 sr_cf_target_clear_sgui = {
 	scope = country
 
@@ -100,7 +101,8 @@ sr_cf_target_clear_sgui = {
 # The colonization overview's cells (audit SPC-6), display only: never
 # Executed. scope:op 1 lists the colonies demanding self-government
 # (sr_ov_list_restless, gen_solar_sites), 2 what threatens our colonies
-# (sr_ov_list_defense, gen_space_fleets).
+# (sr_ov_list_defense, gen_space_fleets), 3 the powers at war with us with a
+# fleet in flight to Earth (sr_ov_list_earth, gen_space_fleets).
 sr_colony_overview_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -121,6 +123,10 @@ sr_colony_overview_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 2 }
 			sr_ov_list_defense = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			sr_ov_list_earth = yes
 		}
 	}
 }

@@ -4,8 +4,9 @@ docs/superpowers/archive/specs/2026-10-16-global-commons-design.md).
 Seabed licences cap the Deep-Sea Mine (building_ocean_mine), so § 1.1 makes each level
 worth more than an Extraplanetary Base (building_space_mine) level until era 12's
 propulsion arrives. § 1.2 gives the Extraplanetary Base two logistics groups, each with
-one era-12 upgrade cutting its Launch Capacity input; with Space Colonization and both,
-it out-earns the Deep-Sea Mine per level.
+one late upgrade cutting its Launch Capacity input (Fusion Tugs in era 12, Tethered Launch
+in era 13 since the era 13 split); with Space Colonization and both, it out-earns the
+Deep-Sea Mine per level.
 
 The Deep-Sea Mine's ships are in a group of their own, its support vessels: Motor Ship
 Tenders by default, and Magnetic Drive Tenders once the technology that makes those

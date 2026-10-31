@@ -687,24 +687,24 @@ covert_tech_grant_era_12 = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 400000 }
+			add_technology_progress = { technology = $TECH$ progress = 300000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 400000 }
+				change_variable = { name = iw_stolen_total add = 300000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 330000 }
+			add_technology_progress = { technology = $TECH$ progress = 247500 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 330000 }
+				change_variable = { name = iw_stolen_total add = 247500 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else = {
-			add_technology_progress = { technology = $TECH$ progress = 200000 }
+			add_technology_progress = { technology = $TECH$ progress = 150000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 200000 }
+				change_variable = { name = iw_stolen_total add = 150000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -713,24 +713,85 @@ covert_tech_grant_era_12 = {
 		limit = { scope:iw_op = { covert_op_is_established = yes } }
 		if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
-			add_technology_progress = { technology = $TECH$ progress = 200000 }
+			add_technology_progress = { technology = $TECH$ progress = 150000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 200000 }
+				change_variable = { name = iw_stolen_total add = 150000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else_if = {
 			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
-			add_technology_progress = { technology = $TECH$ progress = 165000 }
+			add_technology_progress = { technology = $TECH$ progress = 123750 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 165000 }
+				change_variable = { name = iw_stolen_total add = 123750 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
 		else = {
-			add_technology_progress = { technology = $TECH$ progress = 100000 }
+			add_technology_progress = { technology = $TECH$ progress = 75000 }
 			scope:iw_op = {
-				change_variable = { name = iw_stolen_total add = 100000 }
+				change_variable = { name = iw_stolen_total add = 75000 }
+				set_variable = { name = iw_stolen_last value = $IDX$ }
+			}
+		}
+	}
+}
+
+covert_tech_grant_era_13 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
+	if = {
+		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
+		if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
+			add_technology_progress = { technology = $TECH$ progress = 600000 }
+			scope:iw_op = {
+				change_variable = { name = iw_stolen_total add = 600000 }
+				set_variable = { name = iw_stolen_last value = $IDX$ }
+			}
+		}
+		else_if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
+			add_technology_progress = { technology = $TECH$ progress = 495000 }
+			scope:iw_op = {
+				change_variable = { name = iw_stolen_total add = 495000 }
+				set_variable = { name = iw_stolen_last value = $IDX$ }
+			}
+		}
+		else = {
+			add_technology_progress = { technology = $TECH$ progress = 300000 }
+			scope:iw_op = {
+				change_variable = { name = iw_stolen_total add = 300000 }
+				set_variable = { name = iw_stolen_last value = $IDX$ }
+			}
+		}
+	}
+	else_if = {
+		limit = { scope:iw_op = { covert_op_is_established = yes } }
+		if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
+			add_technology_progress = { technology = $TECH$ progress = 300000 }
+			scope:iw_op = {
+				change_variable = { name = iw_stolen_total add = 300000 }
+				set_variable = { name = iw_stolen_last value = $IDX$ }
+			}
+		}
+		else_if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
+			add_technology_progress = { technology = $TECH$ progress = 247500 }
+			scope:iw_op = {
+				change_variable = { name = iw_stolen_total add = 247500 }
+				set_variable = { name = iw_stolen_last value = $IDX$ }
+			}
+		}
+		else = {
+			add_technology_progress = { technology = $TECH$ progress = 150000 }
+			scope:iw_op = {
+				change_variable = { name = iw_stolen_total add = 150000 }
 				set_variable = { name = iw_stolen_last value = $IDX$ }
 			}
 		}
@@ -828,7 +889,6 @@ covert_tech_steal_production = {
 			is_researching_technology = artificial_intelligence
 			NOT = { has_technology_researched = artificial_intelligence }
 			has_technology_researched = generative_ai
-			has_technology_researched = programmable_matter
 			has_technology_researched = autonomous_vehicles
 			scope:iw_theft_target ?= { has_technology_researched = artificial_intelligence }
 		}
@@ -1419,7 +1479,7 @@ covert_tech_steal_production = {
 			has_technology_researched = advanced_nanofabrication
 			scope:iw_theft_target ?= { has_technology_researched = molecular_assemblers }
 		}
-		covert_tech_grant_era_12 = { TECH = molecular_assemblers IDX = 141 }
+		covert_tech_grant_era_13 = { TECH = molecular_assemblers IDX = 141 }
 	}
 	else_if = {
 		limit = {
@@ -1551,7 +1611,7 @@ covert_tech_steal_production = {
 			has_technology_researched = quantum_materials
 			scope:iw_theft_target ?= { has_technology_researched = programmable_matter }
 		}
-		covert_tech_grant_era_12 = { TECH = programmable_matter IDX = 173 }
+		covert_tech_grant_era_13 = { TECH = programmable_matter IDX = 173 }
 	}
 	else_if = {
 		limit = {
@@ -2411,7 +2471,7 @@ covert_tech_steal_production = {
 					can_research = molecular_assemblers
 					scope:iw_theft_target ?= { has_technology_researched = molecular_assemblers }
 				}
-				covert_tech_grant_era_12 = { TECH = molecular_assemblers IDX = 141 }
+				covert_tech_grant_era_13 = { TECH = molecular_assemblers IDX = 141 }
 			}
 			1 = {
 				trigger = {
@@ -2523,7 +2583,7 @@ covert_tech_steal_production = {
 					can_research = programmable_matter
 					scope:iw_theft_target ?= { has_technology_researched = programmable_matter }
 				}
-				covert_tech_grant_era_12 = { TECH = programmable_matter IDX = 173 }
+				covert_tech_grant_era_13 = { TECH = programmable_matter IDX = 173 }
 			}
 			1 = {
 				trigger = {
@@ -2836,7 +2896,7 @@ covert_tech_steal_military = {
 			has_technology_researched = quantum_communications
 			scope:iw_theft_target ?= { has_technology_researched = antimatter_production }
 		}
-		covert_tech_grant_era_12 = { TECH = antimatter_production IDX = 15 }
+		covert_tech_grant_era_13 = { TECH = antimatter_production IDX = 15 }
 	}
 	else_if = {
 		limit = {
@@ -2920,7 +2980,7 @@ covert_tech_steal_military = {
 			has_technology_researched = swarm_technology
 			scope:iw_theft_target ?= { has_technology_researched = bioenhanced_soldiers }
 		}
-		covert_tech_grant_era_11 = { TECH = bioenhanced_soldiers IDX = 34 }
+		covert_tech_grant_era_12 = { TECH = bioenhanced_soldiers IDX = 34 }
 	}
 	else_if = {
 		limit = {
@@ -3154,7 +3214,7 @@ covert_tech_steal_military = {
 			has_technology_researched = compact_fusion_reactors
 			scope:iw_theft_target ?= { has_technology_researched = fusion_batteries }
 		}
-		covert_tech_grant_era_12 = { TECH = fusion_batteries IDX = 89 }
+		covert_tech_grant_era_13 = { TECH = fusion_batteries IDX = 89 }
 	}
 	else_if = {
 		limit = {
@@ -3721,7 +3781,7 @@ covert_tech_steal_military = {
 			has_technology_researched = compact_fusion_reactors
 			scope:iw_theft_target ?= { has_technology_researched = space_elevator }
 		}
-		covert_tech_grant_era_12 = { TECH = space_elevator IDX = 203 }
+		covert_tech_grant_era_13 = { TECH = space_elevator IDX = 203 }
 	}
 	else_if = {
 		limit = {
@@ -3918,7 +3978,7 @@ covert_tech_steal_military = {
 					can_research = antimatter_production
 					scope:iw_theft_target ?= { has_technology_researched = antimatter_production }
 				}
-				covert_tech_grant_era_12 = { TECH = antimatter_production IDX = 15 }
+				covert_tech_grant_era_13 = { TECH = antimatter_production IDX = 15 }
 			}
 			1 = {
 				trigger = {
@@ -3990,7 +4050,7 @@ covert_tech_steal_military = {
 					can_research = bioenhanced_soldiers
 					scope:iw_theft_target ?= { has_technology_researched = bioenhanced_soldiers }
 				}
-				covert_tech_grant_era_11 = { TECH = bioenhanced_soldiers IDX = 34 }
+				covert_tech_grant_era_12 = { TECH = bioenhanced_soldiers IDX = 34 }
 			}
 			1 = {
 				trigger = {
@@ -4190,7 +4250,7 @@ covert_tech_steal_military = {
 					can_research = fusion_batteries
 					scope:iw_theft_target ?= { has_technology_researched = fusion_batteries }
 				}
-				covert_tech_grant_era_12 = { TECH = fusion_batteries IDX = 89 }
+				covert_tech_grant_era_13 = { TECH = fusion_batteries IDX = 89 }
 			}
 			1 = {
 				trigger = {
@@ -4678,7 +4738,7 @@ covert_tech_steal_military = {
 					can_research = space_elevator
 					scope:iw_theft_target ?= { has_technology_researched = space_elevator }
 				}
-				covert_tech_grant_era_12 = { TECH = space_elevator IDX = 203 }
+				covert_tech_grant_era_13 = { TECH = space_elevator IDX = 203 }
 			}
 			1 = {
 				trigger = {
@@ -5028,7 +5088,6 @@ covert_tech_selfcheck_research_tally = {
 		if = {
 			limit = {
 				has_technology_researched = generative_ai
-				has_technology_researched = programmable_matter
 				has_technology_researched = autonomous_vehicles
 			}
 			covert_tech_selfcheck_held = { TECH = artificial_intelligence }

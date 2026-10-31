@@ -993,6 +993,8 @@ gw_emission_multiplier_script_value = {
 # O(1) readers over global counters that one monthly sweep fills
 # (gw_refresh_global_counts_effect). Do not reintroduce a sweeping version.
 
+# Tiers by era, from 20 up: era 12's technologies add 200 and era 13's 300 (era 13 spec § 4.3, 2026-10-31; Biological
+# Immortality and Post-Scarcity Economy added 200 in era 12 until then).
 global_tech_spread_script_value = {
 	value = 0
 	if = {
@@ -1461,7 +1463,7 @@ global_tech_spread_script_value = {
 				has_technology_researched = post-scarcity_economy
 			}
 		}
-		add = 200
+		add = 300
 	}
 	if = {
 		limit = {
@@ -1470,7 +1472,7 @@ global_tech_spread_script_value = {
 				has_technology_researched = biological_immortality
 			}
 		}
-		add = 200
+		add = 300
 	}
 	if = {
 		limit = {

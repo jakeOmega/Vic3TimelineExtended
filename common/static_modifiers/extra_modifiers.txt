@@ -54,7 +54,7 @@
 	# Chemicals (fertilizer): era-2 stock sits in casks, jute sacks and glass
 	# carboys -- hygroscopic salts cake, superphosphate reverts, bleaching powder
 	# loses its chlorine, carboys break. Eight techs from improved_fertilizer
-	# (era 3) to molecular_assemblers (era 12) bring it down to 0.001.
+	# (era 3) to molecular_assemblers (era 13) bring it down to 0.001.
 	country_st_res_fertilizer_decay_add = 0.04
 
 	# ------------------------------------------------------------------------

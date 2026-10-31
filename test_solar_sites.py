@@ -748,9 +748,57 @@ class PanelTest(unittest.TestCase):
                 self.assertIn(f"ScriptValue('sr_disp_site_{site.key}')", row)
                 self.assertIn(f"ScriptValue('sr_disp_site_target_{site.key}')", row)
                 self.assertIn(f"ScriptValue('sr_disp_site_inbound_{site.key}')", row)
-                # The Target button names this world's index, and only this one.
+                # Solar System is a list to read (UI pass design § 5): the Target
+                # button moved to the colony target popup.
+                self.assertNotIn("sr_colony_target_sgui", row)
+                self.assertRegex(row, r'blockoverride "site_target_button" \{\s*visible = no\s*\}')
+                self.assertNotIn('blockoverride "site_window"', row)
+
+    def test_the_target_picker_rows_follow_the_table(self):
+        """The colony target popup (UI pass design § 5): every world under its
+        location, shown while the popup lists all or the world is one we can
+        target, its Target button naming its own index, and its launch window."""
+        section = _gui_type(self.rows, "te_sr_target_picker_rows")
+        rows = _instances(section, "te_sr_site_row")
+        self.assertEqual(re.findall(r"text = \"sr_site_name_(\w+)\"", section), [s.key for s in gss.panel_order()])
+        for site, row in zip(gss.panel_order(), rows):
+            with self.subTest(site=site.key):
+                visible = re.search(r'blockoverride "site_visible" \{\s*visible = "(.*)"', row).group(1)
+                self.assertIn("GetVariableSystem.Exists('sr_panel_target_popup_all_open')", visible)
+                self.assertIn(f"ScriptValue('sr_disp_tp_shown_{site.key}')", visible)
                 self.assertEqual(set(re.findall(r"MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", row)), {str(site.index)})
-                self.assertIn("GetScriptedGui('sr_colony_target_sgui')", row)
+                for method in ("IsValid", "Execute", "IsValidTooltip", "ExecuteTooltip"):
+                    self.assertIn(f"GetScriptedGui('sr_colony_target_sgui').{method}(", row)
+                # Choosing closes the popup, after the choice runs.
+                self.assertLess(row.index("GetScriptedGui('sr_colony_target_sgui').Execute("),
+                                row.index("onclick = \"[GetVariableSystem.Clear('te_popup')]\""))
+                body = gss.transit_body(site)
+                window = _instances(row, "te_sr_site_window_cell")
+                self.assertEqual(len(window), 1)
+                self.assertIn(f"ScriptValue('sr_disp_win_state_{body}')", window[0])
+                for part in ("win_wait", "win_paid"):
+                    if body in gss.NO_WINDOW:
+                        self.assertRegex(window[0], rf'blockoverride "{part}" \{{\s*visible = no\s*\}}')
+                    else:
+                        self.assertIn(f"je_space_race_widget_{part}_{body}", window[0])
+
+    def test_the_target_picker_counts(self):
+        """The popup's headings and count read their own values: a world counts
+        while we can target it (sr_disp_site_target_<key> 1 or 2)."""
+        section = _gui_type(self.rows, "te_sr_target_picker_rows")
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"sr_disp_site_target_{site.key} >= 1", _block(self.display, f"sr_disp_tp_shown_{site.key}"))
+        for loc in gss.LOCATIONS:
+            with self.subTest(location=loc):
+                body = _block(self.display, f"sr_disp_tp_count_{loc}")
+                self.assertEqual(re.findall(r"add = sr_disp_tp_shown_(\w+)", body),
+                                 [s.key for s in gss.SITES if s.location == loc])
+                self.assertIn(f"ScriptValue('sr_disp_tp_count_{loc}')", section)
+        self.assertEqual(re.findall(r"add = sr_disp_tp_count_(\w+)", _block(self.display, "sr_disp_tp_count")),
+                         list(gss.LOCATIONS))
+        self.assertEqual(section.count("GetVariableSystem.Exists('sr_panel_target_popup_all_open')"),
+                         len(gss.LOCATIONS) + len(gss.SITES))
 
     def test_the_colony_and_fleet_rows_follow_the_table(self):
         """The Colonies table's rows (audit SPC-5) in place of the Settlers rows."""
@@ -1290,8 +1338,8 @@ class ModulesTest(unittest.TestCase):
         types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
         self.assertIn("script_only = yes", _block(types, name))
         carriers = {"era_11.txt": ("nuclear_thermal_propulsion",),
-                    "era_12.txt": ("orbital_manufacturing", "advanced_nanofabrication", "space_colonization",
-                                   "molecular_assemblers")}
+                    "era_12.txt": ("orbital_manufacturing", "advanced_nanofabrication", "space_colonization"),
+                    "era_13.txt": ("molecular_assemblers",)}
         for era, techs in carriers.items():
             text = _strip(_raw("common", "technology", "technologies", era))
             for tech in techs:
@@ -1872,11 +1920,148 @@ class FreeColoniesTest(unittest.TestCase):
             rows = rows[:rows.index("\ttype ", 1)] if "\ttype " in rows[1:] else rows
             with self.subTest(rows=row_type):
                 self.assertEqual(re.findall(r'text = "sr_site_name_(\w+)"', rows), [s.key for s in gss.panel_order()])
-        solar = self.rows[self.rows.index("type te_sr_solar_system_rows"):]
+        solar = _gui_type(self.rows, "te_sr_solar_system_rows")
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(f"has_global_variable = sr_site_free_{site.key} }} value = 4", self.display)
         self.assertEqual(solar.count('blockoverride "site_free_visible"'), len(gss.SITES))
+
+
+class EbaseCellTest(unittest.TestCase):
+    """The Extraplanetary Base cell (UI pass design § 8): where the next level
+    would work, counting queued levels, and the overview cell that shows it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        cls.modules = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
+        cls.display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
+        cls.widget = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
+
+    def test_next_fill_walks_the_tiers_with_queued_levels(self):
+        fill = _block(self.effects, "sr_ebase_next_fill")
+        self.assertIn("set_local_variable = { name = sr_eb_next_left value = sr_ebase_queued_levels }", fill)
+        # Past all of the room by default; each tier, best first, either takes its
+        # room from the levels left or is where the next level goes.
+        self.assertIn(f"set_variable = {{ name = sr_ebase_next_grade value = {gss.OVERFLOW_GRADE} }}", fill)
+        rooms = re.findall(r"local_var:sr_eb_next_left >= (\w+) \}", fill)
+        expected = [str(gss.NEAR_EARTH_ROOM) if t is None else f"sr_site_ebase_room_{t.key}" for t in gss.ebase_tiers()]
+        self.assertEqual(rooms, expected)
+        grades = re.findall(r"set_variable = \{ name = sr_ebase_next_grade value = (-?\d+) \}", fill)
+        self.assertEqual(grades[1:], [str(0 if t is None else t.ebase_grade) for t in gss.ebase_tiers()])
+        # A tier is skipped once the next level has found its place.
+        self.assertEqual(fill.count("local_var:sr_eb_next_found = 0"), len(gss.ebase_tiers()))
+        # Each tier, in order: counted only while held, as sr_ebase_fill counts
+        # it; a full tier takes its own room from the levels left, else the next
+        # level works there.
+        arms = fill.split("limit = { local_var:sr_eb_next_found = 0")[1:]
+        self.assertEqual(len(arms), len(gss.ebase_tiers()))
+        for tier, arm in zip(gss.ebase_tiers(), arms):
+            room = str(gss.NEAR_EARTH_ROOM) if tier is None else f"sr_site_ebase_room_{tier.key}"
+            held = (f"has_technology_researched = {gss.NEAR_EARTH_TECH}" if tier is None else gss.site_serves(tier))
+            grade = 0 if tier is None else tier.ebase_grade
+            with self.subTest(tier="near-Earth" if tier is None else tier.key):
+                self.assertTrue(arm.startswith(f" {held} }}"), arm[:120])
+                self.assertRegex(arm, rf"limit = \{{ local_var:sr_eb_next_left >= {re.escape(room)} \}}\s*"
+                                      rf"change_local_variable = \{{ name = sr_eb_next_left subtract = {re.escape(room)} \}}")
+                self.assertRegex(arm, rf"else = \{{\s*set_variable = \{{ name = sr_ebase_next_grade value = {grade} \}}\s*"
+                                      r"set_local_variable = \{ name = sr_eb_next_found value = 1 \}")
+
+    def test_the_refresh_sets_the_next_grade(self):
+        refresh = _block(self.modules, "sr_ebase_refresh")
+        self.assertIn("sr_ebase_next_fill = yes", refresh)
+        self.assertLess(refresh.index("sr_colonies_contested_enabled = yes"), refresh.index("sr_ebase_next_fill = yes"))
+
+    def test_the_display_values(self):
+        queued = _block(self.display, "sr_disp_ebase_queued")
+        self.assertIn("value = sr_ebase_queued_levels", queued)
+        self.assertIn("subtract = sr_ebase_levels", queued)
+        self.assertIn("min = 0", queued)
+        next_grade = _block(self.display, "sr_disp_ebase_next_grade")
+        self.assertIn("var:sr_ebase_next_grade", next_grade)
+        # Past all of the room it reads the overflow grade live, after the record.
+        live = f"if = {{ limit = {{ sr_ebase_queued_levels >= sr_ebase_room_total }} value = {gss.OVERFLOW_GRADE} }}"
+        self.assertIn(live, next_grade)
+        self.assertLess(next_grade.index("var:sr_ebase_next_grade"), next_grade.index(live))
+        self.assertIn("sr_ebase_queued_levels > sr_ebase_room_total", _block(self.display, "sr_disp_ebase_past"))
+        self.assertIn("has_technology_researched = in_situ_resource_utilization", _block(self.display, "sr_disp_ebase_shown"))
+
+    def test_the_cell(self):
+        cell = re.search(r'te_banking_ov_cell = \{\s*visible = "([^"]+)"\s*tooltip = "je_space_race_widget_ovc_ebase_tt"', self.widget)
+        self.assertIsNotNone(cell)
+        start = self.widget.rindex("flowcontainer = {", 0, cell.start())
+        body = self.widget[cell.start():]
+        body = body[:body.index("\n\t\t\t\t\t\t}\n")]
+        # The row it shares with the Hostile Fleet cell shows while either does;
+        # the cell itself only with the technology.
+        self.assertIn("ScriptValue('sr_disp_ebase_shown')", self.widget[start:cell.start()])
+        self.assertEqual(cell.group(1), "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]")
+        self.assertIn('text = "je_space_race_widget_ovc_ebase_cap"', body)
+        for word in ("word", "word_past", "fig", "fig_plus"):
+            with self.subTest(word=word):
+                self.assertIn(f'text = "je_space_race_widget_ovc_ebase_{word}"', body)
+        self.assertIn("ScriptValue('sr_disp_ebase_past')", body)
+        self.assertIn("ScriptValue('sr_disp_ebase_next_grade')", body)
+        self.assertIn("building_space_mine.dds", body)
+        # It sits after the Modules cell, on a row of its own, in the grid that
+        # shows under Simple and Full Colonies only.
+        self.assertLess(self.widget.index('tooltip = "je_space_race_widget_ovc_modules_tt"'), cell.start())
+        grid = self.widget.rindex("ScriptValue('sr_disp_colonies_contested')", 0, cell.start())
+        opener = self.widget.rindex("flowcontainer = {", 0, grid)
+        depth, i = 0, opener + len("flowcontainer = ")
+        while True:
+            depth += {"{": 1, "}": -1}.get(self.widget[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        self.assertGreater(i, cell.end(), "the cell is outside the Simple and Full Colonies grid")
+
+    def test_the_modules_view_shows_queued_levels(self):
+        row = self.widget.index('text = "je_space_race_widget_ebase_queued_label"')
+        opener = self.widget.rindex("te_sr_value_row = {", 0, row)
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_queued'), "
+                      "'(CFixedPoint)0' )]\"", self.widget[opener:row])
+        self.assertIn('text = "je_space_race_widget_ebase_queued_figure"', self.widget[row:row + 300])
+
+
+class EbaseRefreshTest(unittest.TestCase):
+    """The Base Room cell refreshed when a base is built (UI pass design § 8):
+    the building hooks fire a hidden country event on the owner, whose ROOT is
+    the country the refresh's multipliers resolve against."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.on_actions = _strip(_raw("common", "on_actions", "extra_on_actions.txt"))
+        cls.events = _strip(_raw("events", "space_race_events.txt"))
+        cls.modules = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
+
+    def test_the_hooks_fire_a_hidden_country_event_on_the_owner(self):
+        for vanilla, ours in (("on_building_built", "te_on_building_built"),
+                              ("on_building_expanded", "te_on_building_expanded")):
+            with self.subTest(hook=vanilla):
+                hook = _block(self.on_actions, vanilla)
+                self.assertIn(ours, _block(hook, "on_actions"))
+                self.assertNotIn("effect", hook)   # never an effect on a vanilla on_action
+                body = _block(self.on_actions, ours)
+                arm = body[body.index("is_building_type = building_space_mine"):]
+                self.assertIn("owner = { sr_ebase_hook_fire = yes }", arm)
+                self.assertNotIn("space_race_events.110", body)
+
+    def test_one_event_a_day_the_next_day(self):
+        """However many levels finish on one day, the refresh runs once, the
+        next day: a second same-day run of its remove-and-add might stack."""
+        fire = _block(self.modules, "sr_ebase_hook_fire")
+        self.assertRegex(fire, r"limit = \{ NOT = \{ has_variable = sr_ebase_hook_pending \} \}\s*"
+                               r"set_variable = \{ name = sr_ebase_hook_pending value = yes days = 2 \}\s*"
+                               r"trigger_event = \{ id = space_race_events\.110 days = 1 \}")
+
+    def test_the_event_is_hidden_and_refreshes(self):
+        event = _block(self.events, "space_race_events.110")
+        self.assertIn("type = country_event", event)
+        self.assertIn("hidden = yes", event)
+        immediate = _block(event, "immediate")
+        self.assertIn("sr_ebase_refresh = yes", immediate)
+        self.assertLess(immediate.index("remove_variable = sr_ebase_hook_pending"), immediate.index("sr_ebase_refresh = yes"))
 
 
 if __name__ == "__main__":

@@ -3589,6 +3589,18 @@ types space_race_widget_types
 						text = "je_space_race_widget_ebase_figure"
 					}
 				}
+				### The levels queued and not yet built, while there are any
+				### (UI pass design § 8).
+				te_sr_value_row = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_queued'), '(CFixedPoint)0' )]"
+					tooltip = "je_space_race_widget_ebase_tt"
+					blockoverride "row_label" {
+						text = "je_space_race_widget_ebase_queued_label"
+					}
+					blockoverride "row_value" {
+						text = "je_space_race_widget_ebase_queued_figure"
+					}
+				}
 				### The queue on its own (the owner, 2026-10-31: "visually separate
 				### the Queue better"): its heading with the count, then an inset
 				### box holding when the next module is built and the places, and
@@ -3704,19 +3716,26 @@ types space_race_widget_types
 	### through the inner container's datacontext, as the Rivals rows do
 	### (gui_modding_guide.md gotcha #15): its visible is on the outer
 	### container, so an empty slot is never read. Then the colony fleets on
-	### their way there (simple and full colonies; slices 2-3 design § 8) and
-	### the Target button (§ 3: sr_colony_target_sgui, scope:site = the world's
-	### index; Clear on our target). The fleets read "count·months": how many
-	### are on their way and the months until the first lands, highlighted
-	### when the first is ours. The name's hover is what the world offers: its
-	### stage, its two specializations' effects, our drive's transit there and
-	### its next window (je_space_race_widget_ss_site_tt_<key>, audit SPC-7).
-	### 24 icon + 180 name + 122 holder + 65 inbound + 66 button + 4 × 3
-	### spacing + 2 × 4 margin = 477, in the column. Under it, slots and
-	### Extraplanetary Base room (Simple and Full Colonies). The instances are generated
-	### (te_sr_solar_system_rows, sr_sites_generated_rows.gui), each shown
-	### while Solar System lists every world or the world is one our fleets can
-	### go to, ours, or one a fleet is bound for.
+	### their way there (simple and full colonies; slices 2-3 design § 8). The
+	### fleets read "count·months": how many are on their way and the months
+	### until the first lands, highlighted when the first is ours. The name's
+	### hover is what the world offers: its stage, its two specializations'
+	### effects, our drive's transit there and its next window
+	### (je_space_race_widget_ss_site_tt_<key>, audit SPC-7). Under it, slots
+	### and Extraplanetary Base room (Simple and Full Colonies).
+	### Two lists instance it, both generated (sr_sites_generated_rows.gui):
+	### - Solar System (te_sr_solar_system_rows), a list to read: no window, no
+	###   button. 24 icon + 180 name + 122 holder + 65 inbound + 3 × 3 spacing
+	###   + 2 × 4 margin = 408, in the column. Shown while Solar System lists
+	###   every world or the world is one our fleets can go to, ours, or one a
+	###   fleet is bound for.
+	### - The colony target popup (te_sr_target_picker_rows, UI pass design
+	###   § 5): the launch window toward it (te_sr_site_window_cell, block
+	###   site_window) and the Target button (sr_colony_target_sgui,
+	###   scope:site = the world's index; Clear on our target), on every world
+	###   so a greyed one says why. 391 + 152 window + 66 button + 5 × 3
+	###   spacing + 2 × 4 margin = 632, in the popup's 760. Shown while the popup lists every world or we can
+	###   target it.
 	type te_sr_site_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -3895,6 +3914,7 @@ types space_race_widget_types
 					}
 				}
 			}
+			block "site_window" {}
 			button = {
 				using = default_button_action
 				size = { 66 24 }
@@ -3990,11 +4010,171 @@ types space_race_widget_types
 		}
 	}
 
+	### A site's launch window in the colony target popup (UI pass design § 5):
+	### the four states of Next Windows' row (te_sr_window_row,
+	### sr_launch_window_widgets.gui) on sr_disp_win_state_<body> for the body
+	### our transit to the site is read for (gen_solar_sites.transit_body).
+	### 152 wide: "+999% now, 99 mo" with depots, at its longest.
+	type te_sr_site_window_cell = widget {
+		size = { 152 24 }
+		parentanchor = vcenter
+		tooltip = "je_space_race_widget_tp_window_tt"
+
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 152
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_win_any"
+			block "win_any_visible" {}
+		}
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 152
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_win_open"
+			block "win_open_visible" {}
+		}
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 152
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "win_wait" {}
+		}
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 152
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "win_paid" {}
+		}
+	}
+
+	### The colony target popup's content (UI pass design § 5), under the
+	### popup's journal-entry datacontext: what it is for, how many worlds we
+	### can target with Show all beside the count (the client-side
+	### sr_panel_target_popup_all_open, as Solar System's own toggle), every world under
+	### its location, and a line while no world can be targeted.
+	type te_sr_target_popup_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		minimumsize = { 632 -1 }
+		spacing = 2
+
+		te_sr_note = {
+			text = "je_space_race_widget_tp_intro"
+		}
+
+		### The count reads the player: SelectLocalization renders its key
+		### without the journal entry (gotcha #16).
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			margin = { 4 1 }
+
+			textbox = {
+				autoresize = yes
+				minimumsize = { 352 -1 }
+				maximumsize = { 352 -1 }
+				parentanchor = vcenter
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				text = "[SelectLocalization( GetVariableSystem.Exists('sr_panel_target_popup_all_open'), 'je_space_race_widget_tp_all', 'je_space_race_widget_tp_count' )]"
+			}
+			button = {
+				using = default_button
+				size = { 116 26 }
+				parentanchor = vcenter
+				onclick = "[GetVariableSystem.Toggle('sr_panel_target_popup_all_open')]"
+				tooltip = "je_space_race_widget_tp_toggle_tt"
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 110
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_ss_show_all"
+					visible = "[Not(GetVariableSystem.Exists('sr_panel_target_popup_all_open'))]"
+				}
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 110
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_ss_show_fewer"
+					visible = "[GetVariableSystem.Exists('sr_panel_target_popup_all_open')]"
+				}
+			}
+		}
+
+		te_sr_target_picker_rows = {}
+
+		te_sr_note = {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_tp_count'), '(CFixedPoint)0' )]"
+			text = "je_space_race_widget_tp_none"
+		}
+	}
+
+	### The colony target popup (UI pass design § 5), opened from Colony
+	### Fleets' Change and Choose (te_popup = sr_target); instanced in
+	### te_popups (gui/te_popups.gui). The content sits under the entry's
+	### scope-free gate and its GetPlayerJournalEntry datacontext on a child
+	### (gotchas #22, #29); with the entry gone, one line says so.
+	type te_sr_target_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'sr_target')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_space_race_widget_tp_title"
+		}
+		### The rows' 632, plus the window's margins (2 × 35), the list's
+		### (2 × 10) and a scrollbar: 760.
+		blockoverride "popup_size" {
+			size = { 760 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
+					direction = vertical
+					ignoreinvisible = yes
+
+					te_sr_target_popup_body = {}
+				}
+			}
+			te_sr_note = {
+				visible = "[Not( GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "je_space_race_widget_tp_gone"
+			}
+		}
+	}
+
 	### Solar System (solar colonization only): the worlds under their locations
 	### (the owner's nine, less Earth and the Moon), with who holds them (design
-	### § 9). Open by default, directly under Colony Fleets (audit SPC-7: Target
-	### beside the destination it sets), and filtered by default to the worlds
-	### that matter now: those our next colony fleet can go to, ours and any a
+	### § 9), a list to read: a target is picked in the colony target popup,
+	### from Colony Fleets (UI pass design § 5). Open by default, near the foot
+	### of the panel (#1274), and filtered by default to the worlds that matter
+	### now: those our next colony fleet can go to, ours and any a
 	### fleet is bound for (sr_disp_ss_filtered_<location>), with "Show all 40"
 	### beside the count. Rows in gen_solar_sites.panel_order(), written from the
 	### table and held to it by test_solar_sites.py. The flags are
@@ -4133,9 +4313,11 @@ types space_race_widget_types
 	}
 
 	### Where our next colony fleet goes, in Colony Fleets (audit SPC-7): a
-	### label, the world or "chosen at launch", and Clear beside our target.
-	### 110 + 250 + 66 + 2 × 4 + 2 × 4 = 442, in the 480 column. The label is
-	### underlined where the row has a hover (the pick's rule).
+	### label, the world or "chosen at launch", then Change and Clear beside
+	### our target, or Choose (UI pass design § 5): both open the colony
+	### target popup. 110 + 184 + 66 + 66 + 3 × 4 + 2 × 4 = 446 at most, in
+	### the 480 column. The label is underlined where the row has a hover
+	### (the pick's rule).
 	type te_sr_cf_dest_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -4155,8 +4337,8 @@ types space_race_widget_types
 		}
 		textbox = {
 			autoresize = yes
-			minimumsize = { 250 -1 }
-			maximumsize = { 250 -1 }
+			minimumsize = { 184 -1 }
+			maximumsize = { 184 -1 }
 			parentanchor = vcenter
 			align = left|nobaseline
 			using = te_sr_fontsize_row
@@ -4171,8 +4353,9 @@ types space_race_widget_types
 	### next colony fleet goes, as a value row with Clear beside our target
 	### (sr_cf_target_clear_sgui; audit SPC-7), the drive it flies on
 	### ([concept_sr_drive]), and under simple and full colonies our colony fleets
-	### in flight, one row per slot. Solar System, with the Target buttons,
-	### follows directly. Open by default; the flag is sr_panel_fleets_closed.
+	### in flight, one row per slot. Change and Choose open the colony target
+	### popup (te_sr_target_popup; UI pass design § 5). Open by default; the
+	### flag is sr_panel_fleets_closed.
 	type te_sr_sec_colony_fleets = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -4216,6 +4399,23 @@ types space_race_widget_types
 						using = default_button_action
 						size = { 66 24 }
 						parentanchor = vcenter
+						onclick = "[GetVariableSystem.Set('te_popup', 'sr_target')]"
+						tooltip = "je_space_race_widget_cf_change_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 62
+							elide = right
+							using = te_sr_fontsize_row
+							text = "je_space_race_widget_cf_change"
+						}
+					}
+					button = {
+						using = default_button_action
+						size = { 66 24 }
+						parentanchor = vcenter
 						enabled = "[GetScriptedGui('sr_cf_target_clear_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						onclick = "[GetScriptedGui('sr_cf_target_clear_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('sr_cf_target_clear_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_cf_target_clear_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
@@ -4243,6 +4443,25 @@ types space_race_widget_types
 				blockoverride "dest_value" {
 					text = "je_space_race_widget_cf_next_auto"
 				}
+				blockoverride "dest_button" {
+					button = {
+						using = default_button_action
+						size = { 66 24 }
+						parentanchor = vcenter
+						onclick = "[GetVariableSystem.Set('te_popup', 'sr_target')]"
+						tooltip = "je_space_race_widget_cf_change_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 62
+							elide = right
+							using = te_sr_fontsize_row
+							text = "je_space_race_widget_cf_choose"
+						}
+					}
+				}
 			}
 			te_sr_cf_dest_row = {
 				blockoverride "dest_row" {
@@ -4254,6 +4473,25 @@ types space_race_widget_types
 				}
 				blockoverride "dest_value" {
 					text = "je_space_race_widget_cf_next_auto"
+				}
+				blockoverride "dest_button" {
+					button = {
+						using = default_button_action
+						size = { 66 24 }
+						parentanchor = vcenter
+						onclick = "[GetVariableSystem.Set('te_popup', 'sr_target')]"
+						tooltip = "je_space_race_widget_cf_change_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 62
+							elide = right
+							using = te_sr_fontsize_row
+							text = "je_space_race_widget_cf_choose"
+						}
+					}
 				}
 			}
 			te_sr_value_row = {
@@ -7347,6 +7585,91 @@ types space_race_widget_types
 									position = { 78 46 }
 									visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ) )]"
 									text = "je_space_race_widget_ovc_window_fig_moon"
+								}
+							}
+						}
+					}
+					### Base Room (UI pass design § 8, the parallel to Seabed's Long-haul):
+					### our Extraplanetary Base levels against our room, red once built and
+					### queued levels pass it; the grade the next level would work at; on
+					### hover the queued levels, the average now and the rule. Five-digit
+					### figures leave the word no room for the queued count. Shown once the building is ours to
+					### build. Levels, queue and room are read live; the grades come from the
+					### monthly refresh and the one when a base is built (space_race_events.110).
+					### The row also holds the Earth alert's Hostile Fleet cell (§ 9), so it
+					### shows while either cell does.
+					flowcontainer = {
+						visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) ) )]"
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = hcenter
+
+						te_banking_ov_cell = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]"
+							tooltip = "je_space_race_widget_ovc_ebase_tt"
+							blockoverride "caption" {
+								text = "je_space_race_widget_ovc_ebase_cap"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/building_icons/building_space_mine.dds"
+								}
+							}
+							blockoverride "word" {
+								te_banking_ov_word = {
+									visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' ) )]"
+									text = "je_space_race_widget_ovc_ebase_word"
+								}
+								te_banking_ov_word = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' )]"
+									text = "je_space_race_widget_ovc_ebase_word_past"
+								}
+							}
+							blockoverride "third_line" {
+								te_banking_ov_word = {
+									position = { 78 46 }
+									visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' )]"
+									text = "je_space_race_widget_ovc_ebase_fig_plus"
+								}
+								te_banking_ov_word = {
+									position = { 78 46 }
+									visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' ) )]"
+									text = "je_space_race_widget_ovc_ebase_fig"
+								}
+							}
+						}
+						# The Earth alert (UI pass design § 9; Full Colonies): while a fleet
+						# of a power at war with us is bound for Earth, when the first
+						# lands and its strength against ours there; red while a landing
+						# would tip the balance at Earth (sr_earth_alert_loud).
+						te_banking_ov_cell = {
+							visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) )]"
+							tooltip = "je_space_race_widget_ovc_earth_tt"
+							blockoverride "caption" {
+								text = "je_space_race_widget_ovc_earth_cap"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/space_race_icons/warship.dds"
+								}
+							}
+							blockoverride "word" {
+								te_banking_ov_word = {
+									visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' ) )]"
+									text = "je_space_race_widget_ovc_earth_word"
+								}
+								te_banking_ov_word = {
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )]"
+									text = "je_space_race_widget_ovc_earth_word_loud"
+								}
+							}
+							blockoverride "third_line" {
+								te_banking_ov_word = {
+									position = { 78 46 }
+									text = "je_space_race_widget_ovc_earth_fig"
 								}
 							}
 						}
