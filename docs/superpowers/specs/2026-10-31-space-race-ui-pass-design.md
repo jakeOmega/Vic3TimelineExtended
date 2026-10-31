@@ -367,6 +367,23 @@ so this adds one.
   +1% does, and not +9,000%. The base itself is a new running cost on every
   Space Command, fleet or not: 8,400 a week, about 5% of one Fusion Yards level's
   own inputs. The upkeep's hover in the panel gives the goods a week.
+- **Break-even (owner's question, 2026-10-31):** a strength point's upkeep is
+  7,560 a week (about 393,000 a year). Building that point costs its method's
+  inputs for the time one level takes to make it, at base prices, full staff and
+  52/12 weeks a month, goods only (no wages):
+
+  | Method | Inputs a level a week | Strength a level a month | Cost a point | Upkeep = cost after |
+  |---|---|---|---|---|
+  | Orbital Shipyards | 140,000 | 0.5 | 1.21 million | 3.1 years |
+  | Fusion Yards | 180,000 | 1 | 780,000 | 2.0 years |
+  | Torch Yards | 186,000 | 1.5 | 537,000 | 1.4 years |
+  | Antimatter Yards | 232,000 | 2 | 503,000 | 1.3 years |
+
+  So a year's upkeep is a third to four-fifths of what the point cost to build,
+  and more with better yards, since they make points cheaper while the upkeep
+  stays flat. Today's upkeep at four Fusion levels breaks even after about 21
+  years. Lowering the factor of ten to two or three would make it 7–10 years at
+  Fusion Yards.
 - **What stays:** a goods line still runs at the building's occupancy, so an
   understaffed Space Command pays less. A country with no Space Command pays
   nothing, but its fleets can't move (below).
@@ -418,7 +435,8 @@ nothing.
   they are, at the posture they had. Supply and propellant still refill
   (`sr_fl_port_refill_share`, Earth's), so a stranded fleet doesn't also wither
   from attrition (my call: the owner named refit, and a fleet that can neither
-  move nor resupply would only shrink).
+  move nor resupply would only shrink; the owner, 2026-10-31: "the refilling is
+  fair, though not doing it would also be fine").
 - **Seen by the player:** the destination popup's rows, Go and the posture
   buttons give the reason, and Space Fleets says so once above its rows (style
   guide rule 6). The AI follows, since it reads the same triggers.
