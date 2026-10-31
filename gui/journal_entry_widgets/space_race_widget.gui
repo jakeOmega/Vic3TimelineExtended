@@ -2148,7 +2148,7 @@ types space_race_widget_types
 						tooltip = "je_space_race_widget_settlers_crews_tt"
 					}
 					blockoverride "tile_icon" {
-						texture = "gfx/interface/icons/character_trait_icons/engineer.dds"
+						texture = "gfx/interface/icons/space_race_icons/page_crews.dds"
 					}
 					blockoverride "tile_caption" {
 						text = "je_space_race_widget_ch_crews"
@@ -2187,7 +2187,7 @@ types space_race_widget_types
 						tooltip = "je_space_race_widget_modules_staffing_tt"
 					}
 					blockoverride "tile_icon" {
-						texture = "gfx/interface/icons/generic_icons/employment_not_full.dds"
+						texture = "gfx/interface/icons/space_race_icons/page_crewed.dds"
 					}
 					blockoverride "tile_caption" {
 						text = "je_space_race_widget_page_staffing"
@@ -2297,7 +2297,7 @@ types space_race_widget_types
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/building_icons/urban_center.dds"
+					texture = "gfx/interface/icons/space_race_icons/module_hab.dds"
 				}
 				blockoverride "row_name" {
 					text = "je_space_race_widget_mod_name_hab"
@@ -2324,7 +2324,7 @@ types space_race_widget_types
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/building_icons/building_port.dds"
+					texture = "gfx/interface/icons/space_race_icons/module_port.dds"
 				}
 				blockoverride "row_name" {
 					text = "je_space_race_widget_mod_name_port"
@@ -2351,7 +2351,7 @@ types space_race_widget_types
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/building_icons/building_naval_fortification.dds"
+					texture = "gfx/interface/icons/space_race_icons/module_def.dds"
 				}
 				blockoverride "row_name" {
 					text = "je_space_race_widget_mod_name_def"
@@ -2432,7 +2432,7 @@ types space_race_widget_types
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/building_icons/building_university.dds"
+					texture = "gfx/interface/icons/space_race_icons/module_lab.dds"
 				}
 				blockoverride "row_name" {
 					text = "je_space_race_widget_mod_name_lab"
@@ -2459,7 +2459,7 @@ types space_race_widget_types
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/building_icons/building_arts_academy.dds"
+					texture = "gfx/interface/icons/space_race_icons/module_culture.dds"
 				}
 				blockoverride "row_name" {
 					text = "je_space_race_widget_mod_name_culture"
@@ -2540,7 +2540,7 @@ types space_race_widget_types
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/building_icons/building_barracks.dds"
+					texture = "gfx/interface/icons/space_race_icons/module_train.dds"
 				}
 				blockoverride "row_name" {
 					text = "je_space_race_widget_mod_name_train"
@@ -2567,7 +2567,7 @@ types space_race_widget_types
 			}
 			te_sr_page_mod_row = {
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/building_icons/building_nuclear_plant.dds"
+					texture = "gfx/interface/icons/space_race_icons/module_bunker.dds"
 				}
 				blockoverride "row_name" {
 					text = "je_space_race_widget_mod_name_bunker"
@@ -2679,7 +2679,7 @@ types space_race_widget_types
 						tooltip = "je_space_race_widget_autonomy_figure_tt"
 					}
 					blockoverride "tile_icon" {
-						texture = "gfx/interface/icons/diplomatic_action_icons/liberty_desire.dds"
+						texture = "gfx/interface/icons/space_race_icons/page_autonomy.dds"
 					}
 					blockoverride "tile_caption" {
 						text = "je_space_race_widget_ch_autonomy"
@@ -2729,7 +2729,7 @@ types space_race_widget_types
 				}
 				te_sr_page_tile = {
 					blockoverride "tile_icon" {
-						texture = "gfx/interface/icons/ai_strategy_icons/subject_maintain_autonomy.dds"
+						texture = "gfx/interface/icons/space_race_icons/page_aut_status.dds"
 					}
 					blockoverride "tile_caption" {
 						text = "je_space_race_widget_page_status"
@@ -2779,7 +2779,7 @@ types space_race_widget_types
 							tooltip = "je_space_race_widget_def_level_tt"
 						}
 						blockoverride "tile_icon" {
-							texture = "gfx/interface/icons/building_icons/building_naval_fortification.dds"
+							texture = "gfx/interface/icons/space_race_icons/module_def.dds"
 						}
 						blockoverride "tile_caption" {
 							text = "je_space_race_widget_ch_defences"
@@ -2795,7 +2795,7 @@ types space_race_widget_types
 							tooltip = "je_space_race_widget_def_integrity_tt"
 						}
 						blockoverride "tile_icon" {
-							texture = "gfx/interface/icons/state_status_icons/has_devastation.dds"
+							texture = "gfx/interface/icons/space_race_icons/page_integrity.dds"
 						}
 						blockoverride "tile_caption" {
 							text = "je_space_race_widget_ch_integrity"
@@ -2829,7 +2829,7 @@ types space_race_widget_types
 					}
 					te_sr_page_tile = {
 						blockoverride "tile_icon" {
-							texture = "gfx/interface/icons/state_status_icons/colony.dds"
+							texture = "gfx/interface/icons/space_race_icons/page_def_status.dds"
 						}
 						blockoverride "tile_caption" {
 							text = "je_space_race_widget_page_status"

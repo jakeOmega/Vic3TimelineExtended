@@ -1635,3 +1635,6 @@ chronic illness tags).
    `reach=` reads 10 more than the laws give (30 under Unrestricted Augmentation) and `threshold=` 10 lower; in the
    Compound's state, fully staffed, `pull=` reads 0.05 (immortality's 0.03 and the Compound's 0.02). When the bonus
    lapses (prosperity below 75), `reach=` drops back by 10.
+3. **The logos (icon batch 8).** In the companies panel and on the flagships, RejoovenEsense shows an hourglass with a
+   green sprout growing from its sand, and InGen a mosquito in a disc of amber, each in the bronze emblem frame, not
+   the labeled PLACEHOLDER cards they had before.

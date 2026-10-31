@@ -981,28 +981,32 @@ VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 "gfx/interface/icons/generic_icons/up_up.dds",
                 "gfx/interface/progressbar/progressbar_marker.dds"}
 # A colony's page (space_race_gui_icons.md, "A colony's page"): art that already
-# shows the thing, vanilla's or the mod's, and placeholders, each with the file
-# its art will take.
+# shows the thing, vanilla's or the mod's, and the page's own icons (icon batch 8).
 PAGE_KEPT = {f"gfx/interface/icons/{p}" for p in (
     "generic_icons/population.dds", "generic_icons/battalions.dds", "state_status_icons/has_construction.dds",
     "generic_icons/trend_nochange.dds", "building_icons/building_government_administration.dds",
     "building_icons/building_space_mine.dds", "building_icons/building_space_command.dds",
     "building_icons/building_tourism_industry.dds", "covert_icons/operation_slot.dds",
     "building_icons/building_advanced_material_fabricator.dds")}
-PAGE_PLACEHOLDERS = {f"gfx/interface/icons/{p}": f for p, f in (
-    ("character_trait_icons/engineer.dds", "page_crews.dds"),
-    ("generic_icons/employment_not_full.dds", "page_crewed.dds"),
-    ("diplomatic_action_icons/liberty_desire.dds", "page_autonomy.dds"),
-    ("ai_strategy_icons/subject_maintain_autonomy.dds", "page_aut_status.dds"),
-    ("building_icons/building_naval_fortification.dds", "module_def.dds"),
-    ("state_status_icons/has_devastation.dds", "page_integrity.dds"),
-    ("state_status_icons/colony.dds", "page_def_status.dds"),
-    ("building_icons/urban_center.dds", "module_hab.dds"),
-    ("building_icons/building_port.dds", "module_port.dds"),
-    ("building_icons/building_university.dds", "module_lab.dds"),
-    ("building_icons/building_arts_academy.dds", "module_culture.dds"),
-    ("building_icons/building_barracks.dds", "module_train.dds"),
-    ("building_icons/building_nuclear_plant.dds", "module_bunker.dds"))}
+# In page order: the caption or module name that follows each icon, its file in
+# SR_ICONS, and the placeholder it replaced. The Defenses icon is on the module
+# row and the Defenses tile.
+PAGE_ICONS = (
+    ("je_space_race_widget_ch_crews", "page_crews.dds", "character_trait_icons/engineer.dds"),
+    ("je_space_race_widget_page_staffing", "page_crewed.dds", "generic_icons/employment_not_full.dds"),
+    ("je_space_race_widget_mod_name_hab", "module_hab.dds", "building_icons/urban_center.dds"),
+    ("je_space_race_widget_mod_name_port", "module_port.dds", "building_icons/building_port.dds"),
+    ("je_space_race_widget_mod_name_def", "module_def.dds", "building_icons/building_naval_fortification.dds"),
+    ("je_space_race_widget_mod_name_lab", "module_lab.dds", "building_icons/building_university.dds"),
+    ("je_space_race_widget_mod_name_culture", "module_culture.dds", "building_icons/building_arts_academy.dds"),
+    ("je_space_race_widget_mod_name_train", "module_train.dds", "building_icons/building_barracks.dds"),
+    ("je_space_race_widget_mod_name_bunker", "module_bunker.dds", "building_icons/building_nuclear_plant.dds"),
+    ("je_space_race_widget_ch_autonomy", "page_autonomy.dds", "diplomatic_action_icons/liberty_desire.dds"),
+    ("je_space_race_widget_page_status", "page_aut_status.dds", "ai_strategy_icons/subject_maintain_autonomy.dds"),
+    ("je_space_race_widget_ch_defences", "module_def.dds", "building_icons/building_naval_fortification.dds"),
+    ("je_space_race_widget_ch_integrity", "page_integrity.dds", "state_status_icons/has_devastation.dds"),
+    ("je_space_race_widget_page_status", "page_def_status.dds", "state_status_icons/colony.dds"),
+)
 
 
 def _enclosing(text, anchor, opener):
@@ -1064,20 +1068,28 @@ class SpaceRaceIconsTest(unittest.TestCase):
         for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui):
             with self.subTest(path=path):
                 self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT
-                                or path in PAGE_KEPT or path in PAGE_PLACEHOLDERS,
+                                or path in PAGE_KEPT,
                                 f"placeholder left: {path}")
 
-    def test_a_colony_page_s_placeholders_are_listed(self):
-        """Style guide rule 10: each placeholder on a colony's page has a row in
-        the icons doc naming what it is now and the file its art will take, and
-        is still on the page; the page draws no other unlisted icon."""
-        doc = _read(ICONS_DOC)
+    def test_a_colony_page_s_own_icons(self):
+        """Icon batch 8: each tile and module row on a colony's page draws its own
+        icon (the caption or module name after it says which), and the placeholder
+        it replaced is gone from the page."""
         page = _type_body(self.gui, "te_sr_colony_row")
-        for path, target in PAGE_PLACEHOLDERS.items():
-            with self.subTest(path=path):
-                self.assertIn(f'texture = "{path}"', page)
-                short = path[len("gfx/interface/icons/"):]
-                self.assertRegex(doc, rf"(?m)^\|.*\| `{re.escape(short)}` \|.*\| `{re.escape(target)}` \|$")
+        pairs, icon = [], None
+        for line in page.splitlines():
+            m = re.search(rf'texture = "{re.escape(SR_ICONS)}((?:page|module)_\w+\.dds)"', line)
+            if m:
+                icon = m.group(1)
+                continue
+            m = re.search(r'text = "([^"]+)"', line)
+            if m and icon:
+                pairs.append((m.group(1), icon))
+                icon = None
+        self.assertEqual(pairs, [(caption, f) for caption, f, _ in PAGE_ICONS])
+        for _, f, old in PAGE_ICONS:
+            with self.subTest(placeholder=old):
+                self.assertNotIn(f'texture = "gfx/interface/icons/{old}"', page)
 
     def test_every_icon_exists_once_the_art_is_in(self):
         tracked = set(subprocess.run(["git", "-C", REPO, "ls-files", SR_ICONS],

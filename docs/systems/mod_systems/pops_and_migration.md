@@ -33,7 +33,7 @@ Part of the [mod systems reference](../mod_systems.md), which indexes every syst
 
 - **Maintenance:** `pmg_maintenance` (0.1 construction a level): housing is all plant (`construction.md` § Maintenance tiers).
 - **AI:** the building's `ai_value` (state scope) is 0 until `migration_crowding_ratio` passes 0.1, then 300 + 2,000 × the ratio, at most 4,300; each level lowers the ratio, so the value falls as it works. The group is `most_productive` and each method's `ai_value` doubles the one before (1,000 to 32,000), so the AI climbs the ladder. Whether the construction AI builds it at these values is unverified (`scripting_best_practices.md` § AI and Cost-Only Buildings); if it doesn't, the fallback is a monthly AI pass that queues a level in its most crowded state with `start_building_construction`, the Grid Transfer Station's shape.
-- **Icon:** borrows vanilla's `urban_center.dds` until the icon pipeline renders its own (`scripts/image_pipeline/icon_prompts.py`, `ICONS["building"]`, seed `None`).
+- **Icon:** `building_public_housing.dds`, a brick courtyard block with a concrete tower behind it, from the icon pipeline (icon batch 8; `scripts/image_pipeline/icon_prompts.py`, `ICONS["building"]`). It borrowed vanilla's Urban Center icon until then.
 
 ## Unemployment as a Share of the Workforce
 

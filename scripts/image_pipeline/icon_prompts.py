@@ -122,6 +122,13 @@ defaults (September 2026, ~350 icons):
   colour it.
 - Raws can carry a stock-art watermark ("ALLPANELCO", batch 7) as well as a
   signature: zoom every pick's raw.
+- An armoured soldier in olive green with an orange visor draws Halo's Master
+  Chief (batch 8, both subjects): change the palette (sand-tan, a dark visor).
+- At 24 px a scene the size of a building is a ring or specks (an amphitheater
+  under a dome, twin turrets on a crater rim): draw the emblem object (theatre
+  masks) or one object on a small base.
+- A drawn `damage` crack is dark, and vanishes on a dark surface (a deep-blue
+  dome): derive the damaged state from a lighter candidate.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
@@ -990,7 +997,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_antimatter_facility": {"subject": "a futuristic research complex around a huge ring-shaped particle accelerator, with a round steel and glass containment dome at its centre holding a small glowing violet sphere", "seed": 0},
         "building_antimatter_engine": {"subject": "a colossal futuristic rocket engine on a concrete test stand, its polished steel nozzle glowing violet, with fuel tanks, pipes and a gantry beside it", "seed": 0},
         # On vanilla's urban_center.dds until rendered (2026-10-31).
-        "building_public_housing": {"subject": "a city block of plain six-storey brick apartment buildings around a shared courtyard with trees and washing lines, a newer tower block of pale concrete rising behind them", "seed": None},
+        "building_public_housing": {"subject": "a city block of plain six-storey brick apartment buildings around a shared courtyard with trees and washing lines, a newer tower block of pale concrete rising behind them", "seed": 3},
         "te_construction_market_site": {"subject": "a construction site with cranes, scaffolding and stacked building materials", "seed": KEEP},  # a construction camp fits
         # Industry variants: vanilla's industrial layout, the plant behind and
         # its product large in the foreground. They were on goods icons.
@@ -1712,10 +1719,11 @@ ICONS: dict[str, dict[str, dict]] = {
                  "now": f"{_GI}/company_icons/historical_company_icons/german_biontech.dds"},
         "scifi_rosen_association": {"subject": "a lifelike artificial owl made of brass and glass, its eyes glowing amber", "seed": 1,
                  "now": f"{_GI}/company_icons/historical_company_icons/scifi_rosen_association.dds"},
-        # Fictional too: once a seed is picked, drop the stem from gen_placeholder_company_icons.py's ICONS.
-        "scifi_ingen": {"subject": "a polished chunk of golden amber with a mosquito preserved inside it", "seed": None,
+        # Fictional too (#1267), on labeled placeholder cards until batch 8. InGen s2: the amber fills the
+        # disc, the only seed whose mosquito still shows at 48 px (the others were an orange blob).
+        "scifi_ingen": {"subject": "a polished chunk of golden amber with a mosquito preserved inside it", "seed": 2,
                  "now": f"{_GI}/company_icons/historical_company_icons/scifi_ingen.dds"},
-        "scifi_rejoovenesense": {"subject": "a glass hourglass lying on its side, a fresh green sprout growing out of the sand inside it", "seed": None,
+        "scifi_rejoovenesense": {"subject": "a glass hourglass lying on its side, a fresh green sprout growing out of the sand inside it", "seed": 1,
                  "now": f"{_GI}/company_icons/historical_company_icons/scifi_rejoovenesense.dds"},
     },
     # Mod goods drawn by older generators: flat vector art and badges, not
@@ -2156,6 +2164,9 @@ ICONS: dict[str, dict[str, dict]] = {
     "space_part": {
         "rocket": {"subject": "a squat silver rocket with red fins and a pointed nose cone, standing upright",
                    "seed": 1},
+        # A colony's own flag on its page's Autonomy tile (batch 8). Teal, not the gold of the
+        # overview's first-to-finish pennant, which marks the home country's claim.
+        "pennant": {"subject": "a small bold teal-green pennant flag on a thick short staff", "seed": 1},
     },
     "space": {
         "first": {"subject": "a gold pennant flag on a staff planted on the rim of a grey moon crater", "seed": 3,
@@ -2206,6 +2217,45 @@ ICONS: dict[str, dict[str, dict]] = {
         "colony_moon": {"subject": "a round mid-grey Moon, evenly lit, with large dark grey seas across its face and a "
                                    "few bright rayed craters",
                         "seed": 1, "now": f"{_GI}/space_race_icons/colony_mercury.dds"},
+        # A colony's page (space_race_gui_icons.md, batch 8): the tiles at 34 px, the module rows at 24 px.
+        # The habitat is also the dome the Autonomy, Status, Integrity and Defense status tiles derive from
+        # (space_state). Blue-tinted panes: a clear dome cuts out to its frame alone.
+        "module_hab": {"subject": "a squat round colony habitat dome of blue-tinted glass panes in a thick grey metal "
+                                  "frame, on a wide grey metal ring base with a row of small warm yellow lit round "
+                                  "windows",
+                       "seed": 0, "now": f"{_BI}/urban_center.dds"},
+        "module_port": {"subject": "a squat gold-foil lunar lander on four splayed legs standing on a round grey "
+                                   "concrete landing pad ringed with a thick orange stripe",
+                        "seed": 3, "now": f"{_BI}/building_port.dds"},
+        # Not a glass dome: the habitat is one, and this sits beside it in the module list.
+        "module_lab": {"subject": "a squat silver metal observatory dome with its slot open and a thick brass "
+                                  "telescope tube pointing up out of it, on a round grey metal base",
+                       "seed": 1, "now": f"{_BI}/building_university.dds"},
+        # The doc's amphitheater under a dome was a ring of steps at 24 px (round 1, raws kept as
+        # module_culture_r1); the theatre masks say culture at any size.
+        "module_culture": {"subject": "a pair of gold theatre masks, one smiling and one frowning, leaning on a "
+                                      "small round dome of amber-tinted glass panes",
+                           "seed": 1, "now": f"{_BI}/building_arts_academy.dds"},
+        # One figure: a drill of several is specks at 24 px. Olive-green armour with an orange visor (round 1,
+        # raws module_train_r1; two marines over a hurdle, module_train_v2) drew Halo's Master Chief: sand-tan.
+        "module_train": {"subject": "one marine in a bulky sand-tan pressure suit with dark grey armour plates and a "
+                                    "round grey helmet with a dark tinted visor, leaping high in mid-air, a rifle held "
+                                    "across his chest",
+                         "seed": 2, "now": f"{_BI}/building_barracks.dds"},
+        # The trefoil on a sign, not the door's round face: on a round face it draws as fan blades.
+        "module_bunker": {"subject": "a heavy rectangular steel blast door with thick bolts set into a low grey "
+                                     "concrete bunker, a yellow sign with a black radiation trefoil beside the door",
+                          "seed": 2, "now": f"{_BI}/building_nuclear_plant.dds"},
+        # The Defenses tile and the Defenses module row. Twin turrets on a crater rim (round 1, raws
+        # module_def_r1) left the guns a speck on a big rock disc: one turret, the rock small. s0 stamped
+        # faint letters on its turret's front; s3 drew one barrel and is clean.
+        "module_def": {"subject": "one squat grey armoured gun turret with two long thick barrels angled up to the "
+                                  "sky, set on a small chunk of grey moon rock",
+                       "seed": 3, "now": f"{_BI}/building_naval_fortification.dds"},
+        # A gold visor: a helmet seen from the front reads as a face.
+        "page_crews": {"subject": "a colonist in a bulky orange pressure suit and round white-rimmed helmet with a gold "
+                                  "visor, seen from the side, holding a big steel wrench",
+                       "seed": 3, "now": f"{_GI}/character_trait_icons/engineer.dds"},
     },
     # Power grids (#1109): the HVDC Undersea Interconnector's cable (the station's method until 2026-10-25),
     # on vanilla's electric engines until now.
@@ -3477,6 +3527,24 @@ ICONS.update({
                                        "marks": [{"icon": f"{_GI}/generic_icons/green_checkmark.dds",
                                                   "at": (0.74, 0.74), "scale": 0.46}],
                                        "now": f"{_GI}/event_icons/je_space_race_interstellar_results.dds"},
+        # A colony's page (batch 8): four tiles on the habitat's dome, what is around it saying which.
+        "page_autonomy": {"from": "space/module_hab", "base": {"scale": 0.84, "at": (0.44, 0.56)},
+                          "marks": [{"part": "space_part/pennant", "at": (0.72, 0.3), "scale": 0.52}],
+                          "now": f"{_GI}/diplomatic_action_icons/liberty_desire.dds"},
+        "page_aut_status": {"from": "space/module_hab", "base": {"scale": 0.86, "at": (0.44, 0.44)},
+                            "marks": [{"part": "nuclear_part/treaty_seal", "at": (0.72, 0.72), "scale": 0.52}],
+                            "now": f"{_GI}/ai_strategy_icons/subject_maintain_autonomy.dds"},
+        # A crack, not a split: split halves read as a colony already destroyed. The crack is lost on
+        # the deep-blue habitat (s1), so the habitat is s0, with lighter panes and a lit band.
+        "page_integrity": {"from": "space/module_hab", "damage": "crack",
+                           "now": f"{_GI}/state_status_icons/has_devastation.dds"},
+        "page_def_status": {"from": "space/module_hab", "base": {"scale": 0.84, "at": (0.4, 0.56)},
+                            "marks": [{"part": "nuclear_part/radar", "at": (0.74, 0.34), "scale": 0.5}],
+                            "now": f"{_GI}/state_status_icons/colony.dds"},
+        # Modules Crewed: the Modules cell's module with vanilla's population mark as its crew badge.
+        "page_crewed": {"from": "space/module", "base": {"scale": 0.88, "at": (0.44, 0.44)},
+                        "marks": [{"icon": f"{_GI}/generic_icons/population.dds", "at": (0.74, 0.74), "scale": 0.46}],
+                        "now": f"{_GI}/generic_icons/employment_not_full.dds"},
     },
     "st_res_state": {
         # One crate; the lane's state is the mark in its word's colour.
