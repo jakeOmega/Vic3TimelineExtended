@@ -299,8 +299,9 @@ class FlagTest(unittest.TestCase):
         # Autonomy and Colony Defences showed) and How Solar Colonization
         # Works; the shared reference; the Space Race tab's Space Powers and
         # Orbit; and under Full Colonies Space Command, Space Fleets and
-        # Locations (slice 6)
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 11)
+        # Locations (slice 6); and the colony target popup's "show all"
+        # (UI pass design § 5)
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 12)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -1363,6 +1364,46 @@ class TabTest(unittest.TestCase):
         used = [widths["te_sr_tab_button_wide" if "_wide = {" in m.group(0) else "te_sr_tab_button"]
                 for m in re.finditer(r"\bte_sr_tab_button(?:_wide)? = \{", row)]
         self.assertLessEqual(sum(used) + 4 * (len(used) - 1), 520)
+
+class ColonyTargetOpenerTest(unittest.TestCase):
+    """Colony Fleets opens the colony target popup (UI pass design § 5): Change
+    beside our target, with Clear kept; Choose on the two automatic rows."""
+
+    OPEN = "onclick = \"[GetVariableSystem.Set('te_popup', 'sr_target')]\""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _strip_comments(_read(GUI))
+
+    def _rows(self):
+        section = _type_body(self.text, "te_sr_sec_colony_fleets")
+        out = []
+        for m in re.finditer(r"\bte_sr_cf_dest_row = \{", section):
+            out.append(section[m.end():_close(section, m.end() - 1)])
+        return out
+
+    def test_each_destination_row_opens_the_picker(self):
+        rows = self._rows()
+        self.assertEqual(len(rows), 3)
+        target, *automatic = rows
+        self.assertIn(self.OPEN, target)
+        self.assertIn('text = "je_space_race_widget_cf_change"', target)
+        self.assertIn("GetScriptedGui('sr_cf_target_clear_sgui').Execute", target)
+        self.assertLess(target.index("je_space_race_widget_cf_change"), target.index("sr_cf_target_clear_sgui"))
+        for row in automatic:
+            with self.subTest(row=row[:80]):
+                self.assertIn(self.OPEN, row)
+                self.assertIn('text = "je_space_race_widget_cf_choose"', row)
+                self.assertNotIn("sr_cf_target_clear_sgui", row)
+
+    def test_the_row_fits(self):
+        row = _type_body(self.text, "te_sr_cf_dest_row")
+        widths = [int(w) for w in re.findall(r"minimumsize = \{ (\d+) -1 \}", row)]
+        self.assertEqual(len(widths), 2)            # the label and the value
+        spacing = int(re.search(r"spacing = (\d+)", row).group(1))
+        margin = int(re.search(r"margin = \{ (\d+) \d+ \}", row).group(1))
+        # Two 66-wide buttons on the target row, the most it holds.
+        self.assertLessEqual(sum(widths) + 2 * 66 + 3 * spacing + 2 * margin, 480)
 
 
 if __name__ == "__main__":

@@ -314,7 +314,7 @@ def _render(value):
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty"
-             r"|howc_(?!sub_)\w+|win_none|win_beyond)")
+             r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -456,6 +456,9 @@ CELLS = {
     "the next fleet's label (te_sr_cf_dest_row)": (
         ("te_sr_cf_dest_row", 'block "dest_label"'),
         r"je_space_race_widget_cf_(target_label|next_label)"),
+    "the next fleet's Change and Choose (te_sr_sec_colony_fleets)": (
+        ("te_sr_sec_colony_fleets", 'text = "je_space_race_widget_cf_change"'),
+        r"je_space_race_widget_cf_(change|choose)"),
     "the next fleet's world (te_sr_cf_dest_row)": (
         ("te_sr_cf_dest_row", 'block "dest_value"'),
         r"je_space_race_widget_cf_(target_value|next_auto)"),
@@ -524,6 +527,20 @@ CELLS = {
     "a destination's window with depots (te_sr_window_row)": (
         ("te_sr_window_row", 'block "win_paid"'),
         r"je_space_race_widget_win_paid_\w+"),
+    # The colony target popup's window column (UI pass design § 5): Next
+    # Windows' keys, in a narrower cell.
+    "a site's window, any month (te_sr_site_window_cell)": (
+        ("te_sr_site_window_cell", 'text = "je_space_race_widget_win_any"'),
+        r"je_space_race_widget_win_any"),
+    "a site's window, open (te_sr_site_window_cell)": (
+        ("te_sr_site_window_cell", 'text = "je_space_race_widget_win_open"'),
+        r"je_space_race_widget_win_open"),
+    "a site's window, waiting (te_sr_site_window_cell)": (
+        ("te_sr_site_window_cell", 'block "win_wait"'),
+        r"je_space_race_widget_win_wait_\w+"),
+    "a site's window with depots (te_sr_site_window_cell)": (
+        ("te_sr_site_window_cell", 'block "win_paid"'),
+        r"je_space_race_widget_win_paid_\w+"),
     "a destination's transit and its head (te_sr_window_row)": (
         ("te_sr_window_row", 'block "win_transit"'),
         r"je_space_race_widget_win_(col_transit|transit_\w+)"),
@@ -537,7 +554,7 @@ CELLS = {
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|powers_header|orbit_header|howc_header"
-                   r"|sc_header|space_fleets_header|locations_header)")
+                   r"|sc_header|space_fleets_header|locations_header|tp_title)")
 
 
 # Cells that wrap to a second line on purpose: the overview's state cell, where
@@ -721,7 +738,7 @@ class FigureBudgetTest(unittest.TestCase):
         as each generated row prints it (the owner, 2026-10-30)."""
         box = _textbox_with(_type_body(_read(GUI), "te_sr_site_row"), 'block "site_bases"')
         figures = re.findall(r'blockoverride "site_bases" \{\s*raw_text = "([^"]*)"', _read(ROWS))
-        self.assertEqual(len(figures), 40)
+        self.assertEqual(len(figures), 80)   # Solar System's and the colony target popup's
         for figure in figures:
             with self.subTest(figure=figure):
                 text = _render(figure)
@@ -750,13 +767,17 @@ class FigureBudgetTest(unittest.TestCase):
                 self.assertLessEqual(need, _width(box), f"{longest!r} in {block}")
 
     def test_the_solar_system_count(self):
-        """The count line is a SelectLocalization of two keys (not a text = key)."""
-        sec = _type_body(_read(GUI), "te_sr_sec_solar_system")
-        box = _textbox_with(sec, "'je_space_race_widget_ss_filtered'")
-        for key in ("je_space_race_widget_ss_filtered", "je_space_race_widget_ss_all"):
-            text = re.sub(r"\[[^\[\]]*\]", "40", _loc(key))
-            text = re.sub(r"#[A-Za-z_;]+ ", "", text).replace("#!", "")
-            self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
+        """The count line is a SelectLocalization of two keys (not a text = key):
+        Solar System's, and the colony target popup's (UI pass design § 5)."""
+        for type_name, keys in (("te_sr_sec_solar_system", ("ss_filtered", "ss_all")),
+                                ("te_sr_target_popup_body", ("tp_count", "tp_all"))):
+            sec = _type_body(_read(GUI), type_name)
+            box = _textbox_with(sec, f"'je_space_race_widget_{keys[0]}'")
+            for key in (f"je_space_race_widget_{k}" for k in keys):
+                with self.subTest(key=key):
+                    text = re.sub(r"\[[^\[\]]*\]", "40", _loc(key))
+                    text = re.sub(r"#[A-Za-z_;]+ ", "", text).replace("#!", "")
+                    self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
 
     def test_overview_names_fit(self):
         """Audit SPC-6: a world named in an overview cell (154 wide, the

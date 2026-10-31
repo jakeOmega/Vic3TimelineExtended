@@ -3,7 +3,7 @@
 # ============================================================================
 # Switches the Space Program's debris removal group to the best method the
 # country has (te_debris_activate_best_removal): Fusion Sweepers with
-# Muon-Catalyzed Fusion Reactors, else the Laser Broom with Directed Energy
+# Compact Fusion Reactors, else the Laser Broom with Directed Energy
 # Weapons, else Active Debris Removal (Reusable Rocketry). Shown while that
 # method is not the one running (te_debris_best_removal_off), so it also
 # upgrades a running method when a better one arrives. A player can still

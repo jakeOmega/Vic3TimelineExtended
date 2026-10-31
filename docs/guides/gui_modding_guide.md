@@ -57,7 +57,7 @@ Victoria 3 uses the **Jomini** GUI framework (Clausewitz engine family). GUI is 
 ```
 gui/
 ├── shared/                    # Base types, templates, reusable components
-│   ├── defaults.gui           # default_popup, default_block_window, etc.
+│   ├── defaults.gui           # shared defaults (default_popup and default_block_window are in block_windows.gui)
 │   ├── buttons.gui            # Button types
 │   ├── backgrounds.gui        # Background textures/types
 │   ├── animations.gui         # Shared animations
@@ -588,7 +588,7 @@ type my_window = default_popup {
 
 ### Common Vanilla Blocks
 
-The `default_popup` type (from `gui/shared/defaults.gui`) exposes these blocks:
+The `default_popup` type (from `gui/block_windows.gui:97`) exposes these blocks:
 
 | Block | Purpose |
 |---|---|
@@ -1132,6 +1132,8 @@ Replacing `information_panel_bar.gui` also works, but it is a 790-line full-file
 - **The launcher** takes the next small slot under Map List, at `{ 0 825 }`: the bar sits at `{ 0 200 }`, its buttons' flowcontainer has a 5 px top margin, and the small slots are 40 high, Map List's at +580. It is built as vanilla builds Map List, with `sidepanel_button_small`, `selected_sidepanel_animation_small` (lit while the window is open) and `sidebar_tooltip_area_small`. Its hover label is copied from `information_panel_bar.gui`: a flowcontainer whose `onmousehierarchyenter` / `onmousehierarchyleave` run `PdxGuiInterruptThenTriggerAllAnimations('hide_sidebar_labels','show_sidebar_labels')` (and the reverse) drives the `show_sidebar_labels` / `hide_sidebar_labels` states of vanilla's `sidebar_label_button_small` and `sidebar_label_text_small` types and of a dark strip (`dark_area` with `fade_horizontal_right.dds`). A scripted widget builds its own copy of that trio, so the label slides out when its own button is hovered. Whether the call is global, so that hovering either slides out both, is untested (as of 2026-09-30).
 - **The window.** In `default_block_window` the close button carries `shortcut = "close_window"` outside its `header_close_button` block, so overriding the block keeps Escape. Keep the back button: the header art has a socket for it, so emptying `entire_back_button` leaves a hole (play-test 2026-09-30). The window overrides `header_back_button` to clear its open state, so Back closes it. Vanilla's default there, `InformationPanelBar.OpenPreviousPanel`, reopened nothing in game: the window closes the panel it replaces with `ClosePanel`, which leaves no history.
 - **The open state** gates the registered root, not the panel type, so the root's own `_show` runs `ClosePanel` and `CloseCurrentPanel`. The two clearing widgets sit in the launcher's root, which is up whenever the window can be.
+
+**This mod's popups: `gui/te_popups.gui`** (Space Race UI pass, 2026-10-31; not yet seen in game). One scripted widget root, `te_popups`, on `layer = popups`, up while the client-side key `te_popup` is set, holds one instance of each popup type. A popup derives from `te_ui_popup` (`gui/te_widget_library.gui`), vanilla's `principle_selection_window` shape: a full-size `Background_Full_Dim`, a full-size button behind the body that clears the key (a click outside), and `header_pattern`, whose close button carries `shortcut = "close_window"` (Escape), with its `button_close` block clearing the key. One popup is open at a time; the key's value says which: `sr_target` for the colony target popup, the only one so far; the fleet pickers planned next take `sr_dest_<n>`, `sr_xfer_<n>`, `sr_ftarget_<n>` and `sr_icpt_<n>`, per fleet slot. A popup has no journal entry, so each body sits under the entry's scope-free gate and a `GetPlayerJournalEntry` datacontext on a child (gotchas #22, #29), and the panel's generated rows draw in it unchanged.
 
 ### Key Points
 
@@ -1755,7 +1757,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 48 GUI files at the top of `gui/`: 28 full-file replacements of vanilla panels plus 20 additive files (marked below):
+Currently 50 GUI files at the top of `gui/`: 28 full-file replacements of vanilla panels plus 22 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1797,11 +1799,13 @@ Currently 48 GUI files at the top of `gui/`: 28 full-file replacements of vanill
 | `te_demographics_widgets.gui` | (additive, type library) | The Demographics sections as types, one per section (issue #1029): the overview as an eight-cell icon grid, Causes of Death (a pie of last year's deaths by cause and its legend), the population pyramid (a row type a state's pyramid reuses through its range and value blocks), Work and Retirement, Longevity, Family Policy, History (eight charts with war, famine and event pips), Wealth, Where People Live, States (rows that open the state) and How Demographics Works; and the state subtab's from the same blocks with the state's figures. Every figure sits under a gate that asks script whether it exists (`common/scripted_guis/te_demog_sguis.txt`); placeholder icons in `docs/systems/demographics_gui_icons.md` |
 | `te_nation_generated.gui` | (additive, generated templates and types) | The Nation tab's name filters: `te_nation_hidden_filter` for the country panel's list, `te_nation_list_<section>` and `te_nation_row_<row>` for the tab; and each section's type rows, `te_nation_types_<section>`; regenerate with `scripts/generators/gen_nation_tab.py` |
 | `te_nation_tab.gui` | (additive, type library) | The Nation tab of the Timeline Extended window: the overview, five sections (each its score rows, then its type rows), Where These Come From (the country's own permanent modifiers, collapsed) and How the Nation Works, instanced from `te_systems_window.gui` |
+| `te_popups.gui` | (additive, scripted widget) | The mod's centred popups: one root, `te_popups`, on the popups layer, holding each picker's popup (the Space Race's colony target first), shown on the client-side `te_popup` key. Registered in `gui/scripted_widgets/te_systems_window.txt`; see the popups paragraph under [Creating Standalone Panels](#creating-standalone-panels) |
 | `te_seabed_widgets.gui` | (additive, type library) | The Seabed tab's panels (Global Commons): the overview, the seabed policy buttons, the basins table and How Seabed Licences Work, instanced from `te_systems_window.gui` |
 | `te_state_panel_widgets.gui` | (additive, type library) | State-view types: aligned label/value rows, headroom bars, the tourism card, the Grand Monument card (only where one stands; it instances the journal entry's `gm_row_status`) |
 | `te_system_tab_widgets.gui` | (additive, type library) | For system tabs in vanilla panels: a journal entry's bars, goal bar, status description and button grid (`te_je_*`), and `te_tab_buttons_six`, vanilla's tab strip with a sixth slot (the Budget, Diplomacy and Market panels) |
 | `te_systems_window.gui` | (additive, scripted widget) | The Timeline Extended window, the mod's own, Nation first (always open; `te_nation_tab.gui`), then a tab each for the Space Race, Grand Monuments, the Colonial Empire and the Seabed, all five on one vanilla `tab_buttons` strip as in vanilla's Diplomacy panel (the entries' composers under `GetPlayerJournalEntry`), and its launcher, a small sidebar button under Map List. Registered in `gui/scripted_widgets/te_systems_window.txt`, so it replaces nothing; see [Creating Standalone Panels](#creating-standalone-panels) |
 | `te_trade_partner_tooltips.gui` | (additive) | Per-partner goods-breakdown tooltip used by `market_panel.gui` |
+| `te_widget_library.gui` | (additive, type library) | Shared `te_ui_*` types (Space Race UI pass design § 13): `te_ui_popup`, the shell every popup derives from. The rest of the panels' shared types move here one system at a time |
 | `tooltip.gui` | Tooltip widget | Custom tooltip content |
 | `topbar.gui` | Top bar (the HUD's treasury row) | The Banking cycle's phase as one icon after MONEY: two `### TIMELINE EXTENDED` blocks, the line `te_banking_topbar_readings = {}` and the bar's declared width, 705 widened to 765 so the alerts sit after the phase (gotcha #34). The type is in `banking_dashboard_widget.gui`. Vanilla's copy is kept as `test_fixtures/vanilla_gui/topbar.gui`, and `test_topbar_banking.py` fails on any other change. Top bars are a common target for UI mods, so this is a likely collision (`system_panels_feasibility.md` § 7.4) |
 | `treaty_draft_panel.gui` | Treaty drafting | Custom treaty interface |

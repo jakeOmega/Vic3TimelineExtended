@@ -57,7 +57,7 @@ innovation, innovation cap and prestige.
 | Mars Mission | Knowledge Economy | adds Mars Landing | 5,000 |
 | Solar Colonization | Cislunar Infrastructure | adds Solar System Colonization, the Moon and stages 1 and 2 | 10,000 |
 | Deep Space Exploration | Space Colonization | lets a country with no colony beyond the Moon start colonizing at stages 3 to 5 | 50,000 |
-| Interstellar Mission | Muon-Catalyzed Fusion Reactors | adds the Interstellar Probe | 100,000 |
+| Interstellar Mission | Compact Fusion Reactors | adds the Interstellar Probe | 100,000 |
 
 > Lowering the production method, or losing the building, fails every running
 > milestone the new method no longer supports and wipes its progress. The event
@@ -111,7 +111,7 @@ Program runs a method that supports it.
 | Moon Landing | Orbital Flight | Space Exploration (era 7) | 200 | 6% | ×2 |
 | Deep-Space Probe | Moon Landing | Space Exploration (era 7) | 150 | 6% | ×2 |
 | Mars Landing | Moon Landing | Knowledge Economy (era 9) | 450 | 9% | ×6 |
-| Interstellar Probe | Deep-Space Probe and Mars Landing | Muon-Catalyzed Fusion Reactors (era 12) | 600 | 9% | ×12 |
+| Interstellar Probe | Deep-Space Probe and Mars Landing | Compact Fusion Reactors (era 12) | 600 | 9% | ×12 |
 | Interstellar Probe: Awaiting Data | Interstellar Probe | none | 132 months | none | none |
 | Solar System Colonization | Moon Landing (Mars Landing for the sites beyond the Moon) | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
 
@@ -330,9 +330,10 @@ milestone is finished it also decides a reward that fades over ten years.
 
 Each milestone has its own funding level, from 0 to six levels past your cap. The cap starts
 at 3 and rises with technology: thirteen space-related technologies from era 7
-to era 11 raise it by 1 each, and Cislunar Infrastructure (era 10) and four
-technologies in era 12 raise it by 2 each. With all of them the cap is 13 by the
-end of era 10, 18 by the end of era 11 and 26 by the end of era 12. Tier V of the
+to era 11 raise it by 1 each, and Cislunar Infrastructure (era 10), three
+technologies in era 12 and Fusion Batteries in era 13 raise it by 2 each. With
+all of them the cap is 13 by the end of era 10, 18 by the end of era 11, 24 by
+the end of era 12 and 26 in era 13. Tier V of the
 Advanced Research power bloc principle, its highest, adds another level.
 
 Every funding level up to the cap, on any milestone, adds 0.5 to your monthly pace, and so to
@@ -469,8 +470,8 @@ confirms its discovery; the reward is the same.
 ## Colonizing the solar system
 
 Solar System Colonization is repeatable. Each time its bar fills, a colony fleet
-leaves for an unclaimed site: the one you chose with Target in the Solar System
-list (see [Choosing a colony's site](#choosing-a-colonys-site)), or otherwise
+leaves for an unclaimed site: the one you chose as its target (see [Choosing a
+colony's site](#choosing-a-colonys-site)), or otherwise
 one the program picks among those it can reach that month (see [Launch
 windows](#launch-windows)). Under Races Only the program picks a random site of
 the current stage, and the colony is founded the month its fleet leaves. Under
@@ -519,7 +520,7 @@ speed, +10% influence and +15% cultural pull.
 
 The Moon is stage 0, settled before Mars. You can colonize it once your Moon
 Landing is complete, with Cislunar Infrastructure and the Solar Colonization
-method; the sites beyond it wait for your Mars Landing, and a Target button on
+method; the sites beyond it wait for your Mars Landing, and the Target button on
 one says so until then. Its six sites need no launch window
 and no transit: under every setting, a colony fleet bound for the Moon founds its
 colony the month it leaves, and it never takes one of the six places for fleets
@@ -539,7 +540,7 @@ progress of one lunar colony site, for you alone: Shackleton Crater for a Shackl
 landing, Tranquility Base for the Sea of Tranquility, Marius Hills for the
 Equatorial Plain and Daedalus Crater for the far side. A site's hover in the
 Solar System list says when the discount is yours. Under Races Only it counts
-when you choose that site with Target, not when the program draws one for you.
+when you choose that site as your target, not when the program draws one for you.
 
 Shackleton's Propellant Depot cracks the crater's ice into rocket fuel. While you
 hold it, with its specialization built and the colony neither blockaded nor
@@ -586,7 +587,7 @@ Propulsion technology loosens the windows step by step:
 | Cislunar Infrastructure (opens colonization) | In a window only. |
 | Asteroid Mining, or Shackleton's Propellant Depot | In a window as before; outside one, at a premium of extra progress, when your approach judges it worth it. |
 | Nuclear Thermal Propulsion | Outside a window at a smaller premium, once Asteroid Mining or Shackleton's Propellant Depot lets you launch there at all. |
-| Muon-Catalyzed Fusion Reactors | Any month, with no premium. |
+| Compact Fusion Reactors | Any month, with no premium. |
 | Antimatter Production, with an Antimatter Containment Facility built | Any month, with no premium. |
 
 The premium is the extra propellant an off-window transfer needs, so it climbs
@@ -609,18 +610,22 @@ flight](#colony-fleets-in-flight)).
 
 ### Choosing a colony's site
 
-The Solar System list in Solar System Colonization has a Target button on each
-unclaimed site your program can send its next fleet to, while the program
-runs. It lists those sites, your own and any a fleet is on its way to; Show
-all lists all 40. Hover a site's name for what it offers: its stage, its two
-specializations, how long your drive takes to reach it, and its next launch
-window. Click Target to choose that site: its row reads Our target, and the
-Colony Fleets section names it, with a Clear button beside it. The next fleet waits for that site's launch window, even
+Colony Fleets, in Solar System Colonization, says where your next colony fleet
+goes. Click Choose there (Change once you have a target) to open the Colony
+Target window. It lists the unclaimed sites your program can send its next fleet
+to this month, under their locations, each with who holds it and its launch
+window (under Simple and Full Colonies, also its slots, its base room and grade,
+and the fleets on their way); Show all
+lists all 40, and a site you can't target says why on its button. Hover a site's
+name for what it offers: its stage, its two specializations and how long your
+drive takes to reach it. Click Target to choose that site: Colony Fleets names
+it, with Clear beside Change, and its row in the Solar System list reads Our
+target. The next fleet waits for that site's launch window, even
 if another site's window opens first. Outside the window it leaves at the
 premium when your approach judges it worth it, weighing the wait for that site's
 own window. Under Simple Colonies and Full Colonies a chosen site costs the
-progress of its own stage. Click Clear on the row to let the program pick again;
-it also picks again when someone else claims the site first.
+progress of its own stage. Click Clear to let the program pick again; it also
+picks again when someone else claims the site first.
 
 Under Races Only you can choose any site of the current stage, or a released
 site of an earlier stage. The colony is still founded the month its fleet
@@ -635,7 +640,7 @@ reach its site, and claims it only when it lands. Your drive sets how long:
 |---|---|---|---|---|---|---|
 | Chemical | (from the start) | In a launch window | 9 months | 33 months | 16 years | 51 years |
 | Fusion | Fusion Power | In a launch window | 2 to 3 months | 7 to 9 months | about 3 years | 11 to 25 years |
-| Fusion torch | Muon-Catalyzed Fusion Reactors | Any month | 1 month | 2 months | 6 months | 1 year |
+| Fusion torch | Compact Fusion Reactors | Any month | 1 month | 2 months | 6 months | 1 year |
 | Antimatter | Antimatter Production, with an Antimatter Containment Facility built | Any month | 1 month | 1 month | 2 months | 4 months |
 
 Fusion's times are for a departure in the window; a fusion fleet that leaves
@@ -767,7 +772,7 @@ group, Module Fabrication, which starts on No Module Fabrication:
 |---|---|---|---|
 | Orbital Assembly | Cislunar Infrastructure | 1,500 and 10 | 5 |
 | Orbital Foundries | Space Colonization | 2,000 and 15 | 12 |
-| Fusion Shipyards | Muon-Catalyzed Fusion Reactors | 2,000 and 10 | 25 |
+| Fusion Shipyards | Compact Fusion Reactors | 2,000 and 10 | 25 |
 
 Each module within a colony's slots costs 100 points, so a fully staffed Space Program builds one every
 20, 8 or 4 months, more often with higher funding. Mare Imbrium's Mass Driver
@@ -1011,7 +1016,7 @@ every month, by its production method:
 |---|---|---|
 | Orbital Shipyards | Space Militarization | 0.5 |
 | Fusion Yards | Fusion Power | 1 |
-| Torch Yards | Muon-Catalyzed Fusion Reactors | 1.5 |
+| Torch Yards | Compact Fusion Reactors | 1.5 |
 | Antimatter Yards | Antimatter Production | 2 |
 
 The figure is scaled by staffing, and the method's tooltip shows it as Fleet
@@ -1295,7 +1300,7 @@ taking it from the high orbits first, and adds a little prestige:
 |---|---|---|---|
 | Active Debris Removal | Reusable Rocketry | 300 | 0.05 |
 | Laser Broom | Directed Energy Weapons | 300, and 500 electricity | 0.15 |
-| Fusion Sweepers | Muon-Catalyzed Fusion Reactors | 150 | 0.5 |
+| Fusion Sweepers | Compact Fusion Reactors | 150 | 0.5 |
 
 Each fully staffed Space Elevator level raises what you remove by 10%, up to
 +100% at ten levels, and its Launch Capacity makes every method cheaper in your

@@ -1,0 +1,31 @@
+﻿### Timeline Extended: the mod's centred popups (Space Race UI pass design § 3,
+### docs/superpowers/specs/2026-10-31-space-race-ui-pass-design.md). Additive: a
+### scripted widget (gui/scripted_widgets/te_systems_window.txt registers the
+### root), so no vanilla file is replaced.
+###
+### te_popups  a full-size root on the popups layer, above the journal panel,
+###            the side panels and the Timeline Extended window. It is up only
+###            while a popup is open, for a played country (as the Timeline
+###            Extended window's root), and holds one instance of each popup
+###            type. Each derives from te_ui_popup (gui/te_widget_library.gui)
+###            and shows on its own value of te_popup.
+###
+### STATE. te_popup is a client-side GetVariableSystem value (never saved): the
+### open popup, one at a time. Set by the button that opens a popup, cleared by
+### its close button, Escape and a click outside. Values:
+###   sr_target          Solar System Colonization's colony target
+###                      (te_sr_target_popup, space_race_widget.gui)
+###
+### A popup has no journal entry of its own, so each body sits under the entry's
+### scope-free gate and a GetPlayerJournalEntry datacontext on a child, as the
+### Timeline Extended window's tabs do (gui_modding_guide.md gotchas #22, #29):
+### the rows' JournalEntry.GetCountry reads then work as in the panel.
+
+widget = {
+	name = "te_popups"
+	size = { 100% 100% }
+	layer = popups
+	visible = "[And( And( GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, Not( GetMetaPlayer.IsObserver ) ), GetVariableSystem.Exists('te_popup') )]"
+
+	te_sr_target_popup = {}
+}

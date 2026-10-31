@@ -3140,6 +3140,23 @@ def render_overview_display() -> list[str]:
     out += [f"\tadd = sr_disp_ss_filtered_{loc}" for loc in LOCATIONS]
     out += ["}",
             "",
+            "# The colony target popup (UI pass design § 5): 1 while we can target the",
+            "# world (or it is our target); how many such worlds each location and the",
+            "# whole system has."]
+    for site in SITES:
+        k = site.key
+        out += [f"sr_disp_tp_shown_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ sr_disp_site_target_{k} >= 1 }} value = 1 }}",
+                "}"]
+    for loc in LOCATIONS:
+        out += [f"sr_disp_tp_count_{loc} = {{", "\tvalue = 0"]
+        out += [f"\tadd = sr_disp_tp_shown_{s.key}" for s in SITES if s.location == loc]
+        out.append("}")
+    out += ["sr_disp_tp_count = {", "\tvalue = 0"]
+    out += [f"\tadd = sr_disp_tp_count_{loc}" for loc in LOCATIONS]
+    out += ["}",
+            "",
             "# The overview's Colonies cell (audit SPC-6): our colonies at or past the",
             "# autonomy that demands self-government (sr_aut_ask_level).",
             "sr_disp_aut_restless_count = {", "\tvalue = 0"]
@@ -3585,13 +3602,34 @@ def _override(name: str, *lines: str) -> list[str]:
     return [f'\t\t\tblockoverride "{name}" {{', *[f"\t\t\t\t{line}" for line in lines], "\t\t\t}"]
 
 
-def _site_row(site: Site) -> list[str]:
+def _window_cell(body: str) -> list[str]:
+    """A site's launch window in the colony target popup: the four states of
+    Next Windows' row (_window_row) in te_sr_site_window_cell."""
+    state = f"sr_disp_win_state_{body}"
+    cell = _override("win_any_visible", f'visible = "[{_eq(state, 0)}]"')
+    cell += _override("win_open_visible", f'visible = "[{_eq(state, 1)}]"')
+    if body in NO_WINDOW:
+        cell += _override("win_wait", "visible = no")
+        cell += _override("win_paid", "visible = no")
+    else:
+        cell += _override("win_wait", f'visible = "[{_eq(state, 2)}]"', f'text = "je_space_race_widget_win_wait_{body}"')
+        cell += _override("win_paid", f'visible = "[{_eq(state, 3)}]"', f'text = "je_space_race_widget_win_paid_{body}"')
+    # _override indents for a row's top level (three tabs); here one level in.
+    return ["te_sr_site_window_cell = {", *["\t" + line[3:] for line in cell], "}"]
+
+
+def _site_row(site: Site, *, picker: bool) -> list[str]:
+    """One world: in Solar System (a list to read), or in the colony target
+    popup (UI pass design § 5) with its Target button and launch window."""
     k = site.key
     disp, target = f"sr_disp_site_{k}", f"sr_disp_site_target_{k}"
     inbound, months, ours = f"sr_disp_site_inbound_{k}", f"sr_disp_site_inbound_months_{k}", f"sr_disp_site_inbound_ours_{k}"
     figure = f"[{_sv(inbound)}|0]·[{_sv(months)}|0]"
     out = ["\t\tte_sr_site_row = {"]
-    out += _override("site_visible", f'visible = "[Or( GetVariableSystem.Exists(\'{SS_ALL}\'), {_eq(f"sr_disp_ss_shown_{k}", 1)} )]"')
+    if picker:
+        out += _override("site_visible", f'visible = "[Or( GetVariableSystem.Exists(\'{TP_ALL}\'), {_eq(f"sr_disp_tp_shown_{k}", 1)} )]"')
+    else:
+        out += _override("site_visible", f'visible = "[Or( GetVariableSystem.Exists(\'{SS_ALL}\'), {_eq(f"sr_disp_ss_shown_{k}", 1)} )]"')
     out += _override("site_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
     out += _override("site_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_ss_site_tt_{k}"')
     out += _override("site_ours_visible", f'visible = "[{_eq(disp, 1)}]"')
@@ -3606,13 +3644,19 @@ def _site_row(site: Site) -> list[str]:
     out += _override("site_inbound", f'visible = "[{_ge(inbound, 1)}]"', 'tooltip = "je_space_race_widget_ss_inbound_tt"')
     out += _override("site_inbound_ours", f'visible = "[{_eq(ours, 1)}]"', f'raw_text = "#v {figure}#!"')
     out += _override("site_inbound_rival", f'visible = "[{_eq(ours, 0)}]"', f'raw_text = "{figure}"')
-    out += _override("site_target_button",
-                     f'visible = "[{_ge(target, 1)}]"',
-                     f'enabled = "{_sgui_call("sr_colony_target_sgui", "IsValid", site)}"',
-                     f'onclick = "{_sgui_call("sr_colony_target_sgui", "Execute", site)}"',
-                     f'tooltip = "{_reasoned("sr_colony_target_sgui", _site_scope(site))}"')
-    out += _override("site_target_set_visible", f'visible = "[{_eq(target, 1)}]"')
-    out += _override("site_target_clear_visible", f'visible = "[{_eq(target, 2)}]"')
+    if picker:
+        out += _override("site_window", *_window_cell(transit_body(site)))
+        # Shown for every world, so a world we can't target says why on hover.
+        out += _override("site_target_button",
+                         f'enabled = "{_sgui_call("sr_colony_target_sgui", "IsValid", site)}"',
+                         f'onclick = "{_sgui_call("sr_colony_target_sgui", "Execute", site)}"',
+                         # Choosing closes the popup, as a picked destination does.
+                         "onclick = \"[GetVariableSystem.Clear('te_popup')]\"",
+                         f'tooltip = "{_reasoned("sr_colony_target_sgui", _site_scope(site))}"')
+        out += _override("site_target_set_visible", f'visible = "[Not( {_eq(target, 2)} )]"')
+        out += _override("site_target_clear_visible", f'visible = "[{_eq(target, 2)}]"')
+    else:
+        out += _override("site_target_button", "visible = no")
     # What the site offers a colony (the owner, 2026-10-30): its slots with our
     # Colony Module Slots, and its own Extraplanetary Base room and grade.
     out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_slots_{k}")}|0]#!"')
@@ -3630,6 +3674,7 @@ _VIEW_DETAIL = "GetVariableSystem.HasValue('sr_colony_view', 'detail')"
 def _FOCUS(k: str) -> str:
     return f"GetVariableSystem.HasValue('sr_colony_focus', '{k}')"
 SS_ALL = "sr_panel_solar_system_all_open"
+TP_ALL = "sr_panel_target_popup_all_open"   # the colony target popup's Show all (UI pass design § 5)
 
 
 def _colony_row(site: Site) -> list[str]:
@@ -3843,7 +3888,9 @@ def render_gui() -> str:
            "### sr_fleets_display_generated.txt), the scripted GUIs are in sr_colony_sguis.txt.",
            "### te_sr_cede_site_list_war and _treaty are Cede Colony's picker, the worlds the",
            "### ceding country holds by location; its tile, te_sr_cede_site_tile, is in",
-           "### right_click_menu.gui.",
+           "### right_click_menu.gui. te_sr_target_picker_rows is the colony target popup's",
+           "### list (UI pass design § 5): every world by location, with its launch window",
+           "### and Target button, filtered to the worlds we can target by default.",
            "",
            "types sr_sites_generated_rows_types",
            "{",
@@ -3860,7 +3907,22 @@ def render_gui() -> str:
                 "\t\t}"]
         for site in SITES:
             if site.location == loc:
-                out += [""] + _site_row(site)
+                out += [""] + _site_row(site, picker=False)
+    out += ["\t}", "",
+            "\ttype te_sr_target_picker_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 2"]
+    for loc in LOCATIONS:
+        out += ["", "\t\tte_sr_subheader = {",
+                f'\t\t\tvisible = "[Or( GetVariableSystem.Exists(\'{TP_ALL}\'), {_ge(f"sr_disp_tp_count_{loc}", 1)} )]"',
+                '\t\t\tblockoverride "subheader_text" {',
+                f'\t\t\t\ttext = "je_space_race_widget_ss_loc_{loc}"',
+                "\t\t\t}",
+                "\t\t}"]
+        for site in SITES:
+            if site.location == loc:
+                out += [""] + _site_row(site, picker=True)
     out += ["\t}", "",
             "\ttype te_sr_colony_rows = flowcontainer {",
             "\t\tdirection = vertical",

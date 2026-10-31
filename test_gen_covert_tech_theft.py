@@ -36,13 +36,13 @@ class CatalogTest(unittest.TestCase):
 
     def test_era_costs(self):
         costs = gen.read_era_costs(ROOT)
-        self.assertEqual(sorted(costs), list(range(1, 13)))
-        self.assertEqual((costs[1], costs[7], costs[12]), (7500, 65000, 2000000))
+        self.assertEqual(sorted(costs), list(range(1, 14)))
+        self.assertEqual((costs[1], costs[7], costs[12], costs[13]), (7500, 65000, 1500000, 3000000))
 
     def test_categories_and_eras(self):
         self.assertEqual((self.by_key["railways"].category, self.by_key["railways"].era), ("production", 2))
         self.assertEqual((self.by_key["ICBMs"].category, self.by_key["ICBMs"].era), ("military", 7))
-        self.assertEqual({tech.era for tech in self.catalog}, set(range(1, 13)))
+        self.assertEqual({tech.era for tech in self.catalog}, set(range(1, 14)))
 
     def test_excludes_society_and_unresearchable(self):
         self.assertNotIn("mass_media", self.by_key)  # society: no operation steals it
