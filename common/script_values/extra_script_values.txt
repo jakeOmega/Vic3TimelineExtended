@@ -994,7 +994,8 @@ gw_emission_multiplier_script_value = {
 # (gw_refresh_global_counts_effect). Do not reintroduce a sweeping version.
 
 # Tiers by era, from 20 up: era 12's technologies add 200 and era 13's 300 (era 13 spec § 4.3, 2026-10-31; Biological
-# Immortality and Post-Scarcity Economy added 200 in era 12 until then).
+# Immortality and Post-Scarcity Economy added 200 in era 12 until then). Self-Driving Laboratories joins era 11's 100
+# (phase 2): the one era 11 AI technology on the list, since it is the one that does research.
 global_tech_spread_script_value = {
 	value = 0
 	if = {
@@ -1398,6 +1399,15 @@ global_tech_spread_script_value = {
 			any_country = {
 				country_rank >= rank_value:great_power
 				has_technology_researched = personalized_medicine
+			}
+		}
+		add = 100
+	}
+	if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				has_technology_researched = self_driving_laboratories
 			}
 		}
 		add = 100

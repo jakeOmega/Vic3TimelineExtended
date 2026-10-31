@@ -174,6 +174,71 @@ synthetic_biology = {
 	}
 }
 
+ai_agents = {
+	# Software that carries out multi-step work without supervision (era 13 spec § 6.1): Fully Automated Content
+	# Creation PM for Software Industries (from Brain-Computer Interfaces), Automated Bureaucracy law (from
+	# Generative AI)
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/generative_ai.dds" # Placeholder Icon
+	category = production
+
+	unlocking_technologies = {
+		generative_ai
+	}
+
+	modifier = {
+		country_weekly_innovation_max_add = 100	# the late tree's innovation budget (era 13 spec § 4.2)
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+self_driving_laboratories = {
+	# AI that designs, runs and reads its own experiments (era 13 spec § 6.2): AI Assisted Research PM for
+	# Universities (from Brain-Computer Interfaces)
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/additive_manufacturing.dds" # Placeholder Icon
+	category = production
+
+	unlocking_technologies = {
+		ai_agents
+		additive_manufacturing
+	}
+
+	modifier = {
+		country_weekly_innovation_max_add = 200	# era 11's largest step (era 13 spec § 4.2)
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+humanoid_robotics = {
+	# General-purpose robots in homes, shops and warehouses (era 13 spec § 6.3): Robotic Service Providers PM for
+	# Urban Centers (from Artificial General Intelligence), Neuromorphic Computing PM for Electronics Industries
+	# (from Brain-Computer Interfaces)
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/autonomous_vehicles.dds" # Placeholder Icon
+	category = production
+
+	unlocking_technologies = {
+		ai_agents
+		autonomous_vehicles
+	}
+
+	modifier = {
+		# robots stock the shelves and staff the counters: Autonomous Vehicles' pattern, half its size
+		building_group_bg_trade_employee_mult = -0.05
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
 directed_energy_weapons = {
 	# Ablative Rockets PM for Launch Facilities, Laser Excavation PMs for mines,
 	# Electromagnetic Projectors PM for Artillery Foundries, Inertial Fusion Reactors PM
@@ -364,10 +429,29 @@ fusion_power = {
 	}
 }
 
+autonomous_weapons = {
+	# Weapons that select and engage targets on their own (era 13 spec § 6.4): Robotic Soldiers unit (from JADC2)
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/swarm_technology.dds" # Placeholder Icon
+	category = military
+
+	unlocking_technologies = {
+		swarm_technology
+		jadc2
+	}
+
+	modifier = {
+		unit_offense_mult = 0.05
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
 brain_computer_interfaces = {
-	# AI Assisted Research PM for Universities, Neuromorphic Computing PM for Electronics Industries,
-	# Neurostimulation PM for Arts Academy, Fully Automated Content Creation PM for Software Industries,
-	# Unrestricted Augmentation and Human Purity laws
+	# Neurostimulation PM for Arts Academy, Unrestricted Augmentation and Human Purity laws (its three AI methods
+	# moved to AI Agents, Self-Driving Laboratories and Humanoid Robotics, era 13 spec § 6)
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/brain_computer_interfaces.dds"
 	category = society

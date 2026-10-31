@@ -4197,8 +4197,9 @@ pm_academic_computing = {
 pm_ai_assisted_research = {
 	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p2.dds"
 
+	# Self-Driving Laboratories (Brain-Computer Interfaces until the era 13 spec, § 6.2)
 	unlocking_technologies = {
-		brain_computer_interfaces
+		self_driving_laboratories
 	}
 
 	country_modifiers = {
@@ -4622,8 +4623,9 @@ pm_drone_delivery_systems = {
 
 pm_robotic_service_providers = {
 	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p2.dds"
+	# Humanoid Robotics (Artificial General Intelligence until the era 13 spec, § 6.3)
 	unlocking_technologies = {
-		artificial_intelligence
+		humanoid_robotics
 	}
 
 	unlocking_production_methods = {
@@ -9056,8 +9058,9 @@ pm_multicore_processors = {
 
 pm_neuromorphic_computing = {
 	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p5.dds"
+	# Humanoid Robotics (Brain-Computer Interfaces until the era 13 spec, § 6.3)
 	unlocking_technologies = {
-		brain_computer_interfaces
+		humanoid_robotics
 	}
 	building_modifiers = {
 		workforce_scaled = {
@@ -15562,8 +15565,9 @@ pm_advanced_workflow_optimization = {
 
 pm_fully_automated_content_creation = {
 	texture = "gfx/interface/icons/production_method_icons/cat_film_green_p3.dds"
+	# AI Agents (Brain-Computer Interfaces until the era 13 spec, § 6.1)
 	unlocking_technologies = {
-		brain_computer_interfaces
+		ai_agents
 	}
 
 	building_modifiers = {
