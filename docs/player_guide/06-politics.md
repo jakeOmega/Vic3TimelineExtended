@@ -200,11 +200,11 @@ Every country starts with Unrestricted Automation. Humanoid Robotics unlocks the
 other three laws. Two of them scale with your automated share: the part of your
 building levels that run a robotic or AI-managed production method, out of all
 levels of the buildings that have one. The tooltips of the law group and of
-those two laws show the share, counted once a month. The methods are factory automation from robotic assembly
-up and the AI-managed tier, AI-managed power plants and networks, Fully
-Automated Content Creation, Automated Labs, the automated Deep-Sea Mine, robot
-and drone services in Urban Centers, and self-driving trains, highways and
-harvesters.
+those two laws show the share, counted once a month. The methods are factory
+automation from robotic assembly up and the AI-managed tier, AI-managed power
+plants and networks, Fully Automated Content Creation, Automated Labs, the
+automated Deep-Sea Mine, robot and drone services in Urban Centers, and
+self-driving trains, highways and harvesters.
 
 | Law | At an automated share of 100% | You pay |
 |---|---|---|
