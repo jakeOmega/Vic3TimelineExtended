@@ -141,7 +141,7 @@ a note stands in their place. Two sections of its own follow, Space Powers and
 Orbit (see [The Space Race tab](#the-space-race-tab)), and How the Space Race
 Works comes once at the end.
 
-![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies (since moved to the Colonies tab).](images/solar_system_colonization_tab.png)
+![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, and Rivals.](images/solar_system_colonization_tab.png)
 
 The overview is always shown. Its first row is three icons, each with a label
 under it:

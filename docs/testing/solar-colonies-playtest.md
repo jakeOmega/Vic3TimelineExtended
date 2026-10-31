@@ -618,8 +618,8 @@ No post-setback cooldown, self-government at 50, the grade beside Bases, the que
    module in N mo" and the two places, and a gap before the colonies' rows. Fill all eight shipment slots with stock
    in hand: it reads "slots full". With no fabrication method and too little in stock: "stopped", in red; with the stock covering the head, it still reads "in 1 mo" and the module is built. The months match the stock, the
    rate and the head's price (100, more past the colony's slots).
-6. **Solar System's place.** Solar System sits below Space Fleets (Colonies under Simple Colonies), just above How
-   Solar Colonization Works, in the journal and in the Timeline Extended window's Space Race tab.
+6. **Superseded by the tabs (PR 8).** Solar System is now its own tab, above How Solar Colonization Works: the tabs'
+   section below.
 
 ## The owner's UI pass: tabs (PR 8, 2026-10-31)
 
@@ -635,6 +635,10 @@ Solar System Colonization's four tabs (UI pass design § 11; `docs/systems/mod_s
    window's Space Race tab, which shares the choice.
 4. **Both hosts.** The tab row and every tab draw in the journal entry and in the Timeline Extended window.
 5. **Other milestones.** The Moon Base, Mars Landing and the rest keep their one panel, with no tab row.
+6. **The window's Mission Control.** In the Timeline Extended window's Space Race tab, Mission Control shows no Orbital
+   Debris row (the window's empty `sr_debris` override reaches it one container deeper now); the journal's does.
+7. **The guide's screenshot.** Retake `docs/player_guide/images/solar_system_colonization_tab.png` on the Mission
+   Control tab, with the tab row in view, and check its caption in `16-space.md`.
 
 ## The owner's UI pass: the popup and the colony target (PR 2, 2026-10-31)
 

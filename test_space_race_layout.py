@@ -1332,6 +1332,14 @@ class TabTest(unittest.TestCase):
         # Every section sits in a tab: none left at the status's own level.
         self.assertEqual(re.findall(r"^\t\t(te_sr_sec_\w+|te_sr_status_sections) = \{", self.status, re.M), [])
 
+    def test_each_wrapper_has_one_visible(self):
+        """A second visible on a widget overrides the first (gui gotcha #17)."""
+        for key, visible, _ in self.TABS:
+            with self.subTest(tab=key):
+                body = self._wrapper(visible)
+                own = re.search(rf'(?m)^(\t*)visible = "{re.escape(visible)}"', body).group(1)
+                self.assertEqual(len(re.findall(rf"(?m)^{own}visible = ", body)), 1)
+
     def test_the_default_tab_is_mission_control(self):
         first = re.search(r'flowcontainer = \{\s*visible = "([^"]+)"\s*direction = vertical', self.status)
         self.assertEqual(first.group(1), "[Not( GetVariableSystem.Exists('sr_tab') )]")
@@ -1340,11 +1348,15 @@ class TabTest(unittest.TestCase):
         row = self.status[:self.status.index(self._wrapper(self.TABS[0][1]))]
         buttons = _instances(row, r"te_sr_tab_button(?:_wide)?")
         self.assertEqual(len(buttons), 4)
-        wants = (("mission", "GetVariableSystem.Exists('sr_tab')", "[GetVariableSystem.Clear('sr_tab')]"),
-                 ("fleets", "Not( GetVariableSystem.HasValue('sr_tab', 'fleets') )", "[GetVariableSystem.Set('sr_tab', 'fleets')]"),
-                 ("colonies", "Not( GetVariableSystem.HasValue('sr_tab', 'colonies') )", "[GetVariableSystem.Set('sr_tab', 'colonies')]"),
-                 ("system", "Not( GetVariableSystem.HasValue('sr_tab', 'system') )", "[GetVariableSystem.Set('sr_tab', 'system')]"))
-        for button, (key, enabled, onclick) in zip(buttons, wants):
+        # Mission Control and Solar System need the wide button (the labels
+        # test measures each type, not the instance that uses it).
+        types = re.findall(r"\b(te_sr_tab_button(?:_wide)?) = \{", row)
+        wants = (("mission", "GetVariableSystem.Exists('sr_tab')", "[GetVariableSystem.Clear('sr_tab')]", "te_sr_tab_button_wide"),
+                 ("fleets", "Not( GetVariableSystem.HasValue('sr_tab', 'fleets') )", "[GetVariableSystem.Set('sr_tab', 'fleets')]", "te_sr_tab_button"),
+                 ("colonies", "Not( GetVariableSystem.HasValue('sr_tab', 'colonies') )", "[GetVariableSystem.Set('sr_tab', 'colonies')]", "te_sr_tab_button"),
+                 ("system", "Not( GetVariableSystem.HasValue('sr_tab', 'system') )", "[GetVariableSystem.Set('sr_tab', 'system')]", "te_sr_tab_button_wide"))
+        self.assertEqual(types, [w[3] for w in wants])
+        for button, (key, enabled, onclick, _) in zip(buttons, wants):
             with self.subTest(tab=key):
                 self.assertIn(f'enabled = "[{enabled}]"', button)
                 self.assertIn(f'onclick = "{onclick}"', button)

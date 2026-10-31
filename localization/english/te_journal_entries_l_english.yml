@@ -1809,7 +1809,7 @@
  je_space_race_widget_ss_unknown:0 "Another power"
  je_space_race_widget_standard_label:0 "Standard"
  je_space_race_widget_tab_colonies:0 "$je_space_race_widget_colonies_header$"
- je_space_race_widget_tab_colonies_tt:0 "#header $je_space_race_widget_colonies_header$#!\nEvery colony we hold, by view."
+ je_space_race_widget_tab_colonies_tt:0 "#header $je_space_race_widget_colonies_header$#!\nEvery colony we hold."
  je_space_race_widget_tab_fleets:0 "Fleets"
  je_space_race_widget_tab_fleets_tt:0 "#header Fleets#!\n$je_space_race_widget_fleets_header$, and under Full Colonies $je_space_race_widget_sc_header$ and $je_space_race_widget_space_fleets_header$."
  je_space_race_widget_tab_mission:0 "$je_space_race_widget_control_header$"

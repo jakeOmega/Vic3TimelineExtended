@@ -7689,6 +7689,7 @@ types space_race_widget_types
 			visible = "[Not( GetVariableSystem.Exists('sr_tab') )]"
 			direction = vertical
 			parentanchor = hcenter
+			minimumsize = { 520 -1 }
 			ignoreinvisible = yes
 			spacing = 4
 
@@ -7768,6 +7769,7 @@ types space_race_widget_types
 			visible = "[GetVariableSystem.HasValue('sr_tab', 'fleets')]"
 			direction = vertical
 			parentanchor = hcenter
+			minimumsize = { 520 -1 }
 			ignoreinvisible = yes
 			spacing = 4
 
@@ -7781,6 +7783,7 @@ types space_race_widget_types
 			visible = "[GetVariableSystem.HasValue('sr_tab', 'colonies')]"
 			direction = vertical
 			parentanchor = hcenter
+			minimumsize = { 520 -1 }
 			ignoreinvisible = yes
 			spacing = 4
 
@@ -7792,6 +7795,7 @@ types space_race_widget_types
 			visible = "[GetVariableSystem.HasValue('sr_tab', 'system')]"
 			direction = vertical
 			parentanchor = hcenter
+			minimumsize = { 520 -1 }
 			ignoreinvisible = yes
 			spacing = 4
 
