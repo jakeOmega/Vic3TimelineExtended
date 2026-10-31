@@ -114,7 +114,10 @@ ahead, raised if they fall short.
 2. **The ministry's ceiling.** Human Augmentation now lists +2 for the
    Ministry of Thought Control, not +3. Under the Ministry of Thought Control
    law with Cyber Warfare, Brain-Computer Interfaces, Human Augmentation and AI
-   Tutors researched, the ministry's maximum investment reads 9.
+   Tutors researched, the ministry's maximum investment reads 9. In an old
+   save, a country at level 9 without AI Tutors now has a ceiling of 8: record
+   whether the engine lowers its investment at once or holds it until it
+   changes (no repair grants AI Tutors for it).
 3. **Education access.** A state's education access rises by 10 points when
    AI Tutors completes, and its breakdown names the technology.
 4. **Lessons Between the Lines** (`event society_technology_events.36` in a
