@@ -1416,27 +1416,27 @@ sr_fl_xfer_open_at = { sr_fl_$N$_xfer_open_now = yes }
 sr_fl_xfer_step_at = {
 	if = {
 		limit = { scope:pick = 1 }
-		sr_fl_xfer_step_role = { N = $N$ ROLE = war }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = war CODE = 1 }
 	}
 	else_if = {
 		limit = { scope:pick = 2 }
-		sr_fl_xfer_step_role = { N = $N$ ROLE = rapid }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = rapid CODE = 2 }
 	}
 	else_if = {
 		limit = { scope:pick = 3 }
-		sr_fl_xfer_step_role = { N = $N$ ROLE = siege }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = siege CODE = 3 }
 	}
 	else_if = {
 		limit = { scope:pick = 4 }
-		sr_fl_xfer_step_role = { N = $N$ ROLE = carrier }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = carrier CODE = 4 }
 	}
 	else_if = {
 		limit = { scope:pick = 5 }
-		sr_fl_xfer_step_role = { N = $N$ ROLE = tender }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = tender CODE = 5 }
 	}
 	else_if = {
 		limit = { scope:pick = 6 }
-		sr_fl_xfer_step_role = { N = $N$ ROLE = marines }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = marines CODE = 6 }
 	}
 }
 sr_fl_xfer_step_role = {
@@ -1484,13 +1484,23 @@ sr_fl_xfer_step_role = {
 		if = {
 			limit = { NOT = { has_global_variable = sr_xf_step_checked } }
 			set_global_variable = { name = sr_xf_step_checked value = yes }
-			debug_log = "TE_SELF_CHECK BROKEN xfer_step_scope (a Transfer step reached its scripted GUI with no step code: the third AddScope, scope:step, did not arrive; fallback: pick = role x 100 + step code, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			set_variable = { name = sr_xf_chk_slot value = $N$ }
+			set_variable = { name = sr_xf_chk_role value = $CODE$ }
+			debug_log = "TE_SELF_CHECK BROKEN xfer_step_scope (a Transfer step reached its scripted GUI with no step code: the third AddScope, scope:step, did not arrive; fallback: pick = role x 100 + step code, docs/testing/solar-colonies-playtest.md) slot=[THIS.Var('sr_xf_chk_slot').GetValue|0] role=[THIS.Var('sr_xf_chk_role').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+			remove_variable = sr_xf_chk_slot
+			remove_variable = sr_xf_chk_role
 		}
 	}
 	if = {
 		limit = { NOT = { has_global_variable = sr_xf_step_checked } }
 		set_global_variable = { name = sr_xf_step_checked value = yes }
-		debug_log = "TE_SELF_CHECK OK xfer_step_scope (a Transfer step reached its scripted GUI with its step code: three chained AddScopes arrive) date=[TimeKeeper.GetCurrentDate.GetString]"
+		set_variable = { name = sr_xf_chk_slot value = $N$ }
+		set_variable = { name = sr_xf_chk_role value = $CODE$ }
+		set_variable = { name = sr_xf_chk_amount value = var:sr_det_amt_$ROLE$ }
+		debug_log = "TE_SELF_CHECK OK xfer_step_scope (a Transfer step reached its scripted GUI with its step code: three chained AddScopes arrive) slot=[THIS.Var('sr_xf_chk_slot').GetValue|0] role=[THIS.Var('sr_xf_chk_role').GetValue|0] amount=[THIS.Var('sr_xf_chk_amount').GetValue|2] date=[TimeKeeper.GetCurrentDate.GetString]"
+		remove_variable = sr_xf_chk_slot
+		remove_variable = sr_xf_chk_role
+		remove_variable = sr_xf_chk_amount
 	}
 }
 

@@ -1478,7 +1478,6 @@ types sr_fleets_generated_rows_types
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
@@ -1489,7 +1488,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_2'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
@@ -1500,7 +1499,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_3'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
@@ -1511,12 +1510,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_4'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_5'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_6'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_4'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
@@ -1527,7 +1527,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_5'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
@@ -1538,7 +1538,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_6'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
@@ -1549,12 +1549,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_7'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_8'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_9'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_7'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
@@ -1565,7 +1566,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_8'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
@@ -1576,7 +1577,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_xf_here_9'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
@@ -1884,7 +1885,6 @@ types sr_fleets_generated_rows_types
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
@@ -1895,7 +1895,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_1'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
@@ -1906,7 +1906,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_3'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
@@ -1917,12 +1917,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_4'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_5'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_6'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_4'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
@@ -1933,7 +1934,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_5'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
@@ -1944,7 +1945,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_6'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
@@ -1955,12 +1956,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_7'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_8'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_9'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_7'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
@@ -1971,7 +1973,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_8'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
@@ -1982,7 +1984,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_xf_here_9'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
@@ -2290,7 +2292,6 @@ types sr_fleets_generated_rows_types
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
@@ -2301,7 +2302,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_1'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
@@ -2312,7 +2313,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_2'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
@@ -2323,12 +2324,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_4'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_5'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_6'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_4'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
@@ -2339,7 +2341,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_5'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
@@ -2350,7 +2352,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_6'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
@@ -2361,12 +2363,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_7'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_8'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_9'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_7'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
@@ -2377,7 +2380,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_8'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
@@ -2388,7 +2391,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_xf_here_9'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
@@ -2696,7 +2699,6 @@ types sr_fleets_generated_rows_types
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
@@ -2707,7 +2709,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_1'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
@@ -2718,7 +2720,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_2'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
@@ -2729,12 +2731,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_3'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_5'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_6'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_3'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
@@ -2745,7 +2748,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_5'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
@@ -2756,7 +2759,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_6'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
@@ -2767,12 +2770,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_7'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_8'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_9'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_7'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
@@ -2783,7 +2787,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_8'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
@@ -2794,7 +2798,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_xf_here_9'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
@@ -3102,7 +3106,6 @@ types sr_fleets_generated_rows_types
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
@@ -3113,7 +3116,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_1'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
@@ -3124,7 +3127,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_2'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
@@ -3135,12 +3138,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_3'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_4'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_6'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_3'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
@@ -3151,7 +3155,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_4'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
@@ -3162,7 +3166,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_6'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
@@ -3173,12 +3177,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_7'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_8'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_9'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_7'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
@@ -3189,7 +3194,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_8'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
@@ -3200,7 +3205,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_xf_here_9'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
@@ -3508,7 +3513,6 @@ types sr_fleets_generated_rows_types
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
@@ -3519,7 +3523,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_1'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
@@ -3530,7 +3534,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_2'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
@@ -3541,12 +3545,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_3'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_4'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_5'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_3'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
@@ -3557,7 +3562,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_4'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
@@ -3568,7 +3573,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_5'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
@@ -3579,12 +3584,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_7'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_8'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_9'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_7'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
@@ -3595,7 +3601,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_8'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
@@ -3606,7 +3612,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_xf_here_9'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
@@ -3914,7 +3920,6 @@ types sr_fleets_generated_rows_types
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
@@ -3925,7 +3930,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_1'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
@@ -3936,7 +3941,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_2'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
@@ -3947,12 +3952,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_3'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_4'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_5'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_3'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
@@ -3963,7 +3969,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_4'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
@@ -3974,7 +3980,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_5'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
@@ -3985,12 +3991,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_6'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_8'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_9'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_6'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
@@ -4001,7 +4008,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_8'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
@@ -4012,7 +4019,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_xf_here_9'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
@@ -4320,7 +4327,6 @@ types sr_fleets_generated_rows_types
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
@@ -4331,7 +4337,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_1'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
@@ -4342,7 +4348,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_2'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
@@ -4353,12 +4359,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_3'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_4'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_5'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_3'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
@@ -4369,7 +4376,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_4'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
@@ -4380,7 +4387,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_5'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
@@ -4391,12 +4398,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_6'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_7'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_9'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_6'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
@@ -4407,7 +4415,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_7'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
@@ -4418,7 +4426,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_xf_here_9'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
@@ -4726,7 +4734,6 @@ types sr_fleets_generated_rows_types
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
@@ -4737,7 +4744,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_1'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
@@ -4748,7 +4755,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_2'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
@@ -4759,12 +4766,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_3'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_4'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_5'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_3'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
@@ -4775,7 +4783,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_4'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
@@ -4786,7 +4794,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_5'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
@@ -4797,12 +4805,13 @@ types sr_fleets_generated_rows_types
 							}
 						}
 						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_6'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_7'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_8'), '(CFixedPoint)1' ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_6'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
@@ -4813,7 +4822,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_7'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
@@ -4824,7 +4833,7 @@ types sr_fleets_generated_rows_types
 							}
 							te_sr_xf_to_button = {
 								blockoverride "xf_to_btn" {
-									visible = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_xf_here_8'), '(CFixedPoint)1' )]"
 									enabled = "[GetScriptedGui('sr_fleet_xfer_to_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									onclick = "[GetScriptedGui('sr_fleet_xfer_to_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 									tooltip = "[Concatenate( GetScriptedGui('sr_fleet_xfer_to_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_xfer_to_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"

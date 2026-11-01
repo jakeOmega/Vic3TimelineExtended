@@ -959,6 +959,9 @@ def render_transfer_triggers(n: int) -> list[str]:
             "# it is now.",
             f"{var(n, 'xf_moves')} = {{ OR = {{ {var(n, 'xf_strength')} > 0 {var(n, 'xf_marines_moved')} > 0 "
             f"AND = {{ {var(n, 'xf_left')} <= 0 {var(n, 'strength_full')} > 0 }} }} }}",
+            "# Some of its strength stays: else every marine goes with the last ship, and",
+            "# the marines' - and + grey (sr_fleet_xfer_step_sgui).",
+            f"{var(n, 'xf_some_stays')} = {{ {var(n, 'xf_left')} > 0 }}",
             f"{var(n, 'xf_keeps')} = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength }}",
             f"{var(n, 'xf_keeps_or_all')} = {{ OR = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength "
             f"{var(n, 'xf_left')} <= 0 }} }}",
@@ -989,7 +992,8 @@ def render_transfer_effects() -> list[str]:
             "# scope:step its code (XF_STEPS: 1-4 take 1, 10, 100 or 1,000 off, 5 none;",
             "# 6-9 add them, 10 all), the amount then held to 0 and what slot N has.",
             "sr_fl_xfer_step_at = {"]
-    out += _chain([(f"scope:pick = {c}", [f"sr_fl_xfer_step_role = {{ N = $N$ ROLE = {k} }}"]) for k, c in XF_CODE.items()])
+    out += _chain([(f"scope:pick = {c}", [f"sr_fl_xfer_step_role = {{ N = $N$ ROLE = {k} CODE = {c} }}"])
+                   for k, c in XF_CODE.items()])
     # Stepped from the amount as shown (already held to what the slot has, which
     # a battle may have cut since), so each click moves the figure.
     amount = "sr_det_amt_$ROLE$"
@@ -1001,20 +1005,33 @@ def render_transfer_effects() -> list[str]:
               for code, step in XF_STEPS.items()]
     # TE_SELF_CHECK xfer_step_scope: the third chained AddScope (scope:step)
     # reaching a scripted GUI is unproven (two are: sr_colony_module_sgui).
-    # No code matched: it didn't arrive. Once a game either way.
+    # No code matched: it didn't arrive. Once a game either way: BROKEN sets the
+    # flag first, so OK, after the chain, can't follow it. The line's numbers go
+    # through variables, since a $PARAM$ inside a debug_log string is mangled
+    # (scripting_best_practices.md, "No $PARAM$ inside the string").
+    numbers = ["set_variable = { name = sr_xf_chk_slot value = $N$ }", "set_variable = { name = sr_xf_chk_role value = $CODE$ }"]
+    said = "slot=[THIS.Var('sr_xf_chk_slot').GetValue|0] role=[THIS.Var('sr_xf_chk_role').GetValue|0]"
+    removed = ["remove_variable = sr_xf_chk_slot", "remove_variable = sr_xf_chk_role"]
     broken = ["if = {",
               "\tlimit = { NOT = { has_global_variable = sr_xf_step_checked } }",
               "\tset_global_variable = { name = sr_xf_step_checked value = yes }",
+              *[f"\t{line}" for line in numbers],
               '\tdebug_log = "TE_SELF_CHECK BROKEN xfer_step_scope (a Transfer step reached its scripted GUI '
               "with no step code: the third AddScope, scope:step, did not arrive; fallback: pick = role x 100 + step "
-              'code, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"',
+              f'code, docs/testing/solar-colonies-playtest.md) {said} date=[TimeKeeper.GetCurrentDate.GetString]"',
+              *[f"\t{line}" for line in removed],
               "}"]
     out += _chain(cases, else_body=broken)
     out += ["\tif = {",
             "\t\tlimit = { NOT = { has_global_variable = sr_xf_step_checked } }",
             "\t\tset_global_variable = { name = sr_xf_step_checked value = yes }",
+            *[f"\t\t{line}" for line in numbers],
+            "\t\tset_variable = { name = sr_xf_chk_amount value = var:sr_det_amt_$ROLE$ }",
             '\t\tdebug_log = "TE_SELF_CHECK OK xfer_step_scope (a Transfer step reached its scripted GUI with its '
-            'step code: three chained AddScopes arrive) date=[TimeKeeper.GetCurrentDate.GetString]"',
+            f"step code: three chained AddScopes arrive) {said} amount=[THIS.Var('sr_xf_chk_amount').GetValue|2] "
+            'date=[TimeKeeper.GetCurrentDate.GetString]"',
+            *[f"\t\t{line}" for line in removed],
+            "\t\tremove_variable = sr_xf_chk_amount",
             "\t}",
             "}", "",
             "# The Into buttons (sr_fleet_xfer_to_sgui): where the transfer goes, scope:pick",
@@ -2047,13 +2064,19 @@ def render_transfer_display() -> list[str]:
     the fleet it goes into then has. Each reads the script's own value
     (sr_fl_<n>_xf_*), which the transfer reads in its turn."""
     out = ["", "# Per slot, the Transfer popup (UI pass design § 6): each amount, what stays, what",
-           "# the fleet it goes into then has (the script's sr_fl_<n>_xf_* values)."]
+           "# the fleet it goes into then has (the script's sr_fl_<n>_xf_* values); the",
+           "# marines' amount is what moves, all of them once every ship goes. Then 1 for",
+           "# each other slot at its location, which shows its Into button (a scope-free",
+           "# visible, #1286's review I1)."]
     for n in range(1, SLOTS + 1):
         for k in (*XF_KEYS, "strength"):
             stay = "xf_left" if k == "strength" else f"xf_stay_{k}"
-            out += [f"sr_disp_fl_{n}_xf_{k} = {{ value = {var(n, f'xf_{k}')} }}",
+            amount = "xf_marines_moved" if k == "marines" else f"xf_{k}"
+            out += [f"sr_disp_fl_{n}_xf_{k} = {{ value = {var(n, amount)} }}",
                     f"sr_disp_fl_{n}_xf_stay_{k} = {{ value = {var(n, stay)} }}",
                     f"sr_disp_fl_{n}_xf_there_{k} = {{ value = {var(n, f'xf_there_{k}')} }}"]
+        out += [f"sr_disp_fl_{n}_xf_here_{m} = {{ value = 0 if = {{ limit = {{ {_here(m, n)} }} value = 1 }} }}"
+                for m in _others(n)]
     return out
 
 
@@ -2282,12 +2305,24 @@ def _xf_override(name: str, *lines: str, depth: int = 5) -> list[str]:
     return [f'{tab}blockoverride "{name}" {{', *[f"{tab}\t{line}" for line in lines], f"{tab}}}"]
 
 
+def _or(terms: list[str]) -> str:
+    """The GUI's two-argument Or, nested: Or( a, Or( b, c ) )."""
+    return terms[0] if len(terms) == 1 else f"Or( {terms[0]}, {_or(terms[1:])} )"
+
+
+def _xf_here(n: int, m: int) -> str:
+    """Slot m is at slot n's location: its Into button shows (a display value, so
+    the button's visible reads no saved scope, #1286's review I1)."""
+    return _eq(f"sr_disp_fl_{n}_xf_here_{m}", 1)
+
+
 def _xf_to_button(n: int, pick: int) -> list[str]:
     sgui = "sr_fleet_xfer_to_sgui"
     scope = _xf_scope(n, pick=pick)
     label = "je_space_race_widget_xf_new" if pick == 0 else f"je_space_race_widget_xf_to_{pick}"
     out = ["\t\t\t\t\t\tte_sr_xf_to_button = {"]
-    out += _xf_override("xf_to_btn", f'visible = "{_xf_call(sgui, "IsShown", scope)}"',
+    shown = [] if pick == 0 else [f'visible = "[{_xf_here(n, pick)}]"']
+    out += _xf_override("xf_to_btn", *shown,
                         f'enabled = "{_xf_call(sgui, "IsValid", scope)}"', f'onclick = "{_xf_call(sgui, "Execute", scope)}"',
                         f'tooltip = "{_xf_reasoned(sgui, scope)}"', depth=7)
     out += _xf_override("xf_to_label", f'text = "{label}"', depth=7)
@@ -2343,8 +2378,12 @@ def _xfer_body(n: int) -> list[str]:
            "\t\t\t\tte_sr_xf_to_line = {",
            '\t\t\t\t\tblockoverride "xf_to_rows" {']
     for line in lines:
-        out += ["\t\t\t\t\t\tflowcontainer = {", "\t\t\t\t\t\t\tdirection = horizontal", "\t\t\t\t\t\t\tignoreinvisible = yes",
-                "\t\t\t\t\t\t\tspacing = 4"]
+        # A line with no fleet here hides, so it leaves no gap (New fleet, on
+        # the first, always shows). Within a line the buttons pack; across lines
+        # they keep their slot's line.
+        shown = [] if 0 in line else [f'\t\t\t\t\t\t\tvisible = "[{_or([_xf_here(n, m) for m in line])}]"']
+        out += ["\t\t\t\t\t\tflowcontainer = {", *shown, "\t\t\t\t\t\t\tdirection = horizontal",
+                "\t\t\t\t\t\t\tignoreinvisible = yes", "\t\t\t\t\t\t\tspacing = 4"]
         for pick in line:
             out += ["\t" + x for x in _xf_to_button(n, pick)]
         out += ["\t\t\t\t\t\t}"]

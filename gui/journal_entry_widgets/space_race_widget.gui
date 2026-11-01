@@ -5141,12 +5141,13 @@ types space_race_widget_types
 	### ======================================================================
 
 	### An Into button: a new fleet, or another fleet of ours here, named by its
-	### strength (the Fleets rows carry no number). `xf_to_btn` carries the
-	### scripted GUI's four properties (sr_fleet_xfer_to_sgui, scope:op the slot,
-	### scope:pick 0 or the other slot) and its visible (IsShown: a fleet here).
+	### drive and strength, as its Fleets row shows them (the rows carry no
+	### number). `xf_to_btn` carries the scripted GUI's properties
+	### (sr_fleet_xfer_to_sgui, scope:op the slot, scope:pick 0 or the other slot)
+	### and, for a fleet, its visible (sr_disp_fl_<n>_xf_here_<m>: it is here).
 	type te_sr_xf_to_button = button {
 		using = default_button_action
-		size = { 140 26 }
+		size = { 168 26 }
 		parentanchor = vcenter
 		block "xf_to_btn" {}
 
@@ -5154,15 +5155,15 @@ types space_race_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 134
+			max_width = 162
 			elide = right
 			using = te_sr_fontsize_row
 			block "xf_to_label" {}
 		}
 	}
 
-	### Into, then up to three lines of te_sr_xf_to_button: 60 + 3 × 140 + 3 × 4
-	### = 492.
+	### Into, then up to three lines of te_sr_xf_to_button: 60 + 3 × 168 + 3 × 4
+	### + 2 × 4 = 584, the rows' width. A line with no fleet here hides.
 	type te_sr_xf_to_line = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -5216,6 +5217,7 @@ types space_race_widget_types
 			using = te_sr_fontsize_row
 			elide = right
 			text = "je_space_race_widget_xf_col_stay"
+			tooltip = "je_space_race_widget_xf_col_stay_tt"
 		}
 		textbox = {
 			size = { 104 20 }
@@ -5294,18 +5296,17 @@ types space_race_widget_types
 		}
 	}
 
-	### The popup's foot: Transfer (sr_fleet_transfer_sgui, scope:op the slot).
+	### The popup's foot: Transfer (sr_fleet_transfer_sgui, scope:op the slot),
+	### centered under the rows in a slot their width (style guide rules 6 and 8).
 	### `xf_go_btn` carries its four properties: greyed, its hover names the
 	### refusal; a click moves what is chosen and closes the popup.
-	type te_sr_xf_go_row = flowcontainer {
-		direction = horizontal
-		ignoreinvisible = yes
-		margin = { 4 4 }
+	type te_sr_xf_go_row = widget {
+		size = { 584 38 }
 
 		button = {
 			using = default_button_action
 			size = { 140 30 }
-			parentanchor = vcenter
+			parentanchor = center
 			block "xf_go_btn" {}
 
 			textbox = {

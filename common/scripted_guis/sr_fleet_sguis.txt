@@ -135,7 +135,8 @@ sr_fleet_xfer_open_sgui = {
 # (gen_space_fleets.XF_STEPS: 1-4 fewer by 1, 10, 100, 1,000, 5 none; 6-9 more,
 # 10 all), the construction market's keys. The amount is then held to 0 and
 # what the slot has (sr_fl_xfer_step_role). Three chained AddScopes: unproven
-# in game (TE_SELF_CHECK xfer_step_scope).
+# in game (TE_SELF_CHECK xfer_step_scope). The marines' grey while every ship
+# goes, since every marine then goes too.
 sr_fleet_xfer_step_sgui = {
 	scope = country
 	saved_scopes = { op pick step }
@@ -154,6 +155,15 @@ sr_fleet_xfer_step_sgui = {
 			text = sr_fl_not_at_location_tt
 			sr_fl_op_check = { TEST = at_location }
 		}
+		# The marines (6): with every ship going, every marine goes too, and the
+		# row shows it (sr_disp_fl_<n>_xf_marines).
+		trigger_if = {
+			limit = { scope:pick = 6 }
+			custom_tooltip = {
+				text = sr_fl_xf_marines_follow_tt
+				sr_fl_op_check = { TEST = xf_some_stays }
+			}
+		}
 	}
 
 	effect = {
@@ -171,8 +181,11 @@ sr_fleet_xfer_step_sgui = {
 }
 
 # Into: where the transfer goes, scope:pick 0 a new fleet, else another slot
-# of ours. Shown for a new fleet, and for a fleet of ours here; the choice
-# already made greys itself, as the approach selector's does.
+# of ours. The buttons' visible is a display value (a fleet of ours here,
+# sr_disp_fl_<n>_xf_here_<m>), so is_shown reads no saved scope (gotcha #22: a
+# scope that didn't reach is_shown would hide them all, #1286's review I1);
+# is_valid checks the fleet is here again. The choice already made greys
+# itself, as the approach selector's does.
 sr_fleet_xfer_to_sgui = {
 	scope = country
 	saved_scopes = { op pick }
@@ -180,10 +193,6 @@ sr_fleet_xfer_to_sgui = {
 	is_shown = {
 		has_journal_entry = je_space_race_solar_colonization
 		sr_colonies_full_enabled = yes
-		OR = {
-			scope:pick = 0
-			sr_fl_op_check = { TEST = xf_pick_here }
-		}
 	}
 
 	ai_is_valid = {
@@ -200,6 +209,13 @@ sr_fleet_xfer_to_sgui = {
 			custom_tooltip = {
 				text = sr_fl_xf_free_slot_tt
 				sr_fl_has_free_slot = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { scope:pick = 0 } }
+			custom_tooltip = {
+				text = sr_fl_xf_pick_here_tt
+				sr_fl_op_check = { TEST = xf_pick_here }
 			}
 		}
 		custom_tooltip = {

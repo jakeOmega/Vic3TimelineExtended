@@ -2734,7 +2734,10 @@ sr_disp_earth_power_months = {
 }
 
 # Per slot, the Transfer popup (UI pass design § 6): each amount, what stays, what
-# the fleet it goes into then has (the script's sr_fl_<n>_xf_* values).
+# the fleet it goes into then has (the script's sr_fl_<n>_xf_* values); the
+# marines' amount is what moves, all of them once every ship goes. Then 1 for
+# each other slot at its location, which shows its Into button (a scope-free
+# visible, #1286's review I1).
 sr_disp_fl_1_xf_war = { value = sr_fl_1_xf_war }
 sr_disp_fl_1_xf_stay_war = { value = sr_fl_1_xf_stay_war }
 sr_disp_fl_1_xf_there_war = { value = sr_fl_1_xf_there_war }
@@ -2750,12 +2753,20 @@ sr_disp_fl_1_xf_there_carrier = { value = sr_fl_1_xf_there_carrier }
 sr_disp_fl_1_xf_tender = { value = sr_fl_1_xf_tender }
 sr_disp_fl_1_xf_stay_tender = { value = sr_fl_1_xf_stay_tender }
 sr_disp_fl_1_xf_there_tender = { value = sr_fl_1_xf_there_tender }
-sr_disp_fl_1_xf_marines = { value = sr_fl_1_xf_marines }
+sr_disp_fl_1_xf_marines = { value = sr_fl_1_xf_marines_moved }
 sr_disp_fl_1_xf_stay_marines = { value = sr_fl_1_xf_stay_marines }
 sr_disp_fl_1_xf_there_marines = { value = sr_fl_1_xf_there_marines }
 sr_disp_fl_1_xf_strength = { value = sr_fl_1_xf_strength }
 sr_disp_fl_1_xf_stay_strength = { value = sr_fl_1_xf_left }
 sr_disp_fl_1_xf_there_strength = { value = sr_fl_1_xf_there_strength }
+sr_disp_fl_1_xf_here_2 = { value = 0 if = { limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_1_loc var:sr_fl_2_loc = var:sr_fl_1_loc } value = 1 } }
+sr_disp_fl_1_xf_here_3 = { value = 0 if = { limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_1_loc var:sr_fl_3_loc = var:sr_fl_1_loc } value = 1 } }
+sr_disp_fl_1_xf_here_4 = { value = 0 if = { limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_1_loc var:sr_fl_4_loc = var:sr_fl_1_loc } value = 1 } }
+sr_disp_fl_1_xf_here_5 = { value = 0 if = { limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_1_loc var:sr_fl_5_loc = var:sr_fl_1_loc } value = 1 } }
+sr_disp_fl_1_xf_here_6 = { value = 0 if = { limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_1_loc var:sr_fl_6_loc = var:sr_fl_1_loc } value = 1 } }
+sr_disp_fl_1_xf_here_7 = { value = 0 if = { limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_1_loc var:sr_fl_7_loc = var:sr_fl_1_loc } value = 1 } }
+sr_disp_fl_1_xf_here_8 = { value = 0 if = { limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_1_loc var:sr_fl_8_loc = var:sr_fl_1_loc } value = 1 } }
+sr_disp_fl_1_xf_here_9 = { value = 0 if = { limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_1_loc var:sr_fl_9_loc = var:sr_fl_1_loc } value = 1 } }
 sr_disp_fl_2_xf_war = { value = sr_fl_2_xf_war }
 sr_disp_fl_2_xf_stay_war = { value = sr_fl_2_xf_stay_war }
 sr_disp_fl_2_xf_there_war = { value = sr_fl_2_xf_there_war }
@@ -2771,12 +2782,20 @@ sr_disp_fl_2_xf_there_carrier = { value = sr_fl_2_xf_there_carrier }
 sr_disp_fl_2_xf_tender = { value = sr_fl_2_xf_tender }
 sr_disp_fl_2_xf_stay_tender = { value = sr_fl_2_xf_stay_tender }
 sr_disp_fl_2_xf_there_tender = { value = sr_fl_2_xf_there_tender }
-sr_disp_fl_2_xf_marines = { value = sr_fl_2_xf_marines }
+sr_disp_fl_2_xf_marines = { value = sr_fl_2_xf_marines_moved }
 sr_disp_fl_2_xf_stay_marines = { value = sr_fl_2_xf_stay_marines }
 sr_disp_fl_2_xf_there_marines = { value = sr_fl_2_xf_there_marines }
 sr_disp_fl_2_xf_strength = { value = sr_fl_2_xf_strength }
 sr_disp_fl_2_xf_stay_strength = { value = sr_fl_2_xf_left }
 sr_disp_fl_2_xf_there_strength = { value = sr_fl_2_xf_there_strength }
+sr_disp_fl_2_xf_here_1 = { value = 0 if = { limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_2_loc var:sr_fl_1_loc = var:sr_fl_2_loc } value = 1 } }
+sr_disp_fl_2_xf_here_3 = { value = 0 if = { limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_2_loc var:sr_fl_3_loc = var:sr_fl_2_loc } value = 1 } }
+sr_disp_fl_2_xf_here_4 = { value = 0 if = { limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_2_loc var:sr_fl_4_loc = var:sr_fl_2_loc } value = 1 } }
+sr_disp_fl_2_xf_here_5 = { value = 0 if = { limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_2_loc var:sr_fl_5_loc = var:sr_fl_2_loc } value = 1 } }
+sr_disp_fl_2_xf_here_6 = { value = 0 if = { limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_2_loc var:sr_fl_6_loc = var:sr_fl_2_loc } value = 1 } }
+sr_disp_fl_2_xf_here_7 = { value = 0 if = { limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_2_loc var:sr_fl_7_loc = var:sr_fl_2_loc } value = 1 } }
+sr_disp_fl_2_xf_here_8 = { value = 0 if = { limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_2_loc var:sr_fl_8_loc = var:sr_fl_2_loc } value = 1 } }
+sr_disp_fl_2_xf_here_9 = { value = 0 if = { limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_2_loc var:sr_fl_9_loc = var:sr_fl_2_loc } value = 1 } }
 sr_disp_fl_3_xf_war = { value = sr_fl_3_xf_war }
 sr_disp_fl_3_xf_stay_war = { value = sr_fl_3_xf_stay_war }
 sr_disp_fl_3_xf_there_war = { value = sr_fl_3_xf_there_war }
@@ -2792,12 +2811,20 @@ sr_disp_fl_3_xf_there_carrier = { value = sr_fl_3_xf_there_carrier }
 sr_disp_fl_3_xf_tender = { value = sr_fl_3_xf_tender }
 sr_disp_fl_3_xf_stay_tender = { value = sr_fl_3_xf_stay_tender }
 sr_disp_fl_3_xf_there_tender = { value = sr_fl_3_xf_there_tender }
-sr_disp_fl_3_xf_marines = { value = sr_fl_3_xf_marines }
+sr_disp_fl_3_xf_marines = { value = sr_fl_3_xf_marines_moved }
 sr_disp_fl_3_xf_stay_marines = { value = sr_fl_3_xf_stay_marines }
 sr_disp_fl_3_xf_there_marines = { value = sr_fl_3_xf_there_marines }
 sr_disp_fl_3_xf_strength = { value = sr_fl_3_xf_strength }
 sr_disp_fl_3_xf_stay_strength = { value = sr_fl_3_xf_left }
 sr_disp_fl_3_xf_there_strength = { value = sr_fl_3_xf_there_strength }
+sr_disp_fl_3_xf_here_1 = { value = 0 if = { limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_3_loc var:sr_fl_1_loc = var:sr_fl_3_loc } value = 1 } }
+sr_disp_fl_3_xf_here_2 = { value = 0 if = { limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_3_loc var:sr_fl_2_loc = var:sr_fl_3_loc } value = 1 } }
+sr_disp_fl_3_xf_here_4 = { value = 0 if = { limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_3_loc var:sr_fl_4_loc = var:sr_fl_3_loc } value = 1 } }
+sr_disp_fl_3_xf_here_5 = { value = 0 if = { limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_3_loc var:sr_fl_5_loc = var:sr_fl_3_loc } value = 1 } }
+sr_disp_fl_3_xf_here_6 = { value = 0 if = { limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_3_loc var:sr_fl_6_loc = var:sr_fl_3_loc } value = 1 } }
+sr_disp_fl_3_xf_here_7 = { value = 0 if = { limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_3_loc var:sr_fl_7_loc = var:sr_fl_3_loc } value = 1 } }
+sr_disp_fl_3_xf_here_8 = { value = 0 if = { limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_3_loc var:sr_fl_8_loc = var:sr_fl_3_loc } value = 1 } }
+sr_disp_fl_3_xf_here_9 = { value = 0 if = { limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_3_loc var:sr_fl_9_loc = var:sr_fl_3_loc } value = 1 } }
 sr_disp_fl_4_xf_war = { value = sr_fl_4_xf_war }
 sr_disp_fl_4_xf_stay_war = { value = sr_fl_4_xf_stay_war }
 sr_disp_fl_4_xf_there_war = { value = sr_fl_4_xf_there_war }
@@ -2813,12 +2840,20 @@ sr_disp_fl_4_xf_there_carrier = { value = sr_fl_4_xf_there_carrier }
 sr_disp_fl_4_xf_tender = { value = sr_fl_4_xf_tender }
 sr_disp_fl_4_xf_stay_tender = { value = sr_fl_4_xf_stay_tender }
 sr_disp_fl_4_xf_there_tender = { value = sr_fl_4_xf_there_tender }
-sr_disp_fl_4_xf_marines = { value = sr_fl_4_xf_marines }
+sr_disp_fl_4_xf_marines = { value = sr_fl_4_xf_marines_moved }
 sr_disp_fl_4_xf_stay_marines = { value = sr_fl_4_xf_stay_marines }
 sr_disp_fl_4_xf_there_marines = { value = sr_fl_4_xf_there_marines }
 sr_disp_fl_4_xf_strength = { value = sr_fl_4_xf_strength }
 sr_disp_fl_4_xf_stay_strength = { value = sr_fl_4_xf_left }
 sr_disp_fl_4_xf_there_strength = { value = sr_fl_4_xf_there_strength }
+sr_disp_fl_4_xf_here_1 = { value = 0 if = { limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_4_loc var:sr_fl_1_loc = var:sr_fl_4_loc } value = 1 } }
+sr_disp_fl_4_xf_here_2 = { value = 0 if = { limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_4_loc var:sr_fl_2_loc = var:sr_fl_4_loc } value = 1 } }
+sr_disp_fl_4_xf_here_3 = { value = 0 if = { limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_4_loc var:sr_fl_3_loc = var:sr_fl_4_loc } value = 1 } }
+sr_disp_fl_4_xf_here_5 = { value = 0 if = { limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_4_loc var:sr_fl_5_loc = var:sr_fl_4_loc } value = 1 } }
+sr_disp_fl_4_xf_here_6 = { value = 0 if = { limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_4_loc var:sr_fl_6_loc = var:sr_fl_4_loc } value = 1 } }
+sr_disp_fl_4_xf_here_7 = { value = 0 if = { limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_4_loc var:sr_fl_7_loc = var:sr_fl_4_loc } value = 1 } }
+sr_disp_fl_4_xf_here_8 = { value = 0 if = { limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_4_loc var:sr_fl_8_loc = var:sr_fl_4_loc } value = 1 } }
+sr_disp_fl_4_xf_here_9 = { value = 0 if = { limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_4_loc var:sr_fl_9_loc = var:sr_fl_4_loc } value = 1 } }
 sr_disp_fl_5_xf_war = { value = sr_fl_5_xf_war }
 sr_disp_fl_5_xf_stay_war = { value = sr_fl_5_xf_stay_war }
 sr_disp_fl_5_xf_there_war = { value = sr_fl_5_xf_there_war }
@@ -2834,12 +2869,20 @@ sr_disp_fl_5_xf_there_carrier = { value = sr_fl_5_xf_there_carrier }
 sr_disp_fl_5_xf_tender = { value = sr_fl_5_xf_tender }
 sr_disp_fl_5_xf_stay_tender = { value = sr_fl_5_xf_stay_tender }
 sr_disp_fl_5_xf_there_tender = { value = sr_fl_5_xf_there_tender }
-sr_disp_fl_5_xf_marines = { value = sr_fl_5_xf_marines }
+sr_disp_fl_5_xf_marines = { value = sr_fl_5_xf_marines_moved }
 sr_disp_fl_5_xf_stay_marines = { value = sr_fl_5_xf_stay_marines }
 sr_disp_fl_5_xf_there_marines = { value = sr_fl_5_xf_there_marines }
 sr_disp_fl_5_xf_strength = { value = sr_fl_5_xf_strength }
 sr_disp_fl_5_xf_stay_strength = { value = sr_fl_5_xf_left }
 sr_disp_fl_5_xf_there_strength = { value = sr_fl_5_xf_there_strength }
+sr_disp_fl_5_xf_here_1 = { value = 0 if = { limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_5_loc var:sr_fl_1_loc = var:sr_fl_5_loc } value = 1 } }
+sr_disp_fl_5_xf_here_2 = { value = 0 if = { limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_5_loc var:sr_fl_2_loc = var:sr_fl_5_loc } value = 1 } }
+sr_disp_fl_5_xf_here_3 = { value = 0 if = { limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_5_loc var:sr_fl_3_loc = var:sr_fl_5_loc } value = 1 } }
+sr_disp_fl_5_xf_here_4 = { value = 0 if = { limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_5_loc var:sr_fl_4_loc = var:sr_fl_5_loc } value = 1 } }
+sr_disp_fl_5_xf_here_6 = { value = 0 if = { limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_5_loc var:sr_fl_6_loc = var:sr_fl_5_loc } value = 1 } }
+sr_disp_fl_5_xf_here_7 = { value = 0 if = { limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_5_loc var:sr_fl_7_loc = var:sr_fl_5_loc } value = 1 } }
+sr_disp_fl_5_xf_here_8 = { value = 0 if = { limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_5_loc var:sr_fl_8_loc = var:sr_fl_5_loc } value = 1 } }
+sr_disp_fl_5_xf_here_9 = { value = 0 if = { limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_5_loc var:sr_fl_9_loc = var:sr_fl_5_loc } value = 1 } }
 sr_disp_fl_6_xf_war = { value = sr_fl_6_xf_war }
 sr_disp_fl_6_xf_stay_war = { value = sr_fl_6_xf_stay_war }
 sr_disp_fl_6_xf_there_war = { value = sr_fl_6_xf_there_war }
@@ -2855,12 +2898,20 @@ sr_disp_fl_6_xf_there_carrier = { value = sr_fl_6_xf_there_carrier }
 sr_disp_fl_6_xf_tender = { value = sr_fl_6_xf_tender }
 sr_disp_fl_6_xf_stay_tender = { value = sr_fl_6_xf_stay_tender }
 sr_disp_fl_6_xf_there_tender = { value = sr_fl_6_xf_there_tender }
-sr_disp_fl_6_xf_marines = { value = sr_fl_6_xf_marines }
+sr_disp_fl_6_xf_marines = { value = sr_fl_6_xf_marines_moved }
 sr_disp_fl_6_xf_stay_marines = { value = sr_fl_6_xf_stay_marines }
 sr_disp_fl_6_xf_there_marines = { value = sr_fl_6_xf_there_marines }
 sr_disp_fl_6_xf_strength = { value = sr_fl_6_xf_strength }
 sr_disp_fl_6_xf_stay_strength = { value = sr_fl_6_xf_left }
 sr_disp_fl_6_xf_there_strength = { value = sr_fl_6_xf_there_strength }
+sr_disp_fl_6_xf_here_1 = { value = 0 if = { limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_6_loc var:sr_fl_1_loc = var:sr_fl_6_loc } value = 1 } }
+sr_disp_fl_6_xf_here_2 = { value = 0 if = { limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_6_loc var:sr_fl_2_loc = var:sr_fl_6_loc } value = 1 } }
+sr_disp_fl_6_xf_here_3 = { value = 0 if = { limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_6_loc var:sr_fl_3_loc = var:sr_fl_6_loc } value = 1 } }
+sr_disp_fl_6_xf_here_4 = { value = 0 if = { limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_6_loc var:sr_fl_4_loc = var:sr_fl_6_loc } value = 1 } }
+sr_disp_fl_6_xf_here_5 = { value = 0 if = { limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_6_loc var:sr_fl_5_loc = var:sr_fl_6_loc } value = 1 } }
+sr_disp_fl_6_xf_here_7 = { value = 0 if = { limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_6_loc var:sr_fl_7_loc = var:sr_fl_6_loc } value = 1 } }
+sr_disp_fl_6_xf_here_8 = { value = 0 if = { limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_6_loc var:sr_fl_8_loc = var:sr_fl_6_loc } value = 1 } }
+sr_disp_fl_6_xf_here_9 = { value = 0 if = { limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_6_loc var:sr_fl_9_loc = var:sr_fl_6_loc } value = 1 } }
 sr_disp_fl_7_xf_war = { value = sr_fl_7_xf_war }
 sr_disp_fl_7_xf_stay_war = { value = sr_fl_7_xf_stay_war }
 sr_disp_fl_7_xf_there_war = { value = sr_fl_7_xf_there_war }
@@ -2876,12 +2927,20 @@ sr_disp_fl_7_xf_there_carrier = { value = sr_fl_7_xf_there_carrier }
 sr_disp_fl_7_xf_tender = { value = sr_fl_7_xf_tender }
 sr_disp_fl_7_xf_stay_tender = { value = sr_fl_7_xf_stay_tender }
 sr_disp_fl_7_xf_there_tender = { value = sr_fl_7_xf_there_tender }
-sr_disp_fl_7_xf_marines = { value = sr_fl_7_xf_marines }
+sr_disp_fl_7_xf_marines = { value = sr_fl_7_xf_marines_moved }
 sr_disp_fl_7_xf_stay_marines = { value = sr_fl_7_xf_stay_marines }
 sr_disp_fl_7_xf_there_marines = { value = sr_fl_7_xf_there_marines }
 sr_disp_fl_7_xf_strength = { value = sr_fl_7_xf_strength }
 sr_disp_fl_7_xf_stay_strength = { value = sr_fl_7_xf_left }
 sr_disp_fl_7_xf_there_strength = { value = sr_fl_7_xf_there_strength }
+sr_disp_fl_7_xf_here_1 = { value = 0 if = { limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_7_loc var:sr_fl_1_loc = var:sr_fl_7_loc } value = 1 } }
+sr_disp_fl_7_xf_here_2 = { value = 0 if = { limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_7_loc var:sr_fl_2_loc = var:sr_fl_7_loc } value = 1 } }
+sr_disp_fl_7_xf_here_3 = { value = 0 if = { limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_7_loc var:sr_fl_3_loc = var:sr_fl_7_loc } value = 1 } }
+sr_disp_fl_7_xf_here_4 = { value = 0 if = { limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_7_loc var:sr_fl_4_loc = var:sr_fl_7_loc } value = 1 } }
+sr_disp_fl_7_xf_here_5 = { value = 0 if = { limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_7_loc var:sr_fl_5_loc = var:sr_fl_7_loc } value = 1 } }
+sr_disp_fl_7_xf_here_6 = { value = 0 if = { limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_7_loc var:sr_fl_6_loc = var:sr_fl_7_loc } value = 1 } }
+sr_disp_fl_7_xf_here_8 = { value = 0 if = { limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_7_loc var:sr_fl_8_loc = var:sr_fl_7_loc } value = 1 } }
+sr_disp_fl_7_xf_here_9 = { value = 0 if = { limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_7_loc var:sr_fl_9_loc = var:sr_fl_7_loc } value = 1 } }
 sr_disp_fl_8_xf_war = { value = sr_fl_8_xf_war }
 sr_disp_fl_8_xf_stay_war = { value = sr_fl_8_xf_stay_war }
 sr_disp_fl_8_xf_there_war = { value = sr_fl_8_xf_there_war }
@@ -2897,12 +2956,20 @@ sr_disp_fl_8_xf_there_carrier = { value = sr_fl_8_xf_there_carrier }
 sr_disp_fl_8_xf_tender = { value = sr_fl_8_xf_tender }
 sr_disp_fl_8_xf_stay_tender = { value = sr_fl_8_xf_stay_tender }
 sr_disp_fl_8_xf_there_tender = { value = sr_fl_8_xf_there_tender }
-sr_disp_fl_8_xf_marines = { value = sr_fl_8_xf_marines }
+sr_disp_fl_8_xf_marines = { value = sr_fl_8_xf_marines_moved }
 sr_disp_fl_8_xf_stay_marines = { value = sr_fl_8_xf_stay_marines }
 sr_disp_fl_8_xf_there_marines = { value = sr_fl_8_xf_there_marines }
 sr_disp_fl_8_xf_strength = { value = sr_fl_8_xf_strength }
 sr_disp_fl_8_xf_stay_strength = { value = sr_fl_8_xf_left }
 sr_disp_fl_8_xf_there_strength = { value = sr_fl_8_xf_there_strength }
+sr_disp_fl_8_xf_here_1 = { value = 0 if = { limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_8_loc var:sr_fl_1_loc = var:sr_fl_8_loc } value = 1 } }
+sr_disp_fl_8_xf_here_2 = { value = 0 if = { limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_8_loc var:sr_fl_2_loc = var:sr_fl_8_loc } value = 1 } }
+sr_disp_fl_8_xf_here_3 = { value = 0 if = { limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_8_loc var:sr_fl_3_loc = var:sr_fl_8_loc } value = 1 } }
+sr_disp_fl_8_xf_here_4 = { value = 0 if = { limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_8_loc var:sr_fl_4_loc = var:sr_fl_8_loc } value = 1 } }
+sr_disp_fl_8_xf_here_5 = { value = 0 if = { limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_8_loc var:sr_fl_5_loc = var:sr_fl_8_loc } value = 1 } }
+sr_disp_fl_8_xf_here_6 = { value = 0 if = { limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_8_loc var:sr_fl_6_loc = var:sr_fl_8_loc } value = 1 } }
+sr_disp_fl_8_xf_here_7 = { value = 0 if = { limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_8_loc var:sr_fl_7_loc = var:sr_fl_8_loc } value = 1 } }
+sr_disp_fl_8_xf_here_9 = { value = 0 if = { limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_8_loc var:sr_fl_9_loc = var:sr_fl_8_loc } value = 1 } }
 sr_disp_fl_9_xf_war = { value = sr_fl_9_xf_war }
 sr_disp_fl_9_xf_stay_war = { value = sr_fl_9_xf_stay_war }
 sr_disp_fl_9_xf_there_war = { value = sr_fl_9_xf_there_war }
@@ -2918,9 +2985,17 @@ sr_disp_fl_9_xf_there_carrier = { value = sr_fl_9_xf_there_carrier }
 sr_disp_fl_9_xf_tender = { value = sr_fl_9_xf_tender }
 sr_disp_fl_9_xf_stay_tender = { value = sr_fl_9_xf_stay_tender }
 sr_disp_fl_9_xf_there_tender = { value = sr_fl_9_xf_there_tender }
-sr_disp_fl_9_xf_marines = { value = sr_fl_9_xf_marines }
+sr_disp_fl_9_xf_marines = { value = sr_fl_9_xf_marines_moved }
 sr_disp_fl_9_xf_stay_marines = { value = sr_fl_9_xf_stay_marines }
 sr_disp_fl_9_xf_there_marines = { value = sr_fl_9_xf_there_marines }
 sr_disp_fl_9_xf_strength = { value = sr_fl_9_xf_strength }
 sr_disp_fl_9_xf_stay_strength = { value = sr_fl_9_xf_left }
 sr_disp_fl_9_xf_there_strength = { value = sr_fl_9_xf_there_strength }
+sr_disp_fl_9_xf_here_1 = { value = 0 if = { limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_9_loc var:sr_fl_1_loc = var:sr_fl_9_loc } value = 1 } }
+sr_disp_fl_9_xf_here_2 = { value = 0 if = { limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_9_loc var:sr_fl_2_loc = var:sr_fl_9_loc } value = 1 } }
+sr_disp_fl_9_xf_here_3 = { value = 0 if = { limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_9_loc var:sr_fl_3_loc = var:sr_fl_9_loc } value = 1 } }
+sr_disp_fl_9_xf_here_4 = { value = 0 if = { limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_9_loc var:sr_fl_4_loc = var:sr_fl_9_loc } value = 1 } }
+sr_disp_fl_9_xf_here_5 = { value = 0 if = { limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_9_loc var:sr_fl_5_loc = var:sr_fl_9_loc } value = 1 } }
+sr_disp_fl_9_xf_here_6 = { value = 0 if = { limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_9_loc var:sr_fl_6_loc = var:sr_fl_9_loc } value = 1 } }
+sr_disp_fl_9_xf_here_7 = { value = 0 if = { limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_9_loc var:sr_fl_7_loc = var:sr_fl_9_loc } value = 1 } }
+sr_disp_fl_9_xf_here_8 = { value = 0 if = { limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_9_loc var:sr_fl_8_loc = var:sr_fl_9_loc } value = 1 } }

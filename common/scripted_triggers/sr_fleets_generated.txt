@@ -5816,6 +5816,9 @@ sr_fl_1_xf_pick_here = {
 # than its assault carriers hold, and this one no further past its room than
 # it is now.
 sr_fl_1_xf_moves = { OR = { sr_fl_1_xf_strength > 0 sr_fl_1_xf_marines_moved > 0 AND = { sr_fl_1_xf_left <= 0 sr_fl_1_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_1_xf_some_stays = { sr_fl_1_xf_left > 0 }
 sr_fl_1_xf_keeps = { sr_fl_1_xf_left >= sr_fl_minimum_strength }
 sr_fl_1_xf_keeps_or_all = { OR = { sr_fl_1_xf_left >= sr_fl_minimum_strength sr_fl_1_xf_left <= 0 } }
 sr_fl_1_xf_new_min = { sr_fl_1_xf_strength >= sr_fl_minimum_strength }
@@ -5859,6 +5862,9 @@ sr_fl_2_xf_pick_here = {
 # than its assault carriers hold, and this one no further past its room than
 # it is now.
 sr_fl_2_xf_moves = { OR = { sr_fl_2_xf_strength > 0 sr_fl_2_xf_marines_moved > 0 AND = { sr_fl_2_xf_left <= 0 sr_fl_2_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_2_xf_some_stays = { sr_fl_2_xf_left > 0 }
 sr_fl_2_xf_keeps = { sr_fl_2_xf_left >= sr_fl_minimum_strength }
 sr_fl_2_xf_keeps_or_all = { OR = { sr_fl_2_xf_left >= sr_fl_minimum_strength sr_fl_2_xf_left <= 0 } }
 sr_fl_2_xf_new_min = { sr_fl_2_xf_strength >= sr_fl_minimum_strength }
@@ -5902,6 +5908,9 @@ sr_fl_3_xf_pick_here = {
 # than its assault carriers hold, and this one no further past its room than
 # it is now.
 sr_fl_3_xf_moves = { OR = { sr_fl_3_xf_strength > 0 sr_fl_3_xf_marines_moved > 0 AND = { sr_fl_3_xf_left <= 0 sr_fl_3_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_3_xf_some_stays = { sr_fl_3_xf_left > 0 }
 sr_fl_3_xf_keeps = { sr_fl_3_xf_left >= sr_fl_minimum_strength }
 sr_fl_3_xf_keeps_or_all = { OR = { sr_fl_3_xf_left >= sr_fl_minimum_strength sr_fl_3_xf_left <= 0 } }
 sr_fl_3_xf_new_min = { sr_fl_3_xf_strength >= sr_fl_minimum_strength }
@@ -5945,6 +5954,9 @@ sr_fl_4_xf_pick_here = {
 # than its assault carriers hold, and this one no further past its room than
 # it is now.
 sr_fl_4_xf_moves = { OR = { sr_fl_4_xf_strength > 0 sr_fl_4_xf_marines_moved > 0 AND = { sr_fl_4_xf_left <= 0 sr_fl_4_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_4_xf_some_stays = { sr_fl_4_xf_left > 0 }
 sr_fl_4_xf_keeps = { sr_fl_4_xf_left >= sr_fl_minimum_strength }
 sr_fl_4_xf_keeps_or_all = { OR = { sr_fl_4_xf_left >= sr_fl_minimum_strength sr_fl_4_xf_left <= 0 } }
 sr_fl_4_xf_new_min = { sr_fl_4_xf_strength >= sr_fl_minimum_strength }
@@ -5988,6 +6000,9 @@ sr_fl_5_xf_pick_here = {
 # than its assault carriers hold, and this one no further past its room than
 # it is now.
 sr_fl_5_xf_moves = { OR = { sr_fl_5_xf_strength > 0 sr_fl_5_xf_marines_moved > 0 AND = { sr_fl_5_xf_left <= 0 sr_fl_5_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_5_xf_some_stays = { sr_fl_5_xf_left > 0 }
 sr_fl_5_xf_keeps = { sr_fl_5_xf_left >= sr_fl_minimum_strength }
 sr_fl_5_xf_keeps_or_all = { OR = { sr_fl_5_xf_left >= sr_fl_minimum_strength sr_fl_5_xf_left <= 0 } }
 sr_fl_5_xf_new_min = { sr_fl_5_xf_strength >= sr_fl_minimum_strength }
@@ -6031,6 +6046,9 @@ sr_fl_6_xf_pick_here = {
 # than its assault carriers hold, and this one no further past its room than
 # it is now.
 sr_fl_6_xf_moves = { OR = { sr_fl_6_xf_strength > 0 sr_fl_6_xf_marines_moved > 0 AND = { sr_fl_6_xf_left <= 0 sr_fl_6_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_6_xf_some_stays = { sr_fl_6_xf_left > 0 }
 sr_fl_6_xf_keeps = { sr_fl_6_xf_left >= sr_fl_minimum_strength }
 sr_fl_6_xf_keeps_or_all = { OR = { sr_fl_6_xf_left >= sr_fl_minimum_strength sr_fl_6_xf_left <= 0 } }
 sr_fl_6_xf_new_min = { sr_fl_6_xf_strength >= sr_fl_minimum_strength }
@@ -6074,6 +6092,9 @@ sr_fl_7_xf_pick_here = {
 # than its assault carriers hold, and this one no further past its room than
 # it is now.
 sr_fl_7_xf_moves = { OR = { sr_fl_7_xf_strength > 0 sr_fl_7_xf_marines_moved > 0 AND = { sr_fl_7_xf_left <= 0 sr_fl_7_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_7_xf_some_stays = { sr_fl_7_xf_left > 0 }
 sr_fl_7_xf_keeps = { sr_fl_7_xf_left >= sr_fl_minimum_strength }
 sr_fl_7_xf_keeps_or_all = { OR = { sr_fl_7_xf_left >= sr_fl_minimum_strength sr_fl_7_xf_left <= 0 } }
 sr_fl_7_xf_new_min = { sr_fl_7_xf_strength >= sr_fl_minimum_strength }
@@ -6117,6 +6138,9 @@ sr_fl_8_xf_pick_here = {
 # than its assault carriers hold, and this one no further past its room than
 # it is now.
 sr_fl_8_xf_moves = { OR = { sr_fl_8_xf_strength > 0 sr_fl_8_xf_marines_moved > 0 AND = { sr_fl_8_xf_left <= 0 sr_fl_8_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_8_xf_some_stays = { sr_fl_8_xf_left > 0 }
 sr_fl_8_xf_keeps = { sr_fl_8_xf_left >= sr_fl_minimum_strength }
 sr_fl_8_xf_keeps_or_all = { OR = { sr_fl_8_xf_left >= sr_fl_minimum_strength sr_fl_8_xf_left <= 0 } }
 sr_fl_8_xf_new_min = { sr_fl_8_xf_strength >= sr_fl_minimum_strength }
@@ -6160,6 +6184,9 @@ sr_fl_9_xf_pick_here = {
 # than its assault carriers hold, and this one no further past its room than
 # it is now.
 sr_fl_9_xf_moves = { OR = { sr_fl_9_xf_strength > 0 sr_fl_9_xf_marines_moved > 0 AND = { sr_fl_9_xf_left <= 0 sr_fl_9_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_9_xf_some_stays = { sr_fl_9_xf_left > 0 }
 sr_fl_9_xf_keeps = { sr_fl_9_xf_left >= sr_fl_minimum_strength }
 sr_fl_9_xf_keeps_or_all = { OR = { sr_fl_9_xf_left >= sr_fl_minimum_strength sr_fl_9_xf_left <= 0 } }
 sr_fl_9_xf_new_min = { sr_fl_9_xf_strength >= sr_fl_minimum_strength }

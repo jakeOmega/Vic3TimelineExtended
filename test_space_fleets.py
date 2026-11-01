@@ -1620,7 +1620,8 @@ class TransferPopupTest(unittest.TestCase):
                     picks = {(int(m.group(1)), m.group(2)) for m in _SCOPES.finditer(row)}
                     if k is None:   # the strength's total: no buttons
                         self.assertEqual(picks, set())
-                        self.assertRegex(row, r'blockoverride "xf_less" \{\s*visible = no\s*\}')
+                        for block in ("xf_less", "xf_more"):
+                            self.assertRegex(row, rf'blockoverride "{block}" \{{\s*visible = no\s*\}}')
                         self.assertIn("ScriptValue('sr_disp_fl_%d_xf_strength')" % n, row)
                     else:
                         self.assertEqual(picks, {(n, str(gsf.XF_CODE[k]))})
@@ -1662,11 +1663,38 @@ class TransferPopupTest(unittest.TestCase):
                 self.assertRegex(step, rf"scope:step = {code} \}}\s*set_variable = \{{ name = sr_det_amt_\$ROLE\$ value = "
                                        rf"\{{ value = sr_fl_\$N\$_xf_\$ROLE\$ add = {amount} "
                                        r"max = sr_fl_\$N\$_\$ROLE\$_value min = 0 \} \}")
-        # No code matched: the third AddScope didn't arrive (the self-check).
-        self.assertIn("TE_SELF_CHECK BROKEN xfer_step_scope", _raw(gsf.ROOT / gsf.EFFECTS_OUT))
         dispatch = _block(self.effects, "sr_fl_xfer_step_at")
         for k, code in gsf.XF_CODE.items():
-            self.assertRegex(dispatch, rf"scope:pick = {code} \}}\s*sr_fl_xfer_step_role = \{{ N = \$N\$ ROLE = {k} \}}")
+            self.assertRegex(dispatch, rf"scope:pick = {code} \}}\s*sr_fl_xfer_step_role = \{{ N = \$N\$ ROLE = {k} CODE = {code} \}}")
+        # The hover by the step's sign: − below 6, + from 6.
+        effect = _block(_block(self.sguis, "sr_fleet_xfer_step_sgui").replace("\n\t", "\n"), "effect")
+        self.assertRegex(effect, r"if = \{\s*limit = \{ scope:step < 6 \}\s*custom_tooltip = sr_fl_xf_less_tt\s*\}\s*"
+                                 r"else = \{\s*custom_tooltip = sr_fl_xf_more_tt\s*\}")
+
+    def test_the_step_self_check_logs_once_with_its_numbers(self):
+        """TE_SELF_CHECK xfer_step_scope, run: OK on the first step whose code
+        arrived, BROKEN on the first that arrived with none, and never both or
+        twice (the flag is set before either line). Its numbers go through
+        variables, set when it logs and gone after."""
+        fx = _Fx(op=1, pick=1, step=6)
+        fx.fleet(1, loc=2, war=(5, 5))
+        fx.choose(0, war=2)
+        fx.effect("sr_fl_by_op", DO="xfer_step")
+        fx.effect("sr_fl_by_op", DO="xfer_step")
+        self.assertEqual(fx.vars["sr_det_amt_war"], _fxn(4))
+        self.assertEqual(len(fx.logs), 1)
+        line, read = fx.logs[0]
+        self.assertTrue(line.startswith('"TE_SELF_CHECK OK xfer_step_scope'), line)
+        self.assertEqual(read, {"sr_xf_chk_slot": _fxn(1), "sr_xf_chk_role": _fxn(1), "sr_xf_chk_amount": _fxn(3)})
+        self.assertFalse([k for k in fx.vars if k.startswith("sr_xf_chk_")])
+        fx = _Fx(op=3, pick=6, step=11)   # no step code: the third scope didn't arrive
+        fx.fleet(3, loc=2, marines=2, war=(5, 5), carrier=(1, 1))
+        fx.effect("sr_fl_by_op", DO="xfer_step")
+        fx.scopes["step"] = _fxn(6)
+        fx.effect("sr_fl_by_op", DO="xfer_step")
+        self.assertEqual([(line[:40], read) for line, read in fx.logs],
+                         [('"TE_SELF_CHECK BROKEN xfer_step_scope (a', {"sr_xf_chk_slot": _fxn(3), "sr_xf_chk_role": _fxn(6)})])
+        self.assertFalse([k for k in fx.vars if k.startswith("sr_xf_chk_")])
 
     def test_the_amounts_shown_and_moved_are_held_to_the_slot(self):
         """A battle or a repair under an open popup: what is shown, and what a
@@ -1678,7 +1706,23 @@ class TransferPopupTest(unittest.TestCase):
                     self.assertRegex(body, rf"if = \{{ limit = \{{ has_variable = sr_det_amt_{k} \}} value = var:sr_det_amt_{k} \}}"
                                            rf"\s*max = sr_fl_{n}_{k}_value\s*min = 0\s*$")
                     disp = _raw(gsf.ROOT / gsf.DISPLAY_OUT)
-                    self.assertIn(f"sr_disp_fl_{n}_xf_{k} = {{ value = sr_fl_{n}_xf_{k} }}", disp)
+                    moved = "xf_marines_moved" if k == "marines" else f"xf_{k}"
+                    self.assertIn(f"sr_disp_fl_{n}_xf_{k} = {{ value = sr_fl_{n}_{moved} }}", disp)
+
+    def test_with_every_ship_going_the_marines_row_shows_all_of_them_and_its_keys_grey(self):
+        """Review minor 1: the Move cell agrees with Stays and Other fleet, and
+        − and + say why they do nothing."""
+        fx = _Fx(op=1, pick=6, step=1)
+        fx.fleet(1, loc=2, marines=4, war=(2, 2), carrier=(2, 2))
+        fx.fleet(3, loc=2, carrier=(2, 2))
+        fx.choose(3, war=1, carrier=2, marines=1)
+        self.assertEqual([fx.num(f"sr_disp_fl_1_xf_{c}marines") for c in ("", "stay_", "there_")], [_fxn(1), _fxn(3), _fxn(1)])
+        self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), [])
+        fx.choose(3, war=2, carrier=2, marines=1)
+        self.assertEqual([fx.num(f"sr_disp_fl_1_xf_{c}marines") for c in ("", "stay_", "there_")], [_fxn(4), 0, _fxn(4)])
+        self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), ["sr_fl_xf_marines_follow_tt"])
+        fx.scopes["pick"] = _fxn(1)
+        self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), [])
 
     def test_opening_resets_the_amounts(self):
         for n in range(1, gsf.SLOTS + 1):
@@ -1698,11 +1742,38 @@ class TransferPopupTest(unittest.TestCase):
                 row = re.findall(r"te_sr_fleet_row = \{.*?\n\t\t\}\n", rows, re.S)[n - 1]
                 button = _enclosing(row, row.index('blockoverride "fl_transfer_button" {') + 5,
                                     'blockoverride "fl_transfer_button" {')
+                self.assertIn("enabled = \"[GetScriptedGui('sr_fleet_xfer_open_sgui').IsValid(", button)
                 self.assertIn("onclick = \"[GetScriptedGui('sr_fleet_xfer_open_sgui').Execute(", button)
                 self.assertIn(f"onclick = \"[GetVariableSystem.Set('te_popup', 'sr_xfer_{n}')]\"", button)
                 self.assertIn("IsValidTooltip", button)
                 self.assertNotIn("sr_fleet_merge_sgui", row)
                 self.assertNotIn("sr_fleet_detach_sgui", row)
+
+    def test_the_popup_holds_its_rows(self):
+        """The rows' minimum width plus the window's margins, the list's and a
+        scrollbar (128, as the colony target popup's 760 = 632 + 128)."""
+        widget = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
+        popup = _enclosing(widget, widget.index("type te_sr_xfer_popup = te_ui_popup {") + 5, "type te_sr_xfer_popup = te_ui_popup {")
+        width = int(re.search(r'blockoverride "popup_size" \{\s*size = \{ (\d+) \d+ \}', popup).group(1))
+        body = self.rows[self.rows.index("type te_sr_xfer_popup_body"):]
+        rows = int(re.search(r"minimumsize = \{ (\d+) -1 \}", body).group(1))
+        self.assertGreaterEqual(width, rows + 128)
+        for type_name in ("te_sr_xf_role_row", "te_sr_xf_head_row", "te_sr_xf_to_line", "te_sr_xf_go_row"):
+            with self.subTest(row=type_name):
+                cells = _enclosing(widget, widget.index(f"type {type_name} = ") + 5, f"type {type_name} = ")
+                if type_name == "te_sr_xf_go_row":
+                    self.assertIn(f"size = {{ {rows} 38 }}", cells)
+                    self.assertIn("parentanchor = center", cells)
+                    continue
+                sizes = [int(w) for w in re.findall(r"size = \{ (\d+) \d+ \}", cells)]
+                if type_name == "te_sr_xf_role_row":   # the buttons sit in their 28-wide widgets
+                    sizes = [w for w in sizes if w != 26]
+                if type_name == "te_sr_xf_to_line":    # Into, then a line of three buttons
+                    button = _enclosing(widget, widget.index("type te_sr_xf_to_button = ") + 5, "type te_sr_xf_to_button = ")
+                    sizes += 3 * [int(re.search(r"size = \{ (\d+) 26 \}", button).group(1))]
+                    self.assertEqual(sum(sizes) + 3 * 4 + 2 * 4, rows)
+                    continue
+                self.assertEqual(sum(sizes) + (len(sizes) - 1) * 4 + 2 * 4, rows)
 
     def test_the_target_buttons_list_the_new_slot_and_fleets_at_the_location(self):
         for n, body in self.bodies.items():
@@ -1713,24 +1784,65 @@ class TransferPopupTest(unittest.TestCase):
                 picks = [int(_SCOPES.search(b).group(2)) for b in buttons]
                 self.assertEqual(picks, [0, *gsf._others(n)])
                 for pick, b in zip(picks, buttons):
-                    self.assertIn("GetScriptedGui('sr_fleet_xfer_to_sgui').IsShown(", b)
+                    # Shown on a display value, never the scripted GUI's IsShown (review I1).
+                    self.assertNotIn("IsShown(", b)
+                    shown = re.findall(r'(?m)^\s*visible = "([^"]*)"', b)
+                    self.assertEqual(shown, [] if pick == 0 else
+                                     [f"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_{n}_xf_here_{pick}'), "
+                                      "'(CFixedPoint)1' )]"])
+                    enabled = re.search(r'(?m)^\s*enabled = "\[GetScriptedGui\(\'(\w+)\'\)\.IsValid\(', b)
+                    self.assertEqual(enabled.group(1), "sr_fleet_xfer_to_sgui")
                     label = "je_space_race_widget_xf_new" if pick == 0 else f"je_space_race_widget_xf_to_{pick}"
                     self.assertIn(f'text = "{label}"', b)
                     self.assertEqual({(int(m.group(1)), int(m.group(2))) for m in _SCOPES.finditer(b)}, {(n, pick)})
+                # A line with no fleet here hides (New fleet's always shows).
+                lines = _instances(line[0], "flowcontainer")
+                self.assertEqual(len(lines), 3)
+                self.assertNotRegex(lines[0].split("te_sr_xf_to_button")[0], r"(?m)^\s*visible =")
+                for ln in lines[1:]:
+                    head = ln.split("te_sr_xf_to_button")[0]
+                    self.assertEqual(sorted(int(x) for x in re.findall(rf"sr_disp_fl_{n}_xf_here_(\d)", head)),
+                                     sorted(int(_SCOPES.search(b).group(2)) for b in _instances(ln, "te_sr_xf_to_button")))
                 here = _block(self.triggers, f"sr_fl_{n}_xf_pick_here")
                 self.assertEqual(sorted(int(m) for m in re.findall(r"scope:pick = (\d)", here)), gsf._others(n))
                 for m in gsf._others(n):
                     self.assertIn(f"AND = {{ scope:pick = {m} has_variable = sr_fl_{m}_loc has_variable = sr_fl_{n}_loc "
                                   f"var:sr_fl_{m}_loc = var:sr_fl_{n}_loc }}", here)
-        to = _block(self.sguis, "sr_fleet_xfer_to_sgui")
-        self.assertRegex(to, r"is_shown = \{[^{}]*sr_colonies_full_enabled = yes\s*OR = \{\s*scope:pick = 0\s*"
-                             r"sr_fl_op_check = \{ TEST = xf_pick_here \}\s*\}")
+        to = _block(self.sguis, "sr_fleet_xfer_to_sgui").replace("\n\t", "\n")
+        self.assertNotIn("scope:", _block(to, "is_shown"))
+        self.assertRegex(_block(to, "is_valid"), r"trigger_if = \{\s*limit = \{ NOT = \{ scope:pick = 0 \} \}\s*custom_tooltip = \{\s*"
+                                                 r"text = sr_fl_xf_pick_here_tt\s*sr_fl_op_check = \{ TEST = xf_pick_here \}")
         setter = _block(self.effects, "sr_xf_set_to")
         for m in range(0, gsf.SLOTS + 1):
             self.assertRegex(setter, rf"scope:pick = {m} \}}\s*set_variable = \{{ name = sr_det_to value = {m} \}}")
         chosen = _block(self.triggers, "sr_xf_pick_chosen")
         for m in range(0, gsf.SLOTS + 1):
             self.assertIn(f"AND = {{ scope:pick = {m} sr_det_to_value = {m} }}", chosen)
+
+    def test_into_greys_what_it_can_t_choose(self):
+        """Into, run: a fleet here, never the one already chosen; a new fleet with
+        a slot free; a fleet elsewhere hides (its display value) and greys."""
+        fx = _Fx(op=1)
+        fx.fleet(1, loc=2, war=(4, 4))
+        fx.fleet(3, loc=2, war=(1, 1))
+        fx.fleet(4, loc=5, war=(1, 1))
+        fx.choose(0)
+        verdicts = {}
+        for pick in (0, 3, 4):
+            fx.scopes["pick"] = _fxn(pick)
+            verdicts[pick] = fx.refusals("sr_fleet_xfer_to_sgui")
+        self.assertEqual(verdicts, {0: ["sr_fl_xf_not_chosen_tt"], 3: [], 4: ["sr_fl_xf_pick_here_tt"]})
+        self.assertEqual({m: fx.num(f"sr_disp_fl_1_xf_here_{m}") for m in gsf._others(1)},
+                         {m: _fxn(1) if m == 3 else 0 for m in gsf._others(1)})
+        fx.scopes["pick"] = _fxn(3)
+        fx.effect("sr_xf_set_to")
+        self.assertEqual(fx.vars["sr_det_to"], _fxn(3))
+        self.assertEqual(fx.refusals("sr_fleet_xfer_to_sgui"), ["sr_fl_xf_not_chosen_tt"])
+        for n in range(5, gsf.SLOTS + 1):
+            fx.fleet(n, loc=7, war=(1, 1))
+        fx.fleet(2, loc=7, war=(1, 1))
+        fx.scopes["pick"] = 0
+        self.assertEqual(fx.refusals("sr_fleet_xfer_to_sgui"), ["sr_fl_xf_free_slot_tt"])
 
     def test_the_popup_s_buttons_act_only_on_a_fleet_here(self):
         """Each is_valid starts at the fleet's location, so a stale slot greys
@@ -1900,6 +2012,8 @@ class TransferTest(unittest.TestCase):
                 self.assertIn(f"GetScriptedGui('sr_fleet_transfer_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
                               f".AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )", row)
                 self.assertIn("onclick = \"[GetVariableSystem.Clear('te_popup')]\"", row)
+                self.assertIn("enabled = \"[GetScriptedGui('sr_fleet_transfer_sgui').IsValid( GuiScope.SetRoot( "
+                              f"JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )]\"", row)
                 self.assertIn("IsValidTooltip", row)
 
 
