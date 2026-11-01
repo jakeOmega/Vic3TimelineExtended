@@ -277,7 +277,7 @@ Migration attraction is a per-state score that drives both flows. Pops generally
 | Per 10,000 unemployed (capped at 500,000 / -50) | −1 |
 | State has no pops at all | +100 |
 
-State traits and various modifiers further multiply the sum. The 75% factor on subsistence reflects the fact that a peasant moving into a subsistence farm is not really "employed" the way a wage worker is.
+State traits and various modifiers further multiply the sum. The total floors at 0: a state's attraction is never negative, however much unemployment or a modifier takes away (owner, from the in-game breakdown, 2026-11-01; no define or loc text states it). The 75% factor on subsistence reflects the fact that a peasant moving into a subsistence farm is not really "employed" the way a wage worker is.
 
 For **intra-market** moves only, attraction is further boosted for a specific pop:
 
