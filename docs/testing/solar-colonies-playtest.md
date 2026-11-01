@@ -275,11 +275,11 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
     Colony Defences, and our Locations row, read Blockaded / Blockading; their settlers and modules stop arriving,
     a mining or shipping specialization's modifier goes to nothing while an observatory's keeps running, and its
     Extraplanetary Base room drops out.
-14. **Assault and seizure.** Close in on an enemy's colony (the target button steps through hostile worlds; its hover
-    gives the target's Defences as a range, exact with Survey Colony Defences): its Defences fire back and its
-    integrity falls; at 0, with more marines than its garrison and militia, "<World> Occupied" to both sides. It
-    gives its holder nothing, shows Occupied with the occupier's flag, and the war-support breakdown shows "Colonies
-    occupied in space". At the peace it returns ("<World> Returned"), unless a Cede Colony article took it.
+14. **Assault and seizure.** Close in on an enemy's colony (the target button opens Fleet Target, the PR 3 section
+    below; its hover gives the target's Defences as a range, exact with Survey Colony Defences): its Defences fire
+    back and its integrity falls; at 0, with more marines than its garrison and militia, "<World> Occupied" to both
+    sides. It gives its holder nothing, shows Occupied with the occupier's flag, and the war-support breakdown shows
+    "Colonies occupied in space". At the peace it returns ("<World> Returned"), unless a Cede Colony article took it.
 15. **Liberation.** The holder closing in with more marines than the occupier's garrison frees it ("Liberated").
 16. **Destruction.** Toggle To destroy and close in for three months with no enemy fleet stationed: "<World>
     Destroyed", the destroyer's infamy +20, its UN record's "Hostile acts in space" +20, its own colonies +10
@@ -307,12 +307,11 @@ No new self-check: the script sees everything here, and the two engine questions
 choices) are read by eye. `TE_SR_COMBAT interdiction begun …` lines log each interdiction, one for each side.
 
 1. **The Interdict posture.** A fleet at a location where a country at peace with us, and not our ally (no alliance or
-   defensive pact), holds a colony: the posture button steps Station → Stand off → Close in (only with a hostile world
-   there) → Interdict → Station, and its hover names the price when Interdict is next. Where only allies or enemies
-   hold colonies, Interdict is skipped. The target button, while interdicting, steps through the worlds of countries
-   we may interdict.
+   defensive pact), holds a colony: the Interdict posture button can be clicked, and its hover names the price (the
+   posture buttons are in the PR 3 section below). Where only allies or enemies hold colonies, Interdict is greyed.
+   While interdicting, Fleet Target lets us target only the worlds of countries we may interdict.
 2. **The price.** Entering Interdict: our infamy +5, our UN record's "Hostile acts in space" +10, once for that fleet
-   and that country (stepping the target to another country's world pays again; staying put pays nothing more).
+   and that country (targeting another country's world pays again; staying put pays nothing more).
 3. **The blockade.** With none of the target's fleets there, from the next month its colonies at that location read
    Interdicted in its Colony Defences and Locations, and ours reads Interdicting; settlers and modules stop arriving,
    a mining specialization stops, an observatory keeps running, and its Extraplanetary Base room drops out (as step 13
@@ -505,15 +504,15 @@ Build 2b of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md` (§
 
 Design § 8 of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md`, Full Colonies only: Close in at Earth on a lunar world, its blockade while the holder's Earth is blockaded, no interdiction at Earth, and the AI's lunar offence. Before this build no lunar world could be blockaded: the generic blockade step needs an enemy standing off, and nobody stands off at Earth. No new self-check: everything here is script arithmetic on records the console logs (`event te_debug_space_race.6`, option a; `TE_SR_COMBAT` lines for seizures and destructions). A setup: two countries at war, one holding a lunar colony (found one with `event te_debug_space_race.2` or `.3`), the other with a fleet at Earth (option b) with assault carriers.
 
-1. **The Earth posture options.** As the attacker, at war with a lunar colony's holder: the fleet row at Earth shows the posture and target buttons, and only then (at peace, or with no hostile lunar colony, they are hidden). The posture button steps Station → Close in → Station; its hover is the Earth text; the target button steps through the hostile lunar colonies only. A free lunar colony is offered too, and closing in on it costs its 10 infamy once.
+1. **The Earth posture options.** As the attacker, at war with a lunar colony's holder: the fleet row at Earth shows the posture and target buttons, and only then (at peace, or with no hostile lunar colony, they are hidden). The posture buttons offer Station and Close in only (Stand off and Interdict greyed, "not at Earth"), their hovers in the Earth text; Fleet Target lets us target the hostile lunar colonies only. A free lunar colony is offered too, and closing in on it costs its 10 infamy once.
 2. **Close in, then seize.** Close in on the enemy's lunar colony: its Defenses fire on our fleet (losses in the battle report), and every enemy fleet at Earth, its Orbital Battlestation and its batteries fire on it too. Integrity falls (to skip the wait, option h from the holder's seat sets its first colony's integrity to 0). With the holder's fleets and battlestation gone from Earth and more marines than its garrison and militia, the colony is occupied the next month (`.102` to both sides) and goes back at the peace. While a fleet of the holder is stationed at Earth, or its battlestation stands, nothing is seized.
 3. **Close in, then destroy.** Toggle Destroy on a closing-in fleet: three months with more fire than the colony's Defenses, and no enemy fleet stationed at Earth, destroy it (`.103`, 20 infamy, ruined for 25 years). A fleet that can no longer close in (peace, the colony taken) goes back to Station, not Stand off.
 4. **The lunar blockade.** As the holder, with no fleet of ours at Earth and an enemy fleet there (option o): Earth's Locations row reads Earth Blockaded, and from the next month our lunar colonies read Blockaded in the Defenses view, their settlers and module shipments stop, their shipping specializations (Shackleton's Propellant Depot, Peary's Solar Power, Tranquility Base's two, Imbrium's two) give nothing, their Extraplanetary Base room drops out, and research ones keep running. Holding Shackleton with its depot, this is also the `propellant_depots_bool` self-check's blockaded path (build 2a's table above): the premium lines in Next Windows go, and the line should read OK once a blockaded holder read the boolean no. Launch the reserve: the blockade of Earth and of the Moon lifts together the month after. Our battlestation and batteries fire but don't lift it.
-5. **No interdiction at Earth.** At peace with a lunar colony's holder, a fleet at Earth shows no posture or target buttons, and the posture button anywhere else still offers Interdict only where a non-ally holds a colony.
+5. **No interdiction at Earth.** At peace with a lunar colony's holder, a fleet at Earth shows no posture or target buttons, and the posture buttons anywhere else still offer Interdict only where a non-ally holds a colony.
 6. **The AI's lunar offence.** As a lunar holder at war with an AI fleet power, with no fleet of ours at Earth (option o gives the AI one): within a month or two the AI's strongest fleet at Earth closes in on our lunar colony with the most people and modules, if its marines outnumber our garrison and militia (otherwise it stays stationed), and never toggles Destroy. Launch the reserve: with a fleet of ours at Earth the AI's fleet goes back to Station the next month. With two enemies at war with the AI, one of them with a fleet at Earth, the AI doesn't close in on the other's lunar colony (it couldn't seize it). In an observer run, note whether AI wars produce lunar occupations at all.
 7. **Orbital Superiority while closing in.** At war, with our fleets at Earth outmatching the enemy's, the Orbital Superiority modifier keeps its strength when one of those fleets closes in on a lunar colony.
 8. **The AI's Moon while its fleets are away.** In an observer run or at war with an AI that holds a lunar colony: when its offence or defence has sent every fleet of its own away from Earth, and an enemy fleet reaches Earth, does it lose the Moon? Its defence has no Earth arm (it never comes home for a lunar colony), and only Auto's reserve or its reserve rule puts a fleet back up. Record how often an AI loses a lunar colony this way; an Earth arm in its defence is the fix if it does.
-9. **A free lunar colony's price.** At peace, with a free colony on the Moon: the home fleet's Target button picks it for nothing (its hover has no price line). Stepping the posture to Close in then shows the price in the posture hover and charges it once; while closing in, the Target hover's last line names the price, and stepping to another free colony charges it again.
+9. **A free lunar colony's price.** At peace, with a free colony on the Moon: the home fleet's Target button picks it for nothing (its hover has no price line). Close in's hover then shows the price, and the click charges it once; while closing in, the Target hover's last line names the price, and targeting another free colony charges it again.
 
 ## Lunar colonization, build 3a: Nuclear Thermal Propulsion's premium (2026-10-29)
 
@@ -864,7 +863,7 @@ gotcha).
 7. **A posture's price is charged once.** Close in on a free colony: 10 infamy and the UN record once; click Station
    and Close in again on the same site: nothing more. With no target and a free colony the first hostile site here,
    Close in's hover lists the free colony's price before the click, and the click charges it. Interdict a country's site: 5 infamy once; Station, then
-   Interdict the same country: charged again (a new interdiction, as the step did).
+   Interdict the same country: charged again (a new interdiction).
 8. **At Earth.** With an enemy's lunar colony, the posture line shows at Earth: Station and Close in can be chosen,
    Stand off and Interdict greyed with "not at Earth". With none, no posture line at Earth.
 9. **Fleet Target.** The target button opens the sites at the fleet's location with their holders (flag, Ours, Free,
@@ -876,3 +875,14 @@ gotcha).
     location, the slot read from a country variable. Scroll Space Fleets with nine fleets at locations too: each row
     now asks four posture buttons' `IsValid` (36 a frame for nine fleets), where the step button asked one. Fallback
     if that stutters: the four buttons' state from one display value a fleet, set monthly and on each order.
+11. **The two buttons' gates (#1298).** The destination and target buttons grey on `sr_fleet_pick_sgui` and
+    `sr_fleet_target_sgui`, which lost their effects (never run) in #1298. No precedent: vanilla never calls
+    `IsValidTooltip`, and every other effect-less scripted GUI is read only through `IsValid`. Hover a greyed
+    target button (no hostile site at the fleet's location, or no Space Command in a state we control): it opens
+    with the failed reason, crossed ("A site here is held by a country at war with us…" or "We have a Space Command
+    in a state we control…"), then the target. Hover an enabled one: the same lines ticked. The destination button
+    can't grey (its orders line shows only at a location, the gate's one condition), so its hover must open with the
+    ticked "The fleet is at a location, not in transit", then the leg; the leg alone is a fail. A missing line or a
+    raw key means `IsValidTooltip` renders nothing for a scripted GUI with no `effect`. Fallback: give each gate
+    `effect = { custom_tooltip = sr_fl_not_at_location_tt }` (the target gate: `sr_fl_no_target_tt`), a text-only
+    effect that changes nothing.

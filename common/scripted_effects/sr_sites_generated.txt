@@ -2145,6 +2145,7 @@ sr_site_release_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_bunker_valles_marineris } remove_global_variable = sr_site_bunker_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_foundry_valles_marineris } remove_global_variable = sr_site_foundry_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_admin_valles_marineris } remove_global_variable = sr_site_admin_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_terra_valles_marineris } remove_global_variable = sr_site_terra_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_free_valles_marineris } remove_global_variable = sr_site_free_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_autonomy_valles_marineris } remove_global_variable = sr_site_autonomy_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_charter_valles_marineris } remove_global_variable = sr_site_charter_valles_marineris }
@@ -2269,6 +2270,16 @@ sr_site_monthly_valles_marineris = {
 			sr_site_release_valles_marineris = yes
 		}
 	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
+	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_valles_marineris > 0
+		}
+		sr_site_terra_step_valles_marineris = { MONTHS = 1 }
+	}
 	# 4. The projection.
 	sr_site_sync_valles_marineris = yes
 	# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).
@@ -2278,7 +2289,8 @@ sr_site_monthly_valles_marineris = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -2293,7 +2305,7 @@ sr_site_monthly_valles_marineris = {
 			name = sr_site_pop_valles_marineris
 			value = {
 				value = global_var:sr_site_pop_valles_marineris
-				multiply = 1.002
+				multiply = sr_site_growth_valles_marineris
 				max = sr_site_room_held_valles_marineris
 			}
 		}
@@ -2419,6 +2431,7 @@ sr_site_release_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_bunker_olympus_mons } remove_global_variable = sr_site_bunker_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_foundry_olympus_mons } remove_global_variable = sr_site_foundry_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_admin_olympus_mons } remove_global_variable = sr_site_admin_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_terra_olympus_mons } remove_global_variable = sr_site_terra_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_disc_olympus_tubes } remove_global_variable = sr_site_disc_olympus_tubes }
 	if = { limit = { has_global_variable = sr_site_disc_olympus_tubes_pending } remove_global_variable = sr_site_disc_olympus_tubes_pending }
 	if = { limit = { has_global_variable = sr_site_free_olympus_mons } remove_global_variable = sr_site_free_olympus_mons }
@@ -2545,6 +2558,16 @@ sr_site_monthly_olympus_mons = {
 			sr_site_release_olympus_mons = yes
 		}
 	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
+	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_olympus_mons > 0
+		}
+		sr_site_terra_step_olympus_mons = { MONTHS = 1 }
+	}
 	# 4. The projection.
 	sr_site_sync_olympus_mons = yes
 	# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).
@@ -2554,7 +2577,8 @@ sr_site_monthly_olympus_mons = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -2569,7 +2593,7 @@ sr_site_monthly_olympus_mons = {
 			name = sr_site_pop_olympus_mons
 			value = {
 				value = global_var:sr_site_pop_olympus_mons
-				multiply = 1.002
+				multiply = sr_site_growth_olympus_mons
 				max = sr_site_room_held_olympus_mons
 			}
 		}
@@ -2695,6 +2719,7 @@ sr_site_release_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_bunker_hellas_planitia } remove_global_variable = sr_site_bunker_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_foundry_hellas_planitia } remove_global_variable = sr_site_foundry_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_admin_hellas_planitia } remove_global_variable = sr_site_admin_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_terra_hellas_planitia } remove_global_variable = sr_site_terra_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_disc_hellas_fossils } remove_global_variable = sr_site_disc_hellas_fossils }
 	if = { limit = { has_global_variable = sr_site_disc_hellas_fossils_pending } remove_global_variable = sr_site_disc_hellas_fossils_pending }
 	if = { limit = { has_global_variable = sr_site_free_hellas_planitia } remove_global_variable = sr_site_free_hellas_planitia }
@@ -2821,6 +2846,16 @@ sr_site_monthly_hellas_planitia = {
 			sr_site_release_hellas_planitia = yes
 		}
 	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
+	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_hellas_planitia > 0
+		}
+		sr_site_terra_step_hellas_planitia = { MONTHS = 1 }
+	}
 	# 4. The projection.
 	sr_site_sync_hellas_planitia = yes
 	# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).
@@ -2830,7 +2865,8 @@ sr_site_monthly_hellas_planitia = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -2845,7 +2881,7 @@ sr_site_monthly_hellas_planitia = {
 			name = sr_site_pop_hellas_planitia
 			value = {
 				value = global_var:sr_site_pop_hellas_planitia
-				multiply = 1.002
+				multiply = sr_site_growth_hellas_planitia
 				max = sr_site_room_held_hellas_planitia
 			}
 		}
@@ -2971,6 +3007,7 @@ sr_site_release_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_bunker_utopia_planitia } remove_global_variable = sr_site_bunker_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_foundry_utopia_planitia } remove_global_variable = sr_site_foundry_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_admin_utopia_planitia } remove_global_variable = sr_site_admin_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_terra_utopia_planitia } remove_global_variable = sr_site_terra_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_disc_utopia_glacier } remove_global_variable = sr_site_disc_utopia_glacier }
 	if = { limit = { has_global_variable = sr_site_disc_utopia_glacier_pending } remove_global_variable = sr_site_disc_utopia_glacier_pending }
 	if = { limit = { has_global_variable = sr_site_free_utopia_planitia } remove_global_variable = sr_site_free_utopia_planitia }
@@ -3097,6 +3134,16 @@ sr_site_monthly_utopia_planitia = {
 			sr_site_release_utopia_planitia = yes
 		}
 	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
+	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_utopia_planitia > 0
+		}
+		sr_site_terra_step_utopia_planitia = { MONTHS = 1 }
+	}
 	# 4. The projection.
 	sr_site_sync_utopia_planitia = yes
 	# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).
@@ -3106,7 +3153,8 @@ sr_site_monthly_utopia_planitia = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3121,7 +3169,7 @@ sr_site_monthly_utopia_planitia = {
 			name = sr_site_pop_utopia_planitia
 			value = {
 				value = global_var:sr_site_pop_utopia_planitia
-				multiply = 1.002
+				multiply = sr_site_growth_utopia_planitia
 				max = sr_site_room_held_utopia_planitia
 			}
 		}
@@ -3247,6 +3295,7 @@ sr_site_release_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_bunker_arcadia_planitia } remove_global_variable = sr_site_bunker_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_foundry_arcadia_planitia } remove_global_variable = sr_site_foundry_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_admin_arcadia_planitia } remove_global_variable = sr_site_admin_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_terra_arcadia_planitia } remove_global_variable = sr_site_terra_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_disc_arcadia_brines } remove_global_variable = sr_site_disc_arcadia_brines }
 	if = { limit = { has_global_variable = sr_site_disc_arcadia_brines_pending } remove_global_variable = sr_site_disc_arcadia_brines_pending }
 	if = { limit = { has_global_variable = sr_site_free_arcadia_planitia } remove_global_variable = sr_site_free_arcadia_planitia }
@@ -3373,6 +3422,16 @@ sr_site_monthly_arcadia_planitia = {
 			sr_site_release_arcadia_planitia = yes
 		}
 	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
+	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_arcadia_planitia > 0
+		}
+		sr_site_terra_step_arcadia_planitia = { MONTHS = 1 }
+	}
 	# 4. The projection.
 	sr_site_sync_arcadia_planitia = yes
 	# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).
@@ -3382,7 +3441,8 @@ sr_site_monthly_arcadia_planitia = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3397,7 +3457,7 @@ sr_site_monthly_arcadia_planitia = {
 			name = sr_site_pop_arcadia_planitia
 			value = {
 				value = global_var:sr_site_pop_arcadia_planitia
-				multiply = 1.002
+				multiply = sr_site_growth_arcadia_planitia
 				max = sr_site_room_held_arcadia_planitia
 			}
 		}
@@ -3658,7 +3718,8 @@ sr_site_monthly_ceres = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3673,7 +3734,7 @@ sr_site_monthly_ceres = {
 			name = sr_site_pop_ceres
 			value = {
 				value = global_var:sr_site_pop_ceres
-				multiply = 1.002
+				multiply = sr_site_growth_ceres
 				max = sr_site_room_held_ceres
 			}
 		}
@@ -3934,7 +3995,8 @@ sr_site_monthly_vesta = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3949,7 +4011,7 @@ sr_site_monthly_vesta = {
 			name = sr_site_pop_vesta
 			value = {
 				value = global_var:sr_site_pop_vesta
-				multiply = 1.002
+				multiply = sr_site_growth_vesta
 				max = sr_site_room_held_vesta
 			}
 		}
@@ -4210,7 +4272,8 @@ sr_site_monthly_psyche = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4225,7 +4288,7 @@ sr_site_monthly_psyche = {
 			name = sr_site_pop_psyche
 			value = {
 				value = global_var:sr_site_pop_psyche
-				multiply = 1.002
+				multiply = sr_site_growth_psyche
 				max = sr_site_room_held_psyche
 			}
 		}
@@ -4486,7 +4549,8 @@ sr_site_monthly_pallas = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4501,7 +4565,7 @@ sr_site_monthly_pallas = {
 			name = sr_site_pop_pallas
 			value = {
 				value = global_var:sr_site_pop_pallas
-				multiply = 1.002
+				multiply = sr_site_growth_pallas
 				max = sr_site_room_held_pallas
 			}
 		}
@@ -4741,7 +4805,8 @@ sr_site_monthly_hygiea = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4756,7 +4821,7 @@ sr_site_monthly_hygiea = {
 			name = sr_site_pop_hygiea
 			value = {
 				value = global_var:sr_site_pop_hygiea
-				multiply = 1.002
+				multiply = sr_site_growth_hygiea
 				max = sr_site_room_held_hygiea
 			}
 		}
@@ -5017,7 +5082,8 @@ sr_site_monthly_io = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5032,7 +5098,7 @@ sr_site_monthly_io = {
 			name = sr_site_pop_io
 			value = {
 				value = global_var:sr_site_pop_io
-				multiply = 1.002
+				multiply = sr_site_growth_io
 				max = sr_site_room_held_io
 			}
 		}
@@ -5314,7 +5380,8 @@ sr_site_monthly_europa = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5329,7 +5396,7 @@ sr_site_monthly_europa = {
 			name = sr_site_pop_europa
 			value = {
 				value = global_var:sr_site_pop_europa
-				multiply = 1.002
+				multiply = sr_site_growth_europa
 				max = sr_site_room_held_europa
 			}
 		}
@@ -5455,6 +5522,7 @@ sr_site_release_ganymede = {
 	if = { limit = { has_global_variable = sr_site_bunker_ganymede } remove_global_variable = sr_site_bunker_ganymede }
 	if = { limit = { has_global_variable = sr_site_foundry_ganymede } remove_global_variable = sr_site_foundry_ganymede }
 	if = { limit = { has_global_variable = sr_site_admin_ganymede } remove_global_variable = sr_site_admin_ganymede }
+	if = { limit = { has_global_variable = sr_site_terra_ganymede } remove_global_variable = sr_site_terra_ganymede }
 	if = { limit = { has_global_variable = sr_site_disc_ganymede_layers } remove_global_variable = sr_site_disc_ganymede_layers }
 	if = { limit = { has_global_variable = sr_site_disc_ganymede_layers_pending } remove_global_variable = sr_site_disc_ganymede_layers_pending }
 	if = { limit = { has_global_variable = sr_site_free_ganymede } remove_global_variable = sr_site_free_ganymede }
@@ -5581,6 +5649,16 @@ sr_site_monthly_ganymede = {
 			sr_site_release_ganymede = yes
 		}
 	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
+	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_ganymede > 0
+		}
+		sr_site_terra_step_ganymede = { MONTHS = 1 }
+	}
 	# 4. The projection.
 	sr_site_sync_ganymede = yes
 	# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).
@@ -5590,7 +5668,8 @@ sr_site_monthly_ganymede = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5605,7 +5684,7 @@ sr_site_monthly_ganymede = {
 			name = sr_site_pop_ganymede
 			value = {
 				value = global_var:sr_site_pop_ganymede
-				multiply = 1.002
+				multiply = sr_site_growth_ganymede
 				max = sr_site_room_held_ganymede
 			}
 		}
@@ -5731,6 +5810,7 @@ sr_site_release_callisto = {
 	if = { limit = { has_global_variable = sr_site_bunker_callisto } remove_global_variable = sr_site_bunker_callisto }
 	if = { limit = { has_global_variable = sr_site_foundry_callisto } remove_global_variable = sr_site_foundry_callisto }
 	if = { limit = { has_global_variable = sr_site_admin_callisto } remove_global_variable = sr_site_admin_callisto }
+	if = { limit = { has_global_variable = sr_site_terra_callisto } remove_global_variable = sr_site_terra_callisto }
 	if = { limit = { has_global_variable = sr_site_disc_callisto_archive } remove_global_variable = sr_site_disc_callisto_archive }
 	if = { limit = { has_global_variable = sr_site_disc_callisto_archive_pending } remove_global_variable = sr_site_disc_callisto_archive_pending }
 	if = { limit = { has_global_variable = sr_site_free_callisto } remove_global_variable = sr_site_free_callisto }
@@ -5857,6 +5937,16 @@ sr_site_monthly_callisto = {
 			sr_site_release_callisto = yes
 		}
 	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
+	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_callisto > 0
+		}
+		sr_site_terra_step_callisto = { MONTHS = 1 }
+	}
 	# 4. The projection.
 	sr_site_sync_callisto = yes
 	# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).
@@ -5866,7 +5956,8 @@ sr_site_monthly_callisto = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5881,7 +5972,7 @@ sr_site_monthly_callisto = {
 			name = sr_site_pop_callisto
 			value = {
 				value = global_var:sr_site_pop_callisto
-				multiply = 1.002
+				multiply = sr_site_growth_callisto
 				max = sr_site_room_held_callisto
 			}
 		}
@@ -6121,7 +6212,8 @@ sr_site_monthly_himalia = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6136,7 +6228,7 @@ sr_site_monthly_himalia = {
 			name = sr_site_pop_himalia
 			value = {
 				value = global_var:sr_site_pop_himalia
-				multiply = 1.002
+				multiply = sr_site_growth_himalia
 				max = sr_site_room_held_himalia
 			}
 		}
@@ -6376,7 +6468,8 @@ sr_site_monthly_amalthea = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6391,7 +6484,7 @@ sr_site_monthly_amalthea = {
 			name = sr_site_pop_amalthea
 			value = {
 				value = global_var:sr_site_pop_amalthea
-				multiply = 1.002
+				multiply = sr_site_growth_amalthea
 				max = sr_site_room_held_amalthea
 			}
 		}
@@ -6517,6 +6610,7 @@ sr_site_release_venus = {
 	if = { limit = { has_global_variable = sr_site_bunker_venus } remove_global_variable = sr_site_bunker_venus }
 	if = { limit = { has_global_variable = sr_site_foundry_venus } remove_global_variable = sr_site_foundry_venus }
 	if = { limit = { has_global_variable = sr_site_admin_venus } remove_global_variable = sr_site_admin_venus }
+	if = { limit = { has_global_variable = sr_site_terra_venus } remove_global_variable = sr_site_terra_venus }
 	if = { limit = { has_global_variable = sr_site_disc_venus_waves } remove_global_variable = sr_site_disc_venus_waves }
 	if = { limit = { has_global_variable = sr_site_disc_venus_waves_pending } remove_global_variable = sr_site_disc_venus_waves_pending }
 	if = { limit = { has_global_variable = sr_site_free_venus } remove_global_variable = sr_site_free_venus }
@@ -6643,6 +6737,16 @@ sr_site_monthly_venus = {
 			sr_site_release_venus = yes
 		}
 	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
+	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_venus > 0
+		}
+		sr_site_terra_step_venus = { MONTHS = 1 }
+	}
 	# 4. The projection.
 	sr_site_sync_venus = yes
 	# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).
@@ -6652,7 +6756,8 @@ sr_site_monthly_venus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6667,7 +6772,7 @@ sr_site_monthly_venus = {
 			name = sr_site_pop_venus
 			value = {
 				value = global_var:sr_site_pop_venus
-				multiply = 1.002
+				multiply = sr_site_growth_venus
 				max = sr_site_room_held_venus
 			}
 		}
@@ -6928,7 +7033,8 @@ sr_site_monthly_mercury = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6943,7 +7049,7 @@ sr_site_monthly_mercury = {
 			name = sr_site_pop_mercury
 			value = {
 				value = global_var:sr_site_pop_mercury
-				multiply = 1.002
+				multiply = sr_site_growth_mercury
 				max = sr_site_room_held_mercury
 			}
 		}
@@ -7069,6 +7175,7 @@ sr_site_release_titan = {
 	if = { limit = { has_global_variable = sr_site_bunker_titan } remove_global_variable = sr_site_bunker_titan }
 	if = { limit = { has_global_variable = sr_site_foundry_titan } remove_global_variable = sr_site_foundry_titan }
 	if = { limit = { has_global_variable = sr_site_admin_titan } remove_global_variable = sr_site_admin_titan }
+	if = { limit = { has_global_variable = sr_site_terra_titan } remove_global_variable = sr_site_terra_titan }
 	if = { limit = { has_global_variable = sr_site_disc_titan_chemistry } remove_global_variable = sr_site_disc_titan_chemistry }
 	if = { limit = { has_global_variable = sr_site_disc_titan_chemistry_pending } remove_global_variable = sr_site_disc_titan_chemistry_pending }
 	if = { limit = { has_global_variable = sr_site_free_titan } remove_global_variable = sr_site_free_titan }
@@ -7195,6 +7302,16 @@ sr_site_monthly_titan = {
 			sr_site_release_titan = yes
 		}
 	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
+	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_titan > 0
+		}
+		sr_site_terra_step_titan = { MONTHS = 1 }
+	}
 	# 4. The projection.
 	sr_site_sync_titan = yes
 	# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).
@@ -7204,7 +7321,8 @@ sr_site_monthly_titan = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7219,7 +7337,7 @@ sr_site_monthly_titan = {
 			name = sr_site_pop_titan
 			value = {
 				value = global_var:sr_site_pop_titan
-				multiply = 1.002
+				multiply = sr_site_growth_titan
 				max = sr_site_room_held_titan
 			}
 		}
@@ -7480,7 +7598,8 @@ sr_site_monthly_enceladus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7495,7 +7614,7 @@ sr_site_monthly_enceladus = {
 			name = sr_site_pop_enceladus
 			value = {
 				value = global_var:sr_site_pop_enceladus
-				multiply = 1.002
+				multiply = sr_site_growth_enceladus
 				max = sr_site_room_held_enceladus
 			}
 		}
@@ -7735,7 +7854,8 @@ sr_site_monthly_rhea = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7750,7 +7870,7 @@ sr_site_monthly_rhea = {
 			name = sr_site_pop_rhea
 			value = {
 				value = global_var:sr_site_pop_rhea
-				multiply = 1.002
+				multiply = sr_site_growth_rhea
 				max = sr_site_room_held_rhea
 			}
 		}
@@ -7990,7 +8110,8 @@ sr_site_monthly_mimas = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8005,7 +8126,7 @@ sr_site_monthly_mimas = {
 			name = sr_site_pop_mimas
 			value = {
 				value = global_var:sr_site_pop_mimas
-				multiply = 1.002
+				multiply = sr_site_growth_mimas
 				max = sr_site_room_held_mimas
 			}
 		}
@@ -8245,7 +8366,8 @@ sr_site_monthly_iapetus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8260,7 +8382,7 @@ sr_site_monthly_iapetus = {
 			name = sr_site_pop_iapetus
 			value = {
 				value = global_var:sr_site_pop_iapetus
-				multiply = 1.002
+				multiply = sr_site_growth_iapetus
 				max = sr_site_room_held_iapetus
 			}
 		}
@@ -8521,7 +8643,8 @@ sr_site_monthly_titania = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8536,7 +8659,7 @@ sr_site_monthly_titania = {
 			name = sr_site_pop_titania
 			value = {
 				value = global_var:sr_site_pop_titania
-				multiply = 1.002
+				multiply = sr_site_growth_titania
 				max = sr_site_room_held_titania
 			}
 		}
@@ -8776,7 +8899,8 @@ sr_site_monthly_oberon = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8791,7 +8915,7 @@ sr_site_monthly_oberon = {
 			name = sr_site_pop_oberon
 			value = {
 				value = global_var:sr_site_pop_oberon
-				multiply = 1.002
+				multiply = sr_site_growth_oberon
 				max = sr_site_room_held_oberon
 			}
 		}
@@ -9031,7 +9155,8 @@ sr_site_monthly_miranda = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9046,7 +9171,7 @@ sr_site_monthly_miranda = {
 			name = sr_site_pop_miranda
 			value = {
 				value = global_var:sr_site_pop_miranda
-				multiply = 1.002
+				multiply = sr_site_growth_miranda
 				max = sr_site_room_held_miranda
 			}
 		}
@@ -9286,7 +9411,8 @@ sr_site_monthly_ariel = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9301,7 +9427,7 @@ sr_site_monthly_ariel = {
 			name = sr_site_pop_ariel
 			value = {
 				value = global_var:sr_site_pop_ariel
-				multiply = 1.002
+				multiply = sr_site_growth_ariel
 				max = sr_site_room_held_ariel
 			}
 		}
@@ -9562,7 +9688,8 @@ sr_site_monthly_triton = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9577,7 +9704,7 @@ sr_site_monthly_triton = {
 			name = sr_site_pop_triton
 			value = {
 				value = global_var:sr_site_pop_triton
-				multiply = 1.002
+				multiply = sr_site_growth_triton
 				max = sr_site_room_held_triton
 			}
 		}
@@ -9817,7 +9944,8 @@ sr_site_monthly_proteus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9832,7 +9960,7 @@ sr_site_monthly_proteus = {
 			name = sr_site_pop_proteus
 			value = {
 				value = global_var:sr_site_pop_proteus
-				multiply = 1.002
+				multiply = sr_site_growth_proteus
 				max = sr_site_room_held_proteus
 			}
 		}
@@ -10093,7 +10221,8 @@ sr_site_monthly_pluto = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10108,7 +10237,7 @@ sr_site_monthly_pluto = {
 			name = sr_site_pop_pluto
 			value = {
 				value = global_var:sr_site_pop_pluto
-				multiply = 1.002
+				multiply = sr_site_growth_pluto
 				max = sr_site_room_held_pluto
 			}
 		}
@@ -10348,7 +10477,8 @@ sr_site_monthly_eris = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10363,7 +10493,7 @@ sr_site_monthly_eris = {
 			name = sr_site_pop_eris
 			value = {
 				value = global_var:sr_site_pop_eris
-				multiply = 1.002
+				multiply = sr_site_growth_eris
 				max = sr_site_room_held_eris
 			}
 		}
@@ -10603,7 +10733,8 @@ sr_site_monthly_makemake = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10618,7 +10749,7 @@ sr_site_monthly_makemake = {
 			name = sr_site_pop_makemake
 			value = {
 				value = global_var:sr_site_pop_makemake
-				multiply = 1.002
+				multiply = sr_site_growth_makemake
 				max = sr_site_room_held_makemake
 			}
 		}
@@ -10858,7 +10989,8 @@ sr_site_monthly_haumea = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10873,7 +11005,7 @@ sr_site_monthly_haumea = {
 			name = sr_site_pop_haumea
 			value = {
 				value = global_var:sr_site_pop_haumea
-				multiply = 1.002
+				multiply = sr_site_growth_haumea
 				max = sr_site_room_held_haumea
 			}
 		}
@@ -11113,7 +11245,8 @@ sr_site_monthly_sedna = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11128,7 +11261,7 @@ sr_site_monthly_sedna = {
 			name = sr_site_pop_sedna
 			value = {
 				value = global_var:sr_site_pop_sedna
-				multiply = 1.002
+				multiply = sr_site_growth_sedna
 				max = sr_site_room_held_sedna
 			}
 		}
@@ -11366,7 +11499,8 @@ sr_site_monthly_shackleton = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11381,7 +11515,7 @@ sr_site_monthly_shackleton = {
 			name = sr_site_pop_shackleton
 			value = {
 				value = global_var:sr_site_pop_shackleton
-				multiply = 1.002
+				multiply = sr_site_growth_shackleton
 				max = sr_site_room_held_shackleton
 			}
 		}
@@ -11619,7 +11753,8 @@ sr_site_monthly_peary = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11634,7 +11769,7 @@ sr_site_monthly_peary = {
 			name = sr_site_pop_peary
 			value = {
 				value = global_var:sr_site_pop_peary
-				multiply = 1.002
+				multiply = sr_site_growth_peary
 				max = sr_site_room_held_peary
 			}
 		}
@@ -11872,7 +12007,8 @@ sr_site_monthly_tranquility = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11887,7 +12023,7 @@ sr_site_monthly_tranquility = {
 			name = sr_site_pop_tranquility
 			value = {
 				value = global_var:sr_site_pop_tranquility
-				multiply = 1.002
+				multiply = sr_site_growth_tranquility
 				max = sr_site_room_held_tranquility
 			}
 		}
@@ -12125,7 +12261,8 @@ sr_site_monthly_marius_hills = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12140,7 +12277,7 @@ sr_site_monthly_marius_hills = {
 			name = sr_site_pop_marius_hills
 			value = {
 				value = global_var:sr_site_pop_marius_hills
-				multiply = 1.002
+				multiply = sr_site_growth_marius_hills
 				max = sr_site_room_held_marius_hills
 			}
 		}
@@ -12378,7 +12515,8 @@ sr_site_monthly_daedalus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12393,7 +12531,7 @@ sr_site_monthly_daedalus = {
 			name = sr_site_pop_daedalus
 			value = {
 				value = global_var:sr_site_pop_daedalus
-				multiply = 1.002
+				multiply = sr_site_growth_daedalus
 				max = sr_site_room_held_daedalus
 			}
 		}
@@ -12631,7 +12769,8 @@ sr_site_monthly_imbrium = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12646,7 +12785,7 @@ sr_site_monthly_imbrium = {
 			name = sr_site_pop_imbrium
 			value = {
 				value = global_var:sr_site_pop_imbrium
-				multiply = 1.002
+				multiply = sr_site_growth_imbrium
 				max = sr_site_room_held_imbrium
 			}
 		}
@@ -22303,6 +22442,11 @@ sr_mod_install_valles_marineris = {
 			set_global_variable = { name = sr_site_admin_valles_marineris value = { value = sr_site_admin_value_valles_marineris add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_site_generic_built_valles_marineris < sr_site_slots_max_valles_marineris sr_site_terra_value_valles_marineris < sr_terra_max_levels sr_site_terra_open_valles_marineris = yes }
+			set_global_variable = { name = sr_site_terra_valles_marineris value = { value = sr_site_terra_value_valles_marineris add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -22388,6 +22532,15 @@ sr_mod_ai_plan_valles_marineris = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_valles_marineris = yes
+				sr_mod_slots_used_valles_marineris < sr_site_slots_valles_marineris
+				OR = { sr_site_crews_valles_marineris >= sr_site_levels_valles_marineris has_technology_researched = artificial_intelligence }
+				sr_site_fill_valles_marineris >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = valles_marineris TYPE = terra INDEX = 1 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_valles_marineris = yes
 				sr_mod_slots_used_valles_marineris < sr_site_slots_valles_marineris
 				OR = { sr_site_crews_valles_marineris >= sr_site_levels_valles_marineris has_technology_researched = artificial_intelligence }
@@ -22412,6 +22565,31 @@ sr_mod_ai_plan_valles_marineris = {
 			}
 			sr_mod_queue = { KEY = valles_marineris TYPE = lab INDEX = 1 CODE = 8 }
 		}
+	}
+}
+# Valles Marineris's works, MONTHS months at this month's pace (its staffed
+# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
+# the levels stand down and free their slots; the work done stays the world's.
+sr_site_terra_step_valles_marineris = {
+	if = {
+		limit = { sr_site_terra_rate_valles_marineris > 0 }
+		set_global_variable = {
+			name = sr_site_terra_done_valles_marineris
+			value = {
+				value = sr_site_terra_rate_valles_marineris
+				multiply = $MONTHS$
+				add = sr_site_terra_done_value_valles_marineris
+				max = sr_terra_full_months
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_valles_marineris
+			NOT = { sr_site_terra_open_valles_marineris = yes }
+		}
+		remove_global_variable = sr_site_terra_valles_marineris
+		debug_log = "TE_SR_MODULES valles_marineris: terraformed; its Terraforming levels stand down"
 	}
 }
 
@@ -22501,6 +22679,11 @@ sr_mod_install_olympus_mons = {
 			set_global_variable = { name = sr_site_admin_olympus_mons value = { value = sr_site_admin_value_olympus_mons add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_site_generic_built_olympus_mons < sr_site_slots_max_olympus_mons sr_site_terra_value_olympus_mons < sr_terra_max_levels sr_site_terra_open_olympus_mons = yes }
+			set_global_variable = { name = sr_site_terra_olympus_mons value = { value = sr_site_terra_value_olympus_mons add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -22586,6 +22769,15 @@ sr_mod_ai_plan_olympus_mons = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_olympus_mons = yes
+				sr_mod_slots_used_olympus_mons < sr_site_slots_olympus_mons
+				OR = { sr_site_crews_olympus_mons >= sr_site_levels_olympus_mons has_technology_researched = artificial_intelligence }
+				sr_site_fill_olympus_mons >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = olympus_mons TYPE = terra INDEX = 2 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_olympus_mons = yes
 				sr_mod_slots_used_olympus_mons < sr_site_slots_olympus_mons
 				OR = { sr_site_crews_olympus_mons >= sr_site_levels_olympus_mons has_technology_researched = artificial_intelligence }
@@ -22610,6 +22802,31 @@ sr_mod_ai_plan_olympus_mons = {
 			}
 			sr_mod_queue = { KEY = olympus_mons TYPE = lab INDEX = 2 CODE = 8 }
 		}
+	}
+}
+# Olympus Mons's works, MONTHS months at this month's pace (its staffed
+# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
+# the levels stand down and free their slots; the work done stays the world's.
+sr_site_terra_step_olympus_mons = {
+	if = {
+		limit = { sr_site_terra_rate_olympus_mons > 0 }
+		set_global_variable = {
+			name = sr_site_terra_done_olympus_mons
+			value = {
+				value = sr_site_terra_rate_olympus_mons
+				multiply = $MONTHS$
+				add = sr_site_terra_done_value_olympus_mons
+				max = sr_terra_full_months
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_olympus_mons
+			NOT = { sr_site_terra_open_olympus_mons = yes }
+		}
+		remove_global_variable = sr_site_terra_olympus_mons
+		debug_log = "TE_SR_MODULES olympus_mons: terraformed; its Terraforming levels stand down"
 	}
 }
 
@@ -22699,6 +22916,11 @@ sr_mod_install_hellas_planitia = {
 			set_global_variable = { name = sr_site_admin_hellas_planitia value = { value = sr_site_admin_value_hellas_planitia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_site_generic_built_hellas_planitia < sr_site_slots_max_hellas_planitia sr_site_terra_value_hellas_planitia < sr_terra_max_levels sr_site_terra_open_hellas_planitia = yes }
+			set_global_variable = { name = sr_site_terra_hellas_planitia value = { value = sr_site_terra_value_hellas_planitia add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -22784,6 +23006,15 @@ sr_mod_ai_plan_hellas_planitia = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_hellas_planitia = yes
+				sr_mod_slots_used_hellas_planitia < sr_site_slots_hellas_planitia
+				OR = { sr_site_crews_hellas_planitia >= sr_site_levels_hellas_planitia has_technology_researched = artificial_intelligence }
+				sr_site_fill_hellas_planitia >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = hellas_planitia TYPE = terra INDEX = 3 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_hellas_planitia = yes
 				sr_mod_slots_used_hellas_planitia < sr_site_slots_hellas_planitia
 				OR = { sr_site_crews_hellas_planitia >= sr_site_levels_hellas_planitia has_technology_researched = artificial_intelligence }
@@ -22808,6 +23039,31 @@ sr_mod_ai_plan_hellas_planitia = {
 			}
 			sr_mod_queue = { KEY = hellas_planitia TYPE = lab INDEX = 3 CODE = 8 }
 		}
+	}
+}
+# Hellas Planitia's works, MONTHS months at this month's pace (its staffed
+# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
+# the levels stand down and free their slots; the work done stays the world's.
+sr_site_terra_step_hellas_planitia = {
+	if = {
+		limit = { sr_site_terra_rate_hellas_planitia > 0 }
+		set_global_variable = {
+			name = sr_site_terra_done_hellas_planitia
+			value = {
+				value = sr_site_terra_rate_hellas_planitia
+				multiply = $MONTHS$
+				add = sr_site_terra_done_value_hellas_planitia
+				max = sr_terra_full_months
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_hellas_planitia
+			NOT = { sr_site_terra_open_hellas_planitia = yes }
+		}
+		remove_global_variable = sr_site_terra_hellas_planitia
+		debug_log = "TE_SR_MODULES hellas_planitia: terraformed; its Terraforming levels stand down"
 	}
 }
 
@@ -22897,6 +23153,11 @@ sr_mod_install_utopia_planitia = {
 			set_global_variable = { name = sr_site_admin_utopia_planitia value = { value = sr_site_admin_value_utopia_planitia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_site_generic_built_utopia_planitia < sr_site_slots_max_utopia_planitia sr_site_terra_value_utopia_planitia < sr_terra_max_levels sr_site_terra_open_utopia_planitia = yes }
+			set_global_variable = { name = sr_site_terra_utopia_planitia value = { value = sr_site_terra_value_utopia_planitia add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -22982,6 +23243,15 @@ sr_mod_ai_plan_utopia_planitia = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_utopia_planitia = yes
+				sr_mod_slots_used_utopia_planitia < sr_site_slots_utopia_planitia
+				OR = { sr_site_crews_utopia_planitia >= sr_site_levels_utopia_planitia has_technology_researched = artificial_intelligence }
+				sr_site_fill_utopia_planitia >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = utopia_planitia TYPE = terra INDEX = 4 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_utopia_planitia = yes
 				sr_mod_slots_used_utopia_planitia < sr_site_slots_utopia_planitia
 				OR = { sr_site_crews_utopia_planitia >= sr_site_levels_utopia_planitia has_technology_researched = artificial_intelligence }
@@ -23006,6 +23276,31 @@ sr_mod_ai_plan_utopia_planitia = {
 			}
 			sr_mod_queue = { KEY = utopia_planitia TYPE = lab INDEX = 4 CODE = 8 }
 		}
+	}
+}
+# Utopia Planitia's works, MONTHS months at this month's pace (its staffed
+# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
+# the levels stand down and free their slots; the work done stays the world's.
+sr_site_terra_step_utopia_planitia = {
+	if = {
+		limit = { sr_site_terra_rate_utopia_planitia > 0 }
+		set_global_variable = {
+			name = sr_site_terra_done_utopia_planitia
+			value = {
+				value = sr_site_terra_rate_utopia_planitia
+				multiply = $MONTHS$
+				add = sr_site_terra_done_value_utopia_planitia
+				max = sr_terra_full_months
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_utopia_planitia
+			NOT = { sr_site_terra_open_utopia_planitia = yes }
+		}
+		remove_global_variable = sr_site_terra_utopia_planitia
+		debug_log = "TE_SR_MODULES utopia_planitia: terraformed; its Terraforming levels stand down"
 	}
 }
 
@@ -23095,6 +23390,11 @@ sr_mod_install_arcadia_planitia = {
 			set_global_variable = { name = sr_site_admin_arcadia_planitia value = { value = sr_site_admin_value_arcadia_planitia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_site_generic_built_arcadia_planitia < sr_site_slots_max_arcadia_planitia sr_site_terra_value_arcadia_planitia < sr_terra_max_levels sr_site_terra_open_arcadia_planitia = yes }
+			set_global_variable = { name = sr_site_terra_arcadia_planitia value = { value = sr_site_terra_value_arcadia_planitia add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -23180,6 +23480,15 @@ sr_mod_ai_plan_arcadia_planitia = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_arcadia_planitia = yes
+				sr_mod_slots_used_arcadia_planitia < sr_site_slots_arcadia_planitia
+				OR = { sr_site_crews_arcadia_planitia >= sr_site_levels_arcadia_planitia has_technology_researched = artificial_intelligence }
+				sr_site_fill_arcadia_planitia >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = arcadia_planitia TYPE = terra INDEX = 5 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_arcadia_planitia = yes
 				sr_mod_slots_used_arcadia_planitia < sr_site_slots_arcadia_planitia
 				OR = { sr_site_crews_arcadia_planitia >= sr_site_levels_arcadia_planitia has_technology_researched = artificial_intelligence }
@@ -23204,6 +23513,31 @@ sr_mod_ai_plan_arcadia_planitia = {
 			}
 			sr_mod_queue = { KEY = arcadia_planitia TYPE = lab INDEX = 5 CODE = 8 }
 		}
+	}
+}
+# Arcadia Planitia's works, MONTHS months at this month's pace (its staffed
+# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
+# the levels stand down and free their slots; the work done stays the world's.
+sr_site_terra_step_arcadia_planitia = {
+	if = {
+		limit = { sr_site_terra_rate_arcadia_planitia > 0 }
+		set_global_variable = {
+			name = sr_site_terra_done_arcadia_planitia
+			value = {
+				value = sr_site_terra_rate_arcadia_planitia
+				multiply = $MONTHS$
+				add = sr_site_terra_done_value_arcadia_planitia
+				max = sr_terra_full_months
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_arcadia_planitia
+			NOT = { sr_site_terra_open_arcadia_planitia = yes }
+		}
+		remove_global_variable = sr_site_terra_arcadia_planitia
+		debug_log = "TE_SR_MODULES arcadia_planitia: terraformed; its Terraforming levels stand down"
 	}
 }
 
@@ -24679,6 +25013,11 @@ sr_mod_install_ganymede = {
 			set_global_variable = { name = sr_site_admin_ganymede value = { value = sr_site_admin_value_ganymede add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_site_generic_built_ganymede < sr_site_slots_max_ganymede sr_site_terra_value_ganymede < sr_terra_max_levels sr_site_terra_open_ganymede = yes }
+			set_global_variable = { name = sr_site_terra_ganymede value = { value = sr_site_terra_value_ganymede add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -24764,6 +25103,15 @@ sr_mod_ai_plan_ganymede = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_ganymede = yes
+				sr_mod_slots_used_ganymede < sr_site_slots_ganymede
+				OR = { sr_site_crews_ganymede >= sr_site_levels_ganymede has_technology_researched = artificial_intelligence }
+				sr_site_fill_ganymede >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = ganymede TYPE = terra INDEX = 13 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_ganymede = yes
 				sr_mod_slots_used_ganymede < sr_site_slots_ganymede
 				OR = { sr_site_crews_ganymede >= sr_site_levels_ganymede has_technology_researched = artificial_intelligence }
@@ -24788,6 +25136,31 @@ sr_mod_ai_plan_ganymede = {
 			}
 			sr_mod_queue = { KEY = ganymede TYPE = lab INDEX = 13 CODE = 8 }
 		}
+	}
+}
+# Ganymede's works, MONTHS months at this month's pace (its staffed
+# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
+# the levels stand down and free their slots; the work done stays the world's.
+sr_site_terra_step_ganymede = {
+	if = {
+		limit = { sr_site_terra_rate_ganymede > 0 }
+		set_global_variable = {
+			name = sr_site_terra_done_ganymede
+			value = {
+				value = sr_site_terra_rate_ganymede
+				multiply = $MONTHS$
+				add = sr_site_terra_done_value_ganymede
+				max = sr_terra_full_months
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_ganymede
+			NOT = { sr_site_terra_open_ganymede = yes }
+		}
+		remove_global_variable = sr_site_terra_ganymede
+		debug_log = "TE_SR_MODULES ganymede: terraformed; its Terraforming levels stand down"
 	}
 }
 
@@ -24877,6 +25250,11 @@ sr_mod_install_callisto = {
 			set_global_variable = { name = sr_site_admin_callisto value = { value = sr_site_admin_value_callisto add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_site_generic_built_callisto < sr_site_slots_max_callisto sr_site_terra_value_callisto < sr_terra_max_levels sr_site_terra_open_callisto = yes }
+			set_global_variable = { name = sr_site_terra_callisto value = { value = sr_site_terra_value_callisto add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -24962,6 +25340,15 @@ sr_mod_ai_plan_callisto = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_callisto = yes
+				sr_mod_slots_used_callisto < sr_site_slots_callisto
+				OR = { sr_site_crews_callisto >= sr_site_levels_callisto has_technology_researched = artificial_intelligence }
+				sr_site_fill_callisto >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = callisto TYPE = terra INDEX = 14 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_callisto = yes
 				sr_mod_slots_used_callisto < sr_site_slots_callisto
 				OR = { sr_site_crews_callisto >= sr_site_levels_callisto has_technology_researched = artificial_intelligence }
@@ -24986,6 +25373,31 @@ sr_mod_ai_plan_callisto = {
 			}
 			sr_mod_queue = { KEY = callisto TYPE = lab INDEX = 14 CODE = 8 }
 		}
+	}
+}
+# Callisto's works, MONTHS months at this month's pace (its staffed
+# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
+# the levels stand down and free their slots; the work done stays the world's.
+sr_site_terra_step_callisto = {
+	if = {
+		limit = { sr_site_terra_rate_callisto > 0 }
+		set_global_variable = {
+			name = sr_site_terra_done_callisto
+			value = {
+				value = sr_site_terra_rate_callisto
+				multiply = $MONTHS$
+				add = sr_site_terra_done_value_callisto
+				max = sr_terra_full_months
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_callisto
+			NOT = { sr_site_terra_open_callisto = yes }
+		}
+		remove_global_variable = sr_site_terra_callisto
+		debug_log = "TE_SR_MODULES callisto: terraformed; its Terraforming levels stand down"
 	}
 }
 
@@ -25471,6 +25883,11 @@ sr_mod_install_venus = {
 			set_global_variable = { name = sr_site_admin_venus value = { value = sr_site_admin_value_venus add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_site_generic_built_venus < sr_site_slots_max_venus sr_site_terra_value_venus < sr_terra_max_levels sr_site_terra_open_venus = yes }
+			set_global_variable = { name = sr_site_terra_venus value = { value = sr_site_terra_value_venus add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -25556,6 +25973,15 @@ sr_mod_ai_plan_venus = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_venus = yes
+				sr_mod_slots_used_venus < sr_site_slots_venus
+				OR = { sr_site_crews_venus >= sr_site_levels_venus has_technology_researched = artificial_intelligence }
+				sr_site_fill_venus >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = venus TYPE = terra INDEX = 17 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_venus = yes
 				sr_mod_slots_used_venus < sr_site_slots_venus
 				OR = { sr_site_crews_venus >= sr_site_levels_venus has_technology_researched = artificial_intelligence }
@@ -25580,6 +26006,31 @@ sr_mod_ai_plan_venus = {
 			}
 			sr_mod_queue = { KEY = venus TYPE = lab INDEX = 17 CODE = 8 }
 		}
+	}
+}
+# Venus Cloud Habitat's works, MONTHS months at this month's pace (its staffed
+# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
+# the levels stand down and free their slots; the work done stays the world's.
+sr_site_terra_step_venus = {
+	if = {
+		limit = { sr_site_terra_rate_venus > 0 }
+		set_global_variable = {
+			name = sr_site_terra_done_venus
+			value = {
+				value = sr_site_terra_rate_venus
+				multiply = $MONTHS$
+				add = sr_site_terra_done_value_venus
+				max = sr_terra_full_months
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_venus
+			NOT = { sr_site_terra_open_venus = yes }
+		}
+		remove_global_variable = sr_site_terra_venus
+		debug_log = "TE_SR_MODULES venus: terraformed; its Terraforming levels stand down"
 	}
 }
 
@@ -25867,6 +26318,11 @@ sr_mod_install_titan = {
 			set_global_variable = { name = sr_site_admin_titan value = { value = sr_site_admin_value_titan add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_site_generic_built_titan < sr_site_slots_max_titan sr_site_terra_value_titan < sr_terra_max_levels sr_site_terra_open_titan = yes }
+			set_global_variable = { name = sr_site_terra_titan value = { value = sr_site_terra_value_titan add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -25952,6 +26408,15 @@ sr_mod_ai_plan_titan = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_titan = yes
+				sr_mod_slots_used_titan < sr_site_slots_titan
+				OR = { sr_site_crews_titan >= sr_site_levels_titan has_technology_researched = artificial_intelligence }
+				sr_site_fill_titan >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = titan TYPE = terra INDEX = 19 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_titan = yes
 				sr_mod_slots_used_titan < sr_site_slots_titan
 				OR = { sr_site_crews_titan >= sr_site_levels_titan has_technology_researched = artificial_intelligence }
@@ -25976,6 +26441,31 @@ sr_mod_ai_plan_titan = {
 			}
 			sr_mod_queue = { KEY = titan TYPE = lab INDEX = 19 CODE = 8 }
 		}
+	}
+}
+# Titan's works, MONTHS months at this month's pace (its staffed
+# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
+# the levels stand down and free their slots; the work done stays the world's.
+sr_site_terra_step_titan = {
+	if = {
+		limit = { sr_site_terra_rate_titan > 0 }
+		set_global_variable = {
+			name = sr_site_terra_done_titan
+			value = {
+				value = sr_site_terra_rate_titan
+				multiply = $MONTHS$
+				add = sr_site_terra_done_value_titan
+				max = sr_terra_full_months
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_titan
+			NOT = { sr_site_terra_open_titan = yes }
+		}
+		remove_global_variable = sr_site_terra_titan
+		debug_log = "TE_SR_MODULES titan: terraformed; its Terraforming levels stand down"
 	}
 }
 
@@ -32375,6 +32865,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_valles_marineris } remove_variable = sr_mq_bunker_valles_marineris }
 	if = { limit = { has_variable = sr_mq_foundry_valles_marineris } remove_variable = sr_mq_foundry_valles_marineris }
 	if = { limit = { has_variable = sr_mq_admin_valles_marineris } remove_variable = sr_mq_admin_valles_marineris }
+	if = { limit = { has_variable = sr_mq_terra_valles_marineris } remove_variable = sr_mq_terra_valles_marineris }
 	if = { limit = { has_variable = sr_mq_hab_olympus_mons } remove_variable = sr_mq_hab_olympus_mons }
 	if = { limit = { has_variable = sr_mq_a_olympus_mons } remove_variable = sr_mq_a_olympus_mons }
 	if = { limit = { has_variable = sr_mq_b_olympus_mons } remove_variable = sr_mq_b_olympus_mons }
@@ -32390,6 +32881,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_olympus_mons } remove_variable = sr_mq_bunker_olympus_mons }
 	if = { limit = { has_variable = sr_mq_foundry_olympus_mons } remove_variable = sr_mq_foundry_olympus_mons }
 	if = { limit = { has_variable = sr_mq_admin_olympus_mons } remove_variable = sr_mq_admin_olympus_mons }
+	if = { limit = { has_variable = sr_mq_terra_olympus_mons } remove_variable = sr_mq_terra_olympus_mons }
 	if = { limit = { has_variable = sr_mq_hab_hellas_planitia } remove_variable = sr_mq_hab_hellas_planitia }
 	if = { limit = { has_variable = sr_mq_a_hellas_planitia } remove_variable = sr_mq_a_hellas_planitia }
 	if = { limit = { has_variable = sr_mq_b_hellas_planitia } remove_variable = sr_mq_b_hellas_planitia }
@@ -32405,6 +32897,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_hellas_planitia } remove_variable = sr_mq_bunker_hellas_planitia }
 	if = { limit = { has_variable = sr_mq_foundry_hellas_planitia } remove_variable = sr_mq_foundry_hellas_planitia }
 	if = { limit = { has_variable = sr_mq_admin_hellas_planitia } remove_variable = sr_mq_admin_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_terra_hellas_planitia } remove_variable = sr_mq_terra_hellas_planitia }
 	if = { limit = { has_variable = sr_mq_hab_utopia_planitia } remove_variable = sr_mq_hab_utopia_planitia }
 	if = { limit = { has_variable = sr_mq_a_utopia_planitia } remove_variable = sr_mq_a_utopia_planitia }
 	if = { limit = { has_variable = sr_mq_b_utopia_planitia } remove_variable = sr_mq_b_utopia_planitia }
@@ -32420,6 +32913,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_utopia_planitia } remove_variable = sr_mq_bunker_utopia_planitia }
 	if = { limit = { has_variable = sr_mq_foundry_utopia_planitia } remove_variable = sr_mq_foundry_utopia_planitia }
 	if = { limit = { has_variable = sr_mq_admin_utopia_planitia } remove_variable = sr_mq_admin_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_terra_utopia_planitia } remove_variable = sr_mq_terra_utopia_planitia }
 	if = { limit = { has_variable = sr_mq_hab_arcadia_planitia } remove_variable = sr_mq_hab_arcadia_planitia }
 	if = { limit = { has_variable = sr_mq_a_arcadia_planitia } remove_variable = sr_mq_a_arcadia_planitia }
 	if = { limit = { has_variable = sr_mq_b_arcadia_planitia } remove_variable = sr_mq_b_arcadia_planitia }
@@ -32435,6 +32929,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_arcadia_planitia } remove_variable = sr_mq_bunker_arcadia_planitia }
 	if = { limit = { has_variable = sr_mq_foundry_arcadia_planitia } remove_variable = sr_mq_foundry_arcadia_planitia }
 	if = { limit = { has_variable = sr_mq_admin_arcadia_planitia } remove_variable = sr_mq_admin_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_terra_arcadia_planitia } remove_variable = sr_mq_terra_arcadia_planitia }
 	if = { limit = { has_variable = sr_mq_hab_ceres } remove_variable = sr_mq_hab_ceres }
 	if = { limit = { has_variable = sr_mq_a_ceres } remove_variable = sr_mq_a_ceres }
 	if = { limit = { has_variable = sr_mq_b_ceres } remove_variable = sr_mq_b_ceres }
@@ -32555,6 +33050,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_ganymede } remove_variable = sr_mq_bunker_ganymede }
 	if = { limit = { has_variable = sr_mq_foundry_ganymede } remove_variable = sr_mq_foundry_ganymede }
 	if = { limit = { has_variable = sr_mq_admin_ganymede } remove_variable = sr_mq_admin_ganymede }
+	if = { limit = { has_variable = sr_mq_terra_ganymede } remove_variable = sr_mq_terra_ganymede }
 	if = { limit = { has_variable = sr_mq_hab_callisto } remove_variable = sr_mq_hab_callisto }
 	if = { limit = { has_variable = sr_mq_a_callisto } remove_variable = sr_mq_a_callisto }
 	if = { limit = { has_variable = sr_mq_b_callisto } remove_variable = sr_mq_b_callisto }
@@ -32570,6 +33066,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_callisto } remove_variable = sr_mq_bunker_callisto }
 	if = { limit = { has_variable = sr_mq_foundry_callisto } remove_variable = sr_mq_foundry_callisto }
 	if = { limit = { has_variable = sr_mq_admin_callisto } remove_variable = sr_mq_admin_callisto }
+	if = { limit = { has_variable = sr_mq_terra_callisto } remove_variable = sr_mq_terra_callisto }
 	if = { limit = { has_variable = sr_mq_hab_himalia } remove_variable = sr_mq_hab_himalia }
 	if = { limit = { has_variable = sr_mq_a_himalia } remove_variable = sr_mq_a_himalia }
 	if = { limit = { has_variable = sr_mq_b_himalia } remove_variable = sr_mq_b_himalia }
@@ -32615,6 +33112,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_venus } remove_variable = sr_mq_bunker_venus }
 	if = { limit = { has_variable = sr_mq_foundry_venus } remove_variable = sr_mq_foundry_venus }
 	if = { limit = { has_variable = sr_mq_admin_venus } remove_variable = sr_mq_admin_venus }
+	if = { limit = { has_variable = sr_mq_terra_venus } remove_variable = sr_mq_terra_venus }
 	if = { limit = { has_variable = sr_mq_hab_mercury } remove_variable = sr_mq_hab_mercury }
 	if = { limit = { has_variable = sr_mq_a_mercury } remove_variable = sr_mq_a_mercury }
 	if = { limit = { has_variable = sr_mq_b_mercury } remove_variable = sr_mq_b_mercury }
@@ -32645,6 +33143,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_titan } remove_variable = sr_mq_bunker_titan }
 	if = { limit = { has_variable = sr_mq_foundry_titan } remove_variable = sr_mq_foundry_titan }
 	if = { limit = { has_variable = sr_mq_admin_titan } remove_variable = sr_mq_admin_titan }
+	if = { limit = { has_variable = sr_mq_terra_titan } remove_variable = sr_mq_terra_titan }
 	if = { limit = { has_variable = sr_mq_hab_enceladus } remove_variable = sr_mq_hab_enceladus }
 	if = { limit = { has_variable = sr_mq_a_enceladus } remove_variable = sr_mq_a_enceladus }
 	if = { limit = { has_variable = sr_mq_b_enceladus } remove_variable = sr_mq_b_enceladus }
@@ -33093,6 +33592,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_valles_marineris } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_valles_marineris } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_valles_marineris } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_valles_marineris } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 2 }
@@ -33111,6 +33611,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_olympus_mons } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_olympus_mons } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_olympus_mons } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_olympus_mons } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 3 }
@@ -33129,6 +33630,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_hellas_planitia } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_hellas_planitia } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_hellas_planitia } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_hellas_planitia } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 4 }
@@ -33147,6 +33649,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_utopia_planitia } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_utopia_planitia } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_utopia_planitia } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_utopia_planitia } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 5 }
@@ -33165,6 +33668,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_arcadia_planitia } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_arcadia_planitia } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_arcadia_planitia } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_arcadia_planitia } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 6 }
@@ -33309,6 +33813,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_ganymede } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_ganymede } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_ganymede } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_ganymede } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 14 }
@@ -33327,6 +33832,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_callisto } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_callisto } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_callisto } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_callisto } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 15 }
@@ -33381,6 +33887,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_venus } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_venus } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_venus } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_venus } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 18 }
@@ -33417,6 +33924,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_titan } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_titan } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_titan } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_titan } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 20 }
@@ -33817,6 +34325,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = valles_marineris TYPE = bunker CODE = 13 INDEX = 1 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = valles_marineris TYPE = foundry CODE = 14 INDEX = 1 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = valles_marineris TYPE = admin CODE = 15 INDEX = 1 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_valles_marineris = yes } sr_mod_fab_build = { KEY = valles_marineris TYPE = terra CODE = 16 INDEX = 1 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 2 global_var:sr_site_holder_olympus_mons ?= this }
@@ -33835,6 +34344,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = olympus_mons TYPE = bunker CODE = 13 INDEX = 2 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = olympus_mons TYPE = foundry CODE = 14 INDEX = 2 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = olympus_mons TYPE = admin CODE = 15 INDEX = 2 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_olympus_mons = yes } sr_mod_fab_build = { KEY = olympus_mons TYPE = terra CODE = 16 INDEX = 2 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 3 global_var:sr_site_holder_hellas_planitia ?= this }
@@ -33853,6 +34363,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = hellas_planitia TYPE = bunker CODE = 13 INDEX = 3 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = hellas_planitia TYPE = foundry CODE = 14 INDEX = 3 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = hellas_planitia TYPE = admin CODE = 15 INDEX = 3 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_hellas_planitia = yes } sr_mod_fab_build = { KEY = hellas_planitia TYPE = terra CODE = 16 INDEX = 3 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 4 global_var:sr_site_holder_utopia_planitia ?= this }
@@ -33871,6 +34382,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = utopia_planitia TYPE = bunker CODE = 13 INDEX = 4 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = utopia_planitia TYPE = foundry CODE = 14 INDEX = 4 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = utopia_planitia TYPE = admin CODE = 15 INDEX = 4 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_utopia_planitia = yes } sr_mod_fab_build = { KEY = utopia_planitia TYPE = terra CODE = 16 INDEX = 4 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 5 global_var:sr_site_holder_arcadia_planitia ?= this }
@@ -33889,6 +34401,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = arcadia_planitia TYPE = bunker CODE = 13 INDEX = 5 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = arcadia_planitia TYPE = foundry CODE = 14 INDEX = 5 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = arcadia_planitia TYPE = admin CODE = 15 INDEX = 5 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_arcadia_planitia = yes } sr_mod_fab_build = { KEY = arcadia_planitia TYPE = terra CODE = 16 INDEX = 5 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 6 global_var:sr_site_holder_ceres ?= this }
@@ -34033,6 +34546,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = ganymede TYPE = bunker CODE = 13 INDEX = 13 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = ganymede TYPE = foundry CODE = 14 INDEX = 13 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = ganymede TYPE = admin CODE = 15 INDEX = 13 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_ganymede = yes } sr_mod_fab_build = { KEY = ganymede TYPE = terra CODE = 16 INDEX = 13 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 14 global_var:sr_site_holder_callisto ?= this }
@@ -34051,6 +34565,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = callisto TYPE = bunker CODE = 13 INDEX = 14 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = callisto TYPE = foundry CODE = 14 INDEX = 14 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = callisto TYPE = admin CODE = 15 INDEX = 14 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_callisto = yes } sr_mod_fab_build = { KEY = callisto TYPE = terra CODE = 16 INDEX = 14 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 15 global_var:sr_site_holder_himalia ?= this }
@@ -34105,6 +34620,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = venus TYPE = bunker CODE = 13 INDEX = 17 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = venus TYPE = foundry CODE = 14 INDEX = 17 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = venus TYPE = admin CODE = 15 INDEX = 17 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_venus = yes } sr_mod_fab_build = { KEY = venus TYPE = terra CODE = 16 INDEX = 17 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 18 global_var:sr_site_holder_mercury ?= this }
@@ -34141,6 +34657,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = titan TYPE = bunker CODE = 13 INDEX = 19 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = titan TYPE = foundry CODE = 14 INDEX = 19 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = titan TYPE = admin CODE = 15 INDEX = 19 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_titan = yes } sr_mod_fab_build = { KEY = titan TYPE = terra CODE = 16 INDEX = 19 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 20 global_var:sr_site_holder_enceladus ?= this }
@@ -34904,6 +35421,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_valles_marineris } remove_global_variable = sr_site_ship_bunker_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_valles_marineris } remove_global_variable = sr_site_ship_foundry_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_admin_valles_marineris } remove_global_variable = sr_site_ship_admin_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_terra_valles_marineris } remove_global_variable = sr_site_ship_terra_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_hab_olympus_mons } remove_global_variable = sr_site_ship_hab_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_a_olympus_mons } remove_global_variable = sr_site_ship_a_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_b_olympus_mons } remove_global_variable = sr_site_ship_b_olympus_mons }
@@ -34919,6 +35437,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_olympus_mons } remove_global_variable = sr_site_ship_bunker_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_olympus_mons } remove_global_variable = sr_site_ship_foundry_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_admin_olympus_mons } remove_global_variable = sr_site_ship_admin_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_terra_olympus_mons } remove_global_variable = sr_site_ship_terra_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_hab_hellas_planitia } remove_global_variable = sr_site_ship_hab_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_a_hellas_planitia } remove_global_variable = sr_site_ship_a_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_b_hellas_planitia } remove_global_variable = sr_site_ship_b_hellas_planitia }
@@ -34934,6 +35453,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_hellas_planitia } remove_global_variable = sr_site_ship_bunker_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_hellas_planitia } remove_global_variable = sr_site_ship_foundry_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_hellas_planitia } remove_global_variable = sr_site_ship_admin_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_hellas_planitia } remove_global_variable = sr_site_ship_terra_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_hab_utopia_planitia } remove_global_variable = sr_site_ship_hab_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_a_utopia_planitia } remove_global_variable = sr_site_ship_a_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_b_utopia_planitia } remove_global_variable = sr_site_ship_b_utopia_planitia }
@@ -34949,6 +35469,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_utopia_planitia } remove_global_variable = sr_site_ship_bunker_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_utopia_planitia } remove_global_variable = sr_site_ship_foundry_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_utopia_planitia } remove_global_variable = sr_site_ship_admin_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_utopia_planitia } remove_global_variable = sr_site_ship_terra_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_hab_arcadia_planitia } remove_global_variable = sr_site_ship_hab_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_a_arcadia_planitia } remove_global_variable = sr_site_ship_a_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_b_arcadia_planitia } remove_global_variable = sr_site_ship_b_arcadia_planitia }
@@ -34964,6 +35485,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_arcadia_planitia } remove_global_variable = sr_site_ship_bunker_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_arcadia_planitia } remove_global_variable = sr_site_ship_foundry_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_arcadia_planitia } remove_global_variable = sr_site_ship_admin_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_arcadia_planitia } remove_global_variable = sr_site_ship_terra_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_hab_ceres } remove_global_variable = sr_site_ship_hab_ceres }
 	if = { limit = { has_global_variable = sr_site_ship_a_ceres } remove_global_variable = sr_site_ship_a_ceres }
 	if = { limit = { has_global_variable = sr_site_ship_b_ceres } remove_global_variable = sr_site_ship_b_ceres }
@@ -35084,6 +35606,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_ganymede } remove_global_variable = sr_site_ship_bunker_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_ganymede } remove_global_variable = sr_site_ship_foundry_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_admin_ganymede } remove_global_variable = sr_site_ship_admin_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_terra_ganymede } remove_global_variable = sr_site_ship_terra_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_hab_callisto } remove_global_variable = sr_site_ship_hab_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_a_callisto } remove_global_variable = sr_site_ship_a_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_b_callisto } remove_global_variable = sr_site_ship_b_callisto }
@@ -35099,6 +35622,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_callisto } remove_global_variable = sr_site_ship_bunker_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_callisto } remove_global_variable = sr_site_ship_foundry_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_admin_callisto } remove_global_variable = sr_site_ship_admin_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_terra_callisto } remove_global_variable = sr_site_ship_terra_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_hab_himalia } remove_global_variable = sr_site_ship_hab_himalia }
 	if = { limit = { has_global_variable = sr_site_ship_a_himalia } remove_global_variable = sr_site_ship_a_himalia }
 	if = { limit = { has_global_variable = sr_site_ship_b_himalia } remove_global_variable = sr_site_ship_b_himalia }
@@ -35144,6 +35668,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_venus } remove_global_variable = sr_site_ship_bunker_venus }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_venus } remove_global_variable = sr_site_ship_foundry_venus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_venus } remove_global_variable = sr_site_ship_admin_venus }
+	if = { limit = { has_global_variable = sr_site_ship_terra_venus } remove_global_variable = sr_site_ship_terra_venus }
 	if = { limit = { has_global_variable = sr_site_ship_hab_mercury } remove_global_variable = sr_site_ship_hab_mercury }
 	if = { limit = { has_global_variable = sr_site_ship_a_mercury } remove_global_variable = sr_site_ship_a_mercury }
 	if = { limit = { has_global_variable = sr_site_ship_b_mercury } remove_global_variable = sr_site_ship_b_mercury }
@@ -35174,6 +35699,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_titan } remove_global_variable = sr_site_ship_bunker_titan }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_titan } remove_global_variable = sr_site_ship_foundry_titan }
 	if = { limit = { has_global_variable = sr_site_ship_admin_titan } remove_global_variable = sr_site_ship_admin_titan }
+	if = { limit = { has_global_variable = sr_site_ship_terra_titan } remove_global_variable = sr_site_ship_terra_titan }
 	if = { limit = { has_global_variable = sr_site_ship_hab_enceladus } remove_global_variable = sr_site_ship_hab_enceladus }
 	if = { limit = { has_global_variable = sr_site_ship_a_enceladus } remove_global_variable = sr_site_ship_a_enceladus }
 	if = { limit = { has_global_variable = sr_site_ship_b_enceladus } remove_global_variable = sr_site_ship_b_enceladus }
@@ -35502,6 +36028,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_valles_marineris } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_valles_marineris } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_valles_marineris } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_valles_marineris } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 2 }
@@ -35520,6 +36047,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_olympus_mons } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_olympus_mons } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_olympus_mons } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_olympus_mons } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 3 }
@@ -35538,6 +36066,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_hellas_planitia } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_hellas_planitia } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_hellas_planitia } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_hellas_planitia } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 4 }
@@ -35556,6 +36085,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_utopia_planitia } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_utopia_planitia } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_utopia_planitia } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_utopia_planitia } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 5 }
@@ -35574,6 +36104,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_arcadia_planitia } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_arcadia_planitia } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_arcadia_planitia } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_arcadia_planitia } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 6 }
@@ -35718,6 +36249,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_ganymede } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_ganymede } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_ganymede } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_ganymede } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 14 }
@@ -35736,6 +36268,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_callisto } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_callisto } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_callisto } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_callisto } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 15 }
@@ -35790,6 +36323,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_venus } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_venus } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_venus } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_venus } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 18 }
@@ -35826,6 +36360,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_titan } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_titan } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_titan } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_titan } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 20 }
@@ -36318,6 +36853,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = valles_marineris TYPE = bunker INDEX = 1 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = valles_marineris TYPE = foundry INDEX = 1 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = valles_marineris TYPE = admin INDEX = 1 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = valles_marineris TYPE = terra INDEX = 1 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 2 }
@@ -36336,6 +36872,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = olympus_mons TYPE = bunker INDEX = 2 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = olympus_mons TYPE = foundry INDEX = 2 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = olympus_mons TYPE = admin INDEX = 2 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = olympus_mons TYPE = terra INDEX = 2 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 3 }
@@ -36354,6 +36891,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = hellas_planitia TYPE = bunker INDEX = 3 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = hellas_planitia TYPE = foundry INDEX = 3 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = hellas_planitia TYPE = admin INDEX = 3 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = hellas_planitia TYPE = terra INDEX = 3 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 4 }
@@ -36372,6 +36910,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = utopia_planitia TYPE = bunker INDEX = 4 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = utopia_planitia TYPE = foundry INDEX = 4 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = utopia_planitia TYPE = admin INDEX = 4 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = utopia_planitia TYPE = terra INDEX = 4 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 5 }
@@ -36390,6 +36929,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = arcadia_planitia TYPE = bunker INDEX = 5 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = arcadia_planitia TYPE = foundry INDEX = 5 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = arcadia_planitia TYPE = admin INDEX = 5 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = arcadia_planitia TYPE = terra INDEX = 5 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 6 }
@@ -36534,6 +37074,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = ganymede TYPE = bunker INDEX = 13 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = ganymede TYPE = foundry INDEX = 13 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = ganymede TYPE = admin INDEX = 13 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = ganymede TYPE = terra INDEX = 13 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 14 }
@@ -36552,6 +37093,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = callisto TYPE = bunker INDEX = 14 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = callisto TYPE = foundry INDEX = 14 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = callisto TYPE = admin INDEX = 14 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = callisto TYPE = terra INDEX = 14 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 15 }
@@ -36606,6 +37148,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = venus TYPE = bunker INDEX = 17 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = venus TYPE = foundry INDEX = 17 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = venus TYPE = admin INDEX = 17 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = venus TYPE = terra INDEX = 17 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 18 }
@@ -36642,6 +37185,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = titan TYPE = bunker INDEX = 19 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = titan TYPE = foundry INDEX = 19 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = titan TYPE = admin INDEX = 19 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = titan TYPE = terra INDEX = 19 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 20 }
@@ -38217,23 +38761,23 @@ sr_ebase_next_fill = {
 sr_mod_debug_log = {
 	if = {
 		limit = { has_global_variable = sr_colony_valles_marineris }
-		debug_log = "TE_SR_MODULES valles_marineris: a=[THIS.ScriptValue('sr_site_lvl_a_value_valles_marineris')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_valles_marineris')|0] hab=[THIS.ScriptValue('sr_site_hab_value_valles_marineris')|0] def=[THIS.ScriptValue('sr_site_def_value_valles_marineris')|0] port=[THIS.ScriptValue('sr_site_port_value_valles_marineris')|0] mine=[THIS.ScriptValue('sr_site_mine_value_valles_marineris')|0] yard=[THIS.ScriptValue('sr_site_yard_value_valles_marineris')|0] lab=[THIS.ScriptValue('sr_site_lab_value_valles_marineris')|0] culture=[THIS.ScriptValue('sr_site_culture_value_valles_marineris')|0] resort=[THIS.ScriptValue('sr_site_resort_value_valles_marineris')|0] black=[THIS.ScriptValue('sr_site_black_value_valles_marineris')|0] train=[THIS.ScriptValue('sr_site_train_value_valles_marineris')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_valles_marineris')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_valles_marineris')|0] admin=[THIS.ScriptValue('sr_site_admin_value_valles_marineris')|0] staffing=[THIS.ScriptValue('sr_site_staffing_valles_marineris')|2] room=[THIS.ScriptValue('sr_site_room_valles_marineris')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_valles_marineris')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_valles_marineris')|0] of [THIS.ScriptValue('sr_site_slots_valles_marineris')|0]"
+		debug_log = "TE_SR_MODULES valles_marineris: a=[THIS.ScriptValue('sr_site_lvl_a_value_valles_marineris')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_valles_marineris')|0] hab=[THIS.ScriptValue('sr_site_hab_value_valles_marineris')|0] def=[THIS.ScriptValue('sr_site_def_value_valles_marineris')|0] port=[THIS.ScriptValue('sr_site_port_value_valles_marineris')|0] mine=[THIS.ScriptValue('sr_site_mine_value_valles_marineris')|0] yard=[THIS.ScriptValue('sr_site_yard_value_valles_marineris')|0] lab=[THIS.ScriptValue('sr_site_lab_value_valles_marineris')|0] culture=[THIS.ScriptValue('sr_site_culture_value_valles_marineris')|0] resort=[THIS.ScriptValue('sr_site_resort_value_valles_marineris')|0] black=[THIS.ScriptValue('sr_site_black_value_valles_marineris')|0] train=[THIS.ScriptValue('sr_site_train_value_valles_marineris')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_valles_marineris')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_valles_marineris')|0] admin=[THIS.ScriptValue('sr_site_admin_value_valles_marineris')|0] terra=[THIS.ScriptValue('sr_site_terra_value_valles_marineris')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_valles_marineris')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_valles_marineris')|2] room=[THIS.ScriptValue('sr_site_room_valles_marineris')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_valles_marineris')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_valles_marineris')|0] of [THIS.ScriptValue('sr_site_slots_valles_marineris')|0]"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_olympus_mons }
-		debug_log = "TE_SR_MODULES olympus_mons: a=[THIS.ScriptValue('sr_site_lvl_a_value_olympus_mons')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_olympus_mons')|0] hab=[THIS.ScriptValue('sr_site_hab_value_olympus_mons')|0] def=[THIS.ScriptValue('sr_site_def_value_olympus_mons')|0] port=[THIS.ScriptValue('sr_site_port_value_olympus_mons')|0] mine=[THIS.ScriptValue('sr_site_mine_value_olympus_mons')|0] yard=[THIS.ScriptValue('sr_site_yard_value_olympus_mons')|0] lab=[THIS.ScriptValue('sr_site_lab_value_olympus_mons')|0] culture=[THIS.ScriptValue('sr_site_culture_value_olympus_mons')|0] resort=[THIS.ScriptValue('sr_site_resort_value_olympus_mons')|0] black=[THIS.ScriptValue('sr_site_black_value_olympus_mons')|0] train=[THIS.ScriptValue('sr_site_train_value_olympus_mons')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_olympus_mons')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_olympus_mons')|0] admin=[THIS.ScriptValue('sr_site_admin_value_olympus_mons')|0] staffing=[THIS.ScriptValue('sr_site_staffing_olympus_mons')|2] room=[THIS.ScriptValue('sr_site_room_olympus_mons')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_olympus_mons')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_olympus_mons')|0] of [THIS.ScriptValue('sr_site_slots_olympus_mons')|0]"
+		debug_log = "TE_SR_MODULES olympus_mons: a=[THIS.ScriptValue('sr_site_lvl_a_value_olympus_mons')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_olympus_mons')|0] hab=[THIS.ScriptValue('sr_site_hab_value_olympus_mons')|0] def=[THIS.ScriptValue('sr_site_def_value_olympus_mons')|0] port=[THIS.ScriptValue('sr_site_port_value_olympus_mons')|0] mine=[THIS.ScriptValue('sr_site_mine_value_olympus_mons')|0] yard=[THIS.ScriptValue('sr_site_yard_value_olympus_mons')|0] lab=[THIS.ScriptValue('sr_site_lab_value_olympus_mons')|0] culture=[THIS.ScriptValue('sr_site_culture_value_olympus_mons')|0] resort=[THIS.ScriptValue('sr_site_resort_value_olympus_mons')|0] black=[THIS.ScriptValue('sr_site_black_value_olympus_mons')|0] train=[THIS.ScriptValue('sr_site_train_value_olympus_mons')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_olympus_mons')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_olympus_mons')|0] admin=[THIS.ScriptValue('sr_site_admin_value_olympus_mons')|0] terra=[THIS.ScriptValue('sr_site_terra_value_olympus_mons')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_olympus_mons')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_olympus_mons')|2] room=[THIS.ScriptValue('sr_site_room_olympus_mons')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_olympus_mons')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_olympus_mons')|0] of [THIS.ScriptValue('sr_site_slots_olympus_mons')|0]"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_hellas_planitia }
-		debug_log = "TE_SR_MODULES hellas_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_hellas_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_hellas_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_hellas_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_hellas_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_hellas_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_hellas_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_hellas_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_hellas_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_hellas_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_hellas_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_hellas_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_hellas_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_hellas_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_hellas_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_hellas_planitia')|0] staffing=[THIS.ScriptValue('sr_site_staffing_hellas_planitia')|2] room=[THIS.ScriptValue('sr_site_room_hellas_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_hellas_planitia')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_hellas_planitia')|0] of [THIS.ScriptValue('sr_site_slots_hellas_planitia')|0]"
+		debug_log = "TE_SR_MODULES hellas_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_hellas_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_hellas_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_hellas_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_hellas_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_hellas_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_hellas_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_hellas_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_hellas_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_hellas_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_hellas_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_hellas_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_hellas_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_hellas_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_hellas_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_hellas_planitia')|0] terra=[THIS.ScriptValue('sr_site_terra_value_hellas_planitia')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_hellas_planitia')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_hellas_planitia')|2] room=[THIS.ScriptValue('sr_site_room_hellas_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_hellas_planitia')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_hellas_planitia')|0] of [THIS.ScriptValue('sr_site_slots_hellas_planitia')|0]"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_utopia_planitia }
-		debug_log = "TE_SR_MODULES utopia_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_utopia_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_utopia_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_utopia_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_utopia_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_utopia_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_utopia_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_utopia_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_utopia_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_utopia_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_utopia_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_utopia_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_utopia_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_utopia_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_utopia_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_utopia_planitia')|0] staffing=[THIS.ScriptValue('sr_site_staffing_utopia_planitia')|2] room=[THIS.ScriptValue('sr_site_room_utopia_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_utopia_planitia')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_utopia_planitia')|0] of [THIS.ScriptValue('sr_site_slots_utopia_planitia')|0]"
+		debug_log = "TE_SR_MODULES utopia_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_utopia_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_utopia_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_utopia_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_utopia_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_utopia_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_utopia_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_utopia_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_utopia_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_utopia_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_utopia_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_utopia_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_utopia_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_utopia_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_utopia_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_utopia_planitia')|0] terra=[THIS.ScriptValue('sr_site_terra_value_utopia_planitia')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_utopia_planitia')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_utopia_planitia')|2] room=[THIS.ScriptValue('sr_site_room_utopia_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_utopia_planitia')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_utopia_planitia')|0] of [THIS.ScriptValue('sr_site_slots_utopia_planitia')|0]"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_arcadia_planitia }
-		debug_log = "TE_SR_MODULES arcadia_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_arcadia_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_arcadia_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_arcadia_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_arcadia_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_arcadia_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_arcadia_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_arcadia_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_arcadia_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_arcadia_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_arcadia_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_arcadia_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_arcadia_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_arcadia_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_arcadia_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_arcadia_planitia')|0] staffing=[THIS.ScriptValue('sr_site_staffing_arcadia_planitia')|2] room=[THIS.ScriptValue('sr_site_room_arcadia_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_arcadia_planitia')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_arcadia_planitia')|0] of [THIS.ScriptValue('sr_site_slots_arcadia_planitia')|0]"
+		debug_log = "TE_SR_MODULES arcadia_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_arcadia_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_arcadia_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_arcadia_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_arcadia_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_arcadia_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_arcadia_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_arcadia_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_arcadia_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_arcadia_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_arcadia_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_arcadia_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_arcadia_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_arcadia_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_arcadia_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_arcadia_planitia')|0] terra=[THIS.ScriptValue('sr_site_terra_value_arcadia_planitia')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_arcadia_planitia')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_arcadia_planitia')|2] room=[THIS.ScriptValue('sr_site_room_arcadia_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_arcadia_planitia')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_arcadia_planitia')|0] of [THIS.ScriptValue('sr_site_slots_arcadia_planitia')|0]"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_ceres }
@@ -38265,11 +38809,11 @@ sr_mod_debug_log = {
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_ganymede }
-		debug_log = "TE_SR_MODULES ganymede: a=[THIS.ScriptValue('sr_site_lvl_a_value_ganymede')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_ganymede')|0] hab=[THIS.ScriptValue('sr_site_hab_value_ganymede')|0] def=[THIS.ScriptValue('sr_site_def_value_ganymede')|0] port=[THIS.ScriptValue('sr_site_port_value_ganymede')|0] mine=[THIS.ScriptValue('sr_site_mine_value_ganymede')|0] yard=[THIS.ScriptValue('sr_site_yard_value_ganymede')|0] lab=[THIS.ScriptValue('sr_site_lab_value_ganymede')|0] culture=[THIS.ScriptValue('sr_site_culture_value_ganymede')|0] resort=[THIS.ScriptValue('sr_site_resort_value_ganymede')|0] black=[THIS.ScriptValue('sr_site_black_value_ganymede')|0] train=[THIS.ScriptValue('sr_site_train_value_ganymede')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_ganymede')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_ganymede')|0] admin=[THIS.ScriptValue('sr_site_admin_value_ganymede')|0] staffing=[THIS.ScriptValue('sr_site_staffing_ganymede')|2] room=[THIS.ScriptValue('sr_site_room_ganymede')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_ganymede')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_ganymede')|0] of [THIS.ScriptValue('sr_site_slots_ganymede')|0]"
+		debug_log = "TE_SR_MODULES ganymede: a=[THIS.ScriptValue('sr_site_lvl_a_value_ganymede')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_ganymede')|0] hab=[THIS.ScriptValue('sr_site_hab_value_ganymede')|0] def=[THIS.ScriptValue('sr_site_def_value_ganymede')|0] port=[THIS.ScriptValue('sr_site_port_value_ganymede')|0] mine=[THIS.ScriptValue('sr_site_mine_value_ganymede')|0] yard=[THIS.ScriptValue('sr_site_yard_value_ganymede')|0] lab=[THIS.ScriptValue('sr_site_lab_value_ganymede')|0] culture=[THIS.ScriptValue('sr_site_culture_value_ganymede')|0] resort=[THIS.ScriptValue('sr_site_resort_value_ganymede')|0] black=[THIS.ScriptValue('sr_site_black_value_ganymede')|0] train=[THIS.ScriptValue('sr_site_train_value_ganymede')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_ganymede')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_ganymede')|0] admin=[THIS.ScriptValue('sr_site_admin_value_ganymede')|0] terra=[THIS.ScriptValue('sr_site_terra_value_ganymede')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_ganymede')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_ganymede')|2] room=[THIS.ScriptValue('sr_site_room_ganymede')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_ganymede')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_ganymede')|0] of [THIS.ScriptValue('sr_site_slots_ganymede')|0]"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_callisto }
-		debug_log = "TE_SR_MODULES callisto: a=[THIS.ScriptValue('sr_site_lvl_a_value_callisto')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_callisto')|0] hab=[THIS.ScriptValue('sr_site_hab_value_callisto')|0] def=[THIS.ScriptValue('sr_site_def_value_callisto')|0] port=[THIS.ScriptValue('sr_site_port_value_callisto')|0] mine=[THIS.ScriptValue('sr_site_mine_value_callisto')|0] yard=[THIS.ScriptValue('sr_site_yard_value_callisto')|0] lab=[THIS.ScriptValue('sr_site_lab_value_callisto')|0] culture=[THIS.ScriptValue('sr_site_culture_value_callisto')|0] resort=[THIS.ScriptValue('sr_site_resort_value_callisto')|0] black=[THIS.ScriptValue('sr_site_black_value_callisto')|0] train=[THIS.ScriptValue('sr_site_train_value_callisto')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_callisto')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_callisto')|0] admin=[THIS.ScriptValue('sr_site_admin_value_callisto')|0] staffing=[THIS.ScriptValue('sr_site_staffing_callisto')|2] room=[THIS.ScriptValue('sr_site_room_callisto')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_callisto')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_callisto')|0] of [THIS.ScriptValue('sr_site_slots_callisto')|0]"
+		debug_log = "TE_SR_MODULES callisto: a=[THIS.ScriptValue('sr_site_lvl_a_value_callisto')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_callisto')|0] hab=[THIS.ScriptValue('sr_site_hab_value_callisto')|0] def=[THIS.ScriptValue('sr_site_def_value_callisto')|0] port=[THIS.ScriptValue('sr_site_port_value_callisto')|0] mine=[THIS.ScriptValue('sr_site_mine_value_callisto')|0] yard=[THIS.ScriptValue('sr_site_yard_value_callisto')|0] lab=[THIS.ScriptValue('sr_site_lab_value_callisto')|0] culture=[THIS.ScriptValue('sr_site_culture_value_callisto')|0] resort=[THIS.ScriptValue('sr_site_resort_value_callisto')|0] black=[THIS.ScriptValue('sr_site_black_value_callisto')|0] train=[THIS.ScriptValue('sr_site_train_value_callisto')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_callisto')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_callisto')|0] admin=[THIS.ScriptValue('sr_site_admin_value_callisto')|0] terra=[THIS.ScriptValue('sr_site_terra_value_callisto')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_callisto')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_callisto')|2] room=[THIS.ScriptValue('sr_site_room_callisto')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_callisto')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_callisto')|0] of [THIS.ScriptValue('sr_site_slots_callisto')|0]"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_himalia }
@@ -38281,7 +38825,7 @@ sr_mod_debug_log = {
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_venus }
-		debug_log = "TE_SR_MODULES venus: a=[THIS.ScriptValue('sr_site_lvl_a_value_venus')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_venus')|0] hab=[THIS.ScriptValue('sr_site_hab_value_venus')|0] def=[THIS.ScriptValue('sr_site_def_value_venus')|0] port=[THIS.ScriptValue('sr_site_port_value_venus')|0] mine=[THIS.ScriptValue('sr_site_mine_value_venus')|0] yard=[THIS.ScriptValue('sr_site_yard_value_venus')|0] lab=[THIS.ScriptValue('sr_site_lab_value_venus')|0] culture=[THIS.ScriptValue('sr_site_culture_value_venus')|0] resort=[THIS.ScriptValue('sr_site_resort_value_venus')|0] black=[THIS.ScriptValue('sr_site_black_value_venus')|0] train=[THIS.ScriptValue('sr_site_train_value_venus')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_venus')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_venus')|0] admin=[THIS.ScriptValue('sr_site_admin_value_venus')|0] staffing=[THIS.ScriptValue('sr_site_staffing_venus')|2] room=[THIS.ScriptValue('sr_site_room_venus')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_venus')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_venus')|0] of [THIS.ScriptValue('sr_site_slots_venus')|0]"
+		debug_log = "TE_SR_MODULES venus: a=[THIS.ScriptValue('sr_site_lvl_a_value_venus')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_venus')|0] hab=[THIS.ScriptValue('sr_site_hab_value_venus')|0] def=[THIS.ScriptValue('sr_site_def_value_venus')|0] port=[THIS.ScriptValue('sr_site_port_value_venus')|0] mine=[THIS.ScriptValue('sr_site_mine_value_venus')|0] yard=[THIS.ScriptValue('sr_site_yard_value_venus')|0] lab=[THIS.ScriptValue('sr_site_lab_value_venus')|0] culture=[THIS.ScriptValue('sr_site_culture_value_venus')|0] resort=[THIS.ScriptValue('sr_site_resort_value_venus')|0] black=[THIS.ScriptValue('sr_site_black_value_venus')|0] train=[THIS.ScriptValue('sr_site_train_value_venus')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_venus')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_venus')|0] admin=[THIS.ScriptValue('sr_site_admin_value_venus')|0] terra=[THIS.ScriptValue('sr_site_terra_value_venus')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_venus')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_venus')|2] room=[THIS.ScriptValue('sr_site_room_venus')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_venus')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_venus')|0] of [THIS.ScriptValue('sr_site_slots_venus')|0]"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_mercury }
@@ -38289,7 +38833,7 @@ sr_mod_debug_log = {
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_titan }
-		debug_log = "TE_SR_MODULES titan: a=[THIS.ScriptValue('sr_site_lvl_a_value_titan')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_titan')|0] hab=[THIS.ScriptValue('sr_site_hab_value_titan')|0] def=[THIS.ScriptValue('sr_site_def_value_titan')|0] port=[THIS.ScriptValue('sr_site_port_value_titan')|0] mine=[THIS.ScriptValue('sr_site_mine_value_titan')|0] yard=[THIS.ScriptValue('sr_site_yard_value_titan')|0] lab=[THIS.ScriptValue('sr_site_lab_value_titan')|0] culture=[THIS.ScriptValue('sr_site_culture_value_titan')|0] resort=[THIS.ScriptValue('sr_site_resort_value_titan')|0] black=[THIS.ScriptValue('sr_site_black_value_titan')|0] train=[THIS.ScriptValue('sr_site_train_value_titan')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_titan')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_titan')|0] admin=[THIS.ScriptValue('sr_site_admin_value_titan')|0] staffing=[THIS.ScriptValue('sr_site_staffing_titan')|2] room=[THIS.ScriptValue('sr_site_room_titan')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_titan')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_titan')|0] of [THIS.ScriptValue('sr_site_slots_titan')|0]"
+		debug_log = "TE_SR_MODULES titan: a=[THIS.ScriptValue('sr_site_lvl_a_value_titan')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_titan')|0] hab=[THIS.ScriptValue('sr_site_hab_value_titan')|0] def=[THIS.ScriptValue('sr_site_def_value_titan')|0] port=[THIS.ScriptValue('sr_site_port_value_titan')|0] mine=[THIS.ScriptValue('sr_site_mine_value_titan')|0] yard=[THIS.ScriptValue('sr_site_yard_value_titan')|0] lab=[THIS.ScriptValue('sr_site_lab_value_titan')|0] culture=[THIS.ScriptValue('sr_site_culture_value_titan')|0] resort=[THIS.ScriptValue('sr_site_resort_value_titan')|0] black=[THIS.ScriptValue('sr_site_black_value_titan')|0] train=[THIS.ScriptValue('sr_site_train_value_titan')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_titan')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_titan')|0] admin=[THIS.ScriptValue('sr_site_admin_value_titan')|0] terra=[THIS.ScriptValue('sr_site_terra_value_titan')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_titan')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_titan')|2] room=[THIS.ScriptValue('sr_site_room_titan')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_titan')|0] of 4, generic [THIS.ScriptValue('sr_mod_slots_used_titan')|0] of [THIS.ScriptValue('sr_site_slots_titan')|0]"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_enceladus }
@@ -38396,6 +38940,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_valles_marineris = yes } sr_mod_queue = { KEY = valles_marineris TYPE = bunker INDEX = 1 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_valles_marineris = yes } sr_mod_queue = { KEY = valles_marineris TYPE = foundry INDEX = 1 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_valles_marineris = yes } sr_mod_queue = { KEY = valles_marineris TYPE = admin INDEX = 1 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_valles_marineris = yes } sr_mod_queue = { KEY = valles_marineris TYPE = terra INDEX = 1 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_olympus_mons ?= this }
@@ -38414,6 +38959,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_olympus_mons = yes } sr_mod_queue = { KEY = olympus_mons TYPE = bunker INDEX = 2 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_olympus_mons = yes } sr_mod_queue = { KEY = olympus_mons TYPE = foundry INDEX = 2 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_olympus_mons = yes } sr_mod_queue = { KEY = olympus_mons TYPE = admin INDEX = 2 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_olympus_mons = yes } sr_mod_queue = { KEY = olympus_mons TYPE = terra INDEX = 2 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_hellas_planitia ?= this }
@@ -38432,6 +38978,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_hellas_planitia = yes } sr_mod_queue = { KEY = hellas_planitia TYPE = bunker INDEX = 3 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_hellas_planitia = yes } sr_mod_queue = { KEY = hellas_planitia TYPE = foundry INDEX = 3 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_hellas_planitia = yes } sr_mod_queue = { KEY = hellas_planitia TYPE = admin INDEX = 3 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_hellas_planitia = yes } sr_mod_queue = { KEY = hellas_planitia TYPE = terra INDEX = 3 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_utopia_planitia ?= this }
@@ -38450,6 +38997,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_utopia_planitia = yes } sr_mod_queue = { KEY = utopia_planitia TYPE = bunker INDEX = 4 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_utopia_planitia = yes } sr_mod_queue = { KEY = utopia_planitia TYPE = foundry INDEX = 4 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_utopia_planitia = yes } sr_mod_queue = { KEY = utopia_planitia TYPE = admin INDEX = 4 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_utopia_planitia = yes } sr_mod_queue = { KEY = utopia_planitia TYPE = terra INDEX = 4 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_arcadia_planitia ?= this }
@@ -38468,6 +39016,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_arcadia_planitia = yes } sr_mod_queue = { KEY = arcadia_planitia TYPE = bunker INDEX = 5 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_arcadia_planitia = yes } sr_mod_queue = { KEY = arcadia_planitia TYPE = foundry INDEX = 5 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_arcadia_planitia = yes } sr_mod_queue = { KEY = arcadia_planitia TYPE = admin INDEX = 5 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_arcadia_planitia = yes } sr_mod_queue = { KEY = arcadia_planitia TYPE = terra INDEX = 5 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_ceres ?= this }
@@ -38612,6 +39161,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_ganymede = yes } sr_mod_queue = { KEY = ganymede TYPE = bunker INDEX = 13 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_ganymede = yes } sr_mod_queue = { KEY = ganymede TYPE = foundry INDEX = 13 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_ganymede = yes } sr_mod_queue = { KEY = ganymede TYPE = admin INDEX = 13 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_ganymede = yes } sr_mod_queue = { KEY = ganymede TYPE = terra INDEX = 13 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_callisto ?= this }
@@ -38630,6 +39180,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_callisto = yes } sr_mod_queue = { KEY = callisto TYPE = bunker INDEX = 14 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_callisto = yes } sr_mod_queue = { KEY = callisto TYPE = foundry INDEX = 14 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_callisto = yes } sr_mod_queue = { KEY = callisto TYPE = admin INDEX = 14 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_callisto = yes } sr_mod_queue = { KEY = callisto TYPE = terra INDEX = 14 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_himalia ?= this }
@@ -38684,6 +39235,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_venus = yes } sr_mod_queue = { KEY = venus TYPE = bunker INDEX = 17 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_venus = yes } sr_mod_queue = { KEY = venus TYPE = foundry INDEX = 17 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_venus = yes } sr_mod_queue = { KEY = venus TYPE = admin INDEX = 17 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_venus = yes } sr_mod_queue = { KEY = venus TYPE = terra INDEX = 17 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_mercury ?= this }
@@ -38720,6 +39272,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_titan = yes } sr_mod_queue = { KEY = titan TYPE = bunker INDEX = 19 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_titan = yes } sr_mod_queue = { KEY = titan TYPE = foundry INDEX = 19 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_titan = yes } sr_mod_queue = { KEY = titan TYPE = admin INDEX = 19 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_titan = yes } sr_mod_queue = { KEY = titan TYPE = terra INDEX = 19 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_enceladus ?= this }
@@ -39095,6 +39648,20 @@ sr_mod_debug_queue_first = {
 	}
 }
 
+# Console: ten years of terraforming at every colony of ours that takes it, at
+# this month's pace (era 13 spec § 7.11), then the world's sync.
+sr_terra_debug_advance = {
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } sr_site_terra_step_valles_marineris = { MONTHS = 120 } sr_site_sync_valles_marineris = yes }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } sr_site_terra_step_olympus_mons = { MONTHS = 120 } sr_site_sync_olympus_mons = yes }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } sr_site_terra_step_hellas_planitia = { MONTHS = 120 } sr_site_sync_hellas_planitia = yes }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } sr_site_terra_step_utopia_planitia = { MONTHS = 120 } sr_site_sync_utopia_planitia = yes }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } sr_site_terra_step_arcadia_planitia = { MONTHS = 120 } sr_site_sync_arcadia_planitia = yes }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this } sr_site_terra_step_ganymede = { MONTHS = 120 } sr_site_sync_ganymede = yes }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this } sr_site_terra_step_callisto = { MONTHS = 120 } sr_site_sync_callisto = yes }
+	if = { limit = { global_var:sr_site_holder_venus ?= this } sr_site_terra_step_venus = { MONTHS = 120 } sr_site_sync_venus = yes }
+	if = { limit = { global_var:sr_site_holder_titan ?= this } sr_site_terra_step_titan = { MONTHS = 120 } sr_site_sync_titan = yes }
+}
+
 # The entry's backstop (sr_sync_solar_colonization_entry): every specialization
 # THIS records, at its multiplier, in space_race_colony_events order.
 sr_sites_sync_entry_specs = {
@@ -39289,6 +39856,11 @@ sr_md_finish_valles_marineris = {
 		set_global_variable = { name = sr_site_admin_valles_marineris value = { value = sr_site_admin_value_valles_marineris subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
 	}
+	else_if = {
+		limit = { var:sr_md_type_valles_marineris = 16 sr_site_terra_value_valles_marineris > 0 }
+		set_global_variable = { name = sr_site_terra_valles_marineris value = { value = sr_site_terra_value_valles_marineris subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
+	}
 	sr_md_clear_valles_marineris = yes
 	sr_site_sync_valles_marineris = yes
 	debug_log = "TE_SR_MODULES valles_marineris: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] dismantled country=[THIS.GetCountry.GetTagName]"
@@ -39401,6 +39973,11 @@ sr_md_finish_olympus_mons = {
 		limit = { var:sr_md_type_olympus_mons = 15 sr_site_admin_value_olympus_mons > 0 }
 		set_global_variable = { name = sr_site_admin_olympus_mons value = { value = sr_site_admin_value_olympus_mons subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
+	}
+	else_if = {
+		limit = { var:sr_md_type_olympus_mons = 16 sr_site_terra_value_olympus_mons > 0 }
+		set_global_variable = { name = sr_site_terra_olympus_mons value = { value = sr_site_terra_value_olympus_mons subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
 	}
 	sr_md_clear_olympus_mons = yes
 	sr_site_sync_olympus_mons = yes
@@ -39515,6 +40092,11 @@ sr_md_finish_hellas_planitia = {
 		set_global_variable = { name = sr_site_admin_hellas_planitia value = { value = sr_site_admin_value_hellas_planitia subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
 	}
+	else_if = {
+		limit = { var:sr_md_type_hellas_planitia = 16 sr_site_terra_value_hellas_planitia > 0 }
+		set_global_variable = { name = sr_site_terra_hellas_planitia value = { value = sr_site_terra_value_hellas_planitia subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
+	}
 	sr_md_clear_hellas_planitia = yes
 	sr_site_sync_hellas_planitia = yes
 	debug_log = "TE_SR_MODULES hellas_planitia: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] dismantled country=[THIS.GetCountry.GetTagName]"
@@ -39628,6 +40210,11 @@ sr_md_finish_utopia_planitia = {
 		set_global_variable = { name = sr_site_admin_utopia_planitia value = { value = sr_site_admin_value_utopia_planitia subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
 	}
+	else_if = {
+		limit = { var:sr_md_type_utopia_planitia = 16 sr_site_terra_value_utopia_planitia > 0 }
+		set_global_variable = { name = sr_site_terra_utopia_planitia value = { value = sr_site_terra_value_utopia_planitia subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
+	}
 	sr_md_clear_utopia_planitia = yes
 	sr_site_sync_utopia_planitia = yes
 	debug_log = "TE_SR_MODULES utopia_planitia: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] dismantled country=[THIS.GetCountry.GetTagName]"
@@ -39740,6 +40327,11 @@ sr_md_finish_arcadia_planitia = {
 		limit = { var:sr_md_type_arcadia_planitia = 15 sr_site_admin_value_arcadia_planitia > 0 }
 		set_global_variable = { name = sr_site_admin_arcadia_planitia value = { value = sr_site_admin_value_arcadia_planitia subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
+	}
+	else_if = {
+		limit = { var:sr_md_type_arcadia_planitia = 16 sr_site_terra_value_arcadia_planitia > 0 }
+		set_global_variable = { name = sr_site_terra_arcadia_planitia value = { value = sr_site_terra_value_arcadia_planitia subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
 	}
 	sr_md_clear_arcadia_planitia = yes
 	sr_site_sync_arcadia_planitia = yes
@@ -40645,6 +41237,11 @@ sr_md_finish_ganymede = {
 		set_global_variable = { name = sr_site_admin_ganymede value = { value = sr_site_admin_value_ganymede subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
 	}
+	else_if = {
+		limit = { var:sr_md_type_ganymede = 16 sr_site_terra_value_ganymede > 0 }
+		set_global_variable = { name = sr_site_terra_ganymede value = { value = sr_site_terra_value_ganymede subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
+	}
 	sr_md_clear_ganymede = yes
 	sr_site_sync_ganymede = yes
 	debug_log = "TE_SR_MODULES ganymede: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] dismantled country=[THIS.GetCountry.GetTagName]"
@@ -40757,6 +41354,11 @@ sr_md_finish_callisto = {
 		limit = { var:sr_md_type_callisto = 15 sr_site_admin_value_callisto > 0 }
 		set_global_variable = { name = sr_site_admin_callisto value = { value = sr_site_admin_value_callisto subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
+	}
+	else_if = {
+		limit = { var:sr_md_type_callisto = 16 sr_site_terra_value_callisto > 0 }
+		set_global_variable = { name = sr_site_terra_callisto value = { value = sr_site_terra_value_callisto subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
 	}
 	sr_md_clear_callisto = yes
 	sr_site_sync_callisto = yes
@@ -41097,6 +41699,11 @@ sr_md_finish_venus = {
 		set_global_variable = { name = sr_site_admin_venus value = { value = sr_site_admin_value_venus subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
 	}
+	else_if = {
+		limit = { var:sr_md_type_venus = 16 sr_site_terra_value_venus > 0 }
+		set_global_variable = { name = sr_site_terra_venus value = { value = sr_site_terra_value_venus subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
+	}
 	sr_md_clear_venus = yes
 	sr_site_sync_venus = yes
 	debug_log = "TE_SR_MODULES venus: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] dismantled country=[THIS.GetCountry.GetTagName]"
@@ -41322,6 +41929,11 @@ sr_md_finish_titan = {
 		limit = { var:sr_md_type_titan = 15 sr_site_admin_value_titan > 0 }
 		set_global_variable = { name = sr_site_admin_titan value = { value = sr_site_admin_value_titan subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
+	}
+	else_if = {
+		limit = { var:sr_md_type_titan = 16 sr_site_terra_value_titan > 0 }
+		set_global_variable = { name = sr_site_terra_titan value = { value = sr_site_terra_value_titan subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
 	}
 	sr_md_clear_titan = yes
 	sr_site_sync_titan = yes
@@ -43739,6 +44351,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = valles_marineris CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = valles_marineris CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = valles_marineris CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = valles_marineris CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 2 }
@@ -43757,6 +44370,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = olympus_mons CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = olympus_mons CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = olympus_mons CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = olympus_mons CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 3 }
@@ -43775,6 +44389,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = hellas_planitia CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = hellas_planitia CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = hellas_planitia CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = hellas_planitia CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 4 }
@@ -43793,6 +44408,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = utopia_planitia CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = utopia_planitia CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = utopia_planitia CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = utopia_planitia CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 5 }
@@ -43811,6 +44427,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = arcadia_planitia CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = arcadia_planitia CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = arcadia_planitia CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = arcadia_planitia CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 6 }
@@ -43955,6 +44572,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = ganymede CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = ganymede CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = ganymede CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = ganymede CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 14 }
@@ -43973,6 +44591,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = callisto CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = callisto CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = callisto CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = callisto CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 15 }
@@ -44027,6 +44646,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = venus CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = venus CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = venus CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = venus CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 18 }
@@ -44063,6 +44683,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = titan CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = titan CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = titan CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = titan CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 20 }

@@ -1444,6 +1444,50 @@ carbon_removal_modifier = {
 	country_environmental_movement_radicalism_add = -0.05	# read by movement_environmental (GW-3)
 }
 
+# Stratospheric Aerosol Injection (Geoengineering, era 13 spec § 7.5), on the
+# journal entry like the other national policies. Its climate effect is not a
+# modifier: the countries running it set the world's aerosol mask
+# (global_warming_aerosol_values.txt), which every country's warming reads.
+# The Environmental Movement opposes it, so it stirs the movement where every
+# other policy calms it.
+aerosol_injection_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_environmental_movement_radicalism_add = 0.10	# read by movement_environmental (GW-3)
+}
+
+# Stratospheric Aerosol Injection's running cost: 1% of GDP a year, per week
+# (gw_aerosol_injection_cost_value). On the country, applied and re-applied as
+# Renewable Investment's is (gw_aerosol_injection_cost_apply, from
+# gw_refresh_policy_costs_effect). Budget Breakdown: Climate Policy.
+aerosol_injection_cost_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_climate_add = 1
+}
+
+# The haze weakens the summer monsoons (Geoengineering). On the journal entry
+# of a country whose capital lies in a monsoon region (gw_country_in_monsoon_region),
+# re-applied monthly with multiplier = the aerosol mask in degrees: per degree
+# masked, half the farm relief the mask brings back and none of its drought
+# relief (the global_warming modifier is -10% farms, +25% droughts a degree).
+gw_aerosol_monsoon_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.05
+	state_harvest_condition_drought_impact_mult = 0.25
+	state_harvest_condition_drought_duration_mult = 0.25
+}
+
+# Termination shock (environmentalism_events.24): the masked warming returns in
+# a few years instead of a century, faster than farms and cities can adjust.
+# Timed and decaying, with multiplier = the mask returning, in degrees.
+gw_termination_shock_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.05
+	state_harvest_condition_heatwave_impact_mult = 0.25
+	state_harvest_condition_heatwave_duration_mult = 0.25
+	state_harvest_condition_drought_impact_mult = 0.25
+}
+
 reforestation_subsidies_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	building_group_bg_agriculture_throughput_add = 0.05
@@ -5960,6 +6004,89 @@ augmentation_crime_ban_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_weekly_innovation_mult = -0.05
 	state_turmoil_effects_mult = -0.03
+}
+
+# ============================================================================
+# MORPHOLOGICAL FREEDOM DEBATE MODIFIERS (je_morphological_freedom,
+# events/morphological_freedom_events.txt; era 13 spec § 7.2)
+# ============================================================================
+
+# JE active: a society arguing about how its people may look
+morphological_freedom_debate_active_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_cultural_hegemony_art_mult = 0.05
+	state_turmoil_effects_mult = 0.05
+}
+
+# JE success (.200)
+morphological_freedom_embraced_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_hegemony_art_mult = 0.1
+	country_prestige_mult = 0.05
+}
+
+# JE timeout under Licensed Modification
+morphological_freedom_unsettled_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = 0.1
+}
+
+# JE timeout under Natural Form (.100): enforce the law, or look away
+natural_form_enforced_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_cultural_hegemony_art_mult = -0.1
+	state_migration_pull_mult = -0.05
+}
+
+natural_form_tolerated_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = 0.1
+	country_prestige_mult = -0.02
+}
+
+# Event 1: the first clinics
+mf_clinic_inspections_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_turmoil_effects_mult = -0.03
+}
+
+mf_clinic_boom_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_services_mult = 0.03
+}
+
+# Event 2: a public figure's transformation
+mf_public_figure_praised_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_cultural_pull_mult = 0.05
+}
+
+# Event 3: sport and eligibility
+mf_open_competition_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.02
+}
+
+mf_natural_teams_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.02
+}
+
+# Event 5: a religious backlash (on the Devout)
+mf_devout_rebuffed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_pol_str_mult = -0.1
+}
+
+mf_devout_emboldened_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_pol_str_mult = 0.1
+}
+
+# Event 6: a fashion that sweeps a generation
+mf_fashion_export_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_cultural_hegemony_art_mult = 0.05
 }
 
 # ============================================================================

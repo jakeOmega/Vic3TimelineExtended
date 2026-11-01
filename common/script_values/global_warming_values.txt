@@ -133,11 +133,12 @@ gw_emissions_cut_pct_display = {
 	multiply = 100
 }
 
-# How many of the ten policies are in force for this country. Live: ten
+# How many of the eleven policies are in force for this country. Live: eleven
 # journal-entry modifier lookups, and it must react to a click immediately.
 # Scope: country
 gw_policies_active_count_display = {
 	value = 0
+	if = { limit = { gw_policy_aerosol_injection_active = yes } add = 1 }
 	if = { limit = { gw_policy_fossil_fuel_tariffs_active = yes } add = 1 }
 	if = { limit = { gw_policy_carbon_tax_active = yes } add = 1 }
 	if = { limit = { gw_policy_renewable_investment_active = yes } add = 1 }
@@ -163,7 +164,7 @@ gw_warming_penalty_scale_display = {
 # World adoption counts — O(1) readers over the monthly global snapshot.
 # These replace the eight `gw_countries_with_*_script_value` definitions, each
 # of which was a full `every_country` sweep rendered live in the JE's reason
-# text. Do not reintroduce a sweeping version: one sweep now fills all ten.
+# text. Do not reintroduce a sweeping version: one sweep now fills all eleven.
 # Scope: any
 # ----------------------------------------------------------------------------
 gw_world_n_carbon_tax_display = {
@@ -529,6 +530,10 @@ gw_world_n_carbon_removal_display = {
 		limit = { has_global_variable = gw_g_n_carbon_removal }
 		add = global_var:gw_g_n_carbon_removal
 	}
+}
+
+gw_world_n_aerosol_injection_display = {
+	value = gw_aerosol_deployers
 }
 
 gw_world_n_fossil_fuel_tariffs_display = {

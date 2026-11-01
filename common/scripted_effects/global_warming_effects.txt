@@ -86,9 +86,11 @@ gw_refresh_policy_costs_effect = {
 			OR = {
 				has_journal_entry = je_global_warming
 				has_modifier = renewable_investment_cost_modifier
+				has_modifier = aerosol_injection_cost_modifier
 			}
 		}
 		gw_renewable_investment_cost_sync = yes
+		gw_aerosol_injection_cost_sync = yes
 	}
 }
 
@@ -267,14 +269,16 @@ gw_rebase_annual_emissions_effect = {
 	}
 }
 
-# Count how many countries run each of the ten policies, in ONE country sweep
-# that fills all ten counters. Replaces eight separate sweeping script values
+# Count how many countries run each of the eleven policies, in ONE country
+# sweep that fills all eleven counters. Replaces eight separate sweeping script values
 # that were rendered live in the reason text.
 #
 # The same sweep stores the mean standard of living over these countries
 # (gw_g_mean_sol), which the AI's climate wills measure wealth against
 # (gw_ai_sig_wealth in global_warming_ai_values.txt). It is the only world
-# figure those scores need, so it rides this pass instead of adding one.
+# figure those scores need, so it rides this pass instead of adding one. World
+# GDP and the aerosol deployers' GDP ride it too, for the aerosol mask's
+# target (gw_aerosol_update_mask_effect, which runs after this).
 # Scope: any (called from the global monthly pulse)
 gw_refresh_global_counts_effect = {
 	hidden_effect = {
@@ -288,6 +292,9 @@ gw_refresh_global_counts_effect = {
 		set_global_variable = { name = gw_g_n_public_transit value = 0 }
 		set_global_variable = { name = gw_g_n_fossil_fuel_divestment value = 0 }
 		set_global_variable = { name = gw_g_n_green_building_codes value = 0 }
+		set_global_variable = { name = gw_g_n_aerosol_injection value = 0 }
+		set_global_variable = { name = gw_g_aerosol_gdp value = 0 }
+		set_global_variable = { name = gw_g_gdp_sum value = 0 }
 		set_global_variable = { name = gw_g_sol_sum value = 0 }
 		set_global_variable = { name = gw_g_sol_n value = 0 }
 		every_country = {
@@ -298,6 +305,9 @@ gw_refresh_global_counts_effect = {
 			}
 			change_global_variable = { name = gw_g_sol_sum add = average_sol }
 			change_global_variable = { name = gw_g_sol_n add = 1 }
+			# World GDP over the same countries: the aerosol mask is the
+			# deployers' share of it (global_warming_aerosol_values.txt).
+			change_global_variable = { name = gw_g_gdp_sum add = gdp }
 			if = {
 				limit = { gw_policy_carbon_tax_active = yes }
 				change_global_variable = { name = gw_g_n_carbon_tax add = 1 }
@@ -333,6 +343,11 @@ gw_refresh_global_counts_effect = {
 			if = {
 				limit = { gw_policy_green_building_codes_active = yes }
 				change_global_variable = { name = gw_g_n_green_building_codes add = 1 }
+			}
+			if = {
+				limit = { gw_policy_aerosol_injection_active = yes }
+				change_global_variable = { name = gw_g_n_aerosol_injection add = 1 }
+				change_global_variable = { name = gw_g_aerosol_gdp add = gdp }
 			}
 		}
 		if = {
@@ -595,5 +610,153 @@ gw_refresh_tariff_policies_effect = {
 	every_country = {
 		limit = { has_journal_entry = je_global_warming }
 		gw_refresh_fossil_fuel_tariffs_effect = yes
+	}
+}
+
+
+# ============================================================================
+# STRATOSPHERIC AEROSOL INJECTION (Geoengineering, era 13 spec § 7.5)
+# ============================================================================
+# A national policy on the journal entry, mirrored in a country variable so a
+# civil war's winner keeps it (as Carbon Removal Support does), with a running
+# cost on the country (as Renewable Investment's). What it buys is the world's
+# aerosol mask (global_warming_aerosol_values.txt), moved monthly by
+# gw_aerosol_update_mask_effect below.
+
+# The running cost and the objectors' relations sit outside the first
+# custom_tooltip: the cost prints its scaled Expenses line, and the relations
+# line says once what the hidden loop does.
+gw_effect_aerosol_injection = {
+	custom_tooltip = {
+		text = "GW_AEROSOL_INJECTION_DESC"
+		hidden_effect = { set_variable = { name = gw_aerosol_injection_policy value = yes } }
+		je:je_global_warming = { add_modifier = { name = aerosol_injection_modifier } }
+	}
+	gw_aerosol_injection_cost_apply = yes
+	custom_tooltip = {
+		text = gw_aerosol_objection_tt
+		save_scope_as = gw_aerosol_deployer
+		every_country = {
+			limit = {
+				NOT = { THIS = scope:gw_aerosol_deployer }
+				gw_aerosol_objects = yes
+			}
+			change_relations = { country = scope:gw_aerosol_deployer value = gw_aerosol_objection_at_start }
+		}
+	}
+}
+
+gw_effect_remove_aerosol_injection = {
+	custom_tooltip = {
+		text = "GW_REMOVE_AEROSOL_INJECTION_DESC"
+		hidden_effect = { remove_variable = gw_aerosol_injection_policy }
+		je:je_global_warming = { remove_modifier = aerosol_injection_modifier }
+		remove_modifier = aerosol_injection_cost_modifier
+	}
+}
+
+# A revolution inherits the country variable; rebuild the journal-entry
+# modifier. The cost follows on the next monthly sweep. From the journal
+# entry's monthly pulse.
+gw_restore_aerosol_injection_policy_effect = {
+	if = {
+		limit = {
+			has_variable = gw_aerosol_injection_policy
+			NOT = { gw_policy_aerosol_injection_active = yes }
+		}
+		je:je_global_warming = { add_modifier = { name = aerosol_injection_modifier } }
+	}
+}
+
+# The running cost, 1% of GDP a year, as Renewable Investment's: the removal
+# first, since a same-name add_modifier stacks. Scope: country.
+gw_aerosol_injection_cost_apply = {
+	remove_modifier_if_exists_effect = { MODIFIER = aerosol_injection_cost_modifier }
+	add_modifier = {
+		name = aerosol_injection_cost_modifier
+		multiplier = gw_aerosol_injection_cost_value
+	}
+}
+
+# From gw_refresh_policy_costs_effect, monthly. Scope: country.
+gw_aerosol_injection_cost_sync = {
+	if = {
+		limit = { gw_policy_aerosol_injection_active = yes }
+		gw_aerosol_injection_cost_apply = yes
+	}
+	else_if = {
+		limit = { has_modifier = aerosol_injection_cost_modifier }
+		remove_modifier = aerosol_injection_cost_modifier
+	}
+}
+
+# The aerosol mask's monthly step, the one writer of gw_g_aerosol_mask: the
+# target from this month's counts (gw_refresh_global_counts_effect runs just
+# before), the mask a step towards it, then termination shock and, each
+# January, the objectors' relations. From global_warming_events_on_action,
+# under the climate rule. Scope: any (the global monthly pulse).
+gw_aerosol_update_mask_effect = {
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_global_variable = gw_g_aerosol_mask } }
+			set_global_variable = { name = gw_g_aerosol_mask value = 0 }
+		}
+		set_global_variable = { name = gw_g_aerosol_target value = gw_aerosol_target_value }
+		set_global_variable = { name = gw_g_aerosol_mask value = gw_aerosol_mask_next }
+
+		# Termination shock: nobody is flying it any more, and enough of the
+		# warming it hid is coming back. Once until someone starts again.
+		if = {
+			limit = {
+				gw_aerosol_deployers < 1
+				gw_aerosol_mask >= gw_aerosol_shock_min_mask
+				NOT = { has_global_variable = gw_g_aerosol_shock_fired }
+			}
+			set_global_variable = { name = gw_g_aerosol_shock_fired value = 1 }
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = environmentalism_events.24 }
+			}
+		}
+		else_if = {
+			limit = {
+				gw_aerosol_deployers > 0
+				has_global_variable = gw_g_aerosol_shock_fired
+			}
+			remove_global_variable = gw_g_aerosol_shock_fired
+		}
+
+		# The objectors' relations with each country running it, once a year.
+		# `month = 0` is January.
+		if = {
+			limit = {
+				month = 0
+				gw_aerosol_deployers > 0
+			}
+			every_country = {
+				limit = { gw_policy_aerosol_injection_active = yes }
+				save_temporary_scope_as = gw_aerosol_deployer
+				every_country = {
+					limit = {
+						NOT = { THIS = scope:gw_aerosol_deployer }
+						gw_aerosol_objects = yes
+					}
+					change_relations = { country = scope:gw_aerosol_deployer value = gw_aerosol_objection_yearly }
+				}
+			}
+		}
+	}
+}
+
+# The climate rule is off: no warming, so nothing to mask (the else branch of
+# global_warming_events_on_action, which also holds the emissions at 0).
+gw_aerosol_clear_mask_effect = {
+	if = {
+		limit = { has_global_variable = gw_g_aerosol_mask }
+		remove_global_variable = gw_g_aerosol_mask
+	}
+	if = {
+		limit = { has_global_variable = gw_g_aerosol_target }
+		remove_global_variable = gw_g_aerosol_target
 	}
 }

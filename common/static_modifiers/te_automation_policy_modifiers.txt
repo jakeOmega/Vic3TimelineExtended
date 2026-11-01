@@ -1,0 +1,31 @@
+﻿# ======================================================================
+#  AUTOMATION POLICY — static modifiers (era 13 spec § 7.1)
+#  Laws: common/laws/te_automation_policy_laws.txt.
+# ======================================================================
+# Each is written at full automation, an automated share of 1, and
+# te_ap_monthly_update (common/scripted_effects/te_automation_policy_effects.txt),
+# its only writer, applies it with a multiplier of the share. First
+# estimates, sized low on purpose: an observer run sizes them (spec § 7.1).
+# The laws' preview lines (te_ap_law_robot_tax_tt, te_ap_law_dividend_tt)
+# quote these figures; test_automation_policy.py pins them.
+
+# Robot Tax: the machines' owners pay, so tax collection rises with the share
+# (+10% at full automation, against +25% and +50% for the Power Bloc's
+# fiscal principles), and capitalists keep less to invest.
+te_automation_robot_tax = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_tax_collection_mult = 0.1
+	state_capitalists_investment_pool_contribution_add = -0.05
+}
+
+# Automation Dividend: the machines' output paid out as living standards,
+# most to the lower strata (+2 at full automation; Full Equality and
+# Protection gives everyone +3). The profits paid out are not invested.
+# Under Universal Basic Income or Post-Scarcity Economy the multiplier is
+# 1.5 times the share (TE_AP_DIVIDEND_WELFARE_FACTOR).
+te_automation_dividend = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_lower_strata_standard_of_living_add = 2
+	state_middle_strata_standard_of_living_add = 1
+	state_capitalists_investment_pool_contribution_add = -0.1
+}

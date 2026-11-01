@@ -1230,7 +1230,12 @@ class PopulationTest(unittest.TestCase):
                 monthly = _block(self.effects, f"sr_site_monthly_{k}")
                 growth = monthly[monthly.index("# 5.") if "# 5." in monthly else monthly.index("sr_colonies_contested_enabled"):]
                 self.assertIn("sr_colonies_contested_enabled = yes", growth)
-                self.assertIn(f"multiply = {1 + gss.GROWTH_PER_MONTH}", growth)
+                self.assertIn(f"multiply = sr_site_growth_{k}", growth)
+                # The base rate, faster by the holder's Self-Directed Evolution marker (era 13 spec § 7.3).
+                factor = _block(self.values, f"sr_site_growth_{k}")
+                self.assertIn(f"value = {1 + gss.GROWTH_PER_MONTH}", factor)
+                self.assertIn(f"global_var:sr_site_holder_{k} = {{ add = modifier:{gss.GROWTH_MODIFIER} }}", factor)
+                self.assertIn(f"exists = global_var:sr_site_holder_{k}", factor)
                 # Less a Habitat's share while one comes down (dismantling, owner 2026-10-31).
                 self.assertIn(f"max = sr_site_room_held_{k}", growth)
                 share = _block(self.effects, "sr_emig_distribute")
@@ -1494,7 +1499,9 @@ class ModulesTest(unittest.TestCase):
                 self.assertIn(f"local_var:sr_mq_head_site = {site.index} global_var:sr_site_holder_{site.key} ?= this",
                               head)
                 for t in gss.module_types(site):
-                    self.assertIn(f"local_var:sr_mq_head_type = {gss.MODULE_CODES[t]} }} sr_mod_fab_build = "
+                    # A Terraforming level for a world finished meanwhile is dropped unbuilt.
+                    extra = f" sr_site_terra_open_{site.key} = yes" if t == "terra" else ""
+                    self.assertIn(f"local_var:sr_mq_head_type = {gss.MODULE_CODES[t]}{extra} }} sr_mod_fab_build = "
                                   f"{{ KEY = {site.key} TYPE = {t} CODE = {gss.MODULE_CODES[t]} INDEX = {site.index} }}",
                                   head)
         # A new entry takes the first free place; a removal moves every later entry up one.
@@ -1611,8 +1618,9 @@ class ModulesTest(unittest.TestCase):
             body = _block(self.effects, f"sr_mod_ai_plan_{k}")
             with self.subTest(site=k):
                 queued = re.findall(r"sr_mod_queue = \{ KEY = \w+ TYPE = (\w+) ", body)
-                self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "bunker", "yard", "lab"})
-                self.assertEqual(body.count(f"sr_mod_slots_used_{k} < sr_site_slots_{k}"), 6)
+                terra = {"terra"} if gss.terraformable(site) else set()
+                self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "bunker", "yard", "lab"} | terra)
+                self.assertEqual(body.count(f"sr_mod_slots_used_{k} < sr_site_slots_{k}"), 6 + len(terra))
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
         self.assertIn("days = 360", review)
@@ -1799,7 +1807,7 @@ class FreeColoniesTest(unittest.TestCase):
                 # No heir: free or released, never straight to a release.
                 self.assertIn(f"sr_site_free_or_release_{k} = yes", monthly)
                 # Growth needs a supplier at a free colony.
-                growth = monthly[monthly.index(f"multiply = {1 + gss.GROWTH_PER_MONTH}") - 600:]
+                growth = monthly[monthly.index(f"multiply = sr_site_growth_{k}") - 600:]
                 self.assertIn(f"sr_site_suppliers_value_{k} >= 1", growth)
                 self.assertIn(f"sr_site_free_step_{k} = yes", monthly)
                 self.assertIn(f"sr_site_aut_step_{k} = yes", monthly)

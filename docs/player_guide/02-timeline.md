@@ -1,7 +1,7 @@
 # The extended timeline
 
 The base game ends in 1936 after five eras of technology. This mod moves the end
-date to 2136 and adds eight more eras, numbered 6 to 13, with 186 new
+date to 2136 and adds eight more eras, numbered 6 to 13, with 191 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
 a flagship building for every company, 37 wonders and seven megaprojects. None
@@ -31,8 +31,8 @@ them. Era 13's need breakthroughs nobody yet knows how to plan for.
 | 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defense |
 | 10 | the present day | 450,000 | 20 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
 | 11 | the near future | 800,000 | 26 | AI agents and robots, advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
-| 12 | the medium-term future | 1,500,000 | 13 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
-| 13 | the speculative future | 3,000,000 | 11 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
+| 12 | the medium-term future | 1,500,000 | 16 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
+| 13 | the speculative future | 3,000,000 | 13 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
 
 ### Research costs in the new eras
 
@@ -119,7 +119,8 @@ Transition](07-social-movements.md#movement-journal-entries-at-a-glance).
 Era 13 is the speculative future. Molecular Assemblers and Programmable Matter
 add a final tier to many industries. Space Elevator, Antimatter Production, Mind
 Backups, Molecular Assemblers and Telepathic Communities each unlock a
-megaproject. Biological Immortality and Post-Scarcity Economy are among the last
+megaproject. Self-Directed Evolution brings the Clade Citizenship law, and
+Biological Immortality and Post-Scarcity Economy are among the last
 technologies in the tree.
 
 Some of the mod's buildings arrive earlier, with base-game technologies: the
@@ -137,7 +138,10 @@ The bonuses add up, and the later the technology, the more it is worth: the
 earliest tier adds a small step, era 12's (Artificial Intelligence, Space
 Colonization and their peers) ten times as much, and era 13's two (Biological
 Immortality and Post-Scarcity Economy) fifteen times. Only great powers count, so a technology first reached by a
-minor country does not move the world's pace until a great power follows.
+minor country does not move the world's pace until a great power follows. One
+law adds to the bonus too: each major power or greater that holds Open Weights
+([Who builds frontier AI](06-politics.md#who-builds-frontier-ai)) adds 100, up
+to 300.
 
 The bonus appears on your country as the Global Technological Development
 modifier, and every country gets the same one, recognized or not. It is a
@@ -220,8 +224,9 @@ view. Each system also needs its game rule, and some have further conditions.
 | Civil Rights Movement | 7 | The civil rights journal entry | [Social movements](07-social-movements.md) |
 | Automated Surveillance or Cybersecurity | 9 | The digital rights journal entry | [Social movements](07-social-movements.md) |
 | Mental Health Awareness | 10 | The mental health journal entry | [Social movements](07-social-movements.md) |
-| Universal Basic Income | 10 | The post-scarcity journal entry | [Social movements](07-social-movements.md) |
 | Brain-Computer Interfaces or Human Augmentation | 11 | The human augmentation journal entry | [Social movements](07-social-movements.md) |
+| Post-Work Society | 12 | The post-scarcity journal entry | [Social movements](07-social-movements.md) |
+| Morphological Freedom | 12 | The morphological freedom journal entry and the Bodily Autonomy laws | [Social movements](07-social-movements.md#the-morphological-freedom-debate) |
 
 Some society technologies also start occasional narrative events (Second Wave
 Feminism, Contraceptive Pill, Social Media and others), covered in [Social

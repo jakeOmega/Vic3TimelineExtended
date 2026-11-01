@@ -70,6 +70,20 @@ country_sr_colony_slots_add = {
 	script_only = yes
 }
 
+# Growth a month at every colony we hold, beside the 0.2% every colony grows by
+# (slices 2-3 design § 10.2): Self-Directed Evolution carries +0.1%, people
+# adapted to low gravity and radiation (era 13 spec § 7.3), and each world's
+# sr_site_growth_<key> adds its holder's. The engine consumes nothing.
+country_sr_colony_growth_add = {
+	color = good
+	percent = yes
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
 # A colony fleet's drive (slices 2-3 design § 1), one marker each on the
 # technology that brings it, so its tooltip names the drive (the owner,
 # 2026-10-30). sr_drive_level reads them (sr_launch_window_values.txt), and
@@ -90,6 +104,15 @@ country_sr_drive_torch_bool = {
 }
 
 country_sr_drive_antimatter_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
+
+# The Terraforming colony module (era 13 spec § 7.11), the marker on the
+# Terraforming technology: its queue (sr_mod_can_queue_terra_<key>, the module
+# scripted GUI) and the panel's line read it. The engine consumes nothing.
+country_sr_terraforming_bool = {
 	color = good
 	boolean = yes
 	script_only = yes

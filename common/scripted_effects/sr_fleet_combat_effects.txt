@@ -1099,94 +1099,17 @@ sr_site_lunar_blockade_step = {
 }
 
 # ---- Orders (design §§ 7, 9, 12) ------------------------------------------------------------------
-# Country scope (sr_fleet_sguis.txt, $N$): the posture steps Station, Stand off,
-# Close in, Interdict. Closing in needs a target: the first hostile world at the
-# location when none is set (sr_fl_<n>_has_hostile_world); with none, it is
-# skipped. Closing in on a free colony begins the price (§ 9.4) once per fleet
-# and world. Interdicting (6c, § 12) needs a world of a country at peace with
-# us and not our ally (sr_fl_<n>_has_interdict_world), the first such when the
-# target is not one; it begins the interdiction's price (sr_cb_charge_interdict)
-# once per fleet and target. With neither, it goes back to Station. At Earth
-# (lunar colonization § 8.1) it steps Station and Close in alone: Close in on a
-# lunar world, while one there is hostile; never Stand off or Interdict.
-sr_fl_step_posture_at = {
-	set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
-	if = {
-		limit = { sr_fl_$N$_at_earth = yes }
-		if = {
-			limit = {
-				NOT = { local_var:sr_cb_p = 3 }
-				sr_fl_$N$_has_hostile_world = yes
-			}
-			set_variable = { name = sr_fl_$N$_posture value = 3 }
-			if = {
-				limit = {
-					OR = {
-						NOT = { has_variable = sr_fl_$N$_target }
-						NOT = { sr_fl_$N$_target_hostile = yes }
-					}
-				}
-				sr_fl_step_hostile_target_at = { N = $N$ }
-			}
-			sr_fl_charge_free_at = { N = $N$ }
-		}
-		else = {
-			set_variable = { name = sr_fl_$N$_posture value = 1 }
-			if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
-		}
-	}
-	else_if = {
-		limit = { local_var:sr_cb_p <= 1 }
-		set_variable = { name = sr_fl_$N$_posture value = 2 }
-	}
-	else_if = {
-		limit = {
-			local_var:sr_cb_p = 2
-			sr_fl_$N$_has_hostile_world = yes
-		}
-		set_variable = { name = sr_fl_$N$_posture value = 3 }
-		if = {
-			limit = {
-				OR = {
-					NOT = { has_variable = sr_fl_$N$_target }
-					NOT = { sr_fl_$N$_target_hostile = yes }
-				}
-			}
-			sr_fl_step_hostile_target_at = { N = $N$ }
-		}
-		sr_fl_charge_free_at = { N = $N$ }
-	}
-	else_if = {
-		limit = {
-			local_var:sr_cb_p <= 3
-			sr_fl_$N$_has_interdict_world = yes
-		}
-		set_variable = { name = sr_fl_$N$_posture value = 4 }
-		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
-		if = {
-			limit = { NOT = { sr_fl_$N$_target_interdictable = yes } }
-			sr_fl_step_icpt_target_at = { N = $N$ }
-		}
-		sr_fl_charge_icpt_at = { N = $N$ }
-	}
-	else = {
-		set_variable = { name = sr_fl_$N$_posture value = 1 }
-		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
-		if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
-	}
-	sr_icpt_rebuild = yes
-}
-
-# Country scope (sr_fleet_set_posture_sgui, UI pass design § 7): the posture
-# buttons set scope:pick's posture at once, doing what the step's branch that
-# lands on it does: Close in takes the first hostile world here as its target
-# unless its target is one, and begins a free colony's price; Interdict drops
-# Destroy, takes the first world here it may interdict unless its target is
-# one, and begins the interdiction's price; Station and Stand off drop Destroy
-# and the interdiction's record, as leaving Close in or Interdict does. Close
-# in drops that record too, since the step only reaches it from Station or
-# Stand off, where there is none. The scripted GUI holds each pick to the
-# step's rules (Earth's among them), so none lands where the step wouldn't.
+# Country scope (sr_fleet_set_posture_sgui, UI pass design § 7; $N$): the
+# posture buttons set scope:pick's posture at once. Close in takes the first
+# hostile world here as its target unless its target is one (the hostile step,
+# sr_fl_step_hostile_target_at), begins a free colony's price (§ 9.4, once per
+# fleet and world) and drops the interdiction's record; Interdict (6c, § 12)
+# drops Destroy, takes the first world here it may interdict unless its target
+# is one, and begins the interdiction's price (sr_cb_charge_interdict, once per
+# fleet and target); Station and Stand off drop Destroy and the interdiction's
+# record, as leaving Close in or Interdict does. The scripted GUI holds each
+# pick to its rules (at Earth, lunar colonization § 8.1, Station and Close in
+# alone), so none lands where it can't.
 sr_fl_set_posture_at = {
 	if = {
 		limit = { scope:pick = 3 }

@@ -1,0 +1,147 @@
+﻿# ============================================================================
+# GLOBAL WARMING — stratospheric aerosol injection (Geoengineering)
+# ============================================================================
+# The climate policy the Geoengineering technology unlocks (era 13 spec § 7.5).
+# A country that runs it flies sulfate aerosols into the stratosphere, and the
+# haze masks part of the world's warming for everyone:
+#
+#   - THE MASK is one world figure, global_var:gw_g_aerosol_mask, in degrees,
+#     held to hundredths. temperature_anomaly_display (extra_script_values.txt)
+#     is the unmasked warming less the mask, so every harm, tier and event that
+#     reads the anomaly reads the masked temperature. Emissions keep adding to
+#     global_var:greenhouse_gas_emissions underneath (gw_unmasked_temperature).
+#   - THE TARGET is what the countries running it can hold up: their share of
+#     world GDP times gw_aerosol_degrees_per_world_gdp, at most
+#     gw_aerosol_max_mask and never more than the warming there is to hide.
+#     One country can cool everyone (the "free driver" problem): a fifth of
+#     world GDP masks a degree.
+#   - Each month the mask closes gw_aerosol_mask_rate of the gap to the target,
+#     at least 0.01 C, so it builds up over a year or two and, when everyone
+#     stops (the target falls to 0), the masked warming comes back as fast:
+#     two thirds within a year and nearly all within three (TERMINATION SHOCK,
+#     environmentalism_events.24).
+#
+# gw_aerosol_update_mask_effect (global_warming_effects.txt), from the global
+# monthly pulse (global_warming_events_on_action), is the one writer, after
+# gw_refresh_global_counts_effect has counted the deployers and world GDP.
+#
+# Every reader is guarded: the journal entry has is_shown_when_inactive, and
+# temperature_anomaly_display is read from the first day of a game.
+# Scope: any, unless a value says otherwise.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Constants
+# ----------------------------------------------------------------------------
+
+# Degrees the deployers mask per whole of world GDP: a country with a fifth of
+# world GDP masks 1 C on its own, one with a twentieth 0.25 C.
+gw_aerosol_degrees_per_world_gdp = 5
+
+# The most the haze can hide, however many countries fly it.
+gw_aerosol_max_mask = 2
+
+# The share of the gap between the mask and its target closed each month.
+# 0.08 a month: about 63% in a year, 86% in two, 95% in three.
+gw_aerosol_mask_rate = 0.08
+
+# Termination shock (environmentalism_events.24) needs at least this much
+# masked warming coming back; a thinner haze lapses without an event.
+gw_aerosol_shock_min_mask = 0.25
+
+# Relations each objecting country loses with a country that starts injecting,
+# and again each January while it keeps on (gw_aerosol_objects).
+gw_aerosol_objection_at_start = -10
+gw_aerosol_objection_yearly = -5
+
+# ----------------------------------------------------------------------------
+# Guarded reads
+# ----------------------------------------------------------------------------
+
+# The mask in force, in degrees.
+gw_aerosol_mask = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_aerosol_mask }
+		add = global_var:gw_g_aerosol_mask
+	}
+}
+
+# Where the mask is heading: last month's target.
+gw_aerosol_target = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_aerosol_target }
+		add = global_var:gw_g_aerosol_target
+	}
+}
+
+# How many countries run the policy (gw_refresh_global_counts_effect).
+gw_aerosol_deployers = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_aerosol_injection }
+		add = global_var:gw_g_n_aerosol_injection
+	}
+}
+
+# The most the mask can be now: the cap, or all the warming there is if less.
+gw_aerosol_ceiling = {
+	value = gw_aerosol_max_mask
+	max = gw_unmasked_temperature
+	min = 0
+}
+
+# ----------------------------------------------------------------------------
+# The monthly update (gw_aerosol_update_mask_effect)
+# ----------------------------------------------------------------------------
+
+# The target this month: the deployers' share of world GDP, in degrees, capped,
+# to the nearest hundredth. Needs this month's counts.
+gw_aerosol_target_value = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = gw_g_aerosol_gdp
+			has_global_variable = gw_g_gdp_sum
+			global_var:gw_g_gdp_sum > 0
+			global_var:gw_g_aerosol_gdp > 0
+		}
+		add = global_var:gw_g_aerosol_gdp
+		divide = global_var:gw_g_gdp_sum
+		multiply = gw_aerosol_degrees_per_world_gdp
+		max = gw_aerosol_ceiling
+		multiply = 100
+		round = yes
+		divide = 100
+	}
+	min = 0
+}
+
+# How far the mask is from its target (stored this month).
+gw_aerosol_mask_gap = {
+	value = gw_aerosol_target
+	subtract = gw_aerosol_mask
+}
+
+# The mask next month: gw_aerosol_mask_rate of the gap, at least a hundredth so
+# the rounded mask always moves, never past the target.
+gw_aerosol_mask_next = {
+	value = gw_aerosol_mask_gap
+	multiply = gw_aerosol_mask_rate
+	if = {
+		limit = { gw_aerosol_mask_gap > 0 }
+		min = 0.01
+		max = gw_aerosol_mask_gap
+	}
+	else_if = {
+		limit = { gw_aerosol_mask_gap < 0 }
+		max = -0.01
+		min = gw_aerosol_mask_gap
+	}
+	add = gw_aerosol_mask
+	multiply = 100
+	round = yes
+	divide = 100
+	min = 0
+}

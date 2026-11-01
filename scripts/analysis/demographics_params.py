@@ -595,7 +595,8 @@ CAUSE_SHORT = {"infection": "inf", "work": "work", "external": "ext", "maternal"
 # deaths of every job that remains, under any law. The step stores each sum, clamped, as te_dg_in_saf_<short>; a step
 # from before stored none, so the factor reads 1 until the state's next step. Carriers (their own era_N.txt definitions):
 # work, Prefabricated Construction 0.15, Industrial Robotics 0.35, Containerization 0.15, Knowledge Economy 0.25 (0.90 by
-# era 9: x0.05 with Workplace Safety at level 5, near today's rich-world 2-4 deaths a year per 100,000 workers);
+# era 9: x0.05 with Workplace Safety at level 5, near today's rich-world 2-4 deaths a year per 100,000 workers), and
+# Self-Directed Evolution 0.05 in era 13 (bodies built for heat, cold, depth and vacuum; era 13 spec § 7.3), the cap;
 # accidents and violence, Modern Urban Planning 0.20, Computer-Aided Design 0.10, Cellular Networks 0.10 (0.40), and
 # Autonomous Vehicles 0.10 in era 11 (0.50; 2026-10-16: the late-game design's §1.4 proposal, traffic deaths, built here
 # rather than as a laws line, since self-driving cars save lives whatever the laws).

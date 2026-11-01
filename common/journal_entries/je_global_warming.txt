@@ -76,7 +76,7 @@
 	progressbar = yes
 
 	# ---- PLAYER-FACING SURFACE: the climate panels -------------------------
-	# The twenty climate scripted buttons below stay declared because their `ai_chance`
+	# The twenty-two climate scripted buttons below stay declared because their `ai_chance`
 	# is the AI's only route into this system, but each carries `is_ai = yes` in
 	# its `visible`, so a human sees these three widgets instead of the grid.
 	# Every action the grid offered has a control here — see the mapping in
@@ -136,6 +136,8 @@
 	scripted_button = gw_remove_fossil_fuel_divestment_button
 	scripted_button = gw_green_building_codes_button
 	scripted_button = gw_remove_green_building_codes_button
+	scripted_button = gw_aerosol_injection_button
+	scripted_button = gw_remove_aerosol_injection_button
 
 	# Resource Transition retirement programmes (#660): the AI's route, as the
 	# climate buttons above are (is_ai = yes; a human uses the Fossil
@@ -157,7 +159,9 @@
 	on_monthly_pulse = {
 		effect = {
 			gw_restore_carbon_removal_policy_effect = yes
+			gw_restore_aerosol_injection_policy_effect = yes
 			# ---- Update warming modifier: temperature anomaly used directly as multiplier ----
+			# The anomaly is the felt one, after any aerosol mask (Geoengineering).
 			if = {
 				limit = { temperature_anomaly_display >= 0.01 }
 				je:je_global_warming = { remove_modifier = global_warming }
@@ -166,6 +170,22 @@
 			else_if = {
 				limit = { je:je_global_warming = { has_modifier = global_warming } }
 				je:je_global_warming = { remove_modifier = global_warming }
+			}
+
+			# ---- Weakened monsoons: the aerosol mask's regional cost ----
+			# Scaled by the mask in degrees, whoever flies it, for a country
+			# whose capital lies in a monsoon region (global_warming_triggers.txt).
+			if = {
+				limit = {
+					gw_aerosol_mask >= 0.01
+					gw_country_in_monsoon_region = yes
+				}
+				je:je_global_warming = { remove_modifier = gw_aerosol_monsoon_modifier }
+				je:je_global_warming = { add_modifier = { name = gw_aerosol_monsoon_modifier multiplier = gw_aerosol_mask } }
+			}
+			else_if = {
+				limit = { je:je_global_warming = { has_modifier = gw_aerosol_monsoon_modifier } }
+				je:je_global_warming = { remove_modifier = gw_aerosol_monsoon_modifier }
 			}
 
 			# History samples for the widget's two charts. Gated on the game rule

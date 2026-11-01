@@ -1,0 +1,136 @@
+﻿# ============================================================================
+# BODILY AUTONOMY (era 13 spec § 7.1; docs/systems/mod_systems/social_movements.md)
+# ============================================================================
+# Four laws in lawgroup_bodily_autonomy (Human Rights). The group is about how
+# a body looks, chosen for self-expression: appearance, sex characteristics,
+# fur, tails, and at the end a body plan of one's own. What a body can do is
+# Human Augmentation's, a separate group, so the interest groups split
+# differently on the two (ideology_modifications.py, BODILY_AUTONOMY_STANCES):
+#
+#   law_natural_form            the default: no provision for elective change
+#   law_licensed_modification   licensed clinics (Morphological Freedom, era 12)
+#   law_morphological_freedom   a right to change one's body (the same)
+#   law_clade_citizenship       the right to leave the human body plan behind and
+#                               remain a citizen (Self-Directed Evolution, era 13)
+#
+# ORDER MATTERS. law_natural_form comes first in this file: the engine gives a
+# country with no law in a group the group's first law in file order, which is
+# also what an old save loading this group for the first time gets, and what a
+# country created later gets (scripting_best_practices.md, "First Law in a
+# Lawgroup File Is the Unseeded Default"). common/history/extra_history.txt
+# seeds it too, as it does law_no_augmentation.
+#
+# NATURAL FORM CARRIES NOTHING. Every country holds it from 1836 until era 12,
+# so a modifier on it would apply for two centuries with no law to answer it.
+# For the same reason every ideology is neutral on it: the groups that want it
+# (the Devout, the Rural Folk) show it by opposing the other laws.
+#
+# THE ACCEPTANCE HOOK. When appearance is chosen, the heritage trait, the
+# nearest thing the game has to how people look, should matter less. The two
+# middle laws add to country_acceptance_no_shared_heritage_trait_add on top of
+# the citizenship law in force (+5, +10). The mod's citizenship laws
+# (common/laws/modified.txt) are not vanilla's: no shared heritage reads -20 to
+# 0, and Civil Rights Movement and Social Justice Movements add +10 each by era
+# 9, so under four of the six citizenship laws a pop sharing no heritage trait
+# already gets +20, against +20 to +25 for one sharing a heritage trait or
+# group, and the bonus lifts it above them. Read in game whether the engine
+# then gives a pop that shares the trait the higher no-shared value
+# (docs/testing/era-13-playtest.md; scripting_best_practices.md, Citizenship
+# Acceptance: Read the Mod's Laws, Not Vanilla's).
+#
+# CLADE CITIZENSHIP TAKES HERITAGE OUT OF ACCEPTANCE (spec § 7.3). A static
+# bonus can't do it in this engine. Under the mod's citizenship laws, with Civil
+# Rights Movement and Social Justice Movements, a shared heritage trait, a
+# shared trait group and none read 20 / 20-25 / 20 under four of the six
+# (Sovereign Subjecthood; Cultural, Assimilatory and Universal Citizenship),
+# 40 / 30 / 10 under Ancestral and 60 / 60 / 0 under Racialized Citizenship:
+# a flat +20 to no shared heritage would rank those pops 20 points above a
+# shared trait under the first four, and still leave 30 to 60 points of
+# heritage under the other two. So the law carries Morphological Freedom's +10
+# (no pop is worse off than under it), and te_clade_parity_refresh
+# (common/scripted_effects/te_bodily_autonomy_effects.txt, the monthly country
+# pulse) raises each of the three heritage figures to the highest of them,
+# with te_clade_parity_trait, _group and _none at multiplier = the gap. Every
+# pop then reads the same heritage figure, and none ranks above another by it.
+#
+# THE DEBATE. common/journal_entries/je_morphological_freedom.txt succeeds on
+# law_morphological_freedom or law_clade_citizenship and fails on
+# law_natural_form held to its end.
+#
+# A FIFTH LAW goes last in this file, with a stance in each
+# BODILY_AUTONOMY_LISTS row in ideology_modifications.py and in the
+# hand-written blocks of common/ideologies/extra_ideologies.txt
+# (ideology_lawgroup_audit names any it misses), then
+# scripts/generators/regen_ideologies_offline.py.
+# ============================================================================
+
+law_natural_form = {
+	group = lawgroup_bodily_autonomy
+
+	icon = "gfx/interface/icons/law_icons/law_human_purity.dds" # Placeholder Icon
+
+	progressiveness = 20
+}
+
+law_licensed_modification = {
+	group = lawgroup_bodily_autonomy
+
+	icon = "gfx/interface/icons/law_icons/law_basic_protections.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		morphological_freedom
+	}
+
+	progressiveness = 40
+
+	modifier = {
+		country_acceptance_no_shared_heritage_trait_add = 5
+		state_migration_pull_mult = 0.05
+		country_bureaucracy_investment_cost_factor_mult = 0.05	# the licensing boards
+	}
+}
+
+law_morphological_freedom = {
+	group = lawgroup_bodily_autonomy
+
+	icon = "gfx/interface/icons/law_icons/law_comprehensive_rights.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		morphological_freedom
+	}
+
+	progressiveness = 60
+
+	modifier = {
+		country_acceptance_no_shared_heritage_trait_add = 10
+		state_migration_pull_mult = 0.1
+		country_cultural_hegemony_art_mult = 0.05	# expressive freedom (extra_laws.txt's cultural hegemony hooks)
+	}
+}
+
+law_clade_citizenship = {
+	group = lawgroup_bodily_autonomy
+
+	icon = "gfx/interface/icons/law_icons/law_unrestricted_augmentation.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		self_directed_evolution
+	}
+
+	progressiveness = 80
+
+	# What the parity does, on the law's tooltip: its lines are scaled
+	# modifiers a pulse applies, so the law's own block can't show them.
+	on_enact = {
+		custom_tooltip = te_clade_law_parity_tt
+	}
+
+	modifier = {
+		# Morphological Freedom's line, so no pop is worse off than under it; the
+		# heritage parity on top (te_clade_parity_refresh) lifts every heritage
+		# figure to the highest of the three
+		country_acceptance_no_shared_heritage_trait_add = 10
+		state_migration_pull_mult = 0.15
+		country_cultural_hegemony_art_mult = 0.05	# expressive freedom, as Morphological Freedom's
+	}
+}

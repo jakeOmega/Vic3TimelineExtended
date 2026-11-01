@@ -1,0 +1,121 @@
+﻿# The Morphological Freedom Debate (era 13 spec § 7.2): je_human_augmentation's
+# pattern, for lawgroup_bodily_autonomy (common/laws/te_bodily_autonomy_laws.txt).
+# It opens with the Morphological Freedom technology, succeeds on the law of the
+# same name or on Clade Citizenship (Self-Directed Evolution, era 13), and fails
+# on Natural Form held to the end. Licensed Modification at the end leaves the
+# question unsettled. The engine has no "failed at the deadline" hook, so both
+# of those are the timeout's branches.
+je_morphological_freedom = {
+	icon = "gfx/interface/icons/event_icons/je_civil_rights.dds" # Placeholder Icon
+	group = je_group_internal_affairs
+
+	modifiers_while_active = {
+		morphological_freedom_debate_active_modifier
+	}
+
+	is_shown_when_inactive = {
+		has_game_rule = social_movements_enabled
+		has_technology_researched = morphological_freedom
+		NOT = { is_country_type = decentralized }
+		# Rebels do not start their own debate mid-war (and, winning, keep a fresh
+		# outcome): vanilla's pattern for historical entries (je_the_two_spains,
+		# je_risorgimento). Here, not in possible, so it can never touch an
+		# active record, such as one a revolution's winner inherits; the winner
+		# stops being revolutionary.
+		is_revolutionary = no
+		# Set by on_complete and on_timeout. A revolution's winner gets a fresh
+		# record of an entry the loser had finished, and without this it would
+		# re-activate: a completed debate would end again at once and replay its
+		# outcome event, and a timed-out one would run its twenty years again.
+		NOT = { has_variable = morphological_freedom_resolved }
+	}
+
+	possible = {
+		NOT = { has_variable = morphological_freedom_resolved }
+		has_technology_researched = morphological_freedom
+	}
+
+	# About one month in five while all six can fire. The events share a two-year
+	# lockout (te_mf_event_recent) and four of them fire once, so a debate that
+	# runs its twenty years brings about eight at most.
+	on_monthly_pulse = {
+		random_events = {
+			240 = 0
+			10 = morphological_freedom_events.1
+			10 = morphological_freedom_events.2
+			10 = morphological_freedom_events.3
+			10 = morphological_freedom_events.4
+			10 = morphological_freedom_events.5
+			10 = morphological_freedom_events.6
+		}
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_morphological_freedom_status_natural
+				trigger = {
+					has_law = law_type:law_natural_form
+				}
+			}
+			triggered_desc = {
+				desc = je_morphological_freedom_status_licensed
+				trigger = {
+					has_law = law_type:law_licensed_modification
+				}
+			}
+			triggered_desc = {
+				desc = je_morphological_freedom_status_free
+				trigger = {
+					has_law = law_type:law_morphological_freedom
+				}
+			}
+			triggered_desc = {
+				desc = je_morphological_freedom_status_clade
+				trigger = {
+					has_law = law_type:law_clade_citizenship
+				}
+			}
+		}
+	}
+
+	complete = {
+		OR = {
+			has_law = law_type:law_morphological_freedom
+			has_law = law_type:law_clade_citizenship
+		}
+	}
+
+	on_complete = {
+		set_variable = morphological_freedom_resolved
+		trigger_event = { id = morphological_freedom_events.200 popup = yes }
+	}
+
+	invalid = {
+		is_country_type = decentralized
+	}
+
+	timeout = 7300
+
+	on_timeout = {
+		set_variable = morphological_freedom_resolved
+		if = {
+			# The debate is lost: the law still holds every body to its natural form.
+			limit = {
+				has_law = law_type:law_natural_form
+			}
+			trigger_event = { id = morphological_freedom_events.100 popup = yes }
+		}
+		else = {
+			# Licensed Modification: a licensing regime nobody quite wanted.
+			add_modifier = {
+				name = morphological_freedom_unsettled_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+	}
+
+	weight = 75
+	should_be_pinned_by_default_uninvolved_or_context = yes
+}
