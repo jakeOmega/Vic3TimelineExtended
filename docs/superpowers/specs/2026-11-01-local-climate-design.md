@@ -50,9 +50,10 @@ marked *(designer's call)*; the builder may revisit those with a stated reason.
 5. The state panel shows the record and what it costs the state, following the
    mod's state panel tiles (Homeland Dynamics, Migration Crowding, the tourism
    card).
-6. The arable land minimum for mass migration targets goes, along with the
-   penalty for countries with few target states (the owner's original lean was
-   to set it to 1).
+6. The arable land minimum for mass migration targets goes. The penalty for
+   countries with few target states stays at vanilla's (owner, 2026-11-01):
+   a one-state country keeps 40% of its score, so removing the floor lets
+   city-states in without letting one outdraw a continent.
 
 **Non-goals (v1)**
 
@@ -72,6 +73,13 @@ marked *(designer's call)*; the builder may revisit those with a stated reason.
 - A game rule *(designer's call)*: the define change cannot follow a rule, so
   turning comfort off would leave the floor gone and nothing in its place.
   Migration Crowding has no rule either.
+- A terrain or ruggedness field (owner, 2026-11-01). Altitude enters through
+  the main settled area's temperatures and aridity: a high, cold or dry
+  plateau pays, and a mountain state with a mild main town pays little and
+  is left to jobs.
+- A counterweight on country attraction (owner, 2026-11-01). Which countries
+  win mass migrations once comfort is in is left to emerge, and the play-test
+  checks it (§ 5.3, § 9).
 
 **Anti-goals**: what would make this a failure even if it works
 
@@ -327,8 +335,11 @@ same PR as comfort and never before it:
 
 ```
 MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 0
-MASS_MIGRATION_NUM_TARGET_STATES_FOR_NO_PENALTY = 1
 ```
+
+`MASS_MIGRATION_NUM_TARGET_STATES_FOR_NO_PENALTY` and
+`MASS_MIGRATION_FEW_TARGET_STATES_PENALTY` stay at vanilla's 4 and 0.2
+(owner, 2026-11-01; § 2 goal 6).
 
 The same PR fixes `docs/vanilla/vanilla_economy_reference.md` § 8.5. It says a
 mass migration target needs 30% market access, but the define
