@@ -646,7 +646,8 @@ class PauseTest(unittest.TestCase):
         self.assertRegex(resume, r"^\s*in_default = no\s*OR = \{\s*net_fixed_income > 0\s*is_at_war = yes\s*\}\s*"
                                  r"NOT = \{ has_variable = sr_sc_pause_hold \}\s*$")
         review = _block(self.effects, "sr_sc_ai_pause_review")
-        self.assertRegex(review, r"limit = \{\s*NOT = \{ sr_sc_is_paused = yes \}\s*sr_sc_ai_should_pause = yes\s*\}\s*"
+        self.assertRegex(review, r"limit = \{\s*NOT = \{ sr_sc_is_paused = yes \}\s*sr_has_space_command = yes\s*"
+                                 r"sr_sc_ai_should_pause = yes\s*\}\s*"
                                  r"sr_sc_toggle_pause = yes\s*"
                                  r"set_variable = \{ name = sr_sc_pause_hold value = yes months = 6 \}\s*\}\s*"
                                  r"else_if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*sr_sc_ai_may_resume = yes\s*\}\s*"

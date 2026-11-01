@@ -810,6 +810,10 @@ sr_sc_ai_pause_review = {
 	if = {
 		limit = {
 			NOT = { sr_sc_is_paused = yes }
+			# Only with a Space Command to save on (review of #1287, M1): without
+			# one nothing is bought, and a pause would only stop the colonies'
+			# Orbital Yards. Not on the resume, so one that lost it still resumes.
+			sr_has_space_command = yes
 			sr_sc_ai_should_pause = yes
 		}
 		sr_sc_toggle_pause = yes
