@@ -764,6 +764,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "lab-grown_food": {"subject": "a round petri dish holding a pink cultured meat steak", "seed": 0},
         "personalized_medicine": {"subject": "a single capsule pill with a DNA helix pattern on its shell", "seed": 1},
         "universal_digital_identity": {"subject": "a plain pale blue identity card with a glowing blue fingerprint and a gold chip", "seed": 1},
+        "advanced_fission": {"subject": "a squat steel reactor vessel with glowing orange molten salt visible through a round porthole", "seed": None},
         "ai_agents": {"subject": "a small glowing blue robot hand moving a cursor across a stack of paper forms and ticking boxes", "seed": None},
         "self_driving_laboratories": {"subject": "a white robotic arm pipetting into a rack of glowing test tubes on a lab bench", "seed": None},
         "humanoid_robotics": {"subject": "a friendly white humanoid robot carrying a cardboard box in both arms", "seed": None},
