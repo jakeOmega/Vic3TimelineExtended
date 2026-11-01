@@ -1444,6 +1444,50 @@ carbon_removal_modifier = {
 	country_environmental_movement_radicalism_add = -0.05	# read by movement_environmental (GW-3)
 }
 
+# Stratospheric Aerosol Injection (Geoengineering, era 13 spec § 7.5), on the
+# journal entry like the other national policies. Its climate effect is not a
+# modifier: the countries running it set the world's aerosol mask
+# (global_warming_aerosol_values.txt), which every country's warming reads.
+# The Environmental Movement opposes it, so it stirs the movement where every
+# other policy calms it.
+aerosol_injection_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_environmental_movement_radicalism_add = 0.10	# read by movement_environmental (GW-3)
+}
+
+# Stratospheric Aerosol Injection's running cost: 1% of GDP a year, per week
+# (gw_aerosol_injection_cost_value). On the country, applied and re-applied as
+# Renewable Investment's is (gw_aerosol_injection_cost_apply, from
+# gw_refresh_policy_costs_effect). Budget Breakdown: Climate Policy.
+aerosol_injection_cost_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_climate_add = 1
+}
+
+# The haze weakens the summer monsoons (Geoengineering). On the journal entry
+# of a country whose capital lies in a monsoon region (gw_country_in_monsoon_region),
+# re-applied monthly with multiplier = the aerosol mask in degrees: per degree
+# masked, half the farm relief the mask brings back and none of its drought
+# relief (the global_warming modifier is -10% farms, +25% droughts a degree).
+gw_aerosol_monsoon_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.05
+	state_harvest_condition_drought_impact_mult = 0.25
+	state_harvest_condition_drought_duration_mult = 0.25
+}
+
+# Termination shock (environmentalism_events.24): the masked warming returns in
+# a few years instead of a century, faster than farms and cities can adjust.
+# Timed and decaying, with multiplier = the mask returning, in degrees.
+gw_termination_shock_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.05
+	state_harvest_condition_heatwave_impact_mult = 0.25
+	state_harvest_condition_heatwave_duration_mult = 0.25
+	state_harvest_condition_drought_impact_mult = 0.25
+}
+
 reforestation_subsidies_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	building_group_bg_agriculture_throughput_add = 0.05

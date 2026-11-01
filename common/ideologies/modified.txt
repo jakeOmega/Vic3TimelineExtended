@@ -134,6 +134,7 @@ REPLACE:ideology_paternalistic = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -2064,6 +2065,7 @@ REPLACE:ideology_populist = {
 		law_decentralized_cryptocurrency = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_anarchy = approve
@@ -2185,6 +2187,7 @@ REPLACE:ideology_radical = {
 		law_social_monarchy = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -2837,6 +2840,7 @@ REPLACE:ideology_social_democrat = {
 		law_no_workers_rights = neutral
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = neutral
 		law_universal_suffrage = strongly_approve
 		law_census_voting = neutral
@@ -3271,6 +3275,7 @@ REPLACE:ideology_vanguardist = {
 		law_council_republic = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = approve
 		law_oligarchy = strongly_disapprove
 		law_autocracy = strongly_disapprove
@@ -3962,6 +3967,7 @@ REPLACE:ideology_fascist = {
 		law_secret_police = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = strongly_approve
 		law_autocracy = approve
@@ -4651,6 +4657,7 @@ REPLACE:ideology_anarchist = {
 		law_multicultural = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_anarchy = strongly_approve
 		law_universal_suffrage = neutral
@@ -5517,6 +5524,7 @@ REPLACE:ideology_meritocratic = {
 		law_mandatory_augmentation = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = disapprove
 		law_census_voting = approve
@@ -7044,6 +7052,7 @@ REPLACE:ideology_plutocratic = {
 		law_mass_conscription = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = neutral
 		law_oligarchy = approve
 		law_wealth_voting = approve
@@ -8555,6 +8564,7 @@ REPLACE:ideology_republican = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -8633,6 +8643,7 @@ REPLACE:ideology_republican_paternalistic = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -8820,6 +8831,7 @@ REPLACE:ideology_scholar_paternalistic = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -8918,6 +8930,7 @@ REPLACE:ideology_junker_paternalistic = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -9019,6 +9032,7 @@ REPLACE:ideology_papal_paternalistic = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -9172,6 +9186,7 @@ REPLACE:ideology_bakufu = {
 		law_collectivized_agriculture = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_autocracy = strongly_approve
@@ -9239,6 +9254,7 @@ REPLACE:ideology_shinto_moralist = {
 		law_state_atheism = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_autocracy = strongly_approve
@@ -9280,6 +9296,7 @@ REPLACE:ideology_caudillismo = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = approve
 		law_landed_voting = strongly_approve
 		law_autocracy = strongly_approve
@@ -9551,6 +9568,7 @@ REPLACE:ideology_orleanist = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = disapprove
 		law_oligarchy = neutral
@@ -9843,6 +9861,7 @@ REPLACE:ideology_legitimist = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = strongly_approve
 		law_oligarchy = neutral
@@ -10117,6 +10136,7 @@ REPLACE:ideology_bonapartist = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove # Napoleon III was an advocate for universal suffrage. Even if this was opportunistic, it's more accurate to say this than the alternative.
 		law_autocracy = disapprove
 		law_oligarchy = disapprove
@@ -10943,6 +10963,7 @@ REPLACE:ideology_jacksonian_democrat = {
 		law_presidential_republic = approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -11094,6 +11115,7 @@ REPLACE:ideology_positivist = {
 		law_state_atheism = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_approve
 		law_technocracy = strongly_approve
 		law_single_party_state = approve
@@ -11419,6 +11441,7 @@ REPLACE:ideology_russian_patriarch = {
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = strongly_approve
 		law_oligarchy = approve
@@ -11480,6 +11503,7 @@ REPLACE:ideology_orthodox_patriarch = {
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = disapprove
 		law_autocracy = strongly_approve
@@ -11534,6 +11558,7 @@ REPLACE:ideology_oriental_orthodox_patriarch = {
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = disapprove
 		law_autocracy = strongly_approve
@@ -11607,6 +11632,7 @@ REPLACE:ideology_authoritarian = {
 		law_ministry_of_thought_control = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = neutral
 		law_anarchy = strongly_disapprove
 		law_universal_suffrage = strongly_disapprove
@@ -12212,6 +12238,7 @@ REPLACE:ideology_constitutionalist = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = approve
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -12584,6 +12611,7 @@ REPLACE:ideology_agrarian_jeffersonian = {
 		law_land_based_taxation = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -12637,6 +12665,7 @@ REPLACE:ideology_integralist = {
 		law_subjecthood = approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = strongly_approve
 		law_single_party_state = approve
@@ -13127,6 +13156,7 @@ REPLACE:ideology_liberal_leader = {
 		law_minority_rights_affirmative_action = neutral
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = neutral
 		law_algorithmic_governance = neutral
 		law_universal_suffrage = approve
 		law_census_voting = approve
@@ -13426,6 +13456,7 @@ REPLACE:ideology_despotic_utopian = {
 		law_minority_rights_affirmative_action = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_approve
 		law_anarchy = strongly_disapprove
 		law_universal_suffrage = strongly_disapprove
@@ -13672,6 +13703,7 @@ REPLACE:ideology_absolutist_movement = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = approve
@@ -14161,6 +14193,7 @@ REPLACE:ideology_anarchist_movement = {
 		law_multicultural = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_anarchy = strongly_approve
 		law_universal_suffrage = neutral
@@ -14277,6 +14310,7 @@ REPLACE:ideology_vanguardist_movement = {
 		law_council_republic = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = neutral
 		law_oligarchy = strongly_disapprove
 		law_autocracy = strongly_disapprove
@@ -14417,6 +14451,7 @@ REPLACE:ideology_fascist_movement = {
 		law_ministry_of_propaganda = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = strongly_approve
 		law_autocracy = approve
@@ -14591,6 +14626,7 @@ REPLACE:ideology_liberal_movement = {
 		law_outlawed_dissent = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -14724,6 +14760,7 @@ REPLACE:ideology_radical_movement = {
 		law_social_monarchy = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_approve
 		law_algorithmic_governance = neutral
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -14804,6 +14841,7 @@ REPLACE:ideology_liberal_republican_movement = {
 		law_outlawed_dissent = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = neutral
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = approve
 		law_census_voting = approve
@@ -14863,6 +14901,7 @@ REPLACE:ideology_national_liberal_movement = {
 		law_outlawed_dissent = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -14978,6 +15017,7 @@ REPLACE:ideology_positivist_movement = {
 		law_state_atheism = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_approve
 		law_technocracy = strongly_approve
 		law_single_party_state = approve
@@ -15430,6 +15470,7 @@ REPLACE:ideology_orleanist_movement = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = disapprove
 		law_oligarchy = neutral
@@ -15489,6 +15530,7 @@ REPLACE:ideology_bonapartist_movement = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove # Napoleon III was an advocate for universal suffrage. Even if this was opportunistic, it's more accurate to say this than the alternative.
 		law_autocracy = disapprove
 		law_oligarchy = disapprove
@@ -15557,6 +15599,7 @@ REPLACE:ideology_legitimist_movement = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = strongly_approve
 		law_oligarchy = neutral
@@ -15763,6 +15806,7 @@ REPLACE:ideology_japan_paternalistic = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = disapprove
 		law_landed_voting = approve
@@ -15823,6 +15867,7 @@ REPLACE:ideology_magnatial = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -15879,6 +15924,7 @@ REPLACE:ideology_carlist_ig = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -15945,6 +15991,7 @@ REPLACE:ideology_moderantist = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -16042,6 +16089,7 @@ REPLACE:ideology_japan_hierarchic_2 = {
 REPLACE:ideology_meiji_restorationist_movement_daijoi = {
 	icon = "gfx/interface/icons/ideology_icons/patriotic.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = disapprove
 		law_census_voting = neutral
@@ -16096,6 +16144,7 @@ REPLACE:ideology_meiji_restorationist_movement_daijoi = {
 REPLACE:ideology_meiji_restorationist_movement_shojoi = {
 	icon = "gfx/interface/icons/ideology_icons/isolationist.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = disapprove
 		law_census_voting = neutral
@@ -16517,6 +16566,7 @@ REPLACE:ideology_sikh_militancy = {
 REPLACE:ideology_tokugawa_loyalist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/bakufu.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_single_party_state = disapprove
 		law_landed_voting = neutral
@@ -16568,6 +16618,7 @@ REPLACE:ideology_tokugawa_loyalist_movement = {
 REPLACE:ideology_tokugawa_loyalist_movement_2 = {
 	icon = "gfx/interface/icons/ideology_icons/bakufu.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_single_party_state = disapprove
 		law_landed_voting = neutral
@@ -16629,6 +16680,7 @@ REPLACE:ideology_carlist_ig_2 = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -16677,6 +16729,7 @@ REPLACE:ideology_carlist_ig_2 = {
 REPLACE:ideology_cartist = {
 	icon = "gfx/interface/icons/ideology_icons/enclavist.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = neutral
 		law_oligarchy = approve
 		law_wealth_voting = neutral
@@ -16715,6 +16768,7 @@ REPLACE:ideology_cartist = {
 REPLACE:ideology_enclavist = {
 	icon = "gfx/interface/icons/ideology_icons/enclavist.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = neutral
 		law_oligarchy = strongly_approve
 		law_wealth_voting = disapprove
@@ -16840,6 +16894,7 @@ REPLACE:ideology_carlist = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -17091,6 +17146,7 @@ REPLACE:ideology_carlist_2 = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -17340,6 +17396,7 @@ REPLACE:ideology_carlist_movement = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve
@@ -17392,6 +17449,7 @@ REPLACE:ideology_carlist_movement_2 = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve
@@ -17445,6 +17503,7 @@ REPLACE:ideology_miguelist = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -17692,6 +17751,7 @@ REPLACE:ideology_miguelist_2 = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -17937,6 +17997,7 @@ REPLACE:ideology_miguelist_movement = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve
@@ -17989,6 +18050,7 @@ REPLACE:ideology_miguelist_movement_2 = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve
@@ -18031,6 +18093,7 @@ REPLACE:ideology_conservative_praetorian = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_disapprove
 		law_census_voting = disapprove
@@ -18073,6 +18136,7 @@ REPLACE:ideology_liberal_praetorian = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = disapprove
 		law_census_voting = approve
@@ -18127,6 +18191,7 @@ REPLACE:ideology_ibadi_imamate = {
 REPLACE:ideology_ibadi_shura = {
 	icon = "gfx/interface/icons/ideology_icons/ibadi_shura.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove # Strong theological emphasis on community endorsement of an imam means that extreme autocracy is begrudged by even the most reactionary clerics
 		law_single_party_state = disapprove
 		law_autocracy = strongly_disapprove
@@ -18171,6 +18236,7 @@ REPLACE:ideology_integralist_movement = {
 		law_subjecthood = approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_autocracy = strongly_approve
 		law_single_party_state = approve
@@ -18561,6 +18627,7 @@ REPLACE:ideology_rangaku = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = neutral
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -18621,6 +18688,7 @@ REPLACE:ideology_technocratic = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_approve
 		law_universal_suffrage = disapprove
 		law_census_voting = disapprove
@@ -18654,6 +18722,7 @@ REPLACE:ideology_utopian = {
 		law_no_workers_rights = neutral
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -18832,6 +18901,7 @@ REPLACE:ideology_military_absolutist = {
 		law_algorithmic_jurisprudence = neutral
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = approve
 		law_landed_voting = neutral

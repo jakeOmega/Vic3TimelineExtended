@@ -963,7 +963,12 @@ yearly_temperature_change_abs_display = {
 	}
 }
 
-temperature_anomaly_display = {
+# The warming emissions have caused, before any aerosol haze hides some of it
+# (Geoengineering, global_warming_aerosol_values.txt). What the climate harms
+# and the warming tiers read is temperature_anomaly_display below; this is the
+# warming that comes back if the haze goes, and the reading the AI's climate
+# will and the cooling events take.
+gw_unmasked_temperature = {
 	# The two `divide = 100` steps are deliberate, not a copy-paste duplicate:
 	# together they are the documented /10000 (see yearly_temperature_change_display
 	# above), and `round = yes` sits between them so the displayed anomaly is
@@ -973,6 +978,21 @@ temperature_anomaly_display = {
 	divide = 100
 	round = yes
 	divide = 100
+}
+
+# The temperature anomaly the world feels: the warming above, less the aerosol
+# mask (era 13 spec § 7.5: emissions keep accumulating underneath, and the
+# harms read the masked temperature). The mask is held in hundredths of a
+# degree, so the reading stays quantised to 0.01 C. With no mask it is
+# gw_unmasked_temperature exactly, a negative reading included; under one it
+# cannot fall below 0.
+temperature_anomaly_display = {
+	value = gw_unmasked_temperature
+	if = {
+		limit = { gw_aerosol_mask > 0 }
+		subtract = gw_aerosol_mask
+		min = 0
+	}
 }
 
 gw_emission_multiplier_script_value = {

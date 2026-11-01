@@ -238,6 +238,10 @@ The channel that *does* work at fractional magnitudes is **expectations**. `stat
 
 An interest group's approval is shown as a whole number, but the engine adds its contributions together first and rounds the total (owner, 2026-10-16). So a fractional `interest_group_ig_*_approval_add`, a −1 unit line behind `add_modifier { multiplier = … }` or a −3 line at a multiplier of 0.3, counts. Two lines that would each round to 0 can move approval by a point together. This differs from standard of living (above), where a fraction alone does nothing. Rounding each line to whole points before applying it, as the tax code's light reactions do (`gen_tax_code.py`), is not needed for the engine and throws those fractions away. The longevity gap's politics (`te_demog_lx_gap_politics`, demographics phase 3) apply −3 × a 0–1 multiplier on this basis.
 
+## A Rounded Stock Moved by a Fraction of Its Gap Stalls Short of Its Target
+
+A stored figure that eases toward a target each month by a share of the gap (`mask + (target − mask) × 0.08`) and is then rounded (`multiply = 100 round = yes divide = 100`, to keep a displayed reading in hundredths) stops moving once the share is under half a unit: at 0.08 a month that is any gap below 0.07, so the stock never arrives and a "back to 0" never happens. Floor the step at one unit, signed, and cap it at the gap, inside the script value (`if = { limit = { gap > 0 } min = 0.01 max = gap }`, the mirror for a negative gap). Geoengineering's aerosol mask does this (`gw_aerosol_mask_next`, `global_warming_aerosol_values.txt`), and `test_gw_geoengineering.py` runs the step in Python to show the stock arrives.
+
 ## Modifier Value Scale: The Suffix Doesn't Tell You
 
 A modifier's `_add` / `_mult` suffix tells you the *operation* (additive vs multiplicative), not the *unit* the engine reads. Whether a value should be a 0–1 fraction, a raw percentage point integer, or a small integer on a custom scale is set per-modifier by the engine — and it's not always intuitive.
@@ -2931,6 +2935,8 @@ When designing a system that responds to "how authoritarian is this country", co
 
 **`country_has_voting_franchise = yes` under Single-Party State.** The vanilla trigger sums voting-power modifiers, and Single-Party State grants `country_voting_power_base_add = 50`. Technocracy, Oligarchy (and Organic Regulation) and Anarchy grant none, so the trigger is false for them. A test that means "is a voting democracy" needs `NOT = { has_law_or_variant = law_type:law_single_party_state }` as well, as vanilla's `gov_council_republic` does, or names the voting laws outright (`collective_governance_is_popular`). The removed `gov_direct_democracy_autocracy` (`franchise = no`) could never match for this reason. Once the law it dressed allowed Technocracy, Oligarchy and Anarchy, it would have caught every one of them. **No franchise does not mean no elections:** Anarchy holds election campaigns (`in_election_campaign` is true, vanilla's electoral fraud event `caciquismo.2` fires under it), so never read "Anarchy holds no elections" from this trigger; an earlier research pass did. The mod counts Anarchy as electoral: the Tradition of Free Elections attaches to it (`common/amendments/te_tradition_of_free_elections.txt`), the campaign finance laws and Elected Bureaucrats unlock with it, and `modern_election_events.8` names it.
 
+**A new voting law has to join the voting-law lists.** No trigger means "a voting law": vanilla's Women's Suffrage names its voting laws in `unlocking_laws`, and the mod names them in Elected Bureaucrats, the campaign finance laws, Collective Governance and a dozen "holds elections" triggers. A Distribution of Power law left off them is engine-silent, and the consistency walk strips Women's Suffrage, Elected Bureaucrats and the campaign finance law on enactment. Liquid Democracy (2026-10-31) joined each; `docs/systems/mod_systems/governance_laws.md` § Liquid Democracy lists them, with the grep that finds them.
+
 ## Legacy Modifier Cleanup Pattern
 
 When migrating modifiers from country scope to JE scope, existing save games still have the old country-level modifiers. A cleanup scripted effect (`legacy_je_modifier_cleanup_effect`) runs once via `on_game_start` to remove these stale modifiers.
@@ -4074,7 +4080,19 @@ end-game total. Examples found in this codebase:
 - `country_weekly_innovation_max_add` is the research-pool budget across the
   entire late-era tree; per-tech values are tuned together.
 - `country_institution_<X>_max_investment_add` totals reach a target max
-  (~9 institutions by end-game in combination with laws).
+  (~9 institutions by end-game in combination with laws). Sum a ministry's
+  law and technology lines against `MAX_INSTITUTION_INVESTMENT` (9,
+  `common/defines/extra_defines.txt`) before adding one: a level past it is
+  dead at full technology. The Ministry of Thought Control's sit at exactly 9
+  (its law 3, Cyber Warfare 1, Brain-Computer Interfaces 2, Human
+  Augmentation 2, AI Tutors 1), so AI Tutors' level was moved from Human
+  Augmentation, not added (era 13 spec § 7.6).
+- `state_market_access_price_impact` reaches 100% at full technology: the
+  base 0.75 (vanilla's `base_values` static modifier), vanilla's Stock Exchange,
+  Zeppelins and Macroeconomics +0.20, and five mod transport technologies
+  (Containerization, E-Commerce, Globalization, Autonomous Vehicles, Microfusion
+  Cells) +0.01 each. A new transport technology that adds the usual
+  +0.01 takes it past 100%; Vactrains (era 13 spec § 7.9) carries none.
 
 Before adding a modifier to a new tech, **grep the entire tech tree** for
 that modifier name. If multiple techs already use it, the total may be

@@ -342,6 +342,21 @@ te_repair_lunar_technologies = {
 # holder fielding Robotic Soldiers gets Autonomous Weapons. Whether the engine
 # moves a building off a method, or keeps an orphaned unit type's battalions,
 # before this month comes is unread (docs/testing/era-13-playtest.md).
+#
+# Phase 3, Aneutronic Fusion, under its own flag: Fusion Batteries now requires
+# Aneutronic Fusion, so a holder is given it. The Interstellar Probe (the
+# Interstellar Mission method, its decision and the milestone's entry) moved
+# from Compact Fusion Reactors to Aneutronic Fusion, so a Compact Fusion
+# Reactors holder whose Space Program runs the Interstellar Mission is given it
+# too. The method is the "under way" test: the running probe's entry needs its
+# programme bool (possible and fail), which only this method carries, so the
+# method covers every probe under way; and a programme kept on the method after
+# its probe, for the colonization and Deep Space bools it also carries, is
+# content the technology now gates in use as well. A probe finished and off the
+# method gets nothing. If the entry deactivates before this month (its
+# possible now names Aneutronic Fusion), the grant re-activates it, and its
+# immediate keeps the progress unless the monthly milestone cleanup came in
+# between: unread, on the play-test list.
 te_repair_era_13_technologies = {
 	effect = {
 		if = {
@@ -430,6 +445,24 @@ te_repair_era_13_technologies = {
 				}
 				add_technology_researched = autonomous_weapons
 				debug_log = "TE_ERA13_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given Autonomous Weapons"
+			}
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_era_13_aneutronic_fusion_repaired } }
+			set_global_variable = te_era_13_aneutronic_fusion_repaired
+			every_country = {
+				limit = {
+					NOT = { has_technology_researched = aneutronic_fusion }
+					OR = {
+						has_technology_researched = fusion_batteries # now its prerequisite
+						AND = {
+							has_technology_researched = compact_fusion_reactors
+							any_scope_building = { has_active_production_method = pm_interstellar_mission }
+						}
+					}
+				}
+				add_technology_researched = aneutronic_fusion
+				debug_log = "TE_ERA13_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given Aneutronic Fusion"
 			}
 		}
 	}

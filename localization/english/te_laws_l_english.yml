@@ -106,6 +106,8 @@
  law_limited_war_desc:0 "War is fought for limited aims with proportionate force, sparing civilians and civilian [concept_infrastructure]. Crises are slow to become wars, and the public follows the fighting from a distance. No nuclear strike, strategic or tactical, may be ordered except in answer to one or to save the nation."
  law_linguistic_purity:0 "Linguistic Purity"
  law_linguistic_purity_desc:0 "The state suppresses minority languages in public life and enforces a single national language as a marker of loyalty and identity."
+ law_liquid_democracy:0 "Liquid Democracy"
+ law_liquid_democracy_desc:0 "Every citizen may vote on every question put to the nation, or delegate the vote, issue by issue, to anyone they trust. A delegation can be withdrawn at any moment, so those who carry many votes carry them only as long as their voters allow."
  law_littoral_defense:0 "Littoral Defense"
  law_littoral_defense_desc:0 "The fleet exists to defend the home coast, not to project power abroad. Dense flotillas of small craft and reinforced coastal [concept_fortification_system] make landings costly for any aggressor, but the navy cannot operate far from port and capital ships are deliberately neglected."
  law_local_vernacular:0 "Local Vernacular"

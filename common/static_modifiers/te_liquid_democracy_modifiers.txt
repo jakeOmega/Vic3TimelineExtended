@@ -1,0 +1,13 @@
+﻿# Liquid Democracy's synergy with Neural Lace (era 13 spec § 7.4; the
+# Demarchists of Revelation Space). Votes are cast through implants as each
+# question arises and delegations move as trust does: the government always
+# knows where the people stand, and can lose them overnight.
+# te_refresh_continuous_vote (te_liquid_democracy_effects.txt) adds it once a
+# year to a country holding law_liquid_democracy and neural_lace, and removes it
+# otherwise; the law's on_deactivate removes it at once.
+te_continuous_vote = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_success_add = 0.05
+	state_radicals_from_political_movements_mult = -0.1
+	interest_group_in_government_attraction_mult = -0.1
+}

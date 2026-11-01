@@ -1015,7 +1015,7 @@ Development Fund section.
 |---|---|---|---|
 | Peacekeeping | Major power | 0.5% of GDP a year, 100 influence, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
 | Development Programs | The World Development Fund founded; you pay your dues and draw no grant | 0.0625% to 1% of GDP a year, by [size](#development-programs-sizes) | Faster infamy decay, prestige, lobbying with the Fund's recipients; the money pays the Fund's grants |
-| Human rights champions | Universal Citizenship, Universal Suffrage or Protected Speech | 100 influence | Prestige, refugee ministry impact |
+| Human rights champions | Universal Citizenship, Universal Suffrage, Liquid Democracy or Protected Speech | 100 influence | Prestige, refugee ministry impact |
 | Arms control | War Crimes Forbidden, Humanitarian Regulations or Limited War | 100 influence, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
 Great powers can also Champion the Order or Undermine the Order, under the

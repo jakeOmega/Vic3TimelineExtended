@@ -97,10 +97,29 @@ orbital_manufacturing = {
 	}
 }
 
+vactrains = {
+	# Maglev in evacuated tubes (era 13 spec § 7.9): Vactrains PM for the Railway's Rolling Stock,
+	# Vactrain Freight PM for its base group. No modifier block: the payload is the two methods, and
+	# the transport technologies' Market Access Price Impact lines (+0.01 on five of them) already
+	# take a state to 100% at full technology (base 75%, vanilla's technologies +20%)
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/quantum_materials.dds" # Placeholder Icon
+	category = production
+
+	unlocking_technologies = {
+		autonomous_vehicles
+		quantum_materials
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
 compact_fusion_reactors = {
-	# Spaceport PM for airport, Fusion SSTO Craft PM for Launch Facilities,
-	# Interstellar Mission PM for Space Program, DEW Tank unit
-	# Better Fusion Reactors PM for Fusion Plants
+	# Spaceport PM for airport, Fusion SSTO Craft PM for Launch Facilities, DEW Tank unit,
+	# Compact Fusion Power PM for Fusion Plants (the Interstellar Mission PM moved to Aneutronic
+	# Fusion in era 13 spec phase 3, 2026-10-31)
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/compact_fusion_reactors.dds"
 	category = military
@@ -282,6 +301,44 @@ post_work_society = {
 		country_sol_expectations_target_add = 0.25
 		building_art_academy_throughput_add = 0.2
 		country_voting_power_mult = 0.1
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+liquid_democracy = {
+	# Liquid Democracy law, Distribution of Power (era 13 spec § 7.4); its Continuous Vote needs Neural Lace too
+	# Everyone may vote on every question or lend the vote to anyone they trust, and take it back at any time
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/universal_digital_identity.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		universal_digital_identity
+	}
+
+	modifier = {
+		country_voting_power_mult = 0.1
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+geoengineering = {
+	# The Stratospheric Aerosol Injection climate policy in the Global Warming entry (era 13 spec § 7.5);
+	# Terraforming (era 13) will require it. Society, not production: aircraft can already loft the aerosols,
+	# so what it stands for is the will to cool the world on purpose
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/environmental_movement.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		environmental_movement
+		globalization
 	}
 
 	ai_weight = {

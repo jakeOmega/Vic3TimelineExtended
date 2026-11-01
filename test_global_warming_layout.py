@@ -31,6 +31,7 @@ MARKET_WIDE = ["fossil_fuel_tariffs"]
 NATIONAL = ["carbon_tax", "renewable_investment", "emission_standards", "climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
             "green_building_codes"]
 NATIONAL.insert(5, "carbon_removal")
+NATIONAL.append("aerosol_injection")   # Geoengineering (era 13 spec § 7.5)
 # Textures in the widget that are not icons: frames, fills and blanks.
 NOT_ICONS = {"gfx/interface/backgrounds/round_frame_dec.dds",
                     "gfx/interface/backgrounds/white.dds",   # the threshold line, a tinted flat fill
@@ -187,7 +188,7 @@ class GatedLinesTest(unittest.TestCase):
 
 
 class PolicyRowTest(unittest.TestCase):
-    def test_ten_rows_tariffs_first_each_wired_to_its_own_handlers(self):
+    def test_eleven_rows_tariffs_first_each_wired_to_its_own_handlers(self):
         body = _type_body(_read(GUI), "te_gw_sec_policies")
         rows = re.findall(r"gw_policy_row = \{\s*datacontext = \"\[GetScriptedGui\('gw_active_(\w+)_sgui'\)\]\"", body)
         self.assertEqual(rows, MARKET_WIDE + NATIONAL)
@@ -400,7 +401,19 @@ class RoundThreeTest(unittest.TestCase):
         rows = re.findall(r'gw_value_row = \{\s*(?:block "gw_market_country" \{[^{}]*\}\s*)?tooltip = "(\w+)"\s*'
                           r'blockoverride "row_label" \{\s*text = "(\w+)"', body)
         self.assertEqual(rows, [("gw_cond_emis_tt", "gw_emis_market_label"), ("gw_emis_capture_tt", "gw_emis_capture_label"),
-                                ("gw_emis_world_tt", "gw_emis_world_label"), ("gw_cond_trend_tt", "gw_emis_warming_label")])
+                                ("gw_emis_world_tt", "gw_emis_world_label"), ("gw_cond_trend_tt", "gw_emis_warming_label"),
+                                ("gw_emis_aerosol_tt", "gw_emis_aerosol_label")])
+
+    def test_aerosol_mask_line_shows_only_with_a_mask(self):
+        """Geoengineering: the line is there only while there is a haze or one on its way."""
+        body = _type_body(_read(GUI), "te_gw_overview_panel")
+        start = body.index('tooltip = "gw_emis_aerosol_tt"')
+        row = _block_from(body, body.rindex("{", 0, start) + 1)
+        self.assertIn("visible = \"[GetScriptedGui('gw_aerosol_shown_sgui').IsShown( "
+                      "GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\"", row)
+        shown = _top_level(_read(SGUIS), "gw_aerosol_shown_sgui")
+        self.assertIn("gw_aerosol_mask > 0", shown)
+        self.assertIn("gw_aerosol_deployers > 0", shown)
 
     def test_the_section_is_gone(self):
         gui = _read(GUI)
@@ -557,6 +570,7 @@ class WidthBudgetTest(unittest.TestCase):
             ("gw_emis_capture_label", "row", self.label_cell),
             ("gw_emis_world_label", "row", self.label_cell),
             ("gw_emis_warming_label", "row", self.label_cell),
+            ("gw_emis_aerosol_label", "row", self.label_cell),
             ("gw_sect_world", "heading", 440 - 32),       # nested header, text after its arrow
             ("gw_sect_policies", "large", 480),           # section headers, 520 with the arrow
             ("gw_sect_emitters", "large", 480),
@@ -592,6 +606,7 @@ class WidthBudgetTest(unittest.TestCase):
             ("-999.9/yr", "row", self.value_cell, "an emissions value"),
             ("99999/yr", "row", self.value_cell, "world emissions"),
             ("+0.20 °C", "row", self.value_cell, "warming last year"),
+            ("-2.00 °C", "row", self.value_cell, "the aerosol mask"),
             ("136 nations", "row", self.value_cell, "an adoption count (every country)"),
         ]
         for text, font, cell, what in cases:
@@ -660,6 +675,10 @@ OLD_PLACEHOLDERS = {
     "gfx/interface/icons/trade_icons/max_tariffs.dds",
     "gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds",
 }
+# Policy rows still on a borrowed icon, marked `# Placeholder Icon` in the .gui
+# until the icon pipeline paints theirs (icon_prompts.py's `gw` category has
+# the subject; docs/systems/global_warming_gui_icons.md lists them).
+PLACEHOLDER_POLICY_ICONS = {"aerosol_injection": "gfx/interface/icons/un_icons/topic_climate.dds"}
 # The two marks that stay vanilla by design.
 VANILLA_MARKS = {"gfx/interface/icons/generic_icons/green_checkmark.dds",
                  "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"}
@@ -696,14 +715,18 @@ class GwIconsTest(unittest.TestCase):
                                         rf'texture = "{re.escape(GW_ICONS)}penalty\.dds"')
 
     def test_every_policy_has_its_own_file(self):
-        """GW-12: no two rows share an icon."""
+        """GW-12: no two rows share an icon. A row on a placeholder says so."""
         seen = []
         for p in MARKET_WIDE + NATIONAL:
-            path = f"{GW_ICONS}policy_{p}.dds"
+            path = PLACEHOLDER_POLICY_ICONS.get(p, f"{GW_ICONS}policy_{p}.dds")
+            mark = r" # Placeholder Icon" if p in PLACEHOLDER_POLICY_ICONS else ""
             self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*(?:#[^\n]*\n\s*)?"
-                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(path)}"', p)
+                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(path)}"{mark}', p)
             seen.append(path)
         self.assertEqual(len(seen), len(set(seen)))
+        # A placeholder is borrowed from outside the widget's own set.
+        for path in PLACEHOLDER_POLICY_ICONS.values():
+            self.assertFalse(path.startswith(GW_ICONS), path)
 
     def test_pies(self):
         for pie, key in (("pie_share", "gw_ov_pie_share"), ("pie_cut", "gw_ov_pie_cut")):
@@ -720,7 +743,8 @@ class GwIconsTest(unittest.TestCase):
         textures = set(re.findall(r'texture = "(gfx/[^"]+)"', self.gui))
         self.assertEqual(textures & OLD_PLACEHOLDERS, set())
         icons = textures - NOT_ICONS - VANILLA_MARKS - set(TRANSITION_ICONS.values()) - {
-            "gfx/interface/icons/un_icons/pie_rest.dds", "gfx/interface/icons/un_icons/pie_members.dds"}
+            "gfx/interface/icons/un_icons/pie_rest.dds", "gfx/interface/icons/un_icons/pie_members.dds"} - set(
+            PLACEHOLDER_POLICY_ICONS.values())
         self.assertTrue(all(t.startswith(GW_ICONS) for t in icons), sorted(icons))
         self.assertEqual(len(icons), 7 + 2 + 1 + 10 + 2)   # tiers, roles, penalty, policies, pies
 
@@ -1165,9 +1189,9 @@ class MarketTabTest(unittest.TestCase):
         # The status text is empty while the entry is active.
         self.assertEqual(_loc_value("je_global_warming_status_none"), "")
         # Every scripted button is the AI's.
-        # Eighteen climate buttons and six retirement programme buttons (#660).
+        # Twenty-two climate buttons and six retirement programme buttons (#660).
         names = re.findall(r"(?m)^\tscripted_button = (\w+)", je)
-        self.assertEqual(len(names), 26)
+        self.assertEqual(len(names), 28)
         buttons = _read(BUTTONS) + "\n" + _read(RT_BUTTONS)
         for name in names:
             self.assertRegex(_top_level(buttons, name), r"visible = \{\s*is_ai = yes", name)

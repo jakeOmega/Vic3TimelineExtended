@@ -4276,16 +4276,16 @@
   "es": "Alto horno Fundidora Monterrey"
  },
  "pm_fusion_battery_appliances": {
-  "en": "Fusion Battery Appliances",
-  "es": "Electrodomésticos con batería de fusión"
+  "en": "Microfusion Appliances",
+  "es": "Electrodomésticos de microfusión"
  },
  "pm_fusion_battery_motors": {
-  "en": "Fusion Battery Motors",
-  "es": "Motores con batería de fusión"
+  "en": "Microfusion Motors",
+  "es": "Motores de microfusión"
  },
  "pm_fusion_battery_vehicles": {
-  "en": "Fusion Battery Vehicles",
-  "es": "Vehículos con batería de fusión"
+  "en": "Microfusion Vehicles",
+  "es": "Vehículos de microfusión"
  },
  "pm_fusion_ssto_craft": {
   "en": "Fusion SSTO Craft",

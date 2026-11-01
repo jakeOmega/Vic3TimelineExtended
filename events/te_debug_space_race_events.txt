@@ -485,52 +485,6 @@ te_debug_space_race.6 = { # REVIEWED 2026-10-26: console-only test event (`event
 		}
 		sr_earth_debug_blockade = yes
 	}
-
-	# The upkeep_inputs probe (design § 18): the generic building_goods_input_mult,
-	# then, in a second run, the three good-specific multipliers, at +50% on our
-	# Space Command (or Space Program); te_debug_space_race.7 logs the after
-	# figure fourteen days later and removes it.
-	option = {
-		name = te_debug_space_race.6.k
-		trigger = {
-			NOT = { has_variable = sr_fl_probe_candidate }
-			OR = {
-				sr_has_space_command = yes
-				sr_has_space_program = yes
-			}
-		}
-		sr_fl_probe_upkeep = { CANDIDATE = sr_fleet_upkeep CODE = 1 }
-	}
-	option = {
-		name = te_debug_space_race.6.l
-		trigger = {
-			NOT = { has_variable = sr_fl_probe_candidate }
-			OR = {
-				sr_has_space_command = yes
-				sr_has_space_program = yes
-			}
-		}
-		sr_fl_probe_upkeep = { CANDIDATE = sr_fleet_upkeep_goods CODE = 2 }
-	}
-}
-
-# The upkeep_inputs probe's end (te_debug_space_race.6 options k and l): the after
-# line and the candidate removed. Hidden.
-te_debug_space_race.7 = { # REVIEWED 2026-10-26: fired only by the console's probe (sr_fl_probe_upkeep), fourteen days on
-	type = country_event
-	hidden = yes
-
-	trigger = { has_variable = sr_fl_probe_candidate }
-
-	immediate = {
-		if = {
-			limit = { var:sr_fl_probe_candidate = 1 }
-			sr_fl_probe_upkeep_end = { CANDIDATE = sr_fleet_upkeep }
-		}
-		else = {
-			sr_fl_probe_upkeep_end = { CANDIDATE = sr_fleet_upkeep_goods }
-		}
-	}
 }
 
 # The retired Moon Base's migration (lunar colonization design § 10;

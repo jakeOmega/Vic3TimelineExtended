@@ -24,3 +24,16 @@ gw_renewable_investment_cost_value = {
 	divide = 52
 	min = 0
 }
+
+# Stratospheric Aerosol Injection (aerosol_injection_cost_modifier): 1% of GDP a
+# year, twice Renewable Investment's: the fleet, the sulfur and the monitoring.
+# The haze it buys masks warming for the whole world in proportion to the
+# country's share of world GDP (global_warming_aerosol_values.txt), so a share
+# of its own GDP is a fixed price per degree of the world's: a fifth of world
+# GDP pays a fifth of a percent of world GDP for each degree.
+gw_aerosol_injection_cost_value = {
+	value = gdp
+	multiply = 0.01
+	divide = 52
+	min = 0
+}
