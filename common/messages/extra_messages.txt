@@ -2137,6 +2137,16 @@ sr_earth_hostile_notice = {
 	color = bad
 }
 
+# A nation runs one Space Command (sr_sc_one_per_nation): one came with land
+# we took or formed, and the smaller was dismantled. One a building, naming its
+# state (scope:sr_sc_dismantled) and the one kept (scope:sr_sc_keeper).
+sr_space_command_dismantled_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = feed
+	color = bad
+}
+
 # ---- UN redesign phase 2 (un_ladder_effects.txt) ----
 # A charter reform may now be tabled (to member major and great powers).
 un_charter_reform_ripe_notice = {
