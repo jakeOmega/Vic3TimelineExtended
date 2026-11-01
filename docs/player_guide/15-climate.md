@@ -334,6 +334,10 @@ the monsoon regions, and those that would not run it themselves (their will for
 it, below, is more than 15 points short of its threshold), each lose 10 relations
 with a country that starts it, and 5 more every January while it keeps it up.
 
+Geoengineering also brings weather modification, whether or not you fly the
+haze: in every state, droughts are 10% milder and 10% shorter, and hailstorms
+20% weaker.
+
 ## How the AI adopts climate policy
 
 Each AI country weighs each policy separately, from its own conditions. For

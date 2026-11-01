@@ -286,7 +286,12 @@ shock.
 
 1. **The tree.** Geoengineering sits in era 12's society column after
    Environmental Movement and Globalization, on Environmental Movement's icon,
-   and its description names the policy.
+   and its description names the policy. Its effects list "Enables Stratospheric
+   Aerosol Injection" (hover: the 1.0 °C gate, the 2 °C cap, the cost) and the
+   weather modification: droughts −10% impact and duration, hailstorms −20%
+   impact. After researching it, a state's harvest-condition tooltip shows the
+   three lines (a technology's state lines reach the states, as Modern
+   Sewerage's flood line does).
 2. **The row.** Mitigation Policies ends with Aerosol Injection under National,
    on the UN's climate icon. Before the technology, Adopt is greyed with the
    technology crossed; below 1.0 °C beneath the haze, with "Warming beneath any
