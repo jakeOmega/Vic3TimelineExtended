@@ -8,7 +8,16 @@
 # culture-based American term was -10 to five parties and +3 to the Liberals,
 # and its ordinary terms run from 2 to 10, so -20 leaves a third party open
 # only to a group that fits it strongly.
-te_fptp_major_party_join_weight = 5
+#
+# A major party takes the bonus in place of vanilla's party-size multipliers
+# (x2, x0.5, x0 from the third group on), which capped it at three groups and
+# left groups out of every party (2026-11-01). +10 against the base -5 brings
+# a group with no view of the party to +5, so it joins unless it dislikes the
+# party by 5 or more; each group joining first takes 1 off, so groups with no
+# preference split between the two majors, and a fit of 4 outweighs what three
+# more members would; with eight groups, the smaller major always has room.
+te_fptp_major_party_join_weight = 10
+te_fptp_major_party_crowding_weight = -1
 te_fptp_minor_party_join_weight = -20
 
 # Party scope. The party's size: its member groups' clout.
