@@ -1306,17 +1306,28 @@ def render_records() -> list[str]:
     out += ["}", "sr_loc_clear_country = {"]
     out += [f"\tif = {{ limit = {{ has_variable = sr_fl_at_{lc.key} }} remove_variable = sr_fl_at_{lc.key} }}" for lc in LOCATIONS]
     out += ["}", "",
-            "# The strongest two powers at each location, after the rebuild.",
+            "# The strongest two powers at each location, after the rebuild. Second place",
+            "# only where two powers are there: past the end of the list, position = 1",
+            "# caps to the last item, so a lone power was its own runner-up and the",
+            "# iterator logged `Given position was bigger than the list`",
+            "# (scripting_best_practices.md, ordered_scope_state clamps out-of-range).",
             "sr_loc_rank = {"]
+    def pick(key: str, pos: int, name: str, indent: str) -> list[str]:
+        return [indent + ln for ln in (
+            "ordered_in_global_list = {",
+            "\tvariable = sr_fleet_powers",
+            f"\tlimit = {{ is_country_alive = yes has_variable = sr_fl_at_{key} }}",
+            f"\torder_by = var:sr_fl_at_{key}",
+            f"\tposition = {pos}",
+            f"\tset_global_variable = {{ name = sr_loc_{name}_{key} value = this }}",
+            "}")]
     for lc in LOCATIONS:
-        for pos, name in ((0, "top"), (1, "second")):
-            out += ["\tordered_in_global_list = {",
-                    "\t\tvariable = sr_fleet_powers",
-                    f"\t\tlimit = {{ is_country_alive = yes has_variable = sr_fl_at_{lc.key} }}",
-                    f"\t\torder_by = var:sr_fl_at_{lc.key}",
-                    f"\t\tposition = {pos}",
-                    f"\t\tset_global_variable = {{ name = sr_loc_{name}_{lc.key} value = this }}",
-                    "\t}"]
+        out += pick(lc.key, 0, "top", "\t")
+        out += ["\tif = {",
+                f"\t\tlimit = {{ any_in_global_list = {{ variable = sr_fleet_powers "
+                f"is_country_alive = yes has_variable = sr_fl_at_{lc.key} count >= 2 }} }}"]
+        out += pick(lc.key, 1, "second", "\t\t")
+        out += ["\t}"]
     out += ["}", "",
             "# Players: the strongest other power's capital at each location, for its flag",
             "# (gui_modding_guide.md gotcha #15: a country is read through a stored state).",
@@ -1678,13 +1689,13 @@ def render_debug() -> list[str]:
     for n in range(1, SLOTS + 1):
         out += ["\tif = {",
                 f"\t\tlimit = {{ {var(n, 'exists')} = yes }}",
-                f"\t\tdebug_log = \"TE_SR_FLEET slot {n}: location [THIS.MakeScope.ScriptValue('{var(n, 'loc_value')}')|0] "
+                f"\t\tdebug_log = \"TE_SR_FLEET slot {n}: location [THIS.ScriptValue('{var(n, 'loc_value')}')|0] "
                 f"(0 in transit, bound for [THIS.Var('{var(n, 'dest')}').GetValue|0], landing at month "
                 f"[THIS.Var('{var(n, 'arrive')}').GetValue|0]) "
-                f"strength [THIS.MakeScope.ScriptValue('{var(n, 'strength')}')|1] of [THIS.MakeScope.ScriptValue('{var(n, 'strength_full')}')|1] "
-                f"drive [THIS.MakeScope.ScriptValue('{var(n, 'drive_value')}')|0] propellant [THIS.MakeScope.ScriptValue('{var(n, 'dv_value')}')|1] "
-                f"of [THIS.MakeScope.ScriptValue('{var(n, 'dv_capacity')}')|1] supply [THIS.MakeScope.ScriptValue('{var(n, 'supply_value')}')|1] "
-                f"marines [THIS.MakeScope.ScriptValue('{var(n, 'marines_value')}')|0] posture [THIS.MakeScope.ScriptValue('{var(n, 'posture_value')}')|0]\"",
+                f"strength [THIS.ScriptValue('{var(n, 'strength')}')|1] of [THIS.ScriptValue('{var(n, 'strength_full')}')|1] "
+                f"drive [THIS.ScriptValue('{var(n, 'drive_value')}')|0] propellant [THIS.ScriptValue('{var(n, 'dv_value')}')|1] "
+                f"of [THIS.ScriptValue('{var(n, 'dv_capacity')}')|1] supply [THIS.ScriptValue('{var(n, 'supply_value')}')|1] "
+                f"marines [THIS.ScriptValue('{var(n, 'marines_value')}')|0] posture [THIS.ScriptValue('{var(n, 'posture_value')}')|0]\"",
                 "\t}"]
     out += ["}",
            "sr_loc_debug_log = {"]

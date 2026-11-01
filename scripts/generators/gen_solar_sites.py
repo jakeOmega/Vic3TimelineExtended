@@ -2473,13 +2473,13 @@ def render_module_effects() -> list[str]:
         levels = " ".join(f"{t}=[SCOPE.ScriptValue('{level_value(t, site)}')|0]" for t in ("a", "b", *generic_types(site)))
         if terraformable(site):
             levels += f" terraformed=[SCOPE.ScriptValue('sr_site_terra_done_value_{k}')|0]/{TERRA_FULL_MONTHS} months"
-        queue = (f"specializations [THIS.MakeScope.ScriptValue('sr_mod_spec_used_{k}')|0] of {SPEC_BUDGET}, "
-                 f"generic [THIS.MakeScope.ScriptValue('sr_mod_slots_used_{k}')|0] of "
-                 f"[THIS.MakeScope.ScriptValue('sr_site_slots_{k}')|0]")
+        queue = (f"specializations [THIS.ScriptValue('sr_mod_spec_used_{k}')|0] of {SPEC_BUDGET}, "
+                 f"generic [THIS.ScriptValue('sr_mod_slots_used_{k}')|0] of "
+                 f"[THIS.ScriptValue('sr_site_slots_{k}')|0]")
         out += ["\tif = {",
                 f"\t\tlimit = {{ has_global_variable = sr_colony_{k} }}",
-                f"\t\tdebug_log = \"TE_SR_MODULES {k}: {levels.replace('SCOPE.', 'THIS.MakeScope.')} "
-                f"staffing=[THIS.MakeScope.ScriptValue('sr_site_staffing_{k}')|2] room=[THIS.MakeScope.ScriptValue('sr_site_room_{k}')|0]; "
+                f"\t\tdebug_log = \"TE_SR_MODULES {k}: {levels.replace('SCOPE.', 'THIS.')} "
+                f"staffing=[THIS.ScriptValue('sr_site_staffing_{k}')|2] room=[THIS.ScriptValue('sr_site_room_{k}')|0]; "
                 f"built, our queue and every shipment: {queue}\"",
                 "\t}"]
     out += ["}", "",
@@ -3106,13 +3106,13 @@ def render_autonomy_effects() -> list[str]:
         out += ["\tif = {",
                 f"\t\tlimit = {{ has_global_variable = sr_site_free_{k} }}",
                 f"\t\tdebug_log = \"TE_SR_AUTONOMY {k}: free, [GetGlobalVariable('sr_site_pop_{k}').GetValue|0] people, "
-                f"[THIS.MakeScope.ScriptValue('sr_site_suppliers_value_{k}')|0] suppliers, our ties "
-                f"[THIS.MakeScope.ScriptValue('sr_free_ties_value_{k}')|0]\"",
+                f"[THIS.ScriptValue('sr_site_suppliers_value_{k}')|0] suppliers, our ties "
+                f"[THIS.ScriptValue('sr_free_ties_value_{k}')|0]\"",
                 "\t}",
                 "\telse_if = {",
                 f"\t\tlimit = {{ has_global_variable = sr_site_holder_{k} }}",
-                f"\t\tdebug_log = \"TE_SR_AUTONOMY {k}: held, autonomy [THIS.MakeScope.ScriptValue('sr_site_autonomy_value_{k}')|1], "
-                f"[THIS.MakeScope.ScriptValue('sr_site_months_since_contact_{k}')|0] months since contact\"",
+                f"\t\tdebug_log = \"TE_SR_AUTONOMY {k}: held, autonomy [THIS.ScriptValue('sr_site_autonomy_value_{k}')|1], "
+                f"[THIS.ScriptValue('sr_site_months_since_contact_{k}')|0] months since contact\"",
                 "\t}"]
     out += ["}", "",
             "# Console: our first colony, as local_var:sr_site_idx (0 with none).",

@@ -463,6 +463,17 @@ class ChoicePreviewTest(unittest.TestCase):
         steps = _squash(_block(effects, "gm_prev_signed_steps"))
         self.assertEqual(steps.count("gm_curve_steps_f5"), 2, "the approval curve, as gm_compute_ig's")
 
+    def test_the_country_helpers_run_on_the_country(self):
+        # They read the country's ledgers and nets; called from the monument's
+        # state or container they read nothing, and the figures never computed
+        # (2026-10-31, `Failed to fetch variable for 'gm_prev_in'` at seeding).
+        effects = _read(EFFECTS)
+        for caller in ("gm_state_preview_choices", "gm_mon_preview_choices"):
+            body = _squash(_block(effects, caller))
+            for helper in ("gm_preview_choices_on_country", "gm_preview_supporters_on_country"):
+                self.assertEqual(body.count(f"{helper} = yes"), 1, (caller, helper))
+                self.assertIn(f"scope:gm_prev_country = {{ {helper} = yes }}", body, (caller, helper))
+
     def test_the_tooltips_read_the_guarded_figures(self):
         loc = _loc()
         values = _read(VALUES)

@@ -42,7 +42,7 @@ All paths are repo-relative (`mod_path` in `path_constants`). The mod's existing
 
 This file is rebuilt by `python organize_loc.py` (which auto-runs on every `POST /reload`). Make sure `organize_loc.py`'s `categorize_key` routes your new tag's loc keys to `FORMABLE_COUNTRIES` — the mod already routes `dyn_c_*`, `dp_unify_*`, `dp_leadership_*`, and the registered tag/adjective set `{AFU, INM, EAF, EUN, UNA, UNE, ZHO, BHA, NUS, DAR, *_ADJ}` (see `organize_loc.py`'s `categorize_key`). Add new tags to that set when you introduce them, otherwise their `TAG:` and `TAG_ADJ:` keys land in MISCELLANEOUS or CONCEPTS. (Both keys count as used for every tag in `common/country_definitions/`, through `find_country_keys`, so an adjective no dynamic name repeats no longer drifts to `te_unused_l_english.yml`.)
 
-**A releasable country instead of a formable** (one its owner releases, or a Liberate Country war goal frees) is a `common/country_creation/` entry, not a formation rule: `states = { … }`, `use_culture_states = yes`, or `provinces = { x… }` to take only part of a state, as vanilla's Hamburg and the mod's city-states in `te_city_states.txt` do. The country definition, flag and loc rows above apply to it too; the city-states' loc files in `te_city_states_l_english.yml` through `organize_loc.py`'s `CITY_STATE_TAGS`.
+**A releasable country instead of a formable** (one its owner releases, or a Liberate Country war goal frees) is a `common/country_creation/` entry, not a formation rule: `states = { … }`, `use_culture_states = yes`, or `provinces = { x… }` to take only part of a state, as vanilla's Hamburg and the mod's city-states in `te_city_states.txt` do. The country definition, flag and loc rows above apply to it too (the loc is `TAG` and `TAG_ADJ`, both); the city-states' loc files in `te_city_states_l_english.yml` through `organize_loc.py`'s `CITY_STATE_TAGS`.
 
 ## Country formation DSL (essentials)
 
@@ -110,7 +110,7 @@ Available government triggers (canonical, no-registration scripted triggers in v
 
 **2nd-axis flavor** (priority 5+): combine the gov trigger with `was_formed_from = TAG` (which country formed this; e.g. INM-from-Hungary → Crown of Saint Stephen) or `ruler ?= { has_culture = cu:X }` (AU-with-Amhara-ruler → Solomonic African Empire). Higher priority wins on match.
 
-If no entry matches, the engine falls back to the tag's own loc key (e.g. `AFU:0 "African Union"`), so always ship a `TAG:` and `TAG_ADJ:` loc.
+If no entry matches, the engine falls back to the tag's own loc key (e.g. `AFU:0 "African Union"`), so always ship a `TAG:` and `TAG_ADJ:` loc. The engine logs nothing for a missing one: the 22 city-states (#1266) shipped names and no adjectives, so war and treaty names printed a blank. `test_country_definition_loc.py` now fails on any tag in `common/country_definitions/` without both.
 
 Reference: `references/dynamic_name_patterns.md` has the full vanilla USA block plus a worked Intermarium example.
 

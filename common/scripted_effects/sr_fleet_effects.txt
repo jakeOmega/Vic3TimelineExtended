@@ -834,11 +834,13 @@ sr_sc_ai_pause_review = {
 # Command at half staff or more in a state its owner controls must give
 # sr_sc_rate above 0. Armed on the first such country, the verdict a month
 # later (a modifier sum can lag a day after a method changes); re-armed if it
-# no longer qualifies by then. Once a game.
+# no longer qualifies by then. Once a game. The marker is _v2 since
+# 2026-10-31: the first form's lines used THIS.MakeScope, which debug_log
+# can't render, so the verdict was lost; _v2 re-arms it in older saves.
 sr_sc_self_check = {
 	if = {
 		limit = {
-			NOT = { has_global_variable = sr_sc_checked }
+			NOT = { has_global_variable = sr_sc_checked_v2 }
 			sr_sc_qualifies = yes
 		}
 		if = {
@@ -846,13 +848,13 @@ sr_sc_self_check = {
 				has_variable = sr_sc_check_armed
 				te_history_month_index > var:sr_sc_check_armed
 			}
-			set_global_variable = { name = sr_sc_checked value = yes }
+			set_global_variable = { name = sr_sc_checked_v2 value = yes }
 			if = {
 				limit = { sr_sc_rate_buildings > 0 }
-				debug_log = "TE_SELF_CHECK OK ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.MakeScope.ScriptValue('sr_sc_rate_buildings')|2] (Space Command's state modifier reaches its state) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK OK ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.ScriptValue('sr_sc_rate_buildings')|2] (Space Command's state modifier reaches its state) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.MakeScope.ScriptValue('sr_sc_rate_buildings')|2] (a Space Command has run at half staff or more for a month and sr_sc_rate reads 0: the method's state modifier does not reach its state; fall back to computing the rate in script; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN ship_construction country=[THIS.GetCountry.GetTagName] rate=[THIS.ScriptValue('sr_sc_rate_buildings')|2] (a Space Command has run at half staff or more for a month and sr_sc_rate reads 0: the method's state modifier does not reach its state; fall back to computing the rate in script; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 		}
 		else_if = {

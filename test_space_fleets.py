@@ -88,6 +88,25 @@ class GeneratedFilesTest(unittest.TestCase):
                 self.assertFalse(data[3:].startswith(b"\xef\xbb\xbf"))
 
 
+class LocationRankTest(unittest.TestCase):
+    """Second place at a location only with two powers there: position = 1 past
+    the list's end caps to the last item (a lone power ranked its own
+    runner-up) and logs `Given position was bigger than the list`
+    (2026-10-31, 1,000 lines in one day)."""
+
+    def test_second_place_needs_two_powers(self):
+        rank = _strip(_block(_raw(gsf.ROOT / gsf.EFFECTS_OUT), "sr_loc_rank"))
+        for lc in gsf.LOCATIONS:
+            with self.subTest(location=lc.key):
+                guard = (f"any_in_global_list = {{ variable = sr_fleet_powers is_country_alive = yes "
+                         f"has_variable = sr_fl_at_{lc.key} count >= 2 }}")
+                at = rank.index(guard)
+                second = rank.index(f"name = sr_loc_second_{lc.key} ")
+                self.assertLess(at, second)
+                self.assertEqual(rank[at:second].count("position = 1"), 1)
+        self.assertEqual(rank.count("position = 1"), len(gsf.LOCATIONS))
+
+
 class DebugLineTest(unittest.TestCase):
     """No $PARAM$ inside a debug_log string: the engine mangles it
     (scripting_best_practices.md, "No $PARAM$ inside the string")."""

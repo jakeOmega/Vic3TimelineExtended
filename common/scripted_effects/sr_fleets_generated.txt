@@ -2535,7 +2535,11 @@ sr_loc_clear_country = {
 	if = { limit = { has_variable = sr_fl_at_kuiper } remove_variable = sr_fl_at_kuiper }
 }
 
-# The strongest two powers at each location, after the rebuild.
+# The strongest two powers at each location, after the rebuild. Second place
+# only where two powers are there: past the end of the list, position = 1
+# caps to the last item, so a lone power was its own runner-up and the
+# iterator logged `Given position was bigger than the list`
+# (scripting_best_practices.md, ordered_scope_state clamps out-of-range).
 sr_loc_rank = {
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -2544,12 +2548,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_earth value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_earth }
-		order_by = var:sr_fl_at_earth
-		position = 1
-		set_global_variable = { name = sr_loc_second_earth value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_earth count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_earth }
+			order_by = var:sr_fl_at_earth
+			position = 1
+			set_global_variable = { name = sr_loc_second_earth value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -2558,12 +2565,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_inner value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_inner }
-		order_by = var:sr_fl_at_inner
-		position = 1
-		set_global_variable = { name = sr_loc_second_inner value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_inner count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_inner }
+			order_by = var:sr_fl_at_inner
+			position = 1
+			set_global_variable = { name = sr_loc_second_inner value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -2572,12 +2582,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_mars value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_mars }
-		order_by = var:sr_fl_at_mars
-		position = 1
-		set_global_variable = { name = sr_loc_second_mars value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_mars count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_mars }
+			order_by = var:sr_fl_at_mars
+			position = 1
+			set_global_variable = { name = sr_loc_second_mars value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -2586,12 +2599,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_asteroids value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_asteroids }
-		order_by = var:sr_fl_at_asteroids
-		position = 1
-		set_global_variable = { name = sr_loc_second_asteroids value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_asteroids count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_asteroids }
+			order_by = var:sr_fl_at_asteroids
+			position = 1
+			set_global_variable = { name = sr_loc_second_asteroids value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -2600,12 +2616,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_jupiter value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_jupiter }
-		order_by = var:sr_fl_at_jupiter
-		position = 1
-		set_global_variable = { name = sr_loc_second_jupiter value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_jupiter count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_jupiter }
+			order_by = var:sr_fl_at_jupiter
+			position = 1
+			set_global_variable = { name = sr_loc_second_jupiter value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -2614,12 +2633,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_saturn value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_saturn }
-		order_by = var:sr_fl_at_saturn
-		position = 1
-		set_global_variable = { name = sr_loc_second_saturn value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_saturn count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_saturn }
+			order_by = var:sr_fl_at_saturn
+			position = 1
+			set_global_variable = { name = sr_loc_second_saturn value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -2628,12 +2650,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_uranus value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_uranus }
-		order_by = var:sr_fl_at_uranus
-		position = 1
-		set_global_variable = { name = sr_loc_second_uranus value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_uranus count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_uranus }
+			order_by = var:sr_fl_at_uranus
+			position = 1
+			set_global_variable = { name = sr_loc_second_uranus value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -2642,12 +2667,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_neptune value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_neptune }
-		order_by = var:sr_fl_at_neptune
-		position = 1
-		set_global_variable = { name = sr_loc_second_neptune value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_neptune count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_neptune }
+			order_by = var:sr_fl_at_neptune
+			position = 1
+			set_global_variable = { name = sr_loc_second_neptune value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -2656,12 +2684,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_kuiper value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_kuiper }
-		order_by = var:sr_fl_at_kuiper
-		position = 1
-		set_global_variable = { name = sr_loc_second_kuiper value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_kuiper count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_kuiper }
+			order_by = var:sr_fl_at_kuiper
+			position = 1
+			set_global_variable = { name = sr_loc_second_kuiper value = this }
+		}
 	}
 }
 
@@ -10608,39 +10639,39 @@ sr_fl_ai_assault_at = {
 sr_fl_debug_log_all = {
 	if = {
 		limit = { sr_fl_1_exists = yes }
-		debug_log = "TE_SR_FLEET slot 1: location [THIS.MakeScope.ScriptValue('sr_fl_1_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_1_dest').GetValue|0], landing at month [THIS.Var('sr_fl_1_arrive').GetValue|0]) strength [THIS.MakeScope.ScriptValue('sr_fl_1_strength')|1] of [THIS.MakeScope.ScriptValue('sr_fl_1_strength_full')|1] drive [THIS.MakeScope.ScriptValue('sr_fl_1_drive_value')|0] propellant [THIS.MakeScope.ScriptValue('sr_fl_1_dv_value')|1] of [THIS.MakeScope.ScriptValue('sr_fl_1_dv_capacity')|1] supply [THIS.MakeScope.ScriptValue('sr_fl_1_supply_value')|1] marines [THIS.MakeScope.ScriptValue('sr_fl_1_marines_value')|0] posture [THIS.MakeScope.ScriptValue('sr_fl_1_posture_value')|0]"
+		debug_log = "TE_SR_FLEET slot 1: location [THIS.ScriptValue('sr_fl_1_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_1_dest').GetValue|0], landing at month [THIS.Var('sr_fl_1_arrive').GetValue|0]) strength [THIS.ScriptValue('sr_fl_1_strength')|1] of [THIS.ScriptValue('sr_fl_1_strength_full')|1] drive [THIS.ScriptValue('sr_fl_1_drive_value')|0] propellant [THIS.ScriptValue('sr_fl_1_dv_value')|1] of [THIS.ScriptValue('sr_fl_1_dv_capacity')|1] supply [THIS.ScriptValue('sr_fl_1_supply_value')|1] marines [THIS.ScriptValue('sr_fl_1_marines_value')|0] posture [THIS.ScriptValue('sr_fl_1_posture_value')|0]"
 	}
 	if = {
 		limit = { sr_fl_2_exists = yes }
-		debug_log = "TE_SR_FLEET slot 2: location [THIS.MakeScope.ScriptValue('sr_fl_2_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_2_dest').GetValue|0], landing at month [THIS.Var('sr_fl_2_arrive').GetValue|0]) strength [THIS.MakeScope.ScriptValue('sr_fl_2_strength')|1] of [THIS.MakeScope.ScriptValue('sr_fl_2_strength_full')|1] drive [THIS.MakeScope.ScriptValue('sr_fl_2_drive_value')|0] propellant [THIS.MakeScope.ScriptValue('sr_fl_2_dv_value')|1] of [THIS.MakeScope.ScriptValue('sr_fl_2_dv_capacity')|1] supply [THIS.MakeScope.ScriptValue('sr_fl_2_supply_value')|1] marines [THIS.MakeScope.ScriptValue('sr_fl_2_marines_value')|0] posture [THIS.MakeScope.ScriptValue('sr_fl_2_posture_value')|0]"
+		debug_log = "TE_SR_FLEET slot 2: location [THIS.ScriptValue('sr_fl_2_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_2_dest').GetValue|0], landing at month [THIS.Var('sr_fl_2_arrive').GetValue|0]) strength [THIS.ScriptValue('sr_fl_2_strength')|1] of [THIS.ScriptValue('sr_fl_2_strength_full')|1] drive [THIS.ScriptValue('sr_fl_2_drive_value')|0] propellant [THIS.ScriptValue('sr_fl_2_dv_value')|1] of [THIS.ScriptValue('sr_fl_2_dv_capacity')|1] supply [THIS.ScriptValue('sr_fl_2_supply_value')|1] marines [THIS.ScriptValue('sr_fl_2_marines_value')|0] posture [THIS.ScriptValue('sr_fl_2_posture_value')|0]"
 	}
 	if = {
 		limit = { sr_fl_3_exists = yes }
-		debug_log = "TE_SR_FLEET slot 3: location [THIS.MakeScope.ScriptValue('sr_fl_3_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_3_dest').GetValue|0], landing at month [THIS.Var('sr_fl_3_arrive').GetValue|0]) strength [THIS.MakeScope.ScriptValue('sr_fl_3_strength')|1] of [THIS.MakeScope.ScriptValue('sr_fl_3_strength_full')|1] drive [THIS.MakeScope.ScriptValue('sr_fl_3_drive_value')|0] propellant [THIS.MakeScope.ScriptValue('sr_fl_3_dv_value')|1] of [THIS.MakeScope.ScriptValue('sr_fl_3_dv_capacity')|1] supply [THIS.MakeScope.ScriptValue('sr_fl_3_supply_value')|1] marines [THIS.MakeScope.ScriptValue('sr_fl_3_marines_value')|0] posture [THIS.MakeScope.ScriptValue('sr_fl_3_posture_value')|0]"
+		debug_log = "TE_SR_FLEET slot 3: location [THIS.ScriptValue('sr_fl_3_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_3_dest').GetValue|0], landing at month [THIS.Var('sr_fl_3_arrive').GetValue|0]) strength [THIS.ScriptValue('sr_fl_3_strength')|1] of [THIS.ScriptValue('sr_fl_3_strength_full')|1] drive [THIS.ScriptValue('sr_fl_3_drive_value')|0] propellant [THIS.ScriptValue('sr_fl_3_dv_value')|1] of [THIS.ScriptValue('sr_fl_3_dv_capacity')|1] supply [THIS.ScriptValue('sr_fl_3_supply_value')|1] marines [THIS.ScriptValue('sr_fl_3_marines_value')|0] posture [THIS.ScriptValue('sr_fl_3_posture_value')|0]"
 	}
 	if = {
 		limit = { sr_fl_4_exists = yes }
-		debug_log = "TE_SR_FLEET slot 4: location [THIS.MakeScope.ScriptValue('sr_fl_4_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_4_dest').GetValue|0], landing at month [THIS.Var('sr_fl_4_arrive').GetValue|0]) strength [THIS.MakeScope.ScriptValue('sr_fl_4_strength')|1] of [THIS.MakeScope.ScriptValue('sr_fl_4_strength_full')|1] drive [THIS.MakeScope.ScriptValue('sr_fl_4_drive_value')|0] propellant [THIS.MakeScope.ScriptValue('sr_fl_4_dv_value')|1] of [THIS.MakeScope.ScriptValue('sr_fl_4_dv_capacity')|1] supply [THIS.MakeScope.ScriptValue('sr_fl_4_supply_value')|1] marines [THIS.MakeScope.ScriptValue('sr_fl_4_marines_value')|0] posture [THIS.MakeScope.ScriptValue('sr_fl_4_posture_value')|0]"
+		debug_log = "TE_SR_FLEET slot 4: location [THIS.ScriptValue('sr_fl_4_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_4_dest').GetValue|0], landing at month [THIS.Var('sr_fl_4_arrive').GetValue|0]) strength [THIS.ScriptValue('sr_fl_4_strength')|1] of [THIS.ScriptValue('sr_fl_4_strength_full')|1] drive [THIS.ScriptValue('sr_fl_4_drive_value')|0] propellant [THIS.ScriptValue('sr_fl_4_dv_value')|1] of [THIS.ScriptValue('sr_fl_4_dv_capacity')|1] supply [THIS.ScriptValue('sr_fl_4_supply_value')|1] marines [THIS.ScriptValue('sr_fl_4_marines_value')|0] posture [THIS.ScriptValue('sr_fl_4_posture_value')|0]"
 	}
 	if = {
 		limit = { sr_fl_5_exists = yes }
-		debug_log = "TE_SR_FLEET slot 5: location [THIS.MakeScope.ScriptValue('sr_fl_5_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_5_dest').GetValue|0], landing at month [THIS.Var('sr_fl_5_arrive').GetValue|0]) strength [THIS.MakeScope.ScriptValue('sr_fl_5_strength')|1] of [THIS.MakeScope.ScriptValue('sr_fl_5_strength_full')|1] drive [THIS.MakeScope.ScriptValue('sr_fl_5_drive_value')|0] propellant [THIS.MakeScope.ScriptValue('sr_fl_5_dv_value')|1] of [THIS.MakeScope.ScriptValue('sr_fl_5_dv_capacity')|1] supply [THIS.MakeScope.ScriptValue('sr_fl_5_supply_value')|1] marines [THIS.MakeScope.ScriptValue('sr_fl_5_marines_value')|0] posture [THIS.MakeScope.ScriptValue('sr_fl_5_posture_value')|0]"
+		debug_log = "TE_SR_FLEET slot 5: location [THIS.ScriptValue('sr_fl_5_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_5_dest').GetValue|0], landing at month [THIS.Var('sr_fl_5_arrive').GetValue|0]) strength [THIS.ScriptValue('sr_fl_5_strength')|1] of [THIS.ScriptValue('sr_fl_5_strength_full')|1] drive [THIS.ScriptValue('sr_fl_5_drive_value')|0] propellant [THIS.ScriptValue('sr_fl_5_dv_value')|1] of [THIS.ScriptValue('sr_fl_5_dv_capacity')|1] supply [THIS.ScriptValue('sr_fl_5_supply_value')|1] marines [THIS.ScriptValue('sr_fl_5_marines_value')|0] posture [THIS.ScriptValue('sr_fl_5_posture_value')|0]"
 	}
 	if = {
 		limit = { sr_fl_6_exists = yes }
-		debug_log = "TE_SR_FLEET slot 6: location [THIS.MakeScope.ScriptValue('sr_fl_6_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_6_dest').GetValue|0], landing at month [THIS.Var('sr_fl_6_arrive').GetValue|0]) strength [THIS.MakeScope.ScriptValue('sr_fl_6_strength')|1] of [THIS.MakeScope.ScriptValue('sr_fl_6_strength_full')|1] drive [THIS.MakeScope.ScriptValue('sr_fl_6_drive_value')|0] propellant [THIS.MakeScope.ScriptValue('sr_fl_6_dv_value')|1] of [THIS.MakeScope.ScriptValue('sr_fl_6_dv_capacity')|1] supply [THIS.MakeScope.ScriptValue('sr_fl_6_supply_value')|1] marines [THIS.MakeScope.ScriptValue('sr_fl_6_marines_value')|0] posture [THIS.MakeScope.ScriptValue('sr_fl_6_posture_value')|0]"
+		debug_log = "TE_SR_FLEET slot 6: location [THIS.ScriptValue('sr_fl_6_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_6_dest').GetValue|0], landing at month [THIS.Var('sr_fl_6_arrive').GetValue|0]) strength [THIS.ScriptValue('sr_fl_6_strength')|1] of [THIS.ScriptValue('sr_fl_6_strength_full')|1] drive [THIS.ScriptValue('sr_fl_6_drive_value')|0] propellant [THIS.ScriptValue('sr_fl_6_dv_value')|1] of [THIS.ScriptValue('sr_fl_6_dv_capacity')|1] supply [THIS.ScriptValue('sr_fl_6_supply_value')|1] marines [THIS.ScriptValue('sr_fl_6_marines_value')|0] posture [THIS.ScriptValue('sr_fl_6_posture_value')|0]"
 	}
 	if = {
 		limit = { sr_fl_7_exists = yes }
-		debug_log = "TE_SR_FLEET slot 7: location [THIS.MakeScope.ScriptValue('sr_fl_7_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_7_dest').GetValue|0], landing at month [THIS.Var('sr_fl_7_arrive').GetValue|0]) strength [THIS.MakeScope.ScriptValue('sr_fl_7_strength')|1] of [THIS.MakeScope.ScriptValue('sr_fl_7_strength_full')|1] drive [THIS.MakeScope.ScriptValue('sr_fl_7_drive_value')|0] propellant [THIS.MakeScope.ScriptValue('sr_fl_7_dv_value')|1] of [THIS.MakeScope.ScriptValue('sr_fl_7_dv_capacity')|1] supply [THIS.MakeScope.ScriptValue('sr_fl_7_supply_value')|1] marines [THIS.MakeScope.ScriptValue('sr_fl_7_marines_value')|0] posture [THIS.MakeScope.ScriptValue('sr_fl_7_posture_value')|0]"
+		debug_log = "TE_SR_FLEET slot 7: location [THIS.ScriptValue('sr_fl_7_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_7_dest').GetValue|0], landing at month [THIS.Var('sr_fl_7_arrive').GetValue|0]) strength [THIS.ScriptValue('sr_fl_7_strength')|1] of [THIS.ScriptValue('sr_fl_7_strength_full')|1] drive [THIS.ScriptValue('sr_fl_7_drive_value')|0] propellant [THIS.ScriptValue('sr_fl_7_dv_value')|1] of [THIS.ScriptValue('sr_fl_7_dv_capacity')|1] supply [THIS.ScriptValue('sr_fl_7_supply_value')|1] marines [THIS.ScriptValue('sr_fl_7_marines_value')|0] posture [THIS.ScriptValue('sr_fl_7_posture_value')|0]"
 	}
 	if = {
 		limit = { sr_fl_8_exists = yes }
-		debug_log = "TE_SR_FLEET slot 8: location [THIS.MakeScope.ScriptValue('sr_fl_8_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_8_dest').GetValue|0], landing at month [THIS.Var('sr_fl_8_arrive').GetValue|0]) strength [THIS.MakeScope.ScriptValue('sr_fl_8_strength')|1] of [THIS.MakeScope.ScriptValue('sr_fl_8_strength_full')|1] drive [THIS.MakeScope.ScriptValue('sr_fl_8_drive_value')|0] propellant [THIS.MakeScope.ScriptValue('sr_fl_8_dv_value')|1] of [THIS.MakeScope.ScriptValue('sr_fl_8_dv_capacity')|1] supply [THIS.MakeScope.ScriptValue('sr_fl_8_supply_value')|1] marines [THIS.MakeScope.ScriptValue('sr_fl_8_marines_value')|0] posture [THIS.MakeScope.ScriptValue('sr_fl_8_posture_value')|0]"
+		debug_log = "TE_SR_FLEET slot 8: location [THIS.ScriptValue('sr_fl_8_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_8_dest').GetValue|0], landing at month [THIS.Var('sr_fl_8_arrive').GetValue|0]) strength [THIS.ScriptValue('sr_fl_8_strength')|1] of [THIS.ScriptValue('sr_fl_8_strength_full')|1] drive [THIS.ScriptValue('sr_fl_8_drive_value')|0] propellant [THIS.ScriptValue('sr_fl_8_dv_value')|1] of [THIS.ScriptValue('sr_fl_8_dv_capacity')|1] supply [THIS.ScriptValue('sr_fl_8_supply_value')|1] marines [THIS.ScriptValue('sr_fl_8_marines_value')|0] posture [THIS.ScriptValue('sr_fl_8_posture_value')|0]"
 	}
 	if = {
 		limit = { sr_fl_9_exists = yes }
-		debug_log = "TE_SR_FLEET slot 9: location [THIS.MakeScope.ScriptValue('sr_fl_9_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_9_dest').GetValue|0], landing at month [THIS.Var('sr_fl_9_arrive').GetValue|0]) strength [THIS.MakeScope.ScriptValue('sr_fl_9_strength')|1] of [THIS.MakeScope.ScriptValue('sr_fl_9_strength_full')|1] drive [THIS.MakeScope.ScriptValue('sr_fl_9_drive_value')|0] propellant [THIS.MakeScope.ScriptValue('sr_fl_9_dv_value')|1] of [THIS.MakeScope.ScriptValue('sr_fl_9_dv_capacity')|1] supply [THIS.MakeScope.ScriptValue('sr_fl_9_supply_value')|1] marines [THIS.MakeScope.ScriptValue('sr_fl_9_marines_value')|0] posture [THIS.MakeScope.ScriptValue('sr_fl_9_posture_value')|0]"
+		debug_log = "TE_SR_FLEET slot 9: location [THIS.ScriptValue('sr_fl_9_loc_value')|0] (0 in transit, bound for [THIS.Var('sr_fl_9_dest').GetValue|0], landing at month [THIS.Var('sr_fl_9_arrive').GetValue|0]) strength [THIS.ScriptValue('sr_fl_9_strength')|1] of [THIS.ScriptValue('sr_fl_9_strength_full')|1] drive [THIS.ScriptValue('sr_fl_9_drive_value')|0] propellant [THIS.ScriptValue('sr_fl_9_dv_value')|1] of [THIS.ScriptValue('sr_fl_9_dv_capacity')|1] supply [THIS.ScriptValue('sr_fl_9_supply_value')|1] marines [THIS.ScriptValue('sr_fl_9_marines_value')|0] posture [THIS.ScriptValue('sr_fl_9_posture_value')|0]"
 	}
 }
 sr_loc_debug_log = {

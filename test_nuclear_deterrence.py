@@ -638,8 +638,13 @@ class TestReviewFixesPhase1(unittest.TestCase):
         self.assertIn("var:nd_survivors_crisis >= 3", option_body(self.cev, "nuclear_crisis.1.c"))
         self.assertIn("var:nd_survivors_vs_attacker < 3", option_body(self.cev, "nuclear_crisis.20.c"))
         self.assertIn("nd_guarantor_store_survivors = yes", block(self.cev, "nuclear_crisis.20"))
-        self.assertIn("name = nd_survivors_vs_attacker value = nd_survivors_vs_saved",
-                      block(self.crisis, "nd_guarantor_store_survivors"))
+        store = block(self.crisis, "nd_guarantor_store_survivors")
+        self.assertIn("name = nd_survivors_vs_attacker value = nd_survivors_vs_saved", store)
+        # Saved permanently (it replaces a strike's victim saved under the
+        # name), then cleared, so .20's option previews can save their own
+        # temporary nd_sv_enemy (2026-10-31: blocked twice a frame).
+        self.assertIn("save_scope_as = nd_sv_enemy", store)
+        self.assertGreater(store.index("clear_saved_scope = nd_sv_enemy"), store.index("nd_survivors_vs_saved"))
         warning = block(self.effects, "nd_start_unconfirmed_warning")
         self.assertIn("name = nd_survivors_vs_suspect value = nd_survivors_vs_saved", warning)
         self.assertLess(warning.index("nd_survivors_vs_suspect"), warning.index("id = nuclear_incident.1 "))

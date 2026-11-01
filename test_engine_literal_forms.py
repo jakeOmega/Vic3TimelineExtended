@@ -14,6 +14,11 @@ misbehaved quietly at run time:
 - `initiator =` inside `create_diplomatic_play`. effects.log lists the field,
   but the parser rejects it ("Unexpected token: initiator") and the play is
   never created. The current scope is the initiator, as in every vanilla call.
+- `.MakeScope` on THIS, SCOPE, ROOT or PREV inside a `debug_log` string. The
+  line is dropped whole when it runs (`Could not find promote for 'MakeScope'`,
+  then `Data error in loc string`), so a self-check's verdict never reaches
+  the log: Space Command's ship_construction check was lost this way on
+  2026-10-31. `[THIS.ScriptValue('x')|N]` is the working form.
 
 docs/guides/scripting_best_practices.md has the background for each.
 """
@@ -33,6 +38,7 @@ _STRING_OR_COMMENT = re.compile(r'("[^"\n]*")|#[^\n]*')
 _TOKEN = re.compile(r'"[^"\n]*"|[{}]|>=|<=|\?=|!=|[=<>]|[^\s{}=<>!?"]+')
 _LONG_DECIMAL = re.compile(r"-?\d+\.\d{6,}")
 _NUMBER = re.compile(r"-?\d+(\.\d+)?")
+_SCOPE_MAKESCOPE = re.compile(r"\[(?:THIS|SCOPE|ROOT|PREV)\.MakeScope\.")
 
 
 def script_files():
@@ -112,6 +118,14 @@ class TestEngineLiteralForms(unittest.TestCase):
                if key == "initiator"]
         self.assertEqual(bad, [], "run create_diplomatic_play in the initiator's scope with target_country")
 
+    def test_debug_log_strings_skip_makescope_on_a_scope(self):
+        bad = [f"{rel}:{toks[i][1]}"
+               for rel, toks in self.files.items()
+               for i in range(len(toks) - 2)
+               if toks[i][0] == "debug_log" and toks[i + 1][0] == "="
+               and _SCOPE_MAKESCOPE.search(toks[i + 2][0])]
+        self.assertEqual(bad, [], "debug_log can't render .MakeScope on a scope: write [THIS.ScriptValue('x')|N]")
+
     def test_the_checks_see_the_forms_they_reject(self):
         with tempfile.TemporaryDirectory() as tmp:
             sample = Path(tmp) / "sample.txt"
@@ -129,6 +143,10 @@ class TestEngineLiteralForms(unittest.TestCase):
         self.assertEqual(adds, [("add", "sv"), ("add", "2"), ("factor", "0.5")])
         keys = [k for _, body in blocks(toks, "create_diplomatic_play") for k, _, _ in top_level(body)]
         self.assertEqual(keys, ["type", "initiator", "add_war_goal"])
+        logs = [t for t in ('"r=[THIS.MakeScope.ScriptValue(\'x\')|2]"', '"r=[THIS.ScriptValue(\'x\')|2]"',
+                            '"c=[THIS.GetCountry.MakeScope.ScriptValue(\'x\')|0]"', '"s=[SCOPE.MakeScope.Var(\'x\')]"')
+                if _SCOPE_MAKESCOPE.search(t)]
+        self.assertEqual(len(logs), 2, logs)
 
 
 if __name__ == "__main__":
