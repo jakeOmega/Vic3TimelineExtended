@@ -1061,8 +1061,8 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 
 | Order | What it does |
 |---|---|
-| The destination button | Steps through the other locations; its hover gives the trip's months and propellant |
-| Go | Sends the fleet. It can't leave when the trip departs in a later month (a chemical or fusion fleet leaving Earth follows the launch windows), when its propellant doesn't cover the trip, or from Earth while Earth is blockaded or your launch site occupied |
+| The destination button | Opens Fleet Destination, a row for each other location: the trip's months and propellant (in red when the fleet carries too little), from Earth its launch window, your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
+| Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
 | Merge | Joins another of your fleets at the same location |
 | Detach | Splits half of each role into a new fleet |
 | Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
@@ -1089,7 +1089,9 @@ with the months until it arrives.
 ### Battles in space
 
 Each month, fleets of countries at war fight at every location where they meet.
-What a fleet fights depends on its posture, set by the posture button:
+What a fleet fights depends on its posture, set by the four posture buttons under its
+orders. The one in force is lit, and one the fleet can't take is grayed, its
+hover saying why:
 
 | Posture | Fights | Use it to |
 |---|---|---|
@@ -1098,13 +1100,20 @@ What a fleet fights depends on its posture, set by the posture button:
 | Close in | The target site's Defenses and the enemy fleets stationed there | Seize or destroy a colony |
 | Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its site | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
 
+The target button beside them opens Fleet Target: the sites where the fleet is,
+with their holders, and Target on each, grayed with the reason where the fleet's
+posture can't take that site. Closing in on a site needs it to be an enemy's, a
+free colony or yours under an enemy's occupation; interdicting, a country's at
+peace with you that is not your ally. Choosing Close in or Interdict without such
+a target takes the first site there that fits.
+
 At Earth every fleet is stationed and fights every enemy fleet, an Orbital
 Battlestation fights for its owner (25 strength a level, regaining 10% a month;
 none in a state its owner doesn't control), and so do its ground-to-orbit
 batteries (see [Holding Earth orbit](#holding-earth-orbit)). The one exception
-is a fleet closing in on a colony on the Moon: the posture button at Earth
-steps between Station and Close in while there is a lunar colony you can close
-in on (an enemy's, a free one, or yours under an enemy's occupation). A fleet
+is a fleet closing in on a colony on the Moon: at Earth the posture buttons show
+while there is a lunar colony you can close in on (an enemy's, a free one, or
+yours under an enemy's occupation), and only Station and Close in can be chosen. A fleet
 closing in there takes fire from every enemy fleet, battlestation and battery at
 Earth, and no longer guards your own lunar colonies, which can't be seized or
 destroyed while a fleet of yours or your Orbital Battlestation is stationed at
@@ -1151,7 +1160,7 @@ You can blockade a rival's colonies without going to war, as the United States
 quarantined Cuba in 1962. Send a fleet to a location other than Earth where a
 country at peace with you, and not your ally (no alliance or defensive pact),
 holds a colony, and
-step its posture to Interdict; the target button picks which country's site.
+set its posture to Interdict; the target button picks which country's site.
 While none of that country's fleets is stationed or standing off there, its
 colonies at that location are blockaded as an enemy's would be, and its
 Locations row reads Interdicted. Nobody fires. If its fleet holds orbit there,

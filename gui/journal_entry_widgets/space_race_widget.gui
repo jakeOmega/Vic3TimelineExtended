@@ -4752,6 +4752,52 @@ types space_race_widget_types
 		}
 	}
 
+	### One posture button on a fleet's row (UI pass design § 7), in the
+	### approach selector's size for the row (104 × 22, four to the line): the
+	### button while its posture isn't the fleet's, greyed with the reason where
+	### the fleet can't take it; the posture in force in vanilla's selected-tab
+	### look (the Strategic Reserve's policy choice), not a greyed button that
+	### reads as unavailable, with its own hover (pc_held_tooltip: what the
+	### posture does), as the Strategic Reserve's choice has.
+	type te_sr_posture_choice = widget {
+		size = { 104 22 }
+		parentanchor = vcenter
+
+		button = {
+			using = default_button_action
+			size = { 100% 100% }
+			block "pc_shown" {}
+			block "pc_action" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 100
+				elide = right
+				using = te_sr_fontsize_row
+				block "pc_label" {}
+			}
+		}
+		icon = {
+			using = selected_tabs
+			size = { 100% 100% }
+			block "pc_selected" {}
+			block "pc_held_tooltip" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 100
+				elide = right
+				using = te_sr_fontsize_row
+				default_format = "#variable"
+				block "pc_label" {}
+			}
+		}
+	}
+
 	### The column heads above the Fleets rows, the widths of te_sr_fleet_row's
 	### first line.
 	type te_sr_fleet_header_row = flowcontainer {
@@ -4813,13 +4859,15 @@ types space_race_widget_types
 	### strength now / full (the roles on hover), its drive (or its refit's
 	### months), its propellant in km/s (its capacity on the strength hover), its
 	### months of supply and its marines; then, at a location, its orders: the destination button
-	### (it steps through the other eight; the leg on hover), Go, Merge, Detach,
-	### Land, Embark; and from 6b its posture, its target world and Seize /
+	### (it opens the destination popup; the leg on hover), Go, Merge, Detach,
+	### Land, Embark; and from 6b its posture's four buttons (UI pass design
+	### § 7), then its target world (it opens the target popup) and Seize /
 	### Destroy. In transit, its landing instead. 90 + 92 + 96 + 48 + 58 + 66 +
-	### 5 × 4 + 2 × 4 = 478; the orders 108 + 5 × 60 + 5 × 4 = 428; posture,
-	### target and Seize 104 + 190 + 80 + 2 × 4 = 382. Instances in
-	### te_sr_fleet_rows (sr_fleets_generated_rows.gui), one per slot; the
-	### scripted GUIs are sr_fleet_sguis.txt's, scope:op the slot.
+	### 5 × 4 + 2 × 4 = 478; the orders 108 + 5 × 60 + 5 × 4 + 2 × 4 = 436; the
+	### posture 4 × 104 + 3 × 4 + 2 × 4 = 436; target and Seize 190 + 80 + 4 +
+	### 2 × 4 = 282. Instances in te_sr_fleet_rows (sr_fleets_generated_rows.gui),
+	### one per slot; the scripted GUIs are sr_fleet_sguis.txt's, scope:op the
+	### slot (and scope:pick the posture).
 	type te_sr_fleet_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -5033,81 +5081,785 @@ types space_race_widget_types
 		}
 		### Posture and target (6b), at a location other than Earth; at Earth only
 		### while a lunar world there may be closed in on (lunar colonization § 8.1).
+		### The posture's four buttons on a line of their own (UI pass design § 7),
+		### the one in force lit; then the target, which opens the target popup, and
+		### Seize / Destroy.
 		flowcontainer = {
-			direction = horizontal
+			direction = vertical
 			ignoreinvisible = yes
-			spacing = 4
-			margin = { 4 1 }
+			spacing = 2
 			block "fl_combat_visible" {}
 
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+				margin = { 4 1 }
+
+				te_sr_posture_choice = {
+					blockoverride "pc_label" {
+						text = "je_space_race_widget_fl_posture_1"
+					}
+					blockoverride "pc_shown" {
+						block "fl_posture_1_choice" {}
+					}
+					blockoverride "pc_selected" {
+						block "fl_posture_1_selected" {}
+					}
+					blockoverride "pc_held_tooltip" {
+						tooltip = "je_space_race_widget_fl_posture_1_held_tt"
+					}
+					blockoverride "pc_action" {
+						block "fl_posture_1_button" {}
+					}
+				}
+				te_sr_posture_choice = {
+					blockoverride "pc_label" {
+						text = "je_space_race_widget_fl_posture_2"
+					}
+					blockoverride "pc_shown" {
+						block "fl_posture_2_choice" {}
+					}
+					blockoverride "pc_selected" {
+						block "fl_posture_2_selected" {}
+					}
+					blockoverride "pc_held_tooltip" {
+						tooltip = "je_space_race_widget_fl_posture_2_held_tt"
+					}
+					blockoverride "pc_action" {
+						block "fl_posture_2_button" {}
+					}
+				}
+				te_sr_posture_choice = {
+					blockoverride "pc_label" {
+						text = "je_space_race_widget_fl_posture_3"
+					}
+					blockoverride "pc_shown" {
+						block "fl_posture_3_choice" {}
+					}
+					blockoverride "pc_selected" {
+						block "fl_posture_3_selected" {}
+					}
+					blockoverride "pc_held_tooltip" {
+						tooltip = "je_space_race_widget_fl_posture_3_held_tt"
+					}
+					blockoverride "pc_action" {
+						block "fl_posture_3_button" {}
+					}
+				}
+				te_sr_posture_choice = {
+					blockoverride "pc_label" {
+						text = "je_space_race_widget_fl_posture_4"
+					}
+					blockoverride "pc_shown" {
+						block "fl_posture_4_choice" {}
+					}
+					blockoverride "pc_selected" {
+						block "fl_posture_4_selected" {}
+					}
+					blockoverride "pc_held_tooltip" {
+						tooltip = "je_space_race_widget_fl_posture_4_held_tt"
+					}
+					blockoverride "pc_action" {
+						block "fl_posture_4_button" {}
+					}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+				margin = { 4 1 }
+
+				button = {
+					using = default_button_action
+					size = { 190 22 }
+					parentanchor = vcenter
+					block "fl_target_button" {}
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 184
+						elide = right
+						using = te_sr_fontsize_row
+						block "fl_target" {}
+					}
+				}
+				button = {
+					using = default_button_action
+					size = { 80 22 }
+					parentanchor = vcenter
+					block "fl_destroy_button" {}
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 76
+						elide = right
+						using = te_sr_fontsize_row
+						text = "je_space_race_widget_fl_seize"
+						block "fl_destroy_off_visible" {}
+					}
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 76
+						elide = right
+						using = te_sr_fontsize_row
+						text = "je_space_race_widget_fl_destroy"
+						block "fl_destroy_on_visible" {}
+					}
+				}
+			}
+		}
+	}
+
+	### ======================================================================
+	### THE DESTINATION POPUP (UI pass design § 4)
+	### ======================================================================
+
+	### A fleet's destination popup, opened by the destination button on its
+	### row in Space Fleets (te_popup sr_dest_<n>); instanced in te_popups
+	### (gui/te_popups.gui). The bodies are te_sr_dest_popup_body's, one a slot
+	### (sr_fleets_generated_rows.gui, gen_space_fleets.py), under the entry's
+	### scope-free gate and its GetPlayerJournalEntry datacontext on a child
+	### (gotchas #22, #29); with the entry gone, one line says so.
+	type te_sr_dest_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[Or( Or( Or( GetVariableSystem.HasValue('te_popup', 'sr_dest_1'), GetVariableSystem.HasValue('te_popup', 'sr_dest_2') ), Or( GetVariableSystem.HasValue('te_popup', 'sr_dest_3'), GetVariableSystem.HasValue('te_popup', 'sr_dest_4') ) ), Or( Or( GetVariableSystem.HasValue('te_popup', 'sr_dest_5'), GetVariableSystem.HasValue('te_popup', 'sr_dest_6') ), Or( GetVariableSystem.HasValue('te_popup', 'sr_dest_7'), Or( GetVariableSystem.HasValue('te_popup', 'sr_dest_8'), GetVariableSystem.HasValue('te_popup', 'sr_dest_9') ) ) ) )]"
+		}
+		blockoverride "popup_title" {
+			text = "je_space_race_widget_dp_title"
+		}
+		### The rows' 656, plus the window's margins (2 × 35), the list's
+		### (2 × 10) and a scrollbar: 784.
+		blockoverride "popup_size" {
+			size = { 784 600 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
+					direction = vertical
+					ignoreinvisible = yes
+
+					te_sr_dest_popup_body = {}
+				}
+			}
+			te_sr_note = {
+				visible = "[Not( GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "je_space_race_widget_tp_gone"
+			}
+		}
+	}
+
+	### One slot's body in the destination popup (instances in
+	### te_sr_dest_popup_body). While the fleet is at a location: the fleet
+	### (te_sr_fleet_row's Where, Strength, km/s and Supply, its ships on the
+	### strength's hover), a note while it can't leave this month whatever the
+	### leg (sr_disp_fl_<n>_why: no Space Command of ours, refitting, below the
+	### minimum strength, Earth's launches barred), and a row per other
+	### location. Otherwise one line, so
+	### nothing acts on a slot that has left or is gone.
+	type te_sr_dest_slot = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		minimumsize = { 656 -1 }
+		spacing = 2
+		block "dp_visible" {}
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			block "dp_here_visible" {}
+
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+				margin = { 4 1 }
+
+				textbox = {
+					size = { 90 20 }
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fl_col_where"
+				}
+				textbox = {
+					size = { 92 20 }
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fl_col_strength"
+				}
+				textbox = {
+					size = { 60 20 }
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fl_col_dv"
+					tooltip = "je_space_race_widget_fl_dv_tt"
+				}
+				textbox = {
+					size = { 58 20 }
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fl_col_supply"
+					tooltip = "je_space_race_widget_fl_supply_tt"
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+				margin = { 4 1 }
+
+				widget = {
+					size = { 90 24 }
+					parentanchor = vcenter
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 90
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "dp_where" {}
+					}
+				}
+				widget = {
+					size = { 92 24 }
+					parentanchor = vcenter
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 92
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "dp_strength" {}
+					}
+				}
+				widget = {
+					size = { 60 24 }
+					parentanchor = vcenter
+					tooltip = "je_space_race_widget_fl_dv_tt"
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 60
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "dp_dv" {}
+					}
+				}
+				widget = {
+					size = { 58 24 }
+					parentanchor = vcenter
+					tooltip = "je_space_race_widget_fl_supply_tt"
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 58
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "dp_supply" {}
+					}
+				}
+			}
+
+			### Why it can't leave this month, whatever the leg; Go waits, the
+			### choice doesn't.
+			te_sr_note = {
+				text = "je_space_race_widget_dp_why_refit"
+				block "dp_why_1_visible" {}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_dp_why_weak"
+				block "dp_why_2_visible" {}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_dp_why_barred"
+				block "dp_why_3_visible" {}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_dp_why_no_sc"
+				block "dp_why_4_visible" {}
+			}
+
+			te_sr_dest_header_row = {}
+			block "dp_rows" {}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_dp_gone"
+			block "dp_gone_visible" {}
+		}
+	}
+
+	### The column heads above the destination rows, te_sr_dest_row's widths.
+	type te_sr_dest_header_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		textbox = {
+			size = { 146 20 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_dp_col_where"
+		}
+		textbox = {
+			size = { 60 20 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_dp_col_months"
+			tooltip = "je_space_race_widget_dp_col_months_tt"
+		}
+		textbox = {
+			size = { 60 20 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_dp_col_dv"
+			tooltip = "je_space_race_widget_dp_col_dv_tt"
+		}
+		textbox = {
+			size = { 116 20 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_dp_col_window"
+			tooltip = "je_space_race_widget_dp_col_window_tt"
+		}
+		textbox = {
+			size = { 44 20 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_dp_col_ours"
+			tooltip = "je_space_race_widget_dp_col_ours_tt"
+		}
+		textbox = {
+			size = { 56 20 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_dp_col_enemy"
+			tooltip = "je_space_race_widget_dp_col_enemy_tt"
+		}
+		textbox = {
+			size = { 66 20 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_dp_col_inbound"
+			tooltip = "je_space_race_widget_dp_col_inbound_tt"
+		}
+	}
+
+	### One location in a fleet's destination popup: its name, the leg's months
+	### and delta-v at the fleet's pace (red when the fleet carries less), from
+	### Earth the launch window toward it (Next Windows' "Open now" and "In N
+	### months"; blank for other legs: a closed window only raises the delta-v,
+	### UI pass design § 4), our worlds there, the strength there and on its way
+	### of countries at war with us, and Choose, greyed with the reason where
+	### the fleet can't choose; the destination already chosen reads Chosen in
+	### vanilla's selected-tab look (the Strategic Reserve's policy choice).
+	### Picking closes the popup; Go on the fleet's row sends it. 146 + 60 + 60 +
+	### 116 + 44 + 56 + 66 + 72 + 7 × 4 + 2 × 4 = 656.
+	type te_sr_dest_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "dr_visible" {}
+
+		widget = {
+			size = { 146 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 146
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "dr_name" {}
+			}
+		}
+		widget = {
+			size = { 60 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 60
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "dr_months" {}
+			}
+		}
+		widget = {
+			size = { 60 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 60
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "dr_dv_covered" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 60
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				tooltip = "je_space_race_widget_dp_dv_short_tt"
+				block "dr_dv_short" {}
+			}
+		}
+		widget = {
+			size = { 116 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 116
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				text = "je_space_race_widget_win_open"
+				block "dr_win_open_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 116
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "dr_win_wait" {}
+			}
+		}
+		widget = {
+			size = { 44 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 44
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "dr_worlds" {}
+			}
+		}
+		widget = {
+			size = { 56 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 56
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "dr_enemy" {}
+			}
+		}
+		widget = {
+			size = { 66 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 66
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "dr_inbound" {}
+			}
+		}
+		widget = {
+			size = { 72 24 }
+			parentanchor = vcenter
+
 			button = {
 				using = default_button_action
-				size = { 104 22 }
-				parentanchor = vcenter
-				block "fl_posture_button" {}
+				size = { 100% 100% }
+				block "dr_choose_visible" {}
+				block "dr_button" {}
 
 				textbox = {
 					parentanchor = center
 					align = center|nobaseline
 					autoresize = yes
-					max_width = 100
+					max_width = 68
 					elide = right
 					using = te_sr_fontsize_row
-					text = "je_space_race_widget_fl_posture_1"
-					block "fl_posture_1_visible" {}
-				}
-				textbox = {
-					parentanchor = center
-					align = center|nobaseline
-					autoresize = yes
-					max_width = 100
-					elide = right
-					using = te_sr_fontsize_row
-					text = "je_space_race_widget_fl_posture_2"
-					block "fl_posture_2_visible" {}
-				}
-				textbox = {
-					parentanchor = center
-					align = center|nobaseline
-					autoresize = yes
-					max_width = 100
-					elide = right
-					using = te_sr_fontsize_row
-					text = "je_space_race_widget_fl_posture_3"
-					block "fl_posture_3_visible" {}
-				}
-				textbox = {
-					parentanchor = center
-					align = center|nobaseline
-					autoresize = yes
-					max_width = 100
-					elide = right
-					using = te_sr_fontsize_row
-					text = "je_space_race_widget_fl_posture_4"
-					block "fl_posture_4_visible" {}
+					text = "je_space_race_widget_dp_choose"
 				}
 			}
-			button = {
-				using = default_button_action
-				size = { 190 22 }
-				parentanchor = vcenter
-				block "fl_target_button" {}
+			icon = {
+				using = selected_tabs
+				size = { 100% 100% }
+				tooltip = "je_space_race_widget_dp_chosen_tt"
+				block "dr_chosen_visible" {}
 
 				textbox = {
 					parentanchor = center
 					align = center|nobaseline
 					autoresize = yes
-					max_width = 184
+					max_width = 68
 					elide = right
 					using = te_sr_fontsize_row
-					block "fl_target" {}
+					default_format = "#variable"
+					text = "je_space_race_widget_dp_chosen"
 				}
 			}
+		}
+	}
+
+	### ======================================================================
+	### THE TARGET POPUP (UI pass design § 7)
+	### ======================================================================
+
+	### A fleet's target popup, opened by the target button on its row in Space
+	### Fleets (te_popup sr_ftarget_<n>); instanced in te_popups. The bodies are
+	### te_sr_ftarget_popup_body's, one a slot (sr_fleets_generated_rows.gui),
+	### under the entry's scope-free gate and its GetPlayerJournalEntry
+	### datacontext, as the destination popup's.
+	type te_sr_ftarget_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[Or( Or( Or( GetVariableSystem.HasValue('te_popup', 'sr_ftarget_1'), GetVariableSystem.HasValue('te_popup', 'sr_ftarget_2') ), Or( GetVariableSystem.HasValue('te_popup', 'sr_ftarget_3'), GetVariableSystem.HasValue('te_popup', 'sr_ftarget_4') ) ), Or( Or( GetVariableSystem.HasValue('te_popup', 'sr_ftarget_5'), GetVariableSystem.HasValue('te_popup', 'sr_ftarget_6') ), Or( GetVariableSystem.HasValue('te_popup', 'sr_ftarget_7'), Or( GetVariableSystem.HasValue('te_popup', 'sr_ftarget_8'), GetVariableSystem.HasValue('te_popup', 'sr_ftarget_9') ) ) ) )]"
+		}
+		blockoverride "popup_title" {
+			text = "je_space_race_widget_ft_title"
+		}
+		### The note's 480, plus the window's margins (2 × 35), the list's
+		### (2 × 10) and a scrollbar: 608.
+		blockoverride "popup_size" {
+			size = { 608 480 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
+					direction = vertical
+					ignoreinvisible = yes
+
+					te_sr_ftarget_popup_body = {}
+				}
+			}
+			te_sr_note = {
+				visible = "[Not( GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "je_space_race_widget_tp_gone"
+			}
+		}
+	}
+
+	### One slot's body in the target popup (instances in
+	### te_sr_ftarget_popup_body): while the fleet is at a location, what a target
+	### is for, then the worlds there; otherwise the destination popup's line.
+	type te_sr_ftarget_slot = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		minimumsize = { 480 -1 }
+		spacing = 2
+		block "ft_visible" {}
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			block "ft_here_visible" {}
+
+			te_sr_note = {
+				text = "je_space_race_widget_ft_intro"
+			}
+			block "ft_rows" {}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_dp_gone"
+			block "ft_gone_visible" {}
+		}
+	}
+
+	### One world in a fleet's target popup: its icon and name (Solar System's
+	### hover), its holder as Solar System shows it, and Target, greyed with the
+	### reason where the fleet's posture can't take it (closing in, a world held
+	### by a country at war with us, a free colony or ours an enemy occupies;
+	### interdicting, one held by a country at peace with us and not our ally);
+	### the fleet's target reads Targeted, in the selected-tab look. Choosing
+	### closes the popup. 24 + 180 + 122 + 80 + 3 × 3 + 2 × 4 = 423.
+	type te_sr_ftarget_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 3
+		margin = { 4 1 }
+		block "fr_visible" {}
+
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 24 24 }
+				parentanchor = center
+				block "fr_icon" {}
+			}
+		}
+		widget = {
+			size = { 180 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "fr_name" {}
+			}
+		}
+		widget = {
+			size = { 122 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 122
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#v"
+				text = "je_space_race_widget_ss_ours"
+				block "fr_ours_visible" {}
+			}
+			flowcontainer = {
+				parentanchor = left|vcenter
+				ignoreinvisible = yes
+				block "fr_other_visible" {}
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					ignoreinvisible = yes
+					block "fr_context" {}
+
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[State.GetCountry]"
+						}
+					}
+				}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 122
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				text = "je_space_race_widget_ss_unknown"
+				block "fr_unknown_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 122
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#grey"
+				text = "je_space_race_widget_ss_unclaimed"
+				block "fr_unclaimed_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 122
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				tooltip = "je_space_race_widget_ss_free_tt"
+				text = "je_space_race_widget_ss_free"
+				block "fr_free_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 122
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				tooltip = "je_space_race_widget_ss_occupied_tt"
+				text = "je_space_race_widget_ss_occupied"
+				block "fr_occupied_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 122
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				tooltip = "je_space_race_widget_ss_ruined_tt"
+				text = "je_space_race_widget_ss_ruined"
+				block "fr_ruined_visible" {}
+			}
+		}
+		widget = {
+			size = { 80 24 }
+			parentanchor = vcenter
+
 			button = {
 				using = default_button_action
-				size = { 80 22 }
-				parentanchor = vcenter
-				block "fl_destroy_button" {}
+				size = { 100% 100% }
+				block "fr_target_visible" {}
+				block "fr_button" {}
 
 				textbox = {
 					parentanchor = center
@@ -5116,9 +5868,15 @@ types space_race_widget_types
 					max_width = 76
 					elide = right
 					using = te_sr_fontsize_row
-					text = "je_space_race_widget_fl_seize"
-					block "fl_destroy_off_visible" {}
+					text = "je_space_race_widget_ss_target_button"
 				}
+			}
+			icon = {
+				using = selected_tabs
+				size = { 100% 100% }
+				tooltip = "je_space_race_widget_ft_targeted_tt"
+				block "fr_targeted_visible" {}
+
 				textbox = {
 					parentanchor = center
 					align = center|nobaseline
@@ -5126,8 +5884,8 @@ types space_race_widget_types
 					max_width = 76
 					elide = right
 					using = te_sr_fontsize_row
-					text = "je_space_race_widget_fl_destroy"
-					block "fl_destroy_on_visible" {}
+					default_format = "#variable"
+					text = "je_space_race_widget_ft_targeted"
 				}
 			}
 		}
