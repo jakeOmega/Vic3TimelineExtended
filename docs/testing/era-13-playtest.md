@@ -153,3 +153,148 @@ shock.
    Record when the first AI deploys and whether a termination shock happens.
 10. **Civil war.** A revolution that wins in a deploying country keeps the
     policy (the row stays lit within a month) and its cost.
+
+## Phase 3: AI Tutors
+
+1. **The tree.** AI Tutors sits in era 11's society column, its arrow from
+   Digital Education (era 9), and borrows Digital Education's icon until its
+   own is painted. Its tooltip lists qualifications +10%, literacy growth,
+   education access +10 and the Ministry of Thought Control's maximum
+   investment +1.
+2. **The ministry's ceiling.** Human Augmentation now lists +2 for the
+   Ministry of Thought Control, not +3. Under the Ministry of Thought Control
+   law with Cyber Warfare, Brain-Computer Interfaces, Human Augmentation and AI
+   Tutors researched, the ministry's maximum investment reads 9. In an old
+   save, a country at level 9 without AI Tutors now has a ceiling of 8: record
+   whether the engine lowers its investment at once or holds it until it
+   changes (no repair grants AI Tutors for it).
+3. **Education access.** A state's education access rises by 10 points when
+   AI Tutors completes, and its breakdown names the technology.
+4. **Lessons Between the Lines** (`event society_technology_events.36` in a
+   country under Unregulated Internet with AI Tutors). It shows the
+   whistleblower picture. The first option gives Open Curricula, capitalist
+   radicals, and the Intelligentsia's and Industrialists' approval lines; the
+   second gives Contracted Curriculum and the reverse approvals.
+5. **The Ministry's Syllabus** (`event society_technology_events.37`). Its
+   description names the Ministry of Thought Control, the Ministry of
+   Propaganda, or the censors under State-Controlled Internet alone. The
+   second option radicalizes bureaucrats.
+6. **The loyalty line.** Contracted Curriculum and The State Syllabus show a
+   Monthly Loyalists line of 0.1%. The type sets no `decimals`, so confirm it
+   doesn't render as 0%. After either, an incorporated state's pops gain
+   loyalists each month, even in a country without a Ministry of Thought
+   Control (the state's Monthly Loyalists breakdown names the modifier), and
+   the line fades over ten years.
+7. **Once each.** Neither event comes back in the same country, whichever
+   option was taken.
+
+## Phase 3: Aneutronic Fusion
+
+1. **The tree.** Aneutronic Fusion sits in era 13's military column after
+   Compact Fusion Reactors, and Microfusion Cells' (formerly Fusion Batteries) arrow now comes from it, not
+   from Compact Fusion Reactors. It borrows Compact Fusion Reactors' icon
+   until its own is painted. Its tooltip names Aneutronic Fusion Power, Fusion
+   Torch Reclamation and the Interstellar Mission; Compact Fusion Reactors'
+   no longer names the Interstellar Mission.
+2. **Aneutronic Fusion Power.** A Fusion Plant offers it after Compact Fusion
+   Power, with a purple bolt as a borrowed icon. A level employs 950 (450
+   laborers, 300 machinists, 100 engineers, 100 academics) and makes 16,000
+   electricity before throughput. Its description shows in the tooltip.
+3. **The AI-managed option on it.** With Smart Grids, a Fusion Plant on
+   Aneutronic Fusion Power shows one AI Managed Power Plant option, and on it
+   the building employs only the 1,000-engineer crew, with no laborers,
+   machinists or academics left. Switching the base back to Compact Fusion
+   Power swaps it for the reactor option (one AI-managed option either way).
+   Centralized Control and Integrated Smart Systems leave 30 laborers and 20
+   machinists a level on the new base, never a negative count.
+4. **Fusion Torch Reclamation.** A Steel Mill offers it after Microgravity
+   Alloying: 50 iron and 600 electricity for 600 steel a level, 3,000 staff,
+   pollution 10. Bespoke Alloys can run beside it, and its carbon-capture group
+   shows only the not-applicable option.
+5. **The Interstellar Probe** in a new game: the Interstellar Mission method,
+   Begin the Interstellar Mission and the inactive Interstellar Probe entry
+   all wait for Aneutronic Fusion. A country with Compact Fusion Reactors and
+   the Deep-Space Probe and Mars Landing done sees none of them.
+6. **Old saves** (a save from before this change):
+   - A Microfusion Cells holder is given Aneutronic Fusion in the first month.
+   - A Compact Fusion Reactors holder whose Space Program runs the
+     Interstellar Mission is given it too, whether its probe is running,
+     finished or not yet started.
+   - A Compact Fusion Reactors holder on a lower mission gets nothing.
+   - One `TE_ERA13_TECH_REPAIR` line per grant.
+   - **A probe under way keeps its progress.** Its entry's `possible` now
+     names Aneutronic Fusion, so it may deactivate before the repair month and
+     re-activate on the grant. Record whether the bar comes back where it was,
+     or at 0 (the monthly milestone cleanup ran between them), and whether the
+     engine moved the Space Program off the Interstellar Mission at the load
+     (the entry would then fail with Program Discontinued). Either one means
+     the repair needs a day-one on-action.
+
+## Phase 3: Vactrains
+
+1. **The tree.** Vactrains sits in era 12's production column, after
+   Autonomous Vehicles (era 11) and Quantum Materials, and borrows Quantum
+   Materials' icon until its own is painted. Its tooltip names two Railway
+   methods, Vactrains and Vactrain Freight, and no modifiers.
+2. **Rolling Stock.** On a railway in a state with Electricity, Vactrains
+   follows Maglev Trains in the passenger group: 160 Transportation and +15
+   infrastructure a level, on steel, electronic components, tech metals and
+   electricity. In a state with no Electricity it can't be picked
+   (`required_input_goods`), and the AI's railways stay on Maglev Trains there.
+3. **Freight.** Vactrain Freight follows Autonomous Trains in the base group:
+   170 Transportation and 60 infrastructure a level, 10 engineers, on
+   electricity, electronic components, tech metals and digital assets. Its
+   tooltip shows no emissions or pollution line.
+4. **Maintenance.** A railway switched to Vactrain Freight settles on Heavy
+   Maintenance (0.15 construction a level); one switched from steam trains
+   straight to it steps up through Standard within a few days, as for
+   Containerized Cargo.
+5. **The AI.** Both groups are `most_productive`, so AI railways in electrified
+   states move to the two methods after the technology, each switch a
+   five-year retool. Watch that railways in states short of Electricity are
+   not pulled onto them and starved.
+6. **Retooling waiver.** A railway in a Transport principle tier 3 bloc that
+   switches from a diesel variant to Vactrain Freight pays the full
+   Retooling: the change is not read as the principle swap
+   (`te_state_railway_train_code` 13 to 8).
+
+## Phase 3: Von Neumann Machines
+
+1. **The tree.** Von Neumann Machines sits in era 13's production column with
+   arrows from Molecular Assemblers and Orbital Manufacturing. It borrows
+   Molecular Assemblers' icon until its own is painted. Its tooltip names
+   Self-Replicating Construction and Self-Replicating Miners and lists +100
+   maximum weekly construction progress.
+2. **Construction Sector (market game).** Self-Replicating Construction is the
+   last method of the base group, after Nanomaterial Buildings, and makes 24
+   construction a level before throughput (Nanomaterial Buildings: 16). It
+   borrows Nanorobots' icon. All four automation methods stay selectable on it
+   (Prefabricated Building Components, Tower Cranes, Computer-Aided Design, 3D
+   Printed Buildings), and none takes its employment below zero. The
+   construction principle's method applies to it. An AI sector moves up to it
+   once the technology arrives (the group is `most_productive`).
+3. **Construction Site (direct game).** The site lists eight tiers, the new one
+   hidden until researched, and gives 24 points a level on it. The construction
+   panel's Construction Capacity hover reads "from 1 a week for Wooden
+   Buildings to 24 for Self-Replicating Construction". An AI site on the new
+   tier that the AI downsizes comes back on the new tier at the next weekly
+   pulse (the guard's tier 8). In a market game the direct tier never shows.
+4. **Extraplanetary Base.** Self-Replicating Miners is the last base method,
+   after Resort Colony, with Intelligent Drilling Rigs' borrowed icon. Its
+   crew (400 engineers, 100 academics) fills at any level. With neither
+   logistics upgrade the method's tooltip shows 320 Launch Capacity a level;
+   Fusion Tugs and Tethered Launch each still cut it by 30%. The
+   `logistics_input_cut` self-check reads OK on a base running it, since the
+   method carries no launch multiplier of its own. An AI base on Mining Colony
+   switches to it (the group's default `most_profitable`).
+
+## Phase 3: Advanced Fission
+
+1. **The tree.** Advanced Fission sits in era 11's military tree after Nuclear
+   Energy, on Nuclear Energy's icon until its own is painted.
+2. **The method.** A Nuclear Plant offers Generation IV Reactors beside Nuclear
+   Power once Advanced Fission is researched. At the same staff it makes 3,500
+   electricity a level (Nuclear Power 2,000) and buys Advanced Materials. The
+   AI-managed reactor automation still shows for a plant on either method.
+3. **The AI switches.** An AI Nuclear Plant moves to Generation IV Reactors
+   within a year of the technology, where Advanced Materials are on its market.

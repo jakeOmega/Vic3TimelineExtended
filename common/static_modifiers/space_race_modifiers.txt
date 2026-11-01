@@ -356,23 +356,24 @@ sr_dome_breach_repairs = {
 # The fleets' upkeep: on each Space Command building, never the country (the
 # input multipliers are building-masked and would raise every building's use),
 # at sr_fleet_upkeep_units (full fleet strength in service / 10), its one
-# refresh site sr_fl_upkeep_refresh. +1% of the building's input goods a unit,
-# so a bigger fleet costs more and builds no faster. sr_fleet_upkeep_goods, the
-# three good-specific multipliers the mod registers, is the live one;
-# sr_fleet_upkeep, the generic building_goods_input_mult (one line for every
-# input, following the methods), waits on the upkeep_inputs probe
-# (te_debug_space_race.6): the owner recalls trouble with it, and nothing in
-# the repo says what. test_space_fleets.py keeps the goods list in step with
-# the methods' inputs.
+# refresh site sr_fl_upkeep_refresh. sr_fleet_upkeep_goods, the live one,
+# multiplies the six goods of the methods' identical unscaled maintenance line
+# (sr_space_command_pms.txt) by +900% a unit, so a bigger fleet costs more and
+# builds no faster, and the upkeep follows neither the method nor the levels
+# (Space Race UI pass design § 10, owner, 2026-10-31: ten times the old +1% of
+# every method input, the factor of ten in the line's base so the tooltip reads
+# +900% a unit). Six goods, so one shortage or glut can't make it very cheap or
+# very dear. With two Space Command buildings or more each carries it at its
+# share of the units (sr_fleet_upkeep_per_building). test_space_fleets.py keeps
+# the goods in step with the line.
 sr_fleet_upkeep_goods = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	goods_input_launch_capacity_mult = 0.01
-	goods_input_advanced_materials_mult = 0.01
-	goods_input_electricity_mult = 0.01
-}
-sr_fleet_upkeep = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_goods_input_mult = 0.01
+	goods_input_electronic_components_mult = 9
+	goods_input_telephones_mult = 9
+	goods_input_radios_mult = 9
+	goods_input_digital_assets_mult = 9
+	goods_input_robotics_mult = 9
+	goods_input_fertilizer_mult = 9
 }
 
 # Orbital fire support (fleets design § 15, 6d): at war, a country whose

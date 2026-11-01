@@ -50,8 +50,8 @@ class FlatCrewAttractivenessTest(unittest.TestCase):
         cls.methods = _flat_crew_methods()
 
     def test_the_flat_crew_methods_are_found(self):
-        # Fab, chemical, explosives, arms, artillery, munition x2, motor x2, tooling x2, power x3.
-        self.assertGreaterEqual(len(self.methods), 14, sorted(self.methods))
+        # Fab, chemical, explosives, arms, artillery, munition x2, motor x2, tooling x2, power x4.
+        self.assertGreaterEqual(len(self.methods), 15, sorted(self.methods))
 
     def test_every_flat_crew_is_a_very_attractive_job(self):
         for name, unscaled in sorted(self.methods.items()):

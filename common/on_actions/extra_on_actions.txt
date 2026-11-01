@@ -2818,6 +2818,30 @@ society_technology_events_on_action = {
 				trigger_event = { id = society_technology_events.31 }
 			}
 
+			# === AI TUTORS ===
+			# Who writes what the tutors teach (era 13 spec § 7.6). Each mirrors its
+			# event's trigger and fires once per country.
+			5 = {
+				trigger = {
+					has_technology_researched = ai_tutors
+					has_law = law_type:law_unregulated_internet
+					NOT = { has_variable = ste_event_36_fired }
+				}
+				trigger_event = { id = society_technology_events.36 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = ai_tutors
+					OR = {
+						has_law = law_type:law_state_controlled_internet
+						has_law = law_type:law_ministry_of_propaganda
+						has_law = law_type:law_ministry_of_thought_control
+					}
+					NOT = { has_variable = ste_event_37_fired }
+				}
+				trigger_event = { id = society_technology_events.37 }
+			}
+
 			# === RELIGIOUS REVIVAL EVENTS ===
 			# These events can significantly strengthen the Devout IG,
 			# counterbalancing its natural decline from modernization.

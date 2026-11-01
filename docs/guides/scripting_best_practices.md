@@ -4078,7 +4078,19 @@ end-game total. Examples found in this codebase:
 - `country_weekly_innovation_max_add` is the research-pool budget across the
   entire late-era tree; per-tech values are tuned together.
 - `country_institution_<X>_max_investment_add` totals reach a target max
-  (~9 institutions by end-game in combination with laws).
+  (~9 institutions by end-game in combination with laws). Sum a ministry's
+  law and technology lines against `MAX_INSTITUTION_INVESTMENT` (9,
+  `common/defines/extra_defines.txt`) before adding one: a level past it is
+  dead at full technology. The Ministry of Thought Control's sit at exactly 9
+  (its law 3, Cyber Warfare 1, Brain-Computer Interfaces 2, Human
+  Augmentation 2, AI Tutors 1), so AI Tutors' level was moved from Human
+  Augmentation, not added (era 13 spec § 7.6).
+- `state_market_access_price_impact` reaches 100% at full technology: the
+  base 0.75 (vanilla's `base_values` static modifier), vanilla's Stock Exchange,
+  Zeppelins and Macroeconomics +0.20, and five mod transport technologies
+  (Containerization, E-Commerce, Globalization, Autonomous Vehicles, Microfusion
+  Cells) +0.01 each. A new transport technology that adds the usual
+  +0.01 takes it past 100%; Vactrains (era 13 spec § 7.9) carries none.
 
 Before adding a modifier to a new tech, **grep the entire tech tree** for
 that modifier name. If multiple techs already use it, the total may be

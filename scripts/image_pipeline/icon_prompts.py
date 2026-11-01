@@ -764,13 +764,16 @@ ICONS: dict[str, dict[str, dict]] = {
         "lab-grown_food": {"subject": "a round petri dish holding a pink cultured meat steak", "seed": 0},
         "personalized_medicine": {"subject": "a single capsule pill with a DNA helix pattern on its shell", "seed": 1},
         "universal_digital_identity": {"subject": "a plain pale blue identity card with a glowing blue fingerprint and a gold chip", "seed": 1},
+        "advanced_fission": {"subject": "a squat steel reactor vessel with glowing orange molten salt visible through a round porthole", "seed": None},
         "ai_agents": {"subject": "a small glowing blue robot hand moving a cursor across a stack of paper forms and ticking boxes", "seed": None},
         "self_driving_laboratories": {"subject": "a white robotic arm pipetting into a rack of glowing test tubes on a lab bench", "seed": None},
         "humanoid_robotics": {"subject": "a friendly white humanoid robot carrying a cardboard box in both arms", "seed": None},
         "autonomous_weapons": {"subject": "a dark grey four-legged robot with a sensor turret and a red targeting light", "seed": None},
+        "ai_tutors": {"subject": "a small friendly white robot with a glowing blue screen for a face, pointing at a child's blank chalk slate", "seed": None},
         # eras 12 and 13 (era 13 split from era 12, 2026-10-31)
         "antimatter_production": {"subject": "a glowing magnetic containment bottle with a bright violet sphere suspended inside", "seed": 1},
         "compact_fusion_reactors": {"subject": "a compact barrel-sized cylindrical fusion reactor core glowing blue-white at its centre", "seed": 1},
+        "aneutronic_fusion": {"subject": "a glowing violet plasma ring inside a slim metal torus, with copper current leads drawing a bright spark straight off it", "seed": None},
         "fusion_batteries": {"subject": "a chunky cylindrical battery cell with a glowing sun-like core behind a glass window", "seed": 3},
         "orbital_weapon_platforms": {"subject": "a large armed space station with a long cannon barrel and solar panel wings", "seed": 1},
         "space_based_solar_power": {"subject": "a vast orbiting solar panel array sending a thin red energy beam downward", "seed": 0},
@@ -780,6 +783,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "molecular_assemblers": {"subject": "a cluster of coloured atom spheres being snapped together by tiny robotic arms", "seed": 0},
         "orbital_manufacturing": {"subject": "a space station module with a robotic arm assembling a glowing crystal", "seed": 1},
         "programmable_matter": {"subject": "a shimmering silver liquid-metal blob reshaping itself into a cube and a sphere", "seed": 1},
+        "von_neumann_machines": {"subject": "a small boxy silver robot factory on a grey asteroid assembling a smaller copy of itself with its own robotic arms", "seed": None},
         "quantum_materials": {"subject": "a glowing iridescent crystal block levitating above a superconducting disc", "seed": 1},
         "biological_immortality": {"subject": "a glass hourglass with a green sprouting sprig growing inside it", "seed": 1},
         "mind_backups": {"subject": "a glowing crystal data cube with the faint shape of a brain inside", "seed": 1},
@@ -789,6 +793,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
         "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
         "geoengineering": {"subject": "a white high-altitude jet trailing a pale haze across a deep blue sky, the sun dimmed behind it", "seed": None},
+
+        "vactrains": {"subject": "a sleek white bullet-nosed capsule train speeding through a long transparent glass tube raised on slim pylons", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
     "treaty_article": {

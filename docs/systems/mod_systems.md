@@ -24,7 +24,7 @@ Reference for the gameplay systems the mod adds, one file per system in [`mod_sy
 
 | System | Covers | `##` sections |
 |---|---|---|
-| [Production Methods](mod_systems/production_methods.md) | PM group icons, drugs and pharmaceuticals, barracks training, deep-sea and extraplanetary logistics | Production Methods (PMs) |
+| [Production Methods](mod_systems/production_methods.md) | PM group icons, drugs and pharmaceuticals, barracks training, deep-sea and extraplanetary logistics, Aneutronic Fusion's methods | Production Methods (PMs) |
 | [Construction](mod_systems/construction.md) | Construction cost scaling, excess private construction, and construction as a market good | Construction Cost Scaling<br>Excess Private Construction<br>Construction as a Market Good (FMC architecture) |
 | [Transport Goods](mod_systems/transport_goods.md) | Transportation inside a state and Merchant Marine between markets | Transport goods: Transportation and Merchant Marine (#1050) |
 | [Power Grids](mod_systems/power_grids.md) | Grid Transfer Stations and the monthly balancing of Electricity between states | Power Grids (`building_grid_transfer_station`) |
