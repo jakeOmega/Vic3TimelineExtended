@@ -686,6 +686,81 @@ differences:
 - **Covert theft:** the regenerated catalog renumbers its indices. An old save's
   "last stolen" line can name the wrong technology until its next theft.
 
+**Phase 3, as built (2026-11-01).** Wave 1, ten PRs, merged in this order. Each
+PR's body lists its own "Decisions for the owner"; the ones most worth a look
+are named here.
+- **Advanced Fission** (#1284): Generation IV Reactors, a Nuclear Plant base
+  method, makes 3,500 electricity a level (Nuclear Power 2,000), a 91% margin
+  at base prices, below Tokamak Fusion's 111%. A method can't change
+  construction cost, so the spec's "higher build cost" is in running inputs.
+  The technology has no modifier block.
+- **Von Neumann Machines** (#1289):
+  - Self-Replicating Construction is the Construction Sector's eighth tier,
+    24 construction a level.
+  - A tier lives in six places: the group, a Construction Site twin, the
+    market rule's flags, the automation lists, the direct-construction
+    helpers and the hover text. `test_construction_tiers.py` now checks all
+    six.
+  - Self-Replicating Miners is a fifth Extraplanetary Base method, earning
+    2.8 times a Mining Colony at base prices without logistics upgrades.
+    The PR names a milder alternative.
+- **Vactrains** (#1290):
+  - A passenger method, plus a freight base method (Vactrain Freight, on
+    electricity, with no emissions line).
+  - No modifier on the technology: market access price impact already
+    reaches 100% at full technology, now recorded as a calibrated budget.
+- **Aneutronic Fusion** (#1291):
+  - Aneutronic Fusion Power is the Fusion Plant's fourth base method, with its
+    own AI-managed variant, since its staff differs.
+  - Fusion Torch Reclamation is a Steel Mill base method, which also needed
+    the carbon capture generator rerun.
+  - The Interstellar Probe moved here.
+  - The old-save repair rows are under their own flag.
+  - Call 21's rename shipped with it.
+- **AI Tutors** (#1288):
+  - The Ministry of Thought Control's ceiling was already at the engine cap
+    of 9, so AI Tutors' level moved from Human Augmentation (3 to 2) rather
+    than adding a dead tenth.
+  - Two curriculum events, `society_technology_events.36` and `.37`.
+- **Geoengineering** (#1292):
+  - Aerosol Injection is the Global Warming entry's eleventh policy, at 1% of
+    GDP a year.
+  - One world mask, which every harm reads (`temperature_anomaly_display` is
+    the warming less the mask), with termination shock, relations objections
+    and a weakened-monsoon side effect.
+  - The AI's shared climate core reads the unmasked warming.
+  - The UN docket item was left out (a possible follow-up).
+- **Liquid Democracy** (#1293):
+  - The law is a voting law, so it joined about twenty lists that name the
+    voting laws.
+  - It carries a once-a-game self-check (`liquid_democracy_elections`), since
+    no mod law had carried voting power before.
+- **Frontier AI Control** (#1294):
+  - A sixth, placeholder law (No Frontier AI Policy) holds the group until AI
+    Agents, Internet Governance's pattern.
+  - Private Labs' +10% innovation reaches nearly every country with AI Agents,
+    before the pacing runs.
+- **Bodily Autonomy** (#1295):
+  - Three laws; Clade Citizenship comes with wave 2.
+  - The debate fails on Natural Form at the timeout (`on_timeout`; the
+    engine has no fail-at-deadline hook).
+  - Open: the mod's own citizenship laws already give a no-shared-heritage
+    pop about what a shared-trait pop gets under the inclusive laws. So the
+    acceptance bonuses can rank them above shared-trait pops; it is on the
+    play-test list.
+- **Automation Policy** (#1296):
+  - The automated share counts building levels on robotic or AI-run methods.
+  - Human Labor Quotas withdraws 39 methods: in each group, the first
+    automated tier and every tier above it.
+  - Robot Tax and Automation Dividend scale with the share. Their sizes are
+    first estimates, for the observer run.
+
+Merging them in turn meant regenerating the shared generated files (covert
+theft indices, ideologies, law consistency, the Nation tab) and the guide's
+counts at each step, and recounting 06-politics' laws: 163 laws in 39 groups
+after wave 1. Wave 2, Terraforming and Self-Directed Evolution (with Clade
+Citizenship), is under way.
+
 **Play-test list** (a new `docs/testing/era-13-playtest.md`): the technology
 tree draws a thirteenth era column; old saves load with the moved methods and
 units (§ 5.6); an active Post-Scarcity Transition in an old save; each phase-3
