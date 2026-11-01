@@ -2439,6 +2439,14 @@ class TransferRunTest(unittest.TestCase):
             self.assertGreaterEqual(got_full, got_now)
             self.assertAlmostEqual(float(got_now / got_full), float(ratio), places=4)
         self.assertEqual(sum(self.roles(fx, n)["war"][1] for n in (1, 2)), Decimal("9.1"))
+        # Undamaged, at a strength no product divides back exactly (7.33333 x 3 /
+        # 7.33333 cuts to 2.99999): the floor keeps full at the amount.
+        fx = _Fx()
+        fx.fleet(1, loc=2, war=("7.33333", "7.33333"), rapid=(1, 1))
+        fx.choose(0, war=3, rapid=0)
+        self.go(fx, 1)
+        self.assertEqual(self.roles(fx, 2)["war"], (3, 3))
+        self.assertEqual(self.roles(fx, 1)["war"], (Decimal("4.33333"), Decimal("4.33333")))
 
     def test_the_marines_room(self):
         """There: the other fleet's own marines and carriers count; here: the
