@@ -1014,9 +1014,11 @@ here exists under Simple Colonies.
 
 ### Space Command
 
-Space Command is a government building, unlocked by Space Militarization and
-built only in a state with a Space Program. Each level builds fleet strength
-every month, by its production method:
+Space Command is a government building, unlocked by Space Militarization. A
+nation runs one: the first is built in a state with a Space Program, and while
+you have one the build menu refuses another, with the reason, so after moving
+your capital you keep expanding the one you have where it stands, or demolish it
+first. Each level builds fleet strength every month, by its production method:
 
 | Method | Technology | Strength a level a month |
 |---|---|---|
@@ -1045,11 +1047,24 @@ Telecommunication Gear, 10 Software, 20 Industrial Robotics and 40 Chemicals a
 week at full staff, about 8,400 at base prices. Fleets cost upkeep as +900% of
 that line for every 10 points of strength at full, the reserve's included, so a
 fleet of 300 costs about 2.3 million a week. Switching the yards to a cheaper
-method or cutting levels doesn't lower it, and with a second Space Command (one
-that came with a country you annexed, say) the fleets' share is split between
-them, so you pay it once. A large fleet makes Space Command dearer to run; it
-builds as fast while those goods can be bought. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
-Production each raise your fleets' fire by a quarter.
+method or cutting levels doesn't lower it. If annexed or formed land brings a
+second Space Command, the smaller of the two is dismantled, whichever it is (on
+a tie, the one outside your market capital), and you are told. A large fleet
+makes Space Command dearer to run; it builds as fast while those goods can be
+bought.
+Directed Energy Weapons, Orbital Weapon Platforms and Antimatter Production each
+raise your fleets' fire by a quarter.
+
+Pause, beside Launch and Auto, stops construction at once: neither Space
+Command nor your colonies' Orbital Yards build fleet strength, Built a month
+reads Paused, and the yards buy no Launch Capacity, Advanced Materials or
+electricity. The maintenance line and the upkeep are still paid, and your
+fleets, Launch and Auto work as before. Resume waits for the next month's
+construction, which builds nothing; the button reads Resuming until then, and a
+click cancels it. From that month the yards buy their inputs again, and the
+month after builds. A month is built in one go, so it is built only if the
+yards bought their inputs all month. Pausing costs the inputs bought since the
+last month's construction, so pause just after Built a month changes.
 
 ### Moving fleets
 
@@ -1070,10 +1085,10 @@ Your fleets take orders only while you have a Space Command level in a state
 you control. Without one, none can leave, change posture or target, start a
 refit or be repaired, and a refit under way pauses; Space Fleets says so above
 its rows. Fleets already on their way land, every fleet fights where it is at the
-posture it had, and a docked fleet still takes on supply, propellant and
-marines. Demolishing Space Command ends the upkeep and grounds your fleets: one
-at Earth still fights there and keeps Earth from being blockaded, but can't
-leave or be repaired.
+posture it had, at half strength, and a docked fleet still takes on supply,
+propellant and marines. Demolishing Space Command ends the upkeep and grounds
+your fleets: one at Earth still fights there at half strength and keeps Earth
+from being blockaded, but can't leave or be repaired.
 
 A fleet in flight can be neither attacked nor recalled. It docks at Earth and at
 your colonies with a Spaceport: supply and propellant refill (at a Spaceport,
@@ -1230,8 +1245,9 @@ orbits they can't reach.
 At war, holding Earth orbit supports your troops: while your fleets at Earth
 outmatch the enemy's there, or face none, you get Orbital Superiority, up to
 +10% offense and +5% defense for your units. It grows with the margin, and is
-full when you have twice the enemy's strength at Earth, or 10 against none. It
-stands beside the anti-satellite strike's Orbital Network Disrupted.
+full when you have twice the enemy's strength at Earth, or 10 against none;
+without a Space Command your fleets count half. It stands beside the
+anti-satellite strike's Orbital Network Disrupted.
 
 Nothing is launched, built or fired from a state its owner doesn't control.
 While your Space Program's state is occupied, nothing leaves Earth, no module is
@@ -1260,7 +1276,9 @@ fleets at Earth stay stationed. An AI never destroys a colony, never attacks a f
 interdicts. With an enemy fleet at Earth, it launches its reserve once the
 reserve and its fleets at Earth match the enemy's there. It builds batteries
 only while at war with a country that has fleets, up to five levels, and runs
-Ground Lasers at war, and in peace once debris is Cluttered.
+Ground Lasers at war, and in peace once debris is Cluttered. An AI in default,
+or in deficit while at peace, pauses Space Command's construction, and resumes
+once out of default with a surplus, or at war, after six months at least.
 
 ## After the space race
 

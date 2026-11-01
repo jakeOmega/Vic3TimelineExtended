@@ -207,7 +207,7 @@ sr_fl_gather_at = {
 		}
 		if = { limit = { local_var:sr_cb_p < 1 } set_local_variable = { name = sr_cb_p value = 1 } }
 		set_local_variable = { name = sr_cb_s value = sr_fl_$N$_strength }
-		set_local_variable = { name = sr_cb_f value = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality } }
+		set_local_variable = { name = sr_cb_f value = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
 		if = {
 			limit = { local_var:sr_cb_p = 1 }
 			sr_cb_add = { VAR = sr_cb_s1 AMOUNT = local_var:sr_cb_s }
@@ -231,8 +231,9 @@ sr_fl_gather_at = {
 }
 
 # The slot's target world KEY (it closes in on it): its strength, its fire on
-# defences (x quality, x Survey Colony Defences' edge against the holder), and
-# its marines to seize or its fire to destroy.
+# defences (x quality, x readiness, half without a Space Command, x Survey
+# Colony Defences' edge against the holder), and its marines to seize or its
+# fire to destroy.
 sr_cb_add_target = {
 	sr_cb_add = { VAR = sr_cb_s3_$KEY$ AMOUNT = local_var:sr_cb_s }
 	set_local_variable = {
@@ -240,6 +241,7 @@ sr_cb_add_target = {
 		value = {
 			value = sr_fl_$N$_fire_defences
 			multiply = sr_fleet_quality
+			multiply = sr_fleet_readiness
 			multiply = sr_cb_edge_$KEY$
 		}
 	}

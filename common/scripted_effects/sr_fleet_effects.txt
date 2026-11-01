@@ -429,10 +429,12 @@ sr_fl_global_month = {
 }
 
 # ---- The country's month (space_race_on_actions.txt) ----------------------------------------------
-# Country scope, a fleet power under Full Colonies: Space Command's
-# construction, every slot's month, the upkeep, war support's records, orbital
-# fire support (6d), the AI's review, a player's Locations snapshot.
+# Country scope, a fleet power under Full Colonies: one Space Command a nation,
+# Space Command's construction, every slot's month, the upkeep, war support's
+# records, orbital fire support (6d), the AI's review and its pause, a
+# player's Locations snapshot.
 sr_fl_country_month = {
+	sr_sc_one_per_nation = yes
 	sr_fl_join_powers = yes
 	sr_sc_month = yes
 	sr_fl_each_slot = { DO = month }
@@ -442,6 +444,7 @@ sr_fl_country_month = {
 	if = {
 		limit = { is_ai = yes }
 		sr_fl_ai_review = yes
+		sr_sc_ai_pause_review = yes
 	}
 	if = {
 		limit = { is_player = yes }
@@ -454,37 +457,165 @@ sr_fl_country_month = {
 }
 
 # ---- Space Command (design §§ 5, 15) ---------------------------------------------------------------
+# Country scope, first in the fleets' month (owner, 2026-10-31): a nation runs
+# one Space Command. With buildings of a level or more in two states or more
+# (one comes with an annexed or formed country's land), it keeps the one with
+# the most levels, the market capital's on a tie (sr_sc_keeper_score), and
+# dismantles every other, before this month's construction (sr_sc_month) or
+# upkeep (sr_fl_upkeep_refresh) reaches it; a player hears of each
+# (sr_space_command_dismantled_notice, naming both states). Not the market
+# capital's alone, as the Space Program's rule is: that would demolish a
+# player's Space Command each time the capital moved. A new one built in a
+# moved capital is the smaller, so it goes when it reaches its first level.
+sr_sc_one_per_nation = {
+	if = {
+		limit = { sr_sc_buildings > 1 }
+		ordered_scope_state = {
+			limit = { has_building = building_space_command }
+			order_by = sr_sc_keeper_score
+			max = 1
+			save_scope_as = sr_sc_keeper
+		}
+		every_scope_state = {
+			limit = {
+				has_building = building_space_command
+				NOT = { this = scope:sr_sc_keeper }
+			}
+			if = {
+				limit = { owner = { is_player = yes } }
+				save_scope_as = sr_sc_dismantled
+				owner = { post_notification = sr_space_command_dismantled_notice }
+			}
+			remove_building = building_space_command
+		}
+	}
+}
+
 # Country scope. The month's construction (sr_sc_rate) into the ground reserve
 # (6d, sr_reserve_<role>), shared by the build mix; then, with the toggle on
 # and no hostile fleet at Earth, the reserve launches itself into the home
 # fleet (sr_reserve_auto_step, sr_earth_orbit_effects.txt), which is 6a's
-# behaviour. Otherwise it waits on the ground for Launch.
+# behaviour. Otherwise it waits on the ground for Launch. While construction
+# is paused (sr_sc_is_paused, owner, 2026-10-31) nothing is built, neither
+# Space Command's nor the colonies' Orbital Yards' strength, and the yards
+# buy none of their inputs (sr_sc_pause_apply); the reserve, Auto and the
+# fleets' orders carry on.
+#
+# The order is the rule that no built month went unpaid (review of #1287,
+# I1): the build is the whole month's sr_sc_rate in one lump, which doesn't
+# depend on the inputs, so a step builds only when the cut was off from the
+# last step to this one. A pause cuts the inputs at once and holds until a
+# step clears it; a resume (sr_sc_resume_pending) waits for this step, which
+# builds nothing (1, the build check, before 2, the resume), and the cut comes
+# off here (3), so the month after is bought in full before it is built.
+# Clearing the resume first would let a resume the day before the step build
+# a month the inputs never paid for.
 sr_sc_month = {
 	sr_sc_self_check = yes
-	set_local_variable = { name = sr_sc_points value = sr_sc_rate }
-	set_variable = { name = sr_sc_built_last value = local_var:sr_sc_points }
+	# 1. The build: nothing while paused, a resume pending or not.
 	if = {
-		limit = { local_var:sr_sc_points > 0 }
-		sr_reserve_build = yes
+		limit = { sr_sc_is_paused = yes }
+		set_variable = { name = sr_sc_built_last value = 0 }
 	}
+	else = {
+		set_local_variable = { name = sr_sc_points value = sr_sc_rate }
+		set_variable = { name = sr_sc_built_last value = local_var:sr_sc_points }
+		if = {
+			limit = { local_var:sr_sc_points > 0 }
+			sr_reserve_build = yes
+		}
+	}
+	# 2. A pending resume takes effect.
+	if = {
+		limit = { sr_sc_is_resuming = yes }
+		sr_sc_clear_pause = yes
+	}
+	# 3. The cut follows the variables (and reaches a building built since).
+	sr_sc_pause_apply = yes
 	sr_reserve_auto_step = yes
+}
+
+# Country scope: the pause's building modifier, derived from sr_sc_paused.
+# Its one apply site (a same-name add_modifier stacks, so removed first), on
+# each Space Command building of a level or more, wherever it stands, an
+# occupied state's included: the monthly step (sr_sc_month, which also
+# reaches a building built since), the toggle (sr_sc_toggle_pause), so a
+# pause reaches the yards' inputs and the building's tooltip at once, and the
+# AI's resume (sr_sc_ai_pause_review).
+sr_sc_pause_apply = {
+	every_scope_state = {
+		limit = { has_building = building_space_command }
+		every_scope_building = {
+			limit = { is_building_type = building_space_command }
+			if = {
+				limit = { has_modifier = sr_space_command_paused }
+				remove_modifier = sr_space_command_paused
+			}
+			if = {
+				limit = {
+					level >= 1
+					root = { sr_sc_is_paused = yes }
+				}
+				add_modifier = { name = sr_space_command_paused }
+			}
+		}
+	}
+}
+
+# Country scope: Pause, Resume and Resuming (sr_sc_pause_sgui; the AI's
+# pause, sr_sc_ai_pause_review). Building, a click pauses at once (sr_sc_paused,
+# yes; building is its absence) and cuts the inputs. Paused, a click asks to
+# resume (sr_sc_resume_pending): the inputs stay cut and the next step, which
+# builds nothing, ends the pause (sr_sc_month). Resuming, a click cancels it.
+# No cost: a pause mid-month bills the days since the last step for nothing,
+# at most a month's inputs a pause.
+sr_sc_toggle_pause = {
+	if = {
+		limit = { sr_sc_is_resuming = yes }
+		remove_variable = sr_sc_resume_pending
+	}
+	else_if = {
+		limit = { sr_sc_is_paused = yes }
+		set_variable = { name = sr_sc_resume_pending value = yes }
+	}
+	else = {
+		set_variable = { name = sr_sc_paused value = yes }
+	}
+	sr_sc_pause_apply = yes
+}
+
+# Country scope: the pause ends (the step's pending resume, sr_sc_month; the
+# AI's resume, at its step after the build). The caller applies the cut.
+sr_sc_clear_pause = {
+	if = {
+		limit = { has_variable = sr_sc_resume_pending }
+		remove_variable = sr_sc_resume_pending
+	}
+	if = {
+		limit = { has_variable = sr_sc_paused }
+		remove_variable = sr_sc_paused
+	}
 }
 
 # Country scope, the fleets' month: the upkeep's one refresh site (design § 5;
 # Space Race UI pass design § 10). The six goods of Space Command's fixed
 # maintenance line rise +900% a unit (10 points of fleet strength at full, the
-# ground reserve's included): sr_fleet_upkeep_goods, removed first, on each
-# Space Command building of a level or more, at
-# root.var:sr_fleet_upkeep_per_building, the units split between them, so a
-# second building (an annexed or formed space power's) doesn't charge the
-# fleets twice. Buildings have no variables, so the multiplier is read through
-# ROOT, the country, as resettlement's readouts are. Never on the country: the
-# goods' input multipliers are building-masked and would raise every
-# building's use of them.
+# ground reserve's included): sr_fleet_upkeep_goods, removed first, on the
+# Space Command building of a level or more, at root.var:sr_fleet_upkeep_units.
+# A nation has one: the month's sweep (sr_sc_one_per_nation) has dismantled
+# any other before this runs. Buildings have no variables, so the multiplier
+# is read through ROOT, the country, as resettlement's readouts are. Never on
+# the country: the goods' input multipliers are building-masked and would
+# raise every building's use of them.
 sr_fl_upkeep_refresh = {
 	sr_fl_upkeep_self_check = yes
 	set_variable = { name = sr_fleet_upkeep_units value = sr_fleet_upkeep_units_value }
-	set_variable = { name = sr_fleet_upkeep_per_building value = sr_fleet_upkeep_per_building_value }
+	# PR 7's split between two buildings, gone with one Space Command a
+	# nation: a save's stale copy (owner, 2026-10-31; remove after 2026-12-31).
+	if = {
+		limit = { has_variable = sr_fleet_upkeep_per_building }
+		remove_variable = sr_fleet_upkeep_per_building
+	}
 	sr_fl_upkeep_apply = yes
 }
 
@@ -502,8 +633,8 @@ sr_fl_upkeep_self_check = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = sr_fl_upkeep_line_checked }
-			has_variable = sr_fleet_upkeep_per_building
-			var:sr_fleet_upkeep_per_building > 0
+			has_variable = sr_fleet_upkeep_units
+			var:sr_fleet_upkeep_units > 0
 			any_scope_state = {
 				any_scope_building = {
 					is_building_type = building_space_command
@@ -534,7 +665,7 @@ sr_fl_upkeep_self_check = {
 		set_variable = {
 			name = sr_fl_upkeep_line_want
 			value = {
-				value = var:sr_fleet_upkeep_per_building
+				value = var:sr_fleet_upkeep_units
 				multiply = 9
 			}
 		}
@@ -547,10 +678,10 @@ sr_fl_upkeep_self_check = {
 				var:sr_fl_upkeep_line_read_sw > { value = var:sr_fl_upkeep_line_want subtract = 0.01 }
 				var:sr_fl_upkeep_line_read_sw < { value = var:sr_fl_upkeep_line_want add = 0.01 }
 			}
-			debug_log = "TE_SELF_CHECK OK fleet_upkeep_line country=[THIS.GetCountry.GetTagName] per_building=[THIS.Var('sr_fleet_upkeep_per_building').GetValue|2] robotics_mult=[THIS.Var('sr_fl_upkeep_line_read').GetValue|2] telephones_mult=[THIS.Var('sr_fl_upkeep_line_read_tel').GetValue|2] software_mult=[THIS.Var('sr_fl_upkeep_line_read_sw').GetValue|2] want=[THIS.Var('sr_fl_upkeep_line_want').GetValue|2] (the three newly registered input multipliers reach Space Command at +900% a unit; the input tooltip shows whether the maintenance line takes them) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK fleet_upkeep_line country=[THIS.GetCountry.GetTagName] units=[THIS.Var('sr_fleet_upkeep_units').GetValue|2] robotics_mult=[THIS.Var('sr_fl_upkeep_line_read').GetValue|2] telephones_mult=[THIS.Var('sr_fl_upkeep_line_read_tel').GetValue|2] software_mult=[THIS.Var('sr_fl_upkeep_line_read_sw').GetValue|2] want=[THIS.Var('sr_fl_upkeep_line_want').GetValue|2] (the three newly registered input multipliers reach Space Command at +900% a unit; the input tooltip shows whether the maintenance line takes them) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN fleet_upkeep_line country=[THIS.GetCountry.GetTagName] per_building=[THIS.Var('sr_fleet_upkeep_per_building').GetValue|2] robotics_mult=[THIS.Var('sr_fl_upkeep_line_read').GetValue|2] telephones_mult=[THIS.Var('sr_fl_upkeep_line_read_tel').GetValue|2] software_mult=[THIS.Var('sr_fl_upkeep_line_read_sw').GetValue|2] want=[THIS.Var('sr_fl_upkeep_line_want').GetValue|2] (an input multiplier isn't 9 x the building's units: unregistered, or other lines reach it; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN fleet_upkeep_line country=[THIS.GetCountry.GetTagName] units=[THIS.Var('sr_fleet_upkeep_units').GetValue|2] robotics_mult=[THIS.Var('sr_fl_upkeep_line_read').GetValue|2] telephones_mult=[THIS.Var('sr_fl_upkeep_line_read_tel').GetValue|2] software_mult=[THIS.Var('sr_fl_upkeep_line_read_sw').GetValue|2] want=[THIS.Var('sr_fl_upkeep_line_want').GetValue|2] (an input multiplier isn't 9 x the fleets' units: unregistered, or other lines reach it; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		remove_variable = sr_fl_upkeep_line_read
 		remove_variable = sr_fl_upkeep_line_read_tel
@@ -570,9 +701,9 @@ sr_fl_upkeep_apply = {
 			if = {
 				limit = {
 					level >= 1
-					root.var:sr_fleet_upkeep_per_building > 0
+					root.var:sr_fleet_upkeep_units > 0
 				}
-				add_modifier = { name = sr_fleet_upkeep_goods multiplier = root.var:sr_fleet_upkeep_per_building }
+				add_modifier = { name = sr_fleet_upkeep_goods multiplier = root.var:sr_fleet_upkeep_units }
 			}
 		}
 	}
@@ -664,6 +795,38 @@ sr_fl_ai_review = {
 	sr_fl_ai_send_garrisons = yes
 	sr_fl_each_slot = { DO = ai_home }
 	sr_fl_ai_attack = yes
+}
+
+# Country scope, an AI fleet power's month, after its construction (sr_sc_month)
+# and beside its review (owner, 2026-10-31): it pauses Space Command under
+# fiscal stress (sr_sc_ai_should_pause) and resumes once out of it, not before
+# six months (sr_sc_ai_may_resume). The toggle applies the inputs' cut at
+# once, so a pause decided this month saves the coming month's inputs and the
+# next month's step builds nothing. A resume ends the pause directly, not
+# through the pending resume a player's waits on: this runs at the step,
+# after the month's build (nothing, while paused), so the inputs are bought
+# again from now and the next step builds a month they paid for.
+sr_sc_ai_pause_review = {
+	if = {
+		limit = {
+			NOT = { sr_sc_is_paused = yes }
+			# Only with a Space Command to save on (review of #1287, M1): without
+			# one nothing is bought, and a pause would only stop the colonies'
+			# Orbital Yards. Not on the resume, so one that lost it still resumes.
+			sr_has_space_command = yes
+			sr_sc_ai_should_pause = yes
+		}
+		sr_sc_toggle_pause = yes
+		set_variable = { name = sr_sc_pause_hold value = yes months = 6 }
+	}
+	else_if = {
+		limit = {
+			sr_sc_is_paused = yes
+			sr_sc_ai_may_resume = yes
+		}
+		sr_sc_clear_pause = yes
+		sr_sc_pause_apply = yes
+	}
 }
 
 # ---- Self-checks (design § 18) ---------------------------------------------------------------------
