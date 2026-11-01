@@ -49,9 +49,10 @@ country_environmental_movement_radicalism_add = {
 	}
 }
 
-# Geoengineering's marker (era 13 spec § 7.5). The technology unlocks only the
-# Stratospheric Aerosol Injection climate policy, which the engine does not list,
-# so without it the tech tree showed no effect at all (2026-11-01). Display
+# Geoengineering's marker (era 13 spec § 7.5). The technology unlocks the
+# Stratospheric Aerosol Injection climate policy, which the engine does not
+# list, so before it had this and its weather-modification lines the tech tree
+# showed no effect at all (2026-11-01). Display
 # only: the policy's gate, gw_possible_aerosol_injection, reads the technology,
 # as every climate policy's does, so a grayed Adopt names it
 # (global_warming_triggers.txt). test_gw_geoengineering.py pins the two to the

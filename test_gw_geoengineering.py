@@ -62,7 +62,7 @@ class TechnologyTest(unittest.TestCase):
         technology that did nothing (2026-11-01). The gate reads the technology
         (test_the_policy_needs_it), so the marker must sit on that technology."""
         tech = load("common/technology/technologies/era_12.txt")["geoengineering"]
-        self.assertEqual(tech["modifier"], {"country_gw_aerosol_injection_bool": "yes"})
+        self.assertEqual(tech["modifier"]["country_gw_aerosol_injection_bool"], "yes")
         possible = load(TRIGGERS)["gw_possible_aerosol_injection"]
         self.assertEqual(possible["has_technology_researched"], "geoengineering")
         marker = load("common/modifier_type_definitions/global_warming_modifier_types.txt")[
@@ -75,6 +75,26 @@ class TechnologyTest(unittest.TestCase):
         self.assertIn("1.0 °C", desc)
         self.assertIn("2 °C", desc)
         self.assertIn("one percent of GDP", desc)
+
+    def test_weather_modification_eases_droughts_and_hail(self):
+        """Cloud seeding and hail suppression (owner, 2026-11-01): milder than
+        Reforestation Subsidies, a policy that costs, and the figures the
+        player guide gives."""
+        mods = load("common/technology/technologies/era_12.txt")["geoengineering"]["modifier"]
+        self.assertEqual(
+            {k: float(v) for k, v in mods.items() if k.startswith("state_")},
+            {
+                "state_harvest_condition_drought_impact_mult": -0.10,
+                "state_harvest_condition_drought_duration_mult": -0.10,
+                "state_harvest_condition_hailstorm_impact_mult": -0.20,
+            },
+        )
+        reforestation = load(MODIFIERS)["reforestation_subsidies_modifier"]
+        self.assertLess(float(reforestation["state_harvest_condition_drought_impact_mult"]),
+                        float(mods["state_harvest_condition_drought_impact_mult"]))
+        guide = _text("docs/player_guide/15-climate.md")
+        self.assertRegex(guide, r"droughts are 10% milder and 10% shorter, and hailstorms\s+20% weaker")
+        self.assertIn("hail", _loc("geoengineering_desc"))
 
     def test_the_policy_needs_it(self):
         possible = load(TRIGGERS)["gw_possible_aerosol_injection"]
