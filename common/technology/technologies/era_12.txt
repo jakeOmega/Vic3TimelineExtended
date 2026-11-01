@@ -308,6 +308,48 @@ post_work_society = {
 	}
 }
 
+morphological_freedom = {
+	# Bodily Autonomy law group: Licensed Modification and Morphological Freedom laws (era 13 spec § 7.1); opens the
+	# Morphological Freedom Debate journal entry (§ 7.2). Body modification for self-expression, not capability:
+	# appearance, sex characteristics, fur, tails. Clade Citizenship comes with Self-Directed Evolution (era 13)
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/genetic_engineering.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		biohacking_and_human_augmentation
+		LGBTQ_rights_movement
+	}
+
+	modifier = {
+		goods_output_services_mult = 0.03	# the clinics, studios and salons of a new trade in bodies
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+liquid_democracy = {
+	# Liquid Democracy law, Distribution of Power (era 13 spec § 7.4); its Continuous Vote needs Neural Lace too
+	# Everyone may vote on every question or lend the vote to anyone they trust, and take it back at any time
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/universal_digital_identity.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		universal_digital_identity
+	}
+
+	modifier = {
+		country_voting_power_mult = 0.1
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
 geoengineering = {
 	# The Stratospheric Aerosol Injection climate policy in the Global Warming entry (era 13 spec § 7.5);
 	# Terraforming (era 13) will require it. Society, not production: aircraft can already loft the aerosols,

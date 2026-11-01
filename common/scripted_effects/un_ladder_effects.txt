@@ -605,6 +605,9 @@ un_membership_end_effect = {
 
 	# The overview's Security Council flags (un_overview_display_effects.txt).
 	un_p5_display_refresh = yes
+	# International Oversight needs membership (Frontier AI Control): it falls
+	# to National Licensing now (te_frontier_ai_effects.txt).
+	te_frontier_ai_on_un_membership_end = yes
 }
 
 # ---- Founding and joining ------------------------------------------------------------
@@ -701,6 +704,12 @@ un_leave_organisation = {
 	# (un_events.20; redesign phase 4, un_docket_effects.txt).
 	hidden_effect = {
 		un_docket_walkout_consequence = yes
+	}
+	# The custom_tooltip below hides un_membership_end_effect's lines, so the
+	# Frontier AI Control law it drops is said here (te_frontier_ai_effects.txt).
+	if = {
+		limit = { has_law = law_type:law_international_ai_oversight }
+		custom_tooltip = un_leave_drops_international_ai_oversight_tt
 	}
 	custom_tooltip = {
 		text = "UN_LEAVE_DESC"

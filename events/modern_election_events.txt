@@ -697,6 +697,7 @@ modern_election_events.8 = {
 		has_technology_researched = social_media
 		OR = {
 			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_census_voting
 			has_law = law_type:law_anarchy
 		}

@@ -1180,6 +1180,7 @@ fix_incompatible_laws = {
 				has_law = law_type:law_wealth_voting
 				has_law = law_type:law_census_voting
 				has_law = law_type:law_universal_suffrage
+				has_law = law_type:law_liquid_democracy
 			}
 			has_law = law_type:law_no_campaign_finance_laws
 		}
@@ -1192,6 +1193,9 @@ fix_incompatible_laws = {
 		}
 		activate_law = law_type:law_unregulated_internet
 	}
+	# Frontier AI Control opens with AI Agents, and International Oversight
+	# needs UN membership while held (te_frontier_ai_effects.txt).
+	te_frontier_ai_fix_law = yes
 	if = {
 		limit = {
 			has_law = law_type:law_post-scarcity

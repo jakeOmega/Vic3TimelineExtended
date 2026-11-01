@@ -1073,16 +1073,17 @@ good standing; a negative one counts for anyone (§0.10 ruling 2). All are pinne
 | Peace Palace | +0.5 | `pm_wonder_peace_palace` |
 | Palais des Nations | +0.5 | `pm_wonder_palais_des_nations` |
 | A party to the Antarctic Treaty (the Global Commons, 2026-10-16) | +0.25 | `un_antarctic_policy_modifier`, applied at ×1 from party status (`te_antarctic_policy_refresh`), never with the convention's enforcement multiplier |
+| International Oversight (Frontier AI Control, era 13 phase 3, 2026-10-31) | +0.5 | `law_international_ai_oversight`, `te_frontier_ai_laws.txt`; only a member can enact or keep it |
 
 **Rulings.**
 
 1. **Sizing.** The weights sum to about 10, so a value every country held would move Policy by
-   about 10× that value. One country's whole positive stack is +5.35 at weight 1 (Limited War,
-   the aid ministry at 9, No First Use, the HQ and both palaces); a committed member great
-   power without the buildings holds about +2.5 to +3.4. The whole negative stack is −6
-   (Total War, Isolationism, Warfighting, a full burden). The test holds the two stacks to
-   +5.5 and −6.5. A rogue superpower at ×5 can therefore take the pillar to its floor alone;
-   that is intended.
+   about 10× that value. One country's whole positive stack is +5.85 at weight 1 (Limited War,
+   International Oversight, the aid ministry at 9, No First Use, the HQ and both palaces); a
+   committed member great power without the buildings holds about +2.5 to +3.9. The whole
+   negative stack is −6 (Total War, Isolationism, Warfighting, a full burden). The test holds
+   the two stacks to +6 and −6.5 (+5.5 until International Oversight). A rogue superpower at
+   ×5 can therefore take the pillar to its floor alone; that is intended.
 2. **Nothing rides on the UN's own enforcement.** No grant sits on a modifier applied with
    `multiplier = un_enforcement` or `un_convention_multiplier`, whose tier-driven multiplier
    would feed authority back into its own target (tested).

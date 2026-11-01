@@ -80,7 +80,7 @@ country as a bar.
 
 | Component | How it counts |
 |---|---|
-| Art Production | Your fine art output, capped at your percentage share of world production, with diminishing returns above a third of world output. Free Speech, Church and State and LGBTQ+ Rights laws, Romanticism, Realism and Film change it through the Cultural Pull from Art modifier. |
+| Art Production | Your fine art output, capped at your percentage share of world production, with diminishing returns above a third of world output. Free Speech, Church and State, LGBTQ+ Rights and Bodily Autonomy laws, Romanticism, Realism and Film change it through the Cultural Pull from Art modifier. |
 | Prestige | Your prestige divided by 5, capped at your percentage share of world prestige. Recognized countries only. |
 | Standard of Living | Your average standard of living minus the world average (−5 to +20): in full for great powers, half for major powers, a quarter for minor powers, nothing below. |
 | Tech Leadership | +2 each time you research a technology no other country has yet, up to 30, fading by a tenth at each recount. |
@@ -597,9 +597,10 @@ Each unused slot becomes Domestic Intelligence Focus: +2 intelligence capacity,
 more separatism and coup resistance, calmer movements and better colonial
 garrisons. You also have three covert defenses, economic, military and
 ideological, each added to your capacity against operations of its kind. Strict
-IP Protection and Central Bank Independence raise economic defense and Publicly
-Funded Elections ideological defense, by 10 each; No IP Protection, Unregulated
-Banking and No Campaign Finance Laws lower them. A friend's Counterintelligence
+IP Protection, Central Bank Independence and State Monopoly (Frontier AI
+Control) raise economic defense and Publicly Funded Elections ideological
+defense, by 10 each; No IP Protection, Unregulated Banking, Private Labs, Open
+Weights and No Campaign Finance Laws lower them. A friend's Counterintelligence
 Support raises all three at once, by 8 each at base strength and up to 32 fully
 operational at priority 3. Against an agency of about 100 capacity, 10 points
 of defense add about 1.5 points to its Detection Risk. The Intelligence Sharing

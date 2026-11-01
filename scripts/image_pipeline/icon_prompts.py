@@ -792,6 +792,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
         "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
         "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
+        "morphological_freedom": {"subject": "a glass petri dish holding a small curled tuft of russet fox fur, beside a pair of steel tweezers", "seed": None},
+        "liquid_democracy": {"subject": "a glowing blue fingerprint pressed onto a paper ballot, thin lines of light running from it to many small hands", "seed": None},
         "geoengineering": {"subject": "a white high-altitude jet trailing a pale haze across a deep blue sky, the sun dimmed behind it", "seed": None},
         "terraforming": {"subject": "a rust-red planet half turned blue-green, a thin white haze of cloud and a small blue sea on its lit side, a round orbital mirror beside it catching the sun", "seed": None},
         "vactrains": {"subject": "a sleek white bullet-nosed capsule train speeding through a long transparent glass tube raised on slim pylons", "seed": None},
@@ -1195,6 +1197,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_unrestricted_extraction": {"subject": "a tall steel coal mine headframe with its big winding wheel, an oil pumpjack beside it, on a heap of black coal", "seed": 3},
         "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": 1},
         "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": 3},
+        # Automation Policy (era 13 spec § 7.1): placeholders borrow other law icons until these are rendered.
+        "law_unrestricted_automation": {"subject": "a bright orange industrial robot arm welding a car door on a factory line, sparks flying", "seed": None},
+        "law_robot_tax": {"subject": "a small white humanoid robot dropping a gold coin into a slot in a black iron strongbox", "seed": None},
+        "law_human_labor_quotas": {"subject": "a worker's yellow hard hat resting on a wrench, a switched-off robot arm folded down behind it", "seed": None},
+        "law_automation_dividend": {"subject": "a white robot hand pouring gold coins from a tipped steel cog into a row of open cupped human hands", "seed": None},
         # Judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md). Closed
         # books with plain covers: an open book or an unrolled charter gets written on.
         "law_executive_tribunals": {"subject": "a royal crown resting on top of a thick closed leather-bound book with a plain unmarked cover", "seed": 2},
@@ -1279,6 +1286,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_restorative_justice": {"subject": "a cracked clay pot held together by thick metal staples across its cracks and a tight band of twine", "seed": 0},
         # Distribution of Power (a vanilla group)
         "law_algorithmic_governance": {"subject": "a large square computer microchip with gold pins resting on a tasselled royal velvet cushion", "seed": 2},
+        "law_liquid_democracy": {"subject": "a wooden ballot box with a stream of small glowing paper ballots flowing in and out of its slot like water", "seed": None},
         # Electoral Finance
         "law_donation_limits": {"subject": "a fat leather money bag cinched tight around its middle by a thick buckled leather belt", "seed": 0},
         "law_no_campaign_finance_laws": {"from": "law/law_publicly_funded_elections", "base": {"scale": 0.78},
@@ -1320,6 +1328,11 @@ ICONS: dict[str, dict[str, dict]] = {
             "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
         "law_regulated_augmentation_market": {"subject": "a sleek robotic cybernetic hand standing upright on a small velvet-topped display pedestal", "seed": 0},
         "law_unrestricted_augmentation": {"subject": "a bulky cybernetic arm bristling with drills, blades and dangling wires, crudely bolted together", "seed": 2},
+        # Bodily Autonomy (era 13 spec § 7.1): placeholders borrow Human Purity's, Basic
+        # Protections' and Anti-Discrimination Laws' icons until these are painted.
+        "law_natural_form": {"subject": "a plain unpainted wooden artist's mannequin standing upright on its round wooden stand", "seed": None},
+        "law_licensed_modification": {"subject": "a small brass hand mirror lying on a folded paper certificate with a red wax seal", "seed": None},
+        "law_morphological_freedom": {"subject": "a soft fox tail and a pair of pointed fox ears lying on a folded silk scarf", "seed": None},
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
         # 2026-10-08 redesign (#822). Testation: a pen lying across the scroll
@@ -1397,6 +1410,14 @@ ICONS: dict[str, dict[str, dict]] = {
         # Distribution of Power (a vanilla group)
         "law_post-scarcity": {"subject": "a large overflowing cornucopia horn spilling out fruit, bread and small machine gears", "seed": 1},
         "law_universal_basic_income": {"subject": "a sturdy knotted rope safety net slung taut between two thick wooden posts", "seed": 1},
+        # Frontier AI Control (era 13 spec § 7.1): placeholders borrow other laws'
+        # icons until these are painted. Unreviewed subjects.
+        "law_no_frontier_ai_policy": {"subject": "a plain closed cardboard box with a coiled unplugged power cable lying on its lid", "seed": None},
+        "law_private_ai_labs": {"subject": "a glowing blue computer chip resting on a short stack of gold coins", "seed": None},
+        "law_national_ai_licensing": {"subject": "a glowing blue computer chip with a paper license tag tied to it by a string and stamped with a plain red wax seal", "seed": None},
+        "law_state_ai_monopoly": {"subject": "a glowing blue computer chip locked inside a small heavy steel safe with its door ajar", "seed": None},
+        "law_international_ai_oversight": {"subject": "a glowing blue computer chip under a large brass magnifying glass held on a stand, a small globe beside it", "seed": None},
+        "law_open_weights": {"subject": "a glowing blue computer chip in an open wooden box, its lid thrown back and rays of light spilling out", "seed": None},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
@@ -1562,6 +1583,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_grand_monuments": {"subject": "a tall grey stone obelisk with a golden pyramid tip on a stepped stone base", "seed": 0},
         "je_heir_education": {"subject": "a small gold crown resting on a stack of three closed leather-bound books with blank covers", "seed": 1},
         "je_human_augmentation": {"subject": "a polished steel prosthetic hand with an open palm, brass pistons and gears showing at the wrist", "seed": 3},
+        "je_morphological_freedom": {"subject": "a tall oval standing mirror on a wooden frame, a pair of pointed fox ears on a headband hanging from one corner", "seed": None},
         "je_mental_health_crisis": {"subject": "a featureless grey plaster mannequin head in profile with a tangled knot of black wire rising from the top of it", "seed": 0},
         "je_post_scarcity": {"subject": "a golden cornucopia horn spilling ripe fruit, golden wheat and small brass gears", "seed": 1},
         "je_strategic_reserve": {"subject": "a neat stack of olive-green wooden ammunition crates and rust-red steel oil barrels with a brown burlap grain sack on top", "seed": 1},
