@@ -104,6 +104,49 @@ ahead, raised if they fall short.
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
 
+## Phase 3: Liquid Democracy
+
+1. **The tree.** Liquid Democracy follows Universal Digital Identity in era
+   12's society tree, with +10% voting power, and borrows Universal Digital
+   Identity's icon until its own is painted.
+2. **The law.** It sits in Distribution of Power beside Algorithmic
+   Governance, with Publicly Funded Elections' icon for now. Its enactment
+   tooltip shows the Continuous Vote line and the modifier's three effects,
+   and nothing is granted on enactment.
+3. **A voting law.**
+   - Enact it from Universal Suffrage: elections and parties carry on, the
+     government type stays a democratic one (Presidential or Parliamentary
+     Republic, Constitutional Monarchy), and Women's Suffrage, Elected
+     Bureaucrats and the campaign finance law in force all stay.
+   - Enact it from Algorithmic Governance: parties come back and an election
+     campaign starts.
+   - A country holding the Tradition of Free Elections keeps it (the amendment
+     re-attaches on the new law). Voting Age amendments and First Past the
+     Post drop, by design.
+   - Under Collective Governance it becomes a Direct Democracy, with the
+     Direct Democracy amendment.
+4. **The Continuous Vote.** With Neural Lace, the Continuous Vote appears in
+   the Nation tab's Governance list within a year of enactment or of
+   researching Neural Lace (the yearly pulse), not in the country panel's
+   list, and it doesn't stack from year to year. It goes at once when the law
+   is repealed. After a revolution that the law's holders win, it comes back
+   at the winner's next yearly pulse.
+5. **Interest groups.** An Anarchist or Optimist Transhumanist leader's group
+   backs it over Universal Suffrage; groups with Republican, Liberal or Social
+   Democrat leaders prefer Universal Suffrage and back going back to it.
+   Radicals and Populists rate the two the same.
+6. **Law consistency.** An anarchist country that loses Cooperative Ownership
+   with the technology researched moves to Liquid Democracy, not Universal
+   Suffrage.
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … liquid_democracy_elections` | once a game: OK at the first election campaign that starts under the law (`on_election_campaign_start`); BROKEN at the yearly pulse of a country that has held it six years, if no campaign has started under it anywhere | The engine holds elections under a mod Distribution of Power law with Universal Suffrage's voting power | It doesn't: no campaign in six years under the law, more than a four-year cycle and its campaign | Check what the engine keys elections on (the party emergence the law's `on_activate` runs, or a list of vanilla laws). If nothing a mod law can carry starts them, remake the law as a variant of Universal Suffrage (`parent = law_universal_suffrage`, shown only with the technology), which takes its stances and passes every `has_law_or_variant` check for it |
+
+No line after a few years means no country has held the law long enough; enact it in a test game.
+
 ## Phase 3: Geoengineering
 
 Stratospheric Aerosol Injection, the climate policy Geoengineering unlocks

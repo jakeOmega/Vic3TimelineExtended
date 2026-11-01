@@ -2669,6 +2669,7 @@ law_no_campaign_finance_laws = {
 		law_wealth_voting
 		law_census_voting
 		law_universal_suffrage
+		law_liquid_democracy
 		law_anarchy
 	}
 }
@@ -2683,6 +2684,7 @@ law_unregulated_donations = {
 		law_wealth_voting
 		law_census_voting
 		law_universal_suffrage
+		law_liquid_democracy
 		law_anarchy
 	}
 
@@ -2704,6 +2706,7 @@ law_donation_limits = {
 		law_wealth_voting
 		law_census_voting
 		law_universal_suffrage
+		law_liquid_democracy
 		law_anarchy
 	}
 
@@ -2730,6 +2733,7 @@ law_publicly_funded_elections = {
 		law_wealth_voting
 		law_census_voting
 		law_universal_suffrage
+		law_liquid_democracy
 		law_anarchy
 	}
 
@@ -4377,6 +4381,7 @@ law_direct_democracy = {
 		law_organic_regulation
 		law_anarchy
 		law_algorithmic_governance
+		law_liquid_democracy
 	}
 
 	unlocking_technologies = {
@@ -4873,6 +4878,139 @@ law_algorithmic_governance = {
 
 	ai_impose_chance = {
 		value = base_impose_law_weight
+	}
+}
+
+# Liquid Democracy (era 13 spec § 7.4): the human alternative to rule by
+# algorithm. Everyone may vote on every question, or lend the vote, question by
+# question, to anyone they trust, and take it back at any time. A voting law:
+# Universal Suffrage's franchise, plus the lines delegation brings. With Neural
+# Lace, votes are cast through implants as each question arises: the Continuous
+# Vote (te_refresh_continuous_vote, te_liquid_democracy_effects.txt, from the
+# yearly country pulse). docs/systems/mod_systems/governance_laws.md § Liquid
+# Democracy lists every place the voting laws are named.
+law_liquid_democracy = {
+	group = lawgroup_distribution_of_power
+	icon = "gfx/interface/icons/law_icons/law_publicly_funded_elections.dds" # Placeholder Icon
+
+	# Between Universal Suffrage (100) and Anarchy (200), so gen_law_consistency
+	# moves an Anarchy that loses Cooperative Ownership here first.
+	progressiveness = 150
+
+	unlocking_technologies = {
+		liquid_democracy
+	}
+
+	# Vanilla's voting laws are barred by the same two.
+	disallowing_laws = {
+		law_chiefdom
+		law_command_economy
+	}
+
+	# The Continuous Vote, shown rather than granted: the yearly pulse adds it
+	# while Neural Lace is researched.
+	on_enact = {
+		custom_tooltip = LIQUID_DEMOCRACY_TT_CONTINUOUS_VOTE
+		show_as_tooltip = {
+			add_modifier = { name = te_continuous_vote }
+		}
+	}
+
+	# Vanilla's voting laws (00_distribution_of_power.txt): electoral confidence
+	# for the campaign that starts, the parties a non-voting law dissolved, and
+	# the Tradition of Free Elections, which leaves with the old law
+	# (te_tradition_of_free_elections.txt allows this one). Their caciquismo and
+	# King in Parliament lines are left out: both belong to Spain's and the
+	# monarchies' nineteenth-century content.
+	on_activate = {
+		if = {
+			limit = {
+				game_date > 1836.1.1
+				country_has_voting_franchise = yes
+			}
+			initialize_electoral_confidence = yes
+		}
+		scripted_effect_parties_emergence = yes
+		random_law = {
+			limit = { type = law_type:law_liquid_democracy }
+			save_scope_as = relevant_voting_law
+		}
+		inherit_free_elections_effect = yes
+	}
+
+	on_deactivate = {
+		remove_modifier_if_exists_effect = { MODIFIER = te_continuous_vote }
+	}
+
+	can_enact = {
+		NOT = { has_government_type = gov_chartered_company }
+	}
+
+	can_impose = {
+		country_has_voting_franchise = yes
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_distribution_of_power_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
+
+	modifier = {
+		# Universal Suffrage's franchise and legitimacy, as vanilla gives them.
+		country_legitimacy_govt_total_votes_add = 110
+		country_legitimacy_govt_total_clout_add = 25
+		country_legitimacy_govt_size_add = 1
+		country_voting_power_base_add = 50
+
+		# The mod's lines on Universal Suffrage, inline as a mod law carries them:
+		# cultural pull (this file's Distribution of Power INJECTs), the lower
+		# strata's expectations (sol_expectations_vanilla_injections.txt), the
+		# colonial empire's two (colonial_empire_law_injections.txt).
+		country_cultural_pull_mult = 0.03
+		country_sol_expectations_lower_offset_add = 1
+		country_colonial_stability_drift_add = -0.2
+		country_colonial_invest_effectiveness_add = 0.3
+		# Every question goes to the voters, so nothing is forced past them
+		# (Universal Suffrage and Anarchy -3, legislative_override_capacity.txt).
+		country_legislative_override_capacity_add = -3
+
+		# Delegation, question by question: coalitions form issue by issue, so a
+		# government of mixed views loses less legitimacy to them.
+		country_legitimacy_ideological_incoherence_mult = -0.2
+		# The outvoted had their say and can move their vote: a law they opposed
+		# stirs its movements less.
+		political_movement_radicalism_from_enactment_disapproval_mult = -0.25
+		# Putting each question to a nation takes time.
+		country_law_enactment_speed_mult = -0.1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		if = {
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
+			add = 750
+		}
+	}
+
+	# Spread from Universal Suffrage only, as vanilla's egalitarian agenda
+	# spreads Universal Suffrage.
+	ai_impose_chance = {
+		value = 0
+
+		if = {
+			limit = {
+				has_law = law_type:law_liquid_democracy
+				has_strategy = ai_strategy_egalitarian_agenda
+				scope:target_country = { has_law = law_type:law_universal_suffrage }
+			}
+			add = base_impose_law_weight
+		}
 	}
 }
 

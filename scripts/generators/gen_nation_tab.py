@@ -79,6 +79,8 @@ SECTIONS = {
         "te_officer_academies_standing", "te_political_commissars_indoctrination",
         # Heir education's focus
         "heir_ed_*",
+        # Liquid Democracy with Neural Lace (te_liquid_democracy_effects.txt)
+        "te_continuous_vote",
     ),
     "society": (
         # Inheritance: a dynasty's continuity (event outcome)

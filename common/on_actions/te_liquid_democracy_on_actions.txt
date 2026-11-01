@@ -1,0 +1,29 @@
+﻿# Liquid Democracy (law_liquid_democracy; te_liquid_democracy_effects.txt).
+
+# Root = Country. The Continuous Vote's one refresh site, and the elections
+# self-check's count of years under the law.
+on_yearly_pulse_country = {
+	on_actions = {
+		te_liquid_democracy_yearly_pulse
+	}
+}
+
+# Root = Country. The elections self-check's OK.
+on_election_campaign_start = {
+	on_actions = {
+		te_liquid_democracy_campaign_start
+	}
+}
+
+te_liquid_democracy_yearly_pulse = {
+	effect = {
+		te_refresh_continuous_vote = yes
+		te_ld_selfcheck_yearly = yes
+	}
+}
+
+te_liquid_democracy_campaign_start = {
+	effect = {
+		te_ld_selfcheck_campaign = yes
+	}
+}

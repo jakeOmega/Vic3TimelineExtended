@@ -2928,6 +2928,8 @@
  te_construction_market_capacity_modifier_desc:0 "Applies the effects of this construction-focused modifier."
  te_construction_market_private_share_modifier_desc:0 "Adjusts the share of construction handled by the private sector versus public investment."
  te_construction_market_site_desc:0 "With the Free Market Construction game rule on, Construction Sites appear on their own wherever construction is under way and turn purchased [concept_construction] into construction points; nobody builds them. With the rule off, this is your construction sector: the government builds, expands and downsizes it, and each level provides construction points according to its production method."
+ te_continuous_vote:0 "Continuous Vote"
+ te_continuous_vote_desc:0 "Neural implants let citizens vote the moment a question arises and move their delegations as their trust shifts. The government always knows where the people stand, and can lose them overnight."
  te_debris_cleaner_prestige_desc:0 "Our Space Program clears debris that every country in orbit would otherwise have to fly through, and the world notices: +1% prestige for every 0.1 point we remove a month."
  te_debris_removal_method_prestige_desc:0 "Our Space Program runs a debris-removal mission, and a cleaner orbit is a public good the world credits to us."
  te_debris_row:0 "[concept_orbital_debris]: #v [GetPlayer.MakeScope.ScriptValue('te_debris_index')|1]#! ([GetPlayer.GetCustom('te_debris_tier')])"

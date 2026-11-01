@@ -532,6 +532,7 @@ ideology_optimist_transhumanist = {
 		law_autocracy = neutral
 		law_single_party_state = neutral
 		law_algorithmic_governance = strongly_approve
+		law_liquid_democracy = approve
 		law_elder_council = neutral
 	}
 
@@ -1988,6 +1989,7 @@ ideology_custom_religion_aristocratic_governance = {
 		law_autocracy = strongly_approve
 		law_single_party_state = disapprove
 		law_algorithmic_governance = disapprove
+		law_liquid_democracy = strongly_disapprove
 		law_elder_council = approve
 	}
 
@@ -2076,6 +2078,7 @@ ideology_custom_religion_technocratic_governance = {
 		law_autocracy = neutral
 		law_single_party_state = approve
 		law_algorithmic_governance = strongly_approve
+		law_liquid_democracy = strongly_disapprove
 		law_elder_council = disapprove
 	}
 
@@ -2164,6 +2167,7 @@ ideology_custom_religion_republican_governance = {
 		law_autocracy = strongly_disapprove
 		law_single_party_state = disapprove
 		law_algorithmic_governance = disapprove
+		law_liquid_democracy = approve
 		law_elder_council = disapprove
 	}
 
@@ -2260,6 +2264,7 @@ ideology_custom_religion_corporate_governance = {
 		law_autocracy = disapprove
 		law_single_party_state = neutral
 		law_algorithmic_governance = approve
+		law_liquid_democracy = disapprove
 		law_elder_council = disapprove
 	}
 
@@ -2348,6 +2353,7 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_autocracy = strongly_approve
 		law_single_party_state = disapprove
 		law_algorithmic_governance = disapprove
+		law_liquid_democracy = strongly_disapprove
 		law_elder_council = disapprove
 	}
 
@@ -2436,6 +2442,7 @@ ideology_custom_religion_theocratic_governance = {
 		law_autocracy = approve
 		law_single_party_state = approve
 		law_algorithmic_governance = disapprove
+		law_liquid_democracy = disapprove
 		law_elder_council = neutral
 	}
 

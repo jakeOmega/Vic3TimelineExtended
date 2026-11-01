@@ -854,6 +854,7 @@ un_human_rights_resolution_button = {
 		OR = {
 			has_law = law_type:law_multicultural
 			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_protected_speech
 		}
 		custom_tooltip = {
