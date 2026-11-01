@@ -8,6 +8,7 @@
 # scripts/analysis/local_climate_calibration.py mirrors this file and prints its anchor table, and
 # test_local_climate_comfort.py pins the anchors' targets. Change a constant here and rerun both.
 #
+#   warming = (world's anomaly - the anomaly the record's normals hold at) x amplification(latitude)
 #   heat    = max(0, summer + warming - H0) x (1 + k_hum x humidity) x heat weight x (1 - heat relief)
 #   cold    = max(0, C0 - winter - warming) x cold weight x (1 - cold relief)
 #   dry     = W x aridity x (1 - water relief)
@@ -15,7 +16,8 @@
 #   penalty = min(P_max, heat + cold + dry + disease)
 
 # Tuning constants (§ 5, § 5.3).
-te_climate_heat_start = 23 # H0: the warmest month's mean, °C, above which heat costs
+te_climate_heat_start = 22 # H0: the warmest month's mean, °C, above which heat costs (22 with 1836 a degree colder
+# than the record's normals keeps § 5.3's 1836 targets; 23 was calibrated against the normals themselves)
 te_climate_humidity_factor = 0.33 # k_hum: each dew-point class adds a third to the heat cost
 te_climate_heat_weight = 1
 te_climate_cold_start = 0 # C0: the coldest month's mean, °C, below which cold costs
@@ -28,6 +30,10 @@ te_climate_penalty_max = 40 # P_max: climate alone never outweighs a full jobs b
 te_climate_amp_low_lat = 30
 te_climate_amp_high_lat = 66.5
 te_climate_amp_max = 2.5
+# The record holds today's climate normals (about 1991-2020), so a region reads it exactly when the
+# world's anomaly is today's; 1836, at anomaly 0, is this much colder, times the amplification
+# (owner, 2026-11-01).
+te_climate_normals_warming = 1.1
 
 # |latitude| of the region's reference place.
 te_climate_abs_latitude = {
@@ -55,11 +61,13 @@ te_climate_amplification = {
 	add = 1
 }
 
-# The warming this region feels, °C. The felt anomaly, because an aerosol haze cools the air people
-# live in (§ 6). It reads only global variables, so it works from state scope, and it can be
+# The warming this region feels against the record's normals, °C: the felt anomaly less the anomaly
+# the normals hold at, times the latitude's amplification. The felt anomaly, because an aerosol haze
+# cools the air people live in (§ 6). Negative until the world reaches today's warming. It reads only global variables, so it works from state scope, and it can be
 # negative: carbon removal past zero cools every region a little.
 te_climate_warming = {
 	value = temperature_anomaly_display
+	subtract = te_climate_normals_warming
 	multiply = te_climate_amplification
 }
 

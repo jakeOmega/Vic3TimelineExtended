@@ -218,7 +218,7 @@ disease  = D × malaria × (1 − disease_relief)
 penalty  = min(P_max, w_heat × heat + w_cold × cold + dry + disease)
 ```
 
-- `summer` and `winter` are the record's figures plus warming (phase 3).
+- `summer` and `winter` are the record's figures plus warming against today's normals (phase 3; § 6).
 - `H0` (the summer mean where heat starts to cost), `C0` (the winter mean where
   cold starts to cost), `k_hum`, `W`, `D`, the weights and `P_max` are tuning
   constants at the head of the script values file. The builder sets them by
@@ -371,9 +371,15 @@ removes.
 ## 6. Global warming (phase 3)
 
 - `summer` and `winter` in § 5 become the record's figures plus
-  `temperature_anomaly_display × amplification(latitude)`. The felt anomaly is
-  used because an aerosol haze cools the air people live in *(designer's
-  call)*.
+  `(temperature_anomaly_display − te_climate_normals_warming) × amplification(latitude)`.
+  The felt anomaly is used because an aerosol haze cools the air people live
+  in *(designer's call)*. The record holds today's normals, which already carry
+  about 1.1 °C of warming, so `te_climate_normals_warming = 1.1`: a region reads
+  its record exactly when the world's anomaly reaches today's, and 1836, at
+  anomaly 0, runs 1.1 °C × amplification colder *(owner, 2026-11-01)*. To keep
+  § 5.3's 1836 targets with the colder start, `H0` is 22 °C, not the 23 °C
+  first calibrated against the normals themselves. With the Global Warming rule
+  off the anomaly stays 0, and every region keeps its 1836 climate.
 - Amplification rises with latitude: about 1 in the tropics and about 2.5
   above the Arctic Circle, as observed warming runs. The builder picks a
   simple curve and states it.

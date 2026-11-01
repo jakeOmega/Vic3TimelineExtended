@@ -31,10 +31,10 @@ VALUES = ROOT / "common" / "script_values" / "local_climate_values.txt"
 
 # Spec § 5 and the plan's Task 5: the tuning constants at the head of local_climate_values.txt.
 CONSTANTS = {
-    "te_climate_heat_start": 23, "te_climate_humidity_factor": 0.33, "te_climate_heat_weight": 1,
+    "te_climate_heat_start": 22, "te_climate_humidity_factor": 0.33, "te_climate_heat_weight": 1,
     "te_climate_cold_start": 0, "te_climate_cold_weight": 0.8, "te_climate_dry_per_class": 8,
     "te_climate_malaria_per_class": 2.5, "te_climate_penalty_max": 40, "te_climate_amp_low_lat": 30,
-    "te_climate_amp_high_lat": 66.5, "te_climate_amp_max": 2.5,
+    "te_climate_amp_high_lat": 66.5, "te_climate_amp_max": 2.5, "te_climate_normals_warming": 1.1,
 }
 # Each term's raw value and the relief that eases it (the dry term's is water).
 TERMS = {"heat": "heat", "cold": "cold", "dry": "water", "disease": "disease"}
@@ -174,8 +174,11 @@ class Formula(unittest.TestCase):
         self.assertIn("add = modifier:state_malaria_control_add", values_body("te_climate_relief_disease"))
 
     def test_warming_shifts_both_seasons(self):
+        # The record holds today's normals, so a region reads it exactly at the world's anomaly of today
+        # (te_climate_normals_warming): 1836, at anomaly 0, is that much colder (owner, 2026-11-01).
         self.assertEqual(values_body("te_climate_warming"),
-                         "value = temperature_anomaly_display multiply = te_climate_amplification")
+                         "value = temperature_anomaly_display subtract = te_climate_normals_warming "
+                         "multiply = te_climate_amplification")
         self.assertEqual(values_body("te_climate_summer_eff"),
                          "value = te_climate_summer_mean add = te_climate_warming")
         self.assertEqual(values_body("te_climate_winter_eff"),
@@ -194,7 +197,8 @@ class Formula(unittest.TestCase):
         self.assertEqual(cal.terms(neutral_row(), 1, self.c, self.s)["penalty"], 0)
 
     def test_anchor_targets(self):
-        """Spec § 5.3's targets, in attraction points (1 SoL = 2), with no warming."""
+        """Spec § 5.3's targets, in attraction points (1 SoL = 2), in 1836: the world's anomaly 0, so each
+        region runs te_climate_normals_warming x its amplification below the record's normals."""
         p = self.penalty
         ranges = (
             ("STATE_GEORGIA", 1, 12, 16), ("STATE_GEORGIA", 7, 1, 4), ("STATE_GEORGIA", 10, 0, 2),

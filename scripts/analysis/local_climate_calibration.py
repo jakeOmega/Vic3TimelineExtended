@@ -12,8 +12,9 @@ test_local_climate_comfort.py pins the anchors' targets.
 
     python3 scripts/analysis/local_climate_calibration.py [--warming W]
 
-W is the world's felt warming, °C (temperature_anomaly_display); each region feels it times its
-latitude's amplification.
+W is the world's felt anomaly, °C (temperature_anomaly_display): 0 in 1836, about 1.1 today. The record
+holds today's normals, so each region feels W less te_climate_normals_warming, times its latitude's
+amplification; the default W = 0 is 1836.
 """
 import argparse
 import importlib.util
@@ -167,9 +168,10 @@ def amplification(lat, c):
 def terms(row, era, c, schedule, warming=0.0):
     """A row's four penalty terms and their sum, for a country holding every carrier up to `era`.
 
-    `warming` is the world's felt warming (temperature_anomaly_display); the row feels it times its
+    `warming` is the world's felt anomaly (temperature_anomaly_display; 0 in 1836). The record holds at
+    te_climate_normals_warming, so the row feels the anomaly less that, times its
     latitude's amplification. Mirrors local_climate_values.txt step by step."""
-    felt = warming * amplification(row.latitude, c)
+    felt = (warming - c["te_climate_normals_warming"]) * amplification(row.latitude, c)
     summer, winter = row.summer_mean_c + felt, row.winter_mean_c + felt
     raw = {
         "heat": max(0.0, summer - c["te_climate_heat_start"])
@@ -193,11 +195,12 @@ def _load_rows():
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--warming", type=float, default=0.0,
-                        help="the world's felt warming, °C (temperature_anomaly_display); default 0")
+                        help="the world's felt anomaly, °C (temperature_anomaly_display); default 0, 1836")
     args = parser.parse_args(argv)
     c, schedule, rows = load_constants(), relief_schedule(), _load_rows()
     heads = "".join(f"  era {e:>2}" for e in ERAS)
-    print(f"Local Climate calibration: penalty in attraction points (1 SoL = 2), warming {args.warming:+.1f} °C,")
+    print(f"Local Climate calibration: penalty in attraction points (1 SoL = 2), world anomaly {args.warming:+.1f} °C "
+          f"(the record's normals hold at {c['te_climate_normals_warming']:+.1f}),")
     print("for a country holding every relief carrier up to each era (era 1 = 1836).\n")
 
     print(f"  {'Relief':<18}{heads}")
