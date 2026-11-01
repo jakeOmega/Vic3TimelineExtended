@@ -1779,6 +1779,14 @@ class ReadinessTest(unittest.TestCase):
             with self.subTest(key=key):
                 line = re.search(rf'(?m)^ {key}:0 "(.*)"$', loc).group(1)
                 self.assertIn("half strength", line)
+        # The Earth alert prints ours at hull strength, so it says so while
+        # grounded (review of #1287, M5): the popup and the Hostile Fleet hover.
+        self.assertIn("half strength", re.search(r'(?m)^ sr_earth_alert_half_fire:0 "(.*)"$', loc).group(1))
+        for key, root in (("space_race_events.111.d", "ROOT.GetCountry"), ("je_space_race_widget_ovc_earth_tt", "JournalEntry.GetCountry")):
+            with self.subTest(key=key):
+                line = re.search(rf'(?m)^ {re.escape(key)}:0 "(.*)"$', loc).group(1)
+                self.assertIn(f"[AddLocalizationIf( EqualTo_CFixedPoint( {root}.MakeScope.ScriptValue('sr_disp_sc_operational'), "
+                              f"'(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )]", line)
 
 
 class NoSpaceCommandTest(unittest.TestCase):

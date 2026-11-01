@@ -777,8 +777,9 @@ and No Space Command bullets). All under Full Colonies. No self-check line: each
    (the battle report). Demolish Space Command, or have its state occupied, and fight a comparable month: our fleets
    deal about half the losses, take the same, and Space Fleets' note and the orders' hover say they fight at half
    strength. At Earth, Orbital Superiority falls by about half the margin, and an inbound hostile fleet that our
-   fleet's full strength would hold now brings the Earth Is Threatened popup. The battlestation and the batteries fire
-   as before.
+   fleet's full strength would hold now brings the Earth Is Threatened popup. That popup and the overview's Hostile
+   Fleet hover still print ours at full strength, and add "Without a Space Command our fleets fight at half
+   strength." The battlestation and the batteries fire as before.
 7. **No month built for free (review of #1287, I1).** A month is built in one lump at the country's monthly step,
    so Resume waits for the step, and that step builds nothing. Pause the day after a step (Built a month just
    changed) and Resume the day before the next: that step builds nothing, Construction Paused comes off after it,
