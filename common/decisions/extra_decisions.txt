@@ -226,6 +226,7 @@ imperial_federation_act_civilizing_mission = {
 		# Broad-franchise DP
 		OR = {
 			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_census_voting
 			has_law = law_type:law_wealth_voting
 		}
@@ -284,6 +285,7 @@ mandate_system_decision = {
 		# Broad-franchise DP — selling this requires legitimacy
 		OR = {
 			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_census_voting
 			has_law = law_type:law_wealth_voting
 		}
@@ -864,7 +866,7 @@ te_decision_space_mission_deep_space = {
 te_decision_space_mission_interstellar = {
 	is_shown = {
 		sr_space_race_on = yes
-		has_technology_researched = compact_fusion_reactors
+		has_technology_researched = aneutronic_fusion
 		sr_has_space_program = yes
 		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }

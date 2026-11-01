@@ -16,6 +16,7 @@ GLOBAL = {
 		activate_law = law_type:law_no_augmentation
 		activate_law = law_type:law_natural_form
 		activate_law = law_type:law_no_internet_policy
+		activate_law = law_type:law_no_frontier_ai_policy
 		activate_law = law_type:law_traditional_heredity
 		activate_law = law_type:law_unregulated_banking
 		if = {

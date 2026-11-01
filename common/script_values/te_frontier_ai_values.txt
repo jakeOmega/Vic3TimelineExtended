@@ -1,0 +1,20 @@
+﻿# ============================================================================
+# FRONTIER AI CONTROL — values (common/laws/te_frontier_ai_laws.txt)
+# ============================================================================
+
+# Open Weights' share of Global Technological Development
+# (global_tech_spread_script_value, extra_script_values.txt): 100 for each
+# country of major power rank or greater that holds the law, one era 11
+# technology's worth, up to 300. A read of the count the global pulse writes
+# each month (te_frontier_ai_refresh_open_weights_count), 0 before the first.
+# law_open_weights_world_spread_tt and the player guide quote the 100 and the
+# 300; test_frontier_ai_control.py pins them.
+te_frontier_ai_open_weights_spread = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_frontier_ai_open_weights_count }
+		value = global_var:te_frontier_ai_open_weights_count
+		multiply = 100
+		max = 300
+	}
+}

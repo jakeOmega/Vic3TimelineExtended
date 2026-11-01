@@ -177,7 +177,7 @@ synthetic_biology = {
 ai_agents = {
 	# Software that carries out multi-step work without supervision (era 13 spec § 6.1): Fully Automated Content
 	# Creation PM for Software Industries (from Brain-Computer Interfaces), Automated Bureaucracy law (from
-	# Generative AI)
+	# Generative AI), the Frontier AI Control law group (era 13 spec § 7.1; every country moves to Private Labs)
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/generative_ai.dds" # Placeholder Icon
 	category = production
@@ -449,6 +449,22 @@ autonomous_weapons = {
 	}
 }
 
+advanced_fission = {
+	# Generation IV reactors, molten salt and thorium (era 13 spec § 7.7): the Generation IV Reactors base method
+	# for the Nuclear Plant, its second since Nuclear Energy (era 7). Military, as the reactor line is
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/nuclear_energy.dds" # Placeholder Icon
+	category = military
+
+	unlocking_technologies = {
+		nuclear_energy
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
 brain_computer_interfaces = {
 	# Neurostimulation PM for Arts Academy, Unrestricted Augmentation and Human Purity laws (its three AI methods
 	# moved to AI Agents, Self-Driving Laboratories and Humanoid Robotics, era 13 spec § 6)
@@ -566,9 +582,40 @@ biohacking_and_human_augmentation = {
 		country_weekly_innovation_max_add = 100
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1
-		country_institution_ministry_of_thought_control_max_investment_add = 3
+		# 3 until the era 13 spec's AI Tutors took one level (§ 7.6), so the ministry's ceiling stays at 9
+		country_institution_ministry_of_thought_control_max_investment_add = 2
 		political_movement_radicalism_from_enactment_disapproval_mult = 0.1
 		state_literacy_growth_add = 0.00005
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+ai_tutors = {
+	# A personal tutor for every child (era 13 spec § 7.6). It unlocks no content: its downside (the owner's call 8,
+	# indoctrination by unscrupulous governments or private actors) is the Ministry of Thought Control's raised
+	# ceiling below and the curriculum events, society_technology_events.36 (a private platform, under Unregulated
+	# Internet) and .37 (the state's syllabus, under State-Controlled Internet or a Ministry of Propaganda or of
+	# Thought Control).
+	era = era_11
+	texture = "gfx/interface/icons/invention_icons/digital_education.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		digital_education
+	}
+
+	modifier = {
+		# pops retrain fast: Automation Policy (era 13 spec § 7.1) leans on how quickly workers requalify
+		state_pop_qualifications_mult = 0.10
+		state_literacy_growth_add = 0.0001
+		# the one late technology that raises education access; Public Works Programs, Computing Machines, Digital
+		# Education and Brain-Computer Interfaces each take 10 points off (player guide, 02-timeline.md)
+		state_education_access_add = 0.1
+		# a level moved from Human Augmentation, so the ministry's ceiling stays at 9 (MAX_INSTITUTION_INVESTMENT)
+		country_institution_ministry_of_thought_control_max_investment_add = 1
 	}
 
 	ai_weight = {

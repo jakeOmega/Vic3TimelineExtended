@@ -137,6 +137,7 @@ weight, so for a typical great power each point is one point of target.
 |---|---|
 | Rules of War law | Total War −2, Traditional Rules of War 0, War Crimes Forbidden +0.5, Humanitarian Regulations +1, Limited War +1.5 |
 | Isolationism (trade policy) | −1.5 |
+| International Oversight (Frontier AI Control law, members only; see [Laws on state power and information](06-politics.md#laws-on-state-power-and-information)) | +0.5 |
 | Ministry of International Aid | +0.15 for each level of investment (+1.35 at the cap of 9) |
 | Nuclear doctrine | No First Use +0.5, Existential Deterrence 0, Flexible First Use −0.5, Nuclear Compellence −1, Nuclear Warfighting −1.5 |
 | The Burden of the Bomb | Up to −1, in step with your arsenal's burden |
@@ -1014,7 +1015,7 @@ Development Fund section.
 |---|---|---|---|
 | Peacekeeping | Major power | 0.5% of GDP a year, 100 influence, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
 | Development Programs | The World Development Fund founded; you pay your dues and draw no grant | 0.0625% to 1% of GDP a year, by [size](#development-programs-sizes) | Faster infamy decay, prestige, lobbying with the Fund's recipients; the money pays the Fund's grants |
-| Human rights champions | Universal Citizenship, Universal Suffrage or Protected Speech | 100 influence | Prestige, refugee ministry impact |
+| Human rights champions | Universal Citizenship, Universal Suffrage, Liquid Democracy or Protected Speech | 100 influence | Prestige, refugee ministry impact |
 | Arms control | War Crimes Forbidden, Humanitarian Regulations or Limited War | 100 influence, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
 Great powers can also Champion the Order or Undermine the Order, under the

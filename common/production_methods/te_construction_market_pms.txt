@@ -364,6 +364,52 @@ pm_te_direct_construction_nanomaterial = {
 	}
 }
 
+# pm_self_replicating_construction: 24 construction per level
+pm_te_direct_construction_self_replicating = {
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p3.dds" # Placeholder Icon
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		von_neumann_machines
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 24
+		}
+	}
+
+	state_modifiers = {
+		unscaled = {
+			state_construction_mult = 0.3
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_steel_add = 20
+			goods_input_glass_add = 16
+			goods_input_explosives_add = 8
+			goods_input_tools_add = 16
+			goods_input_electricity_add = 40
+			goods_input_transportation_add = 41.5
+			goods_input_engines_add = 4
+			goods_input_digital_assets_add = 20
+			goods_input_advanced_materials_add = 1.5
+			goods_input_robotics_add = 20
+		}
+
+		level_scaled = {
+			building_employment_academics_add = 10
+			building_employment_bureaucrats_add = 410
+			building_employment_clerks_add = 400
+			building_employment_engineers_add = 250
+			building_employment_machinists_add = 500
+			building_employment_laborers_add = 3000
+		}
+	}
+}
+
 # ---- Maintenance (pmg_maintenance) ----
 # Forced in place of the pm_maintenance tiers in direct games (no construction good to
 # pay upkeep in) and in no_maintenance market games (the good exists, but

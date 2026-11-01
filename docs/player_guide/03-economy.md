@@ -66,6 +66,7 @@ methods:
 | Reinforced Concrete Buildings | 6 |
 | Advanced Construction | 10 |
 | Nanomaterial Buildings | 16 |
+| Self-Replicating Construction | 24 |
 
 ### Construction maintenance and retooling
 
@@ -185,7 +186,7 @@ normal retooling costs; penalties already removed stay removed.
 With the rule disabled, construction works as in the base game, but the
 Construction Site takes the Construction Sector's place. The government builds,
 expands and downsizes Construction Sites like any government building, and each
-level provides 1 to 16 points a week by production method, the same tiers as the
+level provides 1 to 24 points a week by production method, the same tiers as the
 table above. The government pays their wages, and they buy materials for each
 point your queues spend. Construction Sites are built from the state view.
 Every country also gets Base Construction, 5 points a week, so a country without
@@ -385,9 +386,12 @@ Transportation is produced by:
 - Railways, on every train method. In a power bloc with tier III or higher of
 the Transportation Infrastructure principle, each railway switches its steam,
 electric or diesel trains to a stronger version on its own, which carries
-20–28% more and adds more infrastructure. That switch costs no retooling.
-- Railways' Rolling Stock (passenger carriages up to Maglev Trains) and ports'
-Passenger Ships, which add more Transportation for a few more inputs.
+20–28% more and adds more infrastructure. That switch costs no retooling. The
+last train method, Vactrain Freight (from the era 12 technology Vactrains), runs
+on Electricity and burns no oil.
+- Railways' Rolling Stock (passenger carriages up to Maglev Trains and
+Vactrains) and ports' Passenger Ships, which add more Transportation for a few
+more inputs.
 - Highways and Airports, and Urban Centers' public transit.
 - Railway, logistics and fulfillment company buildings.
 

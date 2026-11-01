@@ -20,9 +20,12 @@
 #   h    become a market member under a great power that has imposed a carbon
 #        tax -- the state the old button grid showed nothing for
 #   i    recompute the yearly snapshots now instead of waiting for January
-#   j/k  adopt or repeal all nine policies at once
+#   j/k  adopt or repeal every policy at once
 #   l    log every country's AI climate will, part by part, to debug.log
 #        (grep GW_AI_WILL) -- the check on global_warming_ai_values.txt
+#   n    run twelve monthly steps of the aerosol mask (Geoengineering) and
+#        log it (grep GW_AEROSOL): adopt Aerosol Injection first (j), repeal
+#        it (k) and run n again for termination shock
 # ============================================================================
 namespace = te_debug_gw
 
@@ -125,5 +128,11 @@ te_debug_gw.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 	option = {
 		name = te_debug_gw.1.l
 		te_debug_gw_log_ai_will = yes
+	}
+
+	# ---- Geoengineering ---------------------------------------------------
+	option = {
+		name = te_debug_gw.1.n
+		te_debug_gw_advance_mask = yes
 	}
 }

@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 152 laws, most of them in 37 new law groups, with the institutions,
+The mod adds 159 laws, most of them in 38 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
@@ -12,8 +12,8 @@ default) and State Collapse, which has no rule.
 ## The mod's new laws
 
 The new law groups sit beside the base game's in the laws panel. Sixteen of them
-are ministries, covered in [Ministries](#ministries). The other twenty-one are
-grouped here by theme, and ten further laws join base-game law groups.
+are ministries, covered in [Ministries](#ministries). The other twenty-two are
+grouped here by theme, and fifteen further laws join base-game law groups.
 
 Many laws need another law in force, and some can't stand beside one. Anarchy
 needs Cooperative Ownership, for example, and Cooperative Ownership needs a
@@ -101,6 +101,7 @@ debate](07-social-movements.md#the-morphological-freedom-debate).
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
 | Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | How you fight and what you promise the world: combat strength, occupation, war support, diplomatic standing and nuclear strikes. See [The rules of war](#the-rules-of-war). |
 | Internet Governance | No Internet Policy, Unregulated Internet, State-Controlled Internet, Net Neutrality | From the World Wide Web on: technology spread, radicalism, covert defense. |
+| Frontier AI Control | No Frontier AI Policy, Private Labs, National Licensing, State Monopoly, International Oversight, Open Weights | Who builds the most capable AI, from AI Agents on: innovation against covert defense, authority and intelligence capacity. See [Who builds frontier AI](#who-builds-frontier-ai). |
 
 In State Power, Unitary State gives 200 authority and faster incorporation.
 Federal System makes decrees 25% cheaper and calms movements but lowers tax
@@ -143,6 +144,33 @@ country's situation calls for them: a ruling on slavery while abolitionists
 organize, a foreign power demanding an execution, a labor law struck down under
 Judicial Supremacy, an election voided, a new regime asking its courts to call
 it lawful, and two paths out of Religious Courts toward Statutory Courts.
+
+### Who builds frontier AI
+
+Every country holds No Frontier AI Policy until it researches AI Agents, and
+then moves to Private Labs on its own. The other four laws need AI Agents too.
+Economic Covert Defense raises the Detection Risk of a rival's Industrial
+Espionage, the operation that steals production technologies (see [Covert
+defense](11-influence.md#covert-defense)), so the group trades your research
+against what you keep from rivals and how firmly the state holds the
+technology.
+
+| Law | Gives | Costs |
+|---|---|---|
+| Private Labs | +10% innovation; the Industrialists gain political strength | −10 Economic Covert Defense |
+| National Licensing | +5% innovation, +5 Economic Covert Defense, +1 intelligence capacity | |
+| State Monopoly | 100 authority, +3 intelligence capacity, +10 Economic Covert Defense; the Armed Forces gain political strength | −5% innovation |
+| International Oversight | +5% innovation, +2 diplomatic reputation, +0.5 UN Authority Target | Needs membership of the United Nations |
+| Open Weights | +10% technology spread; more Global Technological Development for every country; the Intelligentsia attract more pops | −10 Economic Covert Defense |
+
+Leaving the United Nations, or its dissolution, drops International Oversight
+to National Licensing at once. While you are a major power or greater, Open
+Weights adds 100 technology spread to [Global Technological
+Development](02-timeline.md#global-technological-development) for every
+country, up to 300 from all the countries that hold it, so it helps the world
+catch up on what you and the other leaders have researched. The Industrialists
+back Private Labs, the Armed Forces State Monopoly and the Intelligentsia Open
+Weights; most other interest groups prefer National Licensing.
 
 ### The rules of war
 
@@ -216,6 +244,7 @@ policy](04-banking.md).
 | Communal Administration | Bureaucracy | Council Republic, Anarchy or Collective Governance | Local assemblies and recallable delegates run the administration; see [Who staffs the administration](#who-staffs-the-administration). |
 | Automated Bureaucracy | Bureaucracy | AI Agents | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
 | Algorithmic Governance | Distribution of Power | Artificial General Intelligence | Machines hold supreme authority and run the administration too. |
+| Liquid Democracy | Distribution of Power | Liquid Democracy | Everyone votes on every question or lends the vote to someone they trust, and can take it back at any time. A voting law with Universal Suffrage's franchise: ideological incoherence costs less legitimacy and enacted laws stir their opponents less, but laws pass more slowly. With Neural Lace you also gain the Continuous Vote, checked once a year: more enactment success and fewer radicals from movements, but the groups in government draw less support. Women's Suffrage, Elected Bureaucrats, the campaign finance laws and the Tradition of Free Elections work with it as with any voting law; First Past the Post and the voting-age amendments don't. |
 | Neocolonialism | Colonization | Decolonization | See [Colonial empires and decolonization](12-decolonization.md). |
 | Private Policing | Policing | Computer Networks, with Laissez-Faire or Interventionism | Licensed private firms do most police work for whoever pays them; see [Who polices](#who-polices). |
 | Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
@@ -490,8 +519,8 @@ What it allows depends on your **Legislative Override Capacity**, summed from
 your laws, your institutions and a few technologies and power bloc principles.
 The [Nation tab](01-introduction.md#the-nation-tab) shows it with every source.
 Among the laws, Autocracy and Single-Party State give 3, Algorithmic Governance
-2 and Unitary State 1; Universal Suffrage, Anarchy and Traditional Vassalage
-take away 3, and Guaranteed Liberties, Devolved Administration and Communal
+2 and Unitary State 1; Universal Suffrage, Liquid Democracy, Anarchy and
+Traditional Vassalage take away 3, and Guaranteed Liberties, Devolved Administration and Communal
 Administration 2. Among the courts, Executive Tribunals give 1 and Algorithmic
 Jurisprudence 2 under Algorithmic Governance; Constitutional Review takes away
 2 and Judicial Supremacy 3.
@@ -648,8 +677,8 @@ Collective Governance is a governance principle in which nobody holds supreme
 executive power: a body of equals governs, and its chair is first among equals.
 It unlocks with Political Agitation and needs one of these Distribution of Power
 laws: Landed Voting, Wealth Voting, Census Suffrage, Universal Suffrage,
-Single-Party State, Technocracy, Oligarchy, Organic Regulation, Anarchy or
-Algorithmic Governance. Cooperative Ownership, which Anarchy needs, is open to
+Liquid Democracy, Single-Party State, Technocracy, Oligarchy, Organic
+Regulation, Anarchy or Algorithmic Governance. Cooperative Ownership, which Anarchy needs, is open to
 it as to a Council Republic. Under it you have 15% less authority and laws pass 10% more slowly, but broad
 coalitions earn more legitimacy and ideological incoherence costs less. The
 chair's interest group gets no head-of-state legitimacy bonus.
@@ -700,7 +729,7 @@ group that dislikes the current law doesn't back a new law it has no view on.
 | Multiculturalist | Leaders; also added to the Intelligentsia | Leaders once a Civil Rights Movement exists; the group ideology with the Civil Rights Movement technology |
 | Inclusive Multiculturalist | Leaders | As Multiculturalist, after the Sexual Revolution; adds LGBTQ+ rights |
 | Anti-Colonialist | Leaders; also added to the Trade Unions and Intelligentsia | With the Decolonization technology; opposes colonial laws |
-| Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy and Algorithmic Governance |
+| Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy, Algorithmic Governance and Liquid Democracy |
 | Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism, Contracted Administration and Private Policing |
 | Islamic Inheritance | The Devout in Sunni and Shiite countries | From the start; favors Customary Inheritance and Forced Heirship |
 

@@ -57,7 +57,7 @@ innovation, innovation cap and prestige.
 | Mars Mission | Knowledge Economy | adds Mars Landing | 5,000 |
 | Solar Colonization | Cislunar Infrastructure | adds Solar System Colonization, the Moon and stages 1 and 2 | 10,000 |
 | Deep Space Exploration | Space Colonization | lets a country with no colony beyond the Moon start colonizing at stages 3 to 5 | 50,000 |
-| Interstellar Mission | Compact Fusion Reactors | adds the Interstellar Probe | 100,000 |
+| Interstellar Mission | Aneutronic Fusion | adds the Interstellar Probe | 100,000 |
 
 > Lowering the production method, or losing the building, fails every running
 > milestone the new method no longer supports and wipes its progress. The event
@@ -111,7 +111,7 @@ Program runs a method that supports it.
 | Moon Landing | Orbital Flight | Space Exploration (era 7) | 200 | 6% | ×2 |
 | Deep-Space Probe | Moon Landing | Space Exploration (era 7) | 150 | 6% | ×2 |
 | Mars Landing | Moon Landing | Knowledge Economy (era 9) | 450 | 9% | ×6 |
-| Interstellar Probe | Deep-Space Probe and Mars Landing | Compact Fusion Reactors (era 12) | 600 | 9% | ×12 |
+| Interstellar Probe | Deep-Space Probe and Mars Landing | Aneutronic Fusion (era 13) | 600 | 9% | ×12 |
 | Interstellar Probe: Awaiting Data | Interstellar Probe | none | 132 months | none | none |
 | Solar System Colonization | Moon Landing (Mars Landing for the sites beyond the Moon) | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
 
@@ -141,7 +141,7 @@ a note stands in their place. Two sections of its own follow, Space Powers and
 Orbit (see [The Space Race tab](#the-space-race-tab)), and How the Space Race
 Works comes once at the end.
 
-![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies.](images/solar_system_colonization_tab.png)
+![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, and Rivals.](images/solar_system_colonization_tab.png)
 
 The overview is always shown. Its first row is three icons, each with a label
 under it:
@@ -212,9 +212,16 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels against your room, red once your built and queued levels pass it, and the grade the next level would work at, queued levels counted (see [Extraplanetary Base room](#extraplanetary-base-room)). |
 | Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
 
-Solar System Colonization has more sections below Rivals: Colony Fleets and
-Colonies, then under Full Colonies Space Command and Space Fleets, then Solar
-System, and How Solar Colonization Works (collapsed), which explains them.
+Below its overview, Solar System Colonization has four tabs, and the one you
+were last on stays chosen while you play:
+
+| Tab | Holds |
+|---|---|
+| Mission Control | Mission Control (with Next Windows) and Rivals, as every milestone has. Shown first. |
+| Fleets | Colony Fleets, then under Full Colonies Space Command and Space Fleets. |
+| Colonies | Colonies. |
+| Solar System | Solar System, then How Solar Colonization Works (collapsed), which explains them. |
+
 Colonies (open) has a box for every site you hold, with Colonies Held (out of
 40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a
@@ -326,7 +333,7 @@ milestone is finished it also decides a reward that fades over ten years.
 Each milestone has its own funding level, from 0 to six levels past your cap. The cap starts
 at 3 and rises with technology: thirteen space-related technologies from era 7
 to era 11 raise it by 1 each, and Cislunar Infrastructure (era 10), three
-technologies in era 12 and Fusion Batteries in era 13 raise it by 2 each. With
+technologies in era 12 and Microfusion Cells in era 13 raise it by 2 each. With
 all of them the cap is 13 by the end of era 10, 18 by the end of era 11, 24 by
 the end of era 12 and 26 in era 13. Tier V of the
 Advanced Research power bloc principle, its highest, adds another level.
@@ -1032,9 +1039,16 @@ the reserve until it is launched (see [Holding Earth orbit](#holding-earth-orbit
 | Assault carrier | 0.25 | 0.25 | 12 | Carries 2 marine battalions a point of strength |
 | Tender | 0.1 | 0.1 | 36 | Adds propellant and supply to its fleet |
 
-Fleets cost upkeep as more of every input Space Command uses: 1% for every 10
-points of strength at full, the reserve's included. A large fleet makes the
-yards dearer to run, not slower. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
+Every Space Command uses a maintenance line, the same whatever its method and
+however many levels it has: 20 Electronic Components, 20 Wired and 20 Wireless
+Telecommunication Gear, 10 Software, 20 Industrial Robotics and 40 Chemicals a
+week at full staff, about 8,400 at base prices. Fleets cost upkeep as +900% of
+that line for every 10 points of strength at full, the reserve's included, so a
+fleet of 300 costs about 2.3 million a week. Switching the yards to a cheaper
+method or cutting levels doesn't lower it, and with a second Space Command (one
+that came with a country you annexed, say) the fleets' share is split between
+them, so you pay it once. A large fleet makes Space Command dearer to run; it
+builds as fast while those goods can be bought. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
 Production each raise your fleets' fire by a quarter.
 
 ### Moving fleets
@@ -1047,11 +1061,20 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 
 | Order | What it does |
 |---|---|
-| The destination button | Steps through the other locations; its hover gives the trip's months and propellant |
-| Go | Sends the fleet. It can't leave when the trip departs in a later month (a chemical or fusion fleet leaving Earth follows the launch windows), when its propellant doesn't cover the trip, or from Earth while Earth is blockaded or your launch site occupied |
+| The destination button | Opens Fleet Destination, a row for each other location: the trip's months and propellant (in red when the fleet carries too little), from Earth its launch window, your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
+| Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
 | Merge | Joins another of your fleets at the same location |
 | Detach | Splits half of each role into a new fleet |
 | Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
+
+Your fleets take orders only while you have a Space Command level in a state
+you control. Without one, none can leave, change posture or target, start a
+refit or be repaired, and a refit under way pauses; Space Fleets says so above
+its rows. Fleets already on their way land, every fleet fights where it is at the
+posture it had, and a docked fleet still takes on supply, propellant and
+marines. Demolishing Space Command ends the upkeep and grounds your fleets: one
+at Earth still fights there and keeps Earth from being blockaded, but can't
+leave or be repaired.
 
 A fleet in flight can be neither attacked nor recalled. It docks at Earth and at
 your colonies with a Spaceport: supply and propellant refill (at a Spaceport,
@@ -1066,7 +1089,9 @@ with the months until it arrives.
 ### Battles in space
 
 Each month, fleets of countries at war fight at every location where they meet.
-What a fleet fights depends on its posture, set by the posture button:
+What a fleet fights depends on its posture, set by the four posture buttons under its
+orders. The one in force is lit, and one the fleet can't take is grayed, its
+hover saying why:
 
 | Posture | Fights | Use it to |
 |---|---|---|
@@ -1075,13 +1100,20 @@ What a fleet fights depends on its posture, set by the posture button:
 | Close in | The target site's Defenses and the enemy fleets stationed there | Seize or destroy a colony |
 | Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its site | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
 
+The target button beside them opens Fleet Target: the sites where the fleet is,
+with their holders, and Target on each, grayed with the reason where the fleet's
+posture can't take that site. Closing in on a site needs it to be an enemy's, a
+free colony or yours under an enemy's occupation; interdicting, a country's at
+peace with you that is not your ally. Choosing Close in or Interdict without such
+a target takes the first site there that fits.
+
 At Earth every fleet is stationed and fights every enemy fleet, an Orbital
 Battlestation fights for its owner (25 strength a level, regaining 10% a month;
 none in a state its owner doesn't control), and so do its ground-to-orbit
 batteries (see [Holding Earth orbit](#holding-earth-orbit)). The one exception
-is a fleet closing in on a colony on the Moon: the posture button at Earth
-steps between Station and Close in while there is a lunar colony you can close
-in on (an enemy's, a free one, or yours under an enemy's occupation). A fleet
+is a fleet closing in on a colony on the Moon: at Earth the posture buttons show
+while there is a lunar colony you can close in on (an enemy's, a free one, or
+yours under an enemy's occupation), and only Station and Close in can be chosen. A fleet
 closing in there takes fire from every enemy fleet, battlestation and battery at
 Earth, and no longer guards your own lunar colonies, which can't be seized or
 destroyed while a fleet of yours or your Orbital Battlestation is stationed at
@@ -1128,7 +1160,7 @@ You can blockade a rival's colonies without going to war, as the United States
 quarantined Cuba in 1962. Send a fleet to a location other than Earth where a
 country at peace with you, and not your ally (no alliance or defensive pact),
 holds a colony, and
-step its posture to Interdict; the target button picks which country's site.
+set its posture to Interdict; the target button picks which country's site.
 While none of that country's fleets is stationed or standing off there, its
 colonies at that location are blockaded as an enemy's would be, and its
 Locations row reads Interdicted. Nobody fires. If its fleet holds orbit there,

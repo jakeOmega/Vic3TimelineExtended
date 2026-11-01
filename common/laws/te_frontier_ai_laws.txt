@@ -1,0 +1,179 @@
+﻿# ============================================================================
+# FRONTIER AI CONTROL (era 13 spec § 7.1, call 12)
+# docs/superpowers/specs/2026-10-31-era-13-technology-tree-design.md
+# docs/systems/mod_systems/governance_laws.md § Frontier AI Control
+# ============================================================================
+# Who builds the most capable AI systems. A power structure group, the third
+# of the trio with Bodily Autonomy (human rights) and Automation Policy
+# (economy). Its laws trade innovation against exposure to covert technology
+# theft (economic covert defense, which covers industrial espionage), authority
+# and intelligence capacity:
+#
+#   law_no_frontier_ai_policy        before AI Agents: nothing to govern
+#   law_private_ai_labs              the default once AI Agents exists; innovation
+#   law_national_ai_licensing        between
+#   law_state_ai_monopoly            authority, intelligence, defense; less innovation
+#   law_international_ai_oversight   UN members only; UN Authority Target
+#   law_open_weights                 technology spread, for the world as well
+#
+# KEEP THE KEYS. Superintelligence (spec § 3.5) reads this group as a
+# country's stance on racing for capability or investing in alignment.
+#
+# ORDER MATTERS. law_no_frontier_ai_policy comes first in this file: the engine
+# gives any country that history leaves without a law in a group the group's
+# first law in file order, which is also what an old save loading this group
+# for the first time gets (docs/guides/scripting_best_practices.md, "First Law
+# in a Lawgroup File Is the Unseeded Default"). common/history/extra_history.txt
+# seeds it for every country as well.
+#
+# THE GROUP OPENS WITH AI AGENTS. fix_incompatible_laws
+# (common/scripted_effects/extra_effects.txt) calls te_frontier_ai_fix_law
+# (te_frontier_ai_effects.txt) on every law change, every acquired technology
+# and the yearly country pulse: a country holding No Frontier AI Policy with AI
+# Agents moves to Private Labs, as No Internet Policy moves to Unregulated
+# Internet with the World Wide Web.
+#
+# THE CONSISTENCY WALK. No law here has unlocking_laws or disallowing_laws, so
+# gen_law_consistency emits no helper for the group, and the placeholder is a
+# constraint-free, technology-free fallback should a later law gain one. Its
+# re-enactment is closed with can_enact instead of disallowing_laws, which the
+# generator would read as a constraint and lose the group its fallback. The
+# progressiveness puts the placeholder furthest from every other law, so a
+# cascade would try the five real laws first.
+#
+# INTERNATIONAL OVERSIGHT needs UN membership while it is held, which no law
+# constraint can say: te_frontier_ai_fix_law moves a holder that is no longer a
+# member to National Licensing, and un_membership_end_effect (leaving, or the
+# UN dissolving) calls te_frontier_ai_on_un_membership_end at once.
+# ============================================================================
+
+law_no_frontier_ai_policy = {
+	group = lawgroup_frontier_ai_control
+	icon = "gfx/interface/icons/law_icons/law_no_internet_policy.dds" # Placeholder Icon
+
+	# No gate: the group's constraint-free fallback (see the header).
+	progressiveness = 0
+
+	can_enact = {
+		custom_tooltip = {
+			text = law_no_frontier_ai_policy_closed_tt
+			NOT = { has_technology_researched = ai_agents }
+		}
+	}
+}
+
+law_private_ai_labs = {
+	group = lawgroup_frontier_ai_control
+	icon = "gfx/interface/icons/law_icons/law_corporate_genetic_licensing.dds" # Placeholder Icon
+
+	unlocking_technologies = { ai_agents }
+
+	progressiveness = 50
+
+	modifier = {
+		# The most innovation: capital chases each new model.
+		country_weekly_innovation_mult = 0.1
+		# A company guards its weights only as well as a company can
+		# (No IP Protection's figure).
+		country_covert_defense_economic_add = -10
+		interest_group_ig_industrialists_pol_str_mult = 0.1
+	}
+}
+
+law_national_ai_licensing = {
+	group = lawgroup_frontier_ai_control
+	icon = "gfx/interface/icons/law_icons/law_ministry_of_science.dds" # Placeholder Icon
+
+	unlocking_technologies = { ai_agents }
+
+	progressiveness = 40
+
+	modifier = {
+		country_weekly_innovation_mult = 0.05
+		# Licensed labs meet the regulator's security standard.
+		country_covert_defense_economic_add = 5
+		country_intelligence_capacity_add = 1
+	}
+}
+
+law_state_ai_monopoly = {
+	group = lawgroup_frontier_ai_control
+	icon = "gfx/interface/icons/law_icons/law_state_intellectual_property.dds" # Placeholder Icon
+
+	unlocking_technologies = { ai_agents }
+
+	# 15 below National Licensing and 25 above the placeholder, so a cascade
+	# from here tries National Licensing first.
+	progressiveness = 25
+
+	modifier = {
+		# Compartmented, cleared laboratories work more slowly.
+		country_weekly_innovation_mult = -0.05
+		country_authority_add = 100
+		country_intelligence_capacity_add = 3
+		# Strict IP Protection's figure.
+		country_covert_defense_economic_add = 10
+		interest_group_ig_armed_forces_pol_str_mult = 0.1
+	}
+}
+
+law_international_ai_oversight = {
+	group = lawgroup_frontier_ai_control
+	icon = "gfx/interface/icons/law_icons/law_ministry_of_international_aid.dds" # Placeholder Icon
+
+	unlocking_technologies = { ai_agents }
+
+	progressiveness = 65
+
+	# The United Nations administers the inspections: no UN, no law.
+	is_visible = {
+		has_game_rule = united_nations_enabled
+	}
+
+	can_enact = {
+		custom_tooltip = {
+			text = law_international_ai_oversight_needs_un_tt
+			te_frontier_ai_un_member = yes
+		}
+	}
+
+	modifier = {
+		# Shared evaluations and incident reports.
+		country_weekly_innovation_mult = 0.05
+		# Other countries trust a state whose laboratories are inspected
+		# (Limited War's figure is +3, War Crimes Forbidden's +2).
+		country_diplomatic_reputation_add = 2
+		# A standing choice a member keeps (un_redesign_design.md § 0.11);
+		# test_un_policy_pillar.py pins it.
+		country_un_authority_target_add = 0.5
+	}
+
+	on_enact = {
+		custom_tooltip = law_international_ai_oversight_falls_tt
+	}
+}
+
+law_open_weights = {
+	group = lawgroup_frontier_ai_control
+	icon = "gfx/interface/icons/law_icons/law_open_source_innovation.dds" # Placeholder Icon
+
+	unlocking_technologies = { ai_agents }
+
+	progressiveness = 80
+
+	modifier = {
+		# Our own researchers build on what everyone publishes
+		# (Open Source Innovation's figure).
+		country_tech_spread_mult = 0.1
+		# Nothing at the frontier stays secret here.
+		country_covert_defense_economic_add = -10
+		interest_group_ig_intelligentsia_pop_attraction_mult = 0.1
+	}
+
+	# The world's share: a major power or greater holding the law adds 100 to
+	# Global Technological Development, up to 300 from all of them
+	# (te_frontier_ai_open_weights_spread, te_frontier_ai_values.txt).
+	on_enact = {
+		custom_tooltip = law_open_weights_world_spread_tt
+	}
+}
