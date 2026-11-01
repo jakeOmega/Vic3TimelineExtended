@@ -103,3 +103,14 @@ ahead, raised if they fall short.
 |---|---|---|---|---|---|
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
+
+## Phase 3: Advanced Fission
+
+1. **The tree.** Advanced Fission sits in era 11's military tree after Nuclear
+   Energy, on Nuclear Energy's icon until its own is painted.
+2. **The method.** A Nuclear Plant offers Generation IV Reactors beside Nuclear
+   Power once Advanced Fission is researched. At the same staff it makes 3,500
+   electricity a level (Nuclear Power 2,000) and buys Advanced Materials. The
+   AI-managed reactor automation still shows for a plant on either method.
+3. **The AI switches.** An AI Nuclear Plant moves to Generation IV Reactors
+   within a year of the technology, where Advanced Materials are on its market.
