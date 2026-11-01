@@ -208,7 +208,7 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        self.assertEqual(len(names), 13)
+        self.assertEqual(len(names), 16)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -924,13 +924,14 @@ class InterdictionTest(unittest.TestCase):
             with self.subTest(file=label):
                 setters = [m.start() for m in re.finditer(r"_posture value = 4 \}", text)]
                 owners = {re.findall(r"(?m)^(\w+) = \{", text[:i])[-1] for i in setters}
-                self.assertLessEqual(owners, {"sr_fl_step_posture_at", "sr_fl_debug_icpt_at"})
+                self.assertLessEqual(owners, {"sr_fl_step_posture_at", "sr_fl_set_posture_at", "sr_fl_debug_icpt_at"})
         ai = ""
         for text in (self.generated, self.combat, _strip(_raw(FLEET_EFFECTS))):
             names = re.findall(r"(?m)^(sr_fl_ai_\w+) = \{", text)
             self.assertTrue(names)
             ai += "".join(_block(text, name) for name in names)
         self.assertNotIn("step_posture", ai)
+        self.assertNotIn("set_posture", ai)
         self.assertNotIn("interdict", ai)
 
     def test_cede_colony_costs_no_infamy_against_an_interdictor(self):
@@ -1381,7 +1382,8 @@ class LunarAtEarthTest(unittest.TestCase):
         self.assertNotIn("value = 2 }", earth)
         self.assertNotIn("value = 4 }", earth)
         self.assertLess(step.index("sr_fl_$N$_at_earth = yes"), step.index("local_var:sr_cb_p <= 1"))
-        # The button is shown at Earth only while such a world exists, with its own tooltip.
+        # The posture line is shown at Earth only while such a world exists; the
+        # step (the console's since the posture buttons) keeps its own tooltip.
         for n in range(1, gsf.SLOTS + 1):
             with self.subTest(slot=n):
                 combat = _block(self.display, f"sr_disp_fl_{n}_combat")
@@ -1398,6 +1400,30 @@ class LunarAtEarthTest(unittest.TestCase):
         earth_case = _block("x = {" + hostile_step.split("limit = { var:sr_fl_$N$_loc = 1 }", 1)[1], "x")
         self.assertEqual(sorted(set(re.findall(r"sr_site_hostile_target = \{ KEY = (\w+) \}", earth_case))),
                          sorted(w.key for w in self.lunar))
+
+    def test_earth_offers_station_and_close_in_only(self):
+        """The posture buttons (UI pass design § 7) under Earth's own rules:
+        never Stand off or Interdict there; Close in on a hostile world here,
+        whose Earth arm is the lunar worlds (checked above)."""
+        sgui = _block(_strip(_raw(SGUIS)), "sr_fleet_set_posture_sgui")
+        valid = _block("x = {" + sgui.split("\n\tis_valid = {", 1)[1], "x")
+        opener = r"(?m)^\t\ttrigger_if = \{\s*limit = \{\s*scope:pick = (\d)(\s*sr_fl_op_check = \{ TEST = at_earth \})?\s*\}"
+        rules = {int(m.group(1)): _block("x = {" + valid[m.end():], "x") for m in re.finditer(opener, valid)}
+        at_earth_only = {int(m.group(1)) for m in re.finditer(opener, valid) if m.group(2)}
+        self.assertEqual(sorted(rules), [2, 3, 4])
+        # Stand off's rule applies at Earth alone, where it fails
+        self.assertEqual(at_earth_only, {2})
+        self.assertIn("NOT = { sr_fl_op_check = { TEST = at_earth } }", rules[2])
+        self.assertIn("NOT = { sr_fl_op_check = { TEST = at_earth } }", rules[4])
+        self.assertIn("sr_fl_op_check = { TEST = has_interdict_world }", rules[4])
+        self.assertIn("sr_fl_op_check = { TEST = has_hostile_world }", rules[3])
+        self.assertNotIn("at_earth", rules[3])
+        # Earth's own words for Station and Close in.
+        effect = _block("x = {" + sgui.split("\n\teffect = {", 1)[1], "x")
+        for p in (1, 3):
+            with self.subTest(posture=p):
+                self.assertRegex(effect, rf"limit = \{{ sr_fl_op_check = \{{ TEST = at_earth \}} \}}\s*"
+                                         rf"custom_tooltip = sr_fl_set_posture_{p}_earth_tt")
 
     def test_no_interdiction_at_earth(self):
         """Owner, § 15.3: posture 4 is never offered at Earth, so no lunar world is interdicted."""
@@ -1881,16 +1907,23 @@ class NoSpaceCommandTest(unittest.TestCase):
                     self.assertIn("sr_sc_operational = yes", _block(self.generated, f"sr_fl_{n}_may_depart_{lc.key}"))
 
     def test_posture_and_target_orders_need_it(self):
-        reason = "custom_tooltip = {\n\t\t\ttext = sr_fl_req_space_command_tt\n\t\t\tsr_sc_operational = yes\n\t\t}"
+        def reason(key):
+            return f"custom_tooltip = {{\n\t\t\ttext = {key}\n\t\t\tsr_sc_operational = yes\n\t\t}}"
         # A direct child of is_valid (one tab deeper than is_valid itself), not
         # nested in the line before: last in posture's and target's, before
-        # can_go's in Go's.
-        for sgui, after in (("sr_fleet_go_sgui", "\n\t\tcustom_tooltip = {\n\t\t\ttext = sr_fl_short_tt"),
-                            ("sr_fleet_posture_sgui", "\n\t}\n\n\teffect = {"),
-                            ("sr_fleet_target_sgui", "\n\t}\n\n\teffect = {")):
+        # can_go's in Go's. The posture buttons and the target popup's Target
+        # (UI pass design § 7) give the short line, for the hover's length.
+        for sgui, key, after in (("sr_fleet_go_sgui", "sr_fl_req_space_command_tt",
+                                  "\n\t\tcustom_tooltip = {\n\t\t\ttext = sr_fl_short_tt"),
+                                 ("sr_fleet_posture_sgui", "sr_fl_req_space_command_tt", "\n\t}\n\n\teffect = {"),
+                                 ("sr_fleet_target_sgui", "sr_fl_req_space_command_tt", "\n\t}\n\n\teffect = {"),
+                                 ("sr_fleet_set_posture_sgui", "sr_fl_req_space_command_short_tt", "\n\t}\n\n\teffect = {"),
+                                 ("sr_fleet_set_target_sgui", "sr_fl_req_space_command_short_tt", "\n\t}\n\n\teffect = {")):
             with self.subTest(sgui=sgui):
                 body = _block(self.sguis, sgui)
-                self.assertRegex(body, r"\t\t\}\n\s*" + re.escape(reason) + re.escape(after))
+                self.assertRegex(body, r"\t\t\}\n\s*(#[^\n]*\n\s*)*" + re.escape(reason(key)) + re.escape(after))
+        # The destination popup's Choose isn't an order: it only picks.
+        self.assertNotIn("sr_sc_operational", _block(self.sguis, "sr_fleet_set_dest_sgui"))
         # Go gives this reason before the generic one can_go would.
         go = _block(self.sguis, "sr_fleet_go_sgui")
         self.assertLess(go.index("sr_fl_req_space_command_tt"), go.index("TEST = can_go"))
@@ -1929,6 +1962,748 @@ class NoSpaceCommandTest(unittest.TestCase):
         self.assertIn("sr_fl_each_slot = { DO = ai_assault }", attack)
         calls = re.findall(r"sr_fl_ai_lunar_assault = yes", self.combat + _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)) + self.effects)
         self.assertEqual(len(calls), 1)
+
+
+def _gui_block(text, opener, start=0):
+    """The body of the first `opener = {` block at or after start, and its end."""
+    i = text.index(opener + " = {", start)
+    depth = 0
+    for j in range(i + len(opener) + 2, len(text)):
+        if text[j] == "{":
+            depth += 1
+        elif text[j] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[i + len(opener) + 4:j], j
+    raise AssertionError(f"unclosed {opener}")
+
+
+def _gui_blocks(text, opener):
+    out, start = [], 0
+    while (opener + " = {") in text[start:]:
+        body, start = _gui_block(text, opener, start)
+        out.append(body)
+    return out
+
+
+def _override_body(text, name):
+    """A blockoverride's body (blockoverride "name" { ... }: no `=`)."""
+    i = text.index(f'blockoverride "{name}" {{')
+    j = text.index("{", i)
+    depth = 0
+    for k in range(j, len(text)):
+        if text[k] == "{":
+            depth += 1
+        elif text[k] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[j + 1:k]
+    raise AssertionError(f"unclosed override {name}")
+
+
+class DestinationPopupTest(unittest.TestCase):
+    """UI pass design § 4: a fleet's destination button opens a popup with a
+    row per location; a row's Choose sets the destination, and closes it."""
+
+    @classmethod
+    def setUpClass(cls):
+        rows = _raw(gsf.ROOT / gsf.GUI_OUT)
+        body = rows[rows.index("type te_sr_dest_popup_body = flowcontainer"):]
+        cls.slots = _gui_blocks(body, "te_sr_dest_slot")
+        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_rows")],
+                                     "te_sr_fleet_row")
+        cls.display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
+        cls.sguis = _strip(_raw(SGUIS))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+
+    def test_one_body_per_slot_and_one_row_per_location(self):
+        self.assertEqual(len(self.slots), gsf.SLOTS)
+        for n, slot in enumerate(self.slots, 1):
+            with self.subTest(slot=n):
+                self.assertEqual(_override_body(slot, "dp_visible").strip(),
+                                 f"visible = \"[GetVariableSystem.HasValue('te_popup', 'sr_dest_{n}')]\"")
+                rows = _gui_blocks(slot, "te_sr_dest_row")
+                self.assertEqual([re.search(r'text = "sr_loc_name_(\w+)"', r).group(1) for r in rows],
+                                 [lc.key for lc in gsf.LOCATIONS])
+                for lc, row in zip(gsf.LOCATIONS, rows):
+                    # hidden for where the fleet is
+                    self.assertIn(f"Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                  f"'sr_fl_{n}_loc_value'), '(CFixedPoint){lc.code}' ) )", _override_body(row, "dr_visible"))
+
+    def test_each_row_passes_its_slot_and_location(self):
+        for n, slot in enumerate(self.slots, 1):
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                button = _override_body(row, "dr_button")
+                with self.subTest(slot=n, location=lc.key):
+                    self.assertEqual(set(re.findall(r"AddScope\( 'op', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)),
+                                     {str(n)})
+                    self.assertEqual(set(re.findall(r"AddScope\( 'pick', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)),
+                                     {str(lc.code)})
+                    self.assertEqual(set(re.findall(r"GetScriptedGui\('(\w+)'\)", button)), {"sr_fleet_set_dest_sgui"})
+                    self.assertIn(".IsValidTooltip(", button)
+                    # the leg's own figures, at this slot's pace from where it is
+                    self.assertIn(f"ScriptValue('sr_fl_{n}_leg_months_{lc.key}')|0]", _override_body(row, "dr_months"))
+                    short = _override_body(row, "dr_dv_short")
+                    self.assertIn(f"Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                  f"'sr_fl_{n}_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_leg_dv_{lc.key}') ) )",
+                                  short)
+                    self.assertIn("#R ", short)
+
+    def test_picking_closes_the_popup(self):
+        for n, slot in enumerate(self.slots, 1):
+            for row in _gui_blocks(slot, "te_sr_dest_row"):
+                onclicks = re.findall(r'(?m)^\s*onclick = "(.*)"$', _override_body(row, "dr_button"))
+                with self.subTest(slot=n):
+                    # the choice first, then the close, on one button
+                    self.assertEqual(len(onclicks), 2)
+                    self.assertTrue(onclicks[0].startswith("[GetScriptedGui('sr_fleet_set_dest_sgui').Execute("))
+                    self.assertEqual(onclicks[1], "[GetVariableSystem.Clear('te_popup')]")
+
+    def test_a_body_for_an_empty_slot_shows_only_its_note(self):
+        """Review Focus 1: the slot's fleet leaves, merges or is destroyed with
+        the popup open; nothing then acts on it. The rows show on the test the
+        fleet row's orders show on (at a location), the note on its negation."""
+        for n, (slot, row) in enumerate(zip(self.slots, self.fleet_rows), 1):
+            with self.subTest(slot=n):
+                here = re.search(r'visible = "\[(.*)\]"', _override_body(row, "fl_orders_visible")).group(1)
+                self.assertEqual(_override_body(slot, "dp_here_visible").strip(), f'visible = "[{here}]"')
+                self.assertEqual(_override_body(slot, "dp_gone_visible").strip(), f'visible = "[Not( {here} )]"')
+        # the gone note sits outside the content's block
+        gui = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
+        slot_type = gui[gui.index("type te_sr_dest_slot = flowcontainer"):]
+        content, end = _gui_block(slot_type, "flowcontainer")
+        self.assertIn('block "dp_here_visible"', content)
+        self.assertIn('block "dp_rows"', content)
+        self.assertNotIn('block "dp_gone_visible"', content)
+        self.assertIn('block "dp_gone_visible"', slot_type[end:slot_type.index("type te_sr_dest_header_row")])
+
+    def test_the_why_value_covers_may_depart_s_slot_terms(self):
+        for n in range(1, gsf.SLOTS + 1):
+            body = _block(self.display, f"sr_disp_fl_{n}_why")
+            depart = _block(self.gen_triggers, f"sr_fl_{n}_may_depart_mars")
+            with self.subTest(slot=n):
+                self.assertIn(f"sr_fl_{n}_refitting = yes", body)
+                self.assertIn(f"sr_fl_{n}_strength < sr_fl_minimum_strength", body)
+                self.assertIn("sr_launches_barred = yes", body)
+                self.assertIn(f"sr_fl_{n}_at_earth = yes", body)
+                # no Space Command first: it pauses a refit, so "leave when the
+                # refit ends" would mislead
+                self.assertRegex(body, r"value = 0\s*if = \{ limit = \{ NOT = \{ sr_sc_operational = yes \} \} value = 4 \}")
+                # ... the same terms may_depart reads
+                self.assertIn(f"NOT = {{ sr_fl_{n}_refitting = yes }}", depart)
+                self.assertIn(f"sr_fl_{n}_strength >= sr_fl_minimum_strength", depart)
+                self.assertIn("sr_launches_barred = yes", depart)
+                self.assertIn("sr_sc_operational = yes", depart)
+                self.assertEqual(sorted(int(v) for v in re.findall(r"value = (\d) \}", body)), [1, 2, 3, 4])
+        # each code its note
+        for n, slot in enumerate(self.slots, 1):
+            for code in (1, 2, 3, 4):
+                with self.subTest(slot=n, code=code):
+                    self.assertIn(f"ScriptValue('sr_disp_fl_{n}_why'), '(CFixedPoint){code}'",
+                                  _override_body(slot, f"dp_why_{code}_visible"))
+
+    def test_the_choice_is_the_step_s_rule(self):
+        """At a location, any location but its own; Go keeps the leg's gate."""
+        sgui = _block(self.sguis, "sr_fleet_set_dest_sgui")
+        self.assertIn("saved_scopes = { op pick }", sgui)
+        valid = _block("x = {" + sgui.split("\n\tis_valid = {", 1)[1], "x")
+        self.assertEqual(re.findall(r"TEST = (\w+)", valid), ["at_location", "pick_elsewhere"])
+        # each reason its own line, a direct child of is_valid
+        self.assertRegex(valid, r"^\s*custom_tooltip = \{\s*text = sr_fl_not_at_location_tt\s*sr_fl_op_check = "
+                                r"\{ TEST = at_location \}\s*\}\s*custom_tooltip = \{\s*text = sr_fl_req_other_location_tt\s*"
+                                r"sr_fl_op_check = \{ TEST = pick_elsewhere \}\s*\}\s*$")
+        self.assertIn("sr_fl_by_op = { DO = set_pick }", sgui)
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                elsewhere = _block(self.gen_triggers, f"sr_fl_{n}_pick_elsewhere")
+                self.assertIn(f"has_variable = sr_fl_{n}_loc", elsewhere)
+                self.assertEqual(re.findall(r"AND = \{ scope:pick = (\d+) NOT = \{ var:sr_fl_\d_loc = (\d+) \} \}", elsewhere),
+                                 [(str(lc.code), str(lc.code)) for lc in gsf.LOCATIONS])
+        setter = _block(self.generated, "sr_fl_set_pick_at")
+        self.assertEqual(re.findall(r"scope:pick = (\d+) \}\s*set_variable = \{ name = sr_fl_dest_pick_\$N\$ value = (\d+) \}",
+                                    setter),
+                         [(str(lc.code), str(lc.code)) for lc in gsf.LOCATIONS])
+        # the step stays, for the console
+        self.assertIn("sr_fl_step_pick_at = {", self.generated)
+
+    def test_the_window_shows_from_earth_only(self):
+        for n, slot in enumerate(self.slots, 1):
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                opened, wait = _override_body(row, "dr_win_open_visible"), _override_body(row, "dr_win_wait")
+                with self.subTest(slot=n, location=lc.key):
+                    if lc.code == gsf.EARTH:
+                        self.assertEqual((opened.strip(), wait.strip()), ("visible = no", "visible = no"))
+                        continue
+                    at_earth = f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_loc_value'), '(CFixedPoint)1' )"
+                    self.assertIn(f"And( {at_earth}, EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                  f"'sr_window_wait_months_{lc.body}'), '(CFixedPoint)0' ) )", opened)
+                    self.assertIn(f"And( {at_earth}, GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                  f"'sr_window_wait_months_{lc.body}'), '(CFixedPoint)1' ) )", wait)
+                    self.assertIn(f'text = "je_space_race_widget_win_wait_{lc.body}"', wait)
+
+    def test_the_chosen_destination_is_marked(self):
+        for n, slot in enumerate(self.slots, 1):
+            pick = _block(self.display, f"sr_disp_fl_{n}_pick")
+            self.assertIn(f"if = {{ limit = {{ has_variable = sr_fl_dest_pick_{n} }} value = var:sr_fl_dest_pick_{n} }}", pick)
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                chosen = f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_{n}_pick'), '(CFixedPoint){lc.code}' )"
+                with self.subTest(slot=n, location=lc.key):
+                    self.assertEqual(_override_body(row, "dr_chosen_visible").strip(), f'visible = "[{chosen}]"')
+                    self.assertEqual(_override_body(row, "dr_choose_visible").strip(), f'visible = "[Not( {chosen} )]"')
+
+    def test_our_worlds_at_each_location(self):
+        for lc in gsf.LOCATIONS:
+            body = _block(self.display, f"sr_disp_loc_worlds_{lc.key}")
+            with self.subTest(location=lc.key):
+                self.assertEqual(sorted(re.findall(r"global_var:sr_site_holder_(\w+) \?= this \} add = 1", body)),
+                                 sorted(w.key for w in gsf.worlds_at(lc.key)))
+
+
+class PostureRowTest(unittest.TestCase):
+    """UI pass design § 7: the posture's four buttons in place of the step,
+    the one in force lit; each sets its posture with what the step does on
+    the way, where the step would land on it."""
+
+    @classmethod
+    def setUpClass(cls):
+        rows = _raw(gsf.ROOT / gsf.GUI_OUT)
+        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_rows")],
+                                     "te_sr_fleet_row")
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.sgui = _block(_strip(_raw(SGUIS)), "sr_fleet_set_posture_sgui")
+        cls.gui = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
+
+    def test_four_buttons_lit_on_the_current_posture(self):
+        row_type = self.gui[self.gui.index("type te_sr_fleet_row = flowcontainer"):self.gui.index("type te_sr_dest_popup = ")]
+        self.assertEqual(re.findall(r'text = "je_space_race_widget_fl_posture_(\d)"', row_type), ["1", "2", "3", "4"])
+        self.assertEqual(row_type.count("te_sr_posture_choice = {"), 4)
+        self.assertNotIn('block "fl_posture_button"', row_type)
+        for n, row in enumerate(self.fleet_rows, 1):
+            self.assertNotIn("sr_fleet_posture_sgui", row)
+            for p in gsf.POSTURES:
+                held = f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_{n}_posture'), '(CFixedPoint){p}' )"
+                with self.subTest(slot=n, posture=p):
+                    self.assertEqual(_override_body(row, f"fl_posture_{p}_selected").strip(), f'visible = "[{held}]"')
+                    self.assertEqual(_override_body(row, f"fl_posture_{p}_choice").strip(), f'visible = "[Not( {held} )]"')
+                    button = _override_body(row, f"fl_posture_{p}_button")
+                    self.assertEqual(set(re.findall(r"GetScriptedGui\('(\w+)'\)", button)), {"sr_fleet_set_posture_sgui"})
+                    self.assertEqual(set(re.findall(r"AddScope\( 'op', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)), {str(n)})
+                    self.assertEqual(set(re.findall(r"AddScope\( 'pick', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)), {str(p)})
+                    self.assertIn(".IsValidTooltip(", button)
+        # The button and the lit look share one slot, each with the label.
+        choice = self.gui[self.gui.index("type te_sr_posture_choice = widget"):]
+        choice = choice[:choice.index("\n\t}\n") + 3]
+        self.assertIn("size = { 104 22 }", choice)
+        self.assertIn("using = selected_tabs", choice)
+        self.assertEqual(choice.count('block "pc_label"'), 2)
+        # The posture line keeps the combat line's gate (at Earth, only while a
+        # lunar world may be closed in on).
+        combat = row_type[row_type.index('block "fl_combat_visible"'):]
+        self.assertLess(combat.index("te_sr_posture_choice"), combat.index('block "fl_target_button"'))
+
+    def test_set_posture_repeats_the_steps_side_effects(self):
+        body = _block(self.combat, "sr_fl_set_posture_at")
+        for helper in ("sr_fl_charge_free_at", "sr_fl_charge_icpt_at", "sr_fl_step_hostile_target_at",
+                       "sr_fl_step_icpt_target_at"):
+            with self.subTest(helper=helper):
+                self.assertEqual(body.count(f"{helper} = {{ N = $N$ }}"), 1)
+        self.assertTrue(body.rstrip().endswith("sr_icpt_rebuild = yes"))
+        close = _block("x = {" + body.split("limit = { scope:pick = 3 }", 1)[1], "x")
+        self.assertIn("set_variable = { name = sr_fl_$N$_posture value = 3 }", close)
+        self.assertRegex(close, r"NOT = \{ sr_fl_\$N\$_target_hostile = yes \}\s*\}\s*\}\s*sr_fl_step_hostile_target_at")
+        self.assertLess(close.index("sr_fl_step_hostile_target_at"), close.index("sr_fl_charge_free_at"))
+        self.assertIn("remove_variable = sr_fl_$N$_icpt", close)
+        icpt = _block("x = {" + body.split("limit = { scope:pick = 4 }", 1)[1], "x")
+        self.assertIn("set_variable = { name = sr_fl_$N$_posture value = 4 }", icpt)
+        self.assertIn("remove_variable = sr_fl_$N$_destroy", icpt)
+        self.assertRegex(icpt, r"NOT = \{ sr_fl_\$N\$_target_interdictable = yes \}\s*\}\s*sr_fl_step_icpt_target_at")
+        self.assertLess(icpt.index("sr_fl_step_icpt_target_at"), icpt.index("sr_fl_charge_icpt_at"))
+        rest = body[body.index("scope:pick = 1"):]
+        for line in ("value = 1 }", "value = 2 }", "remove_variable = sr_fl_$N$_destroy", "remove_variable = sr_fl_$N$_icpt"):
+            with self.subTest(line=line):
+                self.assertIn(line, rest)
+        self.assertNotIn("charge", rest)
+
+    def test_each_pick_s_rule_is_its_own_line(self):
+        valid = _block("x = {" + self.sgui.split("\n\tis_valid = {", 1)[1], "x")
+        # direct children of is_valid: the unlisted checks, a trigger_if for
+        # Stand off at Earth, Close in and Interdict, then no Space Command
+        # (NoSpaceCommandTest)
+        self.assertEqual(re.findall(r"(?m)^\t\t(\w+) = \{", valid),
+                         ["hidden_trigger", "trigger_if", "trigger_if", "trigger_if", "custom_tooltip"])
+        # true wherever the button shows (at a location; the held posture is lit,
+        # not a button), so checked without a line (the hover's length)
+        hidden = _block("x = {" + valid.split("hidden_trigger = {", 1)[1], "x")
+        self.assertRegex(hidden, r"^\s*sr_fl_op_check = \{ TEST = at_location \}\s*"
+                                 r"NOT = \{ sr_fl_op_check = \{ TEST = pick_is_posture \} \}\s*$")
+        # Stand off's and Interdict's Earth lines show only at Earth, where they fail
+        self.assertRegex(valid, r"limit = \{\s*scope:pick = 2\s*sr_fl_op_check = \{ TEST = at_earth \}\s*\}\s*"
+                                r"custom_tooltip = \{\s*text = sr_fl_req_standoff_not_earth_tt\s*"
+                                r"NOT = \{ sr_fl_op_check = \{ TEST = at_earth \} \}\s*\}\s*\}")
+        self.assertRegex(valid, r"limit = \{ scope:pick = 3 \}\s*custom_tooltip = \{\s*text = sr_fl_req_hostile_world_tt\s*"
+                                r"sr_fl_op_check = \{ TEST = has_hostile_world \}\s*\}\s*\}")
+        self.assertRegex(valid, r"limit = \{ scope:pick = 4 \}\s*trigger_if = \{\s*limit = \{ sr_fl_op_check = \{ TEST = at_earth \} \}\s*"
+                                r"custom_tooltip = \{\s*text = sr_fl_req_interdict_not_earth_tt\s*"
+                                r"NOT = \{ sr_fl_op_check = \{ TEST = at_earth \} \}\s*\}\s*\}\s*trigger_else = \{\s*"
+                                r"custom_tooltip = \{\s*text = sr_fl_req_interdict_world_tt\s*"
+                                r"sr_fl_op_check = \{ TEST = has_interdict_world \}\s*\}\s*\}\s*\}")
+        # no reason nested in another
+        for m in re.finditer(r"custom_tooltip = \{", valid):
+            with self.subTest(at=m.start()):
+                self.assertNotIn("custom_tooltip", _block("x = {" + valid[m.end():], "x"))
+        self.assertIn("sr_fl_by_op = { DO = set_posture }", self.sgui)
+        for n in range(1, gsf.SLOTS + 1):
+            body = _block(_strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT)), f"sr_fl_{n}_pick_is_posture")
+            with self.subTest(slot=n):
+                self.assertEqual(re.findall(rf"AND = \{{ scope:pick = (\d) sr_fl_{n}_posture_value = (\d) \}}", body),
+                                 [(str(p), str(p)) for p in gsf.POSTURES])
+
+
+def _parse_script(text):
+    """A brace block's statements as (key, op, value) triples, value a word or
+    a nested list: enough for the generated triggers' AND/OR/NOT trees."""
+    tokens = re.findall(r"[{}]|[<>]=?|=|[^\s{}<>=]+", text)
+
+    def block(i):
+        out = []
+        while i < len(tokens) and tokens[i] != "}":
+            key, op = tokens[i], tokens[i + 1]
+            if op not in ("=", "<", ">", "<=", ">="):
+                out.append((key, None, None))  # a bare word (saved_scopes = { op pick })
+                i += 1
+                continue
+            if tokens[i + 2] == "{":
+                value, i = block(i + 3)
+                i += 1
+            else:
+                value, i = tokens[i + 2], i + 3
+            out.append((key, op, value))
+        return out, i
+
+    return block(0)[0]
+
+
+def _eval_step_trigger(stmts, loc, target, hostile, free):
+    """The generated hostile-step triggers' terms, for slot $N$ at location
+    code loc, its target index (None without one), and the hostile and free
+    worlds' keys."""
+    def one(key, op, value):
+        if key == "AND":
+            return all(one(*s) for s in value)
+        if key == "OR":
+            return any(one(*s) for s in value)
+        if key == "NOT":
+            assert len(value) == 1, "NOT of more than one term"
+            return not one(*value[0])
+        if key == "has_variable":
+            return {"sr_fl_$N$_loc": True, "sr_fl_$N$_target": target is not None}[value]
+        if key == "var:sr_fl_$N$_loc" and op == "=":
+            return loc == int(value)
+        if key == "var:sr_fl_$N$_target" and op == "<":
+            return target < int(value)
+        if key == "has_global_variable" and value.startswith("sr_site_free_"):
+            return value[len("sr_site_free_"):] in free
+        if key == "sr_site_hostile_target":
+            return dict((k, v) for k, _, v in value)["KEY"] in hostile
+        raise AssertionError(f"unexpected term {key} {op} {value}")
+    return all(one(*s) for s in stmts)
+
+
+class CloseInPriceTest(unittest.TestCase):
+    """Review of #1285: Close in without a hostile target takes the hostile
+    step's world, and its hover must show the free colony's price whenever
+    that world is free (sr_fl_<n>_hostile_step_free)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.effects = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.sgui = _block(_strip(_raw(SGUIS)), "sr_fleet_set_posture_sgui")
+
+    def _step(self, loc, target, hostile):
+        """The world sr_fl_step_hostile_target_at takes, run from its own
+        generated if-lines (first match in file order wins)."""
+        step = _block(self.effects, "sr_fl_step_hostile_target_at")
+        case = _block("x = {" + step.split(f"limit = {{ var:sr_fl_$N$_loc = {loc} }}", 1)[1], "x")
+        tgt = target or 0
+        for m in re.finditer(r"limit = \{ local_var:sr_fl_next = 0 (?:local_var:sr_fl_tgt < (\d+) )?"
+                             r"sr_site_hostile_target = \{ KEY = (\w+) \} \} set_local_variable = \{ name = sr_fl_next "
+                             r"value = (\d+) \}", case):
+            if (m.group(1) is None or tgt < int(m.group(1))) and m.group(2) in hostile:
+                return m.group(2)
+        return None
+
+    def test_each_slot_calls_the_shared_trigger(self):
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                self.assertRegex(self.triggers, rf"(?m)^sr_fl_{n}_hostile_step_free = \{{ "
+                                                rf"sr_fl_hostile_step_free_at = \{{ N = {n} \}} \}}$")
+
+    def test_it_is_true_exactly_when_the_step_takes_a_free_colony(self):
+        import random
+        stmts = _parse_script(_block(self.triggers, "sr_fl_hostile_step_free_at"))
+        rng = random.Random(1285)
+        cases = 0
+        for lc in gsf.CLOSE_IN_LOCATIONS:
+            ws = [w.key for w in gsf.worlds_at(lc.key)]
+            indices = [w.index for w in gsf.worlds_at(lc.key)]
+            targets = [None, 0, 1, 999, *indices]
+            for _ in range(300):
+                hostile = {k for k in ws if rng.random() < 0.5}
+                free = {k for k in ws if rng.random() < 0.5}
+                target = rng.choice(targets)
+                picked = self._step(lc.code, target, hostile)
+                with self.subTest(loc=lc.key, target=target, hostile=sorted(hostile), free=sorted(free)):
+                    self.assertEqual(_eval_step_trigger(stmts, lc.code, target, hostile, free),
+                                     picked is not None and picked in free)
+                cases += 1
+            # a location elsewhere never matches
+            self.assertFalse(_eval_step_trigger(stmts, 9999, None, set(ws), set(ws)))
+        self.assertGreater(cases, 2000)
+
+    def test_close_in_s_hover_lists_the_price_of_the_world_it_takes(self):
+        effect = _block("x = {" + self.sgui.split("\n\teffect = {", 1)[1], "x")
+        close = _block("x = {" + effect.split("limit = { scope:pick = 3 }", 1)[1], "x")
+        self.assertRegex(close, r"limit = \{\s*OR = \{\s*AND = \{\s*sr_fl_op_check = \{ TEST = target_hostile \}\s*"
+                                r"sr_fl_op_check = \{ TEST = closes_on_free \}\s*\}\s*AND = \{\s*"
+                                r"NOT = \{ sr_fl_op_check = \{ TEST = target_hostile \} \}\s*"
+                                r"sr_fl_op_check = \{ TEST = hostile_step_free \}\s*\}\s*\}\s*\}\s*"
+                                r"custom_tooltip = sr_fl_free_price_tt")
+        # ... the same split sr_fl_set_posture_at makes: a hostile target stays
+        posture = _block(_strip(_raw(COMBAT_EFFECTS)), "sr_fl_set_posture_at")
+        self.assertRegex(posture, r"OR = \{\s*NOT = \{ has_variable = sr_fl_\$N\$_target \}\s*"
+                                  r"NOT = \{ sr_fl_\$N\$_target_hostile = yes \}\s*\}\s*\}\s*sr_fl_step_hostile_target_at")
+
+
+def _loc_english():
+    out = {}
+    for path in sorted((ROOT / "localization/english").rglob("*_l_english.yml")):
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            m = re.match(r'^\s+([\w.]+):\d*\s+"(.*)"\s*(#.*)?$', line)
+            if m:
+                out[m.group(1)] = m.group(2)
+    return out
+
+
+def _rendered_length(loc, key):
+    """A loc key's length as the review of #1285 measured it: $key$ spliced,
+    each [..] two characters, formatting codes dropped."""
+    text = re.sub(r"\$(\w+)\$", lambda m: "x" * _rendered_length(loc, m.group(1)) if m.group(1) in loc else m.group(0),
+                  loc[key])
+    text = re.sub(r"\[[^\[\]]*(\[[^\[\]]*\][^\[\]]*)*\]", "xx", text)
+    text = re.sub(r"#[a-zA-Z_]+ ?|#!", "", text)
+    return len(text.replace("\\n", "\n"))
+
+
+class HoverLengthTest(unittest.TestCase):
+    """Review of #1285: the posture buttons' and Target's hovers, built at
+    runtime (IsValidTooltip, te_tt_break, ExecuteTooltip) where
+    long_tooltip_audit can't see them, stay under 500 rendered characters in
+    the worst case: every listed reason, every price that may show."""
+
+    LIMIT = 500
+
+    @classmethod
+    def setUpClass(cls):
+        cls.sguis = _strip(_raw(SGUIS))
+        cls.loc = _loc_english()
+
+    @staticmethod
+    def _decide(limit, ctx):
+        """True, False, or None (unknown: either may hold) for a limit's
+        terms, from the pick and whether the fleet is at Earth."""
+        def term(key, op, value):
+            if key == "scope:pick":
+                return ctx["pick"] == int(value)
+            if key == "sr_fl_op_check" and isinstance(value, list) and value == [("TEST", "=", "at_earth")]:
+                return ctx["at_earth"]
+            if key == "OR":
+                parts = [term(*t) for t in value]
+                return True if True in parts else (None if None in parts else False)
+            if key == "AND":
+                return HoverLengthTest._decide(value, ctx)
+            if key == "NOT":
+                inner = HoverLengthTest._decide(value, ctx)
+                return None if inner is None else not inner
+            return None
+        parts = [term(*t) for t in limit]
+        return False if False in parts else (None if None in parts else True)
+
+    def _lines(self, stmts, ctx):
+        """The worst case's listed keys: an undecided branch counts its longest
+        arm, an if-chain its longest taken arm."""
+        out, i = [], 0
+        while i < len(stmts):
+            key, _, value = stmts[i]
+            if key == "custom_tooltip":
+                out.append(value if isinstance(value, str) else dict((k, v) for k, _, v in value)["text"])
+            elif key in ("if", "trigger_if"):
+                arms, j = [], i
+                while j < len(stmts) and (j == i or stmts[j][0] in ("else_if", "else", "trigger_else")):
+                    body = stmts[j][2]
+                    limit = next((v for k, _, v in body if k == "limit"), None)
+                    arms.append((self._decide(limit, ctx) if limit is not None else True,
+                                 [s for s in body if s[0] != "limit"]))
+                    j += 1
+                worst = []
+                for decided, body in arms:
+                    if decided is False:
+                        continue
+                    lines = self._lines(body, ctx)
+                    worst = max(worst, lines, key=lambda ks: sum(_rendered_length(self.loc, k) + 1 for k in ks))
+                    if decided is True:
+                        break
+                out += worst
+                i = j
+                continue
+            elif key in ("AND", "OR"):
+                out += self._lines(value, ctx)
+            i += 1
+        return out
+
+    def _hover(self, sgui, ctx):
+        body = _parse_script(_block(self.sguis, sgui))
+        valid = next(v for k, _, v in body if k == "is_valid")
+        effect = next(v for k, _, v in body if k == "effect")
+        keys = self._lines(valid, ctx), self._lines(effect, ctx)
+        total = sum(sum(_rendered_length(self.loc, k) for k in part) + max(len(part) - 1, 0) for part in keys) + 2
+        return total, keys
+
+    def test_the_posture_buttons_and_target_stay_short(self):
+        worst = {}
+        for sgui, picks in (("sr_fleet_set_posture_sgui", (1, 2, 3, 4)), ("sr_fleet_set_target_sgui", (1,))):
+            for pick in picks:
+                for at_earth in (False, True):
+                    total, keys = self._hover(sgui, {"pick": pick, "at_earth": at_earth})
+                    worst[(sgui, pick, at_earth)] = total
+                    with self.subTest(sgui=sgui, pick=pick, at_earth=at_earth, keys=keys):
+                        self.assertLessEqual(total, self.LIMIT)
+                        self.assertTrue(keys[1], "no effect lines read")
+        # the walk reads the prices: Interdict's is its longest case
+        self.assertGreater(worst[("sr_fleet_set_posture_sgui", 4, False)], 400)
+
+
+def _gui_type(text, name):
+    """A GUI type's body (`type <name> = <base> {`)."""
+    m = re.search(rf"(?m)^\ttype {re.escape(name)} = [\w.]+ \{{", text)
+    assert m, f"no type {name}"
+    body, _ = _gui_block(text[m.start():].replace(m.group(0).strip(), "TYPE = {", 1), "TYPE")
+    return body
+
+
+def _enclosing(text, marker):
+    """The opener and body of the innermost block around the one marker."""
+    assert text.count(marker) == 1, f"{marker} {text.count(marker)} times"
+    depth = 0
+    for i in range(text.index(marker), -1, -1):
+        if text[i] == "}":
+            depth += 1
+        elif text[i] == "{":
+            if depth == 0:
+                opener = re.search(r"([\w\"]+)\s*=?\s*$", text[:i]).group(1)
+                body, _ = _gui_block("X = " + text[i:], "X")
+                return opener, body
+            depth -= 1
+    raise AssertionError(f"no block around {marker}")
+
+
+class HandWrittenWiringTest(unittest.TestCase):
+    """Review of #1285: what the generated overrides can't show, the
+    hand-written types' and effects' wiring: which element carries which
+    block, each note's text against its code, each posture's value."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
+        rows = _raw(gsf.ROOT / gsf.GUI_OUT)
+        cls.dest_slots = _gui_blocks(rows[rows.index("type te_sr_dest_popup_body"):rows.index("type te_sr_ftarget_popup_body")],
+                                     "te_sr_dest_slot")
+        cls.display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+
+    def _button_and_lit(self, type_name, button_blocks, lit_blocks, button_text, lit_text, lit_tooltip):
+        body = _gui_type(self.gui, type_name)
+        for marker in button_blocks:
+            with self.subTest(type=type_name, marker=marker):
+                opener, block = _enclosing(body, f'block "{marker}" {{}}')
+                self.assertEqual(opener, "button")
+                self.assertIn("using = default_button_action", block)
+                if button_text:
+                    self.assertIn(f'text = "{button_text}"', block)
+        for marker in lit_blocks:
+            with self.subTest(type=type_name, marker=marker):
+                opener, block = _enclosing(body, f'block "{marker}" {{}}')
+                self.assertEqual(opener, "icon")
+                self.assertIn("using = selected_tabs", block)
+                if lit_text:
+                    self.assertIn(f'text = "{lit_text}"', block)
+                if lit_tooltip:
+                    self.assertIn(f'tooltip = "{lit_tooltip}"', block)
+
+    def test_the_posture_choice_lights_the_held_posture(self):
+        """M16: the button carries pc_shown and pc_action, the lit icon
+        pc_selected and the held posture's hover."""
+        self._button_and_lit("te_sr_posture_choice", ("pc_shown", "pc_action"), ("pc_selected", "pc_held_tooltip"),
+                             None, None, None)
+        row = _gui_type(self.gui, "te_sr_fleet_row")
+        choices = _gui_blocks(row, "te_sr_posture_choice")
+        self.assertEqual(len(choices), 4)
+        for p, choice in zip(gsf.POSTURES, choices):
+            with self.subTest(posture=p):
+                self.assertEqual(_override_body(choice, "pc_label").strip(), f'text = "je_space_race_widget_fl_posture_{p}"')
+                self.assertEqual(_override_body(choice, "pc_shown").strip(), f'block "fl_posture_{p}_choice" {{}}')
+                self.assertEqual(_override_body(choice, "pc_selected").strip(), f'block "fl_posture_{p}_selected" {{}}')
+                self.assertEqual(_override_body(choice, "pc_action").strip(), f'block "fl_posture_{p}_button" {{}}')
+                self.assertEqual(_override_body(choice, "pc_held_tooltip").strip(),
+                                 f'tooltip = "je_space_race_widget_fl_posture_{p}_held_tt"')
+
+    def test_choose_and_target_buttons_and_their_marks(self):
+        """M17: Choose and Target are the buttons, Chosen and Targeted the lit
+        marks, each with its hover."""
+        self._button_and_lit("te_sr_dest_row", ("dr_choose_visible", "dr_button"), ("dr_chosen_visible",),
+                             "je_space_race_widget_dp_choose", "je_space_race_widget_dp_chosen",
+                             "je_space_race_widget_dp_chosen_tt")
+        self._button_and_lit("te_sr_ftarget_row", ("fr_target_visible", "fr_button"), ("fr_targeted_visible",),
+                             "je_space_race_widget_ss_target_button", "je_space_race_widget_ft_targeted",
+                             "je_space_race_widget_ft_targeted_tt")
+
+    def test_each_why_note_reads_its_code(self):
+        """M13: note n's text is the reason code n stands for, and the code
+        is set from that reason."""
+        slot = _gui_type(self.gui, "te_sr_dest_slot")
+        reasons = {1: ("refit", r"sr_fl_{n}_refitting = yes"),
+                   2: ("weak", r"sr_fl_{n}_strength < sr_fl_minimum_strength"),
+                   3: ("barred", r"sr_fl_{n}_at_earth = yes sr_launches_barred = yes"),
+                   4: ("no_sc", r"NOT = { sr_sc_operational = yes }")}
+        for code, (word, condition) in reasons.items():
+            with self.subTest(code=code):
+                opener, note = _enclosing(slot, f'block "dp_why_{code}_visible" {{}}')
+                self.assertEqual(opener, "te_sr_note")
+                self.assertEqual(re.findall(r'text = "(\w+)"', note), [f"je_space_race_widget_dp_why_{word}"])
+                for n in range(1, gsf.SLOTS + 1):
+                    why = _block(self.display, f"sr_disp_fl_{n}_why")
+                    self.assertIn(f"limit = {{ {condition.replace('{n}', str(n))} }} value = {code} }}", why)
+
+    def test_the_propellant_cells_split_on_one_comparison(self):
+        """M20: covered shows where the fleet carries at least the leg's
+        delta-v (equal included), short exactly where it doesn't."""
+        for n, slot in enumerate(self.dest_slots, 1):
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                with self.subTest(slot=n, location=lc.key):
+                    covered = re.search(r'visible = "\[(.*)\]"', _override_body(row, "dr_dv_covered")).group(1)
+                    self.assertEqual(covered, f"GreaterThanOrEqualTo_CFixedPoint( "
+                                              f"JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_dv_value'), "
+                                              f"JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_leg_dv_{lc.key}') )")
+                    self.assertIn(f'visible = "[Not( {covered} )]"', _override_body(row, "dr_dv_short"))
+
+    def test_station_and_stand_off_set_their_own_values(self):
+        """M2: each posture button's branch sets its own posture."""
+        body = _block(self.combat, "sr_fl_set_posture_at")
+        for p in (3, 4):
+            with self.subTest(posture=p):
+                self.assertRegex(body, rf"limit = \{{ scope:pick = {p} \}}\s*"
+                                       rf"set_variable = \{{ name = sr_fl_\$N\$_posture value = {p} \}}")
+        self.assertRegex(body, r"if = \{\s*limit = \{ scope:pick = 1 \}\s*set_variable = \{ name = sr_fl_\$N\$_posture value = 1 \}\s*\}\s*"
+                               r"else = \{\s*set_variable = \{ name = sr_fl_\$N\$_posture value = 2 \}\s*\}")
+        # ... and the else arm is reached only by Stand off
+        self.assertRegex(body, r"OR = \{\s*scope:pick = 1\s*scope:pick = 2\s*\}")
+        self.assertEqual(len(re.findall(r"name = sr_fl_\$N\$_posture value = \d", body)), 4)
+
+
+class TargetPopupTest(unittest.TestCase):
+    """UI pass design § 7: the target button opens a list of the worlds at
+    the fleet's location; Target sets the world and charges as the step."""
+
+    @classmethod
+    def setUpClass(cls):
+        rows = _raw(gsf.ROOT / gsf.GUI_OUT)
+        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_rows")],
+                                     "te_sr_fleet_row")
+        cls.slots = _gui_blocks(rows[rows.index("type te_sr_ftarget_popup_body"):], "te_sr_ftarget_slot")
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.sgui = _block(_strip(_raw(SGUIS)), "sr_fleet_set_target_sgui")
+
+    def test_the_target_button_opens_the_world_list(self):
+        for n, row in enumerate(self.fleet_rows, 1):
+            button = _override_body(row, "fl_target_button")
+            with self.subTest(slot=n):
+                self.assertEqual(re.findall(r'onclick = "(.*)"', button), [f"[GetVariableSystem.Set('te_popup', 'sr_ftarget_{n}')]"])
+                self.assertIn("GetScriptedGui('sr_fleet_target_sgui').IsValid(", button)
+                self.assertIn(f'tooltip = "je_space_race_widget_fl_{n}_target_tt"', button)
+        self.assertEqual(len(self.slots), gsf.SLOTS)
+        for n, slot in enumerate(self.slots, 1):
+            with self.subTest(slot=n):
+                self.assertEqual(_override_body(slot, "ft_visible").strip(),
+                                 f"visible = \"[GetVariableSystem.HasValue('te_popup', 'sr_ftarget_{n}')]\"")
+                rows = _gui_blocks(slot, "te_sr_ftarget_row")
+                self.assertEqual([re.search(r'text = "sr_site_name_(\w+)"', r).group(1) for r in rows],
+                                 [w.key for w in gss.panel_order()])
+                for w, r in zip(gss.panel_order(), rows):
+                    self.assertEqual(_override_body(r, "fr_visible").strip(),
+                                     f"visible = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                     f"'sr_fl_{n}_loc_value'), '(CFixedPoint){gsf.CODE[w.location]}' )]\"")
+
+    def test_each_row_passes_its_slot_and_world_and_closes(self):
+        for n, slot in enumerate(self.slots, 1):
+            for w, r in zip(gss.panel_order(), _gui_blocks(slot, "te_sr_ftarget_row")):
+                button = _override_body(r, "fr_button")
+                onclicks = re.findall(r'(?m)^\s*onclick = "(.*)"$', button)
+                with self.subTest(slot=n, world=w.key):
+                    self.assertEqual(set(re.findall(r"AddScope\( 'op', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)), {str(n)})
+                    self.assertEqual(set(re.findall(r"AddScope\( 'pick', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)),
+                                     {str(w.index)})
+                    self.assertEqual(len(onclicks), 2)
+                    self.assertTrue(onclicks[0].startswith("[GetScriptedGui('sr_fleet_set_target_sgui').Execute("))
+                    self.assertEqual(onclicks[1], "[GetVariableSystem.Clear('te_popup')]")
+                    targeted = (f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_{n}_target'), "
+                                f"'(CFixedPoint){w.index}' )")
+                    self.assertEqual(_override_body(r, "fr_targeted_visible").strip(), f'visible = "[{targeted}]"')
+                    self.assertEqual(_override_body(r, "fr_target_visible").strip(), f'visible = "[Not( {targeted} )]"')
+
+    def test_a_body_for_a_fleet_away_shows_only_its_note(self):
+        for n, (slot, row) in enumerate(zip(self.slots, self.fleet_rows), 1):
+            with self.subTest(slot=n):
+                here = re.search(r'visible = "\[(.*)\]"', _override_body(row, "fl_orders_visible")).group(1)
+                self.assertEqual(_override_body(slot, "ft_here_visible").strip(), f'visible = "[{here}]"')
+                self.assertEqual(_override_body(slot, "ft_gone_visible").strip(), f'visible = "[Not( {here} )]"')
+
+    def test_the_pick_is_held_to_the_step_s_rule(self):
+        valid = _block("x = {" + self.sgui.split("\n\tis_valid = {", 1)[1], "x")
+        # true wherever the popup shows the button: checked without a line
+        hidden = _block("x = {" + valid.split("hidden_trigger = {", 1)[1], "x")
+        self.assertRegex(hidden, r"^\s*sr_fl_op_check = \{ TEST = at_location \}\s*"
+                                 r"sr_fl_op_check = \{ TEST = pick_world_here \}\s*$")
+        self.assertRegex(valid, r"trigger_if = \{\s*limit = \{ sr_fl_op_check = \{ TEST = interdicting \} \}\s*"
+                                r"custom_tooltip = \{\s*text = sr_fl_req_pick_interdictable_tt\s*sr_fl_pick_interdictable = yes\s*\}\s*\}\s*"
+                                r"trigger_else = \{\s*custom_tooltip = \{\s*text = sr_fl_req_pick_hostile_tt\s*sr_fl_pick_hostile = yes")
+        hostile = _block(self.gen_triggers, "sr_fl_pick_hostile")
+        self.assertEqual(re.findall(r"scope:pick = (\d+) sr_site_hostile_target = \{ KEY = (\w+) \}", hostile),
+                         [(str(w.index), w.key) for w in gss.SITES])
+        icpt = _block(self.gen_triggers, "sr_fl_pick_interdictable")
+        # never at Earth (lunar colonization § 8.3)
+        self.assertEqual(re.findall(r"scope:pick = (\d+) sr_site_interdict_target = \{ KEY = (\w+) \}", icpt),
+                         [(str(w.index), w.key) for w in gss.SITES if w.location != "earth"])
+        for n in range(1, gsf.SLOTS + 1):
+            here = _block(self.gen_triggers, f"sr_fl_{n}_pick_world_here")
+            with self.subTest(slot=n):
+                self.assertEqual(re.findall(rf"scope:pick = (\d+) var:sr_fl_{n}_loc = (\d+)", here),
+                                 [(str(w.index), str(gsf.CODE[w.location])) for w in gss.SITES])
+
+    def test_set_target_charges_as_the_step(self):
+        body = _block(self.generated, "sr_fl_set_target_at")
+        self.assertEqual(re.findall(r"scope:pick = (\d+) \}\s*set_variable = \{ name = sr_fl_\$N\$_target value = (\d+) \}", body),
+                         [(str(w.index), str(w.index)) for w in gss.SITES])
+        self.assertRegex(body, r"limit = \{ sr_fl_\$N\$_posture_value = 4 \}\s*sr_fl_charge_icpt_at = \{ N = \$N\$ \}\s*"
+                               r"sr_icpt_rebuild = yes\s*\}\s*else_if = \{\s*limit = \{ sr_fl_\$N\$_posture_value = 3 \}\s*"
+                               r"sr_fl_charge_free_at = \{ N = \$N\$ \}")
+        # the price on the hover, where it is charged
+        effect = _block("x = {" + self.sgui.split("\n\teffect = {", 1)[1], "x")
+        self.assertRegex(effect, r"TEST = interdicting \} \}\s*custom_tooltip = sr_fl_set_icpt_target_tt\s*"
+                                 r"custom_tooltip = sr_fl_interdict_price_tt")
+        self.assertRegex(effect, r"sr_fl_op_check = \{ TEST = closing_in \}\s*sr_fl_pick_free = yes\s*\}\s*"
+                                 r"custom_tooltip = sr_fl_free_price_tt")
 
 
 if __name__ == "__main__":
