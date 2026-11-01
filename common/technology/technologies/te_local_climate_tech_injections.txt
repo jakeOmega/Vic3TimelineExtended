@@ -1,0 +1,43 @@
+﻿# Local Climate (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.2): the base game's
+# technologies that ease a climate's discomfort. Each relief type is 0 to 1, read by the comfort
+# script values (local_climate_values.txt) and clamped there; the mod's own technologies carry their
+# lines in their definitions (era_6.txt to era_13.txt). A carrier keeps one INJECT, and
+# te_demog_tech_injections.txt must stay census-only (a release without the census comments it out
+# whole), so no carrier here is a technology that file injects. Malaria Prevention's relief is the
+# census's own Malaria Control (state_malaria_control_add), which the comfort formula also reads.
+
+INJECT:quinine = {
+	modifier = {
+		state_climate_disease_relief_add = 0.5 # Local Climate: protects newcomers who arrive without immunity
+	}
+}
+
+INJECT:reinforced_concrete = {
+	modifier = {
+		state_climate_cold_relief_add = 0.2 # Local Climate: central heating in modern buildings
+	}
+}
+
+INJECT:electrical_generation = {
+	modifier = {
+		state_climate_heat_relief_add = 0.1 # Local Climate: electric fans
+	}
+}
+
+INJECT:arc_welding = {
+	modifier = {
+		state_climate_water_relief_add = 0.2 # Local Climate: welded pipelines and penstocks for the great dams
+	}
+}
+
+INJECT:watertube_boiler = {
+	modifier = {
+		state_climate_cold_relief_add = 0.25 # Local Climate: steam and hot-water boilers heat whole buildings
+	}
+}
+
+INJECT:mechanized_farming = {
+	modifier = {
+		state_climate_water_relief_add = 0.2 # Local Climate: engine-driven pumps irrigate dry country
+	}
+}

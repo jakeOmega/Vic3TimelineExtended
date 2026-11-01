@@ -206,9 +206,15 @@ rows whose latitude and temperatures disagree badly (a 60° region with a
 ## 5. Comfort
 
 **Shape.** Comfort is a penalty, never a bonus *(designer's call)*: a mild
-climate costs nothing, and a harsh one costs migration attraction. Only
-differences matter inside a market, since a state needs 1.25 × the market's
-average, so penalizing harsh places is the same as favoring mild ones there.
+climate costs nothing, and a harsh one costs migration attraction. Inside a
+market a penalty is not quite the same as favoring mild places: vanilla compares
+a state's attraction with multiples of the market's average
+(`MIGRATION_PULL_HIGH_THRESHOLD` 1.25, `MIGRATION_PULL_LOW_THRESHOLD` 0.75), so
+a penalty every state shares loosens both thresholds by a quarter of it, and a
+market whose average falls to 0 or below inverts them. Hot, poor markets in the
+early eras (Bengal about 21, Cuba about 15) are where that can bite; the
+play-test list checks their internal migration (found at the whole-branch
+review).
 Across countries, a penalty keeps a desert from being picked without inflating
 anyone's attraction.
 
@@ -220,7 +226,7 @@ disease  = D × malaria × (1 − disease_relief)
 penalty  = min(P_max, w_heat × heat + w_cold × cold + dry + disease)
 ```
 
-- `summer` and `winter` are the record's figures plus warming (phase 3).
+- `summer` and `winter` are the record's figures plus warming against today's normals (phase 3; § 6).
 - `H0` (the summer mean where heat starts to cost), `C0` (the winter mean where
   cold starts to cost), `k_hum`, `W`, `D`, the weights and `P_max` are tuning
   constants at the head of the script values file. The builder sets them by
@@ -293,7 +299,8 @@ The builder confirms each carrier by reading the technology tree
 may swap one for a better fit. The candidates are named here only to fix the
 eras. `state_climate_disease_relief_add` is separate from the census's
 `state_malaria_control_add`, so quinine can help migrants without changing
-the census (§ 2).
+the census (§ 2). Disease relief adds the two (ruled at the build), so Malaria
+Prevention's Malaria Control eases the malaria cost too.
 
 ### 5.3 Calibration (before any number is final)
 
@@ -373,9 +380,15 @@ removes.
 ## 6. Global warming (phase 3)
 
 - `summer` and `winter` in § 5 become the record's figures plus
-  `temperature_anomaly_display × amplification(latitude)`. The felt anomaly is
-  used because an aerosol haze cools the air people live in *(designer's
-  call)*.
+  `(temperature_anomaly_display − te_climate_normals_warming) × amplification(latitude)`.
+  The felt anomaly is used because an aerosol haze cools the air people live
+  in *(designer's call)*. The record holds today's normals, which already carry
+  about 1.1 °C of warming, so `te_climate_normals_warming = 1.1`: a region reads
+  its record exactly when the world's anomaly reaches today's, and 1836, at
+  anomaly 0, runs 1.1 °C × amplification colder *(owner, 2026-11-01)*. To keep
+  § 5.3's 1836 targets with the colder start, `H0` is 22 °C, not the 23 °C
+  first calibrated against the normals themselves. With the Global Warming rule
+  off the anomaly stays 0, and every region keeps its 1836 climate.
 - Amplification rises with latitude: about 1 in the tropics and about 2.5
   above the Arctic Circle, as observed warming runs. The builder picks a
   simple curve and states it.

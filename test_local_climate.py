@@ -202,8 +202,10 @@ class Tile(unittest.TestCase):
             self.assertIn(f"ScriptValue('{value}')", body, value)
         for key in ("te_state_climate_summer_value", "te_state_climate_winter_value", "TE_STATE_CLIMATE_NO_DATA"):
             self.assertIn(key, body, key)
-        self.assertIn("te_climate_summer_mean", loc_value("te_state_climate_summer_value"))
-        self.assertIn("te_climate_winter_mean", loc_value("te_state_climate_winter_value"))
+        # Phase 2 shows the record with the warming against today's normals (te_climate_*_eff,
+        # test_local_climate_comfort.py's test_seasons_show_the_climate_now); the hover gives the normal.
+        self.assertIn("te_climate_summer", loc_value("te_state_climate_summer_value"))
+        self.assertIn("te_climate_winter", loc_value("te_state_climate_winter_value"))
 
     def test_word_chains_pick_each_class(self):
         """Each word row's nested SelectLocalization maps class n to its own key: thresholds run down from the
@@ -221,7 +223,7 @@ class Tile(unittest.TestCase):
         """Every reading row hides when the region has no row, so the no-data line shows alone."""
         body = gui_type(WIDGETS.read_text(encoding="utf-8-sig"), "te_state_climate_tile")
         rows = body.split("te_state_climate_row = {")[1:]
-        self.assertEqual(len(rows), 5)
+        self.assertEqual(len(rows), 8)  # five readings and Comfort's three (cost, none, pending)
         for row in rows:
             self.assertIn("row_visible", row)
             self.assertIn("ScriptValue('te_climate_has_record'), '(CFixedPoint)0')", row.split("row_tooltip")[0])

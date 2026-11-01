@@ -238,6 +238,7 @@ plastic_mass_production = {
 	category = production
 
 	modifier = {
+		state_climate_water_relief_add = 0.15 # Local Climate: membranes for desalination
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
 		country_st_res_fertilizer_decay_add = -0.005
 	}
@@ -301,6 +302,7 @@ prefabricated_construction = {
 	}
 
 	modifier = {
+		state_climate_heat_relief_add = 0.35 # Local Climate: central air in new housing
 		# census only, modern safety (demographics_params.SAFETY_TYPES): buildings put together from parts made in factories, not on the scaffold
 		state_work_safety_add = 0.15
 	}

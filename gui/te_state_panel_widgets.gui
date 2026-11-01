@@ -1262,6 +1262,53 @@ types te_state_panel_widget_types
 				raw_text = "#v [SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_malaria'), '(CFixedPoint)1'), 'TE_CLIMATE_MALARIA_2', SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_malaria'), '(CFixedPoint)0'), 'TE_CLIMATE_MALARIA_1', 'TE_CLIMATE_MALARIA_0'))]#!"
 			}
 		}
+
+		# Comfort: what local_climate_discomfort applies, from the last yearly refresh. One of three rows shows:
+		# the red cost, None when the climate costs nothing, or Pending before the first monthly application.
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[And(And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0.05'))]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_comfort_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_COMFORT"
+			}
+			blockoverride "row_value" {
+				text = "te_state_climate_comfort_value"
+			}
+		}
+
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[And(And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')), Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0.05')))]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_comfort_none_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_COMFORT"
+			}
+			blockoverride "row_value" {
+				text = "te_state_climate_comfort_none"
+			}
+		}
+
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')))]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_pending_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_COMFORT"
+			}
+			blockoverride "row_value" {
+				text = "te_state_climate_pending"
+			}
+		}
 		textbox = {
 			visible = "[Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'))]"
 			autoresize = yes

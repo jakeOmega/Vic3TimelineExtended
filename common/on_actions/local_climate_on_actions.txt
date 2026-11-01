@@ -1,0 +1,86 @@
+﻿# Local Climate (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.1, § 5.4).
+# Effects: common/scripted_effects/local_climate_effects.txt.
+#
+#   on_yearly_pulse_state     the yearly refresh of local_climate_discomfort, its one
+#                             refresh site (a different day per state across the year)
+#   on_monthly_pulse_state    the first application, only on a state with no
+#                             te_climate_penalty_applied yet (a new game's first month,
+#                             a save from before this, a newly colonized state)
+#   on_yearly_pulse_country   once a year, from the first country to pulse, a sample of
+#                             the mass migration targets; every ten years a debug.log
+#                             line with the decade's sums
+#
+# Each pulse lists its own on-action, so the lists merge with vanilla's and the
+# mod's other files' rather than replacing them.
+on_yearly_pulse_state = {
+	on_actions = {
+		local_climate_yearly_on_action
+	}
+}
+
+on_monthly_pulse_state = {
+	on_actions = {
+		local_climate_first_on_action
+	}
+}
+
+on_yearly_pulse_country = {
+	on_actions = {
+		local_climate_log_on_action
+	}
+}
+
+# ROOT = the state, so the multiplier reads the state's penalty.
+local_climate_yearly_on_action = {
+	effect = {
+		te_update_local_climate_modifier = yes
+	}
+}
+
+local_climate_first_on_action = {
+	trigger = {
+		NOT = { has_variable = te_climate_penalty_applied }
+	}
+	effect = {
+		te_update_local_climate_modifier = yes
+	}
+}
+
+# Informational, not a TE_SELF_CHECK: the define change (MASS_MIGRATION_TARGET_MIN_ARABLE_LAND
+# = 0, common/defines/extra_defines.txt) lets a state with under 10 arable land be picked as a
+# mass migration target, and this counts how many are. A mass migration lasts about a year, so
+# the first country to pulse each year (a 360-day global gate) samples the targets, and each
+# decade (a 3650-day gate) the sums are logged and reset; the first line, in 1836, holds one
+# year's sample. A decade with none proves nothing, so there is no OK or BROKEN. Play-test list:
+# docs/testing/local-climate-playtest.md.
+local_climate_log_on_action = {
+	trigger = {
+		NOT = { has_global_variable = te_climate_log_year }
+	}
+	effect = {
+		set_global_variable = { name = te_climate_log_year value = yes days = 360 }
+		if = {
+			limit = { NOT = { has_global_variable = te_climate_log_targets } }
+			set_global_variable = { name = te_climate_log_targets value = 0 }
+			set_global_variable = { name = te_climate_log_small_targets value = 0 }
+			set_global_variable = { name = te_climate_log_years value = 0 }
+		}
+		change_global_variable = { name = te_climate_log_years add = 1 }
+		every_state = {
+			limit = { is_mass_migration_target = yes }
+			change_global_variable = { name = te_climate_log_targets add = 1 }
+			if = {
+				limit = { arable_land < 10 }
+				change_global_variable = { name = te_climate_log_small_targets add = 1 }
+			}
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_climate_log_decade } }
+			set_global_variable = { name = te_climate_log_decade value = yes days = 3650 }
+			debug_log = "TE_LOCAL_CLIMATE yearly_targets_summed=[GetGlobalVariable('te_climate_log_targets').GetValue|0] under_10_arable=[GetGlobalVariable('te_climate_log_small_targets').GetValue|0] years=[GetGlobalVariable('te_climate_log_years').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+			remove_global_variable = te_climate_log_targets
+			remove_global_variable = te_climate_log_small_targets
+			remove_global_variable = te_climate_log_years
+		}
+	}
+}

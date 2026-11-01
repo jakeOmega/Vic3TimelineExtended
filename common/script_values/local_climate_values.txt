@@ -1,0 +1,198 @@
+﻿# Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6).
+# State scope throughout. Each state region's climate record (local_climate_generated.txt), the four
+# technology-carried reliefs (local_climate_modifier_types.txt, te_local_climate_tech_injections.txt)
+# and the world's felt warming become four penalty terms, kept separate for the state panel, and
+# their sum, te_climate_penalty: attraction points a migrant counts against the state (1 point of
+# standard of living = 2). It is never negative, so comfort is a penalty, never a bonus, and a
+# region with no row costs nothing. The constants are the calibration's (§ 5.3);
+# scripts/analysis/local_climate_calibration.py mirrors this file and prints its anchor table, and
+# test_local_climate_comfort.py pins the anchors' targets. Change a constant here and rerun both.
+#
+#   warming = (world's anomaly - the anomaly the record's normals hold at) x amplification(latitude)
+#   heat    = max(0, summer + warming - H0) x (1 + k_hum x humidity) x heat weight x (1 - heat relief)
+#   cold    = max(0, C0 - winter - warming) x cold weight x (1 - cold relief)
+#   dry     = W x aridity x (1 - water relief)
+#   disease = D x malaria x (1 - disease relief)
+#   penalty = min(P_max, heat + cold + dry + disease)
+
+# Tuning constants (§ 5, § 5.3).
+te_climate_heat_start = 22 # H0: the warmest month's mean, °C, above which heat costs (22 with 1836 a degree colder
+# than the record's normals keeps § 5.3's 1836 targets; 23 was calibrated against the normals themselves)
+te_climate_humidity_factor = 0.33 # k_hum: each dew-point class adds a third to the heat cost
+te_climate_heat_weight = 1
+te_climate_cold_start = 0 # C0: the coldest month's mean, °C, below which cold costs
+te_climate_cold_weight = 0.8
+te_climate_dry_per_class = 8 # W: per aridity class (1 limited water, 2 scarce)
+te_climate_malaria_per_class = 2.5 # D: per malaria class (1 seasonal or local, 2 endemic)
+te_climate_penalty_max = 40 # P_max: climate alone never outweighs a full jobs bonus plus a good standard of living
+# Warming's amplification by latitude (§ 6): 1 up to the low latitude, rising in a straight line to
+# the maximum at the Arctic (or Antarctic) Circle and beyond, as observed warming runs.
+te_climate_amp_low_lat = 30
+te_climate_amp_high_lat = 66.5
+te_climate_amp_max = 2.5
+# The record holds today's climate normals (about 1991-2020), so a region reads it exactly when the
+# world's anomaly is today's; 1836, at anomaly 0, is this much colder, times the amplification
+# (owner, 2026-11-01).
+te_climate_normals_warming = 1.1
+
+# |latitude| of the region's reference place.
+te_climate_abs_latitude = {
+	value = te_climate_latitude
+	if = {
+		limit = { te_climate_latitude < 0 }
+		multiply = -1
+	}
+}
+
+# 1 at |latitude| <= te_climate_amp_low_lat, te_climate_amp_max at >= te_climate_amp_high_lat.
+te_climate_amplification = {
+	value = te_climate_abs_latitude
+	subtract = te_climate_amp_low_lat
+	min = 0
+	divide = {
+		value = te_climate_amp_high_lat
+		subtract = te_climate_amp_low_lat
+	}
+	max = 1
+	multiply = {
+		value = te_climate_amp_max
+		subtract = 1
+	}
+	add = 1
+}
+
+# The warming this region feels against the record's normals, °C: the felt anomaly less the anomaly
+# the normals hold at, times the latitude's amplification. The felt anomaly, because an aerosol haze
+# cools the air people live in (§ 6). Negative until the world reaches today's warming, and below that again if carbon removal
+# takes the world past it. It reads the global anomaly and the region's latitude, both at state scope.
+te_climate_warming = {
+	value = temperature_anomaly_display
+	subtract = te_climate_normals_warming
+	multiply = te_climate_amplification
+}
+
+# The record's seasons with warming added: warming raises the heat term and eases the cold one.
+te_climate_summer_eff = {
+	value = te_climate_summer_mean
+	add = te_climate_warming
+}
+te_climate_winter_eff = {
+	value = te_climate_winter_mean
+	add = te_climate_warming
+}
+
+# Relief, 0 to 1 (§ 5.2): the sum of the carriers the owner holds, clamped, since carriers or a later
+# law could pass 1.
+te_climate_relief_heat = {
+	value = modifier:state_climate_heat_relief_add
+	min = 0
+	max = 1
+}
+te_climate_relief_cold = {
+	value = modifier:state_climate_cold_relief_add
+	min = 0
+	max = 1
+}
+te_climate_relief_water = {
+	value = modifier:state_climate_water_relief_add
+	min = 0
+	max = 1
+}
+# Malaria Prevention's share is the census's own Malaria Control (te_demog_tech_injections.txt),
+# which eases a newcomer's fever risk as it eases the census's.
+te_climate_relief_disease = {
+	value = modifier:state_climate_disease_relief_add
+	add = modifier:state_malaria_control_add
+	min = 0
+	max = 1
+}
+
+# Each term before relief, in attraction points.
+te_climate_heat_raw = {
+	value = te_climate_summer_eff
+	subtract = te_climate_heat_start
+	min = 0
+	multiply = {
+		value = te_climate_summer_humidity
+		multiply = te_climate_humidity_factor
+		add = 1
+	}
+	multiply = te_climate_heat_weight
+}
+te_climate_cold_raw = {
+	value = te_climate_cold_start
+	subtract = te_climate_winter_eff
+	min = 0
+	multiply = te_climate_cold_weight
+}
+te_climate_dry_raw = {
+	value = te_climate_aridity
+	multiply = te_climate_dry_per_class
+}
+te_climate_disease_raw = {
+	value = te_climate_malaria
+	multiply = te_climate_malaria_per_class
+}
+
+# Each term after relief: what the state panel shows, term by term.
+te_climate_heat_term = {
+	value = te_climate_heat_raw
+	multiply = {
+		value = 1
+		subtract = te_climate_relief_heat
+	}
+}
+te_climate_cold_term = {
+	value = te_climate_cold_raw
+	multiply = {
+		value = 1
+		subtract = te_climate_relief_cold
+	}
+}
+te_climate_dry_term = {
+	value = te_climate_dry_raw
+	multiply = {
+		value = 1
+		subtract = te_climate_relief_water
+	}
+}
+te_climate_disease_term = {
+	value = te_climate_disease_raw
+	multiply = {
+		value = 1
+		subtract = te_climate_relief_disease
+	}
+}
+
+# The comfort penalty, 0 to te_climate_penalty_max. A region with no row reads 0 whatever the warming.
+te_climate_penalty = {
+	value = 0
+	if = {
+		limit = { te_climate_has_record > 0 }
+		add = te_climate_heat_term
+		add = te_climate_cold_term
+		add = te_climate_dry_term
+		add = te_climate_disease_term
+	}
+	max = te_climate_penalty_max
+	min = 0
+}
+
+# The state panel's Comfort row (Task 7). It shows what local_climate_discomfort applies, the penalty
+# te_update_local_climate_modifier stored at the state's last yearly refresh, not the live value, which
+# can drift between refreshes. 0 before the first application.
+te_climate_penalty_now = {
+	value = 0
+	if = {
+		limit = { has_variable = te_climate_penalty_applied }
+		value = var:te_climate_penalty_applied
+	}
+}
+# 1 once the state's first monthly application has run; until then the row says Pending.
+te_climate_penalty_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_climate_penalty_applied }
+		value = 1
+	}
+}

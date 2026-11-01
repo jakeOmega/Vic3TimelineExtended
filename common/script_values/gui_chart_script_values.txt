@@ -136,6 +136,10 @@ gui_state_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = local_climate_discomfort }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = free_port_state_modifier }
 		add = 1
 	}

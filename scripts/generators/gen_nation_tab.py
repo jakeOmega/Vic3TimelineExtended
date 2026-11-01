@@ -252,6 +252,7 @@ NOT_ON_COUNTRY = {
     "solar_collector_progress": "the megaproject's building",
     "space_elevator_progress": "the megaproject's building",
     "demilitarized_zone_state_modifier": "states", "free_port_*": "states", "migration_crowding": "states",
+    "local_climate_discomfort": "states",
     "minority_protection_state_modifier": "states", "pollution_generation_mult_effect": "states",
     "religious_mission_state_modifier": "states", "tourism_*": "states",
     "inh_concentrated_property": "states", "inh_dispersed_property": "states", "inh_land_hunger": "states",

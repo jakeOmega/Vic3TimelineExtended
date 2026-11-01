@@ -1,0 +1,20 @@
+﻿# Local Climate (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.1).
+# State scope, called only from local_climate_on_actions.txt: yearly on every state
+# (local_climate_yearly_on_action), and monthly on a state that has never had it
+# (local_climate_first_on_action: a new game's first month, a save from before this,
+# a newly colonized or split-off state). Both are state pulses, so ROOT is the state
+# and add_modifier's multiplier reads it; on_game_started has no ROOT and would
+# apply x1 (scripting_best_practices.md § "`add_modifier { multiplier = var:X }`
+# Resolves Against ROOT").
+#
+# te_climate_penalty_applied is the penalty in force, set on every refresh and never
+# removed: the modifier's multiplier reads it on later ticks too, and the state
+# panel's Comfort row shows it (0 for a mild climate, which carries no modifier).
+te_update_local_climate_modifier = {
+	remove_modifier_if_exists_effect = { MODIFIER = local_climate_discomfort }
+	set_variable = { name = te_climate_penalty_applied value = te_climate_penalty }
+	if = {
+		limit = { var:te_climate_penalty_applied > 0 }
+		add_modifier = { name = local_climate_discomfort multiplier = var:te_climate_penalty_applied }
+	}
+}

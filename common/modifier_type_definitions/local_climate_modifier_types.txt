@@ -1,0 +1,29 @@
+﻿# Local Climate (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.2): how far technology
+# eases each part of a state's climate discomfort, 0 to 1. The comfort script values
+# (common/script_values/local_climate_values.txt) read them with modifier:<type>, clamp them to 1 and
+# multiply each term by (1 - it). Carried by technologies (te_local_climate_tech_injections.txt,
+# te_demog_tech_injections.txt and the mod's era files); read only by script.
+state_climate_heat_relief_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_climate_cold_relief_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_climate_water_relief_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_climate_disease_relief_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
