@@ -118,9 +118,9 @@ SLOT_LISTS = ("warned_quiet", "warned_loud")
 # The per-slot helpers a dispatcher reaches as sr_fl_<do>_at = { N = <n> }
 # (sr_fl_each_slot, sr_fl_by_op, sr_fl_by_local). Each names $N$, so every one
 # takes the dispatchers' one argument (script_argument_audit).
-SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go", "step_pick",
+SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go",
                 "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
-                "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive",
+                "gather", "apply_losses", "toggle_destroy", "ai_recall", "debug_drive",
                 "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in", "set_pick", "set_posture", "set_target",
                 "xfer_open", "xfer_step", "transfer")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
@@ -571,19 +571,12 @@ def render_slot_triggers(n: int) -> list[str]:
             "}",
             "# At Earth, closing in on a lunar world (the AI's offence leaves it there).",
             f"{var(n, 'closing_at_earth')} = {{ {var(n, 'at_earth')} = yes {var(n, 'posture_value')} = 3 }}",
-            "# The target button: interdicting, the worlds it may interdict; else the",
-            "# hostile worlds.",
+            "# The target button's gate (sr_fleet_target_sgui): interdicting, a world here",
+            "# it may interdict; else a hostile world here.",
             f"{var(n, 'can_target')} = {{",
             "\tOR = {",
             f"\t\tAND = {{ {var(n, 'posture_value')} = 4 {var(n, 'has_interdict_world')} = yes }}",
             f"\t\tAND = {{ NOT = {{ {var(n, 'posture_value')} = 4 }} {var(n, 'has_hostile_world')} = yes }}",
-            "\t}", "}",
-            "# The posture button's next step is Interdict (its price, in the tooltip).",
-            f"{var(n, 'next_interdict')} = {{",
-            f"\t{var(n, 'has_interdict_world')} = yes",
-            "\tOR = {",
-            f"\t\t{var(n, 'posture_value')} = 3",
-            f"\t\tAND = {{ {var(n, 'posture_value')} = 2 NOT = {{ {var(n, 'has_hostile_world')} = yes }} }}",
             "\t}", "}",
             "# The AI's: at Earth, or where no world of ours is threatened.",
             f"{var(n, 'ai_free')} = {{",
@@ -1224,21 +1217,8 @@ def render_location_effects() -> list[str]:
     out += _chain([(f"has_variable = sr_fl_dest_pick_$N$ var:sr_fl_dest_pick_$N$ = {b.code} sr_fl_$N$_may_depart_{b.key} = yes",
                     [f"sr_fl_dispatch = {{ N = $N$ LOC = {b.key} CODE = {b.code} }}"]) for b in LOCATIONS])
     out += ["}", "",
-            "# The destination button: the next location, skipping where the fleet is.",
-            "sr_fl_step_pick_once = {"]
-    out += _chain([(f"local_var:sr_fl_pick = {c}", [f"set_local_variable = {{ name = sr_fl_pick value = {c % SLOTS + 1} }}"])
-                   for c in range(1, len(LOCATIONS) + 1)])
-    out += ["}",
-            "sr_fl_step_pick_at = {",
-            "\tset_local_variable = { name = sr_fl_pick value = sr_fl_$N$_loc_value }",
-            "\tif = { limit = { has_variable = sr_fl_dest_pick_$N$ } set_local_variable = { name = sr_fl_pick value = var:sr_fl_dest_pick_$N$ } }",
-            "\tsr_fl_step_pick_once = yes",
-            "\tif = { limit = { local_var:sr_fl_pick = sr_fl_$N$_loc_value } sr_fl_step_pick_once = yes }",
-            "\tset_variable = { name = sr_fl_dest_pick_$N$ value = local_var:sr_fl_pick }",
-            "}", "",
             "# The destination popup's choice (UI pass design § 4): the location whose code",
-            "# is scope:pick (sr_fleet_set_dest_sgui). The step above runs from nowhere since",
-            "# the popups (sr_fleet_pick_sgui's effect): kept for a revert.",
+            "# is scope:pick (sr_fleet_set_dest_sgui).",
             "sr_fl_set_pick_at = {"]
     out += _chain([(f"scope:pick = {b.code}", [f"set_variable = {{ name = sr_fl_dest_pick_$N$ value = {b.code} }}"])
                    for b in LOCATIONS])
@@ -1409,24 +1389,11 @@ def render_combat() -> list[str]:
     out += _chain([(f"has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = {w.index}",
                     [f"sr_cb_charge_free = {{ N = $N$ KEY = {w.key} INDEX = {w.index} }}"]) for w in gss.SITES])
     out += ["}", "",
-            "# The target button (6c): interdicting, the next world here it may interdict,",
-            "# at the interdiction's price when its holder is a new one; else the next",
-            "# hostile world.",
-            "sr_fl_step_target_at = {",
-            "\tif = {",
-            "\t\tlimit = { sr_fl_$N$_posture_value = 4 }",
-            "\t\tsr_fl_step_icpt_target_at = { N = $N$ }",
-            "\t\tsr_fl_charge_icpt_at = { N = $N$ }",
-            "\t\tsr_icpt_rebuild = yes",
-            "\t}",
-            "\telse = {",
-            "\t\tsr_fl_step_hostile_target_at = { N = $N$ }",
-            "\t}",
-            "}", "",
             "# The target popup's choice (UI pass design § 7; sr_fleet_set_target_sgui): the",
-            "# world whose index is scope:pick, then the step's charge: interdicting, the",
+            "# world whose index is scope:pick, then its charge: interdicting, the",
             "# interdiction's price when its holder is a new one; closing in, a free",
-            "# colony's. The scripted GUI holds the pick to the step's rule.",
+            "# colony's. The scripted GUI holds the pick to a world here that the posture",
+            "# may take.",
             "sr_fl_set_target_at = {"]
     out += _chain([(f"scope:pick = {w.index}", [f"set_variable = {{ name = sr_fl_$N$_target value = {w.index} }}"])
                    for w in gss.SITES])
@@ -1441,16 +1408,17 @@ def render_combat() -> list[str]:
             "\t}",
             "}", ""]
     out += _step_target("sr_fl_step_hostile_target_at", "sr_site_hostile_target",
-                        "The hostile step: the next hostile world at the slot's location after its",
-                        "target (table order), else the first; none clears it. At Earth, the lunar",
-                        "worlds (lunar colonization § 8.1). A free colony's price only while it closes",
-                        "in: a stationed fleet's target costs nothing.",
+                        "The hostile step (Close in's target, sr_fl_set_posture_at): the next hostile",
+                        "world at the slot's location after its target (table order), else the first;",
+                        "none clears it. At Earth, the lunar worlds (lunar colonization § 8.1). A free",
+                        "colony's price only while it closes in.",
                         locations=CLOSE_IN_LOCATIONS,
                         found=["\t\tif = { limit = { sr_fl_$N$_posture_value = 3 } sr_fl_charge_free_at = { N = $N$ } }"],
                         none=["\t\tremove_variable = sr_fl_$N$_target"])
     out += _step_target("sr_fl_step_icpt_target_at", "sr_site_interdict_target",
-                        "The interdiction's step (6c): the next world at the slot's location it may",
-                        "interdict, else the first; none ends the interdiction (it stands off).",
+                        "The interdiction's step (6c; Interdict's target, sr_fl_set_posture_at, and the",
+                        "console's): the next world at the slot's location it may interdict, else the",
+                        "first; none ends the interdiction (it stands off).",
                         "Never at Earth (lunar colonization § 8.3).",
                         locations=INTERDICT_LOCATIONS,
                         found=[],
@@ -1534,9 +1502,10 @@ def render_combat() -> list[str]:
 def _step_target(name: str, trigger: str, *comment: str, locations: tuple[glw.Location, ...],
                  found: list[str], none: list[str],
                  none_guard: str = "limit = { has_variable = sr_fl_$N$_target }") -> list[str]:
-    """A target button's step: the next world at the slot's location (one of
+    """A target step: the next world at the slot's location (one of
     ``locations``) after its target that passes ``trigger`` (table order), else
-    the first such."""
+    the first such. Close in and Interdict take one when the target held isn't
+    theirs (sr_fl_set_posture_at), as does the console's interdiction."""
     out = [f"# {line}" for line in comment]
     out += [f"{name} = {{",
             "\tset_local_variable = { name = sr_fl_tgt value = 0 }",
@@ -2305,10 +2274,11 @@ def _fleet_row(n: int) -> list[str]:
     out += _override("fl_marines", f'raw_text = "[{_sv(var(n, "marines_value"))}|0]"')
     out += _override("fl_orders_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}", 1)}]"')
     # The destination button opens the slot's destination popup (UI pass
-    # design § 4; te_popup sr_dest_<n>). Its hover is the leg to the destination
-    # picked (sr_disp_fl_<n>_leg_months / _dv); the key opens with
-    # sr_fleet_pick_sgui's IsValidTooltip, so a greyed button says why it can't
-    # pick (a key that reads JournalEntry can't go through Localize, gotcha #16).
+    # design § 4; te_popup sr_dest_<n>). It greys on sr_fleet_pick_sgui's
+    # is_valid, a gate with no effect. Its hover is the leg to the destination
+    # picked (sr_disp_fl_<n>_leg_months / _dv); the key opens with that gate's
+    # IsValidTooltip, so a greyed button says why it can't pick (a key that
+    # reads JournalEntry can't go through Localize, gotcha #16).
     out += _override("fl_pick_button", f'enabled = "{_op("sr_fleet_pick_sgui", "IsValid", n)}"',
                      f"onclick = \"[GetVariableSystem.Set('te_popup', '{_popup_key('dest', n)}')]\"",
                      f'tooltip = "je_space_race_widget_fl_{n}_leg_tt"')
@@ -2327,7 +2297,7 @@ def _fleet_row(n: int) -> list[str]:
     out += _override("fl_combat_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_combat", 1)}]"')
     # The posture buttons (UI pass design § 7): each sets its posture
     # (sr_fleet_set_posture_sgui, scope:pick the posture), greyed with the
-    # reason where the step wouldn't land on it; the one in force is lit.
+    # reason where it can't be taken; the one in force is lit.
     for p_code in POSTURES:
         held = _eq(f"sr_disp_fl_{n}_posture", p_code)
         out += _override(f"fl_posture_{p_code}_choice", f'visible = "[Not( {held} )]"')
@@ -2336,9 +2306,10 @@ def _fleet_row(n: int) -> list[str]:
                          f'enabled = "{_pick_call("sr_fleet_set_posture_sgui", "IsValid", n, p_code)}"',
                          f'onclick = "{_pick_call("sr_fleet_set_posture_sgui", "Execute", n, p_code)}"',
                          f'tooltip = "{_pick_reasoned("sr_fleet_set_posture_sgui", n, p_code)}"')
-    # The target button opens the slot's target popup (te_popup sr_ftarget_<n>).
-    # Its hover is what we know of the target (sr_fl_<n>_target_intel), after
-    # sr_fleet_target_sgui's IsValidTooltip, as the destination button's.
+    # The target button opens the slot's target popup (te_popup sr_ftarget_<n>),
+    # greyed on sr_fleet_target_sgui's is_valid, a gate with no effect. Its hover
+    # is what we know of the target (sr_fl_<n>_target_intel), after that gate's
+    # IsValidTooltip, as the destination button's.
     out += _override("fl_target_button", f'enabled = "{_op("sr_fleet_target_sgui", "IsValid", n)}"',
                      f"onclick = \"[GetVariableSystem.Set('te_popup', '{_popup_key('ftarget', n)}')]\"",
                      f'tooltip = "je_space_race_widget_fl_{n}_target_tt"')

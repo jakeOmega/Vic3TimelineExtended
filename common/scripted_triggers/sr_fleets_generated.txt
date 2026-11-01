@@ -500,20 +500,12 @@ sr_fl_1_pick_world_here = {
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_1_closing_at_earth = { sr_fl_1_at_earth = yes sr_fl_1_posture_value = 3 }
-# The target button: interdicting, the worlds it may interdict; else the
-# hostile worlds.
+# The target button's gate (sr_fleet_target_sgui): interdicting, a world here
+# it may interdict; else a hostile world here.
 sr_fl_1_can_target = {
 	OR = {
 		AND = { sr_fl_1_posture_value = 4 sr_fl_1_has_interdict_world = yes }
 		AND = { NOT = { sr_fl_1_posture_value = 4 } sr_fl_1_has_hostile_world = yes }
-	}
-}
-# The posture button's next step is Interdict (its price, in the tooltip).
-sr_fl_1_next_interdict = {
-	sr_fl_1_has_interdict_world = yes
-	OR = {
-		sr_fl_1_posture_value = 3
-		AND = { sr_fl_1_posture_value = 2 NOT = { sr_fl_1_has_hostile_world = yes } }
 	}
 }
 # The AI's: at Earth, or where no world of ours is threatened.
@@ -1216,20 +1208,12 @@ sr_fl_2_pick_world_here = {
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_2_closing_at_earth = { sr_fl_2_at_earth = yes sr_fl_2_posture_value = 3 }
-# The target button: interdicting, the worlds it may interdict; else the
-# hostile worlds.
+# The target button's gate (sr_fleet_target_sgui): interdicting, a world here
+# it may interdict; else a hostile world here.
 sr_fl_2_can_target = {
 	OR = {
 		AND = { sr_fl_2_posture_value = 4 sr_fl_2_has_interdict_world = yes }
 		AND = { NOT = { sr_fl_2_posture_value = 4 } sr_fl_2_has_hostile_world = yes }
-	}
-}
-# The posture button's next step is Interdict (its price, in the tooltip).
-sr_fl_2_next_interdict = {
-	sr_fl_2_has_interdict_world = yes
-	OR = {
-		sr_fl_2_posture_value = 3
-		AND = { sr_fl_2_posture_value = 2 NOT = { sr_fl_2_has_hostile_world = yes } }
 	}
 }
 # The AI's: at Earth, or where no world of ours is threatened.
@@ -1932,20 +1916,12 @@ sr_fl_3_pick_world_here = {
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_3_closing_at_earth = { sr_fl_3_at_earth = yes sr_fl_3_posture_value = 3 }
-# The target button: interdicting, the worlds it may interdict; else the
-# hostile worlds.
+# The target button's gate (sr_fleet_target_sgui): interdicting, a world here
+# it may interdict; else a hostile world here.
 sr_fl_3_can_target = {
 	OR = {
 		AND = { sr_fl_3_posture_value = 4 sr_fl_3_has_interdict_world = yes }
 		AND = { NOT = { sr_fl_3_posture_value = 4 } sr_fl_3_has_hostile_world = yes }
-	}
-}
-# The posture button's next step is Interdict (its price, in the tooltip).
-sr_fl_3_next_interdict = {
-	sr_fl_3_has_interdict_world = yes
-	OR = {
-		sr_fl_3_posture_value = 3
-		AND = { sr_fl_3_posture_value = 2 NOT = { sr_fl_3_has_hostile_world = yes } }
 	}
 }
 # The AI's: at Earth, or where no world of ours is threatened.
@@ -2648,20 +2624,12 @@ sr_fl_4_pick_world_here = {
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_4_closing_at_earth = { sr_fl_4_at_earth = yes sr_fl_4_posture_value = 3 }
-# The target button: interdicting, the worlds it may interdict; else the
-# hostile worlds.
+# The target button's gate (sr_fleet_target_sgui): interdicting, a world here
+# it may interdict; else a hostile world here.
 sr_fl_4_can_target = {
 	OR = {
 		AND = { sr_fl_4_posture_value = 4 sr_fl_4_has_interdict_world = yes }
 		AND = { NOT = { sr_fl_4_posture_value = 4 } sr_fl_4_has_hostile_world = yes }
-	}
-}
-# The posture button's next step is Interdict (its price, in the tooltip).
-sr_fl_4_next_interdict = {
-	sr_fl_4_has_interdict_world = yes
-	OR = {
-		sr_fl_4_posture_value = 3
-		AND = { sr_fl_4_posture_value = 2 NOT = { sr_fl_4_has_hostile_world = yes } }
 	}
 }
 # The AI's: at Earth, or where no world of ours is threatened.
@@ -3364,20 +3332,12 @@ sr_fl_5_pick_world_here = {
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_5_closing_at_earth = { sr_fl_5_at_earth = yes sr_fl_5_posture_value = 3 }
-# The target button: interdicting, the worlds it may interdict; else the
-# hostile worlds.
+# The target button's gate (sr_fleet_target_sgui): interdicting, a world here
+# it may interdict; else a hostile world here.
 sr_fl_5_can_target = {
 	OR = {
 		AND = { sr_fl_5_posture_value = 4 sr_fl_5_has_interdict_world = yes }
 		AND = { NOT = { sr_fl_5_posture_value = 4 } sr_fl_5_has_hostile_world = yes }
-	}
-}
-# The posture button's next step is Interdict (its price, in the tooltip).
-sr_fl_5_next_interdict = {
-	sr_fl_5_has_interdict_world = yes
-	OR = {
-		sr_fl_5_posture_value = 3
-		AND = { sr_fl_5_posture_value = 2 NOT = { sr_fl_5_has_hostile_world = yes } }
 	}
 }
 # The AI's: at Earth, or where no world of ours is threatened.
@@ -4080,20 +4040,12 @@ sr_fl_6_pick_world_here = {
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_6_closing_at_earth = { sr_fl_6_at_earth = yes sr_fl_6_posture_value = 3 }
-# The target button: interdicting, the worlds it may interdict; else the
-# hostile worlds.
+# The target button's gate (sr_fleet_target_sgui): interdicting, a world here
+# it may interdict; else a hostile world here.
 sr_fl_6_can_target = {
 	OR = {
 		AND = { sr_fl_6_posture_value = 4 sr_fl_6_has_interdict_world = yes }
 		AND = { NOT = { sr_fl_6_posture_value = 4 } sr_fl_6_has_hostile_world = yes }
-	}
-}
-# The posture button's next step is Interdict (its price, in the tooltip).
-sr_fl_6_next_interdict = {
-	sr_fl_6_has_interdict_world = yes
-	OR = {
-		sr_fl_6_posture_value = 3
-		AND = { sr_fl_6_posture_value = 2 NOT = { sr_fl_6_has_hostile_world = yes } }
 	}
 }
 # The AI's: at Earth, or where no world of ours is threatened.
@@ -4796,20 +4748,12 @@ sr_fl_7_pick_world_here = {
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_7_closing_at_earth = { sr_fl_7_at_earth = yes sr_fl_7_posture_value = 3 }
-# The target button: interdicting, the worlds it may interdict; else the
-# hostile worlds.
+# The target button's gate (sr_fleet_target_sgui): interdicting, a world here
+# it may interdict; else a hostile world here.
 sr_fl_7_can_target = {
 	OR = {
 		AND = { sr_fl_7_posture_value = 4 sr_fl_7_has_interdict_world = yes }
 		AND = { NOT = { sr_fl_7_posture_value = 4 } sr_fl_7_has_hostile_world = yes }
-	}
-}
-# The posture button's next step is Interdict (its price, in the tooltip).
-sr_fl_7_next_interdict = {
-	sr_fl_7_has_interdict_world = yes
-	OR = {
-		sr_fl_7_posture_value = 3
-		AND = { sr_fl_7_posture_value = 2 NOT = { sr_fl_7_has_hostile_world = yes } }
 	}
 }
 # The AI's: at Earth, or where no world of ours is threatened.
@@ -5512,20 +5456,12 @@ sr_fl_8_pick_world_here = {
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_8_closing_at_earth = { sr_fl_8_at_earth = yes sr_fl_8_posture_value = 3 }
-# The target button: interdicting, the worlds it may interdict; else the
-# hostile worlds.
+# The target button's gate (sr_fleet_target_sgui): interdicting, a world here
+# it may interdict; else a hostile world here.
 sr_fl_8_can_target = {
 	OR = {
 		AND = { sr_fl_8_posture_value = 4 sr_fl_8_has_interdict_world = yes }
 		AND = { NOT = { sr_fl_8_posture_value = 4 } sr_fl_8_has_hostile_world = yes }
-	}
-}
-# The posture button's next step is Interdict (its price, in the tooltip).
-sr_fl_8_next_interdict = {
-	sr_fl_8_has_interdict_world = yes
-	OR = {
-		sr_fl_8_posture_value = 3
-		AND = { sr_fl_8_posture_value = 2 NOT = { sr_fl_8_has_hostile_world = yes } }
 	}
 }
 # The AI's: at Earth, or where no world of ours is threatened.
@@ -6228,20 +6164,12 @@ sr_fl_9_pick_world_here = {
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_9_closing_at_earth = { sr_fl_9_at_earth = yes sr_fl_9_posture_value = 3 }
-# The target button: interdicting, the worlds it may interdict; else the
-# hostile worlds.
+# The target button's gate (sr_fleet_target_sgui): interdicting, a world here
+# it may interdict; else a hostile world here.
 sr_fl_9_can_target = {
 	OR = {
 		AND = { sr_fl_9_posture_value = 4 sr_fl_9_has_interdict_world = yes }
 		AND = { NOT = { sr_fl_9_posture_value = 4 } sr_fl_9_has_hostile_world = yes }
-	}
-}
-# The posture button's next step is Interdict (its price, in the tooltip).
-sr_fl_9_next_interdict = {
-	sr_fl_9_has_interdict_world = yes
-	OR = {
-		sr_fl_9_posture_value = 3
-		AND = { sr_fl_9_posture_value = 2 NOT = { sr_fl_9_has_hostile_world = yes } }
 	}
 }
 # The AI's: at Earth, or where no world of ours is threatened.

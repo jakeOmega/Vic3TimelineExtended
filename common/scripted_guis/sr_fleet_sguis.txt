@@ -10,14 +10,16 @@
 # Transfer below). Full Colonies only;
 # player-only: the AI orders its fleets through the same effects from its
 # monthly review (sr_fl_ai_review). Each is_valid is the trigger its effect's
-# dispatcher checks (sr_fl_<n>_can_go and the rest, generated).
+# dispatcher checks (sr_fl_<n>_can_go and the rest, generated). Two have no
+# effect: sr_fleet_pick_sgui and sr_fleet_target_sgui, the gates of the buttons
+# that open the destination and target popups, read only for the buttons'
+# greyed state and reason (never executed).
 # ============================================================================
 
-# A fleet's destination button. It opens the slot's destination popup (UI pass
-# design § 4, te_popup sr_dest_<n>), so the panel reads only its is_valid: the
-# button greys, with this reason, while the fleet can't pick. Its effect, the
-# step to the next location, runs from nowhere since then (the console can't
-# run a scripted GUI): kept for a revert; removing it is the owner's call.
+# A fleet's destination button's gate. The button opens the slot's destination
+# popup (UI pass design § 4, te_popup sr_dest_<n>) and reads only this
+# is_valid: it greys, with this reason, while the fleet is not at a location.
+# No effect: never executed (the old step to the next location went, #1298).
 sr_fleet_pick_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -37,19 +39,12 @@ sr_fleet_pick_sgui = {
 			sr_fl_op_check = { TEST = at_location }
 		}
 	}
-
-	effect = {
-		custom_tooltip = sr_fl_pick_step_tt
-		hidden_effect = {
-			sr_fl_by_op = { DO = step_pick }
-		}
-	}
 }
 
 # The destination popup's Choose (UI pass design § 4): scope:op the slot,
-# scope:pick a location's code (gen_launch_windows.LOCATIONS). Open wherever
-# the step is: at a location, for any location but its own. A row the fleet
-# couldn't leave for this month still chooses; Go keeps that gate.
+# scope:pick a location's code (gen_launch_windows.LOCATIONS). Open at a
+# location, for any location but its own. A row the fleet couldn't leave for
+# this month still chooses; Go keeps that gate.
 sr_fleet_set_dest_sgui = {
 	scope = country
 	saved_scopes = { op pick }
@@ -405,67 +400,11 @@ sr_fleet_embark_sgui = {
 	}
 }
 
-# 6b: the posture steps Station, Stand off, Close in (close in needs a hostile
-# world there: at war with its holder, or free); 6c: then Interdict (a world
-# there of a country at peace with us, not our ally; its price is in the
-# tooltip when that is the next step). At Earth (lunar colonization § 8.1),
-# Station and Close in on a lunar world alone, with their own tooltip. The
-# panel sets a posture with sr_fleet_set_posture_sgui's four buttons (UI pass
-# design § 7), and nothing references this one since: kept for a revert
-# (the console can't run a scripted GUI); removing it is the owner's call.
-sr_fleet_posture_sgui = {
-	scope = country
-	saved_scopes = { op }
-
-	is_shown = {
-		has_journal_entry = je_space_race_solar_colonization
-		sr_colonies_full_enabled = yes
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-
-	is_valid = {
-		custom_tooltip = {
-			text = sr_fl_not_at_location_tt
-			sr_fl_op_check = { TEST = at_location }
-		}
-		# UI pass design § 10: no Space Command, no fleet orders.
-		custom_tooltip = {
-			text = sr_fl_req_space_command_tt
-			sr_sc_operational = yes
-		}
-	}
-
-	effect = {
-		if = {
-			limit = { sr_fl_op_check = { TEST = at_earth } }
-			custom_tooltip = sr_fl_posture_earth_tt
-		}
-		else = {
-			custom_tooltip = sr_fl_posture_tt
-		}
-		if = {
-			limit = { sr_fl_op_check = { TEST = closes_on_free } }
-			custom_tooltip = sr_fl_free_price_tt
-		}
-		if = {
-			limit = { sr_fl_op_check = { TEST = next_interdict } }
-			custom_tooltip = sr_fl_interdict_price_tt
-		}
-		hidden_effect = {
-			sr_fl_by_op = { DO = step_posture }
-		}
-	}
-}
-
-# The world it closes in on: the next hostile world at its location; while it
-# interdicts (6c), the next world it may interdict, a new country's at the
-# interdiction's price. The panel's target button opens the target popup (UI
-# pass design § 7, te_popup sr_ftarget_<n>) and reads only this is_valid, for
-# its greyed state and reason. Its effect, the step, runs from nowhere since
-# then: kept for a revert; removing it is the owner's call.
+# A fleet's target button's gate (6b; 6c while it interdicts). The button opens
+# the slot's target popup (UI pass design § 7, te_popup sr_ftarget_<n>) and
+# reads only this is_valid, for its greyed state and reason: a world here it
+# may close in on (while interdicting, one it may interdict), and Space Command.
+# No effect: never executed (the old step to the next target went, #1298).
 sr_fleet_target_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -490,28 +429,14 @@ sr_fleet_target_sgui = {
 			sr_sc_operational = yes
 		}
 	}
-
-	effect = {
-		if = {
-			limit = { sr_fl_op_check = { TEST = interdicting } }
-			custom_tooltip = sr_fl_icpt_target_tt
-		}
-		else = {
-			custom_tooltip = sr_fl_target_tt
-		}
-		hidden_effect = {
-			sr_fl_by_op = { DO = step_target }
-		}
-	}
 }
 
 # The posture buttons (UI pass design § 7): scope:op the slot, scope:pick the
 # posture (1 Station, 2 Stand off, 3 Close in, 4 Interdict), set at once with
-# what the step does on the way (sr_fl_set_posture_at). Each is valid where the
-# step would land on it, each rule its own line: never Stand off or Interdict
-# at Earth (lunar colonization §§ 8.1, 8.3), Close in on a hostile world here
-# (at Earth, a lunar one), Interdict on a world here of a country at peace with
-# us and not our ally.
+# what taking it brings (sr_fl_set_posture_at: a target, a price). Each rule is
+# its own line: never Stand off or Interdict at Earth (lunar colonization
+# §§ 8.1, 8.3), Close in on a hostile world here (at Earth, a lunar one),
+# Interdict on a world here of a country at peace with us and not our ally.
 sr_fleet_set_posture_sgui = {
 	scope = country
 	saved_scopes = { op pick }
@@ -633,7 +558,7 @@ sr_fleet_set_posture_sgui = {
 # The target popup's Target (UI pass design § 7): scope:op the slot,
 # scope:pick a world's index (gen_solar_sites.SITES). Valid for a world at the
 # fleet's location that its posture may take: interdicting, one it may
-# interdict; else one it may close in on, as the step's rule.
+# interdict; else one it may close in on.
 sr_fleet_set_target_sgui = {
 	scope = country
 	saved_scopes = { op pick }
