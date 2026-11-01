@@ -12425,6 +12425,13 @@ sr_mq_1_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_1_type
+			var:sr_mq_1_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -12537,6 +12544,13 @@ sr_mq_2_module_name = {
 			var:sr_mq_2_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_2_type
+			var:sr_mq_2_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -12653,6 +12667,13 @@ sr_mq_3_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_3_type
+			var:sr_mq_3_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -12765,6 +12786,13 @@ sr_mq_4_module_name = {
 			var:sr_mq_4_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_4_type
+			var:sr_mq_4_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -12881,6 +12909,13 @@ sr_mq_5_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_5_type
+			var:sr_mq_5_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -12993,6 +13028,13 @@ sr_mq_6_module_name = {
 			var:sr_mq_6_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_6_type
+			var:sr_mq_6_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -13109,6 +13151,13 @@ sr_mq_7_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_7_type
+			var:sr_mq_7_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -13221,6 +13270,13 @@ sr_mq_8_module_name = {
 			var:sr_mq_8_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_8_type
+			var:sr_mq_8_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -13337,6 +13393,13 @@ sr_mq_9_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_9_type
+			var:sr_mq_9_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -13449,6 +13512,13 @@ sr_mq_10_module_name = {
 			var:sr_mq_10_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_10_type
+			var:sr_mq_10_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -13565,6 +13635,13 @@ sr_mq_11_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_11_type
+			var:sr_mq_11_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -13677,6 +13754,13 @@ sr_mq_12_module_name = {
 			var:sr_mq_12_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_12_type
+			var:sr_mq_12_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -13793,6 +13877,13 @@ sr_mq_13_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_13_type
+			var:sr_mq_13_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -13905,6 +13996,13 @@ sr_mq_14_module_name = {
 			var:sr_mq_14_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_14_type
+			var:sr_mq_14_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -14021,6 +14119,13 @@ sr_mq_15_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_15_type
+			var:sr_mq_15_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -14133,6 +14238,13 @@ sr_mq_16_module_name = {
 			var:sr_mq_16_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_16_type
+			var:sr_mq_16_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -14249,6 +14361,13 @@ sr_mq_17_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_17_type
+			var:sr_mq_17_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -14361,6 +14480,13 @@ sr_mq_18_module_name = {
 			var:sr_mq_18_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_18_type
+			var:sr_mq_18_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown
@@ -14477,6 +14603,13 @@ sr_mq_19_module_name = {
 		localization_key = sr_mq_module_admin
 	}
 	text = {
+		trigger = {
+			has_variable = sr_mq_19_type
+			var:sr_mq_19_type = 16
+		}
+		localization_key = sr_mq_module_terra
+	}
+	text = {
 		localization_key = sr_site_name_unknown
 	}
 }
@@ -14589,6 +14722,13 @@ sr_mq_20_module_name = {
 			var:sr_mq_20_type = 15
 		}
 		localization_key = sr_mq_module_admin
+	}
+	text = {
+		trigger = {
+			has_variable = sr_mq_20_type
+			var:sr_mq_20_type = 16
+		}
+		localization_key = sr_mq_module_terra
 	}
 	text = {
 		localization_key = sr_site_name_unknown

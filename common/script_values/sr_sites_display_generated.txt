@@ -1746,6 +1746,11 @@ sr_disp_mod_pending_admin_valles_marineris = {
 	if = { limit = { has_variable = sr_mq_admin_valles_marineris } add = var:sr_mq_admin_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_admin_valles_marineris } add = global_var:sr_site_ship_admin_valles_marineris }
 }
+sr_disp_mod_pending_terra_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_terra_valles_marineris } add = var:sr_mq_terra_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_terra_valles_marineris } add = global_var:sr_site_ship_terra_valles_marineris }
+}
 sr_disp_site_staffing_valles_marineris = {
 	value = sr_site_staffing_valles_marineris
 	multiply = 100
@@ -1834,6 +1839,11 @@ sr_disp_mod_pending_admin_olympus_mons = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_olympus_mons } add = var:sr_mq_admin_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_admin_olympus_mons } add = global_var:sr_site_ship_admin_olympus_mons }
+}
+sr_disp_mod_pending_terra_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_terra_olympus_mons } add = var:sr_mq_terra_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_terra_olympus_mons } add = global_var:sr_site_ship_terra_olympus_mons }
 }
 sr_disp_site_staffing_olympus_mons = {
 	value = sr_site_staffing_olympus_mons
@@ -1924,6 +1934,11 @@ sr_disp_mod_pending_admin_hellas_planitia = {
 	if = { limit = { has_variable = sr_mq_admin_hellas_planitia } add = var:sr_mq_admin_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_hellas_planitia } add = global_var:sr_site_ship_admin_hellas_planitia }
 }
+sr_disp_mod_pending_terra_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_terra_hellas_planitia } add = var:sr_mq_terra_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_hellas_planitia } add = global_var:sr_site_ship_terra_hellas_planitia }
+}
 sr_disp_site_staffing_hellas_planitia = {
 	value = sr_site_staffing_hellas_planitia
 	multiply = 100
@@ -2013,6 +2028,11 @@ sr_disp_mod_pending_admin_utopia_planitia = {
 	if = { limit = { has_variable = sr_mq_admin_utopia_planitia } add = var:sr_mq_admin_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_utopia_planitia } add = global_var:sr_site_ship_admin_utopia_planitia }
 }
+sr_disp_mod_pending_terra_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_terra_utopia_planitia } add = var:sr_mq_terra_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_utopia_planitia } add = global_var:sr_site_ship_terra_utopia_planitia }
+}
 sr_disp_site_staffing_utopia_planitia = {
 	value = sr_site_staffing_utopia_planitia
 	multiply = 100
@@ -2101,6 +2121,11 @@ sr_disp_mod_pending_admin_arcadia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_arcadia_planitia } add = var:sr_mq_admin_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_arcadia_planitia } add = global_var:sr_site_ship_admin_arcadia_planitia }
+}
+sr_disp_mod_pending_terra_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_terra_arcadia_planitia } add = var:sr_mq_terra_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_arcadia_planitia } add = global_var:sr_site_ship_terra_arcadia_planitia }
 }
 sr_disp_site_staffing_arcadia_planitia = {
 	value = sr_site_staffing_arcadia_planitia
@@ -2814,6 +2839,11 @@ sr_disp_mod_pending_admin_ganymede = {
 	if = { limit = { has_variable = sr_mq_admin_ganymede } add = var:sr_mq_admin_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_admin_ganymede } add = global_var:sr_site_ship_admin_ganymede }
 }
+sr_disp_mod_pending_terra_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_terra_ganymede } add = var:sr_mq_terra_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_terra_ganymede } add = global_var:sr_site_ship_terra_ganymede }
+}
 sr_disp_site_staffing_ganymede = {
 	value = sr_site_staffing_ganymede
 	multiply = 100
@@ -2902,6 +2932,11 @@ sr_disp_mod_pending_admin_callisto = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_callisto } add = var:sr_mq_admin_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_admin_callisto } add = global_var:sr_site_ship_admin_callisto }
+}
+sr_disp_mod_pending_terra_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_terra_callisto } add = var:sr_mq_terra_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_terra_callisto } add = global_var:sr_site_ship_terra_callisto }
 }
 sr_disp_site_staffing_callisto = {
 	value = sr_site_staffing_callisto
@@ -3170,6 +3205,11 @@ sr_disp_mod_pending_admin_venus = {
 	if = { limit = { has_variable = sr_mq_admin_venus } add = var:sr_mq_admin_venus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_venus } add = global_var:sr_site_ship_admin_venus }
 }
+sr_disp_mod_pending_terra_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_terra_venus } add = var:sr_mq_terra_venus }
+	if = { limit = { has_global_variable = sr_site_ship_terra_venus } add = global_var:sr_site_ship_terra_venus }
+}
 sr_disp_site_staffing_venus = {
 	value = sr_site_staffing_venus
 	multiply = 100
@@ -3347,6 +3387,11 @@ sr_disp_mod_pending_admin_titan = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_titan } add = var:sr_mq_admin_titan }
 	if = { limit = { has_global_variable = sr_site_ship_admin_titan } add = global_var:sr_site_ship_admin_titan }
+}
+sr_disp_mod_pending_terra_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_terra_titan } add = var:sr_mq_terra_titan }
+	if = { limit = { has_global_variable = sr_site_ship_terra_titan } add = global_var:sr_site_ship_terra_titan }
 }
 sr_disp_site_staffing_titan = {
 	value = sr_site_staffing_titan
@@ -5202,6 +5247,338 @@ sr_disp_mod_next_cost_imbrium = { value = sr_mod_next_cost_imbrium }
 sr_disp_site_ebase_room_imbrium = { value = sr_site_ebase_room_imbrium }
 sr_disp_ss_slots_imbrium = { value = 2 add = modifier:country_sr_colony_slots_add }
 
+# Terraforming (era 13 spec § 7.11), per world that takes it:
+#   sr_disp_terra_shown_<key>  1 once we have the technology, or the world has
+#                              levels, work done or levels on their way
+#   sr_disp_terra_pct_<key>    the room its work has added, in percent of its base
+#   sr_disp_terra_state_<key>  0 no work going on, 1 under way, 2 finished
+#   sr_disp_terra_years_<key>  the years left at this month's pace (under way), at
+#                              most 999
+sr_disp_terra_shown_valles_marineris = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				modifier:country_sr_terraforming_bool = yes
+				sr_site_terra_value_valles_marineris > 0
+				sr_site_terra_done_value_valles_marineris > 0
+				sr_disp_mod_pending_terra_valles_marineris > 0
+			}
+		}
+		value = 1
+	}
+}
+sr_disp_terra_pct_valles_marineris = {
+	value = sr_site_terra_share_valles_marineris
+	multiply = 100
+	floor = yes
+}
+sr_disp_terra_state_valles_marineris = {
+	value = 0
+	if = { limit = { NOT = { sr_site_terra_open_valles_marineris = yes } } value = 2 }
+	else_if = { limit = { sr_site_terra_rate_valles_marineris > 0 } value = 1 }
+}
+sr_disp_terra_years_valles_marineris = {
+	value = 0
+	if = {
+		limit = { sr_site_terra_rate_valles_marineris > 0 sr_site_terra_open_valles_marineris = yes }
+		value = sr_terra_full_months
+		subtract = sr_site_terra_done_value_valles_marineris
+		divide = sr_site_terra_rate_valles_marineris
+		divide = 12
+		ceiling = yes
+		max = 999
+	}
+}
+sr_disp_terra_shown_olympus_mons = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				modifier:country_sr_terraforming_bool = yes
+				sr_site_terra_value_olympus_mons > 0
+				sr_site_terra_done_value_olympus_mons > 0
+				sr_disp_mod_pending_terra_olympus_mons > 0
+			}
+		}
+		value = 1
+	}
+}
+sr_disp_terra_pct_olympus_mons = {
+	value = sr_site_terra_share_olympus_mons
+	multiply = 100
+	floor = yes
+}
+sr_disp_terra_state_olympus_mons = {
+	value = 0
+	if = { limit = { NOT = { sr_site_terra_open_olympus_mons = yes } } value = 2 }
+	else_if = { limit = { sr_site_terra_rate_olympus_mons > 0 } value = 1 }
+}
+sr_disp_terra_years_olympus_mons = {
+	value = 0
+	if = {
+		limit = { sr_site_terra_rate_olympus_mons > 0 sr_site_terra_open_olympus_mons = yes }
+		value = sr_terra_full_months
+		subtract = sr_site_terra_done_value_olympus_mons
+		divide = sr_site_terra_rate_olympus_mons
+		divide = 12
+		ceiling = yes
+		max = 999
+	}
+}
+sr_disp_terra_shown_hellas_planitia = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				modifier:country_sr_terraforming_bool = yes
+				sr_site_terra_value_hellas_planitia > 0
+				sr_site_terra_done_value_hellas_planitia > 0
+				sr_disp_mod_pending_terra_hellas_planitia > 0
+			}
+		}
+		value = 1
+	}
+}
+sr_disp_terra_pct_hellas_planitia = {
+	value = sr_site_terra_share_hellas_planitia
+	multiply = 100
+	floor = yes
+}
+sr_disp_terra_state_hellas_planitia = {
+	value = 0
+	if = { limit = { NOT = { sr_site_terra_open_hellas_planitia = yes } } value = 2 }
+	else_if = { limit = { sr_site_terra_rate_hellas_planitia > 0 } value = 1 }
+}
+sr_disp_terra_years_hellas_planitia = {
+	value = 0
+	if = {
+		limit = { sr_site_terra_rate_hellas_planitia > 0 sr_site_terra_open_hellas_planitia = yes }
+		value = sr_terra_full_months
+		subtract = sr_site_terra_done_value_hellas_planitia
+		divide = sr_site_terra_rate_hellas_planitia
+		divide = 12
+		ceiling = yes
+		max = 999
+	}
+}
+sr_disp_terra_shown_utopia_planitia = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				modifier:country_sr_terraforming_bool = yes
+				sr_site_terra_value_utopia_planitia > 0
+				sr_site_terra_done_value_utopia_planitia > 0
+				sr_disp_mod_pending_terra_utopia_planitia > 0
+			}
+		}
+		value = 1
+	}
+}
+sr_disp_terra_pct_utopia_planitia = {
+	value = sr_site_terra_share_utopia_planitia
+	multiply = 100
+	floor = yes
+}
+sr_disp_terra_state_utopia_planitia = {
+	value = 0
+	if = { limit = { NOT = { sr_site_terra_open_utopia_planitia = yes } } value = 2 }
+	else_if = { limit = { sr_site_terra_rate_utopia_planitia > 0 } value = 1 }
+}
+sr_disp_terra_years_utopia_planitia = {
+	value = 0
+	if = {
+		limit = { sr_site_terra_rate_utopia_planitia > 0 sr_site_terra_open_utopia_planitia = yes }
+		value = sr_terra_full_months
+		subtract = sr_site_terra_done_value_utopia_planitia
+		divide = sr_site_terra_rate_utopia_planitia
+		divide = 12
+		ceiling = yes
+		max = 999
+	}
+}
+sr_disp_terra_shown_arcadia_planitia = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				modifier:country_sr_terraforming_bool = yes
+				sr_site_terra_value_arcadia_planitia > 0
+				sr_site_terra_done_value_arcadia_planitia > 0
+				sr_disp_mod_pending_terra_arcadia_planitia > 0
+			}
+		}
+		value = 1
+	}
+}
+sr_disp_terra_pct_arcadia_planitia = {
+	value = sr_site_terra_share_arcadia_planitia
+	multiply = 100
+	floor = yes
+}
+sr_disp_terra_state_arcadia_planitia = {
+	value = 0
+	if = { limit = { NOT = { sr_site_terra_open_arcadia_planitia = yes } } value = 2 }
+	else_if = { limit = { sr_site_terra_rate_arcadia_planitia > 0 } value = 1 }
+}
+sr_disp_terra_years_arcadia_planitia = {
+	value = 0
+	if = {
+		limit = { sr_site_terra_rate_arcadia_planitia > 0 sr_site_terra_open_arcadia_planitia = yes }
+		value = sr_terra_full_months
+		subtract = sr_site_terra_done_value_arcadia_planitia
+		divide = sr_site_terra_rate_arcadia_planitia
+		divide = 12
+		ceiling = yes
+		max = 999
+	}
+}
+sr_disp_terra_shown_ganymede = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				modifier:country_sr_terraforming_bool = yes
+				sr_site_terra_value_ganymede > 0
+				sr_site_terra_done_value_ganymede > 0
+				sr_disp_mod_pending_terra_ganymede > 0
+			}
+		}
+		value = 1
+	}
+}
+sr_disp_terra_pct_ganymede = {
+	value = sr_site_terra_share_ganymede
+	multiply = 100
+	floor = yes
+}
+sr_disp_terra_state_ganymede = {
+	value = 0
+	if = { limit = { NOT = { sr_site_terra_open_ganymede = yes } } value = 2 }
+	else_if = { limit = { sr_site_terra_rate_ganymede > 0 } value = 1 }
+}
+sr_disp_terra_years_ganymede = {
+	value = 0
+	if = {
+		limit = { sr_site_terra_rate_ganymede > 0 sr_site_terra_open_ganymede = yes }
+		value = sr_terra_full_months
+		subtract = sr_site_terra_done_value_ganymede
+		divide = sr_site_terra_rate_ganymede
+		divide = 12
+		ceiling = yes
+		max = 999
+	}
+}
+sr_disp_terra_shown_callisto = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				modifier:country_sr_terraforming_bool = yes
+				sr_site_terra_value_callisto > 0
+				sr_site_terra_done_value_callisto > 0
+				sr_disp_mod_pending_terra_callisto > 0
+			}
+		}
+		value = 1
+	}
+}
+sr_disp_terra_pct_callisto = {
+	value = sr_site_terra_share_callisto
+	multiply = 100
+	floor = yes
+}
+sr_disp_terra_state_callisto = {
+	value = 0
+	if = { limit = { NOT = { sr_site_terra_open_callisto = yes } } value = 2 }
+	else_if = { limit = { sr_site_terra_rate_callisto > 0 } value = 1 }
+}
+sr_disp_terra_years_callisto = {
+	value = 0
+	if = {
+		limit = { sr_site_terra_rate_callisto > 0 sr_site_terra_open_callisto = yes }
+		value = sr_terra_full_months
+		subtract = sr_site_terra_done_value_callisto
+		divide = sr_site_terra_rate_callisto
+		divide = 12
+		ceiling = yes
+		max = 999
+	}
+}
+sr_disp_terra_shown_venus = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				modifier:country_sr_terraforming_bool = yes
+				sr_site_terra_value_venus > 0
+				sr_site_terra_done_value_venus > 0
+				sr_disp_mod_pending_terra_venus > 0
+			}
+		}
+		value = 1
+	}
+}
+sr_disp_terra_pct_venus = {
+	value = sr_site_terra_share_venus
+	multiply = 100
+	floor = yes
+}
+sr_disp_terra_state_venus = {
+	value = 0
+	if = { limit = { NOT = { sr_site_terra_open_venus = yes } } value = 2 }
+	else_if = { limit = { sr_site_terra_rate_venus > 0 } value = 1 }
+}
+sr_disp_terra_years_venus = {
+	value = 0
+	if = {
+		limit = { sr_site_terra_rate_venus > 0 sr_site_terra_open_venus = yes }
+		value = sr_terra_full_months
+		subtract = sr_site_terra_done_value_venus
+		divide = sr_site_terra_rate_venus
+		divide = 12
+		ceiling = yes
+		max = 999
+	}
+}
+sr_disp_terra_shown_titan = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				modifier:country_sr_terraforming_bool = yes
+				sr_site_terra_value_titan > 0
+				sr_site_terra_done_value_titan > 0
+				sr_disp_mod_pending_terra_titan > 0
+			}
+		}
+		value = 1
+	}
+}
+sr_disp_terra_pct_titan = {
+	value = sr_site_terra_share_titan
+	multiply = 100
+	floor = yes
+}
+sr_disp_terra_state_titan = {
+	value = 0
+	if = { limit = { NOT = { sr_site_terra_open_titan = yes } } value = 2 }
+	else_if = { limit = { sr_site_terra_rate_titan > 0 } value = 1 }
+}
+sr_disp_terra_years_titan = {
+	value = 0
+	if = {
+		limit = { sr_site_terra_rate_titan > 0 sr_site_terra_open_titan = yes }
+		value = sr_terra_full_months
+		subtract = sr_site_terra_done_value_titan
+		divide = sr_site_terra_rate_titan
+		divide = 12
+		ceiling = yes
+		max = 999
+	}
+}
+
 # Dismantling (owner, 2026-10-31), country scope: sr_disp_md_<type>_<key> 1 while
 # we take a level of the type down there; sr_disp_md_left_<key> the months to go.
 sr_disp_md_a_valles_marineris = { value = 0 if = { limit = { has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 1 } value = 1 } }
@@ -5219,6 +5596,7 @@ sr_disp_md_train_valles_marineris = { value = 0 if = { limit = { has_variable = 
 sr_disp_md_bunker_valles_marineris = { value = 0 if = { limit = { has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 13 } value = 1 } }
 sr_disp_md_foundry_valles_marineris = { value = 0 if = { limit = { has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 14 } value = 1 } }
 sr_disp_md_admin_valles_marineris = { value = 0 if = { limit = { has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 15 } value = 1 } }
+sr_disp_md_terra_valles_marineris = { value = 0 if = { limit = { has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 16 } value = 1 } }
 sr_disp_md_left_valles_marineris = {
 	value = 0
 	if = { limit = { has_variable = sr_md_left_valles_marineris } value = var:sr_md_left_valles_marineris }
@@ -5238,6 +5616,7 @@ sr_disp_md_train_olympus_mons = { value = 0 if = { limit = { has_variable = sr_m
 sr_disp_md_bunker_olympus_mons = { value = 0 if = { limit = { has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 13 } value = 1 } }
 sr_disp_md_foundry_olympus_mons = { value = 0 if = { limit = { has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 14 } value = 1 } }
 sr_disp_md_admin_olympus_mons = { value = 0 if = { limit = { has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 15 } value = 1 } }
+sr_disp_md_terra_olympus_mons = { value = 0 if = { limit = { has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 16 } value = 1 } }
 sr_disp_md_left_olympus_mons = {
 	value = 0
 	if = { limit = { has_variable = sr_md_left_olympus_mons } value = var:sr_md_left_olympus_mons }
@@ -5257,6 +5636,7 @@ sr_disp_md_train_hellas_planitia = { value = 0 if = { limit = { has_variable = s
 sr_disp_md_bunker_hellas_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 13 } value = 1 } }
 sr_disp_md_foundry_hellas_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 14 } value = 1 } }
 sr_disp_md_admin_hellas_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 15 } value = 1 } }
+sr_disp_md_terra_hellas_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 16 } value = 1 } }
 sr_disp_md_left_hellas_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_md_left_hellas_planitia } value = var:sr_md_left_hellas_planitia }
@@ -5276,6 +5656,7 @@ sr_disp_md_train_utopia_planitia = { value = 0 if = { limit = { has_variable = s
 sr_disp_md_bunker_utopia_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 13 } value = 1 } }
 sr_disp_md_foundry_utopia_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 14 } value = 1 } }
 sr_disp_md_admin_utopia_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 15 } value = 1 } }
+sr_disp_md_terra_utopia_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 16 } value = 1 } }
 sr_disp_md_left_utopia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_md_left_utopia_planitia } value = var:sr_md_left_utopia_planitia }
@@ -5295,6 +5676,7 @@ sr_disp_md_train_arcadia_planitia = { value = 0 if = { limit = { has_variable = 
 sr_disp_md_bunker_arcadia_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 13 } value = 1 } }
 sr_disp_md_foundry_arcadia_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 14 } value = 1 } }
 sr_disp_md_admin_arcadia_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 15 } value = 1 } }
+sr_disp_md_terra_arcadia_planitia = { value = 0 if = { limit = { has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 16 } value = 1 } }
 sr_disp_md_left_arcadia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_md_left_arcadia_planitia } value = var:sr_md_left_arcadia_planitia }
@@ -5447,6 +5829,7 @@ sr_disp_md_train_ganymede = { value = 0 if = { limit = { has_variable = sr_md_ty
 sr_disp_md_bunker_ganymede = { value = 0 if = { limit = { has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 13 } value = 1 } }
 sr_disp_md_foundry_ganymede = { value = 0 if = { limit = { has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 14 } value = 1 } }
 sr_disp_md_admin_ganymede = { value = 0 if = { limit = { has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 15 } value = 1 } }
+sr_disp_md_terra_ganymede = { value = 0 if = { limit = { has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 16 } value = 1 } }
 sr_disp_md_left_ganymede = {
 	value = 0
 	if = { limit = { has_variable = sr_md_left_ganymede } value = var:sr_md_left_ganymede }
@@ -5466,6 +5849,7 @@ sr_disp_md_train_callisto = { value = 0 if = { limit = { has_variable = sr_md_ty
 sr_disp_md_bunker_callisto = { value = 0 if = { limit = { has_variable = sr_md_type_callisto var:sr_md_type_callisto = 13 } value = 1 } }
 sr_disp_md_foundry_callisto = { value = 0 if = { limit = { has_variable = sr_md_type_callisto var:sr_md_type_callisto = 14 } value = 1 } }
 sr_disp_md_admin_callisto = { value = 0 if = { limit = { has_variable = sr_md_type_callisto var:sr_md_type_callisto = 15 } value = 1 } }
+sr_disp_md_terra_callisto = { value = 0 if = { limit = { has_variable = sr_md_type_callisto var:sr_md_type_callisto = 16 } value = 1 } }
 sr_disp_md_left_callisto = {
 	value = 0
 	if = { limit = { has_variable = sr_md_left_callisto } value = var:sr_md_left_callisto }
@@ -5523,6 +5907,7 @@ sr_disp_md_train_venus = { value = 0 if = { limit = { has_variable = sr_md_type_
 sr_disp_md_bunker_venus = { value = 0 if = { limit = { has_variable = sr_md_type_venus var:sr_md_type_venus = 13 } value = 1 } }
 sr_disp_md_foundry_venus = { value = 0 if = { limit = { has_variable = sr_md_type_venus var:sr_md_type_venus = 14 } value = 1 } }
 sr_disp_md_admin_venus = { value = 0 if = { limit = { has_variable = sr_md_type_venus var:sr_md_type_venus = 15 } value = 1 } }
+sr_disp_md_terra_venus = { value = 0 if = { limit = { has_variable = sr_md_type_venus var:sr_md_type_venus = 16 } value = 1 } }
 sr_disp_md_left_venus = {
 	value = 0
 	if = { limit = { has_variable = sr_md_left_venus } value = var:sr_md_left_venus }
@@ -5561,6 +5946,7 @@ sr_disp_md_train_titan = { value = 0 if = { limit = { has_variable = sr_md_type_
 sr_disp_md_bunker_titan = { value = 0 if = { limit = { has_variable = sr_md_type_titan var:sr_md_type_titan = 13 } value = 1 } }
 sr_disp_md_foundry_titan = { value = 0 if = { limit = { has_variable = sr_md_type_titan var:sr_md_type_titan = 14 } value = 1 } }
 sr_disp_md_admin_titan = { value = 0 if = { limit = { has_variable = sr_md_type_titan var:sr_md_type_titan = 15 } value = 1 } }
+sr_disp_md_terra_titan = { value = 0 if = { limit = { has_variable = sr_md_type_titan var:sr_md_type_titan = 16 } value = 1 } }
 sr_disp_md_left_titan = {
 	value = 0
 	if = { limit = { has_variable = sr_md_left_titan } value = var:sr_md_left_titan }

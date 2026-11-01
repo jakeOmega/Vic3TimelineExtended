@@ -5975,6 +5975,7 @@
  te_debug_space_race.4.f:0 "\"Bolt it on, wire it up, and someone find me five thousand people.\""
  te_debug_space_race.4.g:0 "Recompute our Extraplanetary Base room now"
  te_debug_space_race.4.h:0 "Finish every module level we are taking down now"
+ te_debug_space_race.4.i:0 "Run ten years of terraforming at our colonies now"
  te_debug_space_race.4.t:0 "Colony Modules Console"
  te_debug_space_race.5.a:0 "Log every site's autonomy, freedom and ties"
  te_debug_space_race.5.b:0 "Set our first colony's autonomy to 80 (asked next month)"

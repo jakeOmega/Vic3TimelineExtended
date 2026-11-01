@@ -9465,6 +9465,48 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
 			}
+			blockoverride "mod_terra_level" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_terra_value_venus')|0]"
+				tooltip = "je_space_race_widget_mod_terra_tt"
+			}
+			blockoverride "mod_terra_pending" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_venus'), '(CFixedPoint)1' )]"
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_venus')|0]"
+			}
+			blockoverride "mod_terra_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_dismantling" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_terra_venus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "mod_terra_dismantling_months" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_left_venus')|0]"
+			}
+			blockoverride "mod_terra_dismantle_button" {
+				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "terra_visible" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_venus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_pct" {
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_pct_venus')|0]%"
+			}
+			blockoverride "terra_years" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_years_venus')|0]"
+			}
+			blockoverride "terra_idle_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_venus'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "terra_under_way_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_venus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_finished_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_venus'), '(CFixedPoint)2' )]"
+			}
 			blockoverride "module_clear_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -10457,6 +10499,48 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
 			}
+			blockoverride "mod_terra_level" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_terra_value_valles_marineris')|0]"
+				tooltip = "je_space_race_widget_mod_terra_tt"
+			}
+			blockoverride "mod_terra_pending" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_valles_marineris'), '(CFixedPoint)1' )]"
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_valles_marineris')|0]"
+			}
+			blockoverride "mod_terra_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_dismantling" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_terra_valles_marineris'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "mod_terra_dismantling_months" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_left_valles_marineris')|0]"
+			}
+			blockoverride "mod_terra_dismantle_button" {
+				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "terra_visible" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_valles_marineris'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_pct" {
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_pct_valles_marineris')|0]%"
+			}
+			blockoverride "terra_years" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_years_valles_marineris')|0]"
+			}
+			blockoverride "terra_idle_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_valles_marineris'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "terra_under_way_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_valles_marineris'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_finished_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_valles_marineris'), '(CFixedPoint)2' )]"
+			}
 			blockoverride "module_clear_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -10952,6 +11036,48 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_level" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_terra_value_olympus_mons')|0]"
+				tooltip = "je_space_race_widget_mod_terra_tt"
+			}
+			blockoverride "mod_terra_pending" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_olympus_mons'), '(CFixedPoint)1' )]"
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_olympus_mons')|0]"
+			}
+			blockoverride "mod_terra_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_dismantling" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_terra_olympus_mons'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "mod_terra_dismantling_months" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_left_olympus_mons')|0]"
+			}
+			blockoverride "mod_terra_dismantle_button" {
+				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "terra_visible" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_olympus_mons'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_pct" {
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_pct_olympus_mons')|0]%"
+			}
+			blockoverride "terra_years" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_years_olympus_mons')|0]"
+			}
+			blockoverride "terra_idle_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_olympus_mons'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "terra_under_way_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_olympus_mons'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_finished_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_olympus_mons'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "module_clear_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -11449,6 +11575,48 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
 			}
+			blockoverride "mod_terra_level" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_terra_value_hellas_planitia')|0]"
+				tooltip = "je_space_race_widget_mod_terra_tt"
+			}
+			blockoverride "mod_terra_pending" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_hellas_planitia'), '(CFixedPoint)1' )]"
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_hellas_planitia')|0]"
+			}
+			blockoverride "mod_terra_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_dismantling" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_terra_hellas_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "mod_terra_dismantling_months" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_left_hellas_planitia')|0]"
+			}
+			blockoverride "mod_terra_dismantle_button" {
+				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "terra_visible" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_hellas_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_pct" {
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_pct_hellas_planitia')|0]%"
+			}
+			blockoverride "terra_years" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_years_hellas_planitia')|0]"
+			}
+			blockoverride "terra_idle_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_hellas_planitia'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "terra_under_way_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_hellas_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_finished_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_hellas_planitia'), '(CFixedPoint)2' )]"
+			}
 			blockoverride "module_clear_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -11945,6 +12113,48 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
 			}
+			blockoverride "mod_terra_level" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_terra_value_utopia_planitia')|0]"
+				tooltip = "je_space_race_widget_mod_terra_tt"
+			}
+			blockoverride "mod_terra_pending" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_utopia_planitia'), '(CFixedPoint)1' )]"
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_utopia_planitia')|0]"
+			}
+			blockoverride "mod_terra_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_dismantling" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_terra_utopia_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "mod_terra_dismantling_months" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_left_utopia_planitia')|0]"
+			}
+			blockoverride "mod_terra_dismantle_button" {
+				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "terra_visible" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_utopia_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_pct" {
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_pct_utopia_planitia')|0]%"
+			}
+			blockoverride "terra_years" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_years_utopia_planitia')|0]"
+			}
+			blockoverride "terra_idle_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_utopia_planitia'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "terra_under_way_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_utopia_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_finished_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_utopia_planitia'), '(CFixedPoint)2' )]"
+			}
 			blockoverride "module_clear_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -12440,6 +12650,48 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_level" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_terra_value_arcadia_planitia')|0]"
+				tooltip = "je_space_race_widget_mod_terra_tt"
+			}
+			blockoverride "mod_terra_pending" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_arcadia_planitia'), '(CFixedPoint)1' )]"
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_arcadia_planitia')|0]"
+			}
+			blockoverride "mod_terra_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_dismantling" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_terra_arcadia_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "mod_terra_dismantling_months" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_left_arcadia_planitia')|0]"
+			}
+			blockoverride "mod_terra_dismantle_button" {
+				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "terra_visible" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_arcadia_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_pct" {
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_pct_arcadia_planitia')|0]%"
+			}
+			blockoverride "terra_years" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_years_arcadia_planitia')|0]"
+			}
+			blockoverride "terra_idle_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_arcadia_planitia'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "terra_under_way_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_arcadia_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_finished_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_arcadia_planitia'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "module_clear_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -16409,6 +16661,48 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
 			}
+			blockoverride "mod_terra_level" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_terra_value_ganymede')|0]"
+				tooltip = "je_space_race_widget_mod_terra_tt"
+			}
+			blockoverride "mod_terra_pending" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_ganymede'), '(CFixedPoint)1' )]"
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_ganymede')|0]"
+			}
+			blockoverride "mod_terra_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_dismantling" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_terra_ganymede'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "mod_terra_dismantling_months" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_left_ganymede')|0]"
+			}
+			blockoverride "mod_terra_dismantle_button" {
+				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "terra_visible" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_ganymede'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_pct" {
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_pct_ganymede')|0]%"
+			}
+			blockoverride "terra_years" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_years_ganymede')|0]"
+			}
+			blockoverride "terra_idle_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_ganymede'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "terra_under_way_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_ganymede'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_finished_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_ganymede'), '(CFixedPoint)2' )]"
+			}
 			blockoverride "module_clear_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -16904,6 +17198,48 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_level" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_terra_value_callisto')|0]"
+				tooltip = "je_space_race_widget_mod_terra_tt"
+			}
+			blockoverride "mod_terra_pending" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_callisto'), '(CFixedPoint)1' )]"
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_callisto')|0]"
+			}
+			blockoverride "mod_terra_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_dismantling" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_terra_callisto'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "mod_terra_dismantling_months" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_left_callisto')|0]"
+			}
+			blockoverride "mod_terra_dismantle_button" {
+				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "terra_visible" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_callisto'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_pct" {
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_pct_callisto')|0]%"
+			}
+			blockoverride "terra_years" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_years_callisto')|0]"
+			}
+			blockoverride "terra_idle_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_callisto'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "terra_under_way_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_callisto'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_finished_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_callisto'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "module_clear_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -18392,6 +18728,48 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_level" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_terra_value_titan')|0]"
+				tooltip = "je_space_race_widget_mod_terra_tt"
+			}
+			blockoverride "mod_terra_pending" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_titan'), '(CFixedPoint)1' )]"
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_terra_titan')|0]"
+			}
+			blockoverride "mod_terra_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_module_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_module_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_dismantling" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_terra_titan'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "mod_terra_dismantling_months" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_md_left_titan')|0]"
+			}
+			blockoverride "mod_terra_dismantle_button" {
+				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "terra_visible" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_titan'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_pct" {
+				raw_text = "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_pct_titan')|0]%"
+			}
+			blockoverride "terra_years" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_years_titan')|0]"
+			}
+			blockoverride "terra_idle_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_titan'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "terra_under_way_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_titan'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "terra_finished_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_state_titan'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "module_clear_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
