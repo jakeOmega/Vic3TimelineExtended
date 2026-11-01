@@ -287,7 +287,9 @@ green_party = {
 			}
 		}
 		# First Past the Post (amendment_first_past_the_post): one of the two
-		# largest parties, as te_fptp_effects.txt ranks them monthly.
+		# largest parties, as te_fptp_effects.txt ranks them monthly. In place
+		# of the party-size multipliers (the else_ifs below), so a major party
+		# never fills up: each group joining first takes a little off instead.
 		if = {
 			limit = {
 				owner = {
@@ -300,8 +302,16 @@ green_party = {
 				value = te_fptp_major_party_join_weight
 				desc = "te_fptp_major_party_join"
 			}
+			if = {
+				limit = { scope:number > 0 }
+				add = {
+					value = scope:number
+					multiply = te_fptp_major_party_crowding_weight
+					desc = "te_fptp_major_party_crowding"
+				}
+			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				scope:number = 1
 				is_powerful = no

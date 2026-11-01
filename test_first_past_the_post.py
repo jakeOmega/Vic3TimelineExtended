@@ -92,14 +92,42 @@ class GeneratorTest(unittest.TestCase):
         self.assertIn("# a comment that stays", self.text)
         self.assertIn('desc = "x"', self.text)
 
-    def test_bonus_goes_ahead_of_the_whole_size_chain(self):
+    def test_bonus_takes_the_size_chains_place(self):
         bonus = self.text.index("te_fptp_major_party_join")
         chain_head = self.text.index("scope:number <= 1")
         self.assertLess(bonus, chain_head)
         self.assertGreater(bonus, self.text.index('desc = "x"'))
-        # Nothing between the bonus and the chain's head but the chain's `if`.
-        between = self.text[bonus:chain_head]
-        self.assertNotIn("else_if", between)
+        # The bonus opens an if chain that the size chain continues: a major
+        # party skips the multipliers, whose x0 capped it at three groups.
+        major = g.major_term_lines("example_party")
+        at = self.lines.index(major[0])
+        self.assertEqual(self.lines[at : at + len(major)], major)
+        self.assertEqual(self.lines[at + len(major)], "else_if = {")
+        self.assertEqual(self.lines[at + len(major) + 1], "limit = { scope:number <= 1 }")
+
+    def test_unrestate_inverts_the_insertions(self):
+        kept = field_lines(VANILLA, "join_weight")
+        self.assertEqual(g.unrestate(g.restate(kept, "example_party", descs=()), "example_party"), kept)
+        with self.assertRaises(ValueError):  # an altered term
+            g.unrestate([line for line in self.lines if "te_fptp_major_party_crowding" not in line], "example_party")
+        chain_left_alone = list(self.lines)
+        chain_left_alone[chain_left_alone.index("else_if = {")] = "if = {"
+        with self.assertRaises(ValueError):  # the size chain's head isn't an else_if
+            g.unrestate(chain_left_alone, "example_party")
+
+    def test_a_group_with_no_view_joins_a_major(self):
+        """Base -5 plus the bonus must reach 1 (MIN_AFFILIATION_TO_JOIN_PARTY)
+        at the smaller major, which, with eight interest groups, has at most
+        three groups joining ahead; and a third party must stay shut to it."""
+        values = _read("common/script_values/te_fptp_values.txt")
+
+        def value(name):
+            return float(re.search(rf"(?m)^{name} = (-?[\d.]+)$", values).group(1))
+
+        major, crowding = value("te_fptp_major_party_join_weight"), value("te_fptp_major_party_crowding_weight")
+        self.assertGreaterEqual(-5 + major + 3 * crowding, 1)
+        self.assertLess(crowding, 0)
+        self.assertLess(-5 + value("te_fptp_minor_party_join_weight"), 1)
 
     def test_the_terms_read_no_ruler(self):
         # vanilla_known_bugs.md tags every `Event target link 'ruler' returned an invalid object` in the generated file
@@ -182,15 +210,9 @@ class CommittedFileTest(unittest.TestCase):
         return match.group(1)
 
     def _vanilla_lines(self, party):
-        """The committed block's join_weight lines without the mod's two terms."""
-        chunks = g.top_level_chunks(_block("\n".join(_block(self.text, f"INJECT:{party}")), "join_weight"))
-        return [
-            line
-            for chunk in chunks
-            if not any("te_fptp_" in line for line in chunk)
-            and not chunk[0].startswith("# First Past the Post")
-            for line in chunk
-        ]
+        """The committed block's join_weight lines without the mod's two terms,
+        with the size chain's head back to vanilla's `if` (g.unrestate)."""
+        return g.unrestate(_block("\n".join(_block(self.text, f"INJECT:{party}")), "join_weight"), party)
 
     def test_matches_a_fresh_generation(self):
         """Take the mod's two terms out of each committed block, rebuild a file
@@ -304,11 +326,14 @@ class PartyCoverageTest(unittest.TestCase):
         self.assertLessEqual(marks, self.types)
 
     def test_mod_parties_carry_both_terms(self):
+        """The generator's two terms, word for word, with the bonus opening the
+        if chain the size chain continues (g.unrestate raises otherwise)."""
         for party in MOD_PARTIES:
-            text = "\n".join(_block(_read(f"common/parties/{party}.txt"), "join_weight"))
+            lines = _block(_read(f"common/parties/{party}.txt"), "join_weight")
+            text = "\n".join(lines)
             with self.subTest(party=party):
-                self.assertIn("\n".join(g.major_term_lines(party)[2:]), text)
-                self.assertTrue(text.endswith("\n".join(g.minor_term_lines(party)[1:])))
+                g.unrestate(lines, party)
+                self.assertTrue(text.endswith("\n".join(g.minor_term_lines(party))))
                 bonus = text.index("te_fptp_major_party_join")
                 self.assertLess(bonus, text.index("from_influential_supporting_member"))
 
