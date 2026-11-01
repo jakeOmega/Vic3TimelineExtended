@@ -250,6 +250,8 @@ def _longest_figure(name):
         return MIX_WEIGHT
     if re.fullmatch(r"sr_disp_cf_slot_\d_year", name):
         return END_YEAR
+    if re.fullmatch(r"sr_fl_\d_strength", name):  # the Transfer popup's Into buttons, "Antimatter 99999"
+        return FLEET_STRENGTH
     fixed = {"sr_current_colonization_stage": STAGE_CEILING, "sr_disp_mq_next_months": 999,
              "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS, "sr_sites_world_count": WORLDS,
              "sr_disp_colonies_held": WORLDS, "sr_disp_cf_in_flight": FLEET_SLOTS,
@@ -316,7 +318,7 @@ def _render(value):
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc"
-             r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|dp_why_\w+|dp_gone|ft_intro)")
+             r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone|dp_why_\w+|dp_gone|ft_intro)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -482,7 +484,26 @@ CELLS = {
        for col in ("where", "strength", "drive", "dv", "supply", "marines")},
     "a fleet's orders (te_sr_fl_button)": (
         ("te_sr_fl_button", 'block "fl_btn_label"'),
-        r"je_space_race_widget_fl_(go|merge|detach|land|embark)"),
+        r"je_space_race_widget_fl_(go|land|embark)"),
+    "a fleet's Transfer (te_sr_fleet_row)": (
+        ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_transfer"'),
+        r"je_space_race_widget_fl_transfer"),
+    # The Transfer popup (UI pass design § 6).
+    "the Transfer popup's Into (te_sr_xf_to_line)": (
+        ("te_sr_xf_to_line", 'text = "je_space_race_widget_xf_to_label"'),
+        r"je_space_race_widget_xf_to_label"),
+    "an Into button (te_sr_xf_to_button)": (
+        ("te_sr_xf_to_button", 'block "xf_to_label"'),
+        r"je_space_race_widget_xf_(new|to_\d)"),
+    **{f"the Transfer popup's {col} head (te_sr_xf_head_row)": (
+        ("te_sr_xf_head_row", f'text = "je_space_race_widget_xf_col_{col}"'), f"je_space_race_widget_xf_col_{col}")
+       for col in ("now", "move", "stay", "there")},
+    "Transfer at the popup's foot (te_sr_xf_go_row)": (
+        ("te_sr_xf_go_row", 'text = "je_space_race_widget_xf_go"'),
+        r"je_space_race_widget_xf_go"),
+    "a role's name in the Transfer popup (te_sr_xf_role_row)": (
+        ("te_sr_xf_role_row", 'block "xf_name"'),
+        r"je_space_race_widget_xf_role_\w+"),
     "a fleet's refit (te_sr_fleet_row)": (
         ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_refit"'),
         r"je_space_race_widget_fl_refit"),
@@ -581,7 +602,7 @@ CELLS = {
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|powers_header|orbit_header|howc_header"
-                   r"|sc_header|space_fleets_header|locations_header|tp_title|dp_title|ft_title)")
+                   r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title|dp_title|ft_title)")
 
 
 # Cells that wrap to a second line on purpose: the overview's state cell, where
@@ -717,6 +738,8 @@ class FigureBudgetTest(unittest.TestCase):
     CELL = {"cell_level": "8", "cell_pending": "+8"}
     FREE = {"free_people": "999.9K", "free_ties": "100"}
     FLEET = {"fl_strength": "9999/9999", "fl_dv": "5000", "fl_supply": "36", "fl_marines": "99"}
+    # The Transfer popup's role rows: a role, the marines or the total, now, the amount, after
+    TRANSFER = {"xf_now": "99999", "xf_amount": "99999", "xf_stay": "99999", "xf_there": "99999"}
     # The destination popup (UI pass design § 4): the fleet's figures, its
     # propellant to a tenth; a leg's months (611 the longest), its delta-v
     # (gen_launch_windows.LEG_DV_CAP, 9999), our worlds there (six at Jupiter
@@ -787,6 +810,7 @@ class FigureBudgetTest(unittest.TestCase):
 
     def test_fleet_and_location_rows(self):
         self._check("te_sr_fleet_row", self.FLEET)
+        self._check("te_sr_xf_role_row", self.TRANSFER)
         self._check("te_sr_location_row", self.LOCATION)
 
     def test_the_destination_popup(self):

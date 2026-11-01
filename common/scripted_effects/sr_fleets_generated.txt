@@ -4,7 +4,7 @@
 # common/scripted_effects/sr_fleet_effects.txt; country scope unless said.
 
 # ===== Slot dispatchers =====
-# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, step_pick, merge, detach, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, step_posture, step_target, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target:
+# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, step_pick, merge, detach, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, step_posture, step_target, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer:
 # every slot; the scripted GUIs' slot (scope:op); local_var:sr_fl_n's.
 sr_fl_each_slot = {
 	sr_fl_$DO$_at = { N = 1 }
@@ -1005,6 +1005,1397 @@ sr_fl_detach = {
 	}
 	set_variable = { name = sr_fl_$N$_dv value = { value = sr_fl_$N$_dv_capacity multiply = local_var:sr_fl_dv_share } }
 	set_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_fl_dv_share } }
+	sr_loc_rebuild = yes
+}
+
+# ===== Transfer (UI pass design § 6) =====
+# Opening the popup (sr_fleet_xfer_open_sgui): each amount to half of the
+# slot's, rounded, and the transfer bound for a new fleet, or with no slot
+# free, for the first fleet of ours here.
+sr_fl_1_xfer_open_now = {
+	set_variable = { name = sr_det_amt_war value = { value = sr_fl_1_war_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_rapid value = { value = sr_fl_1_rapid_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_siege value = { value = sr_fl_1_siege_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_carrier value = { value = sr_fl_1_carrier_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_tender value = { value = sr_fl_1_tender_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_marines value = { value = sr_fl_1_marines_value multiply = 0.5 round = yes } }
+	if = {
+		limit = { sr_fl_has_free_slot = yes }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_1_loc var:sr_fl_2_loc = var:sr_fl_1_loc }
+		set_variable = { name = sr_det_to value = 2 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_1_loc var:sr_fl_3_loc = var:sr_fl_1_loc }
+		set_variable = { name = sr_det_to value = 3 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_1_loc var:sr_fl_4_loc = var:sr_fl_1_loc }
+		set_variable = { name = sr_det_to value = 4 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_1_loc var:sr_fl_5_loc = var:sr_fl_1_loc }
+		set_variable = { name = sr_det_to value = 5 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_1_loc var:sr_fl_6_loc = var:sr_fl_1_loc }
+		set_variable = { name = sr_det_to value = 6 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_1_loc var:sr_fl_7_loc = var:sr_fl_1_loc }
+		set_variable = { name = sr_det_to value = 7 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_1_loc var:sr_fl_8_loc = var:sr_fl_1_loc }
+		set_variable = { name = sr_det_to value = 8 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_1_loc var:sr_fl_9_loc = var:sr_fl_1_loc }
+		set_variable = { name = sr_det_to value = 9 }
+	}
+}
+sr_fl_2_xfer_open_now = {
+	set_variable = { name = sr_det_amt_war value = { value = sr_fl_2_war_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_rapid value = { value = sr_fl_2_rapid_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_siege value = { value = sr_fl_2_siege_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_carrier value = { value = sr_fl_2_carrier_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_tender value = { value = sr_fl_2_tender_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_marines value = { value = sr_fl_2_marines_value multiply = 0.5 round = yes } }
+	if = {
+		limit = { sr_fl_has_free_slot = yes }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_2_loc var:sr_fl_1_loc = var:sr_fl_2_loc }
+		set_variable = { name = sr_det_to value = 1 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_2_loc var:sr_fl_3_loc = var:sr_fl_2_loc }
+		set_variable = { name = sr_det_to value = 3 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_2_loc var:sr_fl_4_loc = var:sr_fl_2_loc }
+		set_variable = { name = sr_det_to value = 4 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_2_loc var:sr_fl_5_loc = var:sr_fl_2_loc }
+		set_variable = { name = sr_det_to value = 5 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_2_loc var:sr_fl_6_loc = var:sr_fl_2_loc }
+		set_variable = { name = sr_det_to value = 6 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_2_loc var:sr_fl_7_loc = var:sr_fl_2_loc }
+		set_variable = { name = sr_det_to value = 7 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_2_loc var:sr_fl_8_loc = var:sr_fl_2_loc }
+		set_variable = { name = sr_det_to value = 8 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_2_loc var:sr_fl_9_loc = var:sr_fl_2_loc }
+		set_variable = { name = sr_det_to value = 9 }
+	}
+}
+sr_fl_3_xfer_open_now = {
+	set_variable = { name = sr_det_amt_war value = { value = sr_fl_3_war_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_rapid value = { value = sr_fl_3_rapid_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_siege value = { value = sr_fl_3_siege_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_carrier value = { value = sr_fl_3_carrier_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_tender value = { value = sr_fl_3_tender_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_marines value = { value = sr_fl_3_marines_value multiply = 0.5 round = yes } }
+	if = {
+		limit = { sr_fl_has_free_slot = yes }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_3_loc var:sr_fl_1_loc = var:sr_fl_3_loc }
+		set_variable = { name = sr_det_to value = 1 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_3_loc var:sr_fl_2_loc = var:sr_fl_3_loc }
+		set_variable = { name = sr_det_to value = 2 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_3_loc var:sr_fl_4_loc = var:sr_fl_3_loc }
+		set_variable = { name = sr_det_to value = 4 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_3_loc var:sr_fl_5_loc = var:sr_fl_3_loc }
+		set_variable = { name = sr_det_to value = 5 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_3_loc var:sr_fl_6_loc = var:sr_fl_3_loc }
+		set_variable = { name = sr_det_to value = 6 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_3_loc var:sr_fl_7_loc = var:sr_fl_3_loc }
+		set_variable = { name = sr_det_to value = 7 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_3_loc var:sr_fl_8_loc = var:sr_fl_3_loc }
+		set_variable = { name = sr_det_to value = 8 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_3_loc var:sr_fl_9_loc = var:sr_fl_3_loc }
+		set_variable = { name = sr_det_to value = 9 }
+	}
+}
+sr_fl_4_xfer_open_now = {
+	set_variable = { name = sr_det_amt_war value = { value = sr_fl_4_war_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_rapid value = { value = sr_fl_4_rapid_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_siege value = { value = sr_fl_4_siege_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_carrier value = { value = sr_fl_4_carrier_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_tender value = { value = sr_fl_4_tender_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_marines value = { value = sr_fl_4_marines_value multiply = 0.5 round = yes } }
+	if = {
+		limit = { sr_fl_has_free_slot = yes }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_4_loc var:sr_fl_1_loc = var:sr_fl_4_loc }
+		set_variable = { name = sr_det_to value = 1 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_4_loc var:sr_fl_2_loc = var:sr_fl_4_loc }
+		set_variable = { name = sr_det_to value = 2 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_4_loc var:sr_fl_3_loc = var:sr_fl_4_loc }
+		set_variable = { name = sr_det_to value = 3 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_4_loc var:sr_fl_5_loc = var:sr_fl_4_loc }
+		set_variable = { name = sr_det_to value = 5 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_4_loc var:sr_fl_6_loc = var:sr_fl_4_loc }
+		set_variable = { name = sr_det_to value = 6 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_4_loc var:sr_fl_7_loc = var:sr_fl_4_loc }
+		set_variable = { name = sr_det_to value = 7 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_4_loc var:sr_fl_8_loc = var:sr_fl_4_loc }
+		set_variable = { name = sr_det_to value = 8 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_4_loc var:sr_fl_9_loc = var:sr_fl_4_loc }
+		set_variable = { name = sr_det_to value = 9 }
+	}
+}
+sr_fl_5_xfer_open_now = {
+	set_variable = { name = sr_det_amt_war value = { value = sr_fl_5_war_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_rapid value = { value = sr_fl_5_rapid_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_siege value = { value = sr_fl_5_siege_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_carrier value = { value = sr_fl_5_carrier_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_tender value = { value = sr_fl_5_tender_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_marines value = { value = sr_fl_5_marines_value multiply = 0.5 round = yes } }
+	if = {
+		limit = { sr_fl_has_free_slot = yes }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_5_loc var:sr_fl_1_loc = var:sr_fl_5_loc }
+		set_variable = { name = sr_det_to value = 1 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_5_loc var:sr_fl_2_loc = var:sr_fl_5_loc }
+		set_variable = { name = sr_det_to value = 2 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_5_loc var:sr_fl_3_loc = var:sr_fl_5_loc }
+		set_variable = { name = sr_det_to value = 3 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_5_loc var:sr_fl_4_loc = var:sr_fl_5_loc }
+		set_variable = { name = sr_det_to value = 4 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_5_loc var:sr_fl_6_loc = var:sr_fl_5_loc }
+		set_variable = { name = sr_det_to value = 6 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_5_loc var:sr_fl_7_loc = var:sr_fl_5_loc }
+		set_variable = { name = sr_det_to value = 7 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_5_loc var:sr_fl_8_loc = var:sr_fl_5_loc }
+		set_variable = { name = sr_det_to value = 8 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_5_loc var:sr_fl_9_loc = var:sr_fl_5_loc }
+		set_variable = { name = sr_det_to value = 9 }
+	}
+}
+sr_fl_6_xfer_open_now = {
+	set_variable = { name = sr_det_amt_war value = { value = sr_fl_6_war_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_rapid value = { value = sr_fl_6_rapid_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_siege value = { value = sr_fl_6_siege_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_carrier value = { value = sr_fl_6_carrier_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_tender value = { value = sr_fl_6_tender_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_marines value = { value = sr_fl_6_marines_value multiply = 0.5 round = yes } }
+	if = {
+		limit = { sr_fl_has_free_slot = yes }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_6_loc var:sr_fl_1_loc = var:sr_fl_6_loc }
+		set_variable = { name = sr_det_to value = 1 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_6_loc var:sr_fl_2_loc = var:sr_fl_6_loc }
+		set_variable = { name = sr_det_to value = 2 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_6_loc var:sr_fl_3_loc = var:sr_fl_6_loc }
+		set_variable = { name = sr_det_to value = 3 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_6_loc var:sr_fl_4_loc = var:sr_fl_6_loc }
+		set_variable = { name = sr_det_to value = 4 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_6_loc var:sr_fl_5_loc = var:sr_fl_6_loc }
+		set_variable = { name = sr_det_to value = 5 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_6_loc var:sr_fl_7_loc = var:sr_fl_6_loc }
+		set_variable = { name = sr_det_to value = 7 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_6_loc var:sr_fl_8_loc = var:sr_fl_6_loc }
+		set_variable = { name = sr_det_to value = 8 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_6_loc var:sr_fl_9_loc = var:sr_fl_6_loc }
+		set_variable = { name = sr_det_to value = 9 }
+	}
+}
+sr_fl_7_xfer_open_now = {
+	set_variable = { name = sr_det_amt_war value = { value = sr_fl_7_war_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_rapid value = { value = sr_fl_7_rapid_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_siege value = { value = sr_fl_7_siege_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_carrier value = { value = sr_fl_7_carrier_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_tender value = { value = sr_fl_7_tender_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_marines value = { value = sr_fl_7_marines_value multiply = 0.5 round = yes } }
+	if = {
+		limit = { sr_fl_has_free_slot = yes }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_7_loc var:sr_fl_1_loc = var:sr_fl_7_loc }
+		set_variable = { name = sr_det_to value = 1 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_7_loc var:sr_fl_2_loc = var:sr_fl_7_loc }
+		set_variable = { name = sr_det_to value = 2 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_7_loc var:sr_fl_3_loc = var:sr_fl_7_loc }
+		set_variable = { name = sr_det_to value = 3 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_7_loc var:sr_fl_4_loc = var:sr_fl_7_loc }
+		set_variable = { name = sr_det_to value = 4 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_7_loc var:sr_fl_5_loc = var:sr_fl_7_loc }
+		set_variable = { name = sr_det_to value = 5 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_7_loc var:sr_fl_6_loc = var:sr_fl_7_loc }
+		set_variable = { name = sr_det_to value = 6 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_7_loc var:sr_fl_8_loc = var:sr_fl_7_loc }
+		set_variable = { name = sr_det_to value = 8 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_7_loc var:sr_fl_9_loc = var:sr_fl_7_loc }
+		set_variable = { name = sr_det_to value = 9 }
+	}
+}
+sr_fl_8_xfer_open_now = {
+	set_variable = { name = sr_det_amt_war value = { value = sr_fl_8_war_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_rapid value = { value = sr_fl_8_rapid_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_siege value = { value = sr_fl_8_siege_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_carrier value = { value = sr_fl_8_carrier_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_tender value = { value = sr_fl_8_tender_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_marines value = { value = sr_fl_8_marines_value multiply = 0.5 round = yes } }
+	if = {
+		limit = { sr_fl_has_free_slot = yes }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_8_loc var:sr_fl_1_loc = var:sr_fl_8_loc }
+		set_variable = { name = sr_det_to value = 1 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_8_loc var:sr_fl_2_loc = var:sr_fl_8_loc }
+		set_variable = { name = sr_det_to value = 2 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_8_loc var:sr_fl_3_loc = var:sr_fl_8_loc }
+		set_variable = { name = sr_det_to value = 3 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_8_loc var:sr_fl_4_loc = var:sr_fl_8_loc }
+		set_variable = { name = sr_det_to value = 4 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_8_loc var:sr_fl_5_loc = var:sr_fl_8_loc }
+		set_variable = { name = sr_det_to value = 5 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_8_loc var:sr_fl_6_loc = var:sr_fl_8_loc }
+		set_variable = { name = sr_det_to value = 6 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_8_loc var:sr_fl_7_loc = var:sr_fl_8_loc }
+		set_variable = { name = sr_det_to value = 7 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_8_loc var:sr_fl_9_loc = var:sr_fl_8_loc }
+		set_variable = { name = sr_det_to value = 9 }
+	}
+}
+sr_fl_9_xfer_open_now = {
+	set_variable = { name = sr_det_amt_war value = { value = sr_fl_9_war_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_rapid value = { value = sr_fl_9_rapid_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_siege value = { value = sr_fl_9_siege_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_carrier value = { value = sr_fl_9_carrier_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_tender value = { value = sr_fl_9_tender_value multiply = 0.5 round = yes } }
+	set_variable = { name = sr_det_amt_marines value = { value = sr_fl_9_marines_value multiply = 0.5 round = yes } }
+	if = {
+		limit = { sr_fl_has_free_slot = yes }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_9_loc var:sr_fl_1_loc = var:sr_fl_9_loc }
+		set_variable = { name = sr_det_to value = 1 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_9_loc var:sr_fl_2_loc = var:sr_fl_9_loc }
+		set_variable = { name = sr_det_to value = 2 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_9_loc var:sr_fl_3_loc = var:sr_fl_9_loc }
+		set_variable = { name = sr_det_to value = 3 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_9_loc var:sr_fl_4_loc = var:sr_fl_9_loc }
+		set_variable = { name = sr_det_to value = 4 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_9_loc var:sr_fl_5_loc = var:sr_fl_9_loc }
+		set_variable = { name = sr_det_to value = 5 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_9_loc var:sr_fl_6_loc = var:sr_fl_9_loc }
+		set_variable = { name = sr_det_to value = 6 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_9_loc var:sr_fl_7_loc = var:sr_fl_9_loc }
+		set_variable = { name = sr_det_to value = 7 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_9_loc var:sr_fl_8_loc = var:sr_fl_9_loc }
+		set_variable = { name = sr_det_to value = 8 }
+	}
+}
+sr_fl_xfer_open_at = { sr_fl_$N$_xfer_open_now = yes }
+
+# A step (sr_fleet_xfer_step_sgui): scope:pick the role (1 war, 2 rapid, 3 siege, 4 carrier, 5 tender, 6 marines),
+# scope:step its code (XF_STEPS: 1-4 take 1, 10, 100 or 1,000 off, 5 none;
+# 6-9 add them, 10 all), the amount then held to 0 and what slot N has.
+sr_fl_xfer_step_at = {
+	if = {
+		limit = { scope:pick = 1 }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = war CODE = 1 }
+	}
+	else_if = {
+		limit = { scope:pick = 2 }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = rapid CODE = 2 }
+	}
+	else_if = {
+		limit = { scope:pick = 3 }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = siege CODE = 3 }
+	}
+	else_if = {
+		limit = { scope:pick = 4 }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = carrier CODE = 4 }
+	}
+	else_if = {
+		limit = { scope:pick = 5 }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = tender CODE = 5 }
+	}
+	else_if = {
+		limit = { scope:pick = 6 }
+		sr_fl_xfer_step_role = { N = $N$ ROLE = marines CODE = 6 }
+	}
+}
+sr_fl_xfer_step_role = {
+	if = {
+		limit = { scope:step = 5 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = 0 }
+	}
+	else_if = {
+		limit = { scope:step = 10 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = sr_fl_$N$_$ROLE$_value }
+	}
+	else_if = {
+		limit = { scope:step = 1 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = { value = sr_fl_$N$_xf_$ROLE$ add = -1 max = sr_fl_$N$_$ROLE$_value min = 0 } }
+	}
+	else_if = {
+		limit = { scope:step = 2 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = { value = sr_fl_$N$_xf_$ROLE$ add = -10 max = sr_fl_$N$_$ROLE$_value min = 0 } }
+	}
+	else_if = {
+		limit = { scope:step = 3 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = { value = sr_fl_$N$_xf_$ROLE$ add = -100 max = sr_fl_$N$_$ROLE$_value min = 0 } }
+	}
+	else_if = {
+		limit = { scope:step = 4 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = { value = sr_fl_$N$_xf_$ROLE$ add = -1000 max = sr_fl_$N$_$ROLE$_value min = 0 } }
+	}
+	else_if = {
+		limit = { scope:step = 6 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = { value = sr_fl_$N$_xf_$ROLE$ add = 1 max = sr_fl_$N$_$ROLE$_value min = 0 } }
+	}
+	else_if = {
+		limit = { scope:step = 7 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = { value = sr_fl_$N$_xf_$ROLE$ add = 10 max = sr_fl_$N$_$ROLE$_value min = 0 } }
+	}
+	else_if = {
+		limit = { scope:step = 8 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = { value = sr_fl_$N$_xf_$ROLE$ add = 100 max = sr_fl_$N$_$ROLE$_value min = 0 } }
+	}
+	else_if = {
+		limit = { scope:step = 9 }
+		set_variable = { name = sr_det_amt_$ROLE$ value = { value = sr_fl_$N$_xf_$ROLE$ add = 1000 max = sr_fl_$N$_$ROLE$_value min = 0 } }
+	}
+	else = {
+		if = {
+			limit = { NOT = { has_global_variable = sr_xf_step_checked } }
+			set_global_variable = { name = sr_xf_step_checked value = yes }
+			set_variable = { name = sr_xf_chk_slot value = $N$ }
+			set_variable = { name = sr_xf_chk_role value = $CODE$ }
+			debug_log = "TE_SELF_CHECK BROKEN xfer_step_scope (a Transfer step reached its scripted GUI with no step code: the third AddScope, scope:step, did not arrive; fallback: pick = role x 100 + step code, docs/testing/solar-colonies-playtest.md) slot=[THIS.Var('sr_xf_chk_slot').GetValue|0] role=[THIS.Var('sr_xf_chk_role').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+			remove_variable = sr_xf_chk_slot
+			remove_variable = sr_xf_chk_role
+		}
+	}
+	if = {
+		limit = { NOT = { has_global_variable = sr_xf_step_checked } }
+		set_global_variable = { name = sr_xf_step_checked value = yes }
+		set_variable = { name = sr_xf_chk_slot value = $N$ }
+		set_variable = { name = sr_xf_chk_role value = $CODE$ }
+		set_variable = { name = sr_xf_chk_amount value = var:sr_det_amt_$ROLE$ }
+		debug_log = "TE_SELF_CHECK OK xfer_step_scope (a Transfer step reached its scripted GUI with its step code: three chained AddScopes arrive) slot=[THIS.Var('sr_xf_chk_slot').GetValue|0] role=[THIS.Var('sr_xf_chk_role').GetValue|0] amount=[THIS.Var('sr_xf_chk_amount').GetValue|2] date=[TimeKeeper.GetCurrentDate.GetString]"
+		remove_variable = sr_xf_chk_slot
+		remove_variable = sr_xf_chk_role
+		remove_variable = sr_xf_chk_amount
+	}
+}
+
+# The Into buttons (sr_fleet_xfer_to_sgui): where the transfer goes, scope:pick
+# 0 a new fleet, else that slot.
+sr_xf_set_to = {
+	if = {
+		limit = { scope:pick = 0 }
+		set_variable = { name = sr_det_to value = 0 }
+	}
+	else_if = {
+		limit = { scope:pick = 1 }
+		set_variable = { name = sr_det_to value = 1 }
+	}
+	else_if = {
+		limit = { scope:pick = 2 }
+		set_variable = { name = sr_det_to value = 2 }
+	}
+	else_if = {
+		limit = { scope:pick = 3 }
+		set_variable = { name = sr_det_to value = 3 }
+	}
+	else_if = {
+		limit = { scope:pick = 4 }
+		set_variable = { name = sr_det_to value = 4 }
+	}
+	else_if = {
+		limit = { scope:pick = 5 }
+		set_variable = { name = sr_det_to value = 5 }
+	}
+	else_if = {
+		limit = { scope:pick = 6 }
+		set_variable = { name = sr_det_to value = 6 }
+	}
+	else_if = {
+		limit = { scope:pick = 7 }
+		set_variable = { name = sr_det_to value = 7 }
+	}
+	else_if = {
+		limit = { scope:pick = 8 }
+		set_variable = { name = sr_det_to value = 8 }
+	}
+	else_if = {
+		limit = { scope:pick = 9 }
+		set_variable = { name = sr_det_to value = 9 }
+	}
+}
+
+# Transfer (sr_fleet_transfer_sgui): into the lowest empty slot (sr_det_to 0),
+# or into that slot while it is still here.
+sr_fl_1_transfer_now = {
+	if = {
+		limit = { sr_det_to_value = 0 }
+		if = {
+			limit = { NOT = { sr_fl_2_exists = yes } }
+			sr_fl_transfer_new = { N = 1 M = 2 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_3_exists = yes } }
+			sr_fl_transfer_new = { N = 1 M = 3 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_4_exists = yes } }
+			sr_fl_transfer_new = { N = 1 M = 4 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_5_exists = yes } }
+			sr_fl_transfer_new = { N = 1 M = 5 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_6_exists = yes } }
+			sr_fl_transfer_new = { N = 1 M = 6 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_7_exists = yes } }
+			sr_fl_transfer_new = { N = 1 M = 7 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_8_exists = yes } }
+			sr_fl_transfer_new = { N = 1 M = 8 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_9_exists = yes } }
+			sr_fl_transfer_new = { N = 1 M = 9 }
+		}
+	}
+	else_if = {
+		limit = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_1_loc var:sr_fl_2_loc = var:sr_fl_1_loc }
+		sr_fl_transfer_into = { N = 1 M = 2 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_1_loc var:sr_fl_3_loc = var:sr_fl_1_loc }
+		sr_fl_transfer_into = { N = 1 M = 3 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_1_loc var:sr_fl_4_loc = var:sr_fl_1_loc }
+		sr_fl_transfer_into = { N = 1 M = 4 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_1_loc var:sr_fl_5_loc = var:sr_fl_1_loc }
+		sr_fl_transfer_into = { N = 1 M = 5 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_1_loc var:sr_fl_6_loc = var:sr_fl_1_loc }
+		sr_fl_transfer_into = { N = 1 M = 6 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_1_loc var:sr_fl_7_loc = var:sr_fl_1_loc }
+		sr_fl_transfer_into = { N = 1 M = 7 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_1_loc var:sr_fl_8_loc = var:sr_fl_1_loc }
+		sr_fl_transfer_into = { N = 1 M = 8 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_1_loc var:sr_fl_9_loc = var:sr_fl_1_loc }
+		sr_fl_transfer_into = { N = 1 M = 9 }
+	}
+}
+sr_fl_2_transfer_now = {
+	if = {
+		limit = { sr_det_to_value = 0 }
+		if = {
+			limit = { NOT = { sr_fl_1_exists = yes } }
+			sr_fl_transfer_new = { N = 2 M = 1 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_3_exists = yes } }
+			sr_fl_transfer_new = { N = 2 M = 3 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_4_exists = yes } }
+			sr_fl_transfer_new = { N = 2 M = 4 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_5_exists = yes } }
+			sr_fl_transfer_new = { N = 2 M = 5 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_6_exists = yes } }
+			sr_fl_transfer_new = { N = 2 M = 6 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_7_exists = yes } }
+			sr_fl_transfer_new = { N = 2 M = 7 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_8_exists = yes } }
+			sr_fl_transfer_new = { N = 2 M = 8 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_9_exists = yes } }
+			sr_fl_transfer_new = { N = 2 M = 9 }
+		}
+	}
+	else_if = {
+		limit = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_2_loc var:sr_fl_1_loc = var:sr_fl_2_loc }
+		sr_fl_transfer_into = { N = 2 M = 1 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_2_loc var:sr_fl_3_loc = var:sr_fl_2_loc }
+		sr_fl_transfer_into = { N = 2 M = 3 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_2_loc var:sr_fl_4_loc = var:sr_fl_2_loc }
+		sr_fl_transfer_into = { N = 2 M = 4 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_2_loc var:sr_fl_5_loc = var:sr_fl_2_loc }
+		sr_fl_transfer_into = { N = 2 M = 5 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_2_loc var:sr_fl_6_loc = var:sr_fl_2_loc }
+		sr_fl_transfer_into = { N = 2 M = 6 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_2_loc var:sr_fl_7_loc = var:sr_fl_2_loc }
+		sr_fl_transfer_into = { N = 2 M = 7 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_2_loc var:sr_fl_8_loc = var:sr_fl_2_loc }
+		sr_fl_transfer_into = { N = 2 M = 8 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_2_loc var:sr_fl_9_loc = var:sr_fl_2_loc }
+		sr_fl_transfer_into = { N = 2 M = 9 }
+	}
+}
+sr_fl_3_transfer_now = {
+	if = {
+		limit = { sr_det_to_value = 0 }
+		if = {
+			limit = { NOT = { sr_fl_1_exists = yes } }
+			sr_fl_transfer_new = { N = 3 M = 1 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_2_exists = yes } }
+			sr_fl_transfer_new = { N = 3 M = 2 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_4_exists = yes } }
+			sr_fl_transfer_new = { N = 3 M = 4 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_5_exists = yes } }
+			sr_fl_transfer_new = { N = 3 M = 5 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_6_exists = yes } }
+			sr_fl_transfer_new = { N = 3 M = 6 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_7_exists = yes } }
+			sr_fl_transfer_new = { N = 3 M = 7 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_8_exists = yes } }
+			sr_fl_transfer_new = { N = 3 M = 8 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_9_exists = yes } }
+			sr_fl_transfer_new = { N = 3 M = 9 }
+		}
+	}
+	else_if = {
+		limit = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_3_loc var:sr_fl_1_loc = var:sr_fl_3_loc }
+		sr_fl_transfer_into = { N = 3 M = 1 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_3_loc var:sr_fl_2_loc = var:sr_fl_3_loc }
+		sr_fl_transfer_into = { N = 3 M = 2 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_3_loc var:sr_fl_4_loc = var:sr_fl_3_loc }
+		sr_fl_transfer_into = { N = 3 M = 4 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_3_loc var:sr_fl_5_loc = var:sr_fl_3_loc }
+		sr_fl_transfer_into = { N = 3 M = 5 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_3_loc var:sr_fl_6_loc = var:sr_fl_3_loc }
+		sr_fl_transfer_into = { N = 3 M = 6 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_3_loc var:sr_fl_7_loc = var:sr_fl_3_loc }
+		sr_fl_transfer_into = { N = 3 M = 7 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_3_loc var:sr_fl_8_loc = var:sr_fl_3_loc }
+		sr_fl_transfer_into = { N = 3 M = 8 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_3_loc var:sr_fl_9_loc = var:sr_fl_3_loc }
+		sr_fl_transfer_into = { N = 3 M = 9 }
+	}
+}
+sr_fl_4_transfer_now = {
+	if = {
+		limit = { sr_det_to_value = 0 }
+		if = {
+			limit = { NOT = { sr_fl_1_exists = yes } }
+			sr_fl_transfer_new = { N = 4 M = 1 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_2_exists = yes } }
+			sr_fl_transfer_new = { N = 4 M = 2 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_3_exists = yes } }
+			sr_fl_transfer_new = { N = 4 M = 3 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_5_exists = yes } }
+			sr_fl_transfer_new = { N = 4 M = 5 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_6_exists = yes } }
+			sr_fl_transfer_new = { N = 4 M = 6 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_7_exists = yes } }
+			sr_fl_transfer_new = { N = 4 M = 7 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_8_exists = yes } }
+			sr_fl_transfer_new = { N = 4 M = 8 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_9_exists = yes } }
+			sr_fl_transfer_new = { N = 4 M = 9 }
+		}
+	}
+	else_if = {
+		limit = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_4_loc var:sr_fl_1_loc = var:sr_fl_4_loc }
+		sr_fl_transfer_into = { N = 4 M = 1 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_4_loc var:sr_fl_2_loc = var:sr_fl_4_loc }
+		sr_fl_transfer_into = { N = 4 M = 2 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_4_loc var:sr_fl_3_loc = var:sr_fl_4_loc }
+		sr_fl_transfer_into = { N = 4 M = 3 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_4_loc var:sr_fl_5_loc = var:sr_fl_4_loc }
+		sr_fl_transfer_into = { N = 4 M = 5 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_4_loc var:sr_fl_6_loc = var:sr_fl_4_loc }
+		sr_fl_transfer_into = { N = 4 M = 6 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_4_loc var:sr_fl_7_loc = var:sr_fl_4_loc }
+		sr_fl_transfer_into = { N = 4 M = 7 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_4_loc var:sr_fl_8_loc = var:sr_fl_4_loc }
+		sr_fl_transfer_into = { N = 4 M = 8 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_4_loc var:sr_fl_9_loc = var:sr_fl_4_loc }
+		sr_fl_transfer_into = { N = 4 M = 9 }
+	}
+}
+sr_fl_5_transfer_now = {
+	if = {
+		limit = { sr_det_to_value = 0 }
+		if = {
+			limit = { NOT = { sr_fl_1_exists = yes } }
+			sr_fl_transfer_new = { N = 5 M = 1 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_2_exists = yes } }
+			sr_fl_transfer_new = { N = 5 M = 2 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_3_exists = yes } }
+			sr_fl_transfer_new = { N = 5 M = 3 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_4_exists = yes } }
+			sr_fl_transfer_new = { N = 5 M = 4 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_6_exists = yes } }
+			sr_fl_transfer_new = { N = 5 M = 6 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_7_exists = yes } }
+			sr_fl_transfer_new = { N = 5 M = 7 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_8_exists = yes } }
+			sr_fl_transfer_new = { N = 5 M = 8 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_9_exists = yes } }
+			sr_fl_transfer_new = { N = 5 M = 9 }
+		}
+	}
+	else_if = {
+		limit = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_5_loc var:sr_fl_1_loc = var:sr_fl_5_loc }
+		sr_fl_transfer_into = { N = 5 M = 1 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_5_loc var:sr_fl_2_loc = var:sr_fl_5_loc }
+		sr_fl_transfer_into = { N = 5 M = 2 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_5_loc var:sr_fl_3_loc = var:sr_fl_5_loc }
+		sr_fl_transfer_into = { N = 5 M = 3 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_5_loc var:sr_fl_4_loc = var:sr_fl_5_loc }
+		sr_fl_transfer_into = { N = 5 M = 4 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_5_loc var:sr_fl_6_loc = var:sr_fl_5_loc }
+		sr_fl_transfer_into = { N = 5 M = 6 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_5_loc var:sr_fl_7_loc = var:sr_fl_5_loc }
+		sr_fl_transfer_into = { N = 5 M = 7 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_5_loc var:sr_fl_8_loc = var:sr_fl_5_loc }
+		sr_fl_transfer_into = { N = 5 M = 8 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_5_loc var:sr_fl_9_loc = var:sr_fl_5_loc }
+		sr_fl_transfer_into = { N = 5 M = 9 }
+	}
+}
+sr_fl_6_transfer_now = {
+	if = {
+		limit = { sr_det_to_value = 0 }
+		if = {
+			limit = { NOT = { sr_fl_1_exists = yes } }
+			sr_fl_transfer_new = { N = 6 M = 1 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_2_exists = yes } }
+			sr_fl_transfer_new = { N = 6 M = 2 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_3_exists = yes } }
+			sr_fl_transfer_new = { N = 6 M = 3 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_4_exists = yes } }
+			sr_fl_transfer_new = { N = 6 M = 4 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_5_exists = yes } }
+			sr_fl_transfer_new = { N = 6 M = 5 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_7_exists = yes } }
+			sr_fl_transfer_new = { N = 6 M = 7 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_8_exists = yes } }
+			sr_fl_transfer_new = { N = 6 M = 8 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_9_exists = yes } }
+			sr_fl_transfer_new = { N = 6 M = 9 }
+		}
+	}
+	else_if = {
+		limit = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_6_loc var:sr_fl_1_loc = var:sr_fl_6_loc }
+		sr_fl_transfer_into = { N = 6 M = 1 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_6_loc var:sr_fl_2_loc = var:sr_fl_6_loc }
+		sr_fl_transfer_into = { N = 6 M = 2 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_6_loc var:sr_fl_3_loc = var:sr_fl_6_loc }
+		sr_fl_transfer_into = { N = 6 M = 3 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_6_loc var:sr_fl_4_loc = var:sr_fl_6_loc }
+		sr_fl_transfer_into = { N = 6 M = 4 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_6_loc var:sr_fl_5_loc = var:sr_fl_6_loc }
+		sr_fl_transfer_into = { N = 6 M = 5 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_6_loc var:sr_fl_7_loc = var:sr_fl_6_loc }
+		sr_fl_transfer_into = { N = 6 M = 7 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_6_loc var:sr_fl_8_loc = var:sr_fl_6_loc }
+		sr_fl_transfer_into = { N = 6 M = 8 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_6_loc var:sr_fl_9_loc = var:sr_fl_6_loc }
+		sr_fl_transfer_into = { N = 6 M = 9 }
+	}
+}
+sr_fl_7_transfer_now = {
+	if = {
+		limit = { sr_det_to_value = 0 }
+		if = {
+			limit = { NOT = { sr_fl_1_exists = yes } }
+			sr_fl_transfer_new = { N = 7 M = 1 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_2_exists = yes } }
+			sr_fl_transfer_new = { N = 7 M = 2 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_3_exists = yes } }
+			sr_fl_transfer_new = { N = 7 M = 3 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_4_exists = yes } }
+			sr_fl_transfer_new = { N = 7 M = 4 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_5_exists = yes } }
+			sr_fl_transfer_new = { N = 7 M = 5 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_6_exists = yes } }
+			sr_fl_transfer_new = { N = 7 M = 6 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_8_exists = yes } }
+			sr_fl_transfer_new = { N = 7 M = 8 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_9_exists = yes } }
+			sr_fl_transfer_new = { N = 7 M = 9 }
+		}
+	}
+	else_if = {
+		limit = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_7_loc var:sr_fl_1_loc = var:sr_fl_7_loc }
+		sr_fl_transfer_into = { N = 7 M = 1 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_7_loc var:sr_fl_2_loc = var:sr_fl_7_loc }
+		sr_fl_transfer_into = { N = 7 M = 2 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_7_loc var:sr_fl_3_loc = var:sr_fl_7_loc }
+		sr_fl_transfer_into = { N = 7 M = 3 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_7_loc var:sr_fl_4_loc = var:sr_fl_7_loc }
+		sr_fl_transfer_into = { N = 7 M = 4 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_7_loc var:sr_fl_5_loc = var:sr_fl_7_loc }
+		sr_fl_transfer_into = { N = 7 M = 5 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_7_loc var:sr_fl_6_loc = var:sr_fl_7_loc }
+		sr_fl_transfer_into = { N = 7 M = 6 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_7_loc var:sr_fl_8_loc = var:sr_fl_7_loc }
+		sr_fl_transfer_into = { N = 7 M = 8 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_7_loc var:sr_fl_9_loc = var:sr_fl_7_loc }
+		sr_fl_transfer_into = { N = 7 M = 9 }
+	}
+}
+sr_fl_8_transfer_now = {
+	if = {
+		limit = { sr_det_to_value = 0 }
+		if = {
+			limit = { NOT = { sr_fl_1_exists = yes } }
+			sr_fl_transfer_new = { N = 8 M = 1 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_2_exists = yes } }
+			sr_fl_transfer_new = { N = 8 M = 2 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_3_exists = yes } }
+			sr_fl_transfer_new = { N = 8 M = 3 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_4_exists = yes } }
+			sr_fl_transfer_new = { N = 8 M = 4 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_5_exists = yes } }
+			sr_fl_transfer_new = { N = 8 M = 5 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_6_exists = yes } }
+			sr_fl_transfer_new = { N = 8 M = 6 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_7_exists = yes } }
+			sr_fl_transfer_new = { N = 8 M = 7 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_9_exists = yes } }
+			sr_fl_transfer_new = { N = 8 M = 9 }
+		}
+	}
+	else_if = {
+		limit = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_8_loc var:sr_fl_1_loc = var:sr_fl_8_loc }
+		sr_fl_transfer_into = { N = 8 M = 1 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_8_loc var:sr_fl_2_loc = var:sr_fl_8_loc }
+		sr_fl_transfer_into = { N = 8 M = 2 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_8_loc var:sr_fl_3_loc = var:sr_fl_8_loc }
+		sr_fl_transfer_into = { N = 8 M = 3 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_8_loc var:sr_fl_4_loc = var:sr_fl_8_loc }
+		sr_fl_transfer_into = { N = 8 M = 4 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_8_loc var:sr_fl_5_loc = var:sr_fl_8_loc }
+		sr_fl_transfer_into = { N = 8 M = 5 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_8_loc var:sr_fl_6_loc = var:sr_fl_8_loc }
+		sr_fl_transfer_into = { N = 8 M = 6 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_8_loc var:sr_fl_7_loc = var:sr_fl_8_loc }
+		sr_fl_transfer_into = { N = 8 M = 7 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_8_loc var:sr_fl_9_loc = var:sr_fl_8_loc }
+		sr_fl_transfer_into = { N = 8 M = 9 }
+	}
+}
+sr_fl_9_transfer_now = {
+	if = {
+		limit = { sr_det_to_value = 0 }
+		if = {
+			limit = { NOT = { sr_fl_1_exists = yes } }
+			sr_fl_transfer_new = { N = 9 M = 1 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_2_exists = yes } }
+			sr_fl_transfer_new = { N = 9 M = 2 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_3_exists = yes } }
+			sr_fl_transfer_new = { N = 9 M = 3 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_4_exists = yes } }
+			sr_fl_transfer_new = { N = 9 M = 4 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_5_exists = yes } }
+			sr_fl_transfer_new = { N = 9 M = 5 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_6_exists = yes } }
+			sr_fl_transfer_new = { N = 9 M = 6 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_7_exists = yes } }
+			sr_fl_transfer_new = { N = 9 M = 7 }
+		}
+		else_if = {
+			limit = { NOT = { sr_fl_8_exists = yes } }
+			sr_fl_transfer_new = { N = 9 M = 8 }
+		}
+	}
+	else_if = {
+		limit = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_9_loc var:sr_fl_1_loc = var:sr_fl_9_loc }
+		sr_fl_transfer_into = { N = 9 M = 1 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_9_loc var:sr_fl_2_loc = var:sr_fl_9_loc }
+		sr_fl_transfer_into = { N = 9 M = 2 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_9_loc var:sr_fl_3_loc = var:sr_fl_9_loc }
+		sr_fl_transfer_into = { N = 9 M = 3 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_9_loc var:sr_fl_4_loc = var:sr_fl_9_loc }
+		sr_fl_transfer_into = { N = 9 M = 4 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_9_loc var:sr_fl_5_loc = var:sr_fl_9_loc }
+		sr_fl_transfer_into = { N = 9 M = 5 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_9_loc var:sr_fl_6_loc = var:sr_fl_9_loc }
+		sr_fl_transfer_into = { N = 9 M = 6 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_9_loc var:sr_fl_7_loc = var:sr_fl_9_loc }
+		sr_fl_transfer_into = { N = 9 M = 7 }
+	}
+	else_if = {
+		limit = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_9_loc var:sr_fl_8_loc = var:sr_fl_9_loc }
+		sr_fl_transfer_into = { N = 9 M = 8 }
+	}
+}
+sr_fl_transfer_at = { sr_fl_$N$_transfer_now = yes }
+
+# N into the empty M, Detach's shape: M at N's location, on its drive, posture
+# and refit; then both fleets N's shares of propellant and supply, of their
+# new capacities (with the roles halved, as Detach's, the same months). A
+# source closing in (3) or interdicting (4) leaves M at Stand off (2): M gets
+# no target (owner, 2026-10-31).
+sr_fl_transfer_new = {
+	set_local_variable = { name = sr_xf_all value = 0 }
+	if = { limit = { sr_fl_$N$_xf_left <= 0 } set_local_variable = { name = sr_xf_all value = 1 } }
+	set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_xf_strength }
+	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_strength_full } }
+	set_local_variable = { name = sr_xf_marines value = sr_fl_$N$_xf_marines_moved }
+	set_local_variable = { name = sr_xf_amt_war value = sr_fl_$N$_xf_war }
+	set_local_variable = { name = sr_xf_now_war value = sr_fl_$N$_war_value }
+	set_local_variable = { name = sr_xf_amt_rapid value = sr_fl_$N$_xf_rapid }
+	set_local_variable = { name = sr_xf_now_rapid value = sr_fl_$N$_rapid_value }
+	set_local_variable = { name = sr_xf_amt_siege value = sr_fl_$N$_xf_siege }
+	set_local_variable = { name = sr_xf_now_siege value = sr_fl_$N$_siege_value }
+	set_local_variable = { name = sr_xf_amt_carrier value = sr_fl_$N$_xf_carrier }
+	set_local_variable = { name = sr_xf_now_carrier value = sr_fl_$N$_carrier_value }
+	set_local_variable = { name = sr_xf_amt_tender value = sr_fl_$N$_xf_tender }
+	set_local_variable = { name = sr_xf_now_tender value = sr_fl_$N$_tender_value }
+	set_local_variable = { name = sr_fl_dv_share value = 1 }
+	if = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }
+	set_local_variable = { name = sr_fl_supply_share value = 1 }
+	if = { limit = { sr_fl_$N$_endurance > 0 } set_local_variable = { name = sr_fl_supply_share value = { value = sr_fl_$N$_supply_value divide = sr_fl_$N$_endurance max = 1 } } }
+	sr_fl_clear_at = { N = $M$ }
+	set_variable = { name = sr_fl_$M$_loc value = var:sr_fl_$N$_loc }
+	set_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value }
+	set_variable = { name = sr_fl_$M$_posture value = { value = sr_fl_$N$_posture_value max = 2 } }
+	if = { limit = { has_variable = sr_fl_$N$_refit_until } set_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until } }
+	set_variable = { name = sr_fl_$M$_marines value = 0 }
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_war } sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = var:sr_fl_$N$_war } set_variable = { name = sr_fl_$N$_war value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_war_full } sr_fl_add_role_part = { N = $M$ VAR = war_full AMOUNT = var:sr_fl_$N$_war_full } set_variable = { name = sr_fl_$N$_war_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_war > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_war_full_value multiply = local_var:sr_xf_amt_war divide = local_var:sr_xf_now_war min = local_var:sr_xf_amt_war } }
+		sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = local_var:sr_xf_amt_war }
+		sr_fl_add_role_part = { N = $M$ VAR = war_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_war value = { value = sr_fl_$N$_war_value subtract = local_var:sr_xf_amt_war min = 0 } }
+		set_variable = { name = sr_fl_$N$_war_full value = { value = sr_fl_$N$_war_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_rapid } sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = var:sr_fl_$N$_rapid } set_variable = { name = sr_fl_$N$_rapid value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_rapid_full } sr_fl_add_role_part = { N = $M$ VAR = rapid_full AMOUNT = var:sr_fl_$N$_rapid_full } set_variable = { name = sr_fl_$N$_rapid_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_rapid > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_rapid_full_value multiply = local_var:sr_xf_amt_rapid divide = local_var:sr_xf_now_rapid min = local_var:sr_xf_amt_rapid } }
+		sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = local_var:sr_xf_amt_rapid }
+		sr_fl_add_role_part = { N = $M$ VAR = rapid_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_rapid value = { value = sr_fl_$N$_rapid_value subtract = local_var:sr_xf_amt_rapid min = 0 } }
+		set_variable = { name = sr_fl_$N$_rapid_full value = { value = sr_fl_$N$_rapid_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_siege } sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = var:sr_fl_$N$_siege } set_variable = { name = sr_fl_$N$_siege value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_siege_full } sr_fl_add_role_part = { N = $M$ VAR = siege_full AMOUNT = var:sr_fl_$N$_siege_full } set_variable = { name = sr_fl_$N$_siege_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_siege > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_siege_full_value multiply = local_var:sr_xf_amt_siege divide = local_var:sr_xf_now_siege min = local_var:sr_xf_amt_siege } }
+		sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = local_var:sr_xf_amt_siege }
+		sr_fl_add_role_part = { N = $M$ VAR = siege_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_siege value = { value = sr_fl_$N$_siege_value subtract = local_var:sr_xf_amt_siege min = 0 } }
+		set_variable = { name = sr_fl_$N$_siege_full value = { value = sr_fl_$N$_siege_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_carrier } sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = var:sr_fl_$N$_carrier } set_variable = { name = sr_fl_$N$_carrier value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_carrier_full } sr_fl_add_role_part = { N = $M$ VAR = carrier_full AMOUNT = var:sr_fl_$N$_carrier_full } set_variable = { name = sr_fl_$N$_carrier_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_carrier > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_carrier_full_value multiply = local_var:sr_xf_amt_carrier divide = local_var:sr_xf_now_carrier min = local_var:sr_xf_amt_carrier } }
+		sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = local_var:sr_xf_amt_carrier }
+		sr_fl_add_role_part = { N = $M$ VAR = carrier_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_carrier value = { value = sr_fl_$N$_carrier_value subtract = local_var:sr_xf_amt_carrier min = 0 } }
+		set_variable = { name = sr_fl_$N$_carrier_full value = { value = sr_fl_$N$_carrier_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_tender } sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = var:sr_fl_$N$_tender } set_variable = { name = sr_fl_$N$_tender value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_tender_full } sr_fl_add_role_part = { N = $M$ VAR = tender_full AMOUNT = var:sr_fl_$N$_tender_full } set_variable = { name = sr_fl_$N$_tender_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_tender > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_tender_full_value multiply = local_var:sr_xf_amt_tender divide = local_var:sr_xf_now_tender min = local_var:sr_xf_amt_tender } }
+		sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = local_var:sr_xf_amt_tender }
+		sr_fl_add_role_part = { N = $M$ VAR = tender_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_tender value = { value = sr_fl_$N$_tender_value subtract = local_var:sr_xf_amt_tender min = 0 } }
+		set_variable = { name = sr_fl_$N$_tender_full value = { value = sr_fl_$N$_tender_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	set_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value add = local_var:sr_xf_marines } }
+	set_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value subtract = local_var:sr_xf_marines min = 0 } }
+	set_variable = { name = sr_fl_$N$_dv value = { value = sr_fl_$N$_dv_capacity multiply = local_var:sr_fl_dv_share } }
+	set_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_fl_dv_share } }
+	set_variable = { name = sr_fl_$N$_supply value = { value = sr_fl_$N$_endurance multiply = local_var:sr_fl_supply_share } }
+	set_variable = { name = sr_fl_$M$_supply value = { value = sr_fl_$M$_endurance multiply = local_var:sr_fl_supply_share } }
+	sr_loc_rebuild = yes
+}
+# N into M, one of ours there, Merge's rules: with ships joining, M takes the
+# slower drive, the later refit, and the lower of the two shares of propellant
+# and supply; it keeps its posture. N, with nothing of its strength left, is
+# cleared, as Merge did; else it keeps its shares, of its new capacities.
+sr_fl_transfer_into = {
+	set_local_variable = { name = sr_xf_all value = 0 }
+	if = { limit = { sr_fl_$N$_xf_left <= 0 } set_local_variable = { name = sr_xf_all value = 1 } }
+	set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_xf_strength }
+	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_strength_full } }
+	set_local_variable = { name = sr_xf_marines value = sr_fl_$N$_xf_marines_moved }
+	set_local_variable = { name = sr_xf_amt_war value = sr_fl_$N$_xf_war }
+	set_local_variable = { name = sr_xf_now_war value = sr_fl_$N$_war_value }
+	set_local_variable = { name = sr_xf_amt_rapid value = sr_fl_$N$_xf_rapid }
+	set_local_variable = { name = sr_xf_now_rapid value = sr_fl_$N$_rapid_value }
+	set_local_variable = { name = sr_xf_amt_siege value = sr_fl_$N$_xf_siege }
+	set_local_variable = { name = sr_xf_now_siege value = sr_fl_$N$_siege_value }
+	set_local_variable = { name = sr_xf_amt_carrier value = sr_fl_$N$_xf_carrier }
+	set_local_variable = { name = sr_xf_now_carrier value = sr_fl_$N$_carrier_value }
+	set_local_variable = { name = sr_xf_amt_tender value = sr_fl_$N$_xf_tender }
+	set_local_variable = { name = sr_xf_now_tender value = sr_fl_$N$_tender_value }
+	set_local_variable = { name = sr_fl_dv_share value = 1 }
+	if = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }
+	set_local_variable = { name = sr_fl_supply_share value = 1 }
+	if = { limit = { sr_fl_$N$_endurance > 0 } set_local_variable = { name = sr_fl_supply_share value = { value = sr_fl_$N$_supply_value divide = sr_fl_$N$_endurance max = 1 } } }
+	set_local_variable = { name = sr_xf_m_dv_share value = 1 }
+	if = { limit = { sr_fl_$M$_dv_capacity > 0 } set_local_variable = { name = sr_xf_m_dv_share value = { value = sr_fl_$M$_dv_value divide = sr_fl_$M$_dv_capacity max = 1 } } }
+	set_local_variable = { name = sr_xf_m_supply_share value = 1 }
+	if = { limit = { sr_fl_$M$_endurance > 0 } set_local_variable = { name = sr_xf_m_supply_share value = { value = sr_fl_$M$_supply_value divide = sr_fl_$M$_endurance max = 1 } } }
+	if = {
+		limit = { local_var:sr_xf_ships > 0 }
+		if = { limit = { local_var:sr_fl_dv_share < local_var:sr_xf_m_dv_share } set_local_variable = { name = sr_xf_m_dv_share value = local_var:sr_fl_dv_share } }
+		if = { limit = { local_var:sr_fl_supply_share < local_var:sr_xf_m_supply_share } set_local_variable = { name = sr_xf_m_supply_share value = local_var:sr_fl_supply_share } }
+		if = { limit = { sr_fl_$N$_drive_value < sr_fl_$M$_drive_value } set_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value } }
+		if = {
+			limit = { has_variable = sr_fl_$N$_refit_until }
+			if = {
+				limit = { OR = { NOT = { has_variable = sr_fl_$M$_refit_until } var:sr_fl_$M$_refit_until < var:sr_fl_$N$_refit_until } }
+				set_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_war } sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = var:sr_fl_$N$_war } set_variable = { name = sr_fl_$N$_war value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_war_full } sr_fl_add_role_part = { N = $M$ VAR = war_full AMOUNT = var:sr_fl_$N$_war_full } set_variable = { name = sr_fl_$N$_war_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_war > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_war_full_value multiply = local_var:sr_xf_amt_war divide = local_var:sr_xf_now_war min = local_var:sr_xf_amt_war } }
+		sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = local_var:sr_xf_amt_war }
+		sr_fl_add_role_part = { N = $M$ VAR = war_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_war value = { value = sr_fl_$N$_war_value subtract = local_var:sr_xf_amt_war min = 0 } }
+		set_variable = { name = sr_fl_$N$_war_full value = { value = sr_fl_$N$_war_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_rapid } sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = var:sr_fl_$N$_rapid } set_variable = { name = sr_fl_$N$_rapid value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_rapid_full } sr_fl_add_role_part = { N = $M$ VAR = rapid_full AMOUNT = var:sr_fl_$N$_rapid_full } set_variable = { name = sr_fl_$N$_rapid_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_rapid > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_rapid_full_value multiply = local_var:sr_xf_amt_rapid divide = local_var:sr_xf_now_rapid min = local_var:sr_xf_amt_rapid } }
+		sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = local_var:sr_xf_amt_rapid }
+		sr_fl_add_role_part = { N = $M$ VAR = rapid_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_rapid value = { value = sr_fl_$N$_rapid_value subtract = local_var:sr_xf_amt_rapid min = 0 } }
+		set_variable = { name = sr_fl_$N$_rapid_full value = { value = sr_fl_$N$_rapid_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_siege } sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = var:sr_fl_$N$_siege } set_variable = { name = sr_fl_$N$_siege value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_siege_full } sr_fl_add_role_part = { N = $M$ VAR = siege_full AMOUNT = var:sr_fl_$N$_siege_full } set_variable = { name = sr_fl_$N$_siege_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_siege > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_siege_full_value multiply = local_var:sr_xf_amt_siege divide = local_var:sr_xf_now_siege min = local_var:sr_xf_amt_siege } }
+		sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = local_var:sr_xf_amt_siege }
+		sr_fl_add_role_part = { N = $M$ VAR = siege_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_siege value = { value = sr_fl_$N$_siege_value subtract = local_var:sr_xf_amt_siege min = 0 } }
+		set_variable = { name = sr_fl_$N$_siege_full value = { value = sr_fl_$N$_siege_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_carrier } sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = var:sr_fl_$N$_carrier } set_variable = { name = sr_fl_$N$_carrier value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_carrier_full } sr_fl_add_role_part = { N = $M$ VAR = carrier_full AMOUNT = var:sr_fl_$N$_carrier_full } set_variable = { name = sr_fl_$N$_carrier_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_carrier > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_carrier_full_value multiply = local_var:sr_xf_amt_carrier divide = local_var:sr_xf_now_carrier min = local_var:sr_xf_amt_carrier } }
+		sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = local_var:sr_xf_amt_carrier }
+		sr_fl_add_role_part = { N = $M$ VAR = carrier_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_carrier value = { value = sr_fl_$N$_carrier_value subtract = local_var:sr_xf_amt_carrier min = 0 } }
+		set_variable = { name = sr_fl_$N$_carrier_full value = { value = sr_fl_$N$_carrier_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	if = {
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_tender } sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = var:sr_fl_$N$_tender } set_variable = { name = sr_fl_$N$_tender value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_tender_full } sr_fl_add_role_part = { N = $M$ VAR = tender_full AMOUNT = var:sr_fl_$N$_tender_full } set_variable = { name = sr_fl_$N$_tender_full value = 0 } }
+	}
+	else_if = {
+		limit = { local_var:sr_xf_amt_tender > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_tender_full_value multiply = local_var:sr_xf_amt_tender divide = local_var:sr_xf_now_tender min = local_var:sr_xf_amt_tender } }
+		sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = local_var:sr_xf_amt_tender }
+		sr_fl_add_role_part = { N = $M$ VAR = tender_full AMOUNT = local_var:sr_xf_part }
+		set_variable = { name = sr_fl_$N$_tender value = { value = sr_fl_$N$_tender_value subtract = local_var:sr_xf_amt_tender min = 0 } }
+		set_variable = { name = sr_fl_$N$_tender_full value = { value = sr_fl_$N$_tender_full_value subtract = local_var:sr_xf_part min = 0 } }
+	}
+	set_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value add = local_var:sr_xf_marines } }
+	set_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value subtract = local_var:sr_xf_marines min = 0 } }
+	set_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_xf_m_dv_share } }
+	set_variable = { name = sr_fl_$M$_supply value = { value = sr_fl_$M$_endurance multiply = local_var:sr_xf_m_supply_share } }
+	if = {
+		limit = { sr_fl_$N$_strength < sr_fl_minimum_strength }
+		sr_fl_clear_at = { N = $N$ }
+	}
+	else = {
+		set_variable = { name = sr_fl_$N$_dv value = { value = sr_fl_$N$_dv_capacity multiply = local_var:sr_fl_dv_share } }
+		set_variable = { name = sr_fl_$N$_supply value = { value = sr_fl_$N$_endurance multiply = local_var:sr_fl_supply_share } }
+	}
 	sr_loc_rebuild = yes
 }
 

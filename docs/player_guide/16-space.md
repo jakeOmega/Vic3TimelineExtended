@@ -57,7 +57,7 @@ innovation, innovation cap and prestige.
 | Mars Mission | Knowledge Economy | adds Mars Landing | 5,000 |
 | Solar Colonization | Cislunar Infrastructure | adds Solar System Colonization, the Moon and stages 1 and 2 | 10,000 |
 | Deep Space Exploration | Space Colonization | lets a country with no colony beyond the Moon start colonizing at stages 3 to 5 | 50,000 |
-| Interstellar Mission | Compact Fusion Reactors | adds the Interstellar Probe | 100,000 |
+| Interstellar Mission | Aneutronic Fusion | adds the Interstellar Probe | 100,000 |
 
 > Lowering the production method, or losing the building, fails every running
 > milestone the new method no longer supports and wipes its progress. The event
@@ -111,7 +111,7 @@ Program runs a method that supports it.
 | Moon Landing | Orbital Flight | Space Exploration (era 7) | 200 | 6% | ×2 |
 | Deep-Space Probe | Moon Landing | Space Exploration (era 7) | 150 | 6% | ×2 |
 | Mars Landing | Moon Landing | Knowledge Economy (era 9) | 450 | 9% | ×6 |
-| Interstellar Probe | Deep-Space Probe and Mars Landing | Compact Fusion Reactors (era 12) | 600 | 9% | ×12 |
+| Interstellar Probe | Deep-Space Probe and Mars Landing | Aneutronic Fusion (era 13) | 600 | 9% | ×12 |
 | Interstellar Probe: Awaiting Data | Interstellar Probe | none | 132 months | none | none |
 | Solar System Colonization | Moon Landing (Mars Landing for the sites beyond the Moon) | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
 
@@ -333,7 +333,7 @@ milestone is finished it also decides a reward that fades over ten years.
 Each milestone has its own funding level, from 0 to six levels past your cap. The cap starts
 at 3 and rises with technology: thirteen space-related technologies from era 7
 to era 11 raise it by 1 each, and Cislunar Infrastructure (era 10), three
-technologies in era 12 and Fusion Batteries in era 13 raise it by 2 each. With
+technologies in era 12 and Microfusion Cells in era 13 raise it by 2 each. With
 all of them the cap is 13 by the end of era 10, 18 by the end of era 11, 24 by
 the end of era 12 and 26 in era 13. Tier V of the
 Advanced Research power bloc principle, its highest, adds another level.
@@ -1078,8 +1078,7 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 |---|---|
 | The destination button | Opens Fleet Destination, a row for each other location: the trip's months and propellant (in red when the fleet carries too little), from Earth its launch window, your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
 | Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
-| Merge | Joins another of your fleets at the same location |
-| Detach | Splits half of each role into a new fleet |
+| Transfer | Opens a window to move ships and marines into a new fleet, or into another of your fleets at the same location. Each role and the marines start at half; − and + change an amount by 1, with Shift, Ctrl and Alt by 10, 100 and 1,000, and a right-click sets none or all. Ships moved into another fleet give it the slower drive and the lower share of propellant and supply; moving all of a fleet merges the two |
 | Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
 
 Your fleets take orders only while you have a Space Command level in a state

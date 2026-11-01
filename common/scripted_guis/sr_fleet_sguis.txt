@@ -5,7 +5,9 @@
 # § 16. The buttons of the Fleets rows (gui/journal_entry_widgets/
 # sr_fleets_generated_rows.gui, one per slot, which pass the slot as scope:op)
 # and of Space Command's build mix (scope:op the role: 1 warships, 2 rapid
-# response, 3 siege ships, 4 assault carriers, 5 tenders). Full Colonies only;
+# response, 3 siege ships, 4 assault carriers, 5 tenders), and of a fleet's
+# Transfer popup (scope:op the slot, with scope:pick and scope:step; under
+# Transfer below). Full Colonies only;
 # player-only: the AI orders its fleets through the same effects from its
 # monthly review (sr_fl_ai_review). Each is_valid is the trigger its effect's
 # dispatcher checks (sr_fl_<n>_can_go and the rest, generated).
@@ -127,8 +129,16 @@ sr_fleet_go_sgui = {
 	}
 }
 
-# Merge into the next fleet of ours at the same location.
-sr_fleet_merge_sgui = {
+# Transfer (UI pass design § 6), which took in Merge and Detach: the fleet's
+# popup (te_sr_xfer_popup) chooses how much of each role and how many marines
+# move (the country variables sr_det_amt_<role>, held to what the slot has by
+# sr_fl_<n>_xf_<role>), and where (sr_det_to: 0 a new fleet, else a slot here).
+# The AI never merged or detached; sr_fl_merge and sr_fl_detach stay.
+#
+# Opening the popup: each amount to half the role, rounded, and the transfer
+# bound for a new fleet (or, with no slot free, the first fleet of ours here).
+# The click also sets te_popup to sr_xfer_<n>.
+sr_fleet_xfer_open_sgui = {
 	scope = country
 	saved_scopes = { op }
 
@@ -143,21 +153,141 @@ sr_fleet_merge_sgui = {
 
 	is_valid = {
 		custom_tooltip = {
-			text = sr_fl_no_partner_tt
-			sr_fl_op_check = { TEST = can_merge }
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+		custom_tooltip = {
+			text = sr_fl_no_transfer_tt
+			sr_fl_op_check = { TEST = can_transfer }
 		}
 	}
 
 	effect = {
-		custom_tooltip = sr_fl_merge_tt
+		custom_tooltip = sr_fl_xfer_open_tt
 		hidden_effect = {
-			sr_fl_by_op = { DO = merge }
+			sr_fl_by_op = { DO = xfer_open }
 		}
 	}
 }
 
-# Detach half of each role into an empty slot.
-sr_fleet_detach_sgui = {
+# A − or + in the popup: scope:pick the role (1 warships, 2 rapid response, 3
+# siege ships, 4 assault carriers, 5 tenders, 6 marines), scope:step its code
+# (gen_space_fleets.XF_STEPS: 1-4 fewer by 1, 10, 100, 1,000, 5 none; 6-9 more,
+# 10 all), the construction market's keys. The amount is then held to 0 and
+# what the slot has (sr_fl_xfer_step_role). Three chained AddScopes: unproven
+# in game (TE_SELF_CHECK xfer_step_scope). The marines' grey while every ship
+# goes, since every marine then goes too.
+sr_fleet_xfer_step_sgui = {
+	scope = country
+	saved_scopes = { op pick step }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+		# The marines (6): with every ship going, every marine goes too, and the
+		# row shows it (sr_disp_fl_<n>_xf_marines).
+		trigger_if = {
+			limit = { scope:pick = 6 }
+			custom_tooltip = {
+				text = sr_fl_xf_marines_follow_tt
+				sr_fl_op_check = { TEST = xf_some_stays }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:step < 6 }
+			custom_tooltip = sr_fl_xf_less_tt
+		}
+		else = {
+			custom_tooltip = sr_fl_xf_more_tt
+		}
+		hidden_effect = {
+			sr_fl_by_op = { DO = xfer_step }
+		}
+	}
+}
+
+# Into: where the transfer goes, scope:pick 0 a new fleet, else another slot
+# of ours. The buttons' visible is a display value (a fleet of ours here,
+# sr_disp_fl_<n>_xf_here_<m>), so is_shown reads no saved scope (gotcha #22: a
+# scope that didn't reach is_shown would hide them all, #1286's review I1);
+# is_valid checks the fleet is here again. The choice already made greys
+# itself, as the approach selector's does.
+sr_fleet_xfer_to_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+		trigger_if = {
+			limit = { scope:pick = 0 }
+			custom_tooltip = {
+				text = sr_fl_xf_free_slot_tt
+				sr_fl_has_free_slot = yes
+			}
+		}
+		trigger_if = {
+			limit = { NOT = { scope:pick = 0 } }
+			custom_tooltip = {
+				text = sr_fl_xf_pick_here_tt
+				sr_fl_op_check = { TEST = xf_pick_here }
+			}
+		}
+		custom_tooltip = {
+			text = sr_fl_xf_not_chosen_tt
+			NOT = { sr_xf_pick_chosen = yes }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:pick = 0 }
+			custom_tooltip = sr_fl_xf_to_new_tt
+		}
+		else = {
+			custom_tooltip = sr_fl_xf_to_fleet_tt
+		}
+		hidden_effect = {
+			sr_xf_set_to = yes
+		}
+	}
+}
+
+# Transfer: the chosen share of each role and the marines into a new fleet
+# (sr_det_to 0, Detach's shape) or the fleet chosen under Into (Merge's), each
+# amount held to what the slot has (sr_fl_<n>_xf_<role>). Refused, each its own
+# line: nothing moves; no slot is free for a new fleet, or the fleet chosen has
+# left; the fleet would keep less than sr_fl_minimum_strength (all of it into
+# another fleet excepted) or a new fleet get less; the fleet it goes into would
+# carry more marines than its assault carriers hold, or this one be further past
+# its room than it is now. Not gated by Space Command, as Merge and Detach
+# weren't (UI pass design § 10; an open owner's call).
+sr_fleet_transfer_sgui = {
 	scope = country
 	saved_scopes = { op }
 
@@ -172,15 +302,48 @@ sr_fleet_detach_sgui = {
 
 	is_valid = {
 		custom_tooltip = {
-			text = sr_fl_no_detach_tt
-			sr_fl_op_check = { TEST = can_detach }
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+		custom_tooltip = {
+			text = sr_fl_xf_moves_tt
+			sr_fl_op_check = { TEST = xf_moves }
+		}
+		trigger_if = {
+			limit = { sr_det_to_value = 0 }
+			custom_tooltip = {
+				text = sr_fl_xf_free_slot_tt
+				sr_fl_has_free_slot = yes
+			}
+			custom_tooltip = {
+				text = sr_fl_xf_new_min_tt
+				sr_fl_op_check = { TEST = xf_new_min }
+			}
+			custom_tooltip = {
+				text = sr_fl_xf_keeps_tt
+				sr_fl_op_check = { TEST = xf_keeps }
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_fl_xf_partner_here_tt
+				sr_fl_op_check = { TEST = xf_partner_here }
+			}
+			custom_tooltip = {
+				text = sr_fl_xf_keeps_or_all_tt
+				sr_fl_op_check = { TEST = xf_keeps_or_all }
+			}
+		}
+		custom_tooltip = {
+			text = sr_fl_xf_room_tt
+			sr_fl_op_check = { TEST = xf_room }
 		}
 	}
 
 	effect = {
-		custom_tooltip = sr_fl_detach_tt
+		custom_tooltip = sr_fl_xf_transfer_tt
 		hidden_effect = {
-			sr_fl_by_op = { DO = detach }
+			sr_fl_by_op = { DO = transfer }
 		}
 	}
 }
