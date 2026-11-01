@@ -1,7 +1,7 @@
 # The extended timeline
 
 The base game ends in 1936 after five eras of technology. This mod moves the end
-date to 2136 and adds eight more eras, numbered 6 to 13, with 181 new
+date to 2136 and adds eight more eras, numbered 6 to 13, with 182 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
 a flagship building for every company, 37 wonders and seven megaprojects. None
@@ -30,7 +30,7 @@ them. Era 13's need breakthroughs nobody yet knows how to plan for.
 | 8 | 1968–1987 | 115,000 | 21 | Computer networks, robotics, containerization, pharmaceuticals, stealth |
 | 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defense |
 | 10 | the present day | 450,000 | 20 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
-| 11 | the near future | 800,000 | 24 | AI agents and robots, advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
+| 11 | the near future | 800,000 | 25 | AI agents and robots, advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
 | 12 | the medium-term future | 1,500,000 | 12 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
 | 13 | the speculative future | 3,000,000 | 9 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
 
@@ -802,7 +802,7 @@ from 75 to 225 by 1936.
 | Grandeur at dedication | +25 years | +50 years | +100 years |
 |---|---|---|---|
 | 5 | 7.5 | 10 | 15 |
-| 10 | 15 | 20 | 30 |
+| 10 | 15 | 20 | 20 |
 | 25 | 37.5 | 50 | 75 |
 
 It ages while its message stands or while it is kept as heritage, and not at
