@@ -459,19 +459,30 @@ class Modifier(unittest.TestCase):
         calls = [(path.name, n) for path, text in script_texts("common", "events")
                  for n in [len(re.findall(rf"\b{EFFECT}\s*=\s*yes\b", text))] if n]
         self.assertEqual(calls, [(ON_ACTIONS.name, 2)])
+        # The three on-actions hang off no other hook in another file.
+        for path, other in script_texts("common/on_actions"):
+            if path != ON_ACTIONS:
+                for name in ("local_climate_yearly_on_action", "local_climate_first_on_action", "local_climate_log_on_action"):
+                    self.assertNotIn(name, other, path.name)
 
     def test_decade_log(self):
-        """Informational, not a self-check: every ten years, how many mass migration targets there are and how
-        many of them have under 10 arable land, the floor the define removes."""
+        """Informational, not a self-check: a mass migration lasts about a year, so the log samples the targets
+        once a year (the first country to pulse after a 360-day global gate) and prints each decade's sums:
+        how many targets, and how many with under 10 arable land, the floor the define removes (Task 6 review)."""
         text = ON_ACTIONS.read_text(encoding="utf-8-sig")
         country = [squash(b) for b in top_blocks(text, "on_yearly_pulse_country")]
         self.assertEqual(country, ["on_actions = { local_climate_log_on_action }"])
         body = squash(top_block(text, "local_climate_log_on_action") or "")
-        self.assertIn("days = 3650", body)
+        self.assertTrue(body.startswith("trigger = { NOT = { has_global_variable = te_climate_log_year } }"), body[:90])
+        self.assertIn("set_global_variable = { name = te_climate_log_year value = yes days = 360 }", body)
         self.assertIn("every_state = { limit = { is_mass_migration_target = yes }", body)
         self.assertIn("arable_land < 10", body)
-        self.assertIn('debug_log = "TE_LOCAL_CLIMATE mass_migration_targets=', body)
-        self.assertIn("under_10_arable=", body)
+        decade = body[body.index("limit = { NOT = { has_global_variable = te_climate_log_decade } }"):]
+        self.assertIn("set_global_variable = { name = te_climate_log_decade value = yes days = 3650 }", decade)
+        self.assertIn('debug_log = "TE_LOCAL_CLIMATE yearly_targets_summed=', decade)
+        self.assertIn("under_10_arable=", decade)
+        for counter in ("te_climate_log_targets", "te_climate_log_small_targets", "te_climate_log_years"):
+            self.assertIn(f"remove_global_variable = {counter}", decade, counter)
         self.assertNotIn("$", body, "no $PARAM$ inside a debug_log string")
 
     def test_defines(self):
@@ -479,7 +490,8 @@ class Modifier(unittest.TestCase):
         text = DEFINES.read_text(encoding="utf-8-sig")
         blocks = [squash(b) for b in top_blocks(text, "NPops")]
         self.assertTrue(blocks)
-        self.assertEqual(sum(b.count("MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 0") for b in blocks), 1, blocks)
+        self.assertEqual(sum(len(re.findall(r"MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 0(?![\d.])", b)) for b in blocks),
+                         1, blocks)
         for path, body in script_texts("common/defines"):
             self.assertEqual(body.count("MASS_MIGRATION_TARGET_MIN_ARABLE_LAND"), int(path == DEFINES), path.name)
             for define in FEW_STATES_DEFINES:
@@ -488,7 +500,8 @@ class Modifier(unittest.TestCase):
     def test_modifier_loc(self):
         name, desc = loc_value("local_climate_discomfort"), loc_value("local_climate_discomfort_desc")
         self.assertIsNotNone(name)
-        self.assertIn("Local Climate", name)
+        # Plain, no markup: the state panel hides it by comparing TimedModifier.GetName with Localize().
+        self.assertEqual(name, "Local Climate")
         self.assertIn("[concept_local_climate]", desc or "")
 
 
