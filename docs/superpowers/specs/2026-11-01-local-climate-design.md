@@ -206,9 +206,15 @@ rows whose latitude and temperatures disagree badly (a 60° region with a
 ## 5. Comfort
 
 **Shape.** Comfort is a penalty, never a bonus *(designer's call)*: a mild
-climate costs nothing, and a harsh one costs migration attraction. Only
-differences matter inside a market, since a state needs 1.25 × the market's
-average, so penalizing harsh places is the same as favoring mild ones there.
+climate costs nothing, and a harsh one costs migration attraction. Inside a
+market a penalty is not quite the same as favoring mild places: vanilla compares
+a state's attraction with multiples of the market's average
+(`MIGRATION_PULL_HIGH_THRESHOLD` 1.25, `MIGRATION_PULL_LOW_THRESHOLD` 0.75), so
+a penalty every state shares loosens both thresholds by a quarter of it, and a
+market whose average falls to 0 or below inverts them. Hot, poor markets in the
+early eras (Bengal about 21, Cuba about 15) are where that can bite; the
+play-test list checks their internal migration (found at the whole-branch
+review).
 Across countries, a penalty keeps a desert from being picked without inflating
 anyone's attraction.
 
@@ -293,7 +299,8 @@ The builder confirms each carrier by reading the technology tree
 may swap one for a better fit. The candidates are named here only to fix the
 eras. `state_climate_disease_relief_add` is separate from the census's
 `state_malaria_control_add`, so quinine can help migrants without changing
-the census (§ 2).
+the census (§ 2). Disease relief adds the two (ruled at the build), so Malaria
+Prevention's Malaria Control eases the malaria cost too.
 
 ### 5.3 Calibration (before any number is final)
 

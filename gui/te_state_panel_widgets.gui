@@ -1267,7 +1267,7 @@ types te_state_panel_widget_types
 		# the red cost, None when the climate costs nothing, or Pending before the first monthly application.
 		te_state_climate_row = {
 			blockoverride "row_visible" {
-				visible = "[And(And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0'))]"
+				visible = "[And(And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0.05'))]"
 			}
 			blockoverride "row_tooltip" {
 				tooltip = "te_state_climate_comfort_tt"
@@ -1282,10 +1282,10 @@ types te_state_panel_widget_types
 
 		te_state_climate_row = {
 			blockoverride "row_visible" {
-				visible = "[And(And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')), Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0')))]"
+				visible = "[And(And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')), Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0.05')))]"
 			}
 			blockoverride "row_tooltip" {
-				tooltip = "te_state_climate_comfort_tt"
+				tooltip = "te_state_climate_comfort_none_tt"
 			}
 			blockoverride "row_label" {
 				text = "TE_STATE_CLIMATE_ROW_COMFORT"

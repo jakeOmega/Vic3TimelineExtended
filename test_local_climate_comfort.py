@@ -556,7 +556,8 @@ class Tile(unittest.TestCase):
                          "value = 0 if = { limit = { has_variable = te_climate_penalty_applied } value = 1 }")
         comfort = [(gate, row) for gate, row in tile_rows() if "TE_STATE_CLIMATE_ROW_COMFORT" in row]
         self.assertEqual(len(comfort), 3)
-        cost = "GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0')"
+        # 0.05, not 0: a penalty under it prints as a red -0.0 at one decimal (the Ruhr's 0.04 in 1836).
+        cost = "GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0.05')"
         gates = {key: [g for g, r in comfort if f'"{key}"' in r] for key in
                  ("te_state_climate_comfort_value", "te_state_climate_comfort_none", "te_state_climate_pending")}
         self.assertEqual({k: len(v) for k, v in gates.items()}, dict.fromkeys(gates, 1))

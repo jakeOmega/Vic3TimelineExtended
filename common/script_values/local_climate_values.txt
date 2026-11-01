@@ -63,8 +63,8 @@ te_climate_amplification = {
 
 # The warming this region feels against the record's normals, °C: the felt anomaly less the anomaly
 # the normals hold at, times the latitude's amplification. The felt anomaly, because an aerosol haze
-# cools the air people live in (§ 6). Negative until the world reaches today's warming. It reads only global variables, so it works from state scope, and it can be
-# negative: carbon removal past zero cools every region a little.
+# cools the air people live in (§ 6). Negative until the world reaches today's warming, and below that again if carbon removal
+# takes the world past it. It reads the global anomaly and the region's latitude, both at state scope.
 te_climate_warming = {
 	value = temperature_anomaly_display
 	subtract = te_climate_normals_warming

@@ -34,7 +34,7 @@ Spec: `docs/superpowers/specs/2026-11-01-local-climate-design.md`; plan: `docs/s
   - Amplification is 1 up to 30° of latitude, rising in a straight line to 2.5 at 66.5° and beyond.
   - With the Global Warming rule off the anomaly stays 0, and every region keeps its 1836 climate.
   - The felt anomaly is used because an aerosol haze cools the air people live in. It can go negative when carbon removal passes zero.
-- **Constants** sit at the head of the values file, and each value is a script value so the tile can show it: `te_climate_heat_start` (22; it was 23 before the 1836 baseline), `_humidity_factor`, `_heat_weight`, `_cold_start`, `_cold_weight`, `_dry_per_class`, `_malaria_per_class`, `_penalty_max`, `_amp_low_lat`, `_amp_high_lat`, `_amp_max`, `_normals_warming`.
+- **Constants** sit at the head of the values file, and each is a script value: `te_climate_heat_start` (22; it was 23 before the 1836 baseline), `_humidity_factor`, `_heat_weight`, `_cold_start`, `_cold_weight`, `_dry_per_class`, `_malaria_per_class`, `_penalty_max`, `_amp_low_lat`, `_amp_high_lat`, `_amp_max`, `_normals_warming`.
 - **Terms stay separate** (`te_climate_<term>_raw`, `te_climate_<term>_term`) all the way to the tile, because each has its own technologies. The `_term`s aren't gated on `te_climate_has_record`, but the tile's rows are, so a no-row region shows none.
 
 ## Relief
@@ -45,7 +45,7 @@ Spec: `docs/superpowers/specs/2026-11-01-local-climate-design.md`; plan: `docs/s
 | Technology | Era | Relief |
 |---|---|---|
 | Quinine | 2 | disease 0.5 |
-| Watertube Boiler | 2 | cold 0.25 |
+| Water-tube Boiler | 2 | cold 0.25 |
 | Electrical Generation | 3 | heat 0.1 |
 | Reinforced Concrete | 3 | cold 0.2 |
 | Malaria Prevention | 4 | disease 1 (Malaria Control) |
@@ -70,17 +70,17 @@ Spec: `docs/superpowers/specs/2026-11-01-local-climate-design.md`; plan: `docs/s
 
 - **Modifier:** `local_climate_discomfort` (`common/static_modifiers/local_climate_modifiers.txt`), `state_migration_pull_add = -1`, applied with `multiplier = var:te_climate_penalty_applied`. It is plain "Local Climate" in loc, with the concept link in its `_desc`, because the state panel hides it by comparing `TimedModifier.GetName` with `Localize()`.
 - **Refresh** (`te_update_local_climate_modifier`, `common/scripted_effects/local_climate_effects.txt`): remove the old copy, store `te_climate_penalty` in the state variable `te_climate_penalty_applied`, then add the modifier when it is above 0. The variable is never removed.
-- **Sites** (`common/on_actions/local_climate_on_actions.txt`): the yearly refresh on `on_yearly_pulse_state`, the one refresh site; the first application on `on_monthly_pulse_state`, for states without the variable (a new game's first month, an old save, a new state object), since `on_game_started` has no ROOT for the multiplier. A state that changes owner keeps its penalty until its yearly pulse.
+- **Sites** (`common/on_actions/local_climate_on_actions.txt`): the yearly refresh, `local_climate_yearly_on_action` on `on_yearly_pulse_state`, the one refresh site; the first application, `local_climate_first_on_action` on `on_monthly_pulse_state`, for states without the variable (a new game's first month, an old save, a new state object), since `on_game_started` has no ROOT for the multiplier. A state that changes owner keeps its penalty until its yearly pulse.
 - **Hidden** from the state panel's modifier rows (both `TimedModifier.GetName` filter lines in `gui/states_panel.gui`, and `gui_state_hidden_modifier_count`), since the tile shows it; `NOT_ON_COUNTRY` in `scripts/generators/gen_nation_tab.py`.
 - **The define:** `MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 0` in `common/defines/extra_defines.txt`'s first `NPops` block, so city-states and small partial states can be mass migration targets; climate now keeps deserts out early instead. Vanilla's few-target-states penalty (`MASS_MIGRATION_NUM_TARGET_STATES_FOR_NO_PENALTY` 4, `MASS_MIGRATION_FEW_TARGET_STATES_PENALTY` 0.2) is kept (owner, 2026-11-01). `concept_migration_target_desc` is overridden in `localization/english/replace/` without the floor's clause.
-- **Log line** (informational, not a self-check): each year the first country to pulse samples the mass migration targets, and each decade `TE_LOCAL_CLIMATE yearly_targets_summed=N under_10_arable=M years=Y date=…` prints the sums. `under_10_arable` above 0 shows the define at work.
+- **Log line** (`local_climate_log_on_action` on `on_yearly_pulse_country`; informational, not a self-check): each year the first country to pulse samples the mass migration targets, and each decade `TE_LOCAL_CLIMATE yearly_targets_summed=N under_10_arable=M years=Y date=…` prints the sums. `under_10_arable` above 0 shows the define at work.
 
 ## The Local Climate Tile
 
 - **Where:** a `state_panel_status_item_small` in `gui/states_panel.gui` after Migration Crowding, always shown; its contents are the type `te_state_climate_tile` in `gui/te_state_panel_widgets.gui`.
 - **Rows** (`te_state_climate_row`: 80 px of label, 76 of value, since "Humidity" and "Seasonal" overrun the standard tile rows): Summer (°C), Humidity (Dry, Moderate, Humid, Sultry), Winter (°C), Water (Ample, Limited, Scarce), Malaria (None, Seasonal, Endemic). The words come from nested `SelectLocalization` on the class. A region with no row shows `TE_STATE_CLIMATE_NO_DATA` instead.
-- **Comfort row:** the penalty the modifier applies (`te_climate_penalty_now`, from the yearly variable, not the live value), in red. None shows when it is 0, and Pending until the state's first monthly application (`te_climate_penalty_shown`). Its hover splits it into the four terms.
-- **Hovers:** each reading's hover gives its term before relief (`_raw`), the relief (`te_climate_relief_<kind>`, as a figure; no breakdown of the `script_only` types) and the cost left (`_term`). Summer and Winter show the climate the formula uses now (`te_climate_summer_eff`, `_winter_eff`), and their hovers give today's normal and the warming against it.
+- **Comfort row:** the penalty the modifier applies (`te_climate_penalty_now`, from the yearly variable, not the live value), in red. None shows when it is 0, and Pending until the state's first monthly application (`te_climate_penalty_shown`). Its hover splits it into the four terms, today's, against the total of the last yearly refresh; None has a hover of its own.
+- **Hovers:** each reading's hover gives its term before relief (`_raw`), the relief (`te_climate_relief_<kind>`, as a figure; no breakdown of the `script_only` types) and the cost left (`_term`). Summer and Winter show the climate the formula uses now (`te_climate_summer_eff`, `_winter_eff`), and their hovers give today's normal and the warming against it. Humidity's hover gives no cost, since humidity only scales heat.
 - **Concept:** `concept_local_climate` ("Local Climate"). The name is never bare "Climate", which the global warming panels, the Market panel's Climate tab and the player guide's chapter 15 already use.
 - **Placeholder art:** the tile and the concept use vanilla's `gfx/interface/icons/state_trait_icons/tropical_climate.dds`. The final icon should show a thermometer beside a sun and a snowflake, at `gfx/interface/icons/state_status_icons/local_climate.dds`.
 - **Loc:** `TE_STATE_CLIMATE_*` and `te_state_climate_*` in `te_miscellaneous_l_english.yml`; the words are `TE_CLIMATE_HUMIDITY_0`–`3`, `TE_CLIMATE_WATER_0`–`2` and `TE_CLIMATE_MALARIA_0`–`2`.

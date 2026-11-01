@@ -542,16 +542,32 @@ class TestCensusOffNames(unittest.TestCase):
         cls.types = re.findall(r"(?m)^(\w+)\s*=\s*\{", types)
         cls.loc, cls.custom = _rule_loc()
 
+    # Types something besides the census reads, so they work with the census off and carry no tag.
+    READ_BEYOND_THE_CENSUS = {
+        "state_malaria_control_add": "Local Climate's disease relief (te_climate_relief_disease) reads it under every "
+                                     "Demographics setting",
+    }
+
     def test_every_census_type_ends_in_the_tag(self):
         self.assertGreater(len(self.types), 40)
         for name in self.types:
+            if name in self.READ_BEYOND_THE_CENSUS:
+                continue
             self.assertTrue(self.loc.get(name, "").endswith(self.NAME), name)
             self.assertTrue(self.loc.get(name + "_desc", "").endswith(self.DESC), name + "_desc")
 
     def test_no_other_modifier_carries_the_tag(self):
         """An engine line or a Wealth Concentration term works with the census off, so its name has no tag."""
         tagged = {k for k, v in self.loc.items() if self.NAME in v or self.DESC in v}
-        self.assertEqual(tagged, set(self.types) | {t + "_desc" for t in self.types})
+        census_only = set(self.types) - set(self.READ_BEYOND_THE_CENSUS)
+        self.assertEqual(tagged, census_only | {t + "_desc" for t in census_only})
+
+    def test_malaria_control_works_with_the_census_off(self):
+        """Malaria Prevention's Malaria Control also eases Local Climate's malaria cost, census or not, so its
+        name and description never say it does nothing."""
+        self.assertEqual(self.loc["state_malaria_control_add"], "Malaria Control")
+        self.assertIn("[concept_local_climate]", self.loc["state_malaria_control_add_desc"])
+        self.assertNotIn("census_off", self.loc["state_malaria_control_add_desc"])
 
     def test_the_tag_shows_only_while_the_census_doesnt_run(self):
         for entry, key in (("te_demog_census_off_name", "te_demog_census_off_tag"),
