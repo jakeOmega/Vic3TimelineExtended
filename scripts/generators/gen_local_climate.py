@@ -13,7 +13,8 @@ test_local_climate.py fails CI when the committed file is stale:
 
     python3 scripts/generators/gen_local_climate.py [--check] [--plausibility]
 
---plausibility prints rows whose figures look unusual for their latitude, for a person to read.
+--plausibility prints rows whose figures look unusual for their latitude, for a person to read, and
+exits 1 on a validation error. A plain run writes the file even when a row fails validation, then exits 1.
 """
 import argparse
 import collections
@@ -46,6 +47,14 @@ VALUES = (
 
 RANGES = {"summer_mean_c": (-10, 45), "winter_mean_c": (-50, 30), "summer_humidity": (0, 3),
           "aridity": (0, 2), "malaria": (0, 2), "latitude": (-90, 90)}
+
+# A vanilla desert trait needs water 1 or more, except where the region's people live by a great river or
+# outside the desert: the trait describes the land, the record where people live (2026-11-01, PR #1307 review).
+DESERT_TRAIT_EXCEPTIONS = {
+    "STATE_EGYPTIAN_DESERT": "its people live on the Nile at Aswan",
+    "STATE_WESTERN_AUSTRALIA": "its people live in Perth's Mediterranean south-west",
+    "STATE_NORTHERN_TERRITORY": "its people live in the wet tropical Top End",
+}
 
 STATE_RE = re.compile(r"(?m)^(STATE_\w+)\s*=\s*\{")
 TRAITS_RE = re.compile(r"traits\s*=\s*\{([^}]*)\}")
@@ -113,7 +122,8 @@ def validate(rows, regions, traits):
             errors.append(f"{r.state}: vanilla's state_trait_severe_malaria needs malaria 2, not {r.malaria}")
         elif "state_trait_malaria" in own and r.malaria < 1:
             errors.append(f"{r.state}: vanilla's state_trait_malaria needs malaria 1 or more, not 0")
-        if any(re.fullmatch(r"state_trait_\w+_desert", t) for t in own) and r.aridity < 1:
+        if (any(re.fullmatch(r"state_trait_\w+_desert", t) for t in own) and r.aridity < 1
+                and r.state not in DESERT_TRAIT_EXCEPTIONS):
             errors.append(f"{r.state}: a vanilla desert trait needs aridity 1 or more, not 0")
     return errors
 
@@ -163,7 +173,7 @@ def main():
     if args.plausibility:
         for note in implausible(rows):
             print(f"look: {note}")
-        return 0
+        return 1 if errors else 0
     text = render(rows)
     if args.check:
         try:
