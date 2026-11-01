@@ -110,6 +110,48 @@ Ministries are explained in [Ministries](06-politics.md#ministries). The same
 tolerance multiplies the densities that open and close a resettlement frontier
 (see [The Settlement Authority](#the-settlement-authority)).
 
+## Local climate
+
+Every state region has a climate record, taken where most of its people live:
+the warmest month's temperature and humidity, the coldest month's
+temperature, how much water there is, and how common malaria was in 1836. The
+Local Climate tile shows it, and every part of a split region shares it.
+
+Migrants weigh the climate, so a harsh one cuts a state's migration pull, and
+through it the pull that draws mass migrations. Four things cost:
+
+| Cost | When |
+|---|---|
+| Heat | The warmest month averages over 22°C; humid heat costs more |
+| Cold | The coldest month averages below freezing |
+| Dry land | Water is limited (semi-arid country) or scarce (desert) |
+| Malaria | It was seasonal or endemic in 1836 |
+
+The tile's Comfort row gives the total, worked out again once a year, and
+hovering a reading shows what it costs before and after technology. In 1836 a
+hot, humid, malarial state such as Georgia loses about 15 points of migration
+pull, and Yakutsk about 32; London and Paris lose nothing. Climate never adds
+pull, and it never costs more than 40.
+
+Technologies ease each cost, for the country that researches them:
+
+- Cold eases early, with steam heating and concrete.
+- Malaria goes with Quinine and then Malaria Prevention.
+- Water follows mechanized farming, welding and chemistry.
+- Heat waits for the 20th century's appliances and air conditioning.
+
+By the last era none of the four costs anything.
+
+The record is today's climate. With [global warming](15-climate.md) at 0 the
+world runs about a degree colder than that, more toward the poles. As it
+warms, every state's summer and winter rise, most near the poles: hot states
+lose more to heat, and cold ones less to cold.
+
+Small states can now draw mass migrations. A mass migration no longer needs a
+target with 10 arable land, so a city-state or a small partial state can be
+one. Deserts are kept back by their climate instead, until the technologies
+catch up.
+
 ## Dynamic homelands
 
 With the mod, homelands follow population. A primary culture of yours that makes

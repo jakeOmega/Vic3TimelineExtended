@@ -499,6 +499,15 @@ class Modifier(unittest.TestCase):
             for define in FEW_STATES_DEFINES:
                 self.assertNotIn(define, body, path.name)
 
+    def test_migration_target_concept_drops_the_floor(self):
+        """Vanilla's concept text prints the arable land define, which would now read "at least 0"."""
+        text = (ROOT / "localization" / "english" / "replace" / "timeline_extended_override_l_english.yml").read_text(
+            encoding="utf-8-sig")
+        m = re.search(r'(?m)^ concept_migration_target_desc:\d* "(.*)"\s*$', text)
+        self.assertIsNotNone(m)
+        self.assertNotIn("MASS_MIGRATION_TARGET_MIN_ARABLE_LAND", m.group(1))
+        self.assertIn("MASS_MIGRATION_STATE_MIN_MARKET_ACCESS", m.group(1))
+
     def test_modifier_loc(self):
         name, desc = loc_value("local_climate_discomfort"), loc_value("local_climate_discomfort_desc")
         self.assertIsNotNone(name)

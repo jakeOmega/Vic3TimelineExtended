@@ -185,6 +185,10 @@ At 2 °C every line doubles, and at 3 °C it triples. The Warming Penalty box at
 the top of the entry shows today's standard of living and mortality lines; hover
 it for every line and the multiplier.
 
+Warming also moves every state's [local climate](08-states.md#local-climate):
+summers and winters rise, most near the poles, so hot states lose more
+migration pull to heat and cold states less to cold.
+
 ## The climate dashboard
 
 The journal entry opens with an overview that is always shown. The sections

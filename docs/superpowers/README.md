@@ -54,8 +54,8 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 
 | Doc | Status | What's left |
 |-----|--------|-------------|
-| [specs/2026-11-01-local-climate-design.md](specs/2026-11-01-local-climate-design.md): a climate record per state region (summer heat and humidity, winter cold, aridity, malaria, latitude) feeding a comfort penalty in migration attraction, eased by technology (cold early, then disease and water, then air conditioning) and moved by global warming; the mass migration arable land minimum removed; a Local Climate state panel tile | Phase 1 in PR #1307; phases 2–3 building | Comfort, relief, the defines and warming (`feat/local-climate-comfort`) |
-| [plans/2026-11-01-local-climate.md](plans/2026-11-01-local-climate.md): Tasks 1–9 in two PRs (A: the record, the generator and the tile's readings; B: relief carriers, the comfort formula with warming, the modifier and defines, the Comfort row, docs) | Tasks 1–3 in PR #1307; 4–5 done on `feat/local-climate-comfort` | Tasks 6–9 |
+| [specs/2026-11-01-local-climate-design.md](specs/2026-11-01-local-climate-design.md): a climate record per state region (summer heat and humidity, winter cold, aridity, malaria, latitude) feeding a comfort penalty in migration attraction, eased by technology (cold early, then disease and water, then air conditioning) and moved by global warming; the mass migration arable land minimum removed; a Local Climate state panel tile | Phase 1 merged (#1307); phases 2–3 in the comfort PR | In-game checks (`docs/testing/local-climate-playtest.md`) |
+| [plans/2026-11-01-local-climate.md](plans/2026-11-01-local-climate.md): Tasks 1–9 in two PRs (A: the record, the generator and the tile's readings; B: relief carriers, the comfort formula with warming, the modifier and defines, the Comfort row, docs) | Tasks 1–3 merged (#1307); 4–8 in the comfort PR | Task 9's whole-branch review |
 
 ## Archived — `archive/`
 

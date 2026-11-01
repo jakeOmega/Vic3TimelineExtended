@@ -109,7 +109,8 @@ state_work_capacity_mult = {
 # Calibration step 3 (docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md §2.2; owner,
 # 2026-10-12): how far malaria's toll on the people who live with it is under control, 0 to 1. The census's malaria
 # factor on infection is 1 + the state trait's excess x (1 - it). On Malaria Prevention at 1 (te_demog_tech_injections.txt).
-# Read only by the census; a release comments its carriers out (scripts/release/comment_out_census_inputs.py).
+# Read by the census and by Local Climate's disease relief (te_climate_relief_disease,
+# local_climate_values.txt); a release comments its carriers out (scripts/release/comment_out_census_inputs.py).
 state_malaria_control_add = {
 	color = good
 	percent = yes
