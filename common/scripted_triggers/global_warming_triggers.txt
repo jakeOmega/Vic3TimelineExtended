@@ -30,6 +30,7 @@
 #   Emission Standards     pollution_control           pollution abatement
 #   Public Transit         modern_urban_planning       Multimodal Transit
 #   Carbon Removal Support carbon_capture_and_storage  Carbon Conversion Works
+#   Aerosol Injection      geoengineering              the will to use it (spec § 7.5)
 # `has_technology_researched` stays unwrapped so the tooltip names the
 # technology itself. Treaty 109 checks the forced policies' technologies through
 # gw_has_emissions_treaty_technologies below; test_gw_policy_tech_gates.py fails
@@ -378,4 +379,74 @@ gw_possible_fossil_fuel_tariffs = {
 gw_possible_remove_fossil_fuel_tariffs = {
 	hidden_trigger = { gw_policy_fossil_fuel_tariffs_active = yes }
 	custom_tooltip = { text = gw_cond_leads_market te_tax_owns_market = yes }
+}
+
+
+# ---------------------------------------------------------------------------
+# Stratospheric Aerosol Injection (Geoengineering, era 13 spec § 7.5). The
+# mask it buys and its constants are in global_warming_aerosol_values.txt.
+# ---------------------------------------------------------------------------
+gw_policy_aerosol_injection_active = {
+	je:je_global_warming ?= { has_modifier = aerosol_injection_modifier }
+}
+
+# A last resort, so it waits for a degree of warming, measured beneath any
+# haze already flying: a country may join others' injections, which have
+# pushed the felt reading down, to share the work.
+gw_possible_aerosol_injection = {
+	hidden_trigger = {
+		NOT = { je:je_global_warming = { has_modifier = aerosol_injection_modifier } }
+	}
+	custom_tooltip = {
+		text = gw_cond_unmasked_warming_moderate
+		gw_unmasked_temperature >= 1.0
+	}
+	has_technology_researched = geoengineering
+}
+
+# No treaty lock: Enforce Emissions Reduction binds emissions policies, and this
+# cuts none.
+gw_possible_remove_aerosol_injection = {
+	hidden_trigger = {
+		je:je_global_warming = { has_modifier = aerosol_injection_modifier }
+	}
+}
+
+# The haze weakens the summer monsoons: South and Southeast Asia, southern
+# China and West Africa. Read off the capital, as the climate damage is held
+# on the country (mod_systems/global_warming.md). Scope: country.
+gw_country_in_monsoon_region = {
+	capital ?= {
+		OR = {
+			region = sr:region_north_india
+			region = sr:region_south_india
+			region = sr:region_himalayas
+			region = sr:region_indochina
+			region = sr:region_indonesia
+			region = sr:region_south_china
+			region = sr:region_west_africa
+		}
+	}
+}
+
+# Does this country object to others' aerosol injection? Those whose monsoon
+# it weakens, and those that would not run it themselves: the climate will
+# their own AI weighs it by falls more than gw_ai_repeal_band below its
+# threshold (global_warming_ai_values.txt). A country running it does not
+# object. Read by gw_effect_aerosol_injection (relations at the start) and
+# gw_aerosol_update_mask_effect (each January). Scope: country.
+gw_aerosol_objects = {
+	has_journal_entry = je_global_warming
+	NOT = { is_country_type = decentralized }
+	NOT = { gw_policy_aerosol_injection_active = yes }
+	OR = {
+		gw_country_in_monsoon_region = yes
+		gw_ai_repeal_margin_aerosol_injection > 0
+	}
+}
+
+# Is there warming left for one more country's haze to hide? The AI does not
+# join a mask already at its ceiling. Scope: any.
+gw_aerosol_has_room = {
+	gw_aerosol_target < gw_aerosol_ceiling
 }

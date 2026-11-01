@@ -152,6 +152,8 @@
  generative_ai_desc:0 "We now have AI that can create original content, from images to music to text. It's a powerful new tool for creativity, and it's getting better all the time."
  genetic_engineering:0 "Genetic Engineering"
  genetic_engineering_desc:0 "By manipulating the genes of organisms, we can develop new medical treatments and improve our crops. It's a powerful technology, but one that we must wield with care."
+ geoengineering:0 "Geoengineering"
+ geoengineering_desc:0 "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Unlocks the Stratospheric Aerosol Injection climate policy."
  globalization:0 "Globalization"
  globalization_desc:0 "The world is becoming more and more interconnected. This acceleration of trade, communication, and cultural exchange is bringing us closer together, for better or for worse."
  green_revolution:0 "Green Revolution"
